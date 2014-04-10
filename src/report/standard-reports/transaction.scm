@@ -55,6 +55,7 @@
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
 (define optname-void-transactions (N_ "Void Transactions?"))
+(define optname-table-export (N_ "Table for Exporting"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -170,23 +171,32 @@
 
 
 (define (add-subtotal-row table width subtotal-string subtotal-collector 
-                          subtotal-style)
+                          subtotal-style export?)
   (let ((currency-totals (subtotal-collector
                           'format gnc:make-gnc-monetary #f))
         (blanks (gnc:make-html-table-cell/size 1 (- width 1) #f)))
     (gnc:html-table-append-row/markup!
      table
      subtotal-style 
+     (if export?
+      (append! (cons (gnc:make-html-table-cell subtotal-string)
+                     (gnc:html-make-empty-cells (- width 2)))
+               (list (gnc:make-html-table-cell/markup 
+                      "total-number-cell"
+                      (car currency-totals))))
      (list (gnc:make-html-table-cell/size 1 (- width 1) 
                                           subtotal-string)
            (gnc:make-html-table-cell/markup 
             "total-number-cell"
-            (car currency-totals))))
+             (car currency-totals)))))
     (for-each (lambda (currency)
                 (gnc:html-table-append-row/markup! 
                  table
                  subtotal-style
-                 (cons blanks
+                 (append!
+                  (if export?
+                   (gnc:html-make-empty-cells (- width 1))
+                   (list blanks))
                          (list (gnc:make-html-table-cell/markup
                                 "total-number-cell" currency)))))
               (cdr currency-totals))))
@@ -194,47 +204,47 @@
 (define (total-string str) (string-append (_ "Total For ") str))
 
 (define (render-account-subtotal 
-         table width split total-collector subtotal-style column-vector)
+         table width split total-collector subtotal-style column-vector export?)
     (add-subtotal-row table width 
                       (total-string (account-namestring (gnc:split-get-account split)
                                                         (used-sort-account-code      column-vector)
                                                         #t
                                                         (used-sort-account-full-name column-vector)))
-                      total-collector subtotal-style))
+                      total-collector subtotal-style export?))
 
 (define (render-corresponding-account-subtotal
-         table width split total-collector subtotal-style column-vector)
+         table width split total-collector subtotal-style column-vector export?)
     (add-subtotal-row table width
                       (total-string (account-namestring (gnc:split-get-account 
                                                           (gnc:split-get-other-split split))
                                                         (used-sort-account-code      column-vector)
                                                         #t
                                                         (used-sort-account-full-name column-vector)))
-                    total-collector subtotal-style))
+                    total-collector subtotal-style export?))
 
 (define (render-month-subtotal
-         table width split total-collector subtotal-style column-vector)
+         table width split total-collector subtotal-style column-vector export?)
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
                                  (gnc:split-get-parent split)))))
     (add-subtotal-row table width 
                       (total-string (strftime "%B %Y" tm))
-                      total-collector subtotal-style)))
+                      total-collector subtotal-style export?)))
 
 
 (define (render-year-subtotal
-         table width split total-collector subtotal-style column-vector)
+         table width split total-collector subtotal-style column-vector export?)
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
                                  (gnc:split-get-parent split)))))
     (add-subtotal-row table width 
                       (total-string (strftime "%Y" tm))
-                      total-collector subtotal-style)))
+                      total-collector subtotal-style export?)))
 
 
 (define (render-grand-total
-         table width total-collector)
+         table width total-collector export?)
   (add-subtotal-row table width
                     (_ "Grand Total")
-                    total-collector def:grand-total-style))
+                    total-collector def:grand-total-style export?))
 
 (define account-types-to-reverse-assoc-list
   (list (cons 'none '())
@@ -485,6 +495,11 @@
           (vector 'single
                   (N_ "Single")
                   (N_ "Display 1 line")))))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-table-export
+    "e" (N_ "Formats the table suitable for cut & paste exporting with extra cells") #f))  
   
   ;; Accounts options
   
@@ -844,6 +859,11 @@ Credit Card, and Income accounts")))))
           (gnc:lookup-option options gnc:pagename-general (N_ "Style")))
          'multi-line))
 
+  (define (transaction-report-export-p options)
+    (gnc:option-value
+     (gnc:lookup-option options gnc:pagename-general
+       optname-table-export)))
+
   (define (add-other-split-rows split table used-columns
                                 row-style account-types-to-reverse)
     (define (other-rows-driver split parent table used-columns i)
@@ -866,6 +886,7 @@ Credit Card, and Income accounts")))))
                                   width
                                   multi-rows?
                                   odd-row?
+                                  export?
                                   account-types-to-reverse
                                   primary-subtotal-pred
                                   secondary-subtotal-pred 
@@ -888,7 +909,7 @@ Credit Card, and Income accounts")))))
             (gnc:make-html-table-cell/size
              1 width (gnc:make-html-text (gnc:html-markup-hr)))))
 
-          (render-grand-total table width total-collector))
+          (render-grand-total table width total-collector export?))
 
         (let* ((current (car splits))
                (current-row-style (if multi-rows? def:normal-row-style
@@ -934,12 +955,13 @@ Credit Card, and Income accounts")))))
                       (secondary-subtotal-renderer
                        table width current
                        secondary-subtotal-collector
-                       def:secondary-subtotal-style used-columns)
+                       def:secondary-subtotal-style used-columns export?)
                       (secondary-subtotal-collector 'reset #f #f)))
 
                 (primary-subtotal-renderer table width current
                                            primary-subtotal-collector
-                                           def:primary-subtotal-style used-columns)
+                                           def:primary-subtotal-style used-columns
+                                           export?)
 
                 (primary-subtotal-collector 'reset #f #f)
 
@@ -962,7 +984,7 @@ Credit Card, and Income accounts")))))
                   (begin (secondary-subtotal-renderer
                           table width current
                           secondary-subtotal-collector
-                          def:secondary-subtotal-style used-columns)
+                          def:secondary-subtotal-style used-columns export?)
                          (secondary-subtotal-collector 'reset #f #f)
                          (if next
                              (secondary-subheading-renderer
@@ -975,6 +997,7 @@ Credit Card, and Income accounts")))))
                                   width 
                                   multi-rows?
                                   (not odd-row?)
+                                  export?
                                   account-types-to-reverse
                                   primary-subtotal-pred 
                                   secondary-subtotal-pred
@@ -989,6 +1012,7 @@ Credit Card, and Income accounts")))))
   (let* ((table (gnc:make-html-table))
          (width (num-columns-required used-columns))
          (multi-rows? (transaction-report-multi-rows-p options))
+	 (export? (transaction-report-export-p options))
          (account-types-to-reverse
           (get-account-types-to-reverse options)))
 
@@ -1006,7 +1030,8 @@ Credit Card, and Income accounts")))))
                (car splits) table width def:secondary-subtotal-style used-columns))
 
           (do-rows-with-subtotals splits table used-columns width
-                                  multi-rows? #t 
+                                  multi-rows? #t
+                                  export?
                                   account-types-to-reverse
                                   primary-subtotal-pred
                                   secondary-subtotal-pred

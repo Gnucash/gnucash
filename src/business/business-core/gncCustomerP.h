@@ -30,10 +30,10 @@
 #define GNC_CUSTOMERP_H_
 
 #include "gncCustomer.h"
+#include "qofid-p.h"
 
 gboolean gncCustomerRegister (void);
 gint64 gncCustomerNextID (QofBook *book);
-void gncCustomerSetGUID (GncCustomer *customer, const GUID *guid);
 
 /** The gncCloneCustomer() routine makes a copy of the indicated
  *  customer, placing it in the indicated book.  It copies
@@ -53,5 +53,7 @@ GncCustomer * gncCloneCustomer (GncCustomer *from,  QofBook *book);
  * different ways.
  */
 GncCustomer * gncCustomerObtainTwin (GncCustomer *from, QofBook *book);
+
+#define gncCustomerSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
 
 #endif /* GNC_CUSTOMERP_H_ */

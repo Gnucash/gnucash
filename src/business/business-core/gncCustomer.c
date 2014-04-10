@@ -36,8 +36,8 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid-p.h"
@@ -48,7 +48,7 @@
 #include "qofquerycore.h"
 #include "qofquery.h"
 
-#include "gncAddress.h"
+#include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -113,14 +113,14 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->inst.entity.guid, _GNC_MOD_NAME);
+  cust->addr = gncAddressCreate (book, &cust->inst.entity);
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
 
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
-  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity.guid, _GNC_MOD_NAME);
+  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity);
 
   gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
 
@@ -148,29 +148,16 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->active = from->active;
   cust->taxtable_override = from->taxtable_override;
 
-  cust->addr = gncCloneAddress (from->addr, book);
-  cust->shipaddr = gncCloneAddress (from->shipaddr, book);
+  cust->addr = gncCloneAddress (from->addr, &cust->inst.entity, book);
+  cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst.entity, book);
 
   /* Find the matching currency in the new book, assumes
    * currency has already been copied into new book. */
-  if (from->currency)
-  {
-    const char * ucom;
-    const gnc_commodity_table * comtbl;
-    ucom = gnc_commodity_get_unique_name (from->currency);
-    comtbl = gnc_commodity_table_get_table (book);
-    cust->currency = gnc_commodity_table_lookup_unique (comtbl, ucom);
-  }
+  cust->currency = gnc_commodity_obtain_twin (from->currency, book);
 
   /* Find the matching bill term, tax table in the new book */
-  if (from->terms)
-  {
-    cust->terms = gncBillTermObtainTwin(from->terms, book);
-  }
-  if (from->taxtable)
-  {
-    cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
-  }
+  cust->terms = gncBillTermObtainTwin(from->terms, book);
+  cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
 
   for (node=g_list_last(cust->jobs); node; node=node->next)
   {
@@ -266,14 +253,6 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
   SET_STR(cust, cust->notes, notes);
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
-}
-
-void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
-{
-  if (!cust || !guid) return;
-  if (guid_equal (guid, &cust->inst.entity.guid)) return;
-
-  qof_entity_set_guid (&cust->inst.entity, guid);
 }
 
 void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
@@ -398,7 +377,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  GNC_BEGIN_EDIT (&cust->inst);
+  QOF_BEGIN_EDIT (&cust->inst);
 }
 
 static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -421,8 +400,8 @@ static inline void cust_free (QofInstance *inst)
 
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
-  GNC_COMMIT_EDIT_PART1 (&cust->inst);
-  GNC_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
+  QOF_COMMIT_EDIT_PART1 (&cust->inst);
+  QOF_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }
 
@@ -557,12 +536,14 @@ static QofObject gncCustomerDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Customer",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncCustomerPrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncCustomerRegister (void)
@@ -572,9 +553,9 @@ gboolean gncCustomerRegister (void)
     { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, NULL },
     { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr, NULL },
     { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

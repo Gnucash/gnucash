@@ -29,11 +29,11 @@
 #ifndef GNC_BILLTERMP_H_
 #define GNC_BILLTERMP_H_
 
+#include "qofid-p.h"
 #include "gncBillTerm.h"
 
 gboolean gncBillTermRegister (void);
 
-void gncBillTermSetGUID (GncBillTerm *term, const GUID *guid);
 void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent);
 void gncBillTermSetChild (GncBillTerm *term, GncBillTerm *child);
 void gncBillTermSetRefcount (GncBillTerm *term, gint64 refcount);
@@ -64,6 +64,8 @@ GncBillTerm * gncCloneBillTerm (GncBillTerm *from, QofBook *);
  * different ways.
  */
 GncBillTerm * gncBillTermObtainTwin (GncBillTerm *from, QofBook *book);
+
+#define gncBillTermSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
 
 
 #endif /* GNC_BILLTERMP_H_ */

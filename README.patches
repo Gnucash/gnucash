@@ -45,7 +45,7 @@ COMMON USAGE
      make-gnucash-patch will then uuencode the diff to
      ../diffs/<samefilename>.uue.
 
-     There are two vars you can set in a ~/.gnucash-patch.rc file.
+     There are three vars you can set in a ~/.gnucash-patch.rc file.
      The file should look like this
 
 ----------------------------------------------------------------------
@@ -53,6 +53,7 @@ COMMON USAGE
 
 $::should_uuencode = 0;
 $::ask_description = 0;
+$::diffcmd = "diff -up";
 
 1;
 ----------------------------------------------------------------------
@@ -61,7 +62,9 @@ $::ask_description = 0;
      patch in email using mime and don't need it double encoded).  Set
      $::should_uuencode to 0.  If you don't want makepatch to ask you
      for the patch description (so the process is more automated
-     possibly) set $::ask_description to 0.
+     possibly) set $::ask_description to 0.  If you want to use a
+     different diff command (not recommended for most) set $::diffcmd
+     to something else (say, "gdiff -up").
 
   2) The second method is basically described below but it also
      includes the vars you can set from above.  This method gives you
@@ -100,8 +103,8 @@ $::ask_description = 0;
      a patch.
 
      Now run the script. Note that this script requires the programs
-     'makepatch', 'gzip', 'diff', and 'uuencode' (and, of course,
-     'perl') to run.
+     'makepatch', 'gzip', a 'diff' work-a-like, and 'uuencode' (and, of
+     course, 'perl') to run.
 
      The same files will be generated for this method as the last
      (../diffs/*.diff.gz and ../diffs/*.diff.gz.uue).
@@ -157,6 +160,12 @@ USERS GUIDE
                               mm   = current minutes (2 digit form)
                               SS   = current seconds (2 digit form)
                               XXXX = userid of current user (arbitrary length)
+ 
+ --diffcmd "command"  The command to give to makepatch to generate the
+                      differences between two files.
+                      *NOT* Recommended for most users, only for those whom
+                      diff -up is non-functional. 
+                      Defaults to:  diff -up
 
  --file "filename"   Generate a patch for ONLY this file. The path within
                      the CVS tree must be specified (eg. src/MultiLedger.c) or 

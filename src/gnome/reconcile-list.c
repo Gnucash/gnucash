@@ -461,6 +461,16 @@ gnc_reconcile_list_is_reconciled(gpointer item, gpointer user_data)
   return GINT_TO_POINTER(current != NULL);
 }
 
+static void
+grl_refresh_helper (gpointer key, gpointer value, gpointer user_data)
+{
+  GNCReconcileList *list = user_data;
+  GNCQueryList *qlist = GNC_QUERY_LIST(list);
+
+  if (!gnc_query_list_item_in_list(qlist, key))
+    g_hash_table_remove(list->reconciled, key);
+}
+
 /********************************************************************\
  * gnc_reconcile_list_refresh                                       *
  *   refreshes the list                                             *
@@ -478,6 +488,10 @@ gnc_reconcile_list_refresh (GNCReconcileList *list)
 
   qlist = GNC_QUERY_LIST(list);
   gnc_query_list_refresh(qlist);
+
+  /* Now verify that everything in the reconcile hash is still in qlist */
+  if (list->reconciled)
+    g_hash_table_foreach(list->reconciled, grl_refresh_helper, list);
 }
 
 

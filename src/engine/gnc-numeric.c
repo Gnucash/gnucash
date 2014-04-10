@@ -40,6 +40,238 @@
 
 /* static short module = MOD_ENGINE; */
 
+/* =============================================================== */
+/* Quick-n-dirty 128-bit math lib. The mult128 routine should work 
+ * great; I think that div128 works, but its not really tested.
+ */
+
+typedef struct {
+  guint64 hi;
+  guint64 lo;
+  short isneg;
+} gncint128;
+
+/** Multiply a pair of signed 64-bit numbers, 
+ *  returning a signed 128-bit number.
+ */
+static inline gncint128
+mult128 (gint64 a, gint64 b)
+{
+  gncint128 prod;
+
+  prod.isneg = 0;
+  if (0>a)
+  {
+    prod.isneg = !prod.isneg;
+    a = -a;
+  }
+
+  if (0>b)
+  {
+    prod.isneg = !prod.isneg;
+    b = -b;
+  }
+
+  guint64 a1 = a >> 32;
+  guint64 a0 = a - (a1<<32);
+
+  guint64 b1 = b >> 32;
+  guint64 b0 = b - (b1<<32);
+
+  guint64 d = a0*b0;
+  guint64 d1 = d >> 32;
+  guint64 d0 = d - (d1<<32);
+
+  guint64 e = a0*b1;
+  guint64 e1 = e >> 32;
+  guint64 e0 = e - (e1<<32);
+
+  guint64 f = a1*b0;
+  guint64 f1 = f >> 32;
+  guint64 f0 = f - (f1<<32);
+
+  guint64 g = a1*b1;
+  guint64 g1 = g >> 32;
+  guint64 g0 = g - (g1<<32);
+
+  guint64 sum = d1+e0+f0;
+  guint64 carry = 0;
+  /* Can't say 1<<32 cause cpp will goof it up; 1ULL<<32 might work */
+  guint64 roll = 1<<30;
+  roll <<= 2;
+
+  guint64 pmax = roll-1;
+  while (pmax < sum)
+  {
+    sum -= roll;
+    carry ++;
+  }
+
+  prod.lo = d0 + (sum<<32);
+  prod.hi = carry + e1 + f1 + g0 + (g1<<32);
+
+  return prod;
+}
+
+/** Divide a signed 128-bit number by a signed 64-bit,
+ *  returning a signed 128-bit number.
+ */
+static inline gncint128
+div128 (gncint128 n, gint64 d)
+{
+  gncint128 quotient;
+  guint64 hirem;   /* hi remainder */
+  guint64 qlo;
+
+  quotient.isneg = n.isneg;
+  if (0 > d)
+  {
+    d = -d;
+    quotient.isneg = !quotient.isneg;
+  }
+
+  quotient.hi = n.hi / d;
+  hirem = n.hi - quotient.hi * d;
+  
+  guint64 lo = 1<<30;
+  lo <<= 33;
+  lo /= d;
+  lo <<= 1;
+
+  lo *= hirem; 
+  quotient.lo = lo + n.lo/d;
+
+  /* Deal with low remainder bits.
+   * There's probably a more efficient way of doing this.
+   * XXX This algo breaks if the value of teh denominator 
+   * is larger than 2 billion.
+   */
+  guint64 rnd = quotient.lo;
+  // rnd &= 0x7fffffff;
+  rnd *= d;
+  rnd &= 0x7fffffff;
+  rnd = (n.lo & 0x7fffffff) - rnd;
+  rnd &= 0x7fffffff;
+  rnd /= d;
+
+  /* ?? will this ever overflow ? */
+  qlo = quotient.lo;
+  quotient.lo += rnd;
+  if (lo > quotient.lo)
+  {
+    quotient.hi += 1;
+  }
+
+  return quotient;
+}
+
+/** Return the remainder of a signed 128-bit number modulo a signed 64-bit,
+ *  XXX the current algo only works for divisor values less than 2 billion.
+ */
+static inline gint64
+rem128 (gncint128 n, gint64 d)
+{
+  gncint128 quotient = div128 (n,d);
+
+  guint64 rnd = quotient.lo;
+  // rnd &= 0x7fffffff;
+  rnd *= d;
+  rnd &= 0x7fffffff;
+  rnd = (n.lo & 0x7fffffff) - rnd;
+  rnd &= 0x7fffffff;
+  return rnd;
+}
+
+/** Return the ratio n/d reduced so that there are no common factors. */
+static inline gnc_numeric
+reduce128(gncint128 n, gint64 d)
+{
+  gint64   t;
+  gint64   num;
+  gint64   denom;
+  gnc_numeric out;
+
+  t =  rem128 (n, d);
+  num = d;
+  denom = t;
+
+  /* The strategy is to use Euclid's algorithm */
+  while (denom > 0) 
+  {
+    t = num % denom;
+    num = denom;
+    denom = t;
+  }
+  /* num now holds the GCD (Greatest Common Divisor) */
+
+  gncint128 red = div128 (n, num);
+  if (red.hi)
+  {
+    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+  }
+  out.num   = red.lo;
+  if (red.isneg) out.num = -out.num;
+  out.denom = d / num;
+  return out;
+}
+
+#ifdef TEST_128_BIT_MULT
+void pr (gint64 a, gint64 b)
+{
+   gncint128 prod = mult128 (a,b);
+   printf ("%lld * %lld = %lld %llu (0x%llx %llx)\n", a,b, prod.hi, prod.lo, prod.hi, prod.lo);
+}
+
+void prd (gint64 a, gint64 b, gint64 c)
+{
+   gncint128 prod = mult128 (a,b);
+   gncint128 quot = div128 (prod, c);
+   gint64 rem = rem128 (prod, c);
+   printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx)\n", a,b, c, quot.hi,
+quot.lo, rem, quot.hi, quot.lo);
+}
+
+main ()
+{
+  pr (2,2);
+
+  gint64 x = 1<<30;
+  x <<= 2;
+
+  pr (x,x);
+  pr (x+1,x);
+  pr (x+1,x+1);
+
+  pr (x,-x);
+  pr (-x,-x);
+  pr (x-1,x);
+  pr (x-1,x-1);
+  pr (x-2,x-2);
+
+  x <<= 1;
+  pr (x,x);
+  pr (x,-x);
+
+  prd (x,x,2);
+  prd (x,x,3);
+  prd (x,x,4);
+  prd (x,x,5);
+  prd (x,x,6);
+
+  x <<= 29;
+  prd (3,x,3);
+  prd (6,x,3);
+  prd (99,x,3);
+  prd (100,x,5);
+  prd (540,x,5);
+  prd (777,x,7);
+  prd (1111,x,11);
+}
+
+#endif /* TEST_128_BIT_MULT */
+
+/* =============================================================== */
+
 #if 0
 static const char * _numeric_error_strings[] = 
 {
@@ -52,6 +284,31 @@ static const char * _numeric_error_strings[] =
 #endif
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
+
+/* =============================================================== */
+/* This function is small, simple, and used everywhere below, 
+ * lets try to inline it.
+ */
+inline GNCNumericErrorCode
+gnc_numeric_check(gnc_numeric in) 
+{
+  if(in.denom != 0) 
+  {
+    return GNC_ERROR_OK;
+  }
+  else if(in.num) 
+  {
+    if ((0 < in.num) || (-4 > in.num))
+    {
+       in.num = (gint64) GNC_ERROR_OVERFLOW;
+    }
+    return (GNCNumericErrorCode) in.num;
+  }
+  else 
+  {
+    return GNC_ERROR_ARG;
+  }
+}
 
 /********************************************************************
  *  gnc_numeric_zero_p
@@ -341,6 +598,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how) 
 {
   gnc_numeric product, result;
+  gncint128 bigprod;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -372,13 +630,26 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     b.denom = 1;
   }
 
+  bigprod = mult128 (a.num, b.num);
   product.num   = a.num*b.num;
   product.denom = a.denom*b.denom;
+
+  /* If it looks to be overflowing, try to reduce the fraction ... */
+  if (0 != bigprod.hi)
+  {
+    product = reduce128 (bigprod, product.denom);
+    if (gnc_numeric_check (product))
+    {
+      return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+    }
+  }
   
+#if 0  /* currently, product denom won't ever be zero */
   if(product.denom < 0) {
     product.num   = -product.num;
     product.denom = -product.denom;
   }
+#endif
   
   if((denom == GNC_DENOM_AUTO) &&
      ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
@@ -751,15 +1022,14 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
   
 
 /********************************************************************
- *  gnc_numeric_reduce
- *  reduce a fraction by GCF elimination.  This is NOT done as a
+ ** reduce a fraction by GCF elimination.  This is NOT done as a
  *  part of the arithmetic API unless GNC_DENOM_REDUCE is specified 
  *  as the output denominator.
  ********************************************************************/
 
-#if 1
 gnc_numeric
-gnc_numeric_reduce(gnc_numeric in) {
+gnc_numeric_reduce(gnc_numeric in) 
+{
   gint64   t;
   gint64   num = (in.num < 0) ? (- in.num) : in.num ;
   gint64   denom = in.denom;
@@ -769,96 +1039,20 @@ gnc_numeric_reduce(gnc_numeric in) {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  /* the strategy is to use euclid's algorithm */
+  /* The strategy is to use Euclid's algorithm */
   while (denom > 0) {
     t = num % denom;
     num = denom;
     denom = t;
   }
-  /* num = gcd */
+  /* num now holds the GCD (Greatest Common Divisor) */
 
-  /* all calculations are done on positive num, since it's not 
+  /* All calculations are done on positive num, since it's not 
    * well defined what % does for negative values */
   out.num   = in.num / num;
   out.denom = in.denom / num;
   return out;
 }
-
-#else
-gnc_numeric
-gnc_numeric_reduce(gnc_numeric in) {
-
-  gint64   current_divisor = 2;
-  gint64   max_square;
-  gint64   num = (in.num < 0) ? (- in.num) : in.num ;
-  gint64   denom = in.denom;
-  int      three_count = 0;
-  gnc_numeric out;
-
-  if(gnc_numeric_check(in)) {
-    return gnc_numeric_error(GNC_ERROR_ARG);
-  }
-
-  /* the strategy is to eliminate common factors from 
-   * 2 up to 'max', where max is the smaller of the smaller
-   * part of the fraction and the sqrt of the larger part of 
-   * the fraction.  There's also the special case of the 
-   * smaller of fraction parts being a common factor.
-   * 
-   * we test for 2 and 3 first, and thereafter skip all even numbers
-   * and all odd multiples of 3 (that's every third odd number,
-   * i.e. 9, 15, 21), thus the three_count stuff. */
-
-  /* special case: one side divides evenly by the other */
-  if (num == 0) {
-    denom = 1;
-  }
-  else if((num > denom) && (num % denom == 0)) {
-    num = num / denom;
-    denom = 1;
-  }
-  else if ((num <= denom) && (denom % num == 0)) {
-    denom = denom / num;
-    num = 1;
-  }
-
-  max_square = (num > denom) ? denom : num;
-
-  /* normal case: test 2, then 3, 5, 7, 11, etc.
-   * (skip multiples of 2 and 3) */
-  while(current_divisor * current_divisor <= max_square) {
-    if((num % current_divisor == 0) &&
-       (denom % current_divisor == 0)) {
-      num = num / current_divisor;
-      denom = denom / current_divisor;
-    }
-    else {
-      if(current_divisor == 2) {
-        current_divisor++;
-      }
-      else if(three_count == 3) { 
-        current_divisor += 4;
-        three_count = 1;
-      }
-      else {
-        current_divisor += 2;
-        three_count++;
-      }
-    }
-
-    if((current_divisor > num) ||
-       (current_divisor > denom)) {
-      break;
-    }
-  }
-
-  /* all calculations are done on positive num, since it's not 
-   * well defined what % does for negative values */
-  out.num   = (in.num < 0) ? (- num) : num;
-  out.denom = denom;
-  return out;
-}
-#endif
 
 /********************************************************************
  *  double_to_gnc_numeric
@@ -963,10 +1157,8 @@ gnc_numeric_create(gint64 num, gint64 denom) {
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_error(int error_code) {
-  if(abs(error_code) < 5) {
-    /*    PERR("%s", _numeric_error_strings[ - error_code]); */
-  }
+gnc_numeric_error(GNCNumericErrorCode error_code) 
+{
   return gnc_numeric_create(error_code, 0LL);
 }
 
@@ -1084,25 +1276,13 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
   return quot;
 }
 
-int
-gnc_numeric_check(gnc_numeric in) {
-  if(in.denom != 0) {
-    return GNC_ERROR_OK;
-  }
-  else if(in.num) {
-    return in.num;
-  }
-  else {
-    return GNC_ERROR_ARG;
-  }
-}
-
 /********************************************************************
  *  gnc_numeric text IO
  ********************************************************************/
 
 gchar *
-gnc_numeric_to_string(gnc_numeric n) {
+gnc_numeric_to_string(gnc_numeric n) 
+{
   gchar *result;
   long long int tmpnum = n.num;
   long long int tmpdenom = n.denom;
@@ -1127,11 +1307,11 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
     return(NULL);
   }
 #else
-  tmpnum = atoll (str);
+  tmpnum = strtoll (str, NULL, 0);
   str = strchr (str, '/');
   if (!str) return NULL;
   str ++;
-  tmpdenom = atoll (str);
+  tmpdenom = strtoll (str, NULL, 0);
   num_read = strspn (str, "0123456789");
 #endif
   n->num = tmpnum;

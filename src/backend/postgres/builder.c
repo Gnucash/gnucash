@@ -36,6 +36,8 @@
  * -- check for buffer overflow at end of each setter
  */
 
+#include "config.h"
+
 #define _GNU_SOURCE
 #include <glib.h>
 #include <string.h>

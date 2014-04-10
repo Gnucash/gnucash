@@ -313,10 +313,10 @@
 		    <wrap>False</wrap>
 		    <value>0</value>
 		    <lower>0</lower>
-		    <upper>100</upper>
+		    <upper>365</upper>
 		    <step>1</step>
-		    <page>10</page>
-		    <page_size>10</page_size>
+		    <page>30</page>
+		    <page_size>30</page_size>
 		    <child>
 		      <padding>0</padding>
 		      <expand>False</expand>
@@ -390,10 +390,10 @@
 		    <wrap>False</wrap>
 		    <value>0</value>
 		    <lower>0</lower>
-		    <upper>100</upper>
+		    <upper>365</upper>
 		    <step>1</step>
-		    <page>10</page>
-		    <page_size>10</page_size>
+		    <page>30</page>
+		    <page_size>30</page_size>
 		    <child>
 		      <padding>0</padding>
 		      <expand>False</expand>
@@ -696,15 +696,6 @@
 	  </widget>
 	</widget>
 
-	<widget>
-	  <class>GtkStatusbar</class>
-	  <name>ledger_status</name>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
       </widget>
     </widget>
   </widget>

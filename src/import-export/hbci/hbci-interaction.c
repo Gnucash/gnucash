@@ -28,8 +28,7 @@
 #include "hbci-interaction.h"
 #include "hbci-interactionP.h"
 
-#include <openhbci/interactorcb.h>
-#include <openhbci/progressmonitorcb.h>
+#include <openhbci2/interactorcb.h>
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
@@ -37,10 +36,12 @@
 #include "global-options.h"
 
 #include "dialog-pass.h"
+#include "gnc-hbci-utils.h"
 
-#include <openhbci.h>
+#include <openhbci2.h>
 
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
+
 
 
 /** Adds the interactor and progressmonitor classes to the api. */
@@ -51,6 +52,7 @@ GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
   data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
   data->keepAlive = TRUE;
+  data->cache_valid = FALSE;
   data->cache_pin = 
     gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
 			      "HBCI Remember PIN in memory",
@@ -59,10 +61,47 @@ GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
   /* set HBCI_Interactor */
   HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
 			  gnc_hbci_new_interactor(data), TRUE);
-  /* Set HBCI_Progressmonitor */
-  HBCI_API_setMonitor(api, gnc_hbci_new_pmonitor(data), TRUE);
   return data;
 }
+
+
+
+/* ************************************************************
+ */
+
+
+GtkWidget *GNCInteractor_parent(GNCInteractor *i)
+{
+  g_assert(i);
+  return i->parent;
+}
+
+static void GNCInteractor_setRunning (GNCInteractor *data)
+{
+  g_assert(data);
+  data->state = RUNNING;
+  gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (data->close_button), FALSE);
+}
+static void GNCInteractor_setFinished (GNCInteractor *data)
+{
+  g_assert(data);
+  data->state = FINISHED;
+  gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (data->close_button), TRUE);
+  if (gtk_toggle_button_get_active
+      (GTK_TOGGLE_BUTTON (data->close_checkbutton)))
+    GNCInteractor_hide (data);
+}
+static void GNCInteractor_setAborted (GNCInteractor *data)
+{
+  g_assert(data);
+  data->state = ABORTED;
+  gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (data->close_button), TRUE);
+  data->keepAlive = FALSE;
+}
+
 
 gboolean GNCInteractor_aborted(const GNCInteractor *i)
 {
@@ -122,12 +161,19 @@ void GNCInteractor_delete(GNCInteractor *data)
   data->dialog = NULL;
 }
 
+void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value)
+{
+  g_assert(i);
+  i->cache_valid = value;
+}
+
 void GNCInteractor_erasePIN(GNCInteractor *i)
 {
   g_assert(i);
   if (i->pw != NULL)
     g_free (memset (i->pw, 0, strlen (i->pw)));
   i->pw = NULL;
+  i->cache_valid = FALSE;
   i->user = NULL;
 }
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
@@ -145,18 +191,18 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
     }
 }
 
-/* Helper functions */
-static const char *bank_to_str (const HBCI_Bank *bank)
-{
-  g_assert (bank);
-  return ((strlen(HBCI_Bank_name (bank)) > 0) ?
-	  HBCI_Bank_name (bank) :
-	  HBCI_Bank_bankCode(bank));
-}
-
 /********************************************************
  * Now all the callback functions 
  */
+static const char *username_from_user(const HBCI_User *user)
+{
+  return (user ? 
+	  (HBCI_User_name (user) ? HBCI_User_name (user) :
+	   (HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	    _("Unknown"))) :
+	  _("Newly created user"));
+}
+
 static int msgInputPin(const HBCI_User *user,
 		       char **pinbuf,
 		       int minsize,
@@ -170,13 +216,7 @@ static int msgInputPin(const HBCI_User *user,
   g_assert(data);
 
   while (TRUE) {
-    const char *username;
-    username =
-      (user ?
-       (strlen (HBCI_User_userName (user)) > 0 ? HBCI_User_userName (user) :
-	(HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	 _("Unknown"))) : 
-       _("Unknown"));
+    const char *username = username_from_user(user);
     g_assert (username);
     
     if (newPin) {
@@ -199,7 +239,7 @@ static int msgInputPin(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN for \n"
-				       "user '%s' at unknown bank,\n"
+				       "user '%s',\n"
 				       "with at least %d characters."), 
 				     username, minsize);
       }
@@ -215,7 +255,7 @@ static int msgInputPin(const HBCI_User *user,
       g_free (msgstr);
     }
     else {
-      if (user && (user == data->user)) {
+      if (data->cache_valid && user && (user == data->user)) {
 	/* Cached user matches, so use cached PIN. */
 	/*printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));*/
 	*pinbuf = g_strdup (data->pw);
@@ -239,8 +279,8 @@ static int msgInputPin(const HBCI_User *user,
 	  }
 	}
 	else 
-	  msgstr = g_strdup ( _("Please enter PIN for \n"
-				"unknown user at unknown bank."));
+	  msgstr = g_strdup ( _("Please enter the PIN for \n"
+				"the newly created user."));
 	
 	retval = gnc_hbci_get_password (data->parent,
 					msgstr,
@@ -259,7 +299,9 @@ static int msgInputPin(const HBCI_User *user,
 	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"
 			     "long. Do you want to try again?"),
 			   minsize);
-      retval = gnc_verify_dialog (data->parent, TRUE, msg);
+      retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
+					   TRUE,
+					   msg);
       g_free (msg);
       if (!retval)
 	break;
@@ -295,23 +337,26 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
   g_assert(data);
 
   if (user != NULL) {
-    const char *username = 
-      (HBCI_User_userName (user) ? HBCI_User_userName (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
       case MediumTypeFile:
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
-	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
-				       "user '%s' at bank '%s' can be accessed."), 
-				     username, bank_to_str (b));
+	  msgstr = g_strdup_printf 
+	    ( _("Please make sure the key file for user '%s' at bank '%s' can be \n"
+		"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+		"the key file is on a floppy disk or other removable media, please make \n"
+		"sure the floppy disk or medium is correctly mounted."), 
+	      username, bank_to_str (b));
 	else 
 	  /* xgettext:c-format */	    
-	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
-				       "user '%s' at unknown bank can be accessed."), 
+	  msgstr = g_strdup_printf 
+	    ( _("Please make sure the key file for user '%s' can be \n"
+		"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+		"the key file is on a floppy disk or other removable media, please make \n"
+		"sure the floppy disk or medium is correctly mounted."), 
 				     username);
 	break;
       case MediumTypeCard:
@@ -324,7 +369,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-				       "user '%s' at unknown bank."), 
+				       "user '%s'."), 
 				     username);
     }
   }
@@ -332,16 +377,22 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
     switch (mtype) 
       {
       case MediumTypeFile:
-	msgstr = g_strdup ( _("Please make sure the key file for \n"
-			      "unknown user at unknown bank can be accessed."));
+	msgstr = g_strdup 
+	  (_("Please make sure the key file for the newly created user can be \n"
+	     "accessed. If you want to create the key file on your harddisk, simply \n"
+	     "press 'Ok'. If you want to create the key on a floppy disk or other \n"
+	     "removable media, please make sure the floppy disk or medium is \n"
+	     "correctly mounted."));
 	break;
       case MediumTypeCard:
       default:
 	msgstr = g_strdup ( _("Please insert chip card for \n"
-			      "unknown user at unknown bank."));
+			      "the newly created user."));
       }
     
-  retval = gnc_ok_cancel_dialog (data->parent, GTK_RESPONSE_OK, "%s", msgstr);
+  retval = gnc_ok_cancel_dialog (data->parent,
+					  GTK_RESPONSE_OK, 
+					  "%s", msgstr);
   g_free (msgstr);
   
   return (retval == GTK_RESPONSE_OK);
@@ -359,10 +410,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
   g_assert(data);
 
   if (user != NULL) {
-    const char *username = 
-      (HBCI_User_userName (user) ? HBCI_User_userName (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
@@ -376,8 +424,8 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
-				       "file for user '%s' at unknown bank. Please make \n"
-				       "sure the correct key file can be accessed."), 
+				       "file for user '%s'. Please make sure the \n"
+				       "correct key file can be accessed."), 
 				     username);
 	break;
       case MediumTypeCard: 
@@ -390,7 +438,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 	else 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-				       "user '%s' at unknown bank."), 
+				       "user '%s'."), 
 				     username);
       }
   }
@@ -399,32 +447,32 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
       {
       case MediumTypeFile: 
 	msgstr = g_strdup ( _("The key file does not seem to be the correct \n"
-			      "file for unknown user at unknown bank. Please make \n"
+			      "file for the newly created user. Please make \n"
 			      "sure the correct key file can be accessed."));
 	break;
       case MediumTypeCard: 
       default:
 	msgstr = g_strdup ( _("Please insert the correct chip card for \n"
-			      "unknown user at unknown bank."));
+			      "the newly created user."));
       }
   
-  retval = gnc_ok_cancel_dialog (data->parent, GTK_RESPONSE_OK, "%s", msgstr);
+  retval = gnc_ok_cancel_dialog (data->parent,
+					  GTK_RESPONSE_OK,
+					  "%s", msgstr);
   g_free (msgstr);
   
   return (retval == GTK_RESPONSE_OK);
 }
 
 
-static void msgStateResponse(const char *msg, void *user_data)
+/*static void msgStateResponse(const char *msg, void *user_data)
 {
   GNCInteractor *data = user_data;
   g_assert(data);
 
-  add_log_text (data, msg);
-  /*fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);*/
-  /* Let the widgets be redrawn */
+  GNCInteractor_add_log_text (data, msg);
   while (g_main_iteration (FALSE));
-}
+  }*/
 
 static int keepAlive(void *user_data)
 {
@@ -479,10 +527,7 @@ msgStartInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
 
   /* Create message string */
   if (user != NULL) {
-    const char *username = 
-      (HBCI_User_userName (user) ? HBCI_User_userName (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     bank = HBCI_User_bank (user);
     if (bank != NULL) {
       /* xgettext:c-format */	    
@@ -495,14 +540,14 @@ msgStartInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
     else {
       /* xgettext:c-format */	    
       msgstr = g_strdup_printf ( _("Please enter PIN for \n"
-				   "user '%s' at unknown bank\n"
+				   "user '%s'\n"
 				   "at the keypad of your chip card reader."),
 				 username);
     }
   }
   else 
     msgstr = g_strdup ( _("Please enter PIN for \n"
-			  "unknown user at unknown bank\n"
+			  "the newly created user \n"
 			  "at the keypad of your chip card reader."));
 
   /* Create new dialog */
@@ -514,6 +559,180 @@ msgStartInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
   g_free (msgstr);
 }
 
+/* ************************************************************ 
+ */
+
+int debug_pmonitor = FALSE;
+
+
+/* old ProgressMonitor callbacks
+ */
+
+static void actStarted (ActionProgressType type, void *user_data)
+{
+  GNCInteractor *data = user_data;
+  const char *msg = NULL;
+  g_assert(data);
+  switch (type) {
+    /** Creating HBCI job. Number of Job will follow in string argument. */
+  case ACT_FILLINGQUEUE:
+    msg = _("Creating HBCI Job");
+    break;
+    /** Contacting server. Server IP address will follow in string argument. */
+  case ACT_CONTACTINGSERVER:
+    msg = _("Contacting Server");
+    break;
+    /** Checking Job result. */
+  case ACT_CHKRESULT:
+    msg = _("Checking Job result");
+    break;
+    /** Updating local system. */
+  case ACT_UPDATESYSTEM:
+    msg = _("Updating local system");
+    break;
+    /** Closing connection. */
+  case ACT_CLOSECONNECTION:
+    msg = _("Closing connection");
+    break;
+  case ACT_OPENSESSION:
+    msg = _("Open session");
+    break;
+  case ACT_CLOSESESSION:
+    msg = _("Close session");
+    break;
+  case ACT_OPENDIALOG:
+    msg = _("Open dialog");
+    break;
+  case ACT_CLOSEDIALOG:
+    msg = _("Close dialog");
+    break;
+  case ACT_PROCESSMSG:
+    msg = _("Process message");
+    break;
+  case ACT_CREATEJOB:
+    msg = _("Create job");
+    break;
+  case ACT_HANDLEJOBS:
+    msg = _("Handle jobs");
+    break;
+  case ACT_SIGNMSG:
+    msg = _("Sign message");
+    break;
+  case ACT_ENCRYPTMSG:
+    msg = _("Encrypt message");
+    break;
+  case ACT_VERIFYMSG:
+    msg = _("Verify message");
+    break;
+  case ACT_DECRYPTMSG:
+    msg = _("Decrypt message");
+    break;
+  case ACT_ENCODEMSG:
+    msg = _("Encode message");
+    break;
+  case ACT_DECODEMSG:
+    msg = _("Decode message");
+    break;
+    /** Sending message. */
+  case ACT_SENDINGMESSAGE:
+    /* Note: the ACT_SENDINGMESSAGE doesn't seem to be used. */
+  case ACT_LOW_SENDMSG:
+    msg = _("Sending message");
+    break;
+  case ACT_LOW_RECEIVEMSG:
+    msg = _("Receiving message");
+    break;
+    /*default:
+      msg = _("Unknown");
+      break;*/
+  }
+  
+  g_assert(msg);
+  gtk_entry_set_text (GTK_ENTRY (data->action_entry), msg);
+  /* Let the widgets be redrawn */
+  while (g_main_iteration (FALSE));
+  if (debug_pmonitor)
+    printf("actStarted-cb: current_job %d, jobs %d, current_act %d, actions %d, msg %s.\n", 
+	   data->current_job, data->jobs, data->current_act, data->actions, msg);
+
+  GNCInteractor_setRunning (data);
+ 
+  /* Let the widgets be redrawn */
+  while (g_main_iteration (FALSE));
+}
+
+static void closeConnection(TransportType t, void *user_data)
+{
+  GNCInteractor *data = user_data;
+  g_assert(data);
+  data->current_act++;
+  gtk_entry_set_text (GTK_ENTRY (data->action_entry), _("Done"));
+  /*gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
+    1.0);*/
+
+  if (debug_pmonitor)
+    printf("actFinished-cb: current_job %d, jobs %d, current_act %d, actions %d.\n", 
+	   data->current_job, data->jobs, data->current_act, data->actions);
+  /*if (data->current_act > data->actions) {
+    printf("actFinished-cb: oops, current_act==%d is > than actions==%d.\n",
+    data->current_act, data->actions);
+    }*/
+  
+  GNCInteractor_setFinished (data);
+ 
+  while (g_main_iteration (FALSE));
+}
+static void logMsg (const char *msg, void *user_data)
+{
+  /* Note: this isn't used anyway. */
+  GNCInteractor *data = user_data;
+  g_assert(data);
+  
+  printf("logMsg: Logging msg: %s\n", msg);
+  GNCInteractor_add_log_text (data, msg);
+			    
+  /* Let the widgets be redrawn */
+  while (g_main_iteration (FALSE));
+}
+
+void GNCInteractor_add_log_text (GNCInteractor *data, const char *msg)
+{
+  int pos;
+  g_assert(data);
+  
+  pos = gtk_text_get_length (GTK_TEXT (data->log_text));
+  gtk_editable_insert_text (GTK_EDITABLE (data->log_text),
+			    msg, strlen (msg),
+			    &pos);
+  gtk_editable_insert_text (GTK_EDITABLE (data->log_text),
+			    "\n", 1,
+			    &pos);
+}
+
+static void
+on_button_clicked (GtkButton *button,
+		   gpointer user_data)
+{
+  GNCInteractor *data = user_data;
+  char *name;
+  g_assert(data);
+  
+  name = gtk_widget_get_name (GTK_WIDGET (button));
+  if (strcmp (name, "abort_button") == 0) {
+    GNCInteractor_setAborted(data);
+  } else if (strcmp (name, "close_button") == 0) {
+    if (data->state != RUNNING) {
+      gtk_widget_hide_all (data->dialog); 
+      /*data->dont_hide = FALSE;*/
+      /*GNCInteractor_hide (data);*/
+    }
+  } else {
+    printf("on_button_clicked: Oops, unknown button: %s\n",
+	   name);
+  }
+  /* Let the widgets be redrawn */
+  while (g_main_iteration (FALSE));
+}
 
 
 /********************************************************
@@ -523,15 +742,55 @@ HBCI_Interactor *
 gnc_hbci_new_interactor(GNCInteractor *data)
 {
   HBCI_InteractorCB *inter;
+  GtkWidget *dialog;
+  GladeXML *xml;
 
-  inter = HBCI_InteractorCB_new2(&destr,
+  /* Create the progress dialog window */
+  xml = gnc_glade_xml_new ("hbci.glade", "HBCI_connection_dialog");
+
+  g_assert (dialog = glade_xml_get_widget (xml, "HBCI_connection_dialog"));
+  data->dialog = dialog;
+  g_assert (data->job_entry = glade_xml_get_widget (xml, "job_entry"));
+  g_assert (data->action_entry = glade_xml_get_widget (xml, "action_entry"));
+  g_assert (data->action_progress = 
+	    glade_xml_get_widget (xml, "action_progress"));
+  g_assert (data->log_text = glade_xml_get_widget (xml, "log_text"));
+  g_assert (data->abort_button = glade_xml_get_widget (xml, "abort_button"));
+  gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), FALSE);
+  g_assert (data->close_button = glade_xml_get_widget (xml, "close_button"));
+  g_assert (data->close_checkbutton = 
+	    glade_xml_get_widget (xml, "close_checkbutton"));
+
+  /* grey out the progress bar -- its unused at the moment */
+  gtk_widget_set_sensitive (data->action_progress, FALSE);
+  gtk_toggle_button_set_active 
+    (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
+     gnc_lookup_boolean_option("__gui", "hbci_close_on_finish", TRUE));
+
+  gtk_signal_connect (GTK_OBJECT (data->abort_button), "clicked", 
+		      GTK_SIGNAL_FUNC (on_button_clicked), data);
+  gtk_signal_connect (GTK_OBJECT (data->close_button), "clicked", 
+		      GTK_SIGNAL_FUNC (on_button_clicked), data);
+
+  if (data->parent)
+    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
+  /*gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);*/
+
+  gtk_object_ref (GTK_OBJECT (dialog));
+  gtk_widget_hide_all (dialog);
+
+
+  inter = HBCI_InteractorCB_new4(&destr,
 				 &msgInputPin,
 				 &msgInsertMediumOrAbort,
 				 &msgInsertCorrectMediumOrAbort,
-				 &msgStateResponse,
 				 &keepAlive,
 				 &msgStartInputPinViaKeypadCB,
 				 &msgEndInputPinViaKeypadCB,
+				 NULL,
+				 &closeConnection,
+				 &actStarted,
+				 &logMsg,
 				 data);
 
   return HBCI_InteractorCB_Interactor(inter);

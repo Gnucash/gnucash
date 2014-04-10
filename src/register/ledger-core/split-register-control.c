@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "AccWindow.h"
+#include "dialog-account.h"
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"

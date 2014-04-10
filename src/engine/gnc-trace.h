@@ -22,7 +22,11 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-/** @file gnc-trace.h @brief GnuCash error loging and tracing facility */
+/** @addtogroup Trace
+    @{ */
+
+/** @file gnc-trace.h 
+ *  @brief GnuCash error loging and tracing facility */
 
 #ifndef GNC_TRACE_H
 #define GNC_TRACE_H
@@ -76,7 +80,7 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
-extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
+//extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
 
 /** Initialize the error logging subsystem */
 void gnc_log_init (void);
@@ -103,9 +107,17 @@ const char * gnc_log_prettify (const char *name);
  * a CPU-cucking subroutine call. Thus, this is a #define, not a
  * subroutine call.  The prototype would have been:
  * gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); 
+ *
+ * Unfortunately this doesn't work due to circular dependencies and
+ * undefined symbols, so let's return it to a function call.  The real
+ * problem appears to be that gnc_log_modules isn't being exported
+ * so engine-helpers.c has an undefined symbol when linked into libgw-engine
+ *  -- Derek Atkins  <derek@ihtfp.com>   2004-01-06
+ *
+ * #define gnc_should_log(module,log_level) \
+ *             (log_level <= gnc_log_modules[module]) 
  */
-#define gnc_should_log(module,log_level)   \
-              (log_level <= gnc_log_modules[module]) 
+gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
 
 #define FUNK gnc_log_prettify(__FUNCTION__)
 
@@ -121,66 +133,72 @@ const char * gnc_log_prettify (const char *name);
  * handle.
  */
 
+/** Log an fatal error */
 #define FATAL(format, args...) {                     \
-  if (gnc_should_log (module, GNC_LOG_FATAL)) {      \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
-      "Fatal Error: %s: " format, FUNK, ## args);    \
-  }                                                  \
+      "Fatal Error: %s(): " format, FUNK , ## args); \
 }
 
+/** Log an serious error */
 #define PERR(format, args...) {                    \
   if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
-      "Error: %s: " format, FUNK, ## args);        \
+      "Error: %s(): " format, FUNK , ## args);     \
   }                                                \
 }
 
+/** Log an warning */
 #define PWARN(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
-      "Warning: %s: " format, FUNK, ## args);      \
+      "Warning: %s(): " format, FUNK , ## args);   \
   }                                                \
 }
 
+/** Print an informational note */
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
-      "Info: %s: " format, FUNK, ## args);         \
+      "Info: %s(): " format, FUNK , ## args);      \
   }                                                \
 }
 
+/** Print an debugging message */
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Debug: %s: " format, FUNK, ## args);        \
+      "Debug: %s(): " format, FUNK , ## args);     \
   }                                                \
 }
 
+/** Print an function entry debugging message */
 #define ENTER(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Enter: %s: " format, FUNK, ## args);        \
+      "Enter: %s" format, FUNK , ## args);         \
   }                                                \
 }
 
+/** Print an function exit debugging message */
 #define LEAVE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Leave: %s: " format, FUNK, ## args);        \
+      "Leave: %s" format, FUNK , ## args);         \
   }                                                \
 }
 
+/** Print an function trace debugging message */
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Trace: %s: " format, FUNK, ## args);        \
+      "Trace: %s(): " format, FUNK , ## args);     \
   }                                                \
 }
 
 #define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { (x); }}
 
 /* -------------------------------------------------------- */
-/* Infrastructure to make timing measurements for critical peices 
+/** Infrastructure to make timing measurements for critical peices 
  * of code. Used for only for performance tuning & debugging. 
  */
 
@@ -199,22 +217,26 @@ void gnc_report_clock_total (int clockno,
                              const char *function_name,
                              const char *format, ...);
 
+/** start a particular timer */
 #define START_CLOCK(clockno,format, args...) {              \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_start_clock (clockno, module, GNC_LOG_INFO,         \
-             __FUNCTION__, format, ## args);                \
+             __FUNCTION__, format , ## args);               \
 }
 
+/** report elapsed time since last report on a particular timer */
 #define REPORT_CLOCK(clockno,format, args...) {             \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_report_clock (clockno, module, GNC_LOG_INFO,        \
-             __FUNCTION__, format, ## args);                \
+             __FUNCTION__, format , ## args);               \
 }
 
+/** report total elapsed time since timer started */
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \
-             __FUNCTION__, format, ## args);                \
+             __FUNCTION__, format , ## args);               \
 }
 
 #endif /* GNC_TRACE_H */
+/* @} */

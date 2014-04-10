@@ -361,8 +361,8 @@ gnc_lot_get_latest_split (GNCLot *lot)
 void gnc_lot_register (void)
 {
   static const QofParam params[] = {
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
     { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
     { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance, NULL },
     { NULL },

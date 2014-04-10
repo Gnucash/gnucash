@@ -22,6 +22,7 @@ LDADD = \
 # that they should be executed, with more basic tests coming first.
 # 
 TESTS = \
+  test-link \
   test-load-engine \
   test-guid \
   test-date \
@@ -54,6 +55,7 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
+  test-link \
   test-commodities \
   test-date \
   test-freq-spec \
@@ -70,6 +72,9 @@ noinst_PROGRAMS = \
   test-split-vs-account \
   test-transaction-reversal \
   test-transaction-voiding
+
+test_link_SOURCES = test-link.c
+test_link_LDADD = ../libgncmod-engine.la 
 
 EXTRA_DIST = \
   test-create-account \

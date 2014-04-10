@@ -37,22 +37,22 @@ void qof_query_core_init(void);
 void qof_query_core_shutdown (void);
 
 /* 
- * An arbitrary Query Predicate.  Given the gnucash object and the
+ * An arbitrary Query Predicate.  Given the object and the
  * particular parameter get-function (obtained from the registry by
  * the Query internals), compare the object's parameter to the
- * predicate data
+ * predicate data.
  */
 typedef int (*QofQueryPredicateFunc) (gpointer object,
-			       QofAccessFunc get_fcn,
+			       QofParam *getter,
 			       QofQueryPredData *pdata);
 
 /* A callback for how to compare two (same-type) objects based on a
- * common get_fcn (parameter member), using the provided comparrison
+ * common getter (parameter member), using the provided comparison
  * options (which are the type-specific options).
  */
 typedef int (*QofCompareFunc) (gpointer a, gpointer b,
                               gint compare_options,
-                              QofAccessFunc get_fcn);
+                              QofParam *getter);
 
 /* Lookup functions */
 QofQueryPredicateFunc qof_query_core_get_predicate (char const *type);

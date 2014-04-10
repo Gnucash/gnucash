@@ -1,6 +1,23 @@
 /*
  * search-param.c -- a container for a Search Parameter 
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
 #ifdef HAVE_CONFIG_H
@@ -154,7 +171,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
       break;
 
     /* Save the converter */
-    converters = g_slist_prepend (converters, objDef->param_getfcn);
+    converters = g_slist_prepend (converters, (gpointer) objDef);
 
     /* And reset for the next parameter */
     type = search_type = objDef->param_type;
@@ -355,13 +372,13 @@ gnc_search_param_compute_value (GNCSearchParam *param, gpointer object)
   else
   {
     GSList *converters = gnc_search_param_get_converters (param);
-    QueryAccess fcn = NULL;
     gpointer res = object;
 
     /* Do all the object conversions */
-    for (; converters; converters = converters->next) {
-      fcn = converters->data;
-      res = fcn (res);
+    for (; converters; converters = converters->next) 
+    {
+      QofParam *qp = converters->data;
+      res = (qp->param_getfcn) (res, qp);
     }
 
     return res;

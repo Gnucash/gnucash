@@ -3,6 +3,24 @@
 ;;  load the business report definitions
 ;;
 ;;  Copyright (c) 2002 Derek Atkins <derek@ihtfp.com>
+;;
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report business-reports))
@@ -16,23 +34,23 @@
 
 (define gnc:menuname-business-reports (N_ "Business Reports"))
 
-(define (guid-ref type guid)
-  (gnc:html-build-url type (string-append "guid=" guid) #f))
+(define (guid-ref idstr type guid)
+  (gnc:html-build-url type (string-append idstr guid) #f))
 
 (define (gnc:customer-anchor-text customer)
-  (guid-ref gnc:url-type-customer (gnc:customer-get-guid customer)))
+  (guid-ref "customer=" gnc:url-type-customer (gnc:customer-get-guid customer)))
 
 (define (gnc:job-anchor-text job)
-  (guid-ref gnc:url-type-job (gnc:job-get-guid job)))
+  (guid-ref "job=" gnc:url-type-job (gnc:job-get-guid job)))
 
 (define (gnc:vendor-anchor-text vendor)
-  (guid-ref gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
+  (guid-ref "vendor=" gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
 
 (define (gnc:employee-anchor-text employee)
-  (guid-ref gnc:url-type-employee (gnc:employee-get-guid employee)))
+  (guid-ref "employee=" gnc:url-type-employee (gnc:employee-get-guid employee)))
 
 (define (gnc:invoice-anchor-text invoice)
-  (guid-ref gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
+  (guid-ref "invoice=" gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
 
 (define (gnc:owner-anchor-text owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym

@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Çek Defteri/Maaþ
+    </gnc-act:title>
+    <gnc-act:short-description>
+     GnuCash kullanmanýz için gereken asgari hesaplar
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+     Çek/maaþ hesabýnýzý takip etmek için bu planý kullanýn. Daha sonra ihtiyaç duyarsanýz, gelir ve giderlerinizi daha detaylý takip etmenizi saðlayacak bir plana geçersiniz.
+    </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Varlýklar</act:name>
+  <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Assets</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cari Varlýklar</act:name>
+  <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Cari Varlýklar</act:description>
+  <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Çek/Maaþ Hesabý</act:name>
+  <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Çek/Maaþ Hesabý</act:description>
+  <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gelir</act:name>
+  <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Gelir</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gider</act:name>
+  <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Gider</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">false</slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string"></slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sermaye</act:name>
+  <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sermaye</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Açýlýþ Bakiyeleri</act:name>
+  <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Açýlýþ Bakiyeleri</act:description>
+  <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -181,6 +181,11 @@
   "d" (N_ "Enables support for the European Union EURO currency") 
   (gnc:is-euro-currency-code (gnc:locale-default-iso-currency-code))))
 
+(gnc:register-configuration-option
+ (gnc:make-dateformat-option
+  (N_ "International") (N_ "Fancy Date Format")
+  "e" (N_ "The default date format used for fancy printed dates") #f))
+
 
 ;;; Register options
 
@@ -301,6 +306,26 @@ transaction.") #t))
 not each row")
   #f))
 
+
+;;; Summarybar Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Summarybar") (N_ "Show grand total")
+  "a" (N_ "Show a grand total of all accounts converted to the default report currency")
+  #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Summarybar") (N_ "Show non currency commodities")
+  "b" (N_ "Show non currency commodities")
+  #t))
+
+(gnc:options-make-date-interval!
+ gnc:*options-entries* (N_ "Summarybar")
+ (N_ "Start date") (N_ "Start date for profit/loss calculation")
+ (N_ "End date") (N_ "End date for profit/loss and date for net assets calculation")
+ "c")
 
 ;;; Reconcile Options
 

@@ -21,21 +21,20 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/* 
- * FILE:
- * qofbackend-p.h
- *
- * FUNCTION:
- * Pseudo-object defining how the engine can interact with different
- * back-ends (which may be SQL databases, or network interfaces to 
- * remote GnuCash servers.  In theory, file-io should be a type of 
- * backend).
- * 
- * The callbacks will be called at the appropriate times during 
- * a book session to allow the backend to store the data as needed.
- *
- */
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Object_Private
+    Private interfaces, not meant to be used by applications.
+    @{ */
+/** @name  Backend_Private
+   Pseudo-object defining how the engine can interact with different
+   back-ends (which may be SQL databases, or network interfaces to 
+   remote GnuCash servers.  In theory, file-io should be a type of 
+   backend).
+   
+   The callbacks will be called at the appropriate times during 
+   a book session to allow the backend to store the data as needed.
+@{ */
 
 #ifndef QOF_BACKEND_P_H
 #define QOF_BACKEND_P_H
@@ -44,10 +43,11 @@
 
 #include "qofbackend.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 #include "qofquery.h"
 #include "qofsession.h"
 
-/*
+/**
  * The session_begin() routine gives the backend a second initialization
  *    opportunity.  It is suggested that the backend check that 
  *    the URL is syntactically correct, and that it is actually
@@ -109,11 +109,11 @@
  *    to ERR_BACKEND_MOD_DESTROY from this routine, so that the 
  *    engine can properly clean up.
  *
- * The compile_query() method compiles a Gnucash query object into
+ * The compile_query() method compiles a QOF query object into
  *    a backend-specific data structure and returns the compiled
  *    query.  For an SQL backend, the contents of the query object
- *    need to be turned into a corresponding SQL query statement, and
- *    sent to the database for evaluation.
+ *    are typically turned into a corresponding SQL query statement, 
+ *    and sent to the database for evaluation.
  *
  * The free_query() method frees the data structure returned from 
  *    compile_query()
@@ -235,9 +235,9 @@ struct _QofBackend
 
   void (*load) (QofBackend *, QofBook *);
 
-  void (*begin) (QofBackend *, QofIdTypeConst, gpointer);
-  void (*commit) (QofBackend *, QofIdTypeConst, gpointer);
-  void (*rollback) (QofBackend *, QofIdTypeConst, gpointer);
+  void (*begin) (QofBackend *, QofInstance *);
+  void (*commit) (QofBackend *, QofInstance *);
+  void (*rollback) (QofBackend *, QofInstance *);
 
   gpointer (*compile_query) (QofBackend *, QofQuery *);
   void (*free_query) (QofBackend *, gpointer);
@@ -255,7 +255,7 @@ struct _QofBackend
   QofBackendError last_err;
   char * error_msg;
 
-  /* XXX price_lookup should be removed during the redesign
+  /** XXX price_lookup should be removed during the redesign
    * of the SQL backend... prices can now be queried using
    * the generic query mechanism.
    *
@@ -265,32 +265,39 @@ struct _QofBackend
    */
   void (*price_lookup) (QofBackend *, gpointer);
 
-  /* XXX Export should really _NOT_ be here, but is left here for now.
+  /** XXX Export should really _NOT_ be here, but is left here for now.
    * I'm not sure where this should be going to. It should be
    * removed ASAP. 
    */
   void (*export) (QofBackend *, QofBook *);
 };
 
-/*
+/**
  * The qof_backend_set_error() routine pushes an error code onto the error
  *   stack. (FIXME: the stack is 1 deep in current implementation).
- *
+ */
+void qof_backend_set_error (QofBackend *be, QofBackendError err);
+
+/**
  * The qof_backend_get_error() routine pops an error code off the error
  *   stack.
- *
+ */
+QofBackendError qof_backend_get_error (QofBackend *be);
+/** 
  * The qof_backend_set_message() assigns a string to the backend error
  *   message.
- *
+ */
+void qof_backend_set_message(QofBackend *be, const char *format, ...);
+
+/**
  * The qof_backend_get_message() pops the error message string from
  *   the Backend.  This string should be freed with g_free().
  */
-
-void qof_backend_set_error (QofBackend *be, QofBackendError err);
-QofBackendError qof_backend_get_error (QofBackend *be);
-void qof_backend_set_message(QofBackend *be, const char *format, ...);
 char * qof_backend_get_message(QofBackend *be);
 
 void qof_backend_init(QofBackend *be);
 
+/* @} */
+/* @} */
+/* @} */
 #endif /* QOF_BACKEND_P_H */

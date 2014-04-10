@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofquerycore.h -- API for providing core Query data types           *
+ * qofquerycore.h -- API for providing core Query data types        *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,8 +21,11 @@
  *                                                                  *
 \********************************************************************/
 
+/** @addtogroup Query
+    @{ */
+                                                                                
 /** @file qofquerycore.h
-    @breif API for providing core Query data types
+    @brief API for providing core Query data types
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
 */
 
@@ -36,6 +39,11 @@
 #include "kvp_frame.h"
 #include "qofclass.h"
 
+/**
+ * PREDICATE DATA TYPES: All the predicate data types are rolled up into
+ * the union type PredicateData.  The "type" field specifies which type
+ * the union is.  
+ */
 typedef struct _QofQueryPredData QofQueryPredData;
 
 /** Standard Query comparitors, for how to compare objects in a predicate.
@@ -59,13 +67,32 @@ typedef enum {
   QOF_STRING_MATCH_CASEINSENSITIVE
 } QofStringMatch;
 
-/* Comparisons for QOF_TYPE_DATE	*/
+/** Comparisons for QOF_TYPE_DATE	
+ * The QOF_DATE_MATCH_DAY comparison rounds the two time
+ *     values to mid-day and then compares these rounded values.
+ * The QOF_DATE_MATCH_TIME comparison matches teh time values,
+ *     down to the second.
+ */
+/* XXX remove these deprecated old names .. */
+#define QOF_DATE_MATCH_ROUNDED QOF_DATE_MATCH_DAY
+#define QOF_DATE_MATCH_NORMAL  QOF_DATE_MATCH_TIME
 typedef enum {
   QOF_DATE_MATCH_NORMAL = 1,
-  QOF_DATE_MATCH_ROUNDED
+  QOF_DATE_MATCH_DAY
 } QofDateMatch;
 
-/* Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED	*/
+/* Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED	
+ *
+ * XXX Should be deprecated, or at least wrapped up as a convnience
+ * function,  this is based on the old bill gribble code, which assumed 
+ * the amount was always positive, and the then specified a funds-flow 
+ * direction (credit, debit, or either).
+ * 
+ * The point being that 'match credit' is equivalent to the compound
+ * predicate (amount >= 0) && (amount 'op' value) while the  'match
+ * debit' predicate is equivalent to (amount <= 0) && (abs(amount) 'op' value)
+*/
+
 typedef enum {
   QOF_NUMERIC_MATCH_DEBIT = 1,
   QOF_NUMERIC_MATCH_CREDIT,
@@ -87,16 +114,22 @@ typedef enum {
   QOF_GUID_MATCH_LIST_ANY,
 } QofGuidMatch;
 
-/** No extended comparisons for QOF_TYPE_INT32, QOF_TYPE_INT64,
- *  QOF_TYPE_DOUBLE, QOF_TYPE_BOOLEAN, QOF_TYPE_KVP
+/** A CHAR type is for a RECNCell, Comparisons for QOF_TYPE_CHAR 
+ *  'ANY' will match any charagter in the string.
+ *
+ * Match 'ANY' is a convenience/performance-enhanced predicate 
+ * for the compound statement (value==char1) || (value==char2) || etc.
+ * Match 'NONE' is equivalent to 
+ * (value != char1) && (value != char2) && etc.
  */
-
-/** A CHAR type is for a RECNCell */
-/* Comparisons for QOF_TYPE_CHAR */
 typedef enum {
   QOF_CHAR_MATCH_ANY = 1,
   QOF_CHAR_MATCH_NONE
 } QofCharMatch;
+
+/** No extended comparisons for QOF_TYPE_INT32, QOF_TYPE_INT64,
+ *  QOF_TYPE_DOUBLE, QOF_TYPE_BOOLEAN, QOF_TYPE_KVP
+ */
 
 /** Head of Predicate Data structures.  All PData must start like this. */
 struct _QofQueryPredData {
@@ -105,24 +138,42 @@ struct _QofQueryPredData {
 };
 
 
-/** Core Data Type Predicates */
-QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, char *str,
-					 QofStringMatch options,
-					 gboolean is_regex);
+/** @name Core Data Type Predicates 
+    @{ */
+QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, 
+                                              const char *str,
+                                              QofStringMatch options,
+                                              gboolean is_regex);
+
 QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
-				       QofDateMatch options, Timespec date);
+                                            QofDateMatch options, 
+                                            Timespec date);
+
 QofQueryPredData *qof_query_numeric_predicate (QofQueryCompare how,
-					  QofNumericMatch options,
-					  gnc_numeric value);
+                                               QofNumericMatch options,
+                                               gnc_numeric value);
+
 QofQueryPredData *qof_query_guid_predicate (QofGuidMatch options, GList *guids);
 QofQueryPredData *qof_query_int32_predicate (QofQueryCompare how, gint32 val);
 QofQueryPredData *qof_query_int64_predicate (QofQueryCompare how, gint64 val);
 QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
-				       const char *chars);
+                                            const char *chars);
+
+/** The qof_query_kvp_predicate() matches the object that has
+ *  the value 'value' located at the path 'path'.  In a certain
+ *  sense, the 'path' is handled as if it were a paramter.
+ */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-				      GSList *path, const KvpValue *value);
+                                           GSList *path, 
+                                           const KvpValue *value);
+
+/** Same predicate as above, except that 'path' is assumed to be 
+ * a string containing slash-separated pathname. */
+QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
+                                                const char *path, 
+                                                const KvpValue *value);
 
 /** Copy a predicate. */
 QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);
@@ -133,7 +184,8 @@ void qof_query_core_predicate_free (QofQueryPredData *pdata);
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */
-char * qof_query_core_to_string (char const *type, gpointer object,
-			     QofAccessFunc fcn);
+char * qof_query_core_to_string (QofType, gpointer object, QofParam *getter);
 
 #endif /* QOF_QUERYCORE_H */
+/* @} */
+/* @} */

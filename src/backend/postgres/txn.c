@@ -480,7 +480,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             /* next, restore all split data */
             xaccSplitSetMemo(s, DB_GET_VAL("memo",j));
             xaccSplitSetAction(s, DB_GET_VAL("action",j));
-            ts = gnc_iso8601_to_timespec_local
+            ts = gnc_iso8601_to_timespec_gmt
               (DB_GET_VAL("date_reconciled",j));
             xaccSplitSetDateReconciledTS (s, &ts);
 
@@ -774,9 +774,9 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        if (do_set_guid) xaccTransSetGUID (trans, trans_guid);
        xaccTransSetNum (trans, DB_GET_VAL("num",j));
        xaccTransSetDescription (trans, DB_GET_VAL("description",j));
-       ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
+       ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_posted",j));
        xaccTransSetDatePostedTS (trans, &ts);
-       ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
+       ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
        xaccTransSetDateEnteredTS (trans, &ts);
        xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
        xaccTransSetCurrency (trans, currency);

@@ -20,18 +20,31 @@
  *                                                                  *
 \********************************************************************/
 
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Scrub
+    Data scrubbing, repairing and forward migration routines.
+    These routines check and repair data, making sure that it
+    is in a format that the current version of the GnuCash
+    Engine likes.  These routines serve both to provide backwards
+    compatibility with older versions of GnuCash, and to fix
+    or at least paper over possible current problems.
+
+    It is typically expected that the scrub routines are run 
+    over newly imported data, as well as during data file input.
+    
+    In some cases, it is entirely appropriate to invoke these
+    routines from the GUI, to validate that the user input 
+    through the GUI is in a format that the system likes.  
+    This includes things like balancing individual transactions,
+    or assigning splits to lots, so that capital gains can be 
+    computed.
+    @{ */
+
 /** @file Scrub.h
- *
- * Provides a set of functions and utilities for checking and
- * repairing (formerly called 'scrubbing clean') single-entry accounts
- * so that they can be promoted into self-consistent, clean
- * double-entry accounts. Basically and additionally, this file
- * collects all functions that turn old (deprecated) data structures
- * into the current new data model.
- *
- * HISTORY:
- * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
+ *  @brief convert single-entry accounts to clean double-entry 
+ *  @author Created by Linas Vepstas December 1998
+ *  @author Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_SCRUB_H
@@ -40,27 +53,41 @@
 #include "Group.h"
 #include "gnc-engine.h"
 
-/** The ScrubOrphans() methods search for transacations that contain
- *    splits that do not have a parent account. These "orphaned splits"
- *    are placed into an "orphan account" which the user will have to 
- *    go into and clean up.  Kind of like the unix "Lost+Found" directory
- *    for orphaned inodes.
- *
- * The xaccTransScrubOrphans() method scrubs only the splits in the
+/** @name Double-Entry Scrubbing
+    Convert single-entry accounts to clean double-entry 
+
+    Provides a set of functions and utilities for checking and
+    repairing (formerly called 'scrubbing clean') single-entry accounts
+    so that they can be promoted into self-consistent, clean
+    double-entry accounts. Basically and additionally, this file
+    collects all functions that turn old (deprecated) data structures
+    into the current new data model.
+
+    The ScrubOrphans() methods search for transacations that contain
+    splits that do not have a parent account. These "orphaned splits"
+    are placed into an "orphan account" which the user will have to 
+    go into and clean up.  Kind of like the unix "Lost+Found" directory
+    for orphaned inodes.  
+    @{  */
+
+/** The xaccTransScrubOrphans() method scrubs only the splits in the
  *    given transaction. 
- *
- * The xaccAccountScrubOrphans() method performs this scrub only for the 
- *    indicated account, and not for any of its children.
- *
- * The xaccAccountTreeScrubOrphans() method performs this scrub for the 
- *    indicated account and its children.
- *
- * The xaccGroupScrubOrphans() method performs this scrub for the 
- *    child accounts of this group.
  */
 void xaccTransScrubOrphans (Transaction *trans);
+
+/** The xaccAccountScrubOrphans() method performs this scrub only for the 
+ *    indicated account, and not for any of its children.
+ */
 void xaccAccountScrubOrphans (Account *acc);
+
+/** The xaccAccountTreeScrubOrphans() method performs this scrub for the 
+ *    indicated account and its children.
+ */
 void xaccAccountTreeScrubOrphans (Account *acc);
+
+/** The xaccGroupScrubOrphans() method performs this scrub for the 
+ *    child accounts of this group. 
+ */
 void xaccGroupScrubOrphans (AccountGroup *grp);
 
 /** The xaccSplitScrub method ensures that if this split has the same
@@ -121,3 +148,6 @@ void xaccGroupScrubCommodities (AccountGroup *group);
 void xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table);
 
 #endif /* XACC_SCRUB_H */
+/** @} */
+/** @} */
+/** @} */

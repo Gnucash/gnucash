@@ -171,6 +171,8 @@ static const gchar *month_name(int mon)
     struct tm my_tm;
     int i;
 
+    memset( buf, 0, MONTH_NAME_BUFSIZE );
+    memset( &my_tm, 0, sizeof( struct tm ) );
     my_tm.tm_mon = mon;
     i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%b", &my_tm);
     return buf;
@@ -187,6 +189,8 @@ static const gchar *day_label(int wday)
     struct tm my_tm;
     int i;
     
+    memset( buf, 0, MONTH_NAME_BUFSIZE );
+    memset( &my_tm, 0, sizeof( struct tm ) );
     my_tm.tm_wday = wday;
     i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%a", &my_tm);
     /* Wild hack to use only the first two letters */
@@ -467,6 +471,13 @@ gnc_dense_cal_destroy (GtkObject *object)
         g_return_if_fail (GNC_IS_DENSE_CAL (object));
 
         dcal = GNC_DENSE_CAL(object);
+
+        if ( GTK_WIDGET_REALIZED( dcal->transPopup ) ) {
+                gtk_widget_hide( GTK_WIDGET(dcal->transPopup) );
+                gtk_widget_destroy( GTK_WIDGET(dcal->transPopup) );
+                dcal->transPopup = NULL;
+        }
+
         if ( dcal->drawbuf )
                 gdk_pixmap_unref( dcal->drawbuf );
 
@@ -762,13 +773,13 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                                                 dcal->label_width,
                                                 dcal->label_height, -1 );
                         gdk_draw_rectangle( dcal->monthLabels[i],
-                                            widget->style->bg_gc[widget->state],
+                                            widget->style->white_gc,
                                             TRUE, 0, 0,
                                             dcal->label_width,
                                             dcal->label_height );
 
                         gdk_draw_rectangle( tmpPix,
-                                            widget->style->bg_gc[widget->state],
+                                            widget->style->white_gc,
                                             TRUE, 0, 0,
                                             dcal->label_height,
                                             dcal->label_width );
@@ -783,7 +794,7 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                                                 dcal->label_width );
 
                         /* now, (transpose the pixel matrix)==(do a 90-degree
-                         * counter-clocwise rotation) */
+                         * counter-clockwise rotation) */
                         for ( x=0; x < dcal->label_height; x++ ) {
                                 for ( y=0; y < dcal->label_width; y++ ) {
                                         if ( gdk_image_get_pixel( tmpImg, x, y )
@@ -955,7 +966,7 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                       g_date_add_days( &d, 1 ), doc++ ) {
                         doc_coords( dcal, doc, &x1, &y1, &x2, &y2 );
                         memset( dayNumBuf, 0, 3 );
-                        sprintf( dayNumBuf, "%d", g_date_day( &d ) );
+                        snprintf( dayNumBuf, 3, "%d", g_date_day( &d ) );
                         numW = gdk_string_width( dcal->dayLabelFont, dayNumBuf );
                         numH = gdk_string_height( dcal->dayLabelFont, dayNumBuf );
                         w = (x2 - x1)+1;
@@ -1018,6 +1029,8 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
                         rowText[1] = gdcmd->info;
                         gtk_clist_insert( cl, row++, rowText );
                 }
+
+                // FIXME: free 'date'?
         }
 }
 
@@ -1221,6 +1234,7 @@ month_coords( GncDenseCal *dcal, int monthOfCal, GList **outList )
 
         startD = g_date_new();
         endD = g_date_new();
+        // FIXME: clean these up?
 
         /* Calculate the number of weeks in the column before the month we're
          * interested in. */
@@ -1549,6 +1563,7 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
 
         /* Ignore non-realistic marks */
         if ( (gint)markToRemove == -1 ) {
+                DEBUG( "markToRemove = -1" );
                 return;
         }
 
@@ -1560,6 +1575,7 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
         }
         g_assert( l != NULL );
         if ( l == NULL ) {
+                DEBUG( "l == null" );
                 return;
         }
         g_assert( gdcmd != NULL );

@@ -30,10 +30,10 @@
 #define GNC_TAXTABLEP_H_
 
 #include "gncTaxTable.h"
+#include "qofid-p.h"
 
 gboolean gncTaxTableRegister (void);
 
-void gncTaxTableSetGUID (GncTaxTable *table, const GUID *guid);
 void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent);
 void gncTaxTableSetChild (GncTaxTable *table, GncTaxTable *child);
 void gncTaxTableSetRefcount (GncTaxTable *table, gint64 refcount);
@@ -63,5 +63,7 @@ GncTaxTable * gncCloneTaxTable (GncTaxTable *from, QofBook *book);
  * different ways.
  */
 GncTaxTable * gncTaxTableObtainTwin (GncTaxTable *from, QofBook *book);
+
+#define gncTaxTableSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
 
 #endif /* GNC_TAXTABLEP_H_ */

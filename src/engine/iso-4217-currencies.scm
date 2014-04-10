@@ -178,7 +178,7 @@
 ( "Turkmenistan Manat" "manat" "tenga" "ISO4217" "TMM" "795" 100 100 )
 ( "US Dollar" "dollar" "cent" "ISO4217" "USD" "840" 100 100 )
 ( "Uganda Shilling" "shilling" "cent"  "ISO4217" "UGX" "800" 100 100  )
-( "Ukraine Hryvnia" "hryvnia" "kopiyka"  "ISO4217" "UAG" "804" 100 100 )
+( "Ukraine Hryvnia" "hryvnia" "kopiyka"  "ISO4217" "UAH" "804" 100 100 )
 ( "United Arab Emirates Dirham" "dirham" "fil" "ISO4217" "AED" "784" 100 100 )
 ( "Uruguayan Peso" "peso" "centesimo" "ISO4217" "UYU" "858" 100 100 )
 ( "Uzbekistani Sum" "som" "tiyin" "ISO4217" "UZS" "860" 100 100 )

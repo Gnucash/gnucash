@@ -36,9 +36,10 @@
   again).  If the user refuses to select or create an account, NULL is
   returned.
 
-    @param account_online_id_value The string containing your unique account_id
-    coming from some string of your module.  This is the normal mode of
-    operation.
+    @param account_online_id_value The string containing your unique
+    account_id coming from some string of your module.  This is the
+    normal mode of operation. (FIXME: is this string still owned by
+    the caller or does this function take ownership?)
 
     If account_online_id_value==NULL, you basically end up with an account
     selector that allows you to select an account whose GUID will be 
@@ -83,8 +84,8 @@
   account was found or created.
 */
 Account * gnc_import_select_account(char * account_online_id_value,
-				    char auto_create,
-				    char * account_human_description,
+				    gboolean auto_create,
+				    const char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type,
 				    Account * default_selection,

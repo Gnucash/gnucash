@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -31,12 +32,7 @@
 #include <string.h>
 
 #include "guid.h"
-#include "messages.h"
-#include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-#include "gnc-be-utils.h"
-
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -47,20 +43,26 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 
+#include "Account.h"
+#include "messages.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
+#include "gnc-event-p.h"
+
+#include "gncAddressP.h"
 #include "gncBusiness.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
-#include "gncAddress.h"
 
 struct _gncEmployee 
 {
-  QofInstance inst;
+  QofInstance     inst;
   char *          id;
   char *          username;
   GncAddress *    addr;
   gnc_commodity * currency;
   gboolean        active;
-  
+ 
   char *          language;
   char *          acl;
   gnc_numeric     workday;
@@ -85,6 +87,7 @@ mark_employee (GncEmployee *employee)
   gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ============================================================== */
 /* Create/Destroy Functions */
 
 GncEmployee *gncEmployeeCreate (QofBook *book)
@@ -100,7 +103,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (book, &employee->inst.entity.guid, _GNC_MOD_NAME);
+  employee->addr = gncAddressCreate (book, &employee->inst.entity);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
@@ -133,6 +136,49 @@ static void gncEmployeeFree (GncEmployee *employee)
   g_free (employee);
 }
 
+GncEmployee *
+gncCloneEmployee (GncEmployee *from, QofBook *book)
+{
+  GncEmployee *employee;
+  if (!book || !from) return NULL;
+
+  employee = g_new0 (GncEmployee, 1);
+  qof_instance_init(&employee->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&employee->inst, &from->inst);
+
+  employee->id = CACHE_INSERT (from->id);
+  employee->username = CACHE_INSERT (from->username);
+  employee->language = CACHE_INSERT (from->language);
+  employee->acl = CACHE_INSERT (from->acl);
+  employee->addr = gncCloneAddress (from->addr, &employee->inst.entity, book);
+  employee->workday = from->workday;
+  employee->rate = from->rate;
+  employee->active = from->active;
+  employee->currency = gnc_commodity_obtain_twin(from->currency, book);
+  employee->ccard_acc = 
+     GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
+  
+  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
+
+  return employee;
+}
+
+GncEmployee *
+gncEmployeeObtainTwin (GncEmployee *from, QofBook *book)
+{
+  GncEmployee *employee;
+  if (!book) return NULL;
+
+  employee = (GncEmployee *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!employee)
+  {
+    employee = gncCloneEmployee (from, book);
+  }
+
+  return employee;
+}
+
+/* ============================================================== */
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
@@ -233,6 +279,7 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
   gncEmployeeCommitEdit (employee);
 }
 
+/* ============================================================== */
 /* Get Functions */
 const char * gncEmployeeGetID (GncEmployee *employee)
 {
@@ -302,7 +349,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  GNC_BEGIN_EDIT (&employee->inst);
+  QOF_BEGIN_EDIT (&employee->inst);
 }
 
 static inline void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
@@ -325,11 +372,12 @@ static inline void emp_free (QofInstance *inst)
 
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
-  GNC_COMMIT_EDIT_PART1 (&employee->inst);
-  GNC_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
+  QOF_COMMIT_EDIT_PART1 (&employee->inst);
+  QOF_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
                          gncEmployeeOnDone, emp_free);
 }
 
+/* ============================================================== */
 /* Other functions */
 
 int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
@@ -355,12 +403,14 @@ static QofObject gncEmployeeDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Employee",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncEmployeePrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncEmployeeRegister (void)
@@ -369,9 +419,9 @@ gboolean gncEmployeeRegister (void)
     { EMPLOYEE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetID, NULL },
     { EMPLOYEE_USERNAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetUsername, NULL },
     { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncEmployeeGetAddr, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

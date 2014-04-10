@@ -18,12 +18,10 @@
  *                                                                  *
 \********************************************************************/
 
-/* 
- * FILE:
- * split-register.c
- *
- * FUNCTION:
- * Provide view for SplitRegister object.
+/** 
+ * @addtogroup Ledger 
+ * @file split-register.c
+ * @brief Provide view for SplitRegister object.
  *
  *
  * DESIGN NOTES:
@@ -90,9 +88,8 @@
  * from the engine.
  * 
  *
- * HISTORY:
- * Copyright (c) 1998-2000 Linas Vepstas
- * Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
+ * @author Copyright (c) 1998-2000 Linas Vepstas <linas@linas.org>
+ * @author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  */
 
 #define _GNU_SOURCE
@@ -827,6 +824,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
                             "Are you sure you want to do that?");
     gboolean result;
 
+    Account * copied_leader;
     const GUID *new_guid;
     int trans_split_index;
     int split_index;
@@ -856,10 +854,8 @@ gnc_split_register_paste_current (SplitRegister *reg)
     split_index = gnc_trans_split_index(trans, split);
     trans_split_index = gnc_trans_split_index(trans, trans_split);
 
-    if ((gnc_split_register_get_default_account (reg) != NULL) &&
-        (safe_strcmp (xaccGUIDType(&copied_leader_guid,
-				   gnc_get_current_book ()),
-		      GNC_ID_NULL)))
+    copied_leader = xaccAccountLookup (&copied_leader_guid, gnc_get_current_book ());
+    if (copied_leader && (gnc_split_register_get_default_account (reg) != NULL))
     {
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,

@@ -20,6 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Object_Private
+    Private interfaces, not meant to be used by applications.
+    @{ */
+/** @name  Class_Private
+    @{ */
 
 #ifndef QOF_CLASSP_H
 #define QOF_CLASSP_H
@@ -31,4 +38,7 @@ void qof_class_shutdown (void);
 
 QofSortFunc qof_class_get_default_sort (QofIdTypeConst obj_name);
 
+/* @} */
+/* @} */
+/* @} */
 #endif /* QOF_CLASSP_H */

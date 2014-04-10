@@ -85,6 +85,7 @@ struct gnc_new_iso_code
 } gnc_new_iso_codes[] = {
   {"RUB", "RUR"}, // Russian Ruble
   {"PLZ", "PLN"}, // Polish Zloty
+  {"UAG", "UAH"}, // Ukraine Hryvnia
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
@@ -105,6 +106,7 @@ static gnc_quote_source currency_quote_source =
 
 static gnc_quote_source single_quote_sources[] = {
   { FALSE, 0, 0, "AEX", "AEX", "aex" },
+  { FALSE, 0, 0, "AMFI India", "AMFIINDIA", "amfiindia" },
   { FALSE, 0, 0, "ASX", "ASX", "asx" },
   { FALSE, 0, 0, "DWS", "DWS", "dwsfunds" },
   { FALSE, 0, 0, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
@@ -130,6 +132,7 @@ static gnc_quote_source multiple_quote_sources[] = {
   { FALSE, 0, 0, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
   { FALSE, 0, 0, "Dutch (AEX, ...)", "DUTCH", "dutch" },
   { FALSE, 0, 0, "Europe (Yahoo, ...)", "EUROPE", "europe" },
+  { FALSE, 0, 0, "India Mutual (AMFI, ...)", "INDIAMUTUAL", "indiamutual" },
   { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
   { FALSE, 0, 0, "Nasdaq (Yahoo, ...)", "NASDAQ", "nasdaq" },
   { FALSE, 0, 0, "NYSE (Yahoo, ...)", "NYSE", "nyse" },
@@ -932,6 +935,27 @@ gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct)
   gnc_commodity_table_destroy (old_ct);
 }
 
+gnc_commodity *
+gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
+{
+  gnc_commodity *twin;
+  const char * ucom;
+  gnc_commodity_table * comtbl;
+
+  if (!from) return NULL;
+  comtbl = gnc_commodity_table_get_table (book);
+  if (!comtbl) return NULL;
+
+  ucom = gnc_commodity_get_unique_name (from);
+  twin = gnc_commodity_table_lookup_unique (comtbl, ucom);
+  if (!twin)
+  {
+    twin = gnc_commodity_clone (from);
+    twin = gnc_commodity_table_insert (comtbl, twin);
+  }
+  return twin;
+}
+
 /********************************************************************
  * gnc_commodity_get_size
  * get the size of the commodity table
@@ -1574,12 +1598,14 @@ static QofObject commodity_table_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_COMMODITY_TABLE,
   type_label:        "CommodityTable",
+  create:            NULL,
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
   is_dirty:          NULL,
   mark_clean:        NULL,
   foreach:           NULL,
   printable:         NULL,
+  version_cmp:       NULL,
 };
 
 gboolean 

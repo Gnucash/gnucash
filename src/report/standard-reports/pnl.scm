@@ -56,6 +56,7 @@
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
+(define optname-show-zeros (N_ "Show accounts with a 0.0 total"))
 
 ;; options generator
 (define (pnl-options-generator)
@@ -116,6 +117,12 @@
       gnc:pagename-display optname-show-rates
       "f" (N_ "Show the exchange rates used") #t))
 
+    (gnc:register-option 
+     options
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-zeros
+      "g" (N_ "Show account with 0.0 balance") #t))
+
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)      
 
@@ -156,6 +163,8 @@
                                    optname-price-source))
          (show-rates? (get-option gnc:pagename-display 
                                   optname-show-rates))
+         (show-zeros? (get-option gnc:pagename-display 
+                                  optname-show-zeros))
          (to-date-tp (gnc:timepair-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
@@ -197,7 +206,7 @@
                        #t gnc:accounts-get-comm-total-profit 
                        (_ "Profit") do-grouping? 
                        show-parent-balance? show-parent-total?
-                       show-fcur? report-currency exchange-fn #t))
+                       show-fcur? report-currency exchange-fn show-zeros?))
           ;; add the table 
           (gnc:html-document-add-object! doc table)
 

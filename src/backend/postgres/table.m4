@@ -294,7 +294,7 @@ define(`compare_one_only',
       GET_RESULTS (be->connection, result);
       IF_ONE_ROW (result, nrows, i) {
 
-         /* compared queried values to input values */
+         /* Compare queried values to input values. */
          cmp_fields($@)
       }
 

@@ -32,7 +32,6 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-be-utils.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -48,6 +47,7 @@
 
 #include "qofbackend.h"
 #include "qofbackend-p.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofclass.h"
@@ -141,8 +141,6 @@ xaccMallocAccount (QofBook *book)
 Account *
 xaccCloneAccountSimple(const Account *from, QofBook *book)
 {
-    const char * ucom;
-    const gnc_commodity_table * comtbl;
     Account *ret;
 
     if (!from || !book) return NULL;
@@ -166,9 +164,7 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
 
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
-    ucom = gnc_commodity_get_unique_name (from->commodity);
-    comtbl = gnc_commodity_table_get_table (book);
-    ret->commodity    = gnc_commodity_table_lookup_unique (comtbl, ucom);
+    ret->commodity = gnc_commodity_obtain_twin (from->commodity, book);
 
     ret->commodity_scu = from->commodity_scu;
     ret->non_standard_scu = from->non_standard_scu;
@@ -181,8 +177,6 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
 Account *
 xaccCloneAccount (const Account *from, QofBook *book)
 {
-    const char * ucom;
-    const gnc_commodity_table * comtbl;
     Account *ret;
 
     if (!from || !book) return NULL;
@@ -206,9 +200,7 @@ xaccCloneAccount (const Account *from, QofBook *book)
 
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
-    ucom = gnc_commodity_get_unique_name (from->commodity);
-    comtbl = gnc_commodity_table_get_table (book);
-    ret->commodity    = gnc_commodity_table_lookup_unique (comtbl, ucom);
+    ret->commodity = gnc_commodity_obtain_twin (from->commodity, book);
 
     ret->commodity_scu = from->commodity_scu;
     ret->non_standard_scu = from->non_standard_scu;
@@ -326,7 +318,7 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  GNC_BEGIN_EDIT (&acc->inst);
+  QOF_BEGIN_EDIT (&acc->inst);
 }
 
 static inline void noop(QofInstance *inst) {}
@@ -346,7 +338,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  GNC_COMMIT_EDIT_PART1 (&acc->inst);
+  QOF_COMMIT_EDIT_PART1 (&acc->inst);
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -393,7 +385,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  GNC_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
+  QOF_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
 
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
@@ -1750,6 +1742,36 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
 }
 
 /*
+ * Convert a balance from one currency to another with price of
+ * a given date.
+ */
+gnc_numeric
+xaccAccountConvertBalanceToCurrencyAsOfDate(Account *account, /* for book */
+					    gnc_numeric balance,
+					    gnc_commodity *balance_currency,
+					    gnc_commodity *new_currency,
+					    time_t date)
+{
+  QofBook *book;
+  GNCPriceDB *pdb;
+  Timespec ts;
+
+  if (gnc_numeric_zero_p (balance) ||
+      gnc_commodity_equiv (balance_currency, new_currency))
+    return balance;
+
+  book = xaccGroupGetBook (xaccAccountGetRoot (account));
+  pdb = gnc_book_get_pricedb (book);
+
+  ts.tv_sec = date;
+  ts.tv_nsec = 0;
+
+  balance = gnc_pricedb_convert_balance_nearest_price(pdb, balance, balance_currency, new_currency, ts);
+
+  return balance;
+}
+
+/*
  * Given an account and a GetBalanceFn pointer, extract the requested
  * balance from the account and then convert it to the desired
  * currency.
@@ -2389,8 +2411,9 @@ xaccAccountSetReconcileLastInterval (Account *account, int months, int days)
 
   xaccAccountBeginEdit (account);
 
-  frame = kvp_frame_get_frame (account->inst.kvp_data, 
+  frame = kvp_frame_get_frame_slash (account->inst.kvp_data, 
          "/reconcile-info/last-interval");
+  g_assert(frame);
 
   kvp_frame_set_gint64 (frame, "months", months);
   kvp_frame_set_gint64 (frame, "days", days);
@@ -2813,12 +2836,14 @@ static QofObject account_object_def = {
   interface_version:     QOF_OBJECT_VERSION,
   e_type:                GNC_ID_ACCOUNT,
   type_label:            "Account",
+  create:                NULL,
   book_begin:            NULL,
   book_end:              NULL,
   is_dirty:              NULL,
   mark_clean:            NULL,
   foreach:               qof_collection_foreach,
-  printable:             (const char* (*)(gpointer)) xaccAccountGetName
+  printable:             (const char* (*)(gpointer)) xaccAccountGetName,
+  version_cmp:           (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 gboolean xaccAccountRegister (void)
@@ -2834,8 +2859,8 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance, NULL },
     { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
     { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_guid, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };

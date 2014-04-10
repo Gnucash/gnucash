@@ -34,8 +34,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -193,6 +193,7 @@ mark_entry (GncEntry *entry)
   gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ================================================================ */
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (QofBook *book)
@@ -257,6 +258,30 @@ static void gncEntryFree (GncEntry *entry)
   g_free (entry);
 }
 
+GncEntry *
+gncCloneEntry (GncEntry *from, QofBook *book)
+{
+  /* XXX unfinished */
+  return NULL;
+}
+
+GncEntry *
+gncEntryObtainTwin (GncEntry *from, QofBook *book)
+{
+  GncEntry *entry;
+  if (!book) return NULL;
+
+  entry = (GncEntry *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!entry)
+  {
+    entry = gncCloneEntry (from, book);
+  }
+
+  return entry;
+}
+
+
+/* ================================================================ */
 /* Set Functions */
 
 void gncEntrySetDate (GncEntry *entry, Timespec date)
@@ -587,6 +612,7 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   gncEntryCommitEdit (dest);
 }
 
+/* ================================================================ */
 /* Get Functions */
 
 Timespec gncEntryGetDate (GncEntry *entry)
@@ -745,6 +771,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
+/* ================================================================ */
 /*
  * This is the logic of computing the total for an Entry, so you know
  * what values to put into various Splits or to display in the ledger.
@@ -1084,9 +1111,11 @@ gboolean gncEntryIsOpen (GncEntry *entry)
   return (entry->inst.editlevel > 0);
 }
 
+/* ================================================================ */
+
 void gncEntryBeginEdit (GncEntry *entry)
 {
-  GNC_BEGIN_EDIT (&entry->inst);
+  QOF_BEGIN_EDIT (&entry->inst);
 }
 
 static inline void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
@@ -1104,8 +1133,8 @@ static inline void entry_free (QofInstance *inst)
 
 void gncEntryCommitEdit (GncEntry *entry)
 {
-  GNC_COMMIT_EDIT_PART1 (&entry->inst);
-  GNC_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
+  QOF_COMMIT_EDIT_PART1 (&entry->inst);
+  QOF_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
 			 gncEntryOnDone, entry_free);
 }
 
@@ -1140,12 +1169,14 @@ static QofObject gncEntryDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Order/Invoice/Bill Entry",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          NULL,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncEntryRegister (void)
@@ -1164,8 +1195,8 @@ gboolean gncEntryRegister (void)
     { ENTRY_BILLABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable, NULL },
     { ENTRY_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncEntryGetBillTo, NULL },
     { ENTRY_ORDER, GNC_ID_ORDER, (QofAccessFunc)gncEntryGetOrder, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

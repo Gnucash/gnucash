@@ -1,17 +1,17 @@
 /********************************************************************\
- * FreqSpec.c -- Frequency specifier implementation.      *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>     *
- * Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>      *
- *                          *
+ * FreqSpec.c -- Frequency specifier implementation.                *
+ * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>                *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.         *
- *                          *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.           *
+ * GNU General Public License for more details.                     *
  *                          *
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, contact:         *
@@ -88,8 +88,8 @@
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "messages.h"
 #include "gnc-trace.h"
+#include "messages.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -138,6 +138,7 @@ get_wday_name(guint day)
 {
   static gchar wday_name[WDAY_BUF_WIDTH];
   struct tm t;
+  memset( &t, 0, sizeof( t ) );
   t.tm_wday = day;
   strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
   return wday_name;
@@ -160,6 +161,7 @@ get_abbrev_month_name(guint month)
 {
   static gchar month_name[WDAY_BUF_WIDTH];
   struct tm t;
+  memset( &t, 0, sizeof( t ) );
   t.tm_mon = month;
   strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
   return month_name;
@@ -179,8 +181,8 @@ xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
    g_return_if_fail( fs );
    g_return_if_fail (book);
 
-   col = qof_book_get_collection (book, GNC_ID_FREQSPEC);
-   qof_entity_init (&fs->entity, GNC_ID_FREQSPEC, col);
+   col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
+   qof_entity_init (&fs->entity, QOF_ID_FREQSPEC, col);
 
    fs->type = INVALID;
    fs->uift = UIFREQ_ONCE;
@@ -240,7 +242,7 @@ xaccFreqSpecGetType( FreqSpec *fs )
 {
    g_return_val_if_fail( fs, INVALID );
    /* Is this really a fail? */
-   g_return_val_if_fail( fs->type != INVALID, INVALID );
+   //g_return_val_if_fail( fs->type != INVALID, INVALID );
    return fs->type;
 }
 
@@ -450,6 +452,14 @@ xaccFreqSpecIsValidDateRelaxed( FreqSpec *fs, time_t query )
    return "FIXME: not implemented yet!";
 }
 */
+
+void
+xaccFreqSpecSetNone( FreqSpec *fs )
+{
+        g_return_if_fail( fs );
+        xaccFreqSpecCleanUp( fs );
+        fs->type = INVALID;
+}
 
 void
 xaccFreqSpecSetOnceDate( FreqSpec *fs, const GDate* when )
@@ -709,6 +719,10 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
    memset( freqStrBuf, 0, MAX_FREQ_STR_SIZE + 1 );
 
    switch( xaccFreqSpecGetUIType( fs ) ) {
+   case UIFREQ_NONE:
+     snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("None") );
+     break;
+
    case UIFREQ_ONCE:
       tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );
       /* this is now a GDate. */
@@ -778,6 +792,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
          if ( xaccFreqSpecGetType(tmpFS) != WEEKLY ) {
             snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
                  "error: UIFREQ_WEEKLY doesn't contain weekly children" );
+            g_free( tmpStr );
             return;
          }
          if ( tmpInt == -1 ) {
@@ -785,7 +800,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
          }
          /* put the first letter of the weekday name in
             the appropriate position. */
-         dowIdx = tmpFS->s.weekly.offset_from_epoch;
+         dowIdx = tmpFS->s.weekly.offset_from_epoch % 7;
          tmpStr[dowIdx] = *(get_wday_name(dowIdx));
       }
 

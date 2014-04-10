@@ -309,7 +309,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    modity = gnc_string_to_commodity (DB_GET_VAL("currency",j), book);
    gnc_price_set_currency (pr, modity);
 
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("time",j));
+   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("time",j));
    gnc_price_set_time (pr, ts);
 
    gnc_price_set_source (pr, DB_GET_VAL("source",j));
@@ -462,7 +462,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
 void
 pgend_price_begin_edit (QofBackend * bend, GNCPrice *pr)
 {
-   if (pr && pr->db && pr->db->dirty) 
+   if (pr && pr->db && pr->db->inst.dirty) 
    {
       PERR ("price db is unexpectedly dirty");
    }
@@ -527,7 +527,7 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
    SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
-   if (pr->db) pr->db->dirty = FALSE;
+   if (pr->db) pr->db->inst.dirty = FALSE;
 
    LEAVE ("commited");
    return;

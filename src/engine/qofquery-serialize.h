@@ -1,7 +1,6 @@
 /********************************************************************\
- * dialog-account-pick.h -- window for picking a GNUcash account    *
- *                       (GnuCash)                                  *
- * Copyright (C) 2002 Christian <stimming@tuhh.de>
+ * qofquery-serialize.h -- Convert QofQuery to XML                  *
+ * Copyright (C) 2004 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,15 +18,29 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+/** @addtogroup Query
+   @{ */
+/** @file qofquery-serialize.h
+    @brief Convert QofQuery to XML
+    @author Copyright (C) 2001,2002,2004 Linas Vepstas <linas@linas.org>
+ */
 
-#ifndef DIALOG_ACCOUNT_PICK_H
-#define DIALOG_ACCOUNT_PICK_H
+#ifndef QOF_QUERY_SERIALIZE_H
+#define QOF_QUERY_SERIALIZE_H
 
-#include "Account.h"
+#include <qof/qofquery.h>
+#include <libxml/tree.h>
 
-Account *gnc_account_picker_dialog(Account *initial_sel);
+/** @addtogroup XML Serialize Queries to/from XML */
+/* @{ */
+/** Take the query passed as input, and serialize it into XML.
+ *  The DTD used will be a very qofquery specific DTD
+ *  This is NOT the XQuery XML.
+ */
+xmlNodePtr qof_query_to_xml (QofQuery *q);
+/* @} */
 
-typedef struct _accountpickerdialog GNCAccountPickerDialog;
-
-#endif
+#endif /* QOF_QUERY_SERIALIZE_H */
+/* @} */

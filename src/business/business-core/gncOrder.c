@@ -34,6 +34,7 @@
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -45,7 +46,6 @@
 #include "qofquerycore.h"
 
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -53,6 +53,7 @@
 #include "gncOrder.h"
 #include "gncOrderP.h"
 #include "gncOwner.h"
+#include "gncOwnerP.h"
 
 struct _gncOrder 
 {
@@ -96,6 +97,7 @@ mark_order (GncOrder *order)
   gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* =============================================================== */
 /* Create/Destroy Functions */
 
 GncOrder *gncOrderCreate (QofBook *book)
@@ -142,6 +144,58 @@ static void gncOrderFree (GncOrder *order)
   g_free (order);
 }
 
+GncOrder *
+gncCloneOrder (GncOrder *from, QofBook *book)
+{
+  GList *node;
+  GncOrder *order;
+
+  if (!book) return NULL;
+
+  order = g_new0 (GncOrder, 1);
+  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&order->inst, &from->inst);
+
+  order->id = CACHE_INSERT (from->id);
+  order->notes = CACHE_INSERT (from->notes);
+  order->reference = CACHE_INSERT (from->reference);
+
+  order->active = from->active;
+  order->printname = NULL; /* yes, null, that's right */
+  order->opened = from->opened;
+  order->closed = from->closed;
+
+  order->owner = gncCloneOwner (&from->owner, book);
+
+  order->entries = NULL;
+  for (node = g_list_last(from->entries); node; node=node->prev)
+  {
+    GncEntry *entry = node->data;
+    entry = gncEntryObtainTwin (entry, book);
+    order->entries = g_list_prepend (order->entries, entry);
+  }
+
+  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
+
+  return order;
+}
+
+GncOrder *
+gncOrderObtainTwin (GncOrder *from, QofBook *book)
+{
+  GncOrder *order;
+  if (!book) return NULL;
+
+  order = (GncOrder *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!order)
+  {
+    order = gncCloneOrder (from, book);
+  }
+
+  return order;
+}
+
+/* =============================================================== */
 /* Set Functions */
 
 void gncOrderSetID (GncOrder *order, const char *id)
@@ -209,6 +263,7 @@ void gncOrderSetActive (GncOrder *order, gboolean active)
   gncOrderCommitEdit (order);
 }
 
+/* =============================================================== */
 /* Add an Entry to the Order */
 void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 {
@@ -297,9 +352,11 @@ gboolean gncOrderIsClosed (GncOrder *order)
   return FALSE;
 }
 
+/* =============================================================== */
+
 void gncOrderBeginEdit (GncOrder *order)
 {
-  GNC_BEGIN_EDIT (&order->inst);
+  QOF_BEGIN_EDIT (&order->inst);
 }
 
 static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
@@ -317,8 +374,8 @@ static inline void order_free (QofInstance *inst)
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  GNC_COMMIT_EDIT_PART1 (&order->inst);
-  GNC_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
+  QOF_COMMIT_EDIT_PART1 (&order->inst);
+  QOF_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
 			 gncOrderOnDone, order_free);
 }
 
@@ -368,12 +425,14 @@ static QofObject gncOrderDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Order",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
   printable:          _gncOrderPrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncOrderRegister (void)
@@ -386,9 +445,9 @@ gboolean gncOrderRegister (void)
     { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
     { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, NULL },
     { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

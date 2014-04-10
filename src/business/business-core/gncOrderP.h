@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -33,6 +34,26 @@
 
 gboolean gncOrderRegister (void);
 gint64 gncOrderNextID (QofBook *book);
+
+/** The gncCloneOrder() routine makes a copy of the indicated
+ *  order, placing it in the indicated book.  It copies
+ *  the id, notes, reference, etc.
+ *  It then adds a pair of 'gemini' kvp pointers so that each copy
+ *  can be found from the other.
+ */
+
+GncOrder * gncCloneOrder (GncOrder *from, QofBook *);
+
+/** The gncOrderObtainTwin() will find the 'twin' of the
+ *  indicated order in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneOrder()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally  
+ * different ways.
+ */
+GncOrder * gncOrderObtainTwin (GncOrder *from, QofBook *book);
 
 #define gncOrderSetGUID(O,G) qof_entity_set_guid(QOF_ENTITY(O),(G))
 

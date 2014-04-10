@@ -21,11 +21,20 @@
 
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Scrub  Data Validation
+    @{ */
 /** @file Scrub2.h
- *  @breif Utilities to Convert Stock Accounts to use Lots
+ *  @brief Utilities to Convert Stock Accounts to use Lots
  *  @author Created by Linas Vepstas March 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
- *
+ */
+
+#ifndef XACC_SCRUB2_H
+#define XACC_SCRUB2_H
+
+#include "gnc-engine.h"
+
+/** @name Lot Management Routines
  * Provides the low-level API for checking and repairing ('scrubbing 
  * clean') the usage of Lots and lot balances in stock and commodity 
  * accounts.  Broken lots are repaired using a first-in, first-out 
@@ -35,12 +44,7 @@
  * only one particular task needed to clean up a Lot.  To clean up a 
  * Lot as a whole, you almost certainly want to use one of the
  * high-level API routines from the Scrub3.h file.
- */
-
-#ifndef XACC_SCRUB2_H
-#define XACC_SCRUB2_H
-
-#include "gnc-engine.h"
+ @{ */
 
 /** The xaccAccountAssignLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs
@@ -120,4 +124,6 @@ gboolean xaccScrubMergeTransSubSplits (Transaction *txn);
 gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
 
 #endif /* XACC_SCRUB2_H */
+/** @} */
+/** @} */
 /** @} */

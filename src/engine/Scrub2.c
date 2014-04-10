@@ -55,6 +55,10 @@
 static short module = MOD_LOT;
 
 /* ============================================================== */
+/** Loop over all splits, and make sure that every split
+ * belongs to some lot.  If a split does not belong to 
+ * any lots, poke it into one.
+ */
 
 void
 xaccAccountAssignLots (Account *acc)
@@ -66,10 +70,6 @@ xaccAccountAssignLots (Account *acc)
    ENTER ("acc=%s", acc->accountName);
    xaccAccountBeginEdit (acc);
 
-   /* Loop over all splits, and make sure that every split
-    * belongs to some lot.  If a split does not belong to 
-    * any lots, poke it into one.
-    */
 restart_loop:
    for (node=acc->splits; node; node=node->next)
    {
@@ -82,7 +82,6 @@ restart_loop:
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
 }
-
 
 /* ============================================================== */
 

@@ -36,8 +36,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofinstance.h"
@@ -51,6 +51,7 @@
 #include "gncBusiness.h"
 #include "gncJob.h"
 #include "gncJobP.h"
+#include "gncOwnerP.h"
 
 struct _gncJob 
 {
@@ -120,8 +121,7 @@ gncCloneJob (GncJob *from, QofBook *book)
   job->desc = CACHE_INSERT (from->desc);
   job->active = from->active;
 
-  /* XXX need to clone too */
-  job->owner = from->owner;
+  job->owner = gncCloneOwner(&from->owner, book);
 
   gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_CREATE);
                                                                                 
@@ -214,19 +214,20 @@ void gncJobSetReference (GncJob *job, const char *desc)
   gncJobCommitEdit (job);
 }
 
-void gncJobSetGUID (GncJob *job, const GUID *guid)
-{
-  if (!job || !guid) return;
-
-  qof_entity_set_guid(&job->inst.entity, guid);
-}
-
 void gncJobSetOwner (GncJob *job, GncOwner *owner)
 {
   if (!job) return;
   if (!owner) return;
   if (gncOwnerEqual (owner, &(job->owner))) return;
-  /* XXX: Fail if we have ANY orders or invoices */
+
+  switch (gncOwnerGetType (owner)) {
+  case GNC_OWNER_CUSTOMER:
+  case GNC_OWNER_VENDOR:
+    break;
+  default:
+    PERR("Unsupported Owner type: %d", gncOwnerGetType(owner));
+    return;
+  }
 
   gncJobBeginEdit (job);
 
@@ -270,7 +271,7 @@ void gncJobSetActive (GncJob *job, gboolean active)
 
 void gncJobBeginEdit (GncJob *job)
 {
-  GNC_BEGIN_EDIT (&job->inst);
+  QOF_BEGIN_EDIT (&job->inst);
 }
 
 static void gncJobOnError (QofInstance *inst, QofBackendError errcode)
@@ -288,8 +289,8 @@ static inline void gncJobOnDone (QofInstance *qof) { }
 
 void gncJobCommitEdit (GncJob *job)
 {
-  GNC_COMMIT_EDIT_PART1 (&job->inst);
-  GNC_COMMIT_EDIT_PART2 (&job->inst, gncJobOnError,
+  QOF_COMMIT_EDIT_PART1 (&job->inst);
+  QOF_COMMIT_EDIT_PART2 (&job->inst, gncJobOnError,
                          gncJobOnDone, job_free);
 }
 
@@ -352,12 +353,14 @@ static QofObject gncJobDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Job",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
-  printable:          _gncJobPrintable
+  printable:          _gncJobPrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncJobRegister (void)
@@ -368,9 +371,9 @@ gboolean gncJobRegister (void)
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, NULL },
     { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

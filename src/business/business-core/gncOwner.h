@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001, 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Owner
+    @{ */
+/** @file gncOwner.h
+    @brief Business Interface:  Object OWNERs
+    @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_OWNER_H_
 #define GNC_OWNER_H_
@@ -31,8 +34,6 @@
 typedef struct gnc_owner_s GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
-#define GNC_IS_OWNER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_OWNER))
-#define GNC_OWNER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_OWNER, GncOwner))
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -80,39 +81,39 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 const char * gncOwnerGetName (GncOwner *owner);
 gnc_commodity * gncOwnerGetCurrency (GncOwner *owner);
 
-/* Get the GUID of the immediate owner */
+/** Get the GUID of the immediate owner */
 const GUID * gncOwnerGetGUID (GncOwner *owner);
 GUID gncOwnerRetGUID (GncOwner *owner);
 
 gboolean gncOwnerIsValid (GncOwner *owner);
 
-/*
+/**
  * Get the "parent" Owner or GUID thereof.  The "parent" owner
  * is the Customer or Vendor, or the Owner of a Job
  */
 GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
 const GUID * gncOwnerGetEndGUID (GncOwner *owner);
 
-/* attach an owner to a lot */
+/** attach an owner to a lot */
 void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
 
-/* Get the owner from the lot.  If an owner is found in the lot,
+/** Get the owner from the lot.  If an owner is found in the lot,
  * fill in "owner" and return TRUE.  Otherwise return FALSE.
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
-#define OWNER_TYPE	"type"
-#define OWNER_CUSTOMER	"customer"
-#define OWNER_JOB	"job"
-#define OWNER_VENDOR	"vendor"
-#define OWNER_EMPLOYEE	"employee"
-#define OWNER_PARENT	"parent"
-#define OWNER_PARENTG	"parent-guid"
-#define OWNER_NAME	"name"
+#define OWNER_TYPE        "type"
+#define OWNER_CUSTOMER    "customer"
+#define OWNER_JOB         "job"
+#define OWNER_VENDOR      "vendor"
+#define OWNER_EMPLOYEE    "employee"
+#define OWNER_PARENT      "parent"
+#define OWNER_PARENTG     "parent-guid"
+#define OWNER_NAME        "name"
 
-#define OWNER_FROM_LOT	"owner-from-lot"
+#define OWNER_FROM_LOT    "owner-from-lot"
 
-/*
+/**
  * These two functions are mainly for the convenience of scheme code.
  * Normal C code has no need to ever use these two functions, and rather
  * can just use a GncOwner directly and just pass around a pointer to it.
@@ -121,3 +122,5 @@ GncOwner * gncOwnerCreate (void);
 void gncOwnerDestroy (GncOwner *owner);
 
 #endif /* GNC_OWNER_H_ */
+/** @} */
+/** @} */

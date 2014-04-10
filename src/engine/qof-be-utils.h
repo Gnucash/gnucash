@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-be-utils.h: api for data storage backend                       *
+ * qof-be-utils.h: api for data storage backend                     *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -18,23 +18,26 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/*
- * gnc-be-utils.h -- QOF Backend Utilities
- *        common code used by objects to define begin_edit() and
- *        commit_edit() functions.
- *
- * Written by:        Derek Atkins <derek@ihtfp.com>
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Backend
+ *  @{
+ *  @file qof-be-utils.h 
+ *  @brief QOF Backend Utilities
+ *  @author Derek Atkins <derek@ihtfp.com>
+ *    Common code used by objects to define begin_edit() and
+ *    commit_edit() functions.
  *
  */
 
-#ifndef GNC_BE_UTILS_H
-#define GNC_BE_UTILS_H
+#ifndef QOF_BE_UTILS_H
+#define QOF_BE_UTILS_H
 
 #include "gnc-engine-util.h"
 #include "qofbackend-p.h"
 #include "qofbook.h"
 
-/* begin_edit helper
+/** begin_edit helper
  *
  * @args:
  *        inst: an instance of QofInstance
@@ -42,7 +45,7 @@
  * The caller should use this macro first and then perform any other operations.
  */
 
-#define GNC_BEGIN_EDIT(inst)                                        \
+#define QOF_BEGIN_EDIT(inst)                                        \
   QofBackend * be;                                                  \
   if (!(inst)) return;                                              \
                                                                     \
@@ -59,14 +62,14 @@
   /* See if there's a backend.  If there is, invoke it. */          \
   be = qof_book_get_backend ((inst)->book);                         \
   if (be && be->begin) {                                            \
-     (be->begin) (be, (inst)->entity.e_type, (inst));               \
+     (be->begin) (be, (inst));                                      \
   } else {                                                          \
      /* We tried and failed to start transaction! */                \
      (inst)->dirty = TRUE;                                          \
   }
 
 
-/*
+/**
  * commit_edit helpers
  *
  * The caller should call PART1 as the first thing, then 
@@ -74,14 +77,14 @@
  * Then call PART2.  
  */
 
-/*
+/**
  * part1 -- deal with the editlevel
  * 
  * @args:
  *        inst: an instance of QofInstance
  */
 
-#define GNC_COMMIT_EDIT_PART1(inst) {                            \
+#define QOF_COMMIT_EDIT_PART1(inst) {                            \
   if (!(inst)) return;                                           \
                                                                  \
   (inst)->editlevel--;                                           \
@@ -95,7 +98,7 @@
     QofBackend * be;                                             \
     be = qof_book_get_backend ((inst)->book);                    \
     if (be && be->begin) {                                       \
-     (be->begin) (be, (inst)->entity.e_type, (inst));            \
+     (be->begin) (be, (inst));                                   \
     }                                                            \
     (inst)->editlevel = 0;                                       \
   }                                                              \
@@ -108,7 +111,7 @@
             (inst), (inst)->dirty, (inst)->do_free);             \
 }
 
-/*
+/**
  * part2 -- deal with the backend
  * 
  * @args:
@@ -122,7 +125,7 @@
  *        on_free: a function called if inst->do_free is TRUE. 
  *                void (*on_free)(inst)
  */
-#define GNC_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \
+#define QOF_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \
   QofBackend * be;                                               \
                                                                  \
   /* See if there's a backend.  If there is, invoke it. */       \
@@ -136,7 +139,7 @@
       errcode = qof_backend_get_error (be);                      \
     } while (ERR_BACKEND_NO_ERR != errcode);                     \
                                                                  \
-    (be->commit) (be, (inst)->entity.e_type, (inst));            \
+    (be->commit) (be, (inst));                                   \
     errcode = qof_backend_get_error (be);                        \
     if (ERR_BACKEND_NO_ERR != errcode)                           \
     {                                                            \
@@ -160,5 +163,6 @@
   }                                                              \
 }
 
-
-#endif /* GNC_BE_UTILS_H */
+#endif /* QOF_BE_UTILS_H */
+/** @} */
+/** @} */

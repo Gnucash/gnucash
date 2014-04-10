@@ -18,24 +18,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine
-    @{ */
-/** @file kvp_frame.h
-    @brief A key-value frame system
-    @author Copyright (C) 2000 Bill Gribble
-    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
-*/
+/** @addtogroup KVP
 
-#ifndef KVP_FRAME_H
-#define KVP_FRAME_H
-
-#include <glib.h>
-
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-
-/** a KvpFrame is a set of associations between character strings
+ * A KvpFrame is a set of associations between character strings
  * (keys) and KvpValue structures.  A KvpValue is a union with
  * possible types enumerated in the KvpValueType enum, and includes, 
  * among other things, ints, doubles, strings, guid's, lists, time
@@ -61,10 +46,27 @@
  * a key such as 'some/key' or 'some/./other/../key' because you
  * may get unexpected results.
  * 
- * In almost all cases, you want to be using the kvp_frame_set_gint64()
- * routine or one of its brothers.  Most of the other routines provide
- * only low-level access.
- */
+ * To set a value into a frame, you will want to use one of the 
+ * kvp_frame_set_xxx() routines.  Most of the other routines provide
+ * only low-level access that you probably shouldn't use.
+ 
+@{ */
+/** @file kvp_frame.h
+    @brief A key-value frame system
+    @author Copyright (C) 2000 Bill Gribble
+    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+*/
+
+#ifndef KVP_FRAME_H
+#define KVP_FRAME_H
+
+#include <glib.h>
+
+#include "gnc-date.h"
+#include "gnc-numeric.h"
+#include "guid.h"
+
+/** Opaque frame structure */
 typedef struct _KvpFrame KvpFrame;
 
 /** A KvpValue is a union with possible types enumerated in the
@@ -74,9 +76,16 @@ typedef struct _KvpValue KvpValue;
 /** Enum to enumerate possible types in the union KvpValue 
  *  XXX FIXME TODO: People have asked for boolean values, 
  *  e.g. in xaccAccountSetAutoInterestXfer
+ *
+ * XXX In the long run, this should be synchronized with the 
+ * core QOF types, which in turn should be synced to the g_types
+ * in GLib.  Unfortuantely, this requies writing a pile of code
+ * to handle all of the different cases.
+ * An alternative might be to make kvp values inherit from the 
+ * core g_types (i.e. add new core g_types) ??
  */
 typedef enum {
-  KVP_TYPE_GINT64,
+  KVP_TYPE_GINT64=1,
   KVP_TYPE_DOUBLE,
   KVP_TYPE_NUMERIC,
   KVP_TYPE_STRING,
@@ -286,7 +295,7 @@ KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue 
   are "non-copying" -- the returned item is the actual item stored.
   Do not delete this item unless you take the required care to avoid
   possible bad pointer derefrences (i.e. core dumps).  Also, be 
-  careful anging on to those references if you are also storing
+  careful hanging on to those references if you are also storing
   at the same path names: the referenced item will be freed during
   the store.
 
@@ -305,22 +314,49 @@ void      * kvp_frame_get_binary(const KvpFrame *frame, const char *path,
                                    guint64 * size_return); 
 Timespec    kvp_frame_get_timespec(const KvpFrame *frame, const char *path);
 KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const char *path);
+/** Value accessor.  Takes a unix-style slash-separated path as an
+ *  argument, and return the KvpFrame stored at that location.  If the
+ *  KvpFrame does not exist, then a NULL is returned.
+ *
+ *  @note The semantics here have changed: In gnucash-1.8, if the
+ *  KvpFrame did not exist, this function automatically created one
+ *  and returned it. However, now this function will return NULL in
+ *  this case and the caller has to create a KvpFrame on his own. The
+ *  old functionality is now implemented by
+ *  kvp_frame_get_frame_path(). This happened on 2003-09-14, revision
+ *  1.31. FIXME: Is it really a good idea to change the semantics of
+ *  an existing function and move the old semantics to a new
+ *  function??! It would save us a lot of trouble if the new semantics
+ *  would have been available in a new function!
+ *
+ *  @return The KvpFrame at the specified path, or NULL if it doesn't
+ *  exist.
+*/
 KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const char *path);
 
 /** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
  *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
+ *
+ *  @note The semantics of this function implemented the gnucash-1.8
+ *  behaviour of kvp_frame_get_frame: In gnucash-1.8, if the KvpFrame
+ *  did not exist, kvp_frame_get_frame automatically created one and
+ *  returned it. However, now that one will return NULL in this case
+ *  and the caller has to create a KvpFrame on his own. The old
+ *  functionality is implemented by this
+ *  kvp_frame_get_frame_path(). This happened on 2003-09-14, revision
+ *  1.31.
  */
 KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const char *,...);
 
-/** This routine return the last frame of the path.
+/** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
  *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
  */
 KvpFrame    * kvp_frame_get_frame_gslist (KvpFrame *frame,
                                            GSList *key_path);
 
-/** This routine return the last frame of the path.
+/** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
  *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
  *

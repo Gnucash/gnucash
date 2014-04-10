@@ -7,9 +7,7 @@
        Ένα βασικό σύνολο λογαριασμών που χρησιμοποιούνται συχνά
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Οι περισσότεροι χρήστες θα ήθελαν να επιλέξουν αυτούς τους λογαριασμούς.
-    Περιλαμβάνουν τους πιό συχνά χρησιμοποιούμενους λογαριασμούς
-(Επιταγές, αποταμίευση, μετρητά, πιστωτική κάρτα, εισόδημα , συνήθεις δαπάνες)
+    Οι περισσότεροι χρήστες θα ήθελαν να επιλέξουν αυτούς τους λογαριασμούς. Περιλαμβάνουν τους πιό συχνά χρησιμοποιούμενους λογαριασμούς (Επιταγές, αποταμίευση, μετρητά, πιστωτική κάρτα, εισόδημα , συνήθεις δαπάνες)
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Ενεργητικό</act:name>
@@ -66,14 +64,14 @@
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Υποχρεώσεις</act:name>
+  <act:name>Παθητικό</act:name>
   <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Υποχρεώσεις</act:description>
+  <act:description>Παθητικό</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Λογαριασμοί Πληρωτέοι</act:name>
@@ -98,14 +96,14 @@
   <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Εισόδημα</act:name>
+  <act:name>Έσοδα</act:name>
   <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Εισόδημα</act:description>
+  <act:description>Έσοδα</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bonus</act:name>
@@ -126,7 +124,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δώρα που λάβαμε</act:description>
+  <act:description>Δώρα που Λάβαμε</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -137,29 +135,29 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Εισόδημα από Τόκους</act:description>
+  <act:description>Έσοδα από Τόκους</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι Λογ. Όψεως</act:name>
+  <act:name>Τόκοι Λογαριασμού Όψεως</act:name>
   <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τόκοι Λογ. Όψεως</act:description>
+  <act:description>Τόκοι Λογαριασμού Όψεως</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶λλο Εισόδημα</act:name>
+  <act:name>¶λλα Έσοδα</act:name>
   <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶λλο Εισόδημα</act:description>
+  <act:description>¶λλα Έσοδα</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -174,14 +172,14 @@
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶λλο Εισόδημα</act:name>
+  <act:name>¶λλα Έσοδα</act:name>
   <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶λλο Εισόδημα</act:description>
+  <act:description>¶λλα Έσοδα</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -196,14 +194,14 @@
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δαπάνες</act:name>
+  <act:name>Έξοδα</act:name>
   <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δαπάνες</act:description>
+  <act:description>Έξοδα</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Προσαρμογή</act:name>
@@ -250,14 +248,14 @@
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Parking</act:name>
+  <act:name>Στάθμευση</act:name>
   <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Parking</act:description>
+  <act:description>Στάθμευση</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -294,25 +292,25 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Καλωδιακή Τηλεόραση</act:name>
+  <act:name>Καλωδιακές Υπηρεσίες</act:name>
   <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Καλωδιακή Τηλεόραση</act:description>
+  <act:description>Καλωδιακές Υπηρεσίες</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Φιλανθρωπικές Δωρεές</act:name>
+  <act:name>Δωρεές</act:name>
   <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Φιλανθρωπικές Δωρεές</act:description>
+  <act:description>Δωρεές</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -338,14 +336,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Διατροφή</act:name>
+  <act:name>Γεύματα</act:name>
   <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Διατροφή</act:description>
+  <act:description>Γεύματα</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -389,7 +387,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ψυχαγωγία</act:description>
+  <act:description>Ψυχαγωγία</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -558,14 +556,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Supplies</act:name>
+  <act:name>Εφοδιασμός</act:name>
   <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Supplies</act:description>
+  <act:description>Εφοδιασμός</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -580,14 +578,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Federal</act:name>
+  <act:name>Εφορία</act:name>
   <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Federal</act:description>
+  <act:description>Εφορία</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -657,14 +655,14 @@
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Αποκομιδή  σκουπιδιών</act:name>
+  <act:name>Αποκομιδή σκουπιδιών</act:name>
   <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Αποκομιδή  σκουπιδιών</act:description>
+  <act:description>Αποκομιδή σκουπιδιών</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -690,24 +688,24 @@
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equity</act:name>
+  <act:name>Καθαρή Θέση</act:name>
   <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Equity</act:description>
+  <act:description>Καθαρή Θέση</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Opening Balances</act:name>
+  <act:name>Αρχικά Υπόλοιπα</act:name>
   <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Opening Balances</act:description>
+  <act:description>Αρχικά Υπόλοιπα</act:description>
   <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
 </gnc:account>
 </gnc-account-example>

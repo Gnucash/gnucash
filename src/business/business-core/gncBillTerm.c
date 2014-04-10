@@ -36,9 +36,9 @@
 #include "gnc-engine-util.h"
 #include "qofquerycore.h"
 #include "gnc-event-p.h"
-#include "gnc-be-utils.h"
 #include "kvp_frame.h"
 
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -55,6 +55,8 @@
 struct _gncBillTerm 
 {
   QofInstance     inst;
+
+  /* 'visible' data fields directly manipulated by user */
   char *          name;
   char *          desc;
   GncBillTermType type;
@@ -63,6 +65,7 @@ struct _gncBillTerm
   gnc_numeric     discount;
   gint            cutoff;
 
+  /* Internal management fields */
   /* See src/doc/business.txt for an explanation of the following */
   /* Code that handles this is *identical* to that in gncTaxTable */
   gint64          refcount;
@@ -94,9 +97,6 @@ static short        module = MOD_BUSINESS;
         member = tmp; \
         }
 
-static void add_or_rem_object (GncBillTerm *term, gboolean add);
-static void maybe_resort_list (GncBillTerm *term);
-
 /* ============================================================== */
 /* Misc inline utilities */
 
@@ -117,49 +117,32 @@ static inline void maybe_resort_list (GncBillTerm *term)
   bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
 }
 
-static inline void add_or_rem_object (GncBillTerm *term, gboolean add)
-{
-  struct _book_info *bi;
-
-  if (!term) return;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
-
-  if (add)
-    bi->terms = g_list_insert_sorted (bi->terms, term,
-                                       (GCompareFunc)gncBillTermCompare);
-  else
-    bi->terms = g_list_remove (bi->terms, term);
-}
-
 static inline void addObj (GncBillTerm *term)
 {
-  add_or_rem_object (term, TRUE);
+  struct _book_info *bi;
+  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi->terms = g_list_insert_sorted (bi->terms, term,
+                                       (GCompareFunc)gncBillTermCompare);
 }
 
 static inline void remObj (GncBillTerm *term)
 {
-  add_or_rem_object (term, FALSE);
+  struct _book_info *bi;
+  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi->terms = g_list_remove (bi->terms, term);
 }
 
 static inline void
 gncBillTermAddChild (GncBillTerm *table, GncBillTerm *child)
 {
-  g_return_if_fail(table);
-  g_return_if_fail(child);
   g_return_if_fail(table->inst.do_free == FALSE);
-
   table->children = g_list_prepend(table->children, child);
 }
 
 static inline void
 gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child)
 {
-  g_return_if_fail(table);
-  g_return_if_fail(child);
-
-  if (table->inst.do_free)
-    return;
-
+  if (table->inst.do_free) return;
   table->children = g_list_remove(table->children, child);
 }
 
@@ -225,7 +208,7 @@ gncCloneBillTerm (GncBillTerm *from, QofBook *book)
   GList *node;
   GncBillTerm *term;
 
-  if (!book) return NULL;
+  if (!book || !from) return NULL;
 
   term = g_new0 (GncBillTerm, 1);
   qof_instance_init(&term->inst, _GNC_MOD_NAME, book);
@@ -283,16 +266,6 @@ gncBillTermObtainTwin (GncBillTerm *from, QofBook *book)
 
 /* ============================================================== */
 /* Set Functions */
-
-void gncBillTermSetGUID (GncBillTerm *term, const GUID *guid)
-{
-  if (!term || !guid) return;
-  if (guid_equal (guid, &term->inst.entity.guid)) return;
-
-  remObj (term);
-  qof_entity_set_guid (&term->inst.entity, guid);
-  addObj (term);
-}
 
 void gncBillTermSetName (GncBillTerm *term, const char *name)
 {
@@ -419,7 +392,7 @@ void gncBillTermMakeInvisible (GncBillTerm *term)
   if (!term) return;
   gncBillTermBeginEdit (term);
   term->invisible = TRUE;
-  add_or_rem_object (term, FALSE);
+  remObj (term);
   gncBillTermCommitEdit (term);
 }
 
@@ -431,7 +404,7 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  GNC_BEGIN_EDIT (&term->inst);
+  QOF_BEGIN_EDIT (&term->inst);
 }
 
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
@@ -449,8 +422,8 @@ static inline void on_done (QofInstance *inst) {}
 
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
-  GNC_COMMIT_EDIT_PART1 (&term->inst);
-  GNC_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
+  QOF_COMMIT_EDIT_PART1 (&term->inst);
+  QOF_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
                          on_done, bill_free);
 }
 
@@ -602,6 +575,7 @@ gboolean gncBillTermIsDirty (GncBillTerm *term)
 
 /* Based on the timespec and a proximo type, compute the month and
  * year this is due.  The actual day is filled in below.
+ * XXX explain this, the logic is totally opaque to me.
  */
 static void
 compute_monthyear (GncBillTerm *term, Timespec post_date,
@@ -633,6 +607,8 @@ compute_monthyear (GncBillTerm *term, Timespec post_date,
   if (month) *month = imonth;
   if (year) *year = iyear;
 }
+
+/* XXX explain this, the logic is totally opaque to me. */
 
 static Timespec
 compute_time (GncBillTerm *term, Timespec post_date, int days)
@@ -702,19 +678,21 @@ static QofObject gncBillTermDesc =
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              _GNC_MOD_NAME,
   type_label:          "Billing Term",
+  create:              NULL,
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
   is_dirty:            qof_collection_is_dirty,
   mark_clean:          qof_collection_mark_clean,
   foreach:             qof_collection_foreach,
-  printable:           NULL
+  printable:           NULL,
+  version_cmp:         (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

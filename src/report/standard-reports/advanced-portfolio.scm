@@ -176,27 +176,29 @@
                          (lambda (s)
                            (cond
                              ((same-split? s split) 
-			      (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
 			      ;; (gnc:debug "amount" (gnc:numeric-to-double (gnc:split-get-amount s)) )
-			      (if (< 0 (gnc:numeric-to-double
-					(gnc:split-get-amount s)))
-				  (set! totalunits
-					(+ totalunits
-					   (gnc:numeric-to-double (gnc:split-get-amount s)))))
-			      (set! totalunityears
-				    (+ totalunityears 
-				       (* (gnc:numeric-to-double (gnc:split-get-amount s)) 
-					  (gnc:date-year-delta 
-					   (car (gnc:transaction-get-date-posted parent))
-					   (current-time))))) 
-			      (cond 
-			       ((gnc:numeric-negative-p (gnc:split-get-value s))
-				(moneyoutcoll
-				 'add currency
-				 (gnc:numeric-neg (gnc:split-get-value s))))
-			       (else (moneyincoll 
-				      'add currency
-				      (gnc:numeric-neg (gnc:split-get-value s))))))
+                              (cond
+                                ((not (gnc:numeric-zero-p (gnc:split-get-amount s)))
+                                 (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
+                                 (if (< 0 (gnc:numeric-to-double
+                                           (gnc:split-get-amount s)))
+                                     (set! totalunits
+                                           (+ totalunits
+                                              (gnc:numeric-to-double (gnc:split-get-amount s)))))
+                                 (set! totalunityears
+                                       (+ totalunityears 
+                                          (* (gnc:numeric-to-double (gnc:split-get-amount s)) 
+                                             (gnc:date-year-delta 
+                                              (car (gnc:transaction-get-date-posted parent))
+                                              (current-time))))) 
+                                 (cond 
+                                  ((gnc:numeric-negative-p (gnc:split-get-value s))
+                                   (moneyoutcoll
+                                    'add currency
+                                    (gnc:numeric-neg (gnc:split-get-value s))))
+                                  (else (moneyincoll 
+                                         'add currency
+                                         (gnc:numeric-neg (gnc:split-get-value s))))))))
 
                              ((split-account-type? s 'expense)
 			      (brokeragecoll 'add currency (gnc:split-get-value s)))

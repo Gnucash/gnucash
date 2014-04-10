@@ -41,6 +41,22 @@ static GList *object_modules = NULL;
 static GList *book_list = NULL;
 static GHashTable *backend_data = NULL;
 
+gpointer
+qof_object_new_instance (QofIdTypeConst type_name, QofBook *book)
+{
+  const QofObject *obj;
+
+  if (!type_name) return NULL;
+
+  obj = qof_object_lookup (type_name);
+  if (!obj) return NULL;
+
+  if (obj->create) 
+    return (obj->create (book));
+
+  return NULL;
+}
+
 void qof_object_book_begin (QofBook *book)
 {
   GList *l;
@@ -135,6 +151,11 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
   ENTER ("type=%s", type_name);
 
   obj = qof_object_lookup (type_name);
+  if (!obj)
+  {
+    PERR ("No object of type %s", type_name);
+    return;
+  }
   col = qof_book_get_collection (book, obj->e_type);
   PINFO ("lookup obj=%p for type=%s", obj, type_name);
   if (!obj) return;
@@ -328,3 +349,5 @@ void qof_object_foreach_backend (const char *backend_name,
 
   g_hash_table_foreach (ht, foreach_backend, &cb_data);
 }
+
+/* ========================= END OF FILE =================== */

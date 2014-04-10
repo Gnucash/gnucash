@@ -320,7 +320,7 @@
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>transferfrom-frame</name>
+	  <name>left_trans_frame</name>
 	  <border_width>3</border_width>
 	  <label>Transfer From</label>
 	  <label_xalign>0</label_xalign>
@@ -340,7 +340,7 @@
 
 	    <widget>
 	      <class>GtkScrolledWindow</class>
-	      <name>from_window</name>
+	      <name>left_trans_window</name>
 	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
@@ -387,7 +387,7 @@
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>from_currency_label</name>
+		<name>left_currency_label</name>
 		<label> </label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
@@ -405,7 +405,7 @@
 
 	    <widget>
 	      <class>GtkCheckButton</class>
-	      <name>from_show_button</name>
+	      <name>left_show_button</name>
 	      <can_focus>True</can_focus>
 	      <label>Show Income/Expense</label>
 	      <active>False</active>
@@ -421,7 +421,7 @@
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>transferto-frame</name>
+	  <name>right_trans_frame</name>
 	  <border_width>3</border_width>
 	  <label>Transfer To</label>
 	  <label_xalign>0</label_xalign>
@@ -441,7 +441,7 @@
 
 	    <widget>
 	      <class>GtkScrolledWindow</class>
-	      <name>to_window</name>
+	      <name>right_trans_window</name>
 	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
@@ -488,7 +488,7 @@
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>to_currency_label</name>
+		<name>right_currency_label</name>
 		<label> </label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
@@ -506,7 +506,7 @@
 
 	    <widget>
 	      <class>GtkCheckButton</class>
-	      <name>to_show_button</name>
+	      <name>right_show_button</name>
 	      <can_focus>True</can_focus>
 	      <label>Show Income/Expense</label>
 	      <active>False</active>

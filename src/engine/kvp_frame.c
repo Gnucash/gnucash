@@ -147,11 +147,9 @@ static void
 kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) 
 {
   KvpFrame * dest = (KvpFrame *)user_data;
-  g_hash_table_freeze(dest->hash);
   g_hash_table_insert(dest->hash,
                       (gpointer)g_cache_insert(gnc_engine_get_string_cache(), key), 
                       (gpointer)kvp_value_copy(value));
-  g_hash_table_thaw(dest->hash);
 }
 
 KvpFrame * 
@@ -186,8 +184,6 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if (!frame || !slot) return NULL; 
   if (!init_frame_body_if_needed(frame)) return NULL; /* Error ... */
 
-  g_hash_table_freeze(frame->hash);
-
   key_exists = g_hash_table_lookup_extended(frame->hash, slot,
                                             & orig_key, & orig_value);
   if(key_exists) 
@@ -207,8 +203,6 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
                                        (gpointer) slot),
                         new_value);
   }
-
-  g_hash_table_thaw(frame->hash);
 
   return (KvpValue *) orig_value;
 }

@@ -4,7 +4,7 @@
              Architecture & Implementation Overview
 
                Linas Vepstas <linas@linas.org>
-                  Last Revised August 2003
+                  Last Revised May 2004
 
 
 One often needs to know that the item 'bought' in one transaction
@@ -493,6 +493,10 @@ todo:
 ---- change lot viewer to use gnc-query-list
 ---- after the gnome2 port, add the 'unclaimed splits" window
      to the lot viewer, this will allow it to be a simple lot editor.
+---- Add a new policy (or change the existing fifo policy) to only 
+     open lots with a particular sign for the opening split.  This
+     way, things like business invoice overpayments are not used
+     to start new lots, but are instead applied to new purchases.
 
 
 Status

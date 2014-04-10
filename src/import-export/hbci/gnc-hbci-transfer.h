@@ -24,7 +24,7 @@
 #define GNC_HBCI_TRANSFER_H
 
 #include <gnome.h>
-#include <openhbci/transaction.h>
+#include <openhbci2/transaction.h>
 #include "Account.h"
 #include "dialog-hbcitrans.h"
 

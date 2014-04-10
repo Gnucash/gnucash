@@ -250,9 +250,40 @@ price_cancel_clicked (GtkWidget *widget, gpointer data)
 static void
 commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  gnc_commodity *commodity = NULL;
+  gnc_commodity *currency = NULL;
+  GList *price_list;
   PriceEditDialog *pedit_dialog = data;
 
   gnc_prices_set_changed (pedit_dialog, TRUE);
+
+  commodity = gnc_general_select_get_selected
+    (GNC_GENERAL_SELECT (pedit_dialog->commodity_edit));
+
+  if(commodity)
+  {
+    book = gnc_price_get_book (pedit_dialog->price);
+    pdb = gnc_book_get_pricedb (book);
+
+    price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
+    if(price_list)
+    {
+      currency = gnc_price_get_currency((GNCPrice *)price_list->data);
+
+      if (currency)
+	gnc_currency_edit_set_currency
+	  (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit), currency);
+
+      gnc_price_list_destroy(price_list);
+    }
+    else
+    {
+      gnc_currency_edit_set_currency
+	(GNC_CURRENCY_EDIT (pedit_dialog->currency_edit), gnc_default_currency());
+    }
+  }
 }
 
 static void

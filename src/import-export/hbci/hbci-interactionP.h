@@ -24,8 +24,7 @@
 #ifndef HBCI_INTERACTIONP_H
 #define HBCI_INTERACTIONP_H
 
-#include <openhbci/interactor.h>
-#include <openhbci/progressmonitor.h>
+#include <openhbci2/interactor.h>
 #include <gnome.h>
 
 
@@ -77,18 +76,13 @@ struct _inter_data
   /* The cached PIN and the HBCI_User it's cached for. */
   char *pw;
   const HBCI_User *user;
+  /* Whether this PIN is really valid or not. */
+  gboolean cache_valid;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);
 
-HBCI_ProgressMonitor *
-gnc_hbci_new_pmonitor(GNCInteractor *data);
-
 HBCI_Interactor *
 gnc_hbci_new_interactor(GNCInteractor *data);
-
-void add_log_text (GNCInteractor *data, const char *msg);
-
-
 
 #endif

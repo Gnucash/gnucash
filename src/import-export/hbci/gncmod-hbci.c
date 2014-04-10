@@ -73,8 +73,6 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   /* Add menu items with C callbacks */
   gnc_hbci_addmenus();
   
-  
-  
   return TRUE;
 }
 

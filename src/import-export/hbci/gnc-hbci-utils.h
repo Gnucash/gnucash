@@ -25,13 +25,17 @@
 
 #include <glib.h>
 #include <gnome.h>
-#include <openhbci/account.h>
-#include <openhbci/api.h>
+/*#include <openhbci2/account.h>*/
+#include <openhbci2/api.h>
+#include <openhbci2/transaction.h>
+#include "gnc-ui.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-book.h"
 
 #include "hbci-interaction.h"
+#include "gnc-hbci-account.h"
+
 
 /** Create a new HBCI_API and let it load its environment from the
  * configuration file filename. If the file doesn't exist and
@@ -48,7 +52,8 @@
 HBCI_API * gnc_hbci_api_new (const char *filename, 
 			     gboolean allowNewFile, 
 			     GtkWidget *parent,
-			     GNCInteractor **inter);
+			     GNCInteractor **inter,
+			     GList **list_accounts);
 
 /** Same as above, but takes the filename already from the current
  * book's kvp frame AND caches a pointer to the api. Returns NULL if
@@ -60,7 +65,8 @@ HBCI_API * gnc_hbci_api_new (const char *filename,
  * May be NULL.
  */ 
 HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
-					 GNCInteractor **inter);
+					 GNCInteractor **inter,
+					 GList **list_accounts);
 
 /** Delete the given HBCI_API. If this is also the one that was cached
     by gnc_hbci_api_new_currentbook, then that reference is deleted, too. */
@@ -76,13 +82,12 @@ HBCI_Error * gnc_hbci_api_save (const HBCI_API *api);
 /* Get the corresponding HBCI account to a gnucash account. Of course
  * this only works after the gnucash account has been set up for HBCI
  * use, i.e. the kvp_frame "hbci/..." have been filled with
- * information. Returns NULL if no HBCI_Account was found.
+ * information. Returns NULL if no gnc_HBCI_Account was found.
  *
- * @param api The HBCI_API to get the HBCI_Account from.
- * @param gnc_acc The gnucash account to query for HBCI_Account reference data. */
-const HBCI_Account *
+ * @param api The HBCI_API to get the gnc_HBCI_Account from.
+ * @param gnc_acc The gnucash account to query for gnc_HBCI_Account reference data. */
+const gnc_HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
-
 
 /* Return the HBCI return code of the given 'job', or zero if none was
  * found. If 'verbose' is TRUE, make a lot of debugging messages about
@@ -104,6 +109,7 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
  * should abort. */
 gboolean
 gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
+		      HBCI_Outbox *queue,
 		      HBCI_OutboxJob *job, GNCInteractor *inter);
 
 
@@ -121,7 +127,40 @@ char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans);
     or NULL if none was found (and an error message is printed on
     stdout). */
 const HBCI_Customer *
-gnc_hbci_get_first_customer(const HBCI_Account *h_acc);
+gnc_hbci_get_first_customer(const gnc_HBCI_Account *h_acc);
+
+/** Returns the name of this bank. This function is helpful because it
+ * always makes sure to return a valid const char pointer, even if no
+ * bankName is available. */
+const char *bank_to_str (const HBCI_Bank *bank);
+
+/** Chooses one bank out of the given list. 
+ *
+ * If the list has more than one bank, this displays a multichoice
+ * dialog so that the user can choose one bank. If the list has only
+ * one bank, it returns it. If the list has zero banks, it returns
+ * NULL. */ 
+const HBCI_Bank *
+choose_one_bank (gncUIWidget parent, const list_HBCI_Bank *banklist);
+
+/** Chooses one customer out of the given list. 
+ *
+ * If the list has more than one customer, this displays a multichoice
+ * dialog so that the user can choose one customer. If the list has only
+ * one customer, it returns it. If the list has zero customers, it returns
+ * NULL. */ 
+const HBCI_Customer *
+choose_one_customer (gncUIWidget parent, const list_HBCI_Customer *custlist);
+
+/** Chooses one user out of the given list. 
+ *
+ * If the list has more than one user, this displays a multichoice
+ * dialog so that the user can choose one user. If the list has only
+ * one user, it returns it. If the list has zero users, it returns
+ * NULL. */ 
+const HBCI_User *
+choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist);
+
 
 
 #endif

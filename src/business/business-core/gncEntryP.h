@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -37,6 +38,27 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order);
 void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice);
 void gncEntrySetBill (GncEntry *entry, GncInvoice *bill);
 void gncEntrySetDirty (GncEntry *entry, gboolean dirty);
+
+
+/** The gncCloneEntry() routine makes a copy of the indicated
+ *  entry, placing it in the indicated book.  It copies
+ *  the whole kit-n-kaboodle.
+ *  It then adds a pair of 'gemini' kvp pointers so that each copy
+ *  can be found from the other.
+ */
+
+GncEntry * gncCloneEntry (GncEntry *from, QofBook *);
+
+/** The gncEntryObtainTwin() will find the 'twin' of the
+ *  indicated entry in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneEntry()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally  
+ * different ways.
+ */
+GncEntry * gncEntryObtainTwin (GncEntry *from, QofBook *book);
 
 #define gncEntrySetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
 

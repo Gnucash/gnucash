@@ -64,7 +64,7 @@ run_tests (void)
   val2str = scm_c_eval_string ("gnc:value->string");
   g_return_if_fail (SCM_PROCEDUREP (val2str));
 
-  for (i = 0; i < 244; i++) {
+  for (i = 0; i < 1000; i++) {
     q = get_random_query ();
     test_query (q, val2str);
     xaccFreeQuery (q);

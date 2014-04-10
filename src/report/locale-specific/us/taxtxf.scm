@@ -289,13 +289,27 @@
                ;; Only formats 1,3 implemented now! Others are treated as 1.
                (format (gnc:get-txf-format code (eq? type 'income)))
                (payer-src (gnc:account-get-txf-payer-source account))
-               (account-name (if (eq? payer-src 'parent)
-                                 (gnc:account-get-name
-                                  (gnc:group-get-parent
-                                   (gnc:account-get-parent account)))
-                                 (gnc:account-get-name account))) 
+               (account-name (let* ((named-acct
+				    (if (eq? payer-src 'parent)
+					(gnc:group-get-parent
+					 (gnc:account-get-parent account))
+					account))
+				    (name (gnc:account-get-name named-acct)))
+			       (if name
+				   name
+				   (begin
+				     (display
+				      (string-append
+				       "Failed to get name for account: "
+				       (gnc:account-get-guid named-acct)
+				       (if (not (eq? account named-acct))
+					   (string-append
+					    " which is the parent of "
+					    (gnc:account-get-guid account)))
+				       "\n"))
+				     "<NONE> -- See the Terminal Output"))))
                (action (if (eq? type 'income)
-                           (case (string->symbol code)
+                           (case code
                              ((N286 N488) "ReinvD")
                              (else "Income"))
                            "Expense"))

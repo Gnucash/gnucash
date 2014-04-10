@@ -22,15 +22,22 @@
 
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Commodity Commodities
+    A commodity is something of value that is easily tradeable or
+    sellable; for example, currencies, stocks, bonds, grain,
+    copper, and oil are all commodities.  This file provides
+    an API for defining a commodities, and for working with 
+    collections of commodities.  All GnuCash financial transactions
+    must identify the commodity that is being traded.
+
+    @warning The system used here does not follow the object
+    handling and identification system (GUID's, Entities, etc.)
+    that the other parts of GnuCash use.  The API really should be
+    ported over.  This would allow us to get rid of the 
+    commodity table reoutines defined below. 
+
+    @{ */
 /** @file gnc-commodity.h
- *
- *  This file contains the functions to manipulate two different
- *  objects.  These are an object of type gnc_commodity, and an object
- *  of type gnc_commodity_table. The gnc_commodity object corresponds
- *  one-to-one with some type of tradable commodity; a currency, a
- *  stock, a mutual fund, etc.  The gnc_commodity_table object is a
- *  database containing objects of type gnc_commodity.
- *
  *  @brief Commodity handling public routines   
  *  @author Copyright (C) 2000 Bill Gribble
  *  @author Copyright (C) 2001 Linas Vepstas <linas@linas.org>
@@ -596,7 +603,7 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
  *  nothing), or another entries has the same namespace and mnemonic
  *  (updates the existing entry).
  *
- *  @param table A pointer to the commodity table for the book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param comm A pointer to the commodity to add.
  *
@@ -611,7 +618,7 @@ gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
 /** Remove a commodity from the commodity table. If the commodity to
  *  remove doesn't exist, nothing happens.
  *
- *  @param table A pointer to the commodity table for the book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param comm A pointer to the commodity to remove. */
 void gnc_commodity_table_remove(gnc_commodity_table * table,
@@ -622,7 +629,7 @@ void gnc_commodity_table_remove(gnc_commodity_table * table,
  *  etc.  It also adds all of the ISO 4217 currencies to the commodity
  *  table.
  *
- *  @param table A pointer to the commodity table for the book. */
+ *  @param table A pointer to the commodity table */
 gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
 
 /** @} */
@@ -639,8 +646,7 @@ guint gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl);
 
 /** Test to see if the indicated namespace exits in the commodity table.
  *
- *  @param table A pointer to the commodity table for the current
- *  book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param namespace The new namespace to check.
  *
@@ -661,8 +667,7 @@ GList * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
 /** This function adds a new string to the list of commodity namespaces.
  *  If the new namespace already exists, nothing happens.
  *
- *  @param table A pointer to the commodity table for the current
- *  book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param namespace The new namespace to be added.*/
 void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
@@ -671,8 +676,7 @@ void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 /** This function deletes a string from the list of commodity namespaces.
  *  If the namespace does not exist, nothing happens.
  *
- *  @param table A pointer to the commodity table for the current
- *  book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param namespace The namespace to be deleted.
  *
@@ -687,8 +691,7 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
 
 /** Returns the number of commodities in the commodity table.
  *
- *  @param table A pointer to the commodity table for the current
- *  book.
+ *  @param table A pointer to the commodity table 
  *
  *  @return The number of commodities in the table. 0 if there are no
  *  commodities, or the routine was passed a bad argument. */
@@ -713,8 +716,7 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
  *  field has been set.  All matching commodities are queued onto a
  *  list, and the head of that list is returned.
  *
- *  @param table A pointer to the commodity table for the current
- *  book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param expression Use the given expression as a filter on the
  *  commodities to be returned. If non-null, only commodities in
@@ -733,8 +735,7 @@ GList * gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table *
  *  This table walk returns whenever the end of the table is reached,
  *  or the function returns FALSE.
  *
- *  @param table A pointer to the commodity table for the current
- *  book.
+ *  @param table A pointer to the commodity table 
  *
  *  @param f The function to call for each commodity.
  *
@@ -772,6 +773,13 @@ void          gnc_commodity_table_destroy(gnc_commodity_table * table);
  */
 void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
 
+/** Given the commodity 'from', this routine will find and return the
+ *   equivalent commodity (commodity with the same 'unique name') in 
+ *   the indicated book.  This routine is primarily useful for setting
+ *   up clones of things across multiple books.
+ */
+gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
+
 /** You should probably not be using gnc_commodity_table_register()
  * It is an internal routine for registering the gncObject for the
  * commodity table.
@@ -782,4 +790,5 @@ gboolean gnc_commodity_table_register (void);
 
 
 #endif /* GNC_COMMODITY_H */
+/** @} */
 /** @} */

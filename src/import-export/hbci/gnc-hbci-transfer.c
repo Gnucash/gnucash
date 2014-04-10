@@ -1,6 +1,8 @@
 /********************************************************************\
  * gnc-hbci-transfer.c -- hbci transfer functions                   *
  * Copyright (C) 2002 Christian Stimming                            *
+ * Copyright (C) 2004 Bernd Wagner (minor changes for                     *
+ *                     online transaction templates)                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,8 +25,8 @@
 #include "config.h"
 #include "gnc-hbci-transfer.h"
 
-#include <openhbci/api.h>
-#include <openhbci/outboxaccjobs.h>
+#include <openhbci2/api.h>
+#include <openhbci2/outboxjob.h>
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
@@ -47,20 +49,23 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		    GNC_HBCI_Transtype trans_type)
 {
   HBCI_API *api = NULL;
-  const HBCI_Account *h_acc = NULL;
+  HBCI_Outbox *outbox = NULL;
+  const gnc_HBCI_Account *h_acc = NULL;
   GNCInteractor *interactor = NULL;
   const HBCI_Customer *customer = NULL;
+  GList *hbci_accountlist = NULL;
   
   g_assert(parent);
   g_assert(gnc_acc);
 
   /* Get API */
-  api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  api = gnc_hbci_api_new_currentbook (parent, &interactor, &hbci_accountlist);
   if (api == NULL) {
     printf("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
     return;
   }
   g_assert (interactor);
+  outbox = HBCI_Outbox_new();
 
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
@@ -69,7 +74,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     return;
   }
   /*printf("gnc_hbci_maketrans: HBCI account no. %s found.\n",
-    HBCI_Account_accountId (h_acc));*/
+    gnc_HBCI_Account_accountId (h_acc));*/
   
   /* Get the customer that should be doing this job. */
   customer = gnc_hbci_get_first_customer(h_acc);
@@ -81,7 +86,6 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       gnc_trans_templ_glist_from_kvp_glist
       ( gnc_hbci_get_book_template_list
 	( xaccAccountGetBook(gnc_acc)));
-    unsigned nr_templates;
     int result;
     gboolean successful;
     HBCITransDialog *td;
@@ -96,16 +100,14 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     /* Repeat until HBCI action was successful or user pressed cancel */
     do {
 
-      nr_templates = g_list_length(template_list);
-
       /* Let the user enter the values. If cancel is pressed, -1 is returned.  */
       result = gnc_hbci_dialog_run_until_ok(td, h_acc);
 
       /* Set the template list in case it got modified. */
       template_list = gnc_hbci_dialog_get_templ(td);
-      /* New templates? If yes, store them */
-      if (nr_templates < g_list_length(template_list)) 
-	maketrans_save_templates(parent, gnc_acc, template_list, (result >= 0));
+      /* templates changed? If yes, store them */
+      if (gnc_hbci_dialog_get_templ_changed(td) )
+	       maketrans_save_templates(parent, gnc_acc, template_list, (result >= 0));
 
       if (result < 0) {
 	break;
@@ -116,8 +118,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
       {
 	HBCI_OutboxJob *job = 
-	  gnc_hbci_trans_dialog_enqueue(td, api, customer, 
-					(HBCI_Account *)h_acc, trans_type);
+	  gnc_hbci_trans_dialog_enqueue(td, api, outbox, customer, 
+					(gnc_HBCI_Account *)h_acc, trans_type);
       
 	/* HBCI Transaction has been created and enqueued, so now open
 	 * the gnucash transaction dialog and fill in all values. */
@@ -131,7 +133,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
 	  /* If the user pressed "execute now", then execute this job
 	     now. This function already delete()s the job. */
-	  successful = gnc_hbci_trans_dialog_execute(td, api, job, interactor);
+	  successful = gnc_hbci_trans_dialog_execute(td, api, outbox, 
+						     job, interactor);
 
 	  if (!successful) {
 	    /* HBCI job failed -- then remove gnc txn from the books. */
@@ -160,7 +163,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       }*/
 
     /* Just to be on the safe side, clear queue once again. */
-    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_delete(outbox);
     gnc_hbci_api_save (api);
     gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
@@ -179,9 +183,9 @@ void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc,
       (parent, 
        FALSE,
        "%s",
-       _("You have created a new online transfer template, but \n"
-	 "you cancelled the transfer dialog. Do you nevertheless \n"
-	 "want to store the new online transfer template?"))) {
+       _("You have changed the list of online transfer templates,\n"
+	 "but you cancelled the transfer dialog.\n"
+	 "Do you nevertheless want to store the changes?"))) {
     GList *kvp_list = gnc_trans_templ_kvp_glist_from_glist (template_list);
     /*printf ("Now having %d templates. List: '%s'\n", 
       g_list_length(template_list),

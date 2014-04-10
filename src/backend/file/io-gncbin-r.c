@@ -509,10 +509,8 @@ gnc_load_financials_from_fd(QofBook *book, int fd)
 
   {
     GNCPriceDB *tmpdb;
-    if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, book))
+    if(!cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, book))
     {
-      gnc_pricedb_set_db(book, tmpdb);
-    } else {
       PWARN("pricedb import failed.");
       error_code = ERR_BACKEND_MISC;
       gnc_pricedb_destroy(tmpdb);

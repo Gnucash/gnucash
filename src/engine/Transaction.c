@@ -38,7 +38,6 @@
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "cap-gains.h"
-#include "gnc-be-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
@@ -50,6 +49,7 @@
 #include "messages.h"
 
 #include "qofbackend-p.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofclass.h"
@@ -1461,7 +1461,10 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-   GNC_BEGIN_EDIT(&trans->inst)
+   QOF_BEGIN_EDIT(&trans->inst)
+
+   if (qof_book_shutting_down(trans->inst.book))
+     return;
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -1481,7 +1484,8 @@ xaccTransDestroy (Transaction *trans)
   if (!trans) return;
   check_open (trans);
 
-  if (xaccTransGetReadOnly (trans)) return;
+  if (xaccTransGetReadOnly (trans) &&
+      !qof_book_shutting_down(trans->inst.book)) return;
 
   trans->inst.do_free = TRUE;
 }
@@ -1509,13 +1513,17 @@ static void
 do_destroy (Transaction *trans)
 {
   SplitList *node;
+  gboolean shutting_down;
 
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
   destroy_gains (trans);
 
+  shutting_down = qof_book_shutting_down(trans->inst.book);
+
   /* Make a log in the journal before destruction.  */
-  xaccTransWriteLog (trans, 'D');
+  if (! shutting_down)
+    xaccTransWriteLog (trans, 'D');
 
   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_DESTROY);
 
@@ -1525,7 +1533,8 @@ do_destroy (Transaction *trans)
 
     mark_split (split);
     xaccAccountRemoveSplit (split->acc, split);
-    xaccAccountRecomputeBalance (split->acc);
+    if (!shutting_down)
+      xaccAccountRecomputeBalance (split->acc);
     gen_event (split);
     xaccFreeSplit (split);
 
@@ -1551,7 +1560,7 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    QofBackend *be;
-   GNC_COMMIT_EDIT_PART1 (&trans->inst);
+   QOF_COMMIT_EDIT_PART1 (&trans->inst);
 
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
@@ -1591,7 +1600,7 @@ xaccTransCommitEdit (Transaction *trans)
    if (!trans->splits) trans->inst.do_free = TRUE;
 
    /* XXX the code below is almost identical to 
-    * GNC_COMMIT_EDIT_PART1 (&trans->inst);
+    * QOF_COMMIT_EDIT_PART1 (&trans->inst);
     * except for the rollback bits */
    /* See if there's a backend.  If there is, invoke it. */
    be = qof_book_get_backend (trans->inst.book);
@@ -1604,7 +1613,7 @@ xaccTransCommitEdit (Transaction *trans)
         errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->commit) (be, GNC_ID_TRANS, trans);
+      (be->commit) (be, &(trans->inst));
 
       errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode)
@@ -1673,7 +1682,7 @@ xaccTransRollbackEdit (Transaction *trans)
    int i;
    ENTER ("trans addr=%p\n", trans);
 
-   GNC_COMMIT_EDIT_PART1(&trans->inst);
+   QOF_COMMIT_EDIT_PART1(&trans->inst);
 
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
@@ -1843,7 +1852,7 @@ xaccTransRollbackEdit (Transaction *trans)
         errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->rollback) (be, GNC_ID_TRANS, trans);
+      (be->rollback) (be, &(trans->inst));
 
       errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_MOD_DESTROY == errcode)
@@ -1952,7 +1961,15 @@ xaccSplitDestroy (Split *split)
 
    /* Note: split is removed from lot when its removed from accoount */
    xaccAccountRemoveSplit (acc, split);
-   xaccAccountRecomputeBalance (acc);
+
+   /* If we're shutting down then destroy the transaction, too, and
+    * don't recompute the balance.
+    */
+   if (qof_book_shutting_down (split->parent->inst.book))
+     xaccTransDestroy (trans);
+   else
+     xaccAccountRecomputeBalance (acc);
+   
 
    gen_event (split);
    xaccFreeSplit (split);
@@ -3095,7 +3112,7 @@ xaccTransGetVoidTime(const Transaction *tr)
   val = kvp_frame_get_string(tr->inst.kvp_data, void_time_str);
   if(val)
   {
-    void_time = gnc_iso8601_to_timespec_local(val);
+    void_time = gnc_iso8601_to_timespec_gmt(val);
   }
 
   return void_time;
@@ -3187,16 +3204,18 @@ static QofObject split_object_def = {
   interface_version:       QOF_OBJECT_VERSION,
   e_type:                  GNC_ID_SPLIT,
   type_label:              "Split",
+  create:                  NULL,
   book_begin:              NULL,
   book_end:                NULL,
   is_dirty:                NULL,
   mark_clean:              NULL,
   foreach:                 qof_collection_foreach,
-  printable:               (const char* (*)(gpointer)) xaccSplitGetMemo
+  printable:               (const char* (*)(gpointer)) xaccSplitGetMemo,
+  version_cmp:             NULL,
 };
 
 static gpointer 
-split_account_guid_getter (gpointer obj)
+split_account_guid_getter (gpointer obj, const QofParam *p)
 {
   Split *s = obj;
   Account *acc;
@@ -3214,7 +3233,8 @@ DxaccSplitGetShareAmount (const Split * split)
   return gnc_numeric_to_double(xaccSplitGetAmount(split));
 }
 
-static gpointer no_op (gpointer obj)
+static gpointer 
+no_op (gpointer obj, const QofParam *p)
 {
   return obj;
 }
@@ -3251,13 +3271,14 @@ gboolean xaccSplitRegister (void)
     { SPLIT_TRANS, GNC_ID_TRANS, (QofAccessFunc)xaccSplitGetParent, NULL },
     { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QofAccessFunc)xaccSplitGetAccount, NULL },
     { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, NULL },
-/* XXX why are these no-ops ?? ahh, to register sort func only ?? */
+/*  these are no-ops to register the parameter names (for sorting) but
+    they return an allocated object which getters cannot do.  */
     { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
     { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
     { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
     { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
   };
 
@@ -3279,12 +3300,14 @@ static QofObject trans_object_def = {
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              GNC_ID_TRANS,
   type_label:          "Transaction",
+  create:              NULL,
   book_begin:          NULL,
   book_end:            NULL,
   is_dirty:            NULL,
   mark_clean:          NULL,
   foreach:             qof_collection_foreach,
-  printable:           (const char* (*)(gpointer)) xaccTransGetDescription
+  printable:           (const char* (*)(gpointer)) xaccTransGetDescription,
+  version_cmp:         (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 static gboolean
@@ -3312,8 +3335,8 @@ gboolean xaccTransRegister (void)
     { TRANS_VOID_TIME, QOF_TYPE_DATE, (QofAccessFunc)xaccTransGetVoidTime,NULL },
     { TRANS_SPLITLIST, GNC_ID_SPLIT, (QofAccessFunc)xaccTransGetSplitList,NULL },
     { TRANS_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots,NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book,NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid,NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book,NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid,NULL },
     { NULL },
   };
 

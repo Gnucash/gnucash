@@ -4,7 +4,6 @@
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
-(require 'format)
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define (options-generator)

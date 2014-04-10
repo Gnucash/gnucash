@@ -88,6 +88,9 @@ struct _xferDialog
   gint desc_cursor_position;
   gboolean desc_didquickfill;
 
+  GtkWidget * from_transfer_frame;
+  GtkWidget * to_transfer_frame;
+
   GtkWidget * from_currency_label;
   GtkWidget * to_currency_label;
 
@@ -417,6 +420,11 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
   GtkWidget *scroll_win;
   GtkWidget *button;
   GtkWidget *tree;
+  gboolean  use_accounting_labels;
+
+  use_accounting_labels = gnc_lookup_boolean_option("Accounts",
+						    "Use accounting labels",
+						    FALSE);
 
   tree = gnc_account_tree_new();
   atree = GNC_ACCOUNT_TREE (tree);
@@ -430,9 +438,27 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
   gnc_account_tree_hide_income_expense(GNC_ACCOUNT_TREE(tree));
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
 
-  scroll_win = gnc_glade_lookup_widget (xferData->dialog,
-                                        (direction == XFER_DIALOG_TO) ?
-                                        "to_window" : "from_window");
+  /* In "normal" mode (non accounting terms) the account where the
+   * money comes from is displayed on the left side and the account
+   * where the money gets transferred to is displayed on the right
+   * side. In accounting terms the "from" account is called the
+   * "credit" account ("Haben" in german) and the "to" account is
+   * called "debit" account ("Soll" in german). Accountants told me
+   * that they always want the credit account on the right side
+   * and the debit on the left side (like the debit and credit
+   * columns in the register window). So reverse from and to account
+   * trees when in "accountant" mode. -- Herbert Thoma, 2004-01-18
+   */
+  if(use_accounting_labels) {
+    scroll_win = gnc_glade_lookup_widget (xferData->dialog,
+					  (direction == XFER_DIALOG_TO) ?
+					  "left_trans_window" : "right_trans_window");
+  }
+  else {
+    scroll_win = gnc_glade_lookup_widget (xferData->dialog,
+					  (direction == XFER_DIALOG_TO) ?
+					  "right_trans_window" : "left_trans_window");
+  }
 
   if (direction == XFER_DIALOG_TO)
     xferData->to_window = scroll_win;
@@ -456,9 +482,16 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
     }
   }
 
-  button = gnc_glade_lookup_widget (xferData->dialog,
-                                    (direction == XFER_DIALOG_TO) ?
-                                    "to_show_button" : "from_show_button");
+  if(use_accounting_labels) {
+    button = gnc_glade_lookup_widget (xferData->dialog,
+				      (direction == XFER_DIALOG_TO) ?
+				      "left_show_button" : "right_show_button");
+  }
+  else {
+    button = gnc_glade_lookup_widget (xferData->dialog,
+				      (direction == XFER_DIALOG_TO) ?
+				      "right_show_button" : "left_show_button");
+  }
 
   if (direction == XFER_DIALOG_TO)
     xferData->to_show_button = button;
@@ -1635,6 +1668,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 {
   GtkWidget *dialog;
   GladeXML  *xml;
+  gboolean  use_accounting_labels;
+
+  use_accounting_labels = gnc_lookup_boolean_option("Accounts",
+						    "Use accounting labels",
+						    FALSE);
 
   ENTER(" ");
   xml = gnc_glade_xml_new ("transfer.glade", "Transfer Dialog");
@@ -1719,7 +1757,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
   /* from and to */
   {
-    GtkWidget *label;
+    GtkWidget *label, *frame;
 
     gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_TO);
     gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_FROM);
@@ -1731,11 +1769,44 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 		       GTK_SIGNAL_FUNC(gnc_xfer_dialog_to_tree_select_cb),
 		       xferData);
 
-    label = glade_xml_get_widget (xml, "from_currency_label");
-    xferData->from_currency_label = label;
+    /* Reverse from and to account trees when in "accountant" mode,
+       see comment in function gnc_xfer_dialog_fill_tree_frame */
+    if(use_accounting_labels) {
+      frame = glade_xml_get_widget (xml, "right_trans_frame");
+      xferData->from_transfer_frame = frame;
 
-    label = glade_xml_get_widget (xml, "to_currency_label");
-    xferData->to_currency_label = label;
+      frame = glade_xml_get_widget (xml, "left_trans_frame");
+      xferData->to_transfer_frame = frame;
+
+      gtk_frame_set_label(GTK_FRAME(xferData->from_transfer_frame),
+			  _("Credit Account"));
+      gtk_frame_set_label(GTK_FRAME(xferData->to_transfer_frame),
+			  _("Debit Account"));
+
+      label = glade_xml_get_widget (xml, "right_currency_label");
+      xferData->from_currency_label = label;
+
+      label = glade_xml_get_widget (xml, "left_currency_label");
+      xferData->to_currency_label = label;
+    }
+    else {
+      frame = glade_xml_get_widget (xml, "left_trans_frame");
+      xferData->from_transfer_frame = frame;
+
+      frame = glade_xml_get_widget (xml, "right_trans_frame");
+      xferData->to_transfer_frame = frame;
+
+      gtk_frame_set_label(GTK_FRAME(xferData->from_transfer_frame),
+			  _("Transfer From"));
+      gtk_frame_set_label(GTK_FRAME(xferData->to_transfer_frame),
+			  _("Transfer To"));
+
+      label = glade_xml_get_widget (xml, "left_currency_label");
+      xferData->from_currency_label = label;
+
+      label = glade_xml_get_widget (xml, "right_currency_label");
+      xferData->to_currency_label = label;
+    }
 
     label = glade_xml_get_widget (xml, "conv_forward");
     xferData->conv_forward = label;
@@ -1788,6 +1859,14 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     gtk_signal_connect(GTK_OBJECT(xferData->amount_radio), "toggled",
 		       GTK_SIGNAL_FUNC(price_amount_radio_toggled_cb),
 		       xferData);
+    if(use_accounting_labels) {
+      gtk_label_set_text(GTK_LABEL(GTK_BIN(xferData->amount_radio)->child),
+			 _("Debit Amount:"));
+    }
+    else {
+      gtk_label_set_text(GTK_LABEL(GTK_BIN(xferData->amount_radio)->child),
+			 _("To Amount:"));
+    }
   }
 
   gtk_clist_set_selection_mode(GTK_CLIST(xferData->from),

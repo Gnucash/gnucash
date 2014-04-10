@@ -22,7 +22,7 @@
 /** @file cap-gains.c
  *  @breif Utilities to Automatically Compute Capital Gains/Losses.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
  *  This file implements the various routines to automatically
  *  compute and handle Cap Gains/Losses resulting from trading 
@@ -110,6 +110,7 @@ xaccAccountHasTrades (Account *acc)
 struct find_lot_s
 {
    GNCLot *lot;
+   gnc_commodity *currency;
    Timespec ts;
    int (*numeric_pred)(gnc_numeric);
    gboolean (*date_pred)(Timespec e, Timespec tr);
@@ -145,6 +146,13 @@ finder_helper (GNCLot *lot,  gpointer user_data)
    
    s = gnc_lot_get_earliest_split (lot);
    trans = s->parent;
+   if (els->currency && 
+       (FALSE == gnc_commodity_equiv (els->currency,
+                                      trans->common_currency)))
+   {
+      return NULL;
+   }
+
    if (els->date_pred (els->ts, trans->date_posted))
    {
       els->ts = trans->date_posted;
@@ -156,12 +164,14 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
+   gnc_commodity *currency,
    long long guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
    struct find_lot_s es;
 
    es.lot = NULL;
+   es.currency = currency;
    es.ts.tv_sec = guess;
    es.ts.tv_nsec = 0;
    es.date_pred = date_pred;
@@ -174,24 +184,26 @@ xaccAccountFindOpenLot (Account *acc, gnc_numeric sign,
 }
 
 GNCLot *
-xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
+xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign, 
+                                gnc_commodity *currency)
 {
    GNCLot *lot;
    ENTER (" sign=%lld/%lld", sign.num, sign.denom);
       
-   lot = xaccAccountFindOpenLot (acc, sign, 
+   lot = xaccAccountFindOpenLot (acc, sign, currency,
                    10000000LL * ((long long) LONG_MAX), earliest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
 }
 
 GNCLot *
-xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign)
+xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
+                              gnc_commodity *currency)
 {
    GNCLot *lot;
    ENTER (" sign=%lld/%lld", sign.num, sign.denom);
       
-   lot = xaccAccountFindOpenLot (acc, sign, 
+   lot = xaccAccountFindOpenLot (acc, sign, currency,
                    -10000000LL * ((long long) LONG_MAX), latest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
@@ -539,8 +551,8 @@ xaccSplitAssign (Split *split)
     * block is written in the form of a while loop, since we
     * may have to bust a split across several lots.
     */
-  while (split)
-  {
+   while (split)
+   {
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
      lot = pcy->PolicyGetLot (pcy, split);
@@ -600,7 +612,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    pcy = lot->account->policy;
    currency = split->parent->common_currency;
 
-   ENTER ("split=%p gains=%p status=0x%x lot=%s", split, 
+   ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
        split->gains_split, split->gains,
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
@@ -626,11 +638,13 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          xaccTransCommitEdit (trans);
       }
 #endif
+      PINFO ("Lot opening split, returning.");
       return;
    }
 
    if (GAINS_STATUS_GAINS & split->gains)
    {
+      PINFO ("split is a gains recording split, switch over");
       /* If this is the split that records the gains, then work with 
        * the split that generates the gains. 
        */
@@ -676,7 +690,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * nothing to do. Just return. */
    if ((FALSE == (split->gains & GAINS_STATUS_A_VDIRTY))  &&
        (split->gains_split) &&
-       (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) return;
+       (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) 
+   {
+      PINFO ("split not dirty, returning");
+      return;
+   }
 
    /* Yow! If amount is zero, there's nothing to do! Amount-zero splits 
     * may exist if users attempted to manually record gains. */
@@ -697,6 +715,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        * I don't know how to compute cap gains for that.  This is not
        * an error. Just punt, silently. 
        */
+      PINFO ("Can't compute gains, mismatched commodities!");
       return;
    }
 
@@ -708,7 +727,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
                                 gnc_numeric_abs(split->amount)))
    {
-      PERR ("Malformed Lot! (too thin!)\n");
+      PERR ("Malformed Lot! (too thin!)");
       return;
    }
    if ( (gnc_numeric_negative_p(opening_amount) ||
@@ -716,7 +735,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         (gnc_numeric_positive_p(opening_amount) ||
          gnc_numeric_negative_p(split->amount)))
    {
-      PERR ("Malformed Lot! (too fat!)\n");
+      PERR ("Malformed Lot! (too fat!)");
       return;
    }
 
@@ -728,10 +747,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * cap_gain = current_value - cost_basis 
     */
    value = gnc_numeric_mul (opening_value, split->amount,
-                   GNC_DENOM_AUTO, GNC_RND_NEVER);
+                   GNC_DENOM_AUTO, GNC_RND_NEVER|GNC_DENOM_REDUCE);
    value = gnc_numeric_div (value, opening_amount, 
                    gnc_numeric_denom(opening_value), GNC_DENOM_EXACT);
-   
    value = gnc_numeric_sub (value, split->value,
                            GNC_DENOM_AUTO, GNC_DENOM_LCD);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
@@ -740,6 +758,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
           gnc_numeric_to_string (split->amount),
           gnc_numeric_to_string (split->value),
           gnc_numeric_to_string (value));
+   if (gnc_numeric_check (value))
+   {
+      PERR ("Numeric overflow during gains calculation");
+      return;
+   }
 
    /* Are the cap gains zero?  If not, add a balancing transaction.
     * As per design doc lots.txt: the transaction has two splits, 
@@ -843,7 +866,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
       xaccTransCommitEdit (trans);
    }
-   LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+   LEAVE ("(lot=%s)", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
 
 /* ============================================================== */

@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2003 <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -31,12 +32,7 @@
 #include <string.h>
 
 #include "guid.h"
-#include "messages.h"
-#include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-#include "gnc-be-utils.h"
-
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -47,10 +43,18 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 
+#include "messages.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
+#include "gnc-event-p.h"
+
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
 #include "gncBusiness.h"
+#include "gncJobP.h"
+#include "gncTaxTableP.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
-#include "gncAddress.h"
 
 struct _gncVendor 
 {
@@ -103,7 +107,7 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->inst.entity.guid, _GNC_MOD_NAME);
+  vendor->addr = gncAddressCreate (book, &vendor->inst.entity);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
   vendor->jobs = NULL;
@@ -139,6 +143,63 @@ static void gncVendorFree (GncVendor *vendor)
 
   qof_instance_release (&vendor->inst);
   g_free (vendor);
+}
+
+/** Create a copy of a vendor, placing the copy into a new book. */
+GncVendor *
+gncCloneVendor (GncVendor *from, QofBook *book)
+{
+  GList *node;
+  GncVendor *vendor;
+
+  if (!book) return NULL;
+
+  vendor = g_new0 (GncVendor, 1);
+  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&vendor->inst, &from->inst);
+  
+  vendor->id = CACHE_INSERT (from->id);
+  vendor->name = CACHE_INSERT (from->name);
+  vendor->notes = CACHE_INSERT (from->notes);
+  vendor->addr = gncCloneAddress (from->addr, &vendor->inst.entity, book);
+  vendor->taxincluded = from->taxincluded;
+  vendor->taxtable_override = from->taxtable_override;
+  vendor->active = from->active;
+
+  vendor->terms = gncBillTermObtainTwin (from->terms, book);
+  gncBillTermIncRef (vendor->terms);
+
+  vendor->currency = gnc_commodity_obtain_twin (from->currency, book);
+
+  vendor->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
+  gncTaxTableIncRef (vendor->taxtable);
+
+  vendor->jobs = NULL;
+  for (node=g_list_last(from->jobs); node; node=node->prev)
+  {
+    GncJob *job = node->data;
+    job = gncJobObtainTwin (job, book);
+    vendor->jobs = g_list_prepend(vendor->jobs, job);
+  }
+
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
+
+  return vendor;
+}
+
+GncVendor *
+gncVendorObtainTwin (GncVendor *from, QofBook *book)
+{
+  GncVendor *vendor;
+  if (!book) return NULL;
+
+  vendor = (GncVendor *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!vendor)
+  {
+    vendor = gncCloneVendor (from, book);
+  }
+
+  return vendor;
 }
 
 /* ============================================================== */
@@ -191,7 +252,7 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
     gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
   if (vendor->terms)
-    gncBillTermDecRef (vendor->terms);
+    gncBillTermIncRef (vendor->terms);
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
 }
@@ -348,7 +409,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  GNC_BEGIN_EDIT (&vendor->inst);
+  QOF_BEGIN_EDIT (&vendor->inst);
 }
 
 static inline void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
@@ -370,8 +431,8 @@ static inline void vendor_free (QofInstance *inst)
 
 void gncVendorCommitEdit (GncVendor *vendor)
 {
-  GNC_COMMIT_EDIT_PART1 (&vendor->inst);
-  GNC_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
+  QOF_COMMIT_EDIT_PART1 (&vendor->inst);
+  QOF_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
                          gncVendorOnDone, vendor_free);
 }
 
@@ -425,12 +486,14 @@ static QofObject gncVendorDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Vendor",
+  create:             NULL,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
-  printable:          _gncVendorPrintable
+  printable:          _gncVendorPrintable,
+  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncVendorRegister (void)
@@ -439,9 +502,9 @@ gboolean gncVendorRegister (void)
     { VENDOR_ID, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetID, NULL },
     { VENDOR_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncVendorGetName, NULL },
     { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncVendorGetActive, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncVendorGetActive, NULL },
     { NULL },
   };
 

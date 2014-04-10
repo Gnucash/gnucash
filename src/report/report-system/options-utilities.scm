@@ -28,68 +28,16 @@
 ;; This is one single end-date of a report.
 (define (gnc:options-add-report-date!
 	 options pagename optname sort-tag)
-  (gnc:register-option 
-    options  
-    (gnc:make-date-option
-     pagename optname 
-     sort-tag (N_ "Select a date to report on")
-     (lambda () 
-       (cons 'relative 'today))
-     #f 'both 
-     '(
-       today 
-       end-this-month
-       end-prev-month 
-       end-current-quarter 
-       end-prev-quarter
-       end-cal-year 
-       end-prev-year 
-       end-cur-fin-year
-       end-prev-fin-year
-       ))))
-
+  (gnc:options-make-end-date! options pagename optname sort-tag
+			      (N_ "Select a date to report on")))
 
 ;; This is a date-interval for a report.
 (define (gnc:options-add-date-interval!
 	 options pagename name-from name-to sort-tag)
-  (gnc:register-option 
-   options  
-   (gnc:make-date-option
-    pagename name-from 
-    (string-append sort-tag "a")
-    (N_ "Start of reporting period")
-    (lambda () (cons 'relative 'start-cal-year))
-     #f 'both 
-     '(
-       today
-       start-this-month 
-       start-prev-month 
-       start-current-quarter
-       start-prev-quarter
-       start-cal-year 
-       start-prev-year
-       start-cur-fin-year 
-       start-prev-fin-year
-       )))
-  (gnc:register-option 
-   options  
-   (gnc:make-date-option
-    pagename name-to
-    (string-append sort-tag "b")
-    (N_ "End of reporting period")
-    (lambda () (cons 'relative 'today))
-    #f 'both 
-    '(
-      today
-      end-this-month
-      end-prev-month 
-      end-current-quarter 
-      end-prev-quarter
-      end-cal-year 
-      end-prev-year 
-      end-cur-fin-year
-      end-prev-fin-year
-      ))))
+  (gnc:options-make-date-interval! options pagename
+				   name-from (N_ "Start of reporting period")
+				   name-to (N_ "End of reporting period")
+				   sort-tag))
 
 ;; A date interval multichoice option.
 (define (gnc:options-add-interval-choice! 

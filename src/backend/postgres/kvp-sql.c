@@ -471,7 +471,7 @@ timespec_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    Timespec ts;
    KVP_HANDLER_SETUP;
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL ("data", j));
+   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL ("data", j));
    kv = kvp_value_new_timespec (ts);
    KVP_HANDLER_TAKEDOWN;
 }

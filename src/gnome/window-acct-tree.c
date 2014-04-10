@@ -29,7 +29,6 @@
 #include <string.h>
 #include "guile-mappings.h"
 
-#include "AccWindow.h"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "dialog-account.h"

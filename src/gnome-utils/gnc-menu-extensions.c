@@ -162,11 +162,12 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
     path = SCM_CDR(path);
 
     if (SCM_STRINGP(item))
-      strings[i] = gh_scm2newstr(item, NULL);
+    {
+      /* strings[i] = gh_scm2newstr(item, NULL); */
+      strings[i] = SCM_STRING_CHARS (item);
+    }
     else
     {
-      while (i > 0)
-        free(strings[--i]);
       g_free(strings);
 
       PERR("not a string");
@@ -187,9 +188,6 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
     *fullpath = g_strjoinv("/", strings);
   }
 
-  i = 0;
-  while (strings[i] != NULL)
-    free(strings[i++]);
   g_free(strings);
 }
 

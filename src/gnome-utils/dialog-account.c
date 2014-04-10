@@ -27,7 +27,6 @@
 #include <math.h>
 #include <string.h>
 
-#include "AccWindow.h"
 #include "Transaction.h"
 #include "dialog-account.h"
 #include "dialog-commodity.h"

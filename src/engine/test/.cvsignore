@@ -9,6 +9,7 @@ test-date
 test-freq-spec
 test-guid
 test-group-vs-book
+test-link
 test-lots
 test-object
 test-period

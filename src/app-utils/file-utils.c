@@ -128,4 +128,45 @@ gncReadFile (const char * file, char ** data)
   return size;
 }
 
+/**
+ * gnc_getline -- read a line from the input file, up to and including
+ *                the newline.
+ *
+ * Args:   line - pointer to hold the buffer for the whole line (allocated by
+ *                this function)
+ *         file - the file from which to read
+ * Return: the number of bytes read
+ *
+ * The caller MUST g_free() the line returned from this call in all
+ * cases where it is non-NULL!
+ */
+
+gint64
+gnc_getline (gchar **line, FILE *file)
+{
+  char str[BUFSIZ];
+  gint64 len;
+  GString *gs;
+
+  g_return_val_if_fail(line, -1);
+  *line = NULL;
+  g_return_val_if_fail(file, -1);
+
+  gs = g_string_new("");
+
+  while (fgets(str, sizeof(str), file) != NULL) {
+    g_string_append(gs, str);
+
+    len = strlen(str);
+    if (str[len-1] == '\n')
+      break;
+  }
+
+  len = gs->len;
+  *line = gs->str;
+  g_string_free(gs, FALSE);
+  return len;
+}
+
+
 /* ----------------------- END OF FILE ---------------------  */

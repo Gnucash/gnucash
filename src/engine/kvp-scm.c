@@ -49,9 +49,9 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     {
         char *newstr;
         KvpValue *ret;
-        newstr = gh_scm2newstr(val, NULL);
+        /* newstr = gh_scm2newstr(val, NULL); */
+        newstr = SCM_STRING_CHARS (val);
         ret = kvp_value_new_string(newstr);
-        free(newstr);
         return ret;
     }
     else if(gw_wcp_p(val) &&
