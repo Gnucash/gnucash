@@ -1,5 +1,5 @@
-SUBDIRS = .  binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} log-replay test
-DIST_SUBDIRS = binary-import qif qif-import qif-io-core ofx hbci log-replay test
+SUBDIRS = .  binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
+DIST_SUBDIRS = binary-import qif qif-import qif-io-core ofx hbci mt940 log-replay test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 

@@ -220,6 +220,7 @@ restart:
    {
       Split *s = node->data;
       if (xaccSplitGetLot (s) != lot) continue;
+      if (s == split) continue;
 
       /* OK, this split is in the same lot (and thus same account)
        * as the indicated split.  It must be a subsplit (although
@@ -279,14 +280,15 @@ restart:
 
 /* ================================================================= */
 
-void 
+gboolean
 xaccScrubLot (GNCLot *lot)
 {
+  gboolean splits_deleted = FALSE;
   gnc_numeric lot_baln;
   gboolean opening_baln_is_pos, lot_baln_is_pos;
   Account *acc;
 
-  if (!lot) return;
+  if (!lot) return FALSE;
   ENTER (" ");
 
   acc = gnc_lot_get_account (lot);
@@ -324,7 +326,7 @@ rethin:
     xaccLotFill (lot);
 
     /* Make sure there are no subsplits. */
-    xaccScrubMergeLotSubSplits (lot);
+    splits_deleted = xaccScrubMergeLotSubSplits (lot);
   }
 
   /* Now re-compute cap gains, and then double-check that. */
@@ -332,7 +334,8 @@ rethin:
   xaccLotScrubDoubleBalance (lot);
   xaccAccountCommitEdit(acc);
 
-  LEAVE (" ");
+  LEAVE (" deleted=%d", splits_deleted);
+  return splits_deleted;
 }
 
 /* ========================== END OF FILE  ========================= */

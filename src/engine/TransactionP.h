@@ -267,12 +267,25 @@ gint32 xaccTransGetVersion (const Transaction*);
 gboolean xaccSplitRegister (void);
 gboolean xaccTransRegister (void);
 
-/*
- * The xaccTransactionGetBackend() subroutine will find the
+/* The xaccTransactionGetBackend() subroutine will find the
  *    persistent-data storage backend associated with this 
  *    transaction.
  */
 QofBackend * xaccTransactionGetBackend (Transaction *trans);
+
+/* The xaccEnable/DisableDataScrubbing() routines affect what
+ *   happens during transaction commit.  When scrubbing is enabled,
+ *   then transactions are fixed up during transaction commit, 
+ *   so that only consistent transactions are commited to the engine.
+ *   However, when data is being loaded from a backend (in particular,
+ *   from the file backend), the data might not be consistent until
+ *   its completely loaded.   In particular, gains transactions might
+ *   be loaded at a different time than the transactions that casued
+ *   the gains.  Thus, scrubbing needs do be disabled during file
+ *   load.  These routines enable that.
+ */
+void xaccEnableDataScrubbing(void);
+void xaccDisableDataScrubbing(void);
 
 /* The xaccSplitDetermineGainStatus() routine will analyze the 
  *   the split, and try to set the internal status flags 

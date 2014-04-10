@@ -1,7 +1,4 @@
 /********************************************************************\
- * gnc-hbci-gettrans.h -- hbci get transactions function            *
- * Copyright (C) 2002 Christian Stimming                            *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,33 +16,20 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
-#ifndef GNC_HBCI_GETTRANS_H
-#define GNC_HBCI_GETTRANS_H
-
-#include <gnome.h>
-#include <openhbci/outboxaccjobs.h>
-#include <openhbci/transaction.h>
-
-#include "Account.h"
-#include "import-main-matcher.h"
-
-/** Start a GetTrans job. */
-void
-gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc);
-
-/** Finalizes all the things that have to be done with a GetTrans
- * job.  Returns true if everything has been finished succesfully. */
-gboolean
-gnc_hbci_gettrans_final(GtkWidget *parent, 
-			Account *gnc_acc, 
-			const HBCI_OutboxJobGetTransactions *trans_job,
-			gboolean run_until_done);
-
-/** Import HBCI transaction into gnucash account using importer_generic
+ /** @file
+     @brief mt940 import module interface
+     *
+     gnc-mt940-import.h
+     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-void gnc_hbci_trans_import(const HBCI_Transaction *h_trans,
-		GNCImportMainMatcher *importer_generic,
-		Account *gnc_acc);
+#ifndef MT940_IMPORT_H
+#define MT940_IMPORT_H
 
-#endif /* GNC_HBCI_GETTRANS_H */
+/** The gnc_file_mt940_import() routine will pop up a standard file
+ *     selection dialogue asking the user to pick an MT940 file. If one
+ *     is selected then the MT940 file is opened and read. Its contents
+ *     are merged into the existing session (if any). The current
+ *     session continues to remain open for editing. */
+void              gnc_file_mt940_import (void);
+SCM  scm_gnc_file_mt940_import (void);
+#endif

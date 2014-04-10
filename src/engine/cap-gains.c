@@ -545,6 +545,7 @@ xaccSplitGetCapGainsSplit (Split *split)
 
    gains_split = qof_entity_lookup (qof_book_get_entity_table(split->book),
                    gains_guid, GNC_ID_SPLIT);
+   PINFO ("split=%p has gains-split=%p", split, gains_split);
    return gains_split;
 }
 
@@ -565,7 +566,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!lot) return;
    currency = split->parent->common_currency;
 
-   ENTER ("split=%p lot=%s", split,
+   ENTER ("split=%p gains=%p status=0x%x lot=%s", split, 
+       split->gains_split, split->gains,
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
    /* Make sure the status flags and pointers are initialized */
@@ -696,7 +698,8 @@ XXX this should be a part of a scrub routine !
        * If there is, adjust its value as appropriate. Else, create 
        * a new gains transaction.
        */
-      lot_split = xaccSplitGetCapGainsSplit (split);
+      /* lot_split = xaccSplitGetCapGainsSplit (split);  */
+      lot_split = split->gains_split;
 
       if (NULL == lot_split)
       {

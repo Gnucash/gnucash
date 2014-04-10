@@ -428,6 +428,7 @@ string and 'directories' must be a list of strings."
     (load-module "gnucash/import-export/binary-import" 0 #f)
     (load-module "gnucash/import-export/qif-import" 0 #f)
     (load-module "gnucash/import-export/ofx" 0 #t)
+    (load-module "gnucash/import-export/mt940" 0 #t)
     (load-module "gnucash/import-export/log-replay" 0 #t)
     (load-module "gnucash/import-export/hbci" 0 #t)
     (load-module "gnucash/report/report-system" 0 #f)
