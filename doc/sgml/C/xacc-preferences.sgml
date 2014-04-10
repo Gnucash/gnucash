@@ -1,11 +1,9 @@
-
 <ARTICLE ID="XACC-PREFERENCES">
+
 <ARTHEADER>
 <TITLE>Preferences</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Preferences</TITLE>
-<PARA>    </PARA>
+
 <PARA>You can customize the behavior of GnuCash by changing the
     settings in this dialog box.All settings are automatically
     saved so changes are preserved for future sessions.
@@ -55,5 +53,4 @@
 
 
 </PARA>
-</SECT1>
 </ARTICLE>

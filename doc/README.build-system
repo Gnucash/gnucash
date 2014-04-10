@@ -14,7 +14,7 @@ possible, if you make a mistake when working on the Makefile.am's to
 leave yourself in a situation where automake won't work because a
 Makefile is broken.  To fix this, just run:
 
- aclocal && autoconf && automake --add-missing
+ ./autogen.sh <your usual arguments to ./configure>
 
 That should sledgehammer the problem bit back into place.
 

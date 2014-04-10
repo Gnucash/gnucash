@@ -26,7 +26,7 @@
 
 #include "AccWindow.h"
 
-void gnc_ui_destroy_account_add_windows();
+void gnc_ui_destroy_account_add_windows(void);
 void gnc_ui_edit_account_window_raise(AccountWindow * winData);
 
 

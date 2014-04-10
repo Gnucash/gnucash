@@ -45,6 +45,10 @@ gnc_verify_cancel_dialog_parented(gncUIWidget parent,
                                   const char *message,
                                   GNCVerifyResult default_result);
 
+gboolean gnc_verify_dialog_parented(gncUIWidget parent,
+                                    const char *message,
+                                    gboolean yes_is_default);
+
 GNCVerifyResult
 gnc_ok_cancel_dialog_parented(gncUIWidget parent,
                               const char *message,
@@ -52,9 +56,8 @@ gnc_ok_cancel_dialog_parented(gncUIWidget parent,
 
 void gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
-gboolean gnc_verify_dialog( const char *message,
-                            gboolean yes_is_default );
-void     gnc_error_dialog( const char *message );
+gboolean gnc_verify_dialog(const char *message, gboolean yes_is_default);
+void     gnc_error_dialog(const char *message);
 
 int gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                             const char *title,
@@ -73,17 +76,17 @@ void gnc_set_busy_cursor( gncUIWidget w );
 void gnc_unset_busy_cursor( gncUIWidget w );
 
 /* Getting main window information **********************************/
-Account * gnc_get_current_account();
-GList   * gnc_get_current_accounts();
+Account * gnc_get_current_account(void);
+GList   * gnc_get_current_accounts(void);
 
 /* QIF Import Windows ***********************************************/
 typedef struct _qifimportwindow QIFImportWindow;
 
-QIFImportWindow * gnc_ui_qif_import_dialog_make();
+QIFImportWindow * gnc_ui_qif_import_dialog_make(void);
 void gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
 
 /* Register font information ****************************************/
-const char * gnc_register_default_font();
-const char * gnc_register_default_hint_font();
+const char * gnc_register_default_font(void);
+const char * gnc_register_default_hint_font(void);
 
 #endif

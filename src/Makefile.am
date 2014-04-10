@@ -28,10 +28,13 @@ LDADD = \
   gnome/libgncgnome.a \
   calculation/libgnccalc.a \
   engine/libgncengine.la \
-  @GNOME_LIBS@ \
-  @G_WRAP_LINK_ARGS@ \
-  @GUILE_LINK_ARGS@ \
-  @INTLLIBS@
+  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBDIR} \
+  ${GNOME_PRINT_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
+  ${GTKHTML_LIBS} \
+  ${INTLLIBS}
 
 gnucash_SOURCES = \
   MultiLedger.c \
@@ -39,11 +42,11 @@ gnucash_SOURCES = \
   Destroy.c \
   EuroUtils.c \
   FileDialog.c \
-  Refresh.c
+  Refresh.c \
+  gnc-exp-parser.c
 
 noinst_HEADERS = \
   AccWindow.h \
-  AdjBWindow.h \
   Destroy.h \
   EuroUtils.h \
   FileBox.h \
@@ -55,6 +58,7 @@ noinst_HEADERS = \
   RegWindow.h \
   SplitLedger.h \
   file-history.h \
+  gnc-exp-parser.h \
   gnc-ui-common.h \
   messages.h \
   messages_i18n.h \
@@ -64,9 +68,10 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 
 INCLUDES = \
+  -I./calculation \
   -I./engine \
   -I./guile \
   -I./register

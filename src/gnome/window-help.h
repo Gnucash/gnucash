@@ -28,6 +28,6 @@
 
 void helpWindow(GtkWidget *parent, const char *title, const char *htmlfile);
 
-void gnc_ui_destroy_help_windows();
+void gnc_ui_destroy_help_windows(void);
 
 #endif

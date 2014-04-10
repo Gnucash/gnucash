@@ -1,5 +1,5 @@
 
-SUBDIRS = debian doc intl lib po rpm src
+SUBDIRS = macros debian doc intl lib po rpm src
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -28,6 +28,7 @@ doc_DATA = \
 
 EXTRA_DIST = \
   .cvsignore \
+  HACKING \
   gnucash.lsm \
   intl/.cvsignore \
   make-gnucash-patch.in \

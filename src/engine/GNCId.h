@@ -63,6 +63,6 @@ typedef enum
 GNCIdType xaccGUIDType(const GUID * guid);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
-const GUID * xaccGUIDNULL();
+const GUID * xaccGUIDNULL(void);
 
 #endif

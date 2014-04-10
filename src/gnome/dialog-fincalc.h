@@ -31,7 +31,7 @@
 
 typedef struct _FinCalcDialog FinCalcDialog;
 
-FinCalcDialog * gnc_ui_fincalc_dialog_create();
+FinCalcDialog * gnc_ui_fincalc_dialog_create(void);
 void gnc_ui_fincalc_dialog_destroy(FinCalcDialog *fcd);
 
 #endif

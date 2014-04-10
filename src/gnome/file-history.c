@@ -143,8 +143,8 @@ gnc_history_add_file(char *newfile)
   __gnc_history_config_write();
 }
 
-char *
-gnc_history_get_last()
+const char *
+gnc_history_get_last(void)
 {
   if(history_list == NULL)
     __gnc_history_get_list();
@@ -156,7 +156,7 @@ gnc_history_get_last()
 }
 
 void
-gnc_history_update_menu()
+gnc_history_update_menu(void)
 {
   GnomeApp *app;
   GnomeUIInfo *menu;

@@ -1,23 +1,27 @@
 <ARTICLE ID="XACC-GPL">
+
 <ARTHEADER>
 <TITLE>GNU General Public License</TITLE>
 </ARTHEADER>
+
 <SECT1>
-<TITLE> GNU General Public License</TITLE>
-<PARA>    </PARA>
+<TITLE>GNU General Public License</TITLE>
+
 <SECT2>
 <TITLE>Version 2, June 1991</TITLE>
-<PARA>      Copyright (C) 1989, 1991 Free Software Foundation, Inc. 675
-      Mass Ave, Cambridge, MA 02139, USA 
 
+<PARA>Copyright (C) 1989, 1991 Free Software Foundation, Inc. 675
+      Mass Ave, Cambridge, MA 02139, USA 
       </PARA>
+
 <PARA>Everyone is permitted to copy and distribute verbatim
       copies of this license document, but changing it is not
       allowed.
-
     </PARA>
+
 <SECT3>
 <TITLE><ANCHOR ID="SEC001">Preamble</TITLE>
+
 <PARA>The licenses for most software are designed to take away
     your freedom to share and change it. By contrast, the GNU
     General Public License is intended to guarantee your freedom to
@@ -81,6 +85,7 @@
 
     </PARA>
 </SECT3>
+
 <SECT3>
 <TITLE><ANCHOR ID="SEC002">GNU GENERAL PUBLIC LICENSE TERMS AND
     CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</TITLE>
@@ -336,6 +341,7 @@
 
     </PARA>
 </SECT3>
+
 <SECT3>
 <TITLE><ANCHOR ID="SEC003">NO WARRANTY</TITLE>
 <PARA>11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS
@@ -363,10 +369,14 @@
 
     </PARA>
 </SECT3>
+
 <SECT3>
 <TITLE>END OF TERMS AND CONDITIONS</TITLE>
 <PARA></PARA>
 </SECT3>
+
 </SECT2>
+
 </SECT1>
+
 </ARTICLE>

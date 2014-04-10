@@ -34,14 +34,50 @@
 #include "FileDialog.h"
 #include "window-main.h"
 #include "dialog-utils.h"
-#include "account-treeP.h"
+#include "account-tree.h"
 #include "util.h"
 
 
+/* Signal codes */
+enum
+{
+  SELECT_ACCOUNT,
+  UNSELECT_ACCOUNT,
+  ACTIVATE_ACCOUNT,
+  LAST_SIGNAL
+};
+
+
+/** Static Globals ****************************************************/
 static GtkCTreeClass *parent_class = NULL;
 static guint account_tree_signals[LAST_SIGNAL];
-
 static GSList *account_trees = NULL;
+
+
+/** Static function declarations **************************************/
+static void gnc_account_tree_init(GNCAccountTree *tree);
+static void gnc_account_tree_class_init(GNCAccountTreeClass *klass);
+static gint gnc_account_tree_key_press(GtkWidget *widget, GdkEventKey *event);
+static gint gnc_account_tree_button_press(GtkWidget *widget,
+ 					  GdkEventButton *event);
+static void gnc_account_tree_select_row(GtkCTree *ctree,
+					GtkCTreeNode *row,
+					gint column);
+static void gnc_account_tree_unselect_row(GtkCTree *ctree,
+					  GtkCTreeNode *row,
+					  gint column);
+static GtkCTreeNode * gnc_account_tree_insert_row(GNCAccountTree *tree,
+						  GtkCTreeNode *parent,
+						  GtkCTreeNode *sibling,
+						  Account *acc);
+static void gnc_account_tree_fill(GNCAccountTree *tree,
+                                  GHashTable *expanded_accounts,
+				  GtkCTreeNode *parent,
+				  AccountGroup *accts);
+static void gnc_account_tree_set_view_info_real(GNCAccountTree *tree);
+static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
+static void gnc_account_tree_destroy(GtkObject *object);
+
 
 GtkType
 gnc_account_tree_get_type()

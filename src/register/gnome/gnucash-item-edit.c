@@ -98,15 +98,14 @@ item_edit_get_pixel_coords (ItemEdit *item_edit, int *x, int *y,
 			    int *w, int *h)
 {
         GnucashSheet *sheet = item_edit->sheet;
+        VirtualCellLocation vcell_loc = { item_edit->virt_row,
+                                          item_edit->virt_col };
         int xd, yd, save;
 
         gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &yd);
         save = yd;
 
-        gnucash_sheet_block_pixel_origin (sheet,
-                                          item_edit->virt_row,
-                                          item_edit->virt_col,
-                                          &xd, &yd);
+        gnucash_sheet_block_pixel_origin (sheet, vcell_loc, &xd, &yd);
 
         gnucash_sheet_style_get_cell_pixel_rel_coords (item_edit->style,
 						       item_edit->cell_row,
@@ -124,6 +123,8 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         GtkJustification align;
         SheetBlockStyle *style;
         GtkEditable *editable;
+        CellStyle *cs;
+
         int text_len, total_width;
         int pre_cursor_width;
         int width_1, width_2;
@@ -134,13 +135,13 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 
         style = item_edit->style;
 
-        if (style->fonts[item_edit->cell_row][item_edit->cell_col])
-                info->font = style->fonts[item_edit->cell_row][item_edit->cell_col];
-        else
-                info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
+        info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
 
-        info->bg_color = style->active_bg_color[item_edit->cell_row]
-                                               [item_edit->cell_col];
+        cs = gnucash_style_get_cell_style (style,
+                                           item_edit->cell_row,
+                                           item_edit->cell_col);
+
+        info->bg_color = cs->active_bg_color;
         info->fg_color = &gn_black;
 
         info->bg_color2 = &gn_dark_gray;
@@ -180,8 +181,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->bg_rect.width = wd - (2 * CELL_HPADDING);
         info->bg_rect.height = hd - (2 * CELL_VPADDING - info->font->descent);
 
-        align = item_edit->style->alignments[item_edit->cell_row]
-                                            [item_edit->cell_col];
+        align = cs->alignment;
 
         toggle_space = (item_edit->is_combo) ?
                 item_edit->combo_toggle.toggle_offset : 0;
@@ -199,7 +199,6 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                                 break;
                 default:
                 case GTK_JUSTIFY_LEFT:
-                case GTK_JUSTIFY_FILL:
                 case GTK_JUSTIFY_CENTER:
                         xoffset = MIN (CELL_HPADDING,
                                        info->text_rect.width -
@@ -450,7 +449,8 @@ item_edit_destroy (GtkObject *object)
 
 
 gboolean
-item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
+item_edit_set_cursor_pos (ItemEdit *item_edit,
+                          PhysicalLocation phys_loc, int x,
                           gboolean changed_cells, gboolean extend_selection)
 {
         GtkEditable *editable;
@@ -459,7 +459,9 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
         gint pos;
         gint pos_x;
         gint o_x, o_y;
-        gint virt_row, virt_col, cell_row, cell_col;
+        VirtualCellLocation vcell_loc;
+        CellDimensions *cd;
+        gint cell_row, cell_col;
         SheetBlockStyle *style;
         PhysicalCell *pcell;
         char *text;
@@ -468,22 +470,23 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
 
         table = item_edit->sheet->table;
 
-        pcell = gnc_table_get_physical_cell (table, p_row, p_col);
+        pcell = gnc_table_get_physical_cell (table, phys_loc);
         if (pcell == NULL)
                 return FALSE;
 
-	virt_row = pcell->virt_loc.virt_row;
-	virt_col = pcell->virt_loc.virt_col;
+	vcell_loc = pcell->virt_loc.vcell_loc;
 	cell_row = pcell->virt_loc.phys_row_offset;
 	cell_col = pcell->virt_loc.phys_col_offset;
 
-        style = gnucash_sheet_get_style (item_edit->sheet, virt_row, 0);
+        style = gnucash_sheet_get_style (item_edit->sheet, vcell_loc);
 
-        o_x = style->dimensions->origin_x[cell_row][cell_col];
-        o_y = style->dimensions->origin_y[cell_row][cell_col];
+        cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
 
-        if ( (virt_row != item_edit->virt_row) ||
-             (virt_col != item_edit->virt_col) ||
+        o_x = cd->origin_x;
+        o_y = cd->origin_y;
+
+        if ( (vcell_loc.virt_row != item_edit->virt_row) ||
+             (vcell_loc.virt_col != item_edit->virt_col) ||
              (cell_row != item_edit->cell_row) ||
              (cell_col != item_edit->cell_col) )
                 return FALSE;
@@ -492,9 +495,13 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
 
         if (changed_cells) {
                 GtkJustification align;
+                CellStyle *cs;
 
-                align = item_edit->style->alignments[item_edit->cell_row]
-                                                    [item_edit->cell_col];
+                cs = gnucash_style_get_cell_style (item_edit->style,
+                                                   item_edit->cell_row,
+                                                   item_edit->cell_col);
+
+                align = cs->alignment;
 
                 if (align == GTK_JUSTIFY_RIGHT)
                         gtk_editable_set_position(editable, -1);
@@ -593,6 +600,7 @@ item_edit_configure (ItemEdit *item_edit)
 {
         GnucashSheet *sheet = item_edit->sheet;
         GnucashItemCursor *cursor;
+        VirtualCellLocation vcell_loc;
 
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_BLOCK]);
@@ -600,9 +608,11 @@ item_edit_configure (ItemEdit *item_edit)
         item_edit->virt_row = cursor->row;
         item_edit->virt_col = cursor->col;
 
+        vcell_loc.virt_row = cursor->row;
+        vcell_loc.virt_col = cursor->col;
+
         item_edit->style = gnucash_sheet_get_style (item_edit->sheet,
-                                                    item_edit->virt_row,
-                                                    item_edit->virt_col);
+                                                    vcell_loc);
 
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL]);
@@ -642,7 +652,8 @@ item_edit_claim_selection (ItemEdit *item_edit, guint32 time)
 
                 owner = gdk_selection_owner_get (GDK_SELECTION_PRIMARY);
                 if (owner == GTK_WIDGET(item_edit->sheet)->window)
-                        gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, time);
+                        gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY,
+                                                 time);
                 item_edit->has_selection = FALSE;
         }
 }

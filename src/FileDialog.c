@@ -295,7 +295,7 @@ gncPostFileOpen (const char * filename)
 void
 gncFileOpen (void)
 {
-  char * newfile;
+  const char * newfile;
 
   if (!gncFileQuerySave ())
     return;
@@ -332,7 +332,7 @@ void
 gncFileQIFImport (void)
 {
   /* pop up the QIF File Import dialog box */
-  gnc_ui_qif_import_dialog_make(NULL);
+  gnc_ui_qif_import_dialog_make();
 }
 
 /* ======================================================== */
@@ -407,7 +407,8 @@ gncFileSaveAs (void)
 {
   Session *newsess;
   AccountGroup *oldgrp;
-  char *filename, *newfile;
+  const char *filename;
+  char *newfile;
   AccountGroup *newgrp;
   char * oldfile;
   char buf[BUFSIZE];

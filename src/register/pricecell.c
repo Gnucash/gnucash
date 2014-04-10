@@ -40,6 +40,8 @@
 #include "basiccell.h"
 #include "pricecell.h"
 
+/* GUI-dependent */
+extern void xaccPriceGUIInit (PriceCell *);
 
 static void PriceSetValue (BasicCell *, const char *);
 static char * xaccPriceCellPrintValue (PriceCell *cell);
@@ -117,7 +119,8 @@ PriceMV (BasicCell *_cell,
         /* accept only numbers or a decimal point or a thousands sep */
         if (!isdigit(change[i]) &&
             (decimal_point != change[i]) &&
-            (thousands_sep != change[i]))
+            (thousands_sep != change[i]) &&
+            ('-' != change[i]))
           return NULL;
 
         if (decimal_point == change[i])
@@ -131,8 +134,8 @@ PriceMV (BasicCell *_cell,
       if (1 < count) return NULL;
    }
 
-   /* parse the float pt value and store it */
-   cell->amount = xaccParseAmount (newval, cell->monetary);
+   /* parse the value and store it */
+   xaccParseAmount (newval, cell->monetary, &cell->amount, NULL);
    SET ((&(cell->cell)), newval);
    return newval; 
 }
@@ -144,7 +147,17 @@ PriceLeave (BasicCell *_cell, const char *val)
 {
    PriceCell *cell = (PriceCell *) _cell;
    char *newval;
+   double amount;
 
+   if (val == NULL)
+     val = "";
+
+   if (*val == '\0')
+     amount = 0.0;
+   else if (!xaccParseAmount (val, cell->monetary, &amount, NULL))
+     amount = 0.0;
+
+   cell->amount = amount;
    newval = xaccPriceCellPrintValue(cell);
 
    /* If they are identical, return the original */
@@ -168,7 +181,10 @@ PriceHelp (BasicCell *bcell)
   {
     char *help_str;
 
-    help_str = xaccPriceCellPrintValue(cell);
+    if (xaccParseAmount(bcell->value, cell->monetary, NULL, NULL))
+      help_str = xaccPriceCellPrintValue(cell);
+    else
+      help_str = bcell->value;
 
     return g_strdup(help_str);
   }
@@ -215,6 +231,8 @@ xaccInitPriceCell (PriceCell *cell)
    cell->cell.leave_cell = PriceLeave;
    cell->cell.set_value = PriceSetValue;
    cell->cell.get_help_value = PriceHelp;
+
+   xaccPriceGUIInit( cell);
 }
 
 /* ================================================ */
@@ -371,12 +389,10 @@ PriceSetValue (BasicCell *_cell, const char *str)
    if (str == NULL)
      str = "";
 
-   if (!cell->blank_zero && (*str == '\0'))
-     xaccSetPriceCellBlank(cell);
-   else {
-     amount = xaccParseAmount (str, cell->monetary);
-     xaccSetPriceCellValue (cell, amount);
-   }
+   if (*str == '\0')
+     xaccSetPriceCellValue (cell, 0.0);
+   else if (xaccParseAmount (str, cell->monetary, &amount, NULL))
+       xaccSetPriceCellValue (cell, amount);
 }
 
 /* --------------- end of file ---------------------- */

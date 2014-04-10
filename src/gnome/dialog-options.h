@@ -28,7 +28,7 @@
 
 #include "option-util.h"
 
-void gnc_show_options_dialog();
+void gnc_show_options_dialog(void);
 
 void gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
                                        GNCOptionDB *odb);

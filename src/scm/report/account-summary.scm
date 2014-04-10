@@ -37,8 +37,8 @@
             (set-tm:sec bdtime 59)
             (set-tm:min bdtime 59)
             (set-tm:hour bdtime 23)
-            (cons (car (mktime bdtime)) 0)))
-        #f))
+            (cons 'absolute (cons (car (mktime bdtime)) 0))))
+        #f 'absolute #f))
 
       ;; account(s) to do report on
       (gnc:register-accsum-option
@@ -182,8 +182,8 @@
   (define (accsum-renderer options)
       (let ((acctcurrency "USD")
             (acctname "")
-            (enddate (gnc:option-value
-                      (gnc:lookup-option options "Report Options" "To")))
+            (enddate (gnc:date-option-absolute-time (gnc:option-value
+                      (gnc:lookup-option options "Report Options" "To"))))
             (accounts (gnc:option-value
                        (gnc:lookup-option options "Report Options" "Account")))
             (dosubs (gnc:option-value

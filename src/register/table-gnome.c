@@ -40,8 +40,10 @@
 #include <string.h>
 
 #include <gnome.h>
+#include <guile/gh.h>
 
 #include "cellblock.h"
+#include "global-options.h"
 #include "table-allgui.h"
 #include "splitreg.h"
 #include "util.h"
@@ -54,14 +56,46 @@
 static void
 table_destroy_cb(Table *table)
 {
+        int header_widths[CELL_TYPE_COUNT];
+        GnucashSheet *sheet;
+        SCM alist;
+        int i;
+
         if (table == NULL)
                 return;
 
         if (table->ui_data == NULL)
                 return;
 
-        if (table->ui_data)
-                gtk_widget_unref(GTK_WIDGET(table->ui_data));
+        sheet = GNUCASH_SHEET(table->ui_data);
+
+        for (i = 0; i < CELL_TYPE_COUNT; i++)
+                header_widths[i] = -1;
+
+        if (!GTK_OBJECT_DESTROYED(GTK_OBJECT(sheet)))
+                gnucash_sheet_get_header_widths (sheet, header_widths);
+
+        alist = SCM_EOL;
+        if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+                for (i = 0; i < CELL_TYPE_COUNT; i++)
+                {
+                        const char *name;
+                        SCM assoc;
+
+                        if (header_widths[i] <= 0)
+                                continue;
+
+                        name = xaccSplitRegisterGetCellTypeName (i);
+                        assoc = gh_cons (gh_str02scm(name),
+                                         gh_int2scm(header_widths[i]));
+
+                        alist = gh_cons (assoc, alist);
+                }
+
+        if (!gh_null_p(alist))
+                gnc_set_option ("__gui", "reg_column_widths", alist);
+
+        gtk_widget_unref(GTK_WIDGET(sheet));
 
         table->ui_data = NULL;
 }
@@ -69,20 +103,23 @@ table_destroy_cb(Table *table)
 void
 gnc_table_init_gui (gncUIWidget widget, void *data)
 {
+        int header_widths[CELL_TYPE_COUNT];
         SplitRegister *sr;
         GnucashSheet *sheet;
         GnucashRegister *greg;
         Table *table;
+        SCM alist;
+        int i;
 
         g_return_if_fail (widget != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
 
-        sr = (SplitRegister *) data;
+        sr = data;
 
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);
-        sheet->split_register = data;
+        sheet->split_register = sr;
         table = sheet->table;
 
         table->destroy = table_destroy_cb;
@@ -92,30 +129,50 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         /* config the cell-block styles */
 
-        sheet->cursor_style[GNUCASH_CURSOR_HEADER] =
-		gnucash_sheet_style_compile (sheet,
-					     sr->header,
-					     GNUCASH_CURSOR_HEADER);
+        gnucash_sheet_set_cursor (sheet, sr->header, GNUCASH_CURSOR_HEADER);
+        gnucash_sheet_set_cursor (sheet, sr->single_cursor,
+                                  GNUCASH_CURSOR_SINGLE);
+        gnucash_sheet_set_cursor (sheet, sr->double_cursor,
+                                  GNUCASH_CURSOR_DOUBLE);
+        gnucash_sheet_set_cursor (sheet, sr->trans_cursor,
+                                  GNUCASH_CURSOR_TRANS);
+        gnucash_sheet_set_cursor (sheet, sr->split_cursor,
+                                  GNUCASH_CURSOR_SPLIT);
 
-        sheet->cursor_style[GNUCASH_CURSOR_SINGLE] =
-		gnucash_sheet_style_compile (sheet,
-					     sr->single_cursor,
-					     GNUCASH_CURSOR_SINGLE);
+        for (i = 0; i < CELL_TYPE_COUNT; i++)
+                header_widths[i] = -1;
 
-        sheet->cursor_style[GNUCASH_CURSOR_DOUBLE] =
-		gnucash_sheet_style_compile (sheet,
-					     sr->double_cursor,
-					     GNUCASH_CURSOR_DOUBLE);
+        if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+                alist = gnc_lookup_option ("__gui", "reg_column_widths",
+                                           SCM_EOL);
+        else
+                alist = SCM_EOL;
 
-        sheet->cursor_style[GNUCASH_CURSOR_TRANS] =
-		gnucash_sheet_style_compile (sheet,
-					     sr->trans_cursor,
-					     GNUCASH_CURSOR_TRANS);
+        while (gh_list_p(alist) && !gh_null_p(alist))
+        {
+                char *name;
+                CellType ctype;
+                SCM assoc;
 
-        sheet->cursor_style[GNUCASH_CURSOR_SPLIT] =
-		gnucash_sheet_style_compile (sheet,
-					     sr->split_cursor,
-					     GNUCASH_CURSOR_SPLIT);
+                assoc = gh_car (alist);
+                alist = gh_cdr (alist);
+
+                name = gh_scm2newstr(gh_car (assoc), NULL);
+                ctype = xaccSplitRegisterGetCellTypeFromName (name);
+                if (name)
+                        free(name);
+
+                if (ctype == NO_CELL)
+                        continue;
+
+                header_widths[ctype] = gh_scm2int(gh_cdr (assoc));
+        }
+
+        gnucash_sheet_create_styles (sheet);
+
+        gnucash_sheet_set_header_widths (sheet, header_widths);
+
+        gnucash_sheet_compile_styles (sheet);
 
         gnc_table_refresh_header (table);
 
@@ -124,13 +181,10 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         gnucash_sheet_redraw_all (sheet);
 }
 
-
 void        
 gnc_table_refresh_gui (Table * table)
 {
         GnucashSheet *sheet;
-        SheetBlockStyle *style;
-        SplitRegister *sr;
 
         if (!table)
                 return;
@@ -140,30 +194,9 @@ gnc_table_refresh_gui (Table * table)
         g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
         sheet = GNUCASH_SHEET(table->ui_data);
-        sr = sheet->split_register;
 
-        style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
-        gnucash_sheet_style_recompile (style, sr->header, sr,
-                                       GNUCASH_CURSOR_HEADER);
-
-        style = sheet->cursor_style[GNUCASH_CURSOR_SINGLE];
-        gnucash_sheet_style_recompile (style, sr->single_cursor,
-                                       sr, GNUCASH_CURSOR_SINGLE);
-
-        style = sheet->cursor_style[GNUCASH_CURSOR_DOUBLE];
-        gnucash_sheet_style_recompile (style, sr->double_cursor,
-                                       sr, GNUCASH_CURSOR_DOUBLE);
-
-        style = sheet->cursor_style[GNUCASH_CURSOR_TRANS];
-        gnucash_sheet_style_recompile (style, sr->trans_cursor,
-                                       sr, GNUCASH_CURSOR_TRANS);
-
-        style = sheet->cursor_style[GNUCASH_CURSOR_SPLIT];
-        gnucash_sheet_style_recompile (style, sr->split_cursor,
-                                       sr, GNUCASH_CURSOR_SPLIT);
-
+        gnucash_sheet_styles_recompile (sheet);
         gnucash_sheet_table_load (sheet);
-
         gnucash_sheet_redraw_all (sheet);
 }
 
@@ -171,38 +204,32 @@ gnc_table_refresh_gui (Table * table)
 void        
 gnc_table_refresh_cursor_gui (Table * table,
                               CellBlock *curs,
-                              int phys_row, int phys_col,
+                              PhysicalLocation phys_loc,
                               gboolean do_scroll)
 {
         GnucashSheet *sheet;
         PhysicalCell *pcell;
-        gint virt_row, virt_col;
+        VirtualCellLocation vcell_loc;
 
-        if (!table)
-                return;
-        if (!table->ui_data)
+        if (!table || !table->ui_data || !curs)
                 return;
 
         g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
         /* if the current cursor is undefined, there is nothing to do. */
-        if (!curs) return;
-        if ((0 > phys_row) || (0 > phys_col)) return;
-        if ((phys_row >= table->num_phys_rows) ||
-            (phys_col >= table->num_phys_cols))
+        if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
                 return;
 
         sheet = GNUCASH_SHEET(table->ui_data);
 
         /* compute the physical bounds of the current cursor */
-        pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+        pcell = gnc_table_get_physical_cell (table, phys_loc);
 
-        virt_row = pcell->virt_loc.virt_row;
-        virt_col = pcell->virt_loc.virt_col;
+        vcell_loc = pcell->virt_loc.vcell_loc;
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
-        gnucash_sheet_block_set_from_table (sheet, virt_row, virt_col);
-        gnucash_sheet_redraw_block (sheet, virt_row, virt_col);
+        gnucash_sheet_block_set_from_table (sheet, vcell_loc);
+        gnucash_sheet_redraw_block (sheet, vcell_loc);
 }
 
 /* ================== end of file ======================= */

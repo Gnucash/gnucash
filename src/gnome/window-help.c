@@ -223,7 +223,7 @@ helpWindow(GtkWidget *parent, const char *title, const char *htmlfile)
  * Return: none                                                     * 
 \********************************************************************/
 void
-gnc_ui_destroy_help_windows()
+gnc_ui_destroy_help_windows(void)
 {
   gnc_html_window_destroy(helpwindow);
   helpwindow = NULL;

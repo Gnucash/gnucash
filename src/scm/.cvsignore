@@ -1,2 +1,3 @@
-bootstrap.scm
 Makefile
+Makefile.in
+bootstrap.scm

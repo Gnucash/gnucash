@@ -1,4 +1,4 @@
-@node Introduction, Top Level, Top, Top
+@node Introduction, Top Level, GNU Free Documentation License, Top
 @unnumbered Introduction
 
 This document defines the design and architecture of the GnuCash

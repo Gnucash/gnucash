@@ -19,6 +19,7 @@ libgncgnome_a_SOURCES = \
   extensions.c \
   file-history.c \
   glade-gnc-dialogs.c \
+  gnc-amount-edit.c \
   gnc-currency-edit.c \
   gnc-datedelta.c \
   gnc-dateedit.c \
@@ -27,7 +28,6 @@ libgncgnome_a_SOURCES = \
   query-user.c \
   reconcile-list.c \
   top-level.c \
-  window-adjust.c \
   window-help.c \
   window-html.c \
   window-main.c \
@@ -41,7 +41,6 @@ gnomeapp_DATA = gnucash.desktop
 
 noinst_HEADERS = \
   account-tree.h \
-  account-treeP.h \
   cursors.h \
   dialog-account.h \
   dialog-account-picker.h \
@@ -58,6 +57,7 @@ noinst_HEADERS = \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \
   glade-support-gnc-dialogs.h \
+  gnc-amount-edit.h \
   gnc-currency-edit.h \
   gnc-datedelta.h \
   gnc-dateedit.h \
@@ -66,21 +66,28 @@ noinst_HEADERS = \
   print-session.h \
   query-user.h \
   reconcile-list.h \
-  reconcile-listP.h \
   window-help.h \
   window-html.h \
   window-main.h \
-  window-mainP.h \
   window-reconcile.h \
   window-register.h \
   window-report.h
+
+GLADE_FILES = \
+  glade-gnc-dialogs.c \
+  glade-cb-gnc-dialogs.h \
+  glade-gnc-dialogs.h \
+  glade-support-gnc-dialogs.h
+
+#${GLADE_FILES}: gnc-dialogs.glade
+#	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade
 
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \
   gnucash.desktop
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${G_WRAP_COMPILE_ARGS} ${GNOME_PRINT_CFLAGS} ${GTKHTML_CFLAGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \
@@ -89,4 +96,6 @@ INCLUDES = \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/register \
-  -I${top_srcdir}/src/register/gnome
+  -I${top_srcdir}/src/register/gnome \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS}

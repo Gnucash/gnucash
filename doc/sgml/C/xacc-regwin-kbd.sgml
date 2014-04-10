@@ -1,10 +1,9 @@
-
 <ARTICLE ID="XACC-REGWIN-KBD">
+
 <ARTHEADER>
 <TITLE>Register Keyboard Shortcuts</TITLE>
 </ARTHEADER>
-<SECT1 ID="XACC-REGKEYSC">
-<TITLE> Register Keyboard Shortcuts</TITLE>
+
 <PARA>    The following keys can be used to move around in the register:
     <EMPHASIS>Please check that I didn't miss any</EMPHASIS> 
 
@@ -70,5 +69,5 @@
 
 
 </PARA>
-</SECT1>
+
 </ARTICLE>

@@ -8,3 +8,4 @@ cat-id-tbl.c
 pseudo-source.c
 stamp-cat-id
 extract-macros.perl
+gnucash.pot

@@ -39,6 +39,16 @@
   // printf ("Info: time_t input arg is %ld \n", * ($target));
 }
 
+/* Convert gboolean values */
+%typemap(perl5, in) gboolean *(gboolean temp) {
+  temp = (gboolean) SvIV($source);
+  $target = &temp;
+}
+
+%typemap(perl5, out) gboolean {
+  $target = newSViv ((IV) *($source));
+}
+
 /* --------------------------------------------------------- */
 
 #ifdef DOESNT_WORK_DONT_KNOW_WHY

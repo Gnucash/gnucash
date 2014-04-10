@@ -30,8 +30,8 @@
 
 void mainWindow(void);
 
-GNCAccountTree * gnc_get_current_account_tree();
+GNCAccountTree * gnc_get_current_account_tree(void);
 
-void gnc_ui_mainWindow_save_size();
+void gnc_ui_mainWindow_save_size(void);
 
 #endif

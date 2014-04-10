@@ -1,57 +1,57 @@
-
 <ARTICLE ID="XACC-TICKER">
+
 <ARTHEADER>
 <TITLE>Stock Ticker</TITLE>
 </ARTHEADER>
+
 <SECT1 ID="XACC-STOCKTICKER">
-<TITLE> Stock Pricing and Ticker Symbols</TITLE>
-<PARA>    GnuCash provides a somewhat rudimentary automated stock quote
-    gathering system. 
 
-    </PARA>
-<PARA>If a GnuCash <LINK LINKEND="STOCKACCT">stock
-    account</LINK> is suitably configured, and the host computer is
-    connected to the Internet, the program <APPLICATION>gnc-prices</APPLICATION> may
-    be used to load stock and mutual fund price quotes from various
-    web sites directly into GnuCash.
+<TITLE>Stock Pricing and Ticker Symbols</TITLE>
 
-    </PARA>
-<PARA>To make use of this facility, the following must be
-    done:
+<PARA>GnuCash provides a somewhat rudimentary automated stock quote
+gathering system.
+</PARA>
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>Create an account and mark it as being of type "Mutual
+<PARA>If a GnuCash <LINK LINKEND="STOCKACCT">stock account</LINK> is
+suitably configured, and the host computer is connected to the
+Internet, the program <APPLICATION>gnc-prices</APPLICATION> may be
+used to load stock and mutual fund price quotes from various web sites
+directly into GnuCash.
+</PARA>
+
+<PARA>To make use of this facility, the following must be done:
+
+<ITEMIZEDLIST>
+  <LISTITEM>
+    <PARA>Create an account and mark it as being of type "Mutual
       Fund" or "Stock".
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Enter a valid ticker symbol in the box marked
-      "Security:"
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Select a quote source from the pull-down menu. Currently
-      supported quote sources include <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Yahoo
-      Europe</EMPHASIS>, <EMPHASIS>Fidelity Investments</EMPHASIS>, <EMPHASIS>T. Rowe
-      Price</EMPHASIS>, the <EMPHASIS>Vanguard Group</EMPHASIS>, <EMPHASIS>the Australian Stock
-      Exchange</EMPHASIS> (ASX) and <EMPHASIS>TIAA-CREF</EMPHASIS>. Note that Yahoo will
-      provide price quotes for many mutual funds <EMPHASIS>including</EMPHASIS>
-      Fidelity, T.Rowe Price and Vanguard, and that the quoted
-      prices at Yahoo <EMPHASIS>should</EMPHASIS> be identical to those that may
-      be found at the source sites (otherwise, somebody's reporting
-      wrong information!). If you choose Yahoo Europe, you should
-      append the market code for the security, such as PA for
-      Paris, BE for Berlin, etc. Example: 12150.PA (a Peugeot
-      security in the Paris market).
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>        Ensure that the currency of the account matches the source
-        of the stock you have selected. This means: 
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Enter a valid ticker symbol in the box marked "Security:"
+     </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Select a quote source from the pull-down menu. Currently
+    supported quote sources include <EMPHASIS>Yahoo</EMPHASIS>,
+    <EMPHASIS>Yahoo Europe</EMPHASIS>, <EMPHASIS>Fidelity
+    Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS>, the
+    <EMPHASIS>Vanguard Group</EMPHASIS>, <EMPHASIS>the Australian
+    Stock Exchange</EMPHASIS> (ASX) and
+    <EMPHASIS>TIAA-CREF</EMPHASIS>.  Note that Yahoo will provide
+    price quotes for many mutual funds <EMPHASIS>including</EMPHASIS>
+    Fidelity, T.Rowe Price and Vanguard, and that the quoted prices at
+    Yahoo <EMPHASIS>should</EMPHASIS> be identical to those that may
+    be found at the source sites (otherwise, somebody's reporting
+    wrong information!). If you choose Yahoo Europe, you should append
+    the market code for the security, such as PA for Paris, BE for
+    Berlin, etc. Example: 12150.PA (a Peugeot security in the Paris
+    market).
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Ensure that the currency of the account matches the source
+    of the stock you have selected. This means:
 
         <ITEMIZEDLIST>
 <LISTITEM>
@@ -236,7 +236,7 @@
 <PARA>A sample image is shown below:
      <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="ticker-a.gif">
+<IMAGEDATA FILEREF="image/ticker-a.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Sample Diagram</PHRASE>
@@ -279,7 +279,7 @@
     accounts will begin to resemble the following:
      <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
-<IMAGEDATA FILEREF="ticker-b.gif">
+<IMAGEDATA FILEREF="image/ticker-b.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
 <PHRASE>Later Ticker Listing</PHRASE>

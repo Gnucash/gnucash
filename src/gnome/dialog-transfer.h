@@ -28,7 +28,7 @@ typedef struct _xferDialog XferDialog;
 
 XferDialog * gnc_xfer_dialog(GtkWidget * parent, Account *initial);
 
-void gnc_ui_destroy_xfer_windows();
+void gnc_ui_destroy_xfer_windows(void);
 
 void gnc_xfer_dialog_select_from_account(XferDialog *xferData,
                                          Account *account);

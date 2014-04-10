@@ -15,7 +15,6 @@
 <!entity xaccincomeexpense system "xacc-incomeexpense.sgml">
 <!entity xacclocatingtxns system "xacc-locatingtxns.sgml">
 <!entity xaccpreferences system "xacc-preferences.sgml">
-<!entity xaccpreferences2 system "xacc-preferences2.sgml">
 <!entity xaccchartofaccts system "xacc-chartofaccts.sgml">
 <!entity xaccuserdocs system "xacc-userdocs.sgml">
 <!entity xaccmainwin system "xacc-mainwin.sgml">
@@ -36,8 +35,9 @@
 <!entity xaccgpl system "xacc-gpl.sgml">
 <!entity bofamym system "bofa-mym.sgml">
 ]>
+
 <BOOK ID="index">
-<TITLE>GnuCash Documentation Set</TITLE>
+<TITLE>GnuCash User Manual</TITLE>
 
 &xaccabout;
 &xaccaccountedit;
@@ -55,7 +55,6 @@
 &xaccincomeexpense;
 &xacclocatingtxns;
 &xaccpreferences;
-&xaccpreferences2;
 &xaccchartofaccts;
 &xaccuserdocs;
 &xaccmainwin;

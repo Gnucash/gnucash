@@ -41,6 +41,10 @@ C:
    using g_malloc(), g_new(), g_free(), etc., instead of malloc(),
    free(), etc. Do not mix glib memory calls with libc calls!
 
+ * Where possible, use glib data abstractions instead of rolling your
+   own. Glib linked lists and pointer arrays are very convenient and
+   have been extensively used and tested.
+
  * All gnucash functions and global variables are prefixed with gnc_
 
  * All private functions are enclosed in __ (i.e. _gnc_do_not_call_)

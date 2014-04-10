@@ -53,6 +53,7 @@ Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Matthew Condell <mcondell@bbn.com> FreeBSD patch
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
+Raphael Dechenaux <raphael.dechenaux@worldonline.fr> register patch
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Glen Ditchfield <gjditchfield@acm.org> updated documentation
 Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint
@@ -73,6 +74,7 @@ Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
+Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for cyrillic
 Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Sven Kuenzler <sk@xgm.de> for SuSE README file
@@ -84,6 +86,7 @@ Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
 Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
+Juan Manuel García Molina <juanmagm@mail.com> spanish translation
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump 
@@ -109,6 +112,8 @@ Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
+Christian Stimming <stimming@uclink.berkeley.edu> report patch
+Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Diane Trout <detrout@earthlink.net> scheme qif import patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes

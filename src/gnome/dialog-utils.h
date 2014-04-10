@@ -93,12 +93,12 @@ gint    gnc_get_source_code(const char * codename);
 GtkWidget * gnc_build_option_menu(GNCOptionInfo *option_info,
 				  gint num_options);
 
-GtkToolbarStyle gnc_get_toolbar_style();
+GtkToolbarStyle gnc_get_toolbar_style(void);
 
 void gnc_get_deficit_color(GdkColor *color);
 void gnc_set_label_color(GtkWidget *label, double value);
 
-char gnc_get_account_separator();
+char gnc_get_account_separator(void);
 
 void gnc_get_window_size(const char *prefix, int *width, int *height);
 void gnc_save_window_size(const char *prefix, int width, int height);

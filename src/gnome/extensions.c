@@ -315,7 +315,7 @@ gnc_add_extension(SCM extension)
 
 
 void
-gnc_extensions_shutdown()
+gnc_extensions_shutdown(void)
 {
   g_slist_foreach(extension_list, cleanup_extension_info, NULL);
 

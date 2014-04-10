@@ -1,7 +1,23 @@
 @node Top Level, Engine, Introduction, Top
-@chapter Top Level Design
+@chapter Architectural Overview
 
-GnuCash currently consists of the following modules.
+GnuCash is written primarily in two languages: C and Scheme.
+The engine/server is written in C primarily for speed,
+portability, stability and historical purposes.  Much of the
+day-to-day workhorse code is written in Scheme, primarily
+for its power, expressiveness and ease of development.
+The user interface is gtk/gnome, some of it done up in C,
+some in scheme, and some with the
+GUI designer tool glade @uref{glade.pn.org}.
+
+GnuCash is modular, thereby allowing separate individuals
+to maintain, develop and enhance certain modules without
+disturbing the overall development.  (Never mind that 
+modules help avoid spaghetti code and nasty, ugly hacks).
+The interfaces between modules are documented, and, for the
+most part, stable and unchanging.
+
+GnuCash currently consists of the following modules:
 
 @section The Engine
 

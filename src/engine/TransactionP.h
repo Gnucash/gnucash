@@ -131,9 +131,6 @@ struct _split
   double  share_reconciled_balance;
 
   double cost_basis;
-
-
-  int ticket; /* used for matching up splits for QIFIO.c */
 };
 
 

@@ -33,6 +33,6 @@
 
 void reportWindow(const char *title, SCM rendering_thunk, SCM guile_options);
 
-void gnc_ui_destroy_report_windows();
+void gnc_ui_destroy_report_windows(void);
 
 #endif

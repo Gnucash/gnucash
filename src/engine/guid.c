@@ -47,14 +47,12 @@
 
 
 /** Constants *******************************************************/
-#define GUID_TRUE (0 == 0)
-#define GUID_FALSE (! GUID_TRUE)
 #define BLOCKSIZE 4096
 #define THRESHOLD (2 * BLOCKSIZE)
 
 
 /** Static global variables *****************************************/
-static int guid_initialized = GUID_FALSE;
+static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
 
 
@@ -195,7 +193,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
 }
 
 static size_t
-init_from_time()
+init_from_time(void)
 {
   size_t total;
   time_t t_time;
@@ -217,7 +215,7 @@ init_from_time()
 }
 
 void
-guid_init()
+guid_init(void)
 {
   size_t bytes = 0;
 
@@ -311,10 +309,6 @@ guid_init()
     gethostname(string, sizeof(string));
     md5_process_bytes(string, sizeof(string), &guid_context);
     bytes += sizeof(string);
-
-    getdomainname(string, sizeof(string));
-    md5_process_bytes(string, sizeof(string), &guid_context);
-    bytes += sizeof(string);
   }
 
   /* plain old random */
@@ -340,7 +334,7 @@ guid_init()
             "WARNING: guid_init only got %u bytes.\n"
             "The identifiers might not be very random.\n", bytes);
 
-  guid_initialized = GUID_TRUE;
+  guid_initialized = TRUE;
 }
 
 void
@@ -358,7 +352,7 @@ guid_init_only_salt(const void *salt, size_t salt_len)
 
   md5_process_bytes(salt, salt_len, &guid_context);
 
-  guid_initialized = GUID_TRUE;
+  guid_initialized = TRUE;
 }
 
 void
@@ -393,7 +387,7 @@ encode_md5_data(const unsigned char *data, char *buffer)
 /* returns true if the first 32 bytes of buffer encode
  * a hex number. returns false otherwise. Decoded number
  * is packed into data in little endian order. */
-static int
+static gboolean
 decode_md5_string(const char *string, unsigned char *data)
 {
   unsigned char n1, n2;
@@ -401,17 +395,17 @@ decode_md5_string(const char *string, unsigned char *data)
   char c1, c2;
 
   if (string == NULL)
-    return GUID_FALSE;
+    return FALSE;
 
   for (count = 0; count < 16; count++)
   {
     c1 = tolower(string[2 * count]);
     if (!isxdigit(c1))
-      return GUID_FALSE;
+      return FALSE;
 
     c2 = tolower(string[2 * count + 1]);
     if (!isxdigit(c2))
-      return GUID_FALSE;
+      return FALSE;
 
     if (isdigit(c1))
       n1 = c1 - '0';
@@ -427,7 +421,7 @@ decode_md5_string(const char *string, unsigned char *data)
       data[count] = (n1 << 4) | n2;
   }
 
-  return GUID_TRUE;
+  return TRUE;
 }
 
 char *
@@ -443,8 +437,17 @@ guid_to_string(const GUID * guid)
   return string;
 }
 
-int
+gboolean
 string_to_guid(const char * string, GUID * guid)
 {
   return decode_md5_string(string, (guid != NULL) ? guid->data : NULL);
+}
+
+gboolean
+guid_equal(const GUID *guid_1, const GUID *guid_2)
+{
+  if (guid_1 && guid_2)
+    return (memcmp(guid_1, guid_2, sizeof(GUID)) == 0);
+  else
+    return FALSE;
 }

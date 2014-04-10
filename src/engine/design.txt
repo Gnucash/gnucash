@@ -1,72 +1,12 @@
+This document is becoming obsolete. Please refer to the design
+documentation in src/doc/design for a complete description of the
+Engine architecture.
 
 Accounting Engine
 -----------------
 This document reviews the operation of, and various design points 
 pertinent to the GnuCash accounting engine.  The latest version
 of this document can be found in the engine source-code directory.
-
-Quick Overview
---------------
-The fundamental accounting unit is a "journal entry".  Each entry consists
-of a quantity (number of dollar bills, number of shares, etc.), the
-price of that quantity (the price of one dollar is 1.00 dollars, etc.)
-a memo, a pointer to the "credited" account, a reconciled flag and timestamp, 
-an "action" field, and a pointer to any additional generic data.   Because 
-the word "entry" has many other meanings, the remainder of the documentation, 
-and the code, refers to it as a "split".  So when you see "Split", think 
-"Journal Entry".
-
-The notion of "double entry" is embodied in the "transaction" structure.
-The transaction consists of a date, a description field, a number, and
-a list of one or more "splits".  When double-entry rules are properly 
-enabled in the engine (they are settable with various flags), the sum-total
-value of all of the splits is forced to be zero.  Note that if there
-is just one split, its value must be zero; this is useful because a 
-zero-valued split can store a price (useful for e.g. tracking stocks).
-If there are two splits, then the value of one must be positive, the
-other negative: this denotes that one account is credited, and another
-is debited by an equal amount.  It is this very forcing of the splits to
-add up to zero that causes a double-entry accounting system to always
-automatically balance.  
-
-Through various flags, double-entry can be disabled; this is often 
-desirable for novice, home-oriented users. As an alternative, it may be
-better to leave double-entry enabled, but credit all dangling splits 
-to some dummy account, and then simply not show that dummy account to 
-the user.
-
-Note that the sum of the values of the splits is always computed with respect 
-to a currency; thus splits can be balanced even when they are in different
-currencies, as long as they share a common currency.  The conversion price
-is simply the price stored in the split.  This feature allows currency-trading 
-accounts to be established.
-
-Every split must point at its parent transaction, and that transaction
-must in turn include that split in its list of splits.   A split can 
-belong to at most one transaction.  This relationship is forced by the engine.
-The engine user cannnot accidentally destroy this relationship as long as they
-stick to using the API, and never accessing internal structures directly.
-
-Splits are grouped into "accounts". Each account consists of a list of 
-splits that credit (debit) that account.   To ensure consistency, 
-if a split points at an account, then the account must point at the 
-split, and vice-versa.  A split can belong to at most one account.
-Besides merely containing a list of splits, the account structure
-also gives the account a name, a code number, description and notes fields,
-a place to store general info, a pointer to the currency that is used
-for all splits in this account, and a pointer to the "security" used 
-for all splits in this account.  The "security" can be the name of a stock
-(e.g. "IBM", "McDonald's"), or another currency (e.g. "Yen", "Franc"). 
-The security is used during split balancing to enable trading between 
-accounts denominated in different currencies, or to, for example, move 
-stocks from one account to another.
-
-Accounts can be arranged in a hierarchical tree.  The nodes of the 
-tree are called "Account Groups".  By accounting convention, the 
-value of an account is equal to the value of all of its splits plus
-the value of all of its sub-accounts.  Account Groups are implemented 
-as doubly-linked trees.
-
 
 Stocks, non-Currency-Denominated Assets
 ---------------------------------------
@@ -167,12 +107,13 @@ have one of three dispositions: it can be sold, in which case, it is
 pretty much just like a stock transaction.  It can expire, in which 
 case the option is worthless, and (IIRC) can be/is treated as a sale 
 at a zero price.  Thirdly, it can be exercised, which is a single 
-transaction where by stock is purchased at the strike price, and
-the  option becomes worthless.
+transaction whereby stock is purchased at the strike price, and
+the option becomes worthless.
 
 Another point: with standardized options one option contract represents
 the ability to purchase (with a call option) or sell (with a put option) 
 100 shares of the underlying stock.  
+
 
 Error Reporting
 ---------------
@@ -207,10 +148,11 @@ is as good as, and in many ways can be better to the later design.
  (4) Allows errors that occurred deep in the implementation to be reported
      up to much higher levels without requiring baggage in the middle.
 
-The right implementation for (2) is to implement not a single variable, but a stack
-or a ring (circular queue) on which error codes are placed, and from which error
-codes can be retreived.  The right implementation for (3) is the use
-pthread_getspecific() to define a per-thread global and/or ring/queue.
+The right implementation for (2) is to implement not a single
+variable, but a stack or a ring (circular queue) on which error codes
+are placed, and from which error codes can be retreived.  The right
+implementation for (3) is the use pthread_getspecific() to define a
+per-thread global and/or ring/queue.
 
 
 Engine Isolation
@@ -323,7 +265,7 @@ A lot of small-office/home systems do this. primarily useful as a
 historical record, in case you accidentally wipe out something, and
 don't spot it until later.  Limited usefulness, but very nice in case
 you accidentally delete an entire account.  
-     
+
 To a limited degree, it provides atomicity/consistency/etc at the
 course-grained account-group level.
 
@@ -448,9 +390,8 @@ Ideas for engine enhancements:
      thinko's more quickly, instead of letting them hide for weeks or months
      (as the last one did).  Its not a bad self-consistency check when
      monkeying with the internals, damn the performance.
-     
+
      It can be removed/disabled for product versions.
 
 
 This document is dated May 2000
-

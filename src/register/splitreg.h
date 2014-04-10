@@ -82,30 +82,33 @@ typedef enum
 } SplitRegisterType;
 
 /* These values are used to identify the cells in the register. */
+/* Keep these in sync with the cell_names array in splitreg.c.  */
 typedef enum
 {
   NO_CELL    = -1,
   DATE_CELL  =  0,
-  NUM_CELL   =  1,
-  DESC_CELL  =  2,
-  RECN_CELL  =  3,
-  SHRS_CELL  =  4,
-  BALN_CELL  =  5,
-  ACTN_CELL  =  6,
-  XFRM_CELL  =  7,
-  XTO_CELL   =  8,
-  MEMO_CELL  =  9,
-  CRED_CELL  = 10,
-  DEBT_CELL  = 11,
-  PRIC_CELL  = 12,
-  VALU_CELL  = 13,
+  NUM_CELL,
+  DESC_CELL,
+  RECN_CELL,
+  SHRBALN_CELL,
+  BALN_CELL,
+  ACTN_CELL,
+  XFRM_CELL,
+  XTO_CELL,
+  MEMO_CELL,
+  CRED_CELL,
+  DEBT_CELL,
+  PRIC_CELL,
+  SHRS_CELL,
 
   /* NCRED & NDEBT handle minus the usual quantities */
-  NCRED_CELL = 14,
-  NDEBT_CELL = 15,
+  NCRED_CELL,
+  NDEBT_CELL,
 
   /* MXFRM is the "mirrored" transfer-from account */
-  MXFRM_CELL = 16
+  MXFRM_CELL,
+
+  CELL_TYPE_COUNT
 } CellType;
 
 /*
@@ -142,7 +145,7 @@ typedef enum
 #define MOD_AMNT   0x0200
 #define MOD_NAMNT  0x0400
 #define MOD_PRIC   0x0800
-#define MOD_VALU   0x1000
+#define MOD_SHRS   0x1000
 #define MOD_NEW    0x2000
 #define MOD_ALL    0x3fff
 
@@ -152,7 +155,7 @@ typedef enum
   CURSOR_SPLIT,
   CURSOR_TRANS,
   CURSOR_NONE
-} CursorType;
+} CursorClass;
 
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
@@ -177,7 +180,7 @@ struct _SplitRegister {
    NumCell       * numCell;
    QuickFillCell * descCell;
    RecnCell      * recnCell;   /* main transaction line reconcile */
-   PriceCell     * shrsCell;
+   PriceCell     * shrbalnCell;
    PriceCell     * balanceCell;
    BasicCell     * nullCell;
 
@@ -189,7 +192,7 @@ struct _SplitRegister {
    PriceCell     * creditCell;
    PriceCell     * debitCell;
    PriceCell     * priceCell;
-   PriceCell     * valueCell;
+   PriceCell     * sharesCell;
 
    PriceCell     * ncreditCell;
    PriceCell     * ndebitCell;
@@ -270,35 +273,41 @@ guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
 
 /* Returns the type of the current cursor */
-CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
 
 /* Returns the type of the cursor at the given virtual row and column. */
-CursorType      xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
-                                                      int virt_row,
-                                                      int virt_col);
+CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
+                                                VirtualCellLocation vcell_loc);
+
 /* Returns the type of the current cell */
-CellType        xaccSplitRegisterGetCellType (SplitRegister *reg);
+CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);
 
 /* Returns the type of the cell at the given physical row and column. */
-CellType        xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
-                                                    int phys_row,
-                                                    int phys_col);
+CellType        xaccSplitRegisterGetCellType (SplitRegister *reg,
+                                              PhysicalLocation phys_loc);
 
 /* Returns the physical row and column in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */
-gboolean        xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
-                                                CellType cell_type,
-                                                int *p_phys_row,
-                                                int *p_phys_col);
+gboolean        xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg,
+                                                 CellType cell_type,
+                                                 VirtualCellLocation vcell_loc,
+                                                 PhysicalLocation *phys_loc);
+
+gboolean   xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg,
+                                                   CellType cell_type,
+                                                   PhysicalLocation *phys_loc);
 
 /* Functions for working with split register buffers */
-SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();
+SplitRegisterBuffer * xaccMallocSplitRegisterBuffer (void);
 void xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb);
 
 void xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb);
 void xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
                                            SplitRegisterBuffer *srb);
+
+const char * xaccSplitRegisterGetCellTypeName (CellType type);
+CellType     xaccSplitRegisterGetCellTypeFromName (const char *name);
 
 
 #endif /* __XACC_SPLITREG_H__ */

@@ -89,7 +89,7 @@ char * prettify (const char *);
 /* utility macros  */
 #define FATAL(x...)    LG(1, "Fatal Error: %s: ",  prettify(__FUNCTION__));  LG(1,       ##x);
 #define PERR(x...)     LG(LERR,    "Error: %s: ",  prettify(__FUNCTION__));  LG(LERR,    ##x);
-#define PWARN(x...)    LG(LWARN,   "Waring: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
+#define PWARN(x...)    LG(LWARN,   "Warning: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
 #define PINFO(x...)    LG(LINFO,   "Info: %s: ",   prettify(__FUNCTION__));  LG(LINFO,   ##x);
 #define DEBUG(x...)    LG(LDEBUG,  "Debug: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
 #define ENTER(x...)    LG(LDEBUG,  "Enter: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
@@ -104,7 +104,7 @@ char * prettify (const char *);
 #if DEBUG_MEMORY
 void   *dmalloc( size_t size );
 void   dfree( void *ptr );
-size_t dcoresize();
+size_t dcoresize(void);
 #  define _malloc(x)   dmalloc(x)
 #  define _free(x)     dfree(x)
 #  define _coresize()  dcoresize()
@@ -154,6 +154,9 @@ void gnc_set_log_level_global(gncLogLevel level);
 /* enable/disable the auto decimal option */
 void gnc_set_auto_decimal_enabled(gboolean enabled);
 
+/* set how many auto decimal places to use */
+void gnc_set_auto_decimal_places(int places);
+
 
 /********************************************************/
 /* libc 'enhancements' */
@@ -177,7 +180,6 @@ extern char *strcasestr(const char *str1, const char *str2);
  * An alernate (better??) implementation might be  
  * #define strpskip(s,r) (s+strspn(s,r))
  */
-
 extern char * strpskip (const char * s, const char *reject);
 
 /********************************************************/
@@ -185,7 +187,6 @@ extern char * strpskip (const char * s, const char *reject);
  *    It accepts a number and prints it in the indicated base.
  *    The returned string should be freed when done.
  */
-
 char * ultostr (unsigned long val, int base);
 
 /* Returns true if string s is a number, possibly
@@ -196,10 +197,13 @@ gboolean gnc_strisnum(const char *s);
  * containing locale information. If no locale is set, the
  * structure is given default (en_US) values.
  */
-struct lconv * gnc_localeconv();
+struct lconv * gnc_localeconv(void);
 
 /* Returns the 3 character currency code of the current locale. */
-const char * gnc_locale_default_currency();
+const char * gnc_locale_default_currency(void);
+
+/* Return the number of decimal places for this locale. */
+int gnc_locale_decimal_places( void );
 
 
 /*
@@ -262,8 +266,21 @@ const char * xaccPrintAmountArgs (double val,
                                   gboolean is_shares_value,
                                   const char *curr_code);
 
-/* Parse i18n amount strings */
-double xaccParseAmount (const char * instr, gboolean monetary);
+
+/* xaccParseAmount parses in_str to obtain a numeric result. The
+ *   routine will parse as much of in_str as it can to obtain a single
+ *   number. The number is parsed using the current locale information
+ *   and the 'monetary' flag. The routine will return TRUE if it
+ *   successfully parsed a number and FALSE otherwise. If TRUE is
+ *   returned and result is non-NULL, the value of the parsed number
+ *   is stored in *result. If FALSE is returned, *result is
+ *   unchanged. If TRUE is returned and endstr is non-NULL, the
+ *   location of the first character in in_str not used by the
+ *   parser will be returned in *endstr. If FALSE is returned
+ *   and endstr is non-NULL, *endstr will point to in_str.
+ */
+gboolean xaccParseAmount (const char * in_str, gboolean monetary,
+                          double *result, char **endstr);
 
 
 /** TEMPLATES ******************************************************/

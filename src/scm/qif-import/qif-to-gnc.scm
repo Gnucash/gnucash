@@ -243,9 +243,8 @@
               (begin 
                 ;; create and fill in the GNC transaction
                 (let ((gnc-xtn (gnc:transaction-create)))
-                  (gnc:transaction-init gnc-xtn)
-                  (gnc:transaction-begin-edit gnc-xtn 1) 
-                  
+                  (gnc:transaction-begin-edit gnc-xtn 1)
+
                   ;; destroy any automagic splits in the transaction
                   (let ((numsplits (gnc:transaction-get-split-count gnc-xtn)))
                     (if (not (eqv? 0 numsplits))

@@ -27,7 +27,7 @@
 #include <gnome.h>
 
 #include "gnucash.h"
-#include "reconcile-listP.h"
+#include "reconcile-list.h"
 #include "dialog-utils.h"
 #include "FileDialog.h"
 #include "messages.h"
@@ -35,8 +35,28 @@
 #include "util.h"
 
 
+/* Signal codes */
+enum
+{
+  TOGGLE_RECONCILED,
+  LAST_SIGNAL
+};
+
+
+/** Static Globals ****************************************************/
 static GtkCListClass *parent_class = NULL;
 static guint reconcile_list_signals[LAST_SIGNAL] = {0};
+
+
+/** Static function declarations **************************************/
+static void gnc_reconcile_list_init(GNCReconcileList *list);
+static void gnc_reconcile_list_class_init(GNCReconcileListClass *klass);
+static void gnc_reconcile_list_select_row(GtkCList *clist, gint row,
+					  gint column, GdkEvent *event);
+static void gnc_reconcile_list_unselect_row(GtkCList *clist, gint row,
+					    gint column, GdkEvent *event);
+static void gnc_reconcile_list_destroy(GtkObject *object);
+static void gnc_reconcile_list_fill(GNCReconcileList *list);
 
 
 GtkType

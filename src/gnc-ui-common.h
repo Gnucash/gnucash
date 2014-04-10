@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-common.h -- define GUI independent items                     *
+ * gnc-ui-common.h -- define GUI related but independent items      *
  *                                                                  *
  * Copyright (C) 1999, 2000 Rob Browning                            *
  *                                                                  *

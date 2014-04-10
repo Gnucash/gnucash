@@ -149,8 +149,11 @@ The following packages are required to be installed to run gnucash:
 
   gnome-print: any recent version should work.
 
+  gdk-pixbuf: any recent version should work.
+
   gtkhtml: version 0.4 and later should work. You can obtain the latest
-    version of gtkhtml from Helix Code.
+    version of gtkhtml from Helix Code.  Note that this has changed since
+    1.4, which used the older gtkxmhtml library.
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
@@ -273,11 +276,13 @@ Building & Installing
 (For additional build system details, see doc/README.build-system.)
 
 GnuCash uses GNU Automake to handle the build process, so for most of
-the details, see the generic instructions in INSTALL.  Below we detail
-the GnuCash specific bits.
+the details, see the generic instructions in INSTALL.  (Note that, in
+order to get a working ./configure, you should run ./autogen.sh.)
+Below we detail the GnuCash specific bits.
 
 Prior to building GnuCash, you will have to obtain and install the
 following packages:
+
 
   libtool: Available at ftp://ftp.gnu.org/gnu.
     RPM's and debs are widely available with most distributions.
@@ -292,6 +297,9 @@ following packages:
   g-wrap: RPM's, debs, and source available at 
           ftp://ftp.gnucash.org/pub/g-wrap.
 
+  texinfo: If you are building from CVS, you need the GNU texinfo
+           package, version 4.0 or later.
+
 What you'll need to get and install in order to make sure you have all
 of these pieces properly installed for your particular operating
 system flavor will vary, but here's at least a partial list of what
@@ -300,8 +308,8 @@ you'll need for the systems we know about:
   Debian/GNU/Linux:
     current:
       libgnome-dev
-      libxml-dev
-      libgtkxmhtml-dev
+      libgtkhtml-dev (you can grab this from Helixcode, it may not be 
+      in Debian itself ATM)
       guile1.3
       libguile6-dev
       libguile6-slib
@@ -340,7 +348,7 @@ If you want to make sure that all languages get installed, run
   $ unset LINGUAS
   $ ./configure
 
-The last stable release of GnuCash had a Motif based user interface,
+The 1.2 stable release of GnuCash had a Motif based user interface,
 and there was also an experimental, but never finished qt interface.
 Both of these have been removed from the source tree during the
 process of migrating to automake, but anyone who is interested in
@@ -366,6 +374,13 @@ to be installed, the above command would install
 
 DESTDIR can be helpful when trying to build install images and
 packages.
+
+NOTE: If you have installed different parts of Gnome in different
+places (for instance, if you've installed gtkhtml in /usr/local) you
+will need to set the environment variables GNOME_PATH and
+GNOME_LIBCONFIG_PATH.  See the manpage for gnome-config for more
+details.
+
 
 ###################
 Supported Platforms

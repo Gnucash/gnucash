@@ -26,6 +26,6 @@
 #include <guile/gh.h>
 
 void gnc_add_extension(SCM extension);
-void gnc_extensions_shutdown();
+void gnc_extensions_shutdown(void);
 
 #endif

@@ -92,14 +92,12 @@ typedef struct
 
 GnomeCanvasItem *gnucash_cursor_new (GnomeCanvasGroup *parent);
 
-void gnucash_cursor_get_phys (GnucashCursor *cursor, int *phys_row,
-			      int *phys_col);
-void gnucash_cursor_get_virt (GnucashCursor *cursor, int *virt_row,
-			      int *virt_col, int *cell_row, int *cell_col);
+void gnucash_cursor_get_phys (GnucashCursor *cursor,
+                              PhysicalLocation *phys_loc);
+void gnucash_cursor_get_virt (GnucashCursor *cursor,
+                              VirtualLocation *virt_loc);
 
-void gnucash_cursor_set  (GnucashCursor *cursor,
-                          gint virt_row, gint virt_col,
-                          gint cell_row, gint cell_col);
+void gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc);
 
 void gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style);
 

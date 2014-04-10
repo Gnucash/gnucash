@@ -6,7 +6,8 @@ SUBDIRS = examples html sgml
 doc_DATA = \
   README.francais \
   README.german \
-  guile-hackers.txt
+  guile-hackers.txt \
+  projects.html
 
 man_MANS = \
   gnc-prices.1 \
@@ -17,6 +18,7 @@ EXTRA_DIST = \
   ${doc_DATA} \
   Configure-osr5 \
   Configure-uw7 \
+  RAW-NOTES \
   README.build-system \
   README.francais \
   README.german \

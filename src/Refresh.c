@@ -23,10 +23,8 @@
 #include "top-level.h"
 
 #include "Refresh.h"
-#include "LedgerUtils.h"
 #include "MultiLedger.h"
 #include "RecnWindow.h"
-#include "AdjBWindow.h"
 #include "AccWindow.h"
 
 #include "util.h"
@@ -60,30 +58,7 @@ gnc_account_ui_refresh(Account *account)
 
    xaccAccountDisplayRefresh(account);
    recnRefresh(account);
-   adjBRefresh(account);
    gnc_ui_refresh_edit_account_window(account);
-}
-
-
-/* ------------------------------------------------------ */
-void 
-gnc_account_list_ui_refresh(Account **account_list)
-{
-   Account *account;
-   int i;
-
-   xaccAccListDisplayRefresh(account_list);
-
-   i = 0;
-   account = account_list[0];
-
-   while (account != NULL)
-   {
-     recnRefresh(account);
-
-     i++;
-     account = account_list[i];
-   }
 }
 
 /* ------------------------------------------------------ */

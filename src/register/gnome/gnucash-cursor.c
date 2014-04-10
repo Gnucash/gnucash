@@ -93,38 +93,37 @@ gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style)
 
 
 void
-gnucash_cursor_get_phys (GnucashCursor *cursor, int *phys_row, int *phys_col)
+gnucash_cursor_get_phys (GnucashCursor *cursor, PhysicalLocation *phys_loc)
 {
         Table *table;
         VirtualCell *vcell;
-        int virt_row, virt_col;
-        int cell_row, cell_col;
+        VirtualLocation virt_loc;
 
         g_return_if_fail (cursor != NULL);
         g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
         table = cursor->sheet->table;
 
-        virt_row =
+        virt_loc.vcell_loc.virt_row =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->row;
-        virt_col =
+        virt_loc.vcell_loc.virt_col =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->col;
 
-        cell_row =
+        virt_loc.phys_row_offset =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->row;
-        cell_col =
+        virt_loc.phys_col_offset =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->col;
 
-        vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+        vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
 
-        *phys_row = vcell->phys_loc.phys_row + cell_row;
-        *phys_col = vcell->phys_loc.phys_col + cell_col;
+        *phys_loc = vcell->phys_loc;
+        phys_loc->phys_row += virt_loc.phys_row_offset;
+        phys_loc->phys_col += virt_loc.phys_col_offset;
 }
 
 
 void
-gnucash_cursor_get_virt (GnucashCursor *cursor, int *virt_row, int *virt_col,
-                         int *cell_row, int *cell_col)
+gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
 {
         Table *table;
         
@@ -133,14 +132,14 @@ gnucash_cursor_get_virt (GnucashCursor *cursor, int *virt_row, int *virt_col,
 
         table = cursor->sheet->table;
 
-        *virt_row =
+        virt_loc->vcell_loc.virt_row =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->row;
-        *virt_col =
+        virt_loc->vcell_loc.virt_col =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->col;
 
-        *cell_row =
+        virt_loc->phys_row_offset =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->row;
-        *cell_col =
+        virt_loc->phys_col_offset =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->col;
 }
 
@@ -269,8 +268,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 
 static void
-gnucash_cursor_set_block (GnucashCursor *cursor, gint block_row,
-			  gint block_col)
+gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
 {
         GnucashSheet *sheet;
         GnucashItemCursor *item_cursor;
@@ -282,14 +280,16 @@ gnucash_cursor_set_block (GnucashCursor *cursor, gint block_row,
         item_cursor =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
 
-        if (block_row < 0 || block_row >= sheet->num_virt_rows
-            || block_col < 0 || block_col >= sheet->num_virt_cols)
+        if (vcell_loc.virt_row < 0 ||
+            vcell_loc.virt_row >= sheet->num_virt_rows ||
+            vcell_loc.virt_col < 0 ||
+            vcell_loc.virt_col >= sheet->num_virt_cols)
                 return;
 
-        cursor->style = gnucash_sheet_get_style (sheet, block_row, block_col);
+        cursor->style = gnucash_sheet_get_style (sheet, vcell_loc);
 
-        item_cursor->row = block_row;
-        item_cursor->col = block_col;
+        item_cursor->row = vcell_loc.virt_row;
+        item_cursor->col = vcell_loc.virt_col;
 }
 
 
@@ -307,20 +307,17 @@ gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
         item_cursor = GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL]);
         style = cursor->style;
 
-        if (cell_row < 0 || cell_row >= style->nrows
-            || cell_col < 0 || cell_col >= style->ncols)
+        if (cell_row < 0 || cell_row >= style->nrows ||
+            cell_col < 0 || cell_col >= style->ncols)
                 return;
 
         item_cursor->row = cell_row;
         item_cursor->col = cell_col;
 }
 
-                   
-
 
 void
-gnucash_cursor_set (GnucashCursor *cursor, gint block_row, gint block_col,
-                    gint cell_row, gint cell_col)
+gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
 {
         GnucashSheet *sheet;
         
@@ -331,8 +328,10 @@ gnucash_cursor_set (GnucashCursor *cursor, gint block_row, gint block_col,
 
         gnucash_cursor_request_redraw (cursor);
 
-        gnucash_cursor_set_block (cursor, block_row, block_col);
-        gnucash_cursor_set_cell (cursor, cell_row, cell_col);
+        gnucash_cursor_set_block (cursor, virt_loc.vcell_loc);
+        gnucash_cursor_set_cell (cursor,
+                                 virt_loc.phys_row_offset,
+                                 virt_loc.phys_col_offset);
 
         gnucash_cursor_configure (cursor);
 
