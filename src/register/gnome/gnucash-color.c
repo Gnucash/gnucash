@@ -40,7 +40,7 @@ static int color_inited;
 static GdkColorContext *gnucash_color_context;
 
 /* Public Colors */
-GdkColor gn_white, gn_black, gn_light_gray, gn_dark_gray, gn_red;
+GdkColor gn_white, gn_black, gn_light_gray, gn_dark_gray, gn_blue;
 
 static GHashTable *color_hash_table = NULL;
 
@@ -116,22 +116,23 @@ gnucash_color_argb_to_gdk (guint32 argb)
 
         color = g_hash_table_lookup (color_hash_table, &key);
 
-        if (!color) {
-                color = g_new0(GdkColor, 1);
-                newkey = g_new0(guint32, 1);
+        if (color)
+                return color;
 
-                *newkey = key;
+        color = g_new0(GdkColor, 1);
+        newkey = g_new0(guint32, 1);
+
+        *newkey = key;
                 
-                color->red = (argb & 0xff0000) >> 8;
-                color->green = argb & 0xff00;
-                color->blue = (argb & 0xff) << 8;
+        color->red = (argb & 0xff0000) >> 8;
+        color->green = argb & 0xff00;
+        color->blue = (argb & 0xff) << 8;
 
-                color->pixel = gnucash_color_alloc(color->red, color->green,
-						   color->blue);
+        color->pixel = gnucash_color_alloc(color->red,
+                                           color->green,
+                                           color->blue);
 
-                g_hash_table_insert (color_hash_table, newkey, color);
-/* Fixme:  do we need to  refcount the colors */
-        }
+        g_hash_table_insert (color_hash_table, newkey, color);
 
         return color;
 }
@@ -152,7 +153,7 @@ gnucash_color_init (void)
 
         gnucash_color_alloc_name ("gray60", &gn_light_gray);
         gnucash_color_alloc_name ("gray40", &gn_dark_gray);
-        gnucash_color_alloc_name ("red",   &gn_red);
+        gnucash_color_alloc_name ("sky blue", &gn_blue);
 
         if (!color_hash_table)
                 color_hash_table = g_hash_table_new(color_hash, color_equal);

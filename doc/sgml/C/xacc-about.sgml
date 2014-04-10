@@ -11,23 +11,22 @@
 include:
 
 <ITEMIZEDLIST>
-<LISTITEM> <PARA><EMPHASIS>Multiple accounts,</EMPHASIS> which can be
-open at the same time. Create a GnuCash account for each of your bank
-accounts.
-
-</PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Each account maintains both a running balance and a
+<LISTITEM> <PARA><EMPHASIS>Multiple Accounts.</EMPHASIS> 
+Create a GnuCash account for each of your bank
+accounts.  Each account maintains both a running balance and a
 reconciled balance, so you can keep track of the checks that
 have cleared your account.
-
 </PARA>
 </LISTITEM>
-<LISTITEM> <PARA> <EMPHASIS>A simple user interface.</EMPHASIS> </PARA>
+
+<LISTITEM> <PARA> <EMPHASIS>Simple User Interface.</EMPHASIS> </PARA>
 <PARA>If you can use the register in the back of your checkbook, you
-can use <APPLICATION>GnuCash.</APPLICATION> </PARA>
+can use <APPLICATION>GnuCash.</APPLICATION> 
+Type directly into the register, tab between fields, and use 
+quick-fill to automatically complete transactions.
+</PARA>
 </LISTITEM>
+
 <LISTITEM> <PARA> <EMPHASIS><LINK LINKEND="XACC-RECNWIN">Automated Tools
 for Reconciling Accounts.</LINK></EMPHASIS> </PARA>
 
@@ -37,61 +36,52 @@ off the transactions that appear in the bank statement. This agrees
 what you have recorded in GnuCash with what your bank has reported,
 and makes it easier to track down any discrepancies. </PARA>
 </LISTITEM>
-<LISTITEM> <PARA>        <EMPHASIS>QuickFill.</EMPHASIS>
 
- </PARA>
+<LISTITEM> <PARA> <EMPHASIS>QuickFill.</EMPHASIS> </PARA>
+
 <PARA>If you begin typing in the description field, and the text matches
 a previous transaction, hitting <KEYCAP>TAB</KEYCAP> will copy in that
 previous transaction. This is a handy time saver if you regularly create
 similar transactions.
-      
-
- </PARA>
+</PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS>Stock/Mutual Fund Portfolios.</EMPHASIS> 
 
- </PARA>
+<LISTITEM> <PARA> <EMPHASIS>Stock/Mutual Fund Portfolios.</EMPHASIS> </PARA>
+
 <PARA>Track stocks individually (one per account) or in
         portfolio of accounts (a group of accounts that can be
         displayed together).
-
- </PARA>
-<PARA>There are tools to <LINK LINKEND="XACC-TICKER">        automatically collect stock quotes.</LINK>
-      
-
- </PARA>
+        There are tools to 
+        <LINK LINKEND="XACC-TICKER">automatically collect stock quotes.</LINK>
+</PARA>
 </LISTITEM>
+
 <LISTITEM>
 <PARA>Support for <EMPHASIS><LINK LINKEND="XACC-CURRENCYHANDLING">multiple
       currencies</LINK></EMPHASIS> and <EMPHASIS>currency trading accounts.
       </EMPHASIS>
-        (partial, still broken). 
-
- </PARA>
-<PARA>Bank accounts may be established in different
-        currencies, and trades at varying exchange rates may be
-        made, in much the same way stocks trade at varying
-        prices.
+      (partial, still broken). 
+      Bank accounts may be established in different
+      currencies, and trades at varying exchange rates may be
+      made, in much the same way stocks trade at varying
+      prices.
       
 
- </PARA>
+</PARA>
 </LISTITEM>
+
 <LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="QIF">Quicken File
-        Import</LINK>.</EMPHASIS> 
-
- </PARA>
-<PARA>Imports Quicken-style QIF files.
-      
-
- </PARA>
+<PARA><EMPHASIS><LINK LINKEND="QIF">Quicken File Import</LINK>.</EMPHASIS> 
+</PARA>
+<PARA>Imports Quicken-style QIF files.  The import wizard automatically
+merges duplicate transactions.
+</PARA>
 </LISTITEM>
+
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-REPORTS">Reports</LINK>.</EMPHASIS> Display
       or output as HTML Balance, Transaction, and Profit/Loss
-      reports, as well as graphical account balance tracking
-      (requires gnuplot).
+      reports, as well as graphical account balance tracking.
  </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -107,7 +97,7 @@ similar transactions.
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="XACC-CHARTOFACCTS">Account Hierarchy</LINK></EMPHASIS> 
+<PARA> <EMPHASIS><LINK LINKEND="XACC-CHARTOFACCTS">Chart of Accounts</LINK></EMPHASIS> 
 
  </PARA>
 <PARA>A master account can have a hierarchy of more detailed
@@ -123,41 +113,32 @@ similar transactions.
       Entry</LINK></EMPHASIS> 
 
  </PARA>
-<PARA>Every transaction involves two accounts, and <EMPHASIS>each
-        transaction</EMPHASIS> is required to balance. This provides
-        assurance that the overall set of books will add up
-        correctly, and prevents out-of-balance errors
-        altogether.
+<PARA>Every transaction must debit one account and credit others
+      by an equal amount. This ensures that the 'books balance':
+      that the difference between income and outflow exactly equals
+      the sum of all assets, be they bank, cash, stock or other.
 
  </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense Account
-      Types</LINK></EMPHASIS> 
-
+      Types (Categories)</LINK></EMPHASIS> 
  </PARA>
-<PARA>Intuit's <LINK LINKEND="XACC-QUICKEN">Quicken</LINK> product
-        has what they call "categories" that are used to track
-        incomes and expenses. These may be used to create
-        Profit/Loss reports.
-
+<PARA>These serve not only to categorize your cash flow, but when used
+properly with the double-entry feature and equity accounts, these can
+provide an accurate Profit & Loss statement.
  </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS>General Ledger</EMPHASIS> 
 
- </PARA>
+<LISTITEM>
+<PARA><EMPHASIS>General Ledger</EMPHASIS> </PARA>
+
 <PARA>Multiple accounts may be displayed in one register
         window at the same time. This can make it easier to track
         down data errors. It also provides a convenient way of
         viewing a portfolio of many stocks, by showing all
         transactions in that portfolio.
 
- </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Handling of <LINK LINKEND="XACC-CURRENCYHANDLING">multiple
-      currencies</LINK></EMPHASIS>
  </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -173,19 +154,13 @@ similar transactions.
     are intended to be stable, only seeing maintenance to fix bugs,
     and "odd" sub-versions indicate an "experimental" stream that
     seeks to add enhancement.
-
- </PARA>
-<PARA>The present "experimental" stream is gnucash-1.5.x, which is
-    somewhat unstable.
-
- </PARA>
-<PARA>The latest stable release is 1.4.x; if you don't intend to
+    The latest stable release is 1.4.x; if you don't intend to
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
-
- </PARA>
-<PARA>Once the 1.5.x series stabilizes, the next stable series
+    The present "experimental" stream is gnucash-1.5.x, which is
+    somewhat unstable.
+    Once the 1.5.x series stabilizes, the next stable series
     will be 1.6.x.
 
  </PARA>
@@ -201,15 +176,18 @@ similar transactions.
 <TITLE>Lead Developers</TITLE>
 <PARA>    <GLOSSLIST>
 <GLOSSENTRY>
-<GLOSSTERM><email> rclark@hmc.edu</email> Robin Clark</GLOSSTERM>
+<GLOSSTERM><email>rclark@hmc.edu</email> Robin Clark</GLOSSTERM>
 <GLOSSDEF>
 <PARA>wrote the original <application>X-Accountant</application> in
-Motif as a school project, taking it to version 0.9 by October
-1997.</PARA>
+    Motif as a school project, taking it to version 0.9 by October
+    1997.  Although every single
+    line of his code has been re-written, his name appears as a
+    credit in almost every file.  Such is the magic of copyrights.
+</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> linas@linas.org</email> Linas Vepstas</GLOSSTERM>
+<GLOSSTERM><email>linas@linas.org</email> Linas Vepstas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>liked what he saw: the GUI was slick, the code was
       documented and well structured, and it was all GPL'ed. And so he
@@ -217,49 +195,67 @@ Motif as a school project, taking it to version 0.9 by October
       combobox and arrows would make an even slicker GUI, rewrote the
       <application>X-Accountant</application> internals to add
       double-entry, an account hierarchy, split out a transaction
-      mini-engine, add support for stocks, and spiff up the help
-      menus. This was version 1.0 as of January 1998. Since then, for
-      version 1.1, the engine was expanded and refined, and the
+      mini-engine, add support for stocks, and spiffed up the help
+      menus. That was version 1.0 as of January 1998. For
+      version 1.1 &amp; 1.2, the engine was expanded and refined, and the
       register window code completely redesigned and made mostly
-      Motif-(and GUI-)independent. Did some prototype OFX work.</PARA>
+      Motif-(and GUI-)independent. 
+    Linas is now active with Gnumatic Incorporated, a company formed to
+    enhance and support GnuCash for everyone, from home desktop users
+    to commercial and professional accountants.
+</PARA>
+
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jcollins@gnucash.org</email> Jeremy
+<GLOSSTERM><email>jcollins@gnucash.org</email> Jeremy
       Collins</GLOSSTERM>
 <GLOSSDEF>
 <PARA>publicized the <application>GnoMoney</application> project widely
       and broadly, and then changed its name to
-      <application>GnuCash</application>. Jeremy created the
-      gnucash.org web site, registered the domain, got the initial
-      GTK/gnome code working.</PARA>
+      <application>GnuCash</application>. 
+      (Actually, put the selection
+      of the name up to popular vote.  Democracy is not
+      a good way to pick names.)
+      Jeremy registered the domain name, and created and maintained
+      the gnucash.org web site for years,
+      and got the initial GTK/gnome code working.
+      </PARA>
+
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rlb@cs.utexas.edu</email> Rob Browning</GLOSSTERM>
+<GLOSSTERM><email>rlb@cs.utexas.edu</email> Rob Browning</GLOSSTERM>
 <GLOSSDEF>
-<PARA>abused everyone for not using perl, and then after we
-      added perl support, dumped perl in favor of guile/scheme
-      support. Rob maintains the build infrastructure, is handling
-      the whole guile/perl extension language thing, and is dealing
-      with configuration and configurability.</PARA>
+<PARA>abused everyone for not using Perl, and then after we
+      added Perl support, dumped Perl in favor of Guile/Scheme
+      support.  Rob built the build
+      infrastructure, hacked the gtk code, and is whacking the file format.
+      Also, the re-write of reports and statement downloading in scheme,
+      the g-wrap guile wrapper, and the user preferences.
+</PARA>
+
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> dave@krondo.com</email> Dave Peticolas</GLOSSTERM>
+<GLOSSTERM><email>dave@krondo.com</email> Dave Peticolas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>hacks obsessively on GnuCash. But he can stop anytime he
-      wants to. Really.</PARA>
+      wants to. Really.
+      (As he is now the gatekeeper of the GnuCash CVS tree, be nice to him,
+      or he may decide to stop hacking in the middle of your patch).
+      </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> grib@billgribble.com</email> Bill
+<GLOSSTERM><email>grib@billgribble.com</email> Bill
       Gribble</GLOSSTERM>
 <GLOSSDEF>
-<PARA>works magic. If your checks print wrong, blame him. If
-      you don't like the amount printed on your checks, blame him.
-      If you don't like your your bank balances, your bank, or your
-      life, blame him too.</PARA>
+<PARA>
+    is not shy, or softly spoken.  So don't be shy if you find a bug in
+    his code: QIF import, query API and transaction search, check-printing,
+    commodity and currency support, gtkhtml integration and report printing.
+    </PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 </GLOSSLIST>
@@ -274,27 +270,27 @@ Motif as a school project, taking it to version 0.9 by October
 
     <GLOSSLIST>
 <GLOSSENTRY>
-<GLOSSTERM><email> arensb@cfar.umd.edu</email> Andrew
+<GLOSSTERM><email>arensb@cfar.umd.edu</email> Andrew
       Arensburger</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for FreeBSD and other patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> matt_armstrong@bigfoot.com</email> Matt
+<GLOSSTERM><email>matt_armstrong@bigfoot.com</email> Matt
       Armstrong</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> fred@moremagic.com</email> Fred Baube</GLOSSTERM>
+<GLOSSTERM><email>fred@moremagic.com</email> Fred Baube</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for attempted Java port/MoneyDance</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> dennisb@cs.chalmers.se</email> Dennis
+<GLOSSTERM><email>dennisb@cs.chalmers.se</email> Dennis
       Bj&ouml;rklund</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Swedish translation</PARA>
@@ -302,7 +298,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> bojsen@worldnet.att.net</email> Per
+<GLOSSTERM><email>bojsen@worldnet.att.net</email> Per
       Bojsen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>several core dump fixes</PARA>
@@ -310,7 +306,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tboldt@attglobal.net</email> Terry Boldt
+<GLOSSTERM><email>tboldt@attglobal.net</email> Terry Boldt
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>financial calculator and expression parser</PARA>
@@ -335,7 +331,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 <GLOSSENTRY>
 
-<GLOSSTERM><email> wwc@wwcnet.nu</email> Bill
+<GLOSSTERM><email>wwc@wwcnet.nu</email> Bill
       Carlson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>performance improvements</PARA>
@@ -343,14 +339,14 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> grahamc@zeta.org.au</email> Graham
+<GLOSSTERM><email>grahamc@zeta.org.au</email> Graham
       Chapman</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for the xacc-rpts addon package</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> georgec@sco.com</email> George Chen</GLOSSTERM>
+<GLOSSTERM><email>georgec@sco.com</email> George Chen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for MS-Money QIF support</PARA>
 </GLOSSDEF>
@@ -363,14 +359,14 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jcollins@gnucash.org</email> Jeremey
+<GLOSSTERM><email>jcollins@gnucash.org</email> Jeremey
       Collins</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for GnoMoney and GTK port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> mcondell@bbn.com</email> Matthew
+<GLOSSTERM><email>mcondell@bbn.com</email> Matthew
       Condell</GLOSSTERM>
 <GLOSSDEF>
 <PARA>FreeBSD patch</PARA>
@@ -378,7 +374,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> pcondon@rackspace.com</email> Patrick
+<GLOSSTERM><email>pcondon@rackspace.com</email> Patrick
       Condron</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for webserver and T1 connection.</PARA>
@@ -386,7 +382,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> raphael.dechenaux@worldonline.fr</email> Raphael
+<GLOSSTERM><email>raphael.dechenaux@worldonline.fr</email> Raphael
       Dechenaux</GLOSSTERM>
 <GLOSSDEF>
 <PARA>register patch</PARA>
@@ -394,7 +390,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> Ciaran.Deignan@bull.net</email> Ciaran
+<GLOSSTERM><email>Ciaran.Deignan@bull.net</email> Ciaran
       Deignan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for AIX binary version</PARA>
@@ -402,7 +398,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> gjditchfield@acm.org</email> Glen
+<GLOSSTERM><email>gjditchfield@acm.org</email> Glen
       Ditchfield</GLOSSTERM>
 <GLOSSDEF>
 <PARA>updated documentation</PARA>
@@ -410,25 +406,25 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tyson@tyse.net</email> Tyson Dowd</GLOSSTERM>
+<GLOSSTERM><email>tyson@tyse.net</email> Tyson Dowd</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for config/make patches and debian maintenance</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> ripley@xs4all.nl</email> Koen D'Hondt</GLOSSTERM>
+<GLOSSTERM><email>ripley@xs4all.nl</email> Koen D'Hondt</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for Solaris patches to XmHTML</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> bob@mostly.com</email> Bob Drzyzgula</GLOSSTERM>
+<GLOSSTERM><email>bob@mostly.com</email> Bob Drzyzgula</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for budgeting design notes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> pjf@schools.net.au</email> Paul
+<GLOSSTERM><email>pjf@schools.net.au</email> Paul
       Fenwick</GLOSSTERM>
 <GLOSSDEF>
 <PARA>ASX support, Finance::Quote</PARA>
@@ -436,7 +432,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> hfiguiere@teaser.fr</email> Hubert
+<GLOSSTERM><email>hfiguiere@teaser.fr</email> Hubert
       Figuiere</GLOSSTERM>
 <GLOSSDEF>
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION></PARA>
@@ -444,7 +440,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> frob@df.ru</email> Valek Filippov
+<GLOSSTERM><email>frob@df.ru</email> Valek Filippov
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>Russian translation</PARA>
@@ -452,42 +448,42 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> ju_finck@mail.netwave.de</email> Jan-Uwe
+<GLOSSTERM><email>ju_finck@mail.netwave.de</email> Jan-Uwe
       Finck</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German message translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> kevinfinn@mediaone.net</email> Kevin
+<GLOSSTERM><email>kevinfinn@mediaone.net</email> Kevin
       Finn</GLOSSTERM>
 <GLOSSDEF>
 <PARA>auto-decimal point patch, options patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rjf@aracnet.com</email> Ron
+<GLOSSTERM><email>rjf@aracnet.com</email> Ron
       Forrester</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> DFreese@osc.uscg.mil</email> Dave
+<GLOSSTERM><email>DFreese@osc.uscg.mil</email> Dave
       Freese</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for leap-year fix</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jgoerzen@complete.org</email> John
+<GLOSSTERM><email>jgoerzen@complete.org</email> John
       Goerzen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>file i/o fix for 64-bit architectures</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> grib@billgribble.com</email> Bill
+<GLOSSTERM><email>grib@billgribble.com</email> Bill
       Gribble</GLOSSTERM>
 <GLOSSDEF>
 <PARA>QIF import code, check printing, transaction find
@@ -495,33 +491,33 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> otto@bug.redhat.com</email> Otto
+<GLOSSTERM><email>otto@bug.redhat.com</email> Otto
       Hammersmith</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for RedHat RPM packaging</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> offby1@blarg.net</email> Eric Hanchrow</GLOSSTERM>
+<GLOSSTERM><email>offby1@blarg.net</email> Eric Hanchrow</GLOSSTERM>
 <GLOSSDEF>
 <PARA>updated currency documentation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> haral@codec.ro</email> Alexandru
+<GLOSSTERM><email>haral@codec.ro</email> Alexandru
       Harsanyi</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> john@dhh.gt.org</email> John Hasler</GLOSSTERM>
+<GLOSSTERM><email>john@dhh.gt.org</email> John Hasler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>engine patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> hellan@acm.org</email> Jon K&aring;re
+<GLOSSTERM><email>hellan@acm.org</email> Jon K&aring;re
       Hellan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
@@ -529,7 +525,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> PrakashK@bigfoot.com</email> Prakash
+<GLOSSTERM><email>PrakashK@bigfoot.com</email> Prakash
       Kailasa</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome build fixes</PARA>
@@ -537,7 +533,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> small@arcadia.spb.ru</email> Alexey
+<GLOSSTERM><email>small@arcadia.spb.ru</email> Alexey
       Kakunin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>quickfill patch for cyrillic</PARA>
@@ -545,54 +541,54 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tkludy@csd.sgi.com</email> Tom Kludy</GLOSSTERM>
+<GLOSSTERM><email>tkludy@csd.sgi.com</email> Tom Kludy</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SGI Irix port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> sk@xgm.de</email> Sven Kuenzler</GLOSSTERM>
+<GLOSSTERM><email>sk@xgm.de</email> Sven Kuenzler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SuSE README file</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> blarsen@ada-works.com</email> Bryan
+<GLOSSTERM><email>blarsen@ada-works.com</email> Bryan
       Larsen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile budget report</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> mellon@andare.fugue.com</email> Ted
+<GLOSSTERM><email>mellon@andare.fugue.com</email> Ted
       Lemon</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for NetBSD port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> y-le-ny@ifrance.com</email> Yannick Le
+<GLOSSTERM><email>y-le-ny@ifrance.com</email> Yannick Le
       Ny</GLOSSTERM>
 <GLOSSDEF>
 <PARA>pour la traduction en Fran&ccedil;ais</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> glikely@nortelnetworks.com</email> Grant
+<GLOSSTERM><email>glikely@nortelnetworks.com</email> Grant
       Likely</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnome and engine patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> martinh@pegasus.cc.ucf.edu</email> Heath
+<GLOSSTERM><email>martinh@pegasus.cc.ucf.edu</email> Heath
       Martin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>major work on the gnome register</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> mgmartin@abacusnet.net</email> Matt
+<GLOSSTERM><email>mgmartin@abacusnet.net</email> Matt
       Martin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile error handling code</PARA>
@@ -600,7 +596,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> rgmerk@mira.net</email> Robert Graham
+<GLOSSTERM><email>rgmerk@mira.net</email> Robert Graham
       Merkel</GLOSSTERM>
 <GLOSSDEF>
 <PARA>reporting, gnome, and configuration patches.</PARA>
@@ -608,7 +604,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> juanmagm@mail.com</email> Juan Manuel
+<GLOSSTERM><email>juanmagm@mail.com</email> Juan Manuel
       García Molina</GLOSSTERM>
 <GLOSSDEF>
 <PARA>spanish translation</PARA>
@@ -616,7 +612,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> molnarc@mandrakesoft.com</email> Christopher
+<GLOSSTERM><email>molnarc@mandrakesoft.com</email> Christopher
       Molnar</GLOSSTERM>
 <GLOSSDEF>
 <PARA>build system patch</PARA>
@@ -624,7 +620,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> mooney@dogbert.cc.ndsu.NoDak.edu</email> Tim
+<GLOSSTERM><email>mooney@dogbert.cc.ndsu.NoDak.edu</email> Tim
       Mooney</GLOSSTERM>
 <GLOSSDEF>
 <PARA>port to alpha-dec-osf4.0f</PARA>
@@ -632,7 +628,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> gam3@ann.softgams.com</email> G. Allen Morris
+<GLOSSTERM><email>gam3@ann.softgams.com</email> G. Allen Morris
       III</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for QIF core dump fix</PARA>
@@ -640,7 +636,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> sjmurdoch@linuxfan.com</email> Steven
+<GLOSSTERM><email>sjmurdoch@linuxfan.com</email> Steven
       Murdoch</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnc-prices fix for London exchange</PARA>
@@ -648,14 +644,14 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> brent@baton.phys.lsu.edu</email> Brent
+<GLOSSTERM><email>brent@baton.phys.lsu.edu</email> Brent
       Neal</GLOSSTERM>
 <GLOSSDEF>
 <PARA>TIAA-CREF support</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> spacey@inch.com</email> Peter
+<GLOSSTERM><email>spacey@inch.com</email> Peter
       Norton</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for a valiant attempt at a GTK port</PARA>
@@ -663,7 +659,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> webmaster@obsidian.uia.net</email> OmNiBuS
+<GLOSSTERM><email>webmaster@obsidian.uia.net</email> OmNiBuS
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>web site graphics and content</PARA>
@@ -671,7 +667,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> gordo@pincoya.com</email> Gordon Oliver
+<GLOSSTERM><email>gordo@pincoya.com</email> Gordon Oliver
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>multiple currency status line patch</PARA>
@@ -679,68 +675,68 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> mopyr@IPM.Lviv.UA</email> Myroslav
+<GLOSSTERM><email>mopyr@IPM.Lviv.UA</email> Myroslav
       Opyr</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> laurent.pelecq@wanadoo.fr</email> Laurent
+<GLOSSTERM><email>laurent.pelecq@wanadoo.fr</email> Laurent
       P&eacute;lecq</GLOSSTERM>
 <GLOSSDEF>
 <PARA>i18n patches with gettext</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> Alain.Peyrat@nmu.alcatel.fr</email> Alain
+<GLOSSTERM><email>Alain.Peyrat@nmu.alcatel.fr</email> Alain
       Peyrat</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> peter@wuzel.m.isar.de</email> Peter
+<GLOSSTERM><email>peter@wuzel.m.isar.de</email> Peter
       Pointner</GLOSSTERM>
 <GLOSSDEF>
 <PARA>motif and configuration patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> maufk@csv.warwick.ac.uk</email> Gavin
+<GLOSSTERM><email>maufk@csv.warwick.ac.uk</email> Gavin
       Porter</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for euro style dates</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> tpo@spin.ch</email> Tomas Pospisek</GLOSSTERM>
+<GLOSSTERM><email>tpo@spin.ch</email> Tomas Pospisek</GLOSSTERM>
 <GLOSSDEF>
 <PARA>debian patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rr@sco.com</email> Ron Record</GLOSSTERM>
+<GLOSSTERM><email>rr@sco.com</email> Ron Record</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SCO Unixware and OpenServer binaries</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> Keith.Refson@earth.ox.ac.uk</email> Keith
+<GLOSSTERM><email>Keith.Refson@earth.ox.ac.uk</email> Keith
       Refson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Solaris fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> schoenberger@signsoft.com</email> Dirk
+<GLOSSTERM><email>schoenberger@signsoft.com</email> Dirk
       Schoenberger</GLOSSTERM>
 <GLOSSDEF>
 <PARA>began the Qt/KDE port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jan.schrage@urz.uni-heidelberg.de</email> Jan
+<GLOSSTERM><email>jan.schrage@urz.uni-heidelberg.de</email> Jan
       Schrage</GLOSSTERM>
 <GLOSSDEF>
 <PARA>documentation patches</PARA>
@@ -748,7 +744,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> cls@seawood.org</email> Christopher
+<GLOSSTERM><email>cls@seawood.org</email> Christopher
       Seawood</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for XbaeMatrix core dump</PARA>
@@ -756,7 +752,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> aleseveso@tiscalinet.it</email> Alessandro
+<GLOSSTERM><email>aleseveso@tiscalinet.it</email> Alessandro
       Seveso</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Italian translations</PARA>
@@ -764,21 +760,21 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> msimons@fsimons01.erols.com</email> Mike
+<GLOSSTERM><email>msimons@fsimons01.erols.com</email> Mike
       Simons</GLOSSTERM>
 <GLOSSDEF>
 <PARA>misc <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rich@brake.demon.co.uk</email> Richard
+<GLOSSTERM><email>rich@brake.demon.co.uk</email> Richard
       Skelton</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for Solaris cleanup</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> spruth@bigfoot.com</email> Henning
+<GLOSSTERM><email>spruth@bigfoot.com</email> Henning
       Spruth</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German text and euro date rework</PARA>
@@ -786,7 +782,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> robby.stephenson@usa.net</email> Robby
+<GLOSSTERM><email>robby.stephenson@usa.net</email> Robby
       Stephenson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>register &amp; file history patches</PARA>
@@ -794,7 +790,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> stimming@uclink.berkeley.edu</email> Christian
+<GLOSSTERM><email>stimming@uclink.berkeley.edu</email> Christian
       Stimming</GLOSSTERM>
 <GLOSSDEF>
 <PARA>report patch</PARA>
@@ -802,7 +798,7 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> bszx@bszxdomain.edu.eu.org</email> Bartek
+<GLOSSTERM><email>bszx@bszxdomain.edu.eu.org</email> Bartek
       Szady</GLOSSTERM>
 <GLOSSDEF>
 <PARA>engine and build system patches</PARA>
@@ -810,47 +806,57 @@ Motif as a school project, taking it to version 0.9 by October
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tma@iis.fhg.de</email> Herbert Thoma</GLOSSTERM>
+<GLOSSTERM><email>tma@iis.fhg.de</email> Herbert Thoma</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnome register &amp; euro support patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><email> detrout@earthlink.net</email> Diane
+<GLOSSTERM><email>detrout@earthlink.net</email> Diane
       Trout</GLOSSTERM>
 <GLOSSDEF>
 <PARA>scheme qif import patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><email> rkw@dataplex.net</email> Richard
+<GLOSSTERM><email>uschold@cs.ucf.edu</email> Richard
+      -Gilligan- Uschold</GLOSSTERM>
+<GLOSSDEF>
+<PARA>tax report</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>rkw@dataplex.net</email> Richard
       Wackerbarth</GLOSSTERM>
 <GLOSSDEF>
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION>, qif import fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rob@valinux.com</email> Rob Walker</GLOSSTERM>
+<GLOSSTERM><email>rob@valinux.com</email> Rob Walker</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile and register patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> dwmw2@infradead.org</email> David
+<GLOSSTERM><email>dwmw2@infradead.org</email> David
       Woodhouse</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Great Britain translations</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> gooch@ic.EECS.Berkeley.EDU</email> Ken
+<GLOSSTERM><email>gooch@ic.EECS.Berkeley.EDU</email> Ken
       Yamaguchi</GLOSSTERM>
 <GLOSSDEF>
 <PARA>QIF import fixes; MYM import</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> shimpei@gol.com</email> Shimpei
+<GLOSSTERM><email>shimpei@gol.com</email> Shimpei
       Yamashita</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Japanese translation</PARA>
@@ -918,8 +924,25 @@ Motif as a school project, taking it to version 0.9 by October
 
 <PARA> The table below shows some historical lines-of-code and
 number-of-files metrics for the <application>GnuCash</application>
-development project.
+development project.  Note that not all of the code is counted: for
+instance, the Makefiles and configure.in and autogen.sh are not counted. 
+Also, files that are automatically generated are not counted, nor are
+files that have been 'borrowed' from other projects. Also not counted 
+are experimental files, miscellaneous perl scripts, various translators,
+addons and utilities.
+</PARA>
 
+<PARA>
+Note also that KLOC's are not a good metric of programmer productivity,
+nor even that <application>wc</application> is a good way of counting
+KLOC's.  Much better measures are complexity metrics, which, for
+example, count the number and size of if-then-else blocks, or the number
+and size of all blocks, or the number of math operators per each
+statement.  Maybe someday we'll run one of those tools on this code. 
+For now, this is what we have.
+</PARA>
+
+<PARA>
 <TABLE>
 <TITLE> Historical Development Stats </TITLE>
 
@@ -936,6 +959,7 @@ development project.
 <ENTRY>docs</ENTRY>
 <ENTRY>txt</ENTRY>
 <ENTRY>Total</ENTRY>
+<ENTRY>Languages</ENTRY>
 </ROW>
 </THEAD>
 <TBODY>
@@ -955,6 +979,7 @@ development project.
          (0.1)</ENTRY>
 <ENTRY>40 files
          (8.8)</ENTRY>
+<ENTRY>1</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>xacc-0.9w
@@ -972,6 +997,7 @@ development project.
          (0.1)</ENTRY>
 <ENTRY>61 files
          (16.2)</ENTRY>
+<ENTRY>1</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>xacc-1.0.17
@@ -989,6 +1015,7 @@ development project.
          (0.3)</ENTRY>
 <ENTRY>68 files
          (18.3)</ENTRY>
+<ENTRY>1</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>gnucash-1.1.15
@@ -1011,6 +1038,7 @@ development project.
          (1.8)</ENTRY>
 <ENTRY>159 files
          (34.7)</ENTRY>
+<ENTRY>1 (0.17)</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>gnucash-1.2.2
@@ -1032,6 +1060,7 @@ development project.
          (1.8)</ENTRY>
 <ENTRY>168 files
          (39.0)</ENTRY>
+<ENTRY>3 (0.54)</ENTRY>
 </ROW>
 <ROW>
 <ENTRY>gnucash-1.3.6
@@ -1046,13 +1075,58 @@ development project.
 <ENTRY>78 files
          (32.2+3.0)</ENTRY>
 <ENTRY>74 files
-         (17.0)</ENTRY>
+         (4.0+0.7+12.3)</ENTRY>
 <ENTRY>33 files
          (7.8)</ENTRY>
 <ENTRY>25 files
          (4.5)</ENTRY>
 <ENTRY>302 files
          (95.1)</ENTRY>
+<ENTRY>5 (4.3) </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>gnucash-1.4.6
+         Sept 2000</ENTRY>
+<ENTRY>43 files
+         (13.0+3.6)</ENTRY>
+<ENTRY>27 files
+         (5.9+2.0)</ENTRY>
+<ENTRY>24 files
+         (5.4+1.8)</ENTRY>
+<ENTRY>-</ENTRY>
+<ENTRY>82 files
+         (33.8+3.0)</ENTRY>
+<ENTRY>68 files
+         (4.0+0.7+15.5)</ENTRY>
+<ENTRY>36 files
+         (9.3)</ENTRY>
+<ENTRY>36 files
+         (4.8)</ENTRY>
+<ENTRY>316 files
+         (101.9)</ENTRY>
+<ENTRY>7 (6.0)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>gnucash-1.5.2
+         Sept 2000</ENTRY>
+<ENTRY>46 files
+         (14.9+3.7)</ENTRY>
+<ENTRY>29 files
+         (6.3+2.0)</ENTRY>
+<ENTRY>25 files
+         (5.7+1.8)</ENTRY>
+<ENTRY>-</ENTRY>
+<ENTRY>83 files
+         (35.8+2.9)</ENTRY>
+<ENTRY>73 files
+         (4.6+0.8+16.8)</ENTRY>
+<ENTRY>37 files
+         (10.7)</ENTRY>
+<ENTRY>48 files
+         (8.2)</ENTRY>
+<ENTRY>341 files
+         (114.2)</ENTRY>
+<ENTRY>8 (7.8)</ENTRY>
 </ROW>
 </TBODY>
 </TGROUP>
@@ -1063,8 +1137,7 @@ development project.
     
      number of *c and *.h files
      (KLOCS in *.c + KLOCS in *.h)
-    (unless its the scheme directories, in which case its *scm
-    files, etc) 
+     (or KLOCS of *.txt or KLOCS of *.scm as appropriate)
 
  </PARA>
 <PARA>where KLOC == kilo-lines-of-code, as reported by
@@ -1099,19 +1172,27 @@ development project.
 </LISTITEM>
 <LISTITEM>
 <PARA>scheme -- scheme and guile code -- src/scm plus
-      src/guile
+      src/guile -- in parenthesis is (*.c + *.h + *.scm)
 
  </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>docs -- english-only html docs (user documentation)
-
+<PARA>docs -- english-only user documentation
+              (html or sgml)
+ </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Languages -- the number of languages that the application messages
+      have been translated to.  In parenthesis, the number of messages
+      in the message files (grep msgstr *.po |wc), in thousands.
  </PARA>
 </LISTITEM>
 
-<LISTITEM> <PARA>txt -- internal <filename>README</filename> and
-<filename>*.txt</filename> documentation files in all subdirectories
-</PARA>
+<LISTITEM> 
+<PARA>txt -- internal <filename>README</filename>,
+      <filename>*.txt</filename> and <filename>*.texinfo</filename>
+      documentation files in all subdirectories,
+ </PARA>
 </LISTITEM>
 
 </ITEMIZEDLIST>

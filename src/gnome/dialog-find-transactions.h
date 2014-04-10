@@ -62,13 +62,13 @@ typedef struct {
   GtkWidget  * match_accounts_scroller;
   GtkWidget  * account_tree;
 
-  GtkWidget  * date_start_entry_1;
-  GtkWidget  * date_start_entry_2;
-  GtkWidget  * date_start_entry_3;
+  GtkWidget  * date_start_toggle;
+  GtkWidget  * date_start_frame;
+  GtkWidget  * date_start_entry;
 
-  GtkWidget  * date_end_entry_1;
-  GtkWidget  * date_end_entry_2;
-  GtkWidget  * date_end_entry_3;
+  GtkWidget  * date_end_toggle;
+  GtkWidget  * date_end_frame;
+  GtkWidget  * date_end_entry;
 
   GtkWidget  * description_entry;
   GtkWidget  * description_case_toggle;
@@ -99,6 +99,10 @@ typedef struct {
   GtkWidget  * cleared_not_cleared_toggle;
   GtkWidget  * cleared_cleared_toggle;
   GtkWidget  * cleared_reconciled_toggle;
+
+  GtkWidget  * tag_entry;
+  GtkWidget  * tag_case_toggle;
+  GtkWidget  * tag_regexp_toggle;
 
 } FindTransactionsDialog;
 

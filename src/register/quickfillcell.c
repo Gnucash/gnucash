@@ -57,15 +57,13 @@ quick_set (BasicCell *_cell,
 /* ================================================ */
 /* when entering new cell, put cursor at end and select everything */
 
-static const char * 
-quick_enter (BasicCell *_cell, const char *val,
+static gboolean
+quick_enter (BasicCell *_cell,
              int *cursor_position,
              int *start_selection,
              int *end_selection)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
-
-   cell->qf = cell->qfRoot;
 
    *cursor_position = -1;
    *start_selection = 0;
@@ -73,16 +71,15 @@ quick_enter (BasicCell *_cell, const char *val,
 
    xaccSetQuickFillCellOriginal(cell, NULL);
 
-   return val;
+   return TRUE;
 }
 
 /* ================================================ */
 /* by definition, all text is valid text.  So accept
  * all modifications */
 
-static const char * 
+static void
 quick_modify (BasicCell *_cell,
-              const char *oldval, 
               const char *change, 
               const char *newval,
               int *cursor_position,
@@ -91,7 +88,6 @@ quick_modify (BasicCell *_cell,
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
    const char *match_str;
-   const char *retval;
    QuickFill *match;
 
    /* If deleting, just accept */
@@ -109,20 +105,20 @@ quick_modify (BasicCell *_cell,
        xaccSetQuickFillCellOriginal(cell, NULL);
 
      SET (&(cell->cell), newval);
-     return newval;
+     return;
    }
 
    /* If we are inserting in the middle, just accept */
-   if (*cursor_position < strlen(oldval))
+   if (*cursor_position < strlen(_cell->value))
    {
      SET (&(cell->cell), newval);
      xaccSetQuickFillCellOriginal(cell, NULL);
-     return newval;
+     return;
    }
 
    if (cell->original == NULL)
      cell->original = g_strdup(newval);
-   else if (strcasecmp(cell->original, oldval) == 0)
+   else if (strcasecmp(cell->original, _cell->value) == 0)
    {
      char *original = g_strconcat(cell->original, change, NULL);
      g_free(cell->original);
@@ -134,45 +130,37 @@ quick_modify (BasicCell *_cell,
      cell->original = NULL;
    }
 
-   match = gnc_quickfill_get_string_match (cell->qfRoot, newval);
+   match = gnc_quickfill_get_string_match (cell->qf, newval);
 
    match_str = gnc_quickfill_string (match);
 
-   if ((match == NULL) || (match_str == NULL))
+   if (match_str == NULL)
    {
      if (cell->original != NULL)
-       retval = g_strdup(cell->original);
-     else
-       retval = newval;
+       newval = cell->original;
 
      *cursor_position = -1;
 
-     SET (&(cell->cell), retval);
-     return retval;
+     SET (&(cell->cell), newval);
+     return;
    }
-
-   retval = g_strdup(match_str);
 
    *start_selection = strlen(newval);
    *end_selection = -1;
    *cursor_position += strlen(change);
 
-   SET (&(cell->cell), retval);
-   return retval;
+   SET (&(cell->cell), match_str);
 }
 
 /* ================================================ */
 /* when leaving cell, make sure that text was put into the qf */
 
-static const char * 
-quick_leave (BasicCell *_cell, const char *val) 
+static void
+quick_leave (BasicCell * _cell) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
-   cell->qf = cell->qfRoot;
-   gnc_quickfill_insert (cell->qfRoot, val, cell->sort);
-
-   return val;
+   gnc_quickfill_insert (cell->qf, _cell->value, cell->sort);
 }
 
 /* ================================================ */
@@ -196,8 +184,7 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 {
    xaccInitBasicCell (&(cell->cell));
 
-   cell->qfRoot = gnc_quickfill_new ();
-   cell->qf = cell->qfRoot;
+   cell->qf = gnc_quickfill_new ();
    cell->sort = QUICKFILL_LIFO;
    cell->original = NULL;
 
@@ -214,8 +201,7 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 void
 xaccDestroyQuickFillCell (QuickFillCell *cell)
 {
-   gnc_quickfill_destroy (cell->qfRoot);
-   cell->qfRoot = NULL;
+   gnc_quickfill_destroy (cell->qf);
    cell->qf = NULL;
 
    g_free(cell->original);
@@ -234,8 +220,11 @@ xaccDestroyQuickFillCell (QuickFillCell *cell)
 void
 xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 {
-   gnc_quickfill_insert (cell->qfRoot, value, cell->sort);
-   SET (&(cell->cell), value);
+  if (cell == NULL)
+    return;
+
+  gnc_quickfill_insert (cell->qf, value, cell->sort);
+  SET (&(cell->cell), value);
 }
 
 /* ================================================ */
@@ -263,6 +252,17 @@ xaccSetQuickFillCellOriginal (QuickFillCell *cell, const char *original)
     cell->original = g_strdup(original);
   else
     cell->original = NULL;
+}
+
+/* ================================================ */
+
+void
+xaccQuickFillAddCompletion (QuickFillCell *cell, const char *completion)
+{
+  if (cell == NULL)
+    return;
+
+  gnc_quickfill_insert (cell->qf, completion, cell->sort);
 }
 
 /* =============== END OF FILE ==================== */

@@ -74,9 +74,11 @@ static gint         gtk_select_list_enter      (GtkWidget        *widget,
 static gint         gtk_select_list_key_press  (GtkWidget     *widget, 
                                                GdkEventKey   *event, 
                                                GtkSelect      *select);
-//static gint         gtk_select_entry_key_press (GtkEntry      *widget, 
-//                                               GdkEventKey   *event, 
-//                                               GtkSelect      *select);
+#if 0
+static gint         gtk_select_entry_key_press (GtkEntry      *widget, 
+                                               GdkEventKey   *event, 
+                                               GtkSelect      *select);
+#endif
 static void         gtk_select_size_allocate   (GtkWidget     *widget,
 					       GtkAllocation *allocation);
 

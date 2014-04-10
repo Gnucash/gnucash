@@ -93,7 +93,7 @@
 ;; This function take a C split and returns a representation
 ;; of it as a split-structure. Assumes the transaction is open
 ;; for editing.
-(define (gnc:split->split-scm split)
+(define (gnc:split->split-scm split use-cut-semantics?)
   (gnc:make-split-scm
    (gnc:split-get-guid split)
    (gnc:account-get-guid (gnc:split-get-account split))
@@ -126,7 +126,7 @@
                         (gnc:split-scm-get-account-guid split-scm))))
           (if (and account (gnc:account-can-insert-split? account split))
               (begin
-                (gnc:account-begin-edit account 1)
+                (gnc:account-begin-edit account)
                 (gnc:account-insert-split account split)
                 (gnc:account-commit-edit account)))))))
 
@@ -135,12 +135,6 @@
   (let ((currency (gnc:account-get-currency account))
         (security (gnc:account-get-security account))
         (trans    (gnc:split-get-parent split)))
-
-    ;; fixme: This is a temporary fix of a g-wrap problem.
-    (if (not currency)
-        (set! currency ""))
-    (if (not security)
-        (set! security ""))
 
     (or (< (gnc:transaction-get-split-count trans) 2)
         (gnc:transaction-is-common-currency trans currency)
@@ -219,18 +213,22 @@
 
 ;; This function takes a C transaction and returns
 ;; a representation of it as a transaction-structure.
-(define (gnc:transaction->transaction-scm trans)
+(define (gnc:transaction->transaction-scm trans use-cut-semantics?)
   (define (trans-splits i)
     (let ((split (gnc:transaction-get-split trans i)))
       (if (pointer-token-null? split)
           '()
-          (cons (gnc:split->split-scm split)
+          (cons (gnc:split->split-scm split use-cut-semantics?)
                 (trans-splits (+ i 1))))))
   (gnc:make-transaction-scm
    (gnc:transaction-get-guid trans)
    (gnc:transaction-get-date-entered trans)
-   (gnc:transaction-get-date-posted trans)
-   (gnc:transaction-get-num trans)
+   (if use-cut-semantics?
+       (gnc:transaction-get-date-posted trans)
+       #f)
+   (if use-cut-semantics?
+       (gnc:transaction-get-num trans)
+       #f)
    (gnc:transaction-get-description trans)
    (trans-splits 0)))
 

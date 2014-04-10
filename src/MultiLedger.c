@@ -272,6 +272,45 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
   (regData->set_help)(regData, help_str);
 }
 
+static gpointer
+xaccGUIDMalloc (void)
+{
+  GUID *guid;
+
+  guid = g_new(GUID, 1);
+
+  *guid = *xaccGUIDNULL();
+
+  return guid;
+}
+
+static void
+xaccGUIDFree (gpointer _guid)
+{
+  GUID *guid = _guid;
+
+  if (guid == NULL)
+    return;
+
+  *guid = *xaccGUIDNULL();
+
+  g_free(guid);
+}
+
+static void
+xaccGUIDCopy (gpointer _to, gconstpointer _from)
+{
+  GUID *to = _to;
+  const GUID *from = _from;
+
+  g_return_if_fail(to != NULL);
+
+  if (from == NULL)
+    *to = *xaccGUIDNULL();
+  else
+    *to = *from;
+}
+
 /********************************************************************\
  * xaccLedgerDisplayGeneral                                         *
  *   opens up a ledger window for a list of accounts                *
@@ -371,7 +410,12 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  regData->ledger = xaccMallocSplitRegister (type, style);
+  regData->ledger = xaccMallocSplitRegister (type, style,
+                                             xaccSRGetEntryHandler,
+                                             xaccSRGetFGColorHandler,
+                                             xaccGUIDMalloc,
+                                             xaccGUIDFree,
+                                             xaccGUIDCopy);
 
   xaccSRSetData(regData->ledger, regData,
                 xaccLedgerDisplayParent,
@@ -408,10 +452,10 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 
   /* provide some convenience data for the the GUI window.
    * If the GUI wants to display yet other stuff, it's on its own. */
-  regData->balance = xaccAccountGetBalance (regData->leader);
-  regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
+  regData->balance = DxaccAccountGetBalance (regData->leader);
+  regData->clearedBalance = DxaccAccountGetClearedBalance (regData->leader);
   regData->reconciledBalance = 
-    xaccAccountGetReconciledBalance(regData->leader);
+    DxaccAccountGetReconciledBalance(regData->leader);
 
   /* OK, now tell this specific GUI window to redraw itself ... */
   if (regData->redraw)

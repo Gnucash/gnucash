@@ -40,7 +40,7 @@
 #include "BackendP.h"
 #include "GNCId.h"
 #include "Transaction.h"
-
+#include "gnc-numeric.h"
 
 /** STRUCTS *********************************************************/
 struct _account_group {
@@ -56,7 +56,7 @@ struct _account_group {
   Backend *backend;                /* persistant storage backend */
 
   /* cached parameters */
-  double balance;
+  gnc_numeric balance;
 };
 
 #endif /* __XACC_ACCOUNT_GROUP_P_H__ */

@@ -22,17 +22,16 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include "gnc-commodity.h"
 
 #include "EuroUtils.h"
 
 /* local structs */
-
-typedef struct _gnc_euro_rate_struct
-{
+typedef struct _gnc_euro_rate_struct {
   const char *currency;
   double rate;
-}
-gnc_euro_rate_struct;
+} gnc_euro_rate_struct;
+
 
 /* This array MUST be sorted ! */
 static gnc_euro_rate_struct _gnc_euro_rate_[] =
@@ -64,33 +63,35 @@ static gnc_euro_rate_struct _gnc_euro_rate_[] =
   { "SCH",  13.7603 }   /* austrian schilling */
 };
 
-static int
-_gnc_euro_rate_compare_(const void *euro_rate_struct1,
-                        const void *euro_rate_struct2)
+static int 
+_gnc_euro_rate_compare_(const void * key, 
+                        const void * value)
 {
-  return (strcasecmp(((const gnc_euro_rate_struct *)euro_rate_struct1)->currency,
-		     ((const gnc_euro_rate_struct *)euro_rate_struct2)->currency));
+  const gnc_commodity * curr = key;
+  const gnc_euro_rate_struct * euro = value;
+  if(!key || !value) return -1;
+
+  return strcasecmp(gnc_commodity_get_mnemonic(curr), euro->currency);
+
 }
 
 /* ------------------------------------------------------ */
 
-int
-gnc_is_euro_currency(const char *currency)
-{
-  gnc_euro_rate_struct test_currency;
+int 
+gnc_is_euro_currency(const gnc_commodity * currency) {
+
   gnc_euro_rate_struct *result;
-
-  test_currency.currency = currency;
-  result = (gnc_euro_rate_struct *)bsearch(&test_currency, _gnc_euro_rate_,
-					   sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), sizeof(gnc_euro_rate_struct),
-					   _gnc_euro_rate_compare_);
-
-  if(result == NULL)
-  {
+  
+  result = (gnc_euro_rate_struct *)
+    bsearch(currency, _gnc_euro_rate_,
+            sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), 
+            sizeof(gnc_euro_rate_struct),
+            _gnc_euro_rate_compare_);
+  
+  if(result == NULL) {
     return 0;
   }
-  else
-  {
+  else {
     return 1;
   }
 }
@@ -98,45 +99,42 @@ gnc_is_euro_currency(const char *currency)
 /* ------------------------------------------------------ */
 
 double
-gnc_convert_to_euro(const char *currency, double value)
-{
-  gnc_euro_rate_struct test_currency;
+gnc_convert_to_euro(const gnc_commodity * currency, double value) {
+  
   gnc_euro_rate_struct *result;
 
-  test_currency.currency = currency;
-  result = (gnc_euro_rate_struct *)bsearch(&test_currency, _gnc_euro_rate_,
-					   sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), sizeof(gnc_euro_rate_struct),
-					   _gnc_euro_rate_compare_);
-
-  if(result == NULL)
-  {
+  result = (gnc_euro_rate_struct *)
+    bsearch(currency, _gnc_euro_rate_,
+            sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), 
+            sizeof(gnc_euro_rate_struct),
+            _gnc_euro_rate_compare_);
+  
+  if(result == NULL) {
     return 0.0;
   }
-  else
-  {
-    return (floor(((value / result->rate) * 100.0) + 0.5) / 100.0); /* round to 2 decimal places */
+  else {
+    /* round to 2 decimal places */
+    return (floor(((value / result->rate) * 100.0) + 0.5) / 100.0); 
   }
 }
 
 /* ------------------------------------------------------ */
 
-double
-gnc_convert_from_euro(const char *currency, double value)
-{
-  gnc_euro_rate_struct test_currency;
-  gnc_euro_rate_struct *result;
-
-  test_currency.currency = currency;
-  result = (gnc_euro_rate_struct *)bsearch(&test_currency, _gnc_euro_rate_,
-					   sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), sizeof(gnc_euro_rate_struct),
-					   _gnc_euro_rate_compare_);
-
-  if(result == NULL)
-  {
+double 
+gnc_convert_from_euro(const gnc_commodity * currency, double value) {
+  
+  gnc_euro_rate_struct * result;
+  
+  result = (gnc_euro_rate_struct *)
+    bsearch(currency, _gnc_euro_rate_,
+            sizeof(_gnc_euro_rate_)/sizeof(gnc_euro_rate_struct), 
+            sizeof(gnc_euro_rate_struct),
+            _gnc_euro_rate_compare_);
+  
+  if(result == NULL) {
     return 0.0;
   }
-  else
-  {
+  else {
     return (value * result->rate);
   }
 }

@@ -51,14 +51,12 @@
 typedef struct _QuickFillCell
 {
   BasicCell cell;
-  QuickFill *qfRoot;       /* root of quickfill-tree 
-                            * handled by this cell */
-  QuickFill *qf;           /* current position in tree */
+  QuickFill *qf;       /* quickfill-tree handled by this cell */
 
-  QuickFillSort sort;      /* determines order of strings matched.
-                            * default is QUICKFILL_LIFO. */
+  QuickFillSort sort;  /* determines order of strings matched.
+                        * default is QUICKFILL_LIFO. */
 
-  char *original;          /* original string entered in original case */
+  char *original;      /* original string entered in original case */
 } QuickFillCell;
 
 QuickFillCell *  xaccMallocQuickFillCell (void);
@@ -71,6 +69,9 @@ void             xaccSetQuickFillCellSort (QuickFillCell *cell,
                                            QuickFillSort sort);
 void             xaccSetQuickFillCellOriginal (QuickFillCell *cell,
                                                const char *original);
+
+void             xaccQuickFillAddCompletion (QuickFillCell *cell,
+                                             const char *completion);
 
 /* GUI-dependent */
 void             xaccQuickFillGUIInit (QuickFillCell *cell);

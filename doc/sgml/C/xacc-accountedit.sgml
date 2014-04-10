@@ -1,13 +1,12 @@
 
 <ARTICLE ID="XACC-ACCOUNTEDIT">
 <ARTHEADER>
-<TITLE>Editing Account Parameters</TITLE>
+<TITLE>Editing an Account</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> Editing Account Parameters</TITLE>
-<PARA>    </PARA>
+<TITLE>Editing an Account</TITLE>
 <PARA>The "Edit Account" dialog box lets you change the properties
-    of an account. You can access this via the "edit" button of the
+    of an account. Access this via the "edit" button of the
     main window toolbar, the "Accounts" menu, or via the keyboard
     shortcuts. For a description of the uses of the various
     properties, see the information about <LINK LINKEND="XACC-NEWACCTWIN">new accounts</LINK>.

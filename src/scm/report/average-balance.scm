@@ -370,7 +370,9 @@
                                                          (cons 'query-op 1)))
                    accounts)
 
-              (set! acctcurrency (gnc:account-get-currency (car accounts)))
+              (set! acctcurrency 
+                    (gnc:commodity-get-printname 
+                     (gnc:account-get-currency (car accounts))))
 
               (set! report-lines 
                     (gnc:convert-split-list (gnc:query-get-splits gncq)))

@@ -39,6 +39,7 @@
 enum
 {
   TOGGLE_RECONCILED,
+  DOUBLE_CLICK_SPLIT,
   LAST_SIGNAL
 };
 
@@ -115,10 +116,10 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);
 
   if (type == RECLIST_CREDIT)
-    xaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
+    DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
                             AMT_MATCH_ATLEAST, QUERY_AND);
   else
-    xaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
+    DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
                             AMT_MATCH_ATLEAST, QUERY_AND);
 
   return GTK_WIDGET(list);
@@ -181,23 +182,24 @@ gnc_reconcile_list_init(GNCReconcileList *list)
 
     list->reconciled_style = gtk_style_copy(style);
 
-#if !USE_NO_COLOR
-    style = list->reconciled_style;
+    if (gnc_color_deficits())
+    {
+      style = list->reconciled_style;
 
-    /* A dark green */
-    style->fg[GTK_STATE_NORMAL].red   = 0;
-    style->fg[GTK_STATE_NORMAL].green = 40000;
-    style->fg[GTK_STATE_NORMAL].blue  = 0;
+      /* A dark green */
+      style->fg[GTK_STATE_NORMAL].red   = 0;
+      style->fg[GTK_STATE_NORMAL].green = 40000;
+      style->fg[GTK_STATE_NORMAL].blue  = 0;
 
-    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
+      gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
 
-    /* A nice yellow */
-    style->fg[GTK_STATE_SELECTED].red   = 65280;
-    style->fg[GTK_STATE_SELECTED].green = 62976;
-    style->fg[GTK_STATE_SELECTED].blue  = 36608;
+      /* A nice yellow */
+      style->fg[GTK_STATE_SELECTED].red   = 65280;
+      style->fg[GTK_STATE_SELECTED].green = 62976;
+      style->fg[GTK_STATE_SELECTED].blue  = 36608;
 
-    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_SELECTED], FALSE, TRUE);
-#endif
+      gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_SELECTED], FALSE, TRUE);
+    }
   }
 }
 
@@ -226,6 +228,16 @@ gnc_reconcile_list_class_init(GNCReconcileListClass *klass)
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
 
+  reconcile_list_signals[DOUBLE_CLICK_SPLIT] =
+    gtk_signal_new("double_click_split",
+		   GTK_RUN_FIRST,
+		   object_class->type,
+		   GTK_SIGNAL_OFFSET(GNCReconcileListClass,
+				     double_click_split),
+		   gtk_marshal_NONE__POINTER,
+		   GTK_TYPE_NONE, 1,
+		   GTK_TYPE_POINTER);
+
   gtk_object_class_add_signals(object_class,
 			       reconcile_list_signals,
 			       LAST_SIGNAL);
@@ -236,6 +248,7 @@ gnc_reconcile_list_class_init(GNCReconcileListClass *klass)
   clist_class->unselect_row = gnc_reconcile_list_unselect_row;
 
   klass->toggle_reconciled = NULL;
+  klass->double_click_split = NULL;
 }
 
 static void
@@ -289,8 +302,7 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   gnc_reconcile_list_set_row_style(list, row, reconciled);
 
   gtk_signal_emit(GTK_OBJECT(list),
-		  reconcile_list_signals[TOGGLE_RECONCILED],
-		  split);
+                  reconcile_list_signals[TOGGLE_RECONCILED], split);
 }
 
 static void
@@ -303,6 +315,16 @@ gnc_reconcile_list_select_row(GtkCList *clist, gint row, gint column,
   gnc_reconcile_list_toggle(list);
 
   GTK_CLIST_CLASS(parent_class)->select_row(clist, row, column, event);
+
+  if (event && (event->type == GDK_2BUTTON_PRESS))
+  {
+    Split *split;
+
+    split = gtk_clist_get_row_data(clist, row);
+
+    gtk_signal_emit(GTK_OBJECT(list),
+                    reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
+  }
 }
 
 static void
@@ -319,6 +341,16 @@ gnc_reconcile_list_unselect_row(GtkCList *clist, gint row, gint column,
   }
 
   GTK_CLIST_CLASS(parent_class)->unselect_row(clist, row, column, event);
+
+  if (event && (event->type == GDK_2BUTTON_PRESS))
+  {
+    Split *split;
+
+    split = gtk_clist_get_row_data(clist, row);
+
+    gtk_signal_emit(GTK_OBJECT(list),
+                    reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
+  }
 }
 
 static void
@@ -481,9 +513,9 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
 
     if ((account_type == STOCK) || (account_type == MUTUAL) ||
         (account_type == CURRENCY))
-      total += xaccSplitGetShareAmount(split);
+      total += DxaccSplitGetShareAmount(split);
     else
-      total += xaccSplitGetValue(split);
+      total += DxaccSplitGetValue(split);
   }
 
   return DABS(total);
@@ -602,7 +634,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Split **splits;
   Split *split;
 
-  const char *currency;
+  const gnc_commodity * currency;
   char recn;
 
   double amount;
@@ -629,9 +661,9 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
       continue;
 
     if((account_type == STOCK) || (account_type == MUTUAL))
-      amount = xaccSplitGetShareAmount(split);
+      amount = DxaccSplitGetShareAmount(split);
     else
-      amount = xaccSplitGetValue(split);
+      amount = DxaccSplitGetValue(split);
 
     if ((amount < 0) && (list->list_type == RECLIST_DEBIT))
       continue;
@@ -645,7 +677,8 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = gnc_print_date(ts);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
+    strings[3] = DxaccPrintAmount(DABS(amount), flags, 
+                                 gnc_commodity_get_mnemonic(currency));
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
     recn = reconciled ? YREC : recn;

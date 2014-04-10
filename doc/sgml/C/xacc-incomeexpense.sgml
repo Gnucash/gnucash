@@ -130,65 +130,55 @@ section deals with the more basic recording of incomes and expenses.
     values, and <EMPHASIS>credits</EMPHASIS> are represented by negative values,
     the income/expense accounts do a slightly non-intuitive thing
     and you see incomes as <EMPHASIS>negative</EMPHASIS> values. That <EMPHASIS>    appears</EMPHASIS> contrary to intuition, but is nonetheless
-    necessary in order for the <LINK LINKEND="IDENTITY">    double-entry bookkeeping identity to hold true.</LINK>
+    necessary in order for the 
+    <LINK LINKEND="IDENTITY">double-entry bookkeeping identity to hold true.</LINK>
 
     </PARA>
-<PARA>Another way in which income and expense accounts are special
-    is that their account totals do not directly appear on a
+<PARA>Income and expense accounts are also special, in
+    that their account totals do not directly appear on a
     balance sheet. A balance sheet shows "Net Worth": the sum of
     all assets minus all liabilities.
-
-    </PARA>
-<PARA>Income and expenses are neither assets nor liabilities, and
+    Income and expenses are neither assets nor liabilities, and
     so do not appear on the balance sheet. What appears on the
     balance sheet is their effects on <EMPHASIS>equity.</EMPHASIS>
 
     </PARA>
-<PARA>There is a separate report, a "Profit and Loss" (P&amp;L)
-    report, to analyze income and expenses. The total profit (or
+<PARA>Another report, the "Profit and Loss" (P&amp;L)
+    report, analyzes income and expense. The total profit (or
     loss) is calculated as total income less total expenses. In a
     nicely symmetrical fashion, since assets and liabilities are
     neither income or expenses, <EMPHASIS>they</EMPHASIS> correspondingly do
     not appear on a P&amp;L statement.
 
     </PARA>
-<PARA>Even though these accounts may be somewhat "special", you do
+<PARA>While these accounts may be somewhat "special", you do
     not need to do anything particularly special to use income and
     expense accounts. GnuCash handles the values automatically, so
     that if you record properly the effects of the transactions on
     your bank account or credit card, the income/expense side of
-    the transaction should also be handled correctly.
-
-    </PARA>
-<PARA>The time when things get "peculiar," and when you need to
-    more deeply understand this, is when amounts are transferred
-    between income/expense accounts. (The <EMPHASIS>causes</EMPHASIS> for such
-    transfers tend to be somewhat peculiar, so it's pretty fair for
-    this to be a pretty odd situation.)
-
-    </PARA>
-<PARA>The words "Income" and "Expense" are beguilingly simple;
-    everyone <EMPHASIS>thinks</EMPHASIS> they know what they mean.
-    <EMPHASIS>The money I get is income, the money I spend is 
-    expense</EMPHASIS>, right?  Yes, but only in a very basic 
-    sense. This may be enough when doing personal accounting, but 
-    for a business, things get more complicated.
-    Income and expenses may be recognized as having occurred at a
+    the transaction should also be correctly handled.
+</PARA>
+<PARA>
+    Things only get "peculiar" when amounts are transferred
+    between income and expense accounts.   If you feel you need
+    to make such a transfer, then you will need to learn the 
+    more sophisticated concepts behind "accounts payable"
+    and "accounts receivable".  Such transfers typically 
+    occur in businesses, when income and expenses may occur at a
     moment that is different from the moment when cash actually moved 
     into or out of the business's bank accounts.
 
     </PARA>
 <PARA>For instance, companies usually recognize income
-    <EMPHASIS>when the sale occurs.</EMPHASIS> For example, 
-    that might mean that you recognize a $10,000 sale 
+    <EMPHASIS>when the sale occurs.</EMPHASIS>
+    That might mean that you recognize a $10,000 sale 
     <EMPHASIS>at the moment you and the customer
     shake hands on the deal.</EMPHASIS>
     Since the money hasn't actually come in, the sale has to be posted
     in another way.  You must <EMPHASIS>accrue</EMPHASIS> a sale
     at the time of the handshake.  To make the transaction balance, 
     you add the $10,000 sale to <EMPHASIS>Accounts
-    Receivable</EMPHASIS>,
-    rather than adding something in to cash.
+    Receivable</EMPHASIS>, rather than adding something in to cash.
     </PARA>
 <PARA>
     <EMPHASIS>Insider Knowledge:</EMPHASIS> When a sale is recognized
@@ -199,7 +189,7 @@ section deals with the more basic recording of incomes and expenses.
 </PARA>
 <PARA>
 (The documentiation should state  that 
-for more info, click to the a/r/ and a/p page).
+for more info, click to the a/r and a/p page).
 </PARA>
 
 </SECT1>
@@ -209,14 +199,11 @@ for more info, click to the a/r/ and a/p page).
     "New Account" dialogue window, and then be sure to transfer
     income/expenses to it as you record paychecks, interest,
     etc.
-
-    </PARA>
-<PARA>You will doubtless wish to create quite a number of income
-    and expense accounts; it may be worth looking at the <LINK LINKEND="XACC-SAMPLECHART">Sample Chart of Accounts</LINK> for
+    You will doubtless wish to create quite a number of income
+    and expense accounts; it may be worth looking at the 
+    <LINK LINKEND="XACC-SAMPLECHART">Sample Chart of Accounts</LINK> for
     ideas.
-
-    </PARA>
-<PARA>This partitioning of incomes and expenses is likely to prove
+    This partitioning of incomes and expenses is likely to prove
     particularly useful for North Americans when <EMPHASIS>income tax
     time</EMPHASIS> rolls around.
 

@@ -33,13 +33,12 @@
 #include <locale.h>
 
 #include "pricecell.h"
+#include "gnc-exp-parser.h"
 #include "util.h"
 
 
 static gboolean
 PriceDirect (BasicCell *bcell,
-	     const char *oldval,
-	     char **newval_ptr,
 	     int *cursor_position,
 	     int *start_selection,
 	     int *end_selection,
@@ -49,37 +48,72 @@ PriceDirect (BasicCell *bcell,
     GdkEventKey *event = gui_data;
     char decimal_point;
     struct lconv *lc = gnc_localeconv();
-  
+    char *newval;
+
     if (event->type != GDK_KEY_PRESS)
 	return FALSE;
-  
-    if (event->keyval != GDK_KP_Decimal)
-	return FALSE;
-  
+
+    switch (event->keyval)
+    {
+        case GDK_Return:
+            if (!cell->need_to_parse)
+                return FALSE;
+
+            if (!(event->state &
+                  (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
+                return FALSE;
+
+        case GDK_KP_Enter:
+            {
+                char *error_loc;
+                double amount;
+
+                if (!cell->need_to_parse)
+                    return FALSE;
+
+                if (gnc_exp_parser_parse(cell->cell.value, &amount, &error_loc))
+                    xaccSetPriceCellValue (cell, amount);
+                else
+                    *cursor_position = error_loc - cell->cell.value;
+
+                return TRUE;
+            }
+
+        case GDK_KP_Decimal:
+            break;
+
+        default:
+            return FALSE;
+    }
+
     if (cell->monetary)
 	decimal_point = lc->mon_decimal_point[0];
     else
 	decimal_point = lc->decimal_point[0];
 
     /* Only one decimal point allowed in price : */
-    if (strchr( oldval, decimal_point) != NULL)
+    if (strchr (bcell->value, decimal_point) != NULL)
 	return FALSE;
-  
+
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
-    (*newval_ptr) = g_new(char, strlen(oldval) + 2);
-  
+    newval = g_new (char, strlen(bcell->value) + 2);
+
     /* copy oldval up to the cursor position */
-    strncpy( *newval_ptr, oldval, *cursor_position);
-  
+    strncpy (newval, bcell->value, *cursor_position);
+
     /* insert the decimal_point at cursor position */
-    (*newval_ptr)[*cursor_position] = decimal_point;
+    newval[*cursor_position] = decimal_point;
 
     /* copy the end of oldval : */
-    strcpy( *newval_ptr + (*cursor_position) + 1, oldval + (*cursor_position));
+    strcpy (newval + (*cursor_position) + 1, bcell->value + (*cursor_position));
 
     /* update the cursor position */
     (*cursor_position)++;
+
+    xaccSetBasicCellValue (bcell, newval);
+
+    g_free(newval);
 
     return TRUE;
 }

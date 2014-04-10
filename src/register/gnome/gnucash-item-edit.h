@@ -77,7 +77,7 @@ typedef struct
         GdkGC *gc;
 
         /* Where are we */
-        int cell_col, cell_row, virt_col, virt_row;
+        VirtualLocation virt_loc;
 
         SheetBlockStyle  *style;
 } ItemEdit;
@@ -102,7 +102,7 @@ void item_edit_show_list (ItemEdit *item_edit);
 void item_edit_hide_list (ItemEdit *item_edit);
 
 gboolean item_edit_set_cursor_pos (ItemEdit *item_edit,
-                                   PhysicalLocation phys_loc, int x,
+                                   VirtualLocation virt_loc, int x,
                                    gboolean changed_cells,
                                    gboolean extend_selection);
 

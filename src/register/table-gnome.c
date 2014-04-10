@@ -119,7 +119,6 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);
-        sheet->split_register = sr;
         table = sheet->table;
 
         table->destroy = table_destroy_cb;
@@ -160,7 +159,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
                 name = gh_scm2newstr(gh_car (assoc), NULL);
                 ctype = xaccSplitRegisterGetCellTypeFromName (name);
                 if (name)
-                        free(name);
+                        free((void *)name);
 
                 if (ctype == NO_CELL)
                         continue;
@@ -173,8 +172,6 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         gnucash_sheet_set_header_widths (sheet, header_widths);
 
         gnucash_sheet_compile_styles (sheet);
-
-        gnc_table_refresh_header (table);
 
         gnucash_sheet_table_load (sheet);
         gnucash_sheet_cursor_set_from_table (sheet, TRUE);
@@ -203,33 +200,30 @@ gnc_table_refresh_gui (Table * table)
 
 void        
 gnc_table_refresh_cursor_gui (Table * table,
-                              CellBlock *curs,
-                              PhysicalLocation phys_loc,
+                              VirtualCellLocation vcell_loc,
                               gboolean do_scroll)
 {
         GnucashSheet *sheet;
-        PhysicalCell *pcell;
-        VirtualCellLocation vcell_loc;
 
-        if (!table || !table->ui_data || !curs)
+        if (!table || !table->ui_data)
                 return;
 
         g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
         /* if the current cursor is undefined, there is nothing to do. */
-        if (gnc_table_physical_cell_out_of_bounds (table, phys_loc))
+        if (gnc_table_virtual_cell_out_of_bounds (table, vcell_loc))
                 return;
 
         sheet = GNUCASH_SHEET(table->ui_data);
 
-        /* compute the physical bounds of the current cursor */
-        pcell = gnc_table_get_physical_cell (table, phys_loc);
-
-        vcell_loc = pcell->virt_loc.vcell_loc;
-
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
-        gnucash_sheet_block_set_from_table (sheet, vcell_loc);
-        gnucash_sheet_redraw_block (sheet, vcell_loc);
+        if (gnucash_sheet_block_set_from_table (sheet, vcell_loc))
+        {
+                gnucash_sheet_recompute_block_offsets (sheet);
+                gnucash_sheet_redraw_all (sheet);
+        }
+        else
+                gnucash_sheet_redraw_block (sheet, vcell_loc);
 }
 
 /* ================== end of file ======================= */

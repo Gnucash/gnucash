@@ -67,6 +67,11 @@
 		   (gnc:config-var-value-get gnc:*tip-file*)
 		   (gnc:config-var-value-get gnc:*load-path*)))))
 	(set! gnc:*tip-list* (read in-port))
+        (if (gnc:debugging?)
+            (for-each (lambda (list-strings)
+                        (gnc:register-translatable-strings
+                         (string-fold list-strings "\n")))
+                      gnc:*tip-list*))
 	(if (not (= (length gnc:*tip-list*)
                     (gnc:config-var-value-get gnc:*current-tip-number*)))
 	    (begin 
@@ -79,9 +84,10 @@
 	#f))
 
 (define (gnc:get-current-tip)
-  (string-fold (list-ref gnc:*tip-list*
-                         (gnc:config-var-value-get gnc:*current-tip-number*))
-               "\n"))
+  (gnc:_ (string-fold
+          (list-ref gnc:*tip-list*
+                    (gnc:config-var-value-get gnc:*current-tip-number*))
+          "\n")))
 
 (define (gnc:increment-tip-number)
   (let ((new-value (+ (gnc:config-var-value-get gnc:*current-tip-number*) 1)))
@@ -100,11 +106,11 @@
 
 (gnc:read-tips)
 
-(let ((mainopen-hook (gnc:hook-lookup 'main-window-opened-hook)))
-  (gnc:hook-add-dangler 
-   mainopen-hook
-   (lambda (window) 
-     (let ((tip-opt (gnc:lookup-global-option "General"
-                                              "Display \"Tip of the Day\"")))
-       (if (gnc:option-value tip-opt)
-           (gnc:ui-totd-dialog-create-and-run))))))
+;(let ((mainopen-hook (gnc:hook-lookup 'main-window-opened-hook)))
+;  (gnc:hook-add-dangler 
+;   mainopen-hook
+;   (lambda (window) 
+;     (let ((tip-opt (gnc:lookup-global-option "General"
+;                                              "Display \"Tip of the Day\"")))
+;       (if (gnc:option-value tip-opt)
+;           (gnc:ui-totd-dialog-create-and-run))))))

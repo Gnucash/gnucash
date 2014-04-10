@@ -50,6 +50,7 @@
 
 #include "config.h"
 #include "kvp_frame.h"
+#include "gnc-numeric.h"
 #include "Transaction.h"   /* for typedefs */
 #include "GNCId.h"
 
@@ -94,14 +95,6 @@ struct _split
    */ 
   char  * action;            /* Buy, Sell, Div, etc.                      */
 
-  /* The docref field is a hook for arbitrary additional user-assigned
-   * data, such as invoice numbers, clearing/posting reference numbers, 
-   * supporting document references, etc. This additional data should
-   * be encoded in a machine-readable format, e.g. a mime-type encapsulated
-   * form, which any key-value pairs being URL-encoded.
-   */
-  char * docref;
-
   /* kvp_data is a key-value pair database for storing simple 
    * "extra" information in splits, transactions, and accounts. 
    * it's NULL until accessed. */
@@ -112,8 +105,12 @@ struct _split
   char    reconciled;
   Timespec date_reconciled;  /* date split was reconciled                 */
 
-  double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
-  double  share_price;       /* the share price, ==1.0 for bank account   */
+  /* value is the amount of the account's currency involved,
+   * damount is the amount of the account's security.  For 
+   * bank-type accounts, currency == security and 
+   * value == damount. */
+  gnc_numeric  value;         
+  gnc_numeric  damount;  
 
   /* -------------------------------------------------------------- */
   /* Below follow some 'temporary' fields */
@@ -122,15 +119,13 @@ struct _split
    * all the splits in the account, up to and including this split.
    * These balances apply to a sorting order by date posted
    * (not by date entered). */
-  double  balance;
-  double  cleared_balance;
-  double  reconciled_balance;
+  gnc_numeric  balance;
+  gnc_numeric  cleared_balance;
+  gnc_numeric  reconciled_balance;
 
-  double  share_balance;
-  double  share_cleared_balance;
-  double  share_reconciled_balance;
-
-  double cost_basis;
+  gnc_numeric  share_balance;
+  gnc_numeric  share_cleared_balance;
+  gnc_numeric  share_reconciled_balance;
 };
 
 
@@ -154,14 +149,6 @@ struct _transaction
    * It is meant to be a short descriptive phrase.
    */
   char  * description;        
-
-  /* The docref field is a hook for arbitrary additional user-assigned
-   * data, such as invoice numbers, clearing/posting reference numbers, 
-   * supporting document references, etc. This additional data should
-   * be encoded in a machine-readable format, e.g. a mime-type encapsulated
-   * form, which any key-value pairs being URL-encoded.
-   */
-  char * docref;
 
   /* kvp_data is a key-value pair database for storing simple 
    * "extra" information in splits, transactions, and accounts. 
@@ -188,7 +175,6 @@ struct _transaction
    */
   Transaction *orig;
 };
-
 
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
@@ -252,5 +238,10 @@ void  xaccTransRemoveSplit (Transaction*, Split *);
 
 void xaccSplitRebalance (Split *);
 
+
+/* FIXME: this is probably wrong, but it'll have to wait until Bill
+   returns.  It's *ONLY* for file IO.  Don't use these elsewhere. */
+void xaccSplitSetValueDirectly(Split *s, gnc_numeric n);
+void xaccSplitSetQuantityDirectly(Split *s, gnc_numeric n);
 
 #endif /* __XACC_TRANSACTION_P_H__ */

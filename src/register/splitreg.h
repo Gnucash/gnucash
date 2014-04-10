@@ -29,14 +29,7 @@
  * It also determines the actual physical layout, arrangement
  * of columns, etc.
  *
- * Handles splits
- *
- * Hack alert -- finish documenting this
- *
- * The xaccConfigSplitRegister() subroutine allows the configuration 
- * of the register to be changed on the fly (dynamically).  In particular,
- * the register type, and/or the flags controlling the register display
- * can be changed on the fly. 
+ * See src/doc/design/gnucash-design.info for more information.
  *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
@@ -101,10 +94,6 @@ typedef enum
   PRIC_CELL,
   SHRS_CELL,
 
-  /* NCRED & NDEBT handle minus the usual quantities */
-  NCRED_CELL,
-  NDEBT_CELL,
-
   /* MXFRM is the "mirrored" transfer-from account */
   MXFRM_CELL,
 
@@ -143,11 +132,10 @@ typedef enum
 #define MOD_XTO    0x0080
 #define MOD_MEMO   0x0100
 #define MOD_AMNT   0x0200
-#define MOD_NAMNT  0x0400
-#define MOD_PRIC   0x0800
-#define MOD_SHRS   0x1000
-#define MOD_NEW    0x2000
-#define MOD_ALL    0x3fff
+#define MOD_PRIC   0x0400
+#define MOD_SHRS   0x0800
+#define MOD_NEW    0x1000
+#define MOD_ALL    0x1fff
 
 /* Types of cursors */
 typedef enum
@@ -157,15 +145,14 @@ typedef enum
   CURSOR_NONE
 } CursorClass;
 
-/* The value of NUM_CELLS should be larger than the number of 
- * cells defined in the structure below!
- */
-#define NUM_CELLS 25
 
 typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
 
-struct _SplitRegister {
+typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
+
+struct _SplitRegister
+{
    /* the table itself that implements the underlying GUI. */
    Table         * table;
 
@@ -194,26 +181,13 @@ struct _SplitRegister {
    PriceCell     * priceCell;
    PriceCell     * sharesCell;
 
-   PriceCell     * ncreditCell;
-   PriceCell     * ndebitCell;
-
-   /* The type of the register, must be one of the enumerated types
-    * named *_REGISTER, *_LEDGER, above */
    SplitRegisterType type;
-
    SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
-   int num_cols;
-   int num_header_rows;
-
-   int num_phys_rows;
-   int num_virt_rows;
-
-   int cursor_phys_row;
    int cursor_virt_row;
 
-   BasicCell *header_label_cells[NUM_CELLS];
+   BasicCell *header_cells[CELL_TYPE_COUNT];
 
    /* user_data allows users of this object to hang
     * private data onto it */
@@ -221,7 +195,7 @@ struct _SplitRegister {
 
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
-   void (* destroy) (SplitRegister *);
+   SplitRegisterDestroyCB destroy;
 };
 
 
@@ -253,14 +227,19 @@ typedef char* (*SRStringGetter) (SplitRegisterType);
 void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
 void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
-SplitRegister * xaccMallocSplitRegister (SplitRegisterType type,
-                                         SplitRegisterStyle style);
-void            xaccInitSplitRegister (SplitRegister *reg,
-                                       SplitRegisterType type,
-                                       SplitRegisterStyle style);
+SplitRegister *
+xaccMallocSplitRegister (SplitRegisterType type,
+                         SplitRegisterStyle style,
+                         TableGetEntryHandler entry_handler,
+                         TableGetFGColorHandler fg_color_handler,
+                         VirtCellDataAllocator allocator,
+                         VirtCellDataDeallocator deallocator,
+                         VirtCellDataCopy copy);
+
 void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterType type,
                                          SplitRegisterStyle style);
+
 void            xaccDestroySplitRegister (SplitRegister *reg);
 
 void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
@@ -282,21 +261,21 @@ CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
 /* Returns the type of the current cell */
 CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);
 
-/* Returns the type of the cell at the given physical row and column. */
+/* Returns the type of the cell at the given virtual row and column. */
 CellType        xaccSplitRegisterGetCellType (SplitRegister *reg,
-                                              PhysicalLocation phys_loc);
+                                              VirtualLocation virt_loc);
 
-/* Returns the physical row and column in the current cursor of the
+/* Returns the virtual location in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */
-gboolean        xaccSplitRegisterGetCellPhysLoc (SplitRegister *reg,
-                                                 CellType cell_type,
-                                                 VirtualCellLocation vcell_loc,
-                                                 PhysicalLocation *phys_loc);
+gboolean   xaccSplitRegisterGetCellLoc (SplitRegister *reg,
+                                        CellType cell_type,
+                                        VirtualCellLocation vcell_loc,
+                                        VirtualLocation *virt_loc);
 
-gboolean   xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg,
-                                                   CellType cell_type,
-                                                   PhysicalLocation *phys_loc);
+gboolean   xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg,
+                                               CellType cell_type,
+                                               VirtualLocation *virt_loc);
 
 /* Functions for working with split register buffers */
 SplitRegisterBuffer * xaccMallocSplitRegisterBuffer (void);

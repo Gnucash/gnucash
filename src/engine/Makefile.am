@@ -7,14 +7,12 @@ lib_LTLIBRARIES = libgncengine.la
 
 # Build hell from main.c and libhello.la
 libgncengine_la_SOURCES = \
-  AccInfo.c \
   Account.c \
   Backend.c \
   DateUtils.c \
   FileIO.c \
   Group.c \
   Query.c \
-  Queue.c \
   Scrub.c \
   Session.c \
   Transaction.c \
@@ -23,14 +21,18 @@ libgncengine_la_SOURCES = \
   util.c \
   GNCId.c \
   guid.c \
+  io-gncbin-r.c \
+  io-gncxml-r.c \
+  io-gncxml-w.c \
   md5.c \
-  kvp_frame.c
+  kvp_frame.c \
+  gnc-commodity.c\
+  gnc-numeric.c \
+  gnc-engine.c
 
-libgncengine_la_LDFLAGS = -version-info 1:1:1
+libgncengine_la_LDFLAGS = -version-info 2:1:1
 
 noinst_HEADERS = \
-  AccInfo.h \
-  AccInfoP.h \
   Account.h \
   AccountP.h \
   BackendP.h \
@@ -42,7 +44,6 @@ noinst_HEADERS = \
   Group.h \
   GroupP.h \
   Query.h \
-  Queue.h \
   Scrub.h \
   Session.h \
   TransLog.h \
@@ -51,17 +52,25 @@ noinst_HEADERS = \
   date.h \
   gnc-common.h \
   guid.h \
+  io-gncbin.h \
+  io-gncxml.h \
   md5.h \
   util.h \
-  kvp_frame.h
+  kvp_frame.h \
+  gnc-commodity.h \
+  gnc-numeric.h \
+  gnc-engine.h
 
 EXTRA_DIST = \
   .cvsignore \
   README.query-api \
+  README.gnc-numeric \
   design.txt \
   extensions.txt \
   kvp_doc.txt
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_XML_CFLAGS}
+
+LDADD = ${GNOME_XML_LIB}
 
 INCLUDES = -I..

@@ -27,34 +27,4 @@
 
 #include "Group.h"
 
-/** PROTOTYPES ******************************************************/
-/*
- * NOTE:
- * The Read and WriteAccountGroupFile routines should not be used directly.
- * They are not "safe" against file-locking errors.  Use the Session
- * object instead.
- *
- * These routines are implemented on top of the public xaccReadAccountGroup()
- * and xaccWriteAccountGroup() routines.
- * 
- * The xaccReadAccountGroupFile() method will open and read the indicated 
- *    filename.  It is expected that the file stores an "xac" format 
- *    gnucash data file.  It will return the contents of the file, 
- *    transcribed as an AccountGroup data structure.  If a read error
- *    occurred during reading, the returned value may or may not be 
- *    null. Use the xaccGetFileIOError() routine to check for read 
- *    errors.
- *
- * The xaccWriteAccountGroupFile() method will open the indicated
- *    file and write the indicated account group to it, in the 
- *    gnucash "xac" format.  It will also write out a time-stamped
- *    copy of the file into the same directory as the indicated file,
- *    with a filename of "file.YYYYMMDDHHMMSS.xac" where YYYYMMDDHHMMSS
- *    is replaced with the current year/month/day/hour/minute/second.
- *    Returns a negative number if an error occured.
- */
-AccountGroup *xaccReadAccountGroupFile  (const char *datafile);
-int           xaccWriteAccountGroupFile (const char *datafile,
-                                         AccountGroup *grp);
-
 #endif /* __XACC_FILEIO_P_H__ */

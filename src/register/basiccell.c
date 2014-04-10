@@ -76,7 +76,7 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->use_bg_color = 0;     /* ignore the color */
    cell->use_fg_color = 0;     /* ignore the color */
 
-   cell->value = NULL;
+   cell->value = g_strdup("");
    cell->blank_help = NULL;
    cell->set_value = NULL;
    cell->enter_cell = NULL;

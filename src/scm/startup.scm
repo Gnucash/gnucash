@@ -29,6 +29,8 @@
 (gnc:load "utilities.scm")
 (gnc:load "path.scm")
 (gnc:load "c-interface.scm")
+(gnc:load "commodity-table.scm")
+(gnc:load "engine-init.scm")
 (gnc:load "engine-interface.scm")
 (gnc:load "options.scm")
 (gnc:load "prefs.scm")

@@ -164,10 +164,12 @@ totd_next_cb(GtkWidget * widget, gpointer data)
 static void
 totd_close_cb(GtkWidget *widget, gpointer data)
 {
-  gboolean new_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
+  gboolean new_enabled =
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
+
   gtk_widget_destroy(GTK_WIDGET(win));
   win = NULL;
-  if(new_enabled != old_enabled)
+  if (new_enabled != old_enabled)
   {
     gnc_set_boolean_option("General", 
 			   "Display \"Tip of the Day\"",
@@ -175,7 +177,10 @@ totd_close_cb(GtkWidget *widget, gpointer data)
     gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");    
     if(new_enabled == FALSE)
     {
-      gnc_info_dialog(REENABLE_TIPS_MSG);
+      const char *message = _("You have disabled \"Tip of the Day\"\n"
+                              "You can re-enable tips from the General\n"
+                              "section of the Preferences menu");
+      gnc_info_dialog(message);
     }
   }
   return;

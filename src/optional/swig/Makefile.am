@@ -33,14 +33,12 @@ INCLUDES = \
 
 libgncswig_la_LIBADD = \
   @GLIB_LIBS@ \
-  ${top_srcdir}/src/engine/AccInfo.lo \
   ${top_srcdir}/src/engine/Account.lo \
   ${top_srcdir}/src/engine/DateUtils.lo \
   ${top_srcdir}/src/engine/FileIO.lo \
   ${top_srcdir}/src/engine/GNCId.lo \
   ${top_srcdir}/src/engine/Group.lo \
   ${top_srcdir}/src/engine/Query.lo \
-  ${top_srcdir}/src/engine/Queue.lo \
   ${top_srcdir}/src/engine/Scrub.lo \
   ${top_srcdir}/src/engine/Session.lo \
   ${top_srcdir}/src/engine/TransLog.lo \
@@ -52,14 +50,12 @@ libgncswig_la_LIBADD = \
   ${top_srcdir}/src/engine/md5.lo
 
 SWIG_INPUT_HDRS := \
-  ${top_srcdir}/src/engine/AccInfo.h \
   ${top_srcdir}/src/engine/Account.h \
   ${top_srcdir}/src/engine/DateUtils.h \
   ${top_srcdir}/src/engine/FileIO.h \
   ${top_srcdir}/src/engine/GNCId.h \
   ${top_srcdir}/src/engine/Group.h \
   ${top_srcdir}/src/engine/Query.h \
-  ${top_srcdir}/src/engine/Queue.h \
   ${top_srcdir}/src/engine/Scrub.h \
   ${top_srcdir}/src/engine/Session.h \
   ${top_srcdir}/src/engine/TransLog.h \

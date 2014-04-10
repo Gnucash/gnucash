@@ -68,12 +68,11 @@ RecnCellGetString(char reconciled_flag)
 
 /* ================================================ */
 
-static const char * 
-ToggleRecn (BasicCell *_cell,
-            const char *cur_val,
-            int *cursor_position,
-            int *start_selection,
-            int *end_selection)
+static gboolean
+RecnEnter (BasicCell *_cell,
+           int *cursor_position,
+           int *start_selection,
+           int *end_selection)
 {
   RecnCell *cell = (RecnCell *) _cell;
 
@@ -84,8 +83,13 @@ ToggleRecn (BasicCell *_cell,
      still perhaps not optimal. */
 
   if (cell->reconciled_flag == YREC)
-    if (!gnc_verify_dialog(CHANGE_RECN_MSG, TRUE))
-      return NULL;
+  {
+    const char *message = _("Do you really want to mark this transaction "
+                            "not reconciled?\nDoing so might make future "
+                            "reconciliation difficult!");
+    if (!gnc_verify_dialog(message, TRUE))
+      return FALSE;
+  }
 
   if (cell->reconciled_flag == NREC)
     cell->reconciled_flag = CREC;
@@ -94,7 +98,7 @@ ToggleRecn (BasicCell *_cell,
 
   xaccRecnCellSetFlag (cell, cell->reconciled_flag);
 
-  return g_strdup (_cell->value);
+  return FALSE;
 }
 
 /* ================================================ */
@@ -120,7 +124,7 @@ xaccInitRecnCell (RecnCell *cell)
 
   xaccRecnCellSetFlag(cell, NREC);
 
-  cell->cell.enter_cell = ToggleRecn;
+  cell->cell.enter_cell = RecnEnter;
 }
 
 /* ================================================ */

@@ -253,14 +253,20 @@ the account instead of opening a register." #f))
 'Enter'. Otherwise, move down one row." #f))
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Confirm before changing reconciled"
+  "h" "If selected, use a dialog to confirm a change to a reconciled \
+transaction." #t))
+
+(gnc:register-configuration-option
  (gnc:make-font-option
   "Register" "Register font"
-  "h" "The font to use in the register" (gnc:register-default-font)))
+  "i" "The font to use in the register" (gnc:register-default-font)))
 
 (gnc:register-configuration-option
  (gnc:make-font-option
   "Register" "Register hint font"
-  "i" "The font used to show hints in the register"
+  "j" "The font used to show hints in the register"
   (gnc:register-default-hint-font)))
 
 
@@ -416,12 +422,17 @@ the account instead of opening a register." #f))
   "General" "Display \"Tip of the Day\""
   "f" "Display hints for using GnuCash at startup" #t))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Display negative amounts in red"
+  "g" "Display negative amounts in red" #t))
+
 ; this option also changes the next option so that its
 ; selectability matches the state of this option.
 (gnc:register-configuration-option
  (gnc:make-complex-boolean-option
   "General" "Automatic Decimal Point"
-  "g" 
+  "h" 
   "Automatically insert a decimal point into values that are entered without one." 
   #f #f
   (lambda (x) (gnc:set-option-selectable-by-name "General"
@@ -431,7 +442,7 @@ the account instead of opening a register." #f))
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   "General" "Auto Decimal Places"
-  "h" "How many automatic decimal places will be filled in."
+  "i" "How many automatic decimal places will be filled in."
     ;; current range is 1-8 with default from the locale
     ( gnc:locale-decimal-places )  ;; default
     1.0 ;; lower bound
@@ -567,6 +578,10 @@ the current value of the path."
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__gui" "reg_column_widths" '()))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__exp_parser" "defined_variables" '()))
 
 
 ;; This needs to be after all the global options definitions

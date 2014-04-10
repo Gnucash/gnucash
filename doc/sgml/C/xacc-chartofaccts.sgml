@@ -5,17 +5,14 @@
 </ARTHEADER>
 <SECT1>
 <TITLE> Chart of Accounts</TITLE>
-<PARA>    </PARA>
-<PARA>Typically accounts are arranged as a tree, in hierarchical
-    form.
-
-    </PARA>
-<PARA>The main branches represent entire categories or groups,
+<PARA>
+    The Chart of Accounts is like a table of contents for your 
+    financial organization.  The best way to conceptualize a
+    chart of accounts is as a tree.
+    The main branches represent entire categories or groups,
     while the leaves of the tree denote individual bank accounts or
     expense categories.
-
-    </PARA>
-<PARA>When a summary report is requested, typically only the main
+    When a summary report is requested, typically only the main
     branches are shown in the report, rather than the individual
     accounts. For example, a chart of accounts might look like the
     following:
@@ -36,13 +33,13 @@
 </MSGTEXT></LITERAL>
 
     </PARA>
-<PARA>Note that accounts not only have names; they have <EMPHASIS>    codes,</EMPHASIS> in order to provide <EMPHASIS>order.</EMPHASIS> When a report is
+<PARA>Note that accounts not only have names; they have 
+    <EMPHASIS>codes,</EMPHASIS> in order to provide 
+    <EMPHASIS>order.</EMPHASIS> When a report is
     generated, the <ANCHOR ID="SORTORDER">sort order is determined by
     the numbering.
-
-    </PARA>
-<PARA>A sensible hierarchy generally will have the "leaf" accounts
-    end in non-zero digits, whilst parent nodes have increasing
+    It's customary to have the "leaf" accounts
+    end in non-zero digits, while parent nodes have increasing
     numbers of zeros. For instance, "cash" accounts might logically
     be arranged thus:
 
@@ -103,12 +100,14 @@
 
         </PARA>
 <PARA>When you <LINK LINKEND="XACC-NEWACCTWIN">create a new
-        account</LINK>, GnuCash offers a guess at what an appropriate
-        account code might be; you are free to change this. GnuCash
+        account</LINK>, GnuCash suggests an appropriate
+        account code; you are free to change this. GnuCash
         does not prevent duplicate numbering, although we would
         encourage you to avoid this. Account codes are treated as
         numbers in base-36, thus, if you run out of numbers, you
-        can use the letters, <KEYSYM>a</KEYSYM> through <KEYSYM>z</KEYSYM>.</PARA>
+        can use the letters, <KEYSYM>a</KEYSYM> through 
+        <KEYSYM>z</KEYSYM>.
+</PARA>
 </SECT1>
 <SECT1 ID="XACC-SAMPLECHART">
 <TITLE> A Sample Chart of Accounts</TITLE>

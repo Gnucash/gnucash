@@ -12,7 +12,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file class 
-;;  currency     : a string representing the file's currency unit
 ;;  xtns         : list of <qif-xtn>  
 ;;  accounts     : list of <qif-acct>  
 ;;  cats         : list of <qif-cat>  
@@ -23,10 +22,7 @@
   (make-simple-class 
    'qif-file 
    '(path                 ;; where file was loaded 
-     default-account      ;; guessed or specified default account name
-     default-account-type ;; either GNC-BANK-TYPE or GNC-STOCK-TYPE 
      y2k-threshold
-     currency             ;; this is a string.. no checking 
      xtns                
      accounts 
      cats
@@ -38,18 +34,6 @@
 (define qif-file:path 
   (simple-obj-getter <qif-file> 'path))
 
-(define qif-file:default-account 
-  (simple-obj-getter <qif-file> 'default-account))
-
-(define qif-file:set-default-account!
-  (simple-obj-setter <qif-file> 'default-account))
-
-(define qif-file:default-account-type 
-  (simple-obj-getter <qif-file> 'default-account-type))
-
-(define qif-file:set-default-account-type! 
-  (simple-obj-setter <qif-file> 'default-account-type))
-
 (define qif-file:set-path! 
   (simple-obj-setter <qif-file> 'path))
 
@@ -58,12 +42,6 @@
 
 (define qif-file:set-y2k-threshold!
   (simple-obj-setter <qif-file> 'y2k-threshold))
-
-(define qif-file:currency 
-  (simple-obj-getter <qif-file> 'currency))
-
-(define qif-file:set-currency!
-  (simple-obj-setter <qif-file> 'currency))
 
 (define qif-file:cats 
   (simple-obj-getter <qif-file> 'cats))
@@ -89,10 +67,8 @@
 (define qif-file:set-accounts!
   (simple-obj-setter <qif-file> 'accounts))
 
-(define (make-qif-file account currency) 
+(define (make-qif-file) 
   (let ((self (make-simple-obj <qif-file>)))
-    (qif-file:set-default-account! self account)
-    (qif-file:set-currency! self currency)
     (qif-file:set-y2k-threshold! self 50)
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
@@ -108,7 +84,8 @@
 (define <qif-split>
   (make-simple-class 
    'qif-split
-   '(category class memo amount category-is-account? matching-cleared mark)))
+   '(category class memo amount category-is-account? matching-cleared mark
+              miscx-category miscx-is-account? miscx-class)))
 
 (define qif-split:category 
   (simple-obj-getter <qif-split> 'category))
@@ -121,11 +98,17 @@
           (qif-split:parse-category self value))
          (cat-name (list-ref cat-info 0))
          (is-account? (list-ref cat-info 1))
-         (class-name (list-ref cat-info 2)))
+         (class-name (list-ref cat-info 2))
+         (miscx-name (list-ref cat-info 3))
+         (miscx-is-account? (list-ref cat-info 4))
+         (miscx-class (list-ref cat-info 5)))
     (qif-split:set-category-private! self cat-name)
     (qif-split:set-class! self class-name)
-    (qif-split:set-category-is-account?! self is-account?)))
-
+    (qif-split:set-category-is-account?! self is-account?)
+    (qif-split:set-miscx-category! self miscx-name)
+    (qif-split:set-miscx-is-account?! self miscx-is-account?)
+    (qif-split:set-miscx-class! self miscx-class)))
+    
 (define qif-split:class 
   (simple-obj-getter <qif-split> 'class))
 
@@ -162,11 +145,28 @@
 (define qif-split:set-category-is-account?! 
   (simple-obj-setter <qif-split> 'category-is-account?))
 
+(define qif-split:miscx-is-account? 
+  (simple-obj-getter <qif-split> 'miscx-is-account?))
+
+(define qif-split:set-miscx-is-account?!
+  (simple-obj-setter <qif-split> 'miscx-is-account?))
+
+(define qif-split:miscx-category 
+  (simple-obj-getter <qif-split> 'miscx-category))
+
+(define qif-split:set-miscx-category!
+  (simple-obj-setter <qif-split> 'miscx-category))
+
+(define qif-split:miscx-class 
+  (simple-obj-getter <qif-split> 'miscx-class))
+
+(define qif-split:set-miscx-class!
+  (simple-obj-setter <qif-split> 'miscx-class))
+
 (define (make-qif-split)
   (let ((self (make-simple-obj <qif-split>)))
     (qif-split:set-category! self "")
     self))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -175,7 +175,7 @@
 ;;  [P] payee      : string 
 ;;  [N] number (check number, sell, or buy)
 ;;  [C] cleared    : parsed (x/X/*) ;
-;;  [T] amount     : parsed, units are currency from <qif-file>. 
+;;  [T] amount     : parsed, units are currency of dest account
 ;;  [I] share price : parsed
 ;;  [Q] number of shares
 ;;  [Y] name of security 
@@ -486,3 +486,59 @@
           (set! namestring (string-replace-char! namestring #\_ #\space))
           namestring)
         "QIF Import")))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; qif-map-entry class
+;; information for mapping a QIF account/category name to a
+;; gnucash name.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define <qif-map-entry>
+  (make-simple-class
+   'qif-map-entry
+   '(qif-name       ;; set while parsing file 
+     allowed-types  ;; set while parsing file 
+     description    ;; from QIF acct, if there is one 
+     gnc-name       ;; set from guess-map 
+     new-acct?      ;; set from guess-map
+     display?)))    ;; set when non-zero transactions 
+
+(define (make-qif-map-entry)
+  (make-simple-obj <qif-map-entry>))
+
+(define qif-map-entry:qif-name
+  (simple-obj-getter <qif-map-entry> 'qif-name))
+
+(define qif-map-entry:set-qif-name!
+  (simple-obj-setter <qif-map-entry> 'qif-name))
+
+(define qif-map-entry:allowed-types
+  (simple-obj-getter <qif-map-entry> 'allowed-types))
+
+(define qif-map-entry:set-allowed-types!
+  (simple-obj-setter <qif-map-entry> 'allowed-types))
+
+(define qif-map-entry:description
+  (simple-obj-getter <qif-map-entry> 'description))
+
+(define qif-map-entry:set-description!
+  (simple-obj-setter <qif-map-entry> 'description))
+
+(define qif-map-entry:gnc-name
+  (simple-obj-getter <qif-map-entry> 'gnc-name))
+
+(define qif-map-entry:set-gnc-name!
+  (simple-obj-setter <qif-map-entry> 'gnc-name))
+
+(define qif-map-entry:new-acct?
+  (simple-obj-getter <qif-map-entry> 'new-acct?))
+
+(define qif-map-entry:set-new-acct?!
+  (simple-obj-setter <qif-map-entry> 'new-acct?))
+
+(define qif-map-entry:display?
+  (simple-obj-getter <qif-map-entry> 'display?))
+
+(define qif-map-entry:set-display?!
+  (simple-obj-setter <qif-map-entry> 'display?))

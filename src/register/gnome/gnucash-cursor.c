@@ -48,22 +48,25 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor, gint *x, gint *y,
 				 gint *w, gint *h)
 {
         GnucashSheet *sheet = cursor->sheet;
-        GnucashItemCursor *item_cursor =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
+        GnucashItemCursor *item_cursor;
+        VirtualCellLocation vcell_loc;
+        SheetBlock *block;
 
-        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(cursor->sheet), NULL, y);
+        item_cursor =
+                GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
 
-        *y += gnucash_sheet_row_get_distance (sheet, sheet->top_block,
-					      item_cursor->row)
-                + sheet->top_block_offset;
-        *x = gnucash_sheet_col_get_distance (sheet, item_cursor->row, sheet->left_block,
-					      item_cursor->col)
-                + sheet->left_block_offset;
+        vcell_loc.virt_row = item_cursor->row;
+        vcell_loc.virt_col = item_cursor->col;
 
-        *h = gnucash_sheet_row_get_distance (sheet, item_cursor->row,
-					     item_cursor->row + 1);
-        *w = gnucash_sheet_col_get_distance (sheet, item_cursor->row, item_cursor->col,
-					     item_cursor->col + 1);
+        block = gnucash_sheet_get_block (sheet, vcell_loc);
+        if (block == NULL)
+                return;
+
+        *y = block->origin_y;
+        *x = block->origin_x;
+
+        *h = block->style->dimensions->height;
+        *w = block->style->dimensions->width;
 }
 
 
@@ -93,44 +96,10 @@ gnucash_cursor_set_style (GnucashCursor  *cursor, SheetBlockStyle *style)
 
 
 void
-gnucash_cursor_get_phys (GnucashCursor *cursor, PhysicalLocation *phys_loc)
-{
-        Table *table;
-        VirtualCell *vcell;
-        VirtualLocation virt_loc;
-
-        g_return_if_fail (cursor != NULL);
-        g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
-
-        table = cursor->sheet->table;
-
-        virt_loc.vcell_loc.virt_row =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->row;
-        virt_loc.vcell_loc.virt_col =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->col;
-
-        virt_loc.phys_row_offset =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->row;
-        virt_loc.phys_col_offset =
-		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->col;
-
-        vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-
-        *phys_loc = vcell->phys_loc;
-        phys_loc->phys_row += virt_loc.phys_row_offset;
-        phys_loc->phys_col += virt_loc.phys_col_offset;
-}
-
-
-void
 gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
 {
-        Table *table;
-        
         g_return_if_fail (cursor != NULL);
         g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
-
-        table = cursor->sheet->table;
 
         virt_loc->vcell_loc.virt_row =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->row;
@@ -168,7 +137,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
 			       "GnomeCanvasGroup::x", (double)x,
 			       "GnomeCanvasGroup::y", (double)y,
 			       NULL);
-        
+
         item->x1 = cursor->x = x;
         item->y1 = cursor->y = y;
         cursor->w = w;
@@ -195,7 +164,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
 
         item = cursor->cursor[GNUCASH_CURSOR_CELL];
         item_cursor = GNUCASH_ITEM_CURSOR(item);
-        
+
         gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
 						       item_cursor->row,
 						       item_cursor->col,
@@ -207,7 +176,7 @@ gnucash_cursor_configure (GnucashCursor *cursor)
         gnome_canvas_w2c (canvas, wx, wy, &item_cursor->x, &item_cursor->y);
         item_cursor->w = w;
         item_cursor->h = h;
-        
+
         item->x1 =  item_cursor->x;
         item->y1 =  item_cursor->y;
         item->x2 =  item_cursor->x+ w;
@@ -250,7 +219,6 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			dw = item_cursor->w;
 			dh = item_cursor->h;
 
-
 			gdk_gc_set_line_attributes (cursor->gc, 1,
 						    GDK_LINE_SOLID, -1, -1);
 
@@ -276,7 +244,7 @@ gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
         g_return_if_fail (cursor != NULL);
         g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-        sheet  = cursor->sheet;
+        sheet = cursor->sheet;
         item_cursor =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
 
@@ -303,7 +271,7 @@ gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
         g_return_if_fail (cursor != NULL);
         g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-        sheet  = cursor->sheet;
+        sheet = cursor->sheet;
         item_cursor = GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL]);
         style = cursor->style;
 
@@ -554,21 +522,20 @@ gnucash_cursor_new (GnomeCanvasGroup *parent)
 
         g_return_val_if_fail (parent != NULL, NULL);
         g_return_val_if_fail (GNOME_IS_CANVAS_GROUP(parent), NULL);
-        
 
         item = gnome_canvas_item_new (parent,
                                       gnucash_cursor_get_type(),
                                       NULL);
 
         cursor = GNUCASH_CURSOR(item);
-        
+
         cursor_item = gnome_canvas_item_new (GNOME_CANVAS_GROUP(item),
 					     gnucash_item_cursor_get_type(),
 					     NULL);
 
         item_cursor = GNUCASH_ITEM_CURSOR (cursor_item);
         item_cursor->type = GNUCASH_CURSOR_CELL;
-        
+
         cursor->cursor[GNUCASH_CURSOR_CELL] = cursor_item;
 
         cursor_item = gnome_canvas_item_new (GNOME_CANVAS_GROUP(item),
@@ -577,7 +544,7 @@ gnucash_cursor_new (GnomeCanvasGroup *parent)
 
         item_cursor = GNUCASH_ITEM_CURSOR (cursor_item);
         item_cursor->type = GNUCASH_CURSOR_BLOCK;
-        
+
         cursor->cursor[GNUCASH_CURSOR_BLOCK] = cursor_item;
 
         return item;

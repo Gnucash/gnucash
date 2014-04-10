@@ -21,8 +21,9 @@
 /*
  * The Gnucash Header Canvas
  *
- * Author:
+ * Authors:
  *     Heath Martin <martinh@pegasus.cc.ucf.edu>
+ *     Dave Peticolas <dave@krondo.com>
  */
 
 #include "gnucash-sheet.h"
@@ -66,19 +67,27 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         SheetBlockStyle *style = header->style;
         SheetBlockStyle *header_style;
         CellDimensions *cd;
+        VirtualLocation virt_loc;
+        Table *table = header->sheet->table;
         int i, j;
         int xpaint, ypaint;
         int w = 0, h = 0;
-        gchar *text;
+        const char *text;
         GdkFont *font;
-        CellStyle *cs;
+        GdkColor *bg_color;
+        guint32 argb;
 
         header_style = header->sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
 
-        cs = gnucash_style_get_cell_style (header_style, 0, 0);
+        virt_loc.vcell_loc.virt_row = 0;
+        virt_loc.vcell_loc.virt_col = 0;
+        virt_loc.phys_row_offset = 0;
+        virt_loc.phys_col_offset = 0;
+        argb = gnc_table_get_bg_color (table, virt_loc);
+        bg_color = gnucash_color_argb_to_gdk (argb);
 
         /* Assume all cells have the same color */
-        gdk_gc_set_foreground(header->gc, cs->inactive_bg_color);
+        gdk_gc_set_foreground(header->gc, bg_color);
         gdk_draw_rectangle(drawable, header->gc, TRUE, 0, 0, width, height);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
@@ -100,6 +109,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         for (i = 0; i < style->nrows; i++) {
                 xpaint = -x;
+                virt_loc.phys_row_offset = i;
 
                 /* TODO: This routine is duplicated in several places.
                    Can we abstract at least the cell drawing routine?
@@ -109,8 +119,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         gint x_offset, y_offset;
                         GdkRectangle rect;
 
+                        virt_loc.phys_col_offset = j;
+
                         cd = gnucash_style_get_cell_dimensions (style, i, j);
-                        cs = gnucash_style_get_cell_style (style, i, j);
 
                         if (header->in_resize && (j == header->resize_col))
                                 w = header->resize_col_width;
@@ -122,22 +133,24 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         gdk_draw_rectangle (drawable, header->gc, FALSE,
                                             xpaint, ypaint, w, h);
 
-                        text = cs->label;
+                        virt_loc.vcell_loc =
+                                table->current_cursor_loc.vcell_loc;
+                        text = gnc_table_get_label (table, virt_loc);
                         if (!text)
                                 text = "";
 
                         y_offset = h - MAX(CELL_VPADDING, font->descent + 4);
 
-                        switch (cs->alignment) {
+                        switch (gnc_table_get_align (table, virt_loc)) {
                         default:
-                        case GTK_JUSTIFY_LEFT:
+                        case CELL_ALIGN_LEFT:
                                 x_offset = CELL_HPADDING;
                                 break;
-                        case GTK_JUSTIFY_RIGHT:
+                        case CELL_ALIGN_RIGHT:
                                 x_offset = w - CELL_HPADDING;
                                 x_offset -= gdk_string_measure(font, text);
                                 break;
-                        case GTK_JUSTIFY_CENTER:
+                        case CELL_ALIGN_CENTER:
                                 if (w < gdk_string_measure (font, text))
                                         x_offset = CELL_HPADDING;
                                 else {
@@ -172,7 +185,12 @@ gnucash_header_request_redraw (GnucashHeader *header)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
 
-        gnome_canvas_request_redraw (canvas, 0, 0, INT_MAX/2 -1, INT_MAX/2 -1);
+        if (header->style == NULL)
+                return;
+
+        gnome_canvas_request_redraw (canvas, 0, 0,
+                                     header->style->dimensions->width + 1,
+                                     header->style->dimensions->height + 1);
 }
 
 

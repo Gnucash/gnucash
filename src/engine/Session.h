@@ -49,6 +49,7 @@
 #define __XACC_SESSION_H__
 
 #include "Group.h"
+#include "FileIO.h"
 
 /** STRUCTS *********************************************************/
 typedef struct _session Session;
@@ -88,7 +89,12 @@ void       xaccSessionDestroy (Session *);
  *
  * The xaccSessionBeginFile() routine is identical to the xaccSessionBegin()
  *    routine, except that the argument is a filename (i.e. the five
- *    letters "file:" should not be prepended).
+ *    letters "file:" should not be prepended) and there is an additional
+ *    function argument. This function is called if xaccSessionBeginFile
+ *    fails to obtain a lock for the file. If it returns true, the file
+ *    is loaded anyway. If it returns false, or the handler is NULL, a
+ *    failed lock attempt will abort the load. The lock fail handler is
+ *    passed the filename of the data file being loaded.
  *
  * The xaccSessionGetFilePath() routine returns the fully-qualified file
  *    path for the session.  That is, if a relative or partial filename
@@ -117,10 +123,7 @@ void       xaccSessionDestroy (Session *);
  * The xaccSessionSave() method will commit all changes that have been
  *    made to the top-level account group. In the current
  *    implementation, this is nothing more than a write to the file of
- *    the current AccountGroup of the session.  If the current
- *    AccountGroup is NULL, then the file will be deleted.  This
- *    routine will never release the lock on the file under any
- *    circustances.
+ *    the current AccountGroup of the session.
  *
  * The xaccSessionEnd() method will release the session lock. It will *not*
  *    save the account group to a file.  Thus, this method acts as an "abort"
@@ -168,12 +171,30 @@ void       xaccSessionDestroy (Session *);
  *    xaccSessionDestroy (sess);
  * */
 
-AccountGroup * xaccSessionBegin       (Session *, const char * sessionid);
-AccountGroup * xaccSessionBeginFile   (Session *, const char * filename);
+typedef gboolean (*SessionLockFailHandler)(const char *file);
+
+/* These do not load anything. */
+gboolean xaccSessionBegin(Session *, const char * sessionid);
+gboolean xaccSessionBeginFile(Session *, const char * filename,
+                              SessionLockFailHandler handler);
+
+/* Loads the account group indicated by SessionBegin. */
+gboolean xaccSessionLoad(Session *);
+
 int            xaccSessionGetError    (Session *);
+
+/* FIXME: This is a hack.  I'm trying to move us away from static
+   global vars.  This may be a temp fix if we decide to integrate
+   FileIO errors into Session errors...  This just returns the last
+   FileIO error, but it doesn't clear it. */
+GNCFileIOError xaccSessionGetFileError    (Session *);
+
 AccountGroup * xaccSessionGetGroup    (Session *);
 void           xaccSessionSetGroup    (Session *, AccountGroup *topgroup);
 char         * xaccSessionGetFilePath (Session *);
+
+/* FIXME: This isn't as thorough as we might want it to be... */
+gboolean       xaccSessionSaveMayClobberData(Session *s);
 
 void           xaccSessionSave (Session *);
 void           xaccSessionEnd  (Session *);

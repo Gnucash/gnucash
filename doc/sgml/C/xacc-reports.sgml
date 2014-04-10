@@ -35,6 +35,12 @@
       </PARA>
 </LISTITEM>
 <LISTITEM>
+<PARA><LINK LINKEND="XACC-TAX-REPORT">Tax Report:</LINK>
+      shows tax related Income and Expenses.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
 <PARA><APPLICATION>Balance Tracker</APPLICATION> 
       tracks the balance of one or more accounts over time, and
       supports graphical output (if you have <APPLICATION>gnuplot</APPLICATION>

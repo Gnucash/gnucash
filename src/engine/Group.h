@@ -25,6 +25,8 @@
 #ifndef __XACC_ACCOUNT_GROUP_H__
 #define __XACC_ACCOUNT_GROUP_H__
 
+#include <glib.h>
+
 #include "config.h"
 #include "gnc-common.h"
 
@@ -113,16 +115,6 @@ Account ** xaccGetAccounts (AccountGroup *grp);
 int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
 
 /* 
- * The xaccGetAccountFromID() subroutine fetches the account
- *    with the indicated account id from the collection of accounts
- *    in the indicated AccountGroup.  It returns NULL if the 
- *    account was not found.
- *
- * The xaccGetPeerAccountFromID() subroutine fetches the account
- *    with the indicated account id from the collection of accounts
- *    in the same AccountGroup anchor group. It returns NULL if the
- *    account was not found.
- *
  * The xaccGetAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
  *    in the indicated AccountGroup group.  It returns NULL if the
@@ -142,8 +134,6 @@ int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
  *     names using the given separator.
  */
 
-Account *xaccGetAccountFromID       (AccountGroup *, int);
-Account *xaccGetPeerAccountFromID   (Account *, int);
 Account *xaccGetAccountFromName     (AccountGroup *, const char *);
 Account *xaccGetAccountFromFullName (AccountGroup *,
                                      const char *name,
@@ -165,7 +155,9 @@ void xaccRecomputeGroupBalance (AccountGroup *);
  *    of all the children in this group.
  */
 
-double    xaccGroupGetBalance (AccountGroup *);
+/* deprecated double API will go away */
+double      DxaccGroupGetBalance (AccountGroup *);
+gnc_numeric xaccGroupGetBalance (AccountGroup *);
 
 /*
  * The xaccGetAccountRoot () subroutine will find the topmost 
@@ -205,6 +197,16 @@ char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
+/* if the function returns null for a given item, it won't show up in
+   the result list */
+GSList *xaccGroupMapAccounts(AccountGroup *grp,
+                             gpointer (*thunk)(Account *a, void *data),
+                             gpointer data);
+gpointer xaccGroupForEachAccountDeeply(AccountGroup *grp,
+                                       gpointer (*thunk)(Account *a, void *data),
+                                       gpointer data);
+
+gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b, gboolean check_guids);
 
 #ifndef SWIG
 
@@ -262,7 +264,7 @@ void   xaccGroupDepthAutoCode (AccountGroup *grp);
  */
 
 void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
-void xaccSplitsBeginStagedTransactionTraversals(Split **splits);
+void xaccSplitsBeginStagedTransactionTraversals(GList *splits);
 void xaccAccountBeginStagedTransactionTraversals(Account *account);
 void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
 
@@ -314,6 +316,41 @@ int xaccAccountStagedTransactionTraversal(Account *a,
                                                        void *data),
                                           void *data);
 
-#endif
+/* Traverse all of the transactions in the given account group.
+   Continue processing IFF proc does not return FALSE. This function
+   does not descend recursively to traverse transactions in the
+   children of the accounts in the group.
+
+   Proc will be called exactly once for each transaction that is
+   pointed to by at least one split in an account in the account
+   group.
+
+   Note too, that if you call this function on two separate account
+   groups and those accounts groups share transactions, proc will be
+   called once per account on the shared transactions.
+
+   The result of this function will not be FALSE IFF every relevant
+   transaction was traversed exactly once.  */
+gboolean
+xaccGroupForEachTransaction(AccountGroup *g,
+                            gboolean (*proc)(Transaction *t, void *data),
+                            void *data);
+
+/* Visit every transaction in the account that hasn't already been
+   visited exactly once.  visited_txns must be a hash table created
+   via guid_hash_table_new() and is the authority about which
+   transactions have already been visited.  Further, when this
+   procedure returns, visited_txns will have been modified to reflect
+   all the newly visited transactions.
+
+   The result of this function will not be FALSE IFF every relevant
+   transaction was traversed exactly once.  */
+gboolean
+xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
+                                    gboolean (*proc)(Transaction *t, void *data),
+                                    void *data,
+                                    GHashTable *visited_txns);
+
+#endif /* SWIG */
 
 #endif /* __XACC_ACCOUNT_GROUP_H__ */

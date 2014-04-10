@@ -346,6 +346,7 @@ static void
 gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
 {
   Query *query = regData->ledger->query;
+  gboolean show_present_divider = FALSE;
 
   if (regData->sort_type == sort_code)
     return;
@@ -354,9 +355,11 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
   {
     case BY_STANDARD:
       xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
+      show_present_divider = TRUE;
       break;
     case BY_DATE:
       xaccQuerySetSortOrder(query, BY_DATE, BY_STANDARD, BY_NONE);
+      show_present_divider = TRUE;
       break;
     case BY_DATE_ENTERED:
       xaccQuerySetSortOrder(query, BY_DATE_ENTERED, BY_STANDARD, BY_NONE);
@@ -380,6 +383,8 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
     default:
       assert(0); /* we should never be here */
   }
+
+  xaccSRShowPresentDivider (regData->ledger->ledger, show_present_divider);
 
   regData->sort_type = sort_code;
 
@@ -543,7 +548,8 @@ gnc_register_set_date_range(RegWindow *regData)
     start = gnc_register_min_day_time(start);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            start, LONG_MAX,
+                            TRUE, start, 
+                            FALSE, 0, 
                             QUERY_AND);
   }
 
@@ -555,8 +561,8 @@ gnc_register_set_date_range(RegWindow *regData)
     end = gnc_register_max_day_time(end);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            LONG_MIN,
-                            end,                            
+                            FALSE, 0,
+                            TRUE, end,                            
                             QUERY_AND);
   }
 
@@ -703,7 +709,7 @@ gnc_register_date_window(RegWindow *regData)
     radio = gtk_radio_button_new_with_label(NULL, SHOW_EARLIEST_STR);
     gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
     regDateData->show_earliest = radio;
-    
+
     if (show_all)
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio), TRUE);
 
@@ -981,8 +987,13 @@ new_trans_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
 
-  if (xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
-    xaccSRRedrawRegEntry(regData->ledger->ledger);
+  if (xaccSRCheckReconciled (regData->ledger->ledger))
+  {
+    if (xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
+      xaccSRRedrawRegEntry(regData->ledger->ledger);
+  }
+  else
+    xaccSRCancelCursorTransChanges (regData->ledger->ledger);
 
   gnc_register_jump_to_blank(regData);
 }
@@ -1041,7 +1052,7 @@ print_check_cb(GtkWidget * widget, gpointer data)
      gh_procedure_p(print_check))
   {
     payee  = xaccTransGetDescription(trans);
-    amount = xaccSplitGetValue(split);
+    amount = DxaccSplitGetValue(split);
     date   = xaccTransGetDate(trans);
     memo   = xaccSplitGetMemo(split);
 
@@ -1715,6 +1726,8 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
   gtk_widget_show_all(register_window);
 
+  xaccSRShowPresentDivider (ledger->ledger, TRUE);
+
   ledger->dirty = 1;
   xaccLedgerDisplayRefresh(ledger);
   gnc_reg_refresh_toolbar(regData);
@@ -1749,13 +1762,12 @@ regRefresh(xaccLedgerDisplay *ledger)
   gboolean euro = gnc_lookup_boolean_option("International",
 					    "Enable EURO support",
 					    FALSE);
-  const char *currency = xaccAccountGetCurrency(ledger->leader);
+  const gnc_commodity * currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   if(currency != NULL)
   {
-    euro = (euro && strncasecmp("EUR", currency, 3) &&
-	    gnc_is_euro_currency(currency));
+    euro = (euro && gnc_is_euro_currency(currency));
   }
   else
   {
@@ -1776,11 +1788,12 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      xaccSPrintAmount(string, amount, print_flags, currency);
+      DxaccSPrintAmount(string, amount, print_flags,
+                       gnc_commodity_get_mnemonic(currency));
       if(euro)
       {
 	strcat(string, " / ");
-	xaccSPrintAmount(string + strlen(string),
+	DxaccSPrintAmount(string + strlen(string),
 			 gnc_convert_to_euro(currency, amount),
 			 print_flags | PRTEUR, NULL);
       }
@@ -1796,11 +1809,12 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      xaccSPrintAmount(string, amount, print_flags, currency);
+      DxaccSPrintAmount(string, amount, print_flags,
+                       gnc_commodity_get_mnemonic(currency));
       if(euro)
       {
 	strcat(string, " / ");
-	xaccSPrintAmount(string + strlen(string),
+	DxaccSPrintAmount(string + strlen(string),
 			 gnc_convert_to_euro(currency, amount),
 			 print_flags | PRTEUR, NULL);
       }
@@ -2125,15 +2139,21 @@ gnc_register_include_date(RegWindow *regData, time_t date)
 static void
 recordCB(GtkWidget *w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
-  gboolean really_saved;
+  RegWindow *regData = data;
   Transaction *trans;
 
   trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
 
-  really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, TRUE);
-  if (!really_saved)
+  if (xaccSRCheckReconciled (regData->ledger->ledger))
+  {
+    if (!xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
+      return;
+  }
+  else
+  {
+    xaccSRCancelCursorTransChanges (regData->ledger->ledger);
     return;
+  }
 
   if (trans != NULL)
     gnc_register_include_date(regData, xaccTransGetDate(trans));
@@ -2185,8 +2205,13 @@ gnc_transaction_delete_query(GtkWindow *parent)
   gint       pos = 0;
   gint       result;
 
-  gchar *usual = DEL_USUAL_MSG;
-  gchar *warn  = DEL_WARN_MSG;
+  const char *usual = _("This selection will delete the whole "
+                        "transaction. This is what you usually want.");
+  const char *warn  = _("Warning: Just deleting all the splits will "
+                        "make your account unbalanced. You probably "
+                        "shouldn't do this unless you're going to "
+                        "immediately add another split to bring the "
+                        "transaction back into balance.");
 
   DeleteType return_value;
 
@@ -2210,20 +2235,25 @@ gnc_transaction_delete_query(GtkWindow *parent)
 
   text = gtk_text_new(NULL, NULL);
 
-  trans_button = gtk_radio_button_new_with_label(NULL, DEL_TRANS_MSG);
+  trans_button =
+    gtk_radio_button_new_with_label(NULL,
+                                    _("Delete the whole transaction"));
   gtk_object_set_user_data(GTK_OBJECT(trans_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), trans_button, TRUE, TRUE, 0);
 
   gtk_signal_connect(GTK_OBJECT(trans_button), "toggled",
-                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb), usual);
+                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
+                     (gpointer) usual);
 
   group = gtk_radio_button_group(GTK_RADIO_BUTTON(trans_button));
-  splits_button = gtk_radio_button_new_with_label(group, DEL_SPLITS_MSG);
+  splits_button = gtk_radio_button_new_with_label(group,
+                                                  _("Delete all the splits"));
   gtk_object_set_user_data(GTK_OBJECT(splits_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), splits_button, TRUE, TRUE, 0);
 
   gtk_signal_connect(GTK_OBJECT(splits_button), "toggled",
-                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb), warn);
+                     GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
+                     (gpointer) warn);
 
   gtk_box_pack_start(GTK_BOX(dvbox), frame, TRUE, TRUE, 0);
 
@@ -2421,7 +2451,7 @@ gnc_register_check_close(RegWindow *regData)
 static void
 closeCB(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   gnc_register_check_close(regData);
 

@@ -1,22 +1,20 @@
 
 <ARTICLE ID="XACC-NEWACCTWIN">
 <ARTHEADER>
-<TITLE></TITLE>
 <TITLE>New Account Window</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> New Account Window</TITLE>
-<PARA>    </PARA>
+<TITLE>New Account Window</TITLE>
 <PARA>This is what a new account window looks like:
+</PARA>
 
-    </PARA>
 <PARA><INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/newaccwin-code.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT>
+</PARA>
 
-    </PARA>
 <PARA>Pick an <LINK LINKEND="XACC-ACCTYPES"><EMPHASIS>Account
     Type</EMPHASIS></LINK>.
 
@@ -39,8 +37,6 @@
 <IMAGEDATA FILEREF="image/newaccwin-trade.png">
 </IMAGEOBJECT>
 </INLINEMEDIAOBJECT>
-    
-
 
 </PARA>
 </SECT1>

@@ -55,6 +55,19 @@
                (hash-set! string-hash string #t)))
          strings)))
 
+  (define (expand-newlines string port)
+    (let loop ((chars (string->list string))
+               (accum '()))
+      (cond
+       ((null? chars)
+        (write (list->string (reverse accum)) port))
+       ((char=? (car chars) #\newline)
+        (write (list->string (reverse accum)) port)
+        (display "\"\\n\"\n  " port)
+        (loop (cdr chars) '()))
+       (else
+        (loop (cdr chars) (cons (car chars) accum))))))
+
   (define (save file)
     (let ((port (open file (logior O_WRONLY O_CREAT O_TRUNC))))
       (if port
@@ -62,7 +75,7 @@
             (hash-for-each
              (lambda (string not-used)
                (display "_(" port)
-               (write string port)
+               (expand-newlines string port)
                (display ")\n" port))
              string-hash)
             (close port)))))

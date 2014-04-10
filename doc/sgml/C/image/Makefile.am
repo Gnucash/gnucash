@@ -30,6 +30,8 @@ image_DATA = \
   report-folio.png \
   report-option.png \
   report-pnl.png \
+  report-tax.png \
+  report-tax-options.png \
   reportwin.png \
   ticker-a.png \
   ticker-b.png

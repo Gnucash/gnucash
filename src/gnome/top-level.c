@@ -78,8 +78,8 @@ static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
 static void gnc_configure_sr_label_callbacks(void);
-static void gnc_configure_auto_raise_cb(void * foo) { }
-static void gnc_configure_auto_raise(void) { }
+static void gnc_configure_auto_raise_cb(void *);
+static void gnc_configure_auto_raise(void);
 static void gnc_configure_auto_decimal_cb(void *);
 static void gnc_configure_auto_decimal(void);
 static void gnc_configure_auto_decimal_places_cb(void *);
@@ -163,8 +163,6 @@ gnucash_ui_init(void)
     gtk_widget_set_default_visual (gdk_rgb_get_visual ());
     
     app = gnome_app_new("GnuCash", "GnuCash");
-
-    gnc_options_init();
 
     gnc_configure_date_format();
     date_callback_id =
@@ -294,7 +292,6 @@ gnc_ui_destroy (void)
     app = NULL;
   }
 
-  gnc_options_shutdown();
   gnc_extensions_shutdown();
 }
 
@@ -678,6 +675,35 @@ gnc_configure_register_borders(void)
     reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
   
   gnucash_style_set_register_borders (reg_borders);
+}
+
+/* gnc_configure_auto_raise_cb
+ *    Callback called when options change - sets
+ *    auto-raise status of combocell class
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_raise_cb(void *data)
+{
+  gnc_configure_auto_raise();
+}
+
+/* gnc_configure_auto_raise
+ *    sets combocell auto raise status
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_raise(void)
+{
+  gboolean auto_pop;
+
+  auto_pop = gnc_lookup_boolean_option("Register", "Auto-Raise Lists", TRUE);
+
+  xaccComboCellSetAutoPop(auto_pop);
 }
 
 /* gnc_configure_reverse_balance_cb

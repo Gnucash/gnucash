@@ -17,6 +17,7 @@ doc_DATA = \
   quicktest.qif \
   splitdemo.xac \
   swipe.qif \
+  taxreport.xac \
   test.xac \
   test2.xac \
   test3.xac \

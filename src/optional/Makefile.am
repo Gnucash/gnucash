@@ -1,5 +1,5 @@
 
-SUBDIRS = swig
+#SUBDIRS = swig
 
 EXTRA_DIST = \
   .cvsignore

@@ -32,6 +32,7 @@
 #define __XACC_DATE_H__
 
 #include "config.h"
+#include "glib.h"
 
 
 /** Constants *******************************************************/
@@ -75,6 +76,9 @@ typedef struct timespec64 Timespec;
 
 
 /** Prototypes ******************************************************/
+
+gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
+
 void setDateFormat(DateFormat df);
 
 /**

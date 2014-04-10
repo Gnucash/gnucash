@@ -69,6 +69,8 @@ typedef struct _PriceCell
   gboolean monetary;     /* controls parsing of values */
   gboolean is_currency;  /* controls printint of values */
   gboolean shares_value; /* true if a shares values */
+
+  gboolean need_to_parse; /* internal */
 } PriceCell;
 
 /* installs a callback to handle price recording */

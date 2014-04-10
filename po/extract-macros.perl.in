@@ -35,7 +35,6 @@ sub usage {
 }
 
 usage 1 if $#ARGV==-1;
-usage 0 if $h;
 
 $prefile="messages-i18n.c";
 

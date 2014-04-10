@@ -128,236 +128,229 @@ gnucash_grid_update (GnomeCanvasItem *item, double *affine,
  *
  * All coordinates are with respect to the canvas origin.
  */
-gboolean
-gnucash_grid_find_block_origin_by_pixel (GnucashGrid *grid,
-                                         gint x, gint y,
-                                         VirtualCellLocation *vcell_loc,
-                                         gint *o_x, gint *o_y)
+static SheetBlock *
+gnucash_grid_find_block_by_pixel (GnucashGrid *grid,
+                                  gint x, gint y,
+                                  VirtualCellLocation *vcell_loc)
 {
-        SheetBlockStyle *style;
+        SheetBlock *block;
         VirtualCellLocation vc_loc = { 1, 0 };
-        int pixel = 0;
- 
-        g_return_val_if_fail(y >= 0, FALSE);
-        g_return_val_if_fail(x >= 0, FALSE);
+
+        g_return_val_if_fail(y >= 0, NULL);
+        g_return_val_if_fail(x >= 0, NULL);
 
         do {
-                style = gnucash_sheet_get_style (grid->sheet, vc_loc);
+                block = gnucash_sheet_get_block (grid->sheet, vc_loc);
+                if (!block)
+                        return NULL;
 
-                if (!style || (y >= pixel &&
-                               y <  pixel + style->dimensions->height)) {
-                        if (o_y)
-                                *o_y = pixel;
+                if (block->visible &&
+                    y >= block->origin_y &&
+                    y < block->origin_y + block->style->dimensions->height) {
                         if (vcell_loc)
                                 vcell_loc->virt_row = vc_loc.virt_row;
                         break;
                 }
-                pixel += style->dimensions->height;
                 vc_loc.virt_row++;
         } while (vc_loc.virt_row < grid->sheet->num_virt_rows);
 
         if (vc_loc.virt_row == grid->sheet->num_virt_rows)
-                return FALSE;
+                return NULL;
 
-        pixel = 0;
         do {
-                style = gnucash_sheet_get_style (grid->sheet, vc_loc);
+                block = gnucash_sheet_get_block (grid->sheet, vc_loc);
+                if (!block)
+                        return NULL;
 
-                if (!style || (x >= pixel &&
-                               x <  pixel + style->dimensions->width)) {
-                        if (o_x)
-                                *o_x = pixel;
+                if (block->visible &&
+                    x >= block->origin_x &&
+                    x < block->origin_x + block->style->dimensions->width) {
                         if (vcell_loc)
                                 vcell_loc->virt_col = vc_loc.virt_col;
                         break;
                 }
-                pixel += style->dimensions->height;
                 vc_loc.virt_col++;
         } while (vc_loc.virt_col < grid->sheet->num_virt_cols);
 
         if (vc_loc.virt_col == grid->sheet->num_virt_cols)
+                return NULL;
+
+        return block;
+}
+
+static gboolean
+gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
+                                 VirtualLocation *virt_loc)
+{
+        SheetBlock *block;
+        SheetBlockStyle *style;
+        CellDimensions *cd;
+        gint row = 0;
+        gint col = 0;
+
+        g_return_val_if_fail (virt_loc != NULL, FALSE);
+
+        block = gnucash_sheet_get_block (grid->sheet, virt_loc->vcell_loc);
+        if (block == NULL)
                 return FALSE;
+
+        /* now make x, y relative to the block origin */
+        x -= block->origin_x;
+        y -= block->origin_y;
+
+        style = block->style;
+        if (style == NULL)
+                return FALSE;
+
+        do {
+                cd = gnucash_style_get_cell_dimensions (style, row, 0);
+
+                if (y >= cd->origin_y && y < cd->origin_y + cd->pixel_height)
+                        break;
+
+                row++;
+        } while (row < style->nrows);
+
+        if (row == style->nrows)
+                return FALSE;
+
+        do {
+                cd = gnucash_style_get_cell_dimensions (style, row, col);
+
+                if (x >= cd->origin_x && x < cd->origin_x + cd->pixel_width) 
+                        break;
+
+                col++;
+        } while (col < style->ncols);
+
+        if (col == style->ncols)
+                return FALSE;
+
+        if (virt_loc)
+                virt_loc->phys_row_offset = row;
+        if (virt_loc)
+                virt_loc->phys_col_offset = col;
 
         return TRUE;
 }
 
 gboolean
-gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
-                                 VirtualLocation *virt_loc)
+gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
+                                VirtualLocation *virt_loc)
 {
-        SheetBlockStyle *style;
-        CellDimensions *cd;
-        int block_x, block_y;
+        SheetBlock *block;
 
         if (virt_loc == NULL)
                 return FALSE;
 
-        if (!gnucash_grid_find_block_origin_by_pixel (grid,
-                                                      x, y,
-                                                      &virt_loc->vcell_loc,
-                                                      &block_x, &block_y))
+        block = gnucash_grid_find_block_by_pixel (grid, x, y,
+                                                  &virt_loc->vcell_loc);
+        if (block == NULL)
                 return FALSE;
 
-        /* now make x, y relative to the block origin */
-        x -= block_x;
-        y -= block_y;
-
-        style = gnucash_sheet_get_style (grid->sheet, virt_loc->vcell_loc);
-
-        if (style) {
-                gint row = 0;
-                gint col = 0;
-                gint pixel = 0;
-
-                do {
-                        cd = gnucash_style_get_cell_dimensions (style, row, 0);
-
-                        if ( y >= pixel && y < pixel + cd->pixel_height)
-                                break;
-
-                        pixel += cd->pixel_height;
-                        row++;
-                } while (row < style->nrows);
-
-                if (row == style->nrows)
-                        return FALSE;
-
-                pixel = 0;
-                do {
-                        cd = gnucash_style_get_cell_dimensions (style,
-                                                                row, col);
-
-                        if ( x >= pixel && x < pixel + cd->pixel_width) 
-                                break;
-
-                        pixel += cd->pixel_width;
-                        col++;
-                } while (col < style->ncols);
-
-                if (col == style->ncols)
-                        return FALSE;
-
-                if (virt_loc)
-                        virt_loc->phys_row_offset = row;
-                if (virt_loc)
-                        virt_loc->phys_col_offset = col;
-
-                return TRUE;
-        }
-
-        return FALSE;
+        return gnucash_grid_find_cell_by_pixel (grid, x, y, virt_loc);
 }
 
 
 static void
-draw_cell (GnucashGrid *grid, int block,
-           SheetBlockStyle *style,
-           int i, int j,
+draw_cell (GnucashGrid *grid,
+           SheetBlock *block,
+           VirtualLocation virt_loc,
            GdkDrawable *drawable,
            int x, int y, int width, int height)
 {
         Table *table = grid->sheet->table;
-        gchar *text;
+        const char *text;
         GdkFont *font;
-        CellStyle *cs;
-        SheetBlock *sheet_block;
-        SheetBlockCell *sb_cell;
-        VirtualCellLocation vcell_loc = { block, 0 };
+        GdkColor *bg_color;
+        GdkColor *fg_color;
+        gint x_offset, y_offset;
+        GdkRectangle rect;
+        guint32 argb;
+        gint borders;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
-        sheet_block = gnucash_sheet_get_block (grid->sheet, vcell_loc);
+        argb = gnc_table_get_bg_color (table, virt_loc);
+        bg_color = gnucash_color_argb_to_gdk (argb);
 
-        sb_cell = gnucash_sheet_block_get_cell (sheet_block, i, j);
-
-        gdk_gc_set_foreground (grid->gc, sb_cell->bg_color);
-        gdk_draw_rectangle (drawable, grid->gc, TRUE, x,  y, width, height);
+        gdk_gc_set_foreground (grid->gc, bg_color);
+        gdk_draw_rectangle (drawable, grid->gc, TRUE, x, y, width, height);
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
 
-        cs = gnucash_style_get_cell_style (style, i, j);
-
+        borders = gnucash_sheet_get_borders (grid->sheet, virt_loc);
         /* top */
-        if (cs->border & STYLE_BORDER_TOP)
+        if (borders & STYLE_BORDER_TOP)
                 gdk_draw_line (drawable, grid->gc, x, y, x+width, y);
 
         /* right */
-        if (cs->border & STYLE_BORDER_RIGHT)
+        if (borders & STYLE_BORDER_RIGHT)
                 gdk_draw_line (drawable, grid->gc, x+width, y,
                                x+width, y+height);
 
         /* bottom */
-        if (cs->border & STYLE_BORDER_BOTTOM)
+        if (borders & STYLE_BORDER_BOTTOM)
                 gdk_draw_line (drawable, grid->gc, x+width,
                                y+height, x, y+height);
 
         /* left */
-        if (cs->border & STYLE_BORDER_LEFT)
+        if (borders & STYLE_BORDER_LEFT)
                 gdk_draw_line (drawable, grid->gc, x, y+height, x, y);
 
-#undef ROUNDED_CORNERS        
-#ifdef ROUNDED_CORNERS        
-        gdk_gc_set_foreground (grid->gc, sheet_block->bg_colors[i][j]);        
-        gdk_draw_rectangle (drawable, grid->gc, TRUE, x+1, 
-                            y+1, width-1, height-1);
+        /* dividing line */
+        if ((virt_loc.phys_row_offset == 0) && (table->dividing_row >= 0))
+        {
+                if (virt_loc.vcell_loc.virt_row == table->dividing_row)
+                {
+                        gdk_gc_set_foreground (grid->gc, &gn_blue);
+                        gdk_draw_line (drawable, grid->gc, x, y, x + width, y);
+                }
+        }
 
-        gdk_gc_set_foreground (grid->gc, &gn_black);
+        if ((virt_loc.phys_row_offset == (block->style->nrows - 1)) &&
+            (table->dividing_row >= 0))
+        {
+                if (virt_loc.vcell_loc.virt_row == (table->dividing_row - 1))
+                {
+                        gdk_gc_set_foreground (grid->gc, &gn_blue);
+                        gdk_draw_line (drawable, grid->gc, x, y + height,
+                                       x + width, y + height);
+                }
+        }
 
-        gdk_draw_line (drawable, grid->gc, x+5, y, x+width-5, y);
-        gdk_draw_line (drawable, grid->gc, x+width, y+5, x+width, y+height-5);
-        gdk_draw_line (drawable, grid->gc, x+width-5, y+height, x+5, y+height);
-        gdk_draw_line (drawable, grid->gc, x, y+height-5, x, y+5);        
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x, y,
-                      10, 10,
-                      180*64, -90*64);
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x+width-10, y,
-                      10, 10,
-                      0*64, 90*64);
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x+width-10, y+height-10,
-                      10, 10,
-                      0*64, -100*64);
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x, y+height-10,
-                      10, 10,
-                      180*64, 90*64);
-#endif /* ROUNDED_CORNERS */
-
-        text = sb_cell->entry;
+        text = gnc_table_get_entry (table, virt_loc);
 
         font = grid->normal_font;
 
-        gdk_gc_set_foreground (grid->gc, sb_cell->fg_color);
+        argb = gnc_table_get_fg_color (table, virt_loc);
+        fg_color = gnucash_color_argb_to_gdk (argb);
 
-        if (table->current_cursor_virt_loc.virt_row == block &&
+        gdk_gc_set_foreground (grid->gc, fg_color);
+
+        if ((table->current_cursor_loc.vcell_loc.virt_row ==
+             virt_loc.vcell_loc.virt_row) &&
 	    (!text || strlen(text) == 0)) {
                 font = grid->italic_font;
                 gdk_gc_set_foreground (grid->gc, &gn_light_gray);
-                text = cs->label;
+                text = gnc_table_get_label (table, virt_loc);
         }
 
-        if (text) {
-                gint x_offset, y_offset;
-                GdkRectangle rect;
+        if ((text == NULL) || (*text == '\0'))
+                return;
 
-                y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
+        y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
 
-                switch (cs->alignment) {
+        switch (gnc_table_get_align (table, virt_loc)) {
                 default:
-                case GTK_JUSTIFY_LEFT:
+                case CELL_ALIGN_LEFT:
                         x_offset = CELL_HPADDING;
                         break;
-                case GTK_JUSTIFY_RIGHT:
+                case CELL_ALIGN_RIGHT:
                         x_offset = width - CELL_HPADDING
                                 - gdk_string_measure (font, text);
                         break;
-                case GTK_JUSTIFY_CENTER:
+                case CELL_ALIGN_CENTER:
                         if (width < gdk_string_measure (font, text))
                                 x_offset = CELL_HPADDING;
                         else {
@@ -367,24 +360,70 @@ draw_cell (GnucashGrid *grid, int block,
                         break;
                 }
 
-                rect.x = x + CELL_HPADDING;
-                rect.y = y + CELL_VPADDING;
-                rect.width = width - 2*CELL_HPADDING;
-                rect.height = height;
+        rect.x = x + CELL_HPADDING;
+        rect.y = y + CELL_VPADDING;
+        rect.width = width - 2*CELL_HPADDING;
+        rect.height = height;
 
-                gdk_gc_set_clip_rectangle (grid->gc, &rect);
+        gdk_gc_set_clip_rectangle (grid->gc, &rect);
 
-                gdk_draw_string (drawable,
-                                 font,
-                                 grid->gc,
-                                 x + x_offset,
-                                 y + y_offset,
-                                 text);
+        gdk_draw_string (drawable,
+                         font,
+                         grid->gc,
+                         x + x_offset,
+                         y + y_offset,
+                         text);
 
-                gdk_gc_set_clip_rectangle (grid->gc, NULL);
-        }
+        gdk_gc_set_clip_rectangle (grid->gc, NULL);
 }
 
+static void
+draw_block (GnucashGrid *grid,
+            SheetBlock *block,
+            VirtualLocation virt_loc,
+            GdkDrawable *drawable,
+            int x, int y, int width, int height)
+{
+        CellDimensions *cd;
+        gint x_paint;
+        gint y_paint;
+        gint w, h;
+
+        for ( virt_loc.phys_row_offset = 0;
+              virt_loc.phys_row_offset < block->style->nrows ;
+              virt_loc.phys_row_offset++ )
+        {
+                for ( virt_loc.phys_col_offset = 0;
+                      virt_loc.phys_col_offset < block->style->ncols ;
+                      virt_loc.phys_col_offset++ )
+                {
+                        cd = gnucash_style_get_cell_dimensions
+                                (block->style,
+                                 virt_loc.phys_row_offset,
+                                 virt_loc.phys_col_offset);
+
+                        x_paint = block->origin_x + cd->origin_x;
+                        if (x_paint > x + width)
+                                break;
+
+                        y_paint = block->origin_y + cd->origin_y;
+                        if (y_paint > y + height)
+                                return;
+
+                        h = cd->pixel_height;
+                        w = cd->pixel_width;
+
+                        if (x_paint + w < x)
+                                continue;
+
+                        if (y_paint + h < y)
+                                continue;
+
+                        draw_cell (grid, block, virt_loc, drawable,
+                                   x_paint - x, y_paint - y, w, h);
+                }
+        }
+}
 
 /* FIXME:  this only does the first virtual column */
 static void
@@ -392,74 +431,44 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                    int x, int y, int width, int height)
 {
         GnucashGrid *grid = GNUCASH_GRID (item);
-        GnucashSheet *sheet = grid->sheet;
         VirtualLocation virt_loc;
-        SheetBlockStyle *style;
         SheetBlock *sheet_block;
-        CellDimensions *cd;
-        Table *table;
-        gint x_paint, y_paint;
-        gint diff_x, diff_y;
-        gint cellrow, cellcol;
-        gint w, h = 0;
-        gint ox, oy;
 
         g_return_if_fail(x >= 0);
         g_return_if_fail(y >= 0);
-
-        table = sheet->table;
 
         /* The default background */
         gdk_draw_rectangle (drawable, grid->fill_gc, TRUE,
                             0, 0, width, height);
 
         /* compute our initial values where we start drawing */
-        if (!gnucash_grid_find_block_origin_by_pixel (grid, x, y, NULL,
-                                                      &ox, &oy))
+        sheet_block = gnucash_grid_find_block_by_pixel (grid, x, y,
+                                                        &virt_loc.vcell_loc);
+        if (!sheet_block || !sheet_block->style)
                 return;
 
-        diff_y = y - oy;
+        for ( ; virt_loc.vcell_loc.virt_row < grid->sheet->num_virt_rows;
+              virt_loc.vcell_loc.virt_row++ )
+        {
+                while (TRUE)
+                {
+                        sheet_block = gnucash_sheet_get_block
+                                (grid->sheet, virt_loc.vcell_loc);
 
-        for (y_paint = y - diff_y; y_paint <= y + height; ) {
+                        if (!sheet_block || !sheet_block->style)
+                                return;
 
-                if (!gnucash_grid_find_cell_by_pixel (grid, x, y_paint,
-                                                      &virt_loc))
-                        return;
+                        if (sheet_block->visible)
+                                break;
 
-                style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
-                sheet_block = gnucash_sheet_get_block (sheet,
-                                                       virt_loc.vcell_loc);
-
-                if (!style || ! sheet_block)
-                        return;
-
-                cellrow = virt_loc.phys_row_offset;
-                cellcol = virt_loc.phys_col_offset;
-
-                cd = gnucash_style_get_cell_dimensions (style,
-                                                        cellrow, cellcol);
-
-                ox = cd->origin_x;
-
-                diff_x = x - ox;
-
-                for (x_paint = x - diff_x;
-                     x_paint <= x + width && cellcol < style->ncols; ) {
-                        cd = gnucash_style_get_cell_dimensions (style,
-                                                                cellrow,
-                                                                cellcol);
-
-                        h = cd->pixel_height;
-                        w = cd->pixel_width;
-
-                        draw_cell (grid, virt_loc.vcell_loc.virt_row,
-                                   style, cellrow, cellcol, drawable,
-                                   x_paint - x, y_paint - y, w, h);
-
-                        x_paint += w;
-                        cellcol++;
+                        virt_loc.vcell_loc.virt_row++;
                 }
-                y_paint += h;
+
+                if (y + height < sheet_block->origin_y)
+                        return;
+
+                draw_block (grid, sheet_block, virt_loc, drawable,
+                            x, y, width, height);
         }
 }
 

@@ -1,3 +1,249 @@
+2000-10-23  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/main.scm:
+	(gnc:*batch-mode-things-to-do*): new var - keep track of startup bits.
+	(gnc:main): add --load processing for "things-to-do".
+
+	* src/scm/engine-utilities.scm:
+	(gnc:filename->account-group): new - likely temporary.
+	(gnc:call-with-account-data-from-file): new - likely temporary.
+
+	* src/scm/command-line.scm (gnc:*arg-defs*): add --load option in
+	addition to --evaluate.
+
+	* src/engine/sql/PostgresBackend.c: handle changes in the rest of
+	the code.
+
+	* src/engine/kvp_frame.c: change the datatype a little to pull the
+	union tag into the main struct.  Also update the functions and
+	datatypes to more closely mirror glib types.  i.e. lists are now
+	just GLists that must contain only kvp_value pointers.  The kvp
+	docs have *not* been updated to reflect these changes (nor the
+	changes listed below).
+	(kvp_frame_set_slot): now setting a slot to a NULL value deletes
+	the slot.  This is not in the docs yet.
+	(init_frame_body_if_needed): new function - only initialize the
+	guts of the kvp_frame if we need them.  This helps in some
+	situations and should be free otherwise.  All the other functions
+	should handle this properly now.
+	(kvp_value_new_binary_nc): new function - create a new binary
+	object using the pointer given directly.
+	(kvp_frame_for_each_slot): new function.
+	(kvp_value_compare): new function.
+	(kvp_frame_compare): new function.
+
+	* src/engine/kvp_frame.h: accomodate changes to kvp_frame.c.
+	
+	* src/engine/guid.c:
+	(guid_compare): new function.
+	(guid_hash_to_guint): hash function from glib.
+	(guid_hash_table_new): new function.
+	(guid_g_hash_table_equal): new function.
+
+	* src/engine/guid.h: accomodate changes to guid.c.
+
+	* src/engine/date.c:
+	(timespec_equal): new function.
+
+	* src/engine/date.c: accomodate changes to date.c.
+	
+	* src/engine/Transaction.c: update all functions to mark the
+	account's dirty flags when needed.
+	(xaccTransGetSlot): deleted - replaced by xaccTransGetSlots.
+	(xaccTransSetSlot): deleted - replaced by xaccTransGetSlots.
+	(xaccTransGetSlots): new function.
+	(xaccTransEqual): new function.
+	(DATE_CMP): don't use pointer to pointer args (unnecessary).
+	(xaccSplitDateOrder): now a total order - sort on guid if needed.
+	(xaccSplitOrder): deleted - unused.
+	(xaccTransOrder): now a total order - sort on guid if needed.
+	(xaccTransSetDocref): deleted.
+	(xaccTransGetDocref): deleted.
+
+	* src/engine/Transaction.h: accomodate changes to Transaction.c.	
+
+	* src/engine/TransactionP.h: accomodate changes to Transaction.c.	
+	
+	* src/engine/Session.c:
+	(xaccSessionGetFileError): new function - migrate away from using
+	global for error status.
+	(xaccSessionBegin): change semantics - a begin does *not* load the
+	file automatically now.  You must call xaccSessionLoad for that.
+	This is better, particularly in the SaveAs case when the load is
+	wasteful, and, until we fix the GUID code up so that loading the
+	same file twice doesn't cause a detonation, safer.
+	(xaccSessionBegin): change semantics - same as for
+	xaccSessionBegin.
+	(xaccSessionLoad): new function - loads the session data.
+	(xaccSessionSaveMayClobberData): new function - predicate.
+	(xaccSessionSave): change semantics - don't delete the file if
+	topgroup is NULL.  This is too scary given all the other changes.
+	We can bring it back later if needed, but I'd probably rather see
+	an xaccSessionPurgeStorage, or similar.
+	
+	* src/engine/Session.h: support changes to Session.c.
+
+	* src/engine/Makefile.am: handle new, deleted, and renamed files.
+
+	* src/engine/Group.c: handle vanished account id's, etc.
+	(xaccGroupEqual): new function.
+	(xaccGroupVisitUnvisitedTransactions): new function.
+	(xaccGroupForEachTransaction): new function.
+	(xaccGroupMapAccounts): new function (probably going away later).
+	(xaccGroupForEachAccountDeeply): ditto.
+
+	* src/engine/Group.h: handler changes to Acccount*'s and to Group.c.
+
+	* src/engine/GNCId.c:
+	(xaccGetAndResetEntityTable): new function - needed when you want
+	to load two files representing the same data for
+	comparison.
+	(xaccSetEntityTable): new function - needed when you want
+	to load two files representing the same data for
+	comparison.
+
+	* src/engine/GNCIdP.h: accomodate changes to GNCId.c
+
+	* src/engine/Account.c: many changes, removed some unused fields,
+	changed Account's to have a GList of splits rather than a NULL
+	terminated array of pointers - allowed optimizing several things
+	and made the code cleaner in spots.
+	(xaccAccountBeginEdit): remove defer argument - difficult to
+	handle with nesting - may add later if really needed.  Change this
+	and
+	(xaccAccountCommitEdit): to handle nesting.  Fix up all setter
+	routines to respect Begin/Commit, including ones for splits over
+	in Transaction.c.
+	(xaccInitAccount): Add/use sort_dirty and balance_dirty flags.
+	Change kvp_data to always be initialized (also changed kvp_frames
+	to be lighter weight when empty).
+	(xaccAccountEqual): new function.
+	(xaccSortSplits): new function.
+	(xaccAccountBringUpToDate): new function.
+	(xaccAccountGetSlot): deleted - replaced by xaccAccountGetSlots
+	(xaccAccountSetSlot): deleted - replaced by xaccAccountGetSlots
+	(xaccAccountGetSlots): new function - returns kvp_frame.
+	(xaccAccountGetID): deleted - accounts no longer have IDs.
+	(xaccAccountGetID): deleted - accounts no longer have flags.
+	(xaccAccountCheckDateOrder): renamed to xaccAccountFixSplitDateOrder.
+	(xaccCheckTransDateOrder): renamed to xaccTransFixSplitDateOrder.
+	(xaccAccountSetNotes): notes now stored in slot "notes".
+	(xaccAccountGetNotes): ditto.
+	(xaccAccountTypeEnumAsString): new function - required by text IO.
+	(xaccAccountStringToType): new function - required by text IO.
+	(xaccAccountSetPriceSrc): prices now stored in slot "old-price-source".
+	(xaccAccountGetPriceSrc): ditto.
+	(xaccAccountVisitUnvisitedTransactions): new function.
+	(xaccAccountForEachTransaction): new function.
+	
+	* src/engine/Account.h: changes to accomodate above changes to
+	Account.c.
+
+	* src/engine/Account.h: changes to accomodate above changes to
+	Account.c.
+
+	* src/engine/io-gncxml-r.c: new xml format reader.  This has a
+	semi-abstract incremental configurable low-ish memory XML tree
+	parser inside which should later be broken out into a separate
+	file.
+
+	* src/engine/io-gncxml-w.c: new xml format writer.  This is pretty
+	straightforward, but due to limitations in libxml, has large
+	memory requirements.  It has to build the entire XML tree in RAM
+	before it writes anything.
+
+	* src/engine/io-gncxml.h: new file - the current XML handling does
+	*not* have any transparent file compression.  Expect that soon -
+	it doesn't make the performance any worse (thank goodness).
+
+	* src/engine/io-gncbin-r.c: renamed from src/engine/FileIO.c.
+	Only the reader is still active.  All writing is as XML now.
+
+	* src/engine/io-gncbin.h: renamed from src/engine/FileIO.h.
+
+	* src/engine/FileIO.c: new file - now the meta-level file that has
+	functions that handle the various underlying file types.  Any old
+	docref fields are stored in an "old-docref" slot and any old price
+	sources are stored in an "old-price-source" slot.  Handle the fact
+	that account id's are gone.
+
+	* src/engine/FileIO.h: new file.
+
+	* make-gnucash-patch.in: ignore some more autogen files.
+
+	* src/FileDialog.c: update to handle new Session* semantics.
+	Saving and SavingAs are not the same anymore, session-wise.  We
+	don't perform a pointless (and GUID dangerous) load before we
+	SaveAs.
+
+	* Many changes, not all of which will be documented right now.
+	This patch must get out.  I'll come back and fix this up later.
+	The highlights are...
+
+2000-10-16  Bill Gribble  <grib@billgribble.com>
+
+	* Patch for new numeric representation, new commodity 
+	  representation, and rewritten QIF importer.  
+
+	  - numeric format: the engine's internal representation of values
+	  changed from 'double' to 'gnc-numeric', an exact number format.
+	  see src/doc/gnc-numeric.txt.  This patch is step 1; the old
+	  'double' engine API remains, but the names have been changed
+	  from (for example) xaccSplitSetValue to DxaccSplitSetValue. The
+	  D means deprecated.  Will be gradually migrating the usage of
+	  doubles to gnc-numeric throughout gnucash, eventually removing
+	  the Dxacc API completely.  ATM, there is no scheme support for
+	  gnc-numeric, so I just left the Scheme API alone (old function
+	  names still work, and work the same way).
+
+	  - commodity representation: up to now, the engine has just used
+	  strings to represent currencies.  Now we use a struct
+	  'gnc-commodity', which has more information about the
+	  currency/stock/commodity than its name, including what exchange
+	  it trades on and what the resolution of transactions is in
+	  fractional units.  When you read in an old gnucash file, you
+	  will get a 'wizard' that will ask questions about the currencies
+	  and stocks in your old file.
+
+	  - QIF importer: I redid the GUI to be more of a wizard style.
+	  This should get rid of a lot of people's problems using it since
+	  it's more step-by-step oriented.
+
+	* src/scm/qif-import/qif-to-gnc.scm: set Reconcile correctly.
+	Also numerous other small changes.
+
+	* src/scm/qif-import/qif-parse.scm: handle 20000101 date formats
+	and MiscExpX category lines correctly.
+
+	* src/scm/qif-import/qif-file.scm: correctly handle ambiguous 
+	date format by asking the right answer.
+
+	* src/scm/qif-import/qif-dialog-utils.scm: use the correct account
+	separator char for automatically created accounts 
+
+	* src/scm/hooks.scm: added a file-opened-hook that gets run 
+	any time a gnucash file is opened.  
+
+	* src/engine/gnc-engine.{c,h}: new files for global engine
+	meta-operations.  I mainly needed it to add a global list of known
+	'commodities' (currencies, stocks, etc), but there's now an
+	gnc-engine-init function called at startup with settable hooks.
+
+	* src/gnome/dialog-account.c: add "select" buttons for account
+	security and currency.  Still need to make "smallest currency
+	unit" configurable per-account, but need to fix common-currency
+	problem first.
+
+	* src/gnome/dialog-find-transactions.c: use gnc_dateentry widget
+
+	* src/engine/Translog.c: warning! log format for numbers is 
+	now "%Ld/%Ld", numerator/denominator.
+
+	* src/engine/Query.c: change date query functions to be more
+	useful.  Start and end dates are optionally ignored, making it 
+	possible to say "any date before.." or "any date after.." 
+
+	
 2000-09-16  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/table-allgui.c: re-implement using gtables.

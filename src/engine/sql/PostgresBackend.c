@@ -245,13 +245,17 @@ pgendCompareOneGroupOnly (PGBackend *be, AccountGroup *grp)
 static void
 pgendStoreOneAccountOnly (PGBackend *be, Account *acct, int update)
 {
-   const char *acct_guid, *parent_guid, *child_guid; 
+   const char *acct_guid, *parent_guid, *child_guid, *notes; 
    ENTER ("be=%p, acct=%p\n", be, acct);
    if (!be || !acct) return;
 
    acct_guid = guid_to_string(xaccAccountGetGUID (acct));
    parent_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetParent(acct)));
    child_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetChildren(acct)));
+
+   /* This is technically incorrect since notes could be NULL */
+   notes = xaccAccountGetNotes(acct);
+   if(!notes) notes = "";
 
    if (update) {
       /* hack alert -- values should be escaped so that no '' apear in them */
@@ -266,7 +270,7 @@ pgendStoreOneAccountOnly (PGBackend *be, Account *acct, int update)
                xaccAccountGetName (acct),
                xaccAccountGetCode (acct),
                xaccAccountGetDescription (acct),
-               xaccAccountGetNotes (acct),
+               notes,
                xaccAccountGetType (acct),
                xaccAccountGetCurrency (acct),
                xaccAccountGetSecurity (acct),
@@ -315,7 +319,7 @@ pgendStoreOneAccountOnly (PGBackend *be, Account *acct, int update)
 static int 
 pgendCompareOneAccountOnly (PGBackend *be, Account *acct)
 {
-   const char *acct_guid;
+   const char *acct_guid, *notes;
    PGresult *result;
    int i=0, nrows=0, ndiffs=0;
 
@@ -343,10 +347,13 @@ pgendCompareOneAccountOnly (PGBackend *be, Account *acct)
       GET_RESULTS (be->connection, result);
       IF_ONE_ROW (result, nrows, i) {
  
+        notes = xaccAccountGetNotes(acct);
+        if(!notes) notes = "";
+
          /* compared queried values to input values */
          COMP_STR ("accountName", xaccAccountGetName(acct), ndiffs);
          COMP_STR ("description", xaccAccountGetDescription(acct), ndiffs);
-         COMP_STR ("notes", xaccAccountGetNotes(acct), ndiffs);
+         COMP_STR ("notes", notes, ndiffs);
          COMP_STR ("currency", xaccAccountGetCurrency(acct), ndiffs);
          COMP_STR ("security", xaccAccountGetSecurity(acct), ndiffs);
 
@@ -504,8 +511,8 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split, int update)
                xaccSplitGetMemo(split),
                xaccSplitGetAction(split),
                xaccSplitGetReconcile(split),
-               xaccSplitGetShareAmount(split),
-               xaccSplitGetSharePrice(split),
+               DxaccSplitGetShareAmount(split),
+               DxaccSplitGetSharePrice(split),
                split_guid
                );
    } else {
@@ -522,8 +529,8 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split, int update)
                xaccSplitGetMemo(split),
                xaccSplitGetAction(split),
                xaccSplitGetReconcile(split),
-               xaccSplitGetShareAmount(split),
-               xaccSplitGetSharePrice(split)
+               DxaccSplitGetShareAmount(split),
+               DxaccSplitGetSharePrice(split)
                );
    }
    free ((char *) split_guid);
@@ -589,8 +596,8 @@ GET_DB_VAL("amount"),
 GET_DB_VAL("share_price"));
 /*
             xaccSplitGetReconcile(split),
-            xaccSplitGetShareAmount(split),
-            xaccSplitGetSharePrice(split)
+            DxaccSplitGetShareAmount(split),
+            DxaccSplitGetSharePrice(split)
 */
 
       }

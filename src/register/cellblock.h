@@ -76,6 +76,8 @@ typedef struct
   BasicCell *cell; /* cell handler */
   short cell_type; /* cell type from splitreg.h */
 
+  char *label;     /* cell label for header and hints */
+
   /* GUI layout information */
   char *sample_text;       /* sample text for sizing purposes */
   CellAlignment alignment;
@@ -83,14 +85,6 @@ typedef struct
   gboolean span;           /* can span multiple columns */
 } CellBlockCell;
 
-typedef struct
-{
-  short right_traverse_row;
-  short right_traverse_col;
-
-  short left_traverse_row;
-  short left_traverse_col;
-} CellTraverseInfo;
 
 typedef struct
 {
@@ -113,34 +107,14 @@ typedef struct
   guint32 passive_bg_color;
   guint32 passive_bg_color2;
 
-  /* The traverse and exit information is automatically created and
-   * managed by the routines below. They control the tab-traversal
-   * order through this cell block. If the cell (i,j) has input-focus,
-   * then hitting the tab key on the keyboard will take input-focus to
-   * cell (inext,jnext), where inext = right_traverse_r[i][j] and
-   * jnext = right_traverse_c[i][j]. */
-  GTable *traverse_info;
-
-  void * user_data; /* for user code use */
 } CellBlock;
 
 
 CellBlock * gnc_cellblock_new (int rows, int cols);
+
 void        gnc_cellblock_destroy (CellBlock *cellblock);
 
 CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                         int row, int col);
-
-CellTraverseInfo * gnc_cellblock_get_traverse (CellBlock *cellblock,
-                                               int row, int col);
-
-/* define next cell to traverse to */
-void gnc_cellblock_next_right (CellBlock *cellblock,
-                               int row,      int col,
-                               int next_row, int next_col);
-
-void gnc_cellblock_next_left  (CellBlock *cellblock,
-                               int row,      int col,
-                               int next_row, int next_col);
 
 #endif /* __XACC_CELL_BLOCK_H__ */

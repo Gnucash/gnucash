@@ -47,6 +47,12 @@ static short module = MOD_ENGINE;
 /********************************************************************\
 \********************************************************************/
 
+gboolean
+timespec_equal(const Timespec *ta, const Timespec *tb) {
+  if(ta->tv_sec != tb->tv_sec) return FALSE;
+  if(ta->tv_nsec != tb->tv_nsec) return FALSE;
+  return TRUE;
+}
 
 /**
  * setDateFormat

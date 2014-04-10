@@ -163,4 +163,23 @@ void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
  *    has changed cells that have not been committed. */
 gboolean xaccSRHasPendingChanges (SplitRegister *reg);
 
+/* The xaccSRCheckReconciled() method returns TRUE if the current
+ * cursor has not been changed. It also returns TRUE if it has been
+ * changed, but the relevant split is not reconciled or frozen. It
+ * also returns TRUE if it has been changed and it is reconciled and
+ * the user verifies in a dialog that the split should be changed.
+ * Otherwise, it returns FALSE. */
+gboolean xaccSRCheckReconciled (SplitRegister *reg);
+
+/* If TRUE, visually indicate the demarcation between splits with post
+ * dates prior to the present, and after. This will only make sense if
+ * the splits are ordered primarily by post date. */
+void     xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present);
+
+/* Private function, for MultiLedger.c only */
+const char * xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
+                                    gpointer user_data);
+guint32      xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
+                                      gpointer user_data);
+
 #endif /* __XACC_SPLIT_LEDGER_H__ */
