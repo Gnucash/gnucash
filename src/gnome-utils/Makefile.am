@@ -185,6 +185,10 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
+<<<<<<< HEAD
+=======
+  ${QOF_LIBS} \
+>>>>>>> origin/webkit
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
