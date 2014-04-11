@@ -906,7 +906,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 
   session = gnc_get_current_session();
   book = qof_session_get_book(session);
-  filename = qof_session_get_file_path(session);
+  filename = qof_session_get_url(session);
   if (filename == NULL)
     filename = _("<unknown>");
   if ((tmp = strrchr(filename, '/')) != NULL)

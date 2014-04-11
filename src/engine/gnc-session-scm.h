@@ -43,8 +43,6 @@
 #include "gnc-engine.h"
 
 void gnc_session_scm_load (QofSession *session);
-gboolean gnc_session_scm_export (QofSession *tmp_session,
-                                 QofSession *real_session);
 void     gnc_session_scm_save (QofSession *session);
 void     gnc_session_scm_set_callback (SCM percentage_cb);
 

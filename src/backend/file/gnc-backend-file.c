@@ -66,6 +66,18 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
+typedef enum 
+{
+    GNC_BOOK_NOT_OURS,
+    GNC_BOOK_BIN_FILE,
+    GNC_BOOK_XML1_FILE,
+    GNC_BOOK_XML2_FILE,
+    GNC_BOOK_XML2_FILE_NO_ENCODING,
+    QSF_GNC_OBJECT,
+    QSF_OBJECT,
+    QSF_MAP,
+} QofBookFileType;
+
 /* ================================================================= */
 
 static gboolean
@@ -1024,8 +1036,8 @@ gnc_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-void
-gnc_provider_init(void)
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module)
 {
 	QofBackendProvider *prov;
 #ifdef ENABLE_NLS
@@ -1042,6 +1054,7 @@ gnc_provider_init(void)
         prov->provider_free = gnc_provider_free;
 	prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
+        return NULL;
 }
 
 /* ========================== END OF FILE ===================== */

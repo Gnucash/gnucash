@@ -211,11 +211,18 @@ gnc_html_report_stream_cb (const char *location, char ** data, int *len)
 
   ok = gnc_run_report_id_string (location, data);
 
-  if (!ok)
+  if (!ok) {
     *data = g_strdup_printf ("<html><body><h3>%s</h3>"
 			     "<p>%s</p></body></html>", 
 			     _("Report error"),
 			     _("An error occurred while running the report."));
+    
+    /* Make sure the progress bar is finished, which will also
+       make the GUI sensitive again. Easier to do this via guile
+       because otherwise we would need to link against gnome-utils
+       and a lot more. */
+    scm_c_eval_string("(gnc:report-finished)");
+  }
 
   *len = strlen(*data);
   return ok;

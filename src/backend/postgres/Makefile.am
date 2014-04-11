@@ -2,8 +2,17 @@ SUBDIRS = . test
 
 lib_LTLIBRARIES = libgnc-backend-postgres.la 
 
-libgnc_backend_postgres_la_LDFLAGS = -module 
+AM_CFLAGS = \
+  -I.. -I../.. \
+  -I../../engine \
+  -I${srcdir}/../.. \
+  -I${top_srcdir}/src/backend \
+  -I${top_srcdir}/src/engine \
+  ${PGSQL_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${GLIB_CFLAGS}
 
+libgnc_backend_postgres_la_LDFLAGS = -module 
 libgnc_backend_postgres_la_LIBADD  =  ${PGSQL_LIBS} -lpq  \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${QOF_LIBS} \
@@ -90,14 +99,6 @@ M4_SRC = \
 	kvp-objects-header.m4
 
 SUFFIXES = .sql
-
-AM_CFLAGS = \
-	-I.. -I${srcdir}/.. \
-	-I../.. -I${srcdir}/../.. \
-	-I../../engine -I${srcdir}/../../engine \
-	${PGSQL_CFLAGS} \
-	${QOF_CFLAGS} \
-	${GLIB_CFLAGS}
 
 $(M4_SRC): table.m4
 

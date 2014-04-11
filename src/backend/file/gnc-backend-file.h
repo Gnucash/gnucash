@@ -32,7 +32,9 @@
 #define GNC_BACKEND_FILE_H_
 
 #include "qof.h"
+#include <gmodule.h>
 
+#include "qofbackend-p.h"
 struct FileBackend_struct
 {
   QofBackend be;
@@ -51,20 +53,9 @@ struct FileBackend_struct
 
 typedef struct FileBackend_struct FileBackend;
 
-typedef enum 
-{
-    GNC_BOOK_NOT_OURS,
-    GNC_BOOK_BIN_FILE,
-    GNC_BOOK_XML1_FILE,
-    GNC_BOOK_XML2_FILE,
-    GNC_BOOK_XML2_FILE_NO_ENCODING,
-    QSF_GNC_OBJECT,
-    QSF_OBJECT,
-    QSF_MAP,
-} QofBookFileType;
-
 QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
 
-void gnc_provider_init(void);
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module);
 
 #endif /* GNC_BACKEND_FILE_H_ */

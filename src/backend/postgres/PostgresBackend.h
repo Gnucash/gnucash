@@ -34,6 +34,7 @@
 #ifndef POSTGRES_BACKEND_H
 #define POSTGRES_BACKEND_H
 
+#include <gmodule.h>
 #include <libpq-fe.h>
 
 #include "Group.h"
@@ -57,6 +58,7 @@ typedef enum {
 
 #define MAX_VERSION_AGE 10
 
+#include "qofbackend-p.h"
 struct _pgend {
    QofBackend be;
 
@@ -132,6 +134,7 @@ QofBook * pgendGetBook(PGBackend *pbe);
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);
 
-void pgend_provider_init(void);
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module);
 
 #endif /* POSTGRES_BACKEND_H */

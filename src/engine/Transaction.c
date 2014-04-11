@@ -48,6 +48,7 @@
 #include "gnc-lot.h"
 #include "gnc-event.h"
 
+#include "qofbackend-p.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():

@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-engine.c  -- top-level initialization for Gnucash Engine     *
+ * gnc-engine.c  -- top-level initialization for GnuCash Engine     *
  * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -39,15 +39,14 @@
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
-#define GNC_LIB_NAME "libgnc-backend-file"
-/** init_fcn for gnc file backend library. */
-#define GNC_LIB_INIT "gnc_provider_init"
+#define GNC_LIB_NAME "gnc-backend-file"
+
 /* gnc-backend-file location */
 #include "gncla-dir.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
-static QofLogModule log_module = GNC_MOD_ENGINE;
+//static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /* GnuCash version functions */
 unsigned int
@@ -76,15 +75,18 @@ gnucash_micro_version (void)
 void 
 gnc_engine_init(int argc, char ** argv)
 {
+  static gchar *names[] = {
+      GNC_LIB_NAME, QSF_BACKEND_LIB, "gnc-backend-postgres", 
+      NULL};
+  gchar **np;
   gnc_engine_init_hook_t hook;
-  GList                  * cur;
+  GList * cur;
 
   if (1 == engine_is_initialized) return;
 
   /* initialize logging to our file. */
   qof_log_init_filename("/tmp/gnucash.trace");
-  /* Only set the core log_modules here
-	the rest can be set locally.  */
+  /* Only set the core log_modules here the rest can be set locally.  */
   qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
   qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
   qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
@@ -96,12 +98,11 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  g_return_if_fail((qof_load_backend_library 
-		(QOF_LIB_DIR, QSF_BACKEND_LIB, QSF_MODULE_INIT)));
-  g_return_if_fail((qof_load_backend_library
-		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)));
+  for (np = names; *np; np++) {
+      if (qof_load_backend_library(GNC_LIBDIR, *np))
+          engine_is_initialized = 1;
+  }
 
-  engine_is_initialized = 1;
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)
   {
@@ -138,10 +139,7 @@ gnc_engine_add_init_hook(gnc_engine_init_hook_t h) {
 gboolean
 gnc_engine_is_initialized (void)
 {
-/*	if (engine_is_initialized == 1) return TRUE;
-	return FALSE;
-*/	
-	return (engine_is_initialized == 1) ? TRUE : FALSE;
+    return (engine_is_initialized == 1) ? TRUE : FALSE;
 }
 
 /* replicate old gnc-trace enum behaviour
@@ -174,48 +172,5 @@ void gnc_log_default(void)
 	qof_log_set_level(GNC_MOD_DRUID, QOF_LOG_WARNING);
 	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_TRACE);
 	qof_log_set_level(GNC_MOD_BUDGET, QOF_LOG_WARNING);
-}
-
-/* ====================================================================== */
-/* XXX This exports the list of accounts to a file.  It does not export
- * any transactions.  Its a place-holder until full book-closing is implemented.
- */
-
-gboolean
-qof_session_export (QofSession *tmp_session,
-                    QofSession *real_session,
-                    QofPercentageFunc percentage_func)
-{
-  QofBook *book, *book2;
-  QofBackend *be;
-  int err;
-
-  if ((!tmp_session) || (!real_session)) return FALSE;
-
-  book = qof_session_get_book (real_session);
-  ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
-         tmp_session, real_session, book,
-         qof_session_get_url(tmp_session)
-         ? qof_session_get_url(tmp_session) : "(null)");
-
-  /* There must be a backend or else.  (It should always be the file
-   * backend too.)
-   */
-  book2 = qof_session_get_book(tmp_session);
-  be = qof_book_get_backend(book2);
-  if (!be)
-    return FALSE;
-
-  be->percentage = percentage_func;
-  if (be->export)
-    {
-
-      (be->export)(be, book);
-      err = qof_backend_get_error(be);
-    
-      if (ERR_BACKEND_NO_ERR != err) { return FALSE; }
-    }
-
-  return TRUE;
 }
 

@@ -177,6 +177,15 @@ void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
 gboolean qof_backend_commit_exists(QofBackend *be);
 //@}
 
+/** The qof_backend_set_error() routine pushes an error code onto the error
+ *  stack. (FIXME: the stack is 1 deep in current implementation).
+ */
+void qof_backend_set_error (QofBackend *be, QofBackendError err);
+
+/** The qof_backend_get_error() routine pops an error code off the error stack.
+ */
+QofBackendError qof_backend_get_error (QofBackend *be);
+
 /** @name Backend Configuration using KVP
 
 The backend uses qof_backend_get_config to pass back a KvpFrame of QofBackendOption
@@ -254,16 +263,14 @@ KvpFrame* qof_backend_get_config(QofBackend *be);
 /** \brief Load a QOF-compatible backend shared library.
 
 \param directory Can be NULL if filename is a complete path.
-\param filename  Name of the .la file that describes the
+\param module_name  Name of the .la file that describes the
 	shared library. This provides platform independence,
 	courtesy of libtool.
-\param init_fcn  The QofBackendProvider init function.
 
 \return FALSE in case or error, otherwise TRUE.
 */
 gboolean
-qof_load_backend_library (const gchar *directory, 
-			const gchar* filename, const gchar* init_fcn);
+qof_load_backend_library(const gchar *directory, const gchar* module_name);
 
 /** \brief Retrieve the backend used by this book */
 QofBackend* qof_book_get_backend (QofBook *book);

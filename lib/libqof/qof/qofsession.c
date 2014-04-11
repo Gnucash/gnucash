@@ -843,7 +843,6 @@ struct backend_providers
 {
 	const char *libdir;
 	const char *filename;
-	const char *init_fcn;
 };
 
 /* All available QOF backends need to be described here
@@ -851,11 +850,11 @@ and the last entry must be three NULL's.
 Remember: Use the libdir from the current build environment
 and use JUST the module name without .so - .so is not portable! */
 struct backend_providers backend_list[] = {
-	{ QOF_LIB_DIR, QSF_BACKEND_LIB, QSF_MODULE_INIT },
+	{ QOF_LIB_DIR, QSF_BACKEND_LIB },
 #ifdef HAVE_DWI
-	{ QOF_LIB_DIR, "libqof_backend_dwi", "dwiend_provider_init" },
+	{ QOF_LIB_DIR, "libqof_backend_dwi"},
 #endif
-	{ NULL, NULL, NULL }
+	{ NULL, NULL }
 };
 
 static void
@@ -876,11 +875,10 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	{
 		for (num = 0; backend_list[num].filename != NULL; num++) {
 			if(!qof_load_backend_library(backend_list[num].libdir,
-				backend_list[num].filename, backend_list[num].init_fcn))
+				backend_list[num].filename))
 			{
-				PWARN (" failed to load %s from %s using %s",
-				backend_list[num].filename, backend_list[num].libdir,
-				backend_list[num].init_fcn);
+				PWARN (" failed to load %s from %s",
+				backend_list[num].filename, backend_list[num].libdir);
 			}
 		}
 	}
@@ -894,13 +892,14 @@ qof_session_load_backend(QofSession * session, char * access_method)
 			/* More than one backend could provide this
 			access method, check file type compatibility. */
 			type_check = (gboolean (*)(const char*)) prov->check_data_type;
-			prov_type = (type_check)(session->book_id);
-			if(!prov_type)
-			{
+			if (type_check) {
+                            prov_type = (type_check)(session->book_id);
+                            if (!prov_type) {
 				PINFO(" %s not usable", prov->provider_name);
 				p = p->next;
 				continue;
-			}
+                            }
+                        }
 			PINFO (" selected %s", prov->provider_name);
 			if (NULL == prov->backend_new) 
 			{
@@ -985,11 +984,11 @@ qof_session_begin (QofSession *session, const char * book_id,
     return;
   }
 
-  /* Store the session URL  */
-  session->book_id = g_strdup (book_id);
-
   /* destroy the old backend */
   qof_session_destroy_backend(session);
+
+  /* Store the session URL  */
+  session->book_id = g_strdup (book_id);
 
   /* Look for something of the form of "file:/", "http://" or 
    * "postgres://". Everything before the colon is the access 
@@ -1000,7 +999,7 @@ qof_session_begin (QofSession *session, const char * book_id,
   {
     access_method = g_strdup (book_id);
     p = strchr (access_method, ':');
-    *p = 0;
+    *p = '\0';
     qof_session_load_backend(session, access_method);
     g_free (access_method);
   }
@@ -1013,6 +1012,8 @@ qof_session_begin (QofSession *session, const char * book_id,
   /* No backend was found. That's bad. */
   if (NULL == session->backend)
   {
+    g_free(session->book_id);
+    session->book_id = NULL;
     qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
     LEAVE (" BAD: no backend: sess=%p book-id=%s", 
          session,  book_id ? book_id : "(null)");
@@ -1207,7 +1208,7 @@ qof_session_save (QofSession *session,
 		{
 			for (num = 0; backend_list[num].filename != NULL; num++) {
 				qof_load_backend_library(backend_list[num].libdir,
-					backend_list[num].filename, backend_list[num].init_fcn);
+					backend_list[num].filename);
 			}
 		}
 		p = g_slist_copy(provider_list);
@@ -1416,6 +1417,47 @@ qof_session_process_events (QofSession *session)
   if (!session->backend->process_events) return FALSE;
 
   return session->backend->process_events (session->backend);
+}
+
+/* XXX This exports the list of accounts to a file.  It does not
+ * export any transactions.  It's a place-holder until full
+ * book-closing is implemented.
+ */
+gboolean
+qof_session_export (QofSession *tmp_session,
+                    QofSession *real_session,
+                    QofPercentageFunc percentage_func)
+{
+  QofBook *book, *book2;
+  QofBackend *be;
+
+  if ((!tmp_session) || (!real_session)) return FALSE;
+
+  book = qof_session_get_book (real_session);
+  ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
+         tmp_session, real_session, book,
+         qof_session_get_url(tmp_session)
+         ? qof_session_get_url(tmp_session) : "(null)");
+
+  /* There must be a backend or else.  (It should always be the file
+   * backend too.)
+   */
+  book2 = qof_session_get_book(tmp_session);
+  be = qof_book_get_backend(book2);
+  if (!be)
+    return FALSE;
+
+  be->percentage = percentage_func;
+  if (be->export) {
+      int err;
+
+      (be->export)(be, book);
+      err = qof_backend_get_error(be);
+    
+      if (ERR_BACKEND_NO_ERR != err) { return FALSE; }
+  }
+
+  return TRUE;
 }
 
 /* =================== END OF FILE ====================================== */

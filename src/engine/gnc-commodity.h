@@ -34,7 +34,7 @@
     handling and identification system (GUID's, Entities, etc.)
     that the other parts of GnuCash use.  The API really should be
     ported over.  This would allow us to get rid of the 
-    commodity table reoutines defined below. 
+    commodity table routines defined below. 
 
     @{ */
 /** @file gnc-commodity.h

@@ -70,7 +70,4 @@ QofBackend * qof_session_get_backend (QofSession *session);
 
 void qof_session_push_error (QofSession *session, QofBackendError err,
                              const char *message);
-
-QofBackend* gncBackendInit_file(const char *book_id, void *data);
-
 #endif

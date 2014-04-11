@@ -29,17 +29,16 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 
-#define GNC_LIB_NAME "libgnc-backend-file.la"
-#define GNC_LIB_INIT "gnc_provider_init"
+#define GNC_LIB_NAME "gnc-backend-file"
 
 int main (int argc, char ** argv)
 {
-	qof_init();
-	cashobjects_register();
-	do_test(
-		qof_load_backend_library ("../", GNC_LIB_NAME, GNC_LIB_INIT),
-		" loading gnc-backend-file GModule failed");
+    qof_init();
+    cashobjects_register();
+    do_test(
+        qof_load_backend_library ("../", GNC_LIB_NAME),
+        " loading gnc-backend-file GModule failed");
     print_test_results();
-	qof_close();
-	return 0;
+    qof_close();
+    return 0;
 }

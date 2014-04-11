@@ -642,10 +642,10 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
   switch(dateFormat)
   {
     case QOF_DATE_FORMAT_UK:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d %2d:%02d", day, month, year, hour, min);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", day, month, year, hour, min);
       break;
     case QOF_DATE_FORMAT_CE:
-      flen = g_snprintf (buff, len, "%2d.%2d.%-4d %2d:%02d", day, month, year, hour, min);
+      flen = g_snprintf (buff, len, "%02d.%02d.%-4d %2d:%02d", day, month, year, hour, min);
       break;
     case QOF_DATE_FORMAT_ISO:
       flen = g_snprintf (buff, len, "%04d-%02d-%02d %02d:%02d", year, month, day, hour, min);
@@ -664,7 +664,7 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 
     case QOF_DATE_FORMAT_US:
     default:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d %2d:%02d", month, day, year, hour, min);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", month, day, year, hour, min);
       break;
   }
   return flen;

@@ -586,6 +586,14 @@ AC_ARG_ENABLE( sql,
 
     if test "x$enableval" != "xno" ; then
 
+      AC_MSG_ERROR([
+
+  We are very sorry, but the PostgreSQL backend is currently 
+  completely broken. --enable-sql has been disabled because of this. 
+  See e. g. http://bugzilla.gnome.org/show_bug.cgi?id=332251
+
+]) 
+
       PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
       if test "x$PGSQL_CFLAGS" != x; then
 	PGSQL_CFLAGS="-I${PGSQL_CFLAGS}"
