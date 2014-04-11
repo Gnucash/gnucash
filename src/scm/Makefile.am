@@ -30,14 +30,18 @@ SCM_FILE_LINKS = \
 endif
 
 .scm-links: 
-	rm -f gnucash
-	$(LN_S) -f ${srcdir} gnucash
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
+
+clean-local:
+	$(RM) -rf gnucash
 
 SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 
@@ -54,10 +58,10 @@ EXTRA_DIST = \
 build-config.scm: ${srcdir}/build-config.scm.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:' \
-            -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
+            -e 's#@-VERSION-@#${VERSION}#' \
+            -e 's#@-GNC_HELPDIR-@#${GNC_HELPDIR}#'
 	mv $@.tmp $@
 
-CLEANFILES = gnucash .scm-links
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = build-config.scm

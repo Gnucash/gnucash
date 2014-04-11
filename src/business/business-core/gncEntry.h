@@ -169,7 +169,8 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_inv);
 gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv);
 gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv);
-GList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv);
+typedef GList AccountValueList;
+AccountValueList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv);
 
 /** Compute the Entry value, tax-value, and discount_value, based on
  * the quantity, price, discount, tax-table, and types.  The value is

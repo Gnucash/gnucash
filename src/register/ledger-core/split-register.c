@@ -1366,6 +1366,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (gnc_split_register_handle_exchange (reg, FALSE))
      return TRUE;
 
+   gnc_suspend_gui_refresh ();
+
    /* determine whether we should commit the pending transaction */
    if (pending_trans != trans)
    {
@@ -1379,17 +1381,22 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
            g_assert_not_reached();
 
        if (trans == blank_trans) {
-           /* Don't begin editing the blank trans, because it's already open */
+           /* Don't begin editing the blank trans, because it's
+              already open, but mark it pending now. */
            g_assert(xaccTransIsOpen(blank_trans));
+           /* This is now the pending transaction */
+           info->pending_trans_guid = *xaccTransGetGUID(blank_trans);
        } else {
            PINFO("beginning edit of trans %p", trans);
            if (gnc_split_register_begin_edit_or_warn(info, trans))
+	   {
+	       gnc_resume_gui_refresh ();
                return FALSE;
+	   }
        }
        pending_trans = trans;
    }
    g_assert(xaccTransIsOpen(trans));
-   gnc_suspend_gui_refresh ();
 
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)
@@ -1839,37 +1846,37 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
   switch (sr_type)
   {
     case BANK_REGISTER:
-      return BANK;
+      return ACCT_TYPE_BANK;
     case CASH_REGISTER:
-      return CASH;
+      return ACCT_TYPE_CASH;
     case ASSET_REGISTER:
-      return ASSET;
+      return ACCT_TYPE_ASSET;
     case CREDIT_REGISTER:
-      return CREDIT;
+      return ACCT_TYPE_CREDIT;
     case LIABILITY_REGISTER:
-      return LIABILITY;
+      return ACCT_TYPE_LIABILITY;
     case PAYABLE_REGISTER:
-      return PAYABLE;
+      return ACCT_TYPE_PAYABLE;
     case RECEIVABLE_REGISTER:
-      return RECEIVABLE;
+      return ACCT_TYPE_RECEIVABLE;
     case INCOME_LEDGER:  
     case INCOME_REGISTER:
-      return INCOME;
+      return ACCT_TYPE_INCOME;
     case EXPENSE_REGISTER:
-      return EXPENSE;
+      return ACCT_TYPE_EXPENSE;
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      return STOCK;
+      return ACCT_TYPE_STOCK;
     case CURRENCY_REGISTER:
-      return CURRENCY;
+      return ACCT_TYPE_CURRENCY;
     case GENERAL_LEDGER:  
-      return NO_TYPE;
+      return ACCT_TYPE_NONE;
     case EQUITY_REGISTER:
-      return EQUITY;
+      return ACCT_TYPE_EQUITY;
     case SEARCH_LEDGER:
-      return NO_TYPE;
+      return ACCT_TYPE_NONE;
     default:
-      return NO_TYPE;
+      return ACCT_TYPE_NONE;
   }
 }
 

@@ -68,13 +68,13 @@
    (gnc:make-taxtable-option
     gnc:*business-label* (N_ "Default Customer TaxTable")
     "e" (N_ "The default tax table to apply to customers.")
-    (lambda () #f) #f))
+    (lambda () '()) #f))
 
   (reg-option
    (gnc:make-taxtable-option
     gnc:*business-label* (N_ "Default Vendor TaxTable")
     "f" (N_ "The default tax table to apply to vendors.")
-    (lambda () #f) #f))
+    (lambda () '()) #f))
 
   (reg-option
    (gnc:make-dateformat-option
@@ -83,4 +83,4 @@
     #f))
 )
 
-(gnc:register-kvp-option-generator gnc:id-book book-options-generator)
+(gnc-register-kvp-option-generator QOF-ID-BOOK-SCM book-options-generator)

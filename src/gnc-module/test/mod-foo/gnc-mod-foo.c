@@ -6,8 +6,8 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "foo-gwrap.h"
 #include "gnc-module-api.h"
+#include "swig-foo.c"
 
 int libgncmodfoo_LTX_gnc_module_system_interface = 0;
 
@@ -19,7 +19,6 @@ int libgncmodfoo_LTX_gnc_module_revision = 0;
 char *libgncmodfoo_LTX_gnc_module_path(void);
 char *libgncmodfoo_LTX_gnc_module_description(void);
 int libgncmodfoo_LTX_gnc_module_init(int refcount);
-
 
 char *
 libgncmodfoo_LTX_gnc_module_path(void) {
@@ -33,8 +32,9 @@ libgncmodfoo_LTX_gnc_module_description(void) {
 
 int 
 libgncmodfoo_LTX_gnc_module_init(int refcount) {
-  /* publish the g-wrapped Scheme bindings for libfoo */
-  gw_init_wrapset_foo_gwrap();
+  /* publish the wrapped Scheme bindings for libfoo */
+  scm_init_sw_foo_module();
+  scm_c_eval_string("(use-modules (sw_foo))");
   
   /* use the Scheme "foo" module */
   scm_c_eval_string("(use-modules (gnucash foo))");

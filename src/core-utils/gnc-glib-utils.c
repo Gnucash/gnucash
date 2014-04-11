@@ -214,3 +214,11 @@ gnc_utf8_strip_invalid (gchar *str)
     memmove(end, end+1, len);	/* shuffle the remainder one byte */
   } while (!gnc_utf8_validate(str, -1, (const gchar **)&end));
 }
+
+gchar *
+gnc_utf8_strip_invalid_strdup(const gchar* str)
+{
+  gchar *result = g_strdup (str);
+  gnc_utf8_strip_invalid (result);
+  return result;
+}

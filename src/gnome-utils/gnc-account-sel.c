@@ -146,6 +146,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas->combo = GTK_COMBO_BOX_ENTRY(widget);
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),
 				GTK_TREE_MODEL(gas->store));
+	g_object_unref(gas->store);
         gtk_container_add( GTK_CONTAINER(gas), widget );
 
         /* Add completion. */

@@ -94,6 +94,11 @@ mark_invoice (GncInvoice *invoice)
   qof_event_gen (&invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
+QofBook * gncInvoiceGetBook(GncInvoice *x)
+{
+    return qof_instance_get_book(QOF_INSTANCE(x));
+}
+
 /* ================================================================== */
 /* Create/Destroy Functions */
 
@@ -639,7 +644,7 @@ gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice)
   return invoice->to_charge_amount;
 }
 
-GList * gncInvoiceGetEntries (GncInvoice *invoice)
+EntryList * gncInvoiceGetEntries (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->entries;

@@ -29,10 +29,9 @@
 (use-modules (gnucash process))
 (use-modules (www main))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
-(use-modules (g-wrapped gw-core-utils))
-(use-modules (g-wrapped gw-gnome-utils))
+(use-modules (gnucash core-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
 
@@ -243,7 +242,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (g:find-program-in-path "gnc-fq-check"))
+  (g-find-program-in-path "gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program #f))
@@ -291,7 +290,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (g:find-program-in-path "gnc-fq-helper"))
+  (g-find-program-in-path "gnc-fq-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form
@@ -397,9 +396,9 @@
     ;;                     (commodity-4 currency-4 tz-4) ...)
     ;;  ...)
 
-    (let* ((ct (gnc:book-get-commodity-table book))
+    (let* ((ct (gnc-commodity-table-get-table book))
 	   (big-list
-	    (gnc:commodity-table-get-quotable-commodities-info
+	    (gnc-commodity-table-get-quotable-commodities
 	     ct))
 	   (commodity-list #f)
 	   (currency-list (filter
@@ -445,14 +444,14 @@
     (if (equal? (car fq-call-data) "currency")
         (map (lambda (quote-item-info)
                (list (car fq-call-data)
-                     (gnc:commodity-get-mnemonic (car quote-item-info))
-                     (gnc:commodity-get-mnemonic (cadr quote-item-info))))
+                     (gnc-commodity-get-mnemonic (car quote-item-info))
+                     (gnc-commodity-get-mnemonic (cadr quote-item-info))))
              (cdr fq-call-data))
         (list
          (cons (car fq-call-data)
                (map
                 (lambda (quote-item-info)
-                  (gnc:commodity-get-mnemonic (car quote-item-info)))
+                  (gnc-commodity-get-mnemonic (car quote-item-info)))
                 (cdr fq-call-data))))))
 
   (define (fq-results->commod-tz-quote-triples fq-call-data fq-results)
@@ -539,11 +538,11 @@
            (price #f)
            (price-type #f)
            (currency-str (assq-ref quote-data 'currency))
-           (commodity-table (gnc:book-get-commodity-table book))
+           (commodity-table (gnc-commodity-table-get-table book))
            (currency
             (and commodity-table
                  (string? currency-str)
-                 (gnc:commodity-table-lookup commodity-table
+                 (gnc-commodity-table-lookup commodity-table
                                              "ISO4217"
                                              (string-upcase currency-str)))))
 
@@ -566,7 +565,7 @@
       ;; FIXME: SIGFIGS is not what we want here...
       (if price
           (set! price
-                (gnc:double-to-gnc-numeric price
+                (double-to-gnc-numeric price
                                            GNC-DENOM-AUTO
                                            (logior (GNC-DENOM-SIGFIGS 9)
                                                    GNC-RND-ROUND))))
@@ -577,32 +576,32 @@
 
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
-           currency-str ":" (gnc:commodity-get-mnemonic commodity))
-          (let ((gnc-price (gnc:price-create book)))
+           currency-str ":" (gnc-commodity-get-mnemonic commodity))
+          (let ((gnc-price (gnc-price-create book)))
             (if (not gnc-price)
                 (string-append
-                 currency-str ":" (gnc:commodity-get-mnemonic commodity))
+                 currency-str ":" (gnc-commodity-get-mnemonic commodity))
                 (begin
-                  (gnc:price-set-commodity gnc-price commodity)
-                  (gnc:price-set-currency gnc-price currency)
-                  (gnc:price-set-time gnc-price gnc-time)
-                  (gnc:price-set-source gnc-price "Finance::Quote")
-                  (gnc:price-set-type gnc-price price-type)
-                  (gnc:price-set-value gnc-price price)
+                  (gnc-price-set-commodity gnc-price commodity)
+                  (gnc-price-set-currency gnc-price currency)
+                  (gnc-price-set-time gnc-price gnc-time)
+                  (gnc-price-set-source gnc-price "Finance::Quote")
+                  (gnc-price-set-type gnc-price price-type)
+                  (gnc-price-set-value gnc-price price)
                   gnc-price))))))
 
   (define (book-add-prices! book prices)
-    (let ((pricedb (gnc:book-get-pricedb book)))
+    (let ((pricedb (gnc-pricedb-get-db book)))
       (for-each
        (lambda (price)
-         (gnc:pricedb-add-price pricedb price)
-         (gnc:price-unref price))
+         (gnc-pricedb-add-price pricedb price)
+         (gnc-price-unref price))
        prices)))
 
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.
 
-  (let* ((group (gnc:book-get-group book))
+  (let* ((group (xaccGetAccountGroup book))
          (fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
                         (apply append
@@ -620,9 +619,9 @@
                              (if (car cq-pair)
                                  #f
                                  (string-append
-                                  (gnc:commodity-get-namespace (cdr cq-pair))
+                                  (gnc-commodity-get-namespace (cdr cq-pair))
                                   ":"
-                                  (gnc:commodity-get-mnemonic (cdr cq-pair)))))
+                                  (gnc-commodity-get-mnemonic (cdr cq-pair)))))
                            commod-tz-quote-triples)))
          ;; strip out the "bad" ones from above.
          (ok-syms
@@ -633,47 +632,47 @@
     (cond
      ((eq? fq-call-data #f)
       (set! keep-going? #f)
-      (if (gnc:ui-is-running?)
-          (gnc:error-dialog window (_ "No commodities marked for quote retrieval."))
+      (if (gnucash-ui-is-running)
+          (gnc-error-dialog window (_ "No commodities marked for quote retrieval."))
 	  (gnc:warn (_ "No commodities marked for quote retrieval."))))
      ((eq? fq-results #f)
       (set! keep-going? #f)
-      (if (gnc:ui-is-running?)
-          (gnc:error-dialog window (_ "Unable to get quotes or diagnose the problem."))
+      (if (gnucash-ui-is-running)
+          (gnc-error-dialog window (_ "Unable to get quotes or diagnose the problem."))
 	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
-      (if (gnc:ui-is-running?)
-          (gnc:error-dialog window
+      (if (gnucash-ui-is-running)
+          (gnc-error-dialog window
            (_ "You are missing some needed Perl libraries.
 Run 'gnc-fq-update' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
 Run 'gnc-fq-update' as root to install them.") "\n")))
      ((member 'system-error fq-results)
       (set! keep-going? #f)
-      (if (gnc:ui-is-running?)
-          (gnc:error-dialog window
+      (if (gnucash-ui-is-running)
+          (gnc-error-dialog window
            (_ "There was a system error while retrieving the price quotes."))
           (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
-      (if (gnc:ui-is-running?)
-          (gnc:error-dialog window
+      (if (gnucash-ui-is-running)
+          (gnc-error-dialog window
            (_ "There was an unknown error while retrieving the price quotes."))
           (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
-     ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
-      (gnc:error-dialog window
+     ((and (not commod-tz-quote-triples) (gnucash-ui-is-running))
+      (gnc-error-dialog window
        (_ "Unable to get quotes or diagnose the problem."))
        (set! keep-going? #f))
      ((not commod-tz-quote-triples)
       (gnc:warn (_ "Unable to get quotes or diagnose the problem."))
       (set! keep-going? #f))
      ((not (null? problem-syms))
-      (if (gnc:ui-is-running?)
+      (if (gnucash-ui-is-running)
           (if (and ok-syms (not (null? ok-syms)))
               (set!
                keep-going?
-               (gnc:verify-dialog window #t
+               (gnc-verify-dialog window #t
                 (call-with-output-string
                  (lambda (p)
                    (display (_ "Unable to retrieve quotes for these items:") p)
@@ -683,7 +682,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                    (newline p)
                    (display (_ "Continue using only the good quotes?") p)))))
               (begin
-                (gnc:error-dialog window
+                (gnc-error-dialog window
                  (call-with-output-string
                   (lambda (p)
                     (display
@@ -709,10 +708,10 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                           (commodity-tz-quote-triple->price book triple))
                         ok-syms)))
        (if (any string? prices)
-           (if (gnc:ui-is-running?)
+           (if (gnucash-ui-is-running)
                (set!
                 keep-going?
-                (gnc:verify-dialog window #t
+                (gnc-verify-dialog window #t
                  (call-with-output-string
                   (lambda (p)
                     (display (_ "Unable to create prices for these items:") p)
@@ -737,30 +736,6 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                                    (lambda (x) (not (string? x)))
                                    prices)))))))
 
-(define (gnc:add-quotes-to-book-at-url url)
-  (let* ((session (gnc:url->loaded-session (gnc:get-current-session) url #f #f))
-         (quote-ok? #f))
-    (gnc:debug "in add-quotes-to-book-at-url")
-    (if session
-	(begin
-          (gnc:debug "about to call gnc:book-add-quotes")
-	  (set! quote-ok? (and (gnc:book-add-quotes #f
-				(gnc:session-get-book session))))
-
-          (gnc:debug "done gnc:book-add-quotes:" quote-ok?)
-	  (if (not quote-ok?) (gnc:error "book-add-quotes failed"))
-	  (gnc:session-save session)
-	  (if (not (eq? 'no-err
-			(gw:enum-<gnc:BackendError>-val->sym
-			 (gnc:session-get-error session) #f)))
-	      (set! quote-ok? #f))
-	  (if (not quote-ok?)
-	      (gnc:error "session-save failed " 
-                         (gnc:session-get-error session)))
-	  (gnc:session-destroy session))
-	(gnc:error "book-add-quotes unable to open file"))
-    quote-ok?))
-
 ; (define (get-1-quote exchange . items)
 ;   (let ((cmd (apply list 'fetch exchange items))
 ; 	(quoter (run-sub-process #f
@@ -780,4 +755,4 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
     (if (list? sources)
 	(begin
 	  (gnc:msg "Found Finance::Quote version " (car sources))
-	  (gnc:quote-source-set-fq-installed (cdr sources))))))
+	  (gnc-quote-source-set-fq-installed (cdr sources))))))

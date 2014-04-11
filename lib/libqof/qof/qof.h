@@ -100,7 +100,6 @@
 #include "qofchoice.h"
 #include "qofbookmerge.h"
 #include "qofreference.h"
-#include "qofla-dir.h"
 #include "deprecated.h"
 
 /** allow easy logging of QSF debug messages */

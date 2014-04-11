@@ -30,7 +30,6 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "gw-business-core.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
@@ -43,6 +42,8 @@
 #include "gncOwnerP.h"
 #include "gncTaxTableP.h"
 #include "gncVendorP.h"
+
+extern SCM scm_init_sw_business_core_module (void);
 
 /* version of the gnc module system interface we require */
 int libgncmod_business_core_LTX_gnc_module_system_interface = 0;
@@ -94,7 +95,8 @@ libgncmod_business_core_LTX_gnc_module_init(int refcount)
     gncVendorRegister ();
   }
   
-  scm_c_eval_string("(use-modules (g-wrapped gw-business-core))");
+  scm_init_sw_business_core_module();
+  scm_c_eval_string("(use-modules (sw_business_core))");
   scm_c_eval_string("(use-modules (gnucash business-core))");
 
   return TRUE;

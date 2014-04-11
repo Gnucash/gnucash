@@ -9,39 +9,39 @@
 (use-modules (ice-9 regex))
 
 (define (default-stock-acct brokerage security)
-  (string-append brokerage (gnc:account-separator-string) security))
+  (string-append brokerage (gnc-get-account-separator-string) security))
 
 (define (default-dividend-acct brokerage security)
-  (string-append (_ "Dividends") (gnc:account-separator-string) 
-                 brokerage (gnc:account-separator-string) 
+  (string-append (_ "Dividends") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-interest-acct brokerage security) 
-  (string-append (_ "Interest") (gnc:account-separator-string) 
+  (string-append (_ "Interest") (gnc-get-account-separator-string)
                  brokerage
 		 (if (string=? security "")
 		  ""
-		  (string-append (gnc:account-separator-string)  
+		  (string-append (gnc-get-account-separator-string)
 				  security))))
 
 (define (default-capital-return-acct brokerage security) 
-  (string-append (_ "Cap Return") (gnc:account-separator-string) 
-                 brokerage (gnc:account-separator-string)  
+  (string-append (_ "Cap Return") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-cglong-acct brokerage security)
-  (string-append (_ "Cap. gain (long)") (gnc:account-separator-string) 
-                 brokerage (gnc:account-separator-string) 
+  (string-append (_ "Cap. gain (long)") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-cgmid-acct brokerage security)
-  (string-append (_ "Cap. gain (mid)") (gnc:account-separator-string) 
-                 brokerage (gnc:account-separator-string) 
+  (string-append (_ "Cap. gain (mid)") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-cgshort-acct brokerage security)
-  (string-append (_ "Cap. gain (short)") (gnc:account-separator-string) 
-                 brokerage (gnc:account-separator-string) 
+  (string-append (_ "Cap. gain (short)") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-equity-holding security) (_ "Retained Earnings"))
@@ -49,11 +49,11 @@
 (define (default-equity-account) (_ "Retained Earnings"))  
 
 (define (default-commission-acct brokerage) 
-  (string-append (_ "Commissions") (gnc:account-separator-string) 
+  (string-append (_ "Commissions") (gnc-get-account-separator-string)
                  brokerage))
 
 (define (default-margin-interest-acct brokerage) 
-  (string-append (_ "Margin Interest") (gnc:account-separator-string) 
+  (string-append (_ "Margin Interest") (gnc-get-account-separator-string)
                  brokerage))
 
 (define (default-unspec-acct)
@@ -417,7 +417,7 @@
                          (set! entry 
                                (qif-import:guess-acct
                                 xtn-cat
-                                (if (gnc:numeric-positive-p 
+                                (if (gnc-numeric-positive-p
                                      (qif-split:amount split))
                                     (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE)
                                     (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE))
@@ -494,7 +494,7 @@
                               entry (default-unspec-acct))
                              (qif-map-entry:set-allowed-types!
                               entry 
-                              (if (gnc:numeric-positive-p
+                              (if (gnc-numeric-positive-p
                                    (qif-split:amount split))
                                   (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
                                         GNC-BANK-TYPE GNC-CCARD-TYPE 
@@ -567,7 +567,7 @@
   (if (not qif-import:account-name-regexp)
       (let* ((rstr ":([^:]+)$|^([^:]+)$")
              (newstr (regexp-substitute/global 
-                      #f ":" rstr 'pre (gnc:account-separator-string) 'post)))
+                      #f ":" rstr 'pre (gnc-get-account-separator-string) 'post)))
         
         (set! qif-import:account-name-regexp (make-regexp newstr))))
   
@@ -604,21 +604,21 @@
                   (memv GNC-MUTUAL-TYPE 
                         (qif-map-entry:allowed-types map-entry)))
               (not (hash-ref stock-hash stock-name)))
-             (let* ((separator (string-ref (gnc:account-separator-string) 0))
+             (let* ((separator (string-ref (gnc-get-account-separator-string) 0))
                     (existing-gnc-acct 
-                     (gnc:get-account-from-full-name 
-                      (gnc:get-current-group)
+                     (xaccGetAccountFromFullName
+                      (gnc-get-current-group)
                       (qif-map-entry:gnc-name map-entry)))
-		    (book (gnc:group-get-book (gnc:get-current-group)))
+		    (book (xaccGroupGetBook (gnc-get-current-group)))
                     (existing-type 
-                     (gnc:account-get-type existing-gnc-acct)))
+                     (xaccAccountGetType existing-gnc-acct)))
                (if (and existing-gnc-acct 
                         (memv existing-type (list GNC-STOCK-TYPE 
                                                   GNC-MUTUAL-TYPE)))
                    ;; gnc account already exists... we *know* what the 
                    ;; security is supposed to be 
                    (let ((commodity 
-                          (gnc:account-get-commodity existing-gnc-acct)))
+                          (xaccAccountGetCommodity existing-gnc-acct)))
                      (hash-set! stock-hash stock-name commodity))
                    
                    ;; we know nothing about this security.. we need to 
@@ -629,7 +629,7 @@
                      (set! names (cons stock-name names))
                      (hash-set! 
                       stock-hash stock-name 
-                      (gnc:commodity-create book
+                      (gnc-commodity-new book
 					    stock-name
                                             GNC_COMMODITY_NS_NYSE
                                             ticker-symbol
@@ -685,7 +685,7 @@
 
   (let ((accts '())
         (acct-tree '())
-        (separator (string-ref (gnc:account-separator-string) 0)))
+        (separator (string-ref (gnc-get-account-separator-string) 0)))
     ;; get the new accounts from the account map
     (for-each 
      (lambda (acctmap)
@@ -709,11 +709,11 @@
        (set! accts 
              (cons 
               (cons (string-split 
-                     (gnc:account-get-full-name acct)
+                     (gnc-account-get-full-name acct)
                      separator)
                     #f)
               accts)))
-     (gnc:group-get-subaccounts (gnc:get-current-group)))
+     (xaccGroupGetSubAccountsSorted (gnc-get-current-group)))
 
     ;; now build a tree structure 
     (for-each 

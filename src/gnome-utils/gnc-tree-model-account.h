@@ -122,7 +122,8 @@ GType gnc_tree_model_account_get_type (void);
 
 /** Create a new GtkTreeModel for manipulating gnucash accounts.
  *
- *  @param group The account group to put at the top level of the tree hierarchy. */
+ *  @param group The account group to put at the top level of the tree
+ *  hierarchy. */
 GtkTreeModel *gnc_tree_model_account_new (AccountGroup *group);
 /** @} */
 

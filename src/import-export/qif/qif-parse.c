@@ -213,24 +213,30 @@ build_atype_map()
   qif_atype_map = g_hash_table_new(g_str_hash, g_str_equal);
   g_assert(qif_atype_map);
 
-  QIF_ADD_ATYPE("bank", make_list(1, BANK));
-  QIF_ADD_ATYPE("port", make_list(1, BANK));
-  QIF_ADD_ATYPE("cash", make_list(1, CASH));
-  QIF_ADD_ATYPE("ccard", make_list(1, CREDIT));
-  QIF_ADD_ATYPE("invst", make_list(3, BANK, STOCK, MUTUAL));
-  QIF_ADD_ATYPE("oth a", make_list(3, ASSET, BANK, CASH));
-  QIF_ADD_ATYPE("oth l", make_list(2, LIABILITY, CREDIT));
-  QIF_ADD_ATYPE("mutual", make_list(3, BANK, MUTUAL, STOCK));
+  QIF_ADD_ATYPE("bank", make_list(1, ACCT_TYPE_BANK));
+  QIF_ADD_ATYPE("port", make_list(1, ACCT_TYPE_BANK));
+  QIF_ADD_ATYPE("cash", make_list(1, ACCT_TYPE_CASH));
+  QIF_ADD_ATYPE("ccard", make_list(1, ACCT_TYPE_CREDIT));
+  QIF_ADD_ATYPE("invst", make_list(3, ACCT_TYPE_BANK, ACCT_TYPE_STOCK,
+				   ACCT_TYPE_MUTUAL));
+  QIF_ADD_ATYPE("oth a", make_list(3, ACCT_TYPE_ASSET, ACCT_TYPE_BANK,
+				   ACCT_TYPE_CASH));
+  QIF_ADD_ATYPE("oth l", make_list(2, ACCT_TYPE_LIABILITY, ACCT_TYPE_CREDIT));
+  QIF_ADD_ATYPE("mutual", make_list(3, ACCT_TYPE_BANK, ACCT_TYPE_MUTUAL,
+				    ACCT_TYPE_STOCK));
 
   /* Internal types */
-  QIF_ADD_ATYPE("__any_bank__", make_list(5, BANK, CREDIT, CASH, ASSET,
-                                          LIABILITY));
-  QIF_ADD_ATYPE("__all__", make_list(7, BANK, CREDIT, CASH, ASSET, LIABILITY,
-                                      STOCK, MUTUAL));
-  QIF_ADD_ATYPE("__stock__", make_list(2, STOCK, MUTUAL));
-  QIF_ADD_ATYPE("__income__", make_list(1, INCOME));
-  QIF_ADD_ATYPE("__expense__", make_list(1, EXPENSE));
-  QIF_ADD_ATYPE("__equity__", make_list(1, EQUITY));
+  QIF_ADD_ATYPE("__any_bank__", make_list(5, ACCT_TYPE_BANK, ACCT_TYPE_CREDIT,
+					  ACCT_TYPE_CASH, ACCT_TYPE_ASSET,
+                                          ACCT_TYPE_LIABILITY));
+  QIF_ADD_ATYPE("__all__", make_list(7, ACCT_TYPE_BANK, ACCT_TYPE_CREDIT,
+				     ACCT_TYPE_CASH, ACCT_TYPE_ASSET,
+				     ACCT_TYPE_LIABILITY, ACCT_TYPE_STOCK,
+				     ACCT_TYPE_MUTUAL));
+  QIF_ADD_ATYPE("__stock__", make_list(2, ACCT_TYPE_STOCK, ACCT_TYPE_MUTUAL));
+  QIF_ADD_ATYPE("__income__", make_list(1, ACCT_TYPE_INCOME));
+  QIF_ADD_ATYPE("__expense__", make_list(1, ACCT_TYPE_EXPENSE));
+  QIF_ADD_ATYPE("__equity__", make_list(1, ACCT_TYPE_EQUITY));
 }
 #undef QIF_ADD_ATYPE
 

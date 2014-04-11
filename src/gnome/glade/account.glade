@@ -887,7 +887,7 @@
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-			  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="shadow_type">GTK_SHADOW_NONE</property>
 			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 

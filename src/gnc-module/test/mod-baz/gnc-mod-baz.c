@@ -7,7 +7,7 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "baz-gwrap.h"
+#include "swig-baz.c"
 
 int libgncmodbaz_LTX_gnc_module_system_interface = 0;
 
@@ -34,10 +34,11 @@ int
 libgncmodbaz_LTX_gnc_module_init(int refcount) {
   /* load libfoo */
   if(gnc_module_load("gnucash/foo", 0)) {
-    /* publish the g-wrapped Scheme bindings for libbaz */
-    gw_init_wrapset_baz_gwrap();
-    
-    /* use the scheme module */
+    /* publish the wrapped Scheme bindings for libbaz */
+    scm_init_sw_baz_module();
+    scm_c_eval_string("(use-modules (sw_baz))");
+  
+    /* use the Scheme "baz" module */
     scm_c_eval_string("(use-modules (gnucash baz))");
 
     return TRUE;

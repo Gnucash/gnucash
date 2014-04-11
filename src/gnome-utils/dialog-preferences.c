@@ -1264,7 +1264,8 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
      gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
      gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
 					  dialog);
-     gnc_gconf_remove_notification(G_OBJECT(dialog), NULL);
+     gnc_gconf_remove_notification(G_OBJECT(dialog), NULL,
+				   DIALOG_PREFERENCES_CM_CLASS);
      gtk_widget_destroy(GTK_WIDGET(dialog));
      break;
   }
@@ -1614,7 +1615,8 @@ gnc_preferences_dialog (void)
   gtk_widget_show(dialog);
 
   gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
-			     gnc_preferences_gconf_changed);
+			     gnc_preferences_gconf_changed,
+			     DIALOG_PREFERENCES_CM_CLASS);
   gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
 				(GncGconfGeneralCb)gnc_account_separator_prefs_cb,
 				dialog);

@@ -116,7 +116,7 @@ developing over time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type account-types accounts)))
@@ -212,8 +212,8 @@ developing over time"))
         (chart (gnc:make-html-barchart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
-                        (gnc:group-get-account-list 
-                         (gnc:get-current-group)))))
+                        (xaccGroupGetAccountListSorted
+                         (gnc-get-current-group)))))
     
     ;; Returns true if the account a was selected in the account
     ;; selection option.
@@ -243,7 +243,7 @@ developing over time"))
                ;; created.
                (date-string-list
                 (map (lambda (date-list-item)
-                       (gnc:print-date
+                       (gnc-print-date
                         (if do-intervals?
                             (car date-list-item)
                             date-list-item)))
@@ -257,7 +257,7 @@ developing over time"))
           (define (collector->double c date)
             ;; Future improvement: Let the user choose which kind of
             ;; currency combining she want to be done. 
-            (gnc:numeric-to-double 
+            (gnc-numeric-to-double
              (gnc:gnc-monetary-amount
               (gnc:sum-collector-commodity 
                c report-currency 
@@ -370,16 +370,16 @@ developing over time"))
 			  (cond
 			   ((eq? sort-method 'acct-code)
 			    (lambda (a b) 
-			      (string<? (gnc:account-get-code (car a))
-					(gnc:account-get-code (car b)))))
+			      (string<? (xaccAccountGetCode (car a))
+					(xaccAccountGetCode (car b)))))
 			   ((eq? sort-method 'alphabetical)
 			    (lambda (a b) 
 			      (string<? ((if show-fullname?
-					     gnc:account-get-full-name
-					     gnc:account-get-name) (car a))
+					     gnc-account-get-full-name
+					     xaccAccountGetName) (car a))
 					((if show-fullname?
-					     gnc:account-get-full-name
-					     gnc:account-get-name) (car b)))))
+					     gnc-account-get-full-name
+					     xaccAccountGetName) (car b)))))
 			   (else
 			    (lambda (a b)
 			      (> (apply + (cadr a))
@@ -406,8 +406,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "%s to %s")
                                  (_ "Balances %s to %s"))
-                             (gnc:print-date from-date-tp) 
-                             (gnc:print-date to-date-tp)))
+                             (gnc-print-date from-date-tp)
+                             (gnc-print-date to-date-tp)))
              (gnc:html-barchart-set-width! chart width)
              (gnc:html-barchart-set-height! chart height)
              
@@ -416,7 +416,7 @@ developing over time"))
              ;; FIXME: axis labels are not yet supported by
              ;; libguppitank.
              (gnc:html-barchart-set-y-axis-label!
-              chart (gnc:commodity-get-mnemonic report-currency))
+              chart (gnc-commodity-get-mnemonic report-currency))
              (gnc:html-barchart-set-row-labels-rotated?! chart #t)
              (gnc:html-barchart-set-stacked?! chart stacked?)
              ;; If this is a stacked barchart, then reverse the legend.
@@ -468,8 +468,8 @@ developing over time"))
                            (if (string? (car pair))
                                (car pair)
                                ((if show-fullname?
-                                    gnc:account-get-full-name
-                                    gnc:account-get-name) (car pair)))
+                                    gnc-account-get-full-name
+                                    xaccAccountGetName) (car pair)))
 			   'pre " " (_ "and") " " 'post))
                          all-data))
              (gnc:html-barchart-set-col-colors! 
@@ -507,8 +507,8 @@ developing over time"))
                                (list gnc:pagename-general 
                                      gnc:optname-reportname
                                      ((if show-fullname?
-                                          gnc:account-get-full-name
-                                          gnc:account-get-name) acct))))))))
+                                          gnc-account-get-full-name
+                                          xaccAccountGetName) acct))))))))
                     all-data)))
                (gnc:html-barchart-set-button-1-bar-urls! 
                 chart (append urls urls))
@@ -554,12 +554,15 @@ developing over time"))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income '(income) #t menuname-income menutip-income (lambda (x) #t))
-  (list reportname-expense '(expense) #t menuname-expense menutip-expense (lambda (x) #f))
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t))
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f))
   (list reportname-assets 
-        '(asset bank cash checking savings money-market receivable
-                stock mutual-fund currency)
+        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+              ACCT-TYPE-CURRENCY)
         #f menuname-assets menutip-assets (lambda (x) #f))
   (list reportname-liabilities 
-        '(liability payable credit credit-line)
+        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+              ACCT-TYPE-CREDITLINE)
         #f menuname-liabilities menutip-liabilities (lambda (x) #t))))

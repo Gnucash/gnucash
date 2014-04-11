@@ -34,7 +34,7 @@
 
 /* Fow now, this is global, like it was in guile.  It _should_ be per-book. */
 static GHashTable *reports = NULL;
-static int report_next_serial_id = 0;
+static gint report_next_serial_id = 0;
 
 static void
 gnc_report_init_table(void)
@@ -67,7 +67,7 @@ SCM gnc_report_find(gint id)
     return report;
 }
 
-int gnc_report_add(SCM report)
+gint gnc_report_add(SCM report)
 {
     SCM get_id = scm_c_eval_string("gnc:report-id");
     SCM value;
@@ -133,7 +133,7 @@ error_handler(const char *str)
 }
 
 gboolean
-gnc_run_report (int report_id, char ** data)
+gnc_run_report (gint report_id, char ** data)
 {
   const gchar *free_data;
   SCM scm_text;
@@ -157,7 +157,7 @@ gnc_run_report (int report_id, char ** data)
 gboolean
 gnc_run_report_id_string (const char * id_string, char **data)
 {
-  int report_id;
+  gint report_id;
 
   g_return_val_if_fail (id_string != NULL, FALSE);
   g_return_val_if_fail (data != NULL, FALSE);

@@ -113,7 +113,7 @@ qof_entity_set_guid (QofEntity *ent, const GUID *guid)
 }
 
 const GUID *
-qof_entity_get_guid (QofEntity *ent)
+qof_entity_get_guid (const QofEntity *ent)
 {
   if (!ent) return guid_null();
   return &ent->guid;
@@ -182,7 +182,7 @@ qof_collection_destroy (QofCollection *col)
 /* getters */
 
 QofIdType
-qof_collection_get_type (QofCollection *col)
+qof_collection_get_type (const QofCollection *col)
 {
   return col->e_type;
 }
@@ -303,7 +303,7 @@ qof_collection_compare (QofCollection *target, QofCollection *merge)
 }
 
 QofEntity *
-qof_collection_lookup_entity (QofCollection *col, const GUID * guid)
+qof_collection_lookup_entity (const QofCollection *col, const GUID * guid)
 {
   QofEntity *ent;
   g_return_val_if_fail (col, NULL);
@@ -332,7 +332,7 @@ qof_collection_from_glist (QofIdType type, GList *glist)
 }
 
 guint
-qof_collection_count (QofCollection *col)
+qof_collection_count (const QofCollection *col)
 {
 	guint c;
 
@@ -343,7 +343,7 @@ qof_collection_count (QofCollection *col)
 /* =============================================================== */
 
 gboolean 
-qof_collection_is_dirty (QofCollection *col)
+qof_collection_is_dirty (const QofCollection *col)
 {
    return col ? col->is_dirty : FALSE;
 }
@@ -361,17 +361,17 @@ qof_collection_mark_dirty (QofCollection *col)
 }
 
 void
-qof_collection_print_dirty (QofCollection *col, gpointer dummy)
+qof_collection_print_dirty (const QofCollection *col, gpointer dummy)
 {
   if (col->is_dirty)
     printf("%s collection is dirty.\n", col->e_type);
-  qof_collection_foreach(col, qof_instance_print_dirty, NULL);
+  qof_collection_foreach(col, (QofEntityForeachCB)qof_instance_print_dirty, NULL);
 }
 
 /* =============================================================== */
 
 gpointer 
-qof_collection_get_data (QofCollection *col)
+qof_collection_get_data (const QofCollection *col)
 {
    return col ? col->data : NULL;
 }
@@ -398,7 +398,7 @@ static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 }
 
 void
-qof_collection_foreach (QofCollection *col, QofEntityForeachCB cb_func, 
+qof_collection_foreach (const QofCollection *col, QofEntityForeachCB cb_func, 
                         gpointer user_data)
 {
   struct _iterate iter;

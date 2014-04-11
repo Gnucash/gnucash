@@ -1,25 +1,24 @@
 (define-module (gnucash business-core))
-(use-modules (g-wrapped gw-business-core))
+(use-modules (sw_business_core))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
 (define (gnc:owner-get-address owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
-      ((gnc-owner-customer)
-       (let ((c (gnc:owner-get-customer owner)))
-	 (gnc:customer-get-addr c)))
-      ((gnc-owner-vendor)
-       (let ((v (gnc:owner-get-vendor owner)))
-	 (gnc:vendor-get-addr v)))
-      ((gnc-owner-employee)
-       (let ((e (gnc:owner-get-employee owner)))
-	 (gnc:employee-get-addr e)))
-      ((gnc-owner-job)
+  (let ((type (gncOwnerGetType owner)))
+    (cond
+      ((eqv? type GNC-OWNER-CUSTOMER)
+       (let ((c (gncOwnerGetCustomer owner)))
+	 (gncCustomerGetAddr c)))
+      ((eqv? type GNC-OWNER-VENDOR)
+       (let ((v (gncOwnerGetVendor owner)))
+	 (gncVendorGetAddr v)))
+      ((eqv? type GNC-OWNER-EMPLOYEE)
+       (let ((e (gncOwnerGetEmployee owner)))
+	 (gncEmployeeGetAddr e)))
+      ((eqv? type GNC-OWNER-JOB)
        (gnc:owner-get-address (gnc:job-get-owner
-			       (gnc:owner-get-job owner))))
-      (else ""))))
+			       (gncOwnerGetJob owner))))
+      (else '()))))
 
 ;
 ; The -dep functions return combined strings of the appropriate
@@ -36,13 +35,12 @@
   (define (just-name name)
     (if name name ""))
 
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
-      ((gnc-owner-job)
+  (let ((type (gncOwnerGetType owner)))
+    (cond
+      ((eqv? type GNC-OWNER-JOB)
        (gnc:owner-get-name-dep (gnc:job-get-owner
-				(gnc:owner-get-job owner))))
-      (else (just-name (gnc:owner-get-name owner))))))
+				(gncOwnerGetJob owner))))
+      (else (just-name (gncOwnerGetName owner))))))
 
 (define (gnc:owner-get-address-dep owner)
   (define (add-if-exists lst new)
@@ -56,10 +54,10 @@
      (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
   (let ((lst '())
 	(addr (gnc:owner-get-address owner)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr1 addr)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr2 addr)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr3 addr)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr4 addr)))
+    (set! lst (add-if-exists lst (gncAddressGetAddr1 addr)))
+    (set! lst (add-if-exists lst (gncAddressGetAddr2 addr)))
+    (set! lst (add-if-exists lst (gncAddressGetAddr3 addr)))
+    (set! lst (add-if-exists lst (gncAddressGetAddr4 addr)))
     (build-string lst)))
 
 (define (gnc:owner-get-name-and-address-dep owner)
@@ -70,45 +68,44 @@
 	addr)))
 
 (define (gnc:owner-get-owner-id owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
-      ((gnc-owner-customer)
-       (let ((c (gnc:owner-get-customer owner)))
-	 (gnc:customer-get-id c)))
-      ((gnc-owner-vendor)
-       (let ((v (gnc:owner-get-vendor owner)))
-	 (gnc:vendor-get-id v)))
-      ((gnc-owner-employee)
-       (let ((e (gnc:owner-get-employee owner)))
-	 (gnc:employee-get-id e)))
-      ((gnc-owner-job)
-       (gnc:owner-get-owner-id (gnc:job-get-owner (gnc:owner-get-job owner))))
+  (let ((type (gncOwnerGetType owner)))
+    (cond
+      ((eqv? type GNC-OWNER-CUSTOMER)
+       (let ((c (gncOwnerGetCustomer owner)))
+	 (gncCustomerGetID c)))
+      ((eqv? type GNC-OWNER-VENDOR)
+       (let ((v (gncOwnerGetVendor owner)))
+	 (gncVendorGetID v)))
+      ((eqv? type GNC-OWNER-EMPLOYEE)
+       (let ((e (gncOwnerGetEmployee owner)))
+	 (gncEmployeeGetID e)))
+      ((eqv? type GNC-OWNER-JOB)
+       (gnc:owner-get-owner-id (gncJobGetOwner (gncOwnerGetJob owner))))
       (else ""))))
 
 (define (gnc:entry-type-percent-p type-val)
-  (let ((type (gw:enum-<gnc:GncAmountType>-val->sym type-val #f)))
-    (equal? type 'gnc-amount-type-percent)))
+  (let ((type type-val))
+    (equal? type GNC-AMT-TYPE-PERCENT)))
 
 (define (gnc:owner-from-split split result-owner)
-  (let* ((trans (gnc:split-get-parent split))
-	 (invoice (gnc:invoice-get-invoice-from-txn trans))
-	 (temp-owner (gnc:owner-create))
+  (let* ((trans (xaccSplitGetParent split))
+	 (invoice (gncInvoiceGetInvoiceFromTxn trans))
+	 (temp-owner (gncOwnerCreate))
 	 (owner #f))
 
     (if invoice
-	(set! owner (gnc:invoice-get-owner invoice))
-	(let ((split-list (gnc:transaction-get-splits trans)))
+	(set! owner (gncInvoiceGetOwner invoice))
+	(let ((split-list (xaccTransGetSplits trans)))
 	  (define (check-splits splits)
 	    (if (and splits (not (null? splits)))
 		(let* ((split (car splits))
-		       (lot (gnc:split-get-lot split)))
+		       (lot (xaccSplitGetLot split)))
 		  (if lot
-		      (let* ((invoice (gnc:invoice-get-invoice-from-lot lot))
+		      (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
 			     (owner? (gnc:owner-get-owner-from-lot
 				      lot temp-owner)))
 			(if invoice
-			    (set! owner (gnc:invoice-get-owner invoice))
+			    (set! owner (gncInvoiceGetOwner invoice))
 			    (if owner?
 				(set! owner temp-owner)
 				(check-splits (cdr splits)))))
@@ -117,12 +114,12 @@
 
     (if owner
 	(begin
-	  (gnc:owner-copy-into-owner (gnc:owner-get-end-owner owner) result-owner)
-	  (gnc:owner-destroy temp-owner)
+	  (gncOwnerCopy (gncOwnerGetEndOwner owner) result-owner)
+	  (gncOwnerDestroy temp-owner)
 	  result-owner)
 	(begin
-	  (gnc:owner-destroy temp-owner)
-	  #f))))
+	  (gncOwnerDestroy temp-owner)
+	  #f)))) ;; FIXME!
 
 
 (export gnc:owner-get-address)

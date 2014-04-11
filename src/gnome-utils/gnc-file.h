@@ -31,7 +31,6 @@
  * These utilities are written in a GUI-independent fashion, and should
  * work just fine with the Motif, gnome/gtk and Qt interfaces.
  * These utilities are appropriate for direct invocation from guile.
- * (they should be wrapped by g-wrap).
  *
  * These GUI utilities implement and maintain a single global "session"
  * that defines the currently edited account group.  In a sense, these

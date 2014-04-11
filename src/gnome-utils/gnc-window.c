@@ -116,7 +116,8 @@ gnc_window_update_status (GncWindow *window, GncPluginPage *page)
 }
 
 void
-gnc_window_set_status (GncWindow *window, GncPluginPage *page, const gchar *message)
+gnc_window_set_status (GncWindow *window, GncPluginPage *page, 
+                       const gchar *message)
 {
   g_return_if_fail(GNC_WINDOW (window));
   g_return_if_fail(GNC_PLUGIN_PAGE (page));
@@ -185,7 +186,8 @@ gnc_window_show_progress (const char *message, double percentage)
 	(GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL))
       GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, FALSE);
     if (percentage <= 100) {
-      gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), percentage/100);
+      gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 
+                                    percentage/100);
     } else {
       gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progressbar));
     }

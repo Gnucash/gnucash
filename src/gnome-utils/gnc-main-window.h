@@ -39,8 +39,6 @@
 #include <gtk/gtk.h>
 #include "gnc-plugin-page.h"
 
-G_BEGIN_DECLS
-
 /* type macros */
 #define GNC_TYPE_MAIN_WINDOW            (gnc_main_window_get_type ())
 #define GNC_MAIN_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindow))
@@ -48,8 +46,6 @@ G_BEGIN_DECLS
 #define GNC_IS_MAIN_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_MAIN_WINDOW))
 #define GNC_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_MAIN_WINDOW))
 #define GNC_MAIN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindowClass))
-
-#define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
 #define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
 
@@ -355,8 +351,6 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  @param sensitive Whether or not the user should be able to invoke
  *  this action. */
 void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
-
-G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */
 

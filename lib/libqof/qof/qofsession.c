@@ -45,6 +45,7 @@
 #include "qofbook-p.h"
 #include "qofsession-p.h"
 #include "qofobject-p.h"
+#include "qofla-dir.h" /* for QOF_LIB_DIR */
 
 /** \deprecated should not be static */
 static QofSession * current_session = NULL;
@@ -1005,6 +1006,18 @@ qof_session_begin (QofSession *session, const char * book_id,
     *p = '\0';
     qof_session_load_backend(session, access_method);
     g_free (access_method);
+#ifdef G_OS_WIN32
+    if (NULL == session->backend)
+    {
+      /* Clear the error condition of previous errors */
+      qof_session_clear_error (session);
+
+      /* On windows, a colon can be part of a normal filename. So if
+	 no backend was found (which means the part before the colon
+	 wasn't an access method), fall back to the file backend. */
+      qof_session_load_backend(session, "file"); 
+    }
+#endif
   }
   else
   {

@@ -45,14 +45,6 @@ typedef gint (*QofQueryPredicateFunc) (gpointer object,
 			       QofParam *getter,
 			       QofQueryPredData *pdata);
 
-/* A callback for how to compare two (same-type) objects based on a
- * common getter (parameter member), using the provided comparison
- * options (which are the type-specific options).
- */
-typedef gint (*QofCompareFunc) (gpointer a, gpointer b,
-                              gint compare_options,
-                              QofParam *getter);
-
 /* Lookup functions */
 QofQueryPredicateFunc qof_query_core_get_predicate (gchar const *type);
 QofCompareFunc qof_query_core_get_compare (gchar const *type);

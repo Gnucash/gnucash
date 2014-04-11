@@ -272,6 +272,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     store = gtk_tree_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
 			       G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(wind->treeview, GTK_TREE_MODEL(store));
+    g_object_unref(store);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,

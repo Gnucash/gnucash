@@ -186,21 +186,27 @@ void gxi_end_finish_cb (GnomeDruidPage *page, GtkWidget *widget,
                         GncXmlImportData *data);
 
 static const gchar *encodings_doc_string = N_(
-  "The file you tried to load does not specify an encoding, so GnuCash is "
-  "unable to unambiguously interpret it. This is typical for files created with "
-  "GnuCash prior to 2.0.\n\n"
-  "On the next page you will be asked to select the best looking decoded string "
-  "for every ambiguous word GnuCash found while trying to open your file. "
-  "Therefore GnuCash has guessed what encodings you might have used. So "
-  "probably everything will look just fine and you can simply click "
-  "'Forward'.\n\n"
-  "If it does not work for you, try to change the default encoding at the top. "
-  "Maybe you even have to edit the list of encodings by clicking on the button "
-  "in the top right corner.\n\n"
-  "The page is not overly complicated, just take the time until you feel "
-  "comfortable with it. You can always come back and read this message again.");
+  "The file you are trying to load is from an older version of "
+  "GnuCash. The file format in the older versions was missing the "
+  "detailed specification of the character encoding being used. This "
+  "means the text in your data file could be read in multiple ambiguous "
+  "ways. This ambiguity cannot be resolved automatically, but the new "
+  "GnuCash 2.0.0 file format will include all necessary specifications so "
+  "that you do not have to go through this step again."
+  "\n\n"
+  "GnuCash will try to guess the correct character encoding for your data "
+  "file. On the next page GnuCash will show the resulting texts when "
+  "using this guess. You have to check whether the words look as "
+  "expected. Either everything looks fine and you can simply press "
+  "'Forward'. Or the words contain unexpected characters, in which "
+  "case you should select different character encodings to see "
+  "different results. You may have to edit the list of character "
+  "encodings by clicking on the respective button."
+  "\n\n"
+  "Press 'Forward' now to select the correct character encoding for "
+  "your data file.");
 
-static const gchar *encodings_doc_page_title = N_("Missing file encoding");
+static const gchar *encodings_doc_page_title = N_("Ambiguous character encoding");
 
 static const gchar *finish_convert_string = N_(
   "The file has been loaded successfully. If you click 'Apply' it will be saved "

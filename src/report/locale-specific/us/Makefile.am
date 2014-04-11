@@ -31,17 +31,21 @@ SCM_FILE_LINKS = \
 endif
 
 .scm-links:
-	rm -f gnucash report locale-specific us 
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . report 
-	$(LN_S) -f ${srcdir} locale-specific 
-	$(LN_S) -f . us 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
+	mkdir -p  gnucash/report
+	mkdir -p  gnucash/report/locale-specific
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash/report/locale-specific; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
+	( cd gnucash/report; for A in $(gncscmothermod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 	touch .scm-links
+
+clean-local:
+	$(RM) -rf gnucash
 
 noinst_DATA = .scm-links
 
@@ -49,5 +53,5 @@ EXTRA_DIST = \
   ${gncscmothermod_DATA} \
   ${gncscmmod_DATA} 
 
-CLEANFILES = gnucash report locale-specific us .scm-links
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

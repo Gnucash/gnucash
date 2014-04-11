@@ -74,7 +74,9 @@
 
 ;; Constructor; takes one <gnc:commodity*> and one <gnc-numeric>
 (define (gnc:make-gnc-monetary c a)
-  (if (and (gw:wcp-is-of-type? <gnc:commodity*> c) (gnc:gnc-numeric? a))
+  ;;FIXME: we used to type-check the values, like:
+  ;; (gw:wcp-is-of-type? <gnc:commodity*> c)
+  (if (and #t (gnc:gnc-numeric? a))
       ((record-constructor <gnc-monetary>) c a)
       (warn "wrong arguments for gnc:make-gnc-monetary: " c a)))
 
@@ -91,5 +93,5 @@
   (if (gnc:gnc-monetary? a)
       (gnc:make-gnc-monetary 
        (gnc:gnc-monetary-commodity a)
-       (gnc:numeric-neg (gnc:gnc-monetary-amount a)))
+       (gnc-numeric-neg (gnc:gnc-monetary-amount a)))
       (warn "wrong arguments for gnc:monetary-neg: " a)))

@@ -1,5 +1,4 @@
 (define-module (gnucash business-gnome))
-(use-modules (g-wrapped gw-business-gnome))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
@@ -22,8 +21,8 @@
     (set-current-module m)))
 
 (define (business-report-function)
-  (gnc:add-extension
+  (gnc-add-scm-extension
    (gnc:make-menu gnc:menuname-business-reports
 		  (list gnc:menuname-reports))))
 
-(gnc:hook-add-dangler gnc:*report-hook* business-report-function)
+(gnc-hook-add-scm-dangler HOOK-REPORT business-report-function)

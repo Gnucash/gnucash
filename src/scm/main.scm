@@ -23,9 +23,7 @@
     (default-duplicate-binding-handler 'last))
 (use-modules (ice-9 slib))
 
-(use-modules (g-wrap gw-wct))
-(use-modules (g-wrapped gw-core-utils))
-(use-modules (g-wrapped gw-gnc))
+(use-modules (gnucash core-utils))
 
 ;; Load the srfis (eventually, we should see where these are needed
 ;; and only have the use-modules statements in those files).
@@ -80,6 +78,7 @@
 ;; executable code until the end of the file if you can help it.
 ;; These are needed for a guile 1.3.4 bug
 (debug-enable 'debug)
+(debug-enable 'backtrace)
 (read-enable 'positions)
 
 (debug-set! maxdepth 100000)
@@ -87,9 +86,6 @@
 
 ;;(use-modules (ice-9 statprof))
 
-(define (gnc:setup-debugging)
-  (if (gnc:debugging?)
-      (debug-enable 'backtrace)))
 
 ;; various utilities
 
@@ -183,7 +179,7 @@
   (newline))
 
 (define (gnc:debug . items)
-  (if (gnc:debugging?)
+  (if (gnc-is-debugging)
       (begin
         (display "gnucash: [D] ")
         (for-each (lambda (i) (write i)) items)
@@ -229,7 +225,6 @@
 
   ;; Now the fun begins.
   (gnc:debug "starting up (1).")
-  (gnc:setup-debugging)
 
   ;; Now we can load a bunch of files.
   (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...

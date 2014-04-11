@@ -101,6 +101,13 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       /* Let the user enter the values. If cancel is pressed, -1 is returned.  */
       result = gnc_hbci_dialog_run_until_ok(td, h_acc);
 
+      if ((result != GNC_RESPONSE_NOW) && (result != GNC_RESPONSE_LATER)) {
+	/* If cancel has been pressed, the dialog doesn't exist
+	   anymore and we cannot query for the template
+	   list. Therefore break immediately. */
+	break;
+      } 
+
       /* Set the template list in case it got modified. */
       if (template_list)
 	g_list_free(template_list);
@@ -111,16 +118,12 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	       maketrans_save_templates(parent, gnc_acc, template_list,
 					(result == GNC_RESPONSE_NOW));
 
-      if ((result != GNC_RESPONSE_NOW) && (result != GNC_RESPONSE_LATER)) {
-	break;
-      } 
-	
       /* Make really sure the dialog is hidden now. */
       gnc_hbci_dialog_hide(td);
 
       {
 	AB_JOB *job = 
-	  gnc_hbci_trans_dialog_enqueue(td, api,
+	  gnc_hbci_trans_dialog_enqueue(gnc_hbci_dialog_get_htrans(td), api,
 					(AB_ACCOUNT *)h_acc, trans_type);
 
 	/* Check whether we really got a job */

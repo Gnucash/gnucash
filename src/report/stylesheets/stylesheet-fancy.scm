@@ -322,7 +322,7 @@
               (gnc:html-markup-b prepared-for)
               (gnc:html-markup-br)
               (_ "Date: ")
-              (gnc:print-date 
+              (gnc-print-date
                (cons (current-time) 0)))
 
              ;; title only 

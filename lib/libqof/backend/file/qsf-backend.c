@@ -35,6 +35,10 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+#ifndef HAVE_STRPTIME
+#include "strptime.h"
+#endif
+
 #define QSF_TYPE_BINARY "binary"
 #define QSF_TYPE_GLIST  "glist"
 #define QSF_TYPE_FRAME  "frame"

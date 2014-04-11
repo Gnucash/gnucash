@@ -26,6 +26,7 @@
  * @brief test the loading of a version-2 gnucash XML file
  */
 
+#include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>

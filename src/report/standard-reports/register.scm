@@ -114,65 +114,65 @@
     (reverse heading-list)))
 
 (define (gnc:split-get-balance-display split)
-  (let ((account (gnc:split-get-account split))
-        (balance (gnc:split-get-balance split)))
-    (if (and account (gnc:account-reverse-balance? account))
-        (gnc:numeric-neg balance)
+  (let ((account (xaccSplitGetAccount split))
+        (balance (xaccSplitGetBalance split)))
+    (if (and account (gnc-reverse-balance account))
+        (gnc-numeric-neg balance)
         balance)))
 
 (define (add-split-row table split column-vector row-style
                        transaction-info? split-info? double?)
   (let* ((row-contents '())
-         (parent (gnc:split-get-parent split))
-         (account (gnc:split-get-account split))
+         (parent (xaccSplitGetParent split))
+         (account (xaccSplitGetAccount split))
          (currency (if account
-                       (gnc:account-get-commodity account)
-                       (gnc:default-currency)))
-         (damount (gnc:split-get-amount split))
+                       (xaccAccountGetCommodity account)
+                       (gnc-default-currency)))
+         (damount (xaccSplitGetAmount split))
          (split-value (gnc:make-gnc-monetary currency damount)))
 
     (if (date-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc:print-date 
-                     (gnc:transaction-get-date-posted parent))
+                    (gnc-print-date
+                     (gnc-transaction-get-date-posted parent))
                     " ")))
     (if (num-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc:transaction-get-num parent)
+                    (xaccTransGetNum parent)
                     (if split-info?
-                        (gnc:split-get-action split)
+                        (xaccSplitGetAction split)
                         " "))))
     (if (description-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc:transaction-get-description parent)
+                    (xaccTransGetDescription parent)
                     (if split-info?
-                        (gnc:split-get-memo split)
+                        (xaccSplitGetMemo split)
                         " "))))
     (if (account-col column-vector)
         (addto! row-contents
                 (if split-info?
                     (if transaction-info?
                         (let ((other-split
-                               (gnc:split-get-other-split split)))
+                               (xaccSplitGetOtherSplit split)))
                           (if other-split
-                              (gnc:account-get-full-name
-                               (gnc:split-get-account other-split))
+                              (gnc-account-get-full-name
+                               (xaccSplitGetAccount other-split))
                               (_ "-- Split Transaction --")))
-                        (gnc:account-get-full-name account))
+                        (gnc-account-get-full-name account))
                     " ")))
     (if (shares-col column-vector)
         (addto! row-contents
                 (if split-info?
-                    (gnc:split-get-amount split)
+                    (xaccSplitGetAmount split)
                     " ")))
     (if (price-col column-vector)
         (addto! row-contents 
                 (if split-info?
                     (gnc:make-gnc-monetary
-                     currency (gnc:split-get-share-price split))
+                     currency (xaccSplitGetSharePrice split))
                     " ")))
     (if (amount-single-col column-vector)
         (addto! row-contents
@@ -182,7 +182,7 @@
                      (gnc:html-split-anchor split split-value))
                     " ")))
     (if (debit-col column-vector)
-        (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
+        (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup
@@ -191,7 +191,7 @@
                         " "))
             (addto! row-contents " ")))
     (if (debit-col column-vector)
-        (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
+        (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup
@@ -228,7 +228,7 @@
             (addto! row-contents
                     (gnc:make-html-table-cell/size
                      1 (- (num-columns-required column-vector) count)
-                     (gnc:transaction-get-notes parent)))
+                     (xaccTransGetNotes parent)))
             (gnc:html-table-append-row/markup! table row-style
                                                (reverse row-contents)))))
     split-value))
@@ -246,7 +246,7 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-reg-option
-   (gnc:make-query-option "__reg" "query" #f))
+   (gnc:make-query-option "__reg" "query" '()))
   (gnc:register-reg-option
    (gnc:make-internal-option "__reg" "journal" #f))
   (gnc:register-reg-option
@@ -337,16 +337,16 @@
       (define (colspan monetary)
         (cond
          ((amount-single-col used-columns) (amount-single-col used-columns))
-         ((gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
+         ((gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
           (credit-col used-columns))
          (else (debit-col used-columns))))
 
       (define (display-subtotal monetary)
         (if (amount-single-col used-columns)
-            (if (and leader (gnc:account-reverse-balance? leader))
+            (if (and leader (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
-            (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
+            (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
                 (gnc:monetary-neg monetary)
                 monetary)))
 
@@ -373,14 +373,14 @@
 
   (define (add-other-split-rows split table used-columns row-style)
     (define (other-rows-driver split parent table used-columns i)
-      (let ((current (gnc:transaction-get-split parent i)))
+      (let ((current (xaccTransGetSplit parent i)))
         (if current
             (begin
               (add-split-row table current used-columns row-style #f #t #f)
               (other-rows-driver split parent table
                                  used-columns (+ i 1))))))
 
-    (other-rows-driver split (gnc:split-get-parent split)
+    (other-rows-driver split (xaccSplitGetParent split)
                        table used-columns 0))
 
   (define (do-rows-with-subtotals leader
@@ -429,12 +429,12 @@
                            (gnc:gnc-monetary-commodity split-value)
                            (gnc:gnc-monetary-amount split-value))
 
-	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
+	  (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
 	      (debit-collector 'add
 			       (gnc:gnc-monetary-commodity split-value)
 			       (gnc:gnc-monetary-amount split-value)))
 
-	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
+	  (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
 	      (credit-collector 'add
 			       (gnc:gnc-monetary-commodity split-value)
 			       (gnc:gnc-monetary-amount split-value)))
@@ -452,7 +452,7 @@
 				  credit-collector))))
 
   (define (splits-leader splits)
-    (let ((accounts (map gnc:split-get-account splits)))
+    (let ((accounts (map xaccSplitGetAccount splits)))
       (if (null? accounts) #f
           (begin
             (set! accounts (cons (car accounts)
@@ -532,7 +532,7 @@
      (list
       (string-append
        (_ "Date") ":&nbsp;"
-       (string-expand (gnc:print-date (cons (current-time) 0))
+       (string-expand (gnc-print-date (cons (current-time) 0))
                       #\space "&nbsp;"))
       (make-client-table address)))
     (set-last-row-style!
@@ -559,13 +559,13 @@
     (if invoice?
         (set! title (_ "Invoice")))
 
-    (set! query (gnc:scm->query query-scm))
+    (set! query (gnc-scm2query query-scm))
 
-    (gnc:query-set-book query (gnc:get-current-book))
+    (qof-query-set-book query (gnc-get-current-book))
 
     (set! splits (if journal?
-                     (gnc:query-get-splits-unique-trans query)
-                     (gnc:query-get-splits query)))
+                     (qof-query-run-unique-trans query)
+                     (qof-query-run query)))
 
     (set! table (make-split-table splits
                                   (gnc:report-options report-obj)
@@ -602,7 +602,7 @@
     (gnc:html-document-set-title! document title)
     (gnc:html-document-add-object! document table)
 
-    (gnc:free-query query)
+    (qof-query-destroy query)
 
     document))
 

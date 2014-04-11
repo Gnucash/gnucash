@@ -59,17 +59,19 @@ typedef struct _gncBillTerm GncBillTerm;
  * ??? huh?
  * NOTE: This enum /depends/ on starting at value 1
  */
+#ifndef SWIG
 #define ENUM_TERMS_TYPE(_)  \
  _(GNC_TERM_TYPE_DAYS,=1) \
  _(GNC_TERM_TYPE_PROXIMO,)
 
 DEFINE_ENUM(GncBillTermType, ENUM_TERMS_TYPE)
-
-/*typedef enum {
+#else
+typedef enum {
   GNC_TERM_TYPE_DAYS = 1,
   GNC_TERM_TYPE_PROXIMO,
 } GncBillTermType;
-*/
+#endif
+
 /** @name Create/Destroy Functions 
  @{ */
 GncBillTerm * gncBillTermCreate (QofBook *book);
@@ -108,7 +110,6 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
 
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);
-KvpFrame* gncBillTermGetSlots (GncBillTerm *term);
 
 const char *gncBillTermGetName (GncBillTerm *term);
 const char *gncBillTermGetDescription (GncBillTerm *term);

@@ -1,12 +1,12 @@
 #include "config.h"
 
 #include <qof.h>
-#include <g-wrap-wct.h>
 #include <libguile.h>
 #include <engine-helpers.h>
 
 #include "kvp-scm.h"
 #include "guile-mappings.h"
+#include "swig-runtime.h"
 
 int
 gnc_kvp_value_ptr_p(SCM arg)
@@ -53,10 +53,12 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         ret = kvp_value_new_string(newstr);
         return ret;
     }
-    else if(gw_wcp_p(val) &&
-	    gw_wcp_is_of_type_p(scm_c_eval_string("<gnc:kvp-frame*>"), val))
+    else if(SWIG_IsPointerOfType(val, SWIG_TypeQuery("_p_KvpFrame")))
     {
-        KvpFrame *frame = gw_wcp_get_ptr(val);
+        #define FUNC_NAME __FUNCTION__
+        KvpFrame *frame = SWIG_MustGetPtr(val, SWIG_TypeQuery("_p_KvpFrame"),
+                                          1, 0);
+        #undef FUNC_NAME
         return kvp_value_new_frame (frame);
     }
     /* FIXME: add binary handler here when it's figured out */
@@ -95,8 +97,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
     {
         KvpFrame *frame = kvp_value_get_frame(val);
 	if (frame)
-	  return gw_wcp_assimilate_ptr (frame,
-					scm_c_eval_string("<gnc:kvp-frame*>"));
+            return SWIG_NewPointerObj(frame, SWIG_TypeQuery("_p_KvpFrame"), 0);
     }
         break;
 

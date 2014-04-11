@@ -21,6 +21,7 @@
  *                                                                   *
  ********************************************************************/
 
+#include "config.h"
 #include <glib.h>
 #include "qof.h"
 
@@ -413,7 +414,7 @@ qof_book_merge_foreach_target (QofEntity* targetEnt, gpointer user_data)
 	QofBookMergeData *mergeData;
 
 	g_return_if_fail(user_data != NULL);
-	mergeData = (qof_book_mergeData*)user_data;
+	mergeData = (QofBookMergeData*)user_data;
 	g_return_if_fail(targetEnt != NULL);
 	mergeData->targetList = g_slist_prepend(mergeData->targetList,targetEnt);
 }

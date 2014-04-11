@@ -196,9 +196,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (set! value v))))
      (lambda (x)
@@ -220,9 +220,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (set! value v))))
      (lambda (x)
@@ -254,9 +254,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)     
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (set! value v))))
      (lambda (x)
@@ -276,12 +276,12 @@
   (define (currency->scm currency)
     (if (string? currency)
         currency
-        (gnc:commodity-get-mnemonic currency)))
+        (gnc-commodity-get-mnemonic currency)))
 
   (define (scm->currency currency)
     (if (string? currency)
-        (gnc:commodity-table-lookup
-         (gnc:book-get-commodity-table (gnc:get-current-book))
+        (gnc-commodity-table-lookup
+         (gnc-commodity-table-get-table (gnc-get-current-book))
          GNC_COMMODITY_NS_CURRENCY currency)
         currency))
 
@@ -293,9 +293,9 @@
       (lambda (x) (set! value (currency->scm x)))
       (lambda ()  (scm->currency default-value))
       (gnc:restore-form-generator value->string)
-      (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+      (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
       (lambda (f p)
-	(let ((v (gnc:kvp-frame-get-slot-path f p)))
+	(let ((v (kvp-frame-get-slot-path-gslist f p)))
 	  (if (and v (string? v))
 	      (set! value v))))
       (lambda (x) (list #t x))
@@ -312,14 +312,14 @@
   (define (budget->guid budget)
     (if (string? budget)
         budget
-        (gnc:budget-get-guid budget)))
+        (gncBudgetGetGUID budget)))
 
   (define (guid->budget budget)
     (if (string? budget)
-        (gnc:budget-lookup budget (gnc:get-current-book))
+        (gnc-budget-lookup budget (gnc-get-current-book))
         budget))
 
-  (let* ((default-value (gnc:budget-get-default (gnc:get-current-book)))
+  (let* ((default-value (gnc-budget-get-default (gnc-get-current-book)))
          (value (budget->guid default-value))
          (option-set #f)
          (value->string (lambda ()
@@ -340,11 +340,11 @@
              (set! option-set #t)) ;; setter
      (lambda ()
        (guid->budget
-        (gnc:budget-get-default (gnc:get-current-book)))) ;; default-getter
+        (gnc-budget-get-default (gnc-get-current-book)))) ;; default-getter
      (gnc:restore-form-generator value->string) ;; ??
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
          (if (and v (string? v))
              (set! value v))))
      (lambda (x) (list #t x)) ;; value-validator
@@ -365,12 +365,12 @@
               GNC_COMMODITY_NS_CURRENCY
               commodity)
         (list 'commodity-scm
-              (gnc:commodity-get-namespace commodity)
-              (gnc:commodity-get-mnemonic commodity))))
+              (gnc-commodity-get-namespace commodity)
+              (gnc-commodity-get-mnemonic commodity))))
 
   (define (scm->commodity scm)
-    (gnc:commodity-table-lookup
-     (gnc:book-get-commodity-table (gnc:get-current-book))
+    (gnc-commodity-table-lookup
+     (gnc-commodity-table-get-table (gnc-get-current-book))
      (cadr scm) (caddr scm)))
 
    (let* ((value (commodity->scm default-value))
@@ -385,11 +385,11 @@
       (lambda () default-value)
       (gnc:restore-form-generator value->string)
       (lambda (f p) 
-	(gnc:kvp-frame-set-slot-path f (cadr value) (append p '("ns")))
-	(gnc:kvp-frame-set-slot-path f (caddr value) (append p '("monic"))))
+	(kvp-frame-set-slot-path-gslist f (cadr value) (append p '("ns")))
+	(kvp-frame-set-slot-path-gslist f (caddr value) (append p '("monic"))))
       (lambda (f p)
-	(let ((ns (gnc:kvp-frame-get-slot-path f (append p '("ns"))))
-	      (monic (gnc:kvp-frame-get-slot-path f (append p '("monic")))))
+	(let ((ns (kvp-frame-get-slot-path-gslist f (append p '("ns"))))
+	      (monic (kvp-frame-get-slot-path-gslist f (append p '("monic")))))
 	  (if (and ns monic (string? ns) (string? monic))
 	      (set! value (list 'commodity-scm ns monic)))))
       (lambda (x) (list #t x))
@@ -443,9 +443,9 @@
                       (setter-function-called-cb x)))
       (lambda () default-value)
       (gnc:restore-form-generator value->string)
-      (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+      (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
       (lambda (f p)
-	(let ((v (gnc:kvp-frame-get-slot-path f p)))
+	(let ((v (kvp-frame-get-slot-path-gslist f p)))
 	  (if (and v (boolean? v) (not (equal? v default-value)))
 	      (set! value v))))
       (lambda (x)
@@ -517,16 +517,16 @@
      default-getter
      (gnc:restore-form-generator value->string)
      (lambda (f p)
-       (gnc:kvp-frame-set-slot-path f (symbol->string (car value))
+       (kvp-frame-set-slot-path-gslist f (symbol->string (car value))
 				    (append p '("type")))
-       (gnc:kvp-frame-set-slot-path f
+       (kvp-frame-set-slot-path-gslist f
 				    (if (symbol? (cdr value))
 					(symbol->string (cdr value))
 					(cdr value))
 				    (append p '("value"))))
      (lambda (f p)
-       (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
-	     (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
+       (let ((t (kvp-frame-get-slot-path-gslist f (append p '("type"))))
+	     (v (kvp-frame-get-slot-path-gslist f (append p '("value")))))
 	 (if (and t v (string? t))
 	     (set! value (cons (string->symbol t)
 			       (if (string? v) (string->symbol v) v))))))
@@ -613,11 +613,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:account-get-guid item)))
+        (gncAccountGetGUID item)))
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc:get-current-book))
+        (xaccAccountLookup item (gnc-get-current-book))
         item))
 
   (let* ((option (map convert-to-guid (default-getter)))
@@ -640,8 +640,8 @@
        (if (not account-list) (set! account-list (default-getter)))
        (set! account-list
              (filter (lambda (x) (if (string? x)
-                                     (gnc:account-lookup
-                                      x (gnc:get-current-book))
+                                     (xaccAccountLookup
+                                      x (gnc-get-current-book))
                                      x)) account-list))
        (let* ((result (validator account-list))
               (valid (car result))
@@ -657,20 +657,20 @@
        (define (save-acc list count)
 	 (if (not (null? list))
 	     (let ((key (string-append "acc" (gnc:value->string count))))
-	       (gnc:kvp-frame-set-slot-path f (car list) (append p (list key)))
+	       (kvp-frame-set-slot-path-gslist f (car list) (append p (list key)))
 	       (save-acc (cdr list) (+ 1 count)))))
 
        (if option-set
 	   (begin
-	     (gnc:kvp-frame-set-slot-path f (length option)
+	     (kvp-frame-set-slot-path-gslist f (length option)
 					  (append p '("len")))
 	     (save-acc option 0))))
      (lambda (f p)
-       (let ((len (gnc:kvp-frame-get-slot-path f (append p '("len")))))
+       (let ((len (kvp-frame-get-slot-path-gslist f (append p '("len")))))
 	 (define (load-acc count)
 	   (if (< count len)
 	       (let* ((key (string-append "acc" (gnc:value->string count)))
-		      (guid (gnc:kvp-frame-get-slot-path
+		      (guid (kvp-frame-get-slot-path-gslist
 			     f (append p (list key)))))
 		 (cons guid (load-acc (+ count 1))))
 	       '()))
@@ -715,26 +715,27 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:account-get-guid item)))
+        (gncAccountGetGUID item)))
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc:get-current-book))
+        (xaccAccountLookup item (gnc-get-current-book))
         item))
 
   (define (find-first-account)
     (define (find-first account-list)
       (if (null? account-list)
-	  #f
+	  '()
 	  (let* ((this-account (car account-list))
-		 (account-type (gw:enum-<gnc:AccountType>-val->sym
-				(gnc:account-get-type this-account) #f)))
-	    (if (if (null? acct-type-list) #t (member account-type acct-type-list))
+		 (account-type (xaccAccountGetType this-account)))
+	    (if (if (null? acct-type-list)
+                    #t
+                    (member account-type acct-type-list))
 		this-account
 		(find-first (cdr account-list))))))
 
-    (let* ((current-group (gnc:get-current-group))
-	   (account-list (gnc:group-get-subaccounts current-group)))
+    (let* ((current-group (gnc-get-current-group))
+	   (account-list (xaccGroupGetSubAccountsSorted current-group)))
       (find-first account-list)))
 	   
   (define (get-default)
@@ -771,9 +772,9 @@
 	     (gnc:error "Illegal account value set"))))
      (lambda () (convert-to-account (get-default)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (set! value v))))
      validator
@@ -850,9 +851,9 @@
            (gnc:error "Illegal Multichoice option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f (symbol->string value) p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f (symbol->string value) p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (set! value (string->symbol v)))))
      (lambda (x)
@@ -936,9 +937,9 @@
            (gnc:error "Illegal Radiobutton option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f (symbol->string value) p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f (symbol->string value) p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (set! value (string->symbol v)))))
      (lambda (x)
@@ -1002,16 +1003,16 @@
        (define (save-item list count)
 	 (if (not (null? list))
 	     (let ((key (string-append "item" (gnc:value->string count))))
-	       (gnc:kvp-frame-set-slot-path f (car list) (append p (list key)))
+	       (kvp-frame-set-slot-path-gslist f (car list) (append p (list key)))
 	       (save-item (cdr list) (+ 1 count)))))
-       (gnc:kvp-frame-set-slot-path f (length value) (append p '("len")))
+       (kvp-frame-set-slot-path-gslist f (length value) (append p '("len")))
        (save-item value 0))
      (lambda (f p)
-       (let ((len (gnc:kvp-frame-get-slot-path f (append p '("len")))))
+       (let ((len (kvp-frame-get-slot-path-gslist f (append p '("len")))))
 	 (define (load-item count)
 	   (if (< count len)
 	       (let* ((key (string-append "item" (gnc:value->string count)))
-		      (val (gnc:kvp-frame-get-slot-path
+		      (val (kvp-frame-get-slot-path-gslist
 			    f (append p (list key)))))
 		 (cons val (load-item (+ count 1))))
 	       '()))
@@ -1050,9 +1051,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f (symbol->string value) p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f (symbol->string value) p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (number? v))
 	     (set! value v))))
      (lambda (x)
@@ -1089,16 +1090,16 @@
          default-value)
   (let* ((value (if (list? default-value)
                     default-value
-                    (gnc:query->scm default-value)))
+                    (gnc-query2scm default-value)))
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name "" 'query #f
      (lambda () value)
-     (lambda (x) (set! value (if (list? x) x (gnc:query->scm x))))
+     (lambda (x) (set! value (if (list? x) x (gnc-query2scm x))))
      (lambda () (if (list? default-value)
                     default-value
-                    (gnc:query->scm default-value)))
+                    (gnc-query2scm default-value)))
      (gnc:restore-form-generator value->string)
      #f
      #f
@@ -1210,18 +1211,18 @@
      (lambda () (def-value))
      (gnc:restore-form-generator value->string)
      (lambda (f p)
-       (gnc:kvp-frame-set-slot-path
+       (kvp-frame-set-slot-path-gslist
 	f (symbol->string (car value)) (append p '("fmt")))
-       (gnc:kvp-frame-set-slot-path
+       (kvp-frame-set-slot-path-gslist
 	f (symbol->string (cadr value)) (append p '("month")))
-       (gnc:kvp-frame-set-slot-path
+       (kvp-frame-set-slot-path-gslist
 	f (if (caddr value) 1 0) (append p '("years")))
-       (gnc:kvp-frame-set-slot-path f (cadddr value) (append p '("custom"))))
+       (kvp-frame-set-slot-path-gslist f (cadddr value) (append p '("custom"))))
      (lambda (f p)
-       (let ((fmt (gnc:kvp-frame-get-slot-path f (append p '("fmt"))))
-	     (month (gnc:kvp-frame-get-slot-path f (append p '("month"))))
-	     (years (gnc:kvp-frame-get-slot-path f (append p '("years"))))
-	     (custom (gnc:kvp-frame-get-slot-path f (append p '("custom")))))
+       (let ((fmt (kvp-frame-get-slot-path-gslist f (append p '("fmt"))))
+	     (month (kvp-frame-get-slot-path-gslist f (append p '("month"))))
+	     (years (kvp-frame-get-slot-path-gslist f (append p '("years"))))
+	     (custom (kvp-frame-get-slot-path-gslist f (append p '("custom")))))
 	 (if (and
 	      fmt (string? fmt)
 	      month (string? month)
@@ -1447,7 +1448,7 @@
   ((options 'register-callback) section name callback))
 
 (define (gnc:options-register-c-callback section name c-callback data options)
-  (let ((callback (lambda () (gnc:option-invoke-callback c-callback data))))
+  (let ((callback (lambda () (gncp-option-invoke-callback c-callback data))))
     ((options 'register-callback) section name callback)))
 
 (define (gnc:options-unregister-callback-id id options)
@@ -1467,7 +1468,7 @@
 
 (define (gnc:options-scm->kvp options kvp-frame key-path clear-kvp?)
   (if clear-kvp?
-      (gnc:kvp-frame-delete-at-path kvp-frame key-path))
+      (gnc-kvp-frame-delete-at-path kvp-frame key-path))
   ((options 'scm->kvp) kvp-frame key-path))
 
 (define (gnc:options-kvp->scm options kvp-frame key-path)
@@ -1507,7 +1508,7 @@
 (define (gnc:send-options db_handle options)
   (gnc:options-for-each
    (lambda (option)
-     (gnc:option-db-register-option db_handle option))
+     (gnc-option-db-register-option db_handle option))
    options))
 
 (define (gnc:save-options options options-string file header truncate?)

@@ -964,13 +964,19 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
     period_num = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(col),
                                                     "period_num"));
-    numeric = gnc_budget_get_account_period_value(budget, account, period_num);
 
-    if (gnc_numeric_zero_p(numeric))
+    if (!gnc_budget_is_account_period_value_set(budget, account, period_num)) {
         amtbuff[0] = '\0';
-    else
-        xaccSPrintAmount (amtbuff, numeric,
-                          gnc_account_print_info (account, FALSE));
+    } else {
+      numeric = gnc_budget_get_account_period_value(budget, account, 
+                                                    period_num);
+      if (gnc_numeric_check(numeric)) {
+          strcpy(amtbuff, "error");
+      } else {
+          xaccSPrintAmount(amtbuff, numeric,
+                           gnc_account_print_info(account, FALSE));
+      }
+    }
 
     return g_strdup(amtbuff);
 }
@@ -981,7 +987,7 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
 {
     GncBudget *budget;
     guint period_num;
-    gnc_numeric numeric = gnc_numeric_zero();
+    gnc_numeric numeric = gnc_numeric_error(GNC_ERROR_ARG);
 
     if (!xaccParseAmount (new_text, TRUE, &numeric, NULL) &&
         !(new_text && *new_text == '\0'))
@@ -992,7 +998,11 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
 
-    gnc_budget_set_account_period_value(budget, account, period_num, numeric);
+    if (new_text && *new_text == '\0')
+        gnc_budget_unset_account_period_value(budget, account, period_num);
+    else
+        gnc_budget_set_account_period_value(budget, account, period_num, 
+                                            numeric);
 }
 
 static void

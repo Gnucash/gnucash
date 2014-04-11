@@ -40,7 +40,7 @@
 void qof_object_book_begin (QofBook *book);
 void qof_object_book_end (QofBook *book);
 
-gboolean qof_object_is_dirty (QofBook *book);
+gboolean qof_object_is_dirty (const QofBook *book);
 void qof_object_mark_clean (QofBook *book);
 
 /** \brief check an object can be created and supports iteration

@@ -557,7 +557,7 @@ gnc_stock_split_druid_view_filter_income (Account  *account,
   GNCAccountType type;
 
   type = xaccAccountGetType(account);
-  return (type == INCOME);
+  return (type == ACCT_TYPE_INCOME);
 }
 
 static gboolean
@@ -567,7 +567,8 @@ gnc_stock_split_druid_view_filter_asset (Account  *account,
   GNCAccountType type;
 
   type = xaccAccountGetType(account);
-  return ((type == BANK) || (type == CASH) || (type == ASSET));
+  return ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
+	  (type == ACCT_TYPE_ASSET));
 }
 
 static void
@@ -603,6 +604,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_POINTER, G_TYPE_STRING,
 			       G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,

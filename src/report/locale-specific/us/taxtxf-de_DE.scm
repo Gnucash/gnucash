@@ -68,7 +68,7 @@
 
 (define levelx-collector (make-level-collector MAX-LEVELS))
 
-(define today (gnc:timepair-canonical-day-time
+(define today (timespecCanonicalDayTime
                (cons (current-time) 0)))
 
 (define bdtm
@@ -84,7 +84,7 @@
 
 (define (make-split-list account split-filter-pred)
   (reverse (filter split-filter-pred
-                   (gnc:account-get-split-list account))))
+                   (xaccAccountGetSplitList account))))
 
 ;; returns a predicate that returns true only if a split is
 ;; between early-date and late-date
@@ -92,8 +92,8 @@
                                                  end-date-tp)
   (lambda (split) 
     (let ((tp
-           (gnc:transaction-get-date-posted
-            (gnc:split-get-parent split))))
+           (gnc-transaction-get-date-posted
+            (xaccSplitGetParent split))))
       (and (gnc:timepair-ge-date tp begin-date-tp)
            (gnc:timepair-le-date tp end-date-tp)))))
 
@@ -192,11 +192,11 @@
   (member payer (list 'current 'parent)))
 
 (define (gnc:account-get-txf account)
-  (and (gnc:account-get-tax-related account)
+  (and (xaccAccountGetTaxRelated account)
        (not (equal? (gnc:account-get-txf-code account) 'N000))))
 
 (define (gnc:account-get-txf-code account)
-  (let ((code (gnc:account-get-tax-US-code account)))
+  (let ((code (xaccAccountGetTaxUSCode account)))
     (string->symbol (if code code "N000"))))
 
 (define (gnc:get-txf-format code income?)
@@ -206,7 +206,7 @@
                       code))
 
 (define (gnc:account-get-txf-payer-source account)
-  (let ((pns (gnc:account-get-tax-US-payer-name-source account)))
+  (let ((pns (xaccAccountGetTaxUSPayerNameSource account)))
     (string->symbol (if pns pns "keine"))))
 
 ;; check for duplicate txf codes
@@ -235,7 +235,7 @@
                                        (gnc:account-get-txf-code acc))
                                       "\" has duplicates in "
                                       (number->string cnt) " accounts:")
-                                     (map gnc:account-get-full-name 
+                                     (map gnc-account-get-full-name
                                           (cdr x))))
                              '())))
                      txf-dups-alist)))
@@ -288,12 +288,11 @@
             (make-sub-headers (- max-level 1)))))
 
 (define (render-txf-account account account-value d? date x? x-date)
-  (let* ((print-info (gnc:account-print-info account #t))
+  (let* ((print-info (gnc-account-print-info account #t))
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
-             (not (gnc:numeric-zero-p account-value)))
-        (let* ((type (gw:enum-<gnc:AccountType>-val->sym
-                      (gnc:account-get-type account) #f))
+             (not (gnc-numeric-zero-p account-value)))
+        (let* ((type (xaccAccountGetType account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
                              (strftime "%d.%m.%Y" (localtime (car date)))
@@ -302,43 +301,43 @@
                                (strftime "%d.%m.%Y" (localtime (car x-date)))
                                #f))
                ;; Only formats 1,3 implemented now! Others are treated as 1.
-               (format (gnc:get-txf-format code (eq? type 'income)))
+               (format (gnc:get-txf-format code (eq? type ACCT-TYPE-INCOME)))
 	       (value (string-append 
-		       (if (eq? type 'income) ;; negate expenses. FIXME: Necessary?
+		       (if (eq? type ACCT-TYPE-INCOME) ;; negate expenses. FIXME: Necessary?
 			   ""
 			   "-")
 		       (number->string 
-			(gnc:numeric-num 
-			 (gnc:numeric-convert account-value (cond 
+			(gnc-numeric-num
+			 (gnc-numeric-convert account-value (cond
 							     ((eq? format 2) 1)
 							     (else 100))
 					      3))))) ;; 3 is the GNC_HOW_TRUNC truncation rounding
 	       (payer-src (gnc:account-get-txf-payer-source account))
                (account-name (let* ((named-acct
 				    (if (eq? payer-src 'parent)
-					(gnc:group-get-parent
-					 (gnc:account-get-parent account))
+					(xaccGroupGetParentAccount
+					 (xaccAccountGetParent account))
 					account))
-				    (name (gnc:account-get-name named-acct)))
+				    (name (xaccAccountGetName named-acct)))
 			       (if name
 				   name
 				   (begin
 				     (display
 				      (string-append
 				       "Failed to get name for account: "
-				       (gnc:account-get-guid named-acct)
+				       (gncAccountGetGUID named-acct)
 				       (if (not (eq? account named-acct))
 					   (string-append
 					    " which is the parent of "
-					    (gnc:account-get-guid account)))
+					    (gncAccountGetGUID account)))
 				       "\n"))
 				     "<NONE> -- See the Terminal Output"))))
-               (action (if (eq? type 'income)
+               (action (if (eq? type ACCT-TYPE-INCOME)
                            (case code
                              ((N286 N488) "ReinvD")
                              (else "Ertraege"))
                            "Aufwendungen"))
-               (category-key (if (eq? type 'income)
+               (category-key (if (eq? type ACCT-TYPE-INCOME)
                                  (gnc:txf-get-category-key 
                                   txf-income-categories code)
                                  (gnc:txf-get-category-key
@@ -387,11 +386,11 @@
   (let* ((account-name (if txf-date	; special split
                            (strftime "%d.%m.%Y" (localtime (car txf-date)))
                            (if (or full-names (equal? level 1))
-                               (gnc:account-get-full-name account)
-                               (gnc:account-get-name account))))
+                               (gnc-account-get-full-name account)
+                               (xaccAccountGetName account))))
          (blue? (gnc:account-get-txf account))
-         (print-info (gnc:account-print-info account #f))
-         (value (gnc:amount->string lx-value print-info))
+         (print-info (gnc-account-print-info account #f))
+         (value (xaccPrintAmount lx-value print-info))
          (value-formatted (if (= 1 level)
                               (gnc:html-markup-b value)
                               value))
@@ -412,7 +411,7 @@
         (txf-check-dups account))
 
     (if (or (not suppress-0) (= level 1)
-            (not (gnc:numeric-zero-p lx-value)))
+            (not (gnc-numeric-zero-p lx-value)))
         (begin
           (gnc:html-table-prepend-row!
            table
@@ -432,12 +431,12 @@
 ;; Returns the Parent if a child or grandchild is valid.
 (define (validate accounts)
   (filter (lambda (a)
-            (if (gnc:account-get-tax-related a)
+            (if (xaccAccountGetTaxRelated a)
                 #t
                 ;; check children
                 (if (null? (validate
-                            (gnc:group-get-subaccounts
-                             (gnc:account-get-children a))))
+                            (xaccGroupGetSubAccountsSorted
+                             (xaccAccountGetChildren a))))
                     #f
                     #t)))
           accounts))
@@ -455,9 +454,9 @@
 
   ;; the number of account generations: children, grandchildren etc.
   (define (num-generations account gen)
-    (let ((children (gnc:account-get-children account)))
-      (if (eq? (gnc:group-get-num-accounts children) 0)
-          (if (and (gnc:account-get-tax-related account)
+    (let ((children (xaccAccountGetChildren account)))
+      (if (eq? (xaccGroupGetNumAccounts children) 0)
+          (if (and (xaccAccountGetTaxRelated account)
                    (txf-special-split? (gnc:account-get-txf-code account)))
               (+ gen 1)		; Est Fed Tax has a extra generation
               gen)	       		; no kids, return input
@@ -483,8 +482,8 @@
          (selected-accounts (if (not (null? user-sel-accnts))
                                 valid-user-sel-accnts
                                 (validate (reverse 
-                                           (gnc:group-get-account-list
-                                            (gnc:get-current-group))))))
+                                           (xaccGroupGetAccountListSorted
+                                            (gnc-get-current-group))))))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -576,7 +575,7 @@
     ;; for quarterly estimated tax payments, we need a different period
     ;; return the sometimes changed (from-est to-est full-year?) dates
     (define (txf-special-splits-period account from-value to-value)
-      (if (and (gnc:account-get-tax-related account)
+      (if (and (xaccAccountGetTaxRelated account)
                (txf-special-split? (gnc:account-get-txf-code account)))
           (let* 
               ((full-year?
@@ -591,7 +590,7 @@
                ;; paymnent from the right year
                (from-est (if full-year?
                              (let ((bdtm (gnc:timepair->date
-                                          (gnc:timepair-canonical-day-time
+                                          (timespecCanonicalDayTime
                                            from-value))))
                                (set-tm:mday bdtm 1) ; 01
                                (set-tm:mon bdtm 2) ; Mar
@@ -600,7 +599,7 @@
                              from-value))
                (to-est (if full-year?
                            (let* ((bdtm (gnc:timepair->date
-                                         (gnc:timepair-canonical-day-time
+                                         (timespecCanonicalDayTime
                                           from-value))))
                              (set-tm:mday bdtm 28) ; 28
                              (set-tm:mon bdtm 1) ; Feb
@@ -623,9 +622,9 @@
                      (+ 1 level)
                      level)))
         (map (lambda (spl) 
-               (let* ((date (gnc:transaction-get-date-posted 
-                             (gnc:split-get-parent spl)))
-                      (amount (gnc:split-get-amount spl))
+               (let* ((date (gnc-transaction-get-date-posted
+                             (xaccSplitGetParent spl)))
+                      (amount (xaccSplitGetAmount spl))
                       ;; TurboTax 1999 and 2000 ignore dates after Dec 31
                       (fudge-date (if (and full-year? 
                                            (gnc:timepair-lt to-value date))
@@ -651,14 +650,13 @@
 	  (length accounts)))
 
     (define (handle-level-x-account level account)
-      (let ((type (gw:enum-<gnc:AccountType>-val->sym
-                   (gnc:account-get-type account) #f)))
+      (let ((type (xaccAccountGetType account)))
 	(set! work-done (+ 1 work-done))
 	(gnc:report-percent-done (* 100 (if (> work-to-do 0)
 					    (/ work-done work-to-do)
 					    1)))
         (if (gnc:account-is-inc-exp? account)
-            (let* ((children (gnc:account-get-children account))
+            (let* ((children (xaccAccountGetChildren account))
                    (to-special #f)	; clear special-splits-period
                    (from-special #f)
                    (childrens-output 
@@ -682,34 +680,34 @@
                                    (handle-level-x-account (+ 1 level) x)
                                    '()))
                              (reverse 
-                              (gnc:group-get-account-list children)))))
+                              (xaccGroupGetAccountListSorted children)))))
 
                    (account-balance 
-                    (if (gnc:account-get-tax-related account)
+                    (if (xaccAccountGetTaxRelated account)
                         (if to-special
                             (gnc:account-get-balance-interval
                              account from-special to-special #f)
                             (gnc:account-get-balance-interval
                              account from-value to-value #f))
-                        (gnc:numeric-zero)))) ; don't add non tax related
+                        (gnc-numeric-zero)))) ; don't add non tax related
 
               (set! account-balance
-                    (gnc:numeric-add-fixed
+                    (gnc-numeric-add-fixed
                      (if (> max-level level)
                          (cadr
                           (lx-collector (+ 1 level)
                                         'getpair
-                                        (gnc:account-get-commodity account)
+                                        (xaccAccountGetCommodity account)
                                         #f))
-                         (gnc:numeric-zero))
+                         (gnc-numeric-zero))
                        ;; make positive
-                       (if (eq? type 'income)
-                           (gnc:numeric-neg account-balance)
+                       (if (eq? type ACCT-TYPE-INCOME)
+                           (gnc-numeric-neg account-balance)
                            account-balance)))
 
               (lx-collector level
                             'add
-                            (gnc:account-get-commodity account)
+                            (xaccAccountGetCommodity account)
                             account-balance)
 
               (let ((level-x-output
@@ -749,11 +747,11 @@
 	  (to-year    (strftime "%Y" (localtime (car to-value))))
           (today-date (strftime "%d.%m.%Y" 
                                 (localtime 
-                                 (car (gnc:timepair-canonical-day-time
+                                 (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
 	  (tax-nr (or 
-		   (gnc:kvp-frame-get-slot-path
-		    (gnc:book-get-slots (gnc:get-current-book))
+		   (kvp-frame-get-slot-path-gslist
+		    (gnc-book-get-slots (gnc-get-current-book))
 		    (append gnc:*kvp-option-path*
 			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
 		   ""))

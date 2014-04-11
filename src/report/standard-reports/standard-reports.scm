@@ -91,8 +91,7 @@
 
 (define (gnc:register-report-create account split query journal? double?
 				    title debit-string credit-string)
-  (let* ((acct-type-code (gnc:account-get-type account))
-	 (acct-type (gw:enum-<gnc:AccountType>-val->sym acct-type-code #f))
+  (let* ((acct-type (xaccAccountGetType account))
 	 (create-fcn (lookup-register-report acct-type split)))
     (gnc:debug "create-fcn: " create-fcn)
     (if create-fcn

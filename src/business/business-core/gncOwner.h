@@ -33,7 +33,7 @@
 #ifndef GNC_OWNER_H_
 #define GNC_OWNER_H_
 
-typedef struct gnc_owner_s GncOwner;
+typedef struct _gncOwner GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
 
@@ -67,17 +67,13 @@ QofEntity* qofOwnerGetOwner (GncOwner *owner);
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofEntity *ent);
 
-/** \brief Set the parent owner. */
-void qofOwnerSetEndOwner (GncOwner *owner, GncOwner *parent);
-GncOwner* qofOwnerCreate (QofBook *book);
-
 gboolean
 gncOwnerRegister(void);
 
 /** @} */
 
 /** \struct GncOwner */
-struct gnc_owner_s {
+struct _gncOwner {
   GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
   union {
     gpointer       undefined;

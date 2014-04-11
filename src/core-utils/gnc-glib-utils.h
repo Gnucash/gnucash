@@ -67,6 +67,20 @@ int safe_utf8_collate (const char *str1, const char *str2);
  *  characters. */
 void gnc_utf8_strip_invalid (gchar *str);
 
+/** Returns a newly allocated copy of the given string but with any
+ * non-utf8 character stripped from it.
+ *
+ * Note that it also removes some subset of invalid XML characters,
+ * too.  See http://www.w3.org/TR/REC-xml/#NT-Char linked from bug
+ * #346535
+ *
+ * @param str A pointer to the string to be copied and stripped of
+ * non-utf8 characters.
+ *
+ * @return A newly allocated string that has to be g_free'd by the
+ * caller. */
+gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
+
 
 /** @} */
 

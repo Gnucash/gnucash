@@ -23,6 +23,7 @@
  *  02110-1301, USA.
  */
 
+#include "config.h"
 #include <glib.h>
 
 #include "gnc-commodity.h"

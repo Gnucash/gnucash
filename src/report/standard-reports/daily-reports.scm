@@ -102,7 +102,7 @@
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -170,8 +170,8 @@
     (define (get-split-value split date)
       (monetary->double
        (gnc:make-gnc-monetary
-        (gnc:account-get-commodity (gnc:split-get-account split))
-        (gnc:split-get-amount split))
+        (xaccAccountGetCommodity (xaccSplitGetAccount split))
+        (xaccSplitGetAmount split))
        date))
     
     ;; calculate the statistics for one interval - returns a list 
@@ -206,14 +206,14 @@
 
         (define (split-recurse)
           (if (or (null? splits) (gnc:timepair-gt 
-                                  (gnc:transaction-get-date-posted 
-                                   (gnc:split-get-parent
+                                  (gnc-transaction-get-date-posted
+                                   (xaccSplitGetParent
                                     (car splits))) to)) 
               #f
               (let* 
                   ((split (car splits))
-                   (split-time (gnc:transaction-get-date-posted 
-                                (gnc:split-get-parent split)))
+                   (split-time (gnc-transaction-get-date-posted
+                                (xaccSplitGetParent split)))
                    ;; FIXME: Which date should we use here? The 'to'
                    ;; date? the 'split-time'?
                    (split-amt (get-split-value split split-time)))
@@ -306,7 +306,7 @@
          
          (commodity-list #f)
          (exchange-fn #f)
-         (print-info (gnc:commodity-print-info report-currency #t))
+         (print-info (gnc-commodity-print-info report-currency #t))
         
          (beforebegindate (gnc:timepair-end-day-time 
                            (gnc:timepair-previous-day from-date-tp)))
@@ -314,11 +314,11 @@
          (chart (gnc:make-html-piechart))
          (topl-accounts (gnc:filter-accountlist-type 
                          account-types
-                         (gnc:group-get-account-list 
-                          (gnc:get-current-group)))))
+                         (xaccGroupGetAccountListSorted
+                          (gnc-get-current-group)))))
     
     (define (monetary->double foreign-monetary date)
-      (gnc:numeric-to-double
+      (gnc-numeric-to-double
        (gnc:gnc-monetary-amount
         (exchange-fn foreign-monetary report-currency date))))
     
@@ -338,7 +338,7 @@
               (filter proc (cdr l)))))
     
     (if (not (null? accounts))
-        (let* ((query (gnc:malloc-query))
+        (let* ((query (qof-query-create-for-splits))
                (splits '())
                (data '())
                ;; startbal will be a commodity-collector
@@ -378,11 +378,11 @@
           
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-book query (gnc:get-current-book))
+          (qof-query-set-book query (gnc-get-current-book))
           
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
-          (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+          (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
 	  (gnc:report-percent-done 25)
@@ -403,18 +403,18 @@
                       (delete-duplicates (append accounts subaccts)))))
 	  (gnc:report-percent-done 30)
           
-          (gnc:query-add-account-match query accounts 'guid-match-any 'query-and)
+          (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
-          (gnc:query-add-date-match-timepair
-           query #t from-date-tp #t to-date-tp 'query-and)
-          (gnc:query-set-sort-order query
-				    (list gnc:split-trans gnc:trans-date-posted)
-				    (list gnc:query-default-sort)
+          (xaccQueryAddDateMatchTS
+           query #t from-date-tp #t to-date-tp QOF-QUERY-AND)
+          (qof-query-set-sort-order query
+				    (list SPLIT-TRANS TRANS-DATE-POSTED)
+				    (list QUERY-DEFAULT-SORT)
 				    '())
           
           ;; get the query results 
-          (set! splits (gnc:query-get-splits query))
+          (set! splits (qof-query-run query))
 	  (gnc:report-percent-done 40)
           
           ;; find the net starting balance for the set of accounts 
@@ -423,11 +423,11 @@
                  accounts 
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
-                 gnc:account-reverse-balance?))
+                 gnc-reverse-balance))
 	  (gnc:report-percent-done 50)
           
           (set! startbal 
-                (gnc:numeric-to-double
+                (gnc-numeric-to-double
                  (gnc:gnc-monetary-amount
                   (gnc:sum-collector-commodity 
                    startbal
@@ -463,10 +463,10 @@
                                     (string-append
                                      (car p)
                                      " - "
-                                     (gnc:amount->string
-                                      (gnc:double-to-gnc-numeric
+                                     (xaccPrintAmount
+                                      (double-to-gnc-numeric
                                        (cadr p)
-                                       (gnc:commodity-get-fraction report-currency)
+                                       (gnc-commodity-get-fraction report-currency)
                                        GNC-RND-ROUND)
                                       print-info))
                                     (car p)))
@@ -482,16 +482,16 @@
                    chart (string-append
                           (sprintf #f
                                    (_ "%s to %s")
-                                   (gnc:print-date from-date-tp) 
-                                   (gnc:print-date to-date-tp))
+                                   (gnc-print-date from-date-tp)
+                                   (gnc-print-date to-date-tp))
                           (if show-total?
                               (let ((total (apply + daily-totals)))
                                 (sprintf
                                  #f ": %s"
-                                 (gnc:amount->string
-                                  (gnc:double-to-gnc-numeric
+                                 (xaccPrintAmount
+                                  (double-to-gnc-numeric
                                    total
-                                   (gnc:commodity-get-fraction report-currency)
+                                   (gnc-commodity-get-fraction report-currency)
                                    GNC-RND-ROUND)
                                   print-info)))
                               "")))
@@ -531,5 +531,5 @@
 
  (list 
   ;; reportname, account-types, menu-reportname, menu-tip
-  (list reportname-income '(income) menuname-income menutip-income)
-  (list reportname-expense '(expense) menuname-expense menutip-expense)))
+  (list reportname-income (list ACCT-TYPE-INCOME) menuname-income menutip-income)
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) menuname-expense menutip-expense)))

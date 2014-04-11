@@ -145,7 +145,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-io:invst-xtn-import qif-xtn qif-file gnc-acct-info commodity)
-  (let ((gnc-xtn (gnc:transaction-create (gnc:get-current-book)))
+  (let ((gnc-xtn (xaccMallocTransaction (gnc-get-current-book)))
         (format-info (qif-io:file-invst-xtn-format qif-file)))
     ;; utility to make a new split and add it both to an 
     ;; account and to the transaction
@@ -154,47 +154,47 @@
              (acct-type (cdr acct-info))
              (acct (qif-io:acct-table-lookup 
                     gnc-acct-info acct-name acct-type))
-             (split (gnc:split-create (gnc:get-current-book))))
+             (split (xaccMallocSplit (gnc-get-current-book))))
         ;; make the account if necessary 
         (if (not acct)
             (begin 
-              (set! acct (gnc:malloc-account (gnc:get-current-book)))
-              (gnc:account-set-name acct acct-name)
+              (set! acct (xaccMallocAccount (gnc-get-current-book)))
+              (xaccAccountSetName acct acct-name)
               (qif-io:acct-table-insert! gnc-acct-info 
                                          acct-name acct-type acct)))
         ;; fill in the split 
-        (gnc:split-set-amount split amount)
-        (gnc:split-set-value split value)
-        (gnc:split-set-memo split memo)
-        (gnc:split-set-reconcile split reconcile)
+        (xaccSplitSetAmount split amount)
+        (xaccSplitSetValue split value)
+        (xaccSplitSetMemo split memo)
+        (xaccSplitSetReconcile split reconcile)
         
         ;; add it to the account and the transaction
-        (gnc:account-begin-edit acct)
-        (gnc:account-insert-split acct split)
-        (gnc:account-commit-edit acct)
-        (gnc:transaction-append-split gnc-xtn split)
+        (xaccAccountBeginEdit acct)
+        (xaccSplitSetAccount acct split)
+        (xaccAccountCommitEdit acct)
+        (xaccTransAppendSplit gnc-xtn split)
         split))
 
     (define (lookup-balance acct-info)
       (let ((acct (qif-io:acct-table-lookup gnc-acct-info 
                                             (car acct-info) (cdr acct-info))))
-        (gnc:account-get-balance acct)))
+        (xaccAccountGetBalance acct)))
     
     (if (not (qif-io:invst-xtn-source-acct qif-xtn))
         (qif-io:invst-xtn-set-source-acct! 
          qif-xtn (qif-io:file-default-src-acct qif-file)))
     
-    (gnc:transaction-begin-edit gnc-xtn)
-    (gnc:transaction-set-currency gnc-xtn commodity)
+    (xaccTransBeginEdit gnc-xtn)
+    (xaccTransSetCurrency gnc-xtn commodity)
     
     ;; set the transaction date, number and description 
     (let ((date (qif-io:parse-date/format 
                  (qif-io:invst-xtn-date qif-xtn) 
                  (qif-io:invst-xtn-date format-info))))
-      (apply gnc:transaction-set-date gnc-xtn date))    
+      (apply xaccTransSetDate gnc-xtn date))
     
-    (gnc:transaction-set-xnum gnc-xtn (qif-io:invst-xtn-action qif-xtn))
-    (gnc:transaction-set-description gnc-xtn (qif-io:invst-xtn-payee qif-xtn))
+    (xaccTransSetNum gnc-xtn (qif-io:invst-xtn-action qif-xtn))
+    (xaccTransactionSetDescription gnc-xtn (qif-io:invst-xtn-payee qif-xtn))
     
     ;; get the relevant info, including 'near-acct' and 'far-acct', 
     ;; the accounts affected by the transaction
@@ -232,13 +232,13 @@
                ($amt 
                 (qif-io:parse-number/format 
                  $amt (qif-io:invst-xtn-$-amount format-info)))
-               (#t (gnc:numeric-zero)))))
+               (#t (gnc-numeric-zero)))))
            (action-val 
             (if (and num-shares share-price)
-                (gnc:numeric-mul num-shares share-price 
-                                 (gnc:numeric-denom total-val) 
+                (gnc-numeric-mul num-shares share-price
+                                 (gnc-numeric-denom total-val)
                                  GNC-RND-ROUND)
-                (gnc:numeric-zero)))
+                (gnc-numeric-zero)))
            (cleared 
             (qif-io:parse-cleared-field (qif-io:invst-xtn-cleared qif-xtn)))
            (payee (qif-io:invst-xtn-payee qif-xtn))
@@ -250,7 +250,7 @@
            (commission-acct 
             (cons (default-commission-acct 
                     (qif-io:invst-xtn-source-acct qif-xtn)) 'brokerage))
-           (n- (lambda (n) (gnc:numeric-neg n))))
+           (n- (lambda (n) (gnc-numeric-neg n))))
       
       ;; now build the splits.  We have to switch on the action 
       ;; again to get the signs of the amounts, and whether we use the 
@@ -293,8 +293,8 @@
              (add-split commission-acct commission-val commission-val
                         memo cleared)))
         ((stksplit)
-         (let* ((splitratio (gnc:numeric-div 
-                             num-shares (gnc:numeric-create 10 1)
+         (let* ((splitratio (gnc-numeric-div
+                             num-shares (gnc-numeric-create 10 1)
                              GNC-DENOM-AUTO GNC-DENOM-REDUCE))
                 (in-shares (lookup-balance near-acct))
                 (out-shares (n* in-shares splitratio)))
@@ -303,7 +303,7 @@
         (else 
          (throw 'qif-io:unhandled-action action))))
     
-    (gnc:transaction-commit-edit gnc-xtn)
+    (xaccTransCommitEdit gnc-xtn)
     gnc-xtn))
 
 

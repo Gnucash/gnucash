@@ -578,7 +578,7 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(account_page);
 
-	/* Install it now so we can them manipulate the created widget */
+	/* Install it now so we can then manipulate the created widget */
 	gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
 
         gnc_tree_view_account_restore(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
@@ -1048,7 +1048,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	GList *acct_list, *ptr;
 
 	xaccAccountBeginEdit (daa);
-	acct_list = xaccGroupGetSubAccounts(children);
+	acct_list = g_list_copy(xaccGroupGetAccountList(children));
 	for (ptr = acct_list; ptr; ptr = g_list_next(ptr))
 	  xaccAccountInsertSubAccount (daa, ptr->data);
 	g_list_free(acct_list);
@@ -1168,7 +1168,8 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
 	xaccAccountScrubOrphans (account);
 	xaccAccountScrubImbalance (account);
 
-	xaccAccountScrubLots (account);
+	// XXX: Lots are disabled
+	//xaccAccountScrubLots (account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -1185,7 +1186,8 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
 	xaccAccountTreeScrubOrphans (account);
 	xaccAccountTreeScrubImbalance (account);
 
-	xaccAccountTreeScrubLots (account);
+	// XXX: Lots are disabled
+	//xaccAccountTreeScrubLots (account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -1200,7 +1202,8 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
 	xaccGroupScrubOrphans (group);
 	xaccGroupScrubImbalance (group);
 
-	xaccGroupScrubLots (group);
+	// XXX: Lots are disabled
+	//xaccGroupScrubLots (group);
 
 	gnc_resume_gui_refresh ();
 }

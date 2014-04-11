@@ -59,7 +59,5 @@ libgncmod_register_core_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
-  lmod("(g-wrapped gw-register-core)");
-
   return TRUE;
 }

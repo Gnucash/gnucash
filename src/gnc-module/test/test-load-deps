@@ -8,8 +8,8 @@ exec guile -s $0 "$@"
 (gnc:module-system-init)
 (gnc:module-load "gnucash/baz" 0)
 
-(baz:hello)
-(foo:hello)
+(baz-hello)
+(foo-hello)
 (baz:scheme-hello)
 (foo:scheme-hello)
 

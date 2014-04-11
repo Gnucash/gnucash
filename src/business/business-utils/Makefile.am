@@ -6,7 +6,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
@@ -22,7 +21,6 @@ noinst_HEADERS = \
 libgncmod_business_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
@@ -50,14 +48,18 @@ SCM_FILE_LINKS = business-utils.scm \
 endif
 
 .scm-links: 
-	rm -f gnucash
-	$(LN_S) -f ${srcdir} gnucash 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-CLEANFILES = gnucash .scm-links
+clean-local:
+	$(RM) -rf gnucash
+
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

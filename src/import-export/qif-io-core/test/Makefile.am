@@ -14,13 +14,11 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/import-export/qif-io-core \
   --guile-load-dir ${top_srcdir}/src/import-export/qif-io-core/test \
   --guile-load-dir ${top_srcdir}/lib \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/gnome \
   --guile-load-dir ${top_builddir}/src/scm \
   --library-dir    ${top_builddir}/src/gnome-utils \
-  --library-dir    ${top_srcdir}/src/gnome \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --library-dir    ${top_srcdir}/src/gnome
 
 TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \

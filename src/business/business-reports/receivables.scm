@@ -49,7 +49,7 @@
      (gnc:make-account-sel-limited-option
       acc-page this-acc
       (N_ "The receivables account you wish to examine") "w"
-      #f #f '(receivable)))
+      #f #f (list ACCT-TYPE-RECEIVABLE)))
 
     (aging-options-generator options)))
 
@@ -84,5 +84,5 @@
 	 debit-string credit-string)
   (receivables-report-create-internal account))
 
-(gnc:register-report-hook 'receivable #f
+(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #f
 			  gnc:receivables-report-create-internal)

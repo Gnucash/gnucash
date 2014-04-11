@@ -86,7 +86,7 @@ void gnc_hbci_dialog_show(HBCITransDialog *td);
 int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
 				 const AB_ACCOUNT *h_acc);
 AB_JOB *
-gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
+gnc_hbci_trans_dialog_enqueue(const AB_TRANSACTION *hbci_trans, AB_BANKING *api,
 			      AB_ACCOUNT *h_acc, 
 			      GNC_HBCI_Transtype trans_type);
 /** Callback function for gnc_xfer_dialog_set_txn_cb(). The user_data

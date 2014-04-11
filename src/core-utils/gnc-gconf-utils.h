@@ -56,7 +56,7 @@
 #define GCONF_WARNINGS_PERM	"general/warnings/permanent"
 
 /* Keys used across multiple modules */
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
+#define DESKTOP_GNOME_INTERFACE "desktop/gnome/interface"
 #define KEY_TOOLBAR_STYLE	"toolbar_style"
 #define KEY_SAVE_GEOMETRY	"save_window_geometry"
 #define KEY_LAST_PATH		"last_path"
@@ -167,7 +167,7 @@ void gnc_gconf_suggest_sync (void);
 
 /** Register a callback for when a specific key in the general section
  *  of Gnucash's gconf data is changed.  Any time the key's value
- *  chagnes, the routine will be invoked and will be passed both the
+ *  changes, the routine will be invoked and will be passed both the
  *  changes gconf entry and the user data passed to this function.
  *
  *  @param key This value contains the name of the key within the
@@ -765,10 +765,15 @@ void gnc_gconf_unset_dir (const gchar *section,
  *  @param callback The function to call when a value changes.  This
  *  function will receive the key/value pair as one argument, and the
  *  'object' argument to this function as another of its arguments.
+ *
+ *  @param whoami A magic value that must match up this call to the
+ *  corresponding call to gnc_gconf_remove_notification().  The pair of
+ *  section and whoami should be unique across all callers.
  */
 void gnc_gconf_add_notification (GObject *object,
 				 const gchar *section,
-				 GConfClientNotifyFunc callback);
+				 GConfClientNotifyFunc callback,
+				 const gchar *whoami);
 
 
 /** An alternative function for adding a notification callback to
@@ -820,9 +825,14 @@ guint gnc_gconf_add_anon_notification (const gchar *section,
  *
  *  @param section This string is used to find the correct
  *  notification function to remove from GConf.
+ *
+ *  @param whoami A magic value that must match up this call to the
+ *  corresponding call to gnc_gconf_add_notification().  The pair of
+ *  section and whoami should be unique across all callers.
  */
 void gnc_gconf_remove_notification (GObject *object,
-				    const gchar *section);
+				    const gchar *section,
+				    const gchar *whoami);
 
 
 

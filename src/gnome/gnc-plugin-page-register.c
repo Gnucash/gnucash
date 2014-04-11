@@ -34,12 +34,14 @@
 
 #include "config.h"
 
+#include <libguile.h>
+#include "guile-mappings.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-register.h"
@@ -1725,7 +1727,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
   SplitRegister *reg = gnc_ledger_display_get_split_register (ledger);
   Account *account;
   char *str;
-  SCM qtype;
+  swig_type_info * qtype;
   SCM args;
   SCM func;
   SCM arg;
@@ -1758,19 +1760,19 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     g_return_val_if_fail (query != NULL, -1);
   }
 
-  qtype = scm_c_eval_string("<gnc:Query*>");
-  g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+  qtype = SWIG_TypeQuery ("_p__QofQuery");
+  g_return_val_if_fail (qtype, -1);
 
-  arg = gw_wcp_assimilate_ptr (query, qtype);
+  arg = SWIG_NewPointerObj (query, qtype, 0);
   args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
   if (split)
   {
-    qtype = scm_c_eval_string("<gnc:Split*>");
-    g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
-    arg = gw_wcp_assimilate_ptr (split, qtype);
+    qtype = SWIG_TypeQuery ("_p_Split");
+    g_return_val_if_fail (qtype, -1);
+    arg = SWIG_NewPointerObj (split, qtype, 0);
   }
   else
   {
@@ -1780,11 +1782,11 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
-  qtype = scm_c_eval_string("<gnc:Account*>");
-  g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+  qtype = SWIG_TypeQuery ("_p_Account");
+  g_return_val_if_fail (qtype, -1);
 
   account = gnc_ledger_display_leader (ledger);
-  arg = gw_wcp_assimilate_ptr (account, qtype);
+  arg = SWIG_NewPointerObj (account, qtype, 0);
   args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 

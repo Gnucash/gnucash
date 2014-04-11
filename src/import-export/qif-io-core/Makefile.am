@@ -25,18 +25,22 @@ SCM_FILE_LINKS = \
 endif
 
 .scm-links:
-	rm -f gnucash import-export 
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . import-export
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
+	mkdir -p  gnucash/import-export
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash/import-export; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 	touch .scm-links
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export/
 gncscmmod_DATA = qif-io-core.scm
 
-CLEANFILES = gnucash import-export .scm-links
+clean-local:
+	$(RM) -rf qif-import
+
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

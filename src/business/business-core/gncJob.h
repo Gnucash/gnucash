@@ -70,7 +70,6 @@ GncOwner * gncJobGetOwner (GncJob *job);
 
 /** @} */
 gboolean gncJobGetActive (GncJob *job);
-gboolean gncJobIsDirty (GncJob *job);
 
 /** Return a pointer to the instance gncJob that is identified
  *  by the guid, and is residing in the book. Returns NULL if the

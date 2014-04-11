@@ -28,15 +28,19 @@ SCM_FILE_LINKS = \
 endif
 
 .scm-links:
-	rm -f gnucash tax
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . tax 
+	$(RM) -rf gnucash
+	mkdir -p gnucash
+	mkdir -p gnucash/tax
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash/tax; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 	touch .scm-links
+
+clean-local:
+	$(RM) -rf gnucash
 
 noinst_DATA = .scm-links
 
@@ -44,5 +48,5 @@ EXTRA_DIST = \
   ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
-CLEANFILES = gnucash tax .scm-links
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

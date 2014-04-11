@@ -78,10 +78,11 @@ struct account_s
    */
   char     *description;
 
-  /* The type field is the account type, picked from the enumerated 
-   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its
-   * intended use is to be a hint to the GUI as to how to display   
-   * and format the transaction data.
+  /* The type field is the account type, picked from the enumerated
+   * list that includes ACCT_TYPE_BANK, ACCT_TYPE_STOCK,
+   * ACCT_TYPE_CREDIT, ACCT_TYPE_INCOME, etc.  Its intended use is to
+   * be a hint to the GUI as to how to display and format the
+   * transaction data.
    */
   GNCAccountType type;
 

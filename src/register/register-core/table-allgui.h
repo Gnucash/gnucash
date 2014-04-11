@@ -42,7 +42,6 @@
  *
  * CONCEPTS:
  * The following apply to the rows in a table:
- * -- a phys row can belong to only one virt row at a time.
  * -- a cursor is always the same size as the virt row its on,
  * -- there is only one cursor for a given virt row.
  * -- there is no overlap; a phys row can only belong to one virt row.

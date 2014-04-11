@@ -15,16 +15,20 @@ SCM_FILE_LINKS = ${gncscm_DATA}
 endif
 
 .scm-links: 
-	rm -f www
-	$(LN_S) -f . www
+	$(RM) -rf www
+	mkdir -p www
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd www; for A in $(gncscm_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-CLEANFILES = www .scm-links
+clean-local:
+	$(RM) -rf www
+
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 
 endif # GNC_HAVE_GUILE_WWW (else clause)

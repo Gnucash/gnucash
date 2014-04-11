@@ -135,7 +135,6 @@ on_matcher_ok_clicked (GtkButton *button,
      anyway? */
   for (item = refs_list; item; item = g_slist_next(item)) {
     ref = item->data;
-    model = gtk_tree_row_reference_get_model(ref);
     path =  gtk_tree_row_reference_get_path(ref);
     if (gtk_tree_model_get_iter(model, &iter, path))
       gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
@@ -208,7 +207,7 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
 				      TRUE,
 				      _("Destination account for the auto-balance split."),
 				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
-				      NO_TYPE,
+				      ACCT_TYPE_NONE,
 				      old_acc,
 				      &ok_pressed);
   if(ok_pressed)
@@ -412,6 +411,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
 			     G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
 			     GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   /* Add the columns */
   add_text_column(view, _("Date"), DOWNLOADED_COL_DATE);

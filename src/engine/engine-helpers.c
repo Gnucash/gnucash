@@ -1,5 +1,5 @@
 /********************************************************************\
- * engine-helpers.c -- gnucash g-wrap helper functions              *
+ * engine-helpers.c -- gnucash engine helper functions              *
  * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 #include <libguile.h>
 #include <string.h>
 
@@ -42,6 +42,8 @@ These files are temporarily exported for QOF 0.6.0 but
 cannot be considered "standard" or public parts of QOF. */
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
+
+#define FUNC_NAME __FUNCTION__
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
@@ -197,123 +199,47 @@ typedef enum {
   gnc_QUERY_v2
 } query_version_t;
 
-static SCM
-gnc_gw_enum_val2scm (const char *typestr, int value)
-{
-  char *func_name;
-  SCM func;
-  SCM scm;
-
-  func_name = g_strdup_printf ("gw:enum-%s-val->sym", typestr);
-
-  func = scm_c_eval_string (func_name);
-  if (SCM_PROCEDUREP (func))
-    scm = scm_call_2 (func, scm_int2num (value), SCM_BOOL_F);
-  else
-    scm = SCM_BOOL_F;
-
-  g_free (func_name);
-
-  return scm;
-}
-
-static int
-gnc_gw_enum_scm2val (const char *typestr, SCM enum_scm)
-{
-  char *func_name;
-  SCM func;
-  SCM scm;
-
-  func_name = g_strdup_printf ("gw:enum-%s-val->int", typestr);
-
-  func = scm_c_eval_string (func_name);
-  if (SCM_PROCEDUREP (func))
-    scm = scm_call_1 (func, enum_scm);
-  else
-    scm = scm_int2num (0);
-
-  g_free (func_name);
-
-  return scm_num2int (scm, SCM_ARG1, __FUNCTION__);
-}
-
 /* QofCompareFunc */
-
-static SCM
-gnc_query_compare2scm (QofQueryCompare how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:query-compare-how>", how);
-}
 
 static QofQueryCompare
 gnc_query_scm2compare (SCM how_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:query-compare-how>", how_scm);
+  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
 }
 
 /* QofStringMatch */
-static SCM
-gnc_query_string2scm (QofStringMatch how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:string-match-how>", how);
-}
-
 static QofStringMatch
 gnc_query_scm2string (SCM how_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:string-match-how>", how_scm);
+  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
 }
 
 /* QofDateMatch */
-static SCM
-gnc_query_date2scm (QofDateMatch how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:date-match-how>", how);
-}
-
 static QofDateMatch
 gnc_query_scm2date (SCM how_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:date-match-how>", how_scm);
+  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
 }
 
 /* QofNumericMatch */
-static SCM
-gnc_query_numericop2scm (QofNumericMatch how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:numeric-match-how>", how);
-}
-
 static QofNumericMatch
 gnc_query_scm2numericop (SCM how_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:numeric-match-how>", how_scm);
+  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
 }
 
 /* QofGuidMatch */
-static SCM
-gnc_query_guid2scm (QofGuidMatch how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:guid-match-how>", how);
-}
-
 static QofGuidMatch
 gnc_query_scm2guid (SCM how_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:guid-match-how>", how_scm);
+  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
 }
 
 /* QofCharMatch */
-static SCM
-gnc_query_char2scm (QofCharMatch how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:char-match-how>", how);
-}
-
 static QofCharMatch
 gnc_query_scm2char (SCM how_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:char-match-how>", how_scm);
+  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
 }
 
 static QofGuidMatch
@@ -379,7 +305,7 @@ gnc_scm2kvp_match_how (SCM how_scm)
 }
 
 static int
-gnc_scm2bitfield (const char *typestr, SCM field_scm)
+gnc_scm2bitfield (SCM field_scm)
 {
   int field = 0;
 
@@ -394,7 +320,7 @@ gnc_scm2bitfield (const char *typestr, SCM field_scm)
     scm = SCM_CAR (field_scm);
     field_scm = SCM_CDR (field_scm);
 
-    bit = gnc_gw_enum_scm2val (typestr, scm);
+    bit = scm_num2int(scm, SCM_ARG2, __FUNCTION__);
     field |= bit;
   }
 
@@ -404,7 +330,7 @@ gnc_scm2bitfield (const char *typestr, SCM field_scm)
 static cleared_match_t
 gnc_scm2cleared_match_how (SCM how_scm)
 {
-  return gnc_scm2bitfield ("<gnc:cleared-match-how>", how_scm);
+  return gnc_scm2bitfield (how_scm);
 }
 
 static gboolean
@@ -551,7 +477,7 @@ gnc_query_path2scm (GSList *path)
   return scm_reverse (path_scm);
 }
 
-static GSList *
+GSList *
 gnc_query_scm2path (SCM path_scm)
 {
   GSList *path = NULL;
@@ -588,16 +514,10 @@ gnc_query_path_free (GSList *path)
   g_slist_free (path);
 }
 
-static SCM
-gnc_KvpValueTypeype2scm (KvpValueType how)
-{
-  return gnc_gw_enum_val2scm ("<gnc:kvp-value-t>", how);
-}
-
 static KvpValueType
 gnc_scm2KvpValueTypeype (SCM value_type_scm)
 {
-  return gnc_gw_enum_scm2val ("<gnc:kvp-value-t>", value_type_scm);
+  return scm_num2int(value_type_scm, SCM_ARG1, __FUNCTION__);
 }
 
 static SCM gnc_kvp_frame2scm (KvpFrame *frame);
@@ -613,7 +533,7 @@ gnc_kvp_value2scm (KvpValue *value)
 
   value_t = kvp_value_get_type (value);
 
-  value_scm = scm_cons (gnc_KvpValueTypeype2scm (value_t), value_scm);
+  value_scm = scm_cons (scm_long2num (value_t), value_scm);
 
   switch (value_t)
   {
@@ -862,31 +782,31 @@ gnc_queryterm2scm (QofQueryTerm *qt)
 
   pd = qof_query_term_get_pred_data (qt);
   qt_scm = scm_cons (scm_str2symbol (pd->type_name), qt_scm);
-  qt_scm = scm_cons (gnc_query_compare2scm (pd->how), qt_scm);
+  qt_scm = scm_cons (scm_long2num (pd->how), qt_scm);
 
   if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING)) {
     query_string_t pdata = (query_string_t) pd;
 
-    qt_scm = scm_cons (gnc_query_string2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (SCM_BOOL (pdata->is_regex), qt_scm);
     qt_scm = scm_cons (scm_makfrom0str (pdata->matchstring), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE)) {
     query_date_t pdata = (query_date_t) pd;
 
-    qt_scm = scm_cons (gnc_query_date2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (gnc_timespec2timepair (pdata->date), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC)) {
     query_numeric_t pdata = (query_numeric_t) pd;
 
-    qt_scm = scm_cons (gnc_query_numericop2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (gnc_query_numeric2scm (pdata->amount), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID)) {
     query_guid_t pdata = (query_guid_t) pd;
 
-    qt_scm = scm_cons (gnc_query_guid2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (gnc_guid_glist2scm (pdata->guids), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64)) {
@@ -907,7 +827,7 @@ gnc_queryterm2scm (QofQueryTerm *qt)
   } else if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR)) {
     query_char_t pdata = (query_char_t) pd;
 
-    qt_scm = scm_cons (gnc_query_char2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (scm_makfrom0str (pdata->char_list), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP)) {
@@ -2066,46 +1986,6 @@ gnc_scm2query (SCM query_scm)
   return q;
 }
 
-static int
-gnc_scm_traversal_adapter(Transaction *t, void *data)
-{
-  static SCM trans_type = SCM_BOOL_F;
-  SCM result;
-  SCM scm_trans;
-  SCM thunk = *((SCM *) data);
-
-  if(trans_type == SCM_BOOL_F) {
-    trans_type = scm_c_eval_string("<gnc:Transaction*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(trans_type != SCM_BOOL_F) scm_gc_protect_object(trans_type);
-  }
-  
-  scm_trans = gw_wcp_assimilate_ptr(t, trans_type);
-  result = scm_call_1(thunk, scm_trans);
-
-  return (result != SCM_BOOL_F);
-}
-
-gboolean
-gnc_scmGroupStagedTransactionTraversal(AccountGroup *grp,
-                                       unsigned int new_marker,
-                                       SCM thunk)
-{
-  return xaccGroupStagedTransactionTraversal(grp, new_marker,
-                                             gnc_scm_traversal_adapter,
-                                             &thunk);
-}
-
-gboolean
-gnc_scmAccountStagedTransactionTraversal(Account *a,
-                                         unsigned int new_marker,
-                                         SCM thunk) 
-{
-  return xaccAccountStagedTransactionTraversal(a, new_marker,
-                                               gnc_scm_traversal_adapter,
-                                               &thunk);
-}
-
 SCM
 gnc_gint64_to_scm(const gint64 x)
 {
@@ -2265,89 +2145,60 @@ gnc_numeric_p(SCM arg)
   }
 }
 
-/********************************************************************
- * gnc_scm_to_commodity
- ********************************************************************/
+
+static SCM
+gnc_generic_to_scm(const void *x, const gchar *type_str)
+{
+    swig_type_info * stype = NULL;
+
+    if (!x) return SCM_BOOL_F;
+    stype = SWIG_TypeQuery(type_str);
+
+    if (!stype) {
+        PERR("Unknown SWIG Type: %s ", type_str);
+        return SCM_BOOL_F;
+    }
+
+    return SWIG_NewPointerObj(x, stype, 0);
+}
+
+static void *
+gnc_scm_to_generic(SCM scm, const gchar *type_str)
+{
+    swig_type_info * stype = NULL;
+
+    stype = SWIG_TypeQuery(type_str);
+    if (!stype) {
+        PERR("Unknown SWIG Type: %s ", type_str);
+        return NULL;
+    }
+
+    if (!SWIG_IsPointerOfType(scm, stype))
+        return NULL;
+
+    return SWIG_MustGetPtr(scm, stype, 1, 0);
+}
+
 gnc_commodity *
 gnc_scm_to_commodity(SCM scm)
 {
-  static SCM commodity_type = SCM_UNDEFINED;
-
-  if(commodity_type == SCM_UNDEFINED) {
-    commodity_type = scm_c_eval_string("<gnc:commodity*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(commodity_type != SCM_UNDEFINED) scm_gc_protect_object(commodity_type);
-  }
-
-  if(!gw_wcp_is_of_type_p(commodity_type, scm)) {
-    return NULL;
-  }
-
-  return gw_wcp_get_ptr(scm);
+    return gnc_scm_to_generic(scm, "_p_gnc_commodity");
 }
 
-
-/********************************************************************
- * gnc_commodity_to_scm
- ********************************************************************/
 SCM
 gnc_commodity_to_scm (const gnc_commodity *commodity)
 {
-  static SCM commodity_type = SCM_UNDEFINED;
-
-  if(commodity == NULL) return SCM_BOOL_F;
-
-  if(commodity_type == SCM_UNDEFINED) {
-    commodity_type = scm_c_eval_string("<gnc:commodity*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(commodity_type != SCM_UNDEFINED) scm_gc_protect_object(commodity_type);
-  }
-  
-  return gw_wcp_assimilate_ptr((void *) commodity, commodity_type);
+    return gnc_generic_to_scm(commodity, "_p_gnc_commodity");
 }
 
-/********************************************************************
- * gnc_book_to_scm
- ********************************************************************/
 SCM
 gnc_book_to_scm (QofBook *book)
 {
-  static SCM book_type = SCM_UNDEFINED;
-
-  if (!book)
-    return SCM_BOOL_F;
-
-  if (book_type == SCM_UNDEFINED)
-  {
-    book_type = scm_c_eval_string ("<gnc:Book*>");
-
-    /* don't really need this - types are bound globally anyway. */
-    if (book_type != SCM_UNDEFINED)
-      scm_gc_protect_object (book_type);
-  }
-  
-  return gw_wcp_assimilate_ptr ((void *) book, book_type);
+    return gnc_generic_to_scm(book, "_p_QofBook");
 }
 
-/********************************************************************
- * qof_session_to_scm
- ********************************************************************/
 SCM
 qof_session_to_scm (QofSession *session)
 {
-  static SCM session_type = SCM_UNDEFINED;
-
-  if (!session)
-    return SCM_BOOL_F;
-
-  if (session_type == SCM_UNDEFINED)
-  {
-    session_type = scm_c_eval_string ("<gnc:Session*>");
-
-    /* don't really need this - types are bound globally anyway. */
-    if (session_type != SCM_UNDEFINED)
-      scm_gc_protect_object (session_type);
-  }
-
-  return gw_wcp_assimilate_ptr ((void *) session, session_type);
+    return gnc_generic_to_scm(session, "_p_QofSession");
 }

@@ -84,7 +84,7 @@ Each element must be a string representing a directory or a symbol \
 where 'default expands to the default path, and 'current expands to \
 the current value of the path.")
          (let ((result (cons
-                        (gnc:build-dotgnucash-path "html")
+                        (gnc-build-dotgnucash-path "html")
                         gnc:_install-doc-path_)))
          (lambda () result))))
 

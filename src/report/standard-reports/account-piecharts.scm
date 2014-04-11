@@ -110,7 +110,7 @@ balance at a given time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -200,8 +200,8 @@ balance at a given time"))
         (chart (gnc:make-html-piechart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
-                        (gnc:group-get-account-list 
-                         (gnc:get-current-group)))))
+                        (xaccGroupGetAccountListSorted
+                         (gnc-get-current-group)))))
 
     ;; Returns true if the account a was selected in the account
     ;; selection option.
@@ -227,7 +227,7 @@ balance at a given time"))
                            account-levels))
            (combined '())
            (other-anchor "")
-           (print-info (gnc:commodity-print-info report-currency #t)))
+           (print-info (gnc-commodity-print-info report-currency #t)))
 
       ;; Converts a commodity-collector into one single double
       ;; number, depending on the report currency and the
@@ -239,7 +239,7 @@ balance at a given time"))
         ;; everything foreign gets converted
         ;; (gnc:sum-collector-commodity) based on the weighted
         ;; average of all past transactions.
-        (gnc:numeric-to-double 
+        (gnc-numeric-to-double
          (gnc:gnc-monetary-amount
           (gnc:sum-collector-commodity 
            c report-currency 
@@ -311,16 +311,16 @@ balance at a given time"))
 			(cond
 			 ((eq? sort-method 'acct-code)
 			  (lambda (a b) 
-			    (string<? (gnc:account-get-code (cadr a))
-				      (gnc:account-get-code (cadr b)))))
+			    (string<? (xaccAccountGetCode (cadr a))
+				      (xaccAccountGetCode (cadr b)))))
 			 ((eq? sort-method 'alphabetical)
 			  (lambda (a b) 
 			    (string<? ((if show-fullname?
-					   gnc:account-get-full-name
-					   gnc:account-get-name) (cadr a))
+					   gnc-account-get-full-name
+					   xaccAccountGetName) (cadr a))
 				      ((if show-fullname?
-					   gnc:account-get-full-name
-					   gnc:account-get-name) (cadr b)))))
+					   gnc-account-get-full-name
+					   xaccAccountGetName) (cadr b)))))
 			 (else
 			  (lambda (a b) (> (car a) (car b)))))))
 
@@ -377,8 +377,8 @@ balance at a given time"))
                                  (list gnc:pagename-general 
                                        gnc:optname-reportname
                                        ((if show-fullname?
-                                            gnc:account-get-full-name
-                                            gnc:account-get-name) acct))))))))
+                                            gnc-account-get-full-name
+                                            xaccAccountGetName) acct))))))))
                    combined)))
               (gnc:html-piechart-set-button-1-slice-urls! 
                chart urls)
@@ -401,19 +401,19 @@ balance at a given time"))
                        (if do-intervals?
                            (sprintf #f
                                     (_ "%s to %s")
-                                    (gnc:print-date from-date-tp) 
-                                    (gnc:print-date to-date-tp))
+                                    (gnc-print-date from-date-tp)
+                                    (gnc-print-date to-date-tp))
                            (sprintf #f
                                     (_ "Balance at %s")
-                                    (gnc:print-date to-date-tp)))
+                                    (gnc-print-date to-date-tp)))
                        (if show-total?
                            (let ((total (apply + (unzip1 combined))))
                              (sprintf
                               #f ": %s"
-                              (gnc:amount->string
-                               (gnc:double-to-gnc-numeric
+                              (xaccPrintAmount
+                               (double-to-gnc-numeric
                                 total
-                                (gnc:commodity-get-fraction report-currency)
+                                (gnc-commodity-get-fraction report-currency)
                                 GNC-RND-ROUND)
                                print-info)))
                            "")))
@@ -426,16 +426,16 @@ balance at a given time"))
                            (if (string? (cadr pair))
 			       (cadr pair)
 			       ((if show-fullname?
-				    gnc:account-get-full-name
-				    gnc:account-get-name) (cadr pair)))
+				    gnc-account-get-full-name
+				    xaccAccountGetName) (cadr pair)))
 			       'pre " " (_ "and") " " 'post)
 			   (if show-total?
 			       (string-append 
 				" - "
-				(gnc:amount->string
-				 (gnc:double-to-gnc-numeric
+				(xaccPrintAmount
+				 (double-to-gnc-numeric
 				  (car pair)
-				  (gnc:commodity-get-fraction report-currency)
+				  (gnc-commodity-get-fraction report-currency)
 				  GNC-RND-ROUND)
 				 print-info))
 			       "")))
@@ -479,12 +479,15 @@ balance at a given time"))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income '(income) #t menuname-income menutip-income (lambda (x) #t))
-  (list reportname-expense '(expense) #t menuname-expense menutip-expense (lambda (x) #f))
-  (list reportname-assets 
-        '(asset bank cash checking savings money-market receivable
-                stock mutual-fund currency)
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t))
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f))
+  (list reportname-assets
+        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+              ACCT-TYPE-CURRENCY)
         #f menuname-assets menutip-assets (lambda (x) #f))
   (list reportname-liabilities 
-        '(liability payable credit credit-line)
+        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+              ACCT-TYPE-CREDITLINE)
         #f menuname-liabilities menutip-liabilities (lambda (x) #t))))

@@ -31,7 +31,6 @@
 
 #include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-dir.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-plugin.h"

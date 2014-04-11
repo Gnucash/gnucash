@@ -18,6 +18,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#include "config.h"
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 

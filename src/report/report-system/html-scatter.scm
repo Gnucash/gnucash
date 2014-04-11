@@ -134,7 +134,7 @@
                (let ((n (read)))
                  (if (number? n) n 0.0)))))
           ((gnc:gnc-numeric? elt)
-           (gnc:numeric-to-double elt))
+           (gnc-numeric-to-double elt))
           (#t 
            0.0)))
   

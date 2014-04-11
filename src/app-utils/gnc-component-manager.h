@@ -21,8 +21,6 @@
 #define GNC_COMPONENT_MANAGER_H
 
 #include <glib.h>
-#include <libguile.h>
-#include "guile-mappings.h"
 
 #include "GNCId.h"
 #include "qof.h"
@@ -153,24 +151,6 @@ gint gnc_register_gui_component (const char *component_class,
                                  GNCComponentRefreshHandler refresh_handler,
                                  GNCComponentCloseHandler close_handler,
                                  gpointer user_data);
-
-/* gnc_register_gui_component_scm
- *   Register a GUI component with the manager with scheme callbacks.
- *
- * component_class: same as gnc_register_gui_component
- * refresh_cb:      refresh handler, may be SCM_BOOL_F, indicating
- *                  no handler. the handler is invoked with no
- *                  arguments
- * close_cb:        close handler, may be SCM_BOOL_F, invoked
- *                  with no arguments
- *
- * Notes:           The same notes apply as in gnc_register_gui_component.
- *
- * Return:          id of component, or NO_COMPONENT if error
- */
-gint gnc_register_gui_component_scm (const char * component_class,
-                                     SCM refresh_handler,
-                                     SCM close_handler);
 
 /* gnc_gui_component_set_session
  *   Set the associated session of this component

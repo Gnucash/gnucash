@@ -181,15 +181,15 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 
     switch (account_type)
     {
-      case BANK:
-      case CASH:
-      case ASSET:
-      case STOCK:
-      case MUTUAL:
-      case CREDIT:
-      case LIABILITY:
-      case PAYABLE:
-      case RECEIVABLE:
+      case ACCT_TYPE_BANK:
+      case ACCT_TYPE_CASH:
+      case ACCT_TYPE_ASSET:
+      case ACCT_TYPE_STOCK:
+      case ACCT_TYPE_MUTUAL:
+      case ACCT_TYPE_CREDIT:
+      case ACCT_TYPE_LIABILITY:
+      case ACCT_TYPE_PAYABLE:
+      case ACCT_TYPE_RECEIVABLE:
 	end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
         timespecFromTime_t(&end_timespec, options.end_date);
 	end_amount_default_currency = 
@@ -229,8 +229,8 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 	if (children != NULL)
 	  gnc_ui_accounts_recurse(children, currency_list, options);
 	break;
-      case INCOME:
-      case EXPENSE:
+      case ACCT_TYPE_INCOME:
+      case ACCT_TYPE_EXPENSE:
 	start_amount = xaccAccountGetBalanceAsOfDate(account, options.start_date);
         timespecFromTime_t(&start_timespec, options.start_date);
 	start_amount_default_currency = 
@@ -295,10 +295,10 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 	if (children != NULL)
 	  gnc_ui_accounts_recurse(children, currency_list, options);
 	break;
-      case EQUITY:
+      case ACCT_TYPE_EQUITY:
         /* no-op, see comments at top about summing assets */
 	break;
-      case CURRENCY:
+      case ACCT_TYPE_CURRENCY:
       default:
 	break;
     }

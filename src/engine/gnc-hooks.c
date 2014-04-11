@@ -26,7 +26,7 @@
 #include <glib.h>
 #include <stdio.h>
 #include <libguile.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 #include "gnc-hooks.h"
 #include "gnc-hooks-scm.h"
 #include "gnc-engine.h"
@@ -191,8 +191,7 @@ call_scm_hook_1 (GHook *hook, gpointer data)
 
   // XXX: FIXME: We really should make sure this is a session!!! */
   scm_call_1 (scm->proc,
-	      gw_wcp_assimilate_ptr (data,
-				     scm_c_eval_string("<gnc:Session*>")));
+              SWIG_NewPointerObj(data, SWIG_TypeQuery("_p_QofSession"), 0));
 
   LEAVE("");
 }

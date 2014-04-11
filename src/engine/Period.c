@@ -33,6 +33,7 @@
  * Copyright (c) 2001-2003 Linas Vepstas <linas@linas.org>
  */
 
+#include "config.h"
 #include "AccountP.h"
 #include "qof.h"
 #include "gnc-lot.h"
@@ -395,13 +396,7 @@ lot_list_preen_open_lots (LotList *lot_list)
       LotList *lnext = lnode->next;
 
       if (lot_has_open_trans_tree (lot))
-      {
-         lot_list = g_list_remove_link (lot_list, lnode);
-         /* XXX freeing this node somehow leads to glib g_list
-          * memory corruption which later takes down the system. 
-          * I don't see why.  */
-         /* g_list_free_1 (lnode); */
-      }
+         lot_list = g_list_delete_link(lot_list, lnode);
       lnode = lnext;
    }
    LEAVE (" ");
@@ -559,11 +554,7 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
     * routine, and it is not needed for the current usage. */
    src_grp = xaccGetAccountGroup (src_book);
    dst_grp = xaccGetAccountGroup (dest_book);
-   xaccAccountGroupBeginEdit (dst_grp);
-   xaccAccountGroupBeginEdit (src_grp);
    xaccGroupCopyGroup (dst_grp, src_grp);
-   xaccAccountGroupCommitEdit (src_grp);
-   xaccAccountGroupCommitEdit (dst_grp);
 
    /* Next, run the query */
    xaccAccountGroupBeginEdit (dst_grp);
@@ -624,7 +615,7 @@ find_nearest_equity_acct (Account *acc)
    for (node=acc_list; node; node=node->next)
    {
       candidate = (Account *) node->data;
-      if ((EQUITY == xaccAccountGetType (candidate)) &&
+      if ((ACCT_TYPE_EQUITY == xaccAccountGetType (candidate)) &&
           gnc_commodity_equiv(xaccAccountGetCommodity(acc),
                               xaccAccountGetCommodity(candidate)))
       {
@@ -647,8 +638,8 @@ find_nearest_equity_acct (Account *acc)
    candidate = xaccMallocAccount (xaccGroupGetBook(parent));
    xaccAccountBeginEdit (candidate);
    xaccGroupInsertAccount (parent, candidate);
-   xaccAccountSetType (candidate, EQUITY);
-   xaccAccountSetName (candidate, xaccAccountGetTypeStr(EQUITY));
+   xaccAccountSetType (candidate, ACCT_TYPE_EQUITY);
+   xaccAccountSetName (candidate, xaccAccountGetTypeStr(ACCT_TYPE_EQUITY));
    xaccAccountSetCommodity (candidate, xaccAccountGetCommodity(acc));
    xaccAccountCommitEdit (candidate);
    
@@ -710,7 +701,8 @@ add_closing_balances (AccountGroup *closed_grp,
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not
        * and income or expense or equity account */
-      if ((INCOME != tip) && (EXPENSE != tip) && (EQUITY != tip)) 
+      if ((ACCT_TYPE_INCOME != tip) && (ACCT_TYPE_EXPENSE != tip) &&
+	  (ACCT_TYPE_EQUITY != tip)) 
       {
          gnc_numeric baln;
          baln = xaccAccountGetBalance (candidate);

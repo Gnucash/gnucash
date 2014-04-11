@@ -1,6 +1,7 @@
 /********************************************************************\
- * glib-helpers.h -- gnucash g-wrap helper functions                 *
+ * glib-helpers.h -- gnucash glib helper functions                  *
  * Copyright (C) 2000 Linas Vepstas                                 *
+ * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         * 
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,15 +28,14 @@
 #include <glib.h>
 #include <libguile.h>
 
-SCM gnc_glist_to_scm_list(GList *glist, SCM wct);
+SCM gnc_glist_to_scm_list(GList *glist, gchar *wct);
 GList* gnc_scm_list_to_glist(SCM wcp_list);
-
-SCM gnc_glist_scm_map(SCM wct, SCM thunk, GList *glist);
-void gnc_glist_scm_for_each(SCM wct, SCM thunk, GList *glist);
 
 SCM     gnc_glist_string_to_scm(GList * list);
 GList * gnc_scm_to_glist_string(SCM list);
 int     gnc_glist_string_p(SCM list);
+
+GSList * gnc_scm_to_gslist_string(SCM list);
 
 
 

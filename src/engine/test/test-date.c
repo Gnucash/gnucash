@@ -2,6 +2,7 @@
  * -- fix borken timezone test -- linas May 2004
  */
 
+#include "config.h"
 #include <ctype.h>
 #include <glib.h>
 #include <time.h>

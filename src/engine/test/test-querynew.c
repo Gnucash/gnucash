@@ -21,6 +21,7 @@
  *  02110-1301, USA.
  */
  
+#include "config.h"
 #include <glib.h>
 #include <stdio.h>
 #include "qof.h"

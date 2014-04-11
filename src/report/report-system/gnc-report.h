@@ -28,7 +28,7 @@
 #include <glib.h>
 #include <libguile.h>
 
-gboolean gnc_run_report (int report_id, char ** data);
+gboolean gnc_run_report (gint report_id, char ** data);
 gboolean gnc_run_report_id_string (const char * id_string, char **data);
 
 /**
@@ -40,7 +40,7 @@ gchar* gnc_report_name( SCM report );
 
 SCM gnc_report_find(gint id);
 void gnc_report_remove_by_id(gint id);
-int gnc_report_add(SCM report);
+gint gnc_report_add(SCM report);
 
 void gnc_reports_flush_global(void);
 GHashTable *gnc_reports_get_global(void);

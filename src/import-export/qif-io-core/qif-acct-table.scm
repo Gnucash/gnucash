@@ -49,7 +49,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-io:acct-table-make-gnc-group acct-table qif-file commodity)
-  (let ((group (gnc:malloc-account-group (gnc:get-current-book))))
+  (let ((group (xaccMallocAccountGroup (gnc-get-current-book))))
     ;; poke through the qif-file accounts to see if any of them
     ;; show up in the data 
     (let ((qif-acct-table (qif-io:acct-table-accounts acct-table)))
@@ -61,27 +61,27 @@
                 (gnc-acct (hash-ref qif-acct-table name)))
            (if gnc-acct
                (let ((gnc-type (qif-io:parse-acct-type type)))
-                 (gnc:account-begin-edit gnc-acct)
+                 (xaccAccountBeginEdit gnc-acct)
                  (if gnc-type 
-                     (gnc:account-set-type gnc-acct gnc-type)
-                     (gnc:account-set-type gnc-acct GNC-BANK-TYPE))
+                     (xaccAccountSetType gnc-acct gnc-type)
+                     (xaccAccountSetType gnc-acct GNC-BANK-TYPE))
                  (if desc 
-                     (gnc:account-set-description gnc-acct desc))
-                 (gnc:account-commit-edit gnc-acct)))))
+                     (xaccAccountSetDescription gnc-acct desc))
+                 (xaccAccountCommitEdit gnc-acct)))))
        (qif-io:file-accounts qif-file))
       
       (hash-fold
        (lambda (name acct p)
-         (let ((cmdty (gnc:account-get-commodity acct)))
+         (let ((cmdty (xaccAccountGetCommodity acct)))
            (if (not cmdty)
                (begin 
-                 (gnc:account-begin-edit acct)
-                 (gnc:account-set-commodity acct commodity)
-                 (gnc:account-commit-edit acct))))
-         (let ((type (gnc:account-get-type acct)))
+                 (xaccAccountBeginEdit acct)
+                 (xaccAccountSetCommodity acct commodity)
+                 (xaccAccountCommitEdit acct))))
+         (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
-               (gnc:account-set-type acct GNC-BANK-TYPE)))
-         (gnc:group-insert-account group acct)
+               (xaccAccountSetType acct GNC-BANK-TYPE)))
+         (xaccGroupInsertAccount group acct)
          #t) #t (qif-io:acct-table-accounts acct-table)))
 
     ;; now the categories 
@@ -96,27 +96,27 @@
                 (gnc-acct (hash-ref qif-cat-table name)))
            (if gnc-acct
                (begin 
-                 (gnc:account-begin-edit gnc-acct)
+                 (xaccAccountBeginEdit gnc-acct)
                  (cond (income?
-                        (gnc:account-set-type gnc-acct GNC-INCOME-TYPE))
+                        (xaccAccountSetType gnc-acct GNC-INCOME-TYPE))
                        (#t
-                        (gnc:account-set-type gnc-acct GNC-EXPENSE-TYPE)))
-                 (gnc:account-set-description gnc-acct desc)
-                 (gnc:account-commit-edit gnc-acct)))))
+                        (xaccAccountSetType gnc-acct GNC-EXPENSE-TYPE)))
+                 (xaccAccountSetDescription gnc-acct desc)
+                 (xaccAccountCommitEdit gnc-acct)))))
        (qif-io:file-categories qif-file))
 
       (hash-fold
        (lambda (name acct p)
-         (let ((cmdty (gnc:account-get-commodity acct)))
+         (let ((cmdty (xaccAccountGetCommodity acct)))
            (if (not cmdty)
                (begin 
-                 (gnc:account-begin-edit acct)
-                 (gnc:account-set-commodity acct commodity)
-                 (gnc:account-commit-edit acct))))
-         (let ((type (gnc:account-get-type acct)))
+                 (xaccAccountBeginEdit acct)
+                 (xaccAccountSetCommodity acct commodity)
+                 (xaccAccountCommitEdit acct))))
+         (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
-               (gnc:account-set-type acct GNC-EXPENSE-TYPE)))
-         (gnc:group-insert-account group acct)
+               (xaccAccountSetType acct GNC-EXPENSE-TYPE)))
+         (xaccGroupInsertAccount group acct)
          #t) #t (qif-io:acct-table-categories acct-table)))
 
     ;; the securities 

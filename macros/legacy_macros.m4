@@ -14,13 +14,18 @@ if test x${GUILE} = x ; then
    AC_PATH_PROG(GUILE, guile, no)
 fi
 
+dnl We expect the following variables:
+dnl - BUILD_GUILE="yes" if guile-config is available in PATH
+dnl - name_build_guile="guile-config" i.e. the name of guile-config
+dnl - GUILE="/usr/bin/guile" as detected above.
+
 version_ok=
 min_guile_version=ifelse([$1], , 1.3,$1)
 max_guile_version=ifelse([$2], , 99.99.99,$2)
 
 AC_MSG_CHECKING(for guile - ${min_guile_version} <= version < ${max_guile_version})
 
-if test x${BUILD_GUILE} != x -a ${BUILD_GUILE} != no ; then
+if test "x${BUILD_GUILE}" != x -a "x${BUILD_GUILE}" != xno ; then
   guile_version=`${name_build_guile} --version 2>&1`
   guile_version="$guile_version.0"
   guile_major_version=`echo $guile_version | \
@@ -116,7 +121,18 @@ int main ()
 }
 ],
         am_cv_scanf_lld=yes,
-        am_cv_scanf_lld=no))
+        am_cv_scanf_lld=no,[[
+	# When cross-compiling, simply insert known values here
+	case $host in
+	  *-*-mingw*)
+	    # For mingw we know the result
+	    am_cv_scanf_lld=no
+	    ;;
+	  *)
+	    AC_MSG_ERROR([scanf support unknown.])
+	    ;;
+	esac
+]]))
   if test $am_cv_scanf_lld = yes; then
     AC_DEFINE(HAVE_SCANF_LLD, 1,
       [Define if scanf supports %lld conversions.])
@@ -146,10 +162,62 @@ int main ()
 }
 ],
         am_cv_scanf_qd=yes,
-        am_cv_scanf_qd=no))
+        am_cv_scanf_qd=no,[[
+	# When cross-compiling, simply insert known values here
+	case $host in
+	  *-*-mingw*)
+	    # For mingw we know the result
+	    am_cv_scanf_qd=no
+	    ;;
+	  *)
+	    AC_MSG_ERROR([scanf support unknown.])
+	    ;;
+	esac
+]]))
   if test $am_cv_scanf_qd = yes; then
     AC_DEFINE(HAVE_SCANF_QD, 1,
       [Define if scanf supports %qd conversions.])
+  fi
+])
+
+AC_DEFUN([SCANF_I64D_CHECK],
+[
+  AC_CACHE_CHECK([if scanf supports %I64d conversions],
+                 am_cv_scanf_i64d,
+      AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+  long long int e;
+
+  d = 0;
+  e =  100000;
+  e *= 100000;
+  if ((sscanf ("10000000000", "%I64d", &d) != 1) || (d != e))
+    exit (1);
+
+  exit (0);
+}
+],
+        am_cv_scanf_i64d=yes,
+        am_cv_scanf_i64d=no,[[
+	# When cross-compiling, simply insert known values here
+	case $host in
+	  *-*-mingw*)
+	    # For mingw we know the result
+	    am_cv_scanf_i64d=yes
+	    ;;
+	  *)
+	    AC_MSG_ERROR([scanf support unknown.])
+	    ;;
+	esac
+]]))
+  if test $am_cv_scanf_i64d = yes; then
+    AC_DEFINE(HAVE_SCANF_I64D, 1,
+      [Define if scanf supports %I64d conversions.])
   fi
 ])
 

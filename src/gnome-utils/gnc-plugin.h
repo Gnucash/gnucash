@@ -93,6 +93,8 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN))
 #define GNC_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN, GncPluginClass))
 
+#define GNC_PLUGIN_NAME "GncPlugin"
+
 /* typedefs & structures */
 
 /** The instance data structure for a menu-only plugin. */

@@ -572,12 +572,12 @@
              (with-input-from-string filtered-string
                (lambda () (read)))))
        (if (number? read-val)
-           (gnc:double-to-gnc-numeric
+           (double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
             (logior (GNC-DENOM-SIGFIGS 
                      (string-length (string-remove-char filtered-string #\.)))
                     GNC-RND-ROUND))
-           (gnc:numeric-zero))))
+           (gnc-numeric-zero))))
     ((comma)
      (let* ((filtered-string 
              (string-remove-char 
@@ -589,21 +589,21 @@
              (with-input-from-string filtered-string
                (lambda () (read)))))
        (if (number? read-val)
-           (gnc:double-to-gnc-numeric
+           (double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
             (logior (GNC-DENOM-SIGFIGS
                      (string-length (string-remove-char filtered-string #\.)))
                     GNC-RND-ROUND))
-           (gnc:numeric-zero))))
+           (gnc-numeric-zero))))
     ((integer)
      (let ((read-val
             (with-input-from-string 
                 (string-remove-char value-string #\$)
               (lambda () (read)))))
        (if (number? read-val)
-           (gnc:double-to-gnc-numeric
+           (double-to-gnc-numeric
             (+ 0.0 read-val) 1 GNC-RND-ROUND)
-           (gnc:numeric-zero))))
+           (gnc-numeric-zero))))
     (else 
      (throw 'qif-io:arg-type 'qif-io:parse-number/format 
             'number-format format))))

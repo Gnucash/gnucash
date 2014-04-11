@@ -4,7 +4,7 @@ TESTS =  \
 
 TESTS_ENVIRONMENT= \
    GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
-   GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:../../engine:..:../../gnc-module:${top_srcdir}/lib \
+   GUILE_LOAD_PATH=../../engine:..:../../gnc-module:${top_srcdir}/lib \
    LTDL_LIBRARY_PATH=.. \
    LD_LIBRARY_PATH=${top_builddir}/src/gnc-module:${top_builddir}/src/gnc-module/.libs:${top_builddir}/src/engine:${top_builddir}/src/engine/.libs:${top_builddir}/src/calculation:${top_builddir}/src/calculation/.libs:${top_builddir}/src/network-utils:${top_builddir}/src/network-utils/.libs
 

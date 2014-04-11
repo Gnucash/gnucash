@@ -437,7 +437,7 @@ gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
   }
 
   type = xaccAccountGetType(account);
-  return ((type != INCOME) && (type != EXPENSE)); 
+  return ((type != ACCT_TYPE_INCOME) && (type != ACCT_TYPE_EXPENSE)); 
 }
 
 static void
@@ -638,7 +638,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
     /* Don't want to deactivate the button just because this
      * isn't an income or expense account
      */
-    if( (other_type == EXPENSE) || (other_type == INCOME) )
+    if( (other_type == ACCT_TYPE_EXPENSE) || (other_type == ACCT_TYPE_INCOME) )
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(other_button), TRUE);
 
     gnc_transfer_dialog_set_selected_account (xferData, other_acct, xferData->quickfill);
@@ -2138,7 +2138,8 @@ gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
 
   type = xaccAccountGetType (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_button),
-				(type == EXPENSE) || (type == INCOME));
+				(type == ACCT_TYPE_EXPENSE) ||
+				(type == ACCT_TYPE_INCOME));
 
   gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (tree_view),
 					      account);

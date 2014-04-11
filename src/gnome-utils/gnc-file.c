@@ -26,7 +26,6 @@
 #include <errno.h>
 #include <libguile.h>
 #include <string.h>
-#include <g-wrap-wct.h>
 
 #include "dialog-utils.h"
 #include "druid-gnc-xml-import.h"
@@ -205,12 +204,12 @@ show_session_error (QofBackendError io_error,
     case ERR_BACKEND_NO_ERR:
       uh_oh = FALSE;
       break;
-	
-	case ERR_BACKEND_NO_HANDLER: {
-		fmt = _("No suitable backend was found for %s.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break;
-	}
+
+    case ERR_BACKEND_NO_HANDLER:
+      fmt = _("No suitable backend was found for %s.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
     case ERR_BACKEND_NO_BACKEND:
       fmt = _("The URL %s is not supported by this version of GnuCash.");
       gnc_error_dialog (parent, fmt, newfile);
@@ -416,8 +415,12 @@ show_session_error (QofBackendError io_error,
       break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
-      fmt = _("The file %s could not be found.");
-      gnc_error_dialog (parent, fmt, newfile);
+      if (type == GNC_FILE_DIALOG_SAVE) {
+        uh_oh = FALSE;
+      } else {
+        fmt = _("The file %s could not be found.");
+        gnc_error_dialog (parent, fmt, newfile);
+      }
       break;
 
     case ERR_FILEIO_FILE_TOO_OLD:
@@ -441,6 +444,11 @@ show_session_error (QofBackendError io_error,
               "permission to write to this file and that "
               "there is sufficient space to create it.");
       gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_FILEIO_FILE_EACCES:
+      fmt = _("No read permission to read from file %s.");
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_SQL_DB_TOO_OLD:
@@ -1063,7 +1071,8 @@ gnc_file_save_as (void)
   }
 
   /* if the database doesn't exist, ask the user ... */
-  else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
+  else if ((ERR_FILEIO_FILE_NOT_FOUND == io_err) ||
+           (ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
     if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))

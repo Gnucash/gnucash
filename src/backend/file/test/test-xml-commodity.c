@@ -222,11 +222,10 @@ test_real_commodity(const char *tag, gpointer globaldata, gpointer data)
     return TRUE;
 }
 
-static void
-guile_main (void *closure, int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-    gnc_module_system_init();
-    gnc_module_load("gnucash/engine", 0);
+    gnc_engine_init(argc, argv);
 
     book = qof_book_new ();
 
@@ -243,11 +242,4 @@ guile_main (void *closure, int argc, char **argv)
 
     print_test_results();
     exit(get_rv());
-}
-
-int
-main (int argc, char ** argv)
-{
-  scm_boot_guile (argc, argv, guile_main, NULL);
-  return 0;
 }

@@ -44,7 +44,8 @@ void GNCInteractor_erasePIN(GNCInteractor *i);
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent);
 gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i);
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value);
-GtkWidget *GNCInteractor_parent(GNCInteractor *i);
+GtkWidget *GNCInteractor_parent(const GNCInteractor *i);
+GtkWidget *GNCInteractor_dialog(const GNCInteractor *i);
 void GNCInteractor_add_log_text (GNCInteractor *i, const char *msg);
 /** Returns true if aqbanking requested to show a msgBox of type
     error. (Note: This happens very seldomly.) */

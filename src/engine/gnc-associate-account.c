@@ -150,7 +150,8 @@ make_kvpd_on_list(GList *account_list)
 
     current_account = iter->data;
     type = xaccAccountGetType(current_account);
-    g_return_val_if_fail(type == INCOME || type == EXPENSE, NULL);
+    g_return_val_if_fail(type == ACCT_TYPE_INCOME || type == ACCT_TYPE_EXPENSE,
+			 NULL);
 
     acc_id = xaccAccountGetGUID(current_account);
     guid_kvp = kvp_value_new_guid(acc_id);
@@ -423,7 +424,7 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 
   type = xaccAccountGetType(inc_or_expense_account);
   
-  g_return_if_fail(type == INCOME || type == EXPENSE);
+  g_return_if_fail(type == ACCT_TYPE_INCOME || type == ACCT_TYPE_EXPENSE);
   
   current_account_kvpframe = xaccAccountGetSlots(inc_or_expense_account);
 

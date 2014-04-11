@@ -4,6 +4,8 @@ src/network-utils/gnc-gpg.c
 src/import-export/csv/gnc-csv2glist.c
 src/business/business-core/gncBusPeriod.c
 src/backend/dwi/qofmap.c
+src/gnome-utils/gnctreemodelsort.c
+src/gnome-utils/gtktreedatalist.c
 src/gnome-utils/gnc-tree-model-selection.c
 src/backend/file/gncmod-backend-file.c
 src/backend/file/io-gncbin-r.c

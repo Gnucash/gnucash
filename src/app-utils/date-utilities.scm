@@ -203,22 +203,22 @@
 ;; date-granularity comparison functions.
 
 (define (gnc:timepair-earlier-date t1 t2)
-  (gnc:timepair-earlier (gnc:timepair-canonical-day-time t1)
-			(gnc:timepair-canonical-day-time t2)))
+  (gnc:timepair-earlier (timespecCanonicalDayTime t1)
+			(timespecCanonicalDayTime t2)))
 
 (define (gnc:timepair-later-date t1 t2)
   (gnc:timepair-earlier-date t2 t1))
 
 (define (gnc:timepair-le-date t1 t2)
-  (gnc:timepair-le (gnc:timepair-canonical-day-time t1)
-		   (gnc:timepair-canonical-day-time t2)))
+  (gnc:timepair-le (timespecCanonicalDayTime t1)
+		   (timespecCanonicalDayTime t2)))
 
 (define (gnc:timepair-ge-date t1 t2)
   (gnc:timepair-le t2 t1))
 
 (define (gnc:timepair-eq-date t1 t2)
-  (gnc:timepair-eq (gnc:timepair-canonical-day-time t1)
-		   (gnc:timepair-canonical-day-time t2)))
+  (gnc:timepair-eq (timespecCanonicalDayTime t1)
+		   (timespecCanonicalDayTime t2)))
 
 ;; Build a list of time intervals. 
 ;;
@@ -454,10 +454,10 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-start-accounting-period)
-  (gnc:secs->timepair (gnc:accounting-period-start)))
+  (gnc:secs->timepair (gnc-accounting-period-fiscal-start)))
 
 (define (gnc:get-end-accounting-period)
-  (gnc:secs->timepair (gnc:accounting-period-end)))
+  (gnc:secs->timepair (gnc-accounting-period-fiscal-end)))
 
 (define (gnc:get-start-this-month)
   (let ((now (localtime (current-time))))

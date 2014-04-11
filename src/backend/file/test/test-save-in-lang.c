@@ -1,3 +1,4 @@
+#include "config.h"
 #include <glib.h>
 #include <unistd.h>
 #include <sys/types.h>

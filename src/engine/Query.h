@@ -124,42 +124,36 @@ void xaccQueryAddAccountGUIDMatch(Query *, AccountGUIDList *,
 void xaccQueryAddSingleAccountMatch(Query *, Account *, QofQueryOp);
 
 void xaccQueryAddStringMatch (Query* q, const char *matchstring,
-			      int case_sens, int use_regexp, QofQueryOp op,
+			      gboolean case_sens, gboolean use_regexp,
+                              QofQueryOp op,
 			      const char * path, ...);
-
-#define xaccQueryAddDescriptionMatch(q,m,c,r,o) \
-	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS, \
-				TRANS_DESCRIPTION, NULL)
-#define xaccQueryAddNumberMatch(q,m,c,r,o) \
-	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS, \
-				TRANS_NUM, NULL)
-#define xaccQueryAddActionMatch(q,m,c,r,o) \
-	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_ACTION, \
-				NULL)
-#define xaccQueryAddMemoMatch(q,m,c,r,o) \
-	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_MEMO, \
-				NULL)
+void
+xaccQueryAddDescriptionMatch(Query *q, const char *m, gboolean c, gboolean r,
+                             QofQueryOp o);
+void
+xaccQueryAddNumberMatch(Query *q, const char *m, gboolean c, gboolean r,
+                        QofQueryOp o);
+void
+xaccQueryAddActionMatch(Query *q, const char *m, gboolean c, gboolean r,
+                        QofQueryOp o);
+void
+xaccQueryAddMemoMatch(Query *q, const char *m, gboolean c, gboolean r,
+                      QofQueryOp o);
+void
+xaccQueryAddValueMatch(Query *q, gnc_numeric amt, QofNumericMatch sgn,
+                       QofQueryCompare how, QofQueryOp op);
+void
+xaccQueryAddSharePriceMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
+                            QofQueryOp op);
+void
+xaccQueryAddSharesMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
+                        QofQueryOp op);
+void
+xaccQueryAddBalanceMatch(Query *q, QofQueryCompare bal, QofQueryOp op);
 
 void xaccQueryAddNumericMatch (Query *q, gnc_numeric amount,
 			       QofNumericMatch sign, QofQueryCompare how,
 			       QofQueryOp op, const char * path, ...);
-
-#define xaccQueryAddValueMatch(q,amt,sgn,how,op) \
-	xaccQueryAddNumericMatch ((q), (amt), (sgn), (how), (op), \
-				SPLIT_VALUE, NULL)
-
-#define xaccQueryAddSharePriceMatch(q,amt,how,op) \
-	xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op), \
-				SPLIT_SHARE_PRICE, NULL)
- 
-#define xaccQueryAddSharesMatch(q,amt,how,op) \
-	xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op), \
-				SPLIT_AMOUNT, NULL)
-
-#define xaccQueryAddBalanceMatch(q,bal,op) \
-	xaccQueryAddNumericMatch ((q), gnc_numeric_zero(), QOF_NUMERIC_MATCH_ANY, \
-				((bal) ? QOF_COMPARE_EQUAL : QOF_COMPARE_NEQ), (op), \
-				SPLIT_TRANS, TRANS_IMBALANCE, NULL)
 
 /** The DateMatch queries match transactions whose posted date
  *    is in a date range.  If use_start is TRUE, then a matching
@@ -170,17 +164,17 @@ void xaccQueryAddNumericMatch (Query *q, gnc_numeric amount,
  *    all transactions are matched.
  */
 
-void xaccQueryAddDateMatch(Query * q, 
-                           int use_start, int sday, int smonth, int syear, 
-                           int use_end, int eday, int emonth, int eyear,
+void xaccQueryAddDateMatch(Query * q, gboolean use_start,
+                           int sday, int smonth, int syear,
+                           gboolean use_end, int eday, int emonth, int eyear,
                            QofQueryOp op);
 void xaccQueryAddDateMatchTS(Query * q, 
-                             int use_start, Timespec sts, 
-                             int use_end, Timespec ets,
+                             gboolean use_start, Timespec sts,
+                             gboolean use_end, Timespec ets,
                              QofQueryOp op);
 void xaccQueryAddDateMatchTT(Query * q, 
-                             int use_start, time_t stt, 
-                             int use_end, time_t ett,
+                             gboolean use_start, time_t stt,
+                             gboolean use_end, time_t ett,
                              QofQueryOp op);
 void xaccQueryGetDateMatchTS (Query * q, 
 			      Timespec * sts,
@@ -202,8 +196,6 @@ typedef enum {
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op);
 void xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
                            QofIdType id_type, QofQueryOp op);
-void xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
-			      GUID guid, QofQueryOp op);
 
 /** given kvp value is on right side of comparison */
 void xaccQueryAddKVPMatch(Query *q, GSList *path, const KvpValue *value,

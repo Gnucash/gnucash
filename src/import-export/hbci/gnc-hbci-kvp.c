@@ -20,6 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include "config.h"
 #include "gnc-hbci-kvp.h"
 #include <stdio.h>
 

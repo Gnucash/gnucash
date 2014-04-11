@@ -45,7 +45,6 @@
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
-#include <g-wrap-wct.h>
 #include <libguile.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -67,6 +66,7 @@
 #include "guile-util.h"
 #include "option-util.h"
 #include "window-report.h"
+#include "swig-runtime.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -904,7 +904,12 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
                 editor = scm_call_1(get_editor, SCM_CAR(edited));
                 scm_call_2(set_editor, SCM_CAR(edited), SCM_BOOL_F);
                 if (editor != SCM_BOOL_F) {
-                        gtk_widget_destroy(GTK_WIDGET(gw_wcp_get_ptr(editor)));
+                    GtkWidget *w = NULL;
+                    #define FUNC_NAME "gtk_widget_destroy"
+                    w = SWIG_MustGetPtr(editor,
+                                        SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
+                    #undef FUNC_NAME
+                    gtk_widget_destroy(GTK_WIDGET(w));
                 }
         }
 
@@ -1101,7 +1106,11 @@ gnc_plugin_page_report_raise_editor(SCM report)
 {
         SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
         SCM editor = scm_call_1(get_editor, report);
-        gtk_window_present(gw_wcp_get_ptr(editor));
+        #define FUNC_NAME "gtk_window_present"
+        GtkWidget *w = SWIG_MustGetPtr(editor,
+                                       SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
+        #undef FUNC_NAME
+        gtk_window_present(GTK_WINDOW(w));
 }
 
 static void

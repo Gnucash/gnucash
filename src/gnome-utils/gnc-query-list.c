@@ -138,6 +138,9 @@ gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
 
   /* Initialize the CList */
   gnc_query_list_init_clist(list);
+
+  /* Set initial sort order */
+  gnc_query_list_set_query_sort(list, TRUE);
 }
 
 

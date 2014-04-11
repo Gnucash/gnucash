@@ -902,7 +902,7 @@ xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
-    xaccAccountSetType (acc, BANK);
+    xaccAccountSetType (acc, ACCT_TYPE_BANK);
 
     /* Hang the account off the root. */
     xaccGroupInsertAccount (root, acc);

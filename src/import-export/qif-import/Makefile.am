@@ -23,7 +23,6 @@ libgncmod_qif_import_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
@@ -59,7 +58,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
@@ -89,17 +87,20 @@ endif
 noinst_DATA = .scm-links
 
 .scm-links: 
-	rm -f g-wrapped gnucash import-export qif-import
-	$(LN_S) -f . qif-import # to fix (load "qif-import/foo.scm")
-	$(LN_S) -f . import-export
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash qif-import
+	mkdir -p  gnucash/import-export
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash/import-export; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+	( cd qif-import; for A in $(gncscm_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-CLEANFILES += qif-import import-export gnucash g-wrapped .scm-links
+clean-local:
+	$(RM) -rf gnucash qif-import
+
+CLEANFILES += .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

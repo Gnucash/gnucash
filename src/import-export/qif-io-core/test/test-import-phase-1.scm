@@ -17,10 +17,10 @@
   (let ((qiffile (qif-io:make-empty-file))
         (acct-table (qif-io:make-empty-acct-table))
 	(session (gnc:get-current-session))
-	(book (gnc:session-get-book session))
-	(com-table (gnc:commodity-table-new)))
+	(book (qof-session-get-book session))
+	(com-table (gnc-commodity-table-new)))
 
-    (gnc:commodity-table-add-default-data com-table book)
+    (gnc-commodity-table-add-default-data com-table book)
 
     ;; read the file and look at data formats. we need to do this
     ;; immediately when loading a file.
@@ -42,7 +42,7 @@
     (if (qif-io:file-xtns-need-acct? qiffile)
         (qif-io:file-set-default-src-acct! qiffile filename))
 
-    (let ((commodity (gnc:commodity-table-lookup com-table "ISO4217" "USD")))
+    (let ((commodity (gnc-commodity-table-lookup com-table "ISO4217" "USD")))
 
       ;; import the bank transactions 
       (for-each 
@@ -62,8 +62,8 @@
         ;; write the file
         (let* ((name (simple-format #f "file:~A.gnc" filename)))
           (simple-format #t "using book name='~A'\n" name)
-          (gnc:group-concat-group (gnc:book-get-group book) group)
-	  (gnc:account-group-destroy group)
+          (xaccGroupConcatGroup (xaccGetAccountGroup book) group)
+	  (xaccAccountGroupDestroy group)
           (gnc:session-begin session name #t #t)
           (gnc:session-save session)
           (gnc:session-end session)

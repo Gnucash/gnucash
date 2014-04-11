@@ -6,6 +6,7 @@ libgncmod_hbci_la_SOURCES = \
   dialog-daterange.c \
   dialog-hbcitrans.c \
   dialog-pass.c \
+  gnc-file-aqb-import.c \
   gnc-hbci-getbalance.c \
   gnc-hbci-gettrans.c \
   gnc-hbci-kvp.c \
@@ -30,6 +31,7 @@ noinst_HEADERS = \
   dialog-pass.h \
   druid-hbci-initial.h \
   druid-hbci-utils.h \
+  gnc-file-aqb-import.h \
   gnc-hbci-getbalance.h \
   gnc-hbci-gettrans.h \
   gnc-hbci-kvp.h \
@@ -67,7 +69,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/ledger-core \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \

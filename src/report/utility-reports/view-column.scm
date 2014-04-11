@@ -30,12 +30,12 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
-(use-modules (g-wrapped gw-report-system))
+(use-modules (sw_report_system))
 
 (require 'printf)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (define (make-options)
   (let* ((options (gnc:new-options))
@@ -96,7 +96,7 @@
 	       (begin 
 		 (set! callback 
 		       (make-child-options-callback
-			report (gnc:find-report child)))
+			report (gnc-report-find child)))
 		 (set! report-info 
 		       (list child rowspan colspan callback))))
 	   (set! new-reports (cons report-info new-reports))))
@@ -115,7 +115,7 @@
        ;; hash is an attempt to compute how many columnc are
        ;; actually used in a row; items with non-1 rowspans will take
        ;; up cells in the row without actually being in the row.
-       (let* ((subreport (gnc:find-report (car report-info)))
+       (let* ((subreport (gnc-report-find (car report-info)))
 	      (colspan (cadr report-info))
 	      (rowspan (caddr report-info))
 	      (opt-callback (cadddr report-info))
@@ -166,19 +166,19 @@
 	  report-table 
 	  (list (gnc:make-html-text 
 		 (gnc:html-markup-anchor
-		  (gnc:html-build-url 
-		   gnc:url-type-options
+		  (gnc-build-url
+		   URL-TYPE-OPTIONS
 		   (string-append "report-id=" 
 				  (sprintf #f "%a" (car report-info)))
-		   #f)
+		   "")
 		  (_ "Edit Options"))
 		 "&nbsp;"
 		 (gnc:html-markup-anchor
-		  (gnc:html-build-url
-		   gnc:url-type-report
+		  (gnc-build-url
+		   URL-TYPE-REPORT
 		   (string-append "id=" 
 				  (sprintf #f "%a" (car report-info)))
-		   #f)
+		   "")
 		  (_ "Single Report")))))
 
 	 ;; add the report-table to the toplevel-cell
@@ -217,7 +217,7 @@
 	   (gnc:lookup-option options "__general" "report-list"))))
     (for-each 
      (lambda (child)
-       (gnc:report-set-dirty?! (gnc:find-report (car child)) #t))
+       (gnc:report-set-dirty?! (gnc-report-find (car child)) #t))
      reports)))
 
 (define (cleanup-options report)

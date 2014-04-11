@@ -22,6 +22,7 @@
  * December 2001
  */
 
+#include "config.h" 
 #include <ctype.h>
 #include <glib.h>
 #include <time.h>
