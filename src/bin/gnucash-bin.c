@@ -197,56 +197,6 @@ gnucash_command_line(int *argc, char **argv)
     char *p;
     int debugging = 0;
     char *namespace_regexp = NULL;
-#ifndef HAVE_GTK26
-    poptContext pc;
-    int rc;
-    struct poptOption options[] = {
-        POPT_AUTOHELP
-        {"version", 'v', POPT_ARG_NONE, &gnucash_show_version, 1, 
-         _("Show GnuCash version"), NULL},
-        {"debug", '\0', POPT_ARG_NONE, &debugging, 0,
-         _("Enable debugging mode"), NULL},
-        {"loglevel", '\0', POPT_ARG_INT, &loglevel, 0,
-	 /* Translators: This is the command line option autohelp
-	    text; see popt(3) */
-         _("Set the logging level from 0 (least) to 6 (most)"), 
-	 /* Translators: Argument description for autohelp; see popt(3) */
-         _("LOGLEVEL")},
-        {"nofile", '\0', POPT_ARG_NONE, &nofile, 0,
-         _("Do not load the last file opened"), NULL},
-        {"config-path", '\0', POPT_ARG_STRING, &config_path, 0,
-         _("Set configuration path"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("CONFIGPATH")},
-        {"share-path", '\0', POPT_ARG_STRING, &share_path, 0,
-         _("Set shared data file search path"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("SHAREPATH")},
-        {"doc-path", '\0', POPT_ARG_STRING, &help_path, 0,
-         _("Set the search path for documentation files"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("DOCPATH")},
-        {"add-price-quotes", '\0', POPT_ARG_STRING, &add_quotes_file, 0,
-         _("Add price quotes to given GnuCash datafile"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("FILE")},
-        {"namespace", '\0', POPT_ARG_STRING, &namespace_regexp, 0, 
-         _("Regular expression determining which namespace commodities will be retrieved"), 
-	 /* Translators: Argument description for autohelp; see popt(3) */
-         _("REGEXP")},
-        POPT_TABLEEND
-    };
-    
-    /* Pretend that argv[0] is "gnucash" */
-    if ((p = strstr(argv[0], "-bin"))) *p = '\0';
-
-    pc = poptGetContext(NULL, *argc, (const char **)argv, options, 0);
-    poptSetOtherOptionHelp(pc, "[OPTIONS...] [datafile]");
-    
-    while ((rc = poptGetNextOpt(pc)) > 0);
-    file_to_load = poptGetArg(pc);
-    poptFreeContext(pc);
-#else
     GError *error = NULL;
     GOptionContext *context;
     GOptionEntry options[] = {
@@ -302,7 +252,6 @@ gnucash_command_line(int *argc, char **argv)
 
     if (*argc > 0)
       file_to_load = argv[1];
-#endif
 
     if (gnucash_show_version) {
         if (is_development_version)

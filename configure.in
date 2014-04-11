@@ -182,8 +182,8 @@ fi
 ### --------------------------------------------------------------------------
 ### Glib checks..
 
-AM_PATH_GLIB_2_0(2.4.0,,AC_MSG_ERROR([
-*** GLIB >= 2.4 is required to build Gnucash; please make sure you have the
+AM_PATH_GLIB_2_0(2.6.0,,AC_MSG_ERROR([
+*** GLIB >= 2.6 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
 	gthread gobject gmodule)
@@ -192,21 +192,6 @@ if test ${no_glib}x = yesx
 then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
-
-AC_MSG_CHECKING(for GLIB - version >= 2.6.0)
-if $PKG_CONFIG 'glib-2.0 >= 2.6.0'
-then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_GLIB26,1,[System has glib 2.6.0 or better])
-  HAVE_GLIB26=yes
-else
-  GLIB24_LIBS="$GLIB_LIBS"
-  GLIB_LIBS="\${top_builddir}/lib/glib26/libgncglib.la $GLIB_LIBS"
-  GLIB_CFLAGS="-I\${top_srcdir}/lib/glib26 $GLIB_CFLAGS"
-  AC_MSG_RESULT(no)
-  AC_SUBST(GLIB24_LIBS)
-fi
-AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
 
 AC_MSG_CHECKING(for GLIB - version >= 2.9.0)
 if $PKG_CONFIG 'glib-2.0 >= 2.9.0'
@@ -1014,7 +999,7 @@ then
     fi
     GNOME_COMPILE_WARNINGS
 
-    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4)
+    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.6)
     AS_SCRUB_INCLUDE(GTK_CFLAGS)
     AC_SUBST(GTK_CFLAGS)
     AC_SUBST(GTK_LIBS)
@@ -1115,18 +1100,6 @@ fi
 ### Only test this if we're building the GUI
 if test x${gnc_build_gui} = xtrue ;
 then
-  AC_MSG_CHECKING(for GTK - version >= 2.6.0)
-  if $PKG_CONFIG 'gtk+-2.0 >= 2.6.0'
-  then
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_GTK26,1,[System has gtk 2.6.0 or better])
-    HAVE_GTK26=yes
-  else
-    AC_MSG_RESULT(no)
-  fi
-  AM_CONDITIONAL(HAVE_GTK26, test "x$HAVE_GTK26" = "xyes" )
-  
-  
   AC_MSG_CHECKING(for GTK - version >= 2.10.0)
   if $PKG_CONFIG 'gtk+-2.0 >= 2.10.0'
   then
@@ -1137,18 +1110,6 @@ then
     AC_MSG_RESULT(no)
   fi
   AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
-  
-  
-  AC_MSG_CHECKING(for pango version >= 1.8.0)
-  if $PKG_CONFIG 'pango >= 1.8.0'
-  then
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_PANGO18,1,[System has pango 1.8.0 or better])
-    HAVE_PANGO18=yes
-  else
-    AC_MSG_RESULT(no)
-  fi
-  AM_CONDITIONAL(HAVE_PANGO18, test "x$HAVE_PANGO18" = "xyes" )
   
   
   dnl @@fixme 
@@ -1245,8 +1206,8 @@ then
   ])
   dnl Modules common to libgsf and libgsf-gnome
   libgsf_reqs="
-      gobject-2.0 >= 2.4.0
-      glib-2.0 >= 2.4.0
+      gobject-2.0 >= 2.6.0
+      glib-2.0 >= 2.6.0
       libxml-2.0 >= 2.4.16
   "
   dnl Modules required for libgsf-gnome
@@ -1523,15 +1484,15 @@ then
   dnl *****************************
   #	libgsf-1		>= 1.12.2
   goffice_reqs="
-  	glib-2.0		>= 2.4.7
-  	gobject-2.0		>= 2.4.7
-  	gmodule-2.0		>= 2.4.7
+  	glib-2.0		>= 2.6.4
+  	gobject-2.0		>= 2.6.4
+  	gmodule-2.0		>= 2.6.4
   	libxml-2.0		>= 2.4.12
-  	pango			>= 1.6.0
-  	pangoft2		>= 1.6.0
+  	pango			>= 1.8.1
+  	pangoft2		>= 1.8.1
   "
   goffice_gtk_reqs="
-  	gtk+-2.0		>= 2.4.13
+  	gtk+-2.0		>= 2.6.0
   	libglade-2.0		>= 2.3.6
   	libgnomeprint-2.2	>= 2.8.0
   	libart-2.0		>= 2.3.11
@@ -1829,9 +1790,7 @@ then
   ### ------------------------------------------------------------------------
 else
   ### A bunch of am conditionals that need to be set
-  AM_CONDITIONAL(HAVE_GTK26, false )
   AM_CONDITIONAL(HAVE_GTK_2_10, false)
-  AM_CONDITIONAL(HAVE_PANGO18, false )
   AM_CONDITIONAL(HAVE_LIBGSF, false)
   AM_CONDITIONAL(HAVE_GOFFICE, false)
   AM_CONDITIONAL(WITH_LIBGSF_GNOME, false)
@@ -2091,7 +2050,6 @@ AC_CONFIG_FILES(po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
-          lib/glib26/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile

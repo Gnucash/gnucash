@@ -30,10 +30,6 @@
 #include <time.h>
 #include <zlib.h>
 
-#ifndef HAVE_GLIB26
-#include <gsf/glib24_26-compat.h>
-#endif
-
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "libgsf:zip"
 

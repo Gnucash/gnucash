@@ -70,10 +70,6 @@ libgsf_1_la_SOURCES =		\
 #	gsf-command-context.c	\
 #	gsf-io-context.c
 
-if !HAVE_GLIB26
-  libgsf_1_la_SOURCES += glib24_26-compat.c
-endif
-
 libgsf_1_includedir = $(includedir)/libgsf-1/gsf
 noinst_HEADERS = 	\
 	gsf.h			\
@@ -124,10 +120,6 @@ noinst_HEADERS = 	\
 	gsf-clip-data.h
 #	gsf-command-context.h	\
 #	gsf-io-context.h
-
-if !HAVE_GLIB26
-  noinst_HEADERS += glib24_26-compat.h
-endif
 
 install-data-local: install-libtool-import-lib
 

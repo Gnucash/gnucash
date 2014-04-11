@@ -38,9 +38,6 @@
 #include "guile-mappings.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 #include "swig-runtime.h"
 
 #include "gnc-plugin-page-register.h"
@@ -75,8 +72,6 @@
 #include "QueryNew.h"
 #include "window-reconcile.h"
 #include "window-report.h"
-
-#include "gtk-compat.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

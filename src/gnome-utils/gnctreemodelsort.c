@@ -58,7 +58,6 @@ Plus some minor changes that have been annotated with 'CAS:'
 #include "gtk/gtktreednd.h"      //CAS: path changed
 //#include "gtk/gtkalias.h"      //CAS: header commented
 #include <glib/gi18n.h> //CAS: header added
-#include "gtk-compat.h" //CAS: header added
 #define P_(x) _(x)      //CAS: macro added
 
 typedef struct _SortElt SortElt;
