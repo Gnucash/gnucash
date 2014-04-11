@@ -20,8 +20,8 @@ AC_DEFUN([PKG_CHECK_MODULES], [
      echo "*** to the full path to pkg-config."
      echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
   else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+     pkg_config_min_version=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $pkg_config_min_version; then
         AC_MSG_CHECKING(for $2)
 
         if $PKG_CONFIG --silence-errors --exists "$2" ; then
@@ -36,6 +36,7 @@ AC_DEFUN([PKG_CHECK_MODULES], [
             $1_LIBS=`$PKG_CONFIG --libs "$2"`
             AC_MSG_RESULT($$1_LIBS)
         else
+            AC_MSG_RESULT(no)
             $1_CFLAGS=""
             $1_LIBS=""
             ## If we have a custom action on failure, don't print errors, but 
@@ -47,7 +48,7 @@ AC_DEFUN([PKG_CHECK_MODULES], [
         AC_SUBST($1_CFLAGS)
         AC_SUBST($1_LIBS)
      else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** Your version of pkg-config is too old. You need version $pkg_config_min_version or newer."
         echo "*** See http://www.freedesktop.org/software/pkgconfig"
      fi
   fi

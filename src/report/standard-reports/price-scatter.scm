@@ -212,7 +212,8 @@
     (if 
      (not (gnc-commodity-equiv report-currency price-commodity))
      (begin
-       (if (not (null? currency-accounts))
+       (if (or (not (null? currency-accounts))
+               (eq? price-source 'pricedb))
            (set!
             data
             (case price-source

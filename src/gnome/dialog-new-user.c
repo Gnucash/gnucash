@@ -35,6 +35,7 @@
 #include "gnc-ui.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-account-tree.h"
+#include "gnc-session.h"
 
 #define GCONF_SECTION "dialogs/new_user"
 #define FIRST_STARTUP "first_startup"
@@ -149,5 +150,5 @@ gnc_ui_new_user_cancel_dialog (void)
 void
 gncp_new_user_finish (void)
 {
-  gnc_hook_run(HOOK_BOOK_OPENED, NULL);
+  gnc_hook_run(HOOK_BOOK_OPENED, gnc_get_current_session());
 }

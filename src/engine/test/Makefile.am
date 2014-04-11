@@ -31,6 +31,7 @@ TESTS = \
   test-object \
   test-commodities \
   test-create-account \
+  test-account-object \
   test-group-vs-book \
   test-lots \
   test-period \
@@ -41,7 +42,6 @@ TESTS = \
   test-split-vs-account  \
   test-transaction-reversal \
   test-transaction-voiding \
-  test-freq-spec \
   test-recurrence \
   test-scm-query \
   test-book-merge
@@ -63,9 +63,9 @@ check_PROGRAMS = \
   test-link \
   test-commodities \
   test-date \
-  test-freq-spec \
   test-recurrence \
   test-guid \
+  test-account-object \
   test-group-vs-book \
   test-load-engine \
   test-period \

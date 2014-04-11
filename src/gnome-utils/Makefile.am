@@ -9,7 +9,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
@@ -17,13 +16,11 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS} \
-  ${GSF_CFLAGS}
+  ${GOFFICE_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -43,6 +40,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   druid-gnc-xml-import.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
+  gnc-autosave.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-date-delta.c \
@@ -92,7 +90,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-window.c \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
-  print-session.c \
   search-param.c \
   gnc-dialog.c \
   swig-gnome-utils.c \
@@ -166,6 +163,7 @@ gncinclude_HEADERS = \
   window-main-summarybar.h
 
 noinst_HEADERS = \
+  gnc-autosave.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
@@ -180,11 +178,9 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
-  ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
@@ -192,14 +188,13 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
-  ${GSF_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
-swig-gnome-utils.c: gnome-utils.i gnc-html.h print-session.h \
+swig-gnome-utils.c: gnome-utils.i gnc-html.h \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
@@ -216,6 +211,14 @@ EXTRA_DIST = \
   gnome-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
+
+if GTKHTML_USES_GTKPRINT
+  EXTRA_DIST += print-session.c
+else
+  AM_CFLAGS += ${GNOME_PRINT_CFLAGS}
+  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
+  libgncmod_gnome_utils_la_SOURCES += print-session.c
+endif
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

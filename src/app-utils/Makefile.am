@@ -60,6 +60,7 @@ gncinclude_HEADERS = \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
+  gnc-help-utils.h \
   gnc-helpers.h \
   gnc-sx-instance-model.h \
   gnc-ui-common.h \
@@ -105,6 +106,13 @@ EXTRA_DIST = \
   app-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
+
+if OS_WIN32
+libgncmod_app_utils_la_SOURCES += gnc-help-utils.c
+libgncmod_app_utils_la_LIBADD += $(HTMLHELP_LIBS)
+else
+EXTRA_DIST += gnc-help-utils.c
+endif
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

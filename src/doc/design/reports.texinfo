@@ -2,6 +2,11 @@
 @chapter Reports
 @cindex Reports
 
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
 The reporting infrastructure is designed facilitate the creation
 of sophisticated reports including tables, graphs, and hyperlinks.
 The infrastructure includes functionality to support the following:

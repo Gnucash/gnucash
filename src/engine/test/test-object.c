@@ -33,7 +33,7 @@
 #define TEST_MODULE_NAME "object-test"
 #define TEST_MODULE_DESC "Test Object"
 
-static void obj_foreach (const QofCollection *, QofEntityForeachCB, gpointer);
+static void obj_foreach (const QofCollection *, QofInstanceForeachCB, gpointer);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
 static void test_foreach (QofBook *, const char *);
@@ -79,7 +79,7 @@ test_object (void)
 }
 
 static void
-obj_foreach (const QofCollection *col, QofEntityForeachCB cb, gpointer u_d)
+obj_foreach (const QofCollection *col, QofInstanceForeachCB cb, gpointer u_d)
 {
   int *foo = u_d;
 
@@ -89,7 +89,7 @@ obj_foreach (const QofCollection *col, QofEntityForeachCB cb, gpointer u_d)
   *foo = 1;
 }
 
-static void foreachCB (QofEntity *ent, gpointer u_d)
+static void foreachCB (QofInstance *ent, gpointer u_d)
 {
   do_test (FALSE, "FAIL");
 }

@@ -6,9 +6,11 @@
       	   <menuitem name="FileMt940Import" action="Mt940ImportAction"/>
       	   <menuitem name="FileMt942Import" action="Mt942ImportAction"/>
       	   <menuitem name="FileDtausImport" action="DtausImportAction"/>
-      	   <menuitem name="FileCsvImport" action="CsvImportAction"/>
       	   <menuitem name="FileDtausImportsend" action="DtausImportSendAction"/>
+           <!-- When CsvImport works: 
+           <menuitem name="FileCsvImport" action="CsvImportAction"/>
       	   <menuitem name="FileCsvImportsend" action="CsvImportSendAction"/>
+           -->
       	</placeholder>
       </menu>
     </menu>

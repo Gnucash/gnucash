@@ -219,6 +219,7 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
 
     hbox = gtk_hbox_new (FALSE, 0);
 
+    gtk_widget_set_direction (hbox, GTK_TEXT_DIR_LTR);
     gtk_box_pack_start (GTK_BOX(hbox), calendar, TRUE, TRUE, 0);
 
     item = gnome_canvas_item_new (parent, gnc_date_picker_get_type (),

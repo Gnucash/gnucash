@@ -10,6 +10,12 @@
     Selectionnez ce groupe si vous devez gérer un emprunt pour études.
   </gnc-act:long-description>    
   <gnc:account version="2.0.0">
+	  <act:name>Root Account</act:name>
+	  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+	  <act:type>ROOT</act:type>
+	  <act:commodity-scu>0</act:commodity-scu>
+  </gnc:account>
+  <gnc:account version="2.0.0">
 	  <act:name>Passif</act:name>
 	  <act:id type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:id>
 	  <act:type>LIABILITY</act:type>
@@ -19,6 +25,7 @@
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
 	  <act:description>Passif</act:description>
+	  <act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 	  <act:slots>
 		  <slot>
 			  <slot:key>placeholder</slot:key>
@@ -66,6 +73,7 @@
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
 	  <act:description>Dépenses</act:description>
+	  <act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 	  <act:slots>
 		  <slot>
 			  <slot:key>placeholder</slot:key>

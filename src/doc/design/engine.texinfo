@@ -2,6 +2,11 @@
 @chapter Engine
 @cindex The Engine
 
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
 The Engine provides an interface to a financial engine with three basic
 financial entities: Accounts, Transactions (known as Journal Entries in
 accounting practice), and Splits (known as Ledger Entries). These three

@@ -11,6 +11,12 @@
       préstamo hipotecario (préstamo hipotecario, interés hipoteca).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Pasivo</act:name>
   <act:id type="new">6664763bd1ea41462cba5ef856d9c00c</act:id>
   <act:type>LIABILITY</act:type>
@@ -19,6 +25,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:currency>
   <act:description>Pasivo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Préstamos</act:name>
@@ -51,6 +58,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:currency>
   <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Intereses</act:name>

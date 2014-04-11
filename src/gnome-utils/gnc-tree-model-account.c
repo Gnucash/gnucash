@@ -84,7 +84,7 @@ static gboolean	gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
     						    GtkTreeIter *child);
 
 /** Component Manager Callback ******************************************/
-static void gnc_tree_model_account_event_handler (QofEntity *entity,
+static void gnc_tree_model_account_event_handler (QofInstance *entity,
 						  QofEventId event_type,
 						  GncTreeModelAccount *model,
 						  GncEventData *ed);
@@ -1220,7 +1220,7 @@ propagate_change(GtkTreeModel *model, GtkTreePath *path, gint toggle_if_num)
  *  @param user_data A pointer to the account tree model.
  */
 static void
-gnc_tree_model_account_event_handler (QofEntity *entity,
+gnc_tree_model_account_event_handler (QofInstance *entity,
 				      QofEventId event_type,
 				      GncTreeModelAccount *model,
 				      GncEventData *ed)

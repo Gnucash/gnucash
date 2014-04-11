@@ -30,6 +30,7 @@
  * Created by Linas Vepstas December 1998
  * Copyright (c) 1998-2001,2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
 #include "config.h"
@@ -47,6 +48,8 @@
 #include "qofobject-p.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
+
+QOF_GOBJECT_IMPL(qof_book, QofBook, QOF_TYPE_INSTANCE);
 
 /* ====================================================================== */
 /* constructor / destructor */
@@ -66,14 +69,13 @@ qof_book_init (QofBook *book)
       (GDestroyNotify)qof_util_string_cache_remove,  /* key_destroy_func   */
       coll_destroy);                            /* value_destroy_func */
 
-  qof_instance_init (&book->inst, QOF_ID_BOOK, book);
+  qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
   book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
   
   book->book_open = 'y';
   book->version = 0;
-  book->idata = 0;
 }
 
 QofBook *
@@ -82,11 +84,10 @@ qof_book_new (void)
   QofBook *book;
 
   ENTER (" ");
-  book = g_new0(QofBook, 1);
-  qof_book_init(book);
+  book = g_object_new(QOF_TYPE_BOOK, NULL);
   qof_object_book_begin (book);
 
-  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&book->inst, QOF_EVENT_CREATE, NULL);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -101,14 +102,26 @@ book_final (gpointer key, gpointer value, gpointer booq)
   (*cb) (book, key, user_data);
 }
 
+static void
+qof_book_dispose_real (GObject *bookp)
+{
+}
+
+static void
+qof_book_finalize_real (GObject *bookp)
+{
+}
+
 void
 qof_book_destroy (QofBook *book) 
 {
+  GHashTable* cols;
+
   if (!book) return;
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_force (&book->inst, QOF_EVENT_DESTROY, NULL);
 
   /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.
@@ -122,12 +135,18 @@ qof_book_destroy (QofBook *book)
   g_hash_table_destroy (book->data_tables);
   book->data_tables = NULL;
 
-  qof_instance_release (&book->inst);
+  /* qof_instance_release (&book->inst); */
 
-  g_hash_table_destroy (book->hash_of_collections);
+  /* Note: we need to save this hashtable until after we remove ourself
+   * from it, otherwise we'll crash in our dispose() function when we
+   * DO remove ourself from the collection but the collection had already
+   * been destroyed.
+   */
+  cols = book->hash_of_collections;
+  g_object_unref (book);
+  g_hash_table_destroy (cols);
   book->hash_of_collections = NULL;
 
-  g_free (book);
   LEAVE ("book=%p", book);
 }
 
@@ -149,7 +168,7 @@ qof_book_not_saved (const QofBook *book)
 {
   if (!book) return FALSE;
 
-  return(book->inst.dirty || qof_object_is_dirty (book));
+  return(qof_instance_get_dirty_flag(book) || qof_object_is_dirty(book));
 }
 
 void
@@ -159,8 +178,8 @@ qof_book_mark_saved (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = FALSE;
+  was_dirty = qof_instance_get_dirty_flag(book);
+  qof_instance_set_dirty_flag(book, FALSE);
   book->dirty_time = 0;
   qof_object_mark_clean (book);
   if (was_dirty) {
@@ -175,8 +194,8 @@ void qof_book_mark_dirty (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = TRUE;
+  was_dirty = qof_instance_get_dirty_flag(book);
+  qof_instance_set_dirty_flag(book, TRUE);
   if (!was_dirty) {
     book->dirty_time = time(NULL);
     if (book->dirty_cb)
@@ -187,7 +206,7 @@ void qof_book_mark_dirty (QofBook *book)
 void
 qof_book_print_dirty (const QofBook *book)
 {
-  if (book->inst.dirty)
+  if (qof_instance_get_dirty_flag(book))
     printf("book is dirty.\n");
   qof_book_foreach_collection
     (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
@@ -202,6 +221,9 @@ qof_book_get_dirty_time (const QofBook *book)
 void
 qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 {
+  if (book->dirty_cb)
+    g_warning("qof_book_set_dirty_cb: Already existing callback %p, will be overwritten by %p\n",
+	      book->dirty_cb, cb);
   book->dirty_data = user_data;
   book->dirty_cb = cb;
 }
@@ -337,22 +359,10 @@ gint32 qof_book_get_version (const QofBook *book)
 	return book->version;
 }
 
-guint32 qof_book_get_idata (const QofBook *book)
-{
-	if(!book) { return 0; }
-	return book->idata;
-}
-
 void qof_book_set_version (QofBook *book, gint32 version)
 {
 	if(!book && version < 0) { return; }
 	book->version = version;
-}
-
-void qof_book_set_idata(QofBook *book, guint32 idata)
-{
-	if(!book && idata < 0) { return; }
-	book->idata = idata;
 }
 
 gint64

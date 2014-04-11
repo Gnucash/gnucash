@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-account-example>
+  <gnc-act:title>
+    UK VAT Accounts
+  </gnc-act:title>
+  <gnc-act:short-description>
+    A basic set of accounts for tracking VAT in the UK.
+  </gnc-act:short-description>
+  <gnc-act:long-description>
+    A basic set of accounts for tracking VAT in the UK.
+  </gnc-act:long-description>    
+  <gnc-act:start-selected>0</gnc-act:start-selected>
+<gnc:account version="2.0.0">
+  <act:name>Bank Accounts</act:name>
+  <act:id type="guid">48a242bf9a2d8c947cb41d96493d91da</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Liquids</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Current Account</act:name>
+  <act:id type="guid">bf2ecb42d45a96c78639e10232a420c9</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Main bank account</act:description>
+  <act:parent type="guid">48a242bf9a2d8c947cb41d96493d91da</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reserve Account</act:name>
+  <act:id type="guid">1e9e67d49dfef2572e0f31fa933a7a22</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Reserves held e.g. for paying tax</act:description>
+  <act:parent type="guid">48a242bf9a2d8c947cb41d96493d91da</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assets</act:name>
+  <act:id type="guid">2c6c804d4a7946eb7fb1641ef9086433</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Fixed and semi-fixed assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Capital Equipment</act:name>
+  <act:id type="guid">9c566ece97799eda4e900b003ce48e48</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Additions only, Box 7</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">2c6c804d4a7946eb7fb1641ef9086433</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Computer Equipment</act:name>
+  <act:id type="guid">25a9a71594adb4ece13605fab43e4bc8</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">9c566ece97799eda4e900b003ce48e48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>EC Reverse VAT Purchase</act:name>
+  <act:id type="guid">6708e3ff1292c2b5defd07da9f858b60</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">9c566ece97799eda4e900b003ce48e48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other</act:name>
+  <act:id type="guid">906665a36a7a51e6935c82d0774c3587</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">2c6c804d4a7946eb7fb1641ef9086433</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Liabilities</act:name>
+  <act:id type="guid">831468eeee94fe029230db0c68e16fd9</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Corporation tax and other fees</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Owed Corporation Tax</act:name>
+  <act:id type="guid">6c5a4c8accd399946328ed4c651ea9e4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">831468eeee94fe029230db0c68e16fd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Owed Fees</act:name>
+  <act:id type="guid">ccd33922eef1dfe0501c75e02ff2fb8d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">831468eeee94fe029230db0c68e16fd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Owed Tax/NI</act:name>
+  <act:id type="guid">a3391321a3fd3e1cb1662095c7fc6fa2</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">831468eeee94fe029230db0c68e16fd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other</act:name>
+  <act:id type="guid">39b14b7dfa94471537026be477f3b843</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">831468eeee94fe029230db0c68e16fd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>VAT</act:name>
+  <act:id type="guid">3352145930e40b21fee20532ad07501b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>HMRC input/output accounts</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>tax-related</slot:key>
+      <slot:value type="integer">1</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Input</act:name>
+  <act:id type="guid">d3fda498135dbfca02febf0fbe379069</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Purchases, box 4</act:description>
+  <act:parent type="guid">3352145930e40b21fee20532ad07501b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Output</act:name>
+  <act:id type="guid">a46d9e9624070fcd2427973a4c725ed6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Box 3</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">3352145930e40b21fee20532ad07501b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>EC</act:name>
+  <act:id type="guid">37d726ec68d451d098496b7f5513f6f8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>On reverse VAT purchases (Box 2)</act:description>
+  <act:parent type="guid">a46d9e9624070fcd2427973a4c725ed6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sales</act:name>
+  <act:id type="guid">61bdfc571cdbf2259d99078fe75527a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>All, including zero rate UK/EC and World  (Box 1)</act:description>
+  <act:parent type="guid">a46d9e9624070fcd2427973a4c725ed6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Equity</act:name>
+  <act:id type="guid">c0b1160d2dd6b3059acc5083348b282f</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Capital and other interests</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Corporation Tax</act:name>
+  <act:id type="guid">372df3daa7816b42ad158a169d734cf3</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Payable to HMRC</act:description>
+  <act:parent type="guid">c0b1160d2dd6b3059acc5083348b282f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Director's Loan</act:name>
+  <act:id type="guid">8fb3a7b6ce53849cc89304f6758cbe77</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Loan by company to director</act:description>
+  <act:parent type="guid">c0b1160d2dd6b3059acc5083348b282f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dividends</act:name>
+  <act:id type="guid">c43c647131b41329d9b931486518d75f</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">c0b1160d2dd6b3059acc5083348b282f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Director's Dividends 1</act:name>
+  <act:id type="guid">a14da40765e4782bdf2aabe3060bde56</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">c43c647131b41329d9b931486518d75f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Director's Dividends 2</act:name>
+  <act:id type="guid">cda1c8d0665ad3be4f5429964912920f</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">c43c647131b41329d9b931486518d75f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Shareholder Dividends 1</act:name>
+  <act:id type="guid">6a58e6f9f495885efe65182acf63c5c8</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">c43c647131b41329d9b931486518d75f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Opening Balances</act:name>
+  <act:id type="guid">409c82cc76a1dc46eefe49988983a0f9</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">c0b1160d2dd6b3059acc5083348b282f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Grants</act:name>
+  <act:id type="guid">7e4ed68ddfce93cd7844d68222f5b0a0</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">c0b1160d2dd6b3059acc5083348b282f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income</act:name>
+  <act:id type="guid">6dbad2c3df0d9948e7017b85ab9a25b7</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Money coming in</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest</act:name>
+  <act:id type="guid">1bf0dd5eb0abd0ab217dc8c0282dd806</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bank and loan interest</act:description>
+  <act:parent type="guid">6dbad2c3df0d9948e7017b85ab9a25b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Misc</act:name>
+  <act:id type="guid">88a2dc9e588ab764de91ec21ced94989</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Other sources of income</act:description>
+  <act:parent type="guid">6dbad2c3df0d9948e7017b85ab9a25b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sales</act:name>
+  <act:id type="guid">86ef7451027dcb6223bb01204ac09a5e</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Income from customers</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">6dbad2c3df0d9948e7017b85ab9a25b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>UK</act:name>
+  <act:id type="guid">93539ecc86fdad827ebbe84b2f5d2e40</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sales in UK</act:description>
+  <act:parent type="guid">86ef7451027dcb6223bb01204ac09a5e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>EEC</act:name>
+  <act:id type="guid">af74692df15b1de7665d5dd7a197cdfb</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sales in EEC</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">86ef7451027dcb6223bb01204ac09a5e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Goods</act:name>
+  <act:id type="guid">18abb3a5b55a8600cb659e002e2fb1e6</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sale of goods within EEC</act:description>
+  <act:parent type="guid">af74692df15b1de7665d5dd7a197cdfb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Services</act:name>
+  <act:id type="guid">27079bb92d78c85b0ca9acbafcec0e91</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sale of services within EEC</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Includes software, use sub-accounts as needed.</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">af74692df15b1de7665d5dd7a197cdfb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>World</act:name>
+  <act:id type="guid">f8c798c7e2e51fe5f7e00b9745e27834</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sales in rest of world</act:description>
+  <act:parent type="guid">86ef7451027dcb6223bb01204ac09a5e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Expenses</act:name>
+  <act:id type="guid">99b6260a8d4a093d96a6364781e4b19a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Money going out</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Depreciation</act:name>
+  <act:id type="guid">1c98cc846060b99d7548ca6064529143</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">99b6260a8d4a093d96a6364781e4b19a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Emoulements</act:name>
+  <act:id type="guid">0a7d53c61b7e4f033de30fa466a659c9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">99b6260a8d4a093d96a6364781e4b19a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Director's Fees</act:name>
+  <act:id type="guid">b843ed80892a72f769ab3c7b21bd2dd8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a7d53c61b7e4f033de30fa466a659c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Employer's NICs</act:name>
+  <act:id type="guid">a57741189d33bd3929348714b402f48e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a7d53c61b7e4f033de30fa466a659c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Employees</act:name>
+  <act:id type="guid">d647bd218618d5091fb5731f36ace35a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">0a7d53c61b7e4f033de30fa466a659c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Net Salaries</act:name>
+  <act:id type="guid">e514f3f81e518dc3d6b99788f3f0953b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d647bd218618d5091fb5731f36ace35a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Stakeholder Contributions</act:name>
+  <act:id type="guid">4cd3c1e54781507e2b753477189fdc8b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d647bd218618d5091fb5731f36ace35a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NICs</act:name>
+  <act:id type="guid">8d98cc9b1f28734ed38bf9b96ea51e17</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d647bd218618d5091fb5731f36ace35a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income Tax</act:name>
+  <act:id type="guid">605b15debe595dc138c98d2125ba7a90</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d647bd218618d5091fb5731f36ace35a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other non-VAT expenses</act:name>
+  <act:id type="guid">cfa3e60aafed83de57e4be732815df97</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">99b6260a8d4a093d96a6364781e4b19a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>VAT Purchases</act:name>
+  <act:id type="guid">d77071fafc0de8455dd566b805bfcc40</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Box 7</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">99b6260a8d4a093d96a6364781e4b19a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Accountant</act:name>
+  <act:id type="guid">5ee752c87746e0f368eaf82d531d0189</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bank Charges</act:name>
+  <act:id type="guid">6db88661f0c6b11b121d9cb6c66fcfb7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>EEC Reverse VAT</act:name>
+  <act:id type="guid">af9b5ef4814015a83053a4c991ca0c1a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Office</act:name>
+  <act:id type="guid">921ebceb9d81d627d3396b8e44ddd6cb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Telecoms</act:name>
+  <act:id type="guid">396652462ef503449e4d3dfba1932e72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Software</act:name>
+  <act:id type="guid">5bf6de7b870ff608d8f942a261383251</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Subscriptions</act:name>
+  <act:id type="guid">63407e5d67414459caac7df095782759</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sundries</act:name>
+  <act:id type="guid">e2902798fe6b9e3721a13d96b3baaec5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Travel/Accom</act:name>
+  <act:id type="guid">b40da1c32982229fc507b7531e6bed53</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">d77071fafc0de8455dd566b805bfcc40</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Accounts Payable</act:name>
+  <act:id type="guid">9ed585a7122ec73651aba6ab1b333c7e</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Entities we are in credit to</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Accounts Receivable</act:name>
+  <act:id type="guid">89b200584355ddb86957b95acea890c9</act:id>
+  <act:type>RECEIVABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Entities in debit to us</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cash</act:name>
+  <act:id type="guid">a21914fb3309df6d54d849affb8b01a0</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>GBP</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+</gnc:account>
+</gnc-account-example>

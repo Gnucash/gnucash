@@ -195,11 +195,14 @@ xaccResolveFilePath (const char * filefrag)
   /* OK, now we try to find or build an absolute file path */
 
   /* check for an absolute file path */
-  if (g_path_is_absolute(filefrag))
+  if (g_path_is_absolute(filefrag)) {
+    LEAVE("filefrag is absolute path");
     return g_strdup (filefrag);
+  }
 
   if (!g_ascii_strncasecmp(filefrag, "file:", 5))
   {
+      LEAVE("filefrag is file uri");
       return g_strdup(filefrag + 5);
   }
 
@@ -221,6 +224,7 @@ xaccResolveFilePath (const char * filefrag)
 
 	  if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
 	  {
+	      LEAVE("found %s", fullpath);
 	      return fullpath;
           }
 	  g_free (fullpath);
@@ -251,6 +255,7 @@ xaccResolveFilePath (const char * filefrag)
       gchar *result;
       result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
       g_free (filefrag_dup);
+      LEAVE("create new file %s", result);
       return result;
   } 
 
@@ -261,11 +266,13 @@ xaccResolveFilePath (const char * filefrag)
       gchar *result;
       result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
       g_free (filefrag_dup);
+      LEAVE("create new file %s", result);
       return result;
   }
 
   g_free (filefrag_dup);
 
+  LEAVE("%s not found", filefrag);
   return NULL;
 }
 
@@ -376,26 +383,32 @@ gnc_validate_directory (const gchar *dirname)
 const gchar *
 gnc_dotgnucash_dir (void)
 {
-  static gchar *dotgnucash = NULL, *books_dir;
+  static gchar *dotgnucash = NULL, *tmp_dir;
   const gchar *home;
 
   if (dotgnucash)
     return dotgnucash;
 
-  home = g_get_home_dir();
-  if (!home) {
-    g_warning("Cannot find home directory. Using tmp directory instead.");
-    home = g_get_tmp_dir();
-  }
-  g_assert(home);
+  dotgnucash = g_strdup(g_getenv("GNC_DOT_DIR"));
+  if (!dotgnucash) {
+    home = g_get_home_dir();
+    if (!home) {
+      g_warning("Cannot find home directory. Using tmp directory instead.");
+      home = g_get_tmp_dir();
+    }
+    g_assert(home);
 
-  dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+    dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+  }
   gnc_validate_directory(dotgnucash);
 
   /* Since we're in code that is only executed once.... */
-  books_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
-  gnc_validate_directory(books_dir);
-  g_free(books_dir);
+  tmp_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
+  gnc_validate_directory(tmp_dir);
+  g_free(tmp_dir);
+  tmp_dir = g_build_filename(dotgnucash, "checks", (gchar *)NULL);
+  gnc_validate_directory(tmp_dir);
+  g_free(tmp_dir);
 
   return dotgnucash;
 }

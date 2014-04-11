@@ -135,7 +135,7 @@
 ;; Returns the depth of the current account hierarchy, that is, the
 ;; maximum level of subaccounts in the tree
 (define (gnc:get-current-account-tree-depth)
-  (let ((root (gnc:get-current-root-account)))
+  (let ((root (gnc-get-current-root-account)))
     (gnc-account-get-tree-depth root)))
 
 (define (gnc:split-get-corr-account-full-name split)

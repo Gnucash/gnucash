@@ -138,16 +138,6 @@ void          gnc_html_register_url_handler(URLType url_type,
                                             GncHTMLUrlCB hand);
 void          gnc_html_unregister_url_handler(URLType url_type);
 
-/* default action handlers for GET and POST methods.  'generic_post'
- * is the trivial application/x-www-form-urlencoded submit,
- * multipart-post is a multipart/form-data submit. */
-void          gnc_html_generic_get_submit(gnc_html * html, const char * act, 
-                                          GHashTable * form_data);
-void          gnc_html_generic_post_submit(gnc_html * html, const char * act, 
-                                           GHashTable * form_data);
-void          gnc_html_multipart_post_submit(gnc_html * html, const char * a, 
-                                             GHashTable * form_data);
-
 URLType       gnc_html_parse_url(gnc_html * html, const gchar * url, 
                                  char ** url_location, char ** url_label);
 

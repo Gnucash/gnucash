@@ -31,6 +31,7 @@
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
@@ -39,6 +40,7 @@
 
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"
 #define GCONF_SECTION "dialogs/tax_info"
+#define PANED_POSITION "paned_position"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -742,7 +744,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   {
     GtkWidget *income_radio, *expense_radio, *box;
 
-    box = glade_xml_get_widget (xml, "account_hbox");
+    box = glade_xml_get_widget (xml, "account_scroll");
     tree_view = gnc_tree_view_account_new (FALSE);
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view), 
 				      gnc_tax_info_dialog_account_filter_func,
@@ -791,12 +793,24 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   gnc_tax_info_set_changed (ti_dialog, FALSE);
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(ti_dialog->dialog));
+
+  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL)) {
+    GtkWidget *paned = glade_xml_get_widget(xml, "paned");
+    gint position = gnc_gconf_get_int(GCONF_SECTION, PANED_POSITION, NULL);
+    gtk_paned_set_position(GTK_PANED(paned), position);
+  }
 }
 
 static void
 close_handler (gpointer user_data)
 {
   TaxInfoDialog *ti_dialog = user_data;
+
+  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL)) {
+    GtkWidget *paned = gnc_glade_lookup_widget(ti_dialog->dialog, "paned");
+    gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
+                      gtk_paned_get_position(GTK_PANED(paned)), NULL);
+  }
 
   gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(ti_dialog->dialog));
   gtk_widget_destroy (ti_dialog->dialog);

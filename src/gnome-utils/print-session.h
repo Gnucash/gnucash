@@ -24,6 +24,8 @@
 #ifndef PRINT_SESSION_H
 #define PRINT_SESSION_H
 
+#ifndef GTKHTML_USES_GTKPRINT
+
 /** @addtogroup Printing
     @{ */
 /** @file print-session.h
@@ -83,18 +85,8 @@ void gnc_print_session_destroy(PrintSession * ps);
 void gnc_print_session_done(PrintSession * ps);
 
 /** @} */
-
-/** @addtogroup Adding Output to a Page
-    @{ */
-void gnc_print_session_moveto(PrintSession * ps, double x, double y);
-void gnc_print_session_text(PrintSession * ps, const char * text);
-
-void gnc_print_session_rotate(PrintSession *ps, double theta_in_degrees);
-void gnc_print_session_translate(PrintSession *ps, double x, double y);
-
-void gnc_print_session_gsave(PrintSession *ps);
-void gnc_print_session_grestore(PrintSession *ps);
 /** @} */
-/** @} */
+
+#endif /* GTKHTML_USES_GTKPRINT */
 
 #endif

@@ -75,7 +75,7 @@ typedef struct _GncSxInstances
      GDate next_instance_date;
      
      /** GList<GncSxInstance*> **/
-    GList *list; /* @fixme: s/list/?/ */
+    GList *instance_list;
 } GncSxInstances;
 
 typedef enum 
@@ -126,7 +126,7 @@ GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end, gboolean include_disa
 void gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXaction *sx);
 void gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedXaction *sx);
 
-/** @return GList<GncSxVariable*> **/
+/** @return GList<GncSxVariable*>. Caller owns the list, but not the items. **/
 GList *gnc_sx_instance_get_variables(GncSxInstance *inst);
 
 Account* gnc_sx_get_template_transaction_account(SchedXaction *sx);

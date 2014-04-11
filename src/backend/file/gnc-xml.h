@@ -25,7 +25,6 @@
 #ifndef GNC_XML_H
 #define GNC_XML_H
 
-#include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
@@ -45,7 +44,6 @@ sixtp* gnc_book_slots_sixtp_parser_create(void);
 xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *com);
 sixtp* gnc_commodity_sixtp_parser_create(void);
 
-xmlNodePtr gnc_freqSpec_dom_tree_create( FreqSpec *fs );
 sixtp* gnc_freqSpec_sixtp_parser_create(void);
 
 xmlNodePtr gnc_lot_dom_tree_create(GNCLot *);

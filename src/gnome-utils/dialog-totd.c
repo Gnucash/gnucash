@@ -144,7 +144,7 @@ gnc_totd_dialog_startup_toggled (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-  gchar *filename, *contents, *new;
+  gchar *filename, *contents, *new, *found;
   gsize length;
   GError *error;
 
@@ -159,6 +159,24 @@ gnc_totd_initialize (void)
     g_error_free(error);
     g_free(filename);
     return FALSE;
+  }
+
+  /* Replace maximal substrings of more than two newlines by \n\n,
+   * remove leading and trailing \n\n */
+  while ((found = strstr(contents, "\n\n\n")) != NULL) {
+    *found++ = '\0';
+    while (*found == '\n') found++;
+    if (*contents && *found) {
+      /* put \n\n between the two nonempty parts */
+      new = g_strdup_printf("%s\n\n%s", contents, found);
+      g_free(contents);
+      contents = new;
+    } else if (*found) {
+      /* remove leading newlines */
+      new = g_strdup(found);
+      g_free(contents);
+      contents = new;
+    }
   }
 
   /* Split into multiple strings */

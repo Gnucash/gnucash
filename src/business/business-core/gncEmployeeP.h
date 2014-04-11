@@ -57,6 +57,6 @@ GncEmployee * gncCloneEmployee (GncEmployee *from, QofBook *);
  */
 GncEmployee * gncEmployeeObtainTwin (GncEmployee *from, QofBook *book);
 
-#define gncEmployeeSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
+#define gncEmployeeSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_EMPLOYEEP_H_ */

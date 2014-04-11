@@ -323,6 +323,9 @@ sub parse_input_line {
 # Check for and load non-standard modules
 check_modules ();
 
+# Help Date::Manip on Windows
+Date_Init("TZ=UTC") if ($^O eq "MSWin32" && (!$ENV{'TZ'}));
+
 # Create a stockquote object.
 my $quoter = Finance::Quote->new();
 my $prgnam = "gnc-fq-helper";

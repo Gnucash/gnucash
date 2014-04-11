@@ -7,6 +7,16 @@
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
+ * As a special exception, permission is granted to link the binary module
+ * resultant from this code with the OpenSSL project's "OpenSSL" library (or
+ * modified versions of it that use the same license as the "OpenSSL"
+ * library), and distribute the linked executable.  You must obey the GNU
+ * General Public License in all respects for all of the code used other than
+ * "OpenSSL". If you modify this file, you may extend this exception to your
+ * version of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version of this
+ * file.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -170,7 +180,6 @@ gsidca_find_sx_with_tag(gconstpointer list_data,
     return (GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)) == find_data ? 0 : 1);
 }
 
-// @@ fixme this list is leaked.
 static GList*
 gsidca_get_contained(GncDenseCalModel *model)
 {
@@ -204,19 +213,15 @@ gsidca_get_info(GncDenseCalModel *model, guint tag)
 {
     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
     // g_list_find(instances->sxes, {sx_to_tag, tag}).get_freq_spec().get_freq_str();
-    FreqSpec *spec;
-    GString *info;
-    gchar *info_str;
+    GList *schedule;
+    gchar *schedule_str;
     GncSxInstances *insts
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return NULL;
-    spec = xaccSchedXactionGetFreqSpec(insts->sx);
-    info = g_string_sized_new(16);
-    xaccFreqSpecGetFreqStr(spec, info);
-    info_str = info->str; // @fixme leaked... :/
-    g_string_free(info, FALSE);
-    return info_str;
+    schedule = gnc_sx_get_schedule(insts->sx);
+    schedule_str = recurrenceListToCompactString(schedule);
+    return schedule_str;
 }
 
 static gint
@@ -228,7 +233,7 @@ gsidca_get_instance_count(GncDenseCalModel *model, guint tag)
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return 0;
-    return g_list_length(insts->list);
+    return g_list_length(insts->instance_list);
 }
 
 static void
@@ -240,7 +245,7 @@ gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDa
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return;
-    inst = (GncSxInstance*)g_list_nth_data(insts->list, instance_index);
+    inst = (GncSxInstance*)g_list_nth_data(insts->instance_list, instance_index);
     g_date_valid(&inst->date);
     *date = inst->date;
     g_date_valid(date);

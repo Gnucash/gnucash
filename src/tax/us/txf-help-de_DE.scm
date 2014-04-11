@@ -17,22 +17,22 @@
     (N000 . "This is a dummy category and only shows up on the tax report, but is not exported.")
 
 
-    (K41 . "Innergemeinschaftliche Lieferungen (§ 4 Nr. 1 Buchst. b UStG) an Abnehmer mit USt-IdNr.  (Bemessungsgrundlage)")
+    (K41 . "Innergemeinschaftliche Lieferungen (Â§ 4 Nr. 1 Buchst. b UStG) an Abnehmer mit USt-IdNr.  (Bemessungsgrundlage)")
     (K44 . "Innergemeinschaftliche Lieferungen neuer Fahrzeuge an Abnehmer ohne USt-IdNr (Bemessungsgrundlage)")
-    (K49 . "Innergemeinschaftliche Lieferungen neuer Fahrzeuge außerhalb eines Unternehmens (§ 2a UStG)  (Bemessungsgrundlage)")
-    (K43 . "Weitere steuerfreie Umsätze mit Vorsteuerabzug (z.B. Ausfuhrlieferungen, Umsätze nach § 4 Nr. 2 bis 7 UStG) (Bemessungsgrundlage)")
-    (K48 . "Steuerfreie Umsätze ohne Vorsteuerabzug: Umsätze nach § 4 Nr. 8 bis 28 UStG (Bemessungsgrundlage)")
+    (K49 . "Innergemeinschaftliche Lieferungen neuer Fahrzeuge auÃŸerhalb eines Unternehmens (Â§ 2a UStG)  (Bemessungsgrundlage)")
+    (K43 . "Weitere steuerfreie UmsÃ¤tze mit Vorsteuerabzug (z.B. Ausfuhrlieferungen, UmsÃ¤tze nach Â§ 4 Nr. 2 bis 7 UStG) (Bemessungsgrundlage)")
+    (K48 . "Steuerfreie UmsÃ¤tze ohne Vorsteuerabzug: UmsÃ¤tze nach Â§ 4 Nr. 8 bis 28 UStG (Bemessungsgrundlage)")
 
-    (K51 . "Steuerpflichtige Umsätze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 16 v.H. (Bemessungsgrundlage)")
-    (K86 . "Steuerpflichtige Umsätze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 7 v.H. (Bemessungsgrundlage)")
-    (K35 . "Umsätze, die anderen Steuersätzen unterliegen (Bemessungsgrundlage)")
-    (K36 . "Umsätze, die anderen Steuersätzen unterliegen (Steuer)")
-    (K77 . "Umsätze land- und forstwirtschaftlicher Betriebe nach § 24 UStG: Lieferungen in das übrige Gemeinschaftsgebiet an Abnehmer mit USt-IdNr. (Bemessungsgrundlage)")
-    (K76 . "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Sägewerkserzeugnisse, Getränke und alkohol. Flüssigkeiten, z.B. Wein) (Bemessungsgrundlage)")
-    (K80 . "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Sägewerkserzeugnisse, Getränke und alkohol. Flüssigkeiten, z.B. Wein) (Steuer)")
+    (K51 . "Steuerpflichtige UmsÃ¤tze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 16 v.H. (Bemessungsgrundlage)")
+    (K86 . "Steuerpflichtige UmsÃ¤tze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 7 v.H. (Bemessungsgrundlage)")
+    (K35 . "UmsÃ¤tze, die anderen SteuersÃ¤tzen unterliegen (Bemessungsgrundlage)")
+    (K36 . "UmsÃ¤tze, die anderen SteuersÃ¤tzen unterliegen (Steuer)")
+    (K77 . "UmsÃ¤tze land- und forstwirtschaftlicher Betriebe nach Â§ 24 UStG: Lieferungen in das Ã¼brige Gemeinschaftsgebiet an Abnehmer mit USt-IdNr. (Bemessungsgrundlage)")
+    (K76 . "UmsÃ¤tze, fÃ¼r die eine Steuer nach Â§ 24 UStG zu entrichten ist (SÃ¤gewerkserzeugnisse, GetrÃ¤nke und alkohol. FlÃ¼ssigkeiten, z.B. Wein) (Bemessungsgrundlage)")
+    (K80 . "UmsÃ¤tze, fÃ¼r die eine Steuer nach Â§ 24 UStG zu entrichten ist (SÃ¤gewerkserzeugnisse, GetrÃ¤nke und alkohol. FlÃ¼ssigkeiten, z.B. Wein) (Steuer)")
 
-    (K91 . "Steuerfreie innergemeinschaftliche Erwerbe: Erwerbe nach § 4b UStG (Bemessungsgrundlage)")
+    (K91 . "Steuerfreie innergemeinschaftliche Erwerbe: Erwerbe nach Â§ 4b UStG (Bemessungsgrundlage)")
 
 
-    (K66 . "Vorsteuerbeträge aus Rechnungen von anderen Unternehmern (§ 15 Abs. 1 Satz 1 Nr. 1 UStG), aus Leistungen im Sinne des § 13a Abs. 1 Nr. 6 UStG (§ 15 Abs. 1 Satz 1 Nr. 5 UStG) und aus innergemeinschaftlichen Dreiecksgeschäften (§ 25b Abs. 5 UStG)")
+    (K66 . "VorsteuerbetrÃ¤ge aus Rechnungen von anderen Unternehmern (Â§ 15 Abs. 1 Satz 1 Nr. 1 UStG), aus Leistungen im Sinne des Â§ 13a Abs. 1 Nr. 6 UStG (Â§ 15 Abs. 1 Satz 1 Nr. 5 UStG) und aus innergemeinschaftlichen DreiecksgeschÃ¤ften (Â§ 25b Abs. 5 UStG)")
     ))

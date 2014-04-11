@@ -2,6 +2,11 @@
 @chapter Register
 @cindex Register
 
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
 The register is an infrastructure for building a modular matrix of cells
 in which each cell may be specialized to perform a particular function,
 e.g., to read dates, numerical amounts, or text. The register has been

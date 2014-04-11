@@ -247,8 +247,12 @@ get_resultcode_error (const list_int *list)
   return MAX(tmp_result, cause);
 }
 #endif
-int
-gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
+
+/** Return the HBCI return code of the given 'job', or zero if none was
+ * found. If 'verbose' is TRUE, make a lot of debugging messages about
+ * this outboxjob. */
+static int
+gnc_hbci_debug_outboxjob (GNCInteractor *inter, AB_JOB *job, gboolean verbose)
 {
   int cause = 0;
   AB_JOB_STATUS jobstatus;
@@ -264,6 +268,15 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 
   jobstatus = AB_Job_GetStatus (job);
   if (jobstatus == AB_Job_StatusError) {
+    if (AB_Job_GetResultText (job)) {
+      /* Add the "result text" to the log window */
+      char *logstring = g_strdup_printf("Job %s had an error: %s\n",
+					AB_Job_Type2Char(AB_Job_GetType(job)),
+					AB_Job_GetResultText(job));
+      GNCInteractor_add_log_text (inter, logstring);
+      g_free (logstring);
+    }
+
     if (!verbose)
       g_warning("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
 	     AB_Job_Type2Char(AB_Job_GetType(job)),
@@ -491,9 +504,9 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   } while (gnc_hbci_Error_retry (parent, err, inter));
   
   if (job)
-    resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
+    resultcode = gnc_hbci_debug_outboxjob (inter, job, be_verbose);
   if (!hbci_Error_isOk(err)) {
-    if (job) gnc_hbci_debug_outboxjob (job, TRUE);
+    if (job) gnc_hbci_debug_outboxjob (inter, job, TRUE);
     if (inter) GNCInteractor_show_nodelete (inter);
     return FALSE;
   }
@@ -503,7 +516,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
     return TRUE;
   }
   else {
-    g_message("gnc_AB_BANKING_execute: Some error at executeQueue.");
+    g_message("gnc_AB_BANKING_execute: Some error at executeQueue (see gwen/aqbanking messages above); this does not necessarily mean that the results are unusable.");
     GNCInteractor_show_nodelete (inter);
     return TRUE; /* <- This used to be a FALSE but this was probably
 		  * as wrong as it could get. @%$! */
@@ -778,8 +791,35 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
 {
   /* Description */
   char *h_descr = gnc_hbci_getpurpose (h_trans);
-  char *othername = NULL;
+  char *othername = gnc_hbci_getremotename (h_trans);
   char *g_descr;
+
+  /* Get othername */
+  /*DEBUG("HBCI Description '%s'", h_descr);*/
+
+  if (othername && strlen (othername) > 0)
+    g_descr = 
+      ((strlen (h_descr) > 0) ?
+       g_strdup_printf ("%s; %s", 
+			h_descr,
+			othername) :
+       g_strdup (othername));
+  else
+    g_descr = 
+      ((strlen (h_descr) > 0) ?
+       g_strdup (h_descr) : 
+       g_strdup (_("Unspecified")));
+
+  g_free (h_descr);
+  if (othername) g_free (othername);
+  return g_descr;
+}
+
+char *gnc_hbci_getremotename (const AB_TRANSACTION *h_trans)
+{
+  /* Description */
+  char *othername = NULL;
+  char *result;
   const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
   struct cb_struct cb_object;
 
@@ -796,22 +836,13 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   /*DEBUG("HBCI Description '%s'", h_descr);*/
 
   if (othername && (strlen (othername) > 0))
-    g_descr = 
-      ((strlen (h_descr) > 0) ?
-       g_strdup_printf ("%s; %s", 
-			h_descr,
-			othername) :
-       g_strdup (othername));
+    result = g_strdup (othername);
   else
-    g_descr = 
-      ((strlen (h_descr) > 0) ?
-       g_strdup (h_descr) : 
-       g_strdup (_("Unspecified")));
+    result = NULL;
 
   g_iconv_close(cb_object.gnc_iconv_handler);
-  free (h_descr);
-  free (othername);
-  return g_descr;
+  g_free (othername);
+  return result;
 }
 
 char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
@@ -835,7 +866,7 @@ char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
   g_descr = g_strdup (h_descr ? h_descr : "");
 
   g_iconv_close(cb_object.gnc_iconv_handler);
-  free (h_descr);
+  g_free (h_descr);
   return g_descr;
 }
 

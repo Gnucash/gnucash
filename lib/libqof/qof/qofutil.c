@@ -36,33 +36,48 @@
 
 static QofLogModule log_module = QOF_MOD_UTIL;
 
-/* Search for str2 in first nchar chars of str1, ignore case..  Return
- * pointer to first match, or null.  */
-gchar *
-strncasestr(const guchar *str1, const guchar *str2, size_t len) 
+gboolean
+qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
 {
-  while (*str1 && len--) 
-  {
-    if (toupper(*str1) == toupper(*str2)) 
-    {
-      if (strncasecmp(str1,str2,strlen(str2)) == 0) 
-      {
-        return (gchar *) str1;
-      }
-    }
-    str1++;
-  }
-  return NULL;
+    gchar *haystack_casefold, *haystack_normalized;
+    gchar *needle_casefold, *needle_normalized;
+    gchar *p;
+    gint offset;
+
+    g_return_val_if_fail (haystack && needle, FALSE);
+
+    haystack_casefold = g_utf8_casefold (haystack, -1);
+    haystack_normalized = g_utf8_normalize (haystack_casefold, -1,
+                                            G_NORMALIZE_ALL);
+    g_free (haystack_casefold);
+
+    needle_casefold = g_utf8_casefold (needle, -1);
+    needle_normalized = g_utf8_normalize (needle_casefold, -1, G_NORMALIZE_ALL);
+    g_free (needle_casefold);
+
+    p = strstr (haystack_normalized, needle_normalized);
+    g_free (haystack_normalized);
+    g_free (needle_normalized);
+
+    return p != NULL;
 }
 
-/* Search for str2 in str1, ignore case.  Return pointer to first
- * match, or null.  */
-gchar *
-strcasestr(const gchar *str1, const gchar *str2) 
+gint
+qof_utf8_strcasecmp (const gchar *da, const gchar *db)
 {
-   size_t len = strlen (str1);
-   gchar * retval = strncasestr (str1, str2, len);
-   return retval;
+    gchar *da_casefold, *db_casefold;
+    gint retval;
+
+    g_return_val_if_fail (da != NULL, 0);
+    g_return_val_if_fail (db != NULL, 0);
+
+    da_casefold = g_utf8_casefold (da, -1);
+    db_casefold = g_utf8_casefold (db, -1);
+    retval = g_utf8_collate (da_casefold, db_casefold);
+    g_free (da_casefold);
+    g_free (db_casefold);
+
+    return retval;
 }
 
 gint 
@@ -89,7 +104,7 @@ safe_strcasecmp (const gchar * da, const gchar * db)
 {
 	if ((da) && (db)) {
 		if ((da) != (db)) {
-			gint retval = strcasecmp ((da), (db));
+			gint retval = qof_utf8_strcasecmp ((da), (db));
 			/* if strings differ, return */
 			if (retval) return retval;
 		}     
@@ -224,105 +239,6 @@ qof_util_bool_to_int (const gchar * val)
 }
 
 /* =================================================================== */
-/* Entity edit and commit utilities */
-/* =================================================================== */
-
-gboolean
-qof_begin_edit(QofInstance *inst)
-{
-  QofBackend * be;
-
-  if (!inst) return FALSE;
-  inst->editlevel++;
-  if (1 < inst->editlevel) return FALSE;
-  if (0 >= inst->editlevel) 
-      inst->editlevel = 1;
-
-  be = qof_book_get_backend (inst->book);
-  if (be && qof_backend_begin_exists(be))
-      qof_backend_run_begin(be, inst);
-  else
-      inst->dirty = TRUE; 
-  
-  return TRUE;
-}
-
-gboolean qof_commit_edit(QofInstance *inst)
-{
-  QofBackend * be;
-
-  if (!inst) return FALSE;
-  inst->editlevel--;
-  if (0 < inst->editlevel) return FALSE;
-
-  if ((0 == inst->editlevel) && inst->dirty)
-  {
-    be = qof_book_get_backend (inst->book);
-    if (be && qof_backend_commit_exists(be)) {
-        qof_backend_run_commit(be, inst);
-    }
-  }
-  if (0 > inst->editlevel) { 
-      PERR ("unbalanced call - resetting (was %d)", inst->editlevel);
-      inst->editlevel = 0;
-  }
-  return TRUE;
-}
-
-
-gboolean
-qof_commit_edit_part2(QofInstance *inst, 
-                      void (*on_error)(QofInstance *, QofBackendError), 
-                      void (*on_done)(QofInstance *), 
-                      void (*on_free)(QofInstance *)) 
-{
-    QofBackend * be;
-    gboolean dirty = inst->dirty;
-
-    /* See if there's a backend.  If there is, invoke it. */
-    be = qof_book_get_backend(inst->book);
-    if (be && qof_backend_commit_exists(be)) {
-        QofBackendError errcode;
-        
-        /* clear errors */
-        do {
-            errcode = qof_backend_get_error(be);
-        } while (ERR_BACKEND_NO_ERR != errcode);
-
-        qof_backend_run_commit(be, inst);
-        errcode = qof_backend_get_error(be);
-        if (ERR_BACKEND_NO_ERR != errcode) {
-            /* XXX Should perform a rollback here */
-            inst->do_free = FALSE;
-
-            /* Push error back onto the stack */
-            qof_backend_set_error (be, errcode);
-            if (on_error)
-                on_error(inst, errcode);
-            return FALSE;
-        }   
-        /* XXX the backend commit code should clear dirty!! */
-        inst->dirty = FALSE;
-    }
-    if (dirty && qof_get_alt_dirty_mode() && 
-        !(inst->infant && inst->do_free)) {
-      qof_collection_mark_dirty(inst->entity.collection);
-      qof_book_mark_dirty(inst->book);
-    }
-    inst->infant = FALSE;
-
-    if (inst->do_free) {
-        if (on_free)
-            on_free(inst);
-        return TRUE;
-    }
-
-    if (on_done)
-        on_done(inst);
-    return TRUE;
-}
-
-/* =================================================================== */
 /* The QOF string cache */
 /* =================================================================== */
 
@@ -397,7 +313,7 @@ qof_util_string_cache_insert(gconstpointer key)
 }
 
 gchar*
-qof_util_param_as_string(QofEntity *ent, QofParam *param)
+qof_util_param_as_string(QofInstance *ent, QofParam *param)
 {
 	gchar       *param_string, param_date[MAX_DATE_LENGTH];
 	gchar       param_sa[GUID_ENCODING_LENGTH + 1];
@@ -405,13 +321,13 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 	QofType     paramType;
 	const GUID *param_guid;
 	time_t      param_t;
-	gnc_numeric param_numeric,  (*numeric_getter) (QofEntity*, QofParam*);
-	Timespec    param_ts,       (*date_getter)    (QofEntity*, QofParam*);
-	double      param_double,   (*double_getter)  (QofEntity*, QofParam*);
-	gboolean    param_boolean,  (*boolean_getter) (QofEntity*, QofParam*);
-	gint32      param_i32,      (*int32_getter)   (QofEntity*, QofParam*);
-	gint64      param_i64,      (*int64_getter)   (QofEntity*, QofParam*);
-	gchar       param_char,     (*char_getter)    (QofEntity*, QofParam*);
+	gnc_numeric param_numeric,  (*numeric_getter) (QofInstance*, QofParam*);
+	Timespec    param_ts,       (*date_getter)    (QofInstance*, QofParam*);
+	double      param_double,   (*double_getter)  (QofInstance*, QofParam*);
+	gboolean    param_boolean,  (*boolean_getter) (QofInstance*, QofParam*);
+	gint32      param_i32,      (*int32_getter)   (QofInstance*, QofParam*);
+	gint64      param_i64,      (*int64_getter)   (QofInstance*, QofParam*);
+	gchar       param_char,     (*char_getter)    (QofInstance*, QofParam*);
 
 	param_string = NULL;
     known_type = FALSE;
@@ -423,10 +339,10 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_DATE) == 0) { 
-			date_getter = (Timespec (*)(QofEntity*, QofParam*))param->param_getfcn;
+			date_getter = (Timespec (*)(QofInstance*, QofParam*))param->param_getfcn;
 			param_ts = date_getter(ent, param);
 			param_t = timespecToTime_t(param_ts);
-			strftime(param_date, MAX_DATE_LENGTH, 
+			qof_strftime(param_date, MAX_DATE_LENGTH, 
                 QOF_UTC_DATE_FORMAT, gmtime(&param_t));
 			param_string = g_strdup(param_date);
             known_type = TRUE;
@@ -434,7 +350,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 		}
 		if((safe_strcmp(paramType, QOF_TYPE_NUMERIC) == 0)  ||
 		(safe_strcmp(paramType, QOF_TYPE_DEBCRED) == 0)) { 
-			numeric_getter = (gnc_numeric (*)(QofEntity*, QofParam*)) param->param_getfcn;
+			numeric_getter = (gnc_numeric (*)(QofInstance*, QofParam*)) param->param_getfcn;
 			param_numeric = numeric_getter(ent, param);
 			param_string = g_strdup(gnc_numeric_to_string(param_numeric));
             known_type = TRUE;
@@ -448,28 +364,28 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_INT32) == 0) { 
-			int32_getter = (gint32 (*)(QofEntity*, QofParam*)) param->param_getfcn;
+			int32_getter = (gint32 (*)(QofInstance*, QofParam*)) param->param_getfcn;
 			param_i32 = int32_getter(ent, param);
 			param_string = g_strdup_printf("%d", param_i32);
             known_type = TRUE;
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_INT64) == 0) { 
-			int64_getter = (gint64 (*)(QofEntity*, QofParam*)) param->param_getfcn;
+			int64_getter = (gint64 (*)(QofInstance*, QofParam*)) param->param_getfcn;
 			param_i64 = int64_getter(ent, param);
 			param_string = g_strdup_printf("%"G_GINT64_FORMAT, param_i64);
             known_type = TRUE;
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_DOUBLE) == 0) { 
-			double_getter = (double (*)(QofEntity*, QofParam*)) param->param_getfcn;
+			double_getter = (double (*)(QofInstance*, QofParam*)) param->param_getfcn;
 			param_double = double_getter(ent, param);
 			param_string = g_strdup_printf("%f", param_double);
             known_type = TRUE;
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_BOOLEAN) == 0){ 
-			boolean_getter = (gboolean (*)(QofEntity*, QofParam*)) param->param_getfcn;
+			boolean_getter = (gboolean (*)(QofInstance*, QofParam*)) param->param_getfcn;
 			param_boolean = boolean_getter(ent, param);
 			/* Boolean values need to be lowercase for QSF validation. */
 			if(param_boolean == TRUE) { param_string = g_strdup("true"); }
@@ -491,7 +407,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
             return param_string; 
         }
 		if(safe_strcmp(paramType, QOF_TYPE_CHAR) == 0) { 
-			char_getter = (gchar (*)(QofEntity*, QofParam*)) param->param_getfcn;
+			char_getter = (gchar (*)(QofInstance*, QofParam*)) param->param_getfcn;
 			param_char = char_getter(ent, param);
             known_type = TRUE;
 			return g_strdup_printf("%c", param_char);
@@ -507,7 +423,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
         }
         if(safe_strcmp(paramType, QOF_TYPE_CHOICE) == 0)
         {
-            QofEntity *child = NULL;
+            QofInstance *child = NULL;
             child = param->param_getfcn(ent, param);
             if(!child) { return param_string; }
             known_type = TRUE;
@@ -534,7 +450,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
         }
         if(!known_type)
         {
-            QofEntity *child = NULL;
+            QofInstance *child = NULL;
             child = param->param_getfcn(ent, param);
             if(!child) { return param_string; }
             return g_strdup(qof_object_printable(child->e_type, child));
@@ -545,7 +461,8 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 void
 qof_init (void)
 {
-    qof_log_init();
+	g_type_init();
+	qof_log_init();
 	qof_util_get_string_cache ();
 	guid_init ();
 	qof_object_initialize ();

@@ -69,7 +69,7 @@ if test $? != 0 ; then exit 1 ; fi
 # the revision info, print it out, and then output 0.  Just combine
 # all the revision numbers into a single string by combining them
 # with periods.
-svkinfo=`svk info "$real_srcdir" | grep Rev | sed -e 's/^.* \([0-9:]*\)$/\1/'`
+svkinfo=`svk info "$real_srcdir" | grep Rev | head -5 | sed -e 's/^.* \([0-9:]*\)$/\1/'`
 echo $svkinfo | sed -e 's/\s/./g'
 
 exit 0

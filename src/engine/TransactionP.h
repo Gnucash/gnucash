@@ -95,10 +95,6 @@ struct transaction_s
    * splits can be valued.  */
   gnc_commodity *common_currency;
 
-  /* version number, used for tracking multiuser updates */
-  gint32 version;
-  guint32 version_check; /* data aging timestamp */
-
   GList * splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 
@@ -114,16 +110,17 @@ struct transaction_s
    * any changes made if/when the edit is abandoned.
    */
   Transaction *orig;
+};
 
-  /* -------------------------------------------------------------- */
-  /* Backend private expansion data */
-  guint32  idata;     /* used by the sql backend for kvp management */
+struct _TransactionClass
+{
+  QofInstanceClass parent_class;
 };
 
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
-#define xaccTransSetGUID(t,g) qof_entity_set_guid(QOF_ENTITY(t),g)
+#define xaccTransSetGUID(t,g) qof_instance_set_guid(QOF_INSTANCE(t),g)
 
 /* This routine makes a 'duplicate' of the indicated transaction.
  * This routine cannot be exposed publically since the duplicate

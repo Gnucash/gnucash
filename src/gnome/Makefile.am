@@ -106,7 +106,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/gnome-utils \
@@ -119,7 +118,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \

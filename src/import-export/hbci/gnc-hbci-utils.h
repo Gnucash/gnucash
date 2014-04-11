@@ -85,12 +85,6 @@ int gnc_AB_BANKING_fini (AB_BANKING *api);
 AB_ACCOUNT *
 gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc);
 
-/* Return the HBCI return code of the given 'job', or zero if none was
- * found. If 'verbose' is TRUE, make a lot of debugging messages about
- * this outboxjob. */
-int
-gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose);
-
 /** Clean up the queue after executing, i.e. delete the job as good as
     possible. */
 void
@@ -172,6 +166,11 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans);
  * returned string must be g_free'd by the caller. If there was no
  * purpose, an empty (but allocated) string is returned. */
 char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans);
+
+/* Retrieve the merged "remote name"  fields from the transaction. The
+ * returned string must be g_free'd by the caller. If there was no
+ * "remote name" field, NULL (!) is returned. */
+char *gnc_hbci_getremotename (const AB_TRANSACTION *h_trans);
 
 /** Return the first customer that can act on the specified account,
     or NULL if none was found (and an error message is printed on

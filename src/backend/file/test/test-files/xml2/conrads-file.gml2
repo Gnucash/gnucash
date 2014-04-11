@@ -453,7 +453,7 @@
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-100000000000/100000</split:value>
       <split:quantity>0/100000</split:quantity>
-      <split:account type="guid">00000000000000000000000000000000</split:account>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>

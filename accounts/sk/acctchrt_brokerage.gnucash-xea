@@ -10,6 +10,12 @@
 	Zvoµte si túto sadu úètov, vlastníte investície (akcie, dlhopisy, podielové listy).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Aktíva</act:name>
   <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
   <act:type>ASSET</act:type>
@@ -18,6 +24,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Aktíva</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investície</act:name>
@@ -94,6 +101,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Príjem</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dividendový príjem</act:name>
@@ -137,6 +145,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Výdaje</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Poplatky</act:name>

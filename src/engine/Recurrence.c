@@ -267,9 +267,15 @@ recurrenceListNextInstance(const GList *rlist, const GDate *ref, GDate *next)
     const GList *iter;
     GDate nextSingle;  /* The next date for an individual recurrence */
 
-    g_return_if_fail(rlist && ref && next && g_date_valid(ref));
-
     g_date_clear(next, 1);
+
+    // empty rlist = no recurrence
+    if (rlist == NULL) {
+        return;
+    }
+
+    g_return_if_fail(ref && next && g_date_valid(ref));
+
     for (iter = rlist; iter; iter = iter->next) {
         const Recurrence *r = iter->data;
 
@@ -318,15 +324,21 @@ recurrenceListToString(const GList *r)
     const GList *iter;
     GString *str;
     gchar *s;
-    g_return_val_if_fail(r, NULL);
 
     str = g_string_new("");
-    for(iter = r; iter; iter = iter->next){
-        if (iter != r)
-            g_string_append(str, " + ");
-        s = recurrenceToString((Recurrence *)iter->data);
-        g_string_append(str, s);
-        g_free(s);
+    if (r == NULL) {
+        g_string_append(str, _("None"));
+    } else {
+        for(iter = r; iter; iter = iter->next){
+            if (iter != r)
+            {
+                /* translators: " + " is an separator in a list of string-representations of recurrence frequencies */
+                g_string_append(str, _(" + "));
+            }
+            s = recurrenceToString((Recurrence *)iter->data);
+            g_string_append(str, s);
+            g_free(s);
+        }
     }
     return g_string_free(str, FALSE);
 }
@@ -393,24 +405,6 @@ recurrenceListIsWeeklyMultiple(GList *recurrences)
     return TRUE;
 }
 
-/**
- * Localized DOW abbrev.
- * @fixme - ripped from gnc-dense-cal.c; there can be only one. :p
- * @param dow struct tm semantics: 0=sunday .. 6=saturday
- **/
-static void
-_dow_abbrev(gchar *buf, int buf_len, int dow)
-{
-    struct tm my_tm;
-    int i;
-    
-    memset(buf, 0, buf_len);
-    memset(&my_tm, 0, sizeof(struct tm));
-    my_tm.tm_wday = dow;
-    i = strftime(buf, buf_len - 1, "%a", &my_tm);
-    buf[i] = 0;
-}
-
 static void
 _weekly_list_to_compact_string(GList *rs, GString *buf)
 {
@@ -428,7 +422,9 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
             continue;
         }
         dow_present_bits |= (1 << (dow % 7));
-        // broken, @fixme.
+
+        // there's not necessarily a single multiplier, but for all intents
+        // and purposes this will be fine.
         multiplier = recurrenceGetMultiplier(r);
     }
     g_string_printf(buf, _("Weekly"));
@@ -445,7 +441,7 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
         if ((dow_present_bits & (1 << dow_idx)) != 0)
         {
             gchar dbuf[10];
-            _dow_abbrev(dbuf, 10, dow_idx);
+            gnc_dow_abbrev(dbuf, 9, dow_idx);
             g_string_append_printf(buf, "%c", dbuf[0]);
         }
         else
@@ -462,9 +458,9 @@ _monthly_append_when(Recurrence *r, GString *buf)
     if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
     {
         gint abbrev_day_name_bufsize = 10;
-        gchar day_name_buf[abbrev_day_name_bufsize];
+        gchar day_name_buf[abbrev_day_name_bufsize+1];
                 
-        _dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
+        gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
             
         /* translators: %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("last %s"), day_name_buf);
@@ -504,13 +500,14 @@ recurrenceListToCompactString(GList *rs)
                           recurrenceGetMultiplier(first), recurrenceGetMultiplier(second));
             }
 
-            g_string_printf(buf, _("Semi-monthly "));
+            g_string_printf(buf, _("Semi-monthly"));
+            g_string_append_printf(buf, " ");
             if (recurrenceGetMultiplier(first) > 1)
             {
                 /* translators: %u is the recurrence multiplier */
                 g_string_append_printf(buf, _(" (x%u)"), recurrenceGetMultiplier(first));
             }
-            g_string_append_printf(buf, _(": "));
+            g_string_append_printf(buf, ": ");
             _monthly_append_when(first, buf);
             g_string_append_printf(buf, ", ");
             _monthly_append_when(second, buf);
@@ -525,7 +522,6 @@ recurrenceListToCompactString(GList *rs)
     {
         Recurrence *r = (Recurrence*)g_list_nth_data(rs, 0);
         guint multiplier = recurrenceGetMultiplier(r);
-        GDate date = recurrenceGetDate(r);
 
         switch (recurrenceGetPeriodType(r))
         {
@@ -549,15 +545,15 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, _("Monthly"));
             if (multiplier > 1)
             {
-                /* translators: %u is the recurrence multipler. */
+                /* translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
-            g_string_append_printf(buf, _(": "));
+            g_string_append_printf(buf, ": ");
             _monthly_append_when(r, buf);
         } break;
         case PERIOD_NTH_WEEKDAY: {
-            g_warning("nth weekday unhandled");
-            g_string_printf(buf, "@fixme: nth weekday");
+            g_warning("nth weekday not handled");
+            g_string_printf(buf, "@fixme: nth weekday not handled");
         } break;
         case PERIOD_YEAR: {
             g_string_printf(buf, _("Yearly"));
@@ -568,7 +564,7 @@ recurrenceListToCompactString(GList *rs)
             }
         } break;
         default:
-            g_error("unknown Recurrnce period %d", recurrenceGetPeriodType(r));
+            g_error("unknown Recurrence period %d", recurrenceGetPeriodType(r));
             break;
         }
     }

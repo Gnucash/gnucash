@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      共通勘定科目集
+    </gnc-act:title>
+    <gnc-act:short-description>
+      最も共通に使われる科目の基本セット
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    ほとんどのユーザはこの勘定科目セットを選ぶとよいでしょう。最も共通に使われる科目 (預貯金、現金、クレジットカード、所得、一般的な支出) が含まれています。
+  </gnc-act:long-description>    
+  <gnc-act:start-selected>1</gnc-act:start-selected>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>資産</act:name>
+  <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>資産</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>流動資産</act:name>
+  <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>流動資産</act:description>
+  <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>当座預金</act:name>
+  <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>当座預金</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>普通預金</act:name>
+  <act:id type="new">eeae5a1892e88adbc3b369c76ee4e889</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>普通預金</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>現金</act:name>
+  <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>財布の中の現金</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>負債</act:name>
+  <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>負債</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>クレジットカード</act:name>
+  <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
+  <act:type>CREDIT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>クレジットカード</act:description>
+  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>収益</act:name>
+  <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>収益</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ボーナス</act:name>
+  <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ボーナス</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>贈与収入</act:name>
+  <act:id type="new">1adcf2c65d7a66f32144ccd9ce4f438f</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>贈与収入</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>利息収入</act:name>
+  <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>利息収入</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>当座預金利息</act:name>
+  <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>当座預金利息</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>その他の利息</act:name>
+  <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>その他の利息</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>普通預金利息</act:name>
+  <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>普通預金利息</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>その他の収入</act:name>
+  <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>その他の収入</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>給与</act:name>
+  <act:id type="new">a750b99cb8487a5e47daedcd3a69fe85</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>給与</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>費用</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>費用</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>調整</act:name>
+  <act:id type="new">72f85277a7a7f8b4de175405e20d83bd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>調整</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>自動車</act:name>
+  <act:id type="new">56df186f1ce6114ddca7b9e5d03af390</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>自動車</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>通行料</act:name>
+  <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>通行料</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ガソリン</act:name>
+  <act:id type="new">e64b5eecf86ce4e27a64c477a4c77477</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ガソリン</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>駐車場</act:name>
+  <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>駐車場</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>修理維持</act:name>
+  <act:id type="new">665dd78f0cc75dd331f556949337de68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>修理維持</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>銀行手数料</act:name>
+  <act:id type="new">fb6c8e25a50737e70fffde432a2355ee</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>銀行手数料</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>書籍</act:name>
+  <act:id type="new">36479bbc17680f4b9663a9842736153f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>書籍</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ケーブルテレビ</act:name>
+  <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ケーブルテレビ</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>義援金</act:name>
+  <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>義援金</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>衣料品</act:name>
+  <act:id type="new">c27a040a73eac2688d85d29b5b5309c8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>衣料品</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>コンピュータ</act:name>
+  <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>コンピュータ</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>食費</act:name>
+  <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>食費</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>教育</act:name>
+  <act:id type="new">5b5ac050529b0f553752babe4a6a35d2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>教育</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>娯楽</act:name>
+  <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>娯楽</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>音楽/映画</act:name>
+  <act:id type="new">4570ea8f4ac5cbd7d8927c905f0978ae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>音楽/映画</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>リクリエーション</act:name>
+  <act:id type="new">7db9b0aa3bc348da9900f95fc67541a1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>リクリエーション</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>旅行</act:name>
+  <act:id type="new">def0eac939dbd668f503d84860de8d6e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>旅行</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>贈答</act:name>
+  <act:id type="new">f86b1cebc619455ada23952a0e810909</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>贈答</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>日用品</act:name>
+  <act:id type="new">83bc2bd915ab6b74c7107b55f8783523</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>日用品</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>趣味</act:name>
+  <act:id type="new">89f6400a94cd87fea0b056faf6ab7744</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>趣味</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>保険料</act:name>
+  <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>保険料</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>自動車保険</act:name>
+  <act:id type="new">cd72695526906a15ba1a1d9a7680b8e7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>自動車保険</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>医療保険</act:name>
+  <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>医療保険</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>生命保険</act:name>
+  <act:id type="new">70a327f54be53ef187a52b1d8df70fdd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>生命保険</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>クリーニング</act:name>
+  <act:id type="new">1006551b2458631dfc8507b7451c9631</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>クリーニング</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>医療費</act:name>
+  <act:id type="new">62752930dd1b2b4c90c6d198bd2ff33f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>医療費</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>その他</act:name>
+  <act:id type="new">759deef82e73587bf48a7dd76aa6abe8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>その他</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>オンラインサービス</act:name>
+  <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>オンラインサービス</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>電話料金</act:name>
+  <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>電話料金</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>交通機関</act:name>
+  <act:id type="new">64aa760163c7768518e49a104d1c171f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>交通機関</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>購読</act:name>
+  <act:id type="new">0336712690d36bcb02e0ce59b5d7653b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>購読</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>消耗品</act:name>
+  <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>消耗品</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>税金</act:name>
+  <act:id type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>税金</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>国税</act:name>
+  <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>国税</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>健康保険</act:name>
+  <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>健康保険</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>その他の税</act:name>
+  <act:id type="new">51875f8aaa0e4f2295a2ae13cf780b2e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>その他の税</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>公的年金</act:name>
+  <act:id type="new">c252f10f3d57dd05c500856164b1729e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>公的年金</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>地方税</act:name>
+  <act:id type="new">cd1f1b512ed51a069fd83a5ffcaf6e11</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>地方税</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>公共料金</act:name>
+  <act:id type="new">57635fa5f71dee8ffc207c277250e773</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>公共料金</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>電気</act:name>
+  <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>電気</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ゴミ収集</act:name>
+  <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ゴミ収集</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ガス</act:name>
+  <act:id type="new">dcc33ce7edf402e327318aa1890d35ea</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ガス</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>水道</act:name>
+  <act:id type="new">8cdc91b733444f9f0dfae9773b8f408c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>水道</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>純資産</act:name>
+  <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>純資産</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>開始残高</act:name>
+  <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>開始残高</act:description>
+  <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

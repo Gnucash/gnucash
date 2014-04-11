@@ -52,7 +52,7 @@ GncVendor * gncCloneVendor (GncVendor *from, QofBook *);
  * different ways.
  */
 GncVendor * gncVendorObtainTwin (GncVendor *from, QofBook *book);
-#define gncVendorSetGUID(V,G) qof_entity_set_guid(QOF_ENTITY(V),(G))
+#define gncVendorSetGUID(V,G) qof_instance_set_guid(QOF_INSTANCE(V),(G))
 
 
 #endif /* GNC_VENDORP_H_ */

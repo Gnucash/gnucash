@@ -39,6 +39,7 @@ qofincludedir = ${pkgincludedir}
 qofinclude_HEADERS = \
    deprecated.h      \
    gnc-date.h        \
+   gnc-date-p.h      \
    gnc-numeric.h     \
    guid.h            \
    kvp_frame.h       \
@@ -64,7 +65,8 @@ qofinclude_HEADERS = \
    qofsession.h      \
    qofsql.h          \
    qofutil.h         \
-   qofbookmerge.h
+   qofbookmerge.h    \
+   qof-gobject.h
 
 nodist_qofinclude_HEADERS = \
    qofla-dir.h     
@@ -86,11 +88,17 @@ EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
 
+if OS_WIN32
+libgnc_qof_la_SOURCES += qof-win32.c
+else
+EXTRA_DIST += qof-win32.c
+endif
+
 qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's#@-libdir-@#${QOF_LIB_DIR}#g'
-	 mv $@.tmp $@
+		-e 's#@-libdir-@#${QOF_LIB_DIR}#g'
+	mv $@.tmp $@
 
 BUILT_SOURCES = qofla-dir.h
 CLEANFILES = $(BUILT_SOURCES)

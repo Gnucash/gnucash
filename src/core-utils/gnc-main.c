@@ -27,6 +27,7 @@
 static gchar *namespace_regexp = NULL;
 static gboolean is_debugging = 0;
 static gboolean extras_enabled = 0;
+static const gchar *gconf_path;
 
 void 
 gnc_main_set_namespace_regexp(const gchar *str)
@@ -66,4 +67,16 @@ void
 gnc_set_extra(gboolean enabled)
 {
     extras_enabled = enabled;
+}
+
+void
+gnc_set_gconf_path (const gchar *path)
+{
+    gconf_path = path;
+}
+
+const gchar *
+gnc_get_gconf_path (void)
+{
+    return gconf_path;
 }

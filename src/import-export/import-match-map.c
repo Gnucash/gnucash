@@ -434,7 +434,9 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
   g_hash_table_destroy(running_probabilities);
   g_hash_table_destroy(final_probabilities);
 
-  PINFO("highest P('%s') = '%d'", account_i.account_name, account_i.probability);
+  PINFO("highest P('%s') = '%d'",
+        account_i.account_name ? account_i.account_name: "(null)",
+        account_i.probability);
 
   /* has this probability met our threshold? */
   if(account_i.probability >= threshold)

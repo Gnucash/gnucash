@@ -31,10 +31,7 @@
 typedef struct _print_check_dialog PrintCheckDialog;
 
 void gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
-				      const char    *payee,
-				      gnc_numeric    amount,
-				      time_t         date,
-				      const char    *memo);
+                                      Split *split);
 void gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd);
 
 #endif

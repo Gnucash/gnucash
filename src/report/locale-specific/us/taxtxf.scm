@@ -181,7 +181,7 @@
 
 (define (gnc:account-get-txf-code account)
   (let ((code (xaccAccountGetTaxUSCode account)))
-    (string->symbol (if code code "N000"))))
+    (string->symbol (if (string-null? code) "N000" code))))
 
 (define (gnc:get-txf-format code income?)
   (gnc:txf-get-format (if income?
@@ -191,7 +191,7 @@
 
 (define (gnc:account-get-txf-payer-source account)
   (let ((pns (xaccAccountGetTaxUSPayerNameSource account)))
-    (string->symbol (if pns pns "none"))))
+    (string->symbol (if (string-null? pns) "none" pns))))
 
 ;; check for duplicate txf codes
 (define (txf-check-dups account) 
@@ -293,7 +293,7 @@
 					(gnc-account-get-parent account)
 					account))
 				    (name (xaccAccountGetName named-acct)))
-			       (if name
+			       (if (not (string-null? name))
 				   name
 				   (begin
 				     (display
@@ -473,7 +473,8 @@
                                     '(last-year 1st-last 2nd-last
                                                 3rd-last 4th-last))
                             (set-tm:year bdtm (- (tm:year bdtm) 1)))
-                        (set-tm:mday bdtm 1)
+                        (or (eq? alt-period 'from-to)
+                            (set-tm:mday bdtm 1))
                         (if (< (gnc:date-get-year bdtm) 
                                tax-qtr-real-qtr-year)
                             (case alt-period
@@ -512,7 +513,8 @@
                                   '(last-year 1st-last 2nd-last
                                               3rd-last 4th-last))
                           (set-tm:year bdtm (+ (tm:year bdtm) 1)))
-                      (set-tm:mday bdtm 31)
+                      (or (eq? alt-period 'from-to)
+                          (set-tm:mday bdtm 31))
                       (if (< (gnc:date-get-year bdtm) tax-qtr-real-qtr-year)
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31

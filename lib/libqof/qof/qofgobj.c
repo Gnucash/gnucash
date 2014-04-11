@@ -202,7 +202,7 @@ qof_gobject_double_getter (gpointer data, QofParam *getter)
  * of instances that we have on hand.
  */
 static void
-qof_gobject_foreach (QofCollection *coll, QofEntityForeachCB cb, gpointer ud)
+qof_gobject_foreach (QofCollection *coll, QofInstanceForeachCB cb, gpointer ud)
 {
   GSList *n;
   n = qof_collection_get_data (coll);

@@ -30,5 +30,9 @@
  */
 extern char *strptime(const char *, const char *, struct tm *);
 
+#if defined(OS_WIN32) || defined(G_OS_WIN32)
+extern char *get_win32_locale_string(int lctype);
+extern char *translate_win32_picture(const char *);
 #endif
 
+#endif

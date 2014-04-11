@@ -197,7 +197,7 @@
 
 (define (gnc:account-get-txf-code account)
   (let ((code (xaccAccountGetTaxUSCode account)))
-    (string->symbol (if code code "N000"))))
+    (string->symbol (if (string-null? code) "N000" code))))
 
 (define (gnc:get-txf-format code income?)
   (gnc:txf-get-format (if income?
@@ -207,7 +207,7 @@
 
 (define (gnc:account-get-txf-payer-source account)
   (let ((pns (xaccAccountGetTaxUSPayerNameSource account)))
-    (string->symbol (if pns pns "keine"))))
+    (string->symbol (if (string-null? pns) "keine" pns))))
 
 ;; check for duplicate txf codes
 (define (txf-check-dups account) 
@@ -318,7 +318,7 @@
 					(gnc-account-get-parent account)
 					account))
 				    (name (xaccAccountGetName named-acct)))
-			       (if name
+			       (if (not (string-null? name))
 				   name
 				   (begin
 				     (display

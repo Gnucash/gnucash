@@ -63,5 +63,5 @@ GncInvoice * gncCloneInvoice (GncInvoice *from, QofBook *);
  * different ways.
  */
 GncInvoice * gncInvoiceObtainTwin (GncInvoice *from, QofBook *book);
-#define gncInvoiceSetGUID(I,G) qof_entity_set_guid(QOF_ENTITY(I),(G))
+#define gncInvoiceSetGUID(I,G) qof_instance_set_guid(QOF_INSTANCE(I),(G))
 #endif /* GNC_INVOICEP_H_ */

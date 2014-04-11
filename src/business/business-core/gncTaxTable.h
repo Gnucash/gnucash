@@ -49,6 +49,7 @@ is *identical* to that in ::GncBillTerm
 @param 	GList *         children; list of children for disconnection 
 */
 typedef struct _gncTaxTable GncTaxTable;
+typedef struct _gncTaxTableClass GncTaxTableClass;
 
 /** @struct GncTaxTableEntry
 
@@ -70,8 +71,20 @@ typedef struct _gncAccountValue GncAccountValue;
 #endif
 
 #define GNC_ID_TAXTABLE       "gncTaxTable"
-#define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))
-#define GNC_TAXTABLE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TAXTABLE, GncTaxTable))
+
+/* --- type macros --- */
+#define GNC_TYPE_TAXTABLE            (gnc_taxtable_get_type ())
+#define GNC_TAXTABLE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TAXTABLE, GncTaxTable))
+#define GNC_TAXTABLE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TAXTABLE, GncTaxTableClass))
+#define GNC_IS_TAXTABLE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TAXTABLE))
+#define GNC_IS_TAXTABLE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TAXTABLE))
+#define GNC_TAXTABLE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TAXTABLE, GncTaxTableClass))
+GType gnc_taxtable_get_type(void);
 
 /**
  * How to interpret the amount.

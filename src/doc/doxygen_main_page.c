@@ -15,7 +15,7 @@ The documentation is organised in a rough sequence:
 \subsection manualguide External documentation.
 
 Please refer to the main 
-<a href="http://www.gnucash.org/en/docs.phtml">documentation
+<a href="http://www.gnucash.org/docs.phtml">documentation
 page</a> on the gnucash website which includes links to the 
 GnuCash Manual and the Concepts Guide in various formats.
 
@@ -24,9 +24,6 @@ GnuCash Manual and the Concepts Guide in various formats.
 See also <a href="http://code.neil.williamsleesmill.me.uk/texi/gnucash-design.html">
 GnuCash Design Overview</a> which can be generated from the source using texi2html
 from the texinfo files in src/doc/design.
-
-The <a href="http://code.neil.williamsleesmill.me.uk/finutil.html">
-Financial Transaction Utility</a> documentation is not compatible with Doxygen.
 
 \section doxylist Doxygen overviews.
 

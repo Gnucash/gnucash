@@ -59,6 +59,6 @@ GncEntry * gncCloneEntry (GncEntry *from, QofBook *);
  */
 GncEntry * gncEntryObtainTwin (GncEntry *from, QofBook *book);
 
-#define gncEntrySetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
+#define gncEntrySetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_ENTRYP_H_ */

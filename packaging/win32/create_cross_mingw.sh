@@ -1,5 +1,13 @@
 #! /bin/bash
 
+function qpushd() { pushd "$@" >/dev/null; }
+function qpopd() { popd >/dev/null; }
+function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
+
+qpushd "$(dirname "$0")"
+. functions.sh
+. defaults.sh
+
 #
 # From http://www.mingw.org/MinGWiki/index.php/BuildMingwCross
 #
@@ -54,7 +62,7 @@ TARGET=mingw32
 # have write-access to this directory.  If you leave it
 # blank, it defaults to the current directory.
 
-BUILDDIR=
+BUILDDIR=`unix_path $TMP_DIR`
 
 # Where does the cross-compiler go?
 # This should be the directory into which your cross-compiler
@@ -62,7 +70,7 @@ BUILDDIR=
 # that only root has write access to, you will need to run this
 # script as root.
 
-PREFIX=
+PREFIX=`unix_path $MINGW_DIR`
 
 # Purge anything and everything already in the $PREFIX
 #(also known as the destination or installation) directory?
@@ -443,3 +451,4 @@ final_tweaks
 #
 # End
 #
+qpopd

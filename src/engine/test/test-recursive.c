@@ -65,6 +65,11 @@ typedef struct child_s
 	gint64 	    minor;
 }mychild;
 
+typedef struct childClass_s
+{
+  QofInstanceClass parent_class;
+} mychildClass;
+
 /* simple object structure */
 typedef struct parent_s
 {
@@ -79,6 +84,11 @@ typedef struct parent_s
 	gint32      version;
 	gint64      minor;
 }myparent;
+
+typedef struct parentClass_s
+{
+  QofInstanceClass parent_class;
+} myparentClass;
 
 	/* simple object structure */
 typedef struct grand_s
@@ -95,6 +105,11 @@ typedef struct grand_s
 	gint32       version;
 	gint64       minor;
 }mygrand;
+
+typedef struct grandClass_s
+{
+  QofInstanceClass parent_class;
+} mygrandClass;
 
 mygrand* grand_create(QofBook*);
 myparent* parent_create(QofBook*);
@@ -164,14 +179,110 @@ gint32	    child_getVersion(mychild*);
 gint64	    child_getMinor(mychild*);
 gchar       child_getFlag(mychild*);
 
+/* --- type macros --- */
+#define GNC_TYPE_MYCHILD            (gnc_mychild_get_type ())
+#define GNC_MYCHILD(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_MYCHILD, mychild))
+#define GNC_MYCHILD_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_MYCHILD, mychildClass))
+#define GNC_IS_MYCHILD(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MYCHILD))
+#define GNC_IS_MYCHILD_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_MYCHILD))
+#define GNC_MYCHILD_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_MYCHILD, mychildClass))
+GType gnc_mychild_get_type(void);
+
+/* --- type macros --- */
+#define GNC_TYPE_MYPARENT            (gnc_myparent_get_type ())
+#define GNC_MYPARENT(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_MYPARENT, myparent))
+#define GNC_MYPARENT_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_MYPARENT, myparentClass))
+#define GNC_IS_MYPARENT(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MYPARENT))
+#define GNC_IS_MYPARENT_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_MYPARENT))
+#define GNC_MYPARENT_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_MYPARENT, myparentClass))
+GType gnc_myparent_get_type(void);
+
+/* --- type macros --- */
+#define GNC_TYPE_MYGRAND            (gnc_mygrand_get_type ())
+#define GNC_MYGRAND(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_MYGRAND, mygrand))
+#define GNC_MYGRAND_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_MYGRAND, mygrandClass))
+#define GNC_IS_MYGRAND(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MYGRAND))
+#define GNC_IS_MYGRAND_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_MYGRAND))
+#define GNC_MYGRAND_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_MYGRAND, mygrandClass))
+GType gnc_mygrand_get_type(void);
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_mychild, mychild, QOF_TYPE_INSTANCE);
+
+static void
+gnc_mychild_init(mychild* obj)
+{
+}
+
+static void
+gnc_mychild_dispose_real (GObject *objp)
+{
+}
+
+static void
+gnc_mychild_finalize_real(GObject* objp)
+{
+}
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_myparent, myparent, QOF_TYPE_INSTANCE);
+
+static void
+gnc_myparent_init(myparent* obj)
+{
+}
+
+static void
+gnc_myparent_dispose_real (GObject *objp)
+{
+}
+
+static void
+gnc_myparent_finalize_real(GObject* objp)
+{
+}
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_mygrand, mygrand, QOF_TYPE_INSTANCE);
+
+static void
+gnc_mygrand_init(mygrand* obj)
+{
+}
+
+static void
+gnc_mygrand_dispose_real (GObject *objp)
+{
+}
+
+static void
+gnc_mygrand_finalize_real(GObject* objp)
+{
+}
+
 mygrand*
 grand_create(QofBook *book)
 {
 	mygrand *g;
 
 	g_return_val_if_fail(book, NULL);
-	g = g_new0(mygrand, 1);
-	qof_instance_init (&g->inst, GRAND_MODULE_NAME, book);
+	g = g_object_new(GNC_TYPE_MYGRAND, NULL);
+	qof_instance_init_data (&g->inst, GRAND_MODULE_NAME, book);
 	g->date = *get_random_timespec();
 	g->discount = get_random_double();;
 	g->active = get_random_boolean();
@@ -182,7 +293,7 @@ grand_create(QofBook *book)
 	g->Amount = get_random_gnc_numeric();
 	g->child = NULL;
 	g->descend = NULL;
-	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
+	qof_event_gen(&g->inst, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -192,8 +303,8 @@ parent_create(QofBook *book)
 	myparent *g;
 
 	g_return_val_if_fail(book, NULL);
-	g = g_new0(myparent, 1);
-	qof_instance_init (&g->inst, PARENT_MODULE_NAME, book);
+	g = g_object_new(GNC_TYPE_MYPARENT, NULL);
+	qof_instance_init_data (&g->inst, PARENT_MODULE_NAME, book);
 	g->date = *get_random_timespec();
 	g->discount = get_random_double();
 	g->active = get_random_boolean();
@@ -203,7 +314,7 @@ parent_create(QofBook *book)
 	g->Name = get_random_string();
 	g->Amount = get_random_gnc_numeric();
 	g->child = NULL;
-	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
+	qof_event_gen(&g->inst, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -213,8 +324,8 @@ child_create(QofBook *book)
 	mychild *g;
 
 	g_return_val_if_fail(book, NULL);
-	g = g_new0(mychild, 1);
-	qof_instance_init (&g->inst, CHILD_MODULE_NAME, book);
+	g = g_object_new(GNC_TYPE_MYCHILD, NULL);
+	qof_instance_init_data (&g->inst, CHILD_MODULE_NAME, book);
 	g->date = *get_random_timespec();
 	g->discount = get_random_double();
 	g->active = get_random_boolean();
@@ -223,12 +334,12 @@ child_create(QofBook *book)
 	g->flag = get_random_character();
 	g->Name = get_random_string();
 	g->Amount = get_random_gnc_numeric();
-	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
+	qof_event_gen(&g->inst, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
 static void
-descend_cb (QofEntity *ent, gpointer user_data)
+descend_cb (QofInstance *ent, gpointer user_data)
 {
 	mygrand *g = (mygrand*)user_data;
 
@@ -251,14 +362,14 @@ static QofCollection*
 grand_getDescend(mygrand *g)
 {
 	QofCollection *col;
-	QofEntity *ent;
+	QofInstance *ent;
 	GList *list;
 
 	g_return_val_if_fail(g, NULL);
 	col = qof_collection_new(CHILD_MODULE_NAME);
 	for(list = g_list_copy(g->descend);list;list=list->next)
 	{
-		ent = (QofEntity*)list->data;
+		ent = QOF_INSTANCE(list->data);
 		if(!ent) { break; }
 		do_test(0 == safe_strcmp(ent->e_type, CHILD_MODULE_NAME), "wrong entity");
 		qof_collection_add_entity(col, ent);
@@ -869,9 +980,9 @@ create_data (QofSession *original, guint counter)
 			do_test((coll != NULL), "grandparent not valid");
 			if(coll)
 			{
-				QofEntity *ent;
+				QofInstance *ent;
 
-				ent = (QofEntity*)child1;
+				ent = QOF_INSTANCE(child1);
 				qof_collection_add_entity(coll, ent);
 				grand_setDescend(grand1, coll);
 				qof_collection_destroy(coll);
@@ -891,9 +1002,9 @@ struct tally
 };
 
 static void
-check_cb (QofEntity *ent, gpointer data)
+check_cb (QofInstance *ent, gpointer data)
 {
-	QofEntity *parent, *child;
+	QofInstance *parent, *child;
 	QofCollection *coll;
 	struct tally *c;
 	const QofParam *param;
@@ -913,7 +1024,7 @@ check_cb (QofEntity *ent, gpointer data)
 	c->collect = qof_collection_count(coll);
 	if(c->book) { qof_book_set_references(c->book); }
 	param = qof_class_get_parameter(GRAND_MODULE_NAME, OBJ_RELATIVE);
-	parent = (QofEntity*)param->param_getfcn(ent, param);
+	parent = QOF_INSTANCE(param->param_getfcn(ent, param));
 	testp = grand_getChild((mygrand*)ent);
 	/* not all grandparents have family so just keep count. */
 	if(!parent) { c->nulls++; return; }
@@ -945,7 +1056,7 @@ test_recursion (QofSession *original, guint counter)
 	copy = qof_session_new();
 	if(debug) { qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); }
 	/* TODO: implement QOF_TYPE_CHOICE testing. */
-	qof_entity_copy_coll_r(copy, grand_coll);
+	qof_instance_copy_coll_r(copy, grand_coll);
 	/* test the original */
 	qof_object_foreach(GRAND_MODULE_NAME, book, check_cb, &c);
 	book = qof_session_get_book(copy);

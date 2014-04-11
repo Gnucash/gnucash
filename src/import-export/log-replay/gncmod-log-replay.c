@@ -33,32 +33,34 @@
 #include "gnc-module-api.h"
 #include "gnc-plugin-log-replay.h"
 
+GNC_MODULE_API_DECL(libgncmod_log_replay)
+
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_log_replay_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_log_replay_gnc_module_current  = 0;
+int libgncmod_log_replay_gnc_module_revision = 0;
+int libgncmod_log_replay_gnc_module_age      = 0;
 
 //static GNCModule bus_core;
 //static GNCModule file;
 
 
 char *
-gnc_module_path(void)
+libgncmod_log_replay_gnc_module_path(void)
 {
   return g_strdup("gnucash/import-export/log-replay");
 }
 
 char *
-gnc_module_description(void)
+libgncmod_log_replay_gnc_module_description(void)
 {
   return g_strdup("C code for log file replay");
 }
 
 int
-gnc_module_init(int refcount)
+libgncmod_log_replay_gnc_module_init(int refcount)
 {
   if(!gnc_module_load("gnucash/engine", 0))
   {
@@ -84,7 +86,7 @@ gnc_module_init(int refcount)
 }
 
 int
-gnc_module_end(int refcount)
+libgncmod_log_replay_gnc_module_end(int refcount)
 {
   return TRUE;
 }

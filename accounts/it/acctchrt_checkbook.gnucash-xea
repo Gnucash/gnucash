@@ -15,6 +15,12 @@
      Utile per tenere il saldo delle proprie entrate e uscite. Successivamente, se ce ne sarà bisogno, sarà possibile incominciare a tenerne traccia in modo più dettagliato.
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Attività</act:name>
   <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
   <act:type>ASSET</act:type>
@@ -24,6 +30,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Attività</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Attività correnti</act:name>
@@ -59,6 +66,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Entrate</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Uscite</act:name>
@@ -70,6 +78,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Uscite</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -91,6 +100,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Capitali</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bilanci d'apertura</act:name>

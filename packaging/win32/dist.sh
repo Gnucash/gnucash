@@ -7,8 +7,8 @@ function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
-. functions
-. custom.sh
+. functions.sh
+. defaults.sh
 
 register_env_var PATH ":"
 
@@ -26,8 +26,8 @@ function prepare() {
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     _WIN_UDIR=`unix_path $WINDIR`
     _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
-    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _PCRE_UDIR=`unix_path $PCRE_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _OPENSP_UDIR=`unix_path $OPENSP_DIR`
@@ -35,6 +35,7 @@ function prepare() {
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
+    _REPOS_UDIR=`unix_path $REPOS_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
@@ -69,17 +70,12 @@ function dist_openssl() {
     setup OpenSSL
     _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
     mkdir -p $DIST_UDIR/bin
-    cp -a $_OPENSSL_UDIR/bin/lib{eay,ssl}*.dll $DIST_UDIR/bin
-}
-
-function dist_libxml2() {
-    setup LibXML2
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_LIBXML2_UDIR/bin/libxml2.dll $DIST_UDIR/bin
+    cp -a $_OPENSSL_UDIR/bin/*.dll $DIST_UDIR/bin
 }
 
 function dist_gnome() {
     setup Gnome platform
+    wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
@@ -97,6 +93,7 @@ function dist_gnome() {
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
+    cp $DIST_DIR/share/themes/MS-Windows/gtk-2.0/gtkrc $DIST_DIR/etc/gtk-2.0
     wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GAIL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
@@ -109,17 +106,21 @@ function dist_gnome() {
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $DIST_DIR  # gnomeprint
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
+}
+
+function dist_pcre() {
+    setup pcre
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_PCRE_UDIR/bin/pcre3.dll $DIST_UDIR/bin
 }
 
 function dist_libgsf() {
     setup libGSF
     mkdir -p $DIST_UDIR/bin
     cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp -a $_LIBGSF_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
     cp -a $_LIBGSF_UDIR/lib/locale $DIST_UDIR/lib
 }
@@ -164,6 +165,7 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
     cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
     cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+    cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
 }
 
 function dist_gnucash() {
@@ -180,7 +182,12 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
-    cp -a $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
+    cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
+
+    _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
+    sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
+        > $_GNUCASH_UDIR/gnucash.iss \
+        -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g"
 }
 
 function finish() {
@@ -193,7 +200,14 @@ function finish() {
     done
     gconftool-2 --shutdown
 
-    exetype $DIST_UDIR/libexec/gconfd-2.exe windows
+    mv $DIST_UDIR/libexec/gconfd-2.exe $DIST_UDIR/bin
+    exetype $DIST_UDIR/bin/gconfd-2.exe windows
+    cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
+
+    if [ "$AQBANKING_WITH_QT" = "yes" ]; then
+        mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
+        cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+    fi
 
     # Strip redirections in distributed libtool .la files
     for file in $DIST_UDIR/lib/*.la; do
@@ -204,14 +218,17 @@ function finish() {
     echo "Now running the Inno Setup Compiler for creating the setup.exe"
     ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/gnucash.iss
 
-    # And changing output filename
-    SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/gnome-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
-    SETUP_FILENAME="gnucash-2.0.99-svn-r${SVN_REV}-setup.exe"
-    qpushd ${_GNUCASH_UDIR}
-	mv gnucash-2.0.99-setup.exe ${SETUP_FILENAME}
-    qpopd
-    echo "Final resulting Setup program is:"
-    echo ${_GNUCASH_UDIR}/${SETUP_FILENAME}
+    if [ "$BUILD_FROM_TARBALL" = "no" ]; then
+        # And changing output filename
+        PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
+        SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/gnome-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
+        SETUP_FILENAME="gnucash-${PKG_VERSION}-svn-r${SVN_REV}-setup.exe"
+        qpushd ${_GNUCASH_UDIR}
+            mv gnucash-${PKG_VERSION}-setup.exe ${SETUP_FILENAME}
+        qpopd
+        echo "Final resulting Setup program is:"
+        echo ${_GNUCASH_UDIR}/${SETUP_FILENAME}
+    fi
 }
 
 prepare
@@ -219,8 +236,8 @@ dist_regex
 dist_autotools
 dist_guile
 dist_openssl
-dist_libxml2
 dist_gnome
+dist_pcre
 dist_libgsf
 dist_goffice
 dist_libofx
@@ -233,5 +250,5 @@ qpopd
 
 ### Local Variables: ***
 ### sh-basic-offset: 4 ***
-### tab-width: 8 ***
+### indent-tabs-mode: nil ***
 ### End: ***

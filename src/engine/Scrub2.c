@@ -34,6 +34,7 @@
 
 #include <glib.h>
 
+#include "qof.h"
 #include "Account.h"
 #include "AccountP.h"
 #include "Transaction.h"
@@ -57,15 +58,16 @@ static QofLogModule log_module = GNC_MOD_LOT;
 void
 xaccAccountAssignLots (Account *acc)
 {
-   SplitList *node;
+   SplitList *splits, *node;
 
    if (!acc) return;
 
-   ENTER ("acc=%s", acc->accountName);
+   ENTER ("acc=%s", xaccAccountGetName(acc));
    xaccAccountBeginEdit (acc);
 
 restart_loop:
-   for (node=acc->splits; node; node=node->next)
+   splits = xaccAccountGetSplitList(acc);
+   for (node=splits; node; node=node->next)
    {
       Split * split = node->data;
 
@@ -79,7 +81,7 @@ restart_loop:
       if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
+   LEAVE ("acc=%s", xaccAccountGetName(acc));
 }
 
 /* ============================================================== */
@@ -100,9 +102,9 @@ xaccLotFill (GNCLot *lot)
 
    if (!lot) return;
    acc = lot->account;
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy(acc);
 
-   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 
    /* If balance already zero, we have nothing to do. */
    if (gnc_lot_is_closed (lot)) return;
@@ -140,7 +142,7 @@ xaccLotFill (GNCLot *lot)
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 }
 
 /* ============================================================== */
@@ -319,7 +321,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Find and remove the matching guid's */
    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->inst.kvp_data, "lot-split",
-                    "peer_guid", &sb->inst.entity.guid);
+                    "peer_guid", qof_instance_get_guid(sb));
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sa->inst.kvp_data, "lot-split", ksub);
@@ -328,7 +330,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Now do it in the other direction */
    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->inst.kvp_data, "lot-split",
-                    "peer_guid", &sa->inst.entity.guid);
+                    "peer_guid", qof_instance_get_guid(sa));
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sb->inst.kvp_data, "lot-split", ksub);
@@ -398,6 +400,7 @@ xaccScrubMergeSubSplits (Split *split)
    Transaction *txn;
    SplitList *node;
    GNCLot *lot;
+   const GUID *guid;
 
    if (FALSE == is_subsplit (split)) return FALSE;
 
@@ -411,7 +414,7 @@ restart:
       Split *s = node->data;
       if (xaccSplitGetLot (s) != lot) continue;
       if (s == split) continue;
-      if (s->inst.do_free) continue;
+      if (qof_instance_get_destroying(s)) continue;
 
       /* OK, this split is in the same lot (and thus same account)
        * as the indicated split.  Make sure it is really a subsplit
@@ -421,8 +424,9 @@ restart:
        * example.  Only worry about adjacent sub-splits.  By 
        * repeatedly merging adjacent subsplits, we'll get the non-
        * adjacent ones too. */
+      guid = qof_instance_get_guid(s);
       if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
-                                    "peer_guid", &s->inst.entity.guid) == NULL)
+                                    "peer_guid", guid) == NULL)
          continue;
          
       merge_splits (split, s);

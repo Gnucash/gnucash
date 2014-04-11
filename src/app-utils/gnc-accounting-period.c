@@ -66,7 +66,7 @@ lookup_start_date_option(const gchar *section,
 			 const gchar *key_relative,
 			 GDate *fy_end)
 {
-  const gchar *choice;
+  gchar *choice;
   time_t time;
   int which;
 
@@ -77,6 +77,7 @@ lookup_start_date_option(const gchar *section,
     which = gnc_gconf_get_int(section, key_relative, NULL);
     time = gnc_accounting_period_start_timet(which, fy_end, NULL);
   }
+  g_free(choice);
   /* we will need the balance of the last transaction before the start
      date, so subtract 1 from start date */
   /* CAS: we don't actually do what this comment says.  I think that's
@@ -92,7 +93,7 @@ lookup_end_date_option(const gchar *section,
 		       const gchar *key_relative,
 		       GDate *fy_end)
 {
-  const gchar *choice;
+  gchar *choice;
   time_t time;
   int which;
 
@@ -104,6 +105,7 @@ lookup_end_date_option(const gchar *section,
     which = gnc_gconf_get_int(section, key_relative, NULL);
     time = gnc_accounting_period_end_timet(which, fy_end, NULL);
   }
+  g_free(choice);
   if (time == 0)
     time = -1;
   return time;

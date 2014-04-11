@@ -936,17 +936,22 @@ gnc_tree_view_set_sort_column (GncTreeView *view,
   GtkSortType order;
   gint model_column, current;
 
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   column = gnc_tree_view_find_column_by_name(view, name);
-  if (!column)
+
+  if (!column) {
+    gtk_tree_sortable_set_sort_column_id(
+      GTK_TREE_SORTABLE(s_model), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+      GTK_SORT_ASCENDING);
     return;
+  }
 
   model_column =
     GPOINTER_TO_INT(g_object_get_data(G_OBJECT(column), MODEL_COLUMN));
   if (model_column == GNC_TREE_VIEW_COLUMN_DATA_NONE)
     return;
 
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
 					    &current, &order))
     order = GTK_SORT_ASCENDING;
@@ -1363,8 +1368,12 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
   /* Create the menu if we don't have one already */
   if (!priv->column_menu) {
     priv->column_menu = gtk_menu_new();
+#ifdef HAVE_GTK_2_10
+    g_object_ref_sink(priv->column_menu);
+#else
     g_object_ref(priv->column_menu);
     gtk_object_sink(GTK_OBJECT(priv->column_menu));
+#endif
   }
 
   /* Create the check menu item */

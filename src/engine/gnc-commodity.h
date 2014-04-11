@@ -46,13 +46,40 @@
 #ifndef GNC_COMMODITY_H
 #define GNC_COMMODITY_H
 
+typedef struct _GncCommodityClass gnc_commodityClass;
+typedef struct _GncCommodityNamespaceClass gnc_commodity_namespaceClass;
+
 #include <glib.h>
 #include "gnc-engine.h"
 
-#define GNC_IS_COMMODITY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY))
-#define GNC_COMMODITY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY, gnc_commodity))
-#define GNC_IS_COMMODITY_NAMESPACE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY_NAMESPACE))
-#define GNC_COMMODITY_NAMESPACE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY_NAMESPACE, gnc_commodity_namespace))
+/* --- type macros --- */
+#define GNC_TYPE_COMMODITY            (gnc_commodity_get_type ())
+#define GNC_COMMODITY(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY, gnc_commodity))
+#define GNC_COMMODITY_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY, gnc_commodityClass))
+#define GNC_IS_COMMODITY(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY))
+#define GNC_IS_COMMODITY_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY))
+#define GNC_COMMODITY_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY, gnc_commodityClass))
+GType gnc_commodity_get_type(void);
+
+/* --- type macros --- */
+#define GNC_TYPE_COMMODITY_NAMESPACE            (gnc_commodity_namespace_get_type ())
+#define GNC_COMMODITY_NAMESPACE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY_NAMESPACE, gnc_commodity_namespace))
+#define GNC_COMMODITY_NAMESPACE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY_NAMESPACE, gnc_commodity_namespaceClass))
+#define GNC_IS_COMMODITY_NAMESPACE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY_NAMESPACE))
+#define GNC_IS_COMMODITY_NAMESPACE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY_NAMESPACE))
+#define GNC_COMMODITY_NAMESPACE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY_NAMESPACE, gnc_commodity_namespaceClass))
+GType gnc_commodity_namespace_get_type(void);
+
 
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
 

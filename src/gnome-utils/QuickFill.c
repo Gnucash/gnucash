@@ -51,24 +51,6 @@ static QofLogModule log_module = GNC_MOD_REGISTER;
 /********************************************************************\
 \********************************************************************/
 
-static guint
-quickfill_hash (gconstpointer key)
-{
-  return GPOINTER_TO_UINT (key);
-}
-
-static gint
-quickfill_compare (gconstpointer key1, gconstpointer key2)
-{
-  guint k1 = GPOINTER_TO_UINT (key1);
-  guint k2 = GPOINTER_TO_UINT (key2);
-
-  return (k1 == k2);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 QuickFill *
 gnc_quickfill_new (void)
 {
@@ -85,7 +67,7 @@ gnc_quickfill_new (void)
   qf->text = NULL;
   qf->len = 0;
 
-  qf->matches = g_hash_table_new (quickfill_hash, quickfill_compare);
+  qf->matches = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   return qf;
 }

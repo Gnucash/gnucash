@@ -94,7 +94,7 @@ gnc_account_sel_get_type (void)
 
 static
 void
-gnc_account_sel_event_cb( QofEntity *entity,
+gnc_account_sel_event_cb( QofInstance *entity,
                           QofEventId event_type,
                           gpointer user_data,
 			  gpointer event_data )
@@ -385,7 +385,7 @@ gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
 			  G_CALLBACK( gas_new_account_click ),
 			  gas );
         gtk_box_pack_start( GTK_BOX(gas), gas->newAccountButton,
-                            TRUE, FALSE, 2 );
+                            FALSE, FALSE, 2 );
 }
 
 void

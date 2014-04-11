@@ -10,6 +10,12 @@
 		Sélectionnez ce groupe de comptes si vous voulez faire le suivi de vos revenus et dépenses d'emploi.
 	</gnc-act:long-description>    
 	<gnc:account version="2.0.0">
+		<act:name>Root Account</act:name>
+		<act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+		<act:type>ROOT</act:type>
+		<act:commodity-scu>0</act:commodity-scu>
+	</gnc:account>
+	<gnc:account version="2.0.0">
 		<act:name>Revenus</act:name>
 		<act:id type="guid">e5e6414e2da9abb0d11a675a1244e380</act:id>
 		<act:type>INCOME</act:type>
@@ -19,6 +25,7 @@
 		</act:commodity>
 		<act:commodity-scu>100</act:commodity-scu>
 		<act:description>Revenus</act:description>
+		<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 		<act:slots>
 			<slot>
 				<slot:key>placeholder</slot:key>
@@ -96,6 +103,7 @@
 			</act:commodity>
 			<act:commodity-scu>100</act:commodity-scu>
 			<act:description>Dépenses</act:description>
+			<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 			<act:slots>
 				<slot>
 					<slot:key>placeholder</slot:key>

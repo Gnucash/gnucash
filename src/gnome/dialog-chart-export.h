@@ -31,8 +31,8 @@
 */
 /** @addtogroup ChartExport Export a chart of accounts.
 
-Remember to use qof_entity_copy routines
-like ::qof_entity_copy_to_session so that the QofBook is marked
+Remember to use qof_instance_copy routines
+like ::qof_instance_copy_to_session so that the QofBook is marked
 as \a partial. 
 
 \par guidelines Guidelines for partial book export

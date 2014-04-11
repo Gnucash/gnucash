@@ -53,6 +53,7 @@ static void gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page, GKeyF
 static GncPluginPage *gnc_plugin_page_invoice_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
 
+static void gnc_plugin_page_invoice_summarybar_position_changed(GConfEntry *entry, gpointer user_data);
 
 void gnc_plugin_page_invoice_start_toggle_cb(GtkToggleButton *toggle, gpointer data);
 void gnc_plugin_page_invoice_end_toggle_cb(GtkToggleButton *toggle, gpointer data);
@@ -397,7 +398,10 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 	gtk_box_pack_start(GTK_BOX (priv->widget), widget, TRUE, TRUE, 0);
 
 	plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
-	gtk_box_pack_end(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
+	gnc_plugin_page_invoice_summarybar_position_changed(NULL, page);
+	gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
+        	gnc_plugin_page_invoice_summarybar_position_changed, page);
 
 	regWidget = gnc_invoice_get_register(priv->iw);
 	if (regWidget) {
@@ -423,6 +427,9 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
 	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
+
+	gnc_gconf_general_remove_cb(KEY_SUMMARYBAR_POSITION,
+		gnc_plugin_page_invoice_summarybar_position_changed, page);
 
 	if (priv->widget == NULL)
     {
@@ -515,7 +522,37 @@ gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page,
 	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 	gnc_invoice_window_changed (priv->iw, window);
 }
+
+
+static void
+gnc_plugin_page_invoice_summarybar_position_changed(GConfEntry *entry,
+						    gpointer user_data)
+{
+	GncPluginPage *plugin_page;
+	GncPluginPageInvoice *page;
+	GncPluginPageInvoicePrivate *priv;
+	GtkPositionType position = GTK_POS_BOTTOM;
+	gchar *conf_string;
 	
+	g_return_if_fail(user_data != NULL);
+	
+	plugin_page = GNC_PLUGIN_PAGE(user_data);
+	page = GNC_PLUGIN_PAGE_INVOICE (user_data);
+	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
+	
+	conf_string = gnc_gconf_get_string (GCONF_GENERAL,
+					    KEY_SUMMARYBAR_POSITION, NULL);
+	if (conf_string) {
+		position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
+					       conf_string, GTK_POS_BOTTOM);
+		g_free (conf_string);
+	}
+
+	gtk_box_reorder_child(GTK_BOX(priv->widget),
+			      plugin_page->summarybar,
+			      (position == GTK_POS_TOP ? 0 : -1) );
+}
+
 
 /************************************************************/
 /*                     Command callbacks                    */

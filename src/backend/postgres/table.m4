@@ -11,9 +11,9 @@ define(`account', `gncAccount, Account, Account, a,
        description,    , char *, xaccAccountGetDescription(ptr),
        type,           , char *, xaccAccountTypeEnumAsString(xaccAccountGetType(ptr)),
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
-       version,        , int32,  xaccAccountGetVersion(ptr),
-       iguid,          , int32,  ptr->idata,
-       bookGUID,       , GUID *, qof_entity_get_guid((QofEntity*)gnc_account_get_book(ptr)),
+       version,        , int32,  qof_instance_get_version(ptr),
+       iguid,          , int32,  qof_instance_get_idata(ptr),
+       bookGUID,       , GUID *, qof_entity_get_guid((QofInstance*)gnc_account_get_book(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(gnc_account_get_parent(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
@@ -21,7 +21,7 @@ define(`account', `gncAccount, Account, Account, a,
 define(`book', `gncBook, Book, QofBook, b,
        book_open,      , char,   qof_book_get_open_marker(ptr),
        version,        , int32,  qof_book_get_version(ptr),
-       iguid,          , int32,  qof_book_get_idata(ptr),
+       iguid,          , int32,  qof_instance_get_idata(ptr),
        bookGUID,    KEY, GUID *, qof_book_get_guid(ptr),
        ')
 
@@ -34,7 +34,7 @@ define(`split', `gncSplit, Split, Split, e,
        date_reconciled, , Timespec, xaccSplitRetDateReconciledTS(ptr),
        amount,          , int64,    gnc_numeric_num(xaccSplitGetAmount(ptr)),
        value,           , int64,    gnc_numeric_num(xaccSplitGetValue(ptr)),
-       iguid,           , int32,    ptr->idata,
+       iguid,           , int32,    qof_instance_get_idata(ptr),
        splitGuid,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
 
@@ -52,8 +52,8 @@ define(`transaction', `gncTransaction, Transaction, Transaction, t,
        last_modified,  , now,      "NOW",
        date_entered,   , Timespec, xaccTransRetDateEnteredTS(ptr),
        date_posted,    , Timespec, xaccTransRetDatePostedTS(ptr),
-       version,        , int32,    xaccTransGetVersion(ptr),
-       iguid,          , int32,    ptr->idata,
+       version,        , int32,    qof_instance_get_version(ptr),
+       iguid,          , int32,    qof_instance_get_idata(ptr),
        transGUID,   KEY, GUID *,   xaccTransGetGUID(ptr),
        ')
 
@@ -73,10 +73,10 @@ define(`price', `gncPrice, Price, GNCPrice, p,
        currency,     , commod,   gnc_commodity_get_unique_name(gnc_price_get_currency(ptr)),
        time,         , Timespec, gnc_price_get_time(ptr),
        source,       , char *,   gnc_price_get_source(ptr),
-       type,         , char *,   gnc_price_get_type(ptr),
+       type,         , char *,   gnc_price_get_typestr(ptr),
        valueNum,     , int64,    gnc_numeric_num(gnc_price_get_value(ptr)),
        valueDenom,   , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
-       version,      , int32,    gnc_price_get_version(ptr),
+       version,      , int32,    qof_instance_get_version(ptr),
        bookGUID,     , GUID *,   qof_book_get_guid(gnc_price_get_book(ptr)),
        priceGUID, KEY, GUID *,   gnc_price_get_guid(ptr),
        ')
@@ -362,7 +362,7 @@ define(`compare_version',
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT version FROM tablename($@) WHERE key_fieldname($@) = ''`");
-   p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
+   p = guid_to_string_buff (qof_entity_get_guid(QOF_INSTANCE(ptr)), p);
    p = stpcpy (p, "''`;");
    SEND_QUERY (be,be->buff, -1);
    sql_version = GPOINTER_TO_INT(pgendGetResults (be, get_version_cb, (gpointer) -1));
@@ -392,7 +392,7 @@ define(`is_deleted',
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT version FROM tablename($@)" "Trail WHERE key_fieldname($@) = ''`");
-   p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
+   p = guid_to_string_buff (qof_entity_get_guid(QOF_INSTANCE(ptr)), p);
    p = stpcpy (p, "''` AND change = ''`d''`;");
    SEND_QUERY (be,be->buff, -1);
    sql_version = GPOINTER_TO_INT(pgendGetResults (be, get_version_cb, (gpointer) -1));

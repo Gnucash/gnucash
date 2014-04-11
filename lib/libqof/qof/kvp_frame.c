@@ -512,6 +512,7 @@ kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
 {
   char *key = NULL;
   KvpValue *oldvalue;
+  KvpFrame* orig_frame = frame;
 
   frame = (KvpFrame *) get_trailer_or_null (frame, path, &key);
   oldvalue = kvp_frame_get_slot (frame, key);
@@ -544,6 +545,7 @@ kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
 
   /* Hmm, if we are here, the path doesn't exist. We need to 
    * create the path, add the value to it. */
+  frame = orig_frame;
   frame = kvp_frame_set_value_nc (frame, path, value);
   LEAVE ("new frame=%s", kvp_frame_to_string(frame));
   return frame;

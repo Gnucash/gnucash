@@ -59,8 +59,25 @@
 #ifndef GNC_LOT_H
 #define GNC_LOT_H
 
+typedef struct _GncLotClass GNCLotClass;
+
 #include "qof.h"
 #include "gnc-lot-p.h"
+
+/* --- type macros --- */
+#define GNC_TYPE_LOT            (gnc_lot_get_type ())
+#define GNC_LOT(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_LOT, GNCLot))
+#define GNC_LOT_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_LOT, GNCLotClass))
+#define GNC_IS_LOT(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_LOT))
+#define GNC_IS_LOT_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_LOT))
+#define GNC_LOT_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_LOT, GNCLotClass))
+GType gnc_lot_get_type(void);
+
 
 GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
@@ -88,12 +105,12 @@ void gnc_lot_remove_split (GNCLot *, Split *);
  *    either gnc_lot_add_split() or gnc_lot_remove_split() will
  *    invalidate the returned pointer.
  */
-SplitList * gnc_lot_get_split_list (GNCLot *);
-gint gnc_lot_count_splits (GNCLot *);
+SplitList * gnc_lot_get_split_list (const GNCLot *);
+gint gnc_lot_count_splits (const GNCLot *);
 
 /** The gnc_lot_get_account() routine returns the account with which 
  *    this lot is associated. */
-Account * gnc_lot_get_account (GNCLot *);
+Account * gnc_lot_get_account (const GNCLot *);
 
 /** The gnc_lot_get_balance() routine returns the balance of the lot. 
  *    The commodity in which this balance is expressed is the commodity 
@@ -104,7 +121,7 @@ gnc_numeric gnc_lot_get_balance (GNCLot *);
  *  value in the lot considering only splits in transactions prior to the
  *  one containing the given split or other splits in the same transaction.
  *  The first return value is the amount and the second is the value. */
-void gnc_lot_get_balance_before (GNCLot *, Split *,
+void gnc_lot_get_balance_before (const GNCLot *, const Split *,
                                  gnc_numeric *, gnc_numeric *);
 
 /** The gnc_lot_is_closed() routine returns a boolean flag: is this 
@@ -129,17 +146,17 @@ Split * gnc_lot_get_earliest_split (GNCLot *lot);
 Split * gnc_lot_get_latest_split (GNCLot *lot);
 
 /** Get and set the account title, or the account notes. */
-const char * gnc_lot_get_title (GNCLot *);
-const char * gnc_lot_get_notes (GNCLot *);
+const char * gnc_lot_get_title (const GNCLot *);
+const char * gnc_lot_get_notes (const GNCLot *);
 void gnc_lot_set_title (GNCLot *, const char *);
 void gnc_lot_set_notes (GNCLot *, const char *);
 
 /** Every lot has a place to hang kvp data.  This routine returns that
  *     place. 
  * */
-KvpFrame * gnc_lot_get_slots (GNCLot *);
+KvpFrame * gnc_lot_get_slots (const GNCLot *);
 
-#define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_ENTITY(X))
+#define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_INSTANCE(X))
 
 #define LOT_IS_CLOSED	"is-closed?"
 #define LOT_BALANCE	"balance"

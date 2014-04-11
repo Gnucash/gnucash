@@ -364,7 +364,7 @@ write_out (QofMap *qm, QofInstance *inst)
 {
 	if (!inst) return;
 
-	GUID *guid = &QOF_ENTITY(inst)->guid;
+	GUID *guid = &QOF_INSTANCE(inst)->guid;
 
 	dui_connection_lock(qm->db_conn, qm->table_name);
 	/* Use a temp book when loading from the database */
@@ -376,8 +376,8 @@ write_out (QofMap *qm, QofInstance *inst)
 
 	/* See if we got something back from the DB */
 	QofCollection *col;
-	col = qof_book_get_collection (qm->tmp_book, QOF_ENTITY(inst)->e_type);
-	QofEntity * db_ent = qof_collection_lookup_entity (col, guid);
+	col = qof_book_get_collection (qm->tmp_book, QOF_INSTANCE(inst)->e_type);
+	QofInstance * db_ent = qof_collection_lookup_entity (col, guid);
 	QofInstance *db_inst = QOF_INSTANCE(db_ent);
 
 	/* If its not already in the database, then insert it in */

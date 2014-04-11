@@ -57,6 +57,7 @@
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-report.h"
+#include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
@@ -85,6 +86,7 @@ typedef struct GncPluginPageReportPrivate
 {
         /// The report-id
         int reportId;
+        gint component_manager_id;
 
         /// The report which this Page is satisifying
         SCM cur_report;
@@ -334,8 +336,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         gtk_container_add(GTK_CONTAINER(priv->container), 
                           gnc_html_get_widget(priv->html));
   
-        gnc_register_gui_component( WINDOW_REPORT_CM_CLASS, NULL,
-                                    close_handler, priv );
+        priv->component_manager_id =
+          gnc_register_gui_component(WINDOW_REPORT_CM_CLASS, NULL,
+                                     close_handler, page);
+        gnc_gui_component_set_session(priv->component_manager_id,
+                                      gnc_get_current_session());
   
         gnc_html_set_urltype_cb(priv->html, gnc_plugin_page_report_check_urltype);
         gnc_html_set_load_cb(priv->html, gnc_plugin_page_report_load_cb, report);
@@ -643,14 +648,21 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 
         PINFO("destroy widget");
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
+
+        if (priv->component_manager_id) {
+                gnc_unregister_gui_component(priv->component_manager_id);
+                priv->component_manager_id = 0;
+        }
+
+        gnc_plugin_page_report_destroy(priv);
         gnc_report_remove_by_id(priv->reportId);
 }
 
 
 /** The key name used it the state file for storing the report
  *  options. */
-#define SCHEME_OPTIONS   "Scheme Options"
-#define SCHEME_OPTIONS_N "Scheme Options %d"
+#define SCHEME_OPTIONS   "SchemeOptions"
+#define SCHEME_OPTIONS_N "SchemeOptions%d"
 
 
 /** Save enough information about this report page that it can be
@@ -902,8 +914,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         SCM  set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
         SCM  edited, editor; 
 
-        gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, priv);
-
         /* close any open editors */
         for (edited = scm_list_copy(priv->edited_reports); !SCM_NULLP(edited);
              edited = SCM_CDR(edited)) {
@@ -952,6 +962,9 @@ static GtkActionEntry report_actions[] =
         { "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
           N_("Paste the clipboard content at the cursor position"),
           NULL },
+	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+	  N_("Refresh this window"),
+	  G_CALLBACK (gnc_plugin_page_report_reload_cb) },
         { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), "", 
 	  N_("Add the current report to the `Custom' menu for later use. "
 	     "The report will be saved in the file ~/.gnucash/saved-reports-2.0. "
@@ -1122,9 +1135,9 @@ gnc_plugin_page_report_raise_editor(SCM report)
 static void
 close_handler (gpointer user_data)
 {
-        GncPluginPageReportPrivate *priv = user_data;  
+        GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
         DEBUG("in close handler\n");
-        gnc_plugin_page_report_destroy (priv);
+        gnc_main_window_close_page (plugin_page);
 }
 
 static void
@@ -1363,6 +1376,14 @@ gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
 
 	save_func = scm_c_eval_string("gnc:report-save-to-savefile");
 	scm_call_1(save_func, priv->cur_report);
+
+	{
+	  GtkActionGroup *action_group =
+	    gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
+	  GtkAction *action =
+	    gtk_action_group_get_action (action_group, "ReportSaveAction");
+	  gtk_action_set_sensitive(action, FALSE);
+	}
 }
 
 static void

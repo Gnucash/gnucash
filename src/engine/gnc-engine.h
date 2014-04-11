@@ -93,7 +93,6 @@
 #define GNC_ID_COMMODITY      "Commodity"
 #define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
-#define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_PERIOD         "Period"
 #define GNC_ID_PRICE          "Price"
@@ -195,9 +194,6 @@ typedef struct gnc_lot_struct        GNCLot;
  */
 typedef struct gnc_price_s           GNCPrice;
 typedef struct gnc_quote_source_s    gnc_quote_source;
-
-#define GNC_IS_PRICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_PRICE))
-#define GNC_PRICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_PRICE, GNCPrice))
 
 /** GList of Account */
 typedef GList                  AccountList;

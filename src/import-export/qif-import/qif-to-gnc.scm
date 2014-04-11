@@ -615,13 +615,15 @@
                 (xaccSplitSetReconcile gnc-far-split #\y)))
           
           (if qif-commission-acct
-              (let* ((commission-acct-info 
+              (let* ((commission-acct-info
                       (or (hash-ref qif-acct-map qif-commission-acct)
                           (hash-ref qif-cat-map qif-commission-acct)))
-                     (commission-acct-name 
-                      (qif-map-entry:gnc-name commission-acct-info)))
-                (set! commission-acct 
-                      (hash-ref gnc-acct-hash commission-acct-name))))
+                     (commission-acct-name
+                      (and commission-acct-info
+                           (qif-map-entry:gnc-name commission-acct-info))))
+                (if commission-acct-name
+                    (set! commission-acct
+                          (hash-ref gnc-acct-hash commission-acct-name)))))
           
           (if (and commission-amt commission-acct)
               (begin 

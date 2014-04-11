@@ -97,14 +97,13 @@ log4glib_handler(const gchar     *log_domain,
           return;
 
      {
-          gboolean last_char_is_newline;
           char timestamp_buf[10];
           time_t now;
           struct tm now_tm;
           gchar *level_str = qof_log_level_to_string(log_level);
           now = time(NULL);
           localtime_r(&now, &now_tm);
-          strftime(timestamp_buf, 9, "%T", &now_tm);
+          qof_strftime(timestamp_buf, 9, "%T", &now_tm);
 
           fprintf(fout, "* %s %*s <%s> %*s%s%s",
                   timestamp_buf,
@@ -197,7 +196,7 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 	{
 		log_table = g_hash_table_new(g_str_hash, g_str_equal);
 	}
-	g_hash_table_insert(log_table, (gpointer)log_module, GINT_TO_POINTER((gint)level));
+	g_hash_table_insert(log_table, g_strdup((gchar*)log_module), GINT_TO_POINTER((gint)level));
 }
 
 const char *
@@ -216,6 +215,8 @@ qof_log_prettify (const char *name)
     *(p+2) = 0x0;
   }
   else { strcpy (&buffer[QOF_LOG_MAX_CHARS - 6], "...()"); }
+  if (function_buffer)
+    g_free(function_buffer);
   function_buffer = g_strdup(buffer);
   g_free(buffer);
   return function_buffer;
@@ -273,6 +274,7 @@ qof_log_parse_log_config(const char *filename)
                g_debug("setting log [%s] to level [%s=%d]", logger_name, level_str, level);
                qof_log_set_level(logger_name, level);
 
+               g_free(logger_name);
                g_free(level_str);
           }
           g_strfreev(levels);
@@ -327,7 +329,7 @@ qof_log_check(QofLogModule log_domain, QofLogLevel log_level)
      _QLC_DBG({ printf("trying [%s] (%d):", log_domain, g_hash_table_size(log_levels)); });
      if (G_LIKELY(log_levels))
      {
-          // e.g., "a.b.c" -> "a\0b.c" -> "a.b\0c", "a.b.c"
+          // e.g., "a.b.c\0" -> "a\0b.c\0" -> "a.b\0c\0", "a.b.c\0"
           gpointer match_level;
           while ((dot_pointer = g_strstr_len(dot_pointer, strlen(dot_pointer), ".")) != NULL)
           {

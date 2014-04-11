@@ -727,10 +727,10 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_INVOICE);
-		success = qof_entity_copy_coll_r(chart_session, coll);
+		success = qof_instance_copy_coll_r(chart_session, coll);
 		/* Need to get the GList of GncEntry's - KVP */
 		coll = qof_book_get_collection(book, GNC_ID_CUSTOMER);
-		success = qof_entity_copy_coll_r(chart_session, coll);
+		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);
@@ -762,7 +762,7 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_CUSTOMER);
-		success = qof_entity_copy_coll_r(chart_session, coll);
+		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);
@@ -794,7 +794,7 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_VENDOR);
-		success = qof_entity_copy_coll_r(chart_session, coll);
+		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);
@@ -826,7 +826,7 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_EMPLOYEE);
-		success = qof_entity_copy_coll_r(chart_session, coll);
+		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);

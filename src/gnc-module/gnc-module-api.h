@@ -24,9 +24,10 @@
 #ifndef GNC_MODULE_API_H
 #define GNC_MODULE_API_H
 
-char * gnc_module_path (void);
-char * gnc_module_description (void);
-int    gnc_module_init (int refcount);
-int    gnc_module_end (int refcount);
+#define GNC_MODULE_API_DECL(gmf)		\
+  char * gmf##_gnc_module_path (void);		\
+  char * gmf##_gnc_module_description (void);	\
+  int    gmf##_gnc_module_init (int refcount);	\
+  int    gmf##_gnc_module_end (int refcount);
 
 #endif

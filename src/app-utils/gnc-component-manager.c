@@ -253,7 +253,7 @@ add_event_type (ComponentEventInfo *cei, GNCIdTypeConst entity_type,
 }
 
 static void
-gnc_cm_event_handler (QofEntity *entity,
+gnc_cm_event_handler (QofInstance *entity,
                       QofEventId event_type,
                       gpointer user_data,
 		      gpointer event_data)

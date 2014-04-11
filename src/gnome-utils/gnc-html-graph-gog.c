@@ -33,22 +33,27 @@
 #include "gnc-html.h"
 #include "gnc-engine.h"
 #include <goffice/goffice.h>
+#include <goffice/graph/gog-chart.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
-#include <goffice/graph/gog-renderer-pixbuf.h>
-#include <goffice/graph/gog-renderer-gnome-print.h>
+#ifdef GOFFICE_WITH_CAIRO
+#    include <goffice/graph/gog-renderer-cairo.h>
+#else
+#    include <goffice/graph/gog-renderer-pixbuf.h>
+#endif
+#ifndef GTKHTML_USES_GTKPRINT
+#    include <goffice/graph/gog-renderer-gnome-print.h>
+#endif
 #include <goffice/graph/gog-style.h>
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>
 #include <goffice/graph/gog-series.h>
 #include <goffice/utils/go-color.h>
+#include <goffice/utils/go-marker.h>
 #include <goffice/graph/gog-data-set.h>
-#include <goffice/graph/gog-renderer-svg.h>
 #include <goffice/data/go-data-simple.h>
 #include <goffice/app/go-plugin.h>
 #include <goffice/app/go-plugin-loader-module.h>
-#include <gsf/gsf.h>
-#include <gsf/gsf-output-memory.h>
 
 /**
  * TODO:
@@ -59,16 +64,18 @@
  * - general graph cleanup
  **/
 
-#define LOG_MOD "gnc.gui.html.graph.gog"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.gui.html.graph.gog"
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
+#else
 static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
+#endif
 
 static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
 
@@ -163,7 +170,11 @@ static void
 add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
 {
   GtkWidget *widget;
+#ifdef GOFFICE_WITH_CAIRO
+  GogRendererCairo *cairo_renderer;
+#else
   GogRendererPixbuf *pixbuf_renderer;
+#endif
   GdkPixbuf *buf;
   gboolean update_status;
 
@@ -173,24 +184,22 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   // gnumeric uses.  We probably _should_ do something like that, though.
   gog_object_update (GOG_OBJECT (graph));
 
-#if 0
-  // example SVG use.  Also, nice for debugging.
-  {
-    GsfOutput *mem;
-    gboolean output;
-
-    mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
-    printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
-  }
-#endif // 0
-
+#ifdef GOFFICE_WITH_CAIRO
+  cairo_renderer = GOG_RENDERER_CAIRO (g_object_new (GOG_RENDERER_CAIRO_TYPE,
+						     "model", graph,
+						     NULL));
+  update_status = gog_renderer_cairo_update (cairo_renderer,
+					     eb->width, eb->height, 1.0);
+  buf = gog_renderer_cairo_get_pixbuf (cairo_renderer);
+#else
   pixbuf_renderer = GOG_RENDERER_PIXBUF (g_object_new (GOG_RENDERER_PIXBUF_TYPE,
 						       "model", graph,
 						       NULL));
   update_status = gog_renderer_pixbuf_update (pixbuf_renderer,
 					      eb->width, eb->height, 1.0);
   buf = gog_renderer_pixbuf_get (pixbuf_renderer);
+#endif /* GOFFICE_WITH_CAIRO */
+
   widget = gtk_image_new_from_pixbuf (buf);
   gtk_widget_set_size_request (widget, eb->width, eb->height);
   gtk_widget_show_all (widget);
@@ -507,8 +516,11 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   GogPlot *plot;
   GogSeries *series;
   GOData *sliceData;
+  GogStyle *style;
   int datasize;
   double *xData, *yData;
+  gchar *marker_str, *color_str;
+  gboolean fill = FALSE;
 
   gtkhtml_pre_3_10_1_bug_workaround(eb);
 
@@ -523,6 +535,9 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 
     yDataStr = g_hash_table_lookup( eb->params, "y_data" );
     yData = read_doubles( yDataStr, datasize );
+
+    marker_str = g_hash_table_lookup(eb->params, "marker");
+    color_str = g_hash_table_lookup(eb->params, "color");
   }
 
   if (!create_basic_plot_elements("GogXYPlot", &graph, &chart, &plot))
@@ -531,6 +546,7 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   }
 
   series = gog_plot_new_series( plot );
+  style = gog_styled_object_get_style(GOG_STYLED_OBJECT(series));
 
   sliceData = go_data_vector_val_new( xData, datasize, NULL );
   gog_series_set_dim( series, 0, sliceData, NULL );
@@ -539,6 +555,62 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   sliceData = go_data_vector_val_new( yData, datasize, NULL );
   gog_series_set_dim( series, 1, sliceData, NULL );
   go_data_emit_changed (GO_DATA (sliceData));
+
+  /* set marker shape */
+  if (marker_str) {
+    GOMarkerShape shape;
+
+    if (g_str_has_prefix(marker_str, "filled ")) {
+      fill = TRUE;
+      marker_str += 7;
+    }
+    shape = go_marker_shape_from_str(marker_str);
+    if (shape != GO_MARKER_NONE) {
+      style->marker.auto_shape = FALSE;
+      go_marker_set_shape(style->marker.mark, shape);
+    } else {
+      g_warning("cannot parse marker shape [%s]", marker_str);
+    }
+  }
+
+  /* set marker and line colors */
+  if (color_str) {
+    GdkColor color;
+    if (gdk_color_parse(color_str, &color)) {
+      style->marker.auto_outline_color = FALSE;
+      go_marker_set_outline_color(style->marker.mark, GDK_TO_UINT(color));
+      style->line.auto_color = FALSE;
+      style->line.color = GDK_TO_UINT(color);
+    } else {
+      g_warning("cannot parse color [%s]", color_str);
+    }
+  }
+
+  /* set marker fill colors */
+  if (fill) {
+    style->marker.auto_fill_color = style->marker.auto_outline_color;
+    go_marker_set_fill_color(style->marker.mark,
+                             go_marker_get_outline_color(style->marker.mark));
+  } else {
+    GogStyle *chart_style =
+      gog_styled_object_get_style(GOG_STYLED_OBJECT(chart));
+
+    if (chart_style->fill.type == GOG_FILL_STYLE_PATTERN
+        && chart_style->fill.pattern.pattern == GO_PATTERN_SOLID) {
+      style->marker.auto_fill_color = FALSE;
+      go_marker_set_fill_color(style->marker.mark,
+                               chart_style->fill.pattern.back);
+    } else if (chart_style->fill.type == GOG_FILL_STYLE_PATTERN
+               && chart_style->fill.pattern.pattern
+               == GO_PATTERN_FOREGROUND_SOLID) {
+      style->marker.auto_fill_color = FALSE;
+      go_marker_set_fill_color(style->marker.mark,
+                               chart_style->fill.pattern.fore);
+    } else {
+      g_warning("fill color of markers can only be set like a solid fill "
+                "pattern of the chart");
+    }
+  }
 
   set_chart_titles_from_hash(chart, eb);
   set_chart_axis_labels_from_hash(chart, eb);
@@ -551,6 +623,23 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   return TRUE;
 }
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void
+draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
+{
+  GogGraph *graph = GOG_GRAPH(g_object_get_data(G_OBJECT(eb), "graph"));
+  GogRendererCairo *rend = g_object_new(GOG_RENDERER_CAIRO_TYPE, "model", graph,
+                                        "cairo", cr, "is-vector", TRUE, NULL);
+
+  /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
+  cairo_scale(cr, 0.5, 0.5);
+
+  cairo_translate(cr, 0, -eb->height);
+  gog_renderer_cairo_update(rend, eb->width, eb->height, 1.0);
+  g_object_unref(rend);
+}
+
+#else /* !GTKHTML_USES_GTKPRINT */
 static void
 draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
 {
@@ -562,3 +651,4 @@ draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
   gnome_print_translate (context, 0, eb->height);
   gog_graph_print_to_gnome_print (graph, context, eb->width, eb->height);
 }
+#endif /* GTKHTML_USES_GTKPRINT */

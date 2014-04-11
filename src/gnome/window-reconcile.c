@@ -655,6 +655,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
   /* Create the dialog box */
   xml = gnc_glade_xml_new ("reconcile.glade", "Reconcile Start Dialog");
   dialog = glade_xml_get_widget (xml, "Reconcile Start Dialog");
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, &data);
   title = gnc_recn_make_window_name (account);
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free (title);
@@ -722,7 +723,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     else if( account_type_has_auto_interest_charge( data.account_type ) )
       gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge...") );
     else {
-      gtk_widget_hide(interest);
+      gtk_widget_destroy(interest);
       interest = NULL;
     }
 
@@ -732,9 +733,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
       if( auto_interest_xfer_option )
        gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
     }
-
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-				      &data);
 
     gtk_widget_show_all(dialog);
 
@@ -754,7 +752,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
   if (result == GTK_RESPONSE_OK)
   {
     *new_ending = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (end_value));
-    *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
+    *statement_date = gnc_date_edit_get_date_end(GNC_DATE_EDIT(date_value));
 
     if (gnc_reverse_balance(account))
       *new_ending = gnc_numeric_neg (*new_ending);
@@ -1229,7 +1227,8 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
   xaccAccountTreeScrubImbalance (account);
 
   // XXX: Lots are disabled.
-  //xaccAccountTreeScrubLots (account);
+  if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
+      xaccAccountTreeScrubLots(account);
 
   gnc_resume_gui_refresh ();
 }

@@ -48,7 +48,6 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
-#include "gnc-http.h"
 #include "gnc-html-history.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
@@ -64,7 +63,7 @@ struct gnc_html_struct {
   URLType     base_type;           /* base of URL (path - filename) */
   gchar       * base_location;
 
-  gnc_http    * http;              /* handles HTTP requests */ 
+    //gnc_http    * http;              /* handles HTTP requests */ 
   GHashTable  * request_info;      /* hash uri to GList of GtkHTMLStream * */
 
   /* callbacks */
@@ -108,13 +107,10 @@ static char error_404_title[] = N_("Not found");
 static char error_404_body[] = 
 N_("The specified URL could not be loaded.");
 
-static char error_format[] = 
-"<html><body><h3>%s</h3><p>%s</p>\n<p>%s:</p><p>";
-static char error_title[] = N_("Error");
-static char error_body1[] = 
-N_("There was an error loading the specified URL.");
-static char error_body2[] = N_("Error message");
-static char error_end[] = "</body></html>";
+#ifdef GTKHTML_USES_GTKPRINT
+static GtkPrintSettings *print_settings = NULL;
+G_LOCK_DEFINE_STATIC(print_settings);
+#endif
 
 
 static char * 
@@ -173,7 +169,7 @@ URLType
 gnc_html_parse_url(gnc_html * html, const gchar * url, 
                    char ** url_location, char ** url_label)
 {
-  char        uri_rexp[] = "^(([^:]*):)?([^#]+)?(#(.*))?$";
+  char        uri_rexp[] = "^(([^:][^:]+):)?([^#]+)?(#(.*))?$";
   regex_t     compiled;
   regmatch_t  match[6];
   char        * protocol=NULL, * path=NULL, * label=NULL;
@@ -236,11 +232,12 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
  
   if (!safe_strcmp (retval, URL_TYPE_FILE)) {
     if(!found_protocol && path && html && html->base_location) {
-      if(path[0] == '/') {
+      if (g_path_is_absolute(path)) {
         *url_location = g_strdup(path);
       }
       else {
-        *url_location = g_strconcat(html->base_location, "/", path, NULL);
+        *url_location =
+          g_build_filename(html->base_location, path, (gchar*)NULL);
       }
       g_free(path);
     }
@@ -257,13 +254,14 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     /* case URL_TYPE_OTHER: */
 
     if(!found_protocol && path && html && html->base_location) {
-      if(path[0] == '/') {
-        *url_location = 
-          g_strconcat(extract_machine_name(html->base_location),
-                      "/", path+1, NULL);
+      if (g_path_is_absolute(path)) {
+        *url_location =
+          g_build_filename(extract_machine_name(html->base_location),
+                           path, (gchar*)NULL);
       }
       else {
-        *url_location = g_strconcat(html->base_location, path, NULL);
+        *url_location =
+          g_build_filename(html->base_location, path, (gchar*)NULL);
       }
       g_free(path);
     }
@@ -421,106 +419,10 @@ https_allowed()
   return TRUE;
 }
 
-
-
-/************************************************************
- * gnc_html_http_request_cb: fires when an HTTP request is completed.
- * this is when it's time to load the data into the GtkHTML widget. 
- ************************************************************/
-
-static void
-gnc_html_http_request_cb(const gchar * uri, int completed_ok, 
-                         const gchar * body, gint body_len, 
-                         gpointer user_data)
-{
-  gnc_html * html = user_data; 
-  URLType  type;
-  char     * location = NULL;
-  char     * label    = NULL;
-  GList    * handles  = NULL;
-  GList    * current;
-  gpointer loc_tmp, handles_tmp;
-  
-  DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
-  g_hash_table_lookup_extended(html->request_info, uri, 
-                               &loc_tmp, &handles_tmp );
-
-  location = loc_tmp;
-  handles  = handles_tmp;
-  
-  /* handles will be NULL for an HTTP POST transaction, where we are
-   * displaying the reply data. */
-  if(!handles) {    
-    GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
-    if(completed_ok) {
-      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-    }
-    else {
-      char *data;
-
-      data = g_strdup_printf(error_format, 
-			     _(error_title), _(error_body1), _(error_body2));
-      gtk_html_write(GTK_HTML(html->html), handle, data, strlen (data));
-      g_free (data);
-      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-      gtk_html_write(GTK_HTML(html->html), handle,
-                     error_end, strlen(error_end));
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
-    }
-  }
-  /* otherwise, it's a normal SUBMIT transaction */ 
-  else {
-    /* before writing to the handles, make sure any new traffic won't
-     * see them while we're working */
-    g_hash_table_remove(html->request_info, uri);
-    g_free(location);
-    location = NULL;
-
-    for(current = handles; current; current = current->next) {
-      /* request completed OK... write the HTML to the handles that
-       * asked for that URI. */
-      if(completed_ok) {
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data),
-                       body, body_len);
-        gtk_html_end(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                     GTK_HTML_STREAM_OK);
-        type = gnc_html_parse_url(html, uri, &location, &label);
-        if(label) {
-          gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-        }
-        g_free(location);
-        g_free(label);
-        location = label = NULL;
-      }
-      /* request failed... body is the ghttp error text. */
-      else {
-        char *data;
-
-	data = g_strdup_printf(error_format, 
-			       _(error_title), _(error_body1), _(error_body2));
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       data, strlen(data));
-	g_free (data);
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       body, body_len);
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       error_end, strlen(error_end));
-        gtk_html_end(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                     GTK_HTML_STREAM_ERROR);
-      }
-    }
-    g_list_free(handles);    
-  }
-
-  gnc_unset_busy_cursor (html->html);
-}
-
-
 /************************************************************
  * gnc_html_start_request: starts the gnc-http object working on an
  * http/https request.
  ************************************************************/
-
 static void 
 gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
 {
@@ -540,9 +442,7 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
   g_hash_table_insert(html->request_info, uri, handles);
   
   if(need_request) {
-    gnc_set_busy_cursor (html->html, FALSE);
-    gnc_http_start_request(html->http, uri, gnc_html_http_request_cb, 
-                           (gpointer)html);
+      g_critical("we've not supported network requests for years");
   }
 }
 
@@ -719,7 +619,7 @@ gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data)
 {
   gnc_html * gnchtml = (gnc_html *) data;
 
-  DEBUG("Rollover %s", url);
+  DEBUG("Rollover %s", url ? url : "(null)");
   g_free(gnchtml->current_link);
   gnchtml->current_link = g_strdup(url);
   if(gnchtml->flyover_cb) {
@@ -897,13 +797,8 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   DEBUG(" ");
   form_data = gnc_html_unpack_form_data(encoded_form_data);
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
-  
-  if(!strcasecmp(method, "get")) {
-    gnc_html_generic_get_submit(gnchtml, action, form_data);
-  }
-  else if(!strcasecmp(method, "post")) {
-    gnc_html_generic_post_submit(gnchtml, action, form_data);
-  }
+
+  g_critical("form submission hasn't been supported in years.");
   
   g_free(location);
   g_free(label);
@@ -1148,11 +1043,15 @@ gnc_html_new( GtkWindow *parent )
                     GTK_WIDGET(retval->html));
 
   retval->request_info = g_hash_table_new(g_str_hash, g_str_equal);
-  retval->http         = gnc_http_new();
+  //retval->http         = gnc_http_new();
   retval->history      = gnc_html_history_new();
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(retval->container);
+#else
   g_object_ref (retval->container);
   gtk_object_sink (GTK_OBJECT (retval->container));
+#endif
 
   /* signals */
   g_signal_connect(retval->html, "url_requested",
@@ -1208,7 +1107,7 @@ void
 gnc_html_cancel(gnc_html * html)
 {
   /* remove our own references to requests */ 
-  gnc_http_cancel_requests(html->http);
+    //gnc_http_cancel_requests(html->http);
   
   g_hash_table_foreach_remove(html->request_info, html_cancel_helper, NULL);
 }
@@ -1323,6 +1222,49 @@ gnc_html_export(gnc_html * html, const char *filepath)
   return TRUE;
 }
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void
+draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
+             gint page_nr, gpointer user_data)
+{
+    gnc_html *html = user_data;
+
+    gtk_html_print_page((GtkHTML*) html->html, context);
+}
+
+void
+gnc_html_print(gnc_html *html)
+{
+    GtkPrintOperation *print;
+    GtkPrintOperationResult res;
+
+    print = gtk_print_operation_new();
+
+    G_LOCK(print_settings);
+    if (print_settings)
+        gtk_print_operation_set_print_settings(print, print_settings);
+    G_UNLOCK(print_settings);
+
+    gtk_print_operation_set_use_full_page(print, FALSE);
+    gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
+    gtk_print_operation_set_n_pages(print, 1);
+    g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), html);
+
+    res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                  GTK_WINDOW(html->window), NULL);
+
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
+        G_LOCK(print_settings);
+        if (print_settings)
+            g_object_unref(print_settings);
+        print_settings = g_object_ref(gtk_print_operation_get_print_settings(print));
+        G_UNLOCK(print_settings);
+    }
+
+    g_object_unref(print);
+}
+
+#else /* !GTKHTML_USES_GTKPRINT */
 void
 gnc_html_print(gnc_html * html)
 {
@@ -1337,6 +1279,7 @@ gnc_html_print(gnc_html * html)
   gtk_html_print(GTK_HTML(html->html), ps->context);
   gnc_print_session_done(ps);
 }
+#endif /* GTKHTML_USES_GTKPRINT */
 
 gnc_html_history * 
 gnc_html_get_history(gnc_html * html)
@@ -1611,95 +1554,4 @@ gnc_html_escape_newlines(const gchar * in)
   out = escaped->str;
   g_string_free(escaped, FALSE);
   return out;
-}
-
-
-/********************************************************************
- * gnc_html_generic_get_submit() : normal 'get' submit method. 
- ********************************************************************/
-
-void
-gnc_html_generic_get_submit(gnc_html * html, const char * action, 
-                            GHashTable * form_data)
-{
-  URLType type;
-  char    * location = NULL;
-  char    * label = NULL;
-  char    * fullurl = NULL;
-  char    * encoded = gnc_html_pack_form_data(form_data);
-
-  type    = gnc_html_parse_url(html, action, &location, &label);
-  fullurl = g_strconcat(location, "?", encoded, NULL);
-  gnc_html_show_url(html, type, fullurl, label, 0);
-
-  g_free(encoded);
-  g_free(location);
-  g_free(label);
-  g_free(fullurl);
-}
-
-
-/********************************************************************
- * gnc_html_generic_post_submit() : normal 'post' submit method. 
- ********************************************************************/
-
-void
-gnc_html_generic_post_submit(gnc_html * html, const char * action, 
-                             GHashTable * form_data)
-{
-  char * encoded = gnc_html_pack_form_data(form_data);
-  char * copy = strdup(encoded);
-  gnc_http_start_post(html->http, action, 
-                      "application/x-www-form-urlencoded",
-                      copy, strlen(copy), 
-                      gnc_html_http_request_cb, html);
-  g_free(encoded);
-}
-
-
-/********************************************************************
- * gnc_html_multipart_post_submit() : this is really sort of useless
- * but I'll make it better later.  It's useless because FTMP CGI/php
- * don't properly decode the urlencoded values.
- ********************************************************************/
-
-static void
-multipart_post_helper(gpointer key, gpointer val, 
-                      gpointer user_data)
-{
-  char * old_str = *(char **)user_data;
-  char * new_str = 
-    g_strconcat(old_str,
-                "--XXXgncXXX\r\n",
-                "Content-Disposition: form-data; name=\"",
-                (char *)key, "\"\r\n\r\n",
-                (char *)val, "\r\n",
-                NULL);
-  *(char **)user_data = new_str;
-  g_free(old_str);
-}
-
-
-void
-gnc_html_multipart_post_submit(gnc_html * html, const char * action, 
-                               GHashTable * form_data)
-{
-
-  char * htmlstr = g_strdup("");
-  char * next_htmlstr;
-
-  /* encode the arguments from the hash table */
-  g_hash_table_foreach(form_data, multipart_post_helper, &htmlstr);
-  
-  /* add the closing boundary marker */
-  next_htmlstr = g_strconcat(htmlstr, "--XXXgncXXX--\r\n", NULL);
-  g_free(htmlstr);
-  htmlstr = next_htmlstr;
-  next_htmlstr = NULL;
-  gnc_http_start_post(html->http, action, 
-                      "multipart/form-data; boundary=XXXgncXXX",
-                      htmlstr, strlen(htmlstr), 
-                      gnc_html_http_request_cb, html);
-
-  g_free(htmlstr);
 }

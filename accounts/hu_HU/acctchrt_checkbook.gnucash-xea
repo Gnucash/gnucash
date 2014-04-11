@@ -10,6 +10,12 @@
      Akkor érdemes ezt kiválasztani, ha csak a folyószámlája forgalmát kívánja ellenőrizni. Később elkezdheti a bevételei és költségei alaposabb nyomonkövetését, ha szükségét érzi.
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Eszközök</act:name>
   <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
   <act:type>ASSET</act:type>
@@ -19,6 +25,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Eszközök</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forgóeszközök</act:name>
@@ -54,6 +61,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Bevétel</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Költségek</act:name>
@@ -65,6 +73,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Költségek</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -86,6 +95,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Saját tőke</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nyitóegyenlegek</act:name>

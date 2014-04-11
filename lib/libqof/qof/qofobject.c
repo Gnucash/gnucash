@@ -156,7 +156,7 @@ qof_object_compliance (QofIdTypeConst type_name, gboolean warn)
 
 void 
 qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-                    QofEntityForeachCB cb, gpointer user_data)
+                    QofInstanceForeachCB cb, gpointer user_data)
 {
   QofCollection *col;
   const QofObject *obj;

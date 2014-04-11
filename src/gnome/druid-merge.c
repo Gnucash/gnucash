@@ -188,7 +188,7 @@ on_merge_cancel (GnomeDruid *gnomedruid, gpointer user_data)
 	gnc_resume_gui_refresh ();
 }
 
-void currency_transfer_cb ( QofEntity* ent, gpointer user_data)
+void currency_transfer_cb ( QofInstance* ent, gpointer user_data)
 {
 	if(!ent) return;
 	if(xaccAccountGetCommodity((Account*)ent) == NULL) {
@@ -197,7 +197,7 @@ void currency_transfer_cb ( QofEntity* ent, gpointer user_data)
 }
 
 /* If the account has no parent, shove it into the top level under the root. */
-void reference_parent_cb ( QofEntity* ent, gpointer user_data)
+void reference_parent_cb ( QofInstance* ent, gpointer user_data)
 {
 	Account *root;
 

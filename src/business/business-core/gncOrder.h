@@ -35,14 +35,27 @@
 #define GNC_ORDER_H_
 
 typedef struct _gncOrder GncOrder;
+typedef struct _gncOrderClass GncOrderClass;
 
 #include "gncEntry.h"
 #include "gncOwner.h"
 #include "qof.h"
 
 #define GNC_ID_ORDER "gncOrder"
-#define GNC_IS_ORDER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ORDER))
-#define GNC_ORDER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ORDER, GncOrder))
+
+/* --- type macros --- */
+#define GNC_TYPE_ORDER            (gnc_order_get_type ())
+#define GNC_ORDER(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ORDER, GncOrder))
+#define GNC_ORDER_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ORDER, GncOrderClass))
+#define GNC_IS_ORDER(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ORDER))
+#define GNC_IS_ORDER_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ORDER))
+#define GNC_ORDER_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ORDER, GncOrderClass))
+GType gnc_order_get_type(void);
 
 /* Create/Destroy Functions */
 

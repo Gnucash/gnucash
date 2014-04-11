@@ -31,10 +31,8 @@
 #include "basiccell.h"
 #include "formulacell.h"
 
-#define LOG_MOD "gnc.register.core.formulacell"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.register.core.formulacell"
 
 static void gnc_formula_cell_init( FormulaCell *fc );
 
@@ -144,7 +142,8 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   gunichar uc;
 
   g_debug("%s, %d, %s, %d, %d, %d, %d",
-          (gchar *)change, change_len, (gchar *)newval, newval_len,
+          change ? (gchar *)change : "(null)", change_len,
+          newval ? (gchar *)newval : "(null)", newval_len,
           *cursor_position, *start_selection, *end_selection);
 
   /* accept the newval string if user action was delete */

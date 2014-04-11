@@ -1,3 +1,0 @@
-int libgsf_major_version = @LIBGSF_MAJOR_VERSION@;	/* The ABI version */
-int libgsf_minor_version = @LIBGSF_MINOR_VERSION@;	/* The API version */
-int libgsf_micro_version = @LIBGSF_MICRO_VERSION@;	/* bug fixes */

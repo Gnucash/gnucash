@@ -26,8 +26,8 @@
 #define GNC_FREQUENCY_H
 
 #include "gnc-date-edit.h"
-#include "Recurrence.h"
 #include "FreqSpec.h"
+#include "Recurrence.h"
 
 #define GNC_TYPE_FREQUENCY	  (gnc_frequency_get_type())
 #define GNC_FREQUENCY(obj)	  G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_FREQUENCY, GncFrequency)
@@ -67,11 +67,9 @@ struct pageDataTuple
 GType gnc_frequency_get_type(void);
 
 /**
- * Create a new GncFrequencey widget, reflecting the given FreqSpec \a fs and
- * starting on \a start_date.  Either or both may be NULL for reasonable
- * defaults.
+ * Either or both param may be NULL for reasonable defaults.
  **/
-GtkWidget* gnc_frequency_new(FreqSpec *fs, GDate *start_date);
+GtkWidget* gnc_frequency_new(GList *recurrences, GDate *start_date);
 GtkWidget* gnc_frequency_new_from_recurrence(GList *recurrences, GDate *start_date);
 
 void gnc_frequency_init(GncFrequency *gf);
@@ -81,7 +79,7 @@ void gnc_frequency_init(GncFrequency *gf);
  * If the FreqSpec is NULL, then no change is made to the widget menus.
  * If the date is NULL, then no change is made to the widget date field.
  **/
-void gnc_frequency_setup(GncFrequency *gf, FreqSpec *fs, GDate *date);
+void gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date);
 void gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *start_date);
 
 /**
@@ -89,7 +87,6 @@ void gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate 
  * Updates the given FreqSpec if it's not NULL.
  * Places the date in outDate, if it's not NULL.
  **/
-void gnc_frequency_save_state(GncFrequency *gf, FreqSpec *fs, GDate *outDate);
 void gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *out_start_date);
 
 /**

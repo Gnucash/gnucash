@@ -140,7 +140,7 @@ void qof_log_init_filename_special(const char *log_to_filename);
     # log.ger.path=level
     gnc.engine.sx=debug
     gnc.gui.sx=debug
-    gnc.gui.freqspec=debug
+    gnc.import-export.qif.parse=debug
     [output]
     # to=["stderr"|"stdout"|filename]
     to=stderr

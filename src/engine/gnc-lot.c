@@ -52,8 +52,26 @@ static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================= */
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_lot, GNCLot, QOF_TYPE_INSTANCE);
+
 static void
-gnc_lot_init (GNCLot *lot, QofBook *book)
+gnc_lot_init(GNCLot* lot)
+{
+}
+
+static void
+gnc_lot_dispose_real (GObject *lotp)
+{
+}
+
+static void
+gnc_lot_finalize_real(GObject* lotp)
+{
+}
+
+static void
+gnc_lot_init_data (GNCLot *lot, QofBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
    lot->account = NULL;
@@ -61,7 +79,7 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->is_closed = -1;
    lot->marker = 0;
   
-   qof_instance_init(&lot->inst, GNC_ID_LOT, book);
+   qof_instance_init_data(&lot->inst, GNC_ID_LOT, book);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
@@ -71,9 +89,9 @@ gnc_lot_new (QofBook *book)
    GNCLot *lot;
    g_return_val_if_fail (book, NULL);
 
-   lot = g_new (GNCLot, 1);
-   gnc_lot_init (lot, book);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_CREATE, NULL);
+   lot = g_object_new (GNC_TYPE_LOT, NULL);
+   gnc_lot_init_data (lot, book);
+   qof_event_gen (&lot->inst, QOF_EVENT_CREATE, NULL);
    return lot;
 }
 
@@ -84,7 +102,7 @@ gnc_lot_destroy (GNCLot *lot)
    if (!lot) return;
    
    ENTER ("(lot=%p)", lot);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_DESTROY, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_DESTROY, NULL);
 
    
    for (node=lot->splits; node; node=node->next)
@@ -96,8 +114,8 @@ gnc_lot_destroy (GNCLot *lot)
    
    lot->account = NULL;
    lot->is_closed = TRUE;
-   qof_instance_release (&lot->inst);
-   g_free (lot);
+   /* qof_instance_release (&lot->inst); */
+   g_object_unref (lot);
 }
 
 /* ============================================================= */
@@ -150,26 +168,26 @@ gnc_lot_is_closed (GNCLot *lot)
 }
 
 Account *
-gnc_lot_get_account (GNCLot *lot)
+gnc_lot_get_account (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return lot->account;
 }
 
 KvpFrame *
-gnc_lot_get_slots (GNCLot *lot)
+gnc_lot_get_slots (const GNCLot *lot)
 {
     return qof_instance_get_slots(QOF_INSTANCE(lot));
 }
 
 SplitList *
-gnc_lot_get_split_list (GNCLot *lot)
+gnc_lot_get_split_list (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return lot->splits;
 }
 
-gint gnc_lot_count_splits (GNCLot *lot)
+gint gnc_lot_count_splits (const GNCLot *lot)
 {
    if (!lot) return 0;
    return g_list_length (lot->splits);
@@ -179,14 +197,14 @@ gint gnc_lot_count_splits (GNCLot *lot)
 /* Hmm, we should probably inline these. */
 
 const char * 
-gnc_lot_get_title (GNCLot *lot)
+gnc_lot_get_title (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return kvp_frame_get_string (lot->inst.kvp_data, "/title");
 }
 
 const char * 
-gnc_lot_get_notes (GNCLot *lot)
+gnc_lot_get_notes (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return kvp_frame_get_string (lot->inst.kvp_data, "/notes");
@@ -254,7 +272,7 @@ gnc_lot_get_balance (GNCLot *lot)
 /* ============================================================= */
 
 void
-gnc_lot_get_balance_before (GNCLot *lot, Split *split,
+gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
                             gnc_numeric *amount, gnc_numeric *value)
 {
    GList *node;
@@ -265,7 +283,7 @@ gnc_lot_get_balance_before (GNCLot *lot, Split *split,
    if (lot && lot->splits)
    {
       Transaction *ta, *tb;
-      Split *target;
+      const Split *target;
       /* If this is a gains split, find the source of the gains and use
          its transaction for the comparison.  Gains splits are in separate
          transactions that may sort after non-gains transactions.  */
@@ -321,11 +339,13 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
             "\tlot account=\'%s\', split account=\'%s\'\n",
             xaccAccountGetName(lot->account), xaccAccountGetName (acc));
       gnc_lot_commit_edit(lot);
+      LEAVE("different accounts");
       return;
    }
 
    if (lot == split->lot) {
         gnc_lot_commit_edit(lot);
+        LEAVE("already in lot");
 	return; /* handle not-uncommon no-op */
    }
    if (split->lot)
@@ -340,7 +360,8 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    lot->is_closed = -1;
    gnc_lot_commit_edit(lot);
 
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
+   LEAVE("added to lot");
 }
 
 void
@@ -361,7 +382,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       lot->account = NULL;
    }
    gnc_lot_commit_edit(lot);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -370,59 +391,25 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 Split *
 gnc_lot_get_earliest_split (GNCLot *lot)
 {
-   SplitList *node;
-   Timespec ts;
-   Split *earliest = NULL;
-
-   ts.tv_sec = ((long long) ULONG_MAX);
-   ts.tv_nsec = 0;
-   if (!lot) return NULL;
-
-   for (node=lot->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      Transaction *trans = s->parent;
-      if (!trans) continue;
-      if ((ts.tv_sec > trans->date_posted.tv_sec) ||
-          ((ts.tv_sec == trans->date_posted.tv_sec) &&
-           (ts.tv_nsec > trans->date_posted.tv_nsec)))
-          
-      {
-         ts = trans->date_posted;
-         earliest = s;
-      }
-   }
-
-   return earliest;
+  if (! lot->splits)
+    return NULL;
+  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitOrderDateOnly);
+  return lot->splits->data;
 }
 
 Split *
 gnc_lot_get_latest_split (GNCLot *lot)
 {
-   SplitList *node;
-   Timespec ts;
-   Split *latest = NULL;
+  SplitList *node;
 
-   ts.tv_sec = 0;
-   ts.tv_nsec = 0;
-   if (!lot) return NULL;
+  if (! lot->splits)
+    return NULL;
+  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitOrderDateOnly);
 
-   for (node=lot->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      Transaction *trans = s->parent;
-      if (!trans) continue;
-      if ((ts.tv_sec < trans->date_posted.tv_sec) ||
-          ((ts.tv_sec == trans->date_posted.tv_sec) &&
-           (ts.tv_nsec < trans->date_posted.tv_nsec)))
-          
-      {
-         ts = trans->date_posted;
-         latest = s;
-      }
-   }
+  for (node = lot->splits; node->next; node = node->next)
+    ;
 
-   return latest;
+  return node->data;
 }
 
 /* ============================================================= */

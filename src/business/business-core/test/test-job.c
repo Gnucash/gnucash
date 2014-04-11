@@ -235,19 +235,13 @@ test_gint_fcn (QofBook *book, const char *message,
 int
 main (int argc, char **argv)
 {
-  qof_log_init();
-  guid_init ();
-  qof_query_init ();
-  qof_object_initialize ();
-  qof_book_register ();
+  qof_init();
   do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
   do_test (gncJobRegister (),  "Cannot register GncJob");
   do_test (gncCustomerRegister(), "Cannot register GncCustomer");
   test_job();
   print_test_results();
-  qof_query_shutdown();
-  guid_shutdown();
-  qof_object_shutdown ();
+  qof_close();
   return 0;
 }
 

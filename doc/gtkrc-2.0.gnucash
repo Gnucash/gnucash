@@ -169,3 +169,29 @@ widget "GncMainWindow.*.header_color"    style : highest "gnc-register-header"
 widget "GncMainWindow.*.primary_color"   style : highest "gnc-register-primary"
 widget "GncMainWindow.*.secondary_color" style : highest "gnc-register-secondary"
 widget "GncMainWindow.*.split_color"     style : highest "gnc-register-split"
+
+
+
+#
+# From: calmar <mac@calmar.ws>
+# Allow changing notebook tabs with vim next/prev keys.
+#
+binding "book" {
+    bind "<Control>k" {
+    "change-current-page" (1)
+   }
+    bind "<Control>j" {
+    "change-current-page" (-1)
+   }
+}
+class "GtkNotebook" binding "book"
+
+#
+# From: calmar <mac@calmar.ws>
+# Use larger disclosure tiangles in all tree views.
+#
+style "wide-tree"
+{
+          GtkTreeView::expander_size = 20
+}
+class "GtkTreeView" style "wide-tree"

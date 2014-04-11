@@ -781,7 +781,7 @@ entry_sixtp_parser_create(void)
 }
 
 static void
-do_count (QofEntity * entry_p, gpointer count_p)
+do_count (QofInstance * entry_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -796,7 +796,7 @@ entry_get_count (QofBook *book)
 }
 
 static void
-xml_add_entry (QofEntity * entry_p, gpointer out_p)
+xml_add_entry (QofInstance * entry_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncEntry *entry = (GncEntry *) entry_p;

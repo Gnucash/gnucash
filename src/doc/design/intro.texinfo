@@ -1,6 +1,11 @@
 @node Introduction, Top Level, GNU Free Documentation License, Top
 @unnumbered Introduction
 
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
 This document defines the design and architecture of the GnuCash
 program, an application for tracking finances. GnuCash is composed
 of several subsystems or modules. This document describes each module,

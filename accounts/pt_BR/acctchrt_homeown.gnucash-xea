@@ -10,6 +10,12 @@
     Deverá selecionar este conjunto de contas caso possua uma habitação própria. Este conjunto disponibiliza um grupo de contas para acompanhar despesas da casa (seguro, impostos, reparos).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Despesas</act:name>
   <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
   <act:type>EXPENSE</act:type>
@@ -18,6 +24,7 @@
     <cmdty:id>BRL</cmdty:id>
   </act:currency>
   <act:description>Despesas</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reparos na Casa</act:name>

@@ -9,24 +9,26 @@
 #include "gnc-module-api.h"
 #include "swig-bar.c"
 
-int gnc_module_system_interface = 0;
+GNC_MODULE_API_DECL(libgncmodbar)
 
-int gnc_module_current = 0;
-int gnc_module_age = 0;
-int gnc_module_revision = 0;
+int libgncmodbar_gnc_module_system_interface = 0;
+
+int libgncmodbar_gnc_module_current = 0;
+int libgncmodbar_gnc_module_age = 0;
+int libgncmodbar_gnc_module_revision = 0;
 
 char *
-gnc_module_path(void) {
+libgncmodbar_gnc_module_path(void) {
   return g_strdup("gnucash/bar");
 }
 
 char *
-gnc_module_description(void) {
+libgncmodbar_gnc_module_description(void) {
   return g_strdup("this is a bar module");
 }
 
 int
-gnc_module_init(int refcount) {
+libgncmodbar_gnc_module_init(int refcount) {
   /* publish the wrapped Scheme bindings for libbar */
   scm_init_sw_bar_module();
   scm_c_eval_string("(use-modules (sw_bar))");

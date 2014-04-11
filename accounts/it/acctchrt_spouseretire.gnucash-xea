@@ -18,6 +18,12 @@
     Selezionare questo insieme di conti se si possiedono degli investimenti in favore del coniuge (azioni, buoni, fondi comuni, fondi indicizzati, interessi, dividendi).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Attività</act:name>
   <act:id type="new">96d9b17add59eb4c7edec7ed241af755</act:id>
   <act:type>ASSET</act:type>
@@ -26,6 +32,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Attività</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investimenti</act:name>

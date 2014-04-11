@@ -10,7 +10,6 @@ NONGUI_SUBDIRS = \
   quotes
 
 GUI_SUBDIRS_1 = \
-  network-utils \
   calculation \
   tax \
   app-utils \

@@ -514,7 +514,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
   /* Visual feedback on what the date will look like. */
   secs_now = time(NULL);
   localtime_r(&secs_now, &today);
-  strftime(date_string, MAX_DATE_LEN, format, &today);
+  qof_strftime(date_string, MAX_DATE_LEN, format, &today);
   gtk_label_set_text(GTK_LABEL(priv->sample_label), date_string);
   g_free(format);
 }

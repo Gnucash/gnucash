@@ -137,6 +137,7 @@ typedef struct
         GtkWidget *hscrollbar;
         GtkWidget *sheet;
         GtkWidget *header_canvas;
+        gboolean  hscrollbar_visible;
 } GnucashRegister;
 
 

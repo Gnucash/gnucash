@@ -41,6 +41,8 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
+#define GCONF_SECTION "dialogs/import/generic_matcher/account_matcher"
+
 /*-******************************************************************\
  *   Structs   *
 \********************************************************************/
@@ -80,15 +82,15 @@ build_acct_tree(struct _accountpickerdialog * picker)
 					_("Account ID"), "online_id");
   g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-  col = gnc_tree_view_find_column_by_name(
-      GNC_TREE_VIEW(picker->account_tree), "type");
-  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
   gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
 		    GTK_WIDGET(picker->account_tree));
 
   /* Configure the columns */
   gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));
+  g_object_set(account_tree,
+               "gconf-section", GCONF_SECTION,
+               "show-column-menu", TRUE,
+               (gchar*) NULL);
 }
 
 /* When user clicks to create a new account */
@@ -152,6 +154,7 @@ Account * gnc_import_select_account(gncUIWidget parent,
   struct _accountpickerdialog * picker;
   gint response;
   Account * retval = NULL;
+  const gchar *retval_name = NULL;
   GladeXML *xml;
   GtkWidget * online_id_label, *button;
   gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
@@ -225,7 +228,9 @@ Account * gnc_import_select_account(gncUIWidget parent,
 	switch (response) {
 	 case GTK_RESPONSE_OK:
 	  retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
-	  DEBUG("Selected account %p, %s", retval, xaccAccountGetName(retval));
+	  retval_name = xaccAccountGetName(retval);
+	  DEBUG("Selected account %p, %s", retval,
+		retval_name ? retval_name : "(null)");
 
 	  /* See if the selected account is a placeholder. */
 	  if (xaccAccountGetPlaceholder (retval)) {
@@ -233,7 +238,7 @@ Account * gnc_import_select_account(gncUIWidget parent,
 	      (picker->dialog,
 	       _("The account %s is a placeholder account and does not allow "
 		 "transactions. Please choose a different account."),
-	       xaccAccountGetName (retval));
+	       retval_name ? retval_name : "(null)");
 	    response = GNC_RESPONSE_NEW;
 	    break;
 	  }
@@ -256,6 +261,7 @@ Account * gnc_import_select_account(gncUIWidget parent,
     }
   else
     {
+      retval_name = xaccAccountGetName(retval);
       ok_pressed_retval=TRUE; /* There was no dialog involved, so the computer "pressed" ok */
     }   
   /*FIXME: DEBUG("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); */
@@ -265,7 +271,7 @@ Account * gnc_import_select_account(gncUIWidget parent,
     {
       *ok_pressed=ok_pressed_retval;
     }
-  LEAVE("Selected account %p, %s", retval, xaccAccountGetName(retval));
+  LEAVE("Selected account %p, %s", retval, retval_name ? retval_name : "(null)");
   return retval;
 }
 /**@}*/

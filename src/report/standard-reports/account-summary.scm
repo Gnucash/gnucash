@@ -502,7 +502,7 @@
   )
 
 (gnc:define-report 
- 'version 2
+ 'version 1
  'name reportname
  'options-generator accsum-options-generator
  'renderer accsum-renderer)

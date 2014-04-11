@@ -192,18 +192,18 @@ foreach (@files)
 
 		s/GNCIdTypeConst/QofIdTypeConst/g;
 		s/GNCIdType/QofIdType/g;
-		s/GNCEntityTable/QofEntityTable/g;
+		s/GNCEntityTable/QofInstanceTable/g;
 		s/xaccGUIDTypeEntityTable/qof_guid_type/g;
 
-		s/xaccEntityTableNew/qof_entity_new/g;
-		s/xaccEntityTableDestroy/qof_entity_destroy/g;
-		s/xaccGUIDNewEntityTable/qof_entity_guid_new/g;
-		s/xaccLookupEntity/qof_entity_lookup/g;
-		s/xaccStoreEntity/qof_entity_store/g;
-		s/xaccRemoveEntity/qof_entity_remove/g;
-		s/xaccForeachEntity/qof_entity_foreach/g;
+		s/xaccEntityTableNew/qof_instance_new/g;
+		s/xaccEntityTableDestroy/qof_instance_destroy/g;
+		s/xaccGUIDNewEntityTable/qof_instance_guid_new/g;
+		s/xaccLookupEntity/qof_instance_lookup/g;
+		s/xaccStoreEntity/qof_instance_store/g;
+		s/xaccRemoveEntity/qof_instance_remove/g;
+		s/xaccForeachEntity/qof_instance_foreach/g;
 
-		s/foreachObjectCB/QofEntityForeachCB/g;
+		s/foreachObjectCB/QofInstanceForeachCB/g;
 		s/GNC_OBJECT_VERSION/QOF_OBJECT_VERSION/g;
 
 		s/GNCSession/QofSession/g;

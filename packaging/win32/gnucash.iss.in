@@ -13,14 +13,19 @@ AppPublisher=GnuCash Development Team
 AppPublisherURL=http://www.gnucash.org
 AppSupportURL=http://www.gnucash.org
 AppUpdatesURL=http://www.gnucash.org
+VersionInfoVersion=@VERSION@
 DefaultDirName={pf}\@PACKAGE@
 DefaultGroupName=GnuCash
 LicenseFile=@prefix@\..\dist\share\@PACKAGE@\doc\COPYING
 Compression=lzma
+MinVersion=5.0,5.0
+PrivilegesRequired=poweruser
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
 UninstallFilesDir={app}\uninstall\@PACKAGE@
-InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README
+InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt
+SetupIconFile=@prefix@\..\dist\share\@PACKAGE@\pixmaps\gnucash-icon.ico
+WizardSmallImageFile=@prefix@\..\dist\share\@PACKAGE@\pixmaps\gnucash-icon-48x48.bmp
 
 [Types]
 Name: "full"; Description: "{cm:FullInstall}"
@@ -36,13 +41,26 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm
 Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Icons]
-Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon
-Name: "{group}\Uninstall GnuCash"; Filename: "{uninstallexe}"; Tasks: menuicon
-Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon; Flags: runminimized
+Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\gnucash\{cm:IconFilename_README}"; Comment: "{cm:IconComment_README}"; Tasks: menuicon
+Name: "{group}\{cm:IconName_FAQ}"; Filename: "http://wiki.gnucash.org/wiki/FAQ"; Tasks: menuicon
+Name: "{group}\{cm:IconName_Bugzilla}"; Filename: "http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash"; Tasks: menuicon
+Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
+Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{cm:IconComment_Uninstall}"; Tasks: menuicon
+
+Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
 
 [Run]
-Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; Flags: postinstall skipifsilent
+Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
 Filename: "{app}\bin\guile.bat"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
+;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
+Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash-bin.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
+Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gconfd-2.exe"" ""GConf Settings Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
+
+[UninstallRun]
+Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidden
+Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gnucash-bin.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
+Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gconfd-2.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Here we configure the included files and the place of their
@@ -50,7 +68,7 @@ Filename: "{app}\bin\guile.bat"; Parameters: "-c ""(use-modules (ice-9 slib)) (r
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Files]
 ; The main executables and DLLs
-Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallConfig()
+Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs ignoreversion; Components: main; AfterInstall: MyAfterInstallConfig()
 ; Note: The above AfterInstall function will create the 
 ; gnucash.bat file on-the-fly by the Pascal script below.
 
@@ -58,6 +76,17 @@ Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; C
 Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
+
+; Additionally, we ship the Qt DLLs because the Online-Banking-Wizard
+; lib/aqbanking/plugins/16/wizards/qt3-wizard.exe needs them.
+Source: "@-qtbindir-@\QtCore4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtGui4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\mingwm10.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+; The following are all needed by Qt3Support
+Source: "@-qtbindir-@\Qt3Support4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtXml4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtSql4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtNetwork4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 
 ;; The translations (no idea why mingw installs them in prefix/lib/locale)
 ;Source: "@prefix@\..\dist\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
@@ -67,45 +96,48 @@ Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdir
 
 ; And all the documentation
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Define the registry keys Setup should create (HKCU = HKEY_CURRENT_USER)
+; Define the registry keys Setup should create (HKLM = HKEY_LOCAL_MACHINE)
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Registry]
-Root: HKCU; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash"; ValueType: string; ValueName: "InstallationDirectory"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
 
 ; Additionally, we have to install the paths for gwenhywfar
-Root: HKCU; Subkey: "Software\Gwenhywfar"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "plugindir"; ValueData: "{app}\lib\gwenhywfar\plugins\38"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Gwenhywfar"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "plugindir"; ValueData: "{app}\lib\gwenhywfar\plugins\38"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
 
 ; And we also need some registry keys for aqbanking
-Root: HKCU; Subkey: "Software\Aqbanking"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "providerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\providers"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "bankinfodir"; ValueData: "{app}\lib\aqbanking\plugins\16\bankinfo"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "importerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\imexporters"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "pkgdatadir"; ValueData: "{app}\share\aqbanking"; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
-
-; And even one for aqhbci
-Root: HKCU; Subkey: "Software\AqHbci"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: string; ValueName: "xmldatadir"; ValueData: "{app}\share\aqhbci\xml"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "providerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\providers"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "bankinfodir"; ValueData: "{app}\lib\aqbanking\plugins\16\bankinfo"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "importerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\imexporters"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "wizarddir"; ValueData: "{app}\lib\aqbanking\plugins\16\wizards"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "pkgdatadir"; ValueData: "{app}\share\aqbanking"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\lib\locale"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "xmldatadir"; ValueData: "{app}\share\aqhbci\xml"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "cfgmoduledir"; ValueData: "{app}\lib\aqbanking\plugins\16\frontends\qbanking\cfgmodules"; Flags: uninsdeletevalue
 
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -152,12 +184,14 @@ begin
 
   { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
   FileName := appdir + '\bin\gnucash.bat' ;
-  FileString := 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
+  FileString := 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
+  FileString := FileString + 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
 
   FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
   FileString := FileString + 'set GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
   FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
   FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
+  FileString := FileString + 'set QOF_LIB_DIR=' + pkglibdir + ''#13#10 ;
   FileString := FileString + 'start gnucash-bin'#13#10 ;
 
   { Save the final file }
@@ -177,8 +211,14 @@ end;
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"
-Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
+Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
+
+;; The following language files are available as well, in alphabetical
+;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
+;; Finnish, Hungarian, Italian, Norwegian, Polish, Portuguese,
+;; Russian, Slovak, Slovenian, Spanish
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; These are only for improved text messages
@@ -193,10 +233,32 @@ CreateDesktopIcon=Create a &desktop icon
 CreateMenuLink=Create a start menu link
 RunPrg=Run GnuCash now
 AdditionalIcons=Create these icons:
+StatusMsgFirewall=Installing Windows firewall rules...
 
 MainFiles=GnuCash Program
 TranslFiles=Translation Files
 TemplFiles=Account Template Files
+
+IconComment_GnuCash=GnuCash Free Finance Manager
+IconName_README=Show README
+IconComment_README=Show the README file
+IconFilename_README=README.win32-bin.txt
+IconName_FAQ=FAQ (Online)
+IconName_Bugzilla=Report a Bug (Online)
+IconName_InstallFQ=Install Online Price Retrieval
+IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online retrieval of prices.  Requires ActivePerl 5.8
+IconName_Uninstall=Uninstall GnuCash
+IconComment_Uninstall=Uninstall the Finance Manager GnuCash
+
+;; List of Code pages, used in gnucash.bat
+LanguageCodePage=1252
+de.LanguageCodePage=1252
+el.LanguageCodePage=1253
+fr.LanguageCodePage=1252
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
+;; German translation
 
 de.FullInstall=Komplett-Installation
 de.CustomInstall=Benutzerdefiniert
@@ -204,7 +266,75 @@ de.CreateDesktopIcon=Ein Icon auf dem Desktop erstellen
 de.CreateMenuLink=Eine Verknόpfung im Startmenό erstellen
 de.RunPrg=GnuCash jetzt starten
 de.AdditionalIcons=Folgende Icons erstellen:
+de.StatusMsgFirewall=Ausnahmen fόr Windows-Firewall installieren...
 
 de.MainFiles=GnuCash Hauptprogramm
 de.TranslFiles=Deutsche άbersetzung
 de.TemplFiles=Beispiel-Kontenrahmen
+
+de.IconComment_GnuCash=GnuCash OpenSource-Finanzverwaltung
+de.IconName_README=README anzeigen
+de.IconComment_README=Die Informationsdatei (README) anzeigen
+de.IconFilename_README=README-de.win32-bin.txt
+de.IconName_FAQ=Hδufige Fragen (online, engl.)
+de.IconName_Bugzilla=Fehlerbericht einsenden (online, engl.)
+de.IconName_InstallFQ=Online Kursabruf installieren
+de.IconComment_InstallFQ=Das zusδtzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu kφnnen.  Dazu ist das Programm ActivePerl 5.8 erforderlich.
+de.IconName_Uninstall=Deinstallieren von GnuCash
+de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer lφschen
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
+;; French translation
+
+fr.FullInstall=Installation complθte
+fr.CustomInstall=Installation personnalisιe
+fr.CreateDesktopIcon=Crιer un icτne sur le bureau
+fr.CreateMenuLink=Crιer un lien dans le menu de dιmarrage
+fr.RunPrg=Dιmarrer GnuCash maintenant
+fr.AdditionalIcons=Crιer les icτnes suivants:
+fr.StatusMsgFirewall=Installation des rθgles de pare-feu de Windows
+
+fr.MainFiles=Programme GnuCash
+fr.TranslFiles=Traduction franηaise
+fr.TemplFiles=Modθle de plan comptable
+
+fr.IconComment_GnuCash=GnuCash, le gestionnaire financier OpenSource
+fr.IconName_README=Afficher le LISEZMOI
+fr.IconComment_README=Afficher le fichier LISEZMOI
+fr.IconFilename_README=README-fr.win32-bin.txt
+fr.IconName_FAQ=FAQ (En ligne, en anglais)
+fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
+fr.IconName_InstallFQ=Installer les quotations en ligne
+fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le tιlιchargement du cours des devises et actions. Le programme ActivePerl 5.8 est aussi requis
+fr.IconName_Uninstall=Dι-installer GnuCash
+fr.IconComment_Uninstall=Dιsinstalle le gestionnaire financier GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
+;; Greek translation
+
+el.FullInstall=Πλήρης εγκατάσταση
+el.CustomInstall=Προσαρμοσμένη εγκατάσταση
+el.CreateDesktopIcon=Δημιουργία εικονιδίου στην επιφάνεια εργασίας
+el.CreateMenuLink=Προσθήκη στο μενού Έναρξη
+el.RunPrg=Εκτέλεση του GnuCash τώρα
+el.AdditionalIcons=Δημιουργία εικονιδίων:
+el.StatusMsgFirewall=Εγκατάσταση κανόνων για το τοίχος προστασίας των Windows...
+
+el.MainFiles=Πρόγραμμα GnuCash
+el.TranslFiles=Αρχεία μετάφρασεων
+el.TemplFiles=Αρχεία με πρότυπα λογαριασμών
+
+el.IconComment_GnuCash=GnuCash πρόγραμμα διαχ. οικονομικών
+el.IconName_README=Εμφάνιση του README
+el.IconComment_README=Εμφάνιση του αρχείου README
+el.IconFilename_README=README.win32-bin.txt
+el.IconName_FAQ=Συχνές ερωτήσεις (Online)
+el.IconName_Bugzilla=Αναφορά σφάλματος (Online)
+el.IconName_InstallFQ=Εγκατάσταση λήψης τιμών (online)
+el.IconComment_InstallFQ=Εγκατάσταση του perl module Finance-Quote για λήψη τιμών online.  Απαιτεί ActivePerl 5.8
+el.IconName_Uninstall=Απεγκατάσταση GnuCash
+el.IconComment_Uninstall=Απεγκατάσταση του διαχειριστή οικονομικών GnuCash
+
+;; ;;;;;;;;;;;;;;;;;;;;

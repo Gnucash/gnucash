@@ -482,7 +482,7 @@ billterm_sixtp_parser_create(void)
 }
 
 static void
-do_count (QofEntity *term_p, gpointer count_p)
+do_count (QofInstance *term_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -497,7 +497,7 @@ billterm_get_count (QofBook *book)
 }
 
 static void
-xml_add_billterm (QofEntity *term_p, gpointer out_p)
+xml_add_billterm (QofInstance *term_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncBillTerm *term = (GncBillTerm *) term_p;
@@ -556,7 +556,7 @@ billterm_find_senior (GncBillTerm *term)
 
 /* build a list of bill terms that are grandchildren or bogus (empty entry list). */
 static void
-billterm_scrub_cb (QofEntity *term_p, gpointer list_p)
+billterm_scrub_cb (QofInstance *term_p, gpointer list_p)
 {
   GncBillTerm *term = GNC_BILLTERM(term_p);
   GList **list = list_p;
@@ -590,7 +590,7 @@ billterm_scrub_cb (QofEntity *term_p, gpointer list_p)
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-billterm_scrub_invoices (QofEntity * invoice_p, gpointer ht_p)
+billterm_scrub_invoices (QofInstance * invoice_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
   GncInvoice *invoice = GNC_INVOICE(invoice_p);
@@ -617,7 +617,7 @@ billterm_scrub_invoices (QofEntity * invoice_p, gpointer ht_p)
 }
 
 static void
-billterm_scrub_cust (QofEntity * cust_p, gpointer ht_p)
+billterm_scrub_cust (QofInstance * cust_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
   GncCustomer *cust = GNC_CUSTOMER(cust_p);
@@ -637,7 +637,7 @@ billterm_scrub_cust (QofEntity * cust_p, gpointer ht_p)
 }
 
 static void
-billterm_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
+billterm_scrub_vendor (QofInstance * vendor_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
   GncVendor *vendor = GNC_VENDOR(vendor_p);

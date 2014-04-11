@@ -100,6 +100,11 @@ void gnc_scm_log_error(const gchar *msg);
 void gnc_scm_log_msg(const gchar *msg);
 void gnc_scm_log_debug(const gchar *msg);
 
+/** Kill a process.  On UNIX send a SIGKILL, on Windows call TerminateProcess.
+ *
+ *  @param pid The process ID. */
+void gnc_gpid_kill(GPid pid);
+
 /** @} */
 
 #endif /* GNC_GLIB_UTILS_H */

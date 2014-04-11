@@ -753,8 +753,12 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 		box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
 	else
 		box->item_list = gnc_item_edit_new_list(box->item_edit, box->tmp_store);
+#ifdef HAVE_GTK_2_10
+        g_object_ref_sink(box->item_list);
+#else
 	g_object_ref (box->item_list);
 	gtk_object_sink (GTK_OBJECT(box->item_list));
+#endif
 
 	/* to mark cell as realized, remove the realize method */
 	cell->cell.gui_realize = NULL;

@@ -1,8 +1,9 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
-# Set ${srcdir} to .
-: ${srcdir=.}
+if test -z "$srcdir" ; then srcdir=`dirname $0` ; fi
+if test -z "$srcdir" ; then srcdir=.            ; fi
+cd $srcdir
 
 DIE=0
 
@@ -190,13 +191,11 @@ esac
 # All programs are available. So now actually call them in the
 # required order.
 
-dr=${srcdir}
-
 echo "Creating $dr/po/POTFILES.in ..."
-test -r $dr/po/POTFILES.in || touch $dr/po/POTFILES.in
+test -r po/POTFILES.in || touch po/POTFILES.in
 
 echo "Creating $dr/aclocal.m4 ..."
-test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+test -r aclocal.m4 || touch aclocal.m4
 
 echo "Running ${GLIB_GETTEXTIZE} --force --copy ...  "
 echo "GnuCash note: Please ignore the output of ${GLIB_GETTEXTIZE} below!"
@@ -204,11 +203,11 @@ echo "no" | ${GLIB_GETTEXTIZE} --force --copy
 echo "GnuCash note: Please ignore the output of ${GLIB_GETTEXTIZE} above!"
 echo
 
-echo "Ensure $dr/aclocal.m4 is writable ..."
-test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+echo "Ensure aclocal.m4 is writable ..."
+test -r aclocal.m4 && chmod u+w aclocal.m4
 
-echo "Ensure $dr/po/POTFILES.in is writable ..."
-test -r $dr/po/POTFILES.in && chmod u+w $dr/po/POTFILES.in
+echo "Ensure po/POTFILES.in is writable ..."
+test -r po/POTFILES.in && chmod u+w po/POTFILES.in
 
 echo "Running ${INTLTOOLIZE} --force --copy ..."
 ${INTLTOOLIZE} --force --copy || \

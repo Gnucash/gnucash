@@ -531,8 +531,8 @@ timespec_secs_to_given_string (const Timespec *ts, gchar *str)
   if (!localtime_r(&tmp_time, &parsed_time))
     return FALSE;
 
-  num_chars = strftime(str, TIMESPEC_SEC_FORMAT_MAX,
-                       TIMESPEC_TIME_FORMAT, &parsed_time);
+  num_chars = qof_strftime(str, TIMESPEC_SEC_FORMAT_MAX,
+                           TIMESPEC_TIME_FORMAT, &parsed_time);
   if (num_chars == 0)
     return FALSE;
 

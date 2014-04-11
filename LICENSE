@@ -1,3 +1,36 @@
+This software is provided under a mutually-compatible set of licenses.
+
+The software, for most intents and purposes, is licensed under the GNU
+General Public License, Version 2.
+
+Almost all of the source files are licensed under the GNU GPL, Version 2,
+"or (at your option) any later version".  However, some of the source files
+are licensed under Version 2 of the GNU GPL specifically.
+
+Some of the source files have an exception for linking against OpenSSL, as
+per the following language:
+
+    As  a special exception,  permission is  granted to  link the
+    binary  module  resultant from  this  code  with the  OpenSSL
+    project's "OpenSSL" library (or  modified versions of it that
+    use  the   same  license  as  the   "OpenSSL"  library),  and
+    distribute  the linked  executable.   You must  obey the  GNU
+    General Public  License in all  respects for all of  the code
+    used other than  "OpenSSL". If you modify this  file, you may
+    extend this  exception to your  version of the file,  but you
+    are not  obligated to  do so. If  you do  not wish to  do so,
+    delete  this exception  statement from  your version  of this
+    file.
+
+Some of the source files are in the public domain.
+
+Please see the individual source files for their specific licensing.
+
+The text of the GNU GPL is below.
+
+------------------------------------------------------------
+
+
 		    GNU GENERAL PUBLIC LICENSE
 		       Version 2, June 1991
 

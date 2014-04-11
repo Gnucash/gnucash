@@ -344,7 +344,7 @@ typedef struct qsf_metadata
 	gint count;                  /**< sequential counter for each object in the book */
 	GList *qsf_object_list;      /**< list of qsf_objects */
 	GSList *qsf_sequence;        /**< Parameter list sorted into QSF order */
-	GList *referenceList;        /**< Table of references, ::QofEntityReference. */
+	GList *referenceList;        /**< Table of references, ::QofInstanceReference. */
 	GHashTable *qsf_parameter_hash; /**< Hashtable of parameters for each object */
 	GHashTable *qsf_calculate_hash, *qsf_default_hash, *qsf_define_hash;
 	GSList *supported_types;     /**< The list of QOF types currently supported, in QSF order. */
@@ -362,7 +362,7 @@ typedef struct qsf_metadata
 	QofIdType qof_obj_type;	     /**< current QofObject type (e_type) for the parameters. */
 	QofIdType qof_foreach;       /**< How to iterate over hierarchical entities. */
 	gint foreach_limit;          /**< How many iterations are found in the QSF */
-	QofEntity *qsf_ent;          /**< Current entity in the book. */
+	QofInstance *qsf_ent;          /**< Current entity in the book. */
 	QofBackend *be;              /**< the current QofBackend for this operation. */
 	gboolean knowntype;          /**< detect references by comparing with known QOF types. */
 	QofParam *qof_param;         /**< used by kvp to handle the frame hash table */

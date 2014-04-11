@@ -52,7 +52,7 @@ qsf_date_default_handler(const gchar *default_name, GHashTable *qsf_default_hash
 	xmlNewProp(output_parent, BAD_CAST QSF_OBJECT_TYPE,
 		xmlGetProp(import_node, BAD_CAST MAP_VALUE_ATTR));
 	qsf_time = (time_t*)g_hash_table_lookup(qsf_default_hash, default_name);
-	strftime(date_as_string, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(qsf_time));
+	qof_strftime(date_as_string, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(qsf_time));
 	xmlNodeAddContent(output_parent, BAD_CAST date_as_string);
 }
 
@@ -569,7 +569,7 @@ qsf_set_format_value(xmlChar *format, gchar *qsf_time_now_as_string,
 	regfree(&reg);
 	/** QSF_DATE_LENGTH preset for all internal and QSF_XSD_TIME string formats.
 	 */
-	strftime(qsf_time_now_as_string, QSF_DATE_LENGTH, (char*)format, gmtime(output));
+	qof_strftime(qsf_time_now_as_string, QSF_DATE_LENGTH, (char*)format, gmtime(output));
 	LEAVE (" ok");
 }
 

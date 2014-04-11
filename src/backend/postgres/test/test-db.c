@@ -759,7 +759,7 @@ test_trans_update(Transaction * trans, gpointer data)
 
     ok = xaccTransEqual(trans, trans_2, TRUE, TRUE, TRUE, FALSE);
     if (trans && trans_2)
-        ok = ok && (trans->version == trans_2->version);
+      ok = ok && (qof_instance_compare_version(trans, trans_2));
 
     /*
        ok = ok && (qof_session_get_error (td->session_2) == ERR_BACKEND_MODIFIED);

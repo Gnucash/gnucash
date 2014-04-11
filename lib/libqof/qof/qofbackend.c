@@ -388,6 +388,7 @@ qof_load_backend_library (const char *directory, const char* module_name)
 {
 	gchar *fullpath;
 	GModule *backend;
+	void (*module_init_func) (void);
 
 	g_return_val_if_fail(g_module_supported(), FALSE);
 	fullpath = g_module_build_path(directory, module_name);
@@ -396,8 +397,10 @@ qof_load_backend_library (const char *directory, const char* module_name)
 		g_message ("%s: %s\n", PACKAGE, g_module_error ());
 		return FALSE;
 	}
+	if (g_module_symbol(backend, "qof_backend_module_init",
+			    (gpointer)&module_init_func))
+		module_init_func();
 
-	/* the module should have done that already in g_module_check_init */
 	g_module_make_resident(backend);
 	return TRUE;
 }

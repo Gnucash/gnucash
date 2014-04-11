@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_SYS_WAIT_H
-# include <sys/wait.h>
+#    include <sys/wait.h>
 #endif
 #include <fcntl.h>
 #include <unistd.h>
@@ -48,12 +48,14 @@
 #include "gnc-html.h"
 //#include "import-account-matcher.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 
 #include <aqbanking/banking.h>
 #include <aqbanking/version.h>
 #include <gwenhywfar/stringlist.h>
 #include <gwenhywfar/version.h>
 
+#define DRUID_HBCI_IMPORT_CM_CLASS "druid-hbci-import"
 /* #define DEFAULT_HBCI_VERSION 201 */
 
 enum account_list_cols {
@@ -111,6 +113,8 @@ static void
 delete_initial_druid (HBCIInitialInfo *info)
 {
   if (info == NULL) return;
+
+  gnc_unregister_gui_component_by_data(DRUID_HBCI_IMPORT_CM_CLASS, info);
 
   reset_initial_info (info);
   
@@ -279,8 +283,7 @@ static gboolean banking_has_accounts(AB_BANKING *banking)
 
 
 static void
-on_cancel (GnomeDruid *gnomedruid,
-	   gpointer user_data)
+cm_close_handler(gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
 
@@ -288,6 +291,13 @@ on_cancel (GnomeDruid *gnomedruid,
   /* probably not saving because of 'cancel', but for now we save too */
   gnc_AB_BANKING_fini (info->api);
   delete_initial_druid(info);
+}
+
+static void
+on_cancel (GnomeDruid *gnomedruid,
+	   gpointer user_data)
+{
+  cm_close_handler(user_data);
 }
 
 static void
@@ -448,6 +458,7 @@ on_aqhbci_button (GtkButton *button,
      https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html
   */
   gboolean wizard_exists;
+  gboolean qt_probably_unavailable = FALSE;
   const char *wizard_path;
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
@@ -501,13 +512,15 @@ on_aqhbci_button (GtkButton *button,
 
       /* User pressed cancel in choice dialog */
       if (x == -1) {
-	GWEN_PluginDescription_List2_freeAll(pluginlist);
+	if (pluginlist)
+	  GWEN_PluginDescription_List2_freeAll(pluginlist);
 #if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
      ((GWENHYWFAR_VERSION_MAJOR == 1) && \
       ((GWENHYWFAR_VERSION_MINOR < 98))))
 	/* Memory cleanup needed for gwenhywfar<1.98.x but not for
 	   gwenhywfar>=1.98.x */
-	GWEN_PluginDescription_List2_free(pluginlist);
+	if (pluginlist)
+	  GWEN_PluginDescription_List2_free(pluginlist);
 #endif
 	return;
       }
@@ -526,13 +539,15 @@ on_aqhbci_button (GtkButton *button,
   /* Allocate the backend name again because the PluginDescr list will
      be freed */
   backend_name = g_strdup (backend_name_nc);
-  GWEN_PluginDescription_List2_freeAll (pluginlist);
+  if (pluginlist)
+    GWEN_PluginDescription_List2_freeAll (pluginlist);
 #if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
      ((GWENHYWFAR_VERSION_MAJOR == 1) && \
       ((GWENHYWFAR_VERSION_MINOR < 98))))
   /* Memory cleanup needed for gwenhywfar<1.98.x but not for
      gwenhywfar>=1.98.x */
-  GWEN_PluginDescription_List2_free (pluginlist);
+  if (pluginlist)
+    GWEN_PluginDescription_List2_free (pluginlist);
 #endif
   }
 
@@ -557,11 +572,33 @@ on_aqhbci_button (GtkButton *button,
       close( fd );
   }
 
+#ifdef G_OS_WIN32
+  {
+    const char *check_file = "qtdemo.exe";
+    gchar *found_program = g_find_program_in_path(check_file);
+    if (found_program) {
+      g_debug("Yes, we found the Qt demo program in %s\n", found_program);
+      g_free(found_program);
+    } else {
+      g_warning("Ouch, no Qt demo program was found. Qt not installed?\n");
+      qt_probably_unavailable = TRUE;
+    }
+  }
+#endif
+
   druid_disable_next_button(info);
   /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
     /* Call the qt wizard. See the note above about why this approach
        is chosen. */
+
+#if ((AQBANKING_VERSION_MAJOR == 2) && \
+     (AQBANKING_VERSION_MINOR >= 3))
+    /* With aqbanking>=2.3.0, we can directly activate all backends
+       here. Reduces user confusion. But in aqbanking-3.x this won't
+       be needed anymore. */
+    AB_Banking_ActivateAllProviders (info->api);
+#endif
 
     /* Reset existing mapping tables */
     AB_Banking_Fini (info->api);
@@ -580,6 +617,11 @@ on_aqhbci_button (GtkButton *button,
       spawned = g_spawn_async (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
 			       NULL, NULL, &pid, &error);
       g_free (argv[0]);
+
+      if (error)
+	g_critical("Error on starting AqBanking setup wizard: Code %d: %s",
+		   error->code,
+		   error->message ? error->message : "(null)");
 
       if (!spawned) {
 	g_critical("Could not start AqBanking setup wizard: %s",
@@ -612,6 +654,24 @@ on_aqhbci_button (GtkButton *button,
       }
     }
     else {
+      if (qt_probably_unavailable) {
+	g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
+	gnc_error_dialog
+	  (info->window,
+	   _("The external program \"AqBanking Setup Wizard\" failed "
+	     "to run successfully because the "
+	     "additional software \"Qt\" was not found.  "
+	     "Please install the \"Qt/Windows Open Source Edition\" "
+	     "from Trolltech by downloading it from www.trolltech.com"
+	     "\n\n"
+	     "If you have installed Qt already, you will have to adapt "
+	     "the PATH variable of your system appropriately.  "
+	     "Contact the GnuCash developers if you need further "
+	     "assistance on how to install Qt correctly."
+	     "\n\n"
+	     "Online Banking cannot be setup without Qt.  Press \"Close\" "
+	     "now, then \"Cancel\" to cancel the Online Banking setup."));
+      } else {
       g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
       gnc_error_dialog
 	(info->window,
@@ -619,13 +679,13 @@ on_aqhbci_button (GtkButton *button,
 	   "to run successfully.  Online Banking can only be setup "
 	   "if this wizard has run successfully.  "
 	   "Please try running the \"AqBanking Setup Wizard\" again."));
+      }
       druid_disable_next_button(info);
     }
   } else {
     g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
     gnc_error_dialog
       (info->window,
-       /* Each of the %s is the name of the backend, e.g. "aqhbci". */
        _("The external program \"AqBanking Setup Wizard\" has not "
 	 "been found. \n\n"
 	 "The aqbanking package should include the "
@@ -650,6 +710,7 @@ void gnc_hbci_initial_druid (void)
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
+  gint component_id;
   
   info = g_new0 (HBCIInitialInfo, 1);
 
@@ -719,6 +780,10 @@ void gnc_hbci_initial_druid (void)
 		      G_CALLBACK (on_accountlist_prepare), info);
   }
 
+  component_id = gnc_register_gui_component(DRUID_HBCI_IMPORT_CM_CLASS,
+					    NULL, cm_close_handler,
+					    info);
+  gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
   /*g_signal_connect (dialog, "destroy",*/
   /*                  G_CALLBACK(gnc_hierarchy_destroy_cb), NULL);*/

@@ -104,10 +104,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
     NULL,
     G_CALLBACK (gnc_main_window_cmd_file_save_as) },
+#ifdef QSF_IMPORT_WORKS
   { "FileImportQSFAction", GTK_STOCK_CONVERT,
     N_("_QSF Import"), NULL,
     N_("Import a QSF object file"),
     G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
+#endif // QSF_IMPORT_WORKS
   { "FileExportAccountsAction", GTK_STOCK_CONVERT,
     N_("Export _Accounts"), NULL,
     N_("Export the account hierarchy to a new GnuCash datafile"),
@@ -138,9 +140,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+#ifdef CLOSE_BOOKS_ACTUALLY_WORKS
   { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
+#endif // CLOSE_BOOKS_ACTUALLY_WORKS
 
   /* Tools menu */
 
@@ -372,6 +376,8 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
     error_message = qof_session_get_error_message(qsf_session);
     if (!error_message)
 	error_message = "";
+    /* Translators: %d is the error number; %s is the error message as
+       text. */
     message = g_strdup_printf(_("Error: Loading failed, error code %d - %s."), err, error_message);
     PERR("%s", message);
     qof_session_destroy(qsf_session);
@@ -448,19 +454,21 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
   GncMainWindow *window;
   GncSxInstanceModel *sx_instances;
   GncSxSummary summary;
+  GList *auto_created_txns = NULL;
   const char *nothing_to_do_msg =
     _( "There are no Scheduled Transactions to be entered at this time." );
 	
   g_return_if_fail (data != NULL);
 
   window = data->window;
-  
+
   sx_instances = gnc_sx_get_current_instances();
   gnc_sx_instance_model_summarize(sx_instances, &summary);
-  gnc_sx_instance_model_effect_change(sx_instances, TRUE, NULL, NULL);
+  gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
   if (summary.need_dialog)
   {
-    gnc_ui_sx_since_last_run_dialog(sx_instances);
+    gnc_ui_sx_since_last_run_dialog(sx_instances, auto_created_txns);
+    auto_created_txns = NULL;
   }
   else
   {
@@ -481,6 +489,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
                       summary.num_auto_create_no_notify_instances);
     }
   }
+  g_list_free(auto_created_txns);
   g_object_unref(G_OBJECT(sx_instances));
 }
 

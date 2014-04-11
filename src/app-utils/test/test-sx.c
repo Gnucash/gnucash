@@ -35,8 +35,8 @@ test_basic()
 
           do_test(g_list_length(model->sx_instance_list) == 1, "1 GncSxInstances");
           insts = (GncSxInstances*)model->sx_instance_list->data;
-          do_test(g_list_length(insts->list) == 3, "yesterday, today and tomorrow");
-          for (iter = insts->list; iter != NULL; iter = iter->next)
+          do_test(g_list_length(insts->instance_list) == 3, "yesterday, today and tomorrow");
+          for (iter = insts->instance_list; iter != NULL; iter = iter->next)
           {
                GncSxInstance *inst = (GncSxInstance*)iter->data;
                do_test(inst->state == SX_INSTANCE_STATE_TO_CREATE, "to-create");
@@ -90,8 +90,8 @@ test_once()
 
      do_test(g_list_length(model->sx_instance_list) == 1, "1 instances");
      instances = (GncSxInstances*)model->sx_instance_list->data;
-     do_test(g_list_length(instances->list) == 1, "1 instance");
-     instance = (GncSxInstance*)instances->list->data;
+     do_test(g_list_length(instances->instance_list) == 1, "1 instance");
+     instance = (GncSxInstance*)instances->instance_list->data;
      do_test(g_date_compare(when, &instances->next_instance_date) == 0, "next instance is expected");
      do_test(g_date_compare(when, &instance->date) == 0, "instance date is expected");
 
@@ -103,7 +103,7 @@ test_once()
 static GncSxInstance*
 _nth_instance(GncSxInstances *instances, int i)
 {
-     return (GncSxInstance*)g_list_nth_data(instances->list, i);
+     return (GncSxInstance*)g_list_nth_data(instances->instance_list, i);
 }
 
 static void
@@ -127,7 +127,7 @@ test_state_changes()
 
      do_test(g_list_length(model->sx_instance_list) == 1, "one sx");
      insts = (GncSxInstances*)g_list_nth_data(model->sx_instance_list, 0);
-     do_test(g_list_length(insts->list) == 4, "4 instances");
+     do_test(g_list_length(insts->instance_list) == 4, "4 instances");
 
      inst = _nth_instance(insts, 2);
      gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_TO_CREATE);

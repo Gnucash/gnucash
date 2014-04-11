@@ -60,9 +60,9 @@ void            *parse_env)
     times_I->tm_yday = amortsched->yday_I;
 
     printf("\n******************************");
-    strftime(buffer,(size_t)50,"%c",times_E);
+    qof_strftime(buffer,(size_t)50,"%c",times_E);
     printf("\nEffective       Date: %s\n",buffer);
-    strftime(buffer,(size_t)50,"%c",times_I);
+    qof_strftime(buffer,(size_t)50,"%c",times_I);
     printf("Initial Payment Date: %s\n",buffer);
     free(times_E);
     free(times_I);

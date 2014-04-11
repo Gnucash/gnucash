@@ -264,7 +264,7 @@ using the GnuCash XML v2 file backend will be switched to QSF.
 
 Copied entities are identical to the source entity, all parameters
 defined with ::QofAccessFunc and ::QofSetterFunc in QOF are copied
-and the ::GUID of the original ::QofEntity is set in the new entity.
+and the ::GUID of the original ::QofInstance is set in the new entity.
 Sessions containing copied entities are intended for use
 as mechanisms for data export.
 
@@ -280,19 +280,19 @@ see \ref BookMerge
 
 */
 
-/** \brief Copy a single QofEntity to another session
+/** \brief Copy a single QofInstance to another session
  
 Checks first that no entity in the session book contains
 the GUID of the source entity. 
 
  @param new_session - the target session
- @param original - the QofEntity* to copy
+ @param original - the QofInstance* to copy
 
 @return FALSE without copying if the session contains an entity
 with the same GUID already, otherwise TRUE.
 */
 
-gboolean qof_entity_copy_to_session(QofSession* new_session, QofEntity* original);
+gboolean qof_instance_copy_to_session(QofSession* new_session, QofInstance* original);
 
 /** @brief Copy a GList of entities to another session
 
@@ -301,18 +301,18 @@ with the same GUID as any of the source entities - there is
 no support for handling collisions, instead use \ref BookMerge
 
 Note that the GList (e.g. from ::qof_sql_query_run) can contain
-QofEntity pointers of any ::QofIdType, in any sequence. As long
-as all members of the list are ::QofEntity*, and all GUID's are
+QofInstance pointers of any ::QofIdType, in any sequence. As long
+as all members of the list are ::QofInstance*, and all GUID's are
 unique, the list can be copied.
 
  @param new_session - the target session
- @param entity_list - a GList of QofEntity pointers of any type(s).
+ @param entity_list - a GList of QofInstance pointers of any type(s).
 
 @return FALSE, without copying, if new_session contains any entities
 with the same GUID. Otherwise TRUE.
 
 */
-gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list);
+gboolean qof_instance_copy_list(QofSession *new_session, GList *entity_list);
 
 /** @brief Copy a QofCollection of entities.
 
@@ -327,12 +327,12 @@ no support for handling collisions - instead, use \ref BookMerge
 with the same GUID. Otherwise TRUE.
 */
 
-gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll);
+gboolean qof_instance_copy_coll(QofSession *new_session, QofCollection *entity_coll);
 
 /** \brief Recursively copy a collection of entities to a session.
 
 \note This function creates a <b>partial QofBook</b>. See 
-::qof_entity_copy_to_session for more information.
+::qof_instance_copy_to_session for more information.
 
 The QofBook in the new_session must \b not contain any entities
 with the same GUID as any entities to be copied - there is
@@ -341,7 +341,7 @@ no support for handling collisions - instead, use \ref BookMerge
 Objects can be defined solely in terms of QOF data types or
 as a mix of data types and other objects, which may in turn
 include other objects. These references can be copied recursively
-down to the third level. See ::QofEntityReference.
+down to the third level. See ::QofInstanceReference.
 
 \note This is a deep recursive copy - every referenced entity is copied
 to the new session, including all parameters. The starting point is all
@@ -358,7 +358,7 @@ one of the references fails to copy.
 
 */
 gboolean
-qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll);
+qof_instance_copy_coll_r(QofSession *new_session, QofCollection *coll);
 
 /** \brief Recursively copy a single entity to a new session.
 
@@ -369,7 +369,7 @@ copied.
 
 This is a deep copy - all parameters of all referenced entities are copied. If 
 the top level entity has no references, this is identical to 
-::qof_entity_copy_to_session.
+::qof_instance_copy_to_session.
 
 @param ent A single entity that may or may not have references.
 
@@ -380,7 +380,7 @@ the top level entity has no references, this is identical to
 one of the references fails to copy.
 */
 gboolean
-qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent);
+qof_instance_copy_one_r(QofSession *new_session, QofInstance *ent);
 
 /** @} 
 */

@@ -470,7 +470,7 @@ customer_should_be_saved (GncCustomer *customer)
 }
 
 static void
-do_count (QofEntity * cust_p, gpointer count_p)
+do_count (QofInstance * cust_p, gpointer count_p)
 {
   int *count = count_p;
   if (customer_should_be_saved ((GncCustomer *)cust_p))
@@ -486,7 +486,7 @@ customer_get_count (QofBook *book)
 }
 
 static void
-xml_add_customer (QofEntity * cust_p, gpointer out_p)
+xml_add_customer (QofInstance * cust_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncCustomer *cust = (GncCustomer *) cust_p;

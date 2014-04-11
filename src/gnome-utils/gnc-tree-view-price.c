@@ -329,8 +329,8 @@ sort_by_type (GtkTreeModel *f_model,
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
-  result = safe_utf8_collate (gnc_price_get_type (price_a),
-			      gnc_price_get_type (price_b));
+  result = safe_utf8_collate (gnc_price_get_typestr (price_a),
+			      gnc_price_get_typestr (price_b));
   if (result != 0)
     return result;
 
@@ -746,7 +746,11 @@ gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
 					  gnc_tree_view_price_filter_destroy);
 
   /* Whack any existing levels. The top two levels have been created
-   * before this routine can be called. */
+   * before this routine can be called.  Unfortunately, if the just
+   * applied filter filters out all the nodes in the tree, the gtk
+   * code throws a critical error.  This occurs when there are no
+   * prices in the price database.  Once the very first price has been
+   * added this error message goes away. */
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
   LEAVE(" ");
 }

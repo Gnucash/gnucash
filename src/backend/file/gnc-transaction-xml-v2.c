@@ -307,7 +307,7 @@ spl_account_handler(xmlNodePtr node, gpointer data)
     GUID *id = dom_tree_to_guid(node);
     Account *account;
 
-    if (!id) return FALSE;
+    g_return_val_if_fail(id, FALSE);
 
     account = xaccAccountLookup (id, pdata->book);
     if (!account && gnc_transaction_xml_v2_testing &&
@@ -333,7 +333,7 @@ spl_lot_handler(xmlNodePtr node, gpointer data)
     GUID *id = dom_tree_to_guid(node);
     GNCLot *lot;
 
-    if (!id) return FALSE;
+    g_return_val_if_fail(id, FALSE);
 
     lot = gnc_lot_lookup (id, pdata->book);
     if (!lot && gnc_transaction_xml_v2_testing &&

@@ -7,9 +7,15 @@
       Grundlegende Kontenstruktur
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Einkommen und verschiedene Ausgaben.
+    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben.
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aktiva</act:name>
   <act:id type="new">f181d8f0608cbf3f18004793ebf7b514</act:id>
@@ -26,6 +32,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Barvermögen</act:name>
@@ -115,6 +122,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Barverbindlichkeiten</act:name>
@@ -147,7 +155,7 @@
   <act:parent type="guid">dec5fb863e343e41cd0c028562b26cef</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Einkommen</act:name>
+  <act:name>Erträge</act:name>
   <act:id type="new">134fe997a0edfcfbdd77fdd2916220de</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -155,13 +163,14 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Einkommen</act:description>
+  <act:description>Erträge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gehalt</act:name>
@@ -226,7 +235,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Sonstiges Einkommen</act:description>
+  <act:description>Sonstige Erträge</act:description>
   <act:parent type="guid">134fe997a0edfcfbdd77fdd2916220de</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -311,6 +320,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bildung</act:name>
@@ -922,6 +932,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Anfangsbestand</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 </gnc-account-example>
 

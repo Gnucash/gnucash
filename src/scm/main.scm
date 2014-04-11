@@ -67,10 +67,6 @@
 ;; from main-window.scm
 (export gnc:main-window-properties-cb)
 
-;; from printing/print-check.scm
-(export make-print-check-format)
-(export gnc:print-check)
-
 ;; Get the Makefile.am/configure.in generated variables.
 (load-from-path "build-config.scm")
 
@@ -220,7 +216,6 @@
 
   ;; Now we can load a bunch of files.
   (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
-  (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
 
   (gnc:initialize-config-vars) ;; in command-line.scm
   ;; handle unrecognized command line args
