@@ -153,9 +153,9 @@ main (int argc, char ** argv)
    qof_log_init_filename("/tmp/gnctest.trace");
    qof_log_set_default(QOF_LOG_DETAIL);
    qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
-  session = qof_session_new ();
-  test_generation ();
-  print_test_results ();
+   session = qof_session_new ();
+   test_generation ();
+   print_test_results ();
    qof_close();
-  return 0;
+   exit(get_rv());
 }

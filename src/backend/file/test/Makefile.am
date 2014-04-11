@@ -215,10 +215,10 @@ check_PROGRAMS = \
 noinst_HEADERS = test-file-stuff.h
 
 LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
-        ${top_builddir}/src/gnc-module/libgncmodule.la \
+        ${top_builddir}/src/gnc-module/libgnc-module.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-        ${top_builddir}/src/core-utils/libcore-utils.la \
+        ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ./libgnc-test-file-stuff.la \
         ${LIBXML2_LIBS} \
         ${QOF_LIBS} \

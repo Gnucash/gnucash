@@ -29,6 +29,8 @@ function prepare() {
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
+    _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
@@ -61,8 +63,9 @@ function dist_guile() {
 
 function dist_openssl() {
     setup OpenSSL
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
     mkdir -p $DIST_UDIR/bin
-    cp -a $_WIN_UDIR/system32/lib{eay,ssl}*.dll $DIST_UDIR/bin
+    cp -a $_OPENSSL_UDIR/bin/lib{eay,ssl}*.dll $DIST_UDIR/bin
 }
 
 function dist_libxml2() {
@@ -127,6 +130,23 @@ function dist_goffice() {
     cp -a $_GOFFICE_UDIR/share/{goffice,pixmaps} $DIST_UDIR/share
 }
 
+function dist_gwenhywfar() {
+    setup gwenhywfar
+    cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    mkdir -p ${DIST_UDIR}/etc
+    cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
+    cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
+}
+
+function dist_aqbanking() {
+    setup aqbanking
+    cp -a ${_AQBANKING_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+    cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
+    cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
+    cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+}
+
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
@@ -134,10 +154,10 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/{bin,locale} $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/locale $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
-    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
+    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.dll $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
@@ -152,9 +172,10 @@ function finish() {
             --install-schema-file $file >/dev/null
         echo "done"
     done
+    gconftool-2 --shutdown
 
     # Strip redirections in distributed libtool .la files
-    for file in `find $DIST_UDIR/lib -name '*.la'`; do
+    for file in $DIST_UDIR/lib/*.la; do
         cat $file | sed 's,^libdir=,#libdir=,' > $file.new
         mv $file.new $file
     done
@@ -181,6 +202,8 @@ dist_libxml2
 dist_gnome
 dist_libgsf
 dist_goffice
+dist_gwenhywfar
+dist_aqbanking
 dist_gnucash
 finish
 qpopd

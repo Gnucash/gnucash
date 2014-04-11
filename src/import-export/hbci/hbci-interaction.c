@@ -503,7 +503,12 @@ static int keepAlive(void *user_data)
 }
 
 
-static void destr(void *bp, void *user_data)
+#ifndef GWENHYWFAR_CB
+/* Has been introduced in gwenhywfar>=2.4.1 for callback function
+   decoration on win32, but is empty everywhere else. */
+# define GWENHYWFAR_CB
+#endif
+static void GWENHYWFAR_CB destr(void *bp, void *user_data)
 {
   GNCInteractor *data = user_data;
   if (data == NULL)

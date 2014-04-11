@@ -24,9 +24,6 @@ dist_doc_DATA = \
   README.patches \
   README.dependencies
 
-m4datadir = $(datadir)/aclocal
-m4data_DATA = gnucash.m4
-
 # All the other files that go in the distribution tarfile that aren't
 # included some other way...
 
@@ -40,8 +37,6 @@ m4data_DATA = gnucash.m4
 
 EXTRA_DIST = \
   gnucash.lsm \
-  gnucash.m4 \
-  gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
@@ -78,10 +73,6 @@ EXTRA_DIST = \
   intltool-merge.in \
   intltool-update.in \
   util/gnc-svnversion
-
-bin_SCRIPTS = gnucash-config
-
-CLEANFILES = gnucash-config
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

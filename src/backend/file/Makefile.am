@@ -1,7 +1,8 @@
 SUBDIRS = . test
 
 # Now a shared library AND a GModule
-lib_LTLIBRARIES = libgnc-backend-file-utils.la  libgnc-backend-file.la
+lib_LTLIBRARIES = libgnc-backend-file-utils.la
+pkglib_LTLIBRARIES = libgncmod-backend-file.la
 
 AM_CFLAGS = \
   -I.. -I../.. \
@@ -38,7 +39,7 @@ libgnc_backend_file_utils_la_SOURCES = \
   sixtp-utils.c \
   sixtp.c
 
-libgnc_backend_file_la_SOURCES = \
+libgncmod_backend_file_la_SOURCES = \
   gnc-backend-file.c
 
 noinst_HEADERS = \
@@ -60,13 +61,13 @@ noinst_HEADERS = \
 libgnc_backend_file_utils_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/core-utils/libcore-utils.la \
+   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    ${QOF_LIBS}
 
-libgnc_backend_file_la_LDFLAGS = -module -avoid-version
-libgnc_backend_file_la_LIBADD = \
+libgncmod_backend_file_la_LDFLAGS = -module -avoid-version
+libgncmod_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/core-utils/libcore-utils.la \
+   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    libgnc-backend-file-utils.la \
    ${QOF_LIBS}

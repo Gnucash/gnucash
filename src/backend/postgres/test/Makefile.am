@@ -21,7 +21,7 @@ check_PROGRAMS = \
   test-period
 
 LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
-        ${top_builddir}/src/gnc-module/libgncmodule.la \
+        ${top_builddir}/src/gnc-module/libgnc-module.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \

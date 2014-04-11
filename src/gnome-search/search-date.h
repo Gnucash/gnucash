@@ -48,7 +48,7 @@ struct _GNCSearchDateClass {
   /* signals */
 };
 
-guint		gnc_search_date_get_type	(void);
+GType		gnc_search_date_get_type	(void);
 GNCSearchDate	*gnc_search_date_new	(void);
 
 /* methods */

@@ -53,7 +53,7 @@ static void gnc_tree_model_commodity_finalize (GObject *object);
 static void gnc_tree_model_commodity_dispose (GObject *object);
 
 static void gnc_tree_model_commodity_tree_model_init (GtkTreeModelIface *iface);
-static guint gnc_tree_model_commodity_get_flags (GtkTreeModel *tree_model);
+static GtkTreeModelFlags gnc_tree_model_commodity_get_flags (GtkTreeModel *tree_model);
 static int gnc_tree_model_commodity_get_n_columns (GtkTreeModel *tree_model);
 static GType gnc_tree_model_commodity_get_column_type (GtkTreeModel *tree_model,
 						       int index);
@@ -366,7 +366,7 @@ gnc_tree_model_commodity_tree_model_init (GtkTreeModelIface *iface)
 	iface->iter_parent     = gnc_tree_model_commodity_iter_parent;
 }
 
-static guint
+static GtkTreeModelFlags
 gnc_tree_model_commodity_get_flags (GtkTreeModel *tree_model)
 {
 	return 0;

@@ -237,16 +237,19 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
 static gboolean
 add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
 {
-    GList *list;
-
-    list = gnc_book_get_schedxactions (data->book);
-    list = g_list_append(list, sx);
-
-    gnc_book_set_schedxactions(data->book, list);
-    data->counter.schedXactions_loaded++;
-    run_callback(data, "schedXactions");
-
-    return TRUE;
+     SchedXactions *sxes;
+#if 0 // old
+     GList *list;
+     list = gnc_book_get_schedxactions (data->book);
+     list = g_list_append(list, sx);
+     gnc_book_set_schedxactions(data->book, list);
+#endif // 0
+     sxes = gnc_book_get_schedxactions(data->book);
+     gnc_sxes_add_sx(sxes, sx);
+     data->counter.schedXactions_loaded++;
+     run_callback(data, "schedXactions");
+     
+     return TRUE;
 }
 
 static gboolean
@@ -932,7 +935,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  "transaction",
                  gnc_book_count_transactions(book),
                  "schedxaction",
-                 g_list_length( gnc_book_get_schedxactions(book) ),
+                 g_list_length(gnc_book_get_schedxactions(book)->sx_list),
 		 "budget", qof_collection_count(
                      qof_book_get_collection(book, GNC_ID_BUDGET)),
 		 NULL);
@@ -1067,25 +1070,24 @@ write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 static void
 write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
-    GList *schedXactions;
-    SchedXaction *tmpSX;
-    xmlNodePtr node;
+     GList *schedXactions;
+     SchedXaction *tmpSX;
+     xmlNodePtr node;
+     
+     schedXactions = gnc_book_get_schedxactions(book)->sx_list;
 
-    /* get list of scheduled transactions from QofBook */
-    schedXactions = gnc_book_get_schedxactions( book );
+     if ( schedXactions == NULL )
+          return;
 
-    if ( schedXactions == NULL )
-        return;
-
-    do {
-        tmpSX = schedXactions->data;
-        node = gnc_schedXaction_dom_tree_create( tmpSX );
-        xmlElemDump( out, NULL, node );
-        fprintf( out, "\n" );
-        xmlFreeNode( node );
-        gd->counter.schedXactions_loaded++;
-        run_callback(gd, "schedXactions");
-    } while ( (schedXactions = schedXactions->next) );
+     do {
+          tmpSX = schedXactions->data;
+          node = gnc_schedXaction_dom_tree_create( tmpSX );
+          xmlElemDump( out, NULL, node );
+          fprintf( out, "\n" );
+          xmlFreeNode( node );
+          gd->counter.schedXactions_loaded++;
+          run_callback(gd, "schedXactions");
+     } while ( (schedXactions = schedXactions->next) );
 }
 
 static void
@@ -1175,7 +1177,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
       xaccGroupGetNumSubAccounts(gnc_book_get_group(book));
     gd->counter.transactions_total = gnc_book_count_transactions(book);
     gd->counter.schedXactions_total =
-      g_list_length( gnc_book_get_schedxactions(book));
+      g_list_length(gnc_book_get_schedxactions(book)->sx_list);
     gd->counter.budgets_total = qof_collection_count(
         qof_book_get_collection(book, GNC_ID_BUDGET));
 

@@ -17,7 +17,7 @@ libfuturemodsys_la_LIBADD = \
 libincompatdep_la_SOURCES=incompatdep.c
 libincompatdep_la_LDFLAGS=-module -rpath ${PWD}
 libincompatdep_la_LIBADD = \
-  ../../libgncmodule.la \
+  ../../libgnc-module.la \
   $(GLIB_LIBS)
 
 libagedver_la_SOURCES=agedver.c

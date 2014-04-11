@@ -7,7 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash gnc-module))
-(load-extension "libgncmodule" "scm_init_sw_gnc_module_module")
+(load-extension "libgnc-module" "scm_init_sw_gnc_module_module")
 (use-modules (sw_gnc_module))
 
 (define gnc:module-system-init gnc-module-system-init)

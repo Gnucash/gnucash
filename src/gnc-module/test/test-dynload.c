@@ -15,12 +15,12 @@ guile_main(void *closure, int argc, char ** argv)
 {
   GModule *gmodule;
 
-  printf("  test-dynload.c: testing dynamic linking of libgncmodule ...");
-  gmodule = g_module_open("libgncmodule", 0);
+  printf("  test-dynload.c: testing dynamic linking of libgnc-module ...");
+  gmodule = g_module_open("libgnc-module", 0);
 
   /* Maybe MacOS? */
   if (!gmodule)
-    gmodule = g_module_open("libgncmodule.dylib", 0);
+    gmodule = g_module_open("libgnc-module.dylib", 0);
 
   if (gmodule) {
     gpointer ptr;

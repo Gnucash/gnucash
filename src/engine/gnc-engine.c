@@ -39,7 +39,7 @@
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
-#define GNC_LIB_NAME "gnc-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-file"
 
 /* gnc-backend-file location */
 #include "gnc-path.h"
@@ -86,7 +86,7 @@ gnc_engine_init(int argc, char ** argv)
   gnc_engine_init_hook_t hook;
   GList * cur;
   gchar *tracefilename;
-  gchar *libdir;
+  gchar *pkglibdir;
 
   if (1 == engine_is_initialized) return;
 
@@ -107,16 +107,16 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  libdir = gnc_path_get_libdir ();
+  pkglibdir = gnc_path_get_pkglibdir ();
   for (lib = libs; lib->lib ; lib++)
   {
-      if (qof_load_backend_library(libdir, lib->lib))
+      if (qof_load_backend_library(pkglibdir, lib->lib))
       {
           engine_is_initialized = 1;
       }
       else
       {
-	  g_message("failed to load %s from %s\n", lib->lib, libdir);
+	  g_message("failed to load %s from %s\n", lib->lib, pkglibdir);
 	  /* If this is a required library, stop now! */
 	  if (lib->required)
 	  {
@@ -124,7 +124,7 @@ gnc_engine_init(int argc, char ** argv)
 	  }
       }
   }
-  g_free (libdir);
+  g_free (pkglibdir);
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

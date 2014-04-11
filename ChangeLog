@@ -77,6 +77,17 @@
 	relocation of previously compiled-in paths. With the exception of
 	the env variables in src/bin/gnucash, we're fully relocatable now.
 
+2006-09-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-plugin-page-sx-list.c (sxsl_get_sx_vars): Add
+	variable extraction to instance-model creation.  The
+	GncSxInstances now has a hashtable of variables parsed from the
+	formula, and the GncSxInstance has a copy of that variables hash.
+	Not finished, but mostly in place.
+
+	* src/gnome/dialog-sx-since-last-run.c: New, simplified version of
+	the since-last-run dialog.  GncSxSlrTreeModelAdapter.
+
 2006-09-13  Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-plugin-hbci.c: Move the MT940
@@ -270,6 +281,30 @@
 	  preferences_dialog->Windows. Move "Show close button on notebook
 	  tabs" from General to Windows. Fixes #340299.
 
+2006-07-27  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.c
+	(gnc_dense_cal_transient_model_new): Actually implement
+	GncDenseCalTransientModel. 
+
+	* src/gnome/dialog-sx-editor.c (gnc_sxed_update_cal): 
+	* src/gnome/dialog-sx-from-trans.c (sxftd_update_example_cal):
+	Use GncDenseCalTransientModel from previous ad-hoc updaters.
+
+
+2006-07-25  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.c:
+	Add GncDenseCalModel interface, support.
+	Add unfinished GncDenseCalTransient model impl. for
+	one-off being-edited-SX calendar usage.
+
+	* src/gnome/gnc-plugin-page-sx-list.c:
+	Add GncSxInstanceDenseCalAdapter between GncSxInstanceModel and
+	GncDenseCalModel.  Start to hook up 'added' and 'removing' signals
+	on the GncSxInstanceModel.  The SX-List dense-cal works again, and
+	reflects both removed and new SXes.
+
 2006-07-24  Derek Atkins  <derek@ihtfp.com>
 
 	* [lots of Makefile.am files]:
@@ -302,6 +337,27 @@
 	extra de-quoting of path names that is done on the GNC_MODULE_PATH
 	env variable.
 
+2006-07-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/SX-book-p.h:
+	* src/engine/SX-book.h:
+	* src/engine/SX-book.c: Promote SX list from a GList to a
+	`SchedXactions` QOF Entity.  Create add/remove API that emits
+	GNC_EVENT_{INSERT,REMOVE} signals.  Correctly associate the SX
+	List with the collection of SchedXaction qof-type rather than the
+	SX template transactions qof-type.  Remove some (now-)dead
+	code.  Fix long-standing bug in registration of SX qof types.
+	
+	* src/gnome/dialog-sx-editor.[ch]:
+	* src/gnome/dialog-schedxaction.[ch]:
+	Move the SX editor dialog subset of dialog-schedxaction to
+	dialog-sx-editor.[ch].
+
+	* src/gnome/gnc-plugin-page-sx-list.c:
+	Hookup SX editor for both 'new' and 'edit' actions. Hookup
+	row-activation from tree-view.  Extend GncSxInstanceModel to
+	support SchedXactions (sx list) modification events.
+
 2006-07-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:
@@ -330,6 +386,18 @@
 
 	* src/gnome-utils/gnc-main-window.c: Do not move windows on
 	  restoration that would be offscreen.
+
+2006-07-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/SchedXaction.h (GNC_IS_SX,GNC_SX): added for convenience.
+
+	* src/gnome/ui/gnc-plugin-page-sx-list-ui.xml:
+	* src/gnome/gnc-plugin-page-sx-list.[ch]: SX List as a plugin page.
+
+	* src/gnome/gnc-plugin-basic-commands.c: Call SX List plugin page,
+	not dialog.
+
+	* src/doc/sx.rst: Added.
 
 2006-07-15  Derek Atkins  <derek@ihtfp.com>
 

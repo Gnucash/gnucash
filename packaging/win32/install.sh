@@ -37,7 +37,7 @@ function prepare() {
     level1=$(basename ${_REPOS_UDIR})
     level2=$(basename $(dirname ${_REPOS_UDIR}))"/"$level1
     for mydir in $level0 $level1 $level2; do
-        if [ -f $mydir/gnucash.m4 ]; then
+        if [ -f $mydir/make-gnucash-patch.in ]; then
             die "Do not save install.sh in the repository or one its parent directories"
         fi
     done
@@ -318,15 +318,23 @@ function inst_guile() {
 
 function inst_openssl() {
     setup OpenSSL
-    if [ -f $WINDIR\\system32\\libssl32.dll ]
-    then
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    # Make sure the files of Win32OpenSSL-0_9_8d are really gone!
+    if test -f $_OPENSSL_UDIR/unins000.exe ; then
+	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
+    fi
+    if [ -f $WINDIR\\system32\\libssl32.dll -o -f $WINDIR\\system32\\libeay32.dll ] ; then
+	die "You have uninstalled the wrong version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
+    fi
+
+    if test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a ; then
         echo "openssl already installed.  skipping."
     else
-        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
-	echo "!!! When asked for an installation path, specify $OPENSSL_DIR !!!"
-        $LAST_FILE
+	mkdir -p ${_OPENSSL_UDIR}
+	wget_unpacked $OPENSSL_BIN_URL $DOWNLOAD_DIR $OPENSSL_DIR
+	wget_unpacked $OPENSSL_LIB_URL $DOWNLOAD_DIR $OPENSSL_DIR
     fi
-    [ -f $WINDIR\\system32\\libssl32.dll ] || die "openssl not installed correctly"
+    test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a || die "openssl not installed correctly"
 }
 
 function inst_pexports() {
@@ -614,6 +622,57 @@ function inst_inno() {
     quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
+function inst_gwenhywfar() {
+    setup Gwenhywfar
+    _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
+    add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
+    add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists gwenhywfar
+    then
+	echo "Gwenhywfar already installed. Skipping."
+    else
+	wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
+	# Compiling gwenhywfar needs the openssl DLLs somewhere
+	# outside of WINDOWS_DIR:
+	_WIN_UDIR=`unix_path ${WINDIR}`
+	cp ${_WIN_UDIR}/system32/libssl32.dll ${_WIN_UDIR}/system32/libeay32.dll  ${_OPENSSL_UDIR}/lib || die "OpenSSL is not installed correctly."
+	qpushd $TMP_UDIR/gwenhywfar-*
+	    ./configure \
+		--with-openssl-includes=$_OPENSSL_UDIR/include \
+		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
+		ssl_lib="-lcrypto -lssl" \
+	        --prefix=$_GWENHYWFAR_UDIR \
+		LDFLAGS="${REGEX_LDFLAGS}"
+	    make
+	    make install
+	qpopd
+    fi
+    ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
+}
+
+function inst_aqbanking() {
+    setup AqBanking
+    _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
+    add_to_env ${_AQBANKING_UDIR}/bin PATH
+    add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists aqbanking
+    then
+	echo "AqBanking already installed. Skipping."
+    else
+	wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
+	qpushd $TMP_UDIR/aqbanking-*
+	    ./configure \
+		--with-gwen-dir=${_GWENHYWFAR_UDIR} \
+		--with-frontends="cbanking" \
+		--with-backends="aqdtaus aqhbci" \
+	        --prefix=${_AQBANKING_UDIR}
+	    make
+	    make install
+	qpopd
+    fi
+    ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
+}
+
 function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
@@ -651,6 +710,9 @@ function inst_gnucash() {
     _REL_REPOS_UDIR=`unix_path $REL_REPOS_DIR`
     mkdir -p $_BUILD_UDIR
 
+    # When aqbanking is enabled, uncomment this:
+    AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
+
     qpushd $REPOS_DIR
         if test "x$cross_compile" = xyes ; then
             # Set these variables manually because of cross-compiling
@@ -669,6 +731,7 @@ function inst_gnucash() {
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
+	    ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
@@ -683,7 +746,7 @@ function inst_gnucash() {
         qpushd src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
                 gnucash
         qpopd
 
@@ -691,9 +754,15 @@ function inst_gnucash() {
     qpopd
 
     qpushd $_INSTALL_UDIR/lib/gnucash
-        # Remove the dependency_libs line from the installed .la files
-        # because otherwise loading the modules literally takes hours.
-        for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
+        # Move modules that are compiled without -module to lib/gnucash
+        mv ../bin/*.dll .
+
+        # In the installed .la files, remove the dependency_libs line and
+        # correct the 'dlname'. We do not use these files to dlopen the
+        # modules, so actually this is unneeded.
+        for A in *.la; do
+            sed '/dependency_libs/d;s#../bin/##' $A > tmp ; mv tmp $A
+        done
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas
@@ -707,7 +776,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat

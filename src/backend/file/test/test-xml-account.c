@@ -370,5 +370,5 @@ main (int argc, char ** argv)
     qof_session_destroy(session);        
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }

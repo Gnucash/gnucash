@@ -32,8 +32,12 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "gnc-engine.h"
+#include "gnc-session.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "FreqSpec.h"
+#include "SchedXaction.h"
+#include "SX-book.h"
 
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -2159,4 +2163,62 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     add_kvp_query (q, xaccAccountGetSlots (a), GNC_ID_ACCOUNT);
 
   return q;
+}
+
+static FreqSpec*
+daily_freq(GDate* start, int multiplier)
+{
+     QofBook *book = qof_session_get_book(gnc_get_current_session());
+     FreqSpec *freq = xaccFreqSpecMalloc(book);
+     xaccFreqSpecSetDaily(freq, start, multiplier);
+     xaccFreqSpecSetUIType(freq, UIFREQ_DAILY);
+     return freq;
+}
+
+static FreqSpec*
+once_freq(GDate *when)
+{
+     QofBook *book = qof_session_get_book(gnc_get_current_session());
+     FreqSpec *freq = xaccFreqSpecMalloc(book);
+     xaccFreqSpecSetOnceDate(freq, when);
+     xaccFreqSpecSetUIType(freq, UIFREQ_ONCE);
+     return freq;
+}
+
+static SchedXaction*
+add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, FreqSpec *fs)
+{
+     QofBook *book = qof_session_get_book(gnc_get_current_session());
+     SchedXaction *sx = xaccSchedXactionMalloc(book);
+     xaccSchedXactionSetName(sx, name);
+     xaccSchedXactionSetStartDate(sx, start);
+     if (end != NULL)
+          xaccSchedXactionSetEndDate(sx, end);
+     if (last_occur != NULL)
+          xaccSchedXactionSetLastOccurDate(sx, last_occur);
+     xaccSchedXactionSetFreqSpec(sx, fs);
+
+     gnc_sxes_add_sx(gnc_book_get_schedxactions(book), sx);
+
+     return sx;
+}
+
+SchedXaction*
+add_daily_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur)
+{
+     return add_sx(name, start, end, last_occur, daily_freq(start, 1));
+}
+
+SchedXaction*
+add_once_sx(gchar *name, GDate *when)
+{
+     return add_sx(name, when, NULL, NULL, once_freq(when));
+}
+
+void
+remove_sx(SchedXaction *sx)
+{
+     QofBook *book = qof_session_get_book(gnc_get_current_session());
+     SchedXactions *sxes = gnc_book_get_schedxactions(book);
+     gnc_sxes_del_sx(sxes, sx);
 }

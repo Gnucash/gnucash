@@ -130,5 +130,5 @@ int
 main (int argc, char ** argv)
 {
   scm_boot_guile (argc, argv, guile_main, NULL);
-  return 0;
+  exit(get_rv());
 }

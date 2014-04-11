@@ -34,6 +34,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
+  gnc-sx-instance-model.c \
   gncmod-app-utils.c \
   gnc-ui-util.c \
   guile-util.c \
@@ -59,16 +60,19 @@ gncinclude_HEADERS = \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
   gnc-helpers.h \
+  gnc-sx-instance-model.h \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
   option-util.h
 
+libgncmod_app_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_app_utils_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GCONF_LIBS} \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \

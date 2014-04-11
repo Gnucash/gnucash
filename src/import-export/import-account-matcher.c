@@ -113,6 +113,17 @@ gnc_import_add_account(struct _accountpickerdialog * picker)
   gnc_tree_view_account_set_selected_account(picker->account_tree, new_account);
 }
 
+/* When user double-clicks an account */
+static void
+account_tree_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
+			      GtkTreeViewColumn *column,
+			      struct _accountpickerdialog *picker)
+{
+  g_return_if_fail(picker && picker->dialog);
+
+  gtk_dialog_response(GTK_DIALOG(picker->dialog), GTK_RESPONSE_OK);
+}
+
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {
   const gchar * current_online_id = gnc_import_get_acc_online_id(acct);
@@ -207,6 +218,8 @@ Account * gnc_import_select_account(gncUIWidget parent,
       gnc_tree_view_account_set_selected_account(picker->account_tree, default_selection);
 
       gtk_window_set_modal(GTK_WINDOW(picker->dialog), TRUE);
+      g_signal_connect(picker->account_tree, "row-activated",
+		       G_CALLBACK(account_tree_row_activated_cb), picker);
       do {
 	response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
 	switch (response) {

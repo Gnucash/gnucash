@@ -521,8 +521,8 @@ gnc_finish_ok (AccountWindow *aw)
                                       commodity);
     gnc_account_commodity_from_type (aw, FALSE);
 
-    gnc_tree_view_account_set_selected_account
-      (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
+    gnc_tree_view_account_set_selected_account (
+        GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
 
     gnc_resume_gui_refresh ();
     LEAVE("1");
@@ -1737,7 +1737,7 @@ gnc_ui_new_account_with_types( AccountGroup *unused,
  ************************************************************/
 
 /*
- * register a callback that get's called when the account has changed
+ * register a callback that gets called when the account has changed
  * so significantly that you need to destroy yourself.  In particular
  * this is used by the ledger display to destroy ledgers when the
  * account type has changed.

@@ -35,22 +35,15 @@
 #define GNC_SX_BOOK_P_H
 
 #include "qof.h"
+#include "SX-book.h"
 
 /* ====================================================================== */
 
-struct xaccSchedXactionsDef {
-	GList *sx_list;
-	gboolean sx_notsaved;
-};
-
-void gnc_book_set_schedxactions( QofBook *book, GList *newList );
-void gnc_collection_set_schedxactions( QofCollection *col, GList *newList );
-
+SchedXactions* gnc_collection_get_schedxactions(const QofCollection *col);
 
 /* Associate the given template group with a book */
 void gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup);
 void gnc_collection_set_template_group (QofCollection *col, AccountGroup *templateGroup);
-
 
 gboolean gnc_sxtt_register (void);
 

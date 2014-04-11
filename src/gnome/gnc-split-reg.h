@@ -159,7 +159,7 @@ FROM_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
 /**
  * GTK-related; gets an identifier for the class of GNCSplitRegs.
  **/
-guint gnc_split_reg_get_type(void);
+GType gnc_split_reg_get_type(void);
 
 /**
  * Creates and returns a GNCSplitReg.

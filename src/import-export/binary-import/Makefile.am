@@ -28,7 +28,7 @@ gncinclude_HEADERS = \
   druid-commodity.h
 
 libgncmod_binary_import_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \

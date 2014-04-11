@@ -22,7 +22,7 @@ libgncmodbaz_la_SOURCES = gnc-mod-baz.c
 libgncmodbaz_la_LDFLAGS = -rpath ${PWD}
 libgncmodbaz_la_LIBADD = \
   libbaz.la \
-  ../../libgncmodule.la \
+  ../../libgnc-module.la \
   $(GUILE_LIBS) \
   $(GLIB_LIBS)
 

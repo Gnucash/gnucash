@@ -2,8 +2,10 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-register-core.la
 
+libgncmod_register_core_la_LDFLAGS = -avoid-version
+
 libgncmod_register_core_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

@@ -50,7 +50,7 @@ struct _GNCSearchNumericClass {
   /* signals */
 };
 
-guint		gnc_search_numeric_get_type	(void);
+GType		gnc_search_numeric_get_type	(void);
 GNCSearchNumeric	*gnc_search_numeric_new	(void);
 GNCSearchNumeric	*gnc_search_numeric_debcred_new (void);
 

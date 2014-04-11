@@ -26,7 +26,6 @@
 #include <glib/gi18n.h>
 #include <errno.h>
 #include <iconv.h>
-#include <langinfo.h>
 #include <gwenhywfar/directory.h>
 #include <gwenhywfar/logger.h>
 
