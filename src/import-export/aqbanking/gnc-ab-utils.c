@@ -357,11 +357,6 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     gnc_trans = xaccMallocTransaction(book);
     xaccTransBeginEdit(gnc_trans);
 
-    /* Set OFX unique transaction ID */
-    fitid = AB_Transaction_GetFiId(ab_trans);
-    if (fitid && *fitid)
-        gnc_import_set_trans_online_id(gnc_trans, fitid);
-
     /* Date / Time */
     valuta_date = AB_Transaction_GetValutaDate(ab_trans);
     if (!valuta_date) {
@@ -399,6 +394,11 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     split = xaccMallocSplit(book);
     xaccSplitSetParent(split, gnc_trans);
     xaccSplitSetAccount(split, gnc_acc);
+
+    /* Set OFX unique transaction ID */
+    fitid = AB_Transaction_GetFiId(ab_trans);
+    if (fitid && *fitid)
+        gnc_import_set_split_online_id(split, fitid);
 
     /* Amount into the split */
     ab_value = AB_Transaction_GetValue(ab_trans);
@@ -572,7 +572,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     GncABImExContextImport *data = user_data;
     Account *gnc_acc;
     AB_ACCOUNT_STATUS *item, *best = NULL;
-    const GWEN_TIME *best_time;
+    const GWEN_TIME *best_time = NULL;
     const AB_BALANCE *booked_bal, *noted_bal;
     const AB_VALUE *booked_val = NULL, *noted_val = NULL;
     gdouble booked_value, noted_value;
@@ -593,7 +593,24 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     else
         data->awaiting |= FOUND_BALANCES;
 
+    /* Lookup the most recent ACCOUNT_STATUS available */
+    item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
+    while (item) {
+        const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
+        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0) {
+            best = item;
+            best_time = item_time;
+        }
+        item = AB_ImExporterAccountInfo_GetNextAccountStatus(element);
+    }
+
+    booked_bal = AB_AccountStatus_GetBookedBalance(best);
     if (!(data->awaiting & AWAIT_BALANCES)) {
+        /* Ignore zero balances if we don't await a balance */
+        if (!booked_bal || AB_Value_IsZero(AB_Balance_GetValue(booked_bal)))
+            return NULL;
+
+        /* Ask the user whether to import unawaited non-zero balance */
         if (gnc_verify_dialog(data->parent, TRUE, "%s",
                               _("The bank has sent balance information "
                                 "in its response."
@@ -611,19 +628,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
-    /* Lookup the most recent ACCOUNT_STATUS available */
-    item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
-    while (item) {
-        const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
-        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0) {
-            best = item;
-            best_time = item_time;
-        }
-        item = AB_ImExporterAccountInfo_GetNextAccountStatus(element);
-    }
-
     /* Lookup booked balance and time */
-    booked_bal = AB_AccountStatus_GetBookedBalance(best);
     if (booked_bal) {
         const GWEN_TIME *ti = AB_Balance_GetTime(booked_bal);
         if (ti) {
@@ -798,4 +803,25 @@ gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci)
     g_return_val_if_fail(ieci, FALSE);
 
     return gnc_gen_trans_list_run(ieci->generic_importer);
+}
+
+GWEN_DB_NODE *
+gnc_ab_get_permanent_certs(void)
+{
+    int rv;
+    GWEN_DB_NODE *perm_certs = NULL;
+    AB_BANKING *banking = gnc_AB_BANKING_new();
+
+    g_return_val_if_fail(banking, NULL);
+#ifdef AQBANKING_VERSION_4_PLUS
+    rv = AB_Banking_LoadSharedConfig(banking, "certs", &perm_certs, 0);
+#else
+    /* FIXME: Add code for older AqBanking versions */
+    /* See QBankmanager 0.9.50 in src/kbanking/libs/kbanking.cpp lines 323ff
+       for a proper example of how to do this */
+    rv = 0;
+#endif
+    gnc_AB_BANKING_fini(banking);
+    g_return_val_if_fail(rv >= 0, NULL);
+    return perm_certs;
 }

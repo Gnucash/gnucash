@@ -2,7 +2,7 @@ SUBDIRS = . glade schemas ui
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -12,20 +12,19 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-search \
+  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/business/dialog-tax-table \
-  ${GNOME_CFLAGS} \
-  ${GLADE_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
-  -I${top_srcdir}/src/register/ledger-core
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/libqof/qof \
+  ${GNOME_CFLAGS} \
+  ${GLADE_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS}
 
 libgncmod_business_gnome_la_SOURCES = \
   business-options-gnome.c \
@@ -76,14 +75,15 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \
   ${GNOME_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 # For Business Reports
@@ -112,7 +112,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 noinst_DATA = .scm-links
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}

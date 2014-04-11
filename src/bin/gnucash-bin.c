@@ -84,7 +84,7 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.2.6",
+	    _("The last stable version was "), "GnuCash 2.2.8",
 	    _("The next stable version will be "), "GnuCash 2.4");
 }
 
@@ -171,7 +171,7 @@ load_user_config(void)
         "config-2.0.auto", "config-1.8.auto", "config-1.6.auto",
 	"config.auto", NULL};
     static const gchar *saved_report_files[] = {
-        "saved-reports-2.0", "saved-reports-1.8", NULL};
+      "saved-reports-2.4", "saved-reports-2.0", NULL};
     static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
     static int is_user_config_loaded = FALSE;
 

@@ -785,6 +785,17 @@
     table))
 
 
+(define (gnc:html-make-generic-budget-warning report-title-string)
+  (let ((p (gnc:make-html-text)))
+    (gnc:html-text-append!
+     p
+     (gnc:html-markup-h2 (string-append (_ report-title-string) ":"))
+     (gnc:html-markup-h2 "")
+     (gnc:html-markup-p
+       (_ "No budgets exist.  You must create at least one budget.")))
+    p))
+
+
 ;; TODO: How 'bout factoring the "Edit report options" stuff out of
 ;; these 3 functions?
 

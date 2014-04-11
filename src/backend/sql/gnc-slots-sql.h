@@ -33,14 +33,15 @@
 #include <gmodule.h>
 
 /**
-* gnc_sql_slots_save - Saves slots for an object to the db.
-*
-* @param be SQL backend
-* @param guid Object guid
-* @param is_infant Is this an infant object?
-* @param pFrame Top-level KVP frame
-*/
-void gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
+ * gnc_sql_slots_save - Saves slots for an object to the db.
+ *
+ * @param be SQL backend
+ * @param guid Object guid
+ * @param is_infant Is this an infant object?
+ * @param pFrame Top-level KVP frame
+ * @return TRUE if successful, FALSE if error
+ */
+gboolean gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
 					gboolean is_infant, KvpFrame* pFrame );
 
 /**
@@ -48,8 +49,9 @@ void gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
 *
 * @param be SQL backend
 * @param guid Object guid
+ * @return TRUE if successful, FALSE if error
 */
-void gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid );
+gboolean gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid );
 
 /**
 * gnc_sql_slots_load - Loads slots for an object from the db.

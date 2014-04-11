@@ -35,6 +35,9 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gdk/gdkkeysyms.h>
+#ifdef HAVE_SYS_WAIT_H
+#    include <sys/wait.h>
+#endif
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -161,7 +164,11 @@ dai_destroy_cb(GtkObject *object, gpointer user_data)
     }
 
     if (info->gnc_hash) {
+#ifdef AQBANKING_VERSION_4_PLUS
+        AB_Banking_OnlineFini(info->api, 0);
+#else
         AB_Banking_OnlineFini(info->api);
+#endif
         g_hash_table_destroy(info->gnc_hash);
         info->gnc_hash = NULL;
     }
@@ -323,7 +330,11 @@ dai_match_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget,
         info->match_page_prepared = TRUE;
 
     /* Load aqbanking accounts */
+#ifdef AQBANKING_VERSION_4_PLUS
+    AB_Banking_OnlineInit(info->api, 0);
+#else
     AB_Banking_OnlineInit(info->api);
+#endif
 
     /* Determine current mapping */
     root = gnc_book_get_root_account(gnc_get_current_book());
@@ -362,7 +373,11 @@ banking_has_accounts(AB_BANKING *banking)
 
     g_return_val_if_fail(banking, FALSE);
 
+#ifdef AQBANKING_VERSION_4_PLUS
+    AB_Banking_OnlineInit(banking, 0);
+#else
     AB_Banking_OnlineInit(banking);
+#endif
 
     accl = AB_Banking_GetAccounts(banking);
     if (accl && (AB_Account_List2_GetSize(accl) > 0))
@@ -373,7 +388,11 @@ banking_has_accounts(AB_BANKING *banking)
     if (accl)
         AB_Account_List2_free(accl);
 
+#ifdef AQBANKING_VERSION_4_PLUS
+    AB_Banking_OnlineFini(banking, 0);
+#else
     AB_Banking_OnlineFini(banking);
+#endif
 
     return result;
 }

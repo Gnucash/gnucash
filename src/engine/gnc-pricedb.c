@@ -160,6 +160,7 @@ gnc_price_begin_edit (GNCPrice *p)
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void noop (QofInstance *inst) {}
@@ -193,6 +194,7 @@ static void
 gnc_price_set_dirty (GNCPrice *p)
 {
   qof_instance_set_dirty(&p->inst);
+  qof_event_gen(&p->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -985,7 +987,7 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
 	user_data);
   if (!data->delete_user) {
     source = gnc_price_get_source (price);
-    if (strcmp(source, "Finance::Quote") != 0) {
+    if (safe_strcmp(source, "Finance::Quote") != 0) {
       LEAVE("Not an automatic quote");
       return TRUE;
     }
@@ -1578,7 +1580,10 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
       Timespec abs_current = timespec_abs(&diff_current);
       Timespec abs_next = timespec_abs(&diff_next);
 
-      if (timespec_cmp(&abs_current, &abs_next) <= 0) {
+      /* Choose the price that is closest to the given time. In case of
+       * a tie, prefer the older price since it actually existed at the
+       * time. (This also fixes bug #541970.) */
+      if (timespec_cmp(&abs_current, &abs_next) < 0) {
         result = current_price;
       } else {
         result = next_price;
@@ -1843,6 +1848,18 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
     return balance;
   }
 
+  /* Look for a price of the new currency in the balance currency and use
+   * the reciprocal if we find it 
+   */
+  price = gnc_pricedb_lookup_latest (pdb, new_currency, balance_currency);
+  if (price) {
+    balance = gnc_numeric_div (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+
   /*
    * no direct price found, try if we find a price in another currency
    * and convert in two stages
@@ -1880,7 +1897,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-          (!gnc_numeric_zero_p(currency_price_value)));
+          (gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              GNC_DENOM_AUTO,
@@ -1913,6 +1930,18 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
   price = gnc_pricedb_lookup_nearest_in_time (pdb, balance_currency, new_currency, t);
   if (price) {
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+
+  /* Look for a price of the new currency in the balance currency and use
+   * the reciprocal if we find it 
+   */
+  price = gnc_pricedb_lookup_nearest_in_time (pdb, new_currency, balance_currency, t);
+  if (price) {
+    balance = gnc_numeric_div (balance, gnc_price_get_value (price),
                                gnc_commodity_get_fraction (new_currency),
                                GNC_HOW_RND_ROUND);
     gnc_price_unref (price);
@@ -1956,7 +1985,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-          (!gnc_numeric_zero_p(currency_price_value)));
+	  (gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
@@ -1998,6 +2027,18 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
     return balance;
   }
 
+  /* Look for a price of the new currency in the balance currency and use
+   * the reciprocal if we find it.
+   */
+  price = gnc_pricedb_lookup_latest_before (pdb, new_currency, balance_currency, t);
+  if (price) {
+    balance = gnc_numeric_div (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+  
   /*
    * no direct price found, try if we find a price in another currency
    * and convert in two stages
@@ -2035,7 +2076,7 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-          (!gnc_numeric_zero_p(currency_price_value)));
+          (gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
@@ -2439,32 +2480,32 @@ price_printable(gpointer obj)
 
 static QofObject price_object_def =
 {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_PRICE,
-  type_label:        "Price",
-  create:            price_create,
-  book_begin:        NULL,
-  book_end:          NULL,
-  is_dirty:          qof_collection_is_dirty,
-  mark_clean:        qof_collection_mark_clean,
-  foreach:           price_foreach,
-  printable:         price_printable,
-  version_cmp:       NULL,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_PRICE,
+  .type_label        = "Price",
+  .create            = price_create,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = price_foreach,
+  .printable         = price_printable,
+  .version_cmp       = NULL,
 };
 
 static QofObject pricedb_object_def =
 {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_PRICEDB,
-  type_label:        "PriceDB",
-  create:            NULL,
-  book_begin:        pricedb_book_begin,
-  book_end:          pricedb_book_end,
-  is_dirty:          qof_collection_is_dirty,
-  mark_clean:        qof_collection_mark_clean,
-  foreach:           NULL,
-  printable:         NULL,
-  version_cmp:       NULL,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_PRICEDB,
+  .type_label        = "PriceDB",
+  .create            = NULL,
+  .book_begin        = pricedb_book_begin,
+  .book_end          = pricedb_book_end,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = NULL,
+  .printable         = NULL,
+  .version_cmp       = NULL,
 };
 
 gboolean

@@ -123,7 +123,10 @@ struct gnc_new_iso_code
   {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
-  {"ILS", "NIS"}, /* New Israeli Shekel */
+  {"NIS", "ILS"}, /* New Israeli Shekel: The informal abbreviation may be "NIS", but
+		     its iso-4217 is clearly ILS and only this! Incorrectly changed
+		     due to bug#152755 (Nov 2004) and changed back again by bug#492417
+		     (Oct 2008). */
   {"MXP", "MXN"}, /* Mexican (Nuevo) Peso */
   {"TRL", "TRY"}, /* New Turkish Lira: changed 2005 */
 
@@ -516,6 +519,7 @@ gnc_commodity_begin_edit (gnc_commodity *cm)
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void noop (QofInstance *inst) {}
@@ -885,6 +889,7 @@ gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
   CommodityPrivate* dest_priv = GET_PRIVATE(dest);
 
   gnc_commodity_set_fullname (dest, src_priv->fullname);
+  gnc_commodity_set_mnemonic (dest, src_priv->mnemonic);
   dest_priv->namespace = src_priv->namespace;
   gnc_commodity_set_fraction (dest, src_priv->fraction);
   gnc_commodity_set_cusip (dest, src_priv->cusip);
@@ -1490,6 +1495,22 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
   return TRUE;
 }
 
+int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b)
+{
+    if (gnc_commodity_equal(a,b))
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int gnc_commodity_compare_void(const void * a, const void * b)
+{
+  return gnc_commodity_compare(a, b);
+}
 
 /************************************************************
  *                   Namespace functions                    *
@@ -1635,10 +1656,12 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
      * Backward compatability support for currencies that have
      * recently changed.
      */
-    for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
-      if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0) {
-	mnemonic = gnc_new_iso_codes[i].new_code;
-	break;
+    if (nsp->iso4217) {
+      for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
+	if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0) {
+	  mnemonic = gnc_new_iso_codes[i].new_code;
+	  break;
+	}
       }
     }
     return g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic);
@@ -1747,6 +1770,20 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
       LEAVE("already in table");
       return c;
     }
+
+    /* Backward compatability support for currencies that have
+     * recently changed. */
+    if (priv->namespace->iso4217) {
+      guint i;
+      for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
+        if (!priv->mnemonic
+            || !strcmp(priv->mnemonic, gnc_new_iso_codes[i].old_code)) {
+          gnc_commodity_set_mnemonic(comm, gnc_new_iso_codes[i].new_code);
+          break;
+        }
+      }
+    }
+
     gnc_commodity_copy (c, comm);
     gnc_commodity_destroy (comm);
     LEAVE("found at %p", c);
@@ -2298,28 +2335,28 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
 
 static QofObject commodity_object_def = 
 {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_COMMODITY,
-  type_label:        "Commodity",
-  book_begin:        NULL,
-  book_end:          NULL,
-  is_dirty:          qof_collection_is_dirty,
-  mark_clean:        qof_collection_mark_clean,
-  foreach:           qof_collection_foreach,
-  printable:         (const char* (*)(gpointer)) gnc_commodity_get_fullname,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_COMMODITY,
+  .type_label        = "Commodity",
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer)) gnc_commodity_get_fullname,
 };
 
 static QofObject namespace_object_def = 
 {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_COMMODITY_NAMESPACE,
-  type_label:        "Namespace",
-  book_begin:        NULL,
-  book_end:          NULL,
-  is_dirty:          NULL,
-  mark_clean:        NULL,
-  foreach:           NULL,
-  printable:         NULL,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_COMMODITY_NAMESPACE,
+  .type_label        = "Namespace",
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = NULL,
+  .mark_clean        = NULL,
+  .foreach           = NULL,
+  .printable         = NULL,
 };
 
 static void 
@@ -2354,17 +2391,17 @@ commodity_table_book_end (QofBook *book)
 
 static QofObject commodity_table_object_def = 
 {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_COMMODITY_TABLE,
-  type_label:        "CommodityTable",
-  create:            NULL,
-  book_begin:        commodity_table_book_begin,
-  book_end:          commodity_table_book_end,
-  is_dirty:          qof_collection_is_dirty,
-  mark_clean:        qof_collection_mark_clean,
-  foreach:           NULL,
-  printable:         NULL,
-  version_cmp:       NULL,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_COMMODITY_TABLE,
+  .type_label        = "CommodityTable",
+  .create            = NULL,
+  .book_begin        = commodity_table_book_begin,
+  .book_end          = commodity_table_book_end,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = NULL,
+  .printable         = NULL,
+  .version_cmp       = NULL,
 };
 
 gboolean 

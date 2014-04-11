@@ -388,6 +388,9 @@
          ((gnc:html-scatter? obj)
           (set! o (gnc:make-html-object-internal 
                    gnc:html-scatter-render obj)))
+         ((gnc:html-linechart? obj)
+          (set! o (gnc:make-html-object-internal 
+                   gnc:html-linechart-render obj)))
          ((gnc:html-object? obj)
           (set! o obj))
          

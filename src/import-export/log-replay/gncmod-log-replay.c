@@ -21,7 +21,7 @@
  /**@internal
  @file gncmod-log-replay.c
  @brief module definition/initialization for the log replay module
- @author Copyright (c) 2003 Benoit Grégoire bock@step.polymtl.ca
+ @author Copyright (c) 2003 Benoit GrÃ©goire bock@step.polymtl.ca
  */
 #include "config.h"
 

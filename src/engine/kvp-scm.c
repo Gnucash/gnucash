@@ -32,7 +32,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         }
         else 
         {
-            return kvp_value_new_double(scm_num2dbl(val, __FUNCTION__));
+            return kvp_value_new_double(scm_num2dbl(val, G_STRFUNC));
         }
     }
     else if(gnc_numeric_p(val))
@@ -59,7 +59,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     }
     else if(SWIG_IsPointerOfType(val, SWIG_TypeQuery("_p_KvpFrame")))
     {
-        #define FUNC_NAME __FUNCTION__
+        #define FUNC_NAME G_STRFUNC
         KvpFrame *frame = SWIG_MustGetPtr(val, SWIG_TypeQuery("_p_KvpFrame"),
                                           1, 0);
         #undef FUNC_NAME

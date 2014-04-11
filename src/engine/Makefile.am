@@ -2,13 +2,13 @@ SUBDIRS = . test-core test
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src/core-utils \
 	-I${top_srcdir}/src \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	${QOF_CFLAGS} \
+    -I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
 	${GUILE_INCS}
 
@@ -111,8 +111,8 @@ libgncmod_engine_la_LDFLAGS = -avoid-version
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgnc-module.la \
   ../core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${QOF_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
@@ -159,7 +159,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 noinst_DATA = .scm-links
 
@@ -167,7 +170,7 @@ if BUILDING_FROM_SVN
 swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
                ${gncinclude_HEADERS} ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/lib/libqof/qof -I${top_srcdir}/src -o $@ $<
+	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c

@@ -11,7 +11,7 @@ libgncmod_tax_us_la_LIBADD = \
  ${GUILE_LIBS} \
  ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GLIB_CFLAGS} ${GUILE_INCS}
@@ -39,7 +39,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/tax; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 clean-local:
 	$(RM) -rf gnucash

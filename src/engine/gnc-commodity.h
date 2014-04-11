@@ -180,7 +180,7 @@ gnc_quote_source *gnc_quote_source_add_new(const char * name, gboolean supported
  *  @return A pointer to the price quote source that has the specified
  *  internal name.
  */
-gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
+/*@ dependent @*/ gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
 
 /** Given the type/index of a quote source, find the data structure
  *  identified by this pair.
@@ -230,7 +230,7 @@ gint gnc_quote_source_get_index (const gnc_quote_source *source);
  *
  *  @return The user friendly name.
  */
-const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
+/*@ dependent @*/ const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the internal name
  *  of this quote source.  This is the name used by both gnucash and
@@ -240,7 +240,7 @@ const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
  *
  *  @return The internal name.
  */
-const char *gnc_quote_source_get_internal_name (const gnc_quote_source *source);
+/*@ dependent @*/ const char *gnc_quote_source_get_internal_name (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the internal name
  *  of this quote source.  This is the name used by both gnucash and
@@ -294,11 +294,11 @@ const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *sour
  *
  *  @return A pointer to the new commodity.
  */
-gnc_commodity * gnc_commodity_new(QofBook *book,
-				  const char * fullname, 
-                                  const char * namespace,
-                                  const char * mnemonic,
-                                  const char * cusip,
+/*@ dependent @*/ gnc_commodity * gnc_commodity_new(QofBook *book,
+				  /*@ null @*/ const char * fullname, 
+                                  /*@ null @*/ const char * namespace,
+                                  /*@ null @*/ const char * mnemonic,
+                                  /*@ null @*/ const char * cusip,
                                   int fraction);
 
 /** Destroy a commodity.  Release all memory attached to this data structure.
@@ -461,8 +461,8 @@ gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
  *
  *  @return A pointer to the price quote source for this commodity.
  */
-gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
-gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
+/*@ dependent @*/ gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
+/*@ dependent @*/ gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
 
 /** Retrieve the automatic price quote timezone for the specified
  *  commodity.  This will be a pointer to a null terminated string of
@@ -642,6 +642,21 @@ gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
  *  fullname, exchange private code and fraction.
  */
 gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
+
+/** This routine returns 0 if the two commodities are equal, 1 otherwise.
+ *  Commodities are equal if they have the same namespace, mnemonic,
+ *  fullname, exchange private code and fraction.
+ *  This function is useful for list-traversal comparison purposes where
+ *  The semantics are 0, <0, or >0 (equal, greater than, less than) rather
+ *   than "true or false"
+ */
+int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b);
+
+/** A wrapper around gnc_commodity_compare() which offers the function
+ * declaration that is needed for g_list_find_custom(), which needs
+ * void pointers instead of gnc_commodity ones.
+ */
+int gnc_commodity_compare_void(const void * a, const void * b);
 /** @} */
 
 
@@ -682,7 +697,7 @@ gboolean gnc_commodity_is_currency(const gnc_commodity *cm);
 
 /** Returns the commodity table assoicated with a book.
  */
-gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
+/*@ dependent @*/ gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
 
 /* XXX backwards compat function; remove me someday */
 #define gnc_book_get_commodity_table gnc_commodity_table_get_table
@@ -710,7 +725,7 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);
 
-gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
+/*@ dependent @*/ gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
 gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book);
 
 /** @} */
@@ -734,7 +749,7 @@ gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid,
  *  @note The commodity pointer passed to this function should not be
  *  used after its return, as it may have been destroyed.  Use the
  *  return value which is guaranteed to be valid. */
-gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
+/*@ dependent @*/ gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
                                            gnc_commodity * comm);
 
 /** Remove a commodity from the commodity table. If the commodity to
@@ -822,6 +837,8 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *  @param table A pointer to the commodity table 
  *
  *  @param namespace The new namespace to be added.
+ *
+ *  @param book The book that the new namespace will belong to.
  *
  *  @return A pointer to the newly created namespace. */
 gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,

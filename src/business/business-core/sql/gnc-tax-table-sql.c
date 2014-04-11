@@ -61,7 +61,7 @@ static void set_parent( gpointer pObject, gpointer pValue );
 #define MAX_NAME_LEN 50
 
 #define TT_TABLE_NAME "taxtables"
-#define TT_TABLE_VERSION 1
+#define TT_TABLE_VERSION 2
 
 static GncSqlColumnTableEntry tt_col_table[] =
 {
@@ -78,7 +78,7 @@ static GncSqlColumnTableEntry tt_col_table[] =
 };
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
-#define TTENTRIES_TABLE_VERSION 1
+#define TTENTRIES_TABLE_VERSION 2
 
 static GncSqlColumnTableEntry ttentries_col_table[] =
 {
@@ -259,61 +259,73 @@ create_taxtable_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TT_TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TT_TABLE_NAME, tt_col_table );
+		gnc_sql_set_table_version( be, TT_TABLE_NAME, TT_TABLE_VERSION );
     }
 
 	version = gnc_sql_get_table_version( be, TTENTRIES_TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION, ttentries_col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TTENTRIES_TABLE_NAME, ttentries_col_table );
+		gnc_sql_set_table_version( be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION );
     }
 }
 
 /* ================================================================= */
-static void
+static gboolean
 delete_all_tt_entries( GncSqlBackend* be, const GUID* guid )
 {
     guid_info_t guid_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
 
     guid_info.be = be;
     guid_info.guid = guid;
-    (void)gnc_sql_do_db_operation( be, OP_DB_DELETE, TTENTRIES_TABLE_NAME,
+    return gnc_sql_do_db_operation( be, OP_DB_DELETE, TTENTRIES_TABLE_NAME,
                                 TTENTRIES_TABLE_NAME, &guid_info, guid_col_table );
 }
 
-static void
+static gboolean
 save_tt_entries( GncSqlBackend* be, const GUID* guid, GList* entries )
 {
 	GList* entry;
+	gboolean is_ok;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
 
     /* First, delete the old entries for this object */
-    delete_all_tt_entries( be, guid );
+    is_ok = delete_all_tt_entries( be, guid );
 
-	for( entry = entries; entry != NULL; entry = entry->next ) {
+	for( entry = entries; entry != NULL && is_ok; entry = entry->next ) {
 		GncTaxTableEntry* e = (GncTaxTableEntry*)entry->data;
-    	(void)gnc_sql_do_db_operation( be,
-                        OP_DB_INSERT,
-                        TTENTRIES_TABLE_NAME,
-                        GNC_ID_TAXTABLE, e,
-                        ttentries_col_table );
+    	is_ok = gnc_sql_do_db_operation( be,
+                        			OP_DB_INSERT,
+                        			TTENTRIES_TABLE_NAME,
+                        			GNC_ID_TAXTABLE, e,
+                        			ttentries_col_table );
     }
+
+	return is_ok;
 }
 
-static void
+static gboolean
 save_taxtable( GncSqlBackend* be, QofInstance* inst )
 {
     GncTaxTable* tt;
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok;
 
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_TAXTABLE(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_TAXTABLE(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
     tt = GNC_TAXTABLE(inst);
 
@@ -325,32 +337,50 @@ save_taxtable( GncSqlBackend* be, QofInstance* inst )
 	} else {
 		op = OP_DB_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt, tt_col_table );
+    is_ok = gnc_sql_do_db_operation( be, op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt, tt_col_table );
 
-    // Now, commit or delete any slots and tax table entries
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-		save_tt_entries( be, guid, gncTaxTableGetEntries( tt ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-		delete_all_tt_entries( be, guid );
-    }
+	if( is_ok ) {
+    	// Now, commit or delete any slots and tax table entries
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+			if( is_ok ) {
+				is_ok = save_tt_entries( be, guid, gncTaxTableGetEntries( tt ) );
+			}
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+			if( is_ok ) {
+				is_ok = delete_all_tt_entries( be, guid );
+			}
+    	}
+	}
+
+	return is_ok;
 }
 
 /* ================================================================= */
 static void
-save_next_taxtable( QofInstance* inst, gpointer p2 )
+save_next_taxtable( QofInstance* inst, gpointer data )
 {
-	save_taxtable( (GncSqlBackend*)p2, inst );
+	write_objects_t* s = (write_objects_t*)data;
+
+	if( s->is_ok ) {
+		s->is_ok = save_taxtable( s->be, inst );
+	}
 }
 
-static void
+static gboolean
 write_taxtables( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, save_next_taxtable, be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, save_next_taxtable, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */
@@ -386,7 +416,7 @@ load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t taxtable_guid_handler
+static GncSqlColumnTypeHandler taxtable_guid_handler
 	= { load_taxtable_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,

@@ -508,7 +508,7 @@ void gnc_plugin_page_unselected (GncPluginPage *plugin_page);
 
 /** Tell a page to finish any outstanding activities.
  *  
- *  @param page A page.
+ *  @param plugin_page A page.
  *
  *  @return FALSE if the page could not or would not comply, which
  *  should cancel the pending operation.  TRUE otherwise */

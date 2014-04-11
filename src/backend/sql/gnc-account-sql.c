@@ -42,14 +42,18 @@
 #include "gnc-slots-sql.h"
 #include "gnc-transaction-sql.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "accounts"
 #define TABLE_VERSION 1
 
-static gpointer get_parent( gpointer pObject, const QofParam* );
-static void set_parent( gpointer pObject, gpointer pValue );
-static void set_parent_guid( gpointer pObject, gpointer pValue );
+static /*@ null @*//*@ dependent @*/ gpointer get_parent( gpointer pObject );
+static void set_parent( gpointer pObject, /*@ null @*/ gpointer pValue );
+static void set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
 
 #define ACCOUNT_MAX_NAME_LEN 2048
 #define ACCOUNT_MAX_TYPE_LEN 2048
@@ -58,32 +62,37 @@ static void set_parent_guid( gpointer pObject, gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*@ -full_init_block @*/
     { "guid",           CT_GUID,         0,                           COL_NNUL|COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
     { "commodity_guid", CT_COMMODITYREF, 0,                           COL_NNUL,          "commodity" },
 	{ "commodity_scu",  CT_INT,          0,                           COL_NNUL,          "commodity-scu" },
 	{ "non_std_scu",    CT_BOOLEAN,      0,                           COL_NNUL,          "non-std-scu" },
-    { "parent_guid",    CT_GUID,         0,                           0,                 NULL, NULL, get_parent, set_parent },
+    { "parent_guid",    CT_GUID,         0,                           0,                 NULL, NULL,
+		(QofAccessFunc)get_parent, set_parent },
     { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,                 "code" },
     { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { NULL }
+	/*@ +full_init_block @*/
 };
 static GncSqlColumnTableEntry parent_col_table[] =
 {
+	/*@ -full_init_block @*/
     { "parent_guid", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
     { NULL }
+	/*@ +full_init_block @*/
 };
 
 typedef struct {
-	Account* pAccount;
+	/*@ dependent @*/ Account* pAccount;
 	GUID guid;
 } account_parent_guid_struct;
 
 /* ================================================================= */
 
-static gpointer
-get_parent( gpointer pObject, const QofParam* param )
+static /*@ null @*//*@ dependent @*/ gpointer
+get_parent( gpointer pObject )
 {
     const Account* pAccount;
     const Account* pParent;
@@ -104,7 +113,7 @@ get_parent( gpointer pObject, const QofParam* param )
 }
 
 static void 
-set_parent( gpointer pObject, gpointer pValue )
+set_parent( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     Account* pAccount;
     QofBook* pBook;
@@ -125,7 +134,7 @@ set_parent( gpointer pObject, gpointer pValue )
 }
 
 static void
-set_parent_guid( gpointer pObject, gpointer pValue )
+set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
 	account_parent_guid_struct* s = (account_parent_guid_struct*)pObject;
     GUID* guid = (GUID*)pValue;
@@ -136,22 +145,21 @@ set_parent_guid( gpointer pObject, gpointer pValue )
 	s->guid = *guid;
 }
 
-static Account*
+static /*@ dependent @*//*@ null @*/ Account*
 load_single_account( GncSqlBackend* be, GncSqlRow* row,
 					GList** l_accounts_needing_parents )
 {
     const GUID* guid;
-    GUID acc_guid;
-	Account* pAccount;
+	Account* pAccount = NULL;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
 	g_return_val_if_fail( l_accounts_needing_parents != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    acc_guid = *guid;
-
-    pAccount = xaccAccountLookup( &acc_guid, be->primary_book );
+	if( guid != NULL ) {
+    	pAccount = xaccAccountLookup( guid, be->primary_book );
+	}
     if( pAccount == NULL ) {
         pAccount = xaccMallocAccount( be->primary_book );
     }
@@ -162,7 +170,9 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row,
 	/* If we don't have a parent, it might be because the parent account hasn't
 	   been loaded yet.  Remember the account and its parent guid for later. */
 	if( gnc_account_get_parent( pAccount ) == NULL ) {
-		account_parent_guid_struct* s = g_slice_new( account_parent_guid_struct );
+		account_parent_guid_struct* s = g_malloc( (gsize)sizeof(account_parent_guid_struct) );
+		g_assert( s != NULL );
+
 		s->pAccount = pAccount;
 		gnc_sql_load_object( be, row, GNC_ID_ACCOUNT, s, parent_col_table );
 		*l_accounts_needing_parents = g_list_prepend( *l_accounts_needing_parents, s );
@@ -178,18 +188,23 @@ load_all_accounts( GncSqlBackend* be )
     GncSqlResult* result;
     QofBook* pBook;
     gnc_commodity_table* pTable;
-    int numRows;
-    int r;
-    Account* parent;
 	GList* l_accounts_needing_parents = NULL;
 	GList* list = NULL;
+	GSList* bal_slist;
+	GSList* bal;
 
 	g_return_if_fail( be != NULL );
+
+	ENTER( "" );
 
     pBook = be->primary_book;
     pTable = gnc_commodity_table_get_table( pBook );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
+	if( stmt == NULL ) {
+		LEAVE( "stmt == NULL" );
+		return;
+	}
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
 	if( result != NULL ) {
@@ -207,6 +222,7 @@ load_all_accounts( GncSqlBackend* be )
 
 		if( list != NULL ) {
 			gnc_sql_slots_load_for_list( be, list );
+			g_list_free( list );
 		}
 
 		/* While there are items on the list of accounts needing parents,
@@ -224,7 +240,6 @@ load_all_accounts( GncSqlBackend* be )
 				progress_made = FALSE;
 				for( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
 					account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
-					const gchar* name = xaccAccountGetName( s->pAccount );
    					pParent = xaccAccountLookup( &s->guid, be->primary_book );
 					if( pParent != NULL ) {
 						gnc_account_append_child( pParent, s->pAccount );
@@ -245,7 +260,25 @@ load_all_accounts( GncSqlBackend* be )
             	gnc_account_append_child( root, s->pAccount ); 
 			}
 		}
+
+		/* Load starting balances */
+		bal_slist = gnc_sql_get_account_balances_slist( be );
+		for( bal = bal_slist; bal != NULL; bal = bal->next ) {
+			acct_balances_t* balances = (acct_balances_t*)bal->data;
+
+			g_object_set( balances->acct,
+                			"start-balance", &balances->balance,
+                			"start-cleared-balance", &balances->cleared_balance,
+                			"start-reconciled-balance", &balances->reconciled_balance,
+                			NULL);
+
+		}
+		if( bal_slist != NULL ) {
+			g_slist_free( bal_slist );
+		}
 	}
+
+	LEAVE( "" );
 }
 
 /* ================================================================= */
@@ -258,21 +291,25 @@ create_account_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
     }
 }
 
 /* ================================================================= */
-void
+gboolean
 gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;
 	gboolean is_infant;
+	gboolean is_ok = FALSE;
+	gnc_commodity* commodity;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_ACCOUNT(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_ACCOUNT(inst), FALSE );
+
+	ENTER( "" );
 
 	is_infant = qof_instance_get_infant( inst );
 
@@ -280,9 +317,11 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 	// has been entered directly into the register and an account window will
 	// be opened.  The account info is not complete yet, but the name has been
 	// set, triggering this commit
-    if( xaccAccountGetCommodity( pAcc ) != NULL ) {
+    commodity = xaccAccountGetCommodity( pAcc );
+    if( commodity != NULL ) {
 		gint op;
 
+		is_ok = TRUE;
 		if( qof_instance_get_destroying( inst ) ) {
 			op = OP_DB_DELETE;
 		} else if( be->is_pristine_db || is_infant ) {
@@ -293,25 +332,33 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 
         // If not deleting the account, ensure the commodity is in the db
 		if( op != OP_DB_DELETE ) {
-        	gnc_sql_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
+        	is_ok = gnc_sql_save_commodity( be, commodity );
 		}
 
-        (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
+		if( is_ok ) {
+        	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
+		}
 
-        // Now, commit or delete any slots
-        guid = qof_instance_get_guid( inst );
-        if( !qof_instance_get_destroying(inst) ) {
-            gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-        } else {
-            gnc_sql_slots_delete( be, guid );
-        }
+		if( is_ok ) {
+        	// Now, commit or delete any slots
+        	guid = qof_instance_get_guid( inst );
+        	if( !qof_instance_get_destroying(inst) ) {
+            	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+	        } else {
+            	is_ok = gnc_sql_slots_delete( be, guid );
+			}
+		}
     }
+
+	LEAVE( "" );
+
+	return is_ok;
 }
 
 /* ================================================================= */
 static void
 load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
-            QofSetterFunc setter, gpointer pObject,
+            /*@ null @*/ QofSetterFunc setter, gpointer pObject,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
@@ -328,20 +375,23 @@ load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
     if( val == NULL ) {
         pGuid = NULL;
     } else {
-        string_to_guid( g_value_get_string( val ), &guid );
+        (void)string_to_guid( g_value_get_string( val ), &guid );
         pGuid = &guid;
     }
 	if( pGuid != NULL ) {
 		account = xaccAccountLookup( pGuid, be->primary_book );
 	}
-    if( table_row->gobj_param_name != NULL ) {
-		g_object_set( pObject, table_row->gobj_param_name, account, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)account );
-    }
+	if( account != NULL ) {
+    	if( table_row->gobj_param_name != NULL ) {
+			g_object_set( pObject, table_row->gobj_param_name, account, NULL );
+    	} else {
+			g_return_if_fail( setter != NULL );
+			(*setter)( pObject, (const gpointer)account );
+    	}
+	}
 }
 
-static col_type_handler_t account_guid_handler
+static GncSqlColumnTypeHandler account_guid_handler
 	= { load_account_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -354,12 +404,16 @@ gnc_sql_init_account_handler( void )
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ACCOUNT,
-        gnc_sql_save_account,				/* commit */
-        load_all_accounts,				/* initial_load */
-        create_account_tables		/* create_tables */
+        gnc_sql_save_account,		/* commit */
+        load_all_accounts,			/* initial_load */
+        create_account_tables,		/* create_tables */
+		NULL,                       /* compile_query */
+		NULL,                       /* run_query */
+		NULL,                       /* free_query */
+		NULL                        /* write */
     };
 
-    qof_object_register_backend( GNC_ID_ACCOUNT, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_ACCOUNT, GNC_SQL_BACKEND, &be_data );
 
 	gnc_sql_register_col_type_handler( CT_ACCOUNTREF, &account_guid_handler );
 }

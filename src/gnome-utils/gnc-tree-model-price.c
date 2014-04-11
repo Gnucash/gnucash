@@ -1343,7 +1343,7 @@ typedef struct _remove_data {
 
 static GSList *pending_removals = NULL;
 
-/** This function performs updates the model when a row is being added.
+/** This function updates the model when a row is being added.
  *  The immediate parent needs to be tapped on the shoulder so that it
  *  can correctly update the disclosure triangle (if this is its first
  *  child.)
@@ -1380,6 +1380,10 @@ gnc_tree_model_price_row_add (GncTreeModelPrice *model,
   gtk_tree_model_row_inserted (tree_model, path, iter);
 
   /* Inform all ancestors. */
+  /*
+   * Charles Day: I don't think calls to gtk_tree_model_row_changed() should
+   * be necessary. It is just a workaround for bug #540201.
+   */
   if (gtk_tree_path_up(path) &&
       gtk_tree_path_get_depth(path) > 0 &&
       gtk_tree_model_get_iter(tree_model, &tmp_iter, path)) {
@@ -1480,8 +1484,8 @@ gnc_tree_model_price_row_delete (GncTreeModelPrice *model,
  *  each time an item is removed from the model.  This function will
  *  be called as an idle function some time after the user requests
  *  the deletion.  (Most likely when the event handler for the "OK"
- *  button click returns.  This function will send the "row_deleted"
- *  signal to any/all parent models for each entry deleted.
+ *  button click returns.)  This function will send the "row_deleted"
+ *  signal to the model for each entry deleted.
  *
  *  @internal
  *
@@ -1520,12 +1524,12 @@ gnc_tree_model_price_do_deletions (gpointer unused)
 }
 
 
-/** This function is the handler for all event messages from the
- *  engine.  Its purpose is to update the price tree model any
- *  time a price or namespace is added to the engine or deleted
- *  from the engine.  This change to the model is then propagated to
- *  any/all overlying filters and views.  This function listens to the
- *  ADD, REMOVE, and DESTROY events.
+/** This function is the handler for all event messages from the engine.
+ *  Its purpose is to update the tree model any time a price, commodity, or
+ *  namespace is added to the engine, modified, or deleted from the engine.
+ *  This change to the model is then propagated to any/all overlying filters
+ *  and views. This function listens to the ADD, REMOVE, MODIFY, and DESTROY
+ *  events.
  *
  *  @internal
  *
@@ -1545,9 +1549,9 @@ gnc_tree_model_price_do_deletions (gpointer unused)
  *  @param entity The affected item.
  *
  *  @param event type The type of the event. This function only cares
- *  about items of type ADD, REMOVE, and DESTROY.
+ *  about items of type ADD, REMOVE, MODIFY, and DESTROY.
  *
- *  @param user_data A pointer to the account tree model.
+ *  @param user_data A pointer to the tree model.
  *
  *  @param event_data A pointer to additional data about this event.
  */
@@ -1567,7 +1571,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
 	      entity, event_type, user_data, event_data);
 	model = (GncTreeModelPrice *)user_data;
 
-        /* Do deletions some are pending. */
+        /* Do deletions if any are pending. */
         if (pending_removals)
           gnc_tree_model_price_do_deletions(NULL);
 

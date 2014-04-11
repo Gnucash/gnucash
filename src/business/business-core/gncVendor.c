@@ -451,6 +451,7 @@ void gncVendorBeginEdit (GncVendor *vendor)
 static void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
 {
   PERR("Vendor QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncVendorOnDone (QofInstance *inst)
@@ -520,17 +521,17 @@ static const char * _gncVendorPrintable (gpointer item)
 
 static QofObject gncVendorDesc = 
 {
-  interface_version:  QOF_OBJECT_VERSION,
-  e_type:             _GNC_MOD_NAME,
-  type_label:         "Vendor",
-  create:             (gpointer)gncVendorCreate,
-  book_begin:         NULL,
-  book_end:           NULL,
-  is_dirty:           qof_collection_is_dirty,
-  mark_clean:         qof_collection_mark_clean,
-  foreach:            qof_collection_foreach,
-  printable:          _gncVendorPrintable,
-  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = _GNC_MOD_NAME,
+  .type_label        = "Vendor",
+  .create            = (gpointer)gncVendorCreate,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = _gncVendorPrintable,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncVendorRegister (void)

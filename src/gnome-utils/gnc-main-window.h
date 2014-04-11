@@ -309,11 +309,11 @@ void gnc_main_window_restore_default_state(void);
 
 /**
  * gnc_gtk_action_group_set_translation_domain:
- * @action_group: a #GtkActionGroup
- * @domain: the translation domain to use for dgettext() calls
+ * @param action_group a #GtkActionGroup
+ * @param domain the translation domain to use for dgettext() calls
  * 
  * Sets the translation domain and uses dgettext() for translating the 
- * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
+ * @a label and @a tooltip of #GtkActionEntry<!-- -->s added by 
  * gtk_action_group_add_actions().
  *
  * This is copied from gtk's gtk_action_group_set_translation_domain()
@@ -347,8 +347,6 @@ gboolean gnc_main_window_finish_pending (GncMainWindow *window);
  *  gnc_plugin_page_finish_pending for each installed page.  If any
  *  page returns a failure indication, then the function stops walking
  *  pages and immediately returns a failure.
- *
- *  @param window Whe window whose pages should be checked.
  *
  *  @return FALSE if any page could not or would not comply, which
  *  should cancel the pending operation.  TRUE otherwise */

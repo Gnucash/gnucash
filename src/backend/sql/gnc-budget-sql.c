@@ -42,47 +42,55 @@
 
 #include "gnc-budget.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+
 #define BUDGET_TABLE "budgets"
 #define TABLE_VERSION 1
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*@ -full_init_block @*/
     { "guid",        CT_GUID,   0,                          COL_NNUL|COL_PKEY, "guid" },
     { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { "num_periods", CT_INT,    0,                          COL_NNUL,          "num_periods" },
     { NULL }
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static GncBudget*
+static /*@ dependent @*//*@ null @*/ GncBudget*
 load_single_budget( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-    GUID budget_guid;
-	GncBudget* pBudget;
+	GncBudget* pBudget = NULL;
 	Recurrence* r;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    budget_guid = *guid;
-
-    pBudget = gnc_budget_lookup( &budget_guid, be->primary_book );
+	if( guid != NULL ) {
+    	pBudget = gnc_budget_lookup( guid, be->primary_book );
+	}
     if( pBudget == NULL ) {
         pBudget = gnc_budget_new( be->primary_book );
     }
 
 	gnc_budget_begin_edit( pBudget );
     gnc_sql_load_object( be, row, GNC_ID_BUDGET, pBudget, col_table );
-	r = g_new0( Recurrence, 1 );
-	gnc_sql_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
+	r = gnc_sql_recurrence_load( be, gnc_budget_get_guid( pBudget ) );
+	if( r != NULL ) {
+		gnc_budget_set_recurrence( pBudget, r );
+		g_free( r );
+	}
 	gnc_budget_commit_edit( pBudget );
 
 	return pBudget;
@@ -93,29 +101,31 @@ load_all_budgets( GncSqlBackend* be )
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
-    int r;
 	GList* list = NULL;
 
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, BUDGET_TABLE );
-    result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-	if( result != NULL ) {
-		GncSqlRow* row = gnc_sql_result_get_first_row( result );
-		GncBudget* b;
+	if( stmt != NULL ) {
+    	result = gnc_sql_execute_select_statement( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+		if( result != NULL ) {
+			GncSqlRow* row = gnc_sql_result_get_first_row( result );
+			GncBudget* b;
 
-        while( row != NULL ) {
-            b = load_single_budget( be, row );
-			if( b != NULL ) {
-				list = g_list_append( list, b );
+        	while( row != NULL ) {
+            	b = load_single_budget( be, row );
+				if( b != NULL ) {
+					list = g_list_append( list, b );
+				}
+				row = gnc_sql_result_get_next_row( result );
+        	}
+			gnc_sql_result_dispose( result );
+
+			if( list != NULL ) {
+				gnc_sql_slots_load_for_list( be, list );
+				g_list_free( list );
 			}
-			row = gnc_sql_result_get_next_row( result );
-        }
-		gnc_sql_result_dispose( result );
-
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
 		}
     }
 }
@@ -130,22 +140,23 @@ create_budget_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, BUDGET_TABLE );
     if( version == 0 ) {
-        gnc_sql_create_table( be, BUDGET_TABLE, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, BUDGET_TABLE, TABLE_VERSION, col_table );
     }
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_budget( GncSqlBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_BUDGET(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_BUDGET(inst), FALSE );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
@@ -155,32 +166,50 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
 	} else {
 		op = OP_DB_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget, col_table );
+    is_ok = gnc_sql_do_db_operation( be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget, col_table );
 
     // Now, commit any slots and recurrence
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-		gnc_sql_recurrence_save( be, guid, gnc_budget_get_recurrence( pBudget ) );
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_recurrence_delete( be, guid );
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+			is_ok = gnc_sql_recurrence_save( be, guid, gnc_budget_get_recurrence( pBudget ) );
+			if( is_ok ) {
+        		is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+			}
+    	} else {
+        	is_ok = gnc_sql_recurrence_delete( be, guid );
+			if( is_ok ) {
+        		(void)gnc_sql_slots_delete( be, guid );
+			}
+    	}
+	}
+
+	return is_ok;
 }
 
 static void
 do_save_budget( QofInstance* inst, gpointer data )
 {
-	save_budget( (GncSqlBackend*)data, inst );
+	write_objects_t* s = (write_objects_t*)data;
+
+	if( s->is_ok ) {
+		s->is_ok = save_budget( s->be, inst );
+	}
 }
 
-static void
+static gboolean
 write_budgets( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
     qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_BUDGET ),
-                            (QofInstanceForeachCB)do_save_budget, be );
+                            (QofInstanceForeachCB)do_save_budget, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */
@@ -194,10 +223,12 @@ gnc_sql_init_budget_handler( void )
         save_budget,    		        /* commit */
         load_all_budgets,               /* initial_load */
         create_budget_tables,	        /* create_tables */
-		NULL, NULL, NULL,
+		NULL,                           /* compile_query */
+		NULL,                           /* run_query */
+		NULL,                           /* free_query */
 		write_budgets					/* write */
     };
 
-    qof_object_register_backend( GNC_ID_BUDGET, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_BUDGET, GNC_SQL_BACKEND, &be_data );
 }
 /* ========================== END OF FILE ===================== */

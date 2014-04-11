@@ -40,6 +40,7 @@
 #include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
+#include "gnc-html.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
@@ -112,9 +113,9 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
   SCM    set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
   
   scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
+  gnc_options_dialog_destroy(win->win);
   gnc_option_db_destroy(win->db);
   scm_gc_unprotect_object(win->scm_options);
-  gnc_options_dialog_destroy(win->win);
   g_free(win);
 }
 

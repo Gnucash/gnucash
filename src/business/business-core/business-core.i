@@ -23,7 +23,7 @@
  * emits a warning that the guid null pointer test is always true.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic ignored "-Waddress"
+#    pragma GCC diagnostic warning "-Waddress"
 #endif
 
 SCM scm_init_sw_business_core_module (void);
@@ -124,6 +124,7 @@ GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
 #define URL_TYPE_CUSTOMER GNC_ID_CUSTOMER
 #define URL_TYPE_VENDOR GNC_ID_VENDOR
 #define URL_TYPE_EMPLOYEE GNC_ID_EMPLOYEE
+#define URL_TYPE_JOB GNC_ID_JOB
 #define URL_TYPE_INVOICE GNC_ID_INVOICE
 // not exactly clean
 #define URL_TYPE_OWNERREPORT "owner-report"
@@ -145,6 +146,7 @@ GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
     SET_ENUM("URL-TYPE-CUSTOMER");
     SET_ENUM("URL-TYPE-VENDOR");
     SET_ENUM("URL-TYPE-EMPLOYEE");
+    SET_ENUM("URL-TYPE-JOB");
     SET_ENUM("URL-TYPE-INVOICE");
     SET_ENUM("URL-TYPE-OWNERREPORT");
 

@@ -1,10 +1,11 @@
 SUBDIRS = . test
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
    -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
-   ${GLIB_CFLAGS} ${GUILE_INCS}
+   ${GLIB_CFLAGS} \
+   ${GUILE_INCS}
 
 lib_LTLIBRARIES = libgnc-module.la
 
@@ -50,7 +51,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 CLEANFILES = .scm-links gnucash ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-gnc-module.c

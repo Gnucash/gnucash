@@ -474,7 +474,7 @@ gnc_employee_new_window (GNCBook *bookp,
 
   edit = gnc_account_sel_new();
   acct_types = g_list_prepend(NULL, (gpointer)ACCT_TYPE_CREDIT);
-  gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL(edit), acct_types);
+  gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL(edit), acct_types, NULL);
   g_list_free (acct_types);
 
   ew->ccard_acct_sel = edit;
@@ -549,7 +549,7 @@ gnc_employee_new_window (GNCBook *bookp,
     gtk_widget_set_sensitive (ew->ccard_acct_sel, FALSE);
   } else {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->ccard_acct_check), TRUE);
-    gnc_account_sel_set_account (GNC_ACCOUNT_SEL (ew->ccard_acct_sel), ccard_acct);
+    gnc_account_sel_set_account (GNC_ACCOUNT_SEL (ew->ccard_acct_sel), ccard_acct, FALSE);
   }
 
   /* XXX: Set the ACL */

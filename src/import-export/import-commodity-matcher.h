@@ -20,7 +20,7 @@
     @{ */
 /** @file import-commodity-matcher.h
   @brief A Generic commodity matcher/picker
-  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
+  @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>    
  */
 #ifndef IMPORT_COMMODITY_MATCHER_H
 #define IMPORT_COMMODITY_MATCHER_H

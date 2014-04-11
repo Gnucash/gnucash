@@ -503,7 +503,7 @@ gnc_ui_sx_loan_druid_create(void)
                                         gas, gas_data[i].newAcctAbility );
                                 if ( gas_data[i].allowableAccounts != NULL ) {
                                         gnc_account_sel_set_acct_filters(
-                                                gas, gas_data[i].allowableAccounts );
+                                                gas, gas_data[i].allowableAccounts, NULL );
                                 }
                                 gtk_container_add( GTK_CONTAINER(a),
                                                    GTK_WIDGET(gas) );
@@ -804,7 +804,7 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
         ldd->ld.repayment_schedule = NULL;
         {
                 Recurrence *r = g_new0(Recurrence, 1);
-                recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate);
+                recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate, WEEKEND_ADJ_NONE);
                 ldd->ld.repayment_schedule = g_list_append(ldd->ld.repayment_schedule, r);
         }
 
@@ -1277,7 +1277,7 @@ ld_opts_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         if ( ldd->ld.escrowAcct ) {
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->optEscrowCb),
                                               TRUE );
-                gnc_account_sel_set_account( ldd->optEscrowGAS, ldd->ld.escrowAcct );
+                gnc_account_sel_set_account( ldd->optEscrowGAS, ldd->ld.escrowAcct, FALSE );
         }
         for ( i=0; i<ldd->ld.repayOptCount; i++ ) {
                 rouid = ldd->repayOptsUI[i];
@@ -1414,11 +1414,11 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 gtk_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
 
         gnc_account_sel_set_account( ldd->repAssetsFromGAS,
-                                     ldd->ld.repFromAcct );
+                                     ldd->ld.repFromAcct, FALSE );
         gnc_account_sel_set_account( ldd->repPrincToGAS,
-                                     ldd->ld.repPriAcct );
+                                     ldd->ld.repPriAcct, FALSE );
         gnc_account_sel_set_account( ldd->repIntToGAS,
-                                     ldd->ld.repIntAcct );
+                                     ldd->ld.repIntAcct, FALSE );
         gnc_frequency_setup_recurrence(ldd->repGncFreq,
                                        ldd->ld.repayment_schedule,
                                        ldd->ld.repStartDate);
@@ -1483,7 +1483,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                                                    ldd );
         }
 
-        gnc_account_sel_set_account( ldd->payAcctToGAS,   rod->to );
+        gnc_account_sel_set_account( ldd->payAcctToGAS,   rod->to, FALSE );
 
         uniq = (rod->schedule != NULL);
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartRb),
@@ -1662,7 +1662,7 @@ ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud )
 
                 if ( rod->schedule == NULL ) {
                         Recurrence *r = g_new0(Recurrence, 1);
-                        recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate);
+                        recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate, WEEKEND_ADJ_NONE);
                         rod->schedule = g_list_append(rod->schedule, r);
                 }
                 if ( rod->startDate == NULL ) {
@@ -1684,9 +1684,9 @@ ld_pay_use_esc_setup( LoanDruidData *ldd, gboolean newState )
         if ( newState )
         {
                 gnc_account_sel_set_account( ldd->payAcctEscToGAS,
-                                             ldd->ld.escrowAcct );
+                                             ldd->ld.escrowAcct, FALSE );
                 gnc_account_sel_set_account( ldd->payAcctEscFromGAS,
-                                             ldd->ld.escrowAcct );
+                                             ldd->ld.escrowAcct, FALSE );
         }
 }
 
@@ -1711,7 +1711,7 @@ ld_pay_spec_src_setup( LoanDruidData *ldd, gboolean newState )
         {
                 gnc_account_sel_set_account( ldd->payAcctFromGAS,
                                              ldd->ld.repayOpts[ldd->currentIdx]
-                                             ->from );
+                                             ->from, FALSE );
         }
 }
 

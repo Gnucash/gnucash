@@ -253,7 +253,6 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   for(i = 0; i < ncols; i++)
   {
     int type; /* The column type contained in this column. */
-    gboolean found;
     gchar* contents; /* The column type string in this column. */
     /* Get the type string first. (store is arranged so that every two
      * columns is a pair of the model used for the combobox and the
@@ -265,15 +264,15 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
     for(type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
     {
       /* ... we find one that matches with what's in the column. */
-      found = !strcmp(contents, _(gnc_csv_column_type_strs[type]));
-      g_free(contents);
-      if(found)
+      if(!strcmp(contents, _(gnc_csv_column_type_strs[type])))
       {
         /* Set the column_types array appropriately and quit. */
         column_types->data[i] = type;
         break;
       }
     }
+    /* Free the type string created by gtk_tree_model_get() */
+    g_free(contents);
   }
 
   /* Close the dialog. */

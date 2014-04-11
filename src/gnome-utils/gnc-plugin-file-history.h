@@ -96,9 +96,9 @@ void gnc_history_add_file (const char *filename);
 /** Remove all occurences of a file name from the history list.  Move
  *  the other key values up in the list to fill the gaps.
  *
- *  @param filename The name of the file to remove from the list.
+ *  @param oldfile The name of the file to remove from the list.
  */
-void gnc_history_remove_file (const char *filename);
+void gnc_history_remove_file (const char *oldfile);
 
 
 /** Retrieve the name of the file most recently accessed.  This is the

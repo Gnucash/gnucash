@@ -21,7 +21,7 @@
 /** @internal
     @file gnc-log-replay.c
     @brief .log file replay code
-    @author Copyright (c) 2003 Benoit Grégoire <bock@step.polymtl.ca>
+    @author Copyright (c) 2003 Benoit GrÃ©goire <bock@step.polymtl.ca>
 */
 #include "config.h"
 

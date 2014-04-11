@@ -1,8 +1,25 @@
+# This program is free software; you can redistribute it and/or    
+# modify it under the terms of the GNU General Public License as   
+# published by the Free Software Foundation; either version 2 of   
+# the License, or (at your option) any later version.              
+#                                                                  
+# This program is distributed in the hope that it will be useful,  
+# but WITHOUT ANY WARRANTY; without even the implied warranty of   
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+# GNU General Public License for more details.                     
+#                                                                  
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, contact:
+#
+# Free Software Foundation           Voice:  +1-617-542-5942
+# 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+# Boston, MA  02110-1301,  USA       gnu@gnu.org
+
 SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
@@ -10,9 +27,9 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 
@@ -75,10 +92,10 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GCONF_LIBS} \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
-  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
@@ -130,7 +147,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
 MAINTAINERCLEANFILES = swig-app-utils.c

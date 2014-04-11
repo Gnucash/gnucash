@@ -54,7 +54,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ACL_LEN 2048
 
 #define TABLE_NAME "employees"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 static GncSqlColumnTableEntry col_table[] =
 {
@@ -140,21 +140,26 @@ create_employee_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_employee( GncSqlBackend* be, QofInstance* inst )
 {
     GncEmployee* emp;
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok = TRUE;
 
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_EMPLOYEE(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_EMPLOYEE(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
     emp = GNC_EMPLOYEE(inst);
 
@@ -168,18 +173,24 @@ save_employee( GncSqlBackend* be, QofInstance* inst )
 	}
 	if( op != OP_DB_DELETE ) {
     	// Ensure the commodity is in the db
-    	gnc_sql_save_commodity( be, gncEmployeeGetCurrency( emp ) );
+    	is_ok = gnc_sql_save_commodity( be, gncEmployeeGetCurrency( emp ) );
 	}
 
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_EMPLOYEE, emp, col_table );
+	if( is_ok ) {
+    	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_EMPLOYEE, emp, col_table );
+	}
 
-    // Now, commit or delete any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+		// Now, commit or delete any slots
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+    	}
+	}
+
+	return is_ok;
 }
 
 /* ================================================================= */
@@ -198,26 +209,33 @@ employee_should_be_saved( GncEmployee *employee )
 
     return TRUE;
 }
+
 static void
-write_single_employee( QofInstance *term_p, gpointer be_p )
+write_single_employee( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_objects_t* s = (write_objects_t*)data_p;
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_EMPLOYEE(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
-	if( employee_should_be_saved( GNC_EMPLOYEE(term_p) ) ) {
-    	save_employee( be, term_p );
+	if( s->is_ok && employee_should_be_saved( GNC_EMPLOYEE(term_p) ) ) {
+    	s->is_ok = save_employee( s->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_employees( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_EMPLOYEE, be->primary_book, write_single_employee, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_EMPLOYEE, be->primary_book, write_single_employee, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */

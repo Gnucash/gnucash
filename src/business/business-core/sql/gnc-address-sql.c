@@ -121,11 +121,11 @@ add_address_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
     	buf = g_strdup_printf( "%s_%s", table_row->col_name, subtable_row->col_name );
 		info = g_new0( GncSqlColumnInfo, 1 );
 		info->name = buf;
-		info->type_name = gnc_sql_connection_get_column_type_name( be->conn,
-											G_TYPE_STRING, subtable_row->size );
-		info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
+		info->type = G_TYPE_STRING;
 		info->size = subtable_row->size;
+		info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
 		info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
+		info->is_unicode = TRUE;
 		*pList = g_list_append( *pList, info );
 	}
 }
@@ -197,7 +197,7 @@ add_gvalue_address_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     }
 }
 
-static col_type_handler_t address_handler
+static GncSqlColumnTypeHandler address_handler
 	= { load_address,
 		add_address_col_info_to_list,
 		add_address_colname_to_list,

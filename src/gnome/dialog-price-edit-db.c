@@ -284,6 +284,11 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
   gnc_set_busy_cursor (NULL, TRUE);
   scm_call_2 (quotes_func, scm_window, book_scm);
   gnc_unset_busy_cursor (NULL);
+
+  /* Without this, the summary bar on the accounts tab
+   * won't reflect the new prices (bug #522095). */
+  gnc_gui_refresh_all ();
+
   LEAVE(" ");
 }
 
@@ -458,6 +463,7 @@ static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
   ENTER(" ");
+  LEAVE(" ");
 }
 
 static gboolean

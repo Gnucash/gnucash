@@ -1061,6 +1061,12 @@ gnc_split_register_get_memo_help (VirtualLocation virt_loc,
   return g_strdup (help);
 }
 
+static GNCPrintAmountInfo gnc_split_register_print_info (SplitRegister *reg)
+{
+  return gnc_account_print_info (gnc_split_register_get_default_account (reg),
+      FALSE);
+}
+
 static const char *
 gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
                                       gboolean translate,
@@ -1098,7 +1104,7 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
       balance = gnc_numeric_neg (balance);
   }
 
-  return xaccPrintAmount (balance, gnc_split_value_print_info (split, FALSE));
+  return xaccPrintAmount (balance, gnc_split_register_print_info (reg));
 }
 
 static const char *
@@ -1452,8 +1458,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 				       GNC_RND_ROUND);
     }
 
-    return xaccPrintAmount (imbalance,
-                            gnc_split_value_print_info (split, FALSE));
+    return xaccPrintAmount (imbalance, gnc_split_register_print_info (reg));
   }
 
   {
@@ -1496,7 +1501,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
     amount = gnc_numeric_abs (amount);
 
-    return xaccPrintAmount (amount, gnc_split_value_print_info (split, FALSE));
+    return xaccPrintAmount (amount, gnc_split_register_print_info (reg));
   }
 }
 
@@ -1862,8 +1867,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     amount = gnc_numeric_abs (amount);
 
     /* FIXME: This should be fixed to be correct for the "fake" account. */
-    return xaccPrintAmount( amount,
-                            gnc_split_value_print_info( split, FALSE ) );
+    return xaccPrintAmount (amount, gnc_split_register_print_info (reg));
   }
 
   return NULL;

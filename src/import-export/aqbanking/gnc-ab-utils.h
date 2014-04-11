@@ -41,6 +41,13 @@
 
 G_BEGIN_DECLS
 
+#if (AQBANKING_VERSION_MAJOR > 3) || \
+  ((AQBANKING_VERSION_MAJOR == 3) && \
+    (AQBANKING_VERSION_MINOR >= 99))
+/** Defined if libaqbanking4 as opposed to libaqbanking3 is being used */
+# define AQBANKING_VERSION_4_PLUS
+#endif
+
 #define GCONF_SECTION_AQBANKING "dialogs/import/hbci"
 #define KEY_FORMAT_SWIFT940 "format_swift_mt940"
 #define KEY_FORMAT_SWIFT942 "format_swift_mt942"
@@ -217,6 +224,14 @@ AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
  * @return The return value of gnc_gen_trans_list_run().
  */
 gboolean gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci);
+
+
+/**
+ * get the GWEN_DB_NODE from AqBanking configuration files
+ *
+ * @return a GWEN_DB containing all permanently accepted SSL certificates (hashed).
+ */
+GWEN_DB_NODE *gnc_ab_get_permanent_certs(void);
 
 G_END_DECLS
 

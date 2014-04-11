@@ -1,4 +1,5 @@
 NONGUI_SUBDIRS = \
+  libqof \
   doc \
   pixmaps \
   core-utils \
@@ -14,6 +15,7 @@ GUI_SUBDIRS_1 = \
   tax \
   app-utils \
   gnome-utils \
+  html \
   gnome-search
 
 GUI_SUBDIRS_2 = \

@@ -24,14 +24,49 @@
 #ifndef PRINT_SESSION_H
 #define PRINT_SESSION_H
 
-#ifndef GTKHTML_USES_GTKPRINT
-
 /** @addtogroup Printing
     @{ */
 /** @file print-session.h
     @brief Functions for printing
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
 */
+
+/** @addtogroup Basic Session Functions
+    @{ */
+
+#ifdef HAVE_GTK_2_10
+
+#include <gtk/gtkprintoperation.h>
+
+/**
+ * Retrieve the print settings from the GtkPrintOperation @a op and save them in
+ * a static variable.
+ *
+ * @param op non-NULL print operation
+ */
+void gnc_print_operation_save_print_settings(GtkPrintOperation *op);
+
+/**
+ * If print settings have been saved by
+ * gnc_print_operation_save_print_settings(), then set them on the given
+ * GtkPrintOperation @a op.  Set the default page setup as well.
+ *
+ * @param op non-NULL print operation
+ */
+void gnc_print_operation_init(GtkPrintOperation *op);
+
+/**
+ * Run a page setup dialog and save the resulting GtkPageSetup in a static
+ * variable.
+ *
+ * @param parent Transient parent, or NULL
+ */
+void gnc_ui_page_setup(GtkWindow *parent);
+
+#endif  /* HAVE_GTK_2_10 */
+
+
+#ifndef GTKHTML_USES_GTKPRINT
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-job.h>
@@ -45,11 +80,9 @@ typedef struct {
   GnomePrintJob      * job;
   GnomePrintContext  * context;		/* Convenience only. Owned by the job */
   GnomeFont          * default_font;
+  guchar             * pango_font_string;
 } PrintSession;
 
-
-/** @addtogroup Basic Session Functions
-    @{ */
 
 /** Create a new print 'session'.  Once created, a series of commands
  *  can be issued on the session to create the output page.  The
@@ -84,9 +117,9 @@ void gnc_print_session_destroy(PrintSession * ps);
  */
 void gnc_print_session_done(PrintSession * ps);
 
-/** @} */
-/** @} */
+#endif  /* !GTKHTML_USES_GTKPRINT */
 
-#endif /* GTKHTML_USES_GTKPRINT */
+/** @} */
+/** @} */
 
 #endif

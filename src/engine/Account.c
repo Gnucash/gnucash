@@ -1063,6 +1063,7 @@ static void on_done(QofInstance *inst)
 static void on_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR("commit error: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void acc_free (QofInstance *inst)
@@ -2871,7 +2872,7 @@ gnc_account_set_start_cleared_balance (Account *acc,
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   priv = GET_PRIVATE(acc);
-  priv->starting_balance = start_baln;
+  priv->starting_cleared_balance = start_baln;
   priv->balance_dirty = TRUE;
 }
 
@@ -2892,7 +2893,7 @@ gnc_account_set_start_reconciled_balance (Account *acc,
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   priv = GET_PRIVATE(acc);
-  priv->starting_balance = start_baln;
+  priv->starting_reconciled_balance = start_baln;
   priv->balance_dirty = TRUE;
 }
 
@@ -4534,17 +4535,17 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 /* QofObject function implementation and registration */
 
 static QofObject account_object_def = {
-  interface_version:     QOF_OBJECT_VERSION,
-  e_type:                GNC_ID_ACCOUNT,
-  type_label:            "Account",
-  create:                (gpointer)xaccMallocAccount,
-  book_begin:            NULL,
-  book_end:              NULL,
-  is_dirty:              qof_collection_is_dirty,
-  mark_clean:            qof_collection_mark_clean,
-  foreach:               qof_collection_foreach,
-  printable:             (const char* (*)(gpointer)) xaccAccountGetName,
-  version_cmp:           (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_ACCOUNT,
+  .type_label        = "Account",
+  .create            = (gpointer)xaccMallocAccount,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer)) xaccAccountGetName,
+  .version_cmp       = (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 gboolean xaccAccountRegister (void)

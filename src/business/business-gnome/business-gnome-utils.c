@@ -49,6 +49,8 @@
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 
+#include "gnc-commodity.h"
+
 typedef enum {
   GNCSEARCH_TYPE_SELECT,
   GNCSEARCH_TYPE_EDIT
@@ -303,7 +305,7 @@ void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
 
 void
 gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
-			       GList *acct_types)
+			       GList *acct_types, GList *acct_commodities)
 {
   GtkListStore *store;
   GtkEntry *entry;
@@ -335,6 +337,17 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
 	== -1)
       continue;
 
+    /* Only present accounts with the right commodity, if that's a 
+       restriction */
+    if (acct_commodities)
+    {
+        if ( g_list_find_custom( acct_commodities,
+                                 GINT_TO_POINTER(xaccAccountGetCommodity(account)),
+                                 gnc_commodity_compare_void) == NULL ) {
+            continue;
+        }
+    }
+
     name = xaccAccountGetFullName (account);
     gtk_combo_box_append_text(GTK_COMBO_BOX(combo), name);
     g_free(name);
@@ -364,6 +377,15 @@ gnc_business_account_types (GncOwner *owner)
   default:
     return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_NONE));
   }
+}
+
+GList *
+gnc_business_commodities (GncOwner *owner)
+{
+  g_return_val_if_fail (owner, NULL);
+  g_return_val_if_fail (gncOwnerGetCurrency(owner), NULL);
+
+  return (g_list_prepend (NULL, gncOwnerGetCurrency(owner)));
 }
 
 /*********************************************************************/

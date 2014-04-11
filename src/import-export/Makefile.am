@@ -47,9 +47,9 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
-  ${QOF_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
@@ -58,7 +58,7 @@ glade_DATA = \
   generic-import.glade \
   import-provider-format.glade
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -66,13 +66,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS} 
+  ${GLIB_CFLAGS}
 
 EXTRA_DIST = \
   $(glade_DATA) \

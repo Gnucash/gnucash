@@ -25,7 +25,7 @@ swig-report-system.c: report-system.i ${top_srcdir}/src/base-typemaps.i
 	-I${top_srcdir}/src -o $@ $<
 endif
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
@@ -39,6 +39,7 @@ gncscm_DATA = \
      html-document.scm \
      html-piechart.scm \
      html-scatter.scm \
+     html-linechart.scm \
      html-style-info.scm \
      html-style-sheet.scm \
      html-table.scm \
@@ -71,7 +72,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 noinst_DATA = .scm-links
 

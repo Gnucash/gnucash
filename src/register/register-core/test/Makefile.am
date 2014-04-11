@@ -19,4 +19,4 @@ test_link_module_LDADD= \
 
 #EXTRA_DIST = test-load-module
 
-AM_CFLAGS = ${GLIB_CFLAGS} -I${top_srcdir}/src/test-core -I..
+AM_CPPFLAGS = ${GLIB_CFLAGS} -I${top_srcdir}/src/test-core -I..

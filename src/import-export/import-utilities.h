@@ -20,7 +20,7 @@
     @{ */
 /** @file import-utilities.h
     @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+    @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
 */
 #ifndef IMPORT_UTILITIES_H
 #define IMPORT_UTILITIES_H
@@ -45,6 +45,20 @@ const gchar * gnc_import_get_trans_online_id(Transaction * transaction);
 void gnc_import_set_trans_online_id(Transaction * transaction, 
 				    const gchar * string_value);
 /** @} */
+
+gboolean gnc_import_trans_has_online_id(Transaction * transaction);
+
+/** @name Setter-getters
+    Setter and getter functions for the online_id kvp_frame for 
+    Splits.
+	@{
+*/ 
+const gchar * gnc_import_get_split_online_id(Split * split);
+void gnc_import_set_split_online_id(Split * split,
+				    const gchar * string_value);
+/** @} */
+
+gboolean gnc_import_split_has_online_id(Split * split);
 
 #endif
 /** @} */

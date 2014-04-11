@@ -21,7 +21,7 @@
 /** @internal
      @file gnc-ofx-import.c
      @brief Ofx import module code
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+     @author Copyright (c) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
  */
 #include "config.h"
 
@@ -138,10 +138,6 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	book = gnc_account_get_book(account);
 	transaction = xaccMallocTransaction(book);
 	xaccTransBeginEdit(transaction);
-	
-	if(data.fi_id_valid==true){
-	  gnc_import_set_trans_online_id(transaction, data.fi_id);
-	}
 	
 	if(data.date_initiated_valid==true){
 	  xaccTransSetDateSecs(transaction, data.date_initiated);
@@ -339,6 +335,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 		if(data.memo_valid==true){
 		  xaccSplitSetMemo(split, data.memo);
 		}
+		if(data.fi_id_valid==true){
+		  gnc_import_set_split_online_id(split, data.fi_id);
+		}
 	      }
 	    else if(data.unique_id_valid == true
 		    && data.security_data_valid
@@ -392,6 +391,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			if(data.security_data_ptr->memo_valid==true)
 			  {
 			    xaccSplitSetMemo(split, data.security_data_ptr->memo);
+			  }
+			if(data.fi_id_valid==true)
+			  {
+			    gnc_import_set_split_online_id(split, data.fi_id);
 			  }
 		      }
 		    else
@@ -557,11 +560,9 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
   gnc_commodity * default_commodity;
   GNCAccountType default_type=ACCT_TYPE_NONE;
   gchar * account_description;
-  gchar * account_type_name = NULL;
+  const gchar * account_type_name = _("Unknown OFX account");
 
   if(data.account_id_valid==true){
-    //printf("ofx_proc_account() Now calling gnc_import_select_account()\n");
-    printf("WRITEME:  ofx_proc_account() Fill in the account type, default name, currency, etc.  \n"); 
     commodity_table = gnc_get_current_commodities ();
     if( data.currency_valid == true)
       {
@@ -579,31 +580,31 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
       switch(data.account_type){
       case OFX_CHECKING : 
 	default_type=ACCT_TYPE_BANK;
-	account_type_name = g_strdup_printf(_("Unknown OFX checking account"));
+	account_type_name = _("Unknown OFX checking account");
 	break;
       case OFX_SAVINGS : 
 	default_type=ACCT_TYPE_BANK;
-	account_type_name = g_strdup_printf(_("Unknown OFX savings account"));
+	account_type_name = _("Unknown OFX savings account");
 	break;
       case OFX_MONEYMRKT : 
 	default_type=ACCT_TYPE_MONEYMRKT;
-	account_type_name = g_strdup_printf(_("Unknown OFX money market account"));
+	account_type_name = _("Unknown OFX money market account");
 	break;
       case OFX_CREDITLINE : 
 	default_type=ACCT_TYPE_CREDITLINE;
-	account_type_name = g_strdup_printf(_("Unknown OFX credit line account"));
+	account_type_name = _("Unknown OFX credit line account");
 	break;
       case OFX_CMA : 
 	default_type=ACCT_TYPE_NONE;
-	account_type_name = g_strdup_printf(_("Unknown OFX CMA account"));
+	account_type_name = _("Unknown OFX CMA account");
 	break;
       case OFX_CREDITCARD : 
 	default_type=ACCT_TYPE_CREDIT;
-	account_type_name = g_strdup_printf(_("Unknown OFX credit card account"));
+	account_type_name = _("Unknown OFX credit card account");
 	break;
       case OFX_INVESTMENT :
 	default_type=ACCT_TYPE_BANK;
-	account_type_name = g_strdup_printf(_("Unknown OFX investment account"));
+	account_type_name = _("Unknown OFX investment account");
 	break;
       default: PERR("WRITEME: ofx_proc_account() This is an unknown account type!");
       }
@@ -622,7 +623,6 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 						 account_description, default_commodity,
 						 default_type, NULL, NULL);
     g_free(account_description);
-    g_free(account_type_name);
   }
   else
     {

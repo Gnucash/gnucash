@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define qif-category-compiled-rexp
-  (make-regexp "^ *(\\[)?([^]/\\|]*)(]?)(/?)([^\\|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
+  (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
 (define qif-date-compiled-rexp
   (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$"))
@@ -19,13 +19,13 @@
 
 (define decimal-radix-regexp
   (make-regexp
-   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+\\.[0-9]* *$"))
+   "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+\\.[0-9]*[+-]? *$"))
 
 (define comma-radix-regexp
   (make-regexp
-   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+,[0-9]* *$"))
+   "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+,[0-9]*[+-]? *$"))
 
-(define integer-regexp (make-regexp "^\\$?[+-]?\\$?[0-9]+ *$"))
+(define integer-regexp (make-regexp "^[$]?[+-]?[$]?[0-9]+[+-]? *$"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category
@@ -64,8 +64,13 @@
                          #f))))
           rv)
         (begin
+          ;; Parsing failed. Bug detected!
           (gnc:warn "qif-split:parse-category: can't parse [" value "].")
-          (list "" #f #f)))))
+          (throw 'bug
+                 "qif-split:parse-category"
+                 "Can't parse account or category ~A."
+                 (list value)
+                 #f)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -275,25 +280,29 @@
       #f))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  parse-cleared-field : in a C (cleared) field in a QIF transaction,
-;;  * means cleared, x or X means reconciled, and ! or ? mean some
-;;  budget related stuff I don't understand.
+;;  parse-cleared-field : In a "C" (cleared status) QIF line,
+;;  * or C means cleared, X or R means reconciled, and ! or ?
+;;  mean some budget related stuff I don't understand.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-cleared-field read-value errorproc errortype)
   (if (and (string? read-value)
-           (> (string-length read-value) 0))
+           (not (string-null? read-value)))
       (let ((secondchar (string-ref read-value 0)))
-        (cond ((eq? secondchar #\*)
-               'cleared)
-              ((or (eq? secondchar #\x)
-                   (eq? secondchar #\X))
-               'reconciled)
-              ((or (eq? secondchar #\?)
-                   (eq? secondchar #\!))
-               'budgeted)
-              (else
-               #f)))
+        (case secondchar
+          ;; Reconciled is the most likely, especially for large imports,
+          ;; so check that first. Also allow for lowercase.
+          ((#\X #\x #\R #\r)
+           'reconciled)
+          ((#\* #\C #\c)
+           'cleared)
+          ((#\? #\!)
+           'budgeted)
+          (else
+            (errorproc errortype
+                       (sprintf #f (_ "Unrecognized status '%s'. Defaulting to uncleared.")
+                                read-value))
+            #f)))
       #f))
 
 
@@ -453,8 +462,7 @@
                    (lambda () (read))))
                date-parts))
 
-    ;; if the date parts list doesn't have 3 parts, we're in
-    ;; trouble
+    ;; if the date parts list doesn't have 3 parts, we're in trouble
     (if (not (eq? 3 (length date-parts)))
         (gnc:warn "qif-parse:parse-date/format: can't interpret date ["
                   date-string "]\nDate parts: " date-parts)
@@ -547,39 +555,43 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-number/format value-string format)
-  (case format
-    ((decimal)
-     (let* ((filtered-string (gnc:string-delete-chars value-string ",$'"))
-            (read-val (with-input-from-string filtered-string
-                                              (lambda () (read)))))
-       (if (number? read-val)
-           (double-to-gnc-numeric
-            (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS
-                     (string-length (string-remove-char filtered-string #\.)))
-                    GNC-RND-ROUND))
-           (gnc-numeric-zero))))
-    ((comma)
-     (let* ((filtered-string (gnc:string-replace-char
-                               (gnc:string-delete-chars value-string ".$'")
-                               #\, #\.))
-            (read-val (with-input-from-string filtered-string
-                                              (lambda () (read)))))
-       (if (number? read-val)
-           (double-to-gnc-numeric
-            (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS
-                     (string-length (string-remove-char filtered-string #\.)))
-                    GNC-RND-ROUND))
-           (gnc-numeric-zero))))
-    ((integer)
-     (let ((read-val (with-input-from-string (string-remove-char value-string
-                                                                 #\$)
-                                             (lambda () (read)))))
-       (if (number? read-val)
-           (double-to-gnc-numeric
-            (+ 0.0 read-val) 1 GNC-RND-ROUND)
-           (gnc-numeric-zero))))))
+  (let ((minus-index (string-index value-string #\-))
+        (filtered-string (gnc:string-delete-chars value-string "$'+-")))
+    (case format
+      ((decimal)
+       (let* ((read-string (string-remove-char filtered-string #\,))
+              (read-val (with-input-from-string read-string
+                                                (lambda () (read)))))
+         (if (number? read-val)
+             (double-to-gnc-numeric
+              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
+              GNC-DENOM-AUTO
+              (logior (GNC-DENOM-SIGFIGS
+                       (string-length (string-remove-char read-string #\.)))
+                      GNC-RND-ROUND))
+             (gnc-numeric-zero))))
+      ((comma)
+       (let* ((read-string (gnc:string-replace-char
+                              (string-remove-char filtered-string #\.)
+                              #\, #\.))
+              (read-val (with-input-from-string read-string
+                                                (lambda () (read)))))
+         (if (number? read-val)
+             (double-to-gnc-numeric
+              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
+              GNC-DENOM-AUTO
+              (logior (GNC-DENOM-SIGFIGS
+                       (string-length (string-remove-char read-string #\.)))
+                      GNC-RND-ROUND))
+             (gnc-numeric-zero))))
+      ((integer)
+       (let ((read-val (with-input-from-string filtered-string
+                                               (lambda () (read)))))
+         (if (number? read-val)
+             (double-to-gnc-numeric
+              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
+              1 GNC-RND-ROUND)
+             (gnc-numeric-zero)))))))
 
 (define (qif-parse:check-number-formats amt-strings formats)
   (let ((retval formats))

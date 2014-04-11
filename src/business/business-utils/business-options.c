@@ -27,7 +27,7 @@
 #include "business-options.h"
 #include "swig-runtime.h"
 
-#define FUNC_NAME __FUNCTION__
+#define FUNC_NAME G_STRFUNC
 
 #define LOOKUP_OPTION(fcn) \
   GNCOption *option; \

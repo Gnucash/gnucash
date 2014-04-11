@@ -498,6 +498,12 @@ xaccSplitSetAccount (Split *s, Account *acc)
         xaccTransCommitEdit(trans);
 }
 
+static void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR("commit error: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
+}
+
 /* An engine-private helper for completing xaccTransCommitEdit(). */
 void
 xaccSplitCommitEdit(Split *s)
@@ -551,7 +557,7 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    qof_commit_edit_part2(QOF_INSTANCE(s), NULL, NULL, 
+    qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, NULL, 
                           (void (*) (QofInstance *)) xaccFreeSplit);
 
     if (acc) {
@@ -1752,17 +1758,17 @@ xaccSplitUnvoid(Split *split)
 /* Hook into the QofObject registry */
 
 static QofObject split_object_def = {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_SPLIT,
-  type_label:        "Split",
-  create:            (gpointer)xaccMallocSplit,
-  book_begin:        NULL,
-  book_end:          NULL,
-  is_dirty:          qof_collection_is_dirty,
-  mark_clean:        qof_collection_mark_clean,
-  foreach:           qof_collection_foreach,
-  printable:         (const char* (*)(gpointer)) xaccSplitGetMemo,
-  version_cmp:       (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_SPLIT,
+  .type_label        = "Split",
+  .create            = (gpointer)xaccMallocSplit,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer)) xaccSplitGetMemo,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 static gpointer 

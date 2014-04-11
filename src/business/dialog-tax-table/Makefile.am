@@ -1,6 +1,6 @@
 pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -8,12 +8,10 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
+  -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GUILE_INCS}
 
 libgncmod_dialog_tax_table_la_SOURCES = \
@@ -32,11 +30,11 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 if BUILDING_FROM_SVN
@@ -71,7 +69,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 noinst_DATA = .scm-links
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}

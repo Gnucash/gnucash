@@ -20,7 +20,7 @@
     @{ */
 /**@file import-main-matcher.h
    @brief Transaction matcher main window
-   @author Copyright (C) 2002 Benoit Grégoire
+   @author Copyright (C) 2002 Benoit GrÃ©goire
    @author Christian Stimming    
 */
 

@@ -489,7 +489,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
         
         g_date_clear(&now, 1);
         g_date_set_time_t(&now, time(NULL));
-        recurrenceSet(r, 1, PERIOD_MONTH, &now);
+        recurrenceSet(r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
         schedule = gnc_sx_get_schedule(new_sx);
         schedule = g_list_append(schedule, r);
         gnc_sx_set_schedule(new_sx, schedule);

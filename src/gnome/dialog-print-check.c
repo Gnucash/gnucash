@@ -111,8 +111,6 @@ typedef enum format_combo_col_t {
 
 #if USE_GTKPRINT
 #    define GncPrintContext GtkPrintContext
-static GtkPrintSettings *print_settings = NULL;
-G_LOCK_DEFINE_STATIC(print_settings);
 #else
 #    define GncPrintContext GnomePrintContext
 #    define GNOMEPRINT_CLIP_EXTRA 2
@@ -1980,11 +1978,7 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
 
     print = gtk_print_operation_new();
 
-    G_LOCK(print_settings);
-    if (print_settings)
-        gtk_print_operation_set_print_settings(print, print_settings);
-    G_UNLOCK(print_settings);
-
+    gnc_print_operation_init(print);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_use_full_page(print, TRUE);
     g_signal_connect(print, "begin_print", G_CALLBACK(begin_print), NULL);
@@ -1994,13 +1988,8 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
                                   GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
                                   pcd->caller_window, NULL);
 
-    if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
-        G_LOCK(print_settings);
-        if (print_settings)
-            g_object_unref(print_settings);
-        print_settings = g_object_ref(gtk_print_operation_get_print_settings(print));
-        G_UNLOCK(print_settings);
-    }
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
+        gnc_print_operation_save_print_settings(print);
 
     g_object_unref(print);
 }

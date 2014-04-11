@@ -53,7 +53,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "entries"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 #define MAX_DESCRIPTION_LEN 2048
 #define MAX_ACTION_LEN 2048
 #define MAX_NOTES_LEN 2048
@@ -163,44 +163,54 @@ create_entry_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_entry( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_ENTRY(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_ENTRY(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_ENTRY, col_table );
+    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_ENTRY, col_table );
 }
 
 /* ================================================================= */
 static void
-write_single_entry( QofInstance *term_p, gpointer be_p )
+write_single_entry( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_objects_t* s = (write_objects_t*)data_p;
 	GncEntry* entry = GNC_ENTRY(term_p);
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_ENTRY(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
   	/* Only save if attached */
-  	if( gncEntryGetOrder( entry ) != NULL || gncEntryGetInvoice( entry ) != NULL ||
-			gncEntryGetBill( entry ) != NULL ) {
-    	save_entry( be, term_p );
+  	if( s->is_ok && (gncEntryGetOrder( entry ) != NULL || gncEntryGetInvoice( entry ) != NULL ||
+			gncEntryGetBill( entry ) != NULL) ) {
+    	s->is_ok = save_entry( s->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_entries( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_ENTRY, be->primary_book, write_single_entry, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_ENTRY, be->primary_book, write_single_entry, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */

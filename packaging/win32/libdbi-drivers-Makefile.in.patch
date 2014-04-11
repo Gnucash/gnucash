@@ -1,0 +1,11 @@
+--- drivers/sqlite3/Makefile.in.save	Mon Mar  3 12:41:56 2008
++++ drivers/sqlite3/Makefile.in	Sat Aug 16 17:10:11 2008
+@@ -264,7 +264,7 @@
+ @HAVE_SQLITE3_TRUE@sqlite3_sources = dbd_sqlite3.c
+ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include @DBI_INCLUDE@ @SQLITE3_INCLUDE@
+ lib_LTLIBRARIES = $(sqlite3_ltlibs)
+-libdbdsqlite3_la_LDFLAGS = $(sqlite3_ldflags) @SQLITE3_LDFLAGS@ @SQLITE3_LIBS@ @LIBADD_LIBDBI@
++libdbdsqlite3_la_LDFLAGS = $(sqlite3_ldflags) @SQLITE3_LDFLAGS@ @SQLITE3_LIBS@ @LIBADD_LIBDBI@ -no-undefined
+ libdbdsqlite3_la_SOURCES = $(sqlite3_sources)
+ libdbdsqlite3_la_DEPENDENCIES = dbd_sqlite3.h
+ EXTRA_DIST = dbd_sqlite3.c dbd_sqlite3.h AUTHORS TODO README dbd_sqlite3.sgml dbd_sqlite3.pdf dbd_sqlite3/*

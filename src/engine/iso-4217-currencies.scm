@@ -10,6 +10,9 @@
 ;;   http://www.evertype.com/standards/iso4217/iso4217-en.html
 ;;   http://www.xe.com/iso4217.htm
 ;;   http://www.thefinancials.com/vortex/CurrencyFormats.html
+;;
+;; Learned from some bugs (543061, 564450), please keep in mind: 
+;; If there are no coins for subunits, subunits might still be in use on the paper
 
 ( "Afghanistan Afghani (old)" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 ) ;; through 2003-01-02
 ( "Afghanistan Afghani" "afghani" "afghani" "ISO4217" "AFN" "971" 1 1 ) ;; from 2002-10-07
@@ -94,14 +97,14 @@
 ( "Haitian Gourde" "gourde" "centime"  "ISO4217" "HTG" "332" 100 100 )
 ( "Honduran Lempira" "lempira" "centavo"  "ISO4217" "HNL" "340" 100 100 )
 ( "Hong Kong Dollar" "dollar" "cent"  "ISO4217" "HKD" "344" 100 100 )
-( "Hungarian Forint" "forint" "forint" "ISO4217" "HUF" "348" 1 1)
+( "Hungarian Forint" "forint" "forint" "ISO4217" "HUF" "348" 100 100)
 ( "Iceland Krona" "krona" "aur" "ISO4217" "ISK" "352" 100 100 )
 ( "Indian Rupee" "rupee" "paise" "ISO4217" "INR" "356" 100 100 )
-( "Indonesian Rupiah" "rupiah" "sen" "ISO4217" "IDR" "360" 100 1 )
+( "Indonesian Rupiah" "rupiah" "sen" "ISO4217" "IDR" "360" 100 100 )
 ( "Iranian Rial" "rial" "rial" "ISO4217" "IRR" "364" 1 1)
 ( "Iraqi Dinar" "dinar" "fil"  "ISO4217" "IQD" "368" 1000 1000)
 ( "Irish Punt" "punt" "pingin" "ISO4217" "IEP" "372" 100 100 ) ;; through 1998
-( "Israeli New Shekel" "new shekel" "new agorot"  "ISO4217" "NIS" "376" 100 100)
+( "Israeli New Shekel" "new shekel" "agorot"  "ISO4217" "ILS" "376" 100 100)
 ( "Italian Lira" "lira" "lira" "ISO4217" "ITL" "380" 1 1 ) ;; through 1998
 ( "Jamaican Dollar" "dollar" "cent" "ISO4217" "JMD" "388" 100 100 )
 ( "Japanese Yen" "yen" "sen"  "ISO4217" "JPY" "392" 100 1 )
@@ -198,7 +201,8 @@
 ( "Uruguayan Peso" "peso" "centesimo" "ISO4217" "UYU" "858" 100 100 )
 ( "Uzbekistani Sum" "som" "tiyin" "ISO4217" "UZS" "860" 100 100 )
 ( "Vanuatu Vatu" "vatu" "centime" "ISO4217" "VUV" "548" 1 1 )
-( "Venezuelan Bolivar" "bolivar" "centimo" "ISO4217" "VEB" "862" 100 100 )
+( "Venezuelan Bolivar (old)" "bolivar" "centimo" "ISO4217" "VEB" "862" 100 100 ) ;; 1000 replaced by 1 VEF in 2008
+( "Venezuelan Bolivar Fuerte" "bolivar" "centimo" "ISO4217" "VEF" "937" 100 100 ) ;; since 2008-01-01
 ( "Vietnamese Dong" "dong" "hao" "ISO4217" "VND" "704" 100 100 )
 ( "Yemeni Riyal" "riyal" "fils" "ISO4217" "YER" "886" 100 100 )
 ( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100)

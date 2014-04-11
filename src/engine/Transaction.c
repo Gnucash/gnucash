@@ -940,6 +940,7 @@ static void trans_on_error(Transaction *trans, QofBackendError errcode)
     }
 
     xaccTransRollbackEdit(trans);
+    gnc_engine_signal_commit_error( errcode );
 }
 
 static void trans_cleanup_commit(Transaction *trans)
@@ -1255,9 +1256,12 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
     xaccTransBeginEdit(trans);
 
-    PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
-           trans, val.tv_sec, val.tv_nsec, 
-           ctime (({time_t secs = (time_t) val.tv_sec; &secs;})));
+    {
+        time_t secs = (time_t) val.tv_sec;
+        gchar *tstr = ctime(&secs);
+        PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
+               trans, val.tv_sec, val.tv_nsec, tstr ? tstr : "(null)");
+    }
     
     *dadate = val;
     qof_instance_set_dirty(QOF_INSTANCE(trans));
@@ -1911,17 +1915,17 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 
 /* Hook into the QofObject registry */
 static QofObject trans_object_def = {
-  interface_version:   QOF_OBJECT_VERSION,
-  e_type:              GNC_ID_TRANS,
-  type_label:          "Transaction",
-  create:              (gpointer)xaccMallocTransaction,
-  book_begin:          NULL,
-  book_end:            NULL,
-  is_dirty:            qof_collection_is_dirty,
-  mark_clean:          qof_collection_mark_clean,
-  foreach:             qof_collection_foreach,
-  printable:           (const char* (*)(gpointer)) xaccTransGetDescription,
-  version_cmp:         (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_TRANS,
+  .type_label        = "Transaction",
+  .create            = (gpointer)xaccMallocTransaction,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer)) xaccTransGetDescription,
+  .version_cmp       = (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 static gboolean

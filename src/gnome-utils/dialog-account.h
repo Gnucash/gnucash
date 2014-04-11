@@ -70,7 +70,8 @@ void gnc_ui_new_account_window (QofBook *book, Account *parent);
  *  restrict the available account type values to the list specified
  *  by the caller.
  *
- *  @param unused This parameter is not used.
+ *  @param book The book in which the new account should be created.
+ *  This is a required argument.
  *
  *  @param valid_types A GList of GNCAccountType gints [as pointers]
  *  which are allowed to be created.  The calling function is

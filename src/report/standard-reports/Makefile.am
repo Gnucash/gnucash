@@ -12,7 +12,7 @@ libgncmod_standard_reports_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} ${GLIB_CFLAGS}
@@ -24,8 +24,12 @@ gncscmmod_DATA = \
    advanced-portfolio.scm \
    average-balance.scm \
    balance-sheet.scm \
-   cash-flow.scm \
    budget.scm \
+   budget-balance-sheet.scm \
+   budget-barchart.scm \
+   budget-flow.scm \
+   budget-income-statement.scm \
+   cash-flow.scm \
    category-barchart.scm \
    daily-reports.scm \
    equity-statement.scm \
@@ -55,7 +59,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 clean-local:
 	$(RM) -rf gnucash

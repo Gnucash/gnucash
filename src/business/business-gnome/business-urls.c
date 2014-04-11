@@ -42,6 +42,7 @@
 #include "dialog-employee.h"
 #include "dialog-vendor.h"
 #include "dialog-invoice.h"
+#include "dialog-job.h"
 
 /* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
  * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
@@ -49,7 +50,7 @@
  * emits a warning that the guid null pointer test is always true.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic ignored "-Waddress"
+#    pragma GCC diagnostic warning "-Waddress"
 #endif
 
 #define HANDLE_TYPE(URL_TYPE_STR,OBJ_TYPE) {                                 \
@@ -145,7 +146,6 @@ invoiceCB (const char *location, const char *label,
   return TRUE;
 }
 
-#if 0   // whats up w/ that ?
 static gboolean
 jobCB (const char *location, const char *label,
            gboolean new_window, GNCURLResult * result)
@@ -154,13 +154,12 @@ jobCB (const char *location, const char *label,
   GncJob *job;
 
   /* href="...:job=<guid>" */
-  HANDLE_TYPE ("job=", GNC_ID_INVOICE);
+  HANDLE_TYPE ("job=", GNC_ID_JOB);
   job = (GncJob *) entity;
   gnc_ui_job_edit (job);
 
   return TRUE;
 }
-#endif
 
 /* ================================================================= */
 
@@ -214,6 +213,9 @@ ownerreportCB (const char *location, const char *label,
   case 'e':
     type = GNC_OWNER_EMPLOYEE;
     break;
+  case 'j':
+    type = GNC_OWNER_JOB;
+    break;
   default:
     result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
     return FALSE;
@@ -251,6 +253,15 @@ ownerreportCB (const char *location, const char *label,
       RETURN_IF_NULL(employee);
       gncOwnerInitEmployee (&owner, employee);
       etype = "Employee";
+      break;
+    }
+    case GNC_OWNER_JOB:
+    {
+      GncJob *job = 
+           gncJobLookup (gnc_get_current_book (), &guid);
+      RETURN_IF_NULL(job);
+      gncOwnerInitJob (&owner, job);
+      etype = "Job";
       break;
     }
     default:
@@ -306,6 +317,7 @@ gnc_business_urls_initialize (void)
     { GNC_ID_CUSTOMER, GNC_ID_CUSTOMER, customerCB },
     { GNC_ID_VENDOR, GNC_ID_VENDOR, vendorCB },
     { GNC_ID_EMPLOYEE, GNC_ID_EMPLOYEE, employeeCB },
+    { GNC_ID_JOB, GNC_ID_JOB, jobCB },
     { GNC_ID_INVOICE, GNC_ID_INVOICE, invoiceCB },
     { URL_TYPE_OWNERREPORT, "gnc-ownerreport", ownerreportCB },
     { NULL, NULL }

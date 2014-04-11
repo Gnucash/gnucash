@@ -32,12 +32,12 @@
 #endif
 #include <libxml/xmlIO.h>
 
-#include "gnc-html-graph-gog.h"
+//#include "gnc-html-graph-gog.h"
 
 #include "druid-gconf-setup.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-html.h"
+//#include "gnc-html.h"
 #include "gnc-engine.h"
 #include "gnc-path.h"
 #include "gnc-ui.h"

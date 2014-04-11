@@ -219,3 +219,5 @@ void gnc_ab_trans_templ_set_purpose_cont(GncABTransTempl *t,
 G_END_DECLS
 
 #endif /* GNC_AB_TRANS_TEMPL_H */
+/** @} */
+/** @} */

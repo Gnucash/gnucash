@@ -429,6 +429,7 @@ void gncBillTermBeginEdit (GncBillTerm *term)
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("BillTerm QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void bill_free (QofInstance *inst)
@@ -704,17 +705,17 @@ static void _gncBillTermDestroy (QofBook *book)
 
 static QofObject gncBillTermDesc = 
 {
-  interface_version:   QOF_OBJECT_VERSION,
-  e_type:              _GNC_MOD_NAME,
-  type_label:          "Billing Term",
-  create:              (gpointer)gncBillTermCreate,
-  book_begin:          _gncBillTermCreate,
-  book_end:            _gncBillTermDestroy,
-  is_dirty:            qof_collection_is_dirty,
-  mark_clean:          qof_collection_mark_clean,
-  foreach:             qof_collection_foreach,
-  printable:           NULL,
-  version_cmp:         (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = _GNC_MOD_NAME,
+  .type_label        = "Billing Term",
+  .create            = (gpointer)gncBillTermCreate,
+  .book_begin        = _gncBillTermCreate,
+  .book_end          = _gncBillTermDestroy,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = NULL,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncBillTermRegister (void)

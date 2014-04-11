@@ -21,7 +21,7 @@
 /**@internal
  @file import-commodity-matcher.c
   @brief  A Generic commodity matcher/picker
-  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
+  @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>    
  */
 #include "config.h"
 
@@ -62,8 +62,10 @@ gnc_commodity * gnc_import_select_commodity(char * cusip,
   char * tmp_namespace = NULL;
   GList * commodity_list=NULL;
   GList * namespace_list=NULL;
-  DEBUG("Default fullname received: %s", default_fullname);
-  DEBUG("Default mnemonic received: %s", default_mnemonic);
+  DEBUG("Default fullname received: %s",
+        default_fullname ? default_fullname : "(null)");
+  DEBUG("Default mnemonic received: %s",
+        default_mnemonic ? default_mnemonic : "(null)");
   
   DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
@@ -121,10 +123,20 @@ gnc_commodity * gnc_import_select_commodity(char * cusip,
 						default_mnemonic);
       
     }
+  /* There seems to be a problem here - if the matched commodity does not
+     have a cusip defined (gnc_commodity_get_cusip returns NULL) then
+     it does not get overwritten - which is not consistent with the
+     message - so Im adding it to do this.  Looks like this is all
+     that was needed to fix the cash value used as stock units problem
+     for pre-defined commodities which didnt have the cusip defined! */
   if (retval != NULL&&
       gnc_commodity_get_cusip(retval)!=NULL &&
       cusip != NULL &&
       (strncmp(gnc_commodity_get_cusip(retval),cusip,strlen(cusip))!=0))
+    {
+      gnc_commodity_set_cusip(retval, cusip);
+    }
+  else if (gnc_commodity_get_cusip(retval)==NULL && cusip != NULL)
     {
       gnc_commodity_set_cusip(retval, cusip);
     }

@@ -62,6 +62,8 @@ enum search_cols {
 
 struct _GNCSearchWindow {
   GtkWidget *	dialog;
+  GtkWidget *	grouping_combo;
+  GtkWidget *	match_all_label;
   GtkWidget *	criteria_table;
   GtkWidget *	result_hbox;
 
@@ -437,6 +439,14 @@ gnc_search_dialog_reset_widgets (GNCSearchWindow *sw)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->narrow_rb), TRUE);
   }
+
+  if (sw->crit_list) {
+    gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
+    gtk_widget_hide(sw->match_all_label);
+  } else {
+    gtk_widget_set_sensitive(sw->grouping_combo, FALSE);
+    gtk_widget_show(sw->match_all_label);
+  }
 }
 
 static gboolean
@@ -445,6 +455,9 @@ gnc_search_dialog_crit_ok (GNCSearchWindow *sw)
   struct _crit_data *data;
   GList *l;
   gboolean ret;
+
+  if (!sw->crit_list)
+    return TRUE;
 
   l = g_list_last (sw->crit_list);
   data = l->data;
@@ -523,7 +536,7 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
   GtkWidget *element;
   struct _elem_data *data;
 
-  if (g_list_length (sw->crit_list) < 2)
+  if (!sw->crit_list)
     return;
 
   element = g_object_get_data (G_OBJECT (button), "element");
@@ -535,6 +548,12 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
   /* and from the display */
   gtk_container_remove (GTK_CONTAINER (sw->criteria_table), element);
   gtk_container_remove (GTK_CONTAINER (sw->criteria_table), button);
+
+  /* disable match-type menu when there is no criterion */
+  if (!sw->crit_list) {
+    gtk_widget_set_sensitive(sw->grouping_combo, FALSE);
+    gtk_widget_show(sw->match_all_label);
+  }
 }
 
 static void
@@ -689,8 +708,13 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
   if (sw->crit_list) {
     if (!gnc_search_dialog_crit_ok (sw))
       return;
-  } else
+  } else {
     sw->last_param = sw->params_list->data;
+
+    /* no match-all situation anymore */
+    gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
+    gtk_widget_hide(sw->match_all_label);
+  }
 
   /* create a new criterion element */
 
@@ -803,7 +827,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   gtk_widget_show (add);
   
   /* Set the match-type menu */
-  combo_box = GTK_COMBO_BOX(gtk_combo_box_new_text());
+  sw->grouping_combo = gtk_combo_box_new_text();
+  combo_box = GTK_COMBO_BOX(sw->grouping_combo);
   gtk_combo_box_append_text(combo_box, _("all criteria are met"));
   gtk_combo_box_append_text(combo_box, _("any criteria are met"));
   gtk_combo_box_set_active(combo_box, sw->grouping);
@@ -812,6 +837,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   box = glade_xml_get_widget (xml, "type_menu_box");
   gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
   gtk_widget_show(GTK_WIDGET(combo_box));
+
+  /* Grab the 'all items match' label */
+  sw->match_all_label = glade_xml_get_widget (xml, "match_all_label");
 
   /* if there's no original query, make the narrow, add, delete 
    * buttons inaccessible */

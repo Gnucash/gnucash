@@ -20,7 +20,7 @@
     @{ */
 /** @file import-match-picker.h
    @brief The transaction match picker dialog interface
-   @author Copyright (C) 2002 Benoit Grégoire
+   @author Copyright (C) 2002 Benoit GrÃ©goire
 */
  
 #ifndef GNC_GEN_MATCH_PICKER_H
@@ -47,10 +47,10 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  *
  * This function is used from the gnc-gen-transaction code.
  *
- * @param trans_info The TransInfo for which the user is supposed to
+ * @param transaction_info The TransInfo for which the user is supposed to
  * pick a matching transaction. */
 void 
-gnc_import_match_picker_run_and_close (GNCImportTransInfo *trans_info);
+gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info);
 /**@}*/
 
 

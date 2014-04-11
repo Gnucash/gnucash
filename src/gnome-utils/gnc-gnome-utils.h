@@ -86,7 +86,7 @@ char *gnc_gnome_locate_ui_file (const char *name);
  *  with the given file domain.  This routine will display an error
  *  message if it can't find the file.
  *
- *  @param doamin The GnomeFileDomain, e.g. GNOME_FILE_DOMAIN_APP_HELP
+ *  @param domain The GnomeFileDomain, e.g. GNOME_FILE_DOMAIN_APP_HELP
  *
  *  @param name The name of the file to be found.
  *

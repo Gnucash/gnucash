@@ -485,6 +485,9 @@ gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 	GncPluginPage *page;
 	GncPluginPageRegisterPrivate *priv;
 
+	ENTER("account=%p, subaccounts=%s", account,
+	      subaccounts? "TRUE" : "FALSE");
+
 	if (subaccounts)
 	  ledger = gnc_ledger_display_subaccounts (account);
 	else
@@ -493,6 +496,8 @@ gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 	page = gnc_plugin_page_register_new_common(ledger);
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 	priv->key = *xaccAccountGetGUID(account);
+
+	LEAVE("%p", page);
 	return page;
 }
 
@@ -1609,7 +1614,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget *unused,
  *  make a kind of sense, as radio buttons are nothing more than
  *  linked toggle buttons where only one can be active.
  *
- *  @param button The button whose state is changing.  This will be
+ *  @param radio The button whose state is changing.  This will be
  *  the previously selected button the first of the pair of calls to
  *  this function, and will be the newly selected button the second
  *  time.
@@ -1655,7 +1660,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget *radio,
  *  make a kind of sense, as radio buttons are nothing more than
  *  linked toggle buttons where only one can be active.
  *
- *  @param button The button whose state is changing.  This will be
+ *  @param radio The button whose state is changing.  This will be
  *  the previously selected button the first of the pair of calls to
  *  this function, and will be the newly selected button the second
  *  time.
@@ -1872,7 +1877,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
   arg = scm_apply (func, args, SCM_EOL);
   g_return_val_if_fail (SCM_EXACTP (arg), -1);
 
-  return scm_num2int (arg, SCM_ARG1, __FUNCTION__);
+  return scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 }
 
 /************************************************************/
@@ -2493,6 +2498,7 @@ gnc_plugin_page_register_cmd_blank_transaction (GtkAction *action,
     gnc_split_register_redraw (reg);
 
   gnc_split_reg_jump_to_blank (priv->gsr);
+  LEAVE(" ");
 }
 
 static void

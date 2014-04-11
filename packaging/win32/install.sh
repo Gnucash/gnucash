@@ -15,14 +15,20 @@ qpushd "$(dirname $(unix_path "$0"))"
 register_env_var ACLOCAL_FLAGS " "
 register_env_var AUTOTOOLS_CPPFLAGS " "
 register_env_var AUTOTOOLS_LDFLAGS " "
+register_env_var GMP_CPPFLAGS " "
+register_env_var GMP_LDFLAGS " "
 register_env_var GNOME_CPPFLAGS " "
 register_env_var GNOME_LDFLAGS " "
+register_env_var GNUTLS_CPPFLAGS " "
+register_env_var GNUTLS_LDFLAGS " "
 register_env_var GUILE_LOAD_PATH ";"
 register_env_var GUILE_CPPFLAGS " "
 register_env_var GUILE_LDFLAGS " "
 register_env_var HH_CPPFLAGS " "
 register_env_var HH_LDFLAGS " "
 register_env_var INTLTOOL_PERL " "
+register_env_var LIBDBI_CPPFLAGS " "
+register_env_var LIBDBI_LDFLAGS " "
 register_env_var KTOBLZCHECK_CPPFLAGS " "
 register_env_var KTOBLZCHECK_LDFLAGS " "
 register_env_var PATH ":"
@@ -97,7 +103,8 @@ function inst_wget() {
 function inst_dtk() {
     setup MSYS DTK
     _MSYS_UDIR=`unix_path $MSYS_DIR`
-    if quiet ${_MSYS_UDIR}/bin/perl --help
+    if quiet ${_MSYS_UDIR}/bin/perl --help &&
+        [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ]
     then
         echo "msys dtk already installed.  skipping."
     else
@@ -112,7 +119,10 @@ function inst_dtk() {
             while [ -e $_dst_file ]; do _dst_file=$_dst_file.bak; done
             mv $file $_dst_file
         done
-        quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
+        wget_unpacked $M4_URL $DOWNLOAD_DIR $TMP_DIR
+        mv $TMP_UDIR/usr/bin/m4.exe /bin
+        quiet ${_MSYS_UDIR}/bin/perl --help &&
+        [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ] || die "msys dtk not installed correctly"
     fi
 }
 
@@ -211,6 +221,10 @@ function inst_active_perl() {
         echo "ActivePerl already installed.  skipping."
     else
         wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
+        qpushd $_ACTIVE_PERL_UDIR
+            assert_one_dir ActivePerl-*
+            mv ActivePerl-* ActivePerl
+        qpopd
         quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
     fi
 }
@@ -221,7 +235,6 @@ function inst_autotools() {
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
     add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
     add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet autoconf --help && quiet automake --help
     then
         echo "autoconf/automake already installed.  skipping."
@@ -244,7 +257,7 @@ function inst_autotools() {
         qpopd
         quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
     fi
-    if quiet ${LIBTOOLIZE} --help 
+    if quiet libtoolize --help
     then
         echo "libtool/libtoolize already installed.  skipping."
     else
@@ -256,7 +269,33 @@ function inst_autotools() {
             make
             make install
         qpopd
-        quiet ${LIBTOOLIZE} --help || die "libtool/libtoolize not installed correctly"
+        quiet libtoolize --help || die "libtool/libtoolize not installed correctly"
+    fi
+    [ ! -d $_AUTOTOOLS_UDIR/share/aclocal ] || add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_gmp() {
+    setup Gmp
+    _GMP_UDIR=`unix_path ${GMP_DIR}`
+    add_to_env -I$_GMP_UDIR/include GMP_CPPFLAGS
+    add_to_env -L$_GMP_UDIR/lib GMP_LDFLAGS
+    add_to_env ${_GMP_UDIR}/bin PATH
+    if quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile
+    then
+        echo "Gmp already installed. skipping."
+    else
+        wget_unpacked $GMP_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gmp-*
+        qpushd $TMP_UDIR/gmp-*
+            ./configure ${HOST_XCOMPILE} \
+                ABI=$GMP_ABI \
+                --prefix=${_GMP_UDIR} \
+                --disable-static --enable-shared 
+            make
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
+            make install
+        qpopd
+        quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile || die "Gmp not installed correctly"
     fi
 }
 
@@ -333,9 +372,8 @@ function inst_guile() {
         ln -sf /usr/bin/guile-config mingw32-guile-config
         ln -sf /usr/bin/guile mingw32-build-guile
         qpopd
-    else
-        add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
     fi
+    [ ! -d $_GUILE_UDIR/share/aclocal ] || add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_svn() {
@@ -346,8 +384,11 @@ function inst_svn() {
     then
         echo "subversion already installed.  skipping."
     else
-        smart_wget $SVN_URL $DOWNLOAD_DIR
-        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
+        wget_unpacked $SVN_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/svn-win32-*
+        mkdir -p $_SVN_UDIR
+        mv $TMP_UDIR/svn-win32-*/* $_SVN_UDIR
+        quiet svn --version || die "svn not installed correctly"
     fi
 }
 
@@ -461,10 +502,8 @@ function inst_gnome() {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
-        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-#        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed.  skipping."
@@ -480,8 +519,11 @@ function inst_gnome() {
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -521,26 +563,20 @@ function inst_gnome() {
         wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
-        wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
         wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_DOC_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $_GNOME_UDIR
-            [ -f bin/zlib1.dll ] || mv zlib1.dll bin
-            if [ ! -f lib/libz.dll.a ]; then
-                qpushd bin
-                    ${DLLTOOL} -D zlib1.dll -d ../lib/zlib.def -l libz.dll.a
-                    mv libz.dll.a ../lib
-                qpopd
-            fi
+            assert_one_dir $TMP_UDIR/gtk-doc-*
+            mv $TMP_UDIR/gtk-doc-*/gtk-doc.m4 $_GNOME_UDIR/share/aclocal
             if [ ! -f libexec/gconfd-2.console.exe ]; then
                 cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
             fi
             exetype libexec/gconfd-2.exe windows
-#            sed 's#gtk+-unix-print-2.0 >= [0-9\.]* *##' lib/pkgconfig/libgtkhtml-3.14.pc > tmp  # not gnomeprint
-#            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc  # not gnomeprint
+            for file in bin/intltool-*; do
+                sed '1s,!.*perl,!'"$INTLTOOL_PERL"',;s,/opt/gnu/bin/iconv,iconv,' $file > tmp
+                mv tmp $file
+            done
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
@@ -553,10 +589,11 @@ fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
             chmod +x bin/pkg-config{.exe,-msys.sh}
+            sed '/Requires/s,\(.*\) enchant\(.*\) iso-codes\(.*\),\1\2\3,' lib/pkgconfig/libgtkhtml-3.14.pc > tmp
+            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
         qpopd
         quiet gconftool-2 --version &&
-        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-#        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
@@ -564,12 +601,8 @@ EOF
             perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
             #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
         qpopd
-        # Latest gnome-dev packages don't ship with *.la files
-        # anymore. What do we do...?
-        #qpushd $_GNOME_UDIR/bin
-        #    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
-        #qpopd
     fi
+    [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_swig() {
@@ -639,7 +672,7 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgoffice-0.4
+    if quiet ${PKG_CONFIG} --exists libgoffice-0.8
     then
         echo "goffice already installed.  skipping."
     else
@@ -650,19 +683,19 @@ function inst_goffice() {
         qpushd $TMP_UDIR/goffice-*
             [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
                 patch -p1 < $GOFFICE_PATCH
-            ${LIBTOOLIZE} --force
+            libtoolize --force
             aclocal ${ACLOCAL_FLAGS} -I .
             automake
             autoconf
             ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
-                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS}"
+                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS} ${HH_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS} ${HH_LDFLAGS}"
             [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
             [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
             make
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.4 || die "goffice not installed correctly"
+        ${PKG_CONFIG} --exists libgoffice-0.8 || die "goffice not installed correctly"
     fi
 }
 
@@ -753,6 +786,7 @@ function inst_opensp() {
         qpushd $TMP_UDIR/OpenSP-*
             [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
                 patch -p0 < $OPENSP_PATCH
+            libtoolize --force
             aclocal ${ACLOCAL_FLAGS} -I m4
             automake
             autoconf
@@ -797,12 +831,29 @@ function inst_libofx() {
     fi
 }
 
+function inst_gnutls() {
+    setup GNUTLS
+    _GNUTLS_UDIR=`unix_path ${GNUTLS_DIR}`
+    add_to_env ${_GNUTLS_UDIR}/bin PATH
+    add_to_env ${_GNUTLS_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
+    add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
+    if quiet ${PKG_CONFIG} --exists gnutls
+    then
+        echo "GNUTLS already installed. skipping."
+    else
+        wget_unpacked $GNUTLS_URL $DOWNLOAD_DIR $GNUTLS_DIR
+        rm -f $_GNUTLS_UDIR/lib/*.la
+        quiet ${PKG_CONFIG} --exists gnutls || die "GNUTLS not installed correctly"
+    fi
+    [ ! -d $_GNUTLS_UDIR/share/aclocal ] || add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
 function inst_gwenhywfar() {
     setup Gwenhywfar
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
     add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists gwenhywfar
     then
         echo "Gwenhywfar already installed. skipping."
@@ -811,20 +862,35 @@ function inst_gwenhywfar() {
         assert_one_dir $TMP_UDIR/gwenhywfar-*
         qpushd $TMP_UDIR/gwenhywfar-*
             # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
-            ./configure ${HOST_XCOMPILE} \
-                --with-openssl-includes=$_OPENSSL_UDIR/include \
-                --disable-binreloc \
-                ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-                ssl_lib="-leay32 -lssl32" \
-                --prefix=$_GWENHYWFAR_UDIR \
-                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
-                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+            if [ "$AQBANKING3" != "yes" ]; then
+                ./configure ${HOST_XCOMPILE} \
+                    --with-openssl-includes=$_OPENSSL_UDIR/include \
+                    --disable-binreloc \
+                    ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
+                    ssl_lib="-leay32 -lssl32" \
+                    --prefix=$_GWENHYWFAR_UDIR \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+            else
+                [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] && \
+                    patch -p1 < $GWENHYWFAR_PATCH
+                ./configure ${HOST_XCOMPILE} \
+                    --with-openssl-includes=$_OPENSSL_UDIR/include \
+                    --with-openssl-libs=$_OPENSSL_UDIR/lib \
+                    --with-libgnutls-prefix=$_GNUTLS_UDIR \
+                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
+                    --disable-binreloc \
+                    --prefix=$_GWENHYWFAR_UDIR \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
+            fi
             make
-            [ "$CROSS_COMPILE" != "yes" ] && make check
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
         qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
     fi
+    [ ! -d $_GWENHYWFAR_UDIR/share/aclocal ] || add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_ktoblzcheck() {
@@ -846,7 +912,7 @@ function inst_ktoblzcheck() {
                 --disable-binreloc \
                 --disable-python
             make
-            [ "$CROSS_COMPILE" != "yes" ] && make check
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
         qpopd
         ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
@@ -886,7 +952,6 @@ function inst_aqbanking() {
     _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
     add_to_env ${_AQBANKING_UDIR}/bin PATH
     add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists aqbanking
     then
         echo "AqBanking already installed. skipping."
@@ -894,38 +959,120 @@ function inst_aqbanking() {
         wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/aqbanking-*
         qpushd $TMP_UDIR/aqbanking-*
-            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS}"
-            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS}"
+            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}"
+            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS}"
+            if test x$CROSS_COMPILE = xyes; then
+                XMLMERGE="xmlmerge"
+            else
+                XMLMERGE="${_GWENHYWFAR_UDIR}/bin/xmlmerge"
+            fi
+            if test x$AQBANKING3 = xyes; then
+                _AQ_BACKENDS="aqhbci aqofxconnect"
+            else
+                _AQ_BACKENDS="aqdtaus aqhbci aqofxconnect"
+            fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
-                ./configure \
+                ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                    --with-xmlmerge=${XMLMERGE} \
                     --with-frontends="cbanking qbanking" \
-                    --with-backends="aqdtaus aqhbci aqofxconnect" \
-                    CPPFLAGS="${_AQ_CPPFLAGS}" \
-                    LDFLAGS="${_AQ_LDFLAGS}" \
+                    --with-backends="${_AQ_BACKENDS}" \
+                    CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
+                    LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
                     qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
                     qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
                     --prefix=${_AQBANKING_UDIR}
                 make qt4-port
                 make clean
             else
-                ./configure \
+                ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                    --with-xmlmerge=${XMLMERGE} \
                     --with-frontends="cbanking" \
-                    --with-backends="aqdtaus aqhbci aqofxconnect" \
-                    CPPFLAGS="${_AQ_CPPFLAGS}" \
-                    LDFLAGS="${_AQ_LDFLAGS}" \
+                    --with-backends="${_AQ_BACKENDS}" \
+                    CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
+                    LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
                     --prefix=${_AQBANKING_UDIR}
             fi
             make
             make install
         qpopd
         qpushd ${_AQBANKING_UDIR}/bin
-            exetype aqbanking-tool.exe console
-            exetype aqhbci-tool.exe console
+            if [ "$AQBANKING3" != "yes" ]; then
+                exetype aqbanking-tool.exe console
+                exetype aqhbci-tool.exe console
+            else
+                exetype aqhbci-tool3.exe console
+            fi
         qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
+    fi
+    [ ! -d $_AQBANKING_UDIR/share/aclocal ] || add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_libdbi() {
+    setup LibDBI
+    _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
+    _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
+    add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
+    add_to_env -L$_LIBDBI_UDIR/lib LIBDBI_LDFLAGS
+    if test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll
+    then
+        echo "SQLite3 already installed.  skipping."
+    else
+        wget_unpacked $SQLITE3_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/sqlite-*
+        qpushd $TMP_UDIR/sqlite-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_SQLITE3_UDIR}
+            make
+            make install
+        qpopd
+        test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll || die "SQLite3 not installed correctly"
+    fi
+    if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
+    then
+        echo "libdbi already installed.  skipping."
+    else
+        wget_unpacked $LIBDBI_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libdbi-0*
+        qpushd $TMP_UDIR/libdbi-0*
+            if [ -n "$LIBDBI_PATCH" -a -f "$LIBDBI_PATCH" ]; then
+                patch -p1 < $LIBDBI_PATCH
+                ./autogen.sh
+            fi
+            ./configure ${HOST_XCOMPILE} \
+                --disable-docs \
+                --prefix=${_LIBDBI_UDIR}
+            make
+            make install
+        qpopd
+        test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
+    fi
+    if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll
+    then
+        echo "libdbi drivers already installed.  skipping."
+    else
+        wget_unpacked $LIBDBI_DRIVERS_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libdbi-drivers-*
+        qpushd $TMP_UDIR/libdbi-drivers*
+            [ -n "$LIBDBI_DRIVERS_PATCH" -a -f "$LIBDBI_DRIVERS_PATCH" ] && \
+                patch -p0 < $LIBDBI_DRIVERS_PATCH
+            [ -n "$LIBDBI_DRIVERS_PATCH2" -a -f "$LIBDBI_DRIVERS_PATCH2" ] && \
+                patch -p0 < $LIBDBI_DRIVERS_PATCH2
+            ./configure ${HOST_XCOMPILE} \
+                --disable-docs \
+                --with-dbi-incdir=${_LIBDBI_UDIR}/include \
+                --with-dbi-libdir=${_LIBDBI_UDIR}/lib \
+                --with-sqlite3 \
+                --with-sqlite3-dir=${_SQLITE3_UDIR} \
+                --prefix=${_LIBDBI_DRIVERS_UDIR}
+            make
+            make install
+        qpopd
+        test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi drivers not installed correctly"
     fi
 }
 
@@ -945,7 +1092,7 @@ function inst_libgda() {
             patch libgda/gda-data-model-dir.c $LIBGDA_PATCH
             #patch to use g_setenv instead of setenv (bug #510739)
             patch tools/gda-sql.c $LIBGDA_PATCH2
-            ./configure  \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBGDA_UDIR} \
                 CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
                 LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
@@ -993,8 +1140,6 @@ function inst_gnucash() {
         if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
             ./autogen.sh
         fi
-        # Windows DLLs don't need relinking
-        grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
 
     qpushd $BUILD_DIR
@@ -1002,34 +1147,60 @@ function inst_gnucash() {
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
+            --enable-dbi \
+            --with-dbi-dbd-dir=${_LIBDBI_DRIVERS_UDIR}/lib/dbd \
             ${LIBOFX_OPTIONS} \
             ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             --enable-locale-specific-tax \
-            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
-        # Windows DLLs don't need relinking
-        grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
-
         make
-
-        # Try to fix the paths in the "gnucash" script
-        qpushd src/bin
-            rm gnucash
-            make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${LIBGDA_DIR}/bin" \
-                gnucash
-        qpopd
 
         make_install
     qpopd
 }
 
+# This function will be called by make_install.sh as well,
+# so do not regard variables from inst_* functions as set
+# Parameters allowed: skip_scripts, skip_schemas
 function make_install() {
+    _BUILD_UDIR=`unix_path $BUILD_DIR`
+    _INSTALL_UDIR=`unix_path $INSTALL_DIR`
+    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
+    _PCRE_UDIR=`unix_path $PCRE_DIR`
+    _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _GUILE_UDIR=`unix_path $GUILE_DIR`
+    _REGEX_UDIR=`unix_path $REGEX_DIR`
+    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
+    _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
+    _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
+    _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
+    _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
+    _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
 
+    for param in "$@"; do
+        [ "$param" = "skip_scripts" ] && _skip_scripts=1
+        [ "$param" = "skip_schemas" ] && _skip_schemas=1
+    done
+
+    if [ -z $_skip_scripts ]; then
+        # Try to fix the paths in the "gnucash" script
+        qpushd $_BUILD_UDIR/src/bin
+            rm gnucash
+            make PATH_SEPARATOR=";" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
+                gnucash
+        qpopd
+    fi
+    
     make install
 
     qpushd $_INSTALL_UDIR/lib
@@ -1044,31 +1215,33 @@ function make_install() {
         for A in *.la; do
             sed '/dependency_libs/d' $A > tmp ; mv tmp $A
         done
-
-        # gettext 0.17 installs translations to \share\locale, but not all
-        # gnome packages have been recompiled against it
-        [ -d locale ] && cp -a locale ../share && rm -rf locale
     qpopd
 
-    qpushd $_INSTALL_UDIR/etc/gconf/schemas
-        for file in *.schemas; do
-            gconftool-2 \
-                --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
-                --install-schema-file $file
-        done
-        gconftool-2 --shutdown
-    qpopd
+    if [ -z $_skip_schemas ]; then
+        qpushd $_INSTALL_UDIR/etc/gconf/schemas
+            for file in *.schemas; do
+                gconftool-2 \
+                    --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
+                    --install-schema-file $file
+            done
+            gconftool-2 --shutdown
+        qpopd
+    fi
 
-    # Create a startup script that works without the msys shell
-    qpushd $_INSTALL_UDIR/bin
-        echo "setlocal" > gnucash.bat
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBGDA_DIR}\\bin;%PATH%" > gnucash.bat
-        echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
-        echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
-        echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
-        echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
-        echo "start gnucash-bin %*" >> gnucash.bat
-    qpopd
+    if [ -z $_skip_scripts ]; then
+        # Create a startup script that works without the msys shell
+        qpushd $_INSTALL_UDIR/bin
+            echo "setlocal" > gnucash.cmd
+            echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.cmd
+            echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.cmd
+            echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.cmd
+            echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.cmd
+            echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.cmd
+            echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.cmd
+            echo "set SCHEME_LIBRARY_PATH=" >> gnucash.cmd
+            echo "start gnucash-bin %*" >> gnucash.cmd
+        qpopd
+    fi
 }
 
 function make_chm() {
@@ -1121,11 +1294,13 @@ function inst_docs() {
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
-        mkdir -p $_DOCS_INST_UDIR/{C,de_DE}
+        mkdir -p $_DOCS_INST_UDIR/{C,de_DE,it_IT}
         make_chm guide C
         make_chm guide de_DE
+        make_chm guide it_IT
         make_chm help C
         make_chm help de_DE
+        make_chm help it_IT
     qpopd
 }
 

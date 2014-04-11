@@ -51,3 +51,5 @@ void gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc);
 G_END_DECLS
 
 #endif /* GNC_AB_GETBALANCE_H */
+/** @} */
+/** @} */

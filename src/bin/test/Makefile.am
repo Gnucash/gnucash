@@ -1,7 +1,7 @@
 
 TESTS = test-version
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
 	PATH="..:${PATH}"
 
 EXTRA_DIST = test-version

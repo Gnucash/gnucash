@@ -77,7 +77,7 @@ gint gnc_report_add(SCM report)
 
     value = scm_call_1(get_id, report);
     if (SCM_NUMBERP(value)) {
-      id = scm_num2int(value, SCM_ARG1, __FUNCTION__);
+      id = scm_num2int(value, SCM_ARG1, G_STRFUNC);
       if (!g_hash_table_lookup(reports, &id)) {
 	key = g_new(gint, 1);
 	*key = id;
@@ -144,6 +144,7 @@ gnc_run_report (gint report_id, char ** data)
 
   str = g_strdup_printf("(gnc:report-run %d)", report_id);
   scm_text = gfec_eval_string(str, error_handler);
+  g_free(str);
 
   if (scm_text == SCM_UNDEFINED || !SCM_STRINGP (scm_text))
     return FALSE;

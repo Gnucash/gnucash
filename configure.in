@@ -25,7 +25,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
 # Initialize automake -- make sure we have at least version 1.9
-AM_INIT_AUTOMAKE(1.9)
+AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 
 # Parse out the version number
 GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
@@ -37,8 +37,9 @@ GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\
 # --enable-debug:
 USER_OPTIMIZATION=""
 for flag in $CFLAGS; do
-  if test -z $(echo $flag | sed -e 's,-O.,,'); then
-    USER_OPTIMIZATION="$USER_OPTIMIZATION ${flag}"
+  tmp_flag=`echo $flag | sed -e 's,-O.,,'`
+  if test -z "$tmp_flag"; then
+    USER_OPTIMIZATION="$USER_OPTIMIZATION ${tmp_flag}"
   fi
 done
 
@@ -74,7 +75,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
 	[GnuCash Micro version number])
 
 dnl Set of available languages.
-ALL_LINGUAS="ca cs da de de_CH el en_GB es_NI es eu fr he hu it ja nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+ALL_LINGUAS="ca cs da de de_CH el en_GB es_NI es eu fi fr he hu it ja nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -92,6 +93,7 @@ AM_GLIB_GNU_GETTEXT
 AC_PROG_INSTALL
 
 AC_LIBTOOL_DLOPEN
+AC_LIBTOOL_WIN32_DLL
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 
@@ -215,6 +217,7 @@ AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
+AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
 
@@ -411,7 +414,9 @@ fi
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
 GNC_OLDCFLAGS="$CFLAGS"
+GNC_OLDLDFLAGS="$LDFLAGS"
 CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+LDFLAGS="${LDFLAGS} ${GLIB_LIBS}"
 AC_TRY_RUN([
   #include <glib.h>
   #include <libguile/__scm.h>
@@ -432,13 +437,16 @@ AC_TRY_RUN([
 	       sizeof(gint64)))
 ])
 CFLAGS="$GNC_OLDCFLAGS"
+LDFLAGS="$GNC_OLDLDFLAGS"
 
 # One of the places this is critical is in gnc_scm_to_gint64 and inverse.
 # However, I'm sure we require this elsewhere, so don't remove this test
 # unless you've done sufficient code review/testing.
 AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
 GNC_OLDCFLAGS="$CFLAGS"
+GNC_OLDLDFLAGS="$LDFLAGS"
 CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+LDFLAGS="${LDFLAGS} ${GLIB_LIBS}"
 AC_TRY_RUN([
   #include <glib.h>
   int main(int argc, char *argv[]) {
@@ -453,6 +461,7 @@ AC_TRY_RUN([
   AC_MSG_RESULT(assuming yes)
 ])
 CFLAGS="$GNC_OLDCFLAGS"
+LDFLAGS="$GNC_OLDLDFLAGS"
 
 
 ### --------------------------------------------------------------------------
@@ -506,6 +515,26 @@ AC_SUBST(GCONF_CFLAGS)
 AC_SUBST(GCONF_LIBS)
 
 ### --------------------------------------------------------------------------
+### look for webkit
+
+AC_ARG_ENABLE(webkit,
+  [AS_HELP_STRING([--enable-webkit],[build with the webkit HTML engine])],
+  [case "${enableval}" in
+     yes) want_webkit=true ;;
+     no)  want_webkit=false ;;
+     *) want_webkit=false ;;
+   esac],
+   [want_webkit=false])
+if test x${want_webkit} = xtrue
+then
+  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+  AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+fi
+AM_CONDITIONAL(HTML_USING_WEBKIT, test x${want_webkit} = xtrue)
+AC_SUBST(WEBKIT_CFLAGS)
+AC_SUBST(WEBKIT_LIBS)
+
+### --------------------------------------------------------------------------
 ### LIBXML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
 
 LIBXML2_REQUIRED=2.5.10
@@ -526,6 +555,19 @@ AC_CHECK_LIB(xml2, xmlElemDump, [:], [
 LIBS="$oLIBS"
 
 ### --------------------------------------------------------------------------
+### Zlib
+
+ZLIB_LIBS=-lz
+AC_SUBST(ZLIB_LIBS)
+
+oLIBS="$LIBS"
+LIBS="$LIBS $ZLIB_LIBS"
+AC_CHECK_LIB(z, gzopen, [:], [
+  AC_MSG_ERROR([zlib is required for GnuCash])
+])
+LIBS="$oLIBS"
+
+### --------------------------------------------------------------------------
 ### QOF, the Query Object Framework.  Check if there is a native version.
 
 dnl XXX: FIXME: RELEASE HACK
@@ -533,7 +575,7 @@ dnl This makes sure that we default to using internal QOF for SVN.
 dnl Make sure to enable this to be the default for stable releases!
 
 AC_ARG_ENABLE(qof,
-  [  --enable-qof     enable the search for an external QOF library (disabled)],
+  [AS_HELP_STRING([--enable-qof],[enable the search for an external QOF library (disabled)])],
   [AC_MSG_ERROR([GnuCash has disabled use of external QOF.])
    case "${enableval}" in
      yes) gnc_enable_qof=true ;;
@@ -542,10 +584,10 @@ AC_ARG_ENABLE(qof,
    esac],
    [gnc_enable_qof=false])
 
-AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)],
+AC_ARG_WITH(qof, [AS_HELP_STRING([--with-qof=path],[prefix for Query Object Framework - QOF (auto)])],
 	[gnc_with_qof=$withval], [gnc_with_qof=yes])
 AC_ARG_WITH(qt3_wizard_package,
-                 [  --with-qt3-wizard-package=name  name of package containing qt3-wizard (aqbanking)],
+                 [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
 	[QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
 AC_DEFINE_UNQUOTED([QT3_WIZARD_PACKAGE],["$QT3_WIZARD_PACKAGE"],[Name of package containing qt3-wizard.])
 
@@ -582,8 +624,8 @@ else
 fi
 if test x$QOF_XML_DIR = x; then
 	QOF_LIB_DIR='${pkglibdir}'
-	QOF_CFLAGS='-I${top_builddir}/lib/libqof/qof -I${top_srcdir}/lib/libqof/qof'
-	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgnc-qof.la'
+	QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
+	QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
 	QOF_XML_DIR='${pkgdatadir}/xml/qsf'
@@ -605,24 +647,6 @@ AC_SUBST(QOF_LIB_DIR)
 AC_SUBST(QOF_XML_DIR)
 
 AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
-
-### -----------------------
-### LIBGDA
-#AC_ARG_ENABLE(gda, 
-#  [AS_HELP_STRING([--enable-gda],[build with the libgda backend])],
-#  [case "${enableval}" in
-#     yes) want_gda=true ;;
-#     no)  want_gda=false ;;
-#     *) want_gda=false ;;
-#   esac],
-#   [want_gda=false])
-#if test x${want_gda} = xtrue
-#then
-#  PKG_CHECK_MODULES(LIBGDA, libgda-4.0 >= 3.99.2, [GDA_DIR=gda])
-#fi
-#AC_SUBST(GDA_DIR)
-#AC_SUBST(LIBGDA_CFLAGS)
-#AC_SUBST(LIBGDA_LIBS)
 
 ### ----------------------
 ### LIBDBI
@@ -682,34 +706,32 @@ AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_LIBEXECDIR)
 
 AC_ARG_ENABLE( debug,
-  [  --enable-debug               compile with debugging flags set],
+  [AS_HELP_STRING([--enable-debug],[compile with debugging flags set])],
+  [
        # remove any optimization flags...
-       CFLAGS=$(echo $CFLAGS | sed -e 's,-O.,,g')
+       CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
        # ...except for those the user wants.
        CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
        LDFLAGS="${LDFLAGS} -g"
-       AC_DEFINE(DEBUG_MEMORY,1,Enable debug memory),
-       AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory) )
+       AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
+       AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])])
 
 AC_ARG_ENABLE( profile,
-  [  --enable-profile             compile with profiling set],
+  [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
        CFLAGS="${CFLAGS} -pg"
        LDFLAGS="${LDFLAGS} -pg")
 
 AC_ARG_ENABLE( ref-counts-dumps,
-  [  --enable-ref-counts-dumps    compile with ref count dumps],
-       AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,Enable reference count dumps),
-       AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,Enable reference count dumps) )
+  [AS_HELP_STRING([--enable-ref-counts-dumps],[compile with ref count dumps])],
+       AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,[Enable reference count dumps])
+       AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,[Enable reference count dumps]) )
 
-
-### --------------------------------------------------------------------------
-### RPC has been removed in gnucash 1.9.0
 
 ### --------------------------------------------------------------------------
 ### OFX
 want_ofx=auto
 AC_ARG_ENABLE( ofx,
-  [  --enable-ofx                 compile with ofx support (needs LibOFX)],
+  [AS_HELP_STRING([--enable-ofx],[compile with ofx support (needs LibOFX)])],
   [ case "$enableval" in
     yes) want_ofx=yes ;;
     no)  want_ofx=no ;;
@@ -724,7 +746,7 @@ esac
 if test x${want_ofx} != xno ;
 then
     AC_ARG_WITH( ofx-prefix, 
-	[  --with-ofx-prefix=DIR     specify where to look for libOFX],
+	[AS_HELP_STRING([--with-ofx-prefix=DIR],[specify where to look for libOFX])],
        OFXPREFIX="$with_ofx_prefix" )
 
     if test x${OFXPREFIX} != x ; then
@@ -792,7 +814,7 @@ AC_SUBST(OFX_DIR)
 ### --------------------------------------------------------------------------
 ### MT940
 AC_ARG_ENABLE( mt940,
-  [  --enable-mt940               obsolete, included in --enable-aqbanking],
+  [AS_HELP_STRING([--enable-mt940],[obsolete, included in --enable-aqbanking])],
   if test "x$enableval" != "xno" ; then
     AC_MSG_ERROR([--enable-mt940 is obsolete -- all functionality is already included in --enable-aqbanking])
   fi)
@@ -801,12 +823,12 @@ AC_ARG_ENABLE( mt940,
 ### AqBanking
 
 AC_ARG_ENABLE( aqbanking,
-  [  --enable-aqbanking           compile with AqBanking support],
+  [AS_HELP_STRING([--enable-aqbanking],[compile with AqBanking support])],
   if test "x$enableval" != "xno" ; then
     want_aqbanking=yes
   fi)
 AC_ARG_ENABLE( hbci,
-  [  --enable-hbci                an alias for --enable-aqbanking],
+  [AS_HELP_STRING([--enable-hbci],[an alias for --enable-aqbanking])],
   if test "x$enableval" != "xno" ; then
     want_aqbanking=yes
   fi)
@@ -849,7 +871,7 @@ LANGINFO_D_FMT_CHECK
 
 dnl Enable locale-specific tax-related information in the accounts
 AC_ARG_ENABLE( locale-specific-tax,
-  [  --enable-locale-specific-tax enable localized tax categories (experimental)],
+  [AS_HELP_STRING([--enable-locale-specific-tax],[enable localized tax categories (experimental)])],
   AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
 
 dnl Make sure we have a proper gettext installed
@@ -866,7 +888,7 @@ fi
 
 # Used to initialize doc-path.
 AC_ARG_WITH( help-prefix,
-  [  --with-help-prefix=PATH   specify where to store the help files],
+  [AS_HELP_STRING([--with-help-prefix=PATH],[specify where to store the help files])],
   GNC_HELPDIR="$with_help_prefix",
   GNC_HELPDIR="\${datadir}")
 
@@ -877,7 +899,7 @@ AC_SUBST(GNC_HELPDIR)
 ### Check for etags
 
 AC_ARG_ENABLE( etags,
-  [  --enable-etags               enable automatic create of TAGS file],
+  [AS_HELP_STRING([--enable-etags],[enable automatic create of TAGS file])],
   if test x$enableval = xyes; then
      USE_ETAGS=1
   fi,
@@ -893,7 +915,7 @@ AM_CONDITIONAL(GNC_ETAGS_FILE, test x${GNC_ETAGS_FILE} = xTAGS)
 ### Check for ctags
 
 AC_ARG_ENABLE( ctags,
-  [  --enable-ctags               enable automatic create of tags file],
+  [AS_HELP_STRING([--enable-ctags],[enable automatic create of tags file])],
   if test x$enableval = xyes; then
      USE_CTAGS=1
   fi,
@@ -910,7 +932,7 @@ AM_CONDITIONAL(GNC_CTAGS_FILE, test x${GNC_CTAGS_FILE} = xtags)
 
 # Check for perl, force version 5
 AC_ARG_WITH(perl,
-  [  --with-perl=FILE          which perl executable to use ],
+  [AS_HELP_STRING([--with-perl=FILE],[which perl executable to use])],
   PERL="${with_perl}")
 
 # If the user didn't specify a perl, then go fetch.
@@ -940,7 +962,7 @@ AC_SUBST(PERL)
 #
 PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
 AC_ARG_WITH( perl-includes, 
-  [  --with-perl-includes=DIR  specify where to look for perl includes],
+  [AS_HELP_STRING([--with-perl-includes=DIR],[specify where to look for perl includes])],
        PERLINCL="$with_perl_includes" )
 AC_SUBST(PERLINCL)
 
@@ -948,10 +970,10 @@ AC_SUBST(PERLINCL)
 # ----------------------------------------------------------------------------
 AC_DEFUN([BB_ENABLE_DOXYGEN],
 [
-AC_ARG_ENABLE(doxygen, [  --enable-doxygen             enable documentation generation with doxygen (auto)])
-AC_ARG_ENABLE(dot, [  --enable-dot                 use 'dot' to generate graphs in doxygen (auto)])              
-AC_ARG_ENABLE(html-docs, [  --enable-html-docs           enable HTML generation with doxygen (yes)], [], [ enable_html_docs=yes])              
-AC_ARG_ENABLE(latex-docs, [  --enable-latex-docs          enable LaTeX documentation generation with doxygen (no)], [], [ enable_latex_docs=no])              
+AC_ARG_ENABLE(doxygen, [AS_HELP_STRING([--enable-doxygen],[enable documentation generation with doxygen (auto)])])
+AC_ARG_ENABLE(dot, [AS_HELP_STRING([--enable-dot],[use 'dot' to generate graphs in doxygen (auto)])])
+AC_ARG_ENABLE(html-docs, [AS_HELP_STRING([--enable-html-docs],[enable HTML generation with doxygen (yes)])], [], [ enable_html_docs=yes])              
+AC_ARG_ENABLE(latex-docs, [AS_HELP_STRING([--enable-latex-docs],[enable LaTeX documentation generation with doxygen (no)])], [], [ enable_latex_docs=no])              
 if test "x$enable_doxygen" = xno; then
         enable_doc=no
 else 
@@ -1009,7 +1031,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 ### --------------------------------------------------------------------------
 
 AC_ARG_ENABLE(gui, 
-  [  --disable-gui                  build without the GNOME GUI components of Gnucash],
+  [AS_HELP_STRING([--disable-gui],[build without the GNOME GUI components of Gnucash])],
   [case "${enableval}" in
      yes) gnc_build_gui=true ;;
      no)  gnc_build_gui=false ;;
@@ -1084,8 +1106,10 @@ then
     goffice=0
     goffice_with_cairo=0
     have_goffice_0_5=0
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
-      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [goffice=0])
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
+        PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [goffice=0])
+      ])
     ])
     if test x$goffice = x1
     then
@@ -1138,6 +1162,18 @@ then
       AC_MSG_ERROR([Goffice uses Cairo/GtkPrint but didn't find GtkHTML with GtkPrint support])
     fi
 
+    # check for gtkhtml >= 3.16 (includes gtk_html_print_operation_run())
+    if test x$gtkhtml = x1; then
+      AC_MSG_CHECKING(for GtkHTML - version >= 3.16.0)
+      if $PKG_CONFIG 'libgtkhtml-3.14 >= 3.16.0'; then
+        AC_MSG_RESULT(yes)
+        AC_DEFINE(HAVE_GTKHTML_3_16,1,[System has gtkhtml 3.16.0 or better])
+        HAVE_GTKHTML_3_16=1
+      else
+        AC_MSG_RESULT(no)
+      fi
+    fi
+
     # fallback to older gtkhtml versions and gnomeprint
     if test x$gtkhtml = x0
     then
@@ -1161,8 +1197,8 @@ dnl if Mac OSX, also scrub /sw/include
 dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
 case $host_os in
 	darwin*)
-		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;")
-		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;")
+		GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;"`
+		GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;"`
 		;;
 esac
     AC_SUBST(GTKHTML_CFLAGS)
@@ -1172,7 +1208,7 @@ esac
     ### ----------------------------------------------------------------------
     
     AC_ARG_ENABLE( efence,
-      [  --enable-efence               link using efence],
+      [AS_HELP_STRING([--enable-efence],[link using efence])],
       if test x$enableval = xyes; then
          EFENCE_LIBS="-lefence"
          USE_EFENCE=1
@@ -1214,7 +1250,7 @@ else
   allow_deprecated=false
 fi
 AC_ARG_ENABLE(deprecated-glib,
-  [  --disable-deprecated-glib    don't use deprecated glib functions],
+  [AS_HELP_STRING([--disable-deprecated-glib],[don't use deprecated glib functions])],
   [case "${enableval}" in
         no) allow_deprecated=false ;;
         *)  allow_deprecated=true ;;
@@ -1233,7 +1269,7 @@ else
   allow_deprecated=false
 fi
 AC_ARG_ENABLE(deprecated-gdk,
-  [  --disable-deprecated-gdk     don't use deprecated gdk functions],
+  [AS_HELP_STRING([--disable-deprecated-gdk],[don't use deprecated gdk functions])],
   [case "${enableval}" in
         no) allow_deprecated=false ;;
         *)  allow_deprecated=true ;;
@@ -1253,7 +1289,7 @@ else
   allow_deprecated=false
 fi
 AC_ARG_ENABLE(deprecated-gtk,
-  [  --disable-deprecated-gtk     don't use deprecated gtk functions],
+  [AS_HELP_STRING([--disable-deprecated-gtk],[don't use deprecated gtk functions])],
   [case "${enableval}" in
         no) allow_deprecated=false ;;
         *)  allow_deprecated=true ;;
@@ -1272,7 +1308,7 @@ else
   allow_deprecated=false
 fi
 AC_ARG_ENABLE(deprecated-gnome,
-  [  --disable-deprecated-gnome   don't use deprecated gnome functions],
+  [AS_HELP_STRING([--disable-deprecated-gnome],[don't use deprecated gnome functions])],
   [case "${enableval}" in
         no) allow_deprecated=false ;;
         *)  allow_deprecated=true ;;
@@ -1304,7 +1340,7 @@ AC_SUBST(LC_MESSAGES_ENUM)
 enable_python=false
 
 AC_ARG_ENABLE(python-bindings,
-  [  --enable-python-bindings     enable python bindings],
+  [AS_HELP_STRING([--enable-python-bindings],[enable python bindings])],
   [case "${enableval}" in
         yes) enable_python=true ;;
         no) enable_python=false ;;
@@ -1349,7 +1385,7 @@ then
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
   AC_ARG_ENABLE(error-on-warning,
-    [  --disable-error-on-warning    disable treating compile warnings as errors],
+    [AS_HELP_STRING([--disable-error-on-warning],[disable treating compile warnings as errors])],
     [case "${enableval}" in
        yes) warnFLAGS="${warnFLAGS} -Werror" ; gnc_error_on_warning=yes ;;
        no)  gnc_error_on_warning=no ;;
@@ -1424,12 +1460,14 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/en_GB/Makefile
           accounts/es_ES/Makefile
           accounts/es_MX/Makefile
+          accounts/fi_FI/Makefile
           accounts/fr_CA/Makefile
           accounts/fr_CH/Makefile
           accounts/fr_FR/Makefile
           accounts/hu_HU/Makefile
           accounts/it/Makefile
           accounts/ja/Makefile
+          accounts/nl/Makefile
           accounts/nb/Makefile
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
@@ -1446,10 +1484,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
-          lib/libqof/Makefile
-          lib/libqof/qof/Makefile
-          lib/libqof/backend/Makefile
-          lib/libqof/backend/file/Makefile
           lib/stf/Makefile
           packaging/Makefile
           packaging/win32/Makefile
@@ -1460,10 +1494,10 @@ AC_CONFIG_FILES(po/Makefile.in
           src/backend/Makefile
 		  src/backend/dbi/Makefile
 		  src/backend/dbi/test/Makefile
-          src/backend/file/Makefile
-          src/backend/file/test/Makefile
-          src/backend/file/test/test-files/Makefile
-          src/backend/file/test/test-files/xml2/Makefile
+          src/backend/xml/Makefile
+          src/backend/xml/test/Makefile
+          src/backend/xml/test/test-files/Makefile
+          src/backend/xml/test/test-files/xml2/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
 		  src/backend/sql/Makefile
@@ -1497,6 +1531,7 @@ AC_CONFIG_FILES(po/Makefile.in
 	  src/gnome-utils/test/Makefile
 	  src/gnome-utils/ui/Makefile
           src/gnome-search/Makefile
+		  src/html/Makefile
           src/import-export/Makefile
           src/import-export/test/Makefile
           src/import-export/qif-import/Makefile
@@ -1517,6 +1552,10 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/hbci/glade/Makefile
           src/import-export/hbci/schemas/Makefile
           src/import-export/hbci/test/Makefile
+          src/libqof/Makefile
+          src/libqof/qof/Makefile
+          src/libqof/backend/Makefile
+          src/libqof/backend/file/Makefile
           src/optional/Makefile
           src/optional/python-bindings/Makefile
           src/optional/python-bindings/tests/Makefile
@@ -1554,7 +1593,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/business/business-core/Makefile
           src/business/business-core/sql/Makefile
           src/business/business-core/test/Makefile
-          src/business/business-core/file/Makefile
+          src/business/business-core/xml/Makefile
           src/business/business-utils/Makefile
           src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
@@ -1580,9 +1619,6 @@ output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`
 if test x${DBI_DIR} != x; then
 components="$components dbi"
 fi
-if test x${GDA_DIR} != x; then
-components="$components gda"
-fi
 if test x${OFX_DIR} != x; then
 components="$components ofx"
 fi
@@ -1598,7 +1634,7 @@ AC_MSG_RESULT([
   -------------------------
   gnucash version ...... : $VERSION
   Build for host ....... : $host
-  Optional components....:$components
+  Optional components....: $components
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS

@@ -14,7 +14,7 @@ test_print_parse_amount_SOURCES = \
   ${top_builddir}/src/core-utils/gnc-gconf-utils.c \
   test-print-parse-amount.c
 
-GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
+GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/app-utils \
@@ -30,7 +30,7 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 LDADD = \
@@ -40,8 +40,8 @@ LDADD = \
    ${top_builddir}/src/test-core/libgncmod-test.la \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
    ${GUILE_LIBS} \
-   ${QOF_LIBS} \
    ${GCONF_LIBS}
 
 check_PROGRAMS = \
@@ -55,7 +55,7 @@ check_PROGRAMS = \
 EXTRA_DIST = \
   test-load-module
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
@@ -63,7 +63,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GCONF_CFLAGS}

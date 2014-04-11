@@ -46,6 +46,7 @@ typedef struct
 	GtkListStore *store;
         GtkComboBoxEntry *combo;
         GList *acctTypeFilters;
+	GList *acctCommodityFilters;
         gint eventHandlerId;
         /* The state of this pointer also serves as a flag about what state
          * the widget is in WRT the new-account-button ability. */
@@ -70,9 +71,9 @@ GtkWidget* gnc_account_sel_new (void);
 /**
  * Sets the GAS to the given account.  If the account doesn't exist in the
  * list, then it doesn't change the state of the GAS.  If the account is
- * NULL, then the first list selection is made.
+ * NULL, then the first list selection is made if set_default_acct is TRUE.
  **/
-void       gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct );
+void       gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_default_acct );
 /**
  * Returns the currently-selected Account.  If, for some reason the selection
  * is in a bad state, NULL will be returned.
@@ -81,10 +82,11 @@ Account*   gnc_account_sel_get_account( GNCAccountSel *gas );
 
 /**
  * The GNCAccountSel can be setup to filter the accounts displayed.
- * @param filters A GList of GNCAccountType identifiers which are allowed.
+ * @param typeFilters A GList of GNCAccountType identifiers which are allowed.
+ * @param commodityFilters A GList of gnc_commodity types which are allowed.
  * The list is copied, of course.
  **/
-void gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *filters );
+void gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *typeFilters, GList *commodityFilters );
 
 /**
  * Conditional inclusion of a new-account button to the right of the

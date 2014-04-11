@@ -52,7 +52,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
-#include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
 #include "gnc-session.h"
@@ -852,7 +851,7 @@ gppat_populate_gas_list(GtkWidget *dialog,
   filter = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_FILTER);
 
   /* Setting the account type filter triggers GNCAccountSel population. */
-  gnc_account_sel_set_acct_filters (gas, filter);
+  gnc_account_sel_set_acct_filters (gas, filter, NULL);
 
   /* Accounts to be deleted must be removed. */
   gnc_account_sel_purge_account( gas, account, exclude_subaccounts);

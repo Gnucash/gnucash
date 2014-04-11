@@ -53,7 +53,7 @@
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"
 
-#define FUNC_NAME __FUNCTION__
+#define FUNC_NAME G_STRFUNC
 /* TODO: clean up "register-stocks" junk
  */
 
@@ -1828,7 +1828,7 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
 
   acct_type_list = gnc_option_get_account_type_list(option);
   value = gnc_account_sel_new();
-  gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list);
+  gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list, NULL);
 
   g_signal_connect(value, "account_sel_changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
@@ -2384,7 +2384,8 @@ gnc_option_set_ui_value_account_sel (GNCOption *option, gboolean use_default,
     acc = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_Account"), 4, 0);
   }
 	
-  gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc);
+  //doesn't default because this function is called to set a specific account
+  gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc, FALSE);
 
   return FALSE;
 }
@@ -2435,7 +2436,7 @@ gnc_option_set_ui_value_number_range (GNCOption *option, gboolean use_default,
 
   if (SCM_NUMBERP(value))
   {
-    d_value = scm_num2dbl(value, __FUNCTION__);
+    d_value = scm_num2dbl(value, G_STRFUNC);
     gtk_spin_button_set_value(spinner, d_value);
     return FALSE;
   }
@@ -2801,7 +2802,7 @@ gnc_option_get_ui_value_budget(GNCOption *option, GtkWidget *widget)
     if (!bgt)
         return SCM_BOOL_F;
 
-    return SWIG_NewPointerObj(bgt, SWIG_TypeQuery("_p_gnc_budget_private"), 0);
+    return SWIG_NewPointerObj(bgt, SWIG_TypeQuery("_p_budget_s"), 0);
 }
 
 static SCM

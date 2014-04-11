@@ -102,6 +102,8 @@ void gnc_embedded_window_open_page (GncEmbeddedWindow *window,
 
 /** Remove a data plugin page from a window.
  *
+ *  @param window The window whose plugin is to be removed.
+ *
  *  @param page The page of data to be removed. */
 void gnc_embedded_window_close_page (GncEmbeddedWindow *window,
 				     GncPluginPage *page);

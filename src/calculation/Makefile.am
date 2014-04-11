@@ -5,8 +5,9 @@ pkglib_LTLIBRARIES = libgncmod-calculation.la
 libgncmod_calculation_la_LDFLAGS = -avoid-version
 
 libgncmod_calculation_la_LIBADD = \
-  ${GLIB_LIBS} ${GUILE_LIBS} \
-  ${QOF_LIBS}
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS}
 
 libgncmod_calculation_la_SOURCES = \
   expression_parser.c \
@@ -28,10 +29,10 @@ EXTRA_DIST = \
   numeric_ops.c \
   numeric_ops.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}

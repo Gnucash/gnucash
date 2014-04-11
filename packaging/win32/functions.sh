@@ -4,7 +4,7 @@ __SOURCED_FUNCTIONS=1
 function set_default() {
     local _varname=$1; shift
     if [ -z "`eval echo '"$'"$_varname"'"'`" ]; then
-        eval "$_varname"'="'"$*"'"'
+        eval "$_varname"'="'"$*"'"'  #" help emacs on windows
     fi
 }
 

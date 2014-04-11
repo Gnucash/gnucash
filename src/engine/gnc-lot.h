@@ -79,10 +79,10 @@ typedef struct _GncLotClass GNCLotClass;
 GType gnc_lot_get_type(void);
 
 
-GNCLot * gnc_lot_new (QofBook *);
+/*@ dependent @*/ GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
 
-GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
+/*@ dependent @*/ GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
 QofBook * gnc_lot_get_book (GNCLot *);		  
 
 void gnc_lot_begin_edit (GNCLot *lot);
@@ -110,7 +110,7 @@ gint gnc_lot_count_splits (const GNCLot *);
 
 /** The gnc_lot_get_account() routine returns the account with which 
  *    this lot is associated. */
-Account * gnc_lot_get_account (const GNCLot *);
+/*@ dependent @*/ Account * gnc_lot_get_account (const GNCLot *);
 
 /** The gnc_lot_get_balance() routine returns the balance of the lot. 
  *    The commodity in which this balance is expressed is the commodity 

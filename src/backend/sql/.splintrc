@@ -1,0 +1,39 @@
+-DHAVE_CONFIG_H
+-I.
+-I../../..
+-DG_LOG_DOMAIN="gnc.backend.sql"
+-I..
+-I../..
+-DLOCALE_DIR="/opt/gnucash2-svn/share/locale"
+-I../../../src/backend
+-I../../../src/engine
+-I../../../src/core-utils
+-I../../../lib/libc
+-I../../../lib/libqof/qof
+-I../../../lib/libqof/qof
+-I/usr/include/glib-2.0
+-I/usr/lib/glib-2.0/include
+-DORBIT2=1
+-I/usr/include/gconf/2
+-I/usr/include/orbit-2.0
+-I/usr/include/dbus-1.0
+-I/usr/lib/dbus-1.0/include
+-I/usr/include/glib-2.0
+-I/usr/lib/glib-2.0/include
+-D_FORTIFY_SOURCE=2
+
++posixlib
+
+# Needed for programs using glib typedefs
+-booltype gboolean
+
+# Extra flags about stuff we don't want to worry about right now
+-dependenttrans
+-branchstate
+-fcnuse
+-temptrans
+-exportlocal
+-unqualifiedtrans
+-onlytrans
+-usedef
+-compmempass

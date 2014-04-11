@@ -43,6 +43,10 @@
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
+
+EngineCommitErrorCallback g_error_cb;
+gpointer g_error_cb_data;
+
 // static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /* GnuCash version functions */
@@ -165,3 +169,17 @@ void gnc_log_default(void)
 	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DEBUG);
 }
 
+void
+gnc_engine_add_commit_error_callback( EngineCommitErrorCallback cb, gpointer data )
+{
+    g_error_cb = cb;
+    g_error_cb_data = data;
+}
+
+void
+gnc_engine_signal_commit_error( QofBackendError errcode )
+{
+    if( g_error_cb != NULL ) {
+	(*g_error_cb)( g_error_cb_data, errcode );
+    }
+}

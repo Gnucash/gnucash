@@ -24,15 +24,10 @@
 /** @addtogroup Dialogs
     @{ */
 /** @addtogroup ProgDialog Progress Dialog
-    @{ */
-/** @file dialog-progress.h
     @brief Dialog for displaying progress of long-running operations.
-    @author Copyright (C) 2000 Dave Peticolas
-    @author Copyright (C) 2008 Charles Day
-
-    These functions constitute an API for streamlining the creation
+    @details These functions constitute an API for streamlining the creation
     and management of progress dialogs. Once registered with the API,
-    the dialog's display and behavior can be controlled via simple API
+    the dialog's display and behavior can be controlled via simple
     calls that prevent the caller from needing to know anything about
     the underlying GUI.
 
@@ -42,6 +37,11 @@
     gnc_progress_dialog_custom(). This method allows custom-made dialogs
     to hand off the management of typical progress-related widgets, and
     allows long-running operations report progress in a standard way.
+    @{ */
+/** @file dialog-progress.h
+    @brief API for displaying progress of long-running operations.
+    @author Copyright (C) 2000 Dave Peticolas
+    @author Copyright (C) 2008 Charles Day
 */
 
 
@@ -124,7 +124,7 @@ void gnc_progress_dialog_set_primary(GNCProgressDialog *progress,
  *
  *  @param progress a ::GNCProgressDialog
  *
- *  @param str the text to be displayed
+ *  @param heading the text to be displayed
  *
  * NOTE: For HIG-compliant dialogs, use gnc_progress_dialog_set_primary()
  * instead. */
@@ -196,8 +196,8 @@ void gnc_progress_dialog_set_cancel_func(GNCProgressDialog *progress,
 /** Show a Cancel button and set the Guile procedure that will be called
  *  when it is pressed by the user. It will be called after any C function
  *  registered with gnc_progress_dialog_set_cancel_func(). The procedure
- *  must return @c #t if the dialog should be hidden. If there is no C or Guile
- *  cancel callback (the default state), the Cancel button is hidden.
+ *  must return @c \#t if the dialog should be hidden. If there is no C or
+ *  Guile cancel callback (the default state), the Cancel button is hidden.
  *
  *  @param progress a ::GNCProgressDialog
  *

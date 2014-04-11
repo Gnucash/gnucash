@@ -1,0 +1,86 @@
+--- goffice-0.7.2-old/goffice/Makefile.am	Fri Dec 28 22:55:15 2007
++++ goffice-0.7.2/goffice/Makefile.am	Sat Jan 10 21:50:04 2009
+@@ -27,7 +27,6 @@
+ if WITH_NATIVE_WIN32
+ # libtool thinks there are undefined refs in libhtmlhelp, by pass libtool
+ libgoffice_@GOFFICE_API_VER@_la_LDFLAGS += -Wl,-lhtmlhelp
+-libgoffice_@GOFFICE_API_VER@_la_LIBADD += -lurlmon
+ endif
+ endif
+ 
+--- goffice-0.7.2-old/goffice/utils/go-file.c	Tue Oct 14 10:52:48 2008
++++ goffice-0.7.2/goffice/utils/go-file.c	Sat Jan 10 20:33:58 2009
+@@ -31,11 +31,11 @@
+ #include <glib/gi18n-lib.h>
+ #include <gsf/gsf-input-gio.h>
+ #include <gsf/gsf-output-gio.h>
+-#ifdef GOFFICE_WITH_GNOME
++#ifdef G_OS_WIN32
++#include <windows.h>
++/*#include <io.h>*/
++#elif defined GOFFICE_WITH_GNOME
+ #include <libgnome/gnome-url.h>
+-#elif defined G_OS_WIN32
+-#include <urlmon.h>
+-#include <io.h>
+ #endif
+ 
+ #include <string.h>
+@@ -1065,6 +1065,7 @@
+ go_get_mime_type (gchar const *uri)
+ {
+ #if defined(G_OS_WIN32)
++#if defined(FindMimeFromData)
+ 	/* Do we really need that? */
+ 	LPWSTR wuri, mime_type;
+ 
+@@ -1079,6 +1080,7 @@
+ 	}
+ 
+ 	g_free (wuri);
++#endif
+ 
+ 	/* We try to determine mime using FindMimeFromData().
+ 	 * However, we are not sure whether the functions will know about
+@@ -1117,6 +1119,7 @@
+ go_get_mime_type_for_data (gconstpointer data, int data_size)
+ {
+ #if defined(G_OS_WIN32)
++#if defined(FindMimeFromData)
+ 	/* Do we really need that? */
+ 	LPWSTR mime_type;
+ 
+@@ -1126,6 +1129,7 @@
+ 	{
+ 		return g_utf16_to_utf8 (mime_type, -1, NULL, NULL, NULL);
+ 	}
++#endif
+ 
+ 	/* We try to determine mime using FindMimeFromData().
+ 	 * However, we are not sure whether the functions will know about
+--- goffice-0.7.2-old/goffice/gtk/goffice-gtk.c	Sun Sep 14 11:15:14 2008
++++ goffice-0.7.2/goffice/gtk/goffice-gtk.c	Sat Jan 10 20:59:39 2009
+@@ -779,11 +779,11 @@
+ 	char const *link;
+ } CBHelpPaths;
+ 
+-#ifdef GOFFICE_WITH_GNOME
+-#include <libgnome/gnome-help.h>
+-#elif defined(G_OS_WIN32)
++#ifdef G_OS_WIN32
+ #include <windows.h>
+ #include <htmlhelp.h>
++#elif defined(GOFFICE_WITH_GNOME)
++#include <libgnome/gnome-help.h>
+ #endif
+ static void
+ go_help_display (CBHelpPaths const *paths)
+@@ -837,7 +837,7 @@
+ 		gchar *path = g_build_filename (paths->data_dir, "doc", "C", chmfile, NULL);
+ 
+ 		g_free (chmfile);
+-		if (!HtmlHelp (GetDesktopWindow (), path, HH_HELP_CONTEXT, id))
++		if (!HtmlHelpW (GetDesktopWindow (), path, HH_HELP_CONTEXT, id))
+ 			go_gtk_notice_dialog (NULL, GTK_MESSAGE_ERROR, "Failed to spawn HtmlHelp");
+ 		g_free (path);
+ 	}

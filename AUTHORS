@@ -91,8 +91,8 @@ Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
 Andreas Köhler <andi5.py@gmx.net> is hunting down lots of bugs,
    especially for GUI code and other gtk related issues.
 
-Charles Day <cedayiv@gmail.com> hacks excessively on the QIF importer
-   and aims to see significantly expanded support for investments.
+Charles Day <cedayiv@gmail.com> overhauled the QIF importer and now
+   focuses mainly on investment- and currency-related issues.
 
 Other Contributors:
 ----------------
@@ -103,6 +103,7 @@ Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Jon Arney <jarney1@cox.net> Windows porting patches, misc fixes
 A. Alper Atici <alper_atici@yahoo.com> Turkish translation
+J. Alex Aycinena <alex.aycinena@gmail.com> Heavily improved Tax Report & TXF export
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Roman Bertle <bertle@smoerz.org> Austrian German account templates
 Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
@@ -110,6 +111,7 @@ Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
+Forest Bond <forest@alittletooquiet.net> Budget report improvements
 Richard Braakman <dark@xs4all.nl> xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
@@ -120,7 +122,7 @@ Eskil Bylund <eskil.bylund@gmail.com> account type deprecation
 Paul Campbell <kemitix@users.sourceforge.net> reconcile children patch
 Conrad Canterford <conrad@mail.watersprite.com.au> register bug fix
 Bill Carlson <wwc@wwcnet.nu> performance improvements
-David Mar?n Carre?o <davefx@aspl.f2s.com> Spanish translation of account setup.
+David Marín Carreño <davefx@aspl.f2s.com> Spanish translation of account setup.
 Tomas Cernaj <tcernaj@gmx.de> GType consistency changes, register fixes
 Carol Champagne <carol@io.com> documentation & a patient GUI usability critic
 Nikos Charonitakis <charosn@her.forthnet.gr> Greek translation
@@ -136,7 +138,9 @@ Glen Ditchfield <gjditchfield@acm.org> updated documentation
 Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Frank H. Ellenberger <f.ellenberger@online.de> small things, usually germany related
 Volker Englisch <Volker@englisch.us> QA and testing
+Frank H. Ellenberger <f.ellenberger@online.de> Fix for IDR currency
 Christoph Ernst <C.Ernst72@googlemail.com> Small bugfixes and minor enhancements
 Jonathan Ernst <jonathan@ernstfamily.ch> Translations
 Stephen Evanchik <evanchsa@clarkson.edu> Logging improvements; gtk2 conversions
@@ -148,6 +152,7 @@ Jan-Uwe Finck <jufi@nerdnet.de> for messages German translation
 Kevin Finn <kevinfinn@mediaone.net> auto-decimal point, options, auto interest xfer patches
 Danny Fischer <dan.pescaru@gmail.com> Romanian translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
+Christoph Franzen <ChristophFranzen@gmx.net> German account template for Wohnungswirtschaft business
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Todd T. Fries <todd@flare.fries.net> OpenBSD fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
@@ -175,6 +180,7 @@ Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
 Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Tuomo Kohvakka <tuomo.kohvakka@iki.fi> Finnish translation
 Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Fabrice Kurz <kurzf@voila.fr> French translation
@@ -226,7 +232,7 @@ Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> register changes for utf-8 and pango.
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
-Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
+Laurent Pélecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Zdenko Podobný <zdpo@mailbox.sk> Slovak translations

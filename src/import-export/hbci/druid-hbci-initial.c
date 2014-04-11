@@ -45,7 +45,7 @@
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "gnc-html.h"
+//#include "gnc-html.h"
 //#include "import-account-matcher.h"
 #include "gnc-component-manager.h"
 #include "gnc-session.h"

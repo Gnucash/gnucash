@@ -31,10 +31,12 @@
 static QofBook *book;
 
 static void check_valid(GDate *next, GDate *ref, GDate *start,
-                        guint16 mult, PeriodType pt)
+                        guint16 mult, PeriodType pt, WeekendAdjust wadj)
 {
     gboolean valid;
     gint startToNext;
+    /* FIXME: The WeekendAdjust argument is completely ignored for
+       now. */
 
     valid = g_date_valid(next);
     if (pt == PERIOD_ONCE && g_date_compare(start, ref) <= 0)
@@ -134,27 +136,31 @@ static void test_all()
     GDate d_ref, d_next;
     guint16 mult, mult_reg;
     PeriodType pt, pt_reg;
+    WeekendAdjust wadj, wadj_reg;
     gint32 j1, j2;
     gint i_ref;
 
     for (pt = PERIOD_ONCE; pt < NUM_PERIOD_TYPES; pt++) {
-        for (j1 = JULIAN_START; j1 < JULIAN_START + NUM_DATES_TO_TEST; j1++) {
-            g_date_set_julian(&d_start, j1);
-            for (i_ref = 0; i_ref < NUM_DATES_TO_TEST_REF; i_ref++) {
-                j2 = (guint32) get_random_int_in_range(1, 1 << 19);
-                g_date_set_julian(&d_ref, j2);
+        for (wadj = WEEKEND_ADJ_NONE; wadj < NUM_WEEKEND_ADJS; wadj++) {
+            for (j1 = JULIAN_START; j1 < JULIAN_START + NUM_DATES_TO_TEST; j1++) {
+                g_date_set_julian(&d_start, j1);
+                for (i_ref = 0; i_ref < NUM_DATES_TO_TEST_REF; i_ref++) {
+                    j2 = (guint32) get_random_int_in_range(1, 1 << 19);
+                    g_date_set_julian(&d_ref, j2);
 
-                for (mult = 0; mult < NUM_MULT_TO_TEST; mult++) {
-                    recurrenceSet(&r, mult, pt, &d_start);
-                    pt_reg = recurrenceGetPeriodType(&r);
-                    d_start_reg = recurrenceGetDate(&r);
-                    mult_reg = recurrenceGetMultiplier(&r);
+                    for (mult = 0; mult < NUM_MULT_TO_TEST; mult++) {
+                        recurrenceSet(&r, mult, pt, &d_start, wadj);
+                        pt_reg = recurrenceGetPeriodType(&r);
+                        d_start_reg = recurrenceGetDate(&r);
+                        mult_reg = recurrenceGetMultiplier(&r);
+                        wadj_reg = recurrenceGetWeekendAdjust(&r);
 
-                    recurrenceNextInstance(&r, &d_ref, &d_next);
-                    check_valid(&d_next, &d_ref, &d_start_reg,
-                                mult_reg, pt_reg);
+                        recurrenceNextInstance(&r, &d_ref, &d_next);
+                        check_valid(&d_next, &d_ref, &d_start_reg,
+                                    mult_reg, pt_reg, wadj_reg);
 
-                }
+                    }
+               }
             }
         }
     }
@@ -189,10 +195,10 @@ static void test_specific(PeriodType pt, guint16 mult,
     g_date_set_dmy(&true_next, nd, nm, ny);
 
 
-    recurrenceSet(&r, mult, pt, &start);
+    recurrenceSet(&r, mult, pt, &start, WEEKEND_ADJ_NONE);
     recurrenceNextInstance(&r, &ref, &next);
 
-    check_valid(&next, &ref, &start, mult, pt);
+    check_valid(&next, &ref, &start, mult, pt, WEEKEND_ADJ_NONE);
     if (!test_equal(&next, &true_next)) {
         gchar s1[21], s2[21], s3[21];
         g_date_strftime(s1, 20, "%x", &start);

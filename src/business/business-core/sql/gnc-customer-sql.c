@@ -50,7 +50,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "customers"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 #define MAX_NAME_LEN 2048
 #define MAX_ID_LEN 2048
@@ -143,21 +143,30 @@ create_customer_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_customer( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_CUSTOMER(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_CUSTOMER(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_CUSTOMER, col_table );
+    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_CUSTOMER, col_table );
 }
 
 /* ================================================================= */
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_customers_t;
+
 static gboolean
 customer_should_be_saved( GncCustomer *customer )
 {
@@ -175,25 +184,30 @@ customer_should_be_saved( GncCustomer *customer )
 }
 
 static void
-write_single_customer( QofInstance *term_p, gpointer be_p )
+write_single_customer( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_customers_t* data = (write_customers_t*)data_p;
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_CUSTOMER(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
-	if( customer_should_be_saved( GNC_CUSTOMER(term_p) ) ) {
-    	save_customer( be, term_p );
+	if( customer_should_be_saved( GNC_CUSTOMER(term_p) ) && data->is_ok ) {
+    	data->is_ok = save_customer( data->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_customers( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_customers_t data;
 
-    qof_object_foreach( GNC_ID_CUSTOMER, be->primary_book, write_single_customer, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_CUSTOMER, be->primary_book, write_single_customer, (gpointer)&data );
+	return data.is_ok;
 }
 
 /* ================================================================= */

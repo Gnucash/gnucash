@@ -25,10 +25,10 @@ libgncmod_qif_import_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
-  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 
@@ -51,7 +51,7 @@ gncscm_DATA = \
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -61,13 +61,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
-  ${QOF_CFLAGS} \
-  ${GTKHTML_CFLAGS}
+  ${GNOME_CFLAGS} 
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \
@@ -99,7 +97,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	( cd gnucash/import-export; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 	( cd qif-import; for A in $(gncscm_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 clean-local:
 	$(RM) -rf gnucash qif-import

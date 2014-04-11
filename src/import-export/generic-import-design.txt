@@ -1,9 +1,9 @@
-This a draft of a design proposal for a generic import architecture.  The objective is to maximize code sharing between the QIF, HBCI and OFX modules.
+This the original design proposal for the generic import architecture.  The objective is to maximize code sharing between the QIF, HBCI and OFX modules.
 
 The most important area of potential code sharing is the account and transaction matching code.  This code has 3 distinct roles:
 -Finding the source account.
 -Finding and eliminating transactions downloaded twice in the source account.
--Finding the destination account(s), and finding the matching tansactions(s) if it/they exist(s).
+-Finding the destination account(s), and finding the matching transactions(s) if it/they exist(s).
 
 The Online System specific module is responsible for any steps necessary for obtaining and processing the data.  During this process, it must use the generic-import module to:
 
@@ -12,15 +12,15 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type);
-If no account is found with a matching online_id, the generic-module gives the user the option to select an existing account from a list, or create a new one.  The account_online_id is then stored in the selected or created account's kvp_frame.  The last 3 parameters of the function are defaults for new account creation and are optionnal.    
+If no account is found with a matching online_id, the generic-module gives the user the option to select an existing account from a list, or create a new one.  The account_online_id is then stored in the selected or created account's kvp_frame.  The last 3 parameters of the function are defaults for new account creation and are optional.
 
--The Online System specific module is then responsible for creating a GnuCash transaction and adding the source split (associated with the source account, possibly created above), and filling it with as much information as it has as it's disposal (much info is available for ofx, little for qif).  If a unique transaction id is available from the online system, is is stored in the splits kvp_frame, using key  transaction_online_id.  No transaction matching or duplicate detection is done at this stage.
+-The Online System specific module is then responsible for creating a GnuCash transaction and adding the source split (associated with the source account, possibly created above), and filling it with as much information as it has at its disposal (much info is available for ofx, little for qif).  If a unique transaction id is available from the online system, it is stored in the split's kvp_frame, using key transaction_online_id.  No transaction matching or duplicate detection is done at this stage.
 
 The generic module then receives the Transaction for the online system specific module using function:
 void gnc_import_add_trans(Transaction *trans);
 (We do not use GUID, because in all cases, the transaction was just created)
-The functions defines the following enum:
-enum gnc_match_probability{
+It uses the following enum:
+enum gnc_match_probability {
 	CERTAIN,
 	PROBABLE,
 	LIKELY,
@@ -57,11 +57,11 @@ if transaction not balanced
 commit changes
 return
 
-gnc_balance_transaction((Transaction *trans) add's or matches other splits until the transaction is balanced, using whatever user interaction and heuristics are appropriate.  Since I haven't really used gnucash's current transaction matching before, I would like someone else to contribute the description of the process to match unbalanced transactions.
+gnc_balance_transaction((Transaction *trans) adds or matches other splits until the transaction is balanced, using whatever user interaction and heuristics are appropriate.  Since I haven't really used gnucash's current transaction matching before, I would like someone else to contribute the description of the process to match unbalanced transactions.
 
 Remarks and things to remember:
 -Credit card transactions can sometimes appear over a month after the purchase (clerk lost the paper, international transaction not always fast, etc.)
--void gnc_import_add_trans(Transaction *trans) should return as soon as possible (BEFORE user interaction) so that for systems that maintain a connection (such as HBCI) the user won't run into timeouts.  For example,  gnc_import_add_trans could check if it's main dialog is open, and open it if it isn't, add to the list and return immediately.  The dialog is closed automatically once the list is empty.
+-void gnc_import_add_trans(Transaction *trans) should return as soon as possible (BEFORE user interaction) so that for systems that maintain a connection (such as HBCI) the user won't run into timeouts.  For example,  gnc_import_add_trans could check if its main dialog is open, and open it if it isn't, add to the list and return immediately.  The dialog is closed automatically once the list is empty.
 -We may want to implement the function in such a way that it won't match any transaction that have been added as part of the current import process (flag them volatile or something).  This will solve the problems of multiple interac withdrawals in the same day for QIF, (possibly HBCI too?).
 -The transaction passed to gnc_import_add_trans will have only one split for OFX and HBCI, but 1 or more for QIF.
 

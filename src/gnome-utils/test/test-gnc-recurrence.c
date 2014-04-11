@@ -58,7 +58,7 @@ static void show_gnc_recurrence()
     r = g_new(Recurrence, 1);
     rl = g_list_append(rl, r);
     g_date_set_dmy(&d, 17, 4, 2005);
-    recurrenceSet(r, 1, PERIOD_WEEK, &d);
+    recurrenceSet(r, 1, PERIOD_WEEK, &d, WEEKEND_ADJ_NONE);
 
     gnc_recurrence_set(rw, r);
     g_free(r);
@@ -76,9 +76,9 @@ static void show_gnc_recurrence_comp()
 
     gtk_container_add(GTK_CONTAINER(mainwin), GTK_WIDGET(grc));
 
-    recurrenceSet(&r[0], 1, PERIOD_MONTH, NULL);
+    recurrenceSet(&r[0], 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
     rlist = g_list_append(rlist, &r[0]);
-    recurrenceSet(&r[1], 1, PERIOD_YEAR, NULL);
+    recurrenceSet(&r[1], 1, PERIOD_YEAR, NULL, WEEKEND_ADJ_NONE);
     rlist = g_list_append(rlist, &r[1]);
 
     gnc_recurrence_comp_set_list(grc, rlist);

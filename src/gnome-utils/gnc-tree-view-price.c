@@ -406,13 +406,6 @@ gnc_tree_view_price_new (QofBook *book,
   gchar *sample_text2;
 
   ENTER(" ");
-  /* Create our view */
-  va_start (var_args, first_property_name);
-  view = (GncTreeView *)g_object_new_valist (GNC_TYPE_TREE_VIEW_PRICE,
-					     first_property_name, var_args);
-  va_end (var_args);
-  g_object_set(view, "name", "price_tree", NULL);
-
   /* Create/get a pointer to the existing model for this set of books. */
   price_db = gnc_pricedb_get_db(book);
   model = gnc_tree_model_price_new (book, price_db);
@@ -422,6 +415,10 @@ gnc_tree_view_price_new (QofBook *book,
   g_object_unref(G_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
+
+  /* Create our view */
+  view = g_object_new (GNC_TYPE_TREE_VIEW_PRICE,
+                       "name", "price_tree", NULL);
   gnc_tree_view_set_model (view, s_model);
   g_object_unref(G_OBJECT(s_model));
 
@@ -471,11 +468,19 @@ gnc_tree_view_price_new (QofBook *book,
 
   gnc_tree_view_configure_columns(view);
 
+  /* Set properties */
+  va_start (var_args, first_property_name);
+  g_object_set_valist (G_OBJECT(view), first_property_name, var_args);
+  va_end (var_args);
+
   /* Sort on the commodity column by default. This allows for a consistent
    * sort if commodities are removed and re-added from the model. */
-  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
-                                       GNC_TREE_MODEL_PRICE_COL_COMMODITY,
-                                       GTK_SORT_ASCENDING);
+  if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
+                                            NULL, NULL)) {
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
+                                         GNC_TREE_MODEL_PRICE_COL_COMMODITY,
+                                         GTK_SORT_ASCENDING);
+  }
 
   gtk_widget_show(GTK_WIDGET(view));
   LEAVE(" %p", view);

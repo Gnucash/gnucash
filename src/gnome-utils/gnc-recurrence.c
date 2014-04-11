@@ -166,7 +166,7 @@ gnc_recurrence_init( GncRecurrence *gr )
 {
     GtkVBox *vb;
 
-    recurrenceSet(&gr->recurrence, 1, PERIOD_MONTH, NULL);
+    recurrenceSet(&gr->recurrence, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
 
     gr->xml = gnc_glade_xml_new("budget.glade", "RecurrenceEntryVBox");
     vb = GTK_VBOX(glade_xml_get_widget(gr->xml, "RecurrenceEntryVBox"));
@@ -286,7 +286,7 @@ gnc_recurrence_get(GncRecurrence *gr)
     }
 
 
-    recurrenceSet(&gr->recurrence, mult, pt, &start);
+    recurrenceSet(&gr->recurrence, mult, pt, &start, WEEKEND_ADJ_NONE);
     return &gr->recurrence;
 
 }

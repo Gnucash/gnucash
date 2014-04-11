@@ -323,6 +323,11 @@
     (gnc:options-add-report-date!
      options gnc:pagename-general
      optname-to-date "a")
+    ;; Use a default report date of 'today'
+    (gnc:option-set-value (gnc:lookup-option options
+                                             gnc:pagename-general
+                                             optname-to-date)
+                          (cons 'relative 'today))
    
  ;; all about currencies
     (gnc:options-add-currency!
@@ -521,7 +526,7 @@ totals to report currency")
         ;; document will be the HTML document that we return.
 	(report-date (gnc:timepair-end-day-time 
 		      (gnc:date-option-absolute-time
-		       (op-value gnc:pagename-general (N_ "To")))))
+		       (op-value gnc:pagename-general optname-to-date))))
 	(interval-vec (list->vector (make-interval-list report-date)))
 	(sort-pred (get-sort-pred 
 		    (op-value gnc:pagename-general optname-sort-by)

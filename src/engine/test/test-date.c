@@ -24,6 +24,17 @@ check_time (Timespec ts, gboolean always_print)
   ts.tv_nsec /= 1000;
   ts.tv_nsec *= 1000;
 
+  /* We just can't handle dates whose time_t doesn't fit in int - skip those
+   * cases. */
+  if (ts.tv_sec > (0x7fffffff - 3600*25))
+      return TRUE;
+
+  /* If we are east of UTC, we also can't handle dates whose tv_sec member
+   * falls in the range [0, -gnc_timezone(tm)) - make sure were are at least 12
+   * hours past the epoch to skip those cases too */
+  if (ts.tv_sec < 3600*12)
+      return TRUE;
+
   gnc_timespec_to_iso8601_buff (ts, str);
 
   /* The time, in seconds, everywhere on the planet, is always
@@ -84,49 +95,6 @@ run_test (void)
   Timespec ts;
   int i;
   gboolean do_print = FALSE;
-
-  /* All of the following strings are equivalent 
-   * representations of zero seconds.  Note, zero seconds
-   * is the same world-wide, independent of timezone.
-   */
-  ts.tv_sec = 0;
-  ts.tv_nsec = 0;
-  check_conversion ("1969-12-31 15:00:00.000000 -0900", ts);
-  check_conversion ("1969-12-31 16:00:00.000000 -0800", ts);
-  check_conversion ("1969-12-31 17:00:00.000000 -0700", ts);
-  check_conversion ("1969-12-31 18:00:00.000000 -0600", ts);
-  check_conversion ("1969-12-31 19:00:00.000000 -0500", ts);
-  check_conversion ("1969-12-31 20:00:00.000000 -0400", ts);
-  check_conversion ("1969-12-31 21:00:00.000000 -0300", ts);
-  check_conversion ("1969-12-31 22:00:00.000000 -0200", ts);
-  check_conversion ("1969-12-31 23:00:00.000000 -0100", ts);
-
-  check_conversion ("1970-01-01 00:00:00.000000 -0000", ts);
-  check_conversion ("1970-01-01 00:00:00.000000 +0000", ts);
-
-  check_conversion ("1970-01-01 01:00:00.000000 +0100", ts);
-  check_conversion ("1970-01-01 02:00:00.000000 +0200", ts);
-  check_conversion ("1970-01-01 03:00:00.000000 +0300", ts);
-  check_conversion ("1970-01-01 04:00:00.000000 +0400", ts);
-  check_conversion ("1970-01-01 05:00:00.000000 +0500", ts);
-  check_conversion ("1970-01-01 06:00:00.000000 +0600", ts);
-  check_conversion ("1970-01-01 07:00:00.000000 +0700", ts);
-  check_conversion ("1970-01-01 08:00:00.000000 +0800", ts);
-
-  /* check minute-offsets as well */
-  check_conversion ("1970-01-01 08:01:00.000000 +0801", ts);
-  check_conversion ("1970-01-01 08:02:00.000000 +0802", ts);
-  check_conversion ("1970-01-01 08:03:00.000000 +0803", ts);
-  check_conversion ("1970-01-01 08:23:00.000000 +0823", ts);
-  check_conversion ("1970-01-01 08:35:00.000000 +0835", ts);
-  check_conversion ("1970-01-01 08:47:00.000000 +0847", ts);
-  check_conversion ("1970-01-01 08:59:00.000000 +0859", ts);
-
-  check_conversion ("1969-12-31 15:01:00.000000 -0859", ts);
-  check_conversion ("1969-12-31 15:02:00.000000 -0858", ts);
-  check_conversion ("1969-12-31 15:03:00.000000 -0857", ts);
-  check_conversion ("1969-12-31 15:23:00.000000 -0837", ts);
-  check_conversion ("1969-12-31 15:45:00.000000 -0815", ts);
 
   /* Now leaving the 60's:
    *
@@ -399,14 +367,6 @@ run_test (void)
   for (i = 0; i < 5000; i++)
   {
     ts = *get_random_timespec ();
-
-    ts.tv_nsec = MIN (ts.tv_nsec, 999999999);
-    ts.tv_nsec /= 1000;
-    ts.tv_nsec *= 1000;
-
-    /* We just can't handle dates whose time_t doesn't fit in int. */
-    if (ts.tv_sec > (0x7fffffff - 3600*25))
-        continue;
 
     if (!check_time (ts, FALSE))
       return;

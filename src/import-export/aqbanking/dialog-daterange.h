@@ -24,7 +24,7 @@
  * @{
  * @addtogroup AqBanking
  * @{
- * @file dialog-daterange.h
+ * @file aqbanking/dialog-daterange.h
  * @brief Dialog for date range entry
  * @author Copyright (C) 2002 Christian Stimming <stimming@tuhh.de>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
@@ -65,3 +65,5 @@ gboolean gnc_ab_enter_daterange(GtkWidget *parent,
 G_END_DECLS
 
 #endif /* DIALOG_DATERANGE_H */
+/** @} */
+/** @} */

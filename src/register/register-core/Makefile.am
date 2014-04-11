@@ -9,8 +9,9 @@ libgncmod_register_core_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${QOF_LIBS} ${GLIB_LIBS}
+  ${GLIB_LIBS}
 
 libgncmod_register_core_la_SOURCES = \
   gncmod-register-core.c \
@@ -51,16 +52,16 @@ gncinclude_HEADERS = \
   table-layout.h \
   table-model.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 CLEANFILES = $(BUILT_SOURCES)

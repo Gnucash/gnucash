@@ -69,7 +69,8 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
   { "PTE",  200.482 },  /* portugese escudo */
   { "S",    13.7603 },  /* austrian schilling */
   { "SCH",  13.7603 },  /* austrian schilling */
-  { "SIT",  239.640 }   /* slovenian tolar */
+  { "SIT",  239.640 },  /* slovenian tolar */
+  { "SKK",  30.1260 }   /* slovak koruna */
 };
 
 static int 

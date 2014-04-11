@@ -17,4 +17,4 @@ prepare
 _INSTALL_WFSDIR=`win_fs_path $INSTALL_DIR`
 _INSTALL_UDIR=`unix_path $INSTALL_DIR`
 
-make_install
+make_install "$@"

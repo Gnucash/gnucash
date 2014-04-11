@@ -21,7 +21,7 @@
 /** @internal
      @file gnc-dtaus-import.c
      @brief DTAUS import module code
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>, Copyright (c) 2006 Florian Steinel, 2006 Christian Stimming.
+     @author Copyright (c) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>, Copyright (c) 2006 Florian Steinel, 2006 Christian Stimming.
  */
 #include "config.h"
 

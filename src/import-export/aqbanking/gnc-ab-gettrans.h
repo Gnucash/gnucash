@@ -48,3 +48,5 @@ void gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc);
 G_END_DECLS
 
 #endif /* GNC_AB_GETTRANS_H */
+/** @} */
+/** @} */

@@ -24,7 +24,7 @@
  * @{
  * @addtogroup AqBanking
  * @{
- * @file gnc-file-aqb-import.h
+ * @file aqbanking/gnc-file-aqb-import.h
  * @brief DTAUS import module interface
  * @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>

@@ -41,7 +41,7 @@
 
 #include "dialog-book-close.h"
 #include "dialog-chart-export.h"
-#include "dialog-database-connection.h"
+#include "dialog-file-access.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-sx-since-last-run.h"
@@ -65,10 +65,11 @@ static void gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *k
 static void gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin);
 static void gnc_plugin_basic_commands_finalize (GObject *object);
 
+static void gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+
 /* Command callbacks */
 static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_db_connection (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data);
@@ -103,9 +104,6 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
     N_("Open an existing GnuCash file"),
     G_CALLBACK (gnc_main_window_cmd_file_open) },
-  { "FileDatabaseConnectionAction", NULL, N_("_Database Connection"), NULL,
-    N_("Connect to a database"),
-    G_CALLBACK (gnc_main_window_cmd_file_db_connection) },
   { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
     N_("Save the current file"),
     G_CALLBACK (gnc_main_window_cmd_file_save) },
@@ -245,6 +243,26 @@ gnc_plugin_basic_commands_new (void)
   return GNC_PLUGIN (plugin);
 }
 
+/** Initialize the basic commands menu for a window.  This function is
+ *  called as part of the initialization of a window, after all the
+ *  plugin menu items have been added to the menu structure.  Its job
+ *  is to correctly initialize the basic commands menu,  It does this by
+ *  hiding the Database Connection menu item if database support has not
+ *  been included in the build.
+ *
+ *  @param plugin A pointer to the gnc-plugin object responsible for
+ *  adding/removing the basic commands menu.
+ *
+ *  @param window A pointer the gnc-main-window that is being initialized.
+ *
+ *  @param type Unused
+ */
+static void
+gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
+				       GncMainWindow *window,
+				       GQuark type)
+{
+}
 
 /** Initialize the class for a new basic commands plugin.  This will
  *  set up any function pointers that override functions in the parent
@@ -265,6 +283,9 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
 
   /* plugin info */
   plugin_class->plugin_name  = GNC_PLUGIN_BASIC_COMMANDS_NAME;
+
+  /* function overrides */
+  plugin_class->add_to_window = gnc_plugin_basic_commands_add_to_window;
 
   /* widget addition/removal */
   plugin_class->actions_name 	  = PLUGIN_ACTIONS_NAME;
@@ -333,19 +354,12 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
     return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+#ifdef HAVE_DBI_DBI_H
+  gnc_ui_file_access_for_open();
+#else
   gnc_file_open ();
+#endif
   gnc_window_set_progressbar_window (NULL);
-}
-
-static void
-gnc_main_window_cmd_file_db_connection (GtkAction *action, GncMainWindowActionData *data)
-{
-  g_return_if_fail (data != NULL);
-
-  if (!gnc_main_window_all_finish_pending())
-    return;
-
-  gnc_ui_database_connection();
 }
 
 static void
@@ -371,7 +385,11 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
     return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+#ifdef HAVE_DBI_DBI_H
+  gnc_ui_file_access_for_save_as();
+#else
   gnc_file_save_as ();
+#endif
   gnc_window_set_progressbar_window (NULL);
   /* FIXME GNOME 2 Port (update the title etc.) */
 }

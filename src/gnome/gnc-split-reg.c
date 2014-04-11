@@ -56,6 +56,7 @@
 #include "dialog-utils.h"
 
 // static QofLogModule log_module = GNC_MOD_SX;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /***** PROTOTYPES ***************************************************/
 void gnc_split_reg_raise( GNCSplitReg *gsr );
@@ -85,6 +86,9 @@ static void gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
 static void gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr );
 
 static void gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger );
+
+static Transaction* create_balancing_transaction(QofBook *book, Account *account,
+    time_t statement_date, gnc_numeric balancing_amount);
 
 void gsr_default_enter_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_cancel_handler   ( GNCSplitReg *w, gpointer ud );
@@ -312,6 +316,9 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 {
   GNCSplitReg *gsrToRet;
 
+  ENTER("ld=%p, parent=%p, numberOfLines=%d, read_only=%s",
+        ld, parent, numberOfLines, read_only? "TRUE" : "FALSE");
+
   gsrToRet = g_object_new( gnc_split_reg_get_type(), NULL );
 
   gsrToRet->numRows        = numberOfLines;
@@ -322,6 +329,7 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 
   gnc_split_reg_init2( gsrToRet );
 
+  LEAVE("%p", gsrToRet);
   return GTK_WIDGET( gsrToRet );
 }
 
@@ -358,11 +366,15 @@ gsr_setup_table( GNCSplitReg *gsr )
 {
   SplitRegister *sr;
 
+  ENTER("gsr=%p", gsr);
+
   sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gnc_split_register_show_present_divider( sr, TRUE );
   /* events should be sufficient to redraw this */
   /* gnc_ledger_display_refresh( gsr->ledger ); */
   gnc_split_reg_refresh_toolbar( gsr );
+
+  LEAVE(" ");
 }
 
 static
@@ -371,6 +383,8 @@ gsr_create_table( GNCSplitReg *gsr )
 {
   GtkWidget *register_widget;
   SplitRegister *sr;
+
+  ENTER("gsr=%p", gsr);
 
   gnc_ledger_display_set_user_data( gsr->ledger, (gpointer)gsr );
   gnc_ledger_display_set_handlers( gsr->ledger,
@@ -393,6 +407,8 @@ gsr_create_table( GNCSplitReg *gsr )
                     G_CALLBACK(gsr_redraw_all_cb), gsr);
   g_signal_connect (gsr->reg, "redraw_help",
                     G_CALLBACK(gsr_emit_help_changed), gsr);
+
+  LEAVE(" ");
 }
 
 static
@@ -1326,14 +1342,86 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
   VirtualCellLocation vcell_loc;
   Split *blank;
 
+  ENTER("gsr=%p", gsr);
+
   blank = gnc_split_register_get_blank_split (reg);
   if (blank == NULL)
+  {
+    LEAVE("no blank split");
     return;
+  }
 
   if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
     gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
 
   gnc_ledger_display_refresh (gsr->ledger);
+  LEAVE(" ");
+}
+
+void
+gnc_split_reg_balancing_entry(GNCSplitReg *gsr, Account *account,
+    time_t statement_date, gnc_numeric balancing_amount) {
+
+  Transaction *transaction;
+  Split *split;
+  
+  // create transaction
+  transaction = create_balancing_transaction(gnc_get_current_book(),
+      account, statement_date, balancing_amount);
+
+  // jump to transaction
+  split = xaccTransFindSplitByAccount(transaction, account);
+  if (split == NULL) {
+    // default behaviour: jump to blank split
+    g_warning("create_balancing_transaction failed");
+    gnc_split_reg_jump_to_blank(gsr);
+  } else {
+    // goto balancing transaction
+    gnc_split_reg_jump_to_split(gsr, split );
+  }
+}
+
+static Transaction*
+create_balancing_transaction(QofBook *book, Account *account,
+    time_t statement_date, gnc_numeric balancing_amount) {
+
+  Transaction *trans;
+  Split *split;
+
+  if (!account)
+    return NULL;
+  if (gnc_numeric_zero_p(balancing_amount))
+    return NULL;
+
+  xaccAccountBeginEdit(account);
+
+  trans = xaccMallocTransaction(book);
+  
+  xaccTransBeginEdit(trans);
+
+  // fill Transaction
+  xaccTransSetCurrency(trans, xaccAccountGetCommodity(account));
+  xaccTransSetDateSecs(trans, statement_date);
+  xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+
+  // 1. Split
+  split = xaccMallocSplit(book);
+  xaccTransAppendSplit(trans, split);
+  xaccAccountInsertSplit(account, split);
+  xaccSplitSetAmount(split, balancing_amount);
+  xaccSplitSetValue(split, balancing_amount);
+
+  // 2. Split (no account is defined: split goes to orphan account)
+  split = xaccMallocSplit(book);
+  xaccTransAppendSplit(trans, split);
+
+  balancing_amount = gnc_numeric_neg(balancing_amount);
+  xaccSplitSetAmount(split, balancing_amount);
+  xaccSplitSetValue(split, balancing_amount);
+
+  xaccTransCommitEdit(trans);
+  xaccAccountCommitEdit(account);
+  return trans;
 }
 
 void
@@ -1341,12 +1429,15 @@ gsr_default_blank_handler( GNCSplitReg *gsr, gpointer data )
 {
   SplitRegister *reg;
 
+  ENTER("gsr=%p, gpointer=%p", gsr, data);
+
   reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
   if (gnc_split_register_save (reg, TRUE))
     gnc_split_register_redraw (reg);
 
   gnc_split_reg_jump_to_blank (gsr);
+  LEAVE(" ");
 }
 
 void
@@ -1589,17 +1680,23 @@ gnc_split_reg_record (GNCSplitReg *gsr)
   SplitRegister *reg;
   Transaction *trans;
 
+  ENTER("gsr=%p", gsr);
+
   reg = gnc_ledger_display_get_split_register (gsr->ledger);
   trans = gnc_split_register_get_current_trans (reg);
 
   if (!gnc_split_register_save (reg, TRUE))
+  {
+    LEAVE("no save");
     return;
+  }
 
   gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
 
   /* Explicit redraw shouldn't be needed, 
    * since gui_refresh events should handle this. */
   /* gnc_split_register_redraw (reg); */
+  LEAVE(" ");
 }
 
 static gboolean
@@ -1619,9 +1716,11 @@ gnc_split_reg_match_trans_row( VirtualLocation virt_loc,
 static void
 gnc_split_reg_goto_next_trans_row (GNCSplitReg *gsr)
 {
+  ENTER("gsr=%p", gsr);
   gnucash_register_goto_next_matching_row( gsr->reg,
                                            gnc_split_reg_match_trans_row,
                                            gsr );
+  LEAVE(" ");
 }
 
 void
@@ -1629,6 +1728,8 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
 {
   SplitRegister *sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gboolean goto_blank;
+
+  ENTER("gsr=%p, next_transaction=%s", gsr, next_transaction? "TRUE" : "FALSE");
 
   goto_blank = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
 				  "enter_moves_to_end", NULL);
@@ -1671,6 +1772,7 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
     gnc_split_reg_goto_next_trans_row( gsr );
   else
     gnucash_register_goto_next_virt_row( gsr->reg );
+  LEAVE(" ");
 }
 
 void

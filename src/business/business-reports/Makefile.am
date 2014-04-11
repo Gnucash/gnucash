@@ -1,13 +1,14 @@
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
 gncscmmod_DATA = \
-   business-reports.scm \
    aging.scm \
+   business-reports.scm \
    easy-invoice.scm \
    fancy-invoice.scm \
-   payables.scm \
-   receivables.scm \
    invoice.scm \
-   owner-report.scm
+   job-report.scm \
+   owner-report.scm \
+   payables.scm \
+   receivables.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 SCM_FILE_LINKS = ${gncscmmod_DATA}
@@ -23,7 +24,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 clean-local:
 	$(RM) -rf gnucash

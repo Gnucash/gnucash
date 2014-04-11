@@ -137,7 +137,7 @@ developing over time"))
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-stacked
       "b" 
-      (N_ "Show barchart as stacked barchart? (Guppi>=0.35.4 required)") 
+      (N_ "Show barchart as stacked barchart?") 
       #t))
 
     (add-option

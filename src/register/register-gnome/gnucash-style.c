@@ -31,12 +31,20 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine.h"
+#include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 #define DEFAULT_STYLE_WIDTH 680
 
+
+/** Static Globals *****************************************************/
+
+/* This static indicates the debugging module that this .o belongs to. */
+static QofLogModule log_module = GNC_MOD_REGISTER;
+
+
+/** Implementation *****************************************************/
 
 static gpointer
 style_get_key (SheetBlockStyle *style)
@@ -48,6 +56,15 @@ style_get_key (SheetBlockStyle *style)
         return &key;
 }
 
+static gpointer
+style_create_key (SheetBlockStyle *style)
+{
+        static gint key;
+
+        key = style->cursor->num_rows;
+
+        return g_memdup(&key, sizeof(key));
+}
 
 static void
 cell_dimensions_construct (gpointer _cd, gpointer user_data)
@@ -103,7 +120,7 @@ gnucash_style_dimensions_init (GnucashSheet *sheet, SheetBlockStyle *style)
         if (!dimensions) {
                 dimensions = style_dimensions_new (style);
                 g_hash_table_insert (sheet->dimensions_hash_table,
-                                     style_get_key (style), dimensions);
+                                     style_create_key (style), dimensions);
         }
 
         dimensions->refcount++;
@@ -665,7 +682,11 @@ gnucash_sheet_compile_styles (GnucashSheet *sheet)
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
+	ENTER("sheet=%p", sheet);
+
         gnucash_sheet_styles_set_dimensions (sheet, DEFAULT_STYLE_WIDTH);
+
+	LEAVE(" ");
 }
 
 void

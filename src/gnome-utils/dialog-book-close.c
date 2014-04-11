@@ -94,6 +94,7 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
   txn = g_hash_table_lookup(cacb->txns, cmdty);
   if (!txn)
   {
+    kvp_frame* frame;
     txn = g_new0(struct CACBTransactionList, 1);
     txn->cmdty = cmdty;
     txn->total = gnc_numeric_zero();
@@ -103,6 +104,11 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
     xaccTransSetDatePostedSecs(txn->txn, cacb->cbw->close_date);
     xaccTransSetDescription(txn->txn, cacb->cbw->desc);
     xaccTransSetCurrency(txn->txn, cmdty);
+    frame = xaccTransGetSlots(txn->txn);
+    /* Add a bool flag to indicate this txn was created automatically
+       by the book closing feature. See
+       https://lists.gnucash.org/pipermail/gnucash-devel/2008-August/023757.html */
+    kvp_frame_set_gint64(frame, "book_closing", 1);
 
     g_hash_table_insert(cacb->txns, cmdty, txn);
   }
@@ -333,7 +339,7 @@ void gnc_ui_close_book (QofBook* book)
   box = glade_xml_get_widget(xml, "income_acct_box");
   cbw->income_acct_widget = gnc_account_sel_new();
   gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_acct_widget),
-				   equity_list);
+				   equity_list, NULL);
   gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
   gtk_box_pack_start(GTK_BOX(box), cbw->income_acct_widget, TRUE, TRUE, 0);
 
@@ -341,7 +347,7 @@ void gnc_ui_close_book (QofBook* book)
   box = glade_xml_get_widget(xml, "expense_acct_box");
   cbw->expense_acct_widget = gnc_account_sel_new();
   gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_acct_widget),
-				   equity_list);
+				   equity_list, NULL);
   gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);
   gtk_box_pack_start(GTK_BOX(box), cbw->expense_acct_widget, TRUE, TRUE, 0);
 

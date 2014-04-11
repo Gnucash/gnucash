@@ -51,7 +51,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "invoices"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 #define MAX_ID_LEN 2048
 #define MAX_NOTES_LEN 2048
@@ -147,21 +147,26 @@ create_invoice_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_invoice( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 	GncInvoice* invoice;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok = TRUE;
 
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_INVOICE(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_INVOICE(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
 	invoice = GNC_INVOICE(inst);
 
@@ -175,18 +180,24 @@ save_invoice( GncSqlBackend* be, QofInstance* inst )
 	}
 	if( op != OP_DB_DELETE ) {
     	// Ensure the commodity is in the db
-    	gnc_sql_save_commodity( be, gncInvoiceGetCurrency( invoice ) );
+    	is_ok = gnc_sql_save_commodity( be, gncInvoiceGetCurrency( invoice ) );
 	}
 
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_INVOICE, inst, col_table );
+	if( is_ok ) {
+    	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_INVOICE, inst, col_table );
+	}
 
-    // Now, commit or delete any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+    	// Now, commit or delete any slots
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+    	}
+	}
+
+	return is_ok;
 }
 
 /* ================================================================= */
@@ -207,25 +218,31 @@ invoice_should_be_saved( GncInvoice *invoice )
 }
 
 static void
-write_single_invoice( QofInstance *term_p, gpointer be_p )
+write_single_invoice( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_objects_t* s = (write_objects_t*)data_p;
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_INVOICE(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
-	if( invoice_should_be_saved( GNC_INVOICE(term_p) ) ) {
-    	save_invoice( be, term_p );
+	if( s->is_ok && invoice_should_be_saved( GNC_INVOICE(term_p) ) ) {
+    	s->is_ok = save_invoice( s->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_invoices( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_INVOICE, be->primary_book, write_single_invoice, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_INVOICE, be->primary_book, write_single_invoice, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */
@@ -261,7 +278,7 @@ load_invoice_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t invoice_guid_handler
+static GncSqlColumnTypeHandler invoice_guid_handler
 	= { load_invoice_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,

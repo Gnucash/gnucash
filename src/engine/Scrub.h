@@ -86,7 +86,7 @@ void xaccAccountTreeScrubOrphans (Account *acc);
 
 /** The xaccSplitScrub method ensures that if this split has the same
  *   commodity and currency, then it will have the same amount and value.  
- *   If the commoidty is the currency, the split->amount is set to the 
+ *   If the commodity is the currency, the split->amount is set to the 
  *   split value.  In addition, if this split is an orphan, that is
  *   fixed first.  If the split account doesn't have a commodity declared,
  *   an attempt is made to fix that first.
@@ -141,7 +141,7 @@ void xaccAccountTreeScrubCommodities (Account *acc);
  *  out as part of the account.  Just in case anyone needs to fall
  *  back from CVS to a production version of code.
  *
- *  @param acc A pointer to the root account containing all
+ *  @param root A pointer to the root account containing all
  *  accounts in the current book.
  *
  *  @param table A pointer to the commodity table for the current

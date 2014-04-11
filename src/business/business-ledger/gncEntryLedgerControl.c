@@ -337,8 +337,10 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
       break;
 
     /* Create the account if necessary. Also checks for a placeholder */
-    (void) gnc_entry_ledger_get_account_by_name (ledger, (BasicCell *)cell, cell->cell.value,
-						 &ledger->full_refresh);
+    if (!gnc_entry_ledger_get_account_by_name (ledger, (BasicCell *) cell,
+                                               cell->cell.value,
+                                               &ledger->full_refresh))
+      return TRUE;
 
   } while (FALSE);
 

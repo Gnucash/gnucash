@@ -11,8 +11,8 @@ libgncmod_register_gnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
   ${GNOME_LIBS}
 
 libgncmod_register_gnome_la_SOURCES = \
@@ -50,7 +50,7 @@ noinst_HEADERS = \
   quickfillcell-gnome.h \
   table-gnome.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -59,11 +59,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_XIM_FLAGS} \
-  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.gnome\"

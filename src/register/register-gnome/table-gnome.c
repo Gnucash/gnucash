@@ -51,8 +51,18 @@
 #include "table-gnome.h"
 #include "guile-mappings.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-engine.h"
 
 #define GCONF_SECTION "window/pages/register"
+
+
+/** Static Globals *****************************************************/
+
+/* This static indicates the debugging module that this .o belongs to. */
+static QofLogModule log_module = GNC_MOD_REGISTER;
+
+
+/** Implementation *****************************************************/
 
 void
 gnc_table_save_state (Table *table)
@@ -151,6 +161,8 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
 
+	ENTER("widget=%p, data=%p", widget, data);
+
         greg = GNUCASH_REGISTER (widget);
         sheet = GNUCASH_SHEET (greg->sheet);
         table = sheet->table;
@@ -193,6 +205,8 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         gnucash_sheet_redraw_all (sheet);
 
         gnc_header_widths_destroy (widths);
+
+	LEAVE(" ");
 }
 
 void

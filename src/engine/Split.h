@@ -158,7 +158,7 @@ const char *  xaccSplitGetMemo (const Split *split);
 
 /** The Action is an arbitrary user-assigned string. 
  * The action field is an arbitrary user-assigned value.
- * It is meant to be a very short (one to ten cahracter) string that
+ * It is meant to be a very short (one to ten character) string that
  * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
  * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
  * can be used to create custom reports or graphs of data. */
@@ -214,7 +214,7 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  * any of these routines are invoked!  This is because the actual
  * setting of amounts/values requires SCU settings from the account.
  * If these are not available, then amounts/values will be set to 
- * -1/0, which is an invalid value.  I beleive this order dependency
+ * -1/0, which is an invalid value.  I believe this order dependency
  * is a bug, but I'm too lazy to find, fix & test at the moment ... 
  *
  * @note If you use this on a newly created transaction, make sure

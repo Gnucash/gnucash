@@ -544,7 +544,7 @@ ap_druid_create (AcctPeriodInfo *info)
 
   {
       Recurrence *r = g_new0(Recurrence, 1);
-      recurrenceSet(r, 1, PERIOD_MONTH, &info->closing_date);
+      recurrenceSet(r, 1, PERIOD_MONTH, &info->closing_date, WEEKEND_ADJ_NONE);
       info->period = NULL;
       info->period = g_list_append(info->period, r);
   }

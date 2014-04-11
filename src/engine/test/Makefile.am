@@ -1,13 +1,13 @@
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 LDADD = \
@@ -16,8 +16,8 @@ LDADD = \
   ../libgncmod-engine.la \
   ../test-core/libgncmod-test-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${GLIB_LIBS} \
-  ${QOF_LIBS}
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GLIB_LIBS}
 
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
@@ -46,7 +46,7 @@ TESTS = \
   test-scm-query \
   test-book-merge
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -55,7 +55,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
@@ -84,7 +84,8 @@ check_PROGRAMS = \
 
 
 test_link_SOURCES = test-link.c
-test_link_LDADD = ../libgncmod-engine.la ${QOF_LIBS}
+test_link_LDADD = ../libgncmod-engine.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 EXTRA_DIST = \
   test-create-account \

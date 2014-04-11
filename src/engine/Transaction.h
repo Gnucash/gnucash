@@ -133,14 +133,20 @@ GType gnc_transaction_get_type(void);
  the xaccTransDestroy() method should be called. */ 
 Transaction * xaccMallocTransaction (QofBook *book); 
 
-/**
- The xaccTransDestroy() method will remove all 
- of the splits from each of their accounts, free the memory
- associated with them.  This routine must be followed by either
- an xaccTransCommitEdit(), in which case the transaction 
- memory will be freed, or by xaccTransRollbackEdit(), in which 
- case nothing at all is freed, and everything is put back into 
- original order. */
+/** Destroys a transaction.
+ *  Each split in transaction @a trans is removed from its
+ *  account and destroyed as well.
+ *
+ *  If the transaction has not already been opened for editing with
+ *  ::xaccTransBeginEdit() then the changes are committed immediately.
+ *  Otherwise, the caller must follow up with either
+ *  ::xaccTransCommitEdit(), in which case the transaction and
+ *  split memory will be freed, or xaccTransRollbackEdit(), in which 
+ *  case nothing at all is freed, and everything is put back into 
+ *  original order.
+ *
+ *  @param trans the transaction to destroy
+ */
 void          xaccTransDestroy (Transaction *trans);
 
 /**
@@ -201,7 +207,7 @@ void          xaccTransRollbackEdit (Transaction *trans);
 /** The xaccTransIsOpen() method returns TRUE if the transaction
     is open for editing. Otherwise, it returns false.  
     XXX this routne should probably be deprecated.  its, umm,
-    hard to imagine legitamate uses (but it is used by
+    hard to imagine legitimate uses (but it is used by
     the import/export code for reasons I can't understand.)
  */
 gboolean      xaccTransIsOpen (const Transaction *trans);
@@ -209,7 +215,7 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
-Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
+/*@ dependent @*//*@ null @*/ Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
 #define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
 Split * xaccTransFindSplitByAccount(const Transaction *trans, 
@@ -297,7 +303,7 @@ int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);
     in a transaction.  
     @return The list of splits. This list must NOT be modified.  Do *NOT* free
     this list when you are done with it. */
-SplitList *   xaccTransGetSplitList (const Transaction *trans);
+/*@ dependent @*/ SplitList *   xaccTransGetSplitList (const Transaction *trans);
 gboolean xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
 
@@ -331,7 +337,7 @@ gboolean      xaccTransHasSplitsInStateByAccount (const Transaction *trans,
  * The total value of the transaction must be zero when all splits 
  * are valued in this currency.
  * @note What happens if the Currency isn't set?  Ans: bad things.  */
-gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
+/*@ dependent @*/ gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
 
 /** Set the commodity of this transaction. */
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
@@ -510,7 +516,7 @@ Transaction * xaccTransReverse(Transaction *transaction);
  *
  *  @param trans a Transaction that has been reversed
  *
- *  @param the transaction that reversed the given transaction, or
+ *  @return the transaction that reversed the given transaction, or
  *  NULL if the given transaction has not been reversed.
  */
 Transaction * xaccTransGetReversedBy(const Transaction *trans);

@@ -20,6 +20,39 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup GUI
+ *  @{
+ */
+/** @addtogroup Register Registers, Ledgers and Journals
+ *  @{
+ */
+/** @addtogroup RegisterCore Register Core
+ *  @brief An infrastructure for building a modular matrix of cells like a
+ *  spreadsheet or checkbook register.
+ * 
+ *  @details Each cell may be specialized to perform a particular function,
+ *  e.g. to read dates, numerical amounts, or text. The register core has been
+ *  designed to be easy to extend, modular, easy to maintain, and memory
+ *  efficient. It is intended to be used for building financial apps and
+ *  spreadsheets.
+ *
+ *  The register core is built from several types of components: Cells,
+ *  Cellblocks, Cursors, and the Table.
+ *
+ *  The register core should not have any 'knowledge' of the accounting model
+ *  of GnuCash or of the workings of the main application. It should not be
+ *  specific to a particular GUI (such as Gnome/GTK). It should be possible
+ *  to use the register core in a stand-alone fashion.
+ *
+ *  For information on the GnuCash-specific register implementation that has
+ *  been built atop this core, see @ref SplitRegister.
+ *
+ *  @{
+ */
+/** @file register-common.h
+ *  @brief Common declarations for the register core
+ *  @author Copyright (c) 2000 Dave Peticolas
+ */
 
 #ifndef REGISTER_COMMON_H
 #define REGISTER_COMMON_H
@@ -82,3 +115,6 @@ struct _VirtualLocation {
 gboolean virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2);
 
 #endif
+/** @} */
+/** @} */
+/** @} */

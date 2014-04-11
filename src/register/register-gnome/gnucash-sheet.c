@@ -40,6 +40,7 @@
 #include "gnucash-style.h"
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
+#include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
 
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  400
@@ -51,7 +52,27 @@
 /* jsled: and 2.9.{0,1}, as per http://bugzilla.gnome.org/show_bug.cgi?id=342182 */
 #define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION < 4)
 
+/* Register signals */
+enum
+{
+        ACTIVATE_CURSOR,
+        REDRAW_ALL,
+        REDRAW_HELP,
+        LAST_SIGNAL
+};
+
+
+/** Static Globals *****************************************************/
+
+/* This static indicates the debugging module that this .o belongs to. */
+static QofLogModule log_module = GNC_MOD_REGISTER;
 static guint gnucash_register_initial_rows = 15;
+static GnomeCanvasClass *sheet_parent_class;
+static GtkTableClass *register_parent_class;
+static guint register_signals[LAST_SIGNAL];
+
+
+/** Prototypes *********************************************************/
 
 static void gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet);
 
@@ -64,19 +85,7 @@ static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
 
 
-/* Register signals */
-enum
-{
-        ACTIVATE_CURSOR,
-        REDRAW_ALL,
-        REDRAW_HELP,
-        LAST_SIGNAL
-};
-
-static GnomeCanvasClass *sheet_parent_class;
-static GtkTableClass *register_parent_class;
-static guint register_signals[LAST_SIGNAL];
-
+/** Implementation *****************************************************/
 
 void
 gnucash_register_set_initial_rows (guint num_rows)
@@ -674,6 +683,8 @@ gnucash_sheet_create (Table *table)
         GnucashSheet *sheet;
         GnomeCanvas  *canvas;
 
+	ENTER("table=%p", table);
+
         sheet = g_object_new (GNUCASH_TYPE_SHEET, NULL);
         canvas = GNOME_CANVAS (sheet);
 
@@ -688,6 +699,7 @@ gnucash_sheet_create (Table *table)
         g_signal_connect (G_OBJECT (sheet->hadj), "changed",
                 G_CALLBACK (gnucash_sheet_hadjustment_changed), sheet);
 
+	LEAVE("%p", sheet);
         return sheet;
 }
 
@@ -1071,16 +1083,24 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
         GnucashSheet *sheet = GNUCASH_SHEET(widget);
 
+	ENTER("widget=%p, allocation=%p", widget, allocation);
+
         if (GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->size_allocate)
                         (widget, allocation);
 
         if (allocation->height == sheet->window_height &&
             allocation->width == sheet->window_width)
+	{
+		LEAVE("size unchanged");
                 return;
+	}
 
         if (allocation->width != sheet->window_width)
+	{
                 gnucash_sheet_styles_set_dimensions (sheet, allocation->width);
+		gnucash_sheet_recompute_block_offsets (sheet);
+	}
 
         sheet->window_height = allocation->height;
         sheet->window_width  = allocation->width;
@@ -1091,6 +1111,19 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
         gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
         gnucash_sheet_update_adjustments (sheet);
+
+        if (sheet->table)
+	{
+                VirtualLocation virt_loc;
+
+                virt_loc = sheet->table->current_cursor_loc;
+
+                if (gnucash_sheet_cell_valid (sheet, virt_loc))
+                        gnucash_sheet_show_row (sheet,
+                                                virt_loc.vcell_loc.virt_row);
+        }
+
+	LEAVE(" ");
 }
 
 static gboolean
@@ -1819,6 +1852,7 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 {
         GnucashSheet *sheet;
         VirtualLocation virt_loc;
+        int start_virt_row;
 
         g_return_if_fail (reg != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER(reg));
@@ -1827,8 +1861,14 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_move_vertical_position (sheet->table, &virt_loc, 1))
-                return;
+        /* Move down one physical row at a time until we
+         * reach the next visible virtual cell. */
+        start_virt_row = virt_loc.vcell_loc.virt_row;
+        do
+        {
+          if (!gnc_table_move_vertical_position (sheet->table, &virt_loc, 1))
+            return;
+        } while (start_virt_row == virt_loc.vcell_loc.virt_row);
 
         if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
                 return;
@@ -2426,8 +2466,9 @@ gnucash_sheet_new (Table *table)
         sheet->grid = item;
 
         /* some register data */
-        sheet->dimensions_hash_table = g_hash_table_new (g_int_hash,
-                                                         g_int_equal);
+        sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
+							      g_int_equal,
+							      g_free, NULL);
 
         /* The cursor */
         sheet->cursor = gnucash_cursor_new (sheet_group);

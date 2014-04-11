@@ -1,9 +1,7 @@
 # Order is important here.
 SUBDIRS = . overrides test
 
-AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
-  ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
+AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
   -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
@@ -15,18 +13,24 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnome \
   -I${top_builddir}/src/gnome-utils \
-  -I${top_srcdir}/src/gnc-module
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/libqof/qof \
+  ${GUILE_INCS}
 
 bin_PROGRAMS = gnucash-bin
 gnucash_bin_SOURCES = gnucash-bin.c
-gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
-${QOF_LIBS} \
-${top_builddir}/src/engine/libgncmod-engine.la \
-${top_builddir}/src/gnome/libgnc-gnome.la \
-${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-${top_builddir}/src/core-utils/libgnc-core-utils.la \
-${top_builddir}/src/gnc-module/libgnc-module.la
+gnucash_bin_LDADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS} \
+  ${GNOME_LIBS} \
+  ${GTK_LIBS} \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/gnome/libgnc-gnome.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la
 
 gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp

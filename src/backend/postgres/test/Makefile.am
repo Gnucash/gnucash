@@ -3,14 +3,14 @@ TESTS = \
   test-escape \
   run-tests.sh
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/xml \
   --gnc-module-dir ${top_builddir}/src/backend/postgres
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   TEST_DB_SOCKET_DIR=`pwd`/gnc_test_db_sock \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
@@ -61,9 +61,9 @@ test_escape_SOURCES = \
   ${top_srcdir}/src/backend/postgres/putil.c \
   test-escape.c
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \

@@ -89,8 +89,22 @@ refresh_model_row(GNCImportMainMatcher *gui, GtkTreeModel *model,
 
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GNCImportTransInfo *trans_info;
+
   if (info == NULL) 
     return;
+
+  model = gtk_tree_view_get_model(info->view);
+  if (gtk_tree_model_get_iter_first(model, &iter)) {
+    do {
+      gtk_tree_model_get(model, &iter,
+		         DOWNLOADED_COL_DATA, &trans_info,
+		         -1);
+      gnc_import_TransInfo_delete(trans_info);
+    } while (gtk_tree_model_iter_next (model, &iter));
+  }
 
   gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
   gnc_import_Settings_delete (info->user_settings);
@@ -364,6 +378,7 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
      "text", col_num,
      "background", DOWNLOADED_COL_COLOR,
      NULL);
+  gtk_tree_view_column_set_sort_column_id(column, col_num);
   g_object_set(G_OBJECT(column),
 	       "reorderable", TRUE,
 	       "resizable", TRUE,
@@ -385,6 +400,7 @@ add_toggle_column(GtkTreeView *view, const gchar *title, int col_num,
      "active", col_num,
      "cell-background", DOWNLOADED_COL_COLOR,
      NULL);
+  gtk_tree_view_column_set_sort_column_id(column, col_num);
   g_object_set(G_OBJECT(column),
 	       "reorderable", TRUE,
 	       NULL);
@@ -442,6 +458,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
 				      "text", DOWNLOADED_COL_ACTION_INFO,
 				      "background", DOWNLOADED_COL_COLOR,
 				      NULL);
+  gtk_tree_view_column_set_sort_column_id(column, DOWNLOADED_COL_ACTION_INFO);
   g_object_set(G_OBJECT(column),
 	       "reorderable", TRUE,
 	       "resizable", TRUE,

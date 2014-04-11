@@ -11,7 +11,7 @@ libgncmod_utility_reports_la_LIBADD = \
 
 libgncmod_utility_reports_la_LDFLAGS = -module -avoid-version
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} ${GLIB_CFLAGS}
@@ -41,7 +41,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 clean-local:
 	$(RM) -rf gnucash

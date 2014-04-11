@@ -1,9 +1,9 @@
 Notes on I18n for GnuCash
 -------------------------
 
-A HOWTO for translators can be found in ../doc/TRANSLATION_HOWTO. Any
-instructions about what to do with .po files can be found there.
-
+A HOWTO for translators, including instructions about what to do with .po files,
+can be found here:
+http://wiki.gnucash.org/wiki/Translation
 
 Notes for this directory
 ------------------------

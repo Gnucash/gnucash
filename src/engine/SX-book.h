@@ -74,13 +74,13 @@ GType gnc_schedxactions_get_type(void);
 #define GNC_IS_SXES(obj)  GNC_IS_SCHEDXACTIONS(obj)
 #define GNC_SXES(obj)     GNC_SCHEDXACTIONS(obj)
 
-SchedXactions* gnc_book_get_schedxactions(QofBook* book);
+/*@ dependent @*/ SchedXactions* gnc_book_get_schedxactions(QofBook* book);
 
 void gnc_sxes_add_sx(SchedXactions* sxes, SchedXaction* sx);
 void gnc_sxes_del_sx(SchedXactions* sxes, SchedXaction* sx);
 
 /** Returns the template group from the book. **/
-Account *gnc_book_get_template_root(const QofBook *book);
+/*@ dependent @*/ Account *gnc_book_get_template_root(const QofBook *book);
 
 /** @return The list of SXes which reference the given Account. Caller should free this list. **/
 GList* gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct);

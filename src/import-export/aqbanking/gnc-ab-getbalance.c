@@ -62,7 +62,11 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
         g_warning("gnc_ab_gettrans: Couldn't get AqBanking API");
         return;
     }
-    if (AB_Banking_OnlineInit(api) != 0) {
+    if (AB_Banking_OnlineInit(api
+#ifdef AQBANKING_VERSION_4_PLUS
+			      , 0
+#endif
+			      ) != 0) {
         g_warning("gnc_ab_gettrans: Couldn't initialize AqBanking API");
         goto cleanup;
     }
@@ -116,6 +120,10 @@ cleanup:
     if (job)
         AB_Job_free(job);
     if (online)
-        AB_Banking_OnlineFini(api);
+#ifdef AQBANKING_VERSION_4_PLUS
+	AB_Banking_OnlineFini(api, 0);
+#else
+	AB_Banking_OnlineFini(api);
+#endif
     gnc_AB_BANKING_fini(api);
 }

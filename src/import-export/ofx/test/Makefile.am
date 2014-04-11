@@ -1,6 +1,6 @@
 TESTS=test-link
 
-AM_CFLAGS=${LIBOFX_CFLAGS}
+AM_CPPFLAGS=${LIBOFX_CFLAGS}
 check_PROGRAMS=test-link
 
 test_link_SOURCES=test-link.c

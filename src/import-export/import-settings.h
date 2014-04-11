@@ -22,7 +22,7 @@
    \brief Import preference handling.
    *User preference interface for 
    transaction matching (for both the gui and the backend)
-   \author Copyright (C) 2002 Benoit Grégoire
+   \author Copyright (C) 2002 Benoit GrÃ©goire
 */
  
 #ifndef GNC_GEN_SETTINGS_H

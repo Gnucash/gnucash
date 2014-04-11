@@ -14,7 +14,6 @@
       <placeholder name="FileSavePlaceholder">
         <menuitem name="FileSave" action="FileSaveAction"/>
         <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
-		<menuitem name="FileDatabaseConnection" action="FileDatabaseConnectionAction"/>
       </placeholder>
       <menu name="FileExport" action="FileExportAction">
         <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>

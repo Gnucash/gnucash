@@ -32,8 +32,13 @@ function prepare() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _OPENSP_UDIR=`unix_path $OPENSP_DIR`
     _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
+    _GMP_UDIR=`unix_path $GMP_DIR`
+    _GNUTLS_UDIR=`unix_path $GNUTLS_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
+    _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
+    _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
     _LIBGDA_UDIR=`unix_path $LIBGDA_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _REPOS_UDIR=`unix_path $REPOS_DIR`
@@ -82,11 +87,9 @@ function dist_gnome() {
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
-    smart_wget $LIBPNG_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE bin/libpng13.dll -d $DIST_DIR
+    wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
-    smart_wget $ZLIB_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE zlib1.dll -d $DIST_DIR\\bin
+    wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $DIST_DIR
@@ -107,8 +110,6 @@ function dist_gnome() {
     wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $DIST_DIR  # gnomeprint
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
@@ -148,11 +149,24 @@ function dist_libofx() {
     cp -a ${_LIBOFX_UDIR}/share/libofx ${DIST_UDIR}/share
 }
 
+function dist_gnutls() {
+    setup gnutls
+    cp -a ${_GNUTLS_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_GNUTLS_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+}
+
+function dist_gmp() {
+    setup gmp
+    cp -a ${_GMP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+}
+
 function dist_gwenhywfar() {
     setup gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     mkdir -p ${DIST_UDIR}/etc
-    cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
+    if [ "$AQBANKING3" != "yes" ]; then
+        cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
+    fi
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
 }
 
@@ -168,8 +182,20 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
     cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
-    cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+    if [ "$AQBANKING3" != "yes" ]; then
+        cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+    fi
     cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
+}
+
+function dist_libdbi() {
+    setup LibDBI
+    cp -a ${_SQLITE3_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_SQLITE3_UDIR}/lib/* ${DIST_UDIR}/lib
+    cp -a ${_LIBDBI_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_LIBDBI_UDIR}/lib/* ${DIST_UDIR}/lib
+    mkdir ${DIST_UDIR}/lib/dbd
+    cp -a ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/* ${DIST_UDIR}/lib/dbd
 }
 
 function dist_libgda() {
@@ -193,7 +219,7 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,locale,xml} $DIST_UDIR/share
-    cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
+    cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.cmd $DIST_UDIR/bin
 
     _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
@@ -213,11 +239,16 @@ function finish() {
 
     mv $DIST_UDIR/libexec/gconfd-2.exe $DIST_UDIR/bin
     exetype $DIST_UDIR/bin/gconfd-2.exe windows
-    cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
+    cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
 
     if [ "$AQBANKING_WITH_QT" = "yes" ]; then
-        mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
-        cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+        if [ "$AQBANKING3" != "yes" ]; then
+            mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
+            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+        else
+            mv ${DIST_UDIR}/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe $DIST_UDIR/bin
+            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe
+        fi
     fi
 
     # Strip redirections in distributed libtool .la files
@@ -246,15 +277,20 @@ prepare
 dist_regex
 dist_autotools
 dist_guile
-dist_openssl
 dist_gnome
 dist_pcre
 dist_libgsf
 dist_goffice
 dist_libofx
+if [ "$AQBANKING3" != "yes" ]; then
+ dist_openssl
+else
+ dist_gnutls
+ dist_gmp
+fi
 dist_gwenhywfar
 dist_aqbanking
-dist_libgda
+dist_libdbi
 dist_gnucash
 finish
 qpopd

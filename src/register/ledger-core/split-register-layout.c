@@ -453,7 +453,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
 
     case PAYABLE_REGISTER:
     case RECEIVABLE_REGISTER:
-      num_cols = 10;
+      num_cols = 9;
       break;
 
     case INCOME_LEDGER:
@@ -464,7 +464,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
 
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
-      num_cols = 11;
+      num_cols = 10;
       break;
 
     case PORTFOLIO_LEDGER:
@@ -544,7 +544,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
   gnc_register_add_cell (layout,
                          RATE_CELL,
                          PRICE_CELL_TYPE_NAME,
-                         "",
+                         NULL,
                          CELL_ALIGN_RIGHT,
                          FALSE,
                          FALSE);
@@ -569,7 +569,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          XFRM_CELL,
                          COMBO_CELL_TYPE_NAME,
                          N_("Transfer"),
-                         CELL_ALIGN_LEFT,
+                         CELL_ALIGN_RIGHT,
                          FALSE,
                          FALSE);
 

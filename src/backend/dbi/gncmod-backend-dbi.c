@@ -20,44 +20,46 @@ int gnc_module_current  = 0;
 int gnc_module_revision = 0;
 int gnc_module_age      = 0;
 
-static GNCModule engine;
+/*@ dependent @*//*@ null @*/ static GNCModule engine;
 
 gchar *
 gnc_module_path(void)
 {
-  return g_strdup("gnucash/backend/dbi");
+	return g_strdup( "gnucash/backend/dbi" );
 }
 
 gchar *
 gnc_module_description(void)
 {
-  return g_strdup("The DBI/SQL backend for GnuCash");
+	return g_strdup( "The DBI/SQL backend for GnuCash" );
 }
 
 int
 gnc_module_init(int refcount)
 {
-  engine = gnc_module_load("gnucash/engine", 0);
-  if(!engine) return FALSE;
+	engine = gnc_module_load( "gnucash/engine", 0 );
+	if( !engine ) return FALSE;
 
-  /* Need to initialize g-type engine for gconf */
-  if (refcount == 0) {
-    g_type_init();
-  }
+	/* Need to initialize g-type engine for gconf */
+	if (refcount == 0) {
+    	g_type_init();
+	}
 
-  return TRUE;
+	return TRUE;
 }
 
 int
 gnc_module_end(int refcount)
 {
-  int unload = TRUE;
+	int unload = TRUE;
 
-  if (engine)
-    unload = gnc_module_unload(engine);
+	if( engine != NULL ) {
+    	unload = gnc_module_unload(engine);
+	}
 
-  if (refcount == 0)
-    engine = NULL;
+	if( refcount == 0 ) {
+    	engine = NULL;
+	}
 
-  return unload;
+	return unload;
 }

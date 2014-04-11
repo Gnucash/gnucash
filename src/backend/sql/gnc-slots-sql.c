@@ -37,37 +37,42 @@
 
 #include "gnc-slots-sql.h"
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+#ifdef S_SPLINT_S
+#include "splint-defs.h"
+#endif
+
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 typedef struct {
-    GncSqlBackend* be;
-    const GUID* guid;
-    KvpFrame* pKvpFrame;
+    /*@ dependent @*/ GncSqlBackend* be;
+    /*@ dependent @*/ const GUID* guid;
+	gboolean is_ok;
+    /*@ dependent @*/ KvpFrame* pKvpFrame;
     KvpValueType value_type;
-    KvpValue* pKvpValue;
+    /*@ dependent @*/ KvpValue* pKvpValue;
     GString* path;
 } slot_info_t;
 
-static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
-static void set_obj_guid( gpointer pObject, gpointer pValue );
-static gpointer get_path( gpointer pObject, const QofParam* param );
-static void set_path( gpointer pObject, gpointer pValue );
-static gpointer get_slot_type( gpointer pObject, const QofParam* param );
-static void set_slot_type( gpointer pObject, gpointer pValue );
-static gint64 get_int64_val( gpointer pObject, const QofParam* param );
+static /*@ null @*/ gpointer get_obj_guid( gpointer pObject );
+static void set_obj_guid( void );
+static /*@ null @*/ gpointer get_path( gpointer pObject );
+static void set_path( gpointer pObject, /*@ null @*/ gpointer pValue );
+static /*@ null @*/ gpointer get_slot_type( gpointer pObject );
+static void set_slot_type( gpointer pObject, /*@ null @*/ gpointer pValue );
+static gint64 get_int64_val( gpointer pObject );
 static void set_int64_val( gpointer pObject, gint64 pValue );
-static gpointer get_string_val( gpointer pObject, const QofParam* param );
-static void set_string_val( gpointer pObject, gpointer pValue );
-static gpointer get_double_val( gpointer pObject, const QofParam* param );
-static void set_double_val( gpointer pObject, gpointer pValue );
-static Timespec get_timespec_val( gpointer pObject, const QofParam* param );
+static /*@ null @*/ gpointer get_string_val( gpointer pObject );
+static void set_string_val( gpointer pObject, /*@ null @*/ gpointer pValue );
+static /*@ dependent @*//*@ null @*/ gpointer get_double_val( gpointer pObject );
+static void set_double_val( gpointer pObject, /*@ null @*/ gpointer pValue );
+static Timespec get_timespec_val( gpointer pObject );
 static void set_timespec_val( gpointer pObject, Timespec ts );
-static gpointer get_guid_val( gpointer pObject, const QofParam* param );
-static void set_guid_val( gpointer pObject, gpointer pValue );
-static gnc_numeric get_numeric_val( gpointer pObject, const QofParam* param );
+static /*@ null @*/ gpointer get_guid_val( gpointer pObject );
+static void set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue );
+static gnc_numeric get_numeric_val( gpointer pObject );
 static void set_numeric_val( gpointer pObject, gnc_numeric value );
 
 #define SLOT_MAX_PATHNAME_LEN 4096
@@ -75,39 +80,43 @@ static void set_numeric_val( gpointer pObject, gnc_numeric value );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*@ -full_init_block @*/
     { "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
-			get_obj_guid,     set_obj_guid },
+			(QofAccessFunc)get_obj_guid,     (QofSetterFunc)set_obj_guid },
     { "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL, NULL, NULL,
-			get_path,         set_path },
+			(QofAccessFunc)get_path,         set_path },
     { "slot_type",    CT_INT,      0,                     COL_NNUL, NULL, NULL,
-			get_slot_type,    set_slot_type, },
+			(QofAccessFunc)get_slot_type,    set_slot_type, },
     { "int64_val",    CT_INT64,    0,                     0,        NULL, NULL,
 			(QofAccessFunc)get_int64_val,    (QofSetterFunc)set_int64_val },
     { "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,        NULL, NULL,
-			get_string_val,   set_string_val },
+			(QofAccessFunc)get_string_val,   set_string_val },
     { "double_val",   CT_DOUBLE,   0,                     0,        NULL, NULL,
-			get_double_val,   set_double_val },
+			(QofAccessFunc)get_double_val,   set_double_val },
     { "timespec_val", CT_TIMESPEC, 0,                     0,        NULL, NULL,
 			(QofAccessFunc)get_timespec_val, (QofSetterFunc)set_timespec_val },
     { "guid_val",     CT_GUID,     0,                     0,        NULL, NULL,
-			get_guid_val,     set_guid_val },
+			(QofAccessFunc)get_guid_val,     set_guid_val },
     { "numeric_val",  CT_NUMERIC,  0,                     0,        NULL, NULL,
 			(QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val },
     { NULL }
+	/*@ +full_init_block @*/
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const GncSqlColumnTableEntry obj_guid_col_table[] =
 {
-    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, _retrieve_guid_ },
+	/*@ -full_init_block @*/
+    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, (QofAccessFunc)get_obj_guid, _retrieve_guid_ },
     { NULL }
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
 
-static gpointer
-get_obj_guid( gpointer pObject, const QofParam* param )
+static /*@ null @*/ gpointer
+get_obj_guid( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -117,13 +126,13 @@ get_obj_guid( gpointer pObject, const QofParam* param )
 }
 
 static void
-set_obj_guid( gpointer pObject, gpointer pValue )
+set_obj_guid( void )
 {
     // Nowhere to put the GUID
 }
 
-static gpointer
-get_path( gpointer pObject, const QofParam* param )
+static /*@ null @*/ gpointer
+get_path( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -133,18 +142,21 @@ get_path( gpointer pObject, const QofParam* param )
 }
 
 static void
-set_path( gpointer pObject, gpointer pValue )
+set_path( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pValue != NULL );
 
+	if( pInfo->path != NULL ) {
+		(void)g_string_free( pInfo->path, TRUE );
+	}
     pInfo->path = g_string_new( (gchar*)pValue );
 }
 
-static gpointer
-get_slot_type( gpointer pObject, const QofParam* param )
+static /*@ null @*/ gpointer
+get_slot_type( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -154,7 +166,7 @@ get_slot_type( gpointer pObject, const QofParam* param )
 }
 
 static void
-set_slot_type( gpointer pObject, gpointer pValue )
+set_slot_type( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -165,7 +177,7 @@ set_slot_type( gpointer pObject, gpointer pValue )
 }
 
 static gint64
-get_int64_val( gpointer pObject, const QofParam* param )
+get_int64_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -190,8 +202,8 @@ set_int64_val( gpointer pObject, gint64 value )
     }
 }
 
-static gpointer
-get_string_val( gpointer pObject, const QofParam* param )
+static /*@ null @*/ gpointer
+get_string_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -205,7 +217,7 @@ get_string_val( gpointer pObject, const QofParam* param )
 }
 
 static void
-set_string_val( gpointer pObject, gpointer pValue )
+set_string_val( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -216,8 +228,8 @@ set_string_val( gpointer pObject, gpointer pValue )
     }
 }
 
-static gpointer
-get_double_val( gpointer pObject, const QofParam* param )
+static /*@ dependent @*//*@ null @*/ gpointer
+get_double_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     static double d_val;
@@ -233,7 +245,7 @@ get_double_val( gpointer pObject, const QofParam* param )
 }
 
 static void
-set_double_val( gpointer pObject, gpointer pValue )
+set_double_val( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -245,7 +257,7 @@ set_double_val( gpointer pObject, gpointer pValue )
 }
 
 static Timespec
-get_timespec_val( gpointer pObject, const QofParam* param )
+get_timespec_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -267,8 +279,8 @@ set_timespec_val( gpointer pObject, Timespec ts )
     }
 }
 
-static gpointer
-get_guid_val( gpointer pObject, const QofParam* param )
+static /*@ null @*/ gpointer
+get_guid_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -282,7 +294,7 @@ get_guid_val( gpointer pObject, const QofParam* param )
 }
 
 static void
-set_guid_val( gpointer pObject, gpointer pValue )
+set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -294,7 +306,7 @@ set_guid_val( gpointer pObject, gpointer pValue )
 }
 
 static gnc_numeric
-get_numeric_val( gpointer pObject, const QofParam* param )
+get_numeric_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -323,63 +335,76 @@ static void
 save_slot( const gchar* key, KvpValue* value, gpointer data )
 {
     slot_info_t* pSlot_info = (slot_info_t*)data;
-    gint curlen;
+    gsize curlen;
 
 	g_return_if_fail( key != NULL );
 	g_return_if_fail( value != NULL );
 	g_return_if_fail( data != NULL );
 
+	// Ignore if we've already run into a failure
+	if( !pSlot_info->is_ok ) {
+		return;
+	}
+
     curlen = pSlot_info->path->len;
     pSlot_info->pKvpValue = value;
     if( curlen != 0 ) {
-        g_string_append( pSlot_info->path, "/" );
+        (void)g_string_append( pSlot_info->path, "/" );
     }
-    g_string_append( pSlot_info->path, key );
+    (void)g_string_append( pSlot_info->path, key );
 
     if( kvp_value_get_type( value ) == KVP_TYPE_FRAME ) {
         KvpFrame* pKvpFrame = kvp_value_get_frame( value );
         kvp_frame_for_each_slot( pKvpFrame, save_slot, pSlot_info );
     } else {
-        (void)gnc_sql_do_db_operation( pSlot_info->be, OP_DB_INSERT, TABLE_NAME,
-                                        TABLE_NAME, pSlot_info, col_table );
+        pSlot_info->is_ok = gnc_sql_do_db_operation( pSlot_info->be,
+												OP_DB_INSERT, TABLE_NAME,
+												TABLE_NAME, pSlot_info,
+												col_table );
     }
 
-    g_string_truncate( pSlot_info->path, curlen );
+    (void)g_string_truncate( pSlot_info->path, curlen );
 }
 
-void
+gboolean
 gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, KvpFrame* pFrame )
 {
     slot_info_t slot_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
-	g_return_if_fail( pFrame != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
+	g_return_val_if_fail( pFrame != NULL, FALSE );
 
     // If this is not saving into a new db, clear out the old saved slots first
 	if( !be->is_pristine_db && !is_infant ) {
-    	gnc_sql_slots_delete( be, guid );
+    	(void)gnc_sql_slots_delete( be, guid );
 	}
 
     slot_info.be = be;
     slot_info.guid = guid;
     slot_info.path = g_string_new( "" );
+	slot_info.is_ok = TRUE;
     kvp_frame_for_each_slot( pFrame, save_slot, &slot_info );
-    g_string_free( slot_info.path, TRUE );
+    (void)g_string_free( slot_info.path, TRUE );
+
+	return slot_info.is_ok;
 }
 
-void
+gboolean
 gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid )
 {
     slot_info_t slot_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
 
     slot_info.be = be;
     slot_info.guid = guid;
-    (void)gnc_sql_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
+	slot_info.is_ok = TRUE;
+    slot_info.is_ok = gnc_sql_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
                                 TABLE_NAME, &slot_info, obj_guid_col_table );
+
+	return slot_info.is_ok;
 }
 
 static void
@@ -398,7 +423,7 @@ load_slot( GncSqlBackend* be, GncSqlRow* row, KvpFrame* pFrame )
     gnc_sql_load_object( be, row, TABLE_NAME, &slot_info, col_table );
 
     if( slot_info.path != NULL ) {
-        g_string_free( slot_info.path, TRUE );
+        (void)g_string_free( slot_info.path, TRUE );
     }
 }
 
@@ -408,39 +433,40 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
     gchar* buf;
     GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
-    gchar* field_name;
     GncSqlStatement* stmt;
     GValue value;
 	const GUID* guid;
 	KvpFrame* pFrame;
-	GError* error = NULL;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 
 	guid = qof_instance_get_guid( inst );
 	pFrame = qof_instance_get_slots( inst );
-    guid_to_string_buff( guid, guid_buf );
+    (void)guid_to_string_buff( guid, guid_buf );
     memset( &value, 0, sizeof( value ) );
-    g_value_init( &value, G_TYPE_STRING );
+    (void)g_value_init( &value, G_TYPE_STRING );
     g_value_set_string( &value, guid_buf );
 
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME, guid_buf );
 	stmt = gnc_sql_create_statement_from_sql( be, buf );
-	result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-    if( result != NULL ) {
-        GncSqlRow* row = gnc_sql_result_get_first_row( result );
+	g_free( buf );
+	if( stmt != NULL ) {
+		result = gnc_sql_execute_select_statement( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+    	if( result != NULL ) {
+        	GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
-        while( row != NULL ) {
-            load_slot( be, row, pFrame );
-			row = gnc_sql_result_get_next_row( result );
-        }
-		gnc_sql_result_dispose( result );
-    }
+        	while( row != NULL ) {
+            	load_slot( be, row, pFrame );
+				row = gnc_sql_result_get_next_row( result );
+        	}
+			gnc_sql_result_dispose( result );
+    	}
+	}
 }
 
-static const GUID*
+static /*@ dependent @*//*@ null @*/ const GUID*
 load_obj_guid( const GncSqlBackend* be, GncSqlRow* row )
 {
     static GUID guid;
@@ -465,6 +491,7 @@ load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll 
 	g_return_if_fail( coll != NULL );
 
 	guid = load_obj_guid( be, row );
+	g_assert( guid != NULL );
 	inst = qof_collection_lookup_entity( coll, guid );
 
     slot_info.be = be;
@@ -474,7 +501,7 @@ load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll 
     gnc_sql_load_object( be, row, TABLE_NAME, &slot_info, col_table );
 
     if( slot_info.path != NULL ) {
-        g_string_free( slot_info.path, TRUE );
+        (void)g_string_free( slot_info.path, TRUE );
     }
 }
 
@@ -484,8 +511,6 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 	QofCollection* coll;
 	GncSqlStatement* stmt;
 	GString* sql;
-    gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	gboolean first_guid = TRUE;
 	GncSqlResult* result;
 	gboolean single_item;
 
@@ -500,19 +525,20 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
 	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s ", TABLE_NAME, obj_guid_col_table[0].col_name );
 	if( g_list_length( list ) != 1 ) {
-		g_string_append( sql, "IN (" );
+		(void)g_string_append( sql, "IN (" );
 		single_item = FALSE;
 	} else {
-		g_string_append( sql, "= " );
+		(void)g_string_append( sql, "= " );
 		single_item = TRUE;
 	}
 	(void)gnc_sql_append_guid_list_to_sql( sql, list, G_MAXUINT );
 	if( !single_item ) {
-		g_string_append( sql, ")" );
+		(void)g_string_append( sql, ")" );
 	}
 
 	// Execute the query and load the slots
 	stmt = gnc_sql_create_statement_from_sql( be, sql->str );
+	g_assert( stmt != NULL );
 	result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -524,21 +550,20 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
         }
 		gnc_sql_result_dispose( result );
     }
-	g_string_free( sql, FALSE );
+	(void)g_string_free( sql, FALSE );
 }
 
 /* ================================================================= */
 static void
 create_slots_tables( GncSqlBackend* be )
 {
-	gboolean ok;
 	gint version;
 
 	g_return_if_fail( be != NULL );
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
 	if( version == 0 ) {
-    	gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+    	(void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
 #if 0
 		// FIXME: Create index
 		ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table, &error );
@@ -546,6 +571,10 @@ create_slots_tables( GncSqlBackend* be )
 			PERR( "Unable to create index: %s\n", error->message );
 		}
 #endif
+	} else if( version == 1 ) {
+		/* Upgrade 64-bit int values to proper definition */
+		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		(void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
 	}
 }
 
@@ -559,9 +588,13 @@ gnc_sql_init_slots_handler( void )
         GNC_ID_ACCOUNT,
         NULL,                    /* commit - cannot occur */
         NULL,                    /* initial_load - cannot occur */
-        create_slots_tables        /* create_tables */
+        create_slots_tables,     /* create_tables */
+		NULL,                    /* compile_query */
+		NULL,                    /* run_query */
+		NULL,                    /* free_query */
+		NULL                     /* write */
     };
 
-    qof_object_register_backend( TABLE_NAME, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( TABLE_NAME, GNC_SQL_BACKEND, &be_data );
 }
 /* ========================== END OF FILE ===================== */

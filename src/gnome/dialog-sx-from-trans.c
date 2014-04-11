@@ -302,7 +302,7 @@ sxftd_update_schedule( SXFromTransInfo *sxfti, GDate *date, GList **recurrences)
   {
   case FREQ_DAILY: {
       Recurrence *r = g_new0(Recurrence, 1);
-      recurrenceSet(r, 1, PERIOD_DAY, date);
+      recurrenceSet(r, 1, PERIOD_DAY, date, WEEKEND_ADJ_NONE);
       *recurrences = g_list_append(*recurrences, r);
     } break;
 
@@ -310,7 +310,7 @@ sxftd_update_schedule( SXFromTransInfo *sxfti, GDate *date, GList **recurrences)
   case FREQ_BIWEEKLY: {
       Recurrence *r = g_new0(Recurrence, 1);
       int mult = (index == FREQ_BIWEEKLY ? 2 : 1);
-      recurrenceSet(r, mult, PERIOD_WEEK, date);
+      recurrenceSet(r, mult, PERIOD_WEEK, date, WEEKEND_ADJ_NONE);
       *recurrences = g_list_append(*recurrences, r);
   } break;
 
@@ -323,7 +323,7 @@ sxftd_update_schedule( SXFromTransInfo *sxfti, GDate *date, GList **recurrences)
                   : (index == FREQ_QUARTERLY
                      ? 3
                      : 12));
-      recurrenceSet(r, mult, PERIOD_MONTH, date);
+      recurrenceSet(r, mult, PERIOD_MONTH, date, recurrenceGetWeekendAdjust(r));
       *recurrences = g_list_append(*recurrences, r);
   } break;
 
@@ -694,10 +694,10 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
 
   /* go one day before what's in the box so we can get the correct start
    * date. */
+  startDate = date;
   g_date_subtract_days(&date, 1);
   g_date_clear(&nextDate, 1);
   recurrenceListNextInstance(schedule, &date, &nextDate);
-  startDate = date;
 
   {
       GtkWidget *w;
@@ -781,5 +781,5 @@ gnc_sx_create_from_trans( Transaction *trans )
           }
   }
 
-  gtk_widget_show_all(GTK_WIDGET(sxfti->dialog));
+  gtk_widget_show(GTK_WIDGET(sxfti->dialog));
 }
