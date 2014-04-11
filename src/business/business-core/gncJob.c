@@ -307,19 +307,19 @@ void gncJobCommitEdit (GncJob *job)
 /* ================================================================== */
 /* Get Functions */
 
-const char * gncJobGetID (GncJob *job)
+const char * gncJobGetID (const GncJob *job)
 {
   if (!job) return NULL;
   return job->id;
 }
 
-const char * gncJobGetName (GncJob *job)
+const char * gncJobGetName (const GncJob *job)
 {
   if (!job) return NULL;
   return job->name;
 }
 
-const char * gncJobGetReference (GncJob *job)
+const char * gncJobGetReference (const GncJob *job)
 {
   if (!job) return NULL;
   return job->desc;
@@ -331,7 +331,7 @@ GncOwner * gncJobGetOwner (GncJob *job)
   return &(job->owner);
 }
 
-gboolean gncJobGetActive (GncJob *job)
+gboolean gncJobGetActive (const GncJob *job)
 {
   if (!job) return FALSE;
   return job->active;

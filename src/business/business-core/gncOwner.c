@@ -103,7 +103,7 @@ GncOwnerType gncOwnerGetType (const GncOwner *owner)
 }
 
 QofIdType
-qofOwnerGetType(GncOwner *owner)
+qofOwnerGetType(const GncOwner *owner)
 {
 	QofIdType type;
 
@@ -139,7 +139,7 @@ qofOwnerGetType(GncOwner *owner)
 }
 
 QofInstance*
-qofOwnerGetOwner (GncOwner *owner)
+qofOwnerGetOwner (const GncOwner *owner)
 {
 	QofInstance *ent;
 
@@ -234,7 +234,7 @@ GncEmployee * gncOwnerGetEmployee (const GncOwner *owner)
   return owner->owner.employee;
 }
 
-gnc_commodity * gncOwnerGetCurrency (GncOwner *owner)
+gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner)
 {
   if (!owner) return NULL;
   switch (owner->type) {
@@ -297,7 +297,7 @@ gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
   return (a->owner.undefined == b->owner.undefined);
 }
 
-const char * gncOwnerGetName (GncOwner *owner)
+const char * gncOwnerGetName (const GncOwner *owner)
 {
   if (!owner) return NULL;
   switch (owner->type) {
@@ -316,7 +316,7 @@ const char * gncOwnerGetName (GncOwner *owner)
   }
 }
 
-const GUID * gncOwnerGetGUID (GncOwner *owner)
+const GUID * gncOwnerGetGUID (const GncOwner *owner)
 {
   if (!owner) return NULL;
 
@@ -393,7 +393,7 @@ const GUID * gncOwnerGetEndGUID (GncOwner *owner)
   return gncOwnerGetGUID (owner);
 }
 
-void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot)
+void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 {
   KvpFrame *kvp;
   KvpValue *value;
@@ -458,7 +458,7 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
   return (owner->owner.undefined != NULL);
 }
 
-gboolean gncOwnerIsValid (GncOwner *owner)
+gboolean gncOwnerIsValid (const GncOwner *owner)
 {
   if (!owner) return FALSE;
   return (owner->owner.undefined != NULL);

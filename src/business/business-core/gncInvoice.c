@@ -469,7 +469,7 @@ void gncInvoiceSortEntries (GncInvoice *invoice)
 /* ================================================================== */
 /* Get Functions */
 
-const char * gncInvoiceGetID (GncInvoice *invoice)
+const char * gncInvoiceGetID (const GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->id;
@@ -501,21 +501,21 @@ qofInvoiceGetBillTo (GncInvoice *invoice)
 	return QOF_INSTANCE(billto);
 }
 
-Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
+Timespec gncInvoiceGetDateOpened (const GncInvoice *invoice)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!invoice) return ts;
   return invoice->date_opened;
 }
 
-Timespec gncInvoiceGetDatePosted (GncInvoice *invoice)
+Timespec gncInvoiceGetDatePosted (const GncInvoice *invoice)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!invoice) return ts;
   return invoice->date_posted;
 }
 
-Timespec gncInvoiceGetDateDue (GncInvoice *invoice)
+Timespec gncInvoiceGetDateDue (const GncInvoice *invoice)
 {
   Transaction *txn;
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
@@ -525,19 +525,19 @@ Timespec gncInvoiceGetDateDue (GncInvoice *invoice)
   return xaccTransRetDateDueTS (txn);
 }
 
-GncBillTerm * gncInvoiceGetTerms (GncInvoice *invoice)
+GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice)
 {
-  if (!invoice) return 0;
+  if (!invoice) return NULL;
   return invoice->terms;
 }
 
-const char * gncInvoiceGetBillingID (GncInvoice *invoice)
+const char * gncInvoiceGetBillingID (const GncInvoice *invoice)
 {
-  if (!invoice) return 0;
+  if (!invoice) return NULL;
   return invoice->billing_id;
 }
 
-const char * gncInvoiceGetNotes (GncInvoice *invoice)
+const char * gncInvoiceGetNotes (const GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->notes;
@@ -629,7 +629,7 @@ const char * gncInvoiceGetType (GncInvoice *invoice)
   }
 }
 
-gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice)
+gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->currency;
@@ -641,32 +641,32 @@ GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice)
   return &invoice->billto;
 }
 
-GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice)
+GNCLot * gncInvoiceGetPostedLot (const GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->posted_lot;
 }
 
-Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice)
+Transaction * gncInvoiceGetPostedTxn (const GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->posted_txn;
 }
 
-Account * gncInvoiceGetPostedAcc (GncInvoice *invoice)
+Account * gncInvoiceGetPostedAcc (const GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->posted_acc;
 }
 
-gboolean gncInvoiceGetActive (GncInvoice *invoice)
+gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 {
   if (!invoice) return FALSE;
   return invoice->active;
 }
 
 
-gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice)
+gnc_numeric gncInvoiceGetToChargeAmount (const GncInvoice *invoice)
 {
   if (!invoice) return gnc_numeric_zero();
   return invoice->to_charge_amount;
@@ -724,7 +724,7 @@ qofInvoiceSetEntries(GncInvoice *invoice, QofCollection *entry_coll)
 }
 
 static GncJob*
-qofInvoiceGetJob (GncInvoice *invoice)
+qofInvoiceGetJob (const GncInvoice *invoice)
 {
 	if(!invoice) { return NULL; }
 	return invoice->job;
@@ -806,7 +806,7 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 }
 
 GncInvoice * 
-gncInvoiceGetInvoiceFromTxn (Transaction *txn)
+gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
   KvpFrame *kvp;
   KvpValue *value;
@@ -1454,20 +1454,20 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
   return txn;    
 }
 
-static gboolean gncInvoiceDateExists (Timespec *date)
+static gboolean gncInvoiceDateExists (const Timespec *date)
 {
   g_return_val_if_fail (date, FALSE);
   if (date->tv_sec || date->tv_nsec) return TRUE;
   return FALSE;
 }
 
-gboolean gncInvoiceIsPosted (GncInvoice *invoice)
+gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
 {
   if (!invoice) return FALSE;
   return gncInvoiceDateExists (&(invoice->date_posted));
 }
 
-gboolean gncInvoiceIsPaid (GncInvoice *invoice)
+gboolean gncInvoiceIsPaid (const GncInvoice *invoice)
 {
   if (!invoice) return FALSE;
   if (!invoice->posted_lot) return FALSE;
@@ -1501,7 +1501,7 @@ void gncInvoiceCommitEdit (GncInvoice *invoice)
 			 gncInvoiceOnDone, invoice_free);
 }
 
-int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
+int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b)
 {
   int compare;
 

@@ -1,0 +1,91 @@
+
+# FILE: valgrind-gnucash.supp
+#
+# FUNCTION: This file is a valgrind 'suppression' file, used to 
+#     get valgrind to not report certain errors that we aren't 
+#     interested in.
+#
+#     valgrind is a memory allocation debugging tool.  See the
+#     file ./HACKING for instructions on how to run gnucash with
+#     valgrind
+#
+# HISTORY: created aug 2003 linas vepstas
+
+
+##----------------------------------------------------------------------##
+
+# Format of this file is:
+# {
+#     name_of_suppression
+#     skin_name:supp_kind
+#     (optional extra info for some suppression types)
+#     caller0 name, or /name/of/so/file.so
+#     caller1 name, or ditto
+#     (optionally: caller2 name)
+#     (optionally: caller3 name)
+#  }
+#
+# For memcheck, the supp_kinds are:
+#
+#     Param Value1 Value2 Value4 Value8 Value16
+#     Free Addr1 Addr2 Addr4 Addr8 Addr16
+#     Cond (previously known as Value0)
+#     Leak
+#
+# and the optional extra info is:
+#     if Param: name of system call param
+#     if Free: name of free-ing fn)
+
+{
+   libguile.so(Cond)
+   Memcheck:Cond
+   obj:*libguile.so.*
+}
+{
+   libguile.so(Value4)
+   Memcheck:Value4
+   obj:*libguile.so*
+}
+{
+   libguile.so(Leak)
+   Memcheck:Leak
+   fun:malloc
+   obj:*libguile.so*
+   obj:*libguile.so*
+   obj:*libguile.so*
+}
+{
+   scm_make_port_type Leak
+   Memcheck:Leak
+   fun:realloc
+   fun:scm_make_port_type
+   fun:scm_init_vports
+   obj:*libguile.so*
+}
+{
+   scm_gc_for_newcell Leak
+   Memcheck:Leak
+   fun:malloc
+   obj:*libguile.so*
+   fun:scm_gc_for_newcell
+   fun:scm_acons
+}
+{
+	scm_dynamic_link leak
+	Memcheck:Leak
+	fun:malloc
+	obj:*libguile-ltdl*
+	obj:*libguile-ltdl*
+	obj:*libguile-ltdl*
+	fun:scm_lt_dlopenext
+	fun:scm_dynamic_link
+}
+{
+	scm_deval leak
+	Memcheck:Leak
+	fun:malloc
+	fun:_wrap_*
+	fun:scm_deval
+}
+
+# ##----------------------------------------------------------------------##

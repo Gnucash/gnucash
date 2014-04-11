@@ -5,7 +5,7 @@ bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
 AM_CFLAGS = \
 	-I../../engine -I${srcdir}/../../engine \
-	-I../../backend/file -I${srcdir}/../../backend/file \
+	-I../../backend/xml -I${srcdir}/../../backend/xml \
 	${GLIB_CFLAGS}
 
 LDADD = 			\

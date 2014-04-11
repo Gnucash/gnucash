@@ -471,6 +471,12 @@ gnc_tree_view_price_new (QofBook *book,
 
   gnc_tree_view_configure_columns(view);
 
+  /* Sort on the commodity column by default. This allows for a consistent
+   * sort if commodities are removed and re-added from the model. */
+  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
+                                       GNC_TREE_MODEL_PRICE_COL_COMMODITY,
+                                       GTK_SORT_ASCENDING);
+
   gtk_widget_show(GTK_WIDGET(view));
   LEAVE(" %p", view);
   return GTK_TREE_VIEW(view);

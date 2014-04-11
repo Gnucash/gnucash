@@ -1527,6 +1527,15 @@ xaccSplitGetLot (const Split *split)
    return split ? split->lot : NULL;
 }
 
+void
+xaccSplitSetLot(Split* split, GNCLot* lot)
+{
+   xaccTransBeginEdit (split->parent);
+   split->lot = lot;
+   qof_instance_set_dirty(QOF_INSTANCE(split));
+   xaccTransCommitEdit(split->parent);
+}
+
 const char *
 xaccSplitGetMemo (const Split *split)
 {

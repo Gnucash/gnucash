@@ -127,7 +127,7 @@ qofAddressSetOwner(GncAddress *addr, QofInstance *ent)
 }
 
 static QofInstance*
-qofAddressGetOwner(GncAddress *addr)
+qofAddressGetOwner(const GncAddress *addr)
 {
 
 	if(!addr) { return NULL; }
@@ -135,7 +135,7 @@ qofAddressGetOwner(GncAddress *addr)
 }
 
 GncAddress * 
-gncCloneAddress (GncAddress *from, QofInstance *new_parent, QofBook *book)
+gncCloneAddress (const GncAddress *from, QofInstance *new_parent, QofBook *book)
 {
   GncAddress *addr;
 

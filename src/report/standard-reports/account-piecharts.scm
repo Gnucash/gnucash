@@ -100,7 +100,7 @@ balance at a given time"))
     
     (gnc:options-add-price-source! 
      options gnc:pagename-general
-     optname-price-source "c" 'weighted-average)
+     optname-price-source "c" 'average-cost)
 
     (add-option
      (gnc:make-account-list-option
@@ -238,8 +238,8 @@ balance at a given time"))
         ;; Future improvement: Let the user choose which kind of
         ;; currency combining she want to be done. Right now
         ;; everything foreign gets converted
-        ;; (gnc:sum-collector-commodity) based on the weighted
-        ;; average of all past transactions.
+        ;; (gnc:sum-collector-commodity) based on the average
+        ;; cost of all holdings.
         (gnc-numeric-to-double
          (gnc:gnc-monetary-amount
           (gnc:sum-collector-commodity 

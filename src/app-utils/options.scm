@@ -1534,7 +1534,7 @@
     pagename optname 
     sort-tag info
     (lambda () 
-      (cons 'relative 'today))
+      (cons 'relative 'end-accounting-period))
     #f 'both 
     '(
       today 
@@ -1554,7 +1554,7 @@
    (gnc:make-date-option
     pagename name-from
     (string-append sort-tag "a") info-from
-    (lambda () (cons 'relative 'start-cal-year))
+    (lambda () (cons 'relative 'start-accounting-period))
     #f 'both 
     '(
       today

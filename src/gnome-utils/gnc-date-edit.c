@@ -266,7 +266,7 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 		mtm.tm_year -= 1900;
 
 	gnc_tm_set_day_start(&mtm);
-        if (mktime (&mtm) == -1)
+        if (mktime (&mtm) == (time_t) -1)
         {
 		gnc_tm_get_today_start (&mtm);
                 gnc_date_edit_set_time (gde, mktime (&mtm));
@@ -282,7 +282,6 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 	gtk_widget_show (gde->cal_popup);
 	gtk_widget_grab_focus (gde->cal_popup);
 	gtk_grab_add (gde->cal_popup);
-
 }
 
 typedef struct {
@@ -494,21 +493,29 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
 static void
 gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm) 
 {
-	char buffer [40];
+        char buffer [40];
 
-	/* Set the date */
-	qof_print_date_dmy_buff (buffer, 40,
-                   mytm->tm_mday,
-                   mytm->tm_mon + 1,
-                   1900 + mytm->tm_year);
-	gtk_entry_set_text (GTK_ENTRY (gde->date_entry), buffer);
+        g_return_if_fail(mytm != NULL);
 
-	/* Set the time */
-	if (gde->flags & GNC_DATE_EDIT_24_HR)
-		qof_strftime (buffer, sizeof (buffer), "%H:%M", mytm);
-	else
-		qof_strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
-	gtk_entry_set_text (GTK_ENTRY (gde->time_entry), buffer);
+        /* Update the date text. */
+        qof_print_date_dmy_buff(buffer, 40,
+                                mytm->tm_mday,
+                                mytm->tm_mon + 1,
+                                1900 + mytm->tm_year);
+        gtk_entry_set_text(GTK_ENTRY(gde->date_entry), buffer);
+
+        /* Update the calendar. */
+        gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), 1);
+        gtk_calendar_select_month(GTK_CALENDAR (gde->calendar),
+                                  mytm->tm_mon, 1900 + mytm->tm_year);
+        gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), mytm->tm_mday);
+
+        /* Set the time of day. */
+        if (gde->flags & GNC_DATE_EDIT_24_HR)
+          qof_strftime (buffer, sizeof (buffer), "%H:%M", mytm);
+        else
+          qof_strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
+        gtk_entry_set_text(GTK_ENTRY(gde->time_entry), buffer);
 }
 
 /**
@@ -527,9 +534,16 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	g_return_if_fail (gde != NULL);
         g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
-	if (the_time == 0)
-		the_time = time (NULL);
-	gde->initial_time = the_time;
+        /* If the_time is invalid, use the last valid time
+         * seen (or as a last resort, the current date). */
+        if (the_time == (time_t) -1)
+        {
+          if (gde->initial_time == (time_t) -1)
+            gde->initial_time = gnc_timet_get_today_start();
+          the_time = gde->initial_time;
+        }
+        else
+          gde->initial_time = the_time;
 
 	mytm = localtime (&the_time);
 	gnc_date_edit_set_time_tm(gde, mytm);
@@ -591,14 +605,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
         if (!gnc_handle_date_accelerator (event, &tm, string))
                 return FALSE;
 
-        if (mktime (&tm) == -1)
-		gnc_tm_get_today_start (&tm);
         gnc_date_edit_set_time (gde, mktime (&tm));
-
-        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
-	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
-                                   1900 + tm.tm_year);
-        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
 
 	g_signal_emit (G_OBJECT (gde), date_edit_signals [TIME_CHANGED], 0);
         return TRUE;
@@ -620,12 +627,12 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	GNCDateEdit *gde = data;
         struct tm tm;
 
+        /* Get the date entered and attempt to use it. */
         tm = gnc_date_edit_get_date_internal (gde);
         gnc_date_edit_set_time (gde, mktime (&tm));
 
-	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
-                                   1900 + tm.tm_year);
-        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
+        /* Get the date again in case it was invalid the first time. */
+        tm = gnc_date_edit_get_date_internal (gde);
 
 	g_signal_emit (gde, date_edit_signals [DATE_CHANGED], 0);
 	g_signal_emit (gde, date_edit_signals [TIME_CHANGED], 0);
@@ -792,6 +799,7 @@ gnc_date_edit_new_flags (time_t the_time, GNCDateEditFlags flags)
 	gde = g_object_new (GNC_TYPE_DATE_EDIT, NULL, NULL);
 
 	gde->flags = flags;
+	gde->initial_time = -1;
 	create_children (gde);
 	gnc_date_edit_set_time (gde, the_time);
 
@@ -880,8 +888,13 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
         tm = gnc_date_edit_get_date_internal (gde);
 
         retval = mktime (&tm);
-        if (retval == -1)
-                return gnc_timet_get_today_start ();
+        if (retval == (time_t) -1)
+        {
+          if (gde->initial_time == (time_t) -1)
+            return gnc_timet_get_today_start ();
+          else
+            return gde->initial_time;
+        }
         return retval;
 }
 
@@ -925,8 +938,13 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
         tm = gnc_date_edit_get_date_internal (gde);
 	gnc_tm_set_day_end(&tm);
 
-        if (mktime (&tm) == -1)
-		return gnc_timet_get_today_end();
+        if (mktime (&tm) == (time_t) -1)
+        {
+          if (gde->initial_time == (time_t) -1)
+            return gnc_timet_get_today_end();
+          else
+            return gnc_timet_get_day_end(gde->initial_time);
+        }
 	return mktime (&tm);
 }
 

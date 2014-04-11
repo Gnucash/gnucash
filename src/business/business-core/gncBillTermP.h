@@ -38,7 +38,7 @@ void gncBillTermSetChild (GncBillTerm *term, GncBillTerm *child);
 void gncBillTermSetRefcount (GncBillTerm *term, gint64 refcount);
 void gncBillTermMakeInvisible (GncBillTerm *term);
 
-gboolean gncBillTermGetInvisible (GncBillTerm *term);
+gboolean gncBillTermGetInvisible (const GncBillTerm *term);
 
 /** The gncCloneBillTerm() routine makes a copy of the indicated
  *  bill term, placing it in the indicated book.  It copies

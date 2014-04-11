@@ -1142,6 +1142,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
   /* Build this options page */
   page_content_box = gtk_vbox_new(FALSE, 2);
+  gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 12);
 
   /* Build space for the content - the options box */
   options_box = gtk_vbox_new(FALSE, 5);

@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-file.c: load and save data to files                  *
+ * gnc-backend-xml.c: load and save data to XML files               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-backend-file.c
- *  @brief load and save data to files 
+/** @file gnc-backend-xml.c
+ *  @brief load and save data to XML files 
  *  @author Copyright (c) 2000 Gnumatic Inc.
  *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
@@ -453,6 +453,12 @@ gnc_determine_file_type (const char *path)
 	FILE *t;
 
 	if (!path) { return FALSE; }
+
+	// Since this can be called with "xml:" as a prefix, remove it if it exists
+	if( g_str_has_prefix( path, "xml:" ) ) {
+	    path += 4;
+	}
+
 	if (0 == safe_strcmp(path, QOF_STDOUT)) { return FALSE; }
 	t = g_fopen(path, "r");
 	if(!t) { PINFO (" new file"); return TRUE; }
@@ -462,7 +468,7 @@ gnc_determine_file_type (const char *path)
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
 	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
-	PINFO (" %s is not a gnc file", path);
+	PINFO (" %s is not a gnc XML file", path);
 	return FALSE;
 }	
 
@@ -854,6 +860,11 @@ file_rollback_edit (QofBackend *be, QofInstance *inst)
 static void
 file_commit_edit (QofBackend *be, QofInstance *inst)
 {
+    if (qof_instance_get_dirty(inst) && qof_get_alt_dirty_mode() && 
+        !(qof_instance_get_infant(inst) && qof_instance_get_destroying(inst))) {
+      qof_collection_mark_dirty(qof_instance_get_collection(inst));
+      qof_book_mark_dirty(qof_instance_get_book(inst));
+    }
 #if BORKEN_FOR_NOW
     FileBackend *fbe = (FileBackend *) be;
     QofBook *book = gp;
@@ -1065,6 +1076,15 @@ qof_backend_module_init(void)
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";
         prov->access_method = "file";
+        prov->partial_book_supported = FALSE;
+        prov->backend_new = gnc_backend_new;
+        prov->provider_free = gnc_provider_free;
+        prov->check_data_type = gnc_determine_file_type;
+        qof_backend_register_provider (prov);
+
+        prov = g_new0 (QofBackendProvider, 1);
+        prov->provider_name = "GnuCash File Backend Version 2";
+        prov->access_method = "xml";
         prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_backend_new;
         prov->provider_free = gnc_provider_free;

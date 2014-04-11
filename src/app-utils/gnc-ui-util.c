@@ -212,6 +212,33 @@ gnc_get_current_commodities (void)
   return gnc_book_get_commodity_table (gnc_get_current_book ());
 }
 
+gchar *
+gnc_get_account_name_for_register(const Account *account)
+{
+  gboolean show_leaf_accounts;
+  show_leaf_accounts = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+					  KEY_SHOW_LEAF_ACCOUNT_NAMES, NULL);
+
+  if (show_leaf_accounts)
+    return g_strdup (xaccAccountGetName (account));
+  else
+    return xaccAccountGetFullName (account);
+}
+
+Account *
+gnc_account_lookup_for_register(const Account *base_account, const char *name)
+{
+  gboolean show_leaf_accounts;
+  show_leaf_accounts = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+					  KEY_SHOW_LEAF_ACCOUNT_NAMES, NULL);
+
+  if (show_leaf_accounts)
+    return gnc_account_lookup_by_name (base_account, name);
+  else
+    return gnc_account_lookup_by_full_name (base_account, name);
+}
+
+
 /*
  * This is a wrapper routine around an xaccGetBalanceInCurrency
  * function that handles additional needs of the gui.
@@ -1356,7 +1383,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   /* at this point, buf contains the whole part of the number */
 
   /* If it's not decimal, print the fraction as an expression */
-  if (!is_decimal_fraction (val.denom, NULL))
+  if (!gnc_numeric_to_decimal(&val, NULL))
   {
     if (!gnc_numeric_zero_p (val))
     {

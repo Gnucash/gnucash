@@ -1034,6 +1034,24 @@ gnc_file_save_as (void)
   g_free(default_dir);
   if (!filename) return;
 
+  gnc_file_do_save_as( filename );
+
+  LEAVE (" ");
+}
+
+void
+gnc_file_do_save_as (const char* filename)
+{
+  QofSession *new_session;
+  QofSession *session;
+  char *default_dir = NULL;        /* Default to last open */
+  char *last;
+  char *newfile;
+  const char *oldfile;
+  QofBackendError io_err = ERR_BACKEND_NO_ERR;
+
+  ENTER(" ");
+
   /* Check to see if the user specified the same file as the current
    * file. If so, then just do that, instead of the below, which
    * assumes a truly new name was given. */

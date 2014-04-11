@@ -5,7 +5,8 @@
 (gnc:module-load "gnucash/business-core" 0)
 (gnc:module-load "gnucash/business-utils" 0)
 (gnc:module-load "gnucash/gnome-search" 0)
-(gnc:module-load "gnucash/business-core-file" 0)
+(gnc:module-load "gnucash/business-core-xml" 0)
+(gnc:module-load "gnucash/business-core-sql" 0)
 (gnc:module-load "gnucash/dialog-tax-table" 0)
 
 (gnc:module-load "gnucash/report/report-gnome" 0)

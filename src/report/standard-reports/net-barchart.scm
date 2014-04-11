@@ -120,9 +120,16 @@
           (N_ "Show a Net Worth bar?")) 
       #t))
 
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      (N_ "Show table")
+      "c" (N_ "Display a table of the selected data.")
+      #f))
+
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "c" 500 400)
+     optname-plot-width optname-plot-height "d" 500 400)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -179,6 +186,7 @@
 	 (report-title (get-option gnc:pagename-general 
                                   gnc:optname-reportname))
          (classified-accounts (gnc:decompose-accountlist accounts))
+         (show-table? (get-option gnc:pagename-display (N_ "Show table")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-barchart))
          (non-zeros #f))
@@ -356,7 +364,45 @@
        
        ;; Test for all-zero data here.
        (if non-zeros
+           (begin
            (gnc:html-document-add-object! document chart) 
+             (if show-table?
+             (let ((table (gnc:make-html-table)))
+                (gnc:html-table-set-col-headers!
+                 table
+                 (append
+                  (list (_ "Date"))
+                  (if show-sep?
+                      (if inc-exp?
+                          (list (_ "Income") (_ "Expense"))
+                          (list (_ "Assets") (_ "Liabilities")))
+                      '())
+                  (if show-net?
+                      (if inc-exp?
+                          (list (_ "Net Profit"))
+                          (list (_ "Net Worth")))
+                      '()))
+                 )
+               (gnc:html-table-append-column! table date-string-list)
+               (if show-sep?
+                   (begin
+                     (gnc:html-table-append-column! table assets-list)
+                     (gnc:html-table-append-column! table liability-list)
+                    )
+                   )
+               (if show-net?
+                   (gnc:html-table-append-column! table net-list)
+                   )
+               ;; set numeric columns to align right
+                (for-each
+                 (lambda (col)
+                   (gnc:html-table-set-col-style!
+                    table col "td"
+                    'attribute (list "align" "right")))
+                 '(1 2 3))
+
+              (gnc:html-document-add-object! document table))
+             ))
            (gnc:html-document-add-object!
             document
             (gnc:html-make-empty-data-warning

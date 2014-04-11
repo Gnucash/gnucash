@@ -346,68 +346,68 @@ qofVendorSetTaxIncluded(GncVendor *vendor, const char* type_string)
 /* ============================================================== */
 /* Get Functions */
 
-const char * gncVendorGetID (GncVendor *vendor)
+const char * gncVendorGetID (const GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->id;
 }
 
-const char * gncVendorGetName (GncVendor *vendor)
+const char * gncVendorGetName (const GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->name;
 }
 
-GncAddress * gncVendorGetAddr (GncVendor *vendor)
+GncAddress * gncVendorGetAddr (const GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->addr;
 }
 
-const char * gncVendorGetNotes (GncVendor *vendor)
+const char * gncVendorGetNotes (const GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->notes;
 }
 
-GncBillTerm * gncVendorGetTerms (GncVendor *vendor)
+GncBillTerm * gncVendorGetTerms (const GncVendor *vendor)
 {
   if (!vendor) return 0;
   return vendor->terms;
 }
 
-GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor)
+GncTaxIncluded gncVendorGetTaxIncluded (const GncVendor *vendor)
 {
   if (!vendor) return GNC_TAXINCLUDED_USEGLOBAL;
   return vendor->taxincluded;
 }
 
-gnc_commodity * gncVendorGetCurrency (GncVendor *vendor)
+gnc_commodity * gncVendorGetCurrency (const GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->currency;
 }
 
-gboolean gncVendorGetActive (GncVendor *vendor)
+gboolean gncVendorGetActive (const GncVendor *vendor)
 {
   if (!vendor) return FALSE;
   return vendor->active;
 }
 
-gboolean gncVendorGetTaxTableOverride (GncVendor *vendor)
+gboolean gncVendorGetTaxTableOverride (const GncVendor *vendor)
 {
   if (!vendor) return FALSE;
   return vendor->taxtable_override;
 }
 
-GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor)
+GncTaxTable* gncVendorGetTaxTable (const GncVendor *vendor)
 {
   if (!vendor) return NULL;
   return vendor->taxtable;
 }
 
 static const char*
-qofVendorGetTaxIncluded(GncVendor *vendor)
+qofVendorGetTaxIncluded(const GncVendor *vendor)
 {
 	return gncTaxIncludedTypeToString(vendor->taxincluded);
 }
@@ -475,7 +475,7 @@ void gncVendorCommitEdit (GncVendor *vendor)
 /* ============================================================== */
 /* Other functions */
 
-int gncVendorCompare (GncVendor *a, GncVendor *b)
+int gncVendorCompare (const GncVendor *a, const GncVendor *b)
 {
   if (!a && !b) return 0;
   if (!a && b) return 1;
@@ -484,7 +484,7 @@ int gncVendorCompare (GncVendor *a, GncVendor *b)
   return(strcmp(a->name, b->name));
 }
 
-GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
+GList * gncVendorGetJoblist (const GncVendor *vendor, gboolean show_all)
 {
   if (!vendor) return NULL;
 
@@ -501,7 +501,7 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
   }
 }
 
-gboolean gncVendorIsDirty (GncVendor *vendor)
+gboolean gncVendorIsDirty (const GncVendor *vendor)
 {
   if (!vendor) return FALSE;
   return (qof_instance_get_dirty_flag(vendor)

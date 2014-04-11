@@ -67,6 +67,7 @@
 #define KEY_NUMBER_OF_ROWS	"number_of_rows"
 #define KEY_ENABLE_EURO		"enable_euro"
 #define KEY_DATE_FORMAT 	"date_format"
+#define KEY_SHOW_LEAF_ACCOUNT_NAMES "show_leaf_account_names"
 
 typedef void (*GncGconfGeneralCb)    (GConfEntry *entry, gpointer user_data);
 typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);

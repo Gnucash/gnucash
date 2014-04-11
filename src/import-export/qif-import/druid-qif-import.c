@@ -73,6 +73,7 @@ enum account_cols {
   ACCOUNT_COL_QIF_NAME,
   ACCOUNT_COL_GNC_NAME,
   ACCOUNT_COL_NEW,
+  ACCOUNT_COL_ELLIPSIZE,
   NUM_ACCOUNT_COLS
 };
 
@@ -168,9 +169,9 @@ struct _qifimportwindow {
 
 struct _qifdruidpage {
   GtkWidget     *page;
-  GtkWidget     *new_type_combo;
-  GtkWidget     *new_name_entry;
-  GtkWidget     *new_mnemonic_entry;
+  GtkWidget     *namespace_combo;
+  GtkWidget     *name_entry;
+  GtkWidget     *mnemonic_entry;
   gnc_commodity *commodity;
   SCM            hash_key;
 };
@@ -242,10 +243,11 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
-                       ACCOUNT_COL_INDEX,    row++,
-                       ACCOUNT_COL_QIF_NAME, qif_name,
-                       ACCOUNT_COL_GNC_NAME, gnc_name,
-                       ACCOUNT_COL_NEW,      checked,
+                       ACCOUNT_COL_INDEX,     row++,
+                       ACCOUNT_COL_QIF_NAME,  qif_name,
+                       ACCOUNT_COL_GNC_NAME,  gnc_name,
+                       ACCOUNT_COL_NEW,       checked,
+                       ACCOUNT_COL_ELLIPSIZE, PANGO_ELLIPSIZE_START,
                        -1);
     accts_left = SCM_CDR(accts_left);
   }
@@ -398,9 +400,9 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   int       where = 0;
 
   /* Figure out which stage of the druid we're in. */
-  if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
-    if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
-      if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
+  if ((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
+    if ((current = g_list_find(wind->commodity_pages, page)) == NULL) {
+      if ((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
         /* Where are we? */
         g_critical("QIF import: BUG DETECTED in get_next_druid_page! I'm lost!");
         return FALSE;
@@ -422,7 +424,7 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
          (!wind->show_doc_pages && g_list_find(wind->doc_pages, next->data)) ||
          (wind->new_securities == SCM_BOOL_F &&
           GNOME_DRUID_PAGE(next->data) == get_named_page(wind, "commodity_doc_page"))) {
-    if(next && next->next) {
+    if (next && next->next) {
       next = next->next;
     }
     else {
@@ -467,9 +469,9 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   int       where = 0;
 
   /* Figure out which stage of the druid we're in. */
-  if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
-    if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
-      if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
+  if ((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
+    if ((current = g_list_find(wind->commodity_pages, page)) == NULL) {
+      if ((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
         /* Where are we? */
         g_critical("QIF import: BUG DETECTED in get_prev_druid_page! I'm lost!");
         return NULL;
@@ -503,7 +505,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
     /* We're either out of pages for this stage, or we've reached
      * an optional doc page that shouldn't be shown. */
 
-    if(prev && prev->prev) {
+    if (prev && prev->prev) {
       /* Go back another page within the same stage. */
       prev = prev->prev;
     }
@@ -515,7 +517,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
         prev = g_list_last(wind->pre_comm_pages);
         break;
       case 2:
-        if(wind->new_securities != SCM_BOOL_F) {
+        if (wind->new_securities != SCM_BOOL_F) {
           prev = g_list_last(wind->commodity_pages);
         }
         else {
@@ -533,7 +535,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
     }
   }
 
-  if(prev)
+  if (prev)
     return (GtkWidget *)prev->data;
 
   return NULL;
@@ -553,7 +555,7 @@ gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1,
   QIFImportWindow * wind = user_data;
   GtkWidget * next_page = get_next_druid_page(wind, page);
 
-  if(next_page)
+  if (next_page)
   {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          GNOME_DRUID_PAGE(next_page));
@@ -577,7 +579,7 @@ gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1,
   QIFImportWindow * wind = user_data;
   GtkWidget * back_page = get_prev_druid_page(wind, page);
 
-  if(back_page)
+  if (back_page)
   {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          GNOME_DRUID_PAGE(back_page));
@@ -1213,7 +1215,7 @@ update_file_page(QIFImportWindow * wind)
                        FILENAME_COL_INDEX, row++,
                        FILENAME_COL_NAME, row_text,
                        -1);
-    if(scm_qiffile == wind->selected_file) {
+    if (scm_qiffile == wind->selected_file) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
       reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
       gtk_tree_path_free(path);
@@ -1252,7 +1254,7 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkTreeSelection *selection,
   button = gnc_glade_lookup_widget(wind->window, "unload_file_button");
   if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
     gtk_tree_model_get(model, &iter, FILENAME_COL_INDEX, &row, -1);
-    if(SCM_LISTP(wind->imported_files) &&
+    if (SCM_LISTP(wind->imported_files) &&
        (scm_ilength(wind->imported_files) > row)) {
       scm_gc_unprotect_object(wind->selected_file);
       wind->selected_file = scm_list_ref(wind->imported_files,
@@ -1326,7 +1328,7 @@ gnc_ui_qif_import_unload_file_cb(GtkButton * button,
   SCM unload_qif_file = scm_c_eval_string("qif-dialog:unload-qif-file");
   SCM imported_files;
 
-  if(wind->selected_file != SCM_BOOL_F) {
+  if (wind->selected_file != SCM_BOOL_F) {
     imported_files =
       scm_call_2(unload_qif_file, wind->selected_file, wind->imported_files);
 
@@ -1384,7 +1386,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
   SCM    scm_name;
 
   g_return_val_if_fail(wind->selected_file != SCM_BOOL_F, FALSE);
-  if(!acct_name || acct_name[0] == 0) {
+  if (!acct_name || acct_name[0] == 0) {
     gnc_warning_dialog(wind->window, _("You must enter an account name."));
     return TRUE;
   }
@@ -1446,7 +1448,8 @@ create_account_picker_view(GtkWidget *widget,
   GtkTreeViewColumn *column;
 
   store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
-                             G_TYPE_STRING, G_TYPE_BOOLEAN);
+                             G_TYPE_STRING, G_TYPE_BOOLEAN,
+                             PANGO_TYPE_ELLIPSIZE_MODE);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
   g_object_unref(store);
 
@@ -1455,8 +1458,11 @@ create_account_picker_view(GtkWidget *widget,
                                                     renderer,
                                                     "text",
                                                     ACCOUNT_COL_QIF_NAME,
+                                                    "ellipsize",
+                                                    ACCOUNT_COL_ELLIPSIZE,
                                                     NULL);
   g_object_set(column, "expand", TRUE, NULL);
+  gtk_tree_view_column_set_resizable(column, TRUE);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
@@ -1464,8 +1470,11 @@ create_account_picker_view(GtkWidget *widget,
                                                     renderer,
                                                     "text",
                                                     ACCOUNT_COL_GNC_NAME,
+                                                    "ellipsize",
+                                                    ACCOUNT_COL_ELLIPSIZE,
                                                     NULL);
   g_object_set(column, "expand", TRUE, NULL);
+  gtk_tree_view_column_set_resizable(column, TRUE);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_toggle_new();
@@ -2026,16 +2035,16 @@ gnc_ui_qif_import_comm_prepare_cb(GnomeDruidPage * page,
   gchar           *ns;
 
   /* Get any entered namespace. */
-  ns = gtk_combo_box_get_active_text(GTK_COMBO_BOX(qpage->new_type_combo));
+  ns = gtk_combo_box_get_active_text(GTK_COMBO_BOX(qpage->namespace_combo));
 
   /* Update the namespaces available to select. */
   if (!ns || !ns[0])
     gnc_ui_update_namespace_picker(
-      qpage->new_type_combo,
+      qpage->namespace_combo,
       gnc_commodity_get_namespace(qpage->commodity),
       DIAG_COMM_ALL);
   else
-    gnc_ui_update_namespace_picker(qpage->new_type_combo, ns, DIAG_COMM_ALL);
+    gnc_ui_update_namespace_picker(qpage->namespace_combo, ns, DIAG_COMM_ALL);
 
   g_free(ns);
 }
@@ -2053,29 +2062,34 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
   gnc_commodity_table     *table;
   gnc_commodity_namespace *newns;
 
-  gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
-  const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
-  const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
+  gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->namespace_combo);
+  const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->name_entry));
+  const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->mnemonic_entry));
 
-  if(!namespace || (namespace[0] == 0)) {
+  if (!name || (name[0] == 0)) {
     gnc_warning_dialog(wind->window,
-                       _("You must enter a Type for the commodity."));
+     _("Enter a name or short description, such as \"Red Hat Stock\"."));
+    g_free(namespace);
+    return TRUE;
+  }
+  else if (!mnemonic || (mnemonic[0] == 0)) {
+    gnc_warning_dialog(wind->window,
+     _("Enter the ticker symbol or other well known abbreviation, such as"
+       " \"RHT\". If there isn't one, or you don't know it, create your own."));
+    g_free(namespace);
+    return TRUE;
+  }
+  else if (!namespace || (namespace[0] == 0)) {
+    gnc_warning_dialog(wind->window,
+     _("Select the exchange on which the symbol is traded, or select the"
+       " type of investment (such as FUND for mutual funds.) If you don't"
+       " see your exchange or an appropriate investment type, you can"
+       " enter a new one."));
     if (namespace)
       g_free(namespace);
     return TRUE;
   }
-  else if(!name || (name[0] == 0)) {
-    gnc_warning_dialog(wind->window,
-                       _("You must enter a name for the commodity."));
-    g_free(namespace);
-    return TRUE;
-  }
-  else if(!mnemonic || (mnemonic[0] == 0)) {
-    gnc_warning_dialog
-      (wind->window, _("You must enter an abbreviation for the commodity."));
-    g_free(namespace);
-    return TRUE;
-  }
+
   /* FIXME: Should check whether a commodity with this namespace and
    *        mnemonic already exists. If so, ask the user whether to use
    *        the existing one, or go back and change what they've entered.
@@ -2121,13 +2135,27 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm)
 {
 
   QIFDruidPage *retval = g_new0(QIFDruidPage, 1);
-  GtkWidget    *top_vbox;
-  GtkWidget    *info_label;
-  GtkWidget    *next_label;
-  GtkWidget    *temp;
+  GtkWidget    *table;
+  GtkWidget    *label;
   gchar        *title = NULL;
   const char   *str;
   GnomeDruidPageStandard *page;
+  char         *name_tooltip =
+   _("Enter a name or short description, such as \"Red Hat Stock\".");
+  char         *mnemonic_tooltip =
+   _("Enter the ticker symbol or other well known abbreviation, such as"
+     " \"RHT\". If there isn't one, or you don't know it, create your own.");
+  char         *namespace_tooltip =
+   _("Select the exchange on which the symbol is traded, or select the"
+     " type of investment (such as FUND for mutual funds.) If you don't"
+     " see your exchange or an appropriate investment type, you can"
+     " enter a new one.");
+#if GTK_CHECK_VERSION(2, 12, 0)
+  /* Use the GtkTooltip API */
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  /* Use the deprecated GtkTooltips API */
+  GtkTooltips  *tooltips = gtk_tooltips_new();
+#endif
 
   /* Make the page widget. */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
@@ -2147,81 +2175,81 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm)
   g_free(title);
 
   /* Set the page colors. */
-  gnome_druid_page_standard_set_background(page, & std_bg_color);
-  gnome_druid_page_standard_set_logo_background(page, & std_logo_bg_color);
-  gnome_druid_page_standard_set_title_foreground(page, & std_title_color);
+  gnome_druid_page_standard_set_background(page, &std_bg_color);
+  gnome_druid_page_standard_set_logo_background(page, &std_logo_bg_color);
+  gnome_druid_page_standard_set_title_foreground(page, &std_title_color);
 
   /*
    * Add all the widgets to the page.
    */
-  top_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_box_pack_start(GTK_BOX(page->vbox), top_vbox, FALSE, FALSE, 0);
+  table = gtk_table_new(3, 2, FALSE);
+  gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+  gtk_table_set_col_spacings(GTK_TABLE(table), 12);
 
-  info_label = gtk_label_new(_("Pick the commodity's exchange or listing "
-                               "(NASDAQ, NYSE, etc)."));
-  gtk_label_set_justify(GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-
-  temp = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_type_combo = gtk_combo_box_entry_new_text();
-  gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->new_type_combo));
-  gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  info_label = gtk_label_new(_("Enter the full name of the commodity, "
-                               "such as \"Red Hat Stock\""));
-
-  gtk_label_set_justify(GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-
-  temp = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_name_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(temp), retval->new_name_entry,
-                     TRUE, TRUE, 0);
-  gtk_entry_set_text(GTK_ENTRY(retval->new_name_entry),
+  /* Name entry */
+  retval->name_entry = gtk_entry_new();
+  gtk_entry_set_text(GTK_ENTRY(retval->name_entry),
                      gnc_commodity_get_fullname(comm));
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  info_label = gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\") or "
-                               "other unique abbreviation for the name."));
-
-  gtk_label_set_justify(GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-
-  temp = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_mnemonic_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(temp), retval->new_mnemonic_entry,
-                     TRUE, TRUE, 0);
-  gtk_entry_set_text(GTK_ENTRY(retval->new_mnemonic_entry),
+  label = gtk_label_new_with_mnemonic(_("_Name or description:"));
+  gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->name_entry);
+  gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+#if GTK_CHECK_VERSION(2, 12, 0)
+  gtk_widget_set_tooltip_text(label, name_tooltip);
+  gtk_widget_set_tooltip_text(retval->name_entry, name_tooltip);
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  gtk_tooltips_set_tip(tooltips, label,
+                       name_tooltip, NULL);
+  gtk_tooltips_set_tip(tooltips, retval->name_entry,
+                       name_tooltip, NULL);
+#endif
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+                   GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_table_attach_defaults(GTK_TABLE(table), retval->name_entry,
+                            1, 2, 0, 1);
+  /* Mnemonic entry */
+  retval->mnemonic_entry = gtk_entry_new();
+  gtk_entry_set_text(GTK_ENTRY(retval->mnemonic_entry),
                      gnc_commodity_get_mnemonic(comm));
+  label = gtk_label_new_with_mnemonic(
+    _("_Ticker symbol or other abbreviation:"));
+  gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->mnemonic_entry);
+  gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+#if GTK_CHECK_VERSION(2, 12, 0)
+  gtk_widget_set_tooltip_text(label, mnemonic_tooltip);
+  gtk_widget_set_tooltip_text(retval->mnemonic_entry, mnemonic_tooltip);
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  gtk_tooltips_set_tip(tooltips, label,
+                       mnemonic_tooltip, NULL);
+  gtk_tooltips_set_tip(tooltips, retval->mnemonic_entry,
+                       mnemonic_tooltip, NULL);
+#endif
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+                   GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_table_attach_defaults(GTK_TABLE(table), retval->mnemonic_entry,
+                            1, 2, 1, 2);
 
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+  /* Namespace entry */
+  retval->namespace_combo = gtk_combo_box_entry_new_text();
+  gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->namespace_combo));
+  label = gtk_label_new_with_mnemonic(
+    _("_Exchange or abbreviation type:"));
+  gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->namespace_combo);
+  gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+#if GTK_CHECK_VERSION(2, 12, 0)
+  gtk_widget_set_tooltip_text(label, namespace_tooltip);
+  gtk_widget_set_tooltip_text(retval->namespace_combo, namespace_tooltip);
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  gtk_tooltips_set_tip(tooltips, label,
+                       namespace_tooltip, NULL);
+  gtk_tooltips_set_tip(tooltips, retval->namespace_combo,
+                       namespace_tooltip, NULL);
+#endif
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+                   GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_table_attach_defaults(GTK_TABLE(table), retval->namespace_combo,
+                            1, 2, 2, 3);
 
-  next_label = gtk_label_new(_("Click \"Forward\" to accept the information "
-                               "and move on."));
-  gtk_label_set_justify(GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_end(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
-
+  gtk_box_pack_start(GTK_BOX(page->vbox), table, FALSE, FALSE, 0);
 
   return retval;
 }
@@ -2350,9 +2378,9 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
 
     /* Get any changes from the commodity page. */
-    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
-    fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
+    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->mnemonic_entry));
+    namespace = gnc_ui_namespace_picker_ns(page->namespace_combo);
+    fullname  = gtk_entry_get_text(GTK_ENTRY(page->name_entry));
 
     /* Update the commodity with the new values. */
     gnc_commodity_set_namespace(page->commodity, namespace);
@@ -2847,7 +2875,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
   gtk_list_store_clear(store);
 
-  if(wind->match_transactions != SCM_BOOL_F) {
+  if (wind->match_transactions != SCM_BOOL_F) {
     possible_matches = SCM_CDR(scm_list_ref(wind->match_transactions,
                                   scm_int2num(wind->selected_transaction)));
     scm_call_2(scm_c_eval_string("qif-import:refresh-match-selection"),
@@ -2861,7 +2889,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
       #undef FUNC_NAME
       selected    = SCM_CDR(current_xtn);
 
-      if(xaccTransCountSplits(gnc_xtn) > 2) {
+      if (xaccTransCountSplits(gnc_xtn) > 2) {
         amount_str = _("(split)");
       }
       else {
@@ -3114,272 +3142,29 @@ gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w)
 }
 
 
-/* ======================================================== */
 
-static gboolean
-show_handler(const char *class, gint component_id,
-             gpointer user_data, gpointer iter_data)
-{
-  QIFImportWindow *qif_win = user_data;
-
-  if (!qif_win)
-    return(FALSE);
-  gtk_window_present(GTK_WINDOW(qif_win->window));
-  return(TRUE);
-}
-
-void
-gnc_file_qif_import(void)
-{
-  if (gnc_forall_gui_components(DRUID_QIF_IMPORT_CM_CLASS,
-                                show_handler, NULL))
-    return;
-
-  /* pop up the QIF File Import dialog box */
-  gnc_ui_qif_import_druid_make();
-}
+/* ================================================================== */
+/*                                                                    */
+/*                         IMPORTER CREATION                          */
+/*                                                                    */
+/* ================================================================== */
 
 
 /********************************************************************
- * gnc_ui_qif_import_druid_make()
- * build the druid.
+ * get_preferences
+ *
+ * Get all user preferences related to QIF import.
  ********************************************************************/
 
-QIFImportWindow *
-gnc_ui_qif_import_druid_make(void)
+static void
+get_preferences(QIFImportWindow *wind)
 {
-
-  QIFImportWindow * retval;
-  GladeXML        * xml;
   GError * err = NULL;
-  SCM  load_map_prefs;
-  SCM  mapping_info;
-  SCM  create_ticker_map;
-  int  i;
-  GtkTreeView *view;
-  GtkListStore *store;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkTreeSelection *selection;
 
-
-  char * pre_page_names[NUM_PRE_PAGES] = {
-    "start_page", "load_file_page", "load_progress_page",
-    "date_format_page", "account_name_page",
-    "loaded_files_page", "account_doc_page", "account_match_page",
-    "category_doc_page", "category_match_page", "memo_doc_page",
-    "memo_match_page", "currency_page", "commodity_doc_page"
-  };
-
-  char * post_page_names[NUM_POST_PAGES] = {
-    "convert_progress_page", "match_doc_page", "match_duplicates_page",
-    "end_page"
-  };
-
-  char * doc_page_names[NUM_DOC_PAGES] = {
-    "start_page", "account_doc_page", "category_doc_page",
-    "commodity_doc_page", "memo_doc_page", "match_doc_page"
-  };
-
-  retval = g_new0(QIFImportWindow, 1);
-
-  xml = gnc_glade_xml_new("qif.glade", "QIF Import Druid");
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_cancel_cb",
-     G_CALLBACK(gnc_ui_qif_import_cancel_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_generic_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_generic_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_generic_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_generic_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_select_file_cb",
-     G_CALLBACK(gnc_ui_qif_import_select_file_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_file_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_file_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_file_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_file_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_progress_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_progress_prepare_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_progress_show_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_progress_show_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_progress_pause_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_progress_pause_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_progress_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_progress_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_progress_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_progress_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_date_format_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_date_format_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_loaded_files_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_loaded_files_prepare_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_load_another_cb",
-     G_CALLBACK(gnc_ui_qif_import_load_another_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_unload_file_cb",
-     G_CALLBACK(gnc_ui_qif_import_unload_file_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_loaded_files_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_loaded_files_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_default_acct_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_default_acct_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_default_acct_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_default_acct_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_account_rematch_cb",
-     G_CALLBACK(gnc_ui_qif_import_account_rematch_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_account_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_account_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_category_rematch_cb",
-     G_CALLBACK(gnc_ui_qif_import_category_rematch_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_category_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_category_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_memo_doc_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_memo_doc_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_memo_rematch_cb",
-     G_CALLBACK(gnc_ui_qif_import_memo_rematch_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_memo_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_memo_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_currency_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_currency_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_currency_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_currency_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_convert_progress_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_convert_progress_prepare_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_convert_progress_show_cb",
-     G_CALLBACK(gnc_ui_qif_import_convert_progress_show_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_convert_progress_pause_cb",
-     G_CALLBACK(gnc_ui_qif_import_convert_progress_pause_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_convert_progress_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_convert_progress_next_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_convert_progress_back_cb",
-     G_CALLBACK(gnc_ui_qif_import_convert_progress_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_finish_cb",
-     G_CALLBACK(gnc_ui_qif_import_finish_cb), retval);
-
-  retval->window = glade_xml_get_widget(xml, "QIF Import Druid");
-
-  retval->imported_files    =  SCM_EOL;
-  retval->selected_file     =  SCM_BOOL_F;
-  retval->gnc_acct_info     =  SCM_BOOL_F;
-  retval->cat_display_info  =  SCM_BOOL_F;
-  retval->cat_map_info      =  SCM_BOOL_F;
-  retval->acct_display_info =  SCM_BOOL_F;
-  retval->acct_map_info     =  SCM_BOOL_F;
-  retval->memo_display_info =  SCM_BOOL_F;
-  retval->memo_map_info     =  SCM_BOOL_F;
-  retval->security_hash     =  SCM_BOOL_F;
-  retval->new_securities    =  SCM_BOOL_F;
-  retval->new_namespaces    =  NULL;
-  retval->ticker_map        =  SCM_BOOL_F;
-  retval->imported_account_tree = SCM_BOOL_F;
-  retval->match_transactions    = SCM_BOOL_F;
-  retval->selected_transaction  = 0;
-  retval->busy              = FALSE;
-
-  retval->druid           = glade_xml_get_widget(xml, "qif_import_druid");
-  retval->filename_entry  = glade_xml_get_widget(xml, "qif_filename_entry");
-  retval->load_pause      = glade_xml_get_widget(xml, "load_progress_pause");
-  retval->load_log        = glade_xml_get_widget(xml, "load_progress_log");
-  retval->load_progress = gnc_progress_dialog_custom(
-    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_primary")),
-    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_secondary")),
-    GTK_PROGRESS_BAR(glade_xml_get_widget(xml, "load_progress_bar")),
-    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_sub")),
-    GTK_TEXT_VIEW(retval->load_log));
-  retval->acct_entry      = glade_xml_get_widget(xml, "qif_account_entry");
-  retval->date_format_combo = glade_xml_get_widget(xml, "date_format_combobox");
-  retval->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");
-  retval->currency_picker = glade_xml_get_widget(xml, "currency_comboboxentry");
-  retval->acct_view       = glade_xml_get_widget(xml, "account_page_view");
-  retval->acct_view_count = glade_xml_get_widget(xml, "account_page_count");
-  retval->acct_view_btn   = glade_xml_get_widget(xml, "account_page_change");
-  retval->cat_view        = glade_xml_get_widget(xml, "category_page_view");
-  retval->cat_view_count  = glade_xml_get_widget(xml, "category_page_count");
-  retval->cat_view_btn    = glade_xml_get_widget(xml, "category_page_change");
-  retval->memo_view       = glade_xml_get_widget(xml, "memo_page_view");
-  retval->memo_view_count = glade_xml_get_widget(xml, "memo_page_count");
-  retval->memo_view_btn   = glade_xml_get_widget(xml, "memo_page_change");
-  retval->convert_pause   = glade_xml_get_widget(xml, "convert_progress_pause");
-  retval->convert_log     = glade_xml_get_widget(xml, "convert_progress_log");
-  retval->convert_progress = gnc_progress_dialog_custom(
-    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_primary")),
-    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_secondary")),
-    GTK_PROGRESS_BAR(glade_xml_get_widget(xml, "convert_progress_bar")),
-    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_sub")),
-    GTK_TEXT_VIEW(retval->convert_log));
-  retval->new_transaction_view =
-    glade_xml_get_widget(xml, "new_transaction_view");
-  retval->old_transaction_view =
-    glade_xml_get_widget(xml, "old_transaction_view");
-
-  retval->pre_comm_pages   = NULL;
-  retval->post_comm_pages  = NULL;
-  retval->doc_pages        = NULL;
-  retval->commodity_pages = NULL;
+  g_return_if_fail(wind);
 
   /* Get the user's preference for showing documentation pages. */
-  retval->show_doc_pages =
+  wind->show_doc_pages =
     gnc_gconf_get_bool(GCONF_SECTION, GCONF_NAME_SHOW_DOC, &err);
   if (err != NULL) {
     g_warning("QIF import: gnc_gconf_get_bool error: %s", err->message);
@@ -3389,33 +3174,362 @@ gnc_ui_qif_import_druid_make(void)
     g_warning("QIF import: Couldn't get %s setting from gconf.",
               GCONF_NAME_SHOW_DOC);
     g_warning("QIF import: Documentation pages will be shown by default.");
-    retval->show_doc_pages = TRUE;
+    wind->show_doc_pages = TRUE;
   }
+}
 
-  for(i=0; i < NUM_PRE_PAGES; i++) {
-    retval->pre_comm_pages =
-      g_list_append(retval->pre_comm_pages,
+
+/********************************************************************
+ * initialize_scheme
+ *
+ * Initialize all Scheme-controlled objects.
+ ********************************************************************/
+
+static void
+initialize_scheme(QIFImportWindow *wind)
+{
+  SCM  load_map_prefs;
+  SCM  mapping_info;
+  SCM  create_ticker_map;
+
+  g_return_if_fail(wind);
+
+  /* Initialize Scheme variables. */
+  wind->imported_files        = SCM_EOL;
+  wind->selected_file         = SCM_BOOL_F;
+  wind->gnc_acct_info         = SCM_BOOL_F;
+  wind->cat_display_info      = SCM_BOOL_F;
+  wind->cat_map_info          = SCM_BOOL_F;
+  wind->acct_display_info     = SCM_BOOL_F;
+  wind->acct_map_info         = SCM_BOOL_F;
+  wind->memo_display_info     = SCM_BOOL_F;
+  wind->memo_map_info         = SCM_BOOL_F;
+  wind->security_hash         = SCM_BOOL_F;
+  wind->security_prefs        = SCM_BOOL_F;
+  wind->new_securities        = SCM_BOOL_F;
+  wind->ticker_map            = SCM_BOOL_F;
+  wind->imported_account_tree = SCM_BOOL_F;
+  wind->match_transactions    = SCM_BOOL_F;
+
+  /* Get the saved state of mappings from Quicken accounts and
+   * categories to GnuCash accounts. */
+  load_map_prefs = scm_c_eval_string("qif-import:load-map-prefs");
+  mapping_info = scm_call_0(load_map_prefs);
+  wind->gnc_acct_info         = scm_list_ref(mapping_info, scm_int2num(0));
+  wind->acct_map_info         = scm_list_ref(mapping_info, scm_int2num(1));
+  wind->cat_map_info          = scm_list_ref(mapping_info, scm_int2num(2));
+  wind->memo_map_info         = scm_list_ref(mapping_info, scm_int2num(3));
+  wind->security_hash         = scm_list_ref(mapping_info, scm_int2num(4));
+  wind->security_prefs        = scm_list_ref(mapping_info, scm_int2num(5));
+
+  /* Get the initial ticker map. */
+  create_ticker_map = scm_c_eval_string("make-ticker-map");
+  wind->ticker_map            = scm_call_0(create_ticker_map);
+
+  /* Protect our data from garbage collection. */
+  scm_gc_protect_object(wind->imported_files);
+  scm_gc_protect_object(wind->selected_file);
+  scm_gc_protect_object(wind->gnc_acct_info);
+  scm_gc_protect_object(wind->cat_display_info);
+  scm_gc_protect_object(wind->cat_map_info);
+  scm_gc_protect_object(wind->memo_display_info);
+  scm_gc_protect_object(wind->memo_map_info);
+  scm_gc_protect_object(wind->acct_display_info);
+  scm_gc_protect_object(wind->acct_map_info);
+  scm_gc_protect_object(wind->security_hash);
+  scm_gc_protect_object(wind->security_prefs);
+  scm_gc_protect_object(wind->new_securities);
+  scm_gc_protect_object(wind->ticker_map);
+  scm_gc_protect_object(wind->imported_account_tree);
+  scm_gc_protect_object(wind->match_transactions);
+}
+
+
+/********************************************************************
+ * build_page_lists
+ *
+ * Build the lists of druid pages.
+ ********************************************************************/
+
+static void
+build_page_lists(QIFImportWindow *wind, GladeXML *xml)
+{
+  int  i;
+
+  /* Pages that may appear prior to security-related pages. */
+  char * pre_page_names[NUM_PRE_PAGES] = {
+    "start_page", "load_file_page", "load_progress_page",
+    "date_format_page", "account_name_page",
+    "loaded_files_page", "account_doc_page", "account_match_page",
+    "category_doc_page", "category_match_page", "memo_doc_page",
+    "memo_match_page", "currency_page", "commodity_doc_page"
+  };
+
+  /* Pages that may appear after security-related pages. */
+  char * post_page_names[NUM_POST_PAGES] = {
+    "convert_progress_page", "match_doc_page", "match_duplicates_page",
+    "end_page"
+  };
+
+  /* Optional pages that only show documention. */
+  char * doc_page_names[NUM_DOC_PAGES] = {
+    "start_page", "account_doc_page", "category_doc_page",
+    "commodity_doc_page", "memo_doc_page", "match_doc_page"
+  };
+
+  g_return_if_fail(wind);
+
+  wind->pre_comm_pages   = NULL;
+  wind->post_comm_pages  = NULL;
+  wind->doc_pages        = NULL;
+  wind->commodity_pages = NULL;
+
+  g_return_if_fail(xml);
+
+  /* Build the page lists. */
+  for(i = 0; i < NUM_PRE_PAGES; i++) {
+    wind->pre_comm_pages =
+      g_list_append(wind->pre_comm_pages,
                     glade_xml_get_widget(xml, pre_page_names[i]));
   }
-  for(i=0; i < NUM_POST_PAGES; i++) {
-    retval->post_comm_pages =
-      g_list_append(retval->post_comm_pages,
+  for(i = 0; i < NUM_POST_PAGES; i++) {
+    wind->post_comm_pages =
+      g_list_append(wind->post_comm_pages,
                     glade_xml_get_widget(xml, post_page_names[i]));
   }
-  for(i=0; i < NUM_DOC_PAGES; i++) {
-    retval->doc_pages =
-      g_list_append(retval->doc_pages,
+  for(i = 0; i < NUM_DOC_PAGES; i++) {
+    wind->doc_pages =
+      g_list_append(wind->doc_pages,
                     glade_xml_get_widget(xml, doc_page_names[i]));
   }
+}
+
+
+/********************************************************************
+ * get_glade_widgets
+ *
+ * Get all glade-defined widgets that need to be actively managed.
+ ********************************************************************/
+
+static void
+get_glade_widgets(QIFImportWindow *wind, GladeXML *xml)
+{
+  g_return_if_fail(wind);
+  g_return_if_fail(xml);
+
+  wind->window            = glade_xml_get_widget(xml, "QIF Import Druid");
+  wind->druid             = glade_xml_get_widget(xml, "qif_import_druid");
+  wind->filename_entry    = glade_xml_get_widget(xml, "qif_filename_entry");
+  wind->load_pause        = glade_xml_get_widget(xml, "load_progress_pause");
+  wind->load_log          = glade_xml_get_widget(xml, "load_progress_log");
+  wind->load_progress     = gnc_progress_dialog_custom(
+    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_primary")),
+    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_secondary")),
+    GTK_PROGRESS_BAR(glade_xml_get_widget(xml, "load_progress_bar")),
+    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_sub")),
+    GTK_TEXT_VIEW(wind->load_log));
+  wind->acct_entry        = glade_xml_get_widget(xml, "qif_account_entry");
+  wind->date_format_combo = glade_xml_get_widget(xml, "date_format_combobox");
+  wind->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");
+  wind->currency_picker   = glade_xml_get_widget(xml, "currency_comboboxentry");
+  wind->acct_view         = glade_xml_get_widget(xml, "account_page_view");
+  wind->acct_view_count   = glade_xml_get_widget(xml, "account_page_count");
+  wind->acct_view_btn     = glade_xml_get_widget(xml, "account_page_change");
+  wind->cat_view          = glade_xml_get_widget(xml, "category_page_view");
+  wind->cat_view_count    = glade_xml_get_widget(xml, "category_page_count");
+  wind->cat_view_btn      = glade_xml_get_widget(xml, "category_page_change");
+  wind->memo_view         = glade_xml_get_widget(xml, "memo_page_view");
+  wind->memo_view_count   = glade_xml_get_widget(xml, "memo_page_count");
+  wind->memo_view_btn     = glade_xml_get_widget(xml, "memo_page_change");
+  wind->convert_pause     = glade_xml_get_widget(xml, "convert_progress_pause");
+  wind->convert_log       = glade_xml_get_widget(xml, "convert_progress_log");
+  wind->convert_progress  = gnc_progress_dialog_custom(
+    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_primary")),
+    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_secondary")),
+    GTK_PROGRESS_BAR(glade_xml_get_widget(xml, "convert_progress_bar")),
+    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_sub")),
+    GTK_TEXT_VIEW(wind->convert_log));
+  wind->new_transaction_view =
+    glade_xml_get_widget(xml, "new_transaction_view");
+  wind->old_transaction_view =
+    glade_xml_get_widget(xml, "old_transaction_view");
+}
+
+
+/********************************************************************
+ * connect_glade_signals
+ *
+ * Connect all glade-defined signals to their handlers.
+ ********************************************************************/
+
+static void
+connect_glade_signals(QIFImportWindow *wind, GladeXML *xml)
+{
+  g_return_if_fail(wind);
+  g_return_if_fail(xml);
+
+  /*
+   * Connect all glade-defined signals to their handlers.
+   */
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_cancel_cb",
+     G_CALLBACK(gnc_ui_qif_import_cancel_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_generic_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_generic_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_generic_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_generic_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_select_file_cb",
+     G_CALLBACK(gnc_ui_qif_import_select_file_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_file_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_file_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_file_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_file_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_prepare_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_show_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_show_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_pause_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_pause_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_date_format_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_date_format_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_loaded_files_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_loaded_files_prepare_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_another_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_another_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_unload_file_cb",
+     G_CALLBACK(gnc_ui_qif_import_unload_file_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_loaded_files_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_loaded_files_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_default_acct_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_default_acct_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_default_acct_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_default_acct_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_account_rematch_cb",
+     G_CALLBACK(gnc_ui_qif_import_account_rematch_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_account_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_account_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_category_rematch_cb",
+     G_CALLBACK(gnc_ui_qif_import_category_rematch_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_category_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_category_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_memo_doc_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_memo_doc_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_memo_rematch_cb",
+     G_CALLBACK(gnc_ui_qif_import_memo_rematch_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_memo_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_memo_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_currency_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_currency_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_currency_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_currency_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_prepare_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_show_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_show_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_pause_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_pause_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_next_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_back_cb), wind);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_finish_cb",
+     G_CALLBACK(gnc_ui_qif_import_finish_cb), wind);
+}
+
+
+/********************************************************************
+ * build_views
+ *
+ * Build the details of all GtkTreeView widgets.
+ ********************************************************************/
+
+static void
+build_views(QIFImportWindow *wind)
+{
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail(wind);
 
   /* Set up the selected file view */
-  view = GTK_TREE_VIEW(retval->selected_file_view);
+  view = GTK_TREE_VIEW(wind->selected_file_view);
   store = gtk_list_store_new(NUM_FILENAME_COLS, G_TYPE_INT, G_TYPE_STRING);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
   g_object_unref(store);
 
   renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes(_("Account"),
+  column = gtk_tree_view_column_new_with_attributes("unused",
                                                     renderer,
                                                     "text",
                                                     FILENAME_COL_NAME,
@@ -3425,28 +3539,28 @@ gnc_ui_qif_import_druid_make(void)
   selection = gtk_tree_view_get_selection(view);
   g_signal_connect(selection, "changed",
                    G_CALLBACK(gnc_ui_qif_import_select_loaded_file_cb),
-                   retval);
+                   wind);
 
   /* Set up the QIF account to GnuCash account matcher. */
-  create_account_picker_view(retval->acct_view, _("QIF account name"),
+  create_account_picker_view(wind->acct_view, _("QIF account name"),
                              G_CALLBACK(gnc_ui_qif_import_account_activate_cb),
                              G_CALLBACK(gnc_ui_qif_import_account_select_cb),
-                             retval);
+                             wind);
 
   /* Set up the QIF category to GnuCash account matcher. */
-  create_account_picker_view(retval->cat_view,  _("QIF category name"),
+  create_account_picker_view(wind->cat_view,  _("QIF category name"),
                              G_CALLBACK(gnc_ui_qif_import_category_activate_cb),
                              G_CALLBACK(gnc_ui_qif_import_category_select_cb),
-                             retval);
+                             wind);
 
   /* Set up the QIF payee/memo to GnuCash account matcher. */
-  create_account_picker_view(retval->memo_view, _("QIF payee/memo"),
+  create_account_picker_view(wind->memo_view, _("QIF payee/memo"),
                              G_CALLBACK(gnc_ui_qif_import_memo_activate_cb),
                              G_CALLBACK(gnc_ui_qif_import_memo_select_cb),
-                             retval);
+                             wind);
 
   /* Set up the new transaction view */
-  view = GTK_TREE_VIEW(retval->new_transaction_view);
+  view = GTK_TREE_VIEW(wind->new_transaction_view);
   store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
                              G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
@@ -3480,11 +3594,11 @@ gnc_ui_qif_import_druid_make(void)
   selection = gtk_tree_view_get_selection(view);
   g_signal_connect(selection, "changed",
                    G_CALLBACK(gnc_ui_qif_import_duplicate_new_select_cb),
-                   retval);
+                   wind);
 
 
   /* Set up the old transaction view */
-  view = GTK_TREE_VIEW(retval->old_transaction_view);
+  view = GTK_TREE_VIEW(wind->old_transaction_view);
   store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
                              G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
@@ -3516,7 +3630,7 @@ gnc_ui_qif_import_druid_make(void)
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_toggle_new();
-  column = gtk_tree_view_column_new_with_attributes(_("Dup?"),
+  column = gtk_tree_view_column_new_with_attributes(_("Match?"),
                                                     renderer,
                                                     "active",
                                                     QIF_TRANS_COL_CHECKED,
@@ -3526,58 +3640,90 @@ gnc_ui_qif_import_druid_make(void)
   selection = gtk_tree_view_get_selection(view);
   g_signal_connect(selection, "changed",
                    G_CALLBACK(gnc_ui_qif_import_duplicate_old_select_cb),
-                   retval);
+                   wind);
+}
 
 
-  /* load the saved-state of the mappings from Quicken accounts and
-   * categories to gnucash accounts */
-  load_map_prefs = scm_c_eval_string("qif-import:load-map-prefs");
+/********************************************************************
+ * gnc_ui_qif_import_druid_make
+ *
+ * Build a new QIF import druid.
+ ********************************************************************/
 
-  mapping_info = scm_call_0(load_map_prefs);
-  retval->gnc_acct_info    = scm_list_ref(mapping_info, scm_int2num(0));
-  retval->acct_map_info    = scm_list_ref(mapping_info, scm_int2num(1));
-  retval->cat_map_info     = scm_list_ref(mapping_info, scm_int2num(2));
-  retval->memo_map_info    = scm_list_ref(mapping_info, scm_int2num(3));
-  retval->security_hash    = scm_list_ref(mapping_info, scm_int2num(4));
-  retval->security_prefs   = scm_list_ref(mapping_info, scm_int2num(5));
+QIFImportWindow *
+gnc_ui_qif_import_druid_make(void)
+{
+  QIFImportWindow * wind;
+  GladeXML        * xml;
 
-  create_ticker_map = scm_c_eval_string("make-ticker-map");
-  retval->ticker_map = scm_call_0(create_ticker_map);
+  /* Allocate space for the druid and load its design. */
+  wind = g_new0(QIFImportWindow, 1);
+  xml = gnc_glade_xml_new("qif.glade", "QIF Import Druid");
 
-  scm_gc_protect_object(retval->imported_files);
-  scm_gc_protect_object(retval->selected_file);
-  scm_gc_protect_object(retval->gnc_acct_info);
-  scm_gc_protect_object(retval->cat_display_info);
-  scm_gc_protect_object(retval->cat_map_info);
-  scm_gc_protect_object(retval->memo_display_info);
-  scm_gc_protect_object(retval->memo_map_info);
-  scm_gc_protect_object(retval->acct_display_info);
-  scm_gc_protect_object(retval->acct_map_info);
-  scm_gc_protect_object(retval->security_hash);
-  scm_gc_protect_object(retval->security_prefs);
-  scm_gc_protect_object(retval->new_securities);
-  scm_gc_protect_object(retval->ticker_map);
-  scm_gc_protect_object(retval->imported_account_tree);
-  scm_gc_protect_object(retval->match_transactions);
+  wind->new_namespaces       = NULL;
+  wind->selected_transaction = 0;
+  wind->busy                 = FALSE;
 
-  /* set a default currency for new accounts */
-  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->currency_picker));
-  gnc_ui_update_commodity_picker(retval->currency_picker,
+  /* Get all user preferences related to QIF importing. */
+  get_preferences(wind);
+
+  /* Set up the Scheme side of things. */
+  initialize_scheme(wind);
+
+  /* Build lists of the druid pages. */
+  build_page_lists(wind, xml);
+
+  /* Get all interesting glade-defined widgets. */
+  get_glade_widgets(wind, xml);
+
+  /* Connect all glade-defined signals to their handlers. */
+  connect_glade_signals(wind, xml);
+
+  /* Build the details of all GtkTreeView widgets. */
+  build_views(wind);
+
+  /* Set a default currency for new accounts */
+  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(wind->currency_picker));
+  gnc_ui_update_commodity_picker(wind->currency_picker,
                                  GNC_COMMODITY_NS_CURRENCY,
-                                 gnc_commodity_get_printname
-                                 (gnc_default_currency()));
+                                 gnc_commodity_get_printname(
+                                   gnc_default_currency()));
 
-  if(!retval->show_doc_pages) {
-    gnome_druid_set_page(GNOME_DRUID(retval->druid),
-                         get_named_page(retval, "load_file_page"));
-  }
+  /* If desired, skip the initial documentation pages. */
+  if (!wind->show_doc_pages)
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "load_file_page"));
 
-  gnc_druid_set_colors(GNOME_DRUID(retval->druid));
+  gnc_druid_set_colors(GNOME_DRUID(wind->druid));
 
-  gnc_register_gui_component(DRUID_QIF_IMPORT_CM_CLASS, NULL, NULL, retval);
+  gnc_register_gui_component(DRUID_QIF_IMPORT_CM_CLASS, NULL, NULL, wind);
 
-  gtk_widget_show_all(retval->window);
-  gtk_window_present(GTK_WINDOW(retval->window));
+  gtk_widget_show_all(wind->window);
+  gtk_window_present(GTK_WINDOW(wind->window));
 
-  return retval;
+  return wind;
+}
+
+
+static gboolean
+show_handler(const char *class, gint component_id,
+             gpointer user_data, gpointer iter_data)
+{
+  QIFImportWindow *qif_win = user_data;
+
+  if (!qif_win)
+    return(FALSE);
+  gtk_window_present(GTK_WINDOW(qif_win->window));
+  return(TRUE);
+}
+
+void
+gnc_file_qif_import(void)
+{
+  if (gnc_forall_gui_components(DRUID_QIF_IMPORT_CM_CLASS,
+                                show_handler, NULL))
+    return;
+
+  /* pop up the QIF File Import dialog box */
+  gnc_ui_qif_import_druid_make();
 }

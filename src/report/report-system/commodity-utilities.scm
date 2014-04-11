@@ -184,10 +184,14 @@
 			report-currency (gnc-numeric-zero)))
 		 (gnc-numeric-zero))
 	       (begin
-		 (set! total-foreign (gnc-numeric-add-fixed
-				      total-foreign (third foreignlist)))
-		 (set! total-domestic (gnc-numeric-add-fixed
-				       total-domestic (second foreignlist)))
+		 (set! total-foreign (gnc-numeric-add total-foreign
+                                                      (third foreignlist)
+                                                      GNC-DENOM-AUTO
+                                                      GNC-DENOM-LCD))
+		 (set! total-domestic (gnc-numeric-add total-domestic
+                                                       (second foreignlist)
+                                                       GNC-DENOM-AUTO
+                                                       GNC-DENOM-LCD))
 		 (gnc-numeric-div
 		  total-domestic
 		  total-foreign
@@ -775,23 +779,24 @@
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
     (lambda (foreign domestic)
-      (begin
-	(gnc:debug "foreign: " foreign)
-	(gnc:debug "domestic: " domestic)
-	(if foreign
-	    (or (gnc:exchange-by-euro foreign domestic #f)
-		(gnc:exchange-if-same foreign domestic)
-		(gnc:make-gnc-monetary 
-		 domestic
-		 (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
-				    exchangelist)))
-		   (if (not pair)
-		       (gnc-numeric-zero)
-		       (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
-					(cadr pair)
-					(gnc-commodity-get-fraction domestic)
-					GNC-RND-ROUND)))))
-	  #f)))))
+      (gnc:debug "foreign: " foreign)
+      (gnc:debug "domestic: " domestic)
+      (if foreign
+          (or (gnc:exchange-by-euro foreign domestic #f)
+              (gnc:exchange-if-same foreign domestic)
+              (gnc:make-gnc-monetary
+               domestic
+               (let ((pair (assoc (gnc:gnc-monetary-commodity foreign)
+                                  exchangelist))
+                     (foreign-amount (gnc:gnc-monetary-amount foreign)))
+                 (if (or (not pair)
+                         (gnc-numeric-zero-p foreign-amount))
+                     (gnc-numeric-zero)
+                     (gnc-numeric-mul foreign-amount
+                                      (cadr pair)
+                                      (gnc-commodity-get-fraction domestic)
+                                      GNC-RND-ROUND)))))
+          #f))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
@@ -977,7 +982,7 @@
     (else 
      (begin
        (gnc:warn "gnc:case-exchange-time-fn: bad price-source value: " 
-                    source-option " using pricedb-nearest.")
+                    source-option ". Using pricedb-nearest.")
        ;; FIX-ME another hack to prevent report crashing when an
        ;; unimplemented source-option comes through
        gnc:exchange-by-pricedb-nearest

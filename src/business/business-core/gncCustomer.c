@@ -418,19 +418,19 @@ void gncCustomerCommitEdit (GncCustomer *cust)
 /* ============================================================== */
 /* Get Functions */
 
-const char * gncCustomerGetID (GncCustomer *cust)
+const char * gncCustomerGetID (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->id;
 }
 
-const char * gncCustomerGetName (GncCustomer *cust)
+const char * gncCustomerGetName (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->name;
 }
 
-GncAddress * gncCustomerGetAddr (GncCustomer *cust)
+GncAddress * gncCustomerGetAddr (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->addr;
@@ -470,67 +470,67 @@ qofCustomerSetShipAddr (GncCustomer *cust, QofInstance *ship_addr_ent)
 	gncCustomerCommitEdit(cust);
 }
 
-GncAddress * gncCustomerGetShipAddr (GncCustomer *cust)
+GncAddress * gncCustomerGetShipAddr (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->shipaddr;
 }
 
-const char * gncCustomerGetNotes (GncCustomer *cust)
+const char * gncCustomerGetNotes (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->notes;
 }
 
-GncBillTerm * gncCustomerGetTerms (GncCustomer *cust)
+GncBillTerm * gncCustomerGetTerms (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->terms;
 }
 
-GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *cust)
+GncTaxIncluded gncCustomerGetTaxIncluded (const GncCustomer *cust)
 {
   if (!cust) return GNC_TAXINCLUDED_USEGLOBAL;
   return cust->taxincluded;
 }
 
-gnc_commodity * gncCustomerGetCurrency (GncCustomer *cust)
+gnc_commodity * gncCustomerGetCurrency (const GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->currency;
 }
 
-gboolean gncCustomerGetActive (GncCustomer *cust)
+gboolean gncCustomerGetActive (const GncCustomer *cust)
 {
   if (!cust) return FALSE;
   return cust->active;
 }
 
-gnc_numeric gncCustomerGetDiscount (GncCustomer *cust)
+gnc_numeric gncCustomerGetDiscount (const GncCustomer *cust)
 {
   if (!cust) return gnc_numeric_zero();
   return cust->discount;
 }
 
-gnc_numeric gncCustomerGetCredit (GncCustomer *cust)
+gnc_numeric gncCustomerGetCredit (const GncCustomer *cust)
 {
   if (!cust) return gnc_numeric_zero();
   return cust->credit;
 }
 
-gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer)
+gboolean gncCustomerGetTaxTableOverride (const GncCustomer *customer)
 {
   if (!customer) return FALSE;
   return customer->taxtable_override;
 }
 
-GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer)
+GncTaxTable* gncCustomerGetTaxTable (const GncCustomer *customer)
 {
   if (!customer) return NULL;
   return customer->taxtable;
 }
 
-GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
+GList * gncCustomerGetJoblist (const GncCustomer *cust, gboolean show_all)
 {
   if (!cust) return NULL;
 
@@ -557,7 +557,7 @@ gboolean gncCustomerIsDirty (GncCustomer *cust)
 
 /* Other functions */
 
-int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
+int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b)
 {
   if (!a && !b) return 0;
   if (!a && b) return 1;

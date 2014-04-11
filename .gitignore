@@ -3,6 +3,8 @@
 *.la
 *.lo
 *.orig
+*.pyc
+*.pyo
 *.schemas
 COPYING
 ChangeLog
@@ -39,6 +41,12 @@ lib/libqof/backend/file/qsf-dir.h
 lib/libqof/qof/qofla-dir.h
 libtool
 ltmain.sh
+macros/ltmain.sh
+macros/libtool.m4
+macros/ltoptions.m4
+macros/ltsugar.m4
+macros/ltversion.m4
+macros/lt~obsolete.m4
 make-gnucash-potfiles
 missing
 mkinstalldirs
@@ -49,6 +57,7 @@ po/POTFILES
 po/POTFILES.in
 po/gnucash.pot
 po/stamp-it
+py-compile
 src/app-utils/gnucash
 src/bin/gnucash
 src/bin/gnucash-bin
@@ -81,6 +90,12 @@ src/gnome/gnucash.desktop
 src/gnome/gnucash.desktop.in
 src/import-export/qif-import/gnucash
 src/import-export/qif-import/qif-import
+src/pixmaps/16x16
+src/pixmaps/22x22
+src/pixmaps/24x24
+src/pixmaps/32x32
+src/pixmaps/48x48
+src/pixmaps/scalable
 src/quotes/gnc-fq-check
 src/quotes/gnc-fq-helper
 src/quotes/gnc-fq-update

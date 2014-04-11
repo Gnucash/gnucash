@@ -750,7 +750,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
     case CURSOR_CLASS_SPLIT:
       {
-        char *fullname;
+        char *account_name;
         const char *memo;
         gboolean unit_price;
         Split *auto_split;
@@ -820,9 +820,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         /* auto-complete the account name */
         cell = gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
 
-        fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split));
-        gnc_combo_cell_set_value ((ComboCell *) cell, fullname);
-        g_free(fullname);
+        account_name = gnc_get_account_name_for_register (xaccSplitGetAccount (auto_split));
+        gnc_combo_cell_set_value ((ComboCell *) cell, account_name);
+        g_free(account_name);
 
         gnc_basic_cell_set_changed (cell, TRUE);
 

@@ -146,13 +146,20 @@ developing over time"))
       "c" (N_ "Maximum number of bars in the chart") 8
       2 24 0 1))
 
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      (N_ "Show table")
+      "d" (N_ "Display a table of the selected data.")
+      #f))
+
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 400 400)
+     optname-plot-width optname-plot-height "e" 400 400)
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
-     optname-sort-method "e" 'amount)
+     optname-sort-method "f" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -209,8 +216,10 @@ developing over time"))
         
 	(work-done 0)
 	(work-to-do 0)
+        (show-table? (get-option gnc:pagename-display (N_ "Show table")))
         (document (gnc:make-html-document))
         (chart (gnc:make-html-barchart))
+        (table (gnc:make-html-table))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
                         (gnc-account-get-children-sorted
@@ -518,7 +527,79 @@ developing over time"))
                 chart (append urls urls)))
              
 	     (gnc:report-percent-done 98)
-             (gnc:html-document-add-object! document chart))
+             (gnc:html-document-add-object! document chart)
+             (if show-table?
+                 (begin
+                   (gnc:html-table-append-column! table date-string-list)
+
+                   (letrec
+                       ((addcol
+                         (lambda (col)
+                           (if (not (null? col))
+                               (begin
+                                 (gnc:html-table-append-column!
+                                  table (car col))
+                                 (addcol (cdr col))
+                                 )
+                               ))
+                         ))
+                     (addcol (map cadr all-data))
+                     )
+
+                   (gnc:html-table-set-col-headers!
+                    table
+                    (append
+                     (list (_ "Date"))
+                     (map (lambda (pair)
+                            (regexp-substitute/global #f "&"
+                                                      (if (string? (car pair))
+                                                          (car pair)
+                                                          ((if show-fullname?
+                                                               gnc-account-get-full-name
+                                                               xaccAccountGetName) (car pair)))
+                                                      'pre " " (_ "and") " " 'post))
+                          all-data)
+                     (if (> (gnc:html-table-num-columns table) 2)
+                         (list (_ "Grand Total"))
+                         (list nil)
+                         )
+                     ))
+
+                   (if (> (gnc:html-table-num-columns table) 2)
+                       (letrec
+                           ((sumtot
+                             (lambda (row)
+                               (if (null? row)
+                                   '()
+                                   (cons (sumrow (car row)) (sumtot (cdr row)))
+                                   )
+                               )
+                             )
+                            (sumrow
+                             (lambda (row)
+                               (if (not (null? row))
+                                   (+ (car row) (sumrow (cdr row)))
+                                   0
+                                   )
+                               )
+                             ))
+                         (gnc:html-table-append-column!
+                          table
+                          (sumtot (apply zip (map cadr all-data)))
+                          )
+                         )
+                       )
+                       ;; set numeric columns to align right
+                   (for-each
+                    (lambda (col)
+                      (gnc:html-table-set-col-style!
+                       table col "td"
+                       'attribute (list "align" "right")))
+                    '(1 2 3 4 5 6 7 8 9 10 11 12 13 14))
+                   (gnc:html-document-add-object! document table)
+                   ) ;; begin if
+                 )
+             )
 
            ;; else if empty data
            (gnc:html-document-add-object!

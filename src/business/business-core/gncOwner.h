@@ -61,9 +61,9 @@ to QOF as they can be used by objects like GncInvoice.
 @{
 */
 /** return the type for the collection. */
-QofIdType qofOwnerGetType(GncOwner *owner);
+QofIdType qofOwnerGetType(const GncOwner *owner);
 /** return the owner itself as an entity. */
-QofInstance* qofOwnerGetOwner (GncOwner *owner);
+QofInstance* qofOwnerGetOwner (const GncOwner *owner);
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofInstance *ent);
 
@@ -112,14 +112,14 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
 int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 
-const char * gncOwnerGetName (GncOwner *owner);
-gnc_commodity * gncOwnerGetCurrency (GncOwner *owner);
+const char * gncOwnerGetName (const GncOwner *owner);
+gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner);
 
 /** Get the GUID of the immediate owner */
-const GUID * gncOwnerGetGUID (GncOwner *owner);
+const GUID * gncOwnerGetGUID (const GncOwner *owner);
 GUID gncOwnerRetGUID (GncOwner *owner);
 
-gboolean gncOwnerIsValid (GncOwner *owner);
+gboolean gncOwnerIsValid (const GncOwner *owner);
 
 /**
  * Get the "parent" Owner or GUID thereof.  The "parent" owner
@@ -129,7 +129,7 @@ GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
 const GUID * gncOwnerGetEndGUID (GncOwner *owner);
 
 /** attach an owner to a lot */
-void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
+void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot);
 
 /** Get the owner from the lot.  If an owner is found in the lot,
  * fill in "owner" and return TRUE.  Otherwise return FALSE.

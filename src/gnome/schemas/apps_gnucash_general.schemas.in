@@ -452,6 +452,23 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/register/show_leaf_account_names</key>
+      <applyto>/apps/gnucash/general/register/show_leaf_account_names</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Only display leaf account names.</short>
+        <long>
+          Show only the names of the leaf accounts in the register and in the
+          account selection popup. The default behaviour is to display the full
+          name, including the path in the account tree. Activating this option
+          implies that you use unique leaf names.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/register/number_of_rows</key>
       <applyto>/apps/gnucash/general/register/number_of_rows</applyto>
       <owner>gnucash</owner>

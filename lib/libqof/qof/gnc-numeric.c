@@ -1019,6 +1019,82 @@ gnc_numeric_reduce(gnc_numeric in)
   return out;
 }
 
+
+/* *******************************************************************
+ * gnc_numeric_to_decimal
+ *
+ * Attempt to convert the denominator to an exact power of ten without
+ * rounding. TRUE is returned if 'a' has been converted or was already
+ * decimal. Otherwise, FALSE is returned and 'a' remains unchanged.
+ * The 'max_decimal_places' parameter may be NULL.
+ ********************************************************************/
+
+gboolean
+gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
+{
+  guint8 decimal_places = 0;
+  gnc_numeric converted_val;
+  gint64 fraction;
+
+  g_return_val_if_fail(a, FALSE);
+
+  if (gnc_numeric_check(*a) != GNC_ERROR_OK) 
+    return FALSE;
+
+  converted_val = *a;
+  fraction = converted_val.denom;
+  if (fraction <= 0)
+    return FALSE;
+
+  while (fraction != 1)
+  {
+    switch (fraction % 10)
+    {
+      case 0:
+        fraction = fraction / 10;
+        break;
+
+      case 5:
+        converted_val = gnc_numeric_mul(converted_val,
+                                        gnc_numeric_create(2, 2),
+                                        GNC_DENOM_AUTO,
+                                        GNC_HOW_DENOM_EXACT |
+                                        GNC_HOW_RND_NEVER);
+        if (gnc_numeric_check(converted_val) != GNC_ERROR_OK)
+          return FALSE;
+        fraction = fraction / 5;
+        break;
+
+      case 2:
+      case 4:
+      case 6:
+      case 8:
+        converted_val = gnc_numeric_mul(converted_val,
+                                        gnc_numeric_create(5, 5),
+                                        GNC_DENOM_AUTO,
+                                        GNC_HOW_DENOM_EXACT |
+                                        GNC_HOW_RND_NEVER);
+        if (gnc_numeric_check(converted_val) != GNC_ERROR_OK)
+          return FALSE;
+        fraction = fraction / 2;
+        break;
+
+      default:
+        return FALSE;
+    }
+
+    decimal_places += 1;
+  }
+
+  if (max_decimal_places)
+    *max_decimal_places = decimal_places;
+
+  *a = converted_val;
+
+  return TRUE;
+}
+
+
 /* *******************************************************************
  *  double_to_gnc_numeric
  ********************************************************************/

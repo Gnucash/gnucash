@@ -270,9 +270,11 @@
     (lambda (action amount)  ;;; Dispatch function
       (case action
 	((add) (if (gnc:gnc-numeric? amount) 
-		  (set! value (gnc-numeric-add-fixed amount value))
-		  (gnc:warn 
-		   "gnc:numeric-collector called with wrong argument: " amount)))
+                   (set! value (gnc-numeric-add amount value
+                                                GNC-DENOM-AUTO GNC-DENOM-LCD))
+                   (gnc:warn 
+                    "gnc:numeric-collector called with wrong argument: "
+                    amount)))
 	((total) value)
 	(else (gnc:warn "bad gnc:numeric-collector action: " action))))))
 

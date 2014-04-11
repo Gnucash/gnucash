@@ -38,7 +38,7 @@
     Standardkontenrahmen SKR04, Stand 2005
   </gnc-act:short-description>
   <gnc-act:long-description>
-    BETA-Version eines Kontenrahmes SKR04 für 2005.  Mehr Informationen unter http://linuxwiki.de/GnuCash/skr04
+    BETA-Version eines Kontenrahmes SKR04 für 2005.  Mehr Informationen unter http://wiki.gnucash.org/wiki/De/SKR04
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
   <gnc:account version="2.0.0">
@@ -65,6 +65,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -2223,6 +2227,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -2830,69 +2838,6 @@
     <act:parent type="new">f8a1595720a430d2d890c735ec280801</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Marmor</act:name>
-    <act:id type="new">87234e6891fac01304264bc8512448a0</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e1960c5433e5eb58cbd136d8c3d2fa0a</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Stein</act:name>
-    <act:id type="new">a99b2f31be2be1a074bc1c8b54825c7e</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e1960c5433e5eb58cbd136d8c3d2fa0a</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Eisen</act:name>
-    <act:id type="new">b94ac228e74d955127e50a16d82f7b21</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e1960c5433e5eb58cbd136d8c3d2fa0a</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
     <act:name>04. Geleistete Anzahlungen auf Vorräte</act:name>
     <act:id type="new">4b94caba6927babf0af628999af0e00d</act:id>
     <act:type>ASSET</act:type>
@@ -3189,7 +3134,7 @@
     <act:parent type="new">76c54d31f188167d8a031d96045283fd</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Forderungen aus L+L gemäß § 24 UStG</act:name>
+    <act:name>Forderungen aus L+L gemäß §24 UStG</act:name>
     <act:id type="new">7dc3830ac363a526ef101cf09a77b6ee</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -3234,7 +3179,7 @@
     <act:parent type="new">76c54d31f188167d8a031d96045283fd</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Forderungen nach § 11 Abs. 1 Satz 2 EStG für § 4/3</act:name>
+    <act:name>Forderungen nach §11 Abs. 1 Satz 2 EStG für §4/3</act:name>
     <act:id type="new">fd124dab720d156a374f1386a565d9d0</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -4196,7 +4141,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1298 </act:code>
+    <act:code>1298</act:code>
     <act:description>Forderungen, nicht eingeforderte ausstehende Einlagen s. Konto 2910</act:description>
     <act:slots>
       <slot>
@@ -4856,7 +4801,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nachträglich abziehbare Vorsteuer, § 15a UStG, bewegliche Wirtschaftsgüter</act:name>
+    <act:name>Nachträglich abziehbare Vorsteuer, §15a UStG, bewegliche Wirtschaftsgüter</act:name>
     <act:id type="new">641b00dd407adba480bf1d15a86d9d05</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -4878,7 +4823,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zurückzuzahlende Vorsteuer, § 15a UStG, bewegliche Wirtschaftsgüter</act:name>
+    <act:name>Zurückzuzahlende Vorsteuer, §15a UStG, bewegliche Wirtschaftsgüter</act:name>
     <act:id type="new">e91c35cfe1b485412a871fe71f944a3c</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -4900,7 +4845,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nachträglich abziehbare Vorsteuer, § 15a UStG, unbewegliche Wirtschaftsgüter</act:name>
+    <act:name>Nachträglich abziehbare Vorsteuer, §15a UStG, unbewegliche Wirtschaftsgüter</act:name>
     <act:id type="new">b96f86315d7eaf9afa781af6f7986327</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -4922,7 +4867,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zurückzuzahlende Vorsteuer, § 15a UStG, unbewegliche Wirtschaftsgüter</act:name>
+    <act:name>Zurückzuzahlende Vorsteuer, §15a UStG, unbewegliche Wirtschaftsgüter</act:name>
     <act:id type="new">6025deffab1a31abbcbd91c8a6039cf6</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -4952,7 +4897,6 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1400</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -4974,6 +4918,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:code>1400</act:code>
     <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
@@ -5010,6 +4955,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>1401</act:code>
+    <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -5018,6 +4964,19 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-related</slot:key>
+	<slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-US</slot:key>
+	<slot:value type="frame">
+	  <slot>
+	    <slot:key>code</slot:key>
+	    <slot:value type="string">K66</slot:value>
+	  </slot>
+	</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
@@ -5031,7 +4990,44 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:code>1405</act:code>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+        <slot:key>notes</slot:key>
+        <slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K66</slot:value>
+          </slot>
+        </slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Abziehbare Vorsteuer 19%</act:name>
+    <act:id type="new">f5e12dd9ee63444b35271eb0cc29ca27</act:id>
+    <act:type>ASSET</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:description>UstVa Zl. 55, Kz. 66</act:description>
+    <act:code>1406</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -5040,6 +5036,19 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K66</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
@@ -5090,6 +5099,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>1403</act:code>
+    <act:description>UstVa Zl. 56, Kz. 61</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -5098,6 +5108,55 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K61</slot:value>
+          </slot>
+        </slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">922006b4e0d3a0e5deb659ab7da9b42a</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Abziehbare Vorsteuer aus innergemeinschaftlichem Erwerb 19%</act:name>
+    <act:id type="new">fb1eb58315969d65581a6e4f313f43c4</act:id>
+    <act:type>ASSET</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>1404</act:code>
+    <act:description>UstVa Zl. 56, Kz. 61</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+        <slot:key>notes</slot:key>
+        <slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K61</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">922006b4e0d3a0e5deb659ab7da9b42a</act:parent>
@@ -5139,7 +5198,7 @@
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abziehbare Vorsteuer nach § 13b UStG</act:name>
+    <act:name>Abziehbare Vorsteuer nach §13b UStG</act:name>
     <act:id type="new">97c89eba49fa0e1419ca3753a66d260e</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5175,7 +5234,7 @@
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abziehbare Vorsteuer nach § 13b UStG 16%</act:name>
+    <act:name>Abziehbare Vorsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">eb6e059c85e0833a7715864b3ad75343</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5308,7 +5367,7 @@
     <act:parent type="new">186a44919607662c803018c7279ce2ff</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufzuteilende Vorsteuer nach §§ 13a/13b UStG</act:name>
+    <act:name>Aufzuteilende Vorsteuer nach §§13a/13b UStG</act:name>
     <act:id type="new">0a2ec441e8cb70acb3c6c4fa9c5bf170</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5330,7 +5389,7 @@
     <act:parent type="new">186a44919607662c803018c7279ce2ff</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufzuteilende Vorsteuer nach §§ 13a/13b UStG 16 %</act:name>
+    <act:name>Aufzuteilende Vorsteuer nach §§13a/13b UStG 16 %</act:name>
     <act:id type="new">fa7eaf95d7cbf4b2e8f7e0e6dc4e43e9</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5689,7 +5748,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gegenkonto Vorsteuer § 4/3 EStG</act:name>
+    <act:name>Gegenkonto Vorsteuer §4/3 EStG</act:name>
     <act:id type="new">d8cbb3ed1bbb250b0b9fb83890e6f41d</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5711,7 +5770,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Auflösung Vorsteuer aus Vorjahr § 4/3 EStG</act:name>
+    <act:name>Auflösung Vorsteuer aus Vorjahr §4/3 EStG</act:name>
     <act:id type="new">0517452e941c1acfaeed70871bb203b7</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5733,7 +5792,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Vorsteuer aus Investitionen § 4/3 EStG</act:name>
+    <act:name>Vorsteuer aus Investitionen §4/3 EStG</act:name>
     <act:id type="new">2069db98a8126e51c56002bcca5af58a</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5755,7 +5814,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gegenkonto für Vorsteuer nach Durchschnittssätzen für § 4 Abs. 3 EStG</act:name>
+    <act:name>Gegenkonto für Vorsteuer nach Durchschnittssätzen für §4 Abs. 3 EStG</act:name>
     <act:id type="new">829a214c506d8d13b828f5583a4dda34</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5777,7 +5836,7 @@
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verrechnungskonto Gewinnermittlung § 4/3 EStG, ergebniswirksam</act:name>
+    <act:name>Verrechnungskonto Gewinnermittlung §4/3 EStG, ergebniswirksam</act:name>
     <act:id type="new">157a6372cb0e06f29ffccccf44fd9ca8</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -6131,77 +6190,7 @@
     <act:parent type="new">3be1aa86d6868b006741b9af6777cf5f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Schecks</act:name>
-    <act:id type="new">e0712c0ad9d6bfbc9b18a65832d73fcb</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1550</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Traveler Cheque USD</act:name>
-    <act:id type="new">3c9d85636c36303679cab0eebb461765</act:id>
-    <act:type>CURRENCY</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>USD</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1551</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>old-price-source</slot:key>
-	<slot:value type="string">CURRENCY</slot:value>
-      </slot>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e0712c0ad9d6bfbc9b18a65832d73fcb</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Traveler Cheque EUR</act:name>
-    <act:id type="new">108c962952448650dc56bda358586a10</act:id>
-    <act:type>CURRENCY</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1552</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e0712c0ad9d6bfbc9b18a65832d73fcb</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Kassenbestand</act:name>
+    <act:name>Kasse</act:name>
     <act:id type="new">9245a7abb3a1df7c26c1b189cceb84b1</act:id>
     <act:type>CASH</act:type>
     <act:commodity>
@@ -6231,28 +6220,6 @@
     <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Kasse</act:name>
-    <act:id type="new">a73604541838ee1eff060ae018db8bb3</act:id>
-    <act:type>CASH</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1600</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">9245a7abb3a1df7c26c1b189cceb84b1</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
     <act:name>Postbank</act:name>
     <act:id type="new">e6f2ce6d2586345f309cf8bc699ee51c</act:id>
     <act:type>BANK</act:type>
@@ -6273,29 +6240,6 @@
       </slot>
     </act:slots>
     <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Postbank Dortmund</act:name>
-    <act:id type="new">2c4aa9c6df24e5b1644814fc2248e9ba</act:id>
-    <act:type>BANK</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1710</act:code>
-    <act:description>Geschäftsgirokonto 759296467</act:description>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e6f2ce6d2586345f309cf8bc699ee51c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>LZB-Guthaben</act:name>
@@ -6427,6 +6371,10 @@
 	<slot:value type="frame"/>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string">1900-1999</slot:value>
       </slot>
@@ -6531,11 +6479,15 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>1950</act:code>
-    <act:description>§ 274 HGB</act:description>
+    <act:description>§274 HGB</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -6705,28 +6657,6 @@
     <act:parent type="new">19972a0e65d1f25f0878a3b9fba9343f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>(zur freien Verfügung)</act:name>
-    <act:id type="new">10b4991f5c62b1c3c746026424163cdc</act:id>
-    <act:type>LIABILITY</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>2030</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">19972a0e65d1f25f0878a3b9fba9343f</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
     <act:name>II. Kapital / Teilhafter</act:name>
     <act:id type="new">9caf6e580a978dba2f91d63e21422abd</act:id>
     <act:type>LIABILITY</act:type>
@@ -6802,28 +6732,6 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>2070</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">9caf6e580a978dba2f91d63e21422abd</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>(zur freien Verfügung)</act:name>
-    <act:id type="new">b83e9a3526079b1df0858b2efacc95ee</act:id>
-    <act:type>LIABILITY</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>2080</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -8182,7 +8090,7 @@
     <act:parent type="new">ef029fd872a653c6ae662719cb3d2e2d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklagenanteil nach § 6b EStG</act:name>
+    <act:name>Sonderposten mit Rücklagenanteil nach §6b EStG</act:name>
     <act:id type="new">e7e84679e809c1d26761b5d7b1a691db</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8226,7 +8134,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklagenanteil nach § 6d EStG</act:name>
+    <act:name>Sonderposten mit Rücklagenanteil nach §6d EStG</act:name>
     <act:id type="new">a292c1725a4abda97635cc6ce2956e4f</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8248,7 +8156,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklagenanteil nach § 1 EntwLStG</act:name>
+    <act:name>Sonderposten mit Rücklagenanteil nach §1 EntwLStG</act:name>
     <act:id type="new">1fa3f1ab77fdd0c514be4f187cd77855</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8292,7 +8200,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 7d EStG</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §7d EStG</act:name>
     <act:id type="new">66e8a8172c5438bed865da6f420d3f35</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8314,7 +8222,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 79 EStDV</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §79 EStDV</act:name>
     <act:id type="new">5d2b6f8763a17cf26d9806d392740fe1</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8336,7 +8244,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 80 EStDV</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §80 EStDV</act:name>
     <act:id type="new">ecd339d39cfd7a333b92425bc1161f6f</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8358,7 +8266,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 81 EStDV</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §81 EStDV</act:name>
     <act:id type="new">da36edba147b36f1008190e47a7585f0</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8403,7 +8311,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 82a EStDV</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §82a EStDV</act:name>
     <act:id type="new">afcdc2d61ac5eef73cdb49b9ccd90ca7</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8425,7 +8333,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 82d EStDV</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §82d EStDV</act:name>
     <act:id type="new">34e1223c887777d92b3f9511705c3d0e</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8447,7 +8355,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 82e EStDV</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §82e EStDV</act:name>
     <act:id type="new">5d850f9bd4faf5dbe0f24c9f345c8844</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8469,7 +8377,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 14 BerlinFG</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §14 BerlinFG</act:name>
     <act:id type="new">57a18e7b712d35bfd9d0f329859eaaa2</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8491,7 +8399,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil für Förderung nach § 3 ZonenRFG/§ 4-6 FördergebietsG</act:name>
+    <act:name>Sonderposten mit Rücklageanteil für Förderung nach §3 ZonenRFG/§4-6 FördergebietsG</act:name>
     <act:id type="new">3e1e0e9e7c3be5aa3e739b47a0be9d4b</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8513,7 +8421,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 4d EStG</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §4d EStG</act:name>
     <act:id type="new">60a04819244c9d1b3ae6701afc44c8c4</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8535,7 +8443,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 7g Abs. 1 EStG</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §7g Abs. 1 EStG</act:name>
     <act:id type="new">763e8cefaa12fa61c16439ee2c4c3e19</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8557,7 +8465,7 @@
     <act:parent type="new">6033548eda9d17974781c8d9b2770f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderposten mit Rücklageanteil nach § 7g Abs. 3, 7 EStG</act:name>
+    <act:name>Sonderposten mit Rücklageanteil nach §7g Abs. 3, 7 EStG</act:name>
     <act:id type="new">1bf1de3344d26076aa3e91238ce18d9b</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -8642,6 +8550,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -8994,7 +8906,7 @@
     <act:parent type="new">984e3a4bbeb1a32db7dd6df9437e6ee1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufwandsrückstellungen gemäß § 249 Abs. 2 HGB</act:name>
+    <act:name>Aufwandsrückstellungen gemäß §249 Abs. 2 HGB</act:name>
     <act:id type="new">a6dd348289269e4b609ed06123b2a4cd</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -9039,27 +8951,6 @@
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>C. Verbindlichkeiten</act:name>
-    <act:id type="new">cbdc8c08e95339f0eb311c9f280ff6ad</act:id>
-    <act:type>LIABILITY</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Verbindlichkeiten</act:name>
     <act:id type="new">8755bf4081c942798c5ac5f34c5b1aac</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -9067,7 +8958,6 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>3000</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -9082,7 +8972,7 @@
 	<slot:value type="frame"/>
       </slot>
     </act:slots>
-    <act:parent type="new">cbdc8c08e95339f0eb311c9f280ff6ad</act:parent>
+    <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>01. Anleihen</act:name>
@@ -9894,7 +9784,7 @@
     <act:parent type="new">a3d3131caad56df23167362ec6ab406a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verbindlichkeiten aus Lieferungen und Leistungen für Investitionen für § 4/3 EStG</act:name>
+    <act:name>Verbindlichkeiten aus Lieferungen und Leistungen für Investitionen für §4/3 EStG</act:name>
     <act:id type="new">a1fd22bd69200bb7bdd1ea485a0758e5</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -10654,7 +10544,7 @@
     <act:parent type="new">ecd88b09ea57fbcb6c1371597d818f2c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonstige Verbindlichkeiten z.B. nach § 11 Abs. 2 Satz 2 EStG für § 4/3 EStG</act:name>
+    <act:name>Sonstige Verbindlichkeiten z.B. nach §11 Abs. 2 Satz 2 EStG für §4/3 EStG</act:name>
     <act:id type="new">d8096c61e103f7399bc4b89b9e296d74</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11050,7 +10940,7 @@
     <act:parent type="new">040967754f9301f1256ae5b221fc765c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erhalten Kautionen</act:name>
+    <act:name>Erhaltene Kautionen</act:name>
     <act:id type="new">57a400aeb55463d303ce9dd7b76a9433</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11213,28 +11103,6 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>3567</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">934e168b36770e076b9d2eeaad400912</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Gegenkonto Aufteilung der Darlehen</act:name>
-    <act:id type="new">d542fba3d1dd39fcdf4d5c721a6b43cd</act:id>
-    <act:type>PAYABLE</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>3599</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -11833,7 +11701,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>3796</act:code>
-    <act:description>für § 4/3 EStG</act:description>
+    <act:description>für §4/3 EStG</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -11869,7 +11737,7 @@
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Mehrwertsteuer 7%</act:name>
+    <act:name>Umsatzsteuer 7%</act:name>
     <act:id type="new">c76f946f844d0afc674013ca97731f3a</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11941,7 +11809,7 @@
     <act:parent type="new">e726cf1027d9589c65f0681a73fbc8c8</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Mehrwertsteuer 16%</act:name>
+    <act:name>Umsatzsteuer 16%</act:name>
     <act:id type="new">ea57995749ee6b3af394f62ff181e502</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12291,7 +12159,7 @@
     <act:parent type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nach § 13b UStG 16%</act:name>
+    <act:name>Umsatzsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">6dc1d68bf6a196c6b51e5f5e3d50de3d</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12336,7 +12204,7 @@
     <act:parent type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nach § 13b UStG</act:name>
+    <act:name>Umsatzsteuer nach §13b UStG</act:name>
     <act:id type="new">6cf2599b1f60ced718c520f313ee100b</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12358,7 +12226,7 @@
     <act:parent type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nach § 13b UStG 16%</act:name>
+    <act:name>Umsatzsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">a2046307bda04804b5e6277e01baef5a</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12380,7 +12248,7 @@
     <act:parent type="new">6cf2599b1f60ced718c520f313ee100b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nach § 13a UStG</act:name>
+    <act:name>Umsatzsteuer nach §13a UStG</act:name>
     <act:id type="new">32b9678b389940f682903a025aaa11e9</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12567,6 +12435,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -12747,7 +12619,7 @@
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Steuerfreie Umsätze § 4 Nr. 1a UStG</act:name>
+    <act:name>Steuerfreie Umsätze §4 Nr. 1a UStG</act:name>
     <act:id type="new">c5c101e72cf95f40abdf0f511675f54e</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -12783,7 +12655,7 @@
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Steuerfreie EG-Lieferungen, §4,1b UStG</act:name>
+    <act:name>Steuerfreie EG-Lieferungen (§4,1b UStG) an Abnehmer mit UStID</act:name>
     <act:id type="new">498dcac4132faa3052bfb2af19a7b6fa</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -12819,7 +12691,7 @@
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Innergemeinschaftl. Dreiecksgeschäft</act:name>
+    <act:name>Innergemeinschaftl. Dreiecksgeschäft, Lieferung des ersten Abnehmers (§25b Abs. 2 UStG)</act:name>
     <act:id type="new">17fb01aec55ddc4c737783ea99564e66</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -12927,7 +12799,7 @@
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Steuerfreie Umsätze § 4 Nr. 2-7 UStG</act:name>
+    <act:name>Steuerfreie Umsätze §4 Nr. 2-7 UStG</act:name>
     <act:id type="new">5577d4805c75e241bf0df3d2cb97924b</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -12986,7 +12858,7 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse die mit den Durchschnittssätzen des § 24 UStG versteuert werden</act:name>
+    <act:name>Erlöse die mit den Durchschnittssätzen des §24 UStG versteuert werden</act:name>
     <act:id type="new">d458b83b14466d59de3db27b48ab7182</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13022,7 +12894,7 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse Kleinunternehmer § 19 UStG</act:name>
+    <act:name>Erlöse Kleinunternehmer §19 UStG</act:name>
     <act:id type="new">4620b03acccf52c62cbb7367c5c5db5b</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13169,7 +13041,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>4315</act:code>
+    <act:code>4330</act:code>
     <act:description>UstVa Zl. 35, Kz. 97</act:description>
     <act:slots>
       <slot>
@@ -13190,6 +13062,42 @@
 	  <slot>
 	    <slot:key>code</slot:key>
 	    <slot:value type="string">K97</slot:value>
+	  </slot>
+	</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Erlöse aus im Inland steuerpflichtigen EG Lieferungen 19% USt</act:name>
+    <act:id type="new">7fb425afaf83ab27a04c4665b18f3598</act:id>
+    <act:type>INCOME</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>4315</act:code>
+    <act:description>UstVa Zl. 35, Kz. 89</act:description>
+    <act:slots>
+      <slot>
+	<slot:key>placeholder</slot:key>
+	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>notes</slot:key>
+	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-related</slot:key>
+	<slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-US</slot:key>
+	<slot:value type="frame">
+	  <slot>
+	    <slot:key>code</slot:key>
+	    <slot:value type="string">K89</slot:value>
 	  </slot>
 	</slot:value>
       </slot>
@@ -13219,7 +13127,7 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse aus Leistungen, für die der Leistungsempfänger die Steuer nach § 13b UStG schuldet.</act:name>
+    <act:name>Erlöse aus Leistungen, für die der Leistungsempfänger die Steuer nach §13b UStG schuldet.</act:name>
     <act:id type="new">36b8db0579cb00c7b10e0fb28966aa57</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13335,7 +13243,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>4400</act:code>
+    <act:code>4340</act:code>
     <act:description>UstVa Zl. 27, Kz. 51</act:description>
     <act:slots>
       <slot>
@@ -13360,6 +13268,46 @@
 	  <slot>
 	    <slot:key>code</slot:key>
 	    <slot:value type="string">K51</slot:value>
+	  </slot>
+	</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Umsatzerlöse 19% USt</act:name>
+    <act:id type="new">ecf894d93ba331ecafc6e4084b83ebe1</act:id>
+    <act:type>INCOME</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>4400</act:code>
+    <act:description>UstVa Zl. 27, Kz. 81</act:description>
+    <act:slots>
+      <slot>
+	<slot:key>placeholder</slot:key>
+	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>notes</slot:key>
+	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hbci</slot:key>
+	<slot:value type="frame"/>
+      </slot>
+      <slot>
+	<slot:key>tax-related</slot:key>
+	<slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-US</slot:key>
+	<slot:value type="frame">
+	  <slot>
+	    <slot:key>code</slot:key>
+	    <slot:value type="string">K81</slot:value>
 	  </slot>
 	</slot:value>
       </slot>
@@ -13412,7 +13360,7 @@
     <act:parent type="new">4cc96976e01bee25735c73178ffdea87</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Provisionserlöse, steuerfrei § 4 Nr.5</act:name>
+    <act:name>Provisionserlöse, steuerfrei §4 Nr.5</act:name>
     <act:id type="new">d3801c0ca8cc4f691ce84e5bd50a2a57</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14495,6 +14443,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -14628,6 +14580,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -14838,7 +14794,7 @@
     <act:parent type="new">e42b6d2cd19cd5d85b01f2f91ae15a61</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse Sachanlageverkäufe steuerfrei § 4 Nr. 1a</act:name>
+    <act:name>Erlöse Sachanlageverkäufe steuerfrei §4 Nr. 1a</act:name>
     <act:id type="new">d41a3c99a6ce8d5fdc749e10c0e012b4</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14888,7 +14844,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse Sachanlageverkäufe steuerfrei § 4 Nr. 1b</act:name>
+    <act:name>Erlöse Sachanlageverkäufe steuerfrei §4 Nr. 1b</act:name>
     <act:id type="new">d16fb532f016b5b97efc2905071370ef</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -15787,6 +15743,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -15924,6 +15884,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -16046,7 +16010,7 @@
     <act:parent type="new">c5c52fce955f17d7e01b282e32ca1cb5</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewinne aus Anteilen an nicht steuerbefreiten inländischen Kapitalgesellschaften § 9 Nr. 2a GewStG</act:name>
+    <act:name>Gewinne aus Anteilen an nicht steuerbefreiten inländischen Kapitalgesellschaften §9 Nr. 2a GewStG</act:name>
     <act:id type="new">f9e5c4d024367f304aea7341720bfc91</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -16068,7 +16032,7 @@
     <act:parent type="new">c5c52fce955f17d7e01b282e32ca1cb5</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewinnanteile aus Mitunternehmerschaften § 9 GewStG</act:name>
+    <act:name>Gewinnanteile aus Mitunternehmerschaften §9 GewStG</act:name>
     <act:id type="new">1017a6b287a4bf3b90c53664437e3681</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -16106,6 +16070,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -16270,6 +16238,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -16427,6 +16399,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -16545,7 +16521,7 @@
     <act:parent type="new">094e09462e1b0d687aa5beeb3e52e6af</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zinserträge § 233a AO</act:name>
+    <act:name>Zinserträge §233a AO</act:name>
     <act:id type="new">b4c535754373cb533897ef30985453b5</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -16567,7 +16543,7 @@
     <act:parent type="new">094e09462e1b0d687aa5beeb3e52e6af</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zinserträge § 233a AO Sonderfall Anlage A KSt</act:name>
+    <act:name>Zinserträge §233a AO Sonderfall Anlage A KSt</act:name>
     <act:id type="new">048c7297f319b8c96f968b78b5fca06b</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -16699,6 +16675,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -16793,6 +16773,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -18665,28 +18649,6 @@
     <act:parent type="new">2906a27180c72875652cef912c773d4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Pauschale Steuer für Versicherungen</act:name>
-    <act:id type="new">da3a1376f6f6240594701514868a0465</act:id>
-    <act:type>EXPENSE</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6147</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">2906a27180c72875652cef912c773d4e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
     <act:name>Aufwendungen für Altersversorgung für Mitunternehmer  15 EStG</act:name>
     <act:id type="new">e781f4fa8558d4a1c924f9f54be61a92</act:id>
     <act:type>EXPENSE</act:type>
@@ -19374,6 +19336,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -19464,6 +19430,10 @@
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -19646,7 +19616,7 @@
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewerbesteuerlich zu berücksichtigende Miete § 8 GewStG </act:name>
+    <act:name>Gewerbesteuerlich zu berücksichtigende Miete §8 GewStG </act:name>
     <act:id type="new">01f2a8be03958de5b907d173c34bec28</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -19668,7 +19638,7 @@
     <act:parent type="new">1ba24952187bcf28b0d93b19a593754e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Vergütungen an Mitunternehmer für die mietweise Überlassung ihrer Wirtschaftsgüter § 16 EStG</act:name>
+    <act:name>Vergütungen an Mitunternehmer für die mietweise Überlassung ihrer Wirtschaftsgüter §16 EStG</act:name>
     <act:id type="new">d20bde1edb79b7c83b28ba54c57246c3</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -19734,7 +19704,7 @@
     <act:parent type="new">36fbb1b1ad375d67b895a61dcbe13264</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Vergütungen an Mitunternehmer für die pachtweise Überlassung ihrer Wirtschaftsgüter § 15 EStG</act:name>
+    <act:name>Vergütungen an Mitunternehmer für die pachtweise Überlassung ihrer Wirtschaftsgüter §15 EStG</act:name>
     <act:id type="new">e122ae549e19b01d85240c7dc0c765ac</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -20410,7 +20380,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6458 </act:code>
+    <act:code>6458</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -20568,7 +20538,7 @@
     <act:parent type="new">5925fef34d2d43bd1a1fbe06d7cf5515</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewerbesteuerlich zu berücksichtigendes Mietleasing § 8 GewStG</act:name>
+    <act:name>Gewerbesteuerlich zu berücksichtigendes Mietleasing §8 GewStG</act:name>
     <act:id type="new">4e2ffa4719c68aecc33759447db520fb</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -20922,7 +20892,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6660 </act:code>
+    <act:code>6660</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -21124,7 +21094,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6689 </act:code>
+    <act:code>6689</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -21374,7 +21344,7 @@
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Haftungsvergütung an Mitunternehmer § 15 EStG</act:name>
+    <act:name>Haftungsvergütung an Mitunternehmer §15 EStG</act:name>
     <act:id type="new">2b14079ef17c0b9aab0bb80aa9eb4702</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -21500,7 +21470,7 @@
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewerbesteuerlich zu berücksichtigende Miete für Einrichtungen § 8 GewStG</act:name>
+    <act:name>Gewerbesteuerlich zu berücksichtigende Miete für Einrichtungen §8 GewStG</act:name>
     <act:id type="new">acc87728d36607261557e9daaa426b83</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -21545,7 +21515,7 @@
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewerbesteuerlich zu berücksichtigendes Mietleasing § 8 GewStG</act:name>
+    <act:name>Gewerbesteuerlich zu berücksichtigendes Mietleasing §8 GewStG</act:name>
     <act:id type="new">8e559eae0ee39e2c548f4e6c7146123f</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -22386,7 +22356,7 @@
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse aus Verkäufen Sachanlagevermögen steuerfrei § 4 Nr. 1a UStG</act:name>
+    <act:name>Erlöse aus Verkäufen Sachanlagevermögen steuerfrei §4 Nr. 1a UStG</act:name>
     <act:id type="new">3ed8139edb0209b9ecccfc8b2e60e90a</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -22432,7 +22402,7 @@
     <act:parent type="new">47767b5fa390ff8a4dbb0fdf05a3ee3b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse aus Verkäufen Sachanlagevermögen steuerfrei § 4 Nr. 1b UStG</act:name>
+    <act:name>Erlöse aus Verkäufen Sachanlagevermögen steuerfrei §4 Nr. 1b UStG</act:name>
     <act:id type="new">982804cfea02b767b7c1c8ef7f93ca77</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -22840,7 +22810,7 @@
     <act:parent type="new">d8494e8b7d4b2f51d181e5a3cb3b7b4a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufwendugnen aus der Zuschreibung von steuerlich niedriger bewerteten Rückstellungen</act:name>
+    <act:name>Aufwendungen aus der Zuschreibung von steuerlich niedriger bewerteten Rückstellungen</act:name>
     <act:id type="new">4fd7ecf98b836a356fd25b36ac0c30af</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -23015,7 +22985,7 @@
     <act:parent type="new">1c9b01f1444a088f0922b24a8c1a4ba9</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zuwendungen, Spenden an Stiftungen für gemeinnützige Zwecke i.S.d. § 52 Abs. 2 Nr. 1-3 AO</act:name>
+    <act:name>Zuwendungen, Spenden an Stiftungen für gemeinnützige Zwecke i.S.d. §52 Abs. 2 Nr. 1-3 AO</act:name>
     <act:id type="new">865103769caad0200af84b6a2b0449eb</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -23037,7 +23007,7 @@
     <act:parent type="new">1c9b01f1444a088f0922b24a8c1a4ba9</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zuwendungen, Spenden an Stiftungen für gemeinnützige Zwecke i.S.d. § 52 Abs. 2 Nr. 4 AO</act:name>
+    <act:name>Zuwendungen, Spenden an Stiftungen für gemeinnützige Zwecke i.S.d. §52 Abs. 2 Nr. 4 AO</act:name>
     <act:id type="new">7488fcc28c27087b0481310220281ca7</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -23114,6 +23084,10 @@
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
 	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
@@ -23610,7 +23584,7 @@
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Einstellungen in Sonderposten mit Rücklageanteil (§ 52 Abs. 16 EStG)</act:name>
+    <act:name>Einstellungen in Sonderposten mit Rücklageanteil (§52 Abs. 16 EStG)</act:name>
     <act:id type="new">77d002bae022921736161cb5f75a114c</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -23646,6 +23620,10 @@
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -23832,6 +23810,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -23901,6 +23883,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -23953,7 +23939,7 @@
     <act:parent type="new">330db1de3813d4b598b2646016d5bab4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abschreibungen aufgrund von Verlustanteilen an Mitunternehmerschaften § 8 GewStG</act:name>
+    <act:name>Abschreibungen aufgrund von Verlustanteilen an Mitunternehmerschaften §8 GewStG</act:name>
     <act:id type="new">bd99edea1955d7a98773772ab91332f4</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24284,6 +24270,10 @@
 	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -24357,7 +24347,7 @@
     <act:parent type="new">61f884f026b5cec86f75f7b9b25ea945</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abgeführte Gewinnanteile an stille Gesellschafter § 8 GewStG</act:name>
+    <act:name>Abgeführte Gewinnanteile an stille Gesellschafter §8 GewStG</act:name>
     <act:id type="new">da217e4cc01d7e715df599db374c19bb</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24445,7 +24435,7 @@
     <act:parent type="new">8077a61128333def2454214ea7b6df5c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zinsaufwendungen § 233a AO betriebliche Steuern</act:name>
+    <act:name>Zinsaufwendungen §233a AO betriebliche Steuern</act:name>
     <act:id type="new">175898858541f5e2e9076eced4e27fb7</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24467,7 +24457,7 @@
     <act:parent type="new">8077a61128333def2454214ea7b6df5c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zinsaufwendungen §§ 233a bis 237 AO</act:name>
+    <act:name>Zinsaufwendungen §§233a bis 237 AO</act:name>
     <act:id type="new">b38f82c5de3a784f2e9eab49d678d655</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24512,7 +24502,7 @@
     <act:parent type="new">1848323dfe915f8ed2a24bc00fef1e16</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nicht abzugsfähige Schuldzinsen (langfristig) gemäß § 4 Abs. 4a EStG</act:name>
+    <act:name>Nicht abzugsfähige Schuldzinsen (langfristig) gemäß §4 Abs. 4a EStG</act:name>
     <act:id type="new">94d77d7d8bc10d776c6bd03774e8294a</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24535,7 +24525,7 @@
     <act:parent type="new">71a9174e0b5d1b37537fbaae957435e9</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nicht abzugsfähige Schuldzinsen (kurzfristig) gemäß § 4 Abs. 4a EStG</act:name>
+    <act:name>Nicht abzugsfähige Schuldzinsen (kurzfristig) gemäß §4 Abs. 4a EStG</act:name>
     <act:id type="new">d84388a7f7fcea4151c1b93a677dcfdb</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24647,7 +24637,7 @@
     <act:parent type="new">40bbf2cc46016fd17529264fd27c534d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Renten und dauernde Lasten aus Gründung/Erwerb § 8 GewStG</act:name>
+    <act:name>Renten und dauernde Lasten aus Gründung/Erwerb §8 GewStG</act:name>
     <act:id type="new">62aa443abf3cad9e8c7408d27870333d</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24669,7 +24659,7 @@
     <act:parent type="new">40bbf2cc46016fd17529264fd27c534d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Zinsaufwendungen an Mitunternehmer für die Hingabe von Kapital § 15 EStG</act:name>
+    <act:name>Zinsaufwendungen an Mitunternehmer für die Hingabe von Kapital §15 EStG</act:name>
     <act:id type="new">a4d96f9f3cf84a6f9d356bb79305d1c3</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -24774,6 +24764,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -24893,6 +24887,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -24915,6 +24913,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -24935,6 +24937,10 @@
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -25488,6 +25494,10 @@
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
 	<slot:value type="string">true</slot:value>
       </slot>
       <slot>

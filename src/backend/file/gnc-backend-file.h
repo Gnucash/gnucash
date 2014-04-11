@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-file.h: load and save data to files                  *
+ * gnc-backend-xml.h: load and save data to XML files               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,8 +28,8 @@
  * restoring data to/from an ordinary Unix filesystem file.
  */
 
-#ifndef GNC_BACKEND_FILE_H_
-#define GNC_BACKEND_FILE_H_
+#ifndef GNC_BACKEND_XML_H_
+#define GNC_BACKEND_XML_H_
 
 #include "qof.h"
 #include <gmodule.h>
@@ -59,4 +59,4 @@ typedef struct FileBackend_struct FileBackend;
 G_MODULE_EXPORT void
 qof_backend_module_init(void);
 
-#endif /* GNC_BACKEND_FILE_H_ */
+#endif /* GNC_BACKEND_XML_H_ */

@@ -40,7 +40,7 @@ static void listen_for_account_events  (QofInstance *entity,  QofEventId event_t
 #define NUM_ACCOUNT_COLUMNS 2
 
 /* ===================================================================== */
-/* In order to speed up register starts for registers htat have a huge
+/* In order to speed up register starts for registers that have a huge
  * number of accounts in them (where 'huge' is >500) we build a quickfill
  * cache of account names.  This cache is needed because some users on 
  * some machines experience register open times in the tens of seconds
@@ -65,6 +65,9 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 {
   QFB *qfb = user_data;
   gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
+			      shared_quickfill_gconf_changed,
+			      qfb);
+  gnc_gconf_general_remove_cb(KEY_SHOW_LEAF_ACCOUNT_NAMES,
 			      shared_quickfill_gconf_changed,
 			      qfb);
   gnc_quickfill_destroy (qfb->qf);
@@ -118,7 +121,7 @@ load_shared_qf_cb (Account *account, gpointer data)
      if (skip) return;
   }
 
-  name = xaccAccountGetFullName (account);
+  name = gnc_get_account_name_for_register (account);
   if (NULL == name) return;
   gnc_quickfill_insert (qfb->qf, name, QUICKFILL_ALPHA);
   if (qfb->load_list_store) {
@@ -166,6 +169,10 @@ build_shared_quickfill (QofBook *book, Account *root, const char * key,
     gtk_list_store_new (NUM_ACCOUNT_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
 
   gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
+				shared_quickfill_gconf_changed,
+				qfb);
+
+  gnc_gconf_general_register_cb(KEY_SHOW_LEAF_ACCOUNT_NAMES,
 				shared_quickfill_gconf_changed,
 				qfb);
 
@@ -248,7 +255,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
     return;
   }
 
-  name = xaccAccountGetFullName (account);
+  name = gnc_get_account_name_for_register(account);
   if (NULL == name) {
     LEAVE("account has no name");
     return;
@@ -285,9 +292,11 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
 	    qfb->dont_add_cb(account, qfb->dont_add_data)) {
 	  gtk_list_store_remove(qfb->list_store, &iter);
 	} else {
+	  gchar *aname = gnc_get_account_name_for_register(account);
 	  gtk_list_store_set(qfb->list_store, &iter,
-			     ACCOUNT_NAME, xaccAccountGetFullName(account),
+			     ACCOUNT_NAME, aname,
 			     -1);
+	  g_free(aname);
 	}
       }
 

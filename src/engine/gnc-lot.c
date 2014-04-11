@@ -99,8 +99,8 @@ gnc_lot_new (QofBook *book)
    return lot;
 }
 
-void 
-gnc_lot_destroy (GNCLot *lot)
+static void
+gnc_lot_free(GNCLot* lot)
 {
    GList *node;
    if (!lot) return;
@@ -122,6 +122,16 @@ gnc_lot_destroy (GNCLot *lot)
    g_object_unref (lot);
 }
 
+void 
+gnc_lot_destroy (GNCLot *lot)
+{
+   if (!lot) return;
+   
+   gnc_lot_begin_edit(lot);
+   qof_instance_set_destroying(lot, TRUE);
+   gnc_lot_commit_edit(lot);
+}
+
 /* ============================================================= */
 
 void
@@ -135,13 +145,20 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
   PERR ("Failed to commit: %d", errcode);
 }
 
+static void lot_free(QofInstance* inst)
+{
+	GNCLot* lot = GNC_LOT(inst);
+
+	gnc_lot_free(lot);
+}
+
 static void noop (QofInstance *inst) {}
 
 void
 gnc_lot_commit_edit (GNCLot *lot)
 {
   if (!qof_commit_edit (QOF_INSTANCE(lot))) return;
-  qof_commit_edit_part2 (&lot->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (&lot->inst, commit_err, noop, lot_free);
 }
 
 /* ============================================================= */
@@ -356,7 +373,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    {
       gnc_lot_remove_split (split->lot, split);
    }
-   split->lot = lot;
+   xaccSplitSetLot(split, lot);
 
    lot->splits = g_list_append (lot->splits, split);
 
@@ -377,7 +394,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    gnc_lot_begin_edit(lot);
    qof_instance_set_dirty(QOF_INSTANCE(lot));
    lot->splits = g_list_remove (lot->splits, split);
-   split->lot = NULL;
+   xaccSplitSetLot(split, NULL);
    lot->is_closed = -1;   /* force an is-closed computation */
 
    if (NULL == lot->splits)

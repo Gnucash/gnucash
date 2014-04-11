@@ -1,3 +1,4 @@
+#
 SUBDIRS = test-files
 
 test_date_converting_SOURCES = \
@@ -27,7 +28,7 @@ test_kvp_frames_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   test-kvp-frames.c
 
-# the file backend is now a GModule - this test does
+# the xml backend is now a GModule - this test does
 # not load it as a module and cannot link to it
 # and remain portable.
 
@@ -249,4 +250,4 @@ EXTRA_DIST = \
   test-real-data.sh \
   test-xml2-is-file.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.file\"
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.xml\"

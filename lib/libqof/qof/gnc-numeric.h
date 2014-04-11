@@ -445,6 +445,21 @@ gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom,
 /** Return input after reducing it by Greated Common Factor (GCF) 
  *  elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric in);
+
+/** Attempt to convert the denominator to an exact power of ten without
+ *  rounding.
+ *
+ *  @param a the ::gnc_numeric value to convert
+ *
+ *  @param max_decimal_places the number of decimal places of the
+ *  converted value. This parameter may be @c NULL.
+ *
+ *  @return @c TRUE if @a a has been converted or was already decimal.
+ *  Otherwise, @c FALSE is returned and @a a and @a max_decimal_places
+ *  remain unchanged.
+ ********************************************************************/
+gboolean gnc_numeric_to_decimal(gnc_numeric * a,
+                                guint8 * max_decimal_places);
 /** @} */
 
 /** @name GValue 

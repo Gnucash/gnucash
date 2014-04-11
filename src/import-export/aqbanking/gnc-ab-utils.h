@@ -34,6 +34,7 @@
 #define GNC_AB_UTILS_H
 
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <aqbanking/banking.h>
 
 #include "Account.h"
@@ -44,6 +45,15 @@ G_BEGIN_DECLS
 #define KEY_FORMAT_SWIFT940 "format_swift_mt940"
 #define KEY_FORMAT_SWIFT942 "format_swift_mt942"
 #define KEY_FORMAT_DTAUS "format_dtaus"
+
+typedef struct _GncABImExContextImport GncABImExContextImport;
+
+#define AWAIT_BALANCES      1 << 1
+#define FOUND_BALANCES      1 << 2
+#define IGNORE_BALANCES     1 << 3
+#define AWAIT_TRANSACTIONS  1 << 4
+#define FOUND_TRANSACTIONS  1 << 5
+#define IGNORE_TRANSACTIONS 1 << 6
 
 /**
  * Initialize the gwenhywfar library by calling GWEN_Init() and setting up
@@ -156,15 +166,57 @@ gchar *gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans);
 Transaction *gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc);
 
 /**
- * Lookup the most recent ACCOUNT_STATUS available in an ACCOUNTINFO as
- * extracted from an IMEXPORTER_CONTEXT.  This can be used to determine the
- * reported account balance most up-to-date.
+ * Import balances and transactions found in a AB_IMEXPORTER_CONTEXT into
+ * GnuCash.  By using @a awaiting the caller can specify what the user will
+ * expect to receive.  By using @a execute_txns, transactions in @a context can
+ * be used to generate corresponding AqBanking jobs, e.g. after a file import.
  *
- * @param acc_info ACCOUNTINFO
- * @return An AB_ACCOUNT_STATUS internal to @a acc_info, or NULL otherwise
+ * @param context AB_IMEXPORTER_CONTEXT to import
+ *
+ * @param awaiting Information the caller expects to receive or wants to ignore,
+ * bitmask of AWAIT_* or IGNORE_* values
+ *
+ * @param execute_txns If @a awaiting contains AWAIT_TRANSACTIONS, whether to
+ * create an aqbanking job for each of the transactions found
+ *
+ * @param api If @a execute_txns is TRUE, the AB_BANKING to get
+ * AB_ACCOUNTs from
+ *
+ * @param parent Widget to set new dialogs transient for, may be NULL
+ *
+ * @return A new GncABImExContextImport object which must be freed with
+ * g_free(), or NULL otherwise.  If execute_txns is TRUE, additionally
+ * gnc_ab_ieci_get_job_list() must be called and the result freed with
+ * AB_Job_List2_FreeAll()
  */
-AB_ACCOUNT_STATUS *gnc_ab_get_best_accountstatus(
-    AB_IMEXPORTER_ACCOUNTINFO *acc_info);
+GncABImExContextImport *gnc_ab_import_context(
+    AB_IMEXPORTER_CONTEXT *context, guint awaiting, gboolean execute_txns,
+    AB_BANKING *api, GtkWidget *parent);
+
+/**
+ * Extract awaiting from @a data.
+ *
+ * @param ieci The return value of gnc_ab_import_context()
+ * @return The initial awaiting bitmask plus IGNORE_* for unexpected and then
+ * ignored items, and FOUND_* for non-empty items
+ */
+guint gnc_ab_ieci_get_found(GncABImExContextImport *ieci);
+
+/**
+ * Extract the job list from @a data.
+ *
+ * @param ieci The return value of gnc_ab_import_context()
+ * @return The list of jobs, freeable with AB_Job_List2_FreeAll()
+ */
+AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
+
+/**
+ * Run the generic transaction matcher dialog.
+ *
+ * @param ieci The return value of gnc_ab_import_context()
+ * @return The return value of gnc_gen_trans_list_run().
+ */
+gboolean gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci);
 
 G_END_DECLS
 

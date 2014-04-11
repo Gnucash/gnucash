@@ -78,6 +78,9 @@ enum {
   PROP_TAX_RELATED,
   PROP_TAX_CODE,
   PROP_TAX_SOURCE,
+
+  PROP_HIDDEN,
+  PROP_PLACEHOLDER,
 };
 
 typedef struct AccountPrivate
@@ -347,6 +350,12 @@ gnc_account_get_property (GObject         *object,
 	    g_value_set_string(value,
 			       xaccAccountGetTaxUSPayerNameSource(account));
 	    break;
+	case PROP_HIDDEN:
+		g_value_set_boolean(value, xaccAccountGetHidden(account));
+		break;
+	case PROP_PLACEHOLDER:
+		g_value_set_boolean(value, xaccAccountGetPlaceholder(account));
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -389,6 +398,9 @@ gnc_account_set_property (GObject         *object,
 	case PROP_COMMODITY_SCU:
 	    xaccAccountSetCommoditySCU(account, g_value_get_int(value));
 	    break;
+	case PROP_NON_STD_SCU:
+		xaccAccountSetNonStdSCU(account, g_value_get_boolean(value));
+		break;
 	case PROP_SORT_DIRTY:
 	    gnc_account_set_sort_dirty(account);
 	    break;
@@ -422,6 +434,12 @@ gnc_account_set_property (GObject         *object,
 	case PROP_TAX_SOURCE:
 	    xaccAccountSetTaxUSPayerNameSource(account,
 					       g_value_get_string(value));
+	case PROP_HIDDEN:
+		xaccAccountSetHidden(account, g_value_get_boolean(value));
+		break;
+	case PROP_PLACEHOLDER:
+		xaccAccountSetPlaceholder(account, g_value_get_boolean(value));
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -547,7 +565,7 @@ gnc_account_class_init (AccountClass *klass)
          PROP_NON_STD_SCU,
          g_param_spec_boolean ("non-std-scu",
                                "Non-std SCU",
-                               "TRUE id the account SCU doesn't match "
+                               "TRUE if the account SCU doesn't match "
                                "the commodity SCU.  This indicates a case "
                                "where the two were accidentally set to "
                                "mismatched values in older versions of "
@@ -718,6 +736,16 @@ gnc_account_class_init (AccountClass *klass)
                               "This is an unknown tax related field.",
                               NULL,
                               G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_HIDDEN,
+         g_param_spec_boolean ("hidden",
+                               "Hidden",
+                               "Whether the account should be hidden in the  "
+			       "account tree.",
+                               FALSE,
+                               G_PARAM_READWRITE));
 }
 
 static void

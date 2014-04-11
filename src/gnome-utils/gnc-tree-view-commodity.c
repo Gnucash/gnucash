@@ -823,7 +823,8 @@ gnc_tree_view_commodity_get_selected_commodity (GncTreeViewCommodity *view)
     model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     commodity = gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY(model),
 							&iter);
-    LEAVE("commodity %p (%s)", commodity, gnc_commodity_get_mnemonic (commodity));
+    LEAVE("commodity %p (%s)", commodity,
+          commodity? gnc_commodity_get_mnemonic(commodity) : "");
     return commodity;
 }
 

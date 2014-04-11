@@ -367,7 +367,9 @@ void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent)
   if (parent)
     gncBillTermAddChild(parent, term);
   term->refcount = 0;
-  gncBillTermMakeInvisible (term);
+  if( parent != NULL ) {
+    gncBillTermMakeInvisible (term);
+  }
   gncBillTermCommitEdit (term);
 }
 
@@ -467,19 +469,19 @@ GList * gncBillTermGetTerms (QofBook *book)
   return bi->terms;
 }
 
-const char *gncBillTermGetName (GncBillTerm *term)
+const char *gncBillTermGetName (const GncBillTerm *term)
 {
   if (!term) return NULL;
   return term->name;
 }
 
-const char *gncBillTermGetDescription (GncBillTerm *term)
+const char *gncBillTermGetDescription (const GncBillTerm *term)
 {
   if (!term) return NULL;
   return term->desc;
 }
 
-GncBillTermType gncBillTermGetType (GncBillTerm *term)
+GncBillTermType gncBillTermGetType (const GncBillTerm *term)
 {
   if (!term) return 0;
   return term->type;
@@ -489,37 +491,37 @@ GncBillTermType gncBillTermGetType (GncBillTerm *term)
 AS_STRING_FUNC(GncBillTermType, ENUM_TERMS_TYPE)
 
 static
-const char* qofBillTermGetType (GncBillTerm *term)
+const char* qofBillTermGetType (const GncBillTerm *term)
 {
 	if (!term) { return NULL; }
 	return GncBillTermTypeasString(term->type);
 }
 
-gint gncBillTermGetDueDays (GncBillTerm *term)
+gint gncBillTermGetDueDays (const GncBillTerm *term)
 {
   if (!term) return 0;
   return term->due_days;
 }
 
-gint gncBillTermGetDiscountDays (GncBillTerm *term)
+gint gncBillTermGetDiscountDays (const GncBillTerm *term)
 {
   if (!term) return 0;
   return term->disc_days;
 }
 
-gnc_numeric gncBillTermGetDiscount (GncBillTerm *term)
+gnc_numeric gncBillTermGetDiscount (const GncBillTerm *term)
 {
   if (!term) return gnc_numeric_zero ();
   return term->discount;
 }
 
-gint gncBillTermGetCutoff (GncBillTerm *term)
+gint gncBillTermGetCutoff (const GncBillTerm *term)
 {
   if (!term) return 0;
   return term->cutoff;
 }
 
-static GncBillTerm *gncBillTermCopy (GncBillTerm *term)
+static GncBillTerm *gncBillTermCopy (const GncBillTerm *term)
 {
   GncBillTerm *t;
 
@@ -557,25 +559,25 @@ GncBillTerm *gncBillTermReturnChild (GncBillTerm *term, gboolean make_new)
   return child;
 }
 
-GncBillTerm *gncBillTermGetParent (GncBillTerm *term)
+GncBillTerm *gncBillTermGetParent (const GncBillTerm *term)
 {
   if (!term) return NULL;
   return term->parent;
 }
 
-gint64 gncBillTermGetRefcount (GncBillTerm *term)
+gint64 gncBillTermGetRefcount (const GncBillTerm *term)
 {
   if (!term) return 0;
   return term->refcount;
 }
 
-gboolean gncBillTermGetInvisible (GncBillTerm *term)
+gboolean gncBillTermGetInvisible (const GncBillTerm *term)
 {
   if (!term) return FALSE;
   return term->invisible;
 }
 
-int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b)
+int gncBillTermCompare (const GncBillTerm *a, const GncBillTerm *b)
 {
   int ret;
 
@@ -589,7 +591,7 @@ int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b)
   return safe_strcmp (a->desc, b->desc);
 }
 
-gboolean gncBillTermIsDirty (GncBillTerm *term)
+gboolean gncBillTermIsDirty (const GncBillTerm *term)
 {
   if (!term) return FALSE;
   return qof_instance_get_dirty_flag(term);
@@ -605,7 +607,7 @@ gboolean gncBillTermIsDirty (GncBillTerm *term)
  * XXX explain this, the logic is totally opaque to me.
  */
 static void
-compute_monthyear (GncBillTerm *term, Timespec post_date,
+compute_monthyear (const GncBillTerm *term, Timespec post_date,
                    int *month, int *year)
 {
   int iday, imonth, iyear;
@@ -638,7 +640,7 @@ compute_monthyear (GncBillTerm *term, Timespec post_date,
 /* XXX explain this, the logic is totally opaque to me. */
 
 static Timespec
-compute_time (GncBillTerm *term, Timespec post_date, int days)
+compute_time (const GncBillTerm *term, Timespec post_date, int days)
 {
   Timespec res = post_date;
   int day, month, year;
@@ -659,7 +661,7 @@ compute_time (GncBillTerm *term, Timespec post_date, int days)
 }
 
 Timespec
-gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date)
+gncBillTermComputeDueDate (const GncBillTerm *term, Timespec post_date)
 {
   Timespec res = post_date;
   if (!term) return res;
@@ -668,7 +670,7 @@ gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date)
 }
 
 Timespec
-gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date)
+gncBillTermComputeDiscountDate (const GncBillTerm *term, Timespec post_date)
 {
   Timespec res = post_date;
   if (!term) return res;

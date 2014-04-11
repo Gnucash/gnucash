@@ -33,7 +33,7 @@
 gboolean gncAddressRegister (void);
 
 /** Make a copy of the address, setting the parent to 'new_parent' */
-GncAddress * gncCloneAddress (GncAddress *from, QofInstance *new_parent, QofBook *book);
+GncAddress * gncCloneAddress (const GncAddress *from, QofInstance *new_parent, QofBook *book);
 
 
 #endif /* GNC_ADDRESSP_H_ */

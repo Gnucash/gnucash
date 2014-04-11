@@ -59,7 +59,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
 void gncEmployeeBeginEdit (GncEmployee *employee);
 void gncEmployeeCommitEdit (GncEmployee *employee);
-int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
+int gncEmployeeCompare (const GncEmployee *a, const GncEmployee *b);
 /** @} */
 
 /** @name Set Functions 
@@ -80,16 +80,16 @@ void qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent);
 /** @name Get Functions 
  @{ */
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
-const char * gncEmployeeGetID (GncEmployee *employee);
-const char * gncEmployeeGetUsername (GncEmployee *employee);
-GncAddress * gncEmployeeGetAddr (GncEmployee *employee);
-const char * gncEmployeeGetLanguage (GncEmployee *employee);
-const char * gncEmployeeGetAcl (GncEmployee *employee);
-gnc_numeric gncEmployeeGetWorkday (GncEmployee *employee);
-gnc_numeric gncEmployeeGetRate (GncEmployee *employee);
-gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee);
-gboolean gncEmployeeGetActive (GncEmployee *employee);
-Account * gncEmployeeGetCCard (GncEmployee *employee);
+const char * gncEmployeeGetID (const GncEmployee *employee);
+const char * gncEmployeeGetUsername (const GncEmployee *employee);
+GncAddress * gncEmployeeGetAddr (const GncEmployee *employee);
+const char * gncEmployeeGetLanguage (const GncEmployee *employee);
+const char * gncEmployeeGetAcl (const GncEmployee *employee);
+gnc_numeric gncEmployeeGetWorkday (const GncEmployee *employee);
+gnc_numeric gncEmployeeGetRate (const GncEmployee *employee);
+gnc_commodity * gncEmployeeGetCurrency (const GncEmployee *employee);
+gboolean gncEmployeeGetActive (const GncEmployee *employee);
+Account * gncEmployeeGetCCard (const GncEmployee *employee);
 /** @} */
 
 
@@ -102,7 +102,7 @@ Account * gncEmployeeGetCCard (GncEmployee *employee);
 #define gncEmployeeLookup(book,guid)    \
        QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_EMPLOYEE, GncEmployee)
 
-gboolean gncEmployeeIsDirty (GncEmployee *employee);
+gboolean gncEmployeeIsDirty (const GncEmployee *employee);
 
 #define EMPLOYEE_ID			"id"
 #define EMPLOYEE_USERNAME	"username"

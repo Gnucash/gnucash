@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-tree-model-price.c -- GtkTreeModel implementation to display
  *	prices in a GtkTreeView.
  *
@@ -24,9 +24,15 @@
  */
 
 /*
- * iter->user_data   Type NAMESPACE | COMMODITY | PRICE
- * iter->user_data2  A pointer to the namespace|commodity|item structure
- * iter->user_data3  The index of the item within its parent list
+ * In this model, valid paths take the form "X", "X:Y", or "X:Y:Z", where:
+ *   X is an index into the namespaces list held by the commodity db
+ *   Y is an index into the commodity list for the namespace
+ *   Z is an index into the price list for the commodity
+ *
+ * Iterators are populated with the following private data:
+ *   iter->user_data   Type NAMESPACE | COMMODITY | PRICE
+ *   iter->user_data2  A pointer to the namespace|commodity|item structure
+ *   iter->user_data3  The index of the item within its parent list
  */
 
 #include "config.h"
@@ -59,8 +65,18 @@
  * the null string to be printed by the view.  The removal kicks in
  * immediately after the redraw and causes the blank line to be
  * removed.
+ *
+ * Charles Day: I found that by the time the main loop is reached and
+ * the idle timer goes off, many qof events may have been generated and
+ * handled. In particular, a commodity could be removed, edited, and
+ * re-added by the security editor and all those events would happen
+ * before the timer goes off. This caused a problem where a re-added
+ * commodity would get whacked when the timer went off. I found that
+ * adding a check for pending removals at the beginning of the event
+ * handler fixes that problem and also resolves the race condition.
+ *
  */
-#undef RACE_CONDITION_SOLVED
+#define RACE_CONDITION_SOLVED
 
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -138,7 +154,7 @@ gnc_tree_model_price_get_type (void)
 			0,
 			(GInstanceInitFunc) gnc_tree_model_price_init
 		};
-		
+
 		static const GInterfaceInfo tree_model_info = {
 			(GInterfaceInitFunc) gnc_tree_model_price_tree_model_init,
 			NULL,
@@ -148,7 +164,7 @@ gnc_tree_model_price_get_type (void)
 		gnc_tree_model_price_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
 								    GNC_TREE_MODEL_PRICE_NAME,
 								    &our_info, 0);
-		
+
 		g_type_add_interface_static (gnc_tree_model_price_type,
 					     GTK_TYPE_TREE_MODEL,
 					     &tree_model_info);
@@ -330,7 +346,7 @@ gnc_tree_model_price_get_price (GncTreeModelPrice *model,
 	g_return_val_if_fail (iter != NULL, NULL);
 	g_return_val_if_fail (iter->user_data != NULL, NULL);
 	g_return_val_if_fail (iter->stamp == model->stamp, NULL);
-	
+
 	if (iter->user_data != ITER_IS_PRICE)
 	  return NULL;
 	return (GNCPrice *)iter->user_data2;
@@ -340,10 +356,10 @@ gnc_tree_model_price_get_price (GncTreeModelPrice *model,
 /*        Gnc Tree Model Debugging Utility Function         */
 /************************************************************/
 
-#define debug_path(fn, path) {				\
-    gchar *path_string = gtk_tree_path_to_string(path); \
-    fn("tree path %s", path_string);			\
-    g_free(path_string);				\
+#define debug_path(fn, path) {					\
+    gchar *path_string = gtk_tree_path_to_string(path); 	\
+    fn("tree path %s", path_string? path_string : "(NULL)");	\
+    g_free(path_string);					\
   }
 
 #define ITER_STRING_LEN 256
@@ -373,16 +389,16 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
     switch (GPOINTER_TO_INT(iter->user_data)) {
      case GPOINTER_TO_INT(ITER_IS_NAMESPACE):
       namespace = (gnc_commodity_namespace *) iter->user_data2;
-      snprintf(string, ITER_STRING_LEN, 
+      snprintf(string, ITER_STRING_LEN,
 	       "[stamp:%x data:%d (NAMESPACE), %p (%s), %d]",
 	       iter->stamp, GPOINTER_TO_INT(iter->user_data),
 	       iter->user_data2, gnc_commodity_namespace_get_name (namespace),
 	       GPOINTER_TO_INT(iter->user_data3));
       break;
-    
+
      case GPOINTER_TO_INT(ITER_IS_COMMODITY):
       commodity = (gnc_commodity *) iter->user_data2;
-      snprintf(string, ITER_STRING_LEN, 
+      snprintf(string, ITER_STRING_LEN,
 	       "[stamp:%x data:%d (COMMODITY), %p (%s), %d]",
 	       iter->stamp, GPOINTER_TO_INT(iter->user_data),
 	       iter->user_data2, gnc_commodity_get_mnemonic (commodity),
@@ -392,7 +408,7 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
      case GPOINTER_TO_INT(ITER_IS_PRICE):
       price= (GNCPrice *) iter->user_data2;
       commodity = gnc_price_get_commodity(price);
-      snprintf(string, ITER_STRING_LEN, 
+      snprintf(string, ITER_STRING_LEN,
 	       "[stamp:%x data:%d (PRICE), %p (%s:%s), %d]",
 	       iter->stamp, GPOINTER_TO_INT(iter->user_data),
 	       iter->user_data2, gnc_commodity_get_mnemonic (commodity),
@@ -401,7 +417,7 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
       break;
 
      default:
-      snprintf(string, ITER_STRING_LEN, 
+      snprintf(string, ITER_STRING_LEN,
 	       "[stamp:%x data:%d (UNKNOWN), %p, %d]",
 	       iter->stamp,
 	       GPOINTER_TO_INT(iter->user_data),
@@ -485,18 +501,12 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
 	guint i, depth;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (tree_model), FALSE);
-	
+
 	depth = gtk_tree_path_get_depth (path);
-	ENTER("model %p, iter, %p, path %p (depth %d)", tree_model, iter, path, depth);
+	ENTER("model %p, iter %p, path %p (depth %d)", tree_model, iter, path, depth);
 	debug_path(DEBUG, path);
 
-	model = GNC_TREE_MODEL_PRICE (tree_model);
-	priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-	if (priv->price_db == NULL) {
-	  LEAVE("no price db");
-	  return FALSE;
-	}
-
+        /* Check the path depth. */
 	if (depth == 0) {
 	  LEAVE("depth too small");
 	  return FALSE;
@@ -506,13 +516,26 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
 	  return FALSE;
 	}
 
+        /* Make sure the model has a price db. */
+	model = GNC_TREE_MODEL_PRICE (tree_model);
+	priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
+	if (priv->price_db == NULL) {
+	  LEAVE("no price db");
+	  return FALSE;
+	}
+
+        /* Verify the first part of the path: the namespace. */
 	ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
 	ns_list = gnc_commodity_table_get_namespaces_list(ct);
 	i = gtk_tree_path_get_indices (path)[0];
-	g_return_val_if_fail (i >= 0 && i < g_list_length (ns_list), FALSE);
 	namespace = g_list_nth_data (ns_list, i);
+	if (!namespace) {
+	  LEAVE("invalid path at namespace");
+	  return FALSE;
+        }
 
 	if (depth == 1) {
+          /* Return an iterator for the namespace. */
 	  iter->stamp      = model->stamp;
 	  iter->user_data  = ITER_IS_NAMESPACE;
 	  iter->user_data2 = namespace;
@@ -521,12 +544,17 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
 	  return TRUE;
 	}
 
+        /* Verify the second part of the path: the commodity. */
 	cm_list = gnc_commodity_namespace_get_commodity_list(namespace);
 	i = gtk_tree_path_get_indices (path)[1];
-	g_return_val_if_fail (i >= 0 && i < g_list_length (cm_list), FALSE);
 	commodity = g_list_nth_data (cm_list, i);
+	if (!commodity) {
+	  LEAVE("invalid path at commodity");
+	  return FALSE;
+        }
 
 	if (depth == 2) {
+          /* Return an iterator for the commodity. */
 	  iter->stamp      = model->stamp;
 	  iter->user_data  = ITER_IS_COMMODITY;
 	  iter->user_data2 = commodity;
@@ -535,17 +563,22 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
 	  return TRUE;
 	}
 
+        /* Verify the third part of the path: the price. */
 	price_list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
 	i = gtk_tree_path_get_indices (path)[2];
+	price = g_list_nth_data (price_list, i);
+	gnc_price_list_destroy(price_list);
 	/* There's a race condition here that I can't resolve.
 	 * Comment this check out for now, and we'll handle the
 	 * resulting problem elsewhere. */
 #ifdef RACE_CONDITION_SOLVED
-	g_return_val_if_fail (i >= 0 && i < g_list_length (price_list), FALSE);
+	if (!price) {
+	  LEAVE("invalid path at price");
+	  return FALSE;
+        }
 #endif
-	price = g_list_nth_data (price_list, i);
-	gnc_price_list_destroy(price_list);
 
+        /* Return an iterator for the price. */
 	iter->stamp      = model->stamp;
 	iter->user_data  = ITER_IS_PRICE;
 	iter->user_data2 = price;
@@ -571,26 +604,29 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
 	g_return_val_if_fail (iter != NULL, NULL);
 	g_return_val_if_fail (iter->user_data != NULL, NULL);
 	g_return_val_if_fail (iter->stamp == model->stamp, NULL);
-	
+
+	/* Make sure this model has a price db. */
 	priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 	if (priv->price_db == NULL) {
 	  LEAVE("no price db");
 	  return FALSE;
 	}
 
-	/* Work through the namespace part */
 	if (iter->user_data == ITER_IS_NAMESPACE) {
+	  /* Create a path to the namespace. This is just the index into
+	   * the namespace list, which we already stored in user_data3. */
 	  path = gtk_tree_path_new ();
 	  gtk_tree_path_append_index (path, GPOINTER_TO_INT(iter->user_data3));
 	  debug_path(LEAVE, path);
 	  return path;
 	}
 
+        /* Get the namespaces list. */
 	ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
 	ns_list = gnc_commodity_table_get_namespaces_list(ct);
 
-	/* Work through the commodity part. */
 	if (iter->user_data == ITER_IS_COMMODITY) {
+	  /* Create a path to the commodity. */
 	  commodity = (gnc_commodity*)iter->user_data2;
 	  namespace = gnc_commodity_get_namespace_ds(commodity);
 	  path = gtk_tree_path_new ();
@@ -600,6 +636,7 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
 	  return path;
 	}
 
+	/* Create a path to the price. */
 	commodity = gnc_price_get_commodity((GNCPrice*)iter->user_data2);
 	namespace = gnc_commodity_get_namespace_ds(commodity);
 	cm_list = gnc_commodity_namespace_get_commodity_list(namespace);
@@ -854,7 +891,7 @@ gnc_tree_model_price_iter_children (GtkTreeModel *tree_model,
 	  iter->user_data2 = g_list_nth_data(list, 0);
 	  iter->user_data3 = GINT_TO_POINTER(0);
 	  gnc_price_list_destroy(list);
-	  LEAVE("cm iter %p (%s)", iter, iter_to_string(model, iter));
+	  LEAVE("price iter %p (%s)", iter, iter_to_string(model, iter));
 	  return TRUE;
 	}
 
@@ -941,7 +978,7 @@ gnc_tree_model_price_iter_n_children (GtkTreeModel *tree_model,
 	  list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
 	  n = g_list_length(list);
 	  gnc_price_list_destroy(list);
-	  LEAVE("cm list length %d", n);
+	  LEAVE("price list length %d", n);
 	  return n;
 	}
 
@@ -961,13 +998,13 @@ gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
 	gnc_commodity_namespace *namespace;
 	gnc_commodity *commodity;
 	GList *list;
-	
+
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (tree_model), FALSE);
 	g_return_val_if_fail (iter != NULL, FALSE);
 
 	model = GNC_TREE_MODEL_PRICE (tree_model);
-	ENTER("model %p, iter %p, parent %p (%s)",
-	      tree_model, iter, parent, iter_to_string(model, parent));
+	ENTER("model %p, iter %p, parent %p (%s), n %d",
+	      tree_model, iter, parent, iter_to_string(model, parent), n);
 
 	priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 	if (parent == NULL) {
@@ -995,15 +1032,15 @@ gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
 	}
 
 	if (parent->user_data == ITER_IS_COMMODITY) {
-	  commodity = (gnc_commodity *)iter->user_data2;
+	  commodity = (gnc_commodity *)parent->user_data2;
 	  list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
 
 	  iter->stamp      = model->stamp;
-	  iter->user_data  = ITER_IS_COMMODITY;
+	  iter->user_data  = ITER_IS_PRICE;
 	  iter->user_data2 = g_list_nth_data(list, n);
 	  iter->user_data3 = GINT_TO_POINTER(n);
 	  gnc_price_list_destroy(list);
-	  LEAVE("cm iter %p (%s)", iter, iter_to_string(model, iter));
+	  LEAVE("price iter %p (%s)", iter, iter_to_string(model, iter));
 	  return iter->user_data2 != NULL;
 	}
 
@@ -1023,7 +1060,7 @@ gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
 	gnc_commodity * commodity;
 	gnc_commodity_namespace *namespace;
 	GList *list;
-	
+
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (tree_model), FALSE);
 	g_return_val_if_fail (iter != NULL, FALSE);
 	g_return_val_if_fail (child != NULL, FALSE);
@@ -1059,7 +1096,7 @@ gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
 	iter->user_data  = ITER_IS_COMMODITY;
 	iter->user_data2 = commodity;
 	iter->user_data3 = GINT_TO_POINTER(g_list_index(list, commodity));
-	LEAVE("ns iter %p (%s)", iter, iter_to_string(model, iter));
+	LEAVE("cm iter %p (%s)", iter, iter_to_string(model, iter));
 	return TRUE;
 }
 
@@ -1081,7 +1118,7 @@ gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
 	gnc_commodity *commodity;
 	GList *list;
 	gint n;
-	
+
 	ENTER("model %p, price %p, iter %p", model, price, iter);
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (model), FALSE);
 	g_return_val_if_fail ((price != NULL), FALSE);
@@ -1161,7 +1198,7 @@ gnc_tree_model_price_get_iter_from_commodity (GncTreeModelPrice *model,
 	gnc_commodity_namespace *namespace;
 	GList *list;
 	gint n;
-	
+
 	ENTER("model %p, commodity %p, iter %p", model, commodity, iter);
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (model), FALSE);
 	g_return_val_if_fail ((commodity != NULL), FALSE);
@@ -1239,7 +1276,7 @@ gnc_tree_model_price_get_iter_from_namespace (GncTreeModelPrice *model,
 	gnc_commodity_table *ct;
 	GList *list;
 	gint n;
-	
+
 	ENTER("model %p, namespace %p, iter %p", model, namespace, iter);
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (model), FALSE);
 	g_return_val_if_fail ((namespace != NULL), FALSE);
@@ -1306,73 +1343,134 @@ typedef struct _remove_data {
 
 static GSList *pending_removals = NULL;
 
-/** This function performs common updating to the model after an
- *  price has been added or removed.  The parent entry needs to be
- *  tapped on the shoulder so that it can correctly update the
- *  disclosure triangle (first added child/last removed child) or
- *  possibly rebuild its child list of that level of accounts is
- *  visible.
+/** This function performs updates the model when a row is being added.
+ *  The immediate parent needs to be tapped on the shoulder so that it
+ *  can correctly update the disclosure triangle (if this is its first
+ *  child.)
  *
  *  @internal
  *
- *  @param model The price tree model containing the price
- *  that has been added or deleted.
+ *  @param model The price tree model.
  *
- *  @param path The path to the newly added item, or the just removed
- *  item.
+ *  @param iter The iterator of the new row.
  */
 static void
-gnc_tree_model_price_path_added (GncTreeModelPrice *model,
-				 GtkTreeIter *iter)
+gnc_tree_model_price_row_add (GncTreeModelPrice *model,
+                              GtkTreeIter *iter)
 {
   GtkTreePath *path;
   GtkTreeModel *tree_model;
   GtkTreeIter tmp_iter;
+  gint i;
 
   ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(model, iter));
+
+  /* We're adding a row, so the lists on which this model is based have
+   * changed. Since existing iterators (except the one just passed in)
+   * are all based on old indexes into those lists, we need to invalidate
+   * them, which we can do by changing the model's stamp. */
+  do {
+    model->stamp++;
+  } while (model->stamp == 0);
+  iter->stamp = model->stamp;
+
+  /* Tag the new row as inserted. */
   tree_model = GTK_TREE_MODEL(model);
   path = gnc_tree_model_price_get_path (tree_model, iter);
-
-  /* Tag the new item as inserted. */
   gtk_tree_model_row_inserted (tree_model, path, iter);
 
-  /*  */
-  gtk_tree_path_up(path);
-  while (gtk_tree_path_get_depth(path) != 0) {
-      if (gtk_tree_model_get_iter(tree_model, &tmp_iter, path)) {
-          gtk_tree_model_row_changed(tree_model, path, &tmp_iter);
-          if (gtk_tree_model_iter_n_children(tree_model, &tmp_iter) == 1) {
-              gtk_tree_model_row_has_child_toggled(tree_model, path, &tmp_iter);
-          }
-      }
-      gtk_tree_path_up(path);
+  /* Inform all ancestors. */
+  if (gtk_tree_path_up(path) &&
+      gtk_tree_path_get_depth(path) > 0 &&
+      gtk_tree_model_get_iter(tree_model, &tmp_iter, path)) {
+    /* Signal the change to the parent. */
+    gtk_tree_model_row_changed(tree_model, path, &tmp_iter);
+
+    /* Is this the parent's first child? */
+    if (gtk_tree_model_iter_n_children(tree_model, &tmp_iter) == 1)
+        gtk_tree_model_row_has_child_toggled(tree_model, path, &tmp_iter);
+
+    /* Signal any other ancestors. */
+    while (gtk_tree_path_up(path) &&
+           gtk_tree_path_get_depth(path) > 0 &&
+           gtk_tree_model_get_iter(tree_model, &tmp_iter, path)) {
+      gtk_tree_model_row_changed(tree_model, path, &tmp_iter);
+    }
   }
   gtk_tree_path_free(path);
 
-  do {
-    model->stamp++;
-  } while (model->stamp == 0);
+  /* If the new row already has children, signal that so the expander
+   * can be shown. This can happen, for example, if a namespace or
+   * commodity is changed in another place (like the Security Editor)
+   * and gets removed and then re-added to the commodity db. */
+  if (gnc_tree_model_price_iter_has_child(tree_model, iter))
+  {
+    path = gnc_tree_model_price_get_path(tree_model, iter);
+    gtk_tree_model_row_has_child_toggled(tree_model, path, iter);
+    gtk_tree_path_free(path);
+  }
+  
   LEAVE(" ");
 }
 
+/** This function updates the model when a row is being deleted.
+ *  The immediate parent needs to be tapped on the shoulder so that it
+ *  can correctly update the disclosure triangle (if this was its last
+ *  child.)
+ *
+ *  @internal
+ *
+ *  @param model The price tree model that is losing a row.
+ *
+ *  @param path The path of the row being removed.
+ */
 static void
-gnc_tree_model_price_path_deleted (GncTreeModelPrice *model,
-				   GtkTreePath *path)
+gnc_tree_model_price_row_delete (GncTreeModelPrice *model,
+                                 GtkTreePath *path)
 {
+  GtkTreeModel *tree_model;
   GtkTreeIter iter;
 
-  debug_path(ENTER, path);
-  while (gtk_tree_path_up(path) && (gtk_tree_path_get_depth(path) > 0)) {
-    debug_path(DEBUG, path);
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
-      DEBUG("iter %s", iter_to_string(model, &iter));
-      gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-    }
-  }
+  g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
+  g_return_if_fail(path);
 
+  debug_path(ENTER, path);
+
+  tree_model = GTK_TREE_MODEL(model);
+
+  /* We're removing a row, so the lists on which this model is based have
+   * changed. Since existing iterators are all based on old indexes into
+   * those lists, we need to invalidate them, which we can do by changing
+   * the model's stamp. */
   do {
     model->stamp++;
   } while (model->stamp == 0);
+
+  /* Signal that the path has been deleted. */
+  gtk_tree_model_row_deleted(tree_model, path);
+
+  /* Issue any appropriate signals to ancestors. */
+  if (gtk_tree_path_up(path) &&
+      gtk_tree_path_get_depth(path) > 0 &&
+      gtk_tree_model_get_iter(tree_model, &iter, path)) {
+    DEBUG("iter %s", iter_to_string(model, &iter));
+
+    /* Signal the change to the parent. */
+    gtk_tree_model_row_changed(tree_model, path, &iter);
+
+    /* Was this the parent's only child? */
+    if (!gtk_tree_model_iter_has_child(tree_model, &iter))
+        gtk_tree_model_row_has_child_toggled(tree_model, path, &iter);
+
+    /* Signal any other ancestors. */
+    while (gtk_tree_path_up(path) &&
+           gtk_tree_path_get_depth(path) > 0 &&
+           gtk_tree_model_get_iter(tree_model, &iter, path)) {
+      DEBUG("iter %s", iter_to_string(model, &iter));
+      gtk_tree_model_row_changed(tree_model, path, &iter);
+    }
+  }
+
   LEAVE(" ");
 }
 
@@ -1396,21 +1494,28 @@ gnc_tree_model_price_path_deleted (GncTreeModelPrice *model,
 static gboolean
 gnc_tree_model_price_do_deletions (gpointer unused)
 {
-  GSList *iter, *next = NULL;
-  remove_data *data;
+  ENTER(" ");
 
-  for (iter = pending_removals; iter != NULL; iter = next) {
-    next = g_slist_next(iter);
-    data = iter->data;
-    pending_removals = g_slist_delete_link (pending_removals, iter);
+  /* Go through the list of paths needing removal. */
+  while (pending_removals)
+  {
+    remove_data *data = pending_removals->data;
+    pending_removals = g_slist_delete_link(pending_removals, pending_removals);
 
-    gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
-    gnc_tree_model_price_path_deleted (data->model, data->path);
-    gtk_tree_path_free(data->path);
-    g_free(data);
+    if (data)
+    {
+      debug_path(DEBUG, data->path);
+
+      /* Remove the path. */
+      gnc_tree_model_price_row_delete(data->model, data->path);
+
+      gtk_tree_path_free(data->path);
+      g_free(data);
+    }
   }
 
-  /* Remove me */
+  LEAVE(" ");
+  /* Don't call me again. */
   return FALSE;
 }
 
@@ -1424,13 +1529,17 @@ gnc_tree_model_price_do_deletions (gpointer unused)
  *
  *  @internal
  *
- *  @warning There is a "Catch 22" situation here.
- *  gtk_tree_model_row_deleted() can't be called until after the item
- *  has been deleted from the real model (which is the engine's
- *  price table for us), but once the price has been deleted
+ *  @warning There is a "Catch 22" situation here. The REMOVE event
+ *  indicates that a namespace, commodity, or price is *about* to be
+ *  removed. But we can't actually delete the row by calling
+ *  gtk_tree_model_row_deleted() until after the item has *actually*
+ *  been removed from the real model (which is the engine's commodity
+ *  and price db's for us). But once the item has been deleted
  *  from the engine we have no way to determine the path to pass to
- *  row_deleted().  This is a PITA, but the only other choice is to
- *  have this model mirror the engine's price table instead of
+ *  row_deleted().  So we will save the path now, then call a function
+ *  to delete the row when we receive the next event or we're idle
+ *  (whichever comes first.) This is a PITA, but the only other choice
+ *  is to have this model mirror the engine's price table instead of
  *  referencing it directly.
  *
  *  @param entity The affected item.
@@ -1457,6 +1566,10 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
 	ENTER("entity %p, event %d, model %p, event data %p",
 	      entity, event_type, user_data, event_data);
 	model = (GncTreeModelPrice *)user_data;
+
+        /* Do deletions some are pending. */
+        if (pending_removals)
+          gnc_tree_model_price_do_deletions(NULL);
 
 	/* hard failures */
 	g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
@@ -1503,7 +1616,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
 	 case QOF_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("add %s", name);
-	  gnc_tree_model_price_path_added (model, &iter);
+	  gnc_tree_model_price_row_add (model, &iter);
 	  break;
 
 	 case QOF_EVENT_REMOVE:
@@ -1521,6 +1634,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
 	  pending_removals = g_slist_append (pending_removals, data);
 	  g_idle_add_full(G_PRIORITY_HIGH_IDLE,
 			  gnc_tree_model_price_do_deletions, NULL, NULL);
+
 	  LEAVE(" ");
 	  return;
 

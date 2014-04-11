@@ -299,67 +299,67 @@ qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent)
 
 /* ============================================================== */
 /* Get Functions */
-const char * gncEmployeeGetID (GncEmployee *employee)
+const char * gncEmployeeGetID (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->id;
 }
 
-const char * gncEmployeeGetUsername (GncEmployee *employee)
+const char * gncEmployeeGetUsername (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->username;
 }
 
-GncAddress * gncEmployeeGetAddr (GncEmployee *employee)
+GncAddress * gncEmployeeGetAddr (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->addr;
 }
 
-const char * gncEmployeeGetLanguage (GncEmployee *employee)
+const char * gncEmployeeGetLanguage (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->language;
 }
 
-const char * gncEmployeeGetAcl (GncEmployee *employee)
+const char * gncEmployeeGetAcl (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->acl;
 }
 
-gnc_numeric gncEmployeeGetWorkday (GncEmployee *employee)
+gnc_numeric gncEmployeeGetWorkday (const GncEmployee *employee)
 {
   if (!employee) return gnc_numeric_zero();
   return employee->workday;
 }
 
-gnc_numeric gncEmployeeGetRate (GncEmployee *employee)
+gnc_numeric gncEmployeeGetRate (const GncEmployee *employee)
 {
   if (!employee) return gnc_numeric_zero();
   return employee->rate;
 }
 
-gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee)
+gnc_commodity * gncEmployeeGetCurrency (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->currency;
 }
 
-gboolean gncEmployeeGetActive (GncEmployee *employee)
+gboolean gncEmployeeGetActive (const GncEmployee *employee)
 {
   if (!employee) return FALSE;
   return employee->active;
 }
 
-Account * gncEmployeeGetCCard (GncEmployee *employee)
+Account * gncEmployeeGetCCard (const GncEmployee *employee)
 {
   if (!employee) return NULL;
   return employee->ccard_acc;
 }
 
-gboolean gncEmployeeIsDirty (GncEmployee *employee)
+gboolean gncEmployeeIsDirty (const GncEmployee *employee)
 {
   if (!employee) return FALSE;
   return (qof_instance_get_dirty_flag(employee)
@@ -399,7 +399,7 @@ void gncEmployeeCommitEdit (GncEmployee *employee)
 /* ============================================================== */
 /* Other functions */
 
-int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
+int gncEmployeeCompare (const GncEmployee *a, const GncEmployee *b)
 {
   if (!a && !b) return 0;
   if (!a && b) return 1;

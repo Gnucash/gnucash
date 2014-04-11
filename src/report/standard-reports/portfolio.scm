@@ -127,8 +127,16 @@
                  (units (cadr (unit-collector 'getpair commodity #f)))
 
                  (price-info (price-fn commodity to-date))
-                 
-		 (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency)))
+                 (price (car price-info))
+                 (price-monetary (if price
+                                     (gnc:make-gnc-monetary
+                                      (gnc-price-get-currency price)
+                                      (gnc-price-get-value price))
+                                     (gnc:make-gnc-monetary
+                                      currency
+                                      (cdr price-info))))
+                 (value (exchange-fn (gnc:make-gnc-monetary commodity units)
+                                     currency)))
 
 	    (set! work-done (+ 1 work-done))
 	    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
@@ -145,10 +153,7 @@
 			       (xaccPrintAmount units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
-			       (gnc:html-price-anchor
-				(car price-info)
-				(gnc:make-gnc-monetary (gnc-price-get-currency (car price-info))
-						       (gnc-price-get-value (car price-info)))))
+                               (gnc:html-price-anchor price price-monetary))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)))
 		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc-numeric-to-double units)))

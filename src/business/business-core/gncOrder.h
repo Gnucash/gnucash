@@ -78,22 +78,22 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 /* Get Functions */
 
-const char * gncOrderGetID (GncOrder *order);
+const char * gncOrderGetID (const GncOrder *order);
 GncOwner * gncOrderGetOwner (GncOrder *order);
-Timespec gncOrderGetDateOpened (GncOrder *order);
-Timespec gncOrderGetDateClosed (GncOrder *order);
-const char * gncOrderGetNotes (GncOrder *order);
-const char * gncOrderGetReference (GncOrder *order);
-gboolean gncOrderGetActive (GncOrder *order);
+Timespec gncOrderGetDateOpened (const GncOrder *order);
+Timespec gncOrderGetDateClosed (const GncOrder *order);
+const char * gncOrderGetNotes (const GncOrder *order);
+const char * gncOrderGetReference (const GncOrder *order);
+gboolean gncOrderGetActive (const GncOrder *order);
 
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
-int gncOrderCompare (GncOrder *a, GncOrder *b);
+int gncOrderCompare (const GncOrder *a, const GncOrder *b);
 
-gboolean gncOrderIsClosed (GncOrder *order);
+gboolean gncOrderIsClosed (const GncOrder *order);
 
 /** Return a pointer to the instance gncOrder that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 

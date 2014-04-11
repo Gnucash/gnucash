@@ -61,7 +61,7 @@ gnc_collection_get_template_root( const QofCollection *col )
 }
 
 Account *
-gnc_book_get_template_root( QofBook *book )
+gnc_book_get_template_root( const QofBook *book )
 {
   QofCollection *col;
   if (!book) return NULL;
@@ -113,12 +113,12 @@ sxtg_book_begin (QofBook *book)
 {
   Account *root;
 
-  root = xaccMallocAccount(book);
-  xaccAccountBeginEdit(root);
-  xaccAccountSetType(root, ACCT_TYPE_ROOT);
-  xaccAccountCommitEdit(root);
-  gnc_book_set_template_root (book, root);
-}
+  	root = xaccMallocAccount(book);
+  	xaccAccountBeginEdit(root);
+  	xaccAccountSetType(root, ACCT_TYPE_ROOT);
+  	xaccAccountCommitEdit(root);
+  	gnc_book_set_template_root (book, root);
+  }
 
 static void 
 sxtg_book_end (QofBook *book)

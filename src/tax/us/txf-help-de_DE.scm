@@ -24,6 +24,7 @@
     (K48 . "Steuerfreie Umsätze ohne Vorsteuerabzug: Umsätze nach § 4 Nr. 8 bis 28 UStG (Bemessungsgrundlage)")
 
     (K51 . "Steuerpflichtige Umsätze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 16 v.H. (Bemessungsgrundlage)")
+    (K81 . "Steuerpflichtige Umsätze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 19 v.H. (Bemessungsgrundlage)")
     (K86 . "Steuerpflichtige Umsätze (Lieferungen und sonstige Leistungen einschl. unentgeltlicher Wertabgaben) zum Steuersatz von 7 v.H. (Bemessungsgrundlage)")
     (K35 . "Umsätze, die anderen Steuersätzen unterliegen (Bemessungsgrundlage)")
     (K36 . "Umsätze, die anderen Steuersätzen unterliegen (Steuer)")
@@ -31,8 +32,9 @@
     (K76 . "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Sägewerkserzeugnisse, Getränke und alkohol. Flüssigkeiten, z.B. Wein) (Bemessungsgrundlage)")
     (K80 . "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Sägewerkserzeugnisse, Getränke und alkohol. Flüssigkeiten, z.B. Wein) (Steuer)")
 
+    (K89 . "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 19 v.H. (Bemessungsgrundlage)")
     (K91 . "Steuerfreie innergemeinschaftliche Erwerbe: Erwerbe nach § 4b UStG (Bemessungsgrundlage)")
-
+    (K93 . "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 7 v.H. (Bemessungsgrundlage)")
 
     (K66 . "Vorsteuerbeträge aus Rechnungen von anderen Unternehmern (§ 15 Abs. 1 Satz 1 Nr. 1 UStG), aus Leistungen im Sinne des § 13a Abs. 1 Nr. 6 UStG (§ 15 Abs. 1 Satz 1 Nr. 5 UStG) und aus innergemeinschaftlichen Dreiecksgeschäften (§ 25b Abs. 5 UStG)")
     ))
