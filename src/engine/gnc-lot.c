@@ -29,9 +29,10 @@
  * src/doc/lots.txt for implmentation overview.
  *
  * XXX Lots are not currently treated in a correct transactional
- * manner.  There's no dirty flag, and, at this time, the backend
- * is not signalled about the fact that a lot has changed.  This
- * is true both in the Scrub2.c and in src/gnome/lot-viewer.c
+ * manner.  There's now a per-Lot dirty flag in the QofInstance, but
+ * this code still needs to emit the correct signals when a lot has
+ * changed.  This is true both in the Scrub2.c and in
+ * src/gnome/lot-viewer.c
  *
  * HISTORY:
  * Created by Linas Vepstas May 2002
@@ -41,6 +42,7 @@
 #include "Account.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "cap-gains.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 
@@ -52,17 +54,13 @@ static QofLogModule log_module = GNC_MOD_LOT;
 static void
 gnc_lot_init (GNCLot *lot, QofBook *book)
 {
-   QofCollection *col;
    ENTER ("(lot=%p, book=%p)", lot, book);
-   lot->kvp_data = kvp_frame_new();
    lot->account = NULL;
    lot->splits = NULL;
    lot->is_closed = -1;
    lot->marker = 0;
   
-   lot->book = book;
-   col = qof_book_get_collection (book, GNC_ID_LOT);
-   qof_entity_init (&lot->entity, GNC_ID_LOT, col);
+   qof_instance_init(&lot->inst, GNC_ID_LOT, book);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
@@ -74,7 +72,7 @@ gnc_lot_new (QofBook *book)
 
    lot = g_new (GNCLot, 1);
    gnc_lot_init (lot, book);
-   gnc_engine_gen_event (&lot->entity, GNC_EVENT_CREATE);
+   qof_event_gen (&lot->inst.entity, QOF_EVENT_CREATE, NULL);
    return lot;
 }
 
@@ -85,9 +83,8 @@ gnc_lot_destroy (GNCLot *lot)
    if (!lot) return;
    
    ENTER ("(lot=%p)", lot);
-   gnc_engine_gen_event (&lot->entity, GNC_EVENT_DESTROY);
+   qof_event_gen (&lot->inst.entity, QOF_EVENT_DESTROY, NULL);
 
-   qof_entity_release (&lot->entity);
    
    for (node=lot->splits; node; node=node->next)
    {
@@ -96,13 +93,32 @@ gnc_lot_destroy (GNCLot *lot)
    }
    g_list_free (lot->splits);
    
-   kvp_frame_delete (lot->kvp_data);
-   lot->kvp_data = NULL;
-   
    lot->account = NULL;
    lot->is_closed = TRUE;
-
+   qof_instance_release (&lot->inst);
    g_free (lot);
+}
+
+/* ============================================================= */
+
+void
+gnc_lot_begin_edit (GNCLot *lot)
+{
+  qof_begin_edit(&lot->inst);
+}
+
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+void
+gnc_lot_commit_edit (GNCLot *lot)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(lot))) return;
+  qof_commit_edit_part2 (&lot->inst, commit_err, noop, noop);
 }
 
 /* ============================================================= */
@@ -119,8 +135,7 @@ gnc_lot_lookup (const GUID *guid, QofBook *book)
 QofBook *
 gnc_lot_get_book (GNCLot *lot)
 {
-  if (!lot) return NULL;
-  return lot->book;
+    return qof_instance_get_book(QOF_INSTANCE(lot));
 }
 
 /* ============================================================= */
@@ -143,8 +158,7 @@ gnc_lot_get_account (GNCLot *lot)
 KvpFrame *
 gnc_lot_get_slots (GNCLot *lot)
 {
-   if (!lot) return NULL;
-   return lot->kvp_data;
+    return qof_instance_get_slots(QOF_INSTANCE(lot));
 }
 
 SplitList *
@@ -167,28 +181,34 @@ const char *
 gnc_lot_get_title (GNCLot *lot)
 {
    if (!lot) return NULL;
-   return kvp_frame_get_string (lot->kvp_data, "/title");
+   return kvp_frame_get_string (lot->inst.kvp_data, "/title");
 }
 
 const char * 
 gnc_lot_get_notes (GNCLot *lot)
 {
    if (!lot) return NULL;
-   return kvp_frame_get_string (lot->kvp_data, "/notes");
+   return kvp_frame_get_string (lot->inst.kvp_data, "/notes");
 }
 
 void
 gnc_lot_set_title (GNCLot *lot, const char *str)
 {
    if (!lot) return;
-   return kvp_frame_set_str (lot->kvp_data, "/title", str);
+   qof_begin_edit(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
+   kvp_frame_set_str (lot->inst.kvp_data, "/title", str);
+   gnc_lot_commit_edit(lot);
 }
 
 void
 gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
    if (!lot) return;
-   return kvp_frame_set_str (lot->kvp_data, "/notes", str);
+   gnc_lot_begin_edit(lot);
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
+   kvp_frame_set_str (lot->inst.kvp_data, "/notes", str);
+   gnc_lot_commit_edit(lot);
 }
 
 /* ============================================================= */
@@ -233,6 +253,50 @@ gnc_lot_get_balance (GNCLot *lot)
 /* ============================================================= */
 
 void
+gnc_lot_get_balance_before (GNCLot *lot, Split *split,
+                            gnc_numeric *amount, gnc_numeric *value)
+{
+   GList *node;
+   gnc_numeric zero = gnc_numeric_zero();
+   gnc_numeric amt = zero;
+   gnc_numeric val = zero;
+   
+   if (lot && lot->splits)
+   {
+      Transaction *ta, *tb;
+      Split *target;
+      /* If this is a gains split, find the source of the gains and use
+         its transaction for the comparison.  Gains splits are in separate
+         transactions that may sort after non-gains transactions.  */
+      target = xaccSplitGetGainsSourceSplit (split);
+      if (target == NULL)
+         target = split;
+      tb = xaccSplitGetParent (target);
+      for (node = lot->splits; node; node = node->next)
+      {
+         Split *s = node->data;
+         Split *source = xaccSplitGetGainsSourceSplit (s);
+         if (source == NULL)
+            source = s;
+         ta = xaccSplitGetParent (source);
+         if ((ta == tb && source != target) ||
+             xaccTransOrder (ta, tb) < 0)
+         {
+            gnc_numeric tmpval = xaccSplitGetAmount (s);
+            amt = gnc_numeric_add_fixed (amt, tmpval);
+            tmpval = xaccSplitGetValue (s);
+            val = gnc_numeric_add_fixed (val, tmpval);
+         }
+      }
+   }
+
+   *amount = amt;
+   *value = val;
+}
+               
+/* ============================================================= */
+
+void
 gnc_lot_add_split (GNCLot *lot, Split *split)
 {
    Account * acc;
@@ -242,7 +306,9 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
         gnc_lot_get_title (lot), 
         gnc_num_dbg_to_string (split->amount),
         gnc_num_dbg_to_string (split->value));
+   gnc_lot_begin_edit(lot);
    acc = xaccSplitGetAccount (split);
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
    if (NULL == lot->account)
    {
       xaccAccountInsertLot (acc, lot);
@@ -253,10 +319,14 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
             "be added to this lot!\n"
             "\tlot account=\'%s\', split account=\'%s\'\n",
             xaccAccountGetName(lot->account), xaccAccountGetName (acc));
+      gnc_lot_commit_edit(lot);
       return;
    }
 
-   if (lot == split->lot) return; /* handle not-uncommon no-op */
+   if (lot == split->lot) {
+        gnc_lot_commit_edit(lot);
+	return; /* handle not-uncommon no-op */
+   }
    if (split->lot)
    {
       gnc_lot_remove_split (split->lot, split);
@@ -267,8 +337,9 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
 
     /* for recomputation of is-closed */
    lot->is_closed = -1;
+   gnc_lot_commit_edit(lot);
 
-   gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
+   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -277,6 +348,8 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    if (!lot || !split) return;
 
    ENTER ("(lot=%p, split=%p)", lot, split);
+   gnc_lot_begin_edit(lot);
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
    lot->is_closed = -1;   /* force an is-closed computation */
@@ -286,7 +359,8 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
-   gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
+   gnc_lot_commit_edit(lot);
+   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -299,7 +373,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
    Timespec ts;
    Split *earliest = NULL;
 
-   ts.tv_sec = ((long long) LONG_MAX);
+   ts.tv_sec = ((long long) ULONG_MAX);
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 
@@ -328,7 +402,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
    Timespec ts;
    Split *latest = NULL;
 
-   ts.tv_sec = -((long long) LONG_MAX);
+   ts.tv_sec = 0;
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 
@@ -352,40 +426,44 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 /* ============================================================= */
 
-/* Should the object description be enabled?. */
-/*
 static QofObject gncLotDesc =
 {
-interface_version:  QOF_OBJECT_VERSION,
-e_type:             GNC_ID_LOT,
-type_label:         "Lot",
-create:             (gpointer)gnc_lot_new,
-book_begin:         NULL,
-book_end:           NULL,
-is_dirty:           NULL,
-mark_clean:         NULL,
-foreach:            qof_collection_foreach,
-printable:          NULL,
-version_cmp:        (int (*)(gpointer,gpointer))qof_instance_version_cmp,
+    interface_version:  QOF_OBJECT_VERSION,
+    e_type:             GNC_ID_LOT,
+    type_label:         "Lot",
+    create:             (gpointer)gnc_lot_new,
+    book_begin:         NULL,
+    book_end:           NULL,
+    is_dirty:           qof_collection_is_dirty,
+    mark_clean:         qof_collection_mark_clean,
+    foreach:            qof_collection_foreach,
+    printable:          NULL,
+    version_cmp:        (int (*)(gpointer,gpointer))qof_instance_version_cmp,
 };
-*/
+
 
 gboolean gnc_lot_register (void)
 {
-  static const QofParam params[] = {
-   { LOT_TITLE, QOF_TYPE_STRING, (QofAccessFunc)gnc_lot_get_title, (QofSetterFunc)gnc_lot_set_title },
-   { LOT_NOTES,	QOF_TYPE_STRING, (QofAccessFunc)gnc_lot_get_notes, (QofSetterFunc)gnc_lot_set_notes },
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
-    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
-    { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
-    { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance, NULL },
-    { NULL },
-  };
+    static const QofParam params[] = {
+        { LOT_TITLE, QOF_TYPE_STRING, 
+          (QofAccessFunc) gnc_lot_get_title, 
+          (QofSetterFunc) gnc_lot_set_title },
+        { LOT_NOTES, QOF_TYPE_STRING, 
+          (QofAccessFunc) gnc_lot_get_notes, 
+          (QofSetterFunc) gnc_lot_set_notes },
+        { QOF_PARAM_GUID, QOF_TYPE_GUID, 
+          (QofAccessFunc) qof_entity_get_guid, NULL },
+        { QOF_PARAM_BOOK, QOF_ID_BOOK, 
+          (QofAccessFunc) gnc_lot_get_book, NULL },
+        { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, 
+          (QofAccessFunc) gnc_lot_is_closed, NULL },
+        { LOT_BALANCE, QOF_TYPE_NUMERIC, 
+          (QofAccessFunc) gnc_lot_get_balance, NULL },
+        { NULL },
+    };
 
-  qof_class_register (GNC_ID_LOT, NULL, params);
-  return TRUE;
-//  return qof_object_register(&gncLotDesc);
-
+    qof_class_register (GNC_ID_LOT, NULL, params);
+    return qof_object_register(&gncLotDesc);
 }
 
 /* ========================== END OF FILE ========================= */

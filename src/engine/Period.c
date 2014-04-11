@@ -100,8 +100,8 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* move the split into the new book ... */
-      s->book = book;
-      qof_collection_insert_entity(col, &s->entity);
+      s->inst.book = book;
+      qof_collection_insert_entity(col, &s->inst.entity);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -118,7 +118,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (newtrans);
-   gnc_engine_gen_event (&newtrans->inst.entity, GNC_EVENT_CREATE);
+   qof_event_gen (&newtrans->inst.entity, QOF_EVENT_CREATE, NULL);
    LEAVE ("trans=%p %s", trans, trans->description);
 }
 
@@ -161,10 +161,10 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* Move the splits over (only if they haven't already been moved). */
-      if (s->book != book)
+      if (s->inst.book != book)
       {
-         s->book = book;
-         qof_collection_insert_entity (col, &s->entity);
+         s->inst.book = book;
+         qof_collection_insert_entity (col, &s->inst.entity);
       }
 
       /* Find the twin account, and re-parent to that. */
@@ -186,7 +186,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (trans);
-   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
+   qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
    LEAVE ("trans=%p %s", trans, trans->description);
 }
 
@@ -216,9 +216,10 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    if (!lot || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (lot->book == book) return;
+   if (gnc_lot_get_book(lot) == book) return;
 
-   if (qof_book_get_backend(book) != qof_book_get_backend(lot->book))
+   if (qof_book_get_backend(book) != 
+       qof_book_get_backend(gnc_lot_get_book(lot)))
    {
       gnc_book_insert_lot_clobber (book, lot);
       return;
@@ -226,18 +227,18 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    ENTER ("lot=%p", lot);
 
    col = qof_book_get_collection (book, GNC_ID_LOT);
-   lot->book = book;
-   qof_collection_insert_entity (col, &lot->entity);
+   lot->inst.book = book;
+   qof_collection_insert_entity (col, &lot->inst.entity);
 
    /* Move the splits over (only if they haven't already been moved). */
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
    for (snode = lot->splits; snode; snode=snode->next)
    {
       Split *s = snode->data;
-      if (s->book != book)
+      if (s->inst.book != book)
       {
-         s->book = book;
-         qof_collection_insert_entity (col, &s->entity);
+         s->inst.book = book;
+         qof_collection_insert_entity (col, &s->inst.entity);
       }
    }
 

@@ -18,8 +18,8 @@
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
 	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
+	<menuitem name="EditRenumberSubaccounts" action="EditRenumberSubaccountsAction"/>
       </placeholder>
-      <menuitem name="EditAccountViewOptions" action="EditAccountViewOptionsAction"/>
     </menu>
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
@@ -27,7 +27,7 @@
 	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
 	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
 	<menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
-	<menuitem name="ActionLots" action="ActionsLotsAction"/>
+	<!-- menuitem name="ActionLots" action="ActionsLotsAction"/ -->
 	<separator name="ActionsSep2"/>
 	<menu name="ScrubMenu" action="ScrubMenuAction">
 	  <menuitem name="Scrub" action="ScrubAction"/>
@@ -39,9 +39,6 @@
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">
-    <placeholder name="PopupPlaceholder1">
-      <menuitem name="PopupOptions" action="PopupOptionsAction"/>
-    </placeholder>
     <placeholder name="PopupPlaceholder2">
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
@@ -50,7 +47,7 @@
       <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
       <menuitem name="AccountTransfer" action="ActionsTransferAction"/>
       <menuitem name="AccountStockSplit" action="ActionsStockSplitAction"/>
-      <menuitem name="AccountLots" action="ActionsLotsAction"/>
+      <!-- menuitem name="AccountLots" action="ActionsLotsAction"/ -->
       <separator name="AccountSep2"/>
       <menuitem name="AccountNewAccount" action="FileNewAccountAction"/>
       <menuitem name="AccountDeleteAccount" action="EditDeleteAccountAction"/>
@@ -71,8 +68,6 @@
       <toolitem name="ToolbarOpenAccount" action="FileOpenAccountAction"/>
       <toolitem name="ToolbarEditAccount" action="EditEditAccountAction"/>
       <separator name="ToolbarSep3"/>
-      <toolitem name="ToolbarAccountViewOptions" action="EditAccountViewOptionsAction"/>
-      <separator name="ToolbarSep4"/>
       <toolitem name="ToolbarNewAccount" action="FileNewAccountAction"/>
       <toolitem name="ToolbarDeleteAccount" action="EditDeleteAccountAction"/>
     </placeholder>

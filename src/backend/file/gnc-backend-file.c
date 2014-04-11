@@ -28,8 +28,6 @@
  * restoring data to/from an ordinary Unix filesystem file.
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -57,59 +55,16 @@
 #include "io-gncxml-v2.h"
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
+#include "gnc-gconf-utils.h"
+
+#ifndef HAVE_STRPTIME
+# include "strptime.h"
+#endif
 
 #define GNC_BE_DAYS "file_retention_days"
 #define GNC_BE_ZIP  "file_compression"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
-
-static gint file_retention_days = 0;
-static gboolean file_compression = FALSE;
-
-static void option_cb (QofBackendOption *option, gpointer data)
-{
-	if(0 == safe_strcmp(GNC_BE_DAYS, option->option_name)) {
-		file_retention_days = *(gint*)option->value;
-	}
-	if(0 == safe_strcmp(GNC_BE_ZIP, option->option_name)) {
-		file_compression = (gboolean)qof_util_bool_to_int(option->value);
-	}
-}
-
-/* lookup the options and modify the frame */
-static void
-gnc_file_be_set_config(QofBackend *be, KvpFrame *config)
-{
-	qof_backend_option_foreach(config, option_cb, NULL);
-}
-
-static KvpFrame*
-gnc_file_be_get_config(QofBackend *be)
-{
-	QofBackendOption *option;
-
-	qof_backend_prepare_frame(be);
-	option = g_new0(QofBackendOption, 1);
-	option->option_name = GNC_BE_DAYS;
-	option->description = _("Number of days to retain old files");
-	option->tooltip = _("GnuCash keeps backups of old files. "
-		"This setting specifies how long each is kept.");
-	option->type = KVP_TYPE_GINT64;
-	option->value = (gpointer)&file_retention_days;
-	qof_backend_prepare_option(be, option);
-	g_free(option);
-	option = g_new0(QofBackendOption, 1);
-	option->option_name = GNC_BE_ZIP;
-	option->description = _("Compress output files?");
-	option->tooltip = _("GnuCash can save data files with compression."
-		" Enable this option to compress your data file. ");
-	option->type = KVP_TYPE_STRING;
-	if(file_compression) { option->value = (gpointer)"TRUE"; }
-	else { option->value = (gpointer)"FALSE"; }
-	qof_backend_prepare_option(be, option);
-	g_free(option);
-	return qof_backend_complete_frame(be);
-}
 
 /* ================================================================= */
 
@@ -117,8 +72,10 @@ static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
+#ifndef _WIN32
     char pathbuf[PATH_MAX];
     char *path = NULL;
+#endif
     int rc;
     QofBackendError be_err;
 
@@ -164,6 +121,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
      * provides a better long-term solution.
      */
 
+#ifndef _WIN32
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
@@ -172,7 +130,11 @@ gnc_file_be_get_file_lock (FileBackend *be)
     if (rc)
     {
         /* If hard links aren't supported, just allow the lock. */
-        if (errno == EOPNOTSUPP || errno == EPERM)
+        if (errno == EPERM
+# ifdef EOPNOTSUPP
+	    || errno == EOPNOTSUPP
+# endif
+	    )
         {
             be->linkfile = NULL;
             return TRUE;
@@ -209,6 +171,13 @@ gnc_file_be_get_file_lock (FileBackend *be)
     be->linkfile = g_strdup (pathbuf);
 
     return TRUE;
+
+#else /* ifndef _WIN32 */
+    /* On windows, there is no NFS and the open(,O_CREAT | O_EXCL)
+       is sufficient for locking. */
+    be->linkfile = NULL;
+    return TRUE;
+#endif /* ifndef _WIN32 */
 }
 
 /* ================================================================= */
@@ -376,10 +345,22 @@ copy_file(const char *orig, const char *bkup)
 static gboolean
 gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 {
-    int err_ret = link(orig, bkup);
+    int err_ret = 
+#ifdef HAVE_LINK
+      link (orig, bkup)
+#else
+      -1
+#endif
+      ;
     if(err_ret != 0)
     {
-        if(errno == EPERM || errno == EOPNOTSUPP)
+#ifdef HAVE_LINK
+        if(errno == EPERM
+# ifdef EOPNOTSUPP
+	   || errno == EOPNOTSUPP
+# endif
+	   )
+#endif
         {
             err_ret = copy_file(orig, bkup);
         }
@@ -425,15 +406,21 @@ is_gzipped_file(const gchar *name)
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
-	if(gnc_is_xml_data_file_v2(path)) {
-        return GNC_BOOK_XML2_FILE;
-    } else if(gnc_is_xml_data_file(path)) {
-        return GNC_BOOK_XML1_FILE;
-    } else if(is_gzipped_file(path)) {
-        return GNC_BOOK_XML2_FILE;
-	}
-	else if(gnc_is_bin_file(path)) { return GNC_BOOK_BIN_FILE; }
-	return GNC_BOOK_NOT_OURS;
+  gboolean with_encoding;
+  if (gnc_is_xml_data_file_v2(path, &with_encoding)) {
+    if (with_encoding) {
+      return GNC_BOOK_XML2_FILE;
+    } else {
+      return GNC_BOOK_XML2_FILE_NO_ENCODING;
+    }
+  } else if (gnc_is_xml_data_file(path)) {
+    return GNC_BOOK_XML1_FILE;
+  } else if (is_gzipped_file(path)) {
+    return GNC_BOOK_XML2_FILE;
+  } else if (gnc_is_bin_file(path)) {
+    return GNC_BOOK_BIN_FILE;
+  }
+  return GNC_BOOK_NOT_OURS;
 }
 
 static gboolean
@@ -451,10 +438,10 @@ gnc_determine_file_type (const char *path)
 	rc = stat(path, &sbuf);
 	if(rc < 0) { return FALSE; }
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
-	if(gnc_is_xml_data_file_v2(path))   { return TRUE; } 
-	else if(gnc_is_xml_data_file(path)) { return TRUE; } 
-	else if(is_gzipped_file(path))      { return TRUE; }
-	else if(gnc_is_bin_file(path))      { return TRUE; }
+	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
+	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
+	else if(is_gzipped_file(path))          { return TRUE; }
+	else if(gnc_is_bin_file(path))          { return TRUE; }
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
@@ -542,7 +529,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
     }
   
-    if(gnc_book_write_to_xml_file_v2(book, tmp_name, file_compression)) 
+    if (gnc_book_write_to_xml_file_v2(book, tmp_name, fbe->file_compression))
     {
         /* Record the file's permissions before unlinking it */
         rc = stat(datafile, &statbuf);
@@ -552,25 +539,36 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             if(chmod(tmp_name, statbuf.st_mode) != 0)
             {
                 qof_backend_set_error(be, ERR_BACKEND_PERM);
+		/* FIXME: Even if the chmod did fail, the save
+		   nevertheless completed successfully. It is
+		   therefore wrong to signal the ERR_BACKEND_PERM
+		   error here which implies that the saving itself
+		   failed! What should we do? */
                 PWARN("unable to chmod filename %s: %s",
-                        datafile ? datafile : "(null)", 
+                        tmp_name ? tmp_name : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
 #if VFAT_DOESNT_SUCK  /* chmod always fails on vfat fs */
                 g_free(tmp_name);
                 return FALSE;
 #endif
             }
-            if(chown(tmp_name, statbuf.st_uid, statbuf.st_gid) != 0)
+#ifdef HAVE_CHOWN
+	    /* Don't try to change the owner. Only root can do
+	       that. */
+            if(chown(tmp_name, -1, statbuf.st_gid) != 0)
             {
-                qof_backend_set_error(be, ERR_BACKEND_PERM);
+	        /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
+	        /* A failed chown doesn't mean that the saving itself
+		   failed. So don't abort with an error here! */
                 PWARN("unable to chown filename %s: %s",
-                        datafile ? datafile : "(null)", 
+                        tmp_name ? tmp_name : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
 #if VFAT_DOESNT_SUCK /* chown always fails on vfat fs */
-                g_free(tmp_name);
-                return FALSE;
+                /* g_free(tmp_name);
+		   return FALSE; */
 #endif
             }
+#endif
         }
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
@@ -704,14 +702,14 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 PINFO ("unlink lock file: %s", name);
                 unlink(name);
             } 
-            else if (file_retention_days > 0) 
+            else if (be->file_retention_days > 0) 
             {
                 time_t file_time;
                 struct tm file_tm;
                 int days;
                 const char* res;
 
-                PINFO ("file retention = %d days", file_retention_days);
+                PINFO ("file retention = %d days", be->file_retention_days);
 
                 /* Is the backup file old enough to delete */
                 memset(&file_tm, 0, sizeof(file_tm));
@@ -719,13 +717,13 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 file_time = mktime(&file_tm);
                 days = (int)(difftime(now, file_time) / 86400);
 
-                /* Make sure this file actually has a date before unlinking */
-                if (res && res != name+pathlen+1 &&
-                    /* We consumed some but not all of the filename */
-		    !strcmp(res, ".xac") &&
-                    file_time > 0 &&
-                    /* we actually have a reasonable time and it is old enough */
-                    days > file_retention_days) 
+                
+                if (res
+                    && res != name+pathlen+1
+                    && (strcmp(res, ".xac") == 0
+                        || strcmp(res, ".log") == 0)
+                    && file_time > 0
+                    && days > be->file_retention_days)
                 {
                     PINFO ("unlink stale (%d days old) file: %s", days, name);
                     unlink(name);
@@ -868,7 +866,7 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
     gboolean rc;
     FileBackend *be = (FileBackend *) bend;
 
-	error = ERR_BACKEND_NO_ERR;
+    error = ERR_BACKEND_NO_ERR;
     be->primary_book = book;
 
     switch (gnc_file_be_determine_file_type(be->fullpath))
@@ -878,6 +876,9 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
+    case GNC_BOOK_XML2_FILE_NO_ENCODING:
+        error = ERR_FILEIO_NO_ENCODING;
+        break;
     case GNC_BOOK_XML1_FILE:
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
@@ -935,7 +936,6 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
     fbe->linkfile = NULL;
-    fbe->price_lookup = NULL;
     fbe->lockfd = -1;
 
     fbe->primary_book = NULL;
@@ -943,6 +943,23 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     return be;
 }
 #endif
+
+static void
+retain_changed_cb(GConfEntry *entry, gpointer user_data)
+{
+        FileBackend *be = (FileBackend*)user_data;
+        g_return_if_fail(be != NULL);
+        be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+}
+
+static void
+compression_changed_cb(GConfEntry *entry, gpointer user_data)
+{
+        FileBackend *be = (FileBackend*)user_data;
+        g_return_if_fail(be != NULL);
+        be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+}
+
 QofBackend*
 gnc_backend_new(void)
 {
@@ -977,10 +994,11 @@ gnc_backend_new(void)
 	be->process_events = NULL;
 
 	be->sync = file_sync_all;
-	be->load_config = gnc_file_be_set_config;
-	be->get_config = gnc_file_be_get_config;
+	be->load_config = NULL;
+	be->get_config = NULL;
 
-	gnc_be->export = gnc_file_be_write_accounts_to_file;
+        be->export = gnc_file_be_write_accounts_to_file;
+
 	gnc_be->dirname = NULL;
 	gnc_be->fullpath = NULL;
 	gnc_be->lockfile = NULL;
@@ -988,6 +1006,13 @@ gnc_backend_new(void)
 	gnc_be->lockfd = -1;
 
 	gnc_be->primary_book = NULL;
+
+        gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+        gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+
+        gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
+        gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
+
 	return be;
 }
 

@@ -177,6 +177,7 @@ TESTS = \
   test-xml2-is-file
 
 GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
@@ -193,6 +194,8 @@ TESTS_ENVIRONMENT := \
 noinst_LTLIBRARIES = libgnc-test-file-stuff.la
 
 libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
+libgnc_test_file_stuff_la_LIBADD = \
+  ${top_builddir}/src/engine/libgncmod-engine.la
 
 noinst_PROGRAMS = \
   test-date-converting \
@@ -217,6 +220,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgw-engine.la \
         ${top_builddir}/src/engine/libgw-kvp.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+        ${top_builddir}/src/core-utils/libcore-utils.la \
         ./libgnc-test-file-stuff.la \
         ${LIBXML2_LIBS} \
         ${QOF_LIBS} \
@@ -232,7 +236,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/backend/qsf \
-  ${XML_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GUILE_INCS}

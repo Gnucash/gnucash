@@ -442,8 +442,7 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
       PINFO("found match");
       LEAVE(" ");
       return xaccGetAccountFromFullName(gnc_book_get_group(imap->book),
-					account_i.account_name,
-					gnc_get_account_separator());
+					account_i.account_name);
     }
 
   PINFO("no match");
@@ -471,7 +470,7 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
     return;
   }
 
-  account_fullname = xaccAccountGetFullName(acc, gnc_get_account_separator());
+  account_fullname = xaccAccountGetFullName(acc);
 
   PINFO("account name: '%s'\n", account_fullname);
 

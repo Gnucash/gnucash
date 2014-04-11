@@ -248,7 +248,7 @@ gnc_tree_model_selection_convert_iter_to_child_iter (GncTreeModelSelection *mode
 }
 
 gint
-gnc_tree_model_selection_get_selection_row (GncTreeModelSelection *model)
+gnc_tree_model_selection_get_selection_column (GncTreeModelSelection *model)
 {
 	GncTreeModelSelectionPrivate *priv;
 

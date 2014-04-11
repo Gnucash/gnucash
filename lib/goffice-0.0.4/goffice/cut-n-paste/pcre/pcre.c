@@ -4556,7 +4556,7 @@ pcre_compile (const char *pattern, int options, const char **errorptr,
 
     ptr = (const uschar *) (pattern - 1);
     while ((c = *(++ptr)) != 0) {
-	int min, max;
+        int min = 0, max = 0;
 	int class_optcount;
 	int bracket_length;
 	int duplength;

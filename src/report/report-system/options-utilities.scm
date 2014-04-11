@@ -236,3 +236,47 @@
      (vector 'alphabetical (N_ "Alphabetical") (N_ "Alphabetical by account name"))
      (vector 'amount (N_ "Amount") (N_ "By amount, largest to smallest"))))))
 
+
+;; These control the calculation and view mode of subtotal balances
+(define (gnc:options-add-subtotal-view!
+	 options pagename 
+	 optname-parent-balance-mode optname-parent-total-mode
+	 sort-tag)
+  ;; what to show for non-leaf accounts
+  (gnc:register-option
+   options
+   (gnc:make-multichoice-option
+    pagename 
+    ;; usually the option name is: (N_ "Parent account balances")
+    optname-parent-balance-mode
+    (string-append sort-tag "a")
+    (N_ "How to show the balances of parent accounts")
+    'immediate-bal
+    (list (vector 'immediate-bal
+		  (N_ "Account Balance")
+		  (N_ "Show only the balance in the parent account, excluding any subaccounts"))
+	  (vector 'recursive-bal
+		  (N_ "Subtotal")
+		  (N_ "Calculate the subtotal for this parent account and all of its subaccounts, and show this as the parent account balance"))
+	  (vector 'omit-bal
+		  (N_ "Do not show")
+		  (N_ "Do not show any balances of parent accounts")))))
+  (gnc:register-option
+   options
+   (gnc:make-multichoice-option
+    pagename
+    ;; usually the option name is: (N_ "Parent account subtotals")
+    optname-parent-total-mode
+    (string-append sort-tag "b")
+    (N_ "How to show account subtotals for parent accounts")
+    'f
+    (list (vector 't
+		  (N_ "Show subtotals")
+		  (N_ "Show subtotals for selected parent accounts which have subaccounts"))
+	  (vector 'f
+		  (N_ "Do not show")
+		  (N_ "Do not show any subtotals for parent accounts"))
+	  (vector 'canonically-tabbed
+		  ;;(N_ "Subtotals indented text book style")
+		  (N_ "Text book style (experimental)")
+		  (N_ "Show parent account subtotals, indented per accounting text book practice (experimental)"))))))

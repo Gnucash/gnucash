@@ -1,5 +1,18 @@
 /** \page osxbuild Building GnuCash on OSX
 
+\section dependency Automake dependency
+
+automake1.4 is NOT compatible with gnucash on OSX. If fink replaces
+a later automake during an update of other packages, you will need
+to replace with a later version. Fink will then remove automake1.4 
+in favour of the later version. GnuCash has been tested on OSX with
+automake1.9
+
+\section building Build advice
+
+'make uninstall' may not be sufficient - when rebuilding in the same
+source tree, remove the installation directory with 'rm -rf'. 
+
 \section osxprepare Preparation
 
 There are notable problems building gnucash with the default

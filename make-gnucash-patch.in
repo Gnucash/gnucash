@@ -3,8 +3,8 @@
 #
 # This perl script is used to make a patch for your GnuCash
 # development work. All patches should be submitted to the
-# mailing list gnucash-patches@gnucash.org. For more info
-# consult the README.
+# mailing list gnucash-devel@gnucash.org. For more info
+# consult README.patches
 #
 # WARNING: By default, this script will checkout an entire
 # up to date copy of the source tree in ../tmp/gnucash/.
@@ -26,6 +26,8 @@ use Getopt::Long;
 $::ask_description = 1;
 $::should_uuencode = 1;
 $::diffcmd = "diff -up";
+
+die "This utility has not been updated to use SVN.  Sorry, just use diff(1).";
 
 my $rcfile = $ENV{"HOME"} . "/.gnucash-patch.rc";
 

@@ -18,13 +18,15 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- *  02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include <glib.h>
+#include "qof.h"
 #include "qofchoice.h"
 
+static QofLogModule log_module = QOF_MOD_CHOICE;
 static GHashTable *qof_choice_table = NULL;
 
 /* To initialise, call qof_choice_add_class in
@@ -45,11 +47,11 @@ gboolean qof_object_is_choice(QofIdType type)
 
 	value = NULL;
 	check = NULL;
-	g_return_val_if_fail(qof_choice_is_initialized(), FALSE);
+	if(!qof_choice_is_initialized()) { return FALSE; }
 	g_return_val_if_fail(type != NULL, FALSE);
 	value = g_hash_table_lookup(qof_choice_table, type);
 	if((GHashTable*)value) { return TRUE; }
-	g_message("DEBUG: QOF_TYPE_CHOICE setup failed for %s\n", type);
+	DEBUG (" QOF_TYPE_CHOICE setup failed for %s\n", type);
 	return FALSE;
 }
 

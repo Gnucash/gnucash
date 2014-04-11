@@ -23,8 +23,6 @@
 #ifndef G_TABLE_H
 #define G_TABLE_H
 
-#include "config.h"
-
 #include <glib.h>
 
 

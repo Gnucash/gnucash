@@ -1,6 +1,6 @@
 (define-module (g-wrapped gw-gnc-spec))
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (use-modules (g-wrap))
 
@@ -26,6 +26,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <glib.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <gnc-ui-util.h>\n"
@@ -50,83 +51,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:ui-is-running?
-   '<gw:bool>
-   "gnucash_ui_is_running"
-   '()
-   "Predicate to determine if the UI is running.")
-
-  (gw:wrap-function
-   ws
-   'gnc:ui-is-terminating?
-   '<gw:bool>
-   "gnucash_ui_is_terminating"
-   '()
-   "Predicate to determine if the UI is in the process of terminating.")
-
-  (gw:wrap-function
-   ws
    'gnc:new-user-dialog
    '<gw:void>
    "gnc_ui_new_user_dialog"
    '()
    "Show the new user dialog.")
-
-  (gw:wrap-function
-   ws
-   'gnc:start-ui-event-loop
-   '<gw:int>
-   "gnc_ui_start_event_loop"
-   '()
-   "Start the UI event loop.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-init
-   '<gw:scm>
-   "gnc_gui_init"
-   '((<gw:scm> command-line))
-   "Initialize the remaining parts of the lower level ui. Returns main-window and remaining command line.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-init-splash
-   '<gw:scm>
-   "gnc_gui_init_splash"
-   '((<gw:scm> command-line))
-   "Initialize the lower level ui parts and put up the splash screen. Returns remaining command line.")
-
-  (gw:wrap-function
-   ws
-   'gnc:update-splash-screen
-   '<gw:void>
-   "gnc_update_splash_screen"
-   '(((<gw:mchars> caller-owned const) string))
-   "Update the progress box on the splash screen dialog.")
-
-  (gw:wrap-function
-   ws
-   'gnc:destroy-splash-screen
-   '<gw:void>
-   "gnc_destroy_splash_screen"
-   '()
-   "Destroy the splash screen dialog.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-shutdown
-   '<gw:void>
-   "gnc_gui_shutdown"
-   '()
-   "Shutdown the UI.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-destroy
-   '<gw:void>
-   "gnc_gui_destroy"
-   '()
-   "Destroy the UI.")
 
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>

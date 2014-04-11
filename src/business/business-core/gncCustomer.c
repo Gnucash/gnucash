@@ -78,9 +78,8 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
 void mark_customer (GncCustomer *customer)
 {
-  customer->inst.dirty = TRUE;
-  qof_collection_mark_dirty (customer->inst.entity.collection);
-  gnc_engine_gen_event (&customer->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&customer->inst);
+  qof_event_gen (&customer->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -107,7 +106,7 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->credit = gnc_numeric_zero();
   cust->shipaddr = gncAddressCreate (book, &cust->inst.entity);
 
-  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&cust->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return cust;
 }
@@ -151,7 +150,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
     cust->jobs = g_list_prepend(cust->jobs, job);
   }
 
-  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&cust->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return cust;
 }
@@ -160,7 +159,7 @@ void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
   cust->inst.do_free = TRUE;
-  qof_collection_mark_dirty (cust->inst.entity.collection);
+  qof_instance_set_dirty (&cust->inst);
   gncCustomerCommitEdit (cust);
 }
 
@@ -168,7 +167,7 @@ static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
-  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&cust->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
@@ -341,7 +340,7 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
                                        (GCompareFunc)gncJobCompare);
 
-  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&cust->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -358,7 +357,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_remove_link (cust->jobs, node);
     g_list_free_1 (node);
   }
-  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&cust->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncCustomerBeginEdit (GncCustomer *cust)
@@ -386,8 +385,8 @@ static inline void cust_free (QofInstance *inst)
 
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
-  QOF_COMMIT_EDIT_PART1 (&cust->inst);
-  QOF_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(cust))) return;
+  qof_commit_edit_part2 (&cust->inst, gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }
 

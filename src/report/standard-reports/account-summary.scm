@@ -69,7 +69,6 @@
 (define opthelp-party-name (N_ "Name of company/individual"))
 
 (define optname-date (N_ "Date"))
-(define opthelp-date (N_ "Account summary as-of date"))
 ;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts to include"))
@@ -83,11 +82,7 @@
   (N_ "How to treat accounts which exceed the specified depth limit (if any)"))
 
 (define optname-parent-balance-mode (N_ "Parent account balances"))
-(define opthelp-parent-balance-mode
-  (N_ "How to show any balance in parent accounts"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
-(define opthelp-parent-total-mode
-  (N_ "How to show account subtotals for selected accounts having children"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
@@ -142,17 +137,13 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
 
     ;; date at which to report balance
-    (add-option
-     (gnc:make-date-option
-      gnc:pagename-general optname-date
-      "c" opthelp-date
-      (lambda () (cons 'absolute (cons (current-time) 0)))
-      #f 'both '(start-cal-year start-prev-year end-prev-year) ))
+    (gnc:options-add-report-date!
+     options gnc:pagename-general optname-date "c")
 
     ;; accounts to work on
     (add-option
@@ -216,36 +207,11 @@
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
     ;; what to show for non-leaf accounts
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-balance-mode
-      "c" opthelp-parent-balance-mode
-      'immediate-bal
-      (list (vector 'immediate-bal
-		    (N_ "Show Immediate Balance")
-		    (N_ "Show only the balance in the parent account, excluding any subaccounts"))
-	    (vector 'recursive-bal
-		    (N_ "Recursive Balance")
-		    (N_ "Include subaccounts in balance"))
-	    (vector 'omit-bal
-		    (N_ "Omit Balance")
-		    (N_ "Do not show parent account balances")))))
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-total-mode
-      "d" opthelp-parent-total-mode
-      'f
-      (list (vector 't
-		    (N_ "Show subtotals")
-		    (N_ "Show subtotals for selected accounts which have subaccounts"))
-	    (vector 'f
-		    (N_ "Do not show subtotals")
-		    (N_ "Do not subtotal selected parent accounts"))
-	    (vector 'canonically-tabbed
-		    ;;(N_ "Subtotals indented text book style")
-		    (N_ "Text book style (experimental)")
-		    (N_ "Show parent account subtotals, indented per text book practice (experimental)")))))
-    
+    (gnc:options-add-subtotal-view!
+     options gnc:pagename-display
+     optname-parent-balance-mode optname-parent-total-mode
+     "c")
+
     ;; some detailed formatting options
     (add-option 
      (gnc:make-simple-boolean-option
@@ -467,10 +433,10 @@
 	  (gnc:html-table-append-row!
 	   build-table
 	   (append
-	    (if show-account-code? (list (N_ "Code")) '())
-	    (if show-account-type? (list (N_ "Type")) '())
-	    (if show-account-desc? (list (N_ "Description")) '())
-	    (list (N_ "Account title"))
+	    (if show-account-code? (list (_ "Code")) '())
+	    (if show-account-type? (list (_ "Type")) '())
+	    (if show-account-desc? (list (_ "Description")) '())
+	    (list (_ "Account title"))
 	    )
 	   )
 	  ;; add any fields to be displayed before the account name
@@ -486,10 +452,12 @@
 		)
 	  (if show-account-bals?
 	      (gnc:html-table-set-cell!
-	       build-table 0 (+ cur-col account-cols) (N_ "Balance"))
+	       build-table 0 (+ cur-col account-cols) (_ "Balance"))
 	      )
 	  (let ((row 0))
 	    (while (< row table-rows)
+		   (gnc:html-table-set-row-markup! build-table (+ row 1)
+						   (gnc:html-table-row-markup hold-table row))
 		   (let ((col 0))
 		     (while (< col hold-table-width)
 			    (gnc:html-table-set-cell!
@@ -506,7 +474,7 @@
 	  (if show-account-notes?
 	      (begin
 		(gnc:html-table-set-cell!
-		 build-table 0 cur-col (N_ "Notes"))
+		 build-table 0 cur-col (_ "Notes"))
 		(add-col 'account-notes)
 		)
 	      )

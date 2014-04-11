@@ -57,7 +57,7 @@ void mark_address (GncAddress *address)
 {
   address->dirty = TRUE;
 
-  gnc_engine_gen_event (address->parent, GNC_EVENT_MODIFY);
+  qof_event_gen (address->parent, QOF_EVENT_MODIFY, NULL);
 }
 
 /* Create/Destroy functions */

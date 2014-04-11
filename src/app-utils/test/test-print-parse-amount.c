@@ -12,9 +12,12 @@ test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
 {
   gnc_numeric n_parsed = gnc_numeric_zero();
   const char *s;
-  gboolean ok;
+  gboolean ok, print_ok;
 
   s = xaccPrintAmount (n, print_info);
+  print_ok = (s && s[0] != '\0');
+  if (!print_ok)
+      return;
 
   ok = xaccParseAmount (s, print_info.monetary, &n_parsed, NULL);
 
@@ -53,7 +56,8 @@ test_num (gnc_numeric n)
 
     n1 = gnc_numeric_convert (n, fraction, GNC_RND_ROUND);
     if (gnc_numeric_check(n1)) {
-      do_test_args(0, "BAD NUMERIC CONVERSION", __FILE__, __LINE__,
+        do_test_args((gnc_numeric_check(n1) == GNC_ERROR_OVERFLOW), 
+                     "BAD NUMERIC CONVERSION", __FILE__, __LINE__,
 		   "num: %s, fraction: %d", gnc_numeric_to_string(n), fraction);
       continue;
     }
@@ -78,14 +82,15 @@ test_num (gnc_numeric n)
   }
 }
 
-#define IS_VALID_NUM(n,m)				\
-  if (gnc_numeric_check(n)) {				\
-    do_test_args(0, "BAD NUMERIC", __FILE__, __LINE__,	\
-		 "num: %s (from %s)",			\
-		 gnc_numeric_to_string(n),		\
-		 gnc_numeric_to_string(m));		\
-    continue;						\
-  } else { m = n; }
+#define IS_VALID_NUM(n,m)                                               \
+    if (gnc_numeric_check(n)) {                                         \
+        do_test_args(gnc_numeric_check(n) == GNC_ERROR_OVERFLOW,        \
+                     "BAD NUMERIC", __FILE__, __LINE__,                 \
+                     "num: %s (from %s)",                               \
+                     gnc_numeric_to_string(n),                          \
+                     gnc_numeric_to_string(m));                         \
+        continue;                                                       \
+    } else { m = n; }
 
 static void
 run_tests (void)

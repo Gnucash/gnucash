@@ -43,13 +43,13 @@
 #ifndef XACC_TRANS_LOG_H
 #define XACC_TRANS_LOG_H
 
-#include "config.h"
-
 #include "Account.h"
 #include "Transaction.h"
 
 void    xaccOpenLog (void);
 void    xaccCloseLog (void);
+void    xaccReopenLog (void);
+
 /**
  * @param trans The transaction to write out to the log
  * @param flag The engine currently uses the log mechanism with flag char set as
@@ -77,6 +77,9 @@ void    xaccLogDisable (void);
  *    base name.
  */
 void    xaccLogSetBaseName (const char *);
+
+/** Test a filename to see if it is the name of the current logfile */
+gboolean xaccFileIsCurrentLog (const gchar *name);
 
 #endif /* XACC_TRANS_LOG_H */
 /** @} */

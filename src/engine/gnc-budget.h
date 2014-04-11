@@ -22,7 +22,13 @@
  *                                                                  *
 \********************************************************************/
 
-/*  Design decisions:
+/** @addtogroup budget 
+ @{
+*/
+/** @file gnc-budget.h
+ * @brief GnuCash Budgets
+ *
+ *   Design decisions:
  *
  *  - The budget values that the user enters (and that are stored) for
  *  each account are inclusive of any sub-accounts.
@@ -80,7 +86,7 @@ gboolean gnc_budget_register(void);
 GncBudget *gnc_budget_new(QofBook *book);
 
 /** Deletes the given budget object.*/
-void gnc_budget_free(GncBudget* budget);
+void gnc_budget_destroy(GncBudget* budget);
 
 const GUID* gnc_budget_get_guid(GncBudget* budget);
 #define gnc_budget_return_guid(X) \

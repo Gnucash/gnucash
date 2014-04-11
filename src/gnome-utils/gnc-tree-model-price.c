@@ -69,7 +69,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass);
 static void gnc_tree_model_price_init (GncTreeModelPrice *model);
 static void gnc_tree_model_price_finalize (GObject *object);
-static void gnc_tree_model_price_destroy (GtkObject *object);
+static void gnc_tree_model_price_dispose (GObject *object);
 
 static void gnc_tree_model_price_tree_model_init (GtkTreeModelIface *iface);
 static guint gnc_tree_model_price_get_flags (GtkTreeModel *tree_model);
@@ -101,9 +101,10 @@ static gboolean	gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
 static gboolean	gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
 						  GtkTreeIter *iter,
 						  GtkTreeIter *child);
-static void gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
-						GNCEngineEventType event_type,
-						gpointer user_data);
+static void gnc_tree_model_price_event_handler (QofEntity *entity,
+						QofEventId event_type,
+						gpointer user_data,
+						gpointer event_data);
 
 /** The instance private data for a price database tree model. */
 typedef struct GncTreeModelPricePrivate
@@ -160,14 +161,11 @@ static void
 gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
 {
 	GObjectClass *o_class = G_OBJECT_CLASS (klass);
-	GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	o_class->finalize = gnc_tree_model_price_finalize;
-
-	/* GtkObject signals */
-	object_class->destroy = gnc_tree_model_price_destroy;
+	o_class->dispose = gnc_tree_model_price_dispose;
 
 	g_type_class_add_private(klass, sizeof(GncTreeModelPricePrivate));
 }
@@ -207,7 +205,7 @@ gnc_tree_model_price_finalize (GObject *object)
 }
 
 static void
-gnc_tree_model_price_destroy (GtkObject *object)
+gnc_tree_model_price_dispose (GObject *object)
 {
 	GncTreeModelPrice *model;
 	GncTreeModelPricePrivate *priv;
@@ -220,12 +218,12 @@ gnc_tree_model_price_destroy (GtkObject *object)
 	priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 
 	if (priv->event_handler_id) {
-	  gnc_engine_unregister_event_handler (priv->event_handler_id);
+	  qof_event_unregister_handler (priv->event_handler_id);
 	  priv->event_handler_id = 0;
 	}
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-	  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+	if (G_OBJECT_CLASS (parent_class)->dispose)
+            G_OBJECT_CLASS (parent_class)->dispose (object);
 	LEAVE(" ");
 }
 
@@ -241,6 +239,7 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 		model = (GncTreeModelPrice *)item->data;
 		priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 		if (priv->price_db == price_db) {
+			g_object_ref(G_OBJECT(model));
 			LEAVE("returning existing model %p", model);
 			return GTK_TREE_MODEL(model);
 		}
@@ -254,7 +253,7 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 	priv->price_db = price_db;
 
 	priv->event_handler_id =
-	  gnc_engine_register_event_handler (gnc_tree_model_price_event_handler, model);
+	  qof_event_register_handler (gnc_tree_model_price_event_handler, model);
 
 	return GTK_TREE_MODEL (model);
 }
@@ -1301,7 +1300,6 @@ gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *model,
 /************************************************************/
 
 typedef struct _remove_data {
-  GUID               guid;
   GncTreeModelPrice *model;
   GtkTreePath       *path;
 } remove_data;
@@ -1325,54 +1323,31 @@ static GSList *pending_removals = NULL;
  */
 static void
 gnc_tree_model_price_path_added (GncTreeModelPrice *model,
-				 GtkTreePath *path)
+				 GtkTreeIter *iter)
 {
-  GtkTreeIter iter;
-  GtkTreePath *copy;
+  GtkTreePath *path, *tmp_path;
+  GtkTreeIter tmp_iter;
+  gint *indices;
+  gint depth, i;
 
-  /* Update the commodity */
-  debug_path(ENTER, path);
-#if AIEEE
-  do {
-    gtk_tree_path_up (path);
-    debug_path(DEBUG, path);
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-    DEBUG("iter %s", iter_to_string(model, &iter));
-    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-  } while (gtk_tree_path_get_depth(path) > 1);
-#endif
-#if UPDATE_ROOT_ONLY
-  while (gtk_tree_path_get_depth(path) != 1)
-    gtk_tree_path_up (path);
-  debug_path(DEBUG, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-#endif
-#ifdef IM_FUCKED
-  gtk_tree_path_up (path);
-  debug_path(DEBUG, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-#endif
+  ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(model, iter));
+  path = gnc_tree_model_price_get_path (GTK_TREE_MODEL(model), iter);
 
-  /* Poke the namespace first */
-  copy = gtk_tree_path_copy (path);
-  while (gtk_tree_path_get_depth(copy) != 1)
-    gtk_tree_path_up (copy);
-  debug_path(DEBUG, copy);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, copy);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), copy, &iter);
-  gtk_tree_path_free(copy);
-
-  /* Now poke the commodity */
-  gtk_tree_path_up (path);
-  debug_path(DEBUG, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
+  /* Tag all the parent nodes as changed. */
+  depth = gtk_tree_path_get_depth (path);
+  indices = gtk_tree_path_get_indices (path);
+  tmp_path = gtk_tree_path_new();
+  for (i = 0; i <= depth - 1; i++) {
+    gtk_tree_path_append_index (tmp_path, indices[i]);
+    gnc_tree_model_price_get_iter (GTK_TREE_MODEL(model), &tmp_iter, tmp_path);
+    gtk_tree_model_row_changed(GTK_TREE_MODEL(model), tmp_path, &tmp_iter);
+    gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), tmp_path, &tmp_iter);
+  }
+  gtk_tree_path_free(tmp_path);
+    
+  /* Now tag the new item as inserted. */
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, iter);
+  gtk_tree_path_free(path);
 
   do {
     model->stamp++;
@@ -1387,13 +1362,13 @@ gnc_tree_model_price_path_deleted (GncTreeModelPrice *model,
   GtkTreeIter iter;
 
   debug_path(ENTER, path);
-  do {
-    gtk_tree_path_up (path);
+  while (gtk_tree_path_up(path) && (gtk_tree_path_get_depth(path) > 0)) {
     debug_path(DEBUG, path);
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-    DEBUG("iter %s", iter_to_string(model, &iter));
-    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-  } while (gtk_tree_path_get_depth(path) > 1);
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
+      DEBUG("iter %s", iter_to_string(model, &iter));
+      gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
+    }
+  }
 
   do {
     model->stamp++;
@@ -1458,20 +1433,20 @@ gnc_tree_model_price_do_deletions (gpointer unused)
  *  have this model mirror the engine's price table instead of
  *  referencing it directly.
  *
- *  @param entity The guid of the affected item.
- *
- *  @param type The type of the affected item.  This function only
- *  cares about items of type "account" or "namespace".
+ *  @param entity The affected item.
  *
  *  @param event type The type of the event. This function only cares
  *  about items of type ADD, REMOVE, and DESTROY.
  *
  *  @param user_data A pointer to the account tree model.
+ *
+ *  @param event_data A pointer to additional data about this event.
  */
 static void
-gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
-				    GNCEngineEventType event_type,
-				    gpointer user_data)
+gnc_tree_model_price_event_handler (QofEntity *entity,
+				    QofEventId event_type,
+				    gpointer user_data,
+				    gpointer event_data)
 {
   	GncTreeModelPrice *model;
 	GtkTreePath *path;
@@ -1479,42 +1454,42 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	remove_data *data;
 	const gchar *name;
 
-	ENTER("entity %p of type %s, event %d, model %p",
-	      entity, type, event_type, user_data);
+	ENTER("entity %p, event %d, model %p, event data %p",
+	      entity, event_type, user_data, event_data);
 	model = (GncTreeModelPrice *)user_data;
 
 	/* hard failures */
 	g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
 
 	/* get type specific data */
-	if (safe_strcmp(type, GNC_ID_COMMODITY) == 0) {
+	if (GNC_IS_COMMODITY(entity)) {
 	  gnc_commodity *commodity;
 
-	  commodity = gnc_commodity_find_commodity_by_guid(entity, gnc_get_current_book ());
+	  commodity = GNC_COMMODITY(entity);
 	  name = gnc_commodity_get_mnemonic(commodity);
-	  if (event_type != GNC_EVENT_DESTROY) {
+	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_price_get_iter_from_commodity (model, commodity, &iter)) {
 	      LEAVE("no iter");
 	      return;
 	    }
 	  }
-	} else if (safe_strcmp(type, GNC_ID_COMMODITY_NAMESPACE) == 0) {
+	} else if (GNC_IS_COMMODITY_NAMESPACE(entity)) {
 	  gnc_commodity_namespace *namespace;
 
-	  namespace = gnc_commodity_find_namespace_by_guid(entity, gnc_get_current_book ());
+	  namespace = GNC_COMMODITY_NAMESPACE(entity);
 	  name = gnc_commodity_namespace_get_name(namespace);
-	  if (event_type != GNC_EVENT_DESTROY) {
+	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_price_get_iter_from_namespace (model, namespace, &iter)) {
 	      LEAVE("no iter");
 	      return;
 	    }
 	  }
-	} else if (safe_strcmp(type, GNC_ID_PRICE) == 0) {
+	} else if (GNC_IS_PRICE(entity)) {
 	  GNCPrice *price;
 
-	  price = gnc_price_lookup(entity, gnc_get_current_book ());
+	  price = GNC_PRICE(entity);
 	  name = "price";
-	  if (event_type != GNC_EVENT_DESTROY) {
+	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_price_get_iter_from_price (model, price, &iter)) {
 	      LEAVE("no iter");
 	      return;
@@ -1525,15 +1500,13 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	}
 
 	switch (event_type) {
-	 case GNC_EVENT_ADD:
+	 case QOF_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("add %s", name);
-	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
-	  gnc_tree_model_price_path_added (model, path);
-	  gtk_tree_path_free(path);
+	  gnc_tree_model_price_path_added (model, &iter);
 	  break;
 
-	 case GNC_EVENT_REMOVE:
+	 case QOF_EVENT_REMOVE:
 	  /* Record the path of this account for later use in destruction */
 	  DEBUG("remove %s", name);
 	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
@@ -1543,7 +1516,6 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	  }
 
 	  data = malloc(sizeof(*data));
-	  data->guid = *entity;
 	  data->model = model;
 	  data->path = path;
 	  pending_removals = g_slist_append (pending_removals, data);
@@ -1552,7 +1524,7 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	  LEAVE(" ");
 	  return;
 
-	 case GNC_EVENT_MODIFY:
+	 case QOF_EVENT_MODIFY:
 	  DEBUG("change %s", name);
 	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
 	  if (path == NULL) {

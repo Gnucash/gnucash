@@ -43,7 +43,6 @@ typedef struct {
   GnomePrintJob      * job;
   GnomePrintContext  * context;		/* Convenience only. Owned by the job */
   GnomeFont          * default_font;
-  GnomePrintPaper    * paper;
 } PrintSession;
 
 

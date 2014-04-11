@@ -163,14 +163,15 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
   ENTER("window %p, page %p", window, page);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (window));
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+  g_return_if_fail (priv->page == page);
 
   if (!page->notebook_page) {
     LEAVE("no displayed widget");
     return;
   }
 
-  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
-  gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(priv->page));
+  gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(page->notebook_page));
   priv->page = NULL;
   gnc_plugin_page_removed (page);
 
@@ -369,7 +370,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
 
   /* Create menu and toolbar information */
   priv->action_group = gtk_action_group_new (action_group_name);
-  gtk_action_group_set_translation_domain(priv->action_group, GETTEXT_PACKAGE);
+  gnc_gtk_action_group_set_translation_domain(priv->action_group, GETTEXT_PACKAGE);
   gtk_action_group_add_actions (priv->action_group, action_entries,
 				n_action_entries, user_data);
   gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);

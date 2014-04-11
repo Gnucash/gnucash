@@ -410,6 +410,9 @@ void gnc_split_register_show_present_divider (SplitRegister *reg,
 void gnc_split_register_expand_current_trans (SplitRegister *reg,
                                               gboolean expand);
 
+/** Mark the current transaction as collapsed, and do callbacks. */
+void gnc_split_register_collapse_current_trans (SplitRegister *reg);
+
 /** Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
 gboolean gnc_split_register_current_trans_expanded (SplitRegister *reg);
 
@@ -434,10 +437,6 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 
 /** Private function -- outsiders must not use this */
 gboolean gnc_split_register_full_refresh_ok (SplitRegister *reg);
-
-/** Private function -- outsiders must not use this */
-void     gnc_split_register_load_xfer_cells (SplitRegister *reg,
-                                             Account *base_account);
 
 /** Private function -- outsiders must not use this */
 void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,

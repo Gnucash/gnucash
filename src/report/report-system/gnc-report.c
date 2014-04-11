@@ -2,6 +2,7 @@
  * gnc-report.c -- C functions for reports.                         *
  *                                                                  *
  * Copyright (C) 2001 Linux Developers Group                        *
+ * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,23 +28,124 @@
 #include <libguile.h>
 #include <stdio.h>
 #include <string.h>
+#include "gfec.h"
 
 #include "gnc-report.h"
+
+/* Fow now, this is global, like it was in guile.  It _should_ be per-book. */
+static GHashTable *reports = NULL;
+static int report_next_serial_id = 0;
+
+static void
+gnc_report_init_table(void)
+{
+    if (!reports) {
+        reports = g_hash_table_new_full(
+            g_int_hash, g_int_equal, 
+            g_free, (GDestroyNotify) scm_gc_unprotect_object);
+    }
+}
+
+void 
+gnc_report_remove_by_id(gint id)
+{
+    if (reports)
+        g_hash_table_remove(reports, &id);
+}
+
+SCM gnc_report_find(gint id)
+{
+    gpointer report = NULL;
+
+    if (reports) {
+        report = g_hash_table_lookup(reports, &id);
+    }
+
+    if (!report)
+        return SCM_BOOL_F;
+
+    return report;
+}
+
+int gnc_report_add(SCM report)
+{
+    SCM get_id = scm_c_eval_string("gnc:report-id");
+    SCM value;
+    gint id, *key;
+
+    gnc_report_init_table();
+
+    value = scm_call_1(get_id, report);
+    if (SCM_NUMBERP(value)) {
+      id = scm_num2int(value, SCM_ARG1, __FUNCTION__);
+      if (!g_hash_table_lookup(reports, &id)) {
+	key = g_new(gint, 1);
+	*key = id;
+	g_hash_table_insert(reports, key, (gpointer)report);
+	scm_gc_protect_object(report);
+	return id;
+      }
+      g_warning("Report specified id of %d is already is use. "
+		"Using generated id.", id);
+    }
+
+    id = report_next_serial_id++;
+    while (id < G_MAXINT) {
+      if (!g_hash_table_lookup(reports, &id)) {
+	key = g_new(gint, 1);
+	*key = id;
+	g_hash_table_insert(reports, key, (gpointer)report);
+	scm_gc_protect_object(report);
+	return id;
+      }
+      id = report_next_serial_id++;
+    }
+
+    g_warning("Unable to add report to table. %d reports in use.", G_MAXINT);
+    report_next_serial_id = G_MAXINT;
+    return G_MAXINT;
+}
+
+static gboolean 
+yes_remove(gpointer key, gpointer val, gpointer data)
+{
+    return TRUE;
+}
+
+void
+gnc_reports_flush_global(void)
+{
+    if (reports)
+        g_hash_table_foreach_remove(reports, yes_remove, NULL);
+}
+
+GHashTable *
+gnc_reports_get_global(void)
+{
+    gnc_report_init_table();
+    return reports;
+}
+
+static void
+error_handler(const char *str)
+{
+    g_warning("Failure running report: %s", str);
+}
 
 gboolean
 gnc_run_report (int report_id, char ** data)
 {
   const gchar *free_data;
-  SCM run_report;
   SCM scm_text;
+  gchar *str;
 
   g_return_val_if_fail (data != NULL, FALSE);
   *data = NULL;
 
-  run_report = scm_c_eval_string ("gnc:report-run");
+  str = g_strdup_printf("(gnc:report-run %d)", report_id);
+  scm_text = gfec_eval_string(str, error_handler);
 
-  scm_text = scm_call_1 (run_report, scm_int2num (report_id));
-  if (!SCM_STRINGP (scm_text))
+  if (scm_text == SCM_UNDEFINED || !SCM_STRINGP (scm_text))
     return FALSE;
 
   free_data = SCM_STRING_CHARS (scm_text);

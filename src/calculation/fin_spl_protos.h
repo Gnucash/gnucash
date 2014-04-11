@@ -27,11 +27,11 @@
 /* Line Number:  344 */
 parser_env_ptr init_parser(
                            var_store_ptr  predefined_vars,
-                           char  radix_point,
-                           char  group_char,
+                           gchar  *radix_point,
+                           gchar  *group_char,
                            void          *trans_numeric(const char *digit_str,
-                                                        char   radix_point,
-                                                        char   group_char,
+                                                        gchar *radix_point,
+                                                        gchar *group_char,
                                                         char **rstr),
                            void          *numeric_ops(char  op_sym,
                                                       void *left_value,

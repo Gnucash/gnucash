@@ -35,7 +35,7 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "General Journal"))
-(define regrptname "Register")
+(define regrptname (N_ "Register"))
 
 ;; report constructor
 
@@ -67,17 +67,24 @@
 			      (list gnc:query-default-sort)
 			      '())
     (gnc:query-set-sort-increasing query #t #t #t)
+
+    (gnc:query-add-account-match
+     query
+     (gnc:group-get-subaccounts (gnc:book-get-template-group (gnc:get-current-book)))
+     'guid-match-none
+     'query-and)
+
     ;; set the "__reg" options required by the Register Report...
     (for-each
      (lambda (l)
        (set-option! "__reg" (car l) (cadr l)))
      ;; One list per option here with: option-name, default-value
      (list
-      (list (N_ "query") (gnc:query->scm query)) ;; think this wants an scm...
-      (list (N_ "journal") #t)
-      (list (N_ "double") #t)
-      (list (N_ "debit-string") (N_ "Debit"))
-      (list (N_ "credit-string") (N_ "Credit"))
+      (list "query" (gnc:query->scm query)) ;; think this wants an scm...
+      (list "journal" #t)
+      (list "double" #t)
+      (list "debit-string" (N_ "Debit"))
+      (list "credit-string" (N_ "Credit"))
       )
      )
     ;; we'll leave query malloc'd in case this is required by the C side...

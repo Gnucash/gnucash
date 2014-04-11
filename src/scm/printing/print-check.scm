@@ -108,7 +108,7 @@
 	 (payee-stub-text "")
 	 (memo-stub-text ""))
 
-    (if (not (null? ps))
+    (if ps
      (begin
       (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 
@@ -121,33 +121,33 @@
 		    (if off (set! offset (cdr off)))))))
           (set! format (print-check-format:custom-info format-info)))
       
-      (if (not (or offset (eq? (print-check-format:position format-info) 'custom)))
+      (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 
-            (set! offset 
-                  (cdr (assq (print-check-format:position format-info)
-                          (cdr (assq (print-check-format:format format-info)
-                             gnc:*stock-check-formats*)))))
-            (if (pair? offset)
-                (set! offset (cdr offset))))
-          (set! offset
-                (cdr (assq 'position 
-                           (print-check-format:custom-info format-info)))))
+	    (if (not (or offset (eq? (print-check-format:position format-info) 'custom)))
+		(begin 
+		  (set! offset 
+			(cdr (assq (print-check-format:position format-info)
+				   (cdr (assq (print-check-format:format format-info)
+					      gnc:*stock-check-formats*)))))
+		  (if (pair? offset)
+		      (set! offset (cdr offset))))
+		(set! offset
+		      (caddr (assq 'translate 
+				   (print-check-format:custom-info format-info))))))
+	  (set! offset 0.0))
       
       (let ((fmt (print-check-format:date-format format-info)))
-        (if (string=? fmt "custom")
-            (let* ((custom-info (print-check-format:custom-info format-info))
-                   (date-fmt (assq 'date-format custom-info)))
-              (if date-fmt 
-                  (set! date-fmt (cdr date-fmt)))
-              (set! date-string
-                    (strftime date-fmt (localtime date))))
-            (begin 
-              (set! date-string (strftime fmt (localtime date))))))            
+	(begin 
+	  (set! date-string (strftime fmt (localtime date)))))
 
+      (display "offset is ") (display offset) (newline)
       (let ((translate-pos (assq 'translate format)))
 	(if translate-pos
-	    (gnc:print-session-translate ps (cadr translate-pos)
-					 (caddr translate-pos))))
+	    (begin
+	      (display "translate by ") (display (cadr translate-pos))
+	      (display " ") (display (caddr translate-pos)) (newline)
+	      (gnc:print-session-translate ps (cadr translate-pos)
+					   (caddr translate-pos)))))
 
       (let ((rotate-angle (assq 'rotate format)))
 	(if rotate-angle (gnc:print-session-rotate ps (cdr rotate-angle))))
@@ -172,15 +172,22 @@
                                   (+ offset (caddr words-pos)))
         (gnc:print-session-text ps (number-to-words amount 100)))
 
-      (let ((memo-pos (assq 'memo format)))
-        (gnc:print-session-moveto ps (cadr memo-pos) 
-                                  (+ offset (caddr memo-pos)))
-        (gnc:print-session-text ps memo))
+      (if (not (eq? (print-check-format:format format-info) 'wallet))
+        (let ((memo-pos (assq 'memo format)))
+          (gnc:print-session-moveto ps (cadr memo-pos) 
+                                    (+ offset (caddr memo-pos)))
+          (gnc:print-session-text ps memo)))
 
       (if (eq? (print-check-format:format format-info) 'wallet)
         (begin
+           (let ((memo-pos (assq 'memo format)))
+             (gnc:print-session-moveto ps (cadr memo-pos) 
+                                  (+ offset (caddr memo-pos)))
+             (if (< (string-length memo) 28)
+	          (gnc:print-session-text ps memo)
+	          (gnc:print-session-text ps (substring memo 0 27))))
            (let ((memostub-pos (assq 'memo-stub format)))
-                (gnc:print-session-moveto ps (cadr memostub-pos) 
+             (gnc:print-session-moveto ps (cadr memostub-pos) 
                                   (+ offset (caddr memostub-pos)))
              (if (< (string-length memo) 22)
 	            (set! memo-stub-text memo)

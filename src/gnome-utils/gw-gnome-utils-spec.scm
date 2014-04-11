@@ -1,5 +1,5 @@
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (define-module (g-wrapped gw-gnome-utils-spec))
 
@@ -29,6 +29,7 @@
    ws
    (lambda (wrapset client-wrapset) 
      (list
+      "#include <config.h>\n"
       "#include <dialog-options.h>\n"
       "#include <dialog-utils.h>\n"
       "#include <druid-utils.h>\n"
@@ -46,27 +47,9 @@
       "#include <gnc-plugin-file-history.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <print-session.h>\n"
+      "#include <gnc-splash.h>\n"
       )))
 
-
-  (gw:wrap-function
-   ws
-   'gnc:gnome-init
-   '<gw:scm>
-   "gnc_gnome_init"
-   '(((<gw:mchars> caller-owned const) arg0)
-     ((<gw:mchars> caller-owned const) progname)
-     ((<gw:mchars> caller-owned const) version)
-     (<gw:scm> command-line))
-   "Initialize the GnuCash gnome system.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gnome-shutdown
-   '<gw:void>
-   "gnc_gnome_shutdown"
-   '()
-   "Shutdown the GnuCash gnome system.")
 
   (gw:wrap-as-wct ws '<gtk:Widget*> "GtkWidget*" "const GtkWidget*")
   (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
@@ -256,6 +239,7 @@
    '((<gnc:UIWidget> parent)
      ((<gw:mchars> caller-owned const) title)
      ((<gw:mchars> caller-owned const) msg)
+     ((<gw:mchars> caller-owned const) button-name)
      (<gw:int> default-choice)
      ((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
    "Show a dialog offering different mutually exclusive choices
@@ -449,15 +433,6 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:file-query-save
-   '<gw:bool>
-   "gnc_file_query_save"
-   '()
-   "Query the user whether to save the current file, and save
-if they say 'Yes'. The return is false if the user says 'Cancel'.")
-
-  (gw:wrap-function
-   ws
    'gnc:file-quit
    '<gw:void>
    "gnc_file_quit"
@@ -504,4 +479,29 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
    '(((<gw:mchars> caller-owned const) message)
      (<gw:double> percentage))
    "Set the progressbar window from the given GncWindow.")
+
+  (gw:wrap-function
+   ws
+   'gnc:gnome-locate-data-file
+   '(<gw:mchars> caller-owned)
+   "gnc_gnome_locate_data_file"
+   '(((<gw:mchars> caller-owned const) name))
+   "Find the file in the application data directory.")
+
+  (gw:wrap-function
+   ws
+   'gnc:ui-is-running?
+   '<gw:bool>
+   "gnucash_ui_is_running"
+   '()
+   "Predicate to determine if the UI is running.")
+
+  (gw:wrap-function
+   ws
+   'gnc:update-splash-screen
+   '<gw:void>
+   "gnc_update_splash_screen"
+   '(((<gw:mchars> caller-owned const) string))
+   "Update the progress box on the splash screen dialog.")
+
 )

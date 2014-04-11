@@ -64,12 +64,8 @@
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual"))
 
-(define optname-start-date (N_ "Equity Statement Start Date"))
-(define opthelp-start-date
-  (N_ "Start of the period this equity statement will cover"))
-(define optname-end-date (N_ "Equity Statement End Date"))
-(define opthelp-end-date
-  (N_ "End of the period this equity statement will cover"))
+(define optname-start-date (N_ "Start Date"))
+(define optname-end-date (N_ "End Date"))
 
 (define optname-accounts (N_ "Accounts to include"))
 (define opthelp-accounts
@@ -101,46 +97,6 @@
 (define opthelp-closing-regexp
   (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
 
-;; This calculates the increase in the balance(s) of all accounts in
-;; <accountlist> over the period from <start-date> to <end-date>.
-;; Returns a commodity collector.
-;;
-;; Note: There is both a gnc:account-get-comm-balance-interval and
-;; gnc:group-get-comm-balance-interval which could replace this
-;; function....
-;;
-(define (accountlist-get-comm-balance-at-date accountlist start-date end-date)
-;;  (for-each (lambda (x) (display x))
-;;	    (list "computing from: " (gnc:print-date start-date) " to "
-;;		  (gnc:print-date end-date) "\n"))
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (let* (
-		       (start-balance
-			(gnc:account-get-comm-balance-at-date
-			 account start-date #f))
-		       (sb (cadr (start-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       (end-balance
-			(gnc:account-get-comm-balance-at-date 
-			 account end-date #f))
-		       (eb (cadr (end-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       )
-;;		  (for-each (lambda (x) (display x))
-;;			    (list "Start balance: " sb " : "
-;;				  (gnc:account-get-name account) " : end balance: "
-;;				  eb "\n"))
-                  (collector 'merge end-balance #f)
-		  (collector 'minusmerge start-balance #f)
-		  ))
-              accountlist)
-    collector))
-
 ;; options generator
 (define (equity-statement-options-generator)
   (let* ((options (gnc:new-options))
@@ -155,7 +111,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
@@ -237,7 +193,6 @@
     (gnc:option-value
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
-  (define forever-ago (cons 0 0))
   
   (gnc:report-starting reportname)
   
@@ -319,7 +274,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period Covering %s to %s"))
+				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
@@ -383,8 +338,8 @@
 		   account end-date-tp #f)))
 	       (terse-period? #t)
 	       (period-for (if terse-period?
-			       (string-append " " (N_ "for Period"))
-			       (sprintf #f (string-append ", " (N_ "%s to %s"))
+			       (string-append " " (_ "for Period"))
+			       (sprintf #f (string-append ", " (_ "%s to %s"))
 					(gnc:print-date start-date-printable)
 					(gnc:print-date end-date-tp))
 			       ))
@@ -484,13 +439,11 @@
 	  
 	  ;; start and end retained earnings (income - expenses)
 	  (set! neg-pre-start-retained-earnings
-		(accountlist-get-comm-balance-at-date
-		 income-expense-accounts
-		 forever-ago start-date-tp)) ; OK
+		(gnc:accountlist-get-comm-balance-at-date
+		 income-expense-accounts start-date-tp)) ; OK
 	  (set! neg-pre-end-retained-earnings
-		(accountlist-get-comm-balance-at-date
-		 income-expense-accounts
-		 forever-ago end-date-tp)) ; OK
+		(gnc:accountlist-get-comm-balance-at-date
+		 income-expense-accounts end-date-tp)) ; OK
 	  ;; neg-pre-end-retained-earnings is not used to calculate
 	  ;; profit but is used to calculate unrealized gains
 	  
@@ -503,7 +456,7 @@
 		)
 	  ;; find retained earnings for the period
 	  (set! neg-net-income
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 income-expense-accounts
 		 start-date-tp end-date-tp)) ; OK
 	  ;; revert the income/expense to its pre-closing balance
@@ -628,28 +581,28 @@
 	  
 	  (report-line
 	   build-table
-	   (string-append (N_ "Capital") ", "
+	   (string-append (_ "Capital") ", "
 			  (gnc:print-date start-date-printable))
 	   #f start-total-equity
 	   1 start-exchange-fn #f "primary-subheading"
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Net income") period-for)
-	   (string-append (N_ "Net loss") period-for)
+	   (string-append (_ "Net income") period-for)
+	   (string-append (_ "Net loss") period-for)
 	   net-income
 	   0 end-exchange-fn #f #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Investments") period-for)
+	   (string-append (_ "Investments") period-for)
 	   #f
 	   investments
 	   0 end-exchange-fn #f #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Withdrawals") period-for)
+	   (string-append (_ "Withdrawals") period-for)
 	   #f
 	   withdrawals
 	   0 end-exchange-fn #f #f
@@ -657,22 +610,22 @@
 	  (or (gnc:commodity-collector-allzero? net-unrealized-gains)
 	      (report-line
 	       build-table 
-	       (N_ "Unrealized Gains")
-	       (N_ "Unrealized Losses")
+	       (_ "Unrealized Gains")
+	       (_ "Unrealized Losses")
 	       net-unrealized-gains
 	       0 end-exchange-fn #f #f
 	       )
 	   )
 	  (report-line
 	   build-table 
-	   (N_ "Increase in capital")
-	   (N_ "Decrease in capital")
+	   (_ "Increase in capital")
+	   (_ "Decrease in capital")
 	   capital-increase
 	   1 end-exchange-fn use-rules? #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Capital") ", "
+	   (string-append (_ "Capital") ", "
 			  (gnc:print-date end-date-tp))
 	   #f
 	   end-total-equity

@@ -34,6 +34,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
+#include "gtk-compat.h"
 #include <string.h>
 
 #include "gnc-file.h"
@@ -316,7 +317,7 @@ gnc_history_update_action (GncMainWindow *window,
 	    g_free(old_filename);
 	  g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
 	} else {
-	  g_object_set(G_OBJECT(action), "visible", FALSE, NULL);
+	  gtk_action_set_visible(action, FALSE);
 	}
 	g_free(action_name);
 	LEAVE("");
@@ -379,7 +380,7 @@ gnc_plugin_history_list_changed (GConfClient *client,
 	window = GNC_MAIN_WINDOW(user_data);
 
 	fullkey = gconf_entry_get_key(entry);
-	key = rindex(fullkey, '/') + 1;
+	key = strrchr(fullkey, '/') + 1;
 	if (strcmp(key, HISTORY_STRING_MAXFILES) == 0) {
 	  gnc_history_update_menus (window);
 	  LEAVE("updated maxfiles");

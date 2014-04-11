@@ -25,8 +25,6 @@
 #ifndef GNC_XML_H
 #define GNC_XML_H
 
-#include "config.h"
-
 #include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "gnc-engine.h"

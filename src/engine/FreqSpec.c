@@ -77,6 +77,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 #include <string.h>
 #include <time.h>
 
@@ -188,7 +189,7 @@ xaccFreqSpecMalloc(QofBook *book)
 
    fs = g_new0(FreqSpec, 1);
    xaccFreqSpecInit( fs, book );
-   gnc_engine_gen_event( &fs->entity, GNC_EVENT_CREATE );
+   qof_event_gen( &fs->entity, QOF_EVENT_CREATE , NULL);
    return fs;
 }
 
@@ -219,7 +220,7 @@ void
 xaccFreqSpecFree( FreqSpec *fs )
 {
    if ( fs == NULL ) return;
-   gnc_engine_gen_event( &fs->entity, GNC_EVENT_DESTROY );
+   qof_event_gen( &fs->entity, QOF_EVENT_DESTROY , NULL);
    xaccFreqSpecCleanUp( fs );
 
    qof_entity_release (&fs->entity);
@@ -1296,7 +1297,7 @@ qofFreqSpecSetBaseDate(FreqSpec *fs, Timespec start_date)
 	when = g_date_new();
 	type = xaccFreqSpecGetType(fs);
 	start_t = timespecToTime_t(start_date);
-	g_date_set_time(when, (GTime)start_t);
+	g_date_set_time_t(when, start_t);
 	/* QOF sets this before a type is assigned. */
 	if(type == INVALID) {
 		fs->type = ONCE;

@@ -51,13 +51,11 @@ static void
 save_xml_file(QofSession * session, const char *filename_base)
 {
     QofBackendError io_err;
-    char cwd[1024];
-    char *filename;
+    gchar *cwd, *filename;
 
     g_return_if_fail(session && filename_base);
 
-    getcwd(cwd, sizeof(cwd));
-
+    cwd = g_get_current_dir();
     filename = g_strdup_printf("file:/%s/%s", cwd, filename_base);
 
     qof_session_begin(session, filename, FALSE, TRUE);
@@ -74,6 +72,7 @@ save_xml_file(QofSession * session, const char *filename_base)
     g_return_if_fail(io_err == ERR_BACKEND_NO_ERR);
 
     g_free(filename);
+    g_free(cwd);
 }
 
 static void
@@ -510,7 +509,7 @@ test_raw_query(QofSession * session, Query * q)
     book = qof_session_get_book(session);
     be = (PGBackend *) qof_book_get_backend(book);
 
-    if (gnc_should_log(log_module, GNC_LOG_DETAIL))
+    if (qof_log_check(log_module, QOF_LOG_DETAIL))
         qof_query_print(qn);
 
     sq = sqlQuery_new();
@@ -1060,7 +1059,7 @@ test_performance(DbInfo *dbinfo)
 
     session = get_random_session();
 
-    gnc_set_log_level(MOD_TEST, GNC_LOG_WARNING);
+    qof_log_set_level(MOD_TEST, QOF_LOG_WARNING);
 
     dbinfo->mode = sumode;
     START_CLOCK(0, "Starting to save session");
@@ -1075,7 +1074,7 @@ test_performance(DbInfo *dbinfo)
     if (!load_db_file(session, dbinfo, FALSE))
         return;
 
-    gnc_set_log_level(MOD_TEST, GNC_LOG_INFO);
+    qof_log_set_level(MOD_TEST, QOF_LOG_INFO);
 
     START_CLOCK(0, "Starting to save transactions");
     add_random_transactions_to_book(qof_session_get_book(session), 100);

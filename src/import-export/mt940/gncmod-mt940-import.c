@@ -26,9 +26,14 @@
 #include "config.h"
 #include <glib.h>
 
-#include "gnc-mt940-import.h"
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <libguile.h>
+
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+
+#include "gnc-mt940-import.h"
 #include "gnc-plugin-mt940.h"
 
 /* version of the gnc module system interface we require */

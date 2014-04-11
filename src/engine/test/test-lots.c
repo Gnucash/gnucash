@@ -72,28 +72,29 @@ run_test (void)
 int
 main (int argc, char **argv)
 {
-	gint i;
+    gint i;
 
-	qof_init();
-	if(cashobjects_register()) {
-  /* Any tests that cause an error or warning to be printed
-   * automatically fail! */
-  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
-  /* Set up a reproducible test-case */
-  srand(0);
-  /* Iterate the test a number of times */
-		for (i=0; i< max_iterate; i++)
-  {
-			fprintf(stdout, " Lots: %d of %d paired tests . . . \r",
-				(i + 1)*2, max_iterate * 2);
-			fflush(stdout);
-    run_test ();
-  }
-		/* 'erase' the recurring tag line with dummy spaces. */
-		fprintf(stdout, "Lots: Test series complete.         \n");
-		fflush(stdout);
-  print_test_results();
-	}
-	qof_close();
-  return 0;
+    qof_init();
+    if (!cashobjects_register())
+        exit(1);
+
+    /* Any tests that cause an error or warning to be printed
+     * automatically fail! */
+    g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+    /* Set up a reproducible test-case */
+    srand(0);
+    /* Iterate the test a number of times */
+    for (i=0; i< max_iterate; i++) {
+        fprintf(stdout, " Lots: %d of %d paired tests . . . \r",
+                (i + 1)*2, max_iterate * 2);
+        fflush(stdout);
+        run_test ();
+    }
+    /* 'erase' the recurring tag line with dummy spaces. */
+    fprintf(stdout, "Lots: Test series complete.         \n");
+    fflush(stdout);
+    print_test_results();
+
+    qof_close();
+    return 0;
 }

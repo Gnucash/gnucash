@@ -15,8 +15,8 @@ int main( int argc, char* argv[] )
 	int a, b;
 	g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 	a = b = 1;
-	do_test( a == b, 'integer equality" );
-	do_test( a != b, 'integer inequality? (should fail)" );
+	do_test( a == b, "integer equality" );
+	do_test( a != b, "integer inequality? (should fail)" );
 
 	do_test_args( a == b, "fancy info", __FILE__, __LINE__, "a = %d, b = %b", a, b );
 
@@ -33,8 +33,6 @@ Otherwise, only failures are printed out.
 
 #ifndef TEST_STUFF_H
 #define TEST_STUFF_H
-
-#include "config.h"
 
 #include <glib.h>
 #include <stdlib.h>
@@ -123,6 +121,7 @@ gint get_random_int_in_range(int start, int end);
 void random_character_include_funky_chars (gboolean use_funky_chars);
 gchar get_random_character(void);
 gchar* get_random_string(void);
+gchar * get_random_string_length_in_range(int minlen, int maxlen);
 gchar* get_random_string_without(const char *exclude_chars);
 gint64 get_random_gint64(void);
 double get_random_double(void);

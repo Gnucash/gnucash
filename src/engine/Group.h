@@ -73,7 +73,7 @@ void          xaccAccountGroupDestroy (AccountGroup *grp);
 #define gnc_book_get_group xaccGetAccountGroup
 
 /** Return the book to which this account belongs */
-QofBook * xaccGroupGetBook (AccountGroup *group);
+QofBook * xaccGroupGetBook (const AccountGroup *group);
 
 /** Compare two account groups
 
@@ -82,7 +82,7 @@ groups have different numbers of accounts.
 
 @return TRUE if the two account groups are equal, FALSE otherwise.
 */
-gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
+gboolean xaccGroupEqual(const AccountGroup *a, const AccountGroup *b,
                         gboolean check_guids);
 
 /** @} */
@@ -105,7 +105,7 @@ void          xaccAccountGroupCommitEdit (AccountGroup *grp);
  *    hasn't been saved.
  XXX this should be moved to private header file, this is not a public routine!
  */
-gboolean xaccGroupNotSaved  (AccountGroup *grp);
+gboolean xaccGroupNotSaved  (const AccountGroup *grp);
 
 /** The xaccGroupMarkSaved() subroutine will mark
  *    the entire group as having been saved, including 
@@ -172,52 +172,65 @@ void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 /** The xaccGroupGetNumSubAccounts() subroutine returns the number
  *    of accounts, including subaccounts, in the account group
  */
-int     xaccGroupGetNumSubAccounts (AccountGroup *grp);
+int     xaccGroupGetNumSubAccounts (const AccountGroup *grp);
 
 /** The xaccGroupGetNumAccounts() subroutine returns the number
  *    of accounts in the indicated group only (children not counted).
  */
-int     xaccGroupGetNumAccounts (AccountGroup *grp);
+int     xaccGroupGetNumAccounts (const AccountGroup *grp);
 
 /** The xaccGroupGetDepth() subroutine returns the length of the 
  *    longest tree branch.  Each link between an account and its
  *    (non-null) children counts as one unit of length.
  */
-int     xaccGroupGetDepth (AccountGroup *grp);
+int     xaccGroupGetDepth (const AccountGroup *grp);
 /** @} */
 
 /** @name Getting Accounts and Subaccounts
  @{
 */
 /** DOCUMENT ME! is this routine deprecated? XXX using index is weird! */
-Account * xaccGroupGetAccount (AccountGroup *group, int index);
+Account * xaccGroupGetAccount (const AccountGroup *group, int index);
 
 /** The xaccGroupGetSubAccounts() subroutine returns an list of the accounts,
  *    including subaccounts, in the account group. The returned list
  *    should be freed with g_list_free() when no longer needed.
  */
-AccountList * xaccGroupGetSubAccounts (AccountGroup *grp);
+AccountList * xaccGroupGetSubAccounts (const AccountGroup *grp);
+
+/** The xaccGroupGetSubAccounts() subroutine returns a sorted list of
+ *    the accounts, including subaccounts, in the account group. The
+ *    returned list should be freed with g_list_free() when no longer
+ *    needed.
+ */
+AccountList * xaccGroupGetSubAccountsSorted (const AccountGroup *grp);
 
 /** The xaccGroupGetAccountList() subroutines returns only the immediate
  *    children of the account group. The returned list should *not*
  *    be freed by the caller.
  */
-AccountList * xaccGroupGetAccountList (AccountGroup *grp);
+AccountList * xaccGroupGetAccountList (const AccountGroup *grp);
+
+/** The xaccGroupGetAccountList() subroutines returns only the
+ *    immediate children of the account group.  The returned list
+ *    should be freed with g_list_free() when no longer needed.
+ */
+GList * xaccGroupGetAccountListSorted (const AccountGroup *grp);
 
 /** The xaccGroupGetRoot() subroutine will find the topmost 
  *    (root) group to which this group belongs.
  */
-AccountGroup * xaccGroupGetRoot (AccountGroup *grp);
+AccountGroup * xaccGroupGetRoot (const AccountGroup *grp);
 
 /** The xaccGetAccountRoot() subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
-AccountGroup * xaccAccountGetRoot (Account *account);
+AccountGroup * xaccAccountGetRoot (const Account *account);
 
 /** The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.
  */
-Account * xaccGroupGetParentAccount (AccountGroup *group);
+Account * xaccGroupGetParentAccount (const AccountGroup *group);
 
 /** @} */
 
@@ -229,30 +242,28 @@ Account * xaccGroupGetParentAccount (AccountGroup *group);
  *    in the indicated AccountGroup group.  It returns NULL if the
  *    account was not found.
  */
-Account *xaccGetAccountFromName     (AccountGroup *group, const char *name);
+Account *xaccGetAccountFromName (const AccountGroup *group, const char *name);
 
 /** The xaccGetAccountFromFullName() subroutine works like
  *    xaccGetAccountFromName, but uses fully-qualified names
  *    using the given separator.
  */
-Account *xaccGetAccountFromFullName (AccountGroup *group,
-                                     const char *name,
-                                     const char separator);
+Account *xaccGetAccountFromFullName (const AccountGroup *group,
+                                     const char *name);
 
 /** The xaccGetPeerAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
  *    in the same AccountGroup anchor group. It returns NULL if the
  *    account was not found.
  */
-Account *xaccGetPeerAccountFromName (Account *account, const char *name);
+Account *xaccGetPeerAccountFromName (const Account *account, const char *name);
 
 /** The xaccGetPeerAccountFromFullName() subroutine works like
  *     xaccGetPeerAccountFromName, but uses fully-qualified
  *     names using the given separator.
  */
-Account *xaccGetPeerAccountFromFullName (Account *acc,
-                                         const char * name,
-                                         const char separator);
+Account *xaccGetPeerAccountFromFullName (const Account *acc,
+                                         const char * name);
 
 /** @} */
 
@@ -260,7 +271,7 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
  @{
 */
 
-typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
+typedef gpointer (*AccountCallback) (Account *a, gpointer data);
 
 /** The xaccGroupMapAccounts() routine will traverse the account 
       group, returning a list of accounts.  If the callback
@@ -344,7 +355,7 @@ void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
  *    marker for each transaction which is a parent of one of the
  *    splits in the account.
  */
-void xaccAccountBeginStagedTransactionTraversals(Account *account);
+void xaccAccountBeginStagedTransactionTraversals(const Account *account);
 
 /** xaccTransactionTraverse() checks the stage of the given transaction.
  *    If the transaction hasn't reached the given stage, the transaction
@@ -387,7 +398,7 @@ int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
  *    a traversal is undefined, so don't do that. 
  */
 
-int xaccAccountStagedTransactionTraversal(Account *a,
+int xaccAccountStagedTransactionTraversal(const Account *a,
                                           unsigned int stage,
                                           TransactionCallback thunk,
                                           void *data);

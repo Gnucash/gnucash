@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 
 #include "gnc-engine.h"
 #include "SX-book.h"
@@ -185,7 +186,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     retval.type = END_ON_DATE;
     g_date_clear( &(retval.end_date), 1 );
     end_tt = gnc_date_edit_get_date(sxfti->endDateGDE);
-    g_date_set_time( &(retval.end_date), end_tt);
+    g_date_set_time_t( &(retval.end_date), end_tt);
     return retval;
   }
     
@@ -266,7 +267,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
           && !gnc_verify_dialog( (gncUIWidget)sxfti->dialog,
                                  FALSE, "%s",
                                  _("The Scheduled Transaction Editor "
-                                   "cannot automatically\nbalance "
+                                   "cannot automatically balance "
                                    "this transaction. "
                                    "Should it still be "
                                    "entered?") ) ) {
@@ -316,7 +317,7 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
     tmpfs = xaccFreqSpecMalloc( gnc_get_current_book() );
     xaccFreqSpecSetComposite( fs );
     xaccFreqSpecSetWeekly( tmpfs, date, 2 );
-    xaccFreqSpecSetUIType( fs, UIFREQ_WEEKLY );
+    xaccFreqSpecSetUIType( fs, UIFREQ_BI_WEEKLY );
     xaccFreqSpecCompositeAdd( fs, tmpfs );
     break;
 
@@ -421,7 +422,7 @@ sxftd_init( SXFromTransInfo *sxfti )
   /* Setup the initial start date for user display/confirmation */
   /* compute good initial date. */
   start_tt = xaccTransGetDate( sxfti->trans );
-  g_date_set_time( &date, start_tt );
+  g_date_set_time_t( &date, start_tt );
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
@@ -474,7 +475,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   xaccSchedXactionSetName(sx, name);
   g_free(name);
 
-  g_date_set_time( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
+  g_date_set_time_t( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
  
   fs = xaccFreqSpecMalloc(gnc_get_current_book ());
   sxftd_update_fs( sxfti, &date, fs );
@@ -562,7 +563,7 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
 
     if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION ) {
             gnc_error_dialog( gnc_ui_get_toplevel(), 
-                              _( "The Scheduled Transaction is unbalanced.\n"
+                              _( "The Scheduled Transaction is unbalanced. "
                                  "You are strongly encouraged to correct this situation." ) );
     }
     book = gnc_get_current_book ();
@@ -596,7 +597,7 @@ sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
   FreqSpec *fs;
 
   tmp_tt = xaccTransGetDate( sxfti->trans );
-  g_date_set_time( &date, tmp_tt );
+  g_date_set_time_t( &date, tmp_tt );
   
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
@@ -712,24 +713,27 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   gchar *name;
   GString *info;
 
-  i = 0;
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   get = sxftd_get_end_info( sxfti );
 
   tmp_tt = gnc_date_edit_get_date( sxfti->startDateGDE );
   tmpTm = g_new0( struct tm, 1 );
   *tmpTm = *localtime( &tmp_tt );
-  /* go one day before what's in the box so we can get the correct start
-   * date. */
-  g_date_set_day( &date, tmpTm->tm_mday-1 );
+  g_date_clear(&date, 1);
+  g_date_set_day( &date, tmpTm->tm_mday );
   g_date_set_month( &date, tmpTm->tm_mon+1 );
   g_date_set_year( &date, tmpTm->tm_year+1900 );
   g_free( tmpTm );
 
   sxftd_update_fs( sxfti, &date, fs );
+
+  /* go one day before what's in the box so we can get the correct start
+   * date. */
+  g_date_subtract_days(&date, 1);
   xaccFreqSpecGetNextInstance( fs, &date, &date );
   startDate = date;
 
+  i = 0;
   while ( (i < (SXFTD_EXCAL_NUM_MONTHS * 31))
           && g_date_valid( &date )
           /* Do checking against end restriction. */
@@ -805,7 +809,7 @@ gnc_sx_create_from_trans( Transaction *trans )
           {
                   gnc_error_dialog( gnc_ui_get_toplevel(),
                                     _( "Cannot create a Scheduled Transaction "
-                                       "from a Transaction currently\n"
+                                       "from a Transaction currently "
                                        "being edited. Please Enter the "
                                        "Transaction before Scheduling." ) );
                   sxftd_close( sxfti, TRUE );

@@ -39,7 +39,6 @@
 #ifndef XACC_ACCOUNT_P_H
 #define XACC_ACCOUNT_P_H
 
-#include "config.h"
 #include "Account.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
@@ -68,7 +67,7 @@ struct account_s
    * It is intended to be reporting code that is a synonym for the 
    * accountName. Typically, it will be a numeric value that follows 
    * the numbering assignments commonly used by accountants, such 
-   * as 100, 200 or 600 for top-level * accounts, and 101, 102..  etc.
+   * as 100, 200 or 600 for top-level accounts, and 101, 102..  etc.
    * for detail accounts.
    */
   char     *accountCode;
@@ -133,15 +132,6 @@ struct account_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-/* The xaccAccountRemoveSplit() routine will remove the indicated split
- *    from the indicated account.  Note that this will leave the split
- *    "dangling", i.e. unassigned to any account, and therefore will put
- *    the engine into an inconsistent state.  After removing a split, 
- *    it should be immediately destroyed, or it should be inserted into  
- *    an account.
- */
-void         xaccAccountRemoveSplit (Account *, Split *);
-
 /* The xaccAccountSortSplits() routine will resort the account's 
  * splits if the sort is dirty. If 'force' is true, the account 
  * is sorted even if the editlevel is not zero. 
@@ -151,12 +141,12 @@ void xaccAccountSortSplits (Account *acc, gboolean force);
 /* The following recompute the partial balances (stored with the
  * transaction) and the total balance, for this account 
  */
-void         xaccAccountRecomputeBalance (Account *);
+void xaccAccountRecomputeBalance (Account *);
 
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
-void         xaccAccountSetGUID (Account *account, const GUID *guid);
+void xaccAccountSetGUID (Account *account, const GUID *guid);
 
 /* The xaccAccountSetStartingBalance() routine will set the starting
  *    commodity balance for this account.  This routine is intended for
@@ -189,7 +179,7 @@ void xaccFreeAccount (Account *account);
  *    want anyone except the backend to mess with them.
  */
 void xaccAccountSetVersion (Account*, gint32);
-gint32 xaccAccountGetVersion (Account*);
+gint32 xaccAccountGetVersion (const Account* acc);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);

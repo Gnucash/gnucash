@@ -55,7 +55,7 @@ libgncmod_dialog_tax_table_LTX_gnc_module_path(void)
 char * 
 libgncmod_dialog_tax_table_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash tax-table GNOME UI module");
+  return g_strdup("The GnuCash tax-table GNOME UI module");
 }
 
 int

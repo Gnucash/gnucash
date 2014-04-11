@@ -21,10 +21,9 @@
  *                                                                   *
  ********************************************************************/
  /* Test the qof_book_merge infrastructure. */
- 
-#include <glib.h>
 
-#define _GNU_SOURCE
+#include "config.h" 
+#include <glib.h>
 
 #include "qof.h"
 #include "test-stuff.h"
@@ -41,7 +40,7 @@
 #define OBJ_MINOR "tiny"
 #define OBJ_ACTIVE "ofcourse"
 
-static void test_rule_loop (qof_book_mergeData*, qof_book_mergeRule*, guint);
+static void test_rule_loop (QofBookMergeData*, QofBookMergeRule*, guint);
 static void test_merge (void);
 gboolean myobjRegister (void);
 
@@ -50,7 +49,7 @@ typedef struct obj_s
 {
 	QofInstance inst;
 	char     	*Name;
-	gnc_numeric Amount;
+	gnc_numeric	Amount;
 	const GUID 	*obj_guid;
 	Timespec 	date;
 	double 		discount; /* cheap pun, I know. */
@@ -95,7 +94,7 @@ obj_create(QofBook *book)
 	g->active = TRUE;
 	g->version = 1;
 	g->minor = 1;
-	gnc_engine_gen_event(&g->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -261,7 +260,7 @@ test_merge (void)
 	gint64 minor;
 	gchar *import_init, *target_init;
 	gnc_numeric obj_amount;
-	qof_book_mergeData *mergeData;
+	QofBookMergeData *mergeData;
 	
 	target = qof_book_new();
 	import = qof_book_new();
@@ -286,7 +285,7 @@ test_merge (void)
 	do_test ((NULL != &import_obj->inst), "#4 instance init");
 	obj_setGUID(import_obj,qof_instance_get_guid(&import_obj->inst));
 	do_test ((NULL != &import_obj->obj_guid), "#5 guid set");
-	gnc_engine_gen_event(&import_obj->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&import_obj->inst.entity, QOF_EVENT_CREATE, NULL);
 	do_test ((NULL != &import_obj->inst.entity), "#6 gnc event create");
 	obj_setName(import_obj, import_init);
 	do_test ((NULL != &import_obj->Name), "#7 string set");
@@ -314,7 +313,7 @@ test_merge (void)
 	new_obj = g_new(myobj, 1);
 	qof_instance_init (&new_obj->inst, TEST_MODULE_NAME, import);
 	obj_setGUID(new_obj,qof_instance_get_guid(&new_obj->inst));
-	gnc_engine_gen_event (&new_obj->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen (&new_obj->inst.entity, QOF_EVENT_CREATE, NULL);
 	obj_setName(new_obj, import_init);
 	obj_setAmount(new_obj, obj_amount);
 	obj_setActive(new_obj, active);
@@ -334,7 +333,7 @@ test_merge (void)
 	target_obj = g_new(myobj, 1);
 	qof_instance_init (&target_obj->inst, TEST_MODULE_NAME, target);
 	obj_setGUID(target_obj,qof_instance_get_guid(&target_obj->inst));
-	gnc_engine_gen_event (&target_obj->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen (&target_obj->inst.entity, QOF_EVENT_CREATE, NULL);
 	obj_setName(target_obj, target_init);
 	obj_setAmount(target_obj, obj_amount);
 	obj_setActive(target_obj, active);
@@ -343,21 +342,21 @@ test_merge (void)
 	obj_setMinor(target_obj, minor);
 	obj_setDate(target_obj, tc );
 	
-	mergeData = qof_book_mergeInit(import, target);
+	mergeData = qof_book_merge_init(import, target);
 	do_test ( mergeData != NULL, "FATAL: Merge could not be initialised!\t aborting . . ");
 	g_return_if_fail(mergeData != NULL);
- 	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_REPORT);
-	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_UPDATE);
-	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_NEW);
+ 	qof_book_merge_rule_foreach(mergeData, test_rule_loop, MERGE_REPORT);
+	qof_book_merge_rule_foreach(mergeData, test_rule_loop, MERGE_UPDATE);
+	qof_book_merge_rule_foreach(mergeData, test_rule_loop, MERGE_NEW);
  	/* reserved calls - test only */
- 	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_ABSOLUTE);
- 	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_DUPLICATE);
+ 	qof_book_merge_rule_foreach(mergeData, test_rule_loop, MERGE_ABSOLUTE);
+ 	qof_book_merge_rule_foreach(mergeData, test_rule_loop, MERGE_DUPLICATE);
 
 	/* import should not be in the target - pass if import_init fails match with target */
 	do_test (((safe_strcmp(obj_getName(import_obj),obj_getName(target_obj))) != 0), "Init value test #1");
 	
 	/* a good commit returns zero */
- 	do_test (qof_book_mergeCommit(mergeData) == 0, "Commit failed");
+ 	do_test (qof_book_merge_commit(mergeData) == 0, "Commit failed");
 
 	/* import should be in the target - pass if import_init matches target */
 	do_test (((safe_strcmp(import_init,obj_getName(target_obj))) == 0), "Merged value test #1");
@@ -389,7 +388,7 @@ test_merge (void)
 }
 
 static void
-test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint remainder)
+test_rule_loop (QofBookMergeData *mergeData, QofBookMergeRule *rule, guint remainder)
 {
 	GSList *testing;
 	QofParam *eachParam;
@@ -461,17 +460,17 @@ test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint r
 	} // end param loop
 	/* set each rule dependent on the user involvement response above. */
 	/* test routine just sets all MERGE_REPORT to MERGE_UPDATE */
-	mergeData = qof_book_mergeUpdateResult(mergeData, MERGE_UPDATE);
+	mergeData = qof_book_merge_update_result(mergeData, MERGE_UPDATE);
 	do_test ((rule->mergeResult != MERGE_REPORT), "update result fail");
 }
 
 int
 main (int argc, char **argv)
 {
-	gnc_engine_init(argc, argv);
+	qof_init();
 	myobjRegister();
 	test_merge();
 	print_test_results();
-	exit(get_rv());
+	qof_close();
 	return 0;
 }

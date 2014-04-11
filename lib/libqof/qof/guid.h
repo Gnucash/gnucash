@@ -24,7 +24,6 @@
 #ifndef GUID_H
 #define GUID_H 
 
-#include <glib.h>
 #include <stddef.h>
 
 /** @addtogroup Entity
@@ -38,8 +37,10 @@
     or beyond.
 
     QOF GUID's can be used independently of any other subsystem
-    in QOF.   In particular, they do not require the use of
-    other parts of the object subsystem.
+    in QOF. In particular, they do not require the use of
+    other parts of the object subsystem. New GUID's are usually
+    created by initialising a new entity using qof_instance_init,
+    rather than calling GUID functions directly.
 
     @{ */
 /** @file guid.h
@@ -48,11 +49,12 @@
 */
 
 /** The type used to store guids */
+#define GUID_DATA_SIZE	16
 typedef union _GUID
 {
-  unsigned char data[16];
+  guchar data[GUID_DATA_SIZE];
 
-  int __align_me; /* this just ensures that GUIDs are 32-bit
+  gint __align_me; /* this just ensures that GUIDs are 32-bit
                    * aligned on systems that need them to be. */
 } GUID;
 
@@ -127,19 +129,13 @@ void guid_new(GUID *guid);
 /** Generate a new id. If no initialization function has been called,
  *  guid_init() will be called before the id is created.
  *
- *  @return guid A pointer to a data structure containing a new GUID.
- *  The memory pointed to is owned by this routine and the guid must
- *  be copied out. 
- * 
- *  CAS: huh? make that: @return guid A data structure containing a newly
- * allocated GUID.  Caller is responsible for calling guid_free().
+ * @return guid A data structure containing a newly allocated GUID.
+ *  Caller is responsible for calling guid_free().
  */
 GUID guid_new_return(void);
 
-/** Returns a GUID which is guaranteed to never reference any entity. */
-/* CAS: AFAICT: this isn't really guaranteed, but it's only as likely
-   as any other md5 collision. This could be guaranteed if GUID
-   contained a validity flag. */
+/** Returns a GUID which is guaranteed
+to never reference any entity. */
 const GUID * guid_null (void);
 
 /** Efficiently allocate & free memory for GUIDs */
@@ -163,7 +159,7 @@ void   guid_free (GUID *guid);
  *  returned memory is owned by this routine and may not be freed by
  *  the caller.
  */
-const char * guid_to_string (const GUID * guid);
+const gchar * guid_to_string (const GUID * guid);
 
 /** The guid_to_string_buff() routine puts a null-terminated string
  *  encoding of the id into the memory pointed at by buff.  The
@@ -178,7 +174,7 @@ const char * guid_to_string (const GUID * guid);
  *
  *  @return A pointer to the terminating null character of the string.
  */
-char * guid_to_string_buff (const GUID * guid, char *buff);
+gchar * guid_to_string_buff (const GUID * guid, gchar *buff);
 
 
 /** Given a string, decode the id into the guid if guid is non-NULL.
@@ -186,7 +182,7 @@ char * guid_to_string_buff (const GUID * guid, char *buff);
  * hexadecimal number. This function accepts both upper and lower case
  * hex digits. If the return value is FALSE, the effect on guid is
  * undefined. */
-gboolean string_to_guid(const char * string, GUID * guid);
+gboolean string_to_guid(const gchar * string, GUID * guid);
 
 
 /** Given two GUIDs, return TRUE if they are non-NULL and equal.

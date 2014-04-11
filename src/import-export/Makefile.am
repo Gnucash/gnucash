@@ -39,10 +39,11 @@ noinst_HEADERS = \
 
 libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
@@ -77,17 +78,23 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = 
 #For executing test cases
-SCM_FILE_LINKS += generic-import.scm
+SCM_FILE_LINKS +=
 endif
 
 noinst_DATA = .scm-links
 
 .scm-links:
 	rm -f g-wrapped gnucash generic-import import-export
-	ln -sf . import-export
-	ln -sf . gnucash
-	ln -sf . generic-import
-	ln -sf . g-wrapped
+	$(LN_S) -f . import-export
+	$(LN_S) -f . gnucash
+	$(LN_S) -f . generic-import
+	$(LN_S) -f . g-wrapped
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
-DISTCLEANFILES = gnucash generic-import g-wrapped .scm-links import-export
+CLEANFILES = gnucash generic-import g-wrapped .scm-links import-export
+DISTCLEANFILES = ${SCM_FILE_LINKS}

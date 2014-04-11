@@ -17,7 +17,10 @@ noinst_HEADERS = \
 
 libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
 
-libgncmodfoo_la_LIBADD = libfoo.la
+libgncmodfoo_la_LIBADD = \
+  libfoo.la \
+  $(G_WRAP_LINK_ARGS) \
+  $(GLIB_LIBS)
 
 EXTRA_DIST = \
   foo-gwrap.scm \

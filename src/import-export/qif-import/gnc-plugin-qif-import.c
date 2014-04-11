@@ -38,7 +38,7 @@ static void gnc_plugin_qif_import_finalize (GObject *object);
 
 /* Command callbacks */
 static void gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data);
+/* static void gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data); */
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-qif-import-actions"
@@ -48,8 +48,10 @@ static GtkActionEntry gnc_plugin_actions [] = {
 	{ "QIFImportAction", GTK_STOCK_CONVERT, N_("Import _QIF..."), NULL,
 	  N_("Import a Quicken QIF file"),
 	  G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import) },
+/*
 	{ "QIFTestDruid", GTK_STOCK_CONVERT, "_Test Druid...", NULL, 
 	  "Test the new Druid", G_CALLBACK(gnc_plugin_qif_test_druid) },
+*/
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -151,11 +153,13 @@ gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action,
 	gnc_ui_qif_import_druid_make ();
 }
 
+/*
 static void
 gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data)
 {
 	gnc_druid_gnome_test();
 }
+*/
 
 /************************************************************
  *                    Plugin Bootstrapping                   *

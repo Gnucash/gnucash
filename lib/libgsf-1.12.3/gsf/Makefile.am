@@ -11,9 +11,9 @@ uninstall-libtool-import-lib:
 endif
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib/libgsf-1.12.3 $(LIBGSF_CFLAGS) $(Z_CPPFLAGS) \
-	-DGNOMELOCALEDIR=\"$(datadir)/locale\"
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\" $(GLIB_CFLAGS)
 
-lib_LTLIBRARIES = libgsf-1.la
+pkglib_LTLIBRARIES = libgsf-1.la
 
 libgsf_1_la_LIBADD  = $(LIBGSF_LIBS) $(Z_LIBS) $(BZ2_LIBS)
 libgsf_1_la_LDFLAGS = -version-info $(VERSION_INFO)
@@ -75,7 +75,7 @@ if !HAVE_GLIB26
 endif
 
 libgsf_1_includedir = $(includedir)/libgsf-1/gsf
-libgsf_1_include_HEADERS = 	\
+noinst_HEADERS = 	\
 	gsf.h			\
 	gsf-utils.h		\
 	gsf-libxml.h		\
@@ -126,7 +126,7 @@ libgsf_1_include_HEADERS = 	\
 #	gsf-io-context.h
 
 if !HAVE_GLIB26
-  libgsf_1_include_HEADERS += glib24_26-compat.h
+  noinst_HEADERS += glib24_26-compat.h
 endif
 
 install-data-local: install-libtool-import-lib

@@ -26,11 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
-#include <popt.h>
 #include <stdlib.h>
-#include <g-wrap-wct.h>
-#include <X11/Xlib.h>
 
 #include "TransLog.h"
 #include "combocell.h"
@@ -58,11 +54,8 @@
 #include "gnc-plugin-budget.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
-#include "gnc-icons.h" /* FIXME Remove this line*/
-#include "gnc-splash.h"
 #include "gnc-html.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-gpg.h"
 #include "gnc-report.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
@@ -73,50 +66,17 @@
 #include "guile-util.h"
 #include "top-level.h"
 #include "window-report.h"
-
-
-#define ACCEL_MAP_NAME "accelerator-map"
-
-/** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format(void);
+#include "gnc-window.h"
+#include "gnc-gkeyfile-utils.h"
+#include <g-wrap-wct.h>
 
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static int gnome_is_running = FALSE;
-static int splash_is_initialized = FALSE;
-static int gnome_is_initialized = FALSE;
-static int gnome_is_terminating = FALSE;
-
-
-gboolean
-gnucash_ui_is_running(void)
-{
-  return gnome_is_running;
-}
-
-gboolean 
-gnucash_ui_is_terminating(void)
-{
-  return gnome_is_terminating;
-}
-
-static void
-gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
-}
-
-static void
-gnc_commodity_help_cb (void)
-{
-  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
-}
-
 /* ============================================================== */
-/* HTML Hadler for reports. */
+/* HTML Handler for reports. */
 
 #define IF_TYPE(URL_TYPE_STR,ENTITY_TYPE)                                   \
   if (strncmp (URL_TYPE_STR, location, strlen (URL_TYPE_STR)) == 0)         \
@@ -159,8 +119,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
   if (strncmp("account=", location, 8) == 0)
   {
     account = xaccGetAccountFromFullName (gnc_get_current_group (),
-                                          location + 8, 
-                                          gnc_get_account_separator ());
+                                          location + 8);
   }
 
   /* href="gnc-register:guid=12345678901234567890123456789012" */
@@ -237,52 +196,191 @@ gnc_html_price_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
-/* ============================================================== */
-
-SCM
-gnc_gui_init_splash (SCM command_line)
+/** Restore all persistent program state.  This function finds the
+ *  "new" state file associated with a specific book guid.  It then
+ *  iterates through this state information, calling a helper function
+ *  to recreate each open window.
+ *
+ *  If the "new" state file cannot be found, this function will open
+ *  an account tree window and then attempt to invoke the old gnucash
+ *  1.x state routines.  This provides a fluid transition for users
+ *  from the old to the new state systems.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param session A pointer to the current session.
+ *
+ *  @param unused An unused pointer. */
+static void
+gnc_restore_all_state (gpointer session, gpointer unused)
 {
-  SCM ret = command_line;
+    GKeyFile *keyfile = NULL;
+    QofBook *book;
+    const GUID *guid;
+    const gchar *url, *guid_string;    
+    gchar *file_guid, *filename = NULL;
+    GError *error = NULL;
+    
+    url = qof_session_get_url(session);
+    ENTER("session %p (%s)", session, url);
+    if (!url) {
+        LEAVE("no url, nothing to do");
+        return;
+    }
+    
+    /* Get the book GUID */
+    book = qof_session_get_book(session);
+    guid = qof_entity_get_guid(QOF_ENTITY(book));
+    guid_string = guid_to_string(guid);
+    
+    keyfile = gnc_find_state_file(url, guid_string, &filename);
+    if (filename)
+        g_free(filename);
 
-  ENTER (" ");
-
-  if (!splash_is_initialized)
-  {
-    splash_is_initialized = TRUE;
-
-    ret = gnc_gnome_init ("gnucash", "GnuCash", VERSION, command_line);
-
-    /* put up splash screen */
-    gnc_show_splash_screen ();
-  }
-
-  LEAVE (" ");
-
-  return ret;
+    if (!keyfile) {
+        gnc_main_window_restore_default_state();
+        
+#if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
+        /* See if there's an old style state file to be found */
+        scm_call_1(scm_c_eval_string("gnc:main-window-book-open-handler"),
+                   (session ?
+                    gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+                    SCM_BOOL_F));
+        /* At this point the reports have only been loaded into
+           memory.  Now we create their ui component. */
+        gnc_reports_show_all(session);
+#endif
+        
+        LEAVE("old");
+        return;
+    }
+    
+#ifdef DEBUG
+    /*  Debugging: dump a copy to stdout and the trace log */
+    {
+        gchar *file_data;
+        gsize file_length;
+        file_data = g_key_file_to_data(keyfile, &file_length, NULL);
+        DEBUG("=== File Data Read===\n%s\n=== File End ===\n", file_data);
+        g_free(file_data);
+    }
+#endif
+    
+    /* validate top level info */
+    file_guid = g_key_file_get_string(keyfile, STATE_FILE_TOP, 
+                                      STATE_FILE_BOOK_GUID, &error);
+    if (error) {
+        g_warning("error reading group %s key %s: %s",
+                  STATE_FILE_TOP, STATE_FILE_BOOK_GUID, error->message);
+        LEAVE("can't read guid");
+        goto cleanup;
+    }
+    if (!file_guid || strcmp(guid_string, file_guid)) {
+        g_warning("guid mismatch: book guid %s, state file guid %s",
+                  guid_string, file_guid);
+        LEAVE("guid values do not match");
+        goto cleanup;
+    }
+    
+    gnc_main_window_restore_all_windows(keyfile);
+    
+    /* Clean up */
+    LEAVE("ok");
+ cleanup:
+    if (error)
+        g_error_free(error);
+    if (file_guid)
+        g_free(file_guid);
+    g_key_file_free(keyfile);
 }
 
-SCM
-gnc_gui_init (SCM command_line)
+
+/** Save all persistent program state to disk.  This function finds the
+ *  name of the "new" state file associated with a specific book guid.
+ *  It saves some top level data, then iterates through the list of
+ *  open windows calling a helper function to save each window.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param session The QofSession whose state should be saved.
+ *
+ *  @param unused */
+static void
+gnc_save_all_state (gpointer session, gpointer unused)
 {
-  SCM ret = command_line;
-  GncMainWindow *main_window;
-  gchar *map;
+    QofBook *book;
+    const char *url, *guid_string;
+    gchar *filename;
+    const GUID *guid;
+    GError *error = NULL;
+    GKeyFile *keyfile = NULL;
+    
+    
+    url = qof_session_get_url(session);
+    ENTER("session %p (%s)", session, url);
+    if (!url) {
+        LEAVE("no url, nothing to do");
+        return;
+    }
 
-  ENTER (" ");
+    /* Get the book GUID */
+    book = qof_session_get_book(session);
+    guid = qof_entity_get_guid(QOF_ENTITY(book));
+    guid_string = guid_to_string(guid);
 
-  if (!gnome_is_initialized)
-  {
-    /* Make sure the splash (and hense gnome) was initialized */
-    if (!splash_is_initialized)
-      ret = gnc_gui_init_splash (ret);
+    /* Find the filename to use.  This returns the data from the
+     * file so its possible that we could reuse the data and
+     * maintain comments that were added to the data file, but
+     * that's not something we currently do. For now the existing
+     * data is dumped and completely regenerated.*/
+    keyfile = gnc_find_state_file(url, guid_string, &filename);
+    if (keyfile)
+        g_key_file_free(keyfile);
 
-    gnome_is_initialized = TRUE;
+    keyfile = g_key_file_new();
+    /* Store top level info in the data structure */
+    g_key_file_set_string(keyfile, STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
+                          guid_string);
 
-    gnc_ui_util_init();
-    gnc_configure_date_format();
-    gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
-				  (GncGconfGeneralCb)gnc_configure_date_format, NULL);
-    gnc_gconf_general_register_any_cb((GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+    gnc_main_window_save_all_windows(keyfile);
+    
+#ifdef DEBUG
+    /*  Debugging: dump a copy to the trace log */
+    {
+        gchar *file_data;
+        gsize file_length;
+        file_data = g_key_file_to_data(keyfile, &file_length, NULL);
+        DEBUG("=== File Data Written===\n%s\n=== File End ===\n", file_data);
+        g_free(file_data);
+    }
+#endif
+
+    /* Write it all out to disk */
+    gnc_key_file_save_to_file(filename, keyfile, &error);
+    if (error) {
+        g_critical(_("Error: Failure saving state file.\n  %s"), 
+                   error->message);
+        g_error_free(error);
+    }
+    g_free(filename);
+    
+    /* Clean up */
+    g_key_file_free(keyfile);
+    LEAVE("");
+}
+
+void
+gnc_main_gui_init (void)
+{
+    ENTER(" ");
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -294,195 +392,42 @@ gnc_gui_init (SCM command_line)
     gnc_html_register_url_handler (URL_TYPE_PRICE,
                                    gnc_html_price_url_cb);
 
-    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
-
-    gnc_file_set_shutdown_callback (gnc_shutdown);
-
-    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
-
-    gnc_totd_dialog(NULL, TRUE);
     gnc_ui_sx_initialize();
 
-    main_window = gnc_main_window_new ();
-    gtk_widget_show (GTK_WIDGET (main_window));
-
-    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
-    gtk_accel_map_load(map);
-    g_free(map);
-
     /* FIXME Remove this test code */
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_file_history_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_register_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_file_history_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_register_new ());
     /* I'm not sure why the FIXME note says to remove this.  Maybe
        each module should be adding its own plugin to the manager?
        Anyway... Oh, maybe... nah */
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
                                    gnc_plugin_budget_new ());
-    gnc_load_stock_icons ();
     gnc_ui_hierarchy_druid_initialize();
 
     /* Run the ui startup hooks. */
     gnc_hook_run(HOOK_UI_STARTUP, NULL);
 
-    // return ( main_window . command_line )
-    {
-      SCM gncMainWindowType;
-      gncMainWindowType = scm_c_eval_string("<gnc:MainWindow*>");
-      ret = scm_cons( gw_wcp_assimilate_ptr(main_window, gncMainWindowType), ret );
-    }
-  }
+    gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+                         gnc_restore_all_state, NULL);
+    gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
+                         gnc_save_all_state, NULL);
 
-  LEAVE (" ");
+    /* CAS: I'm not really sure why we remove before adding. */
+    gnc_hook_remove_dangler(HOOK_BOOK_CLOSED, (GFunc)gnc_reports_flush_global);
+    gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
+                         (GFunc)gnc_reports_flush_global, NULL);
 
-  return ret;
-}
 
-/* ============================================================== */
-
-void
-gnc_gui_shutdown (void)
-{
-  gchar *map;
-
-  if (gnome_is_running && !gnome_is_terminating)
-  {
-    gnome_is_terminating = TRUE;
-
-    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
-    gtk_accel_map_save(map);
-    g_free(map);
-
-    gtk_main_quit();
-
-    gnc_gnome_shutdown ();
-  }
-}
-
-/* ============================================================== */
-
-void
-gnc_gui_destroy (void)
-{
-  if (!gnome_is_initialized)
+    LEAVE(" ");
     return;
-
-  gnc_extensions_shutdown ();
-}
-
-/* ============================================================== */
-
-static gboolean
-gnc_ui_check_events (gpointer not_used)
-{
-  QofSession *session;
-  gboolean force;
-
-  if (gtk_main_level() != 1)
-    return TRUE;
-
-  session = qof_session_get_current_session ();
-  if (!session)
-    return TRUE;
-
-  if (gnc_gui_refresh_suspended ())
-    return TRUE;
-
-  if (!qof_session_events_pending (session))
-    return TRUE;
-
-  gnc_suspend_gui_refresh ();
-
-  force = qof_session_process_events (session);
-
-  gnc_resume_gui_refresh ();
-
-  if (force)
-    gnc_gui_refresh_all ();
-
-  return TRUE;
-}
-
-static int
-gnc_x_error (Display        *display, XErrorEvent *error)
-{
-  if (error->error_code)
-  {
-    char buf[64];
-
-    XGetErrorText (display, error->error_code, buf, 63);
-
-    g_warning ("X-ERROR **: %s\n  serial %ld error_code %d "
-               "request_code %d minor_code %d\n", 
-               buf, 
-               error->serial, 
-               error->error_code, 
-               error->request_code,
-               error->minor_code);
-  }
-
-  return 0;
-}
-
-int
-gnc_ui_start_event_loop (void)
-{
-  guint id;
-
-  gnome_is_running = TRUE;
-
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
-                           gnc_ui_check_events, NULL, NULL);
-
-  XSetErrorHandler (gnc_x_error);
-
-  /* Enter gnome event loop */
-  gtk_main ();
-
-  g_source_remove (id);
-
-  gnome_is_running = FALSE;
-  gnome_is_terminating = FALSE;
-
-  return 0;
-}
-
-/* ============================================================== */
-
-/* gnc_configure_date_format
- *    sets dateFormat to the current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_date_format (void)
-{
-  char *format_code = gnc_gconf_get_string(GCONF_GENERAL, KEY_DATE_FORMAT, NULL);
-
-  QofDateFormat df;
-
-  if (format_code == NULL)
-    format_code = g_strdup("locale");
-  if (*format_code == '\0') {
-    g_free(format_code);
-    format_code = g_strdup("locale");
-  }
-
-  if (gnc_date_string_to_dateformat(format_code, &df))
-  {
-    PERR("Incorrect date format code");
-    if (format_code != NULL)
-      free(format_code);
-    return;
-  }
-
-  qof_date_format_set(df);
-
-  if (format_code != NULL)
-    free(format_code);
 }
 
 /****************** END OF FILE **********************/

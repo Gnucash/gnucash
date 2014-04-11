@@ -50,9 +50,6 @@
     @addtogroup Object Object: Dynamic Object Class Framework
     @ingroup QOF
 */
-/** @addtogroup Choice Choice and collect : One to many links.
-	@ingroup QOF
-*/
 /**
     @addtogroup Query Query: Querying for Objects
     @ingroup QOF
@@ -61,11 +58,17 @@
     @addtogroup Trace Trace: Error Reporting and Debugging
     @ingroup QOF
 */
+/** @addtogroup Event Event: QOF event handlers.
+	@ingroup QOF
+*/
+/** @addtogroup Choice Choice and collect : One to many links.
+	@ingroup QOF
+*/
 /** @addtogroup BookMerge Merging QofBook structures
 	@ingroup QOF
 */
-/** @addtogroup Event Event: QOF event handlers.
-	@ingroup QOF
+/** \addtogroup Reference Referring to entities outside a partial book.
+	\ingroup QOF
 */
 /**
     @addtogroup Utilities Misc Utilities
@@ -73,12 +76,12 @@
 */
 /** @} */
 
+#include <glib.h>
 #include "qofid.h"
-#include "gnc-trace.h"
+#include "qoflog.h"
 #include "gnc-date.h"
 #include "gnc-numeric.h"
-#include "gnc-event.h"
-#include "gnc-engine-util.h"
+#include "qofutil.h"
 #include "guid.h"
 #include "kvp_frame.h"
 #include "kvp-util.h"
@@ -88,14 +91,23 @@
 #include "qofinstance-p.h"
 #include "qofbook.h"
 #include "qofclass.h"
+#include "qofevent.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofsession.h"
 #include "qofsql.h"
 #include "qofchoice.h"
-#include "qof_book_merge.h"
-#include "qof-be-utils.h"
+#include "qofbookmerge.h"
+#include "qofreference.h"
 #include "qofla-dir.h"
+#include "deprecated.h"
+
+/** allow easy logging of QSF debug messages */
+#define QOF_MOD_QSF "gncqof-backend-qsf"
+/** allow easy loading of the QSF backend */
+#define QSF_BACKEND_LIB "libgncqof-backend-qsf"
+/** allow easy loading of the QSF backend */
+#define QSF_MODULE_INIT "qsf_provider_init"
 
 #endif /* QOF_H_ */

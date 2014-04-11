@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <glib.h>
-#include <dlfcn.h>
 #include "gnc-engine.h"
 #include "qof.h"
 #include "cashobjects.h"
@@ -40,7 +39,7 @@
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
-#define GNC_LIB_NAME "libgnc-backend-file.la"
+#define GNC_LIB_NAME "libgnc-backend-file"
 /** init_fcn for gnc file backend library. */
 #define GNC_LIB_INIT "gnc_provider_init"
 /* gnc-backend-file location */
@@ -86,18 +85,19 @@ gnc_engine_init(int argc, char ** argv)
   qof_log_init_filename("/tmp/gnucash.trace");
   /* Only set the core log_modules here
 	the rest can be set locally.  */
-  gnc_set_log_level(GNC_MOD_ENGINE, GNC_LOG_WARNING);
-  gnc_set_log_level(GNC_MOD_IO, GNC_LOG_WARNING);
-  gnc_set_log_level(GNC_MOD_GUI, GNC_LOG_WARNING);
-  qof_log_set_default(GNC_LOG_WARNING);
+  qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
+  qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
+  qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
+  qof_log_set_default(QOF_LOG_WARNING);
   /* initialize QOF */
   qof_init();
+  qof_set_alt_dirty_mode(TRUE);
 
   /* Now register our core types */
   cashobjects_register();
 
   g_return_if_fail((qof_load_backend_library 
-		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")));
+		(QOF_LIB_DIR, QSF_BACKEND_LIB, QSF_MODULE_INIT)));
   g_return_if_fail((qof_load_backend_library
 		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)));
 
@@ -120,11 +120,8 @@ gnc_engine_init(int argc, char ** argv)
 void
 gnc_engine_shutdown (void)
 {
-  qof_query_shutdown ();
-  qof_object_shutdown ();
-  guid_shutdown();
-  gnc_engine_string_cache_destroy ();
   qof_log_shutdown();
+  qof_close();
   engine_is_initialized = 0;
 }
 
@@ -145,6 +142,38 @@ gnc_engine_is_initialized (void)
 	return FALSE;
 */	
 	return (engine_is_initialized == 1) ? TRUE : FALSE;
+}
+
+/* replicate old gnc-trace enum behaviour
+ *
+ * these are only here as a convenience, they could be
+ * initialised elsewhere as appropriate.
+ * */
+void gnc_log_default(void)
+{
+	qof_log_set_default(QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_ACCOUNT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_SX, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_QUERY, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_SCRUB, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_LOT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_COMMODITY, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_BACKEND, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_BUSINESS, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_BOOK, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_GUILE, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_LEDGER, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_REGISTER, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_HTML, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_PREFS, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_DRUID, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_TRACE);
+	qof_log_set_level(GNC_MOD_BUDGET, QOF_LOG_WARNING);
 }
 
 /* ====================================================================== */

@@ -56,9 +56,8 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_job (GncJob *job);
 void mark_job (GncJob *job)
 {
-  job->inst.dirty = TRUE;
-  qof_collection_mark_dirty (job->inst.entity.collection);
-  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&job->inst);
+  qof_event_gen (&job->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================== */
@@ -79,7 +78,7 @@ GncJob *gncJobCreate (QofBook *book)
   job->active = TRUE;
 
   /* GncOwner not initialized */
-  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&job->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return job;
 }
@@ -102,7 +101,7 @@ gncCloneJob (GncJob *from, QofBook *book)
 
   job->owner = gncCloneOwner(&from->owner, book);
 
-  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&job->inst.entity, QOF_EVENT_CREATE, NULL);
                                                                                 
   return job;
 }
@@ -118,7 +117,7 @@ static void gncJobFree (GncJob *job)
 {
   if (!job) return;
 
-  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&job->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (job->id);
   CACHE_REMOVE (job->name);
@@ -278,8 +277,8 @@ static inline void gncJobOnDone (QofInstance *qof) { }
 
 void gncJobCommitEdit (GncJob *job)
 {
-  QOF_COMMIT_EDIT_PART1 (&job->inst);
-  QOF_COMMIT_EDIT_PART2 (&job->inst, gncJobOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(job))) return;
+  qof_commit_edit_part2 (&job->inst, gncJobOnError,
                          gncJobOnDone, job_free);
 }
 

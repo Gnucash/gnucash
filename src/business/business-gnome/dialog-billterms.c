@@ -287,7 +287,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     }
     if (gncBillTermLookupByName (btw->book, name)) {
       message = g_strdup_printf(_(
-			 "You must provide a unique name for this Billing Term.\n"
+			 "You must provide a unique name for this Billing Term. "
 			 "Your choice \"%s\" is already in use."), name);
       gnc_error_dialog (nbt->dialog, "%s", message);
       g_free (message);
@@ -396,9 +396,10 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   GncBillTerm *created_term = NULL;
   NewBillTerm *nbt;
   GladeXML *xml;
-  GtkWidget *box, *widget;
+  GtkWidget *box;
   gint response;
   gboolean done;
+  const gchar *dialog_name;
 
   if (!btw) return NULL;
 
@@ -407,8 +408,9 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   nbt->this_term = term;
 
   /* Open and read the XML */
-  xml = gnc_glade_xml_new ("billterms.glade", "New Term Dialog");
-  nbt->dialog = glade_xml_get_widget (xml, "New Term Dialog");
+  dialog_name = term ? "Edit Term Dialog" : "New Term Dialog";
+  xml = gnc_glade_xml_new ("billterms.glade", dialog_name);
+  nbt->dialog = glade_xml_get_widget (xml, dialog_name);
   nbt->name_entry = glade_xml_get_widget (xml, "name_entry");
   nbt->desc_entry = glade_xml_get_widget (xml, "desc_entry");
   if (name)
@@ -446,8 +448,6 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   /* Show what we should */
   gtk_widget_show_all (nbt->dialog);
   if (term) {
-    widget = glade_xml_get_widget (xml, "term_frame");
-    gtk_widget_hide_all (widget);
     gtk_widget_grab_focus (nbt->desc_entry);
   } else
     gtk_widget_grab_focus (nbt->name_entry);
@@ -544,7 +544,7 @@ billterms_window_refresh (BillTermsWindow *btw)
 
     gnc_gui_component_watch_entity (btw->component_id,
 				    gncBillTermGetGUID (term),
-				    GNC_EVENT_MODIFY);
+				    QOF_EVENT_MODIFY);
 
     row_text[0] = (char *)gncBillTermGetName (term);
     row_text[1] = NULL;
@@ -558,7 +558,7 @@ billterms_window_refresh (BillTermsWindow *btw)
 
   gnc_gui_component_watch_entity_type (btw->component_id,
 				       GNC_BILLTERM_MODULE_NAME,
-				       GNC_EVENT_CREATE | GNC_EVENT_DESTROY);
+				       QOF_EVENT_CREATE | QOF_EVENT_DESTROY);
 
   if (vadjustment) {
     save_value = CLAMP (save_value, vadjustment->lower,

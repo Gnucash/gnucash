@@ -1,3 +1,7 @@
+#ifndef HAVE_GLIB26
+  #include <gsf/glib24_26-compat.h>
+#endif
+
 /* vim: set sw=8: -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * test-cp-zip.c: Test gsf-outfile-zip by cloning a file the hard way

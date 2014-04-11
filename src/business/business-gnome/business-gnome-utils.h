@@ -2,7 +2,7 @@
  * business-gnome-utils.h -- General GUI Utilities for GNC Business Objects
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2006 Derek Atkins
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,6 +29,7 @@
 #include "gncOwner.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
+#include "gncInvoice.h"
 
 #define GCONF_SECTION_ORDER    "dialogs/business/order"
 #define GCONF_SECTION_JOB      "dialogs/business/job"
@@ -45,6 +46,18 @@ GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
 void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
 
+
+/* An invoice select widget.. 
+ * the owner, invoice, and label parameters are optional
+ */
+GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, GNCBook *book,
+				       const GncOwner *owner,
+				       GncInvoice *invoice,
+				       GtkWidget *label);
+
+GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget);
+void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice);
+void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner);
 
 /* Return a list of account-types based on the owner type */
 GList * gnc_business_account_types (GncOwner *owner);

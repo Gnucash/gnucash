@@ -2,9 +2,9 @@
 
 #include "config.h"
 #include "gnc-druid-gnome-ui.h"
+#include "gnc-druid-provider-file-gnome.h"
 #include "gnc-druid-provider-multifile-gnome.h"
 #include "gnc-druid-provider-desc-multifile.h"
-#include "gnc-druid-provider-file-gnome.h"
 
 #include "gnc-basic-gobject.h"
 #include "dialog-utils.h"

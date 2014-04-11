@@ -177,8 +177,7 @@ update_accountlist_acc_cb (AB_ACCOUNT *hacc, gpointer user_data)
   if (gacc == NULL)
     row_text[1] = "";
   else 
-    row_text[1] = 
-      xaccAccountGetFullName (gacc, gnc_get_account_separator ());
+    row_text[1] = xaccAccountGetFullName (gacc);
 
   /* Add this row to the list */
   row = gtk_clist_append (GTK_CLIST (info->accountlist), row_text);
@@ -396,10 +395,11 @@ on_accountlist_select_row (GtkCList *clist, gint row,
 	(strlen(AB_Account_GetCurrency (hbci_acc)) > 0)) {
       currency = gnc_commodity_table_lookup 
 	(gnc_book_get_commodity_table (gnc_get_current_book ()), 
-	 GNC_COMMODITY_NS_ISO, AB_Account_GetCurrency (hbci_acc));
+	 GNC_COMMODITY_NS_CURRENCY, AB_Account_GetCurrency (hbci_acc));
     }
 
-    gnc_acc = gnc_import_select_account(NULL, TRUE, longname, currency, BANK,
+    gnc_acc = gnc_import_select_account(info->window,
+					NULL, TRUE, longname, currency, BANK,
 					old_value, NULL);
     g_free(longname);
 
@@ -505,6 +505,7 @@ on_aqhbci_button (GtkButton *button,
 	(GTK_WIDGET(info->window),
 	 _("Choose AqBanking Backend"),
 	 _("Please choose an AqBanking backend to be configured"),
+	 _("Co_nfigure"),
 	 0,
 	 radio_list);
       g_list_free(radio_list);
@@ -615,10 +616,10 @@ on_aqhbci_button (GtkButton *button,
       gnc_error_dialog
 	(info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
-	 _("The external program \"%s Setup Wizard\" returned a nonzero \n"
-	   "exit code which means it has not been finished successfully. \n"
-	   "The further HBCI setup can only be finished if the %s \n"
-	   "Setup Wizard is run successfully. Please try to start and \n"
+	 _("The external program \"%s Setup Wizard\" returned a nonzero "
+	   "exit code which means it has not been finished successfully. "
+	   "The further HBCI setup can only be finished if the %s "
+	   "Setup Wizard is run successfully. Please try to start and "
 	   "successfully finish the %s Setup Wizard program again."),
 	 backend_name, backend_name, backend_name);
       druid_disable_next_button(info);
@@ -629,7 +630,7 @@ on_aqhbci_button (GtkButton *button,
       (info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
        _("The external program \"%s Setup Wizard\" has not been found. \n\n"
-	 "The package aqbanking is supposed to install the program \n"
+	 "The package aqbanking is supposed to install the program "
 	 "\"%s-qt3-wizard\". Please check your installation of aqbanking."),
        backend_name, backend_name);
     druid_disable_next_button(info);

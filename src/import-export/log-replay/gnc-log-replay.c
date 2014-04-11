@@ -23,8 +23,6 @@
     @brief .log file replay code
     @author Copyright (c) 2003 Benoit Grégoire <bock@step.polymtl.ca>
 */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -33,17 +31,20 @@
 #include <string.h>
 #include <sys/time.h>
 #include <libguile.h>
+#include <errno.h>
 
 #include "Account.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "TransLog.h"
+#include "Scrub.h"
 #include "gnc-log-replay.h"
 #include "gnc-file.h"
 #include "qof.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
-
+#include "gnc-gui-query.h"
 
 #define GCONF_SECTION "dialogs/log_replay"
 
@@ -485,6 +486,7 @@ static void  process_trans_record(  FILE *log_file)
 	  DEBUG("process_trans_record(): Record ended\n");
 	  if(trans!=NULL)/*If we played with a transaction, commit it here*/
 	    {
+	      xaccTransScrubCurrencyFromSplits(trans);
 	      xaccTransCommitEdit(trans);
 	    }
 	}
@@ -497,18 +499,31 @@ void gnc_file_log_replay (void)
   char *default_dir;
   char read_buf[256];
   char *read_retval;
+  GtkFileFilter *filter;
   FILE *log_file;
-  char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled";
   char * record_start_str = "===== START";
+  /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
+  char * expected_header_orig = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+  	"date_entered\tdate_posted\tacc_guid\tacc_name\tnum\tdescription\t"
+  	"notes\tmemo\taction\treconciled\tamount\tvalue\tdate_reconciled";
+  static char *expected_header = NULL;
 
-  gnc_set_log_level(GNC_MOD_IMPORT, GNC_LOG_DEBUG);
+  /* Use g_strdup_printf so we don't get accidental tab -> space conversion */
+  if (!expected_header)
+    expected_header = g_strdup_printf(expected_header_orig);
+
+  qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
   ENTER(" ");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
+
+  filter = gtk_file_filter_new();
+  gtk_file_filter_set_name(filter, "*.log");
+  gtk_file_filter_add_pattern(filter, "*.[Ll][Oo][Gg]");
   selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
-				      NULL,
+				      g_list_prepend(NULL, filter),
 				      default_dir,
 				      GNC_FILE_DIALOG_OPEN);
 
@@ -520,41 +535,51 @@ void gnc_file_log_replay (void)
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);
-
-      DEBUG("Opening selected file");
-      log_file = fopen(selected_filename, "r");
-      if(ferror(log_file)!=0)
-	{
+      if (xaccFileIsCurrentLog(selected_filename)) {
+	g_warning("Cannot open the current log file: %s", selected_filename);
+	gnc_error_dialog(NULL,
+			 /* Translators: %s is the file name. */
+			 _("Cannot open the current log file: %s"),
+			 selected_filename);
+      } else {
+	DEBUG("Opening selected file");
+	log_file = fopen(selected_filename, "r");
+	if(!log_file || ferror(log_file)!=0) {
+	  int err = errno;
 	  perror("File open failed");
-	}
-      else
-	{
-	  if((read_retval = fgets(read_buf,sizeof(read_buf),log_file)) == NULL)
-	    {
+	  gnc_error_dialog(NULL,
+			   /* Translation note:
+			    * First argument is the filename,
+			    * second argument is the error.
+			    */
+			   _("Failed to open log file: %s: %s"),
+			   selected_filename,
+			   strerror(err));
+	} else {
+	  if((read_retval = fgets(read_buf,sizeof(read_buf),log_file)) == NULL) {
 	      DEBUG("Read error or EOF");
-	    }
-	  else
-	    {
-	      if(strncmp(expected_header,read_buf,strlen(expected_header))!=0)
-		{
-		  PERR("File header not recognised:\n%s",read_buf);
-		  PERR("Expected:\n%s",expected_header);
+	      gnc_info_dialog(NULL, "%s",
+			      _("The log file you selected was empty."));
+	  } else {
+	    if(strncmp(expected_header,read_buf,strlen(expected_header))!=0) {
+		PERR("File header not recognised:\n%s",read_buf);
+		PERR("Expected:\n%s",expected_header);
+		gnc_error_dialog(NULL, "%s",
+				 _("The log file you selected cannot be read.  "
+				   "The file header was not recognized."));
+	    } else {
+	      do {
+		read_retval = fgets(read_buf,sizeof(read_buf),log_file);
+		/*DEBUG("Chunk read: %s",read_retval);*/
+		if(strncmp(record_start_str,read_buf,strlen(record_start_str))==0) {/* If a record started */
+		  process_trans_record(log_file);
 		}
-	      else
-		{
-		  do
-		    {
-		      read_retval = fgets(read_buf,sizeof(read_buf),log_file);
-		      /*DEBUG("Chunk read: %s",read_retval);*/
-		      if(strncmp(record_start_str,read_buf,strlen(record_start_str))==0)/* If a record started */
-			{
-			  process_trans_record(log_file);
-			}
-		    }while(feof(log_file)==0);
-		}
+	      }while(feof(log_file)==0);
 	    }
+	  }
 	  fclose(log_file);
 	}
+      }
       g_free(selected_filename);
     }
   g_free(default_dir);

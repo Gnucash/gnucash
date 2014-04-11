@@ -70,9 +70,8 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
-  order->inst.dirty = TRUE;
-  qof_collection_mark_dirty (order->inst.entity.collection);
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&order->inst);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* =============================================================== */
@@ -93,7 +92,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->active = TRUE;
 
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -109,7 +108,7 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
@@ -153,7 +152,7 @@ gncCloneOrder (GncOrder *from, QofBook *book)
     order->entries = g_list_prepend (order->entries, entry);
   }
 
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -352,8 +351,8 @@ static inline void order_free (QofInstance *inst)
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  QOF_COMMIT_EDIT_PART1 (&order->inst);
-  QOF_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(order))) return;
+  qof_commit_edit_part2 (&order->inst, gncOrderOnError,
 			 gncOrderOnDone, order_free);
 }
 

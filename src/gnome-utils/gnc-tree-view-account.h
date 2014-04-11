@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-tree-view-account.h -- GtkTreeView implementation to display *
  *                            accounts in a GtkTreeView.            *
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org> *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,7 +28,7 @@
  * @{ */
 /** @file gnc-tree-view-account.h
     @brief GtkTreeView implementation for gnucash account tree.
-    @author David Hampton <hampton@employees.org>
+    @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 
 #ifndef __GNC_TREE_VIEW_ACCOUNT_H
@@ -40,6 +40,7 @@
 
 #include "Group.h"
 #include "gnc-ui-util.h"
+#include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
 
@@ -50,6 +51,7 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_VIEW_ACCOUNT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT))
 #define GNC_IS_TREE_VIEW_ACCOUNT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW_ACCOUNT))
 #define GNC_TREE_VIEW_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountClass))
+#define GNC_TREE_VIEW_ACCOUNT_NAME            "GncTreeViewAccount"
 
 /* typedefs & structures */
 typedef struct AccountViewInfo_s     AccountViewInfo;
@@ -70,6 +72,44 @@ typedef struct {
 	GncTreeViewClass gnc_tree_view;
 } GncTreeViewAccountClass;
 
+typedef	struct {
+    GtkWidget    *dialog;
+    GtkTreeModel *model;
+    GncTreeViewAccount  *tree_view;
+    guint32      visible_types;
+    guint32      original_visible_types;
+    gboolean     show_hidden;
+    gboolean     original_show_hidden;
+    gboolean     show_zero_total;
+    gboolean     original_show_zero_total;
+} AccountFilterDialog;
+
+void account_filter_dialog_create(AccountFilterDialog *fd, 
+                                  GncPluginPage *page);
+
+gboolean gnc_plugin_page_account_tree_filter_accounts (Account *account, 
+                                                       gpointer user_data);
+
+/* "Filter By" dialog callbacks */
+void gppat_filter_show_hidden_toggled_cb (GtkToggleButton *togglebutton, 
+					  AccountFilterDialog *fd);
+void gppat_filter_show_zero_toggled_cb (GtkToggleButton *togglebutton, 
+                                        AccountFilterDialog *fd);
+void gppat_filter_clear_all_cb (GtkWidget *button, AccountFilterDialog *fd);
+void gppat_filter_select_all_cb (GtkWidget *button, AccountFilterDialog *fd);
+void gppat_filter_select_default_cb (GtkWidget *button, 
+                                     AccountFilterDialog *fd);
+void gppat_filter_response_cb (GtkWidget *dialog, gint response, 
+                               AccountFilterDialog *fd);
+
+/* Saving/Restoring */
+void gnc_tree_view_account_save(GncTreeViewAccount *tree_view, 
+                                AccountFilterDialog *fd, 
+                                GKeyFile *key_file, const gchar *group_name);
+void gnc_tree_view_account_restore(GncTreeViewAccount *view, 
+                                   AccountFilterDialog *fd, 
+                                   GKeyFile *key_file, 
+                                   const gchar *group_name);
 
 
 /* Get the GType for an GncTreeViewAccount object. */
@@ -144,7 +184,21 @@ GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
     GncTreeViewAccountColumnSource source_cb, 
     GncTreeViewAccountColumnTextEdited edited_cb);
 
+void gnc_tree_view_account_set_name_edited(GncTreeViewAccount *view,
+                                           GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_name_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_name);
 
+void gnc_tree_view_account_set_code_edited(GncTreeViewAccount *view,
+                                           GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_code_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_code);
+
+void gnc_tree_view_account_set_description_edited(GncTreeViewAccount *view,
+                                                  GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_description_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_desc);
+
+void gnc_tree_view_account_set_notes_edited(GncTreeViewAccount *view,
+                                            GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_notes);
 
 /** Add a new column to the set of columns in an account tree view.
  *  This column will be visible as soon as it is added and will
@@ -158,9 +212,11 @@ GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
  *  account KVP structures. The value associated with this key is what
  *  will be displayed in the column.
  */
-void gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
-					   const gchar *column_title,
-					   const gchar *kvp_key);
+GtkTreeViewColumn * 
+gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
+                                      const gchar *column_title,
+                                      const gchar *kvp_key);
+
 /** @} */
 
 
@@ -436,7 +492,6 @@ void gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
  *  @param account A pointer to the account to show.
  */
 void gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view, Account *account);
-
 
 /** @} */
 

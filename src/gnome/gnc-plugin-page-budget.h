@@ -21,7 +21,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/** @addtogroup UI
+/** @addtogroup budget Budgets
     @{ */
 /** @file gnc-plugin-page-budget.h
     @brief

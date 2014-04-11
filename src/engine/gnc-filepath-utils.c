@@ -35,6 +35,11 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
+#ifdef HAVE_GLIB26
+#include <glib/gstdio.h>
+#else
+#define g_mkdir(a,b) mkdir(a,b)
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -77,13 +82,13 @@ MakeHomeDir (void)
      * and not because its read-protected or other error.
      * Go ahead and make it. Don't bother much with checking mkdir 
      * for errors; seems pointless. */
-    mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+    g_mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
   }
 
   data = g_strconcat (path, "/data", NULL);
   rc = stat (data, &statbuf);
   if (rc)
-    mkdir (data, S_IRWXU);
+    g_mkdir (data, S_IRWXU);
 
   g_free (path);
   g_free (data);
@@ -321,12 +326,12 @@ gnc_validate_directory (const gchar *dirname)
   if (rc) {
     switch (errno) {
     case ENOENT:
-      rc = mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+      rc = g_mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
       if (rc) {
 	g_fprintf(stderr,
 		  _("An error occurred while creating the directory:\n"
 		    "  %s\n"
-		    "Please correct the problem and restart gnucash.\n"
+		    "Please correct the problem and restart GnuCash.\n"
 		    "The reported error was '%s' (errno %d).\n"),
 		  dirname, strerror(errno), errno);
 	exit(1);
@@ -349,7 +354,7 @@ gnc_validate_directory (const gchar *dirname)
 		_("The path\n"
 		  "  %s\n"
 		  "exists but it is not a directory. Please delete\n"
-		  "the file and start gnucash again.\n"),
+		  "the file and start GnuCash again.\n"),
 		dirname);
       exit(1);
       
@@ -358,7 +363,7 @@ gnc_validate_directory (const gchar *dirname)
 		_("An unknown error occurred when validating that the\n"
 		  "  %s\n"
 		  "directory exists and is usable. Please correct the\n"
-		  "problem and restart gnucash.  The reported error \n"
+		  "problem and restart GnuCash.  The reported error \n"
 		  "was '%s' (errno %d)."),
 		dirname, strerror(errno), errno);
       exit(1);
@@ -370,7 +375,7 @@ gnc_validate_directory (const gchar *dirname)
 	      _("The path\n"
 		"  %s\n"
 		"exists but it is not a directory. Please delete\n"
-		"the file and start gnucash again.\n"),
+		"the file and start GnuCash again.\n"),
 	      dirname);
     exit(1);
   }

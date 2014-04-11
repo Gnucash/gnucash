@@ -68,6 +68,9 @@ void gnc_lot_destroy (GNCLot *);
 GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
 QofBook * gnc_lot_get_book (GNCLot *);		  
 
+void gnc_lot_begin_edit (GNCLot *lot);
+void gnc_lot_commit_edit (GNCLot *lot);
+
 /** The gnc_lot_add_split() routine adds a split to this lot.  Note
  *    that *all* splits in a lot must also be in the same account.
  *    Note that this routine adds the split unconditionally, with
@@ -96,6 +99,13 @@ Account * gnc_lot_get_account (GNCLot *);
  *    The commodity in which this balance is expressed is the commodity 
  *    of the account. */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
+
+/** The gnc_lot_get_balance_before routines computes both the balance and
+ *  value in the lot considering only splits in transactions prior to the
+ *  one containing the given split or other splits in the same transaction.
+ *  The first return value is the amount and the second is the value. */
+void gnc_lot_get_balance_before (GNCLot *, Split *,
+                                 gnc_numeric *, gnc_numeric *);
 
 /** The gnc_lot_is_closed() routine returns a boolean flag: is this 
  *    lot closed?  A lot is closed if its balance is zero.  This 

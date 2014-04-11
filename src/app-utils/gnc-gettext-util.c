@@ -25,7 +25,6 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "i18n.h"
 #include "gnc-gettext-util.h"
 
 /* ============================================================== */
@@ -33,19 +32,6 @@
 char *
 gnc_gettext_helper(const char *string)
 {
-  return strdup(_(string));
+  return strdup(string && *string ? _(string) : "");
 }
 
-/* ============================================================== */
-
-void
-gnc_setup_gettext(void)
-{
-#ifdef HAVE_GETTEXT
-  bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
-  textdomain (TEXT_DOMAIN);
-  bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
-#endif
-}
-
-/* ============================================================== */

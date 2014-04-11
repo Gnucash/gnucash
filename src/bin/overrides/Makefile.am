@@ -1,19 +1,14 @@
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 # When you add a file here, please modify ../test/Makefile.am's overrides.stamp
 gncoverrides_SCRIPTS = \
-  gnucash \
   gnucash-env \
   gnucash-make-guids \
-  gnucash-run-script \
   guile
 
 EXTRA_DIST = \
-  gnucash \
   gnucash-env.in \
   gnucash-build-env.in \
   gnucash-make-guids \
-  gnucash-run-script \
-  gnucash-valgrind \
   guile.in 
 
 noinst_DATA = gnucash-build-env
@@ -25,7 +20,7 @@ PWD := $(shell pwd)
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
 
-guile: guile.in ${top_builddir}/config.status
+guile: guile.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GUILE-@:${GUILE}:'
@@ -33,7 +28,7 @@ guile: guile.in ${top_builddir}/config.status
 	chmod u+x $@
 CLEANFILES = guile
 
-gnucash-env: gnucash-env.in ${top_builddir}/config.status
+gnucash-env: gnucash-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
@@ -48,7 +43,7 @@ gnucash-env: gnucash-env.in ${top_builddir}/config.status
 	chmod u+x $@
 CLEANFILES += gnucash-env
 
-gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status
+gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-GNC_TEST_SRFI_LOAD_CMD-@:@GNC_TEST_SRFI_LOAD_CMD@:g' \

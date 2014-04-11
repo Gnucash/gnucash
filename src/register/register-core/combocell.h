@@ -46,6 +46,7 @@
 typedef struct
 {
   BasicCell cell;
+  gpointer shared_store;
 } ComboCell;
 
 
@@ -64,13 +65,17 @@ void         gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr);
  *  ignore the characters normally used to separate account names. */
 void         gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr);
 
+/** Enable sorting of the menu item's contents. Loading the item is
+ *  much faster with sorting disabled. */
+void         gnc_combo_cell_set_sort_enabled (ComboCell *cell, gboolean enabled);
+
 /** Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
 void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);
 
 /** Sets a character used for special completion processing. */
 void         gnc_combo_cell_set_complete_char (ComboCell *cell,
-                                               char complete_char);
+                                               gunichar complete_char);
 
 /** Add a string to a list of strings which, if the cell has that value,
  * will cause the cell to be uneditable on 'enter'. */
@@ -91,5 +96,7 @@ void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
  *  quickfill object.  The combocell will *not* make a copy of teh quickfill.
  */
 void gnc_combo_cell_use_quickfill_cache (ComboCell *cell, QuickFill *shared_qf);
+
+void gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data);
 
 #endif

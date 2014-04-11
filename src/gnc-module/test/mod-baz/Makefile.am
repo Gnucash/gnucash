@@ -11,6 +11,7 @@ checklibdir = ${PWD}
 checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la
 
 libbaz_la_SOURCES = baz.c
+libbaz_la_LIBADD = ../mod-foo/libfoo.la
 
 noinst_HEADERS = \
   baz.h \
@@ -18,7 +19,11 @@ noinst_HEADERS = \
 
 libgncmodbaz_la_SOURCES = baz-gwrap.c gnc-mod-baz.c
 
-libgncmodbaz_la_LIBADD = ../mod-foo/libfoo.la libbaz.la
+libgncmodbaz_la_LIBADD = \
+  libbaz.la \
+  ../../libgncmodule.la \
+  $(G_WRAP_LINK_ARGS) \
+  $(GLIB_LIBS)
 
 EXTRA_DIST = \
   baz-gwrap.scm \

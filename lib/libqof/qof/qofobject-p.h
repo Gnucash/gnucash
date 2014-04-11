@@ -43,6 +43,18 @@ void qof_object_book_end (QofBook *book);
 gboolean qof_object_is_dirty (QofBook *book);
 void qof_object_mark_clean (QofBook *book);
 
+/** \brief check an object can be created and supports iteration
+
+\param type_name object to check
+\param warn If called only once per operation, pass TRUE to log objects
+that fail the compliance check. To prevent repeated log messages when
+calling more than once, pass FALSE.
+
+\return TRUE if object can be created and supports iteration, else FALSE.
+*/
+gboolean 
+qof_object_compliance (QofIdTypeConst type_name, gboolean warn);
+
 #endif /* QOF_OBJECT_P_H_ */
 /** @} */
 /** @} */

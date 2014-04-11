@@ -29,6 +29,7 @@ if test x${BUILD_GUILE} != x -a ${BUILD_GUILE} != no ; then
 	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\2/'`
   guile_micro_version=`echo $guile_version | \
 	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\3/'`
+  guile_vers_string="$guile_major_version.$guile_minor_version.$guile_micro_version"
 
   major_required=`echo ${min_guile_version} |\
         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
@@ -63,11 +64,11 @@ if test x${BUILD_GUILE} != x -a ${BUILD_GUILE} != no ; then
 fi
 
 if test -n "$version_ok"; then
-	AC_MSG_RESULT(yes)
-	ifelse([$3], , true, [$4])
+	AC_MSG_RESULT(yes: $guile_vers_string)
+	ifelse([$3], , true, [$3])
 
 else
-	AC_MSG_RESULT(no)
+	AC_MSG_RESULT(no: $guile_vers_string)
 	ifelse([$4], , true , [AC_MSG_WARN(guile version check failed)
 	$4])
 fi])
@@ -119,6 +120,36 @@ int main ()
   if test $am_cv_scanf_lld = yes; then
     AC_DEFINE(HAVE_SCANF_LLD, 1,
       [Define if scanf supports %lld conversions.])
+  fi
+])
+
+AC_DEFUN([SCANF_QD_CHECK],
+[
+  AC_CACHE_CHECK([if scanf supports %qd conversions],
+                 am_cv_scanf_qd,
+      AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+  long long int e;
+
+  d = 0;
+  e =  100000;
+  e *= 100000;
+  if ((sscanf ("10000000000", "%qd", &d) != 1) || (d != e))
+    exit (1);
+
+  exit (0);
+}
+],
+        am_cv_scanf_qd=yes,
+        am_cv_scanf_qd=no))
+  if test $am_cv_scanf_qd = yes; then
+    AC_DEFINE(HAVE_SCANF_QD, 1,
+      [Define if scanf supports %qd conversions.])
   fi
 ])
 

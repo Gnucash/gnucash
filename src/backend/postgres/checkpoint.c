@@ -33,7 +33,7 @@
  * 
  */
 
-#define _GNU_SOURCE
+#include "config.h"
 #include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,7 +69,9 @@ static void
 pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
 {
    Timespec this_ts, next_ts;
+#ifndef HAVE_GLIB29
    GMemChunk *chunk;
+#endif
    GList *node, *checkpoints = NULL;
    PGresult *result;
    Checkpoint *bp;
@@ -87,7 +89,9 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    commodity_name =
      gnc_commodity_get_unique_name (xaccAccountGetCommodity(acc));
 
+#ifndef HAVE_GLIB29
    chunk = g_mem_chunk_create (Checkpoint, 300, G_ALLOC_ONLY);
+#endif
 
    /* prevent others from inserting any splits while we recompute 
     * the checkpoints. (hack alert -verify that this is the correct
@@ -109,7 +113,11 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    FINISH_QUERY(be->connection);
 
    /* malloc a new checkpoint, set it to the dawn of unix time ... */
+#ifdef HAVE_GLIB29
+   bp = g_slice_alloc0 (sizeof(Checkpoint));
+#else
    bp = g_chunk_new0 (Checkpoint, chunk);
+#endif
    checkpoints = g_list_prepend (checkpoints, bp);
    this_ts = gnc_iso8601_to_timespec_gmt (CK_EARLIEST_DATE);
    bp->date_start = this_ts;
@@ -171,7 +179,11 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
          bp->date_end = this_ts;
 
          /* and build a new checkpoint */
-         bp = g_chunk_new0 (Checkpoint, chunk);
+#ifdef HAVE_GLIB29
+	 bp = g_slice_alloc0 (sizeof(Checkpoint));
+#else
+	 bp = g_chunk_new0 (Checkpoint, chunk);
+#endif
          checkpoints = g_list_prepend (checkpoints, bp);
          bp->date_start = this_ts;
          bp->account_guid = acct_guid;
@@ -199,7 +211,9 @@ done:
    }
 
    g_list_free (checkpoints);
+#ifndef HAVE_GLIB29
    g_mem_chunk_destroy (chunk);
+#endif
 
    /* finally, let the sql server do the heavy lifting of computing the 
     * subtotal balances */

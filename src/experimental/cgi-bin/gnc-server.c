@@ -38,7 +38,7 @@ reject_user_agent (const char *user_agent)
          "<h1>Error - Wrong Browser</h1>\n"
          "Your browser was deteted to be %s<p>\n"
          "This server returns finacial data (XML) that only\n"
-         "the gnucash client understands.  You must use gnucash\n"
+         "the GnuCash client understands.  You must use GnuCash\n"
          "to view this data\n"
          "</body></html>\n",
          user_agent);

@@ -192,22 +192,22 @@
     (gnc:html-scatter-set-height! chart height)
     (gnc:html-scatter-set-marker! chart 
                                   (case marker
-                                    ('circle "circle")
-                                    ('cross "cross")
-                                    ('square "square")
-                                    ('asterisk "asterisk")
-                                    ('filledcircle "filled circle")
-                                    ('filledsquare "filled square")))
+                                    ((circle) "circle")
+                                    ((cross) "cross")
+                                    ((square) "square")
+                                    ((asterisk) "asterisk")
+                                    ((filledcircle) "filled circle")
+                                    ((filledsquare) "filled square")))
     (gnc:html-scatter-set-markercolor! chart mcolor)
     (gnc:html-scatter-set-y-axis-label!
      chart (gnc:commodity-get-mnemonic report-currency))
     (gnc:html-scatter-set-x-axis-label!
      chart (case interval
-             ('DayDelta (N_ "Days"))
-             ('WeekDelta (N_ "Weeks"))
-             ('TwoWeekDelta (N_ "Double-Weeks"))
-             ('MonthDelta (N_ "Months"))
-             ('YearDelta (N_ "Years"))))
+             ((DayDelta) (N_ "Days"))
+             ((WeekDelta) (N_ "Weeks"))
+             ((TwoWeekDelta) (N_ "Double-Weeks"))
+             ((MonthDelta) (N_ "Months"))
+             ((YearDelta) (N_ "Years"))))
 
     (if 
      (not (gnc:commodity-equiv? report-currency price-commodity))
@@ -216,15 +216,15 @@
            (set!
             data
             (case price-source
-              ('actual-transactions
+              ((actual-transactions)
                (gnc:get-commodity-inst-prices
                 currency-accounts to-date-tp 
                 price-commodity report-currency))
-              ('weighted-average
+              ((weighted-average)
                (gnc:get-commodity-totalavg-prices
                 currency-accounts to-date-tp 
                 price-commodity report-currency))
-              ('pricedb
+              ((pricedb)
                (map (lambda (p)
                       (list (gnc:price-get-time p)
                             (gnc:price-get-value p)))
@@ -264,11 +264,11 @@
                         ;; scaling thing is totally bogus as well,
                         ;; so this doesn't matter too much.
                         (case interval
-                          ('DayDelta 86400)
-                          ('WeekDelta 604800)
-                          ('TwoWeekDelta 1209600)
-                          ('MonthDelta 2628000)
-                          ('YearDelta 31536000)))
+                          ((DayDelta) 86400)
+                          ((WeekDelta) 604800)
+                          ((TwoWeekDelta) 1209600)
+                          ((MonthDelta) 2628000)
+                          ((YearDelta) 31536000)))
                      (second x)))
                   data))
        

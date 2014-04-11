@@ -7,12 +7,21 @@ gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
 #nodist_gwmod_DATA = gw-gnc.scm
 
 libgncgnome_la_LIBADD = \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
-  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
+  ${GLADE_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -34,7 +43,6 @@ libgncgnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sxsincelast.c \
   dialog-tax-info.c \
-  dialog-totd.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
   druid-acct-period.c \
@@ -53,7 +61,6 @@ libgncgnome_la_SOURCES = \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
-  window-main-summarybar.c \
   window-reconcile.c \
   ${top_srcdir}/src/backend/file/sixtp-dom-parsers.c \
   ${top_srcdir}/src/backend/file/sixtp-dom-generators.c \
@@ -62,7 +69,9 @@ libgncgnome_la_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/file/io-example-account.c \
+  ${top_srcdir}/src/backend/file/io-gncbin-r.c \
   ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
+  ${top_srcdir}/src/backend/file/io-gncxml-v1.c \
   ${top_srcdir}/src/backend/file/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/file/io-utils.c \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
@@ -77,7 +86,7 @@ libgncgnome_la_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-pricedb-xml-v2.c
 
 
-gnomeappdir = ${datadir}/gnome/apps/Applications
+gnomeappdir = ${datadir}/applications
 
 gnomeapp_in_files = gnucash.desktop.in
 gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)
@@ -97,7 +106,6 @@ noinst_HEADERS = \
   dialog-progress.h \
   dialog-sx-from-trans.h \
   dialog-sxsincelast.h \
-  dialog-totd.h \
   dialog-scheduledxaction.h \
   druid-acct-period.h \
   druid-hierarchy.h \
@@ -116,7 +124,6 @@ noinst_HEADERS = \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \
-  window-main-summarybar.h \
   window-reconcile.h \
   gw-gnc.h
 
@@ -144,6 +151,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/glib26 \
+  -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
@@ -162,7 +170,7 @@ AM_CFLAGS = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnucash.keys: gnucash.keys.in ${top_builddir}/config.status
+gnucash.keys: gnucash.keys.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-icondir-@:${appicondir}:g'
@@ -178,17 +186,17 @@ endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
 
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
-  gw-gnc-spec.scm .scm-links ${top_builddir}/config.status
+  gw-gnc-spec.scm .scm-links ${top_builddir}/config.status Makefile
 	FLAVOR=gnome $(GUILE) -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (set! %load-path (cons \"../engine\" %load-path)) \
@@ -198,6 +206,5 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
-CLEANFILES = gnucash.keys gnucash.desktop
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-gnc.html
+CLEANFILES = gnucash.keys gnucash.desktop gnucash g-wrapped .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc.html

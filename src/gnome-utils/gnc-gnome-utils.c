@@ -26,6 +26,9 @@
 #include <gnome.h>
 #include <libguile.h>
 #include <gconf/gconf.h>
+#ifdef HAVE_X11_XLIB_H
+# include <X11/Xlib.h>
+#endif
 
 #include "gnc-html-graph-gog.h"
 
@@ -36,30 +39,76 @@
 #include "gnc-html.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
-
+#include "gnc-file.h"
+#include "gnc-hooks.h"
+#include "gnc-filepath-utils.h"
+#include "gnc-menu-extensions.h"
+#include "gnc-component-manager.h"
+#include "gnc-splash.h"
+#include "gnc-window.h"
+#include "gnc-icons.h"
+#include "dialog-options.h"
+#include "dialog-commodity.h"
+#include "dialog-totd.h"
+#include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include <gnc-dir.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
+static int gnome_is_running = FALSE;
+static int gnome_is_terminating = FALSE;
+static int gnome_is_initialized = FALSE;
 
-static char**
-gnc_scm2argv (SCM scm, int prelen, const char **prependargv)
+
+#define ACCEL_MAP_NAME "accelerator-map"
+
+static void
+gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, scm);
+  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
 }
 
-static SCM
-gnc_argv2scm (int len, const char **rest)
+static void
+gnc_commodity_help_cb (void)
 {
-  return gnc_argvarr_to_scheme_list (len, rest);
+  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
 }
 
-static const char *default_argv[] = {"", 0};
+/* gnc_configure_date_format
+ *    sets dateFormat to the current value on the scheme side
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_date_format (void)
+{
+  char *format_code = gnc_gconf_get_string(GCONF_GENERAL, 
+                                           KEY_DATE_FORMAT, NULL);
 
-static const struct poptOption nullPoptTable[] = {
-  { NULL, 0, 0, NULL, 0 }
-};
+  QofDateFormat df;
+
+  if (format_code == NULL)
+    format_code = g_strdup("locale");
+  if (*format_code == '\0') {
+    g_free(format_code);
+    format_code = g_strdup("locale");
+  }
+
+  if (gnc_date_string_to_dateformat(format_code, &df))
+  {
+    PERR("Incorrect date format code");
+    if (format_code != NULL)
+      free(format_code);
+    return;
+  }
+
+  qof_date_format_set(df);
+
+  if (format_code != NULL)
+    free(format_code);
+}
 
 char *
 gnc_gnome_locate_pixmap (const char *name)
@@ -76,6 +125,19 @@ gnc_gnome_locate_pixmap (const char *name)
     return NULL;
   }
 
+  return fullname;
+}
+
+char *
+gnc_gnome_locate_file (GnomeFileDomain domain, const char *name)
+{
+  char *fullname;
+
+  g_return_val_if_fail(name, NULL);
+  fullname = gnome_program_locate_file(gnucash_program,
+                                       domain, name, TRUE, NULL);
+  if (!fullname)
+      PERR ("Could not locate file %s", name);
   return fullname;
 }
 
@@ -127,54 +189,20 @@ gnc_gtk_add_rc_file (void)
   }
 }
 
-SCM
-gnc_gnome_init (const char * arg0,
-                const char * progname,
-                const char * version,
-                SCM command_line)
+void
+gnc_gnome_init (int argc, char **argv, const char * version)
 {
-  poptContext returnedPoptContext; /* owned by the library */
-  int restargc;
   char *fullname;
-  char **restargv;
-  char **restargv2;
-  SCM ret = command_line;
   GError *error = NULL;
-  GValue value = { 0, };
-
-  if (arg0)
-    default_argv[0] = arg0;
-
-  restargv = gnc_scm2argv (command_line, 1, default_argv);
-  if (!restargv)
-  {
-    restargv = g_new (char*, 2);
-    restargv[0] = g_strdup (default_argv[0]);
-    restargv[1] = NULL;
-  }
-
-  restargc = argv_length (restargv);
 
   gnc_gtk_add_rc_file();
-  gnucash_program =
-    gnome_program_init("gnucash", version, LIBGNOMEUI_MODULE,
-		       restargc, restargv,
-		       GNOME_PARAM_POPT_TABLE, nullPoptTable,
-		       GNOME_PROGRAM_STANDARD_PROPERTIES,
-		       GNOME_PARAM_NONE);
-
-  g_value_init(&value, G_TYPE_POINTER);
-  g_object_get_property (G_OBJECT (gnucash_program),
-			 GNOME_PARAM_POPT_CONTEXT, &value);
-  returnedPoptContext = g_value_get_pointer (&value);
-  restargv2 = (char**) poptGetArgs (returnedPoptContext);
-  ret = gnc_argv2scm (argv_length (restargv2), (const char**)restargv2);
-
-  gnc_free_argv (restargv);
+  gnucash_program = gnome_program_init(
+      "gnucash", version, LIBGNOMEUI_MODULE,
+      argc, argv,
+      GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
 
   /* initialization required for gtkhtml */
-  gdk_rgb_init ();    
-  gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+  gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
   /* use custom icon */
   fullname = gnc_gnome_locate_pixmap ("gnucash-icon.png");
@@ -189,12 +217,7 @@ gnc_gnome_init (const char * arg0,
 
   druid_gconf_install_check_schemas();
 
-  return ret;
-}
-
-void
-gnc_gnome_shutdown (void)
-{
+  return;
 }
 
 void
@@ -273,27 +296,176 @@ gnc_gnome_get_gdkpixbuf (const char *name)
   return pixbuf;
 }
 
+static gboolean
+gnc_ui_check_events (gpointer not_used)
+{
+  QofSession *session;
+  gboolean force;
 
-/*  shutdown gnucash.  This function will call the Scheme side of
- *  GnuCash to initiate an orderly shutdown, and when that has
- *  finished it will exit the program.
+  if (gtk_main_level() != 1)
+    return TRUE;
+
+  if (!gnc_current_session_exist())
+    return TRUE;
+  session = gnc_get_current_session ();
+
+  if (gnc_gui_refresh_suspended ())
+    return TRUE;
+
+  if (!qof_session_events_pending (session))
+    return TRUE;
+
+  gnc_suspend_gui_refresh ();
+
+  force = qof_session_process_events (session);
+
+  gnc_resume_gui_refresh ();
+
+  if (force)
+    gnc_gui_refresh_all ();
+
+  return TRUE;
+}
+
+#ifdef HAVE_X11_XLIB_H
+static int
+gnc_x_error (Display *display, XErrorEvent *error)
+{
+  if (error->error_code)
+  {
+    char buf[64];
+
+    XGetErrorText (display, error->error_code, buf, 63);
+
+    g_warning ("X-ERROR **: %s\n  serial %ld error_code %d "
+               "request_code %d minor_code %d\n", 
+               buf, 
+               error->serial, 
+               error->error_code, 
+               error->request_code,
+               error->minor_code);
+  }
+
+  return 0;
+}
+#endif
+
+int
+gnc_ui_start_event_loop (void)
+{
+  guint id;
+
+  gnome_is_running = TRUE;
+
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
+                           gnc_ui_check_events, NULL, NULL);
+
+#ifdef HAVE_X11_XLIB_H
+  XSetErrorHandler (gnc_x_error);
+#endif
+
+  /* Enter gnome event loop */
+  gtk_main ();
+
+  g_source_remove (id);
+
+  gnome_is_running = FALSE;
+  gnome_is_terminating = FALSE;
+
+  return 0;
+}
+
+GncMainWindow *
+gnc_gui_init(void)
+{
+    static GncMainWindow *main_window;
+    gchar *map;
+
+    if (gnome_is_initialized) {
+        return main_window;
+    }
+
+    gnc_gui_init_splash();
+
+    gnome_is_initialized = TRUE;
+
+    gnc_ui_util_init();
+    gnc_configure_date_format();
+
+    gnc_gconf_general_register_cb(
+        KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_gconf_general_register_any_cb(
+        (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+
+    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
+    gnc_file_set_shutdown_callback (gnc_shutdown);
+
+    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
+
+    main_window = gnc_main_window_new ();
+    gtk_widget_show (GTK_WIDGET (main_window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
+
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_load(map);
+    g_free(map);
+
+    gnc_load_stock_icons();
+    gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
+
+    return main_window;
+}
+
+gboolean
+gnucash_ui_is_running(void)
+{
+  return gnome_is_running;
+}
+
+static void
+gnc_gui_destroy (void)
+{
+  if (!gnome_is_initialized)
+    return;
+
+  gnc_extensions_shutdown ();
+}
+
+static void
+gnc_gui_shutdown (void)
+{
+  gchar *map;
+
+  if (gnome_is_running && !gnome_is_terminating)
+  {
+    gnome_is_terminating = TRUE;
+
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_save(map);
+    g_free(map);
+
+    gtk_main_quit();
+  }
+}
+
+/*  shutdown gnucash.  This function will initiate an orderly
+ *  shutdown, and when that has finished it will exit the program.
  */
 void
 gnc_shutdown (int exit_status)
 {
-  /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
-  SCM scm_shutdown = scm_c_eval_string("gnc:shutdown");
-
-  if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
-  {
-    SCM scm_exit_code = scm_long2num(exit_status);    
-    scm_call_1(scm_shutdown, scm_exit_code);
-  }
-  else
-  {
-    /* Either guile is not running, or for some reason we
-       can't find gnc:shutdown. Either way, just exit. */
-    g_warning("couldn't find gnc:shutdown -- exiting anyway.");
-    exit(exit_status);
-  }
+    if (gnucash_ui_is_running()) {
+        if (!gnome_is_terminating) {
+            if (gnc_file_query_save(FALSE)) {
+                gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
+                gnc_gui_shutdown();
+            }
+        }
+    } else {
+        gnc_gui_destroy();
+        gnc_hook_run(HOOK_SHUTDOWN, NULL);
+        gnc_engine_shutdown();
+        exit(exit_status);
+    }   
 }
+

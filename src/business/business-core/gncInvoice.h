@@ -29,7 +29,7 @@ transaction and lot for the posted invoice.
     @{ */
 /** @file gncInvoice.h
     @brief  Business Invoice Interface 
-    @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (C) 2001,2006 Derek Atkins <warlord@MIT.EDU>
     @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
@@ -75,6 +75,11 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 /** Call this function when adding an entry to a bill instead of an invoice */
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
+
+/** Call this function when an Entry is changed and you want to
+    re-sort the list of entries
+*/
+void gncInvoiceSortEntries (GncInvoice *invoice);
 
 /** @name Get Functions 
  @{ */
@@ -130,13 +135,16 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 
 /**
  * Apply a payment of "amount" for the owner, between the xfer_account
- * (bank or other asset) and the posted_account (A/R or A/P).
+ * (bank or other asset) and the posted_account (A/R or A/P).  If the
+ * caller supplies an (optional) invoice argument, then apply the
+ * payment to that invoice first before any other invoice.
  *
  * XXX: yes, this should be in gncOwner, but all the other logic is
  * in gncInvoice...
  */
 Transaction *
-gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
+gncOwnerApplyPayment (GncOwner *owner, GncInvoice *invoice,
+		      Account *posted_acc, Account *xfer_acc,
 		      gnc_numeric amount, Timespec date,
 		      const char *memo, const char *num);
 

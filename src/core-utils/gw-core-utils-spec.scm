@@ -1,7 +1,7 @@
 ;;; -*-scheme-*-
 
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (define-module (g-wrapped gw-core-utils-spec))
 
@@ -24,7 +24,8 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
-      "#include <gnc-gconf-utils.h>\n")))
+      "#include <gnc-gconf-utils.h>\n"
+      "#include <gnc-main.h>\n")))
 
   (gw:wrap-function
    ws
@@ -34,4 +35,21 @@
    '(((<gw:mchars> caller-owned) section)
      ((<gw:mchars> caller-owned) name))
    "Get a boolean value from gconf.")
+
+  (gw:wrap-function
+   ws
+   'gnc:debugging?
+   '<gw:bool>
+   "gnc_is_debugging"
+   '()
+   "Is debugging mode on?")
+
+  (gw:wrap-function
+   ws
+   'g:find-program-in-path
+   '(<gw:mchars> callee-owned const)
+   "g_find_program_in_path"
+   '(((<gw:mchars> caller-owned) program))
+   "Get a boolean value from gconf.")
+
 )

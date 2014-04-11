@@ -135,6 +135,7 @@ static const gchar *account_tree_actions[] = {
 };
 
 static const gchar *register_actions[] = {
+  "HbciSetupAction",
   "HbciGetBalanceAction",
   "HbciGetTransAction",
   "HbciIssueTransAction",
@@ -398,7 +399,7 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
 			      "visible", TRUE);
   }
 
-  /* Only make items sensitive is an account can be determined */
+  /* Only make items sensitive if an account can be determined */
   account = main_window_to_account (window);
   if (account) {
     gnc_plugin_update_actions(action_group, need_account_actions,

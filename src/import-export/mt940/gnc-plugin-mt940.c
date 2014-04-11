@@ -25,9 +25,12 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "gnc-plugin-mt940.h"
+#include "gnc-engine.h"
 #include "gnc-plugin-manager.h"
+#include "gnc-plugin-mt940.h"
 #include "gnc-mt940-import.h"
+#include "gnc-plugin-page-account-tree.h"
+#include "gnc-plugin-page-register.h"
 
 static void gnc_plugin_mt940_class_init (GncPluginMt940Class *klass);
 static void gnc_plugin_mt940_init (GncPluginMt940 *plugin);

@@ -132,24 +132,24 @@ void gnc_file_save_as (void);
 /** Tell the user about errors in the backends
 
 */
-gboolean show_session_error (QofBackendError io_error, const char *newfile);
+gboolean show_session_error (QofBackendError io_error,
+			     const char *newfile,
+			     GNCFileDialogType type);
 
 char * gnc_file_dialog (const char * title,
-			const char * filter,
+			GList * filters,
 			const char * starting_dir,
 			GNCFileDialogType type);
 
 gboolean gnc_file_open_file (const char *filename);
 void gnc_file_export_file(const char * filename);
 
-gboolean gnc_file_query_save (void);
+gboolean gnc_file_query_save (gboolean can_cancel);
 
 void gnc_file_quit (void);
 
-typedef gboolean (*GNCCanCancelSaveCB) (void);
-void gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb);
-
 typedef void (*GNCShutdownCB) (int);
 void gnc_file_set_shutdown_callback (GNCShutdownCB cb);
+gboolean gnc_file_save_in_progress (void);
 
 #endif /* GNC_FILE_H */

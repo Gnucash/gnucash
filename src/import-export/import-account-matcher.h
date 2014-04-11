@@ -26,6 +26,7 @@
 #define ACCOUNT_MATCHER_H
  
 #include "Account.h"
+#include "gnc-ui-common.h"
 
 /**  Must be called with a string containing a unique identifier for the
   account.  If an account with a matching online_id kvp_frame is
@@ -36,10 +37,11 @@
   again).  If the user refuses to select or create an account, NULL is
   returned.
 
+  @param parent The parent widget. Can be NULL.
+
     @param account_online_id_value The string containing your unique
     account_id coming from some string of your module.  This is the
-    normal mode of operation. (FIXME: is this string still owned by
-    the caller or does this function take ownership?)
+    normal mode of operation. Can be NULL.
 
     If account_online_id_value==NULL, you basically end up with an account
     selector that allows you to select an account whose GUID will be 
@@ -68,9 +70,13 @@
     function will also warn the user if the found or created account's
     commodity doesn't match.
 
-    @param auto_create If 0, if the account_online_id_value in unknown,
-    the function returns NULL, otherwise, the user will be asked to 
-    create a new account.
+    @param auto_create 
+         Only active if no account with the
+    account_online_id_value could be found in gnucash, or if online-id
+    was NULL. In that case, if auto_create is TRUE (nonzero), the user
+    will be asked to create a new account. If auto_create is FALSE
+    (zero), this function will simply return NULL but will neither
+    select nor create any account.
 
     @param default_selection If not NULL, that account will be 
     pre-selected by default.
@@ -83,9 +89,10 @@
   @return A pointer to the found or created Account, or NULL if no
   account was found or created.
 */
-Account * gnc_import_select_account(char * account_online_id_value,
+Account * gnc_import_select_account(gncUIWidget parent,
+				    const gchar * account_online_id_value,
 				    gboolean auto_create,
-				    const char * account_human_description,
+				    const gchar * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type,
 				    Account * default_selection,

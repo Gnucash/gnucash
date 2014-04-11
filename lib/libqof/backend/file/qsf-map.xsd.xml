@@ -38,6 +38,7 @@ xmlns:qsf-map="http://qof.sourceforge.net/">
  <xsd:simpleContent>
    <xsd:extension base="xsd:string">
      <xsd:attribute name="e_type" type="xsd:string"/>
+     <xsd:attribute name="foreach" type="xsd:string" use="optional"/>
    </xsd:extension>
  </xsd:simpleContent>
 </xsd:complexType>

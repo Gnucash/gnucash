@@ -39,7 +39,7 @@
   (gnc:register-guid "split-guid=" (gnc:split-get-guid split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (gnc:register-guid (gnc:transaction-get-guid trans)))
+  (gnc:register-guid "trans-guid=" (gnc:transaction-get-guid trans)))
 
 (define (gnc:report-anchor-text report-id)
   (gnc:html-build-url gnc:url-type-report

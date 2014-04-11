@@ -63,11 +63,13 @@ void gnc_hooks_init(void);
 #define HOOK_UI_SHUTDOWN	"hook_ui_shutdown"
 #define HOOK_NEW_BOOK		"hook_new_book"
 #define HOOK_REPORT		"hook_report"
+#define HOOK_CURRENCY_CHANGED	"hook_currency_changed"
 #define HOOK_SAVE_OPTIONS	"hook_save_options"
 #define HOOK_ADD_EXTENSION	"hook_add_extension"
 
 /* Common session hook names */
 #define HOOK_BOOK_OPENED	"hook_book_opened"
 #define HOOK_BOOK_CLOSED	"hook_book_closed"
+#define HOOK_BOOK_SAVED		"hook_book_saved"
 
 #endif /* GNC_HOOKS_H */

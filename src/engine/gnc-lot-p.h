@@ -42,13 +42,7 @@
 
 struct gnc_lot_struct
 {
-  QofEntity entity;     /* Unique guid for this lot */
-
-  /* Book that this lot belongs to */
-  QofBook *book;
-
-  /* Anchor for generic lot-specific data. */
-  KvpFrame *kvp_data;
+  QofInstance inst;
 
   /* Account to which this lot applies.  All splits in the lot must
    * belong to this account.

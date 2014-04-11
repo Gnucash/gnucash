@@ -298,7 +298,8 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
   gboolean ok_pressed;
   g_assert (trans_info);
   old_acc = gnc_import_TransInfo_get_destacc (trans_info);
-  new_acc = gnc_import_select_account(NULL,
+  new_acc = gnc_import_select_account(info->dialog,
+				      NULL,
 				      TRUE,
 				      _("Destination account for the auto-balance split."),
 				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
@@ -666,8 +667,7 @@ refresh_clist_row (GNCImportMainMatcher *gui,
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 					&(gui->color_back_green));
 	      tmp = xaccAccountGetFullName 
-		(gnc_import_TransInfo_get_destacc (info),
-		 gnc_get_account_separator ());
+		(gnc_import_TransInfo_get_destacc (info));
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)
 		 == TRUE)
 		{

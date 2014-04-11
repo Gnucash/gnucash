@@ -223,15 +223,15 @@ explode_locale (const gchar *locale,
  *       but it is big, ugly, and complicated, so I'm reluctant
  *       to do so when this should handle 99% of the time...
  */
-GSList *
+static GSList *
 _g_compute_locale_variants (const gchar *locale)
 {
   GSList *retval = NULL;
 
   gchar *language;
-  gchar *territory;
-  gchar *codeset;
-  gchar *modifier;
+  gchar *territory = NULL;
+  gchar *codeset = NULL;
+  gchar *modifier = NULL;
 
   guint mask;
   guint i;

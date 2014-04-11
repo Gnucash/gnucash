@@ -7,7 +7,18 @@
 //extern "C" {
 #endif
 
-#include <glob.h>
+#ifdef HAVE_GLOB_H
+# include <glob.h>
+#else
+# include <stddef.h> /* for size_t */
+typedef struct
+{
+  size_t gl_pathc;    /* Count of paths matched so far  */
+  char **gl_pathv;    /* List of matched pathnames.  */
+  size_t gl_offs;     /* Slots to reserve in `gl_pathv'.  */
+} glob_t;
+#endif
+
 #include <glib.h>
 #include <glib-object.h>
 #include <libgnomeui/libgnomeui.h>
@@ -29,7 +40,7 @@ struct _GNCDruidProviderFileGnome
   GNCDruidProvider parent;
 
   GnomeDruidPage*	page;
-  GnomeFileEntry*	file_entry;
+  GtkFileChooser*       file_entry;
 
   GNCDruidProviderFileCB* cb;
 

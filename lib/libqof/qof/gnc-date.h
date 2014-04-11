@@ -1,3 +1,10 @@
+/***************************************************************************
+ *            gnc-date.h (to be renamed qofdate.h)
+ *
+ *  Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
+ *  Copyright (C) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
+ *  Copyright  2005  Neil Williams <linux@codehelp.co.uk>
+ ****************************************************************************/
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -46,11 +53,13 @@
     If a file-io backend needs date handling, it should do it itself,
     instead of depending on the routines here. 
 
+	(to be renamed qofdate.h in libqof2.)
+
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu> 
     @author Copyright (C) 1998-2001,2003 Linas Vepstas <linas@linas.org>
 */
 
-/* @{ 
+/** @{ 
     @file gnc-date.h 
     @brief Date and Time handling routines  
 */
@@ -58,7 +67,6 @@
 #ifndef GNC_DATE_H
 #define GNC_DATE_H
 
-#include <glib.h>
 #include <time.h>
 
 /** The maximum length of a string created by the date printers */
@@ -91,6 +99,9 @@ typedef enum
 #define DATE_FORMAT_FIRST QOF_DATE_FORMAT_US
 #define DATE_FORMAT_LAST  QOF_DATE_FORMAT_LOCALE
 
+/** \deprecated qof_date_format_get_format has been replaced
+by qof_date_text_format_get_string */
+#define qof_date_format_get_format qof_date_text_format_get_string
 
 /**
  * This is how to format the month, as a number, an abbreviated string,
@@ -107,59 +118,54 @@ typedef enum {
 //@{ 
 
 /** \brief The string->value versions return FALSE on success and TRUE on failure */
-const char* gnc_date_dateformat_to_string(QofDateFormat format);
+const gchar* gnc_date_dateformat_to_string(QofDateFormat format);
 
 /** \brief Converts the date format to a printable string.
 
 Note the reversed return values!
 @return FALSE on success, TRUE on failure.
 */
-gboolean gnc_date_string_to_dateformat(const char* format_string,
+gboolean gnc_date_string_to_dateformat(const gchar* format_string,
 				       QofDateFormat *format);
 
-const char* gnc_date_monthformat_to_string(GNCDateMonthFormat format);
+const gchar* gnc_date_monthformat_to_string(GNCDateMonthFormat format);
 
 /** \brief Converts the month format to a printable string.
 
 Note the reversed return values!
 @return FALSE on success, TRUE on failure.
 */
-gboolean gnc_date_string_to_monthformat(const char *format_string,
+gboolean gnc_date_string_to_monthformat(const gchar *format_string,
 					GNCDateMonthFormat *format);
 // @}
 
 /* Datatypes *******************************************************/
 
-/** \brief Use a 64-bit signed int timespec
+/** \brief Use a 64-bit unsigned int timespec
  *
  * struct timespec64 is just like the unix 'struct timespec' except 
  * that we use a 64-bit
- * signed int to store the seconds.  This should adequately cover
+ * unsigned int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
  * they're not more than a couple dozen times the age of the universe.
- * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
- * VisualAge, etc) correctly handle long long as a 64 bit quantity,
- * even on the 32-bit Intel x86 and PowerPC architectures.  I'm
- * assuming that all the other modern compilers are clean on this
- * issue too. */
+ * Values of this type can range from 0 to 18,446,744,073,709,551,615.
+ */
 
 #ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
 {
-   long long int tv_sec;     
-   long int tv_nsec;
+   guint64 tv_sec;     
+   glong tv_nsec;
 };
 #endif /* SWIG */
 
 /** The Timespec is just like the unix 'struct timespec' 
- * except that we use a 64-bit signed int to
+ * except that we use a 64-bit unsigned int to
  * store the seconds.  This should adequately cover dates in the
  * distant future as well as the distant past, as long as they're not
- * more than a couple dozen times the age of the universe.  Note that
- * both gcc and the IBM Toronto xlC compiler (aka CSet, VisualAge,
- * etc) correctly handle long long as a 64 bit quantity, even on the
- * 32-bit Intel x86 and PowerPC architectures.  I'm assuming that all
- * the other modern compilers are clean on this issue too. */
+ * more than a couple dozen times the age of the universe
+ * Values of this type can range from 0 to 18,446,744,073,709,551,615.
+ */
 typedef struct timespec64 Timespec;
 
 
@@ -171,7 +177,7 @@ typedef struct timespec64 Timespec;
 gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
 
 /** comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
-int      timespec_cmp(const Timespec *ta, const Timespec *tb);
+gint      timespec_cmp(const Timespec *ta, const Timespec *tb);
 
 /** difference between ta and tb, results are normalised
  * ie tv_sec and tv_nsec of the result have the same size
@@ -192,10 +198,10 @@ void timespecFromTime_t( Timespec *ts, time_t t );
 time_t timespecToTime_t (Timespec ts);
 
 /** Convert a day, month, and year to a Timespec */
-Timespec gnc_dmy2timespec (int day, int month, int year);
+Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 
 /** Same as gnc_dmy2timespec, but last second of the day */
-Timespec gnc_dmy2timespec_end (int day, int month, int year);
+Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
 
 /** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style 
  *    date/time string to Timespec.  Please note that ISO-8601 strings
@@ -213,7 +219,7 @@ Timespec gnc_dmy2timespec_end (int day, int month, int year);
  * XXX Caution: this routine does not handle strings that specify
  * times before January 1 1970.
  */
-Timespec gnc_iso8601_to_timespec_gmt(const char *);
+Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
 
 /** The gnc_timespec_to_iso8601_buff() routine takes the input 
  *    UTC Timespec value and prints it as an ISO-8601 style string.  
@@ -231,15 +237,33 @@ Timespec gnc_iso8601_to_timespec_gmt(const char *);
  *    The string generated by this routine uses the local timezone
  *    on the machine on which it is executing to create the timestring.
  */
-char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
+gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
 
 /** DOCUMENT ME! FIXME: Probably similar to xaccDMYToSec() this date
  * routine might return incorrect values for dates before 1970.  */
-void gnc_timespec2dmy (Timespec ts, int *day, int *month, int *year);
+void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
-/** Add a number of months to a time value and normalize.  Optionally
- * also track the last day of the month, i.e. 1/31 -> 2/28 -> 3/30. */
-void date_add_months (struct tm *tm, int months, gboolean track_last_day);
+/** \brief Add a number of days to a Timespec and normalise.
+
+Together with qof_date_add_months, replaces date_add_months.
+
+\return FALSE on error, otherwise TRUE.
+*/
+gboolean qof_date_add_days(Timespec *ts, gint days);
+
+/** \brief Add a number of months to a Timespec and normalise.
+
+Optionally track the last day of the month so that adding one
+month to 31st January returns 28th February (29th in a leap year)
+and adding three months returns 30th April.
+
+\return FALSE on error, otherwise TRUE.
+*/
+gboolean qof_date_add_months(Timespec *ts, gint months, gboolean track_last_day);
+
+/** \deprecated Add a number of months to a time value and normalize.  Optionally
+ * also track the last day of the month, i.e. 1/31 -> 2/28 -> 3/31. */
+void date_add_months (struct tm *tm, gint months, gboolean track_last_day);
 
 /** \warning hack alert XXX FIXME -- these date routines return incorrect
  * values for dates before 1970.  Most of them are good only up 
@@ -249,7 +273,7 @@ void date_add_months (struct tm *tm, int months, gboolean track_last_day);
  * the user wanted the time at noon, localtime.  The returned 
  * time_t should be seconds (at GMT) of the local noon-time.
 */
-time_t xaccDMYToSec (int day, int month, int year);
+time_t xaccDMYToSec (gint day, gint month, gint year);
 
 /** The gnc_timezone function returns the number of seconds *west*
  * of UTC represented by the tm argument, adjusted for daylight
@@ -263,7 +287,7 @@ time_t xaccDMYToSec (int day, int month, int year);
  * daylight savings time! Timezone stuff under unix is not
  * standardized and is a big mess.
  */
-long int gnc_timezone (struct tm *tm);
+glong gnc_timezone (struct tm *tm);
 // @}
 
 /* ------------------------------------------------------------------------ */
@@ -313,7 +337,7 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df);
  *
  * Globals: global dateFormat value
  */
-char dateSeparator(void);
+gchar dateSeparator(void);
 
 /** \name Date Printing/Scanning functions 
  */
@@ -341,7 +365,7 @@ char dateSeparator(void);
  *
  * Globals: global dateFormat value
  **/
-size_t qof_print_date_dmy_buff (char * buff, size_t buflen, int day, int month, int year);
+size_t qof_print_date_dmy_buff (gchar * buff, size_t buflen, int day, int month, int year);
 
 /** Convenience: calls through to qof_print_date_dmy_buff(). **/
 size_t qof_print_date_buff (char * buff, size_t buflen, time_t secs);
@@ -501,7 +525,7 @@ int date_get_last_mday(struct tm *tm);
 /** Is the mday field the last day of the specified month.*/
 gboolean date_is_last_mday(struct tm *tm);
 
-/** DOCUMENT ME! Probably the same as date_get_last_mday() */
+/** \deprecated Use date_get_last_mday() */
 int gnc_date_my_last_mday (int month, int year);
 /** DOCUMENT ME! Probably the same as date_get_last_mday() */
 int gnc_timespec_last_mday (Timespec ts);
@@ -536,4 +560,3 @@ char * xaccDateUtilGetStampNow (void);
 //@}
 //@}
 #endif /* GNC_DATE_H */
-

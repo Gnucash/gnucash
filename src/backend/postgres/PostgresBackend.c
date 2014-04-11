@@ -20,9 +20,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -575,7 +572,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       for (snode = engine_splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+         s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
       }
 
       xaccTransCommitEdit (trans);
@@ -723,7 +720,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    if (!be || !q) { LEAVE("(null) args"); return; }
    be->version_check = (guint32) time(0);
 
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* first thing we do is convert the gnc-engine query into
@@ -761,7 +758,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    xaccGroupMarkSaved (topgroup);
 
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE (" ");
 }
@@ -800,7 +797,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 {
    GList *node, *xaction_list = NULL;
 
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    SEND_QUERY (be, "SELECT transGuid FROM gncTransaction;", );
@@ -817,7 +814,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    xaccAccountGroupCommitEdit (grp);
 
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 #endif
 
@@ -901,7 +898,7 @@ pgendSync (QofBackend *bend, QofBook *book)
    pgendStoreAllTransactions (be, grp);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    pgendKVPInit(be);
@@ -926,7 +923,7 @@ pgendSync (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE(" ");
 }
@@ -1072,14 +1069,14 @@ pgendSyncPriceDB (QofBackend *bend, QofBook *book)
    pgendStorePriceDB (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    pgendGetAllPricesInBook (be, book);
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE(" ");
 }
@@ -1490,7 +1487,7 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
    if (!be) return;
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
@@ -1518,7 +1515,7 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 
 /* ============================================================= */
@@ -1538,7 +1535,7 @@ pgend_book_load_single (QofBackend *bend, QofBook *book)
 
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
@@ -1560,7 +1557,7 @@ pgend_book_load_single (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 
 /* ============================================================= */
@@ -1580,7 +1577,7 @@ pgend_price_load_single (QofBackend *bend, QofBook *book)
    pgend_set_book (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
@@ -1588,7 +1585,7 @@ pgend_price_load_single (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
    LEAVE(" ");
 }
 
@@ -2550,7 +2547,7 @@ void pgend_provider_init(void)
 	QofBackendProvider *prov;
 
 	prov = g_new0(QofBackendProvider, 1);
-	prov->provider_name = "The Postgres backend for Gnucash";
+	prov->provider_name = "The Postgres backend for GnuCash";
 	prov->access_method = "postgres";
 	prov->partial_book_supported = FALSE;
 	prov->backend_new = pgendNew;

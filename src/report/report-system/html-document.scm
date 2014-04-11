@@ -29,7 +29,7 @@
 
 (define <html-document> 
   (make-record-type "<html-document>" 
-                    '(style-sheet style-stack style title objects)))
+                    '(style-sheet style-stack style title headline objects)))
 
 (define gnc:html-document? 
   (record-predicate <html-document>))
@@ -43,6 +43,7 @@
    '()                   ;; style stack
    (gnc:make-html-style-table) ;; document style info
    ""                    ;; document title
+   #f                    ;; headline
    '()                   ;; subobjects 
    ))
 
@@ -51,6 +52,15 @@
 
 (define gnc:html-document-title
   (record-accessor <html-document> 'title))
+
+(define gnc:html-document-set-headline!
+  (record-modifier <html-document> 'headline))
+
+(define gnc:html-document-headline
+  (record-accessor <html-document> 'headline))
+
+(define gnc:html-document-set-style-sheet!
+  (record-modifier <html-document> 'style-sheet))
 
 (define gnc:html-document-set-style-sheet!
   (record-modifier <html-document> 'style-sheet))
@@ -120,14 +130,15 @@
                (push (lambda (l) (set! retval (cons l retval))))
 	       (objs (gnc:html-document-objects doc))
 	       (work-to-do (length objs))
-	       (work-done 0))
+	       (work-done 0)
+               (title (gnc:html-document-title doc)))
           ;; compile the doc style 
           (gnc:html-style-table-compile (gnc:html-document-style doc)
                                         (gnc:html-document-style-stack doc))
           ;; push it 
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
-
-	  (gnc:report-render-starting (gnc:html-document-title doc))
+          (if (not (string-null? title))
+              (gnc:report-render-starting (gnc:html-document-title doc)))
           (if (not (null? headers?))
               (begin 
                 (push "<html>\n")

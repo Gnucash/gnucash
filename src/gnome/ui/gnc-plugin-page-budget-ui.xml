@@ -1,5 +1,13 @@
 <ui>
   <menubar>
+    <menu name="File" action="FileAction">
+      <menu name="FileOpenMenu" action="FileOpenMenuAction">
+        <placeholder name="FileOpenBottomPlaceholder">
+          <menuitem name="FileOpenAccount" action="OpenAccountAction"/>
+          <menuitem name="FileOpenSubaccounts" action="OpenSubaccountsAction"/>
+        </placeholder>
+      </menu>
+    </menu>
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="Estimate" action="EstimateBudgetAction"/>
@@ -17,6 +25,7 @@
 
   <toolbar name="DefaultToolbar">
     <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="OpenAccount" action="OpenAccountAction"/>
       <separator name="ToolbarSep3"/>
       <toolitem name="Options" action="OptionsBudgetAction"/>
       <separator name="ToolbarSep4"/>

@@ -539,14 +539,17 @@ cb_graph_guru_delete_item (GraphGuruState *s)
 	if (s->prop_object != NULL) {
 		GtkTreeIter iter;
 		GogObject *obj = s->prop_object;
+		gboolean have_iter;
 
 		/* store parent iter */
-		gtk_tree_model_iter_parent (GTK_TREE_MODEL (s->prop_model),
-			&iter, &s->prop_iter);
+		have_iter =
+		  gtk_tree_model_iter_parent (GTK_TREE_MODEL (s->prop_model),
+					      &iter, &s->prop_iter);
 		gog_object_clear_parent (obj);
 		g_object_unref (obj);
 		/* then select the parent after we delete */
-		gtk_tree_selection_select_iter (s->prop_selection, &iter);
+		if (have_iter)
+		  gtk_tree_selection_select_iter (s->prop_selection, &iter);
 	}
 }
 
@@ -955,10 +958,13 @@ populate_graph_item_list (GogObject *obj, GogObject *select, GraphGuruState *s,
 		gint i = g_slist_index (gparent->children, obj);
 		if (i > 0) {
 			GtkTreeIter sibling;
-			gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (s->prop_model),
-				&sibling, parent, i-1);
-			gtk_tree_store_insert_after (s->prop_model, &iter,
+			if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (s->prop_model),
+				&sibling, parent, i-1)) {
+			  gtk_tree_store_insert_after (s->prop_model, &iter,
 				parent, &sibling);
+			} else {
+			  gtk_tree_store_append (s->prop_model, &iter, parent);
+			}
 		} else
 			gtk_tree_store_prepend (s->prop_model, &iter, parent);
 	} else

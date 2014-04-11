@@ -310,6 +310,7 @@ gnc_search_param_prepend_internal (GList *list, char const *title,
 
   p = gnc_search_param_new ();
   gnc_search_param_set_title (p, title);
+  gnc_search_param_set_justify (p, justify);
 
   for (this_param = param; this_param;
        this_param = va_arg (args, const char *)) {

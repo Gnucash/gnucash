@@ -21,7 +21,6 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE
 #include "config.h"
 
 #include <errno.h>
@@ -80,7 +79,8 @@
 
 
 static int gen_logs = 1;
-static FILE * trans_log = NULL;
+static FILE * trans_log = NULL; /**< current log file handle */
+static char * trans_log_name = NULL; /**< current log file name */
 static char * log_base_name = NULL;
 
 /********************************************************************\
@@ -91,6 +91,16 @@ void xaccLogEnable  (void) { gen_logs = 1; }
 
 /********************************************************************\
 \********************************************************************/
+
+void 
+xaccReopenLog (void)
+{
+   if (trans_log) {
+      xaccCloseLog();
+      xaccOpenLog();
+   }
+}
+
 
 void 
 xaccLogSetBaseName (const char *basepath)
@@ -104,6 +114,28 @@ xaccLogSetBaseName (const char *basepath)
       xaccCloseLog();
       xaccOpenLog();
    }
+}
+
+
+/*
+ * See if the provided file name is that of the current log file.
+ * Since the filename is generated with a time-stamp we can ignore the
+ * directory path and avoid problems with worrying about any ".."
+ * components in the path.
+ */
+gboolean
+xaccFileIsCurrentLog (const gchar *name)
+{
+  gchar *base;
+  gint result;
+
+  if (!name || !trans_log_name)
+    return FALSE;
+
+  base = g_path_get_basename(name);
+  result = (strcmp(base, trans_log_name) == 0);
+  g_free(base);
+  return result;
 }
 
 /********************************************************************\
@@ -136,15 +168,20 @@ xaccOpenLog (void)
       return;
    }
 
+   /* Save the log file name */
+   if (trans_log_name)
+     g_free (trans_log_name);
+   trans_log_name = g_path_get_basename(filename);
+
    g_free (filename);
    g_free (timestamp);
 
-   /* use tab-separated fields */
-   fprintf (trans_log, "mod        trans_guid        split_guid        time_now        " \
-                       "date_entered        date_posted        " \
-                       "acc_guid        acc_name        num        description        " \
-                       "notes        memo        action        reconciled        " \
-                       "amount        value        date_reconciled\n");
+   /*  Note: this must match src/import-export/log-replay/gnc-log-replay.c */
+   fprintf (trans_log, "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+                       "date_entered\tdate_posted\t"
+                       "acc_guid\tacc_name\tnum\tdescription\t"
+                       "notes\tmemo\taction\treconciled\t"
+                       "amount\tvalue\tdate_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 }
 

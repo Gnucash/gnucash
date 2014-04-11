@@ -76,8 +76,8 @@ struct gnc_price_lookup_s
 {
   PriceLookupType type;
   GNCPriceDB     *prdb;
-  gnc_commodity  *commodity;
-  gnc_commodity  *currency;
+  const gnc_commodity  *commodity;
+  const gnc_commodity  *currency;
   Timespec        date;
 };
 

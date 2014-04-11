@@ -198,6 +198,8 @@ typedef struct gnc_lot_struct        GNCLot;
 typedef struct gnc_price_s           GNCPrice;
 typedef struct gnc_quote_source_s    gnc_quote_source;
 
+#define GNC_IS_PRICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_PRICE))
+#define GNC_PRICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_PRICE, GNCPrice))
 
 /** GList of Account */
 typedef GList                  AccountList;
@@ -240,6 +242,9 @@ void gnc_engine_shutdown (void);
 
 /** check the engine is fully initialized */
 gboolean gnc_engine_is_initialized(void);
+
+/** enable default log modules */
+void gnc_log_default(void);
 
 /** Pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */

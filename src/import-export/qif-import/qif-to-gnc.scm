@@ -15,11 +15,11 @@
 (define (qif-import:find-or-make-acct acct-info check-types? commodity
 				      check-commodity? default-currency
                                       gnc-acct-hash old-group new-group)
-  (let* ((separator (string-ref (gnc:account-separator-char) 0))
+  (let* ((separator (string-ref (gnc:account-separator-string) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
-          (gnc:get-account-from-full-name old-group gnc-name separator))
+          (gnc:get-account-from-full-name old-group gnc-name))
          (allowed-types 
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
@@ -38,13 +38,12 @@
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
-      (if (gnc:get-account-from-full-name old-group long-name separator)
+      (if (gnc:get-account-from-full-name old-group long-name)
           (let loop ((count 2))
             (let* ((test-name 
                     (string-append long-name (sprintf #f " %a" count)))
                    (test-acct 
-                    (gnc:get-account-from-full-name old-group test-name 
-                                                    separator)))
+                    (gnc:get-account-from-full-name old-group test-name)))
               (if (and test-acct (not (compatible? test-acct)))
                   (loop (+ 1 count))
                   (string-append short-name (sprintf #f " %a" count)))))
@@ -175,17 +174,17 @@
 (define (qif-import:qif-to-gnc qif-files-list 
                                qif-acct-map qif-cat-map 
                                qif-memo-map stock-map 
-                               default-currency-name)
+                               default-currency-name window)
   (gnc:backtrace-if-exception 
    (lambda ()
      (let* ((old-group (gnc:get-current-group))
             (new-group (gnc:malloc-account-group (gnc:get-current-book)))
             (gnc-acct-hash (make-hash-table 20))
-            (separator (string-ref (gnc:account-separator-char) 0))
+            (separator (string-ref (gnc:account-separator-string) 0))
             (default-currency 
               (gnc:commodity-table-find-full 
                (gnc:book-get-commodity-table (gnc:get-current-book))
-               GNC_COMMODITY_NS_ISO default-currency-name))
+               GNC_COMMODITY_NS_CURRENCY default-currency-name))
             (sorted-accounts-list '())
             (markable-xtns '())
             (sorted-qif-files-list 
@@ -297,7 +296,7 @@
        
        (if (> work-to-do 100)
            (begin 
-             (set! progress-dialog (gnc:progress-dialog-new #f #f))
+             (set! progress-dialog (gnc:progress-dialog-new window #f))
              (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
              (gnc:progress-dialog-set-heading progress-dialog
                                               (_ "Importing transactions..."))))

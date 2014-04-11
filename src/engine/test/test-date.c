@@ -28,7 +28,7 @@ check_time (Timespec ts, gboolean always_print)
   /* The time, in seconds, everywhere on the planet, is always
    * the same, and is independent of location.  In particular,
    * the time, in seconds, is identical to the local time in 
-	* Greewich (GMT).
+   * Greenwich (GMT).
    */
   ts_2 = gnc_iso8601_to_timespec_gmt (str);
 
@@ -69,8 +69,8 @@ check_conversion (const char * str, Timespec expected_ts)
   if ((expected_ts.tv_sec != ts.tv_sec) || (expected_ts.tv_nsec != ts.tv_nsec)) 
   {
     fprintf (stderr, 
-             "\nmis-converted \"%s\" to %lld.%09ld seconds\n"
-             "\twas expecting %lld.%09ld seconds\n", 
+             "\nmis-converted \"%s\" to %" G_GUINT64_FORMAT ".%09ld seconds\n"
+             "\twas expecting %" G_GUINT64_FORMAT ".%09ld seconds\n", 
              str, ts.tv_sec, ts.tv_nsec, 
              expected_ts.tv_sec, expected_ts.tv_nsec); 
     failure ("misconverted timespec");
@@ -338,6 +338,12 @@ run_test (void)
   ts = gnc_iso8601_to_timespec_gmt ("2008-02-28 23:23:23.000000 -0000");
   check_time (ts, do_print);
 
+  /* Here's a date ten days after the 2038 rollover that should work
+     if/when we support it. */
+  ts.tv_nsec = 0;
+  ts.tv_sec = (long long int) 0x7fffffff + 3600*24*10;
+  //check_time(ts, do_print);
+
   /* Various 'special' times. What makes these so special? */
   ts.tv_sec = 152098136;
   ts.tv_nsec = 0;
@@ -399,6 +405,10 @@ run_test (void)
     ts.tv_nsec = MIN (ts.tv_nsec, 999999999);
     ts.tv_nsec /= 1000;
     ts.tv_nsec *= 1000;
+
+    /* We just can't handle dates whose time_t doesn't fit in int. */
+    if (ts.tv_sec > (0x7fffffff - 3600*25))
+        continue;
 
     if (!check_time (ts, FALSE))
       return;

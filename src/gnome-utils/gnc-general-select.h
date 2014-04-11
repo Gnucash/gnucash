@@ -78,6 +78,8 @@ const char *gnc_general_select_get_printname (GNCGeneralSelect *gsl,
 					      gpointer selection);
 GType      gnc_general_select_get_type       (void);
 
+void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label);
+
 #endif
 
 /*

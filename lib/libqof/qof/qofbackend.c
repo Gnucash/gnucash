@@ -22,7 +22,6 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,9 +29,8 @@
 #include <regex.h>
 #include <glib.h>
 #include <gmodule.h>
-#include <dlfcn.h>
-#include <sys/stat.h>
 #include <errno.h>
+#include "qof.h"
 #include "qofbackend-p.h"
 
 static QofLogModule log_module = QOF_MOD_BACKEND;
@@ -40,7 +38,7 @@ static QofLogModule log_module = QOF_MOD_BACKEND;
 #define QOF_CONFIG_DESC    "desc"
 #define QOF_CONFIG_TIP     "tip"
 
-/********************************************************************\
+/* *******************************************************************\
  * error handling                                                   *
 \********************************************************************/
 
@@ -89,7 +87,6 @@ qof_backend_set_message (QofBackend *be, const char *format, ...)
    be->error_msg = buffer;
 }
 
-/* This should always return a valid char * */
 char *
 qof_backend_get_message (QofBackend *be) 
 {
@@ -100,9 +97,9 @@ qof_backend_get_message (QofBackend *be)
 
    /* 
     * Just return the contents of the error_msg and then set it to
-    * NULL.  This is necessary, because the Backends don't seem to
-    * have a destroy_backend function to take care if freeing stuff
-    * up.  The calling function should free the copy.
+    * NULL. This is necessary, because the Backends don't seem to
+    * have a destroy_backend function to take care of freeing stuff
+    * up. The calling function should free the copy.
     * Also, this is consistent with the qof_backend_get_error() popping.
     */
 
@@ -141,13 +138,10 @@ qof_backend_init(QofBackend *be)
     be->error_msg = NULL;
     be->percentage = NULL;
 	be->backend_configuration = kvp_frame_new();
-
-#ifdef GNUCASH_MAJOR_VERSION
-    /* XXX remove these */
-    be->fullpath = NULL;
-    be->price_lookup = NULL;
-    be->export = NULL;
-#endif
+	
+	/* to be removed */
+	be->price_lookup = NULL;
+	be->export = NULL;
 }
 
 void
@@ -195,7 +189,6 @@ void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
 	count = be->config_count;
 	count++;
 	value = NULL;
-	ENTER (" %d", count);
 	switch (option->type)
 	{
 		case KVP_TYPE_GINT64   : {
@@ -226,22 +219,16 @@ void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
 	if(value) {
 		temp = g_strdup_printf("/%s", option->option_name);
 		kvp_frame_set_value(be->backend_configuration, temp, value);
-		PINFO (" setting value at %s", temp);
 		g_free(temp);
 		temp = g_strdup_printf("/%s/%s", QOF_CONFIG_DESC, option->option_name);
-		PINFO (" setting description %s at %s", option->description, temp);
 		kvp_frame_set_string(be->backend_configuration, temp, option->description);
-		PINFO (" check= %s", kvp_frame_get_string(be->backend_configuration, temp));
 		g_free(temp);
 		temp = g_strdup_printf("/%s/%s", QOF_CONFIG_TIP, option->option_name);
-		PINFO (" setting tooltip %s at %s", option->tooltip, temp);
 		kvp_frame_set_string(be->backend_configuration, temp, option->tooltip);
-		PINFO (" check= %s", kvp_frame_get_string(be->backend_configuration, temp));
 		g_free(temp);
 		/* only increment the counter if successful */
 		be->config_count = count;
 	}
-	LEAVE (" ");
 }
 
 KvpFrame* qof_backend_complete_frame(QofBackend *be)
@@ -258,6 +245,10 @@ struct config_iterate {
 	KvpFrame          *recursive;
 };
 
+/* Set the option with the default KvpValue,
+manipulate the option in the supplied callback routine
+then set the value of the option into the KvpValue
+in the configuration frame. */
 static void
 config_foreach_cb (const char *key, KvpValue *value, gpointer data)
 {
@@ -280,11 +271,11 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
 	option.type = kvp_value_get_type(value);
 	if(!option.type) { return; }
 	switch (option.type)
-	{
+	{ /* set the KvpFrame value into the option */
 		case KVP_TYPE_GINT64   : {
 			int64 = kvp_value_get_gint64(value);
 			option.value = (gpointer)&int64;
-			break; 
+			break;
 		}
 		case KVP_TYPE_DOUBLE   : {
 			db = kvp_value_get_double(value);
@@ -300,12 +291,12 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
 			option.value = (gpointer)kvp_value_get_string(value);
 			break;
 		}
-		case KVP_TYPE_GUID     : { break; } /* unsupported */
 		case KVP_TYPE_TIMESPEC : {
 			ts = kvp_value_get_timespec(value);
 			option.value = (gpointer)&ts;
 			break;
 		}
+		case KVP_TYPE_GUID     : { break; } /* unsupported */
 		case KVP_TYPE_BINARY   : { break; } /* unsupported */
 		case KVP_TYPE_GLIST    : { break; } /* unsupported */
 		case KVP_TYPE_FRAME    : { break; } /* unsupported */
@@ -315,9 +306,43 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
 	g_free(parent);
 	parent = g_strdup_printf("/%s/%s", QOF_CONFIG_TIP, key);
 	option.tooltip = kvp_frame_get_string(helper->recursive, parent);
+	g_free(parent);
 	helper->count++;
+    /* manipulate the option */
 	helper->fcn (&option, helper->data);
-	LEAVE (" desc=%s tip=%s", option.description, option.tooltip);
+	switch (option.type)
+	{ /* set the option value into the KvpFrame */
+		case KVP_TYPE_GINT64   : {
+			kvp_frame_set_gint64(helper->recursive, key, 
+				(*(gint64*)option.value));
+			break;
+		}
+		case KVP_TYPE_DOUBLE   : {
+			kvp_frame_set_double(helper->recursive, key, 
+				(*(double*)option.value));
+			break; 
+		}
+		case KVP_TYPE_NUMERIC  : {
+			kvp_frame_set_numeric(helper->recursive, key, 
+				(*(gnc_numeric*)option.value));
+			break; 
+		}
+		case KVP_TYPE_STRING   : {
+			kvp_frame_set_string(helper->recursive, key, 
+				(gchar*)option.value);
+			break;
+		}
+		case KVP_TYPE_TIMESPEC : {
+			kvp_frame_set_timespec(helper->recursive, key, 
+				(*(Timespec*)option.value));
+			break;
+		}
+		case KVP_TYPE_GUID     : { break; } /* unsupported */
+		case KVP_TYPE_BINARY   : { break; } /* unsupported */
+		case KVP_TYPE_GLIST    : { break; } /* unsupported */
+		case KVP_TYPE_FRAME    : { break; } /* unsupported */
+	}
+	LEAVE (" ");
 }
 
 void qof_backend_option_foreach(KvpFrame *config, QofBackendOptionCB cb, gpointer data)
@@ -359,45 +384,9 @@ qof_backend_commit_exists(QofBackend *be)
 }
 
 gboolean
-qof_begin_edit(QofInstance *inst)
-{
-  QofBackend * be;
-
-  if (!inst) { return FALSE; }
-  (inst->editlevel)++;
-  if (1 < inst->editlevel) { return FALSE; }
-  if (0 >= inst->editlevel) { inst->editlevel = 1; }
-  be = qof_book_get_backend (inst->book);
-    if (be && qof_backend_begin_exists(be)) {
-     qof_backend_run_begin(be, inst);
-  } else { inst->dirty = TRUE; }
-  return TRUE;
-}
-
-gboolean qof_commit_edit(QofInstance *inst)
-{
-  QofBackend * be;
-
-  if (!inst) { return FALSE; }
-  (inst->editlevel)--;
-  if (0 < inst->editlevel) { return FALSE; }
-  if ((-1 == inst->editlevel) && inst->dirty)
-  {
-    be = qof_book_get_backend ((inst)->book);
-    if (be && qof_backend_begin_exists(be)) {
-     qof_backend_run_begin(be, inst);
-    }
-    inst->editlevel = 0;
-  }
-  if (0 > inst->editlevel) { inst->editlevel = 0; }
-  return TRUE;
-}
-
-gboolean
 qof_load_backend_library (const char *directory, 
 				const char* filename, const char* init_fcn)
 {
-	struct stat sbuf;
 	gchar *fullpath;
 	typedef void (* backend_init) (void);
 	GModule *backend;
@@ -406,8 +395,6 @@ qof_load_backend_library (const char *directory,
 
 	g_return_val_if_fail(g_module_supported(), FALSE);
 	fullpath = g_module_build_path(directory, filename);
-	PINFO (" fullpath=%s", fullpath);
-	g_return_val_if_fail((stat(fullpath, &sbuf) == 0), FALSE);
 	backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
 	if(!backend) { 
 		g_message ("%s: %s\n", PACKAGE, g_module_error ());

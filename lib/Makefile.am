@@ -1,4 +1,5 @@
 SUBDIRS = libc glib26 guile-www srfi
+DIST_SUBDIRS = libc glib26 guile-www srfi libgsf-1.12.3 goffice-0.0.4 libqof
 
 if !HAVE_GOFFICE
 if !HAVE_LIBGSF
@@ -9,8 +10,6 @@ endif
 
 if USE_LIBQOF
 SUBDIRS += libqof
-else
-SUBDIRS +=
 endif
 
 EXTRA_DIST = README

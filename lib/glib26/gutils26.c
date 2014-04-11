@@ -1035,6 +1035,30 @@ _glib_gettext (const gchar *str)
 
 #endif /* ENABLE_NLS */
 
+/**
+ * g_strv_length:
+ * @str_array: a %NULL-terminated array of strings.
+ * 
+ * Returns the length of the given %NULL-terminated 
+ * string array @str_array.
+ * 
+ * Return value: length of @str_array.
+ *
+ * Since: 2.6
+ **/
+guint
+g_strv_length (gchar **str_array)
+{
+  guint i = 0;
+
+  g_return_val_if_fail (str_array != NULL, 0);
+
+  while (str_array[i])
+    ++i;
+
+  return i;
+}
+
 #if 0
 #define __G_UTILS_C__
 #include "galiasdef.c"

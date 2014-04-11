@@ -1,6 +1,6 @@
 (define-module (g-wrapped gw-engine-spec))
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (use-modules (g-wrap))
 (use-modules (g-wrap simple-type))
@@ -34,7 +34,8 @@
     "#include <gnc-lot.h>\n"
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-hooks-scm.h>\n"
-    "#include <engine-helpers.h>\n")))
+    "#include <engine-helpers.h>\n"
+    "#include <SX-book.h>\n")))
 
 (gw:wrapset-add-cs-initializers!
  ws
@@ -109,13 +110,13 @@
 
 (gw:wrap-as-wct ws '<gnc:Query*> "Query *" "const Query *")
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:event-type> "GNCEngineEventType")))
+(let ((wt (gw:wrap-enumeration ws '<gnc:event-type> "QofEventId")))
 
-  (gw:enum-add-value! wt "GNC_EVENT_NONE" 'gnc-event-none)
-  (gw:enum-add-value! wt "GNC_EVENT_CREATE" 'gnc-event-create)
-  (gw:enum-add-value! wt "GNC_EVENT_MODIFY" 'gnc-event-modify)
-  (gw:enum-add-value! wt "GNC_EVENT_DESTROY" 'gnc-event-destroy)
-  (gw:enum-add-value! wt "GNC_EVENT_ALL" 'gnc-event-all))
+  (gw:enum-add-value! wt "QOF_EVENT_NONE" 'qof-event-none)
+  (gw:enum-add-value! wt "QOF_EVENT_CREATE" 'qof-event-create)
+  (gw:enum-add-value! wt "QOF_EVENT_MODIFY" 'qof-event-modify)
+  (gw:enum-add-value! wt "QOF_EVENT_DESTROY" 'qof-event-destroy)
+  (gw:enum-add-value! wt "QOF_EVENT_ALL" 'qof-event-all))
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QofQueryOp")))
 
@@ -381,6 +382,15 @@
  '((<gnc:Split*> s))
  "Return split's value.")
 
+
+(gw:wrap-function
+ ws
+ 'gnc:account-separator-string
+ '(<gw:mchars> callee-owned const)
+ "gnc_get_account_separator_string"
+ '()
+ "Returns a string with the user-selected account separator")
+
 (gw:wrap-function
  ws
  'gnc:split-get-account
@@ -452,7 +462,7 @@ its account")
  'gnc:split-get-corr-account-full-name-internal
  '(<gw:gchars> caller-owned)
  "xaccSplitGetCorrAccountFullName"
- '((<gnc:Split*> sa) (<gw:char> separator))
+ '((<gnc:Split*> sa))
  "Find the split on the other side of the transaction, and return the 
 name of its account.  Don't use directly, use 
 gnc:split-get-corr-account-full-name in src/scm/report-utilities.scm")
@@ -557,7 +567,7 @@ value.  It is meant to be a short descriptive phrase.")
 (gw:wrap-function
  ws
  'gnc:transaction-get-void-reason
- '(<gw:mchars> callee-owned)
+ '(<gw:mchars> callee-owned const)
  "xaccTransGetVoidReason"
  '((<gnc:Transaction*> transaction))
  "return a string indicating reason for voiding")
@@ -722,35 +732,20 @@ number of nanoseconds.")
  "Insert the split s into account a. If the split already belongs
 to another account, it will be removed from that account first.")
 
-(gw:wrap-function
- ws
- 'gnc:account-fix-split-date-order
- '<gw:void>
- "xaccAccountFixSplitDateOrder"
- '((<gnc:Account*> a) (<gnc:Split*> s))
- "Check to see if split s is in proper sorted date order with respect
-to the other splits in account a.")
-
-(gw:wrap-function
- ws
- 'gnc:trans-fix-split-date-order
- '<gw:void>
- "xaccTransFixSplitDateOrder"
- '((<gnc:Transaction*> t))
- "Check to see if all of the splits in transaction t are in proper
-date order.")
-
-(gw:wrap-function
- ws
- 'gnc:account-order
- '<gw:int>
- "xaccAccountOrder"
- '((<gnc:Account**> a1) (<gnc:Account**> a2))
- "Defines a sorting order on accounts.  Returns -1 if a1 is \"less
-than\" the second, +1 if the a1 is \"greater than\" the second, and 0
-if they are equal.  To determine the sort order, the account codes are
-compared, and if these are equal, then account types, and, if these
-are equal, then account names.")
+;; (gw:wrap-function
+;;  ws
+;;  'gnc:account-order
+;;  '<gw:int>
+;;  "xaccAccountOrder_gwrap"
+;;  '(
+;;    (<gnc:Account**> a1)
+;;    (<gnc:Account**> a2)
+;;    )
+;;  "Defines a sorting order on accounts.  Returns -1 if a1 is \"less
+;; than\" the second, +1 if the a1 is \"greater than\" the second, and 0
+;; if they are equal.  To determine the sort order, the account codes are
+;; compared, and if these are equal, then account types, and, if these
+;; are equal, then account names.")
 
 (gw:wrap-function
  ws
@@ -1062,8 +1057,7 @@ group")
  '<gnc:Account*>
  "xaccGetAccountFromFullName"
  '((<gnc:AccountGroup*> g)
-   ((<gw:mchars> caller-owned const) name)
-   (<gw:char> separator))
+   ((<gw:mchars> caller-owned const) name))
  "Return account named name in group g.  full path with separators.")
 
 (gw:wrap-function
@@ -1094,7 +1088,7 @@ group")
  ws
  'gnc:group-get-subaccounts
  '(gw:glist-of <gnc:Account*> caller-owned)
- "xaccGroupGetSubAccounts"
+ "xaccGroupGetSubAccountsSorted"
  '((<gnc:AccountGroup*> g))
  "Return a list containing all of the accounts, including
 subaccounts, in the account group. The returned array should be freed
@@ -1103,8 +1097,8 @@ when no longer needed.")
 (gw:wrap-function
  ws
  'gnc:group-get-account-list
- '(gw:glist-of <gnc:Account*> callee-owned)
- "xaccGroupGetAccountList"
+ '(gw:glist-of <gnc:Account*> caller-owned)
+ "xaccGroupGetAccountListSorted"
  '((<gnc:AccountGroup*> g))
  "Return a list containing the immediate children of g.")
 
@@ -1307,6 +1301,27 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:time-pair> t))
  "Returns the price(s) nearest to t in any currency available.")
 
+
+(gw:wrap-function
+ws
+'gnc:pricedb-lookup-latest-before
+'<gnc:Price*>
+"gnc_pricedb_lookup_latest_before"
+'((<gnc:PriceDB*> db)
+  (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
+  (<gnc:time-pair> t))
+"Returns the latest price quote <= t. Unref price when finished with it.")
+
+(gw:wrap-function
+ws
+'gnc:pricedb-lookup-latest-before-any-currency
+'(gw:glist-of <gnc:Price*> caller-owned)
+"gnc_pricedb_lookup_latest_before_any_currency"
+'((<gnc:PriceDB*> db)
+  (<gnc:commodity*> commodity) (<gnc:time-pair> t))
+"Returns the latest price quote(s) <= t in any currency available.")
+
+
 (gw:wrap-function
  ws
  'gnc:pricedb-get-prices
@@ -1358,6 +1373,20 @@ when no longer needed.")
    (<gnc:time-pair> t))
  "convert balance in commodity balance_commodity to new_currency using nearest price
 to time t.")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-latest-before
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_latest_before"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency)
+   (<gnc:time-pair> t))
+ "convert balance in commodity balance_commodity to new_currency using latest price
+prior to time t.")
+
 
 ;;===========
 ;; QofSession
@@ -1448,6 +1477,14 @@ argument between 0 and 100 (inclusive).")
 
 (gw:wrap-function
  ws
+ 'gnc:book-get-template-group
+ '<gnc:AccountGroup*>
+ "gnc_book_get_template_group"
+ '((<gnc:Book*> book))
+ "Get the book's template account group.")
+
+(gw:wrap-function
+ ws
  'gnc:book-get-commodity-table
  '<gnc:commodity-table*>
  "gnc_commodity_table_get_table"
@@ -1498,7 +1535,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:set-log-level-global
  '<gw:void>
- "gnc_set_log_level_global"
+ "qof_log_set_level_registered"
  '((<gw:int> level))
  "Set the logging level for all modules to level.")
 
@@ -2062,9 +2099,9 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:commodity-get-exchange-code
  '(<gw:mchars> callee-owned const)
- "gnc_commodity_get_exchange_code"
+ "gnc_commodity_get_cusip"
  '((<gnc:commodity*> comm))
- "Get the exchange code (ISO numeric code)")
+ "Get the cusip (exchange specific data, not the stock ticker)")
 
 (gw:wrap-function
  ws
@@ -2073,6 +2110,14 @@ of having a parent transaction with which one is working...")
  "gnc_commodity_get_fraction"
  '((<gnc:commodity*> comm))
  "Get the number of smallest transactional units per unit of the currency")
+
+(gw:wrap-function
+ ws
+ 'gnc:commodity-is-currency?
+ '<gw:bool>
+ "gnc_commodity_is_currency"
+ '((<gnc:commodity*> comm))
+ "return true if the commodity is an ISO4217 currency")
 
 (gw:wrap-function
  ws
@@ -2142,7 +2187,8 @@ of having a parent transaction with which one is working...")
  '<gnc:commodity-namespace*>
  "gnc_commodity_table_add_namespace"
  '((<gnc:commodity-table*> table)
-   ((<gw:mchars> caller-owned const) namespace))
+   ((<gw:mchars> caller-owned const) namespace)
+   (<gnc:Book*> book))
  "Add a new namespace to the commodity table")
 
 (gw:wrap-function
@@ -2168,8 +2214,7 @@ of having a parent transaction with which one is working...")
  'gnc:commodity-table-get-quotable-commodities
  '(gw:glist-of <gnc:commodity*> caller-owned)
  "gnc_commodity_table_get_quotable_commodities"
- '((<gnc:commodity-table*> table)
-   ((<gw:mchars> caller-owned const) namespace))
+ '((<gnc:commodity-table*> table))
  "Return a list of all the quotable commodities in a given namespace in the table.")
 
 (gw:wrap-function
@@ -2470,17 +2515,17 @@ the timepair representing midday on that day")
 
 (gw:wrap-function
  ws
- 'gnc:engine-suspend-events
+ 'qof:event-suspend
  '<gw:void>
- "gnc_engine_suspend_events"
+ "qof_event_suspend"
  '()
  "Suspend all engine events.") 
 
 (gw:wrap-function
  ws
- 'gnc:engine-resume-events
+ 'qof:event-resume
  '<gw:void>
- "gnc_engine_resume_events"
+ "qof_event_resume"
  '()
  "Resume engine event generation.") 
 
@@ -2618,24 +2663,12 @@ the timepair representing midday on that day")
  "Run the danglers on a hook.")
 
 ; Now wrap all the 'known' hooks
-(gw:wrap-value ws 'gnc:*startup-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_STARTUP")
-(gw:wrap-value ws 'gnc:*shutdown-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_SHUTDOWN")
-(gw:wrap-value ws 'gnc:*ui-startup-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_UI_STARTUP")
-(gw:wrap-value ws 'gnc:*ui-post-startup-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_UI_POST_STARTUP")
-(gw:wrap-value ws 'gnc:*ui-shutdown-hook* 
-	       '(<gw:mchars> callee-owned) "HOOK_UI_SHUTDOWN")
 (gw:wrap-value ws 'gnc:*new-book-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_NEW_BOOK")
 (gw:wrap-value ws 'gnc:*report-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_REPORT")
 (gw:wrap-value ws 'gnc:*save-options-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_SAVE_OPTIONS")
-(gw:wrap-value ws 'gnc:*add-extension-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_ADD_EXTENSION")
 (gw:wrap-value ws 'gnc:*book-opened-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_BOOK_OPENED")
 (gw:wrap-value ws 'gnc:*book-closed-hook*

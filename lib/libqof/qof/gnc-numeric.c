@@ -22,8 +22,6 @@
  *                                                                  *
  *******************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -75,7 +73,7 @@ gnc_numeric_check(gnc_numeric in)
   }
 }
 
-/**
+/*
  *  Find the least common multiple of the denominators of a and b.
  */
 
@@ -106,7 +104,7 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b)
 }
 
 
-/** Return the ratio n/d reduced so that there are no common factors. */
+/* Return the ratio n/d reduced so that there are no common factors. */
 static inline gnc_numeric
 reduce128(qofint128 n, gint64 d)
 {
@@ -140,7 +138,7 @@ reduce128(qofint128 n, gint64 d)
   return out;
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_zero_p
  ********************************************************************/
 
@@ -164,7 +162,7 @@ gnc_numeric_zero_p(gnc_numeric a)
   }
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_negative_p
  ********************************************************************/
 
@@ -188,7 +186,7 @@ gnc_numeric_negative_p(gnc_numeric a)
   }
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_positive_p
  ********************************************************************/
 
@@ -212,7 +210,7 @@ gnc_numeric_positive_p(gnc_numeric a)
   }
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_compare
  *  returns 1 if a>b, -1 if b>a, 0 if a == b 
  ********************************************************************/
@@ -243,6 +241,14 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
     return cmp128 (l,r);
   }
 
+  if (a.denom < 0)
+      a.denom *= -1;
+  if (b.denom < 0)
+      b.denom *= -1;
+
+  /* BUG: Possible overflow here..  Also, doesn't properly deal with
+   * reciprocal denominators.
+   */
   aa = a.num * a.denom;
   bb = b.num * b.denom;
 
@@ -252,7 +258,7 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_eq
  ********************************************************************/
 
@@ -263,13 +269,14 @@ gnc_numeric_eq(gnc_numeric a, gnc_numeric b)
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_equal
  ********************************************************************/
 
 gboolean
 gnc_numeric_equal(gnc_numeric a, gnc_numeric b) 
 {
+  qofint128 l, r;
   if ((a.denom == b.denom) && (a.denom > 0))
   {
     return (a.num == b.num);
@@ -277,8 +284,8 @@ gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
   if ((a.denom > 0) && (b.denom > 0))
   {
     // return (a.num*b.denom == b.num*a.denom);
-    qofint128 l = mult128 (a.num, b.denom);
-    qofint128 r = mult128 (b.num, a.denom);
+    l = mult128 (a.num, b.denom);
+    r = mult128 (b.num, a.denom);
     return equal128 (l, r);
 
 #if ALT_WAY_OF_CHECKING_EQUALITY
@@ -289,18 +296,28 @@ gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
     return 1;
 #endif
   }
-  if ((a.denom < 0) && (b.denom < 0))
-  {    
-    return ((a.num * b.denom) == (a.denom * b.num));
+  if ((a.denom < 0) && (b.denom < 0)) {
+      l = mult128 (a.num, -a.denom);
+      r = mult128 (b.num, -b.denom);
+      return equal128 (l, r);
+  } else {
+      /* BUG: One of the numbers has a reciprocal denom, and the other
+         does not. I just don't know to handle this case in any
+         reasonably overflow-proof yet simple way.  So, this funtion
+         will simply get it wrong whenever the three multiplies
+         overflow 64-bits.  -CAS */
+      if (a.denom < 0) {
+          return ((a.num * -a.denom * b.denom) == b.num);
+      } else {
+          return (a.num == (b.num * a.denom * -b.denom));
+      }
   }
-  else 
-  {
-    return 0;
-  }
+
+  return ((a.num * b.denom) == (a.denom * b.num));
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_same
  *  would a and b be equal() if they were both converted to the same 
  *  denominator? 
@@ -319,7 +336,7 @@ gnc_numeric_same(gnc_numeric a, gnc_numeric b, gint64 denom,
 
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_add
  ********************************************************************/
 
@@ -355,20 +372,20 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   
   if(a.denom < 0) 
   {
-    a.num *= a.denom;
+    a.num *= -a.denom;  /* BUG: overflow not handled.  */
     a.denom = 1;
   }
 
   if(b.denom < 0) 
   {
-    b.num *= b.denom;
+    b.num *= -b.denom;  /* BUG: overflow not handled.  */
     b.denom = 1;
   }
 
   /* Get an exact answer.. same denominator is the common case. */ 
   if(a.denom == b.denom) 
   {
-    sum.num = a.num + b.num;
+    sum.num = a.num + b.num;  /* BUG: overflow not handled.  */
     sum.denom = a.denom;
   }
   else 
@@ -377,7 +394,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
      *    sum.num = a.num*b.denom + b.num*a.denom;
      *    sum.denom = a.denom*b.denom;
      * but the multiply could overflow.  
-     * Computing the LCD minimizes likelyhood of overflow
+     * Computing the LCD minimizes likelihood of overflow
      */
     gint64 lcd;
     qofint128 ca, cb, cab;
@@ -410,7 +427,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   return gnc_numeric_convert(sum, denom, how);                             
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_sub
  ********************************************************************/
 
@@ -429,7 +446,7 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
   return gnc_numeric_add (a, nb, denom, how);
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_mul
  ********************************************************************/
 
@@ -468,12 +485,12 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   }
 
   if(a.denom < 0) {
-    a.num *= a.denom;
+    a.num *= -a.denom;  /* BUG: overflow not handled.  */
     a.denom = 1;
   }
 
   if(b.denom < 0) {
-    b.num *= b.denom;
+    b.num *= -b.denom;  /* BUG: overflow not handled.  */
     b.denom = 1;
   }
 
@@ -548,7 +565,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_div
  ********************************************************************/
 
@@ -584,13 +601,13 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
 
   if(a.denom < 0) 
   {
-    a.num *= a.denom;
+    a.num *= -a.denom;   /* BUG: overflow not handled.  */
     a.denom = 1;
   }
 
   if(b.denom < 0) 
   {
-    b.num *= b.denom;
+    b.num *= -b.denom;   /* BUG: overflow not handled.  */
     b.denom = 1;
   }
 
@@ -680,7 +697,7 @@ dive_done:
   return gnc_numeric_convert(quotient, denom, how); 
 }
  
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_neg
  *  negate the argument 
  ********************************************************************/
@@ -693,7 +710,7 @@ gnc_numeric_neg(gnc_numeric a) {
   return gnc_numeric_create(- a.num, a.denom);
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_neg
  *  return the absolute value of the argument 
  ********************************************************************/
@@ -707,7 +724,7 @@ gnc_numeric_abs(gnc_numeric a)
   return gnc_numeric_create(ABS(a.num), a.denom);
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_convert
  ********************************************************************/
 
@@ -785,10 +802,15 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   if(in.denom == denom) {
     return in;
   }
+  if(in.num == 0) {
+    out.num = 0;
+    out.denom = denom;
+    return out;
+  }
   
   /* If the denominator of the input value is negative, get rid of that. */
   if(in.denom < 0) {
-    in.num = in.num * (- in.denom);
+    in.num = in.num * (- in.denom);  /* BUG: overflow not handled.  */
     in.denom = 1;
   }
   
@@ -803,9 +825,9 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
     denom     = - denom;
     denom_neg = 1;
     temp_a    = (in.num < 0) ? -in.num : in.num;
-    temp_bc   = in.denom * denom;
-    remainder = in.num % temp_bc;
-    out.num   = in.num / temp_bc;
+    temp_bc   = in.denom * denom;  /* BUG: overflow not handled.  */
+    remainder = temp_a % temp_bc;
+    out.num   = temp_a / temp_bc;
     out.denom = - denom;    
   }
   else 
@@ -957,8 +979,8 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
 }
 
 
-/********************************************************************
- ** reduce a fraction by GCF elimination.  This is NOT done as a
+/* *******************************************************************
+ *  reduce a fraction by GCF elimination.  This is NOT done as a
  *  part of the arithmetic API unless GNC_HOW_DENOM_REDUCE is specified 
  *  as the output denominator.
  ********************************************************************/
@@ -991,7 +1013,7 @@ gnc_numeric_reduce(gnc_numeric in)
   return out;
 }
 
-/********************************************************************
+/* *******************************************************************
  *  double_to_gnc_numeric
  ********************************************************************/
 
@@ -1063,7 +1085,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
   return out;
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_to_double
  ********************************************************************/
 
@@ -1076,11 +1098,11 @@ gnc_numeric_to_double(gnc_numeric in)
   }
   else 
   {
-    return (double)(in.num * in.denom);
+    return (double)(in.num * -in.denom);
   }
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_error
  ********************************************************************/
 
@@ -1091,7 +1113,7 @@ gnc_numeric_error(GNCNumericErrorCode error_code)
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_add_with_error
  ********************************************************************/
 
@@ -1113,7 +1135,7 @@ gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
   return sum;
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_sub_with_error
  ********************************************************************/
 
@@ -1134,7 +1156,7 @@ gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_mul_with_error
  ********************************************************************/
 
@@ -1155,7 +1177,7 @@ gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
 }
 
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric_div_with_error
  ********************************************************************/
 
@@ -1175,7 +1197,7 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
   return quot;
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric text IO
  ********************************************************************/
 
@@ -1235,7 +1257,7 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
   return TRUE;
 }
 
-/********************************************************************
+/* *******************************************************************
  *  gnc_numeric misc testing
  ********************************************************************/
 #ifdef _GNC_NUMERIC_TEST

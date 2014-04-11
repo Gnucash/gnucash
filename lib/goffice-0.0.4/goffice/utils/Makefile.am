@@ -37,7 +37,7 @@ libgoffice_utils_la_SOURCES =	\
 	go-regression.c
 
 libgoffice_utils_ladir = $(goffice_include_dir)/utils
-libgoffice_utils_la_HEADERS = 	\
+noinst_HEADERS = 	\
 	goffice-utils.h		\
 	go-color.h		\
 	go-file.h		\

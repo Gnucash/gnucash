@@ -19,13 +19,13 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/** @addtogroup gnome-util
+/** @addtogroup budget
  *     @{ */
 
 #include "config.h"
 
 #include <gtk/gtk.h>
-
+#include <glib/gi18n.h>
 #include "gnc-tree-model-budget.h"
 #include "gnc-budget.h"
 #include "gnc-ui-util.h"
@@ -93,13 +93,13 @@ gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm)
     /* column for name */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (
-        "Name", renderer, "text", BUDGET_NAME_COLUMN, NULL);
+        _("Name"), renderer, "text", BUDGET_NAME_COLUMN, NULL);
     gtk_tree_view_append_column (tv, column);
 
     /* column for description */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (
-        "Description", renderer, "text", BUDGET_DESCRIPTION_COLUMN, NULL);
+        _("Description"), renderer, "text", BUDGET_DESCRIPTION_COLUMN, NULL);
     gtk_tree_view_append_column (tv, column);
 
 }
@@ -119,7 +119,7 @@ gnc_tree_model_budget_get_budget(GtkTreeModel *tm, GtkTreeIter *iter)
     return bgt;
 }
 
-void 
+gboolean
 gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
                                           GncBudget *bgt)
 {
@@ -127,18 +127,24 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
     const GUID *guid1;
     GUID *guid2;
 
-    g_return_if_fail(GNC_BUDGET(bgt));
+    g_return_val_if_fail(GNC_BUDGET(bgt), FALSE);
 
     guid1 = gnc_budget_get_guid(bgt);
-    for (gtk_tree_model_get_iter_first(tm, iter);
-         gtk_list_store_iter_is_valid(GTK_LIST_STORE(tm), iter);
-         gtk_tree_model_iter_next(tm, iter)) {
-
+    if (!gtk_tree_model_get_iter_first(tm, iter))
+      return FALSE;
+    while (gtk_list_store_iter_is_valid(GTK_LIST_STORE(tm), iter)) {
         gtk_tree_model_get_value(tm, iter, BUDGET_GUID_COLUMN, &gv);
         guid2 = (GUID *) g_value_get_pointer(&gv);
         g_value_unset(&gv);
 
         if (guid_equal(guid1, guid2))
-            return;
+            return TRUE;
+
+	if (!gtk_tree_model_iter_next(tm, iter))
+	  return FALSE;
     }
+    return FALSE;
 }
+
+/** @} */
+

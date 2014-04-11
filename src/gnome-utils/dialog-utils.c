@@ -23,14 +23,17 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE 1  /* necessary to get RTLD_DEFAULT on linux */
-
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include "glib-compat.h"
+#include <glib/gi18n.h>
 #include <glade/glade.h>
 #include <gmodule.h>
-#include <dlfcn.h>
+#ifdef HAVE_DLFCN_H
+# include <dlfcn.h>
+#endif
 
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
@@ -164,7 +167,7 @@ gnc_get_toolbar_style(void)
     return GTK_TOOLBAR_BOTH;
   tbstyle = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_string,
 			       GTK_TOOLBAR_BOTH);
-  free(style_string);
+  g_free(style_string);
 
   return tbstyle;
 }
@@ -310,42 +313,6 @@ gnc_save_window_size(const char *section, GtkWindow *window)
 }
 
 
-/********************************************************************\
- * gnc_fill_menu_with_data                                          *
- *   fill the user data values in the menu structure with the given *
- *   value. The filling is done recursively.                        *
- *                                                                  *
- * Args: info - the menu to fill                                    *
- *       data - the value to fill with                              *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
-{
-  if (info == NULL)
-    return;
-
-  while (1)
-  {
-    switch (info->type)
-    {
-      case GNOME_APP_UI_RADIOITEMS:
-      case GNOME_APP_UI_SUBTREE:
-      case GNOME_APP_UI_SUBTREE_STOCK:
-        gnc_fill_menu_with_data((GnomeUIInfo *) info->moreinfo, data);
-        break;
-      case GNOME_APP_UI_ENDOFINFO:
-        return;
-      default:
-        info->user_data = data;
-        break;
-    }
-
-    info++;
-  }
-}
-
-
 void
 gnc_option_menu_init(GtkWidget * w)
 {
@@ -439,7 +406,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
   screen_width = gdk_screen_width();
   screen_height = gdk_screen_height();
-  gdk_window_get_size(GTK_WIDGET(window)->window, &width, &height);
+  gdk_drawable_get_size(GTK_WIDGET(window)->window, &width, &height);
 
   if ((width <= screen_width) && (height <= screen_height))
     return;
@@ -596,7 +563,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         GTime gtime;
 
         gtime = time (NULL);
-        g_date_set_time (&gdate, gtime);
+        g_date_set_time_t (&gdate, gtime);
         break;
       }
 
@@ -709,7 +676,7 @@ check_realize (GtkWidget *widget, gpointer user_data)
                  check_size / 3, check_size - 4,
                  check_size - 3, 1);
 
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   clist = GTK_CLIST (widget);
 
@@ -735,13 +702,13 @@ check_unrealize (GtkWidget *widget, gpointer user_data)
   GNCCListCheckInfo *check_info = user_data;
 
   if (check_info->mask)
-    gdk_bitmap_unref (check_info->mask);
+    g_object_unref (check_info->mask);
 
   if (check_info->on_pixmap)
-    gdk_pixmap_unref (check_info->on_pixmap);
+    g_object_unref (check_info->on_pixmap);
 
   if (check_info->off_pixmap)
-    gdk_pixmap_unref (check_info->off_pixmap);
+    g_object_unref (check_info->off_pixmap);
 
   check_info->mask = NULL;
   check_info->on_pixmap = NULL;
@@ -870,13 +837,18 @@ GtkWidget *
 gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 {
   GladeXML *xml;
+  GtkWidget *wid;
 
   if (!widget || !name) return NULL;
 
   xml = glade_get_widget_tree (widget);
   if (!xml) return NULL;
+  
+  wid = glade_xml_get_widget (xml, name);
+  if (!wid)
+      PWARN("I know nothing of this '%s' whom you seek.", name);
 
-  return glade_xml_get_widget (xml, name);
+  return wid;
 }
 
 /*
@@ -902,8 +874,12 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
   }
 
   if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func)) {
+#ifdef HAVE_DLSYM
     /* Fallback to dlsym -- necessary for *BSD linkers */
     func = dlsym(RTLD_DEFAULT, handler_name);
+#else
+    func = NULL;
+#endif
     if (func == NULL) {
       g_warning("ggaff: could not find signal handler '%s'.", handler_name);
       return;
@@ -913,9 +889,9 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
   if (other_object) {
     if (signal_after)
       g_signal_connect_object (signal_object, signal_name, func,
-			       other_object, G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+			       other_object, G_CONNECT_AFTER);
     else
-      g_signal_connect_swapped (signal_object, signal_name, func, other_object);
+      g_signal_connect_object (signal_object, signal_name, func, other_object, 0);
   } else {
     if (signal_after)
       g_signal_connect_after(signal_object, signal_name, func, user_data);
@@ -930,7 +906,7 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *s
   GtkWidget *button;
 
   button = gtk_button_new_with_label(label);
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
   if (stock_id) {
     GtkWidget *image;
 
@@ -943,3 +919,126 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *s
   gtk_widget_show_all(button);
   gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
 }
+
+static void
+gnc_perm_button_cb (GtkButton *perm, gpointer user_data)
+{
+  gboolean perm_active;
+
+  perm_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm));
+  gtk_widget_set_sensitive(user_data, !perm_active);
+}
+
+gint
+gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
+{
+    GtkWidget *perm, *temp;
+    gboolean ask = TRUE;
+    gint response;
+
+    /* Does the user want to see this question? If not, return the
+     * previous answer. */
+    response = gnc_gconf_get_int(GCONF_WARNINGS_PERM, gconf_key, NULL);
+    if (response != 0)
+      return response;
+    response = gnc_gconf_get_int(GCONF_WARNINGS_TEMP, gconf_key, NULL);
+    if (response != 0)
+      return response;
+
+    /* Add in the checkboxes to find out if the answer should be remembered. */
+#if 0
+    if (GTK_IS_MESSAGE_DIALOG(dialog)) {
+      GtkMessageType type;
+      g_object_get(dialog, "message-type", &type, (gchar*)NULL);
+      ask = (type == GTK_MESSAGE_QUESTION);
+    } else {
+      ask = FALSE;
+    }
+#endif
+    perm = gtk_check_button_new_with_mnemonic
+      (ask
+       ? _("Remember and don't _ask me again.")
+       : _("Don't _tell me again."));
+    temp = gtk_check_button_new_with_mnemonic
+      (ask
+       ? _("Remember and don't ask me again this _session.")
+       : _("Don't tell me again this _session."));
+    gtk_widget_show(perm);
+    gtk_widget_show(temp);
+    gtk_box_pack_start_defaults(GTK_BOX(dialog->vbox), perm);
+    gtk_box_pack_start_defaults(GTK_BOX(dialog->vbox), temp);
+    g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
+
+    /* OK. Present the dialog. */
+    response = gtk_dialog_run(dialog);
+    if ((response == GTK_RESPONSE_NONE) || (response == GTK_RESPONSE_DELETE_EVENT)) {
+      return GTK_RESPONSE_NO;
+    }
+
+    /* Save the answer? */
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm))) {
+      gnc_gconf_set_int(GCONF_WARNINGS_PERM, gconf_key, response, NULL);
+    } else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(temp))) {
+      gnc_gconf_set_int(GCONF_WARNINGS_TEMP, gconf_key, response, NULL);
+    }
+
+    return response;
+}
+
+#ifndef HAVE_GTK26
+
+/** Find the first GtkLabel in a container. When called on a gtk2.4
+ *  message dialog, there is only one label in the dialog so theis
+ *  should return it. */
+static void
+find_label (GtkWidget *widget, gpointer data)
+{
+  GtkWidget **label = data;
+
+  if (*label)
+    return;
+
+  if (GTK_IS_LABEL(widget)) {
+    *label = widget;
+    return;
+  }
+
+  if (GTK_IS_CONTAINER(widget)) {
+    gtk_container_foreach(GTK_CONTAINER(widget), find_label, data);
+  }
+}
+
+/** Mimic the gtk2.6 function to add secondary information to a
+ *  message dialog. */
+void
+gtk_message_dialog_format_secondary_text(GtkMessageDialog *dialog,
+					 const gchar *format,
+					 ...)
+{
+  GtkWidget *label = NULL;
+  const gchar *current;
+  gchar *primary, *secondary;
+  va_list args;
+
+  gtk_container_foreach(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox),
+			find_label, &label);
+  if (!label)
+    return;
+
+  /* Get the current markup. */
+  current = gtk_label_get_label(GTK_LABEL(label));
+
+  /* Format the text to be added. */
+  va_start(args, format);
+  secondary = g_strdup_vprintf(format, args);
+  va_end(args);
+
+  /* Append the two strings, making the first one bold. */
+  primary = g_strdup_printf("<b>%s</b>\n\n%s", current, secondary);
+  gtk_label_set_markup(GTK_LABEL(label), primary);
+
+  g_free(primary);
+  g_free(secondary);
+}
+
+#endif

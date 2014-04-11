@@ -5,7 +5,7 @@
 ;(read-enable 'positions)
 
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (define-module (g-wrapped gw-dialog-tax-table-spec)
   :use-module (g-wrap))
@@ -32,6 +32,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <dialog-tax-table.h>\n"
       )))
 

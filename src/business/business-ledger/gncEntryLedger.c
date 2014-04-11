@@ -21,15 +21,14 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "Account.h"
 #include "dialog-account.h"
+#include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "combocell.h"
 #include "pricecell.h"
@@ -79,16 +78,15 @@ Account *
 gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
 				      const char *name, gboolean *new)
 {
-  const char *placeholder = _("The account %s does not allow transactions.\n");
-  const char *missing = _("The account %s does not exist.\n"
+  const char *placeholder = _("The account %s does not allow transactions.");
+  const char *missing = _("The account %s does not exist. "
 			  "Would you like to create it?");
   char *fullname;
   ComboCell *cell = (ComboCell *) bcell;
   Account *account;
 
   /* Find the account */
-  account = xaccGetAccountFromFullName (gnc_get_current_group (),
-					name, gnc_get_account_separator ());
+  account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */
@@ -105,7 +103,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
     *new = TRUE;
 
     /* Now have a new account. Update the cell with the name as created. */
-    fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    fullname = xaccAccountGetFullName (account);
     gnc_combo_cell_set_value (cell, fullname);
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
     g_free (fullname);
@@ -801,13 +799,29 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
   /* If the cursor has been edited, we are going to have to commit
    * it before we can duplicate. Make sure the user wants to do that. */
   if (changed) {
-    const char *message = _("The current entry has been changed.\n"
-			  "Would you like to save it?");
-    gint result;
+    const char *title = _("Save the current entry?");
+    const char *message =
+      _("The current transaction has been changed. Would you like to "
+	"record the changes before duplicating this entry, or "
+	"cancel the duplication?");
+    GtkWidget *dialog;
+    gint response;
 
-    result = gnc_ok_cancel_dialog (ledger->parent, GTK_RESPONSE_OK, message);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(ledger->parent),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   _("_Record"), GTK_RESPONSE_ACCEPT,
+			   NULL);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "invoice_entry_duplicated");
+    gtk_widget_destroy(dialog);
 
-    if (result != GTK_RESPONSE_OK) {
+    if (response != GTK_RESPONSE_ACCEPT) {
       gnc_resume_gui_refresh ();
       return;
     }

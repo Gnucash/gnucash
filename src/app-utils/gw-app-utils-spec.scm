@@ -1,7 +1,7 @@
 (define-module (g-wrapped gw-app-utils-spec))
 
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (use-modules (g-wrap))
 (use-modules (g-wrap simple-type))
@@ -26,12 +26,15 @@
    ws
    (lambda (wrapset client-wrapset) 
      (list 
+      "#include <config.h>\n"
       "#include <option-util.h>\n"
       "#include <gnc-euro.h>\n"
       "#include <gnc-exp-parser.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-gettext-util.h>\n"
       "#include <gnc-helpers.h>\n"
+      "#include <gnc-accounting-period.h>\n"
+      "#include <gnc-session.h>\n"
       "#include <gnc-component-manager.h>\n")))
 
   (gw:wrap-simple-type ws '<gnc:print-amount-info-scm> "GNCPrintAmountInfo"
@@ -70,25 +73,9 @@
    ws
    'gnc:get-current-session
    '<gnc:Session*>
-   "qof_session_get_current_session"
+   "gnc_get_current_session"
    '()
    "Get the current session.")
-
-  (gw:wrap-function
-   ws
-   'gnc:exp-parser-init
-   '<gw:void>
-   "gnc_exp_parser_init"
-   '()
-   "Initialize the expression parser.")
-
-  (gw:wrap-function
-   ws
-   'gnc:exp-parser-shutdown
-   '<gw:void>
-   "gnc_exp_parser_shutdown"
-   '()
-   "Shutdown the expression parser and free any associated memory.")
 
   (gw:wrap-function
    ws
@@ -98,14 +85,6 @@
    '(((<gw:mchars> caller-owned const) str)
      (<gw:bool> monetary))
    "Parse the expression and return either a gnc numeric or #f.")
-
-  (gw:wrap-function
-   ws
-   'gnc:setup-gettext
-   '<gw:void>
-   "gnc_setup_gettext"
-   '()
-   "Runs bindtextdomain and textdomain.")
 
   (gw:wrap-function
    ws
@@ -419,15 +398,21 @@ determines formatting details.")
    'gnc:commodity-table-get-quotable-commodities-info
    '(gw:glist-of <gnc:quote-info-scm> caller-owned)
    "gnc_commodity_table_get_quotable_commodities"
-   '((<gnc:commodity-table*> table)
-     ((<gw:mchars> caller-owned const) namespace))
+   '((<gnc:commodity-table*> table))
    "Return a list of all the quotable commodities in a given namespace in the table.")
-
 
   (gw:wrap-function
    ws
-   'gnc:account-separator-char
-   '(<gw:mchars> callee-owned const)
-   "gnc_get_account_separator_string"
+   'gnc:accounting-period-start
+   '<gw:int>
+   "gnc_accounting_period_fiscal_start"
    '()
-   "Returns a string with the user-selected account separator"))
+   "Returns the beginning of the preferred accounting period")
+
+  (gw:wrap-function
+   ws
+   'gnc:accounting-period-end
+   '<gw:int>
+   "gnc_accounting_period_fiscal_end"
+   '()
+   "Returns the end of the preferred accounting period"))

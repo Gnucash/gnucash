@@ -381,7 +381,7 @@ gnucash_cursor_unrealize (GnomeCanvasItem *item)
         GnucashCursor *cursor = GNUCASH_CURSOR (item);
 
 	if (cursor->gc != NULL) {
-		gdk_gc_unref (cursor->gc);
+		g_object_unref (cursor->gc);
 		cursor->gc = NULL;
 	}
 

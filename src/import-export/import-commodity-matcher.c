@@ -23,8 +23,6 @@
   @brief  A Generic commodity matcher/picker
   @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
  */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -53,7 +51,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 
-gnc_commodity * gnc_import_select_commodity(char * exchange_code,
+gnc_commodity * gnc_import_select_commodity(char * cusip,
 				    char auto_create,
 				    char * default_fullname,
 				    char * default_mnemonic)
@@ -67,7 +65,7 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
   DEBUG("Default fullname received: %s", default_fullname);
   DEBUG("Default mnemonic received: %s", default_mnemonic);
   
-  DEBUG("Looking for commodity with exchange_code: %s", exchange_code);
+  DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
   namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
@@ -88,9 +86,9 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 	  tmp_commodity=commodity_list->data;
 	  DEBUG("Looking at commodity %s",gnc_commodity_get_fullname(tmp_commodity));
 	  
-	  if(gnc_commodity_get_exchange_code(tmp_commodity)!=NULL &&
-	     exchange_code != NULL &&
-	     strncmp(gnc_commodity_get_exchange_code(tmp_commodity),exchange_code,strlen(exchange_code))==0)
+	  if(gnc_commodity_get_cusip(tmp_commodity)!=NULL &&
+	     cusip != NULL &&
+	     strncmp(gnc_commodity_get_cusip(tmp_commodity),cusip,strlen(cusip))==0)
 	    {
 	      retval = tmp_commodity;
 	      DEBUG("Commodity %s%s",gnc_commodity_get_fullname(retval)," matches.");
@@ -110,22 +108,25 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 
   if(retval==NULL && auto_create != 0)
     {
+      const gchar *message = 
+        _("Please select a commodity to match the following exchange "
+	  "specific code. Please note that the exchange code of the "
+	  "commodity you select will be overwritten.");
       retval=gnc_ui_select_commodity_modal_full(NULL,
 						NULL,
 						DIAG_COMM_ALL,
-						_("Please select a commodity to match the following exchange specific code.\nPlease note that the exchange code of the commodity you select will be overwritten.\n"),
-						exchange_code,
+						message,
+						cusip,
 						default_fullname,
 						default_mnemonic);
       
     }
   if (retval != NULL&&
-      gnc_commodity_get_exchange_code(tmp_commodity)!=NULL &&
-      exchange_code != NULL &&
-      (strncmp(gnc_commodity_get_exchange_code(retval),exchange_code,strlen(exchange_code))!=0))
+      gnc_commodity_get_cusip(tmp_commodity)!=NULL &&
+      cusip != NULL &&
+      (strncmp(gnc_commodity_get_cusip(retval),cusip,strlen(cusip))!=0))
     {
-      gnc_commodity_set_exchange_code(retval,
-				      exchange_code);
+      gnc_commodity_set_cusip(retval, cusip);
     }
   return retval;
 };

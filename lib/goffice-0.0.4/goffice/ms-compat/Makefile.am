@@ -7,7 +7,7 @@ libgoffice_ms_compat_la_SOURCES =	\
 	go-ms-parser.c
 
 libgoffice_ms_compat_ladir = $(goffice_include_dir)/ms-compat
-libgoffice_ms_compat_la_HEADERS = 	\
+noinst_HEADERS = 	\
 	god-drawing-ms-client-handler.h	\
 	god-drawing-ms.h		\
 	god-image-ms.h			\

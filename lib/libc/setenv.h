@@ -20,14 +20,13 @@
  *
 \********************************************************************/
 
-#ifndef GNC_CORE_UTILS_H
-#define GNC_CORE_UTILS_H
-
-#include "config.h"
+#ifndef __SETENV_H
+#define __SETENV_H
 
 #ifndef HAVE_SETENV
 
 int setenv(const char *name, const char *value, int overwrite);
 int unsetenv(const char *name);
 
+#endif
 #endif

@@ -18,14 +18,19 @@ noinst_HEADERS = \
   gncEntryLedgerModel.h
 
 libgnc_business_ledger_la_LIBADD = \
-  ${QOF_LIBS} \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
+  ${top_builddir}/src/business/business-utils/libgncmod-business-utils.la \
+  ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
   ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
-  ${top_builddir}/src/business/business-utils/libgncmod-business-utils.la \
-  ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${GTK_LIBS} \
+  ${GUILE_LIBS} \
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-core \

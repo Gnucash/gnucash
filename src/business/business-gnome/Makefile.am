@@ -27,7 +27,8 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
-  -I${top_srcdir}/src/register/ledger-core
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/lib/glib26
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
@@ -35,6 +36,7 @@ libgncmod_business_gnome_la_SOURCES = \
   business-urls.c \
   business-gnome-utils.c \
   dialog-billterms.c \
+  dialog-choose-owner.c \
   dialog-customer.c \
   dialog-date-close.c \
   dialog-employee.c \
@@ -52,6 +54,7 @@ noinst_HEADERS = \
   business-urls.h \
   business-gnome-utils.h \
   dialog-billterms.h \
+  dialog-choose-owner.h \
   dialog-customer.h \
   dialog-date-close.h \
   dialog-employee.h \
@@ -68,20 +71,33 @@ noinst_HEADERS = \
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
+  ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
+  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GUILE_LIBS} \
+  ${GLADE_LIBS} \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${EFENCE_LIBS}
 
 
 libgw_business_gnome_la_SOURCES = gw-business-gnome.c
 
 libgw_business_gnome_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_business_gnome_la_LIBADD  = libgncmod-business-gnome.la
+libgw_business_gnome_la_LIBADD  = \
+  libgncmod-business-gnome.la \
+  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS}
 
 # For Business Reports
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
@@ -102,16 +118,19 @@ EXTRA_DIST = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
+#for compiling
 SCM_FILE_LINKS = gw-business-gnome-spec.scm
+#for running
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -130,6 +149,5 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: \
 	 (gw:generate-wrapset \"gw-business-gnome\")"
 
 BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-business-gnome.html
-
+CLEANFILES = g-wrapped gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-business-gnome.html

@@ -30,10 +30,6 @@
         <separator name="ViewSep44"/>
         <menuitem name="ViewStyleDoubleLine"   	action="ViewStyleDoubleLineAction"/>
       </placeholder>
-      <placeholder name="ViewSortPlaceholder">
-        <menuitem name="ViewSortBy"             action="ViewSortByAction"/>
-        <menuitem name="ViewFilterBy"           action="ViewFilterByAction"/>
-      </placeholder>
     </menu>
 
     <menu name="Actions" action="ActionsAction">
@@ -42,7 +38,7 @@
 	<menuitem name="ActionsTransfer"         action="ActionsTransferAction"/>
 	<menuitem name="ActionsReconcile"        action="ActionsReconcileAction"/>
 	<menuitem name="ActionsStockSplit"       action="ActionsStockSplitAction"/>
-	<menuitem name="ActionLots"              action="ActionsLotsAction"/>
+	<!-- menuitem name="ActionLots"              action="ActionsLotsAction"/ -->
         <separator name="ActionsSep4"/>
         <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
         <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
@@ -79,6 +75,7 @@
       <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
       <separator name="ToolbarSep68"/>
       <toolitem name="ToolbarTransfer"             action="ActionsTransferAction"/>
+      <toolitem name="ActionsReconcile"            action="ActionsReconcileAction"/>
     </placeholder>
   </toolbar>
 

@@ -1,23 +1,24 @@
-# Vietnamese Translation for gnucash-glossary-1.8.9.
+# Vietnamese Translation for GNUCash Glossary.
 # Copyright © 2005 Free Software Foundation, Inc.
 # Clytie Siddall <clytie@riverland.net.au>, 2005.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary 1.8.9\n"
+"Project-Id-Version: gnucash-glossary-1.9.1\n"
 "Report-Msgid-Bugs-To: bug-gnucash@gnu.org\n"
-"POT-Creation-Date: 2005-11-14 21:55+0100\n"
-"PO-Revision-Date: 2005-05-01 21:06+0930\n"
+"POT-Creation-Date: 2006-02-07 21:51+0100\n"
+"PO-Revision-Date: 2006-03-09 22:30+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: LocFactoryEditor 1.6b36\n"
 
-#. "English Definition"
-msgid "Term"
-msgstr "Kỹ thuật"
+#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
+msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgstr "Thuật ngữ"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -201,15 +202,15 @@ msgstr "điều kiện hóa đơn"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "Sách"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "đóng sách"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "Ngân sách"
 
 #. "-"
 msgid "business (adjective)"
@@ -327,6 +328,10 @@ msgstr "nhân viên"
 msgid "equity"
 msgstr "cổ phần"
 
+#. "Report that ... FIXME: Add description."
+msgid "equity statement"
+msgstr "lời tuyên bố cổ phần"
+
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
 msgstr "bản giao kèo do người thứ ba gữ (tài khoản)"
@@ -367,6 +372,10 @@ msgstr "chưa cân bằng"
 msgid "import"
 msgstr "nhập"
 
+#. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
+msgid "income statement"
+msgstr "lời tuyên bố thu nhập"
+
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
 msgstr "lãi"
@@ -400,14 +409,12 @@ msgid "Lost Accounts"
 msgstr "Tài khoản chưa tên"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
-#, fuzzy
 msgid "Lot"
-msgstr "Tổng"
+msgstr "Tập"
 
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "tải lại"
+msgstr "hợp nhất"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
@@ -525,7 +532,7 @@ msgstr "giá: hiện thời"
 msgid "profit"
 msgstr "lợi"
 
-#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+#. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
 msgstr "Lợi và mất"
 
@@ -580,6 +587,10 @@ msgstr "tải lại"
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
 msgstr "Lợi còn giữ"
+
+#. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
+msgid "reverse transaction, to (Action in the register)"
+msgstr "ngược lại giao dịch (Hành động trong sổ ghi)"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -673,6 +684,10 @@ msgstr "tài khoản chuyển"
 msgid "transfer, to (register toolbar)"
 msgstr "chuyển (thanh công cụ sổ)"
 
+#. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
+msgid "trial balance (report)"
+msgstr "kết toán kiểm tra (thông báo)"
+
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
 msgstr "kiểu"
@@ -693,6 +708,13 @@ msgstr "giá trị (trong phần)"
 msgid "vendor"
 msgstr "nhà bán"
 
+#. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+msgid "voucher"
+msgstr "chứng chỉ"
+
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "rút (trong hộp thoại điều hoà)"
+
+#~ msgid "Term"
+#~ msgstr "Kỹ thuật"

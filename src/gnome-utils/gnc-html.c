@@ -22,6 +22,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+// libgtkhtml docs:
+// http://www.fifi.org/doc/libgtkhtml-dev/html/
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -43,7 +46,6 @@
 #include "Group.h"
 #include "print-session.h"
 #include "gnc-engine.h"
-#include "gnc-gpg.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-http.h"
@@ -375,9 +377,6 @@ gnc_html_initialize (void)
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
 
-  PINFO( "initializing gnc_html..." );
-  printf( "initializing gnc_html...\n" );
-
   for (i = 0; types[i].type; i++)
     gnc_html_register_urltype (types[i].type, types[i].protocol);
 
@@ -603,8 +602,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
 	  gnc_error_dialog( html->window,
-                            _("Secure HTTP access is disabled.\n"
-                              "You can enable it in the Network section of\n"
+                            _("Secure HTTP access is disabled. "
+                              "You can enable it in the Network section of "
                               "the Preferences dialog."));
 	  break;
 	}
@@ -612,8 +611,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
 
       if(!http_allowed()) {
 	gnc_error_dialog( html->window,
-                          _("Network HTTP access is disabled.\n"
-                            "You can enable it in the Network section of\n"
+                          _("Network HTTP access is disabled. "
+                            "You can enable it in the Network section of "
                             "the Preferences dialog."));
       } else {
 	char *fullurl;
@@ -687,7 +686,7 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
  * loaded.  
  ********************************************************************/
 
-static int
+static gboolean
 gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
                              gpointer data)
 {
@@ -1062,8 +1061,8 @@ gnc_html_show_url(gnc_html * html, URLType type,
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
 	  gnc_error_dialog( html->window,
-                            _("Secure HTTP access is disabled.\n"
-                              "You can enable it in the Network section of\n"
+                            _("Secure HTTP access is disabled. "
+                              "You can enable it in the Network section of "
                               "the Preferences dialog."));
 	  break;
 	}
@@ -1072,8 +1071,8 @@ gnc_html_show_url(gnc_html * html, URLType type,
       if (safe_strcmp (type, URL_TYPE_FILE)) {
 	if(!http_allowed()) {
 	  gnc_error_dialog( html->window,
-                            _("Network HTTP access is disabled.\n"
-                              "You can enable it in the Network section of\n"
+                            _("Network HTTP access is disabled. "
+                              "You can enable it in the Network section of "
                               "the Preferences dialog."));
 	  break;
 	}
@@ -1279,7 +1278,12 @@ raw_html_receiver (gpointer     engine,
                    gpointer     user_data)
 {
   FILE *fh = (FILE *) user_data;
-  fwrite (data, len, 1, fh);
+  size_t written;
+
+  do {
+    written = fwrite (data, 1, len, fh);
+    len -= written;
+  } while (len > 0);
   return TRUE;
 }
 
@@ -1529,9 +1533,11 @@ gnc_html_decode_string(const char * str)
     }
     else if(c == '%') {
       ptr++;
-      sscanf(ptr, "%02X", &hexval);
+      if (1 == sscanf(ptr, "%02X", &hexval))
+	decoded = g_string_append_c(decoded, (char)hexval);
+      else
+	decoded = g_string_append_c(decoded, ' ');
       ptr++;
-      decoded = g_string_append_c(decoded, (char)hexval);
     }
     ptr++;
   }

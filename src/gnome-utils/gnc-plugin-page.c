@@ -300,6 +300,21 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 }
 
 
+GtkAction *
+gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name)
+{
+  GncPluginPagePrivate *priv;
+  
+  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), NULL);
+  g_return_val_if_fail(name != NULL, NULL);
+
+  priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+  if (!priv->action_group)
+    return NULL;
+  return gtk_action_group_get_action (priv->action_group, name);
+}
+
+
 /*  Retrieve the textual name of a plugin. */
 const gchar *
 gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)
@@ -518,7 +533,6 @@ gnc_plugin_page_finalize (GObject *object)
 {
   GncPluginPagePrivate *priv;
   GncPluginPage *page;
-  GList *item;
 
   page = GNC_PLUGIN_PAGE (object);
 
@@ -531,9 +545,6 @@ gnc_plugin_page_finalize (GObject *object)
 	g_free(priv->statusbar_text);
 
   if (priv->books) {
-    for (item = priv->books; item; item = g_list_next(item)) {
-      guid_free (item->data);
-    }
     g_list_free(priv->books);
     priv->books = NULL;
   }
@@ -668,34 +679,28 @@ void
 gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
 {
   GncPluginPagePrivate *priv;
-  GUID *guid;
 
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
   g_return_if_fail (book != NULL);
 
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-
-  guid = guid_malloc();
-  *guid = *qof_book_get_guid(book);
-  priv->books = g_list_append(priv->books, guid);
+  priv->books = g_list_append(priv->books, book);
 }
 
 
-/*  Query a page to see if it has a reference to a given book.  This
- *  function takes a guid instead of a QofBook because that's what the
- *  engine event mechanism provides. */
+/*  Query a page to see if it has a reference to a given book. */
 gboolean
-gnc_plugin_page_has_book (GncPluginPage *page, GUID *entity)
+gnc_plugin_page_has_book (GncPluginPage *page, QofBook *book)
 {
   GncPluginPagePrivate *priv;
   GList *item;
 
   g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
-  g_return_val_if_fail (entity != NULL, FALSE);
+  g_return_val_if_fail (book != NULL, FALSE);
 
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
   for (item = priv->books; item; item = g_list_next(item)) {
-    if (guid_equal((GUID*)item->data, entity)) {
+    if (item->data == book) {
       return TRUE;
     }
   }
@@ -913,9 +918,22 @@ gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_nam
 
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
   group = gtk_action_group_new(group_name);
-  gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
+  gnc_gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
   priv->action_group = group;
   return group;
+}
+
+gboolean
+gnc_plugin_page_finish_pending (GncPluginPage *page)
+{
+  if (!page)
+    return TRUE;
+  if (!GNC_IS_PLUGIN_PAGE(page))
+    return TRUE;
+
+  if (!GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)
+    return TRUE;
+  return (GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)(page);
 }
 
 /** @} */

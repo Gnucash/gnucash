@@ -37,6 +37,7 @@
 
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+#include "test-engine-strings.h"
 
 static gboolean glist_strings_only = FALSE;
 
@@ -44,10 +45,14 @@ static GHashTable *exclude_kvp_types = NULL;
 static gint kvp_max_depth = 5;
 static gint kvp_frame_max_elements = 10;
 
-static gint max_group_depth = 4;
-static gint max_group_accounts = 10;
-static gint max_total_accounts = 1000;
+static gint max_group_depth = 1;
+static gint max_group_accounts = 3;
+static gint max_total_accounts = 10;
+static gint max_trans_num = 1000;
 static gint total_num_accounts = 0;
+/* SCU == smallest currency unit -- the value of the denominator */
+static gint max_scu = 100; //6000;
+static gint min_scu = 100; //1;
 
 
 /* The inverse fraction of split/transaction data that should 
@@ -456,6 +461,8 @@ get_random_gnc_numeric(void)
      * of avoiding overflow. */
     numer = get_random_gint64()/100000;
     if (0 == numer) numer = 1;
+    /* Make sure we have a non-zero denominator */
+    if (0 == deno) deno = 1;
     return gnc_numeric_create(numer, deno);
 }
 
@@ -518,7 +525,7 @@ get_random_commodity (QofBook *book)
     gchar *name;
     const gchar *space;
     gchar *mn;
-    gchar *xcode;
+    gchar *cusip;
     int ran_int;
     gnc_commodity_table *table;
 
@@ -531,7 +538,7 @@ get_random_commodity (QofBook *book)
       return get_random_commodity_from_table (table);
 #endif
 
-    mn = get_random_string();
+    mn = get_random_string_length_in_range(1, 3);
     space = get_random_commodity_namespace();
 
     if (table)
@@ -546,17 +553,15 @@ get_random_commodity (QofBook *book)
     }
 
     name = get_random_string();
-    xcode = get_random_string();
+    cusip = get_random_string();
 
-    /* SCU == smallest currency unit -- the value of the denominator */
-#define MAX_SCU 6000
-    ran_int = get_random_int_in_range(1, MAX_SCU);
+    ran_int = get_random_int_in_range(min_scu, max_scu);
 
-    ret = gnc_commodity_new (book, name, space, mn, xcode, ran_int);
+    ret = gnc_commodity_new(book, name, space, mn, cusip, ran_int);
 
     g_free(mn);
     g_free(name);
-    g_free(xcode);
+    g_free(cusip);
 
     if (table)
       ret = gnc_commodity_table_insert (table, ret);
@@ -584,7 +589,7 @@ make_random_changes_to_commodity (gnc_commodity *com)
   g_free (str);
 
   str = get_random_string ();
-  gnc_commodity_set_exchange_code (com, str);
+  gnc_commodity_set_cusip (com, str);
   g_free (str);
 
   gnc_commodity_set_fraction (com, get_random_int_in_range (1, 100000));
@@ -810,6 +815,17 @@ set_account_random_string(Account* act,
 }
 
 static void
+set_account_random_string_from_array(
+    Account* act, void(*func)(Account *act, const gchar*str),
+    const gchar *list[])
+{
+    const gchar *tmp_str = get_random_string_in_array(list);
+    if(tmp_str)
+        (func)(act, tmp_str);
+
+}
+
+static void
 account_add_subaccounts (QofBook *book, Account *account, int depth)
 {
   int num_accounts;
@@ -849,6 +865,7 @@ make_random_group_depth (QofBook *book, AccountGroup *group, int depth)
     Account *account = get_random_account (book);
 
     xaccGroupInsertAccount (group, account);
+    total_num_accounts++;
 
     account_add_subaccounts (book, account, depth - 1);
   }
@@ -866,6 +883,10 @@ make_random_group (QofBook *book, AccountGroup *group)
   depth = get_random_int_in_range (1, max_group_depth);
 
   make_random_group_depth (book, group, depth);
+
+  /* Make sure we have at least two accounts! */
+  if (total_num_accounts <= 1)
+    make_random_group_depth (book, group, 1);
 }
 
 AccountGroup *
@@ -900,35 +921,14 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
     Account *acc, *bcc;
     Split *s;
-    gnc_commodity *com;
-    int scu;
-    gnc_numeric num;
+    gnc_numeric val, amt;
 
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
 
-    /* Set up two splits whose values really are opposites. */
-    com = xaccTransGetCurrency (trn);
-    scu = gnc_commodity_get_fraction(com);
-    num = get_random_gnc_numeric();
-
-    if (!do_bork()) num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
-
     acc = get_random_list_element (account_list);
+    xaccTransBeginEdit(trn);
     s = get_random_split(book, acc, trn);
-    xaccSplitSetValue(s, num);
-
-    /* If the currencies are the same, the split amount should equal
-     * the split value (unless we bork it on purpose) */
-    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
-                             xaccAccountGetCommodity(acc)) &&
-        (!do_bork()))
-    {
-      xaccSplitSetAmount(s, num);
-    }
-
-    /* Occasionally leave a dangling split around */
-    if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
 
     bcc = get_random_list_element (account_list);
     if ((bcc == acc) && (!do_bork()))
@@ -942,23 +942,34 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
       }
     }
 
+    /* Set up two splits whose values really are opposites. */
+    val = xaccSplitGetValue(s);
     s = get_random_split(book, bcc, trn);
 
     /* Other split should have equal and opposite value */
     if (do_bork()) 
     {
-       num = get_random_gnc_numeric();
-    } 
-    xaccSplitSetValue(s, gnc_numeric_neg(num));
+       val = get_random_gnc_numeric();
+    }
+    val = gnc_numeric_neg(val);
+    xaccSplitSetValue(s, val);
 
     if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
                              xaccAccountGetCommodity(bcc)) && 
         (!do_bork()))
     {
-      xaccSplitSetAmount(s, num);
-    }
+        amt = val;
+    } else {
+        gnc_numeric amt2 = xaccSplitGetAmount(s);
+        if (gnc_numeric_positive_p(amt2) ^ gnc_numeric_positive_p(val))
+            amt = gnc_numeric_neg(amt2);
+    }   
+    
+    if (gnc_numeric_zero_p(val))
+        amt = val;
 
-    if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
+    xaccSplitSetAmount(s, val);
+    xaccTransCommitEdit(trn);
 }
 
 typedef struct
@@ -1200,7 +1211,8 @@ get_random_account(QofBook *book)
 
     xaccAccountBeginEdit(ret);
 
-    set_account_random_string(ret, xaccAccountSetName);
+    set_account_random_string_from_array(ret, xaccAccountSetName,
+                                         sane_account_names);
 
     tmp_int = get_random_int_in_range(BANK, NUM_ACCOUNT_TYPES - 1);
     xaccAccountSetType(ret, tmp_int);
@@ -1267,28 +1279,66 @@ Split*
 get_random_split(QofBook *book, Account *acct, Transaction *trn)
 {
     Split *ret;
-    gnc_numeric num;
+    gnc_numeric amt, val, rate;
+    const gchar *str;
+    gnc_commodity *com;
+    int scu, denom;
+    Timespec *ts;
+
+    com = xaccTransGetCurrency (trn);
+    scu = gnc_commodity_get_fraction(com);
 
     ret = xaccMallocSplit(book);
 
-    set_split_random_string(ret, xaccSplitSetMemo);
-    set_split_random_string(ret, xaccSplitSetAction);
+    str = get_random_string_in_array(sane_descriptions);
+    xaccSplitSetMemo(ret, str);
+    str = get_random_string_in_array(sane_actions);
+    xaccSplitSetAction(ret, str);
 
     xaccSplitSetReconcile(ret, possible_chars[get_random_int_in_range(0, 3)]);
 
-    xaccSplitSetDateReconciledTS(ret, get_random_timespec());
+    ts = get_random_timespec();
+    xaccSplitSetDateReconciledTS(ret, ts);
+    g_free(ts);
 
     /* Split must be in an account before we can set an amount */
     /* and in a transaction before it can be added to an account. */
-    xaccTransAppendSplit(trn, ret);
-    xaccAccountInsertSplit (acct, ret);
-    num = get_random_gnc_numeric ();
-    xaccSplitSetAmount(ret, num);
+    xaccTransBeginEdit(trn);
+    xaccSplitSetParent(ret, trn);
+    xaccSplitSetAccount(ret, acct);
 
-    if (num.num == 0)
-      fprintf(stderr, "get_random_split: Created split with zero amount: %p\n", ret);
+    do {
+        val = get_random_gnc_numeric ();
+        if (val.num == 0)
+            fprintf(stderr, "get_random_split: Created split with zero value: %p\n", ret);
 
+        if (!do_bork()) 
+            val.denom = scu;
+    } while (gnc_numeric_check(val) != GNC_ERROR_OK);
+    xaccSplitSetValue(ret, val);
+
+    /* If the currencies are the same, the split amount should equal
+     * the split value (unless we bork it on purpose) */
+    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
+                             xaccAccountGetCommodity(acct)) &&
+        (!do_bork())) {
+        amt = val;
+    } else {
+        denom = gnc_commodity_get_fraction(xaccAccountGetCommodity(
+                                               xaccSplitGetAccount(ret)));
+        do {
+            rate = gnc_numeric_abs(get_random_gnc_numeric());
+            amt = gnc_numeric_mul(val, rate, 
+                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+            amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND);
+        } while (gnc_numeric_check(amt) != GNC_ERROR_OK);
+    }
+    xaccSplitSetAmount(ret, amt);
+    if (gnc_numeric_positive_p(val))
+        g_assert(gnc_numeric_positive_p(amt));
+    
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
+    xaccTransCommitEdit(trn);
 
     return ret;
 }
@@ -1297,6 +1347,7 @@ void
 make_random_changes_to_split (Split *split)
 {
   Transaction *trans;
+  Timespec *ts;
 
   g_return_if_fail (split);
 
@@ -1309,7 +1360,9 @@ make_random_changes_to_split (Split *split)
 
   xaccSplitSetReconcile (split, possible_chars[get_random_int_in_range(0, 3)]);
 
-  xaccSplitSetDateReconciledTS (split, get_random_timespec());
+  ts = get_random_timespec();
+  xaccSplitSetDateReconciledTS (split, ts);
+  g_free(ts);
 
   xaccSplitSetSlots_nc (split, get_random_kvp_frame());
 
@@ -1336,6 +1389,17 @@ set_tran_random_string(Transaction* trn,
 }
 
 static void
+set_tran_random_string_from_array(
+    Transaction* trn, void(*func)(Transaction *trn, const gchar*str),
+    const gchar *list[])
+{
+    const gchar *tmp_str = get_random_string_in_array(list);
+    if(tmp_str)
+        (func)(trn, tmp_str);
+}
+
+
+static void
 trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
                                                     const Timespec*))
 {
@@ -1352,51 +1416,61 @@ get_random_transaction_with_currency(QofBook *book,
                                      gnc_commodity *currency,
                                      GList *account_list)
 {
-    Transaction* ret;
+    Transaction* trans;
     KvpFrame *f;
+    gint num;
+    gchar *numstr;
 
+    numstr = g_new0(gchar, 10);
     if (!account_list) 
     {
       account_list = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
     }
 
     /* Gotta have at least two different accounts */
-    if (1 >= g_list_length (account_list)) return NULL;
+    if (1 >= g_list_length (account_list)) {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+              "get_random_transaction_with_currency: account_list too short");
+      return NULL;
+    }
 
-    ret = xaccMallocTransaction(book);
+    trans = xaccMallocTransaction(book);
 
-    xaccTransBeginEdit(ret);
+    xaccTransBeginEdit(trans);
 
-    xaccTransSetCurrency (ret,
+    xaccTransSetCurrency (trans,
                           currency ? currency :
                           get_random_commodity (book));
 
-    set_tran_random_string(ret, xaccTransSetNum);
-    set_tran_random_string(ret, xaccTransSetDescription);
-    trn_add_ran_timespec(ret, xaccTransSetDatePostedTS);
-    trn_add_ran_timespec(ret, xaccTransSetDateEnteredTS);
+    num = get_random_int_in_range (1, max_trans_num);
+    g_snprintf(numstr, 10, "%d", num);
+    xaccTransSetNum(trans, numstr);
+    set_tran_random_string_from_array(trans, xaccTransSetDescription,
+                                      sane_descriptions);
+    trn_add_ran_timespec(trans, xaccTransSetDatePostedTS);
+    trn_add_ran_timespec(trans, xaccTransSetDateEnteredTS);
 
     f = get_random_kvp_frame();
-    xaccTransSetSlots_nc(ret, f);
+    xaccTransSetSlots_nc(trans, f);
 
-    add_random_splits(book, ret, account_list);
+    add_random_splits(book, trans, account_list);
 
     if (get_random_int_in_range (1, 10) == 1)
     {
       char *reason = get_random_string ();
-      xaccTransVoid (ret, reason);
+      xaccTransVoid (trans, reason);
       g_free (reason);
     }
 
-    xaccTransCommitEdit(ret);
-    if(!ret)
+    xaccTransCommitEdit(trans);
+    if (!trans)
     {
         failure_args("engine-stuff", __FILE__, __LINE__,
                      "get_random_transaction_with_currency failed");
         return NULL;
     }
 
-    return ret;
+    return trans;
 }
 
 Transaction*
@@ -1475,8 +1549,31 @@ free_random_guids(GList *guids)
 static QofQueryOp
 get_random_queryop(void)
 {
-  QofQueryOp op = get_random_int_in_range (1, QOF_QUERY_XOR);
-  if (gnc_engine_debug_random) printf ("op = %d, ", op);
+  int op_num = get_random_int_in_range(1,11);
+  QofQueryOp op = QOF_QUERY_AND;
+  /* = get_random_int_in_range (1, QOF_QUERY_XOR); */
+
+  /* Let's make it MUCH more likely to get AND and OR */
+  switch(op_num) {
+  case 1:  case 2:  case 3:  case 4:
+    op = QOF_QUERY_AND;
+    break;
+  case 5:  case 6:  case 7:  case 8:
+    op = QOF_QUERY_OR;
+    break;
+  case 9:
+    op = QOF_QUERY_NAND;
+    break;
+  case 10:
+    op = QOF_QUERY_NOR;
+    break;
+  case 11:
+    op = QOF_QUERY_XOR;
+    break;
+  default:
+    g_assert_not_reached();
+  };
+  if (gnc_engine_debug_random) printf ("op = %d (int was %d), ", op, op_num);
   return op;
 }
 
@@ -1802,17 +1899,13 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
 {
   gnc_commodity_table *table;
   GList *accounts;
-  gint num_accounts;
 
   if (num_transactions <= 0) return;
 
   g_return_if_fail (book);
 
   accounts = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
-
   g_return_if_fail (accounts);
-
-  num_accounts = g_list_length (accounts);
 
   table = gnc_commodity_table_get_table (book);
 
@@ -1930,14 +2023,23 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
   {
     xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QOF_QUERY_AND);
 
-    xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                  TRUE, FALSE, QOF_QUERY_AND);
+    if (xaccTransGetDescription(trans) && *xaccTransGetDescription(trans) != '\0')
+    {
+      xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
+                                    TRUE, FALSE, QOF_QUERY_AND);
+    }
 
-    xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
-                             TRUE, FALSE, QOF_QUERY_AND);
-
-    xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
-                             TRUE, FALSE, QOF_QUERY_AND);
+    if (xaccTransGetNum(trans) && *xaccTransGetNum(trans) != '\0')
+    {
+      xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
+                               TRUE, FALSE, QOF_QUERY_AND);
+    }
+     
+    if (xaccSplitGetAction(s) && *xaccSplitGetAction(s) != '\0')
+    {
+      xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
+                               TRUE, FALSE, QOF_QUERY_AND);
+    }
 
     n = xaccSplitGetValue (s);
     xaccQueryAddValueMatch (q, n, QOF_NUMERIC_MATCH_ANY,
@@ -1959,7 +2061,10 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QOF_QUERY_AND);
     }
 
-    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
+    if (xaccSplitGetMemo(s) && *xaccSplitGetMemo(s) != '\0')
+    {
+      xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
+    }
 
     {
       cleared_match_t how;

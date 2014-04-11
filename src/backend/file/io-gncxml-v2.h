@@ -142,11 +142,57 @@ gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
 /** The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.
  */
-gboolean gnc_is_xml_data_file_v2(const gchar *name);
+gboolean gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
 
 /** Write a name-space declaration for the provided namespace data type
  * within the GNC XML namespace at http://www.gnucash.org/XML.
  */
 void gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
+
+
+typedef struct {
+  GQuark encoding;
+  gchar *utf8_string;
+} conv_type;
+
+/** Read a file as plain byte stream to find words that are not completely ASCII.
+ * On error, @unique, @ambiguous and @impossible will be filled up to that point,
+ * @error may contain an io channel error, -1 will be returned.
+ *
+ * @param filename Name of the file to read.
+ *
+ * @param encodings List of encodings to check words for, each begin one a GQuark
+ * in a pointer.
+ *
+ * @param unique Location used for a hash table for unique solutions, if not
+ * NULL. The byte sequence is the key, successful_conversion the value.
+ *
+ * @param ambiguous Location used for a hash table for ambiguous byte sequences,
+ * if not NULL. The byte sequences is the key, a list of successful_conversions
+ * the value.
+ *
+ * @param impossible Location used for a list for undecodable byte sequences,
+ * if not NULL.
+ *
+ * @param error Location to return an io channel error.
+ *
+ * @return Size of impossible, -1 on error.
+ */
+gint gnc_xml2_find_ambiguous(
+    const gchar *filename, GList *encodings, GHashTable **unique,
+    GHashTable **ambiguous, GList **impossible, GError **error);
+typedef gint (*find_ambiguous_handler)(
+    const gchar *filename, GList *encodings, GHashTable **unique,
+    GHashTable **ambiguous, GList **impossible, GError **error);
+
+/** Parse a file in push mode, but replace byte sequences in the file given a
+ * hash table of substitutions
+ *
+ * @param subst hash table with keys and values of type gchar*
+ */
+gboolean gnc_xml2_parse_with_subst (
+    FileBackend *fbe, QofBook *book, GHashTable *subst);
+typedef gboolean (*parse_with_subst_handler)(
+    FileBackend *fbe, QofBook *book, GHashTable *subst);
 
 #endif /* __IO_GNCXML_V2_H__ */

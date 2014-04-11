@@ -5,13 +5,13 @@
 <qsf-map
 xmlns="http://qof.sourceforge.net/">
 <definition qof_version="3">
-  <define e_type="pilot_expenses">Pilot-link QOF expenses</define>
-  <define e_type="pilot_datebook">Pilot-link QOF datebook</define>
-  <define e_type="pilot_address">Pilot-link QOF address</define>
-  <define e_type="gncInvoice">Invoice</define>
-  <define e_type="Trans">Transaction</define>
-  <define e_type="gncEntry">Order/Invoice/Bill Entry</define>
-  <default name="mileage_rate" type="numeric" value="28/100"/>
+  <define e_type="pilot_expenses"/>
+  <define e_type="pilot_datebook"/>
+  <define e_type="pilot_address"/>
+  <define e_type="gncInvoice"/>
+  <define e_type="Trans"/>
+  <define e_type="gncEntry"/>
+  <default name="mileage_rate" type="numeric" value="30/100"/>
   <default name="use_weekday_descriptor" type="boolean" value="true"/>
   <default name="use_discount" type="boolean" value="false"/>
   <default name="tax_included" type="boolean" value="false"/>
@@ -29,20 +29,28 @@ xmlns="http://qof.sourceforge.net/">
     <if boolean="use_weekday_descriptor">
       <set format="%A">expense_date</set>
     </if>
-    <else type="qof_expenses">
+    <else type="pilot_expenses">
       <set>expense_vendor</set>
+    </else>
+    <else type="pilot_datebook">
+      <set>description</set>
     </else>
   </calculate>
   <calculate type="string" value="action">
-    <if type="qof-expenses">
+    <if type="pilot_expenses">
       <set>Material</set>
     </if>
-    <else type="qof-datebook">
+    <else type="pilot_datebook">
       <set>Hours</set>
     </else>
   </calculate>
   <calculate type="string" value="notes">
-    <set object="qof-expenses">expense_note</set>
+    <if type="pilot-expenses">
+      <set>expense_note</set>
+    </if>
+    <else type="pilot_datebook">
+      <set>note</set>
+    </else>
   </calculate>
   <calculate type="guid" value="bill-to"/>
   <calculate type="boolean" value="invoice-taxable"/>
@@ -54,20 +62,18 @@ xmlns="http://qof.sourceforge.net/">
   </calculate>
   <calculate type="numeric" value="iprice">
     <if type="string" value="expense_type">
-      <equals type="string" value="etMileage">
+      <equals type="string" value="Mileage">
         <set>mileage_rate</set>
       </equals>
     </if>
   </calculate>
   <calculate type="numeric" value="bprice"/>
   <calculate type="numeric" value="qty">
-    <if string="expense_type">
-      <equals type="string" value="etMileage">
-        <set object="qof-expenses">expense_amount</set>
-      </equals>
+    <if type="pilot_datebook">
+      <set>end_time-start_time</set>
     </if>
-    <else type="string" value="expense_type">
-      <set>0/1</set>
+    <else type="pilot_expenses">
+      <set>expense_amount</set>
     </else>
   </calculate>
   <calculate type="numeric" value="invoice-discount">

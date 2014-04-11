@@ -24,6 +24,7 @@
  * Copyright (C) 2001, 2002 Derek Atkins
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -463,6 +464,22 @@ gboolean gncOwnerIsValid (GncOwner *owner)
   return (owner->owner.undefined != NULL);
 }
 
+KvpFrame* gncOwnerGetSlots(GncOwner* owner)
+{
+  if (!owner) return NULL;
+
+  switch (gncOwnerGetType(owner)) {
+  case GNC_OWNER_CUSTOMER:
+  case GNC_OWNER_VENDOR:
+  case GNC_OWNER_EMPLOYEE:
+    return qof_instance_get_slots(QOF_INSTANCE(owner->owner.undefined));
+  case GNC_OWNER_JOB:
+    return gncOwnerGetSlots(gncJobGetOwner(gncOwnerGetJob(owner)));
+  default:
+    return NULL;
+  }
+}
+
 /* XXX: Yea, this is broken, but it should work fine for Queries.
  * We're single-threaded, right?
  */
@@ -487,6 +504,30 @@ reg_lot (void)
   };
 
   qof_class_register (GNC_ID_LOT, NULL, params);
+}
+
+gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GUID *guid)
+{
+  if (!book || !owner || !type || !guid) return FALSE;
+
+  if (0 == safe_strcmp(type, GNC_ID_CUSTOMER)) {
+    GncCustomer *customer = gncCustomerLookup(book,guid);
+    gncOwnerInitCustomer(owner, customer);
+    return (NULL != customer);
+  } else if (0 == safe_strcmp(type, GNC_ID_JOB)) {
+    GncJob *job = gncJobLookup(book,guid);
+    gncOwnerInitJob(owner, job);
+    return (NULL != job);
+  } else if (0 == safe_strcmp(type, GNC_ID_VENDOR)) {
+    GncVendor *vendor = gncVendorLookup(book,guid);
+    gncOwnerInitVendor(owner, vendor);
+    return (NULL != vendor);
+  } else if (0 == safe_strcmp(type, GNC_ID_EMPLOYEE)) {
+    GncEmployee *employee = gncEmployeeLookup(book,guid);
+    gncOwnerInitEmployee(owner, employee);
+    return (NULL != employee);
+  }
+  return 0;
 }
 
 gboolean gncOwnerRegister (void)

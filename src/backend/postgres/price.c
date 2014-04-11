@@ -20,9 +20,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -379,7 +376,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
    currency_str  = gnc_commodity_get_unique_name(look->currency);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* set up the common part of the query */
@@ -432,7 +429,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
          PERR ("unknown lookup type %d", look->type);
          /* re-enable events */
          pgendEnable(be);
-         gnc_engine_resume_events();
+         qof_event_resume();
          LEAVE(" ");
          return;
    }
@@ -442,7 +439,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
    LEAVE(" ");
 }
 
@@ -520,7 +517,8 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
    SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
-   if (pr->db) pr->db->inst.dirty = FALSE;
+   if (pr->db)
+     qof_instance_mark_clean(&pr->db->inst);
 
    LEAVE ("commited");
    return;

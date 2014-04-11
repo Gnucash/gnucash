@@ -90,7 +90,7 @@
      optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type
-        '(bank cash asset stock mutual-fund)
+        '(asset liability income expense)
         (gnc:group-get-subaccounts (gnc:get-current-group))))
      #f)
 
@@ -242,8 +242,6 @@
          ;;                             optname-report-currency))
          (show-full-names? (get-option gnc:pagename-general
                                        optname-show-full-names))
-         (separator (gnc:account-separator-char))
-
          (doc (gnc:make-html-document))
          ;;(table (gnc:make-html-table))
          ;;(txt (gnc:make-html-text))

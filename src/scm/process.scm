@@ -22,6 +22,7 @@
 
 (define-module (gnucash process))
 
+(use-modules (gnucash main))
 (export gnc:run-sub-process)
 (export gnc:cleanup-sub-process)
 
@@ -52,34 +53,40 @@
                (parent-write-pipe (cdr parent-to-child-pipe))
                (child-read-pipe (car parent-to-child-pipe))
                (child-write-pipe (cdr child-to-parent-pipe))
-               (pid (false-if-exception (primitive-fork))))
-          
-          (setvbuf parent-write-pipe _IONBF)
-          (setvbuf child-write-pipe _IONBF)
+               (pid (false-if-exception (primitive-fork)))
+	       )
 
-          (if (not (zero? pid))
-              ;; we're the parent
-              (begin
-                (close-input-port child-read-pipe)
-                (close-output-port child-write-pipe)
-                (list pid parent-read-pipe parent-write-pipe #f))
-              ;; else we're the child
-              (begin
-                ;; set standard-input and standard-output at the fd
-                ;; level -- which is really all that matters since
-                ;; we're about to exec...
-                (set-batch-mode?! #t)
-                (close-all-ports-except child-read-pipe child-write-pipe)
-                ;;(close-input-port parent-read-pipe)
-                ;;(close-output-port parent-write-pipe)
-                (dup->fdes child-read-pipe 0)
-                (dup->fdes child-write-pipe 1)
-                ;; now launch the child process.
-                (or (false-if-exception
-                     (if envt
-                         (apply execle path envt args)
-                         (apply execl path args)))
-                    (exit 1))))))))
+          (if (not pid)
+	      (begin
+		(gnc:error "Failed to fork child process.")
+		#f)
+	      (begin
+		(setvbuf parent-write-pipe _IONBF)
+		(setvbuf child-write-pipe _IONBF)
+
+		(if (not (zero? pid))
+		    ;; we're the parent
+		    (begin
+		      (close-input-port child-read-pipe)
+		      (close-output-port child-write-pipe)
+		      (list pid parent-read-pipe parent-write-pipe #f))
+		    ;; else we're the child
+		    (begin
+		      ;; set standard-input and standard-output at the fd
+		      ;; level -- which is really all that matters since
+		      ;; we're about to exec...
+		      (set-batch-mode?! #t)
+		      (close-all-ports-except child-read-pipe child-write-pipe)
+		      ;;(close-input-port parent-read-pipe)
+		      ;;(close-output-port parent-write-pipe)
+		      (dup->fdes child-read-pipe 0)
+		      (dup->fdes child-write-pipe 1)
+		      ;; now launch the child process.
+		      (or (false-if-exception
+			   (if envt
+			       (apply execle path envt args)
+			       (apply execl path args)))
+			  (exit 1))))))))))
 
 (define (gnc:cleanup-sub-process pid clean-secs)
   ;; Try to be nice, until it's time not to be nice.  If this function

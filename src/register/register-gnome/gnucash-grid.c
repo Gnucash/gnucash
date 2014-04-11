@@ -85,17 +85,17 @@ gnucash_grid_unrealize (GnomeCanvasItem *item)
         GnucashGrid *gnucash_grid = GNUCASH_GRID (item);
 
 	if (gnucash_grid->grid_gc != NULL) {
-		gdk_gc_unref(gnucash_grid->grid_gc);
+		g_object_unref(gnucash_grid->grid_gc);
 		gnucash_grid->grid_gc = NULL;
 	}
 
 	if (gnucash_grid->fill_gc != NULL) {
-		gdk_gc_unref(gnucash_grid->fill_gc);
+		g_object_unref(gnucash_grid->fill_gc);
 		gnucash_grid->fill_gc = NULL;
 	}
 
 	if (gnucash_grid->gc != NULL) {
-		gdk_gc_unref(gnucash_grid->gc);
+		g_object_unref(gnucash_grid->gc);
 		gnucash_grid->gc = NULL;
 	}
 
@@ -366,7 +366,7 @@ draw_cell (GnucashGrid *grid,
 	PangoLayout *layout;
 	PangoContext *context;
 	PangoFontDescription *font;
-	PangoRectangle ink_rect;
+	PangoRectangle logical_rect;
         GdkColor *bg_color;
         GdkColor *fg_color;
 /*        gint x_offset, y_offset;*/
@@ -439,7 +439,9 @@ draw_cell (GnucashGrid *grid,
                 if (virt_loc.vcell_loc.virt_row == table->model->dividing_row)
                 {
                         gdk_gc_set_foreground (grid->gc, &gn_blue);
-                        gdk_draw_line (drawable, grid->gc, x, y, x + width, y);
+                        gdk_draw_line (drawable, grid->gc, x, y-1, x + width, y-1);
+                        gdk_draw_line (drawable, grid->gc, x, y,   x + width, y);
+                        gdk_draw_line (drawable, grid->gc, x, y+1, x + width, y+1);
                 }
         }
 
@@ -450,8 +452,12 @@ draw_cell (GnucashGrid *grid,
                     (table->model->dividing_row - 1))
                 {
                         gdk_gc_set_foreground (grid->gc, &gn_blue);
+                        gdk_draw_line (drawable, grid->gc, x, y + height - 1,
+                                       x + width, y + height - 1);
                         gdk_draw_line (drawable, grid->gc, x, y + height,
                                        x + width, y + height);
+                        gdk_draw_line (drawable, grid->gc, x, y + height + 1,
+                                       x + width, y + height + 1);
                 }
         }
 
@@ -491,8 +497,8 @@ draw_cell (GnucashGrid *grid,
         y_offset++;*/
 
 	pango_layout_get_pixel_extents(layout,
-				       &ink_rect,
-				       NULL);
+				       NULL,
+				       &logical_rect);
 
         rect.x      = x + CELL_HPADDING;
         rect.y      = y + CELL_VPADDING;
@@ -510,15 +516,15 @@ draw_cell (GnucashGrid *grid,
                         break;
 
                 case CELL_ALIGN_RIGHT:
-			x_offset = width - 2 * CELL_HPADDING - ink_rect.width;
+			x_offset = width - 2 * CELL_HPADDING - logical_rect.width;
                         break;
 
                 case CELL_ALIGN_CENTER:
-			if (ink_rect.width > width - 2 * CELL_HPADDING)
+			if (logical_rect.width > width - 2 * CELL_HPADDING)
 				x_offset = 0;
 			else
 				x_offset = (width - 2 * CELL_HPADDING - 
-					    ink_rect.width) / 2;
+					    logical_rect.width) / 2;
                         break;
 	}
 
@@ -527,7 +533,7 @@ draw_cell (GnucashGrid *grid,
         gdk_draw_layout (drawable,
                          grid->gc,
                          x + CELL_HPADDING + x_offset,
-                         y + 1,
+                         y + CELL_VPADDING + 1,
                          layout);
 
         gdk_gc_set_clip_rectangle (grid->gc, NULL);

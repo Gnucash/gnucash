@@ -37,7 +37,7 @@ libgoffice_graph_la_SOURCES = \
 	gog-renderer-svg.c
 
 libgoffice_graph_ladir = $(goffice_include_dir)/graph
-libgoffice_graph_la_HEADERS = \
+noinst_HEADERS = \
 	goffice-graph.h			\
 	gog-object.h			\
 	gog-object-xml.h		\
@@ -74,11 +74,6 @@ libgoffice_graph_la_HEADERS = \
 	gog-control-foocanvas.h		\
 	gog-renderer-gnome-print.h	\
 	gog-renderer-svg.h
-
-if WITH_CAIRO
-  libgoffice_graph_la_SOURCES += gog-renderer-cairo.c	
-  libgoffice_graph_la_HEADERS += gog-renderer-cairo.h
-endif
 
 gladedir = $(goffice_datadir)/glade
 dist_glade_DATA = \

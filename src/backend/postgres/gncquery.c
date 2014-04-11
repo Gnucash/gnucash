@@ -35,7 +35,6 @@
  * Linas Vepstas January 2001
  */
 
-#define _GNU_SOURCE
 #include "config.h"
 
 #include <glib.h>

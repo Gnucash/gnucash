@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 #include <math.h>
 
 #include "gnc-dense-cal.h"
@@ -362,7 +363,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 GDate *tmpDate;
 
                 tmpDate = g_date_new();
-                g_date_set_time( tmpDate, time(NULL) );
+                g_date_set_time_t( tmpDate, time(NULL) );
                 gnc_dense_cal_set_month( dcal, g_date_get_month(tmpDate) );
                 gnc_dense_cal_set_year( dcal, g_date_get_year(tmpDate) );
                 g_date_free( tmpDate );
@@ -491,7 +492,7 @@ gnc_dense_cal_dispose (GObject *object)
         }
 
         if ( dcal->drawbuf ) {
-                gdk_pixmap_unref( dcal->drawbuf );
+                g_object_unref( dcal->drawbuf );
 		dcal->drawbuf = NULL;
 	}
 
@@ -508,7 +509,7 @@ gnc_dense_cal_dispose (GObject *object)
         /* month labels */
 	if ( dcal->monthLabels[0] ) {
         	for ( i=0; i < 12; i++ ) {
-                	gdk_pixmap_unref( dcal->monthLabels[i] );
+                	g_object_unref( dcal->monthLabels[i] );
                 	dcal->monthLabels[i] = NULL;
 		}
         }
@@ -581,7 +582,7 @@ gdc_reconfig( GncDenseCal *dcal )
         GtkWidget *widget = GTK_WIDGET(dcal);
 
         if ( dcal->drawbuf ) {
-                gdk_pixmap_unref( dcal->drawbuf );
+                g_object_unref( dcal->drawbuf );
         }
         dcal->drawbuf = gdk_pixmap_new( widget->window,
                                         widget->allocation.width,
@@ -686,7 +687,7 @@ recompute_mark_storage( GncDenseCal *dcal )
  createNew:
         dcal->numMarks = num_weeks(dcal) * 7;
         dcal->marks = g_new0( GList*, dcal->numMarks );
-        g_signal_emit_by_name( dcal, MARKS_LOST_SIGNAL_NAME, NULL );
+        g_signal_emit_by_name( dcal, MARKS_LOST_SIGNAL_NAME );
 }
 
 static void
@@ -756,12 +757,12 @@ gnc_dense_cal_expose( GtkWidget *widget,
 
         dcal = GNC_DENSE_CAL (widget);
         gc = widget->style->fg_gc[ GTK_WIDGET_STATE(widget) ];
-        gdk_draw_pixmap( widget->window,
-                         gc,
-                         dcal->drawbuf,
-                         0, 0, 0, 0,
-                         widget->allocation.width,
-                         widget->allocation.height );
+        gdk_draw_drawable(GDK_DRAWABLE(widget->window),
+                          gc,
+                          GDK_DRAWABLE(dcal->drawbuf),
+                          0, 0, 0, 0,
+                          widget->allocation.width,
+                          widget->allocation.height);
 
         return FALSE;
 }
@@ -976,14 +977,14 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                                 break;
                         }
                         idx = (dcal->month - 1 + i) % 12;
-                        gdk_draw_pixmap( dcal->drawbuf,
-                                         widget->style->fg_gc[widget->state],
-                                         dcal->monthLabels[idx],
-                                         0, 0,
-                                         dcal->leftPadding
-                                         + dcal->monthPositions[i].x,
-                                         dcal->monthPositions[i].y,
-                                         dcal->label_width, dcal->label_height );
+                        gdk_draw_drawable(GDK_DRAWABLE(dcal->drawbuf),
+                                          widget->style->fg_gc[widget->state],
+                                          GDK_DRAWABLE(dcal->monthLabels[idx]),
+                                          0, 0,
+                                          dcal->leftPadding
+                                          + dcal->monthPositions[i].x,
+                                          dcal->monthPositions[i].y,
+                                          dcal->label_width, dcal->label_height);
                 }
         }
 

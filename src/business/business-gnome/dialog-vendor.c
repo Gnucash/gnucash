@@ -202,7 +202,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 
   /* Check for valid company name */
   if (check_entry_nonempty (vw->dialog, vw->company_entry,
-		   _("You must enter a company name.\n"
+		   _("You must enter a company name. "
 		     "If this vendor is an individual (and not a company) "
 		     "you should set the \"company name\" and \"contact name\" "
 		     "the same.")))
@@ -327,7 +327,7 @@ gnc_vendor_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &vw->vendor_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (vw->component_id);
       return;
     }
@@ -487,7 +487,7 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   gnc_gui_component_watch_entity_type (vw->component_id,
 				       GNC_VENDOR_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gtk_widget_show_all (vw->dialog);
 
@@ -691,10 +691,10 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, columns, q, q2,
-				   buttons, NULL,
+  return gnc_search_dialog_create (type, _("Find Vendor"),
+				   params, columns, q, q2, buttons, NULL,
 				   new_vendor_cb, sw, free_vendor_cb,
-				   GCONF_SECTION_SEARCH);
+				   GCONF_SECTION_SEARCH, NULL);
 }
 
 GNCSearchWindow *

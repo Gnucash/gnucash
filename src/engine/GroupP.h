@@ -36,7 +36,6 @@
 #ifndef XACC_GROUP_P_H
 #define XACC_GROUP_P_H
 
-#include "config.h"
 #include "Group.h"
 #include "Transaction.h"
 
@@ -96,7 +95,7 @@ void     xaccCollSetAccountGroup (QofCollection *col, AccountGroup *grp);
  * The xaccGroupGetBackend() subroutine will find the
  *    persistent-data storage backend associated with this account group.
  */
-QofBackend * xaccGroupGetBackend (AccountGroup *group);
+QofBackend * xaccGroupGetBackend (const AccountGroup *group);
 
 gboolean      xaccGroupRegister (void);
 

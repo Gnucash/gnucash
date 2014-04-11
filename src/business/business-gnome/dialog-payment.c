@@ -1,6 +1,6 @@
 /*
  * dialog-payment.c -- Dialog for payment entry
- * Copyright (C) 2002 Derek Atkins
+ * Copyright (C) 2002,2006 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
@@ -53,6 +53,7 @@ struct _payment_window {
   GtkWidget *	memo_entry;
   GtkWidget *	post_combo;
   GtkWidget *	owner_choice;
+  GtkWidget *	invoice_choice;
   GtkWidget *	amount_edit;
   GtkWidget *	date_edit;
   GtkWidget *	acct_tree;
@@ -60,6 +61,7 @@ struct _payment_window {
   gint		component_id;
   GNCBook *	book;
   GncOwner	owner;
+  GncInvoice *	invoice;
   GList *	acct_types;
 };
 
@@ -87,9 +89,124 @@ gnc_payment_window_close_handler (gpointer data)
 }
 
 static void
+gnc_payment_dialog_invoice_changed(PaymentWindow *pw)
+{
+  GNCLot *lot;
+  gnc_numeric val;
+
+  /* Set the payment amount in the dialog */
+  if (pw->invoice) {
+    lot = gncInvoiceGetPostedLot (pw->invoice);
+    val = gnc_numeric_abs (gnc_lot_get_balance (lot));
+  } else {
+    val = gnc_numeric_zero();
+  }
+
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_edit), val);
+}
+
+static void
+gnc_payment_dialog_owner_changed(PaymentWindow *pw)
+{
+  Account *last_acct;
+  GUID *guid;
+  KvpValue* value;
+  KvpFrame* slots;
+
+  /* If the owner changed, the invoice selection is invalid */
+  pw->invoice = NULL;
+  gnc_invoice_set_owner(pw->invoice_choice, &pw->owner);
+  /* note that set_owner implies ...set_invoice(...,NULL); */
+
+  /* in case we don't get the callback */
+  gnc_payment_dialog_invoice_changed(pw);
+
+  /* XXX: We should set the sensitive flag on the invoice_choice
+   * based on whether 'owner' is NULL or not...
+   */
+
+  /* Now handle the account tree */
+  slots = gncOwnerGetSlots(&pw->owner);
+  if (!slots) return;
+
+  value = kvp_frame_get_slot_path(slots, "payment", "last_acct", NULL);
+  if (!value) return;
+  
+  guid = kvp_value_get_guid(value);
+  if (!guid) return;
+
+  last_acct = xaccAccountLookup(guid, pw->book);
+
+  /* Set the last-used transfer account */
+  if (last_acct) {
+    gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
+					       last_acct);
+  }
+}
+
+static void
+gnc_payment_dialog_remember_account(PaymentWindow *pw, Account *acc)
+{
+  KvpValue* value;
+  KvpFrame* slots = gncOwnerGetSlots(&pw->owner);
+
+  if (!acc) return;
+  if (!slots) return;
+
+  value = kvp_value_new_guid(xaccAccountGetGUID(acc));
+  if (!value) return;
+  
+  kvp_frame_set_slot_path(slots, value, "payment", "last_acct", NULL);
+  kvp_value_delete(value);
+
+  /* XXX: FIXME:  Need a commit_edit here to save the data! */
+}
+
+
+static void
 gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
 {
   gnc_owner_set_owner (pw->owner_choice, owner);
+  gnc_payment_dialog_owner_changed(pw);
+}
+
+static int
+gnc_payment_dialog_owner_changed_cb (GtkWidget *widget, gpointer data)
+{
+  PaymentWindow *pw = data;
+  GncOwner owner;
+
+  if (!pw) return FALSE;
+
+  gncOwnerCopy (&(pw->owner), &owner);
+  gnc_owner_get_owner (pw->owner_choice, &owner);
+
+  /* If this owner really changed, then reset ourselves */
+  if (!gncOwnerEqual (&owner, &(pw->owner))) {
+    gncOwnerCopy (&owner, &(pw->owner));
+    gnc_payment_dialog_owner_changed(pw);
+  }
+
+  return FALSE;
+}
+
+static int
+gnc_payment_dialog_invoice_changed_cb (GtkWidget *widget, gpointer data)
+{
+  PaymentWindow *pw = data;
+  GncInvoice *invoice;
+
+  if (!pw) return FALSE;
+
+  invoice = gnc_invoice_get_invoice (pw->invoice_choice);
+
+  /* If this invoice really changed, then reset ourselves */
+  if (invoice != pw->invoice) {
+    pw->invoice = invoice;
+    gnc_payment_dialog_invoice_changed(pw);
+  }
+
+  return FALSE;
 }
 
 void
@@ -136,8 +253,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     return;
   }
 
-  post = xaccGetAccountFromFullName (gnc_book_get_group (pw->book),
-				     text, gnc_get_account_separator ());
+  post = xaccGetAccountFromFullName (gnc_book_get_group (pw->book), text);
 
   if (!post) {
     char *msg = g_strdup_printf (
@@ -160,9 +276,13 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (pw->date_edit));
 
     /* Now apply the payment */
-    gncOwnerApplyPayment (&pw->owner, post, acc, amount, date, memo, num);
+    gncOwnerApplyPayment (&pw->owner, pw->invoice,
+			  post, acc, amount, date, memo, num);
   }
   gnc_resume_gui_refresh ();
+
+  /* Save the transfer account, acc */
+  gnc_payment_dialog_remember_account(pw, acc);
 
   gnc_ui_payment_window_destroy (pw);
 }
@@ -222,7 +342,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static PaymentWindow *
-new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
+new_payment_window (GncOwner *owner, GNCBook *book, GncInvoice *invoice)
 {
   PaymentWindow *pw;
   GladeXML *xml;
@@ -268,12 +388,16 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   box = glade_xml_get_widget (xml, "owner_box");
   pw->owner_choice = gnc_owner_select_create (label, box, book, owner);
 
+  label = glade_xml_get_widget (xml, "invoice_label");
+  box = glade_xml_get_widget (xml, "invoice_box");
+  pw->invoice_choice = gnc_invoice_select_create (box, book, owner, invoice, label);
+
   box = glade_xml_get_widget (xml, "amount_box");
   pw->amount_edit = gnc_amount_edit_new ();
   gtk_box_pack_start (GTK_BOX (box), pw->amount_edit, TRUE, TRUE, 0);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_edit),
 					 TRUE);
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_edit), initial_payment);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_edit), gnc_numeric_zero());
 
   box = glade_xml_get_widget (xml, "date_box");
   pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -285,10 +409,23 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
   gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 
+  /* Set the dialog for the 'new' owner */
+  gnc_payment_dialog_owner_changed(pw);
+
+  /* Set the dialog for the 'new' invoice */
+  pw->invoice = invoice;
+  gnc_payment_dialog_invoice_changed(pw);
+
   /* Setup signals */
   glade_xml_signal_autoconnect_full( xml,
                                      gnc_glade_autoconnect_full_func,
                                      pw);
+
+  g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
+		    G_CALLBACK (gnc_payment_dialog_owner_changed_cb), pw);
+
+  g_signal_connect (G_OBJECT (pw->invoice_choice), "changed",
+		    G_CALLBACK (gnc_payment_dialog_invoice_changed_cb), pw);
 
   /* Register with the component manager */
   pw->component_id =
@@ -300,14 +437,34 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   /* Watch for any new or changed accounts */
   gnc_gui_component_watch_entity_type (pw->component_id,
 				       GNC_ID_ACCOUNT,
-				       GNC_EVENT_CREATE | GNC_EVENT_MODIFY | 
-				       GNC_EVENT_DESTROY);
+				       QOF_EVENT_CREATE | QOF_EVENT_MODIFY | 
+				       QOF_EVENT_DESTROY);
 
   /* Fill in the post_combo and account_tree widgets */
   gnc_fill_account_select_combo (pw->post_combo, pw->book, pw->acct_types);
 
   /* Show it all */
   gtk_widget_show_all (pw->dialog);
+
+  /* Warn the user if they have no valid post-to accounts */
+  {
+    const gchar *text;
+    const char *acct_type;
+
+    text = gtk_entry_get_text(GTK_ENTRY((GTK_COMBO(pw->post_combo))->entry));
+    if (!text || safe_strcmp (text, "") == 0) {
+  
+      /* XXX: I know there's only one type here */
+      acct_type = xaccAccountGetTypeStr(GPOINTER_TO_INT(pw->acct_types->data));
+      gnc_warning_dialog(pw->dialog,
+			 _("You have no valid \"Post To\" accounts.  "
+			   "Please create an account of type \"%s\" "
+			   "before you continue to process this payment.  "
+			   "Perhaps you want to create an Invoice or "
+			   "Bill first?"),
+			 acct_type);
+    }
+  }
 
   return pw;
 }
@@ -321,8 +478,8 @@ gnc_ui_payment_window_destroy (PaymentWindow *pw)
 }
 
 PaymentWindow *
-gnc_ui_payment_new_with_value (GncOwner *owner, GNCBook *book,
-			       gnc_numeric initial_payment)
+gnc_ui_payment_new_with_invoice (GncOwner *owner, GNCBook *book,
+				 GncInvoice *invoice)
 {
   GncOwner owner_def;
 
@@ -335,12 +492,12 @@ gnc_ui_payment_new_with_value (GncOwner *owner, GNCBook *book,
     owner = &owner_def;
   }
 
-  return new_payment_window (owner, book, initial_payment);
+  return new_payment_window (owner, book, invoice);
 }
 
 PaymentWindow *
 gnc_ui_payment_new (GncOwner *owner, GNCBook *book)
 {
-  return gnc_ui_payment_new_with_value (owner, book, gnc_numeric_zero());
+  return gnc_ui_payment_new_with_invoice (owner, book, NULL);
 }
 

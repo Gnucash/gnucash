@@ -24,6 +24,7 @@
 #define GNC_DIALOG_COLUMN_VIEW_H
 
 #include <libguile.h>
+#include <gtk/gtk.h>
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 

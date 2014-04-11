@@ -195,6 +195,7 @@ gnc_amount_edit_new (void)
   GNCAmountEdit *gae;
 
   gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
+  gtk_widget_show (GTK_WIDGET(gae));
 
   return GTK_WIDGET (gae);
 }

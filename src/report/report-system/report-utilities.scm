@@ -155,8 +155,7 @@
    (gnc:group-get-account-list (gnc:get-current-group))))
 
 (define (gnc:split-get-corr-account-full-name split)
-  (let ((separator (string-ref (gnc:account-separator-char) 0)))
-    (gnc:split-get-corr-account-full-name-internal split separator)))
+  (gnc:split-get-corr-account-full-name-internal split))
 
 
 ;; get children that are the direct descendant of this acct
@@ -191,16 +190,6 @@
      (gnc:group-get-subaccounts
       (gnc:account-get-children a)))
    accountlist))
-
-
-(define (gnc:transaction-map-splits thunk transaction)
-  (let loop ((num-splits (gnc:transaction-get-split-count transaction))
-             (i 0))
-    (if (< i num-splits)
-        (cons
-         (thunk (gnc:transaction-get-split transaction i))
-         (loop num-splits (+ i 1)))
-        '())))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
 ;;; it easy to get at the mean.
@@ -258,13 +247,13 @@
 		    (set! totalitems 0))))
       (lambda (action value)  ;;; Dispatch function
 	(case action
-	  ('add (adder value))
-	  ('total (gettotal))
-	  ('average (getaverage))
-	  ('numitems (getnumitems))
-	  ('getmax (getmax))
-	  ('getmin (getmin))
-	  ('reset (reset-all))
+	  ((add) (adder value))
+	  ((total) (gettotal))
+	  ((average) (getaverage))
+	  ((numitems) (getnumitems))
+	  ((getmax) (getmax))
+	  ((getmin) (getmin))
+	  ((reset) (reset-all))
           (else (gnc:warn "bad stats-collector action: " action)))))))
 
 (define (gnc:make-drcr-collector)
@@ -289,11 +278,11 @@
 		    (set! totalitems 0))))
       (lambda (action value)  ;;; Dispatch function
 	(case action
-	  ('add (adder value))
-	  ('debits (getdebits))
-	  ('credits (getcredits))
-	  ('items (getitems))
-	  ('reset (reset-all))
+	  ((add) (adder value))
+	  ((debits) (getdebits))
+	  ((credits) (getcredits))
+	  ((items) (getitems))
+	  ((reset) (reset-all))
           (else (gnc:warn "bad dr-cr-collector action: " action)))))))
 
 ;; This is a collector of values -- works similar to the stats-collector but
@@ -303,9 +292,9 @@
       ((value 0))
     (lambda (action amount)  ;;; Dispatch function
       (case action
-	('add (if (number? amount) 
+	((add) (if (number? amount) 
 		  (set! value (+ amount value))))
-	('total value)
+	((total) value)
 	(else (gnc:warn "bad value-collector action: " action))))))
 ;; Bah. Let's get back to normal data types -- this procedure thingy
 ;; from above makes every code almost unreadable. First step: replace
@@ -322,12 +311,13 @@
       ((value (gnc:numeric-zero)))
     (lambda (action amount)  ;;; Dispatch function
       (case action
-	('add (if (gnc:gnc-numeric? amount) 
+	((add) (if (gnc:gnc-numeric? amount) 
 		  (set! value (gnc:numeric-add-fixed amount value))
 		  (gnc:warn 
 		   "gnc:numeric-collector called with wrong argument: " amount)))
-	('total value)
+	((total) value)
 	(else (gnc:warn "bad gnc:numeric-collector action: " action))))))
+
 ;; Replace all 'action function calls by the normal functions below.
 (define (gnc:numeric-collector-add collector amount)
   (collector 'add amount))
@@ -446,16 +436,16 @@
     ;; Dispatch function
     (lambda (action commodity amount)
       (case action
-	('add (add-commodity-value commodity amount))
-	('merge (add-commodity-clist 
+	((add) (add-commodity-value commodity amount))
+	((merge) (add-commodity-clist 
 		 (gnc:commodity-collector-list commodity)))
-	('minusmerge (minus-commodity-clist
+	((minusmerge) (minus-commodity-clist
 		      (gnc:commodity-collector-list commodity)))
-	('format (process-commodity-list commodity commoditylist))
-	('reset (set! commoditylist '()))
-	('getpair (getpair commodity amount))
-	('getmonetary (getmonetary commodity amount))
-	('list commoditylist) ; this one is only for internal use
+	((format) (process-commodity-list commodity commoditylist))
+	((reset) (set! commoditylist '()))
+	((getpair) (getpair commodity amount))
+	((getmonetary) (getmonetary commodity amount))
+	((list) commoditylist) ; this one is only for internal use
 	(else (gnc:warn "bad commodity-collector action: " action))))))
 
 
@@ -643,6 +633,27 @@
 		 (gnc:account-get-comm-balance-interval 
 		  account from to #t)) group))
     this-collector))
+
+;; This calculates the increase in the balance(s) of all accounts in
+;; <accountlist> over the period from <from-date> to <to-date>.
+;; Returns a commodity collector.
+(define (gnc:accountlist-get-comm-balance-interval accountlist from to)
+  (let ((collector (gnc:make-commodity-collector)))
+    (for-each (lambda (account)
+                (gnc:commodity-collector-merge 
+                 collector (gnc:account-get-comm-balance-interval 
+                            account from to #f)))
+              accountlist)
+    collector))
+
+(define (gnc:accountlist-get-comm-balance-at-date accountlist date)
+   (let ((collector (gnc:make-commodity-collector)))
+    (for-each (lambda (account)
+                (gnc:commodity-collector-merge 
+                 collector (gnc:account-get-comm-balance-at-date 
+                            account date #f)))
+              accountlist)
+    collector))
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)

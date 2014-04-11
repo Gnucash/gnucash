@@ -33,6 +33,7 @@
  * Created by Linas Vepstas December 1998
  * Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2002 Christian Stimming
+ * Copyright (c) 2006 David Hampton
  */
 
 #include "config.h"
@@ -103,9 +104,7 @@ TransScrubOrphansFast (Transaction *trans, AccountGroup *root)
     orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, _("Orphan"));
     if (!orph) continue;
 
-    xaccAccountBeginEdit (orph);
-    xaccAccountInsertSplit (orph, split);
-    xaccAccountCommitEdit (orph);
+    xaccSplitSetAccount(split, orph);
   }
 }
 
@@ -196,27 +195,6 @@ xaccAccountScrubSplits (Account *account)
 }
 
 void
-xaccTransScrubSplits (Transaction *trans)
-{
-  gnc_commodity *currency;
-  GList *node;
-
-  if (!trans) return;
-
-  /* The split scrub expects the transaction to have a currency! */
-  currency = xaccTransGetCurrency (trans);
-  if (!currency) 
-  {
-    PERR ("Transaction doesn't have a currency!");
-  }
-
-  for (node = trans->splits; node; node = node->next)
-  {
-    xaccSplitScrub (node->data);
-  }
-}
-
-void
 xaccSplitScrub (Split *split)
 {
   Account *account;
@@ -233,7 +211,7 @@ xaccSplitScrub (Split *split)
 
   account = xaccSplitGetAccount (split);
 
-  /* If theres no account, this split is an orphan.
+  /* If there's no account, this split is an orphan.
    * We need to fix that first, before proceeding.
    */
   if (!account)
@@ -352,52 +330,95 @@ xaccAccountScrubImbalance (Account *acc)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
+    xaccTransScrubCurrencyFromSplits(trans);
+    
     xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
   }
 }
 
 void
+xaccTransScrubCurrencyFromSplits(Transaction *trans)
+{
+  GList *node;
+  gnc_commodity *common_currency = NULL;
+    
+  if (!trans) return;
+  
+  for (node = xaccTransGetSplitList (trans); node; node = node->next) {
+    Split *split = node->data;
+
+    if (!xaccTransStillHasSplit(trans, split)) continue;
+    if (gnc_numeric_equal(xaccSplitGetAmount (split),
+                          xaccSplitGetValue (split))) {
+
+      Account *s_account = xaccSplitGetAccount (split);
+      gnc_commodity *s_commodity = xaccAccountGetCommodity (s_account);
+      
+      if (s_commodity) {
+        if (gnc_commodity_is_currency(s_commodity)) {
+          /* Found a split where the amount is the same as the value and
+             the commodity is a currency.  If all splits in the transaction
+             that fit this description are in the same currency then the
+             transaction should be in that currency too. */
+
+          if (common_currency == NULL)
+            /* First one we've found, save the currency */
+            common_currency = s_commodity;
+          else if ( !gnc_commodity_equiv (common_currency, s_commodity)) {
+            /* Splits are inconsistent, more than one has a value equal to
+               the amount, but they aren't all in the same currency. */
+            common_currency = NULL;
+            break;
+          }
+        }
+      }
+    }
+  }
+    
+  if (common_currency &&
+      !gnc_commodity_equiv (common_currency, xaccTransGetCurrency (trans))) {
+
+    /* Found a common currency for the splits, and the transaction is not
+       in that currency */
+    gboolean trans_was_open;
+
+    PINFO ("transaction in wrong currency");
+      
+    trans_was_open = xaccTransIsOpen (trans);
+
+    if (!trans_was_open)
+      xaccTransBeginEdit (trans);
+
+    xaccTransSetCurrency (trans, common_currency);
+    
+    if (!trans_was_open)
+      xaccTransCommitEdit (trans);
+  }
+}
+
+void
 xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
-                         Account *parent)
+                         Account *account)
 {
   Split *balance_split = NULL;
-  QofBook *book = NULL;
   gnc_numeric imbalance;
-  Account *account;
-  SplitList *node, *slist;
 
   if (!trans) return;
 
   ENTER ("()");
+
+  /* Must look for orphan splits even if there is no imbalance. */
   xaccTransScrubSplits (trans);
 
   /* If the transaction is balanced, nothing more to do */
   imbalance = xaccTransGetImbalance (trans);
   if (gnc_numeric_zero_p (imbalance)) return;
 
-  slist = xaccTransGetSplitList (trans);
-  if (!slist) return;
-
-  if (!parent)
+  if (!account)
   {
     if (!root) 
-    { 
-       Split *s = slist->data; 
-       if (NULL == s->acc)
-       {
-          /* This should never occur, since xaccTransScrubSplits()
-           * above should have fixed things up.  */
-          PERR ("Split is not assigned to any account");
-       }
-       root = xaccAccountGetRoot (s->acc);
-       if (NULL == root)
-       {
-          /* This should never occur, accounts are always 
-           * in an account group */
-          PERR ("Can't find root account");
-          book = xaccTransGetBook (trans);
-          root = xaccGetAccountGroup (book);
-       }
+    {
+       root = xaccGetAccountGroup (xaccTransGetBook (trans));
        if (NULL == root)
        {
           /* This can't occur, things should be in books */
@@ -407,37 +428,23 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     }
     account = xaccScrubUtilityGetOrMakeAccount (root, 
         trans->common_currency, _("Imbalance"));
-  }
-  else
-  {
-    account = parent;
-  }
-
-  if (!account) 
-  {
-      PERR ("Can't get balancing account");
-      return;
-  }
-
-  for (node = slist; node; node = node->next)
-  {
-    Split *split = node->data;
-
-    if (xaccSplitGetAccount (split) == account)
-    {
-      balance_split = split;
-      break;
+    if (!account) {
+        PERR ("Can't get balancing account");
+        return;
     }
   }
+
+  balance_split = xaccTransFindSplitByAccount(trans, account);
 
   /* Put split into account before setting split value */
   if (!balance_split)
   {
     balance_split = xaccMallocSplit (trans->inst.book);
 
-    xaccAccountBeginEdit (account);
-    xaccAccountInsertSplit (account, balance_split);
-    xaccAccountCommitEdit (account);
+    xaccTransBeginEdit (trans);
+    xaccSplitSetParent(balance_split, trans);
+    xaccSplitSetAccount(balance_split, account);
+    xaccTransCommitEdit (trans);
   }
 
   PINFO ("unbalanced transaction");
@@ -467,7 +474,6 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
       xaccSplitSetAmount (balance_split, new_value);
     }
 
-    xaccTransAppendSplit (trans, balance_split);
     xaccSplitScrub (balance_split);
     xaccTransCommitEdit (trans);
   }
@@ -603,7 +609,7 @@ xaccTransScrubCurrency (Transaction *trans)
 
   /* If there are any orphaned splits in a transaction, then the 
    * this routine will fail.  Therefore, we want to make sure that
-   * tehre are no orphans (splits without parent account).
+   * there are no orphans (splits without parent account).
    */
   xaccTransScrubOrphans (trans);
 
@@ -834,6 +840,35 @@ xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
                            GINT_TO_POINTER(new_style), TRUE);
   xaccAccountGroupCommitEdit (group);
   LEAVE("Migration done");
+}
+
+/* ================================================================ */
+
+void
+xaccAccountScrubKvp (Account *account)
+{
+  const gchar *str;
+  gchar *str2;
+  kvp_frame *frame;
+
+  if (!account) return;
+
+  str = kvp_frame_get_string(account->inst.kvp_data, "notes");
+  if (str) {
+    str2 = g_strstrip(g_strdup(str));
+    if (strlen(str2) == 0)
+      kvp_frame_set_slot_nc (account->inst.kvp_data, "notes", NULL);
+    g_free(str2);
+  }
+
+  str = kvp_frame_get_string(account->inst.kvp_data, "placeholder");
+  if (str && strcmp(str, "false") == 0)
+    kvp_frame_set_slot_nc (account->inst.kvp_data, "placeholder", NULL);
+
+  frame = kvp_frame_get_frame(account->inst.kvp_data, "hbci");
+  if (frame && kvp_frame_is_empty(frame)) {
+    kvp_frame_set_frame_nc(account->inst.kvp_data, "hbci", NULL);
+  }
 }
 
 /* ================================================================ */

@@ -35,6 +35,7 @@ struct _GogGraph {
 	GogTheme *theme;
 	GSList	 *charts;
 	GSList	 *data;
+	GHashTable *ref_counts;
 
 	unsigned  num_cols, num_rows;
 	double	  width, height;

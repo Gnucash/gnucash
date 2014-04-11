@@ -8,8 +8,6 @@
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
-  int       (*foo_hello)(void);
-  int helloval; 
   GNCModule foo;
 
   printf("  test-load-c.c: testing module load/unload from C ... ");
@@ -20,13 +18,6 @@ guile_main(void *closure, int argc, char ** argv)
   
   if(!foo) {
     printf("  Failed to load foo\n");
-    exit(-1);
-  }
-  
-  foo_hello = gnc_module_lookup(foo, "foo_hello");
-  helloval = foo_hello();
-  if(helloval != 10) {
-    printf("  Call of module function failed.\n");
     exit(-1);
   }
 

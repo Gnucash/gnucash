@@ -262,7 +262,7 @@
  * After parsing the above expressions the variables nni, jk, tyh and
  * tgh would all be defined.
  *
- * Functiosn are invoked with expressions of the format
+ * Functions are invoked with expressions of the format
  *
  *   [_a-zA-Z]( <argument_0> : <argument_1> : ... : <argument_n> )
  *
@@ -276,11 +276,11 @@
  * *vp), "vp" is the pointer returned by the "init_parser" function.
  *
  * void *init_parser(var_store_ptr  predefined_vars,
- *                   char  radix_point,
- *                   char  group_char,
+ *                   gchar  *radix_point,
+ *                   gchar  *group_char,
  *                   void          *trans_numeric(char  *digit_str,
- *                                                char   radix_point,
- *                                                char   group_char,
+ *                                                gchar *radix_point,
+ *                                                gchar *group_char,
  *                                                char **rstr),
  *                   void          *numeric_ops(char  op_sym,
  *                                              void          *left_value,
@@ -363,7 +363,7 @@
  * Note: The parser/evaluator uses a simple recursive descent
  * parser. I decided on this type for the simple reason that for a
  * simple four function calculator a recursive descent parser is, in
- * my opnion, the easiest to construct. I also think that recursive
+ * my opinion, the easiest to construct. I also think that recursive
  * descent parsers are easier for the human to understand and thus
  * maintain.
  *
@@ -406,8 +406,8 @@ typedef struct parser_env
   var_store_ptr unnamed_vars;
 
   const char *parse_str;
-  char radix_point;
-  char group_char;
+  gchar *radix_point;
+  gchar *group_char;
   char name[128];
 
   char Token;
@@ -421,7 +421,7 @@ typedef struct parser_env
   void *numeric_value;
 
   void *(*trans_numeric) (const char *digit_str,
-			  char radix_point, char group_char, char **rstr);
+			  gchar *radix_point, gchar *group_char, char **rstr);
   void *(*numeric_ops) (char op_sym, void *left_value, void *right_value);
   void *(*negate_numeric) (void *value);
   void (*free_numeric) (void *numeric_value);
@@ -449,11 +449,11 @@ static char allowed_operators[] = "+-*/()=:";
 
 parser_env_ptr
 init_parser (var_store_ptr predefined_vars,
-	     char radix_point,
-	     char group_char,
+	     gchar *radix_point,
+	     gchar *group_char,
 	     void *trans_numeric (const char *digit_str,
-				  char radix_point,
-				  char group_char,
+				  gchar *radix_point,
+				  gchar *group_char,
 				  char **rstr),
 	     void *numeric_ops (char op_sym,
 				void *left_value,
@@ -751,8 +751,11 @@ free_var (var_store_ptr value, parser_env_ptr pe)
 static void
 add_token (parser_env_ptr pe, char token)
 {
-  *pe->token_tail = pe->Token = token;
-  pe->token_tail++;
+    pe->Token = token;
+    if ((token != EOS) || (*pe->token_tail != EOS)) {
+        *pe->token_tail = token;
+        pe->token_tail++;
+    }
 }
 
 /* parse next token from string */
@@ -760,7 +763,7 @@ static void
 next_token (parser_env_ptr pe)
 {
   char *nstr;
-  const char *str_parse = pe->parse_str;
+  const unsigned char *str_parse = pe->parse_str;
   void *number;
 
   while (isspace (*str_parse))
@@ -829,9 +832,9 @@ next_token (parser_env_ptr pe)
 
     *nstr = EOS;
     if ( funcFlag ) {
-      add_token( pe, FN_TOKEN );
+      add_token(pe, FN_TOKEN);
     } else {
-      add_token (pe, VAR_TOKEN);
+      add_token(pe, VAR_TOKEN);
     }
 
   }
@@ -1059,12 +1062,32 @@ multiply_divide_op (parser_env_ptr pe)
   }				/* endwhile */
 }				/* multiply_divide_op */
 
+/**
+ * Bug#334811, 308554: apply some basic grammar constraints.
+ * @return true if the expression is in error; pe->error_code will already
+ * contain the error.
+ **/
+static int
+check_expression_grammar_error(parser_env_ptr pe)
+{
+  if (pe->Token == VAR_TOKEN
+      || pe->Token == STR_TOKEN
+      || pe->Token == NUM_TOKEN
+      || pe->Token == FN_TOKEN)
+  {
+    add_token(pe, EOS);
+    pe->error_code = EXPRESSION_ERROR;
+    return TRUE;
+  }
+  return FALSE;
+}
+
 /* evaluate:
  *  unary '+' and '-'
  *  named variables
  *  numerics
  *  grouped expressions, "()"
- *  functions [ <name>( [exp, exp, ..., exp] ) ]
+ *  functions [ <name>( [exp : exp : ... : exp] ) ]
  *  strings
  */
 static void
@@ -1133,6 +1156,9 @@ primary_exp (parser_env_ptr pe)
       if (pe->error_code)
         return;
 
+      if (check_expression_grammar_error(pe))
+        return;
+
       rslt->value = pe->numeric_value;
       pe->numeric_value = NULL;
       break;
@@ -1144,13 +1170,12 @@ primary_exp (parser_env_ptr pe)
         assignment_op(pe);
         if ( pe->error_code )
           return;
-
         funcArgCount++;
-        if ( pe->Token == ')' ) {
+        if (!pe->Token || pe->Token == ')') {
           break;
         }
         next_token(pe);
-      } while ( pe->Token != ARG_TOKEN );
+      } while (pe->Token != ARG_TOKEN);
 
       if ( pe->Token != ')' ) {
         add_token( pe, EOS );
@@ -1185,16 +1210,30 @@ primary_exp (parser_env_ptr pe)
           add_token( pe, EOS );
           return;
         }
-
       }
 
       next_token(pe);
+
+      if (check_expression_grammar_error(pe))
+        return;
+
       break;
 
     case VAR_TOKEN:
+      if (check_expression_grammar_error(pe))
+        return;
+
       rslt = get_named_var (pe);
       break;
     case STR_TOKEN:
+      if (!(pe->Token == ')'
+            || pe->Token == ARG_TOKEN))
+      {
+        add_token(pe, EOS);
+        pe->error_code = EXPRESSION_ERROR;
+        return;
+      }
+
       rslt = get_unnamed_var( pe );
       rslt->type = VST_STRING;
       rslt->value = ident;

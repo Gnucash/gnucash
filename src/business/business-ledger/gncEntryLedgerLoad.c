@@ -21,8 +21,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -180,7 +178,7 @@ typedef struct {
 } BCE;
 
 static gpointer
-load_xfer_cell_cb (Account *account, gpointer data)
+load_entry_xfer_cell_cb (Account *account, gpointer data)
 {
   BCE *bce = data;
   GNCAccountType type;
@@ -219,7 +217,7 @@ load_xfer_cell_cb (Account *account, gpointer data)
   if (xaccAccountGetPlaceholder (account)) return NULL;
 
 
-  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  name = xaccAccountGetFullName (account);
   if (NULL == name) return NULL;
   gnc_combo_cell_add_menu_item (bce->cell, name);
   g_free(name);
@@ -272,7 +270,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
 
   bce.cell = cell;
   bce.ledger_type = ledger->type;
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, &bce, TRUE);
+  xaccGroupForEachAccount (group, load_entry_xfer_cell_cb, &bce, TRUE);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
@@ -281,7 +279,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
 
   bce.cell = cell;
   bce.ledger_type = ledger->type;
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, &bce, TRUE);
+  xaccGroupForEachAccount (group, load_entry_xfer_cell_cb, &bce, TRUE);
 }
 
 /* ===================================================================== */

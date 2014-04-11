@@ -34,7 +34,7 @@ localtime_r(const time_t *const timep, struct tm *p_tm)
 struct tm *
 localtime_r(const time_t *const timep, struct tm *p_tm)
 {
-    static tm* tmp;
+    static struct tm* tmp;
     tmp = localtime(timep);
     if (tmp) {
             memcpy(p_tm, tmp, sizeof(struct tm));

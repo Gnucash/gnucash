@@ -1,17 +1,18 @@
-lib_LTLIBRARIES = libqof.la
+lib_LTLIBRARIES = libgncqof.la
 
-libqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
+libgncqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
+libgncqof_la_LIBADD= \
+  $(GLIB_LIBS) \
+  $(top_builddir)/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
-  -I. \
-  ${GLIB_CFLAGS}
+  $(GLIB_CFLAGS) \
+  -I$(top_srcdir)/lib/libc
 
-libqof_la_SOURCES =  \
+libgncqof_la_SOURCES =  \
+   deprecated.c      \
    gnc-date.c        \
-   gnc-engine-util.c \
    gnc-numeric.c     \
-   gnc-event.c       \
-   gnc-trace.c       \
    guid.c            \
    kvp_frame.c       \
    kvp-util.c        \
@@ -23,29 +24,31 @@ libqof_la_SOURCES =  \
    qofinstance.c     \
    qofquery.c        \
    qofbook.c         \
+   qofevent.c        \
+   qoflog.c          \
    qofobject.c       \
    qofquerycore.c    \
+   qofreference.c    \
+   qofutil.c         \
    qofsession.c      \
-   qof_book_merge.c
+   qofbookmerge.c
 
 qofincludedir = ${pkgincludedir}
 
 qofinclude_HEADERS = \
+   deprecated.h      \
    gnc-date.h        \
-   gnc-engine-util.h \
    gnc-numeric.h     \
-   gnc-event.h       \
-   gnc-trace.h       \
    guid.h            \
    kvp_frame.h       \
    kvp-util.h        \
    kvp-util-p.h      \
    qof.h             \
-   qof-be-utils.h    \
    qofbackend.h      \
    qofbackend-p.h    \
    qofclass.h        \
    qofchoice.h       \
+   qofevent.h        \
    qofgobj.h         \
    qofid.h           \
    qofid-p.h         \
@@ -53,14 +56,19 @@ qofinclude_HEADERS = \
    qofinstance.h     \
    qofquery.h        \
    qofbook.h         \
+   qoflog.h          \
    qofobject.h       \
    qofquerycore.h    \
+   qofreference.h    \
    qofsession.h      \
-   qofla-dir.h       \
-   qof_book_merge.h
+   qofsql.h          \
+   qofutil.h         \
+   qofbookmerge.h
+
+nodist_qofinclude_HEADERS = \
+   qofla-dir.h     
 
 noinst_HEADERS = \
-   gnc-event-p.h \
    md5.h  \
    qofclass-p.h  \
    qofmath128.h  \
@@ -68,22 +76,22 @@ noinst_HEADERS = \
    qofquery-deserial.h \
    qofquery-serialize.h \
    qofbook-p.h  \
+   qofevent-p.h \
    qofobject-p.h  \
    qofquerycore-p.h \
    qofsession-p.h
 
-QOFLIBdir = $(libdir)
+QOFLIBdir = $(QOF_LIB_DIR)
 
 EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
 
-qofla-dir.h: qofla-dir.h.in
+qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
                 -e 's:@-libdir-@:${QOFLIBdir}:g'
 	 mv $@.tmp $@
 
 BUILT_SOURCES = qofla-dir.h
-
-
+DISTCLEANFILES = qofla-dir.h

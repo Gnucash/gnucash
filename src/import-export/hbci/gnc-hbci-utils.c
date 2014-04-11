@@ -21,7 +21,6 @@
 \********************************************************************/
 
 #include "config.h"
-#include "gnc-hbci-utils.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -36,6 +35,9 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h" 
+
+#define AQBANKING_NOWARN_DEPRECATED
+#include "gnc-hbci-utils.h"
 
 #include "hbci-interaction.h"
 #include <aqbanking/version.h>
@@ -218,6 +220,8 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
   }
 
 #if 0  
+  /* hbci debugging code; might be adapted to aqbanking at a later
+     point in time */
   list = AB_JOB_resultCodes (job);
   if (list_int_size (list) > 0) {
 
@@ -276,6 +280,9 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
 
   switch (code) {
 #if 0
+    /* these error codes existed in openhbci, but no longer in
+       aqbanking. Maybe they might get reintroduced later, but maybe
+       not. */
   case AB_ERROR_PIN_WRONG:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog (parent,
@@ -289,34 +296,11 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
 				       _("The PIN you entered was wrong.\n"
 					 "ATTENTION: You have zero further wrong retries left!\n"
 					 "Do you want to try again?"));
-  case AB_ERROR_PIN_WRONG_1:
-    GNCInteractor_erasePIN (inter);
-    return gnc_verify_dialog (parent,
-				       TRUE,
-				       _("The PIN you entered was wrong.\n"
-					 "You have one further wrong retry left.\n"
-					 "Do you want to try again?"));
-  case AB_ERROR_PIN_WRONG_2:
-    GNCInteractor_erasePIN (inter);
-    return gnc_verify_dialog (parent,
-				       TRUE,
-				       _("The PIN you entered was wrong.\n"
-					 "You have two further wrong retries left.\n"
-					 "Do you want to try again?"));
-  case AB_ERROR_PIN_ABORTED:
-    /*     printf("gnc_hbci_Error_feedback: PIN dialog was aborted.\n"); */
-    return FALSE;
-  case AB_ERROR_PIN_TOO_SHORT:
-    GNCInteractor_erasePIN (inter);
-    return gnc_verify_dialog (parent,
-				       TRUE,
-				       _("The PIN you entered was too short.\n"
-					 "Do you want to try again?"));
   case AB_ERROR_CARD_DESTROYED:
     GNCInteractor_hide (inter);
     gnc_error_dialog
       (parent,
-       _("Unfortunately you entered a wrong PIN for too many times.\n"
+       _("Unfortunately you entered a wrong PIN for too many times. "
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
   case AB_ERROR_FILE_NOT_FOUND:
@@ -324,14 +308,14 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     return FALSE;
   case AB_ERROR_NO_CARD:
     return gnc_verify_dialog (parent,
-				       TRUE,
-				       _("No chip card has been found in the chip card reader.\n"
-					 "Do you want to try again?"));
+			      TRUE,
+			      _("No chip card has been found in the chip card reader. "
+				"Do you want to try again?"));
   case AB_ERROR_JOB_NOT_SUPPORTED:
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("Unfortunately this HBCI job is not supported \n"
+       _("Unfortunately this HBCI job is not supported "
 	 "by your bank or for your account. Aborting."));
     return FALSE;
 #endif
@@ -339,27 +323,9 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("The server of your bank refused the HBCI connection.\n"
+       _("The server of your bank refused the HBCI connection. "
 	 "Please try again later. Aborting."));
     return FALSE;
-#if 0
-  case AB_ERROR_MEDIUM:
-    gnc_error_dialog 
-      (parent,
-       _("There was an error when loading the plugin for your security medium \n"
-	 "(see log window). Probably the versions of your currently installed \n"
-	 "OpenHBCI library and of the plugin do not match. In that case you need \n"
-	 "to recompile and reinstall the plugin again. Aborting now."));
-    GNCInteractor_hide (inter);
-    return FALSE;
-  case AB_ERROR_BAD_MEDIUM:
-    gnc_error_dialog 
-      (parent,
-       _("Your security medium is not supported. No appropriate plugin \n"
-	 "has been found for that medium. Aborting."));
-    GNCInteractor_hide (inter);
-    return FALSE;
-#endif
       
   default:
     return FALSE;
@@ -368,6 +334,9 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
 }
 
 #if 0
+/* hbci debugging code; might be adapted to aqbanking at a later
+   point in time */
+
 /* Prints all results that can be found in the outbox into the interactor */
 static void gnc_hbci_printresult(HBCI_Outbox *outbox, GNCInteractor *inter)
 {
@@ -484,7 +453,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   }
 
   GNCInteractor_set_cache_valid (inter, TRUE);
-  if (resultcode <= 20) {
+  if (resultcode <= 20 && (! GNCInteractor_errorsLogged (inter)) ) {
     return TRUE;
   }
   else {
@@ -498,7 +467,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 
 struct cb_struct {
   gchar **result;
-  iconv_t gnc_iconv_handler;
+  GIConv gnc_iconv_handler;
 };
 
 /* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */
@@ -540,8 +509,8 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   struct cb_struct cb_object;
 
   cb_object.gnc_iconv_handler = 
-    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
-  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
+    g_iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (GIConv)(-1));
 
   /* Get othername */
   cb_object.result = &othername;
@@ -564,7 +533,7 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
        g_strdup (h_descr) : 
        g_strdup (_("Unspecified")));
 
-  iconv_close(cb_object.gnc_iconv_handler);
+  g_iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   free (othername);
   return g_descr;
@@ -579,8 +548,8 @@ char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
   struct cb_struct cb_object;
 
   cb_object.gnc_iconv_handler = 
-    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
-  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
+    g_iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (GIConv)(-1));
 
   cb_object.result = &h_descr;
   if (h_purpose)
@@ -590,7 +559,7 @@ char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
 
   g_descr = g_strdup (h_descr ? h_descr : "");
 
-  iconv_close(cb_object.gnc_iconv_handler);
+  g_iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   return g_descr;
 }
@@ -627,267 +596,6 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans)
   return g_memo;
 }
 
-
-#if 0
-/** Return the only customer that can act on the specified account, or
-    NULL if none was found. */
-const HBCI_Customer *
-gnc_hbci_get_first_customer(const AB_ACCOUNT *h_acc)
-{
-  /* Get one customer. */
-  const list_HBCI_User *userlist;
-  const HBCI_Bank *bank;
-  const HBCI_User *user;
-  g_assert(h_acc);
-  
-  bank = AB_ACCOUNT_bank (h_acc);
-  userlist = HBCI_Bank_users (bank);
-  g_assert (userlist);
-  user = choose_one_user(gnc_ui_get_toplevel (), userlist);
-  g_assert (user);
-  return choose_one_customer(gnc_ui_get_toplevel (), HBCI_User_customers (user));
-}
-
-const char *bank_to_str (const HBCI_Bank *bank)
-{
-  g_assert (bank);
-  return ((strlen(HBCI_Bank_name (bank)) > 0) ?
-	  HBCI_Bank_name (bank) :
-	  HBCI_Bank_bankCode(bank));
-}
-
-
-const HBCI_Bank *
-choose_one_bank (gncUIWidget parent, const list_HBCI_Bank *banklist)
-{
-  const HBCI_Bank *bank;
-  list_HBCI_Bank_iter *iter, *end;
-  int list_size;
-  g_assert (parent);
-  g_assert (banklist);
-
-  /*printf("%d banks found.\n", list_HBCI_Bank_size (banklist));*/
-  list_size = list_HBCI_Bank_size (banklist);
-  if (list_size == 0) 
-    return NULL;
-
-  if (list_size == 1) 
-    {
-      /* Get bank. */
-      iter = list_HBCI_Bank_begin (banklist);
-      bank = list_HBCI_Bank_iter_get (iter);
-      list_HBCI_Bank_iter_delete (iter);
-      return bank;
-    }
-
-  /* More than one bank available. */
-  {
-    int choice, i;
-    GList *node;
-    GList *radio_list = NULL;
-
-    end = list_HBCI_Bank_end (banklist);
-    for (iter = list_HBCI_Bank_begin (banklist);
-	 !list_HBCI_Bank_iter_equal(iter, end); 
-	 list_HBCI_Bank_iter_next(iter))
-      {
-	bank = list_HBCI_Bank_iter_get (iter);
-	radio_list = g_list_append(radio_list, 
-				   g_strdup_printf ("%s (%s)",
-						    HBCI_Bank_name (bank),
-						    HBCI_Bank_bankCode (bank)));
-      }
-    list_HBCI_Bank_iter_delete (iter);
-      
-    choice = gnc_choose_radio_option_dialog
-      (parent,
-       _("Choose HBCI bank"), 
-       _("More than one HBCI bank is available for \n"
-	 "the requested operation. Please choose \n"
-	 "the one that should be used."), 
-       0, 
-       radio_list);
-      
-    for (node = radio_list; node; node = node->next)
-      g_free (node->data);
-    g_list_free (radio_list);
-
-    i = 0;
-    for (iter = list_HBCI_Bank_begin (banklist);
-	 !list_HBCI_Bank_iter_equal(iter, end); 
-	 list_HBCI_Bank_iter_next(iter))
-      if (i == choice)
-	{
-	  bank = list_HBCI_Bank_iter_get (iter);
-	  list_HBCI_Bank_iter_delete (iter);
-	  list_HBCI_Bank_iter_delete (end);
-	  return bank;
-	}
-      else
-	++i;
-  }
-  
-  g_assert_not_reached();
-  return NULL;
-}
-
-const HBCI_Customer *
-choose_one_customer (gncUIWidget parent, const list_HBCI_Customer *custlist)
-{
-  const HBCI_Customer *customer;
-  list_HBCI_Customer_iter *iter, *end;
-  g_assert(parent);
-  g_assert(custlist);
-  
-  if (list_HBCI_Customer_size (custlist) == 0) {
-    printf ("choose_one_customer: oops, no customer found.\n");
-    return NULL;
-  }
-  if (list_HBCI_Customer_size (custlist) == 1) 
-    {
-      /* Get one customer */
-      iter = list_HBCI_Customer_begin (custlist);
-      customer = list_HBCI_Customer_iter_get (iter);
-      list_HBCI_Customer_iter_delete (iter);
-      
-      return customer;
-    }
-
-  /* More than one customer available. */
-  {
-    int choice, i;
-    GList *node;
-    GList *radio_list = NULL;
-
-    end = list_HBCI_Customer_end (custlist);
-    for (iter = list_HBCI_Customer_begin (custlist);
-	 !list_HBCI_Customer_iter_equal(iter, end); 
-	 list_HBCI_Customer_iter_next(iter))
-      {
-	customer = list_HBCI_Customer_iter_get (iter);
-	radio_list = 
-	  g_list_append(radio_list, 
-			/* Translators: %s is the name of the
-			 * customer. %s is the id of the customer. %s
-			 * is the name of the bank. %s is the bank
-			 * code. */
-			g_strdup_printf (_("%s (%s) at bank %s (%s)"),
-					 HBCI_Customer_name (customer),
-					 HBCI_Customer_custId (customer),
-					 bank_to_str (HBCI_User_bank(HBCI_Customer_user(customer))),
-					 HBCI_Bank_bankCode (HBCI_User_bank(HBCI_Customer_user(customer)))));
-      }
-    list_HBCI_Customer_iter_delete (iter);
-      
-    choice = gnc_choose_radio_option_dialog
-      (parent,
-       _("Choose HBCI customer"), 
-       _("More than one HBCI customer is available for \n"
-	 "the requested operation. Please choose \n"
-	 "the one that should be used."), 
-       0, 
-       radio_list);
-      
-    for (node = radio_list; node; node = node->next)
-      g_free (node->data);
-    g_list_free (radio_list);
-
-    i = 0;
-    for (iter = list_HBCI_Customer_begin (custlist);
-	 !list_HBCI_Customer_iter_equal(iter, end); 
-	 list_HBCI_Customer_iter_next(iter))
-      if (i == choice)
-	{
-	  customer = list_HBCI_Customer_iter_get (iter);
-	  list_HBCI_Customer_iter_delete (iter);
-	  list_HBCI_Customer_iter_delete (end);
-	  return customer;
-	}
-      else
-	++i;
-  }
-  
-  g_assert_not_reached();
-  return NULL;
-}
-
-const HBCI_User *
-choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist)
-{
-  const HBCI_User *user;
-  list_HBCI_User_iter *iter, *end;
-  g_assert(parent);
-  g_assert(userlist);
-
-  if (list_HBCI_User_size (userlist) == 0) {
-    printf("choose_one_user: oops, no user found.\n");
-    return NULL;
-  }
-  if (list_HBCI_User_size (userlist) == 1)
-    {
-      /* Get one User */
-      iter = list_HBCI_User_begin (userlist);
-      user = list_HBCI_User_iter_get (iter);
-      list_HBCI_User_iter_delete (iter);
-
-      return user;
-    }
-
-  /* More than one user available. */
-  {
-    int choice, i;
-    GList *node;
-    GList *radio_list = NULL;
-
-    end = list_HBCI_User_end (userlist);
-    for (iter = list_HBCI_User_begin (userlist);
-	 !list_HBCI_User_iter_equal(iter, end); 
-	 list_HBCI_User_iter_next(iter))
-      {
-	user = list_HBCI_User_iter_get (iter);
-	radio_list = g_list_append
-	    (radio_list, 
-	     g_strdup_printf (_("%s (%s) at bank %s (%s)"),
-			      HBCI_User_name (user),
-			      HBCI_User_userId (user),
-			      bank_to_str (HBCI_User_bank(user)),
-			      HBCI_Bank_bankCode (HBCI_User_bank(user))));
-      }
-    list_HBCI_User_iter_delete (iter);
-      
-    choice = gnc_choose_radio_option_dialog
-      (parent,
-       _("Choose HBCI user"), 
-       _("More than one HBCI user is available for \n"
-	 "the requested operation. Please choose \n"
-	 "the one that should be used."), 
-       0, 
-       radio_list);
-      
-    for (node = radio_list; node; node = node->next)
-      g_free (node->data);
-    g_list_free (radio_list);
-
-    i = 0;
-    for (iter = list_HBCI_User_begin (userlist);
-	 !list_HBCI_User_iter_equal(iter, end); 
-	 list_HBCI_User_iter_next(iter))
-      if (i == choice)
-	{
-	  user = list_HBCI_User_iter_get (iter);
-	  list_HBCI_User_iter_delete (iter);
-	  list_HBCI_User_iter_delete (end);
-	  return user;
-	}
-      else
-	++i;
-  }
-  
-  g_assert_not_reached();
-  return NULL;
-}
-#endif
-
 char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
 {
   char tmp[100];
@@ -898,19 +606,26 @@ char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
   return g_strdup(tmp);
 }
 
+/* Note: In the gnome2-branch we don't need the iconv(3) conversion
+   and gnc_call_iconv() anymore since the gnc_book has an UTF-8
+   encoding and the AqBanking library also expects all strings in
+   UTF-8. Nevertheless we keep all these functions for now, just in
+   case they might be needed later.
+*/
+
 /* Returns a newly allocated gchar, converted according to the given
    handler */
-gchar *gnc_call_iconv(iconv_t handler, const char* input)
+gchar *gnc_call_iconv(GIConv handler, const gchar* input)
 {
-  char *inbuffer = (char*)input;
-  char *outbuffer, *outbufferstart;
-  size_t inbytes, outbytes;
+  gchar *inbuffer = (gchar*)input;
+  gchar *outbuffer, *outbufferstart;
+  gsize inbytes, outbytes;
 
   inbytes = strlen(inbuffer);
   outbytes = inbytes + 2;
   outbufferstart = g_strndup(inbuffer, outbytes);
   outbuffer = outbufferstart;
-  iconv(handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
+  g_iconv(handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
   if (outbytes > 0) 
     *outbuffer = '\0';
   return outbufferstart;

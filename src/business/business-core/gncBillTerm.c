@@ -84,9 +84,8 @@ FROM_STRING_DEC(GncBillTermType, ENUM_TERMS_TYPE)
 static inline void
 mark_term (GncBillTerm *term)
 {
-  term->inst.dirty = TRUE;
-  qof_collection_mark_dirty (term->inst.entity.collection);
-  gnc_engine_gen_event (&term->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&term->inst);
+  qof_event_gen (&term->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 static inline void maybe_resort_list (GncBillTerm *term)
@@ -141,15 +140,17 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
   term->desc = CACHE_INSERT ("");
   term->discount = gnc_numeric_zero ();
   addObj (term);
-  gnc_engine_gen_event (&term->inst.entity,  GNC_EVENT_CREATE);
+  qof_event_gen (&term->inst.entity,  QOF_EVENT_CREATE, NULL);
   return term;
 }
 
 void gncBillTermDestroy (GncBillTerm *term)
 {
   if (!term) return;
+  DEBUG("destroying bill term %s (%p)",
+	    guid_to_string(qof_instance_get_guid(&term->inst)), term);
   term->inst.do_free = TRUE;
-  qof_collection_mark_dirty (term->inst.entity.collection);
+  qof_instance_set_dirty (&term->inst);
   gncBillTermCommitEdit (term);
 }
 
@@ -160,7 +161,7 @@ static void gncBillTermFree (GncBillTerm *term)
 
   if (!term) return;
 
-  gnc_engine_gen_event (&term->inst.entity,  GNC_EVENT_DESTROY);
+  qof_event_gen (&term->inst.entity,  QOF_EVENT_DESTROY, NULL);
   CACHE_REMOVE (term->name);
   CACHE_REMOVE (term->desc);
   remObj (term);
@@ -227,7 +228,7 @@ gncCloneBillTerm (GncBillTerm *from, QofBook *book)
   }
 
   addObj (term);
-  gnc_engine_gen_event (&term->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&term->inst.entity, QOF_EVENT_CREATE, NULL);
   return term;
 }
 
@@ -415,8 +416,8 @@ static inline void on_done (QofInstance *inst) {}
 
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
-  QOF_COMMIT_EDIT_PART1 (&term->inst);
-  QOF_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(term))) return;
+  qof_commit_edit_part2 (&term->inst, gncBillTermOnError,
                          on_done, bill_free);
 }
 

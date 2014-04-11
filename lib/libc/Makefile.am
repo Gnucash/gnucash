@@ -21,6 +21,6 @@ libc_missing_la_LIBADD = $(LTLIBOBJS)
 # should be removed.
 EXTRA_DIST = scm_strptime.c
 
-print_libobjs:
+print_libobjs: Makefile
 	@echo "LIBOBJS = $(LIBOBJS)"
 	@echo "LTLIBOBJS = $(LTLIBOBJS)"

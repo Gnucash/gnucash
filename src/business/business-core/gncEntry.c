@@ -168,9 +168,8 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 G_INLINE_FUNC void mark_entry (GncEntry *entry);
 void mark_entry (GncEntry *entry)
 {
-  entry->inst.dirty = TRUE;
-  qof_collection_mark_dirty (entry->inst.entity.collection);
-  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&entry->inst);
+  qof_event_gen (&entry->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================ */
@@ -204,7 +203,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   entry->values_dirty = TRUE;
 
-  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&entry->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return entry;
 }
@@ -220,7 +219,7 @@ static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
-  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&entry->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -266,12 +265,25 @@ gncEntryObtainTwin (GncEntry *from, QofBook *book)
 
 void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
+  gboolean first_date = FALSE;
+  Timespec zero_time = { 0, 0 };
+
   if (!entry) return;
   if (timespec_equal (&entry->date, &date)) return;
+  if (timespec_equal (&entry->date, &zero_time))
+    first_date = TRUE;
   gncEntryBeginEdit (entry);
   entry->date = date;
   mark_entry (entry);
   gncEntryCommitEdit (entry);
+
+  /* Don't re-sort the first time we set the date on this entry */
+  if (!first_date) {
+    if (entry->invoice)
+      gncInvoiceSortEntries(entry->invoice);
+    if (entry->bill)
+      gncInvoiceSortEntries(entry->bill);
+  }
 }
 
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date)
@@ -547,8 +559,8 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 
   /* Generate an event modifying the Order's end-owner */
 #if 0  
-  gnc_engine_gen_event (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
-			     GNC_EVENT_MODIFY);
+  qof_event_gen (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
+		 QOF_EVENT_MODIFY, NULL);
 #endif
 }
 
@@ -1002,7 +1014,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 }
 
 static int
-get_commodity_denom (GncEntry *entry)
+get_entry_commodity_denom (GncEntry *entry)
 {
   gnc_commodity *c;
   if (!entry)
@@ -1070,7 +1082,7 @@ gncEntryRecomputeValues (GncEntry *entry)
 			gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
 			&(entry->b_value), NULL, &(entry->b_tax_values));
 
-  denom = get_commodity_denom (entry);
+  denom = get_entry_commodity_denom (entry);
   entry->i_value_rounded = gnc_numeric_convert (entry->i_value, denom,
 						GNC_RND_ROUND);
   entry->i_disc_value_rounded = gnc_numeric_convert (entry->i_disc_value, denom,
@@ -1160,8 +1172,8 @@ static inline void entry_free (QofInstance *inst)
 
 void gncEntryCommitEdit (GncEntry *entry)
 {
-  QOF_COMMIT_EDIT_PART1 (&entry->inst);
-  QOF_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(entry))) return;
+  qof_commit_edit_part2 (&entry->inst, gncEntryOnError,
 			 gncEntryOnDone, entry_free);
 }
 

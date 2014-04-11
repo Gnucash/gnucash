@@ -59,11 +59,15 @@ typedef struct
 
 GType gnc_item_list_get_type (void);
 
-GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent);
+GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent, GtkListStore *shared_store);
 
 void gnc_item_list_clear (GncItemList *item_list);
 
 void gnc_item_list_append (GncItemList *item_list, char *string);
+
+void gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled);
+
+gboolean gnc_item_in_list (GncItemList *item_list, const char *string);
 
 void gnc_item_list_select (GncItemList *item_list, const char *string);
 

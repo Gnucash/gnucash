@@ -36,6 +36,7 @@
 #include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
@@ -168,25 +169,6 @@ find_by_leader (gpointer find_data, gpointer user_data)
 }
 
 static gboolean
-find_by_account (gpointer find_data, gpointer user_data)
-{
-  Account *account = find_data;
-  GNCLedgerDisplay *ld = user_data;
-
-  if (!account || !ld)
-    return FALSE;
-
-  if (account == gnc_ledger_display_leader (ld))
-    return TRUE;
-
-  if (ld->ld_type == LD_SINGLE)
-    return FALSE;
-
-  /* Hack. */
-  return TRUE;
-}
-
-static gboolean
 find_by_query (gpointer find_data, gpointer user_data)
 {
   Query *q = find_data;
@@ -246,16 +228,7 @@ gnc_get_default_register_style (GNCAccountType type)
 static gpointer
 look_for_portfolio_cb (Account *account, gpointer data)
 {
-  GNCAccountType le_type;
-
-  le_type = xaccAccountGetType (account);
-  if ((STOCK    == le_type) ||
-      (MUTUAL   == le_type) ||
-      (CURRENCY == le_type))
-  {
-     return (gpointer) PORTFOLIO_LEDGER;
-  }
-  return NULL;
+    return xaccAccountIsPriced(account) ? (gpointer) PORTFOLIO_LEDGER : NULL;
 }
 
 static SplitRegisterType
@@ -536,7 +509,8 @@ gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
 
   gnc_gui_component_watch_entity_type (ld->component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY
+				       | GNC_EVENT_ITEM_CHANGED);
 
   for (node = splits; node; node = node->next)
   {
@@ -545,7 +519,7 @@ gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
 
     gnc_gui_component_watch_entity (ld->component_id,
                                     xaccTransGetGUID (trans),
-                                    GNC_EVENT_MODIFY);
+                                    QOF_EVENT_MODIFY);
   }
 }
 
@@ -575,7 +549,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   if (changes && has_leader)
   {
     info = gnc_gui_get_entity_events (changes, &ld->leader);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY))
+    if (info && (info->event_mask & QOF_EVENT_DESTROY))
     {
       gnc_close_gui_component (ld->component_id);
       return;
@@ -828,9 +802,6 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld, GList *splits)
   if (!ld || ld->loading)
     return;
 
-    gnc_split_register_load_xfer_cells (ld->reg,
-                                        gnc_ledger_display_leader (ld));
-
   if (!gnc_split_register_full_refresh_ok (ld->reg))
     return;
 
@@ -889,41 +860,6 @@ gnc_ledger_display_refresh_by_split_register (SplitRegister *reg)
   {
     gnc_ledger_display_refresh (ld);
   }
-}
-
-/********************************************************************\
- * xaccDestroyLedgerDisplay()
-\********************************************************************/
-
-static void
-gnc_destroy_ledger_display_class (Account *account,
-                                  const char *component_class)
-{
-  GList *list;
-  GList *node;
-
-  list = gnc_find_gui_components (component_class, find_by_account, account);
-
-  for (node = list; node; node = node->next)
-  {
-    GNCLedgerDisplay *ld = node->data;
-
-    gnc_close_gui_component (ld->component_id);
-  }
-
-  g_list_free (list);
-}
-
-void
-gnc_ledger_display_destroy_by_account (Account *account)
-{
-  if (!account)
-    return;
-
-  gnc_destroy_ledger_display_class (account, REGISTER_SINGLE_CM_CLASS);
-  gnc_destroy_ledger_display_class (account, REGISTER_SUBACCOUNT_CM_CLASS);
-  gnc_destroy_ledger_display_class (account, REGISTER_GL_CM_CLASS);
-  /* no TEMPLATE_CM_CLASS, because it doesn't correspond to any account */
 }
 
 void

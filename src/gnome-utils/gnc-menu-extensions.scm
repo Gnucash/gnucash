@@ -53,13 +53,3 @@
 
 (define (gnc:make-separator path)
   (gnc:make-extension 'separator "" "" path #f))
-
-(define (gnc:extensions-menu-setup)
-  (define menu (gnc:make-menu (N_ "Extensions") (list "_Tools")))
-  (gnc:add-extension menu)
-  (gnc:hook-run-danglers gnc:*add-extension-hook*)
-  #f)
-
-(if (gnc:debugging?)
-    (gnc:hook-add-dangler gnc:*ui-startup-hook*
-                          gnc:extensions-menu-setup))

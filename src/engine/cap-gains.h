@@ -147,9 +147,15 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
  *  that records the cap gains for this split.  It returns NULL
  *  if not found.  This routine does nothing more than search for
  *  the split recorded in the KVP key "/gains-split"
- */
-                                                                                
-Split * xaccSplitGetCapGainsSplit (Split *);
+ */                                       
+Split * xaccSplitGetCapGainsSplit (const Split *);
+
+/** The xaccSplitGetGainsSourceSplit() routine returns the split
+ *  that is the source of the cap gains in this split.  It returns
+ *  NULL if not found.  This routine does nothing more than search 
+ *  for the split recorded in the KVP key "/gains-source"
+ */                                       
+Split * xaccSplitGetGainsSourceSplit (const Split *);
 
 /** The`xaccSplitAssign() routine will take the indicated
  *  split and, if it doesn't already belong to a lot, it will attempt 
@@ -195,15 +201,6 @@ gboolean xaccSplitAssign (Split *split);
  *    are used.
  */
 Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
-
-/** The xaccTransScrubGains() routine performs a number of cleanup
- *  functions on the indicated transaction, with the end-goal of
- *  setting up a consistent set of gains/losses for all the splits
- *  in the transaction.  This includes making sure that the lot
- *  assignments of all the splits are good, and that the lots 
- *  balance appropriately.
- */
-void xaccTransScrubGains (Transaction *trans, Account *gain_acc);
 
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into

@@ -254,8 +254,10 @@ gsf_output_stdio_close (GsfOutput *output)
 			   stdio->st.st_uid,
 			   stdio->st.st_gid)) {
 			/* We cannot set both.  Maybe we can set one.  */
-			chown (stdio->real_filename, -1, stdio->st.st_gid);
-			chown (stdio->real_filename, stdio->st.st_uid, -1);
+			if (!chown (stdio->real_filename, -1, stdio->st.st_gid)) {
+				gint dc; /* Don't care */
+				dc = chown (stdio->real_filename, stdio->st.st_uid, -1);
+			}
 		}
 		chmod_wrapper (stdio->real_filename, stdio->st.st_mode);
 #endif

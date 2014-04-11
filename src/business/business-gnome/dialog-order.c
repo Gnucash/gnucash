@@ -138,7 +138,7 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
   gncOrderSetReference (order, gtk_editable_get_chars
 			(GTK_EDITABLE (ow->ref_entry), 0, -1));
 
-  tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ow->opened_date));
+  tt = gnome_date_edit_get_time (GNOME_DATE_EDIT (ow->opened_date));
   timespecFromTime_t (&ts, tt);
   gncOrderSetDateOpened (order, ts);
 
@@ -284,8 +284,8 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
      * close this order!
      */
 
-    message = _("This order contains entries that have not been invoiced.\n"
-		"Are you sure you want to close it out before\n"
+    message = _("This order contains entries that have not been invoiced. "
+		"Are you sure you want to close it out before "
 		"you invoice all the entries?");
 
     if (gnc_verify_dialog (ow->dialog, FALSE, message) == FALSE)
@@ -396,7 +396,7 @@ gnc_order_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &ow->order_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (ow->component_id);
       return;
     }
@@ -480,7 +480,7 @@ gnc_order_update_window (OrderWindow *ow)
 
   gnc_gui_component_watch_entity_type (ow->component_id,
 				       GNC_ORDER_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (ow->ledger), TRUE);
 
@@ -881,9 +881,11 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, columns, q, q2,
+  return gnc_search_dialog_create (type, _("Find Order"),
+				   params, columns, q, q2,
 				   buttons, NULL, new_order_cb,
-				   sw, free_order_cb, GCONF_SECTION_SEARCH);
+				   sw, free_order_cb, GCONF_SECTION_SEARCH,
+				   NULL);
 }
 
 GNCSearchWindow *

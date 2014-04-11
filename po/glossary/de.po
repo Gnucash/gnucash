@@ -5,16 +5,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2005-11-26 20:49+0100\n"
-"PO-Revision-Date: 2005-11-26 20:50+0100\n"
+"POT-Creation-Date: 2006-04-29 15:14+0200\n"
+"PO-Revision-Date: 2006-02-07 21:51+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. "English Definition"
-msgid "Term"
+#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
+msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr "Begriff"
 
 #. "A detailed record of money spent and received"
@@ -189,7 +189,7 @@ msgstr "Ausgleichen "
 msgid "bank"
 msgstr "Bank"
 
-#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
 msgstr "Rechnung (Rechnungseingang, Empfangene Rechnung)"
 
@@ -328,6 +328,10 @@ msgstr "Angestellter<"
 msgid "equity"
 msgstr "Eigenkapital"
 
+#. "Report that ... FIXME: Add description."
+msgid "equity statement"
+msgstr "Eigenkapitalbilanz"
+
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
 msgstr "Treuhandkonto"
@@ -368,15 +372,19 @@ msgstr "Ausgleichskonto"
 msgid "import"
 msgstr "Import"
 
+#. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
+msgid "income statement"
+msgstr "Einnahmeüberschussrechnung"
+
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
 msgstr "Zinsen"
 
-#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
 msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
 
-#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "Auftrag"
 
@@ -464,7 +472,7 @@ msgstr "Anfangsbestand"
 msgid "options"
 msgstr "Optionen"
 
-#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
 msgstr "Bestellung"
 
@@ -524,7 +532,7 @@ msgstr "Börsenkurs, (Kurs, Börsennotierung, Marktwert)"
 msgid "profit"
 msgstr "Ergebnis, Gewinn"
 
-#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+#. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
 msgstr "Gewinn- und Verlustrechnung (GuV)"
 
@@ -677,6 +685,10 @@ msgstr "Gegenkonto"
 msgid "transfer, to (register toolbar)"
 msgstr "Buchen"
 
+#. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
+msgid "trial balance (report)"
+msgstr "Rohbilanz (Probebilanz, Saldenbilanz)"
+
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
 msgstr "Art"
@@ -696,6 +708,10 @@ msgstr "Wert "
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
 msgstr "Zulieferer"
+
+#. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+msgid "voucher"
+msgstr "Auslagenerstattung"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

@@ -59,6 +59,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glade/glade.h>
 
 #include "dialog-utils.h"
@@ -111,6 +112,38 @@ typedef struct addition_t {
  *  dialog.  The data fields for this list are ::addition data
  *  structures. */
 GSList *add_ins = NULL;
+
+
+/** This function is called whenever the account separator is changed
+ *  in gconf.  It updates the label in the "Account" page of the
+ *  preferences dialog.
+ *
+ *  @internal
+ *
+ *  @param unused A pointer to the changed gconf entry.
+ *  
+ *  @param dialog A pointer to the preferences dialog.
+ */
+static void
+gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
+{
+  GtkWidget *label;
+  gchar *sample;
+
+  label = gnc_glade_lookup_widget(dialog, "sample_account");
+  /* Translators: Both %s will be the account separator character; the
+     resulting string is a demonstration how the account separator
+     character will look like. You can replace these three account
+     names with other account names that are more suitable for your
+     language - just keep in mind to have exactly two %s in your
+     translation. */
+  sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
+			   gnc_get_account_separator_string(),
+			   gnc_get_account_separator_string());
+  DEBUG(" Label set to '%s'", sample);
+  gtk_label_set_text(GTK_LABEL(label), sample);
+  g_free(sample);
+}
 
 
 /** This function compares two add-ins to see if they specify the same
@@ -570,7 +603,7 @@ gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
 
   /* Copy the widget name and split into gconf key and button value parts */
   key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
-  button_name = rindex(key, '/');
+  button_name = strrchr(key, '/');
   *button_name++ = '\0';
 
   DEBUG("Radio button group %s now set to %s", key, button_name);
@@ -622,7 +655,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 
   /* Copy the widget name and split into gconf key and button name parts */
   key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
-  button_name = rindex(key, '/');
+  button_name = strrchr(key, '/');
   *button_name++ = '\0';
 
   /* Get the current value. */
@@ -922,7 +955,7 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
   mnemonic = gconf_value_get_string(entry->value);
   DEBUG("gce %p, mnemonic %s", gce, mnemonic);
   currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					GNC_COMMODITY_NS_ISO, mnemonic);
+					GNC_COMMODITY_NS_CURRENCY, mnemonic);
 
   /* If there isn't any such commodity, get the default */
   if (!currency) {
@@ -961,7 +994,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
   name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
   mnemonic = gnc_gconf_get_string(name, NULL, NULL);
   currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					GNC_COMMODITY_NS_ISO, mnemonic);
+					GNC_COMMODITY_NS_CURRENCY, mnemonic);
   if (mnemonic)
     g_free(mnemonic);
 
@@ -977,6 +1010,77 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
 		   G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
 
   gtk_widget_show_all(GTK_WIDGET(gce));
+}
+
+
+/**********/
+
+
+/** The user changed a gtk entry.  Update gconf.
+ *
+ *  @internal
+ *
+ *  @param entry A pointer to the entry that was changed.
+ *  
+ *  @param user_data Unused.
+ */
+static void
+gnc_prefs_entry_user_cb (GtkEntry *entry,
+			 gpointer user_data)
+{
+  const gchar *name, *text;
+
+  g_return_if_fail(GTK_IS_ENTRY(entry));
+  name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
+  text = gtk_entry_get_text(entry);
+  DEBUG("Entry %s set to '%s'", name, text);
+  gnc_gconf_set_string(name, NULL, text, NULL);
+}
+
+
+/** A gtk entry was updated in gconf.  Update the user visible dialog.
+ *
+ *  @internal
+ *
+ *  @param entry A pointer to the gtk entry that changed.
+ *
+ *  @param value The new value of the combo box.
+ */
+static void
+gnc_prefs_entry_gconf_cb (GtkEntry *entry,
+			  const gchar *value)
+{
+  g_return_if_fail(GTK_IS_ENTRY(entry));
+  ENTER("entry %p, value '%s'", entry, value);
+  g_signal_handlers_block_by_func(G_OBJECT(entry),
+				 G_CALLBACK(gnc_prefs_entry_user_cb),
+				 NULL);
+  gtk_entry_set_text(entry, value);
+  g_signal_handlers_unblock_by_func(G_OBJECT(entry),
+			   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
+  LEAVE(" ");
+}
+
+
+/** Connect a entry widget to the user callback function.  Set the
+ *  starting state of the entry from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param entry A pointer to the entry that should be connected.
+ */
+static void
+gnc_prefs_connect_entry (GtkEntry *entry)
+{
+  const gchar *name, *text;
+
+  g_return_if_fail(GTK_IS_ENTRY(entry));
+  name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
+  text = gnc_gconf_get_string(name, NULL, NULL);
+  gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
+  DEBUG(" Entry %s set to '%s'", name, text);
+  g_signal_connect(G_OBJECT(entry), "changed",
+		   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
 }
 
 
@@ -1235,6 +1339,9 @@ gnc_prefs_connect_one (const gchar *name,
   } else if (GTK_IS_COMBO_BOX(widget)) {
     DEBUG("  %s - combo box", name);
     gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
+  } else if (GTK_IS_ENTRY(widget)) {
+    DEBUG("  %s - entry", name);
+    gnc_prefs_connect_entry(GTK_ENTRY(widget));
   } else {
     DEBUG("  %s - unsupported %s", name,
 	  G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
@@ -1266,8 +1373,8 @@ gnc_preferences_dialog_create(void)
 
   ENTER("");
   DEBUG("Opening preferences.glade:");
-  xml = gnc_glade_xml_new(GLADE_FILENAME, "Gnucash Preferences");
-  dialog = glade_xml_get_widget(xml, "Gnucash Preferences");
+  xml = gnc_glade_xml_new(GLADE_FILENAME, "GnuCash Preferences");
+  dialog = glade_xml_get_widget(xml, "GnuCash Preferences");
   DEBUG("autoconnect");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
@@ -1305,6 +1412,8 @@ gnc_preferences_dialog_create(void)
   gtk_label_set_label(GTK_LABEL(label), currency_name);
   label = glade_xml_get_widget(xml, "locale_currency2");
   gtk_label_set_label(GTK_LABEL(label), currency_name);
+
+  gnc_account_separator_prefs_cb(NULL, dialog);
 
   LEAVE("dialog %p", dialog);
   return dialog;
@@ -1442,6 +1551,10 @@ gnc_preferences_gconf_changed (GConfClient *client,
       DEBUG("widget %p - combo_box", widget);
       gnc_prefs_combo_box_gconf_cb(GTK_COMBO_BOX(widget),
 				   gconf_value_get_int(entry->value));
+    } else if (GTK_IS_ENTRY(widget)) {
+      DEBUG("widget %p - entry", widget);
+      gnc_prefs_entry_gconf_cb(GTK_ENTRY(widget),
+			       gconf_value_get_string(entry->value));
     } else {
       DEBUG("widget %p - unsupported %s", widget,
 	    G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
@@ -1523,8 +1636,12 @@ gnc_preferences_dialog (void)
 
   gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
 			     gnc_preferences_gconf_changed);
+  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
+				(GncGconfGeneralCb)gnc_account_separator_prefs_cb,
+				dialog);
   gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,
 			     NULL, close_handler, dialog);
+
   LEAVE(" ");
 }
 

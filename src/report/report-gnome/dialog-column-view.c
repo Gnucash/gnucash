@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include <g-wrap-wct.h>
@@ -33,6 +32,7 @@
 #include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
+#include "gnc-report.h"
 
 struct gncp_column_view_edit {
   GNCOptionWin * optwin;
@@ -65,7 +65,8 @@ static void gnc_column_view_edit_size_cb(GtkButton * button,
 
 static void
 gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
-                           SCM new_value) {
+                           SCM new_value)
+{
   GNCOption *  option = 
     gnc_option_db_get_option_by_name(odb, section, name);
   
@@ -79,7 +80,8 @@ gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
 }
 
 static void 
-gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
+gnc_column_view_edit_destroy(gnc_column_view_edit * view)
+{
   gnc_options_dialog_destroy(view->optwin);
   scm_gc_unprotect_object(view->options);
   scm_gc_unprotect_object(view->view);
@@ -88,11 +90,11 @@ gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
 }
 
 static void
-update_display_lists(gnc_column_view_edit * view) {
+update_display_lists(gnc_column_view_edit * view)
+{
   SCM   get_names = scm_c_eval_string("gnc:all-report-template-names");
   SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/name");
   SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
-  SCM   find_report = scm_c_eval_string("gnc:find-report");
   SCM   names = scm_call_0(get_names);
   SCM   contents = 
     gnc_option_db_lookup_option(view->odb, "__general", "report-list",
@@ -100,7 +102,7 @@ update_display_lists(gnc_column_view_edit * view) {
   SCM   this_report, this_name;
   SCM   selection;
   char  * name[3];
-  int   row, i;
+  int   row, i, id;
 
   /* Update the list of available reports (left selection box). */
   row = view->available_selected;
@@ -153,7 +155,8 @@ update_display_lists(gnc_column_view_edit * view) {
       if (SCM_EQUALP (SCM_CAR(contents), selection))
         row = i;
 
-      this_report = scm_call_1(find_report, SCM_CAAR(contents));
+      id = scm_num2int(SCM_CAAR(contents), SCM_ARG1, __FUNCTION__);
+      this_report = gnc_report_find(id);
       /* this_name = scm_call_1(report_name, this_report); */
       this_name = scm_call_1(report_menu_name, this_report);
       name[0] = g_strdup(SCM_STRING_CHARS(this_name));
@@ -173,20 +176,23 @@ update_display_lists(gnc_column_view_edit * view) {
 
 static void
 gnc_column_view_select_avail_cb(GtkCList * clist, gint row, gint col,
-                                GdkEvent * ev, gpointer data) {
+                                GdkEvent * ev, gpointer data)
+{
   gnc_column_view_edit * r = data;
   r->available_selected = row;  
 }
 
 static void
 gnc_column_view_select_contents_cb(GtkCList * clist, gint row, gint col,
-                                   GdkEvent * ev, gpointer data) {
+                                   GdkEvent * ev, gpointer data)
+{
   gnc_column_view_edit * r = data;
   r->contents_selected = row;  
 }
 
 static void
-gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data) {
+gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data)
+{
   SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
   gnc_column_view_edit * win = user_data;
   
@@ -196,7 +202,8 @@ gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data) {
 }
 
 static void
-gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data) {
+gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data)
+{
   gnc_column_view_edit * r = user_data;
   SCM set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
   
@@ -211,7 +218,8 @@ gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data) {
  ********************************************************************/
 
 GtkWidget * 
-gnc_column_view_edit_options(SCM options, SCM view) {
+gnc_column_view_edit_options(SCM options, SCM view)
+{
   SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
   SCM ptr;
   GtkWidget * editor;
@@ -308,24 +316,25 @@ gnc_column_view_edit_options(SCM options, SCM view) {
 }
 
 static void
-gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
+gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
+{
   gnc_column_view_edit * r = user_data;
   SCM make_report = scm_c_eval_string("gnc:make-report");
   SCM mark_report = scm_c_eval_string("gnc:report-set-needs-save?!");
-  SCM find_report = scm_c_eval_string("gnc:find-report");
   SCM template_name;
   SCM new_report;
   SCM newlist = SCM_EOL;
   SCM oldlist = r->contents_list;
   int count;
-  int oldlength; 
+  int oldlength, id;
   
   if(SCM_LISTP(r->available_list) && 
      (scm_ilength(r->available_list) > r->available_selected)) {
     template_name = scm_list_ref(r->available_list, 
                                 scm_int2num(r->available_selected));
     new_report = scm_call_1(make_report, template_name);
-    scm_call_2(mark_report, scm_call_1(find_report, new_report), SCM_BOOL_T);
+    id = scm_num2int(new_report, SCM_ARG1, __FUNCTION__);
+    scm_call_2(mark_report, gnc_report_find(id), SCM_BOOL_T);
     oldlength = scm_ilength(r->contents_list);
     
     if(oldlength > r->contents_selected) {
@@ -366,7 +375,8 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
 }
 
 static void
-gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
+gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
+{
   gnc_column_view_edit * r = user_data;
   SCM newlist = SCM_EOL;
   SCM oldlist = r->contents_list;
@@ -403,7 +413,8 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
 }
 
 static void
-gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
+gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
+{
   gnc_column_view_edit * r = user_data;
   SCM oldlist = r->contents_list;
   SCM newlist = SCM_EOL;
@@ -438,7 +449,8 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
 }
 
 static void
-gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
+gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
+{
   gnc_column_view_edit * r = user_data;
   SCM oldlist = r->contents_list;
   SCM newlist = SCM_EOL;
@@ -473,7 +485,8 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
 }
 
 static void
-gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
+gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
+{
   gnc_column_view_edit * r = user_data;
   GtkWidget * rowspin;
   GtkWidget * colspin;

@@ -20,8 +20,6 @@
 #ifndef GNC_EXP_PARSER_H
 #define GNC_EXP_PARSER_H
 
-#include "config.h"
-
 #include <glib.h>
 
 #include "qof.h"

@@ -24,26 +24,17 @@
 
 #include "config.h"
 
-#define _GNU_SOURCE
 #include <glib.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 
-#include "gnc-date.h"
-#include "gnc-trace.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-#include "kvp_frame.h"
-
+#include "qof.h"
 
  /* Note that we keep the keys for this hash table in a GCache
-  * (gnc_string_cache), as it is very likely we will see the 
+  * (qof_util_string_cache), as it is very likely we will see the 
   * same keys over and over again  */
-
-/* TODO: set the cache handling functions with hash_table_new_full */
 
 struct _KvpFrame 
 {
@@ -76,7 +67,7 @@ struct _KvpValue
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_KVP;
 
-/********************************************************************
+/* *******************************************************************
  * KvpFrame functions
  ********************************************************************/
 
@@ -115,7 +106,7 @@ kvp_frame_new(void)
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) 
 {
-  gnc_string_cache_remove(key);
+  qof_util_string_cache_remove(key);
   kvp_value_delete((KvpValue *)value);  
 }
 
@@ -150,7 +141,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data)
 {
   KvpFrame * dest = (KvpFrame *)user_data;
   g_hash_table_insert(dest->hash,
-                      gnc_string_cache_insert(key),
+                      qof_util_string_cache_insert(key),
                       (gpointer)kvp_value_copy(value));
 }
 
@@ -191,7 +182,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(key_exists) 
   {
     g_hash_table_remove(frame->hash, slot);
-    gnc_string_cache_remove(orig_key);
+    qof_util_string_cache_remove(orig_key);
   }
   else
   {
@@ -201,7 +192,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(new_value) 
   {
     g_hash_table_insert(frame->hash,
-                        gnc_string_cache_insert((gpointer) slot),
+                        qof_util_string_cache_insert((gpointer) slot),
                         new_value);
   }
 
@@ -245,7 +236,7 @@ get_or_make (KvpFrame *fr, const char * key)
     return next_frame;
 }
 
-/* Get pointer to last frame in path. If teh path doesn't exist,
+/* Get pointer to last frame in path. If the path doesn't exist,
  * it is created.  The string stored in keypath will be hopelessly 
  * mangled .
  */
@@ -312,16 +303,16 @@ kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path)
  */
 
 static inline KvpFrame *
-get_trailer_make (KvpFrame * frame, const char * key_path, const char **end_key)
+get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
 {
-  const char *last_key;
+  char *last_key;
 
   if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
   last_key = strrchr (key_path, '/');
   if (NULL == last_key)
   {
-    last_key = key_path;
+    last_key = (char *) key_path;
   }
   else if (last_key == key_path)
   {
@@ -354,16 +345,16 @@ get_trailer_make (KvpFrame * frame, const char * key_path, const char **end_key)
  */
 
 static inline const KvpFrame *
-get_trailer_or_null (const KvpFrame * frame, const char * key_path, const char **end_key)
+get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_key)
 {
-  const char *last_key;
+  char *last_key;
 
   if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
   last_key = strrchr (key_path, '/');
   if (NULL == last_key)
   {
-    last_key = key_path;
+    last_key = (char *) key_path;
   }
   else if (last_key == key_path)
   {
@@ -469,7 +460,7 @@ KvpFrame *
 kvp_frame_set_value_nc (KvpFrame * frame, const char * key_path, 
                         KvpValue * value) 
 {
-  const char *last_key;
+  char *last_key;
 
   frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
@@ -482,7 +473,7 @@ kvp_frame_set_value (KvpFrame * frame, const char * key_path,
                      const KvpValue * value) 
 {
   KvpValue *new_value = NULL;
-  const char *last_key;
+  char *last_key;
 
   frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
@@ -497,7 +488,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
                             KvpValue * new_value) 
 {
   KvpValue * old_value;
-  const char *last_key;
+  char *last_key;
 
   last_key = NULL;
   if (new_value)
@@ -519,7 +510,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
 KvpFrame *
 kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value) 
 {
-  const char *key = NULL;
+  char *key = NULL;
   KvpValue *oldvalue;
 
   frame = (KvpFrame *) get_trailer_or_null (frame, path, &key);
@@ -855,7 +846,7 @@ kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
 gint64
 kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_gint64(kvp_frame_get_slot (frame, key));
 }
@@ -863,7 +854,7 @@ kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
 double      
 kvp_frame_get_double(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_double(kvp_frame_get_slot (frame, key));
 }
@@ -871,15 +862,15 @@ kvp_frame_get_double(const KvpFrame *frame, const char *path)
 gnc_numeric 
 kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_numeric(kvp_frame_get_slot (frame, key));
 }
 
-char * 
+const char * 
 kvp_frame_get_string(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_string(kvp_frame_get_slot (frame, key));
 }
@@ -887,7 +878,7 @@ kvp_frame_get_string(const KvpFrame *frame, const char *path)
 GUID *
 kvp_frame_get_guid(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_guid(kvp_frame_get_slot (frame, key));
 }
@@ -896,7 +887,7 @@ void *
 kvp_frame_get_binary(const KvpFrame *frame, const char *path,
                                    guint64 * size_return)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_binary(kvp_frame_get_slot (frame, key), size_return);
 }
@@ -904,7 +895,7 @@ kvp_frame_get_binary(const KvpFrame *frame, const char *path,
 Timespec
 kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_timespec(kvp_frame_get_slot (frame, key));
 }
@@ -912,7 +903,7 @@ kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
 KvpFrame *
 kvp_frame_get_frame(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_frame(kvp_frame_get_slot (frame, key));
 }
@@ -920,7 +911,7 @@ kvp_frame_get_frame(const KvpFrame *frame, const char *path)
 KvpValue *
 kvp_frame_get_value(const KvpFrame *frame, const char *path)
 {
-  const char *key = NULL;
+  char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_frame_get_slot (frame, key);
 }
@@ -1039,7 +1030,7 @@ kvp_frame_get_slot_path_gslist (KvpFrame *frame,
   }
 }
 
-/********************************************************************
+/* *******************************************************************
  * kvp glist functions
  ********************************************************************/
 
@@ -1109,7 +1100,7 @@ kvp_glist_compare(const GList * list1, const GList * list2)
   return 0;
 }
 
-/********************************************************************
+/* *******************************************************************
  * KvpValue functions
  ********************************************************************/
 
@@ -1637,6 +1628,13 @@ kvp_value_glist_to_string(const GList *list)
     return tmp2;
 }
 
+static void
+kvp_frame_to_bare_string_helper(gpointer key, gpointer value, gpointer data)
+{
+	gchar **str = (gchar**)data;
+	*str = g_strdup_printf("%s", kvp_value_to_bare_string((KvpValue *)value));
+}
+
 gchar*
 kvp_value_to_bare_string(const KvpValue *val)
 {
@@ -1645,7 +1643,7 @@ kvp_value_to_bare_string(const KvpValue *val)
     const gchar *ctmp;
     
     g_return_val_if_fail(val, NULL);
-    
+    tmp1 = g_strdup("");
     switch(kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
@@ -1675,13 +1673,13 @@ kvp_value_to_bare_string(const KvpValue *val)
         break;
 
     case KVP_TYPE_TIMESPEC:
-        tmp1 = g_new0 (char, 40);
-        gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (val), tmp1);
-        tmp2 = g_strdup_printf("%s", tmp1);
-        g_free(tmp1);
-        return tmp2;
+	{
+		time_t t;
+		t = timespecToTime_t(kvp_value_get_timespec(val));
+        qof_date_format_set(QOF_DATE_FORMAT_UTC);
+        return qof_print_date(t);
         break;
-
+	}
     case KVP_TYPE_BINARY:
     {
         guint64 len;
@@ -1693,19 +1691,26 @@ kvp_value_to_bare_string(const KvpValue *val)
         break;
  
     case KVP_TYPE_GLIST:
+		/* borked. kvp_value_glist_to_string is a debug fcn */
+	{
         tmp1 = kvp_value_glist_to_string(kvp_value_get_glist(val));
         tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
         g_free(tmp1);
         return tmp2;
         break;
-
+	}
     case KVP_TYPE_FRAME:
-        tmp1 = kvp_frame_to_string(kvp_value_get_frame(val));
-        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
-        g_free(tmp1);
-        return tmp2;
-        break;
+	{
+		KvpFrame *frame;
 
+		frame = kvp_value_get_frame(val);
+		if (frame->hash) {
+			tmp1 = g_strdup("");
+			g_hash_table_foreach(frame->hash, kvp_frame_to_bare_string_helper, &tmp1);
+		}
+        return tmp1;
+        break;
+	}
     default:
         return g_strdup_printf(" ");
         break;
@@ -1746,7 +1751,7 @@ kvp_value_to_string(const KvpValue *val)
         break;
 
     case KVP_TYPE_GUID:
-        /* THREAD-UNSAFE */
+		/* THREAD-UNSAFE */
         ctmp = guid_to_string(kvp_value_get_guid(val));
         tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", ctmp ? ctmp : "");
         return tmp2;

@@ -54,9 +54,6 @@ static void gas_accounts_to_names (gpointer data, gpointer user_data);
 
 static void gas_populate_list (GNCAccountSel *gas);
 static void gas_strcmp_adapter (gpointer a, gpointer b);
-static void gnc_account_sel_event_cb (GUID *entity, QofIdType id_type,
-                                      GNCEngineEventType event_type,
-                                      gpointer user_data);
 
 static void gas_new_account_click (GtkButton *b, gpointer ud);
 
@@ -97,14 +94,15 @@ gnc_account_sel_get_type (void)
 
 static
 void
-gnc_account_sel_event_cb( GUID *entity, QofIdType type,
-                          GNCEngineEventType event_type,
-                          gpointer user_data )
+gnc_account_sel_event_cb( QofEntity *entity,
+                          QofEventId event_type,
+                          gpointer user_data,
+			  gpointer event_data )
 {
-        if ( ! ( event_type == GNC_EVENT_CREATE
-                 || event_type == GNC_EVENT_MODIFY
-                 || event_type == GNC_EVENT_DESTROY )
-             || strcmp( type, GNC_ID_ACCOUNT ) != 0 ) {
+        if ( ! ( event_type == QOF_EVENT_CREATE
+                 || event_type == QOF_EVENT_MODIFY
+                 || event_type == QOF_EVENT_DESTROY )
+             || !GNC_IS_ACCOUNT(entity) ) {
                 return;
         }
         gas_populate_list( (GNCAccountSel*)user_data );
@@ -157,7 +155,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas_populate_list( gas );
 
         gas->eventHandlerId =
-                gnc_engine_register_event_handler( gnc_account_sel_event_cb, gas );
+                qof_event_register_handler( gnc_account_sel_event_cb, gas );
 
         gas->initDone = TRUE;
 }
@@ -165,7 +163,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
 typedef struct {
         GNCAccountSel *gas;
         GList **outList;
-        char accountSep;
 } accounts_to_names_data;
 
 /**
@@ -198,12 +195,11 @@ gas_populate_list( GNCAccountSel *gas )
                 GTK_EDITABLE(gas->combo->entry), 0, -1 );
 
         ag = gnc_book_get_group( gnc_get_current_book() );
-        accts = (GList*)xaccGroupGetSubAccounts( ag );
+        accts = (GList*)xaccGroupGetSubAccountsSorted( ag );
 
         nameList        = NULL;
         atnd.gas        = gas;
         atnd.outList    = &nameList;
-        atnd.accountSep = gnc_get_account_separator();
 
         g_list_foreach( accts, gas_accounts_to_names,
                         (gpointer)&atnd );
@@ -266,8 +262,7 @@ gas_accounts_to_names( gpointer data, gpointer user_data )
                 }
         }
         *atnd->outList =
-                g_list_append( *atnd->outList,
-                               xaccAccountGetFullName(a, atnd->accountSep) );
+                g_list_append( *atnd->outList, xaccAccountGetFullName(a) );
 }
 
 #if 0 /* completion not implemented  */
@@ -378,8 +373,7 @@ gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct )
                 gtk_list_select_item( GTK_LIST(gas->combo->list), 0 );
                 return;
         }
-        acctStr = xaccAccountGetFullName( acct,
-                                          gnc_get_account_separator() );
+        acctStr = xaccAccountGetFullName( acct );
         gtk_entry_set_text( GTK_ENTRY(gas->combo->entry), acctStr );
         g_free( acctStr );
 }
@@ -398,7 +392,7 @@ gnc_account_sel_get_account( GNCAccountSel *gas )
                 goto cleanup;
         }
         ag = gnc_book_get_group( gnc_get_current_book() );
-        ret = xaccGetAccountFromFullName( ag, txt, gnc_get_account_separator() );
+        ret = xaccGetAccountFromFullName( ag, txt );
  cleanup:
         g_free( txt );
         return ret;
@@ -450,7 +444,7 @@ gnc_account_sel_dispose (GObject *object)
 	gas = GNC_ACCOUNT_SEL (object);
 
         if (gas->eventHandlerId) {
-		gnc_engine_unregister_event_handler (gas->eventHandlerId);
+		qof_event_unregister_handler (gas->eventHandlerId);
 		gas->eventHandlerId = 0;
 	}
 

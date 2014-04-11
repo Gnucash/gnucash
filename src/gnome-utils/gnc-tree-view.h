@@ -60,8 +60,20 @@ typedef struct {
 GType gnc_tree_view_get_type (void);
 
 
+/* The columns managed by gnc-tree-view can use the following column
+   attributes.  Set them with:
 
+   g_object_set_data(col, ATTRIBUTE_NAME, value);
+*/
 
+/* A column with this attribute set cannot be hidden from view. Valid
+   values: GINT_TO_POINTER(0) and GINT_TO_POINTER(1) */
+#define ALWAYS_VISIBLE  "always-visible"
+
+/* This attribute controls visibility of a non-gconf column or a gconf
+   column before a visibility preference has been recorded. Valid values:
+   GINT_TO_POINTER(0) and GINT_TO_POINTER(1)  */
+#define DEFAULT_VISIBLE  "default-visible"
 
 #define GNC_TREE_VIEW_COLUMN_DATA_NONE -1
 #define GNC_TREE_VIEW_COLUMN_COLOR_NONE -1
@@ -135,9 +147,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
  *
  *  @param view A pointer to a generic GncTreeView.
  *
- *  @param column_title The title for this column.  This will be
- *  added as a tooltip what will be displayed when the mouse is
- *  hovered over the column title button.
+ *  @param column_title The title for this column.
  *
  *  @param pref_name The internal name of this column.  This name is
  *  used in several functions to look up the column, and it is also
@@ -155,7 +165,8 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
  *  @param model_data_column The index of the GtkTreeModel data column
  *  used to determine the data that will be displayed in this column
  *  for each row in the view.  Use GNC_TREE_VIEW_COLUMN_DATA_NONE if
- *  you plan on using an non-model data source for this column.
+ *  you plan on using a non-model data source for this column.  This
+ *  index is connected to the "text" attribute of the cell renderer.
  *
  *  @param model_visibility_column The index of the GtkTreeModel data
  *  column used to determine whether or not a checkbox for each row
@@ -177,6 +188,25 @@ gnc_tree_view_add_text_column (GncTreeView *view,
 			       gint model_data_column,
 			       gint model_visibility_column,
 			       GtkTreeIterCompareFunc column_sort_fn);
+#if HAVE_GTK26
+/** This function adds a new combobox column to a GncTreeView base
+ *  view.  The parameters it takes in common with
+ *  gnc_tree_view_add_text_column() behave the same as there.  In
+ *  addition, it will use combo_tree_model as the GtkTreeModel for the
+ *  combobox, and combo_model_text_column will be the column in the
+ *  model used for displaying the text in the combobox.
+ */
+GtkTreeViewColumn *
+gnc_tree_view_add_combo_column (GncTreeView *view,
+                                const gchar *column_title,
+                                const gchar *pref_name,
+                                const gchar *sizing_text,
+                                gint model_data_column,
+                                gint model_visibility_column,
+                                GtkTreeModel *combo_tree_model,
+                                gint combo_model_text_column,
+                                GtkTreeIterCompareFunc column_sort_fn);
+#endif
 
 /** This function adds a new numeric column to a GncTreeView base
  *  view.  It takes all the parameters necessary to hook a
@@ -188,9 +218,7 @@ gnc_tree_view_add_text_column (GncTreeView *view,
  *
  *  @param view A pointer to a generic GncTreeView.
  *
- *  @param column_title The title for this column.  This will be
- *  added as a tooltip what will be displayed when the mouse is
- *  hovered over the column title button.
+ *  @param column_title The title for this column.
  *
  *  @param pref_name The internal name of this column.  This name is
  *  used in several functions to look up the column, and it is also
@@ -266,21 +294,27 @@ gint gnc_tree_view_append_column (GncTreeView *view,
  */
 void gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model);
 
-/** Configure (by name) the default set of visible columns in an gnc
- *  tree view.  This is the list of columns that will be shown if the
- *  view isn't using gconf to manage column visibility.  If gconf is
- *  used, this list will be used the very first time the view is
- *  presented to the user, then gconf will be used after that.  The
- *  available list of columns can be found in the file
- *  gnc-tree-view-xxx.c.
+/** Make all the correct columns visible, respecting their default
+ *  visibility setting, their "always" visibility setting, and their
+ *  gconf visibility settings, if managed by gconf.
  *
  *  @param view A pointer to an gnc tree view.
- *
- *  @param column_names A list of column names to make visible.
  */
-void gnc_tree_view_configure_columns (GncTreeView *view,
-				      gchar *first_column_name,
-				      ...);
+void gnc_tree_view_configure_columns (GncTreeView *view);
+
+/** Find a tree column given the "pref name" used with gconf.  This
+ *  function simply runs the list of all (visible and invisible)
+ *  columns looking for a match.  Column names were attached to each
+ *  column at the time the column was created.
+ *
+ *  @param view The visible tree widget.
+ *
+ *  @param id The "pref name" to find.
+ *
+ */
+GtkTreeViewColumn *
+gnc_tree_view_find_column_by_name (GncTreeView *view,
+                                   const gchar *wanted);
 
 /** This function is called to set up or remove an association between
  *  a gconf section and the display of a view.  It will first remove
@@ -316,6 +350,10 @@ void gnc_tree_view_set_gconf_section (GncTreeView *view,
  */
 const gchar *gnc_tree_view_get_gconf_section (GncTreeView *view);
 
+void gnc_tree_view_expand_columns (GncTreeView *view,
+				   gchar *first_column_name,
+				   ...);
+
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
  *  "gconf-section" property has not been set.
@@ -338,6 +376,29 @@ gnc_tree_view_set_show_column_menu (GncTreeView *view,
  */
 gboolean
 gnc_tree_view_get_show_column_menu (GncTreeView *view);
+
+/** Return the "main" cell renderer from a GtkTreeViewColumn added to
+ *  a GncTreeView my one of the convenience routines.
+ *
+ *  @param column The tree view column that was added to the GncTreeView
+ *
+ *  @returns The cell renderer in use in the column.
+ */
+GtkCellRenderer *
+gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column);
+
+
+/* Takes a GdkEventKey and the current path and column for the
+ * treeview.  Interprets the event as something that might move the
+ * cursor.  Returns the new column and the possibly changed (if
+ * navigation wrapped a row) path. */
+void
+gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col, 
+                     GtkTreePath *path, GdkEventKey *event);
+
+/* Returns TRUE if path is a vaid path for the treeview */
+gboolean
+gnc_tree_view_path_is_valid(GncTreeView *view, GtkTreePath *path);
 
 /** @} */
 

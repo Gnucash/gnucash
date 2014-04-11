@@ -21,14 +21,13 @@
 
 ;; Copyright 2000 Rob Browning <rlb@cs.utexas.edu>
 
-(define (gnc:url->loaded-session url ignore-lock? create-if-needed?)
+(define (gnc:url->loaded-session session url ignore-lock? create-if-needed?)
   ;; Return a <gnc:Book*> representing the data stored at the given
   ;; url or #f on failure -- this should later be changed to returning
   ;; the symbol representing the book error...  On success, the book
   ;; will already be loaded.
 
-  (let* ((session (gnc:session-new))
-         (result (and session
+  (let* ((result (and session
                       (gnc:session-begin session url
                                          ignore-lock?
                                          create-if-needed?)
@@ -38,15 +37,6 @@
                       session)))
     (or result
         (begin (gnc:session-destroy session) #f))))
-
-(define (gnc:transaction-map-splits thunk transaction)
-  (let ((retval '()))
-    (let loop ((splits (or (gnc:transaction-get-splits transaction) '())))
-      (if (not (null? splits))
-          (begin 
-            (set! retval (cons (thunk (car splits)) retval))
-            (loop (cdr splits)))))
-    (reverse retval)))
 
 (define (gnc:group-map-all-accounts thunk group)
   (let ((accounts (or (gnc:group-get-subaccounts group) '())))

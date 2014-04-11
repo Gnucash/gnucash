@@ -52,7 +52,7 @@
 #define HL_GLOBPREFS         "set-prefs"
 #define HL_PRINTCHECK        "print-check"
 #define HL_RECNWIN           "acct-reconcile"
-#define HL_SXEDITOR          "tran-sched"
+#define HL_SXEDITOR          "tool-sched"
 #define HL_GCONF             "gconf"
 
 /* GTK Windows - Common Response Codes */
@@ -63,23 +63,10 @@
 
 /* Dialog windows ***************************************************/
 
-extern gint
-gnc_verify_cancel_dialog(gncUIWidget parent,
-			 gint default_result,
-			 const char *format, ...) G_GNUC_PRINTF (3,4);
-
-
-
 extern gboolean
 gnc_verify_dialog(gncUIWidget parent,
 		  gboolean yes_is_default,
 		  const char *format, ...) G_GNUC_PRINTF (3, 4);
-
-gint
-gnc_verify_remember_dialog(gncUIWidget parent, const gchar *gconf_key,
-			   const gchar *yes_label, const gchar *no_label,
-			   const gchar *format, ...) G_GNUC_PRINTF (5,6);
-
 
 extern gint
 gnc_ok_cancel_dialog(gncUIWidget parent,
@@ -90,19 +77,13 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
 
 extern void
 gnc_warning_dialog(gncUIWidget parent,
-		   const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+		   const char *format, ...) G_GNUC_PRINTF (2, 3);
 
-
-
-gint
-gnc_warning_remember_dialog(gncUIWidget parent, const gchar *gconf_key,
-			   const gchar *yes_label, const gchar *no_label,
-			   const gchar *format, ...) G_GNUC_PRINTF (5,6);
 
 
 extern void
 gnc_error_dialog(GtkWidget *parent,
-		 const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+		 const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 extern void
@@ -111,6 +92,7 @@ gnc_gnome_help (const char *file_name, const char *target_link);
 int      gnc_choose_radio_option_dialog (gncUIWidget parent,
 					 const char *title,
 					 const char *msg,
+					 const char *button_name,
 					 int default_value,
 					 GList *radio_list);
 
@@ -125,9 +107,9 @@ typedef enum
   GNC_PRICE_NEW,
 } GNCPriceEditType;
 
-GNCPrice* gnc_price_edit_dialog (gncUIWidget parent, GNCPrice *price,
-				GNCPriceEditType type);
-GNCPrice * gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid);
+GNCPrice* gnc_price_edit_dialog (gncUIWidget parent, QofSession *session,
+				 GNCPrice *price, GNCPriceEditType type);
+GNCPrice* gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid);
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);
 

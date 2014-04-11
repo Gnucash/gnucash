@@ -403,7 +403,7 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
 gboolean
 gnc_is_xml_data_file(const gchar *filename) 
 {
-    return gnc_is_our_xml_file(filename, "gnc");
+    return gnc_is_our_xml_file(filename, "gnc", NULL);
 }
 
 /* ================================================================== */
@@ -3112,8 +3112,8 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
   if(strcmp(child_result->tag, "slots") == 0) {
     kvp_frame *f = (kvp_frame *) child_result->data;
     g_return_val_if_fail(f, FALSE);
-    if(s->kvp_data) kvp_frame_delete(s->kvp_data);
-    s->kvp_data = f;
+    if(s->inst.kvp_data) kvp_frame_delete(s->inst.kvp_data);
+    s->inst.kvp_data = f;
     child_result->should_cleanup = FALSE;
   }
   else if(strcmp(child_result->tag, "quantity") == 0) {

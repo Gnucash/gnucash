@@ -33,9 +33,11 @@
 #include "gnc-component-manager.h"
 #include "Account.h"
 #include "Group.h"
+#include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-ui-util.h"
 
@@ -48,7 +50,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass);
 static void gnc_tree_model_account_init (GncTreeModelAccount *model);
 static void gnc_tree_model_account_finalize (GObject *object);
-static void gnc_tree_model_account_destroy (GtkObject *object);
+static void gnc_tree_model_account_dispose (GObject *object);
 
 /** Implementation of GtkTreeModel  **************************************/
 static void gnc_tree_model_account_tree_model_init (GtkTreeModelIface *iface);
@@ -87,9 +89,10 @@ static void gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 						 Account *toplevel);
 
 /** Component Manager Callback ******************************************/
-static void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
-						  GNCEngineEventType event_type,
-						  gpointer user_data);
+static void gnc_tree_model_account_event_handler (QofEntity *entity,
+						  QofEventId event_type,
+						  GncTreeModelAccount *model,
+						  GncEventData *ed);
 
 /** The instance private data for a account tree model. */
 typedef struct GncTreeModelAccountPrivate
@@ -177,18 +180,14 @@ static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 {
 	GObjectClass *o_class;
-	GtkObjectClass *object_class;
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	o_class = G_OBJECT_CLASS (klass);
-	object_class = GTK_OBJECT_CLASS (klass);
 
 	/* GObject signals */
 	o_class->finalize = gnc_tree_model_account_finalize;
-
-	/* GtkObject signals */
-	object_class->destroy = gnc_tree_model_account_destroy;
+	o_class->dispose = gnc_tree_model_account_dispose;
 
 	g_type_class_add_private(klass, sizeof(GncTreeModelAccountPrivate));
 }
@@ -239,12 +238,12 @@ gnc_tree_model_account_finalize (GObject *object)
 	priv->book = NULL;
 
 	if (G_OBJECT_CLASS (parent_class)->finalize)
-	  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+            G_OBJECT_CLASS(parent_class)->finalize (object);
 	LEAVE(" ");
 }
 
 static void
-gnc_tree_model_account_destroy (GtkObject *object)
+gnc_tree_model_account_dispose (GObject *object)
 {
 	GncTreeModelAccountPrivate *priv;
 	GncTreeModelAccount *model;
@@ -254,15 +253,19 @@ gnc_tree_model_account_destroy (GtkObject *object)
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
 
 	model = GNC_TREE_MODEL_ACCOUNT (object);
-
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+
 	if (priv->event_handler_id) {
-	  gnc_engine_unregister_event_handler (priv->event_handler_id);
+	  qof_event_unregister_handler (priv->event_handler_id);
 	  priv->event_handler_id = 0;
 	}
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-	  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+	gnc_gconf_general_remove_cb(KEY_NEGATIVE_IN_RED,
+                                    gnc_tree_model_account_update_color,
+                                    model);
+
+	if (G_OBJECT_CLASS (parent_class)->dispose)
+            G_OBJECT_CLASS (parent_class)->dispose (object);
 	LEAVE(" ");
 }
 
@@ -284,6 +287,7 @@ gnc_tree_model_account_new (AccountGroup *group)
 		model = (GncTreeModelAccount *)item->data;
 		priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 		if (priv->root == group) {
+			g_object_ref(G_OBJECT(model));
 			LEAVE("returning existing model %p", model);
 			return GTK_TREE_MODEL(model);
 		}
@@ -303,8 +307,8 @@ gnc_tree_model_account_new (AccountGroup *group)
 	  gnc_tree_model_account_set_toplevel (model, account);
 	}
 
-	priv->event_handler_id =
-	  gnc_engine_register_event_handler (gnc_tree_model_account_event_handler, model);
+	priv->event_handler_id = qof_event_register_handler
+	  ((QofEventHandler)gnc_tree_model_account_event_handler, model);
 
 	LEAVE("model %p", model);
 	return GTK_TREE_MODEL (model);
@@ -397,6 +401,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE:
 		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT:
+		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD:
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED:
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED:
@@ -405,16 +410,19 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL:
 		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT:
+		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD:
 		case GNC_TREE_MODEL_ACCOUNT_COL_NOTES:
 		case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO:
 		case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE:
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL:
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD:
 			return G_TYPE_STRING;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
@@ -589,6 +597,36 @@ gnc_tree_model_account_set_color(GncTreeModelAccount *model,
 	  g_value_set_static_string (value, "black");
 }
 
+static gchar *
+gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
+					      Account *acct,
+					      gboolean recurse,
+					      gboolean *negative)
+{
+  GncTreeModelAccountPrivate *priv;
+  time_t t1, t2;
+  gnc_numeric b3;  
+
+  priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+  if (acct == priv->toplevel)
+    return g_strdup("");
+
+  t1 = gnc_accounting_period_fiscal_start();
+  t2 = gnc_accounting_period_fiscal_end();
+    
+  if (t1 > t2)
+    return g_strdup("");
+
+  b3 = xaccAccountGetBalanceChangeForPeriod(acct, t1, t2, recurse);
+  if (gnc_reverse_balance (acct))
+    b3 = gnc_numeric_neg (b3);
+
+  if (negative)
+    *negative = gnc_numeric_negative_p(b3);
+
+  return g_strdup(xaccPrintAmount(b3, gnc_account_print_info(acct, TRUE)));
+}
+
 static void
 gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 				  GtkTreeIter *iter,
@@ -677,6 +715,17 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			gnc_tree_model_account_set_color(model, negative, value);
 			g_free(string);
 			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, FALSE, &negative);
+			g_value_take_string (value, string);
+			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, FALSE, &negative);
+			gnc_tree_model_account_set_color(model, negative, value);
+			g_free (string);
+			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED:
 			g_value_init (value, G_TYPE_STRING);
@@ -754,6 +803,17 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, TRUE, &negative);
+			gnc_tree_model_account_set_color(model, negative, value);
+			g_free (string);
+			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, TRUE, &negative);
+			g_value_take_string (value, string);
+			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, TRUE, &negative);
 			gnc_tree_model_account_set_color(model, negative, value);
 			g_free (string);
 			break;
@@ -1246,8 +1306,8 @@ gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 
 	if (priv->toplevel != NULL) {
 		path = gtk_tree_path_new_first ();
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
-		gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
+		if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+		  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
 		gtk_tree_path_free (path);
 	}
 
@@ -1297,20 +1357,20 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	g_return_val_if_fail ((account != NULL), FALSE);
 	g_return_val_if_fail ((iter != NULL), FALSE);
 
-	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	if (priv->root != xaccAccountGetRoot (account)) {
-		LEAVE("Root doesn't match");
-		return FALSE;
-	}
-
 	iter->user_data = account;
 	iter->stamp = model->stamp;
 
+	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 	if (account == priv->toplevel) {
 		iter->user_data2 = NULL;
 		iter->user_data3 = GINT_TO_POINTER (0);
 		LEAVE("Matched top level");
 		return TRUE;
+	}
+
+	if (priv->root != xaccAccountGetRoot (account)) {
+		LEAVE("Root doesn't match");
+		return FALSE;
 	}
 
 	group = xaccAccountGetParent (account);
@@ -1366,24 +1426,6 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 /*   Account Tree Model - Engine Event Handling Functions   */
 /************************************************************/
 
-/** This data structure maintains a record of a pending removal of an
- *  account from GnuCash.  There is a chicken/egg problem whereby the
- *  account cannot be removed from the model before it is removed from
- *  the account group (throws the indices off), but after the account
- *  has been removed from the account group a path to the account
- *  can't be generated.  This data structure holds a temporary copy of
- *  the account path to bridge this problem. */
-typedef struct _remove_data {
-  /** The guid of the account that was removed. */
-  GUID                 guid;
-  /** A pointer to the model containing the account. */
-  GncTreeModelAccount *model;
-  /** The path within the model to the account. */
-  GtkTreePath         *path;
-} remove_data;
-
-static GSList *pending_removals = NULL;
-
 /** This function performs common updating to the model after an
  *  account has been added or removed.  The parent entry needs to be
  *  tapped on the shoulder so that it can correctly update the
@@ -1405,80 +1447,17 @@ gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
 {
   GtkTreeIter iter;
 
-  if (gtk_tree_path_up (path)) {
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
+  while (gtk_tree_path_get_depth(path) > 0) {
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path))
+      break;
+    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
     gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
+    gtk_tree_path_up(path);
   }
 
   do {
     model->stamp++;
   } while (model->stamp == 0);
-}
-
-
-/** This function is a one-shot helper routine for the following
- *  gnc_tree_model_account_event_handler() function.  It must be armed
- *  each time an item is removed from the model.  This function will
- *  be called as an idle function some time after the user requests
- *  the deletion.  This function will send the "row_deleted"
- *  signal to any/all parent models for each entry deleted.
- *
- *  @internal
- *
- *  @param unused
- *
- *  @return FALSE.  Tells the glib idle function to remove this
- *  handler, making it a one-shot that will be re-armed at the next
- *  item removal.
- */
-static gboolean
-gnc_tree_model_account_do_deletions (gpointer unused)
-{
-  GSList *iter, *next = NULL;
-  remove_data *data;
-
-  for (iter = pending_removals; iter != NULL; iter = next) {
-    next = g_slist_next(iter);
-    data = iter->data;
-    pending_removals = g_slist_delete_link (pending_removals, iter);
-
-    gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
-    gnc_tree_model_account_path_changed (data->model, data->path);
-    gtk_tree_path_free(data->path);
-    g_free(data);
-  }
-
-  /* Remove me */
-  return FALSE;
-}
-
-
-/** This function is a helper routine for the following
- *  gnc_tree_model_account_event_handler() function.  It is called to
- *  add an item to the pending removal list.
- *
- *  @param entity The guid value of the account that is being removed
- *  from the model.
- *
- *  @param model A pointer to the tree model.
- *
- *  @param path The path to the removed account.  This can't be
- *  generated once the account is removed.
- */
-static void
-pending_list_add (GUID *entity,
-		  GncTreeModelAccount *model,
-		  GtkTreePath *path)
-{
-  remove_data *data;
-
-  data = malloc(sizeof(*data));
-  data->guid = *entity;
-  data->model = model;
-  data->path = path;
-  pending_removals = g_slist_append (pending_removals, data);
-  g_idle_add_full(G_PRIORITY_HIGH_IDLE,
-		  gnc_tree_model_account_do_deletions, NULL, NULL);
 }
 
 
@@ -1511,88 +1490,90 @@ pending_list_add (GUID *entity,
  *  @param user_data A pointer to the account tree model.
  */
 static void
-gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
-				      GNCEngineEventType event_type,
-				      gpointer user_data)
+gnc_tree_model_account_event_handler (QofEntity *entity,
+				      QofEventId event_type,
+				      GncTreeModelAccount *model,
+				      GncEventData *ed)
 {
-  	GncTreeModelAccount *model;
-  	GncTreeModelAccountPrivate *priv;
-	GtkTreePath *path;
-	GtkTreeIter iter;
-	Account *account;
-	const gchar *account_name;
+  GncTreeModelAccountPrivate *priv;
+  const gchar *parent_name;
+  GtkTreePath *path = NULL;
+  GtkTreeIter iter;
+  Account *account, *parent;
 
-	/* hard failures */
-	g_return_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(user_data));
+  g_return_if_fail(model);	/* Required */
+  if (!GNC_IS_ACCOUNT(entity))
+    return;
 
-	/* soft failures */
-	if (safe_strcmp(type, GNC_ID_ACCOUNT) != 0)
-	  return;
+  ENTER("entity %p of type %d, model %p, event_data %p",
+	entity, event_type, model, ed);
+  priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-	ENTER("entity %p of type %s, event %d, model %p",
-	      entity, type, event_type, user_data);
-	model = (GncTreeModelAccount *)user_data;
+  account = GNC_ACCOUNT(entity);
+  if (xaccAccountGetBook(account) != priv->book) {
+      LEAVE("not in this book");
+      return;
+  }
+  if (xaccAccountGetRoot(account) != priv->root) {
+      LEAVE("not in this model");
+      return;
+  }
+  /* What to do, that to do. */
+  switch (event_type) {
+    case QOF_EVENT_ADD:
+      /* Tell the filters/views where the new account was added. */
+      DEBUG("add account %p (%s)", account, xaccAccountGetName(account));
+      path = gnc_tree_model_account_get_path_from_account(model, account);
+      if (!path) {
+	DEBUG("can't generate path");
+	break;
+      }
+      if (!gnc_tree_model_account_get_iter(GTK_TREE_MODEL(model), &iter, path)) {
+	DEBUG("can't generate iter");
+	break;
+      }
+      gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
+      if (gtk_tree_path_up (path))
+	gnc_tree_model_account_path_changed(model, path);
+      break;
 
-	/* Get the account.*/
-	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	account = xaccAccountLookup (entity, priv->book);
-	if (!account) {
-	  LEAVE("account not in this model's book");
-	  return;
-	}
-	account_name = xaccAccountGetName(account);
+    case QOF_EVENT_REMOVE:
+      if (!ed) /* Required for a remove. */
+	break;
+      parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->toplevel;
+      parent_name = ed->node ? xaccAccountGetName(parent) : "Root";
+      DEBUG("remove child %d of account %p (%s)", ed->idx, parent, parent_name);
+      path = gnc_tree_model_account_get_path_from_account(model, parent);
+      if (!path) {
+	DEBUG("can't generate path");
+	break;
+      }
+      gtk_tree_path_append_index (path, ed->idx);
+      gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path);
+      gnc_tree_model_account_path_changed(model, path);
+      break;
 
-	switch (event_type) {
-	 case GNC_EVENT_ADD:
-	  /* Tell the filters/views where the new account was added. */
-	  DEBUG("add account %p (%s)", account, account_name);
-	  if (gnc_tree_model_account_get_iter_from_account (
-                  model, account, &iter)) {
-	    path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
-	    gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
-	    gnc_tree_model_account_path_changed (model, path);
-	    gtk_tree_path_free(path);
-	  }
-	  break;
+    case QOF_EVENT_MODIFY:
+      DEBUG("modify  account %p (%s)", account, xaccAccountGetName(account));
+      path = gnc_tree_model_account_get_path_from_account(model, account);
+      if (!path) {
+	DEBUG("can't generate path");
+	break;
+      }
+      if (!gnc_tree_model_account_get_iter(GTK_TREE_MODEL(model), &iter, path)) {
+	DEBUG("can't generate iter");
+	break;
+      }
+      gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+      break;
 
-	 case GNC_EVENT_REMOVE:
-	  /* Record the path of this account for later use in destruction */
-	  DEBUG("remove account %p (%s)", account, account_name);
-	  path = gnc_tree_model_account_get_path_from_account (model, account);
-	  if (path == NULL) {
-	    LEAVE("account not in model");
-	    return;
-	  }
+    default:
+      DEBUG("unknown event type");
+      return;
+  }
 
-	  pending_list_add(entity, model, path);
-	  LEAVE(" ");
-	  return;
-
-	 case GNC_EVENT_MODIFY:
-	  DEBUG("modify account %p (%s)", account, account_name);
-	  path = gnc_tree_model_account_get_path_from_account (model, account);
-	  if (path == NULL) {
-	    LEAVE("account not in model");
-	    return;
-	  }
-	  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
-	    gtk_tree_path_free(path);
-	    LEAVE("can't find iter for path");
-	    return;
-	  }
-	  gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
-	  gtk_tree_path_free(path);
-	  LEAVE(" ");
-	  return;
-
-	 case GNC_EVENT_DESTROY:
-	  /* Tell the filters/view the account has been deleted. */
-	  DEBUG("destroy account %p (%s)", account, account_name);
-	  break;
-
-	 default:
-	  LEAVE("ignored event for %p (%s)", account, account_name);
-	  return;
-	}
-	LEAVE(" new stamp %u", model->stamp);
+  if (path)
+    gtk_tree_path_free(path);
+  LEAVE(" ");
+  return;
 }

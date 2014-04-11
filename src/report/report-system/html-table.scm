@@ -349,7 +349,9 @@
   (let* ((dd (gnc:html-table-data table))
 	 (current-num-rows (gnc:html-table-num-rows table))
 	 (new-num-rows (+ current-num-rows 1)))
-    (set! dd (cons newrow dd))
+    (if (list? newrow)
+        (set! dd (cons newrow dd))
+        (set! dd (cons (list newrow) dd)))
     (gnc:html-table-set-num-rows-internal! 
      table 
      new-num-rows)

@@ -23,7 +23,6 @@
 /** @addtogroup Object
     @{ */
 /** @addtogroup Object_Private
-    Private interfaces, not meant to be used by applications.
     @{ */
 /** @name  Entity_Private
     @{ */
@@ -31,14 +30,12 @@
 #ifndef QOF_ID_P_H
 #define QOF_ID_P_H 
 
-#include <glib.h>
-
 #include "qofid.h"
 
-/* This file defines an engine-only API for using gnucash entity
+/* This file defines an engine-only API for using QOF entity
  * identifiers. */
 
-/** Set the ID of the entity, over-riding teh previous ID. 
+/** Set the ID of the entity, over-riding the previous ID. 
  *  Very dangerous, use only for file i/o work. 
  */
 void qof_entity_set_guid (QofEntity *ent, const GUID *guid);
@@ -52,6 +49,7 @@ void qof_collection_insert_entity (QofCollection *, QofEntity *);
 /** reset value of dirty flag */
 void qof_collection_mark_clean (QofCollection *);
 void qof_collection_mark_dirty (QofCollection *);
+void qof_collection_print_dirty (QofCollection *col, gpointer dummy);
 
 /* @} */
 /* @} */

@@ -17,7 +17,6 @@
 #include "dialog-options.h"
 #include "gnc-html.h"
 #include "qof.h"
-#include "gnc-err-popup.h"
 #include "gnc-gui-query.h"
 
 #include "gnc-druid-gnome.h"
@@ -96,15 +95,11 @@ libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
     gnc_druid_provider_multifile_gnome_register();
   }
 
-  gnc_set_warning_message(gnc_warning_dialog_va);
-  gnc_set_error_message(gnc_error_dialog_va);
   return TRUE;
 }
 
 int
 libgncmod_gnome_utils_LTX_gnc_module_end(int refcount)
 {
-  gnc_set_warning_message(NULL);
-  gnc_set_error_message(NULL);
   return TRUE;
 }

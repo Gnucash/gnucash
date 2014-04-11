@@ -101,7 +101,7 @@ struct sr_info
   /* flag indicating a template register */
   gboolean template;
 
-  /* The template account which template transaction should below to */
+  /* The template account which template transaction should belong to */
   GUID template_account;
 
   /* configured strings for debit/credit headers */
@@ -109,8 +109,6 @@ struct sr_info
   char *credit_str;
   char *tdebit_str;
   char *tcredit_str;
-
-  GList *saved_slist;
 };
 
 
@@ -151,8 +149,8 @@ CellBlock * gnc_split_register_get_active_cursor (SplitRegister *reg);
 
 void gnc_split_register_set_last_num (SplitRegister *reg, const char *num);
 
-Account * gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * cell,
-						  const char *name, gboolean *new);
+Account * gnc_split_register_get_account_by_name(
+    SplitRegister *reg, BasicCell * cell, const char *name, gboolean *new);
 Account * gnc_split_register_get_account (SplitRegister *reg,
                                           const char *cell_name);
 
@@ -166,8 +164,9 @@ gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
  * transaction, and if so, what conversion we need
  */
 gboolean gnc_split_reg_has_rate_cell (SplitRegisterType type);
-gboolean gnc_split_register_split_needs_amount (SplitRegister *reg, Split *split);
-gboolean gnc_split_register_needs_conv_rate (SplitRegister *reg, Transaction *txn, Account *acc);
-gnc_numeric gnc_split_register_get_conv_rate (Transaction *txn, Account *acc);
+gboolean gnc_split_register_split_needs_amount(
+    SplitRegister *reg, Split *split);
+gboolean gnc_split_register_needs_conv_rate(
+    SplitRegister *reg, Transaction *txn, Account *acc);
 
 #endif

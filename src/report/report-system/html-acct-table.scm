@@ -1132,6 +1132,8 @@
 		  (row-type (get-val env 'row-type))
 		  (rule-mode (and (equal? row-type 'subtotal-row)
 				  (get-val env 'rule-mode)))
+		  (row-markup (and (equal? row-type 'subtotal-row)
+				   "primary-subheading"))
 		  (multicommodity-mode (get-val env 'multicommodity-mode))
 		  (limit-behavior
 		   (or (get-val env 'depth-limit-behavior)
@@ -1237,7 +1239,7 @@
 	     (gnc:html-table-add-labeled-amount-line!
 	      html-table
 	      (+ account-cols logical-cols) ;; table-width
-	      #f                            ;; row-markup
+	      row-markup                    ;; row-markup
               rule-mode
 	      label
               indented-depth

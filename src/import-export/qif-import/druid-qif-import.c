@@ -21,8 +21,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gnome.h>
@@ -350,6 +348,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
                                  gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
+  GtkFileFilter *filter;
   char * new_file_name;
   char *file_name, *default_dir;
 
@@ -357,8 +356,14 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
-  new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", 
-		  default_dir, GNC_FILE_DIALOG_IMPORT);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "*.qif");
+  gtk_file_filter_add_pattern (filter, "*.[Qq][Ii][Ff]");
+  new_file_name = gnc_file_dialog (_("Select QIF File"),
+				   g_list_prepend (NULL, filter),
+				   default_dir,
+				   GNC_FILE_DIALOG_IMPORT);
 
   /* Insure valid data, and something that can be freed. */
   if (new_file_name == NULL) {
@@ -433,27 +438,29 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
   SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
   SCM qif_file_parse_results  = scm_c_eval_string("qif-file:parse-fields-results");
+  SCM window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
   SCM imported_files = SCM_EOL;
   SCM load_return, parse_return;
-
+  SCM window;
   int ask_date_format = FALSE;
 
   /* get the file name */ 
   path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+  window = gw_wcp_assimilate_ptr(wind->window, window_type);
 
   /* check a few error conditions before we get started */
   if(strlen(path_to_load) == 0) {
     /* stay here if no file specified */
-    gnc_error_dialog(wind->window, _("Please select a file to load.\n"));
+    gnc_error_dialog(wind->window, _("Please select a file to load."));
     return TRUE;
   }
   else if ((strlen(path_to_load) > 0) && access(path_to_load, R_OK) < 0) {
     /* stay here if bad file */
     gnc_error_dialog(wind->window, 
-		     _("File not found or read permission denied.\n"
+		     _("File not found or read permission denied. "
 		       "Please select another file."));
     return TRUE;
   }
@@ -465,7 +472,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     if(scm_call_2(qif_file_loaded, scm_filename, wind->imported_files)
        == SCM_BOOL_T) {
       gnc_error_dialog(wind->window,
-                                _("That QIF file is already loaded.\n"
+                                _("That QIF file is already loaded. "
                                   "Please select another file."));
       return TRUE;
     }
@@ -482,8 +489,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     scm_gc_protect_object(wind->selected_file);      
     
     /* load the file */
-    load_return = scm_call_3(qif_file_load, SCM_CAR(imported_files),
-			     scm_filename, wind->ticker_map);
+    load_return = scm_call_4(qif_file_load, SCM_CAR(imported_files),
+			     scm_filename, wind->ticker_map, window);
     
     /* a list returned is (#f error-message) for an error, 
      * (#t error-message) for a warning, or just #f for an 
@@ -492,7 +499,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
        (SCM_CAR(load_return) == SCM_BOOL_T)) {
       const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
       gnc_warning_dialog(GTK_WIDGET(wind->window),
-			 _("QIF file load warning:\n%s"),
+			 _("QIF file load warning: %s"),
 			 warn_str ? warn_str : "(null)");
     }
 
@@ -507,7 +514,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
               (SCM_CAR(load_return) != SCM_BOOL_T))) {
       const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
       gnc_error_dialog(wind->window,
-		       _("QIF file load failed:\n%s"),
+		       _("QIF file load failed: %s"),
 		       warn_str ? warn_str : "(null)");
 
       imported_files = 
@@ -575,7 +582,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
           (SCM_CAR(parse_return) != SCM_BOOL_T))) {
         const gchar *warn_str = SCM_STRING_CHARS(SCM_CDADR(parse_return));
         gnc_error_dialog(wind->window,
-			 _("QIF file parse failed:\n%s"),
+			 _("QIF file parse failed: %s"),
 			 warn_str ? warn_str : "(null)");
 
         imported_files = 
@@ -1104,8 +1111,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
   SCM   find_duplicates = scm_c_eval_string("gnc:group-find-duplicates");
+  SCM   window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM   retval;
   SCM   current_xtn;
+  SCM   window;
 
   GnomeDruidPage * gtkpage;
   QIFDruidPage * page;
@@ -1150,13 +1159,15 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   /* call a scheme function to do the work.  The return value is an
    * account group containing all the new accounts and transactions */
+  window = gw_wcp_assimilate_ptr(wind->window, window_type);
   retval = scm_apply(qif_to_gnc, 
-		     SCM_LIST6(wind->imported_files,
+		     SCM_LIST7(wind->imported_files,
 			       wind->acct_map_info, 
 			       wind->cat_map_info,
 			       wind->memo_map_info,
 			       wind->stock_hash,
-			       scm_makfrom0str(currname)),
+			       scm_makfrom0str(currname),
+			       window),
 		     SCM_EOL);
 
   gnc_unset_busy_cursor(NULL);
@@ -1177,9 +1188,9 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
-    retval = scm_call_2(find_duplicates, 
+    retval = scm_call_3(find_duplicates, 
 			scm_c_eval_string("(gnc:get-current-group)"),
-			wind->imported_account_group);
+			wind->imported_account_group, window);
     gnc_unset_busy_cursor(NULL);
     
     scm_gc_unprotect_object(wind->match_transactions);
@@ -2001,7 +2012,7 @@ gnc_ui_qif_import_druid_make(void)
   
   /* set a default currency for new accounts */
   gnc_ui_update_commodity_picker(retval->currency_picker,
-                                 GNC_COMMODITY_NS_ISO, 
+                                 GNC_COMMODITY_NS_CURRENCY, 
                                  gnc_commodity_get_printname
                                  (gnc_default_currency()));
   

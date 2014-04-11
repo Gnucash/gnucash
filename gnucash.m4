@@ -22,9 +22,6 @@ AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile 
      if test x${GNUCASH_CONFIG+set} != xset ; then
         GNUCASH_CONFIG=$gnucash_config_exec_prefix/bin/gnucash-config
      fi
-     if test x${GNUCASH_RUN_SCRIPT+set} != xset ; then
-        GNUCASH_RUN_SCRIPT=$gnucash_config_exec_prefix/bin/gnucash-run-script
-     fi
      if test x${GNUCASH_ENV+set} != xset ; then
         GNUCASH_ENV=$gnucash_config_exec_prefix/bin/gnucash-env
      fi
@@ -36,9 +33,6 @@ AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile 
      gnucash_config_args="$gnucash_config_args --prefix=$gnucash_config_prefix"
      if test x${GNUCASH_CONFIG+set} != xset ; then
         GNUCASH_CONFIG=$gnucash_config_prefix/bin/gnucash-config
-     fi
-     if test x${GNUCASH_RUN_SCRIPT+set} != xset ; then
-        GNUCASH_RUN_SCRIPT=$gnucash_config_prefix/bin/gnucash-run-script
      fi
      if test x${GNUCASH_ENV+set} != xset ; then
         GNUCASH_ENV=$gnucash_config_prefix/bin/gnucash-env
@@ -211,8 +205,6 @@ main ()
   AC_SUBST(GNUCASH_LIBS)
   rm -f conf.gnucashtest
 
-  AC_PATH_PROG(GNUCASH_RUN_SCRIPT, gnucash-run-script, gnucash-run-script)
-  AC_SUBST(GNUCASH_RUN_SCRIPT)
   AC_PATH_PROG(GNUCASH_ENV, gnucash-env, gnucash-env)
   AC_SUBST(GNUCASH_ENV)
   AC_PATH_PROG(GNC_TEST_ENV, gnc-test-env, gnc-test-env)

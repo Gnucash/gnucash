@@ -1,5 +1,44 @@
-GnuCash Dependency Policy
--------------------------
+GnuCash Compiler Dependency
+---------------------------
+
+The GnuCash developers use gcc (http://gcc.gnu.org) for developing and
+testing GnuCash.  For convenience, we have relied on certain features
+of gcc that are not part of any official standard and may not be
+available with other standard-compliant compilers.  Anyone desiring to
+compile GnuCash with some other compiler may have to remove these
+"gcc-isms", some of which are documented here.
+
+  Pointer-typed NULL sentinel values
+  ----------------------------------
+
+  Gcc provides an implementation of `stddef.h' that defines NULL to
+always expand to a pointer-typed null constant.  This is precisely
+what is needed in order to make sentinel value arguments to variadic
+functions correct for both 32 and 64 bit platforms.  However, another
+implementation may define NULL to expand to `0'.  In that case, all
+sentinel value arguments must have an explicit `(void *)' cast.
+
+  C++ style comments
+  ------------------
+
+  C++ style comments (`// comment to end of line') are discouraged but
+not actively eradicated.
+
+  Variadic Macros
+  ---------------
+
+  GnuCash uses variadic macros for debugging and logging support (via
+qof).
+
+  Declarations after Code
+  -----------------------
+
+  The use of declarations after code (`int i; i = 0; char *foo;') is
+strongly discouraged and actively removed whenever it's caught.
+
+
+GnuCash Library Dependency Policy
+---------------------------------
 
 GnuCash desires to only depend on library versions and packages that are
 practically available.  Specifically, we choose to depend only on versions
@@ -18,7 +57,6 @@ release (or an official package-upgrade path)
 Libraries/Deps
 --------------
 aqbanking
-cairo
 gconf2
 glib2
 gtk+2
@@ -168,6 +206,23 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - pango-1.8.1
     - libgtkhtml-3.1.11
 - SUSE
+  -  10.1 = 2006-05-11
+    - aqbanking-1.2.0 (but package is broken; needs to be replaced by >=1.3.0)
+    - cairo-1.0.2
+    - gconf2-2.12.1
+    - glib2-2.8.5
+    - gtk2-2.8.10
+    - gtkhtml2-3.10.0
+    - guile-1.6.7
+    - g-wrap: not included
+    - libart_lgpl-2.3.17
+    - libglade2-2.5.1
+    - libgnomeprint-2.12.1
+    - libgnomeui-2.12.0
+    - libgsf-1.13.99
+    - libofx-0.8.0
+    - libxml2-2.6.23
+    - pango-1.10.2
   -  10.0 = 2005-10-06
     - aqbanking: not included; binary aqbanking-1.6.0 available at ftp://ftp.gwdg.de/linux/misc/suser-crauch/10.0/
     - cairo-1.0.0
@@ -190,6 +245,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gconf2-2.10.0
     - glib2-2.6.3
     - gtk2-2.6.4
+    - gtkhtml2-3.6.1
     - guile-1.6.7
     - gwrap: not included
     - libart_lgpl-2.3.17

@@ -7,7 +7,6 @@
 //extern "C" {
 #endif
 
-#include <glob.h>
 #include <glib.h>
 #include <glib-object.h>
 #include <libgnomeui/libgnomeui.h>

@@ -23,8 +23,6 @@
  * \brief A very generic and flexible account matcher/picker
  \author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -52,7 +50,7 @@ struct _accountpickerdialog {
   GncTreeViewAccount *account_tree;
   GtkWidget       * account_tree_sw;
   const gchar * account_human_description;
-  gchar * account_online_id_value;
+  const gchar * account_online_id_value;
   gnc_commodity * new_account_default_commodity;
   GNCAccountType new_account_default_type;
 };
@@ -66,6 +64,7 @@ static void
 build_acct_tree(struct _accountpickerdialog * picker)
 {
   GtkTreeView *account_tree;
+  GtkTreeViewColumn *col;
 
   /* Build a new account tree */
   TRACE("Begin");
@@ -73,16 +72,23 @@ build_acct_tree(struct _accountpickerdialog * picker)
   picker->account_tree = GNC_TREE_VIEW_ACCOUNT(account_tree);
   gtk_tree_view_set_headers_visible (account_tree, TRUE);
 
+  col = gnc_tree_view_find_column_by_name(GNC_TREE_VIEW(account_tree), "type");
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+
   /* Add our custom column. */
-  gnc_tree_view_account_add_kvp_column (picker->account_tree,
+  col = gnc_tree_view_account_add_kvp_column (picker->account_tree,
 					_("Account ID"), "online_id");
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+
+  col = gnc_tree_view_find_column_by_name(
+      GNC_TREE_VIEW(picker->account_tree), "type");
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
   gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
 		    GTK_WIDGET(picker->account_tree));
 
   /* Configure the columns */
-  gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree),
-				   "type", "description", "online_id", NULL);
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));
 }
 
 /* When user clicks to create a new account */
@@ -121,9 +127,10 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
     }
 }
 
-Account * gnc_import_select_account(char * account_online_id_value,
+Account * gnc_import_select_account(gncUIWidget parent,
+				    const gchar * account_online_id_value,
 				    gboolean auto_create,
-				    const char * account_human_description,
+				    const gchar * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type,
 				    Account * default_selection,
@@ -152,7 +159,9 @@ Account * gnc_import_select_account(char * account_online_id_value,
     {
       retval = xaccGroupForEachAccount(gnc_get_current_group (),
 				       test_acct_online_id_match,
-				       account_online_id_value,
+				       /* This argument will only be
+					  used as a "const char*" */
+				       (void*)account_online_id_value,
 				       TRUE);
     }
   if(retval==NULL && auto_create != 0)
@@ -166,6 +175,9 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	}
       
       picker->dialog     = glade_xml_get_widget (xml, "Generic Import Account Picker");
+      if (parent)
+	gtk_window_set_transient_for (GTK_WINDOW (picker->dialog), 
+				      GTK_WINDOW (parent));
       picker->account_tree_sw   = glade_xml_get_widget (xml, "account_tree_sw");
       online_id_label = glade_xml_get_widget (xml, "online_id_label");
       button = glade_xml_get_widget (xml, "newbutton");
@@ -200,6 +212,18 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	 case GTK_RESPONSE_OK:
 	  retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
 	  DEBUG("Selected account %p, %s", retval, xaccAccountGetName(retval));
+
+	  /* See if the selected account is a placeholder. */
+	  if (xaccAccountGetPlaceholder (retval)) {
+	    gnc_error_dialog
+	      (picker->dialog,
+	       _("The account %s is a placeholder account and does not allow "
+		 "transactions. Please choose a different account."),
+	       xaccAccountGetName (retval));
+	    response = GNC_RESPONSE_NEW;
+	    break;
+	  }
+
 	  if( account_online_id_value != NULL)
 	    {
 	      gnc_import_set_acc_online_id(retval, account_online_id_value);

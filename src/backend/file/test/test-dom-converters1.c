@@ -156,7 +156,7 @@ test_dom_tree_to_timespec(void)
             printf("Node looks like:\n");
             xmlElemDump(stdout, NULL, test_node);
             printf("\n");
-            printf("Secs are %lld vs %lld :: ",
+            printf("Secs are %" G_GUINT64_FORMAT " vs %" G_GUINT64_FORMAT " :: ",
                    test_spec1->tv_sec,
                    test_spec2.tv_sec);
             printf("NSecs are %ld vs %ld\n",

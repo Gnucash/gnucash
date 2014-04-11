@@ -1,24 +1,28 @@
 
-SUBDIRS = . doc lib src intl-scm po rpm accounts
+SUBDIRS = . doc lib src intl-scm packaging po accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles .goffice-links
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles lib/.links
 
-doc_DATA = \
+dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2005 \
+  ChangeLog.2004 \
+  ChangeLog.2003 \
   DOCUMENTERS \
   HACKING \
   INSTALL \
   LICENSE \
   NEWS \
   README \
-  README.patches
+  README.patches \
+  README.dependencies
 
 m4datadir = $(datadir)/aclocal
 m4data_DATA = gnucash.m4
@@ -34,9 +38,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = ChangeLog.1 \
-  HACKING \
-  README.patches \
+EXTRA_DIST = \
   gnucash.lsm \
   gnucash.m4 \
   gnucash-config.in \
@@ -44,16 +46,20 @@ EXTRA_DIST = ChangeLog.1 \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \
-  macros/autogen.sh \
   macros/compiler-flags.m4 \
+  macros/g-wrap.m4 \
   macros/gnome-guile-checks.m4 \
   macros/legacy_macros.m4 \
+  po/gnucash.pot \
+  po/POTFILES.in \
+  po/POTFILES.skip \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
   po/glossary/el.po \
   po/glossary/es.po \
   po/glossary/es_NI-policy.txt \
+  po/glossary/fr.po \
   po/glossary/gnc-glossary.txt \
   po/glossary/it.po \
   po/glossary/nl.po \
@@ -89,58 +95,53 @@ make-gnucash-patch: make-gnucash-patch.in Makefile
 make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
+            -e 's:@-SRCDIR-@:${srcdir}:g' \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-
-.goffice-links: 
-	rm -f goffice
+lib/.links: 
+	rm -f goffice gsf
 if !HAVE_GOFFICE
-	ln -sf . goffice
+	$(LN_S) -f . goffice
 endif
-	touch .goffice-links
+if !HAVE_LIBGSF
+	$(LN_S) -f $(srcdir)/lib/libgsf-1.12.3/gsf gsf
+endif
+	touch lib/.links
 
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
   make-gnucash-potfiles po/.intltool-merge-cache \
-  goffice .goffice-links
+  goffice gsf lib/.links po/POTFILES.in
 
 cscope.files:
-	find . -name '*.[ch]' > cscope.files
+	find src lib -name '*.[ch]' > cscope.files
 
 cscope.out: cscope.files
 	cscope -b
 
+
+# make sure etags.files is up to date.
+# and use the contents of etags.files to re-make TAGS if needed.
+etags:
 if GNC_ETAGS_FILE
-
-etags:
-        # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
-        # now use the contents of etags.files to re-make TAGS if needed.
 	${MAKE} -f Makefile.TAGS TAGS
-
 else
-
-etags:
 	@echo "You must ./configure with --enable-etags to use etags."
-
 endif
 
+
+# make sure etags.files is up to date.
+# and use the contents of etags.files to re-make tags if needed.
+ctags:
 if GNC_CTAGS_FILE
-
-ctags:
-        # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
-        # now use the contents of etags.files to re-make TAGS if needed.
 	${MAKE} -f Makefile.TAGS tags
-
 else
-
-ctags:
 	@echo "You must ./configure with --enable-ctags to use ctags."
-
 endif
 
 .PHONY: etags ctags
@@ -154,18 +155,50 @@ doc:
 distcleancheck_listfiles = \
   find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
 
+dist-hook: po/POTFILES.in
+
 distcheck-hook:
+	@e=''; \
+	for X in `grep -v \# ${distdir}/po/POTFILES.in` ; do \
+		if [ ! -f ${distdir}/$$X ] ; then \
+			echo $$X " is in POTFILES.in but not in the dist."; \
+			e='yes'; \
+		fi; \
+	done; \
+	for X in `grep -v \# ${distdir}/po/POTFILES.skip` ; do \
+		if [ -f ${distdir}/$$X ] ; then \
+			echo $$X " is in POTFILES.skip but also in the dist.";\
+			e='yes'; \
+		fi; \
+	done; \
+	if test "$$e" = "yes" ; then exit 1; fi;
 
 distclean-local:
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
-pot:
+.PHONY: pot
+pot: Makefile po/POTFILES.in
 	rm -f intl-scm/guile-strings.c
-	make -C intl-scm
+	${MAKE} -C intl-scm
 	rm -f po/$(PACKAGE).pot
-	make -C po $(PACKAGE).pot
+	${MAKE} -C po $(PACKAGE).pot
+
+
+BUILT_SOURCES = po/POTFILES.in
+
+po/POTFILES.in: make-gnucash-potfiles .potfiles
+	./make-gnucash-potfiles > ./po/POTFILES.in
+
+# Creation rules so that po/gnucash.pot can always be created for
+# make dist.
+po/gnucash.pot: po/POTFILES.in intl-scm/guile-strings.c
+	${MAKE} -C po gnucash.pot
+intl-scm/guile-strings.c:
+	${MAKE} -C intl-scm guile-strings.c
+
+.potfiles:
 
 SVN = svn
 XSLTPROC = xsltproc

@@ -182,7 +182,7 @@ ownerreportCB (const char *location, const char *label,
 
   /* href="...:owner=<owner-type>:guid=<guid>[&acct=<guid>]" */
   
-  acctptr = index (location, '&');
+  acctptr = strchr (location, '&');
   if (acctptr)
     acctptr++;
 

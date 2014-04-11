@@ -269,7 +269,7 @@ gnc_job_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &jw->job_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (jw->component_id);
       return;
     }
@@ -378,7 +378,7 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
   gnc_job_name_changed_cb (NULL, jw);
   gnc_gui_component_watch_entity_type (jw->component_id,
 				       GNC_JOB_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gtk_widget_show_all (jw->dialog);
 
@@ -587,10 +587,10 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, columns,
-				   q, q2, buttons, NULL,
+  return gnc_search_dialog_create (type, _("Find Job"),
+				   params, columns, q, q2, buttons, NULL,
 				   new_job_cb, sw, free_userdata_cb,
-				   GCONF_SECTION_SEARCH);
+				   GCONF_SECTION_SEARCH, NULL);
 }
 
 /* Functions for widgets for job selection */

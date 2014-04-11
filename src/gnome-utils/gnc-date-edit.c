@@ -46,7 +46,7 @@
 #include "gnc-date.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-
+#include "glib-compat.h"
 
 enum {
 	DATE_CHANGED,
@@ -491,28 +491,10 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
                                                     callback_data);
 }
 
-/**
- * gnc_date_edit_set_time:
- * @gde: the GNCDateEdit widget
- * @the_time: The time and date that should be set on the widget
- *
- * Changes the displayed date and time in the GNCDateEdit widget
- * to be the one represented by @the_time.
- */
-void
-gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
+static void
+gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm) 
 {
-	struct tm *mytm;
 	char buffer [40];
-
-	g_return_if_fail (gde != NULL);
-        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
-
-	if (the_time == 0)
-		the_time = time (NULL);
-	gde->initial_time = the_time;
-
-	mytm = localtime (&the_time);
 
 	/* Set the date */
 	qof_print_date_dmy_buff (buffer, 40,
@@ -527,6 +509,44 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	else
 		strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
 	gtk_entry_set_text (GTK_ENTRY (gde->time_entry), buffer);
+}
+
+/**
+ * gnc_date_edit_set_time:
+ * @gde: the GNCDateEdit widget
+ * @the_time: The time and date that should be set on the widget
+ *
+ * Changes the displayed date and time in the GNCDateEdit widget
+ * to be the one represented by @the_time.
+ */
+void
+gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
+{
+	struct tm *mytm;
+
+	g_return_if_fail (gde != NULL);
+        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
+
+	if (the_time == 0)
+		the_time = time (NULL);
+	gde->initial_time = the_time;
+
+	mytm = localtime (&the_time);
+	gnc_date_edit_set_time_tm(gde, mytm);
+}
+
+void
+gnc_date_edit_set_gdate (GNCDateEdit *gde, const GDate *date)
+{
+        struct tm mytm;
+        time_t t;
+        
+        g_return_if_fail(gde && GNC_IS_DATE_EDIT(gde) && 
+                         date && g_date_valid(date));
+        g_date_to_struct_tm(date, &mytm);
+        t = mktime(&mytm);
+        if (t != (time_t)(-1))
+                gnc_date_edit_set_time(gde, t);
 }
 
 void
@@ -782,7 +802,8 @@ static struct tm
 gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 {
 	struct tm tm = {0};
-	char *str, *flags = NULL;
+	char *str;
+	unsigned char *flags = NULL;
 
 	/* Assert, because we're just hosed if it's NULL */
 	g_assert(gde != NULL);
@@ -800,7 +821,8 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 		tm.tm_year -= 1900;
 
 	if (gde->flags & GNC_DATE_EDIT_SHOW_TIME) {
-		char *tokp = NULL, *temp;
+		char *tokp = NULL;
+		unsigned char *temp;
 
 		str = g_strdup (gtk_entry_get_text
                                 (GTK_ENTRY (gde->time_entry)));
@@ -849,16 +871,30 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 time_t
 gnc_date_edit_get_date (GNCDateEdit *gde)
 {
- 	struct tm tm;
+        struct tm tm;
+        time_t retval;
 
         g_return_val_if_fail (gde != NULL, 0);
         g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
 
         tm = gnc_date_edit_get_date_internal (gde);
 
-        if (mktime (&tm) == -1)
-		return gnc_timet_get_today_start();
-	return mktime (&tm);
+        retval = mktime (&tm);
+        if (retval == -1)
+                return gnc_timet_get_today_start ();
+        return retval;
+}
+
+void
+gnc_date_edit_get_gdate (GNCDateEdit *gde, GDate *date)
+{
+	time_t t;
+
+	g_return_if_fail (gde && date);
+	g_return_if_fail (GNC_IS_DATE_EDIT (gde));
+
+	t = gnc_date_edit_get_date(gde);
+	g_date_set_time_t(date, t);
 }
 
 Timespec
@@ -987,6 +1023,23 @@ gnc_date_activates_default (GNCDateEdit *gde, gboolean state)
 		return;
 
     gtk_entry_set_activates_default(GTK_ENTRY(gde->date_entry), state);
+}
+
+
+/** Sets the editable field from a GNCDateEdit widget as the target
+ *  for the specified label's access key.
+ *
+ *  @param gde The date editor to set as the target.
+ *
+ *  @param label The label whose access key should set focus to this
+ *  widget. */
+void
+gnc_date_make_mnemonic_target (GNCDateEdit *gde, GtkWidget *label)
+{
+	if (!gde)
+		return;
+
+	gtk_label_set_mnemonic_widget (GTK_LABEL(label), gde->date_entry);
 }
 
 

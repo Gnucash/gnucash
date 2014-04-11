@@ -36,6 +36,7 @@
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
 
+#include <gtk/gtk.h>
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -47,6 +48,8 @@ G_BEGIN_DECLS
 #define GNC_IS_MAIN_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_MAIN_WINDOW))
 #define GNC_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_MAIN_WINDOW))
 #define GNC_MAIN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindowClass))
+
+#define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
 /* typedefs & structures */
 
@@ -142,6 +145,10 @@ void gnc_main_window_close_page (GncPluginPage *page);
  */
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
+
+void
+main_window_update_page_name (GncPluginPage *page,
+			      const gchar *name_in);
 
 /** Manually add a set of actions to the specified window.  Plugins
  *  whose user interface is not hard coded (e.g. the menu-additions *
@@ -273,6 +280,80 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
 gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
 					  GdkEventButton *event,
 					  GncPluginPage *page);
+
+/** Restore the persistent state of all windows.
+ *
+ *  @param keyfile The GKeyFile containing persistent window state.
+ */ 
+void gnc_main_window_restore_all_windows(const GKeyFile *keyfile);
+
+/** Save the persistent state of all windows.
+ *
+ *  @param keyfile The GKeyFile to contain persistent window state.
+ */ 
+void gnc_main_window_save_all_windows(GKeyFile *keyfile);
+
+/** Restore the persistent state of one window to a sane default.
+ */ 
+void gnc_main_window_restore_default_state(void);
+
+/**
+ * gnc_gtk_action_group_set_translation_domain:
+ * @action_group: a #GtkActionGroup
+ * @domain: the translation domain to use for dgettext() calls
+ * 
+ * Sets the translation domain and uses dgettext() for translating the 
+ * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
+ * gtk_action_group_add_actions().
+ *
+ * This is copied from gtk's gtk_action_group_set_translation_domain()
+ * into GnuCash in order to fix problems when empty msgids were passed
+ * through gettext().
+ *
+ * See http://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
+ * is fixed in the gtk that we can rely open, then
+ * gnc_gtk_action_group_set_translation_domain can be replaced by
+ * gtk_action_group_set_translation_domain again.
+ **/
+void 
+gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
+					     const gchar    *domain);
+
+
+/** Tell a window to finish any outstanding activities.  This function
+ *  will call gnc_plugin_page_finish_pending for each installed page.
+ *  If any page returns a failure indication, then the function stops
+ *  walking pages and immediately returns a failure.
+ *
+ *  @param window Whe window whose pages should be checked.
+ *
+ *  @return FALSE if any page could not or would not comply, which
+ *  should cancel the pending operation.  TRUE otherwise */
+gboolean gnc_main_window_finish_pending (GncMainWindow *window);
+
+
+/** Tell all pages in all windows to finish any outstanding
+ *  activities.  This function will call
+ *  gnc_plugin_page_finish_pending for each installed page.  If any
+ *  page returns a failure indication, then the function stops walking
+ *  pages and immediately returns a failure.
+ *
+ *  @param window Whe window whose pages should be checked.
+ *
+ *  @return FALSE if any page could not or would not comply, which
+ *  should cancel the pending operation.  TRUE otherwise */
+gboolean gnc_main_window_all_finish_pending (void);
+
+/** Change the sensitivity of a command in all windows.  This can be
+ *  used to serialize access to a command so that in cannot be
+ *  reinvoked until the current invocation is finished.
+ *
+ *  @param action_name The name of the command to modity.
+ *
+ *  @param sensitive Whether or not the user should be able to invoke
+ *  this action. */
+void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
+
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

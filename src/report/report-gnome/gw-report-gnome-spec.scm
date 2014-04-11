@@ -1,7 +1,7 @@
 (define-module (g-wrapped gw-report-gnome-spec))
 
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (use-modules (g-wrap))
 
@@ -27,6 +27,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <gtk/gtk.h>\n"
       "#include <dialog-column-view.h>\n"
       "#include <gnc-plugin-page-report.h>\n"

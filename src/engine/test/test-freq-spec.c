@@ -562,21 +562,21 @@ test_composite (void)
 int
 main (int argc, char **argv)
 {
-	QofSession *session;
+    QofSession *session;
 
-	qof_init();
-	g_return_val_if_fail(cashobjects_register(), -1);
-	session = qof_session_new ();
-	book = qof_session_get_book(session);
-   test_once();
-   test_caseA();
-   test_daily();
-   test_weekly();
-   test_monthly();
-   test_month_relative();
-   test_composite();
-   print_test_results();
-	qof_session_end(session);
-	qof_close();
-  return 0;
+    qof_init();
+    g_return_val_if_fail(cashobjects_register(), -1);
+    session = qof_session_new ();
+    book = qof_session_get_book(session);
+    test_once();
+    test_caseA();
+    test_daily();
+    test_weekly();
+    test_monthly();
+    test_month_relative();
+    test_composite();
+    print_test_results();
+    qof_session_end(session);
+    qof_close();
+    return (get_rv() > 1);
 }

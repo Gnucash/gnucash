@@ -14,14 +14,24 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-#ifndef HAVE_SETENV
-#include "setenv.h"
-#endif
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
 
+#ifndef lt_ptr
+# define lt_ptr lt_ptr_t
+#endif
+
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
+
+typedef struct {
+  char * module_path;
+  char * module_description;
+  char * module_filepath;
+  int    module_interface;
+  int    module_age;
+  int    module_revision;
+} GNCModuleInfo;
 
 typedef struct 
 {
@@ -32,6 +42,7 @@ typedef struct
   int           (* init_func)(int refcount);
 } GNCLoadedModule;
 
+static GNCModuleInfo * gnc_module_get_info(const char * lib_path);
 
 /*************************************************************
  * gnc_module_system_search_dirs
@@ -133,7 +144,7 @@ gnc_module_system_setup_load_path(void)
     }
     g_list_free(dirs);
     
-    if(setenv("LD_LIBRARY_PATH", envt, 1) != 0)
+    if (!g_setenv("LD_LIBRARY_PATH", envt, 1))
     {
       g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
     }
@@ -192,15 +203,15 @@ gnc_module_system_refresh(void)
   /* look in each search directory */
   for(current = search_dirs; current; current = current->next) 
   {
-    DIR           * d = opendir(current->data);
-    struct dirent * dent = NULL;
-    char          * fullpath = NULL;
-    int           namelen;
-    GNCModuleInfo * info; 
- 
-    if(d) 
-    {
-      while((dent = readdir(d)) != NULL) 
+      DIR *d = opendir(current->data);
+      struct dirent * dent = NULL;
+      char * fullpath = NULL;
+      int namelen;
+      GNCModuleInfo * info;
+
+      if (!d) continue;
+
+      while ((dent = readdir(d)) != NULL)
       {
         namelen = strlen(dent->d_name);
         
@@ -221,7 +232,7 @@ gnc_module_system_refresh(void)
         }
       }
       closedir(d);
-    }
+
   }
   /* free the search dir strings */
   for(current = search_dirs; current; current=current->next) 
@@ -255,7 +266,7 @@ gnc_module_system_modinfo(void)
  *  if it's a gnc_module, return a struct describing it.
  *************************************************************/
 
-GNCModuleInfo * 
+static GNCModuleInfo *
 gnc_module_get_info(const char * fullpath) 
 {
   lt_dlhandle handle;
@@ -568,38 +579,3 @@ gnc_module_unload(GNCModule module)
   }
 }
 
-
-/*************************************************************
- * gnc_module_lookup
- * find a symbol in a module
- *************************************************************/
-
-void *
-gnc_module_lookup(GNCModule module, gchar * symbol) 
-{
-  GNCLoadedModule * info;
-  lt_ptr ltptr;
-
-  if(!loaded_modules) 
-  {
-    gnc_module_system_init();
-  }
-  
-  if(module && symbol) 
-  {  
-    info = g_hash_table_lookup(loaded_modules, module);
-    if(info) 
-    {
-      ltptr = lt_dlsym(info->handle, symbol);
-      return (void *)ltptr;
-    }
-    else 
-    {
-      return NULL;
-    }
-  }
-  else 
-  {
-    return NULL;
-  }
-}

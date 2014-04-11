@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#define _GNU_SOURCE
 #define __EXTENSIONS__
 
 #include <ctype.h>
@@ -39,9 +38,6 @@
 #include <errno.h>
 
 #ifdef GNUCASH_MAJOR_VERSION
-#ifndef HAVE_SETENV
-#include "setenv.h"
-#endif
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
@@ -55,7 +51,7 @@ static QofLogModule log_module = GNC_MOD_IO;
 gboolean
 isspace_str(const gchar *str, int nomorethan)
 {
-  const gchar *cursor = str;
+  const guchar *cursor = str;
   while(*cursor && (nomorethan != 0)) {
     if(!isspace(*cursor)) {
       return(FALSE);
@@ -223,7 +219,7 @@ string_to_gint64(const gchar *str, gint64 *v)
   g_return_val_if_fail(str, FALSE);
   
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " " GNC_SCANF_LLD "%n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " " QOF_SCANF_LLD "%n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
 
@@ -233,7 +229,7 @@ string_to_gint64(const gchar *str, gint64 *v)
    * is fixed in the next release 10.2 afaik
    */  
   while( (*((gchar*)str + num_read)!='\0') &&
-	 isspace(*((char*)str + num_read)))
+	 isspace(*((unsigned char*)str + num_read)))
     num_read++;
 
   if (v)
@@ -259,7 +255,7 @@ string_to_gint32(const gchar *str, gint32 *v)
     return(FALSE);
   }
   while( (*((gchar*)str + num_read)!='\0') &&
-	 isspace(*((char*)str + num_read)))
+	 isspace(*((unsigned char*)str + num_read)))
     num_read++;
 
   if (v)
@@ -277,7 +273,7 @@ gboolean
 hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 {
   /* Convert a hex string to binary.  No whitespace allowed. */
-  const gchar *cursor = str;
+  const guchar *cursor = str;
   guint64 str_len;
   gboolean error = FALSE;
   
@@ -394,19 +390,19 @@ gnc_timegm (struct tm *tm)
 
   old_tz = getenv ("TZ");
   /* FIXME: there's no way to report this error to the caller. */
-  if(setenv("TZ", "UTC", 1) != 0)
+  if (!g_setenv("TZ", "UTC", 1))
     PERR ("couldn't switch the TZ.");
   result = mktime (tm);
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(setenv("TZ", old_tz, 1) != 0)
+    if (!g_setenv("TZ", old_tz, 1))
       PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    unsetenv("TZ");
+    g_unsetenv("TZ");
     if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }
@@ -499,9 +495,12 @@ string_to_timespec_nsecs(const gchar *str, Timespec *ts)
 
   if (!str || !ts) return FALSE;
 
-  sscanf(str, " %ld%n", &nanosecs, &charcount);
+  /* The '%n' doesn't count as a conversion. */
+  if (1 != sscanf(str, " %ld%n", &nanosecs, &charcount))
+    return FALSE;
+
   while( (*((gchar*)str + charcount)!='\0') &&
-	 isspace(*((char*)str + charcount)))
+	 isspace(*((unsigned char*)str + charcount)))
     charcount++;
 
   if(charcount != strlen(str)) return(FALSE);

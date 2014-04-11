@@ -86,6 +86,9 @@ typedef void (*sixtp_fail_handler)(gpointer data_for_children,
                                    gpointer *result,
                                    const gchar *tag);
 
+typedef void (*sixtp_push_handler)(xmlParserCtxtPtr xml_context,
+                                   gpointer user_data);
+
 typedef struct sixtp 
 {
   /* If you change this, don't forget to modify all the copy/etc. functions */
@@ -180,6 +183,9 @@ gboolean sixtp_parse_file(sixtp *sixtp, const char *filename,
 gboolean sixtp_parse_buffer(sixtp *sixtp, char *bufp, int bufsz,
                             gpointer data_for_top_level, gpointer global_data,
                             gpointer *parse_result);
+gboolean sixtp_parse_push(sixtp *sixtp, sixtp_push_handler push_handler,
+                          gpointer push_user_data, gpointer data_for_top_level,
+                          gpointer global_data, gpointer *parse_result);
 
 void sixtp_set_start(sixtp *parser, sixtp_start_handler start_handler);
 void sixtp_set_before_child(sixtp *parser, sixtp_before_child_handler handler);
@@ -198,7 +204,8 @@ sixtp* sixtp_add_some_sub_parsers(sixtp *tochange, gboolean cleanup, ...);
 gboolean sixtp_add_sub_parser(sixtp *parser, const gchar* tag,
                               sixtp *sub_parser);
 
-gboolean gnc_is_our_xml_file(const char *filename, const char *first_tag);
+gboolean gnc_is_our_xml_file(const char *filename, const char *first_tag,
+                             gboolean *with_encoding);
 
 
 #endif /* _SIXTP_H_ */

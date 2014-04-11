@@ -41,15 +41,17 @@
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-ui-util.h"
 #include "Group.h"
 #include "Transaction.h"
 #include "guile-mappings.h"
-
+#include "gnc-session.h"
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"
+#define KEY_REVERSED_ACCOUNTS "reversed_accounts"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -59,36 +61,43 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 static gboolean reverse_balance_inited = FALSE;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
+/* Cache currency ISO codes and only look them up in gconf when
+ * absolutely necessary. Can't cache a pointer to the data structure
+ * as that will change any time the book changes. */
+static gchar *user_default_currency = NULL;
+static gchar *user_report_currency = NULL;
+
 /********************************************************************\
- * gnc_get_account_separator                                        *
- *   returns the current account separator character                *
+ * gnc_configure_account_separator                                  *
+ *   updates the current account separator character                *
  *                                                                  *
  * Args: none                                                       *
- * Returns: account separator character                             *
  \*******************************************************************/
-char
-gnc_get_account_separator (void)
+static void
+gnc_configure_account_separator (void)
 {
-  char separator = ':';
+  const gchar *separator;
   char *string;
 
   string = gnc_gconf_get_string(GCONF_GENERAL, KEY_ACCOUNT_SEPARATOR, NULL);
 
-  if (!string || safe_strcmp(string, "colon") == 0)
-    separator = ':';
+  if (!string || !*string || safe_strcmp(string, "colon") == 0)
+    separator = ":";
   else if (safe_strcmp(string, "slash") == 0)
-    separator = '/';
+    separator = "/";
   else if (safe_strcmp(string, "backslash") == 0)
-    separator = '\\';
+    separator = "\\";
   else if (safe_strcmp(string, "dash") == 0)
-    separator = '-';
+    separator = "-";
   else if (safe_strcmp(string, "period") == 0)
-    separator = '.';
+    separator = ".";
+  else
+    separator = string;
+
+  gnc_set_account_separator(separator);
 
   if (string != NULL)
     free(string);
-
-  return separator;
 }
 
 
@@ -101,7 +110,7 @@ gnc_configure_reverse_balance (void)
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     reverse_type[i] = FALSE;
 
-  choice = gnc_gconf_get_string(GCONF_GENERAL, "reversed_accounts", NULL);
+  choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_REVERSED_ACCOUNTS, NULL);
 
   if (safe_strcmp (choice, "none") == 0)
   {
@@ -146,7 +155,7 @@ gnc_reverse_balance_type (GNCAccountType type)
 }
 
 gboolean
-gnc_reverse_balance (Account *account)
+gnc_reverse_balance (const Account *account)
 {
   int type;
 
@@ -180,20 +189,20 @@ gnc_extract_directory (char **dirname, const char *filename)
     free(*dirname);
 
   /* Parse out the directory. */
-  if ((filename == NULL) || (rindex(filename, '/') == NULL)) {
+  if ((filename == NULL) || (strrchr(filename, '/') == NULL)) {
     *dirname = NULL;
     return;
   }
 
   *dirname = g_strdup(filename);
-  tmp = rindex(*dirname, '/');
+  tmp = strrchr(*dirname, '/');
   *(tmp+1) = '\0';
 }
 
 QofBook *
 gnc_get_current_book (void)
 {
-  return qof_session_get_book (qof_session_get_current_session ());
+  return qof_session_get_book (gnc_get_current_session ());
 }
 
 AccountGroup *
@@ -228,10 +237,10 @@ gnc_get_current_commodities (void)
  */
 gnc_numeric
 gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
-				 Account *account,
+				 const Account *account,
 				 gboolean recurse,
 				 gboolean *negative,
-				 gnc_commodity *commodity)
+				 const gnc_commodity *commodity)
 {
   gnc_numeric balance;
 
@@ -253,7 +262,7 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
  * including all sub-accounts under the specified account.
  */
 gnc_numeric
-gnc_ui_account_get_balance (Account *account, gboolean recurse)
+gnc_ui_account_get_balance (const Account *account, gboolean recurse)
 {
   return gnc_ui_account_get_balance_full (xaccAccountGetBalanceInCurrency,
 					  account, recurse, NULL, NULL);
@@ -265,7 +274,8 @@ gnc_ui_account_get_balance (Account *account, gboolean recurse)
  * specified account.
  */
 gnc_numeric
-gnc_ui_account_get_balance_in_currency (Account *account, gnc_commodity *currency,
+gnc_ui_account_get_balance_in_currency (const Account *account,
+					const gnc_commodity *currency,
 					gboolean recurse)
 {
   return gnc_ui_account_get_balance_full (xaccAccountGetBalanceInCurrency,
@@ -277,7 +287,7 @@ gnc_ui_account_get_balance_in_currency (Account *account, gnc_commodity *currenc
  * possibly including all sub-accounts under the specified account.
  */
 gnc_numeric
-gnc_ui_account_get_reconciled_balance (Account *account,
+gnc_ui_account_get_reconciled_balance (const Account *account,
                                        gboolean recurse)
 {
   return gnc_ui_account_get_balance_full (xaccAccountGetReconciledBalanceInCurrency,
@@ -301,7 +311,7 @@ gnc_ui_account_get_reconciled_balance (Account *account,
  */
 gchar *
 gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
-				  Account *account,
+				  const Account *account,
 				  gboolean recurse,
 				  gboolean *negative)
 {
@@ -331,7 +341,7 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
  */
 gchar *
 gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
-					 Account *account,
+					 const Account *account,
 					 gboolean recurse,
 					 gboolean *negative)
 {
@@ -348,7 +358,8 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
 
 
 gnc_numeric
-gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
+gnc_ui_account_get_balance_as_of_date (Account *account,
+				       time_t date,
                                        gboolean include_children)
 {
   gnc_numeric balance;
@@ -392,7 +403,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
 
 /* Caller is responsible for g_free'ing returned memory */
 char *
-gnc_ui_account_get_tax_info_string (Account *account)
+gnc_ui_account_get_tax_info_string (const Account *account)
 {
   static SCM get_form = SCM_UNDEFINED;
   static SCM get_desc = SCM_UNDEFINED;
@@ -472,6 +483,20 @@ gnc_ui_account_get_tax_info_string (Account *account)
 }
 
 
+static const char *
+string_after_colon (const char *msgstr)
+{
+  const char *string_at_colon;
+  g_assert(msgstr);
+  string_at_colon = strchr(msgstr, ':');
+  if (string_at_colon)
+    return string_at_colon + 1;
+  else
+    /* No colon found; we assume the translation contains only the
+       part after the colon, similar to the disambiguation prefixes */
+    return msgstr;
+}
+
 /********************************************************************\
  * gnc_get_reconcile_str                                            *
  *   return the i18n'd string for the given reconciled flag         *
@@ -486,16 +511,16 @@ gnc_get_reconcile_str (char reconciled_flag)
   {
     /* Translators: For the following strings, the single letters
        after the colon are abbreviations of the word before the
-       colon. Please only translate the letter *after* the colon. */
-    case NREC: return _("not cleared:n") + 12;
-      /* Please only translate the letter *after* the colon. */
-    case CREC: return _("cleared:c") + 8;
-      /* Please only translate the letter *after* the colon. */
-    case YREC: return _("reconciled:y") + 11;
-      /* Please only translate the letter *after* the colon. */
-    case FREC: return _("frozen:f") + 7;
-      /* Please only translate the letter *after* the colon. */
-    case VREC: return _("void:v") + 5;
+       colon. You should only translate the letter *after* the colon. */
+    case NREC: return string_after_colon(_("not cleared:n"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case CREC: return string_after_colon(_("cleared:c"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case YREC: return string_after_colon(_("reconciled:y"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case FREC: return string_after_colon(_("frozen:f"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case VREC: return string_after_colon(_("void:v"));
     default:
       PERR("Bad reconciled flag\n");
       return NULL;
@@ -572,7 +597,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   if (!account)
   {
-    base_name = _(base_name);
+    base_name = base_name && *base_name ? _(base_name) : "";
 
     account = xaccGetAccountFromName (group, base_name);
     if (account && xaccAccountGetType (account) != EQUITY)
@@ -700,11 +725,11 @@ gnc_account_create_opening_balance (Account *account,
 }
 
 char *
-gnc_account_get_full_name (Account *account)
+gnc_account_get_full_name (const Account *account)
 {
   if (!account) return NULL;
 
-  return xaccAccountGetFullName (account, gnc_get_account_separator ());
+  return xaccAccountGetFullName (account);
 }
 
 static void
@@ -794,7 +819,7 @@ gnc_locale_default_currency_nodefault (void)
   table = gnc_get_current_commodities ();
   code = gnc_locale_default_iso_currency_code ();
 
-  currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, code);
+  currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
 
   return (currency ? currency : NULL);
 }
@@ -806,54 +831,80 @@ gnc_locale_default_currency (void)
 
   return (currency ? currency :
 	  gnc_commodity_table_lookup (gnc_get_current_commodities (), 
-				      GNC_COMMODITY_NS_ISO, "USD"));
+				      GNC_COMMODITY_NS_CURRENCY, "USD"));
 }
 
 
 gnc_commodity *
 gnc_default_currency (void)
 {
-  gnc_commodity *currency;
+  gnc_commodity *currency = NULL;
   gchar *choice, *mnemonic;
+
+  if (user_default_currency)
+    return gnc_commodity_table_lookup(gnc_get_current_commodities(),
+				      GNC_COMMODITY_NS_CURRENCY,
+				      user_default_currency);
 
   choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
   if (choice && strcmp(choice, "other") == 0) {
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					  GNC_COMMODITY_NS_ISO, mnemonic);
+					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
     g_free(mnemonic);
     g_free(choice);
-
-    if (currency)
-      return currency;
   }
 
-  return gnc_locale_default_currency ();
+  if (!currency)
+    currency = gnc_locale_default_currency ();
+  if (currency) {
+    mnemonic = user_default_currency;
+    user_default_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
+    g_free(mnemonic);
+  }
+  return currency;
 }
 
 gnc_commodity *
 gnc_default_report_currency (void)
 {
-  gnc_commodity *currency;
+  gnc_commodity *currency = NULL;
   gchar *choice, *mnemonic;
 
+  if (user_report_currency)
+    return gnc_commodity_table_lookup(gnc_get_current_commodities(),
+				      GNC_COMMODITY_NS_CURRENCY,
+				      user_report_currency);
   choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				KEY_CURRENCY_CHOICE, NULL);
   if (choice && strcmp(choice, "other") == 0) {
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				    KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					  GNC_COMMODITY_NS_ISO, mnemonic);
+					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
-    g_free(mnemonic);
     g_free(choice);
-
-    if (currency)
-      return currency;
+    g_free(mnemonic);
   }
 
-  return gnc_locale_default_currency ();
+  if (!currency)
+    currency = gnc_locale_default_currency (); 
+  if (currency) {
+    mnemonic = user_report_currency;
+    user_report_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
+    g_free(mnemonic);
+  }
+  return currency;
+}
+
+
+static void
+gnc_currency_changed_cb (GConfEntry *entry, gpointer user_data)
+{
+  user_default_currency = NULL;
+  user_report_currency = NULL;
+  gnc_hook_run(HOOK_CURRENCY_CHANGED, NULL);
 }
 
 
@@ -1000,7 +1051,7 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
 }
 
 static GNCPrintAmountInfo
-gnc_account_print_info_helper(Account *account, gboolean use_symbol,
+gnc_account_print_info_helper(const Account *account, gboolean use_symbol,
                               gnc_commodity * (*efffunc)(const Account *),
                               int (*scufunc)(const Account*))
 {
@@ -1038,7 +1089,7 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
 }
 
 GNCPrintAmountInfo
-gnc_account_print_info (Account *account, gboolean use_symbol)
+gnc_account_print_info (const Account *account, gboolean use_symbol)
 {
     return gnc_account_print_info_helper(account, use_symbol,
                                          xaccAccountGetCommodity,
@@ -1154,7 +1205,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 {
   struct lconv *lc = gnc_localeconv();
   int num_whole_digits;
-  char temp_buf[64];
+  char temp_buf[128];
   gnc_numeric whole, rounding;
   int min_dp, max_dp;
 
@@ -1189,11 +1240,17 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
     rounding.denom = pow(10, max_dp + 1);
     val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    /* Yes, rounding up can cause overflow.  Check for it. */
+    if (gnc_numeric_check(val)) {
+        PWARN("Bad numeric from rounding.");
+        *buf = '\0';
+        return 0;
+    }
   }
 
   /* calculate the integer part and the remainder */
-  whole = gnc_numeric_create (val.num / val.denom, 1);
-  val = gnc_numeric_sub (val, whole, val.denom, GNC_RND_NEVER);
+  whole = gnc_numeric_convert(val, 1, GNC_HOW_RND_TRUNC);
+  val = gnc_numeric_sub (val, whole, GNC_DENOM_AUTO, GNC_HOW_RND_NEVER);
   if (gnc_numeric_check (val))
   {
     PWARN ("Problem with remainder.");
@@ -1210,19 +1267,20 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   else
   {
     int group_count;
-    char separator;
+    char *separator;
     char *temp_ptr;
     char *buf_ptr;
     char *group;
+    gchar *rev_buf;
 
     if (info->monetary)
     {
-      separator = lc->mon_thousands_sep[0];
+      separator = lc->mon_thousands_sep;
       group = lc->mon_grouping;
     }
     else
     {
-      separator = lc->thousands_sep[0];
+      separator = lc->thousands_sep;
       group = lc->grouping;
     }
 
@@ -1240,7 +1298,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
         if (group_count == *group)
         {
-          *buf_ptr++ = separator;
+	  g_utf8_strncpy(buf_ptr, separator, 1);
+	  buf_ptr = g_utf8_find_next_char(buf_ptr, NULL);
           group_count = 0;
 
           /* Peek ahead at the next group code */
@@ -1264,7 +1323,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     /* We built the string backwards, now reverse */
     *buf_ptr++ = *temp_ptr;
     *buf_ptr = '\0';
-    g_strreverse(buf);
+    rev_buf = g_utf8_strreverse(buf, -1);
+    strcpy (buf, rev_buf);
+    g_free(rev_buf);
   } /* endif */
 
   /* at this point, buf contains the whole part of the number */
@@ -1276,20 +1337,26 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
       val = gnc_numeric_reduce (val);
 
-      sprintf (temp_buf, " + %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT,
-               val.num,
-               val.denom);
+      if (val.denom > 0)
+          sprintf (temp_buf, " + %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT,
+                   val.num, val.denom);
+      else
+          sprintf (temp_buf, " + %" G_GINT64_FORMAT " * %" G_GINT64_FORMAT,
+                   val.num, -val.denom);
 
       strcat (buf, temp_buf);
     }
   }
   else
   {
+    char *decimal_point;
     guint8 num_decimal_places = 0;
     char *temp_ptr = temp_buf;
 
-    *temp_ptr++ = info->monetary ?
-      lc->mon_decimal_point[0] : lc->decimal_point[0];
+    decimal_point = info->monetary ?
+      lc->mon_decimal_point : lc->decimal_point;
+    g_utf8_strncpy(temp_ptr, decimal_point, 1);
+    temp_ptr = g_utf8_find_next_char(temp_ptr, NULL);
 
     while (!gnc_numeric_zero_p (val) && (val.denom != 1) &&
 	   (num_decimal_places < max_dp))
@@ -1417,60 +1484,60 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 1))
-     bufp = gnc_stpcpy(bufp, sign);
+     bufp = g_stpcpy(bufp, sign);
 
    /* Now see if we print currency */
    if (cs_precedes)
    {
      /* See if we print sign now */
      if (print_sign && (sign_posn == 3))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
 
      if (info.use_symbol)
      {
-       bufp = gnc_stpcpy(bufp, currency_symbol);
+       bufp = g_stpcpy(bufp, currency_symbol);
        if (sep_by_space)
-         bufp = gnc_stpcpy(bufp, " ");
+         bufp = g_stpcpy(bufp, " ");
      }
 
      /* See if we print sign now */
      if (print_sign && (sign_posn == 4))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
    }
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
-     bufp = gnc_stpcpy(bufp, "(");
+     bufp = g_stpcpy(bufp, "(");
 
    /* Now print the value */
    bufp += PrintAmountInternal(bufp, val, &info);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
-     bufp = gnc_stpcpy(bufp, ")");
+     bufp = g_stpcpy(bufp, ")");
 
    /* Now see if we print currency */
    if (!cs_precedes)
    {
      /* See if we print sign now */
      if (print_sign && (sign_posn == 3))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
 
      if (info.use_symbol)
      {
        if (sep_by_space)
-         bufp = gnc_stpcpy(bufp, " ");
-       bufp = gnc_stpcpy(bufp, currency_symbol);
+         bufp = g_stpcpy(bufp, " ");
+       bufp = g_stpcpy(bufp, currency_symbol);
      }
 
      /* See if we print sign now */
      if (print_sign && (sign_posn == 4))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
    }
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 2))
-     bufp = gnc_stpcpy(bufp, sign);
+     bufp = g_stpcpy(bufp, sign);
 
    /* return length of printed string */
    return (bufp - orig_bufp);
@@ -1482,7 +1549,8 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
   /* hack alert -- this is not thread safe ... */
   static char buf[1024];
 
-  xaccSPrintAmount (buf, val, info);
+  if (!xaccSPrintAmount (buf, val, info))
+      buf[0] = '\0';
 
   /* its OK to return buf, since we declared it static */
   return buf;
@@ -1554,22 +1622,22 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 {
   struct lconv *lc = gnc_localeconv();
 
-  char negative_sign;
-  char decimal_point;
-  char group_separator;
+  gunichar negative_sign;
+  gunichar decimal_point;
+  gunichar group_separator;
   char *group;
 
-  negative_sign = lc->negative_sign[0];
+  negative_sign = g_utf8_get_char(lc->negative_sign);
   if (monetary)
   {
-    group_separator = lc->mon_thousands_sep[0];
-    decimal_point = lc->mon_decimal_point[0];
+    group_separator = g_utf8_get_char(lc->mon_thousands_sep);
+    decimal_point = g_utf8_get_char(lc->mon_decimal_point);
     group = lc->mon_grouping;
   }
   else
   {
-    group_separator = lc->thousands_sep[0];
-    decimal_point = lc->decimal_point[0];
+    group_separator = g_utf8_get_char(lc->thousands_sep);
+    decimal_point = g_utf8_get_char(lc->decimal_point);
     group = lc->grouping;
   }
 
@@ -1577,10 +1645,14 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 				 group_separator, group, NULL, result, endstr);
 }
 
+/* Note: xaccParseAmountExtended causes test-print-parse-amount 
+to fail if QOF_SCANF_LLD is simply replaced by G_GINT64_FORMAT. Why?
+A: Because scanf and printf use different symbols for 64-bit numbers.
+*/
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
-			 char negative_sign, char decimal_point,
-			 char group_separator, char *group, char *ignore_list,
+			 gunichar negative_sign, gunichar decimal_point,
+			 gunichar group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr)
 {
   gboolean is_negative;
@@ -1589,13 +1661,14 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
   GList * group_data;
   long long int numer;
   long long int denom;
-  int group_count;
+  int count, group_count;
 
   ParseState state;
 
-  const char *in;
-  char *out_str;
-  char *out;
+  const gchar *in;
+  gunichar uc;
+  gchar *out_str;
+  gchar *out;
 
   /* Initialize *endstr to in_str */
   if (endstr != NULL)
@@ -1604,9 +1677,15 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
   if (in_str == NULL)
     return FALSE;
 
+  if (!g_utf8_validate(in_str, -1, &in)) {
+    printf("Invalid utf8 string '%s'. Bad character at position %ld.\n",
+	   in_str, g_utf8_pointer_to_offset (in_str, in));
+    return FALSE;
+  }
+
   /* 'out_str' will be used to store digits for numeric conversion.
    * 'out' will be used to traverse out_str. */
-  out = out_str = g_new(char, strlen(in_str) + 1);
+  out = out_str = g_new(gchar, strlen(in_str) + 128);
 
   /* 'in' is used to traverse 'in_str'. */
   in = in_str;
@@ -1627,9 +1706,11 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
   {
     ParseState next_state = state;
 
+    uc = g_utf8_get_char(in);
+
     /* Ignore anything in the 'ignore list' */
-    if (ignore_list && *in != '\0' && strchr(ignore_list, *in) != NULL) {
-      in++;
+      if (ignore_list && uc && g_utf8_strchr(ignore_list, -1, uc) != NULL) {
+      in = g_utf8_next_char(in);
       continue;
     }
 
@@ -1639,25 +1720,26 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     {
       /* START_ST means we have parsed 0 or more whitespace characters */
       case START_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in; /* we record the digits themselves in out_str
+          count = g_unichar_to_utf8(uc, out);
+	  out += count; /* we record the digits themselves in out_str
                          * for later conversion by libc routines */
           next_state = PRE_GROUP_ST;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (isspace(*in))
+        else if (g_unichar_isspace(uc))
         {
         }
-        else if (*in == negative_sign)
+        else if (uc == negative_sign)
         {
           is_negative = TRUE;
           next_state = NEG_ST;
         }
-        else if (*in == '(')
+        else if (uc == '(')
         {
           is_negative = TRUE;
           need_paren = TRUE;
@@ -1673,16 +1755,17 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       /* NEG_ST means we have just parsed a negative sign. For now,
        * we only recognize formats where the negative sign comes first. */
       case NEG_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
           next_state = PRE_GROUP_ST;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (isspace(*in))
+        else if (g_unichar_isspace(uc))
         {
         }
         else
@@ -1695,19 +1778,20 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       /* PRE_GROUP_ST means we have started parsing the number, but
        * have not encountered a decimal point or a grouping character. */
       case PRE_GROUP_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (*in == group_separator)
+        else if (uc == group_separator)
         {
           next_state = START_GROUP_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
           next_state = DONE_ST;
           need_paren = FALSE;
@@ -1725,27 +1809,29 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
        * try to interpret it in the fashion that will allow parsing
        * of the current number to continue. */
       case START_GROUP_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
           group_count++; /* We record the number of digits
                           * in the group for later checking. */
           next_state = IN_GROUP_ST;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           /* If we now get a decimal point, and both the decimal
            * and the group separator are also whitespace, assume
            * the last group separator was actually whitespace and
            * stop parsing. Otherwise, there's a problem. */
-          if (isspace(group_separator) && isspace(decimal_point))
+          if (g_unichar_isspace(group_separator) &&
+	      g_unichar_isspace(decimal_point))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
-          if (isspace(group_separator))
+          if (g_unichar_isspace(group_separator))
           {
             next_state = DONE_ST;
             need_paren = FALSE;
@@ -1758,7 +1844,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
           /* If the last group separator is also whitespace,
            * assume it was intended as such and stop parsing.
            * Otherwise, there is a problem. */
-          if (isspace(group_separator))
+          if (g_unichar_isspace(group_separator))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
@@ -1768,21 +1854,22 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       /* IN_GROUP_ST means we are in the middle of parsing
        * a group of digits. */
       case IN_GROUP_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
           group_count++; /* We record the number of digits
                           * in the group for later checking. */
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (*in == group_separator)
+        else if (uc == group_separator)
         {
           next_state = START_GROUP_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
           next_state = DONE_ST;
           need_paren = FALSE;
@@ -1796,31 +1883,32 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
       /* FRAC_ST means we are now parsing fractional digits. */
       case FRAC_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           /* If a subsequent decimal point is also whitespace,
            * assume it was intended as such and stop parsing.
            * Otherwise, there is a problem. */
-          if (isspace(decimal_point))
+          if (g_unichar_isspace(decimal_point))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
         }
-        else if (*in == group_separator)
+        else if (uc == group_separator)
         {
           /* If a subsequent group separator is also whitespace,
            * assume it was intended as such and stop parsing.
            * Otherwise, there is a problem. */
-          if (isspace(group_separator))
+          if (g_unichar_isspace(group_separator))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
           next_state = DONE_ST;
           need_paren = FALSE;
@@ -1852,7 +1940,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     {
       *out = '\0';
 
-      if (*out_str != '\0' && sscanf(out_str, GNC_SCANF_LLD, &numer) < 1)
+      if (*out_str != '\0' && sscanf(out_str, QOF_SCANF_LLD, &numer) < 1)
       {
         next_state = NO_NUM_ST;
       }
@@ -1870,7 +1958,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     if (done_state (state))
       break;
 
-    in++;
+    in = g_utf8_next_char(in);
   }
 
   /* If there was an error, just quit */
@@ -1945,7 +2033,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       len = 8;
     }
 
-    if (sscanf (out_str, GNC_SCANF_LLD, &fraction) < 1)
+    if (sscanf (out_str, QOF_SCANF_LLD, &fraction) < 1)
     {
       g_free(out_str);
       return FALSE;
@@ -2007,9 +2095,17 @@ gnc_set_auto_decimal_places  (GConfEntry *entry, gpointer user_data)
 void
 gnc_ui_util_init (void)
 {
-  gnc_gconf_general_register_cb("reversed_accounts",
+  gnc_configure_account_separator ();
+  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
+				(GncGconfGeneralCb)gnc_configure_account_separator,
+				NULL);
+  gnc_gconf_general_register_cb(KEY_REVERSED_ACCOUNTS,
 				(GncGconfGeneralCb)gnc_configure_reverse_balance,
 				NULL);
+  gnc_gconf_general_register_cb(KEY_CURRENCY_CHOICE,
+				gnc_currency_changed_cb, NULL);
+  gnc_gconf_general_register_cb(KEY_CURRENCY_OTHER,
+				gnc_currency_changed_cb, NULL);
   gnc_gconf_general_register_cb("auto_decimal_point",
 				gnc_set_auto_decimal_enabled,
 				NULL);

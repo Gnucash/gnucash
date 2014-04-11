@@ -251,16 +251,16 @@ gnc_header_unrealize (GnomeCanvasItem *item)
         GncHeader *header = GNC_HEADER (item);
 
         if (header->gc != NULL) {
-                gdk_gc_unref (header->gc);
+                g_object_unref (header->gc);
                 header->gc = NULL;
         }
 
         if (header->resize_cursor != NULL)
-                gdk_cursor_destroy (header->resize_cursor);
+                gdk_cursor_unref (header->resize_cursor);
         header->resize_cursor = NULL;
 
         if (header->normal_cursor != NULL)
-                gdk_cursor_destroy (header->normal_cursor);
+                gdk_cursor_unref (header->normal_cursor);
         header->normal_cursor = NULL;
 
         if (GNOME_CANVAS_ITEM_CLASS (parent_class)->unrealize)

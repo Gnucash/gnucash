@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofbook.c -- dataset access (set of accounting books)            *
+ * qofbook.c -- dataset access (set of books of entities)           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,8 +24,7 @@
  * qofbook.c
  *
  * FUNCTION:
- * Encapsulate all the information about a gnucash dataset.
- * See src/doc/books.txt for design overview.
+ * Encapsulate all the information about a QOF dataset.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
@@ -40,18 +39,12 @@
 
 #include <glib.h>
 
-#include "gnc-event.h"
-#include "gnc-event-p.h"
-#include "gnc-trace.h"
+#include "qof.h"
+#include "qofevent-p.h"
 #include "qofbackend-p.h"
-#include "qofbook.h"
 #include "qofbook-p.h"
-#include "qofclass.h"
 #include "qofid-p.h"
 #include "qofobject-p.h"
-#include "gnc-engine-util.h"
-
-#include "guid.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
@@ -70,7 +63,7 @@ qof_book_init (QofBook *book)
 
   book->hash_of_collections = g_hash_table_new_full(
       g_str_hash, g_str_equal,
-      (GDestroyNotify)gnc_string_cache_remove,  /* key_destroy_func   */
+      (GDestroyNotify)qof_util_string_cache_remove,  /* key_destroy_func   */
       coll_destroy);                            /* value_destroy_func */
 
   qof_instance_init (&book->inst, QOF_ID_BOOK, book);
@@ -93,7 +86,7 @@ qof_book_new (void)
   qof_book_init(book);
   qof_object_book_begin (book);
 
-  gnc_engine_gen_event (&book->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE, NULL);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -115,9 +108,9 @@ qof_book_destroy (QofBook *book)
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  gnc_engine_force_event (&book->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY, NULL);
 
-  /* Call the list of finalizers, let them do their thing.
+  /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.
    */
   g_hash_table_foreach (book->data_table_finalizers, book_final, book);
@@ -152,7 +145,7 @@ qof_book_equal (QofBook *book_1, QofBook *book_2)
 /* ====================================================================== */
 
 gboolean
-qof_book_not_saved(QofBook *book)
+qof_book_not_saved (QofBook *book)
 {
   if (!book) return FALSE;
 
@@ -160,12 +153,56 @@ qof_book_not_saved(QofBook *book)
 }
 
 void
-qof_book_mark_saved(QofBook *book)
+qof_book_mark_saved (QofBook *book)
 {
+  gboolean was_dirty;
+
   if (!book) return;
 
+  was_dirty = book->inst.dirty;
   book->inst.dirty = FALSE;
+  book->dirty_time = 0;
   qof_object_mark_clean (book);
+  if (was_dirty) {
+    if (book->dirty_cb)
+      book->dirty_cb(book, FALSE, book->dirty_data);
+  }
+}
+
+void qof_book_mark_dirty (QofBook *book)
+{
+  gboolean was_dirty;
+
+  if (!book) return;
+
+  was_dirty = book->inst.dirty;
+  book->inst.dirty = TRUE;
+  if (!was_dirty) {
+    book->dirty_time = time(NULL);
+    if (book->dirty_cb)
+      book->dirty_cb(book, TRUE, book->dirty_data);
+  }
+}
+
+void
+qof_book_print_dirty (QofBook *book)
+{
+  if (book->inst.dirty)
+    printf("book is dirty.\n");
+  qof_book_foreach_collection(book, qof_collection_print_dirty, NULL);
+}
+
+time_t
+qof_book_get_dirty_time (QofBook *book)
+{
+  return book->dirty_time;
+}
+
+void
+qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
+{
+  book->dirty_data = user_data;
+  book->dirty_cb = cb;
 }
 
 /* ====================================================================== */
@@ -199,8 +236,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 
 void qof_book_kvp_changed (QofBook *book)
 {
-  if (!book) return;
-  book->inst.dirty = TRUE;
+  qof_book_mark_dirty(book);
 }
 
 /* ====================================================================== */
@@ -246,7 +282,7 @@ qof_book_get_collection (QofBook *book, QofIdType entity_type)
       col = qof_collection_new (entity_type);
       g_hash_table_insert(
           book->hash_of_collections,
-          gnc_string_cache_insert((gpointer) entity_type), col);
+          qof_util_string_cache_insert((gpointer) entity_type), col);
   }
   return col;
 }
@@ -290,32 +326,32 @@ void qof_book_mark_closed (QofBook *book)
 
 gchar qof_book_get_open_marker(QofBook *book)
 {
-       if(!book) { return 'n'; }
-       return book->book_open;
+	if(!book) { return 'n'; }
+	return book->book_open;
 }
 
 gint32 qof_book_get_version (QofBook *book)
 {
-       if(!book) { return -1; }
-       return book->version;
+	if(!book) { return -1; }
+	return book->version;
 }
 
 guint32 qof_book_get_idata (QofBook *book)
 {
-       if(!book) { return 0; }
-       return book->idata;
+	if(!book) { return 0; }
+	return book->idata;
 }
 
 void qof_book_set_version (QofBook *book, gint32 version)
 {
-       if(!book && version < 0) { return; }
-       book->version = version;
+	if(!book && version < 0) { return; }
+	book->version = version;
 }
 
 void qof_book_set_idata(QofBook *book, guint32 idata)
 {
-       if(!book && idata < 0) { return; }
-       book->idata = idata;
+	if(!book && idata < 0) { return; }
+	book->idata = idata;
 }
 
 gint64

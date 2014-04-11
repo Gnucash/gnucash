@@ -419,7 +419,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
      * Otherwise, we _can_ use the rate_cell!
      */
     if (sd->reg_expanded && ! gnc_commodity_equal (reg_com, xfer_com))
-      amtconv = gnc_split_register_get_conv_rate (sd->trans, acc);
+      amtconv = xaccTransGetAccountConvRate(sd->trans, acc);
     else
       amtconv = convrate;
 
@@ -506,7 +506,7 @@ gnc_split_register_save_cells (gpointer save_data,
     Account *acc;
     gboolean split_needs_amount;
 
-    split_needs_amount = gnc_split_register_split_needs_amount (reg, sd->split);
+    split_needs_amount = gnc_split_register_split_needs_amount(reg, sd->split);
 
     /* We are changing the rate on the current split, but it was not
      * handled in the debcred handler, so we need to do it here.
@@ -514,8 +514,8 @@ gnc_split_register_save_cells (gpointer save_data,
     if (!sd->handled_dc && split_needs_amount && !gnc_numeric_zero_p (rate))
     {
       gnc_numeric amount = xaccSplitGetAmount (sd->split);
-      value = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
-			       GNC_RND_ROUND);
+      value = gnc_numeric_div(
+          amount, rate, gnc_commodity_get_fraction(txn_cur), GNC_RND_ROUND);
       xaccSplitSetValue (sd->split, value);
 
       /* XXX: do we need to set the amount on the other split? */
@@ -534,8 +534,8 @@ gnc_split_register_save_cells (gpointer save_data,
        * _both_ accounts -- so grab the other exchange rate.
        */
       if (gnc_numeric_zero_p (rate) || split_needs_amount)
-	rate = gnc_split_register_get_conv_rate (xaccSplitGetParent (other_split),
-						 acc);
+          rate = xaccTransGetAccountConvRate(xaccSplitGetParent (other_split),
+                                             acc);
 
       amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
 				GNC_RND_ROUND);
@@ -596,8 +596,6 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, XFRM_CELL));
 
-  kvpf = xaccSplitGetSlots (sd->split);
-
   /* save the account GUID into the kvp_data. */
   acct = gnc_split_register_get_account (reg, XFRM_CELL);
   if (!acct)
@@ -607,11 +605,9 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
   }
 
   acctGUID = xaccAccountGetGUID (acct);
-
+  kvpf = xaccSplitGetSlots (sd->split);
   kvp_frame_set_slot_path (kvpf, kvp_value_new_guid(acctGUID),
                            GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
-
-  kvpf = xaccSplitGetSlots (sd->split);
 
   template_acc = xaccAccountLookup (&info->template_account,
                                     gnc_get_current_book ());

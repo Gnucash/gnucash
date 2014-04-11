@@ -1,7 +1,7 @@
 /********************************************************************\
- * gnc-budget.c -- Implementation of the top level Budgeting API's. *
+ * gnc-budget.c -- Implementation of the top level Budgeting API.   *
  * Copyright (C) 04 sep 2003    Darin Willits <darin@willits.ca>    *
- * Copyright (C) 2005  Chris Shoemaker <c.shoemaker@cox.net>        *
+ * Copyright (C) 2005-2006 Chris Shoemaker <c.shoemaker@cox.net>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,7 +24,8 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
-
+#include <glib/gi18n.h>
+#include <time.h>
 #include "qof.h"
 
 #include "Account.h"
@@ -45,89 +46,94 @@ struct gnc_budget_private{
     guint  num_periods;
 };
 
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static void
+gnc_budget_free(QofInstance *inst)
+{
+    GncBudget *budget = GNC_BUDGET(inst);
+    if (budget == NULL)
+        return;
+
+    g_return_if_fail(GNC_IS_BUDGET(budget));
+
+    /* We first send the message that this object is about to be
+     * destroyed so that any GUI elements can remove it before it is
+     * actually gone. */
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_DESTROY, NULL);
+
+    CACHE_REMOVE(budget->name);
+    CACHE_REMOVE(budget->description);
+
+    qof_instance_release (&budget->inst);
+    g_free(budget);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+static void
+gnc_budget_begin_edit(GncBudget *bgt)
+{
+    qof_begin_edit(QOF_INSTANCE(bgt));
+}
+
+static void
+gnc_budget_commit_edit(GncBudget *bgt)
+{
+    if (!qof_commit_edit(QOF_INSTANCE(bgt))) return;
+    qof_commit_edit_part2(QOF_INSTANCE(bgt), commit_err, 
+                          noop, gnc_budget_free);
+}
+
 GncBudget*
 gnc_budget_new(QofBook *book)
 {
     GncBudget* budget;
-
+    GDate date;
     g_return_val_if_fail(book, NULL);
 
     ENTER(" ");
     budget = g_new0(GncBudget, 1);
     qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
 
-    recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, NULL);
+    g_date_set_time(&date, time(NULL));
+    g_date_subtract_days(&date, g_date_get_day(&date)-1);
+    recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, &date);
 
-    gnc_budget_set_name(budget, "Unnamed Budget");
+    gnc_budget_set_name(budget, _("Unnamed Budget"));
     gnc_budget_set_description(budget, "");
     gnc_budget_set_num_periods(budget, 12);
 
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_CREATE );
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_CREATE , NULL);
 
     LEAVE(" ");
     return budget;
 }
 
-static void
-remove_bgt_line_items(QofEntity *act, gpointer bgt)
-{
-    KvpFrame *frame;
-    const GUID *guid;
-    gchar guidbuf[GUID_ENCODING_LENGTH+1];
-
-    frame = qof_instance_get_slots(QOF_INSTANCE(bgt));
-    guid = qof_entity_get_guid(QOF_ENTITY(act));
-    guid_to_string_buff(guid, guidbuf);
-    kvp_frame_delete(kvp_frame_get_frame(frame, guidbuf));
-}
-
-static void
-gnc_budget_remove_all_line_items(GncBudget *budget)
-{
-    QofBook *book;
-    QofCollection *col;
-
-    g_return_if_fail(GNC_IS_BUDGET(budget));
-
-    book = qof_instance_get_book(QOF_INSTANCE(budget));
-    col = qof_book_get_collection(book, GNC_ID_ACCOUNT);
-    qof_collection_foreach(col, remove_bgt_line_items, (gpointer) budget);
-}
-
 void
-gnc_budget_free(GncBudget* budget)
+gnc_budget_destroy(GncBudget *budget)
 {
-    if (budget == NULL)
-        return;
-
     g_return_if_fail(GNC_IS_BUDGET(budget));
-    gnc_budget_remove_all_line_items(budget);
-
-    /* We first send the message that this object is about to be
-     * destroyed so that any GUI elements can remove it before it is
-     * actually gone. */
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_DESTROY);
-
-    if (budget->name)
-        g_free(budget->name);
-
-    if (budget->description)
-        g_free(budget->description);
-
-    qof_instance_release (&budget->inst);
-    g_free(budget);
+    gnc_budget_begin_edit(budget);
+    qof_instance_set_dirty(&budget->inst);
+    budget->inst.do_free = TRUE;
+    gnc_budget_commit_edit(budget);
 }
 
 void
 gnc_budget_set_name(GncBudget* budget, const gchar* name)
 {
-    g_return_if_fail(GNC_IS_BUDGET(budget));
-    g_return_if_fail(name);
+    g_return_if_fail(GNC_IS_BUDGET(budget) && name);
 
-    if (budget->name)
-        g_free(budget->name);
-    budget->name = g_strdup(name);
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    gnc_budget_begin_edit(budget);
+    CACHE_REPLACE(budget->name, name);
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
+
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 const gchar*
@@ -143,10 +149,12 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     g_return_if_fail(GNC_IS_BUDGET(budget));
     g_return_if_fail(description);
 
-    if (budget->description)
-        g_free( budget->description);
-    budget->description = g_strdup(description);
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    gnc_budget_begin_edit(budget);
+    CACHE_REPLACE(budget->description, description);
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
+
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 const gchar*
@@ -160,8 +168,12 @@ void
 gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
 {
     g_return_if_fail(budget && r);
+    gnc_budget_begin_edit(budget);
     budget->recurrence = *r;
-    gnc_engine_gen_event(&budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
+
+    qof_event_gen(&budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 const Recurrence *
@@ -183,8 +195,13 @@ void
 gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 {
     g_return_if_fail(GNC_IS_BUDGET(budget));
+
+    gnc_budget_begin_edit(budget);
     budget->num_periods = num_periods;
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
+
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 guint
@@ -208,13 +225,17 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     gchar path[BUF_SIZE];
     gchar *bufend;
 
+    gnc_budget_begin_edit(budget);
     frame = qof_instance_get_slots(QOF_INSTANCE(budget));
     guid = xaccAccountGetGUID(account);
     bufend = guid_to_string_buff(guid, path);
     g_sprintf(bufend, "/%d", period_num);
 
     kvp_frame_set_numeric(frame, path, val);
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
+
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 
 }
 
@@ -272,52 +293,24 @@ gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
     return numeric;
 }
 
-/* If 'end' is true, then get a time just before the beginning of the
-   next period */
-static time_t
-gnc_budget_get_period_time(GncBudget *budget, guint period_num, gboolean end)
-{
-    GDate date;
-    recurrenceNthInstance(&(budget->recurrence),
-                          period_num + (end ? 1 : 0), &date);
-    if (end) {
-        g_date_subtract_days(&date, 1);
-        return gnc_timet_get_day_end_gdate(&date);
-    } else {
-        return gnc_timet_get_day_start_gdate(&date);
-    }
-
-}
 
 Timespec
 gnc_budget_get_period_start_date(GncBudget *budget, guint period_num)
 {
     Timespec ts;
     timespecFromTime_t(
-        &ts,  gnc_budget_get_period_time(budget, period_num, FALSE));
+        &ts,  recurrenceGetPeriodTime(&budget->recurrence, period_num, FALSE));
     return ts;
 }
 
 gnc_numeric
 gnc_budget_get_account_period_actual_value(
-    GncBudget *budget, Account *account, guint period_num)
+    GncBudget *budget, Account *acc, guint period_num)
 {
-    gnc_numeric numeric, num1, num2;
-    time_t t1, t2;
-
     // FIXME: maybe zero is not best error return val.
-    g_return_val_if_fail(GNC_IS_BUDGET(budget) && account, gnc_numeric_zero());
-    t1 = gnc_budget_get_period_time(budget, period_num, FALSE);
-    t2 = gnc_budget_get_period_time(budget, period_num, TRUE);
-
-    num1 = xaccAccountGetBalanceAsOfDateInCurrency(
-        account, t1, NULL, TRUE);
-    num2 = xaccAccountGetBalanceAsOfDateInCurrency(
-        account, t2, NULL, TRUE);
-
-    numeric = gnc_numeric_sub(num2, num1, GNC_DENOM_AUTO,
-                              GNC_HOW_DENOM_FIXED);
-    return numeric;
+    g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
+    return recurrenceGetAccountPeriodValue(&budget->recurrence, 
+                                           acc, period_num);
 }
 
 QofBook*

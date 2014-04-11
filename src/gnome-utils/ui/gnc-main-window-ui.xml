@@ -45,7 +45,6 @@
       <placeholder name="EditFindPlaceholder"/>
       <separator name="EditSep4"/>
       <menuitem name="EditPreferences" action="EditPreferencesAction"/>
-      <menuitem name="EditAcceleratorKeys" action="EditAcceleratorKeysAction"/>
       <placeholder name="EditPreferencesPlaceholder"/>
       <separator name="EditSep5"/>
       <placeholder name="EditStyleSheetsPlaceholder"/>
@@ -58,7 +57,9 @@
       <separator name="ViewSep1"/>
       <placeholder name="ViewContentPlaceholder"/>
       <separator name="ViewSep2"/>
+      <menuitem name="ViewSortBy" action="ViewSortByAction"/>
       <placeholder name="ViewSortPlaceholder"/>
+      <menuitem name="ViewFilterBy" action="ViewFilterByAction"/>
       <placeholder name="ViewFilterPlaceholder"/>
       <separator name="ViewSep3"/>
       <placeholder name="ViewZoomPlaceholder"/>
@@ -106,6 +107,7 @@
     </menu>
 
     <menu name="Extensions" action="ExtensionsAction">
+      <menuitem name="Callgrind"      action="ExtensionsCallgrindAction"/>
       <placeholder name="ExtensionsPlaceholder"/>
     </menu>
 
@@ -133,9 +135,6 @@
       <menuitem name="HelpAbout" action="HelpAboutAction"/>
     </menu>
 
-    <menu name="Misc" action="MiscAction">
-      <menuitem name="MiscTest" action="MiscTestAction"/>
-    </menu>
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">

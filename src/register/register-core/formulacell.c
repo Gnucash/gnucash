@@ -21,8 +21,12 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include "gnc-exp-parser.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 #include "basiccell.h"
 #include "formulacell.h"
@@ -36,9 +40,7 @@ static gboolean gnc_formula_cell_enter( BasicCell *_cell,
                                         int *start_selection,
                                         int *end_selection );
 
-#if 0
 static void gnc_formula_cell_leave( BasicCell *_cell );
-#endif
 
 static void gnc_formula_cell_modify_verify( BasicCell *_cell, 
                                             const char *change,
@@ -73,6 +75,7 @@ gnc_formula_cell_init( FormulaCell *fc )
   fc->cell.enter_cell    = gnc_formula_cell_enter;
   fc->cell.modify_verify = gnc_formula_cell_modify_verify;
   fc->cell.set_value     = gnc_formula_cell_set_value_internal;
+  fc->cell.leave_cell    = gnc_formula_cell_leave;
 }
 
 void
@@ -97,18 +100,26 @@ gnc_formula_cell_enter( BasicCell *_cell,
   return TRUE;
 }
 
-#if 0
-static
-void
-gnc_formula_cell_leave( BasicCell *_cell )
+static void
+gnc_formula_cell_leave(BasicCell *_cell)
 {
   char *str;
   FormulaCell *fc = (FormulaCell*)_cell;
-  DEBUG( "leaving.." );
   str = fc->cell.value;
+  {
+    char *error_location = NULL;
+    gnc_numeric amount;
+    if (str != NULL
+        && strlen(str) != 0
+        && !gnc_exp_parser_parse(str, &amount, &error_location))
+    {
+      gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
+                         str);//, (error_location - str));
+    }
+  }
+
   gnc_basic_cell_set_value_internal( &fc->cell, str );
 }
-#endif
 
 static
 void
@@ -124,8 +135,8 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   FormulaCell *cell = (FormulaCell *)_cell;
   struct lconv *lc = gnc_localeconv ();
   const char *toks = "+-*/=()_:";
-  unsigned char decimal_point;
-  unsigned char thousands_sep;
+  gunichar decimal_point;
+  gunichar thousands_sep;
   const char *c;
   gunichar uc;
 
@@ -141,14 +152,14 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   }
 
   if (cell->print_info.monetary)
-    decimal_point = lc->mon_decimal_point[0];
+    decimal_point = g_utf8_get_char(lc->mon_decimal_point);
   else
-    decimal_point = lc->decimal_point[0];
+    decimal_point = g_utf8_get_char(lc->decimal_point);
 
   if (cell->print_info.monetary)
-    thousands_sep = lc->mon_thousands_sep[0];
+    thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
   else
-    thousands_sep = lc->thousands_sep[0];
+    thousands_sep = g_utf8_get_char(lc->thousands_sep);
 
    c = change;
    while (*c)

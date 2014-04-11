@@ -153,17 +153,6 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
   return info_scm;
 }
 
-const char *
-gnc_get_account_separator_string (void)
-{
-  static char sep[2];
-
-  sep[0] = gnc_get_account_separator ();
-  sep[1] = '\0';
-
-  return sep;
-}
-
 SCM
 gnc_parse_amount_helper (const char * string, gboolean monetary)
 {

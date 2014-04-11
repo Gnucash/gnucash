@@ -35,8 +35,6 @@
  * XXX clist should be probably be removed and replaced by the gnc_query_list
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -45,8 +43,7 @@
 #include "Account.h"
 #include "cap-gains.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
-#include "gnc-event.h"
+#include "qof.h"
 #include "gnc-lot.h"
 #include "Scrub3.h"
 #include "Transaction.h"
@@ -137,7 +134,7 @@ lv_show_splits (GNCLotViewer *lv)
 
    if (NULL == lot) return;
 
-/* gnc_engine_suspend_events();  XXX remove when xaccSplitGetCapGains() fixed */
+/* qof_event_suspend();  XXX remove when xaccSplitGetCapGains() fixed */
    gtk_clist_freeze (lv->mini_clist);
    gtk_clist_clear (lv->mini_clist);
    split_list = gnc_lot_get_split_list (lot);
@@ -214,7 +211,7 @@ lv_show_splits (GNCLotViewer *lv)
       gtk_clist_set_selectable (lv->mini_clist, row, FALSE);
    }
    gtk_clist_thaw (lv->mini_clist);
-/* gnc_engine_resume_events();  XXX remove when xaccSplitGetCapGains() fixed */
+/* qof_event_resume();  XXX remove when xaccSplitGetCapGains() fixed */
 }
 
 /* ======================================================================== */
@@ -650,7 +647,7 @@ gnc_lot_viewer_dialog (Account *account)
 
    gnc_gui_component_watch_entity_type (component_id,
                GNC_ID_LOT,
-               GNC_EVENT_CREATE | GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+               QOF_EVENT_CREATE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
    gtk_widget_show_all (lv->window);
    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));

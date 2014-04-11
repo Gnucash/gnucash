@@ -122,6 +122,7 @@
 ;; prefs.scm
 (export gnc:get-debit-string)
 (export gnc:get-credit-string)
+(export gnc:config-file-format-version)
 
 ;; gw-engine-spec.scm
 (re-export gnc:*save-options-hook*)
@@ -208,10 +209,6 @@
 (export gnc:get-end-cal-year)
 (export gnc:get-start-prev-year)
 (export gnc:get-end-prev-year)
-(export gnc:get-start-cur-fin-year)
-(export gnc:get-start-prev-fin-year)
-(export gnc:get-end-prev-fin-year)
-(export gnc:get-end-cur-fin-year)
 (export gnc:get-start-this-month)
 (export gnc:get-end-this-month)
 (export gnc:get-start-prev-month)
@@ -232,11 +229,6 @@
 (export gnc:hook-run-danglers)		;; from hooks.scm
 (re-export gnc:hook-add-dangler)
 (re-export gnc:hook-remove-dangler)
-(re-export gnc:*startup-hook*)
-(re-export gnc:*shutdown-hook*)
-(re-export gnc:*ui-startup-hook*)
-(re-export gnc:*ui-post-startup-hook*)
-(re-export gnc:*ui-shutdown-hook*)
 (re-export gnc:*book-opened-hook*)
 (re-export gnc:*new-book-hook*)
 (re-export gnc:*book-closed-hook*)
@@ -266,21 +258,3 @@
 (load-from-path "date-utilities.scm")
 (load-from-path "simple-obj.scm")
 
-
-
-(gnc:hook-add-dangler gnc:*startup-hook*
-                      (lambda ()
-                        (begin
-                          ;; Initialize the expression parser.
-                          ;; Must come after the C side options initialization.
-                          (gnc:exp-parser-init))))
-
-;; add a hook to shut down the expression parser
-(gnc:hook-add-dangler gnc:*shutdown-hook*
-                      (lambda ()
-                        (begin
-                          ;; Shutdown the expression parser
-                          (gnc:exp-parser-shutdown)
-
-                          ;; This saves options. E.G. Stylesheets.
-			  (gnc:hook-run-danglers gnc:*save-options-hook*))))

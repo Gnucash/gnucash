@@ -27,6 +27,7 @@
     @brief Business Interface:  Object OWNERs
     @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
     @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
+    @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
 
 #ifndef GNC_OWNER_H_
@@ -134,6 +135,11 @@ void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
  * fill in "owner" and return TRUE.  Otherwise return FALSE.
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
+
+gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GUID *guid);
+
+/** Get the kvp-frame from the underlying owner object */
+KvpFrame* gncOwnerGetSlots(GncOwner* owner);
 
 #define OWNER_TYPE        "type"
 #define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */

@@ -29,8 +29,12 @@ noinst_HEADERS = \
   gw-dialog-tax-table.h
 
 libgncmod_dialog_tax_table_la_LIBADD = \
-  ../../gnc-module/libgncmodule.la \
-  ../../core-utils/libcore-utils.la \
+  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
@@ -40,7 +44,9 @@ libgncmod_dialog_tax_table_la_LIBADD = \
 
 libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c
 
-libgw_dialog_tax_table_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
+libgw_dialog_tax_table_la_LIBADD = \
+  libgncmod-dialog-tax-table.la \
+  ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
@@ -60,16 +66,19 @@ EXTRA_DIST = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
+# for compline
 SCM_FILE_LINKS = gw-dialog-tax-table-spec.scm
+# for running
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -88,5 +97,5 @@ gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
 
 BUILT_SOURCES = gw-dialog-tax-table.scm gw-dialog-tax-table.c \
 	gw-dialog-tax-table.h
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-dialog-tax-table.html
+CLEANFILES = g-wrapped gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-dialog-tax-table.html

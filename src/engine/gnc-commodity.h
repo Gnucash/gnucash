@@ -49,6 +49,11 @@
 #include <glib.h>
 #include "gnc-engine.h"
 
+#define GNC_IS_COMMODITY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY))
+#define GNC_COMMODITY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY, gnc_commodity))
+#define GNC_IS_COMMODITY_NAMESPACE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY_NAMESPACE))
+#define GNC_COMMODITY_NAMESPACE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY_NAMESPACE, gnc_commodity_namespace))
+
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
 
 /** The commodity namespace definitions are used to tag a commodity by
@@ -63,7 +68,9 @@
  *  window.
  */
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
+/* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
+#define GNC_COMMODITY_NS_CURRENCY "CURRENCY"
 #define GNC_COMMODITY_NS_NASDAQ "NASDAQ"
 #define GNC_COMMODITY_NS_NYSE   "NYSE"
 #define GNC_COMMODITY_NS_EUREX  "EUREX"
@@ -248,9 +255,9 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *  match the stock ticker symbol used by the exchange where you want
  *  to get automatic stock quote updates.  E.G. ACME, ACME.US, etc.
  *
- *  @param exchange_code A string containing the CUSIP code or similar
+ *  @param cusip A string containing the CUSIP code or similar
  *  UNIQUE code for this commodity. The stock ticker is NOT
- *  appropriate.
+ *  appropriate as that goes in the mnemonic field.
  *
  *  @param fraction The smallest division of this commodity
  *  allowed. I.E. If this is 1, then the commodity must be traded in
@@ -263,7 +270,7 @@ gnc_commodity * gnc_commodity_new(QofBook *book,
 				  const char * fullname, 
                                   const char * namespace,
                                   const char * mnemonic,
-                                  const char * exchange_code,
+                                  const char * cusip,
                                   int fraction);
 
 /** Destroy a commodity.  Release all memory attached to this data structure.
@@ -307,6 +314,20 @@ const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
  *  is owned by the engine and should not be freed by the caller.
  */
 const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
+
+/** Retrieve the namespace for the specified commodity.  This will be
+ *  a pointer to a null terminated string of the form "AMEX",
+ *  "NASDAQ", etc.  The only difference between function and
+ *  gnc_commodity_get_namespace() is that this function returns
+ *  ISO4217 instead of CURRENCY for backward compatability with the
+ *  1.8 data files.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @return A pointer to the namespace for this commodity.  This string
+ *  is owned by the engine and should not be freed by the caller.
+ */
+const char * gnc_commodity_get_namespace_compat(const gnc_commodity * cm);
 
 /** Retrieve the namespace data strucure for the specified commodity.
  *  This will be a pointer to another data structure.
@@ -356,7 +377,7 @@ const char * gnc_commodity_get_printname(const gnc_commodity * cm);
  *  string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char * gnc_commodity_get_exchange_code(const gnc_commodity * cm);
+const char * gnc_commodity_get_cusip(const gnc_commodity * cm);
 
 /** Retrieve the 'unique' name for the specified commodity.  This will
  *  be a pointer to a null terminated string of the form "AMEX::ACME",
@@ -480,11 +501,11 @@ void  gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname);
  *
  *  @param cm A pointer to a commodity data structure.
  *
- *  @param exchange_code A pointer to the full name for this commodity.  This
- *  string belongs to the caller and will be duplicated by the engine.
+ *  @param cusip A pointer to the cusip or other exchange specific
+ *  data for this commodity.  This string belongs to the caller and
+ *  will be duplicated by the engine.
  */
-void  gnc_commodity_set_exchange_code(gnc_commodity * cm, 
-                                      const char * exchange_code);
+void  gnc_commodity_set_cusip(gnc_commodity * cm, const char * cusip);
 
 /** Set the fraction for the specified commodity.  This should be
  *  an integer value specifying the number of fractional units that
@@ -574,6 +595,15 @@ gboolean gnc_commodity_namespace_is_iso(const char *namespace);
  *
  *  @return TRUE if the commodity represents a currency, FALSE otherwise. */
 gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
+
+/** Checks to see if the specified commodity is an ISO 4217 recognized
+ * currency or a legacy currency.
+ *
+ *  @param cm The commodity to check.
+ *
+ *  @return TRUE if the commodity represents a currency, FALSE otherwise. */
+gboolean gnc_commodity_is_currency(const gnc_commodity *cm);
+
 /** @} */
 
 
@@ -726,7 +756,8 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *
  *  @return A pointer to the newly created namespace. */
 gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-							    const char * namespace);
+							    const char * namespace,
+							    QofBook *book);
 
 /** This function finds a commodity namespace in the set of existing commodity namespaces.
  *
@@ -783,22 +814,21 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
  *  should be retrieved.  It will scan the entire commodity table (or
  *  a subset) and check each commodity to see if the price_quote_flag
  *  field has been set.  All matching commodities are queued onto a
- *  list, and the head of that list is returned.
+ *  list, and the head of that list is returned.  Use the command-line
+ *  given expression as a filter on the commodities to be returned. If
+ *  non-null, only commodities in namespace that match the specified
+ *  regular expression are checked.  If none was given, all
+ *  commodities are checked.
  *
  *  @param table A pointer to the commodity table 
- *
- *  @param expression Use the given expression as a filter on the
- *  commodities to be returned. If non-null, only commodities in
- *  namespace that match the specified regular expression are checked.
- *  If null, all commodities are checked.
  *
  *  @return A pointer to a list of commodities.  NULL if invalid
  *  arguments were supplied or if there no commodities are flagged for
  *  quote retrieval.
  *
  *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
-						     const char * expression);
+GList * gnc_commodity_table_get_quotable_commodities(
+    const gnc_commodity_table * table);
 
 /** Call a function once for each commodity in the commodity table.
  *  This table walk returns whenever the end of the table is reached,
@@ -851,6 +881,9 @@ gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
  * commodity table.
  */
 gboolean gnc_commodity_table_register (void);
+
+void gnc_commodity_begin_edit (gnc_commodity *cm);
+void gnc_commodity_commit_edit (gnc_commodity *cm);
 		  
 /** @} */
 

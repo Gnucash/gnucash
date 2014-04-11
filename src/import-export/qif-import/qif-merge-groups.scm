@@ -30,12 +30,11 @@
 ;;  them in a list. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:group-find-duplicates old-group new-group)
+(define (gnc:group-find-duplicates old-group new-group window)
   ;; get all the transactions in the new group, then iterate over them
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
   (let* ((new-xtns (gnc:group-get-transactions new-group))
-         (separator (string-ref (gnc:account-separator-char) 0))
 	 (progress-dialog #f)
 	 (work-to-do (length new-xtns))
 	 (work-done 0)
@@ -43,7 +42,7 @@
     
     (if (> work-to-do 100)
 	(begin 
-	  (set! progress-dialog (gnc:progress-dialog-new #f #f))
+	  (set! progress-dialog (gnc:progress-dialog-new window #f))
 	  (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
 	  (gnc:progress-dialog-set-heading progress-dialog
 					   (_ "Finding duplicate transactions..."))))
@@ -90,7 +89,7 @@
                  sq 
                  (gnc:get-account-from-full-name
                   old-group (gnc:account-get-full-name 
-                             (gnc:split-get-account split)) separator)
+                             (gnc:split-get-account split)))
                  'query-and)
                 
                 ;; we want the value for the split to match the value

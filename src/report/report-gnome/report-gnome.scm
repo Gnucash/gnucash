@@ -8,6 +8,7 @@
 (define-module (gnucash report report-gnome))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gnome-utils))
 
 (use-modules (ice-9 slib))
 (require 'printf)
@@ -17,6 +18,7 @@
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report/utility-reports" 0)
 
 (export gnc:report-edit-options)
 (export gnc:report-menu-setup)
@@ -106,8 +108,6 @@
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
-  (gnc:warn "report-menu-setup") ;; why do we do this?
-
   ;; (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
@@ -118,4 +118,14 @@
   (gnc:hook-run-danglers gnc:*report-hook*)
 
   ;; push reports (new items added on top of menu)
-  (gnc:add-report-template-menu-items))
+  (gnc:add-report-template-menu-items)
+
+  ;; the Welcome to GnuCash "extravaganza" report
+  (gnc:add-extension 
+   (gnc:make-menu-item 
+    (N_ "Welcome Sample Report")
+    (N_ "Welcome-to-GnuCash report screen")
+    (list gnc:menuname-reports gnc:menuname-utility "")
+    (lambda (window)
+      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
+)

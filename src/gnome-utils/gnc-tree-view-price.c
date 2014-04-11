@@ -36,6 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
@@ -212,16 +213,14 @@ sort_ns_or_cm (GtkTreeModel *f_model,
   if (gnc_tree_model_price_iter_is_namespace (model, &iter_a)) {
     ns_a = gnc_tree_model_price_get_namespace (model, &iter_a);
     ns_b = gnc_tree_model_price_get_namespace (model, &iter_b);
-    SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
-		 gnc_commodity_namespace_get_name (ns_b));
-    return 0;
+    return safe_utf8_collate (gnc_commodity_namespace_get_name (ns_a),
+			      gnc_commodity_namespace_get_name (ns_b));
   }
 
   comm_a = gnc_tree_model_price_get_commodity (model, &iter_a);
   comm_b = gnc_tree_model_price_get_commodity (model, &iter_b);
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-	       gnc_commodity_get_mnemonic (comm_b));
-  return 0;
+  return safe_utf8_collate (gnc_commodity_get_mnemonic (comm_a),
+			    gnc_commodity_get_mnemonic (comm_b));
 }
 
 static gint
@@ -237,18 +236,21 @@ default_sort (GNCPrice *price_a, GNCPrice *price_b)
   curr_a = gnc_price_get_currency (price_a);
   curr_b = gnc_price_get_currency (price_b);
 
-  SAFE_STRCMP (gnc_commodity_get_namespace (curr_a),
-	       gnc_commodity_get_namespace (curr_b));
+  result = safe_utf8_collate (gnc_commodity_get_namespace (curr_a),
+			      gnc_commodity_get_namespace (curr_b));
+  if (result != 0) return result;
 
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (curr_a),
-	       gnc_commodity_get_mnemonic (curr_b));
+  result = safe_utf8_collate (gnc_commodity_get_mnemonic (curr_a),
+			      gnc_commodity_get_mnemonic (curr_b));
+  if (result != 0) return result;
 
   /* tertiary sort: time */
   ts_a = gnc_price_get_time (price_a);
   ts_b = gnc_price_get_time (price_b);
   result = timespec_cmp (&ts_a, &ts_b);
   if (result)
-    return result;
+    /* Reverse the result to present the most recent quote first. */
+    return -result;
 
   /* last sort: value */
   return gnc_numeric_compare (gnc_price_get_value (price_a),
@@ -287,7 +289,8 @@ sort_by_date (GtkTreeModel *f_model,
   ts_b = gnc_price_get_time (price_b);
   result = timespec_cmp (&ts_a, &ts_b);
   if (result)
-    return result;
+    /* Reverse the result to present the most recent quote first. */
+    return -result;
 
   return default_sort (price_a, price_b);
 }
@@ -299,13 +302,16 @@ sort_by_source (GtkTreeModel *f_model,
 		gpointer user_data)
 {
   GNCPrice *price_a, *price_b;
+  gint result;
 
   if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
-  SAFE_STRCMP (gnc_price_get_source (price_a),
-               gnc_price_get_source (price_b));
+  result = safe_utf8_collate (gnc_price_get_source (price_a),
+			      gnc_price_get_source (price_b));
+  if (result != 0)
+    return result;
 
   return default_sort (price_a, price_b);
 }
@@ -317,13 +323,16 @@ sort_by_type (GtkTreeModel *f_model,
 	      gpointer user_data)
 {
   GNCPrice *price_a, *price_b;
+  gint result;
 
   if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
-  SAFE_STRCMP (gnc_price_get_type (price_a),
-               gnc_price_get_type (price_b));
+  result = safe_utf8_collate (gnc_price_get_type (price_a),
+			      gnc_price_get_type (price_b));
+  if (result != 0)
+    return result;
 
   return default_sort (price_a, price_b);
 }
@@ -337,6 +346,7 @@ sort_by_value (GtkTreeModel *f_model,
   gnc_commodity *comm_a, *comm_b;
   GNCPrice *price_a, *price_b;
   gboolean result;
+  gint value;
 
   if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
@@ -349,11 +359,14 @@ sort_by_value (GtkTreeModel *f_model,
   comm_a = gnc_price_get_currency (price_a);
   comm_b = gnc_price_get_currency (price_b);
   if (comm_a && comm_b){
-    SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-		 gnc_commodity_get_namespace (comm_b));
-
-    SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-		 gnc_commodity_get_mnemonic (comm_b));
+    value = safe_utf8_collate (gnc_commodity_get_namespace (comm_a),
+			       gnc_commodity_get_namespace (comm_b));
+    if (value != 0)
+      return value;
+    value = safe_utf8_collate (gnc_commodity_get_mnemonic (comm_a),
+			       gnc_commodity_get_mnemonic (comm_b));
+    if (value != 0)
+      return value;
   }
 
   /*
@@ -386,6 +399,7 @@ gnc_tree_view_price_new (QofBook *book,
 {
   GncTreeView *view;
   GtkTreeModel *model, *f_model, *s_model;
+  GtkTreeViewColumn *col;
   GNCPriceDB *price_db;
   va_list var_args;
   const gchar *sample_text;
@@ -405,7 +419,7 @@ gnc_tree_view_price_new (QofBook *book,
 
   /* Set up the view private filter on the common model. */
   f_model = gtk_tree_model_filter_new (model, NULL);
-  gtk_object_sink(GTK_OBJECT(model));
+  g_object_unref(G_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
   gnc_tree_view_set_model (view, s_model);
@@ -417,39 +431,45 @@ gnc_tree_view_price_new (QofBook *book,
 
   sample_text = gnc_commodity_get_printname(gnc_default_currency());
   sample_text2 = g_strdup_printf("%s%s", sample_text, sample_text);
-  gnc_tree_view_add_text_column (view, N_("Commodity"), "commodity", NULL,
-				 sample_text2,
-				 GNC_TREE_MODEL_PRICE_COL_COMMODITY,
-				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				 sort_by_name);
+  col = gnc_tree_view_add_text_column (
+      view, _("Security"), "security", NULL, sample_text2,
+      GNC_TREE_MODEL_PRICE_COL_COMMODITY,
+      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+      sort_by_name);
   g_free(sample_text2);
-  gnc_tree_view_add_text_column (view, N_("Currency"), "currency", NULL,
-				 sample_text,
-				 GNC_TREE_MODEL_PRICE_COL_CURRENCY,
-				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-				 sort_by_name);
-  gnc_tree_view_add_text_column (view, N_("Date"), "date", NULL,
-				 "2005-05-20",
-				 GNC_TREE_MODEL_PRICE_COL_DATE,
-				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-				 sort_by_date);
-  gnc_tree_view_add_text_column (view, N_("Source"), "source", NULL,
-				 "Finance::Quote",
-				 GNC_TREE_MODEL_PRICE_COL_SOURCE,
-				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-				 sort_by_source);
-  gnc_tree_view_add_text_column (view, N_("Type"), "type", NULL, "last",
-				 GNC_TREE_MODEL_PRICE_COL_TYPE,
-				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-				 sort_by_type);
-  gnc_tree_view_add_numeric_column (view, N_("Price"), "price", "100.00000",
-				    GNC_TREE_MODEL_PRICE_COL_VALUE,
-				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-				    GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-				    sort_by_value);
+  col = gnc_tree_view_add_text_column (
+      view, _("Currency"), "currency", NULL, sample_text,
+      GNC_TREE_MODEL_PRICE_COL_CURRENCY,
+      GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+      sort_by_name);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_text_column (
+      view, _("Date"), "date", NULL, "2005-05-20",
+      GNC_TREE_MODEL_PRICE_COL_DATE,
+      GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+      sort_by_date);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_text_column (
+      view, _("Source"), "source", NULL, "Finance::Quote",
+      GNC_TREE_MODEL_PRICE_COL_SOURCE,
+      GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+      sort_by_source);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_text_column (
+      view, _("Type"), "type", NULL, "last",
+      GNC_TREE_MODEL_PRICE_COL_TYPE,
+      GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+      sort_by_type);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_numeric_column (
+      view, _("Price"), "price", "100.00000",
+      GNC_TREE_MODEL_PRICE_COL_VALUE,
+      GNC_TREE_VIEW_COLUMN_COLOR_NONE,
+      GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+      sort_by_value);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-  gnc_tree_view_configure_columns(view, "commodity", "currency",
-				  "date", "source", "type", "price", NULL);
+  gnc_tree_view_configure_columns(view);
 
   gtk_widget_show(GTK_WIDGET(view));
   LEAVE(" %p", view);

@@ -18,8 +18,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- *  02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef _QOFCHOICE_H
@@ -88,11 +87,17 @@ the object must return a single entity matching one of the choice types.
 */
 
 /** @file qofchoice.h
-	@brief Linking one entity to a single entity of many possible types.
+	@brief Linking one entity to other entities of many possible types.
 	@author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 #include "qofclass.h"
 #include "qofobject.h"
+
+#define QOF_MOD_CHOICE "qof-choice"
+
+/** \note Choice
+@{
+*/
 
 /** \brief Identify an object as containing a choice. */
 #define QOF_TYPE_CHOICE "choice"
@@ -146,7 +151,7 @@ GList* qof_object_get_choices(QofIdType type, QofParam *param);
 this parameter of this object. Otherwise, FALSE
 */
 gboolean qof_choice_check(char* choice_obj, char *param_name, char* choice);
-
+/** @} */
 
 /** @} */
 #endif /* _QOFCHOICE_H */

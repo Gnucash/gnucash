@@ -193,7 +193,7 @@ gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
 					      G_SIGNAL_RUN_FIRST,
 					      G_STRUCT_OFFSET (GncPluginManagerClass, plugin_added),
 					      NULL, NULL,
-					      g_cclosure_marshal_VOID__POINTER,
+					      g_cclosure_marshal_VOID__OBJECT,
 					      G_TYPE_NONE,
 					      1,
 					      GNC_TYPE_PLUGIN);
@@ -202,7 +202,7 @@ gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
 						G_SIGNAL_RUN_FIRST,
 						G_STRUCT_OFFSET (GncPluginManagerClass, plugin_removed),
 						NULL, NULL,
-						g_cclosure_marshal_VOID__POINTER,
+						g_cclosure_marshal_VOID__OBJECT,
 						G_TYPE_NONE,
 						1,
 						GNC_TYPE_PLUGIN);

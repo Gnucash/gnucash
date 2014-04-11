@@ -180,4 +180,6 @@ DllMain (HINSTANCE hinstDLL,						   \
 }
 #endif /* G_PLATFORM_WIN32 */
 
+guint                 g_strv_length    (gchar       **str_array);
+
 #endif /* __G_UTILS_26_H__ */

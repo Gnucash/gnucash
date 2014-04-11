@@ -213,6 +213,23 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (data));
 }
 
+static gboolean
+gnc_xfer_dialog_key_press_cb (GtkWidget   *widget,
+			      GdkEventKey *event,
+			      gpointer     unused)
+{
+  GtkWidget *toplevel;
+
+  if ((event->keyval == GDK_Return) || (event->keyval == GDK_KP_Enter)) {
+    toplevel = gtk_widget_get_toplevel (widget);
+    if (GTK_WIDGET_TOPLEVEL(toplevel) && GTK_IS_WINDOW(toplevel)) {
+      gtk_window_activate_default(GTK_WINDOW(toplevel));
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 static void
 gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
                                 gboolean currency_active,
@@ -480,6 +497,8 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
  /* Have to force the filter once. Alt is to show income/expense by default. */
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (tree_view));
   gtk_widget_show(GTK_WIDGET(tree_view));
+  g_signal_connect (G_OBJECT (tree_view), "key-press-event",
+		    G_CALLBACK (gnc_xfer_dialog_key_press_cb), NULL);
 
   selection = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
@@ -709,9 +728,6 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
 
     /* This doesn't seem to fix the selection problems, why? */
     gtk_editable_select_region (GTK_EDITABLE(entry), 0, 0);
-#if DRH_NEEDS_INVESTIGATION
-    gtk_old_editable_claim_selection (GTK_OLD_EDITABLE (entry), FALSE, GDK_CURRENT_TIME);
-#endif
 
     /* Store off data for the key_press_cb or
      * the button_release_cb to make use of. */
@@ -747,7 +763,8 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
 				     &current_end);
   if( current_pos != xferData->desc_cursor_position )
   {
-    gtk_entry_set_position( entry, xferData->desc_cursor_position );
+    gtk_editable_set_position( GTK_EDITABLE(entry),
+			       xferData->desc_cursor_position );
     did_something = TRUE;
   }
 
@@ -759,9 +776,6 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
     gtk_editable_select_region( GTK_EDITABLE(entry),
 				xferData->desc_start_selection,
 				xferData->desc_end_selection );
-#if DRH_NEEDS_INVESTIGATION
-    gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry), TRUE, time );
-#endif
     did_something = TRUE;
   }
 
@@ -825,10 +839,6 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
          */
         gtk_editable_select_region( GTK_EDITABLE(xferData->description_entry),
 				    0, 0 );
-#if DRH_NEEDS_INVESTIGATION
-        gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(xferData->description_entry),
-                                          FALSE, event->time );
-#endif
       }
       break;
   }
@@ -1179,7 +1189,8 @@ gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *exch_rate)
+gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, 
+                                    gnc_numeric *exch_rate)
 {
   GNCAmountEdit *gae;
 
@@ -1214,9 +1225,11 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
   if (xferData == NULL)
     return;
 
-  account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
+  account = gnc_transfer_dialog_get_selected_account (xferData, 
+                                                      XFER_DIALOG_FROM);
   if (account == NULL)
-    account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
+    account = gnc_transfer_dialog_get_selected_account (xferData, 
+                                                        XFER_DIALOG_TO);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
@@ -1340,8 +1353,8 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   {
     if ((from_account == NULL) || (to_account == NULL))
     {
-      const char *message = _("You must specify an account to transfer from,\n"
-			      "or to, or both, for this transaction.\n"
+      const char *message = _("You must specify an account to transfer from, "
+			      "or to, or both, for this transaction. "
 			      "Otherwise, it will not be recorded.");
       gnc_error_dialog(xferData->dialog, message);
       LEAVE("bad account");
@@ -1361,15 +1374,13 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 	xaccAccountGetPlaceholder(to_account))
     {
       const char *placeholder_format =
-	_("The account %s\ndoes not allow transactions.\n");
+	_("The account %s does not allow transactions.");
       char *name;
 
       if (xaccAccountGetPlaceholder(from_account))
-	name = xaccAccountGetFullName(from_account,
-				      gnc_get_account_separator ());
+	name = xaccAccountGetFullName(from_account);
       else
-	name = xaccAccountGetFullName(to_account,
-				      gnc_get_account_separator ());
+	name = xaccAccountGetFullName(to_account);
       gnc_error_dialog(xferData->dialog, placeholder_format, name);
       g_free(name);
       LEAVE("placeholder");
@@ -1668,10 +1679,12 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     xferData->amount_edit = amount;
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
+    gtk_entry_set_activates_default (GTK_ENTRY(entry), TRUE);
     g_signal_connect (G_OBJECT (entry), "focus-out-event",
 		      G_CALLBACK (gnc_xfer_amount_update_cb), xferData);
 
     date = gnc_date_edit_new(time (NULL), FALSE, FALSE);
+    gnc_date_activates_default (GNC_DATE_EDIT(date), TRUE);
     hbox = glade_xml_get_widget (xml, "date_hbox");
 
     gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
@@ -2139,4 +2152,82 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
   g_assert(xferData);
   xferData->transaction_cb = handler;
   xferData->transaction_user_data = user_data;
+}
+
+
+
+gboolean gnc_xfer_dialog_run_exchange_dialog(
+    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount, 
+    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com)
+{
+    gboolean swap_amounts = FALSE;
+    gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
+    gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
+
+    /* We know that "amount" is always in the reg_com currency.
+     * Unfortunately it is possible that neither xfer_com or txn_cur are
+     * the same as reg_com, in which case we need to convert to the txn
+     * currency...  Or, if the register commodity is the xfer_com, then we
+     * need to flip-flop the commodities and the exchange rates.
+     */
+    
+    if (gnc_commodity_equal(reg_com, txn_cur)) {
+        /* we're working in the txn currency.  Great.  Nothing to do! */
+        swap_amounts = FALSE;
+        
+    } else if (gnc_commodity_equal(reg_com, xfer_com)) {
+        /* We're working in the xfer commodity.  Great.  Just swap the
+           amounts. */
+        swap_amounts = TRUE;
+        
+        /* XXX: Do we need to check for expanded v. non-expanded
+           accounts here? */
+        
+    } else {
+        /* UGGH -- we're not in either.  That means we need to convert
+         * 'amount' from the register commodity to the txn currency.
+         */
+        gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
+        
+        /* XXX: should we tell the user we've done the conversion? */
+        amount = gnc_numeric_div(
+            amount, rate, 
+            gnc_commodity_get_fraction(txn_cur), GNC_DENOM_REDUCE);
+    }
+    
+    /* enter the accounts */
+    if (swap_amounts) {
+        gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
+        gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
+        if (!gnc_numeric_zero_p(*exch_rate))
+            *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
+                                         GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    } else {
+        gnc_xfer_dialog_select_to_currency(xfer, xfer_com);
+        gnc_xfer_dialog_select_from_currency(xfer, txn_cur);
+    }
+    gnc_xfer_dialog_hide_to_account_tree(xfer);
+    gnc_xfer_dialog_hide_from_account_tree(xfer);
+    
+    gnc_xfer_dialog_set_amount(xfer, amount);
+    
+    /*
+     * When we flip, we should tell the dialog so it can deal with the
+     * pricedb properly.
+     */
+    
+    /* Set the exchange rate */
+    gnc_xfer_dialog_set_exchange_rate(xfer, *exch_rate);
+    
+    /* and run it... */
+    if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
+        return TRUE;
+    
+    /* If we swapped the amounts for the dialog, then make sure we swap
+     * it back now...
+     */
+    if (swap_amounts)
+        *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
+                                     GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    return FALSE;
 }

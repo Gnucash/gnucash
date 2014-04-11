@@ -78,14 +78,14 @@
 
   (let ((document (gnc:make-html-document)))
 
-    (gnc:html-document-set-title! document (_ "Graphs"))
+    (gnc:html-document-set-title! document "Graphs")
 
     (gnc:html-document-add-object!
      document
      (gnc:make-html-text
       (gnc:html-markup-p
        (gnc:html-markup/format
-        (_ "Sample graphs:")))))
+        "Sample graphs:"))))
 
     (gnc:html-document-add-object!
      document
@@ -110,7 +110,7 @@
     (gnc:html-document-add-object! 
      document 
      (gnc:make-html-text 
-      (gnc:html-markup-p (_ "Done."))))
+      (gnc:html-markup-p "Done.")))
       
     document
     )
@@ -125,15 +125,15 @@
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name (N_ "Test Graphing")
+ 'name "Test Graphing"
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name (N_ "Sample graphs.")
+ 'menu-name "Sample graphs."
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip (N_ "Sample graphs.")
+ 'menu-tip "Sample graphs."
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.

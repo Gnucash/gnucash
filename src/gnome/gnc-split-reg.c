@@ -25,8 +25,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -44,7 +42,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
-#include "gnc-err-popup.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
@@ -58,28 +55,7 @@
 #include <libguile.h>
 #include "dialog-utils.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
-
-/**
- * TODO list:
- *
- * X alpha-necessary
- *   X fill out gnc-split-reg.h interface
- *   X calendar/date-picker
- * . beta-necessary
- *   X date-inclusion on jumping
- *   . pass in, use number-of-lines
- *   . title-renaming in read-only case.
- *   X size-allocation
- *   X default schedule/recur handling for from-SX items.
- *   X handle destruction/cleanup more cleanly
- *   X conditional creation
- *   X handle widget-visibility callbacks
- *   X fix regWindow{Simple,Ledger,Account}
- *   X fix jumping-to-split
- *   X fix window-raising
- **/
-
+// static QofLogModule log_module = GNC_MOD_SX;
 
 /***** PROTOTYPES ***************************************************/
 void gnc_split_reg_raise( GNCSplitReg *gsr );
@@ -92,14 +68,9 @@ static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 
-static void gsr_create_menus( GNCSplitReg *gsr );
-static void gsr_setup_menu_widgets( GNCSplitReg *gsr, GladeXML *xml );
-static void gsr_create_toolbar( GNCSplitReg *gsr );
 static void gsr_create_table( GNCSplitReg *gsr );
 static void gsr_setup_table( GNCSplitReg *gsr );
 static void gsr_setup_status_widgets( GNCSplitReg *gsr );
-static GtkWidget* gsr_create_popup_menu( GNCSplitReg *gsr );
-
 
 static void gsr_update_summary_label( GtkWidget *label,
                                       xaccGetBalanceFn getter,
@@ -339,16 +310,14 @@ GtkWidget*
 gnc_split_reg_new( GNCLedgerDisplay *ld,
                    GtkWindow *parent,
                    gint numberOfLines,
-                   gint createFlags,
-                   gint disallowCaps )
+                   gboolean read_only )
 {
   GNCSplitReg *gsrToRet;
 
   gsrToRet = g_object_new( gnc_split_reg_get_type(), NULL );
 
-  gsrToRet->disallowedCaps = disallowCaps;
   gsrToRet->numRows        = numberOfLines;
-  gsrToRet->createFlags    = createFlags;
+  gsrToRet->read_only      = read_only;
 
   gsrToRet->ledger = ld;
   gsrToRet->window = GTK_WIDGET(parent);
@@ -364,23 +333,9 @@ gnc_split_reg_init( GNCSplitReg *gsr )
   gsr->sort_type = BY_STANDARD;
   gsr->width = -1;
   gsr->height = -1;
-  gsr->disallowedCaps = 0;
   gsr->numRows = gnc_gconf_get_float(GCONF_GENERAL_REGISTER,
 				     KEY_NUMBER_OF_ROWS, NULL);
   gsr->read_only = FALSE;
-
-  /* IMPORTANT: If we set this to anything other than GTK_RESIZE_QUEUE, we
-   * enter into a very bad back-and-forth between the sheet and a containing
-   * GnomeDruid [in certain conditions and circumstances not detailed here],
-   * resulting in either a single iteration of the Druid resizing or infinite
-   * iterations of the Druid resizing without bound.  Contact
-   * jsled@asynchronous.org for details. -- 2002.04.15
-   */
-  /* This function call causes several problems in gnome2 port.  I do
-   * not see any problems with the code when it is removed.
-   * hampton@employees.org -- 2003-10-06
-   */
-  //gtk_container_set_resize_mode( GTK_CONTAINER(gsr), GTK_RESIZE_QUEUE );
 
   g_signal_connect( gsr, "destroy",
                     G_CALLBACK (gnc_split_reg_destroy_cb), gsr );
@@ -393,23 +348,10 @@ gnc_split_reg_init2( GNCSplitReg *gsr )
 
   gnc_split_reg_determine_read_only( gsr );
 
-  if ( gsr->createFlags & CREATE_MENUS ) {
-    gsr_create_menus( gsr );
-  }
-
-  if ( gsr->createFlags & CREATE_TOOLBAR ) {
-    gsr_create_toolbar( gsr );
-  }
-
-  if ( gsr->createFlags & CREATE_SUMMARYBAR ) {
-    gsr_create_summary_bar( gsr );
-  }
-
   gsr_setup_status_widgets( gsr );
   /* ordering is important here... setup_status before create_table */
   gsr_create_table( gsr );
   gsr_setup_table( gsr );
-
 }
 
 static
@@ -418,103 +360,11 @@ gsr_setup_table( GNCSplitReg *gsr )
 {
   SplitRegister *sr;
 
-  if ( gsr->createFlags & CREATE_POPUP ) {
-    if ( !gsr->popup_menu ) {
-      gsr->popup_menu = gsr_create_popup_menu (gsr);
-    }
-    gnucash_register_attach_popup( gsr->reg, gsr->popup_menu, gsr );
-  }
-
   sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gnc_split_register_show_present_divider( sr, TRUE );
   /* events should be sufficient to redraw this */
   /* gnc_ledger_display_refresh( gsr->ledger ); */
   gnc_split_reg_refresh_toolbar( gsr );
-}
-
-
-static
-void
-gsr_create_menus( GNCSplitReg *gsr )
-{
-  GladeXML *xml;
-  GtkWidget *mbar, *mi;
-  xml = gnc_glade_xml_new( "register.glade", "register_menubar" );
-  glade_xml_signal_autoconnect_full( xml,
-                                     gnc_glade_autoconnect_full_func,
-                                     gsr );
-
-  mbar = glade_xml_get_widget( xml, "register_menubar" );
-  gtk_widget_hide( mbar );
-
-  gsr->edit_menu = glade_xml_get_widget( xml, "menu_edit_menu" );
-  g_object_ref( gsr->edit_menu );
-  mi = glade_xml_get_widget( xml, "menu_edit" );
-  gtk_menu_item_remove_submenu( GTK_MENU_ITEM( mi ) );
-
-  gsr->view_menu = glade_xml_get_widget( xml, "menu_view_menu" );
-  g_object_ref( gsr->view_menu );
-  mi = glade_xml_get_widget( xml, "menu_view" );
-  gtk_menu_item_remove_submenu( GTK_MENU_ITEM(mi) );
-
-  gsr->style_submenu = glade_xml_get_widget( xml, "menu_style_menu" );
-  gsr->sort_submenu = glade_xml_get_widget( xml, "menu_sort_order_menu" );
-
-  gsr->action_menu = glade_xml_get_widget( xml, "menu_actions_menu" );
-  g_object_ref( gsr->action_menu );
-  mi = glade_xml_get_widget( xml, "menu_actions" );
-  gtk_menu_item_remove_submenu( GTK_MENU_ITEM(mi) );
-
-  gsr->double_line_check =
-    glade_xml_get_widget (xml, "menu_style_double_line");
-  gsr->split_menu_check =
-    glade_xml_get_widget (xml, "menu_splits");
-
-  gsr_setup_menu_widgets( gsr, xml );
-
-  /* we've ref'd the objects we need to. */
-  gtk_widget_destroy( mbar );
-}
-
-static
-void
-gsr_create_toolbar( GNCSplitReg *gsr )
-{
-#if 0
-  GladeXML *xml;
-  GtkWidget *widget;
-  SCM id;
-
-  xml = gnc_glade_xml_new( "register.glade", "toolbar" );
-  glade_xml_signal_autoconnect_full( xml,
-                                     gnc_glade_autoconnect_full_func,
-                                     gsr );
-
-  gsr->toolbar = glade_xml_get_widget( xml, "toolbar" );
-  gsr->split_button = glade_xml_get_widget( xml, "toolbar_split" );
-
-  if ( gsr->disallowedCaps & CAP_DELETE ) {
-    widget = glade_xml_get_widget( xml, "toolbar_delete" );
-    gtk_widget_set_sensitive( widget, FALSE );
-  }
-
-  if ( gsr->disallowedCaps & CAP_JUMP ) {
-    widget = glade_xml_get_widget( xml, "toolbar_jump" );
-    gtk_widget_set_sensitive( widget, FALSE );
-  }
-
-  if ( gsr->disallowedCaps & CAP_SCHEDULE ) {
-    widget = glade_xml_get_widget( xml, "toolbar_schedule" );
-    gtk_widget_set_sensitive( widget, FALSE );
-  }
-
-  if (gsr->read_only) {
-    widget = glade_xml_get_widget (xml, "toolbar_delete");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "toolbar_duplicate");
-    gtk_widget_set_sensitive(widget, FALSE);
-  }
-#endif
 }
 
 static
@@ -553,27 +403,12 @@ gsr_setup_status_widgets( GNCSplitReg *gsr )
 {
   SplitRegister *sr;
   gboolean use_double_line;
-  GtkCheckMenuItem *check;
 
   sr = gnc_ledger_display_get_split_register( gsr->ledger );
   use_double_line = gnc_ledger_display_default_double_line( gsr->ledger );
 
   /* be sure to initialize the gui elements associated with the cursor */
   gnc_split_register_config( sr, sr->type, sr->style, use_double_line );
-
-  if ( ! (gsr->createFlags & CREATE_MENUS) ) {
-    return;
-  }
-
-  check = GTK_CHECK_MENU_ITEM( gsr->double_line_check );
-
-  g_signal_handlers_block_by_func( check,
-                                   gnc_split_reg_double_line_cb, gsr );
-
-  gtk_check_menu_item_set_active(check, use_double_line);
-
-  g_signal_handlers_unblock_by_func( check,
-                                     gnc_split_reg_double_line_cb, gsr );
 }
 
 void
@@ -864,30 +699,48 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 gboolean
 gnc_split_reg_check_close( GNCSplitReg *gsr )
 {
-  gint result;
+  GtkWidget *dialog;
+  gint response;
   gboolean pending_changes;
   SplitRegister *reg;
-  const char *message = _("The current transaction has been changed.\n"
-			  "Would you like to record it?");
+  const char *title = _("Save transaction before closing?");
+  const char *message =
+    _("The current transaction has been changed.  Would you like to "
+      "record the changes before closing this page, close the page "
+      "without recording the changes, or cancel the close?");
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   pending_changes = gnc_split_register_changed( reg );
   if ( !pending_changes )
     return TRUE;
 
-  result = gnc_verify_cancel_dialog(gsr->window, GTK_RESPONSE_YES, message);
-  switch (result)
+  dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_QUESTION,
+				  GTK_BUTTONS_NONE,
+				  "%s", title);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", message);
+  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			 _("_Don't Record"), GTK_RESPONSE_REJECT,
+			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			 _("_Record"), GTK_RESPONSE_ACCEPT,
+			 NULL);
+  response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
+  gtk_widget_destroy(dialog);
+
+  switch (response)
   {
-    case GTK_RESPONSE_YES:
-    case GTK_RESPONSE_OK:
+    case GTK_RESPONSE_ACCEPT:
       gnc_split_reg_record_trans_cb( gsr->window, gsr );
       return TRUE;
 
-    case GTK_RESPONSE_NO:
+    case GTK_RESPONSE_REJECT:
       gnc_split_register_cancel_cursor_trans_changes( reg );
       return TRUE;
 
     case GTK_RESPONSE_CANCEL:
+    default:
       return FALSE;
   }
   return TRUE;
@@ -1044,39 +897,23 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
 {
   SplitRegister *reg;
   Transaction *trans, *new_trans;
-  kvp_frame *txn_frame;
-  kvp_value *kvp_val;
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
     return;
 
-  txn_frame = xaccTransGetSlots( trans );
-  if ( txn_frame != NULL ) {
-    kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
-    if ( kvp_val ) {
-      // GUID *fromSXId = kvp_value_get_guid( kvp_val );
+  if (xaccTransGetReversedBy(trans)) {
       gnc_error_dialog(gsr->window,
-		       _("A reversing entry has already been created for this transaction."));
+        _("A reversing entry has already been created for this transaction."));
       return;
-    }
   }
-
-  new_trans = xaccTransClone(trans);
-  xaccTransReverse(new_trans);
+  
+  new_trans = xaccTransReverse(trans);
 
   /* Clear transaction level info */
-  xaccTransBeginEdit(new_trans);
   xaccTransSetDatePostedSecs(new_trans, time(NULL));
   xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-  xaccTransCommitEdit(new_trans);
-
-  /* Now update the original with a pointer to the new one */
-  xaccTransBeginEdit(trans);
-  kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
-  kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
-  xaccTransCommitEdit(trans);
 
   /* Now jump to new trans */
   gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
@@ -1093,15 +930,25 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 static gboolean
 xaccTransWarnReadOnly (const Transaction *trans)
 {
+  GtkWidget *dialog;
   const gchar *reason;
+  const gchar *title = _("Cannot modify or delete this transaction.");
+  const gchar *message =
+    _("This transaction is marked read-only with the comment: '%s'");
 
   if (!trans) return FALSE;
 
   reason = xaccTransGetReadOnly (trans);
   if (reason) {
-    gnc_send_gui_error(_("Cannot modify or delete this transaction.\n"
-                       "This transaction is marked read-only because:\n\n'%s'"),
-                       reason);
+    dialog = gtk_message_dialog_new(NULL,
+				    0,
+				    GTK_MESSAGE_ERROR,
+				    GTK_BUTTONS_OK,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     message, reason);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
     return TRUE;
   }
   return FALSE;
@@ -1116,9 +963,10 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   Transaction *trans;
   Split *split;
   GtkWidget *dialog;
-  gint result;
+  gint response;
+  const gchar *warning;
 
-  const char *message = _("Remove the splits from this transaction?");
+  const char *title = _("Remove the splits from this transaction?");
   const char *recn_warn = _("This transaction contains reconciled splits. "
                             "Modifying it is not a good idea because that will "
 			    "cause your reconciled balance to be off.");
@@ -1128,32 +976,26 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   trans = gnc_split_register_get_current_trans (reg);
   if (xaccTransWarnReadOnly(trans))
     return;
+  dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_WARNING,
+				  GTK_BUTTONS_NONE,
+				  "%s", title);
   if (xaccTransHasReconciledSplits (trans)) {
-    dialog =
-      gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					 GTK_DIALOG_MODAL
-					 | GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_WARNING,
-					 GTK_BUTTONS_NONE,
-					 "<b>%s</b>\n\n%s",
-					 message, recn_warn);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", recn_warn);
+    warning = "register_remove_all_splits2";
   } else {
-    dialog =
-      gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					 GTK_DIALOG_MODAL
-					 | GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_QUESTION,
-					 GTK_BUTTONS_NONE,
-					 "<b>%s</b>", message);
+    warning = "register_remove_all_splits";
   }
 
   gtk_dialog_add_button(GTK_DIALOG(dialog),
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gnc_gtk_dialog_add_button(dialog, N_("_Remove Splits"),
 			    GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-  result =  gtk_dialog_run(GTK_DIALOG(dialog));
+  response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
   gtk_widget_destroy (dialog);
-  if (result != GTK_RESPONSE_ACCEPT)
+  if (response != GTK_RESPONSE_ACCEPT)
     return;
 
   /*
@@ -1187,7 +1029,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   Transaction *trans;
   Split *split;
   GtkWidget *dialog;
-  gint result;
+  gint response;
+  const gchar *warning;
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -1241,13 +1084,14 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     char recn;
 
     if (split == gnc_split_register_get_current_trans_split (reg, NULL)) {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_OK,
-					   "<b>%s</b>\n\n%s",
-					   anchor_error, anchor_split);
+      dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				      GTK_DIALOG_MODAL
+				      | GTK_DIALOG_DESTROY_WITH_PARENT,
+				      GTK_MESSAGE_ERROR,
+				      GTK_BUTTONS_OK,
+				      "%s", anchor_error);
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					       "%s", anchor_split);
       gtk_dialog_run(GTK_DIALOG(dialog));
       gtk_widget_destroy (dialog);
       return;
@@ -1261,35 +1105,30 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 
     /* ask for user confirmation before performing permanent damage */
     buf = g_strdup_printf (format, memo, desc);
-
+    dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				    GTK_DIALOG_MODAL
+				    | GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    buf);
+    g_free(buf);
     recn = xaccSplitGetReconcile (split);
     if (recn == YREC || recn == FREC)
     {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL
-					   | GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_WARNING,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>\n\n%s", buf, recn_warn);
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					       "%s", recn_warn);
+      warning = "register_delete_split2";
     } else {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL
-					   | GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_QUESTION,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>", buf);
+      warning = "register_delete_split";
     }
-    g_free(buf);
 
     gtk_dialog_add_button(GTK_DIALOG(dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
 			      GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-    result =  gtk_dialog_run(GTK_DIALOG(dialog));
+    response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
-    if (result != GTK_RESPONSE_ACCEPT)
+    if (response != GTK_RESPONSE_ACCEPT)
       return;
 
     gnc_split_register_delete_current_split (reg);
@@ -1301,36 +1140,32 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
   {
-    const char *message = _("Delete the current transaction?");
+    const char *title = _("Delete the current transaction?");
     const char *recn_warn = _("You would be deleting a transaction "
                               "with reconciled splits! "
                               "This is not a good idea as it will cause your "
                               "reconciled balance to be off.");
 
+    dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				    GTK_DIALOG_MODAL
+				    | GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_WARNING,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
     if (xaccTransHasReconciledSplits (trans)) {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL |
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_WARNING,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>\n\n%s", message, recn_warn);
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					       "%s", recn_warn);
+      warning = "register_delete_trans2";
     } else {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL
-					   | GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_QUESTION,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>", message);
+      warning = "register_delete_trans";
     }
     gtk_dialog_add_button(GTK_DIALOG(dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
 			      GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-    result =  gtk_dialog_run(GTK_DIALOG(dialog));
+    response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
-    if (result != GTK_RESPONSE_ACCEPT)
+    if (response != GTK_RESPONSE_ACCEPT)
       return;
 
     gnc_split_register_delete_current_trans (reg);
@@ -1938,7 +1773,6 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
 GtkWidget *
 gsr_create_summary_bar( GNCSplitReg *gsr )
 {
-  gboolean has_shares;
   GtkWidget *summarybar;
 
   gsr->cleared_label    = NULL;
@@ -1954,30 +1788,9 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     return NULL;
   }
 
-  {
-    Account *account;
-    GNCAccountType atype;
-
-    account = gnc_ledger_display_leader( gsr->ledger );
-    atype = xaccAccountGetType (account);
-
-    switch (atype)
-    {
-      case STOCK:
-      case MUTUAL:
-      case CURRENCY:
-        has_shares = TRUE;
-        break;
-
-      default:
-        has_shares = FALSE;
-        break;
-    }
-  }
-
   summarybar = gtk_hbox_new (FALSE, 4);
 
-  if (!has_shares)
+  if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
   {
     gsr->balance_label    = add_summary_label (summarybar, _("Present:"));
     gsr->future_label     = add_summary_label (summarybar, _("Future:"));
@@ -1996,136 +1809,6 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
   /* Force the first update */
   gsr_redraw_all_cb(NULL, gsr);
   return gsr->summarybar;
-}
-
-static
-void
-gsr_setup_menu_widgets(GNCSplitReg *gsr, GladeXML *xml)
-{
-  /* Make sure the right style radio item is active */
-  SplitRegister *reg;
-  GtkWidget *widget;
-  char *widget_name;
-
-  if ( gsr->disallowedCaps & CAP_DELETE ) {
-    widget = glade_xml_get_widget( xml, "menu_delete" );
-    gtk_widget_set_sensitive( widget, FALSE );
-  }
-
-  if ( gsr->disallowedCaps & CAP_JUMP ) {
-    widget = glade_xml_get_widget( xml, "menu_jump" );
-    gtk_widget_set_sensitive( widget, FALSE );
-  }
-
-  if ( gsr->disallowedCaps & CAP_SCHEDULE ) {
-    widget = glade_xml_get_widget( xml, "menu_schedule" );
-    gtk_widget_set_sensitive( widget, FALSE );
-  }
-    
-
-  if (gsr->read_only) {
-    widget = glade_xml_get_widget (xml, "menu_paste");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "menu_cut_trans");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "menu_paste_trans");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "menu_delete");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "menu_duplicate");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "menu_reinitialize");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = glade_xml_get_widget (xml, "menu_exchange");
-    gtk_widget_set_sensitive(widget, FALSE);
-  }
-
-  reg = gnc_ledger_display_get_split_register( gsr->ledger );
-
-  switch (reg->style)
-    {
-    default:
-    case REG_STYLE_LEDGER:
-      widget_name = "menu_style_basic_ledger";
-      break;
-    case REG_STYLE_AUTO_LEDGER:
-      widget_name = "menu_style_auto_split_ledger";
-      break;
-    case REG_STYLE_JOURNAL:
-      widget_name = "menu_style_transaction_journal";
-      break;
-    }
-
-  /* registers with more than one account can only use journal mode */
-  if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
-    {
-      widget = glade_xml_get_widget(xml, "menu_style_basic_ledger");
-      gtk_widget_set_sensitive (widget, FALSE);
-
-      widget = glade_xml_get_widget(xml, "menu_style_auto_split_ledger");
-      gtk_widget_set_sensitive (widget, FALSE);
-    }
-
-  widget = glade_xml_get_widget(xml, widget_name);
-  g_signal_handlers_block_matched(widget, G_SIGNAL_MATCH_DATA,
-				  0, 0, NULL, NULL, gsr);
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-  g_signal_handlers_unblock_matched(widget, G_SIGNAL_MATCH_DATA,
-				    0, 0, NULL, NULL, gsr);
-}
-
-static
-GtkWidget *
-gsr_create_popup_menu( GNCSplitReg *gsr )
-{
-  GtkWidget *popup, *menuitem;
-  GladeXML *xml;
-
-  xml = gnc_glade_xml_new( "register.glade", "register_popup" );
-  popup = glade_xml_get_widget( xml, "register_popup" );
-  glade_xml_signal_autoconnect_full( xml,
-                                     gnc_glade_autoconnect_full_func,
-                                     gsr );
-
-  /* Glade insists on making this a tearoff menu. */
-  if (gnc_gconf_menus_have_tearoff()) {
-    GtkMenuShell *ms = GTK_MENU_SHELL(popup);
-    GtkWidget *tearoff;
-
-    tearoff = g_list_nth_data(ms->children, 0);
-    ms->children = g_list_remove(ms->children, tearoff);
-    gtk_widget_destroy(tearoff);
-  }
-
-  gsr->split_popup_check = glade_xml_get_widget( xml, "popup_splits" );
-
-  if ( gsr->disallowedCaps & CAP_DELETE ) {
-    menuitem = glade_xml_get_widget( xml, "sr_popup_delete" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-  }
-
-  if ( gsr->disallowedCaps & CAP_JUMP ) {
-    menuitem = glade_xml_get_widget( xml, "sr_popup_jump" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-  }
-
-  if ( gsr->disallowedCaps & CAP_SCHEDULE ) {
-    menuitem = glade_xml_get_widget( xml, "sr_popup_schedule" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-  }
-
-  if (gsr->read_only) {
-    menuitem = glade_xml_get_widget( xml, "sr_popup_delete" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-    menuitem = glade_xml_get_widget( xml, "sr_popup_duplicate" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-    menuitem = glade_xml_get_widget( xml, "sr_popup_reinitialize" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-    menuitem = glade_xml_get_widget( xml, "sr_popup_exchange" );
-    gtk_widget_set_sensitive( menuitem, FALSE );
-  }
-
-  return popup;
 }
 
 /**
@@ -2190,17 +1873,17 @@ gboolean
 gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
-  const gchar *read_only = "This account register is read-only.";
+  const gchar *read_only = _("This account register is read-only.");
   GtkWidget *dialog;
 
-  dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(args->gsr->window),
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_MESSAGE_WARNING,
-					      GTK_BUTTONS_CLOSE,
-					      "<b>%s</b>\n\n%s",
-					      read_only,
-					      args->string);
-  gtk_dialog_run(GTK_DIALOG(dialog));
+  dialog = gtk_message_dialog_new(GTK_WINDOW(args->gsr->window),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_WARNING,
+				  GTK_BUTTONS_CLOSE,
+				  "%s", read_only);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", args->string);
+  gnc_dialog_run(GTK_DIALOG(dialog), "register_read_only");
   gtk_widget_destroy(dialog);
   g_free(args);
   return FALSE;
@@ -2216,15 +1899,7 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
   dialog_args *args = g_malloc(sizeof(dialog_args));
   SplitRegister *reg;
 
-  gsr->read_only = FALSE;
-
-  if ( gsr->disallowedCaps & CAP_READ_ONLY ) {
-
-    /* FIXME: this is not ideal, as whatever window-title solution we come up
-     * with should be used in this case as well. */
-    gsr->read_only = TRUE;
-
-  } else {
+  if ( !gsr->read_only ) {
 
     switch (gnc_split_reg_get_placeholder(gsr)) {
     case PLACEHOLDER_NONE:
@@ -2316,99 +1991,10 @@ gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t )
 }
 
 GtkWidget*
-gnc_split_reg_get_edit_menu( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->edit_menu;
-}
-
-GtkWidget*
-gnc_split_reg_get_view_menu( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->view_menu;
-}
-
-GtkWidget*
-gnc_split_reg_get_style_menu( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->style_submenu;
-}
-
-GtkWidget*
-gnc_split_reg_get_sort_menu( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->sort_submenu;
-}
-
-GtkWidget*
-gnc_split_reg_get_action_menu( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->action_menu;
-}
-
-GtkWidget*
-gnc_split_reg_get_toolbar( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->toolbar;
-}
-
-GtkWidget*
 gnc_split_reg_get_summarybar( GNCSplitReg *gsr )
 {
   if ( !gsr ) return NULL;
   return gsr->summarybar;
-}
-
-GtkWidget*
-gnc_split_reg_get_popup( GNCSplitReg *gsr )
-{
-  if ( !gsr ) return NULL;
-  return gsr->popup_menu;
-}
-
-void
-gnc_split_reg_set_split_state( GNCSplitReg *gsr, gboolean split )
-{
-  g_assert( gsr );
-  /* FIXME */
-  PERR( "Unimplemented" );
-}
-
-void
-gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine )
-{
-  g_assert( gsr );
-  /* FIXME */
-  PERR( "unimplemented" );
-}
-
-void
-gnc_split_reg_use_extended_popup( GNCSplitReg *gsr )
-{
-  GtkWidget *popup, *tmpMenu, *tmpMI;
-
-  g_assert( gsr );
-
-  popup = gsr->popup_menu;
-
-  gtk_menu_shell_append( GTK_MENU_SHELL(popup), gtk_menu_item_new() );
-
-  tmpMenu = gnc_split_reg_get_edit_menu( gsr );
-  tmpMI = gtk_menu_item_new_with_label( N_("Edit") );
-  gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
-  gtk_menu_shell_append( GTK_MENU_SHELL(popup), tmpMI );
-
-  tmpMenu = gnc_split_reg_get_view_menu( gsr );
-  tmpMI = gtk_menu_item_new_with_label( N_("View") );
-  gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
-  gtk_menu_shell_append( GTK_MENU_SHELL(popup), tmpMI );
-
-  gtk_widget_show_all( popup );
 }
 
 gboolean
@@ -2416,4 +2002,10 @@ gnc_split_reg_get_read_only( GNCSplitReg *gsr )
 {
   g_assert( gsr );
   return gsr->read_only;
+}
+
+void
+gnc_split_reg_set_moved_cb( GNCSplitReg *gsr, GFunc cb, gpointer cb_data )
+{
+  gnucash_register_set_moved_cb (gsr->reg, cb, cb_data);
 }

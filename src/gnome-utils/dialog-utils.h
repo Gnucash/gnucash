@@ -27,11 +27,17 @@
 #define DIALOG_UTILS_H
 
 #include <glade/glade.h>
+#include <gtk/gtk.h>
 #include "qof.h"
 
 /* option button callback function */
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
+typedef void (*GNCOptionCallback) (GtkWidget *,
+                                   gpointer user_data);
+#else
 typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
                                    gpointer user_data);
+#endif
 
 /* Structure for building option buttons */
 typedef struct _GNCOptionInfo GNCOptionInfo;
@@ -77,18 +83,6 @@ void gnc_restore_window_size (const char *prefix, GtkWindow *window);
 \********************************************************************/
 void gnc_save_window_size (const char *section, GtkWindow *window);
 
-
-/********************************************************************\
- * Fill the user data values in the menu structure with the given   *
- * value. The filling is done recursively.                          *
- *                                                                  *
- * Args: info - the menu to fill                                    *
- *       data - the value to fill with                              *
- * Returns: nothing                                                 *
-\********************************************************************/
-#ifdef LIBGNOME_H
-void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
-#endif
 
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,
@@ -149,5 +143,18 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
 				const gchar *label,
 				const gchar *stock_id,
 				guint response);
+
+
+/** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)
+ */
+gint
+gnc_dialog_run(GtkDialog *dialog, const gchar *gconf_key);
+
+#ifndef HAVE_GTK26
+void
+gtk_message_dialog_format_secondary_text(GtkMessageDialog *dialog,
+					 const gchar *message_format,
+					 ...) G_GNUC_PRINTF (2, 3);
+#endif
 
 #endif

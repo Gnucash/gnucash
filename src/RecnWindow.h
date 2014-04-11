@@ -27,8 +27,6 @@
 #ifndef RECONCILE_H
 #define RECONCILE_H
 
-#include "config.h"
-
 #include "gnc-ui-common.h"
 #include "Account.h"
 

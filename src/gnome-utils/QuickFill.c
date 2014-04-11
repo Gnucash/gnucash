@@ -111,7 +111,7 @@ gnc_quickfill_destroy (QuickFill *qf)
   qf->matches = NULL;
 
   if (qf->text)
-    gnc_string_cache_remove(qf->text);
+    CACHE_REMOVE(qf->text);
   qf->text = NULL;
   qf->len = 0;
 
@@ -127,7 +127,7 @@ gnc_quickfill_purge (QuickFill *qf)
   g_hash_table_foreach_remove (qf->matches, destroy_helper, NULL);
 
   if (qf->text)
-    gnc_string_cache_remove (qf->text);
+    CACHE_REMOVE (qf->text);
   qf->text = NULL;
   qf->len = 0;
 }
@@ -155,13 +155,6 @@ gnc_quickfill_get_char_match (QuickFill *qf, gunichar uc)
   if (NULL == qf) return NULL;
 
   DEBUG ("xaccGetQuickFill(): index = %u\n", key);
-#if DEBUG_ME
-  GdkWChar s[2];
-  s[0] = wc;
-  s[1] = 0;
-  char * r= gnc_wcstombs (s);
-  PINFO ("ascii char=%s (%d)\n", r, (int) r[0]);
-#endif
 
   return g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
 }
@@ -309,7 +302,7 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
       /* If there's no string there already, just put the new one in. */
       if (old_text == NULL)
       {
-        match_qf->text = gnc_string_cache_insert((gpointer) text);
+        match_qf->text = CACHE_INSERT((gpointer) text);
         match_qf->len = len;
         break;
       }
@@ -319,8 +312,8 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
           (strncmp(text, old_text, strlen(old_text)) == 0))
         break;
 
-      gnc_string_cache_remove(old_text);
-      match_qf->text = gnc_string_cache_insert((gpointer) text);
+      CACHE_REMOVE(old_text);
+      match_qf->text = CACHE_INSERT((gpointer) text);
       match_qf->len = len;
       break;
   }

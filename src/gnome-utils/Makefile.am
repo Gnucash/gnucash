@@ -1,4 +1,4 @@
-SUBDIRS = schemas . test ui
+SUBDIRS = glade schemas . test ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
@@ -20,6 +20,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/glib26 \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
@@ -30,6 +31,8 @@ AM_CFLAGS = \
   ${GSF_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
+  gtktreedatalist.c \
+  gnctreemodelsort.c \
   QuickFill.c \
   account-quickfill.c \
   cursors.c \
@@ -40,10 +43,12 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-preferences.c \
   dialog-query-list.c \
   dialog-reset-warnings.c \
+  dialog-totd.c \
   dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
   druid-gconf-setup.c \
+  druid-gnc-xml-import.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
@@ -80,10 +85,9 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
+  gnc-tree-model-budget.c \
   gnc-tree-model-commodity.c \
-  gnc-tree-model-example-account.c \
   gnc-tree-model-price.c \
-  gnc-tree-model-selection.c \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-price.c \
@@ -94,10 +98,12 @@ libgncmod_gnome_utils_la_SOURCES = \
   print-session.c \
   search-param.c \
   gnc-dialog.c \
-  gnc-tree-model-budget.c
+  window-main-summarybar.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  gtktreedatalist.h \
+  gnctreemodelsort.h \
   QuickFill.h \
   account-quickfill.h \
   dialog-account.h \
@@ -106,10 +112,12 @@ gncinclude_HEADERS = \
   dialog-options.h \
   dialog-query-list.h \
   dialog-reset-warnings.h \
+  dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
   druid-gconf-setup.h \
+  druid-gnc-xml-import.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
@@ -143,10 +151,9 @@ gncinclude_HEADERS = \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
+  gnc-tree-model-budget.h \
   gnc-tree-model-commodity.h \
-  gnc-tree-model-example-account.h \
   gnc-tree-model-price.h \
-  gnc-tree-model-selection.h \
   gnc-tree-view-account.h \
   gnc-tree-view-commodity.h \
   gnc-tree-view-price.h \
@@ -155,7 +162,7 @@ gncinclude_HEADERS = \
   misc-gnome-utils.h \
   print-session.h \
   gnc-dialog.h \
-  gnc-tree-model-budget.h
+  window-main-summarybar.h
 
 noinst_HEADERS = \
   argv-list-converters.h \
@@ -172,6 +179,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -182,15 +190,24 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${GSF_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
-  ${XML_LIBS}
+  ${LIBXML2_LIBS}
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
+libgw_gnome_utils_la_LIBADD = \
+  libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${QOF_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
+  ${GLIB_LIBS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm
@@ -201,23 +218,9 @@ gncmod_DATA = gnome-utils.scm
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = gnc-menu-extensions.scm
 
-gladedir = $(GNC_GLADE_DIR)
-glade_DATA = \
-  commodity.glade \
-  dialog-query-list.glade \
-  dialog-reset-warnings.glade \
-  druid-provider-multifile.glade \
-  exchange-dialog.glade \
-  druid-gconf-setup.glade \
-  gnc-date-format.glade \
-  gnc-gui-query.glade \
-  preferences.glade \
-  transfer.glade
-
 EXTRA_DIST = \
   gnc-dir.h.in \
   gnc-svninfo.h \
-  ${glade_DATA} \
   ${gwmod_DATA} \
   ${gncmod_DATA} \
   ${gncscm_DATA}
@@ -226,7 +229,7 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status
+gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
@@ -235,11 +238,11 @@ gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status
 	mv $@.tmp $@
 
 gnc-version.h: _gnc-version.h
-	-[ ! -f gnc-version.h ] && cp _gnc-version.h gnc-version.h
+	-if [ ! -f gnc-version.h ]; then cp _gnc-version.h gnc-version.h; fi
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h
 	-rm -f _gnc-version.h
 
-_gnc-version.h: gnc-svninfo.h
+_gnc-version.h: gnc-svninfo.h Makefile
 	@echo "/* Autogenerated. Do not change. */"	 > _gnc-version.h
 	@echo "#ifndef GNC_VERSION_H"			>> _gnc-version.h
 	@echo "#define GNC_VERSION_H"			>> _gnc-version.h
@@ -256,23 +259,35 @@ _gnc-version.h: gnc-svninfo.h
 	@echo "#include \"gnc-svninfo.h\""		>> _gnc-version.h
 	@echo "#endif"					>> _gnc-version.h
 
-gnc-svninfo.h: .gnc-svninfo.h
+gnc-svninfo.h: _gnc-svninfo.h
+	-if [ ! -f gnc-svninfo.h ]; then cp _gnc-svninfo.h gnc-svninfo.h; fi
+	-cmp -s _gnc-svninfo.h gnc-svninfo.h || cp _gnc-svninfo.h gnc-svninfo.h
+	-rm -f _gnc-svninfo.h
+
+_gnc-svninfo.h: Makefile
 	@s=${srcdir} ; \
 	if [ -h ${srcdir}/Makefile.am ] ; then \
 		d=`readlink $(srcdir)/Makefile.am` ; \
 		s="${srcdir}/`dirname $$d`" ; \
 	fi ; \
 	if [ -d $$s/.svn ] ; then \
-		svninfo=`LANG=C svn info $$s |grep '^Revision: '|sed 's/Revision: //'` ; \
+		svninfo=`svnversion $$s` ; \
 		if [ -z "$$svninfo" ] ; then \
-			echo "svn info failed.  figure out why." ; \
+			echo "svnversion failed.  figure out why." ; \
 			echo "can't determine svn revision from $$s." ; \
 			exit 1 ; \
 		fi ; \
-		echo "#define GNUCASH_SVN_REV $$svninfo" > gnc-svninfo.h ; \
+		echo "/* Autogenerated. Do not change. */" > _gnc-svninfo.h ; \
+		echo "#define GNUCASH_SVN_REV \"$$svninfo\"" >> _gnc-svninfo.h ; \
+	else \
+		if [ -r $(srcdir)/gnc-svninfo.h ] ; then \
+			cp $(srcdir)/gnc-svninfo.h _gnc-svninfo.h ; \
+		else \
+			echo "You're building from SVN...  But your build system is broken" ; \
+			echo "Don't do that.   Complain to your build-system creator." ; \
+			exit 1 ; \
+		fi ; \
 	fi
-
-.gnc-svninfo.h:
 
 BUILT_SOURCES = gnc-dir.h gnc-version.h
 
@@ -280,22 +295,24 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-gnome-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += gnome-utils-spec.scm gnome-utils.scm
+SCM_FILE_LINKS += \
+  ${gncmod_DATA} \
+  ${gncscm_DATA}
 endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
 
 gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
-  .scm-links gw-gnome-utils-spec.scm ${top_builddir}/config.status
+  .scm-links gw-gnome-utils-spec.scm ${top_builddir}/config.status Makefile
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
@@ -305,8 +322,8 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-gnome-utils.html gnc-svninfo.h
+CLEANFILES = gnucash g-wrapped .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnome-utils.html
 
 #
 # I hate inconsistent standards. Autotools puts help files into
@@ -314,7 +331,7 @@ DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
 # them in ${pkgdatadir}/gnome/help/${program}.
 #
 install-data-hook:
-	ln -sf ../gnome ${DESTDIR}/${pkgdatadir}
+	$(LN_S) -f ../gnome ${DESTDIR}${pkgdatadir}
 
 uninstall-hook:
-	rm -f ${DESTDIR}/${pkgdatadir}/gnome
+	rm -f ${DESTDIR}${pkgdatadir}/gnome

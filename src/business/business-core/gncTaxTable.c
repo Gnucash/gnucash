@@ -143,9 +143,8 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 static inline void
 mark_table (GncTaxTable *table)
 {
-  table->inst.dirty = TRUE;
-  qof_collection_mark_dirty (table->inst.entity.collection);
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&table->inst);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 static inline void 
@@ -213,7 +212,7 @@ gncTaxTableCreate (QofBook *book)
   qof_instance_init (&table->inst, _GNC_MOD_NAME, book);
   table->name = CACHE_INSERT ("");
   addObj (table);
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_CREATE, NULL);
   return table;
 }
 
@@ -265,7 +264,7 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   }
 
   addObj (table);
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_CREATE, NULL);
   return table;
 }
 
@@ -289,7 +288,7 @@ gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
   table->inst.do_free = TRUE;
-  qof_collection_mark_dirty (table->inst.entity.collection);
+  qof_instance_set_dirty (&table->inst);
   gncTaxTableCommitEdit (table);
 }
 
@@ -301,7 +300,7 @@ gncTaxTableFree (GncTaxTable *table)
 
   if (!table) return;
 
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_DESTROY, NULL);
   CACHE_REMOVE (table->name);
   remObj (table);
 
@@ -524,8 +523,8 @@ static inline void table_free (QofInstance *inst)
 
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
-  QOF_COMMIT_EDIT_PART1 (&table->inst);
-  QOF_COMMIT_EDIT_PART2 (&table->inst, gncTaxTableOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(table))) return;
+  qof_commit_edit_part2 (&table->inst, gncTaxTableOnError,
                          gncTaxTableOnDone, table_free);
 }
 
@@ -663,9 +662,8 @@ int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b)
   if (!a) return -1;
   if (!b) return 1;
     
-  name_a = xaccAccountGetFullName (a->account, ':');
-  name_b = xaccAccountGetFullName (b->account, ':');
-  /* for comparison purposes it doesn't matter what we use as a separator */
+  name_a = xaccAccountGetFullName (a->account);
+  name_b = xaccAccountGetFullName (b->account);
   retval = safe_strcmp(name_a, name_b);
   g_free(name_a);
   g_free(name_b);

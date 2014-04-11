@@ -93,11 +93,13 @@ void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list);
 
 /* lowlevel */
 
-/* internal getter for kvp frame in book */
-kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b);
+/* internal getter for kvp frame in book. The create argument says
+ *  to create the frame if it doesn't already exist. */
+kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b, gboolean create);
 
-/* internal getter for kvp frame in Account */
-kvp_frame *gnc_hbci_get_account_kvp (Account *a);
+/* internal getter for kvp frame in Account. The create argument says
+ *  to create the frame if it doesn't already exist. */
+kvp_frame *gnc_hbci_get_account_kvp (Account *a, gboolean create);
 
 
 

@@ -14,11 +14,13 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${GNOME_CFLAGS}
+  ${GCONF_CFLAGS} \
+  ${GTK_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
   file-utils.c \
   gfec.c \
+  gnc-account-merge.c \
   gnc-accounting-period.c \
   gnc-component-manager.c \
   gnc-druid.c \
@@ -29,7 +31,6 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-druid-provider-desc-file.c \
   gnc-druid-provider-desc-multifile.c \
   gnc-druid-provider-file-cb.c \
-  gnc-err-popup.c \
   gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
@@ -37,13 +38,14 @@ libgncmod_app_utils_la_SOURCES = \
   gncmod-app-utils.c \
   gnc-ui-util.c \
   guile-util.c \
-  option-util.c 
+  option-util.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   file-utils.h \
   gfec.h \
   gnc-basic-gobject.h \
+  gnc-account-merge.h \
   gnc-accounting-period.h \
   gnc-component-manager.h \
   gnc-druid.h \
@@ -54,7 +56,6 @@ gncinclude_HEADERS = \
   gnc-druid-provider-desc-file.h \
   gnc-druid-provider-desc-multifile.h \
   gnc-druid-provider-file-cb.h \
-  gnc-err-popup.h \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
@@ -62,8 +63,7 @@ gncinclude_HEADERS = \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
-  option-util.h \
-  i18n.h
+  option-util.h
 
 noinst_HEADERS = \
   gw-app-utils.h
@@ -71,9 +71,23 @@ noinst_HEADERS = \
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
+  ${GCONF_LIBS} \
+  ${GTK_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
+
+libgw_app_utils_la_LIBADD = \
+  libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
@@ -102,38 +116,24 @@ noinst_DATA = .scm-links
 EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
-  ${gwmod_DATA} \
-  i18n.h.in 
-
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
-i18n.h: i18n.h.in ${top_builddir}/config.status
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
-            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
-	mv $@.tmp $@
-
-# This has to be in BUILT_SOURCES because other files depend on it,
-# but it's never a target itself.
-BUILT_SOURCES = i18n.h
+  ${gwmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-app-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += app-utils.scm
+SCM_FILE_LINKS += \
+  ${gncmod_DATA} \
+  ${gncscm_DATA}
 endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -147,6 +147,6 @@ gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
 	  (primitive-load \"./gw-app-utils-spec.scm\") \
 	  (gw:generate-wrapset \"gw-app-utils\")"
 
-BUILT_SOURCES += gw-app-utils.scm gw-app-utils.c gw-app-utils.h
+BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
 DISTCLEANFILES = ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links \
                  gw-app-utils.html

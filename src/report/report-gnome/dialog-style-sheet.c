@@ -29,6 +29,7 @@
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "gnc-report.h"
 #include "gnc-ui.h"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
@@ -60,13 +61,40 @@ enum {
  ************************************************************/
 
 static void
+dirty_same_stylesheet(gpointer key, gpointer val, gpointer data)
+{
+    SCM dirty_ss = data;
+    SCM rep_ss = NULL;
+    SCM report = val;
+    SCM func = NULL;
+
+    func = scm_c_eval_string("gnc:report-stylesheet");
+    if (SCM_PROCEDUREP(func))
+        rep_ss = scm_call_1(func, report);
+    else
+        return;
+
+    if (SCM_NFALSEP(scm_eq_p(rep_ss, dirty_ss))) {
+        func = scm_c_eval_string("gnc:report-set-dirty?!");
+        /* This makes _me_ feel dirty! */
+        if (SCM_PROCEDUREP(func))
+            scm_call_2(func, report, SCM_BOOL_T);
+    }
+}
+
+static void
 gnc_style_sheet_options_apply_cb(GNCOptionWin * propertybox,
                                  gpointer user_data)
 {
   ss_info * ssi = (ss_info *)user_data;
-  SCM    apply_changes = scm_c_eval_string("gnc:html-style-sheet-apply-changes");
+  GHashTable *reports = NULL;
+
+  /* FIXME: shouldn't be global */
+  reports = gnc_reports_get_global();
+  if (reports)
+      g_hash_table_foreach(reports, dirty_same_stylesheet, ssi->stylesheet);
+
   gnc_option_db_commit(ssi->odb);
-  scm_call_1(apply_changes, ssi->stylesheet);
 }
 
 
@@ -79,11 +107,11 @@ gnc_style_sheet_options_close_cb(GNCOptionWin * propertybox,
 
   if (gtk_tree_row_reference_valid (ssi->row_ref)) {
     StyleSheetDialog * ss = gnc_style_sheet_dialog;
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(ss->list_store), &iter,
-			     gtk_tree_row_reference_get_path (ssi->row_ref));
-    gtk_list_store_set (ss->list_store, &iter,
-			COLUMN_DIALOG, NULL,
-			-1);
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(ss->list_store), &iter,
+				 gtk_tree_row_reference_get_path (ssi->row_ref)))
+      gtk_list_store_set (ss->list_store, &iter,
+			  COLUMN_DIALOG, NULL,
+			  -1);
     
   }
   gtk_tree_row_reference_free (ssi->row_ref);
@@ -107,7 +135,7 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
     GtkWidget      * window;
     gchar          * title;
 
-    title = g_strdup_printf("HTML Style Sheet Properties: %s", name);
+    title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
     ssinfo->odialog = gnc_options_dialog_new(title);
     ssinfo->odb     = gnc_option_db_new(scm_options);
     ssinfo->stylesheet = sheet_info;

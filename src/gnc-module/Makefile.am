@@ -49,16 +49,16 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-gnc-module-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += gnc-module.scm
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash
-	ln -sf . g-wrapped
+	$(LN_S) -f . gnucash
+	$(LN_S) -f . g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -71,7 +71,5 @@ gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: \
 	  (gw:generate-wrapset \"gw-gnc-module\")"
 
 BUILT_SOURCES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c
-DISTCLEANFILES = .scm-links g-wrapped gnucash ${SCM_FILE_LINKS} \
-                 gw-gnc-module.html
-
-
+CLEANFILES = .scm-links g-wrapped gnucash
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc-module.html

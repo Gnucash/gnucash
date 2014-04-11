@@ -12,8 +12,13 @@ noinst_HEADERS = \
 libgncmod_stylesheets_la_LDFLAGS=-module
 
 libgncmod_stylesheets_la_LIBADD = \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${QOF_LIBS} \
-  ${top_builddir}/src/report/report-system/libgncmod-report-system.la
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -27,20 +32,30 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
-.scm-links:
-	rm -f gnucash report
-	ln -sf . gnucash
-	ln -sf ${srcdir} report 
-	touch .scm-links
-
-noinst_DATA = .scm-links
-
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
   stylesheets.scm \
   stylesheet-plain.scm \
   stylesheet-fancy.scm \
   stylesheet-easy.scm
+
+if GNUCASH_SEPARATE_BUILDDIR
+#For executing test cases
+SCM_FILE_LINKS = ${gncscmmod_DATA}
+endif
+
+.scm-links:
+	rm -f gnucash report
+	$(LN_S) -f . gnucash
+	$(LN_S) -f ${srcdir} report 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+noinst_DATA = .scm-links
 
 uidir = $(GNC_UI_DIR)
 dist_ui_DATA = \
@@ -49,4 +64,4 @@ dist_ui_DATA = \
 EXTRA_DIST = ${gncscmmod_DATA}
 
 CLEANFILES = gnucash report .scm-links
-
+DISTCLEANFILES = ${SCM_FILE_LINKS}

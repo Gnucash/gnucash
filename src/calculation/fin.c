@@ -1199,6 +1199,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <glib.h>
 
 #define FIN_STATICS
 #include "finvar.h"
@@ -1216,7 +1217,7 @@ rnd (double x, unsigned places)
   if (places >= 0)
   {
     sprintf (buf, "%.*f", (int) places, x);
-    sscanf (buf, "%lf", &r);
+    r = strtod(buf, NULL);
   }
   else
     r = x;
@@ -1243,13 +1244,9 @@ _A (double eint, unsigned per)
 static double
 _B (double eint, unsigned beg)
 {
-  /* the following should call an error routine to report the error */
-  if (eint == 0.0)
-  {
-    fprintf (stderr, "Zero Interest.\n");
-    exit (1);
-  }				/* endif */
-
+  /* if eint == 0.0, all processing _must_ stop or 
+	a recursive loop will start. */
+  g_return_val_if_fail(eint != 0.0, 0.0); 
   return (1.0 + eint * (double) beg) / eint;
 }				/* _B */
 
@@ -1257,7 +1254,8 @@ _B (double eint, unsigned beg)
 static double
 _C (double eint, double pmt, unsigned beg)
 {
-  return pmt * _B (eint, beg);
+  g_return_val_if_fail(eint != 0.0, 0.0);
+  return pmt * _B(eint, beg);
 }				/* _C */
 
 /* compute Number of Periods from preset data */
@@ -1289,7 +1287,6 @@ _fi_calc_num_payments (double nint,	/* nominal interest rate    */
 {
   double eint = eff_int (nint / 100.0, CF, PF, disc);
   double CC = _C (eint, pmt, bep);
-
   CC = (CC - fv) / (CC + pv);
   return (CC > 0.0) ? log (CC) / log (1.0 + eint) : 0.0;
 }				/* _fi_calc_num_payments */
@@ -1431,6 +1428,7 @@ _fi_calc_payment (unsigned per,	/* number of periods        */
   double eint = eff_int (nint / 100.0, CF, PF, disc);
   double AA = _A (eint, per);
   double BB = _B (eint, bep);
+  g_return_val_if_fail(BB != 0.0, 0.0);
 
   return -(fv + pv * (AA + 1.0)) / (AA * BB);
 }				/* _fi_calc_payment */
@@ -1530,7 +1528,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
   double AA = _A (eint, per);
   double CC = _C (eint, pmt, bep);
   double D = (AA + 1.0) / (1.0 + eint);
-
+  g_return_val_if_fail(CC != 0.0, 0.0);
   return (double) per *(pv + CC) * D - (AA * CC) / eint;
 }				/* fip */
 

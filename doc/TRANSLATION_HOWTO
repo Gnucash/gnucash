@@ -310,9 +310,9 @@ that there are no unclosed quotes, etc).  To do this, use the msgfmt program
 This will report any errors in your .po file if it finds them.
 
 If you want to see your translations within a running version of gnucash,
-simply place your .po file in you SVN copy of the gnucash source code (which
+simply place your .po file in your SVN copy of the gnucash source code (which
 you have previously installed) and from within the po/ directory type (you
-may nee to be root to do this):
+may need to be root to do this):
 
 make install
 
@@ -345,7 +345,7 @@ svn revert configure.in
 ---------------------------------
 If you see any "Gtk-CRITICAL" messages while running gnucash, it is probably
 because you translated a string differently than how it exists in some other
-gnome library.  You must discover which string you tranlated differently, and
+gnome library. You must discover which string you translated differently, and
 change the translation to exactly match that of the gnome libraries.
 
 To do this, you need to run gnucash under gdb:
@@ -355,7 +355,7 @@ LANG=XXXX /opt/gnucash-1.8/bin/gnucash-env gdb /usr/bin/guile
 Then, from within gdb, issue:
 run -e main -s /opt/gnucash-1.8/libexec/gnucash/overrides/gnucash --g-fatal-warnings
 
-Eventually, gnucash should crash (becuase of the --g-fatal-warnings 
+Eventually, gnucash should crash (because of the --g-fatal-warnings 
 directive), when it does, issue from within gdb:
 
 backtrace

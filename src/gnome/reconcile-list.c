@@ -119,7 +119,8 @@ gnc_reconcile_list_construct(GNCReconcileList *list, Query *query)
 }
 
 GtkWidget *
-gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
+gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
+                       time_t statement_date)
 {
   GNCReconcileList *list;
   gboolean include_children, auto_check;
@@ -176,11 +177,13 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
     for (splits = xaccQueryGetSplits(query); splits; splits = splits->next) {
       Split *split = splits->data;
       char recn = xaccSplitGetReconcile(split);
+      time_t trans_date = xaccTransGetDate(xaccSplitGetParent(split));
     
       /* Just an extra verification that our query is correct ;) */
       g_assert (recn == NREC || recn == CREC);
 
-      if (recn == CREC)
+      if (recn == CREC &&
+          difftime(trans_date, statement_date) <= 0)
 	g_hash_table_insert (list->reconciled, split, split);
     }
   }
@@ -525,13 +528,9 @@ grl_commit_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
   Split *split = key;
   time_t *date = user_data;
-  Transaction *trans;
 
-  trans = xaccSplitGetParent(split);
-  xaccTransBeginEdit(trans);
   xaccSplitSetReconcile (split, YREC);
   xaccSplitSetDateReconciledSecs (split, *date);
-  xaccTransCommitEdit(trans);
 }
 
 void
@@ -560,7 +559,6 @@ gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
 void
 gnc_reconcile_list_postpone (GNCReconcileList *list)
 {
-  Transaction *trans;
   GtkCList *clist = GTK_CLIST(list); /* This is cheating! */
   Split *split;
   int num_splits;
@@ -582,10 +580,7 @@ gnc_reconcile_list_postpone (GNCReconcileList *list)
 
     recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
 
-    trans = xaccSplitGetParent(split);
-    xaccTransBeginEdit(trans);
     xaccSplitSetReconcile (split, recn);
-    xaccTransCommitEdit(trans);
   }
   gnc_resume_gui_refresh();
 }

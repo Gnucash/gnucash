@@ -23,15 +23,15 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
-(export gnc:fq-check-sources)
-(export gnc:book-add-quotes)
-(export gnc:add-quotes-to-book-at-url)
+(export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
+(export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash process))
 (use-modules (www main))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (g-wrapped gw-core-utils))
 (use-modules (g-wrapped gw-gnome-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
@@ -45,6 +45,35 @@
 (use-modules (srfi srfi-1))
 
 ;; (use-modules (srfi srfi-19)) when available (see below).
+
+(define (item-list->hash! lst hash
+			  getkey getval
+			  hashref hashset 
+			  list-duplicates?)
+  ;; Takes a list of the form (item item item item) and returns a hash
+  ;; formed by traversing the list, and getting the key and val from
+  ;; each item using the supplied get-key and get-val functions, and
+  ;; building a hash table from the result using the given hashref and
+  ;; hashset functions.  list-duplicates? determines whether or not in
+  ;; the resulting hash, the value for a given key is a list of all
+  ;; the values associated with that key in the input or just the
+  ;; first one encountered.
+
+  (define (handle-item item)
+    (let* ((key (getkey item))
+	   (val (getval item))
+	   (existing-val (hashref hash key)))
+
+      (if (not list-duplicates?)
+	  ;; ignore if not first value.
+	  (if (not existing-val) (hashset hash key val))
+	  ;; else result is list.
+	  (if existing-val
+	      (hashset hash key (cons val existing-val))
+	      (hashset hash key (list val))))))
+  
+  (for-each handle-item lst)
+  hash)
 
 (define (yahoo-get-historical-quotes symbol
                                      start-year start-month start-day
@@ -214,8 +243,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (gnc:find-file "finance-quote-check"
-                 (gnc:config-var-value-get gnc:*share-path*)))
+  (g:find-program-in-path "gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program #f))
@@ -263,8 +291,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (gnc:find-file "finance-quote-helper"
-                 (gnc:config-var-value-get gnc:*share-path*)))
+  (g:find-program-in-path "gnc-fq-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form
@@ -284,7 +311,7 @@
   ;; symbol if the corresponding method call fails, or a list
   ;; otherwise. A quote-result list will contain the symbol
   ;; representing the item being quoted, followed by an alist
-  ;; detailing the quote data from finance-quote-helper.
+  ;; detailing the quote data from gnc-fq-helper.
   ;;
   ;; Possible error symbols and their meanings are:
   ;;   missing-lib    One of the required perl libs is missing
@@ -301,7 +328,7 @@
   ;;
   ;; Also note that any given value in the alist might be
   ;; 'failed-conversion if the Finance::Quote result for that field
-  ;; was unparsable.  See the finance-quote-helper for more details
+  ;; was unparsable.  See the gnc-fq-helper for more details
   ;; about it's output.
 
   (let ((quoter #f))
@@ -350,7 +377,7 @@
         get-quotes
         kill-quoter)))
 
-(define (gnc:book-add-quotes book)
+(define (gnc:book-add-quotes window book)
 
   (define (book->commodity->fq-call-data book)
     ;; Call helper that walks all of the defined commodities to see if
@@ -361,7 +388,7 @@
     ;; Finance::Quote method.
     ;; 
     ;; Returns a list of the info needed for a set of calls to
-    ;; finance-quote-helper.  Each item will of the list will be of the
+    ;; gnc-fq-helper.  Each item will of the list will be of the
     ;; form:
     ;;
     ;; (("yahoo" (commodity-1 currency-1 tz-1)
@@ -373,27 +400,26 @@
     (let* ((ct (gnc:book-get-commodity-table book))
 	   (big-list
 	    (gnc:commodity-table-get-quotable-commodities-info
-	     ct
-	     (gnc:config-var-value-get gnc:*namespace-regexp*)))
+	     ct))
 	   (commodity-list #f)
 	   (currency-list (filter
 			   (lambda (a) (not (equal? (cadr a) (caddr a))))
 			   (call-with-values 
-			   (lambda () (partition!
-				       (lambda (cmd)
-					 (not (string=? (car cmd) "currency")))
-				       big-list))
-			   (lambda (a b) (set! commodity-list a) b))))
+                               (lambda () (partition!
+                                           (lambda (cmd)
+                                             (not (string=? (car cmd) "currency")))
+                                           big-list))
+                             (lambda (a b) (set! commodity-list a) b))))
 	   (quote-hash (make-hash-table 31)))
 
-      (if (null? big-list)
+      (if (and (null? commodity-list) (null? currency-list))
 	  #f
 	  (begin
 
 	    ;; Now collect symbols going to the same backend.
 	    (item-list->hash! commodity-list quote-hash car cdr hash-ref hash-set! #t)
 
-	    ;; Now translate to just what finance-quote-helper expects.
+	    ;; Now translate to just what gnc-fq-helper expects.
 	    (append
 	     (hash-fold
 	      (lambda (key value prior-result)
@@ -608,35 +634,35 @@
      ((eq? fq-call-data #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f (_ "No commodities marked for quote retrieval."))
+          (gnc:error-dialog window (_ "No commodities marked for quote retrieval."))
 	  (gnc:warn (_ "No commodities marked for quote retrieval."))))
      ((eq? fq-results #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f (_ "Unable to get quotes or diagnose the problem."))
+          (gnc:error-dialog window (_ "Unable to get quotes or diagnose the problem."))
 	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f
+          (gnc:error-dialog window
            (_ "You are missing some needed Perl libraries.
-Run 'update-finance-quote' as root to install them."))
+Run 'gnc-fq-update' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
-Run 'update-finance-quote' as root to install them.") "\n")))
+Run 'gnc-fq-update' as root to install them.") "\n")))
      ((member 'system-error fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f
+          (gnc:error-dialog window
            (_ "There was a system error while retrieving the price quotes."))
           (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f
+          (gnc:error-dialog window
            (_ "There was an unknown error while retrieving the price quotes."))
           (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
      ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
-      (gnc:error-dialog #f
+      (gnc:error-dialog window
        (_ "Unable to get quotes or diagnose the problem."))
        (set! keep-going? #f))
      ((not commod-tz-quote-triples)
@@ -647,7 +673,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
           (if (and ok-syms (not (null? ok-syms)))
               (set!
                keep-going?
-               (gnc:verify-dialog #f #t
+               (gnc:verify-dialog window #t
                 (call-with-output-string
                  (lambda (p)
                    (display (_ "Unable to retrieve quotes for these items:") p)
@@ -657,7 +683,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                    (newline p)
                    (display (_ "Continue using only the good quotes?") p)))))
               (begin
-                (gnc:error-dialog #f
+                (gnc:error-dialog window
                  (call-with-output-string
                   (lambda (p)
                     (display
@@ -686,7 +712,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
            (if (gnc:ui-is-running?)
                (set!
                 keep-going?
-                (gnc:verify-dialog #f #t
+                (gnc:verify-dialog window #t
                  (call-with-output-string
                   (lambda (p)
                     (display (_ "Unable to create prices for these items:") p)
@@ -712,21 +738,25 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                                    prices)))))))
 
 (define (gnc:add-quotes-to-book-at-url url)
-  (let* ((session (gnc:url->loaded-session url #f #f))
+  (let* ((session (gnc:url->loaded-session (gnc:get-current-session) url #f #f))
          (quote-ok? #f))
+    (gnc:debug "in add-quotes-to-book-at-url")
     (if session
 	(begin
-	  (set! quote-ok? (and (gnc:book-add-quotes
+          (gnc:debug "about to call gnc:book-add-quotes")
+	  (set! quote-ok? (and (gnc:book-add-quotes #f
 				(gnc:session-get-book session))))
 
-	  (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
+          (gnc:debug "done gnc:book-add-quotes:" quote-ok?)
+	  (if (not quote-ok?) (gnc:error "book-add-quotes failed"))
 	  (gnc:session-save session)
 	  (if (not (eq? 'no-err
 			(gw:enum-<gnc:BackendError>-val->sym
 			 (gnc:session-get-error session) #f)))
 	      (set! quote-ok? #f))
 	  (if (not quote-ok?)
-	      (gnc:msg "session-save failed " (gnc:session-get-error session)))
+	      (gnc:error "session-save failed " 
+                         (gnc:session-get-error session)))
 	  (gnc:session-destroy session))
 	(gnc:error "book-add-quotes unable to open file"))
     quote-ok?))
@@ -744,3 +774,10 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 ; 	   (close-input-port (cadr quoter))
 ; 	   (close-output-port (caddr quoter))
 ; 	   result))))
+
+(define (gnc:price-quotes-install-sources)
+  (let ((sources (gnc:fq-check-sources)))
+    (if (list? sources)
+	(begin
+	  (gnc:msg "Found Finance::Quote version " (car sources))
+	  (gnc:quote-source-set-fq-installed (cdr sources))))))

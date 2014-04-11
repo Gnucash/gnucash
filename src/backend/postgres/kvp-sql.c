@@ -31,8 +31,6 @@
  * Copyright (c) 2001 Linas Vepstas
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 #include <stdlib.h>
 #include <string.h>

@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofclass-p.h -- Private API for registering queriable objects    *
+ * qofclass-p.h -- Private API for registering queryable objects    *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -23,7 +23,6 @@
 /** @addtogroup Object
     @{ */
 /** @addtogroup Object_Private
-    Private interfaces, not meant to be used by applications.
     @{ */
 /** @name  Class_Private
     @{ */

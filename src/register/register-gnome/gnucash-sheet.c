@@ -42,12 +42,13 @@
 #include "gnucash-item-edit.h"
 
 #define DEFAULT_REGISTER_HEIGHT 400
-#define DEFAULT_REGISTER_WIDTH  630
+#define DEFAULT_REGISTER_WIDTH  400
 
 
 /* FIXME: at least broken on gtk 2.4.14 */
 /* jsled: and 2.6.8 */
-#define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION > 6)
+/* jsled: and 2.8.8 */
+#define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION > 8)
 
 static guint gnucash_register_initial_rows = 15;
 
@@ -308,6 +309,8 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
         /* Now turn on the editing controls. */
         gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
 
+	if (sheet->moved_cb)
+		(sheet->moved_cb)(sheet, sheet->moved_cb_data);
         return changed_cells;
 }
 
@@ -342,6 +345,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
         VirtualCellLocation vcell_loc;
         gint height;
         gint cy;
+	gint old_visible_blocks, old_visible_rows;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
@@ -353,6 +357,8 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 
         sheet->top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
 
+	old_visible_blocks = sheet->num_visible_blocks;
+	old_visible_rows = sheet->num_visible_phys_rows;
         sheet->num_visible_blocks = 0;
         sheet->num_visible_phys_rows = 0;
 
@@ -379,6 +385,16 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
         /* FIXME */
         sheet->left_block = 0;
         sheet->right_block = 0;
+
+	if ((old_visible_blocks > sheet->num_visible_blocks) ||
+	    (old_visible_rows > sheet->num_visible_phys_rows)) {
+		/* Reach up and tell the parent widget to redraw as
+		 * well.  The sheet doesn't occupy all the visible
+		 * area in the notebook page, and this will cause the
+		 * parent to color in the empty grey space after the
+		 * area occupied by the sheet. */
+		gtk_widget_queue_draw(gtk_widget_get_parent(GTK_WIDGET(sheet)));
+	}
 }
 
 
@@ -1163,9 +1179,6 @@ gnucash_button_release_event (GtkWidget *widget, GdkEventButton *event)
         sheet->grabbed = FALSE;
 
         gnc_item_edit_set_has_selection(GNC_ITEM_EDIT(sheet->item_editor), FALSE);
-
-        gnc_item_edit_claim_selection(GNC_ITEM_EDIT(sheet->item_editor), event->time);
-
         return TRUE;
 }
 
@@ -1299,10 +1312,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 		editable = GTK_EDITABLE(sheet->entry);
                 gtk_editable_set_position(editable, -1);
                 gtk_editable_select_region(editable, 0, -1);
-
-                gnc_item_edit_claim_selection (GNC_ITEM_EDIT(sheet->item_editor),
-                                           event->time);
-
                 return TRUE;
         }
 
@@ -1358,6 +1367,21 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 		gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
 			       sheet->popup_data, event->button, event->time);
         return TRUE;
+}
+
+gboolean
+gnucash_register_has_selection (GnucashRegister *reg)
+{
+        GnucashSheet *sheet;
+        GncItemEdit *item_edit;
+
+        g_return_val_if_fail((reg != NULL), FALSE);
+        g_return_val_if_fail(GNUCASH_IS_REGISTER(reg), FALSE);
+
+        sheet = GNUCASH_SHEET(reg->sheet);
+        item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+
+        return gnc_item_edit_get_has_selection(item_edit);
 }
 
 void
@@ -2595,6 +2619,19 @@ gnucash_register_new (Table *table)
                           0, 0);
 
         return widget;
+}
+
+
+void gnucash_register_set_moved_cb (GnucashRegister *reg,
+				    GFunc cb, gpointer cb_data)
+{
+	GnucashSheet *sheet;
+
+	if (!reg || !reg->sheet)
+		return;
+	sheet = GNUCASH_SHEET(reg->sheet);
+	sheet->moved_cb = cb;
+	sheet->moved_cb_data = cb_data;
 }
 
 

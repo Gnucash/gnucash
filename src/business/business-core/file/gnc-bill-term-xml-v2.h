@@ -24,6 +24,8 @@
 #ifndef GNC_BILLTERM_XML_V2_H
 #define GNC_BILLTERM_XML_V2_H
 
+#include "gncBillTerm.h"
 void gnc_billterm_xml_initialize (void);
+GncBillTerm *gnc_billterm_xml_find_or_create(QofBook *book, GUID *guid);
 
 #endif /* GNC_BILLTERM_XML_V2_H */

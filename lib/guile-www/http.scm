@@ -116,9 +116,9 @@
 (define (parse-status-line statline)
   (let* ((first (string-index statline #\space))
 	 (second (string-index statline #\space (1+ first))))
-    (list (make-shared-substring statline 0 first)
-	  (make-shared-substring statline (1+ first) second)
-	  (make-shared-substring statline (1+ second)))))
+    (list (substring statline 0 first)
+	  (substring statline (1+ first) second)
+	  (substring statline (1+ second)))))
 
 
 ;;; HTTP connection management functions.
@@ -299,4 +299,4 @@
 	   (set! end (1- end)))
     (if (< end st)
 	""
-	(make-shared-substring s st end))))
+	(substring s st end))))

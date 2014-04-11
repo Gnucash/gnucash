@@ -3,6 +3,8 @@
  * Copyright (C) 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -39,6 +41,7 @@
 #include "dialog-tax-table.h"
 
 #define DIALOG_TAX_TABLE_CM_CLASS "tax-table-dialog"
+#define GCONF_SECTION "dialogs/business/tax_tables"
 
 void tax_table_new_table_cb (GtkButton *button, TaxTableWindow *ttw);
 void tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw);
@@ -102,7 +105,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     }
     if (gncTaxTableLookupByName (ttw->book, name)) {
       message = g_strdup_printf(_(
-			 "You must provide a unique name for this Tax Table.\n"
+			 "You must provide a unique name for this Tax Table. "
 			 "Your choice \"%s\" is already in use."), name);
       gnc_error_dialog (ntt->dialog, "%s", message);
       g_free (message);
@@ -262,6 +265,12 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 					     (GNC_AMOUNT_EDIT (ntt->amount_entry))),
 				  TRUE);
 
+  /* Fix mnemonics for generated target widgets */
+  widget = glade_xml_get_widget (xml, "value_label");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->amount_entry);
+  widget = glade_xml_get_widget (xml, "account_label");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->acct_tree);
+
   /* Fill in the widgets appropriately */
   if (entry) {
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (ntt->amount_entry),
@@ -281,12 +290,22 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   /* Show what we should */
   gtk_widget_show_all (ntt->dialog);
   if (new_table == FALSE) {
-    widget = glade_xml_get_widget (xml, "table_frame");
-    gtk_widget_hide_all (widget);
+    gtk_widget_hide (glade_xml_get_widget (xml, "table_title"));
+    gtk_widget_hide (glade_xml_get_widget (xml, "table_name"));
+    gtk_widget_hide (glade_xml_get_widget (xml, "spacer"));
+    gtk_widget_hide (ntt->name_entry);
+    /* Tables are great for layout, but a pain when you hide widgets */
+    widget = glade_xml_get_widget (xml, "ttd_table");
+    gtk_table_set_row_spacing (GTK_TABLE(widget), 0, 0);
+    gtk_table_set_row_spacing (GTK_TABLE(widget), 1, 0);
+    gtk_table_set_row_spacing (GTK_TABLE(widget), 2, 0);
     gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
 			   (GNC_AMOUNT_EDIT (ntt->amount_entry)));
   } else
     gtk_widget_grab_focus (ntt->name_entry);
+
+  /* Display the dialog now that we're done manipulating it */
+  gtk_widget_show (ntt->dialog);
 
   done = FALSE;
   while (!done) {
@@ -346,7 +365,7 @@ tax_table_entries_refresh (TaxTableWindow *ttw, gboolean new_table)
     Account *acc = gncTaxTableEntryGetAccount (entry);
     gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
 
-    row_text[0] = xaccAccountGetFullName (acc, gnc_get_account_separator ());
+    row_text[0] = xaccAccountGetFullName (acc);
     switch (gncTaxTableEntryGetType (entry)) {
     case GNC_AMT_TYPE_PERCENT:
      row_text[1] =
@@ -434,7 +453,7 @@ tax_table_window_refresh (TaxTableWindow *ttw)
 
     gnc_gui_component_watch_entity (ttw->component_id,
 				    gncTaxTableGetGUID (table),
-				    GNC_EVENT_MODIFY);
+				    QOF_EVENT_MODIFY);
 
     row_text[0] = (char *)gncTaxTableGetName (table);
     row_text[1] = NULL;
@@ -448,7 +467,7 @@ tax_table_window_refresh (TaxTableWindow *ttw)
 
   gnc_gui_component_watch_entity_type (ttw->component_id,
 				       GNC_TAXTABLE_MODULE_NAME,
-				       GNC_EVENT_CREATE | GNC_EVENT_DESTROY);
+				       QOF_EVENT_CREATE | QOF_EVENT_DESTROY);
 
   if (vadjustment) {
     save_value = CLAMP (save_value, vadjustment->lower,
@@ -572,7 +591,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     return;
 
   if (g_list_length (gncTaxTableGetEntries (ttw->current_table)) <= 1) {
-    char *message = _("You cannot remove the last entry from the tax table.\n"
+    char *message = _("You cannot remove the last entry from the tax table. "
 		      "Try deleting the tax table if you want to do that.");
     gnc_error_dialog (ttw->dialog, message);
     return;
@@ -615,6 +634,7 @@ tax_table_window_close (GtkWidget *widget, gpointer data)
 {
   TaxTableWindow *ttw = data;
 
+  gnc_save_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
   gnc_ui_tax_table_window_destroy (ttw);
 }
 
@@ -649,7 +669,7 @@ gnc_ui_tax_table_window_new (GNCBook *book)
   if (!book) return NULL;
 
   /*
-   * Find an existing tax-tab;e window.  If found, bring it to
+   * Find an existing tax-table window.  If found, bring it to
    * the front.  If we have an actual owner, then set it in
    * the window.
    */
@@ -683,6 +703,7 @@ gnc_ui_tax_table_window_new (GNCBook *book)
 				ttw);
 
   tax_table_window_refresh (ttw);
+  gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
   gtk_widget_show_all (ttw->dialog);
   return ttw;
 }

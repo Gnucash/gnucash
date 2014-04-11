@@ -23,8 +23,6 @@
 #ifndef XACC_KVP_UTIL_P_H
 #define XACC_KVP_UTIL_P_H
 
-#include "config.h"
-
 #include "guid.h"
 #include "kvp_frame.h"
 

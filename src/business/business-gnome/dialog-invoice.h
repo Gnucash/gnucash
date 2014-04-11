@@ -3,6 +3,8 @@
  * Copyright (C) 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2005,2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -76,6 +78,11 @@ void gnc_invoice_window_changed (InvoiceWindow *iw, GtkWidget *window);;
 gchar *gnc_invoice_get_help (InvoiceWindow *iw);
 
 gchar *gnc_invoice_get_title (InvoiceWindow *iw);
+
+#ifdef __GNC_PLUGIN_PAGE_H
+GncPluginPage *gnc_invoice_recreate_page (GKeyFile *key_file, const gchar *group_name);
+void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *group_name);
+#endif
 
 GtkWidget * gnc_invoice_create_page (InvoiceWindow *iw, gpointer page);
 

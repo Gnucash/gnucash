@@ -31,13 +31,14 @@ EXTRA_DIST = \
   gnome-hackers.txt \
   gnc-prices.1.in \
   gnucash.1.in \
+  gtkrc-2.0.gnucash \
   tip_of_the_day.list.in
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-prices.1: gnc-prices.1.in
+gnc-prices.1: gnc-prices.1.in Makefile
 	rm -f $@.tmp
 	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
@@ -45,7 +46,7 @@ gnc-prices.1: gnc-prices.1.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-gnucash.1: gnucash.1.in
+gnucash.1: gnucash.1.in Makefile
 	rm -f $@.tmp
 	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
@@ -53,9 +54,9 @@ gnucash.1: gnucash.1.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-tip_of_the_day.list: tip_of_the_day.list.in
+tip_of_the_day.list: tip_of_the_day.list.in Makefile
 	gcc -E -P -x c -D'N_(x)=x' -o $@.tmp $<
-	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/m' > $@
+	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/' > $@
 	rm -f $@.tmp
 
 DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list

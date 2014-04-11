@@ -181,7 +181,7 @@ gnc_find_state_file (const gchar *url,
   gint i;
 
   ENTER("url %s, guid %s", url, guid);
-  tmp = index(url, ':');
+  tmp = strchr(url, ':');
   if (tmp)
     url = tmp + 1;
 
@@ -198,7 +198,7 @@ gnc_find_state_file (const gchar *url,
     else
       filename = g_strdup_printf("%s_%d", original, i);
     DEBUG("Trying %s", filename);
-    key_file = gnc_key_file_load_from_file(filename, FALSE);
+    key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE);
     DEBUG("Result %p", key_file);
 
     if (!key_file) {

@@ -57,9 +57,10 @@ typedef struct _gncBillTerm GncBillTerm;
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  * ??? huh?
+ * NOTE: This enum /depends/ on starting at value 1
  */
 #define ENUM_TERMS_TYPE(_)  \
- _(GNC_TERM_TYPE_DAYS,) \
+ _(GNC_TERM_TYPE_DAYS,=1) \
  _(GNC_TERM_TYPE_PROXIMO,)
 
 DEFINE_ENUM(GncBillTermType, ENUM_TERMS_TYPE)

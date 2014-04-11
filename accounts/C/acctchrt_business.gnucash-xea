@@ -20,6 +20,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Current Assets</act:name>
@@ -32,6 +38,12 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Current Assets</act:description>
   <act:parent type="new">4f40ddce996f8f74b4e99f52e275ba14</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Checking Account</act:name>
@@ -135,6 +147,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Liabilities</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Credit Card</act:name>
@@ -190,6 +208,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Income</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest Income</act:name>
@@ -269,6 +293,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Expenses</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Adjustment</act:name>
@@ -1324,6 +1354,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Equity</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Opening Balances</act:name>

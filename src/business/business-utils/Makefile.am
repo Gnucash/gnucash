@@ -20,6 +20,9 @@ noinst_HEADERS = \
   business-options.h
 
 libgncmod_business_utils_la_LIBADD = \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
@@ -41,9 +44,20 @@ EXTRA_DIST = \
 
 noinst_DATA = .scm-links
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = business-utils.scm \
+  ${gncscm_DATA}
+endif
+
 .scm-links: 
 	rm -f gnucash
-	ln -sf ${srcdir} gnucash 
+	$(LN_S) -f ${srcdir} gnucash 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
-DISTCLEANFILES = gnucash .scm-links
+CLEANFILES = gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

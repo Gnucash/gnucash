@@ -28,6 +28,9 @@
 #include "qofquerycore-p.h"
 #include "kvp_frame.h"
 
+/* NOTE: Development of this idea has ceased and this file is
+no longer included in the QOF library. It remains in CVS for now.*/
+
 /* ======================================================= */
 
 #define PUT_STR(TOK,VAL) {                           \
@@ -221,7 +224,7 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
 	query_double_t pdata_db;
 	query_boolean_t pdata_bool;
 	query_char_t pdata_c;
-
+	
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
 	{
 		topnode = xmlNewNode (NULL, "qofquery:pred-guid");
@@ -425,7 +428,7 @@ qof_query_terms_to_xml (QofQuery *q)
 	xmlNodePtr terms;
 	GList *n;
 	xmlNodePtr andt;
-
+	
 	terms = NULL;
 	n = qof_query_get_terms (q);
 	if (!n) return NULL;
@@ -543,7 +546,7 @@ int main (int argc, char * argv[])
 	xmlChar *xbuf;
 	int bufsz;
 	xmlOutputBufferPtr xbuf;
-
+	
 	qof_query_init();
 	qof_object_initialize ();
 

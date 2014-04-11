@@ -1,6 +1,9 @@
 /********************************************************************\
  * gnucash-item-list.c -- A scrollable list box                     *
  *                                                                  *
+ * Initial copyright not recorded.                                  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -32,7 +35,7 @@
 #include "gnc-engine.h"
 #include "gnucash-item-list.h"
 #include "gnucash-scrolled-window.h"
-
+#include "gtk-compat.h"
 
 /* Item list signals */
 enum {
@@ -42,7 +45,6 @@ enum {
   KEY_PRESS_EVENT,
   LAST_SIGNAL
 };
-
 
 static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
@@ -82,6 +84,23 @@ gnc_item_list_append (GncItemList *item_list, char *string)
 }
 
 
+void
+gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled)
+{
+	if (enabled) {
+		gtk_tree_sortable_set_sort_column_id
+			(GTK_TREE_SORTABLE (item_list->list_store),
+			 0,
+			 GTK_SORT_ASCENDING);
+	} else {
+		gtk_tree_sortable_set_sort_column_id
+			(GTK_TREE_SORTABLE (item_list->list_store),
+			 GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+			 GTK_SORT_ASCENDING);
+	}
+}
+
+
 typedef struct _findSelectionData
 {
         GncItemList *item_list;
@@ -103,6 +122,29 @@ _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
         }
         return FALSE;
 }
+
+gboolean
+gnc_item_in_list (GncItemList *item_list, const char *string)
+{
+        FindSelectionData *to_find_data;
+	gboolean result;
+
+        g_return_val_if_fail(item_list != NULL, FALSE);
+        g_return_val_if_fail(IS_GNC_ITEM_LIST(item_list), FALSE);
+
+        to_find_data = (FindSelectionData*)g_new0(FindSelectionData, 1);
+        to_find_data->item_list = item_list;
+        to_find_data->string_to_find = string;
+
+        gtk_tree_model_foreach(GTK_TREE_MODEL(item_list->list_store),
+                               _gnc_item_find_selection,
+                               to_find_data);
+
+        result = (to_find_data->found_path != NULL);
+        g_free(to_find_data);
+	return result;
+}
+
 
 void
 gnc_item_list_select (GncItemList *item_list, const char *string)
@@ -194,6 +236,7 @@ gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
         GtkTreePath *path;
         GtkTreeModel *model;
         gchar *string;
+	gboolean success;
 
         g_return_val_if_fail(IS_GNC_ITEM_LIST (data), FALSE);
 
@@ -216,11 +259,14 @@ gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
                         gtk_tree_view_set_cursor (item_list->tree_view, path, NULL, FALSE);
 
                         model = GTK_TREE_MODEL (item_list->list_store);
-                        gtk_tree_model_get_iter (model, &iter, path);
+                        success = gtk_tree_model_get_iter (model, &iter, path);
 
                         gtk_tree_path_free (path);
 
-                        gtk_tree_model_get (model, &iter, 0, &string, -1);
+			if (!success)
+				return FALSE;
+
+			gtk_tree_model_get (model, &iter, 0, &string, -1);
 
 	                g_signal_emit (G_OBJECT (item_list), 
                                        gnc_item_list_signals[ACTIVATE_ITEM],
@@ -320,7 +366,7 @@ gnc_item_list_class_init (GncItemListClass *item_list_class)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET(GncItemListClass, key_press_event),
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
+			      g_cclosure_marshal_VOID__BOXED,
 			      G_TYPE_NONE, 1,
 			      GDK_TYPE_EVENT);
 
@@ -381,12 +427,11 @@ tree_view_selection_changed (GtkTreeSelection *selection,
 }
 
 GnomeCanvasItem *
-gnc_item_list_new(GnomeCanvasGroup *parent)
+gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
 {
         GtkWidget *frame;
 	GtkWidget *tree_view;
         GtkWidget *scrollwin;
-	GtkListStore *list_store;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
         GnomeCanvasItem *item;
@@ -401,15 +446,17 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
 
-	list_store = gtk_list_store_new (1, G_TYPE_STRING);
+	if (NULL == list_store)
+		list_store = gtk_list_store_new (1, G_TYPE_STRING);
 	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
-        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
-                                              0,
-                                              GTK_SORT_ASCENDING);
+	/* Removed code to enable sorting. Enable it after the list is
+	 * fully populated by calling gnc_item_list_finished_loading(). */
  
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				     GTK_SELECTION_BROWSE);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(list_store),
+					     0, GTK_SORT_ASCENDING);
 
 	renderer = gtk_cell_renderer_text_new ();
 	column = gtk_tree_view_column_new_with_attributes (_("List"),

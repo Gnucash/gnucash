@@ -1,6 +1,7 @@
 /********************************************************************\
  * dialog-options.c -- GNOME option handling                        *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,9 +23,10 @@
 
 #include "config.h"
 
-#ifdef HAVE_GLIB26 
+#ifdef HAVE_GTK26 
 #include <gtk/gtk.h>
 #else
+#undef GNOME_DISABLE_DEPRECATED
 #include <gnome.h>
 #endif
 #include <gdk/gdk.h>
@@ -218,7 +220,7 @@ gnc_rd_option_rel_set_cb(GtkWidget *widget, gpointer *raw_option)
   return;
 }
 
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
 static void
 gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 				    GNCOption *option)
@@ -249,7 +251,7 @@ gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 
   gtk_image_set_from_pixbuf(image, pixbuf);
   if (pixbuf)
-    gdk_pixbuf_unref(pixbuf);
+    g_object_unref(pixbuf);
 
   gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
   LEAVE("preview visible is %d", have_preview);
@@ -265,6 +267,13 @@ gnc_image_option_selection_changed_cb (GtkFileChooser *chooser,
   if (!filename)
     return;
   g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
+}
+#else
+static void
+gnc_image_option_clear_selection_cb (GtkButton *button,
+				     GtkEntry *entry)
+{
+   gtk_entry_set_text(entry, "");
 }
 #endif
 
@@ -388,12 +397,59 @@ gnc_option_default_cb(GtkWidget *widget, GNCOption *option)
   gnc_options_dialog_changed_internal (widget, TRUE);
 }
 
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 static void
 gnc_option_multichoice_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
   gnc_option_changed_widget_cb(widget, option);
 }
+#else
+static void
+gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *widget;
+  GtkWidget *omenu;
+  gpointer _current;
+  gint current;
+  char *type;
+
+  widget = gnc_option_get_widget (option);
+
+  /* the option menu may be part of a date option widget, so we need to
+     decomposit the enclosing hbox then */
+  type = gnc_option_type (option);
+  if (safe_strcmp (type, "date") == 0) {
+    char *date_type = gnc_option_date_option_get_subtype(option);
+    GList *children;
+
+    if (safe_strcmp (date_type, "both") == 0) {
+      children = gtk_container_get_children (GTK_CONTAINER (widget));
+      widget = g_list_nth_data (children, GNC_RD_WID_REL_WIDGET_POS);
+    }
+    free (date_type);
+  }
+  free (type);
+
+  _current = g_object_get_data(G_OBJECT(widget), "gnc_multichoice_index");
+  current = GPOINTER_TO_INT(_current);
+
+  if (current == index)
+    return;
+
+  gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+  g_object_set_data(G_OBJECT(widget), "gnc_multichoice_index",
+                    GINT_TO_POINTER(index));
+
+  gnc_option_set_changed (option, TRUE);
+
+  gnc_option_call_option_widget_changed_proc(option);
+
+  omenu = g_object_get_data(G_OBJECT(w), "gnc_option_menu");
+  gnc_options_dialog_changed_internal (omenu, TRUE);
+}
+#endif
 
 static void
 gnc_option_radiobutton_cb(GtkWidget *w, gpointer data)
@@ -428,7 +484,6 @@ gnc_option_create_date_widget (GNCOption *option)
   GtkWidget *entry;
   gboolean show_time, use24;
   char *type;
-  char *string;
   int num_values;
 
   type = gnc_option_date_option_get_subtype(option);
@@ -456,16 +511,69 @@ gnc_option_create_date_widget (GNCOption *option)
     
     g_return_val_if_fail(num_values >= 0, NULL);
     
-    rel_widget = gtk_combo_box_new_text();
-    for (i = 0; i < num_values; i++)
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     {
-      string = gnc_option_permissible_value_name(option, i);
-      gtk_combo_box_append_text(GTK_COMBO_BOX(rel_widget), string);
-      g_free(string);
-    }
+      /* New code for GtkComboBox. Is not used because it is missing
+       * the feature of per-item tooltips. Not yet implemented in gtk,
+       * see http://bugzilla.gnome.org/show_bug.cgi?id=303717 , see
+       * also gnc_option_create_multichoice_widget() below. */
+      char *string;
+      rel_widget = gtk_combo_box_new_text();
+      for (i = 0; i < num_values; i++)
+      {
+	string = gnc_option_permissible_value_name(option, i);
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rel_widget), string);
+	g_free(string);
+      }
 
-    g_signal_connect(G_OBJECT(rel_widget), "changed",
-		     G_CALLBACK(gnc_option_multichoice_cb), option);
+      g_signal_connect(G_OBJECT(rel_widget), "changed",
+		       G_CALLBACK(gnc_option_multichoice_cb), option);
+    }
+#else
+    {
+      /* Old 1-8-branch code for a GtkOptionMenu. We use this one
+       * because it has a per-item tooltip which the GtkComboBox still
+       * doesn't have. - cstim, 2006-02-25 */
+      GNCOptionInfo *info;
+      char **raw_strings;
+      char **raw;
+      
+      info = g_new0(GNCOptionInfo, num_values);
+      raw_strings = g_new0(char *, num_values * 2);
+      raw = raw_strings;
+    
+      for (i = 0; i < num_values; i++)
+      {
+	*raw = gnc_option_permissible_value_name(option, i);
+	info[i].name = *raw; /* (*raw && **raw) ? _(*raw) : ""; */
+      
+	raw++;
+
+	*raw = gnc_option_permissible_value_description(option, i);
+	info[i].tip = *raw; /* (*raw && **raw) ? _(*raw) : ""; */
+
+	if(safe_strcmp(type, "both") == 0)
+	{
+	  info[i].callback = gnc_option_multichoice_cb; /* gnc_option_rd_combo_cb */
+	}
+	else 
+        {
+	  info[i].callback = gnc_option_multichoice_cb;
+	}
+	info[i].user_data = option;
+	raw++;
+      }
+
+      rel_widget = gnc_build_option_menu(info, num_values);
+
+      for (i = 0; i < num_values * 2; i++)
+	if (raw_strings[i])
+	  free(raw_strings[i]);
+  
+      g_free(raw_strings);
+      g_free(info);
+    }
+#endif
   }
 
   if(safe_strcmp(type, "absolute") == 0)
@@ -529,25 +637,78 @@ gnc_option_create_budget_widget(GNCOption *option)
 }
 
 static GtkWidget *
-gnc_option_create_multichoice_widget(GNCOption *option)
+gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
 {
   GtkWidget *widget;
   int num_values;
-  char *string;
   int i;
 
   num_values = gnc_option_num_permissible_values(option);
 
   g_return_val_if_fail(num_values >= 0, NULL);
 
-  widget = gtk_combo_box_new_text();
-  for (i = 0; i < num_values; i++) {
-    string = gnc_option_permissible_value_name(option, i);
-    gtk_combo_box_append_text(GTK_COMBO_BOX(widget), string);
-    g_free(string);
+#ifndef GTKCOMBOBOX_TOOLTIPS_WORK
+  {
+    /* Old 1-8-branch code for a GtkOptionMenu. We use this one
+       because it has a per-item tooltip which the GtkComboBox still
+       doesn't have. - cstim, 2006-02-25 */
+    GNCOptionInfo *info;
+    char **raw_strings;
+    char **raw;
+
+    info = g_new0(GNCOptionInfo, num_values);
+    raw_strings = g_new0(char *, num_values * 2);
+    raw = raw_strings;
+
+    for (i = 0; i < num_values; i++)
+    {
+      *raw = gnc_option_permissible_value_name(option, i);
+      info[i].name = (*raw && **raw) ? _(*raw) : "";
+      
+      raw++;
+
+      *raw = gnc_option_permissible_value_description(option, i);
+      info[i].tip = (*raw && **raw) ? _(*raw) : "";
+
+      info[i].callback = gnc_option_multichoice_cb;
+      info[i].user_data = option;
+      raw++;
+    }
+
+    widget = gnc_build_option_menu(info, num_values);
+
+    for (i = 0; i < num_values * 2; i++)
+      if (raw_strings[i])
+	free(raw_strings[i]);
+  
+    g_free(raw_strings);
+    g_free(info);
   }
-  g_signal_connect(G_OBJECT(widget), "changed",
-        	   G_CALLBACK(gnc_option_multichoice_cb), option);
+#else
+  {
+    
+    /* New code for GtkComboBox. Is still unused because it is missing
+       the feature of per-item tooltips. Not yet implemented in gtk,
+       see http://bugzilla.gnome.org/show_bug.cgi?id=303717 */
+    char *itemstring;
+    /* char *description; */
+    widget = gtk_combo_box_new_text();
+    for (i = 0; i < num_values; i++) {
+      itemstring = gnc_option_permissible_value_name(option, i);
+      /* description = gnc_option_permissible_value_description(option, i); */
+      gtk_combo_box_append_text(GTK_COMBO_BOX(widget),
+				(itemstring && *itemstring) ? _(itemstring) : "");
+      /*, (description && *description) ? _(description) : "" */
+      /* Maybe the per-item tooltip will simply be added as such an
+	 additional argument as shown above, but we'll see. */
+      if (itemstring)
+	g_free(itemstring);
+      /* if (description) g_free(description); */
+    }
+    g_signal_connect(G_OBJECT(widget), "changed",
+		     G_CALLBACK(gnc_option_multichoice_cb), option);
+  }
+#endif
 
   return widget;
 }
@@ -597,10 +758,10 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
       gtk_radio_button_new_with_label_from_widget (widget ?
 						   GTK_RADIO_BUTTON (widget) :
 						   NULL,
-						   label ? _(label) : "");
+						   label && *label ? _(label) : "");
     g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
 		       GINT_TO_POINTER (i));
-    gtk_tooltips_set_tip(tooltips, widget, tip ? _(tip) : "", NULL);
+    gtk_tooltips_set_tip(tooltips, widget, tip && *tip ? _(tip) : "", NULL);
     g_signal_connect(G_OBJECT(widget), "toggled",
 		     G_CALLBACK(gnc_option_radiobutton_cb), option);
     gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
@@ -657,7 +818,7 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
 
 
 static GtkWidget *
-gnc_option_create_account_widget(GNCOption *option, char *name)
+gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *tooltips)
 {
   gboolean multiple_selection;
   GtkWidget *scroll_win;
@@ -721,12 +882,14 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   {
     button = gtk_button_new_with_label(_("Select All"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_tooltips_set_tip(tooltips, button, _("Select all accounts."), NULL);
 
     g_signal_connect(G_OBJECT(button), "clicked",
 		     G_CALLBACK(gnc_option_account_select_all_cb), option);
 
     button = gtk_button_new_with_label(_("Clear All"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_tooltips_set_tip(tooltips, button, _("Clear the selection and unselect all accounts."), NULL);
 
     g_signal_connect(G_OBJECT(button), "clicked",
 		     G_CALLBACK(gnc_option_account_clear_all_cb), option);
@@ -734,6 +897,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
 
   button = gtk_button_new_with_label(_("Select Default"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip(tooltips, button, _("Select the default account selection."), NULL);
 
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_default_cb), option);
@@ -782,7 +946,7 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
 }
 
 static GtkWidget *
-gnc_option_create_list_widget(GNCOption *option, char *name)
+gnc_option_create_list_widget(GNCOption *option, char *name, GtkTooltips *tooltips)
 {
   GtkWidget *scroll_win;
   GtkWidget *top_hbox;
@@ -816,7 +980,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
     string = gnc_option_permissible_value_name(option, i);
     if (string != NULL)
     {
-      text[0] = _(string);
+      text[0] = *string ? _(string) : "";
       gtk_clist_append(GTK_CLIST(clist), text);
       gtk_clist_set_row_data(GTK_CLIST(clist), i, GINT_TO_POINTER(FALSE));
       free(string);
@@ -845,18 +1009,21 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
 
   button = gtk_button_new_with_label(_("Select All"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip(tooltips, button, _("Select all entries."), NULL);
 
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_list_select_all_cb), option);
 
   button = gtk_button_new_with_label(_("Clear All"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip(tooltips, button, _("Clear the selection and unselect all entries."), NULL);
 
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_list_clear_all_cb), option);
 
   button = gtk_button_new_with_label(_("Select Default"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip(tooltips, button, _("Select the default selection."), NULL);
 
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_default_cb), option);
@@ -900,13 +1067,13 @@ gnc_option_set_ui_widget(GNCOption *option,
   }
 
   raw_name = gnc_option_name(option);
-  if (raw_name != NULL)
+  if (raw_name && *raw_name)
     name = _(raw_name);
   else
     name = NULL;
 
   raw_documentation = gnc_option_documentation(option);
-  if (raw_documentation != NULL)
+  if (raw_documentation && *raw_documentation)
     documentation = _(raw_documentation);
   else
     documentation = NULL;
@@ -921,11 +1088,19 @@ gnc_option_set_ui_widget(GNCOption *option,
   }
   else
   {
-    PERR("Unknown type. Ignoring.\n");
+    PERR("Unknown option type. Ignoring option \"%s\".\n", name);
   }
 
-  if (!packed && (enclosing != NULL))
-    gtk_box_pack_start(page_box, enclosing, FALSE, FALSE, 0);
+  if (!packed && (enclosing != NULL)) {
+    /* Pack option widget into an extra eventbox because otherwise the
+       "documentation" tooltip is not displayed. */
+    GtkWidget *eventbox = gtk_event_box_new();
+
+    gtk_container_add (GTK_CONTAINER (eventbox), enclosing);
+    gtk_box_pack_start (page_box, eventbox, FALSE, FALSE, 0);
+
+    gtk_tooltips_set_tip (tooltips, eventbox, documentation, NULL);
+  }
 
   if (value != NULL)
     gtk_tooltips_set_tip(tooltips, value, documentation, NULL);
@@ -948,7 +1123,8 @@ gnc_options_dialog_add_option(GtkWidget *page,
 
 static gint
 gnc_options_dialog_append_page(GNCOptionWin * propertybox,
-                               GNCOptionSection *section)
+                               GNCOptionSection *section,
+			       GtkTooltips *tooltips)
 {
   GNCOption *option;
   GtkWidget *page_label;
@@ -971,7 +1147,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     return -1;
   advanced = (strncmp(name, "_+", 2) == 0);
   name_offset = (advanced) ? 2 : 0;
-  page_label = gtk_label_new(_(name) + name_offset);
+  page_label = gtk_label_new(_(name + name_offset));
   gtk_widget_show(page_label);
 
   /* Build this options page */
@@ -998,8 +1174,11 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
   gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
 
-  /* Install the lone reset button */
+  /* The reset button on each option page */
   reset_button = gtk_button_new_with_label (_("Defaults"));
+  gtk_tooltips_set_tip(tooltips, reset_button, 
+		       _("Reset all values to their defaults."), NULL);
+
   g_signal_connect(G_OBJECT(reset_button), "clicked",
 		   G_CALLBACK(gnc_options_dialog_reset_cb), propertybox);
   g_object_set_data(G_OBJECT(reset_button), "section", section);
@@ -1014,7 +1193,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
   if (propertybox->page_list) {
     /* Build the matching list item for selecting from large page sets */
-    listitem = gtk_list_item_new_with_label(_(name) + name_offset);
+    listitem = gtk_list_item_new_with_label(_(name + name_offset));
     gtk_widget_show(listitem);
     gtk_container_add(GTK_CONTAINER(propertybox->page_list), listitem);
 
@@ -1083,7 +1262,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
     const char *section_name;
 
     section = gnc_option_db_get_section(odb, i);
-    page = gnc_options_dialog_append_page(propertybox, section);
+    page = gnc_options_dialog_append_page(propertybox, section, propertybox->tips);
 
     section_name = gnc_option_section_name(section);
     if (safe_strcmp(section_name, default_section_name) == 0)
@@ -1228,8 +1407,8 @@ gnc_options_dialog_new(gchar *title)
   GtkWidget * hbox;
 
   retval = g_new0(GNCOptionWin, 1);
-  xml = gnc_glade_xml_new ("preferences.glade", "Gnucash Options");
-  retval->dialog = glade_xml_get_widget (xml, "Gnucash Options");
+  xml = gnc_glade_xml_new ("preferences.glade", "GnuCash Options");
+  retval->dialog = glade_xml_get_widget (xml, "GnuCash Options");
   retval->page_list = glade_xml_get_widget (xml, "page_list");
 
   glade_xml_signal_autoconnect_full( xml,
@@ -1468,10 +1647,6 @@ gnc_option_set_ui_widget_currency (GNCOption *option, GtkBox *page_box,
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
 
-  if (documentation != NULL)
-    gtk_tooltips_set_tip(tooltips, value,
-			 documentation, NULL);
-
   g_signal_connect(G_OBJECT(value), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
 
@@ -1531,13 +1706,13 @@ gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkBox *page_box,
   gchar *colon_name;
 
   colon_name = g_strconcat(name, ":", NULL);
-  label= gtk_label_new(colon_name);
+  label = gtk_label_new(colon_name);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
 
-  value = gnc_option_create_multichoice_widget(option);
+  value = gnc_option_create_multichoice_widget(option, tooltips);
   gnc_option_set_widget (option, value);
 
   gnc_option_set_ui_value(option, FALSE);
@@ -1557,9 +1732,10 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
   GtkWidget *value;
   GtkWidget *label;
   gchar *colon_name;
+  GtkWidget *eventbox;
 
   colon_name = g_strconcat(name, ":", NULL);
-  label= gtk_label_new(colon_name);
+  label = gtk_label_new(colon_name);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   g_free(colon_name);
 
@@ -1572,8 +1748,15 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
   gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
 
-  gtk_box_pack_start(page_box, *enclosing, FALSE, FALSE, 5);
+  /* Pack option widget into an extra eventbox because otherwise the
+     "documentation" tooltip is not displayed. */
+  eventbox = gtk_event_box_new();
+  gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
+  gtk_box_pack_start(page_box, eventbox, FALSE, FALSE, 5);
   *packed = TRUE;  
+
+  gtk_tooltips_set_tip (tooltips, eventbox, documentation, NULL);
+
   gnc_option_set_ui_value(option, FALSE);
   gtk_widget_show_all(*enclosing);
   return value;
@@ -1589,7 +1772,7 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
   GtkWidget *value;
   GtkTreeSelection *selection;
 
-  *enclosing = gnc_option_create_account_widget(option, name);
+  *enclosing = gnc_option_create_account_widget(option, name, tooltips);
   value = gnc_option_get_widget (option);
 
   gtk_tooltips_set_tip(tooltips, *enclosing, documentation, NULL);
@@ -1656,15 +1839,20 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
 				  GtkWidget **enclosing, gboolean *packed)
 {
   GtkWidget *value;
+  GtkWidget *eventbox;
   gint num_lines;
 
-  *enclosing = gnc_option_create_list_widget(option, name);
+  *enclosing = gnc_option_create_list_widget(option, name, tooltips);
   value = gnc_option_get_widget (option);
 
-  gtk_tooltips_set_tip(tooltips, *enclosing, documentation, NULL);
-
-  gtk_box_pack_start(page_box, *enclosing, FALSE, FALSE, 5);
+  /* Pack option widget into an extra eventbox because otherwise the
+     "documentation" tooltip is not displayed. */
+  eventbox = gtk_event_box_new();
+  gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
+  gtk_box_pack_start(page_box, eventbox, FALSE, FALSE, 5);
   *packed = TRUE;
+
+  gtk_tooltips_set_tip(tooltips, eventbox, documentation, NULL);
 
   //gtk_widget_realize(value);
 
@@ -1717,7 +1905,6 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
   gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value), TRUE);
 
   {
-    GtkStyle *style;
     gdouble biggest;
     gint num_digits;
 
@@ -1734,26 +1921,9 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
     if (num_digits == 0)
       num_digits = 1;
 
-    num_digits += num_decimals + 1;
+    num_digits += num_decimals;
 
-    style = gtk_widget_get_style(value);
-    if (style != NULL)
-    {
-      gchar *string;
-      gint width;
-
-      string = g_strnfill(num_digits, '8');
-      
-      width = gdk_text_measure(gdk_font_from_description (style->font_desc), 
-                 string, num_digits);
-
-      /* sync with gtkspinbutton.c. why doesn't it do this itself? */
-      width += 11 + (2 * style->xthickness);
-
-      g_free(string);
-
-      gtk_widget_set_size_request(value, width, -1);
-    }
+    gtk_entry_set_width_chars(GTK_ENTRY(value), num_digits);
   }
 
   gnc_option_set_widget (option, value);
@@ -1851,7 +2021,8 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 {
   GtkWidget *value;
   GtkWidget *label;
-#ifndef HAVE_GLIB26
+  GtkWidget *button;
+#ifndef HAVE_GTK26
   GtkWidget *entry;
 #endif
   gchar *colon_name;
@@ -1863,9 +2034,14 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
-#ifdef HAVE_GLIB26
+
+  button = gtk_button_new_with_label(_("Clear"));
+  gtk_tooltips_set_tip(tooltips, button, _("Clear any selected image file."), NULL);
+
+#ifdef HAVE_GTK26
   value = gtk_file_chooser_button_new(_("Select image"),
 				      GTK_FILE_CHOOSER_ACTION_OPEN);
+  gtk_tooltips_set_tip(tooltips, value, _("Select an image file."), NULL);
   g_object_set(G_OBJECT(value),
 	       "width-chars", 30,
 	       "preview-widget", gtk_image_new(),
@@ -1876,21 +2052,27 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 		   G_CALLBACK(gnc_image_option_selection_changed_cb), option);
   g_signal_connect(G_OBJECT (value), "update-preview",
 		   G_CALLBACK(gnc_image_option_update_preview_cb), option);
+  g_signal_connect_swapped(G_OBJECT (button), "clicked",
+		   G_CALLBACK(gtk_file_chooser_unselect_all), value);
 #else
   value = gnome_pixmap_entry_new(NULL, _("Select pixmap"),
 				 FALSE);
+  gtk_tooltips_set_tip(tooltips, value, _("Select an image file."), NULL);
   gnome_pixmap_entry_set_preview(GNOME_PIXMAP_ENTRY(value), FALSE);
 
   entry = gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY(value));
   g_signal_connect(G_OBJECT (entry), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+  g_signal_connect(G_OBJECT (button), "clicked",
+		   G_CALLBACK(gnc_image_option_clear_selection_cb), entry);
 #endif
     
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
 
   gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(*enclosing), button, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
 
   gtk_widget_show(value);
   gtk_widget_show(label);
@@ -1944,6 +2126,13 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
                                  GtkWidget **enclosing, gboolean *packed)
 {
   GtkWidget *value;
+  GtkWidget *label;
+  gchar *colon_name;
+
+  colon_name = g_strconcat(name, ":", NULL);
+  label = gtk_label_new(colon_name);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
 
@@ -1956,6 +2145,7 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
   g_signal_connect(G_OBJECT(value), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+  gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
   gtk_widget_show_all(*enclosing);
   return value;
@@ -2066,7 +2256,13 @@ gnc_option_set_ui_value_multichoice (GNCOption *option, gboolean use_default,
     return TRUE;
   else
   {
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     gtk_combo_box_set_active(GTK_COMBO_BOX(widget), index);
+#else
+    gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+    g_object_set_data(G_OBJECT(widget), "gnc_multichoice_index",
+                      GINT_TO_POINTER(index));
+#endif 	 
     return FALSE;
   }
 }
@@ -2094,7 +2290,14 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	index = gnc_option_permissible_value_index(option, relative);
 	if (safe_strcmp(date_option_type, "relative") == 0)
 	{
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 	  gtk_combo_box_set_active(GTK_COMBO_BOX(widget), index);
+#else
+	  g_object_set_data(G_OBJECT(widget),
+			    "gnc_multichoice_index",
+			    GINT_TO_POINTER(index));
+	  gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+#endif
 	}
 	else if (safe_strcmp(date_option_type, "both") == 0)
 	{
@@ -2105,7 +2308,15 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	  rel_date_widget = g_list_nth_data(widget_list,
 					    GNC_RD_WID_REL_WIDGET_POS);
 	  gnc_date_option_set_select_method(option, FALSE, TRUE);
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 	  gtk_combo_box_set_active(GTK_COMBO_BOX(rel_date_widget), index);
+#else
+          g_object_set_data(G_OBJECT(rel_date_widget),
+			    "gnc_multichoice_index",
+			    GINT_TO_POINTER(index));
+	  gtk_option_menu_set_history(GTK_OPTION_MENU(rel_date_widget),
+				      index);
+#endif
 	}
 	else
 	{
@@ -2302,7 +2513,7 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 
     if (string && *string)
     {
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
       gchar *test;
       DEBUG("string = %s", string);
       gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(widget), string);
@@ -2342,8 +2553,8 @@ static gboolean gnc_option_set_ui_value_budget(
         bgt = gw_wcp_get_ptr(value);
         cb = GTK_COMBO_BOX(widget);
         tm = gtk_combo_box_get_model(cb);
-        gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt);
-        gtk_combo_box_set_active_iter(cb, &iter);
+        if (gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt))
+	  gtk_combo_box_set_active_iter(cb, &iter);
     }
 
 
@@ -2485,7 +2696,14 @@ gnc_option_get_ui_value_multichoice (GNCOption *option, GtkWidget *widget)
 {
   int index;
 
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
   index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+#else
+  {
+    gpointer _index = g_object_get_data(G_OBJECT(widget), "gnc_multichoice_index");
+    index = GPOINTER_TO_INT(_index);
+  }
+#endif 	 
   return (gnc_option_permissible_value(option, index));
 }
 
@@ -2498,7 +2716,12 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 
   if(safe_strcmp(subtype, "relative") == 0)
   {
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+#else
+    index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget),
+                                              "gnc_multichoice_index"));
+#endif
     type = scm_str2symbol("relative");
     val = gnc_option_permissible_value(option, index);
     result = scm_cons(type, val);
@@ -2534,7 +2757,12 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     }
     else 
     {
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
       index = gtk_combo_box_get_active(GTK_COMBO_BOX(rel_widget));
+#else
+      index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(rel_widget),
+                                                "gnc_multichoice_index"));
+#endif
       val = gnc_option_permissible_value(option, index);
       result = scm_cons(scm_str2symbol("relative"), val);
     }
@@ -2672,7 +2900,7 @@ gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 {
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
   gchar *string;
   SCM result;
 

@@ -125,6 +125,9 @@
 (define gnc:html-style-sheet-style
   (record-accessor <html-style-sheet> 'style))
 
+(define gnc:current-saved-stylesheets
+  (gnc:build-dotgnucash-path "stylesheets-2.0"))
+
 (define (gnc:save-style-sheet-options) 
   (let ((port (false-if-exception
                (open gnc:current-saved-stylesheets
@@ -222,19 +225,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  html-style-sheet-apply-changes 
-;;  when options have been changed, rerun relevant reports 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (gnc:html-style-sheet-apply-changes ss)
-  (hash-fold 
-   (lambda (report-name report prior)
-     (if (eq? (gnc:report-stylesheet report) ss)
-         (gnc:report-set-dirty?! report #t))
-     #t) #t *gnc:_reports_*))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  html-style-sheet-render 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -245,6 +235,13 @@
                  doc))
         (headers? (if (null? rest) #f (if (car rest) #t #f))))
 
+    ;; Copy values over to stylesheet-produced document.  note that this is a
+    ;; bug that should probably better be fixed by having the stylesheets
+    ;; emit documents that are correct.  this, however, is a slightly easier
+    ;; place to enforce it. :p
+    (gnc:html-document-set-title! newdoc (gnc:html-document-title doc))
+    (gnc:html-document-set-headline! newdoc (gnc:html-document-headline doc))
+    
     ;; push the style sheet's default styles 
     (gnc:html-document-push-style newdoc (gnc:html-style-sheet-style sheet))
     

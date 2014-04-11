@@ -1,12 +1,10 @@
 [Desktop Entry]
-_Name=GnuCash
-_GenericName=Money Management
+_Name=GnuCash Finance Management
 _Comment=Manage your finances, accounts, and investments
-TryExec=gnucash
 Exec=gnucash
 Icon=gnucash/gnucash-icon.png
 StartupNotify=true
 Terminal=false
 Type=Application
-Categories=GNOME;Application;Office;
+Categories=Application;Office;Finance;
 X-Desktop-File-Install-Version=0.3

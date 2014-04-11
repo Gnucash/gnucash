@@ -20,9 +20,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -220,7 +217,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    GList *node, *xaction_list = NULL;
    AccountGroup *grp;
 
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* design note: someday, we might get a performance boost by adding
@@ -274,7 +271,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
          Split *s = snode->data;
          if (s->idata)
          {
-            s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+            s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
          }
       }
 
@@ -286,7 +283,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    xaccAccountGroupCommitEdit (grp);
 
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 
 /* ======================== END OF FILE ======================== */

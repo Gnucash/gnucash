@@ -2,7 +2,7 @@
  * business-options.c -- Initialize Business Options
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2002 Derek Atkins
+ * Copyright (C) 2002,2006 Derek Atkins
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -355,12 +355,10 @@ create_invoice_widget (GNCOption *option, GtkWidget *hbox)
 {
   GtkWidget *widget;
 
-  widget = gnc_general_search_new (GNC_INVOICE_MODULE_NAME,
-				   _("Select..."),
-				   gnc_invoice_search_select,
-				   gnc_get_current_book ());
+  /* No owner or starting invoice here, but that's okay. */
+  widget = gnc_invoice_select_create (hbox, gnc_get_current_book(),
+				      NULL, NULL, NULL);
 
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
   gnc_option_set_widget (option, widget);
   g_signal_connect (G_OBJECT (widget), "changed", 
 		    G_CALLBACK (gnc_option_changed_option_cb), option);

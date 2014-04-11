@@ -4,29 +4,40 @@ SUBDIRS = gnumeric printing
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 
-gncscmmod_DATA = process.scm main.scm price-quotes.scm fin.scm
+gncscmmod_DATA = process.scm main.scm price-quotes.scm
 
 gnc_regular_scm_files = \
-  build-config.scm \
   command-line.scm \
   doc.scm \
   fin.scm \
   help-topics-index.scm \
   main-window.scm \
-  path.scm \
   substring-search.scm \
   xml-generator.scm
 
-gncscm_DATA = ${gnc_regular_scm_files}
+gncscm_DATA = \
+  build-config.scm \
+  ${gnc_regular_scm_files}
 
 noinst_DATA = .scm-links
 
 configdir = ${GNC_CONFIGDIR}
 config_DATA = config
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = \
+  ${gncscmmod_DATA} \
+  ${gnc_regular_scm_files}
+endif
+
 .scm-links: 
 	rm -f gnucash
-	ln -sf ${srcdir} gnucash
+	$(LN_S) -f ${srcdir} gnucash
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
@@ -45,10 +56,9 @@ build-config.scm: ${srcdir}/build-config.scm.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \
-            -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 
-DISTCLEANFILES = gnucash .scm-links
+CLEANFILES = gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = build-config.scm

@@ -32,8 +32,6 @@
 #ifndef GNC_UI_UTIL_H
 #define GNC_UI_UTIL_H
 
-#include "config.h"
-
 #include <glib.h>
 #include <locale.h>
 
@@ -45,13 +43,7 @@
 typedef QofSession * (*QofSessionCB) (void);
 
 
-/** Returns the account separation character chosen by the user.
- *
- *  @return The character to use.
- */
-char gnc_get_account_separator (void);
-
-gboolean gnc_reverse_balance(Account *account);
+gboolean gnc_reverse_balance(const Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 
@@ -73,6 +65,12 @@ void gnc_init_default_directory (char **dirname);
  * Again watch out: The caller takes ownership of the char buffer
  * '*dirname', i.e. the caller has to do a g_free(*dirname) when that
  * buffer is no longer in use.
+ *
+ * NOTE: We strongly recommend to use g_path_get_dirname() from glib
+ * instead of this function. (There's one slight functional difference:
+ * If filename is NULL or does not contain a separator,
+ * g_path_get_dirname will return "." whereas this function here will
+ * return NULL. 2006-03-02, cstim)
 */
 void gnc_extract_directory (char **dirname, const char *filename);
 
@@ -102,10 +100,10 @@ gnc_commodity_table * gnc_get_current_commodities (void);
  */
 gnc_numeric
 gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
-				 Account *account,
+				 const Account *account,
 				 gboolean recurse,
 				 gboolean *negative,
-				 gnc_commodity *commodity);
+				 const gnc_commodity *commodity);
 
 /**
  * This routine retrives the total balance in an account, possibly
@@ -114,11 +112,11 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
  * @param account           The account to retrieve data about.
  * @param include_children  Include all sub-accounts of this account.
  */
-gnc_numeric gnc_ui_account_get_balance (Account *account,
+gnc_numeric gnc_ui_account_get_balance (const Account *account,
                                         gboolean include_children);
 
-gnc_numeric gnc_ui_account_get_balance_in_currency (Account *account,
-						    gnc_commodity *currency,
+gnc_numeric gnc_ui_account_get_balance_in_currency (const Account *account,
+						    const gnc_commodity *currency,
 						    gboolean recurse);
 /**
  * This routine retrives the reconciled balance in an account,
@@ -127,7 +125,7 @@ gnc_numeric gnc_ui_account_get_balance_in_currency (Account *account,
  * @param account           The account to retrieve data about.
  * @param include_children  Include all sub-accounts of this account.
  */
-gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
+gnc_numeric gnc_ui_account_get_reconciled_balance(const Account *account,
                                                   gboolean include_children);
 
 /**
@@ -145,7 +143,7 @@ gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
  */
 gchar *
 gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
-				  Account *account,
+				  const Account *account,
 				  gboolean recurse,
 				  gboolean *negative);
 
@@ -165,11 +163,11 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
  */
 gchar *
 gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
-					 Account *account,
+					 const Account *account,
 					 gboolean recurse,
 					 gboolean *negative);
 
-char *gnc_ui_account_get_tax_info_string (Account *account);
+char *gnc_ui_account_get_tax_info_string (const Account *account);
 
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    time_t date,
@@ -195,7 +193,7 @@ gboolean gnc_account_create_opening_balance (Account *account,
                                              time_t date,
                                              QofBook *book);
 
-char * gnc_account_get_full_name (Account *account);
+char * gnc_account_get_full_name (const Account *account);
 
 
 /* Locale functions *************************************************/
@@ -281,7 +279,7 @@ GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
                                              gboolean use_symbol);
 
-GNCPrintAmountInfo gnc_account_print_info (Account *account,
+GNCPrintAmountInfo gnc_account_print_info (const Account *account,
                                            gboolean use_symbol);
 
 GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,
@@ -295,6 +293,9 @@ GNCPrintAmountInfo gnc_default_price_print_info (void);
 
 GNCPrintAmountInfo gnc_integral_print_info (void);
 
+/* WARNING: Garbage in, garbage out.  You must check the validity of
+   the supplied gnc_numeric.  If it's invalid, the returned string
+   could point to ANYTHING. */
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 
@@ -324,8 +325,8 @@ gboolean xaccParseAmount (const char * in_str, gboolean monetary,
  */
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
-			 char negative_sign, char decimal_point,
-			 char group_separator, char *group, char *ignore_list,
+			 gunichar negative_sign, gunichar decimal_point,
+			 gunichar group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr);
 
 /* Initialization ***************************************************/

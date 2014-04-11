@@ -27,11 +27,16 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "qof.h"
+
 #include "FreqSpec.h"
+#include "Account.h"
+#include "gnc-book.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
+#include "SchedXaction.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
@@ -43,7 +48,7 @@ static QofLogModule log_module = GNC_MOD_SX;
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
+xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    AccountGroup        *ag;
 
@@ -87,7 +92,7 @@ xaccSchedXactionMalloc(QofBook *book)
 
    sx = g_new0( SchedXaction, 1 );
    xaccSchedXactionInit( sx, book );
-   gnc_engine_gen_event( &sx->inst.entity, GNC_EVENT_CREATE );
+   qof_event_gen( &sx->inst.entity, QOF_EVENT_CREATE , NULL);
 
    return sx;
 }
@@ -141,7 +146,7 @@ xaccSchedXactionFree( SchedXaction *sx )
   if ( sx == NULL ) return;
   
   xaccFreqSpecFree( sx->freq );
-  gnc_engine_gen_event( &sx->inst.entity, GNC_EVENT_DESTROY );
+  qof_event_gen( &sx->inst.entity, QOF_EVENT_DESTROY , NULL);
   
   if ( sx->name )
     g_free( sx->name );
@@ -176,6 +181,28 @@ xaccSchedXactionFree( SchedXaction *sx )
 
 /* ============================================================ */
 
+void
+gnc_sx_begin_edit (SchedXaction *sx)
+{
+  qof_begin_edit (&sx->inst);
+}
+
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+void
+gnc_sx_commit_edit (SchedXaction *sx)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(sx))) return;
+  qof_commit_edit_part2 (&sx->inst, commit_err, noop, noop);
+}
+
+/* ============================================================ */
+
 FreqSpec *
 xaccSchedXactionGetFreqSpec( SchedXaction *sx )
 {
@@ -187,9 +214,11 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 {
    g_return_if_fail( fs );
 
+   gnc_sx_begin_edit(sx);
    xaccFreqSpecFree( sx->freq );
    sx->freq = fs;
-   sx->inst.dirty = TRUE;
+   qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 gchar *
@@ -202,12 +231,14 @@ void
 xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
 {
    g_return_if_fail( newName != NULL );
+   gnc_sx_begin_edit(sx);
    if ( sx->name != NULL ) {
            g_free( sx->name );
            sx->name = NULL;
    }
-   sx->inst.dirty = TRUE;
    sx->name = g_strdup( newName );
+   qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 GDate*
@@ -219,8 +250,10 @@ xaccSchedXactionGetStartDate( SchedXaction *sx )
 void
 xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 {
+   gnc_sx_begin_edit(sx);
    sx->start_date = *newStart;
-   sx->inst.dirty = TRUE;
+   qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 gboolean
@@ -249,8 +282,10 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
     return;
   }
 
+  gnc_sx_begin_edit(sx);
   sx->end_date = *newEnd;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 GDate*
@@ -262,8 +297,10 @@ xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
 void
 xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
 {
+  gnc_sx_begin_edit(sx);
   sx->last_date = *newLastOccur;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 gboolean
@@ -281,8 +318,10 @@ xaccSchedXactionGetNumOccur( SchedXaction *sx )
 void
 xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
 {
+  gnc_sx_begin_edit(sx);
   sx->num_occurances_remain = sx->num_occurances_total = newNum;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 gint
@@ -302,8 +341,10 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
   }
   else
   {
+    gnc_sx_begin_edit(sx);
     sx->num_occurances_remain = numRemain;
-    sx->inst.dirty = TRUE;
+    qof_instance_set_dirty(&sx->inst);
+    gnc_sx_commit_edit(sx);
   }
 }
 
@@ -323,8 +364,10 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
 {
   if (!sx) return;
 
+  gnc_sx_begin_edit(sx);
   kvp_frame_set_slot( sx->inst.kvp_data, slot, value );
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 void
@@ -343,9 +386,11 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
                                gboolean newNotify )
 {
  
+  gnc_sx_begin_edit(sx);
   sx->autoCreateOption = newAutoCreate;
   sx->autoCreateNotify = newNotify; 
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
   return;
 }
 
@@ -358,8 +403,10 @@ xaccSchedXactionGetAdvanceCreation( SchedXaction *sx )
 void
 xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 {
+  gnc_sx_begin_edit(sx);
   sx->advanceCreateDays = createDays;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 gint
@@ -371,8 +418,10 @@ xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
 void
 xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 {
-  sx->inst.dirty = TRUE;
+  gnc_sx_begin_edit(sx);
   sx->advanceRemindDays = reminderDays;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 
@@ -652,10 +701,12 @@ void
 gnc_sx_revert_to_temporal_state( SchedXaction *sx, void *stateData )
 {
    temporalStateData *tsd = (temporalStateData*)stateData;
+   gnc_sx_begin_edit(sx);
    sx->last_date        = tsd->last_date;
    sx->num_occurances_remain = tsd->num_occur_rem;
    sx->instance_num     = tsd->num_inst;
-   sx->inst.dirty = TRUE;
+   qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 void
@@ -733,14 +784,15 @@ static QofObject SXDesc =
 	create            : (gpointer)xaccSchedXactionMalloc,
 	book_begin        : NULL,
 	book_end          : NULL,
-	is_dirty          : NULL,
-	mark_clean        : NULL,
+	is_dirty          : qof_collection_is_dirty,
+	mark_clean        : qof_collection_mark_clean,
 	foreach           : qof_collection_foreach,
 	printable         : NULL,
 	version_cmp       : (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
-gboolean SXRegister (void)
+gboolean
+SXRegister(void)
 {
 	static QofParam params[] = {
 	 { GNC_SX_FREQ_SPEC, QOF_ID_FREQSPEC, (QofAccessFunc)xaccSchedXactionGetFreqSpec,

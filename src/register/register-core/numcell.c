@@ -88,10 +88,17 @@ gnc_num_cell_modify_verify (BasicCell *_cell,
   gunichar uc;
   glong change_chars;
     
+  if (change == NULL) /* if we are deleting */
+    /* then just accept the proposed change */
+  {
+    gnc_basic_cell_set_value_internal (&cell->cell, newval);
+    return;
+  }
+
   change_chars = g_utf8_strlen (change, -1);
 
-  if ((change == NULL) || (change_chars == 0) || /* if we are deleting       */
-      (change_chars > 1))                        /* or entering > 1 char     */
+  if ((change_chars == 0) || /* if we are deleting       */
+      (change_chars > 1))    /* or entering > 1 char     */
     /* then just accept the proposed change */
   {
     gnc_basic_cell_set_value_internal (&cell->cell, newval);

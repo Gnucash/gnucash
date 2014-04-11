@@ -191,32 +191,6 @@ static void                  g_key_file_flush_parse_buffer     (GKeyFile        
 								GError                **error);
 
 
-/**
- * g_strv_length:
- * @str_array: a %NULL-terminated array of strings.
- * 
- * Returns the length of the given %NULL-terminated 
- * string array @str_array.
- * 
- * Return value: length of @str_array.
- *
- * From the file gstrfuncs.c
- *
- * Since: 2.6
- **/
-static guint
-g_strv_length (gchar **str_array)
-{
-  guint i = 0;
-
-  g_return_val_if_fail (str_array != NULL, 0);
-
-  while (str_array[i])
-    ++i;
-
-  return i;
-}
-
 GQuark
 g_key_file_error_quark (void)
 {

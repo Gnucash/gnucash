@@ -74,7 +74,7 @@ libgncmod_business_gnome_LTX_gnc_module_path(void)
 char * 
 libgncmod_business_gnome_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash business module GNOME UI");
+  return g_strdup("The GnuCash business module GNOME UI");
 }
 
 int
@@ -115,7 +115,7 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
 				   gnc_plugin_business_new ());
 
-    gnc_hook_add_dangler(HOOK_UI_POST_STARTUP,
+    gnc_hook_add_dangler(HOOK_BOOK_OPENED,
 			 (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
 
     gnc_preferences_add_page("businessprefs.glade", "business_prefs",

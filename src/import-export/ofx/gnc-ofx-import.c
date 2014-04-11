@@ -23,8 +23,6 @@
      @brief Ofx import module code
      @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -76,13 +74,13 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data);
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
-  char * tmp_exchange_code=NULL;
+  char * tmp_cusip=NULL;
   char * tmp_default_fullname=NULL;
   char * tmp_default_mnemonic=NULL;
  
   if(data.unique_id_valid==true)
     {
-      tmp_exchange_code=(char *)data.unique_id;
+      tmp_cusip=(char *)data.unique_id;
     }
   if(data.secname_valid==true)
     {
@@ -93,7 +91,7 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
       tmp_default_mnemonic=(char *)data.ticker;
     }
   
-  gnc_import_select_commodity(tmp_exchange_code,
+  gnc_import_select_commodity(tmp_cusip,
 	        	      true,
 			      tmp_default_fullname,
 			      tmp_default_mnemonic);
@@ -122,7 +120,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
   g_assert(gnc_ofx_importer_gui);
 
   if(data.account_id_valid==true){
-    account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE, NULL, NULL);
+    account = gnc_import_select_account(NULL,
+					data.account_id, 0, NULL, NULL, NO_TYPE, NULL, NULL);
     if(account!=NULL)
       {
 	/********** Create the transaction and setup transaction data ************/
@@ -286,13 +285,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  g_free(tmp);
 	}
 	
-	PERR("WRITEME: Gnucash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
+	PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
 	
 	/* Ideally, gnucash should process the corrected transactions */
 	if(data.fi_id_corrected_valid==true){
-	  PERR("WRITEME: Gnucash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
+	  PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
 	  tmp=notes;
-	  notes=g_strdup_printf("%s%s%s%s",tmp,"|This corrects transaction #",data.fi_id_corrected,"but Gnucash didn't process the correction!");
+	  notes=g_strdup_printf("%s%s%s%s",tmp,"|This corrects transaction #",data.fi_id_corrected,"but GnuCash didn't process the correction!");
 	  g_free(tmp);
 	}
 	xaccTransSetNotes(transaction, notes);
@@ -301,7 +300,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  {
 	    DEBUG("Currency from libofx: %s",data.account_ptr->currency);
 	    currency = gnc_commodity_table_lookup( gnc_get_current_commodities (),
-						   GNC_COMMODITY_NS_ISO,
+						   GNC_COMMODITY_NS_CURRENCY,
 						   data.account_ptr->currency);
 	  }
 	else
@@ -347,7 +346,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								  in any translations.  */
 							      _("Stock account for security \"%s\""),
 							      data.security_data_ptr->secname);
-		    investment_account = gnc_import_select_account(data.unique_id,
+		    investment_account = gnc_import_select_account(NULL,
+								   data.unique_id,
 								   1,
 								   investment_account_text, 
 								   investment_commodity,
@@ -413,6 +413,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								      _("Income account for security \"%s\""),
 								      data.security_data_ptr->secname);
 			    income_account=gnc_import_select_account(NULL,
+								     NULL,
 								     1,
 								     investment_account_text, 
 								     currency,
@@ -437,9 +438,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			  }
 		      }
 		    if(income_account!=NULL&&
-		       (data.invtransactiontype==OFX_REINVEST||
-			data.invtransactiontype==OFX_INCOME)
-		       )
+		       data.invtransactiontype==OFX_REINVEST)
 		      {
 			DEBUG("Adding investment split; Money flows from the income account"); 
 			split=xaccMallocSplit(book);
@@ -447,6 +446,27 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			xaccAccountInsertSplit(income_account,split);
 
 			gnc_amount = double_to_gnc_numeric (data.amount,
+							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
+							    GNC_RND_ROUND);
+			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
+		    
+			/* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
+			if(data.name_valid==true){
+			  xaccSplitSetMemo(split, data.name);
+			}
+			else if(data.memo_valid==true){
+			  xaccSplitSetMemo(split, data.memo);
+			}    
+		      }
+		    if(income_account!=NULL&&
+			data.invtransactiontype==OFX_INCOME)
+		      {
+			DEBUG("Adding investment split; Money flows from the income account"); 
+			split=xaccMallocSplit(book);
+			xaccTransAppendSplit(transaction,split);
+			xaccAccountInsertSplit(income_account,split);
+
+			gnc_amount = double_to_gnc_numeric (-data.amount,/*OFX_INCOME amounts come in as positive numbers*/
 							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
 							    GNC_RND_ROUND);
 			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
@@ -492,7 +512,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	else
 	  {
 	    PERR("The transaction doesn't have a valid amount");
-	    xaccTransRollbackEdit(transaction);
+	    xaccTransDestroy(transaction);
 	    xaccTransCommitEdit(transaction);
 	  }
 	
@@ -533,7 +553,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
       {
 	DEBUG("Currency from libofx: %s",data.currency);
 	default_commodity = gnc_commodity_table_lookup(commodity_table,
-						       GNC_COMMODITY_NS_ISO,
+						       GNC_COMMODITY_NS_CURRENCY,
 						       data.currency);
       }
     else
@@ -582,7 +602,10 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 					  "%s \"%s\"",
 					  account_type_name,
 					  data.account_name);
-    selected_account = gnc_import_select_account(data.account_id, 1, account_description, default_commodity, default_type, NULL, NULL);
+    selected_account = gnc_import_select_account(NULL,
+						 data.account_id, 1,
+						 account_description, default_commodity,
+						 default_type, NULL, NULL);
     g_free(account_description);
     g_free(account_type_name);
   }
@@ -613,7 +636,7 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
-  gnc_should_log(GNC_MOD_IMPORT, GNC_LOG_TRACE);
+  qof_log_check(GNC_MOD_IMPORT, QOF_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);

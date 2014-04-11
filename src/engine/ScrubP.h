@@ -28,8 +28,6 @@
 #ifndef XACC_SCRUB_P_H
 #define XACC_SCRUB_P_H
 
-#include "config.h"
-
 #include "Account.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"

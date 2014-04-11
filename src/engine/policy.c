@@ -53,6 +53,9 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    gnc_commodity *common_currency;
    gboolean want_positive;
    gnc_numeric baln;
+   Split *osplit;
+   Transaction *otrans;
+   Timespec open_ts;
 
    if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
 
@@ -65,6 +68,13 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    /* All splits in lot must share a common transaction currency. */
    split = lot->splits->data;
    common_currency = split->parent->common_currency;
+   
+   /* Don't add a split to the lot unless it will be the new last
+      split in the lot.  Otherwise our balance tests will be wrong
+      and the lot may end up too thin or too fat. */
+   osplit = gnc_lot_get_latest_split (lot);
+   otrans = osplit ? xaccSplitGetParent (osplit) : 0;
+   open_ts = xaccTransRetDatePostedTS (otrans);
 
    /* Walk over *all* splits in the account, till we find one that
     * hasn't been assigned to a lot.  Return that split.
@@ -79,9 +89,22 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    {
       gboolean is_match;
       gboolean is_positive;
+      Timespec this_ts;
       split = node->data;
       if (split->lot) goto donext;
 
+      /* Skip it if it's too early */
+      this_ts = xaccTransRetDatePostedTS ( xaccSplitGetParent (split));
+      if ((this_ts.tv_sec < open_ts.tv_sec) ||
+          ((this_ts.tv_sec == open_ts.tv_sec) && 
+            (this_ts.tv_nsec < open_ts.tv_nsec)))
+      {
+         if (reverse)
+            /* Going backwards, no point in looking further */
+            break;
+         goto donext;
+      }
+      
       /* Allow equiv currencies */
       is_match = gnc_commodity_equiv (common_currency, 
                                       split->parent->common_currency);

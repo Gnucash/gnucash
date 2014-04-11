@@ -18,6 +18,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Object
+ @{
+*/
 /** @addtogroup Backend
 
     The QOF Backend is a pseudo-object providing an interface between the
@@ -112,6 +115,8 @@ typedef enum {
   ERR_FILEIO_PARSE_ERROR,    /**< couldn't parse the data in the file */
   ERR_FILEIO_BACKUP_ERROR,   /**< couldn't make a backup of the file */
   ERR_FILEIO_WRITE_ERROR,    /**< couldn't write to the file */
+  ERR_FILEIO_READ_ERROR,     /**< Could not open the file for reading. */
+  ERR_FILEIO_NO_ENCODING,    /**< file does not specify encoding */
 
   /* network errors */
   ERR_NETIO_SHORT_READ = 2000,  /**< not enough bytes received */
@@ -185,16 +190,20 @@ qof_backend_get_config, qof_backend_option_foreach and qof_backend_load_config
 are intended for either the backend or the frontend to retrieve the option data
 from the frame or set new data.
 
+Backends are loaded using QofBackendProvider via the function specified in
+prov->backend_new. Before backend_new returns, you should ensure that your
+backend is fully configured and ready for use.
+
 @{
 */
 
 /** A single Backend Configuration Option. */
 typedef struct QofBackendOption_s {
-	KvpValueType type;        /**< Only GINT64, DOUBLE, NUMERIC, STRING and TIMESPEC supported. */
-	const char *option_name;  /**< non-translated, key. */
-	const char *description;  /**< translatable description. */
-	const char *tooltip;      /**< translatable tooltip */
-	gpointer value;           /**< The value of the option. */
+	KvpValueType type;         /**< Only GINT64, DOUBLE, NUMERIC, STRING and TIMESPEC supported. */
+	const gchar *option_name;  /**< non-translated, key. */
+	const gchar *description;  /**< translatable description. */
+	const gchar *tooltip;      /**< translatable tooltip */
+	gpointer   value;          /**< The value of the option. */
 }QofBackendOption;
 
 /** Initialise the backend_configuration */
@@ -253,8 +262,8 @@ KvpFrame* qof_backend_get_config(QofBackend *be);
 \return FALSE in case or error, otherwise TRUE.
 */
 gboolean
-qof_load_backend_library (const char *directory, 
-			const char* filename, const char* init_fcn);
+qof_load_backend_library (const gchar *directory, 
+			const gchar* filename, const gchar* init_fcn);
 
 /** \brief Retrieve the backend used by this book */
 QofBackend* qof_book_get_backend (QofBook *book);
@@ -262,4 +271,5 @@ QofBackend* qof_book_get_backend (QofBook *book);
 void qof_book_set_backend (QofBook *book, QofBackend *);
 
 #endif /* QOF_BACKEND_H */
+/** @} */
 /** @} */

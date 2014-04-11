@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <glib.h>
+#include <glib-gobject.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -37,7 +38,7 @@ libgncmod_backend_file_LTX_gnc_module_path(void)
 char * 
 libgncmod_backend_file_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The binary and XML (v1 and v2) backends for Gnucash");
+  return g_strdup("The binary and XML (v1 and v2) backends for GnuCash");
 }
 
 int
@@ -45,6 +46,10 @@ libgncmod_backend_file_LTX_gnc_module_init(int refcount)
 {  
   engine = gnc_module_load("gnucash/engine", 0);
   if(!engine) return FALSE;
+
+  /* Need to initialize g-type engine for gconf */
+  if (refcount == 0)
+    g_type_init();
 
   return TRUE;
 }

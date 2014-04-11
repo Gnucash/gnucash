@@ -29,7 +29,7 @@
 /** @file gnc-plugin-page-account-tree.h 
     @brief Functions providing a chart of account page.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
-    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
+    @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 
 #ifndef __GNC_PLUGIN_PAGE_ACCOUNT_TREE_H

@@ -57,7 +57,6 @@ static QofLogModule log_module = GNC_MOD_REGISTER;
 static void gnc_table_init (Table * table);
 static void gnc_table_free_data (Table * table);
 static void gnc_virtual_cell_construct (gpointer vcell, gpointer user_data);
-static void gnc_virtual_location_init (VirtualLocation *vloc);
 static void gnc_virtual_cell_destroy (gpointer vcell, gpointer user_data);
 static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
@@ -565,7 +564,7 @@ gnc_table_save_cells (Table *table, gpointer save_data)
   if (gnc_table_model_read_only (table->model))
     return;
 
-  gnc_table_leave_update (table, table->current_cursor_loc);
+  // gnc_table_leave_update (table, table->current_cursor_loc);
 
   save_handler = gnc_table_model_get_pre_save_handler (table->model);
   if (save_handler)
@@ -620,7 +619,7 @@ gnc_table_free_data (Table * table)
   g_table_resize (table->virt_cells, 0, 0);
 }
 
-static void
+void
 gnc_virtual_location_init (VirtualLocation *vloc)
 {
   if (vloc == NULL)

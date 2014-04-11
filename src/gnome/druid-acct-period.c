@@ -26,6 +26,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 
 #include "FreqSpec.h"
 #include "Group.h"
@@ -45,7 +46,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
-
+#include "gnc-session.h"
 
 #define DRUID_ACCT_PERIOD_CM_CLASS "druid-acct-period"
 
@@ -214,12 +215,6 @@ prepare_remarks (AcctPeriodInfo *info)
   char * str;
   ENTER ("info=%p", info);
 
-  remarks_text = 
-    _("The earliest transaction date found in this book is %s.\n"
-      "Based on the selection made above, this book will be split\n"
-      "into %d books.  Click on 'Next' to start closing the\n"
-      "earliest book.\n");
-
   /* Pull info from widget, push into freq spec */
   gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
 
@@ -229,7 +224,7 @@ prepare_remarks (AcctPeriodInfo *info)
   g_date_clear (&date_now, 1);
   nperiods = 0;
   period_end = info->closing_date;
-  g_date_set_time (&date_now, time(0));
+  g_date_set_time_t (&date_now, time(NULL));
 
   while (0 > g_date_compare(&period_end, &date_now ))
   {
@@ -243,6 +238,11 @@ prepare_remarks (AcctPeriodInfo *info)
   } 
 
   /* Display the results */
+  remarks_text = 
+    _("The earliest transaction date found in this book is %s. "
+      "Based on the selection made above, this book will be split "
+      "into %d books.  Click on 'Forward' to start closing the "
+      "earliest book.");
   str = g_strdup_printf (remarks_text, info->earliest_str, nperiods);
   gtk_label_set_text (info->period_remarks, str);
   g_free (str);
@@ -271,13 +271,6 @@ show_book_details (AcctPeriodInfo *info)
   /* Pull info from widget, push into freq spec */
   gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
 
-  period_text = 
-    _("You have asked for a book to be created.  This book\n"
-      "will contain all transactions up to midnight %s\n"
-      "(for a total of %d transactions spread over %d accounts).\n"
-      "Click on 'Next' to create this book.\n"
-      "Click on 'Back' to adjust the dates.\n");
-
   qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
                            g_date_get_day(&info->closing_date),
                            g_date_get_month(&info->closing_date),
@@ -290,6 +283,12 @@ show_book_details (AcctPeriodInfo *info)
   nacc = xaccGroupGetNumSubAccounts (xaccGetAccountGroup (currbook));
 
   /* Display the book info */
+  period_text = 
+    _("You have asked for a book to be created.  This book "
+      "will contain all transactions up to midnight %s "
+      "(for a total of %d transactions spread over %d accounts). "
+      "Click on 'Forward' to create this book. "
+      "Click on 'Back' to adjust the dates.");
   str = g_strdup_printf (period_text, close_date_str, ntrans, nacc);
   gtk_label_set_text (info->book_details, str);
   g_free (str);
@@ -354,18 +353,18 @@ ap_validate_menu (GnomeDruidPage *druidpage,
 
   if (0 <= g_date_compare(&info->prev_closing_date, &info->closing_date))
   {
-    const char *msg = _("You must select closing date that\n"
-                        "is greater than the closing date\n"
+    const char *msg = _("You must select closing date that "
+                        "is greater than the closing date "
                         "of the previous book.");
     gnc_error_dialog (info->window, msg);
     return TRUE;
   }
 
   g_date_clear (&date_now, 1);
-  g_date_set_time (&date_now, time(0));
+  g_date_set_time_t (&date_now, time(NULL));
   if (0 < g_date_compare(&info->closing_date, &date_now))
   {
-    const char *msg = _("You must select closing date\n"
+    const char *msg = _("You must select closing date "
                         "that is not in the future.");
     gnc_error_dialog (info->window, msg);
     return TRUE;
@@ -431,7 +430,7 @@ ap_close_period (GnomeDruidPage *druidpage,
   if (really_do_close_books)
   {
     /* Close the books ! */
-    gnc_engine_suspend_events ();
+    qof_event_suspend ();
     gnc_suspend_gui_refresh ();
 
     scrub_all();
@@ -441,7 +440,7 @@ ap_close_period (GnomeDruidPage *druidpage,
     kvp_frame_set_str (book_frame, "/book/title", btitle);
     kvp_frame_set_str (book_frame, "/book/notes", bnotes);
 
-    qof_session_add_book (qof_session_get_current_session(), closed_book);
+    qof_session_add_book (gnc_get_current_session(), closed_book);
 
     /* We must save now; if we don't, and the user bails without saving,
      * then opening account balances will be incorrect, and this can only
@@ -449,7 +448,7 @@ ap_close_period (GnomeDruidPage *druidpage,
      */
     gnc_file_save ();
     gnc_resume_gui_refresh ();
-    gnc_engine_resume_events ();
+    qof_event_resume ();
     gnc_gui_refresh_all ();  /* resume above should have been enough ??? */
   }
   g_free(bnotes);
@@ -462,7 +461,7 @@ ap_close_period (GnomeDruidPage *druidpage,
   xaccFreqSpecGetNextInstance (info->period, &info->prev_closing_date, &info->closing_date);
 
   /* If the next closing date is in the future, then we are done. */
-  if (time(0) < gnc_timet_get_day_end_gdate (&info->closing_date))
+  if (time(NULL) < gnc_timet_get_day_end_gdate (&info->closing_date))
   {
     return FALSE;
   }
@@ -532,7 +531,7 @@ ap_druid_create (AcctPeriodInfo *info)
                   info->earliest, ctime (&info->earliest));
 
   g_date_clear (&info->closing_date, 1);
-  g_date_set_time (&info->closing_date, info->earliest);
+  g_date_set_time_t (&info->closing_date, info->earliest);
   g_date_clear (&info->prev_closing_date, 1);
   info->prev_closing_date = info->closing_date;
   g_date_add_years (&info->closing_date, 1);

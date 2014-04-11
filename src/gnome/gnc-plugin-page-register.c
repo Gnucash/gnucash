@@ -2,7 +2,7 @@
  * gnc-plugin-page-register.c -- 
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -57,6 +57,7 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -64,6 +65,8 @@
 #include "gnc-split-reg.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
+#include "gnc-main-window.h"
+#include "gnc-session.h"
 #include "gnucash-sheet.h"
 #include "lot-viewer.h"
 #include "Scrub.h"
@@ -71,6 +74,7 @@
 #include "window-reconcile.h"
 #include "window-report.h"
 
+#include "gtk-compat.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -90,6 +94,8 @@ static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
 static void gnc_plugin_page_register_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_register_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
+static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide);
+static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
 
@@ -125,7 +131,9 @@ static void gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *act
 static void gnc_plugin_page_register_cmd_reconcile (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_transfer (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_stock_split (GtkAction *action, GncPluginPageRegister *plugin_page);
+#ifdef LOTS_READY_FOR_SHOWTIME
 static void gnc_plugin_page_register_cmd_lots (GtkAction *action, GncPluginPageRegister *plugin_page);
+#endif
 static void gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cancel_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -143,6 +151,13 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
+
+static void gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page);
+static void gppr_account_destroy_cb (Account *account);
+static void gnc_plugin_page_register_event_handler (QofEntity *entity,
+						    QofEventId event_type,
+						    GncPluginPageRegister *page,
+						    GncEventData *ed);
 
 /************************************************************/
 /*                          Actions                         */
@@ -172,16 +187,19 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 
 	/* Transaction menu */
 
-	{ "CutTransactionAction", GTK_STOCK_CUT, N_("Cu_t Transaction"), "", NULL,
+	{ "CutTransactionAction", GTK_STOCK_CUT, N_("Cu_t Transaction"), "",
+	  N_("Cut the selected transaction into clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction) },
-	{ "CopyTransactionAction", GTK_STOCK_COPY, N_("_Copy Transaction"), "", NULL,
+	{ "CopyTransactionAction", GTK_STOCK_COPY, N_("_Copy Transaction"), "",
+	  N_("Copy the selected transaction into clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction) },
-	{ "PasteTransactionAction", GTK_STOCK_PASTE, N_("_Paste Transaction"), "", NULL,
+	{ "PasteTransactionAction", GTK_STOCK_PASTE, N_("_Paste Transaction"), "",
+	  N_("Paste the transaction from the clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction) },
-	{ "DuplicateTransactionAction", GTK_STOCK_COPY, N_("Du_plicate Transaction"), "",
+	{ "DuplicateTransactionAction", GTK_STOCK_COPY, N_("Dup_licate Transaction"), "",
 	  N_("Make a copy of the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction) },
-	{ "DeleteTransactionAction", GTK_STOCK_DELETE, N_("Delete Transaction"), NULL,
+	{ "DeleteTransactionAction", GTK_STOCK_DELETE, N_("_Delete Transaction"), NULL,
 	  N_("Delete the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction) },
 	{ "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Transaction Splits"), NULL,
@@ -191,7 +209,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  N_("Record the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction) },
 	{ "CancelTransactionAction", GTK_STOCK_CANCEL, N_("Ca_ncel Transaction"), NULL,
-	  N_("_Cancel the current transaction"),
+	  N_("Cancel the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction) },
 	{ "VoidTransactionAction", NULL, N_("_Void Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_void_transaction) },
@@ -209,49 +227,56 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 
 	/* Actions menu */
 
-	{ "ActionsTransferAction", GTK_STOCK_MISSING_IMAGE, N_("_Transfer..."), "<control>t",
+	{ "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transfer) },
-	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
+	{ "ActionsReconcileAction", GTK_STOCK_INDEX, N_("_Reconcile..."), NULL,
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reconcile) },
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
+#ifdef LOTS_READY_FOR_SHOWTIME
 	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
-	{ "BlankTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("_Blank Transaction"), NULL,
+#endif
+	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
-	{ "EditExchangeRateAction", GTK_STOCK_MISSING_IMAGE, N_("Edit E_xchange Rate"), NULL,
+	{ "EditExchangeRateAction", NULL, N_("Edit E_xchange Rate"), NULL,
 	  N_("Exit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
-	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
+	{ "JumpTransactionAction", GNC_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_jump) },
-	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
-	  N_("Edit scheduled transactions"),
+	{ "ScheduleTransactionAction", GNC_STOCK_SCHEDULE, N_("Sche_dule..."), NULL,
+	  N_("Create a Scheduled Transaction with the current transaction as a template"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
-	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
+	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL,
+	  NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all) },
-	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL, NULL,
+	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL,
+	  NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_current) },
 
 	/* Reports menu */
 
-	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL, NULL,
+	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL,
+	  N_("Open a register report window for this transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
-	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL, NULL,
+	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL,
+	  N_("Open a register report window for this transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
 
 static GtkToggleActionEntry toggle_entries[] = {
-	{ "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL, NULL,
+	{ "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL,
+	  N_("Show two lines of information for each transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE },
 
-	{ "SplitTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("S_plit Transaction"), NULL,
+	{ "SplitTransactionAction", GNC_STOCK_SPLIT_TRANS, N_("S_plit Transaction"), NULL,
 	  N_("Show all splits in the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE },
 };
@@ -259,9 +284,15 @@ static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 static GtkRadioActionEntry radio_entries_2 [] =
 {
-	{ "ViewStyleBasicAction", NULL, N_("_Basic Ledger"), NULL, NULL, REG_STYLE_LEDGER },
-	{ "ViewStyleAutoSplitAction", NULL, N_("_Auto-Split Ledger"), NULL, NULL, REG_STYLE_AUTO_LEDGER },
-	{ "ViewStyleJournalAction", NULL, N_("Transaction _Journal"), NULL, NULL, REG_STYLE_JOURNAL }
+	/* Translators: This is a menu item in the View menu */
+	{ "ViewStyleBasicAction", NULL, N_("_Basic Ledger"), NULL,
+	  N_("Show transactions on one or two lines"), REG_STYLE_LEDGER },
+	/* Translators: This is a menu item in the View menu */
+	{ "ViewStyleAutoSplitAction", NULL, N_("_Auto-Split Ledger"), NULL,
+	  N_("Show transactions on one or two lines and expand the current transaction"), REG_STYLE_AUTO_LEDGER },
+	/* Translators: This is a menu item in the View menu */
+	{ "ViewStyleJournalAction", NULL, N_("Transaction _Journal"), NULL,
+	  N_("Show expanded transactions with all splits"), REG_STYLE_JOURNAL }
 };
 static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 
@@ -280,7 +311,18 @@ static const gchar *important_actions[] = {
 static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"ActionsReconcileAction",
+#ifdef LOTS_READY_FOR_SHOWTIME
 	"ActionsLotsAction",
+#endif
+	NULL
+};
+
+
+/** View Style actions */
+static const gchar *view_style_actions[] = {
+	"ViewStyleBasicAction",
+	"ViewStyleAutoSplitAction",
+	"ViewStyleJournalAction",
 	NULL
 };
 
@@ -295,6 +337,7 @@ static action_toolbar_labels toolbar_labels[] = {
   { "SplitTransactionAction",     N_("Split") },
   { "ScheduleTransactionAction",  N_("Schedule") },
   { "BlankTransactionAction",     N_("Blank") },
+  { "ActionsReconcileAction",     N_("Reconcile") },
   { NULL, NULL },
 };
 
@@ -325,12 +368,14 @@ typedef struct GncPluginPageRegisterPrivate
 
 	GtkWidget *widget;
 
+	gint event_handler_id;
 	gint component_manager_id;
+	GUID key;  /* The guid of the Account we're watching */
 
 	const char *lines_opt_section;
 	const char *lines_opt_name;
 	gint lines_default;
-	gint disallowCaps;
+        gboolean read_only;
 
 	struct {
 	  GtkWidget *dialog;
@@ -390,6 +435,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GncPluginPageRegisterPrivate *priv;
 	GncPluginPage *plugin_page;
 	GNCSplitReg *gsr;
+	SplitRegister *reg;
 	const GList *item;
 	GList *book_list;
 	gchar *label;
@@ -410,6 +456,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	register_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, NULL);
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(register_page);
 	priv->ledger = ledger;
+	priv->key = *guid_null();
 
 	plugin_page = GNC_PLUGIN_PAGE(register_page);
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
@@ -422,6 +469,8 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
 	// Do not free the list. It is owned by the query.
 	
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+
 	priv->component_manager_id = 0;
 	return plugin_page;
 }
@@ -430,13 +479,18 @@ GncPluginPage *
 gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 {
 	GNCLedgerDisplay *ledger;
+	GncPluginPage *page;
+	GncPluginPageRegisterPrivate *priv;
 
 	if (subaccounts)
 	  ledger = gnc_ledger_display_subaccounts (account);
 	else
 	  ledger = gnc_ledger_display_simple (account);
 
-	return gnc_plugin_page_register_new_common(ledger);
+	page = gnc_plugin_page_register_new_common(ledger);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+	priv->key = *xaccAccountGetGUID(account);
+	return page;
 }
 
 GncPluginPage *
@@ -471,8 +525,12 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->window_changed  = gnc_plugin_page_register_window_changed;
 	gnc_plugin_class->save_page       = gnc_plugin_page_register_save_page;
 	gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
+	gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
+	gnc_plugin_class->finish_pending  = gnc_plugin_page_register_finish_pending;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
+
+	gnc_ui_register_account_destroy_callback (gppr_account_destroy_cb);
 }
 
 static void
@@ -516,7 +574,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	priv->lines_opt_section = DEFAULT_LINES_OPTION_SECTION;
 	priv->lines_opt_name    = DEFAULT_LINES_OPTION_NAME;
 	priv->lines_default     = DEFAULT_LINES_AMOUNT;
-	priv->disallowCaps      = 0;
+        priv->read_only         = FALSE;
 	priv->fd.cleared_match  = CLEARED_ALL;
 }
 
@@ -555,13 +613,48 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
 
 
 static void
-gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
+gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	SplitRegister *reg;
+	GtkAction *action;
+	gboolean expanded, voided;
+	Transaction *trans;
+
+	/* Set 'Split Transaction' */
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+	expanded = gnc_split_register_current_trans_expanded(reg);
+	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+					     "SplitTransactionAction");
+	gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
+	g_signal_handlers_block_by_func
+	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), expanded);
+	g_signal_handlers_unblock_by_func
+	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+
+	/* Set 'Void' and 'Unvoid' */
+	trans = gnc_split_register_get_current_trans(reg);
+	voided = xaccTransHasSplitsInState(trans, VREC);
+	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+					     "VoidTransactionAction");
+	gtk_action_set_sensitive (GTK_ACTION(action), !voided);
+
+	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+					     "UnvoidTransactionAction");
+	gtk_action_set_sensitive (GTK_ACTION(action), voided);
+}
+
+static void
+gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister *page)
 { 
 	GncPluginPageRegisterPrivate *priv ;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	Account *account;
-	SplitRegister *sr;
+	SplitRegister *reg;
+	GNCLedgerDisplayType ledger_type;
 	int i;
 
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -571,10 +664,15 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 				  "sensitive", account != NULL);
 
 	/* Set "style" radio button */
-	sr = gnc_ledger_display_get_split_register(priv->ledger);
+	ledger_type = gnc_ledger_display_type(priv->ledger);
+	gnc_plugin_update_actions(action_group, view_style_actions,
+				  "sensitive", ledger_type == LD_SINGLE);
+
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
 	for (i = n_radio_entries_2 - 1; i > 0; i--) {
-	  DEBUG(" index %d: comparing %x to %x", i, radio_entries_2[i].value, sr->style);
-	  if (radio_entries_2[i].value == sr->style) {
+	  DEBUG(" index %d: comparing %x to %x", i, radio_entries_2[i].value, 
+                reg->style);
+	  if (radio_entries_2[i].value == reg->style) {
 	    DEBUG("match");
 	    break;
 	  }
@@ -583,14 +681,14 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	/* Either a match was found, or fell out with i = 0 */
 	action = gtk_action_group_get_action(action_group, radio_entries_2[i].name);
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_changed, page);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), TRUE);
+	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_changed, page);
 
 	/* Set "double line" toggle button */
 	action = gtk_action_group_get_action (action_group,
 					      "ViewStyleDoubleLineAction");
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), sr->use_double_line);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), reg->use_double_line);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 }
 
@@ -605,7 +703,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	GncWindow *gnc_window;
 	guint numRows;
 	GtkWidget *gsr;
-	SplitRegister *sr;
+	SplitRegister *reg;
+	Account *acct;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
@@ -629,7 +728,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 	gsr = gnc_split_reg_new(priv->ledger,
 				gnc_window_get_gtk_window(gnc_window),
-				numRows, 0, priv->disallowCaps);
+				numRows, priv->read_only);
 	priv->gsr = (GNCSplitReg *)gsr;
 	gtk_widget_show (gsr);
 	gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
@@ -638,11 +737,13 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 			  G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
 			  page );
 
-	sr = gnc_ledger_display_get_split_register(priv->ledger);
-	gnc_split_register_config(sr, sr->type, sr->style, sr->use_double_line);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+	gnc_split_register_config(reg, reg->type, reg->style, 
+                                  reg->use_double_line);
 	gnc_ledger_display_refresh(priv->ledger);
 
-	gnc_plugin_page_register_update_menus (page);
+	gnc_plugin_page_register_ui_initial_state (page);
+	gnc_plugin_page_register_ui_update (NULL, page);
 
 	plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
 	if (plugin_page->summarybar) {
@@ -651,10 +752,22 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 			   FALSE, FALSE, 0);
 	}
 
+	priv->event_handler_id = qof_event_register_handler
+	  ((QofEventHandler)gnc_plugin_page_register_event_handler, page);
 	priv->component_manager_id =
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
 				     gnc_plugin_page_register_refresh_cb,
 				     NULL, page);
+	gnc_gui_component_set_session (priv->component_manager_id,
+				       gnc_get_current_session());
+	acct = gnc_plugin_page_register_get_account(page);
+	if (acct)
+	    gnc_gui_component_watch_entity (
+		priv->component_manager_id, xaccAccountGetGUID(acct),
+		QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
+
+	gnc_split_reg_set_moved_cb
+	  (priv->gsr, (GFunc)gnc_plugin_page_register_ui_update, page);
 
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	LEAVE(" ");
@@ -677,6 +790,11 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 	if (priv->component_manager_id) {
 	  gnc_unregister_gui_component(priv->component_manager_id);
 	  priv->component_manager_id = 0;
+	}
+
+	if (priv->event_handler_id) {
+	  qof_event_unregister_handler(priv->event_handler_id);
+	  priv->event_handler_id = 0;
 	}
 
 	if (priv->sd.dialog) {
@@ -770,8 +888,7 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
     leader = gnc_ledger_display_leader(priv->ledger);
     g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
     g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME,
-			  xaccAccountGetFullName(leader,
-						 gnc_get_account_separator()));
+			  xaccAccountGetFullName(leader));
   } else if (reg->type == GENERAL_LEDGER) {
     g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
 			  LABEL_GL);
@@ -810,7 +927,6 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
 					    const gchar *group_name)
 {
   GncPluginPageRegisterPrivate *priv;
-  GtkActionGroup *action_group;
   GtkAction *action;
   GError *error = NULL;
   gchar *style_name;
@@ -819,7 +935,6 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
 
   ENTER(" ");
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-  action_group = gnc_plugin_page_get_action_group(page);
 
   /* Convert the style name to an index */
   style_name = g_key_file_get_string(key_file, group_name,
@@ -835,9 +950,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
   /* Update the style menu action for this page */
   if (i <= REG_STYLE_JOURNAL) {
     DEBUG("Setting style: %d", i);
-    action_group =
-      gnc_plugin_page_get_action_group(page);
-    action= gtk_action_group_get_action(action_group, radio_entries_2[i].name);
+    action = gnc_plugin_page_get_action(page, radio_entries_2[i].name);
     gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
   }
 
@@ -845,8 +958,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
   use_double_line =
     g_key_file_get_boolean(key_file, group_name, KEY_DOUBLE_LINE, &error);
   DEBUG("Setting double_line_mode: %d", use_double_line);
-  action = gtk_action_group_get_action(action_group,
-				       "ViewStyleDoubleLineAction");
+  action = gnc_plugin_page_get_action(page, "ViewStyleDoubleLineAction");
   gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), use_double_line);
 
   LEAVE(" ");
@@ -888,10 +1000,9 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     DEBUG("Include subs: %d", include_subs);
     acct_name = g_key_file_get_string(key_file, group_name,
 				      KEY_ACCOUNT_NAME, &error);
-    book = qof_session_get_book(qof_session_get_current_session());
+    book = qof_session_get_book(gnc_get_current_session());
     account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-					 acct_name,
-					 gnc_get_account_separator());
+					 acct_name);
     g_free(acct_name);
     if (account == NULL) {
       LEAVE("Bad account name");
@@ -917,7 +1028,97 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
   return page;
 }
 
-	
+
+/*
+ * Based on code from Epiphany (src/ephy-window.c)
+ */
+static void
+gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GncPluginPageRegister *reg_page;
+	GtkAction *action;
+	gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
+	gboolean has_selection;
+
+	reg_page = GNC_PLUGIN_PAGE_REGISTER(page);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(reg_page);
+	has_selection = gnucash_register_has_selection (priv->gsr->reg);
+
+	can_copy = has_selection;
+	can_cut = has_selection;
+	can_paste = TRUE;
+
+	action = gnc_plugin_page_get_action (page, "EditCopyAction");
+	gtk_action_set_sensitive (action, can_copy);
+	gtk_action_set_visible (action, !hide || can_copy);
+	action = gnc_plugin_page_get_action (page, "EditCutAction");
+	gtk_action_set_sensitive (action, can_cut);
+	gtk_action_set_visible (action, !hide || can_cut);
+	action = gnc_plugin_page_get_action (page, "EditPasteAction");
+	gtk_action_set_sensitive (action, can_paste);
+	gtk_action_set_visible (action,  !hide || can_paste);
+}
+
+
+static gboolean
+gnc_plugin_page_register_finish_pending (GncPluginPage *page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GncPluginPageRegister *reg_page;
+	SplitRegister *reg;
+	GtkWidget *dialog, *window;
+	const gchar *name;
+	gint response;
+
+	reg_page = GNC_PLUGIN_PAGE_REGISTER(page);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(reg_page);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+
+	if (!reg || !gnc_split_register_changed(reg))
+	  return TRUE;
+
+	name = gnc_plugin_page_register_get_tab_name(page);
+	window = gnc_plugin_page_get_window(page);
+	dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_WARNING,
+					GTK_BUTTONS_NONE,
+					/* Translators: %s is the name
+					   of the tab page */
+					_("Save changes to %s?"), name);
+	gtk_message_dialog_format_secondary_text
+	  (GTK_MESSAGE_DIALOG(dialog),
+	   "%s",
+	   _("This register has pending changes to a transaction.  "
+	     "Would you like to save the changes to this transaction, "
+	     "discard the transaction, or cancel the operation?"));
+	gnc_gtk_dialog_add_button(dialog, _("_Discard Transaction"),
+				  GTK_STOCK_DELETE, GTK_RESPONSE_REJECT);
+	gtk_dialog_add_button(GTK_DIALOG(dialog),
+			      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	gnc_gtk_dialog_add_button(dialog, _("_Save Transaction"),
+				  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT);
+
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+
+	switch (response) {
+	  case GTK_RESPONSE_ACCEPT:
+	    gnc_split_register_save(reg, TRUE);
+	    return TRUE;
+
+	  case GTK_RESPONSE_REJECT:
+	    gnc_split_register_cancel_cursor_trans_changes(reg);
+	    gnc_split_register_save (reg, TRUE);
+	    return TRUE;
+
+	  default:
+	    return FALSE;
+	}
+}
+
+
 static gchar *
 gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 {
@@ -1069,9 +1270,6 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page)
     xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QUERY_AND);
 
   gnc_ledger_display_refresh (priv->ledger);
-  /* The register widget doesn't seem to clean up when it shrinks.
-   * Redraw the entire widget so the screen looks clean. */
-  gtk_widget_queue_draw(priv->widget);
   LEAVE(" ");
 }
 
@@ -1124,9 +1322,6 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
   }
 
   gnc_ledger_display_refresh (priv->ledger);
-  /* The register widget doesn't seem to clean up when it shrinks.
-   * Redraw the entire widget so the screen looks clean. */
-  gtk_widget_queue_draw(priv->widget);
   LEAVE(" ");
 }
 
@@ -1512,8 +1707,7 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 
   if ((leader != NULL) && (ledger_type != LD_GL))
   {
-    account_name = xaccAccountGetFullName (leader,
-                                           gnc_get_account_separator ());
+    account_name = xaccAccountGetFullName (leader);
 
     if (ledger_type == LD_SINGLE)
     {
@@ -1784,14 +1978,15 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
   trans = gnc_split_register_get_current_trans(reg);
   if (trans == NULL)
     return;
-  if (xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(NULL, _("This transaction has already been voided."));
+  if (xaccTransHasSplitsInState(trans, VREC))
     return;
-  }
   if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
     gnc_error_dialog(NULL, _("You cannot void a transaction with reconciled or cleared splits."));
     return;
   }
+
+  if (!gnc_plugin_page_register_finish_pending(GNC_PLUGIN_PAGE(page)))
+      return;
 
   xml = gnc_glade_xml_new("register.glade", "Void Transaction");
   dialog = glade_xml_get_widget(xml, "Void Transaction");
@@ -1807,7 +2002,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
 
   /* All done. Get rid of it. */
   gtk_widget_destroy(dialog);
-  g_free(xml);
+  g_object_unref(xml);
 }
 
 
@@ -1826,10 +2021,8 @@ gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction *action,
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
   reg = gnc_ledger_display_get_split_register(priv->ledger);
   trans = gnc_split_register_get_current_trans(reg);
-  if (!xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(NULL, _("This transaction is not voided."));
+  if (!xaccTransHasSplitsInState(trans, VREC))
     return;
-  }
   gnc_split_register_unvoid_current_trans(reg);
   LEAVE(" ");
 }
@@ -1843,9 +2036,6 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
   SplitRegister *reg;
   GNCSplitReg *gsr;
   Transaction *trans, *new_trans;
-  kvp_frame *txn_frame;
-  kvp_value *kvp_val;
-
 
   ENTER("(action %p, page %p)", action, page);
 
@@ -1857,33 +2047,20 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
   if (trans == NULL)
     return;
 
-  txn_frame = xaccTransGetSlots( trans );
-  if ( txn_frame != NULL ) {
-    kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
-    if ( kvp_val ) {
-      // GUID *fromSXId = kvp_value_get_guid( kvp_val );
-      gnc_error_dialog(GNC_PLUGIN_PAGE(page)->window,
-		       _("A reversing entry has already been created for this transaction."));
+  if (xaccTransGetReversedBy(trans)) {
+      gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page)),
+        _("A reversing entry has already been created for this transaction."));
       return;
-    }
   }
 
-  gnc_engine_suspend_events();
-  new_trans = xaccTransClone(trans);
-  xaccTransReverse(new_trans);
+  qof_event_suspend();
+  new_trans = xaccTransReverse(trans);
 
   /* Clear transaction level info */
-  xaccTransBeginEdit(new_trans);
   xaccTransSetDatePostedSecs(new_trans, time(NULL));
   xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-  xaccTransCommitEdit(new_trans);
 
-  /* Now update the original with a pointer to the new one */
-  xaccTransBeginEdit(trans);
-  kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
-  kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
-  xaccTransCommitEdit(trans);
-  gnc_engine_resume_events();
+  qof_event_resume();
 
   /* Now jump to new trans */
   gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));
@@ -1918,9 +2095,9 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
   dialog = glade_xml_get_widget (xml, "Sort By");
   priv->sd.dialog = dialog;
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
-			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
+			       gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
   /* Translations: The %s is the name of the plugin page */
-  title = g_strdup_printf(N_("Sort %s by..."),
+  title = g_strdup_printf(_("Sort %s by..."),
 			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
@@ -1970,9 +2147,9 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
   dialog = glade_xml_get_widget (xml, "Filter By");
   priv->fd.dialog = dialog;
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
-			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
+			       gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
   /* Translators: The %s is the name of the plugin page */
-  title = g_strdup_printf(N_("Filter %s by..."),
+  title = g_strdup_printf(_("Filter %s by..."),
 			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
@@ -2003,8 +2180,10 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     /* Start date info */
     if (start_time == 0) {
       button = glade_xml_get_widget(xml, "start_date_earliest");
+      time_val = xaccQueryGetEarliestDateFound (query); 
       sensitive = FALSE;
     } else {
+      time_val = start_time;
       if ((start_time >= gnc_timet_get_today_start()) &&
 	  (start_time <= gnc_timet_get_today_end())) {
 	button = glade_xml_get_widget(xml, "start_date_today");
@@ -2017,7 +2196,6 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     start_date = glade_xml_get_widget(xml, "start_date");
     gtk_widget_set_sensitive(GTK_WIDGET(start_date), sensitive);
-    time_val = xaccQueryGetEarliestDateFound (query); 
     gnc_date_edit_set_time(GNC_DATE_EDIT(start_date), time_val);
     g_signal_connect (G_OBJECT (start_date), "date-changed",
 		      G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
@@ -2028,8 +2206,10 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     /* End date info */
     if (end_time == 0) {
       button = glade_xml_get_widget(xml, "end_date_latest");
+      time_val = xaccQueryGetLatestDateFound (query); 
       sensitive = FALSE;
     } else {
+      time_val = end_time;
       if ((end_time >= gnc_timet_get_today_start()) &&
 	  (end_time <= gnc_timet_get_today_end())) {
 	button = glade_xml_get_widget(xml, "end_date_today");
@@ -2042,7 +2222,6 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     end_date = glade_xml_get_widget(xml, "end_date");
     gtk_widget_set_sensitive(GTK_WIDGET(end_date), sensitive);
-    time_val = xaccQueryGetLatestDateFound (query); 
     gnc_date_edit_set_time(GNC_DATE_EDIT(end_date), time_val);
     g_signal_connect (G_OBJECT (end_date), "date-changed",
 		      G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
@@ -2076,9 +2255,7 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
   value = gtk_radio_action_get_current_value(current);
   gnc_split_reg_change_style(priv->gsr, value);
 
-  /* The register widget doesn't seem to clean up when it shrinks.
-   * Redraw the entire widget so the screen looks clean. */
-  gtk_widget_queue_draw(priv->widget);
+  gnc_plugin_page_register_ui_update (NULL, plugin_page);
   LEAVE(" ");
 }
 
@@ -2111,6 +2288,7 @@ gnc_plugin_page_register_cmd_transfer (GtkAction *action,
 				       GncPluginPageRegister *page)
 {
   Account *account;
+  GncWindow *gnc_window;
   GtkWidget *window;
 
   ENTER("(action %p, plugin_page %p)", action, page);
@@ -2118,7 +2296,8 @@ gnc_plugin_page_register_cmd_transfer (GtkAction *action,
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
   account = gnc_plugin_page_register_get_account (page);
-  window = GNC_PLUGIN_PAGE (page)->window;
+  gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
+  window = GTK_WIDGET(gnc_window_get_gtk_window(gnc_window));
   gnc_xfer_dialog (window, account);
   LEAVE(" ");
 }
@@ -2128,7 +2307,7 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction *action,
 					GncPluginPageRegister *page)
 {
   Account *account;
-  GtkWidget *window;
+  GtkWindow *window;
   RecnWindow * recnData;
 
   ENTER("(action %p, plugin_page %p)", action, page);
@@ -2137,8 +2316,8 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction *action,
 
   account = gnc_plugin_page_register_get_account (page);
 
-  window = GNC_PLUGIN_PAGE (page)->window;
-  recnData = recnWindow (window, account);
+  window = gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window));
+  recnData = recnWindow (GTK_WIDGET(window), account);
   gnc_ui_reconcile_window_raise (recnData);
   LEAVE(" ");
 }
@@ -2158,6 +2337,7 @@ gnc_plugin_page_register_cmd_stock_split (GtkAction *action,
   LEAVE(" ");
 }
 
+#ifdef LOTS_READY_FOR_SHOWTIME
 static void
 gnc_plugin_page_register_cmd_lots (GtkAction *action,
 				   GncPluginPageRegister *page)
@@ -2172,6 +2352,7 @@ gnc_plugin_page_register_cmd_lots (GtkAction *action,
   gnc_lot_viewer_dialog (account);
   LEAVE(" ");
 }
+#endif
 
 static void
 gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action,
@@ -2375,8 +2556,6 @@ gnc_plugin_page_register_cmd_jump (GtkAction *action,
   }
   new_reg_page = GNC_PLUGIN_PAGE_REGISTER(new_page);
 
-  /* DRH - This will be a problem when someone attempts to use the
-     'Jump' command from the scheduled transaction window. */
   gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
   gsr = gnc_plugin_page_register_get_gsr (new_page);
   gnc_split_reg_jump_to_split(gsr, split);
@@ -2538,7 +2717,7 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 				      const char *lines_opt_section,
 				      const char *lines_opt_name,
 				      gint lines_default,
-				      gint disallowCaps)
+                                      gboolean read_only)
 {
 	GncPluginPageRegister *page;
 	GncPluginPageRegisterPrivate *priv;
@@ -2550,7 +2729,7 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 	priv->lines_opt_section = lines_opt_section;
 	priv->lines_opt_name 	= lines_opt_name;
 	priv->lines_default  	= lines_default;
-	priv->disallowCaps   	= disallowCaps;
+        priv->read_only         = read_only;
 }
 
 GNCSplitReg *
@@ -2599,15 +2778,142 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
   GncPluginPageRegisterPrivate *priv;
 
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+  priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
-  /* We're only looking for forced updates here. */
-  if (changes)
+  if (changes) {
+      const EventInfo* ei;
+      ei = gnc_gui_get_entity_events(changes, &priv->key);
+      if (ei) {
+          if (ei->event_mask & QOF_EVENT_DESTROY) {
+              gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
+              return;
+          }
+          if (ei->event_mask & QOF_EVENT_MODIFY) {
+          }
+      }
+  }
+  else {
+      /* forced updates */
+      gnucash_register_refresh_from_gconf(priv->gsr->reg);
+      gtk_widget_queue_draw(priv->widget);
+  }
+
+  gnc_plugin_page_register_ui_update(NULL, page);
+}
+
+/** This function is called when an account has been edited and an
+ *  "extreme" change has been made to it.  (E.G. Changing from a
+ *  credit card account to an expense account.  This rouine is
+ *  responsible for finding all open registers containing the account
+ *  and closing them.
+ *
+ *  @param accoung A pointer to the account that was changed.
+ */
+static void
+gppr_account_destroy_cb (Account *account)
+{
+  GncPluginPageRegister *page;
+  GncPluginPageRegisterPrivate *priv;
+  GNCLedgerDisplayType ledger_type;
+  const GUID *acct_guid;
+  const GList *citem;
+  GList *item, *kill = NULL;
+
+  acct_guid = xaccAccountGetGUID(account);
+
+  /* Find all windows that need to be killed.  Don't kill them yet, as
+   * that would affect the list being walked.*/
+  citem = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_REGISTER_NAME);
+  for ( ; citem; citem = g_list_next(citem)) {
+    page = (GncPluginPageRegister *)citem->data;
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    ledger_type = gnc_ledger_display_type (priv->ledger);
+    if (ledger_type == LD_GL) {
+      kill = g_list_append(kill, page);
+      /* kill it */
+    } else if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT)) {
+      if (guid_compare(acct_guid, &priv->key) == 0) {
+	kill = g_list_append(kill, page);
+      }
+    }
+  }
+
+  /* Now kill them. */
+  for (item = kill; item; item = g_list_next(item)) {
+    page = (GncPluginPageRegister *)item->data;
+    gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
+  }
+}
+
+/** This function is the handler for all event messages from the
+ *  engine.  Its purpose is to update the register page any time
+ *  an account or transaction is changed.
+ *
+ *  @internal
+ *
+ *  @param entity A pointer to the affected item.
+ *
+ *  @param event_type The type of the affected item.
+ *
+ *  @param page A pointer to the register page.
+ *
+ *  @param ed
+ */
+static void
+gnc_plugin_page_register_event_handler (QofEntity *entity,
+					QofEventId event_type,
+					GncPluginPageRegister *page,
+					GncEventData *ed)
+{
+  Transaction *trans;
+  QofBook *book;
+  GncPluginPage *visible_page;
+  GtkWidget *window;
+  gchar *label;
+
+  g_return_if_fail(page);	/* Required */
+  if (!GNC_IS_TRANS(entity) && !GNC_IS_ACCOUNT(entity))
     return;
 
-  priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-  gnucash_register_refresh_from_gconf(priv->gsr->reg);
-  gtk_widget_queue_draw(priv->widget);
+  ENTER("entity %p of type %d, page %p, event data %p",
+	entity, event_type, page, ed);
+
+  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+
+  if (GNC_IS_ACCOUNT(entity)) {
+    if (GNC_IS_MAIN_WINDOW(window)) {
+      label = gnc_plugin_page_register_get_tab_name(GNC_PLUGIN_PAGE(page));
+      main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
+      g_free(label);
+    }
+    LEAVE("tab name updated");
+    return;
+  }
+
+  if (!(event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY))) {
+    LEAVE("not a modify");
+    return;
+  }
+  trans = GNC_TRANS(entity);
+  book = qof_instance_get_book(QOF_INSTANCE(trans));
+  if (!gnc_plugin_page_has_book(GNC_PLUGIN_PAGE(page), book)) {
+      LEAVE("not in this book");
+      return;
+  }
+
+  if (GNC_IS_MAIN_WINDOW(window)) {
+    visible_page = gnc_main_window_get_current_page(GNC_MAIN_WINDOW(window));
+    if (visible_page != GNC_PLUGIN_PAGE(page)) {
+      LEAVE("page not visible");
+      return;
+    }
+  }
+
+  gnc_plugin_page_register_ui_update(NULL, page);
+  LEAVE(" ");
+  return;
 }
+
 
 /** @} */
 /** @} */

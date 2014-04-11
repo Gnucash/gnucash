@@ -32,8 +32,6 @@
 ;;    
 ;;    The variables in this code could use more consistent naming.
 ;;    
-;;    I'm not sure if I got (_ ) vs (N_ ) right. (What are they?)
-;;    
 ;;    The multicurrency support has been tested, BUT IS ALPHA.  I
 ;;    *think* it works right, but can make no guarantees....  In
 ;;    particular, I have made the educated assumption <grin> that a
@@ -82,10 +80,9 @@
 (define opthelp-party-name (N_ "Name of company/individual"))
 
 (define optname-date (N_ "Balance Sheet Date"))
-(define opthelp-date (N_ "Balance sheet as-of date"))
-(define optname-report-form (N_ "Report form Balance Sheet"))
+(define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
-  (N_ "Create report in report (as opposed to report) form"))
+  (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
 ;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts to include"))
@@ -99,11 +96,7 @@
   (N_ "Displays accounts which exceed the depth limit at the depth limit"))
 
 (define optname-parent-balance-mode (N_ "Parent account balances"))
-(define opthelp-parent-balance-mode
-  (N_ "How to show any balance in parent accounts"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
-(define opthelp-parent-total-mode
-  (N_ "How to show account subtotals for selected accounts having children"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
@@ -147,45 +140,6 @@
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used"))
 
-;; This calculates the increase in the balance(s) of all accounts in
-;; <accountlist> over the period from <from-date> to <to-date>.
-;; Returns a commodity collector.
-;;
-;; Note: There is both a gnc:account-get-comm-balance-interval and
-;; gnc:group-get-comm-balance-interval which could replace this
-;; function....
-;;
-(define (accountlist-get-comm-balance-at-date accountlist from-date to-date)
-;;  (for-each (lambda (x) (display x))
-;;	    (list "computing from: " (gnc:print-date from-date) " to "
-;;		  (gnc:print-date to-date) "\n"))
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (let* (
-		       (start-balance
-			(gnc:account-get-comm-balance-at-date
-			 account from-date #f))
-		       (sb (cadr (start-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       (end-balance
-			(gnc:account-get-comm-balance-at-date 
-			 account to-date #f))
-		       (eb (cadr (end-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       )
-;;		  (for-each (lambda (x) (display x))
-;;			    (list "Start balance: " sb " : "
-;;				  (gnc:account-get-name account) " : end balance: "
-;;				  eb "\n"))
-                  (collector 'merge end-balance #f)
-		  (collector 'minusmerge start-balance #f)
-		  ))
-              accountlist)
-    collector))
 
 ;; options generator
 (define (balance-sheet-options-generator)
@@ -196,23 +150,19 @@
     
     (add-option
       (gnc:make-string-option
-      (N_ "General") optname-report-title
+      gnc:pagename-general optname-report-title
       "a" opthelp-report-title reportname))
     (add-option
       (gnc:make-string-option
-      (N_ "General") optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      gnc:pagename-general optname-party-name
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
     
     ;; date at which to report balance
-    (add-option
-     (gnc:make-date-option
-      (N_ "General") optname-date
-      "c" opthelp-date
-      (lambda () (cons 'absolute (cons (current-time) 0)))
-      #f 'both '(start-cal-year start-prev-year end-prev-year) ))
+    (gnc:options-add-report-date!
+     options gnc:pagename-general optname-date "c")
     
     (add-option
      (gnc:make-simple-boolean-option
@@ -268,36 +218,11 @@
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
     ;; what to show for non-leaf accounts
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-balance-mode
-      "c" opthelp-parent-balance-mode
-      'immediate-bal
-      (list (vector 'immediate-bal
-		    (N_ "Show Immediate Balance")
-		    (N_ "Show only the balance in the parent account, excluding any subaccounts"))
-	    (vector 'recursive-bal
-		    (N_ "Recursive Balance")
-		    (N_ "Include subaccounts in balance"))
-	    (vector 'omit-bal
-		    (N_ "Omit Balance")
-		    (N_ "Do not show parent account balances")))))
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-total-mode
-      "d" opthelp-parent-total-mode
-      'f
-      (list (vector 't
-		    (N_ "Show subtotals")
-		    (N_ "Show subtotals for selected accounts which have subaccounts"))
-	    (vector 'f
-		    (N_ "Do not show subtotals")
-		    (N_ "Do not subtotal selected parent accounts"))
-	    (vector 'canonically-tabbed
-		    ;;(N_ "Subtotals indented text book style")
-		    (N_ "Text book style (experimental)")
-		    (N_ "Show parent account subtotals, indented per text book practice (experimental)")))))
-    
+    (gnc:options-add-subtotal-view!
+     options gnc:pagename-display
+     optname-parent-balance-mode optname-parent-total-mode
+     "c")
+
     ;; some detailed formatting options
     (add-option 
      (gnc:make-simple-boolean-option
@@ -352,7 +277,6 @@
     (gnc:option-value
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
-  (define forever-ago (cons 0 0))
   
   (gnc:report-starting reportname)
   
@@ -556,9 +480,8 @@
 	  (gnc:report-percent-done 12)
 	  ;; sum any retained earnings
 	  (set! neg-retained-earnings
-		(accountlist-get-comm-balance-at-date
-		 income-expense-accounts
-		 forever-ago date-tp))
+		(gnc:accountlist-get-comm-balance-at-date
+		 income-expense-accounts date-tp))
 	  (set! retained-earnings (gnc:make-commodity-collector))
 	  (retained-earnings 'minusmerge
 			  neg-retained-earnings
@@ -721,14 +644,14 @@
 	  (and (not (gnc:commodity-collector-allzero?
 		     retained-earnings))
 	       (add-subtotal-line right-table
-				  (N_ "Retained Earnings")
-				  (N_ "Retained Losses")
+				  (_ "Retained Earnings")
+				  (_ "Retained Losses")
 				  retained-earnings))
 	  (and (not (gnc:commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (add-subtotal-line right-table
-				  (N_ "Unrealized Gains")
-				  (N_ "Unrealized Losses")
+				  (_ "Unrealized Gains")
+				  (_ "Unrealized Losses")
 				  unrealized-gain-collector))
 	  (if total-equity?
 	      (add-subtotal-line

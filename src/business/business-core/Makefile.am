@@ -17,7 +17,6 @@ libgncmod_business_core_la_SOURCES = \
   gncAddress.c \
   gncBillTerm.c \
   gncBusiness.c \
-  gncBusGuile.c \
   gncCustomer.c \
   gncEmployee.c \
   gncEntry.c \
@@ -57,17 +56,27 @@ noinst_HEADERS = \
   gw-business-core.h
 
 libgncmod_business_core_la_LIBADD = \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${G_WRAP_LINK_ARGS} \
+  ${QOF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 # business-core-helpers.c
 
-libgw_business_core_la_SOURCES = gw-business-core.c 
+libgw_business_core_la_SOURCES = \
+  gncBusGuile.c \
+  gw-business-core.c
 
 libgw_business_core_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_business_core_la_LIBADD  = libgncmod-business-core.la
+libgw_business_core_la_LIBADD  = \
+  libgncmod-business-core.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm
@@ -85,16 +94,16 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-business-core-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += business-core.scm
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links

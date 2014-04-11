@@ -1,6 +1,6 @@
 SUBDIRS = utils data app graph gtk drawing ms-compat cut-n-paste
 
-lib_LTLIBRARIES = libgoffice-1.la
+pkglib_LTLIBRARIES = libgoffice-1.la
 
 libgoffice_1_la_LIBADD = 			\
 	cut-n-paste/pcre/libpcre.la		\
@@ -32,10 +32,10 @@ if !HAVE_GLIB26
 endif
 
 libgoffice_1_ladir = $(goffice_include_dir)
-libgoffice_1_la_HEADERS = 	\
+noinst_HEADERS = 	\
 	goffice.h
 if !HAVE_GLIB26
-  libgoffice_1_la_HEADERS += glib24_26-compat.h
+  noinst_HEADERS += glib24_26-compat.h
 endif
 
 # Depends on this Makefile, because it uses make variables.

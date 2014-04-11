@@ -462,7 +462,7 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
     (gnc:html-table-append-row!
      table
      (list "<br>"))
@@ -540,7 +540,6 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (title #f)
 	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
 	 (owner-type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
@@ -553,20 +552,26 @@
       ((gnc-owner-employee)
        (set! type-str (N_ "Employee"))))
 
+    (gnc:html-document-set-title!
+     document (string-append (_ type-str) " " (_ "Report")))
+
     (if (gnc:owner-is-valid? owner)
 	(begin
 	  (setup-query query owner account end-date)
 
-	  (set! title (gnc:html-markup
-		       "!" 
-		       (_ type-str )
-		       (_ " Report: ")
-		       (gnc:html-markup-anchor
-			(gnc:owner-anchor-text owner)
-			(gnc:owner-get-name owner))))
-	  
-	  (gnc:html-document-set-title! document title)
+	  (gnc:html-document-set-title!
+	   document
+           (string-append (_ type-str ) " " (_ "Report:") " " (gnc:owner-get-name owner)))
 
+           (gnc:html-document-set-headline!
+            document (gnc:html-markup
+                      "!" 
+                      (_ type-str )
+                      " " (_ "Report:") " "
+                      (gnc:html-markup-anchor
+                       (gnc:owner-anchor-text owner)
+                       (gnc:owner-get-name owner))))
+	  
 	  (if account
 	      (begin
 		(set! table (make-txn-table (gnc:report-options report-obj)
@@ -580,9 +585,7 @@
 	      (set!
 	       table
 	       (gnc:make-html-text
-		(string-append 
-		 "No Valid Account Selected.  "
-		 "Click on the Options button and select the account to use."))))
+		(_ "No valid account selected.  Click on the Options button and select the account to use."))))
 
 	  (gnc:html-document-add-object!
 	   document
@@ -612,9 +615,9 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (string-append
-	   "No Valid " type-str	" Selected.  "
-	   "Click on the Options button to select a company."))))
+	  (sprintf #f 
+		   (_ "No valid %s selected.  Click on the Options button to select a company.")
+		   type-str))))
 
     (gnc:free-query query)
     document))

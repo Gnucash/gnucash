@@ -208,11 +208,9 @@ gnc_tracking_associate_income_accounts(Account *stock_account,
 {
   KvpFrame *account_frame, *inc_account_frame;
   KvpValue *kvpd_on_account_list;
-  GNCAccountType type;
 
   g_return_if_fail(stock_account);
-  type = xaccAccountGetType(stock_account);
-  g_return_if_fail(type == STOCK || type == MUTUAL);
+  g_return_if_fail(xaccAccountIsPriced(stock_account));
   account_frame = xaccAccountGetSlots(stock_account);
   g_return_if_fail(account_frame);
   g_return_if_fail(category >= 0);
@@ -250,11 +248,9 @@ gnc_tracking_asssociate_expense_account(Account *stock_account,
 {
   KvpFrame *account_frame, *expense_acc_frame;
   KvpValue *kvpd_on_account_list;
-  GNCAccountType type;
 
   g_return_if_fail(stock_account);
-  type = xaccAccountGetType(stock_account);
-  g_return_if_fail(type == STOCK || type == MUTUAL);
+  g_return_if_fail(xaccAccountIsPriced(stock_account));
   account_frame = xaccAccountGetSlots(stock_account);
   g_return_if_fail(account_frame);
   g_return_if_fail(category >= 0);
@@ -286,15 +282,12 @@ GList *
 gnc_tracking_find_expense_accounts(Account *stock_account, 
                                    GNCTrackingExpenseCategory category)
 {
-  
-  GNCAccountType type;
   KvpFrame *account_frame, *expense_acc_frame;
   KvpValue *kvpd_on_account_list;
 
-  type = xaccAccountGetType(stock_account);
+  g_return_val_if_fail(xaccAccountIsPriced(stock_account), NULL);  
   g_return_val_if_fail(category >= 0 && category < GNC_TR_EXP_N_CATEGORIES,
 		       NULL);
-  g_return_val_if_fail(type == STOCK || type == MUTUAL, NULL);
 
   account_frame = xaccAccountGetSlots(stock_account);
   g_return_val_if_fail(account_frame, NULL);
@@ -321,14 +314,12 @@ GList *
 gnc_tracking_find_income_accounts(Account *stock_account, 
                                   GNCTrackingIncomeCategory category)
 {
-  GNCAccountType type;
   KvpFrame *account_frame, *income_acc_frame;
   KvpValue *kvpd_on_account_list;
 
-  type = xaccAccountGetType(stock_account);
+  g_return_val_if_fail(xaccAccountIsPriced(stock_account), NULL);
   g_return_val_if_fail(category >= 0 && category < GNC_TR_INC_N_CATEGORIES,
 		       NULL);
-  g_return_val_if_fail(type == STOCK || type == MUTUAL, NULL);
 
   account_frame = xaccAccountGetSlots(stock_account);
   g_return_val_if_fail(account_frame, NULL);

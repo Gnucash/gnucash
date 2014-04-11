@@ -70,7 +70,7 @@
 
     (gnc:options-add-price-source! 
      options gnc:pagename-general
-     optname-price-source "c" 'weighted-average)
+     optname-price-source "c" 'pricedb-nearest)
 
     (gnc:register-option 
      options
@@ -143,8 +143,6 @@
          ;; calculate the exchange rates
          (exchange-fn (gnc:case-exchange-fn
                        price-source report-currency to-date-tp))
-
-         (separator (gnc:account-separator-char))
 
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
@@ -235,7 +233,16 @@
 
                (money-diff-collector (gnc:make-commodity-collector))
 	       (splits-to-do (gnc:accounts-count-splits accounts))
-	       (seen-split-list '()))
+	       (seen-split-list '())
+	       (time-exchange-fn #f)
+	       (commodity-list #f))
+
+	  ;; Helper function to convert currencies
+	  (define (to-report-currency currency amount date)
+	    (gnc:gnc-monetary-amount
+	     (time-exchange-fn (gnc:make-gnc-monetary currency amount)
+			       report-currency
+			       date)))
 
           ;; function to add inflow and outflow of money
           (define (calc-money-in-out accounts)
@@ -282,11 +289,11 @@
 				      (if (not (split-in-list? s seen-split-list))
 					  (begin  
 					    (set! seen-split-list (cons s seen-split-list))
-					    (if (gnc:numeric-negative-p (gnc:split-get-value s))
+					    (if (gnc:numeric-negative-p s-value)
 						(let ((pair (account-in-alist s-account money-in-alist)))
 						  ;(gnc:debug "in:" (gnc:commodity-get-printname s-commodity)
 						;	     (gnc:numeric-to-double s-amount) 
-						;	     (gnc:commodity-get-printname curr-commodity)
+						;	     (gnc:commodity-get-printname parent-currency)
 						;	     (gnc:numeric-to-double s-value))
 						  (if (not pair)
 						      (begin
@@ -296,14 +303,18 @@
 							;(gnc:debug money-in-alist)
 							)
 						      )
-						  (let ((s-account-in-collector (cadr pair)))
-						    (money-in-collector 'add parent-currency (gnc:numeric-neg s-value))
-						    (s-account-in-collector 'add parent-currency (gnc:numeric-neg s-value)))
+						  (let ((s-account-in-collector (cadr pair))
+							(s-report-value (to-report-currency parent-currency
+											    (gnc:numeric-neg s-value)
+											    (gnc:transaction-get-date-posted
+											     parent))))
+						    (money-in-collector 'add report-currency s-report-value)
+						    (s-account-in-collector 'add report-currency s-report-value))
 						  )
 						(let ((pair (account-in-alist s-account money-out-alist)))
 						  ;(gnc:debug "out:" (gnc:commodity-get-printname s-commodity)
 						;	     (gnc:numeric-to-double s-amount) 
-						;	     (gnc:commodity-get-printname curr-commodity)
+						;	     (gnc:commodity-get-printname parent-currency)
 						;	     (gnc:numeric-to-double s-value))
 						  (if (not pair)
 						      (begin
@@ -313,9 +324,13 @@
 							;(gnc:debug money-out-alist)
 							)
 						      )
-						  (let ((s-account-out-collector (cadr pair)))
-						    (money-out-collector 'add parent-currency s-value)
-						    (s-account-out-collector 'add parent-currency s-value))
+						  (let ((s-account-out-collector (cadr pair))
+							(s-report-value (to-report-currency parent-currency
+											    s-value
+											    (gnc:transaction-get-date-posted
+											     parent))))
+						    (money-out-collector 'add report-currency s-report-value)
+						    (s-account-out-collector 'add report-currency s-report-value))
 						  )
 						)
 					    )
@@ -335,6 +350,16 @@
                   (calc-money-in-out-internal rest))))
 
             (calc-money-in-out-internal accounts))
+
+	  ;; Get an exchange function that will convert each transaction using the
+	  ;; nearest available exchange rate if that is what is specified
+	  (set! commodity-list (gnc:accounts-get-commodities
+				accounts
+				report-currency))
+	  (set! time-exchange-fn (gnc:case-exchange-time-fn
+				  price-source report-currency
+				  commodity-list to-date-tp
+				  0 0))
 
 
           (calc-money-in-out accounts)

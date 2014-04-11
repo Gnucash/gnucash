@@ -35,30 +35,11 @@
 #ifndef GNC_GNOME_UTILS_H
 #define GNC_GNOME_UTILS_H
 
-#ifdef LIBGUILEH
-/** Initialize the Gnome libraries.
- *
- *  @param arg0 The running application as it appears to a user.
- *
- *  @param program The compiled name of the application. "gnucash"
- *
- *  @param version The program version. (e.g. 1.8.7)
- *
- *  @param command_line A scheme list containing all of the command
- *  line arguments (or all of the arguments notyet pasrsed in scheme).
- *
- *  @return The initial command_line argument minus any arguments
- *  parsed by this function.
- */
-SCM gnc_gnome_init (const char * arg0,
-                    const char * progname,
-                    const char * version,
-                    SCM command_line);
-#endif
+#include <libgnome/libgnome.h>
+#include <gnc-main-window.h>
 
-/** Shutdown/cleanup any gnome related libraries. */
-void gnc_gnome_shutdown (void);
-
+/** Initialize the Gnome libraries. */
+void gnc_gnome_init (int argc, char **argv, const char * version);
 
 /** Given a pixmap/pixbuf file name, find the file in the pixmap
  *  directory associated with this application.  This routine will
@@ -101,6 +82,20 @@ char *gnc_gnome_locate_data_file (const char *name);
  */
 char *gnc_gnome_locate_ui_file (const char *name);
 
+/** Given a file name, find the file in the directories associated
+ *  with the given file domain.  This routine will display an error
+ *  message if it can't find the file.
+ *
+ *  @param doamin The GnomeFileDomain, e.g. GNOME_FILE_DOMAIN_APP_HELP
+ *
+ *  @param name The name of the file to be found.
+ *
+ *  @return the full path name of the file, or NULL of the file can't
+ *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
+ */
+char *gnc_gnome_locate_file (GnomeFileDomain domain, const char *name);
 
 /** Launch the default gnome help browser and open to a given link
  *  within a given file.  This routine will display an error message
@@ -141,14 +136,17 @@ GtkWidget * gnc_gnome_get_pixmap (const char *name);
 GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
 
 
-/** Shutdown gnucash.  This function will call the Scheme side of
- *  GnuCash to initiate an orderly shutdown, and when that has
- *  finished it will exit the program.
+/** Shutdown gnucash.  This function will initiate an orderly
+ *  shutdown, and when that has finished it will exit the program.
  *
  *  @param exit_status The exit status for the program.
  */
 void gnc_shutdown (int exit_status);
 
+void gnc_gui_init_splash (void);
+GncMainWindow *gnc_gui_init (void);
+int gnc_ui_start_event_loop (void);
+gboolean gnucash_ui_is_running (void);
 
 #endif
 /** @} */

@@ -24,7 +24,7 @@
     @{ 
 */
 /** @file kvp-util.h 
-    @brief GnuCash KVP utility functions 
+    @brief QOF KVP utility functions 
  */
 /**  @name Hash Utilities
  @{ 
@@ -32,8 +32,6 @@
 
 #ifndef GNC_KVP_UTIL_H
 #define GNC_KVP_UTIL_H
-
-#include "config.h"
 
 typedef struct {
   gpointer key;

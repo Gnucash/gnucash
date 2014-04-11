@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
+(use-modules (g-wrapped gw-report-system)) 
 
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
@@ -29,11 +30,6 @@
 ;; The key is the string naming the report (the report "type") and the
 ;; value is the report definition structure.
 (define *gnc:_report-templates_* (make-hash-table 23))
-
-;; this is a hash of 'report ID' to instantiated report.  the 
-;; report id is generated at report-record creation time. 
-(define *gnc:_reports_* (make-hash-table 23))
-(define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
 (define gnc:menuname-reports "Reports/StandardReports")
@@ -96,14 +92,23 @@
   (let ((report-rec (args-to-defn #f args)))
     (if (and report-rec
              (gnc:report-template-name report-rec))
-        (hash-set! *gnc:_report-templates_*
-                   (gnc:report-template-name report-rec) report-rec)
+	(let* ((name (gnc:report-template-name report-rec))
+	       (tmpl (hash-ref *gnc:_report-templates_* name)))
+	  (if (not tmpl)
+	      (hash-set! *gnc:_report-templates_*
+			 (gnc:report-template-name report-rec) report-rec)
+	      (begin
+		(gnc:error "Refusing to add custom report with the same name as an existing report.")
+		(gnc:error "Please edit your saved-reports file and delete the section for: " name)
+		)))
         (gnc:warn "gnc:define-report: bad report"))))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
 (define gnc:report-template-name
   (record-accessor <report-template> 'name))
+(define gnc:report-template-set-name
+  (record-modifier <report-template> 'name))
 (define gnc:report-template-options-generator
   (record-accessor <report-template> 'options-generator))
 (define gnc:report-template-options-cleanup-cb
@@ -244,9 +249,7 @@
             #f            ;; ctext
             ))
         (template (hash-ref *gnc:_report-templates_* template-name))
-        (id *gnc:_report-next-serial_*))
-    (gnc:report-set-id! r id)
-    (set! *gnc:_report-next-serial_* (+ 1 id))
+        )
     (let ((options 
            (if (not (null? rest))
                (car rest)
@@ -261,16 +264,16 @@
                (cb r))))
        options))
 
-    (hash-set! *gnc:_reports_* (gnc:report-id r) r)
-    id))
+    (gnc:report-set-id! r (gnc:report-add r))
+    (gnc:report-id r))
+  )
 
+;; This is the function that is called when saved reports are evaluated.
 (define (gnc:restore-report id template-name options)
   (let ((r ((record-constructor <report>)
             template-name id options #t #t #f #f)))
-    (if (>= id *gnc:_report-next-serial_*)
-        (set! *gnc:_report-next-serial_* (+ id 1)))
-    (hash-set! *gnc:_reports_* id r)
-    id))
+    (gnc:report-add r))
+  )
 
 
 (define (gnc:make-report-options template-name)
@@ -306,9 +309,11 @@
         #f)))
 
 (define (gnc:report-name report) 
-  (gnc:option-value
-   (gnc:lookup-option (gnc:report-options report)
-                      gnc:pagename-general gnc:optname-reportname)))
+  (let* ((opt (gnc:report-options report)))
+    (if opt
+        (gnc:option-value
+         (gnc:lookup-option opt gnc:pagename-general gnc:optname-reportname))
+        #f)))
 
 (define (gnc:report-stylesheet report)
   (gnc:html-style-sheet-find 
@@ -335,27 +340,14 @@
     '() *gnc:_report-templates_*)
    string<?))
 
-(define (gnc:report-remove-by-id id)
-  (let ((r (hash-ref *gnc:_reports_* id)))
-    ;; 2005.10.02, jsled: gnc:report-children doesn't appear defined anywhere?
-    ;; (for-each 
-     ;; (lambda (child)
-     ;;   (gnc:report-remove-by-id child))
-     ;; (gnc:report-children r))
-    (hash-remove! *gnc:_reports_* id)))
- 
-(define (gnc:find-report id)
-  (hash-ref *gnc:_reports_* id))
-
 (define (gnc:find-report-template report-type) 
   (hash-ref *gnc:_report-templates_* report-type))
 
 (define (gnc:report-generate-restore-forms report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
-  (let* ((template 
-          (hash-ref  *gnc:_report-templates_* 
-                     (gnc:report-type report)))
+  (let* ((report-type (gnc:report-type report))
+         (template (hash-ref *gnc:_report-templates_* report-type))
          (thunk (gnc:report-template-options-cleanup-cb template)))
     (if thunk 
         (thunk report)))
@@ -396,6 +388,9 @@
     #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/name ~S)))\n\n"
     (gnc:report-name report)
     (gnc:report-type report))))
+
+(define gnc:current-saved-reports
+  (gnc:build-dotgnucash-path "saved-reports-2.0"))
 
 (define (gnc:report-save-to-savefile report)
   (let ((conf-file-name gnc:current-saved-reports))
@@ -458,3 +453,12 @@
 (define (gnc:report-templates-for-each thunk)
   (hash-for-each (lambda (name template) (thunk name template))
                  *gnc:_report-templates_*))
+
+;; return the list of reports embedded in the specified report
+(define (gnc:report-embedded-list report)
+  (let* ((options (gnc:report-options report))
+	 (option (gnc:lookup-option options "__general" "report-list")))
+    (if option
+	(let ((opt-value (gnc:option-value option)))
+	  (map (lambda (x) (car x)) opt-value))
+	#f)))

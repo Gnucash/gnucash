@@ -40,6 +40,9 @@
 /* This static indicates the debugging module that this .o belongs to. */
 /* static short module = MOD_LEDGER; */
 
+static void gnc_split_register_load_xfer_cells (SplitRegister *reg,
+						Account *base_account);
+
 static void
 gnc_split_register_load_recn_cells (SplitRegister *reg)
 {
@@ -100,11 +103,10 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
-  {
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
+  for (node = xaccTransGetSplitList (trans); node; node = node->next) {
       Split *secondary = node->data;
 
+      if (!xaccTransStillHasSplit(trans, secondary)) continue;
       if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
         *new_split_row = vcell_loc->virt_row;
 
@@ -112,21 +114,55 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                            xaccSplitGetGUID (secondary),
                            visible_splits, TRUE, *vcell_loc);
       vcell_loc->virt_row++;
-    }
   }
 
-  if (!add_blank)
-    return;
+  if (add_blank) {
+      
+      if (find_trans == trans && find_split == NULL &&
+          find_class == CURSOR_CLASS_SPLIT) {
+          *new_split_row = vcell_loc->virt_row;
+      }
+      
+      /* Add blank transaction split */
+      gnc_table_set_vcell(reg->table, split_cursor, xaccSplitGetGUID(NULL), 
+                          FALSE, TRUE, *vcell_loc);
+      vcell_loc->virt_row++;
+  }
+}
 
-  if (find_trans == trans && find_split == NULL &&
-      find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
+static gint
+_find_split_with_parent_txn(gconstpointer a, gconstpointer b)
+{
+  Split *split = (Split*)a;
+  Transaction *txn = (Transaction*)b;
+  return xaccSplitGetParent(split) == txn ? 0 : 1;
+}
 
-  /* Add blank transaction split */
-  gnc_table_set_vcell (reg->table, split_cursor,
-                       xaccSplitGetGUID (NULL), FALSE, TRUE, *vcell_loc);
-  vcell_loc->virt_row++;
+static void add_quickfill_completions(TableLayout *layout, Transaction *trans, 
+                                      gboolean has_last_num)
+{
+    Split *s;
+    int i = 0;      
 
+    gnc_quickfill_cell_add_completion(
+        (QuickFillCell *) gnc_table_layout_get_cell(layout, DESC_CELL),
+         xaccTransGetDescription(trans));
+    
+    gnc_quickfill_cell_add_completion(
+        (QuickFillCell *) gnc_table_layout_get_cell(layout, NOTES_CELL),
+        xaccTransGetNotes(trans));
+
+    if (!has_last_num)
+        gnc_num_cell_set_last_num(
+            (NumCell *) gnc_table_layout_get_cell(layout, NUM_CELL),
+            xaccTransGetNum(trans));
+    
+    while ((s = xaccTransGetSplit(trans, i)) != NULL) {
+        gnc_quickfill_cell_add_completion(
+            (QuickFillCell *) gnc_table_layout_get_cell(layout, MEMO_CELL), 
+            xaccSplitGetMemo(s));
+        i++;
+    }
 }
 
 void
@@ -157,6 +193,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   gboolean has_last_num = FALSE;
   gboolean multi_line;
   gboolean dynamic;
+  gboolean we_own_slist = FALSE;
 
   VirtualCellLocation vcell_loc;
   VirtualLocation save_loc;
@@ -184,12 +221,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
      */
     if (default_account != NULL) {
       gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
-      if (commodity) {
-	const char * namespace = gnc_commodity_get_namespace (commodity);
-	if (!safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) ||
-	    !safe_strcmp (namespace, GNC_COMMODITY_NS_LEGACY))
-	  currency = commodity;
-      }
+      if (gnc_commodity_is_currency(commodity))
+          currency = commodity;
     }
 
     gnc_suspend_gui_refresh ();
@@ -197,11 +230,22 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
     xaccTransBeginEdit (new_trans);
-    xaccTransSetCurrency (new_trans, currency ? currency : gnc_default_currency ());
+    xaccTransSetCurrency (new_trans, 
+                          currency ? currency : gnc_default_currency());
     xaccTransSetDateSecs (new_trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
-    xaccTransAppendSplit (new_trans, blank_split);
-    xaccTransCommitEdit (new_trans);
+    xaccSplitSetParent(blank_split, new_trans);
+    /* We don't want to commit this transaction yet, because the split
+       doesn't even belong to an account yet.  But, we don't want to
+       set this transaction as the pending transaction either, because
+       we want to pretend that it hasn't been changed.  We depend on
+       some other code (somewhere) to commit this transaction if we
+       really edit it, even though it's not marked as the pending
+       transaction. */
+
+    /* Wouldn't it be a bug to open this transaction if there was already a
+       pending transaction? */
+    g_assert(pending_trans == NULL);
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
     info->blank_split_edited = FALSE;
@@ -215,7 +259,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   table = reg->table;
 
-  gnc_table_leave_update (table, table->current_cursor_loc);
+  // gnc_table_leave_update (table, table->current_cursor_loc);
 
   multi_line = (reg->style == REG_STYLE_JOURNAL);
   dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);
@@ -229,15 +273,14 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     find_trans = xaccSplitGetParent (blank_split);
     find_split = NULL;
     find_trans_split = blank_split;
-    find_class = info->cursor_hint_cursor_class;
   }
   else
   {
     find_trans = info->cursor_hint_trans;
     find_split = info->cursor_hint_split;
     find_trans_split = info->cursor_hint_trans_split;
-    find_class = info->cursor_hint_cursor_class;
   }
+  find_class = info->cursor_hint_cursor_class;
 
   save_loc = table->current_cursor_loc;
 
@@ -260,11 +303,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   {
     VirtualLocation virt_loc;
 
-    virt_loc.vcell_loc.virt_row = -1;
-    virt_loc.vcell_loc.virt_col = -1;
-    virt_loc.phys_row_offset = -1;
-    virt_loc.phys_col_offset = -1;
-
+    gnc_virtual_location_init(&virt_loc);
     gnc_table_move_cursor_gui (table, virt_loc);
   }
 
@@ -288,29 +327,25 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
       {
         NumCell *cell;
 
-        cell = (NumCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                      NUM_CELL);
+        cell = (NumCell *) gnc_table_layout_get_cell(table->layout, NUM_CELL);
         gnc_num_cell_set_last_num (cell, last_num);
         has_last_num = TRUE;
       }
     }
 
     /* set the completion character for the xfer cells */
-    gnc_combo_cell_set_complete_char
-      ((ComboCell *)
-       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-       gnc_get_account_separator ());
+    gnc_combo_cell_set_complete_char(
+        (ComboCell *) gnc_table_layout_get_cell(table->layout, MXFRM_CELL),
+        gnc_get_account_separator());
   
-    gnc_combo_cell_set_complete_char
-      ((ComboCell *)
-       gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
-       gnc_get_account_separator ());
+    gnc_combo_cell_set_complete_char(
+        (ComboCell *) gnc_table_layout_get_cell(table->layout, XFRM_CELL),
+        gnc_get_account_separator());
   
     /* set the confirmation callback for the reconcile cell */
-    gnc_recn_cell_set_confirm_cb
-      ((RecnCell *)
-       gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-       gnc_split_register_recn_cell_confirm, reg);
+    gnc_recn_cell_set_confirm_cb(
+        (RecnCell *) gnc_table_layout_get_cell(table->layout, RECN_CELL),
+        gnc_split_register_recn_cell_confirm, reg);
   
     /* load up account names into the transfer combobox menus */
     gnc_split_register_load_xfer_cells (reg, default_account);
@@ -323,19 +358,28 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   if (multi_line)
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  /*
-   * Which split list to use?  If there is a transction pending, then
-   * use the saved list so that the transaction is guaranteed to
-   * remain in the register intil the user finishes editing
-   * it. Otherwise, the moment the user changes the account field of
-   * the split that is attached to the register, the transaction will
-   * be ripped out from underneath them.
-   */
-  if (pending_trans != NULL) {
-    slist = info->saved_slist;
-  } else {
-    g_list_free(info->saved_slist);
-    info->saved_slist = g_list_copy(slist);
+  // Ensure that the transaction and splits being edited are in the split
+  // list we're about to load.
+  if (pending_trans != NULL)
+  {
+    for (node = xaccTransGetSplitList(pending_trans); node; node = node->next)
+    {
+      Split *pending_split = (Split*)node->data;
+      if (!xaccTransStillHasSplit(pending_trans, pending_split)) continue;
+      if (g_list_find(slist, pending_split) != NULL)
+        continue;
+
+      if (g_list_find_custom(slist, pending_trans, 
+                             _find_split_with_parent_txn) != NULL)
+        continue;
+
+      if (!we_own_slist)
+      { // lazy-copy
+        slist = g_list_copy(slist);
+        we_own_slist = TRUE;
+      }
+      slist = g_list_append(slist, pending_split);
+    }
   }
 
   /* populate the table */
@@ -343,6 +387,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   {
     split = node->data;
     trans = xaccSplitGetParent (split);
+
+    if (!xaccTransStillHasSplit(trans, split))
+        continue;
 
     if (pending_trans == trans)
       found_pending = TRUE;
@@ -373,35 +420,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     /* If this is the first load of the register,
      * fill up the quickfill cells. */
     if (info->first_pass)
-    {
-      GList *node;
-
-      gnc_quickfill_cell_add_completion
-        ((QuickFillCell *)
-         gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
-         xaccTransGetDescription (trans));
-
-      gnc_quickfill_cell_add_completion
-        ((QuickFillCell *)
-         gnc_table_layout_get_cell (reg->table->layout, NOTES_CELL),
-         xaccTransGetNotes (trans));
-
-      if (!has_last_num)
-        gnc_num_cell_set_last_num
-          ((NumCell *)
-           gnc_table_layout_get_cell (reg->table->layout, NUM_CELL),
-           xaccTransGetNum (trans));
-
-      for (node = xaccTransGetSplitList (trans); node; node = node->next)
-      {
-        Split *s = node->data;
-        QuickFillCell *cell;
-
-        cell = (QuickFillCell *)
-          gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL);
-        gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
-      }
-    }
+        add_quickfill_completions(reg->table->layout, trans, has_last_num);
 
     if (trans == find_trans)
       new_trans_row = vcell_loc.virt_row;
@@ -478,9 +497,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     if (dynamic || multi_line || info->trans_expanded)
     {
-      gnc_table_set_virt_cell_cursor
-        (table, trans_split_loc.vcell_loc,
-         gnc_split_register_get_active_cursor (reg));
+      gnc_table_set_virt_cell_cursor(
+          table, trans_split_loc.vcell_loc,
+          gnc_split_register_get_active_cursor (reg));
       gnc_split_register_set_trans_visible (reg, trans_split_loc.vcell_loc,
                                             TRUE, multi_line);
 
@@ -509,11 +528,13 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
    * from the account. */
   if (!found_pending)
   {
-    if (xaccTransIsOpen (pending_trans))
-      xaccTransCommitEdit (pending_trans);
+      info->pending_trans_guid = *guid_null ();
+      if (xaccTransIsOpen (pending_trans))
+          xaccTransCommitEdit (pending_trans);
+      else if (pending_trans) 
+          g_assert_not_reached();
 
-    info->pending_trans_guid = *guid_null ();
-    pending_trans = NULL;
+      pending_trans = NULL;
   }
 
   /* Set up the hint transaction, split, transaction split, and column. */
@@ -529,8 +550,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   info->first_pass = FALSE;
   info->reg_loaded = TRUE;
 
-  gnc_split_register_set_cell_fractions
-    (reg, gnc_split_register_get_current_split (reg));
+  gnc_split_register_set_cell_fractions(
+      reg, gnc_split_register_get_current_split (reg));
 
   gnc_table_refresh_gui (table, TRUE);
 
@@ -538,25 +559,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
-}
 
-/* ===================================================================== */
-/* Splat the account name into the transfer cell combobox menu */
-
-static gpointer
-load_xfer_cell_cb (Account *account, gpointer data)
-{
-  ComboCell *cell = data;
-  char *name;
-
-  if (xaccAccountGetPlaceholder (account)) return NULL;
-
-  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-  if (NULL == name) return NULL;
-  gnc_combo_cell_add_account_menu_item (cell, name);
-  g_free(name);
-
-  return NULL;
+  if (we_own_slist)
+    g_list_free(slist);
 }
 
 /* ===================================================================== */
@@ -566,15 +571,18 @@ load_xfer_cell_cb (Account *account, gpointer data)
 static gboolean 
 skip_cb (Account *account, gpointer x)
 {
+  if (xaccAccountIsHidden(account))
+    return TRUE;
   return xaccAccountGetPlaceholder (account);
 }
 
-void
+static void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
   QuickFill *qf;
   ComboCell *cell;
+  GtkListStore *store;
 
   group = xaccAccountGetRoot(base_account);
   if (group == NULL)
@@ -584,18 +592,17 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
     return;
 
   qf = gnc_get_shared_account_name_quickfill (group, QKEY, skip_cb, NULL);
+  store = gnc_get_shared_account_name_list_store (group, QKEY, skip_cb, NULL);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
-  gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
+  gnc_combo_cell_use_list_store_cache (cell, store);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
-  gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
+  gnc_combo_cell_use_list_store_cache (cell, store);
 }
 
 /* ====================== END OF FILE ================================== */

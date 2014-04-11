@@ -19,7 +19,7 @@ libgoffice_app_la_SOURCES = \
 	go-cmd-context.c
 
 libgoffice_app_ladir = $(goffice_include_dir)/app
-libgoffice_app_la_HEADERS = 	\
+noinst_HEADERS += 	\
 	goffice-app.h			\
 	\
 	go-doc.h 			\

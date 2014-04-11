@@ -60,13 +60,14 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
      then probably utf-8 as well. iconv is also used in
      gnc_hbci_descr_tognc() in gnc-hbci-utils.c. */
   data->gnc_iconv_handler = 
-    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
-  g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
+    g_iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(data->gnc_iconv_handler != (GIConv)(-1));
   data->keepAlive = TRUE;
   data->cache_pin = 
     gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
+  data->min_loglevel = AB_Banking_LogLevelVerbous;
 
   /* set HBCI_Interactor */
   gnc_hbci_add_callbacks(api, data);
@@ -90,7 +91,7 @@ void GNCInteractor_delete(GNCInteractor *data)
   data->dialog = NULL;
 
   g_hash_table_destroy(data->showbox_hash);
-  iconv_close(data->gnc_iconv_handler);
+  g_iconv_close(data->gnc_iconv_handler);
 
   g_free (data);
 }
@@ -215,7 +216,17 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 gboolean GNCInteractor_hadErrors (const GNCInteractor *i)
 {
   g_assert (i);
-  return i->msgBoxError != 0;
+  return (i->msgBoxError != 0);
+}
+
+gboolean GNCInteractor_errorsLogged (const GNCInteractor *i)
+{
+  g_assert (i);
+  /* Note: Unfortunately this does not mean at all that there actually
+     has been any error. Old aqbanking versions had some debugging
+     messages set at "error" level, and there can also be errors when
+     closing connection that don't affect the job result at all. */
+  return (i->min_loglevel < AB_Banking_LogLevelNotice);
 }
 
 /* ************************************************************ 
@@ -344,7 +355,7 @@ static int inputBoxCB(AB_BANKING *ab,
     if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"
+	g_strdup_printf (  _("The PIN needs to be at least %d characters "
 			     "long. Do you want to try again?"),
 			   minsize);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
@@ -357,10 +368,10 @@ static int inputBoxCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %d characters, but the PIN must \n"
-			     "be no longer than %d characters. \n"
+	g_strdup_printf (  _("You entered %ld characters, but the PIN must "
+			     "be no longer than %d characters. "
 			     "Do you want to try again?"),
-			   strlen(passwd), maxLen);
+			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -425,7 +436,7 @@ static int getTanCB(AB_BANKING *ab,
     if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("This TAN needs to be at least %d characters \n"
+	g_strdup_printf (  _("This TAN needs to be at least %d characters "
 			     "long. Do you want to try again?"),
 			   minsize);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
@@ -438,10 +449,10 @@ static int getTanCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %d characters, but the TAN must \n"
-			     "be no longer than %d characters. \n"
+	g_strdup_printf (  _("You entered %ld characters, but the TAN must "
+			     "be no longer than %d characters. "
 			     "Do you want to try again?"),
-			   strlen(passwd), maxLen);
+			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -509,14 +520,14 @@ hideBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
   g_assert(data);
 
   if (id > 0) {
-    dialog = g_hash_table_lookup(data->showbox_hash, (gpointer)id);
+    dialog = g_hash_table_lookup(data->showbox_hash, GUINT_TO_POINTER(id));
   } else {
     dialog = data->showbox_last;
   }
   if (dialog) {
     gtk_widget_hide (dialog);
     gtk_widget_destroy (dialog);
-    g_hash_table_remove(data->showbox_hash, (gpointer)id);
+    g_hash_table_remove(data->showbox_hash, GUINT_TO_POINTER(id));
   }
 }
 
@@ -542,7 +553,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 				  0,
 				  GTK_MESSAGE_INFO,
 				  GTK_BUTTONS_OK,
-				  text);
+				  "%s", text);
 
   if (title && (strlen(title) > 0))
     gtk_window_set_title (GTK_WINDOW (dialog), title);
@@ -552,7 +563,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   gtk_widget_show_all (dialog);
 
   result = data->showbox_id;
-  g_hash_table_insert(data->showbox_hash, (gpointer)result, dialog);
+  g_hash_table_insert(data->showbox_hash, GUINT_TO_POINTER(result), dialog);
   data->showbox_id++;
   data->showbox_last = dialog;
 
@@ -652,6 +663,9 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
   /* Show the dialog */
   GNCInteractor_show(data);
 
+  /* Initialize loglevel caching */
+  data->min_loglevel = AB_Banking_LogLevelVerbous;
+
   g_free(title);
   g_free(text);
   return progress_id;
@@ -700,6 +714,10 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
 
   /* printf("progressLogCB: Logging msg: %s\n", text); */
   GNCInteractor_add_log_text (data, text);
+
+  /* Cache loglevel */
+  if (level < data->min_loglevel)
+    data->min_loglevel = level;
 
   g_free(text);
   return !keepAlive(data);

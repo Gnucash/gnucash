@@ -1,7 +1,9 @@
 /*
  * dialog-invoice.c -- Dialog for Invoice entry
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001,2002,2006 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
+ *
+ * Copyright (c) 2005,2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -45,12 +47,17 @@
 #include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
-
+#include "gnc-session.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 
 #include "gncEntryLedger.h"
 
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
+
+#include "gnc-plugin-page.h"
 #include "gnc-general-search.h"
 #include "dialog-date-close.h"
 #include "dialog-invoice.h"
@@ -65,7 +72,6 @@
 #include "dialog-query-list.h"
 
 #include "gnc-plugin-business.h"
-#include "gnc-plugin-page.h"
 #include "gnc-plugin-page-invoice.h"
 #include "gnc-main-window.h"
 
@@ -79,13 +85,18 @@ void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data);
 
-typedef enum
-{
-  NEW_INVOICE,
-  MOD_INVOICE,
-  EDIT_INVOICE,
-  VIEW_INVOICE
-} InvoiceDialogType;
+#define ENUM_INVOICE_TYPE(_) \
+  _(NEW_INVOICE, )  \
+  _(MOD_INVOICE, )  \
+  _(EDIT_INVOICE, ) \
+  _(VIEW_INVOICE, )
+
+DEFINE_ENUM(InvoiceDialogType, ENUM_INVOICE_TYPE)
+AS_STRING_DEC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+FROM_STRING_DEC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+
+FROM_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+AS_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 
 struct _invoice_select_window {
   GNCBook *	book;
@@ -167,7 +178,7 @@ struct _invoice_window {
 /* Forward definitions for CB functions */
 void gnc_invoice_window_closeCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
+gboolean gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
@@ -414,6 +425,7 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
 
   gnc_entry_ledger_destroy (iw->ledger);
   gnc_unregister_gui_component (iw->component_id);
+  gtk_widget_destroy(widget);
   gnc_resume_gui_refresh ();
 
   g_free (iw);
@@ -598,6 +610,20 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     return;
   }
 
+  /* Make sure that the invoice has a positive balance */
+  if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice))) {
+    gnc_error_dialog(iw_get_window(iw),
+		     _("You may not post an invoice with a negative total value."));
+    return;
+  }
+
+  if (iw->total_cash_label &&
+      gnc_numeric_negative_p(gncInvoiceGetTotalOf(invoice, GNC_PAYMENT_CASH))) {
+    gnc_error_dialog(iw_get_window(iw),
+		     _("You may not post an expense voucher with a negative total cash value."));
+    return;
+  }
+
   /* Ok, we can post this invoice.  Ask for verification, set the due date,
    * post date, and posted account
    */
@@ -757,13 +783,11 @@ void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice = iw_get_invoice(iw);
-  GNCLot *lot = gncInvoiceGetPostedLot (invoice);
-  gnc_numeric val = gnc_numeric_abs (gnc_lot_get_balance (lot));
 
   if (gncOwnerGetJob (&iw->job))
-    gnc_ui_payment_new_with_value (&iw->job, iw->book, val);
+    gnc_ui_payment_new_with_invoice (&iw->job, iw->book, invoice);
   else
-    gnc_ui_payment_new_with_value (&iw->owner, iw->book, val);
+    gnc_ui_payment_new_with_invoice (&iw->owner, iw->book, invoice);
 }
 
 /* Sorting callbacks */
@@ -829,7 +853,7 @@ gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data)
 		       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 }
 
-void
+gboolean
 gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 				   gpointer data)
 {
@@ -839,19 +863,21 @@ gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
   GtkTextIter start, end;
   gchar *text;
 
-  if (!invoice) return;
+  if (!invoice) return FALSE;
 
   text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(iw->notes_text));
   gtk_text_buffer_get_bounds (text_buffer, &start, &end);
   text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
   gncInvoiceSetNotes (invoice, text);
+  return FALSE;
 }
 
-static void
+static gboolean
 gnc_invoice_window_leave_to_charge_cb (GtkWidget *widget, GdkEventFocus *event,
 				       gpointer data)
 {
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (widget));
+  return FALSE;
 }
 
 static void
@@ -1278,7 +1304,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &iw->invoice_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (iw->component_id);
       return;
     }
@@ -1429,7 +1455,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     ts = gncInvoiceGetDatePosted (invoice);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
 
-    tmp_string = xaccAccountGetFullName (acct, gnc_get_account_separator ());
+    tmp_string = xaccAccountGetFullName (acct);
     gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
     g_free(tmp_string);
 
@@ -1655,6 +1681,114 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
   return iw;
 }
 
+#define KEY_INVOICE_TYPE	"Invoice Type"
+#define KEY_INVOICE_GUID	"Invoice GUID"
+#define KEY_OWNER_TYPE		"Owner Type"
+#define KEY_OWNER_GUID		"Owner GUID"
+
+GncPluginPage *
+gnc_invoice_recreate_page (GKeyFile *key_file,
+			   const gchar *group_name)
+{
+  InvoiceWindow *iw;
+  GError *error = NULL;
+  char *tmp_string = NULL, *owner_type = NULL;
+  InvoiceDialogType type;
+  GncInvoice *invoice;
+  GUID guid;
+  QofBook *book;
+  GncOwner owner = { 0 };
+
+  /* Get Invoice Type */
+  tmp_string = g_key_file_get_string(key_file, group_name,
+				     KEY_INVOICE_TYPE, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_INVOICE_TYPE, error->message);
+    goto give_up;
+  }
+  type = InvoiceDialogTypefromString(tmp_string);
+  g_free(tmp_string);
+
+  /* Get Invoice GUID */
+  tmp_string = g_key_file_get_string(key_file, group_name,
+				     KEY_INVOICE_GUID, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_INVOICE_GUID, error->message);
+    goto give_up;
+  }
+  if (!string_to_guid(tmp_string, &guid)) {
+    g_warning("Invalid invoice guid: %s.", tmp_string);
+    goto give_up;
+  }
+  book = gnc_get_current_book();
+  invoice = gncInvoiceLookup(gnc_get_current_book(), &guid);
+  if (invoice == NULL) {
+    g_warning("Can't find invoice %s in current book.", tmp_string);
+    goto give_up;
+  }
+  g_free(tmp_string);
+
+  /* Get Owner Type */
+  owner_type = g_key_file_get_string(key_file, group_name,
+				     KEY_OWNER_TYPE, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_OWNER_TYPE, error->message);
+    goto give_up;
+  }
+
+  /* Get Owner GUID */
+  tmp_string = g_key_file_get_string(key_file, group_name,
+				     KEY_OWNER_GUID, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_OWNER_GUID, error->message);
+    goto give_up;
+  }
+  if (!string_to_guid(tmp_string, &guid)) {
+    g_warning("Invalid owner guid: %s.", tmp_string);
+    goto give_up;
+  }
+
+  if (!gncOwnerGetOwnerFromTypeGuid(book, &owner, owner_type, &guid)) {
+    g_warning("Can't find owner %s in current book.", tmp_string);
+    goto give_up;
+  }
+  g_free(tmp_string);
+  g_free(owner_type);
+
+  iw = gnc_invoice_new_page (book, type, invoice, &owner);
+  return iw->page;
+
+ give_up:
+  g_warning("Giving up on restoring '%s'.", group_name);
+  if (error)
+    g_error_free(error);
+  if (tmp_string)
+    g_free(tmp_string);
+  if (owner_type)
+    g_free(owner_type);
+  return NULL;
+}
+
+void
+gnc_invoice_save_page (InvoiceWindow *iw,
+		       GKeyFile *key_file,
+		       const gchar *group_name)
+{
+  g_key_file_set_string(key_file, group_name, KEY_INVOICE_TYPE,
+			InvoiceDialogTypeasString(iw->dialog_type));
+  g_key_file_set_string(key_file, group_name, KEY_INVOICE_GUID,
+			guid_to_string(&iw->invoice_guid));
+
+  g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
+			qofOwnerGetType(&iw->owner));
+  g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
+			guid_to_string(gncOwnerGetGUID(&iw->owner)));
+}
+
 GtkWidget *
 gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 {
@@ -1793,10 +1927,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  g_signal_connect (G_OBJECT (dialog), "destroy",
-		    G_CALLBACK (gnc_invoice_window_destroy_cb), iw);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   /* Create the register */
   {
@@ -1936,7 +2067,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
 
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   /* Now fill in a lot of the pieces and display properly */
   gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
@@ -2017,15 +2148,10 @@ static void
 pay_invoice_direct (gpointer inv, gpointer user_data)
 {
   GncInvoice *invoice = inv;
-  GNCLot *lot;
-  gnc_numeric val;
 
   g_return_if_fail (invoice);
-
-  lot = gncInvoiceGetPostedLot (invoice);
-  val = gnc_numeric_abs (gnc_lot_get_balance (lot));
-  gnc_ui_payment_new_with_value (gncInvoiceGetOwner (invoice),
-				 gncInvoiceGetBook (invoice), val);
+  gnc_ui_payment_new_with_invoice (gncInvoiceGetOwner (invoice),
+				   gncInvoiceGetBook (invoice), invoice);
 }
 
 static void
@@ -2066,10 +2192,25 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   GNCIdType type = GNC_INVOICE_MODULE_NAME;
   struct _invoice_select_window *sw;
   QueryNew *q, *q2 = NULL;
-  static GList *params = NULL;
+  GncOwnerType owner_type = GNC_OWNER_CUSTOMER;
+  static GList *inv_params = NULL, *bill_params = NULL, *emp_params = NULL, *params;
   static GList *columns = NULL;
-  static GNCSearchCallbackButton buttons[] = { 
+  const gchar *title, *label;
+  static GNCSearchCallbackButton *buttons; 
+  static GNCSearchCallbackButton inv_buttons[] = { 
     { N_("View/Edit Invoice"), edit_invoice_cb},
+    { N_("Process Payment"), pay_invoice_cb},
+    { NULL },
+  };
+  static GNCSearchCallbackButton bill_buttons[] = { 
+    { N_("View/Edit Bill"), edit_invoice_cb},
+    { N_("Process Payment"), pay_invoice_cb},
+    { NULL },
+  };
+  static GNCSearchCallbackButton emp_buttons[] = { 
+    /* Translators: The terms 'Voucher' and 'Expense Voucher' are used
+       interchangeably in gnucash and mean the same thing. */
+    { N_("View/Edit Voucher"), edit_invoice_cb},
     { N_("Process Payment"), pay_invoice_cb},
     { NULL },
   };
@@ -2077,26 +2218,95 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   g_return_val_if_fail (book, NULL);
 
   /* Build parameter list in reverse order */
-  if (params == NULL) {
-    params = gnc_search_param_prepend (params, _("Invoice Owner"), NULL, type,
-				       INVOICE_OWNER, NULL);
-    params = gnc_search_param_prepend (params, _("Invoice Notes"), NULL, type,
-				       INVOICE_NOTES, NULL);
-    params = gnc_search_param_prepend (params, _("Billing ID"), NULL, type,
-				       INVOICE_BILLINGID, NULL);
-    params = gnc_search_param_prepend (params, _("Is Paid?"), NULL, type,
-				       INVOICE_IS_PAID, NULL);
-    params = gnc_search_param_prepend (params, _("Date Posted"), NULL, type,
-				       INVOICE_POSTED, NULL);
-    params = gnc_search_param_prepend (params, _("Is Posted?"), NULL, type,
-				       INVOICE_IS_POSTED, NULL);
-    params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
-				       INVOICE_OPENED, NULL);
-    params = gnc_search_param_prepend (params, _("Company Name "), NULL, type,
-				       INVOICE_OWNER, OWNER_PARENT,
-				       OWNER_NAME, NULL);
-    params = gnc_search_param_prepend (params, _("Invoice ID"), NULL, type,
-				       INVOICE_ID, NULL);
+  if (inv_params == NULL) {
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Invoice Owner"), NULL, type,
+					   INVOICE_OWNER, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Invoice Notes"), NULL, type,
+					   INVOICE_NOTES, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Billing ID"), NULL, type,
+					   INVOICE_BILLINGID, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Is Paid?"), NULL, type,
+					   INVOICE_IS_PAID, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Date Posted"), NULL, type,
+					   INVOICE_POSTED, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Is Posted?"), NULL, type,
+					   INVOICE_IS_POSTED, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Date Opened"), NULL, type,
+					   INVOICE_OPENED, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Company Name "), NULL, type,
+					   INVOICE_OWNER, OWNER_PARENT,
+					   OWNER_NAME, NULL);
+    inv_params = gnc_search_param_prepend (inv_params,
+					   _("Invoice ID"), NULL, type,
+					   INVOICE_ID, NULL);
+  }
+  if (bill_params == NULL) {
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Bill Owner"), NULL, type,
+					   INVOICE_OWNER, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Bill Notes"), NULL, type,
+					   INVOICE_NOTES, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Billing ID"), NULL, type,
+					   INVOICE_BILLINGID, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Is Paid?"), NULL, type,
+					   INVOICE_IS_PAID, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Date Posted"), NULL, type,
+					   INVOICE_POSTED, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Is Posted?"), NULL, type,
+					   INVOICE_IS_POSTED, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Date Opened"), NULL, type,
+					   INVOICE_OPENED, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Company Name "), NULL, type,
+					   INVOICE_OWNER, OWNER_PARENT,
+					    OWNER_NAME, NULL);
+    bill_params = gnc_search_param_prepend (bill_params,
+					   _("Bill ID"), NULL, type,
+					   INVOICE_ID, NULL);
+  }
+  if (emp_params == NULL) {
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Voucher Owner"), type,
+					   INVOICE_OWNER, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Voucher Notes"), NULL, type,
+					   INVOICE_NOTES, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Billing ID"), NULL, type,
+					   INVOICE_BILLINGID, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Is Paid?"), NULL, type,
+					   INVOICE_IS_PAID, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Date Posted"), NULL, type,
+					   INVOICE_POSTED, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Is Posted?"), NULL, type,
+					   INVOICE_IS_POSTED, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Date Opened"), NULL, type,
+					   INVOICE_OPENED, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Employee Name"), NULL, type,
+					   INVOICE_OWNER, OWNER_PARENT,
+					   OWNER_NAME, NULL);
+    emp_params = gnc_search_param_prepend (emp_params,
+					   _("Voucher ID"), NULL, type,
+					   INVOICE_ID, NULL);
   }
 
   /* Build the column list in reverse order */
@@ -2131,21 +2341,35 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
    * match on <supplied-owner's guid> == Invoice->Owner->GUID or
    * Invoice->owner->parentGUID.
    */
-  if (owner && gncOwnerGetGUID (owner)) {
-    q2 = gncQueryCreate ();
-    gncQueryAddGUIDMatch (q2, g_slist_prepend
-			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
-			   INVOICE_OWNER),
-			  gncOwnerGetGUID (owner), QUERY_OR);
+  if (owner) {
+    GncOwner *tmp = owner;
 
-    gncQueryAddGUIDMatch (q2, g_slist_prepend
-			  (g_slist_prepend (NULL, OWNER_PARENTG),
-			   INVOICE_OWNER),
-			  gncOwnerGetGUID (owner), QUERY_OR);
+    /* First, figure out the type of owner here.. */
+    owner_type = gncOwnerGetType(owner);
+    while (owner_type == GNC_OWNER_JOB) {
+      tmp = gncOwnerGetEndOwner(tmp);
+      owner_type = gncOwnerGetType(tmp);
+    }
 
-    gncQueryMergeInPlace (q, q2, QUERY_AND);
-    gncQueryDestroy (q2);
-    q2 = gncQueryCopy (q);
+    /* Then if there's an actual owner (and not just a type)
+     * then add it to the query and limit the search to this owner
+     */
+    if (gncOwnerGetGUID (owner)) {
+      q2 = gncQueryCreate ();
+      gncQueryAddGUIDMatch (q2, g_slist_prepend
+			    (g_slist_prepend (NULL, QUERY_PARAM_GUID),
+			     INVOICE_OWNER),
+			    gncOwnerGetGUID (owner), QUERY_OR);
+
+      gncQueryAddGUIDMatch (q2, g_slist_prepend
+			    (g_slist_prepend (NULL, OWNER_PARENTG),
+			     INVOICE_OWNER),
+			    gncOwnerGetGUID (owner), QUERY_OR);
+
+      gncQueryMergeInPlace (q, q2, QUERY_AND);
+      gncQueryDestroy (q2);
+      q2 = gncQueryCopy (q);
+    }
   }
 
 #if 0
@@ -2168,10 +2392,30 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, columns, q, q2,
+  switch (owner_type) {
+    case GNC_OWNER_VENDOR:
+      title = _("Find Bill");
+      label = _("Bill");
+      params = bill_params;
+      buttons = bill_buttons;
+      break;
+    case GNC_OWNER_EMPLOYEE:
+      title = _("Find Expense Voucher");
+      label = _("Expense Voucher");
+      params = emp_params;
+      buttons = emp_buttons;
+      break;
+    default:
+      title = _("Find Invoice");
+      label = _("Invoice");
+      params = inv_params;
+      buttons = inv_buttons;
+      break;
+  }
+  return gnc_search_dialog_create (type, title, params, columns, q, q2,
 				   buttons, NULL, new_invoice_cb,
-				   sw, free_invoice_cb, GCONF_SECTION_SEARCH);
-
+				   sw, free_invoice_cb, GCONF_SECTION_SEARCH,
+				   label);
 }
 
 GNCSearchWindow *
@@ -2279,7 +2523,8 @@ gnc_invoice_remind_bills_due (void)
   GNCBook *book;
   gint days;
 
-  book = qof_session_get_book(qof_session_get_current_session());
+  if (!gnc_current_session_exist()) return;
+  book = qof_session_get_book(gnc_get_current_session());
   days = gnc_gconf_get_float(GCONF_SECTION_BILL, "days_in_advance", NULL);
 
   gnc_invoice_show_bills_due(book, days);

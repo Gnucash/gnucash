@@ -78,10 +78,9 @@ typedef void (* GncHTMLLoadCB)(gnc_html * html, URLType type,
                                gpointer data);
 typedef int  (* GncHTMLButtonCB)(gnc_html * html, GdkEventButton * event,
                                  gpointer data);
-//#if 0
-typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
+
+typedef gboolean (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
                                  gpointer data); 
-//#endif
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, GHashTable * form_data);
 typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data, int *datalen);

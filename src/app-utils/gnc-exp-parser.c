@@ -27,6 +27,7 @@
 #include <locale.h>
 #include <string.h>
 
+#include "gfec.h"
 #include "finproto.h"
 #include "fin_spl_protos.h"
 #include "gnc-filepath-utils.h"
@@ -36,6 +37,8 @@
 #include "guile-mappings.h"
 
 #define GROUP_NAME "Variables"
+
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Data Types *****************************************************/
 
@@ -83,7 +86,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
 
   if ( addPredefined ) {
     filename = gnc_exp_parser_filname();
-    key_file = gnc_key_file_load_from_file(filename, FALSE);
+    key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE);
     if (key_file) {
       keys = g_key_file_get_keys(key_file, GROUP_NAME, NULL, NULL);
       for (key = keys; key && *key; key++) {
@@ -319,10 +322,16 @@ update_variables (var_store_ptr vars)
   }
 }
 
+static char* _function_evaluation_error_msg = NULL;
+static void
+_exception_handler(const char *error_message)
+{
+  _function_evaluation_error_msg = (char*)error_message;
+}
+
 static
 void*
-func_op( const char *fname,
-         int argc, void **argv )
+func_op(const char *fname, int argc, void **argv)
 {
   SCM scmFn, scmArgs, scmTmp;
   int i;
@@ -335,7 +344,7 @@ func_op( const char *fname,
   g_string_printf( realFnName, "gnc:%s", fname );
   scmFn = gh_eval_str_with_standard_handler( realFnName->str );
   g_string_free( realFnName, TRUE );
-  if ( ! SCM_PROCEDUREP( scmFn ) ) {
+  if (!SCM_PROCEDUREP(scmFn)) {
     /* FIXME: handle errors correctly. */
     printf( "gnc:\"%s\" is not a scm procedure\n", fname );
     return NULL;
@@ -362,8 +371,16 @@ func_op( const char *fname,
     }
     scmArgs = scm_cons( scmTmp, scmArgs );
   }
-  scmTmp = scm_apply( scmFn, scmArgs , SCM_EOL);
-  
+
+  //scmTmp = scm_apply(scmFn, scmArgs , SCM_EOL);
+  scmTmp = gfec_apply(scmFn, scmArgs, _exception_handler);
+  if (_function_evaluation_error_msg != NULL)
+  {
+    PERR("function eval error: [%s]\n", _function_evaluation_error_msg);
+    _function_evaluation_error_msg = NULL;
+    return NULL;
+  }
+    
   result = g_new0( gnc_numeric, 1 );
   *result = double_to_gnc_numeric( scm_num2dbl(scmTmp, __FUNCTION__),
                                    GNC_DENOM_AUTO,
@@ -374,8 +391,8 @@ func_op( const char *fname,
 
 static void *
 trans_numeric(const char *digit_str,
-              char        radix_point,
-              char        group_char,
+              gchar      *radix_point,
+              gchar      *group_char,
               char      **rstr)
 {
   ParserNum *pnum;
@@ -452,8 +469,6 @@ gnc_ep_tmpvarhash_check_vals( gpointer key, gpointer value, gpointer user_data )
 {
   gboolean *allVarsHaveValues = (gboolean*)user_data;
   gnc_numeric *num = (gnc_numeric*)value;
-  printf( "var %s with value %s\n",
-          (char*)key, num ? gnc_numeric_to_string( *num ) : "(null)" );
   *allVarsHaveValues &= ( num && gnc_numeric_check( *num ) != GNC_ERROR_ARG );
 }
 
@@ -531,7 +546,7 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
 
   lc = gnc_localeconv ();
 
-  pe = init_parser (vars, *lc->mon_decimal_point, *lc->mon_thousands_sep,
+  pe = init_parser (vars, lc->mon_decimal_point, lc->mon_thousands_sep,
                     trans_numeric, numeric_ops, negate_numeric, g_free,
                     func_op);
 

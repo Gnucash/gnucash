@@ -65,6 +65,7 @@
 (export gnc:options-add-plot-size!)
 (export gnc:options-add-marker-choice!)
 (export gnc:options-add-sort-method!)
+(export gnc:options-add-subtotal-view!)
 
 ;; html-utilities.scm 
 
@@ -106,7 +107,6 @@
 
 (export gnc:define-report)
 (export <report>)
-(export *gnc:_reports_*)
 (export gnc:report-template-new-options/name)
 (export gnc:report-template-menu-name/name)
 (export gnc:report-template-renderer/name)
@@ -147,8 +147,6 @@
 (export gnc:report-stylesheet)
 (export gnc:report-set-stylesheet!)
 (export gnc:all-report-template-names)
-(export gnc:report-remove-by-id)
-(export gnc:find-report)
 (export gnc:find-report-template)
 (export gnc:report-generate-restore-forms)
 (export gnc:report-generate-saved-forms)
@@ -156,6 +154,7 @@
 (export gnc:report-render-html)
 (export gnc:report-run)
 (export gnc:report-templates-for-each)
+(export gnc:report-embedded-list)
 
 ;; html-barchart.scm
 
@@ -216,6 +215,8 @@
 (export gnc:make-html-document)
 (export gnc:html-document-set-title!)
 (export gnc:html-document-title)
+(export gnc:html-document-set-headline!)
+(export gnc:html-document-headline)
 (export gnc:html-document-set-style-sheet!)
 (export gnc:html-document-style-sheet)
 (export gnc:html-document-set-style-stack!)
@@ -584,6 +585,8 @@
 (export gnc:account-get-balance-interval)
 (export gnc:account-get-comm-balance-interval)
 (export gnc:group-get-comm-balance-interval)
+(export gnc:accountlist-get-comm-balance-interval)
+(export gnc:accountlist-get-comm-balance-at-date)
 (export gnc:query-set-match-non-voids-only!)
 (export gnc:query-set-match-voids-only!)
 (export gnc:split-voided?)

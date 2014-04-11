@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#define AQBANKING_NOWARN_DEPRECATED
 #include "gnc-hbci-gettrans.h"
 
 #include "gnc-ui.h"
@@ -46,13 +47,7 @@ gboolean
 gettrans_dates(GtkWidget *parent, Account *gnc_acc, 
 	       GWEN_TIME **from_date, GWEN_TIME **to_date);
 
-static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *reportn, void *user_data);
 
-struct trans_list_data 
-{
-  Account *gnc_acc;
-  GNCImportMainMatcher *importer_generic;
-};
 
 
 void
@@ -199,18 +194,8 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 
   trans_list = AB_JobGetTransactions_GetTransactions(trans_job);
   if (trans_list && (AB_Transaction_List2_GetSize(trans_list) > 0)) {
-    struct trans_list_data data;
-    GNCImportMainMatcher *importer_generic_gui = 
-      gnc_gen_trans_list_new(NULL, NULL, TRUE, 14);
-
-    data.importer_generic = importer_generic_gui;
-    data.gnc_acc = gnc_acc;
-	
-    AB_Transaction_List2_ForEach (trans_list, trans_list_cb, &data);
-
-    if (run_until_done)
-      return gnc_gen_trans_list_run (importer_generic_gui);
-    return TRUE;
+    /* Final importing part. */
+    return gnc_hbci_import_final(parent, gnc_acc, trans_list, run_until_done);
   }
 
   dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
@@ -218,6 +203,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 				  | GTK_DIALOG_DESTROY_WITH_PARENT,
 				  GTK_MESSAGE_INFO,
 				  GTK_BUTTONS_OK,
+				  "%s",
 				  _("The HBCI import returned no transactions "
 				    "for the selected time period."));
   gtk_dialog_run(GTK_DIALOG(dialog));
@@ -226,9 +212,34 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 }
 
 
+gboolean
+gnc_hbci_import_final(GtkWidget *parent, 
+		      Account *gnc_acc,
+		      AB_TRANSACTION_LIST2 *trans_list, 
+		      gboolean run_until_done)
+{
+  struct trans_list_data data;
+  GNCImportMainMatcher *importer_generic_gui;
+
+  if (!trans_list || (AB_Transaction_List2_GetSize(trans_list) == 0)) 
+    return TRUE;
+    
+  importer_generic_gui = gnc_gen_trans_list_new(parent, NULL, TRUE, 14);
+
+  data.importer_generic = importer_generic_gui;
+  data.gnc_acc = gnc_acc;
+	
+  AB_Transaction_List2_ForEach (trans_list, gnc_hbci_trans_list_cb, &data);
+
+  if (run_until_done)
+    return gnc_gen_trans_list_run (importer_generic_gui);
+  return TRUE;
+}
+
+
 /* list_AB_TRANSACTION_foreach callback. The Conversion from HBCI to
    GNC transaction is done here, once for each AB_TRANSACTION.  */
-static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
+AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
 {
   time_t current_time;
   /* time_t tt1, tt2; */

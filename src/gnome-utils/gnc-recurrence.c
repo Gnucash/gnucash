@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include "glib-compat.h"
 #include <glade/glade.h>
 
 #include "dialog-utils.h"
@@ -131,7 +132,7 @@ something_changed( GtkWidget *wid, gpointer d )
 
     pt = get_pt_ui(gr);
     t = gnome_date_edit_get_time(gr->gde_start);
-    g_date_set_time(&start, t);
+    g_date_set_time_t(&start, t);
 
     if (pt == GNCR_MONTH)
         g_object_set(G_OBJECT(gr->nth_weekday), "visible", TRUE, NULL);
@@ -157,7 +158,7 @@ something_changed( GtkWidget *wid, gpointer d )
     }
     g_object_set(G_OBJECT(gr->gcb_eom), "visible", show_last, NULL);
 
-    g_signal_emit_by_name(d, "changed", NULL);  // not sure if NULL is needed
+    g_signal_emit_by_name(d, "changed");
 }
 
 static void
@@ -239,7 +240,7 @@ gnc_recurrence_get(GncRecurrence *gr)
 
     mult = (guint) gtk_spin_button_get_value_as_int(gr->gsb_mult);
     t = gnome_date_edit_get_time(gr->gde_start);
-    g_date_set_time(&start, t);
+    g_date_set_time_t(&start, t);
     period = get_pt_ui(gr);
 
     switch (period) {
@@ -381,7 +382,7 @@ typedef enum {
 
 static void grc_changed(GtkWidget *w, gpointer data)
 {
-    g_signal_emit_by_name(data, "changed", NULL);
+    g_signal_emit_by_name(data, "changed");
 }
 static void addRecurrence(GncRecurrenceComp *grc, GncRecurrence *gr)
 {
@@ -392,9 +393,8 @@ static void addRecurrence(GncRecurrenceComp *grc, GncRecurrence *gr)
                       G_CALLBACK(grc_changed), grc );
     grc->num_rec++;
 
-    g_object_set(G_OBJECT(grc->buttRemove), "sensitive",
-                 (grc->num_rec > 1), NULL);
-    g_signal_emit_by_name(G_OBJECT(grc), "changed", NULL);
+    gtk_widget_set_sensitive(GTK_WIDGET(grc->buttRemove), (grc->num_rec > 1));
+    g_signal_emit_by_name(G_OBJECT(grc), "changed");
 
 
 }
@@ -408,11 +408,10 @@ static void removeRecurrence(GncRecurrenceComp *grc)
     last = g_list_last(children);
     gtk_widget_destroy(GTK_WIDGET(last->data));
     g_list_free(children);
-    g_signal_emit_by_name(G_OBJECT(grc), "changed", NULL);
+    g_signal_emit_by_name(G_OBJECT(grc), "changed");
 
 
-    g_object_set(G_OBJECT(grc->buttRemove), "sensitive",
-                 (grc->num_rec > 1), NULL);
+    gtk_widget_set_sensitive(GTK_WIDGET(grc->buttRemove), (grc->num_rec > 1));
 
 }
 

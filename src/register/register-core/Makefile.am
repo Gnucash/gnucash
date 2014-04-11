@@ -8,6 +8,7 @@ libgncmod_register_core_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${GUILE_LIBS} \
   ${QOF_LIBS} ${GLIB_LIBS}
 
 libgncmod_register_core_la_SOURCES = \
@@ -50,6 +51,9 @@ gncinclude_HEADERS = \
   table-model.h
 
 libgw_register_core_la_SOURCES = gw-register-core.c
+libgw_register_core_la_LIBADD = \
+  libgncmod-register-core.la \
+  ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-register-core.scm gw-register-core-spec.scm
@@ -81,12 +85,12 @@ endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
-	ln -sf . register
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
+	$(LN_S) -f . register
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -101,5 +105,5 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: \
 	  (gw:generate-wrapset \"gw-register-core\")"
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
-DISTCLEANFILES = gnucash g-wrapped register .scm-links ${SCM_FILE_LINKS} \
-                 gw-register-core.html
+CLEANFILES = gnucash g-wrapped register .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-register-core.html

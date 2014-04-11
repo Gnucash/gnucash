@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include "glib-compat.h"
 #include <math.h>
 #include <time.h>
 
@@ -259,7 +260,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 gnc_date_edit_set_time( gf->startDate, *secs);
                 if (NULL == fs) 
                 {
-                        g_signal_emit_by_name( gf, "changed", NULL );
+                        g_signal_emit_by_name( gf, "changed" );
                 }
         }
  
@@ -554,7 +555,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 break;
         }
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -644,7 +645,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         tmpTimeT = gnc_date_edit_get_date( gf->startDate );
         if ( NULL != outDate ) 
         {
-                g_date_set_time( outDate, tmpTimeT );
+                g_date_set_time_t( outDate, tmpTimeT );
         }
 
         if (NULL == fs) return;
@@ -657,7 +658,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         gnc_suspend_gui_refresh();
 
         g_date_clear (&gd, 1);
-        g_date_set_time( &gd, tmpTimeT );
+        g_date_set_time_t( &gd, tmpTimeT );
 
         /*uift = xaccFreqSpecGetUIType( fs );*/
         uift = PAGES[page].uiFTVal;
@@ -695,7 +696,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                         /*  month-day += (week-day - current-week-day ) % 7 */
                         /*  week-day <- 0 */
                         stm.tm_mday -= ( stm.tm_wday ) % 7;
-                        g_date_set_time( &gd, mktime(&stm) );
+                        g_date_set_time_t( &gd, mktime(&stm) );
                 }
 
                 /*  1 == "mon", 5 == "fri" */
@@ -719,7 +720,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 /*  for-now hack: normalize to Sunday. */
                 g_date_to_struct_tm( &gd, &stm);
                 stm.tm_mday -= stm.tm_wday % 7;
-                g_date_set_time( &gd, mktime(&stm) );
+                g_date_set_time_t( &gd, mktime(&stm) );
 
                 /*  now, go through the check boxes and add composites based on that date. */
                 for ( i=0; CHECKBOX_NAMES[i]!=NULL; i++ ) {
@@ -765,7 +766,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 }
                 /* else, this month */
                 stm.tm_mday = day;
-                g_date_set_time( &gd, mktime( &stm) );
+                g_date_set_time_t( &gd, mktime( &stm) );
                 xaccFreqSpecSetMonthly( tmpFS, &gd, tmpInt );
                 xaccFreqSpecCompositeAdd( fs, tmpFS );
 
@@ -773,7 +774,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                 tmpTimeT = gnc_date_edit_get_date( gf->startDate );
-                g_date_set_time( &gd, tmpTimeT );
+                g_date_set_time_t( &gd, tmpTimeT );
                 g_date_to_struct_tm( &gd, &stm);
                 if ( day >= stm.tm_mday ) {
                         /* next month */
@@ -781,7 +782,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 }
                 /* else, this month */
                 stm.tm_mday = day;
-                g_date_set_time( &gd, mktime( &stm ) );
+                g_date_set_time_t( &gd, mktime( &stm ) );
                 xaccFreqSpecSetMonthly( tmpFS, &gd, tmpInt );
                 xaccFreqSpecCompositeAdd( fs, tmpFS );
 
@@ -797,7 +798,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) ) + 1;
                 stm.tm_mday = day;
-                g_date_set_time( &gd, mktime( &stm ) );
+                g_date_set_time_t( &gd, mktime( &stm ) );
                 xaccFreqSpecSetMonthly( fs, &gd, tmpInt );
                 xaccFreqSpecSetUIType( fs, uift );
                 break;
@@ -831,7 +832,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
 static void
 spin_changed_helper( GtkAdjustment *adj, gpointer d )
 {
-        g_signal_emit_by_name( GNC_FREQUENCY(d), "changed", NULL );
+        g_signal_emit_by_name( GNC_FREQUENCY(d), "changed" );
 }
 
 static void
@@ -840,7 +841,7 @@ weekly_days_changed( GtkButton *b, gpointer d )
         GNCFrequency *gf;
 
         gf = GNC_FREQUENCY(d);
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -869,7 +870,7 @@ monthly_sel_changed( GtkButton *b, gpointer d )
         tmptt = mktime( tmptm );
         gnc_date_edit_set_time( gf->startDate, tmptt );
 
-        g_signal_emit_by_name( d, "changed", NULL );
+        g_signal_emit_by_name( d, "changed" );
 }
 
 static void
@@ -902,7 +903,7 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
         tmptt = mktime( tmptm );
         gnc_date_edit_set_time( gf->startDate, tmptt );
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -957,7 +958,7 @@ year_range_sels_changed( GNCFrequency *gf,
         tmpTT = mktime( tmpTm );
         gnc_date_edit_set_time( gf->startDate, tmpTT );
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -990,7 +991,7 @@ yearly_sel_changed( GtkButton *b, gpointer d )
         tmptt = mktime( tmptm );
         gnc_date_edit_set_time( gf->startDate, tmptt );
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static inline guint32 min( guint32 a, guint32 b )
@@ -1076,7 +1077,7 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
                 /* nuttin can be done, for whatever reason. */
                 break;
         }
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -1177,7 +1178,7 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
                 PERR( "unknown uift value %d\n", uift );
                 break;
         }
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 /* ================================================================= */

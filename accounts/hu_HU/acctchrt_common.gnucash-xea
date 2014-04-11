@@ -9,7 +9,7 @@
     <gnc-act:long-description>
     A legtöbb felhasználónak ezt célszerű választani. Magában foglalja a leggyakrabban használt számlákat (folyószámla, betét, készpénz, hitelkártya, bevétel, gyakori költségek).
   </gnc-act:long-description>    
-  <gnc-act:start-selected>0</gnc-act:start-selected>
+  <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
   <act:name>Eszközök</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>

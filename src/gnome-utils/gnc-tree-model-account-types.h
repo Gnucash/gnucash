@@ -2,9 +2,9 @@
  * gnc-tree-model-account-types.h -- GtkTreeModel implementation
  *	to display account types in a GtkTreeView.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Copyright (C) 2005, Chris Shoemaker <c.shoemaker@cox.net>
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2005, 2006 Chris Shoemaker <c.shoemaker@cox.net>
+ * Copyright (C) 2006 Eskil Bylund <eskil.bylund@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -28,7 +28,8 @@
 /** @addtogroup GuiTreeModel
  * @{ */
 /** @file gnc-tree-model-account-types.h
- *  @brief GtkTreeModel implementation to display account types in a GtkTreeView.
+ *  @brief GtkTreeModel implementation to display account types in a 
+ *     GtkTreeView.
  *  @author Copyright (C) 2003 Jan Arne Petersen
  *  @author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  *
@@ -36,6 +37,8 @@
 
 #ifndef __GNC_TREE_MODEL_ACCOUNT_TYPES_H
 #define __GNC_TREE_MODEL_ACCOUNT_TYPES_H
+
+#include "Account.h"
 
 G_BEGIN_DECLS
 
@@ -76,7 +79,7 @@ GType gnc_tree_model_account_types_get_type (void);
    account types while showing all account types, use
    gnc_tree_model_account_types_master() to get the treemodel.
    Connect it to your tree view and use
-   gnc_tree_view_account_types_{sg}et_selection() to convert between
+   gnc_tree_model_account_types_{sg}et_selection() to convert between
    bitmasks and GtkTreeView states.  No need to free the treemodel.
 
    Method 2: If you must store selection state in the model for some
@@ -91,18 +94,42 @@ GType gnc_tree_model_account_types_get_type (void);
 
 /*************** Method 1 functions ***************/
 
-/* Get the static GtkTreeModel representing the list of all possible
-   account types.  You may not modify this model, but you can use if
-   for multiple views. */
-GtkTreeModel * gnc_tree_model_account_types_master(void);
+/* Returns a GtkTreeModelFilter that wraps the model. Deprecated
+   account types will be filtered. Caller is responsible for
+   ref/unref. */
+GtkTreeModel * gnc_tree_model_account_types_valid (void);
+
+/* Returns a GtkTreeModelFilter that wraps the model. Only account
+   types specified by the 'types' bitmask are visible.  To force the
+   visibility of deprecated account types, pass
+   (xaccAccountTypesValid() | (1 << xaccAccountGetType(acct))). 
+
+   To get the GtkTreeModel that shows all account types, including
+   deprecated account types, pass (-1).
+
+   To get the GtkTreeModel that only shows non-deprecated account types, 
+   use gnc_tree_model_account_types_valid().
+
+   Caller is responsible for ref/unref. */
+GtkTreeModel * gnc_tree_model_account_types_filter_using_mask (guint32 types);
 
 /* Return the bitmask of the account type enums reflecting the state
-   of the tree selection */
-guint32 gnc_tree_model_account_types_get_selection(GtkTreeView *view);
+   of the tree selection.  If your view allows the selection of
+   multiple account types, use must use this function to get the
+   selection. */
+guint32 gnc_tree_model_account_types_get_selection(GtkTreeSelection *sel);
+
+/* Gets the selected account type.  Use the function if your view
+   allows the selection of only one account type. If no types are
+   selected, returns NO_TYPE.  If more than one type is selected,
+   arbitrarily returns one of the selected types. */
+GNCAccountType
+gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel);
 
 /* Set the selection state of the tree selection to match the bitmask
-   of account-type enums in 'selected' */
-void gnc_tree_model_account_types_set_selection(GtkTreeView *view,
+   of account-type enums in 'selected'.  This will also scroll to a
+   selected row in the TreeView.*/
+void gnc_tree_model_account_types_set_selection(GtkTreeSelection *sel,
                                                 guint32 selected);
 
 

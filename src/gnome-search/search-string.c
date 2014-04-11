@@ -179,6 +179,7 @@ gncs_validate (GNCSearchCoreType *fe)
 				     GTK_DIALOG_MODAL,
 				     GTK_MESSAGE_ERROR,
 				     GTK_BUTTONS_OK,
+				     "%s",
 				     _("You need to enter a string value"));
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy(dialog);
@@ -214,7 +215,7 @@ gncs_validate (GNCSearchCoreType *fe)
 				       GTK_DIALOG_MODAL,
 				       GTK_MESSAGE_ERROR,
 				       GTK_BUTTONS_OK,
-				       errmsg);
+				       "%s", errmsg);
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy(dialog);
       g_free (errmsg);

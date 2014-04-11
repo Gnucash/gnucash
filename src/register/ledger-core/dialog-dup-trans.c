@@ -103,18 +103,19 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
   if (parent != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  /* default to ok */
-  gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-
   /* date widget */
   {
     GtkWidget *date_edit;
     GtkWidget *hbox;
+    GtkWidget *label;
 
     date_edit = gnc_date_edit_new (date, FALSE, FALSE);
     gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);
     hbox = glade_xml_get_widget (xml, "date_hbox");
     gtk_widget_show (date_edit);
+
+    label = glade_xml_get_widget (xml, "date_label");
+    gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
 
     gtk_box_pack_end (GTK_BOX (hbox), date_edit, TRUE, TRUE, 0);
     dt_dialog->date_edit = date_edit;

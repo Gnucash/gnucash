@@ -2,9 +2,11 @@
 lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
 libcore_utils_la_SOURCES = \
+  gnc-main.c \
   gnc-gconf-utils.c \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
+  gnc-glib-utils.c \
   gnc-gobject-utils.c
 
 libcore_utils_la_LIBADD = \
@@ -19,12 +21,15 @@ libgw_core_utils_la_SOURCES = \
 libgw_core_utils_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_core_utils_la_LIBADD = \
   libcore-utils.la \
+  ${GLIB_LIBS} \
   ${GUILE_LIBS}
 
 noinst_HEADERS = \
+  gnc-main.h \
   gnc-gconf-utils.h \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
+  gnc-glib-utils.h \
   gnc-gobject-utils.h \
   gw-core-utils.h
 
@@ -48,11 +53,11 @@ endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -65,5 +70,5 @@ gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
            (gw:generate-wrapset \"gw-core-utils\")"
 
 BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-core-utils.html
+CLEANFILES = g-wrapped gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-core-utils.html

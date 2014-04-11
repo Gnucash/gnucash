@@ -120,10 +120,7 @@ vfailure_args(
 int
 get_rv(void)
 {
-	if( failures ) {
-		return 1;
-	}
-	return 0;
+    return failures;
 }
 
 gboolean
@@ -245,6 +242,20 @@ get_random_character(void)
 }
 
 gchar *
+get_random_string_length_in_range(int minlen, int maxlen)
+{
+    gchar *ret;
+    int i, len = get_random_int_in_range(minlen, maxlen);
+    
+    ret = g_new0(gchar, len);
+
+    for (i = 0; i < len - 1; i++)
+        ret[i] = get_random_character ();
+    
+    return g_strstrip(ret);
+}
+
+gchar *
 get_random_string_without(const char *exclude_chars)
 {
     gchar *ret;
@@ -305,16 +316,13 @@ get_random_gint64(void)
 double
 get_random_double(void)
 {
-    union 
-    {
-        double d;
-        gint64 i;
-    } ret;
-    
+    double d;
+	guint  i;
 
-    ret.i = get_random_gint64();
-    
-    return ret.d;
+	i = (guint)get_random_int_in_range(8,13);
+	/* using 0.9 and 7 increases chances of getting lots of decimals */
+    d = ((double)get_random_int_in_range(8,999999) * i * 0.9 / 7);
+    return d;
 }
 
 const char*

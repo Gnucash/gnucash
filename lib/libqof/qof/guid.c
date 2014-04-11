@@ -21,13 +21,13 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE
-
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
 
-#include <sys/types.h>
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <ctype.h>
 #include <dirent.h>
 #include <glib.h>
@@ -35,34 +35,52 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/times.h>
+#ifdef HAVE_SYS_TIMES_H
+# include <sys/times.h>
+#endif
 #include <time.h>
 #include <unistd.h>
-
-#include "guid.h"
+#include "qof.h"
 #include "md5.h"
-#include "qofid.h"
-#include "gnc-trace.h"
 
 # ifndef P_tmpdir
 #  define P_tmpdir "/tmp"
 # endif
 
-/** Constants *******************************************************/
+/* Constants *******************************************************/
 #define DEBUG_GUID 0
 #define BLOCKSIZE 4096
 #define THRESHOLD (2 * BLOCKSIZE)
 
 
-/** Static global variables *****************************************/
+/* Static global variables *****************************************/
 static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
+#ifndef HAVE_GLIB29
 static GMemChunk *guid_memchunk = NULL;
+#endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
-/** Memory management routines ***************************************/
+/* Memory management routines ***************************************/
+#ifdef HAVE_GLIB29
+GUID *
+guid_malloc (void)
+{
+  return g_slice_new(GUID);
+}
+
+void
+guid_free (GUID *guid)
+{
+  if (!guid)
+    return;
+
+  g_slice_free(GUID, guid);
+}
+#else /* !HAVE_GLIB29 */
+
 static void
 guid_memchunk_init (void)
 {
@@ -95,6 +113,7 @@ guid_free (GUID *guid)
 
   g_chunk_free (guid, guid_memchunk);
 }
+#endif
 
 
 const GUID *
@@ -108,8 +127,8 @@ guid_null(void)
     int i;
     char *tmp = "NULLGUID.EMPTY.";
 
-    /* 16th space for '\O' */
-    for (i = 0; i < 16; i++)
+      /* 16th space for '\O' */
+	  for (i = 0; i < GUID_DATA_SIZE; i++)
       null_guid.data[i] = tmp[i];
 
     null_inited = 1;
@@ -118,7 +137,7 @@ guid_null(void)
   return &null_guid;
 }
 
-/** Function implementations ****************************************/
+/* Function implementations ****************************************/
 
 /* This code is based on code in md5.c in GNU textutils. */
 static size_t
@@ -240,8 +259,8 @@ init_from_dir(const char *dirname, unsigned int max_files)
     if (de == NULL)
       break;
 
-    md5_process_bytes(de, sizeof(struct dirent), &guid_context);
-    total += sizeof(struct dirent);
+    md5_process_bytes(de->d_name, strlen(de->d_name), &guid_context);
+    total += strlen(de->d_name);
 
     result = snprintf(filename, sizeof(filename),
                       "%s/%s", dirname, de->d_name);
@@ -267,8 +286,10 @@ init_from_time(void)
 {
   size_t total;
   time_t t_time;
+#ifdef HAVE_SYS_TIMES_H
   clock_t clocks;
   struct tms tms_buf;
+#endif
 
   total = 0;
 
@@ -276,10 +297,12 @@ init_from_time(void)
   md5_process_bytes(&t_time, sizeof(t_time), &guid_context);
   total += sizeof(t_time);
 
+#ifdef HAVE_SYS_TIMES_H
   clocks = times(&tms_buf);
   md5_process_bytes(&clocks, sizeof(clocks), &guid_context);
   md5_process_bytes(&tms_buf, sizeof(tms_buf), &guid_context);
   total += sizeof(clocks) + sizeof(tms_buf);
+#endif
 
   return total;
 }
@@ -363,13 +386,16 @@ guid_init(void)
     md5_process_bytes(&pid, sizeof(pid), &guid_context);
     bytes += sizeof(pid);
 
+#ifdef HAVE_GETPPID
     pid = getppid();
     md5_process_bytes(&pid, sizeof(pid), &guid_context);
     bytes += sizeof(pid);
+#endif
   }
 
   /* user info */
   {
+#ifdef HAVE_GETUID
     uid_t uid;
     gid_t gid;
     char *s;
@@ -388,16 +414,19 @@ guid_init(void)
     gid = getgid();
     md5_process_bytes(&gid, sizeof(gid), &guid_context);
     bytes += sizeof(gid);
+#endif
   }
 
   /* host info */
   {
+#ifdef HAVE_GETHOSTNAME
     char string[1024];
 
     memset(string, 0, sizeof(string));
     gethostname(string, sizeof(string));
     md5_process_bytes(string, sizeof(string), &guid_context);
     bytes += sizeof(string);
+#endif
   }
 
   /* plain old random */
@@ -449,7 +478,9 @@ guid_init_only_salt(const void *salt, size_t salt_len)
 void 
 guid_shutdown (void)
 {
+#ifndef HAVE_GLIB29
 	guid_memchunk_shutdown();
+#endif
 }
 
 #define GUID_PERIOD 5000
@@ -474,18 +505,18 @@ guid_new(GUID *guid)
   init_from_time();
 
   /* Make it a little extra salty.  I think init_from_time was buggy,
-   * or something, since duplicate id's actually happened. Or something
-   * like that.  I think this is because init_from_time kept returning
-   * the same values too many times in a row.  So we'll do some 'block
-   * chaining', and feed in the old guid as new random data.
-   *
-   * Anyway, I think the whole fact that I saw a bunch of duplicate 
-   * id's at one point, but can't reproduce the bug is rather alarming.
-   * Something must be broken somewhere, and merely adding more salt
-   * is just hiding the problem, not fixing it.
-   */
+	* or something, since duplicate id's actually happened. Or something
+	* like that.  I think this is because init_from_time kept returning
+	* the same values too many times in a row.  So we'll do some 'block
+	* chaining', and feed in the old guid as new random data.
+	*
+	* Anyway, I think the whole fact that I saw a bunch of duplicate 
+	* id's at one point, but can't reproduce the bug is rather alarming.
+	* Something must be broken somewhere, and merely adding more salt
+	* is just hiding the problem, not fixing it.
+	*/
   init_from_int (433781*counter);
-  init_from_buff (guid->data, 16);
+  init_from_buff (guid->data, GUID_DATA_SIZE);
 
   if (counter == 0)
   {
@@ -521,7 +552,7 @@ encode_md5_data(const unsigned char *data, char *buffer)
 {
   size_t count;
 
-  for (count = 0; count < 16; count++, buffer += 2)
+  for (count = 0; count < GUID_DATA_SIZE; count++, buffer += 2)
     sprintf(buffer, "%02x", data[count]);
 }
 
@@ -529,16 +560,16 @@ encode_md5_data(const unsigned char *data, char *buffer)
  * a hex number. returns false otherwise. Decoded number
  * is packed into data in little endian order. */
 static gboolean
-decode_md5_string(const char *string, unsigned char *data)
+decode_md5_string(const unsigned char *string, unsigned char *data)
 {
   unsigned char n1, n2;
   size_t count = -1;
-  char c1, c2;
+  unsigned char c1, c2;
 
   if (NULL == data) return FALSE;
   if (NULL == string) goto badstring;
 
-  for (count = 0; count < 16; count++)
+  for (count = 0; count < GUID_DATA_SIZE; count++)
   {
     /* check for a short string e.g. null string ... */
     if ((0==string[2*count]) || (0==string[2*count+1])) goto badstring;
@@ -564,7 +595,7 @@ decode_md5_string(const char *string, unsigned char *data)
   return TRUE;
 
 badstring:
-  for (count = 0; count < 16; count++)
+  for (count = 0; count < GUID_DATA_SIZE; count++)
   {
     data[count] = 0;
   }
@@ -616,7 +647,7 @@ gboolean
 guid_equal(const GUID *guid_1, const GUID *guid_2)
 {
   if (guid_1 && guid_2)
-    return (memcmp(guid_1, guid_2, sizeof(GUID)) == 0);
+    return (memcmp(guid_1, guid_2, GUID_DATA_SIZE) == 0);
   else
     return FALSE;
 }
@@ -634,7 +665,7 @@ guid_compare(const GUID *guid_1, const GUID *guid_2)
   if (guid_1 && !guid_2)
     return 1;
 
-  return memcmp (guid_1, guid_2, sizeof (GUID));
+  return memcmp (guid_1, guid_2, GUID_DATA_SIZE);
 }
 
 guint
@@ -658,7 +689,7 @@ guid_hash_to_guint (gconstpointer ptr)
     unsigned int i, j;
 
     for (i = 0, j = 0; i < sizeof(guint); i++, j++) {
-      if (j == 16) j = 0;
+      if (j == GUID_DATA_SIZE) j = 0;
 
       hash <<= 4;
       hash |= guid->data[j];

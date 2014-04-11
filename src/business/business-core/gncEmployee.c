@@ -61,9 +61,8 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_employee (GncEmployee *employee);
 void mark_employee (GncEmployee *employee)
 {
-  employee->inst.dirty = TRUE;
-  qof_collection_mark_dirty (employee->inst.entity.collection);
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_MODIFY);
+  qof_instance_set_dirty(&employee->inst);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -87,7 +86,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return employee;
 }
@@ -103,7 +102,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (employee->id);
   CACHE_REMOVE (employee->username);
@@ -137,7 +136,7 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->ccard_acc = 
      GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
   
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return employee;
 }
@@ -365,8 +364,8 @@ static inline void emp_free (QofInstance *inst)
 
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
-  QOF_COMMIT_EDIT_PART1 (&employee->inst);
-  QOF_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
+  if (!qof_commit_edit (QOF_INSTANCE(employee))) return;
+  qof_commit_edit_part2 (&employee->inst, gncEmployeeOnError,
                          gncEmployeeOnDone, emp_free);
 }
 

@@ -236,5 +236,5 @@ gnc_get_euro (void)
 
   table = gnc_book_get_commodity_table (gnc_get_current_book ());
 
-  return gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, "EUR");
+  return gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, "EUR");
 }

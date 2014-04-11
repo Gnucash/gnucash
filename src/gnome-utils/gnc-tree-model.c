@@ -39,7 +39,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_model_class_init (GncTreeModelClass *klass);
 static void gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass);
 static void gnc_tree_model_finalize (GObject *object);
-static void gnc_tree_model_destroy (GtkObject *object);
 
 /** The instance private data for a generic tree model. */
 typedef struct GncTreeModelPrivate
@@ -56,7 +55,7 @@ typedef struct GncTreeModelPrivate
 /************************************************************/
 
 /** A pointer to the parent class of a generic tree model. */
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 GType
 gnc_tree_model_get_type (void)
@@ -82,9 +81,7 @@ gnc_tree_model_get_type (void)
     //  NULL
     //};
 
-    /* CAS: I think this should subclass GObject, not GtkObject. */
-
-    gnc_tree_model_type = g_type_register_static (GTK_TYPE_OBJECT,
+    gnc_tree_model_type = g_type_register_static (G_TYPE_OBJECT,
 						  GNC_TREE_MODEL_NAME,
 						  &our_info, 0);
 
@@ -100,18 +97,13 @@ static void
 gnc_tree_model_class_init (GncTreeModelClass *klass)
 {
   GObjectClass *o_class;
-  GtkObjectClass *object_class;
 
   parent_class = g_type_class_peek_parent (klass);
 
   o_class = G_OBJECT_CLASS (klass);
-  object_class = GTK_OBJECT_CLASS (klass);
 
   /* GObject signals */
   o_class->finalize = gnc_tree_model_finalize;
-
-  /* GtkObject signals */
-  object_class->destroy = gnc_tree_model_destroy;
 
   g_type_class_add_private(klass, sizeof(GncTreeModelPrivate));
 }
@@ -141,22 +133,6 @@ gnc_tree_model_finalize (GObject *object)
   gnc_gobject_tracking_forget(object);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
-    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
-  LEAVE(" ");
-}
-
-static void
-gnc_tree_model_destroy (GtkObject *object)
-{
-  GncTreeModel *model;
-
-  ENTER("model %p", object);
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_TREE_MODEL (object));
-
-  model = GNC_TREE_MODEL (object);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+      G_OBJECT_CLASS (parent_class)->finalize (object);
   LEAVE(" ");
 }

@@ -119,9 +119,6 @@ void gnc_ledger_display_refresh_by_split_register (SplitRegister *reg);
 /* close the window */
 void gnc_ledger_display_close (GNCLedgerDisplay * ledger_display);
 
-/* close all ledger windows containing this account. */
-void gnc_ledger_display_destroy_by_account (Account *account);
-
 /* Returns a boolean of whether this display should be single or double lined
  * mode by default */
 gboolean gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld);

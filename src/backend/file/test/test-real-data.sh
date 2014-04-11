@@ -14,8 +14,7 @@ for i in $SRCDIR/test-files/xml2/*.gml2 ; do
       mkdir $j
       FILES=`perl $SRCDIR/grab-types.pl "gnc:$j" $i "$j/dataXXX.xml"`
       if [ ! -z "$FILES" ] ; then
-        echo "Testing file `basename $i`, section $j"
-        echo "[./test-xml-$j $FILES # from file $i]:"
+        echo "Testing ./test-xml-$j $j/data*.xml # from `basename $i`:"
         eval "./test-xml-$j $FILES"
         if [ $? != 0 ] ; then
           EXIT_VALUE=1

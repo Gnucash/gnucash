@@ -15,13 +15,11 @@ AM_CFLAGS = \
   ${GUILE_INCS}
 
 libgncmod_network_utils_la_SOURCES = \
-  gnc-gpg.c \
   gnc-http.c \
   gncmod-network-utils.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  gnc-gpg.h \
   gnc-http.h
 
 libgncmod_network_utils_la_LIBADD = \

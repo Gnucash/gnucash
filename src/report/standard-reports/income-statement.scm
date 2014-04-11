@@ -58,12 +58,8 @@
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual"))
 
-(define optname-start-date (N_ "Income Statement Start Date"))
-(define opthelp-start-date
-  (N_ "Start of the period this income statement will cover"))
-(define optname-end-date (N_ "Income Statement End Date"))
-(define opthelp-end-date
-  (N_ "End of the period this income statement will cover"))
+(define optname-start-date (N_ "Start Date"))
+(define optname-end-date (N_ "End Date"))
 ;; FIXME this could use an indent option
 
 (define optname-accounts (N_ "Accounts to include"))
@@ -77,11 +73,7 @@
   (N_ "Displays accounts which exceed the depth limit at the depth limit"))
 
 (define optname-parent-balance-mode (N_ "Parent account balances"))
-(define opthelp-parent-balance-mode
-  (N_ "How to show any balance in parent accounts"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
-(define opthelp-parent-total-mode
-  (N_ "How to show account subtotals for selected accounts having children"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
@@ -132,46 +124,6 @@
 (define opthelp-closing-regexp
   (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
 
-;; This calculates the increase in the balance(s) of all accounts in
-;; <accountlist> over the period from <from-date> to <to-date>.
-;; Returns a commodity collector.
-;;
-;; Note: There is both a gnc:account-get-comm-balance-interval and
-;; gnc:group-get-comm-balance-interval which could replace this
-;; function....
-;;
-(define (accountlist-get-comm-balance-at-date accountlist from-date to-date)
-;;  (for-each (lambda (x) (display x))
-;;	    (list "computing from: " (gnc:print-date from-date) " to "
-;;		  (gnc:print-date to-date) "\n"))
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (let* (
-		       (start-balance
-			(gnc:account-get-comm-balance-at-date
-			 account from-date #f))
-		       (sb (cadr (start-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       (end-balance
-			(gnc:account-get-comm-balance-at-date 
-			 account to-date #f))
-		       (eb (cadr (end-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       )
-;;		  (for-each (lambda (x) (display x))
-;;			    (list "Start balance: " sb " : "
-;;				  (gnc:account-get-name account) " : end balance: "
-;;				  eb "\n"))
-                  (collector 'merge end-balance #f)
-		  (collector 'minusmerge start-balance #f)
-		  ))
-              accountlist)
-    collector))
-
 ;; options generator
 (define (income-statement-options-generator)
   (let* ((options (gnc:new-options))
@@ -186,7 +138,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
@@ -245,36 +197,11 @@
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
     ;; what to show for non-leaf accounts
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-balance-mode
-      "c" opthelp-parent-balance-mode
-      'immediate-bal
-      (list (vector 'immediate-bal
-		    (N_ "Show Immediate Balance")
-		    (N_ "Show only the balance in the parent account, excluding any subaccounts"))
-	    (vector 'recursive-bal
-		    (N_ "Recursive Balance")
-		    (N_ "Include subaccounts in balance"))
-	    (vector 'omit-bal
-		    (N_ "Omit Balance")
-		    (N_ "Do not show parent account balances")))))
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-total-mode
-      "d" opthelp-parent-total-mode
-      'f
-      (list (vector 't
-		    (N_ "Show subtotals")
-		    (N_ "Show subtotals for selected accounts which have subaccounts"))
-	    (vector 'f
-		    (N_ "Do not show subtotals")
-		    (N_ "Do not subtotal selected parent accounts"))
-	    (vector 'canonically-tabbed
-		    ;;(N_ "Subtotals indented text book style")
-		    (N_ "Text book style (experimental)")
-		    (N_ "Show parent account subtotals, indented per text book practice (experimental)")))))
-    
+    (gnc:options-add-subtotal-view!
+     options gnc:pagename-display
+     optname-parent-balance-mode optname-parent-total-mode
+     "c")
+
     ;; some detailed formatting options
     (add-option 
      (gnc:make-simple-boolean-option
@@ -468,7 +395,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period Covering %s to %s"))
+				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
@@ -502,8 +429,8 @@
 	       
 	       (terse-period? #t)
 	       (period-for (if terse-period?
-			       (string-append " " (N_ "for Period"))
-			       (sprintf #f (string-append ", " (N_ "%s to %s"))
+			       (string-append " " (_ "for Period"))
+			       (sprintf #f (string-append ", " (_ "%s to %s"))
 					(gnc:print-date start-date-printable)
 					(gnc:print-date end-date-tp))
 			       )
@@ -557,12 +484,12 @@
 		 start-date-tp end-date-tp)
 		) ;; this is norm negative (credit)
 	  (set! expense-total
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 expense-accounts
 		 start-date-tp end-date-tp))
 	  (expense-total 'minusmerge expense-closing #f)
 	  (set! neg-revenue-total
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 revenue-accounts
 		 start-date-tp end-date-tp))
 	  (neg-revenue-total 'minusmerge revenue-closing #f)
@@ -644,8 +571,8 @@
 	  
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Net income") period-for)
-	   (string-append (N_ "Net loss") period-for)
+	   (string-append (_ "Net income") period-for)
+	   (string-append (_ "Net loss") period-for)
 	   net-income
 	   (* 2 (- tree-depth 1)) exchange-fn #f #f
 	   )

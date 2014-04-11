@@ -17,6 +17,7 @@ LDADD = \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
   -lltdl
@@ -38,6 +39,7 @@ TESTS = \
   test-period \
   test-querynew \
   test-query \
+  test-recursive \
   test-resolve-file-path \
   test-split-vs-account  \
   test-transaction-reversal \
@@ -46,8 +48,7 @@ TESTS = \
   test-recurrence \
   test-scm-query \
   test-book-merge 
-  
- 
+
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -70,18 +71,20 @@ noinst_PROGRAMS = \
   test-guid \
   test-group-vs-book \
   test-load-engine \
+  test-period \
   test-lots \
   test-numeric \
   test-book-merge \
   test-object \
-  test-period \
   test-query \
   test-querynew \
+  test-recursive \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
   test-transaction-reversal \
   test-transaction-voiding
+
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la ${QOF_LIBS}
@@ -92,7 +95,7 @@ EXTRA_DIST = \
   test-scm-query-import \
   test-scm-query-import.scm
 
-clean:
+clean-local:
 	rm -f translog.*
 
-distclean-local: clean
+distclean-local: clean-local

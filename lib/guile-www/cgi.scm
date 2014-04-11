@@ -94,10 +94,10 @@
   ;; Values are URL-encoded, so url:decode must be called on each one.
   (define (get-name pair)
     (let ((p (string-index pair #\=)))
-      (and p (make-shared-substring pair 0 p))))
+      (and p (substring pair 0 p))))
   (define (get-value pair)
     (let ((p (string-index pair #\=)))
-      (and p (url:decode (make-shared-substring pair (+ p 1))))))
+      (and p (url:decode (substring pair (+ p 1))))))
   (for-each (lambda (pair)
 	      (let* ((name (get-name pair))
 		     (value (get-value pair))
@@ -180,6 +180,6 @@
              (str str))
     (let ((pos (string-rindex str ch)))
       (if pos
-	  (loop (cons (make-shared-substring str (+ 1 pos)) fields)
-		(make-shared-substring str 0 pos))
+	  (loop (cons (substring str (+ 1 pos)) fields)
+		(substring str 0 pos))
 	  (cons str fields)))))

@@ -159,6 +159,10 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("commodity scus differ");
             }
         }
+        else if (safe_strcmp((char*)mark->name, "act:security") == 0)
+        {
+            return NULL; // This tag is ignored.
+        }
         else
         {
             return g_strdup_printf("unknown node in dom tree: %s", mark->name);
@@ -171,8 +175,6 @@ node_and_account_equal(xmlNodePtr node, Account *act)
 static void
 delete_random_account(Account *act)
 {
-    gnc_commodity_destroy(xaccAccountGetCommodity(act));
-
     xaccAccountBeginEdit(act);
     xaccAccountDestroy(act);
 }
@@ -364,7 +366,8 @@ main (int argc, char ** argv)
     {
         test_generation();
     }
-        
+    
+    qof_session_destroy(session);        
     print_test_results();
     qof_close();
   return 0;

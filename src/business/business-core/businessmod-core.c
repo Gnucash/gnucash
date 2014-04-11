@@ -67,7 +67,7 @@ libgncmod_business_core_LTX_gnc_module_path(void)
 char * 
 libgncmod_business_core_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash business core");
+  return g_strdup("The GnuCash business core");
 }
 
 int

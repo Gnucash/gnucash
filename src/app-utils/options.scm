@@ -282,7 +282,7 @@
     (if (string? currency)
         (gnc:commodity-table-lookup
          (gnc:book-get-commodity-table (gnc:get-current-book))
-         GNC_COMMODITY_NS_ISO currency)
+         GNC_COMMODITY_NS_CURRENCY currency)
         currency))
 
    (let* ((value (currency->scm default-value))
@@ -362,7 +362,7 @@
   (define (commodity->scm commodity)
     (if (string? commodity)
         (list 'commodity-scm
-              GNC_COMMODITY_NS_ISO
+              GNC_COMMODITY_NS_CURRENCY
               commodity)
         (list 'commodity-scm
               (gnc:commodity-get-namespace commodity)
@@ -1159,13 +1159,17 @@
     (inexact->exact
      (min 255.0
           (truncate (* (/ 255.0 range) value)))))
+  (define (number->hex-string number)
+    (let ((ret (number->string number 16)))
+      (cond ((< (string-length ret) 2) (string-append "0" ret))
+            (else ret))))
   (let ((red (car color))
         (green (cadr color))
         (blue (caddr color)))
     (string-append
-     (number->string (html-value red) 16)
-     (number->string (html-value green) 16)
-     (number->string (html-value blue) 16))))
+     (number->hex-string (html-value red))
+     (number->hex-string (html-value green))
+     (number->hex-string (html-value blue)))))
 
 (define (gnc:color->html color range)
     (string-append "#"
@@ -1533,9 +1537,8 @@
       end-current-quarter 
       end-prev-quarter
       end-cal-year 
-      end-prev-year 
-      end-cur-fin-year
-      end-prev-fin-year
+      end-prev-year
+      end-accounting-period
       ))))
 
 (define (gnc:options-make-date-interval! options pagename name-from info-from
@@ -1555,8 +1558,7 @@
       start-prev-quarter
       start-cal-year 
       start-prev-year
-      start-cur-fin-year 
-      start-prev-fin-year
+      start-accounting-period
       )))
   (gnc:options-make-end-date! options pagename name-to
 			      (string-append sort-tag "b") info-to))

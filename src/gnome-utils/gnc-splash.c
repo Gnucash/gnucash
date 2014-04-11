@@ -29,15 +29,25 @@
 #include "gnc-splash.h"
 #include "gnc-version.h"
 
+#define MARKUP_STRING "<span size='small'>%s</span>"
 
 static GtkWidget * splash = NULL;
 static GtkWidget * progress = NULL;
-
+static int splash_is_initialized = FALSE;
 
 static void
 splash_destroy_cb (GtkObject *object, gpointer user_data)
 {
   splash = NULL;
+}
+
+void
+gnc_gui_init_splash (void)
+{
+  if (!splash_is_initialized) {
+    splash_is_initialized = TRUE;
+    gnc_show_splash_screen ();
+  }
 }
 
 void
@@ -48,7 +58,7 @@ gnc_show_splash_screen (void)
   GtkWidget *vbox;
   GtkWidget *version;
   GtkWidget *separator;
-  gchar *ver_string;
+  gchar *ver_string, *markup;
 
   if (splash) return;
 
@@ -74,16 +84,26 @@ gnc_show_splash_screen (void)
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
 #ifdef GNUCASH_SVN
-  ver_string = g_strdup_printf(_("Version: Gnucash-%s svn (r%d built %s)"),
+  /* Development version */
+  ver_string = g_strdup_printf(_("Version: GnuCash-%s svn (r%s built %s)"),
 			       VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #else
-  ver_string =  g_strdup_printf(_("Version: Gnucash-%s"), VERSION);
+  /* Dist Tarball */
+  ver_string = g_strdup_printf(_("Version: GnuCash-%s (r%s built %s)"),
+			       VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #endif
 
-  version = gtk_label_new (ver_string);
+  version = gtk_label_new(NULL);
+  markup = g_markup_printf_escaped(MARKUP_STRING, ver_string);
+  gtk_label_set_markup(GTK_LABEL(version), markup);
+  g_free(markup);
   g_free(ver_string);
   separator = gtk_hseparator_new();
-  progress = gtk_label_new(_("Loading..."));
+
+  progress = gtk_label_new(NULL);
+  markup = g_markup_printf_escaped(MARKUP_STRING, _("Loading..."));
+  gtk_label_set_markup(GTK_LABEL(progress), markup);
+  g_free(markup);
 
   gtk_container_add (GTK_CONTAINER (frame), pixmap);
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
@@ -115,9 +135,13 @@ gnc_destroy_splash_screen (void)
 void
 gnc_update_splash_screen (const gchar *string)
 {
+  gchar *markup;
+
   if (progress)
   {
-    gtk_label_set_text (GTK_LABEL(progress), string);
+    markup = g_markup_printf_escaped(MARKUP_STRING, string);
+    gtk_label_set_markup (GTK_LABEL(progress), markup);
+    g_free (markup);
 
     /* make sure new text is up */
     while (gtk_events_pending ())

@@ -67,10 +67,10 @@ SWIG_INPUT_HDRS := \
 install-data-local: libgncswig.la
 	cd ${DESTDIR}${perllibdir} && rm -f gnucash.so
 	if [ -f ${DESTDIR}${perllibdir}/libgncswig.so ]; then \
-		cd ${DESTDIR}${perllibdir} && ln -s libgncswig.so gnucash.so; \
+		cd ${DESTDIR}${perllibdir} && $(LN_S) -f libgncswig.so gnucash.so; \
 	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.0 ]; then \
 		cd ${DESTDIR}${perllibdir} && \
-                ln -s libgncswig.so.0 gnucash.so; \
+                $(LN_S) -f libgncswig.so.0 gnucash.so; \
 	else \
 		echo "Can't find libgncswig shared library!" \
 		exit 1; \
