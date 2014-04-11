@@ -39,6 +39,7 @@ gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book);
 gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *);
 
 FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, QofBook *book);
+GList* dom_tree_freqSpec_to_recurrences(xmlNodePtr node, QofBook *book);
 Recurrence* dom_tree_to_recurrence(xmlNodePtr node);
 
 Timespec dom_tree_to_timespec(xmlNodePtr node);

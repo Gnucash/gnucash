@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+   Actifs fixes
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Comptes pour la gestion de vos  actifs fixes.importants. 
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Sélectionnez ce groupe de comptes si vous possédez des immobilisations ou actifs fixes importants tels que résidence, chalet, auto ou autres actifs.
+  </gnc-act:long-description>    
+  <gnc:account version="2.0.0">
+	  <act:name>Actif</act:name>
+	  <act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Actif</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+		  <act:name>Actifs fixes</act:name>
+		  <act:id type="guid">c888710a53770a065aceae44d8abd0dd</act:id>
+		  <act:type>ASSET</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Actifs fixes</act:description>
+		  <act:slots>
+			  <slot>
+				  <slot:key>placeholder</slot:key>
+				  <slot:value type="string">true</slot:value>
+			  </slot>
+		  </act:slots>
+		  <act:parent type="guid">b14f810bdb0b57b77acf1a5db700068c</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Résidence</act:name>
+		  <act:id type="guid">b86ae426ae1fd7705d49ef6ae16d614a</act:id>
+		  <act:type>ASSET</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Résidence</act:description>
+		  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Véhicule</act:name>
+		  <act:id type="guid">66c6a566a0abd30a95e10e2a1b68bc81</act:id>
+		  <act:type>ASSET</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Véhicule</act:description>
+		  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Autres biens immobilisés</act:name>
+		  <act:id type="guid">420fd6fd4be88b92d648611bdcf808da</act:id>
+		  <act:type>ASSET</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Autres biens immobilisés de valeur</act:description>
+		  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+	  </gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

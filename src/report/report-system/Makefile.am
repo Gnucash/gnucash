@@ -79,3 +79,5 @@ EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA}
 
 CLEANFILES = gnucash report .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-report-system.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.core\"

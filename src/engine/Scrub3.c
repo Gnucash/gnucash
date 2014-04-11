@@ -40,7 +40,6 @@
 #include "policy-p.h"
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
@@ -176,19 +175,11 @@ xaccAccountScrubLots (Account *acc)
 
 /* ============================================================== */
 
-static gpointer 
+static void
 lot_scrub_cb (Account *acc, gpointer data)
 {
-   if (FALSE == xaccAccountHasTrades (acc)) return NULL;
+   if (FALSE == xaccAccountHasTrades (acc)) return;
    xaccAccountScrubLots (acc);
-   return NULL;
-}
-
-void 
-xaccGroupScrubLots (AccountGroup *grp)
-{
-   if (!grp) return;
-   xaccGroupForEachAccount (grp, lot_scrub_cb, NULL, TRUE);
 }
 
 void 
@@ -196,7 +187,7 @@ xaccAccountTreeScrubLots (Account *acc)
 {
    if (!acc) return;
 
-   xaccGroupScrubLots (acc->children);
+   gnc_account_foreach_descendant(acc, lot_scrub_cb, NULL);
    xaccAccountScrubLots (acc);
 }
 

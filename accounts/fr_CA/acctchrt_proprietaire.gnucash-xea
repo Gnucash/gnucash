@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+     Propriétaire d'une résidence
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Dépenses du propriétaire d'une résidence.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Sélectionnez ce groupe de comptes si vous êtes propriétaire d'une résidence, et voulez en suivre les frais associés (hypothèque, intérêts, entretien et réparations, taxes, ...).
+  </gnc-act:long-description>    
+  <gnc:account version="2.0.0">
+	  <act:name>Actif</act:name>
+	  <act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Actif</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Actifs fixes</act:name>
+	  <act:id type="guid">c888710a53770a065aceae44d8abd0dd</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Actifs fixes</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">b14f810bdb0b57b77acf1a5db700068c</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Résidence</act:name>
+	  <act:id type="guid">b86ae426ae1fd7705d49ef6ae16d614a</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Résidence</act:description>
+	  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Passif</act:name>
+	  <act:id type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Passif</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Emprunts</act:name>
+	  <act:id type="guid">03a161c156fdb13c85a1f84400866a29</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Emprunts</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Hypothèque</act:name>
+	  <act:id type="guid">e17068c9c1e1be7635d125ef0a073691</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Emprunt hypothécaire pour la résidence</act:description>
+	  <act:parent type="guid">03a161c156fdb13c85a1f84400866a29</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Dépenses</act:name>
+	  <act:id type="guid">5882be9c31d58cc589c53f94d86f82da</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépenses</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+		  <act:name>Intérêts</act:name>
+		  <act:id type="guid">6622783b69e9ca8105125c778c7b621f</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Dépense d'intérêts</act:description>
+		  <act:slots>
+			  <slot>
+				  <slot:key>placeholder</slot:key>
+				  <slot:value type="string">true</slot:value>
+			  </slot>
+		  </act:slots>
+		  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Hypothèque</act:name>
+		  <act:id type="guid">3b3cbc695ad5a40e97e6a238cbb6e98e</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Intérêts sur emprunt hypothécaire</act:description>
+		  <act:parent type="guid">6622783b69e9ca8105125c778c7b621f</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Entretien de la résidence</act:name>
+		  <act:id type="guid">6f52398f2c8d4668e4392b8f42c228d0</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Entretien de la résidence</act:description>
+		  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Assurances</act:name>
+		  <act:id type="guid">93afcfa6113ca99a60ed52fff880904c</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Assurances</act:description>
+		  <act:slots>
+			  <slot>
+				  <slot:key>placeholder</slot:key>
+				  <slot:value type="string">true</slot:value>
+			  </slot>
+		  </act:slots>
+		  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Résidence</act:name>
+		  <act:id type="guid">b5b8a47a69567954297061b1421b783d</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Assurance de la résidence</act:description>
+		  <act:parent type="guid">93afcfa6113ca99a60ed52fff880904c</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Taxes et impôts</act:name>
+		  <act:id type="guid">80e04606e5258beb9d50e264d5a40d85</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Taxes et impôts</act:description>
+		  <act:slots>
+			  <slot>
+				  <slot:key>placeholder</slot:key>
+				  <slot:value type="string">true</slot:value>
+			  </slot>
+		  </act:slots>
+		  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+	  </gnc:account>
+	  <gnc:account version="2.0.0">
+		  <act:name>Impôt foncier</act:name>
+		  <act:id type="guid">138dfe323ece735de3ca32486f15fa1e</act:id>
+		  <act:type>EXPENSE</act:type>
+		  <act:commodity>
+			  <cmdty:space>ISO4217</cmdty:space>
+			  <cmdty:id>CAD</cmdty:id>
+		  </act:commodity>
+		  <act:commodity-scu>100</act:commodity-scu>
+		  <act:description>Impôt foncier</act:description>
+		  <act:parent type="guid">80e04606e5258beb9d50e264d5a40d85</act:parent>
+	  </gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -387,6 +387,8 @@ static void test_main()
 int
 main (int argc, char **argv)
 {
+    qof_init();
+
     g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 
 #if 0

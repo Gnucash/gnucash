@@ -12,6 +12,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2006 \
   ChangeLog.2005 \
   ChangeLog.2004 \
   ChangeLog.2003 \
@@ -196,6 +197,6 @@ intl-scm/guile-strings.c:
 SVN = svn
 XSLTPROC = xsltproc
 ChangeLog.svn:
-	$(SVN) log -v --xml -r HEAD:11782 http://svn.gnucash.org/repo/gnucash | \
+	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
 	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@

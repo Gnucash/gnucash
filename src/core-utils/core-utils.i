@@ -14,6 +14,11 @@ gchar * g_find_program_in_path(const gchar *);
 
 gboolean gnc_is_debugging(void);
 
+void gnc_scm_log_warn(const gchar *);
+void gnc_scm_log_error(const gchar *);
+void gnc_scm_log_msg(const gchar *);
+void gnc_scm_log_debug(const gchar *);
+
 /* Special treatment because the string changes in place. */
 %typemap(in) gchar * " $1 = SCM_STRING_CHARS($input); "
 %typemap(freearg) gchar * ""

@@ -27,11 +27,10 @@
 
 #include <stdio.h>
 
-#include "Group.h"
 #include "io-gncxml-v2.h"
 #include "qof.h"
 
-void write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd);
+void write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd);
 void write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);
 void write_book_parts(FILE *out, QofBook *book);
 void write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd);

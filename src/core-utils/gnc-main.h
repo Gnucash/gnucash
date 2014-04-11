@@ -32,4 +32,7 @@ const gchar *gnc_main_get_namespace_regexp(void);
 gboolean gnc_is_debugging(void);
 void gnc_set_debugging(gboolean d);
 
+gboolean gnc_is_extra_enabled(void);
+void gnc_set_extra(gboolean enabled);
+
 #endif /* GNC_MAIN_H */

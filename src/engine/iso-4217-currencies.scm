@@ -5,6 +5,11 @@
 ;;
 ;; This file is not currently used at runtime.  It's used to generate
 ;; the contents of iso-4217-currencies.c.
+;;
+;; You can find Currency Information from the following sites: 
+;;   http://www.evertype.com/standards/iso4217/iso4217-en.html
+;;   http://www.xe.com/iso4217.htm
+;;   http://www.thefinancials.com/vortex/CurrencyFormats.html
 
 ( "Afghanistan Afghani" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 )
 ( "Albanian Lek" "lek" "qindarka" "ISO4217" "ALL" "008" 100 100 )
@@ -145,7 +150,7 @@
 ( "Qatari Rial" "rial" "dirham" "ISO4217" "QAR" "634" 100 100 )
 ( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 ) ;; through 2005-06
 ( "Romanian Leu" "leu" "bani"  "ISO4217" "RON" "946" 100 100 ) ;; from 2005-07
-( "Russian Rouble" "rouble" "kopek" "ISO4217" "RUR" "810" 100 100 )
+( "Russian Rouble" "rouble" "kopek" "ISO4217" "RUB" "643" 100 100 ) ;; RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185
 ( "Rwanda Franc" "franc" "centime" "ISO4217" "RWF" "646" 100 100 )
 ( "Samoan Tala" "tala" "sene" "ISO4217" "WST" "882" 100 100 )
 ( "Sao Tome and Principe Dobra" "Dobra" "centimo" "ISO4217" "STD" "678" 100 100 )
@@ -178,7 +183,7 @@
 ( "Tongan Pa'anga" "Pa'anga" "seniti" "ISO4217" "TOP" "776" 100 100 )
 ( "Trinidad and Tobago Dollar" "dollar" "cent" "ISO4217" "TTD" "780" 100 100 )
 ( "Tunisian Dinar" "dinar" "milleme" "ISO4217" "TND" "788" 1000 1000 )
-( "Turkish Lira" "lira" "kuru" "ISO4217" "TRL" "792" 1 1)
+( "Turkish New Lira" "lira" "kuru" "ISO4217" "TRY" "949" 100 100)
 ( "Turkmenistan Manat" "manat" "tenga" "ISO4217" "TMM" "795" 100 100 )
 ( "US Dollar" "dollar" "cent" "ISO4217" "USD" "840" 100 100 )
 ( "Uganda Shilling" "shilling" "cent"  "ISO4217" "UGX" "800" 100 100  )

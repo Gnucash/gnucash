@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Location d'un logis
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Frais associés à la location d'une résidence ou d'un logis.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Sélectionnez ce groupe de compte si vous louez une résidence ou un logis (Loyer, assurances, ...).
+  </gnc-act:long-description>    
+  <gnc:account version="2.0.0">
+	  <act:name>Dépenses</act:name>
+	  <act:id type="guid">5882be9c31d58cc589c53f94d86f82da</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépenses</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Assurances</act:name>
+	  <act:id type="guid">93afcfa6113ca99a60ed52fff880904c</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Assurances</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Locataire</act:name>
+	  <act:id type="guid">d76ea87c9f5d1a844914ba7566a71212</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Assurance du locataire-résident</act:description>
+	  <act:parent type="guid">93afcfa6113ca99a60ed52fff880904c</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Loyer</act:name>
+	  <act:id type="guid">c385132651830fba73e788911aef696c</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Frais de location d'un logement</act:description>
+	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

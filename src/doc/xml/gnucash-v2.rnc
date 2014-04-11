@@ -336,6 +336,7 @@ ScheduledTransaction = element gnc:schedxaction {
   attribute version { "1.0.0" },
   element sx:id { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }},
   element sx:name { text },
+  element sx:enabled { "y" | "n" },
   element sx:autoCreate { "y" | "n" },
   element sx:autoCreateNotify { "y" | "n" },
   element sx:advanceCreateDays { xsd:int },

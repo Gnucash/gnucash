@@ -23,7 +23,6 @@
 #ifndef SPLIT_REGISTER_P_H
 #define SPLIT_REGISTER_P_H
 
-#include "Group.h"
 #include "split-register.h"
 
 

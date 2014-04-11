@@ -163,28 +163,20 @@
 
 ;;;; Status output functions.
 
+(define (strify items)
+  (string-join (map (lambda (x) (simple-format #f "~A" x)) items) ""))
+
 (define (gnc:warn . items)
-  (display "gnucash: [W] ")
-  (for-each (lambda (i) (write i)) items)
-  (newline))
+  (gnc-scm-log-warn (strify items)))
 
 (define (gnc:error . items)
-  (display "gnucash: [E] ")
-  (for-each (lambda (i) (write i)) items)
-  (newline))
+  (gnc-scm-log-error (strify items )))
 
 (define (gnc:msg . items)
-  (display "gnucash: [M] ")
-  (for-each (lambda (i) (write i)) items)
-  (newline))
+  (gnc-scm-log-msg (strify items)))
 
 (define (gnc:debug . items)
-  (if (gnc-is-debugging)
-      (begin
-        (display "gnucash: [D] ")
-        (for-each (lambda (i) (write i)) items)
-        (newline))))
-
+  (gnc-scm-log-debug (strify items)))
 
 ;; Set up timing functions
 

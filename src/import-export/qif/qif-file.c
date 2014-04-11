@@ -28,7 +28,7 @@
 #endif
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 
 #include "gnc-engine.h"
@@ -206,7 +206,7 @@ qif_import_file(QifContext ctx, const char *filename)
   g_return_val_if_fail(*filename, QIF_E_BADARGS);
 
   /* Open the file */
-  fp = fopen(filename, "r");
+  fp = g_fopen(filename, "r");
   if (fp == NULL)
     return QIF_E_NOFILE;
 

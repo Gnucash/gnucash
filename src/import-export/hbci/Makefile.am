@@ -87,3 +87,5 @@ ui_DATA = \
 	gnc-plugin-hbci-ui.xml
 
 EXTRA_DIST = ${gncscm_DATA} ${libgncmod_hbci_la_empty} ${ui_DATA}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.hbci\"

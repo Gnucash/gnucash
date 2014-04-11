@@ -31,8 +31,6 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "Transaction.h"
@@ -215,7 +213,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
 {
    char *p, buff[900];
    GList *node, *xaction_list = NULL;
-   AccountGroup *grp;
+   Account *root;
 
    qof_event_suspend();
    pgendDisable(be);
@@ -233,8 +231,8 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    SEND_QUERY (be, buff, );
 
    /* restore the transactions */
-   grp = gnc_book_get_group (book);
-   xaccAccountGroupBeginEdit (grp);
+   root = gnc_book_get_root_account (book);
+   xaccAccountBeginEdit (root);
 
    be->tmp_return = NULL;
    pgendGetResults (be, get_mass_trans_cb, book);
@@ -280,7 +278,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    }
    g_list_free(xaction_list);
 
-   xaccAccountGroupCommitEdit (grp);
+   xaccAccountCommitEdit (root);
 
    pgendEnable(be);
    qof_event_resume();

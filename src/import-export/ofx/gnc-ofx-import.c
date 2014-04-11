@@ -131,7 +131,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  gnc_utf8_strip_invalid(data.memo);
 
 	/********** Create the transaction and setup transaction data ************/
-	book = xaccAccountGetBook(account);
+	book = gnc_account_get_book(account);
 	transaction = xaccMallocTransaction(book);
 	xaccTransBeginEdit(transaction);
 	
@@ -644,7 +644,6 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
-  qof_log_check(GNC_MOD_IMPORT, QOF_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
   default_dir = gnc_get_default_directory(GCONF_SECTION);

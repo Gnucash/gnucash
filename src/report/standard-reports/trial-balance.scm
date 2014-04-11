@@ -185,7 +185,7 @@
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit

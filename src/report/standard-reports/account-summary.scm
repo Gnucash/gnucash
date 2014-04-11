@@ -158,7 +158,7 @@
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+	 (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -315,7 +315,7 @@
          (doc (gnc:make-html-document))
 	 ;; just in case we need this information...
          (tree-depth (if (equal? depth-limit 'all)
-                         (gnc:get-current-group-depth) 
+                         (gnc:get-current-account-tree-depth) 
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
@@ -492,8 +492,7 @@
                 report-commodity exchange-fn 
                 (append-map
                  (lambda (a)
-                   (xaccGroupGetSubAccountsSorted
-                    (xaccAccountGetChildren a)))
+		   (gnc-account-get-descendants-sorted a))
                  accounts))))
 	  )
 	)

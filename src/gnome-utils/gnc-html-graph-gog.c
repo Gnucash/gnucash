@@ -59,7 +59,10 @@
  * - general graph cleanup
  **/
 
-static QofLogModule log_module = GNC_MOD_GUI;
+#define LOG_MOD "gnc.gui.html.graph.gog"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
@@ -81,7 +84,7 @@ void
 gnc_html_graph_gog_init(void)
 {
 
-  PINFO( "init gog graphing" );
+  g_debug( "init gog graphing" );
   
   libgoffice_init();
   
@@ -231,23 +234,22 @@ set_chart_titles_from_hash(GogObject *chart, GtkHTMLEmbedded * eb)
 static void
 set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
 {
-  GString *totalTitle;
-  GOData *titleScalar;
+  gchar *my_sub_title, *total_title;
+  GOData *title_scalar;
   GogObject *tmp;
 
-  totalTitle = g_string_sized_new(32);
-  g_string_printf(totalTitle, "%s", title);
-  if (sub_title != NULL)
-  {
-    g_string_append_printf(totalTitle, " (%s)", sub_title);
-  }
+  if (sub_title)
+    my_sub_title = g_strdup_printf("%s(%s)", title ? " " : "", sub_title);
+  else
+    my_sub_title = g_strdup("");
+
+  total_title = g_strdup_printf("%s%s", title ? title : "", my_sub_title);
 
   tmp = gog_object_add_by_name(chart, "Title", NULL);
-  titleScalar = go_data_scalar_str_new(totalTitle->str, FALSE);
-  gog_dataset_set_dim(GOG_DATASET(tmp), 0, titleScalar, NULL);
+  title_scalar = go_data_scalar_str_new(total_title, TRUE);
+  gog_dataset_set_dim(GOG_DATASET(tmp), 0, title_scalar, NULL);
 
-  // @@fixme -- record or ref the string for freeing...
-  g_string_free(totalTitle, FALSE);
+  g_free(my_sub_title);
 }
 
 static void
@@ -442,7 +444,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
                 //"vary_style_by_element",	TRUE,
                 "type",                         bar_type,
                 "overlap_percentage",           bar_overlap, 
-		NULL);
+                NULL);
   label_data = go_data_vector_str_new ((char const * const *)row_labels, data_rows, NULL);
   {
     // foreach row:
@@ -456,8 +458,8 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
       gog_object_set_name (GOG_OBJECT (series), col_labels[i], &err);
       if (err != NULL)
       {
-        PERR("error setting name [%s] on series [%d]: [%s]\n",
-             col_labels[i], i, err->message);
+           g_warning("error setting name [%s] on series [%d]: [%s]",
+                     col_labels[i], i, err->message);
       }
 
       g_object_ref (label_data);
@@ -471,10 +473,10 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
       style = gog_styled_object_get_style (GOG_STYLED_OBJECT (series));
       style->fill.type = GOG_FILL_STYLE_PATTERN;
       if (gdk_color_parse (col_colors[i], &color)) {
-	style->fill.auto_back = FALSE;
-	go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
+           style->fill.auto_back = FALSE;
+           go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
       } else {
-	PERR("cannot parse color %s.", col_colors[i]);
+           g_warning("cannot parse color [%s]", col_colors[i]);
       }
     }
   }
@@ -494,7 +496,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 
   add_pixbuf_graph_widget (eb, graph);
 
-  PINFO("barchart rendered.");
+  g_debug("barchart rendered.");
   return TRUE;
 }
 

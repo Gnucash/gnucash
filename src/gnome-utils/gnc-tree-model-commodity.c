@@ -164,10 +164,10 @@ gnc_tree_model_commodity_finalize (GObject *object)
 	GncTreeModelCommodity *model;
 	GncTreeModelCommodityPrivate *priv;
 
-	ENTER("model %p", object);
-
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_TREE_MODEL_COMMODITY (object));
+
+	ENTER("model %p", object);
 
 	model = GNC_TREE_MODEL_COMMODITY (object);
 	priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
@@ -184,10 +184,10 @@ gnc_tree_model_commodity_dispose (GObject *object)
 	GncTreeModelCommodity *model;
 	GncTreeModelCommodityPrivate *priv;
 
-	ENTER("model %p", object);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_TREE_MODEL_COMMODITY (object));
 
+	ENTER("model %p", object);
 	model = GNC_TREE_MODEL_COMMODITY (object);
 	priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
 
@@ -208,6 +208,8 @@ gnc_tree_model_commodity_new (QofBook *book, gnc_commodity_table *ct)
 	GncTreeModelCommodityPrivate *priv;
 	const GList *item;
 
+    ENTER("");
+
 	item = gnc_gobject_tracking_get_list(GNC_TREE_MODEL_COMMODITY_NAME);
 	for ( ; item; item = g_list_next(item)) {
 		model = (GncTreeModelCommodity *)item->data;
@@ -227,6 +229,7 @@ gnc_tree_model_commodity_new (QofBook *book, gnc_commodity_table *ct)
 	priv->event_handler_id =
 	  qof_event_register_handler (gnc_tree_model_commodity_event_handler, model);
 
+    LEAVE("");
 	return GTK_TREE_MODEL (model);
 }
 
@@ -447,7 +450,10 @@ gnc_tree_model_commodity_get_iter (GtkTreeModel *tree_model,
 
 	list = gnc_commodity_table_get_namespaces_list(ct);
 	i = gtk_tree_path_get_indices (path)[0];
-	g_return_val_if_fail (i >= 0 && i < g_list_length (list), FALSE);
+    {
+         if (!(i >= 0 && i < g_list_length (list))) { LEAVE(""); }
+         g_return_val_if_fail (i >= 0 && i < g_list_length (list), FALSE);
+    }
 	namespace = g_list_nth_data (list, i);
 
 	if (depth == 1) {
@@ -461,7 +467,10 @@ gnc_tree_model_commodity_get_iter (GtkTreeModel *tree_model,
 
 	list = gnc_commodity_namespace_get_commodity_list(namespace);
 	i = gtk_tree_path_get_indices (path)[1];
-	g_return_val_if_fail (i >= 0 && i < g_list_length (list), FALSE);
+    {
+         if (!(i >= 0 && i < g_list_length (list))) { LEAVE(""); }
+         g_return_val_if_fail (i >= 0 && i < g_list_length (list), FALSE);
+    }
 	commodity = g_list_nth_data (list, i);
 
 	iter->stamp      = model->stamp;
@@ -483,13 +492,13 @@ gnc_tree_model_commodity_get_path (GtkTreeModel *tree_model,
 	gnc_commodity_namespace *namespace;
 	GList *ns_list;
 
-	ENTER("model %p, iter %p (%s)", tree_model, iter, iter_to_string(iter));
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_COMMODITY (tree_model), NULL);
 	model = GNC_TREE_MODEL_COMMODITY (tree_model);
 	g_return_val_if_fail (iter != NULL, NULL);
 	g_return_val_if_fail (iter->user_data != NULL, NULL);
 	g_return_val_if_fail (iter->user_data2 != NULL, NULL);
 	g_return_val_if_fail (iter->stamp == model->stamp, NULL);
+	ENTER("model %p, iter %p (%s)", tree_model, iter, iter_to_string(iter));
 	
 	priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
 	ct = priv->commodity_table;
@@ -640,7 +649,6 @@ gnc_tree_model_commodity_iter_next (GtkTreeModel *tree_model,
 	GList *list;
 	int n;
 
-	ENTER("model %p, iter %p(%s)", tree_model, iter, iter_to_string(iter));
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_COMMODITY (tree_model), FALSE);
 	model = GNC_TREE_MODEL_COMMODITY (tree_model);
 	g_return_val_if_fail (iter != NULL, FALSE);
@@ -648,6 +656,7 @@ gnc_tree_model_commodity_iter_next (GtkTreeModel *tree_model,
 	g_return_val_if_fail (iter->user_data2 != NULL, FALSE);
 	g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
 
+	ENTER("model %p, iter %p(%s)", tree_model, iter, iter_to_string(iter));
 	priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
 	if (iter->user_data == ITER_IS_NAMESPACE) {
 	  ct = priv->commodity_table;
@@ -733,9 +742,9 @@ gnc_tree_model_commodity_iter_has_child (GtkTreeModel *tree_model,
 	gnc_commodity_namespace *namespace;
 	GList *list;
 
+	g_return_val_if_fail (iter != NULL, FALSE);
 	ENTER("model %p, iter %p (%s)", tree_model,
 	      iter, iter_to_string(iter));
-	g_return_val_if_fail (iter != NULL, FALSE);
 
 	if (iter->user_data != ITER_IS_NAMESPACE) {
 	  LEAVE("no children (not ns)");
@@ -886,10 +895,11 @@ gnc_tree_model_commodity_get_iter_from_commodity (GncTreeModelCommodity *model,
 	GList *list;
 	gint n;
 	
-	ENTER("model %p, commodity %p, iter %p", model, commodity, iter);
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model), FALSE);
 	g_return_val_if_fail ((commodity != NULL), FALSE);
 	g_return_val_if_fail ((iter != NULL), FALSE);
+
+	ENTER("model %p, commodity %p, iter %p", model, commodity, iter);
 
 	namespace = gnc_commodity_get_namespace_ds(commodity);
 	if (namespace == NULL) {
@@ -929,9 +939,9 @@ gnc_tree_model_commodity_get_path_from_commodity (GncTreeModelCommodity *model,
 	GtkTreeIter tree_iter;
 	GtkTreePath *tree_path;
 
-	ENTER("model %p, commodity %p", model, commodity);
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model), NULL);
 	g_return_val_if_fail (commodity != NULL, NULL);
+	ENTER("model %p, commodity %p", model, commodity);
 
 	if (!gnc_tree_model_commodity_get_iter_from_commodity (model, commodity, &tree_iter)) {
 	  LEAVE("no iter");
@@ -963,19 +973,26 @@ gnc_tree_model_commodity_get_iter_from_namespace (GncTreeModelCommodity *model,
 	GList *list;
 	gint n;
 	
-	ENTER("model %p, namespace %p, iter %p", model, namespace, iter);
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model), FALSE);
 	g_return_val_if_fail ((namespace != NULL), FALSE);
 	g_return_val_if_fail ((iter != NULL), FALSE);
 
+	ENTER("model %p, namespace %p, iter %p", model, namespace, iter);
+
 	priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
 	list = gnc_commodity_table_get_namespaces_list(priv->commodity_table);
 	if (list == NULL)
+    {
+      LEAVE("");
 	  return FALSE;
+    }
 
 	n = g_list_index(list, namespace);
 	if (n == -1)
+    {
+      LEAVE("");
 	  return FALSE;
+    }
 
 	iter->stamp = model->stamp;
 	iter->user_data  = ITER_IS_NAMESPACE;
@@ -1114,10 +1131,10 @@ gnc_tree_model_commodity_path_deleted (GncTreeModelCommodity *model,
       gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
       namespace = gnc_tree_model_commodity_get_namespace (model, &iter);
       if (namespace) {
-	list = gnc_commodity_namespace_get_commodity_list(namespace);
-	if (g_list_length(list) == 0) {
-	  gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &iter);
-	}
+           list = gnc_commodity_namespace_get_commodity_list(namespace);
+           if (g_list_length(list) == 0) {
+                gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &iter);
+           }
       }
     }
   }
@@ -1206,12 +1223,13 @@ gnc_tree_model_commodity_event_handler (QofEntity *entity,
 	remove_data *data;
 	const gchar *name;
 
-	ENTER("entity %p, event %d, model %p, event data %p",
-	      entity, event_type, user_data, event_data);
 	model = (GncTreeModelCommodity *)user_data;
 
 	/* hard failures */
 	g_return_if_fail(GNC_IS_TREE_MODEL_COMMODITY(model));
+
+	ENTER("entity %p, event %d, model %p, event data %p",
+	      entity, event_type, user_data, event_data);
 
 	/* get type specific data */
 	if (GNC_IS_COMMODITY(entity)) {
@@ -1237,6 +1255,7 @@ gnc_tree_model_commodity_event_handler (QofEntity *entity,
 	    }
 	  }
 	} else {
+      LEAVE("");
 	  return;
 	}
 

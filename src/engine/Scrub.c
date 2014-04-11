@@ -45,8 +45,6 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Scrub.h"
 #include "ScrubP.h"
 #include "Transaction.h"
@@ -58,34 +56,17 @@ static QofLogModule log_module = GNC_MOD_SCRUB;
 /* ================================================================ */
 
 void
-xaccGroupScrubOrphans (AccountGroup *grp)
-{
-  GList *list;
-  GList *node;
-
-  if (!grp) return;
-
-  list = xaccGroupGetAccountList (grp);
-
-  for (node = list; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    xaccAccountTreeScrubOrphans (account);
-  }
-}
-
-void
 xaccAccountTreeScrubOrphans (Account *acc)
 {
   if (!acc) return;
 
-  xaccGroupScrubOrphans (xaccAccountGetChildren(acc));
   xaccAccountScrubOrphans (acc);
+  gnc_account_foreach_descendant(acc,
+                                 (AccountCb)xaccAccountScrubOrphans, NULL);
 }
 
 static void
-TransScrubOrphansFast (Transaction *trans, AccountGroup *root)
+TransScrubOrphansFast (Transaction *trans, Account *root)
 {
   GList *node;
 
@@ -125,7 +106,7 @@ xaccAccountScrubOrphans (Account *acc)
     Split *split = node->data;
 
     TransScrubOrphansFast (xaccSplitGetParent (split),
-                           xaccAccountGetRoot (acc));
+                           gnc_account_get_root (acc));
   }
 }
 
@@ -135,14 +116,14 @@ xaccTransScrubOrphans (Transaction *trans)
 {
   SplitList *node;
   QofBook *book = NULL;
-  AccountGroup *root = NULL;
+  Account *root = NULL;
   for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
 
     if (split->acc)
     {
-      TransScrubOrphansFast (trans, xaccAccountGetRoot(split->acc));
+      TransScrubOrphansFast (trans, gnc_account_get_root(split->acc));
       return;
     }
   }
@@ -154,35 +135,20 @@ xaccTransScrubOrphans (Transaction *trans)
    */
   PINFO ("Free Floating Transaction!");
   book = xaccTransGetBook (trans);
-  root = xaccGetAccountGroup (book);
+  root = gnc_book_get_root_account (book);
   TransScrubOrphansFast (trans, root);
 }
 
 /* ================================================================ */
 
 void
-xaccGroupScrubSplits (AccountGroup *group)
-{
-  GList *list;
-  GList *node;
-
-  if (!group) return;
-
-  list = xaccGroupGetAccountList (group);
-
-  for (node = list; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    xaccAccountTreeScrubSplits (account);
-  }
-}
-
-void
 xaccAccountTreeScrubSplits (Account *account)
 {
-  xaccGroupScrubSplits (xaccAccountGetChildren(account));
+  if (!account) return;
+
   xaccAccountScrubSplits (account);
+  gnc_account_foreach_descendant(account,
+                                 (AccountCb)xaccAccountScrubSplits, NULL);
 }
 
 void
@@ -289,28 +255,11 @@ xaccSplitScrub (Split *split)
 /* ================================================================ */
 
 void
-xaccGroupScrubImbalance (AccountGroup *grp)
-{
-  GList *list;
-  GList *node;
-
-  if (!grp) return;
-
-  list = xaccGroupGetAccountList (grp);
-
-  for (node = list; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    xaccAccountTreeScrubImbalance (account);
-  }
-}
-
-void
 xaccAccountTreeScrubImbalance (Account *acc)
 {
-  xaccGroupScrubImbalance (xaccAccountGetChildren(acc));
   xaccAccountScrubImbalance (acc);
+  gnc_account_foreach_descendant(acc,
+                                 (AccountCb)xaccAccountScrubImbalance, NULL);
 }
 
 void
@@ -332,7 +281,7 @@ xaccAccountScrubImbalance (Account *acc)
 
     xaccTransScrubCurrencyFromSplits(trans);
     
-    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
+    xaccTransScrubImbalance (trans, gnc_account_get_root (acc), NULL);
   }
 }
 
@@ -397,7 +346,7 @@ xaccTransScrubCurrencyFromSplits(Transaction *trans)
 }
 
 void
-xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
+xaccTransScrubImbalance (Transaction *trans, Account *root,
                          Account *account)
 {
   Split *balance_split = NULL;
@@ -418,7 +367,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   {
     if (!root) 
     {
-       root = xaccGetAccountGroup (xaccTransGetBook (trans));
+       root = gnc_book_get_root_account (xaccTransGetBook (trans));
        if (NULL == root)
        {
           /* This can't occur, things should be in books */
@@ -711,6 +660,7 @@ xaccAccountScrubCommodity (Account *account)
   gnc_commodity *commodity;
 
   if (!account) return;
+  if (xaccAccountGetType(account) == ACCT_TYPE_ROOT) return;
 
   commodity = xaccAccountGetCommodity (account);
   if (commodity) return;
@@ -754,27 +704,22 @@ scrub_trans_currency_helper (Transaction *t, gpointer data)
   return 0;
 }
 
-static gpointer
+static void
 scrub_account_commodity_helper (Account *account, gpointer data)
 {
   xaccAccountScrubCommodity (account);
   xaccAccountDeleteOldData (account);
-  return NULL;
 }
 
 void
-xaccGroupScrubCommodities (AccountGroup *group)
+xaccAccountTreeScrubCommodities (Account *acc)
 {
-  if (!group) return;
+  if (!acc) return;
 
-  xaccAccountGroupBeginEdit (group);
+  xaccAccountTreeForEachTransaction (acc, scrub_trans_currency_helper, NULL);
 
-  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, NULL);
-
-  xaccGroupForEachAccount (group, scrub_account_commodity_helper,
-                           NULL, TRUE);
-
-  xaccAccountGroupCommitEdit (group);
+  scrub_account_commodity_helper (acc, NULL);
+  gnc_account_foreach_descendant (acc, scrub_account_commodity_helper, NULL);
 }
 
 /* ================================================================ */
@@ -788,7 +733,7 @@ check_quote_source (gnc_commodity *com, gpointer data)
   return TRUE;
 }
 
-static gpointer
+static void
 move_quote_source (Account *account, gpointer data)
 {
   gnc_commodity *com;
@@ -798,12 +743,12 @@ move_quote_source (Account *account, gpointer data)
 
   com = xaccAccountGetCommodity(account);
   if (!com)
-    return NULL;
+    return;
 
   if (!new_style) {
     source = dxaccAccountGetPriceSrc(account);
     if (!source || !*source)
-      return NULL;
+      return;
     tz = dxaccAccountGetQuoteTZ(account);
 
     PINFO("to %8s from %s", gnc_commodity_get_mnemonic(com),
@@ -818,27 +763,26 @@ move_quote_source (Account *account, gpointer data)
 
   dxaccAccountSetPriceSrc(account, NULL);
   dxaccAccountSetQuoteTZ(account, NULL);
-  return NULL;
+  return;
 }
 
 
 void
-xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
+xaccAccountTreeScrubQuoteSources (Account *root, gnc_commodity_table *table)
 {
   gboolean new_style = FALSE;
   ENTER(" ");
 
-  if (!group || !table) {
+  if (!root || !table) {
     LEAVE("Oops");
     return;
   }
 
   gnc_commodity_table_foreach_commodity (table, check_quote_source, &new_style);
 
-  xaccAccountGroupBeginEdit (group);
-  xaccGroupForEachAccount (group, move_quote_source,
-                           GINT_TO_POINTER(new_style), TRUE);
-  xaccAccountGroupCommitEdit (group);
+  move_quote_source(root, GINT_TO_POINTER(new_style));
+  gnc_account_foreach_descendant (root, move_quote_source,
+                           GINT_TO_POINTER(new_style));
   LEAVE("Migration done");
 }
 
@@ -874,7 +818,7 @@ xaccAccountScrubKvp (Account *account)
 /* ================================================================ */
 
 Account *
-xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
+xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
                   const char *name_root)
 {
   char * accname;
@@ -893,19 +837,19 @@ xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
                          gnc_commodity_get_mnemonic (currency), NULL);
 
   /* See if we've got one of these going already ... */
-  acc = xaccGetAccountFromName (root, accname);
+  acc = gnc_account_lookup_by_name(root, accname);
 
   if (acc == NULL)
   {
     /* Guess not. We'll have to build one. */
-    acc = xaccMallocAccount (root->book);
+    acc = xaccMallocAccount(gnc_account_get_book (root));
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
     xaccAccountSetType (acc, ACCT_TYPE_BANK);
 
     /* Hang the account off the root. */
-    xaccGroupInsertAccount (root, acc);
+    gnc_account_append_child (root, acc);
     xaccAccountCommitEdit (acc);
   }
 

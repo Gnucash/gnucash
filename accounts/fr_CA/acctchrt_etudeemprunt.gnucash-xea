@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-account-example>
+    <gnc-act:title>
+      Emprunt pour études
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Emprunt pour études et frais d'intérêts associés.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Selectionnez ce groupe si vous devez gérer un emprunt pour études.
+  </gnc-act:long-description>    
+  <gnc:account version="2.0.0">
+	  <act:name>Passif</act:name>
+	  <act:id type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Passif</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Emprunts</act:name>
+	  <act:id type="guid">03a161c156fdb13c85a1f84400866a29</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Emprunts</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Études</act:name>
+	  <act:id type="guid">4eb202607c3ab5f173eec32e2cb4972f</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Emprunt pour les études</act:description>
+	  <act:parent type="guid">03a161c156fdb13c85a1f84400866a29</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Dépenses</act:name>
+	  <act:id type="guid">5882be9c31d58cc589c53f94d86f82da</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépenses</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Intérêts</act:name>
+	  <act:id type="guid">6622783b69e9ca8105125c778c7b621f</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépense d'intérêts</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Études</act:name>
+	  <act:id type="guid">eaafdbe8554a4e7b33ef9e93b6cb49cd</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Intérêts sur emprunt pour études</act:description>
+	  <act:parent type="guid">6622783b69e9ca8105125c778c7b621f</act:parent>
+  </gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

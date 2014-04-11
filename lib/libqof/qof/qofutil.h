@@ -56,7 +56,7 @@
 # endif
 #endif
 
-#define QOF_MOD_UTIL "qof-utilities"
+#define QOF_MOD_UTIL "qof.utilities"
 
 /** \name typedef enum as string macros
 @{

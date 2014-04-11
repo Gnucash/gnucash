@@ -102,6 +102,7 @@ test_string_converters(void)
 int
 main(int argc, char **argv)
 {
+    qof_log_init();
     test_binary();
     fflush(stdout);
     test_string_converters();

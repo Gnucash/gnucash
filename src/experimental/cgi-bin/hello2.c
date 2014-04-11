@@ -12,7 +12,6 @@
 
 #include "gnc-book.h"
 #include "gnc-engine.h"
-#include "Group.h"
 #include "io-gncxml.h"
 #include "Query.h"
  
@@ -22,7 +21,7 @@ main (int argc, char *argv[])
    int fake_argc =1;
    char * fake_argv[] = {"hello2", 0};
    GNCBook *book;
-   AccountGroup *grp;
+   Account *root;
    Query *q, *qq;
    GList *split_list, *sl2, *node;
    Split *s;
@@ -54,12 +53,12 @@ main (int argc, char *argv[])
       goto bookerrexit;
    }
 
-   /* the grp pointer points to our local cache of the data */
-   grp = gnc_book_get_group (book);
+   /* the root pointer points to our local cache of the data */
+   root = gnc_book_get_root_account (book);
    
    /* build a query */
    q = xaccMallocQuery ();
-   xaccQuerySetGroup (q, grp);
+   xaccQuerySetGroup (q, root);
    xaccQuerySetMaxSplits (q, 30);
    
    /* Get everything between some random dates */
@@ -80,8 +79,8 @@ main (int argc, char *argv[])
 		       
    gncxml_write_query_to_buf(q, &bufp, &sz);
    qq = gncxml_read_query (bufp, sz);
-xaccQuerySetMaxSplits (qq, 30);
-   xaccQuerySetGroup (qq, grp);
+   xaccQuerySetMaxSplits (qq, 30);
+   xaccQuerySetGroup (qq, root);
    sl2 = xaccQueryGetSplits (qq);
 
    /* count number of splits */

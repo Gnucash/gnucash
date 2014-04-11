@@ -58,10 +58,7 @@ ToDo:
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
@@ -221,7 +218,7 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
 /* Similar to GetOrMakeAccount, but different in important ways */
 
 static Account *
-GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
+GetOrMakeLotOrphanAccount (Account *root, gnc_commodity * currency)
 {
   char * accname;
   Account * acc;
@@ -239,12 +236,12 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
                          gnc_commodity_get_mnemonic (currency), NULL);
 
   /* See if we've got one of these going already ... */
-  acc = xaccGetAccountFromName (root, accname);
+  acc = gnc_account_lookup_by_name(root, accname);
 
   if (acc == NULL)
   {
     /* Guess not. We'll have to build one. */
-    acc = xaccMallocAccount (root->book);
+    acc = xaccMallocAccount (gnc_account_get_book(root));
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
@@ -256,7 +253,7 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
            "that haven't been recorded elsewhere."));
 
     /* Hang the account off the root. */
-    xaccGroupInsertAccount (root, acc);
+    gnc_account_append_child (root, acc);
     xaccAccountCommitEdit (acc);
   }
 
@@ -344,10 +341,10 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
    * for this account, then create such a place */
   if (NULL == gain_acct)
   {
-      AccountGroup *root;
+      Account *root;
 
       xaccAccountBeginEdit (acc);
-      root = xaccAccountGetRoot(acc);
+      root = gnc_account_get_root(acc);
       gain_acct = GetOrMakeLotOrphanAccount (root, currency);
 
       vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));

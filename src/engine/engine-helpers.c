@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-date.h"

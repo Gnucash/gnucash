@@ -66,21 +66,6 @@ const char * gnc_log_prettify (const char *name);
 /** \deprecated use qof_log_check instead. */
 gboolean gnc_should_log(QofLogModule log_module, gncLogLevel log_level);
 
-/** \deprecated */
-#define GNC_LOG_FATAL   QOF_LOG_FATAL
-/** \deprecated */
-#define GNC_LOG_ERROR   QOF_LOG_ERROR
-/** \deprecated */
-#define GNC_LOG_WARNING QOF_LOG_WARNING
-/** \deprecated */
-#define GNC_LOG_INFO    QOF_LOG_INFO
-/** \deprecated */
-#define GNC_LOG_DEBUG   QOF_LOG_DEBUG
-/** \deprecated */
-#define GNC_LOG_DETAIL  QOF_LOG_DETAIL
-/** \deprecated */
-#define GNC_LOG_TRACE   QOF_LOG_TRACE
-
 /** \deprecated use qof_start_clock */
 void gnc_start_clock (int, QofLogModule, gncLogLevel, const char*, const char*, ...);
 /** \deprecated use qof_report_clock */

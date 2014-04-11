@@ -1,27 +1,17 @@
+-*- mode: rst; buffer-file-coding-system: utf-8 -*-
+
 Scheduled Transactions
 ===============================================================
-
-Overview
---------------
-
-- SX List
-  - CRUD operations on SXes
-  - Show Next "year"s worth of SX instances
-    - gnc_sx_get_instances({now + 1yr})
-
-- SX Editor
-
-- SinceLastRun
-  - Last .. present (+ create-in-advance, reminder) instances
-    - gnc_sx_get_instances(now)
 
 TODO
 ----------
 
 - meta
-  - [x] move files around
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
   - [ ] generic tree model adapter setup code
+  - [ ] move documentation into doxygen comments, here and in sources.
+  - [x] move files around
+  - [x] printf -> logging
 
 - core
   - [x] sx list -> qof collection
@@ -32,7 +22,7 @@ TODO
 !   - [x] implement sort model
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
-  - [ ] after updating/merging new instances, enforce state (+variable) consistency.
+! - [ ] after updating/merging new instances, enforce state (+variable) consistency.
 
 - unit testing
   - [ ] model updating in the face of change
@@ -42,10 +32,12 @@ TODO
       - [ ] add instances
       - [ ] remove instances
       - [ ] make "weird"
+    - [ ] ± disabled flag
   - [x] ensure state consistency model is upheld
   - [ ] check variables-unbound logic
   - [ ] verify summary counts
   - [ ] check "since last run" states
+    - [ ] specious datafile dirty-ing
     - [ ] -autocreate[, ±notify]
     - [ ] +autocreate, -notify
     - [ ] +autocreate, +notify
@@ -53,40 +45,45 @@ TODO
     - [ ] +autocreate, +notify, w/postponed
   - [ ] bugs
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
+  - remove
+    - [x] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
+  - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
-! - [ ] crash with two sx lists open and SX mutation
-    - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
-    [[[
-    (gnucash:17610): GLib-GObject-WARNING **: invalid unclassed pointer in cast to `GncSxListTreeModelAdapterType'
-    sx list tree model adapter update
-    
-    (gnucash:17610): Gtk-CRITICAL **: gtk_tree_store_clear: assertion `GTK_IS_TREE_STORE (tree_store)' failed ]]]
+  - [x] sx-from-trans: "unknown get.type [3]" [dh20070120]_
 
-  - [x] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
+! - [x] crash with two sx lists open and SX mutation
+    - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
+
+  - [x] no way to clear a variable entry [ve20070209]_
+
+.. _[dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
+.. _[ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
 
 - sx list page
-  - [ ] use gnc-tree-view
-  - [ ] save/restore state
   - [/] make into split panel
-    - [ ] fix slider position
+    - [ ] fix default slider position
+    - [ ] conf-save slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
+! - [x] use gnc-tree-view
+! - [x] save/restore state
 
 - sx editor
-  - [ ] clean up, reformat
+  - [/] clean up source formatting
+  - [ ] re-layout dialog
+    - tabs: "overview", "frequency", "template transaction" [, "estimation"]
   - [ ] model-ize
     - (check_consistent, especially...)
 
-- gnc-frequency
-  - [ ] clean up, reformat
-
 - gnc_dense_cal
-  - [ ] font handling: gdk -> pango
   - [ ] change number-of-month properties to display-named properties (width, length)
+  - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
   - [/] (re-format file)
+! - [x] font handling: gdk -> pango
   - [x] set_model(GncTemporalInstancesModel *mdl)
     - [x] new interface creation.
     - [x] register callbacks for signals
@@ -97,12 +94,54 @@ TODO
   - [x] hookup destroy/finalize
 
 - FreqSpec
-  - [ ] type+ui-type -> type
+  - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-  - [ ] XML migration, handling
+! - [x] XML migration, handling
+    - xml:freqSpec -> obj:Recurrence
+      - [x] none (Recurrence doesn't support)
+      - [x] once
+        - [x] if once, fix Recurrence date to be SX start date. :p
+      - [x] daily
+      - [x] daily [m-f] (composite)
+      - [x] weekly, single
+      - [x] weekly, multiple (composite)
+      - [x] monthly (+quarterly, tri-anually, semi-annually, yearly)
+      - [x] semi-monthly (composite)
+    - [x] write Recurrences into new-version SX
+  - gnc-frequency
+!   - [x] Support Recurrence
+      - [x] in
+      - [x] out
+!   - [x] Support 'last-day-of-month'
+    - [x] simplify
+      - [x] remove daily [m-f] (-> weekly)
+      - [x] remove biweekly page (-> weekly)
+      - [x] remove > monthly pages (-> monthly)
+    - [x] clean up, reformat source
+  - gnc-plugin-page-sx-list
+    - [x] gnc_plugin_page_sx_list_cmd_new
+  - dialog-sx-editor
+    - [x] gnc_sxed_check_changed
+    - [x] gnc_sxed_check_consistent
+    - [x] gnc_sxed_update_cal
+    - [x] gnc_sxed_save_sx
+  - sx list
+    - [x] recurrence_cmp(...)
+    - [x] More compact recurrenceListToString(...).
+  - [ ] remove FreqSpec code
+    - [ ] SX code
+    - [x] src/gnome/druid-acct-period.c
+
+- gnc_frequency
+  - [ ] support nth-weekday Recurrence period.
 
 - since-last-run
+  - [ ] "reminder" instances show number of days until due
+  - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
+! - [x] save/restore dialog window size
+  - [x] remove split pane
+  - [x] "auto" scrollbars
 ! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
@@ -122,12 +161,9 @@ TODO
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
-- destroy/cleanup
-  - notes
-    - dispose: should no longer hold references to other objects; callable
-      multiple times; chain up at end
-    - finalize: complete destruction; just before free; only called once;
-      chain up at end.
+- destroy/cleanup, notes:
+  - dispose: break references; callable multiple times
+  - finalize: complete destruction; just before free; only called once
 
 Pedantic Todo
 ----------------------
@@ -250,19 +286,6 @@ counters for newly-discovered-as-to-be-created SXes."
     - others, auto-create (-notify): SLR dialog, incl. created 
     - others, auto-create (+notify): SLR dialog, incl. created
 
-Bugs to close after merge
---------------------------------------
-
-- With many auto-create transactions but none with notify option, "Auto-Created Transactions Notification" druid page lists every existing transaction - http://bugzilla.gnome.org/show_bug.cgi?id=347116
-- Since last run dialog does not allow for early finish, an... - http://bugzilla.gnome.org/show_bug.cgi?id=329384
-- Since Last Run druid changes data before Apply - http://bugzilla.gnome.org/show_bug.cgi?id=333849
-- Resize the "Since Last Run" window is incorrect - http://bugzilla.gnome.org/show_bug.cgi?id=353563
-- Transaction reminders page has slightly incorrect instructions - http://bugzilla.gnome.org/show_bug.cgi?id=331069
-- Transaction not highlighted in "Transaction Preparation" window - http://bugzilla.gnome.org/show_bug.cgi?id=342658
-- Scrolling through variables list does not work - http://bugzilla.gnome.org/show_bug.cgi?id=343190
-- Gnucash thinks the file has changed after cancelling out of the Since Last Run dialog and making no changes - http://bugzilla.gnome.org/show_bug.cgi?id=344494
-- Transaction reminder with variable amount doesn't display value field - http://bugzilla.gnome.org/show_bug.cgi?id=147946
-
 ------------------------------------------------------------
 
 Release Notes
@@ -304,7 +327,6 @@ Licensing
 ---------
 
 In new files (and old files related to this code that I hold copyright on), I've removed the "or any later version" clause.  I have problems licensing under a license that I haven't read, or that can change in ways I disagree with.  At some point I'll make this change for all source files I hold copyright on, and I intend to not use the clause on sources I (re)write in the future.
-
 
 Testing
 -------

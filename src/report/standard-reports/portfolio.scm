@@ -72,8 +72,8 @@
       "b"
       (N_ "Stock Accounts to report on")
       (lambda () (filter gnc:account-is-stock?
-                         (xaccGroupGetSubAccountsSorted
-                          (gnc-get-current-group))))
+                         (gnc-account-get-descendants-sorted
+                          (gnc-get-current-root-account))))
       (lambda (accounts) (list  #t 
                                 (filter gnc:account-is-stock? accounts)))
       #t))

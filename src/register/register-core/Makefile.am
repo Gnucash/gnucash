@@ -64,3 +64,5 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 CLEANFILES = $(BUILT_SOURCES)
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.core\"

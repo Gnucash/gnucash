@@ -46,11 +46,11 @@ static GNCModuleInfo * gnc_module_get_info(const char * lib_path);
 static GList * 
 gnc_module_system_search_dirs(void) 
 {
-  char  * spath   = getenv("GNC_MODULE_PATH");
+  const char *spath = g_getenv("GNC_MODULE_PATH");
   GList * list    = NULL;
   GString * token = g_string_new(NULL);
   int   escchar   = 0;
-  char  * cpos;
+  const char *cpos;
 
   if(!spath) 
   {
@@ -127,13 +127,9 @@ gnc_module_system_setup_load_path(void)
 
   if(dirs)
   {
-    char *envt = getenv("LD_LIBRARY_PATH");
+    char *envt = g_strdup(g_getenv("LD_LIBRARY_PATH"));
     
-    if(envt)
-    {
-      envt = g_strdup(envt);
-    }
-    else
+    if(!envt)
     {
       envt = g_strdup("");
     }
@@ -147,7 +143,7 @@ gnc_module_system_setup_load_path(void)
     }
     g_list_free(dirs);
     
-    if (!g_setenv("LD_LIBRARY_PATH", envt, 1))
+    if (!g_setenv("LD_LIBRARY_PATH", envt, TRUE))
     {
       g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
     }
@@ -198,27 +194,27 @@ gnc_module_system_refresh(void)
   /* look in each search directory */
   for(current = search_dirs; current; current = current->next) 
   {
-      DIR *d = opendir(current->data);
-      struct dirent * dent = NULL;
+      GDir *d = g_dir_open(current->data, 0,NULL);
+      const gchar *dent = NULL;
       char * fullpath = NULL;
       GNCModuleInfo * info;
 
       if (!d) continue;
 
-      while ((dent = readdir(d)) != NULL)
+      while ((dent = g_dir_read_name(d)) != NULL)
       {
         /* is the file a loadable module? */
 
         /* Gotcha: On MacOS, G_MODULE_SUFFIX is defined as "so", but if we do
          * not build clean libtool modules with "-module", we get dynamic
          * libraries ending on .dylib */
-        if (g_str_has_suffix(dent->d_name, "." G_MODULE_SUFFIX) ||
-            g_str_has_suffix(dent->d_name, ".dylib"))
+        if (g_str_has_suffix(dent, "." G_MODULE_SUFFIX) ||
+            g_str_has_suffix(dent, ".dylib"))
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
-          fullpath = g_build_filename((const gchar *)(current->data), 
-				      dent->d_name, (char*)NULL);
+          fullpath = g_build_filename((const gchar *)(current->data),
+                                      dent, (char*)NULL);
           info     = gnc_module_get_info(fullpath);
           
           if(info) 
@@ -228,7 +224,7 @@ gnc_module_system_refresh(void)
           g_free(fullpath);
         }
       }
-      closedir(d);
+      g_dir_close(d);
 
   }
   /* free the search dir strings */

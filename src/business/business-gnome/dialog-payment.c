@@ -255,7 +255,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     return;
   }
 
-  post = xaccGetAccountFromFullName (gnc_book_get_group (pw->book), text);
+  post = gnc_account_lookup_by_full_name (gnc_book_get_root_account (pw->book), text);
 
   if (!post) {
     char *msg = g_strdup_printf (

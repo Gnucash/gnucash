@@ -74,6 +74,7 @@ test_xml_account_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
@@ -92,6 +93,7 @@ test_xml_commodity_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
@@ -110,6 +112,7 @@ test_xml_pricedb_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
@@ -237,10 +240,13 @@ AM_CFLAGS = \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${GUILE_INCS}
+  ${GUILE_INCS} \
+  ${GCONF_CFLAGS}
 
 EXTRA_DIST = \
   grab-types.pl \
   test-dom-parser1.c \
   test-real-data.sh \
   test-xml2-is-file.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.file\"

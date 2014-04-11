@@ -23,7 +23,7 @@ typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 typedef int GNCOptionDBHandle;
 
 QofBook * gnc_get_current_book (void);
-AccountGroup * gnc_get_current_group (void);
+Account * gnc_get_current_root_account (void);
 
 char * gnc_gettext_helper(const char *string);
 

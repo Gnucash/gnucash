@@ -29,6 +29,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -43,7 +44,6 @@
 #include <gtkhtml/gtkhtml-embedded.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
@@ -1312,7 +1312,7 @@ gnc_html_export(gnc_html * html, const char *filepath)
   g_return_val_if_fail (html != NULL, FALSE);
   g_return_val_if_fail (filepath != NULL, FALSE);
 
-  fh = fopen (filepath, "w");
+  fh = g_fopen (filepath, "w");
   if (!fh)
     return FALSE;
 

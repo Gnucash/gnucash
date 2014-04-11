@@ -102,7 +102,7 @@
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -314,8 +314,8 @@
          (chart (gnc:make-html-piechart))
          (topl-accounts (gnc:filter-accountlist-type 
                          account-types
-                         (xaccGroupGetAccountListSorted
-                          (gnc-get-current-group)))))
+                         (gnc-account-get-children-sorted
+                          (gnc-get-current-root-account)))))
     
     (define (monetary->double foreign-monetary date)
       (gnc-numeric-to-double
@@ -391,7 +391,7 @@
                 (for-each 
                  (lambda (acct)
                    (let ((this-acct-subs 
-                          (gnc:account-get-all-subaccounts acct)))
+                          (gnc-account-get-descendants-sorted acct)))
                      (if (list? this-acct-subs)
                          (set! subaccts 
                                (append subaccts this-acct-subs)))))

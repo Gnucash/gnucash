@@ -1,5 +1,5 @@
 TESTS =  \
-  test-link-module test-load-module test-sx
+  test-link-module test-load-module
 
 # The following tests are nice, but have absolutely no place in an
 # automated testing system.
@@ -20,13 +20,14 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --library-dir    ${top_builddir}/src/backend/file \
   --library-dir    ${top_builddir}/src/network-utils \
   --library-dir    ${top_builddir}/src/calculation \
-  --library-dir    ${top_builddir}/src/app-utils
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/gnome-utils
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
-  test-link-module test-gnc-recurrence test-gnc-dialog test-sx
+  test-link-module test-gnc-recurrence test-gnc-dialog
 
 INCLUDES= \
   -I${top_srcdir}/src \

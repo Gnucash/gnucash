@@ -8,7 +8,6 @@ AM_CFLAGS = \
 	-I${top_srcdir}/src \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	-I${top_srcdir}/src/business/business-core/ \
 	${QOF_CFLAGS} \
 	${GNUCASH_ENGINE_CFLAGS}
 
@@ -16,7 +15,6 @@ libgncmod_engine_la_SOURCES = \
   Account.c \
   FreqSpec.c \
   Recurrence.c \
-  Group.c \
   Period.c \
   Query.c \
   SchedXaction.c \
@@ -57,7 +55,6 @@ gncinclude_HEADERS = \
   FreqSpec.h \
   Recurrence.h \
   GNCId.h \
-  Group.h \
   Period.h \
   SchedXaction.h \
   SX-book.h \
@@ -96,9 +93,7 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   AccountP.h \
   FreqSpecP.h \
-  GroupP.h \
   QueryP.h \
-  SchedXactionP.h \
   ScrubP.h \
   SplitP.h \
   SX-book.h \
@@ -196,3 +191,5 @@ BUILT_SOURCES = iso-4217-currencies.c \
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
 	${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-engine.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"

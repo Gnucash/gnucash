@@ -37,19 +37,19 @@ G_BEGIN_DECLS
 typedef struct _GncDenseCalModel GncDenseCalModel; /* non existant */
 typedef struct _GncDenseCalModelIface
 {
-  GTypeInterface parent;
+    GTypeInterface parent;
 
-  /* signals */
-  void (*insert)(GncDenseCalModel *mdl, gint tag);
-  void (*update)(GncDenseCalModel *mdl, gint tag);
-  void (*remove)(GncDenseCalModel *mdl, gint tag);
+    /* signals */
+    void (*insert)(GncDenseCalModel *mdl, gint tag);
+    void (*update)(GncDenseCalModel *mdl, gint tag);
+    void (*remove)(GncDenseCalModel *mdl, gint tag);
 
-  /* virtual table */
-  GList* (*get_contained)(GncDenseCalModel *model);
-  gchar* (*get_name)(GncDenseCalModel *model, guint tag);
-  gchar* (*get_info)(GncDenseCalModel *model, guint tag);
-  gint (*get_instance_count)(GncDenseCalModel *model, guint tag);
-  void (*get_instance)(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
+    /* virtual table */
+    GList* (*get_contained)(GncDenseCalModel *model);
+    gchar* (*get_name)(GncDenseCalModel *model, guint tag);
+    gchar* (*get_info)(GncDenseCalModel *model, guint tag);
+    gint (*get_instance_count)(GncDenseCalModel *model, guint tag);
+    void (*get_instance)(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
 } GncDenseCalModelIface;
 
 GType gnc_dense_cal_model_get_type(void);

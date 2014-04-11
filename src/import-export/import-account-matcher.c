@@ -67,7 +67,7 @@ build_acct_tree(struct _accountpickerdialog * picker)
   GtkTreeViewColumn *col;
 
   /* Build a new account tree */
-  TRACE("Begin");
+  DEBUG("Begin");
   account_tree = gnc_tree_view_account_new(FALSE);
   picker->account_tree = GNC_TREE_VIEW_ACCOUNT(account_tree);
   gtk_tree_view_set_headers_visible (account_tree, TRUE);
@@ -169,12 +169,12 @@ Account * gnc_import_select_account(gncUIWidget parent,
   /*DEBUG("Looking for account with online_id: %s", account_online_id_value);*/
   if(account_online_id_value!=NULL)
     {
-      retval = xaccGroupForEachAccount(gnc_get_current_group (),
+      retval =
+	gnc_account_foreach_descendant_until(gnc_get_current_root_account (),
 				       test_acct_online_id_match,
 				       /* This argument will only be
 					  used as a "const char*" */
-				       (void*)account_online_id_value,
-				       TRUE);
+				       (void*)account_online_id_value);
     }
   if(retval==NULL && auto_create != 0)
     {

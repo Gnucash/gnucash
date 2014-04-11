@@ -26,7 +26,6 @@
 #include <time.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "Query.h"
 #include "QueryCore.h"
 #include "QueryNew.h"
@@ -311,9 +310,7 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
       gpointer ret;
       reg_type = GENERAL_LEDGER;
 
-      ret = xaccGroupForEachAccount (xaccAccountGetChildren (leader),
-                                    look_for_portfolio_cb,
-                                    NULL, TRUE);
+      ret = gnc_account_foreach_descendant_until(leader, look_for_portfolio_cb, NULL);
       if (ret) reg_type = PORTFOLIO_LEDGER;
       break;
     }
@@ -404,20 +401,20 @@ gnc_ledger_display_gl (void)
 
   /* In lieu of not "mis-using" some portion of the infrastructure by writing
    * a bunch of new code, we just filter out the accounts of the template
-   * transactions.  While these are in a seperate AccountGroup just for this
-   * reason, the query engine makes no distinction between AccountGroups.
+   * transactions.  While these are in a seperate Account trees just for this
+   * reason, the query engine makes no distinction between Account trees.
    * See Gnome Bug 86302.
    *         -- jsled */
   {
-    AccountGroup *tAG;
-    AccountList *al;
+    Account *tRoot;
+    GList *al;
     
-    tAG = gnc_book_get_template_group( gnc_get_current_book() );
-    al = xaccGroupGetSubAccounts( tAG );
+    tRoot = gnc_book_get_template_root( gnc_get_current_book() );
+    al = gnc_account_get_descendants( tRoot );
     xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QUERY_AND );
     g_list_free (al);
     al = NULL;
-    tAG = NULL;
+    tRoot = NULL;
   }
 
   gnc_tm_get_today_start(&tm);
@@ -448,8 +445,7 @@ gnc_ledger_display_template_gl (char *id)
   Query *q;
   GNCLedgerDisplay *ld;
   SplitRegister *sr;
-  AccountGroup *ag;
-  Account *acct;
+  Account *root, *acct;
   gboolean isTemplateModeTrue;
 
   acct = NULL;
@@ -461,8 +457,8 @@ gnc_ledger_display_template_gl (char *id)
   xaccQuerySetBook (q, book);
 
   if ( id != NULL ) {
-    ag = gnc_book_get_template_group (book);
-    acct = xaccGetAccountFromName (ag, id);
+    root = gnc_book_get_template_root (book);
+    acct = gnc_account_lookup_by_name(root, id);
     g_assert( acct );
     xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
   }
@@ -630,7 +626,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
   leader = gnc_ledger_display_leader (ld);
 
   if (ld->ld_type == LD_SUBACCOUNT)
-    accounts = xaccGroupGetSubAccounts (xaccAccountGetChildren (leader));
+    accounts = gnc_account_get_descendants (leader);
   else
     accounts = NULL;
 

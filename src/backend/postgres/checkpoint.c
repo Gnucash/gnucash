@@ -45,7 +45,6 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "qof.h"
-#include "Group.h"
 #include "gnc-commodity.h"
 
 #include "builder.h"
@@ -235,11 +234,13 @@ done:
 /* recompute fresh balance checkpoints for every account */
 
 void
-pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp)
+pgendAccountTreeRecomputeAllCheckpoints (PGBackend *be, Account *parent)
 {
    GList *acclist, *node;
 
-   acclist = xaccGroupGetSubAccounts(grp);
+   pgendAccountRecomputeAllCheckpoints (be, xaccAccountGetGUID(parent));
+
+   acclist = gnc_account_get_descendants(parent);
    for (node = acclist; node; node=node->next)
    {
       Account *acc = (Account *) node->data;
@@ -456,9 +457,9 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    com = xaccAccountGetCommodity(acc);
    if (!com)
    {
-     PERR ("account %s has no commodity",
-           guid_to_string (xaccAccountGetGUID (acc)));
-     return;
+        PERR("account %s has no commodity",
+             guid_to_string (xaccAccountGetGUID (acc)));
+        return;
    }
 
    chk.commodity = gnc_commodity_get_unique_name(com);
@@ -475,13 +476,13 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    rec_b = chk.reconciled_balance;
    deno = gnc_commodity_get_fraction (com);
 
-   DEBUGCMD({
+   {
       char buf[80];
       gnc_timespec_to_iso8601_buff (chk.date_start, buf);
-      PINFO("%s balance to %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, 
-        xaccAccountGetDescription (acc), buf,
-        b, deno, cl_b, deno, rec_b, deno);
-     });
+      DEBUG("%s balance to %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, 
+            xaccAccountGetDescription (acc), buf,
+            b, deno, cl_b, deno, rec_b, deno);
+   }
 
    /* add up loose entries since the checkpoint */
    pgendAccountGetPartialBalance (be, &chk);
@@ -497,29 +498,29 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 
    xaccAccountSetStartingBalance (acc, baln, cleared_baln, reconciled_baln);
 
-   DEBUGCMD ({
-      char buf[80];
-      gnc_timespec_to_iso8601_buff (as_of_date, buf);
-      LEAVE("be=%p %s %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, be, 
-        xaccAccountGetDescription (acc), buf,
-        b, deno, cl_b, deno, rec_b, deno);
-     });
+   {
+        char buf[80];
+        gnc_timespec_to_iso8601_buff (as_of_date, buf);
+        LEAVE("be=%p %s %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, be, 
+              xaccAccountGetDescription (acc), buf,
+              b, deno, cl_b, deno, rec_b, deno);
+   }
 }
 
 /* ============================================================= */
 /* get checkpoint value for all accounts */
 
 void
-pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, 
+pgendAccountTreeGetAllBalances (PGBackend *be, Account *root, 
                           Timespec as_of_date)
 {
    GList *acclist, *node;
 
-   if (!be || !grp) return;
+   if (!be || !root) return;
    ENTER("be=%p", be);
 
    /* loop over all accounts */
-   acclist = xaccGroupGetSubAccounts (grp);
+   acclist = gnc_account_get_descendants (root);
    for (node=acclist; node; node=node->next)
    {
       Account *acc = (Account *) node->data;

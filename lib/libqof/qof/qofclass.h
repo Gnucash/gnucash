@@ -71,7 +71,7 @@
 
 #include "qofid.h"
 
-#define QOF_MOD_CLASS "qof-class"
+#define QOF_MOD_CLASS "qof.class"
 
 /** \name Core types
 

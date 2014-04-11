@@ -74,9 +74,6 @@ struct QofInstance_s
    gboolean infant;
 };
 
-/* reset the dirty flag */
-void qof_instance_mark_clean (QofInstance *);
-
 void qof_instance_set_slots (QofInstance *, KvpFrame *);
 
 /*  Set the last_update time. Reserved for use by the SQL backend;

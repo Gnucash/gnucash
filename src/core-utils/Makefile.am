@@ -61,3 +61,5 @@ noinst_DATA = .scm-links
 EXTRA_DIST = $(gncmod_DATA) core-utils.i
 CLEANFILES = gnucash .scm-links
 MAINTAINERCLEANFILES = swig-core-utils.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"

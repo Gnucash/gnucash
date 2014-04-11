@@ -263,7 +263,7 @@ typedef struct LoanDruidData_ {
         GtkSpinButton *prmIrateSpin;
         GtkComboBox   *prmType;
         GtkFrame      *prmVarFrame;
-        GNCFrequency  *prmVarGncFreq;
+        GncFrequency  *prmVarGncFreq;
         GNCDateEdit   *prmStartDateGDE;
         GtkSpinButton *prmLengthSpin;
         GtkComboBox   *prmLengthType;
@@ -283,7 +283,7 @@ typedef struct LoanDruidData_ {
         GNCAccountSel *repPrincToGAS;
         GNCAccountSel *repIntToGAS;
         GtkFrame      *repFreqFrame;
-        GNCFrequency  *repGncFreq;
+        GncFrequency  *repGncFreq;
 
         /* pay = payment[s] */
         GtkEntry         *payTxnName;
@@ -301,7 +301,7 @@ typedef struct LoanDruidData_ {
         GtkRadioButton   *payTxnFreqPartRb;
         GtkRadioButton   *payTxnFreqUniqRb;
         GtkAlignment     *payFreqAlign;
-        GNCFrequency     *payGncFreq;
+        GncFrequency     *payGncFreq;
 
         /* rev = review */
         GtkComboBox       *revRangeOpt;

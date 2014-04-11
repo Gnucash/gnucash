@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+	 Véhicule
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Frais relatifs à votre véhicule.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	    Sélectionnez ce groupe de comptes si vous devez suivre les frais relatifs à la possession et à l'utilisation d'une auto (assurances, carburant, emprunt, intérêts, ...).
+  </gnc-act:long-description>    
+  <gnc:account version="2.0.0">
+	  <act:name>Actif</act:name>
+	  <act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Actif</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Actifs fixes</act:name>
+	  <act:id type="guid">c888710a53770a065aceae44d8abd0dd</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Actifs fixes</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">b14f810bdb0b57b77acf1a5db700068c</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Véhicule</act:name>
+	  <act:id type="guid">66c6a566a0abd30a95e10e2a1b68bc81</act:id>
+	  <act:type>ASSET</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Véhicule</act:description>
+	  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Passif</act:name>
+	  <act:id type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Passif</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Emprunts</act:name>
+	  <act:id type="guid">03a161c156fdb13c85a1f84400866a29</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Emprunts</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">daf9ad37262c7254bbdf0be5ba26e29e</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Auto</act:name>
+	  <act:id type="guid">856bbc47d550fa0a0fb91c4c59364241</act:id>
+	  <act:type>LIABILITY</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Emprunt pour l'auto</act:description>
+	  <act:parent type="guid">03a161c156fdb13c85a1f84400866a29</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Dépenses</act:name>
+	  <act:id type="guid">5882be9c31d58cc589c53f94d86f82da</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépenses</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Auto</act:name>
+	  <act:id type="guid">18afa7c0de704dc2f64c67e42b2a0d19</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Frais associés à l'auto</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Permis</act:name>
+	  <act:id type="guid">8349ba7c26f61f3aafa01ce404c4bb12</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Permis</act:description>
+	  <act:parent type="guid">18afa7c0de704dc2f64c67e42b2a0d19</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Carburant</act:name>
+	  <act:id type="guid">248a4b7dbca7ec82908c11ebc43b17af</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Carburant</act:description>
+	  <act:parent type="guid">18afa7c0de704dc2f64c67e42b2a0d19</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Parking</act:name>
+	  <act:id type="guid">0b77318da42e55a0bc1ec7e39665d53e</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Parking</act:description>
+	  <act:parent type="guid">18afa7c0de704dc2f64c67e42b2a0d19</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Entretien</act:name>
+	  <act:id type="guid">fbd078af145d7d402ec06c6393f9ad2c</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Entretien et réparation</act:description>
+	  <act:parent type="guid">18afa7c0de704dc2f64c67e42b2a0d19</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Intérêts</act:name>
+	  <act:id type="guid">6622783b69e9ca8105125c778c7b621f</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépense d'intérêts</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Auto</act:name>
+	  <act:id type="guid">6a7b42864d57258c6db94249e91d7551</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Intérêts sur emprunt pour auto</act:description>
+	  <act:parent type="guid">6622783b69e9ca8105125c778c7b621f</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Assurances</act:name>
+	  <act:id type="guid">93afcfa6113ca99a60ed52fff880904c</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Primes d'assurances</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Auto</act:name>
+	  <act:id type="guid">1e1f194ac3f0f5c4eac9bcd203c0eb7e</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Assurance automobile</act:description>
+	  <act:parent type="guid">93afcfa6113ca99a60ed52fff880904c</act:parent>
+  </gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

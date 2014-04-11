@@ -27,7 +27,6 @@
 #include <gnome.h>
 #include <glib/gi18n.h>
 
-#include "Group.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
 #include "druid-stock-split.h"
@@ -132,7 +131,7 @@ fill_account_list (StockSplitInfo *info, Account *selected_account)
 
   gtk_list_store_clear (list);
 
-  accounts = xaccGroupGetSubAccountsSorted (gnc_get_current_group ());
+  accounts = gnc_account_get_descendants_sorted (gnc_get_current_root_account ());
   for (node = accounts; node; node = node->next)
   {
     Account *account = node->data;
@@ -226,7 +225,7 @@ refresh_details_page (StockSplitInfo *info)
                                 xaccAccountGetCommoditySCU (account));
 
   commodity = xaccAccountGetCommodity (account);
-  book = xaccAccountGetBook (account);
+  book = gnc_account_get_book (account);
   db = gnc_book_get_pricedb(book);
 
   prices = gnc_pricedb_lookup_latest_any_currency(db, commodity);

@@ -32,7 +32,6 @@
 #include "glib-compat.h"
 
 #include "Account.h"
-#include "Group.h"
 
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
@@ -290,14 +289,12 @@ is_same_commodity(Account *a, gpointer data)
 static gboolean
 xaccAccountChildrenHaveSameCommodity(Account *account)
 {
-    AccountGroup *grp;
     gpointer different;
     gnc_commodity *comm;
 
     comm = xaccAccountGetCommodity(account);
-    grp = xaccAccountGetChildren(account);
-    different = xaccGroupForEachAccount(
-        grp, is_same_commodity, comm, TRUE);
+    different =
+      gnc_account_foreach_descendant_until(account, is_same_commodity, comm);
     return (different == NULL);
 }
 #endif

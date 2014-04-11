@@ -667,7 +667,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 		account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(view));
 		sensitive = (account != NULL);
 
-		subaccounts = (xaccAccountGetChildren(account) != NULL);
+		subaccounts = (gnc_account_n_children(account) != 0);
 		/* Check here for placeholder accounts, etc. */
 	}
 
@@ -691,7 +691,7 @@ gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAc
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
-	gnc_ui_new_account_window_with_default (NULL, account);
+	gnc_ui_new_account_window (gnc_get_current_book(), account);
 }
 
 static void
@@ -845,7 +845,6 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
   Account *account = gnc_plugin_page_account_tree_get_current_account (page);
   gchar *acct_name;
   GList *splits;
-  AccountGroup *children;
   delete_helper_t delete_res = { FALSE, FALSE };
   GtkWidget *widget;
   GtkWidget *window;
@@ -868,13 +867,12 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
   }
 
   splits = xaccAccountGetSplitList(account);
-  children = xaccAccountGetChildren(account);
 
   /*
    * If the account has transactions or child accounts then conduct a
    * dialog to allow the user to specify what should be done with them.
    */
-  if ((NULL != splits) || (NULL != children)) {
+  if ((NULL != splits) || (gnc_account_n_children(account) > 0)) {
     GList *filter;
     GladeXML *xml;
     GtkWidget *label;
@@ -923,12 +921,12 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     /*
      * Adjust the dialog based on whether the account has children.
      */
-    if (children != NULL) {
+    if (gnc_account_n_children(account) > 0) {
       /*
        * Check for RO txns in descendants
        */
-      xaccGroupForEachAccount(children, delete_account_helper,
-			      &delete_res, TRUE);
+      gnc_account_foreach_descendant_until(account, delete_account_helper,
+			      &delete_res);
       if (delete_res.has_ro_splits) {
 	gtk_widget_destroy(glade_xml_get_widget (xml, "sa_trans_rw"));
 	widget = glade_xml_get_widget (xml, "dtdrb");
@@ -996,7 +994,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	lines[++i] = g_strdup_printf("%s", format);
       }
     }
-    if (children) {
+    if (gnc_account_n_children(account) > 0) {
       if (daa) {
 	name = xaccAccountGetFullName(daa);
 	format = _("All of its sub-accounts will be moved to "
@@ -1045,17 +1043,16 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	GList *acct_list, *ptr;
 
 	xaccAccountBeginEdit (daa);
-	acct_list = g_list_copy(xaccGroupGetAccountList(children));
+	acct_list = gnc_account_get_children(account);
 	for (ptr = acct_list; ptr; ptr = g_list_next(ptr))
-	  xaccAccountInsertSubAccount (daa, ptr->data);
+	  gnc_account_append_child (daa, ptr->data);
 	g_list_free(acct_list);
 	xaccAccountCommitEdit (daa);
       } else if (NULL != dta) {
 	/* Move the splits of its subaccounts, if any. */
-	xaccGroupForEachAccount (children,
-				 (gpointer (*)(Account *, gpointer))
-				 xaccAccountMoveAllSplits,
-				 dta, TRUE);
+	gnc_account_foreach_descendant(account,
+				       (AccountCb)xaccAccountMoveAllSplits,
+				       dta);
       }
       if (NULL != ta) {
 	/* Move the splits of the account to be deleted. */
@@ -1192,15 +1189,14 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
 static void
 gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page)
 {
-	AccountGroup *group = gnc_get_current_group ();
+	Account *root = gnc_get_current_root_account ();
 
 	gnc_suspend_gui_refresh ();
 
-	xaccGroupScrubOrphans (group);
-	xaccGroupScrubImbalance (group);
-
+	xaccAccountTreeScrubOrphans (root);
+	xaccAccountTreeScrubImbalance (root);
 	// XXX: Lots are disabled
-	//xaccGroupScrubLots (group);
+	// xaccAccountTreeScrubLots (root);
 
 	gnc_resume_gui_refresh ();
 }

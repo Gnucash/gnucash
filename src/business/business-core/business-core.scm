@@ -16,7 +16,7 @@
        (let ((e (gncOwnerGetEmployee owner)))
 	 (gncEmployeeGetAddr e)))
       ((eqv? type GNC-OWNER-JOB)
-       (gnc:owner-get-address (gnc:job-get-owner
+       (gnc:owner-get-address (gncJobGetOwner
 			       (gncOwnerGetJob owner))))
       (else '()))))
 
@@ -38,7 +38,7 @@
   (let ((type (gncOwnerGetType owner)))
     (cond
       ((eqv? type GNC-OWNER-JOB)
-       (gnc:owner-get-name-dep (gnc:job-get-owner
+       (gnc:owner-get-name-dep (gncJobGetOwner
 				(gncOwnerGetJob owner))))
       (else (just-name (gncOwnerGetName owner))))))
 

@@ -1872,7 +1872,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   xferData->transaction_cb = NULL;
 
   if (initial) {
-    book = xaccAccountGetBook (initial);
+    book = gnc_account_get_book (initial);
   } else {
     book = gnc_get_current_book ();
   }

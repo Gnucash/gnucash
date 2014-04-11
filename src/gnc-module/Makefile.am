@@ -54,3 +54,5 @@ endif
 
 CLEANFILES = .scm-links gnucash ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-gnc-module.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.module\"

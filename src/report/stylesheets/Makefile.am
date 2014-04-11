@@ -69,3 +69,5 @@ EXTRA_DIST = ${gncscmmod_DATA}
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.core\"

@@ -47,6 +47,4 @@ GncSxSinceLastRunDialog*  gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx
 // eliminate...
 void gnc_ui_sxsincelast_dialog_create(void);
 
-//void gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model, gboolean auto_create_only, GList **created_transaction_guids, GList **creation_errors);
-
 #endif

@@ -46,3 +46,5 @@ ui_DATA = \
 	gnc-plugin-ofx-ui.xml
 
 EXTRA_DIST = $(ui_DATA)
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.ofx\"

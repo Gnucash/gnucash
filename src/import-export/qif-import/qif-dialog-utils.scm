@@ -606,10 +606,10 @@
               (not (hash-ref stock-hash stock-name)))
              (let* ((separator (string-ref (gnc-get-account-separator-string) 0))
                     (existing-gnc-acct 
-                     (xaccGetAccountFromFullName
-                      (gnc-get-current-group)
+                     (gnc-account-lookup-by-full-name 
+                      (gnc-get-current-root-account)
                       (qif-map-entry:gnc-name map-entry)))
-		    (book (xaccGroupGetBook (gnc-get-current-group)))
+		    (book (gnc-account-get-book (gnc:get-current-root-account)))
                     (existing-type 
                      (xaccAccountGetType existing-gnc-acct)))
                (if (and (not (null? existing-gnc-acct)) 
@@ -713,7 +713,7 @@
                      separator)
                     #f)
               accts)))
-     (xaccGroupGetSubAccountsSorted (gnc-get-current-group)))
+     (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
 
     ;; now build a tree structure 
     (for-each 

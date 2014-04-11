@@ -63,7 +63,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
   /* Get the api */
   api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
-    printf("gnc_hbci_gettrans: Couldn't get HBCI API.\n");
+    g_message("gnc_hbci_gettrans: Couldn't get HBCI API.\n");
     return;
   }
   g_assert (interactor);
@@ -71,7 +71,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
-    printf("gnc_hbci_getbalance: No HBCI account found.\n");
+    g_warning("gnc_hbci_getbalance: No HBCI account found.\n");
     /* FIXME: free unneeded data */
     return;
   }
@@ -91,7 +91,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     /* Create OutboxJob */
     job = AB_JobGetTransactions_new((AB_ACCOUNT*)h_acc);
     if (AB_Job_CheckAvailability(job)) {
-      printf("gnc_hbci_gettrans: Oops, job not available. Aborting.\n");
+      g_warning("gnc_hbci_gettrans: Oops, job not available. Aborting.\n");
       /* FIXME: free unneeded data */
       return;
     }
@@ -204,7 +204,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 				  GTK_MESSAGE_INFO,
 				  GTK_BUTTONS_OK,
 				  "%s",
-				  _("The HBCI import returned no transactions "
+				  _("The Online Banking import returned no transactions "
 				    "for the selected time period."));
   gtk_dialog_run(GTK_DIALOG(dialog));
   gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -256,7 +256,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
 
   gnc_acc = data->gnc_acc;
   g_assert(gnc_acc);
-  book = xaccAccountGetBook(gnc_acc);
+  book = gnc_account_get_book(gnc_acc);
 
   /* Create new gnucash transaction for the given hbci one */
   gnc_trans = xaccMallocTransaction(book);
@@ -281,7 +281,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
     xaccTransSetDateSecs
       (gnc_trans, GWEN_Time_toTime_t (valutaDate));
   else
-    printf("trans_list_cb: Oops, date 'valutaDate' was NULL.\n");
+    g_warning("trans_list_cb: Oops, date 'valutaDate' was NULL.\n");
     
   current_time = time(NULL);
   xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
@@ -321,7 +321,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
        xaccAccountGetCommoditySCU(gnc_acc),
        GNC_RND_ROUND);
     if (!h_value)
-      printf("trans_list_cb: Oops, value was NULL. Using 0.\n");
+      g_warning("trans_list_cb: Oops, value was NULL. Using 0.\n");
     xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
   }
     

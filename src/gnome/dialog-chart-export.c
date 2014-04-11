@@ -229,7 +229,6 @@ on_dateok_clicked (chart_data  *data)
 	data->chart_time_t = mktime(chart_tm);
 	current_session = gnc_get_current_session();
 	book = qof_session_get_book(current_session);
-	filename = g_strdup("/tmp/qsf-chartofaccounts.xml");
 	chart_session = qof_session_new();
 	filename = gnc_file_dialog(_("Export Chart of Accounts to QSF XML"),
 				   NULL, NULL, GNC_FILE_DIALOG_EXPORT);

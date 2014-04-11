@@ -14,12 +14,12 @@
 
 (define (qif-import:find-or-make-acct acct-info check-types? commodity
 				      check-commodity? default-currency
-                                      gnc-acct-hash old-group new-group)
+                                      gnc-acct-hash old-root new-root)
   (let* ((separator (string-ref (gnc-get-account-separator-string) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
-          (xaccGetAccountFromFullName old-group gnc-name))
+          (gnc-account-lookup-by-full-name old-root gnc-name))
          (allowed-types 
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
@@ -38,12 +38,12 @@
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
-      (if (not (null? (xaccGetAccountFromFullName old-group long-name)))
+      (if (not (null? (gnc-account-lookup-by-full-name old-root long-name)))
           (let loop ((count 2))
             (let* ((test-name 
                     (string-append long-name (sprintf #f " %a" count)))
                    (test-acct 
-                    (xaccGetAccountFromFullName old-group test-name)))
+                    (gnc-account-lookup-by-full-name old-root test-name)))
               (if (and (not (null? test-acct)) (not (compatible? test-acct)))
                   (loop (+ 1 count))
                   (string-append short-name (sprintf #f " %a" count)))))
@@ -156,10 +156,10 @@
                 
                 (set! parent-acct (qif-import:find-or-make-acct 
                                    pinfo #t default-currency #f default-currency
-                                   gnc-acct-hash old-group new-group))))
+                                   gnc-acct-hash old-root new-root))))
           (if (and parent-acct (not (null? parent-acct)))
-              (xaccAccountInsertSubAccount parent-acct new-acct)
-              (xaccGroupInsertAccount new-group new-acct))
+              (gnc-account-append-child parent-acct new-acct)
+              (gnc-account-append-child new-root new-acct))
           
           (hash-set! gnc-acct-hash gnc-name new-acct)
           new-acct))))
@@ -178,8 +178,8 @@
                                default-currency-name window)
   (gnc:backtrace-if-exception 
    (lambda ()
-     (let* ((old-group (gnc-get-current-group))
-            (new-group (xaccMallocAccountGroup (gnc-get-current-book)))
+     (let* ((old-root (gnc-get-current-root-account))
+	    (new-root (xaccMallocAccount (gnc-get-current-book)))
             (gnc-acct-hash (make-hash-table 20))
             (separator (string-ref (gnc-get-account-separator-string) 0))
             (default-currency 
@@ -266,16 +266,16 @@
                    (qif-import:find-or-make-acct acctinfo #f
                                                  security #t default-currency
                                                  gnc-acct-hash 
-                                                 old-group new-group))
+                                                 old-root new-root))
                   ((and security (or stock?
 				     (gnc-commodity-is-currency security)))
                    (qif-import:find-or-make-acct 
                     acctinfo #f security #t default-currency
-                    gnc-acct-hash old-group new-group))
+                    gnc-acct-hash old-root new-root))
                   (#t 
                    (qif-import:find-or-make-acct 
                     acctinfo #f default-currency #t default-currency
-                    gnc-acct-hash old-group new-group)))))
+                    gnc-acct-hash old-root new-root)))))
         sorted-accounts-list)
        
        ;; before trying to mark transactions, prune down the list of 
@@ -356,7 +356,7 @@
        (if (not (null? progress-dialog))
            (gnc-progress-dialog-destroy progress-dialog))
        
-       new-group))))
+       new-root))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-xtn-to-gnc-xtn

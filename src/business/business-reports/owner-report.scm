@@ -626,20 +626,19 @@
     document))
 
 (define (find-first-account type)
-  (define (find-first group num index)
+  (define (find-first account num index)
     (if (>= index num)
 	'()
-	(let* ((this-account (xaccGroupGetAccount group index))
-	       (account-type (xaccAccountGetType this-account)))
+	(let* ((this-child (gnc-account-nth-child account index))
+	       (account-type (xaccAccountGetType this-child)))
 	  (if (eq? account-type type)
-	      this-account
-	      (find-first group num (+ index 1))))))
+	      this-child
+	      (find-first account num (+ index 1))))))
 
-  (let* ((current-group (gnc-get-current-group))
-	 (num-accounts (xaccGroupGetNumAccounts
-			current-group)))
+  (let* ((current-root (gnc-get-current-root-account))
+	 (num-accounts (gnc-account-n-children current-root)))
     (if (> num-accounts 0)
-	(find-first current-group num-accounts 0)
+	(find-first current-root num-accounts 0)
 	'())))
 
 (define (find-first-account-for-owner owner)

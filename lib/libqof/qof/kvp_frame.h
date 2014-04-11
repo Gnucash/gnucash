@@ -65,7 +65,7 @@
 #include "gnc-numeric.h"
 #include "guid.h"
 
-#define QOF_MOD_KVP "qof-kvp"
+#define QOF_MOD_KVP "qof.kvp"
 
 /** Opaque frame structure */
 typedef struct _KvpFrame KvpFrame;

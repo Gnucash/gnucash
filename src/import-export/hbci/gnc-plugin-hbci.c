@@ -39,6 +39,10 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 
+/* for gnc_gconf_ */
+#include "gnc-gconf-utils.h"
+#include "hbci-interaction.h"
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnucash-hbci";
 
@@ -92,17 +96,17 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "OnlineActionsAction", NULL, N_("_Online Actions"), NULL, NULL, NULL },
 
   /* Menu Items */
-  { "HbciSetupAction", NULL, N_("_HBCI Setup..."), NULL,
-    N_("Initial setup of HBCI/AqBanking access"),
+  { "HbciSetupAction", NULL, N_("_Online Banking Setup..."), NULL,
+    N_("Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using AqBanking)"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
   { "HbciGetBalanceAction", NULL, N_("Get _Balance"), NULL,
-    N_("Get the account balance online through HBCI/AqBanking"),
+    N_("Get the account balance online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_balance) },
   { "HbciGetTransAction", NULL, N_("Get _Transactions..."), NULL,
-    N_("Get the transactions online through HBCI/AqBanking"),
+    N_("Get the transactions online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_transactions) },
   { "HbciIssueTransAction", NULL, N_("_Issue Transaction..."), NULL,
-    N_("Issue a new transaction online through HBCI"),
+    N_("Issue a new transaction online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_transaction) },
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
      ((AQBANKING_VERSION_MAJOR == 1) && \
@@ -111,11 +115,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
         ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
 	 (AQBANKING_VERSION_BUILD > 2))))))
   { "HbciIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
-    N_("Issue a new bank-internal transaction online through HBCI/AqBanking"),
+    N_("Issue a new bank-internal transaction online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_inttransaction) },
 #endif
   { "HbciIssueDirectDebitAction", NULL, N_("_Direct Debit..."), NULL,
-    N_("Issue a new direct debit note online through HBCI/AqBanking"),
+    N_("Issue a new direct debit note online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
 
   /* File -> Import menu item */
@@ -132,10 +136,10 @@ static GtkActionEntry gnc_plugin_actions [] = {
     N_("Import a CSV file into GnuCash"),
     G_CALLBACK (gnc_plugin_hbci_cmd_csv_import) },
   { "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
-    N_("Import a DTAUS file into GnuCash and send the transfers online through HBCI/AqBanking"),
+    N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_dtaus_importsend) },
   { "CsvImportSendAction", GTK_STOCK_CONVERT, N_("Import CSV and s_end..."), NULL,
-    N_("Import a CSV file into GnuCash and send the transfers online through HBCI/AqBanking"),
+    N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_csv_importsend) },
 
 };
@@ -323,26 +327,39 @@ main_window_to_account (GncMainWindow *window)
   GncPluginPage  *page;
   const gchar    *page_name;
   Account        *account = NULL;
+  const gchar    *account_name;
 
   ENTER("main window %p", window);
-  g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), NULL);
+  if (!GNC_IS_MAIN_WINDOW(window)) {
+    LEAVE("no main_window");
+    return NULL;
+  }
 
   /* Ensure we are called from a register page. */
   page = gnc_main_window_get_current_page(window);
+  if (!GNC_IS_PLUGIN_PAGE(page)) {
+    LEAVE("no plugin_page");
+    return NULL;
+  }
   page_name = gnc_plugin_page_get_plugin_name(page);
+  if (!page_name) {
+    LEAVE("no page_name of plugin_page");
+    return NULL;
+  }
 
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
+  if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
     DEBUG("register page");
     account =
       gnc_plugin_page_register_get_account (GNC_PLUGIN_PAGE_REGISTER(page));
-  } else if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
+  } else if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
     account =
       gnc_plugin_page_account_tree_get_current_account (GNC_PLUGIN_PAGE_ACCOUNT_TREE(page));
   } else {
     account = NULL;
   }
-  LEAVE("account %s(%p)", xaccAccountGetName(account), account);
+  account_name = xaccAccountGetName (account);
+  LEAVE("account %s(%p)", account_name ? account_name : "(null)", account);
   return account;
 }
 
@@ -360,8 +377,11 @@ gnc_plugin_hbci_account_selected (GncPluginPage *plugin_page,
   GtkActionGroup *action_group;
   GncMainWindow  *window;
 
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
   window = GNC_MAIN_WINDOW(plugin_page->window);
+  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
   action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   gnc_plugin_update_actions(action_group, need_account_actions,
 			    "sensitive", account != NULL);
 }
@@ -375,8 +395,18 @@ gnc_plugin_hbci_main_window_page_added (GncMainWindow *window,
   const gchar    *page_name;
 
   ENTER("main window %p, page %p", window, page);
+  if (!GNC_IS_PLUGIN_PAGE(page)) { 
+    LEAVE("no plugin_page");
+    return;
+  }
+
   page_name = gnc_plugin_page_get_plugin_name(page);
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
+  if (!page_name) {
+    LEAVE("no page_name of plugin_page");
+    return;
+  }
+
+  if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page, adding signal");
     g_signal_connect (G_OBJECT(page),
 		      "account_selected",
@@ -398,8 +428,16 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
   Account        *account;
 
   ENTER("main window %p, page %p", window, page);
+  if (!GNC_IS_MAIN_WINDOW (window)) {
+    LEAVE("no main_window");
+    return;
+  }
+
   action_group = gnc_main_window_get_action_group(window,PLUGIN_ACTIONS_NAME);
-  g_return_if_fail(action_group != NULL);
+  if (!GTK_IS_ACTION_GROUP (action_group)) {
+    LEAVE("no action_group");
+    return;
+  }
 
   /* Reset everything to known state */
   gnc_plugin_update_actions(action_group, need_account_actions,
@@ -417,11 +455,12 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
 
   /* Selectively make items visible */
   page_name = gnc_plugin_page_get_plugin_name(page);
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
+  g_return_if_fail (page_name);
+  if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
     gnc_plugin_update_actions(action_group, account_tree_actions,
 			      "visible", TRUE);
-  } else if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
+  } else if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
     DEBUG("register page");
     gnc_plugin_update_actions(action_group, register_actions,
 			      "visible", TRUE);
@@ -543,38 +582,50 @@ static void
 gnc_plugin_hbci_cmd_dtaus_importsend (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("dtaus", "default", TRUE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_DTAUS, NULL);
+  gnc_file_aqbanking_import ("dtaus", format ? format : "default", TRUE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_csv_importsend (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("csv", "default", TRUE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_CSV, NULL);
+  gnc_file_aqbanking_import ("csv", format ? format : "default", TRUE);
+  g_free (format);
 }
 
 static void
 gnc_plugin_hbci_cmd_mt940_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("swift", "swift-mt940", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_SWIFT940, NULL);
+  gnc_file_aqbanking_import ("swift", format ? format : "swift-mt940", FALSE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_mt942_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("swift", "swift-mt942", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_SWIFT942, NULL);
+  gnc_file_aqbanking_import ("swift", format ? format : "swift-mt942", FALSE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_dtaus_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("dtaus", "default", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_DTAUS, NULL);
+  gnc_file_aqbanking_import ("dtaus", format ? format : "default", FALSE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_csv_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("csv", "default", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_CSV, NULL);
+  gnc_file_aqbanking_import ("csv", format ? format : "default", FALSE);
+  g_free (format);
 }
 /************************************************************
  *                    Plugin Bootstrapping                   *

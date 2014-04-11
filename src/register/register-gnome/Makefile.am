@@ -65,3 +65,5 @@ AM_CFLAGS = \
   ${GTK_XIM_FLAGS} \
   ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.gnome\"

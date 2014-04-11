@@ -133,57 +133,20 @@
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
-;; maximum level of subaccounts in the current-group.
-(define (gnc:get-current-group-depth)
-  ;; Given a list of accounts, this function determines the maximum
-  ;; sub-account level that there is.
-  (define (accounts-get-children-depth accounts)
-    (apply max
-	   (map (lambda (acct)
-		  (let ((children 
-			 (gnc:account-get-immediate-subaccounts acct)))
-		    (if (null? children)
-			1
-			(+ 1 (accounts-get-children-depth children)))))
-		accounts)))
-  (accounts-get-children-depth 
-   (xaccGroupGetAccountListSorted (gnc-get-current-group))))
+;; maximum level of subaccounts in the tree
+(define (gnc:get-current-account-tree-depth)
+  (let ((root (gnc:get-current-root-account)))
+    (gnc-account-get-tree-depth root)))
 
 (define (gnc:split-get-corr-account-full-name split)
   (xaccSplitGetCorrAccountFullName split))
 
 
-;; get children that are the direct descendant of this acct
-(define (gnc:account-get-immediate-subaccounts acct)
-  (define (acctptr-eq? a1 a2)
-    (let ((a1-str 
-           (with-output-to-string (lambda () (write a1))))
-          (a2-str 
-           (with-output-to-string (lambda () (write a2)))))
-      (string=? a1-str a2-str)))
-  
-  (let* ((group (xaccAccountGetChildren acct))
-         (children (xaccGroupGetSubAccountsSorted group))
-         (retval '()))
-    (for-each 
-     (lambda (child)
-       (if (acctptr-eq? acct (xaccAccountGetParentAccount child))
-           (begin 
-             (set! retval (cons child retval)))))
-     children)
-    (reverse retval)))
-
-;; get all children of this account 
-(define (gnc:account-get-all-subaccounts acct)
-  (let ((group (xaccAccountGetChildren acct)))
-    (xaccGroupGetSubAccountsSorted group)))
-
 ;; Get all children of this list of accounts.
 (define (gnc:acccounts-get-all-subaccounts accountlist)
   (append-map 
    (lambda (a)
-     (xaccGroupGetSubAccountsSorted
-      (xaccAccountGetChildren a)))
+     (gnc-account-get-descendants-sorted a))
    accountlist))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
@@ -493,14 +456,19 @@
 ;; values rather than double values.
 (define (gnc:account-get-comm-balance-at-date account 
 					      date include-children?)
-  (let ((balance-collector
-         (if include-children?
-             (gnc:group-get-comm-balance-at-date
-              (xaccAccountGetChildren account) date)
-             (gnc:make-commodity-collector)))
-	  (query (qof-query-create-for-splits))
-	  (splits #f))
-      
+  (let ((balance-collector (gnc:make-commodity-collector))
+	(query (qof-query-create-for-splits))
+	(splits #f))
+
+      (if include-children?
+	  (for-each 
+	   (lambda (x) 
+	     (gnc-commodity-collector-merge balance-collector x))
+	   (gnc:account-map-descendants
+	    (lambda (child)
+	      (gnc:account-get-comm-balance-at-date child date #f))
+	    account)))
+
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
       (xaccQueryAddDateMatchTS query #f date #t date QOF-QUERY-AND)
@@ -580,19 +548,6 @@
    get-balance-fn
    (lambda(x) #f)))
 
-;; returns a commodity-collector
-(define (gnc:group-get-comm-balance-at-date group date)
-  (let ((this-collector (gnc:make-commodity-collector)))
-    (for-each 
-     (lambda (x) 
-       (gnc-commodity-collector-merge this-collector x))
-     (gnc:group-map-all-accounts
-      (lambda (account)
-	(gnc:account-get-comm-balance-at-date 
-	 account date #f)) 
-      group))
-    this-collector))
-
 ;; get the change in balance from the 'from' date to the 'to' date.
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
@@ -616,17 +571,6 @@
       account
       (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
       include-children?))
-    this-collector))
-
-;; the version which returns a commodity-collector
-(define (gnc:group-get-comm-balance-interval group from to)
-  (let ((this-collector (gnc:make-commodity-collector)))
-    (for-each (lambda (x) 
-		(gnc-commodity-collector-merge this-collector x))
-	      (gnc:group-map-all-accounts
-	       (lambda (account)
-		 (gnc:account-get-comm-balance-interval 
-		  account from to #t)) group))
     this-collector))
 
 ;; This calculates the increase in the balance(s) of all accounts in
@@ -708,10 +652,10 @@
 	 (gnc:accounts-count-splits (cdr accounts)))
       0))
 
-;; Sums up any splits of a certain type affecting a group of accounts.
+;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 (define (gnc:account-get-trans-type-balance-interval
-	 group type start-date-tp end-date-tp)
+	 account-list type start-date-tp end-date-tp)
   (let* ((query (qof-query-create-for-splits))
 	 (splits #f)
 	 (get-val (lambda (alist key)
@@ -724,7 +668,7 @@
 	 )
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTS
      query
      (and start-date-tp #t) start-date-tp
@@ -751,7 +695,7 @@
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
-	 group type start-date-tp end-date-tp)
+	 account-list type start-date-tp end-date-tp)
   (let* ((str-query (qof-query-create-for-splits))
 	 (sign-query (qof-query-create-for-splits))
 	 (total-query #f)
@@ -769,8 +713,8 @@
     (qof-query-set-book sign-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch str-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddAccountMatch sign-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch str-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch sign-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTS
      str-query
      (and start-date-tp #t) start-date-tp

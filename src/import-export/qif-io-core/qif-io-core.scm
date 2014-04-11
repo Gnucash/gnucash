@@ -85,7 +85,7 @@
 ;; acct-table.scm 
 (export qif-io:acct-table-lookup)
 (export qif-io:acct-table-insert!)
-(export qif-io:acct-table-make-gnc-group)
+(export qif-io:acct-table-make-gnc-acct-tree)
 
 ;; from main
 (export simple-format)

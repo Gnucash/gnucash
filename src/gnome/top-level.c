@@ -119,8 +119,8 @@ gnc_html_register_url_cb (const char *location, const char *label,
   /* href="gnc-register:account=My Bank Account" */
   if (strncmp("account=", location, 8) == 0)
   {
-    account = xaccGetAccountFromFullName (gnc_get_current_group (),
-                                          location + 8);
+    account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (),
+					       location + 8);
   }
 
   /* href="gnc-register:guid=12345678901234567890123456789012" */

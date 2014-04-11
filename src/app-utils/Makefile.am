@@ -3,6 +3,7 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CFLAGS = \
+  -I$(top_srcdir)/lib/libc \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/gnc-module \
@@ -125,3 +126,5 @@ endif
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
 MAINTAINERCLEANFILES = swig-app-utils.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.app-util\"

@@ -36,11 +36,18 @@
 #include "qof.h" 
 #include "gnc-glib-utils.h"
 
+#include "import-main-matcher.h"
+#include "import-account-matcher.h"
+
 #define AQBANKING_NOWARN_DEPRECATED
 #include "gnc-hbci-utils.h"
 
 #include "hbci-interaction.h"
+#include "gnc-hbci-gettrans.h"
+#include "dialog-hbcitrans.h"
 #include <aqbanking/version.h>
+#include <aqbanking/jobsingledebitnote.h>
+
 
 /* static short module = MOD_IMPORT; */
 
@@ -48,6 +55,59 @@
 static AB_BANKING *gnc_AB_BANKING = NULL;
 static int gnc_AB_BANKING_refcnt = 0;
 static GNCInteractor *gnc_hbci_inter = NULL;
+
+
+/* If aqbanking is older than 1.9.7, use our own copies of these
+   foreach functions */
+#if ((AQBANKING_VERSION_MAJOR == 1) && \
+     ((AQBANKING_VERSION_MINOR < 9) || \
+      ((AQBANKING_VERSION_MINOR == 9) && \
+       ((AQBANKING_VERSION_PATCHLEVEL < 7)))))
+static AB_IMEXPORTER_ACCOUNTINFO *
+AB_ImExporterContext_AccountInfoForEach(AB_IMEXPORTER_CONTEXT *iec,
+					AB_IMEXPORTER_ACCOUNTINFO *
+					(* func)(AB_IMEXPORTER_ACCOUNTINFO *element,
+						 void *user_data),
+					void* user_data)
+{
+  AB_IMEXPORTER_ACCOUNTINFO *it;
+  AB_IMEXPORTER_ACCOUNTINFO *retval;
+  g_assert(iec);
+
+  it = AB_ImExporterContext_GetFirstAccountInfo (iec);
+  while (it) {
+    retval = func(it, user_data);
+    if (retval) {
+      return retval;
+    }
+    it = AB_ImExporterContext_GetNextAccountInfo (iec);
+  }
+  return 0;
+
+}
+static const AB_TRANSACTION *
+AB_ImExporterAccountInfo_TransactionsForEach(AB_IMEXPORTER_ACCOUNTINFO *iea,
+					     const AB_TRANSACTION *
+					     (* func)(const AB_TRANSACTION *element,
+						      void *user_data),
+					     void* user_data)
+{
+  const AB_TRANSACTION *it;
+  const AB_TRANSACTION *retval;
+  g_assert(iea);
+
+  it = AB_ImExporterAccountInfo_GetFirstTransaction (iea);
+  while (it) {
+    retval = func(it, user_data);
+    if (retval) {
+      return retval;
+    }
+    it = AB_ImExporterAccountInfo_GetNextTransaction (iea);
+  }
+  return 0;
+}
+#endif /* aqbanking < 1.9.7 */
+
 
 
 AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent, 
@@ -62,7 +122,7 @@ AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent,
     {
       int r = AB_Banking_Init(api);
       if (r != 0)
-	printf("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
+	g_critical("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
     }
     
     gnc_hbci_inter = gnc_AB_BANKING_interactors (api, parent);
@@ -140,10 +200,10 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 
     if (!hbci_acc && bankcode && (strlen(bankcode)>0) &&
 	accountid && (strlen(accountid) > 0)) {
-      /* printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid); */
+      g_message("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid);
       hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
     }
-    /*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
+    /* g_message("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc); */
     return hbci_acc;
   } else if (bankcode && (strlen(bankcode)>0) && accountid && (strlen(accountid) > 0)) {
     hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
@@ -157,7 +217,7 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 static void *
 print_list_int_cb (int value, void *user_data)
 {
-  printf("%d, ", value);
+  g_warning("%d, ", value);
   return NULL;
 }
 static void 
@@ -165,7 +225,7 @@ print_list_int (const list_int *list)
 {
   g_assert(list);
   list_int_foreach (list, &print_list_int_cb, NULL);
-  printf ("\n");
+  g_warning ("\n");
 }
 static void *
 get_resultcode_error_cb (int value, void *user_data)
@@ -190,28 +250,22 @@ get_resultcode_error (const list_int *list)
 int
 gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 {
-/*   list_int *list; */
-/*   const char *msg; */
   int cause = 0;
   AB_JOB_STATUS jobstatus;
   
   g_assert (job);
-/*   if (AB_JOB_status (job) != HBCI_JOB_STATUS_DONE) */
-/*     return; */
-/*   if (AB_JOB_result (job) != HBCI_JOB_RESULT_FAILED) */
-/*     return; */
 
   if (verbose) {
-    printf("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
+    g_warning("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
 
-    printf(", result: %s", AB_Job_GetResultText(job));
-    printf("\n");
+    g_warning(", result: %s", AB_Job_GetResultText(job));
+    g_warning("\n");
   }
 
   jobstatus = AB_Job_GetStatus (job);
   if (jobstatus == AB_Job_StatusError) {
     if (!verbose)
-      printf("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
+      g_warning("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
 	     AB_Job_Type2Char(AB_Job_GetType(job)),
 	     AB_Job_GetResultText(job));
     cause = 9000;
@@ -228,7 +282,7 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
     cause = get_resultcode_error (list);
 
     if (verbose) {
-      printf("OutboxJob resultcodes: ");
+      g_warning("OutboxJob resultcodes: ");
       print_list_int (list);
 
       switch (cause) {
@@ -247,11 +301,11 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
       default:
 	msg = "Unknown";
       }
-      printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+      g_warning("Probable cause of error was: code %d, msg: %s\n", cause, msg);
     }
   } else {
     if (verbose)
-      printf("OutboxJob's resultCodes list has zero length.\n");
+      g_warning("OutboxJob's resultCodes list has zero length.\n");
   }
   list_int_delete (list);
 #endif
@@ -304,7 +358,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
   case AB_ERROR_FILE_NOT_FOUND:
-    /*     printf("gnc_hbci_Error_feedback: File not found error.\n"); */
+    /*     g_warning("gnc_hbci_Error_feedback: File not found error.\n"); */
     return FALSE;
   case AB_ERROR_NO_CARD:
     return gnc_verify_dialog (parent,
@@ -315,7 +369,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("Unfortunately this HBCI job is not supported "
+       _("Unfortunately this Online Banking job is not supported "
 	 "by your bank or for your account. Aborting."));
     return FALSE;
 #endif
@@ -323,7 +377,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     if (inter) GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("The server of your bank refused the HBCI connection. "
+       _("The server of your bank refused the Online Banking connection. "
 	 "Please try again later. Aborting."));
     return FALSE;
       
@@ -388,6 +442,8 @@ static void gnc_hbci_printresult(HBCI_Outbox *outbox, GNCInteractor *inter)
 }
 #endif
 
+/* ------------------------------------------------------- */
+
 static gboolean hbci_Error_isOk(int err) {
   switch (err) {
   case 0:
@@ -437,13 +493,6 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   if (job)
     resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
   if (!hbci_Error_isOk(err)) {
-/*     char *errstr =  */
-/*       g_strdup_printf("gnc_AB_BANKING_execute: Error at executeQueue: %s", */
-/* 		      hbci_Error_message (err)); */
-/*     printf("%s\n", errstr); */
-/*     HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor  */
-/* 				      (AB_BANKING_Hbci (api)), errstr); */
-/*     g_free (errstr); */
     if (job) gnc_hbci_debug_outboxjob (job, TRUE);
     if (inter) GNCInteractor_show_nodelete (inter);
     return FALSE;
@@ -454,13 +503,239 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
     return TRUE;
   }
   else {
-/*     printf("gnc_AB_BANKING_execute: Some message at executeQueue: %s", */
-/* 	   hbci_Error_message (err)); */
+    g_message("gnc_AB_BANKING_execute: Some error at executeQueue.");
     GNCInteractor_show_nodelete (inter);
     return TRUE; /* <- This used to be a FALSE but this was probably
-		  * as wrong as it could get. @§%$! */
+		  * as wrong as it could get. @%$! */
   }
 }
+
+static void multijob_cb (gpointer element, gpointer user_data);
+
+gboolean 
+gnc_hbci_multijob_execute(GtkWidget *parent, AB_BANKING *api, 
+			  GList *job_list, GNCInteractor *interactor)
+{
+  gboolean successful;
+  g_assert(api);
+
+  successful = gnc_AB_BANKING_execute (parent, api, NULL, interactor);
+
+  /*printf("dialog-hbcitrans: Ok, result of api_execute was %d.\n", 
+    successful);*/
+	  
+  if (!successful) {
+    /* AB_BANKING_executeOutbox failed. */
+    gnc_error_dialog (GNCInteractor_dialog (interactor),
+		      "%s",
+		      _("Executing the Online Banking outbox failed. Please check the log window."));
+    GNCInteractor_show_nodelete(interactor);
+
+    g_list_foreach (job_list, multijob_cb, GNCInteractor_dialog (interactor));
+  }
+  /* Watch out! The job *has* to be removed from the queue
+     here because otherwise it might be executed again. */
+  /* AB_Banking_DequeueJob(api, job); is done in the calling function. */
+  return successful;
+}
+
+
+void multijob_cb (gpointer element, gpointer user_data)
+{
+  AB_JOB *job = element;
+  GtkWidget *parent = user_data;
+
+  if ((AB_Job_GetStatus (job) == AB_Job_StatusPending) ||
+      (AB_Job_GetStatus (job) == AB_Job_StatusError)) {
+    /* There was some error in this job. */
+    if (AB_Job_GetType (job) == AB_Job_TypeDebitNote) {
+      const AB_TRANSACTION *h_trans =
+	AB_JobSingleDebitNote_GetTransaction (job);
+      gchar *descr_name = gnc_hbci_descr_tognc (h_trans);
+      gchar *value = 
+	gnc_AB_VALUE_toReadableString (AB_Transaction_GetValue (h_trans));
+      gchar *errortext;
+      errortext =
+	g_strdup_printf(_("A debit note has been refused by the bank. The refused debit note has the following data:\n"
+			  "Remote bank code: \"%s\"\n"
+			  "Remote account number: \"%s\"\n"
+			  "Description and remote name: \"%s\"\n"
+			  "Value: \"%s\"\n"),
+			AB_Transaction_GetRemoteBankCode (h_trans),
+			AB_Transaction_GetRemoteAccountNumber (h_trans),
+			descr_name,
+			value);
+      g_warning ("%s", errortext);
+      gnc_error_dialog (parent, "%s", errortext);
+      g_free (errortext);
+      g_free (descr_name);
+    } else {
+    gnc_error_dialog 
+      (parent, "%s",
+       _("One of the jobs was sent to the bank successfully, but the "
+	 "bank is refusing to execute the job. Please check "
+	 "the log window for the exact error message of the "
+	 "bank. The line with the error message contains a "
+	 "code number that is greater than 9000.\n"
+	 "\n"
+	 "The job has been removed from the queue."));
+    /* FIXME: Might make more useful user feedback here. */
+    }
+  }
+}
+
+
+/* ------------------------------------------------------- */
+
+/* Callback declarations */
+static const AB_TRANSACTION *
+translist_cb (const AB_TRANSACTION *element, void *user_data);
+static AB_IMEXPORTER_ACCOUNTINFO *
+accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *element, void *user_data);
+
+struct import_data 
+{
+  Account *gnc_acc;
+  GNCImportMainMatcher *importer_generic;
+  AB_BANKING *ab;
+  AB_ACCOUNT *hbci_account;
+  GList *job_list;
+  gboolean execute_transactions;
+};
+
+
+GList *
+gnc_hbci_import_ctx(AB_BANKING *ab, AB_IMEXPORTER_CONTEXT *ctx,
+		    GNCImportMainMatcher *importer_generic_gui,
+		    gboolean exec_as_aqbanking_jobs)
+{
+  struct import_data data;
+  data.importer_generic = importer_generic_gui;
+  data.ab = ab;
+  data.job_list = NULL;
+  data.execute_transactions = exec_as_aqbanking_jobs;
+  
+  /* Iterate through all accounts */
+  AB_ImExporterContext_AccountInfoForEach(ctx, accountinfolist_cb, &data);
+  /* All accounts finished. Finished importing. */
+  return data.job_list;
+}
+
+
+static AB_IMEXPORTER_ACCOUNTINFO *
+accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *accinfo, void *user_data) {
+  Account *gnc_acc;
+  struct import_data *data = user_data;
+  const char *bank_code =
+    AB_ImExporterAccountInfo_GetBankCode(accinfo);
+  const char *account_number = 
+    AB_ImExporterAccountInfo_GetAccountNumber(accinfo);
+  const char *account_name = 
+    AB_ImExporterAccountInfo_GetAccountName(accinfo);
+  gchar *online_id = g_strconcat (bank_code, account_number, NULL);
+  
+  gnc_acc = gnc_import_select_account(NULL, 
+				      online_id, 1, account_name, NULL, 
+				      ACCT_TYPE_NONE, NULL, NULL);
+  g_free(online_id);
+  if (gnc_acc) {
+    /* Store chosen gnucash account in callback data */
+    data->gnc_acc = gnc_acc;
+
+    if (data->execute_transactions) {
+      /* Retrieve the aqbanking account that belongs to this gnucash
+	 account */
+      data->hbci_account = gnc_hbci_get_hbci_acc (data->ab, gnc_acc);
+      if (data->hbci_account == NULL) {
+	gnc_error_dialog (NULL, _("No Online Banking account found for this gnucash account. These transactions will not be executed by Online Banking."));
+      }
+    }
+    else {
+      data->hbci_account = NULL;
+    }
+  
+    /* Iterate through all transactions.  */
+    AB_ImExporterAccountInfo_TransactionsForEach (accinfo, translist_cb, data);
+    /* all transactions finished. */
+  }
+  return NULL;
+}
+
+static const AB_TRANSACTION *
+translist_cb (const AB_TRANSACTION *element, void *user_data) {
+  AB_JOB *job;
+  AB_TRANSACTION *trans = (AB_TRANSACTION*)element;
+  GtkWidget *parent = NULL;
+  struct import_data *data = user_data;
+  struct trans_list_data hbci_userdata;
+
+  /* This callback in the hbci module will add the imported
+     transaction to gnucash's importer. */
+  hbci_userdata.gnc_acc = data->gnc_acc;
+  hbci_userdata.importer_generic = data->importer_generic;
+  /* The call will use "trans" only as const* */
+  gnc_hbci_trans_list_cb((AB_TRANSACTION*) trans, &hbci_userdata);
+
+  if (data->hbci_account) {
+    /* NEW: The imported transaction has been imported into
+       gnucash. Now also add it as a job to aqbanking. */
+    AB_Transaction_SetLocalBankCode (trans, 
+				     AB_Account_GetBankCode (data->hbci_account));
+    AB_Transaction_SetLocalAccountNumber (trans, AB_Account_GetAccountNumber (data->hbci_account));
+    AB_Transaction_SetLocalCountry (trans, "DE");
+
+    job = 
+      gnc_hbci_trans_dialog_enqueue(trans, data->ab,
+				    data->hbci_account, SINGLE_DEBITNOTE);
+
+    /* Check whether we really got a job */
+    if (!job) {
+      /* Oops, no job, probably not supported by bank. */
+      if (gnc_verify_dialog
+	  (parent, 
+	   FALSE,
+	   "%s",
+	   _("The backend found an error during the preparation "
+	     "of the job. It is not possible to execute this job. \n"
+	     "\n"
+	     "Most probable the bank does not support your chosen "
+	     "job or your Online Banking account does not have the permission "
+	     "to execute this job. More error messages might be "
+	     "visible on your console log.\n"
+	     "\n"
+	     "Do you want to enter the job again?"))) {
+	gnc_error_dialog (parent, "Sorry, not implemented yet.");
+      }
+      /* else
+	 break; */
+    }
+    data->job_list = g_list_append(data->job_list, job);
+  }
+
+  return NULL;
+}
+
+
+/* ------------------------------------------------------- */
+
+static void delpending_cb (gpointer element, gpointer user_data);
+
+void
+gnc_hbci_clearqueue(AB_BANKING *ab, GList *ab_job_list)
+{
+  g_list_foreach (ab_job_list, delpending_cb, ab);
+}
+
+void delpending_cb (gpointer element, gpointer user_data)
+{
+  AB_JOB *job = element;
+  AB_BANKING *ab = user_data;
+
+  if (AB_Job_GetStatus (job) == AB_Job_StatusPending)
+    AB_Banking_DelPendingJob(ab, job);
+}
+
+/* ------------------------------------------------------- */
 
 struct cb_struct {
   gchar **result;

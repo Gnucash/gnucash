@@ -1375,7 +1375,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        // FIXME: For that matter, how could an open pending
        // transaction ever not be the current trans?
        if (xaccTransIsOpen (pending_trans)) {
-           g_message("Impossible? commiting pending %p", pending_trans);
+           g_warning("Impossible? commiting pending %p", pending_trans);
            xaccTransCommitEdit (pending_trans);
        } else if (pending_trans) 
            g_assert_not_reached();
@@ -1504,7 +1504,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     return NULL;
 
   /* Find the account */
-  account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
+  account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */

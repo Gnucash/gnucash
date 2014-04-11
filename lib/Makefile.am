@@ -1,5 +1,5 @@
-SUBDIRS = libc guile-www srfi
-DIST_SUBDIRS = libc guile-www srfi libgsf-1.12.3 goffice-0.0.4 libqof
+SUBDIRS = libc glib28 guile-www srfi
+DIST_SUBDIRS = libc glib28 guile-www srfi libgsf-1.12.3 goffice-0.0.4 libqof
 
 if !HAVE_GOFFICE
 if !HAVE_LIBGSF

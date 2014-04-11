@@ -25,7 +25,6 @@
 #define DIALOG_ACCOUNT_H
 
 #include "Account.h"
-#include "Group.h"
 
 /** @addtogroup GUI
     @{ */
@@ -52,28 +51,24 @@
 void gnc_ui_edit_account_window (Account *account);
 
 
-/** Disply a window for creating a new account
- *
- *  @param group This parameter is not used.
- */
-void gnc_ui_new_account_window (AccountGroup *group);
-
-
 /** Disply a window for creating a new account.  This function will
  *  also initially set the parent account of the new account to what
  *  the caller specified.  The user is free, however, to choose any
  *  parent account they wish.
  *
- *  @param group This parameter is not used.
+ *  @param book The book in which the new account should be created.
+ *  This is a required argument.
  *
- *  @param parent The initially selected parent account.
+ *  @param parent The initially selected parent account.  This
+ *  argument is optional, but if supplied must be an account contained
+ *  in the specified book.
  */
-void gnc_ui_new_account_window_with_default (AccountGroup *group,
-					     Account * parent);
+void gnc_ui_new_account_window (QofBook *book, Account *parent);
 
 
 /** Disply a window for creating a new account.  This function will
- *  restrict the available account type values to the list specified by the caller.
+ *  restrict the available account type values to the list specified
+ *  by the caller.
  *
  *  @param unused This parameter is not used.
  *
@@ -81,7 +76,7 @@ void gnc_ui_new_account_window_with_default (AccountGroup *group,
  *  which are allowed to be created.  The calling function is
  *  responsible for freeing this list.
  */
-void gnc_ui_new_account_with_types (AccountGroup *unused,
+void gnc_ui_new_account_with_types (QofBook *book,
 				    GList *valid_types);
 /** @} */
 

@@ -27,7 +27,6 @@
 #include "cashobjects.h"
 #include "gnc-engine.h"
 #include "AccountP.h"
-#include "GroupP.h"
 #include "TransactionP.h"
 #include "FreqSpec.h"
 #include "SchedXaction.h"
@@ -43,7 +42,6 @@ cashobjects_register(void)
 	g_return_val_if_fail(xaccAccountRegister(), FALSE);
 	g_return_val_if_fail ( xaccTransRegister(), FALSE);
 	g_return_val_if_fail ( xaccSplitRegister(), FALSE);
-	g_return_val_if_fail ( xaccGroupRegister(), FALSE);
 	g_return_val_if_fail ( FreqSpecRegister(),  FALSE);
 	g_return_val_if_fail ( SXRegister (),       FALSE);
 	g_return_val_if_fail ( gnc_sxtt_register(), FALSE);

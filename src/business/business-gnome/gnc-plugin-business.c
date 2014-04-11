@@ -722,7 +722,7 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Invoices to XML"), NULL, 
-			"/tmp/qsf-invoices.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -757,7 +757,7 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Customers to XML"), NULL, 
-			"/tmp/qsf-customers.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -789,7 +789,7 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Vendors to XML"), NULL, 
-			"/tmp/qsf-vendors.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -821,7 +821,7 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Employees to XML"), NULL, 
-			"/tmp/qsf-employee.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -886,7 +886,7 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
 	GncInvoice *invoice	= gncInvoiceCreate(book);
 	GncOwner *owner		= gncOwnerCreate();
 	GncJob *job		= gncJobCreate(book);
-	AccountGroup *group	= xaccGetAccountGroup(book);
+	Account *root		= gnc_book_get_root_account(book);
 	Account *inc_acct	= xaccMallocAccount(book);
 	Account *bank_acct	= xaccMallocAccount(book);
 	Account *tax_acct	= xaccMallocAccount(book);
@@ -925,25 +925,25 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
 	xaccAccountSetType(ar_acct, ACCT_TYPE_RECEIVABLE);
 	xaccAccountSetName(ar_acct, "A/R");
 	xaccAccountSetCommodity(ar_acct, gnc_default_currency());
-	xaccGroupInsertAccount(group, ar_acct);
+	gnc_account_append_child(root, ar_acct);
 
 	// Create the Income account
 	xaccAccountSetType(inc_acct, ACCT_TYPE_INCOME);
 	xaccAccountSetName(inc_acct, "Income");
 	xaccAccountSetCommodity(inc_acct, gnc_default_currency());
-	xaccGroupInsertAccount(group, inc_acct);
+	gnc_account_append_child(root, inc_acct);
 
 	// Create the Bank account
 	xaccAccountSetType(bank_acct, ACCT_TYPE_BANK);
 	xaccAccountSetName(bank_acct, "Bank");
 	xaccAccountSetCommodity(bank_acct, gnc_default_currency());
-	xaccGroupInsertAccount(group, bank_acct);
+	gnc_account_append_child(root, bank_acct);
 
 	// Create the Tax account
 	xaccAccountSetType(tax_acct, ACCT_TYPE_LIABILITY);
 	xaccAccountSetName(tax_acct, "Tax-Holding");
 	xaccAccountSetCommodity(tax_acct, gnc_default_currency());
-	xaccGroupInsertAccount(group, tax_acct);
+	gnc_account_append_child(root, tax_acct);
 
 	// Launch the invoice editor
 	gnc_ui_invoice_edit(invoice);

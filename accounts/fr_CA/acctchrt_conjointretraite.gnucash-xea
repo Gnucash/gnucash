@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+	Retraite Conjoint(e)
+    </gnc-act:title>
+    <gnc-act:short-description>
+	    Compte de placements pour retraite du (de la) conjoint(e) et autres comptes associés.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	    Sélectionnez ce groupe si vous faites le suivi d'un compte de placements (actions, obligations, fonds communs et fonds d'indices boursiers) pour la retraite de votre conjoint(e).
+    </gnc-act:long-description>    
+	    <gnc:account version="2.0.0">
+		    <act:name>Actif</act:name>
+		    <act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Actif</act:description>
+		    <act:slots>
+			    <slot>
+				    <slot:key>placeholder</slot:key>
+				    <slot:value type="string">true</slot:value>
+			    </slot>
+		    </act:slots>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Placements</act:name>
+		    <act:id type="guid">3609dabb457eb4b186c4059c93d2069a</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Placements</act:description>
+		    <act:parent type="guid">b14f810bdb0b57b77acf1a5db700068c</act:parent>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Retraite - Conjoint(e)</act:name>
+		    <act:id type="guid">3b7fc349a666e9d43b12f7a7bad07a76</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Compte d'épargne retraite du (de la) conjoint(e)</act:description>
+		    <act:slots>
+			    <slot>
+				    <slot:key>placeholder</slot:key>
+				    <slot:value type="string">true</slot:value>
+			    </slot>
+		    </act:slots>
+		    <act:parent type="guid">3609dabb457eb4b186c4059c93d2069a</act:parent>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Obligations</act:name>
+		    <act:id type="guid">b249603740b6486d2d63bab392c30961</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Obligations et débentures</act:description>
+		    <act:parent type="guid">3b7fc349a666e9d43b12f7a7bad07a76</act:parent>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Actions</act:name>
+		    <act:id type="guid">2a739c149d1b31e085227ac0c7bc30ab</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Actions</act:description>
+		    <act:parent type="guid">3b7fc349a666e9d43b12f7a7bad07a76</act:parent>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Fonds commun</act:name>
+		    <act:id type="guid">422b393ae28658f13912293e79db66bc</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Fonds commun de placements</act:description>
+		    <act:parent type="guid">3b7fc349a666e9d43b12f7a7bad07a76</act:parent>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Fonds d'indices boursiers</act:name>
+		    <act:id type="guid">116a463642471dab7ed2a71c1ee56aa3</act:id>
+		    <act:type>ASSET</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Fonds d'indices boursiers</act:description>
+		    <act:parent type="guid">3b7fc349a666e9d43b12f7a7bad07a76</act:parent>
+	    </gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

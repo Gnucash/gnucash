@@ -31,7 +31,10 @@
 #include "basiccell.h"
 #include "formulacell.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.register.core.formulacell"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 static void gnc_formula_cell_init( FormulaCell *fc );
 
@@ -82,7 +85,7 @@ void
 gnc_formula_cell_set_value( FormulaCell *fc,
                             const char *newVal )
 {
-  DEBUG( "Got value \"%s\"", newVal );
+  g_debug("got value [%s]", newVal);
   gnc_formula_cell_set_value_internal( &fc->cell, newVal );
 }
 
@@ -93,7 +96,7 @@ gnc_formula_cell_enter( BasicCell *_cell,
                         int *start_selection,
                         int *end_selection )
 {
-  DEBUG( "%d, %d, %d", *cursor_position, *start_selection, *end_selection );
+  g_debug("%d, %d, %d", *cursor_position, *start_selection, *end_selection);
   *cursor_position = -1;
   *start_selection = 0;
   *end_selection   = -1;
@@ -140,9 +143,9 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   const char *c;
   gunichar uc;
 
-  DEBUG( "%s, %d, %s, %d, %d, %d, %d",
-         (gchar *)change, change_len, (gchar *)newval, newval_len,
-         *cursor_position, *start_selection, *end_selection );
+  g_debug("%s, %d, %s, %d, %d, %d, %d",
+          (gchar *)change, change_len, (gchar *)newval, newval_len,
+          *cursor_position, *start_selection, *end_selection);
 
   /* accept the newval string if user action was delete */
   if (change == NULL)
@@ -184,6 +187,6 @@ gnc_formula_cell_set_value_internal( BasicCell *_cell,
                                      const char *str )
 {
   FormulaCell *fc = (FormulaCell*)_cell;
-  DEBUG( "internal string: %s", str );
+  g_debug("internal string: [%s]", str);
   gnc_basic_cell_set_value_internal( &fc->cell, str );
 }

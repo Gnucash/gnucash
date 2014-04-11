@@ -182,7 +182,7 @@
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+	 (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -356,7 +356,7 @@
 	 ;; is the only simple way to ensure that all three tables
 	 ;; (asset, liability, equity) have the same width.
          (tree-depth (if (equal? depth-limit 'all)
-                         (gnc:get-current-group-depth) 
+                         (gnc:get-current-account-tree-depth) 
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
@@ -423,7 +423,7 @@
          (gnc:html-make-no-account-warning 
 	  reportname (gnc:report-id report-obj)))
 	
-        ;; Get all the balances for each account group.
+        ;; Get all the balances for each of the account types.
         (let* ((asset-balance #f)
                (neg-liability-balance #f) ;; credit balances are < 0
                (liability-balance #f)

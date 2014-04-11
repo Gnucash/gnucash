@@ -431,7 +431,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       }
       else
       {
-	gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, _("Open"), -1);
+	gtk_list_store_set(store, &iter, LOT_COL_CLOSE, _("Open"), -1);
       }
 
       /* Title */

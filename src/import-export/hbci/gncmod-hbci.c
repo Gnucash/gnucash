@@ -34,7 +34,7 @@ gnc_module_path(void) {
 
 char *
 gnc_module_description(void) {
-  return g_strdup("Support for HBCI protocol");
+  return g_strdup("Support for Online Banking protocols");
 }
 
 

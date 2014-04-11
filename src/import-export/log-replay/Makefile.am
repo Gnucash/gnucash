@@ -41,3 +41,5 @@ AM_CFLAGS = \
 uidir = $(GNC_UI_DIR)
 dist_ui_DATA = \
 	gnc-plugin-log-replay-ui.xml
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.log-replay\"

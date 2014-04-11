@@ -31,8 +31,6 @@
  
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
@@ -350,11 +348,11 @@ trans_traverse_cb (Transaction *trans, void *cb_data)
 
 
 void
-pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
+pgendStoreAllTransactions (PGBackend *be, Account *root)
 {
    char *p;
-   ENTER ("be=%p, grp=%p", be, grp);
-   if (!be || !grp) return;
+   ENTER ("be=%p, root=%p", be, root);
+   if (!be || !root) return;
 
    /* lock it up so that we store atomically */
    p = "BEGIN;\n"
@@ -365,8 +363,8 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
 
    /* Recursively walk transactions. Start by reseting the write 
     * flags. We use this to avoid infinite recursion */
-   xaccGroupBeginStagedTransactionTraversals(grp);
-   xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
+   gnc_account_tree_begin_staged_transaction_traversals(root);
+   gnc_account_tree_staged_transaction_traversal (root, 1, trans_traverse_cb, be);
 
    p = "COMMIT;\n"
        "NOTIFY gncTransaction;";
@@ -378,7 +376,7 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
    if ((MODE_POLL == be->session_mode) ||
        (MODE_EVENT == be->session_mode))
    {
-      pgendGroupRecomputeAllCheckpoints(be, grp);
+      pgendAccountTreeRecomputeAllCheckpoints(be, root);
    }
    LEAVE(" ");
 }
@@ -503,8 +501,6 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
 
             if (acc)
             {
-              int save_state;
-
               if (acc != previous_acc)
               {
                 xaccAccountCommitEdit (previous_acc);
@@ -512,15 +508,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
                 previous_acc = acc;
               }
 
-              if (acc->parent)
-                save_state = acc->parent->saved;
-              else
-                save_state = 1;
-
               xaccAccountInsertSplit(acc, s);
-
-              if (acc->parent)
-                acc->parent->saved = save_state;
             }
 
             /* It's ok to set value without an account, since
@@ -570,20 +558,11 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
      if (account)
      {
        gnc_numeric amount;
-       int save_state;
        int acct_frac;
-
-       if (account->parent)
-         save_state = account->parent->saved;
-       else
-         save_state = 1;
 
        xaccAccountBeginEdit (account);
        xaccAccountInsertSplit (account, sri->split);
        xaccAccountCommitEdit (account);
-
-       if (account->parent)
-         account->parent->saved = save_state;
 
        acct_frac = xaccAccountGetCommoditySCU (account);
        amount = gnc_numeric_create (sri->amount, acct_frac);
@@ -1051,19 +1030,6 @@ pgend_trans_commit_edit (QofBackend * bend,
 
       /* set checkpoints for the new accounts */
       pgendTransactionRecomputeCheckpoints (be, trans);
-   }
-
-   /* hack alert -- the following code will get rid of that annoying
-    * message from the GUI about saving one's data. However, it doesn't
-    * do the right thing if the connection to the backend was ever lost.
-    * what should happen is the user should get a chance to
-    * resynchronize their data with the backend, before quiting out.
-    */
-   {
-      Split * s = xaccTransGetSplit (trans, 0);
-      Account *acc = xaccSplitGetAccount (s);
-      AccountGroup *top = xaccAccountGetRoot (acc);
-      xaccGroupMarkSaved (top);
    }
 
    LEAVE ("commited");

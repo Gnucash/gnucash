@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "qof.h"
 #include "qofbackend-p.h"
 #include "qof-backend-qsf.h"
@@ -205,7 +206,7 @@ qsf_determine_file_type(const gchar *path)
 
 	if (!path) { return TRUE; }
 	if (0 == safe_strcmp(path, QOF_STDOUT)) { return TRUE; }
-	if (stat(path, &sbuf) <0)    { return FALSE; }
+	if (g_stat(path, &sbuf) <0)  { return FALSE; }
 	if (sbuf.st_size == 0)       { return TRUE; }
 	if(is_our_qsf_object(path))  { return TRUE; }
 	else if(is_qsf_object(path)) { return TRUE; }
@@ -251,7 +252,7 @@ qsf_session_begin(QofBackend *be, QofSession *session, const gchar *book_path,
 	{
         FILE *f;
 
-        f = fopen(qsf_be->fullpath, "a+");
+        f = g_fopen(qsf_be->fullpath, "a+");
         if(f) {fclose(f); }
 		else
 		{
@@ -472,7 +473,7 @@ qsf_file_type(QofBackend *be, QofBook *book)
 	params = qsf_be->params;
 	params->book = book;
 	path = g_strdup(qsf_be->fullpath);
-	f = fopen(path, "r");
+	f = g_fopen(path, "r");
 	if(!f) { qof_backend_set_error(be, ERR_FILEIO_READ_ERROR); }
 	fclose(f);
 	params->filepath = g_strdup(path);

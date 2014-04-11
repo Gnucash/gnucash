@@ -166,8 +166,8 @@
          (document (gnc:make-html-document))
          (chart (gnc:make-html-scatter))
          (currency-accounts 
-          (filter gnc:account-has-shares? (xaccGroupGetSubAccountsSorted
-                                           (gnc-get-current-group))))
+          (filter gnc:account-has-shares? (gnc-account-get-descendants-sorted
+                                           (gnc-get-current-root-account))))
          (data '()))
 
     ;; Short helper for all the warnings below

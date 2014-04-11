@@ -35,7 +35,6 @@
 #include <unistd.h>
 
 #include "AccountP.h"
-#include "Group.h"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
@@ -1665,45 +1664,9 @@ guint
 gnc_book_count_transactions(QofBook *book)
 {
     guint count = 0;
-    xaccGroupForEachTransaction(xaccGetAccountGroup(book),
+    xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
                                 counter_thunk, (void*)&count);
     return count;
-}
-
-/********************************************************************\
-\********************************************************************/
-/* walk through the splits, looking for any account */
-static Account * 
-get_any_account(const Transaction *trans)
-{
-    GList *node;
-    if (!trans) return NULL;
-    for (node = trans->splits; node; node = node->next)
-        if (((Split *)node->data)->acc)
-            return ((Split *)node->data)->acc;
-    return NULL;
-}
-Account *
-xaccGetAccountByName (const Transaction *trans, const char * name)
-{
-   Account *acc;
-   if (!trans || !name) return NULL;
-
-   acc = get_any_account(trans);
-   return acc ? xaccGetPeerAccountFromName (acc, name) : NULL;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-Account *
-xaccGetAccountByFullName (const Transaction *trans, const char * name)
-{
-   Account *acc;
-   if (!trans || !name) return NULL;
-
-   acc = get_any_account(trans);
-   return acc ? xaccGetPeerAccountFromFullName (acc, name) : NULL;
 }
 
 /********************************************************************\

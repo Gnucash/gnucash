@@ -17,7 +17,6 @@
 
 #include "gnc-book.h"
 #include "gnc-engine.h"
-#include "Group.h"
 #include "io-gncxml.h"
  
 #include <fcgi_stdio.h>
@@ -213,7 +212,7 @@ main (int argc, char *argv[])
    int err, fake_argc =1;
    char * fake_argv[] = {"hello", 0};
    GNCBook *book;
-   AccountGroup *grp;
+   Account *root;
    char *request_bufp, *reply_bufp;
    int rc, sz;
    
@@ -230,8 +229,8 @@ main (int argc, char *argv[])
    rc = gnc_book_load (book);
    if (!rc) goto bookerrexit;
 
-   /* the grp pointer points to our local cache of the data */
-   grp = gnc_book_get_group (book);
+   /* the root pointer points to our local cache of the data */
+   root = gnc_book_get_root_account (book);
    
    /* --------------------------------------------------- */
    /* done with initialization, go into event loop */
@@ -326,7 +325,7 @@ main (int argc, char *argv[])
           * in, send them the full set of accounts.
           * (Do not send them any transactions yet).
           */
-         gncxml_write_group_to_buf(grp, &reply_bufp, &sz);
+         gncxml_write_account_tree_to_buf(root, &reply_bufp, &sz);
 
          /* send the xml to the client */
          printf ("%s", reply_bufp);
@@ -345,7 +344,7 @@ main (int argc, char *argv[])
 
       /* conver the xml input into a gnucash query structure... */
       q = gncxml_read_query (request_bufp, read_len);
-      xaccQuerySetGroup (q, grp);
+      xaccQuerySetGroup (q, root);
 
       /* hack -- limit to 30 splits ... */
       xaccQuerySetMaxSplits (q, 30);
