@@ -17,9 +17,9 @@ etags.files: $(shell find . -mindepth 1 -type d ! -name CVS ! -path "*/.*")
 # we don't need an etags.files dep here b/c you always call this after
 # re-generating etags.files if needed from the top-level Makefile.am.
 TAGS: $(shell cat etags.files)
-	rm TAGS
+	if [ -f TAGS ]; then rm TAGS; fi
 	cat etags.files | xargs -n 200 etags --append
 
 tags: $(shell cat etags.files)
-	rm tags
+	if [ -f TAGS ]; then rm tags; fi
 	cat etags.files | xargs -n 200 ctags --append

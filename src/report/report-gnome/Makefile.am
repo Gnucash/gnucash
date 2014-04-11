@@ -14,7 +14,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/report/report-system \
-  -I${top_srcdir}/lib/glib26 \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
@@ -44,7 +43,6 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
-  ${top_builddir}/lib/glib26/libgncglib.la \
   ${GLADE_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
@@ -53,13 +51,14 @@ libgncmod_report_gnome_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-libgw_report_gnome_la_SOURCES = gw-report-gnome.c
+nodist_libgw_report_gnome_la_SOURCES = gw-report-gnome.c
 libgw_report_gnome_la_LIBADD = \
   libgncmod-report-gnome.la \
   ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-report-gnome.scm gw-report-gnome-spec.scm
+gwmod_DATA = gw-report-gnome-spec.scm
+nodist_gwmod_DATA = gw-report-gnome.scm
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
 gncmod_DATA = report-gnome.scm
@@ -73,9 +72,6 @@ uidir = $(GNC_UI_DIR)
 
 ui_DATA = \
 	gnc-plugin-page-report-ui.xml
-
-noinst_HEADERS = \
- gw-report-gnome.h
 
 EXTRA_DIST = \
   ${glade_DATA} \
@@ -116,5 +112,5 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: \
 	  (gw:generate-wrapset \"gw-report-gnome\")"
 
 BUILT_SOURCES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h
-CLEANFILES = gnucash g-wrapped report .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-report-gnome.html
+CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped report .scm-links \
+	${SCM_FILE_LINKS} gw-report-gnome.html

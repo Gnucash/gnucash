@@ -437,7 +437,7 @@ show_session_error (QofBackendError io_error,
       break;
 
     case ERR_FILEIO_WRITE_ERROR:
-      fmt = _("Could not write to file %s Check that you have "
+      fmt = _("Could not write to file %s.  Check that you have "
               "permission to write to this file and that "
               "there is sufficient space to create it.");
       gnc_error_dialog(parent, fmt, newfile);

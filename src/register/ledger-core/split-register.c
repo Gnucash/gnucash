@@ -143,6 +143,24 @@ gnc_split_get_amount_denom (Split *split)
   return denom;
 }
 
+/* returns TRUE if begin_edit was aborted */
+gboolean
+gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans)
+{
+      if (!xaccTransIsOpen(trans)) {
+          xaccTransBeginEdit(trans);
+          /* This is now the pending transaction */
+          info->pending_trans_guid = *xaccTransGetGUID(trans);
+          return FALSE;
+      } else {
+          GtkWidget *parent = NULL;
+          if (info->get_parent)
+              parent = info->get_parent(info->user_data);
+          gnc_error_dialog(parent, "%s", _("This transaction is already being edited in another register. Please finish editing it there first."));
+          return TRUE;
+      }
+}
+
 void
 gnc_split_register_expand_current_trans (SplitRegister *reg, gboolean expand)
 {
@@ -829,9 +847,8 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
       g_assert(xaccTransIsOpen(trans));
   } else {
       g_assert(!pending_trans);
-      g_assert(!xaccTransIsOpen(trans));
-      xaccTransBeginEdit(trans);
-      info->pending_trans_guid = *xaccTransGetGUID(trans);
+      if (gnc_split_register_begin_edit_or_warn(info, trans))
+          return;
   }
   xaccSplitDestroy (split);
 
@@ -1001,10 +1018,8 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg,
 
   trans = xaccSplitGetParent(split);
   if (!pending) {
-      g_assert(!xaccTransIsOpen(trans));
-      xaccTransBeginEdit(trans);
-      /* This is now the pending transaction */
-      info->pending_trans_guid = *xaccTransGetGUID(trans);
+      if (gnc_split_register_begin_edit_or_warn(info, trans))
+          return;
   } else if (pending == trans) {
       g_assert(xaccTransIsOpen(trans));
   } else g_assert_not_reached();
@@ -1351,15 +1366,12 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (gnc_split_register_handle_exchange (reg, FALSE))
      return TRUE;
 
-   gnc_suspend_gui_refresh ();
-
    /* determine whether we should commit the pending transaction */
    if (pending_trans != trans)
    {
        // FIXME: How could the pending transaction not be open?
        // FIXME: For that matter, how could an open pending
        // transaction ever not be the current trans?
-       info->pending_trans_guid = *xaccTransGetGUID(trans);
        if (xaccTransIsOpen (pending_trans)) {
            g_message("Impossible? commiting pending %p", pending_trans);
            xaccTransCommitEdit (pending_trans);
@@ -1371,10 +1383,13 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
            g_assert(xaccTransIsOpen(blank_trans));
        } else {
            PINFO("beginning edit of trans %p", trans);
-           xaccTransBeginEdit (trans);
+           if (gnc_split_register_begin_edit_or_warn(info, trans))
+               return FALSE;
        }
        pending_trans = trans;
    }
+   g_assert(xaccTransIsOpen(trans));
+   gnc_suspend_gui_refresh ();
 
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)

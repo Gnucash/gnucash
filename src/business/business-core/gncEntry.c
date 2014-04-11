@@ -839,13 +839,15 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
  * the amount the merchant gets; the taxes are the amount the gov't
  * gets, and the customer pays the sum or value + taxes.
  *
+ * The SCU is the denominator to convert the value.
+ *
  * The discount return value is just for entertainment -- you may way
  * to let a consumer know how much they saved.
  */
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   GncTaxTable *tax_table, gboolean tax_included,
 			   gnc_numeric discount, GncAmountType discount_type,
-			   GncDiscountHow discount_how,
+			   GncDiscountHow discount_how, int SCU,
 			   gnc_numeric *value, gnc_numeric *discount_value,
 			   GList **tax_value)
 {
@@ -975,11 +977,15 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
    * need to compute taxes (based on 'pretax') if the caller wants it.
    */
 
-  if (discount_value != NULL)
+  if (discount_value != NULL) {
+    if (SCU) discount = gnc_numeric_convert(discount, SCU, GNC_RND_ROUND);
     *discount_value = discount;
+  }
 
-  if (value != NULL)
+  if (value != NULL) {
+    if (SCU) result = gnc_numeric_convert(result, SCU, GNC_RND_ROUND);
     *value = result;
+  }
 
   /* Now... Compute the list of tax values (if the caller wants it) */
 
@@ -995,12 +1001,14 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 
       switch (gncTaxTableEntryGetType (entry)) {
       case GNC_AMT_TYPE_VALUE:
+	if (SCU) amount = gnc_numeric_convert(amount, SCU, GNC_RND_ROUND);
 	taxes = gncAccountValueAdd (taxes, acc, amount);
 	break;
       case GNC_AMT_TYPE_PERCENT:
 	amount = gnc_numeric_div (amount, percent, GNC_DENOM_AUTO,
 				  GNC_DENOM_LCD);
 	tax = gnc_numeric_mul (pretax, amount, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+	if (SCU) tax = gnc_numeric_convert(tax, SCU, GNC_RND_ROUND);
 	taxes = gncAccountValueAdd (taxes, acc, tax);
 	break;
       default:
@@ -1066,12 +1074,16 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->b_tax_values = NULL;
   }
 
+  /* Determine the commodity denominator */
+  denom = get_entry_commodity_denom (entry);
+
   /* Compute the invoice values */
   gncEntryComputeValue (entry->quantity, entry->i_price,
 			(entry->i_taxable ? entry->i_tax_table : NULL),
 			entry->i_taxincluded,
 			entry->i_discount, entry->i_disc_type,
 			entry->i_disc_how,
+			denom,
 			&(entry->i_value), &(entry->i_disc_value),
 			&(entry->i_tax_values));
 
@@ -1080,9 +1092,9 @@ gncEntryRecomputeValues (GncEntry *entry)
 			(entry->b_taxable ? entry->b_tax_table : NULL),
 			entry->b_taxincluded,
 			gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
+			denom,
 			&(entry->b_value), NULL, &(entry->b_tax_values));
 
-  denom = get_entry_commodity_denom (entry);
   entry->i_value_rounded = gnc_numeric_convert (entry->i_value, denom,
 						GNC_RND_ROUND);
   entry->i_disc_value_rounded = gnc_numeric_convert (entry->i_disc_value, denom,

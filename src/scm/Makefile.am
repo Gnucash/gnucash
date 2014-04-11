@@ -10,7 +10,6 @@ gnc_regular_scm_files = \
   command-line.scm \
   doc.scm \
   fin.scm \
-  help-topics-index.scm \
   main-window.scm \
   substring-search.scm \
   xml-generator.scm

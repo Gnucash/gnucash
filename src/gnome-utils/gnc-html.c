@@ -1267,6 +1267,14 @@ gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
   html->button_cb_data  = data;
 }
 
+void
+gnc_html_copy(gnc_html *html)
+{
+  g_return_if_fail(html);
+
+  gtk_html_copy(GTK_HTML(html->html));
+}
+
 /**************************************************************
  * gnc_html_export : wrapper around the builtin function in gtkhtml
  **************************************************************/

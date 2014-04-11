@@ -52,13 +52,14 @@ static QofSession * current_session = NULL;
 static GHookList * session_closed_hooks = NULL;
 static QofLogModule log_module = QOF_MOD_SESSION;
 static GSList *provider_list = NULL;
+static gboolean qof_providers_initialized = FALSE;
 
 /* ====================================================================== */
 
 void
 qof_backend_register_provider (QofBackendProvider *prov)
 {
-	provider_list = g_slist_prepend (provider_list, prov);
+	provider_list = g_slist_append (provider_list, prov);
 }
 
 /* ====================================================================== */
@@ -846,7 +847,7 @@ struct backend_providers
 };
 
 /* All available QOF backends need to be described here
-and the last entry must be three NULL's.
+and the last entry must be two NULL's.
 Remember: Use the libdir from the current build environment
 and use JUST the module name without .so - .so is not portable! */
 struct backend_providers backend_list[] = {
@@ -869,9 +870,10 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	gboolean prov_type;
 	gboolean (*type_check) (const char*);
 	
-	ENTER (" list=%d", g_slist_length(provider_list));
+	ENTER (" list=%d, initted=%s", g_slist_length(provider_list),
+	       qof_providers_initialized ? "true" : "false");
 	prov_type = FALSE;
-	if (NULL == provider_list)
+	if (!qof_providers_initialized)
 	{
 		for (num = 0; backend_list[num].filename != NULL; num++) {
 			if(!qof_load_backend_library(backend_list[num].libdir,
@@ -881,8 +883,9 @@ qof_session_load_backend(QofSession * session, char * access_method)
 				backend_list[num].filename, backend_list[num].libdir);
 			}
 		}
+		qof_providers_initialized = TRUE;
 	}
-	p = g_slist_copy(provider_list);
+	p = provider_list;
 	while(p != NULL)
 	{
 		prov = p->data;
@@ -1204,14 +1207,15 @@ qof_session_save (QofSession *session,
 	if(change_backend == TRUE)
 	{
 		qof_session_destroy_backend(session);
-		if (NULL == provider_list)
+		if (!qof_providers_initialized)
 		{
 			for (num = 0; backend_list[num].filename != NULL; num++) {
 				qof_load_backend_library(backend_list[num].libdir,
 					backend_list[num].filename);
 			}
+			qof_providers_initialized = TRUE;
 		}
-		p = g_slist_copy(provider_list);
+		p = provider_list;
 		while(p != NULL)
 		{
 			prov = p->data;

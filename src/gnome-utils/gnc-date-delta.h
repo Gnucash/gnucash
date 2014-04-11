@@ -54,8 +54,8 @@ typedef struct {
   GtkHBox hbox;
 
   GtkWidget *value_spin;
-  GtkWidget *units_menu;
-  GtkWidget *polarity_menu;
+  GtkWidget *units_combo;
+  GtkWidget *polarity_combo;
 
   GNCDateDeltaUnits units;
   GNCDateDeltaPolarity polarity;

@@ -11,6 +11,12 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 
+enum file_cols {
+  FILE_COL_FILENAME = 0,
+  FILE_COL_POINTER,
+  NUM_FILE_COLS
+};
+
 static void gnc_druid_provider_multifile_gnome_class_init	(GNCDruidProviderMultifileGnomeClass *class);
 static void gnc_druid_provider_multifile_gnome_finalize		(GObject *obj);
 
@@ -52,13 +58,19 @@ gnc_druid_provider_multifile_gnome_finalize (GObject *obj)
 }
 
 static void
-gnc_dpmfg_select_file_cb(GtkCList *clist, int row, int column, GdkEvent *event,
-			 gpointer user_data)
+gnc_dpmfg_select_file_cb(GtkTreeSelection *selection,
+			 GNCDruidProviderMultifileGnome *prov_mf)
 {
-  GNCDruidProviderMultifileGnome *prov_mf = user_data;
-  gpointer file = gtk_clist_get_row_data(clist, row);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
 
-  prov_mf->selected_file = file;
+  if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+    gtk_tree_model_get(model, &iter,
+		       FILE_COL_POINTER, &prov_mf->selected_file,
+		       -1);
+  } else {
+    prov_mf->selected_file = NULL;
+  }
 }
 
 static void
@@ -66,35 +78,46 @@ gnc_dpmfg_refresh_list(GNCDruidProviderMultifileGnome *prov_mf)
 {
   GNCDruidProviderDescMultifile *desc_mf =
     GNC_DRUID_PROVIDER_DESC_MULTIFILE(prov_mf->parent.desc);
-  GtkCList *clist = GTK_CLIST(prov_mf->list);
+  GtkTreeView *view = GTK_TREE_VIEW(prov_mf->file_view);
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeSelection *selection;
+  GtkTreeRowReference *reference = NULL;
   GList *list;
   const gchar* filename;
-  gint row = 0;
-  gint sel_row = -1;
   gpointer be_ctx = prov_mf->parent.druid->be_ctx;
 
-  gtk_clist_freeze(clist);
-  gtk_clist_clear(clist);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  gtk_list_store_clear(store);
 
   for (list = desc_mf->get_files(be_ctx); list; list = list->next) {
     filename = desc_mf->get_filename(be_ctx, list->data);
 
-    row = gtk_clist_append(clist, (char**)&filename);
-    gtk_clist_set_row_data(clist, row, list->data);
-
-    if (prov_mf->selected_file == list->data)
-      sel_row = row;
+    gtk_list_store_prepend(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       FILE_COL_FILENAME, filename,
+		       FILE_COL_POINTER, list->data,
+		       -1);
+    if (prov_mf->selected_file == list->data) {
+      path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+      reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
+      gtk_tree_path_free(path);
+    }
   }
 
-  gtk_clist_thaw(clist);
-
-  if(sel_row >= 0)
-    gtk_clist_select_row(clist, sel_row, 0);
-  else
+  if (reference) {
+    path = gtk_tree_row_reference_get_path(reference);
+    gtk_tree_row_reference_free(reference);
+    if (path) {
+      selection = gtk_tree_view_get_selection(view);
+      gtk_tree_selection_select_path(selection, path);
+      gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
+      gtk_tree_path_free(path);
+    }
+  } else {
     prov_mf->selected_file = NULL;
-  
-  /* hopefully we don't need to queue the actual window */
-  gtk_widget_queue_resize(GTK_WIDGET(prov_mf->page));
+  }
 }
 
 static GNCDruidPage*
@@ -188,8 +211,12 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   GNCDruidProviderMultifileGnome *prov;
   GNCDruidProviderDescMultifile *desc_mf;
   GNCDruidCB *cb;
-  GtkWidget *window, *page, *list, *button1, *button2, *label;
+  GtkWidget *window, *page, *view, *button1, *button2, *label;
   GladeXML *xml;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GtkListStore *store;
+  GtkTreeSelection *selection;
 
   /* verify that this is the correct provider descriptor */
   g_return_val_if_fail(IS_GNC_DRUID_PROVIDER_DESC_MULTIFILE(desc), NULL);
@@ -218,7 +245,7 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   g_assert(xml);
   window = glade_xml_get_widget(xml, "Multifile Provider Window");
   page = glade_xml_get_widget(xml, "Multifile Provider Page");
-  list = glade_xml_get_widget(xml, "file_list");
+  view = glade_xml_get_widget(xml, "file_view");
   button1 = glade_xml_get_widget(xml, "load_button");
   button2 = glade_xml_get_widget(xml, "unload_button");
   label = glade_xml_get_widget(xml, "instruction_label");
@@ -233,11 +260,23 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   g_assert(page);
   prov->page = GNOME_DRUID_PAGE(page);
   prov_base->pages = g_list_prepend(NULL, page);
-  prov->list = list;
+  prov->file_view = view;
+
+  /* Set up the file view */
+  store = gtk_list_store_new (NUM_FILE_COLS, G_TYPE_STRING, G_TYPE_POINTER);
+  gtk_tree_view_set_model(GTK_TREE_VIEW(view), GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes("", renderer,
+						    "text", FILE_COL_FILENAME,
+						    NULL);
+  gtk_tree_view_append_column(GTK_TREE_VIEW(view), column);
+
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+  g_signal_connect(selection, "changed",
+		   (GCallback)gnc_dpmfg_select_file_cb, prov);
 
   /* Set the page properties */
-  g_signal_connect(G_OBJECT(list), "select-row",
-		   (GCallback)gnc_dpmfg_select_file_cb, prov);
   g_signal_connect(G_OBJECT(button1), "clicked",
 		   (GCallback)gnc_dpmfg_load_another_cb, prov);
   g_signal_connect(G_OBJECT(button2), "clicked",

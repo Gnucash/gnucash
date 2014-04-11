@@ -141,6 +141,7 @@ static void gxi_data_destroy (GncXmlImportData *data);
 static void gxi_ambiguous_info_destroy (GncXmlImportData *data);
 static void gxi_session_destroy (GncXmlImportData *data);
 static void gxi_check_file (GncXmlImportData *data);
+static void gxi_sort_ambiguous_list (GncXmlImportData *data);
 static gboolean gxi_parse_file (GncXmlImportData *data);
 static gboolean gxi_save_file (GncXmlImportData *data);
 static void gxi_update_progress_bar (const gchar *message, double percentage);
@@ -248,29 +249,6 @@ static system_encoding_type system_encodings [] =
 };
 static guint n_system_encodings = G_N_ELEMENTS (system_encodings);
 
-static find_ambiguous_handler find_ambiguous = NULL;
-static parse_with_subst_handler parse_with_subst = NULL;
-static GModule *allsymbols = NULL;
-
-static gboolean
-gxi_find_backend_symbols ()
-{
-  gpointer symbol;
-
-  if (!allsymbols)
-    allsymbols = g_module_open (NULL, 0);
-
-  if (!g_module_symbol (allsymbols, "gnc_xml2_find_ambiguous", &symbol))
-    return FALSE;
-  find_ambiguous = symbol;
-
-  if (!g_module_symbol (allsymbols, "gnc_xml2_parse_with_subst", &symbol))
-    return FALSE;
-  parse_with_subst = symbol;
-
-  return TRUE;
-}
-
 gboolean
 gnc_xml_convert_single_file (const gchar *filename)
 {
@@ -278,8 +256,6 @@ gnc_xml_convert_single_file (const gchar *filename)
   GtkWidget *dialog, *widget;
   GladeXML *xml;
   gboolean success;
-
-  g_return_val_if_fail (gxi_find_backend_symbols (), FALSE);
 
   data = g_new0 (GncXmlImportData, 1);
   data->import_type = XML_CONVERT_SINGLE_FILE;
@@ -499,7 +475,7 @@ ambiguous_cmp (const ambiguous_type *a, const ambiguous_type *b,
     }
   } else {
     if (string_b) {
-      /* b looks good, a not. pub a to the top */
+      /* b looks good, a not. put a to the top */
       return -1;
     } else {
       /* both look suboptimal, see whether one has a decision attached to it */
@@ -569,8 +545,6 @@ gxi_session_destroy (GncXmlImportData *data)
 static void
 gxi_check_file (GncXmlImportData *data)
 {
-  GError *error=NULL;
-
   if (!data->encodings) {
     gboolean is_utf8;
     const gchar *locale_enc;
@@ -628,17 +602,23 @@ gxi_check_file (GncXmlImportData *data)
   gxi_ambiguous_info_destroy (data);
 
   /* analyze file */
-  data->n_impossible = (*find_ambiguous) (
-    data->filename, data->encodings, &data->unique, &data->ambiguous_ht,
-    NULL, &error);
+  data->n_impossible = gnc_xml2_find_ambiguous (
+    data->filename, data->encodings, &data->unique, &data->ambiguous_ht, NULL);
 
   if (data->n_impossible != -1) {
     /* sort ambiguous words */
     g_hash_table_foreach (data->ambiguous_ht, (GHFunc)ambiguous_list_insert,
                           data);
-    data->ambiguous_list = g_list_sort_with_data (
-      data->ambiguous_list, (GCompareDataFunc) ambiguous_cmp, data);
+    gxi_sort_ambiguous_list (data);
   }
+}
+
+static void
+gxi_sort_ambiguous_list (GncXmlImportData *data)
+{
+  data->ambiguous_list = g_list_sort_with_data (
+    data->ambiguous_list, (GCompareDataFunc) ambiguous_cmp, data);
+
 }
 
 static void
@@ -709,7 +689,7 @@ gxi_parse_file (GncXmlImportData *data)
   qof_session_begin (session, data->filename, TRUE, FALSE);
   io_err = qof_session_get_error (session);
   if (io_err != ERR_BACKEND_NO_ERR) {
-    message = _("The file could not be reopen.");
+    message = _("The file could not be reopened.");
     goto cleanup_parse_file;
   }
 
@@ -728,7 +708,7 @@ gxi_parse_file (GncXmlImportData *data)
     goto cleanup_parse_file;
   } else if (io_err != ERR_FILEIO_NO_ENCODING) {
     /* another error, cannot handle this here */
-    message = _("The file could not be reopen.");
+    message = _("The file could not be reopened.");
     goto cleanup_parse_file;
   }
 
@@ -737,7 +717,7 @@ gxi_parse_file (GncXmlImportData *data)
   backend = (FileBackend*) qof_book_get_backend (book);
 
   gxi_update_progress_bar (_("Parsing file..."), 0.0);
-  success = (*parse_with_subst) (backend, book, data->subst);
+  success = gnc_xml2_parse_with_subst (backend, book, data->subst);
   gxi_update_progress_bar (NULL, -1.0);
 
   if (success)
@@ -1137,7 +1117,7 @@ gxi_default_enc_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
   }
 
   data->default_encoding = curr_enc;
-  gxi_check_file (data);
+  gxi_sort_ambiguous_list (data);
   gxi_update_string_box (data);
   gxi_update_conversion_forward (data);
 }

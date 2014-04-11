@@ -12,7 +12,7 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
-libgnc_backend_postgres_la_LDFLAGS = -module 
+libgnc_backend_postgres_la_LDFLAGS = -module -avoid-version
 libgnc_backend_postgres_la_LIBADD  =  ${PGSQL_LIBS} -lpq  \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${QOF_LIBS} \

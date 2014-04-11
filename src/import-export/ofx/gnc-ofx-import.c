@@ -47,6 +47,7 @@
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-glib-utils.h"
 
 #define GCONF_SECTION "dialogs/import/ofx"
 
@@ -124,6 +125,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 					data.account_id, 0, NULL, NULL, NO_TYPE, NULL, NULL);
     if(account!=NULL)
       {
+	/********** Validate the input strings to ensure utf8 ********************/
+	if (data.name_valid)
+	  gnc_utf8_strip_invalid(data.name);
+	if (data.memo_valid)
+	  gnc_utf8_strip_invalid(data.memo);
+
 	/********** Create the transaction and setup transaction data ************/
 	book = xaccAccountGetBook(account);
 	transaction = xaccMallocTransaction(book);
@@ -595,6 +602,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
       }
     }
 
+    gnc_utf8_strip_invalid(data.account_name);
     account_description = g_strdup_printf( /* This string is a default account
 					      name. It MUST NOT contain the
 					      character ':' anywhere in it or

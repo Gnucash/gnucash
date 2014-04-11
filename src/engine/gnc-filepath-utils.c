@@ -65,15 +65,15 @@ MakeHomeDir (void)
 {
   int rc;
   struct stat statbuf;
-  char *home;
+  const gchar *home;
   char *path;
   char *data;
 
   /* Punt. Can't figure out where home is. */
-  home = getenv ("HOME");
+  home = g_get_home_dir();
   if (!home) return;
 
-  path = g_strconcat(home, "/.gnucash", NULL);
+  path = g_build_filename(home, ".gnucash", (gchar *)NULL);
 
   rc = stat (path, &statbuf);
   if (rc)
@@ -85,7 +85,7 @@ MakeHomeDir (void)
     g_mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
   }
 
-  data = g_strconcat (path, "/data", NULL);
+  data = g_build_filename (path, "data", (gchar *)NULL);
   rc = stat (data, &statbuf);
   if (rc)
     g_mkdir (data, S_IRWXU);
@@ -97,26 +97,22 @@ MakeHomeDir (void)
 /* ====================================================================== */
 
 /* XXX hack alert -- we should be yanking this out of some config file */
+/* These are obviously meant to be hard-coded paths to the gnucash
+   data file. That is insane. These should be thrown out
+   altogether. On non-Unix systems (Windows) these paths would not
+   only have different directory separator characters but these
+   would certainly be completely different paths. I'd vote to
+   throw this out completely. -- cstim, 2006-07-19 */
 static char * searchpaths[] =
 {
-   "/usr/share/gnucash/data/",
-   "/usr/local/share/gnucash/data/",
-   "/usr/share/gnucash/accounts/",
-   "/usr/local/share/gnucash/accounts/",
+   "/usr/share/gnucash/data",
+   "/usr/local/share/gnucash/data",
+   "/usr/share/gnucash/accounts",
+   "/usr/local/share/gnucash/accounts",
    NULL,
 };
 
 typedef gboolean (*pathGenerator)(char *pathbuf, int which);
-
-static gboolean
-xaccAddEndPath(char *pathbuf, const char *ending, int len)
-{
-    if(len + strlen(pathbuf) >= PATH_MAX)
-        return FALSE;
-          
-    strcat (pathbuf, ending);
-    return TRUE;
-}
 
 static gboolean
 xaccCwdPathGenerator(char *pathbuf, int which)
@@ -131,7 +127,6 @@ xaccCwdPathGenerator(char *pathbuf, int which)
         if (getcwd (pathbuf, PATH_MAX) == NULL)
             return FALSE;
 
-        strcat (pathbuf, "/");
         return TRUE;
     }
 }
@@ -139,23 +134,28 @@ xaccCwdPathGenerator(char *pathbuf, int which)
 static gboolean
 xaccDataPathGenerator(char *pathbuf, int which)
 {
-    char *path;
-    
     if(which != 0)
     {
         return FALSE;
     }
     else
     {
-        path = getenv ("HOME");
-        if (!path)
+        const gchar *home;
+	gchar *tmppath;
+    
+        home = g_get_home_dir ();
+        if (!home)
             return FALSE;
 
-        if (PATH_MAX <= (strlen (path) + 20))
-            return FALSE;
+	tmppath = g_build_filename (home, ".gnucash", "data", (gchar *)NULL);
+        if (strlen(tmppath) >= PATH_MAX)
+	{
+	    g_free (tmppath);
+	    return FALSE;
+	}
 
-        strcpy (pathbuf, path);
-        strcat (pathbuf, "/.gnucash/data/");
+        g_strlcpy (pathbuf, tmppath, PATH_MAX);
+	g_free (tmppath);
         return TRUE;
     }
 }
@@ -176,7 +176,7 @@ xaccUserPathPathGenerator(char *pathbuf, int which)
         if (PATH_MAX <= strlen(path))
             return FALSE;
 
-        strcpy (pathbuf, path);
+        g_strlcpy (pathbuf, path, PATH_MAX);
         return TRUE;
     }
 }
@@ -206,14 +206,12 @@ xaccResolveFilePath (const char * filefrag)
   /* OK, now we try to find or build an absolute file path */
 
   /* check for an absolute file path */
-  if (*filefrag == '/')
+  if (g_path_is_absolute(filefrag))
     return g_strdup (filefrag);
 
   if (!g_ascii_strncasecmp(filefrag, "file:", 5))
   {
-      char *ret = g_new(char, strlen(filefrag) - 5 + 1);
-      strcpy(ret, filefrag + 5);
-      return ret;
+      return g_strdup(filefrag + 5);
   }
 
   /* get conservative on the length so that sprintf(getpid()) works ... */
@@ -230,14 +228,14 @@ xaccResolveFilePath (const char * filefrag)
       int j;
       for(j = 0; gens[i](pathbuf, j) ; j++)
       {
-          if(xaccAddEndPath(pathbuf, filefrag, namelen))
-          {
-              int rc = stat (pathbuf, &statbuf);
-              if ((!rc) && (S_ISREG(statbuf.st_mode)))
-              {
-                  return (g_strdup (pathbuf));
-              }
+	  gchar *fullpath = g_build_filename(pathbuf, filefrag, (gchar *)NULL);
+
+	  int rc = stat (fullpath, &statbuf);
+	  if ((!rc) && (S_ISREG(statbuf.st_mode)))
+	  {
+	      return fullpath;
           }
+	  g_free (fullpath);
       }
   }
   /* OK, we didn't find the file. */
@@ -262,22 +260,20 @@ xaccResolveFilePath (const char * filefrag)
   /* Lets try creating a new file in $HOME/.gnucash/data */
   if (xaccDataPathGenerator(pathbuf, 0))
   {
-      if(xaccAddEndPath(pathbuf, filefrag_dup, namelen))
-      {
-          g_free (filefrag_dup);
-          return (g_strdup (pathbuf));
-      }
+      gchar *result;
+      result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
+      g_free (filefrag_dup);
+      return result;
   } 
 
   /* OK, we still didn't find the file */
   /* Lets try creating a new file in the cwd */
   if (xaccCwdPathGenerator(pathbuf, 0))
   {
-      if(xaccAddEndPath(pathbuf, filefrag_dup, namelen))
-      {
-          g_free (filefrag_dup);
-          return (g_strdup (pathbuf));
-      }
+      gchar *result;
+      result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
+      g_free (filefrag_dup);
+      return result;
   }
 
   g_free (filefrag_dup);

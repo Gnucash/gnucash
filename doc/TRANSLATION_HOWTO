@@ -50,9 +50,10 @@ http://www.iro.umontreal.ca/contrib/po/HTML/
 ==============================================================================
 2) Get the source from CVS/SVN
 
-  FIXME: This section is now outdated since the source is now in SVN
-  instead of CVS. Please check the website.
+  ****FIXME: This section is now outdated since the source is now in SVN
+  instead of CVS. Please check the website.*****
 
+#######################################################################
 The first thing to do is to download the latest STABLE branch of gnucash
 from CVS and get it to compile.  Do not use the HEAD branch, since the text
 in the HEAD branch changes so much, it would be a waste of time to translate 
@@ -65,7 +66,7 @@ cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
 
 Checkout the current stable branch.
 cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
-        -rgnucash-1-8-branch gnucash
+        -rgnucash-2-0-branch gnucash
 
 Checkout the documentation (optional, but recommended)
 cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
@@ -73,6 +74,7 @@ cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
 
 After this initial CVS checkout, you can update your CVS files using:
 cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot update gnucash
+########################################################################
 
 ==============================================================================
 3) Contact the maintainer of your language
@@ -93,7 +95,7 @@ The beginning of your .po file should look something similar to this:
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.8.3\n"
+"Project-Id-Version: GnuCash 2.0.0\n"
 "POT-Creation-Date: 2003-05-16 16:42-0300\n"
 "PO-Revision-Date: 2003-06-02 12:00-0300\n"
 "Last-Translator: Jon Lapham <lapham@extracta.com.br>\n"
@@ -129,7 +131,7 @@ versions.
 
 cd gnucash
 ./autogen.sh
-./configure  --enable-debug --prefix=/opt/gnucash-1.8
+./configure  --enable-debug --prefix=/opt/gnucash-2.0
 
 If autogen complains about missing development packages, find them on your
 favorite OS distribution, install it, and try to re-run the autogen command.
@@ -153,7 +155,7 @@ To compile the documentation, enter the gnucash-doc directory and go
 through the same process:
 
 ./autogen.sh
-./configure --prefix=/opt/gnucash-1.8
+./configure --prefix=/opt/gnucash-2.0
 make
 su -
 make install
@@ -164,7 +166,7 @@ make install
 After installation, insure that it works by running (as a normal user,
 no need to be root here):
 
-/opt/gnucash-1.8/bin/gnucash
+/opt/gnucash-2.0/bin/gnucash
 
 It is a good idea to use absolute paths like this to insure you run 
 the proper gnucash executable.  To run your OS pre-installed version of
@@ -176,7 +178,7 @@ In either case, you can easily switch between the various languages the
 gnucash has available by placing the LANG env var before the call to the
 executable:
 
-LANG=pt_BR /opt/gnucash-1.8/bin/gnucash
+LANG=pt_BR /opt/gnucash-2.0/bin/gnucash
 
 ==============================================================================
 6) The glossary file
@@ -318,7 +320,7 @@ make install
 
 Now you can run gnucash with your ned translations:
 
-LANG=XXXX /opt/gnucash-1.8/bin/gnucash
+LANG=XXXX /opt/gnucash-2.0/bin/gnucash
 
 When you are happy with the new translation file, email a gzipped version
 of it to the gnucash-patches mailing list.
@@ -350,10 +352,10 @@ change the translation to exactly match that of the gnome libraries.
 
 To do this, you need to run gnucash under gdb:
 
-LANG=XXXX /opt/gnucash-1.8/bin/gnucash-env gdb /usr/bin/guile
+LANG=XXXX /opt/gnucash-2.0/bin/gnucash-env gdb /usr/bin/guile
 
 Then, from within gdb, issue:
-run -e main -s /opt/gnucash-1.8/libexec/gnucash/overrides/gnucash --g-fatal-warnings
+run -e main -s /opt/gnucash-2.0/libexec/gnucash/overrides/gnucash --g-fatal-warnings
 
 Eventually, gnucash should crash (because of the --g-fatal-warnings 
 directive), when it does, issue from within gdb:
@@ -387,7 +389,7 @@ Remember that the translations must contain the proper underscores.
 
 ------------
 To follow gnucash as it access files, 
-strace /opt/gnucash-1.8/bin/gnucash
+strace /opt/gnucash-2.0/bin/gnucash
 
 ==============================================================================
 11) How to translate the GnuCash guide and/or help files

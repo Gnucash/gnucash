@@ -675,19 +675,17 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* now perform the completion */
-
-        gnc_suspend_gui_refresh ();
-
-        info->pending_trans_guid = *xaccTransGetGUID(trans);
         if ((pending_trans != NULL) && (pending_trans != trans)) {
+            if (gnc_split_register_begin_edit_or_warn(info, trans))
+                return TRUE;
+
             if (xaccTransIsOpen (pending_trans))
                 xaccTransCommitEdit (pending_trans);
             else g_assert_not_reached();
-            g_assert(!xaccTransIsOpen(trans));
-            xaccTransBeginEdit(trans);
         }
         g_assert(xaccTransIsOpen(trans));
         pending_trans = trans;
+        gnc_suspend_gui_refresh ();
 
         gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
         blank_split = NULL;
@@ -1466,7 +1464,7 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
   /* Does the user want to be warned? */
   window = gnc_split_register_get_parent(reg);
   dialog =
-    gtk_message_dialog_new_with_markup(GTK_WINDOW(window),
+    gtk_message_dialog_new(GTK_WINDOW(window),
 				       GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_WARNING,
 				       GTK_BUTTONS_CANCEL,

@@ -53,6 +53,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
@@ -71,6 +72,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 #define GCONF_SECTION "window/pages/account_tree"
+
+#define DELETE_DIALOG_FILTER  "filter"
+#define DELETE_DIALOG_ACCOUNT "account"
 
 enum {
   ACCOUNT_SELECTED,
@@ -129,9 +133,7 @@ static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, 
 static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginPageAccountTree *page);
-#endif
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
@@ -159,7 +161,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts) },
 
 	/* Edit menu */
-	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit Account"), "<control>e",
+	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account) },
 	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), NULL,
@@ -183,15 +185,13 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split) },
-#ifdef LOTS_READY_FOR_SHOWTIME
 	{ "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots) },
-#endif
 	{ "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },
-	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccount"), NULL,
+	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccounts"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits "
              "in this account and its subaccounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub) },
@@ -211,9 +211,7 @@ static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"EditDeleteAccountAction",
 	"ActionsReconcileAction",
-#ifdef LOTS_READY_FOR_SHOWTIME
 	"ActionsLotsAction",
-#endif
 	NULL
 };
 
@@ -303,6 +301,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	GtkActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
 	GncPluginPage *parent;
+	const GList *page_list;
 
 	ENTER("page %p", plugin_page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(plugin_page);
@@ -317,6 +316,14 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
+
+	/* Is this the first accounts page? */
+	page_list =
+	  gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
+	if (plugin_page == page_list->data) {
+	  g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
+			    GINT_TO_POINTER(1));
+	}
 
 	/* Create menu and toolbar information */
 	action_group =
@@ -776,58 +783,21 @@ set_ok_sensitivity(GtkWidget *dialog)
 {
   GtkWidget *button;
   gpointer dmas, tmas;
+  gint dmas_cnt, tmas_cnt;
   gboolean sensitive;
 
   dmas = g_object_get_data(G_OBJECT(dialog), "dmas");
   tmas = g_object_get_data(G_OBJECT(dialog), "tmas");
+  dmas_cnt = gnc_account_sel_get_num_account(GNC_ACCOUNT_SEL(dmas));
+  tmas_cnt = gnc_account_sel_get_num_account(GNC_ACCOUNT_SEL(tmas));
+
   sensitive = (((NULL == dmas) ||
-		(!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(dmas)) ||
-		 GTK_LIST(GNC_ACCOUNT_SEL(dmas)->combo->list)->children)) &&
+		(!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(dmas)) || dmas_cnt)) &&
 	       ((NULL == tmas) ||
-		(!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(tmas)) ||
-		 GTK_LIST(GNC_ACCOUNT_SEL(tmas)->combo->list)->children)));
+		(!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(tmas)) || tmas_cnt)));
 
   button = gnc_glade_lookup_widget(dialog, "deletebutton");
   gtk_widget_set_sensitive(button, sensitive);
-}
-
-/***
- *** GNCAccountSel has an odd habit of adding a
- *** blank item when its list is otherwise empty.
- ***/
-
-static void
-exclude_account(GtkWidget *item,
-		gpointer name)
-{
-  char *text;
-
-  gtk_label_get(GTK_LABEL(GTK_BIN(item)->child), &text);
-  if ((0 == strlen(text)) || (0 == strcmp(text, name))) {
-    gtk_widget_destroy(GTK_WIDGET(item));
-  }
-}
-
-static void
-exclude_account_subtree(GtkWidget *item,
-			gpointer prefix)
-{
-  char *text;
-
-  gtk_label_get(GTK_LABEL(GTK_BIN(item)->child), &text);
-  if ((0 == strlen(text)) || 0 == strncmp(text, prefix, strlen(prefix))) {
-    gtk_widget_destroy(GTK_WIDGET(item));
-  }
-}
-
-static gint
-compare_listitem_text(gconstpointer item,
-		      gconstpointer entrytext)
-{
-  char *text;
-
-  gtk_label_get(GTK_LABEL(GTK_BIN(item)->child), &text);
-  return strcmp(text, entrytext);
 }
 
 static void
@@ -835,33 +805,20 @@ gppat_populate_gas_list(GtkWidget *dialog,
 			GNCAccountSel *gas,
 			gboolean exclude_subaccounts)
 {
-  GtkList *list;
-  GtkEntry *entry;
-  gpointer name, filter;
+  Account *account;
+  GList *filter;
 
   g_return_if_fail(GTK_IS_DIALOG(dialog));
   if (gas == NULL)
     return;
-  list = GTK_LIST(gas->combo->list);
-  entry = GTK_ENTRY(gas->combo->entry);
-  name = g_object_get_data(G_OBJECT(dialog), "name");
-  filter = g_object_get_data(G_OBJECT(dialog), "filter");
+  account = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_ACCOUNT);
+  filter = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_FILTER);
 
   /* Setting the account type filter triggers GNCAccountSel population. */
   gnc_account_sel_set_acct_filters (gas, filter);
 
   /* Accounts to be deleted must be removed. */
-  gtk_container_foreach(GTK_CONTAINER(list), (exclude_subaccounts ?
-					      exclude_account_subtree :
-					      exclude_account), name);
-
-  /* The entry widget may need to be reset. */
-  if (NULL == g_list_find_custom(list->children, 
-				 gtk_entry_get_text(entry),
-				 compare_listitem_text)) {
-    gtk_entry_set_text(entry, "");
-    gtk_list_select_item(list, 0);
-  }
+  gnc_account_sel_purge_account( gas, account, exclude_subaccounts);
 
   /* The sensitivity of the OK button needs to be reevaluated. */
   set_ok_sensitivity(GTK_WIDGET(dialog));
@@ -941,8 +898,8 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
      * type as the one being deleted.
      */
     filter = g_list_prepend(NULL, (gpointer)xaccAccountGetType(account));
-    g_object_set_data(G_OBJECT(dialog), "filter", filter);
-    g_object_set_data(G_OBJECT(dialog), "name", acct_name);
+    g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_FILTER, filter);
+    g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_ACCOUNT, account);
 
     /*
      * Adjust the dialog based on whether the account has
@@ -1189,7 +1146,6 @@ gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action,
 	gnc_stock_split_dialog (window, account);
 }
 
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void
 gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
 				       GncPluginPageAccountTree *page)
@@ -1199,7 +1155,6 @@ gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
 	account = gnc_plugin_page_account_tree_get_current_account (page);
 	gnc_lot_viewer_dialog (account);
 }
-#endif
 
 static void
 gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page)

@@ -65,7 +65,6 @@
 
 ;; from doc.scm
 (export gnc:find-doc-file)
-;(export gnc:load-help-topics)
 
 ;; from main-window.scm
 (export gnc:main-window-properties-cb)

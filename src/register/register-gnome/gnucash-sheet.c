@@ -195,6 +195,7 @@ gnucash_sheet_stop_editing (GnucashSheet *sheet)
         gnucash_sheet_hide_editing_cursor (sheet);
 
         sheet->editing = FALSE;
+        sheet->input_cancelled = FALSE;
 }
 
 
@@ -1609,8 +1610,16 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
         new_virt_loc = cur_virt_loc;
 
+	/* Don't process any keystrokes where a modifier key (Alt,
+	 * Meta, etc.) is being held down.  This should't include
+	 * MOD2, aka NUM LOCK. */
+	if (event->state & (GDK_MOD1_MASK | GDK_MOD3_MASK |
+			    GDK_MOD4_MASK | GDK_MOD5_MASK))
+		pass_on = TRUE;
+
 	/* Calculate tentative physical values */
-        switch (event->keyval) {
+	if (!pass_on) {
+            switch (event->keyval) {
                 case GDK_Return:
                 case GDK_KP_Enter:
                         g_signal_emit_by_name(sheet->reg, "activate_cursor");
@@ -1663,8 +1672,10 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                                           &new_virt_loc, -1);
 			break;
                 case GDK_KP_Down:
-		case GDK_Down:
-                        if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+                case GDK_Down:
+                case GDK_Menu:
+                        if (event->keyval == GDK_Menu ||
+                            event->state & GDK_CONTROL_MASK)
                         {
                                 GncItemEdit *item_edit;
 
@@ -1694,22 +1705,9 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                 return TRUE;
 
 			pass_on = TRUE;
-
-                        /* This is a piece of logic from gtkentry.c. We
-                           are trying to figure out whether to change the
-                           selection. If this is a regular character, we
-                           don't want to change the selection, as it will
-                           get changed in the insert callback. */
-                        if ((event->keyval >= 0x20) && (event->keyval <= 0xFF))
-                        {
-                                if (event->state & GDK_CONTROL_MASK)
-                                        break;
-                                if (event->state & GDK_MOD1_MASK)
-                                        break;
-                        }
-
 			break;
-        }
+            }
+	}
 
 	/* Forward the keystroke to the input line */
 	if (pass_on)

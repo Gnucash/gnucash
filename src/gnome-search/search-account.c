@@ -3,6 +3,8 @@
  *
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
@@ -31,6 +33,7 @@
 #include "gnc-gui-query.h"
 
 #include "search-account.h"
+#include "search-core-utils.h"
 
 #define d(x)
 
@@ -172,58 +175,30 @@ gncs_validate (GNCSearchCoreType *fe)
   return valid;
 }
 
-static void
-option_changed (GtkWidget *widget, GNCSearchAccount *fe)
-{
-  fe->how = (query_compare_t)
-    g_object_get_data (G_OBJECT (widget), "option");
-}
-
-static GtkWidget *
-add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       query_compare_t option)
-{
-  GtkWidget *item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-#define ADD_MENU_ITEM(str,op) { \
-	item = add_menu_item (menu, fe, str, op); \
-	if (fi->how == op) { current = index; first = item; } \
-	index++; \
-} 
-
 static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
   GNCSearchAccount *fi = (GNCSearchAccount *)fe;
   GNCSearchAccountPrivate *priv;
-  GtkWidget *menu, *item, *first, *opmenu;
-  int current = 0, index = 0;
+  GtkComboBox *combo;
+  int initial = 0;
 
-  menu = gtk_menu_new ();
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
 
   priv = _PRIVATE(fi);
   if (priv->match_all) {
-    ADD_MENU_ITEM (_("matches all accounts"), GUID_MATCH_ALL);
-    first = item;
+    gnc_combo_box_search_add(combo, _("matches all accounts"), GUID_MATCH_ALL);
+    initial = GUID_MATCH_ALL;
   } else {
-    ADD_MENU_ITEM (_("matches any account"), GUID_MATCH_ANY);
-    first = item;			/* Force one */
-    ADD_MENU_ITEM (_("matches no accounts"), GUID_MATCH_NONE);
+    gnc_combo_box_search_add(combo, _("matches any account"), GUID_MATCH_ANY);
+    gnc_combo_box_search_add(combo, _("matches no accounts"), GUID_MATCH_NONE);
+    initial = GUID_MATCH_ANY;
   }
 
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
+  gnc_combo_box_search_changed(combo, &fi->how);
+  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : initial);
 
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
-
-  return opmenu;
+  return GTK_WIDGET(combo);
 }
 
 static char *

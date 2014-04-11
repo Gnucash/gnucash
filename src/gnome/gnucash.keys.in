@@ -1,3 +1,0 @@
-application/x-gnucash:
-	open=gnucash %f
-	view=gnucash %f

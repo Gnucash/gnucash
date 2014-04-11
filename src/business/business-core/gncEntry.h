@@ -174,7 +174,9 @@ GList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv);
 /** Compute the Entry value, tax-value, and discount_value, based on
  * the quantity, price, discount, tax-table, and types.  The value is
  * the amount the merchant gets, the taxes are what the gov't gets,
- * and the discount is how much the customer saved.
+ * and the discount is how much the customer saved.  The SCU is the
+ * target denominator of the value and tax -- it should be the
+ * account or commodity SCU of the target.
  *
  * The tax_values list is the property of the entry and will be
  * destroyed automatically, so use it quickly.  Note that all return
@@ -187,7 +189,7 @@ void gncEntryGetValue (GncEntry *entry, gboolean is_inv, gnc_numeric *value,
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   GncTaxTable *tax_table, gboolean tax_included,
 			   gnc_numeric discount, GncAmountType discount_type,
-			   GncDiscountHow discount_how,
+			   GncDiscountHow discount_how, int SCU,
 			   /* return values */
 			   gnc_numeric *value, gnc_numeric *discount_value,
 			   GList **tax_values);

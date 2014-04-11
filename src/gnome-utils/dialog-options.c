@@ -908,100 +908,90 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 }
 
 static void
-gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
-                          GdkEventButton *event, gpointer data)
+gnc_option_list_changed_cb(GtkTreeSelection *selection,
+			   GNCOption *option)
 {
-  GNCOption *option = data;
+  GtkTreeView *view;
 
-  gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
-  gnc_option_changed_widget_cb(GTK_WIDGET(clist), option);
-}
-
-static void
-gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
-                            GdkEventButton *event, gpointer data)
-{
-  GNCOption *option = data;
-
-  gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
-  gnc_option_changed_widget_cb(GTK_WIDGET(clist), option);
+  view = gtk_tree_selection_get_tree_view(selection);
+  gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
 static void
 gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
+  GtkTreeView *view;
+  GtkTreeSelection *selection;
 
-  gtk_clist_select_all(GTK_CLIST(gnc_option_get_widget (option)));
-  gnc_option_changed_widget_cb(widget, option);
+  view = GTK_TREE_VIEW(gnc_option_get_widget (option));
+  selection = gtk_tree_view_get_selection(view);
+  gtk_tree_selection_select_all(selection);
+  gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
 static void
 gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
+  GtkTreeView *view;
+  GtkTreeSelection *selection;
 
-  gtk_clist_unselect_all(GTK_CLIST(gnc_option_get_widget (option)));
-  gnc_option_changed_widget_cb(widget, option);
+  view = GTK_TREE_VIEW(gnc_option_get_widget (option));
+  selection = gtk_tree_view_get_selection(view);
+  gtk_tree_selection_unselect_all(selection);
+  gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
 static GtkWidget *
 gnc_option_create_list_widget(GNCOption *option, char *name, GtkTooltips *tooltips)
 {
-  GtkWidget *scroll_win;
-  GtkWidget *top_hbox;
+  GtkListStore *store;
+  GtkTreeView *view;
+  GtkTreeIter iter;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GtkTreeSelection *selection;
+
   GtkWidget *button;
   GtkWidget *frame;
-  GtkWidget *clist;
   GtkWidget *hbox;
   GtkWidget *bbox;
   gint num_values;
-  gint width;
   gint i;
 
-  top_hbox = gtk_hbox_new(FALSE, 0);
-
   frame = gtk_frame_new(name);
-  gtk_box_pack_start(GTK_BOX(top_hbox), frame, FALSE, FALSE, 0);
-
   hbox = gtk_hbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(frame), hbox);
 
-  clist = gtk_clist_new(1);
-  gtk_clist_column_titles_hide(GTK_CLIST(clist));
-  gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_MULTIPLE);
+  store = gtk_list_store_new(1, G_TYPE_STRING);
+  view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes("", renderer,
+						    "text", 0,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+  gtk_tree_view_set_headers_visible(view, FALSE);
 
   num_values = gnc_option_num_permissible_values(option);
   for (i = 0; i < num_values; i++)
   {
-    gchar *text[1];
     gchar *string;
 
     string = gnc_option_permissible_value_name(option, i);
-    if (string != NULL)
-    {
-      text[0] = *string ? _(string) : "";
-      gtk_clist_append(GTK_CLIST(clist), text);
-      gtk_clist_set_row_data(GTK_CLIST(clist), i, GINT_TO_POINTER(FALSE));
-      free(string);
-    }
-    else
-    {
-      PERR("bad value name\n");
-    }
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       0, string ? string : "",
+		       -1);
   }
 
-  scroll_win = gtk_scrolled_window_new(NULL, NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
-                                 GTK_POLICY_NEVER, 
-                                 GTK_POLICY_AUTOMATIC);
+  gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
 
-  width = gtk_clist_columns_autosize(GTK_CLIST(clist));
-  gtk_widget_set_size_request(scroll_win, width + 50, -1);
+  selection = gtk_tree_view_get_selection(view);
+  gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(gnc_option_list_changed_cb), option);
 
-  gtk_box_pack_start(GTK_BOX(hbox), scroll_win, FALSE, FALSE, 0);
-  gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
-  gtk_container_add(GTK_CONTAINER(scroll_win), clist);
 
   bbox = gtk_vbutton_box_new();
   gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
@@ -1028,9 +1018,9 @@ gnc_option_create_list_widget(GNCOption *option, char *name, GtkTooltips *toolti
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_default_cb), option);
 
-  gnc_option_set_widget (option, clist);
+  gnc_option_set_widget (option, GTK_WIDGET(view));
 
-  return top_hbox;
+  return frame;
 }
 
 static void
@@ -1815,8 +1805,7 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
   value = gnc_account_sel_new();
   gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list);
 
-  g_signal_connect(G_OBJECT(gnc_account_sel_gtk_entry(GNC_ACCOUNT_SEL(value))),
-		   "changed",
+  g_signal_connect(value, "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
 
   gnc_option_set_widget (option, value);
@@ -1840,7 +1829,6 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
 {
   GtkWidget *value;
   GtkWidget *eventbox;
-  gint num_lines;
 
   *enclosing = gnc_option_create_list_widget(option, name, tooltips);
   value = gnc_option_get_widget (option);
@@ -1854,21 +1842,8 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
 
   gtk_tooltips_set_tip(tooltips, eventbox, documentation, NULL);
 
-  //gtk_widget_realize(value);
-
   gnc_option_set_ui_value(option, FALSE);
-
-  g_signal_connect(G_OBJECT(value), "select_row",
-		   G_CALLBACK(gnc_option_list_select_cb), option);
-  g_signal_connect(G_OBJECT(value), "unselect_row",
-		   G_CALLBACK(gnc_option_list_unselect_cb), option);
-
-  num_lines = gnc_option_num_permissible_values(option);
-  num_lines = MIN(num_lines, 9) + 1;
-
-  gtk_clist_set_row_height(GTK_CLIST(value), 0);
-  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * num_lines);
-  gtk_widget_show_all(*enclosing);
+  gtk_widget_show(*enclosing);
   return value;
 }
 
@@ -2407,13 +2382,12 @@ static gboolean
 gnc_option_set_ui_value_list (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
-  gint num_rows, row;
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
+  gint row;
 
-  gtk_clist_unselect_all(GTK_CLIST(widget));
-
-  num_rows = gnc_option_num_permissible_values(option);
-  for (row = 0; row < num_rows; row++)
-    gtk_clist_set_row_data(GTK_CLIST(widget), row, GINT_TO_POINTER(FALSE));
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+  gtk_tree_selection_unselect_all(selection);
 
   while (SCM_LISTP(value) && !SCM_NULLP(value))
   {
@@ -2428,8 +2402,9 @@ gnc_option_set_ui_value_list (GNCOption *option, gboolean use_default,
       return TRUE;
     }
 
-    gtk_clist_select_row(GTK_CLIST(widget), row, 0);
-    gtk_clist_set_row_data(GTK_CLIST(widget), row, GINT_TO_POINTER(TRUE));
+    path = gtk_tree_path_new_from_indices(row, -1);
+    gtk_tree_selection_select_path(selection, path);
+    gtk_tree_path_free(path);
   }
 
   if (!SCM_LISTP(value) || !SCM_NULLP(value))
@@ -2825,20 +2800,23 @@ gnc_option_get_ui_value_budget(GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_list (GNCOption *option, GtkWidget *widget)
 {
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
   SCM result;
   gboolean selected;
-  GtkCList *clist;
   gint num_rows;
   gint row;
 
-  clist = GTK_CLIST(widget);
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
   num_rows = gnc_option_num_permissible_values(option);
   result = scm_c_eval_string("'()");
 
   for (row = 0; row < num_rows; row++)
   {
-    selected = GPOINTER_TO_INT(gtk_clist_get_row_data(clist, row));
-    if (selected)
+   path = gtk_tree_path_new_from_indices(row, -1);
+   selected = gtk_tree_selection_path_is_selected(selection, path);
+   gtk_tree_path_free(path);
+   if (selected)
       result = scm_cons(gnc_option_permissible_value(option, row), result);
   }
 

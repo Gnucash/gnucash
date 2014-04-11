@@ -1038,7 +1038,7 @@ gnc_reconcile_window_create_list_box(Account *account,
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
 				 GTK_POLICY_AUTOMATIC,
-				 GTK_POLICY_ALWAYS);
+				 GTK_POLICY_AUTOMATIC);
   gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
 
   gtk_container_add(GTK_CONTAINER(frame), scrollWin);
@@ -1080,7 +1080,7 @@ gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 static void
 gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
 {
-  gnc_gnome_help(HF_USAGE, HL_RECNWIN);
+  gnc_gnome_help(HF_HELP, HL_RECNWIN);
 }
 
 static void
@@ -1284,6 +1284,7 @@ gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
+  time_t today;
   struct tm tm;
 
   if (xaccAccountGetReconcileLastDate (account, statement_date))
@@ -1309,6 +1310,10 @@ gnc_get_reconcile_info (Account *account,
     tm.tm_isdst = -1;
     gnc_tm_set_day_end (&tm);
     *statement_date = mktime (&tm);
+
+    today = gnc_timet_get_day_end(time(NULL));
+    if (*statement_date > today)
+      *statement_date = today;
   }
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);
@@ -1602,7 +1607,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   {
     GtkWidget *frame = gtk_frame_new(NULL);
     GtkWidget *main_area = gtk_vbox_new(FALSE, 10);
-    GtkWidget *debcred_area = gtk_hbox_new(FALSE, 15);
+    GtkWidget *debcred_area = gtk_table_new(1, 2, TRUE);
     GtkWidget *debits_box;
     GtkWidget *credits_box;
 
@@ -1626,8 +1631,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     GNC_RECONCILE_LIST(recnData->credit)->sibling = GNC_RECONCILE_LIST(recnData->debit);
 
     gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(debcred_area), debits_box, TRUE, TRUE, 0);
-    gtk_box_pack_end(GTK_BOX(debcred_area), credits_box, TRUE, TRUE, 0);
+    gtk_table_set_col_spacings(GTK_TABLE(debcred_area), 15);
+    gtk_table_attach_defaults(GTK_TABLE(debcred_area), debits_box, 0, 1, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(debcred_area), credits_box, 1, 2, 0, 1);
 
     {
       GtkWidget *hbox, *title_vbox, *value_vbox;

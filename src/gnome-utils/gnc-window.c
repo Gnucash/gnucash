@@ -174,7 +174,7 @@ gnc_window_show_progress (const char *message, double percentage)
   }
 
   if (percentage < 0) {
-    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), NULL);
+    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), " ");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 0.0);
     if (GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL)
       GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, TRUE);

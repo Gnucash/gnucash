@@ -1,7 +1,7 @@
 SUBDIRS = . test
 
-#Now a shared GModule, not a package library.
-lib_LTLIBRARIES = libgnc-backend-file.la
+# Now a shared library AND a GModule
+lib_LTLIBRARIES = libgnc-backend-file-utils.la  libgnc-backend-file.la
 
 AM_CFLAGS = \
   -I.. -I../.. \
@@ -15,9 +15,8 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS}
 
-libgnc_backend_file_la_SOURCES = \
+libgnc_backend_file_utils_la_SOURCES = \
   gnc-account-xml-v2.c \
-  gnc-backend-file.c \
   gnc-book-xml-v2.c \
   gnc-budget-xml-v2.c \
   gnc-commodity-xml-v2.c \
@@ -28,7 +27,6 @@ libgnc_backend_file_la_SOURCES = \
   gnc-schedxaction-xml-v2.c \
   gnc-transaction-xml-v2.c \
   io-example-account.c \
-  io-gncbin-r.c \
   io-gncxml-gen.c \
   io-gncxml-v1.c \
   io-gncxml-v2.c \
@@ -40,12 +38,14 @@ libgnc_backend_file_la_SOURCES = \
   sixtp-utils.c \
   sixtp.c
 
+libgnc_backend_file_la_SOURCES = \
+  gnc-backend-file.c
+
 noinst_HEADERS = \
   gnc-backend-file.h \
   gnc-xml.h \
   gnc-xml-helper.h \
   io-example-account.h \
-  io-gncbin.h \
   io-gncxml-gen.h \
   io-gncxml.h \
   io-gncxml-v2.h \
@@ -57,9 +57,16 @@ noinst_HEADERS = \
   sixtp-stack.h \
   sixtp-utils.h
 
-libgnc_backend_file_la_LDFLAGS = -module
+libgnc_backend_file_utils_la_LIBADD = \
+   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
+   ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${top_builddir}/src/core-utils/libcore-utils.la \
+   ${QOF_LIBS}
+
+libgnc_backend_file_la_LDFLAGS = -module -avoid-version
 libgnc_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libcore-utils.la \
+   libgnc-backend-file-utils.la \
    ${QOF_LIBS}

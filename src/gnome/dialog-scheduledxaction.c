@@ -349,7 +349,7 @@ static
 void
 editor_help_button_clicked(GtkButton *b, SchedXactionEditorDialog *sxed)
 {
-	gnc_gnome_help(HF_USAGE, HL_SXEDITOR);
+	gnc_gnome_help(HF_HELP, HL_SXEDITOR);
 }
 
 static void

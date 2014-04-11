@@ -431,6 +431,10 @@ const char * gnc_split_register_get_credit_string (SplitRegister *reg);
 gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 
+/* returns TRUE if begin_edit was aborted */
+gboolean
+gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans);
+
 /** @} */
 /** @} */
 /* -------------------------------------------------------------- */

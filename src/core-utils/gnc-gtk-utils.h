@@ -1,6 +1,6 @@
 /********************************************************************\
- * gnc-backend-api.h -- public functions needed by gnucash backends *
- * Copyright (C) 2001 Linux Developers Group, Inc.                  *
+ * gnc-gtk-utils.c -- utility functions based on glib functions     *
+ * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,11 +21,35 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GNC_BACKEND_API_H
-#define GNC_BACKEND_API_H
+/** @addtogroup Gtk
+    @{ */
+/** @addtogroup Gtk Gtk Utilities
 
-#include "qof.h"
+    The API in this file is designed to provide support functions that
+    wrap the base gtk functions and make them easier to use.
 
-QofBackend * gnc_backend_new (void);
+    @{ */
+/** @file gnc-gtk-utils.h
+ *  @brief gtk helper routines.
+ *  @author Copyright (C) 2006 David Hampton <hampton@employees.org>
+ */
 
-#endif
+#ifndef GNC_GTK_UTILS_H
+#define GNC_GTK_UTILS_H
+
+#include <gtk/gtk.h>
+
+/** @name gtk Miscellaneous Functions
+ @{ 
+*/
+
+void gnc_cbe_set_by_string(GtkComboBoxEntry *cbe, const gchar *text);
+void gnc_cbe_add_completion (GtkComboBoxEntry *cbe);
+void gnc_cbe_require_list_item (GtkComboBoxEntry *cbe);
+
+
+/** @} */
+
+#endif /* GNC_GTK_UTILS_H */
+/** @} */
+/** @} */

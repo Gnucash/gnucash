@@ -23,11 +23,13 @@
    @brief The transaction match picker dialog 
    implementation
    @author Copyright (C) 2002 Benoit Grégoire
+   @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
  
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "import-backend.h"
 #include "import-match-picker.h"
@@ -42,20 +44,27 @@
 
 #define GCONF_SECTION "dialogs/import/generic_matcher/match_picker"
 
-#define NUM_COLUMNS_DOWNLOADED_CLIST 6
-static const int DOWNLOADED_CLIST_ACCOUNT = 0;
-static const int DOWNLOADED_CLIST_DATE = 1;
-static const int DOWNLOADED_CLIST_AMOUNT = 2;
-static const int DOWNLOADED_CLIST_DESCRIPTION = 3;
-static const int DOWNLOADED_CLIST_MEMO = 4;
-static const int DOWNLOADED_CLIST_BALANCED = 5;
+enum downloaded_cols {
+  DOWNLOADED_COL_ACCOUNT = 0,
+  DOWNLOADED_COL_DATE,
+  DOWNLOADED_COL_AMOUNT,
+  DOWNLOADED_COL_DESCRIPTION,
+  DOWNLOADED_COL_MEMO,
+  DOWNLOADED_COL_BALANCED,
+  DOWNLOADED_COL_INFO_PTR,
+  NUM_DOWNLOADED_COLS
+};
 
-#define NUM_COLUMNS_MATCHER_CLIST 5
-static const int MATCHER_CLIST_CONFIDENCE = 0;
-static const int MATCHER_CLIST_DATE = 1;
-static const int MATCHER_CLIST_AMOUNT = 2;
-static const int MATCHER_CLIST_DESCRIPTION = 3;
-static const int MATCHER_CLIST_MEMO = 4;
+enum matcher_cols {
+  MATCHER_COL_CONFIDENCE = 0,
+  MATCHER_COL_CONFIDENCE_PIXBUF,
+  MATCHER_COL_DATE,
+  MATCHER_COL_AMOUNT,
+  MATCHER_COL_DESCRIPTION,
+  MATCHER_COL_MEMO,
+  MATCHER_COL_INFO_PTR,
+  NUM_MATCHER_COLS
+};
 
 /* Needs to be commented in again if any DEBUG() macro is used here. */
 /*static short module = MOD_IMPORT;*/
@@ -72,8 +81,8 @@ static const int SHOW_NUMERIC_SCORE = FALSE;
 
 struct _transpickerdialog {
   GtkWidget * transaction_matcher;
-  GtkCList * downloaded_clist;
-  GtkCList * match_clist;
+  GtkTreeView * downloaded_view;
+  GtkTreeView * match_view;
   GNCImportSettings * user_settings;
   struct _transactioninfo * selected_trans_info;
   GNCImportMatchInfo * selected_match_info;
@@ -81,57 +90,76 @@ struct _transpickerdialog {
 
 
 
-static gint  
+static void
 downloaded_transaction_append(GNCImportMatchPicker * matcher,
-				   GNCImportTransInfo * transaction_info)
+			      GNCImportTransInfo * transaction_info)
 {
-  gint row_number;
-  const char * clist_text[NUM_COLUMNS_DOWNLOADED_CLIST];
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreeSelection *selection;
+  Transaction *trans;
+  Split *split;
+  gchar *text;
+  const gchar *ro_text;
+  gboolean found = FALSE;
+  GNCImportTransInfo *local_info;
 
   g_assert(matcher);
   g_assert(transaction_info);
+
   /*DEBUG("Begin");*/
-  row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
-					    transaction_info);
+
+  /* Has the transaction already been added? */
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->downloaded_view));
+  if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter)) {
+    do {
+      gtk_tree_model_get(GTK_TREE_MODEL(store), &iter,
+			 DOWNLOADED_COL_INFO_PTR, &local_info,
+			 -1);
+      if (local_info == transaction_info) {
+	found = TRUE;
+	break;
+      }
+    } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
+  }
+  if (!found)
+    gtk_list_store_append(store, &iter);
+  
+  split = gnc_import_TransInfo_get_fsplit(transaction_info);
+  trans = gnc_import_TransInfo_get_trans(transaction_info);
   
   /*Account*/
-  clist_text[DOWNLOADED_CLIST_ACCOUNT] =
-    g_strdup ( xaccAccountGetName
-	       ( xaccSplitGetAccount
-		 ( gnc_import_TransInfo_get_fsplit (transaction_info))));
-  
-  
+  ro_text = xaccAccountGetName(xaccSplitGetAccount(split));
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_ACCOUNT, ro_text, -1);
+
   /*Date*/
-  clist_text[DOWNLOADED_CLIST_DATE] = 
-    qof_print_date 
-    ( xaccTransGetDate
-      ( gnc_import_TransInfo_get_trans(transaction_info) ) );
+  text = qof_print_date(xaccTransGetDate(trans));
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_DATE, text, -1);
+  g_free(text);
   
   /*Amount*/
-  clist_text[DOWNLOADED_CLIST_AMOUNT] =
-    g_strdup( xaccPrintAmount( xaccSplitGetAmount ( gnc_import_TransInfo_get_fsplit(transaction_info) ),
-			       gnc_split_amount_print_info( gnc_import_TransInfo_get_fsplit(transaction_info), TRUE) 
-			       ) );
+  ro_text = xaccPrintAmount(xaccSplitGetAmount(split),
+			    gnc_split_amount_print_info(split, TRUE));
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_AMOUNT, ro_text, -1);
  
   /*Description*/
-  clist_text[DOWNLOADED_CLIST_DESCRIPTION] = g_strdup(xaccTransGetDescription(gnc_import_TransInfo_get_trans(transaction_info) ) );
+  ro_text = xaccTransGetDescription(trans);
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_DESCRIPTION, ro_text, -1);
   
   /*Memo*/
-  clist_text[DOWNLOADED_CLIST_MEMO] =
-    g_strdup(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(transaction_info) ) );
+  ro_text = xaccSplitGetMemo(split);
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_MEMO, ro_text, -1);
 
   /*Imbalance*/
-  clist_text[DOWNLOADED_CLIST_BALANCED] =
-    g_strdup (xaccPrintAmount (xaccTransGetImbalance(gnc_import_TransInfo_get_trans(transaction_info) ), 
-			       gnc_default_print_info (TRUE) )
-	      );
+  ro_text = xaccPrintAmount(xaccTransGetImbalance(trans), 
+			    gnc_default_print_info(TRUE));
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_BALANCED, ro_text, -1);
 
-  row_number = gtk_clist_append(matcher->downloaded_clist,
-				(char **)(clist_text));
-  gtk_clist_set_row_data(matcher->downloaded_clist,
-			 row_number,
-			 transaction_info);
-  return row_number;
+  gtk_list_store_set(store, &iter, DOWNLOADED_COL_INFO_PTR,
+		     transaction_info, -1);
+
+  selection = gtk_tree_view_get_selection(matcher->downloaded_view);
+  gtk_tree_selection_select_iter(selection, &iter);
 }
 
 /********************************************************************\
@@ -141,96 +169,100 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
 \********************************************************************/
 
 static void
-downloaded_transaction_select_cb (GtkCList *clist,
-				  gint row,
-				  gint column,
-				  GdkEventButton *event,
-				  gpointer user_data) {
-  GNCImportMatchPicker * matcher = user_data;
+downloaded_transaction_changed_cb (GtkTreeSelection *selection,
+				   GNCImportMatchPicker *matcher) 
+{
   GNCImportMatchInfo * match_info;
+  GtkTreeModel *dl_model;
+  GtkListStore *match_store;
+  GtkTreeIter iter;
   GList * list_element;
-  gint row_number;
-  const char * clist_text[NUM_COLUMNS_MATCHER_CLIST];
+  gchar *text;
+  const gchar *ro_text;
   /*DEBUG("row: %d%s%d",row,", column: ",column);*/
-  
-  matcher->selected_trans_info = gtk_clist_get_row_data(clist, row);
-  
 
-  gtk_clist_clear(matcher->match_clist);
+  /* Get the transaction info from the "downloaded" model.  */
+  if (!gtk_tree_selection_get_selected(selection, &dl_model, &iter)) {
+      matcher->selected_trans_info=NULL;
+      return;
+  }
+  gtk_tree_model_get(dl_model, &iter,
+		     DOWNLOADED_COL_INFO_PTR, &matcher->selected_trans_info,
+		     -1);
+  
+  /* Now rewrite the "match" model based on that trans. */
+  match_store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->match_view));
+  gtk_list_store_clear(match_store);
   list_element = g_list_first (gnc_import_TransInfo_get_match_list
 			       (matcher->selected_trans_info));
   while(list_element!=NULL)
     {
       match_info = list_element->data;
       
+      gtk_list_store_append(match_store, &iter);
+
       /* Print fields. */
 
       /* Probability */
-      clist_text[MATCHER_CLIST_CONFIDENCE] = 
-	g_strdup_printf("%d", gnc_import_MatchInfo_get_probability (match_info));
-      
+      text = g_strdup_printf("%d", gnc_import_MatchInfo_get_probability (match_info));
+      gtk_list_store_set(match_store, &iter, MATCHER_COL_CONFIDENCE, text, -1);
+      g_free(text);
+
       /* Date */
-      clist_text[MATCHER_CLIST_DATE]=
+      text =
 	qof_print_date 
 	( xaccTransGetDate
 	  ( xaccSplitGetParent
 	    ( gnc_import_MatchInfo_get_split(match_info) ) ));
+      gtk_list_store_set(match_store, &iter, MATCHER_COL_DATE, text, -1);
+      g_free(text);
       
       /* Amount */
-      clist_text[MATCHER_CLIST_AMOUNT]=
-	g_strdup(xaccPrintAmount( xaccSplitGetAmount ( gnc_import_MatchInfo_get_split(match_info)  ), 
+      ro_text =
+	xaccPrintAmount( xaccSplitGetAmount ( gnc_import_MatchInfo_get_split(match_info)  ), 
 				  gnc_split_amount_print_info(gnc_import_MatchInfo_get_split(match_info), TRUE) 
-				  ) );
+				  );
+      gtk_list_store_set(match_store, &iter, MATCHER_COL_AMOUNT, ro_text, -1);
       
       /*Description*/
-      clist_text[MATCHER_CLIST_DESCRIPTION] =
-	g_strdup( xaccTransGetDescription
-		  ( xaccSplitGetParent( gnc_import_MatchInfo_get_split(match_info)) ));
+      ro_text = xaccTransGetDescription
+	( xaccSplitGetParent( gnc_import_MatchInfo_get_split(match_info)) );
+      gtk_list_store_set(match_store, &iter, MATCHER_COL_DESCRIPTION, ro_text, -1);
       
       /*Split memo*/    
-      clist_text[MATCHER_CLIST_MEMO]=
-	g_strdup(xaccSplitGetMemo(gnc_import_MatchInfo_get_split(match_info) ) );
+      ro_text = xaccSplitGetMemo(gnc_import_MatchInfo_get_split(match_info) );
+      gtk_list_store_set(match_store, &iter, MATCHER_COL_MEMO, ro_text, -1);
       
-      row_number = gtk_clist_append(matcher->match_clist,
-				    (char **)(clist_text)); 
-      gtk_clist_set_row_data          (matcher->match_clist,
-				       row_number,
-				       match_info);
+      gtk_list_store_set(match_store, &iter, MATCHER_COL_INFO_PTR, match_info, -1);
       if(gnc_import_MatchInfo_get_probability(match_info) != 0)
 	{
 	  if(SHOW_NUMERIC_SCORE==TRUE)
 	    {
-	      gtk_clist_set_pixtext (matcher->match_clist,
-				     row_number,
-				     MATCHER_CLIST_CONFIDENCE,
-				     clist_text[MATCHER_CLIST_CONFIDENCE],
-				     3,
-				     gen_probability_pixmap(gnc_import_MatchInfo_get_probability(match_info), 
+	      gtk_list_store_set(match_store, &iter,
+				     MATCHER_COL_CONFIDENCE_PIXBUF,
+				     gen_probability_pixbuf(gnc_import_MatchInfo_get_probability(match_info), 
 							    matcher->user_settings, 
-							    GTK_WIDGET(matcher->match_clist)),
-				     NULL);
+							    GTK_WIDGET(matcher->match_view)),
+				     -1);
 	    }
 	  else
 	    {
-	      gtk_clist_set_pixmap (matcher->match_clist,
-				    row_number,
-				    MATCHER_CLIST_CONFIDENCE,
-				    gen_probability_pixmap(gnc_import_MatchInfo_get_probability(match_info),
+	      gtk_list_store_set(match_store, &iter,
+				    MATCHER_COL_CONFIDENCE_PIXBUF,
+				    gen_probability_pixbuf(gnc_import_MatchInfo_get_probability(match_info),
 							   matcher->user_settings, 
-							   GTK_WIDGET(matcher->match_clist)),
-				    NULL);
+							   GTK_WIDGET(matcher->match_view)),
+				    -1);
 	    }
 	}
       
-      gtk_clist_set_row_height        (matcher->match_clist,
-				       0);
-
       if(match_info == 
 	 gnc_import_TransInfo_get_selected_match (matcher->selected_trans_info))
 	{
-	  gtk_clist_select_row            (matcher->match_clist,
-					   row_number,
-					   0);
+	  GtkTreeSelection *selection;
+
+	  selection = gtk_tree_view_get_selection(matcher->match_view);
+	  gtk_tree_selection_select_iter(selection, &iter);
 	}
       
       list_element=g_list_next(list_element);
@@ -238,27 +270,101 @@ downloaded_transaction_select_cb (GtkCList *clist,
 }
 
 static void
-match_transaction_select_cb (GtkCList *clist,
-			     gint row,
-			     gint column,
-			     GdkEventButton *event,
-			     gpointer user_data) {
-  GNCImportMatchPicker * matcher = user_data;
-  /*DEBUG("row: %d%s%d",row,", column: ",column);*/
-  matcher->selected_match_info =
-    gtk_clist_get_row_data(clist, row);
+match_transaction_changed_cb (GtkTreeSelection *selection,
+			      GNCImportMatchPicker *matcher) 
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
+      matcher->selected_match_info=NULL;
+      return;
+  }
+
+  gtk_tree_model_get(model, &iter,
+		     MATCHER_COL_INFO_PTR, &matcher->selected_match_info,
+		     -1);
 }
 
 static void
-match_transaction_unselect_cb(GtkCList *clist,
-			      gint row,
-			      gint column,
-			      GdkEventButton *event,
-			      gpointer user_data) {
-  GNCImportMatchPicker * matcher = user_data;
-  /*DEBUG("row: %d%s%d",row,", column: ",column);*/
-  matcher->selected_match_info=NULL;
+add_column(GtkTreeView *view, const gchar *title, int col_num)
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+ 
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(title, renderer,
+						    "text", col_num,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+  g_object_set(G_OBJECT(column),
+	       "reorderable", TRUE,
+	       "resizable", TRUE,
+	       NULL);
+}
 
+static void
+gnc_import_match_picker_init_downloaded_view (GNCImportMatchPicker * matcher)
+{
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeSelection *selection;
+
+  view = matcher->downloaded_view;
+  store = gtk_list_store_new(NUM_DOWNLOADED_COLS,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+			     G_TYPE_POINTER);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  add_column(view, _("Account"),     DOWNLOADED_COL_ACCOUNT);
+  add_column(view, _("Date"),        DOWNLOADED_COL_DATE);
+  add_column(view, _("Amount"),      DOWNLOADED_COL_AMOUNT);
+  add_column(view, _("Description"), DOWNLOADED_COL_DESCRIPTION);
+  add_column(view, _("Memo"),        DOWNLOADED_COL_MEMO);
+  add_column(view, _("Balanced"),    DOWNLOADED_COL_BALANCED);
+
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(downloaded_transaction_changed_cb), matcher);
+}
+
+static void
+gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
+{
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
+
+  view = matcher->match_view;
+  store = gtk_list_store_new(NUM_MATCHER_COLS,
+			     G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_STRING, 
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+			     G_TYPE_POINTER);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_pixbuf_new();
+  g_object_set(renderer, "xalign", 0.0, NULL);
+  column = gtk_tree_view_column_new_with_attributes(_("Confidence"), renderer,
+				      "pixbuf", MATCHER_COL_CONFIDENCE_PIXBUF,
+				      NULL);
+  renderer = gtk_cell_renderer_text_new();
+  gtk_tree_view_column_pack_start(column, renderer, TRUE);
+  gtk_tree_view_column_set_attributes(column, renderer,
+				      "text", MATCHER_COL_CONFIDENCE,
+				      NULL);
+  gtk_tree_view_append_column(view, column);
+
+  add_column(view, _("Date"),        MATCHER_COL_DATE);
+  add_column(view, _("Amount"),      MATCHER_COL_AMOUNT);
+  add_column(view, _("Description"), MATCHER_COL_DESCRIPTION);
+  add_column(view, _("Memo"),        MATCHER_COL_MEMO);
+
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(match_transaction_changed_cb), matcher);
 }
 
 /********************************************************************\
@@ -279,41 +385,12 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
   xml = gnc_glade_xml_new ("generic-import.glade", "match_picker");
   g_return_if_fail (xml != NULL);
 
-  /* connect the signals in the interface */
-  glade_xml_signal_connect_data(xml,
-				"match_transaction_select_cb", 
-				G_CALLBACK(match_transaction_select_cb),
-				matcher);
-  glade_xml_signal_connect_data(xml,
-				"match_transaction_unselect_cb", 
-				G_CALLBACK(match_transaction_unselect_cb),
-				matcher);
-  
   matcher->transaction_matcher = glade_xml_get_widget (xml, "match_picker");
-  matcher->downloaded_clist = (GtkCList *)glade_xml_get_widget (xml, "downloaded_clist");
-  matcher->match_clist =  (GtkCList *)glade_xml_get_widget (xml, "matched_clist");
+  matcher->downloaded_view = (GtkTreeView *)glade_xml_get_widget (xml, "downloaded_view");
+  matcher->match_view = (GtkTreeView *)glade_xml_get_widget (xml, "matched_view");
 
-  /*Ajust column size*/
-  gtk_clist_set_column_auto_resize (GTK_CLIST (matcher->downloaded_clist),
-				    DOWNLOADED_CLIST_DATE,
-				    TRUE);
-  gtk_clist_set_column_auto_resize (GTK_CLIST (matcher->downloaded_clist),
-				    DOWNLOADED_CLIST_AMOUNT,
-				    TRUE);
-
-  gtk_clist_set_column_auto_resize (GTK_CLIST (matcher->downloaded_clist),
-				    DOWNLOADED_CLIST_BALANCED,
-				    TRUE);
-
-  gtk_clist_set_column_auto_resize (GTK_CLIST (matcher->match_clist),
-				    MATCHER_CLIST_CONFIDENCE,
-				    TRUE);
-  gtk_clist_set_column_auto_resize (GTK_CLIST (matcher->match_clist),
-				    MATCHER_CLIST_DATE,
-				    TRUE);
-  gtk_clist_set_column_auto_resize (GTK_CLIST (matcher->match_clist),
-				    MATCHER_CLIST_AMOUNT,
-				    TRUE);
+  gnc_import_match_picker_init_downloaded_view(matcher);
+  gnc_import_match_picker_init_match_view(matcher);
 
   /* DEBUG("User prefs:%s%d%s%d%s%d%s%d%s%d",
      " action_replace_enabled:",matcher->action_replace_enabled,
@@ -337,7 +414,7 @@ void
 gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
 {
   GNCImportMatchPicker *matcher;
-  gint row_number, response;
+  gint response;
   GNCImportMatchInfo *old;
   g_assert (transaction_info);
   
@@ -347,17 +424,8 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
   /* DEBUG("Init match_picker"); */
   init_match_picker_gui(matcher);
  
-  /* Append this single transaction to the downloaded_clist */
-  row_number = downloaded_transaction_append(matcher,
-					     transaction_info);
-  
-  /* Now fake a selection of that transaction. */
-  downloaded_transaction_select_cb (matcher->downloaded_clist,
-				    row_number,
-				    2,
-				    NULL,
-				    matcher);
-  gtk_widget_set_sensitive (GTK_WIDGET (matcher->downloaded_clist), FALSE);
+  /* Append this single transaction to the view and select it */
+  downloaded_transaction_append(matcher, transaction_info);
   
   old = gnc_import_TransInfo_get_selected_match(transaction_info);
   

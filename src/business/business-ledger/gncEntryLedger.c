@@ -627,6 +627,7 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
   gboolean taxable, taxincluded;
   GncTaxTable *table;
   GList *taxes = NULL;
+  int denom = 100;
 
   gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &qty);
   gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &price);
@@ -670,18 +671,20 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
     table = NULL;
   }
 
+  if (ledger->invoice)
+  {
+    gnc_commodity *currency = gncInvoiceGetCurrency(ledger->invoice);
+    if (currency)
+      denom = gnc_commodity_get_fraction(currency);
+  }
+
   gncEntryComputeValue (qty, price, (taxable ? table : NULL), taxincluded,
-			discount, disc_type, disc_how,
+			discount, disc_type, disc_how, denom,
 			value, NULL, &taxes);
 
-  /* Now convert the values to the proper denomination */
-  if (value)
-    *value = gnc_numeric_convert (*value, 100 /* XXX */, GNC_RND_ROUND);
-
-  if (tax_value) {
+  /* return the tax value */
+  if (tax_value)
     *tax_value = gncAccountValueTotal (taxes);
-    *tax_value = gnc_numeric_convert (*tax_value, 100 /* XXX */, GNC_RND_ROUND);
-  }
 }
 
 gboolean

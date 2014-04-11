@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>
  * All rights reserved.
+ * Copyright (C) 2006 David Hampton <hampton@employees.org>
  *
  * Gnucash is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public License
@@ -31,6 +32,7 @@
 #include "GNCId.h"
 #include "gnc-account-sel.h"
 #include "gnc-exp-parser.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
 
@@ -43,6 +45,12 @@ enum
         LAST_SIGNAL
 };
 
+enum account_cols {
+	ACCT_COL_NAME = 0,
+	ACCT_COL_PTR,
+	NUM_ACCT_COLS
+};
+
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_account_sel_init (GNCAccountSel *gas);
@@ -50,19 +58,11 @@ static void gnc_account_sel_class_init (GNCAccountSelClass *klass);
 static void gnc_account_sel_finalize (GObject *object);
 static void gnc_account_sel_dispose (GObject *object);
 
-static void gas_accounts_to_names (gpointer data, gpointer user_data);
+static void gas_filter_accounts (gpointer data, gpointer user_data);
 
 static void gas_populate_list (GNCAccountSel *gas);
-static void gas_strcmp_adapter (gpointer a, gpointer b);
 
 static void gas_new_account_click (GtkButton *b, gpointer ud);
-
-#if 0 /* completion not implemented */
-static void gnc_account_sel_changed( GtkEditable *entry, gpointer ud );
-static void gnc_account_sel_list_clicked( GtkButton *b, gpointer ud );
-static gint gnc_account_sel_key_press( GtkWidget          *widget,
-                                       GdkEventKey        *event );
-#endif /* 0 -- completion not implemented */
 
 static GtkHBox *parent_class;
 
@@ -134,22 +134,22 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
 static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
+	GtkWidget *widget;
+
         gas->initDone = FALSE;
         gas->acctTypeFilters = FALSE;
         gas->newAccountButton = NULL;
 
-        gas->combo = GTK_COMBO(gtk_combo_new());
-        gtk_combo_set_value_in_list( gas->combo, TRUE, TRUE );
-        gtk_container_add( GTK_CONTAINER(gas), GTK_WIDGET(gas->combo) );
+	gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
+        widget =
+	  gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(gas->store), ACCT_COL_NAME);
+        gas->combo = GTK_COMBO_BOX_ENTRY(widget);
+	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),
+				GTK_TREE_MODEL(gas->store));
+        gtk_container_add( GTK_CONTAINER(gas), widget );
 
-        /* This is only because completion cannot be implemented. */
-        gtk_editable_set_editable( GTK_EDITABLE(gas->combo->entry), FALSE );
-
-#if 0 /* completion not implemented. */
-        g_signal_connect( gas->combo->entry, "changed",
-			  G_CALLBACK( gnc_account_sel_changed ),
-			  gas );
-#endif /* 0 -- completion not implemented. */
+        /* Add completion. */
+	gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(widget));
 
         /* Get the accounts, place into combo list */
         gas_populate_list( gas );
@@ -163,92 +163,68 @@ gnc_account_sel_init (GNCAccountSel *gas)
 typedef struct {
         GNCAccountSel *gas;
         GList **outList;
-} accounts_to_names_data;
-
-/**
- * Used in the g_list_foreach call in gas_populate_list to see if the given
- * string is in [via strcmp] the list, and to set the flag as necessary.
- **/
-typedef struct {
-        char *str;
-        gboolean flag;
-} findData;
-
-static
-void
-gas_strcmp_adapter( gpointer listElt, gpointer ud )
-{
-        findData *fd = (findData*)ud;
-        fd->flag |= ( strcmp( (char*)listElt, (char*)fd->str ) == 0 );
-}
+} account_filter_data;
 
 static
 void
 gas_populate_list( GNCAccountSel *gas )
 {
-        accounts_to_names_data atnd;
+        account_filter_data atnd;
         AccountGroup *ag;
-        GList *accts, *nameList;
-        gchar *currentSel;
+	Account *acc;
+	GtkTreeIter iter;
+	GtkEntry *entry;
+	gint i, active = 0;
+        GList *accts, *ptr, *filteredAccts;
+        gchar *currentSel, *name;
 
+	entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gas->combo)));
         currentSel = gtk_editable_get_chars(
-                GTK_EDITABLE(gas->combo->entry), 0, -1 );
+                GTK_EDITABLE(entry), 0, -1 );
 
         ag = gnc_book_get_group( gnc_get_current_book() );
         accts = (GList*)xaccGroupGetSubAccountsSorted( ag );
 
-        nameList        = NULL;
+        filteredAccts   = NULL;
         atnd.gas        = gas;
-        atnd.outList    = &nameList;
+        atnd.outList    = &filteredAccts;
 
-        g_list_foreach( accts, gas_accounts_to_names,
-                        (gpointer)&atnd );
+        g_list_foreach( accts, gas_filter_accounts, (gpointer)&atnd );
         g_list_free( accts );
 
-	/* Make sure we have a list of something... */
-	if ( nameList == NULL )
-		nameList = g_list_prepend( NULL, "" );
-
-	gtk_combo_set_popdown_strings( gas->combo, nameList );
+	gtk_list_store_clear(gas->store);
+	for (ptr = filteredAccts, i = 0; ptr; ptr = g_list_next(ptr), i++) {
+	  acc = ptr->data;
+	  name = xaccAccountGetFullName(acc);
+	  gtk_list_store_append(gas->store, &iter);
+	  gtk_list_store_set(gas->store, &iter,
+			     ACCT_COL_NAME, name,
+			     ACCT_COL_PTR,  acc,
+			     -1);
+	  if (g_utf8_collate(name, currentSel) == 0) {
+	    active = i;
+	  g_free(name);
+	  }
+	}
 
         /* If the account which was in the text box before still exists, then
          * reset to it. */
-        {
-                findData tmpfd;
-                gint pos;
-                tmpfd.str = currentSel;
-                tmpfd.flag = FALSE;
+	gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), active);
 
-                g_list_foreach( nameList, gas_strcmp_adapter, &tmpfd );
-
-                if ( tmpfd.flag ) {
-                        gtk_editable_delete_text(
-                                GTK_EDITABLE(gas->combo->entry), 0, -1 );
-                        pos = 0;
-                        gtk_editable_insert_text(
-                                GTK_EDITABLE(gas->combo->entry),
-                                currentSel, strlen(currentSel), &pos );
-                }
-        }
-        g_list_free( nameList );
+        g_list_free( filteredAccts );
         if ( currentSel ) {
                 g_free( currentSel );
         }
-
-#if 0 /* completion not implemented */
-        gas->completion = g_completion_new( NULL );
-        g_completion_add_items( gas->completion, nameList );
-#endif /* 0 -- completion not implemented */
 }
 
 static
 void
-gas_accounts_to_names( gpointer data, gpointer user_data )
+gas_filter_accounts( gpointer data, gpointer user_data )
 {
-        accounts_to_names_data *atnd;
+        account_filter_data *atnd;
         Account *a;
 
-        atnd = (accounts_to_names_data*)user_data;
+        atnd = (account_filter_data*)user_data;
         a = (Account*)data;
         /* Filter as we've been configured to do. */
         if ( atnd->gas->acctTypeFilters ) {
@@ -261,89 +237,9 @@ gas_accounts_to_names( gpointer data, gpointer user_data )
                         return;
                 }
         }
-        *atnd->outList =
-                g_list_append( *atnd->outList, xaccAccountGetFullName(a) );
+        *atnd->outList = g_list_append( *atnd->outList, a );
 }
 
-#if 0 /* completion not implemented  */
-/*
- * There is apparently no way -- in GTK 1.x -- to programatically select a
- * region in the way we would like... so we've disallowed manual editing of
- * the Account string.
- */
-static
-void
-gnc_account_sel_changed( GtkEditable *entry, gpointer ud )
-{
-        gchar *s, *prefix;
-        GNCAccountSel *gas = (GNCAccountSel*)ud;
-
-        if ( !gas->initDone ) {
-                return;
-        }
-        s = gtk_editable_get_chars( entry, 0, -1 );
-        g_completion_complete( gas->completion, s, &prefix );
-        if ( prefix && (strlen(prefix) > 0) ) {
-                printf( "changed into \"%s\"; longest completion: \"%s\"\n", s, prefix );
-                g_signal_handlers_block_by_func( gas->combo->entry,
-						 gnc_account_sel_changed,
-						 ud );
-                gtk_entry_set_text( GTK_ENTRY(gas->combo->entry), prefix );
-                gtk_editable_select_region( GTK_EDITABLE(gas->combo->entry),
-                                            strlen(s), -1 );
-                {
-                        GdkEventKey k;
-                        gboolean ret;
-                        
-                        k.type = GDK_KEY_RELEASE;
-                        k.send_event = TRUE;
-                        k.state = GDK_SHIFT_MASK;
-                        k.keyval = GDK_End;
-                        k.length = 0;
-                        k.string = "";
-                        printf( "foo [%d : \"%s\"]\n", k.length, k.string );
-                        //gtk_widget_event( GTK_WIDGET(gas->combo->entry), &e );
-                        g_signal_emit_by_name( gas->combo->entry,
-					       "key-press-event",
-					       gas->combo->entry, &k, NULL, &ret );
-                        printf( "bar\n" );
-                }
-                gtk_editable_set_position( GTK_EDITABLE(gas->combo->entry),
-                                           strlen(s) );
-                g_signal_handlers_unblock_by_func( gas->combo->entry,
-						   gnc_account_sel_changed,
-						   ud );
-                g_free( prefix );
-        }
-        g_free( s );
-}
-
-static
-gint
-gnc_account_sel_key_press(GtkWidget *widget, GdkEventKey *event)
-{
-        GNCAccountSel *gas = GNC_ACCOUNT_SEL(widget);
-        gint result;
-
-        result = (* GTK_WIDGET_CLASS (parent_class)->key_press_event)(widget, event);
-
-        switch (event->keyval)
-        {
-        case GDK_Tab:
-                /* FIXME: += equivalent keys. */
-                break;
-                if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK))
-                        break;
-                return result;
-        case GDK_KP_Enter:
-                break;
-        default:
-                return result;
-        }
-
-        return TRUE;
-}
-#endif /* 0 -- completion not implemented */
 
 GtkWidget *
 gnc_account_sel_new (void)
@@ -355,47 +251,56 @@ gnc_account_sel_new (void)
         return GTK_WIDGET (gas);
 }
 
-GtkWidget *
-gnc_account_sel_gtk_entry (GNCAccountSel *gas)
+typedef struct {
+  GNCAccountSel *gas;
+  Account *acct;
+} gas_find_data;
+
+static
+gboolean
+gnc_account_sel_find_account (GtkTreeModel *model,
+			      GtkTreePath *path,
+			      GtkTreeIter *iter,
+			      gas_find_data *data)
 {
-        g_return_val_if_fail(gas != NULL, NULL);
-        g_return_val_if_fail(GNC_IS_ACCOUNT_SEL(gas), NULL);
+  Account *model_acc;
 
-        return (GtkWidget *)gas->combo->entry;
+  gtk_tree_model_get(model, iter, ACCT_COL_PTR, &model_acc, -1);
+  if (data->acct != model_acc)
+    return FALSE;
+
+  gtk_combo_box_set_active_iter(GTK_COMBO_BOX(data->gas->combo), iter);
+  return TRUE;
 }
-
 void
 gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct )
 {
-        gchar *acctStr;
+	gas_find_data data;
 
-        if ( acct == NULL ) {
-                gtk_list_select_item( GTK_LIST(gas->combo->list), 0 );
+	gtk_combo_box_set_active( GTK_COMBO_BOX(gas->combo), -1 );
+        if ( acct == NULL )
                 return;
-        }
-        acctStr = xaccAccountGetFullName( acct );
-        gtk_entry_set_text( GTK_ENTRY(gas->combo->entry), acctStr );
-        g_free( acctStr );
+
+	data.gas = gas;
+	data.acct = acct;
+	gtk_tree_model_foreach(GTK_TREE_MODEL(gas->store),
+			       (GtkTreeModelForeachFunc)gnc_account_sel_find_account,
+			       &data);
 }
 
 Account*
 gnc_account_sel_get_account( GNCAccountSel *gas )
 {
-        AccountGroup *ag;
-        Account *ret;
-        gchar *txt;
+	GtkTreeIter iter;
+        Account *acc;
 
-        ret = NULL;
-        txt = gtk_editable_get_chars( GTK_EDITABLE(gas->combo->entry), 0, -1 );
-        g_assert( txt != NULL );
-        if ( strlen(txt) == 0 ) {
-                goto cleanup;
-        }
-        ag = gnc_book_get_group( gnc_get_current_book() );
-        ret = xaccGetAccountFromFullName( ag, txt );
- cleanup:
-        g_free( txt );
-        return ret;
+	if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(gas->combo), &iter))
+	  return NULL;
+
+	gtk_tree_model_get(GTK_TREE_MODEL(gas->store), &iter,
+			   ACCT_COL_PTR, &acc,
+			   -1);
+        return acc;
 }
 
 
@@ -500,3 +405,53 @@ gas_new_account_click( GtkButton *b, gpointer ud )
 	else
 	  gnc_ui_new_account_with_types( NULL, gas->acctTypeFilters );
 }
+
+gint
+gnc_account_sel_get_num_account( GNCAccountSel *gas )
+{
+  if (NULL == gas)
+    return 0;
+  return gtk_tree_model_iter_n_children( GTK_TREE_MODEL(gas->store), NULL );
+}
+
+void
+gnc_account_sel_purge_account( GNCAccountSel *gas,
+			       Account *target,
+			       gboolean recursive)
+{
+  GtkTreeModel *model = GTK_TREE_MODEL(gas->store);
+  GtkTreeIter iter;
+  Account *acc;
+  gboolean more;
+
+  if (!gtk_tree_model_get_iter_first(model, &iter))
+    return;
+
+  if (!recursive) {
+    do {
+      gtk_tree_model_get(model, &iter, ACCT_COL_PTR, &acc, -1);
+      if (acc == target) {
+	gtk_list_store_remove(gas->store, &iter);
+	break;
+      }
+    } while (gtk_tree_model_iter_next(model, &iter));
+  } else {
+    do {
+      gtk_tree_model_get(model, &iter, ACCT_COL_PTR, &acc, -1);
+      while (acc) {
+	if (acc == target)
+	  break;
+	acc = xaccAccountGetParentAccount(acc);
+      }
+
+      if (acc == target)
+	more = gtk_list_store_remove(gas->store, &iter);
+      else
+	more = gtk_tree_model_iter_next(model, &iter);
+    } while (more);
+  }
+
+  gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), 0);
+}
+
+

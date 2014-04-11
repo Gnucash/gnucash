@@ -2,6 +2,7 @@
  * dialog-payment.c -- Dialog for payment entry
  * Copyright (C) 2002,2006 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -34,6 +35,7 @@
 #include "qof.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-tree-view-account.h"
 #include "Transaction.h"
 #include "Account.h"
@@ -246,7 +248,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   }
 
   /* Verify the "post" account */
-  text = gtk_entry_get_text (GTK_ENTRY ((GTK_COMBO (pw->post_combo))->entry));
+  text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(pw->post_combo));
   if (!text || safe_strcmp (text, "") == 0) {
     text = _("You must enter an account name for posting.");
     gnc_error_dialog (pw->dialog, text);
@@ -383,6 +385,7 @@ new_payment_window (GncOwner *owner, GNCBook *book, GncInvoice *invoice)
   pw->num_entry = glade_xml_get_widget (xml, "num_entry");
   pw->memo_entry = glade_xml_get_widget (xml, "memo_entry");
   pw->post_combo = glade_xml_get_widget (xml, "post_combo");
+  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pw->post_combo));
 
   label = glade_xml_get_widget (xml, "owner_label");
   box = glade_xml_get_widget (xml, "owner_box");
@@ -451,7 +454,7 @@ new_payment_window (GncOwner *owner, GNCBook *book, GncInvoice *invoice)
     const gchar *text;
     const char *acct_type;
 
-    text = gtk_entry_get_text(GTK_ENTRY((GTK_COMBO(pw->post_combo))->entry));
+    text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(pw->post_combo));
     if (!text || safe_strcmp (text, "") == 0) {
   
       /* XXX: I know there's only one type here */

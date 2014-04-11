@@ -102,44 +102,14 @@
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkCTree" id="account_tree">
+		    <widget class="GtkTreeView" id="account_tree">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="n_columns">2</property>
-		      <property name="column_widths">214,48</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-		      <property name="show_titles">True</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-
-		      <child>
-			<widget class="GtkLabel" id="label847711">
-			  <property name="label" translatable="yes">Account</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label847712">
-			  <property name="label" translatable="yes">New?</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+		      <property name="headers_visible">True</property>
+		      <property name="rules_hint">True</property>
+		      <property name="reorderable">False</property>
+		      <property name="enable_search">True</property>
+		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -350,56 +320,10 @@ Please select a date format for the file.  QIF files created by European softwar
 	      </child>
 
 	      <child>
-		<widget class="GtkCombo" id="date_format_combo">
+		<widget class="GtkComboBox" id="date_format_combobox">
 		  <property name="visible">True</property>
-		  <property name="value_in_list">True</property>
-		  <property name="allow_empty">False</property>
-		  <property name="case_sensitive">False</property>
-		  <property name="enable_arrow_keys">True</property>
-		  <property name="enable_arrows_always">False</property>
-
-		  <child internal-child="entry">
-		    <widget class="GtkEntry" id="date_format_entry">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="editable">False</property>
-		      <property name="visibility">True</property>
-		      <property name="max_length">0</property>
-		      <property name="text" translatable="yes"></property>
-		      <property name="has_frame">True</property>
-		      <property name="invisible_char">*</property>
-		      <property name="activates_default">False</property>
-		    </widget>
-		  </child>
-
-		  <child internal-child="list">
-		    <widget class="GtkList" id="convertwidget3">
-		      <property name="visible">True</property>
-		      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
-
-		      <child>
-			<widget class="GtkListItem" id="convertwidget4">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkLabel" id="convertwidget5">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes"></property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
+		  <property name="items">Dummy Date Entry</property>
+		  <property name="focus_on_click">True</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -569,38 +493,23 @@ Please enter a name for the account. If the file was exported from another accou
 	      <property name="spacing">4</property>
 
 	      <child>
-		<widget class="GtkScrolledWindow" id="scrolledwindow10">
+		<widget class="GtkScrolledWindow" id="scrolledwindow26">
 		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkCList" id="selected_file_list">
+		    <widget class="GtkTreeView" id="selected_file_view">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="n_columns">1</property>
-		      <property name="column_widths">80</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-		      <property name="show_titles">False</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-		      <signal name="select_row" handler="gnc_ui_qif_import_select_loaded_file_cb"/>
-
-		      <child>
-			<widget class="GtkLabel" id="label827">
-			  <property name="label" translatable="no">labe82l7</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+		      <property name="headers_visible">False</property>
+		      <property name="rules_hint">True</property>
+		      <property name="reorderable">False</property>
+		      <property name="enable_search">True</property>
+		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -737,66 +646,21 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow11">
 		  <property name="visible">True</property>
-		  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+		  <property name="can_focus">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkCList" id="account_page_list">
+		    <widget class="GtkTreeView" id="account_page_view">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="n_columns">3</property>
-		      <property name="column_widths">281,242,53</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-		      <property name="show_titles">True</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-		      <signal name="select_row" handler="gnc_ui_qif_import_account_line_select_cb"/>
-
-		      <child>
-			<widget class="GtkLabel" id="label834">
-			  <property name="label" translatable="yes">QIF account name</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label835">
-			  <property name="label" translatable="yes">GnuCash account name</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label836">
-			  <property name="label" translatable="yes">New?</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+		      <property name="headers_visible">True</property>
+		      <property name="rules_hint">True</property>
+		      <property name="reorderable">False</property>
+		      <property name="enable_search">True</property>
+		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -901,60 +765,14 @@ If you change your mind later, you can reorganize the account structure safely w
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkCList" id="category_page_list">
+		    <widget class="GtkTreeView" id="category_page_view">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="n_columns">3</property>
-		      <property name="column_widths">243,250,72</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-		      <property name="show_titles">True</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-		      <signal name="select_row" handler="gnc_ui_qif_import_category_line_select_cb"/>
-
-		      <child>
-			<widget class="GtkLabel" id="label837">
-			  <property name="label" translatable="yes">QIF category name</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label838">
-			  <property name="label" translatable="yes">GnuCash account name</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label839">
-			  <property name="label" translatable="yes">New?</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+		      <property name="headers_visible">True</property>
+		      <property name="rules_hint">True</property>
+		      <property name="reorderable">False</property>
+		      <property name="enable_search">True</property>
+		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -1049,7 +867,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkScrolledWindow" id="scrolledwindow25">
+		<widget class="GtkScrolledWindow" id="scrolledwindow12">
 		  <property name="visible">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -1057,60 +875,14 @@ In the following page, you will see the text that appears in the Payee and Memo 
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkCList" id="memo_page_list">
+		    <widget class="GtkTreeView" id="memo_page_view">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="n_columns">3</property>
-		      <property name="column_widths">285,228,72</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-		      <property name="show_titles">True</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-		      <signal name="select_row" handler="gnc_ui_qif_import_memo_line_select_cb"/>
-
-		      <child>
-			<widget class="GtkLabel" id="label847708">
-			  <property name="label" translatable="yes">QIF payee/memo</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label847709">
-			  <property name="label" translatable="yes">GnuCash account name</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label847710">
-			  <property name="label" translatable="yes">New?</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+		      <property name="headers_visible">True</property>
+		      <property name="rules_hint">True</property>
+		      <property name="reorderable">False</property>
+		      <property name="enable_search">True</property>
+		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -1165,56 +937,11 @@ Select the currency to use for transactions imported from your QIF files:
 	      </child>
 
 	      <child>
-		<widget class="GtkCombo" id="currency_combo">
+		<widget class="GtkComboBoxEntry" id="currency_comboboxentry">
 		  <property name="visible">True</property>
-		  <property name="value_in_list">True</property>
-		  <property name="allow_empty">False</property>
-		  <property name="case_sensitive">False</property>
-		  <property name="enable_arrow_keys">True</property>
-		  <property name="enable_arrows_always">False</property>
-
-		  <child internal-child="entry">
-		    <widget class="GtkEntry" id="currency_entry">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="editable">True</property>
-		      <property name="visibility">True</property>
-		      <property name="max_length">0</property>
-		      <property name="text" translatable="yes"></property>
-		      <property name="has_frame">True</property>
-		      <property name="invisible_char">*</property>
-		      <property name="activates_default">False</property>
-		    </widget>
-		  </child>
-
-		  <child internal-child="list">
-		    <widget class="GtkList" id="convertwidget14">
-		      <property name="visible">True</property>
-		      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
-
-		      <child>
-			<widget class="GtkListItem" id="convertwidget15">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkLabel" id="convertwidget16">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes"></property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
+		  <property name="items">Dummy currency entry</property>
+		  <property name="has_frame">True</property>
+		  <property name="focus_on_click">True</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -1358,7 +1085,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 	      <child>
 		<widget class="GtkHBox" id="hbox94">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
+		  <property name="homogeneous">False</property>
 		  <property name="spacing">2</property>
 
 		  <child>
@@ -1377,60 +1104,14 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 			  <child>
-			    <widget class="GtkCList" id="new_transaction_list">
+			    <widget class="GtkTreeView" id="new_transaction_view">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="n_columns">3</property>
-			      <property name="column_widths">53,172,56</property>
-			      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-			      <property name="show_titles">True</property>
-			      <property name="shadow_type">GTK_SHADOW_IN</property>
-			      <signal name="select_row" handler="gnc_ui_qif_import_duplicate_new_select_cb"/>
-
-			      <child>
-				<widget class="GtkLabel" id="label847700">
-				  <property name="label" translatable="yes">Date</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label847700">
-				  <property name="label" translatable="yes">Description</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label847702">
-				  <property name="label" translatable="yes">Amount</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
+			      <property name="headers_visible">True</property>
+			      <property name="rules_hint">True</property>
+			      <property name="reorderable">False</property>
+			      <property name="enable_search">True</property>
+			      <property name="fixed_height_mode">False</property>
 			    </widget>
 			  </child>
 			</widget>
@@ -1478,75 +1159,14 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 			  <child>
-			    <widget class="GtkCList" id="old_transaction_list">
+			    <widget class="GtkTreeView" id="old_transaction_view">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="n_columns">4</property>
-			      <property name="column_widths">50,133,55,32</property>
-			      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-			      <property name="show_titles">True</property>
-			      <property name="shadow_type">GTK_SHADOW_IN</property>
-			      <signal name="select_row" handler="gnc_ui_qif_import_duplicate_old_select_cb"/>
-
-			      <child>
-				<widget class="GtkLabel" id="label847703">
-				  <property name="label" translatable="yes">Date</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label847704">
-				  <property name="label" translatable="yes">Description</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label847705">
-				  <property name="label" translatable="yes">Amount</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label847706">
-				  <property name="label" translatable="yes">Dup?</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
+			      <property name="headers_visible">True</property>
+			      <property name="rules_hint">True</property>
+			      <property name="reorderable">False</property>
+			      <property name="enable_search">True</property>
+			      <property name="fixed_height_mode">False</property>
 			    </widget>
 			  </child>
 			</widget>

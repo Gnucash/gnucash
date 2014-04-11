@@ -27,6 +27,7 @@ libgncmod_gnome_search_la_SOURCES = \
   search-account.c \
   search-boolean.c \
   search-core-type.c \
+  search-core-utils.c \
   search-date.c \
   search-double.c \
   search-int64.c \
@@ -43,6 +44,7 @@ noinst_HEADERS = \
   search-account.h \
   search-boolean.h \
   search-core-type.h \
+  search-core-utils.h \
   search-date.h \
   search-double.h \
   search-int64.h \

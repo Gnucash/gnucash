@@ -45,7 +45,7 @@ typedef struct _GNCFrequency
 
   	GtkVBox         *vb;
 	GtkNotebook     *nb;
-	GtkOptionMenu   *freqOpt;
+	GtkComboBox     *freqComboBox;
 	GNCDateEdit     *startDate;
 	GladeXML        *gxml;
 } GNCFrequency;
@@ -101,5 +101,8 @@ void gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt)
  * impelmentation, the default label text is "Start Date:"
  */
 void gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt);
+
+void
+gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date );
 
 #endif /* !defined( GNC_FREQUENCY_H ) */

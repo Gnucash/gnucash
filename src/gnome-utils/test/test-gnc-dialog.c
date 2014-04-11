@@ -1,6 +1,8 @@
 /* Copyright (C) 2005, Chris Shoemaker <c.shoemaker@cox.net>
  * This file is free software.  See COPYING for details. */
 
+#include "config.h"
+
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <stdio.h>

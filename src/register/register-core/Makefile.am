@@ -50,16 +50,14 @@ gncinclude_HEADERS = \
   table-layout.h \
   table-model.h
 
-libgw_register_core_la_SOURCES = gw-register-core.c
+nodist_libgw_register_core_la_SOURCES = gw-register-core.c
 libgw_register_core_la_LIBADD = \
   libgncmod-register-core.la \
   ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-register-core.scm gw-register-core-spec.scm
-
-noinst_HEADERS = \
-  gw-register-core.h
+gwmod_DATA = gw-register-core-spec.scm
+nodist_gwmod_DATA = gw-register-core.scm
 
 EXTRA_DIST = \
   ${gwmod_DATA}
@@ -105,5 +103,5 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: \
 	  (gw:generate-wrapset \"gw-register-core\")"
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
-CLEANFILES = gnucash g-wrapped register .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-register-core.html
+CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped register .scm-links \
+	${SCM_FILE_LINKS} gw-register-core.html

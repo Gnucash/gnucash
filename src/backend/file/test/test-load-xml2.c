@@ -111,7 +111,7 @@ main (int argc, char ** argv)
     g_type_init();
     qof_init();
     cashobjects_register();
-    do_test(qof_load_backend_library ("../", GNC_LIB_NAME),
+    do_test(qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
             " loading gnc-backend-file GModule failed");
 
     if (!location)

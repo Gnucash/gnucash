@@ -39,10 +39,14 @@ struct test_strings_struct
 typedef struct test_strings_struct test_strings;
 
 test_strings strs[] = {
-    { "/.gnucash/test-account-name", "/.gnucash/test-account-name", 1 },
-    { "/tmp/test-account-name2", "/tmp/test-account-name2", 0 },
-    { "postgres://localhost/foo/bar", "/.gnucash/data/postgres:,,localhost,foo,bar", 2 },
-    { "file:/tmp/test-account-name3", "/tmp/test-account-name3", 0 },
+    { G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name",
+      G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name", 1 },
+    { G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2",
+      G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2", 0 },
+    { "postgres://localhost/foo/bar",
+      G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "postgres:,,localhost,foo,bar", 2 },
+    { "file:" G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3",
+      G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0 },
     { NULL, NULL, 0 },
 };
 
@@ -59,15 +63,16 @@ main(int argc, char **argv)
         
         if(strs[i].prefix_home == 1) 
         {
-            dain = g_strdup_printf("%s/%s", g_get_home_dir(), strs[i].input);
-            wantout = g_strdup_printf("%s/%s", g_get_home_dir(),
-                                      strs[i].output);
+            dain = g_build_filename(g_get_home_dir(), strs[i].input,
+				    (gchar *)NULL);
+            wantout = g_build_filename(g_get_home_dir(), strs[i].output,
+				       (gchar *)NULL);
         }
         else if(strs[i].prefix_home == 2)
         {
             dain = g_strdup(strs[i].input);
-            wantout = g_strdup_printf("%s%s", g_get_home_dir(),
-                                      strs[i].output);
+            wantout = g_build_filename(g_get_home_dir(), strs[i].output,
+				       (gchar *)NULL);
         }
          else
         {

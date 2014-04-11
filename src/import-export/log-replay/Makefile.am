@@ -17,6 +17,7 @@ libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${GTK_LIBS} \
   ${GLIB_LIBS} ${QOF_LIBS}
 
 AM_CFLAGS = \

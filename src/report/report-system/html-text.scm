@@ -44,9 +44,6 @@
    body
    (gnc:make-html-style-table)))
 
-(define gnc:html-text? 
-  (record-predicate <html-text>))
-
 (define gnc:html-text-body
   (record-accessor <html-text> 'body))
 

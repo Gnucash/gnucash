@@ -1069,119 +1069,28 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkOptionMenu" id="freq_option">
+	    <widget class="GtkComboBox" id="freq_combobox">
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="history">0</property>
-
-	      <child internal-child="menu">
-		<widget class="GtkMenu" id="convertwidget1">
-		  <property name="visible">True</property>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget2">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">None</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget3">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Once</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget4">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Daily</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget5">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Daily [M-F]</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget6">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Weekly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget7">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Bi-Weekly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget8">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Semi-Monthly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget9">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Monthly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget10">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Quarterly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget11">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Tri-Yearly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget12">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Semi-Yearly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget13">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Yearly</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
+	      <property name="items" translatable="yes">None
+Once
+Daily
+Daily [M-F]
+Weekly
+Bi-Weekly
+Semi-Monthly
+Monthly
+Quarterly
+Tri-Yearly
+Semi-Yearly
+Yearly</property>
+	      <property name="focus_on_click">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
 	      <property name="right_attach">2</property>
 	      <property name="top_attach">0</property>
 	      <property name="bottom_attach">1</property>
-	      <property name="y_options"></property>
+	      <property name="y_options">fill</property>
 	    </packing>
 	  </child>
 	</widget>
@@ -1988,269 +1897,45 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkOptionMenu" id="semimonthly_first">
+			<widget class="GtkComboBox" id="semimonthly_first">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="history">0</property>
-
-			  <child internal-child="menu">
-			    <widget class="GtkMenu" id="convertwidget14">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget15">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1st</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget16">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">2nd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget17">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">3rd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget18">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">4th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget19">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">5th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget20">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">6th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget21">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">7th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget22">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">8th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget23">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">9th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget24">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">10th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget25">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">11th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget26">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">12th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget27">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">13th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget28">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">14th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget29">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">15th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget30">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">16th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget31">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">17th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget32">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">18th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget33">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">19th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget34">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">20th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget35">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">21st</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget36">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">22nd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget37">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">23rd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget38">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">24th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget39">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">25th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget40">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">26th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget41">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">27th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget42">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">28th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget43">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[29th/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget44">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[30th/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget45">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[31st/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
+			  <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+			  <property name="focus_on_click">True</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
 		    </widget>
@@ -2289,264 +1974,40 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkOptionMenu" id="semimonthly_second">
+			<widget class="GtkComboBox" id="semimonthly_second">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="history">0</property>
-
-			  <child internal-child="menu">
-			    <widget class="GtkMenu" id="convertwidget46">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget47">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1st</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget48">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">2nd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget49">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">3rd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget50">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">4th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget51">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">5th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget52">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">6th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget53">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">7th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget54">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">8th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget55">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">9th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget56">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">10th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget57">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">11th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget58">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">12th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget59">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">13th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget60">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">14th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget61">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">15th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget62">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">16th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget63">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">17th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget64">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">18th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget65">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">19th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget66">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">20th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget67">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">21st</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget68">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">22nd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget69">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">23rd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget70">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">24th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget71">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">25th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget72">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">26th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget73">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">27th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget74">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">28th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget75">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[29th/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget76">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[30th/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget77">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[31st/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
+			  <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+			  <property name="focus_on_click">True</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -2708,264 +2169,40 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkOptionMenu" id="monthly_day">
+			<widget class="GtkComboBox" id="monthly_day">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="history">0</property>
-
-			  <child internal-child="menu">
-			    <widget class="GtkMenu" id="convertwidget78">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget79">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1st</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget80">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">2nd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget81">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">3rd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget82">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">4th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget83">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">5th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget84">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">6th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget85">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">7th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget86">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">8th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget87">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">9th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget88">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">10th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget89">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">11th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget90">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">12th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget91">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">13th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget92">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">14th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget93">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">15th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget94">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">16th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget95">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">17th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget96">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">18th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget97">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">19th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget98">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">20th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget99">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">21st</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget100">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">22nd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget101">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">23rd</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget102">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">24th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget103">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">25th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget104">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">26th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget105">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">27th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget106">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">28th</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget107">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[29th/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget108">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[30th/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget109">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">[31st/last]</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
+			  <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+			  <property name="focus_on_click">True</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -3048,40 +2285,12 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="quarterly_occur">
+		    <widget class="GtkComboBox" id="quarterly_occur">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget110">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget111">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Jan, Apr, Jul, Oct</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget112">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Feb, May, Aug, Nov</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget113">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Mar, Jun, Sep, Dec</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">Jan, Apr, Jul, Oct
+Feb, May, Aug, Nov
+Mar, Jun, Sep, Dec</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -3126,264 +2335,40 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="quarterly_day">
+		    <widget class="GtkComboBox" id="quarterly_day">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget114">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget115">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">1st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget116">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">2nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget117">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">3rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget118">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">4th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget119">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">5th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget120">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">6th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget121">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">7th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget122">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">8th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget123">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">9th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget124">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">10th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget125">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">11th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget126">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">12th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget127">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">13th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget128">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">14th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget129">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">15th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget130">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">16th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget131">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">17th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget132">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">18th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget133">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">19th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget134">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">20th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget135">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">21st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget136">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">22nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget137">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">23rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget138">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">24th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget139">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">25th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget140">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">26th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget141">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">27th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget142">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">28th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget143">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[29th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget144">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[30th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget145">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[31st/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -3459,48 +2444,12 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="triyearly_occur">
+		    <widget class="GtkComboBox" id="triyearly_occur">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget146">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget147">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Jan, May, Sep</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget148">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Feb, Jun, Oct</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget149">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Mar, Jul, Nov</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget150">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Apr, Aug, Dec</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">Jan, May, Sep
+Feb, Jun, Oct
+Mar, Jul, Nov</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -3545,264 +2494,40 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="triyearly_day">
+		    <widget class="GtkComboBox" id="triyearly_day">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget151">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget152">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">1st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget153">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">2nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget154">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">3rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget155">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">4th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget156">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">5th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget157">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">6th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget158">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">7th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget159">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">8th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget160">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">9th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget161">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">10th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget162">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">11th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget163">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">12th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget164">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">13th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget165">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">14th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget166">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">15th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget167">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">16th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget168">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">17th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget169">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">18th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget170">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">19th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget171">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">20th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget172">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">21st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget173">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">22nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget174">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">23rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget175">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">24th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget176">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">25th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget177">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">26th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget178">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">27th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget179">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">28th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget180">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[29th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget181">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[30th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget182">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[31st/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -3878,64 +2603,15 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="semiyearly_occur">
+		    <widget class="GtkComboBox" id="semiyearly_occur">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget183">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget184">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Jan, Jul</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget185">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Feb, Aug</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget186">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Mar, Sep</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget187">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Apr, Oct</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget188">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">May, Nov</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget189">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Jun, Dec</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">Jan, Jul
+Feb, Aug
+Mar, Sep
+Apr, Oct
+May, Nov
+Jun, Dec</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -3980,264 +2656,40 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="semiyearly_day">
+		    <widget class="GtkComboBox" id="semiyearly_day">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget190">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget191">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">1st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget192">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">2nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget193">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">3rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget194">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">4th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget195">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">5th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget196">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">6th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget197">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">7th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget198">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">8th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget199">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">9th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget200">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">10th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget201">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">11th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget202">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">12th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget203">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">13th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget204">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">14th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget205">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">15th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget206">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">16th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget207">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">17th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget208">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">18th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget209">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">19th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget210">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">20th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget211">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">21st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget212">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">22nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget213">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">23rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget214">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">24th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget215">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">25th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget216">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">26th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget217">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">27th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget218">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">28th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget219">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[29th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget220">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[30th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget221">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[31st/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -4388,112 +2840,21 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="yearly_month">
+		    <widget class="GtkComboBox" id="yearly_month">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget222">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget223">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">January</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget224">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">February</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget225">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">March</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget226">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">April</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget227">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">May</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget228">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">June</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget229">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">July</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget230">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">August</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget231">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">September</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget232">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">October</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget233">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">November</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget234">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">December</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">January
+February
+March
+April
+May
+June
+July
+August
+September
+October
+November
+December</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -4538,264 +2899,40 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="yearly_day">
+		    <widget class="GtkComboBox" id="yearly_day">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget235">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget236">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">1st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget237">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">2nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget238">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">3rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget239">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">4th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget240">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">5th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget241">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">6th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget242">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">7th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget243">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">8th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget244">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">9th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget245">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">10th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget246">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">11th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget247">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">12th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget248">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">13th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget249">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">14th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget250">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">15th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget251">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">16th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget252">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">17th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget253">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">18th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget254">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">19th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget255">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">20th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget256">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">21st</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget257">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">22nd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget258">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">23rd</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget259">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">24th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget260">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">25th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget261">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">26th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget262">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">27th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget263">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">28th</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget264">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[29th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget265">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[30th/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget266">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">[31st/last]</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
+		      <property name="items" translatable="yes">1st
+2nd
+3rd
+4th
+5th
+6th
+7th
+8th
+9th
+10th
+11th
+12th
+13th
+14th
+15th
+16th
+17th
+18th
+19th
+20th
+21st
+22nd
+23rd
+24th
+25th
+26th
+27th
+28th
+[29th/last]
+[30th/last]
+[31st/last]</property>
+		      <property name="focus_on_click">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -5367,76 +3504,6 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="freq_option_menu">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget269">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget270">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Daily</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget271">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Weekly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget272">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Bi-Weekly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget273">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Monthly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget274">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Quarterly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget275">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Yearly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">2</property>
-		      <property name="top_attach">1</property>
-		      <property name="bottom_attach">2</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkEntry" id="name_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
@@ -5454,6 +3521,27 @@
 		      <property name="top_attach">0</property>
 		      <property name="bottom_attach">1</property>
 		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkComboBox" id="freq_combo_box">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">Daily
+Weekly
+Bi-Weekly
+Monthly
+Quarterly
+Yearly</property>
+		      <property name="focus_on_click">True</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">1</property>
+		      <property name="bottom_attach">2</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -6697,32 +4785,11 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 		      </child>
 
 		      <child>
-			<widget class="GtkOptionMenu" id="len_opt">
+			<widget class="GtkComboBox" id="len_opt">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="history">0</property>
-
-			  <child internal-child="menu">
-			    <widget class="GtkMenu" id="convertwidget288">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget289">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">months</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget290">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">years</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
+			  <property name="items" translatable="yes">months
+years</property>
+			  <property name="focus_on_click">True</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -6932,6 +4999,26 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 		      <property name="bottom_attach">4</property>
 		      <property name="x_options">expand|shrink|fill</property>
 		      <property name="y_options">expand|shrink|fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkComboBox" id="type_combobox">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">Fixed Rate
+3/1 Year ARM
+5/1 Year ARM
+7/1 Year ARM
+10/1 Year ARM</property>
+		      <property name="focus_on_click">True</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">3</property>
+		      <property name="right_attach">4</property>
+		      <property name="top_attach">2</property>
+		      <property name="bottom_attach">3</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -7898,48 +5985,13 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkOptionMenu" id="rev_range_opt">
+				<widget class="GtkComboBox" id="rev_range_opt">
 				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="history">0</property>
-
-				  <child internal-child="menu">
-				    <widget class="GtkMenu" id="convertwidget291">
-				      <property name="visible">True</property>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget292">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Current Year</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget293">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Now + 1 Year</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget294">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Whole Loan</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget295">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Custom</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-				    </widget>
-				  </child>
+				  <property name="items" translatable="yes">Current Year
+Now + 1 Year
+Whole Loan
+Custom</property>
+				  <property name="focus_on_click">True</property>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -8644,6 +6696,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 		  <property name="rules_hint">False</property>
 		  <property name="reorderable">False</property>
 		  <property name="enable_search">False</property>
+		  <property name="fixed_height_mode">False</property>
 		</widget>
 	      </child>
 	    </widget>

@@ -39,12 +39,11 @@
 
 
 /** Help Files ******************************************************/
-#define HF_USAGE             "gnucash-help/usage.html"
-#define HF_CUSTOM            "gnucash-help/custom-gnucash.html"
-#define HF_GUIDE             "gnucash-guide/index.html"
-#define HF_HELP              "gnucash-help/help.html"
+#define HF_GUIDE             "gnucash-guide.xml"
+#define HF_HELP              "gnucash-help.xml"
 
 /** Links in the Help Files *****************************************/
+#define HL_USAGE             "usage"
 #define HL_ACC               "acct-create"
 #define HL_ACCEDIT           "acct-edit"
 #define HL_COMMODITY         "tool-commodity"

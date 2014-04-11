@@ -392,19 +392,6 @@ be left empty")
 
 
   ;; dialog-utils.h
-  (gw:wrap-as-wct ws '<gnc:GtkCList> "GtkCList*" "const GtkCList*")
-
-  (gw:wrap-function
-   ws
-   'gnc:clist-set-check
-   '<gw:void>
-   "gnc_clist_set_check"
-   '((<gnc:GtkCList> clist)
-     (<gw:int> row)
-     (<gw:int> col)
-     (<gw:bool> checked))
-   "Set the check status of a clist cell.")
-
   (gw:wrap-function
    ws
    'gnc:set-busy-cursor

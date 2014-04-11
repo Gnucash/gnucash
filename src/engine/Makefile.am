@@ -100,8 +100,6 @@ noinst_HEADERS = \
   gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
-  gw-engine.h \
-  gw-kvp.h \
   policy-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
@@ -114,7 +112,8 @@ libgncmod_engine_la_LIBADD = \
   ${GNUCASH_ENGINE_BASE_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
-libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
+libgw_kvp_la_SOURCES = kvp-scm.c
+nodist_libgw_kvp_la_SOURCES = gw-kvp.c
 libgw_kvp_la_LDFLAGS = \
   ${G_WRAP_LINK_ARGS} \
   ${QOF_LIBS} \
@@ -123,7 +122,8 @@ libgw_kvp_la_LIBADD = \
   libgncmod-engine.la \
   libgw-engine.la
 
-libgw_engine_la_SOURCES = gw-engine.c engine-helpers.c glib-helpers.c
+libgw_engine_la_SOURCES = engine-helpers.c glib-helpers.c
+nodist_libgw_engine_la_SOURCES = gw-engine.c
 libgw_engine_la_LDFLAGS = \
   ${G_WRAP_LINK_ARGS} \
   ${QOF_LIBS} \
@@ -144,8 +144,9 @@ gncscm_DATA = \
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
   gw-engine-spec.scm \
+  gw-kvp-spec.scm
+nodist_gwmod_DATA = \
   gw-engine.scm \
-  gw-kvp-spec.scm \
   gw-kvp.scm
 
 EXTRA_DIST = \
@@ -201,16 +202,15 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: \
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-wrapset \"gw-kvp\")"
 
-BUILT_SOURCES = \
-  iso-4217-currencies.c \
-  gw-engine.scm gw-engine.c gw-engine.h \
-  gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
-
-CLEANFILES = gnucash g-wrapped .scm-links gncla-dir.h
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-engine.html gw-kvp.html
-
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
                 -e 's:@-libdir-@:${libdir}:g'
 	mv $@.tmp $@
+
+BUILT_SOURCES = iso-4217-currencies.c \
+  gw-engine.scm gw-engine.c gw-engine.h \
+  gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
+
+CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped .scm-links gncla-dir.h \
+	${SCM_FILE_LINKS} gw-engine.html gw-kvp.html

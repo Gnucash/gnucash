@@ -51,6 +51,8 @@ G_BEGIN_DECLS
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
+#define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
+
 /* typedefs & structures */
 
 /** The instance data structure for a main window object. */

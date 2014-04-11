@@ -54,6 +54,14 @@
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
 #define GCONF_SECTION "dialogs/account"
 
+enum account_cols {
+  ACCOUNT_COL_FULLNAME = 0,
+  ACCOUNT_COL_FIELDNAME,
+  ACCOUNT_COL_OLD_VALUE,
+  ACCOUNT_COL_NEW_VALUE,
+  NUM_ACCOUNT_COLS
+};
+
 typedef enum
 {
   NEW_ACCOUNT,
@@ -211,7 +219,7 @@ gnc_account_to_ui(AccountWindow *aw)
   } else {
     index = 0;
   }
-  gtk_option_menu_set_history(GTK_OPTION_MENU(aw->account_scu), index);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(aw->account_scu), index);
 
   string = xaccAccountGetCode (account);
   if (string == NULL) string = "";
@@ -338,7 +346,7 @@ gnc_ui_to_account(AccountWindow *aw)
     old_scu = xaccAccountGetCommoditySCU(account);
   }
 
-  index = gnc_option_menu_get_active(aw->account_scu);
+  index = gtk_combo_box_get_active(GTK_COMBO_BOX(aw->account_scu));
   nonstd = (index != 0);
   if (nonstd != xaccAccountGetNonStdSCU(account))
     xaccAccountSetNonStdSCU(account, nonstd);
@@ -556,7 +564,7 @@ make_account_changes(GHashTable *change_type)
 typedef struct
 {
   Account *account;
-  GtkCList *list;
+  GtkListStore *list;
   guint count;
 } FillStruct;
 
@@ -566,49 +574,32 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   Account *account = key;
   FillStruct *fs = data;
   gchar *full_name;
-  gchar *account_field_name;
-  gchar *account_field_value;
-  gchar *value_str;
+  const gchar *account_field_name;
+  const gchar *account_field_value;
+  const gchar *value_str;
+  GtkTreeIter iter;
 
   if (fs == NULL) return;
   if (fs->account == account) return;
 
   full_name = xaccAccountGetFullName(account);
-  if(!full_name)
-    full_name = g_strdup("");
+  account_field_name = "Type";
+  account_field_value = xaccAccountGetTypeStr(xaccAccountGetType(account));
+  value_str = xaccAccountGetTypeStr(GPOINTER_TO_INT(value));
 
-  account_field_name = g_strdup("Type");
-  if (!account_field_name)
-    account_field_name = g_strdup("");
-
-  account_field_value =
-    g_strdup (xaccAccountGetTypeStr(xaccAccountGetType(account)));
-  if (!account_field_value)
-    account_field_value = g_strdup("");
-
-  value_str = g_strdup(xaccAccountGetTypeStr(GPOINTER_TO_INT(value)));
-
-  {  
-    gchar *strings[5];
-
-    strings[0] = full_name;
-    strings[1] = account_field_name;
-    strings[2] = account_field_value;
-    strings[3] = value_str;
-    strings[4] = NULL; 
-
-    gtk_clist_append(fs->list, strings);
-  }
-
+  gtk_list_store_append(fs->list, &iter);
+  gtk_list_store_set(fs->list, &iter,
+		     ACCOUNT_COL_FULLNAME,  full_name,
+		     ACCOUNT_COL_FIELDNAME, account_field_name,
+		     ACCOUNT_COL_OLD_VALUE, account_field_value,
+		     ACCOUNT_COL_NEW_VALUE, value_str,
+		     -1);
   g_free(full_name);
-  g_free(account_field_name);
-  g_free(account_field_value);
-  g_free(value_str);
   fs->count++;
 }
 
 static guint
-fill_list(Account *account, GtkCList *list,
+fill_list(Account *account, GtkListStore *list,
           GHashTable *change)
 {
   FillStruct fs;
@@ -632,8 +623,10 @@ extra_change_verify (AccountWindow *aw,
                      GHashTable *change_type)
 {
   Account *account;
-  GtkCList *list;
-  gchar *titles[5];
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeView *view;
+  GtkListStore *store;
   gboolean result;
   guint size;
 
@@ -644,27 +637,46 @@ extra_change_verify (AccountWindow *aw,
   if (!account)
     return FALSE;
 
-  titles[0] = _("Account");
-  titles[1] = _("Field");
-  titles[2] = _("Old Value");
-  titles[3] = _("New Value");
-  titles[4] = NULL;
-
-  list = GTK_CLIST(gtk_clist_new_with_titles(4, titles));
+  store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING);
 
   size = 0;
-  size += fill_list(account, list, change_type);
+  size += fill_list(account, GTK_LIST_STORE(store), change_type);
 
   if (size == 0)
   {
-    gtk_widget_destroy(GTK_WIDGET(list));
+    gtk_widget_destroy(GTK_WIDGET(store));
     return TRUE;
   }
 
-  gtk_clist_column_titles_passive(list);
-  gtk_clist_set_sort_column(list, 0);
-  gtk_clist_sort(list);
-  gtk_clist_columns_autosize(list);
+  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store),
+				       ACCOUNT_COL_FULLNAME,
+				       GTK_SORT_ASCENDING);
+
+  view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
+						    "text", ACCOUNT_COL_FULLNAME,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Field"), renderer,
+						    "text", ACCOUNT_COL_FIELDNAME,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Old Value"), renderer,
+						    "text", ACCOUNT_COL_OLD_VALUE,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("New Value"), renderer,
+						    "text", ACCOUNT_COL_NEW_VALUE,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
 
   {
     GtkWidget *dialog;
@@ -699,7 +711,7 @@ extra_change_verify (AccountWindow *aw,
 
     gtk_container_add(GTK_CONTAINER(frame), scroll);
     gtk_container_set_border_width(GTK_CONTAINER(scroll), 5);
-    gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(list));
+    gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(view));
 
     gtk_widget_show_all(vbox);
 
@@ -990,11 +1002,11 @@ gnc_account_window_response_cb (GtkDialog *dialog,
 			switch (aw->dialog_type) {
 				case NEW_ACCOUNT:
 					DEBUG("new acct dialog, HELP");
-					gnc_gnome_help(HF_USAGE, HL_ACC);
+					gnc_gnome_help(HF_HELP, HL_ACC);
 					break;
 				case EDIT_ACCOUNT:
 					DEBUG("edit acct dialog, HELP");
-					gnc_gnome_help(HF_USAGE, HL_ACCEDIT);
+					gnc_gnome_help(HF_HELP, HL_ACCEDIT);
 					break;
 				default:
 					g_assert_not_reached ();
@@ -1277,7 +1289,6 @@ gnc_account_window_create(AccountWindow *aw)
                     G_CALLBACK (commodity_changed_cb), aw);
 
   aw->account_scu = glade_xml_get_widget (xml, "account_scu");
-  gnc_option_menu_init(aw->account_scu);
 
   box = glade_xml_get_widget (xml, "parent_scroll");
 
@@ -1555,10 +1566,14 @@ gnc_split_account_name (const char *in_name, Account **base_account)
   GList *list, *node;
 
   group = gnc_get_current_group ();
-  list = xaccGroupGetAccountList (group);
   names = g_strsplit(in_name, gnc_get_account_separator_string(), -1);
 
   for (ptr = names; *ptr; ptr++) {
+    /* Stop if there are no children at the current level. */
+    if (group == NULL)
+      break;
+    list = xaccGroupGetAccountList (group);
+
     /* Look for the first name in the children. */
     for (node = list; node; node = g_list_next(node)) {
       account = node->data;
@@ -1575,9 +1590,6 @@ gnc_split_account_name (const char *in_name, Account **base_account)
       break;
 
     group = xaccAccountGetChildren (account);
-    if (group == NULL)
-      break;
-    list = xaccGroupGetAccountList (group);
   }
 
   out_names = g_strdupv(ptr);

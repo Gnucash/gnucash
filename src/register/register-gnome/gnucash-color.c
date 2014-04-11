@@ -152,11 +152,9 @@ gnucash_color_argb_to_gdk (guint32 argb)
 void
 gnucash_color_init (void)
 {
-        GdkColormap *colormap = gtk_widget_get_default_colormap ();
-
         /* Allocate the default colors */
-        gdk_color_white (colormap, &gn_white);
-        gdk_color_black (colormap, &gn_black);
+        gnucash_color_alloc_name ("white",  &gn_white);
+        gnucash_color_alloc_name ("black",  &gn_black);
 
         gnucash_color_alloc_name ("gray60", &gn_light_gray);
         gnucash_color_alloc_name ("gray40", &gn_dark_gray);

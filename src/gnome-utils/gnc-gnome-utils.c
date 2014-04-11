@@ -66,13 +66,13 @@ static int gnome_is_initialized = FALSE;
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
+  gnc_gnome_help (HF_HELP, HL_GLOBPREFS);
 }
 
 static void
 gnc_commodity_help_cb (void)
 {
-  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
+  gnc_gnome_help (HF_HELP, HL_COMMODITY);
 }
 
 /* gnc_configure_date_format
@@ -385,7 +385,8 @@ gnc_gui_init(void)
         return main_window;
     }
 
-    gnc_gui_init_splash();
+    if (gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL))
+        gnc_gui_init_splash();
 
     gnome_is_initialized = TRUE;
 

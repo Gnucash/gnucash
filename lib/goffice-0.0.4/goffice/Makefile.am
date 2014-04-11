@@ -24,7 +24,6 @@ BUILT_SOURCES =	goffice-paths.h
 CLEANFILES = $(BUILT_SOURCES)
 
 libgoffice_1_la_SOURCES = 	\
-	$(BUILT_SOURCES)	\
 	goffice.c		\
 	goffice-priv.h
 if !HAVE_GLIB26

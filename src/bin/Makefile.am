@@ -67,7 +67,7 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	mv $@.tmp $@
 	chmod u+x $@
 
-CLEANFILES = gnucash gnucash-valgrind
+CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
@@ -99,7 +99,6 @@ ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
 CLEANFILES += ${gnc_common_scripts} update-gnucash-gconf
-DISTCLEANFILES = i18n.h
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

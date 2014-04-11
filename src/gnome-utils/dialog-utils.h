@@ -113,8 +113,10 @@ gboolean gnc_handle_date_accelerator (GdkEventKey *event,
  * place. Stick to gtk_clist_append, or use gnc_clist_set_check
  * after you have built the list. This only applies to unrealized
  * widgets. */
+#ifdef __GTK_CLIST_H__
 void gnc_clist_set_check (GtkCList *list, int row, int col, 
 			  gboolean checked);
+#endif
 
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);

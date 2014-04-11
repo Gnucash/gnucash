@@ -317,16 +317,13 @@ gnc_header_reconfigure (GncHeader *header)
             header->width != w  ||
             header->style != old_style)
         {
-                gint old_height = header->height;
-
                 header->height = h;
                 header->width = w;
 
                 gnome_canvas_set_scroll_region (GNOME_CANVAS(canvas),
                                                 0, 0, w, h);
 
-                if (old_height != h)
-                        gtk_widget_set_size_request (GTK_WIDGET(canvas), -1, h);
+		gtk_widget_set_size_request (GTK_WIDGET(canvas), -1, h);
 
                 gnc_header_request_redraw (header);
         }
@@ -643,6 +640,8 @@ gnc_header_init (GncHeader *header)
         header->resize_cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
         header->normal_cursor = NULL;
         header->height = 20;
+        header->width = 400;
+        header->style = NULL;
 }
 
 

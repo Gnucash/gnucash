@@ -42,10 +42,12 @@ typedef struct _SchedXactionEditorDialog SchedXactionEditorDialog;
 
 SchedXactionDialog * gnc_ui_scheduled_xaction_dialog_create(void);
 void gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd);
+#ifdef __GTK_CLIST_H__
 void row_select_handler( GtkCList *clist, gint row, gint col,
                          GdkEventButton *event, gpointer d );
 void row_unselect_handler( GtkCList *clist, gint row, gint col,
                          GdkEventButton *event, gpointer d );
+#endif
 
 void gnc_sxd_list_refresh( SchedXactionDialog *sxd );
 

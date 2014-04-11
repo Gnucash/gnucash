@@ -88,6 +88,7 @@ struct gnc_new_iso_code
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
   {"ILS", "NIS"}, /* New Israeli Shekel */
+  {"MXP", "MXN"}, /* Mexican (Nuevo) Peso */
 
   /* Only add currencies to this table when the old currency no longer
    * exists in the file iso-4217-currencies.scm */

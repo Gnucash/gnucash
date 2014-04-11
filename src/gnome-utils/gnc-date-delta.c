@@ -158,8 +158,8 @@ static void
 gnc_date_delta_init (GNCDateDelta *gdd)
 {
   gdd->value_spin = NULL;
-  gdd->units_menu = NULL;
-  gdd->polarity_menu = NULL;
+  gdd->units_combo = NULL;
+  gdd->polarity_combo = NULL;
 
   gdd->units = 0;
   gdd->polarity = 0;
@@ -194,93 +194,59 @@ value_changed(GtkEditable *editable, gpointer data)
 }
 
 static void
-set_units (GtkWidget *widget, gpointer data)
+set_units (GtkComboBox *combo, GNCDateDelta *gdd)
 {
-  GNCDateDeltaUnits units;
-  GNCDateDelta *gdd;
+  gint active;
 
-  units = GPOINTER_TO_INT(data);
-  gdd = GNC_DATE_DELTA(g_object_get_data(G_OBJECT(widget), GDD_LABEL));
-
-  gdd->units = units;
+  active = gtk_combo_box_get_active(GTK_COMBO_BOX(gdd->units_combo));
+  if ((active < GNC_DATE_DELTA_DAYS) || (active > GNC_DATE_DELTA_YEARS))
+    active = GNC_DATE_DELTA_DAYS;
+  gdd->units = active;
 
   g_signal_emit (gdd, date_delta_signals [UNITS_CHANGED], 0);
   g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
-fill_units_menu(GNCDateDelta *gdd)
+fill_units_combo(GNCDateDelta *gdd)
 {
-  GtkWidget *menu;
-  GtkWidget *item;
-  char *strings[] = {
-    _("Days"),
-    _("Weeks"),
-    _("Months"),
-    _("Years"),
-    NULL
-  };
-  gint i;
+  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+			    _("Days"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+			    _("Weeks"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+			    _("Months"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+			    _("Years"));
 
-  menu = gtk_menu_new ();
-  gtk_widget_show(menu);
-
-  for (i = 0; strings[i] != NULL; i++)
-  {
-    item = gtk_menu_item_new_with_label (strings[i]);
-    g_object_set_data(G_OBJECT(item), GDD_LABEL, gdd);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-    gtk_widget_show(item);
-
-    g_signal_connect (item, "activate",
-		      G_CALLBACK (set_units), GINT_TO_POINTER(i));
-  }
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (gdd->units_menu), menu);
+  g_signal_connect (gdd->units_combo, "changed",
+		    G_CALLBACK (set_units), gdd);
 }
 
 static void
-set_polarity (GtkWidget *widget, gpointer data)
+set_polarity (GtkComboBox *combo, GNCDateDelta *gdd)
 {
-  GNCDateDeltaPolarity polarity;
-  GNCDateDelta *gdd;
+  gint active;
 
-  polarity = GPOINTER_TO_INT(data);
-  gdd = GNC_DATE_DELTA(g_object_get_data(G_OBJECT(widget), GDD_LABEL));
-
-  gdd->polarity = polarity;
+  active = gtk_combo_box_get_active(GTK_COMBO_BOX(gdd->units_combo));
+  if ((active < GNC_DATE_DELTA_PAST) || (active > GNC_DATE_DELTA_FUTURE))
+    active = GNC_DATE_DELTA_PAST;
+  gdd->polarity = active;
 
   g_signal_emit (gdd, date_delta_signals [POLARITY_CHANGED], 0);
   g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
-fill_polarity_menu(GNCDateDelta *gdd)
+fill_polarity_combo(GNCDateDelta *gdd)
 {
-  GtkWidget *menu;
-  GtkWidget *item;
-  char *strings[] = {
-    _("Ago"),
-    _("From Now"),
-    NULL
-  };
-  gint i;
+  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
+			    _("Ago"));
+  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
+			    _("From Now"));
 
-  menu = gtk_menu_new ();
-  gtk_widget_show(menu);
-
-  for (i = 0; strings[i] != NULL; i++)
-  {
-    item = gtk_menu_item_new_with_label (strings[i]);
-    g_object_set_data(G_OBJECT(item), GDD_LABEL, gdd);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-    gtk_widget_show(item);
-
-    g_signal_connect (item, "activate",
-		      G_CALLBACK (set_polarity), GINT_TO_POINTER(i));
-  }
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (gdd->polarity_menu), menu);
+  g_signal_connect (gdd->polarity_combo, "changed",
+		    G_CALLBACK(set_polarity), gdd);
 }
 
 static void
@@ -297,18 +263,18 @@ create_children (GNCDateDelta *gdd)
   g_signal_connect(gdd->value_spin, "changed",
 		   G_CALLBACK(value_changed), gdd);
 
-  gdd->units_menu = gtk_option_menu_new();
-  fill_units_menu(gdd);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(gdd->units_menu), 0);
-  gtk_box_pack_start(GTK_BOX(gdd), gdd->units_menu, FALSE, FALSE, 0);
-  gtk_widget_show(gdd->units_menu);
+  gdd->units_combo = gtk_combo_box_new_text();
+  fill_units_combo(gdd);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), 0);
+  gtk_box_pack_start(GTK_BOX(gdd), gdd->units_combo, FALSE, FALSE, 0);
+  gtk_widget_show(gdd->units_combo);
 
-  gdd->polarity_menu = gtk_option_menu_new();
-  fill_polarity_menu(gdd);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(gdd->polarity_menu), 0);
-  gtk_box_pack_start(GTK_BOX(gdd), gdd->polarity_menu, FALSE, FALSE, 0);
+  gdd->polarity_combo = gtk_combo_box_new_text();
+  fill_polarity_combo(gdd);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), 0);
+  gtk_box_pack_start(GTK_BOX(gdd), gdd->polarity_combo, FALSE, FALSE, 0);
   if (gdd->show_polarity)
-    gtk_widget_show(gdd->polarity_menu);
+    gtk_widget_show(gdd->polarity_combo);
 }
 
 /**
@@ -382,7 +348,7 @@ gnc_date_delta_set_units (GNCDateDelta *gdd, GNCDateDeltaUnits units)
 
   gdd->units = units;
 
-  gtk_option_menu_set_history(GTK_OPTION_MENU(gdd->units_menu), units);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), units);
 }
 
 /**
@@ -417,7 +383,7 @@ gnc_date_delta_set_polarity (GNCDateDelta *gdd, GNCDateDeltaPolarity polarity)
 
   gdd->polarity = polarity;
 
-  gtk_option_menu_set_history(GTK_OPTION_MENU(gdd->polarity_menu), polarity);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), polarity);
 }
 
 /**
@@ -451,7 +417,7 @@ gnc_date_delta_show_polarity (GNCDateDelta *gdd, gboolean show_polarity)
   gdd->show_polarity = show_polarity;
 
   if (show_polarity)
-    gtk_widget_show(gdd->polarity_menu);
+    gtk_widget_show(gdd->polarity_combo);
   else
-    gtk_widget_hide(gdd->polarity_menu);
+    gtk_widget_hide(gdd->polarity_combo);
 }

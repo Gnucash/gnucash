@@ -785,6 +785,9 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
       }
       sigfigs  = GNC_HOW_GET_SIGFIGS(how);
 
+      if (fabs(sigfigs - logratio) > 18)
+          return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+
       if(sigfigs-logratio >= 0) {
         denom    = (gint64)(pow(10, sigfigs-logratio));
       }

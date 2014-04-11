@@ -1222,13 +1222,8 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
   if ( !ta && tb ) return +1;
   if ( !ta && !tb ) return 0;
 
-  /* Only sort on the date, since time info isn't displayed */
-  na = ta->date_posted.tv_sec / SECS_PER_DAY;
-  nb = tb->date_posted.tv_sec / SECS_PER_DAY;
-  if (na < nb)
-    return -1;
-  if (na > nb)
-    return 1;
+  /* if dates differ, return */
+  DATE_CMP(ta,tb,date_posted);
 
   /* otherwise, sort on number string */
   na = atoi(ta->num);

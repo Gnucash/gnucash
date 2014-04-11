@@ -75,17 +75,26 @@ gnucash_micro_version (void)
 void 
 gnc_engine_init(int argc, char ** argv)
 {
-  static gchar *names[] = {
-      GNC_LIB_NAME, QSF_BACKEND_LIB, "gnc-backend-postgres", 
-      NULL};
-  gchar **np;
+  static struct {
+    const gchar* dir;
+    const gchar* lib;
+    gboolean required;
+  } libs[] = {
+    { GNC_LIBDIR, GNC_LIB_NAME, TRUE },
+    /* shouldn't the PG gnc-module do this instead of US doing it? */
+    { GNC_LIBDIR, "gnc-backend-postgres", FALSE },
+    { NULL, NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
+  gchar *tracefilename;
 
   if (1 == engine_is_initialized) return;
 
   /* initialize logging to our file. */
-  qof_log_init_filename("/tmp/gnucash.trace");
+  tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",
+				   (gchar *)NULL);
+  qof_log_init_filename(tracefilename);
+  g_free(tracefilename);
   /* Only set the core log_modules here the rest can be set locally.  */
   qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
   qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
@@ -98,9 +107,21 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  for (np = names; *np; np++) {
-      if (qof_load_backend_library(GNC_LIBDIR, *np))
+  for (lib = libs; lib->dir && lib->lib ; lib++)
+  {
+      if (qof_load_backend_library(lib->dir, lib->lib))
+      {
           engine_is_initialized = 1;
+      }
+      else
+      {
+          g_message("failed to load %s from %s\n", lib->lib, lib->dir);
+	  /* If this is a required library, stop now! */
+	  if (lib->required)
+	  {
+	      g_message("required library %s not found.\n", lib->lib);
+	  }
+      }
   }
 
   /* call any engine hooks */

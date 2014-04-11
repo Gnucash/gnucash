@@ -393,9 +393,9 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
 {
   CommodityDruid * cd = user_data;
   CommodityDruidPage * dpage = g_object_get_data(G_OBJECT(page), "page_struct");
-  const char * new_type;
-  const char * new_name;
-  const char * new_mnemonic;
+  gchar * new_type;
+  const gchar * new_name;
+  const gchar * new_mnemonic;
   gnc_commodity * new_comm;
 
   new_type     = gnc_ui_namespace_picker_ns (dpage->new_type_combo);
@@ -408,6 +408,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
 		       _("You must put values for the type, name, "
 			 "and abbreviation of the currency/stock."));
 
+    g_free(new_type);
     return TRUE;
   }
 
@@ -418,7 +419,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     gnc_warning_dialog(cd->window,
 		       _("You must enter an existing national "
 			 "currency or enter a different type."));
-
+    g_free(new_type);
     return TRUE;
   }
   new_comm = g_hash_table_lookup(cd->new_map, dpage->old_name);
@@ -429,6 +430,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   gnc_commodity_set_namespace(new_comm, new_type);
   gnc_commodity_set_mnemonic(new_comm, new_mnemonic);
 
+  g_free(new_type);
   return FALSE;
 }
 

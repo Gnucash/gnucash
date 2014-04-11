@@ -2092,10 +2092,21 @@ gnc_set_auto_decimal_places  (GConfEntry *entry, gpointer user_data)
   auto_decimal_places = gconf_value_get_float(value);
 }
 
+static void
+gnc_auto_decimal_init (void)
+{
+  auto_decimal_enabled =
+    gnc_gconf_get_bool(GCONF_GENERAL, "auto_decimal_point", NULL);
+  auto_decimal_places =
+    gnc_gconf_get_float(GCONF_GENERAL, "auto_decimal_places", NULL);
+}
+
 void
 gnc_ui_util_init (void)
 {
   gnc_configure_account_separator ();
+  gnc_auto_decimal_init();
+
   gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
 				(GncGconfGeneralCb)gnc_configure_account_separator,
 				NULL);

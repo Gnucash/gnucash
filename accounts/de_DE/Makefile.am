@@ -12,6 +12,7 @@ account_DATA = \
   acctchrt_otherasset.gnucash-xea \
   acctchrt_otherloan.gnucash-xea \
   acctchrt_studium.gnucash-xea \
+  acctchrt_skr03.gnucash-xea \
   acctchrt_skr04.gnucash-xea
 
 

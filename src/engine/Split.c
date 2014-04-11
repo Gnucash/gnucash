@@ -925,15 +925,15 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
     if (gnc_commodity_equiv(commodity, base_currency)) {
       s->amount = gnc_numeric_convert(value,
                                       get_commodity_denom(s), 
-                                      GNC_HOW_RND_NEVER);
+                                      GNC_HOW_RND_ROUND);
     }
     s->value = gnc_numeric_convert(value, 
                                    get_currency_denom(s),
-                                   GNC_HOW_RND_NEVER);
+                                   GNC_HOW_RND_ROUND);
   }
   else if (gnc_commodity_equiv(commodity, base_currency)) {
     s->amount = gnc_numeric_convert(value, get_commodity_denom(s),
-                                    GNC_HOW_RND_NEVER);
+                                    GNC_HOW_RND_ROUND);
   }
   else {
     PERR ("inappropriate base currency %s "

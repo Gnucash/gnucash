@@ -187,6 +187,9 @@ esac
 
 dr=${srcdir}
 
+echo "Creating $dr/po/POTFILES.in ..."
+test -r $dr/po/POTFILES.in || touch $dr/po/POTFILES.in
+
 echo "Creating $dr/aclocal.m4 ..."
 test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 
@@ -198,6 +201,9 @@ echo
 
 echo "Ensure $dr/aclocal.m4 is writable ..."
 test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+
+echo "Ensure $dr/po/POTFILES.in is writable ..."
+test -r $dr/po/POTFILES.in && chmod u+w $dr/po/POTFILES.in
 
 echo "Running ${INTLTOOLIZE} --force --copy ..."
 ${INTLTOOLIZE} --force --copy || \
