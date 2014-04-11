@@ -612,7 +612,7 @@
 		    (book (xaccGroupGetBook (gnc-get-current-group)))
                     (existing-type 
                      (xaccAccountGetType existing-gnc-acct)))
-               (if (and existing-gnc-acct 
+               (if (and (not (null? existing-gnc-acct)) 
                         (memv existing-type (list GNC-STOCK-TYPE 
                                                   GNC-MUTUAL-TYPE)))
                    ;; gnc account already exists... we *know* what the 

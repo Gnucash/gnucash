@@ -46,7 +46,7 @@ TESTS_ENVIRONMENT := \
   GNC_TEST_FILES=${srcdir}/test-files \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link \
   test-qif
 

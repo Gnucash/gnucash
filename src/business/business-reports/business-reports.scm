@@ -90,7 +90,7 @@
     (if ref
 	(begin
 	  (set! ref (string-append ref (gncOwnerReturnGUID end-owner)))
-	  (if acc
+	  (if (not (null? acc))
 	      (set! ref (string-append ref "&acct="
 				       (gncAccountGetGUID acc))))
 	  (gnc-build-url URL-TYPE-OWNERREPORT ref ""))

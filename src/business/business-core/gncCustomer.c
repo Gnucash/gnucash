@@ -365,19 +365,19 @@ void gncCustomerBeginEdit (GncCustomer *cust)
   qof_begin_edit (&cust->inst);
 }
 
-static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
+static void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Customer QofBackend Failure: %d", errcode);
 }
 
-static inline void gncCustomerOnDone (QofInstance *inst)
+static void gncCustomerOnDone (QofInstance *inst)
 {
   GncCustomer *cust = (GncCustomer *) inst;
   gncAddressClearDirty (cust->addr);
   gncAddressClearDirty (cust->shipaddr);
 }
 
-static inline void cust_free (QofInstance *inst)
+static void cust_free (QofInstance *inst)
 {
   GncCustomer *cust = (GncCustomer *) inst;
   gncCustomerFree (cust);

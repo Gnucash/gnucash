@@ -78,14 +78,14 @@
 
 ;; returns the account name as html-text and anchor to the register.
 (define (gnc:html-account-anchor acct)
-  (gnc:make-html-text (if acct
+  (gnc:make-html-text (if (and acct (not (null? acct)))
                           (gnc:html-markup-anchor
                            (gnc:account-anchor-text acct)
                            (xaccAccountGetName acct))
                           "")))
 
 (define (gnc:html-split-anchor split text)
-  (gnc:make-html-text (if (xaccSplitGetAccount split)
+  (gnc:make-html-text (if (not (null? (xaccSplitGetAccount split)))
                           (gnc:html-markup-anchor
                            (gnc:split-anchor-text split)
                            text)

@@ -639,7 +639,7 @@ static gboolean
 changes_match (ComponentEventInfo *cei, ComponentEventInfo *changes)
 {
   ComponentEventInfo *big_cei;
-  GHashTable *small;
+  GHashTable *smalltable;
 
   if (cei == NULL)
     return FALSE;
@@ -653,18 +653,18 @@ changes_match (ComponentEventInfo *cei, ComponentEventInfo *changes)
   if (g_hash_table_size (cei->entity_events) <=
       g_hash_table_size (changes->entity_events))
   {
-    small = cei->entity_events;
+    smalltable = cei->entity_events;
     big_cei = changes;
   }
   else
   {
-    small = changes->entity_events;
+    smalltable = changes->entity_events;
     big_cei = cei;
   }
 
   big_cei->match = FALSE;
 
-  g_hash_table_foreach (small, match_helper, big_cei);
+  g_hash_table_foreach (smalltable, match_helper, big_cei);
 
   return big_cei->match;
 }

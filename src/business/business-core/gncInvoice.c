@@ -1445,14 +1445,14 @@ void gncInvoiceBeginEdit (GncInvoice *invoice)
   QOF_BEGIN_EDIT (&invoice->inst);
 }
 
-static inline void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
+static void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Invoice QofBackend Failure: %d", errcode);
 }
 
-static inline void gncInvoiceOnDone (QofInstance *invoice) { }
+static void gncInvoiceOnDone (QofInstance *invoice) { }
 
-static inline void invoice_free (QofInstance *inst)
+static void invoice_free (QofInstance *inst)
 {
   GncInvoice *invoice = (GncInvoice *) inst;
   gncInvoiceFree (invoice);

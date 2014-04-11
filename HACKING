@@ -60,8 +60,10 @@ Scheme:
 
  * All private functions are enclosed in __ (i.e. gnc:_do-not-call_)
 
- * All C functions wrapped with g-wrap have dashes in place of underscores.
-   (xaccSplitGetBalance --> gnc:split-get-balance).
+ * All C functions wrapped into scheme have dashes in place of underscores.
+   (xaccSplitGetBalance --> gnc:split-get-balance) - but FIXME:
+   This policy seems to have been dropped in favor of having
+   identical function names. cstim, 2006-10-30.
 
 
 Dave Peticolas <dave@krondo.com>

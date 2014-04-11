@@ -1,35 +1,30 @@
 /*********************************************************************
  * test-dynload.c
  * test the ability to dlopen the gnc_module library and initialize
- * it via dlsym 
+ * it via dlsym
  *********************************************************************/
 
 #include <stdio.h>
-#ifdef G_OS_WIN32
-# undef DLL_EXPORT /* Will cause warnings in ltdl.h if defined */
-# define LIBLTDL_DLL_IMPORT
-#endif
-#include <ltdl.h>
+#include <gmodule.h>
 #include <libguile.h>
 
 #include "gnc-module.h"
 
-#ifndef lt_ptr
-# define lt_ptr lt_ptr_t
-#endif
-
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
-  lt_dlhandle handle;
-
-  lt_dlinit();
+  GModule *gmodule;
 
   printf("  test-dynload.c: testing dynamic linking of libgncmodule ...");
-  handle = lt_dlopen("libgncmodule.la");
-  if(handle) {
-    lt_ptr ptr = lt_dlsym(handle, "gnc_module_system_init");
-    if(ptr) {
+  gmodule = g_module_open("libgncmodule", 0);
+
+  /* Maybe MacOS? */
+  if (!gmodule)
+    gmodule = g_module_open("libgncmodule.dylib", 0);
+
+  if (gmodule) {
+    gpointer ptr;
+    if (g_module_symbol(gmodule, "gnc_module_system_init", &ptr)) {
       void (* fn)(void) = ptr;
       fn();
       printf(" OK\n");
@@ -42,7 +37,7 @@ guile_main(void *closure, int argc, char ** argv)
   }
   else {
     printf(" failed to open library.\n");
-    printf("%s\n", lt_dlerror());
+    printf("%s\n", g_module_error());
     exit(-1);
   }
 }

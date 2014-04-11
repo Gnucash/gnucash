@@ -82,8 +82,6 @@ noinst_HEADERS = \
    qofquerycore-p.h \
    qofsession-p.h
 
-QOFLIBdir = $(QOF_LIB_DIR)
-
 EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
@@ -91,8 +89,16 @@ EXTRA_DIST = \
 qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's#@-libdir-@#${QOFLIBdir}#g'
+                -e 's#@-libdir-@#${QOF_LIB_DIR}#g'
 	 mv $@.tmp $@
 
 BUILT_SOURCES = qofla-dir.h
 CLEANFILES = $(BUILT_SOURCES)
+
+## For testing the qofmath128 routines
+# run "make check" (to build the test program) and then run test-qofmath
+check_PROGRAMS = test-qofmath
+test_qofmath_SOURCES=gnc-numeric.c
+test_qofmath_CPPFLAGS=$(libgncqof_la_CPPFLAGS) -DTEST_128_BIT_MULT
+test_qofmath_LDFLAGS=$(libgncqof_la_LDFLAGS)
+test_qofmath_LDADD=$(libgncqof_la_LIBADD)

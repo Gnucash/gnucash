@@ -11,6 +11,7 @@ libcore_utils_la_SOURCES = \
   gnc-gtk-utils.c
 
 libcore_utils_la_LIBADD = \
+  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
   ${GTK_LIBS}
@@ -25,8 +26,9 @@ noinst_HEADERS = \
   gnc-gtk-utils.h
 
 if BUILDING_FROM_SVN
-swig-core-utils.c: core-utils.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 AM_CFLAGS = \

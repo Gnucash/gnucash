@@ -1,12 +1,10 @@
-SUBDIRS = .
-# test -- removed 'test' from SUBDIRS by jsled 2004.05.02 .. I don't know how
-# to get the test-link-mumble to link correctly; plz assist.
-PWD := $(shell pwd)
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
@@ -51,9 +49,9 @@ libgncmod_report_gnome_la_LIBADD = \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
-swig-report-gnome.c: report-gnome.i ${gncinclude_HEADERS}
+swig-report-gnome.c: report-gnome.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src/engine -o $@ $<
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report

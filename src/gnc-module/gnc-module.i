@@ -5,8 +5,7 @@
 SCM scm_init_sw_gnc_module_module (void);
 %}
 
-typedef char gchar;
-typedef int gint;
+%import "base-typemaps.i"
 
 void            gnc_module_system_init(void);
 void            gnc_module_system_refresh(void);

@@ -49,31 +49,9 @@ gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 /* Default directories **********************************************/
 
-void gnc_init_default_directory (char **dirname);
-/** 
- * Extracts the directory part of the given 'filename' into the char
- * pointer variable '*dirname'. If the 'filename' is NULL or does not
- * contain any directory separator '/', then '*dirname' will be set to
- * NULL.
- * 
- * WATCH OUT: If '*dirname' (i.e. the underlying char pointer
- * variable) is non-NULL, then it will be free()'d. Make sure that you
- * have initialized it to NULL, or otherwise you will get a bogus
- * free() or a double-free() here. FIXME: This is probably not-so-good
- * behaviour and should be changed (2005-10-08, cstim).
- *
- * Again watch out: The caller takes ownership of the char buffer
- * '*dirname', i.e. the caller has to do a g_free(*dirname) when that
- * buffer is no longer in use.
- *
- * NOTE: We strongly recommend to use g_path_get_dirname() from glib
- * instead of this function. (There's one slight functional difference:
- * If filename is NULL or does not contain a separator,
- * g_path_get_dirname will return "." whereas this function here will
- * return NULL. 2006-03-02, cstim)
-*/
-void gnc_extract_directory (char **dirname, const char *filename);
-
+gchar *gnc_get_default_directory (const gchar *gconf_section);
+void gnc_set_default_directory (const gchar *gconf_section,
+				const gchar *directory);
 
 /* Engine enhancements & i18n ***************************************/
 QofBook * gnc_get_current_book (void);

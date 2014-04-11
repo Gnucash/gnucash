@@ -128,8 +128,8 @@
 
 ;; display an account name depending on the options the user has set
 (define (account-namestring account show-account-code show-account-name show-account-full-name)
-  ;;# on multi-line splits we can get an empty (#f) account
-  (if (not account)
+  ;;# on multi-line splits we can get an empty ('()) account
+  (if (null? account)
         (_ "Split")
         (string-append 
            ;; display account code?
@@ -418,7 +418,7 @@
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
          (account-type (xaccAccountGetType account))
-         (currency (if account
+         (currency (if (not (null? account))
                        (xaccAccountGetCommodity account)
                        (gnc-default-currency)))
 	 (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
@@ -923,7 +923,7 @@ Credit Card, and Income accounts")))))
                                 row-style account-types-to-reverse)
     (define (other-rows-driver split parent table used-columns i)
       (let ((current (xaccTransGetSplit parent i)))
-        (cond ((not current) #f)
+        (cond ((null? current) #f)
               ((equal? current split)
                (other-rows-driver split parent table used-columns (+ i 1)))
               (else (begin
@@ -1142,7 +1142,7 @@ Credit Card, and Income accounts")))))
                                   #f #f #f))
             (cons 'corresponding-acc-name
                                  (vector
-                                  (list SPLIT-CORR-ACCT-FULLNAME)
+                                  (list SPLIT-CORR-ACCT-NAME)
                                   split-same-corr-account-full-name-p 
                                   render-corresponding-account-subheading
                                   render-corresponding-account-subtotal))
@@ -1228,7 +1228,7 @@ Credit Card, and Income accounts")))))
 
 	  (if splits-ok?
 	      (let* ((txn (xaccSplitGetParent split))
-		     (splits (xaccTransGetSplits txn)))
+		     (splits (xaccTransGetSplitList txn)))
 
 		;; Walk through the list of splits.
 		;; if we reach the end, return #f

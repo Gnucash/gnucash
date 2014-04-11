@@ -26,7 +26,6 @@ EXTRA_DIST = \
   TRANSLATION_HOWTO \
   build-aix.txt \
   build-solaris.txt \
-  build-suse.txt \
   generic_objects.txt \
   gnome-hackers.txt \
   gnc-prices.1.in \

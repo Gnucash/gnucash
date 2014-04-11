@@ -58,6 +58,7 @@ const gchar *commodity_version_string = "2.0.0";
 #define cmdty_get_quotes     "cmdty:get_quotes"
 #define cmdty_quote_source   "cmdty:quote_source"
 #define cmdty_quote_tz       "cmdty:quote_tz"
+#define cmdty_slots          "cmdty:slots"
 
 xmlNodePtr
 gnc_commodity_dom_tree_create(const gnc_commodity *com)
@@ -66,8 +67,11 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     const char *string;
     xmlNodePtr ret;
     gboolean currency = gnc_commodity_is_iso(com);
+    xmlNodePtr kvpnode =
+      kvp_frame_to_dom_tree(cmdty_slots,
+			    qof_instance_get_slots(QOF_INSTANCE(com)));
 
-    if (currency && !gnc_commodity_get_quote_flag(com))
+    if (currency && !gnc_commodity_get_quote_flag(com) && !kvpnode)
       return NULL;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_commodity_string);
@@ -108,6 +112,10 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
       if (string)
 	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_tz, string));
     }
+
+    if (kvpnode)
+      xmlAddChild(ret, kvpnode);
+
     return ret;
 }
 
@@ -158,6 +166,12 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 	  source = gnc_quote_source_add_new(string, FALSE);
 	gnc_commodity_set_quote_source(com, source);
         xmlFree (string);
+    }
+    else if(safe_strcmp((char*)node->name, cmdty_slots) == 0)
+    {
+      /* We ignore the results here */
+      dom_tree_to_kvp_frame_given(node,
+				  qof_instance_get_slots(QOF_INSTANCE(com)));
     }
     else 
     {

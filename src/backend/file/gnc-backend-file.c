@@ -50,6 +50,7 @@
 #include "gnc-engine.h"
 
 #include "gnc-filepath-utils.h"
+#include "gnc-path.h"
 
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
@@ -83,7 +84,7 @@ static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
-#ifndef _WIN32
+#ifndef G_OS_WIN32
     char pathbuf[PATH_MAX];
     char *path = NULL;
 #endif
@@ -132,7 +133,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
      * provides a better long-term solution.
      */
 
-#ifndef _WIN32
+#ifndef G_OS_WIN32
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
@@ -183,12 +184,12 @@ gnc_file_be_get_file_lock (FileBackend *be)
 
     return TRUE;
 
-#else /* ifndef _WIN32 */
+#else /* ifndef G_OS_WIN32 */
     /* On windows, there is no NFS and the open(,O_CREAT | O_EXCL)
        is sufficient for locking. */
     be->linkfile = NULL;
     return TRUE;
-#endif /* ifndef _WIN32 */
+#endif /* ifndef G_OS_WIN32 */
 }
 
 /* ================================================================= */
@@ -1051,10 +1052,16 @@ g_module_check_init(GModule *module)
 {
 	QofBackendProvider *prov;
 #ifdef ENABLE_NLS
+	gchar *localedir = gnc_path_get_localedir ();
+	/* FIXME: It is unclear whether setlocale() is actually
+	   needed here (added in r11313). Some platforms might
+	   need it so that gettext works correctly in this
+	   GModule. We'll keep it for now. */
 	setlocale (LC_ALL, "");
-	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
+	bindtextdomain (GETTEXT_PACKAGE, localedir);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
+	g_free (localedir);
 #endif
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";

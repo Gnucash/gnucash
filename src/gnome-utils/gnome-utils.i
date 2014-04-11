@@ -9,7 +9,6 @@
 #include <gnc-amount-edit.h>
 #include <gnc-date-edit.h>
 #include <gnc-file.h>
-//#include <gnc-gconf-utils.h>
 #include <gnc-gnome-utils.h>
 #include <gnc-gui-query.h>
 #include <gnc-html.h>
@@ -24,18 +23,11 @@
 SCM scm_init_sw_gnome_utils_module (void);
 %}
 
-// Temporary SWIG<->G-wrap converters for engine types
-%typemap(in) gboolean "$1 = SCM_NFALSEP($input) ? TRUE : FALSE;"
-%typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
-
-// End of temporary typemaps.
-typedef char * URLType;
-typedef char gchar;
-
-//%include "gnc-main-window.h"
-%include "gnc-html.h"
+%import "base-typemaps.i"
 
 /* Parse the header file to generate wrappers */
+%include "gnc-html.h"
+
 
 GNCOptionWin * gnc_options_dialog_new(gchar *title);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
@@ -60,11 +52,7 @@ void
 gnc_info_dialog(GtkWidget *parent,
 		const char *format, ...);
 
-
 void gnc_add_scm_extension (SCM extension);
-//char * gnc_html_encode_string(const char * str);
-//char * gnc_build_url (const gchar * type, const gchar * location,
-//        const gchar * label);
 
 void gnc_set_busy_cursor (GtkWidget *w, gboolean update_now);
 void gnc_unset_busy_cursor (GtkWidget *w);

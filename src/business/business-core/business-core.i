@@ -20,21 +20,7 @@
 SCM scm_init_sw_business_core_module (void);
 %}
 
-// Temporary SWIG<->G-wrap converters for engine types
-%typemap(in) gboolean "$1 = SCM_NFALSEP($input) ? TRUE : FALSE;"
-%typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
-
-%typemap(in) Timespec "$1 = gnc_timepair2timespec($input);"
-%typemap(out) Timespec "$result = gnc_timespec2timepair($1);"
-
-%typemap(in) GUID "$1 = gnc_scm2guid($input);"
-%typemap(out) GUID "$result = gnc_guid2scm($1);"
-
-%typemap(in) gnc_numeric "$1 = gnc_scm_to_numeric($input);"
-%typemap(out) gnc_numeric "$result = gnc_numeric_to_scm($1);"
-
-// End of temporary typemaps.
-
+%import "base-typemaps.i"
 
 %rename(gncOwnerReturnGUID) gncOwnerRetGUID;
 
@@ -77,33 +63,14 @@ static GncEmployee * gncEmployeeLookupFlip(GUID g, QofBook *b)
 
 %}
 
-%typemap(out) EntryList * {
-  SCM list = SCM_EOL;
-  GList *node;
-
-  for (node = $1; node; node = node->next)
-    list = scm_cons(SWIG_NewPointerObj(node->data,
-        SWIGTYPE_p__gncEntry, 0), list);
-
-  $result = scm_reverse(list);
-}
-
-%typemap(out) AccountValueList * {
-  SCM list = SCM_EOL;
-  GList *node;
-
-  for (node = $1; node; node = node->next)
-    list = scm_cons(SWIG_NewPointerObj(node->data,
-        SWIGTYPE_p__gncAccountValue, 0), list);
-
-  $result = scm_reverse(list);
-}
+GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
+GLIST_HELPER_INOUT(AccountValueList, SWIGTYPE_p__gncAccountValue);
 
 %typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr($input);"
 %typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm($1);"
 
 
-/* Parse the header file to generate wrappers */
+/* Parse the header files to generate wrappers */
 %include <gncAddress.h>
 %include <gncBillTerm.h>
 %include <gncCustomer.h>

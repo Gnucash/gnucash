@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gtypes.h>
 #include "glib-compat.h"
 #include <math.h>
 #include <time.h>
@@ -977,7 +978,7 @@ yearly_sel_changed( GtkButton *b, gpointer d )
         tmptm->tm_mday = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
 
         /* FIXME: correct for
-           option_menu_selected_day > min(31,correct_days_in_month)
+           option_menu_selected_day > minn(31,correct_days_in_month)
            problem */
         while ( ! g_date_valid_dmy( tmptm->tm_mday,
                                     tmptm->tm_mon+1,
@@ -991,12 +992,12 @@ yearly_sel_changed( GtkButton *b, gpointer d )
         g_signal_emit_by_name( gf, "changed" );
 }
 
-static inline guint32 min( guint32 a, guint32 b )
+static inline guint32 minn( guint32 a, guint32 b )
 {
         return a > b ? b : a;
 }
 
-static inline guint32 max( guint32 a, guint32 b )
+static inline guint32 maxn( guint32 a, guint32 b )
 {
         return a > b ? a : b;
 }
@@ -1031,10 +1032,10 @@ freq_combo_changed( GtkComboBox *b, gpointer d )
                 tmpDate = mktime( tmpTm );
                 tmpTm = localtime( &tmpDate );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  min( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
+					  minn( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  max( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
+					  maxn( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
         }
         break;
         case UIFREQ_MONTHLY:

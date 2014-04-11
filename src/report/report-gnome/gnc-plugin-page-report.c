@@ -319,6 +319,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         char * url_location = NULL;
         char * url_label = NULL;
 
+	ENTER("page %p", page);
+
         report = GNC_PLUGIN_PAGE_REPORT(page);
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
@@ -347,7 +349,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
         type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
         DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
-               id_name, child_name, type, url_location, url_label );
+               id_name, child_name ? child_name : "(null)",
+               type ? type : "(null)", url_location ? url_location : "(null)",
+               url_label ? url_label : "(null)" );
 
         gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
         gnc_html_show_url(priv->html, type, url_location, url_label, 0);
@@ -357,6 +361,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 			 G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
   
         gtk_widget_show_all( GTK_WIDGET(priv->container) );
+
+	LEAVE("container %p", priv->container);
 
         return GTK_WIDGET( priv->container );
 }
@@ -431,7 +437,8 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         SCM  inst_report;
 
         ENTER( "load_cb: type=[%s], location=[%s], label=[%s]",
-               type, location, label );
+               type ? type : "(null)", location ? location : "(null)",
+               label ? label : "(null)" );
 
         /* we get this callback if a new report is requested to be loaded OR
          * if any URL is clicked.  If an options URL is clicked, we want to
@@ -834,7 +841,8 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
   /* Is this a redundant call? */
   old_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
 						"Report name", NULL);
-  DEBUG("Comparing old name '%s' to new name '%s'", old_name, name);
+  DEBUG("Comparing old name '%s' to new name '%s'",
+	old_name ? old_name : "(null)", name);
   if (old_name && (strcmp(old_name, name) == 0)) {
     LEAVE("no change");
     return;

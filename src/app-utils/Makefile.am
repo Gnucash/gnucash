@@ -1,10 +1,10 @@
 SUBDIRS = . test
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/core-utils \
@@ -76,9 +76,9 @@ libgncmod_app_utils_la_LIBADD = \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
-swig-app-utils.c: app-utils.i ${gncinclude_HEADERS}
+swig-app-utils.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src/engine -I${top_srcdir}/lib/libqof/qof -o $@ $<
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash

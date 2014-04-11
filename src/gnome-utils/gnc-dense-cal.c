@@ -166,15 +166,16 @@ static GtkWidgetClass *parent_class = NULL;
  * locale. (i18n'd version of the above static character array.) */
 static const gchar *month_name(int mon) 
 {
-    static gchar buf[MONTH_NAME_BUFSIZE];
-    struct tm my_tm;
-    int i;
+        static gchar buf[MONTH_NAME_BUFSIZE];
+        GDate *date;
 
-    memset( buf, 0, MONTH_NAME_BUFSIZE );
-    memset( &my_tm, 0, sizeof( struct tm ) );
-    my_tm.tm_mon = mon;
-    i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%b", &my_tm);
-    return buf;
+        memset(buf, 0, MONTH_NAME_BUFSIZE);
+        date = g_date_new();
+        g_date_set_month(date, mon);
+        g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", date);
+        g_date_free(date);
+
+        return buf;
 }
 /* FIXME: i18n 
    static const gchar *dayLabels[7] = {

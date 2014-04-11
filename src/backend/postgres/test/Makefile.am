@@ -14,7 +14,7 @@ TESTS_ENVIRONMENT := \
   TEST_DB_SOCKET_DIR=`pwd`/gnc_test_db_sock \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-load-backend \
   test-db \
   test-escape \
@@ -25,8 +25,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-        -lltdl \
-	-lpq
+        -lpq
 
 test_db_SOURCES = \
   ${top_srcdir}/src/backend/postgres/PostgresBackend.c \

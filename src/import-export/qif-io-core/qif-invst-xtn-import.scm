@@ -156,7 +156,7 @@
                     gnc-acct-info acct-name acct-type))
              (split (xaccMallocSplit (gnc-get-current-book))))
         ;; make the account if necessary 
-        (if (not acct)
+        (if (or (not acct) (null? acct))
             (begin 
               (set! acct (xaccMallocAccount (gnc-get-current-book)))
               (xaccAccountSetName acct acct-name)
@@ -170,9 +170,9 @@
         
         ;; add it to the account and the transaction
         (xaccAccountBeginEdit acct)
-        (xaccSplitSetAccount acct split)
+        (xaccSplitSetAccount split acct)
         (xaccAccountCommitEdit acct)
-        (xaccTransAppendSplit gnc-xtn split)
+        (xaccSplitSetParent split gnc-xtn)
         split))
 
     (define (lookup-balance acct-info)
@@ -194,7 +194,7 @@
       (apply xaccTransSetDate gnc-xtn date))
     
     (xaccTransSetNum gnc-xtn (qif-io:invst-xtn-action qif-xtn))
-    (xaccTransactionSetDescription gnc-xtn (qif-io:invst-xtn-payee qif-xtn))
+    (xaccTransSetDescription gnc-xtn (qif-io:invst-xtn-payee qif-xtn))
     
     ;; get the relevant info, including 'near-acct' and 'far-acct', 
     ;; the accounts affected by the transaction

@@ -2,6 +2,7 @@ pkglib_LTLIBRARIES = libgncmod-business-utils.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \

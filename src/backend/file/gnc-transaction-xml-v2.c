@@ -444,7 +444,7 @@ set_tran_date(xmlNodePtr node, Transaction *trn,
     return TRUE;
 }
 
-static inline gboolean
+static gboolean
 trn_id_handler(xmlNodePtr node, gpointer trans_pdata)
 {
     struct trans_pdata *pdata = trans_pdata;

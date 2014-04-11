@@ -188,7 +188,8 @@ balance at a given time"))
 
         (show-fullname? (get-option gnc:pagename-display optname-fullname))
         (show-total? (get-option gnc:pagename-display optname-show-total))
-        (max-slices (get-option gnc:pagename-display optname-slices))
+        (max-slices (inexact->exact
+		     (get-option gnc:pagename-display optname-slices)))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))

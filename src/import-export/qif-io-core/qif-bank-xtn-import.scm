@@ -56,7 +56,7 @@
                     gnc-acct-info acct-name acct-type))
              (split (xaccMallocSplit (gnc-get-current-book))))
         ;; make the account if necessary 
-        (if (not acct)
+        (if (or (not acct) (null? acct))
             (begin 
               (set! acct (xaccMallocAccount (gnc-get-current-book)))
               (xaccAccountBeginEdit acct)
@@ -72,9 +72,9 @@
         
         ;; add it to the account and the transaction
         (xaccAccountBeginEdit acct)
-        (xaccSplitSetAccount acct split)
+        (xaccSplitSetAccount split acct)
         (xaccAccountCommitEdit acct)
-        (xaccTransAppendSplit gnc-xtn split)
+        (xaccSplitSetParent split gnc-xtn)
         split))
 
     (xaccTransBeginEdit gnc-xtn)
@@ -87,7 +87,7 @@
       (apply xaccTransSetDate gnc-xtn date))
     
     (xaccTransSetNum gnc-xtn (qif-io:bank-xtn-number qif-xtn))
-    (xaccTransactionSetDescription gnc-xtn (qif-io:bank-xtn-payee qif-xtn))
+    (xaccTransSetDescription gnc-xtn (qif-io:bank-xtn-payee qif-xtn))
     
     ;; create the near split (the one that goes to the source-acct)
     (let* ((near-acct-name (qif-io:bank-xtn-source-acct qif-xtn)))

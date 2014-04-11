@@ -23,13 +23,17 @@ gnc_kvp_value_ptr_p(SCM arg)
 KvpValue *
 gnc_scm_to_kvp_value_ptr(SCM val)
 {
-    if(SCM_EXACTP (val) && gnc_gh_gint64_p(val))
+    if(SCM_NUMBERP(val))
     {
-        return kvp_value_new_gint64(gnc_scm_to_gint64(val));
-    }
-    else if(SCM_NUMBERP(val))
-    {
-        return kvp_value_new_double(scm_num2dbl(val, __FUNCTION__));
+        /* in guile 1.8 (exact? ) only works on numbers */
+        if(SCM_EXACTP (val) && gnc_gh_gint64_p(val))
+        {
+            return kvp_value_new_gint64(gnc_scm_to_gint64(val));
+        }
+        else 
+        {
+            return kvp_value_new_double(scm_num2dbl(val, __FUNCTION__));
+        }
     }
     else if(gnc_numeric_p(val))
     {

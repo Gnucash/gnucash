@@ -47,6 +47,7 @@ endif
 MAINTAINERCLEANFILES = swig-runtime.h
 
 EXTRA_DIST = \
+  base-typemaps.i \
   README.modules \
   gnc-test-env \
   valgrind-gnucash.supp \

@@ -660,7 +660,7 @@
                    (to-special #f)	; clear special-splits-period
                    (from-special #f)
                    (childrens-output 
-                    (if (not children)
+                    (if (null? children)
                         (let* ((splits-period (txf-special-splits-period
                                                account from-value to-value)))
                           (if splits-period
@@ -736,7 +736,7 @@
                         (if tax-mode?
                             (list level-x-output
                                   childrens-output)
-                            (if (not children) ; swap for txf special splt
+                            (if (null? children) ; swap for txf special splt
                                 (list childrens-output level-x-output)
                                 (list level-x-output childrens-output)))))))
             ;; Ignore

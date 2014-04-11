@@ -27,12 +27,11 @@
 (export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash process))
-(use-modules (www main))
-(use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
 
+(gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
 (gnc:module-load "gnucash/app-utils" 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

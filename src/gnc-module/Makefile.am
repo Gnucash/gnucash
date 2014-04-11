@@ -12,9 +12,9 @@ libgncmodule_la_SOURCES = gnc-module.c swig-gnc-module.c
 
 libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
- ${top_builddir}/lib/libc/libc-missing.la \
-  ${GLIB_LIBS} \
-  -lltdl
+  ${top_builddir}/lib/libc/libc-missing.la \
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm
@@ -27,8 +27,9 @@ gncinclude_HEADERS = \
 noinst_DATA = .scm-links
 
 if BUILDING_FROM_SVN
-swig-gnc-module.c: gnc-module.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+swig-gnc-module.c: gnc-module.i ${top_srcdir}/src/base-typemaps.i
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 EXTRA_DIST = \

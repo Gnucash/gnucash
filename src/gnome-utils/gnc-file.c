@@ -40,7 +40,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
 #include "TransLog.h"
@@ -129,14 +128,9 @@ gnc_file_dialog (const char * title,
     gtk_dialog_add_button(GTK_DIALOG(file_box),
 			  okbutton, GTK_RESPONSE_ACCEPT);
 
-  if (starting_dir) {
-    gchar *dir_name;
-
-    /* Ensure we have a directory name.  The set function fails otherwise. */
-    dir_name = g_path_get_dirname(starting_dir);
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box), dir_name);
-    g_free(dir_name);
-  }
+  if (starting_dir)
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box),
+					starting_dir);
 
   gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
   /*
@@ -180,7 +174,7 @@ gnc_file_dialog (const char * title,
     file_name = g_strdup(internal_name);
   }
   gtk_widget_destroy(GTK_WIDGET(file_box));
-  LEAVE("%s", file_name);
+  LEAVE("%s", file_name ? file_name : "(null)");
   return file_name;
 }
 
@@ -877,21 +871,17 @@ gnc_file_export_file(const char * newfile)
   QofBackendError io_err = ERR_BACKEND_NO_ERR;
   gchar *default_dir;
 
-  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
-  if (default_dir == NULL)
-    gnc_init_default_directory(&default_dir);
-
   if (!newfile) {
+    default_dir = gnc_get_default_directory (GCONF_SECTION);
     newfile =  gnc_file_dialog (_("Export"), NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
     g_free(default_dir);
-    default_dir = NULL;
     if (!newfile)
       return;
   }
 
   /* Remember the directory as the default. */
-  gnc_extract_directory(&default_dir, newfile);
-  gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
+  default_dir = g_path_get_dirname(newfile);
+  gnc_set_default_directory (GCONF_SECTION, default_dir);
   g_free(default_dir);
   
   qof_event_suspend();
@@ -1020,15 +1010,14 @@ gnc_file_save_as (void)
 
   last = gnc_history_get_last();
   if (last) {
-    gnc_extract_directory(&default_dir, last);
+    default_dir = g_path_get_dirname(last);
     g_free(last);
   } else {
-    gnc_init_default_directory(&default_dir);
+    default_dir = gnc_get_default_directory(GCONF_SECTION);
   }
   filename = gnc_file_dialog (_("Save"), NULL, default_dir, 
-		  GNC_FILE_DIALOG_SAVE);
-  if (default_dir)
-    free(default_dir);
+			      GNC_FILE_DIALOG_SAVE);
+  g_free(default_dir);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current
@@ -1168,5 +1157,6 @@ gnc_file_set_shutdown_callback (GNCShutdownCB cb)
 gboolean
 gnc_file_save_in_progress (void)
 {
-  return (save_in_progress > 0);
+    QofSession *session = gnc_get_current_session();
+    return (qof_session_save_in_progress(session) || save_in_progress > 0);
 }

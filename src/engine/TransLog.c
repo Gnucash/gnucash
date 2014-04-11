@@ -50,7 +50,7 @@
  *       No, using a perl script to analyze a file that's supposed to
  *       be human readable is not a contradication in terms -- that's 
  *       exactly the point.
- * (2.b) Use tabs as a human freindly field separator; its also a 
+ * (2.b) Use tabs as a human friendly field separator; its also a 
  *       character that does not (should not) appear naturally anywhere 
  *       in the data, as it serves no formatting purpose in the current 
  *       GUI design.  (hack alert -- this is not currently tested for 

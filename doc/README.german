@@ -45,7 +45,8 @@ Benötigte Pakete:
 -----------------
 
 Siehe README.dependencies; im wesentlichen alle
-Gnome2-Entwickler-Pakete sowie guile, slib und g-wrap.
+Gnome2-Entwickler-Pakete sowie guile, slib und swig. (g-wrap wurde
+mit gnucash-2.2.0 durch swig ersetzt und wird nicht mehr benutzt.)
 
 Für die HBCI-Funktionen muss außerdem das Paket aqbanking
 installiert sein, welches noch ein Paket namens gwenhywfar
@@ -72,9 +73,7 @@ Siehe auch http://www.linuxwiki.de/GnuCash/SourceInstall
 Nur beim Uebersetzen von GnuCash braucht man zusaetzlich die folgenden 
 Pakete: 
 
-libtool -- Um unsere interne Version von g-wrap zu uebersetzen, die 
-           unsere guile-C 'wrappers' enthaelt.
-           Erhaeltlich bei ftp://ftp.gnu.org/gnu.
+libtool -- Erhaeltlich bei ftp://ftp.gnu.org/gnu.
            RPM's und deb's sind in ihrer Betriebssystem-Distribution.
 
 Normalerweise wird GnuCash wie folgt übersetzt und installiert:

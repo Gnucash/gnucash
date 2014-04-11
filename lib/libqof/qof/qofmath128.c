@@ -329,10 +329,13 @@ add128 (qofint128 a, qofint128 b)
 
 
 #ifdef TEST_128_BIT_MULT
+
 static void pr (gint64 a, gint64 b)
 {
    qofint128 prod = mult128 (a,b);
-   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " (0x%llx %llx) %hd\n",
+   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " = %"
+	   G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " (0x%"
+	   G_GINT64_MODIFIER "x %" G_GINT64_MODIFIER "x) %hd\n",
 	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.isbig);
 }
 
@@ -341,15 +344,24 @@ static void prd (gint64 a, gint64 b, gint64 c)
    qofint128 prod = mult128 (a,b);
    qofint128 quot = div128 (prod, c);
    gint64 rem = rem128 (prod, c);
-   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " + %" G_GINT64_FORMAT " (0x%llx %llx) %hd\n",
+   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT
+	   " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " + %"
+	   G_GINT64_FORMAT " (0x%" G_GINT64_MODIFIER "x %"
+	   G_GINT64_MODIFIER "x) %hd\n",
 	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.isbig);
 }
 
 int main ()
 {
+  gint64 x;
+  qofint128 n;
+  gint64 d;
+  qofint128 quot;
+  int i;
+
   pr (2,2);
 
-  gint64 x = 1<<30;
+  x = 1<<30;
   x <<= 2;
 
   pr (x,x);
@@ -366,7 +378,7 @@ int main ()
   pr (x,x);
   pr (x,-x);
 
-  pr (1000000, 10000000000000);
+  pr (1000000, G_GINT64_CONSTANT(10000000000000));
 
   prd (x,x,2);
   prd (x,x,3);
@@ -384,17 +396,16 @@ int main ()
   prd (1111,x,11);
 
   /* Really test division */
-  qofint128 n;
   n.hi = 0xdd91;
   n.lo = 0x6c5abefbb9e13480ULL;
 
-  gint64 d = 0x2ae79964d3ae1d04ULL;
+  d = 0x2ae79964d3ae1d04ULL;
   
-  int i;
   for (i=0; i<20; i++) {
 
-  qofint128 quot = div128 (n, d);
-  printf ("%d result = %llx %llx\n", i, quot.hi, quot.lo);
+  quot = div128 (n, d);
+  printf ("%d result = %" G_GINT64_MODIFIER "x %" G_GINT64_MODIFIER "x\n",
+	  i, quot.hi, quot.lo);
     d >>=1;
     n = shift128 (n);
   }
