@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Activos fijos
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Cuentas para gestionar varios activos fijos
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deberá seleccionar esta cuenta si tiene varios activos fijos
+      (casa, vehículo, casa de vacaciones, otros activos).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo</act:name>
+  <act:id type="new">64b6276c060185131cecbd1ac6218440</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo fijo</act:name>
+  <act:id type="new">9b171f77000bf68dd1ebbaf58336656d</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo fijo</act:description>
+  <act:parent type="new">64b6276c060185131cecbd1ac6218440</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Casa</act:name>
+  <act:id type="new">9205ad6b6482903e5a696602d491c8f5</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Casa</act:description>
+  <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otros activos</act:name>
+  <act:id type="new">ad3b239297277c9ef3840c0433cecb18</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otros activos</act:description>
+  <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vehículo</act:name>
+  <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Vehículo</act:description>
+  <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

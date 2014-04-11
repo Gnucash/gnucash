@@ -11,7 +11,8 @@
 ;;   http://www.xe.com/iso4217.htm
 ;;   http://www.thefinancials.com/vortex/CurrencyFormats.html
 
-( "Afghanistan Afghani" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 )
+( "Afghanistan Afghani (old)" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 ) ;; through 2003-01-02
+( "Afghanistan Afghani" "afghani" "afghani" "ISO4217" "AFN" "971" 1 1 ) ;; from 2002-10-07
 ( "Albanian Lek" "lek" "qindarka" "ISO4217" "ALL" "008" 100 100 )
 ( "Algerian Dinar" "dinar" "centime"  "ISO4217" "DZD" "012" 100 100 )
 ( "Andorran Franc" "franc" "centime" "ISO4217" "ADF" "950" 100 100 ) ;; 1/1 French Franc
@@ -203,6 +204,9 @@
 ( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100)
 ( "Zambian Kwacha" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 )
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWD" "716" 100 100 )
+
+( "Special Drawing Rights" "SDR" "SDR" "ISO4217" "XDR" "960" 1 1 ) ;; International Monetary Fund
+( "No currency" "" "" "ISO4217" "XXX" "999" 1 1000000 )
 
 ( "Gold" "ounce" "ounce" "ISO4217" "XAU" "959" 1 1000000 )
 ( "Palladium" "ounce" "ounce" "ISO4217" "XPD" "964" 1 1000000 )

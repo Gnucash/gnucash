@@ -37,15 +37,15 @@
 #     if Free: name of free-ing fn)
 
 {
-   libguile.so.12(Cond)
+   libguile.so(Cond)
    Memcheck:Cond
-   obj:/usr/lib/libguile.so.12.3.0
+   obj:*libguile.so.*
 }
 
 {
-   libguile.so.12(Value4)
+   libguile.so(Value4)
    Memcheck:Value4
-   obj:/usr/lib/libguile.so.12.3.0
+   obj:*libguile.so*
 }
 
 {
@@ -57,21 +57,30 @@
 }
 
 {
-   <insert a suppression name here>
+   write(buf) Param
    Memcheck:Param
    write(buf)
-   fun:__write_nocancel
-   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/lib/libpthread-2.5.so
    fun:_X11TransWrite
-   obj:/usr/X11R6/lib/libX11.so.6.2
 }
 
 {
    <insert a suppression name here>
    Memcheck:Param
    writev(vector[...])
+   fun:do_writev
    fun:writev
-   obj:/usr/lib/libORBit-2.so.0.0.0
+   obj:*libORBit-2.so*
+   fun:link_connection_writev
+   fun:giop_send_buffer_write
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Param
+   writev(vector[...])
+   fun:do_writev
+   obj:*libORBit-2.so*
    fun:link_connection_writev
    fun:giop_send_buffer_write
 }

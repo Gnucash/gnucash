@@ -360,7 +360,7 @@ void qof_query_set_max_results (QofQuery *q, int n);
  * implementation -- logical equivalences between different
  * and/or trees are ignored. 
  */
-gboolean qof_query_equal (QofQuery *q1, QofQuery *q2);
+gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2);
 
 /** Log the Query 
  *
@@ -371,7 +371,7 @@ gboolean qof_query_equal (QofQuery *q1, QofQuery *q2);
 void qof_query_print (QofQuery *query);
 
 /** Return the type of data we're querying for */
-QofIdType qof_query_get_search_for (QofQuery *q);
+QofIdType qof_query_get_search_for (const QofQuery *q);
 
 /** Return the list of books we're using */
 GList * qof_query_get_books (QofQuery *q);

@@ -44,6 +44,7 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
   { "ATS",  13.7603 },  /* austrian schilling */
   { "BEF",  40.3399 },  /* belgian franc */
   { "BFR",  40.3399 },  /* belgian franc */
+  { "CYP",  .585274 },  /* cyprus pound */
   { "DEM",  1.95583 },  /* german mark */
   { "DM",   1.95583 },  /* german mark */
   { "ESC",  200.482 },  /* portugese escudo */
@@ -62,11 +63,13 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
   { "LFR",  40.3399 },  /* luxembourg franc */
   { "LIT",  1936.27 },  /* italian lira */
   { "LUF",  40.3399 },  /* luxembourg franc */
+  { "MTL",  .429300 },  /* maltese lira */
   { "NLG",  2.20371 },  /* netherland gulden */
   { "PTA",  166.386 },  /* spanish peseta */
   { "PTE",  200.482 },  /* portugese escudo */
   { "S",    13.7603 },  /* austrian schilling */
-  { "SCH",  13.7603 }   /* austrian schilling */
+  { "SCH",  13.7603 },  /* austrian schilling */
+  { "SIT",  239.640 }   /* slovenian tolar */
 };
 
 static int 

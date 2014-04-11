@@ -385,7 +385,7 @@
                  accounts 
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
-                 gnc-reverse-balance))
+                 (lambda (x) #f)))
 	  (gnc:report-percent-done 50)
 
           (set! startbal 
@@ -528,6 +528,7 @@
 (gnc:define-report
  'version 1
  'name reportname
+ 'report-guid "d5adcc61c62e4b8684dd8907448d7900"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator
  'renderer renderer)

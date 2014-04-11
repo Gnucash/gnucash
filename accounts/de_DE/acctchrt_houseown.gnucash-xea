@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Hausbesitz
     </gnc-act:title>
     <gnc-act:short-description>
-      Konten für Hausbesitzer/innen
+      Konten fÃ¼r Hausbesitzer/innen
     </gnc-act:short-description>
     <gnc-act:long-description>
-      Konten für Hausbesitzer/innen
+      Konten fÃ¼r Hausbesitzer/innen
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -158,7 +158,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Ausgaben für Wohnung/Haus</act:description>
+  <act:description>Ausgaben fÃ¼r Wohnung/Haus</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -175,7 +175,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Zahlungen für Bausparvertrag</act:description>
+  <act:description>Zahlungen fÃ¼r Bausparvertrag</act:description>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -88,8 +88,8 @@ Source: "@-qtbindir-@\QtXml4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "@-qtbindir-@\QtSql4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "@-qtbindir-@\QtNetwork4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 
-;; The translations (no idea why mingw installs them in prefix/lib/locale)
-;Source: "@prefix@\..\dist\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+;; The translations
+;Source: "@prefix@\..\dist\share\locale\*"; DestDir: "{app}\share\locale"; Flags: recursesubdirs; Components: translations
 ;
 ;; The account templates
 ;Source: "@prefix@\..\dist\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
@@ -135,7 +135,7 @@ Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "i
 Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "wizarddir"; ValueData: "{app}\lib\aqbanking\plugins\16\wizards"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "pkgdatadir"; ValueData: "{app}\share\aqbanking"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
-Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\lib\locale"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "xmldatadir"; ValueData: "{app}\share\aqhbci\xml"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "cfgmoduledir"; ValueData: "{app}\lib\aqbanking\plugins\16\frontends\qbanking\cfgmodules"; Flags: uninsdeletevalue
 
@@ -184,7 +184,8 @@ begin
 
   { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
   FileName := appdir + '\bin\gnucash.bat' ;
-  FileString := 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
+  FileString := 'setlocal'#13#10 ;
+  FileString := FileString + 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
   FileString := FileString + 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
 
   FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
@@ -192,7 +193,7 @@ begin
   FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
   FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
   FileString := FileString + 'set QOF_LIB_DIR=' + pkglibdir + ''#13#10 ;
-  FileString := FileString + 'start gnucash-bin'#13#10 ;
+  FileString := FileString + 'start gnucash-bin %*'#13#10 ;
 
   { Save the final file }
   Res := SaveStringToFile(FileName, FileString, False);
@@ -214,6 +215,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
+Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 ;; The following language files are available as well, in alphabetical
 ;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
@@ -255,6 +257,7 @@ LanguageCodePage=1252
 de.LanguageCodePage=1252
 el.LanguageCodePage=1253
 fr.LanguageCodePage=1252
+pt_BR.LanguageCodePage=1252
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;
@@ -336,5 +339,32 @@ el.IconName_InstallFQ=Εγκατάσταση λήψης τιμών (online)
 el.IconComment_InstallFQ=Εγκατάσταση του perl module Finance-Quote για λήψη τιμών online.  Απαιτεί ActivePerl 5.8
 el.IconName_Uninstall=Απεγκατάσταση GnuCash
 el.IconComment_Uninstall=Απεγκατάσταση του διαχειριστή οικονομικών GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Brazilian Portuguese translation
+
+pt_BR.FullInstall=Instalaηγo Completa
+pt_BR.CustomInstall=Instalaηγo Personalizada
+pt_BR.CreateDesktopIcon=Criar um νcone na Αrea de Trabalho
+pt_BR.CreateMenuLink=Criar um link no menu Iniciar
+pt_BR.RunPrg=Executar o GnuCash agora
+pt_BR.AdditionalIcons=Criar estes νcones:
+pt_BR.StatusMsgFirewall=Instalando as regras de firewall do Windows...
+
+pt_BR.MainFiles=Programa GnuCash
+pt_BR.TranslFiles=Traduηγo
+pt_BR.TemplFiles=Modelos de Conta
+
+pt_BR.IconComment_GnuCash=Gerenciador Financeiro Livre GnuCash
+pt_BR.IconName_README=Mostrar LEIA-ME (README)
+pt_BR.IconComment_README=Mostra o arquivo LEIA-ME (README)
+pt_BR.IconFilename_README=LEIA-ME.win32-bin.txt
+pt_BR.IconName_FAQ=Perguntas Freqόentes (online, inglκs)
+pt_BR.IconName_Bugzilla=Relatar um erro (online, inglκs)
+pt_BR.IconName_InstallFQ=Instalar a Consulta de Preηos Online
+pt_BR.IconComment_InstallFQ=Instala o mσdulo perl Finance-Quote, necessαrio para a busca de preηos online. Requer ActivePerl 5.8.
+pt_BR.IconName_Uninstall=Desinstalar o GnuCash
+pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;

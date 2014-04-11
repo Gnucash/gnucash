@@ -171,7 +171,10 @@
    (gnc:make-multichoice-option
     pagename optname
     sort-tag (N_ "The source of price information") default
-    (list (vector 'weighted-average 
+    (list (vector 'average-cost
+		  (N_ "Average Cost")
+		  (N_ "The volume-weighted average cost of purchases"))
+          (vector 'weighted-average 
 		  (N_ "Weighted Average")
 		  (N_ "The weighted average of all currency transactions of the past"))
 	  (vector 'pricedb-latest 

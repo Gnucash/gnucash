@@ -108,6 +108,9 @@ struct sr_info
   char *credit_str;
   char *tdebit_str;
   char *tcredit_str;
+
+  /* true if the account separator has changed */
+  gboolean separator_changed;
 };
 
 

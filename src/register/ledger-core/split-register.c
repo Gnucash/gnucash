@@ -723,7 +723,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != NULL)
       result = gnc_verify_dialog (gnc_split_register_get_parent (reg),
-				  FALSE, message);
+				  FALSE, "%s", message);
     else
       result = TRUE;
 
@@ -759,7 +759,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != blank_split)
       result = gnc_verify_dialog(gnc_split_register_get_parent(reg),
-				 FALSE, message);
+				 FALSE, "%s", message);
     else
       result = TRUE;
 
@@ -1400,7 +1400,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    g_assert(xaccTransIsOpen(trans));
 
    /* If we are committing the blank split, add it to the account now */
-   if (trans == blank_trans)
+   if (split == blank_split && !info->blank_split_edited)
    {
      account = gnc_split_register_get_default_account(reg);
      if (account)
@@ -1507,6 +1507,8 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
 
   /* Find the account */
   account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
+  if (!account)
+	  account = gnc_account_lookup_by_code (gnc_get_current_root_account (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */
@@ -1519,14 +1521,14 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     account = gnc_ui_new_accounts_from_name_window (name);
     if (!account)
       return NULL;
-    *refresh = TRUE;
-
-    /* Now have a new account. Update the cell with the name as created. */
-    fullname = xaccAccountGetFullName (account);
-    gnc_combo_cell_set_value (cell, fullname);
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    g_free (fullname);
   }
+
+  /* Now have the account. Update the cell with the name as created. */
+  *refresh = TRUE;
+  fullname = xaccAccountGetFullName (account);
+  gnc_combo_cell_set_value (cell, fullname);
+  gnc_basic_cell_set_changed (&cell->cell, TRUE);
+  g_free (fullname);
 
   /* See if the account (either old or new) is a placeholder. */
   if (xaccAccountGetPlaceholder (account)) {
@@ -2149,6 +2151,7 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
   SplitRegister * reg = user_data;
   SRInfo *info;
 
+  g_return_if_fail(entry && entry->key);
   if (reg == NULL)
     return;
 
@@ -2156,16 +2159,23 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
   if (!info)
     return;
 
-  /* Release current strings. Will be reloaded at next reference. */
-  g_free (info->debit_str);
-  g_free (info->tdebit_str);
-  g_free (info->credit_str);
-  g_free (info->tcredit_str);
+  if (g_str_has_suffix(entry->key, KEY_ACCOUNTING_LABELS)) {
+    /* Release current strings. Will be reloaded at next reference. */
+    g_free (info->debit_str);
+    g_free (info->tdebit_str);
+    g_free (info->credit_str);
+    g_free (info->tcredit_str);
 
-  info->debit_str = NULL;
-  info->tdebit_str = NULL;
-  info->credit_str = NULL;
-  info->tcredit_str = NULL;
+    info->debit_str = NULL;
+    info->tdebit_str = NULL;
+    info->credit_str = NULL;
+    info->tcredit_str = NULL;
+
+  } else if (g_str_has_suffix(entry->key, KEY_ACCOUNT_SEPARATOR)) {
+    info->separator_changed = TRUE;
+  } else {
+    g_warning("split_register_gconf_changed: Unknown gconf key %s", entry->key);
+  }
 }
 
 static void 
@@ -2182,6 +2192,9 @@ gnc_split_register_init (SplitRegister *reg,
 
   /* Register 'destroy' callback */
   gnc_gconf_general_register_cb(KEY_ACCOUNTING_LABELS,
+				split_register_gconf_changed,
+				reg);
+  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
 				split_register_gconf_changed,
 				reg);
 
@@ -2413,6 +2426,9 @@ gnc_split_register_destroy (SplitRegister *reg)
     return;
 
   gnc_gconf_general_remove_cb(KEY_ACCOUNTING_LABELS,
+			      split_register_gconf_changed,
+			      reg);
+  gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
 			      split_register_gconf_changed,
 			      reg);
   gnc_split_register_cleanup (reg);

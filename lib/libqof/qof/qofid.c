@@ -260,11 +260,11 @@ qof_collection_lookup_entity (const QofCollection *col, const GUID * guid)
 }
 
 QofCollection *
-qof_collection_from_glist (QofIdType type, GList *glist)
+qof_collection_from_glist (QofIdType type, const GList *glist)
 {
 	QofCollection *coll;
 	QofInstance *ent;
-	GList *list;
+	const GList *list;
 
 	coll = qof_collection_new(type);
 	for(list = glist; list != NULL; list = list->next)

@@ -124,9 +124,12 @@ _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 {
         FindSelectionData *to_find = (FindSelectionData*)data;
         gchar *iterStr;
+        gboolean found;
 
         gtk_tree_model_get(model, iter, 0, &iterStr, -1);
-        if (safe_strcmp(to_find->string_to_find, iterStr) == 0)
+        found = safe_strcmp(to_find->string_to_find, iterStr) == 0;
+        g_free(iterStr);
+        if (found)
         {
                 to_find->found_path = gtk_tree_path_copy(path);
                 return TRUE;
@@ -283,7 +286,7 @@ gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
                                        gnc_item_list_signals[ACTIVATE_ITEM],
                                        0, 
                                        string);
-
+                        g_free(string);
                         return TRUE;
                 default:
                         return FALSE;
@@ -313,6 +316,7 @@ gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
                                        gnc_item_list_signals[ACTIVATE_ITEM], 
                                        0, 
                                        string);
+                        g_free(string);
                         return TRUE;
 
 		case GDK_Page_Up:

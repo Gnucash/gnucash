@@ -126,7 +126,7 @@ void qof_event_gen (QofInstance *entity, QofEventId event_type,
 /** \brief  Suspend all engine events.
  *
  *    This function may be called multiple times. To resume event generation,
- *   an equal number of calls to gnc_engine_resume_events
+ *   an equal number of calls to qof_event_resume
  *   must be made.
  */
 void qof_event_suspend (void);

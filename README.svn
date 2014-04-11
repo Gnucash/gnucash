@@ -1,4 +1,4 @@
-This file contains guidelines for using Gnucash from Subversion.
+This file contains guidelines for using GnuCash from Subversion.
 They have been adapted from the guidelines for gnome-libs by
 Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
@@ -47,21 +47,13 @@ When making changes to GnuCash and trying to commit to the repository:
 
    Since you want other people to review your code before it goes in,
    you can submit your changes as a patch to gnucash-devel@gnucash.org.
-   See README.patches for details.
+   See README for details.
 
    If you are making changes to gnucash SVN, you should be subscribed
    to gnucash-devel@gnucash.org and to gnucash-changes@gnucash.org.
    (Subscription address: http://www.gnucash.org/en/lists.phtml)
    gnucash-devel@gnucash.org is a good place to ask about intended
    changes.
-
- + There must be a ChangeLog entry for every commit. If you discover that
-   you only committed half the files you meant to and need to fix that
-   up you do not need a new ChangeLog entry.  But in general, ChangeLog
-   entries are mandatory. Changes with out ChangeLog entries will be
-   reverted.
-
- + When you commit, use your ChangeLog entry as the log message.
 
  + You must not break the build! Never check in changes that do not
    compile, install or run. Just because your local tree compiles
@@ -84,12 +76,6 @@ When making changes to GnuCash and trying to commit to the repository:
    changes. Please see the SVN info documentation to see how to create
    a branch. Also, please inform the gnucash-devel-list about what you
    are going to do.
-
- + The ChangeLog entries should preferably match in date format with
-   the existing entries. You can set how emacs does this by using
-   customize mode:
-
-   - M-x customize
 
  + When code is added from new developers, add them to AUTHORS and
    to doc/sgml/C/xacc-about.sgml.

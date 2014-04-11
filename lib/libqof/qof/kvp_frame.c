@@ -129,7 +129,7 @@ kvp_frame_delete(KvpFrame * frame)
 }
 
 gboolean
-kvp_frame_is_empty(KvpFrame * frame) 
+kvp_frame_is_empty(const KvpFrame * frame) 
 {
   if (!frame) return TRUE;
   if (!frame->hash) return TRUE;
@@ -921,7 +921,7 @@ kvp_frame_get_value(const KvpFrame *frame, const char *path)
 /* ============================================================ */
 
 KvpFrame *
-kvp_frame_get_frame_gslist (KvpFrame *frame, GSList *key_path) 
+kvp_frame_get_frame_gslist (KvpFrame *frame, const GSList *key_path) 
 {
   if (!frame) return frame;
 
@@ -1010,7 +1010,7 @@ kvp_frame_get_slot_path (KvpFrame *frame,
 
 KvpValue *
 kvp_frame_get_slot_path_gslist (KvpFrame *frame,
-                                GSList *key_path) 
+                                const GSList *key_path) 
 {
   if (!frame || !key_path) return NULL;
 

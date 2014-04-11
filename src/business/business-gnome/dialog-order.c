@@ -288,7 +288,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 		"Are you sure you want to close it out before "
 		"you invoice all the entries?");
 
-    if (gnc_verify_dialog (ow->dialog, FALSE, message) == FALSE)
+    if (gnc_verify_dialog (ow->dialog, FALSE, "%s", message) == FALSE)
       return;
   }
 

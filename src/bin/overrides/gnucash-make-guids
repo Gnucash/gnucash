@@ -27,7 +27,7 @@ exec gnucash-env guile -s "$0" "$@"
 (gnc:module-load "gnucash/engine" 0)
 
 (let loop ((remaining num-to-make))
-  (display (gnc:guid-new)) (newline)
+  (display (guid-new-return)) (newline)
   (if (> remaining 1)
       (loop (- remaining 1))))
 

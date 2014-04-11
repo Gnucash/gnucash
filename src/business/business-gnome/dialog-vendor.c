@@ -214,7 +214,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
       check_entry_nonempty (vw->dialog, vw->addr3_entry, NULL) &&
       check_entry_nonempty (vw->dialog, vw->addr4_entry, NULL)) {
     const char *msg = _("You must enter a payment address.");
-    gnc_error_dialog (vw->dialog, msg);
+    gnc_error_dialog (vw->dialog, "%s", msg);
     return;
   }
 

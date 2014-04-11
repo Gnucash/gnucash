@@ -15,7 +15,7 @@ noinst_HEADERS = \
   gnc-csv-model.h \
   gnc-csv-gnumeric-popup.h
 
-libgncmod_csv_la_LDFLAGS = -avoid-version $(pkg-config --libs libgoffice-0.3)
+libgncmod_csv_la_LDFLAGS = -avoid-version
 
 libgncmod_csv_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
@@ -25,6 +25,8 @@ libgncmod_csv_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/lib/stf/libgnc-stf.la \
+  ${top_builddir}/lib/libc/libc-missing.la \
+  ${GOFFICE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
@@ -37,6 +39,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
+  -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/lib \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
@@ -54,6 +57,6 @@ gladedir = ${GNC_GLADE_DIR}
 glade_DATA = \
 	gnc-csv-preview-dialog.glade
 
-EXTRA_DIST = $(ui_DATA)
+EXTRA_DIST = $(ui_DATA) $(glade_DATA)
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.csv\"

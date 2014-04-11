@@ -170,7 +170,7 @@ on_import_next (GnomeDruidPage  *gnomedruidpage,
 		message = g_strdup_printf(_("Error: Please resolve all %d "
 			"conflicts before trying to commit the data."), count);
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-		gnc_error_dialog(top, message);
+		gnc_error_dialog(top, "%s", message);
 		g_free(message);
 		return TRUE;
 	}
@@ -224,7 +224,7 @@ on_merge_finish (GnomeDruidPage  *gnomedruidpage,
 	if(result != 0) {
 		message = g_strdup_printf(_("Error: the Commit operation failed, error code %d."), result);
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-		gnc_error_dialog(top, message);
+		gnc_error_dialog(top, "%s", message);
 	}
 	g_return_if_fail(result == 0);
 	delete_merge_window ();
@@ -352,7 +352,7 @@ void collision_rule_loop(QofBookMergeData *mergeData, QofBookMergeRule *rule,
 		   will allocate a new string; all of these need to be
 		   freed later. Currently this causes a lot of memory
 		   leaks. */
-		buffer = g_strconcat(buffer, g_strdup_printf(_("%i:Parameter name: %s "), 
+		buffer = g_strconcat(buffer, g_strdup_printf(_("%i: Parameter name: %s "), 
 			count, one_param->param_name), NULL);
 		importstring = qof_book_merge_param_as_string(one_param, rule->importEnt);
 		buffer = g_strconcat(buffer, 

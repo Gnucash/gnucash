@@ -33,6 +33,7 @@
 
 static GtkWidget * splash = NULL;
 static GtkWidget * progress = NULL;
+static GtkWidget * progress_bar = NULL;
 static int splash_is_initialized = FALSE;
 
 static void
@@ -63,6 +64,7 @@ gnc_show_splash_screen (void)
   GtkWidget *pixmap;
   GtkWidget *frame;
   GtkWidget *vbox;
+  GtkWidget *hbox;
   GtkWidget *version;
   GtkWidget *separator;
   gchar *ver_string, *markup;
@@ -90,6 +92,7 @@ gnc_show_splash_screen (void)
 
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
+  hbox = gtk_hbox_new (FALSE, 3);
 #ifdef GNUCASH_SVN
   /* Development version */
   ver_string = g_strdup_printf(_("Version: GnuCash-%s svn (r%s built %s)"),
@@ -112,16 +115,20 @@ gnc_show_splash_screen (void)
      if a long string is given in gnc_update_splash_screen();
      presumably it would be better to inhibit size change of the
      top level container, but I don't know how to do this */
-  gtk_label_set_max_width_chars(GTK_LABEL(progress), 50);
+  gtk_label_set_max_width_chars(GTK_LABEL(progress), 34);
   markup = g_markup_printf_escaped(MARKUP_STRING, _("Loading..."));
   gtk_label_set_markup(GTK_LABEL(progress), markup);
   g_free(markup);
+
+  progress_bar = gtk_progress_bar_new ();
 
   gtk_container_add (GTK_CONTAINER (frame), pixmap);
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), version, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), progress, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), progress, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), progress_bar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (splash), vbox);
 
   gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
@@ -144,12 +151,13 @@ gnc_destroy_splash_screen (void)
   {
     gtk_widget_destroy (splash);
     progress = NULL;
+    progress_bar = NULL;
     splash = NULL;
   }
 }
 
 void
-gnc_update_splash_screen (const gchar *string)
+gnc_update_splash_screen (const gchar *string, double percentage)
 {
   gchar *markup;
 
@@ -163,7 +171,31 @@ gnc_update_splash_screen (const gchar *string)
 
       /* make sure new text is up */
       while (gtk_events_pending ())
-       gtk_main_iteration ();
+          gtk_main_iteration ();
     }
+  }
+
+  if (progress_bar)
+  {
+    if (percentage < 0)
+    {
+      gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), 0.0);
+    }
+    else
+    {
+      if (percentage <= 100)
+      {
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), 
+                                      percentage/100);
+      }
+      else
+      {
+        gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progress_bar));
+      }
+    }
+
+    /* make sure new status bar is up */
+    while (gtk_events_pending ())
+      gtk_main_iteration ();
   }
 }

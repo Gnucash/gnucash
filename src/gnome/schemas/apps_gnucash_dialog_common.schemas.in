@@ -160,7 +160,7 @@
       <default>1.0</default>
       <locale name="C">
         <short>Default to 'new search' if fewer than this number of items is returned</short>
-        <long>Default to 'new search' if fewer than this number of items is returned.</long>
+        <long>Default to 'new search' if fewer than this number of items is returned</long>
       </locale>
     </schema>
 

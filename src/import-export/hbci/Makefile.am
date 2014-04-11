@@ -56,7 +56,7 @@ libgncmod_hbci_la_LIBADD = \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS} \
-  ${HBCI_LIBS}
+  ${AQBANKING_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -77,7 +77,7 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${HBCI_CFLAGS}
+  ${AQBANKING_CFLAGS}
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 

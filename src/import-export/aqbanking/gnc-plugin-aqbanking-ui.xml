@@ -1,0 +1,34 @@
+<ui>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <menu name="FileImport" action="FileImportAction">
+        <placeholder name="FileImportPlaceholder">
+           <menuitem name="FileMt940Import"     action="Mt940ImportAction"/>
+           <menuitem name="FileMt942Import"     action="Mt942ImportAction"/>
+           <menuitem name="FileDtausImport"     action="DtausImportAction"/>
+           <menuitem name="FileDtausImportsend" action="DtausImportSendAction"/>
+           <!-- When CsvImport works:
+           <menuitem name="FileCsvImport"       action="CsvImportAction"/>
+           <menuitem name="FileCsvImportsend"   action="CsvImportSendAction"/>
+           -->
+        </placeholder>
+      </menu>
+    </menu>
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder">
+        <menu name="OnlineActions" action="OnlineActionsAction">
+          <menuitem name="ABGetBalance"         action="ABGetBalanceAction"/>
+          <menuitem name="ABGetTrans"           action="ABGetTransAction"/>
+          <menuitem name="ABIssueTrans"         action="ABIssueTransAction"/>
+          <menuitem name="ABIssueIntTrans"      action="ABIssueIntTransAction"/>
+          <menuitem name="ABIssueDirectDebit"   action="ABIssueDirectDebitAction"/>
+        </menu>
+      </placeholder>
+    </menu>
+    <menu name="Tools" action="ToolsAction">
+      <placeholder name="ToolsPlaceholder">
+        <menuitem name="ABSetup"                action="ABSetupAction"/>
+     </placeholder>
+    </menu>
+  </menubar>
+</ui>

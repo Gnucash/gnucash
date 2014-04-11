@@ -627,7 +627,7 @@ qof_book_merge_commit_rule_create_objects(QofBookMergeData *mergeData,
  * Returns the corresponding target entity to the given importEnt
  */
 static QofInstance*
-qof_book_merge_map_entity(QofBookMergeData *mergeData, QofInstance* importEnt)
+qof_book_merge_map_entity(const QofBookMergeData *mergeData, const QofInstance* importEnt)
 {
     QofBookMergeRule *currentRule;
     GList *node;

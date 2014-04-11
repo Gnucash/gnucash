@@ -1246,7 +1246,7 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
 
 #ifdef GNC_DEPRECATED
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " " GNC_SCANF_LLD "/" GNC_SCANF_LLD "%n",
+  if(sscanf(str, " " QOF_SCANF_LLD "/" QOF_SCANF_LLD "%n",
             &tmpnum, &tmpdenom, &num_read) < 2) {
     return FALSE;
   }

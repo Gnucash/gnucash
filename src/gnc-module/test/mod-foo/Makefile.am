@@ -17,7 +17,7 @@ noinst_HEADERS = \
   swig-foo.c
 
 libgncmodfoo_la_SOURCES = gnc-mod-foo.c
-libgncmodfoo_la_LDFLAGS = -rpath ${PWD}
+libgncmodfoo_la_LDFLAGS = -rpath ${PWD} -avoid-version
 libgncmodfoo_la_LIBADD = \
   libfoo.la \
   $(GUILE_LIBS) \

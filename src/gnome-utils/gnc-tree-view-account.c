@@ -270,7 +270,7 @@ sort_by_string (GtkTreeModel *f_model,
   GtkTreeModel *model;
   GtkTreeIter iter1, iter2;
   const Account *account1, *account2;
-  const gchar *str1, *str2;
+  gchar *str1, *str2;
   gint column = GPOINTER_TO_INT(user_data);
   gint result;
 
@@ -281,6 +281,8 @@ sort_by_string (GtkTreeModel *f_model,
   gtk_tree_model_get(GTK_TREE_MODEL(model), &iter2,  column, &str2, -1);
 
   result = safe_utf8_collate(str1, str2);
+  g_free(str1);
+  g_free(str2);
   if (result != 0)
     return result;
   return xaccAccountOrder(account1, account2);
@@ -1119,6 +1121,11 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
   gtk_tree_path_free(parent_path);
 
   gtk_tree_selection_select_path (selection, s_path);
+
+  /* give gtk+ a chance to resize the tree view first by handling pending
+   * configure events */
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
   gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
   debug_path(LEAVE, s_path);
   gtk_tree_path_free(s_path);
@@ -2079,6 +2086,7 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
                 tree_restore_expanded_row(view, value);
                 g_free(value);
 	    }
+            g_free(key);
         }
     } else {
         g_warning("error reading group %s key %s: %s",

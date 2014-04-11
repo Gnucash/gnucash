@@ -119,35 +119,10 @@ safe_utf8_collate (const char * da, const char * db)
      ((Char) >= 0x20 || (Char) == 0x09 || (Char) == 0x0A || (Char) == 0x0D) && \
      ((Char) & 0xFFFE) != 0xFFFE)
 
-/**
- * gnc_utf8_validate (copied from g_utf8_validate):
- * @str: a pointer to character data
- * @max_len: max bytes to validate, or -1 to go until nul
- * @end: return location for end of valid data
- * 
- * Validates UTF-8 encoded text. @str is the text to validate;
- * if @str is nul-terminated, then @max_len can be -1, otherwise
- * @max_len should be the number of bytes to validate.
- * If @end is non-%NULL, then the end of the valid range
- * will be stored there (i.e. the address of the first invalid byte
- * if some bytes were invalid, or the end of the text being validated
- * otherwise).
- *
- * This function looks validates the strict subset of UTF-8 that is
- * valid XML text, as detailed in
- * http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535
- *
- * Returns %TRUE if all of @str was valid. Many GLib and GTK+
- * routines <emphasis>require</emphasis> valid UTF-8 as input;
- * so data read from a file or the network should be checked
- * with g_utf8_validate() before doing anything else with it.
- * 
- * Return value: %TRUE if the text was valid UTF-8
- **/
-static gboolean
-gnc_utf8_validate (const gchar  *str,
-                 gssize        max_len,    
-                 const gchar **end)
+gboolean
+gnc_utf8_validate(const gchar  *str,
+                  gssize        max_len,    
+                  const gchar **end)
 {
 
   const gchar *p;
@@ -229,6 +204,40 @@ gnc_utf8_strip_invalid_strdup(const gchar* str)
   return result;
 }
 
+gchar *
+gnc_locale_from_utf8(const gchar* str)
+{
+  gchar *   locale_str;
+  gsize     bytes_written = 0;
+  GError *  err = NULL;
+
+  /* Convert from UTF-8 to the encoding used in the current locale. */
+  locale_str = g_locale_from_utf8(str, -1, NULL, &bytes_written, &err);
+  if (err) {
+    g_warning("g_locale_from_utf8 failed: %s", err->message);
+    g_error_free(err);
+  }
+
+  return locale_str;
+}
+
+gchar *
+gnc_locale_to_utf8(const gchar* str)
+{
+  gchar *   utf8_str;
+  gsize     bytes_written = 0;
+  GError *  err = NULL;
+
+  /* Convert to UTF-8 from the encoding used in the current locale. */
+  utf8_str = g_locale_to_utf8(str, -1, NULL, &bytes_written, &err);
+  if (err) {
+    g_warning("g_locale_to_utf8 failed: %s", err->message);
+    g_error_free(err);
+  }
+
+  return utf8_str;
+}
+
 GList*
 gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
 {
@@ -260,25 +269,25 @@ gnc_g_list_cut(GList **list, GList *cut_point)
 void
 gnc_scm_log_warn(const gchar *msg)
 {
-    g_log("gnc.scm", G_LOG_LEVEL_WARNING, msg);
+    g_log("gnc.scm", G_LOG_LEVEL_WARNING, "%s", msg);
 }
 
 void
 gnc_scm_log_error(const gchar *msg)
 {
-    g_log("gnc.scm", G_LOG_LEVEL_CRITICAL, msg);
+    g_log("gnc.scm", G_LOG_LEVEL_CRITICAL, "%s", msg);
 }
 
 void
 gnc_scm_log_msg(const gchar *msg)
 {
-    g_log("gnc.scm", G_LOG_LEVEL_MESSAGE, msg);
+    g_log("gnc.scm", G_LOG_LEVEL_MESSAGE, "%s", msg);
 }
 
 void
 gnc_scm_log_debug(const gchar *msg)
 {
-    g_log("gnc.scm", G_LOG_LEVEL_DEBUG, msg);
+    g_log("gnc.scm", G_LOG_LEVEL_DEBUG, "%s", msg);
 }
 
 void gnc_gpid_kill(GPid pid)

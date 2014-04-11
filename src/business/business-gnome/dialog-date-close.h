@@ -41,6 +41,8 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
  * Note that the dialog will "own" (and free) the acct_types list.
  * it should be a list of GNCAccountTypes.  If memo is non-NULL,
  * it will g_malloc() a string.  The caller should g_free() it.
+ * The value of *acct will be used as preselection of the account
+ * selection widget.
  */
 
 gboolean

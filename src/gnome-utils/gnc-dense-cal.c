@@ -149,13 +149,13 @@ static void gdc_remove_markings(GncDenseCal *cal);
 
 static GObject *parent_class = NULL;
 
-#define MONTH_NAME_BUFSIZE 5
+#define MONTH_NAME_BUFSIZE 10
 
 /* Takes the number of months since January, in the range 0 to
  * 11. Returns the abbreviated month name according to the current
  * locale.*/
 static const gchar*
-month_name(int mon) 
+month_name(int mon)
 {
     static gchar buf[MONTH_NAME_BUFSIZE];
     GDate date;
@@ -163,13 +163,13 @@ month_name(int mon)
 
     memset(buf, 0, MONTH_NAME_BUFSIZE);
     g_date_clear(&date, 1);
-     
+
     g_date_set_year(&date, arbitrary_year);
     g_date_set_day(&date, 1);
     // g_date API is 1..12 (not 0..11)
     g_date_set_month(&date, mon+1);
-    g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", &date);
-     
+    g_date_strftime(buf, MONTH_NAME_BUFSIZE, "%b", &date);
+
     return buf;
 }
 
@@ -179,8 +179,11 @@ static void
 day_label(gchar *buf, int buf_len, int dow)
 {
     gnc_dow_abbrev(buf, buf_len, dow);
-    /* Wild hack to use only the first two letters */
-    buf[2]='\0';
+    /* Use only the first two characters */
+    if (g_utf8_strlen(buf, -1) > 2) {
+        gchar *pointer = g_utf8_offset_to_pointer(buf, 2);
+        *pointer = '\0';
+    }
 }
 
 GType
@@ -436,12 +439,18 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->week_starts_monday = 0;
     {
         gchar **parts;
-	/* Translators: This string should not have shown up in
-	   gnucash.pot as it is looked up in the "gtk20" translation
-	   domain. You can safely ignore this string and leave it
-	   untranslated. */
-        parts = g_strsplit(dgettext("gtk20", "calendar:week_start:0"),
-                           ":", 3);
+	const char *week_start_str;
+
+	/* Use this renaming macro to avoid extraction of the message
+	   string into the gnucash.pot file when calling xgettext. */
+#define dgettext_noextract dgettext
+	/* Translators: This string must not show up in gnucash.pot as
+	   it is looked up in the "gtk20" translation domain
+	   instead. */
+	week_start_str = dgettext_noextract("gtk20", "calendar:week_start:0");
+#undef dgettext_noextract
+
+        parts = g_strsplit(week_start_str, ":", 3);
         if (parts[0] != NULL
             && parts[1] != NULL
             && parts[2] != NULL)
@@ -921,7 +930,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             dcal->monthPositions[i].x
                 = floor(i/dcal->monthsPerCol)
                 * (col_width(dcal) + COL_BORDER_SIZE);
-            dcal->monthPositions[i].y = ((GdkRectangle*)mcList->next->data)->y;
+            dcal->monthPositions[i].y = ((GdkRectangle*)mcList->next->next->data)->y;
             for (mcListIter = mcList; mcListIter != NULL; mcListIter = mcListIter->next)
             {
                 rect = (GdkRectangle*)mcListIter->data;
@@ -1378,6 +1387,8 @@ int num_weeks_per_col(GncDenseCal *dcal)
         }
         num_weeks_toRet = MAX(num_weeks_toRet, (endWeek - startWeek)+1);
     }
+	g_date_free(start);
+	g_date_free(end);
     return num_weeks_toRet;
 }
 
@@ -1614,7 +1625,7 @@ wheres_this(GncDenseCal *dcal, int x, int y)
     {
         return -1;
     }
-    if (y >= col_height(dcal))
+    if (y >= dcal->dayLabelHeight + col_height(dcal))
     {
         return -1;
     }

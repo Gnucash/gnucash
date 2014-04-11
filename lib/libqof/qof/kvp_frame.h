@@ -126,7 +126,7 @@ void         kvp_frame_delete(KvpFrame * frame);
 KvpFrame   * kvp_frame_copy(const KvpFrame * frame);
 
 /** Return TRUE if the KvpFrame is empty */
-gboolean     kvp_frame_is_empty(KvpFrame * frame);
+gboolean     kvp_frame_is_empty(const KvpFrame * frame);
 
 /** @} */
 
@@ -395,7 +395,7 @@ KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const gchar *,...);
  *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
  */
 KvpFrame    * kvp_frame_get_frame_gslist (KvpFrame *frame,
-                                           GSList *key_path);
+                                           const GSList *key_path);
 
 /** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
@@ -502,7 +502,7 @@ KvpValue   * kvp_frame_get_slot_path (KvpFrame *frame,
  * path, or NULL if any portion of the path doesn't exist.
  */
 KvpValue   * kvp_frame_get_slot_path_gslist (KvpFrame *frame,
-                                              GSList *key_path);
+                                              const GSList *key_path);
 
 /**
  * Similar returns as strcmp.

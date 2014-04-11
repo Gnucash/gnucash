@@ -871,6 +871,7 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
     priv->commodity = gnc_commodity_obtain_twin(from_priv->commodity, book);
+    gnc_commodity_increment_usage_count(priv->commodity);
 
     priv->commodity_scu = from_priv->commodity_scu;
     priv->non_standard_scu = from_priv->non_standard_scu;
@@ -1004,6 +1005,7 @@ xaccFreeAccount (Account *acc)
   priv->reconciled_balance = gnc_numeric_zero();
 
   priv->type = ACCT_TYPE_NONE;
+  gnc_commodity_decrement_usage_count(priv->commodity);
   priv->commodity = NULL;
 
   priv->balance_dirty = FALSE;
@@ -1650,6 +1652,8 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
     priv->lots = g_list_remove(priv->lots, lot);
+    qof_event_gen (&lot->inst, QOF_EVENT_REMOVE, NULL);
+    qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
@@ -1684,6 +1688,9 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
     * if appropriate, and doing it here will not work if we are being 
     * called from gnc_book_close_period since xaccAccountInsertSplit
     * will try to balance capital gains and things aren't ready for that. */
+
+   qof_event_gen (&lot->inst, QOF_EVENT_ADD, NULL);
+   qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
 
    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
@@ -2061,7 +2068,9 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
       return;
 
   xaccAccountBeginEdit(acc);
+  gnc_commodity_decrement_usage_count(priv->commodity);
   priv->commodity = com;
+  gnc_commodity_increment_usage_count(com);
   priv->commodity_scu = gnc_commodity_get_fraction(com);
   priv->non_standard_scu = FALSE;
 
@@ -2080,15 +2089,6 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
   priv->balance_dirty = TRUE;
   mark_account (acc);
 
-  if (gnc_commodity_is_iso(com)) {
-    /* compatability hack - Gnucash 1.8 gets currency quotes when a
-       non-default currency is assigned to an account.  */
-	gnc_commodity_begin_edit(com);
-    gnc_commodity_set_quote_flag(com, TRUE);
-    gnc_commodity_set_quote_source(com, 
-        gnc_commodity_get_default_quote_source(com));
-	gnc_commodity_commit_edit(com);
-  }
   xaccAccountCommitEdit(acc);
 }
 
@@ -2484,6 +2484,39 @@ gnc_account_lookup_by_name (const Account *parent, const char * name)
   {
     child = node->data;
     result = gnc_account_lookup_by_name (child, name);
+    if (result)
+      return result;
+  }
+
+  return NULL;
+}
+
+Account *
+gnc_account_lookup_by_code (const Account *parent, const char * code)
+{
+  AccountPrivate *cpriv, *ppriv;
+  Account *child, *result;
+  GList *node;
+
+  g_return_val_if_fail(GNC_IS_ACCOUNT(parent), NULL);
+  g_return_val_if_fail(code, NULL);
+
+  /* first, look for accounts hanging off the current node */
+  ppriv = GET_PRIVATE(parent);
+  for (node = ppriv->children; node; node = node->next)
+  {
+    child = node->data;
+    cpriv = GET_PRIVATE(child);
+    if (safe_strcmp(cpriv->accountCode, code) == 0)
+      return child;
+  }
+
+  /* if we are still here, then we haven't found the account yet.
+   * Recursively search each of the child accounts next */
+  for (node = ppriv->children; node; node = node->next)
+  {
+    child = node->data;
+    result = gnc_account_lookup_by_code (child, code);
     if (result)
       return result;
   }
@@ -3298,10 +3331,13 @@ xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboole
  * allowing the internal organization to change data structures if
  * necessary for whatever reason, while leaving the external API
  * unchanged. */
+/* XXX: violates the const'ness by forcing a sort before returning
+ * the splitlist */
 SplitList *
 xaccAccountGetSplitList (const Account *acc) 
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    xaccAccountSortSplits((Account*)acc, FALSE);  // normally a noop
     return GET_PRIVATE(acc)->splits;
 }
 
@@ -4247,15 +4283,15 @@ gnc_account_merge_children (Account *parent)
       Account *acc_b = node_b->data;
 
       priv_b = GET_PRIVATE(acc_b);
-      if (0 != safe_strcmp(priv_a->accountName, priv_b->accountName))
+      if (0 != null_strcmp(priv_a->accountName, priv_b->accountName))
 	continue;
-      if (0 != safe_strcmp(priv_a->accountCode, priv_b->accountCode))
+      if (0 != null_strcmp(priv_a->accountCode, priv_b->accountCode))
 	continue;
-      if (0 != safe_strcmp(priv_a->description, priv_b->description))
+      if (0 != null_strcmp(priv_a->description, priv_b->description))
 	continue;
       if (!gnc_commodity_equiv(priv_a->commodity, priv_b->commodity))
 	continue;
-      if (0 != safe_strcmp(xaccAccountGetNotes(acc_a),
+      if (0 != null_strcmp(xaccAccountGetNotes(acc_a),
 			   xaccAccountGetNotes(acc_b)))
 	continue;
       if (priv_a->type != priv_b->type)
@@ -4375,6 +4411,7 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
 {
   AccountPrivate *priv;
   GList *split_p;
+  GList *next;
   Transaction *trans;
   Split *s;
   int retval;
@@ -4382,7 +4419,13 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
   if (!acc) return 0;
 
   priv = GET_PRIVATE(acc);
-  for(split_p = priv->splits; split_p; split_p = g_list_next(split_p)) {
+  for(split_p = priv->splits; split_p; split_p = next) {
+    /* Get the next element in the split list now, just in case some
+     * naughty thunk destroys the one we're using. This reduces, but
+     * does not eliminate, the possibility of undefined results if
+     * a thunk removes splits from this account. */
+    next = g_list_next(split_p);
+
     s = split_p->data;
     trans = s->parent;   
     if (trans && (trans->marker < stage)) {

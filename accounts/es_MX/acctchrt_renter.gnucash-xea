@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Gastos de inquilino
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Gastos asociados a alquilar una casa
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deseará escoger este juego de cuentas si alquila una casa o
+      apartamento (alquiler, seguro de inquilino).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguros</act:name>
+  <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguros</act:description>
+  <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro de inquilino</act:name>
+  <act:id type="new">a4c93c964b8322d534e35b7054cbda4d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguro de inquilino</act:description>
+  <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Alquiler</act:name>
+  <act:id type="new">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Alquiler</act:description>
+  <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

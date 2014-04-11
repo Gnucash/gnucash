@@ -128,7 +128,8 @@ void
 qof_log_init_filename(const gchar* log_filename)
 {
      if (log_table == NULL)
-          log_table = g_hash_table_new(g_str_hash, g_str_equal);
+          log_table = g_hash_table_new_full(g_str_hash, g_str_equal,
+                                            g_free, NULL);
 
      if (log_filename)
      {
@@ -382,7 +383,7 @@ qof_log_level_to_string(QofLogLevel log_level)
 }
 
 QofLogLevel
-qof_log_level_from_string(gchar *str)
+qof_log_level_from_string(const gchar *str)
 {
      if (g_ascii_strncasecmp("error", str, 5) == 0) return QOF_LOG_FATAL;
      if (g_ascii_strncasecmp("crit", str, 4) == 0) return QOF_LOG_ERROR;

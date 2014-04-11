@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Gastos de propietario de casa
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Gastos asociados a la propiedad de una casa
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deseará seleccionar este juego de cuentas si posee una casa. Este
+      juego le proporciona un grupo de cuentas para controlar los
+      gastos domésticos (seguro, impuestos, reparaciones).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reparaciones domésticas</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Reparaciones domésticas</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguros</act:name>
+  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguros</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro contra siniestros</act:name>
+  <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguro contra siniestros (incendios, entre otros)</act:description>
+  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Impuestos</act:name>
+  <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuestos</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Predial</act:name>
+  <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuesto predial</act:description>
+  <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -260,12 +260,12 @@ verify_term_ok (NewBillTerm *nbt)
   num = gnc_numeric_zero ();
   if (gnc_numeric_negative_p (num)) {
     message = _("Negative amounts are not allowed.");
-    gnc_error_dialog (nbt->dialog, message);
+    gnc_error_dialog (nbt->dialog, "%s", message);
     return FALSE;
   }
   if (gnc_numeric_compare (num, gnc_numeric_create (100, 1)) > 0) {
     message = _("Percentage amount must be between 0 and 100.");
-    gnc_error_dialog (nbt->dialog, message);
+    gnc_error_dialog (nbt->dialog, "%s", message);
     return FALSE;
   }
   return TRUE;
@@ -288,7 +288,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     name = gtk_entry_get_text (GTK_ENTRY (nbt->name_entry));
     if (name == NULL || *name == '\0') {
       message = _("You must provide a name for this Billing Term.");
-      gnc_error_dialog (nbt->dialog, message);
+      gnc_error_dialog (nbt->dialog, "%s", message);
       return FALSE;
     }
     if (gncBillTermLookupByName (btw->book, name)) {

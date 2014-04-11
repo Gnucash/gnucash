@@ -86,8 +86,6 @@ static void gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr );
 
 static void gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger );
 
-gboolean gnc_split_reg_check_close(GNCSplitReg *gsr);
-
 void gsr_default_enter_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_cancel_handler   ( GNCSplitReg *w, gpointer ud );
 void gsr_default_delete_handler   ( GNCSplitReg *w, gpointer ud );
@@ -695,56 +693,6 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
   gnc_ledger_display_set_user_data (ledger, NULL);
 }
 
-gboolean
-gnc_split_reg_check_close( GNCSplitReg *gsr )
-{
-  GtkWidget *dialog;
-  gint response;
-  gboolean pending_changes;
-  SplitRegister *reg;
-  const char *title = _("Save transaction before closing?");
-  const char *message =
-    _("The current transaction has been changed.  Would you like to "
-      "record the changes before closing this page, close the page "
-      "without recording the changes, or cancel the close?");
-
-  reg = gnc_ledger_display_get_split_register( gsr->ledger );
-  pending_changes = gnc_split_register_changed( reg );
-  if ( !pending_changes )
-    return TRUE;
-
-  dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
-				  GTK_DIALOG_DESTROY_WITH_PARENT,
-				  GTK_MESSAGE_QUESTION,
-				  GTK_BUTTONS_NONE,
-				  "%s", title);
-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					   "%s", message);
-  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			 _("_Don't Record"), GTK_RESPONSE_REJECT,
-			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			 _("_Record"), GTK_RESPONSE_ACCEPT,
-			 NULL);
-  response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
-  gtk_widget_destroy(dialog);
-
-  switch (response)
-  {
-    case GTK_RESPONSE_ACCEPT:
-      gnc_split_reg_record_trans_cb( gsr->window, gsr );
-      return TRUE;
-
-    case GTK_RESPONSE_REJECT:
-      gnc_split_register_cancel_cursor_trans_changes( reg );
-      return TRUE;
-
-    case GTK_RESPONSE_CANCEL:
-    default:
-      return FALSE;
-  }
-  return TRUE;
-}
-
 void
 gsr_default_cut_handler( GNCSplitReg *gsr, gpointer data )
 {
@@ -1109,7 +1057,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 				    | GTK_DIALOG_DESTROY_WITH_PARENT,
 				    GTK_MESSAGE_QUESTION,
 				    GTK_BUTTONS_NONE,
-				    buf);
+				    "%s", buf);
     g_free(buf);
     recn = xaccSplitGetReconcile (split);
     if (recn == YREC || recn == FREC)

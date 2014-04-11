@@ -90,7 +90,7 @@ GtkWidget *gnc_currency_edit_new (void);
 
 
 /** @name Get/Set Functions */
-
+/** @{ */
 
 /** Set the widget to display a certain currency name.
  *
@@ -111,8 +111,11 @@ void gnc_currency_edit_set_currency (GNCCurrencyEdit *gce, const gnc_commodity *
  */
 gnc_commodity *gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 
+/** @} */
+
 #endif
 
+/** @} */
 /** @} */
 
 /*

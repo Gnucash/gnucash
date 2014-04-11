@@ -375,7 +375,7 @@
 ;   (gnc:make-string-option
 ;    (N_ "Display") (N_ "Today Date Format")
 ;    "v" (N_ "The format for the date->string conversion for today's date.")
-;    "%B %e, %Y"))
+;    (gnc-default-strftime-date-format)))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -647,7 +647,9 @@
     ;; oli-custom - modified to display a custom format
     ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
-    (string-expand (strftime "%B %e, %Y" (localtime (car date))) #\space "&nbsp;")
+    (string-expand (strftime (gnc-default-strftime-date-format)
+                             (localtime (car date)))
+                   #\space "&nbsp;")
     ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
     )))
 
@@ -955,19 +957,22 @@
 
     document))
 
+(define fancy-invoice-guid "3ce293441e894423a2425d7a22dd1ac6")
+
 (gnc:define-report
  'version 1
  'name (N_ "Fancy Invoice")
+ 'report-guid fancy-invoice-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
 
 (define (gnc:fancy-invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options (N_ "Fancy Invoice")))
+  (let* ((options (gnc:make-report-options fancy-invoice-guid))
          (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report (N_ "Fancy Invoice") options)))
+    (gnc:make-report fancy-invoice-guid options)))
 
 (export gnc:fancy-invoice-report-create-internal)

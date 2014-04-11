@@ -134,6 +134,9 @@ typedef struct _startRecnWindowData
 static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
+static void   recn_cancel (RecnWindow *recnData);
+static gboolean recn_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data);
+static gboolean recn_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void   recnFinishCB (GtkAction *action, RecnWindow *recnData);
 static void   recnPostponeCB (GtkAction *action, gpointer data);
 static void   recnCancelCB (GtkAction *action, gpointer data);
@@ -453,6 +456,8 @@ recnInterestXferWindow( startRecnWindowData *data)
 		    			    _("Payment From") );
     gnc_xfer_dialog_set_from_show_button_active( data->xferData, TRUE );
 
+    // XXX: Set "from" account from previous interest payment.
+
     gnc_xfer_dialog_set_to_account_label( data->xferData,
 		    			  _("Reconcile Account") );
     gnc_xfer_dialog_select_to_account( data->xferData, data->account );
@@ -471,6 +476,8 @@ recnInterestXferWindow( startRecnWindowData *data)
     gnc_xfer_dialog_set_to_account_label( data->xferData,
 		    			  _("Payment To") );
     gnc_xfer_dialog_set_to_show_button_active( data->xferData, TRUE );
+
+    // XXX: Set "to" account from previous interest payment.
 
     /* Quickfill based on the reconcile account, which is the "From" acct. */
     gnc_xfer_dialog_quickfill_to_account( data->xferData, FALSE );
@@ -1129,7 +1136,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
                             "transaction?");
     gboolean result;
 
-    result = gnc_verify_dialog(recnData->window, FALSE, message);
+    result = gnc_verify_dialog(recnData->window, FALSE, "%s", message);
 
     if (!result)
       return;
@@ -1324,8 +1331,10 @@ gnc_get_reconcile_info (Account *account,
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);
 
-  if( !xaccAccountGetReconcilePostponeBalance (account, new_ending) )
-  {
+  if (xaccAccountGetReconcilePostponeBalance(account, new_ending)) {
+    if (gnc_reverse_balance(account))
+      *new_ending = gnc_numeric_neg(*new_ending);
+  } else {
     /* if the account wasn't previously postponed, try to predict
      * the statement balance based on the statement date.
      */
@@ -1607,6 +1616,10 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
   g_signal_connect (recnData->window, "destroy",
                     G_CALLBACK(recn_destroy_cb), recnData);
+  g_signal_connect (recnData->window, "delete_event",
+                    G_CALLBACK(recn_delete_cb), recnData);
+  g_signal_connect (recnData->window, "key_press_event",
+                    G_CALLBACK(recn_key_press_cb), recnData);
 
 
   /* The main area */
@@ -1798,6 +1811,48 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
   g_free (recnData);
 }
 
+static void
+recn_cancel(RecnWindow *recnData)
+{
+  gboolean changed = FALSE;
+
+  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->credit)))
+    changed = TRUE;
+  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->debit)))
+    changed = TRUE;
+
+  if (changed)
+  {
+    const char *message = _("You have made changes to this reconcile "
+                            "window. Are you sure you want to cancel?");
+    if (!gnc_verify_dialog(recnData->window, FALSE, "%s", message))
+      return;
+  }
+
+  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+}
+
+static gboolean
+recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  recn_cancel(recnData);
+  return TRUE;
+}
+
+static gboolean
+recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  if (event->keyval == GDK_Escape) {
+    recn_cancel(recnData);
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
 
 /********************************************************************\
  * find_payment_account                                             *
@@ -1882,7 +1937,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
   {
     const char *message = _("The account is not balanced. "
                             "Are you sure you want to finish?");
-    if (!gnc_verify_dialog (recnData->window, FALSE, message))
+    if (!gnc_verify_dialog (recnData->window, FALSE, "%s", message))
       return;
   }
 
@@ -1939,7 +1994,7 @@ recnPostponeCB (GtkAction *action, gpointer data)
   {
     const char *message = _("Do you want to postpone this reconciliation "
                             "and finish it later?");
-    if (!gnc_verify_dialog (recnData->window, FALSE, message))
+    if (!gnc_verify_dialog (recnData->window, FALSE, "%s", message))
       return;
   }
 
@@ -1962,22 +2017,7 @@ static void
 recnCancelCB (GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
-  gboolean changed = FALSE;
-
-  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->credit)))
-    changed = TRUE;
-  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->debit)))
-    changed = TRUE;
-
-  if (changed)
-  {
-    const char *message = _("You have made changes to this reconcile "
-                            "window. Are you sure you want to cancel?");
-    if (!gnc_verify_dialog(recnData->window, FALSE, message))
-      return;
-  }
-
-  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+  recn_cancel(recnData);
 }
 
 /** An array of all of the actions provided by the main window code.

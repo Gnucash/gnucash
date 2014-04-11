@@ -49,6 +49,8 @@ struct GNCReconcileList {
   Account *account;
   GList *column_list;
 
+  time_t statement_date;
+
   GNCReconcileList *sibling;
   GNCReconcileListType list_type;
   gboolean no_toggle;

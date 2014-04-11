@@ -55,6 +55,7 @@ gnc_split_register_init_info (SplitRegister *reg)
 
   info->first_pass = TRUE;
   info->full_refresh = TRUE;
+  info->separator_changed = TRUE;
 
   reg->sr_info = info;
 }

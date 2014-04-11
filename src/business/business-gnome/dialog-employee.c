@@ -227,7 +227,7 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
       check_entry_nonempty (ew->dialog, ew->addr3_entry, NULL) &&
       check_entry_nonempty (ew->dialog, ew->addr4_entry, NULL)) {
     const char *msg = _("You must enter an address.");
-    gnc_error_dialog (ew->dialog, msg);
+    gnc_error_dialog (ew->dialog, "%s", msg);
     return;
   }
 

@@ -145,6 +145,15 @@ qof_backend_init(QofBackend *be)
 }
 
 void
+qof_backend_destroy(QofBackend *be)
+{
+    g_free(be->error_msg);
+    be->error_msg = NULL;
+    kvp_frame_delete(be->backend_configuration);
+    be->backend_configuration = NULL;
+}
+
+void
 qof_backend_run_begin(QofBackend *be, QofInstance *inst)
 {
 	if(!be || !inst) { return; }
@@ -153,7 +162,7 @@ qof_backend_run_begin(QofBackend *be, QofInstance *inst)
 }
 
 gboolean
-qof_backend_begin_exists(QofBackend *be)
+qof_backend_begin_exists(const QofBackend *be)
 {
 	if(be->begin) { return TRUE; }
 	else { return FALSE; }
@@ -179,7 +188,7 @@ void qof_backend_prepare_frame(QofBackend *be)
 	be->config_count = 0;
 }
 
-void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
+void qof_backend_prepare_option(QofBackend *be, const QofBackendOption *option)
 {
 	KvpValue *value;
 	gchar *temp;
@@ -376,7 +385,7 @@ qof_backend_get_config(QofBackend *be)
 }
 
 gboolean
-qof_backend_commit_exists(QofBackend *be)
+qof_backend_commit_exists(const QofBackend *be)
 {
 	if(!be) { return FALSE; }
 	if(be->commit) { return TRUE; }
@@ -393,6 +402,7 @@ qof_load_backend_library (const char *directory, const char* module_name)
 	g_return_val_if_fail(g_module_supported(), FALSE);
 	fullpath = g_module_build_path(directory, module_name);
 	backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
+	g_free(fullpath);
 	if (!backend) {
 		g_message ("%s: %s\n", PACKAGE, g_module_error ());
 		return FALSE;

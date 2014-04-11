@@ -27,6 +27,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   account-quickfill.c \
   cursors.c \
   dialog-account.c \
+  dialog-book-close.c \
   dialog-commodity.c \
   dialog-options.c \
   dialog-preferences.c \
@@ -100,6 +101,7 @@ gncinclude_HEADERS = \
   QuickFill.h \
   account-quickfill.h \
   dialog-account.h \
+  dialog-book-close.h \
   dialog-commodity.h \
   dialog-preferences.h \
   dialog-options.h \

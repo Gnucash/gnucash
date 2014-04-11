@@ -11748,11 +11748,11 @@ msgstr "Externí program \"Průvodce nastavením AqBanking\" neproběhl úspěš
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
-"The aqbanking package should include the program \"qt3-wizard\".  Please check your installation to ensure this program is present.  On some distributions this may require installing additional packages."
+"The %s package should include the program \"qt3-wizard\".  Please check your installation to ensure this program is present.  On some distributions this may require installing additional packages."
 msgstr ""
 "Externí program \"Průvodce nastavením AqBanking\" nebyl nalezen. \n"
 "\n"
-"Balíček aqbanking by měl obsahovat program \"qt3-wizard\". Zkontrolujte prosím vaši instalaci a zajistěte, aby byl tento program přítomen. V některých distribucích k tomu může být potřeba nainstalovat další balíčky."
+"Balíček %s by měl obsahovat program \"qt3-wizard\". Zkontrolujte prosím vaši instalaci a zajistěte, aby byl tento program přítomen. V některých distribucích k tomu může být potřeba nainstalovat další balíčky."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:709
 msgid "Online Banking Account Name"

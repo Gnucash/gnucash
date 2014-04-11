@@ -306,7 +306,7 @@ gnc_stock_split_druid_details_next (GnomeDruidPage *druidpage,
   if (gnc_numeric_zero_p (amount))
   {
     const char *message = _("You must enter a distribution amount.");
-    gnc_error_dialog (info->window, message);
+    gnc_error_dialog (info->window, "%s", message);
     return TRUE;
   }
 
@@ -323,7 +323,7 @@ gnc_stock_split_druid_details_next (GnomeDruidPage *druidpage,
   if (gnc_numeric_negative_p (amount))
   {
     const char *message = _("The price must be positive.");
-    gnc_error_dialog (info->window, message);
+    gnc_error_dialog (info->window, "%s", message);
     return TRUE;
   }
 
@@ -370,7 +370,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
   if (gnc_numeric_negative_p (amount))
   {
     const char *message = _("The cash distribution must be positive.");
-    gnc_error_dialog (info->window, message);
+    gnc_error_dialog (info->window, "%s", message);
     return TRUE;
   }
 
@@ -383,7 +383,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
     {
       const char *message = _("You must select an income account "
                               "for the cash distribution.");
-      gnc_error_dialog (info->window, message);
+      gnc_error_dialog (info->window, "%s", message);
       return TRUE;
     }
 
@@ -392,7 +392,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
     {
       const char *message = _("You must select an asset account "
                               "for the cash distribution.");
-      gnc_error_dialog (info->window, message);
+      gnc_error_dialog (info->window, "%s", message);
       return TRUE;
     }
   }

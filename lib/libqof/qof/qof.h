@@ -96,7 +96,6 @@
 #include "qofchoice.h"
 #include "qofbookmerge.h"
 #include "qofreference.h"
-#include "deprecated.h"
 
 /** allow easy logging of QSF debug messages */
 #define QOF_MOD_QSF "qof.backend.qsf"

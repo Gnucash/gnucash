@@ -165,11 +165,11 @@ typedef void (*QofBePercentageFunc) (const char *message, double percent);
 
 void qof_backend_run_begin(QofBackend *be, QofInstance *inst);
 
-gboolean qof_backend_begin_exists(QofBackend *be);
+gboolean qof_backend_begin_exists(const QofBackend *be);
 
 void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
 
-gboolean qof_backend_commit_exists(QofBackend *be);
+gboolean qof_backend_commit_exists(const QofBackend *be);
 //@}
 
 /** The qof_backend_set_error() routine pushes an error code onto the error
@@ -214,7 +214,7 @@ typedef struct QofBackendOption_s {
 void qof_backend_prepare_frame(QofBackend *be);
 
 /** Add an option to the backend_configuration. Repeat for more. */
-void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option);
+void qof_backend_prepare_option(QofBackend *be, const QofBackendOption *option);
 
 /** Complete the backend_configuration and return the frame. */
 KvpFrame* qof_backend_complete_frame(QofBackend *be);

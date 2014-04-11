@@ -219,10 +219,10 @@ gnc_plugin_menu_additions_action_cb (GtkAction *action,
 }
 
 
-/** Compare two extension menu item and indicate which should appear
- *  first in the menu listings.  The strings being compared are
- *  collation keys produced by g_utf8_collate_key(), so this function
- *  doesn't have to be anything more than a wrapper around strcmp,
+/** Compare two extension menu items and indicate which should appear
+ *  first in the menu listings.  If only one of them is a submenu,
+ *  choose that one.  Otherwise, the sort_keys are collation keys
+ *  produced by g_utf8_collate_key(), so compare them with strcmp.
  *
  *  @param a A menu extension.
  *
@@ -231,9 +231,16 @@ gnc_plugin_menu_additions_action_cb (GtkAction *action,
  *  @return -1 if extension 'a' should appear first. 1 if extension
  *  'b' should appear first. */
 static gint
-gnc_menu_additions_alpha_sort (ExtensionInfo *a, ExtensionInfo *b)
+gnc_menu_additions_sort (ExtensionInfo *a, ExtensionInfo *b)
 {
-  return strcmp(a->sort_key, b->sort_key);
+  if (a->type == b->type)
+    return strcmp(a->sort_key, b->sort_key);
+  else if (a->type == GTK_UI_MANAGER_MENU)
+    return -1;
+  else if (b->type == GTK_UI_MANAGER_MENU)
+    return 1;
+  else
+    return 0;
 }
 
 
@@ -437,7 +444,7 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
   gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
 
   menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
-			   (GCompareFunc)gnc_menu_additions_alpha_sort);
+			   (GCompareFunc)gnc_menu_additions_sort);
 
   /* Assign accelerators */
   table = g_once(&accel_table_init, gnc_menu_additions_init_accel_table, NULL);

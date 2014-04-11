@@ -10,7 +10,7 @@
       <default>[namespace,symbol,name,printname,uniquename,cusip_code,fraction,quote_flag,quote_source,quote_timezone]</default>
       <locale name="C">
         <short>Order of columns in the dialog</short>
-        <long>This setting contains a list of name which control the order
+        <long>This setting contains a list of names which controls the order
 	in which the columns are listed in the dialog.  Names may be reordered
 	or removed from this list to control which columns appear in the dialog
 	and in what order.</long>

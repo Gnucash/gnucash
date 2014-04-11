@@ -1,6 +1,7 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
+  dialog-book-close.glade \
   dialog-query-list.glade \
   dialog-reset-warnings.glade \
   druid-provider-multifile.glade \

@@ -84,7 +84,7 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.2.1",
+	    _("The last stable version was "), "GnuCash 2.2.5",
 	    _("The next stable version will be "), "GnuCash 2.4");
 }
 
@@ -140,8 +140,8 @@ try_load_config_array(const gchar *fns[])
 static void
 update_message(const gchar *msg)
 {
-    gnc_update_splash_screen(msg);
-    g_message(msg);
+    gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
+    g_message("%s", msg);
 }
 
 static void
@@ -285,7 +285,8 @@ gnucash_command_line(int *argc, char **argv)
     g_option_context_add_group (context, gtk_get_option_group (FALSE));
     if (!g_option_context_parse (context, argc, &argv, &error))
     {
-         g_error("Error parsing command line arguments: [%s]; try `gnucash --help` for available options.", error->message);
+         g_warning("Error parsing command line arguments: [%s]; try `gnucash --help` for available options.", error->message);
+         exit(1);
     }
     g_option_context_free (context);
     if (error)
@@ -339,6 +340,7 @@ load_gnucash_modules()
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/csv", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
+        { "gnucash/import-export/aqbanking", 0, TRUE },
         { "gnucash/import-export/hbci", 0, TRUE },
         { "gnucash/report/report-system", 0, FALSE },
         { "gnucash/report/stylesheets", 0, FALSE },
@@ -352,7 +354,7 @@ load_gnucash_modules()
     /* module initializations go here */
     len = sizeof(modules) / sizeof(*modules);
     for (i = 0; i < len; i++) {
-        gnc_update_splash_screen(modules[i].name);
+        gnc_update_splash_screen(modules[i].name, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         if (modules[i].optional)
             gnc_module_load_optional(modules[i].name, modules[i].version);
         else
@@ -360,11 +362,11 @@ load_gnucash_modules()
     }
     if (!gnc_engine_is_initialized()) {
         /* On Windows this check used to fail anyway, see
-	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
-	   but more recently it seems to work as expected
-	   again. 2006-12-20, cstim. */
-        g_error("GnuCash engine failed to initialize.  Exiting.\n");
-        exit(0);
+         * https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
+         * but more recently it seems to work as expected
+         * again. 2006-12-20, cstim. */
+        g_warning("GnuCash engine failed to initialize.  Exiting.\n");
+        exit(1);
     }
 }
 
@@ -408,7 +410,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
 
     qof_session_destroy(session);
     if (!SCM_NFALSEP(scm_result)) {
-        g_error("Failed to add quotes to %s.", add_quotes_file);
+        g_warning("Failed to add quotes to %s.", add_quotes_file);
         goto fail;
     }
 
@@ -417,7 +419,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     return;
  fail:
     if (session && qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        g_error("Session Error: %s", qof_session_get_error_message(session));
+        g_warning("Session Error: %s", qof_session_get_error_message(session));
     qof_event_resume();
     gnc_shutdown(1);
 }
@@ -463,14 +465,14 @@ inner_main (void *closure, int argc, char **argv)
     scm_c_eval_string("(gnc:main)");
 
     /* Install Price Quote Sources */
-    gnc_update_splash_screen(_("Checking Finance::Quote..."));
+    gnc_update_splash_screen(_("Checking Finance::Quote..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     scm_c_use_module("gnucash price-quotes");
     scm_c_eval_string("(gnc:price-quotes-install-sources)");  
 
     gnc_hook_run(HOOK_STARTUP, NULL);
     
     if (!nofile && (fn = get_file_to_load())) {
-        gnc_update_splash_screen(_("Loading data..."));
+        gnc_update_splash_screen(_("Loading data..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(fn);
         g_free(fn);
     } 
@@ -522,6 +524,14 @@ gnc_log_init()
           qof_log_set_level("gnc", QOF_LOG_INFO);
      }
 
+     {
+          gchar *log_config_filename;
+          log_config_filename = gnc_build_dotgnucash_path("log.conf");
+          if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
+               qof_log_parse_log_config(log_config_filename);
+          g_free(log_config_filename);
+     }
+
      if (log_flags != NULL)
      {
           int i = 0;
@@ -542,14 +552,6 @@ gnc_log_init()
                qof_log_set_level(parts[0], level);
                g_strfreev(parts);
           }
-     }
-
-     {
-          gchar *log_config_filename;
-          log_config_filename = gnc_build_dotgnucash_path("log.conf");
-          if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
-               qof_log_parse_log_config(log_config_filename);
-          g_free(log_config_filename);
      }
  }
 

@@ -372,6 +372,9 @@ gnc_xfer_dialog_from_tree_selection_changed_cb (GtkTreeSelection *selection,
   Account *account;
 
   account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
+  if (!account)
+    return;
+
   commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
 		     gnc_commodity_get_printname(commodity));
@@ -402,6 +405,9 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
   Account *account;
 
   account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
+  if (!account)
+    return;
+
   commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
 		     gnc_commodity_get_printname(commodity));
@@ -617,14 +623,17 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
   {
     GNCAccountType other_type;
     GtkWidget *other_button;
-    
+    XferDirection other_direction;
+
     DEBUG("updating other split");
     if (xferData->quickfill == XFER_DIALOG_FROM) {
-      other_button = xferData->from_show_button;
+      other_button = xferData->to_show_button;
+      other_direction = XFER_DIALOG_TO;
     }
     else
     {
-      other_button = xferData->to_show_button;
+      other_button = xferData->from_show_button;
+      other_direction = XFER_DIALOG_FROM;
     }
 
     other_type = xaccAccountGetType(other_acct);
@@ -635,7 +644,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
     if( (other_type == ACCT_TYPE_EXPENSE) || (other_type == ACCT_TYPE_INCOME) )
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(other_button), TRUE);
 
-    gnc_transfer_dialog_set_selected_account (xferData, other_acct, xferData->quickfill);
+    gnc_transfer_dialog_set_selected_account (xferData, other_acct, other_direction);
 
     changed = TRUE;
   }
@@ -1243,7 +1252,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
       const char *message = _("You must specify an account to transfer from, "
 			      "or to, or both, for this transaction. "
 			      "Otherwise, it will not be recorded.");
-      gnc_error_dialog(xferData->dialog, message);
+      gnc_error_dialog(xferData->dialog, "%s", message);
       LEAVE("bad account");
       return;
     }
@@ -1252,7 +1261,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     {
       const char *message = _("You can't transfer from and to the same "
 			      "account!");
-      gnc_error_dialog(xferData->dialog, message);
+      gnc_error_dialog(xferData->dialog, "%s", message);
       LEAVE("same account");
       return;
     }
@@ -1279,7 +1288,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
       const char *message = _("You can't transfer from a non-currency account.  "
 			      "Try reversing the \"from\" and \"to\" accounts "
 			      "and making the \"amount\" negative.");
-      gnc_error_dialog(xferData->dialog, message);
+      gnc_error_dialog(xferData->dialog, "%s", message);
       LEAVE("non-currency");
       return;
     }
@@ -1302,7 +1311,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   if (gnc_numeric_zero_p (amount))
   {
     const char *message = _("You must enter an amount to transfer.");
-    gnc_error_dialog(xferData->dialog, message);
+    gnc_error_dialog(xferData->dialog, "%s", message);
     LEAVE("invalid from amount");
     return;
   }

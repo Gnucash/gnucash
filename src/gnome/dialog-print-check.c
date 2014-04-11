@@ -550,7 +550,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                                         GTK_BUTTONS_CLOSE,
                                         _("Cannot save check format file."));
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                                                 error->message);
+                                                 "%s", error->message);
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_error_free(error);
@@ -721,9 +721,9 @@ format_read_item_placement(const gchar * file,
             }
             g_free(key);
 
+            key = g_strdup_printf("%s_%d", KF_KEY_ALIGN, item_num);
             value =
-                g_key_file_get_string(key_file, KF_GROUP_ITEMS, KF_KEY_ALIGN,
-                                      &error);
+                g_key_file_get_string(key_file, KF_GROUP_ITEMS, key, &error);
             if (!error) {
                 g_debug("Check file %s, group %s, key %s, value: %s",
                         file, KF_GROUP_ITEMS, key, value);
@@ -744,6 +744,7 @@ format_read_item_placement(const gchar * file,
                 data->align = PANGO_ALIGN_LEFT;
                 g_clear_error(&error);
             }
+            g_free(key);
         }
         /* Get any extra data for specific items. */
         switch (data->type) {
@@ -1088,7 +1089,7 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
 		  * is the filename of that format; %3$s the type of
 		  * the other check format; and %4$s the filename of
 		  * that other format. */
-                 _("The guids in the %s check format file '%s' and "
+                 _("The GUIDs in the %s check format file '%s' and "
                    "the %s check format file '%s' match."),
                  existing->group, existing->filename,
                  format->group, format->filename);
@@ -1362,7 +1363,8 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     }
     pango_layout_set_alignment(layout,
                                data->w ? data->align : PANGO_ALIGN_LEFT);
-    pango_layout_set_width(layout, -1);
+    pango_layout_set_width(layout, data->w ? data->w * PANGO_SCALE : -1);
+    pango_layout_set_ellipsize(layout, PANGO_ELLIPSIZE_END);
     if (gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL)) {
         new_text = g_strdup_printf("***%s***", text);
         pango_layout_set_text(layout, new_text, -1);

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Studium
     </gnc-act:title>
     <gnc-act:short-description>
-      Konten für Studentinnen und Studenten
+      Konten fÃ¼r Studentinnen und Studenten
     </gnc-act:short-description>
     <gnc-act:long-description>
-      BAFöG, Studiengebühren
+      BAFÃ¶G, StudiengebÃ¼hren
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -50,25 +50,25 @@
   <act:parent type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>BAFöG</act:name>
+  <act:name>BAFÃ¶G</act:name>
   <act:id type="new">ff3f7509348ababb6b105c6090f7098f</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Darlehensanteil des BAFöGs</act:description>
+  <act:description>Darlehensanteil des BAFÃ¶Gs</act:description>
   <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Erträge</act:name>
+  <act:name>ErtrÃ¤ge</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Erträge</act:description>
+  <act:description>ErtrÃ¤ge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -78,14 +78,14 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>BAFöG</act:name>
+  <act:name>BAFÃ¶G</act:name>
   <act:id type="new">a3f10cc287e9fb80272dd9bc4c86d090</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>BAFöG-Leistungen</act:description>
+  <act:description>BAFÃ¶G-Leistungen</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -123,14 +123,14 @@
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Studiengebühren</act:name>
+  <act:name>StudiengebÃ¼hren</act:name>
   <act:id type="new">df59b64631384ab3ae44e022170e0d47</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Studiengebühren</act:description>
+  <act:description>StudiengebÃ¼hren</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 </gnc-account-example>

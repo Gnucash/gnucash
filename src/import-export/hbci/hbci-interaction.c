@@ -403,7 +403,7 @@ static int inputBoxCB(AB_BANKING *ab,
 			   minsize);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
-					   msg);
+					   "%s", msg);
       g_free (msg);
       if (!retval)
 	break;
@@ -417,7 +417,7 @@ static int inputBoxCB(AB_BANKING *ab,
 			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
-					   msg);
+					   "%s", msg);
       g_free (msg);
       if (!retval)
 	break;
@@ -484,7 +484,7 @@ static int getTanCB(AB_BANKING *ab,
 			   minsize);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
-					   msg);
+					   "%s", msg);
       g_free (msg);
       if (!retval)
 	break;
@@ -498,7 +498,7 @@ static int getTanCB(AB_BANKING *ab,
 			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
-					   msg);
+					   "%s", msg);
       g_free (msg);
       if (!retval)
 	break;

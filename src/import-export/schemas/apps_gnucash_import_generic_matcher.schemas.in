@@ -143,11 +143,11 @@
           This field specifies the extra fee that is taken into
           account when matching imported transactions. In some places
           commercial ATMs (not belonging to a financial institution)
-          are installed in places like convienience store.  These ATM
-          add its fee directly to the amount instead of showing up as
+          are installed in places like convenience stores.  These ATMs
+          add their fee directly to the amount instead of showing up as
           a separate transaction or in your monthly banking fees.  For
-          example, you withdraw 100$, and you are charged 101,50$ plus
-          Interac fees.  If you manually entered that 100$, the
+          example, you withdraw $100, and you are charged $101,50 plus
+          Interac fees.  If you manually entered that $100, the
           amounts won't match.  You should set this to whatever is the
           maximum such fee in your area (in units of your local
           currency), so the transaction will be recognised as a match.

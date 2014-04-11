@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Cuentas de jubilación
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Cuenta de jubilación con subcuentas de inversiones relacionadas
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deseará escoger este juego de cuentas si tiene cuentas de
+      jubilación (de acciones, bonos, fondos de inversión, fondos de
+      índice).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo</act:name>
+  <act:id type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inversiones</act:name>
+  <act:id type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Inversiones</act:description>
+  <act:parent type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Jubilación</act:name>
+  <act:id type="new">4173f3047238f4b5595b11d6161b2f48</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Jubilación</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">IRA, 401(k), u otros fondos de jubilación</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bonos</act:name>
+  <act:id type="new">9053199c1da747555d12272f48c719fd</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Bonos</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Acciones</act:name>
+  <act:id type="new">9bf53e9580991e323b297999fddff988</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Acciones</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fondo de índice</act:name>
+  <act:id type="new">2326b032fe4e8f434159310fccf17091</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Fondo de índice</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fondo de inversión</act:name>
+  <act:id type="new">a62d804729117e74a6c880cecb818b56</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Fondo de inversión</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

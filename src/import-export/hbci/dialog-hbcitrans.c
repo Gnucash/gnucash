@@ -33,14 +33,7 @@
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>
 #include <aqbanking/jobsingledebitnote.h>
-#if ((AQBANKING_VERSION_MAJOR > 1) || \
-     ((AQBANKING_VERSION_MAJOR == 1) && \
-      ((AQBANKING_VERSION_MINOR > 6) || \
-       ((AQBANKING_VERSION_MINOR == 6) && \
-        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
-	 (AQBANKING_VERSION_BUILD > 2))))))
-# include <aqbanking/jobinternaltransfer.h>
-#endif
+#include <aqbanking/jobinternaltransfer.h>
 #include <iconv.h>
 
 #include "dialog-utils.h"
@@ -487,20 +480,12 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       g_warning("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
       return GTK_RESPONSE_CANCEL;
     }
-#if ((AQBANKING_VERSION_MAJOR > 1) || \
-     ((AQBANKING_VERSION_MAJOR == 1) && \
-      ((AQBANKING_VERSION_MINOR > 0) || \
-       ((AQBANKING_VERSION_MINOR == 0) && \
-        (AQBANKING_VERSION_PATCHLEVEL > 6)))))
     {
       const AB_TRANSACTION_LIMITS *joblimits = AB_JobSingleTransfer_GetFieldLimits(job);
       max_purpose_lines = (joblimits ?
 			   AB_TransactionLimits_GetMaxLinesPurpose (joblimits) :
 			   2);
     }
-#else
-    max_purpose_lines = AB_JobSingleTransfer_GetMaxPurposeLines(job);
-#endif
     /* these are the number of fields, 27 characters each. */
     AB_Job_free(job);
   }
@@ -767,15 +752,8 @@ gnc_hbci_trans_dialog_enqueue(const AB_TRANSACTION *hbci_trans, AB_BANKING *api,
     job = AB_JobSingleDebitNote_new(h_acc);
     break;
   case SINGLE_INTERNAL_TRANSFER:
-#if ((AQBANKING_VERSION_MAJOR > 1) || \
-     ((AQBANKING_VERSION_MAJOR == 1) && \
-      ((AQBANKING_VERSION_MINOR > 6) || \
-       ((AQBANKING_VERSION_MINOR == 6) && \
-        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
-	 (AQBANKING_VERSION_BUILD > 2))))))
     job = AB_JobInternalTransfer_new(h_acc);
     break;
-#endif
   default:
   case SINGLE_TRANSFER:
     job = AB_JobSingleTransfer_new(h_acc);
@@ -790,15 +768,8 @@ gnc_hbci_trans_dialog_enqueue(const AB_TRANSACTION *hbci_trans, AB_BANKING *api,
     AB_JobSingleDebitNote_SetTransaction(job, hbci_trans);
     break;
   case SINGLE_INTERNAL_TRANSFER:
-#if ((AQBANKING_VERSION_MAJOR > 1) || \
-     ((AQBANKING_VERSION_MAJOR == 1) && \
-      ((AQBANKING_VERSION_MINOR > 6) || \
-       ((AQBANKING_VERSION_MINOR == 6) && \
-        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
-	 (AQBANKING_VERSION_BUILD > 2))))))
     AB_JobInternalTransfer_SetTransaction(job, hbci_trans);
     break;
-#endif
   default:
   case SINGLE_TRANSFER:
     AB_JobSingleTransfer_SetTransaction(job, hbci_trans);

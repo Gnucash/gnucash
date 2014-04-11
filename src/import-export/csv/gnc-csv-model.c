@@ -8,7 +8,6 @@
 #include <string.h>
 #include <sys/time.h>
 
-#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <regex.h>
@@ -16,6 +15,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <time.h>
+#ifndef HAVE_LOCALTIME_R
+#include "localtime_r.h"
+#endif
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 

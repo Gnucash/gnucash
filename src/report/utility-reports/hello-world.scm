@@ -467,6 +467,13 @@ new, totally cool report, consult the mailing list %s.")
  ;; untranslated value here!
  'name (N_ "Hello, World")
 
+ ;; The GUID for this report. This string should be unique, set once
+ ;; and left alone forever after that. In theory, you could use any
+ ;; unique string, even a meaningful one (!) but its probably best to
+ ;; use a true uuid. Get them from `uuidgen | sed -e s/-//g` and paste
+ ;; the results in here. You must make a new guid for each report!
+ 'report-guid "898d78ec92854402bf76e20a36d24ade"
+
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
  'menu-name (N_ "Sample Report with Examples")

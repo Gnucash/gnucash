@@ -75,8 +75,8 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Remove a splits from a transaction</short>
-        <long>This dialog is presented before allowing you to remove a splits from a transaction.</long>
+        <short>Remove a split from a transaction</short>
+        <long>This dialog is presented before allowing you to remove a split from a transaction.</long>
       </locale>
     </schema>
 
@@ -88,7 +88,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Remove a splits from a transaction</short>
+        <short>Remove a reconciled split from a transaction</short>
         <long>This dialog is presented before allowing you to remove a reconciled split from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</long>
       </locale>
     </schema>

@@ -36,7 +36,9 @@
 #include <goffice/graph/gog-chart.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
-#ifdef GOFFICE_WITH_CAIRO
+#if defined(HAVE_GOFFICE_0_5)
+#    include <goffice/graph/gog-renderer.h>
+#elif defined(GOFFICE_WITH_CAIRO)
 #    include <goffice/graph/gog-renderer-cairo.h>
 #else
 #    include <goffice/graph/gog-renderer-pixbuf.h>
@@ -170,7 +172,9 @@ static void
 add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
 {
   GtkWidget *widget;
-#ifdef GOFFICE_WITH_CAIRO
+#if defined(HAVE_GOFFICE_0_5)
+  GogRenderer *renderer;
+#elif defined(GOFFICE_WITH_CAIRO)
   GogRendererCairo *cairo_renderer;
 #else
   GogRendererPixbuf *pixbuf_renderer;
@@ -184,7 +188,13 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   // gnumeric uses.  We probably _should_ do something like that, though.
   gog_object_update (GOG_OBJECT (graph));
 
-#ifdef GOFFICE_WITH_CAIRO
+#if defined(HAVE_GOFFICE_0_5)
+  renderer = GOG_RENDERER (g_object_new (GOG_RENDERER_TYPE,
+					 "model", graph,
+					 NULL));
+  update_status = gog_renderer_update (renderer, eb->width, eb->height);
+  buf = gog_renderer_get_pixbuf (renderer);
+#elif defined(GOFFICE_WITH_CAIRO)
   cairo_renderer = GOG_RENDERER_CAIRO (g_object_new (GOG_RENDERER_CAIRO_TYPE,
 						     "model", graph,
 						     NULL));
@@ -198,7 +208,7 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   update_status = gog_renderer_pixbuf_update (pixbuf_renderer,
 					      eb->width, eb->height, 1.0);
   buf = gog_renderer_pixbuf_get (pixbuf_renderer);
-#endif /* GOFFICE_WITH_CAIRO */
+#endif
 
   widget = gtk_image_new_from_pixbuf (buf);
   gtk_widget_set_size_request (widget, eb->width, eb->height);
@@ -628,14 +638,23 @@ static void
 draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
 {
   GogGraph *graph = GOG_GRAPH(g_object_get_data(G_OBJECT(eb), "graph"));
+#    ifdef HAVE_GOFFICE_0_5
+  GogRenderer *rend = g_object_new(GOG_RENDERER_TYPE, "model", graph, NULL);
+#    else
   GogRendererCairo *rend = g_object_new(GOG_RENDERER_CAIRO_TYPE, "model", graph,
                                         "cairo", cr, "is-vector", TRUE, NULL);
+#    endif
 
   /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
   cairo_scale(cr, 0.5, 0.5);
 
   cairo_translate(cr, 0, -eb->height);
+
+#    ifdef HAVE_GOFFICE_0_5
+  gog_renderer_render_to_cairo(rend, cr, eb->width, eb->height);
+#    else
   gog_renderer_cairo_update(rend, eb->width, eb->height, 1.0);
+#    endif
   g_object_unref(rend);
 }
 

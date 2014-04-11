@@ -149,7 +149,7 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
 Split * xaccSplitClone (const Split *s);
 
 Split *xaccDupeSplit (const Split *s);
-G_INLINE_FUNC void mark_split (Split *s);
+void mark_split (Split *s);
 
 void xaccSplitVoid(Split *split);
 void xaccSplitUnvoid(Split *split);

@@ -156,6 +156,9 @@ void gnc_lot_set_notes (GNCLot *, const char *);
  * */
 KvpFrame * gnc_lot_get_slots (const GNCLot *);
 
+/** XXX: Document? */
+GNCLot * gnc_lot_make_default (Account * acc);
+
 #define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_INSTANCE(X))
 
 #define LOT_IS_CLOSED	"is-closed?"

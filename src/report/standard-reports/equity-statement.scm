@@ -691,6 +691,7 @@
 (gnc:define-report 
  'version 1
  'name reportname
+ 'report-guid "c2a996c8970f43448654ca84f17dda24"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator equity-statement-options-generator
  'renderer (lambda (report-obj)

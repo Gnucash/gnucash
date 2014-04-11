@@ -246,7 +246,8 @@ gnc_plugin_page_recreate_page(GtkWidget *window,
 
   klass = g_type_class_ref(type);
   if (klass == NULL) {
-    LEAVE("Cannot create class %s(%ld)", page_type, type);
+    const gchar *type_name = g_type_name(type);
+    LEAVE("Cannot create class %s(%s)", page_type, type_name ? type_name : "invalid type");
     return NULL;
   }
 

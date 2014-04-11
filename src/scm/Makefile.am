@@ -7,6 +7,7 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncscmmod_DATA = main.scm price-quotes.scm
 
 gnc_regular_scm_files = \
+  string.scm \
   command-line.scm \
   doc.scm \
   fin.scm \

@@ -488,6 +488,57 @@
 				       (xaccSplitGetBalance (car splits))))
       balance-collector))
 
+;; Calculate the increase in the balance of the account in terms of
+;; "value" (as opposed to "amount") between the specified dates.
+;; If include-children? is true, the balances of all children (not
+;; just direct children) are are included in the calculation. The results
+;; are returned in a commodity collector.
+(define (gnc:account-get-comm-value-interval account start-date end-date
+                                                include-children?)
+  (let ((value-collector (gnc:make-commodity-collector))
+	(query (qof-query-create-for-splits))
+	(splits #f))
+
+    (if include-children?
+        (for-each
+         (lambda (x)
+           (gnc-commodity-collector-merge value-collector x))
+         (gnc:account-map-descendants
+          (lambda (d)
+            (gnc:account-get-comm-value-interval d start-date end-date #f))
+          account)))
+
+    ;; Build a query to find all splits between the indicated dates.
+    (qof-query-set-book query (gnc-get-current-book))
+    (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS query
+                             (and start-date #t) start-date
+                             (and end-date #t) end-date
+                             QOF-QUERY-AND)
+
+    ;; Get the query results.
+    (set! splits (qof-query-run query))
+    (qof-query-destroy query)
+
+    ;; Add the "value" of each split returned (which is measured
+    ;; in the transaction currency).
+    (for-each
+     (lambda (split)
+       (value-collector 'add
+                        (xaccTransGetCurrency (xaccSplitGetParent split))
+                        (xaccSplitGetValue split)))
+     splits)
+
+    value-collector))
+
+;; Calculate the balance of the account in terms of "value" (rather
+;; than "amount") at the specified date. If include-children? is
+;; true, the balances of all children (not just direct children) are
+;; are included in the calculation. The results are returned in a
+;; commodity collector.
+(define (gnc:account-get-comm-value-at-date account date include-children?)
+  (gnc:account-get-comm-value-interval account #f date include-children?))
+
 ;; Adds all accounts' balances, where the balances are determined with
 ;; the get-balance-fn. The reverse-balance-fn
 ;; (e.g. gnc-reverse-balance) should return #t if the
@@ -597,29 +648,31 @@
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (qof-query-create-for-splits)))
-     (qof-query-set-book temp-query book)
-     
-     (xaccQueryAddClearedMatch
-	     temp-query
-	     CLEARED-VOIDED
-	     QOF-QUERY-AND)
+    (qof-query-set-book temp-query book)
 
-     (set! temp-query (qof-query-invert temp-query))
+    (xaccQueryAddClearedMatch
+     temp-query
+     CLEARED-VOIDED
+     QOF-QUERY-AND)
 
-     (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
+    (let ((inv-query (qof-query-invert temp-query)))
+      (qof-query-merge-in-place query inv-query QOF-QUERY-AND)
+      (qof-query-destroy inv-query)
+      (qof-query-destroy temp-query))))
 
 ;; utility function - ensure that a query matches only voids.  Destructive
 
 (define (gnc:query-set-match-voids-only! query book)
   (let ((temp-query (qof-query-create-for-splits)))
-     (qof-query-set-book temp-query book)
-     
-     (xaccQueryAddClearedMatch
-	     temp-query
-	     CLEARED-VOIDED
-	     QOF-QUERY-AND)
+    (qof-query-set-book temp-query book)
 
-     (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
+    (xaccQueryAddClearedMatch
+     temp-query
+     CLEARED-VOIDED
+     QOF-QUERY-AND)
+
+    (qof-query-merge-in-place query temp-query QOF-QUERY-AND)
+    (qof-query-destroy temp-query)))
 
 (define (gnc:split-voided? split)
   (let ((trans (xaccSplitGetParent split)))
@@ -726,14 +779,16 @@
     (xaccQueryAddDescriptionMatch
      str-query matchstr case-sens regexp QOF-QUERY-AND)
     (set! total-query
-	  ;; this is a tad inefficient, but its a simple way to accomplish
-	  ;; description match inversion...
-	  (if pos?
-	      (qof-query-merge sign-query str-query QOF-QUERY-AND)
-	      (qof-query-merge
-	       sign-query (qof-query-invert str-query) QOF-QUERY-AND)
-	      ))
-    
+          ;; this is a tad inefficient, but its a simple way to accomplish
+          ;; description match inversion...
+          (if pos?
+              (qof-query-merge-in-place sign-query str-query QOF-QUERY-AND)
+              (let ((inv-query (qof-query-invert str-query)))
+                (qof-query-merge-in-place
+                 sign-query inv-query QOF-QUERY-AND)
+                qof-query-destroy inv-query)))
+    (qof-query-destroy str-query)
+
     (set! splits (qof-query-run total-query))
     (map (lambda (split)
 	   (let* ((shares (xaccSplitGetAmount split))

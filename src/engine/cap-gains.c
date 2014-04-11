@@ -76,7 +76,7 @@ static QofLogModule log_module = GNC_MOD_LOT;
 /* ============================================================== */
 
 gboolean 
-xaccAccountHasTrades (Account *acc)
+xaccAccountHasTrades (const Account *acc)
 {
    gnc_commodity *acc_comm;
    SplitList *splits, *node;
@@ -168,7 +168,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
    gnc_commodity *currency,
-   guint64 guess,
+   gint64 guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
    struct find_lot_s es;
@@ -195,7 +195,7 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
           sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   G_MAXUINT64, earliest_pred);
+                   G_MAXINT64, earliest_pred);
    LEAVE ("found lot=%p %s baln=%s", lot, gnc_lot_get_title (lot),
                gnc_num_dbg_to_string(gnc_lot_get_balance(lot)));
    return lot;
@@ -210,7 +210,7 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
 	  sign.num, sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   0, latest_pred);
+                   G_MININT64, latest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
 }
@@ -266,7 +266,7 @@ GetOrMakeLotOrphanAccount (Account *root, gnc_commodity * currency)
 /* ============================================================== */
 
 void
-xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
+xaccAccountSetDefaultGainAccount (Account *acc, const Account *gain_acct)
 {
   KvpFrame *cwd;
   KvpValue *vvv;
@@ -292,7 +292,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
 /* ============================================================== */
 
 Account *
-xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
+xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * currency)
 {
   Account *gain_acct = NULL;
   KvpFrame *cwd;
@@ -571,25 +571,6 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
 
 /* ============================================================== */
 
-static GNCLot *
-MakeDefaultLot (Account *acc)
-{
-   GNCLot * lot;
-   gint64 id;
-   char buff[200];
-
-   lot = gnc_lot_new (qof_instance_get_book(acc));
-
-   /* Provide a reasonable title for the new lot */
-   id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
-   snprintf (buff, 200, ("%s %" G_GINT64_FORMAT), _("Lot"), id);
-   kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
-   id ++;
-   kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
-
-   return lot;
-}
-
 /* Accounting-policy callback.  Given an account and an amount, 
  * this routine should return a lot.  By implementing this as 
  * a callback, we can 'easily' add other accounting policies.
@@ -632,7 +613,7 @@ xaccSplitAssign (Split *split)
      lot = pcy->PolicyGetLot (pcy, split);
      if (!lot)
      {
-        lot = MakeDefaultLot (acc);
+        lot = gnc_lot_make_default (acc);
         PINFO ("start new lot (%s)", gnc_lot_get_title(lot));
      }
      split = xaccSplitAssignToLot (split, lot);

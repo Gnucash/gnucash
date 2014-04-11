@@ -520,6 +520,7 @@
    (gnc:define-report
     'version 1
     'name (car l)
+    'report-guid (car (reverse l))
     'menu-path (list gnc:menuname-income-expense)
     'menu-name (caddr l) 
     'menu-tip (car (cdddr l)) 
@@ -531,5 +532,5 @@
 
  (list 
   ;; reportname, account-types, menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) menuname-income menutip-income)
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) menuname-expense menutip-expense)))
+  (list reportname-income (list ACCT-TYPE-INCOME) menuname-income menutip-income "5e2d129f28d14df881c3e47e3053f604")
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) menuname-expense menutip-expense "dde49fed4ca940959ae7d01b72742530")))

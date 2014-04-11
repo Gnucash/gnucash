@@ -27,7 +27,7 @@ add_precious_path msys $MSYS_DIR
 add_precious_path wget $WGET_DIR
 add_precious_path svn $SVN_DIR
 add_precious_path repos $REPOS_DIR
-add_precious_path docs $DOCS_DIR
+add_precious_path hh $HH_DIR
 
 # usage: eval_path <path> <force>
 function eval_path() {
@@ -83,6 +83,8 @@ function eval_all() {
     eval_path $GNUCASH_DIR\\dist
     eval_path $TMP_DIR
     eval_path $MSYS_DIR\\etc\\profile.d\\installer.sh force
+    eval_path $DOCS_DIR
+    eval_path $LIBXSLT_DIR
 }
 
 echo

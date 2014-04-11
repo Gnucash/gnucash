@@ -11668,10 +11668,10 @@ msgstr "No s'ha pogut executar correctament el programa extern «Assistent de co
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
-"The aqbanking package should include the program \"qt3-wizard\".  Please check your installation to ensure this program is present.  On some distributions this may require installing additional packages."
+"The %s package should include the program \"qt3-wizard\".  Please check your installation to ensure this program is present.  On some distributions this may require installing additional packages."
 msgstr ""
 "No s'ha trobat el programa extern «Assistent de configuració de l'AqBanking». \n"
-"El paquet de l'aqbanking hauria d'incloure el programa «qt3-wizard». Comproveu la vostra instal·lació per a assegurar-vos que teniu aquest programa. En algunes distribucions això requereix la instal·lació de paquets addicionals."
+"El paquet de l'%s hauria d'incloure el programa «qt3-wizard». Comproveu la vostra instal·lació per a assegurar-vos que teniu aquest programa. En algunes distribucions això requereix la instal·lació de paquets addicionals."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:709
 msgid "Online Banking Account Name"

@@ -38,15 +38,12 @@ check_time (Timespec ts, gboolean always_print)
   if (!ok || always_print)
   {
     fprintf (stderr,
-             "\n%lld:%lld -> %s ->\n\t%lld:%lld "
-             "(diff of %lld secs %lld nsecs)\n",
-             (long long int) ts.tv_sec,
-             (long long int) ts.tv_nsec,
-             str,
-             (long long int) ts_2.tv_sec,
-             (long long int) ts_2.tv_nsec,
-             (long long int) (ts.tv_sec - ts_2.tv_sec),
-             (long long int) (ts.tv_nsec - ts_2.tv_nsec));
+             "\n%" G_GINT64_FORMAT ":%ld -> %s ->\n"
+             "\t%" G_GINT64_FORMAT ":%ld"
+             " (diff of %" G_GINT64_FORMAT " secs %ld nsecs)\n",
+             ts.tv_sec, ts.tv_nsec, str,
+             ts_2.tv_sec, ts_2.tv_nsec,
+             ts.tv_sec - ts_2.tv_sec, ts.tv_nsec - ts_2.tv_nsec);
 
     if (!ok)
     {

@@ -29,13 +29,20 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(define multicolumn-guid "d8ba4a2e89e8479ca9f6eccdeb164588")
+(define welcome-guid "65135608f2014c6ca8412793a8cdf169")
+(define acct-summary-guid "3298541c236b494998b236dfad6ad752")
+(define exp-piechart-guid "9bf1892805cb4336be6320fe48ce5446")
+(define inc-piechart-guid "e1bd09b8a1dd49dd85760db9d82b045c")
+(define inc-exp-chart-guid "80769921e87943adade887b9835a7685")
+
 (define (gnc:make-welcome-report)
-  (let* ((view (gnc:make-report "Multicolumn View"))
-         (sub-welcome (gnc:make-report "Welcome to GnuCash"))
-         (sub-accounts (gnc:make-report "Account Summary"))
-         (sub-expense-pie (gnc:make-report "Expense Accounts"))
-         (sub-income-pie (gnc:make-report "Income Accounts"))
-         (sub-bar (gnc:make-report "Income/Expense Chart"))
+  (let* ((view (gnc:make-report multicolumn-guid))
+         (sub-welcome (gnc:make-report welcome-guid))
+         (sub-accounts (gnc:make-report acct-summary-guid))
+         (sub-expense-pie (gnc:make-report exp-piechart-guid))
+         (sub-income-pie (gnc:make-report inc-piechart-guid))
+         (sub-bar (gnc:make-report inc-exp-chart-guid))
          (options #f))
 
     (define (set-option! section name value)
@@ -87,6 +94,7 @@
 (gnc:define-report 
  'name (N_ "Welcome to GnuCash")
  'version 1
+ 'report-guid "65135608f2014c6ca8412793a8cdf169"
  'in-menu? #f
  'menu-path (list gnc:menuname-utility)
  'options-generator options

@@ -599,7 +599,7 @@ gnc_entry_ledger_check_close_internal (GtkWidget *parent,
   if (!gnc_entry_ledger_verify_can_save (ledger))
     return FALSE;
 
-  if (dontask || gnc_verify_dialog (parent, TRUE, message))
+  if (dontask || gnc_verify_dialog (parent, TRUE, "%s", message))
     gnc_entry_ledger_save (ledger, TRUE);
   else
     gnc_entry_ledger_cancel_cursor_changes (ledger);

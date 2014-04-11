@@ -538,7 +538,7 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    /* Next, copy the commodity tables */
    src_tbl = gnc_commodity_table_get_table (src_book);
    dst_tbl = gnc_commodity_table_get_table (dest_book);
-   gnc_commodity_table_copy (dst_tbl, src_tbl);
+   gnc_commodity_table_copy (dst_tbl, src_tbl, dest_book);
 
    /* Next, copy all of the accounts */
    /* hack alert -- FIXME -- this should really be a merge, not a

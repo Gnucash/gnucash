@@ -369,14 +369,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Diverção</act:name>
+  <act:name>Diversão</act:name>
   <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:currency>
-  <act:description>Diverção</act:description>
+  <act:description>Diversão</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

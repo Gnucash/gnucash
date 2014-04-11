@@ -227,7 +227,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   if (gnc_numeric_check (amount) || !gnc_numeric_positive_p (amount)) {
     text = _("You must enter the amount of the payment.  "
 	     "The payment amount must be greater than zero.");
-    gnc_error_dialog (pw->dialog, text);
+    gnc_error_dialog (pw->dialog, "%s", text);
     return;
   }
 
@@ -235,7 +235,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   gnc_owner_get_owner (pw->owner_choice, &(pw->owner));
   if (pw->owner.owner.undefined == NULL) {
     text = _("You must select a company for payment processing.");
-    gnc_error_dialog (pw->dialog, text);
+    gnc_error_dialog (pw->dialog, "%s", text);
     return;
   }
 
@@ -243,7 +243,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   acc = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(pw->acct_tree));
   if (!acc) {
     text = _("You must select a transfer account from the account tree.");
-    gnc_error_dialog (pw->dialog, text);
+    gnc_error_dialog (pw->dialog, "%s", text);
     return;
   }
 
@@ -251,7 +251,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(pw->post_combo));
   if (!text || safe_strcmp (text, "") == 0) {
     text = _("You must enter an account name for posting.");
-    gnc_error_dialog (pw->dialog, text);
+    gnc_error_dialog (pw->dialog, "%s", text);
     return;
   }
 

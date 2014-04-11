@@ -291,8 +291,11 @@ static GtkWidget *gnc_dialog_get_widget_smart(GtkWidget *w)
     if (GTK_IS_BOX(w)) {
         GList *children = gtk_container_get_children(GTK_CONTAINER(w));
         if (g_list_length(children) == 1) {
-            return gnc_dialog_get_widget_smart(GTK_WIDGET(children->data));
+            GtkWidget *child = GTK_WIDGET(children->data);
+            g_list_free(children);
+            return gnc_dialog_get_widget_smart(child);
         }
+        g_list_free(children);
     }
     return w;
 }
@@ -354,23 +357,22 @@ gboolean gnc_dialog_set_string(GncDialog *d, const gchar* name,
     return TRUE;
 }
 
-const gchar * gnc_dialog_get_string(GncDialog *d, const gchar* name)
+gchar * gnc_dialog_get_string(GncDialog *d, const gchar* name)
 {
     SPECIFIC_INIT(d, name, wid, NULL);
 
     if (IS_A(wid, "GtkEntry"))
-	return gtk_entry_get_text(GTK_ENTRY(wid));
+        return g_strdup(gtk_entry_get_text(GTK_ENTRY(wid)));
     else if (IS_A(wid, "GtkLabel"))
-        return gtk_label_get_text(GTK_LABEL(wid));
+        return g_strdup(gtk_label_get_text(GTK_LABEL(wid)));
     else if (IS_A(wid, "GtkCombo")) //deprecated
-        return gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(wid)->entry));
+        return g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(wid)->entry)));
     else if (IS_A(wid, "GtkTextView")) {
         GtkTextBuffer *buf;
         GtkTextIter start, end;
         buf = gtk_text_view_get_buffer(GTK_TEXT_VIEW(wid));
         gtk_text_buffer_get_bounds(buf, &start, &end);
         return gtk_text_buffer_get_text(buf, &start, &end, TRUE);
-        //FIXME: LEAK: callers are expecting NOT to own the mem.
     } else if (IS_A(wid, "GtkComboBoxEntry")) {
         gint col;
         GtkTreeModel *tm;
@@ -382,9 +384,9 @@ const gchar * gnc_dialog_get_string(GncDialog *d, const gchar* name)
         if (type != G_TYPE_STRING)
             return NULL;
         if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(wid), &iter)) {
-            GValue val;
-            gtk_tree_model_get_value(tm, &iter, col, &val);
-            return g_value_get_string(&val);
+            gchar *str;
+            gtk_tree_model_get(tm, &iter, col, &str);
+            return str;
         } else return NULL;
     } else TYPE_ERROR(wid, "GtkEntry or GtkLabel or GtkTextView", NULL);
 }

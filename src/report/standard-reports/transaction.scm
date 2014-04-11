@@ -95,6 +95,16 @@
        (= (gnc:timepair-get-month tp-a)
           (gnc:timepair-get-month tp-b))))
 
+(define (timepair-same-week tp-a tp-b)
+  (and (timepair-same-year tp-a tp-b)
+       (= (gnc:timepair-get-week tp-a)
+	  (gnc:timepair-get-week tp-b))))
+
+(define (split-same-week-p a b)
+  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+	(tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
+    (timepair-same-week tp-a tp-b)))
+
 (define (split-same-month-p a b)
   (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
         (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
@@ -167,6 +177,13 @@
                                                #t
                                                (used-sort-account-full-name column-vector))))
                         table width subheading-style)))
+
+(define (render-week-subheading split table width subheading-style column-vector)
+  (add-subheading-row (gnc:date-get-week-year-string
+		       (gnc:timepair->date
+			(gnc-transaction-get-date-posted
+			 (xaccSplitGetParent split))))
+		      table width subheading-style))
 
 (define (render-month-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-month-year-string
@@ -241,6 +258,14 @@
                                                         #t
                                                         (used-sort-account-full-name column-vector)))
                     total-collector subtotal-style export?))
+
+(define (render-week-subtotal
+	 table width split total-collector subtotal-style column-vector export?)
+  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+				 (xaccSplitGetParent split)))))
+    (add-subtotal-row table width
+		      (total-string (gnc:date-get-week-year-string tm))
+		      total-collector subtotal-style export?)))
 
 (define (render-month-subtotal
          table width split total-collector subtotal-style column-vector export?)
@@ -320,8 +345,10 @@
   (vector-ref columns-used 17))
 (define (used-sort-account-full-name columns-used)
   (vector-ref columns-used 18))
+(define (used-notes columns-used)
+  (vector-ref columns-used 19))
 
-(define columns-used-size 19)
+(define columns-used-size 20)
 
 (define (num-columns-required columns-used)  
   (do ((i 0 (+ i 1)) 
@@ -372,6 +399,8 @@
         (vector-set! column-list 17 #t))
     (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name?"))
         (vector-set! column-list 18 #t))
+    (if (opt-val (N_ "Display") (N_ "Notes"))
+        (vector-set! column-list 19 #t))
     column-list))
 
 (define (make-heading-list column-vector)
@@ -385,7 +414,9 @@
     (if (used-description column-vector)
         (addto! heading-list (_ "Description")))
     (if (used-memo column-vector)
-        (addto! heading-list (_ "Memo")))
+        (if (used-notes column-vector)
+            (addto! heading-list (string-append (_ "Memo") "/" (_ "Notes")))
+            (addto! heading-list (_ "Memo"))))
     (if (or (used-account-name column-vector) (used-account-code column-vector))
         (addto! heading-list (_ "Account")))
     (if (or (used-other-account-name column-vector) (used-other-account-code column-vector))
@@ -462,8 +493,10 @@
                     " ")))
     
     (if (used-memo column-vector)
-        (addto! row-contents
-                (xaccSplitGetMemo split)))
+        (let ((memo (xaccSplitGetMemo split)))
+          (if (and (equal? memo "") (used-notes column-vector))
+              (addto! row-contents (xaccTransGetNotes parent))
+              (addto! row-contents memo))))
     
     (if (or (used-account-name column-vector) (used-account-code column-vector))
        (addto! row-contents (account-namestring account
@@ -700,7 +733,7 @@
         (subtotal-choice-list
          (list
           (vector 'none (N_ "None") (N_ "None"))
-          ;;(vector 'weekly (N_ "Weekly") (N_ "Weekly"))
+          (vector 'weekly (N_ "Weekly") (N_ "Weekly"))
           (vector 'monthly (N_ "Monthly") (N_ "Monthly"))
           (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly"))
           (vector 'yearly (N_ "Yearly") (N_ "Yearly")))))
@@ -806,7 +839,7 @@
     (list (N_ "Reconciled Date")              "a2" (N_ "Display the reconciled date?") #f)
     (list (N_ "Num")                          "b"  (N_ "Display the check number?") #t)
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
-    (list (N_ "Memo")                         "d"  (N_ "Display the memo?") #t)
+    (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
     (list (N_ "Use Full Account Name?")       "f"  (N_ "Display the full account name") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code") #f)
@@ -819,6 +852,19 @@
     ;; note the "Amount" multichoice option in between here
     (list (N_ "Running Balance")              "n"  (N_ "Display a running balance") #f)
     (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)))
+
+  ;; Add an option to display the memo, and disable the notes option
+  ;; when memos are not included.
+  (gnc:register-trep-option
+   (gnc:make-complex-boolean-option
+    gnc:pagename-display (N_ "Memo")
+    "d"  (N_ "Display the memo?") #t
+    #f
+    (lambda (x) (gnc-option-db-set-option-selectable-by-name
+		 gnc:*transaction-report-options*
+		 gnc:pagename-display
+		 (N_ "Notes")
+		 x))))
 
   (gnc:register-trep-option
    (gnc:make-multichoice-option
@@ -1162,6 +1208,8 @@ Credit Card, and Income accounts")))))
     ;; subtotal-renderer))
     (list
      (cons 'none (vector #f #f #f))
+     (cons 'weekly (vector split-same-week-p render-week-subheading
+			   render-week-subtotal))
      (cons 'monthly (vector split-same-month-p render-month-subheading 
                             render-month-subtotal))
      (cons 'quarterly (vector split-same-quarter-p render-quarter-subheading 
@@ -1391,6 +1439,7 @@ in the Options panel.")))
  'version 1
  
  'name reportname
+ 'report-guid "2fe3b9833af044abb929a88d5a59620f"
  
  'options-generator trep-options-generator
  

@@ -21,8 +21,6 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Gtk
-    @{ */
 /** @addtogroup Gtk Gtk Utilities
 
     The API in this file is designed to provide support functions that
@@ -50,5 +48,4 @@ void gnc_cbe_require_list_item (GtkComboBoxEntry *cbe);
 /** @} */
 
 #endif /* GNC_GTK_UTILS_H */
-/** @} */
 /** @} */

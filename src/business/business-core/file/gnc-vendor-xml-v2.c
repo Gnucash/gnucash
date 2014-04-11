@@ -73,7 +73,7 @@ const gchar *vendor_version_string = "2.0.0";
 static xmlNodePtr
 vendor_dom_tree_create (GncVendor *vendor)
 {
-    xmlNodePtr ret;
+    xmlNodePtr ret, kvpnode;
     GncBillTerm *term;
     GncTaxTable *taxtable;
 
@@ -117,6 +117,10 @@ vendor_dom_tree_create (GncVendor *vendor)
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (vendor_taxtable_string,
 					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));
+
+    kvpnode = kvp_frame_to_dom_tree (vendor_slots_string, 
+				     qof_instance_get_slots (QOF_INSTANCE(vendor)));
+    if (kvpnode) xmlAddChild (ret, kvpnode);
 
     return ret;
 }
@@ -303,7 +307,10 @@ vendor_taxtableoverride_handler (xmlNodePtr node, gpointer vendor_pdata)
 static gboolean
 vendor_slots_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-  return TRUE;
+    struct vendor_pdata *pdata = vendor_pdata;
+    return dom_tree_to_kvp_frame_given (
+	node, qof_instance_get_slots (QOF_INSTANCE(pdata->vendor)));
+
 }
 
 static struct dom_tree_handler vendor_handlers_v2[] = {

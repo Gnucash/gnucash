@@ -20,6 +20,7 @@
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <property name="has_separator">False</property>
+  <signal name="destroy" handler="gxi_dialog_destroy_cb" last_modification_time="Sun, 23 Mar 2008 21:58:59 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox1">

@@ -59,6 +59,7 @@
         <menuitem name="ToolsPriceEditor" action="ToolsPriceEditorAction"/>
         <menuitem name="ToolsCommodityEditor" action="ToolsCommodityEditorAction"/>
         <menuitem name="ToolsFinancialCalculator" action="ToolsFinancialCalculatorAction"/>
+        <menuitem name="ToolsBookClose" action="ToolsBookCloseAction"/>
       </placeholder>
     </menu>
 

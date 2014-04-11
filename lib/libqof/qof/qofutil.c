@@ -268,13 +268,8 @@ static gboolean qof_util_str_equal(gconstpointer v, gconstpointer v2)
     return (v && v2) ? g_str_equal(v, v2) : FALSE;
 }
 #endif
-#ifdef QOF_DISABLE_DEPRECATED 
 static GCache*
 qof_util_get_string_cache(void)
-#else
-GCache*
-qof_util_get_string_cache(void)
-#endif    
 {
     if(!qof_string_cache) {
         qof_string_cache = g_cache_new(

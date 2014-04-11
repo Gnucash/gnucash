@@ -243,7 +243,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
         report == SCM_BOOL_F)
     {
       result->error_message =
-        g_strdup_printf (_("Badly report id: %s"), location);
+        g_strdup_printf (_("Badly-formed report id: %s"), location);
 
       return FALSE;
     }

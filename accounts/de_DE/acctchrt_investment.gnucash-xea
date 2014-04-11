@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Geldanlagen
     </gnc-act:title>
     <gnc-act:short-description>
-      Konten für Geldanlagen
+      Konten fÃ¼r Geldanlagen
     </gnc-act:short-description>
     <gnc-act:long-description>
-      Konten für Investitionen in Geldanlagen: Bausparvertrag, Lebensversicherung, Festgeld, Investmentfonds.
+      Konten fÃ¼r Investitionen in Geldanlagen: Bausparvertrag, Lebensversicherung, Festgeld, Investmentfonds.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -94,14 +94,14 @@
   <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Erträge</act:name>
+  <act:name>ErtrÃ¤ge</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Erträge</act:description>
+  <act:description>ErtrÃ¤ge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>

@@ -127,6 +127,13 @@
  ;; untranslated value here!
  'name "Test Graphing"
 
+ ;; The GUID for this report. This string should be unique, set once
+ ;; and left alone forever after that. In theory, you could use any
+ ;; unique string, even a meaningful one (!) but its probably best to
+ ;; use a true uuid. Get them from `uuidgen | sed -e s/-//g` and paste
+ ;; the results in here. You must make a new guid for each report!
+ 'report-guid "2eff1729072e411ab124065b850dee6a"
+
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
  'menu-name "Sample graphs."

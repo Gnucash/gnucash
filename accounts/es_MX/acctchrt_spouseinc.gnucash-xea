@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Ingresos de cónyuge
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Cuentas para controlar los ingresos del cónyuge de manera separada
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deseará seleccionar este juego de cuentas si su cónyuge trabaja
+      (sueldo (cónyuge), impuestos (cónyuge)).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos</act:name>
+  <act:id type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ingresos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sueldo (Cónyuge)</act:name>
+  <act:id type="new">7c4495ff132d100b0aa339ce683200dd</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Sueldo (Cónyuge)</act:description>
+  <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Impuestos (Cónyuge)</act:name>
+  <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuestos (Cónyuge)</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IRPF</act:name>
+  <act:id type="new">78df9cf06ee197272a695a4c3044f749</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>IRPF</act:description>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Retenciones</act:name>
+  <act:id type="new">eba0c095658c7c3a4f4294db9c7392f3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Retenciones</act:description>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otros impuestos</act:name>
+  <act:id type="new">dea0cf67026749c9a5aa97be4e5cd052</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otros impuestos</act:description>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguridad Social</act:name>
+  <act:id type="new">9bd3abb2ed8c4c0d00f8e8ec36d2744d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguridad Social</act:description>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Municipales</act:name>
+  <act:id type="new">aa14dbcd622024495a8a972b0f37d13a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Municipales</act:description>
+  <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

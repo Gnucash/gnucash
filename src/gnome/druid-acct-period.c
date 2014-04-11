@@ -361,7 +361,7 @@ ap_validate_menu (GnomeDruidPage *druidpage,
     const char *msg = _("You must select closing date that "
                         "is greater than the closing date "
                         "of the previous book.");
-    gnc_error_dialog (info->window, msg);
+    gnc_error_dialog (info->window, "%s", msg);
     return TRUE;
   }
 
@@ -371,7 +371,7 @@ ap_validate_menu (GnomeDruidPage *druidpage,
   {
     const char *msg = _("You must select closing date "
                         "that is not in the future.");
-    gnc_error_dialog (info->window, msg);
+    gnc_error_dialog (info->window, "%s", msg);
     return TRUE;
   }
   return FALSE;

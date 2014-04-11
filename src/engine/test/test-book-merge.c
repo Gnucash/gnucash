@@ -24,7 +24,6 @@
 
 #include "config.h" 
 #include <glib.h>
-#include <unistd.h>
 
 #include "qof.h"
 #include "test-stuff.h"
@@ -438,7 +437,7 @@ test_rule_loop (QofBookMergeData *mergeData, QofBookMergeRule *rule, guint remai
 	
 	Take particular care with MERGE_NEW - targetEnt is always NULL until the Commit.
 	Do not attempt to use param_getfcn on targetEnt in the loop called by 
-	qof_book_mergeRuleForeach(rule_loop, MERGE_NEW);
+	QofBookMergeRuleForeach(rule_loop, MERGE_NEW);
 	
 	*/
 	gboolean skip_target;
@@ -505,7 +504,6 @@ test_rule_loop (QofBookMergeData *mergeData, QofBookMergeRule *rule, guint remai
 int
 main (int argc, char **argv)
 {
-  sleep(10);
 	qof_init();
 	myobjRegister();
 	test_merge();

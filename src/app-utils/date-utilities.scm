@@ -20,6 +20,8 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (gnucash core-utils))
+
 (define gnc:reldate-list '())
 
 (define (gnc:timepair->secs tp)
@@ -49,6 +51,10 @@
 (define (gnc:date-get-week-day datevec)
   (+ (tm:wday datevec) 1))
 ;; jan 1 == 1
+(define (gnc:date-get-week datevec)
+  (gnc:date-to-week (gnc:timepair->secs
+		     (gnc:timepair-start-day-time
+		      (gnc:date->timepair datevec)))))
 
 (define (gnc:date-get-year-day datevec)
   (+ (tm:yday datevec) 1))
@@ -68,11 +74,14 @@
 (define (gnc:timepair-get-week-day tp)
   (gnc:date-get-week-day (gnc:timepair->date tp)))
 
+(define (gnc:timepair-get-week tp)
+  (gnc:date-get-week (gnc:timepair->date tp)))
+
 (define (gnc:timepair-get-year-day tp)
   (gnc:date-get-year-day (gnc:timepair->date tp)))
 
 (define (gnc:date-get-year-string datevec)
-  (strftime "%Y" datevec))
+  (gnc-locale-to-utf8 (strftime "%Y" datevec)))
 
 (define (gnc:date-get-quarter-string datevec)
   (sprintf #f "Q%d" (gnc:date-get-quarter datevec)))
@@ -84,10 +93,27 @@
    (gnc:date-get-year-string datevec)))
 
 (define (gnc:date-get-month-string datevec)
-  (strftime "%B" datevec))
+  (gnc-locale-to-utf8 (strftime "%B" datevec)))
 
 (define (gnc:date-get-month-year-string datevec)
-  (strftime "%B %Y" datevec))
+  (gnc-locale-to-utf8 (strftime "%B %Y" datevec)))
+
+(define (gnc:date-get-week-year-string datevec)
+  (let ((begin-string (gnc-print-date
+		       (gnc:secs->timepair
+			(+ (* (gnc:date-to-week
+			    (gnc:timepair->secs
+			     (gnc:timepair-start-day-time
+			      (gnc:date->timepair datevec))))
+			   604800 ) 345600))))
+        (end-string (gnc-print-date
+		       (gnc:secs->timepair
+			(+ (* (gnc:date-to-week
+			    (gnc:timepair->secs
+			     (gnc:timepair-start-day-time
+			      (gnc:date->timepair datevec))))
+			   604800 ) 864000)))))
+  (sprintf #f (_ "%s to %s") begin-string end-string)))
 
 ;; is leap year?
 (define (gnc:leap-year? year)
@@ -149,6 +175,9 @@
 ;; ignoring leap-seconds
 (define (gnc:date-to-week-fraction caltime)
   (/ (- (/ (/ caltime 3600.0) 24) 3) 7))
+
+(define (gnc:date-to-week caltime)
+  (quotient (- (quotient caltime 86400) 3) 7))
 
 ;; convert a date in seconds since 1970 into # of days since Feb 28, 1970
 ;; ignoring leap-seconds

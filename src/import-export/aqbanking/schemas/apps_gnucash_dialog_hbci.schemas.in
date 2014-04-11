@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/position</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/connection_dialog/window_position</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window position</short>
+        <long>
+	  The X,Y coordinates of the top left corner of the dialog
+	  when it was last closed.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/geometry</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/connection_dialog/window_geometry</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window geometry</short>
+        <long>
+	  The width and size of the dialog when it was last closed.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/close_on_finish</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/close_on_finish</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>True</default>
+      <locale name="C">
+        <short>Close dialog when finished</short>
+        <long>
+	  If active, the window will be closed automatically when you
+	  finish the HBCI/AqBanking import process. Otherwise it will
+	  stay open.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/remember_pin</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/remember_pin</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>False</default>
+      <locale name="C">
+        <short>Remember the PIN in memory</short>
+        <long>If active, the PIN for HBCI/AqBanking actions will be
+        remembered in memory during a session. Otherwise it will have
+        to be entered again each time during a session when it is
+        needed.</long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/verbose_debug</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/verbose_debug</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>False</default>
+      <locale name="C">
+        <short>Verbose HBCI debug messages</short>
+        <long>Enables verbose debug messages for HBCI/AqBanking Online Banking.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_dtaus</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_dtaus</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>DTAUS import data format</short>
+        <long>
+	  This setting specifies the data format when importing DTAUS
+	  files.  The AqBanking library offers various import formats
+	  (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_csv</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_csv</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>CSV import data format</short>
+        <long>
+	  This setting specifies the data format when importing CSV
+	  files.  The AqBanking library offers various import formats
+	  (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_swift_mt940</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_swift_mt940</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>swift-mt940</default>
+      <locale name="C">
+        <short>SWIFT MT940 import data format</short>
+        <long>
+	  This setting specifies the data format when importing SWIFT
+	  MT940 files.  The AqBanking library offers various import
+	  formats (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_swift_mt942</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_swift_mt942</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>swift-mt942</default>
+      <locale name="C">
+        <short>SWIFT MT942 import data format</short>
+        <long>
+	  This setting specifies the data format when importing SWIFT
+	  MT942 files.  The AqBanking library offers various import
+	  formats (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

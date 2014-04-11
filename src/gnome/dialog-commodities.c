@@ -136,7 +136,7 @@ remove_clicked (CommoditiesDialog *cd)
                             "at least one of your accounts. You may "
                             "not delete it.");
 
-    gnc_warning_dialog (cd->dialog, message);
+    gnc_warning_dialog (cd->dialog, "%s", message);
     g_list_free (accounts);
     return;
   }

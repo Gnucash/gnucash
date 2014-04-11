@@ -24,11 +24,14 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "account-quickfill.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
+#include "gnc-gui-query.h"
 #include "numcell.h"
 #include "quickfillcell.h"
 #include "recncell.h"
@@ -221,7 +224,34 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (default_account != NULL) {
       gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
       if (gnc_commodity_is_currency(commodity))
-          currency = commodity;
+	currency = commodity;
+      else {
+	Account *parent_account = default_account;
+	/* Account commodity is not a currency, walk up the tree until
+	 * we find a parent account that is a currency account and use
+	 * it's currency.
+	 */
+	do {
+	  parent_account = gnc_account_get_parent ( parent_account );
+	  if (parent_account)
+	  {
+	    commodity = xaccAccountGetCommodity (parent_account);
+	    if (gnc_commodity_is_currency(commodity))
+	    {
+	      currency = commodity;
+	      break;
+	    }
+	  }
+	} while (parent_account && !currency);
+      }
+
+      /* If we don't have a currency then pop up a warning dialog */
+      if (!currency)
+      {
+	gnc_info_dialog(NULL, "%s",
+			_("Could not determine the account currency.  "
+			  "Using the default currency provided by your system."));
+      }
     }
 
     gnc_suspend_gui_refresh ();
@@ -272,14 +302,15 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     find_trans = blank_trans;
     find_split = NULL;
     find_trans_split = blank_split;
+    find_class = CURSOR_CLASS_SPLIT;
   }
   else
   {
     find_trans = info->cursor_hint_trans;
     find_split = info->cursor_hint_split;
     find_trans_split = info->cursor_hint_trans_split;
+    find_class = info->cursor_hint_cursor_class;
   }
-  find_class = info->cursor_hint_cursor_class;
 
   save_loc = table->current_cursor_loc;
 
@@ -332,24 +363,28 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
       }
     }
 
-    /* set the completion character for the xfer cells */
-    gnc_combo_cell_set_complete_char(
-        (ComboCell *) gnc_table_layout_get_cell(table->layout, MXFRM_CELL),
-        gnc_get_account_separator());
-  
-    gnc_combo_cell_set_complete_char(
-        (ComboCell *) gnc_table_layout_get_cell(table->layout, XFRM_CELL),
-        gnc_get_account_separator());
-  
-    /* set the confirmation callback for the reconcile cell */
-    gnc_recn_cell_set_confirm_cb(
-        (RecnCell *) gnc_table_layout_get_cell(table->layout, RECN_CELL),
-        gnc_split_register_recn_cell_confirm, reg);
-  
     /* load up account names into the transfer combobox menus */
     gnc_split_register_load_xfer_cells (reg, default_account);
     gnc_split_register_load_recn_cells (reg);
     gnc_split_register_load_type_cells (reg);
+  }
+
+  if (info->separator_changed) {
+    info->separator_changed = FALSE;
+
+    /* set the completion character for the xfer cells */
+    gnc_combo_cell_set_complete_char(
+      (ComboCell *) gnc_table_layout_get_cell(table->layout, MXFRM_CELL),
+      gnc_get_account_separator());
+
+    gnc_combo_cell_set_complete_char(
+      (ComboCell *) gnc_table_layout_get_cell(table->layout, XFRM_CELL),
+      gnc_get_account_separator());
+
+    /* set the confirmation callback for the reconcile cell */
+    gnc_recn_cell_set_confirm_cb(
+      (RecnCell *) gnc_table_layout_get_cell(table->layout, RECN_CELL),
+      gnc_split_register_recn_cell_confirm, reg);
   }
 
   table->model->dividing_row = -1;

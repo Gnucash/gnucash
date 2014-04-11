@@ -52,7 +52,7 @@
 #include "qof.h"
 
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN "gnc.app-util.sx"
+#define G_LOG_DOMAIN "gnc.app-utils.sx"
 
 static GObjectClass *parent_class = NULL;
 
@@ -261,11 +261,10 @@ Account*
 gnc_sx_get_template_transaction_account(SchedXaction *sx)
 {
     Account *template_root, *sx_template_acct;
-    const char *sx_guid_str;
+    char sx_guid_str[GUID_ENCODING_LENGTH+1];
 
     template_root = gnc_book_get_template_root(gnc_get_current_book());
-    sx_guid_str = guid_to_string(xaccSchedXactionGetGUID(sx));
-    /* Get account named after guid string. */
+    guid_to_string_buff(xaccSchedXactionGetGUID(sx), sx_guid_str);
     sx_template_acct = gnc_account_lookup_by_name(template_root, sx_guid_str);
     return sx_template_acct;
 }
@@ -846,7 +845,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
 
                     g_assert(parent_var != NULL);
                     var_copy = gnc_sx_variable_new_copy(parent_var);
-                    g_hash_table_insert(inst->variable_bindings, to_add_key, var_copy);
+                    g_hash_table_insert(inst->variable_bindings, g_strdup(to_add_key), var_copy);
                 }
             }
         }
@@ -916,22 +915,25 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
+        else
+            g_string_free(err, TRUE);
         return FALSE;
     }
     acct_guid = kvp_value_get_guid( kvp_val );
     *split_acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
     if (*split_acct == NULL)
     {
-        const char *guid_str;
+        char guid_str[GUID_ENCODING_LENGTH+1];
         GString *err;
-        guid_str = guid_to_string((const GUID*)acct_guid);
+        guid_to_string_buff((const GUID*)acct_guid, guid_str);
         err = g_string_new("");
         g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
                         guid_str, xaccSchedXactionGetName(instance->parent->sx));
-        g_free((char*)guid_str);
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
+        else
+            g_string_free(err, TRUE);
         return FALSE;
     }
 
@@ -966,8 +968,11 @@ _get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeri
                             formula_str,
                             parseErrorLoc,
                             gnc_exp_parser_error_string());
+            g_critical("%s", err->str);
             if (creation_errors != NULL)
                 *creation_errors = g_list_append(*creation_errors, err);
+            else
+                g_string_free(err, TRUE);
         }
         
         if (parser_vars != NULL)
@@ -1015,6 +1020,12 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     /* clear any copied KVP data */
     qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
 
+    /* Bug#500427: copy the notes, if any */
+    if (xaccTransGetNotes(template_txn) != NULL)
+    {
+        xaccTransSetNotes(new_txn, g_strdup(xaccTransGetNotes(template_txn)));
+    }
+
     xaccTransSetDate(new_txn,
                      g_date_get_day(&creation_data->instance->date),
                      g_date_get_month(&creation_data->instance->date),
@@ -1046,15 +1057,15 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
 
-        /* clear out any copied Split frame data. */
-        qof_instance_set_slots(QOF_INSTANCE(copying_split), kvp_frame_new());
-
         if (!_get_template_split_account(creation_data->instance, template_split, &split_acct, creation_data->creation_errors))
         {
             err_flag = TRUE;
             break;
         }
              
+        /* clear out any copied Split frame data. */
+        qof_instance_set_slots(QOF_INSTANCE(copying_split), kvp_frame_new());
+
         split_cmdty = xaccAccountGetCommodity(split_acct);
         if (first_cmdty == NULL)
         {
@@ -1062,8 +1073,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             xaccTransSetCurrency(new_txn, first_cmdty);
         }
 
-        xaccAccountBeginEdit(split_acct);
-        xaccAccountInsertSplit(split_acct, copying_split);
+        xaccSplitSetAccount(copying_split, split_acct);
 
         {
             gnc_numeric credit_num, debit_num, final;
@@ -1078,12 +1088,16 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             final = gnc_numeric_sub_fixed( debit_num, credit_num );
                         
             gncn_error = gnc_numeric_check(final);
-            if (gncn_error != GNC_ERROR_OK) {
+            if (gncn_error != GNC_ERROR_OK)
+            {
                 GString *err = g_string_new("");
-                g_string_printf(err, "Error %d in SX [%s] final gnc_numeric value, using 0 instead.", 
-                                gncn_error,
-                                xaccSchedXactionGetName(creation_data->instance->parent->sx));
-                *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
+                g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead", 
+                                gncn_error, xaccSchedXactionGetName(creation_data->instance->parent->sx));
+                g_critical("%s", err->str);
+                if (creation_data->creation_errors != NULL)
+                    *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
+                else
+                    g_string_free(err, TRUE);
                 final = gnc_numeric_zero();
             }
 
@@ -1143,8 +1157,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
             xaccSplitScrub(copying_split);
         }
-
-        xaccAccountCommitEdit(split_acct);
     }
 
     if (err_flag)

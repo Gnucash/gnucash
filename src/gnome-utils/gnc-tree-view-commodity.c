@@ -277,7 +277,7 @@ sort_by_commodity_string (GtkTreeModel *f_model,
   GtkTreeModel *model;
   GtkTreeIter iter_a, iter_b;
   gnc_commodity *comm_a, *comm_b;
-  const gchar *str1, *str2;
+  gchar *str1, *str2;
   gint column = GPOINTER_TO_INT(user_data);
   gint result;
 
@@ -290,6 +290,8 @@ sort_by_commodity_string (GtkTreeModel *f_model,
   gtk_tree_model_get(GTK_TREE_MODEL(model), &iter_b,  column, &str2, -1);
 
   result = safe_utf8_collate(str1, str2);
+  g_free(str1);
+  g_free(str2);
   if (result != 0)
     return result;
   return default_sort(comm_a, comm_b);

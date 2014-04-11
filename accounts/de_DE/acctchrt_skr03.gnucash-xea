@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-15"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example
   xmlns="http://www.gnucash.org/XML/"
   xmlns:act="http://www.gnucash.org/XML/act"
@@ -38,7 +38,7 @@
     Standardkontenrahmen SKR03
   </gnc-act:short-description>
   <gnc-act:long-description>
-    Beta Version des Kontenrahmes SKR03 zum Erweitern und Umstrukturieren. Der Kontenrahmen sollte den eigenen Bedürfnissen angepasst werden was Struktur und Kontenbezeichnungen angeht. WICHTIG!: Die Privatkonten fließen nicht in die Berechnung des Berichtes Bilanz, sind jedoch im Bericht Bilanz aufgeführt. Die im Bericht Bilanz aufgeführte Passiva "Gewinnrücklagen" gibt den Saldo der GuV aus. Die Anlage dieses Kontenrahmens wurde von der Firma LiHAS - Linuxhaus Stuttgart - unterstützt.
+    Beta Version des Kontenrahmes SKR03 zum Erweitern und Umstrukturieren. Der Kontenrahmen sollte den eigenen BedÃŒrfnissen angepasst werden was Struktur und Kontenbezeichnungen angeht. WICHTIG!: Die Privatkonten flieÃen nicht in die Berechnung des Berichtes Bilanz, sind jedoch im Bericht Bilanz aufgefÃŒhrt. Die im Bericht Bilanz aufgefÃŒhrte Passiva "GewinnrÃŒcklagen" gibt den Saldo der GuV aus. Die Anlage dieses Kontenrahmens wurde von der Firma LiHAS - Linuxhaus Stuttgart - unterstÃŒtzt.
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
   <gnc:account version="2.0.0">
@@ -99,7 +99,7 @@
     <act:parent type="new">27356188a1963c1dbf943022441d095f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>0410 Geschäftsausstattung</act:name>
+    <act:name>0410 GeschÃ€ftsausstattung</act:name>
     <act:id type="new">a588283077bd935dede66d13b2ee478f</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -117,7 +117,7 @@
     <act:parent type="new">27356188a1963c1dbf943022441d095f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>0420 Büroeinrichtung</act:name>
+    <act:name>0420 BÃŒroeinrichtung</act:name>
     <act:id type="new">573063d23b81fe3f9917d80fe6cc41e7</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -236,7 +236,7 @@
     <act:parent type="new">1b13a7614b5e84b0778963995e20d897</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1371 Gewinnermittlung §4/3 nicht Ergebniswirksam</act:name>
+    <act:name>1371 Gewinnermittlung Â§4/3 nicht Ergebniswirksam</act:name>
     <act:id type="new">58c8b84a785d7feac255d381943076df</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -272,7 +272,7 @@
     <act:parent type="new">1b13a7614b5e84b0778963995e20d897</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1576 Abziehbare VStr. nach §13b UStG 16%</act:name>
+    <act:name>1576 Abziehbare VStr. nach Â§13b UStG 16%</act:name>
     <act:id type="new">ac0fb64d0cfc2b88444527ce8c8682fe</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -286,7 +286,7 @@
   <gnc:account version="2.0.0">
     <act:name>1400 Ford. a. Lieferungen und Leistungen</act:name>
     <act:id type="new">2fe36b4ddde053387e42aa893a94b91b</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -313,7 +313,7 @@
     <act:parent type="new">fc3b1f110a6686f3d40bb0c41c0f8de0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>3120 Leistungen §13b UStG 16% Vorsteuer, 16% Umsatzsteuer</act:name>
+    <act:name>3120 Leistungen Â§13b UStG 16% Vorsteuer, 16% Umsatzsteuer</act:name>
     <act:id type="new">39c180a4e3647d347ebc3e16e984372b</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -426,7 +426,7 @@
     <act:parent type="new">dea7f32e6a447d2d1cd7048932c98265</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1786 Umsatzsteuer § 13b UStG 16%</act:name>
+    <act:name>1786 Umsatzsteuer Â§ 13b UStG 16%</act:name>
     <act:id type="new">8e1583dfe60365b756f5365741250001</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -450,7 +450,7 @@
     <act:parent type="new">dea7f32e6a447d2d1cd7048932c98265</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1791 Umsatzsteuer frühere Jahre</act:name>
+    <act:name>1791 Umsatzsteuer frÃŒhere Jahre</act:name>
     <act:id type="new">b2d79b416fee27d4d6a38643f6ad0d45</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -481,7 +481,7 @@
   <gnc:account version="2.0.0">
     <act:name>1600 Verblk. aus Lieferungen u. Leistungen</act:name>
     <act:id type="new">1bf9f2675a36b278adcf6da68a7e4cbe</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>PAYABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -491,7 +491,7 @@
     <act:parent type="new">a31fca8b7c5eb2cb0111f1f97696ac93</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse u. Erträge 2/8</act:name>
+    <act:name>ErlÃ¶se u. ErtrÃ€ge 2/8</act:name>
     <act:id type="new">3f31fc649f19b5201f22f7648c3f7107</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -508,7 +508,7 @@
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöskonten 8</act:name>
+    <act:name>ErlÃ¶skonten 8</act:name>
     <act:id type="new">fd04e181ab83b37b80a4609b0806e954</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -525,7 +525,7 @@
     <act:parent type="new">3f31fc649f19b5201f22f7648c3f7107</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>8400 Erlöse USt. 16%</act:name>
+    <act:name>8400 ErlÃ¶se USt. 16%</act:name>
     <act:id type="new">d75d796e879b0ad9b2732d698ae9e838</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -543,7 +543,7 @@
     <act:parent type="new">fd04e181ab83b37b80a4609b0806e954</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>8300 Erlöse USt. 7%</act:name>
+    <act:name>8300 ErlÃ¶se USt. 7%</act:name>
     <act:id type="new">0c82316c2aecaa02ce1b4ecb223f6f5d</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -572,7 +572,7 @@
     <act:parent type="new">3f31fc649f19b5201f22f7648c3f7107</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>2650 sonstige Zinsen und ähnliche Erträge</act:name>
+    <act:name>2650 sonstige Zinsen und Ã€hnliche ErtrÃ€ge</act:name>
     <act:id type="new">cc08ab7c747853f5f7ea6b384fdd8b4d</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -584,7 +584,7 @@
     <act:parent type="new">4f552b822559c82eaa816d0049f70064</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>2500 Außerordentliche Erträge</act:name>
+    <act:name>2500 AuÃerordentliche ErtrÃ€ge</act:name>
     <act:id type="new">5634359999c43ba58697553d1d905c4c</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -596,7 +596,7 @@
     <act:parent type="new">4f552b822559c82eaa816d0049f70064</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>2700 Sonstige Erträge</act:name>
+    <act:name>2700 Sonstige ErtrÃ€ge</act:name>
     <act:id type="new">067716095fef7e694a2e0c40f1eaaefd</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -760,7 +760,7 @@
     <act:parent type="new">be324e400d3b67510f89afd18de776e3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4120 Gehälter</act:name>
+    <act:name>4120 GehÃ€lter</act:name>
     <act:id type="new">8f21199517fcfd70ad2ad6aaa3e714b6</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -784,7 +784,7 @@
     <act:parent type="new">43953979cf408743814cb6887d5ec022</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4165 Aufwendungen für Altersvorsorge</act:name>
+    <act:name>4165 Aufwendungen fÃŒr Altersvorsorge</act:name>
     <act:id type="new">e89eafba1acc736a7ba74882a7f8c836</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -796,7 +796,7 @@
     <act:parent type="new">43953979cf408743814cb6887d5ec022</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4170 Vermögenswirksame Leistungen</act:name>
+    <act:name>4170 VermÃ¶genswirksame Leistungen</act:name>
     <act:id type="new">88bc69e1ff8977cd70c52567dde8107d</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -808,7 +808,7 @@
     <act:parent type="new">43953979cf408743814cb6887d5ec022</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4190 Aushilfslöhne</act:name>
+    <act:name>4190 AushilfslÃ¶hne</act:name>
     <act:id type="new">d74350b9ad5583b533fd906ec837d9fe</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -890,7 +890,7 @@
     <act:parent type="new">be324e400d3b67510f89afd18de776e3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4805 Reparatur u. Instandh. von Anlagen/Maschinen u. Betriebs- u. Geschäftsausst.</act:name>
+    <act:name>4805 Reparatur u. Instandh. von Anlagen/Maschinen u. Betriebs- u. GeschÃ€ftsausst.</act:name>
     <act:id type="new">b5d6461bb3028d13faa8bee2981925a1</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -902,7 +902,7 @@
     <act:parent type="new">accaec28a4afcf3c82570da4c9343c2d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Versicherungsbeiträge</act:name>
+    <act:name>VersicherungsbeitrÃ€ge</act:name>
     <act:id type="new">709bf14d69164a6c2a48e6c0e13ece37</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -931,7 +931,7 @@
     <act:parent type="new">709bf14d69164a6c2a48e6c0e13ece37</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4380 Beiträge</act:name>
+    <act:name>4380 BeitrÃ€ge</act:name>
     <act:id type="new">f2b1ad75fd3b7fc4473972a9c2675cbf</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -955,7 +955,7 @@
     <act:parent type="new">709bf14d69164a6c2a48e6c0e13ece37</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4396 steuerlich abzugsfähige Verspätungszuschläge und Zwandsgelder</act:name>
+    <act:name>4396 steuerlich abzugsfÃ€hige VerspÃ€tungszuschlÃ€ge und Zwangsgelder</act:name>
     <act:id type="new">0c73c5dc5e72bb4962b83ddc85991101</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1008,7 +1008,7 @@
     <act:parent type="new">a657ade965a1429d44d830d3832bf9aa</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4665 nicht abzugsfähige Betriebsausg. aus Werbe-, Repräs.- u. Reisekosten</act:name>
+    <act:name>4665 nicht abzugsfÃ€hige Betriebsausg. aus Werbe-, ReprÃ€s.- u. Reisekosten</act:name>
     <act:id type="new">235a6225c2c7d2ffa865345e78cae283</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1020,7 +1020,7 @@
     <act:parent type="new">a657ade965a1429d44d830d3832bf9aa</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4670 Reisekosten Unernehmer</act:name>
+    <act:name>4670 Reisekosten Unternehmer</act:name>
     <act:id type="new">dda3ae53573975cd05fab1d3cdf40806</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1097,7 +1097,7 @@
     <act:parent type="new">d0c00095e4b00f9f25253307be05e885</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4930 Bürobedarf</act:name>
+    <act:name>4930 BÃŒrobedarf</act:name>
     <act:id type="new">ac4d7c452835096c373f1a94dc3104f4</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1109,7 +1109,7 @@
     <act:parent type="new">d0c00095e4b00f9f25253307be05e885</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4940 Zeitschriften, Bücher</act:name>
+    <act:name>4940 Zeitschriften, BÃŒcher</act:name>
     <act:id type="new">1bac306450e7bc0619e42c11ab791204</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1133,7 +1133,7 @@
     <act:parent type="new">d0c00095e4b00f9f25253307be05e885</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4955 Buchführungskosten</act:name>
+    <act:name>4955 BuchfÃŒhrungskosten</act:name>
     <act:id type="new">25afa584627e0c0e8681bd8a82a77d14</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1145,7 +1145,7 @@
     <act:parent type="new">d0c00095e4b00f9f25253307be05e885</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4957 Abschluß- u. Prüfungskosten</act:name>
+    <act:name>4957 AbschluÃ- u. PrÃŒfungskosten</act:name>
     <act:id type="new">bf093094a55c036a193357ebcafcab67</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1169,7 +1169,7 @@
     <act:parent type="new">d0c00095e4b00f9f25253307be05e885</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4985 Werkzeuge und Kleingeräte</act:name>
+    <act:name>4985 Werkzeuge und KleingerÃ€te</act:name>
     <act:id type="new">a5b36148c3fc06080973a5d25f28225b</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1198,7 +1198,7 @@
     <act:parent type="new">be324e400d3b67510f89afd18de776e3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>2110 Zinsaufwendungen für kurzfristige Verbindlichkeiten</act:name>
+    <act:name>2110 Zinsaufwendungen fÃŒr kurzfristige Verbindlichkeiten</act:name>
     <act:id type="new">2d20e36f8abb4e366c8e3e2783bdafab</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1210,7 +1210,7 @@
     <act:parent type="new">8d2641f8bbc41aa863274bb496002f3e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>2121 Zinsaufwendungen für KFZ Finanzierung</act:name>
+    <act:name>2121 Zinsaufwendungen fÃŒr KFZ Finanzierung</act:name>
     <act:id type="new">17651501792b93b06832634462ddddae</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1269,7 +1269,7 @@
     <act:parent type="new">26c3f10c1c7621661c1b813d6141280d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>9008 Saldenvorträge Debitoren</act:name>
+    <act:name>9008 SaldenvortrÃ€ge Debitoren</act:name>
     <act:id type="new">1f36ecbf065faa2b25a0749ceee72efa</act:id>
     <act:type>EQUITY</act:type>
     <act:commodity>
@@ -1281,7 +1281,7 @@
     <act:parent type="new">26c3f10c1c7621661c1b813d6141280d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>9009 Saldenvorträge Kreditoren</act:name>
+    <act:name>9009 SaldenvortrÃ€ge Kreditoren</act:name>
     <act:id type="new">a6c754f12d0b9129790d9f52c5361778</act:id>
     <act:type>EQUITY</act:type>
     <act:commodity>
@@ -1351,7 +1351,7 @@
     <act:parent type="new">b9ae1b059749ea81c757a9adad39db1b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1820 Sonderausgaben beschränkt abzugsfähig</act:name>
+    <act:name>1820 Sonderausgaben beschrÃ€nkt abzugsfÃ€hig</act:name>
     <act:id type="new">5c008564ba99d0dfe6f20166adde5e6c</act:id>
     <act:type>EQUITY</act:type>
     <act:commodity>
@@ -1363,7 +1363,7 @@
     <act:parent type="new">b9ae1b059749ea81c757a9adad39db1b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1830 Sonderausgaben unbeschränkt abzugsfähig</act:name>
+    <act:name>1830 Sonderausgaben unbeschrÃ€nkt abzugsfÃ€hig</act:name>
     <act:id type="new">d89a53718b4753ac5407b38ab43f1339</act:id>
     <act:type>EQUITY</act:type>
     <act:commodity>
@@ -1375,7 +1375,7 @@
     <act:parent type="new">b9ae1b059749ea81c757a9adad39db1b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1850 Außergewöhnliche Belastungen</act:name>
+    <act:name>1850 AuÃergewÃ¶hnliche Belastungen</act:name>
     <act:id type="new">ab2c3c1b68e9c21ca3bce32c729c5cdc</act:id>
     <act:type>EQUITY</act:type>
     <act:commodity>
