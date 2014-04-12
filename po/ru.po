@@ -354,11 +354,12 @@ msgstr "GnuCash %s (разрабатываемая версия)"
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
 #: ../src/bin/gnucash-bin.c:403 ../src/gnome-utils/gnc-main-window.c:4415
-#, fuzzy, c-format
 msgid ""
 "%s\n"
 "This copy was built from %s rev %s on %s."
-msgstr "%s Эта копия была собрана из svn r%s %s."
+msgstr ""
+"%s\n"
+"Эта копия собрана из %s, ревизия %s. Дата сборки %s."
 
 #: ../src/bin/gnucash-bin.c:409
 #, c-format
@@ -5162,7 +5163,6 @@ msgstr "Открыть выбранный счет"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
 #: ../src/gnome/gnc-plugin-page-account-tree.c:284
-#, fuzzy
 msgid "Open _SubAccounts"
 msgstr "Открыть субсчета"
 
@@ -5230,9 +5230,8 @@ msgid "_Auto-clear..."
 msgstr "_Автоочистка..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:242
-#, fuzzy
 msgid "Automatically clear individual transactions, given a cleared amount"
-msgstr "Автоматическая очистка отдельных проводок с учётом очищенной суммы"
+msgstr "Автоматическая очистка отдельных проводок, с учётом очищенной суммы"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:246
 #: ../src/gnome/gnc-plugin-page-register2.c:331
@@ -11330,28 +11329,25 @@ msgstr "Несохранённая книга"
 
 #: ../src/gnome-utils/gnc-main-window.c:1670
 msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
-msgstr ""
+msgstr "Последнее изменение в %a, %b %e, %Y %I:%M%P"
 
 #: ../src/gnome-utils/gnc-main-window.c:1671
 msgid "Last modified on %a, %b %e, %Y at %H:%M"
-msgstr ""
+msgstr "Последнее изменение в %a, %b %e, %Y %H:%M"
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.
 #: ../src/gnome-utils/gnc-main-window.c:1677
-#, fuzzy, c-format
 msgid "File %s opened. %s"
-msgstr "Не удалось открыть файл."
+msgstr "Открыт файл %s. %s"
 
 #: ../src/gnome-utils/gnc-main-window.c:2709
-#, fuzzy
 msgid "Unable to save to database."
-msgstr "Невозможно сохранить в базу данных %s"
+msgstr "Невозможно сохранить в базу данных"
 
 #: ../src/gnome-utils/gnc-main-window.c:2711
-#, fuzzy
 msgid "Unable to save to database: Book is marked read-only."
-msgstr ": Книга отмечена только для чтения."
+msgstr "Невозможно сохранить в базу данных: Книга отмечена только для чтения."
 
 #: ../src/gnome-utils/gnc-main-window.c:4014
 msgid "Book Options"
@@ -11365,7 +11361,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:4402
 msgid "© 1997-2013 Contributors"
-msgstr ""
+msgstr "© 1997-2013 Участники"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -11377,7 +11373,8 @@ msgstr ""
 "Валек Филиппов\n"
 "Виталий Липатов\n"
 "Владимир Турбаевский\n"
-"Сергей Беляшов"
+"Сергей Беляшов\n"
+"Дмитрий Павлов"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:71 ../intl-scm/guile-strings.c:156
@@ -14682,7 +14679,7 @@ msgstr "Искать пункты, которые"
 
 #: ../src/gnome/window-autoclear.c:241
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
-msgstr ""
+msgstr "Невозможно однозначно очистить части проводок. Найдено несколько решений"
 
 #: ../src/gnome/window-autoclear.c:248
 #, fuzzy
@@ -27180,7 +27177,6 @@ msgstr ""
 "нанапример \"Авторазворачиваемый\" или \"Журнал проводок\"."
 
 #: ../doc/tip_of_the_day.list.in:29
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
@@ -27239,13 +27235,12 @@ msgstr ""
 "уменьшения номеров."
 
 #: ../doc/tip_of_the_day.list.in:53
-#, fuzzy
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
-"Для переключения между вкладками основного окна используйте Ctrl+Alt+PageUp "
-"и Ctrl+Alt+PageDown."
+"Для переключения между вкладками основного окна используйте Ctrl+PageUp "
+"и Ctrl+PageDown."
 
 #: ../doc/tip_of_the_day.list.in:56
 msgid ""
@@ -27308,7 +27303,15 @@ msgid ""
 "\n"
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
-msgstr ""
+msgstr "Редактор плановых проводок обладает очень гибкими возможностями для"
+" настройки периодичности выполнения проводок."
+" В основу заложены ежедневная, еженедельная и ежемесячная периодичности, "
+" используя которые, можно составить более сложные схемы."
+" Например:\n\n"
+"Для того чтобы запланировать выполнение проводки каждые 3 недели,"
+" следует выбрать периодичность \"Еженедельно\" и указать \"Каждые 3 недели\".\n\n"
+"Для того чтобы запланировать выполнение проводки раз в год,"
+" следует выбрать периодичность \"Ежемесячно\" и указать \"Каждые 12 месяцев\""
 
 #: ../doc/tip_of_the_day.list.in:86
 msgid ""
@@ -27331,7 +27334,6 @@ msgstr ""
 "на #gnucash на irc.gnome.org"
 
 #: ../doc/tip_of_the_day.list.in:94
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
@@ -27342,8 +27344,9 @@ msgid ""
 msgstr ""
 "Существует теория, что если даже кто-нибудь и откроет для чего нужна "
 "Вселенная и почему она здесь, то она тотчас пропадет и будет заменена чем-"
-"нибудь еще более странным и необъяснимым. Другая теория состоит в том, что "
-"это уже произошло. Дуглас Адамс, \"Ресторан в конце Вселенной\""
+"нибудь еще более странным и необъяснимым.\n"
+"Другая теория состоит в том, что это уже произошло.\n\n"
+"Дуглас Адамс, \"Ресторан в конце Вселенной\""
 
 #: ../doc/tip_of_the_day.list.in:101
 msgid ""
