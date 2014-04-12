@@ -304,40 +304,37 @@ msgid "[datafile]"
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:156
-#, fuzzy
 msgid "This is a development version. It may or may not work."
 msgstr ""
-"Эта версия находится в разработке, она может как работать, так и не "
-"работать.\n"
+"Эта версия находится в разработке. Она может как работать, так и не "
+"работать."
 
 #: ../src/bin/gnucash-bin.c:157
-#, fuzzy
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr ""
-"Сообщайте об ошибках и других проблемах по адресу: gnucash-devel@gnucash."
-"org.\n"
+"Сообщайте об ошибках и других проблемах по адресу: gnucash-devel@gnucash.org"
 
 #: ../src/bin/gnucash-bin.c:158
-#, fuzzy
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
 msgstr ""
-"Также вы можете смотреть и создавать сообщения об ошибках по адресу: http://"
-"bugzilla.gnome.org\n"
+"Также вы можете искать и создавать сообщения об ошибках по адресу: http://"
+"bugzilla.gnome.org"
 
 #: ../src/bin/gnucash-bin.c:159
 msgid "To find the last stable version, please refer to http://www.gnucash.org"
-msgstr ""
+msgstr "Последнюю стабильную версию вы можете найти на сайте http://www.gnucash.org"
 
 #: ../src/bin/gnucash-bin.c:378
 msgid "- GnuCash personal and small business finance management"
-msgstr ""
+msgstr "- GnuCash управление финансами для частных лиц и малого бизнеса"
 
 #: ../src/bin/gnucash-bin.c:384 ../../po/../src/bin/gnucash-bin.c:763
 #, c-format
 msgid ""
 "%s\n"
 "Run '%s --help' to see a full list of available command line options.\n"
-msgstr ""
+msgstr "%s\n"
+"Запустите '%s --help' для того чтобы посмотреть полный список доступных опций командной строки.\n"
 
 #: ../src/bin/gnucash-bin.c:397
 #, c-format
@@ -370,11 +367,12 @@ msgstr "GnuCash %s"
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
 #: ../src/bin/gnucash-bin.c:414 ../src/gnome-utils/gnc-main-window.c:4422
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from rev %s on %s."
-msgstr "%s Эта копия была собрана из r%s %s."
+msgstr "%s\n"
+"Эта копия была собрана из ревизии %s. Дата сборки %s."
 
 #: ../src/bin/gnucash-bin.c:515
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -393,7 +391,8 @@ msgstr "Загружаются данные..."
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set."
-msgstr ""
+msgstr "Ошибка: не удается создать графический интерфейс и опция add-price-quotes"
+" не задана"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
@@ -607,16 +606,16 @@ msgstr ""
 "поставщика ниже."
 
 #: ../src/business/business-gnome/dialog-customer.c:329
-#, fuzzy
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"Вы должны ввести название фирмы. Если же клиент физическое лицо, то вы "
-"должны указать одинаковые значения в полях \"название фирмы\" и \"контактное "
-"лицо\", а также \"Реквизиты\" и \"Адрес платежа\"."
+"Вы должны ввести название фирмы. Если клиент физическое лицо (не является организацией), то вы "
+"должны указать одинаковые значения для:\n"
+"Идентефикация - Название фирмы, и\n"
+"Назначение платежа - Название."
 
 #: ../src/business/business-gnome/dialog-customer.c:341
 msgid "You must enter a billing address."
@@ -867,9 +866,8 @@ msgstr ""
 "Вам будут заданы вопросы по обменному курсу для каждого из них."
 
 #: ../src/business/business-gnome/dialog-invoice.c:947
-#, fuzzy
 msgid "The post action was canceled because not all exchange rates were given."
-msgstr "Сумма части проводки нулевая, поэтому курс обмена не требуется."
+msgstr "Ввод счета-фактуры был отменен, так как не все обменные курсы были заданы."
 
 #: ../src/business/business-gnome/dialog-invoice.c:1216
 #: ../src/gnome/window-reconcile2.c:1142 ../src/gnome/window-reconcile.c:1142
@@ -973,9 +971,8 @@ msgstr "Просмотреть товарный чек"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2331
 #: ../src/business/business-gnome/dialog-invoice.c:2507
-#, fuzzy
 msgid "Bill Information"
-msgstr "Информация о плательщике"
+msgstr "Информация о платеже"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2333
 #: ../src/business/business-gnome/dialog-invoice.c:2510
@@ -985,9 +982,8 @@ msgstr "ID платежа"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2336
 #: ../src/business/business-gnome/dialog-invoice.c:2514
-#, fuzzy
 msgid "Voucher Information"
-msgstr "Информация о счете-фактуре"
+msgstr "Информация о товарном чеке"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2338
 #: ../src/business/business-gnome/dialog-invoice.c:2517
@@ -1001,9 +997,8 @@ msgid "Date of duplicated entries"
 msgstr "Дублировать запись"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2849
-#, fuzzy
 msgid "Do you really want to post these invoices?"
-msgstr "Вы действительно хотите ввести счет-фактуру?"
+msgstr "Вы действительно хотите ввести счета-фактуры?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2915
 msgid "View/Edit Invoice"
@@ -1493,14 +1488,12 @@ msgid "_Customer"
 msgstr "Клиент"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
-#, fuzzy
 msgid "Customers Overview"
-msgstr "Счета-фактуры клиента"
+msgstr "Обзор клиентов"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
-#, fuzzy
 msgid "Open a Customer overview page"
-msgstr "Открыть диалог создания новых клиентов"
+msgstr "Открыть страницу с обзором клиентов"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:160
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:161
@@ -1571,14 +1564,12 @@ msgid "Open the Process Payment dialog"
 msgstr "Открыть диалог обработки платежей"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
-#, fuzzy
 msgid "Vendors Overview"
-msgstr "Обзор"
+msgstr "Обзор поставщиков"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
-#, fuzzy
 msgid "Open a Vendor overview page"
-msgstr "Открыть новую страницу дерева счетов"
+msgstr "Открыть страницу с обзором поставщиков"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "_Vendor"
@@ -1619,14 +1610,12 @@ msgid "Open the Find Bill dialog"
 msgstr "Открыть диалог поиска платежей"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:240
-#, fuzzy
 msgid "Employees Overview"
-msgstr "Имя пользователя работника"
+msgstr "Обзор работников"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
-#, fuzzy
 msgid "Open a Employee overview page"
-msgstr "Открыть диалог создания новых работников"
+msgstr "Открыть страницу с обзором работников"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:244
 msgid "_Employee"
@@ -1670,9 +1659,8 @@ msgid "Sales _Tax Table"
 msgstr "Таблица торговых _налогов"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:274
-#, fuzzy
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Просмотреть и изменить список таблиц налогов"
+msgstr "Просмотреть и изменить список таблиц торговых налогов (НДС)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:278
 msgid "_Billing Terms Editor"
@@ -1705,14 +1693,12 @@ msgid "Initialize Test Data"
 msgstr "Инициализировать тестовые данные"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:311
-#, fuzzy
 msgid "Assign as payment..."
-msgstr "Обработать платеж..."
+msgstr "Установить как платеж..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:312
-#, fuzzy
 msgid "Assign the selected transaction as payment"
-msgstr "Вырезать выбранную проводку"
+msgstr "Сделать выбранную проводку в качестве платежа"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:98
 msgid "Sort _Order"
@@ -1829,24 +1815,20 @@ msgid "Make a copy of the current entry"
 msgstr "Сделать копию текущей записи"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:176
-#, fuzzy
 msgid "Move Entry _Up"
 msgstr "Переместить ввер_х"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:177
-#, fuzzy
 msgid "Move the current entry one row upwards"
-msgstr "Сохранить текущую запись?"
+msgstr "Переместить текущую запись на одну строчку вверх"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:181
-#, fuzzy
 msgid "Move Entry Do_wn"
 msgstr "Переместить вни_з"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:182
-#, fuzzy
 msgid "Move the current entry one row downwards"
-msgstr "Переместить выделенный шаблон проводок на строку ниже"
+msgstr "Переместить текущуб запись на одну строчку вниз"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:188
 msgid "New _Invoice"
@@ -1951,12 +1933,12 @@ msgstr "Удалить"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:262
 #: ../src/gnome/gnc-plugin-page-register2.c:486
 msgid "Up"
-msgstr ""
+msgstr "Вверх"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:263
 #: ../src/gnome/gnc-plugin-page-register2.c:487
 msgid "Down"
-msgstr ""
+msgstr "Вниз"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:264
 #: ../src/gnome/gnc-plugin-page-register2.c:483
@@ -1969,49 +1951,40 @@ msgid "Unpost"
 msgstr "Отменить ввод"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:141
-#, fuzzy
 msgid "E_dit Vendor"
-msgstr "Изменить поставщика"
+msgstr "_Редактировать поставщика"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:142
-#, fuzzy
 msgid "Edit the selected vendor"
-msgstr "Изменить выбранный счет"
+msgstr "Отредактировать выбранного поставщика"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:146
-#, fuzzy
 msgid "E_dit Customer"
-msgstr "Изменить клиента"
+msgstr "_Редактировать клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:147
-#, fuzzy
 msgid "Edit the selected customer"
-msgstr "Изменить выбранный счет"
+msgstr "Отредактировать выбранного клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:151
-#, fuzzy
 msgid "E_dit Employee"
-msgstr "Изменить работника"
+msgstr "_Редактировать работника"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:152
-#, fuzzy
 msgid "Edit the selected employee"
-msgstr "Изменить выбранный счет"
+msgstr "Отредактировать выбранного работника"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:157
-#, fuzzy
 msgid "Create a new vendor"
-msgstr "Создать новый документ"
+msgstr "Создать нового поставщика"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:162
-#, fuzzy
 msgid "Create a new customer"
-msgstr "Создать новый счет"
+msgstr "Создать нового клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:167
-#, fuzzy
 msgid "Create a new employee"
-msgstr "Создать новый документ"
+msgstr "Создать нового работника"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:173
 #, fuzzy
@@ -2160,11 +2133,11 @@ msgid "(no name)"
 msgstr "(без имени)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:1067
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "Счет не согласован. Вы уверены, что хотите закончить?"
+msgstr "Владелец %s будет удален.\n Вы уверены, что хотите это сделать?"
 
 #. * @}
 #. * @}
@@ -2196,15 +2169,14 @@ msgstr "Размер и положение окна"
 #: ../src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in.h:2
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:18
 #: ../src/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in.h:5
-#, fuzzy
 msgid ""
 "This setting describes the size and position of the window when it was last "
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"Эта установка содержит координаты окна при последнем запуске. Числа "
-"соответствуют координатам X и Y левого верхнего угла, а так же ширине и "
-"высоте окна."
+"Эта установка содержит координаты окна при последнем закрытии. Числа "
+"соответствуют координатам X и Y левого верхнего угла, после которых указаны ширина и "
+"высота окна."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:3
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:4
@@ -3959,30 +3931,29 @@ msgstr "последняя(ий) %s"
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
 msgid "1st"
-msgstr ""
+msgstr "1-е"
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
-#, fuzzy
 msgid "2nd"
-msgstr "Конец"
+msgstr "2-е"
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "3rd"
-msgstr ""
+msgstr "3-е"
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:30
 msgid "4th"
-msgstr ""
+msgstr "4-е"
 
 #. translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. * %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:652
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s"
-msgstr "%s %s - %s"
+msgstr "%s %s"
 
 #: ../src/engine/Recurrence.c:689
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:31
