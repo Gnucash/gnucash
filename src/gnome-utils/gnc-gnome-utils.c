@@ -709,9 +709,14 @@ gnc_gui_init(void)
     gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
 
 #ifdef MAC_INTEGRATION
-    data_dir = gnc_path_get_pkgdatadir();
-    map = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
-    g_free(data_dir);
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    if (!g_file_test (map, G_FILE_TEST_EXISTS))
+    {
+	g_free (map);
+	data_dir = gnc_path_get_pkgdatadir();
+	map = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
+	g_free(data_dir);
+    }
 #else
     map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
 #endif /* MAC_INTEGRATION */
@@ -748,11 +753,9 @@ gnc_gui_shutdown (void)
     if (gnome_is_running && !gnome_is_terminating)
     {
         gnome_is_terminating = TRUE;
-#ifndef MAC_INTEGRATION
         map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
         gtk_accel_map_save(map);
         g_free(map);
-#endif /* MAC_INTEGRATION */
         gtk_main_quit();
     }
 }
