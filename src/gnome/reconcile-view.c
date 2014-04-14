@@ -63,7 +63,8 @@ static void gnc_reconcile_view_line_toggled (GNCQueryView *qview, gpointer item,
 static void gnc_reconcile_view_double_click_entry (GNCQueryView *qview, gpointer item, gpointer user_data);
 static void gnc_reconcile_view_row_selected (GNCQueryView *qview, gpointer item, gpointer user_data);
 static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-
+static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y, gboolean keyboard_mode,
+					 GtkTooltip* tooltip, gpointer* user_data);
 
 GType
 gnc_reconcile_view_get_type (void)
@@ -93,6 +94,120 @@ gnc_reconcile_view_get_type (void)
 }
 
 
+static gboolean
+gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
+	gboolean keyboard_mode, GtkTooltip *tooltip, gpointer *user_data)
+{
+    GtkTreeModel* model;
+    GtkTreeIter iter;
+
+    if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (qview), &x, &y, keyboard_mode, &model, NULL, &iter))
+    {
+        GtkTreeViewColumn *col;
+        GList *cols;
+        gint col_pos, col_width;
+	gchar* desc_text = NULL;
+
+        /* Are we in keyboard tooltip mode, CTRL+F1 */
+        if (keyboard_mode == FALSE)
+        {
+            if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (qview), x, y, NULL, &col, NULL, NULL) == FALSE)
+                return FALSE;
+        }
+        else
+            gtk_tree_view_get_cursor (GTK_TREE_VIEW (qview), NULL, &col);
+
+        cols = gtk_tree_view_get_columns (GTK_TREE_VIEW (qview));
+        col_width = gtk_tree_view_column_get_width (col);
+        col_pos = g_list_index (cols, col);
+        g_list_free (cols);
+
+        /* If column is not description, do not show tooltip */
+        if (col_pos != 2)
+            return FALSE;
+
+        gtk_tree_model_get (model, &iter, 3, &desc_text, -1);
+
+        if (desc_text)
+        {
+            PangoLayout* layout;
+            gint text_width;
+            gint root_x, root_y;
+            gint cur_x, cur_y;
+
+            layout = gtk_widget_create_pango_layout (GTK_WIDGET (qview), desc_text);
+            pango_layout_get_pixel_size (layout, &text_width, NULL);
+            g_object_unref (layout);
+
+            /* If text_width + 10 <= column_width, do not show tooltip */
+            if ((text_width + 10) <= col_width)
+            {
+                g_free (desc_text);
+                return FALSE;
+            }
+
+            if (keyboard_mode == FALSE)
+            {
+                GdkScreen *screen;
+                GtkWindow *tip_win = NULL;
+                GdkWindow *parent_window, *temp_window;
+                GList *win_list, *node;
+
+                parent_window = gtk_widget_get_parent_window (GTK_WIDGET (qview));
+                temp_window = gdk_window_get_pointer (parent_window, &cur_x, &cur_y, NULL);
+                gdk_window_get_origin (parent_window, &root_x, &root_y);
+
+                screen = gtk_widget_get_screen (GTK_WIDGET (qview));
+
+                /* Get a list of toplevel windows */
+                win_list = gtk_window_list_toplevels ();
+
+                /* Look for the gtk-tooltip window, we do this as gtk_widget_get_tooltip_window
+                   does not seem to work for the default tooltip window, custom yes */
+                for (node = win_list;  node != NULL;  node = node->next)
+                {
+                    if (g_strcmp0 (gtk_widget_get_name (node->data), "gtk-tooltip") == 0)
+                    tip_win = node->data;
+                }
+                g_list_free (win_list);
+
+	        gtk_tooltip_set_text (tooltip, desc_text);
+
+                if (GTK_IS_WINDOW (tip_win))
+                {
+                    GdkRectangle monitor;
+                    GtkRequisition requisition;
+                    gint monitor_num;
+                    gint x, y;
+
+                    gtk_widget_size_request (GTK_WIDGET (tip_win), &requisition);
+
+                    x = root_x + cur_x + 10;
+                    y = root_y + cur_y + 10;
+
+                    monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+                    gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+                    if (x + requisition.width > monitor.x + monitor.width)
+                        x -= x - (monitor.x + monitor.width) + requisition.width;
+                    else if (x < monitor.x)
+                        x = monitor.x;
+
+                    if (y + requisition.height > monitor.y + monitor.height)
+                        y -= y - (monitor.y + monitor.height) + requisition.height;
+
+                    gtk_window_move (tip_win, x, y);
+                }
+            }
+	    gtk_tooltip_set_text (tooltip, desc_text);
+            g_free (desc_text);
+	    return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
 /****************************************************************************\
  * gnc_reconcile_view_new                                                   *
  *   creates the account tree                                               *
@@ -108,6 +223,8 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
     GNCQueryView      *qview = GNC_QUERY_VIEW (view);
     GtkTreeViewColumn *col;
     GtkTreeSelection  *selection;
+    GList             *renderers;
+    GtkCellRenderer   *cr0;
     gboolean           inv_sort = FALSE;
 
     if (view->view_type == RECLIST_CREDIT)
@@ -121,6 +238,14 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), 2);
     gtk_tree_view_column_set_expand (col, TRUE);
 
+    /* Get the renderer of the description column and set ellipsize value */
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+    cr0 = g_list_nth_data (renderers, 0);
+    g_list_free (renderers);
+    g_object_set (cr0, "ellipsize", PANGO_ELLIPSIZE_END, NULL );
+
+    gtk_widget_set_has_tooltip (GTK_WIDGET (qview), TRUE);
+
     /* Set the selection method */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
@@ -132,8 +257,10 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
                       G_CALLBACK (gnc_reconcile_view_double_click_entry), view);
     g_signal_connect (G_OBJECT (qview), "row_selected",
                       G_CALLBACK (gnc_reconcile_view_row_selected), view);
-    g_signal_connect(G_OBJECT (qview), "key_press_event",
-                     G_CALLBACK(gnc_reconcile_view_key_press_cb), view);
+    g_signal_connect (G_OBJECT (qview), "key_press_event",
+                      G_CALLBACK (gnc_reconcile_view_key_press_cb), view);
+    g_signal_connect (G_OBJECT (qview), "query-tooltip",
+                      G_CALLBACK (gnc_reconcile_view_tooltip_cb), view);
 }
 
 

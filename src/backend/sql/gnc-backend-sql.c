@@ -439,8 +439,6 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     ENTER( "book=%p, be->book=%p", book, be->book );
     update_progress( be );
     (void)reset_version_info( be );
-    gnc_sql_set_table_version( be, "Gnucash", gnc_prefs_get_long_version() );
-    gnc_sql_set_table_version( be, "Gnucash-Resave", GNUCASH_RESAVE_VERSION );
 
     /* Create new tables */
     be->is_pristine_db = TRUE;
@@ -3231,6 +3229,10 @@ gnc_sql_init_version_info( GncSqlBackend* be )
     else
     {
         do_create_table( be, VERSION_TABLE_NAME, version_table );
+	gnc_sql_set_table_version( be, "Gnucash",
+				   gnc_prefs_get_long_version() );
+	gnc_sql_set_table_version( be, "Gnucash-Resave",
+				   GNUCASH_RESAVE_VERSION );
     }
 }
 
@@ -3258,6 +3260,8 @@ reset_version_info( GncSqlBackend* be )
         g_hash_table_remove_all( be->versions );
     }
 
+    gnc_sql_set_table_version( be, "Gnucash", gnc_prefs_get_long_version() );
+    gnc_sql_set_table_version( be, "Gnucash-Resave", GNUCASH_RESAVE_VERSION );
     return ok;
 }
 

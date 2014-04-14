@@ -47,7 +47,7 @@
  */
 
 
-#ifndef GNC_GSETIINGS_H
+#ifndef GNC_GSETTINGS_H
 #define GNC_GSETTINGS_H
 
 #include <gio/gio.h>

@@ -4399,7 +4399,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
                                    "The GNU way to manage your money!");
-	const gchar *copyright = _("© 1997-2013 Contributors");
+	const gchar *copyright = _("© 1997-2014 Contributors");
 	gchar **authors = get_file_strsplit("AUTHORS");
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");

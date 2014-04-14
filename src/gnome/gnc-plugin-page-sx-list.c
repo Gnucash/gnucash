@@ -66,6 +66,7 @@
 #include "gnc-icons.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-sx-list.h"
+#include "gnc-session.h"
 #include "gnc-sx-instance-dense-cal-adapter.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-sx-list-tree-model-adapter.h"
@@ -79,7 +80,7 @@
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
-#define STATE_SECTION "window/pages/sx_list"
+#define STATE_SECTION "SX Transaction List"
 
 typedef struct GncPluginPageSxListPrivate
 {
@@ -474,6 +475,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                              gnc_plugin_page_sx_list_refresh_cb,
                              gnc_plugin_page_sx_list_close_cb,
                              page);
+    gnc_gui_component_set_session (priv->gnc_component_id,
+                                   gnc_get_current_session());
 
     return priv->widget;
 }

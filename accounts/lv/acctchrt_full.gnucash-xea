@@ -18,7 +18,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Aktīvi</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -35,7 +35,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Tekošie aktīvi</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
@@ -52,7 +52,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bankas depozīti</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -63,7 +63,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bankas konts</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -74,7 +74,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Termiņnoguldījumi</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -85,7 +85,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Uzkrājumi</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -96,7 +96,7 @@
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Skaidra nauda</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -107,7 +107,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Īpašumi</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
@@ -124,7 +124,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mājoklis</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
@@ -135,7 +135,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi īpašumi</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
@@ -146,7 +146,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Transporta līdzekļi</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
@@ -157,7 +157,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Investīcijas</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
@@ -174,7 +174,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Biržas konti</act:description>
   <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
@@ -185,7 +185,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Vērtspapīri</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -196,7 +196,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Akcijas</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -207,7 +207,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kapitāla daļas</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -218,7 +218,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pensijas fondi</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -240,7 +240,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Vērtspapīri</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -251,7 +251,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Akcijas</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -262,7 +262,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kapitāla daļas</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -273,7 +273,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dzīvesbiedra pensijas fondi</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -295,7 +295,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Vērtspapīri</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -306,7 +306,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Akcijas</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -317,7 +317,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kapitāla daļas</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -339,7 +339,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Saistības</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -356,7 +356,7 @@
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kredītkarte</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
@@ -373,7 +373,7 @@
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kredītlīnija</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
@@ -384,7 +384,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Aizņēmumi</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
@@ -401,7 +401,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Studiju kredīts</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -412,7 +412,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mājokļa kredīts</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -423,7 +423,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi aizņēmumi</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -434,7 +434,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Auto līzings</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -445,7 +445,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Ienākumi</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -462,7 +462,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bonusi</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -473,7 +473,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dividendes</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -484,7 +484,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dāvinājumi</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -495,7 +495,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Procenti</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -506,7 +506,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Vērtspapīru peļņa</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -517,7 +517,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Depozītu procenti</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -528,7 +528,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Valūtu kursu peļņa</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -539,7 +539,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi procenti</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -550,7 +550,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Noguldījumu procenti</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -561,7 +561,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi ienākumi</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -572,7 +572,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Alga</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -583,7 +583,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dzīvesbiedra alga</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -594,7 +594,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Izdevumi</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -611,7 +611,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Neuzskaitītu izdevumu korekcija</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -622,7 +622,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mašīna</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -633,7 +633,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Nodevas</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -644,7 +644,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Degviela</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -655,7 +655,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Stāvvieta</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -666,7 +666,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Remonts un uzturēšana</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -677,7 +677,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Banku pakalpojumi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -688,7 +688,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Grāmatas</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -699,7 +699,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Televīzija</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -710,7 +710,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Ziedojumi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -721,7 +721,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bērni</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -732,7 +732,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Apģērbs un apavi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -743,7 +743,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Starpniecība</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -754,7 +754,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dators</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -765,7 +765,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pusdienas</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -776,7 +776,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Izglītība</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -787,7 +787,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Izklaide</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -798,7 +798,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mūzika un filmas</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
@@ -809,7 +809,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Atpūta</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
@@ -820,7 +820,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Ceļojumi</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
@@ -831,7 +831,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dāvanas</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -842,7 +842,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pārtika</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -853,7 +853,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Vaļasprieki</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -864,7 +864,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mājokļa remonts</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -875,7 +875,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Apdrošināšana</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -886,7 +886,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mašīnas apdrošināšana</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -897,7 +897,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Veselības apdrošināšana</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -908,7 +908,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mājokļa apdrošināšana</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -919,7 +919,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dzīvības apdrošināšana</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -930,7 +930,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Īres apdrošināšana</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -941,7 +941,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Procenti</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -952,7 +952,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Studiju kredīta procenti</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -963,7 +963,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mājokļa kredīta procenti</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -974,7 +974,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi procenti</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -985,7 +985,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mašīnas līzinga procenti</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -996,7 +996,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Apģērba tīrīšana</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1007,7 +1007,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Medicīna</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1018,7 +1018,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dažādi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1029,7 +1029,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Internets</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1040,7 +1040,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Telefons</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1051,7 +1051,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sabiedriskais transports</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1062,7 +1062,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Īre</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1073,7 +1073,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Abonēšana</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1084,7 +1084,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Piegādes</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1095,7 +1095,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Nodokļi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1106,7 +1106,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pašvaldības</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1117,7 +1117,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Veselības</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1128,7 +1128,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi nodokļi</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1139,7 +1139,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Īpašuma nodoklis</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1150,7 +1150,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sociālais nodoklis</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1161,7 +1161,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Valsts</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1172,7 +1172,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Dzīvesbiedra nodokļi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1183,7 +1183,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pašvaldības</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1194,7 +1194,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Veselības</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1205,7 +1205,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Citi nodokļi</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1216,7 +1216,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sociālie nodokļi</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1227,7 +1227,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Valsts</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1238,7 +1238,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pakalpojumi</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1249,7 +1249,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Elektrība</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1260,7 +1260,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Apkure</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1271,7 +1271,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Atkritumu savākšana</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1282,7 +1282,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Gāze</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1293,7 +1293,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Ūdens un kanalizācija</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1304,7 +1304,7 @@
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bilance</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -1321,7 +1321,7 @@
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sākuma bilances</act:description>
   <act:parent type="new">68d4074f91295062c0b773b4ae8de6bd</act:parent>

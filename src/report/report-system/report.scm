@@ -464,7 +464,7 @@
   (hash-ref *gnc:_report-templates_* report-type))
 
 (define (gnc:report-template-is-custom/template-guid? guid)
-  (let* ((custom-template (if (string-null? guid) #f (hash-ref *gnc:_report-templates_* guid)))
+  (let* ((custom-template (if (string? guid) (if (string-null? guid) #f (hash-ref *gnc:_report-templates_* guid)) #f))
          (parent-type (if custom-template (gnc:report-template-parent-type custom-template) #f)))
 
         (if parent-type
@@ -508,7 +508,9 @@
 
 ;; Load and save functions
 
-(define (gnc:report-generate-restore-forms report)
+
+;; Generate guile code required to recreate an instatiated report
+(define (gnc:report-serialize report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
   (let* ((report-type (gnc:report-type report))
@@ -529,7 +531,7 @@
    ;; Temporary check to make the new report saving code more or less backwards
    ;; compatible with older gnucash versions. This can be removed again in 2.8.
    "(if (defined? 'gnc:restore-report-by-guid-with-custom-template)\n"
-    ;; end of 2.6->2.4 compatibility code prefix.
+   ;; end of 2.6->2.4 compatibility code prefix.
    (format 
     #f "  (gnc:restore-report-by-guid-with-custom-template ~S ~S ~S ~S options)\n"
     (gnc:report-id report) (gnc:report-type report)
@@ -544,17 +546,15 @@
    ")"
   ))
 
-;; Loop over embedded reports and concat result of each gnc:report-generate-restore-forms
-(define (gnc:report-generate-options-embedded report)
-  (let*
-      ((embedded-reports (gnc:report-embedded-list report))
-       (result-string ""))
+;; Generate guile code required to recreate embedded report instances
+(define (gnc:report-serialize-embedded embedded-reports)
+  (let* ((result-string ""))
     (if embedded-reports
         (for-each
          (lambda (subreport-id)
            (let*
                ((subreport (gnc-report-find subreport-id))
-                (subreport-options-text (gnc:report-generate-restore-forms subreport)))
+                (subreport-options-text (gnc:report-serialize subreport)))
              (set! result-string (string-append
                                   result-string
                                   ";;;; Options for embedded report\n"
@@ -562,32 +562,35 @@
          embedded-reports))
     result-string))
 
-(define (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)
-  (let ((result (string-append 
+(define (gnc:report-template-serialize-internal name type templ-name options guid)
+  (let* ((embedded-serialized (gnc:report-serialize-embedded (gnc:report-embedded-list options)))
+         (result (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
    (format #f ";; Options for saved report ~S, based on template ~S\n"
-		  name type)
+           name type)
    (format
     #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
     type templ-name)
    (gnc:generate-restore-forms options "options")
-   (if embedded-options
-       embedded-options
+   (if embedded-serialized
+       embedded-serialized
        "")
    "  options))\n"
    (format 
     #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
     name
     (if guid
-	guid
-	(guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
+        guid
+        (guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
     type
     type
     templ-name))))
     (gnc:debug result)
     result))
 
-(define (gnc:report-generate-saved-forms report)
+;; Convert an instantiated report into a report template
+;; and generate the guile code required to recreate this template
+(define (gnc:report-template-serialize-from-report report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
   (let* ((template 
@@ -598,22 +601,24 @@
         (thunk report)))
   
   ;; save them
-  (let ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
-	(type (gnc:report-type report))
-	(templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-	(options (gnc:report-options report))
-	(embedded-options (gnc:report-generate-options-embedded report)))
-    (gnc:report-generate-saved-forms-string name type templ-name options embedded-options #f)))
+  (let* ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
+         (type (gnc:report-type report))
+         (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+         (options (gnc:report-options report)))
+    (gnc:report-template-serialize-internal name type templ-name options #f)))
 
-(define (gnc:report-template-generate-saved-forms report-template)
+;; Generate guile code required to recreate a report template
+;; Note: multi column report templates encapsulate instantiated reports, not other report templates
+;;       this means that the template recreation code must also contain the code to instantiate
+;;       these embedded report instances. This results in a mix of template and instatiated reports
+;;       in the saved reports file...
+(define (gnc:report-template-serialize report-template)
   (let* ((name (gnc:report-template-name report-template))
-	 (type (gnc:report-template-parent-type report-template))
-	 (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
-	 (options (gnc:report-template-new-options report-template))
-	 (embedded-options #f)
-	 (guid (gnc:report-template-report-guid report-template))
-	 )
-    (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)))
+         (type (gnc:report-template-parent-type report-template))
+         (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
+         (options (gnc:report-template-new-options report-template))
+         (guid (gnc:report-template-report-guid report-template)))
+    (gnc:report-template-serialize-internal name type templ-name options guid)))
 
 (define gnc:current-saved-reports
   (gnc-build-dotgnucash-path "saved-reports-2.4"))
@@ -642,7 +647,7 @@
   (let* ((custom-template-id (gnc:report-custom-template report))
          (overwrite-ok? (and (gnc:report-template-is-custom/template-guid? custom-template-id) overwrite?))
          ;; Generate a serialized report-template with a random guid
-         (saved-form (gnc:report-generate-saved-forms report))
+         (saved-form (gnc:report-template-serialize-from-report report))
          ;; Immediatly evaluate the serialized report template to
          ;; - check if it's error free and can be deserialized
          ;; - load it into the runtime for immediate use by the user
@@ -689,7 +694,7 @@
 (define (gnc:report-template-save-to-savefile report-template)
   (let* ((report-port (gnc:open-saved-reports "a")))
     (if report-port
-        (let ((saved-form (gnc:report-template-generate-saved-forms report-template)))
+        (let ((saved-form (gnc:report-template-serialize report-template)))
           (display saved-form report-port)
           (close report-port)
           #t)
@@ -781,9 +786,8 @@
                  *gnc:_report-templates_*))
 
 ;; return the list of reports embedded in the specified report
-(define (gnc:report-embedded-list report)
-  (let* ((options (gnc:report-options report))
-	 (option (gnc:lookup-option options "__general" "report-list")))
+(define (gnc:report-embedded-list options)
+  (let* ((option (gnc:lookup-option options "__general" "report-list")))
     (if option
 	(let ((opt-value (gnc:option-value option)))
 	  (map (lambda (x) (car x)) opt-value))

@@ -89,14 +89,12 @@
     <menu name="Reports" action="ReportsAction">
       <placeholder name="StandardReports"/>
       <separator   name="ReportSep1"/>
-      <placeholder name="CustomReports"/>
+      <placeholder name="SavedReportConfigs"/>
       <separator   name="ReportSep2"/>
-      <placeholder name="CustomReports"/>
-      <separator   name="ReportSep3"/>
       <placeholder name="AccountReports"/>
-      <separator   name="ReportSep4"/>
+      <separator   name="ReportSep3"/>
       <placeholder name="OtherReports"/>
-      <separator   name="ReportSep5"/>
+      <separator   name="ReportSep4"/>
     </menu>
 
     <menu name="Tools" action="ToolsAction">

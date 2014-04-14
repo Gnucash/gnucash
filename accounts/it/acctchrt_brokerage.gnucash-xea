@@ -15,8 +15,7 @@
       Conti per il brokeraggio ed i relativi investimenti
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Selezionare questo insieme di conti se si possiedono degli
-    investimenti (azioni, buoni, fondi comuni, fondi indicizzati, interessi, dividendi).
+    Selezionare questo insieme di conti se si possiedono degli investimenti (azioni, buoni, fondi comuni, fondi indicizzati, interessi, dividendi).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

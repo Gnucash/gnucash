@@ -80,6 +80,7 @@ typedef struct
     int        disposed;
 
     gboolean   popup_in_progress;
+    gboolean   in_selected_handler;
 } GNCDateEdit;
 
 typedef struct

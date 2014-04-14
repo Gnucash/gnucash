@@ -1,30 +1,16 @@
 #!/bin/sh
 #
 # Notes:
-# 1. for this script to work, you need to make sure bash can
-#    find svn on your system. If it's not in the default
-#    Windows path, you will have to add it yourself, for
-#    example like this:
-#    - create a file /etc/profile.d/svn.sh
-#    - add this line: export PATH=/c/soft/svn/bin:$PATH
-#    (Use the real path to your svn installation, obviously)
+# 1. for this script to work, git must have been setup before
+#    in a way that doesn't conflict with the GnuCash build.
+#    The easiest way to do so is to run the build once manually
+#    with a properly set up custom.sh.
 #
-# 2. The recommended setup is to call this script from within the
-#    source code repository (packaging/win32 directory). This is
-#    different from before, where it was assumed to be called
-#    from outside the source code repository. To remain some
-#    compatibility with the old way, svn update is called twice
-#    - once for the repository (to update all)
-#    - once for the build scripts (to also update the build scripts
-#       using the old way)
-#    The second invocation is superfluous if this script was called
-#    from within the source code repository.
-#
-# 3. Should this script change in the source repository, then the
-#    svn update below will fail due to a limitation in Windows that
+# 2. Should this script change in the source repository, then the
+#    git pull below will fail due to a limitation in Windows that
 #    won't allow to change a file that is "in use". So in the rare
 #    situation this script needs to be updated, you will need to
-#    run the svn update once yourself.
+#    run the git pull once yourself.
 
 set -e
 
@@ -36,6 +22,35 @@ function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
-svn update
-./build_package.sh
+. functions.sh
+. defaults.sh
+
+# Variables
+_GIT_UDIR=`unix_path $GIT_DIR`
+set_env "$_GIT_UDIR/bin/git" GIT_CMD
+export $GIT_CMD
+
+$GIT_CMD pull
+
+################################################################
+# determine if there are any new commits since the last time we ran
+#
+
+# If we don't have a rev file then start from 'now' and force a build
+revfile=last_rev_weekly
+if [ ! -f ${revfile} ] ; then
+  echo $($GIT_CMD rev-parse HEAD) > ${revfile}
+  oldrev=a   # definitely an invalid, so non-existing git rev
+else
+  oldrev=$(cat ${revfile})
+fi
+
+newrev=$($GIT_CMD rev-parse HEAD)
+if [[ "${oldrev}" != "${newrev}" ]]; then
+  ./build_package.sh
+fi
+
+# move the new file into place, will only happen if the build was successful
+echo ${newrev} > ${revfile}
+
 qpopd

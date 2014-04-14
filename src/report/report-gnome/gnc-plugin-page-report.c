@@ -587,6 +587,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     const gchar *old_name;
     gchar *new_name;
+    gchar *new_name_escaped;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
@@ -602,7 +603,13 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
                "Report name", NULL);
     if (strcmp(old_name, new_name) != 0)
-        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
+    {
+        /* Bug 727130 - escape the non-printable characters from the name */
+        new_name_escaped = g_strescape(new_name,NULL);
+        ENTER("Escaped new report name: %s", new_name_escaped);
+        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name_escaped);
+        g_free(new_name_escaped);
+	}
     g_free(new_name);
 
     /* it's probably already dirty, but make sure */
@@ -724,6 +731,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     GncPluginPageReportPrivate *priv;
     SCM gen_save_text, scm_text;
     SCM get_embedded_list, embedded, item, tmp_report;
+    SCM  get_options;
     gint count, id;
     gchar *text, *key_name;
 
@@ -744,9 +752,10 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
+    gen_save_text = scm_c_eval_string("gnc:report-serialize");
     get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
-    embedded = scm_call_1(get_embedded_list, priv->cur_report);
+    get_options    = scm_c_eval_string("gnc:report-options");
+    embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->cur_report));
     count = scm_ilength(embedded);
     while (count-- > 0)
     {
@@ -1026,14 +1035,14 @@ static GtkActionEntry report_actions[] =
         G_CALLBACK (gnc_plugin_page_report_reload_cb)
     },
     {
-        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report"), "<control><alt>s",
+        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<control><alt>s",
         N_("Update the current report's saved configuration. "
         "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_cb)
     },
     {
-        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report As..."), "<control><alt><shift>s",
-        N_("Add the current report's configuration to the `Preconfigured Reports' menu. "
+        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<control><alt><shift>s",
+        N_("Add the current report's configuration to the `Saved Report Configurations' menu. "
         "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_as_cb)
     },

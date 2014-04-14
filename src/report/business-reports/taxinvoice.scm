@@ -100,7 +100,7 @@
 (define optname-row-address		(N_ "row: Address"))
 (define optname-row-contact		(N_ "row: Contact"))
 (define optname-row-invoice-number	(N_ "row: Invoice Number"))
-(define optname-row-company-name		(N_ "row: Company Name"))
+(define optname-row-company-name	(N_ "row: Company Name"))
 (define optname-report-currency		(N_ "Report Currency"))
 (define optname-invoice-number-text	(N_ "Invoice number text"))
 (define optname-to-text			(N_ "To text"))
@@ -114,26 +114,26 @@
 (define optname-border-color-th		(N_ "table-header-border-color"))
 (define optname-border-color-td		(N_ "table-cell-border-color"))
 (define optname-extra-css		(N_ "Embedded CSS"))
-(define optname-report-title   (N_ "Report title"))
-(define optname-template-file  (N_ "Template file"))
-(define optname-css-file       (N_ "CSS stylesheet file"))
-(define optname-heading-font   (N_ "Heading font"))
-(define optname-text-font      (N_ "Text font"))
-(define optname-logofile       (N_ "Logo filename"))
-(define optname-logo-width     (N_ "Logo width"))
-(define optname-units          (N_ "Units"))
-(define optname-qty            (N_ "Qty"))
-(define optname-unit-price     (N_ "Unit Price"))
-(define optname-disc-rate      (N_ "Discount Rate"))
-(define optname-disc-amount    (N_ "Discount Amount"))
-(define optname-net-price      (N_ "Net Price"))
-(define optname-tax-rate       (N_ "Tax Rate"))
-(define optname-tax-amount     (N_ "Tax Amount"))
-(define optname-total-price    (N_ "Total Price"))
-(define optname-subtotal       (N_ "Sub-total"))
-(define optname-amount-due     (N_ "Amount Due"))
-(define optname-payment-recd   (N_ "Payment received text"))
-(define optname-extra-notes    (N_ "Extra notes"))
+(define optname-report-title		(N_ "Report title"))
+(define optname-template-file		(N_ "Template file"))
+(define optname-css-file	        (N_ "CSS stylesheet file"))
+(define optname-heading-font		(N_ "Heading font"))
+(define optname-text-font		(N_ "Text font"))
+(define optname-logofile	        (N_ "Logo filename"))
+(define optname-logo-width     		(N_ "Logo width"))
+(define optname-units          		(N_ "Units"))
+(define optname-qty            		(N_ "Qty"))
+(define optname-unit-price     		(N_ "Unit Price"))
+(define optname-disc-rate      		(N_ "Discount Rate"))
+(define optname-disc-amount    		(N_ "Discount Amount"))
+(define optname-net-price      		(N_ "Net Price"))
+(define optname-tax-rate       		(N_ "Tax Rate"))
+(define optname-tax-amount     		(N_ "Tax Amount"))
+(define optname-total-price    		(N_ "Total Price"))
+(define optname-subtotal       		(N_ "Sub-total"))
+(define optname-amount-due     		(N_ "Amount Due"))
+(define optname-payment-recd   		(N_ "Payment received text"))
+(define optname-extra-notes    		(N_ "Extra notes"))
 
 ; Choose only customer invoices
 ; (This doesn't work very nicely -- all invoices and bills
@@ -213,30 +213,30 @@
   (add-option (gnc:make-string-option
                 headingpage optname-disc-amount "f" "" (_ "Discount Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-net-price "g" "" (_ "Net Price")))
+                headingpage optname-net-price "g" "" (_ "Net Price")))
   (add-option (gnc:make-string-option
                 headingpage optname-tax-rate "h" "" (_ "Tax Rate")))
   (add-option (gnc:make-string-option
                 headingpage optname-tax-amount "i" "" (_ "Tax Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-total-price "j" "" (_ "Total Price")))
+                headingpage optname-total-price "j" "" (_ "Total Price")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-subtotal "a" "" (_ "Sub-total")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
+                headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" "" 
                 (_ "Payment received, thank you")))
   (add-option (gnc:make-string-option	headingpage2	optname-invoice-number-text
-    "d" "" (N_ "Invoice number: ")))
+    "d" "" (N_ "Invoice number: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-to-text
     "e" "" (N_ "To: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-ref-text
-    "f" "" (N_ "Your ref: ")))
+    "f" "" (N_ "Your ref: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-jobnumber-text
-    "g" "" (N_ "Job number: ")))
+    "g" "" (N_ "Job number: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-jobname-text
-    "h" "" (N_ "Job name: ")))
+    "h" "" (N_ "Job name: ")))
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"

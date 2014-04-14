@@ -257,10 +257,10 @@
 			  (gnc-numeric-add b-value
 					   (gnc-numeric-mul (caar b-list)
 							    (cdar b-list) 
-							    GNC-DENOM-AUTO GNC-RND-ROUND)
-					   GNC-DENOM-AUTO GNC-RND-ROUND)
+							    GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+					   GNC-DENOM-AUTO GNC-DENOM-REDUCE)
 			  (gnc-numeric-add b-units
-					   (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
+					   (caar b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)
 			  price-denom GNC-RND-ROUND)))
 	     (append b-list 
 		     (list (cons b-units (gnc-numeric-div
@@ -278,12 +278,8 @@
              (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar b-list))
                ((-1)
                  ;; Sold less than the first lot, create a new first lot from the remainder
-                 (let* ((new-units (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND))
-                        (old-val (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND))
-                        (new-val (gnc-numeric-mul old-val 
-                                                  (gnc-numeric-div new-units (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
-                                                  currency-frac GNC-RND-ROUND)))
-                    (basis-builder (cdr b-list) new-units new-val b-method currency-frac))) 
+                 (let ((new-units (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND)))
+                        (cons (cons new-units (cdar b-list)) (cdr b-list))))
                ((0)
                  ;; Sold all of the first lot
                  (cdr b-list))
@@ -297,13 +293,8 @@
                (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar rev-b-list))
                  ((-1)
                    ;; Sold less than the last lot
-                 (let* ((new-units (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND))
-                        (old-val (gnc-numeric-mul (caar rev-b-list) (cdar rev-b-list) currency-frac GNC-RND-ROUND))
-                        (new-val (gnc-numeric-mul old-val 
-                                                  (gnc-numeric-div new-units (caar rev-b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
-                                                  currency-frac GNC-RND-ROUND)))
-                    (basis-builder (reverse (cdr rev-b-list)) new-units new-val b-method currency-frac)
-                 ))
+                 (let ((new-units (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND)))
+                        (reverse (cons (cons new-units (cdar rev-b-list)) (cdr rev-b-list)))))
                  ((0)
                    ;; Sold all of the last lot
                    (reverse (cdr rev-b-list))
@@ -324,12 +315,12 @@
      ((and (gnc-numeric-zero-p b-value)
 	   (not (gnc-numeric-zero-p b-units)))
 	(let* ((current-units (units-basis b-list))
-	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-RND-ROUND) 
-					     current-units GNC-DENOM-AUTO GNC-RND-ROUND))
+	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE) 
+					     current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE))
                ;; If the units ratio is zero the stock is worthless and the value should be zero too 
 	       (value-ratio (if (gnc-numeric-zero-p units-ratio)
 	                        (gnc-numeric-zero)
-                                (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-RND-ROUND))))
+                                (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
 	  
 	  (gnc:debug "blist is " b-list " current units is " 
 	             (gnc-numeric-to-string current-units) 
@@ -344,8 +335,8 @@
      ((and (gnc-numeric-zero-p b-units)
 	   (not (gnc-numeric-zero-p b-value)))
       (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
-	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-RND-ROUND) 
-					   current-value GNC-DENOM-AUTO GNC-RND-ROUND)))
+	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE) 
+					   current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
 	  
 	(gnc:debug "this is a spinoff")
 	(gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
@@ -648,7 +639,7 @@
                        (if (and (not (eq? handle-brokerage-fees 'ignore-brokerage))
                                 (gnc-numeric-positive-p trans-brokerage)
                                 (gnc-numeric-positive-p trans-shares))
-                           (let* ((fee-frac (gnc-numeric-div shares-bought trans-shares GNC-DENOM-AUTO GNC-RND-ROUND))
+                           (let* ((fee-frac (gnc-numeric-div shares-bought trans-shares GNC-DENOM-AUTO GNC-DENOM-REDUCE))
                                   (fees (gnc-numeric-mul trans-brokerage fee-frac commod-currency-frac GNC-RND-ROUND)))
                                  (set! trans-bought (gnc-numeric-add trans-bought fees commod-currency-frac GNC-RND-ROUND)))) 
                        
@@ -725,7 +716,7 @@
 			               (orig-basis (sum-basis basis-list currency-frac))
 			               ;; proportion of the fees attributable to this split
 			               (fee-ratio (gnc-numeric-div (gnc-numeric-abs split-units) trans-shares
-			                                           GNC-DENOM-AUTO GNC-RND-ROUND))
+			                                           GNC-DENOM-AUTO GNC-DENOM-REDUCE))
 			               ;; Fees for this split in report currency 
 			               (fees-currency (gnc:gnc-monetary-amount (my-exchange-fn 
 			                               (gnc:make-gnc-monetary commod-currency

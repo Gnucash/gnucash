@@ -1003,7 +1003,7 @@ If you don't see your exchange listed, or none of the available choices are appr
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="convert_content_page">
+      <object class="GtkVBox" id="convert_progress_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>

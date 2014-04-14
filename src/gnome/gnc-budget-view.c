@@ -369,6 +369,7 @@ gbv_create_widget(GncBudgetView *view)
 
     totals_title_col = gtk_tree_view_column_new_with_attributes("", gtk_cell_renderer_text_new(), "text", 0, NULL);
     gtk_tree_view_column_set_expand(totals_title_col, TRUE);
+    gtk_tree_view_column_set_sizing(totals_title_col, GTK_TREE_VIEW_COLUMN_FIXED);
     gtk_tree_view_append_column(totals_tree_view, totals_title_col);
 
     gtk_box_pack_end(GTK_BOX(inner_vbox), GTK_WIDGET(totals_tree_view), /*expand*/FALSE, /*fill*/TRUE, 0);
@@ -585,12 +586,7 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
         {
             col_width = gtk_tree_view_column_get_width(tree_view_col);
             totals_view_col = gtk_tree_view_get_column(priv->totals_tree_view, j);
-            /* Don't set the width of the first column, which was set up
-             * in gbv_create_widget. It has a sizing of GROW_ONLY. */
-            if (gtk_tree_view_column_get_sizing(totals_view_col) == GTK_TREE_VIEW_COLUMN_FIXED)
-            {
-                gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
-            }
+            gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
             j++;
         }
     }

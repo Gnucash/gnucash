@@ -178,7 +178,7 @@ set_default READLINE_BIN_URL "$SF_MIRROR/gnuwin32/readline-5.0-1-bin.zip"
 set_default READLINE_LIB_URL "$SF_MIRROR/gnuwin32/readline-5.0-1-lib.zip"
 set_default READLINE_DIR $GLOBAL_DIR\\readline
 
-set_default ACTIVE_PERL_URL "http://downloads.activestate.com/ActivePerl/releases/5.14.4.1405/ActivePerl-5.14.4.1405-MSWin32-x86-296746.zip"
+set_default ACTIVE_PERL_URL "http://downloads.activestate.com/ActivePerl/releases/5.16.3.1603/ActivePerl-5.16.3.1603-MSWin32-x86-296746.zip"
 set_default ACTIVE_PERL_DIR $GLOBAL_DIR\\active-perl
 
 set_default AUTOCONF_URL "http://ftp.gnu.org/gnu/autoconf/autoconf-2.63.tar.bz2"
@@ -343,16 +343,16 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 #set_default LIBOFX_PATCH `pwd`/libofx-x.x.x.patch
 
 ## online banking: gwenhywfar+aqbanking
-GWENHYWFAR_VERSION="4.9.0beta"
-set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=72&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
+GWENHYWFAR_VERSION="4.11.1beta"
+set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=75&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-KTOBLZCHECK_VERSION="1.44"
+KTOBLZCHECK_VERSION="1.45"
 set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-${KTOBLZCHECK_VERSION}.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-AQBANKING_VERSION="5.3.0beta"
-set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=105&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
+AQBANKING_VERSION="5.4.2beta"
+set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=114&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 
 set_default SQLITE3_URL "http://sqlite.org/sqlite-amalgamation-3.6.1.tar.gz"

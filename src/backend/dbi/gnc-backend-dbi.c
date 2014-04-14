@@ -52,6 +52,8 @@
 
 #include "gnc-backend-dbi.h"
 
+#include "gnc-prefs.h"
+
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
@@ -1409,7 +1411,7 @@ gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadTy
         be->primary_book = book;
 
         // Set up table version information
-        gnc_sql_init_version_info( &be->sql_be );
+        gnc_sql_init_version_info (&be->sql_be);
 
         // Call all object backends to create any required tables
         qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );

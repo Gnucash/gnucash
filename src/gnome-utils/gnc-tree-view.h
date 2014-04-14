@@ -363,6 +363,16 @@ const gchar *gnc_tree_view_get_state_section (GncTreeView *view);
  */
 void gnc_tree_view_remove_state_information(GncTreeView *view);
 
+
+/** This function is called to write the treeview's state
+ *  information (column visibility, width, sorting order,..)
+ *  to the state file.
+ *
+ *  @param view The tree view.
+ */
+void gnc_tree_view_save_state (GncTreeView *view);
+
+
 /** This function set the columns that will be allocated the free space
  *  in the view.
  *

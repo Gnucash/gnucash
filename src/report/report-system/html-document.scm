@@ -193,8 +193,7 @@
           (gnc:html-document-pop-style doc)
           (gnc:html-style-table-uncompile (gnc:html-document-style doc))
 
-          (apply string-append 
-                 (gnc:html-document-tree-collapse retval))))))
+          (string-concatenate (gnc:html-document-tree-collapse retval))))))
 
 
 (define (gnc:html-document-push-style doc style)

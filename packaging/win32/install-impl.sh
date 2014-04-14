@@ -352,7 +352,7 @@ function inst_autotools() {
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
     add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
     add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    if quiet autoconf --help && quiet automake --help
+    if quiet $_AUTOTOOLS_UDIR/bin/autoconf --help && quiet $_AUTOTOOLS_UDIR/bin/automake --help
     then
         echo "autoconf/automake already installed in $_AUTOTOOLS_UDIR.  skipping."
     else

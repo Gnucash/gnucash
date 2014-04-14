@@ -178,7 +178,7 @@ def recursivly_build_account_tree(original_parent_account,
                                   account_types_to_open ):
 
     for child in original_parent_account.get_children():
-        original_account = Account(instance=child)
+        original_account = child
         new_account = Account(new_book)
         # attach new account to its parent
         new_parent_account.append_child(new_account)
@@ -195,7 +195,9 @@ def recursivly_build_account_tree(original_parent_account,
         namespace = orig_commodity.get_namespace()
         mnemonic = orig_commodity.get_mnemonic()
         new_commodity = new_commodity_table.lookup(namespace, mnemonic)
-        assert(new_commodity.get_instance() != None )
+        if new_commodity == None:
+            new_commodity = orig_commodity.clone(new_book)
+            new_commodity_table.insert(new_commodity)
         new_account.SetCommodity(new_commodity)
 
         record_opening_balance( original_account, new_account,
@@ -220,7 +222,7 @@ def find_or_make_account(account_tuple, root_account, book,
                          currency ):
     current_account_name, account_path = account_tuple[0], account_tuple[1:]
     current_account = root_account.lookup_by_name(current_account_name)
-    if current_account.get_instance() == None:
+    if current_account == None:
         current_account = Account(book)
         current_account.SetName(current_account_name)
         current_account.SetCommodity(currency)

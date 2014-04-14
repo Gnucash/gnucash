@@ -21,7 +21,6 @@ def mark_account_with_code_as_tax_related(account, target_code):
         return True
     else:
         for child in account.get_children():
-            child = Account(instance=child)
             if mark_account_with_code_as_tax_related(child, target_code):
                 return True
         return False

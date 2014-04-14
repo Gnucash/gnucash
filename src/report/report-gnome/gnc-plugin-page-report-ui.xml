@@ -1,10 +1,6 @@
 <ui>
   <menubar>
     <menu name="File" action="FileAction">
-      <placeholder name="FileSavePlaceholder">
-        <menuitem name="FileReportSave" action="ReportSaveAction" />
-        <menuitem name="FileReportSaveAs" action="ReportSaveAsAction" />
-      </placeholder>
       <placeholder name="FilePrintPlaceholder">
         <menuitem name="FileExportPDF" action="FilePrintPDFAction"/>
       </placeholder>
@@ -18,6 +14,13 @@
     <menu name="Edit" action="EditAction">
       <placeholder name="EditStyleSheetsPlaceholder">
         <menuitem name="EditReportOptions" action="ReportOptionsAction" />
+      </placeholder>
+    </menu>
+
+    <menu name="Reports" action="ReportsAction">
+      <placeholder name="SavedReportConfigs">
+        <menuitem name="ReportSaveConfig" action="ReportSaveAction" />
+        <menuitem name="ReportSaveConfigAs" action="ReportSaveAsAction" />
       </placeholder>
     </menu>
   </menubar>

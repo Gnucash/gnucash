@@ -140,7 +140,7 @@ def account_from_path(top_account, account_path, original_path=None):
     account, account_path = account_path[0], account_path[1:]
 
     account = top_account.lookup_by_name(account)
-    if account.get_instance() == None:
+    if account == None:
         raise Exception(
             "path " + ''.join(original_path) + " could not be found")
     if len(account_path) > 0 :

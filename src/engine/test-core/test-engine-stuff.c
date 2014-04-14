@@ -462,12 +462,12 @@ get_random_gnc_numeric(void)
 
     /* Arbitrary random numbers can cause pointless overflow
      * during calculations.  Limit dynamic range in hopes
-     * of avoiding overflow. Right now limit it to approx 2^48.
+     * of avoiding overflow. Right now limit it to approx 2^44.
      * The initial division is to help us down towards the range.
      * The loop is to "make sure" we get there.  We might
      * want to make this dependent on "deno" in the future.
      */
-    numer = get_random_gint64 () % (2ULL << 48);
+    numer = get_random_gint64 () % (2ULL << 44);
     if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
@@ -1603,7 +1603,7 @@ get_random_kvp_path (void)
     len = get_random_int_in_range (1, kvp_max_depth);
 
     while (len--)
-        path = g_slist_prepend (path, get_random_string ());
+        path = g_slist_prepend (path, get_random_string_without ("\n\\"));
 
     return g_slist_reverse (path);
 }
@@ -1631,7 +1631,7 @@ get_random_id_type (void)
     case 3:
         return GNC_ID_ACCOUNT;
     default:
-        return get_random_string ();
+         return get_random_string ();
     }
 }
 
@@ -1743,7 +1743,7 @@ get_random_query(void)
             break;
 
         case 2: /*PR_ACTION */
-            string = get_random_string ();
+            string = get_random_string_without ("\\");
             xaccQueryAddActionMatch (q,
                                      string,
                                      get_random_boolean (),
@@ -1785,7 +1785,7 @@ get_random_query(void)
             break;
 
         case 6: /* PR_DESC */
-            string = get_random_string ();
+            string = get_random_string_without ("\\");
             xaccQueryAddDescriptionMatch (q,
                                           string,
                                           get_random_boolean (),
@@ -1821,7 +1821,7 @@ get_random_query(void)
             break;
 
         case 9: /* PR_MEMO */
-            string = get_random_string ();
+            string = get_random_string_without ("\\");
             xaccQueryAddMemoMatch (q,
                                    string,
                                    get_random_boolean (),
@@ -1831,7 +1831,7 @@ get_random_query(void)
             break;
 
         case 10: /* PR_NUM */
-            string = get_random_string ();
+            string = get_random_string_without ("\\");
             xaccQueryAddNumberMatch (q,
                                      string,
                                      get_random_boolean (),
