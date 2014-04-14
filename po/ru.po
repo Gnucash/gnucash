@@ -20056,9 +20056,8 @@ msgstr "Выровнять список с учетом предела глуб�
 #: ../intl-scm/guile-strings.c:552 ../intl-scm/guile-strings.c:2808
 #: ../intl-scm/guile-strings.c:2922 ../intl-scm/guile-strings.c:3112
 #: ../intl-scm/guile-strings.c:3244 ../intl-scm/guile-strings.c:3662
-#, fuzzy
 msgid "Displays accounts which exceed the depth limit at the depth limit."
-msgstr "Отобразить счета, которые выходят за предел глубины на этот предел"
+msgstr "Отобразить счета, которые выходят за предел глубины на предельном уровне."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:554
@@ -20102,9 +20101,8 @@ msgstr "Отображать счета, как гиперссылки"
 #: ../intl-scm/guile-strings.c:2828 ../intl-scm/guile-strings.c:2942
 #: ../intl-scm/guile-strings.c:3132 ../intl-scm/guile-strings.c:3682
 #: ../intl-scm/guile-strings.c:4266 ../intl-scm/guile-strings.c:4908
-#, fuzzy
 msgid "Shows each account in the table as a hyperlink to its register window."
-msgstr "Отображать каждый счет в таблице, как гиперссылку на окно журнала"
+msgstr "Отображать каждый счет в таблице, как гиперссылку на окно журнала."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:562
@@ -20113,13 +20111,12 @@ msgstr "Формат отрицательных сумм"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:564
-#, fuzzy
 msgid ""
 "The formatting to use for negative amounts: with a leading sign, or "
 "enclosing brackets."
 msgstr ""
 "Форматирование, используемое для отрицательных сумм: с предшествующим знаком "
-"или заключение в скобки"
+"или заключение в скобки."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:566
@@ -20227,7 +20224,7 @@ msgstr "Показывать иностранную валюту"
 #: ../intl-scm/guile-strings.c:4918
 #, fuzzy
 msgid "Display any foreign currency amount in an account."
-msgstr "Отображать все суммы иностранных валют в счете"
+msgstr "Отображать все суммы иностранных валют в счете."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/account-summary.scm
@@ -22423,37 +22420,31 @@ msgstr "Все счета"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2176
-#, fuzzy
 msgid "Top-level."
-msgstr "Высший уровень "
+msgstr "Верхний уровень"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2178
-#, fuzzy
 msgid "Second-level."
 msgstr "Второй уровень"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2180
-#, fuzzy
 msgid "Third-level."
 msgstr "Третий уровень"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2182
-#, fuzzy
 msgid "Fourth-level."
 msgstr "Четвёртый уровень"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2184
-#, fuzzy
 msgid "Fifth-level."
 msgstr "Пятый уровень"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2186
-#, fuzzy
 msgid "Sixth-level."
 msgstr "Шестой уровень"
 
@@ -22507,9 +22498,8 @@ msgstr "Выводить сумму в иностранной валюте эт�
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:2202 ../intl-scm/guile-strings.c:2604
 #: ../intl-scm/guile-strings.c:4014
-#, fuzzy
 msgid "The source of price information."
-msgstr "Источник информации о цене"
+msgstr "Источник информации о цене."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2204
@@ -22533,7 +22523,7 @@ msgstr "Средневзвешенное"
 #: ../intl-scm/guile-strings.c:2210 ../intl-scm/guile-strings.c:4018
 #, fuzzy
 msgid "The weighted average of all currency transactions of the past."
-msgstr "Средневзвешенное всех прошедших денежных проводок"
+msgstr "Средневзвешенное всех прошедших денежных проводок."
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -22544,9 +22534,8 @@ msgstr "Последняя"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2214 ../intl-scm/guile-strings.c:2608
-#, fuzzy
 msgid "The most recent recorded price."
-msgstr "Последняя записанная цена"
+msgstr "Последняя записанная цена."
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -22557,9 +22546,8 @@ msgstr "Ближайшая по времени"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2218 ../intl-scm/guile-strings.c:2612
-#, fuzzy
 msgid "The price recorded nearest in time to the report date."
-msgstr "Цена записанная ближе всего к дате отчета"
+msgstr "Цена записанная ближе всего к дате отчета."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2220
@@ -23438,9 +23426,8 @@ msgstr "Отображать курсы обмена"
 #: ../intl-scm/guile-strings.c:3280 ../intl-scm/guile-strings.c:3500
 #: ../intl-scm/guile-strings.c:3720 ../intl-scm/guile-strings.c:4300
 #: ../intl-scm/guile-strings.c:4922
-#, fuzzy
 msgid "Show the exchange rates used."
-msgstr "Отображать используемые курсы обмена"
+msgstr "Отображать использованные курсы обмена."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23923,9 +23910,8 @@ msgstr "Пометить раздел \"Активы\""
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2832 ../intl-scm/guile-strings.c:2946
-#, fuzzy
 msgid "Whether or not to include a label for the assets section."
-msgstr "Нужно ли включить метку раздела \"Активы\""
+msgstr "Нужно ли добавить подпись к разделу \"Активы\"."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -23936,7 +23922,6 @@ msgstr "Включить итоги активов"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2836 ../intl-scm/guile-strings.c:2950
-#, fuzzy
 msgid "Whether or not to include a line indicating total assets."
 msgstr "Нужно ли включить строку, отражающую итоги активов"
 
@@ -23961,9 +23946,8 @@ msgstr "Пометить раздел \"Обязательства\""
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2844 ../intl-scm/guile-strings.c:2954
-#, fuzzy
 msgid "Whether or not to include a label for the liabilities section."
-msgstr "Нужно ли включить метку раздела \"Обязательства\""
+msgstr "Нужно ли добавить подпись к разделу \"Обязательства\"."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -23974,22 +23958,20 @@ msgstr "Включить итоги обязательств"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2848 ../intl-scm/guile-strings.c:2958
-#, fuzzy
 msgid "Whether or not to include a line indicating total liabilities."
-msgstr "Нужно ли включить строку, отражающую итоги обязательств"
+msgstr "Нужно ли включить строку, отражающую итоги обязательств."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2850 ../intl-scm/guile-strings.c:2960
 msgid "Label the equity section"
-msgstr "Пометить раздел собственных средств"
+msgstr "Пометить раздел \"Собственные средства\""
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2852 ../intl-scm/guile-strings.c:2962
-#, fuzzy
 msgid "Whether or not to include a label for the equity section."
-msgstr "Нужно ли включить метку раздела \"Собственные средства\""
+msgstr "Нужно ли добавить подпись к разделу \"Собственные средства\"."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -24000,9 +23982,8 @@ msgstr "Включить итоги собственных средств"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2856 ../intl-scm/guile-strings.c:2966
-#, fuzzy
 msgid "Whether or not to include a line indicating total equity."
-msgstr "Нужно ли включить строку, отражающую итоги собственных средств"
+msgstr "Нужно ли включить строку, отражающую итоги собственных средств."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -24068,11 +24049,10 @@ msgstr "Включить новые/существующие итоги"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2970
-#, fuzzy
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
-msgstr "Включить или нет строку, отражающую изменение итогов из-за бюджета"
+msgstr "Включить или нет строку, отражающую изменение итогов из-за бюджета."
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-barchart.scm
@@ -24468,13 +24448,12 @@ msgstr "Бюджетные суммы в родительском счёте"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3232
-#, fuzzy
 msgid ""
 "If parent account does not have its own budget value, use the sum of the "
 "child account budget values."
 msgstr ""
 "Если родительский счёт не имеет собственного значения бюджета, то "
-"использовать сумму значений дочерних счетов"
+"использовать сумму значений дочерних счетов."
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3234
@@ -24483,13 +24462,12 @@ msgstr "Включить счета с нулевым балансом и зна
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3236
-#, fuzzy
 msgid ""
 "Include accounts with zero total (recursive) balances and budget values in "
 "this report."
 msgstr ""
 "Включить в этот отчёт счета с нулевыми итоговым балансом (рекурсивно) и "
-"бюджетными значениями"
+"бюджетными значениями."
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3238
@@ -24508,10 +24486,9 @@ msgstr ""
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3250 ../intl-scm/guile-strings.c:3282
-#, fuzzy
 msgid "Show full account names (including parent accounts)."
 msgstr ""
-"Показывать полные названия счетов (включая названия родительских счетов)"
+"Показывать полные названия счетов (включая названия родительских счетов)."
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3252
