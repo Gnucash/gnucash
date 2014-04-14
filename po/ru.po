@@ -4918,15 +4918,15 @@ msgstr "Сохранить этот файл с другим именем"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Re_vert"
-msgstr ""
+msgstr "От_менить правки"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Reload the current database, reverting all unsaved changes"
-msgstr ""
+msgstr "Перезагрузить данные из БД, отменив все несохраненные изменения"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:133
 msgid "Export _Accounts"
-msgstr "Экспорт счетов"
+msgstr "Экспорт _счетов"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "Export the account hierarchy to a new GnuCash datafile"
@@ -8813,11 +8813,11 @@ msgstr "Получатель платежа:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:17
 msgid "Amount (_words):"
-msgstr "Количество (слова):"
+msgstr "Сумма _прописью:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:18
 msgid "Amount (_numbers):"
-msgstr "Количество (числа):"
+msgstr "_Сумма:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:19
 msgid "_Notes:"
@@ -8825,7 +8825,7 @@ msgstr "Заметки:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:20
 msgid "_Units:"
-msgstr "Единицы:"
+msgstr "Единицы измерения:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:21
 msgid "_Translation:"
@@ -8845,11 +8845,11 @@ msgstr "Точка отсчета находится в левом нижнем 
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:25
 msgid "Degrees"
-msgstr "Степени"
+msgstr "Градусов"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:26
 msgid "_Save format"
-msgstr "Формат сохранения"
+msgstr "_Cохранить формат"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:27
 msgid "_Address:"
@@ -8858,17 +8858,17 @@ msgstr "_Адрес:"
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:29
 #, fuzzy
 msgid "Splits Memo"
-msgstr "Разделяет запись"
+msgstr "Памятка целевого счета"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:30
 #, fuzzy
 msgid "Splits Amount"
-msgstr "Разделяет сумму"
+msgstr "Сумма в единицах целевого счета"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:31
 #, fuzzy
 msgid "Splits Account"
-msgstr "Разделяет счёт"
+msgstr "Название целевого счета"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:32
 msgid "Custom format"
@@ -8876,24 +8876,23 @@ msgstr "Пользовательский формат"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:33
 msgid "Inches"
-msgstr ""
+msgstr "Дюймы"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:34
-#, fuzzy
 msgid "Centimeters"
-msgstr "Центр"
+msgstr "Сантиметры"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:35
 msgid "Millimeters"
-msgstr ""
+msgstr "Миллиметры"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:36
 msgid "Points"
-msgstr ""
+msgstr "Точки"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:38
 msgid "Middle"
-msgstr ""
+msgstr "Посередине"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:39
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:186
@@ -8925,13 +8924,12 @@ msgid "Account Deletion"
 msgstr "Удаление счета"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:2
-#, fuzzy
 msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
 "now be corrected. Press OK to edit them."
 msgstr ""
-"Следующие плановые проводки ссылаются на удаляемый счет и должны быть "
-"исправлены. Нажмите \"OK\" для их изменения."
+"Следующие плановые проводки ссылаются на удалённый счет и должны быть "
+"исправлены сейчас. Нажмите \"OK\" для их изменения."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:4
 msgid "<b>Since Last Run Dialog</b>"
@@ -10232,7 +10230,7 @@ msgstr "Открыть..."
 
 #: ../src/gnome-utils/dialog-file-access.c:302
 msgid "Save As..."
-msgstr "Сохранить как..."
+msgstr "Сохранить _как..."
 
 #: ../src/gnome-utils/dialog-file-access.c:311
 #: ../src/gnome-utils/gnc-file.c:119 ../src/gnome-utils/gnc-file.c:289
@@ -10613,7 +10611,7 @@ msgstr "Импорт"
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
 #: ../src/gnome-utils/gnc-file.c:1319
 msgid "Save"
-msgstr "Сохранить"
+msgstr "_Сохранить"
 
 #: ../src/gnome-utils/gnc-file.c:116 ../src/gnome-utils/gnc-main-window.c:274
 msgid "_Export"
@@ -16068,33 +16066,28 @@ msgid "place_holder"
 msgstr "Виртуальный"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
-#, fuzzy
 msgid "Export Account T_ree to CSV..."
-msgstr "Экспорт счетов"
+msgstr "Экспорт _иерархии счетов в CSV..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:48
-#, fuzzy
 msgid "Export the Account Tree to a CSV file"
-msgstr "Экспортировать иерархию счетов в новый файл данных GnuCash"
+msgstr "Экспортировать иерархию счетов в CSV файл"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:52
-#, fuzzy
 msgid "Export _Transactions to CSV..."
-msgstr "Получить проводки..."
+msgstr "Экспорт _проводок в CSV..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:53
-#, fuzzy
 msgid "Export the Transactions to a CSV file"
-msgstr "Импортировать проводки из текстового файла"
+msgstr "Экспортировать проводки в CSV файл"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:5
 msgid "Window geometry"
 msgstr "Геометрия окна"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:6
-#, fuzzy
 msgid "The position of paned window when it was last closed."
-msgstr "Ширина и высота окна диалога при последнем его закрытии."
+msgstr "Расположение диалога при последнем его закрытии."
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:71
 #, c-format
