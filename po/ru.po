@@ -4953,10 +4953,10 @@ msgstr "_Параметры налогового отчёта"
 #. * DE: VAT                                *
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:152
-#, fuzzy
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
 msgstr ""
-"Настроить подходящие счета для налоговых отчётов, например подоходный налог"
+"Настроить подходящие счета для налоговых отчётов: поддерживается "
+"подоходный налог США или НДС в Германии"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:158
@@ -5018,14 +5018,12 @@ msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Просмотреть и изменить предметы ценных бумаг и взаимных фондов"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:196
-#, fuzzy
 msgid "_Loan Repayment Calculator"
-msgstr "Финансовый калькулятор"
+msgstr "_Калькулятор кредитных платежей"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:197
-#, fuzzy
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "Использовать финансовый калькулятор"
+msgstr "Использовать калькулятор для расчета платежей по кредиту/ипотеке"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Close Book"
@@ -6158,17 +6156,14 @@ msgid "Register2 Open GL Account"
 msgstr "_Открыть счет"
 
 #: ../src/gnome/gnc-plugin-register.c:54
-#, fuzzy
 msgid "Old St_yle General Ledger"
-msgstr "_Главная Книга"
+msgstr "_Главная Книга (старый стиль)"
 
 #: ../src/gnome/gnc-plugin-register.c:55
-#, fuzzy
 msgid "Open an old style general ledger window"
-msgstr "Открыть окно главной книги"
+msgstr "Открыть окно главной книги в старом стиле"
 
 #: ../src/gnome/gnc-plugin-register.c:59
-#, fuzzy
 msgid "Open general ledger window"
 msgstr "Открыть окно главной книги"
 
@@ -8384,9 +8379,8 @@ msgid "Edit the current commodity."
 msgstr "Удалить текущий товар."
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:1
-#, fuzzy
 msgid "Loan Repayment Calculator"
-msgstr "Финансовый калькулятор"
+msgstr "Калькулятор кредитных платежей"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:2
 msgid "<b>Calculations</b>"
@@ -18289,9 +18283,8 @@ msgstr "Изменить параметры отчета"
 #. src/report/report-gnome/report-gnome.scm
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
 #: ../intl-scm/guile-strings.c:2036
-#, fuzzy
 msgid "Saved Report Configurations"
-msgstr "_Параметры налогового отчёта"
+msgstr "_Сохраненные преднастроенные отчеты"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 #, fuzzy
@@ -18450,21 +18443,20 @@ msgstr "Сохранить настройки отчета"
 msgid ""
 "Update the current report's saved configuration. The report will be saved in "
 "the file ~/.gnucash/saved-reports-2.4. "
-msgstr ""
+msgstr "Обновить настройки текущего сохраненного отчета. Отчет будет сохранен в "
+"файл ~/.gnucash/saved-reports-2.4."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1037
 msgid "Save Report Configuration As..."
-msgstr ""
+msgstr "Сохранить отчет как..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
-#, fuzzy
 msgid ""
 "Add the current report's configuration to the `Saved Report Configurations' "
 "menu. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgstr ""
-"Добавить текущий отчет в меню \"Настроено\" для последующего использования. "
-"Отчет будет сохранен в файл \"~/.gnucash/saved-reports-2.4\". Он будет "
-"доступен в виде пункта меню отчетов при следующем запуске GnuCash."
+"Добавить текущий отчет в меню \"Сохраненные преднастроенные отчеты\". "
+"Отчет будет сохранен в файл \"~/.gnucash/saved-reports-2.4\""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1043
 msgid "Export _Report"
@@ -18603,9 +18595,8 @@ msgid "St_yle Sheets"
 msgstr "Стили о_формления"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:52
-#, fuzzy
 msgid "Edit report style sheets"
-msgstr "Редактировать стили оформления отчетов."
+msgstr "Редактировать стили оформления отчетов"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:1
 msgid ""
@@ -22085,9 +22076,8 @@ msgstr "Вывести отчет \"%s\""
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:2038
-#, fuzzy
 msgid "Manage and run saved report configurations"
-msgstr "Управление и использование собственных отчётов"
+msgstr "Управление и использование настроенных отчётов"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:2040
@@ -22097,7 +22087,7 @@ msgstr "Пример простейшего отчета"
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:2042
 msgid "Welcome-to-GnuCash report screen"
-msgstr "Эран отчета \"GnuCash приветствует вас\""
+msgstr "Экран отчета \"GnuCash приветствует вас\""
 
 #. src/report/report-system/eguile-gnc.scm
 #: ../intl-scm/guile-strings.c:2044
