@@ -19090,27 +19090,23 @@ msgstr "%s по %s"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:126
-#, fuzzy
 msgid "First day of the current calendar year."
-msgstr "Первый день текущего календарного года"
+msgstr "Первый день текущего календарного года."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:130
-#, fuzzy
 msgid "Last day of the current calendar year."
-msgstr "Последний день текущего календарного года"
+msgstr "Последний день текущего календарного года."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:134
-#, fuzzy
 msgid "First day of the previous calendar year."
-msgstr "Первый день предыдущего календарного года"
+msgstr "Первый день предыдущего календарного года."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:138
-#, fuzzy
 msgid "Last day of the previous calendar year."
-msgstr "Последний день предыдущего календарного года"
+msgstr "Последний день предыдущего календарного года."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:140
@@ -19119,9 +19115,8 @@ msgstr "Начало следующего года"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:142
-#, fuzzy
 msgid "First day of the next calendar year."
-msgstr "Первый день следующего календарного года"
+msgstr "Первый день следующего календарного года."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:144
@@ -19130,9 +19125,8 @@ msgstr "Конец следующего года"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:146
-#, fuzzy
 msgid "Last day of the next calendar year."
-msgstr "Последний день следующего календарного года"
+msgstr "Последний день следующего календарного года."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:148
@@ -19141,9 +19135,8 @@ msgstr "Начало учётного периода"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:150
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "Первый день учётного периода, установленный в основных настройках"
+msgstr "Первый день учётного периода, установленный в основных настройках."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:152
@@ -19152,33 +19145,28 @@ msgstr "Конец учётного периода"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:154
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "Последний день учётного периода, установленный в основных настройках"
+msgstr "Последний день учётного периода, установленный в основных настройках."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:158
-#, fuzzy
 msgid "First day of the current month."
-msgstr "Первый день текущего месяца"
+msgstr "Первый день текущего месяца."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:162
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "Последний день текущего месяца"
+msgstr "Последний день текущего месяца."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:166
-#, fuzzy
 msgid "First day of the previous month."
-msgstr "Первый день предыдущего месяца"
+msgstr "Первый день предыдущего месяца."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:170
-#, fuzzy
 msgid "Last day of previous month."
-msgstr "Последний день предыдущего месяца"
+msgstr "Последний день предыдущего месяца."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:172
@@ -19187,9 +19175,8 @@ msgstr "Начало следующего месяца"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:174
-#, fuzzy
 msgid "First day of the next month."
-msgstr "Первый день следующего месяца"
+msgstr "Первый день следующего месяца."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:176
@@ -19198,9 +19185,8 @@ msgstr "Конец следующего месяца"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:178
-#, fuzzy
 msgid "Last day of next month."
-msgstr "Последний день следующего месяца"
+msgstr "Последний день следующего месяца."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:180
@@ -19209,9 +19195,8 @@ msgstr "Начало текущего квартала"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:182
-#, fuzzy
 msgid "First day of the current quarterly accounting period."
-msgstr "Первый день текущего квартального учётного периода"
+msgstr "Первый день текущего квартального учётного периода."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:184
@@ -19220,21 +19205,18 @@ msgstr "Конец текущего квартала"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:186
-#, fuzzy
 msgid "Last day of the current quarterly accounting period."
-msgstr "Последний день текущего квартального учётного периода"
+msgstr "Последний день текущего квартального учётного периода."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:190
-#, fuzzy
 msgid "First day of the previous quarterly accounting period."
-msgstr "Первый день предыдущего квартального учётного периода"
+msgstr "Первый день предыдущего квартального учётного периода."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:194
-#, fuzzy
 msgid "Last day of previous quarterly accounting period."
-msgstr "Последний день предыдущего квартального учётного периода"
+msgstr "Последний день предыдущего квартального учётного периода."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:196
@@ -19243,9 +19225,8 @@ msgstr "Начало следующего квартала"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:198
-#, fuzzy
 msgid "First day of the next quarterly accounting period."
-msgstr "Первый день следующего квартального учетного периода"
+msgstr "Первый день следующего квартального учетного периода."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:200
@@ -19254,15 +19235,13 @@ msgstr "Конец следующего квартала"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:202
-#, fuzzy
 msgid "Last day of next quarterly accounting period."
-msgstr "Последний день следующего квартального учётного периода"
+msgstr "Последний день следующего квартального учётного периода."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:206
-#, fuzzy
 msgid "The current date."
-msgstr "Текущая дата"
+msgstr "Текущая дата."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:208
@@ -19271,9 +19250,8 @@ msgstr "Месяц назад"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:210
-#, fuzzy
 msgid "One Month Ago."
-msgstr "Месяц назад"
+msgstr "Месяц назад."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:212
@@ -19282,9 +19260,8 @@ msgstr "Неделя назад"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:214
-#, fuzzy
 msgid "One Week Ago."
-msgstr "Неделя назад"
+msgstr "Неделя назад."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:216
@@ -19293,9 +19270,8 @@ msgstr "Три месяца назад"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:218
-#, fuzzy
 msgid "Three Months Ago."
-msgstr "Три месяца назад"
+msgstr "Три месяца назад."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:220
@@ -19304,9 +19280,8 @@ msgstr "Шесть месяцев назад"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:222
-#, fuzzy
 msgid "Six Months Ago."
-msgstr "Шесть месяцев назад"
+msgstr "Шесть месяцев назад."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:224
@@ -19315,53 +19290,48 @@ msgstr "Год назад"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:226
-#, fuzzy
 msgid "One Year Ago."
-msgstr "Год назад"
+msgstr "Год назад."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:228
 msgid "One Month Ahead"
-msgstr "Месяц назад"
+msgstr "Месяц вперед"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:230
-#, fuzzy
 msgid "One Month Ahead."
-msgstr "Месяц назад"
+msgstr "Месяц вперед."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:232
 msgid "One Week Ahead"
-msgstr "Неделя назад"
+msgstr "Неделя вперед"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:234
-#, fuzzy
 msgid "One Week Ahead."
-msgstr "Неделя назад"
+msgstr "Неделя вперед."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:236
 msgid "Three Months Ahead"
-msgstr "Три месяца назад"
+msgstr "Три месяца вперед"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:238
-#, fuzzy
 msgid "Three Months Ahead."
-msgstr "Три месяца назад"
+msgstr "Три месяца вперед."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:240
 msgid "Six Months Ahead"
-msgstr "Шесть месяцев назад"
+msgstr "Шесть месяцев вперед"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:242
-#, fuzzy
 msgid "Six Months Ahead."
-msgstr "Шесть месяцев назад"
+msgstr "Шесть месяцев вперед."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:244
@@ -19370,9 +19340,8 @@ msgstr "Год назад"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:246
-#, fuzzy
 msgid "One Year Ahead."
-msgstr "Год назад"
+msgstr "Год вперед."
 
 #. src/import-export/qif-imp/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:310
@@ -19980,9 +19949,8 @@ msgstr "Заголовок отчета"
 #: ../intl-scm/guile-strings.c:3080 ../intl-scm/guile-strings.c:3470
 #: ../intl-scm/guile-strings.c:3642 ../intl-scm/guile-strings.c:4226
 #: ../intl-scm/guile-strings.c:4844
-#, fuzzy
 msgid "Title for this report."
-msgstr "Заголовок для этого отчета"
+msgstr "Заголовок для этого отчета."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -20031,9 +19999,8 @@ msgstr "Уровни субсчетов"
 #: ../intl-scm/guile-strings.c:2804 ../intl-scm/guile-strings.c:2918
 #: ../intl-scm/guile-strings.c:3108 ../intl-scm/guile-strings.c:3658
 #: ../intl-scm/guile-strings.c:4242 ../intl-scm/guile-strings.c:4864
-#, fuzzy
 msgid "Maximum number of levels in the account tree displayed."
-msgstr "Максимальное количество уровней, отображаемых на дереве счетов"
+msgstr "Максимальное количество уровней, отображаемых в иерархии счетов."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -20071,8 +20038,7 @@ msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-"
 "accounts."
 msgstr ""
-"Исключить счета не верхнего уровня с нулевым балансом и не нулевыми "
-"подсчетами"
+"Исключить счета не верхнего уровня с нулевым балансом и без ненулевых подсчетов."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/account-summary.scm
@@ -20222,9 +20188,8 @@ msgstr "Показывать иностранную валюту"
 #: ../intl-scm/guile-strings.c:3158 ../intl-scm/guile-strings.c:3496
 #: ../intl-scm/guile-strings.c:3716 ../intl-scm/guile-strings.c:4296
 #: ../intl-scm/guile-strings.c:4918
-#, fuzzy
 msgid "Display any foreign currency amount in an account."
-msgstr "Отображать все суммы иностранных валют в счете."
+msgstr "Отображать сумму в иностранной валюте в строке по счету."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/account-summary.scm
@@ -22310,27 +22275,23 @@ msgstr ""
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2136
-#, fuzzy
 msgid "Select a date to report on."
-msgstr "Выберите дату отчета"
+msgstr "Выберите дату на которую будет сформирован отчет."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2138
-#, fuzzy
 msgid "Start of reporting period."
-msgstr "Начало отчетного периода"
+msgstr "Начало отчетного периода."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2140
-#, fuzzy
 msgid "End of reporting period."
-msgstr "Конец отчетного периода"
+msgstr "Конец отчетного периода."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2142
-#, fuzzy
 msgid "The amount of time between data points."
-msgstr "Прошедшее время между точками данных"
+msgstr "Прошедшее время между точками данных."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2144
@@ -22508,9 +22469,8 @@ msgstr "Средняя цена"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2206
-#, fuzzy
 msgid "The volume-weighted average cost of purchases."
-msgstr "Средняя цена покупок"
+msgstr "Средняя цена покупок, взвешенная по объему (VWAP)."
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -22521,9 +22481,8 @@ msgstr "Средневзвешенное"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:2210 ../intl-scm/guile-strings.c:4018
-#, fuzzy
 msgid "The weighted average of all currency transactions of the past."
-msgstr "Средневзвешенное всех прошедших денежных проводок."
+msgstr "Средневзвешенное значение цены всех прошедших валютных проводок."
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -22672,9 +22631,8 @@ msgstr "По сумме, с большей к меньшей"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2276
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "Способ отображения остатков на родительских счетах"
+msgstr "Способ отображения остатков на родительских счетах."
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
@@ -22686,21 +22644,19 @@ msgstr "Остатки по счету"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2280
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
 "Показывать только остаток на родительском счете, исключая любые остатки "
-"субсчетов"
+"субсчетов."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2284
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
 msgstr ""
 "Считать подытог для этого родительского счета и всех его подсчетов и "
-"показывать результат, как остаток на родительском счете"
+"показывать результат, как остаток на родительском счете."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2286 ../intl-scm/guile-strings.c:2296
@@ -22709,15 +22665,13 @@ msgstr "Не показывать"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2288
-#, fuzzy
 msgid "Do not show any balances of parent accounts."
-msgstr "Не показывать остатки по родительским счетам"
+msgstr "Не показывать остатки по родительским счетам."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2290
-#, fuzzy
 msgid "How to show account subtotals for parent accounts."
-msgstr "Способ отображения подытогов счета для родительских счетов"
+msgstr "Способ отображения подытогов счета для родительских счетов."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2292
@@ -22726,17 +22680,15 @@ msgstr "Показывать подытоги"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2294
-#, fuzzy
 msgid "Show subtotals for selected parent accounts which have subaccounts."
 msgstr ""
 "Показывать подытоги для выбранных родительских счетов, у которых есть "
-"субсчета"
+"субсчета."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2298
-#, fuzzy
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Не показывать подытоги для родительских счетов"
+msgstr "Не показывать подытоги для родительских счетов."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2300
@@ -22745,13 +22697,12 @@ msgstr "Стиль текстовой книги (экспериментальн
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2302
-#, fuzzy
 msgid ""
 "Show parent account subtotals, indented per accounting text book practice "
 "(experimental)."
 msgstr ""
 "Показывать подытоги родительского счета, отступая от практики текстовых "
-"бухгалтеских книг (экспериментально)"
+"бухгалтеских книг (экспериментально)."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2304
@@ -22795,8 +22746,8 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Один из отчётов имеет повторяющийся quid. Посмотрите систему отчётов среди "
-"сохранённых отчётов на предмет guid "
+"Один из отчётов имеет повторяющийся guid. Проверьте файлы отчетов, в особенности "
+"сохраненные отчеты, на наличие отчета со следующим guid: "
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2328
@@ -22811,9 +22762,8 @@ msgstr ""
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2330
-#, fuzzy
 msgid "Enter a descriptive name for this report."
-msgstr "Введите описательное название этого отчета"
+msgstr "Введите описательное название для этого отчета."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2332
@@ -23222,9 +23172,8 @@ msgstr "Название фирмы"
 #: ../intl-scm/guile-strings.c:2906 ../intl-scm/guile-strings.c:3084
 #: ../intl-scm/guile-strings.c:3474 ../intl-scm/guile-strings.c:3646
 #: ../intl-scm/guile-strings.c:4230 ../intl-scm/guile-strings.c:4848
-#, fuzzy
 msgid "Name of company/individual."
-msgstr "Название фирмы/имя человека"
+msgstr "Название фирмы/имя человека."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23235,9 +23184,8 @@ msgstr "Поведение ограничения глубины"
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2498 ../intl-scm/guile-strings.c:4246
-#, fuzzy
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
-msgstr "Что делать со счетами, которые выходят за указанный предел глубины"
+msgstr "Что делать со счетами, которые выходят за указанный предел глубины."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23288,9 +23236,8 @@ msgstr "Включить счета с нулевым балансом"
 #: ../intl-scm/guile-strings.c:2930 ../intl-scm/guile-strings.c:3120
 #: ../intl-scm/guile-strings.c:3670 ../intl-scm/guile-strings.c:4254
 #: ../intl-scm/guile-strings.c:4904
-#, fuzzy
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr "Включить счета с нулевым итоговым балансом (рекурсивно) в этот отчёт"
+msgstr "Включить счета с нулевым итоговым балансом (рекурсивно) в этот отчёт."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23313,9 +23260,8 @@ msgstr "Пропустить нулевые остатки"
 #: ../intl-scm/guile-strings.c:2510 ../intl-scm/guile-strings.c:2820
 #: ../intl-scm/guile-strings.c:2934 ../intl-scm/guile-strings.c:3124
 #: ../intl-scm/guile-strings.c:3674 ../intl-scm/guile-strings.c:4258
-#, fuzzy
 msgid "Show blank space in place of any zero balances which would be shown."
-msgstr "Не выводить нулевые числа, оставляя место пустым"
+msgstr "Если остаток по отображаемому счету нулевой, оставить место пустым."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23329,7 +23275,7 @@ msgstr "Не выводить нулевые числа, оставляя мес
 #: ../intl-scm/guile-strings.c:3484 ../intl-scm/guile-strings.c:3676
 #: ../intl-scm/guile-strings.c:4260
 msgid "Show accounting-style rules"
-msgstr "Показать правила бухгалтерского стиля"
+msgstr "Показать линейки в подытогах"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23342,10 +23288,9 @@ msgstr "Показать правила бухгалтерского стиля"
 #: ../intl-scm/guile-strings.c:2938 ../intl-scm/guile-strings.c:3128
 #: ../intl-scm/guile-strings.c:3486 ../intl-scm/guile-strings.c:3678
 #: ../intl-scm/guile-strings.c:4262
-#, fuzzy
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr ""
-"Использовать правила нижних столбцов добавляемых чисел, как делают бухгалтеры"
+"Использовать линии под колонками складываемых чисел, как это принято у бухгалетров."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23893,13 +23838,12 @@ msgstr "Балансовая ведомость в один столбец"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2796 ../intl-scm/guile-strings.c:2910
-#, fuzzy
 msgid ""
 "Print liability/equity section in the same column under the assets section "
 "as opposed to a second column right of the assets section."
 msgstr ""
 "Вывести раздел \"Обязательства/Собственные средства\" в том же столбце под "
-"разделом \"Активы\", вместо второго столбца справа от раздела \"Активы\""
+"разделом \"Активы\", вместо второго столбца справа от раздела \"Активы\"."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -23928,14 +23872,14 @@ msgstr "Нужно ли включить строку, отражающую ит
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2838
 msgid "Use standard US layout"
-msgstr ""
+msgstr "Использовать формат отчета принятый в США"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2840
 msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
-msgstr ""
+msgstr "При включении порядок разделов в отчете будет активы/обязательства/собственные средства (вместо активы/собственные средства/обязательства)."
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
