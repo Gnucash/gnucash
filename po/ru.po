@@ -4914,7 +4914,7 @@ msgstr "Сохранить как..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:123
 msgid "Save this file with a different name"
-msgstr ""
+msgstr "Сохранить этот файл с другим именем"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Re_vert"
@@ -16508,24 +16508,20 @@ msgid "%s column could not be understood."
 msgstr "Не удалось разобрать столбец %s."
 
 #: ../src/import-export/csv-imp/gnc-plugin-csv-import.c:48
-#, fuzzy
 msgid "Import _Accounts from CSV..."
-msgstr "Экспорт счетов"
+msgstr "Импортировать счета из CSV..."
 
 #: ../src/import-export/csv-imp/gnc-plugin-csv-import.c:49
-#, fuzzy
 msgid "Import Accounts from a CSV file"
-msgstr "Импортировать проводки из текстового файла"
+msgstr "Импортировать счета из CSV файла"
 
 #: ../src/import-export/csv-imp/gnc-plugin-csv-import.c:53
-#, fuzzy
 msgid "Import _Transactions from CSV..."
-msgstr "Импортировать проводки из текстового файла"
+msgstr "Импортировать проводки из CSV..."
 
 #: ../src/import-export/csv-imp/gnc-plugin-csv-import.c:54
-#, fuzzy
 msgid "Import Transactions from a CSV file"
-msgstr "Импортировать проводки из текстового файла"
+msgstr "Импортировать проводки из CSV файла"
 
 #: ../src/import-export/dialog-import.glade.h:2
 msgid "Enable skip transaction action"
@@ -17868,9 +17864,8 @@ msgid "Import Bills & Invoices..."
 msgstr "Импорт счетов и счетов-фактур..."
 
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:57
-#, fuzzy
 msgid "Import bills and invoices from a CSV text file"
-msgstr "Импортировать проводки из текстового файла"
+msgstr "Импортировать счета и счета-фактуры из CSV файла"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:1
 msgid "Import transactions from text file"
@@ -17927,19 +17922,19 @@ msgstr "4. Предпросмотр"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:15
 msgid "Open imported documents in tabs"
-msgstr ""
+msgstr "Открыть импортированные документы во вкладках"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:16
 msgid "Open not yet posted documents in tabs "
-msgstr ""
+msgstr "Открыть еще не введенные документы во вкладках"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:17
 msgid "Don't open imported documents in tabs"
-msgstr ""
+msgstr "Не открывать импортированные документы"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:18
-msgid "5. Afterwards"
-msgstr ""
+msgid "5. Afterwards5. После импорта"
+msgstr "5. После импорта"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:169
 #, fuzzy
@@ -17980,27 +17975,24 @@ msgstr ""
 
 #. Menu Items
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
-#, fuzzy
 msgid "I_mport"
-msgstr "Импорт"
+msgstr "_Импорт"
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "Import Customers and Vendors"
-msgstr ""
+msgstr "Импорт клиентов и поставщиков"
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "customer_import tooltip"
-msgstr ""
+msgstr "Импортировать клиентов или поставщиков из CSV файла"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
-#, fuzzy
 msgid "Import customers or vendors from text file"
-msgstr "Импортировать проводки из текстового файла"
+msgstr "Импортировать клиентов или поставщиков из текстового файла"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
-#, fuzzy
 msgid "<b>1. Choose the file to import</b>"
-msgstr "1. Выберите файл для импорта"
+msgstr "<b>1. Выберите файл для импорта</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:4
 msgid "For importing customer lists."
@@ -18011,19 +18003,16 @@ msgid "For importing vendor lists."
 msgstr ""
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:7
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "2. Выберите тип импорта"
+msgstr "<b>2. Выберите тип импорта</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:13
-#, fuzzy
 msgid "<b>3. Select import options</b>"
-msgstr "3. Задайте настройки импорта"
+msgstr "<b>3. Задайте настройки импорта</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
-#, fuzzy
 msgid "<b>3. Preview</b>"
-msgstr "4. Предпросмотр"
+msgstr "<b>4. Предпросмотр</b>"
 
 #. Menu Items
 #: ../src/plugins/example/gnc-plugin.example.c:50
@@ -18453,19 +18442,16 @@ msgid "Print the current report"
 msgstr "Напечатать текущий отчет"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1006
-#, fuzzy
 msgid "Export as P_DF..."
-msgstr "Импорт _QIF..."
+msgstr "Экспорт в P_DF..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1007
-#, fuzzy
 msgid "Export the current report as a PDF document"
-msgstr "Напечатать текущий отчет"
+msgstr "Экспортировать текущий отчет в PDF документ"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
-#, fuzzy
 msgid "Save _Report Configuration"
-msgstr "Варианты отчета"
+msgstr "Сохранить настройки отчета"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1032
 msgid ""
