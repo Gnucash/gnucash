@@ -6,6 +6,7 @@
 # Vitaly Lipatov <lav@altlinux.ru>, 2002, 2003, 2004.
 # Vladimir Turbaevsky <tur@oriontv.net>, 2006.
 # Sergey Belyashov <Sergey.Belyashov@gmail.com>, 2009, 2011.
+# Dmitry Pavlov  <zeldigas@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
