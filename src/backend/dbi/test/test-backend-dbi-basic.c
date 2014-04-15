@@ -34,6 +34,13 @@
 #include <gnc-prefs.h>
 #include <qofsession-p.h>
 
+#if LIBDBI_VERSION >= 900
+#define HAVE_LIBDBI_R 1
+static dbi_inst dbi_instance;
+#else
+#define HAVE_LIBDBI_R 0
+#endif
+
 static const gchar* suitename = "/backend/dbi";
 void test_suite_gnc_backend_dbi (void);
 
@@ -230,9 +237,17 @@ destroy_database (gchar* url)
     gnc_uri_get_components  (url, &protocol, &host, &portnum,
                              &username, &password, &dbname);
     if (g_strcmp0 (protocol, "postgres") == 0)
-        conn = dbi_conn_new (pgsql);
+        #if HAVE_LIBDBI_R
+        conn = dbi_conn_new_r( pgsql, dbi_instance );
+        #else
+        conn = dbi_conn_new( pgsql );
+        #endif
     else
+        #if HAVE_LIBDBI_R
+        conn = dbi_conn_new_r (protocol, dbi_instance);
+        #else
         conn = dbi_conn_new (protocol);
+        #endif
     port = g_strdup_printf ("%d", portnum);
     if (conn == NULL)
     {
@@ -581,7 +596,11 @@ test_suite_gnc_backend_dbi (void)
 {
     dbi_driver driver = NULL;
     GList *drivers = NULL;
+    #if HAVE_LIBDBI_R
+    while ((driver = dbi_driver_list_r (driver, dbi_instance)))
+    #else
     while ((driver = dbi_driver_list (driver)))
+    #endif
     {
         drivers = g_list_prepend (drivers,
                                   (gchar*)dbi_driver_get_name (driver));
