@@ -26,7 +26,12 @@
 #include "qof.h"
 #include "gnc-ui.h"
 #include "gnc-keyring.h"
-#ifdef HAVE_GNOME_KEYRING
+#ifdef HAVE_LIBSECRET
+#include <libsecret/secret.h>
+#endif
+#if HAVE_GNOME_KEYRING
+#define GNOME_KEYRING_DEPRECATED
+#define GNOME_KEYRING_DEPRECATED_FOR(x)
 #include <gnome-keyring.h>
 #endif
 #ifdef HAVE_OSX_KEYCHAIN
@@ -38,6 +43,27 @@
 /* This static indicates the debugging module that this .o belongs to. */
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
+#ifdef HAVE_LIBSECRET
+const SecretSchema* gnucash_get_secret_schema(void) G_GNUC_CONST;
+const SecretSchema* gnucash_get_secret_schema(void)
+{
+  static const SecretSchema secret_schema = {
+    "org.gnucash.password", SECRET_SCHEMA_NONE,
+    {
+      { "protocol", SECRET_SCHEMA_ATTRIBUTE_STRING },
+      { "server", SECRET_SCHEMA_ATTRIBUTE_STRING },
+      { "port", SECRET_SCHEMA_ATTRIBUTE_INTEGER },
+      { "user", SECRET_SCHEMA_ATTRIBUTE_STRING },
+      { "NULL", 0 },
+    }
+  };
+
+  return &secret_schema;
+}
+
+#define SECRET_SCHEMA_GNUCASH gnucash_get_secret_schema()
+#endif
+
 void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *server,
                                guint32 port,
@@ -45,8 +71,29 @@ void gnc_keyring_set_password (const gchar *access_method,
                                const gchar *user,
                                const gchar* password)
 {
+#ifdef HAVE_LIBSECRET
+  GError* error = NULL;
+  gchar* label = NULL;
 
-#ifdef HAVE_GNOME_KEYRING
+  label = g_strdup_printf("GnuCash password for %s://%s@%s", access_method, user, server);
+
+  secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                            label, password, NULL, &error,
+                            "protocol", access_method,
+                            "server", server,
+                            "port", port,
+                            "user", user,
+                            NULL);
+
+  g_free(label);
+
+  if (error != NULL)
+  {
+      PWARN ("libsecret error: %s", error->message);
+      PWARN ("The user will be prompted for a password again next time.");
+      g_error_free(error);
+  }
+#elif HAVE_GNOME_KEYRING
     GnomeKeyringResult  gkr_result;
     guint32 item_id = 0;
 
@@ -105,7 +152,11 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
                                     gchar **password)
 {
     gboolean password_found = FALSE;
-#ifdef HAVE_GNOME_KEYRING
+#ifdef HAVE_LIBSECRET
+    GError* error = NULL;
+    char* libsecret_password;
+#endif
+#if HAVE_GNOME_KEYRING
     GnomeKeyringResult  gkr_result;
     GList *found_list = NULL;
     GnomeKeyringNetworkPasswordData *found;
@@ -121,24 +172,56 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
 
     *password = NULL;
 
-#ifdef HAVE_GNOME_KEYRING
-    gkr_result = gnome_keyring_find_network_password_sync
-                 ( *user, NULL, server, service,
-                   access_method, NULL, port, &found_list );
+#ifdef HAVE_LIBSECRET
+    libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+        "protocol", access_method,
+        "server", server,
+        "port", port,
+        "user", *user,
+        NULL);
 
-    if (gkr_result == GNOME_KEYRING_RESULT_OK)
-    {
-        found = (GnomeKeyringNetworkPasswordData *) found_list->data;
-        if (found->password)
-            *password = g_strdup(found->password);
+    if (libsecret_password == NULL) {
+        if (error != NULL) {
+            PWARN ("libsecret access failed: %s.", error->message);
+            g_error_free(error);
+        }
+    } else {
         password_found = TRUE;
+        *password = g_strdup (libsecret_password);
+        secret_password_free (libsecret_password);
     }
-    else
-        PWARN ("Gnome-keyring access failed: %s.",
-               gnome_keyring_result_to_message(gkr_result));
+#endif /* HAVE_LIBSECRET */
 
-    gnome_keyring_network_password_list_free(found_list);
+#if HAVE_GNOME_KEYRING
+    if (password_found == FALSE) {
+        gkr_result = gnome_keyring_find_network_password_sync
+                     ( *user, NULL, server, service,
+                       access_method, NULL, port, &found_list );
+
+        if (gkr_result == GNOME_KEYRING_RESULT_OK)
+        {
+            found = (GnomeKeyringNetworkPasswordData *) found_list->data;
+            if (found->password)
+                *password = g_strdup(found->password);
+            password_found = TRUE;
+        }
+        else
+            PWARN ("Gnome-keyring access failed: %s.",
+                   gnome_keyring_result_to_message(gkr_result));
+
+        gnome_keyring_network_password_list_free(found_list);
+    }
 #endif /* HAVE_GNOME_KEYRING */
+
+#if defined(HAVE_LIBSECRET) && defined(HAVE_GNOME_KEYRING)
+    /* If we were not able to retrieve the password with libsecret and the new
+     * schema and libgnome-keyring was successful to retrieve the password using
+     * the old schema, we immediatly store it in the new schema.
+     */
+    if (libsecret_password == NULL && password_found == TRUE) {
+        gnc_keyring_set_password(access_method, server, port, service, *user, *password);
+    }
+#endif /* HAVE_LIBSECRET && HAVE_GNOME_KEYRING */
 
 #ifdef HAVE_OSX_KEYCHAIN
     /* mysql and postgres aren't valid protocols on Mac OS X.

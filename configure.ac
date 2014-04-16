@@ -1106,6 +1106,13 @@ then
       PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
           [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
           [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
+
+      PKG_CHECK_MODULES(LIBSECRET, libsecret-1 >= "0.18",
+          [AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])],
+          [AC_DEFINE(HAVE_NO_LIBSECRET,1,[System has no suitable libsecret service])])
+      AC_SUBST(LIBSECRET_CFLAGS)
+      AC_SUBST(LIBSECRET_LIBS)
+      ;;
   esac
 
   ### ----------------------------------------------------------------------
