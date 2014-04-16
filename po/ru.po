@@ -10878,12 +10878,12 @@ msgid "Save changes to the file?"
 msgstr "Сохранить изменения в файл?"
 
 #: ../src/gnome-utils/gnc-file.c:586 ../src/gnome-utils/gnc-main-window.c:1253
-#, fuzzy, c-format
+#, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] ""
-"Если Вы не сохранитесь, изменения за последние %d минут будут потеряны."
+"Если Вы не сохранитесь, изменения за последние %d минуту будут потеряны."
 msgstr[1] ""
 "Если Вы не сохранитесь, изменения за последние %d минут будут потеряны."
 msgstr[2] ""
@@ -10918,16 +10918,15 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:778
 msgid "_Open Read-Only"
-msgstr ""
+msgstr "Открыть только для _чтения"
 
 #: ../src/gnome-utils/gnc-file.c:780
 msgid "_Create New File"
 msgstr "_Создать новый файл"
 
 #: ../src/gnome-utils/gnc-file.c:782
-#, fuzzy
 msgid "Open _Anyway"
-msgstr "_Открыть"
+msgstr "Всё равно _открыть"
 
 #. try to load once again
 #: ../src/gnome-utils/gnc-file.c:866 ../src/gnome-utils/gnc-file.c:886
@@ -15835,6 +15834,10 @@ msgid ""
 "You can also go back and verify your selections by clicking on 'Back' or "
 "'Cancel' to Abort Export.\n"
 msgstr ""
+"Нажмите кнопку \"Применить\", чтобы экспортировать иерархию счетов в файл '%s'.\n"
+"\n"
+"Вы так же можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
+"или отменить экспорт, нажав на кнопку \"Отмена\".\n"
 
 #. Translators: %s is the file name string and %u the number of accounts.
 #: ../src/import-export/csv-exp/assistant-csv-export.c:86
@@ -15846,6 +15849,12 @@ msgid ""
 "You can also go back and verify your selections by clicking on 'Back' or "
 "'Cancel' to Abort Export.\n"
 msgstr ""
+"Нажмите кнопку \"Применить\", чтобы экспортировать проводки в файл '%s'. "
+"Число счетов которые включены экспорт: %u.\n"
+"\n"
+"Вы так же можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
+"или отменить экспорт, нажав на кнопку \"Отмена\".\n"
+
 
 #: ../src/import-export/csv-exp/assistant-csv-export.c:92
 msgid ""
@@ -15854,6 +15863,10 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
+"Этот мастер поможет вам экспортировать иерархию счетов в файл.\n"
+"\n"
+"Установите требуемые параметры экспорта и затем нажмите на кнопку "
+"\"Вперёд\" или нажмите \"Отмена\", чтобы прервать экспорт.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
@@ -15862,6 +15875,10 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
+"Этот мастер поможет вам экспортировать проводки в файл.\n"
+"\n"
+"Установите требуемые параметры экспорта и затем нажмите на кнопку "
+"\"Вперёд\" или нажмите \"Отмена\", чтобы прервать экспорт.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.c:750
 msgid ""
@@ -15870,31 +15887,34 @@ msgid ""
 "logging!\n"
 "You may need to enable debugging.\n"
 msgstr ""
+"Не удалось выполнить экспорт. Это может быть связано с недостатком свободного места, "
+"нехваткой прав доступа или невозможностью получить доступ к директории. "
+"Для получения подробностей обратитесь к файлу лога!\n"
+"Возможно вам потребуется включить debug режим.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.c:754
 msgid "File exported successfully!\n"
-msgstr ""
+msgstr "Файл был успешно экспортирован!\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:1
-#, fuzzy
 msgid "CSV Export Assistant"
-msgstr "Мастер по залогам и займам"
+msgstr "Мастер экспорта в CSV"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:2
 msgid ""
 "\n"
 "Select the type of Export required and the separator that will be used.\n"
 msgstr ""
+"\n"
+"Выберите требуемый тип экспорта и используемый разделитель.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:5
-#, fuzzy
 msgid "Quotes"
-msgstr "Получить котировки"
+msgstr "Кавычки"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:6
-#, fuzzy
 msgid "Use Quotes"
-msgstr "Получить котировки"
+msgstr "Использовать кавычки"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:7
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:24
@@ -15917,13 +15937,12 @@ msgid "Separators"
 msgstr "Разделители"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:12
-#, fuzzy
 msgid "Choose Export Settings"
-msgstr "Выберите формат экспорта"
+msgstr "Выберите параметры экспорта"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:13
 msgid "Select the accounts to be exported and date range if required."
-msgstr ""
+msgstr "Выберите экспортируемые счета и диапазон дат если требуется."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:22
 #, fuzzy
@@ -15932,21 +15951,20 @@ msgstr "<b>Заметки</b>"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:33
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:34
-#, fuzzy
 msgid "Account Selection"
-msgstr "Удаление счета"
+msgstr "Выбор счета"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:34
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Нет параметров для этого отчета."
+msgstr ""
+"\n"
+"Введите имя файла и его расположение для экспорта...\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:37
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Выберите файл для импорта"
+msgstr "Выберите имя файла для экспорта"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:38
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:23
@@ -15956,19 +15974,16 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:40
-#, fuzzy
 msgid "Export Now..."
-msgstr "Экспорт файла..."
+msgstr "Все готово для экспорта"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:41
-#, fuzzy
 msgid "Summary"
-msgstr "Строка _итогов"
+msgstr "Результаты"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:42
-#, fuzzy
 msgid "Export Summary"
-msgstr "Итого по счету"
+msgstr "Результаты"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:346
 msgid "Category"
@@ -16148,9 +16163,8 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:1
-#, fuzzy
 msgid "CSV Import Assistant"
-msgstr "Мастер импорта файлов данных GnuCash"
+msgstr "Мастер импорта CSV файлов"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:2
 msgid ""
@@ -16165,6 +16179,17 @@ msgid ""
 "\n"
 "Click on 'Forward' to proceed or 'Cancel' to Abort Import.\n"
 msgstr ""
+"\n"
+"Этот мастер поможет вам импортировать счета из файла.\n"
+"\n"
+"Формат файла фиксирован, поэтому импортируемый файл должен иметь формат "
+"в точности совпадающим с экспортируемым. "
+"Если счет, соответсвтвующий полному имени "
+"импортируемого счета, не найден, он будет добавлен, при условии что для "
+"него указана валюта/тип ценных бумаг. Если счет существует, то у него "
+"будут обновлены следующие четыре поля: код, описание, заметки и цвет"
+"\n"
+"Нажмите \"Вперёд\" для начала или \"Отмена\", чтобы прервать импорт.\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:9
 #, fuzzy
@@ -16563,7 +16588,7 @@ msgstr ""
 "типа продовольственных магазинов, могут добавлять комиссию сразу в итоговую "
 "сумму, вместо отображения в виде отдельной записи. Например, вы сняли $100, "
 "но с вас списали $101,50. Если вы вручную введете эти $100, то итог не "
-"совпадет. Вы должны установить на какой-нибудь максимум подобной проводки в "
+"совпадет. Вы должны задать, какой может максимальная комиссия такого типа в "
 "вашем регионе (в единицах вашей локальной валюты), так что проводка будет "
 "распознана, как подходящая."
 
@@ -17183,15 +17208,15 @@ msgid "Loading completed"
 msgstr "Загрузка завершена"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:1929
-#, fuzzy
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"GnuCash сейчас загрузит ваш файл QIF. Если не будет ошибок или "
-"предупреждений, то вы перейдете к следующему шагу. Иначе, будут показаны "
-"подробности для рассмотрения."
+"Когда вы нажмете кнопку \"Начать\", GnuCash загрузит ваш файл QIF. "
+"В случае отсутсвия ошибок или "
+"предупреждений, будет произведен переход к следующему шагу. В противном случае, будут показаны "
+"подробности для проверки."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2494
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:60
@@ -17226,31 +17251,27 @@ msgid "Conversion completed"
 msgstr "Преобразование завершено"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2984
-#, fuzzy
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"GnuCash импортирует ваши данные QIF. Если не произойдет ошибок или "
-"предупреждений, вы автоматически перейдете на следующий шаг. Иначе, будут "
-"показаны подробности для ознакомления."
+"Когда вы нажмете кнопку \"Начать импорт\", GnuCash импортирует ваши данные QIF. "
+"В случае отсутствия ошибок или "
+"предупреждений, вы автоматически перейдете на следующий шаг. В противном случае, будут показаны "
+"подробности для проверки."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3180
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash не может сохранить настройки отображения."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3213
-#, fuzzy, c-format
 msgid "There was a problem with the import."
-msgstr ""
-"Проблема при выполнении %s:%s.\n"
-"%s"
+msgstr "Возникла проблема при импорте."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3215
-#, fuzzy, c-format
 msgid "QIF Import Completed."
-msgstr "Импорт QIF"
+msgstr "Импорт QIF завершен."
 
 #. Set up the QIF account to GnuCash account matcher.
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3440
@@ -17272,9 +17293,8 @@ msgid "Match?"
 msgstr "Подходит?"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:1
-#, fuzzy
 msgid "QIF Import Assistant"
-msgstr "Импорт QIF"
+msgstr "Помощник импорта QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:2
 msgid ""
@@ -17295,7 +17315,7 @@ msgstr ""
 "Процесс импорта состоит из нескольких шагов. Ваши счета GnuCash не будут "
 "изменены, пока вы не нажмете \"Применить\" в конце процесса.\n"
 "\n"
-"Нажмите \"Далее\" для начала загрузки ваших QIF данных или \"Отмена\"для "
+"Нажмите \"Вперёд\" для начала загрузки ваших QIF данных или \"Отменить\" для "
 "прерывания процесса импорта. "
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:7
@@ -17303,7 +17323,6 @@ msgid "Import QIF files"
 msgstr "Импорт файлов QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:8
-#, fuzzy
 msgid ""
 "Please select a file to load. When you click \"Forward\", the file will be "
 "loaded and analyzed. You may need to answer some questions about the account"
@@ -17312,11 +17331,11 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files. \n"
 msgstr ""
-"Пожалуйста, выберите файл для загрузки. Когда вы нажмете \"Далее\", файл "
+"Пожалуйста, выберите файл для загрузки. Когда вы нажмете \"Вперёд\", файл "
 "будет загружен и проанализирован. Вам может потребоваться ответить на "
-"некоторые вопросы о счете(ах) в файле.\n"
+"несколько вопросов о счете(ах) в файле.\n"
 "\n"
-"Есть возможность загружать столько файлов, сколько пожелаете, так что не "
+"У вас будет возможность загрузить столько файлов, сколько пожелаете, так что не "
 "беспокойтесь, если ваши данные располагаются в нескольких файлах.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:12
@@ -17328,9 +17347,8 @@ msgid "Select a QIF file to load"
 msgstr "Выберите файл QIF для загрузки"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:14
-#, fuzzy
 msgid "_Start"
-msgstr "Начало:"
+msgstr "Н_ачать"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:15
 msgid "Load QIF files"
@@ -17441,13 +17459,13 @@ msgstr ""
 "названием и типом взятым из QIF файла. Если вас не устраивает предлагаемый "
 "GnuCash счет, то измените, дважды кликнув на нем.\n"
 "\n"
-"Примечание: GnuCash создаст множество счетов, которые отсутствуют в другой "
+"Примечание: GnuCash создаст множество счетов, которые отсутствовали в другой "
 "вашей программе, включая раздельные счета для каждого пакета акций, "
 "комиссионных вознаграждений, специальных счетов \"Собственных средств"
 "\" (субсчета \"Нераспределенной прибыли\", по умолчанию), являющихся "
 "источниками начальных сальдо, и т.п. Все эти счета будут указаны на "
 "следующей странице, таким образом будет возможность их изменить так, как "
-"хочется, но лучше их не трогать.\n"
+"хочется, но вы можете оставить все как есть.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:38
 msgid "Accounts and stock holdings"
@@ -17593,16 +17611,14 @@ msgid "Tradable commodities"
 msgstr "Продаваемые предметы"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:67
-#, fuzzy
 msgid "_Start Import"
-msgstr "_Импорт"
+msgstr "Н_ачать импорт"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:68
 msgid "QIF Import"
 msgstr "Импорт QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:69
-#, fuzzy
 msgid ""
 "\n"
 "If you are importing a QIF file from a bank or other financial institution, "
@@ -17617,18 +17633,18 @@ msgid ""
 "\n"
 "Click \"Forward\" to review the possible matches."
 msgstr ""
+"\n"
 "Если производится импорт файла QIF из банка или другой финансовой "
 "организации, некоторые проводки могут уже присутствовать на ваших счетах "
-"GnuCash. Для предотвращения повторов GnuCash попытается определить "
-"совпадения, поэтому ему может понадобиться ваша помощь для проверки "
-"результатов.\n"
+"GnuCash. Для предотвращения повторов GnuCash попытался определить "
+"совпадения и сейчас нужна ваша помощь для проверки сделанных сопоставлений.\n"
 "\n"
 "На следующей странице будет показан список импортированных проводок. При "
 "выборе каждой из них ниже будет показываться список подходящих совпадений. "
 "Если вы увидите подходящую, то кликните на ней. Ваш выбор будет подтвержден "
 "изменением состояния в столбце \"Подходит?\".\n"
 "\n"
-"Кликните \"Далее\" для просмотра возможных совпадений."
+"Кликните \"Вперёд\" для просмотра возможных совпадений."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:75
 msgid "Match existing transactions"
@@ -17647,7 +17663,6 @@ msgid "Select possible duplicates"
 msgstr "Выберите возможные дубликаты"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:79
-#, fuzzy
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -17665,7 +17680,7 @@ msgstr ""
 "при следующем импорте QIF.\n"
 "\n"
 "Нажмите \"Назад\", чтобы проверить соответствия счетов и категорий, изменить "
-"настройки валюты и ценных бумаг новых счетов.\n"
+"настройки валюты и ценных бумаг новых счетов или импортировать дополнительные файлы.\n"
 "\n"
 "Нажмите \"Отмена\", чтобы прервать процесс импорта QIF."
 
