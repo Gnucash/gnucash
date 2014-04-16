@@ -104,7 +104,7 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
 #ifndef G_OS_WIN32
-    char *pathbuf = NULL, *path = NULL;
+    char *pathbuf = NULL, *path = NULL, *tmpbuf = NULL;
     size_t pathbuf_size = 0;
 #endif
     int rc;
@@ -158,13 +158,22 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 #ifndef G_OS_WIN32
     pathbuf_size = strlen (be->lockfile) + 100;
     pathbuf = (char *) malloc (pathbuf_size);
+    if (pathbuf == NULL) {
+      return FALSE;
+    }
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     while (snprintf (path, pathbuf_size - (path - pathbuf), ".%lx.%d.LNK", gethostid(), getpid())
             >= pathbuf_size - (path - pathbuf))
     {
         pathbuf_size += 100;
-        pathbuf = (char *) realloc (pathbuf, pathbuf_size);
+        tmpbuf = (char *) realloc (pathbuf, pathbuf_size);
+        if (tmpbuf == NULL) {
+          free(pathbuf);
+          return FALSE;
+        } else {
+          pathbuf = tmpbuf;
+        }
     }
 
     rc = link (be->lockfile, pathbuf);
