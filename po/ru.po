@@ -6239,7 +6239,7 @@ msgid ""
 msgstr ""
 "Один из выбранных подсчетов не может быть изменен. Если вы хотите менять "
 "проводки в этом реестре, пожалуйста откройте настройки субсчета и выключите "
-"параметр \"виртуальный\". Вы так же можете открыть отдельный счет вместо "
+"параметр \"виртуальный\". Вы также можете открыть отдельный счет вместо "
 "набора счетов."
 
 #: ../src/gnome/gnc-split-reg.c:909
@@ -9292,7 +9292,7 @@ msgstr "Сам_ые ранние"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:11
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:27
 msgid "Choo_se Date:"
-msgstr "Дата закрытия:"
+msgstr "Выберите дату:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:11
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:12
@@ -9316,7 +9316,7 @@ msgstr "Конец:"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:15
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:31
 msgid "C_hoose Date:"
-msgstr "Дата закрытия:"
+msgstr "Выберите дату:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:15
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:16
@@ -15836,7 +15836,7 @@ msgid ""
 msgstr ""
 "Нажмите кнопку \"Применить\", чтобы экспортировать иерархию счетов в файл '%s'.\n"
 "\n"
-"Вы так же можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
+"Вы также можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
 "или отменить экспорт, нажав на кнопку \"Отмена\".\n"
 
 #. Translators: %s is the file name string and %u the number of accounts.
@@ -15852,7 +15852,7 @@ msgstr ""
 "Нажмите кнопку \"Применить\", чтобы экспортировать проводки в файл '%s'. "
 "Число счетов которые включены экспорт: %u.\n"
 "\n"
-"Вы так же можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
+"Вы также можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
 "или отменить экспорт, нажав на кнопку \"Отмена\".\n"
 
 
@@ -15942,12 +15942,11 @@ msgstr "Выберите параметры экспорта"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:13
 msgid "Select the accounts to be exported and date range if required."
-msgstr "Выберите экспортируемые счета и диапазон дат если требуется."
+msgstr "Выберите экспортируемые счета и диапазон дат, если требуется."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:22
-#, fuzzy
 msgid "<b>_Dates</b>"
-msgstr "<b>Заметки</b>"
+msgstr "<b>Даты</b>"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:33
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:34
@@ -17501,7 +17500,7 @@ msgid ""
 "If you change your mind later, you can reorganize the account structure "
 "safely within GnuCash."
 msgstr ""
-"GnuCash использует раздельные приходные и расходные счета так же, как и "
+"GnuCash использует раздельные приходные и расходные счета также, как и "
 "категории, определяющие ваши проводки. Каждая категория вашего QIF файла "
 "будет преобразована в счет GnuCash.\n"
 "\n"
@@ -25503,7 +25502,7 @@ msgstr "Оба"
 #, fuzzy
 msgid "Show both (and include void transactions in totals)."
 msgstr ""
-"Показывать и аннулированные, и не аннулированные проводки (а так же включить "
+"Показывать и аннулированные, и не аннулированные проводки (а также включить "
 "аннулированные проводки в итоги)"
 
 #. src/report/standard-reports/transaction.scm
