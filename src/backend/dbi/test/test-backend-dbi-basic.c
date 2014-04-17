@@ -281,7 +281,7 @@ static void
 teardown (Fixture *fixture, gconstpointer pData)
 {
     gchar *lockfile = g_strdup_printf ("%s/test-dbi.xml.LCK",
-                                       g_dirname (DBI_TEST_XML_FILENAME));
+                                       g_path_get_dirname (DBI_TEST_XML_FILENAME));
     gchar *msg = g_strdup_printf ("[xml_session_end()] Error on g_unlink(%s): 2: No such file or directory", lockfile);
     gchar *logdomain = "gnc.backend";
     guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
