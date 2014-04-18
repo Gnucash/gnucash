@@ -4388,7 +4388,7 @@ msgstr "Сбалансированный"
 #: ../intl-scm/guile-strings.c:2048 ../intl-scm/guile-strings.c:3520
 #: ../intl-scm/guile-strings.c:3744 ../intl-scm/guile-strings.c:4942
 msgid "Closing Entries"
-msgstr "Зарывающие записи"
+msgstr "Закрывающие записи"
 
 #: ../src/gnome/dialog-find-transactions2.c:117
 #: ../src/gnome/dialog-find-transactions.c:116
@@ -9548,11 +9548,11 @@ msgstr "Новый пункт"
 
 #: ../src/gnome-search/dialog-search.c:1111
 msgid "all criteria are met"
-msgstr "все критерии"
+msgstr "соответсвуют всем критериям"
 
 #: ../src/gnome-search/dialog-search.c:1112
 msgid "any criteria are met"
-msgstr "любые критерии"
+msgstr "соответствуют любому критерию"
 
 #: ../src/gnome-search/dialog-search.glade.h:1
 msgid "_New item..."
@@ -9599,11 +9599,10 @@ msgid "Search only active data"
 msgstr "Искать только активные данные"
 
 #: ../src/gnome-search/dialog-search.glade.h:12
-#, fuzzy
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
 msgstr ""
-"Отметьте, искать ли во всех данных или только помеченный как \"активные\""
+"Определяет, искать ли во всех данных или только помеченных как \"активные\""
 
 #: ../src/gnome-search/dialog-search.glade.h:13
 msgid "Type of search"
@@ -10375,14 +10374,12 @@ msgid "Error"
 msgstr "Ошибка"
 
 #: ../src/gnome-utils/dialog-transfer.c:1248
-#, fuzzy
 msgid "Retrieve the current online quote"
-msgstr "Удалить текущую цену"
+msgstr "Получить текущую цену по сети"
 
 #: ../src/gnome-utils/dialog-transfer.c:1252
-#, fuzzy
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "Внимание: Finance::Quote не установлено должным образом."
+msgstr "Для активации этой кнопки, должен быть установлен Finance::Quote."
 
 #: ../src/gnome-utils/dialog-transfer.c:1388
 msgid ""
@@ -14800,24 +14797,20 @@ msgid "Delete the selected transaction"
 msgstr "Удалить выбранную проводку"
 
 #: ../src/gnome/window-reconcile2.c:2213 ../src/gnome/window-reconcile.c:2213
-#, fuzzy
 msgid "_Reconcile Selection"
-msgstr "Счет согласования"
+msgstr "_Согласовать выбранные"
 
 #: ../src/gnome/window-reconcile2.c:2214 ../src/gnome/window-reconcile.c:2214
-#, fuzzy
 msgid "Reconcile the selected transactions"
-msgstr "Удалить выбранную проводку"
+msgstr "Согласовать выбранные проводки"
 
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
-#, fuzzy
 msgid "_Unreconcile Selection"
-msgstr "_Рассогласовать"
+msgstr "_Рассогласовать выбранные"
 
 #: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
-#, fuzzy
 msgid "Unreconcile the selected transactions"
-msgstr "Удалить выбранную проводку"
+msgstr "Рассогласовать выбранные проводки"
 
 #: ../src/gnome/window-reconcile2.c:2227 ../src/gnome/window-reconcile.c:2227
 msgid "Open the GnuCash help window"
@@ -14857,9 +14850,8 @@ msgstr "Произошла ошибка при доступе к \"%s\"."
 #. file name. We will store the chosen directory in the gtk print settings
 #. as well.
 #: ../src/html/gnc-html-webkit.c:1140
-#, fuzzy
 msgid "Export to PDF File"
-msgstr "Заголовок отчёта"
+msgstr "Экспортировать в PDF"
 
 #: ../src/import-export/aqb/assistant-ab-initial.c:373
 #, c-format
@@ -14922,7 +14914,6 @@ msgid "AqBanking Initial Assistant"
 msgstr ""
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:2
-#, fuzzy
 msgid ""
 "\n"
 "This assistant helps you setting up your Online Banking connection with your "
@@ -14948,6 +14939,7 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now.\n"
 msgstr ""
+"\n"
 "Этот мастер поможет настроить соединение интернет-банкинга с вашим банком.\n"
 "\n"
 "Для начала нужно подключить услугу интернет-доступа в банке. Если банк "
@@ -14960,14 +14952,14 @@ msgstr ""
 "* Информацию об открытом ключе шифрования банка в случае использования HBCI "
 "(\"Ini-Letter\").\n"
 "\n"
-"Эта информация дальше пригодится. Нажмите \"Далее\".\n"
+"Эта информация потребуется далее. Нажмите \"Вперед\".\n"
 "\n"
 "Внимание! Никаких гарантий. Ряд банков используют плохо работающие сервера "
 "интернет-банкинга. Не стоит полагаться на интернет-банкинг для критичных по "
 "времени операций, так как иногда банк не информирует в случае отклонения "
 "операции.\n"
 "\n"
-"Нажмите \"Отмена\", если не готовы настраивать сейчас интернет-банкинг."
+"Нажмите \"Отмена\", если вы не готовы настраивать соединение сейчас.\n"
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:18
 msgid "Initial Online Banking Setup"
@@ -14992,20 +14984,18 @@ msgid "Start Online Banking Wizard"
 msgstr "Запустить мастер настройки интернет банкинга"
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:22
-#, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account. Click \"Forward\" when all desired accounts "
 "are matching."
 msgstr ""
-"Кликните на строку со счетов интернет-банкинга, если желаете сопоставить его "
-"со счетов GnuCash. Кликните \"Далее\", когда все желаемые счета будут "
+"Дважды кликните на строку со счетов интернет-банкинга, если желаете сопоставить его "
+"со счетов GnuCash. Кликните \"Вперёд\", когда все желаемые счета будут "
 "сопоставлены."
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:23
-#, fuzzy
 msgid "Match Online accounts with GnuCash accounts"
-msgstr "Сопоставление счетов HBCI со счетами GnuCash"
+msgstr "Сопоставление счетов интернет-банкинга со счетами GnuCash"
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:24
 msgid ""
@@ -17114,9 +17104,8 @@ msgstr ""
 "подходящего типа инвестиций, то введите свою."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:864
-#, fuzzy
 msgid "Enter information about"
-msgstr "Введите информацию о \"%s\""
+msgstr "Введите информацию о"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:880
 msgid "_Name or description:"
@@ -17220,12 +17209,11 @@ msgstr ""
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2494
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:60
 msgid "Choose the QIF file currency and select Book Options"
-msgstr ""
+msgstr "Выберите валюту QIF файла и настройки книги"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2501
-#, fuzzy
 msgid "Choose the QIF file currency"
-msgstr "Введите валюту QIF файла"
+msgstr "Выберите валюту QIF файла"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2683
 msgid "You must enter an existing national currency or enter a different type."
@@ -17384,7 +17372,6 @@ msgid "Set a date format for this QIF file"
 msgstr "Установить формат даты для этого QIF файла"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:22
-#, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
 "one account, but the file does not specify a name for that account. \n"
@@ -17393,11 +17380,11 @@ msgid ""
 "accounting program, you should use the same account name that was used in "
 "that program.\n"
 msgstr ""
-"Только что загруженный QIF файл, похоже, содержит проводки только одного "
-"счета, но в файле не указано какого именно.\n"
+"Загруженный QIF файл, похоже, содержит проводки только по одному "
+"счету, но в файле не указано название этого счета.\n"
 "\n"
-"Пожалуйста, введите название счета. Если файлы был экспортирован другой "
-"бухгалтерской программой, то вы должны использовать имя счета такое же, как "
+"Пожалуйста, введите название счета. Если файл был экспортирован другой "
+"бухгалтерской программой, вам следует использовать такое же имя счета, как "
 "и в той программе.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:26
@@ -17591,12 +17578,12 @@ msgid ""
 "If you don't see your exchange listed, or none of the available choices are "
 "appropriate, you can enter a new one."
 msgstr ""
-"На следующих страницах у вас будет спрошена информация о вкладах, взаимных "
-"фондах и других вложениях, которые могут присутствовать в импортируемых "
+"На следующих страницах у вас будет запрошена информация о вкладах, взаимных "
+"фондах и других вложениях, которые присутствуют в импортируемых "
 "файлах QIF. GnuCash требуется некоторые дополнительные подробности об этих "
 "вложениях, которые не предоставляет формат QIF.\n"
 "\n"
-"Каждый вклад, ПИФ или другая инвестиция должна иметь название и "
+"Каждый вклад, взаимный фонд или другая инвестиция должна иметь название и "
 "аббревиатуру, такую как биржевой символ. Так как некоторые несвязанные "
 "инвестиции могут иметь одинаковые аббревиатуры, вам необходимо как-то "
 "выделить, что за тип вклада вы вводите. Например, вы можете выбрать биржу, "
@@ -18662,14 +18649,12 @@ msgid "Perform financial calculations, such as a loan repayment"
 msgstr ""
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
-#, fuzzy
 msgid "GnuCash"
-msgstr "GnuCash %s"
+msgstr "GnuCash"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:2
-#, fuzzy
 msgid "Finance Management"
-msgstr "GnuCash - Управление финансами"
+msgstr "Управление финансами"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:3
 msgid "Manage your finances, accounts, and investments"
@@ -18693,7 +18678,7 @@ msgstr "Бюджет"
 
 #: ../src/libqof/qof/qofbookslots.h:71
 msgid "Default Budget"
-msgstr "Исходный бюджет"
+msgstr "Бюджет по умолчанию"
 
 #. src/app-utils/app-utils.scm
 #: ../intl-scm/guile-strings.c:6
@@ -18962,51 +18947,43 @@ msgstr ""
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:86
-#, fuzzy
 msgid "The name of your business."
-msgstr "Название вашего предприятия"
+msgstr "Название вашего предприятия."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:88
-#, fuzzy
 msgid "The address of your business."
-msgstr "Адрес вашего предприятия"
+msgstr "Адрес вашего предприятия."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:90
-#, fuzzy
 msgid "The contact person to print on invoices."
-msgstr "Контактное лицо, указываемое на счетах-фактурах"
+msgstr "Контактное лицо, указываемое на счетах-фактурах."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:92
-#, fuzzy
 msgid "The phone number of your business."
-msgstr "Телефонный номер вашего предприятия"
+msgstr "Телефонный номер вашего предприятия."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:94
-#, fuzzy
 msgid "The fax number of your business."
-msgstr "Номер факса вашего предприятия"
+msgstr "Номер факса вашего предприятия."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:96
-#, fuzzy
 msgid "The email address of your business."
-msgstr "Адрес электронной почты вашего предприятия"
+msgstr "Адрес электронной почты вашего предприятия."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:98
-#, fuzzy
 msgid "The URL address of your website."
-msgstr "URL адрес вашего сайта"
+msgstr "URL адрес вашего сайта."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:100
-#, fuzzy
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "ID вашей фирмы (например 'Tax-ID:00-000000)"
+msgstr "ID вашей фирмы (например 'Tax-ID:00-000000)."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:102
@@ -19035,18 +19012,16 @@ msgstr "Современный формат даты"
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:112
-#, fuzzy
 msgid "The default date format used for fancy printed dates."
 msgstr "Формат даты используемый для печати современных дат"
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:114
-#, fuzzy
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
 msgstr ""
-"Проверьте наличие торговых счетов, используемых для операций с более чем "
+"Проверять наличие торговых счетов, используемых для операций с более чем "
 "одной валютой или товаром"
 
 #. src/app-utils/business-prefs.scm
@@ -19069,9 +19044,8 @@ msgstr ""
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:120
-#, fuzzy
 msgid "Budget to be used when none has been otherwise specified."
-msgstr "Используемый бюджет, если ничего другого не указано"
+msgstr "Используемый бюджет, если явно не указано."
 
 #. src/app-utils/date-utilities.scm
 #. src/report/standard-reports/account-piecharts.scm
