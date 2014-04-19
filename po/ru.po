@@ -11585,7 +11585,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1827
 #: ../src/register/ledger-core/split-register-control.c:1847
 msgid "_Unreconcile"
-msgstr "_Рассогласовать"
+msgstr "_Отменить согласование"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1912
 #: ../src/register/ledger-core/split-register-model.c:2037
@@ -14806,11 +14806,11 @@ msgstr "Согласовать выбранные проводки"
 
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
 msgid "_Unreconcile Selection"
-msgstr "_Рассогласовать выбранные"
+msgstr "_Отменить согласование выбранных"
 
 #: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
 msgid "Unreconcile the selected transactions"
-msgstr "Рассогласовать выбранные проводки"
+msgstr "Отменить согласование выбранных проводок"
 
 #: ../src/gnome/window-reconcile2.c:2227 ../src/gnome/window-reconcile.c:2227
 msgid "Open the GnuCash help window"
@@ -17736,11 +17736,10 @@ msgstr ""
 "Если состояние не указано в файле QIF, то проводка не отмечается чистой."
 
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:11
-#, fuzzy
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
-"Исходное состояние проводки (заменяется на статус, полученный из файла QIF):"
+"Исходное состояние проводки (заменяется на статус, полученный из файла QIF)"
 
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:13
 msgid "_Select or add a GnuCash account:"
@@ -22280,7 +22279,7 @@ msgstr "День"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2146
 msgid "One Day."
-msgstr ""
+msgstr "Один день."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2148
@@ -22289,9 +22288,8 @@ msgstr "Неделя"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2150
-#, fuzzy
 msgid "One Week."
-msgstr "Неделя назад"
+msgstr "Одна неделя."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2152
@@ -22300,9 +22298,8 @@ msgstr "2 Недели"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2154
-#, fuzzy
 msgid "Two Weeks."
-msgstr "Две недели"
+msgstr "Две недели."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2156
@@ -22311,9 +22308,8 @@ msgstr "Месяц"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2158
-#, fuzzy
 msgid "One Month."
-msgstr "Месяц назад"
+msgstr "Один месяц."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2160
@@ -22322,9 +22318,8 @@ msgstr "Квартал"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2162
-#, fuzzy
 msgid "One Quarter."
-msgstr "Квартал"
+msgstr "Один квартал."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2164
@@ -22333,9 +22328,8 @@ msgstr "Полугодие"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2166
-#, fuzzy
 msgid "Half Year."
-msgstr "Полугодие"
+msgstr "Полугодие."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2168
@@ -22344,9 +22338,8 @@ msgstr "Год"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2170
-#, fuzzy
 msgid "One Year."
-msgstr "Год назад"
+msgstr "Один год."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2172
@@ -22587,9 +22580,8 @@ msgstr "Выберите метод сортировки счетов."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2266
-#, fuzzy
 msgid "Alphabetical by account code."
-msgstr "В алфавитном порядке по коду счета"
+msgstr "В алфавитном порядке по коду счета."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2268
@@ -22598,15 +22590,13 @@ msgstr "В алфавитном порядке"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2270
-#, fuzzy
 msgid "Alphabetical by account name."
-msgstr "В алфавитном порядке по названию счета"
+msgstr "В алфавитном порядке по названию счета."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2274
-#, fuzzy
 msgid "By amount, largest to smallest."
-msgstr "По сумме, с большей к меньшей"
+msgstr "По сумме, от большей к меньшей."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2276
@@ -22751,9 +22741,8 @@ msgstr "Выберите стиль оформления отчета."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2336
-#, fuzzy
 msgid "stylesheet."
-msgstr "Стиль оформления"
+msgstr "cтиль оформления"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2340
@@ -24534,7 +24523,7 @@ msgstr "Использовать накопление"
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3344
 msgid "Maximum Bars"
-msgstr "Максимум прямоугольников"
+msgstr "Максимальное число столбцов"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3370
@@ -24549,9 +24538,8 @@ msgstr "Показать гистограмму, как гистограмму �
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3380
-#, fuzzy
 msgid "Maximum number of bars in the chart."
-msgstr "Максимальное количество прямоугольников в гистограмме"
+msgstr "Максимальное количество столбцов в гистограмме"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3392
