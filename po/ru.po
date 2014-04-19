@@ -615,7 +615,7 @@ msgid ""
 msgstr ""
 "Вы должны ввести название фирмы. Если клиент физическое лицо (не является организацией), то вы "
 "должны указать одинаковые значения для:\n"
-"Идентефикация - Название фирмы, и\n"
+"Идентификация - Название фирмы, и\n"
 "Назначение платежа - Название."
 
 #: ../src/business/business-gnome/dialog-customer.c:341
@@ -1695,11 +1695,11 @@ msgstr "Инициализировать тестовые данные"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:311
 msgid "Assign as payment..."
-msgstr "Установить как платеж..."
+msgstr "Назначить как платеж..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:312
 msgid "Assign the selected transaction as payment"
-msgstr "Сделать выбранную проводку в качестве платежа"
+msgstr "Назначить выбранную проводку в качестве платежа"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:98
 msgid "Sort _Order"
@@ -1821,7 +1821,7 @@ msgstr "Переместить ввер_х"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:177
 msgid "Move the current entry one row upwards"
-msgstr "Переместить текущую запись на одну строчку вверх"
+msgstr "Переместить текущую запись на одну строку вверх"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:181
 msgid "Move Entry Do_wn"
@@ -1829,7 +1829,7 @@ msgstr "Переместить вни_з"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:182
 msgid "Move the current entry one row downwards"
-msgstr "Переместить текущуб запись на одну строчку вниз"
+msgstr "Переместить текущую запись на одну строку вниз"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:188
 msgid "New _Invoice"
@@ -8851,17 +8851,14 @@ msgid "_Address:"
 msgstr "_Адрес:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:29
-#, fuzzy
 msgid "Splits Memo"
 msgstr "Памятка целевого счета"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:30
-#, fuzzy
 msgid "Splits Amount"
 msgstr "Сумма в единицах целевого счета"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:31
-#, fuzzy
 msgid "Splits Account"
 msgstr "Название целевого счета"
 
@@ -9548,7 +9545,7 @@ msgstr "Новый пункт"
 
 #: ../src/gnome-search/dialog-search.c:1111
 msgid "all criteria are met"
-msgstr "соответсвуют всем критериям"
+msgstr "соответствуют всем критериям"
 
 #: ../src/gnome-search/dialog-search.c:1112
 msgid "any criteria are met"
@@ -9649,11 +9646,11 @@ msgstr "истинно"
 
 #: ../src/gnome-search/search-date.c:195
 msgid "is before"
-msgstr "перед"
+msgstr "до"
 
 #: ../src/gnome-search/search-date.c:196
 msgid "is before or on"
-msgstr "перед или на"
+msgstr "до (включая)"
 
 #: ../src/gnome-search/search-date.c:197
 msgid "is on"
@@ -9661,7 +9658,7 @@ msgstr "на"
 
 #: ../src/gnome-search/search-date.c:198
 msgid "is not on"
-msgstr "не на"
+msgstr "исключая"
 
 #: ../src/gnome-search/search-date.c:199
 msgid "is after"
@@ -9669,7 +9666,7 @@ msgstr "после"
 
 #: ../src/gnome-search/search-date.c:200
 msgid "is on or after"
-msgstr "после или на"
+msgstr "после (включая)"
 
 #: ../src/gnome-search/search-double.c:187
 #: ../src/gnome-search/search-int64.c:189
@@ -10880,11 +10877,11 @@ msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] ""
-"Если Вы не сохранитесь, изменения за последние %d минуту будут потеряны."
+"Если вы не сохранитесь, изменения за последние %d минуту будут потеряны."
 msgstr[1] ""
-"Если Вы не сохранитесь, изменения за последние %d минут будут потеряны."
+"Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
 msgstr[2] ""
-"Если Вы не сохранитесь, изменения за последние %d минут будут потеряны."
+"Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
 
 #: ../src/gnome-utils/gnc-file.c:590
 msgid "Continue _Without Saving"
@@ -15880,7 +15877,7 @@ msgstr ""
 "Не удалось выполнить экспорт. Это может быть связано с недостатком свободного места, "
 "нехваткой прав доступа или невозможностью получить доступ к директории. "
 "Для получения подробностей обратитесь к файлу лога!\n"
-"Возможно вам потребуется включить debug режим.\n"
+"Возможно вам потребуется включить режим отладки.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.c:754
 msgid "File exported successfully!\n"
@@ -15932,7 +15929,7 @@ msgstr "Выберите параметры экспорта"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:13
 msgid "Select the accounts to be exported and date range if required."
-msgstr "Выберите экспортируемые счета и диапазон дат, если требуется."
+msgstr "Выберите счета для экспорта и, при необходимости, диапазон дат."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:22
 msgid "<b>_Dates</b>"
@@ -16171,9 +16168,9 @@ msgstr ""
 "\n"
 "Этот мастер поможет вам импортировать счета из файла.\n"
 "\n"
-"Формат файла фиксирован, поэтому импортируемый файл должен иметь формат "
-"в точности совпадающим с экспортируемым. "
-"Если счет, соответсвтвующий полному имени "
+"Формат файла фиксирован, поэтому импортируемый файл должен иметь формат, "
+"в точности совпадающий с экспортируемым. "
+"Если счет, соответствующий полному имени "
 "импортируемого счета, не найден, он будет добавлен, при условии что для "
 "него указана валюта/тип ценных бумаг. Если счет существует, то у него "
 "будут обновлены следующие четыре поля: код, описание, заметки и цвет"
@@ -16577,7 +16574,7 @@ msgstr ""
 "типа продовольственных магазинов, могут добавлять комиссию сразу в итоговую "
 "сумму, вместо отображения в виде отдельной записи. Например, вы сняли $100, "
 "но с вас списали $101,50. Если вы вручную введете эти $100, то итог не "
-"совпадет. Вы должны задать, какой может максимальная комиссия такого типа в "
+"совпадет. Вы должны задать, какой может быть максимальная комиссия такого типа в "
 "вашем регионе (в единицах вашей локальной валюты), так что проводка будет "
 "распознана, как подходящая."
 
@@ -17202,7 +17199,7 @@ msgid ""
 "Otherwise, the details will be shown below for your review."
 msgstr ""
 "Когда вы нажмете кнопку \"Начать\", GnuCash загрузит ваш файл QIF. "
-"В случае отсутсвия ошибок или "
+"В случае отсутствия ошибок или "
 "предупреждений, будет произведен переход к следующему шагу. В противном случае, будут показаны "
 "подробности для проверки."
 
@@ -17322,7 +17319,7 @@ msgstr ""
 "будет загружен и проанализирован. Вам может потребоваться ответить на "
 "несколько вопросов о счете(ах) в файле.\n"
 "\n"
-"У вас будет возможность загрузить столько файлов, сколько пожелаете, так что не "
+"У вас будет возможность загрузить сколько угодно файлов, так что не "
 "беспокойтесь, если ваши данные располагаются в нескольких файлах.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:12
@@ -17487,7 +17484,7 @@ msgid ""
 "If you change your mind later, you can reorganize the account structure "
 "safely within GnuCash."
 msgstr ""
-"GnuCash использует раздельные приходные и расходные счета также, как и "
+"GnuCash использует раздельные приходные и расходные счета так же, как и "
 "категории, определяющие ваши проводки. Каждая категория вашего QIF файла "
 "будет преобразована в счет GnuCash.\n"
 "\n"
@@ -17921,7 +17918,7 @@ msgid "Don't open imported documents in tabs"
 msgstr "Не открывать импортированные документы"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:18
-msgid "5. Afterwards5. После импорта"
+msgid "5. Afterwards"
 msgstr "5. После импорта"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:169
