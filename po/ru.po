@@ -16169,26 +16169,24 @@ msgstr ""
 "Нажмите \"Вперёд\" для начала или \"Отмена\", чтобы прервать импорт.\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:9
-#, fuzzy
 msgid "Import Account Assistant"
-msgstr "Экспорт счетов"
+msgstr "Мастер импорта счетов"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:10
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Нет параметров для этого отчета."
+msgstr ""
+"\n"
+"Выберите файл для импорта...\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:13
-#, fuzzy
 msgid "Choose File to Import"
 msgstr "Выберите файл для импорта"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:14
-#, fuzzy
 msgid "Number of rows for the Header"
-msgstr "Заголовок номера"
+msgstr "Число строк в заголовке"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:15
 #, fuzzy
