@@ -4158,9 +4158,8 @@ msgstr "Использовать существующий"
 #: ../src/gnome/assistant-hierarchy.c:1129
 #: ../src/gnome/assistant-hierarchy.c:1140
 #: ../src/gnome-utils/dialog-utils.c:586
-#, fuzzy
 msgid "New Book Options"
-msgstr "Настройки книги"
+msgstr "Настройки новой книги"
 
 #. { name, default txn memo, throughEscrowP, specSrcAcctP }
 #: ../src/gnome/assistant-loan.c:111
@@ -6008,38 +6007,32 @@ msgid "Filter %s by..."
 msgstr "Отобрать %s по..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "_Associate File with Transaction"
-msgstr "_Автосозданные новые проводки"
+msgstr "_Привязать файл к проводке"
 
 #: ../src/gnome/gnc-plugin-page-register.c:197
-#, fuzzy
 msgid "_Associate Location with Transaction"
-msgstr "_Автосозданные новые проводки"
+msgstr "_Привязать ссылку к проводке"
 
 #: ../src/gnome/gnc-plugin-page-register.c:198
 msgid "_Open Associated File/Location"
-msgstr ""
+msgstr "Открыть привязанный файл/ссылку"
 
 #: ../src/gnome/gnc-plugin-page-register.c:209
-#, fuzzy
 msgid "Associate a file with the current transaction"
-msgstr "Удалить текущую проводку"
+msgstr "Привязать файл к текущей проводке"
 
 #: ../src/gnome/gnc-plugin-page-register.c:210
-#, fuzzy
 msgid "Associate a location with the current transaction"
-msgstr "Сделать копию текущей проводки"
+msgstr "Привязать ссылку к текущей проводке"
 
 #: ../src/gnome/gnc-plugin-page-register.c:211
-#, fuzzy
 msgid "Open the associated file or location with the current transaction"
-msgstr "Создать запланированную проводку, используя текущую в качестве шаблона"
+msgstr "Открыть файл или ссылку, которые привязаны к текущей проводке"
 
 #: ../src/gnome/gnc-plugin-page-register.c:283
-#, fuzzy
 msgid "Remo_ve Other Splits"
-msgstr "Удалить части"
+msgstr "Удалить все другие части"
 
 #: ../src/gnome/gnc-plugin-page-register.c:328
 #: ../src/gnome-utils/gnc-main-window.c:329
@@ -6048,21 +6041,21 @@ msgstr "Упорядочить по..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:488
 msgid "Associate File"
-msgstr ""
+msgstr "Привязать файл"
 
 #: ../src/gnome/gnc-plugin-page-register.c:489
 msgid "Associate Location"
-msgstr ""
+msgstr "Привязать ссылку"
 
 #: ../src/gnome/gnc-plugin-page-register.c:490
 msgid "Open File/Location"
-msgstr ""
+msgstr "Открыть файл/ссылку"
 
 #: ../src/gnome/gnc-plugin-page-register.c:684
 msgid ""
 "You have tried to open an account in the old register while it is open in "
 "the new register."
-msgstr ""
+msgstr "Вы попытались открыть счет в старом журнале, в то время как он открыт в новом журнале"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gnc-plugin-page-register.c:2564
@@ -6124,14 +6117,12 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Удалить выбранную запланированную проводку"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:382
-#, fuzzy, c-format
 msgid "Transactions"
-msgstr "Проводка"
+msgstr "Проводки"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:444
-#, fuzzy, c-format
 msgid "Upcoming Transactions"
-msgstr "Аннулировать проводки"
+msgstr "Предстоящие проводки"
 
 #. FIXME: Does this always refer to only one transaction? Or could
 #. multiple SXs be deleted as well? Ideally, the number of
@@ -6263,7 +6254,7 @@ msgstr ""
 #: ../src/gnome/gnc-split-reg.c:959
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:841
 msgid "Remove the splits from this transaction?"
-msgstr "Удалить все части их этой проводки?"
+msgstr "Удалить все части из этой проводки?"
 
 #: ../src/gnome/gnc-split-reg.c:960
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:842
@@ -7767,7 +7758,7 @@ msgstr ""
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:4
 #, fuzzy
 msgid "Setup Account Period"
-msgstr "Настройка расчетных периодов"
+msgstr "Настройка расчетного периода"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:5
 #, fuzzy
@@ -7818,7 +7809,6 @@ msgid "Summary Page"
 msgstr "Строка _итогов"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:1
-#, fuzzy
 msgid ""
 "This assistant will help you create a set of GnuCash accounts for your "
 "assets (such as investments, checking or savings accounts), liabilities "
@@ -7827,7 +7817,7 @@ msgid ""
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
 "Этот мастер поможет создать набор счетов GnuCash для ваших активов "
-"(например, инвестиции, чеки и сберегательные книжки), задолженностей "
+"(например, инвестиции, чеки и сберегательные счета), задолженностей "
 "(например, займы) и различных видов доходов и расходов денежных средств, "
 "имеющихся у вас.\n"
 "\n"
@@ -7838,18 +7828,18 @@ msgid "New Account Hierarchy Setup"
 msgstr "Создание новой иерархии счетов"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:5
-#, fuzzy
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
-msgstr "Пожалуйста, выберите валюту, для использования в новых счетах."
+msgstr ""
+"\n"
+"Пожалуйста, выберите валюту, для использования в новых счетах."
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:7
 msgid "Choose Currency"
 msgstr "Выберите валюту"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:8
-#, fuzzy
 msgid ""
 "\n"
 "Select categories that correspond to the ways that you will use GnuCash. "
@@ -7857,10 +7847,11 @@ msgid ""
 "the categories that are relevant to you. You can always create additional "
 "accounts by hand later."
 msgstr ""
+"\n"
 "Выберите те виды деятельности, для учета которых вы собираетесь использовать "
-"GnuCash. Каждая категория, которую вы выберете, вызовет создание нескольких "
-"счетов. Выберите только те категории, которые относятся к делу. Вы в любой "
-"момент сможете потом создать дополнительные счета вручную."
+"GnuCash. Каждая категория, которую вы выберите, создаст несколько "
+"счетов. Выберите только те категории, которые вам необходимы. В дальнейшем "
+"вы в любой момент сможете создать дополнительные счета вручную."
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:10
 msgid "<b>Categories</b>"
@@ -7886,7 +7877,6 @@ msgid "Choose accounts to create"
 msgstr "Выберите счета для создания"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:15
-#, fuzzy
 msgid ""
 "\n"
 "If you would like to change an account's name, click on the row containing "
@@ -7904,18 +7894,19 @@ msgid ""
 "Note: all accounts except Equity and placeholder accounts may have an "
 "opening balance.\n"
 msgstr ""
+"\n"
 "Если желаете переименовать счёт, то щёлкните на строке счёта, а затем на его "
 "имени и измените его.\n"
 "\n"
 "Ряд счетов имеют отметку \"Виртуальный\". Виртуальные счета используются для "
 "создания иерархии счетов и, обычно, не содержат проводок и начального "
-"баланса. Если желаете, чтобы счёт был виртуальным, просто включите "
-"соответствующее свойство.\n"
+"сальдо. Если хотите, чтобы счёт был виртуальным, просто выставите "
+"для него флажок.\n"
 "\n"
-"Если желаете, чтобы счёт имел начальный баланс, щёлкните на строке счёта, а "
-"затем на поле начального баланса. Теперь можно ввести требуемое значение.\n"
+"Если желаете, чтобы счёт имел начальное сальдо, щёлкните на строке счёта, а "
+"затем на поле начального сальдо. Теперь можно ввести требуемое значение.\n"
 "\n"
-"Все счета, кроме Активов и виртуальных, могут иметь начальный баланс.\n"
+"Все счета, кроме Активов и виртуальных, могут иметь начальное сальдо.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:24
 msgid "Setup selected accounts"
@@ -18661,11 +18652,11 @@ msgstr "Использовать торговые счета"
 
 #: ../src/libqof/qof/qofbookslots.h:67
 msgid "Day Threshold for Read-Only Transactions (red line)"
-msgstr ""
+msgstr "Граница начала неизменяемых проводок в днях (красная линия)"
 
 #: ../src/libqof/qof/qofbookslots.h:68
 msgid "Use Split Action Field for Number"
-msgstr ""
+msgstr "Использовать поле действия для номера проводки"
 
 #: ../src/libqof/qof/qofbookslots.h:70
 msgid "Budgeting"
@@ -19026,7 +19017,10 @@ msgid ""
 "cannot be edited anymore. This threshold is marked by a red line in the "
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
-msgstr ""
+msgstr "Укажите число дней после истечения которых проводки будут доступны "
+"только для просмотра и не смогут быть отредактированы. Эта граница помечена "
+"красной линией в окне журнала проводок. Если значение установлено в 0, "
+"все транзакции можно изменять."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:118
