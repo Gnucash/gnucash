@@ -18282,12 +18282,11 @@ msgstr "Изменить параметры отчета"
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
 #: ../intl-scm/guile-strings.c:2036
 msgid "Saved Report Configurations"
-msgstr "_Сохраненные преднастроенные отчеты"
+msgstr "_Сохраненные настройки отчетов"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
-#, fuzzy
 msgid "Exit the saved report configurations dialog"
-msgstr "Выйти из диалога настройки отчета"
+msgstr "Закрыть диалог сохраненных настрое отчетов"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:3
 msgid ""
@@ -18441,7 +18440,7 @@ msgstr "Сохранить настройки отчета"
 msgid ""
 "Update the current report's saved configuration. The report will be saved in "
 "the file ~/.gnucash/saved-reports-2.4. "
-msgstr "Обновить настройки текущего сохраненного отчета. Отчет будет сохранен в "
+msgstr "Обновить сохраненные настройки текущего отчета. Отчет будет сохранен в "
 "файл ~/.gnucash/saved-reports-2.4."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1037
@@ -18453,7 +18452,7 @@ msgid ""
 "Add the current report's configuration to the `Saved Report Configurations' "
 "menu. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgstr ""
-"Добавить текущий отчет в меню \"Сохраненные преднастроенные отчеты\". "
+"Добавить текущий отчет в меню \"Сохраненные настройки отчетов\". "
 "Отчет будет сохранен в файл \"~/.gnucash/saved-reports-2.4\""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1043
