@@ -11406,18 +11406,18 @@ msgstr "Конец предыдущего учётного периода"
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
 #: ../src/gnome-utils/gnc-splash.c:95
-#, fuzzy, c-format
+#,  c-format
 msgid "Version: GnuCash-%s %s (rev %s built %s)"
-msgstr "Версия: Gnucash-%s svn (r%s сборка %s)"
+msgstr "Версия: Gnucash-%s %s (ревизия %s, дата сборки %s)"
 
 #. Dist Tarball
 #. Translators: 1st %s is the GnuCash version (eg 2.4.11);
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
 #: ../src/gnome-utils/gnc-splash.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Version: GnuCash-%s (rev %s built %s)"
-msgstr "Версия: Gnucash-%s (r%s сборка %s)"
+msgstr "Версия: Gnucash-%s (ревизия %s, дата сборки %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:120
 msgid "Loading..."
@@ -15995,62 +15995,51 @@ msgstr ""
 #. Header string
 #: ../src/import-export/csv-exp/csv-tree-export.c:112
 msgid "type"
-msgstr ""
+msgstr "тип"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:112
-#, fuzzy
 msgid "full_name"
-msgstr "Полное название:"
+msgstr "полное_название"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:113
-#, fuzzy
 msgid "name"
-msgstr "Имя пользователя"
+msgstr "название"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:113
-#, fuzzy
 msgid "code"
-msgstr "Юникод"
+msgstr "код"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:114
-#, fuzzy
 msgid "description"
-msgstr "Описание"
+msgstr "описание"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:114
-#, fuzzy
 msgid "color"
-msgstr "Цвета"
+msgstr "цвет"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:114
-#, fuzzy
 msgid "notes"
-msgstr "Заметки"
+msgstr "заметки"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:115
-#, fuzzy
 msgid "commoditym"
-msgstr "Предмет"
+msgstr "код_товара"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:115
-#, fuzzy
 msgid "commodityn"
-msgstr "Предмет"
+msgstr "тип_товара"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:116
-#, fuzzy
 msgid "hidden"
-msgstr "Скрытый"
+msgstr "скрытый"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:116
-#, fuzzy
 msgid "tax"
-msgstr "Налоги"
+msgstr "учитывается_в_налогах"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:116
-#, fuzzy
 msgid "place_holder"
-msgstr "Виртуальный"
+msgstr "виртуальный"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
 msgid "Export Account T_ree to CSV..."
@@ -16084,6 +16073,10 @@ msgid ""
 "You can also go back and verify your selections by clicking on 'Back' or "
 "'Cancel' to Abort Import.\n"
 msgstr ""
+"Нажмите кнопку \"Применить\", чтобы импортировать счета из файла '%s'.\n"
+"\n"
+"Вы также можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
+"или отменить импорт, нажав на кнопку \"Отмена\".\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:76
 #, c-format
@@ -16098,6 +16091,15 @@ msgid ""
 "converted to GnuCash transactions. If this is an existing file, the dialog "
 "will not be shown.\n"
 msgstr ""
+"Нажмите кнопку \"Применить\", чтобы импортировать счета из файла '%s'.\n"
+"\n"
+"Вы также можете вернуться назад и проверить параметры, нажав на кнопку \"Назад\", "
+"или отменить импорт, нажав на кнопку \"Отмена\".\n"
+"\n"
+"Если это первый импорт счетов в новый файл, сначала вы увидите диалог "
+"настроек книги, так как эти настройки могут повлиять на то, как импортируемые данные "
+"преобразуется в проводки GnuCash. Если импорт производится в существующий файл, диалог "
+"настроек показан не будет.\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:150
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:219
@@ -16130,6 +16132,11 @@ msgid ""
 "\n"
 "See below for errors..."
 msgstr ""
+"Импорт завершен, но в процессе возникали ошибки!\n"
+"\n"
+"Число счетов добавлено: %u. Число счетов обновлено: %u.\n"
+"\n"
+"Информацию по возникшим ошибкам смотрите ниже..."
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:455
 #, c-format
@@ -16138,6 +16145,9 @@ msgid ""
 "\n"
 "The number of Accounts added was %u and updated was %u.\n"
 msgstr ""
+"Импорт завершен успешно!\n"
+"\n"
+"Число счетов добавлено: %u. Число счетов обновлено: %u.\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:1
 msgid "CSV Import Assistant"
@@ -16189,54 +16199,45 @@ msgid "Number of rows for the Header"
 msgstr "Число строк в заголовке"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:15
-#, fuzzy
 msgid "Semicolon Separated"
-msgstr "Разделённые точкой с запятой"
+msgstr "Точка с запятой"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:16
-#, fuzzy
 msgid "Semicolon Separated with Quotes"
-msgstr "Разделённые точкой с запятой с кавычками"
+msgstr "Точка с запятой, значения в кавычках"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:17
-#, fuzzy
 msgid "Comma Separated"
-msgstr "Разделённые запятой"
+msgstr "Запятая"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:18
-#, fuzzy
 msgid "Comma Separated with Quotes"
-msgstr "Разделённые запятой с кавычками"
+msgstr "Запятая, значения в кавычках"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:19
-#, fuzzy
 msgid "Custom regular Expression"
 msgstr "Особое регулярное выражение"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:20
-#, fuzzy
 msgid "Select Separator Type"
-msgstr "2. Выберите тип импорта"
+msgstr "Выберите тип разделителя"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:21
-#, fuzzy
 msgid "Preview"
-msgstr "4. Предпросмотр"
+msgstr "Предпросмотр"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:22
 msgid "Import Account Preview, first 10 rows only"
-msgstr ""
+msgstr "Предпросмотр импорта счетов, первые 10 строк"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:25
-#, fuzzy
 msgid "Import Accounts Now"
-msgstr "Экспорт счетов"
+msgstr "Все готово к импорту"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:27
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:47
-#, fuzzy
 msgid "Import Summary"
-msgstr "Итого по счету"
+msgstr "Результаты импорта"
 
 #. If it fails, change back to the old encoding.
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:502
@@ -16264,19 +16265,17 @@ msgid "_Narrow this column"
 msgstr "Су_зить этот стобец"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1336
-#, fuzzy
 msgid ""
 "The rows displayed below had errors which are in the last column. You can "
 "attempt to correct them by changing the configuration."
 msgstr ""
-"Строки указанные ниже содержат ошибки. Вы можете попытаться исправить их "
-"путем изменения конфигурации."
+"Строки указанные ниже содержат ошибки, текст которых находится в последней колонке. "
+"Вы можете попытаться исправить их путем изменения конфигурации."
 
 #. Set check button label
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1345
-#, fuzzy
 msgid "Skip Errors"
-msgstr "Ошибки"
+msgstr "Пропустить ошибки"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1377
 #, c-format
@@ -16290,22 +16289,22 @@ msgstr ""
 msgid ""
 "To Change the account, double click on the required account, click Forward "
 "to proceed."
-msgstr ""
+msgstr "Для изменения счетов, дважды кликните по нужному счету. Нажмите "
+"\"Вперед\", чтобы продолжить"
 
 #. A list of the transactions we create
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1471
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr ""
+msgstr "Дважды кликните на строке для изменения, затем нажмите \"Применить\" для импорта"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1519
-#, fuzzy, c-format
+#, c-format
 msgid "The transactions were imported from the file '%s'."
-msgstr "Произошла ошибка обработки файла \"%s\"."
+msgstr "Проводки были импортированы из файла '%s'."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:1
-#, fuzzy
 msgid "CSV Transaction Import"
-msgstr "Отчет о проводке"
+msgstr "Импорт проводок из CSV"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:2
 msgid ""
@@ -16431,17 +16430,17 @@ msgstr "Вставить проводку"
 #: ../src/import-export/csv-imp/csv-account-import.c:239
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
-msgstr ""
+msgstr "Строка %u, путь к счету %s не найден, добавлен на верхний уровень\n"
 
 #: ../src/import-export/csv-imp/csv-account-import.c:289
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
-msgstr ""
+msgstr "Строка %u, товар %s / %s не найден\n"
 
 #: ../src/import-export/csv-imp/csv-account-import.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Row %u, account %s not in %s\n"
-msgstr "Показать примечание к счету"
+msgstr "Строка %u, счет %s не соотвествует полному названию %s\n"
 
 #: ../src/import-export/csv-imp/gnc-csv-model.c:30
 msgid "y-m-d"
