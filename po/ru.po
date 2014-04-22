@@ -13906,22 +13906,20 @@ msgstr "Окна"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:195
 #, fuzzy
 msgid "US"
-msgstr "_США:"
+msgstr "США"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:196
-#, fuzzy
 msgid "07/31/2013"
-msgstr "07/31/2005"
+msgstr "07/31/2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:197
 #, fuzzy
 msgid "UK"
-msgstr "А_нглийский:"
+msgstr "Английский"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:198
-#, fuzzy
 msgid "31/07/2013"
-msgstr "31/07/2005"
+msgstr "31/07/2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:199
 #, fuzzy
@@ -13929,25 +13927,22 @@ msgid "Europe"
 msgstr "Европейский"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
-#, fuzzy
 msgid "31.07.2013"
-msgstr "31.07.2005"
+msgstr "31.07.2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
-#, fuzzy
 msgid "ISO"
-msgstr "_ISO:"
+msgstr "ISO"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:202
-#, fuzzy
 msgid "2013-07-31"
-msgstr "2005-07-31"
+msgstr "2013-07-31"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
 #: ../src/import-export/csv-imp/gnc-csv-model.c:38
 msgid "Locale"
-msgstr ""
+msgstr "Региональные настройки"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:204
 msgid "(dummy)"
@@ -15949,6 +15944,8 @@ msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
 msgstr ""
+"Для создания экспортирования данных в файл, нажмите \"Применить\".\n"
+"Нажмите \"Отмена\", чтобы отменить экспорт."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:40
 msgid "Export Now..."
@@ -15964,33 +15961,31 @@ msgstr "Результаты"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:346
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:350
 msgid "To With Sym"
-msgstr ""
+msgstr "Получено (с симв. валюты)"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:350
 msgid "From With Sym"
-msgstr ""
+msgstr "Списано (с симв. валюты)"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:351
 msgid "To Num."
-msgstr ""
+msgstr "Получено (число)"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:351
-#, fuzzy
 msgid "From Num."
-msgstr "С настоящего времени"
+msgstr "Списано (число)"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:352
-#, fuzzy
 msgid "To Rate/Price"
-msgstr "Итоговая цена"
+msgstr "Коэффицент списания"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:352
 msgid "From Rate/Price"
-msgstr ""
+msgstr "Коэффицент зачисления"
 
 #. Header string
 #: ../src/import-export/csv-exp/csv-tree-export.c:112
@@ -16283,6 +16278,9 @@ msgid ""
 "There are problems with the import settings!\n"
 "The date format could be wrong or there are not enough columns set..."
 msgstr ""
+"Настройки импорта заданы некорректно!\n"
+"Это может быть связано с неверным форматом даны или с тем что не "
+"все необходимые колонки заданы"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1388
 #, c-format
@@ -16322,31 +16320,44 @@ msgid ""
 "There is an option for specifying the start and end row which can be used if "
 "you have some header text or multiple accounts in the same file."
 msgstr ""
+"Этот мастер поможем вам импортировать файл с разделителями, содержащий список проводок.\n"
+"\n"
+"Все импортируемые проводки будут привязаны к одному счету для каждой процедуры импорта "
+" и если вы укажите колонку со счетами, счет, находящийся в первой строке, "
+"будет использован для всех остальных строк.\n"
+"\n"
+"В качестве разделителя колонок вы можете указать различные значения, включая задание "
+"фиксированной ширины колонок. Если вы выбрали режим с фиксированной шириной, "
+"дважды кликните по панели над отображаемыми строками для задания ширины.\n"
+"\n"
+"В настройках импорта также доступо задание начальной и конечной строки для обработки. "
+"Эта возможность будет полезна, если в файле есть строки, содержащие заголовки, или файл "
+"содержит проводки по нескольким счетам."
+
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:9
-#, fuzzy
 msgid "Transaction Import Assistant"
-msgstr "Мастер импорта файлов данных GnuCash"
+msgstr "Мастер импорта проводок"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:10
 msgid ""
 "\n"
 "Select location and file name for the Import, then click 'OK'...\n"
 msgstr ""
+"\n"
+"Выберите файл для импорта и нажмите \"ОК\"...\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:13
-#, fuzzy
 msgid "Select File for Import"
-msgstr "Выберите файл QIF для загрузки"
+msgstr "Выберите файл для импорта"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:14
-#, fuzzy
 msgid "Start import on row "
-msgstr "Начало отчетного периода"
+msgstr "Начать импорт со строки "
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:15
 msgid " and stop on row "
-msgstr ""
+msgstr " и закончить на строке "
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:16
 msgid "Data type: "
@@ -16361,9 +16372,8 @@ msgid "Fixed-Width"
 msgstr "Фиксированной ширины"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:20
-#, fuzzy
 msgid "Currency format"
-msgstr "Информация о валюте"
+msgstr "Денежный формат"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:21
 msgid "Encoding: "
@@ -16387,16 +16397,15 @@ msgstr "Выберите ниже тип каждого столбца."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:31
 msgid "Step over Account Page if Setup"
-msgstr ""
+msgstr "Пропустить настройку счета, если он определен"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:32
 msgid "Preview Settings"
-msgstr ""
+msgstr "Предварительный просмотр настроек"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:33
-#, fuzzy
 msgid "Error text."
-msgstr "Ошибка"
+msgstr "Текст ошибки."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
 msgid ""
@@ -16416,16 +16425,28 @@ msgid ""
 "\n"
 "More information can be displayed by using the help button."
 msgstr ""
+"На следующей странице вы сможете сопоставить каждую проводку с категорией.\n"
+"\n"
+"Если вы импортируете данные в первый раз, вам потребуется сопоставить все "
+"строки. При последующих импортах, мастер попытается провести сопоставление "
+"проводок, опираясь на информацию о предыдущих импортах.\n"
+"\n"
+"Если это первый импорт в новый файл, сначала вы увидите диалог "
+"настроек книги, так как эти настройки могут повлиять на то, как импортируемые данные "
+"преобразуется в проводки GnuCash. Если импорт производится в существующий файл, диалог "
+"настроек показан не будет.\n"
+"\n"
+"Точность правильного сопоставления отображается в виде цвета панели.\n"
+"\n"
+"Дополнительную информацию можно получить, нажав кнопку \"Помощь\""
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:44
-#, fuzzy
 msgid "Transaction Information"
-msgstr "<b>Информация о новой проводке</b>"
+msgstr "Информация о проводке"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
-#, fuzzy
 msgid "Match Transactions"
-msgstr "Вставить проводку"
+msgstr "Сопоставить проводки"
 
 #: ../src/import-export/csv-imp/csv-account-import.c:239
 #, c-format
