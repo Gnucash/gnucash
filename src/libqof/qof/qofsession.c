@@ -626,7 +626,6 @@ qof_session_save (QofSession *session,
                   QofPercentageFunc percentage_func)
 {
     QofBackend *be;
-    gboolean partial, change_backend;
     QofBackendProvider *prov;
     GSList *p;
     QofBook *book;
@@ -639,100 +638,9 @@ qof_session_save (QofSession *session,
         goto leave;
     ENTER ("sess=%p book_id=%s",
            session, session->book_id ? session->book_id : "(null)");
-    /* Partial book handling. */
     book = qof_session_get_book(session);
-    partial = (gboolean)GPOINTER_TO_INT(qof_book_get_data(book, PARTIAL_QOFBOOK));
-    change_backend = FALSE;
     msg = g_strdup_printf(" ");
     book_id = g_strdup(session->book_id);
-    if (partial == TRUE)
-    {
-        if (session->backend && session->backend->provider)
-        {
-            prov = session->backend->provider;
-            if (TRUE == prov->partial_book_supported)
-            {
-                /* if current backend supports partial, leave alone. */
-                change_backend = FALSE;
-            }
-            else
-            {
-                change_backend = TRUE;
-            }
-        }
-        /* If provider is undefined, assume partial not supported. */
-        else
-        {
-            change_backend = TRUE;
-        }
-    }
-    if (change_backend == TRUE)
-    {
-        qof_session_destroy_backend(session);
-        if (!qof_providers_initialized)
-        {
-            qof_providers_initialized = TRUE;
-        }
-        p = provider_list;
-        while (p != NULL)
-        {
-            prov = p->data;
-            if (TRUE == prov->partial_book_supported)
-            {
-                /** \todo check the access_method too, not in scope here, yet. */
-                /*	if((TRUE == prov->partial_book_supported) &&
-                (0 == g_ascii_strcasecmp (access_method, prov->access_method)))
-                {*/
-                if (NULL == prov->backend_new) continue;
-                /* Use the providers creation callback */
-                session->backend = (*(prov->backend_new))();
-                session->backend->provider = prov;
-                if (session->backend->session_begin)
-                {
-                    /* Call begin - backend has been changed,
-                       so make sure a file can be written,
-                       use ignore_lock and force create */
-                    g_free(session->book_id);
-                    session->book_id = NULL;
-                    (session->backend->session_begin)(session->backend, session,
-                                                      book_id, TRUE, TRUE, TRUE);
-                    PINFO("Done running session_begin on changed backend");
-                    err = qof_backend_get_error(session->backend);
-                    msg = qof_backend_get_message(session->backend);
-                    if (err != ERR_BACKEND_NO_ERR)
-                    {
-                        g_free(session->book_id);
-                        session->book_id = NULL;
-                        qof_session_push_error (session, err, msg);
-                        LEAVE("changed backend error %d", err);
-                        goto leave;
-                    }
-                    if (msg != NULL)
-                    {
-                        PWARN("%s", msg);
-                        g_free(msg);
-                        msg = NULL;
-                    }
-                }
-                /* Tell the book about the backend that they'll be using. */
-                qof_book_set_backend (session->book, session->backend);
-                p = NULL;
-            }
-            if (p)
-            {
-                p = p->next;
-            }
-        }
-        if (!session->backend)
-        {
-            if (ERR_BACKEND_NO_ERR != qof_session_get_error(session))
-            {
-                msg = g_strdup_printf("failed to load backend");
-                qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
-            }
-            goto leave;
-        }
-    }
     /* If there is a backend, and the backend is reachable
     * (i.e. we can communicate with it), then synchronize with
     * the backend.  If we cannot contact the backend (e.g.

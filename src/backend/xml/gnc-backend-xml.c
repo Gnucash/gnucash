@@ -1302,7 +1302,6 @@ gnc_module_init_backend_xml(void)
     prov = g_new0 (QofBackendProvider, 1);
     prov->provider_name = "GnuCash File Backend Version 2";
     prov->access_method = "file";
-    prov->partial_book_supported = FALSE;
     prov->backend_new = gnc_backend_new;
     prov->provider_free = gnc_provider_free;
     prov->check_data_type = gnc_determine_file_type;
@@ -1311,7 +1310,6 @@ gnc_module_init_backend_xml(void)
     prov = g_new0 (QofBackendProvider, 1);
     prov->provider_name = "GnuCash File Backend Version 2";
     prov->access_method = "xml";
-    prov->partial_book_supported = FALSE;
     prov->backend_new = gnc_backend_new;
     prov->provider_free = gnc_provider_free;
     prov->check_data_type = gnc_determine_file_type;

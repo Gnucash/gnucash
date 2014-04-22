@@ -33,7 +33,6 @@ libgnc_qof_la_SOURCES =  \
    qofobject.c       \
    qofquery.c        \
    qofquerycore.c    \
-   qofreference.c    \
    qofsession.c      \
    qof-string-cache.c  \
    qofutil.c
@@ -64,7 +63,6 @@ qofinclude_HEADERS = \
    qofobject.h       \
    qofquery.h        \
    qofquerycore.h    \
-   qofreference.h    \
    qofsession.h      \
    qof-string-cache.h  \
    qofutil.h         \

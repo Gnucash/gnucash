@@ -247,14 +247,6 @@ struct QofBackendProvider_s
     /*@ observer @*/
     const char * access_method;
 
-    /** \brief Partial QofBook handler
-
-      TRUE if the backend handles external references
-      to entities outside this book and can save a QofBook that
-      does not contain any specific QOF objects.
-      */
-    gboolean partial_book_supported;
-
     /** Return a new, fully initialized backend.
      *
      * If the backend supports configuration, all configuration options
