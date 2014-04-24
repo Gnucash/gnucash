@@ -115,6 +115,7 @@ entry_dom_tree_create (GncEntry *entry)
     GncTaxTable *taxtable;
     GncOrder *order;
     GncInvoice *invoice;
+    kvp_frame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_entry_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST entry_version_string);
@@ -210,6 +211,16 @@ entry_dom_tree_create (GncEntry *entry)
     if (order)
         xmlAddChild (ret, guid_to_dom_tree (entry_order_string,
                                             qof_instance_get_guid(QOF_INSTANCE (order))));
+
+    kf = qof_instance_get_slots (QOF_INSTANCE(entry));
+    if (kf)
+    {
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(entry_slots_string, kf);
+        if (kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
+    }
 
     return ret;
 }
@@ -661,7 +672,10 @@ entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
 static gboolean
 entry_slots_handler (xmlNodePtr node, gpointer entry_pdata)
 {
-    return TRUE;
+    struct entry_pdata *pdata = entry_pdata;
+
+    return dom_tree_to_kvp_frame_given
+           (node, xaccAccountGetSlots (pdata->entry));
 }
 
 static struct dom_tree_handler entry_handlers_v2[] =

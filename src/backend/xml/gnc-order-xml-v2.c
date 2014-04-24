@@ -76,6 +76,7 @@ order_dom_tree_create (GncOrder *order)
 {
     xmlNodePtr ret;
     Timespec ts;
+    kvp_frame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_order_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST order_version_string);
@@ -101,6 +102,16 @@ order_dom_tree_create (GncOrder *order)
 
     xmlAddChild(ret, int_to_dom_tree(order_active_string,
                                      gncOrderGetActive (order)));
+
+    kf = qof_instance_get_slots (QOF_INSTANCE(order));
+    if (kf)
+    {
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(order_slots_string, kf);
+        if (kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
+    }
 
     return ret;
 }
@@ -234,7 +245,10 @@ order_active_handler (xmlNodePtr node, gpointer order_pdata)
 static gboolean
 order_slots_handler (xmlNodePtr node, gpointer order_pdata)
 {
-    return TRUE;
+    struct order_pdata *pdata = order_pdata;
+
+    return dom_tree_to_kvp_frame_given
+           (node, xaccAccountGetSlots (pdata->order));
 }
 
 static struct dom_tree_handler order_handlers_v2[] =
