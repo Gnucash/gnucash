@@ -938,8 +938,6 @@ gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
     gnc_commodity_set_quote_tz (dest, src_priv->quote_tz);
     kvp_frame_delete (dest->inst.kvp_data);
     dest->inst.kvp_data = kvp_frame_copy (src->inst.kvp_data);
-    kvp_frame_delete (dest->inst.kvp_data);
-    dest->inst.kvp_data = kvp_frame_copy (src->inst.kvp_data);
 }
 
 gnc_commodity *
