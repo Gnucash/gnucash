@@ -1,7 +1,7 @@
 if GNUCASH_ENABLE_GUI
-SUBDIRS = libc guile-www stf
+SUBDIRS = libc stf
 else
-SUBDIRS = libc guile-www
+SUBDIRS = libc
 endif
 
 EXTRA_DIST = README

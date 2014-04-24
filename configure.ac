@@ -83,7 +83,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar bg ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+ALL_LINGUAS="ar bg ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko kok kok@latin lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -436,7 +436,6 @@ AC_CHECK_FUNCS(gethostid link)
 
 # - check minimum version
 # - determine GUILE_CFLAGS and GUILE_LIBS
-# - test if guile module (www main) is present on the system
 # Note: systems that install both guile 1.8 and guile 2 use different
 #       names for the 1.8 and 2.0 autoconf macros to avoid conflicts.
 #       So the tests below will check for known macro names in the order
@@ -447,17 +446,14 @@ gnc_have_guile_www=no
 PKG_CHECK_MODULES(GUILE,
                   [guile-1.8 >= 1.8.5],
                   [m4_ifdef([GUILE1_8_PROGS],
-                            [ GUILE1_8_PROGS
-                              GUILE1_8_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ],
-                            [ GUILE_PROGS
-                              GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ])
+                            [ GUILE1_8_PROGS ],
+                            [ GUILE_PROGS ])
                   ], [
   PKG_CHECK_MODULES(GUILE,
                   [guile-2.0 >= 2.0.0],
                   [m4_ifdef([GUILE_PROGS],
                             [ GUILE_PROGS
-                              gnc_have_guile_2=yes
-                              GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ],
+                              gnc_have_guile_2=yes ],
                             [ AC_MSG_ERROR([ guile 2 is found on your system, but appears
     to export different autoconf macros than what we expected. Please report this as a bug
     in GnuCash, so we can fix this for your platform.]) ])
@@ -470,7 +466,6 @@ PKG_CHECK_MODULES(GUILE,
 ])
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
-AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 
 
 ### --------------------------------------------------------------------------
@@ -1378,7 +1373,6 @@ AC_CONFIG_FILES(
   doc/examples/Makefile
   intl-scm/Makefile
   lib/Makefile
-  lib/guile-www/Makefile
   lib/libc/Makefile
   lib/stf/Makefile
   packaging/Makefile

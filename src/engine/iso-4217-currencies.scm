@@ -139,7 +139,7 @@
 ( "Loti" "loti" "sente" "ISO4217" "LSL" "426" 100 100 "M" )
 ( "Lithuanian Litas" "litas" "centas" "ISO4217" "LTL" "440" 100 100 "Lt" )
 ( "Luxembourg Franc" "frang" "centime" "ISO4217" "LUF" "442" 100 100  "Flux" ) ;; 2002-01-01 "EUR" 40.3399
-( "Latvian Lats" "lats" "santīms" "ISO4217" "LVL" "428" 100 100 "Ls" )
+( "Latvian Lats" "lats" "santīms" "ISO4217" "LVL" "428" 100 100 "Ls" ) ;; Valid from 2. may 2009. till 31. december 2013, now "EUR" 0.702804
 ( "Libyan Dinar" "dinar" "dirham" "ISO4217" "LYD" "434" 1000 1000 "ل.د" )
 ( "Moroccan Dirham" "dirham" "centime"  "ISO4217" "MAD" "504" 100 100 "د.م" )
 ( "Moldovan Leu" "leu" "ban" "ISO4217" "MDL" "498" 100 100 "" )

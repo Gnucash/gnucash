@@ -31,6 +31,7 @@
 #include <glib.h>
 #include <string.h>
 
+#include "gnc-features.h"
 #include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncJobP.h"
@@ -366,6 +367,10 @@ static void gncJobOnDone (QofInstance *qof) { }
 
 void gncJobCommitEdit (GncJob *job)
 {
+    /* GnuCash 2.6.3 and earlier didn't handle job kvp's... */
+    if (!kvp_frame_is_empty (job->inst.kvp_data))
+        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (job)), GNC_FEATURE_KVP_EXTRA_DATA);
+
     if (!qof_commit_edit (QOF_INSTANCE(job))) return;
     qof_commit_edit_part2 (&job->inst, gncJobOnError,
                            gncJobOnDone, job_free);

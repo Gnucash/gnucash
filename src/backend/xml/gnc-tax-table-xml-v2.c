@@ -104,6 +104,7 @@ taxtable_dom_tree_create (GncTaxTable *table)
 {
     xmlNodePtr ret, entries;
     GList *list;
+    kvp_frame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_taxtable_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST taxtable_version_string);
@@ -128,6 +129,16 @@ taxtable_dom_tree_create (GncTaxTable *table)
     {
         GncTaxTableEntry *entry = list->data;
         xmlAddChild(entries, ttentry_dom_tree_create (entry));
+    }
+
+    kf = qof_instance_get_slots (QOF_INSTANCE(table));
+    if (kf)
+    {
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(taxtable_slots_string, kf);
+        if (kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
     }
 
     return ret;
@@ -368,7 +379,10 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
 static gboolean
 taxtable_slots_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    return TRUE;
+    struct taxtable_pdata *pdata = taxtable_pdata;
+
+    return dom_tree_to_kvp_frame_given
+           (node, xaccAccountGetSlots (pdata->table));
 }
 
 static struct dom_tree_handler taxtable_handlers_v2[] =
