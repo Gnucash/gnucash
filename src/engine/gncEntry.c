@@ -33,6 +33,7 @@
 
 #include "gncEntry.h"
 #include "gncEntryP.h"
+#include "gnc-features.h"
 #include "gncInvoice.h"
 #include "gncOrder.h"
 
@@ -1505,6 +1506,10 @@ static void entry_free (QofInstance *inst)
 
 void gncEntryCommitEdit (GncEntry *entry)
 {
+    /* GnuCash 2.6.3 and earlier didn't handle entry kvp's... */
+    if (!kvp_frame_is_empty (entry->inst.kvp_data))
+        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (entry)), GNC_FEATURE_KVP_EXTRA_DATA);
+
     if (!qof_commit_edit (QOF_INSTANCE(entry))) return;
     qof_commit_edit_part2 (&entry->inst, gncEntryOnError,
                            gncEntryOnDone, entry_free);

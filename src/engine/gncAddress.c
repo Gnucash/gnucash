@@ -32,6 +32,7 @@
 #include "gncAddress.h"
 #include "gncAddressP.h"
 #include "gncCustomerP.h"
+#include "gnc-features.h"
 
 struct _gncAddress
 {
@@ -492,6 +493,10 @@ static void address_free (QofInstance *inst)
 
 void gncAddressCommitEdit (GncAddress *addr)
 {
+    /* GnuCash 2.6.3 and earlier didn't handle address kvp's... */
+    if (!kvp_frame_is_empty (addr->inst.kvp_data))
+        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (addr)), GNC_FEATURE_KVP_EXTRA_DATA);
+
     if (!qof_commit_edit (QOF_INSTANCE(addr))) return;
     qof_commit_edit_part2 (&addr->inst, gncAddressOnError,
                            gncAddressOnDone, address_free);
