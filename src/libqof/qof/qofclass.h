@@ -71,6 +71,11 @@
 
 #include "qofid.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define QOF_MOD_CLASS "qof.class"
 
 /** \name Core types
@@ -271,6 +276,10 @@ Used for partial QofBook support, see ::QofInstanceReference
 */
 GList* qof_class_get_referenceList(QofIdTypeConst type);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_CLASS_H */
 /** @} */

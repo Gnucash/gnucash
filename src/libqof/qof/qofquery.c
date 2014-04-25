@@ -21,6 +21,11 @@
  *                                                                  *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <sys/types.h>
@@ -28,6 +33,10 @@
 #include <glib.h>
 #include <regex.h>
 #include <string.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "qof.h"
 #include "qofbackend-p.h"
@@ -113,16 +122,16 @@ typedef struct _QofQueryCB
 /* initial_term will be owned by the new Query */
 static void query_init (QofQuery *q, QofQueryTerm *initial_term)
 {
-    GList * or = NULL;
-    GList *and = NULL;
+    GList * _or_ = NULL;
+    GList *_and_ = NULL;
     GHashTable *ht;
 
     if (initial_term)
     {
-        or = g_list_alloc ();
-        and = g_list_alloc ();
-        and->data = initial_term;
-        or->data = and;
+        _or_ = g_list_alloc ();
+        _and_ = g_list_alloc ();
+        _and_->data = initial_term;
+        _or_->data = _and_;
     }
 
     if (q->terms)
@@ -143,11 +152,12 @@ static void query_init (QofQuery *q, QofQueryTerm *initial_term)
     memset (q, 0, sizeof (*q));
     q->be_compiled = ht;
 
-    q->terms = or;
+    q->terms = _or_;
     q->changed = 1;
     q->max_results = -1;
 
-    q->primary_sort.param_list = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+    q->primary_sort.param_list = g_slist_prepend (static_cast<GSList*>(NULL),
+						  static_cast<void*>(const_cast<char*>(QUERY_DEFAULT_SORT)));
     q->primary_sort.increasing = TRUE;
     q->secondary_sort.increasing = TRUE;
     q->tertiary_sort.increasing = TRUE;
@@ -196,29 +206,29 @@ static QofQueryTerm * copy_query_term (const QofQueryTerm *qt)
 
 static GList * copy_and_terms (const GList *and_terms)
 {
-    GList *and = NULL;
+    GList *_and_ = NULL;
     const GList *cur_and;
 
     for (cur_and = and_terms; cur_and; cur_and = cur_and->next)
     {
-        and = g_list_prepend(and, copy_query_term (cur_and->data));
+        _and_ = g_list_prepend(_and_, copy_query_term (static_cast<QofQueryTerm*>(cur_and->data)));
     }
 
-    return g_list_reverse(and);
+    return g_list_reverse(_and_);
 }
 
 static GList *
 copy_or_terms(const GList * or_terms)
 {
-    GList * or = NULL;
+    GList * _or_ = NULL;
     const GList * cur_or;
 
     for (cur_or = or_terms; cur_or; cur_or = cur_or->next)
     {
-        or = g_list_prepend(or, copy_and_terms(cur_or->data));
+        _or_ = g_list_prepend(_or_, copy_and_terms(static_cast<GList*>(cur_or->data)));
     }
 
-    return g_list_reverse(or);
+    return g_list_reverse(_or_);
 }
 
 static void copy_sort (QofQuerySort *dst, const QofQuerySort *src)
@@ -247,13 +257,14 @@ static void free_members (QofQuery *q)
     {
         GList * cur_and;
 
-        for (cur_and = cur_or->data; cur_and; cur_and = cur_and->next)
+        for (cur_and = static_cast<GList*>(cur_or->data); cur_and;
+	     cur_and = static_cast<GList*>(cur_and->next))
         {
-            free_query_term(cur_and->data);
+            free_query_term(static_cast<QofQueryTerm*>(cur_and->data));
             cur_and->data = NULL;
         }
 
-        g_list_free(cur_or->data);
+        g_list_free(static_cast<GList*>(cur_or->data));
         cur_or->data = NULL;
     }
 
@@ -296,9 +307,10 @@ static int cmp_func (const QofQuerySort *sort, QofSortFunc default_sort,
     /* Do the list of conversions */
     conva = (gpointer)a;
     convb = (gpointer)b;
-    for (node = sort->param_fcns; node; node = node->next)
+    for (node = static_cast<GSList*>(sort->param_fcns); node;
+	 node = static_cast<GSList*>(node->next))
     {
-        param = node->data;
+        param = static_cast<QofParam*>(node->data);
 
         /* The last term is really the "parameter getter",
          * unless we're comparing objects ;) */
@@ -320,10 +332,11 @@ static int cmp_func (const QofQuerySort *sort, QofSortFunc default_sort,
     return sort->obj_cmp (conva, convb);
 }
 
-static int sort_func (const gconstpointer a, const gconstpointer b, const gpointer q)
+static int
+sort_func (const gconstpointer a, const gconstpointer b, const gpointer q)
 {
     int retval;
-    const QofQuery *sortQuery = q;
+    const QofQuery *sortQuery = static_cast<const QofQuery*>(q);
 
     g_return_val_if_fail (sortQuery, 0);
 
@@ -366,7 +379,8 @@ check_object (const QofQuery *q, gpointer object)
     for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next)
     {
         and_terms_ok = 1;
-        for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next)
+        for (and_ptr = static_cast<GList*>(or_ptr->data); and_ptr;
+	     and_ptr = static_cast<GList*>(and_ptr->next))
         {
             qt = (QofQueryTerm *)(and_ptr->data);
             if (qt->param_fcns && qt->pred_fcn)
@@ -378,7 +392,7 @@ check_object (const QofQuery *q, gpointer object)
                 /* iterate through the conversions */
                 for (node = qt->param_fcns; node; node = node->next)
                 {
-                    param = node->data;
+                    param = static_cast<QofParam*>(node->data);
 
                     /* The last term is the actual parameter getter */
                     if (!node->next) break;
@@ -432,7 +446,7 @@ compile_params (QofQueryParamList *param_list, QofIdType start_obj,
 
     for (; param_list; param_list = param_list->next)
     {
-        QofIdType param_name = param_list->data;
+        QofIdType param_name = static_cast<QofIdType>(param_list->data);
         objDef = qof_class_get_parameter (start_obj, param_name);
 
         /* If it doesn't exist, then we've reached the end */
@@ -492,7 +506,8 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
         if (sort->comp_fcn == NULL)
             sort->obj_cmp = qof_class_get_default_sort (resObj->param_type);
     }
-    else if (!g_strcmp0 (sort->param_list->data, QUERY_DEFAULT_SORT))
+    else if (!g_strcmp0 (static_cast<char*>(sort->param_list->data),
+			 QUERY_DEFAULT_SORT))
     {
         sort->use_default = TRUE;
     }
@@ -509,10 +524,11 @@ static void compile_terms (QofQuery *q)
      */
     for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next)
     {
-        for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next)
+        for (and_ptr = static_cast<GList*>(or_ptr->data); and_ptr;
+	     and_ptr = static_cast<GList*>(and_ptr->next))
         {
-            QofQueryTerm *qt = and_ptr->data;
-            const QofParam *resObj = NULL;
+            QofQueryTerm* qt = static_cast<QofQueryTerm*>(and_ptr->data);
+            const QofParam* resObj = NULL;
 
             g_slist_free (qt->param_fcns);
             qt->param_fcns = NULL;
@@ -542,8 +558,8 @@ static void compile_terms (QofQuery *q)
     /* Now compile the backend instances */
     for (node = q->books; node; node = node->next)
     {
-        QofBook *book = node->data;
-        QofBackend *be = book->backend;
+        QofBook* book = static_cast<QofBook*>(node->data);
+        QofBackend* be = book->backend;
 
         if (be && be->compile_query)
         {
@@ -557,7 +573,7 @@ static void compile_terms (QofQuery *q)
 
 static void check_item_cb (gpointer object, gpointer user_data)
 {
-    QofQueryCB *ql = user_data;
+    QofQueryCB* ql = static_cast<QofQueryCB*>(user_data);
 
     if (!object || !ql) return;
 
@@ -581,7 +597,8 @@ static int param_list_cmp (const QofQueryParamList *l1, const QofQueryParamList 
         if (!l1 && l2) return -1;
         if (l1 && !l2) return 1;
 
-        ret = g_strcmp0 (l1->data, l2->data);
+        ret = g_strcmp0 (static_cast<char*>(l1->data),
+			 static_cast<char*>(l2->data));
         if (ret)
             break;
 
@@ -610,7 +627,7 @@ static GList * merge_books (GList *l1, GList *l2)
 static gboolean
 query_free_compiled (gpointer key, gpointer value, gpointer not_used)
 {
-    QofBook* book = key;
+    QofBook* book = static_cast<QofBook*>(key);
     QofBackend* be = book->backend;
 
     if (be && be->free_query)
@@ -675,36 +692,37 @@ void qof_query_add_term (QofQuery *q, QofQueryParamList *param_list,
 void qof_query_purge_terms (QofQuery *q, QofQueryParamList *param_list)
 {
     QofQueryTerm *qt;
-    GList *or, *and;
+    GList *_or_, *_and_;
 
     if (!q || !param_list) return;
 
-    for (or = q->terms; or; or = or->next)
+    for (_or_ = q->terms; _or_; _or_ = _or_->next)
     {
-        for (and = or->data; and; and = and->next)
+        for (_and_ = static_cast<GList*>(_or_->data); _and_;
+	     _and_ = static_cast<GList*>(_and_->next))
         {
-            qt = and->data;
+            qt = static_cast<QofQueryTerm*>(_and_->data);
             if (!param_list_cmp (qt->param_list, param_list))
             {
-                if (g_list_length (or->data) == 1)
+                if (g_list_length (static_cast<GList*>(_or_->data)) == 1)
                 {
-                    q->terms = g_list_remove_link (q->terms, or);
-                    g_list_free_1 (or);
-                    or = q->terms;
+                    q->terms = g_list_remove_link (static_cast<GList*>(q->terms), _or_);
+                    g_list_free_1 (_or_);
+                    _or_ = q->terms;
                     break;
                 }
                 else
                 {
-                    or->data = g_list_remove_link (or->data, and);
-                    g_list_free_1 (and);
-                    and = or->data;
-                    if (!and) break;
+                    _or_->data = g_list_remove_link (static_cast<GList*>(_or_->data), _and_);
+                    g_list_free_1 (_and_);
+                    _and_ = static_cast<GList*>(_or_->data);
+                    if (!_and_) break;
                 }
                 q->changed = 1;
                 free_query_term (qt);
             }
         }
-        if (!or) break;
+        if (!_or_) break;
     }
 }
 
@@ -809,8 +827,8 @@ static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
 
     for (node = qcb->query->books; node; node = node->next)
     {
-        QofBook *book = node->data;
-        QofBackend *be = book->backend;
+        QofBook* book = static_cast<QofBook*>(node->data);
+        QofBackend* be = book->backend;
 
         /* run the query in the backend */
         if (be)
@@ -838,7 +856,7 @@ GList * qof_query_run (QofQuery *q)
 
 static void qof_query_run_subq_cb(QofQueryCB* qcb, gpointer cb_arg)
 {
-    QofQuery* pq = cb_arg;
+    QofQuery* pq = static_cast<QofQuery*>(cb_arg);
 
     g_return_if_fail(pq);
     g_list_foreach(qof_query_last_run(pq), check_item_cb, qcb);
@@ -925,23 +943,24 @@ int qof_query_num_terms (QofQuery *q)
     int n = 0;
     if (!q) return 0;
     for (o = q->terms; o; o = o->next)
-        n += g_list_length(o->data);
+        n += g_list_length(static_cast<GList*>(o->data));
     return n;
 }
 
 gboolean qof_query_has_term_type (QofQuery *q, QofQueryParamList *term_param)
 {
-    GList *or;
-    GList *and;
+    GList *_or_;
+    GList *_and_;
 
     if (!q || !term_param)
         return FALSE;
 
-    for (or = q->terms; or; or = or->next)
+    for (_or_ = q->terms; _or_; _or_ = _or_->next)
     {
-        for (and = or->data; and; and = and->next)
+        for (_and_ = static_cast<GList*>(_or_->data); _and_;
+	     _and_ = static_cast<GList*>(_and_->next))
         {
-            QofQueryTerm *qt = and->data;
+            QofQueryTerm* qt = static_cast<QofQueryTerm*>(_and_->data);
             if (!param_list_cmp (term_param, qt->param_list))
                 return TRUE;
         }
@@ -952,18 +971,19 @@ gboolean qof_query_has_term_type (QofQuery *q, QofQueryParamList *term_param)
 
 GSList * qof_query_get_term_type (QofQuery *q, QofQueryParamList *term_param)
 {
-    GList *or;
-    GList *and;
+    GList *_or_;
+    GList *_and_;
     GSList *results = NULL;
 
     if (!q || !term_param)
         return FALSE;
 
-    for (or = q->terms; or; or = or->next)
+    for (_or_ = q->terms; _or_; _or_ = _or_->next)
     {
-        for (and = or->data; and; and = and->next)
+        for (_and_ = static_cast<GList*>(_or_->data); _and_;
+	     _and_ = static_cast<GList*>(_and_->next))
         {
-            QofQueryTerm *qt = and->data;
+            QofQueryTerm *qt = static_cast<QofQueryTerm*>(_and_->data);
             if (!param_list_cmp (term_param, qt->param_list))
                 results = g_slist_append(results, qt->pdata);
         }
@@ -1044,11 +1064,11 @@ QofQuery * qof_query_invert (QofQuery *q)
         retval->search_for = q->search_for;
         retval->changed = 1;
 
-        aterms = g_list_nth_data(q->terms, 0);
+        aterms = static_cast<GList*>(g_list_nth_data(q->terms, 0));
         new_oterm = NULL;
         for (cur = aterms; cur; cur = cur->next)
         {
-            qt = copy_query_term(cur->data);
+            qt = copy_query_term(static_cast<QofQueryTerm*>(cur->data));
             qt->invert = !(qt->invert);
             new_oterm = g_list_append(NULL, qt);
             retval->terms = g_list_prepend(retval->terms, new_oterm);
@@ -1065,7 +1085,7 @@ QofQuery * qof_query_invert (QofQuery *q)
 
         left         = qof_query_create();
         left->terms  = g_list_append(NULL,
-                                     copy_and_terms(g_list_nth_data(q->terms, 0)));
+                                     copy_and_terms(static_cast<GList*>(g_list_nth_data(q->terms, 0))));
 
         iright       = qof_query_invert(right);
         ileft        = qof_query_invert(left);
@@ -1153,8 +1173,8 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
                 retval->terms =
                     g_list_prepend(retval->terms,
                                    g_list_concat
-                                   (copy_and_terms(i->data),
-                                    copy_and_terms(j->data)));
+                                   (copy_and_terms(static_cast<GList*>(i->data)),
+                                    copy_and_terms(static_cast<GList*>(j->data))));
             }
         }
         retval->terms = g_list_reverse(retval->terms);
@@ -1297,8 +1317,8 @@ void qof_query_set_book (QofQuery *q, QofBook *book)
     if (g_list_index (q->books, book) == -1)
         q->books = g_list_prepend (q->books, book);
 
-    slist = g_slist_prepend (slist, QOF_PARAM_GUID);
-    slist = g_slist_prepend (slist, QOF_PARAM_BOOK);
+    slist = g_slist_prepend (slist, static_cast<void*>(const_cast<char*>(QOF_PARAM_GUID)));
+    slist = g_slist_prepend (slist, static_cast<void*>(const_cast<char*>(QOF_PARAM_BOOK)));
     qof_query_add_guid_match (q, slist,
                               qof_instance_get_guid(book), QOF_QUERY_AND);
 }
@@ -1449,13 +1469,14 @@ gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2)
     {
         GList *and1, *and2;
 
-        and1 = or1->data;
-        and2 = or2->data;
+        and1 = static_cast<GList*>(or1->data);
+        and2 = static_cast<GList*>(or2->data);
 
         if (g_list_length (and1) != g_list_length (and2)) return FALSE;
 
         for ( ; and1; and1 = and1->next, and2 = and2->next)
-            if (!qof_query_term_equal (and1->data, and2->data))
+            if (!qof_query_term_equal (static_cast<QofQueryTerm*>(and1->data),
+				       static_cast<QofQueryTerm*>(and2->data)))
                 return FALSE;
     }
 
@@ -1479,12 +1500,12 @@ static GList *qof_query_printTerms (QofQuery * query, GList * output);
 static GList *qof_query_printSorts (QofQuerySort *s[], const gint numSorts,
                                     GList * output);
 static GList *qof_query_printAndTerms (GList * terms, GList * output);
-static gchar *qof_query_printStringForHow (QofQueryCompare how);
-static gchar *qof_query_printStringMatch (QofStringMatch s);
-static gchar *qof_query_printDateMatch (QofDateMatch d);
-static gchar *qof_query_printNumericMatch (QofNumericMatch n);
-static gchar *qof_query_printGuidMatch (QofGuidMatch g);
-static gchar *qof_query_printCharMatch (QofCharMatch c);
+static const char *qof_query_printStringForHow (QofQueryCompare how);
+static const char *qof_query_printStringMatch (QofStringMatch s);
+static const char *qof_query_printDateMatch (QofDateMatch d);
+static const char *qof_query_printNumericMatch (QofNumericMatch n);
+static const char *qof_query_printGuidMatch (QofGuidMatch g);
+static const char *qof_query_printCharMatch (QofCharMatch c);
 static GList *qof_query_printPredData (QofQueryPredData *pd, GList *lst);
 static GString *qof_query_printParamPath (QofQueryParamList * parmList);
 static void qof_query_printValueForParam (QofQueryPredData *pd, GString * gs);
@@ -1588,7 +1609,8 @@ qof_query_printTerms (QofQuery * query, GList * output)
 
         if (lst->data)
         {
-            output = qof_query_printAndTerms (lst->data, output);
+            output = qof_query_printAndTerms (static_cast<GList*>(lst->data),
+					      output);
         }
         else
         {
@@ -1625,7 +1647,7 @@ qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
         if (gsl) g_string_append_printf (gs, " Param: ");
         for (n = gsl; n; n = n->next)
         {
-            QofIdType param_name = n->data;
+            QofIdType param_name = static_cast<QofIdType>(n->data);
             if (gsl != n) g_string_append_printf (gs, " ");
             g_string_append_printf (gs, "%s", param_name);
         }
@@ -1721,7 +1743,7 @@ qof_query_printPredData (QofQueryPredData *pd, GList *lst)
         Get a string representation for the
         QofCompareFunc enum type.
 */
-static gchar *
+static const char *
 qof_query_printStringForHow (QofQueryCompare how)
 {
 
@@ -1843,7 +1865,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
  * Print out a string representation of the
  * QofStringMatch enum
  */
-static gchar *
+static const char *
 qof_query_printStringMatch (QofStringMatch s)
 {
     switch (s)
@@ -1860,7 +1882,7 @@ qof_query_printStringMatch (QofStringMatch s)
  * Print out a string representation of the
  * QofDateMatch enum
  */
-static gchar *
+static const char *
 qof_query_printDateMatch (QofDateMatch d)
 {
     switch (d)
@@ -1877,7 +1899,7 @@ qof_query_printDateMatch (QofDateMatch d)
  * Print out a string representation of the
  * QofNumericMatch enum
  */
-static gchar *
+static const char *
 qof_query_printNumericMatch (QofNumericMatch n)
 {
     switch (n)
@@ -1896,7 +1918,7 @@ qof_query_printNumericMatch (QofNumericMatch n)
  * Print out a string representation of the
  * QofGuidMatch enum
  */
-static gchar *
+static const char *
 qof_query_printGuidMatch (QofGuidMatch g)
 {
     switch (g)
@@ -1920,7 +1942,7 @@ qof_query_printGuidMatch (QofGuidMatch g)
  * Print out a string representation of the
  * QofCharMatch enum
  */
-static gchar *
+static const char *
 qof_query_printCharMatch (QofCharMatch c)
 {
     switch (c)

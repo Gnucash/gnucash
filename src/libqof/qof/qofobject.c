@@ -24,9 +24,18 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "qof.h"
 #include "qofobject-p.h"
@@ -43,10 +52,19 @@ static GHashTable *backend_data = NULL;
  * They should be removed when no longer needed
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 gboolean get_object_is_initialized( void );
 GList* get_object_modules( void );
 GList* get_book_list( void );
 GHashTable* get_backend_data( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 gboolean
 get_object_is_initialized( void )
@@ -98,7 +116,7 @@ void qof_object_book_begin (QofBook *book)
     ENTER (" ");
     for (l = object_modules; l; l = l->next)
     {
-        QofObject *obj = l->data;
+        QofObject *obj = static_cast<QofObject*>(l->data);
         if (obj->book_begin)
             obj->book_begin (book);
     }
@@ -116,7 +134,7 @@ void qof_object_book_end (QofBook *book)
     ENTER (" ");
     for (l = object_modules; l; l = l->next)
     {
-        QofObject *obj = l->data;
+        QofObject *obj = static_cast<QofObject*>(l->data);
         if (obj->book_end)
             obj->book_end (book);
     }
@@ -134,7 +152,7 @@ qof_object_is_dirty (const QofBook *book)
     if (!book) return FALSE;
     for (l = object_modules; l; l = l->next)
     {
-        QofObject *obj = l->data;
+        QofObject *obj = static_cast<QofObject*>(l->data);
         if (obj->is_dirty)
         {
             QofCollection *col;
@@ -153,7 +171,7 @@ qof_object_mark_clean (QofBook *book)
     if (!book) return;
     for (l = object_modules; l; l = l->next)
     {
-        QofObject *obj = l->data;
+        QofObject *obj = static_cast<QofObject*>(l->data);
         if (obj->mark_clean)
         {
             QofCollection *col;
@@ -171,7 +189,7 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data)
 
     for (l = object_modules; l; l = l->next)
     {
-        QofObject *obj = l->data;
+        QofObject *obj = static_cast<QofObject*>(l->data);
         (cb) (obj, user_data);
     }
 }
@@ -228,7 +246,7 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
 static void
 do_prepend (QofInstance *qof_p, gpointer list_p)
 {
-    GList **list = list_p;
+    GList **list = static_cast<GList**>(list_p);
     *list = g_list_prepend(*list, qof_p);
 }
 
@@ -244,7 +262,7 @@ qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book, QofInstanceF
 
     for (iter = list; iter; iter = iter->next)
     {
-        cb(iter->data, user_data);
+        cb(static_cast<QofInstance*>(iter->data), user_data);
     }
 
     g_list_free(list);
@@ -287,7 +305,7 @@ const char * qof_object_get_type_label (QofIdTypeConst type_name)
 
 static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 {
-    g_hash_table_destroy (value);
+    g_hash_table_destroy (static_cast<GHashTable*>(value));
     return TRUE;
 }
 
@@ -337,7 +355,7 @@ gboolean qof_object_register (const QofObject *object)
     {
         GList *node;
         for (node = book_list; node; node = node->next)
-            object->book_begin (node->data);
+            object->book_begin (static_cast<QofBook*>(node->data));
     }
 
     return TRUE;
@@ -354,7 +372,7 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
 
     for (iter = object_modules; iter; iter = iter->next)
     {
-        obj = iter->data;
+        obj = static_cast<QofObject*>(iter->data);
         if (!g_strcmp0 (obj->e_type, name))
             return obj;
     }
@@ -373,7 +391,7 @@ gboolean qof_object_register_backend (QofIdTypeConst type_name,
             !be_data)
         return FALSE;
 
-    ht = g_hash_table_lookup (backend_data, backend_name);
+    ht = static_cast<GHashTable*>(g_hash_table_lookup (backend_data, backend_name));
 
     /* If it doesn't already exist, create a new table for this backend */
     if (!ht)
@@ -397,7 +415,7 @@ gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
             !backend_name || *backend_name == '\0')
         return NULL;
 
-    ht = g_hash_table_lookup (backend_data, (char *)backend_name);
+    ht = static_cast<GHashTable*>(g_hash_table_lookup (backend_data, (char *)backend_name));
     if (!ht)
         return NULL;
 
@@ -412,8 +430,8 @@ struct foreach_data
 
 static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
 {
-    char *data_type = key;
-    struct foreach_data *cb_data = arg;
+    char *data_type = static_cast<char*>(key);
+    struct foreach_data *cb_data = static_cast<struct foreach_data*>(arg);
 
     g_return_if_fail (key && be_item && arg);
 
@@ -431,7 +449,7 @@ void qof_object_foreach_backend (const char *backend_name,
     if (!backend_name || *backend_name == '\0' || !cb)
         return;
 
-    ht = g_hash_table_lookup (backend_data, (char *)backend_name);
+    ht = static_cast<GHashTable*>(g_hash_table_lookup (backend_data, (char *)backend_name));
     if (!ht)
         return;
 

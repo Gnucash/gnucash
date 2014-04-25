@@ -43,6 +43,11 @@
 #include "qofid-p.h"
 #include "qofinstance-p.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*
  *    qof_book_set_backend() is used by backends to
  *    initialize the pointers in the book structure to
@@ -78,4 +83,8 @@ void qof_book_print_dirty (const QofBook *book);
 /* @} */
 /* @} */
 /* @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* QOF_BOOK_P_H */

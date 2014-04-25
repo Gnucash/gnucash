@@ -26,6 +26,11 @@
  *   Author: Phil Longstaff (phil.longstaff@yahoo.ca)               *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <ctype.h>
@@ -33,6 +38,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "qof.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 /* Uncomment if you need to log anything.
 static QofLogModule log_module = QOF_MOD_UTIL;
@@ -119,8 +128,8 @@ qof_string_cache_insert(gconstpointer key)
         }
         else
         {
-            gpointer new_key = g_strdup(key);
-            guint* refcount = g_malloc(sizeof(guint));
+            gpointer new_key = g_strdup(static_cast<const char*>(key));
+            guint* refcount = static_cast<unsigned int*>(g_malloc(sizeof(guint)));
             *refcount = 1;
             g_hash_table_insert(cache, new_key, refcount);
             return new_key;

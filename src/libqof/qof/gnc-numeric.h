@@ -49,6 +49,10 @@ See \ref gncnumericexample
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <glib-object.h>
 
@@ -520,4 +524,8 @@ GType gnc_numeric_get_type( void );
  */
 gint64 pwr64 (gint64 op, int exp);
 /** @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif

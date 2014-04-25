@@ -40,6 +40,11 @@
 #ifndef QOF_BOOK_H
 #define QOF_BOOK_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* We only want a few things exported to Guile */
 #ifndef SWIG
 
@@ -332,7 +337,8 @@ gchar * qof_book_validate_counter_format(const gchar *format);
  *    The return value is NULL on error or the format string of the
  *    counter. The string should not be freed.
  */
-gchar *qof_book_get_counter_format (const QofBook *book, const char *counter_name);
+const char *qof_book_get_counter_format (const QofBook *book,
+					 const char *counter_name);
 
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
@@ -344,6 +350,9 @@ void qof_book_commit_edit(QofBook *book);
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
 
 #endif /* SWIG */
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_BOOK_H */
 /** @} */

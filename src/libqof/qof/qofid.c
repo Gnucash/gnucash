@@ -22,10 +22,19 @@
  *                                                                  *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <string.h>
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "qof.h"
 #include "qofid-p.h"
@@ -63,7 +72,7 @@ qof_collection_new (QofIdType type)
 {
     QofCollection *col;
     col = g_new0(QofCollection, 1);
-    col->e_type = CACHE_INSERT (type);
+    col->e_type = static_cast<QofIdType>(CACHE_INSERT (type));
     col->hash_of_entities = guid_hash_table_new();
     col->data = NULL;
     return col;
@@ -234,7 +243,8 @@ qof_collection_lookup_entity (const QofCollection *col, const GncGUID * guid)
     QofInstance *ent;
     g_return_val_if_fail (col, NULL);
     if (guid == NULL) return NULL;
-    ent = g_hash_table_lookup (col->hash_of_entities, guid);
+    ent = static_cast<QofInstance*>(g_hash_table_lookup (col->hash_of_entities,
+							 guid));
     return ent;
 }
 
@@ -328,8 +338,8 @@ struct _iterate
 static void
 foreach_cb (gpointer item, gpointer arg)
 {
-    struct _iterate *iter = arg;
-    QofInstance *ent = item;
+    struct _iterate *iter = static_cast<_iterate*>(arg);
+    QofInstance *ent = static_cast<QofInstance*>(item);
 
     iter->fcn (ent, iter->data);
 }

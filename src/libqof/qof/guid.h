@@ -24,6 +24,11 @@
 #ifndef GUID_H
 #define GUID_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stddef.h>
 #include <glib-object.h>
 
@@ -180,4 +185,8 @@ GHashTable *guid_hash_table_new(void);
 
 /* @} */
 /* @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif

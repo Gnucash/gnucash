@@ -21,6 +21,10 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "config.h"
 #include <stdio.h>
@@ -32,6 +36,10 @@
 #include <errno.h>
 #include "qof.h"
 #include "qofbackend-p.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_BACKEND;
 
@@ -242,7 +250,7 @@ qof_load_backend_library (const char *directory, const char* module_name)
         return FALSE;
     }
     if (g_module_symbol (backend, "qof_backend_module_init",
-                        (gpointer)&module_init_func))
+			 reinterpret_cast<void**>(&module_init_func)))
         module_init_func ();
 
     g_module_make_resident (backend);
@@ -262,7 +270,7 @@ qof_finalize_backend_libraries(void)
         backend = (GModule*)node->data;
 
         if (g_module_symbol(backend, "qof_backend_module_finalize",
-                            (gpointer)&module_finalize_func))
+                            reinterpret_cast<void**>(&module_finalize_func)))
             module_finalize_func();
 
     }

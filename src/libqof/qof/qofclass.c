@@ -21,9 +21,18 @@
  *                                                                  *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "qof.h"
 #include "qofclass-p.h"
@@ -36,7 +45,7 @@ static gboolean initialized = FALSE;
 
 static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 {
-    g_hash_table_destroy (value);
+    g_hash_table_destroy (static_cast<GHashTable*>(value));
     return TRUE;
 }
 
@@ -76,7 +85,8 @@ QofSortFunc
 qof_class_get_default_sort (QofIdTypeConst obj_name)
 {
     if (!obj_name) return NULL;
-    return g_hash_table_lookup (sortTable, obj_name);
+    return reinterpret_cast<QofSortFunc>(g_hash_table_lookup (sortTable,
+							      obj_name));
 }
 
 /* *******************************************************************/
@@ -95,10 +105,11 @@ qof_class_register (QofIdTypeConst obj_name,
 
     if (default_sort_function)
     {
-        g_hash_table_insert (sortTable, (char *)obj_name, default_sort_function);
+        g_hash_table_insert (sortTable, (char *)obj_name,
+			     reinterpret_cast<void*>(default_sort_function));
     }
 
-    ht = g_hash_table_lookup (classTable, obj_name);
+    ht = static_cast<GHashTable*>(g_hash_table_lookup (classTable, obj_name));
 
     /* If it doesn't already exist, create a new table for this object */
     if (!ht)
@@ -141,14 +152,14 @@ qof_class_get_parameter (QofIdTypeConst obj_name,
     g_return_val_if_fail (parameter, NULL);
     if (!check_init()) return NULL;
 
-    ht = g_hash_table_lookup (classTable, obj_name);
+    ht = static_cast<GHashTable*>(g_hash_table_lookup (classTable, obj_name));
     if (!ht)
     {
         PWARN ("no object of type %s", obj_name);
         return NULL;
     }
 
-    return (g_hash_table_lookup (ht, parameter));
+    return static_cast<QofParam*>(g_hash_table_lookup (ht, parameter));
 }
 
 QofAccessFunc
@@ -208,8 +219,8 @@ struct class_iterate
 static void
 class_foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
-    struct class_iterate *iter = arg;
-    QofIdTypeConst id = key;
+    struct class_iterate *iter = static_cast<class_iterate*>(arg);
+    QofIdTypeConst id = static_cast<QofIdTypeConst>(key);
 
     iter->fcn (id, iter->data);
 }
@@ -239,8 +250,8 @@ struct parm_iterate
 static void
 param_foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
-    struct parm_iterate *iter = arg;
-    QofParam *parm = item;
+    struct parm_iterate *iter = static_cast<parm_iterate*>(arg);
+    QofParam *parm = static_cast<QofParam*>(item);
 
     iter->fcn (parm, iter->data);
 }
@@ -254,7 +265,7 @@ qof_class_param_foreach (QofIdTypeConst obj_name,
 
     if (!obj_name || !cb) return;
     if (!classTable) return;
-    param_ht = g_hash_table_lookup (classTable, obj_name);
+    param_ht = static_cast<GHashTable*>(g_hash_table_lookup (classTable, obj_name));
     if (!param_ht) return;
 
     iter.fcn = cb;

@@ -77,8 +77,17 @@ typedef struct qof_instance_copy_data
     gboolean error;
 } QofInstanceCopyData;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 QofBackend * qof_session_get_backend (const QofSession *session);
 
 void qof_session_push_error (QofSession *session, QofBackendError err,
                              const char *message);
+#ifdef __cplusplus
+}
+#endif
+
 #endif

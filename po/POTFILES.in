@@ -428,7 +428,7 @@ src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
 src/import-export/qif/qif-objects.c
 src/libqof/qof/gnc-date.c
-src/libqof/qof/gnc-numeric.c
+src/libqof/qof/gnc-numeric.cpp
 src/libqof/qof/guid.c
 src/libqof/qof/kvp_frame.c
 src/libqof/qof/kvp-util.c
@@ -445,7 +445,6 @@ src/libqof/qof/qofmath128.c
 src/libqof/qof/qofobject.c
 src/libqof/qof/qofquery.c
 src/libqof/qof/qofquerycore.c
-src/libqof/qof/qofreference.c
 src/libqof/qof/qofsession.c
 src/libqof/qof/qof-string-cache.c
 src/libqof/qof/qofutil.c

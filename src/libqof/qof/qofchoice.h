@@ -93,6 +93,11 @@ the object must return a single entity matching one of the choice types.
 #include "qofclass.h"
 #include "qofobject.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define QOF_MOD_CHOICE "qof.choice"
 
 /** \note Choice
@@ -156,4 +161,8 @@ gboolean qof_choice_check(const char* choice_obj,
 /** @} */
 
 /** @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _QOFCHOICE_H */

@@ -61,6 +61,11 @@
 #ifndef KVP_FRAME_H
 #define KVP_FRAME_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "gnc-date.h"
 #include "gnc-numeric.h"
 #include "guid.h"
@@ -87,6 +92,7 @@ typedef struct _KvpValue KvpValue;
  */
 typedef enum
 {
+    KVP_TYPE_INVALID = -1,
     KVP_TYPE_GINT64 = 1, /**< QOF_TYPE_INT64  gint64 */
     KVP_TYPE_DOUBLE,     /**< QOF_TYPE_DOUBLE  gdouble */
     KVP_TYPE_NUMERIC,    /**< QOF_TYPE_NUMERIC */
@@ -589,4 +595,8 @@ gchar* binary_to_string(const void *data, guint32 size);
 GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
 /** @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif

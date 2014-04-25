@@ -1919,7 +1919,6 @@ gnc_module_init_backend_dbi(void)
 
         prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
         prov->access_method = FILE_URI_TYPE;
-        prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_dbi_backend_sqlite3_new;
         prov->provider_free = gnc_dbi_provider_free;
         prov->check_data_type = gnc_dbi_check_sqlite3_file;
@@ -1930,7 +1929,6 @@ gnc_module_init_backend_dbi(void)
 
         prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
         prov->access_method = SQLITE3_URI_TYPE;
-        prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_dbi_backend_sqlite3_new;
         prov->provider_free = gnc_dbi_provider_free;
         prov->check_data_type = gnc_dbi_check_sqlite3_file;
@@ -1944,7 +1942,6 @@ gnc_module_init_backend_dbi(void)
 
         prov->provider_name = "GnuCash Libdbi (MYSQL) Backend";
         prov->access_method = "mysql";
-        prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_dbi_backend_mysql_new;
         prov->provider_free = gnc_dbi_provider_free;
         prov->check_data_type = NULL;
@@ -1958,7 +1955,6 @@ gnc_module_init_backend_dbi(void)
 
         prov->provider_name = "GnuCash Libdbi (POSTGRESQL) Backend";
         prov->access_method = "postgres";
-        prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_dbi_backend_postgres_new;
         prov->provider_free = gnc_dbi_provider_free;
         prov->check_data_type = NULL;

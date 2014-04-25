@@ -22,8 +22,18 @@
  *                                                                  *
  ********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
+
 #include "qof.h"
 #include "qofevent-p.h"
 
@@ -52,7 +62,7 @@ find_next_handler_id(void)
 
     while (node)
     {
-        hi = node->data;
+        hi = static_cast<HandlerInfo*>(node->data);
 
         if (hi->handler_id == handler_id)
         {
@@ -106,7 +116,7 @@ qof_event_unregister_handler (gint handler_id)
     ENTER ("(handler_id=%d)", handler_id);
     for (node = handlers; node; node = node->next)
     {
-        HandlerInfo *hi = node->data;
+        HandlerInfo *hi = static_cast<HandlerInfo*>(node->data);
 
         if (hi->handler_id != handler_id)
             continue;
@@ -184,7 +194,7 @@ qof_event_generate_internal (QofInstance *entity, QofEventId event_id,
     handler_run_level++;
     for (node = handlers; node; node = next_node)
     {
-        HandlerInfo *hi = node->data;
+        HandlerInfo *hi = static_cast<HandlerInfo*>(node->data);
 
         next_node = node->next;
         if (hi->handler)
@@ -203,7 +213,7 @@ qof_event_generate_internal (QofInstance *entity, QofEventId event_id,
     {
         for (node = handlers; node; node = next_node)
         {
-            HandlerInfo *hi = node->data;
+            HandlerInfo *hi = static_cast<HandlerInfo*>(node->data);
             next_node = node->next;
             if (hi->handler == NULL)
             {

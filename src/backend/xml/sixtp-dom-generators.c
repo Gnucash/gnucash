@@ -363,7 +363,8 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
                                     add_kvp_slot, val_node, (GCompareFunc)strcmp);
     }
     break;
-
+    default:
+	break;
     }
 }
 

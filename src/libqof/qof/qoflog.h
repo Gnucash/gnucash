@@ -84,6 +84,11 @@
 #ifndef _QOF_LOG_H
 #define _QOF_LOG_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <glib.h>
@@ -101,8 +106,8 @@
 
 DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST)
 
-gchar* qof_log_level_to_string(QofLogLevel lvl);
-QofLogLevel qof_log_level_from_string(const gchar *str);
+const char* qof_log_level_to_string(QofLogLevel lvl);
+QofLogLevel qof_log_level_from_string(const char *str);
 
 /** Indents one level; see ENTER macro. **/
 void qof_log_indent(void);
@@ -288,6 +293,10 @@ void qof_log_set_default(QofLogLevel log_level);
   g_return_if_fail(test); \
 } while (0);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _QOF_LOG_H */
 

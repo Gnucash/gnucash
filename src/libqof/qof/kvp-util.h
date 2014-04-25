@@ -53,8 +53,17 @@ typedef struct
 
 */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 GSList *g_hash_table_key_value_pairs(GHashTable *table);
 void g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data);
+
+#ifdef __cplusplus
+}
+#endif
 
 /***********************************************************************/
 

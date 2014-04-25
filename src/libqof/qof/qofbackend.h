@@ -45,6 +45,10 @@
 #define QOF_BACKEND_H
 
 #include "qofinstance.h"
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #define QOF_MOD_BACKEND "qof.backend"
 
@@ -186,6 +190,10 @@ void qof_finalize_backend_libraries(void);
 QofBackend* qof_book_get_backend (const QofBook *book);
 
 void qof_book_set_backend (QofBook *book, QofBackend *);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_BACKEND_H */
 /** @} */

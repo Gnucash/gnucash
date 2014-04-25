@@ -22,6 +22,11 @@
  *                                                                  *
  ********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <glib.h>
@@ -29,6 +34,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "qof.h"
 
@@ -144,7 +153,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data)
     KvpFrame * dest = (KvpFrame *)user_data;
     g_hash_table_insert(dest->hash,
                         qof_string_cache_insert(key),
-                        (gpointer)kvp_value_copy(value));
+                        static_cast<void*>(kvp_value_copy(static_cast<KvpValue*>(value))));
 }
 
 KvpFrame *
@@ -601,7 +610,7 @@ kvp_frame_get_slot(const KvpFrame * frame, const char * slot)
     KvpValue *v;
     if (!frame) return NULL;
     if (!frame->hash) return NULL;  /* Error ... */
-    v = g_hash_table_lookup(frame->hash, slot);
+    v = static_cast<KvpValue*>(g_hash_table_lookup(frame->hash, slot));
     return v;
 }
 
@@ -667,7 +676,7 @@ kvp_frame_set_slot_path_gslist (KvpFrame *frame,
 
     while (TRUE)
     {
-        const char *key = key_path->data;
+        const char *key = static_cast<char*>(key_path->data);
         KvpValue *value;
 
         if (!key)
@@ -824,7 +833,7 @@ kvp_frame_get_slot_path_gslist (KvpFrame *frame,
 
     while (TRUE)
     {
-        const char *key = key_path->data;
+        const char *key = static_cast<const char*>(key_path->data);
         KvpValue *value;
 
         if (!key) break;
@@ -854,7 +863,7 @@ kvp_glist_delete(GList * list)
     /* Delete the data in the list */
     for (node = list; node; node = node->next)
     {
-        KvpValue *val = node->data;
+        KvpValue *val = static_cast<KvpValue*>(node->data);
         kvp_value_delete(val);
     }
 
@@ -877,7 +886,7 @@ kvp_glist_copy(const GList * list)
     /* This step deep-copies the values */
     for (lptr = retval; lptr; lptr = lptr->next)
     {
-        lptr->data = kvp_value_copy(lptr->data);
+        lptr->data = kvp_value_copy(static_cast<KvpValue*>(lptr->data));
     }
 
     return retval;
@@ -1083,11 +1092,7 @@ kvp_value_delete(KvpValue * value)
         kvp_frame_delete(value->value.frame);
         break;
 
-    case KVP_TYPE_GINT64:
-    case KVP_TYPE_DOUBLE:
-    case KVP_TYPE_NUMERIC:
-    case KVP_TYPE_TIMESPEC:
-    case KVP_TYPE_GDATE:
+    default:
         break;
     }
     g_free(value);
@@ -1096,7 +1101,7 @@ kvp_value_delete(KvpValue * value)
 KvpValueType
 kvp_value_get_type(const KvpValue * value)
 {
-    if (!value) return -1;
+    if (!value) return KVP_TYPE_INVALID;
     return value->type;
 }
 
@@ -1311,6 +1316,8 @@ kvp_value_copy(const KvpValue * value)
     case KVP_TYPE_FRAME:
         return kvp_value_new_frame(value->value.frame);
         break;
+    default:
+	break;
     }
     return NULL;
 }
@@ -1392,6 +1399,8 @@ kvp_value_compare(const KvpValue * kva, const KvpValue * kvb)
     case KVP_TYPE_FRAME:
         return kvp_frame_compare(kva->value.frame, kvb->value.frame);
         break;
+    default:
+	break;
     }
     PERR ("reached unreachable code.");
     return FALSE;
@@ -1496,7 +1505,16 @@ kvp_value_glist_to_string(const GList *list)
 }
 
 /* struct for kvp frame static funtion testing*/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 void init_static_test_pointers( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 KvpFrame* ( *p_get_trailer_make )( KvpFrame *frame, const char *key_path, char **end_key );
 gchar* ( *p_kvp_value_glist_to_string )( const GList *list );
@@ -1593,6 +1611,8 @@ kvp_value_to_string(const KvpValue *val)
                                g_date_get_year(&val->value.gdate),
                                g_date_get_month(&val->value.gdate),
                                g_date_get_day(&val->value.gdate));
+    default:
+	break;
     }
     g_assert(FALSE); /* must not be reached */
     return g_strdup("");

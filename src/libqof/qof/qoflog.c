@@ -25,6 +25,11 @@
  *  02110-1301,  USA
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <glib.h>
@@ -45,6 +50,10 @@
 
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #include "qof.h"
@@ -99,7 +108,8 @@ log4glib_handler(const gchar     *log_domain,
                  const gchar     *message,
                  gpointer        user_data)
 {
-    if (G_LIKELY(!qof_log_check(log_domain, log_level)))
+    QofLogLevel level = static_cast<QofLogLevel>(log_level);
+    if (G_LIKELY(!qof_log_check(log_domain, level)))
         return;
 
     {
@@ -113,7 +123,7 @@ log4glib_handler(const gchar     *log_domain,
             "%T"
 #endif
             ;
-        gchar *level_str = qof_log_level_to_string(log_level);
+        const char *level_str = qof_log_level_to_string(level);
         now = gnc_time (NULL);
         gnc_localtime_r (&now, &now_tm);
         qof_strftime(timestamp_buf, 9, format_24hour, &now_tm);
@@ -415,10 +425,10 @@ qof_log_set_default(QofLogLevel log_level)
     qof_log_set_level("qof", log_level);
 }
 
-gchar*
+const gchar*
 qof_log_level_to_string(QofLogLevel log_level)
 {
-    gchar *level_str = "unknw";
+    const char *level_str;
     switch (log_level)
     {
     case G_LOG_LEVEL_ERROR:

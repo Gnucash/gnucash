@@ -32,6 +32,11 @@
 #ifndef QOF_UTIL_H
 #define QOF_UTIL_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stddef.h>
 #include "qof.h"
 #include "qoflog.h"
@@ -257,6 +262,10 @@ qof_commit_edit_part2(QofInstance *inst,
                       void (*on_error)(QofInstance *, QofBackendError),
                       void (*on_done)(QofInstance *),
                       void (*on_free)(QofInstance *));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_UTIL_H */
 /** @} */

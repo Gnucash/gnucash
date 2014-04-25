@@ -37,6 +37,11 @@
 #include "kvp_frame.h"
 #include "qofclass.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**
  * PREDICATE DATA TYPES: All the predicate data types are rolled up into
  * the union type PredicateData.  The "type" field specifies which type
@@ -204,6 +209,10 @@ char * qof_query_core_to_string (QofType, gpointer object, QofParam *getter);
 int qof_string_number_compare_func (gpointer a, gpointer b, gint options,
                                     QofParam *this_param);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_QUERYCORE_H */
 /* @} */

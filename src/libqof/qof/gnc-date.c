@@ -25,6 +25,10 @@
 \********************************************************************/
 
 #define __EXTENSIONS__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "config.h"
 #include <glib.h>
@@ -57,6 +61,9 @@
 
 #ifdef G_OS_WIN32
 #  include <windows.h>
+#endif
+#ifdef __cplusplus
+}
 #endif
 
 #ifdef HAVE_LANGINFO_D_FMT
@@ -300,6 +307,11 @@ typedef struct
     GDateTime *(*to_local)(GDateTime *);
 } _GncDateTime;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 void _gnc_date_time_init(_GncDateTime*);
 void
 _gnc_date_time_init (_GncDateTime *gncdt)
@@ -311,6 +323,10 @@ _gnc_date_time_init (_GncDateTime *gncdt)
     gncdt->new_now_local = gnc_g_date_time_new_now_local;
     gncdt->to_local = gnc_g_date_time_to_local;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 /****************** Posix Replacement Functions ***************************/
 void
@@ -339,13 +355,13 @@ gnc_g_date_time_fill_struct_tm (GDateTime *gdt, struct tm* time)
 struct tm*
 gnc_localtime (const time64 *secs)
 {
-     struct tm *time = g_slice_alloc0 (sizeof (struct tm));
-     if (gnc_localtime_r (secs, time) == NULL)
-     {
-	  gnc_tm_free (time);
-	  return NULL;
-     }
-     return time;
+    struct tm *time = static_cast<struct tm*>(g_slice_alloc0 (sizeof (struct tm)));
+    if (gnc_localtime_r (secs, time) == NULL)
+    {
+	gnc_tm_free (time);
+	return NULL;
+    }
+    return time;
 }
 
 /* Linux, Darwin, and MSWindows implementations of this function set the
@@ -381,7 +397,7 @@ gnc_gmtime (const time64 *secs)
      struct tm *time;
      GDateTime *gdt = g_date_time_new_from_unix_utc (*secs);
      g_return_val_if_fail (gdt != NULL, NULL);
-     time = g_slice_alloc0 (sizeof (struct tm));
+     time = static_cast<struct tm*>(g_slice_alloc0 (sizeof (struct tm)));
      gnc_g_date_time_fill_struct_tm (gdt, time);
      g_date_time_unref (gdt);
      return time;
@@ -1088,7 +1104,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     /* Use strtok to find delimiters */
     if (tmp)
     {
-        static char *delims = ".,-+/\\()년월年月 ";
+        static const char *delims = ".,-+/\\()년월年月 ";
 
         first_field = strtok (tmp, delims);
         if (first_field)
@@ -1406,7 +1422,7 @@ qof_format_time(const gchar *format, const struct tm *tm)
     tmpbufsize = MAX(128, strlen(locale_format) * 2);
     while (TRUE)
     {
-        tmpbuf = g_malloc(tmpbufsize);
+        tmpbuf = static_cast<gchar*>(g_malloc(tmpbufsize));
 
         /* Set the first byte to something other than '\0', to be able to
          * recognize whether strftime actually failed or just returned "".
@@ -1549,7 +1565,7 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
-    gchar *fmt1 = "%Y-%m-%d %H:%M", *fmt2 = "%s:%02d.%06d %s";
+    const gchar *fmt1 = "%Y-%m-%d %H:%M", *fmt2 = "%s:%02d.%06d %s";
     GDateTime *gdt;
     gchar *time_base, *tz;
 
@@ -1687,7 +1703,7 @@ GDate timespec_to_gdate (Timespec ts)
 
     g_date_clear (&result, 1);
     gnc_timespec2dmy (ts, &day, &month, &year);
-    g_date_set_dmy (&result, day, month, year);
+    g_date_set_dmy (&result, day, static_cast<GDateMonth>(month), year);
     g_assert(g_date_valid (&result));
 
     return result;
@@ -1700,7 +1716,7 @@ GDate* gnc_g_date_new_today ()
      GDate *result;
 
      g_date_time_get_ymd (gdt, &year, &month, &day);
-     result = g_date_new_dmy (day, month, year);
+     result = g_date_new_dmy (day, static_cast<GDateMonth>(month), year);
      g_date_time_unref (gdt);
      g_assert(g_date_valid (result));
 
@@ -1808,7 +1824,7 @@ timespec_boxed_copy_func( gpointer in_timespec )
 {
     Timespec* newvalue;
 
-    newvalue = g_malloc( sizeof( Timespec ) );
+    newvalue = static_cast<Timespec*>(g_malloc (sizeof (Timespec)));
     memcpy( newvalue, in_timespec, sizeof( Timespec ) );
 
     return newvalue;

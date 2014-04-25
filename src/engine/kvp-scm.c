@@ -108,9 +108,9 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
 
         /* FIXME: handle types below */
     case KVP_TYPE_BINARY:
-        break;
     case KVP_TYPE_GLIST:
-        break;
+    default:
+	break;
     }
     return SCM_BOOL_F;
 }

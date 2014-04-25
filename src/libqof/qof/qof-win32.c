@@ -21,6 +21,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <glib.h>
@@ -28,6 +33,10 @@
 #include "strptime.h"
 #include <windows.h>
 #include <stdlib.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 static GHashTable *picture_to_format = NULL;
 G_LOCK_DEFINE_STATIC(picture_to_format);
