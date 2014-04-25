@@ -7935,7 +7935,6 @@ msgstr ""
 "в любой момент можно напрямую изменить созданные плановые проводки."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:4
-#, fuzzy
 msgid "Loan / Mortgage Repayment Setup"
 msgstr "Настройка выплат по залогам и займам"
 
@@ -7943,6 +7942,7 @@ msgstr "Настройка выплат по залогам и займам"
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
 msgstr ""
+"Введите детали займа. Для начала задайте значения счета и суммы займа.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:7
 msgid "Interest Rate:"
@@ -8145,9 +8145,8 @@ msgid "Years"
 msgstr "Годы"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:56
-#, fuzzy
 msgid "Current Year"
-msgstr "Текущая"
+msgstr "Текущий год"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:57
 msgid "Now + 1 Year"
@@ -8158,34 +8157,32 @@ msgid "Whole Loan"
 msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:60
-#, fuzzy
 msgid "Interest Rate"
-msgstr "Процентная ставка:"
+msgstr "Процентная ставка"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:61
 msgid "APR (Compounded Daily)"
-msgstr ""
+msgstr "Годовая ставка (с ежедневной капитализацией)"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:62
 msgid "APR (Compounded Weekly)"
-msgstr ""
+msgstr "Годовая ставка (с еженедельной капитализацией)"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:63
 msgid "APR (Compounded Monthly)"
-msgstr ""
+msgstr "Годовая ставка (с месячной капитализацией)"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:64
 msgid "APR (Compounded Quarterly)"
-msgstr ""
+msgstr "Годовая ставка (с квартальной капитализацией)"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:65
 msgid "APR (Compounded Annually)"
-msgstr ""
+msgstr "Годовая ставка (с годовой капитализацией)"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:66
-#, fuzzy
 msgid "Fixed Rate"
-msgstr "_Загрузить цену"
+msgstr "Фиксированная ставка"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:67
 msgid "3/1 Year ARM"
@@ -8204,14 +8201,12 @@ msgid "10/1 Year ARM"
 msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:1
-#, fuzzy
 msgid "This assistant will help you record a stock split or stock merger.\n"
-msgstr "Этот мастер поможет вам записать дробление акций или их объединение."
+msgstr "Этот мастер поможет вам записать дробление акций или их объединение.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:3
-#, fuzzy
 msgid "Stock Split Assistant"
-msgstr "Подробности разделения ценных бумаг"
+msgstr "Мастер дробления ценных бумаг"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:4
 msgid ""
@@ -12954,18 +12949,16 @@ msgid "Show _hidden accounts"
 msgstr "Показывать скрытые счета"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:55
-#, fuzzy
 msgid "Show accounts which have the option \"Hidden\" checked."
-msgstr "Показать счета помеченные скрытыми."
+msgstr "Показать счета, с включенным флагом \"Скрытый\"."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:56
 msgid "Show _zero total accounts"
 msgstr "Показывать счета с нулевым балансом"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:57
-#, fuzzy
 msgid "Show accounts which have a zero total value."
-msgstr "Скрыть счета, имеющие нулевой остаток."
+msgstr "Показать счета, имеющие нулевой остаток."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:59
 msgid "Renumber sub-accounts"
