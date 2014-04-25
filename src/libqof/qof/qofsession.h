@@ -103,6 +103,11 @@
 #include "qofclass.h"
 #include "qofobject.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define QOF_MOD_SESSION "qof.session"
 
 /* PROTOTYPES ******************************************************/
@@ -310,6 +315,10 @@ GList* qof_backend_get_registered_access_method_list(void);
 /** Ensure all of the data is loaded from the session.
  */
 void qof_session_ensure_all_data_loaded(QofSession* session);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_SESSION_H */
 /** @} */

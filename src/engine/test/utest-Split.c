@@ -21,6 +21,11 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 #include <string.h>
 #include <glib.h>
@@ -43,6 +48,10 @@
 
 static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 typedef struct
 {
@@ -75,8 +84,8 @@ setup (Fixture *fixture, gconstpointer pData)
     xaccSplitSetParent (fixture->split, txn);
     xaccTransCommitEdit (txn);
     gnc_lot_set_account (lot, acc);
-    fixture->split->action = CACHE_INSERT ("foo");
-    fixture->split->memo = CACHE_INSERT ("bar");
+    fixture->split->action = static_cast<char*>(CACHE_INSERT ("foo"));
+    fixture->split->memo = static_cast<char*>(CACHE_INSERT ("bar"));
     fixture->split->acc = acc;
     fixture->split->lot = lot;
     fixture->split->parent = txn;
@@ -122,7 +131,7 @@ gnc_split_init(Split* split)*/
 static void
 test_gnc_split_init ()
 {
-    Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
+    Split *split = static_cast<Split*>(g_object_new (GNC_TYPE_SPLIT, NULL));
     g_assert (split->acc == NULL);
     g_assert (split->orig_acc == NULL);
     g_assert (split->parent == NULL);
@@ -158,7 +167,7 @@ test_gnc_split_dispose ()
      * Transaction objects, a Split object, and a GNCLot object. All of
      * these should be unreffed in gnc_split_dispose.
      */
-    Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
+    Split *split = static_cast<Split*>(g_object_new (GNC_TYPE_SPLIT, NULL));
     QofInstance *instance = QOF_INSTANCE (split);
     QofBook *book = qof_book_new ();
 
@@ -384,7 +393,8 @@ static void
 test_xaccSplitEqualCheckBal (Fixture *fixture, gconstpointer pData)
 {
     gchar *msg = "[xaccSplitEqualCheckBal] test balances differ: 123/100 vs 456/100";
-    guint loglevel = G_LOG_LEVEL_INFO, hdlr;
+    GLogLevelFlags loglevel = G_LOG_LEVEL_INFO;
+    guint hdlr;
     TestErrorStruct check = { loglevel, "gnc.engine", msg, 0 };
 
     gnc_numeric foo = gnc_numeric_create (123, 100);
@@ -423,7 +433,7 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     gchar *msg13 = "[xaccSplitEqualCheckBal] cleared balances differ: 321/1000 vs 0/1";
     gchar *msg14 = "[xaccSplitEqualCheckBal] reconciled balances differ: 321/1000 vs 0/1";
     gchar *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_INFO;
+    GLogLevelFlags loglevel = G_LOG_LEVEL_INFO;
     TestErrorStruct checkA = { loglevel, logdomain, msg01, 0 };
     TestErrorStruct checkB = { loglevel, logdomain, msg10, 0 };
     TestErrorStruct checkC = { loglevel, logdomain, msg11, 0 };
@@ -542,7 +552,7 @@ typedef struct
 static void
 test_error_callback (gpointer pdata, QofBackendError errcode)
 {
-    TestErr *data = pdata;
+    TestErr *data = static_cast<TestErr*>(pdata);
     ++(data->hits);
     data->lasterr = errcode;
 }
@@ -553,7 +563,7 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     gchar *msg1 = "[xaccSplitCommitEdit()] Account lost track of moved or deleted split.";
     gchar *msg2 = "[xaccSplitCommitEdit()] Account grabbed split prematurely.";
     gchar *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     guint infolevel = G_LOG_LEVEL_INFO;
     guint hdlr;
     TestErrorStruct checkA = { loglevel, logdomain, msg1, 0 };
@@ -883,7 +893,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
     gchar *fmt = "[xaccSplitSetBaseValue()] inappropriate base currency %s "
                  "given split currency=%s and commodity=%s\n";
     gchar *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct check = { loglevel, logdomain, msg1, 0 };
     gnc_numeric value = { 360, 240 };
     gnc_numeric old_val = fixture->split->value;
@@ -983,7 +993,7 @@ test_xaccSplitConvertAmount (void)
     gnc_numeric result;
 
     gchar *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
 
@@ -1276,7 +1286,7 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
 #endif
     gchar *msg = _func ": assertion " _Q "sa' failed";
 #undef _func
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct *check = test_error_struct_new ("gnc.engine",
                              loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
@@ -1598,7 +1608,7 @@ test_xaccSplitSetParent (Fixture *fixture, gconstpointer pData)
     Split *split = fixture->split;
     TestSignal sig1, sig2;
     gchar *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     /* FIXME: This error doesn't actually stop execution, so we need to test for it happening. */
     gchar *msg = "[xaccSplitSetParent()] You may not add the split to more"
                  " than one transaction during the BeginEdit/CommitEdit block.";
@@ -1638,7 +1648,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     /* Warning: this is a define in Split.c */
     const guint PRICE_SIGFIGS = 6;
     char *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
     guint hdlr = g_log_set_handler (logdomain, loglevel,
                                     (GLogFunc)test_checked_handler, &check);

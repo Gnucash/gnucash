@@ -950,7 +950,8 @@ gnc_scm2KvpValue (SCM value_scm)
         kvp_frame_delete (frame);
         break;
     }
-
+    default:
+	break;
     }
 
     return value;

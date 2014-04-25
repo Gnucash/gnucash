@@ -344,6 +344,11 @@ struct QofBackend_s
 
 };
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** Let the sytem know about a new provider of backends.  This function
  *  is typically called by the provider library at library load time.
  *  This function allows the backend library to tell the QOF infrastructure
@@ -385,4 +390,8 @@ void qof_book_set_version (QofBook *book, gint32 version);
 /* @} */
 /* @} */
 /* @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* QOF_BACKEND_P_H */

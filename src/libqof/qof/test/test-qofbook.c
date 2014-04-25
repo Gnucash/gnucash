@@ -19,10 +19,19 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 #include <string.h>
 #include <glib.h>
 #include <unittest-support.h>
+#ifdef __cplusplus
+}
+#endif
+
 #include "../qof.h"
 #include "../qofbook-p.h"
 #include "../qofbookslots.h"
@@ -271,7 +280,7 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     const char *counter_name = "Counter name";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
-    gchar *r;
+    const char *r;
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -309,8 +318,8 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     const char *counter_name = "Counter name";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
-    gchar *format;
-    gchar *r;
+    const char *format;
+    char *r;
     gint64 counter;
 
     /* need this as long as we have fatal warnings enabled */

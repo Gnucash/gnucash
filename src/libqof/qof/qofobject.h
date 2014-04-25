@@ -52,6 +52,11 @@
 #include "qofid.h"
 #include "qofchoice.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version
  * of the interface will load properly
@@ -178,6 +183,10 @@ gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
 void qof_object_foreach_backend (const char *backend_name,
                                  QofForeachBackendTypeCB cb,
                                  gpointer user_data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_OBJECT_H_ */
 /** @} */

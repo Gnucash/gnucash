@@ -67,7 +67,11 @@
 
 #ifndef GNC_DATE_H
 #define GNC_DATE_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+ 
 #include <glib-object.h>
 #include <time.h>
 
@@ -666,4 +670,8 @@ void gnc_dow_abbrev(gchar *buf, int buf_len, int dow);
 
 //@}
 //@}
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* GNC_DATE_H */

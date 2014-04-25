@@ -21,6 +21,10 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "config.h"
 
@@ -29,6 +33,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __cplusplus
+}
+#endif
 
 #include "gnc-numeric.h"
 
@@ -74,7 +81,7 @@ pwr64 (gint64 op, int exp)
 /* This function is small, simple, and used everywhere below,
  * lets try to inline it.
  */
-inline GNCNumericErrorCode
+GNCNumericErrorCode
 gnc_numeric_check(gnc_numeric in)
 {
     if (G_LIKELY(in.denom != 0))
@@ -1395,7 +1402,7 @@ gnc_numeric_boxed_copy_func( gpointer in_gnc_numeric )
 {
     gnc_numeric* newvalue;
 
-    newvalue = g_malloc( sizeof( gnc_numeric ) );
+    newvalue = static_cast<gnc_numeric*>(g_malloc (sizeof (gnc_numeric)));
     memcpy( newvalue, in_gnc_numeric, sizeof( gnc_numeric ) );
 
     return newvalue;

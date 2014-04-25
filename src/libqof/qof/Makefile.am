@@ -18,7 +18,7 @@ AM_CPPFLAGS = \
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.c        \
-   gnc-numeric.c     \
+   gnc-numeric.cpp   \
    guid.c            \
    kvp-util.c        \
    kvp_frame.c       \
@@ -83,8 +83,10 @@ noinst_HEADERS = \
 # gets "dereferencing type-punned pointer will break strict-aliasing rules"
 noinst_LTLIBRARIES = libmd5.la
 libmd5_la_SOURCES = md5.c
-libmd5_la_CFLAGS=-fno-strict-aliasing
+libmd5_la_CFLAGS = -fno-strict-aliasing
+
 libgnc_qof_la_LIBADD += libmd5.la
+libgnc_qof_la_CFLAGS = -xc++
 
 EXTRA_DIST += \
   qofmath128.c
@@ -98,9 +100,9 @@ endif
 ## For testing the qofmath128 routines
 # run "make check" (to build the test program) and then run test-qofmath
 check_PROGRAMS = test-qofmath
-test_qofmath_SOURCES=gnc-numeric.c
-test_qofmath_CPPFLAGS=$(AM_CPPFLAGS) -DTEST_128_BIT_MULT
-test_qofmath_LDFLAGS=$(libgnc_qof_la_LDFLAGS)
-test_qofmath_LDADD=$(libgnc_qof_common_libs)
+test_qofmath_SOURCES = gnc-numeric.cpp
+test_qofmath_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_128_BIT_MULT
+test_qofmath_LDFLAGS = $(libgnc_qof_la_LDFLAGS)
+test_qofmath_LDADD = $(libgnc_qof_common_libs)
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"

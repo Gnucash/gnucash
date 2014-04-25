@@ -29,6 +29,11 @@
 typedef struct _QofQueryTerm QofQueryTerm;
 typedef struct _QofQuerySort QofQuerySort;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* Functions to get Query information */
 int qof_query_get_max_results (const QofQuery *q);
 
@@ -65,5 +70,9 @@ void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
 QofQueryParamList * qof_query_sort_get_param_path (const QofQuerySort *querysort);
 gint qof_query_sort_get_sort_options (const QofQuerySort *querysort);
 gboolean qof_query_sort_get_increasing (const QofQuerySort *querysort);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_QUERY_P_H */

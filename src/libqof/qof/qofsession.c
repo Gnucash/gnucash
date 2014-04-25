@@ -62,10 +62,19 @@ static gboolean qof_providers_initialized = FALSE;
  * They should be removed when no longer needed
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 GHookList* get_session_closed_hooks (void );
 GSList* get_provider_list (void );
 gboolean get_qof_providers_initialized (void );
 void unregister_all_providers (void );
+
+#ifdef __cplusplus
+}
+#endif
 
 GHookList*
 get_session_closed_hooks (void)
@@ -112,7 +121,7 @@ qof_backend_get_registered_access_method_list(void)
 
     for ( node = provider_list; node != NULL; node = node->next )
     {
-        QofBackendProvider *prov = node->data;
+        QofBackendProvider *prov = static_cast<QofBackendProvider*>(node->data);
         list = g_list_append( list, (gchar*)prov->access_method );
     }
 
@@ -130,7 +139,7 @@ qof_session_add_close_hook (GFunc fn, gpointer data)
 
     if (session_closed_hooks == NULL)
     {
-        session_closed_hooks = malloc(sizeof(GHookList)); /* LEAKED */
+        session_closed_hooks = static_cast<GHookList*>(malloc(sizeof(GHookList))); /* LEAKED */
         g_hook_list_init (session_closed_hooks, sizeof(GHook));
     }
 
@@ -138,7 +147,7 @@ qof_session_add_close_hook (GFunc fn, gpointer data)
     if (!hook)
         return;
 
-    hook->func = (GHookFunc)fn;
+    hook->func = reinterpret_cast<void*>(fn);
     hook->data = data;
     g_hook_append(session_closed_hooks, hook);
 }
@@ -351,7 +360,7 @@ qof_session_load_backend(QofSession * session, const char * access_method)
     p = provider_list;
     while (p != NULL)
     {
-        prov = p->data;
+        prov = static_cast<QofBackendProvider*>(p->data);
         /* Does this provider handle the desired access method? */
         if (0 == g_ascii_strcasecmp (access_method, prov->access_method))
         {
@@ -495,7 +504,7 @@ qof_session_begin (QofSession *session, const char * book_id,
     if (session->backend->session_begin)
     {
         char *msg;
-        int err;
+        QofBackendError err;
 
         (session->backend->session_begin)(session->backend, session,
                                           session->book_id, ignore_lock,
@@ -610,7 +619,7 @@ qof_session_load (QofSession *session,
 static gboolean
 save_error_handler(QofBackend *be, QofSession *session)
 {
-    int err;
+    QofBackendError err;
     err = qof_backend_get_error(be);
 
     if (ERR_BACKEND_NO_ERR != err)
@@ -689,7 +698,7 @@ void
 qof_session_safe_save(QofSession *session, QofPercentageFunc percentage_func)
 {
     QofBackend *be = session->backend;
-    gint err;
+    QofBackendError err;
     char *msg = NULL;
     g_return_if_fail( be != NULL );
     g_return_if_fail( be->safe_sync != NULL );
@@ -858,11 +867,20 @@ qof_session_export (QofSession *tmp_session,
 
 /* ================= Static function access for testing ================= */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 void init_static_qofsession_pointers (void);
 
 void (*p_qof_session_load_backend) (QofSession * session, const char * access_method);
 void (*p_qof_session_clear_error) (QofSession *session);
 void (*p_qof_session_destroy_backend) (QofSession *session);
+
+#ifdef __cplusplus
+}
+#endif
 
 void
 init_static_qofsession_pointers (void)

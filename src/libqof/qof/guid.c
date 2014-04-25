@@ -21,6 +21,11 @@
  *                                                                  *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -46,6 +51,10 @@
 #endif
 #include "qof.h"
 #include "md5.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 # ifndef P_tmpdir
 #  define P_tmpdir "/tmp"
@@ -677,10 +686,10 @@ guid_to_string(const GncGUID * guid)
     static GPrivate guid_buffer_key = G_PRIVATE_INIT(g_free);
     gchar *string;
 
-    string = g_private_get (&guid_buffer_key);
+    string = static_cast<char*>(g_private_get (&guid_buffer_key));
     if (string == NULL)
     {
-        string = malloc(GUID_ENCODING_LENGTH + 1);
+        string = static_cast<char*>(malloc(GUID_ENCODING_LENGTH + 1));
         g_private_set (&guid_buffer_key, string);
     }
 #endif
@@ -739,7 +748,7 @@ guid_compare(const GncGUID *guid_1, const GncGUID *guid_2)
 guint
 guid_hash_to_guint (gconstpointer ptr)
 {
-    const GncGUID *guid = ptr;
+    const GncGUID *guid = static_cast<const GncGUID*>(ptr);
 
     if (!guid)
     {
@@ -772,7 +781,8 @@ guid_hash_to_guint (gconstpointer ptr)
 gint
 guid_g_hash_table_equal (gconstpointer guid_a, gconstpointer guid_b)
 {
-    return guid_equal (guid_a, guid_b);
+    return guid_equal (static_cast<const GncGUID*>(guid_a),
+		       static_cast<const GncGUID*>(guid_b));
 }
 
 GHashTable *

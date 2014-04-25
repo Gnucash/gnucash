@@ -36,6 +36,11 @@
 #include "qofbook.h"
 #include "qofobject.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** To be called from within the book */
 void qof_object_book_begin (QofBook *book);
 void qof_object_book_end (QofBook *book);
@@ -54,6 +59,10 @@ calling more than once, pass FALSE.
 */
 gboolean
 qof_object_compliance (QofIdTypeConst type_name, gboolean warn);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_OBJECT_P_H_ */
 /** @} */

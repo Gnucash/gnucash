@@ -79,6 +79,11 @@ probably optimize.
 #include "qofquerycore.h"
 #include "qofchoice.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define QOF_MOD_QUERY "qof.query"
 
 /** A Query */
@@ -380,4 +385,8 @@ GList * qof_query_get_books (QofQuery *q);
 
 // @}
 /* @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* QOF_QUERYNEW_H */

@@ -68,6 +68,11 @@
  *  NULL if an error occured.
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 KvpFrame * gnc_kvp_bag_add (KvpFrame *kvp_root, const char *path, time64 secs,
                             const char *first_name, ...);
 
@@ -103,4 +108,8 @@ void gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path,
 
 /** @} */
 /** @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* XACC_KVP_UTIL_P_H */

@@ -21,10 +21,19 @@
  *                                                                  *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <glib.h>
 #include <stdio.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "kvp_frame.h"
 #include "kvp-util.h"
@@ -113,7 +122,7 @@ gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
 
     for (node = kvp_value_get_glist(arr); node; node = node->next)
     {
-        KvpValue *va = node->data;
+        KvpValue *va = static_cast<KvpValue*>(node->data);
         MATCH_GUID (va);
     }
     return NULL;
@@ -147,7 +156,7 @@ gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
     listhead = kvp_value_get_glist(arr);
     for (node = listhead; node; node = node->next)
     {
-        KvpValue *va = node->data;
+        KvpValue *va = static_cast<KvpValue*>(node->data);
         if (fr == kvp_value_get_frame (va))
         {
             listhead = g_list_remove_link (listhead, node);
@@ -182,7 +191,7 @@ gnc_kvp_bag_get_first (KvpFrame *root, const char * path)
     node = kvp_value_get_glist(arr);
     if (NULL == node) return NULL;
 
-    va = node->data;
+    va = static_cast<KvpValue*>(node->data);
     return kvp_value_get_frame(va);
 }
 

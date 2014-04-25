@@ -33,12 +33,21 @@
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 
 #include <stdlib.h>
 #include <string.h>
 
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "qof.h"
 #include "qofevent-p.h"
@@ -87,7 +96,7 @@ qof_book_new (void)
     QofBook *book;
 
     ENTER (" ");
-    book = g_object_new(QOF_TYPE_BOOK, NULL);
+    book = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, NULL));
     qof_object_book_begin (book);
 
     qof_event_gen (&book->inst, QOF_EVENT_CREATE, NULL);
@@ -98,8 +107,8 @@ qof_book_new (void)
 static void
 book_final (gpointer key, gpointer value, gpointer booq)
 {
-    QofBookFinalCB cb = value;
-    QofBook *book = booq;
+    QofBookFinalCB cb = reinterpret_cast<QofBookFinalCB>(value);
+    QofBook *book = static_cast<QofBook*>(booq);
 
     gpointer user_data = g_hash_table_lookup (book->data_tables, key);
     (*cb) (book, key, user_data);
@@ -275,7 +284,8 @@ qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFin
     g_hash_table_insert (book->data_tables, (gpointer)key, data);
 
     if (!cb) return;
-    g_hash_table_insert (book->data_table_finalizers, (gpointer)key, cb);
+    g_hash_table_insert (book->data_table_finalizers, (gpointer)key,
+			 reinterpret_cast<void*>(cb));
 }
 
 gpointer
@@ -308,7 +318,7 @@ qof_book_get_collection (const QofBook *book, QofIdType entity_type)
 
     if (!book || !entity_type) return NULL;
 
-    col = g_hash_table_lookup (book->hash_of_collections, entity_type);
+    col = static_cast<QofCollection*>(g_hash_table_lookup (book->hash_of_collections, entity_type));
     if (!col)
     {
         col = qof_collection_new (entity_type);
@@ -328,8 +338,8 @@ struct _iterate
 static void
 foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
-    struct _iterate *iter = arg;
-    QofCollection *col = item;
+    struct _iterate *iter = static_cast<_iterate*>(arg);
+    QofCollection *col = static_cast<QofCollection*>(item);
 
     iter->fn (col, iter->data);
 }
@@ -406,7 +416,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     KvpFrame *kvp;
     KvpValue *value;
     gint64 counter;
-    gchar* format;
+    const char* format;
 
     if (!book)
     {
@@ -459,11 +469,11 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     return g_strdup_printf(format, counter);
 }
 
-gchar *
+const gchar *
 qof_book_get_counter_format(const QofBook *book, const char *counter_name)
 {
     KvpFrame *kvp;
-    gchar *format;
+    const char *format;
     KvpValue *value;
     gchar *error;
 

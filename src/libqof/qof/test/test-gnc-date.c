@@ -21,11 +21,20 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <config.h>
 #include <string.h>
 #include <glib.h>
 #include <unittest-support.h>
 /* Add specific headers for this class */
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "../gnc-date.h"
 #include "../gnc-date-p.h"
@@ -55,7 +64,16 @@ typedef struct
 } _GncDateTime;
 
 static _GncDateTime gncdt;
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 extern void _gnc_date_time_init (_GncDateTime *);
+
+#ifdef __cplusplus
+}
+#endif
 
 /* gnc_localtime just creates a tm on the heap and calls
  * gnc_localtime_r with it, so this suffices to test both.
@@ -1719,7 +1737,7 @@ test_gnc_timespec_to_iso8601_buff (void)
     gchar *logdomain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
 #ifdef __clang__
-#define _func "gchar *gnc_timespec_to_iso8601_buff(Timespec, char *)"
+#define _func "char *gnc_timespec_to_iso8601_buff(Timespec, char *)"
 #else
 #define _func "gnc_timespec_to_iso8601_buff"
 #endif

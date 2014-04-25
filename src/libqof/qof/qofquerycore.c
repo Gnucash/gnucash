@@ -371,7 +371,7 @@ date_compare_func (gpointer a, gpointer b, gint options, QofParam *getter)
     ta = ((query_date_getter)getter->param_getfcn) (a, getter);
     tb = ((query_date_getter)getter->param_getfcn) (b, getter);
 
-    return date_compare (ta, tb, options);
+    return date_compare (ta, tb, static_cast<QofDateMatch>(options));
 }
 
 static void
@@ -596,10 +596,11 @@ guid_match_predicate (gpointer object, QofParam *getter,
         for (node = pdata->guids; node; node = node->next)
         {
             /* See if this GncGUID matches the object's guid */
-            for (o_list = object; o_list; o_list = o_list->next)
+            for (o_list = static_cast<GList*>(object); o_list;
+		 o_list = static_cast<GList*>(o_list->next))
             {
                 guid = ((query_guid_getter)getter->param_getfcn) (o_list->data, getter);
-                if (guid_equal (node->data, guid))
+                if (guid_equal (static_cast<GncGUID*>(node->data), guid))
                     break;
             }
 
@@ -635,7 +636,8 @@ guid_match_predicate (gpointer object, QofParam *getter,
             /* Search the predicate data for a match */
             for (node2 = pdata->guids; node2; node2 = node2->next)
             {
-                if (guid_equal (node->data, node2->data))
+                if (guid_equal (static_cast<GncGUID*>(node->data),
+				static_cast<GncGUID*>(node2->data)))
                     break;
             }
 
@@ -661,7 +663,7 @@ guid_match_predicate (gpointer object, QofParam *getter,
         guid = ((query_guid_getter)getter->param_getfcn) (object, getter);
         for (node = pdata->guids; node; node = node->next)
         {
-            if (guid_equal (node->data, guid))
+            if (guid_equal (static_cast<GncGUID*>(node->data), guid))
                 break;
         }
     }
@@ -693,7 +695,7 @@ guid_free_pdata (QofQueryPredData *pd)
     VERIFY_PDATA (query_guid_type);
     for (node = pdata->guids; node; node = node->next)
     {
-        guid_free (node->data);
+        guid_free (static_cast<GncGUID*>(node->data));
     }
     g_list_free (pdata->guids);
     g_free (pdata);
@@ -718,7 +720,8 @@ guid_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
     if (g_list_length (l1) != g_list_length (l2)) return FALSE;
     for ( ; l1 ; l1 = l1->next, l2 = l2->next)
     {
-        if (!guid_equal (l1->data, l2->data))
+        if (!guid_equal (static_cast<GncGUID*>(l1->data),
+			 static_cast<GncGUID*>(l2->data)))
             return FALSE;
     }
     return TRUE;
@@ -1277,7 +1280,8 @@ kvp_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
 
     for ( ; n1 && n2; n1 = n1->next, n2 = n2->next)
     {
-        if (g_strcmp0 (n1->data, n2->data) != 0)
+        if (g_strcmp0 (static_cast<char*>(n1->data),
+		       static_cast<char*>(n2->data)) != 0)
             return FALSE;
     }
 
@@ -1302,7 +1306,7 @@ qof_query_kvp_predicate (QofQueryCompare how,
     pdata->value = kvp_value_copy (value);
     pdata->path = g_slist_copy (path);
     for (node = pdata->path; node; node = node->next)
-        node->data = g_strdup (node->data);
+        node->data = g_strdup (static_cast<char*>(node->data));
 
     return ((QofQueryPredData*)pdata);
 }
@@ -1358,11 +1362,12 @@ collect_match_predicate (gpointer object, QofParam *getter,
     {
         for (node = pdata->guids; node; node = node->next)
         {
-            for (o_list = object; o_list; o_list = o_list->next)
+            for (o_list = static_cast<GList*>(object); o_list;
+		 o_list = static_cast<GList*>(o_list->next))
             {
                 guid = ((query_guid_getter)getter->param_getfcn)
                        (o_list->data, getter);
-                if (guid_equal (node->data, guid))
+                if (guid_equal (static_cast<GncGUID*>(node->data), guid))
                 {
                     break;
                 }
@@ -1381,7 +1386,8 @@ collect_match_predicate (gpointer object, QofParam *getter,
         {
             for (node2 = pdata->guids; node2; node2 = node2->next)
             {
-                if (guid_equal (node->data, node2->data))
+                if (guid_equal (static_cast<GncGUID*>(node->data),
+				static_cast<GncGUID*>(node2->data)))
                 {
                     break;
                 }
@@ -1399,7 +1405,7 @@ collect_match_predicate (gpointer object, QofParam *getter,
         guid = ((query_guid_getter)getter->param_getfcn) (object, getter);
         for (node = pdata->guids; node; node = node->next)
         {
-            if (guid_equal (node->data, guid))
+            if (guid_equal (static_cast<GncGUID*>(node->data), guid))
             {
                 break;
             }
@@ -1457,7 +1463,7 @@ collect_free_pdata (QofQueryPredData *pd)
     VERIFY_PDATA (query_collect_type);
     for (node = pdata->guids; node; node = node->next)
     {
-        guid_free (node->data);
+        guid_free (static_cast<GncGUID*>(node->data));
     }
     qof_collection_destroy(pdata->coll);
     g_list_free (pdata->guids);
@@ -1540,10 +1546,11 @@ choice_match_predicate (gpointer object, QofParam *getter,
         for (node = pdata->guids; node; node = node->next)
         {
             /* See if this GncGUID matches the object's guid */
-            for (o_list = object; o_list; o_list = o_list->next)
+            for (o_list = static_cast<GList*>(object); o_list;
+		 o_list = static_cast<GList*>(o_list->next))
             {
                 guid = ((query_choice_getter)getter->param_getfcn) (o_list->data, getter);
-                if (guid_equal (node->data, guid))
+                if (guid_equal (static_cast<GncGUID*>(node->data), guid))
                     break;
             }
 
@@ -1573,7 +1580,8 @@ choice_match_predicate (gpointer object, QofParam *getter,
 
             for (node2 = pdata->guids; node2; node2 = node2->next)
             {
-                if (guid_equal (node->data, node2->data))
+                if (guid_equal (static_cast<GncGUID*>(node->data),
+				static_cast<GncGUID*>(node2->data)))
                     break;
             }
 
@@ -1594,7 +1602,7 @@ choice_match_predicate (gpointer object, QofParam *getter,
         guid = ((query_choice_getter)getter->param_getfcn) (object, getter);
         for (node = pdata->guids; node; node = node->next)
         {
-            if (guid_equal (node->data, guid))
+            if (guid_equal (static_cast<GncGUID*>(node->data), guid))
                 break;
         }
     }
@@ -1626,7 +1634,7 @@ choice_free_pdata (QofQueryPredData *pd)
     VERIFY_PDATA (query_choice_type);
     for (node = pdata->guids; node; node = node->next)
     {
-        guid_free (node->data);
+        guid_free (static_cast<GncGUID*>(node->data));
     }
     g_list_free (pdata->guids);
     g_free (pdata);
@@ -1651,7 +1659,8 @@ choice_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
     if (g_list_length (l1) != g_list_length (l2)) return FALSE;
     for ( ; l1 ; l1 = l1->next, l2 = l2->next)
     {
-        if (!guid_equal (l1->data, l2->data))
+        if (!guid_equal (static_cast<GncGUID*>(l1->data),
+			 static_cast<GncGUID*>(l2->data)))
             return FALSE;
     }
     return TRUE;
@@ -1706,22 +1715,28 @@ qof_query_register_core_object (QofType core_name,
     g_return_if_fail (*core_name != '\0');
 
     if (pred)
-        g_hash_table_insert (predTable, (char *)core_name, pred);
+        g_hash_table_insert (predTable, (char *)core_name,
+			     reinterpret_cast<void*>(pred));
 
     if (comp)
-        g_hash_table_insert (cmpTable, (char *)core_name, comp);
+        g_hash_table_insert (cmpTable, (char *)core_name,
+			     reinterpret_cast<void*>(comp));
 
     if (copy)
-        g_hash_table_insert (copyTable, (char *)core_name, copy);
+        g_hash_table_insert (copyTable, (char *)core_name,
+			     reinterpret_cast<void*>(copy));
 
     if (pd_free)
-        g_hash_table_insert (freeTable, (char *)core_name, pd_free);
+        g_hash_table_insert (freeTable, (char *)core_name,
+			     reinterpret_cast<void*>(pd_free));
 
     if (toString)
-        g_hash_table_insert (toStringTable, (char *)core_name, toString);
+        g_hash_table_insert (toStringTable, (char *)core_name,
+			     reinterpret_cast<void*>(toString));
 
     if (pred_equal)
-        g_hash_table_insert (predEqualTable, (char *)core_name, pred_equal);
+        g_hash_table_insert (predEqualTable, (char *)core_name,
+			     reinterpret_cast<void*>(pred_equal));
 }
 
 static void init_tables (void)
@@ -1821,7 +1836,7 @@ qof_query_copy_predicate (QofType type)
 {
     QueryPredicateCopyFunc rc;
     g_return_val_if_fail (type, NULL);
-    rc = g_hash_table_lookup (copyTable, type);
+    rc = reinterpret_cast<QueryPredicateCopyFunc>(g_hash_table_lookup (copyTable, type));
     return rc;
 }
 
@@ -1829,7 +1844,7 @@ static QueryPredDataFree
 qof_query_predicate_free (QofType type)
 {
     g_return_val_if_fail (type, NULL);
-    return g_hash_table_lookup (freeTable, type);
+    return reinterpret_cast<QueryPredDataFree>(g_hash_table_lookup (freeTable, type));
 }
 
 /********************************************************************/
@@ -1869,14 +1884,14 @@ QofQueryPredicateFunc
 qof_query_core_get_predicate (QofType type)
 {
     g_return_val_if_fail (type, NULL);
-    return g_hash_table_lookup (predTable, type);
+    return reinterpret_cast<QofQueryPredicateFunc>(g_hash_table_lookup (predTable, type));
 }
 
 QofCompareFunc
 qof_query_core_get_compare (QofType type)
 {
     g_return_val_if_fail (type, NULL);
-    return g_hash_table_lookup (cmpTable, type);
+    return reinterpret_cast<QofCompareFunc>(g_hash_table_lookup (cmpTable, type));
 }
 
 void
@@ -1913,7 +1928,7 @@ qof_query_core_to_string (QofType type, gpointer object,
     g_return_val_if_fail (object, NULL);
     g_return_val_if_fail (getter, NULL);
 
-    toString = g_hash_table_lookup (toStringTable, type);
+    toString = reinterpret_cast<QueryToString>(g_hash_table_lookup (toStringTable, type));
     g_return_val_if_fail (toString, NULL);
 
     return toString (object, getter);
@@ -1930,7 +1945,7 @@ qof_query_core_predicate_equal (const QofQueryPredData *p1, const QofQueryPredDa
     if (p1->how != p2->how) return FALSE;
     if (g_strcmp0 (p1->type_name, p2->type_name)) return FALSE;
 
-    pred_equal = g_hash_table_lookup (predEqualTable, p1->type_name);
+    pred_equal = reinterpret_cast<QueryPredicateEqual>(g_hash_table_lookup (predEqualTable, p1->type_name));
     g_return_val_if_fail (pred_equal, FALSE);
 
     return pred_equal (p1, p2);

@@ -28,8 +28,18 @@
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
+
 #include "qof.h"
 #include "kvp-util-p.h"
 #include "qofbook-p.h"
@@ -115,6 +125,8 @@ typedef struct QofInstancePrivate
 
 QOF_GOBJECT_GET_TYPE(QofInstance, qof_instance, G_TYPE_OBJECT, {});
 QOF_GOBJECT_FINALIZE(qof_instance);
+#undef G_PARAM_READWRITE
+#define G_PARAM_READWRITE static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_WRITABLE)
 
 static void qof_instance_get_property (GObject         *object,
                                        guint            prop_id,
@@ -303,7 +315,7 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
         return;
     }
     priv = GET_PRIVATE(inst);
-    inst->e_type = CACHE_INSERT (type);
+    inst->e_type = static_cast<QofIdType>(CACHE_INSERT (type));
 
     do
     {
@@ -433,19 +445,21 @@ qof_instance_set_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_GUID:
-        qof_instance_set_guid(inst, g_value_get_boxed(value));
+        qof_instance_set_guid(inst,
+			      static_cast<GncGUID*>(g_value_get_boxed(value)));
         break;
     case PROP_COLLECTION:
-        qof_instance_set_collection(inst, g_value_get_pointer(value));
+        qof_instance_set_collection(inst, static_cast<QofCollection*>(g_value_get_pointer(value)));
         break;
     case PROP_BOOK:
-        qof_instance_set_book(inst, g_value_get_object(value));
+        qof_instance_set_book(inst,
+			      static_cast<QofBook*>(g_value_get_object(value)));
         break;
     case PROP_KVP_DATA:
-        qof_instance_set_slots(inst, g_value_get_pointer(value));
+        qof_instance_set_slots(inst, static_cast<KvpFrame*>(g_value_get_pointer(value)));
         break;
     case PROP_LAST_UPDATE:
-        ts = g_value_get_pointer(value);
+        ts = static_cast<Timespec*>(g_value_get_pointer(value));
         qof_instance_set_last_update(inst, *ts);
         break;
     case PROP_DESTROYING:

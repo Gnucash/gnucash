@@ -21,8 +21,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 #include <glib.h>
+
+#ifdef __cplusplus
+}
+#endif
+
 #include "qof.h"
 #include "qofchoice.h"
 
@@ -101,8 +111,8 @@ GList* qof_object_get_choices(QofIdType type, QofParam *param)
     g_return_val_if_fail(type != NULL, NULL);
     g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
     choices = NULL;
-    param_table = g_hash_table_lookup(qof_choice_table, type);
-    choices = g_hash_table_lookup(param_table, param->param_name);
+    param_table = static_cast<GHashTable*>(g_hash_table_lookup(qof_choice_table, type));
+    choices = static_cast<GList*>(g_hash_table_lookup(param_table, param->param_name));
     return choices;
 }
 
@@ -115,8 +125,8 @@ gboolean qof_choice_check(const char* choice_obj,
 
     choices = result = NULL;
     g_return_val_if_fail(qof_object_is_choice(choice_obj), FALSE);
-    param_table = g_hash_table_lookup(qof_choice_table, choice_obj);
-    choices = g_hash_table_lookup(param_table, param_name);
+    param_table = static_cast<GHashTable*>(g_hash_table_lookup(qof_choice_table, choice_obj));
+    choices = static_cast<GList*>(g_hash_table_lookup(param_table, param_name));
     result = g_list_find(choices, choice);
     if (!result)
     {
