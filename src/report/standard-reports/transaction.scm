@@ -360,7 +360,12 @@
   (do ((i 0 (+ i 1)) 
        (col-req 0 col-req)) 
       ((>= i columns-used-size) col-req)
-    (if (vector-ref columns-used i) (set! col-req (+ col-req 1)))))
+    (if (and (not (= i 12)) (not (= i 16)) (not (= i 18)) (not (= i 19)) (vector-ref columns-used i))
+      (set! col-req (+ col-req 1)))
+    (if (or (and (= i 14) (vector-ref columns-used 14) (vector-ref columns-used 4))
+            (and (= i 15) (vector-ref columns-used 15) (vector-ref columns-used 5))
+            (and (= i 18) (vector-ref columns-used 18) (vector-ref columns-used 17)))
+      (set! col-req (- col-req 1)))))
 
 (define (build-column-used options)   
   (define (opt-val section name)
