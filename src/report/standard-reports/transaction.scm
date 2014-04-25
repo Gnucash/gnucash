@@ -9,6 +9,8 @@
 ;; Michael T. Garrison Stuber
 ;; Modified account names display by Tomas Pospisek
 ;; <tpo_deb@sourcepole.ch> with a lot of help from "warlord"
+;; Modified by AMM for pagewise reports with headers on each page
+;;   and other minor improvements
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -55,6 +57,9 @@
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
 (define optname-void-transactions (N_ "Void Transactions"))
 (define optname-table-export (N_ "Table for Exporting"))
+(define optname-table-pagebreak (N_ "Insert Pagebreak before Tables"))
+(define optname-table-onetable (N_ "Use Single Table for Accounts"))
+(define optname-table-style (N_ "Additional Style Data for Document"))
 (define optname-common-currency (N_ "Common Currency"))
 (define optname-currency (N_ "Report's currency"))
 (define def:grand-total-style "grand-total")
@@ -128,7 +133,11 @@
     (apply gnc:html-table-set-row-style! arg-list)))
 
 (define (add-subheading-row data table width subheading-style)
-  (let ((heading-cell (gnc:make-html-table-cell/markup "total-label-cell" data)))
+  (let ((heading-cell (gnc:make-html-table-cell/markup "total-label-cell" data))
+        (actheadstart-cell (gnc:make-html-table-cell))
+        (actheadend-cell (gnc:make-html-table-cell)))
+    (gnc:html-table-append-row! table (list actheadstart-cell))
+    (set-last-row-style! table "tr" 'attribute (list "class" "actheadstart"))
     (gnc:html-table-cell-set-colspan! heading-cell width)
     (gnc:html-table-append-row/markup!
      table
@@ -137,7 +146,9 @@
      (gnc:html-table-append-row/markup!
       table
       subheading-style
-      (reverse heading-list))))
+      (reverse heading-list))
+    (gnc:html-table-append-row! table (list actheadend-cell))
+    (set-last-row-style! table "tr" 'attribute (list "class" "actheadend"))))
 
 ;; display an account name depending on the options the user has set
 (define (account-namestring account show-account-code show-account-name show-account-full-name)
@@ -638,7 +649,22 @@
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
     "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))  
-  
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-table-pagebreak
+    "h" (N_ "Formats the table for printing each table on separate page.") #f))  
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-table-onetable
+    "i" (N_ "Use only one table for all accounts, instead separate tables for each Account.") #f))  
+
+  (gnc:register-trep-option
+   (gnc:make-text-option
+    gnc:pagename-general optname-table-style
+    "j" (N_ "Additional Style to apply to document.") ".subac { margin-bottom:20px; }\n@page { margin:25mm; }\ntable { width:100%; }\n"))  
+
   ;; Accounts options
   
   ;; account to do report on
@@ -1427,6 +1453,8 @@ Credit Card, and Income accounts.")))))
         (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
         (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
 	(void-status (opt-val gnc:pagename-accounts optname-void-transactions))
+	(pagebreak? (opt-val gnc:pagename-general optname-table-pagebreak))
+	(onetable? (opt-val gnc:pagename-general optname-table-onetable))
         (splits '())
         (query (qof-query-create-for-splits)))
 
@@ -1518,7 +1546,32 @@ Credit Card, and Income accounts.")))))
                    (display-date-interval begindate enddate))))
                 (gnc:html-document-add-object!
                  document 
+                 (gnc:make-html-text
+                  "<div>\n"))
+                (gnc:html-document-add-object!
+                 document 
                  table)
+                (gnc:html-document-add-object!
+                 document 
+                 (gnc:make-html-text
+                  "</div>\n"))
+                (gnc:html-document-add-object!
+                 document 
+                 (gnc:make-html-text
+                  "<style>.subac{page-break-before:"
+                  (if pagebreak? "always" "auto")
+                  "}\n"
+                  (opt-val gnc:pagename-general optname-table-style)
+                  "</style>\n"
+                  "<script>var onetable="
+                  (if onetable? "true" "false")
+                  ";if (!onetable)window.onload=function(){\n"
+                  "var tblre=new RegExp('<table\\\\b.+>','i');"
+                  "var tbl=tblre.exec(document.body.innerHTML);\n"
+                  "if (tbl==null) tbl='<table cellspacing=\"3.0\" border=\"0\" cellpadding=\"3.0\">';\n"
+                  "document.body.innerHTML=document.body.innerHTML.replace(/<tr\\b.+class=\"actheadstart\"[\\S\\s]+?<\\/tr>/g,'</table></div><div class=\"subac\">'+tbl+'<thead>');\n"
+                  "document.body.innerHTML=document.body.innerHTML.replace(/<tr\\b.+class=\"actheadend\"[\\S\\s]+?<\\/tr>/g,'</thead>');\n"
+                  "}</script>\n"))
                 (qof-query-destroy query))
               ;; error condition: no splits found
               (let ((p (gnc:make-html-text)))
