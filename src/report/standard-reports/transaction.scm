@@ -452,10 +452,10 @@
     (if (used-amount-single column-vector)
         (addto! heading-list (_ "Amount")))
     ;; FIXME: Proper labels: what?
-    (if (used-amount-double-positive column-vector)
-        (addto! heading-list (_ "Debit")))
     (if (used-amount-double-negative column-vector)
         (addto! heading-list (_ "Credit")))
+    (if (used-amount-double-positive column-vector)
+        (addto! heading-list (_ "Debit")))
     (if (used-running-balance column-vector)
         (addto! heading-list (_ "Balance")))
     (reverse heading-list)))
