@@ -44,6 +44,7 @@
 
 ;; Define the strings here to avoid typos and make changes easier.
 
+(define heading-list (list))
 (define reportname (N_ "Transaction Report"))
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
@@ -127,12 +128,16 @@
     (apply gnc:html-table-set-row-style! arg-list)))
 
 (define (add-subheading-row data table width subheading-style)
-  (let ((heading-cell (gnc:make-html-table-cell data)))
+  (let ((heading-cell (gnc:make-html-table-cell/markup "total-label-cell" data)))
     (gnc:html-table-cell-set-colspan! heading-cell width)
     (gnc:html-table-append-row/markup!
      table
      subheading-style
-     (list heading-cell))))
+     (list heading-cell))
+     (gnc:html-table-append-row/markup!
+      table
+      subheading-style
+      (reverse heading-list))))
 
 ;; display an account name depending on the options the user has set
 (define (account-namestring account show-account-code show-account-name show-account-full-name)
@@ -407,7 +412,7 @@
     column-list))
 
 (define (make-heading-list column-vector options)
-  (let ((heading-list '()))
+  (begin
     (if (used-date column-vector)
         (addto! heading-list (_ "Date")))
     (if (used-reconciled-date column-vector)
@@ -1213,9 +1218,8 @@ Credit Card, and Income accounts.")))))
          (account-types-to-reverse
           (get-account-types-to-reverse options)))
 
-    (gnc:html-table-set-col-headers!
-     table
-     (make-heading-list used-columns options))
+    (set! heading-list (list))
+    (make-heading-list used-columns options)
     ;;     (gnc:warn "Splits:" splits)
     (if (not (null? splits))
         (begin
