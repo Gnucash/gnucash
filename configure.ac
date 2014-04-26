@@ -700,6 +700,9 @@ AC_ARG_ENABLE( debug,
      CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
      # ...except for those the user wants.
      CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
+     # Do the same for C++
+     CXXFLAGS=`echo ${CXXFLAGS} | sed -e 's,-O.,,g'`
+     CXXFLAGS="${CXXFLAGS} -g ${USER_OPTIMIZATION}"
      LDFLAGS="${LDFLAGS} -g"
      AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
   ],
@@ -709,6 +712,7 @@ AC_ARG_ENABLE( debug,
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
   CFLAGS="${CFLAGS} -pg"
+  CXXFLAGS="${CFLAGS} -pg"
   LDFLAGS="${LDFLAGS} -pg")
 
 ### --------------------------------------------------------------------------
@@ -1148,6 +1152,7 @@ else
   then
     # We should always see these errors...
     AM_CFLAGS="${AM_CFLAGS} -Wall"
+    AM_CXXFLAGS="${AM_CXXFLAGS} -Wall"
   fi
 
 fi
@@ -1272,7 +1277,9 @@ AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
+  warnXXFLAGS=
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
+  AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
@@ -1294,12 +1301,13 @@ then
   AC_ARG_ENABLE(error-on-warning,
     [AS_HELP_STRING([--disable-error-on-warning],[disable treating compile warnings as errors])],
     [case "${enableval}" in
-       yes) warnFLAGS="${warnFLAGS} -Werror" ; gnc_error_on_warning=yes ;;
+       yes) warnFLAGS="${warnFLAGS} -Werror" ; warnXXFLAGS="${warnXXFLAGS} -Werror" ; gnc_error_on_warning=yes ;;
        no)  gnc_error_on_warning=no ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
      esac],
     [ if test "${error_on_warning_as_default}" = "yes"; then
         warnFLAGS="${warnFLAGS} -Werror";
+        warnXXFLAGS="${warnXXFLAGS} -Werror";
         gnc_error_on_warning=auto
       else
         gnc_error_on_warning=no
@@ -1324,10 +1332,12 @@ then
     fi
   fi
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
+  AM_CXXFLAGS="${warnXXFLAGS} ${AM_CXXFLAGS}"
 else
   warnFLAGS=none
 fi
 AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CXXFLAGS)
 AC_MSG_RESULT($warnFLAGS)
 
 ### --------------------------------------------------------------------------
@@ -1551,6 +1561,7 @@ AC_MSG_RESULT([
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS
+  CXXFLAGS ............. : $CXXFLAGS
   LDFLAGS .............. : $LDFLAGS
   prefix................ : ${prefix}
 

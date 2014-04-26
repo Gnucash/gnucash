@@ -114,8 +114,9 @@ noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 test_engine_SOURCES = \
 	test-engine.c \
 	utest-Account.c \
-    utest-Budget.c \
-	utest-Invoice.c
+	utest-Budget.c \
+	utest-Invoice.c \
+	dummy.cpp
 
 test_engine_LDADD = \
 	libutest-Split.la \
@@ -132,9 +133,9 @@ noinst_LTLIBRARIES = \
 	libutest-Trans.la
 
 libutest_Split_la_SOURCES = \
-	utest-Split.c \
+	utest-Split.cpp \
 	${top_srcdir}/src/libqof/qof/gnc-numeric.cpp
-libutest_Split_la_CFLAGS = -xc++ -Wno-deprecated-writable-strings
+libutest_Split_la_CXXFLAGS = -Wno-write-strings $(AM_CXXFLAGS)
 
 libutest_Split_la_LIBADD = $(LDADD)
 

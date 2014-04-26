@@ -86,7 +86,10 @@ libmd5_la_SOURCES = md5.c
 libmd5_la_CFLAGS = -fno-strict-aliasing
 
 libgnc_qof_la_LIBADD += libmd5.la
-libgnc_qof_la_CFLAGS = -xc++ -Wall -Werror
+libgnc_qof_la_CFLAGS = -xc++ $(AM_CXXFLAGS)
+# Since we asked for the C++ compiler, give it the C++ flags, not the C flags
+# which may not be legal in C++
+CFLAGS = $(CXXFLAGS)
 
 EXTRA_DIST += \
   qofmath128.c
