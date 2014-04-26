@@ -115,7 +115,7 @@ kvp_frame_new(void)
 }
 
 static void
-kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data)
+kvp_frame_delete_worker(gpointer key, gpointer value, G_GNUC_UNUSED gpointer user_data)
 {
     qof_string_cache_remove(key);
     kvp_value_delete((KvpValue *)value);
@@ -326,7 +326,7 @@ get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
 
     if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
-    last_key = strrchr (key_path, '/');
+    last_key = strrchr (const_cast<char*>(key_path), '/');
     if (NULL == last_key)
     {
         last_key = (char *) key_path;
@@ -368,7 +368,7 @@ get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_k
 
     if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
-    last_key = strrchr (key_path, '/');
+    last_key = strrchr (const_cast<char*>(key_path), '/');
     if (NULL == last_key)
     {
         last_key = (char *) key_path;

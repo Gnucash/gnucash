@@ -635,21 +635,15 @@ qof_session_save (QofSession *session,
                   QofPercentageFunc percentage_func)
 {
     QofBackend *be;
-    QofBackendProvider *prov;
-    GSList *p;
-    QofBook *book;
-    int err;
     char *msg = NULL;
-    char *book_id;
+
 
     if (!session) return;
     if (!g_atomic_int_dec_and_test(&session->lock))
         goto leave;
     ENTER ("sess=%p book_id=%s",
            session, session->book_id ? session->book_id : "(null)");
-    book = qof_session_get_book(session);
     msg = g_strdup_printf(" ");
-    book_id = g_strdup(session->book_id);
     /* If there is a backend, and the backend is reachable
     * (i.e. we can communicate with it), then synchronize with
     * the backend.  If we cannot contact the backend (e.g.

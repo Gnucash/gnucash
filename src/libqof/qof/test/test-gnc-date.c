@@ -90,7 +90,8 @@ test_gnc_localtime (void)
 #ifdef __clang__
 #define _func "struct tm *gnc_localtime_r(const time64 *, struct tm *)"
 #else
-#define _func "gnc_localtime_r"
+#define _func "tm* gnc_localtime_r(const time64*, tm*)"
+//#define _func "gnc_localtime_r"
 #endif
     gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
 #undef _func
@@ -161,7 +162,8 @@ test_gnc_gmtime (void)
 #ifdef __clang__
 #define _func "struct tm *gnc_gmtime(const time64 *)"
 #else
-#define _func "gnc_gmtime"
+#define _func "tm* gnc_gmtime(const time64*)"
+//#define _func "gnc_gmtime"
 #endif
     gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
 #undef _func
@@ -1739,7 +1741,8 @@ test_gnc_timespec_to_iso8601_buff (void)
 #ifdef __clang__
 #define _func "char *gnc_timespec_to_iso8601_buff(Timespec, char *)"
 #else
-#define _func "gnc_timespec_to_iso8601_buff"
+#define _func "char* gnc_timespec_to_iso8601_buff(Timespec, char*)"
+//#define _func "gnc_timespec_to_iso8601_buff"
 #endif
     gchar *msg = _func ": assertion " _Q "buff != NULL' failed";
 #undef _func

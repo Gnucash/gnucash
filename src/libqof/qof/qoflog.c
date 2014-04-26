@@ -317,7 +317,7 @@ qof_log_parse_log_config(const char *filename)
     if (g_key_file_has_group(conf, levels_group))
     {
         gsize num_levels;
-        int key_idx;
+        unsigned int key_idx;
         gchar **levels;
 
         levels = g_key_file_get_keys(conf, levels_group, &num_levels, NULL);
@@ -343,7 +343,7 @@ qof_log_parse_log_config(const char *filename)
     if (g_key_file_has_group(conf, output_group))
     {
         gsize num_outputs;
-        int output_idx;
+        unsigned int output_idx;
         gchar **outputs;
 
         outputs = g_key_file_get_keys(conf, output_group, &num_outputs, NULL);

@@ -115,12 +115,12 @@ book_final (gpointer key, gpointer value, gpointer booq)
 }
 
 static void
-qof_book_dispose_real (GObject *bookp)
+qof_book_dispose_real (G_GNUC_UNUSED GObject *bookp)
 {
 }
 
 static void
-qof_book_finalize_real (GObject *bookp)
+qof_book_finalize_real (G_GNUC_UNUSED GObject *bookp)
 {
 }
 
@@ -336,7 +336,7 @@ struct _iterate
 };
 
 static void
-foreach_cb (gpointer key, gpointer item, gpointer arg)
+foreach_cb (G_GNUC_UNUSED gpointer key, gpointer item, gpointer arg)
 {
     struct _iterate *iter = static_cast<_iterate*>(arg);
     QofCollection *col = static_cast<QofCollection*>(item);
@@ -746,13 +746,13 @@ qof_book_begin_edit (QofBook *book)
     qof_begin_edit(&book->inst);
 }
 
-static void commit_err (QofInstance *inst, QofBackendError errcode)
+static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode)
 {
     PERR ("Failed to commit: %d", errcode);
 //  gnc_engine_signal_commit_error( errcode );
 }
 
-static void noop (QofInstance *inst) {}
+static void noop (G_GNUC_UNUSED QofInstance *inst) {}
 
 void
 qof_book_commit_edit(QofBook *book)

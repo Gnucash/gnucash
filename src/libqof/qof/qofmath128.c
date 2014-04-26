@@ -197,7 +197,7 @@ div128 (qofint128 n, gint64 d)
         remainder <<= 1;
         if (sbit) remainder |= 1;
         quotient = shiftleft128 (quotient);
-        if (remainder >= d)
+        if (remainder >= static_cast<unsigned int64_t>(d))
         {
             remainder -= d;
             quotient.lo |= 1;

@@ -200,7 +200,7 @@ win32_in_dst (GDateTime *date, TIME_ZONE_INFORMATION *tzinfo)
 #endif
 
 static GTimeZone*
-gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, GDateTime *date)
+gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, G_GNUC_UNUSED GDateTime *date)
 {
 #ifdef G_OS_WIN32
     TIME_ZONE_INFORMATION tzinfo;
@@ -372,16 +372,12 @@ gnc_localtime (const time64 *secs)
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
 {
-     guint index = 0;
      GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
      g_return_val_if_fail (gdt != NULL, NULL);
 
      gnc_g_date_time_fill_struct_tm (gdt, time);
      if (g_date_time_is_daylight_savings (gdt))
-     {
-	  index = 1;
           time->tm_isdst = 1;
-     }
 
 #ifdef HAVE_STRUCT_TM_GMTOFF
      time->tm_gmtoff = g_date_time_get_utc_offset (gdt) / G_TIME_SPAN_SECOND;
@@ -411,7 +407,7 @@ normalize_time_component (gint *inner, gint *outer, guint divisor, gint base)
 	  --(*outer);
 	  *inner += divisor;
      }
-     while (*inner > divisor)
+     while (*inner > static_cast<gint>(divisor))
      {
 	  ++(*outer);
 	  *inner -= divisor;
@@ -430,7 +426,6 @@ normalize_struct_tm (struct tm* time)
 {
      gint year = time->tm_year + 1900;
      gint last_day;
-     time64 secs;
 
      ++time->tm_mon;
      /* GDateTime doesn't protect itself against out-of range years,
@@ -1542,10 +1537,8 @@ gnc_iso8601_to_timespec_gmt(const char *str)
     else if (fields > 6 && strlen (zone) > 0) /* Date string included a timezone */
     {
 	GTimeZone *tz = g_time_zone_new (zone);
-        time64 secs;
 	second += 5e-10;
 	gdt = g_date_time_new (tz, year, month, day, hour, minute, second);
-        secs = g_date_time_to_unix (gdt);
     }
     else /* No zone info, assume UTC */
     {
@@ -1609,7 +1602,6 @@ gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
     Timespec result;
     struct tm date;
     long long secs = 0;
-    long long era = 0;
 
     date.tm_year = year - 1900;
     date.tm_mon = month - 1;

@@ -235,7 +235,7 @@ g_hash_table_key_value_pairs(GHashTable *table)
 }
 
 void
-g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data)
+g_hash_table_kv_pair_free_gfunc(gpointer data, G_GNUC_UNUSED gpointer user_data)
 {
     GHashTableKVPair *kvp = (GHashTableKVPair *) data;
     g_free(kvp);
