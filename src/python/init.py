@@ -8,7 +8,16 @@ sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
     print "woop", os.path.dirname(__file__)
+# Importing the console class causes SIGTTOU to be thrown if GnuCash is
+# started in the background.  This causes a hang if it is not handled, 
+# so ignore it for the duration
+import signal
+old_sigttou = signal.signal(signal.SIGTTOU, signal.SIG_IGN)
+
 import pycons.console as cons
+
+# Restore the SIGTTOU handler
+signal.signal(signal.SIGTTOU, old_sigttou)
 
 if noisy:
     print "Hello from python!"
