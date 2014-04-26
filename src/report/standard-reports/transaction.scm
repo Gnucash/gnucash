@@ -355,11 +355,20 @@
   (do ((i 0 (+ i 1)) 
        (col-req 0 col-req)) 
       ((>= i columns-used-size) col-req)
-    (if (and (not (= i 12)) (not (= i 16)) (not (= i 18)) (not (= i 19)) (vector-ref columns-used i))
+    ; If column toggle is true, increase column count. But attention:
+    ; some toggles only change the meaning of another toggle. Don't count these modifier toggles
+    (if (and (not (= i 12)) ; Skip Account Full Name toggle - modifies Account Name column
+             (not (= i 16)) ; Skip Other Account Full Name toggle - modifies Other Account Name column
+             (not (= i 17)) ; Skip Sort Account Code - modifies Account Name subheading
+             (not (= i 18)) ; Skip Sort Account Full Name - modifies Account Name subheading
+             (not (= i 19)) ; Skip Note toggle - modifies Memo column
+             (vector-ref columns-used i))
       (set! col-req (+ col-req 1)))
-    (if (or (and (= i 14) (vector-ref columns-used 14) (vector-ref columns-used 4))
-            (and (= i 15) (vector-ref columns-used 15) (vector-ref columns-used 5))
-            (and (= i 18) (vector-ref columns-used 18) (vector-ref columns-used 17)))
+    ; Account Code and Account Name share one column so if both were ticked the
+    ; the check above would have set up one column too much. The check below
+    ; will compensate these again.
+    (if (or (and (= i 14) (vector-ref columns-used 14) (vector-ref columns-used 4)) ; Account Code and Name
+            (and (= i 15) (vector-ref columns-used 15) (vector-ref columns-used 5))) ; Other Account Code and Name
       (set! col-req (- col-req 1)))))
 
 (define (build-column-used options)   
