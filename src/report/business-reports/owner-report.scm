@@ -343,7 +343,7 @@
        ((equal? type TXN-TYPE-PAYMENT)
         (gnc:make-html-text
 	 (gnc:html-markup-anchor
-	  (gnc:split-anchor-text split) (_ "Payment, thank you"))))
+	  (gnc:split-anchor-text split) (_ "Payment"))))
        (else (_ "Unknown"))))
      )
 
@@ -435,22 +435,29 @@
             (_ "Period Totals"))
            '())
 
-    ; This is hard-coded to expect 'debits' to follow 'credits'
-    (let ((row-contents '())
-        (credit-span (credit-col used-columns))
-        (debit-span
-        (if (credit-col used-columns) 1 (debit-col used-columns))))
+     (let ((row-contents '())
+         (pre-span 0))
 
-    ; HTML gets generated in reverse order
-    (if (debit-col used-columns) (addto! row-contents
-        (gnc:make-html-table-cell/size/markup
-        1 debit-span "total-number-cell"
-        (gnc:make-gnc-monetary currency debit))))
-    (if (credit-col used-columns) (addto! row-contents
-        (gnc:make-html-table-cell/size/markup
-        1 credit-span "total-number-cell"
-        (gnc:make-gnc-monetary currency credit))))
-    row-contents))))
+      ; HTML gets generated in reverse order
+      (if (value-col used-columns) (addto! row-contents
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency (gnc-numeric-add-fixed credit debit)))))
+      (if (debit-col used-columns) (addto! row-contents
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency debit))))
+      (if (credit-col used-columns) (addto! row-contents
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency credit))))
+      (if (memo-col used-columns) (set! pre-span (+ pre-span 1)))
+      (if (type-col used-columns) (set! pre-span (+ pre-span 1)))
+      (if (num-col used-columns) (set! pre-span (+ pre-span 1)))
+      (if (date-due-col used-columns) (set! pre-span (+ pre-span 1)))
+      (if (date-col used-columns) (set! pre-span (+ pre-span 1)))
+      (if (>= pre-span 2) (addto! row-contents (gnc:make-html-table-cell/size 1 (- pre-span 1) "")))
+     row-contents))))
 
     (if (value-col used-columns)
     (gnc:html-table-append-row/markup! 
