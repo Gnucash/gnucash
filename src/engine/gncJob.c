@@ -56,6 +56,7 @@ struct _gncJobClass
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_JOB
+#define GNC_JOB_RATE         "job-rate"
 
 /* ================================================================== */
 /* misc inline functions */
@@ -306,6 +307,28 @@ void gncJobSetReference (GncJob *job, const char *desc)
     gncJobCommitEdit (job);
 }
 
+void gncJobSetRate (GncJob *job, gnc_numeric rate)
+{
+    if (!job) return;
+    if (gnc_numeric_equal (gncJobGetRate(job), rate)) return;
+
+    gncJobBeginEdit (job);
+    if (!gnc_numeric_zero_p(rate))
+        kvp_frame_set_numeric(job->inst.kvp_data, GNC_JOB_RATE, rate);
+    else
+    {
+        KvpFrame *frame;
+        KvpValue *value;
+
+        value = NULL;
+        frame = kvp_frame_set_value_nc (job->inst.kvp_data,
+                                        GNC_JOB_RATE, value);
+        if (!frame) kvp_value_delete (value);
+    }
+    mark_job (job);
+    gncJobCommitEdit (job);
+}
+
 void gncJobSetOwner (GncJob *job, GncOwner *owner)
 {
     if (!job) return;
@@ -429,6 +452,12 @@ const char * gncJobGetReference (const GncJob *job)
     return job->desc;
 }
 
+gnc_numeric gncJobGetRate (const GncJob *job)
+{
+    if (!job) return gnc_numeric_zero ();
+    return kvp_frame_get_numeric(job->inst.kvp_data, GNC_JOB_RATE);
+}
+
 GncOwner * gncJobGetOwner (GncJob *job)
 {
     if (!job) return NULL;
@@ -488,6 +517,12 @@ gboolean gncJobEqual(const GncJob * a, const GncJob *b)
         return FALSE;
     }
 
+    if (!gnc_numeric_equal(gncJobGetRate(a), gncJobGetRate(b)))
+    {
+        PWARN("Rates differ");
+        return FALSE;
+    }
+
     if (a->active != b->active)
     {
         PWARN("Active flags differ");
@@ -536,6 +571,7 @@ gboolean gncJobRegister (void)
         { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
         { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
         { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
+        { JOB_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncJobGetRate, (QofSetterFunc)gncJobSetRate },
 #ifdef GNUCASH_MAJOR_VERSION
         { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
 #else

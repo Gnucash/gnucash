@@ -379,6 +379,17 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
                 gboolean taxincluded = FALSE;
                 gnc_numeric discount = gnc_numeric_zero ();
+                gnc_numeric price = gnc_numeric_zero ();
+
+                /* Determine the Price from Customer's or Vendor's Job */
+                switch (gncOwnerGetType (gncInvoiceGetOwner (ledger->invoice)))
+                {
+                case GNC_OWNER_JOB:
+                    price = gncJobGetRate( gncOwnerGetJob (gncInvoiceGetOwner (ledger->invoice)));
+                    break;
+                default:
+                    break;
+                }
 
                 /* Determine the TaxIncluded and Discount values */
                 switch (gncOwnerGetType (owner))
@@ -443,11 +454,13 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                     gncEntrySetInvTaxTable (blank_entry, table);
                     gncEntrySetInvTaxIncluded (blank_entry, taxincluded);
                     gncEntrySetInvDiscount (blank_entry, discount);
+                    gncEntrySetInvPrice (blank_entry, price);
                 }
                 else
                 {
                     gncEntrySetBillTaxTable (blank_entry, table);
                     gncEntrySetBillTaxIncluded (blank_entry, taxincluded);
+                    gncEntrySetBillPrice (blank_entry, price);
                 }
             }
 
