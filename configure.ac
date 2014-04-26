@@ -1013,7 +1013,12 @@ then
   then
     enable_compile_warnings="yes"
   fi
+#Save CFLAGS so that we can put the warnings in AM_CFLAGS
+  __cflags="$CFLAGS"
+  CFLAGS=
   GNOME_COMPILE_WARNINGS
+  AM_CFLAGS="$CFLAGS"
+  CFLAGS="$__cflags"
 
   PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.24.0)
   AS_SCRUB_INCLUDE(GTK_CFLAGS)
@@ -1142,7 +1147,7 @@ else
   if test ${GCC}x = yesx
   then
     # We should always see these errors...
-    CFLAGS="${CFLAGS} -Wall"
+    AM_CFLAGS="${AM_CFLAGS} -Wall"
   fi
 
 fi
@@ -1267,7 +1272,7 @@ AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
-  CFLAGS="${CFLAGS} -Wno-unused"
+  AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
@@ -1318,10 +1323,11 @@ then
          fi
     fi
   fi
-  CFLAGS="${warnFLAGS} ${CFLAGS}"
+  AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
 else
   warnFLAGS=none
 fi
+AC_SUBST(AM_CFLAGS)
 AC_MSG_RESULT($warnFLAGS)
 
 ### --------------------------------------------------------------------------
