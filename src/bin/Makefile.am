@@ -56,8 +56,7 @@ gnucash_LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${GTK_LIBS} \
-  -lprofiler
+  ${GTK_LIBS}
 
 GNUCASH_BIN_INSTALL_NAME=`echo ${BIN_NAME} | sed -e '$(transform)'`
 
