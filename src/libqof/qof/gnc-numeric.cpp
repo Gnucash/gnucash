@@ -43,7 +43,7 @@ extern "C"
          nowhere else. Hence, we inline the C code directly into here so
          that the compiler can potentially inline the code as-is and speed
          up the gnc-numeric.c functions. */
-#include "qofmath128.c"
+#include "qofmath128.cpp"
 
 /* static short module = MOD_ENGINE; */
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,

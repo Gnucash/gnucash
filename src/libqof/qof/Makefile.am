@@ -17,25 +17,25 @@ AM_CPPFLAGS = \
   $(GLIB_CFLAGS)
 
 libgnc_qof_la_SOURCES =  \
-   gnc-date.c        \
+   gnc-date.cpp        \
    gnc-numeric.cpp   \
-   guid.c            \
-   kvp-util.c        \
-   kvp_frame.c       \
-   qofbackend.c      \
-   qofbook.c         \
-   qofchoice.c       \
-   qofclass.c        \
-   qofevent.c        \
-   qofid.c           \
-   qofinstance.c     \
-   qoflog.c          \
-   qofobject.c       \
-   qofquery.c        \
-   qofquerycore.c    \
-   qofsession.c      \
-   qof-string-cache.c  \
-   qofutil.c
+   guid.cpp            \
+   kvp-util.cpp        \
+   kvp_frame.cpp       \
+   qofbackend.cpp      \
+   qofbook.cpp         \
+   qofchoice.cpp       \
+   qofclass.cpp        \
+   qofevent.cpp        \
+   qofid.cpp           \
+   qofinstance.cpp     \
+   qoflog.cpp          \
+   qofobject.cpp       \
+   qofquery.cpp        \
+   qofquerycore.cpp    \
+   qofsession.cpp      \
+   qof-string-cache.cpp  \
+   qofutil.cpp
 
 qofincludedir = ${pkgincludedir}
 
@@ -83,21 +83,17 @@ noinst_HEADERS = \
 # gets "dereferencing type-punned pointer will break strict-aliasing rules"
 noinst_LTLIBRARIES = libmd5.la
 libmd5_la_SOURCES = md5.c
-libmd5_la_CFLAGS = -fno-strict-aliasing
+libmd5_la_CFLAGS = ${AM_CFLAGS} -fno-strict-aliasing
 
 libgnc_qof_la_LIBADD += libmd5.la
-libgnc_qof_la_CFLAGS = -xc++ $(AM_CXXFLAGS)
-# Since we asked for the C++ compiler, give it the C++ flags, not the C flags
-# which may not be legal in C++
-CFLAGS = $(CXXFLAGS)
 
 EXTRA_DIST += \
-  qofmath128.c
+  qofmath128.cpp
 
 if OS_WIN32
-libgnc_qof_la_SOURCES += qof-win32.c
+libgnc_qof_la_SOURCES += qof-win32.cpp
 else
-EXTRA_DIST += qof-win32.c
+EXTRA_DIST += qof-win32.cpp
 endif
 
 ## For testing the qofmath128 routines

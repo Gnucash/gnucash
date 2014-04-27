@@ -10,27 +10,27 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for strptime.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src) # for platform.h
 
 SET (libgnc_qof_SOURCES
-   qof/gnc-date.c
-   qof/gnc-numeric.c
-   qof/guid.c
-   qof/kvp-util.c
-   qof/kvp_frame.c
+   qof/gnc-date.cpp
+   qof/gnc-numeric.cpp
+   qof/guid.cpp
+   qof/kvp-util.cpp
+   qof/kvp_frame.cpp
    qof/md5.c
-   qof/qofbackend.c
-   qof/qofbook.c
-   qof/qofchoice.c
-   qof/qofclass.c
-   qof/qofevent.c
-   qof/qofid.c
-   qof/qofinstance.c
-   qof/qoflog.c
-   qof/qofobject.c
-   qof/qofquery.c
-   qof/qofquerycore.c
-   qof/qofreference.c
-   qof/qofsession.c
-   qof/qofutil.c
-   qof/qof-string-cache.c
+   qof/qofbackend.cpp
+   qof/qofbook.cpp
+   qof/qofchoice.cpp
+   qof/qofclass.cpp
+   qof/qofevent.cpp
+   qof/qofid.cpp
+   qof/qofinstance.cpp
+   qof/qoflog.cpp
+   qof/qofobject.cpp
+   qof/qofquery.cpp
+   qof/qofquerycore.cpp
+   qof/qofreference.cpp
+   qof/qofsession.cpp
+   qof/qofutil.cpp
+   qof/qof-string-cache.cpp
 )
 IF (WIN32)
   ADD_DEFINITIONS (-DOS_WIN32)
