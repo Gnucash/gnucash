@@ -1318,18 +1318,18 @@ then
   # -Wdeclaration-after-statement in order to preserve source code
   # compatibility to gcc 2.95 and other compilers.
   GCC_VERSION=`${CC} -dumpversion`
-  if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 3; then
-    # This is gcc >= 3.x.x
+  if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 3; then
+    # This is gcc 3.x.x
     if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
       # This is gcc >= 3.4.x
       warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
-    else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
-           # This is gcc == 4.x.x
-           warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
-           # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
-           warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-         fi
     fi
+  else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
+         # This is gcc >= 4.x.x
+         warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
+         # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
+         warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+       fi
   fi
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
   AM_CXXFLAGS="${warnXXFLAGS} ${AM_CXXFLAGS}"

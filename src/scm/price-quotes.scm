@@ -28,6 +28,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (srfi srfi-1))
 
 (gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
 (gnc:module-load "gnucash/app-utils" 0)
