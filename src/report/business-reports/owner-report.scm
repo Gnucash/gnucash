@@ -5,6 +5,7 @@
 ;;
 ;; Created by:  Derek Atkins <warlord@MIT.EDU>
 ;; Copyright (c) 2002, 2003 Derek Atkins <warlord@MIT.EDU>
+;; Modified by AMM to show tax figures of invoice.
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -53,6 +54,8 @@
 (define reference-header (N_ "Reference"))
 (define type-header (N_ "Type"))
 (define desc-header (N_ "Description"))
+(define sale-header (N_ "Sale"))
+(define tax-header (N_ "Tax"))
 (define credit-header (N_ "Credits"))
 (define debit-header (N_ "Debits"))
 (define amount-header (N_ "Amount"))
@@ -131,14 +134,18 @@
   (vector-ref columns-used 3))
 (define (memo-col columns-used)
   (vector-ref columns-used 4))
-(define (credit-col columns-used)
+(define (sale-col columns-used)
   (vector-ref columns-used 5))
-(define (debit-col columns-used)
+(define (tax-col columns-used)
   (vector-ref columns-used 6))
-(define (value-col columns-used)
+(define (credit-col columns-used)
   (vector-ref columns-used 7))
+(define (debit-col columns-used)
+  (vector-ref columns-used 8))
+(define (value-col columns-used)
+  (vector-ref columns-used 9))
 
-(define columns-used-size 8)
+(define columns-used-size 10)
 
 (define (build-column-used options)   
   (define (opt-val section name)
@@ -160,9 +167,11 @@
     (set-col (opt-val "Display Columns" reference-header) 2)
     (set-col (opt-val "Display Columns" type-header) 3)
     (set-col (opt-val "Display Columns" desc-header) 4)
-    (set-col (opt-val "Display Columns" credit-header) 5)
-    (set-col (opt-val "Display Columns" debit-header) 6)
-    (set-col (opt-val "Display Columns" amount-header) 7)
+    (set-col (opt-val "Display Columns" sale-header) 5)
+    (set-col (opt-val "Display Columns" tax-header) 6)
+    (set-col (opt-val "Display Columns" credit-header) 7)
+    (set-col (opt-val "Display Columns" debit-header) 8)
+    (set-col (opt-val "Display Columns" amount-header) 9)
     col-vector))
 
 (define (make-heading-list column-vector)
@@ -177,6 +186,10 @@
     (addto! heading-list (_ type-header)))
     (if (memo-col column-vector)
     (addto! heading-list (_ desc-header)))
+    (if (sale-col column-vector)
+    (addto! heading-list (_ sale-header)))
+    (if (tax-col column-vector)
+    (addto! heading-list (_ tax-header)))
     (if (credit-col column-vector)
     (addto! heading-list (_ credit-header)))
     (if (debit-col column-vector)
@@ -269,7 +282,7 @@
 ;;
 ;; Make a row list based on the visible columns
 ;;
-(define (make-row column-vector date due-date num type-str memo monetary credit debit)
+(define (make-row column-vector date due-date num type-str memo monetary credit debit sale tax)
   (let ((row-contents '()))
     (if (date-col column-vector)
         (addto! row-contents (gnc-print-date date)))
@@ -285,6 +298,12 @@
         (addto! row-contents type-str))
     (if (memo-col column-vector)
         (addto! row-contents memo))
+    (if (sale-col column-vector)
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" sale)))
+    (if (tax-col column-vector)
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" tax)))
     (if (credit-col column-vector)
         (addto! row-contents
          (gnc:make-html-table-cell/markup "number-cell" credit)))
@@ -308,7 +327,7 @@
     (set! printed? #t)
     (if (and (value-col column-vector) (not (gnc-numeric-zero-p total)))
         (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
-                 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" ""))
+                 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" "" "" ""))
           (row-style (if odd-row? "normal-row" "alternate-row")))
           (gnc:html-table-append-row/markup! table row-style (reverse row))
           (set! odd-row? (not odd-row?))
@@ -328,6 +347,8 @@
      (date (gnc-transaction-get-date-posted txn))
      (due-date #f)
      (value (xaccTransGetAccountValue txn acc))
+     (sale (gnc-numeric-zero))
+     (tax (gnc-numeric-zero))
      (split (xaccTransGetSplit txn 0))
      (invoice (gncInvoiceGetInvoiceFromTxn txn))
      (currency (xaccTransGetCurrency txn))
@@ -358,7 +379,15 @@
       
       ; Now print out the invoice row
       (if (not (null? invoice))
-          (set! due-date (gncInvoiceGetDateDue invoice)))
+        (begin
+          (set! due-date (gncInvoiceGetDateDue invoice))
+          (set! sale (gncInvoiceGetTotalSubtotal invoice))
+          (set! tax (gncInvoiceGetTotalTax invoice))))
+
+      (if reverse?
+        (begin
+          (set! tax (gnc-numeric-neg tax))
+          (set! sale (gnc-numeric-neg sale))))
 
       (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
                    type-str (xaccSplitGetMemo split)
@@ -367,6 +396,10 @@
                (gnc:make-gnc-monetary currency value) "")
            (if (gnc-numeric-negative-p value)
                (gnc:make-gnc-monetary currency value) "")
+           (if (not (null? invoice))
+               (gnc:make-gnc-monetary currency sale) "")
+           (if (not (null? invoice))
+               (gnc:make-gnc-monetary currency tax) "")
         ))
         (row-style (if odd-row? "normal-row" "alternate-row")))
 
@@ -376,7 +409,7 @@
       (set! odd-row? (not odd-row?))
       ))
 
-    (list printed? value odd-row?)
+    (list printed? value odd-row? sale tax)
     ))
 
 
@@ -386,6 +419,8 @@
     (total (gnc-numeric-zero))
     (debit (gnc-numeric-zero))
     (credit (gnc-numeric-zero))
+    (tax (gnc-numeric-zero))
+    (sale (gnc-numeric-zero))
     (currency (gnc-default-currency)) ;XXX
     (table (gnc:make-html-table))
     (inv-str (gnc:option-value (gnc:lookup-option options "__reg"
@@ -413,9 +448,12 @@
 
           (set! printed? (car result))
           (if (and printed? total)
-        (if (gnc-numeric-negative-p (cadr result))
-            (set! debit (gnc-numeric-add-fixed debit (cadr result)))
-            (set! credit (gnc-numeric-add-fixed credit (cadr result)))))
+            (begin
+              (set! sale (gnc-numeric-add-fixed sale (cadddr result)))
+              (set! tax (gnc-numeric-add-fixed tax (car (cddddr result))))
+              (if (gnc-numeric-negative-p (cadr result))
+                (set! debit (gnc-numeric-add-fixed debit (cadr result)))
+                (set! credit (gnc-numeric-add-fixed credit (cadr result))))))
           (set! total (gnc-numeric-add-fixed total (cadr result)))
           (set! odd-row? (caddr result))
           ))))
@@ -426,7 +464,7 @@
       (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
         ))
 
-    (if (or (credit-col used-columns) (debit-col used-columns))
+    (if (or (sale-col used-columns) (tax-col used-columns) (credit-col used-columns) (debit-col used-columns))
     (gnc:html-table-append-row/markup! 
      table
      "grand-total"
@@ -451,6 +489,14 @@
           (gnc:make-html-table-cell/size/markup
           1 1 "total-number-cell"
           (gnc:make-gnc-monetary currency credit))))
+      (if (tax-col used-columns) (addto! row-contents
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency tax))))
+      (if (sale-col used-columns) (addto! row-contents
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency sale))))
       (if (memo-col used-columns) (set! pre-span (+ pre-span 1)))
       (if (type-col used-columns) (set! pre-span (+ pre-span 1)))
       (if (num-col used-columns) (set! pre-span (+ pre-span 1)))
@@ -546,13 +592,23 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
+    (N_ "Display Columns") sale-header
+    "haa" (N_ "Display the sale amount column?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") tax-header
+    "hab" (N_ "Display the tax column?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
     (N_ "Display Columns") credit-header
-    "haa" (N_ "Display the period credits column?") #t))
+    "hac" (N_ "Display the period credits column?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") debit-header
-    "hab" (N_ "Display a period debits column?") #t))
+    "had" (N_ "Display a period debits column?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
