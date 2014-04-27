@@ -52,7 +52,8 @@ libtest_core_guile_la_LIBADD = \
 
 libtest_core_guile_la_CFLAGS = \
 	${libtest_core_la_CPPFLAGS} \
-	${GUILE_CFLAGS}
+	${GUILE_CFLAGS} \
+	${AM_CFLAGS}
 
 libtest_core_guile_la_LDFLAGS = \
   -rpath ${exec-prefix}/lib

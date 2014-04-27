@@ -119,7 +119,6 @@ gnc_g_time_zone_new_local (void)
 #else
     {
         TIME_ZONE_INFORMATION tzinfo;
-        gint64 dst = GetTimeZoneInformation (&tzinfo);
         gint bias = tzinfo.Bias + tzinfo.StandardBias;
         gint hours = -bias / 60; // 60 minutes per hour
         gint minutes = (bias < 0 ? -bias : bias) % 60;
@@ -151,13 +150,13 @@ dst_systemtime_to_gdate (SYSTEMTIME stime, GDate *gdate, gint year)
    */
   static const int gdate_sunday = 7;
   static const int week_length = 7;
-
+  GDateMonth month = static_cast<GDateMonth>(stime.wMonth);
   g_date_clear (gdate, 1);
-  g_date_set_dmy (gdate, 1, stime.wMonth, year);
+  g_date_set_dmy (gdate, 1, month, year);
   wkday = g_date_get_weekday (gdate) % gdate_sunday;
 
   days = week_length * stime.wDay + stime.wDayOfWeek - wkday;
-  while (days > g_date_get_days_in_month (stime.wMonth, year))
+  while (days > g_date_get_days_in_month (month, year))
     days -= week_length;
   g_date_add_days (gdate, days);
   wkday = g_date_get_weekday (gdate) % gdate_sunday;
@@ -179,7 +178,7 @@ win32_in_dst (GDateTime *date, TIME_ZONE_INFORMATION *tzinfo)
       return FALSE;
     g_date_time_get_ymd (date, &year, &month, &day);
     g_date_clear (&gdate, 1);
-    g_date_set_dmy (&gdate, day, month, year);
+    g_date_set_dmy (&gdate, day, static_cast<GDateMonth>(month), year);
     dst_systemtime_to_gdate (tzinfo->StandardDate, &std, year);
     dst_systemtime_to_gdate (tzinfo->DaylightDate, &dlt, year);
     /* In the southern hemisphere, where DST ends in spring and begins in fall, we look for the date being before std or after dlt; in the northern hemisphere we look for them to be between dlt and std.

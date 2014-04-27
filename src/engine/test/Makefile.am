@@ -126,7 +126,8 @@ test_engine_CFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I${top_srcdir}/${MODULEPATH}/ \
 	-DTESTPROG=test_engine \
-	${GLIB_CFLAGS}
+	${GLIB_CFLAGS} \
+	${AM_CFLAGS}
 
 noinst_LTLIBRARIES = \
 	libutest-Split.la \

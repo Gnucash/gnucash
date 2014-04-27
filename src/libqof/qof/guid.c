@@ -676,10 +676,10 @@ guid_to_string(const GncGUID * guid)
     static GStaticPrivate guid_buffer_key = G_STATIC_PRIVATE_INIT;
     gchar *string;
 
-    string = g_static_private_get (&guid_buffer_key);
+    string = static_cast<gchar*>(g_static_private_get (&guid_buffer_key));
     if (string == NULL)
     {
-        string = malloc(GUID_ENCODING_LENGTH + 1);
+        string = static_cast<gchar*>(malloc(GUID_ENCODING_LENGTH + 1));
         g_static_private_set (&guid_buffer_key, string, g_free);
     }
 #else

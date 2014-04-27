@@ -995,7 +995,7 @@ qof_print_date_buff (char * buff, size_t len, time64 t)// C: 3 in 1  Local: 2:0:
 static void
 test_qof_print_date_buff (void)
 {
-    gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     GDateTime *gd1 = gncdt.new_local (1974, 11, 23, 12, 0, 0.0);
     GDateTime *gd2 = gncdt.new_local (1961, 2, 2, 12, 0, 0.0);
@@ -1276,7 +1276,6 @@ static void
 test_qof_print_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    gchar *buff;
     GDateTime *gd1 = gncdt.new_local (1974, 11, 23, 12, 0, 0.0);
     GDateTime *gd2 = gncdt.new_local (1961, 2, 2, 12, 0, 0.0);
     GDateTime *gd3 = gncdt.new_local (2045, 6, 16, 12, 0, 0.0);

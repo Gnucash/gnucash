@@ -447,41 +447,11 @@ mock_sync (QofBackend *be, QofBook *book)
 }
 
 static void
-mock_session_begin_for_save (QofBackend *be, QofSession *session, const char *book_id,
-                             gboolean ignore_lock, gboolean create, gboolean force)
-{
-    g_assert (be);
-    g_assert (be == session_save_struct.be);
-    g_assert (session);
-    g_assert (session == session_save_struct.session);
-    g_assert (book_id);
-    g_assert_cmpstr (book_id, == , session_save_struct.book_id);
-    g_assert (ignore_lock);
-    g_assert (create);
-    g_assert (force);
-    session_save_struct.session_begin_called = TRUE;
-}
-
-static QofBackend*
-mock_backend_new_for_save (void)
-{
-    QofBackend *be = NULL;
-
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    be->session_begin = mock_session_begin_for_save;
-    be->sync = mock_sync;
-    session_save_struct.be = be;
-    session_save_struct.backend_new_called = TRUE;
-    return be;
-}
-
-static void
 test_qof_session_save (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = NULL;
     QofBackend *be = NULL;
-    QofBackendProvider *prov = NULL, *reg_prov = NULL;
+    QofBackendProvider *prov = NULL;
 
     g_test_message ("Test when backend not set");
     g_assert (fixture->session->backend == NULL);
