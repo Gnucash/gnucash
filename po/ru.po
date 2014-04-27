@@ -4169,11 +4169,11 @@ msgstr "Страховой платеж"
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/assistant-loan.c:114
 msgid "PMI"
-msgstr "ЧСИ"
+msgstr "Страхование залога (СЗ)"
 
 #: ../src/gnome/assistant-loan.c:114
 msgid "PMI Payment"
-msgstr "Платеж по ЧСИ"
+msgstr "Платеж по СЗ"
 
 #: ../src/gnome/assistant-loan.c:115
 msgid "Other Expense"
@@ -4203,9 +4203,9 @@ msgstr "Заем"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: ../src/gnome/assistant-loan.c:1441
-#, fuzzy, c-format
+#, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Финансовый калькулятор"
+msgstr "Параметры выплат по займу: \"%s\""
 
 #: ../src/gnome/assistant-loan.c:1837 ../src/gnome/assistant-loan.c:3011
 msgid "Principal"
@@ -5007,11 +5007,11 @@ msgstr "Просмотреть и изменить предметы ценных
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:196
 msgid "_Loan Repayment Calculator"
-msgstr "_Калькулятор кредитных платежей"
+msgstr "_Калькулятор выплат по займу"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:197
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "Использовать калькулятор для расчета платежей по кредиту/ипотеке"
+msgstr "Использовать калькулятор для расчета платежей по займу/залогу (ипотеке)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Close Book"
@@ -7916,7 +7916,6 @@ msgid "Finish Account Setup"
 msgstr "Закончить настройку счетов"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:1
-#, fuzzy
 msgid ""
 "This is a step-by-step method for creating a loan repayment within GnuCash. "
 "In this assistant, you can input the details of your loan and its repayment "
@@ -7928,11 +7927,11 @@ msgid ""
 msgstr ""
 "Этот пошаговый метод создания настроек погашения займа в GnuCash. В этом "
 "мастере можно задать параметры займа и его погашения, а также указать "
-"особенности его окупаемости. Используя эту информацию будут созданы "
+"особенности его окупаемости. На основе введенной информации будут созданы "
 "подходящие плановые проводки.\n"
 "\n"
-"Если будет допусщена ошибка или возникнет желание внести изменения позже, то "
-"в любой момент можно напрямую изменить созданные плановые проводки."
+"Если вы допустите ошибку или возникнет желание внести изменения позже, то "
+"вы сможете исправить созданные плановые проводки вручную."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:4
 msgid "Loan / Mortgage Repayment Setup"
@@ -7984,13 +7983,15 @@ msgstr "Периодичность изменения процентной ст�
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:17
 msgid "Loan Details"
-msgstr ""
+msgstr "Детали займа"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:18
 msgid ""
 "\n"
 "Do you utilise an escrow account, if so an account must be specified..."
 msgstr ""
+"\n"
+"Если вы используете депонентный счет, укажите его..."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:20
 msgid "... utilize an escrow account for payments?"
@@ -8001,15 +8002,16 @@ msgid "Escrow Account:"
 msgstr "Депонентный счет:"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:22
-#, fuzzy
 msgid "Loan Repayment Options"
-msgstr "Финансовый калькулятор"
+msgstr "Параметры выплат по займу"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:23
 msgid ""
 "\n"
 "All accounts must have valid entries to continue.\n"
 msgstr ""
+"\n"
+"Для продолжения все счета должны быть указаны.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:26
 msgid "Payment From:"
@@ -8017,7 +8019,7 @@ msgstr "Платеж из:"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:27
 msgid "Principal To:"
-msgstr "Состояние на:"
+msgstr "Основной долг на:"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:28
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:48
@@ -8034,9 +8036,8 @@ msgid "Repayment Frequency"
 msgstr "Периодичность возврата"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:31
-#, fuzzy
 msgid "Loan Repayment"
-msgstr "Возврат"
+msgstr "Выплаты по займу"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:32
 msgid ""
@@ -8186,19 +8187,19 @@ msgstr "Фиксированная ставка"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:67
 msgid "3/1 Year ARM"
-msgstr ""
+msgstr "Изменямемая ежегодно после 3-х лет"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:68
 msgid "5/1 Year ARM"
-msgstr ""
+msgstr "Изменямемая ежегодно после 5-ти лет"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:69
 msgid "7/1 Year ARM"
-msgstr ""
+msgstr "Изменямемая ежегодно после 7-ми лет"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:70
 msgid "10/1 Year ARM"
-msgstr ""
+msgstr "Изменямемая ежегодно после 10-ти лет"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:1
 msgid "This assistant will help you record a stock split or stock merger.\n"
@@ -8344,13 +8345,12 @@ msgid "Remove the current commodity."
 msgstr "Удалить текущий товар."
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:6
-#, fuzzy
 msgid "Edit the current commodity."
-msgstr "Удалить текущий товар."
+msgstr "Редактировать текущий товар."
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:1
 msgid "Loan Repayment Calculator"
-msgstr "Калькулятор кредитных платежей"
+msgstr "Калькулятор выплат по займу"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:2
 msgid "<b>Calculations</b>"
@@ -8361,9 +8361,8 @@ msgid "Payment periods"
 msgstr "Платежные периоды"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:4
-#, fuzzy
 msgid "Clear the entry."
-msgstr "Очистить запись"
+msgstr "Очистить запись."
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:5
 msgid "Interest rate"
@@ -18259,6 +18258,8 @@ msgid ""
 "\n"
 "Currently you have no saved reports.\n"
 msgstr ""
+"\n"
+"На данный момент у вас нет сохраненных отчетов.\n"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:6
 msgid ""
@@ -18268,6 +18269,9 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
+"Чтобы сохранить настройки для отчета, сначала выберите отчет из меню \"Отчеты\",\n"
+"установите необходивые вам параметры и затем выберите \"Сохранить настройки отчета\"\n"
+"из меню \"Отчеты\" или из панели инструментов."
 
 #: ../src/report/report-gnome/dialog-report-column-view.c:321
 msgid "Contents"
@@ -18607,7 +18611,7 @@ msgstr ""
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:10
 msgid "Perform financial calculations, such as a loan repayment"
-msgstr ""
+msgstr "Выполнить финансовые расчеты, например выплат по займу"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
 msgid "GnuCash"
@@ -24016,9 +24020,8 @@ msgstr "Посчитать как текущую сумму?"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:3046 ../intl-scm/guile-strings.c:3070
 #: ../intl-scm/guile-strings.c:4500 ../intl-scm/guile-strings.c:4860
-#, fuzzy
 msgid "Report on these accounts."
-msgstr "Отчёт по этим счетам"
+msgstr "Отчёт по этим счетам."
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:3050
@@ -25220,9 +25223,8 @@ msgstr "Показать значение в валюте проводки?"
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4190 ../intl-scm/guile-strings.c:4758
-#, fuzzy
 msgid "Display a running balance?"
-msgstr "Показать текущий баланс"
+msgstr "Показать текущий баланс?"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:4198
@@ -25288,9 +25290,8 @@ msgstr "Итого для "
 #: ../intl-scm/guile-strings.c:4442 ../intl-scm/guile-strings.c:4444
 #: ../intl-scm/guile-strings.c:4474 ../intl-scm/guile-strings.c:4476
 #: ../intl-scm/guile-strings.c:4764
-#, fuzzy
 msgid "Trans Number"
-msgstr "Налоговый номер"
+msgstr "Номер проводки"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4446
@@ -25304,9 +25305,8 @@ msgstr "Передано с/на"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4484
-#, fuzzy
 msgid "Report style."
-msgstr "Стиль отчета"
+msgstr "Стиль отчета."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4486
@@ -25315,47 +25315,40 @@ msgstr "Многострочный"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4488
-#, fuzzy
 msgid "Display N lines."
-msgstr "Отображать N строк"
+msgstr "Отображать N строк."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4492
-#, fuzzy
 msgid "Display 1 line."
-msgstr "Отображать 1 строку"
+msgstr "Отображать 1 строку."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4494
-#, fuzzy
 msgid "Convert all transactions into a common currency."
-msgstr "Преобразовать все проводки в общую валюту"
+msgstr "Преобразовать все проводки в общую валюту."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4496
-#, fuzzy
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
 msgstr ""
 "Форматирует таблицу для экспортирования с помощью копирования и вставки с "
-"дополнительными ячейками"
+"дополнительными ячейками."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4504
-#, fuzzy
 msgid "Filter on these accounts."
-msgstr "Фильтровать эти счета"
+msgstr "Фильтровать по этим счетам."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4508
-#, fuzzy
 msgid "Filter account."
-msgstr "Фильтровать счет"
+msgstr "Фильтровать счет."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4512
-#, fuzzy
 msgid "Do not do any filtering."
-msgstr "Ничего не фильтровать"
+msgstr "Не производить фильтрацию."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4514
@@ -25364,9 +25357,8 @@ msgstr "Включить проводки с/на отобранные счет�
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4516
-#, fuzzy
 msgid "Include transactions to/from filter accounts only."
-msgstr "Включить только проводки с/на отобранные счета"
+msgstr "Включить только проводки с/на отобранные счета."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4518
@@ -25375,15 +25367,13 @@ msgstr "Исключить проводки с/на отобранные сче�
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4520
-#, fuzzy
 msgid "Exclude transactions to/from all filter accounts."
-msgstr "Исключить проводки с/на все отобранные счета"
+msgstr "Исключить проводки с/на все отобранные счета."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4522
-#, fuzzy
 msgid "How to handle void transactions."
-msgstr "Как поступать с аннулированными проводками"
+msgstr "Как поступать с аннулированными проводками."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4524
@@ -25392,9 +25382,8 @@ msgstr "Только не аннулированные"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4526
-#, fuzzy
 msgid "Show only non-voided transactions."
-msgstr "Показывать только не аннулированные проводки"
+msgstr "Показывать только не аннулированные проводки."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4528
@@ -25403,9 +25392,8 @@ msgstr "Только аннулированные"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4530
-#, fuzzy
 msgid "Show only voided transactions."
-msgstr "Показывать только аннулированные проводки"
+msgstr "Показывать только аннулированные проводки."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4532
@@ -25414,29 +25402,24 @@ msgstr "Оба"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4534
-#, fuzzy
 msgid "Show both (and include void transactions in totals)."
 msgstr ""
-"Показывать и аннулированные, и не аннулированные проводки (а также включить "
-"аннулированные проводки в итоги)"
+"Показывать оба вида (а также включить аннулированные проводки в итоги)."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4538 ../intl-scm/guile-strings.c:4594
-#, fuzzy
 msgid "Do not sort."
-msgstr "Не упорядочивать"
+msgstr "Не сортировать."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4542 ../intl-scm/guile-strings.c:4598
-#, fuzzy
 msgid "Sort & subtotal by account name."
-msgstr "Упорядочить и подытожить по имени счета"
+msgstr "Сортировать и подытожить по имени счета."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4546 ../intl-scm/guile-strings.c:4602
-#, fuzzy
 msgid "Sort & subtotal by account code."
-msgstr "Упорядочить и подытожить по коду счета"
+msgstr "Сортировать и подытожить по коду счета."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4552 ../intl-scm/guile-strings.c:4608
@@ -25445,15 +25428,13 @@ msgstr "Точное время"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4554 ../intl-scm/guile-strings.c:4610
-#, fuzzy
 msgid "Sort by exact time."
-msgstr "Сортировать по точному времени"
+msgstr "Сортировать по точному времени."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4558 ../intl-scm/guile-strings.c:4614
-#, fuzzy
 msgid "Sort by the Reconciled Date."
-msgstr "Сортировать по дате согласования"
+msgstr "Сортировать по дате согласования."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4560 ../intl-scm/guile-strings.c:4616
@@ -25462,87 +25443,73 @@ msgstr "Порядок журнала"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4562 ../intl-scm/guile-strings.c:4618
-#, fuzzy
 msgid "Sort as with the register."
-msgstr "Сортировать, как в журнале"
+msgstr "Сортировать, как в журнале."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4566 ../intl-scm/guile-strings.c:4622
-#, fuzzy
 msgid "Sort by account transferred from/to's name."
-msgstr "Упорядочить по названию счета, на который или с которого был перевод"
+msgstr "Сортировать по названию счета, на который или с которого был перевод."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4570 ../intl-scm/guile-strings.c:4626
-#, fuzzy
 msgid "Sort by account transferred from/to's code."
-msgstr "Упорядочить по коду счета, на который или с которого был перевод"
+msgstr "Сортировать по коду счета, на который или с которого был перевод."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4582
-#, fuzzy
 msgid "Sort by check number/action."
-msgstr "Упорядочить по номеру"
+msgstr "Сортировать по номеру/действию."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4586
-#, fuzzy
 msgid "Sort by transaction number."
-msgstr "Упорядочить по номеру чека/проводки"
+msgstr "Упорядочить по номеру проводки."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4638
-#, fuzzy
 msgid "Sort by check/transaction number."
-msgstr "Упорядочить по номеру чека/проводки"
+msgstr "Упорядочить по номеру чека/проводки."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4646
-#, fuzzy
 msgid "Smallest to largest, earliest to latest."
-msgstr "от меньшего к большему, от раннего к позднему"
+msgstr "От меньшего к большему, от раннего к позднему"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4650
-#, fuzzy
 msgid "Largest to smallest, latest to earliest."
-msgstr "от большего к меньшему, от позднего к раннему"
+msgstr "От большего к меньшему, от позднего к раннему."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4654
-#, fuzzy
 msgid "None."
-msgstr "Ничего"
+msgstr "Ничего."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4658
-#, fuzzy
 msgid "Weekly."
-msgstr "Еженедельно"
+msgstr "Еженедельно."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4662
-#, fuzzy
 msgid "Monthly."
-msgstr "Ежемесячно"
+msgstr "Ежемесячно."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4666
-#, fuzzy
 msgid "Quarterly."
-msgstr "Ежеквартально"
+msgstr "Ежеквартально."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4670
-#, fuzzy
 msgid "Yearly."
-msgstr "Ежегодно"
+msgstr "Ежегодно."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4672
-#, fuzzy
 msgid "Sort by this criterion first."
-msgstr "Сначала упорядочить по этому критерию"
+msgstr "Сначала упорядочить по этому критерию."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4676
@@ -25605,15 +25572,13 @@ msgstr "Показывать название счета?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4730 ../intl-scm/guile-strings.c:4742
-#, fuzzy
 msgid "Display the full account name?"
-msgstr "Показывать полное название счета"
+msgstr "Показывать полное название счета?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4734
-#, fuzzy
 msgid "Display the account code?"
-msgstr "Показывать код счета"
+msgstr "Показывать код счета?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4738
@@ -25626,9 +25591,8 @@ msgstr ""
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4746
-#, fuzzy
 msgid "Display the other account code?"
-msgstr "Показывать код другого счета"
+msgstr "Показывать код другого счета?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4766
@@ -25644,15 +25608,13 @@ msgstr "Показывать отсутствие суммы"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4792
-#, fuzzy
 msgid "Reverse amount display for certain account types."
-msgstr "Отображать обратную сумму для некоторых типов счетов"
+msgstr "Отображать обратную сумму для некоторых типов счетов."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4796
-#, fuzzy
 msgid "Don't change any displayed amounts."
-msgstr "Не изменять отображаемые суммы"
+msgstr "Не изменять отображаемые суммы."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4798
