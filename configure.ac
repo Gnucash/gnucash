@@ -712,7 +712,7 @@ AC_ARG_ENABLE( debug,
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
   CFLAGS="${CFLAGS} -pg"
-  CXXFLAGS="${CFLAGS} -pg"
+  CXXFLAGS="${CXXFLAGS} -pg"
   LDFLAGS="${LDFLAGS} -pg")
 
 ### --------------------------------------------------------------------------
