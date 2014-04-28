@@ -25879,9 +25879,8 @@ msgstr "Автор"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:4978 ../intl-scm/guile-strings.c:5190
 #: ../intl-scm/guile-strings.c:5402
-#, fuzzy
 msgid "Name of person preparing the report."
-msgstr "Имя человека, подготовившего отчет"
+msgstr "Имя человека, подготовившего отчет."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25897,9 +25896,8 @@ msgstr "Подготовлен для"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:4984 ../intl-scm/guile-strings.c:5196
 #: ../intl-scm/guile-strings.c:5408
-#, fuzzy
 msgid "Name of organization or company prepared for."
-msgstr "Название организации или фирмы, для которой подготовлен отчет"
+msgstr "Название организации или фирмы, для которой подготовлен отчет."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25915,9 +25913,8 @@ msgstr "Информация об авторе"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:4990 ../intl-scm/guile-strings.c:5202
 #: ../intl-scm/guile-strings.c:5414
-#, fuzzy
 msgid "Name of organization or company."
-msgstr "Название организации или фирмы"
+msgstr "Название организации или фирмы."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26015,9 +26012,8 @@ msgstr "Лево"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5018 ../intl-scm/guile-strings.c:5230
 #: ../intl-scm/guile-strings.c:5448
-#, fuzzy
 msgid "Align the banner to the left."
-msgstr "Выровнять по левому краю"
+msgstr "Выровнять по левому краю."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26032,9 +26028,8 @@ msgstr "Центр"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5022 ../intl-scm/guile-strings.c:5234
 #: ../intl-scm/guile-strings.c:5452
-#, fuzzy
 msgid "Align the banner in the center."
-msgstr "Выровнять шапку по центру"
+msgstr "Выровнять шапку по центру."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26049,9 +26044,8 @@ msgstr "Право"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5026 ../intl-scm/guile-strings.c:5238
 #: ../intl-scm/guile-strings.c:5456
-#, fuzzy
 msgid "Align the banner to the right."
-msgstr "Выровнять шапку по правому краю"
+msgstr "Выровнять шапку по правому краю."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26193,9 +26187,8 @@ msgstr "Цвет ячеек под-подзаголовков/итогов"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5074 ../intl-scm/guile-strings.c:5286
 #: ../intl-scm/guile-strings.c:5504
-#, fuzzy
 msgid "Color for subsubtotals."
-msgstr "Цвет подытогов"
+msgstr "Цвет для подытогов."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26211,9 +26204,8 @@ msgstr "Цвет ячейки с общей суммой"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5080 ../intl-scm/guile-strings.c:5292
 #: ../intl-scm/guile-strings.c:5510
-#, fuzzy
 msgid "Color for grand totals."
-msgstr "Цвет для общих сумм"
+msgstr "Цвет для общих сумм."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26250,9 +26242,8 @@ msgstr "Расстояние между ячейками"
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5086 ../intl-scm/guile-strings.c:5298
 #: ../intl-scm/guile-strings.c:5516 ../intl-scm/guile-strings.c:5648
-#, fuzzy
 msgid "Space between table cells."
-msgstr "Расстояние между ячейками таблицы"
+msgstr "Расстояние между ячейками таблицы."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26271,9 +26262,8 @@ msgstr "Отступ от края ячейки"
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5092 ../intl-scm/guile-strings.c:5304
 #: ../intl-scm/guile-strings.c:5522 ../intl-scm/guile-strings.c:5654
-#, fuzzy
 msgid "Space between table cell edge and content."
-msgstr "Расстояние между границей ячейки и содержимым"
+msgstr "Расстояние между границей ячейки и содержимым."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26292,9 +26282,8 @@ msgstr "Ширина границы таблицы"
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5098 ../intl-scm/guile-strings.c:5310
 #: ../intl-scm/guile-strings.c:5528 ../intl-scm/guile-strings.c:5660
-#, fuzzy
 msgid "Bevel depth on tables."
-msgstr "Глубина скоса у таблиц"
+msgstr "Глубина скоса у таблиц."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -26335,9 +26324,8 @@ msgstr "Сноска"
 
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5426
-#, fuzzy
 msgid "String to be placed as a footer."
-msgstr "Строка помещаемая в нижнюю сноску"
+msgstr "Строка помещаемая в нижнюю сноску."
 
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5624
@@ -26395,9 +26383,8 @@ msgstr "Первый параметр"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5680
-#, fuzzy
 msgid "Help for first option."
-msgstr "Помощь по первому параметру"
+msgstr "Помощь по первому параметру."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5682
@@ -26406,9 +26393,8 @@ msgstr "Второй параметр"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5684
-#, fuzzy
 msgid "Help for second option."
-msgstr "Помощь по второму параметру"
+msgstr "Помощь по второму параметру."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5686
@@ -26417,9 +26403,8 @@ msgstr "Третий параметр"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5688
-#, fuzzy
 msgid "Help for third option."
-msgstr "Помощь по третьему параметру"
+msgstr "Помощь по третьему параметру."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5690
@@ -26438,9 +26423,8 @@ msgstr "Строковый параметр"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5698
-#, fuzzy
 msgid "This is a string option."
-msgstr "Это строковый параметр"
+msgstr "Это строковый параметр."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5700 ../intl-scm/guile-strings.c:5774
@@ -26455,9 +26439,8 @@ msgstr "Параметр-дата"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5706
-#, fuzzy
 msgid "This is a date option."
-msgstr "Этот параметр задает дату"
+msgstr "Этот параметр задает дату."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5710
@@ -26466,9 +26449,8 @@ msgstr "Параметр даты и времени"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5712
-#, fuzzy
 msgid "This is a date option with time."
-msgstr "Этот параметр задает дату со временем"
+msgstr "Этот параметр задает дату со временем."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5716
@@ -26477,9 +26459,8 @@ msgstr "Комбинированная дата"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5718
-#, fuzzy
 msgid "This is a combination date option."
-msgstr "Это комбинированный параметр, задающий дату"
+msgstr "Это комбинированный параметр, задающий дату."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5722
@@ -26488,9 +26469,8 @@ msgstr "Относительная дата"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5724
-#, fuzzy
 msgid "This is a relative date option."
-msgstr "Это настройка относительной даты"
+msgstr "Это настройка относительной даты."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5728
@@ -26504,9 +26484,8 @@ msgstr "Это числовой параметр"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5736 ../intl-scm/guile-strings.c:5742
-#, fuzzy
 msgid "This is a color option."
-msgstr "Это параметр выбора цвета"
+msgstr "Это параметр выбора цвета."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5744 ../intl-scm/guile-strings.c:5750
@@ -26520,9 +26499,8 @@ msgstr "Список счетов"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5748
-#, fuzzy
 msgid "This is an account list option."
-msgstr "Это список счетов"
+msgstr "Это параметр выбора списка счетов."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5752
@@ -26531,9 +26509,8 @@ msgstr "Список"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5754
-#, fuzzy
 msgid "This is a list option."
-msgstr "Это список"
+msgstr "Это выбора элементов списка."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5756
@@ -26542,9 +26519,8 @@ msgstr "Хорошо"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5758
-#, fuzzy
 msgid "Good option."
-msgstr "Хороший параметр"
+msgstr "Хороший параметр."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5760
@@ -26553,9 +26529,8 @@ msgstr "Плохо"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5762
-#, fuzzy
 msgid "Bad option."
-msgstr "Плохой параметр"
+msgstr "Плохой параметр."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5764
@@ -26564,9 +26539,8 @@ msgstr "Безобразно"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5766
-#, fuzzy
 msgid "Ugly option."
-msgstr "Безобразный параметр"
+msgstr "Безобразный параметр."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5768
@@ -26774,16 +26748,14 @@ msgstr "Добро пожаловать в GnuCash"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:5850
-#, fuzzy
 msgid "Welcome to GnuCash ~a !"
-msgstr "Добро пожаловать в GnuCash"
+msgstr "Добро пожаловать в GnuCash ~a !"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:5852
-#, fuzzy
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr ""
-"В GnuCash 2.4 появился ряд приятных нововведений. Здесь малая их часть."
+"В GnuCash ~a появился ряд приятных нововведений. Вот несколько из них."
 
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:5856 ../intl-scm/guile-strings.c:5858
