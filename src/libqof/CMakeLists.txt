@@ -27,7 +27,6 @@ SET (libgnc_qof_SOURCES
    qof/qofobject.cpp
    qof/qofquery.cpp
    qof/qofquerycore.cpp
-   qof/qofreference.cpp
    qof/qofsession.cpp
    qof/qofutil.cpp
    qof/qof-string-cache.cpp
@@ -69,7 +68,6 @@ SET (libgnc_qof_HEADERS
    qof/qofobject.h
    qof/qofquery.h
    qof/qofquerycore.h
-   qof/qofreference.h
    qof/qofsession.h
    qof/qofutil.h
    qof/qof-gobject.h
