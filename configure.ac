@@ -334,6 +334,8 @@ AC_SUBST(SED)
 REGEX_LIBS=""
 
 AC_MSG_CHECKING(operating system)
+#NOUNDEF for use with mingw
+NOUNDEF=""
 case $host_os in
   rhapsody* | darwin[1567].*)
     AC_MSG_RESULT([darwin, but too old])
@@ -400,7 +402,10 @@ update to latest  darwin])
 
     # Adjust CFLAGS and LDFLAGS on Windows
     CFLAGS="${CFLAGS} -mms-bitfields"
-    LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
+#   NOUNDEF will be added to ldflags for the makefiles but not the configures
+#   This fixes a problem with libtool and gcc 4.8
+    NOUNDEF="-no-undefined"
+    LDFLAGS="${LDFLAGS} -mwindows"
     ;;
 
   *)
@@ -1290,7 +1295,7 @@ then
   if test "x$BUILDING_FROM_SCM" = "xyes"
   then
     # This code is from svn/svk/git/bzr, so enable error-on-warning
-    error_on_warning_as_default="yes"
+    error_on_warning_as_default="no"
   else
     # This is from a tarball, so disable error-on-warning
     error_on_warning_as_default="no"
@@ -1548,7 +1553,7 @@ AC_CONFIG_FILES(
 # A few files need extra actions at creation time
 AC_CONFIG_FILES([src/gnc-test-env], [chmod u+x src/gnc-test-env])
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
-
+LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT
 
 
