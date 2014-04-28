@@ -1283,7 +1283,7 @@ then
   if test "x$BUILDING_FROM_SCM" = "xyes"
   then
     # This code is from svn/svk/git/bzr, so enable error-on-warning
-    error_on_warning_as_default="no"
+    error_on_warning_as_default="yes"
   else
     # This is from a tarball, so disable error-on-warning
     error_on_warning_as_default="no"
