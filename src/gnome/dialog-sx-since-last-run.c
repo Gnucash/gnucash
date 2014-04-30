@@ -975,6 +975,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                 "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                 NULL);
         gtk_tree_view_append_column(dialog->instance_view, col);
+        gtk_tree_view_column_set_resizable(col, TRUE);
 
         renderer = gtk_cell_renderer_text_new();
         g_object_set(G_OBJECT(renderer),
