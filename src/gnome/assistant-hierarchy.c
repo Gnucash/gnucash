@@ -1005,6 +1005,26 @@ on_cancel (GtkAssistant      *gtkassistant,
 }
 
 static void
+finish_book_options_helper(GNCOptionWin * optionwin,
+                          gpointer user_data)
+{
+    GNCOptionDB * options = user_data;
+    QofBook *book = gnc_get_current_book ();
+    gboolean use_split_action_for_num_before =
+        qof_book_use_split_action_for_num_field (book);
+    gboolean use_split_action_for_num_after;
+
+    if (!options) return;
+
+    gnc_option_db_commit (options);
+    qof_book_save_options (book, gnc_option_db_save_to_kvp, options, TRUE);
+    use_split_action_for_num_after =
+        qof_book_use_split_action_for_num_field (book);
+    if (use_split_action_for_num_before != use_split_action_for_num_after)
+        gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
+}
+
+static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
     gnc_numeric balance;
@@ -1062,6 +1082,58 @@ on_finish (GtkAssistant  *gtkassistant,
     }
 
     LEAVE (" ");
+}
+
+/********************************************************
+ * For a new book the assistant will also allow the user
+ * to set default book options, because this impacts how
+ * transactions are created.
+ * Ideally, the book options code can cleanly provide us
+ * with a page to insert in the assistant and be done with
+ * it. Unfortunately this is not possible without a serious
+ * rewrite of the options dialog code.
+ * So instead the following hack is used:
+ * we create the complete dialog, but only use the notebook
+ * part of it to create a new page.
+ * To make sure this dialog is cleaned up properly
+ * when the assistant closes, the close callback is set up anyway
+ * and at the finish we'll send a "close" response signal to the
+ * dialog to make it clean up after itself.
+ */
+static void
+book_options_dialog_close_cb(GNCOptionWin * optionwin,
+                               gpointer user_data)
+{
+    GNCOptionDB * options = user_data;
+
+    gnc_options_dialog_destroy(optionwin);
+    gnc_option_db_destroy(options);
+}
+
+static void
+assistant_instert_book_options_page (hierarchy_data *data)
+{
+    GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+
+    data->options = gnc_option_db_new_for_type (QOF_ID_BOOK);
+    qof_book_load_options (gnc_get_current_book (),
+			   gnc_option_db_load_from_kvp, data->options);
+    gnc_option_db_clean (data->options);
+
+    data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"));
+    gnc_options_dialog_build_contents_full (data->optionwin, data->options, FALSE);
+
+    gnc_options_dialog_set_close_cb (data->optionwin,
+                                     book_options_dialog_close_cb,
+                                     (gpointer)data->options);
+    gnc_options_dialog_set_new_book_option_values (data->options);
+
+    gtk_widget_reparent (gnc_options_dialog_notebook (data->optionwin), vbox);
+    gtk_widget_show_all (vbox);
+    gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 2);
+    gtk_assistant_set_page_title (GTK_ASSISTANT(data->dialog), vbox, _("New Book Options"));
+    gtk_assistant_set_page_complete (GTK_ASSISTANT(data->dialog), vbox, TRUE);
+
 }
 
 static GtkWidget *
