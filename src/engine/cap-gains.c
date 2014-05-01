@@ -397,22 +397,18 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         ts = xaccSplitRetDateReconciledTS (split);
         xaccSplitSetDateReconciledTS (new_split, &ts);
 
-        /* We do not copy the KVP tree, as it seems like a dangerous
-         * thing to do.  If the user wants to access stuff in the 'old'
-         * kvp tree from the 'new' split, they shoudl follow the
-         * 'split-lot' pointers.  Yes, this is complicated, but what
-         * else can one do ??
+        /* Set the lot-split and peer_guid properties on the two
+         * splits to indicate that they're linked. 
          */
-        /* Add kvp markup to indicate that these two splits used
-         * to be one before being 'split'
-         */
-        gnc_kvp_bag_add (split->inst.kvp_data, "lot-split", now,
-                         "peer_guid", xaccSplitGetGUID (new_split),
-                         NULL);
+        qof_instance_set (QOF_INSTANCE (split),
+                          "lot-split", now,
+                          "peer_guid", xaccSplitGetGUID (new_split),
+                          NULL);
 
-        gnc_kvp_bag_add (new_split->inst.kvp_data, "lot-split", now,
-                         "peer_guid", xaccSplitGetGUID (split),
-                         NULL);
+        qof_instance_set (QOF_INSTANCE (new_split),
+                          "lot-split", now,
+                          "peer_guid", xaccSplitGetGUID (split),
+                          NULL);
 
         xaccAccountInsertSplit (acc, new_split);
         xaccTransAppendSplit (trans, new_split);
@@ -489,15 +485,14 @@ xaccSplitAssign (Split *split)
 Split *
 xaccSplitGetCapGainsSplit (const Split *split)
 {
-    KvpValue *val;
     GncGUID *gains_guid;
     Split *gains_split;
 
     if (!split) return NULL;
 
-    val = kvp_frame_get_slot (split->inst.kvp_data, "gains-split");
-    if (!val) return NULL;
-    gains_guid = kvp_value_get_guid (val);
+    qof_instance_get (QOF_INSTANCE (split),
+                      "gains-split", &gains_guid,
+                      NULL);
     if (!gains_guid) return NULL;
 
     /* Both splits will be in the same collection, so search there. */
@@ -512,15 +507,14 @@ xaccSplitGetCapGainsSplit (const Split *split)
 Split *
 xaccSplitGetGainsSourceSplit (const Split *split)
 {
-    KvpValue *val;
     GncGUID *source_guid;
     Split *source_split;
 
     if (!split) return NULL;
 
-    val = kvp_frame_get_slot (split->inst.kvp_data, "gains-source");
-    if (!val) return NULL;
-    source_guid = kvp_value_get_guid (val);
+    qof_instance_get (QOF_INSTANCE (split),
+                      "gains-source", &source_guid,
+                      NULL);
     if (!source_guid) return NULL;
 
     /* Both splits will be in the same collection, so search there. */
@@ -819,14 +813,18 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
             xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
 
-            /* For the new transaction, install KVP markup indicating
+            /* For the new transaction, set the split properties indicating
              * that this is the gains transaction that corresponds
              * to the gains source.
              */
-            kvp_frame_set_guid (split->inst.kvp_data, "gains-split",
-                                xaccSplitGetGUID (lot_split));
-            kvp_frame_set_guid (lot_split->inst.kvp_data, "gains-source",
-                                xaccSplitGetGUID (split));
+            xaccTransBeginEdit (base_txn);
+            qof_instance_set (QOF_INSTANCE (split),
+                              "gains-split", xaccSplitGetGUID (lot_split),
+                              NULL);
+            xaccTransCommitEdit (base_txn);
+            qof_instance_set (QOF_INSTANCE (lot_split),
+                              "gains-source", xaccSplitGetGUID (split),
+                              NULL);
 
         }
         else
@@ -882,7 +880,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             xaccSplitSetAmount (gain_split, negvalue);
             xaccSplitSetValue (gain_split, negvalue);
 
-            /* Some short-cuts to help avoid the above kvp lookup. */
+            /* Some short-cuts to help avoid the above property lookup. */
             split->gains = GAINS_STATUS_CLEAN;
             split->gains_split = lot_split;
             lot_split->gains = GAINS_STATUS_GAINS;
