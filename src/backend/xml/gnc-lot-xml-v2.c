@@ -53,6 +53,8 @@ const gchar *lot_version_string = "2.0.0";
 #define gnc_lot_string "gnc:lot"
 #define lot_id_string "lot:id"
 #define lot_slots_string "lot:slots"
+/* EFFECTIVE FRIEND FUNCTION */
+extern KvpFrame *qof_instance_get_slots (const QofInstance *);
 
 xmlNodePtr
 gnc_lot_dom_tree_create(GNCLot *lot)
@@ -66,7 +68,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
 
     xmlAddChild(ret, guid_to_dom_tree(lot_id_string, gnc_lot_get_guid(lot)));
 
-    kf = gnc_lot_get_slots (lot);
+    kf = qof_instance_get_slots (QOF_INSTANCE (lot));
     if (kf)
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(lot_slots_string, kf);
@@ -112,7 +114,7 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
 
     ENTER("(lot=%p)", pdata->lot);
     success = dom_tree_to_kvp_frame_given
-              (node, gnc_lot_get_slots (pdata->lot));
+	(node, qof_instance_get_slots (QOF_INSTANCE (pdata->lot)));
 
     LEAVE("");
     g_return_val_if_fail(success, FALSE);

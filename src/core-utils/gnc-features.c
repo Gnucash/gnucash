@@ -67,10 +67,12 @@ static void gnc_features_init ()
                              g_strdup (known_features[i].desc));
 }
 
-static void gnc_features_test_one(const gchar *key, KvpValue *value, gpointer data)
+static void gnc_features_test_one(gpointer pkey, gpointer value,
+				  gpointer data)
 {
+    const gchar *key = (const gchar*)pkey;
+    const gchar *feature_desc = (const gchar*)value;
     GList **unknown_features;
-    gchar *feature_desc;
 
     g_assert(data);
     unknown_features = (GList**) data;
@@ -80,54 +82,47 @@ static void gnc_features_test_one(const gchar *key, KvpValue *value, gpointer da
         return;
 
     /* It is unknown, so add the description to the unknown features list: */
-    feature_desc = kvp_value_get_string(value);
     g_assert(feature_desc);
 
-    *unknown_features = g_list_prepend(*unknown_features, feature_desc);
+    *unknown_features = g_list_prepend(*unknown_features,
+				       (gpointer)feature_desc);
 }
 
 /* Check if the session requires features unknown to this version of GnuCash.
  *
- * Returns a message to display if we found unknown features, NULL if we're okay.
+ * Returns a message to display if we found unknown features, NULL if
+ * we're okay.
  */
 gchar *gnc_features_test_unknown (QofBook *book)
 {
-    KvpFrame *frame = qof_book_get_slots (book);
-    KvpValue *value;
+
+    GList* features_list = NULL;
+    GHashTable *features_used = qof_book_get_features (book);
 
     /* Setup the known_features hash table */
     gnc_features_init();
 
-    g_assert(frame);
-    value = kvp_frame_get_value(frame, "features");
-
-    if (value)
+    /* Iterate over the members of this frame for unknown features */
+    g_hash_table_foreach (features_used, &gnc_features_test_one,
+			  &features_list);
+    if (features_list)
     {
-        GList* features_list = NULL;
-        frame = kvp_value_get_frame(value);
-        g_assert(frame);
-
-        /* Iterate over the members of this frame for unknown features */
-        kvp_frame_for_each_slot(frame, &gnc_features_test_one, &features_list);
-        if (features_list)
-        {
-            GList *i;
-            char* msg = g_strdup(
-                            _("This Dataset contains features not supported by this "
-                              "version of GnuCash. You must use a newer version of "
-                              "GnuCash in order to support the following features:"
+	GList *i;
+	char* msg = g_strdup(_("This Dataset contains features not supported "
+			       "by this version of GnuCash. You must use a "
+			       "newer version of GnuCash in order to support "
+			       "the following features:"
                              ));
 
-            for (i = features_list; i; i = i->next)
-            {
-                char *tmp = g_strconcat(msg, "\n* ", i->data, NULL);
-                g_free (msg);
-                msg = tmp;
-            }
+	for (i = features_list; i; i = i->next)
+	{
+	    char *tmp = g_strconcat(msg, "\n* ", i->data, NULL);
+	    g_free (msg);
+	    msg = tmp;
+	}
 
-            g_list_free(features_list);
-            return msg;
-        }
+	g_list_free(features_list);
+	return msg;
     }
 
     return NULL;
@@ -135,9 +130,7 @@ gchar *gnc_features_test_unknown (QofBook *book)
 
 void gnc_features_set_used (QofBook *book, const gchar *feature)
 {
-    KvpFrame *frame;
     const gchar *description;
-    gchar *kvp_path;
 
     g_return_if_fail (book);
     g_return_if_fail (feature);
@@ -152,10 +145,7 @@ void gnc_features_set_used (QofBook *book, const gchar *feature)
         return;
     }
 
-    frame = qof_book_get_slots (book);
-    kvp_path = g_strconcat ("/features/", feature, NULL);
-    kvp_frame_set_string (frame, kvp_path, description);
-    qof_book_kvp_changed (book);
+    qof_book_set_feature (book, feature, description);
 
 
 }

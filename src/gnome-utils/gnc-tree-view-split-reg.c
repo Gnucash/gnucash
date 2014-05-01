@@ -4801,9 +4801,8 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
             if (viewcol == COL_TRANSFERVOID)
             {
                 Account *template_acc;
+		Account *acct;
                 const GncGUID *acctGUID;
-                kvp_frame *kvpf;
-                Account *acct;
 
                 /* save the account GncGUID into the kvp_data. */
                 view->priv->stop_cell_move = FALSE;
@@ -4822,9 +4821,9 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
                 }
 
                 acctGUID = xaccAccountGetGUID (acct);
-                kvpf = xaccSplitGetSlots (split);
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_guid (acctGUID),
-                             GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
+		qof_instance_set (QOF_INSTANCE (split),
+				  "sx-account", acctGUID,
+				  NULL);
 
                 template_acc = gnc_tree_model_split_reg_get_template_account (model);
 
@@ -4844,20 +4843,11 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
             /* Setup the debit and credit fields */
             if (viewcol == COL_DEBIT)
             {
-                kvp_frame *kvpf;
                 char *error_loc;
                 gnc_numeric new_value;
                 gboolean parse_result;
 
-                kvpf = xaccSplitGetSlots (split);
-
-                DEBUG ("kvp_frame debit before: %s\n", kvp_frame_to_string (kvpf));
-
                 /* Setup the debit formula */
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_string (new_text),
-                                         GNC_SX_ID,
-                                         GNC_SX_DEBIT_FORMULA,
-                                         NULL);
 
                 /* If the value can be parsed into a numeric result, store that
                  * numeric value additionally. See above comment.*/
@@ -4866,45 +4856,22 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
                 {
                     new_value = gnc_numeric_zero();
                 }
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_value),
-                                         GNC_SX_ID,
-                                         GNC_SX_DEBIT_NUMERIC,
-                                         NULL);
-
-                DEBUG ("kvp_frame debit after: %s\n", kvp_frame_to_string (kvpf));
-
-                /* Blank the credit formula */
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_string (NULL),
-                                         GNC_SX_ID,
-                                         GNC_SX_CREDIT_FORMULA,
-                                         NULL);
-
-                new_value = gnc_numeric_zero();
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_value),
-                                         GNC_SX_ID,
-                                         GNC_SX_CREDIT_NUMERIC,
-                                         NULL);
+		qof_instance_set (QOF_INSTANCE (split),
+				  "sx-debit-formula", new_text,
+				  "sx-debit-numeric", &new_value,
+				  "sx-credit-formula", NULL,
+				  "sx-credit-numeric", NULL,
+				  NULL);
             }
 
             /* Setup the debit and credit fields */
             if (viewcol == COL_CREDIT)
             {
-                kvp_frame *kvpf;
                 char *error_loc;
                 gnc_numeric new_value;
                 gboolean parse_result;
 
-                kvpf = xaccSplitGetSlots (split);
-
-                DEBUG ("kvp_frame credit before: %s\n", kvp_frame_to_string (kvpf));
-
-                /* Setup the credit formula */
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_string (new_text),
-                                             GNC_SX_ID,
-                                             GNC_SX_CREDIT_FORMULA,
-                                             NULL);
-
-                /* If the value can be parsed into a numeric result (without any
+               /* If the value can be parsed into a numeric result (without any
                  * further variable definitions), store that numeric value
                  * additionally in the kvp. Otherwise store a zero numeric
                  * there.*/
@@ -4913,24 +4880,12 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
                 {
                     new_value = gnc_numeric_zero();
                 }
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_value),
-                                         GNC_SX_ID,
-                                         GNC_SX_CREDIT_NUMERIC,
-                                         NULL);
-
-                DEBUG ("kvp_frame credit after: %s\n", kvp_frame_to_string (kvpf));
-
-                /* Blank the debit formula */
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_string (NULL),
-                                         GNC_SX_ID,
-                                         GNC_SX_DEBIT_FORMULA,
-                                         NULL);
-
-                new_value = gnc_numeric_zero();
-                kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_value),
-                                         GNC_SX_ID,
-                                         GNC_SX_DEBIT_NUMERIC,
-                                         NULL);
+		qof_instance_set (QOF_INSTANCE (split),
+				  "sx-credit-formula", new_text,
+				  "sx-credit-numeric", &new_value,
+				  "sx-debit-formula", NULL,
+				  "sx-debit-numeric", NULL,
+				  NULL);
             }
             /* set the amount to an innocuous value */
             xaccSplitSetValue (split, gnc_numeric_create (0, 1));

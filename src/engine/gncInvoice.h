@@ -268,6 +268,7 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
  */
 static inline GncInvoice * gncInvoiceLookup (const QofBook *book, const GncGUID *guid)
 {
+    if (book == NULL || guid == NULL) return NULL;
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_INVOICE, GncInvoice);
 }
 
@@ -305,7 +306,6 @@ QofBook *gncInvoiceGetBook(GncInvoice *x);
 /** deprecated functions */
 #define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
-#define gncInvoiceLookupDirect(G,B) gncInvoiceLookup((B),&(G))
 
 /** Test support function used by test-dbi-business-stuff.c */
 gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b);

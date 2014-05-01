@@ -417,6 +417,17 @@ void xaccAccountSortSplits (Account *acc, gboolean force);
  */
 gchar * gnc_account_get_full_name (const Account *account);
 
+/** Retrieve the gains account used by this account for the indicated
+ * currency, creating and recording a new one if necessary.
+ *
+ * FIXME: There is at present no interface to designate an existing
+ * account, and the new account name is hard coded to
+ * "Orphaned Gains -- CUR"
+ *
+ * FIXME: There is no provision for creating separate accounts for
+ * anything other than currency, e.g. holding period of a security.
+ */
+Account * xaccAccountGainsAccount (Account *acc, gnc_commodity *curr);
 /** Set a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm
  *  for more information
@@ -859,8 +870,6 @@ gboolean xaccAccountGetReconcileChildrenStatus(const Account *account);
  *  if either one is NULL.
  */
 gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
-
-#define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
 /** @} */
 

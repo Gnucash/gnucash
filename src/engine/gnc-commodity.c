@@ -23,7 +23,7 @@
  *                                                                  *
  *******************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <regex.h>
+#include <qofinstance-p.h>
 
 #include "gnc-commodity.h"
 #include "gnc-prefs.h"
@@ -47,16 +48,16 @@ static QofLogModule log_module = GNC_MOD_COMMODITY;
 enum
 {
     PROP_0,
-    PROP_NAMESPACE,
-    PROP_FULL_NAME,
-    PROP_MNEMONIC,
-    PROP_PRINTNAME,
-    PROP_CUSIP,
-    PROP_FRACTION,
-    PROP_UNIQUE_NAME,
-    PROP_QUOTE_FLAG,
-    PROP_QUOTE_SOURCE,
-    PROP_QUOTE_TZ,
+    PROP_NAMESPACE,	/* Table */
+    PROP_FULL_NAME,	/* Table */
+    PROP_MNEMONIC,	/* Table */
+    PROP_PRINTNAME,	/* Constructed */
+    PROP_CUSIP,		/* Table */
+    PROP_FRACTION,	/* Table */
+    PROP_UNIQUE_NAME,	/* Constructed */
+    PROP_QUOTE_FLAG,	/* Table */
+    PROP_QUOTE_SOURCE,	/* Table */
+    PROP_QUOTE_TZ,	/* Table */
 };
 
 struct gnc_commodity_s
@@ -698,6 +699,7 @@ gnc_commodity_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_COMMODITY(object));
 
     commodity = GNC_COMMODITY(object);
+    g_assert (qof_instance_get_editlevel(commodity));
 
     switch (prop_id)
     {

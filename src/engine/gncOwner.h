@@ -197,9 +197,6 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
 gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GncGUID *guid);
 
-/** Get the kvp-frame from the underlying owner object */
-KvpFrame* gncOwnerGetSlots(GncOwner* owner);
-
 /**
  * Create a lot for a payment to the owner using the other
  * parameters passed in. If a transaction is set, this transaction will be
@@ -307,6 +304,7 @@ void gncOwnerFree (GncOwner *owner);
  * without knowing its type.
  */
 void gncOwnerBeginEdit (GncOwner *owner);
+void gncOwnerCommitEdit (GncOwner *owner);
 void gncOwnerDestroy (GncOwner *owner);
 
 #endif /* GNC_OWNER_H_ */

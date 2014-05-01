@@ -18,13 +18,11 @@ libgncmod_generic_import_la_SOURCES = \
 	import-parse.c \
 	import-utilities.c \
 	import-settings.c \
-	import-match-map.c \
 	import-main-matcher.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  import-match-map.h \
   import-parse.h
 
 noinst_HEADERS = \
@@ -32,7 +30,6 @@ noinst_HEADERS = \
   import-backend.h \
   import-commodity-matcher.h \
   import-main-matcher.h \
-  import-match-map.h \
   import-match-picker.h \
   import-settings.h \
   import-utilities.h

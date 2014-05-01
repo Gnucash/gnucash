@@ -304,15 +304,7 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
 /* #defines for KvpFrame strings and QOF */
-#define GNC_SX_ID                    "sched-xaction"
-#define GNC_SX_ACCOUNT               "account"
-#define GNC_SX_CREDIT_FORMULA        "credit-formula"
-#define GNC_SX_DEBIT_FORMULA         "debit-formula"
-#define GNC_SX_CREDIT_NUMERIC        "credit-numeric"
-#define GNC_SX_DEBIT_NUMERIC         "debit-numeric"
 #define GNC_SX_SHARES                "shares"
-#define GNC_SX_AMOUNT                "amnt"
-#define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"
 #define GNC_SX_FREQ_SPEC             "scheduled-frequency"
 #define GNC_SX_NAME                  "sched-xname"
 #define GNC_SX_START_DATE            "sched-start-date"

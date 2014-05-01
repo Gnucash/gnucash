@@ -84,7 +84,6 @@
 #include "kvp-util-p.h"
 #include "qofbackend.h"
 #include "qofid-p.h"
-#include "qofinstance-p.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofevent.h"

@@ -674,16 +674,14 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
     }
 
     acctGUID = xaccAccountGetGUID (acct);
-    kvpf = xaccSplitGetSlots (sd->split);
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_guid(acctGUID),
-                             GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
-
+    qof_instance_set (QOF_INSTANCE (sd->split),
+		      "sx-account", acctGUID,
+		      NULL);
     template_acc = xaccAccountLookup (&info->template_account,
                                       gnc_get_current_book ());
 
     /* set the actual account to the fake account for these templates */
     xaccAccountInsertSplit (template_acc, sd->split);
-    qof_instance_set_dirty (QOF_INSTANCE (sd->split));
 }
 
 static void
@@ -700,10 +698,9 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
 {
     SRSaveData *sd = save_data;
     SplitRegister *reg = user_data;
-    kvp_frame *kvpf;
-    const char *value;
+    const char *credit_formula, *debit_formula;
     char *error_loc;
-    gnc_numeric new_amount;
+    gnc_numeric credit_amount, debit_amount;
     gboolean parse_result;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, FDEBT_CELL) ||
@@ -712,54 +709,37 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
     if (sd->handled_dc)
         return;
 
-    kvpf = xaccSplitGetSlots (sd->split);
-
-    DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
-
     /* amountStr = gnc_numeric_to_string (new_amount); */
 
-    value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_string (value),
-                             GNC_SX_ID,
-                             GNC_SX_CREDIT_FORMULA,
-                             NULL);
-
+    credit_formula = gnc_table_layout_get_cell_value (reg->table->layout,
+						      FCRED_CELL);
     /* If the value can be parsed into a numeric result (without any
      * further variable definitions), store that numeric value
      * additionally in the kvp. Otherwise store a zero numeric
      * there.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(value, &new_amount, &error_loc, NULL);
+    parse_result = gnc_exp_parser_parse_separate_vars(credit_formula,
+						      &credit_amount,
+						      &error_loc, NULL);
     if (!parse_result)
-    {
-        new_amount = gnc_numeric_zero();
-    }
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
-                             GNC_SX_ID,
-                             GNC_SX_CREDIT_NUMERIC,
-                             NULL);
+        credit_amount = gnc_numeric_zero();
 
-    value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
-
-    kvp_frame_set_slot_path (kvpf,
-                             kvp_value_new_string (value),
-                             GNC_SX_ID,
-                             GNC_SX_DEBIT_FORMULA,
-                             NULL);
+    debit_formula = gnc_table_layout_get_cell_value (reg->table->layout,
+						     FDEBT_CELL);
 
     /* If the value can be parsed into a numeric result, store that
      * numeric value additionally. See above comment.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(value, &new_amount, &error_loc, NULL);
+    parse_result = gnc_exp_parser_parse_separate_vars(debit_formula,
+						      &debit_amount,
+						      &error_loc, NULL);
     if (!parse_result)
-    {
-        new_amount = gnc_numeric_zero();
-    }
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
-                             GNC_SX_ID,
-                             GNC_SX_DEBIT_NUMERIC,
-                             NULL);
+        debit_amount = gnc_numeric_zero();
 
-    DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
-
+    qof_instance_set (QOF_INSTANCE (sd->split),
+		      "sx-credit-formula", credit_formula,
+		      "sx-credit-numeric", &credit_amount,
+		      "sx-debit-formula", debit_formula,
+		      "sx-debit-numeric", &debit_amount,
+		      NULL);
     /* set the amount to an innocuous value */
     /* Note that this marks the split dirty */
     xaccSplitSetValue (sd->split, gnc_numeric_create (0, 1));
@@ -773,24 +753,13 @@ gnc_template_register_save_shares_cell (BasicCell * cell,
                                         gpointer user_data)
 {
     SRSaveData *sd = save_data;
-    kvp_frame *kvpf;
     char *sharesStr = "(x + y)/42";
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, SHRS_CELL));
-
-    kvpf = xaccSplitGetSlots (sd->split);
-
     /* FIXME: shares cells are numeric by definition. */
-    DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
-
-    /* sharesStr = gnc_numeric_to_string( sharesStr ); */
-    kvp_frame_set_slot_path (kvpf,
-                             kvp_value_new_string (sharesStr),
-                             GNC_SX_ID,
-                             GNC_SX_SHARES,
-                             NULL);
-
-    DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
+    qof_instance_set (QOF_INSTANCE (sd->split),
+		      "sx-shares", sharesStr,
+		      NULL);
 
     /* set the shares to an innocuous value */
     /* Note that this marks the split dirty */
