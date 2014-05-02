@@ -1357,7 +1357,16 @@ then
 
   warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
   # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
-  warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+  cflags_save="$CFLAGS"
+  CFLAGS="$AM_CFLAGS $CFLAGS -Werror -D_FORTIFY_SOURCE=2"
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <stdio.h>
+	 ]],
+	 [[ printf( "%s\n", "Hello World!");]])],
+	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+	 AC_MSG_RESULT(OK)],
+	 [AC_MSG_RESULT(No)])
+  CFLAGS="$cflags_save"
 
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
   AM_CXXFLAGS="${warnXXFLAGS} ${AM_CXXFLAGS}"
