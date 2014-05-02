@@ -83,7 +83,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar bg ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko kok kok@latin lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+ALL_LINGUAS="ar bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr he hu it ja ko kok kok@latin lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -1332,8 +1332,18 @@ then
   else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
          # This is gcc >= 4.x.x
          warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
-         # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
-         warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+         # rpmbuild on FC4 forces this flag. Only add it when optimizing
+         have_optimization=
+         for flag in $CFLAGS; do
+           tmp_flag=`echo $flag | sed -e 's,-O.,,'`
+           if `echo $flag | grep -q -- '-O'` ; then
+             have_optimization=yes
+           fi
+         done
+
+         if test "x${have_optimization}" = xyes; then 
+             warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+         fi
        fi
   fi
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
