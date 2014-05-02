@@ -35,7 +35,7 @@
 #include "../Transaction.h"
 #include "../Split.h"
 #include "../Account.h"
-#include "../SchedXAction.h"
+#include "../SchedXaction.h"
 #include "../gncCustomer.h"
 #include "../gncEmployee.h"
 #include "../gncJob.h"
