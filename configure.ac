@@ -1319,8 +1319,18 @@ then
   else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
          # This is gcc >= 4.x.x
          warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
-         # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
-         warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+         # rpmbuild on FC4 forces this flag. Only add it when optimizing
+         have_optimization=
+         for flag in $CFLAGS; do
+           tmp_flag=`echo $flag | sed -e 's,-O.,,'`
+           if `echo $flag | grep -q -- '-O'` ; then
+             have_optimization=yes
+           fi
+         done
+
+         if test "x${have_optimization}" = xyes; then 
+             warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+         fi
        fi
   fi
   CFLAGS="${warnFLAGS} ${CFLAGS}"
