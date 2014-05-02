@@ -4,17 +4,23 @@ TEST_SUBDIRS = test
 
 lib_LTLIBRARIES = libgnc-qof.la
 
-libgnc_qof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
+libgnc_qof_la_LDFLAGS= \
+	-version-info \
+	$(LIBQOF_LIBRARY_VERSION) \
+	$(BOOST_LDFLAGS)
+
 libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
+
 libgnc_qof_la_LIBADD = $(libgnc_qof_common_libs)
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
   -I$(top_srcdir)/src \
-  $(GLIB_CFLAGS)
+  $(GLIB_CFLAGS) \
+  $(BOOST_CPPFLAGS)
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.cpp        \
