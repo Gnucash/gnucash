@@ -737,9 +737,9 @@ AC_ARG_ENABLE( debug,
 
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
-  CFLAGS="${CFLAGS} -pg"
-  CXXFLAGS="${CXXFLAGS} -pg"
-  LDFLAGS="${LDFLAGS} -pg")
+  AM_CFLAGS="${AM_CFLAGS} -pg"
+  AM_CXXFLAGS="${AM_CXXFLAGS} -pg"
+  AM_LDFLAGS="${AM_LDFLAGS} -pg")
 
 ###---------------------------------------------------------------------------
 ### Google Profiler Support: https://code.google.com/p/gperftools/
