@@ -61,6 +61,8 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
+# Ensure the compiler supports C++ 11:
+AX_CXX_COMPILE_STDCXX_11(noext)
 
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
@@ -1159,6 +1161,7 @@ then
 
   GNOME=1
   AC_DEFINE(GNOME,,using GNOME)
+  AM_CXXFLAGS="${AM_CXXFLAGS} -Wall"
 
 else
   # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
@@ -1293,6 +1296,8 @@ if test ${GCC}x = yesx
 then
   warnFLAGS=
   warnXXFLAGS=
+  #We have a lot of unused variables. Don't warn until someone gets
+  #around to cleaning them up.
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
   AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"
   # other flags...
@@ -1329,29 +1334,10 @@ then
       fi
     ])
 
-  # For gcc >= 3.4.x, specifically enable the new warning switch
-  # -Wdeclaration-after-statement in order to preserve source code
-  # compatibility to gcc 2.95 and other compilers.
+  warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
+  # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
+  warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
 
-  if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 3; then
-    # This is gcc 3.x.x
-    if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
-      # This is gcc >= 3.4.x
-      warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
-    fi
-  elif test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
-         # This is gcc >= 4.x.x
-         warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
-         # rpmbuild on FC4 forces this flag. Only add it when optimizing
-	 cflags_save="$CFLAGS"
-	 CFLAGS="$AM_CFLAGS $CFLAGS -Werror -D_FORTIFY_SOURCE=2"
-	 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <stdio.h>
-	 ]],
-	  [[ printf( "%s\n", "Hello World!");]])],
-            [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
-	 CFLAGS="$cflags_save"
-  fi
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
   AM_CXXFLAGS="${warnXXFLAGS} ${AM_CXXFLAGS}"
 else
