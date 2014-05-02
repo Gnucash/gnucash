@@ -1329,22 +1329,21 @@ then
       # This is gcc >= 3.4.x
       warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
     fi
-  else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
+  elif test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
+         AC_MSG_CHECKING(OK To use fortify source?)
          # This is gcc >= 4.x.x
          warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
          # rpmbuild on FC4 forces this flag. Only add it when optimizing
-         have_optimization=
-         for flag in $CFLAGS; do
-           tmp_flag=`echo $flag | sed -e 's,-O.,,'`
-           if `echo $flag | grep -q -- '-O'` ; then
-             have_optimization=yes
-           fi
-         done
-
-         if test "x${have_optimization}" = xyes; then 
-             warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-         fi
-       fi
+	 cflags_save="$CFLAGS"
+	 CFLAGS="$AM_CFLAGS $CFLAGS -Werror -D_FORTIFY_SOURCE=2"
+	 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <stdio.h>
+	 ]],
+	  [[ printf( "%s\n", "Hello World!");]])],
+            [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+	     AC_MSG_RESULT(OK)],
+	    [AC_MSG_RESULT(No)])
+	 CFLAGS="$cflags_save"
   fi
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
   AM_CXXFLAGS="${warnXXFLAGS} ${AM_CXXFLAGS}"
