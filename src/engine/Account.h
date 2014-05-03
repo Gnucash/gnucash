@@ -970,6 +970,15 @@ guint32 xaccAccountTypesValid(void);
  */
 SplitList* xaccAccountGetSplitList (const Account *account);
 
+
+/** The xaccAccountGetNrSplits() routine returns the number of all
+ *    the splits in the account.
+ * @note The first argument is the account, and the second one defines
+ * if the number returned should include the number of splits in descendants
+ * (TRUE) or this account only (FALSE).
+ */
+gint64 xaccAccountGetNrSplits (const Account *acc, gboolean include_children);
+
 /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
  *  in accfrom to accto. */
 void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);

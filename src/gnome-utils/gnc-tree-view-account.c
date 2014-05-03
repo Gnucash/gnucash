@@ -1923,6 +1923,15 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account,
         }
     }
 
+    if (!fd->show_unused)
+    {
+        if (xaccAccountGetNrSplits(account, TRUE) == 0)
+        {
+            LEAVE(" hide: unused");
+            return FALSE;
+        }
+    }
+
     acct_type = xaccAccountGetType(account);
     result = (fd->visible_types & (1 << acct_type)) ? TRUE : FALSE;
     LEAVE(" %s", result ? "show" : "hide");
@@ -1965,6 +1974,25 @@ gppat_filter_show_zero_toggled_cb (GtkToggleButton *button,
     fd->show_zero_total = gtk_toggle_button_get_active(button);
     gnc_tree_view_account_refilter(fd->tree_view);
     LEAVE("show_zero %d", fd->show_zero_total);
+}
+
+/** The "show unused" button in the Filter dialog changed state.
+ *  Update the page to reflect these changes.
+ *
+ *  @param button The GtkCheckButton that was toggled.
+ *
+ *  @param fd A pointer to the account filter dialog struct.
+ */
+void
+gppat_filter_show_unused_toggled_cb (GtkToggleButton *button,
+                                   AccountFilterDialog *fd)
+{
+    g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
+
+    ENTER("button %p", button);
+    fd->show_unused = gtk_toggle_button_get_active(button);
+    gnc_tree_view_account_refilter(fd->tree_view);
+    LEAVE("show_unused %d", fd->show_unused);
 }
 
 /** The "clear all account types" button in the Filter dialog was
@@ -2105,6 +2133,7 @@ gppat_filter_response_cb (GtkWidget *dialog,
         fd->visible_types = fd->original_visible_types;
         fd->show_hidden = fd->original_show_hidden;
         fd->show_zero_total = fd->original_show_zero_total;
+        fd->show_unused = fd->original_show_unused;
         gnc_tree_view_account_refilter(fd->tree_view);
     }
 
@@ -2152,6 +2181,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     fd->original_visible_types = fd->visible_types;
     fd->original_show_hidden = fd->show_hidden;
     fd->original_show_zero_total = fd->show_zero_total;
+    fd->original_show_unused = fd->show_unused;
 
     /* Update the dialog widgets for the current state */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_hidden"));
@@ -2160,6 +2190,9 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_zero"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
                                  fd->show_zero_total);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_unused"));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
+                                 fd->show_unused);
 
     /* Set up the tree view and model */
     view = GTK_TREE_VIEW(gtk_builder_get_object (builder, FILTER_TREE_VIEW));
@@ -2198,6 +2231,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 #define ACCT_SELECTED "SelectedAccount"
 #define SHOW_HIDDEN   "ShowHidden"
 #define SHOW_ZERO     "ShowZeroTotal"
+#define SHOW_UNUSED   "ShowUnused"
 #define ACCT_TYPES    "AccountTypes"
 
 typedef struct foo
@@ -2293,6 +2327,8 @@ gnc_tree_view_account_save(GncTreeViewAccount *view,
                            fd->show_hidden);
     g_key_file_set_boolean(key_file, group_name, SHOW_ZERO,
                            fd->show_zero_total);
+    g_key_file_set_boolean(key_file, group_name, SHOW_UNUSED,
+                           fd->show_unused);
 
     bar.key_file = key_file;
     bar.group_name = group_name;
@@ -2381,6 +2417,17 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
         show = TRUE;
     }
     fd->show_zero_total = show;
+
+    show = g_key_file_get_boolean(key_file, group_name, SHOW_UNUSED, &error);
+    if (error)
+    {
+        g_warning("error reading group %s key %s: %s",
+                  group_name, SHOW_UNUSED, error->message);
+        g_error_free(error);
+        error = NULL;
+        show = TRUE;
+    }
+    fd->show_unused = show;
 
     i = g_key_file_get_integer(key_file, group_name, ACCT_TYPES, &error);
     if (error)
