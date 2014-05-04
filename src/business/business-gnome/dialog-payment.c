@@ -458,7 +458,7 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     pw->invoice = NULL;
 
     /* Now handle the account tree */
-    qof_instance_get (QOF_INSTANCE (owner),
+    qof_instance_get (qofOwnerGetOwner (owner),
 		      "payment-last-account", &guid,
 		      NULL);
 
@@ -506,17 +506,17 @@ gnc_payment_dialog_post_to_changed (PaymentWindow *pw)
 static void
 gnc_payment_dialog_remember_account (PaymentWindow *pw, Account *acc)
 {
-    GncOwner *owner = &pw->owner;
+     QofInstance *owner = qofOwnerGetOwner (&pw->owner);
     const GncGUID *guid;
 
     if (!acc) return;
 
     guid = xaccAccountGetGUID(acc);
-    qof_begin_edit (QOF_INSTANCE (owner));
-    qof_instance_set (QOF_INSTANCE (owner),
+    qof_begin_edit (owner);
+    qof_instance_set (owner,
 		      "payment-last-account", guid,
 		      NULL);
-    qof_commit_edit (QOF_INSTANCE (owner));
+    qof_commit_edit (owner);
 }
 
 
