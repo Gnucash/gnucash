@@ -2181,10 +2181,20 @@ gnc_invoice_save_page (InvoiceWindow *iw,
     g_key_file_set_string(key_file, group_name, KEY_INVOICE_GUID,
                           guid_to_string(&iw->invoice_guid));
 
-    g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
+    if (gncOwnerGetJob (&(iw->job)))
+    {
+        g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
+                          qofOwnerGetType(&iw->job));
+        g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
+                          guid_to_string(gncOwnerGetGUID(&iw->job)));
+    }
+    else
+    {
+        g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
                           qofOwnerGetType(&iw->owner));
-    g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
+        g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
                           guid_to_string(gncOwnerGetGUID(&iw->owner)));
+    }
 }
 
 GtkWidget *
