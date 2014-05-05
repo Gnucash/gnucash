@@ -292,7 +292,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     }
 
     #if HAVE_LIBDBI_R
-    be->conn = dbi_conn_new_r( "sqlite3", &dbi_instance );
+    be->conn = dbi_conn_new_r( "sqlite3", dbi_instance );
     #else
     be->conn = dbi_conn_new( "sqlite3" );
     #endif
@@ -822,7 +822,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
         dbi_conn_close( be->conn );
     }
 #if HAVE_LIBDBI_R
-    be->conn = dbi_conn_new_r( "mysql", &dbi_instance );
+    be->conn = dbi_conn_new_r( "mysql", dbi_instance );
 #else
     be->conn = dbi_conn_new( "mysql" );
 #endif
@@ -911,7 +911,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 
             // Try again to connect to the db
             #if HAVE_LIBDBI_R
-            be->conn = dbi_conn_new_r( "mysql", &dbi_instance );
+            be->conn = dbi_conn_new_r( "mysql", dbi_instance );
             #else
             be->conn = dbi_conn_new( "mysql" );
             #endif
@@ -1168,7 +1168,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     }
 
     #if HAVE_LIBDBI_R
-    be->conn = dbi_conn_new_r( "pgsql", &dbi_instance );
+    be->conn = dbi_conn_new_r( "pgsql", dbi_instance );
     #else
     be->conn = dbi_conn_new( "pgsql" );
     #endif
@@ -1259,7 +1259,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 
             // Try again to connect to the db
             #if HAVE_LIBDBI_R
-            be->conn = dbi_conn_new_r( "pgsql", &dbi_instance );
+            be->conn = dbi_conn_new_r( "pgsql", dbi_instance );
             #else
             be->conn = dbi_conn_new( "pgsql" );
             #endif
@@ -1885,7 +1885,7 @@ gnc_module_init_backend_dbi(void)
         do
         {
             #if HAVE_LIBDBI_R
-            driver = dbi_driver_list_r( driver, &dbi_instance );
+            driver = dbi_driver_list_r( driver, dbi_instance );
             #else
             driver = dbi_driver_list( driver );
             #endif
@@ -1984,7 +1984,7 @@ void
 gnc_module_finalize_backend_dbi( void )
 {
     #if HAVE_LIBDBI_R
-    dbi_shutdown_r(&dbi_instance);
+    dbi_shutdown_r(dbi_instance);
     #else
     dbi_shutdown();
     #endif
