@@ -12,6 +12,7 @@
     <child name="log-replay" schema="org.gnucash.dialogs.log-replay"/>
     <child name="open-save" schema="org.gnucash.dialogs.open-save"/>
     <child name="report" schema="org.gnucash.dialogs.report"/>
+    <child name="report-saved-configs" schema="org.gnucash.dialogs.report-saved-configs"/>
     <child name="lot-viewer" schema="org.gnucash.dialogs.lot-viewer"/>
     <child name="new-user" schema="org.gnucash.dialogs.new-user"/>
     <child name="new-hierarchy" schema="org.gnucash.dialogs.new-hierarchy"/>
@@ -138,6 +139,16 @@
       <default>''</default>
       <summary>Last pathname used</summary>
       <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.report-saved-configs" path="/org/gnucash/dialogs/report-saved-configs/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
     </key>
   </schema>
 

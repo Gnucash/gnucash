@@ -41,6 +41,7 @@
 #include "gnc-report.h"
 #include "gnc-plugin-page-report.h"
 
+#define GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS "dialogs.report-saved-configs"
 
 /* convenience for accessing columns in the GtkListStore that holds
    the reports */
@@ -95,6 +96,8 @@ void
 custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
 {
     CustomReportDialog *crd = data;
+    gnc_save_window_size(GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
+
     gtk_widget_destroy(crd->dialog);
     g_free(crd);
 }
@@ -496,6 +499,8 @@ static CustomReportDialog *gnc_ui_custom_report_internal(GncMainWindow * window)
     no_report_notification = GTK_WIDGET(gtk_builder_get_object (builder, "label2"));
     set_reports_view_and_model(crd);
     crd->window = window;
+
+    gnc_restore_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
 
     /* connect the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);

@@ -96,7 +96,7 @@ altering the report's options to your taste and then choosing "Save Report Confi
 the Reports menu or tool bar.</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
