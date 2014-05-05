@@ -1869,7 +1869,7 @@ gnc_module_init_backend_dbi(void)
 
     /* dbi_initialize returns -1 in case of errors */
     #if HAVE_LIBDBI_R
-    num_drivers = dbi_initialize_r( driver_dir, dbi_instance );
+    num_drivers = dbi_initialize_r( driver_dir, &dbi_instance );
     #else
     num_drivers = dbi_initialize( driver_dir );
     #endif
