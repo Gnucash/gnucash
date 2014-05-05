@@ -1330,7 +1330,6 @@ then
       warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
     fi
   elif test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
-         AC_MSG_CHECKING(OK To use fortify source?)
          # This is gcc >= 4.x.x
          warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
          # rpmbuild on FC4 forces this flag. Only add it when optimizing
@@ -1340,9 +1339,7 @@ then
 #include <stdio.h>
 	 ]],
 	  [[ printf( "%s\n", "Hello World!");]])],
-            [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	     AC_MSG_RESULT(OK)],
-	    [AC_MSG_RESULT(No)])
+            [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
 	 CFLAGS="$cflags_save"
   fi
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
