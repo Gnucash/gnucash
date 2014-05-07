@@ -124,25 +124,6 @@ GNCLot * xaccAccountFindLatestOpenLot (Account *acc,
                                        gnc_numeric sign,
                                        gnc_commodity *currency);
 
-/** The xaccAccountGetDefaultGainAccount() routine will return
- *   the account to which realized gains/losses may be posted.
- *   Because gains may be in different currencies, one must
- *   specify the currency type in which the gains will be posted.
- *   This routine does nothing more than return the value of
- *   the "/lot-mgmt/gains-act/XXX" key, where XXX is the unique
- *   currency name.  IOf there is no default account for this
- *   currency, NULL will be returned.
- */
-Account * xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * currency);
-
-/** The xaccAccountSetDefaultGainAccount() routine can be used
- *   to set the account to which realized gains/losses will be
- *   posted by default. This routine does nothing more than set
- *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the
- *   unique currency name of the currency of gains account.
- */
-void xaccAccountSetDefaultGainAccount (Account *acc, const Account *gains_acct);
-
 /** The xaccSplitGetCapGainsSplit() routine returns the split
  *  that records the cap gains for this split.  It returns NULL
  *  if not found.  This routine does nothing more than search for

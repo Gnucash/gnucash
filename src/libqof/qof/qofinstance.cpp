@@ -62,7 +62,6 @@ enum
     PROP_GUID,
     PROP_COLLECTION,
     PROP_BOOK,
-    PROP_KVP_DATA,
     PROP_LAST_UPDATE,
     PROP_EDITLEVEL,
     PROP_DESTROYING,
@@ -82,12 +81,6 @@ typedef struct QofInstancePrivate
 
     /* The entity_table in which this instance is stored */
     QofBook * book;
-
-    /* kvp_data is a key-value pair database for storing arbirtary
-     * information associated with this instance.
-     * See src/engine/kvp_doc.txt for a list and description of the
-     * important keys. */
-//    KvpFrame *kvp_data;
 
     /*  Timestamp used to track the last modification to this
      *  instance.  Typically used to compare two versions of the
@@ -179,15 +172,6 @@ static void qof_instance_class_init(QofInstanceClass *klass)
                           "The book that contains this object.",
                           QOF_TYPE_BOOK,
                           G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (object_class,
-     PROP_KVP_DATA,
-     g_param_spec_pointer ("kvp-data",
-                           "Object KVP Data",
-                           "A pointer to the key-value data associated "
-                           "with this object.",
-                           G_PARAM_READWRITE));
 
     g_object_class_install_property
     (object_class,
@@ -396,9 +380,6 @@ qof_instance_get_property (GObject         *object,
     case PROP_BOOK:
         g_value_take_object(value, priv->book);
         break;
-    case PROP_KVP_DATA:
-        g_value_set_pointer(value, inst->kvp_data);
-        break;
     case PROP_LAST_UPDATE:
         g_value_set_pointer(value, &priv->last_update);
         break;
@@ -454,9 +435,6 @@ qof_instance_set_property (GObject         *object,
     case PROP_BOOK:
         qof_instance_set_book(inst,
 			      static_cast<QofBook*>(g_value_get_object(value)));
-        break;
-    case PROP_KVP_DATA:
-        qof_instance_set_slots(inst, static_cast<KvpFrame*>(g_value_get_pointer(value)));
         break;
     case PROP_LAST_UPDATE:
         ts = static_cast<Timespec*>(g_value_get_pointer(value));
@@ -960,6 +938,32 @@ gboolean qof_instance_refers_to_object(const QofInstance* inst, const QofInstanc
     }
 }
 
+/* g_object_set/get wrappers */
+void
+qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
+{
+    va_list ap;
+    g_return_if_fail (QOF_IS_INSTANCE (inst));
+
+    va_start (ap, first_prop);
+    g_object_get_valist (G_OBJECT (inst), first_prop, ap);
+    va_end (ap);
+}
+
+void
+qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
+{
+    va_list ap;
+    QofInstancePrivate *priv = GET_PRIVATE(inst);
+    g_return_if_fail (QOF_IS_INSTANCE (inst));
+
+    qof_instance_set_dirty (inst);
+    va_start (ap, first_prop);
+    g_object_set_valist (G_OBJECT (inst), first_prop, ap);
+    va_end (ap);
+}
+
+
 /* =================================================================== */
 /* Entity edit and commit utilities */
 /* =================================================================== */
@@ -1063,6 +1067,26 @@ qof_commit_edit_part2(QofInstance *inst,
         on_done(inst);
     return TRUE;
 }
+
+void
+qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value)
+{
+    KvpFrame *frame = qof_instance_get_slots (inst);
+    kvp_frame_set_gvalue (frame, key, value);
+}
+
+void
+qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value)
+{
+    KvpFrame *frame = qof_instance_get_slots (inst);
+    GValue *temp = kvp_frame_get_gvalue (frame, key);
+    if (temp)
+    {
+	g_value_copy (temp, value);
+	gnc_gvalue_free (temp);
+    }
+}
+
 
 /* ========================== END OF FILE ======================= */
 

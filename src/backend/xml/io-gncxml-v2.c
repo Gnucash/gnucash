@@ -2182,7 +2182,7 @@ gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
                   push_data, GNC_BOOK_XML2_FILE);
 
     if (success)
-        qof_book_kvp_changed(book);
+	qof_instance_set_dirty (QOF_INSTANCE (book));
 
     return success;
 }

@@ -72,6 +72,9 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_tochargeamt_string "invoice:charge-amt"
 #define invoice_slots_string "invoice:slots"
 
+/* EFFECTIVE FRIEND FUNCTION */
+extern KvpFrame *qof_instance_get_slots (const QofInstance *);
+
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
@@ -410,7 +413,7 @@ invoice_slots_handler (xmlNodePtr node, gpointer invoice_pdata)
     struct invoice_pdata *pdata = invoice_pdata;
 
     return dom_tree_to_kvp_frame_given
-           (node, xaccAccountGetSlots (pdata->invoice));
+           (node, qof_instance_get_slots (QOF_INSTANCE (pdata->invoice)));
 }
 
 static struct dom_tree_handler invoice_handlers_v2[] =

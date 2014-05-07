@@ -1730,43 +1730,44 @@ gtva_currency_changed_cb (void)
         gtva_update_column_names (ptr->data);
     }
 }
-/* This function implements a custom mapping between an account's KVP
- * and the cell renderer's 'text' property. */
+/* Retrieve a specified account string property and put the result
+ * into the tree column's text property.
+ */
 static void
-account_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
-                            GtkCellRenderer *cell,
-                            GtkTreeModel *s_model,
-                            GtkTreeIter *s_iter,
-                            gpointer key)
+account_cell_property_data_func (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer *cell,
+				 GtkTreeModel *s_model,
+				 GtkTreeIter *s_iter,
+				 gpointer key)
 {
     Account *account;
-    kvp_frame * frame;
+    gchar *string = NULL;
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
-    frame = xaccAccountGetSlots(account);
+    qof_instance_get (QOF_INSTANCE (account),
+		      key, &string,
+		      NULL);
+    if (string == NULL)
+	string = "";
 
-    g_object_set (G_OBJECT (cell),
-                  "text", kvp_frame_get_string(frame, (gchar *)key),
-                  "xalign", 0.0,
-                  NULL);
-
+    g_object_set (G_OBJECT (cell), "text", string, "xalign", 0.0, NULL);
 }
 
 
 GtkTreeViewColumn *
-gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
+gnc_tree_view_account_add_property_column (GncTreeViewAccount *view,
                                       const gchar *column_title,
-                                      const gchar *kvp_key)
+                                      const gchar *propname)
 {
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
 
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
-    g_return_val_if_fail (kvp_key != NULL, NULL);
+    g_return_val_if_fail (propname != NULL, NULL);
 
     column = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), column_title,
-                                           kvp_key, NULL, "Sample text",
+                                           propname, NULL, "Sample text",
                                            -1, -1, NULL);
 
     /* This new kvp column has only had one renderer added to it so
@@ -1775,8 +1776,8 @@ gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
     g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
 
     gtk_tree_view_column_set_cell_data_func (column, renderer,
-            account_cell_kvp_data_func,
-            g_strdup(kvp_key), g_free);
+            account_cell_property_data_func,
+            g_strdup(propname), g_free);
     return column;
 }
 

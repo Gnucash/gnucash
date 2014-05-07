@@ -1,6 +1,6 @@
 /********************************************************************
- * testmain.c: GLib g_test test execution file.			    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * test-app-utils.c: GLib g_test test execution file.		    *
+ * Copyright 2013 John Ralls <jralls@ceridwen.us>		    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,37 +20,37 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-
 #include <config.h>
 #include <glib.h>
 #include <qof.h>
-#include <TransLog.h>
+#include <libguile.h>
+#include <gnc-module.h>
 
-extern void test_suite_account();
-extern void test_suite_budget();
-extern void test_suite_gncInvoice();
-extern void test_suite_transaction();
-extern void test_suite_split();
-extern void test_suite_engine_kvp_properties (void);
+extern void test_suite_option_util (void);
+
+static void
+guile_main (void *closure, int argc, char **argv)
+{
+    GNCModule mod;
+    int retval;
+    gnc_module_system_init ();
+    mod = gnc_module_load ("gnucash/app-utils", 0);
+
+    test_suite_option_util ();
+    retval = g_test_run ();
+
+    exit (retval);
+}
 
 int
-main (int   argc,
-      char *argv[])
+main (int argc, char *argv[])
 {
-    qof_init(); 			/* Initialize the GObject system */
-    qof_log_init_filename_special("stderr"); /* Init the log system */
-    g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
+    qof_init (); 			/* Initialize the GObject system */
+    qof_log_init_filename_special ("stderr"); /* Init the log system */
+    g_test_init (&argc, &argv, NULL); 	/* initialize test program */
     //qof_log_set_level("gnc", G_LOG_LEVEL_DEBUG);
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
-    /* Disable the transaction log */
-    xaccLogDisable();
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
+    scm_boot_guile (argc, argv, guile_main, NULL);
 
-    test_suite_account();
-    test_suite_budget();
-    test_suite_gncInvoice();
-    test_suite_transaction();
-    test_suite_split();
-    test_suite_engine_kvp_properties ();
-
-    return g_test_run( );
 }

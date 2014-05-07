@@ -1,3 +1,5 @@
+include $(top_srcdir)/test-templates/Makefile.decl
+
 TESTS = \
   test-link-module \
   test-load-module \
@@ -66,3 +68,17 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
+
+TEST_PROGS += test-app-utils
+
+noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
+
+test_app_utils_SOURCES = \
+	test-app-utils.c \
+	test-option-util.c
+
+test_app_utils_CFLAGS = \
+	${DEFAULT_INCLUDES} \
+	-I${top_srcdir}/${MODULEPATH}/ \
+	-DTESTPROG=test_app_utils \
+	${GLIB_CFLAGS}

@@ -33,6 +33,7 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
+#include <qofinstance-p.h>
 
 static void
 run_test (void)
@@ -61,7 +62,9 @@ run_test (void)
     /*****/
 
     five = gnc_numeric_create(5, 1);
+    qof_instance_increase_editlevel (acc);
     g_object_set(acc, "start-balance", &five, NULL);
+    qof_instance_decrease_editlevel (acc);
     xaccAccountRecomputeBalance(acc);
     g_object_get(acc, "start-balance", &start, "end-balance", &end, NULL);
     end2 = xaccAccountGetBalance(acc);

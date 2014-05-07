@@ -397,30 +397,20 @@ const char *
 gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 {
     static char *name = NULL;
+    Account *account;
+    GncGUID *guid = NULL;
 
-    kvp_frame *kvpf;
+    /* Callers either g_strdup the return or use it as a temp for comparison,
+       so we keep our static ref and free it on every call. */
+    g_free (name);
 
     if (!split)
         return NULL;
-
-    kvpf = xaccSplitGetSlots (split);
-
-    g_free (name);
-
-    if (kvpf)
-    {
-        Account *account;
-        GncGUID *guid;
-
-        guid = kvp_value_get_guid(
-                   kvp_frame_get_slot_path (kvpf, "sched-xaction", "account", NULL));
-
-        account = xaccAccountLookup (guid, gnc_get_current_book ());
-
-        name = account ? gnc_get_account_name_for_register (account) : NULL;
-    }
-    else
-        name = NULL;
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-account", &guid,
+		      NULL);
+    account = xaccAccountLookup (guid, gnc_get_current_book ());
+    name = account ? gnc_get_account_name_for_register (account) : NULL;
 
     return name;
 }
@@ -429,20 +419,27 @@ gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 const char *
 gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split)
 {
-    kvp_frame *kvpf = xaccSplitGetSlots (split);
+    gchar *formula = NULL;
 
-    return kvp_value_get_string(
-               kvp_frame_get_slot_path (kvpf, "sched-xaction", "debit-formula", NULL));
+    g_return_val_if_fail (split != NULL, NULL);
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-debit-formula", &formula,
+		      NULL);
+
+    return formula;
 }
-
 
 const char *
 gnc_tree_util_split_reg_template_get_fcred_entry (Split *split)
 {
-    kvp_frame *kvpf = xaccSplitGetSlots (split);
+    gchar *formula = NULL;
 
-    return kvp_value_get_string(
-               kvp_frame_get_slot_path (kvpf, "sched-xaction", "credit-formula", NULL));
+    g_return_val_if_fail (split != NULL, NULL);
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-credit-formula", &formula,
+		      NULL);
+
+    return formula;
 }
 
 

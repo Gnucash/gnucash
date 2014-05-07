@@ -203,20 +203,19 @@ void gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *
 
 /** Add a new column to the set of columns in an account tree view.
  *  This column will be visible as soon as it is added and will
- *  display the contents of the specified KVP slot.
+ *  display the contents of the specified account property
  *
  *  @param view A pointer to an account tree view.
  *
  *  @param column_title The title for this new column.
  *
- *  @param kvp_key The lookup key to use for looking up data in the
- *  account KVP structures. The value associated with this key is what
- *  will be displayed in the column.
+ *  @param propname The g_object_property name of the desired
+ *  value. This must be a string property.
  */
 GtkTreeViewColumn *
-gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
-                                      const gchar *column_title,
-                                      const gchar *kvp_key);
+gnc_tree_view_account_add_property_column (GncTreeViewAccount *view,
+					   const gchar *column_title,
+					   const gchar *propname);
 
 /** @} */
 

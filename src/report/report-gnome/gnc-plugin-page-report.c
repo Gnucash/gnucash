@@ -1778,8 +1778,6 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
     g_free (job_name);
 }
 
-#define KVP_OWNER_EXPORT_PDF_DIRNAME "export-pdf-directory"
-
 static void
 gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *report )
 {
@@ -1787,7 +1785,6 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
     gchar *job_name = report_create_jobname(priv);
     GncInvoice *invoice;
     GncOwner *owner = NULL;
-    KvpFrame *kvp = NULL;
 
     // Do we have an invoice report?
     invoice = lookup_invoice(priv);
@@ -1797,20 +1794,19 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         owner = (GncOwner*) gncInvoiceGetOwner(invoice);
         if (owner)
         {
+	    QofInstance *inst = qofOwnerGetOwner (owner);
+	    gchar *dirname = NULL;
+	    qof_instance_get (inst, "export-pdf-dir", &dirname, NULL);
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that
             // we can export to PDF.
-            kvp = gncOwnerGetSlots(owner);
-            if (kvp)
-            {
-                const char *dirname = kvp_frame_get_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME);
-                if (dirname && g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-                {
-                    gchar *tmp = g_build_filename(dirname, job_name, NULL);
-                    g_free(job_name);
-                    job_name = tmp;
-                }
-            }
+	    if (dirname && g_file_test(dirname,
+				       G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+	    {
+		gchar *tmp = g_build_filename(dirname, job_name, NULL);
+		g_free(job_name);
+		job_name = tmp;
+	    }
         }
     }
 
@@ -1818,10 +1814,12 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     gnc_html_print(priv->html, job_name, TRUE);
 
-    if (owner && kvp)
+    if (owner)
     {
-        // As this is an invoice report with some owner, we will try to look up the
-        // chosen output directory from the print settings and store it again in the owner kvp.
+	/* As this is an invoice report with some owner, we will try
+	 * to look up the chosen output directory from the print
+	 * settings and store it again in the owner kvp.
+	 */
         GtkPrintSettings *print_settings = gnc_print_get_settings();
         if (print_settings &&
 	    gtk_print_settings_has_key(print_settings,
@@ -1832,15 +1830,10 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
             // Only store the directory if it exists.
             if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
             {
-                QofInstance *qofinstance = qofOwnerGetOwner(owner);
-                if (qofinstance)
-		{
-		    gncOwnerBeginEdit(owner);
-		    kvp_frame_set_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME,
-					 dirname);
-                    qof_instance_set_dirty(qofinstance);
-		    qof_commit_edit (qofinstance);
-		}
+                QofInstance *inst = qofOwnerGetOwner(owner);
+                gncOwnerBeginEdit(owner);
+		qof_instance_set (inst, "export-pdf-dir", dirname);
+		gncOwnerCommitEdit(owner);
             }
         }
     }

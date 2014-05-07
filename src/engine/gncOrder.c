@@ -25,10 +25,11 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <qofinstance-p.h>
 
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -84,12 +85,14 @@ void mark_order (GncOrder *order)
 enum
 {
     PROP_0,
-    PROP_ID,
-    PROP_NOTES,
-    PROP_ACTIVE,
-    PROP_DATE_OPENED,
-    PROP_DATE_CLOSED,
-    PROP_REFERENCE
+    PROP_ID,		/* Table */
+    PROP_NOTES,		/* Table */
+    PROP_REFERENCE,	/* Table */
+    PROP_ACTIVE,	/* Table */
+    PROP_DATE_OPENED,	/* Table */
+    PROP_DATE_CLOSED,	/* Table */
+//  PROP_OWNER_TYPE,	/* Table */
+//  PROP_OWNER,		/* Table */
 };
 
 /* GObject Initialization */
@@ -160,6 +163,8 @@ gnc_order_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_ORDER(object));
 
     order = GNC_ORDER(object);
+    g_assert (qof_instance_get_editlevel(order));
+
     switch (prop_id)
     {
     case PROP_ID:

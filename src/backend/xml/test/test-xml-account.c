@@ -144,7 +144,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         {
             /* xaccAccountDeleteOldData (act); */
 
-            if (!equals_node_val_vs_kvp_frame(mark, xaccAccountGetSlots(act)))
+            if (!equals_node_val_vs_kvp_frame(mark, qof_instance_get_slots(QOF_INSTANCE (act))))
             {
                 return g_strdup("slots differ");
             }

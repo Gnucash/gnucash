@@ -165,11 +165,6 @@ const char * gnc_lot_get_notes (const GNCLot *);
 void gnc_lot_set_title (GNCLot *, const char *);
 void gnc_lot_set_notes (GNCLot *, const char *);
 
-/** Every lot has a place to hang kvp data.  This routine returns that
- *     place.
- * */
-KvpFrame * gnc_lot_get_slots (const GNCLot *);
-
 /** XXX: Document? */
 GNCLot * gnc_lot_make_default (Account * acc);
 

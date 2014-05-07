@@ -1008,18 +1008,17 @@ finish_book_options_helper(GNCOptionWin * optionwin,
                           gpointer user_data)
 {
     GNCOptionDB * options = user_data;
-    kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
+    QofBook *book = gnc_get_current_book ();
     gboolean use_split_action_for_num_before =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
+        qof_book_use_split_action_for_num_field (book);
     gboolean use_split_action_for_num_after;
 
     if (!options) return;
 
     gnc_option_db_commit (options);
-    gnc_option_db_save_to_kvp (options, slots, TRUE);
-    qof_book_kvp_changed (gnc_get_current_book());
+    qof_book_save_options (book, gnc_option_db_save_to_kvp, options, TRUE);
     use_split_action_for_num_after =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
+        qof_book_use_split_action_for_num_field (book);
     if (use_split_action_for_num_before != use_split_action_for_num_after)
         gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
 }
@@ -1119,11 +1118,11 @@ book_options_dialog_close_cb(GNCOptionWin * optionwin,
 static void
 assistant_instert_book_options_page (hierarchy_data *data)
 {
-    kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
     GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
 
     data->options = gnc_option_db_new_for_type (QOF_ID_BOOK);
-    gnc_option_db_load_from_kvp (data->options, slots);
+    qof_book_load_options (gnc_get_current_book (),
+			   gnc_option_db_load_from_kvp, data->options);
     gnc_option_db_clean (data->options);
 
     data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"));

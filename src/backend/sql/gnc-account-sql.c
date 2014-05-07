@@ -294,12 +294,14 @@ load_all_accounts( GncSqlBackend* be )
         {
             acct_balances_t* balances = (acct_balances_t*)bal->data;
 
+	    qof_instance_increase_editlevel (balances->acct);
             g_object_set( balances->acct,
                           "start-balance", &balances->balance,
                           "start-cleared-balance", &balances->cleared_balance,
                           "start-reconciled-balance", &balances->reconciled_balance,
                           NULL);
 
+	    qof_instance_decrease_editlevel (balances->acct);
         }
         if ( bal_slist != NULL )
         {
@@ -418,7 +420,9 @@ load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
         {
             if ( table_row->gobj_param_name != NULL )
             {
+		qof_instance_increase_editlevel (pObject);
                 g_object_set( pObject, table_row->gobj_param_name, account, NULL );
+		qof_instance_decrease_editlevel (pObject);
             }
             else
             {

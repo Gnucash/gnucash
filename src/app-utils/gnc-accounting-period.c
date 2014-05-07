@@ -102,15 +102,13 @@ get_fy_end(void)
 {
     QofBook *book;
     KvpFrame *book_frame;
-    gint64 month, day;
+    GDate *date = NULL;
 
     book = gnc_get_current_book();
-    book_frame = qof_book_get_slots(book);
-    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
-    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
-    if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
-        return g_date_new_dmy(day, month, G_DATE_BAD_YEAR);
-    return NULL;
+    qof_instance_get (QOF_INSTANCE (book),
+		      "fy-end", &date,
+		      NULL);
+    return date;
 }
 
 time64

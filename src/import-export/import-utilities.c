@@ -40,42 +40,36 @@
  * Account, Transaction and Split
 \********************************************************************/
 
-const gchar * gnc_import_get_acc_online_id(Account * account)
+const gchar * gnc_import_get_acc_online_id (Account * account)
 {
-    kvp_frame * frame;
-    frame = xaccAccountGetSlots(account);
-    return kvp_frame_get_string(frame, "online_id");
+    gchar *id = NULL;
+    qof_instance_get (QOF_INSTANCE (account), "online-id", &id, NULL);
+    return id;
 }
 
 /* Used in the midst of editing a transaction; make it save the
  * account data. */
-void gnc_import_set_acc_online_id(Account * account,
-                                  const gchar * string_value)
+void gnc_import_set_acc_online_id (Account *account, const gchar *id)
 {
-    kvp_frame * frame;
     g_return_if_fail (account != NULL);
-    frame = xaccAccountGetSlots(account);
     xaccAccountBeginEdit (account);
-    kvp_frame_set_str(frame, "online_id", string_value);
-    qof_instance_set_dirty (QOF_INSTANCE (account));
+    qof_instance_set (QOF_INSTANCE (account), "online-id", &id, NULL);
     xaccAccountCommitEdit (account);
 }
 
-const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
+const gchar * gnc_import_get_trans_online_id (Transaction * transaction)
 {
-    kvp_frame * frame;
-    frame = xaccTransGetSlots(transaction);
-    return kvp_frame_get_string(frame, "online_id");
+    gchar *id = NULL;
+    qof_instance_get (QOF_INSTANCE (transaction), "online-id", &id, NULL);
+    return id;
 }
 /* Not actually used */
-void gnc_import_set_trans_online_id(Transaction * transaction,
-                                    const gchar * string_value)
+void gnc_import_set_trans_online_id (Transaction *transaction,
+				     const gchar *id)
 {
-    kvp_frame * frame;
+    g_return_if_fail (transaction != NULL);
     xaccTransBeginEdit (transaction);
-    frame = xaccTransGetSlots(transaction);
-    kvp_frame_set_str (frame, "online_id", string_value);
-    qof_instance_set_dirty (QOF_INSTANCE (transaction));
+    qof_instance_set (QOF_INSTANCE (transaction), "online-id", &id, NULL);
     xaccTransCommitEdit (transaction);
 }
 
@@ -86,24 +80,19 @@ gboolean gnc_import_trans_has_online_id(Transaction * transaction)
     return (online_id != NULL && strlen(online_id) > 0);
 }
 
-const gchar * gnc_import_get_split_online_id(Split * split)
+const gchar * gnc_import_get_split_online_id (Split * split)
 {
-    kvp_frame * frame;
-    frame = xaccSplitGetSlots(split);
-    return kvp_frame_get_string(frame, "online_id");
+    gchar *id = NULL;
+    qof_instance_get (QOF_INSTANCE (split), "online-id", &id, NULL);
+    return id;
 }
 /* Used several places in a transaction edit where many other
  * parameters are also being set, so individual commits wouldn't be
- * appropriate. */
-void gnc_import_set_split_online_id(Split * split,
-                                    const gchar * string_value)
+ * appropriate. Besides, there isn't a function for one.*/
+void gnc_import_set_split_online_id (Split *split, const gchar *id)
 {
-    kvp_frame * frame;
-    xaccTransBeginEdit (xaccSplitGetParent (split));
-    frame = xaccSplitGetSlots(split);
-    kvp_frame_set_str (frame, "online_id", string_value);
-    qof_instance_set_dirty (QOF_INSTANCE (split));
-    xaccTransCommitEdit (xaccSplitGetParent (split));
+    g_return_if_fail (split != NULL);
+    qof_instance_set (QOF_INSTANCE (split), "online-id", &id, NULL);
 }
 
 gboolean gnc_import_split_has_online_id(Split * split)

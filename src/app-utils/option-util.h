@@ -33,7 +33,7 @@
 
 typedef struct gnc_option GNCOption;
 typedef struct gnc_option_section GNCOptionSection;
-typedef struct gnc_option_db GNCOptionDB;
+/* typedef struct gnc_option_db GNCOptionDB is in qof-book.h */
 
 typedef int GNCOptionDBHandle;
 
