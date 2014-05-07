@@ -144,6 +144,20 @@ GNCLot *      xaccSplitGetLot (const Split *split);
 /** Assigns the split to a specific Lot */
 void xaccSplitSetLot(Split* split, GNCLot* lot);
 
+
+/** Returns the KvpFrame slots of this split for direct editing.
+ *
+ * Split slots are used to store arbitrary strings, numbers, and
+ * structures which aren't members of the transaction struct.  See
+ * kvp_doc.txt for reserved slot names.
+ */
+KvpFrame *xaccSplitGetSlots(const Split *split);
+
+/** Set the KvpFrame slots of this split to the given frm by directly
+ * using the frm pointer (i.e. non-copying). */
+void xaccSplitSetSlots_nc(Split *s, KvpFrame *frm);
+
+
 /** The memo is an arbitrary string associated with a split.  It is
  * intended to hold a short (zero to forty character) string that is
  * displayed by the GUI along with this split.  Users typically type

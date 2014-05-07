@@ -49,9 +49,6 @@
 
 const gchar *transaction_version_string = "2.0.0";
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance *);
-
 static void
 add_gnc_num(xmlNodePtr node, const gchar *tag, gnc_numeric num)
 {
@@ -132,7 +129,7 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     }
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
-                             qof_instance_get_slots (QOF_INSTANCE (spl)));
+                             xaccSplitGetSlots(spl));
         if (kvpnode)
         {
             xmlAddChild(ret, kvpnode);
@@ -195,7 +192,7 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree("trn:slots",
-                             qof_instance_get_slots (QOF_INSTANCE (trn)));
+                             xaccTransGetSlots(trn));
         if (kvpnode)
         {
             xmlAddChild(ret, kvpnode);
@@ -371,7 +368,7 @@ spl_slots_handler(xmlNodePtr node, gpointer data)
     gboolean successful;
 
     successful = dom_tree_to_kvp_frame_given(node,
-                 qof_instance_get_slots (QOF_INSTANCE (pdata->split)));
+                 xaccSplitGetSlots (pdata->split));
     g_return_val_if_fail(successful, FALSE);
 
     return TRUE;
@@ -530,7 +527,7 @@ trn_slots_handler(xmlNodePtr node, gpointer trans_pdata)
     Transaction *trn = pdata->trans;
     gboolean successful;
 
-    successful = dom_tree_to_kvp_frame_given(node, qof_instance_get_slots (QOF_INSTANCE (trn)));
+    successful = dom_tree_to_kvp_frame_given(node, xaccTransGetSlots(trn));
 
     g_return_val_if_fail(successful, FALSE);
 

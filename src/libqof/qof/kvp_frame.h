@@ -594,59 +594,6 @@ gchar* kvp_frame_to_string(const KvpFrame *frame);
 gchar* binary_to_string(const void *data, guint32 size);
 GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
-/** KvpItem: GValue Exchange
- * \brief Transfer of KVP to and from GValue, with the key
- *
- * Used to parameterize KVP <-> GValue exchanges.
- */
-typedef struct
-{
-    const gchar   *key;
-    GValue        *value;
-}KvpItem;
-
-/** Return a KvpItem containing the value of a KvpFrame
- *
- * Structure types (gnc_numeric, Timespec) are converted to pointers
- * and must be extracted with g_value_get_boxed. A KVP_TYPE_GLIST will
- * have all of its contents converted from KvpValues to GValues, so
- * the return type will be a GValue containing a GList of GValue*, not
- * GValue.  Use gnc_value_list_free() to free such a list if you take
- * it out of the GValue.
- *
- * \param frame: (transfer-none) The KvpFrame retrieved with kvp_get_frame_foo()
- * \param key: (transfer-none) A slash-delimited string with the path to
- * the stored value. Must not be NULL or empty.
- * \return (transfer-full) A KvpItem* which must be freed with kvp_item_free().
- */
-GValue *kvp_frame_get_gvalue (KvpFrame *frame, const gchar *key);
-
-/** Replace or create a Kvp slot from a KvpItem
- *
- * Structure types (gnc_numeric, Timespec) should be stored as
- * boxed-type pointers in the GValue with the appropriate type from
- * qof.h. Lists should be stored as a GValue containing a GList of
- * GValues of type convertable to KvpValues. Unsupported types will
- * emit a warning message and will be skipped.
- *
- * \param frame: (transfer none) The KvpFrame into which the value
- * will be added.
- * \param key: (transfer none) The subkey of the frame at which to
- * store the value
- * \param value: GValue containing the paramter to store.
- */
-void kvp_frame_set_gvalue (KvpFrame *frame, const gchar *key, const GValue *value);
-
-/**
- * \brief Convenience function to release the value in a GValue
- * acquired by kvp_frame_get_gvalue and to free the GValue.
- * \param value: A GValue* created by kvp_frame_get_gvalue
- */
-void gnc_gvalue_free (GValue *value);
-
-GType gnc_value_list_get_type (void);
-#define GNC_TYPE_VALUE_LIST (gnc_value_list_get_type ())
-
 /** @} */
 #ifdef __cplusplus
 }

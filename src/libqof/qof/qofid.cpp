@@ -38,7 +38,6 @@ extern "C"
 
 #include "qof.h"
 #include "qofid-p.h"
-#include "qofinstance-p.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 static gboolean qof_alt_dirty_mode = FALSE;

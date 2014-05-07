@@ -157,7 +157,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
 
     if (!lot) return;
 
-    ENTER ("lot=%s", gnc_lot_get_title(lot));
+    ENTER ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
     for (snode = gnc_lot_get_split_list(lot); snode; snode = snode->next)
     {
@@ -216,7 +216,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
         }
     }
 
-    LEAVE ("lot=%s", gnc_lot_get_title(lot));
+    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
 
 /* ================================================================= */

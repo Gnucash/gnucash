@@ -26,11 +26,10 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <glib.h>
 #include <string.h>
-#include <qofinstance-p.h>
 
 #include "Account.h"
 #include "gnc-commodity.h"
@@ -80,19 +79,16 @@ void mark_employee (GncEmployee *employee)
 enum
 {
     PROP_0,
-    PROP_USERNAME,		/* Table */
-    PROP_ID,			/* Table */
-    PROP_LANGUAGE,		/* Table */
-    PROP_ACL,			/* Table */
-    PROP_ACTIVE,		/* Table */
-    PROP_CURRENCY,		/* Table */
-    PROP_CCARD,			/* Table */
-    PROP_WORKDAY,		/* Table (numeric) */
-    PROP_RATE,			/* Table (numeric) */
-    PROP_ADDRESS,		/* Table, 8 fields */
-    PROP_PDF_DIRNAME,		/* KVP */
-    PROP_LAST_POSTED,		/* KVP */
-    PROP_PAYMENT_LAST_ACCT,	/* KVP */
+    PROP_USERNAME,
+    PROP_ID,
+    PROP_ACTIVE,
+    PROP_LANGUAGE,
+    PROP_CURRENCY,
+    PROP_ACL,
+    PROP_ADDRESS,
+    PROP_WORKDAY,
+    PROP_RATE,
+    PROP_CCARD
 };
 
 /* GObject Initialization */
@@ -128,7 +124,6 @@ gnc_employee_get_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     GncEmployee *emp;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_EMPLOYEE(object));
 
@@ -165,18 +160,6 @@ gnc_employee_get_property (GObject         *object,
     case PROP_CCARD:
         g_value_take_object(value, emp->ccard_acc);
         break;
-    case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_get_kvp (QOF_INSTANCE (emp), key, value);
-	break;
-    case PROP_LAST_POSTED:
-	key = LAST_POSTED_TO_ACCT;
-	qof_instance_get_kvp (QOF_INSTANCE (emp), key, value);
-	break;
-    case PROP_PAYMENT_LAST_ACCT:
-	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
-	qof_instance_get_kvp (QOF_INSTANCE (emp), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -190,13 +173,10 @@ gnc_employee_set_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     GncEmployee *emp;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_EMPLOYEE(object));
 
     emp = GNC_EMPLOYEE(object);
-    g_assert (qof_instance_get_editlevel(emp));
-
     switch (prop_id)
     {
     case PROP_USERNAME:
@@ -229,18 +209,6 @@ gnc_employee_set_property (GObject         *object,
     case PROP_CCARD:
         gncEmployeeSetCCard(emp, g_value_get_object(value));
         break;
-    case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_set_kvp (QOF_INSTANCE (emp), key, value);
-	break;
-    case PROP_LAST_POSTED:
-	key = LAST_POSTED_TO_ACCT;
-	qof_instance_set_kvp (QOF_INSTANCE (emp), key, value);
-	break;
-    case PROP_PAYMENT_LAST_ACCT:
-	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
-	qof_instance_set_kvp (QOF_INSTANCE (emp), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -399,39 +367,6 @@ gnc_employee_class_init (GncEmployeeClass *klass)
                           "The credit card account for this employee.",
                           GNC_TYPE_ACCOUNT,
                           G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_PDF_DIRNAME,
-     g_param_spec_string ("export-pdf-dir",
-                          "Export PDF Directory Name",
-                          "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
-                          NULL,
-                          G_PARAM_READWRITE));
-
-    g_object_class_install_property(
-       gobject_class,
-       PROP_LAST_POSTED,
-       g_param_spec_boxed("invoice-last-posted-account",
-			  "Invoice Last Posted Account",
-			  "The last account to which an invoice belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
-
-    g_object_class_install_property(
-       gobject_class,
-       PROP_PAYMENT_LAST_ACCT,
-       g_param_spec_boxed("payment-last-account",
-			  "Payment Last Account",
-			  "The last account to which an payment belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

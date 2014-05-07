@@ -3646,30 +3646,39 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
     /* If the transaction has a sched-xact KVP frame, then go to the editor
      * for the existing SX; otherwise, do the sx-from-trans dialog. */
     {
-	GncGUID *fromSXId = NULL;
-	SchedXaction *theSX = NULL;
-	GList *sxElts;
-	qof_instance_get (QOF_INSTANCE (trans),
-			  "from-sched-xaction", &fromSXId,
-			  NULL);
+        kvp_frame *txn_frame;
+        kvp_value *kvp_val;
+        /* set a kvp-frame element in the transaction indicating and
+         * pointing-to the SX this was created from. */
+        txn_frame = xaccTransGetSlots (trans);
+        if ( txn_frame != NULL )
+        {
+            kvp_val = kvp_frame_get_slot (txn_frame, "from-sched-xaction");
+            if (kvp_val)
+            {
+                GncGUID *fromSXId = kvp_value_get_guid (kvp_val);
+                SchedXaction *theSX = NULL;
+                GList *sxElts;
 
-	/* Get the correct SX */
-	for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
-	      (!theSX) && sxElts;
-	      sxElts = sxElts->next )
-	{
-	    SchedXaction *sx = (SchedXaction*)sxElts->data;
-	    theSX =
-		((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
-		 ? sx : NULL);
-	}
+                /* Get the correct SX */
+                for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
+                        (!theSX) && sxElts;
+                        sxElts = sxElts->next )
+                {
+                    SchedXaction *sx = (SchedXaction*)sxElts->data;
+                    theSX =
+                        ((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
+                          ? sx : NULL);
+                }
 
-	if (theSX)
-	{
-	    gnc_ui_scheduled_xaction_editor_dialog_create2 (theSX, FALSE);
-	    LEAVE(" ");
-	    return;
-	}
+                if (theSX)
+                {
+                    gnc_ui_scheduled_xaction_editor_dialog_create2 (theSX, FALSE);
+                    LEAVE(" ");
+                    return;
+                }
+            }
+        }
     }
     gnc_sx_create_from_trans (trans);
     LEAVE(" ");

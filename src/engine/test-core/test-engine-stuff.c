@@ -26,7 +26,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <qofinstance-p.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -1340,7 +1339,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     else
         g_assert(!gnc_numeric_positive_p(amt)); /* non-positive amt */
 
-    qof_instance_set_slots(QOF_INSTANCE (ret), get_random_kvp_frame());
+    xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
     xaccTransCommitEdit(trn);
 
     return ret;
@@ -1367,7 +1366,7 @@ make_random_changes_to_split (Split *split)
     xaccSplitSetDateReconciledTS (split, ts);
     g_free(ts);
 
-    qof_instance_set_slots (QOF_INSTANCE (split), get_random_kvp_frame());
+    xaccSplitSetSlots_nc (split, get_random_kvp_frame());
 
     /* Don't change share values/prices here, since that would
      * throw transactions out of balance. Do that in the corresponding
@@ -2170,13 +2169,13 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     }
 
     if (query_types & SPLIT_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (s)), GNC_ID_SPLIT);
+        add_kvp_query (q, xaccSplitGetSlots (s), GNC_ID_SPLIT);
 
     if (query_types & TRANS_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (trans)), GNC_ID_TRANS);
+        add_kvp_query (q, xaccTransGetSlots (trans), GNC_ID_TRANS);
 
     if (query_types & ACCOUNT_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (a)), GNC_ID_ACCOUNT);
+        add_kvp_query (q, xaccAccountGetSlots (a), GNC_ID_ACCOUNT);
 
     return q;
 }

@@ -587,6 +587,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     const gchar *old_name;
     gchar *new_name;
+    gchar *new_name_escaped;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
@@ -602,7 +603,13 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
                "Report name", NULL);
     if (strcmp(old_name, new_name) != 0)
-        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
+    {
+        /* Bug 727130 - escape the non-printable characters from the name */
+        new_name_escaped = g_strescape(new_name,NULL);
+        ENTER("Escaped new report name: %s", new_name_escaped);
+        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name_escaped);
+        g_free(new_name_escaped);
+	}
     g_free(new_name);
 
     /* it's probably already dirty, but make sure */
@@ -724,6 +731,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     GncPluginPageReportPrivate *priv;
     SCM gen_save_text, scm_text;
     SCM get_embedded_list, embedded, item, tmp_report;
+    SCM  get_options;
     gint count, id;
     gchar *text, *key_name;
 
@@ -744,9 +752,10 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
+    gen_save_text = scm_c_eval_string("gnc:report-serialize");
     get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
-    embedded = scm_call_1(get_embedded_list, priv->cur_report);
+    get_options    = scm_c_eval_string("gnc:report-options");
+    embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->cur_report));
     count = scm_ilength(embedded);
     while (count-- > 0)
     {
@@ -889,12 +898,10 @@ static void
 gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 {
     GncPluginPageReportPrivate *priv;
-    static gint count = 1, max_count = 10;
     const gchar *old_name;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
     g_return_if_fail(name != NULL);
-    g_return_if_fail(count++ <= max_count);
 
     ENTER("page %p, name %s", page, name);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
@@ -1028,14 +1035,14 @@ static GtkActionEntry report_actions[] =
         G_CALLBACK (gnc_plugin_page_report_reload_cb)
     },
     {
-        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report"), "<control><alt>s",
+        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<control><alt>s",
         N_("Update the current report's saved configuration. "
         "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_cb)
     },
     {
-        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report As..."), "<control><alt><shift>s",
-        N_("Add the current report's configuration to the `Preconfigured Reports' menu. "
+        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<control><alt><shift>s",
+        N_("Add the current report's configuration to the `Saved Report Configurations' menu. "
         "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_as_cb)
     },
@@ -1771,6 +1778,8 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
     g_free (job_name);
 }
 
+#define KVP_OWNER_EXPORT_PDF_DIRNAME "export-pdf-directory"
+
 static void
 gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *report )
 {
@@ -1778,6 +1787,7 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
     gchar *job_name = report_create_jobname(priv);
     GncInvoice *invoice;
     GncOwner *owner = NULL;
+    KvpFrame *kvp = NULL;
 
     // Do we have an invoice report?
     invoice = lookup_invoice(priv);
@@ -1787,19 +1797,20 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         owner = (GncOwner*) gncInvoiceGetOwner(invoice);
         if (owner)
         {
-	    QofInstance *inst = qofOwnerGetOwner (owner);
-	    gchar *dirname = NULL;
-	    qof_instance_get (inst, "export-pdf-dir", &dirname, NULL);
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that
             // we can export to PDF.
-	    if (dirname && g_file_test(dirname,
-				       G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-	    {
-		gchar *tmp = g_build_filename(dirname, job_name, NULL);
-		g_free(job_name);
-		job_name = tmp;
-	    }
+            kvp = gncOwnerGetSlots(owner);
+            if (kvp)
+            {
+                const char *dirname = kvp_frame_get_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME);
+                if (dirname && g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+                {
+                    gchar *tmp = g_build_filename(dirname, job_name, NULL);
+                    g_free(job_name);
+                    job_name = tmp;
+                }
+            }
         }
     }
 
@@ -1807,12 +1818,10 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     gnc_html_print(priv->html, job_name, TRUE);
 
-    if (owner)
+    if (owner && kvp)
     {
-	/* As this is an invoice report with some owner, we will try
-	 * to look up the chosen output directory from the print
-	 * settings and store it again in the owner kvp.
-	 */
+        // As this is an invoice report with some owner, we will try to look up the
+        // chosen output directory from the print settings and store it again in the owner kvp.
         GtkPrintSettings *print_settings = gnc_print_get_settings();
         if (print_settings &&
 	    gtk_print_settings_has_key(print_settings,
@@ -1823,10 +1832,15 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
             // Only store the directory if it exists.
             if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
             {
-                QofInstance *inst = qofOwnerGetOwner(owner);
-                gncOwnerBeginEdit(owner);
-		qof_instance_set (inst, "export-pdf-dir", dirname);
-		gncOwnerCommitEdit(owner);
+                QofInstance *qofinstance = qofOwnerGetOwner(owner);
+                if (qofinstance)
+		{
+		    gncOwnerBeginEdit(owner);
+		    kvp_frame_set_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME,
+					 dirname);
+                    qof_instance_set_dirty(qofinstance);
+		    qof_commit_edit (qofinstance);
+		}
             }
         }
     }

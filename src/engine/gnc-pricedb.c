@@ -41,12 +41,12 @@ static GNCPrice *lookup_nearest_in_time(GNCPriceDB *db, const gnc_commodity *c,
 enum
 {
     PROP_0,
-    PROP_COMMODITY,	/* Table */
-    PROP_CURRENCY,	/* Table */
-    PROP_DATE,		/* Table */
-    PROP_SOURCE,	/* Table */
-    PROP_TYPE,		/* Table */
-    PROP_VALUE,		/* Table, 2 fields (numeric) */
+    PROP_COMMODITY,
+    PROP_CURRENCY,
+    PROP_DATE,
+    PROP_SOURCE,
+    PROP_TYPE,
+    PROP_VALUE
 };
 
 /* GObject Initialization */
@@ -123,8 +123,6 @@ gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GPar
     g_return_if_fail(GNC_IS_PRICE(object));
 
     price = GNC_PRICE(object);
-    g_assert (qof_instance_get_editlevel(price));
-
     switch (prop_id)
     {
     case PROP_SOURCE:

@@ -32,105 +32,134 @@
 
 #include "gnc-ab-kvp.h"
 
+#define AB_KEY "hbci"
+#define AB_ACCOUNT_ID "account-id"
+#define AB_ACCOUNT_UID "account-uid"
+#define AB_BANK_CODE "bank-code"
+#define AB_TRANS_RETRIEVAL "trans-retrieval"
+#define AB_TEMPLATES "template-list"
+
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
+static kvp_frame *gnc_ab_get_account_kvp(const Account *a, gboolean create);
 static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
 
 const gchar *
 gnc_ab_get_account_accountid(const Account *a)
 {
-    gchar *id = NULL;
-    qof_instance_get (QOF_INSTANCE (a),
-		      "ab-account-id", &id,
-		      NULL);
-    return id;
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_ACCOUNT_ID);
+    return kvp_value_get_string(value);
 }
 
 void
 gnc_ab_set_account_accountid(Account *a, const gchar *id)
 {
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, TRUE);
+    kvp_value *value = kvp_value_new_string(id);
     xaccAccountBeginEdit(a);
-    qof_instance_set (QOF_INSTANCE (a),
-		      "ab-account-id", id,
-		      NULL);
+    kvp_frame_set_slot_nc(frame, AB_ACCOUNT_ID, value);
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
 const gchar *
 gnc_ab_get_account_bankcode(const Account *a)
 {
-    gchar *code = NULL;
-    qof_instance_get (QOF_INSTANCE (a),
-		      "ab-bank-code", &code,
-		      NULL);
-    return code;
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_BANK_CODE);
+    return kvp_value_get_string(value);
 }
 
 void
 gnc_ab_set_account_bankcode(Account *a, const gchar *code)
 {
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, TRUE);
+    kvp_value *value = kvp_value_new_string(code);
     xaccAccountBeginEdit(a);
-    qof_instance_set (QOF_INSTANCE (a),
-		      "ab-bank-code", code,
-		      NULL);
+    kvp_frame_set_slot_nc(frame, AB_BANK_CODE, value);
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
 guint32
 gnc_ab_get_account_uid(const Account *a)
 {
-    guint64 uid = 0LL;
-    qof_instance_get (QOF_INSTANCE (a),
-		      "ab-account-uid", &uid,
-		      NULL);
-    return (guint32)uid;
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_ACCOUNT_UID);
+    return (guint32) kvp_value_get_gint64(value);
 }
 
 void
 gnc_ab_set_account_uid(Account *a, guint32 uid)
 {
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, TRUE);
+    kvp_value *value = kvp_value_new_gint64(uid);
     xaccAccountBeginEdit(a);
-    qof_instance_set (QOF_INSTANCE (a),
-		      "ab-account-uid", (guint64)uid,
-		      NULL);
+    kvp_frame_set_slot_nc(frame, AB_ACCOUNT_UID, value);
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
 Timespec
 gnc_ab_get_account_trans_retrieval(const Account *a)
 {
-    Timespec t = {0LL, 0LL};
-    qof_instance_get (QOF_INSTANCE (a),
-		      "ab-trans-retrieval", &t,
-		      NULL);
-    return t;
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_TRANS_RETRIEVAL);
+    return kvp_value_get_timespec(value);
 }
 
 void
 gnc_ab_set_account_trans_retrieval(Account *a, Timespec time)
 {
+    kvp_frame *frame = gnc_ab_get_account_kvp(a, TRUE);
+    kvp_value *value = kvp_value_new_timespec(time);
     xaccAccountBeginEdit(a);
-    qof_instance_set (QOF_INSTANCE (a),
-		      "ab-trans-retrieval", &time,
-		      NULL);
+    kvp_frame_set_slot_nc(frame, AB_TRANS_RETRIEVAL, value);
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
 GList *
 gnc_ab_get_book_template_list(QofBook *b)
 {
-    GList *template_list = NULL;
-    qof_instance_get (QOF_INSTANCE (b),
-		      "ab-templates", &template_list,
-		      NULL);
-    return template_list;
+    kvp_frame *frame = gnc_ab_get_book_kvp(b, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_TEMPLATES);
+    return kvp_value_get_glist(value);
 }
 
 void
 gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
 {
-    qof_instance_set (QOF_INSTANCE (b),
-		      "ab-templates", &template_list,
-		      NULL);
+    kvp_frame *frame = gnc_ab_get_book_kvp(b, TRUE);
+    kvp_value *value = kvp_value_new_glist_nc(template_list);
+    kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
+    qof_book_kvp_changed (b);
+}
+
+static kvp_frame *
+gnc_ab_get_account_kvp(const Account *a, gboolean create)
+{
+    kvp_frame *toplevel = xaccAccountGetSlots(a);
+    kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
+    if (!result && create)
+    {
+        result = kvp_frame_new();
+        kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
+    }
+    return result;
+}
+
+static kvp_frame *
+gnc_ab_get_book_kvp(QofBook *b, gboolean create)
+{
+    kvp_frame *toplevel = qof_book_get_slots(b);
+    kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
+    if (!result && create)
+    {
+        result = kvp_frame_new();
+        kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
+    }
+    return result;
 }

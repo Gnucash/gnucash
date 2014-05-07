@@ -26,11 +26,10 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <glib.h>
 #include <string.h>
-#include <qofinstance-p.h>
 
 #include "gnc-features.h"
 #include "gncInvoice.h"
@@ -72,13 +71,7 @@ void mark_job (GncJob *job)
 enum
 {
     PROP_0,
-//  PROP_ID,		/* Table */
-    PROP_NAME,		/* Table */
-//  PROP_REFERENCE,	/* Table */
-//  PROP_ACTIVE,	/* Table */
-//  PROP_OWNER_TYPE,	/* Table */
-//  PROP_OWNER,		/* Table */
-    PROP_PDF_DIRNAME,	/* KVP */
+    PROP_NAME
 };
 
 /* GObject Initialization */
@@ -108,7 +101,6 @@ gnc_job_get_property (GObject         *object,
                       GParamSpec      *pspec)
 {
     GncJob *job;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_JOB(object));
 
@@ -118,10 +110,6 @@ gnc_job_get_property (GObject         *object,
     case PROP_NAME:
         g_value_set_string(value, job->name);
         break;
-    case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_get_kvp (QOF_INSTANCE (job), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -135,22 +123,15 @@ gnc_job_set_property (GObject         *object,
                       GParamSpec      *pspec)
 {
     GncJob *job;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_JOB(object));
 
     job = GNC_JOB(object);
-    g_assert (qof_instance_get_editlevel(job));
-
     switch (prop_id)
     {
     case PROP_NAME:
         gncJobSetName(job, g_value_get_string(value));
         break;
-    case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_set_kvp (QOF_INSTANCE (job), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -194,19 +175,6 @@ gnc_job_class_init (GncJobClass *klass)
                           "assigned by the user.  It is intended to "
                           "a short character string that is displayed "
                           "by the GUI as the job mnemonic.",
-                          NULL,
-                          G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_PDF_DIRNAME,
-     g_param_spec_string ("export-pdf-dir",
-                          "Export PDF Directory Name",
-                          "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
                           NULL,
                           G_PARAM_READWRITE));
 }

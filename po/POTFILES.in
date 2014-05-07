@@ -404,6 +404,7 @@ src/import-export/import-backend.c
 src/import-export/import-commodity-matcher.c
 src/import-export/import-format-dialog.c
 src/import-export/import-main-matcher.c
+src/import-export/import-match-map.c
 src/import-export/import-match-picker.c
 src/import-export/import-parse.c
 src/import-export/import-settings.c

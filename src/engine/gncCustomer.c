@@ -30,7 +30,6 @@
 
 #include <glib.h>
 #include <string.h>
-#include <qofinstance-p.h>
 
 #include "gnc-commodity.h"
 
@@ -97,10 +96,7 @@ void mark_customer (GncCustomer *customer)
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_PDF_DIRNAME,
-    PROP_LAST_POSTED,
-    PROP_PAYMENT_LAST_ACCT,
+    PROP_NAME
 };
 
 /* GObject Initialization */
@@ -130,7 +126,7 @@ gnc_customer_get_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     GncCustomer *cust;
-    gchar *key;
+
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 
     cust = GNC_CUSTOMER(object);
@@ -139,18 +135,6 @@ gnc_customer_get_property (GObject         *object,
     case PROP_NAME:
         g_value_set_string(value, cust->name);
         break;
-    case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_get_kvp (QOF_INSTANCE (cust), key, value);
-	break;
-    case PROP_LAST_POSTED:
-	key = LAST_POSTED_TO_ACCT;
-	qof_instance_get_kvp (QOF_INSTANCE (cust), key, value);
-	break;
-    case PROP_PAYMENT_LAST_ACCT:
-	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
-	qof_instance_get_kvp (QOF_INSTANCE (cust), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -160,34 +144,19 @@ gnc_customer_get_property (GObject         *object,
 static void
 gnc_customer_set_property (GObject         *object,
                            guint            prop_id,
-                           const GValue    *value,
+                           const GValue          *value,
                            GParamSpec      *pspec)
 {
     GncCustomer *cust;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 
     cust = GNC_CUSTOMER(object);
-    g_assert (qof_instance_get_editlevel(cust));
-
     switch (prop_id)
     {
     case PROP_NAME:
         gncCustomerSetName(cust, g_value_get_string(value));
         break;
-    case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_set_kvp (QOF_INSTANCE (cust), key, value);
-	break;
-    case PROP_LAST_POSTED:
-	key = LAST_POSTED_TO_ACCT;
-	qof_instance_set_kvp (QOF_INSTANCE (cust), key, value);
-	break;
-    case PROP_PAYMENT_LAST_ACCT:
-	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
-	qof_instance_set_kvp (QOF_INSTANCE (cust), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -273,39 +242,6 @@ gnc_customer_class_init (GncCustomerClass *klass)
                           "customer name.",
                           NULL,
                           G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_PDF_DIRNAME,
-     g_param_spec_string ("export-pdf-dir",
-                          "Export PDF Directory Name",
-                          "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
-                          NULL,
-                          G_PARAM_READWRITE));
-
-    g_object_class_install_property(
-       gobject_class,
-       PROP_LAST_POSTED,
-       g_param_spec_boxed("invoice-last-posted-account",
-			  "Invoice Last Posted Account",
-			  "The last account to which an invoice belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
-
-    g_object_class_install_property(
-       gobject_class,
-       PROP_PAYMENT_LAST_ACCT,
-       g_param_spec_boxed("payment-last-account",
-			  "Payment Last Account",
-			  "The last account to which an payment belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
@@ -930,6 +866,7 @@ gboolean gncCustomerRegister (void)
             (QofSetterFunc)gncCustomerSetTaxTableOverride
         },
         { CUSTOMER_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncCustomerGetTerms, (QofSetterFunc)gncCustomerSetTerms },
+        { CUSTOMER_SLOTS, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
         { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

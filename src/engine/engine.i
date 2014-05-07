@@ -140,18 +140,10 @@ functions. */
 
 QofSession * qof_session_new (void);
 QofBook * qof_session_get_book (QofSession *session);
-/* This horror is to permit the scheme options in
- * src/app-utils/options.scm to read and write the book's KVP (another
- * horror) directly. It should be refactored into book functions that
- * handle the KVP access.
- */
-%inline {
-  KvpFrame *qof_book_get_slots (QofBook *book);
-  extern KvpFrame *qof_instance_get_slots (QofInstance*);
-  KvpFrame *qof_book_get_slots (QofBook *book) {
-       return qof_instance_get_slots (QOF_INSTANCE (book));
-  }
-}
+
+// TODO: Maybe unroll
+void qof_book_kvp_changed (QofBook *book);
+
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
@@ -181,6 +173,7 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 %include <qofbookslots.h>
 %include <qofbook.h>
 
+KvpFrame* qof_book_get_slots(QofBook* book);
 %ignore GNC_DENOM_AUTO;
 %ignore GNCNumericErrorCodes;
 %ignore GNC_ERROR_OK;

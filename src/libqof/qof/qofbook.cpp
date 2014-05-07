@@ -58,30 +58,9 @@ extern "C"
 #include "qofbookslots.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
-#define AB_KEY "hbci"
-#define AB_TEMPLATES "template-list"
 
-enum
-{
-    PROP_0,
-//  PROP_ROOT_ACCOUNT,		/* Table */
-//  PROP_ROOT_TEMPLATE,		/* Table */
-    PROP_OPT_TRADING_ACCOUNTS,	/* KVP */
-    PROP_OPT_AUTO_READONLY_DAYS,/* KVP */
-    PROP_OPT_NUM_FIELD_SOURCE,	/* KVP */
-    PROP_OPT_DEFAULT_BUDGET,	/* KVP */
-    PROP_OPT_FY_END,		/* KVP */
-    PROP_AB_TEMPLATES,		/* KVP */
-    N_PROPERTIES		/* Just a counter */
-};
+QOF_GOBJECT_IMPL(qof_book, QofBook, QOF_TYPE_INSTANCE);
 
-QOF_GOBJECT_GET_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE, {});
-QOF_GOBJECT_DISPOSE(qof_book);
-QOF_GOBJECT_FINALIZE(qof_book);
-
-static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
-#undef G_PARAM_READWRITE
-#define G_PARAM_READWRITE static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_WRITABLE)
 /* ====================================================================== */
 /* constructor / destructor */
 
@@ -109,186 +88,6 @@ qof_book_init (QofBook *book)
     book->read_only = FALSE;
     book->session_dirty = FALSE;
     book->version = 0;
-}
-
-static void
-qof_book_get_property (GObject* object,
-		       guint prop_id,
-		       GValue* value,
-		       GParamSpec* pspec)
-{
-    QofBook *book;
-    gchar *key;
-
-    g_return_if_fail (QOF_IS_BOOK (object));
-    book = QOF_BOOK (object);
-    switch (prop_id)
-    {
-    case PROP_OPT_TRADING_ACCOUNTS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_TRADING_ACCOUNTS);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_AUTO_READONLY_DAYS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_AUTO_READONLY_DAYS);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_NUM_FIELD_SOURCE:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_NUM_FIELD_SOURCE);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_DEFAULT_BUDGET:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_DEFAULT_BUDGET);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-    case PROP_OPT_FY_END:
-	key = const_cast<char*>("fy_end");
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	break;
-    case PROP_AB_TEMPLATES:
-	key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	break;
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
-    }
-}
-
-static void
-qof_book_set_property (GObject      *object,
-		       guint         prop_id,
-		       const GValue *value,
-		       GParamSpec   *pspec)
-{
-    QofBook *book;
-    gchar *key;
-
-    g_return_if_fail (QOF_IS_BOOK (object));
-    book = QOF_BOOK (object);
-    g_assert (qof_instance_get_editlevel(book));
-
-    switch (prop_id)
-    {
-    case PROP_OPT_TRADING_ACCOUNTS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_TRADING_ACCOUNTS);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_AUTO_READONLY_DAYS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_AUTO_READONLY_DAYS);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_NUM_FIELD_SOURCE:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_NUM_FIELD_SOURCE);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_DEFAULT_BUDGET:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_DEFAULT_BUDGET);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
-    case PROP_OPT_FY_END:
-	key = const_cast<char*>("fy_end");
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	break;
-    case PROP_AB_TEMPLATES:
-	key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	break;
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
-    }
-}
-
-static void
-qof_book_class_init (QofBookClass *klass)
-{
-    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    gobject_class->dispose = qof_book_dispose;
-    gobject_class->finalize = qof_book_finalize;
-    gobject_class->get_property = qof_book_get_property;
-    gobject_class->set_property = qof_book_set_property;
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_OPT_TRADING_ACCOUNTS,
-     g_param_spec_string("trading-accts",
-                         "Use Trading Accounts",
-			 "Scheme true ('t') or NULL. If 't', then the book "
-			 "uses trading accounts for managing multiple-currency "
-			 "transactions.",
-                         NULL,
-                         G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_OPT_NUM_FIELD_SOURCE,
-     g_param_spec_string("split-action-num-field",
-                         "Use Split-Action in the Num Field",
-			 "Scheme true ('t') or NULL. If 't', then the book "
-			 "will put the split action value in the Num field.",
-                         NULL,
-                         G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_OPT_AUTO_READONLY_DAYS,
-     g_param_spec_double("autoreadonly-days",
-                         "Transaction Auto-read-only Days",
-			 "Prevent editing of transactions posted more than "
-			 "this many days ago.",
-			 0,
-                         G_MAXDOUBLE,
-			 0,
-                         G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_OPT_DEFAULT_BUDGET,
-     g_param_spec_boxed("default-budget",
-                        "Book Default Budget",
-                        "The default Budget for this book.",
-                        GNC_TYPE_GUID,
-                        G_PARAM_READWRITE));
-    g_object_class_install_property
-    (gobject_class,
-     PROP_OPT_FY_END,
-     g_param_spec_boxed("fy-end",
-                        "Book Fiscal Year End",
-                        "A GDate with a bogus year having the last Month and "
-			"Day of the Fiscal year for the book.",
-                        G_TYPE_DATE,
-                        G_PARAM_READWRITE));
-    g_object_class_install_property
-    (gobject_class,
-     PROP_AB_TEMPLATES,
-     g_param_spec_boxed("ab-templates",
-                        "AQBanking Template List",
-                        "A GList of AQBanking Templates",
-                        GNC_TYPE_VALUE_LIST,
-                        G_PARAM_READWRITE));
 }
 
 QofBook *
@@ -362,7 +161,6 @@ qof_book_destroy (QofBook *book)
 
     LEAVE ("book=%p", book);
 }
-
 /* ====================================================================== */
 
 gboolean
@@ -455,7 +253,20 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
     LEAVE (" ");
 }
 
+void qof_book_kvp_changed (QofBook *book)
+{
+    qof_book_begin_edit(book);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit(book);
+}
+
 /* ====================================================================== */
+
+KvpFrame *qof_book_get_slots(const QofBook *book)
+{
+    return qof_instance_get_slots(QOF_INSTANCE(book));
+}
+
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
 /* XXX if data is NULL, we should remove the key from the hash table!
  */
@@ -578,7 +389,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
     }
 
     /* Use the KVP in the book */
-    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
+    kvp = qof_book_get_slots (book);
 
     if (!kvp)
     {
@@ -630,7 +441,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     counter++;
 
     /* Get the KVP from the current book */
-    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
+    kvp = qof_book_get_slots (book);
 
     if (!kvp)
     {
@@ -679,7 +490,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
     }
 
     /* Get the KVP from the current book */
-    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
+    kvp = qof_book_get_slots (book);
 
     if (!kvp)
     {
@@ -830,10 +641,19 @@ qof_book_validate_counter_format_internal(const gchar *p,
 gboolean
 qof_book_use_trading_accounts (const QofBook *book)
 {
-    const char *opt = NULL;
-    qof_instance_get (QOF_INSTANCE (book),
-		      "trading-accts", &opt,
-		      NULL);
+    const char *opt;
+    kvp_value *kvp_val;
+
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+                                       KVP_OPTION_PATH,
+                                       OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_TRADING_ACCOUNTS,
+                                       NULL);
+    if (kvp_val == NULL)
+        return FALSE;
+
+    opt = kvp_value_get_string (kvp_val);
+
     if (opt && opt[0] == 't' && opt[1] == 0)
         return TRUE;
     return FALSE;
@@ -844,10 +664,19 @@ qof_book_use_trading_accounts (const QofBook *book)
 gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
-    const char *opt = NULL;
-    qof_instance_get (QOF_INSTANCE (book),
-		      "split-action-num-field", &opt,
-		      NULL);
+    const char *opt;
+    kvp_value *kvp_val;
+
+    g_assert(book);
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+                                       KVP_OPTION_PATH,
+                                       OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_NUM_FIELD_SOURCE,
+                                       NULL);
+    if (kvp_val == NULL)
+        return FALSE;
+
+    opt = kvp_value_get_string (kvp_val);
 
     if (opt && opt[0] == 't' && opt[1] == 0)
         return TRUE;
@@ -863,13 +692,21 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
     kvp_value *kvp_val;
-    double tmp = 0;
-    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-
+    double tmp;
     g_assert(book);
-    qof_instance_get (QOF_INSTANCE (book),
-		      "autoreadonly-days", &tmp,
-		      NULL);
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+                                       KVP_OPTION_PATH,
+                                       OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_AUTO_READONLY_DAYS,
+                                       NULL);
+
+    if (kvp_val == NULL)
+    {
+        //PWARN("kvp_val for slot '%s' is NULL", OPTION_NAME_AUTO_READONLY_DAYS);
+        return 0;
+    }
+
+    tmp = kvp_value_get_double (kvp_val);
     return (gint) tmp;
 }
 
@@ -891,16 +728,14 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    return kvp_frame_get_string(qof_instance_get_slots(QOF_INSTANCE (book)),
-				opt_name);
+    return kvp_frame_get_string(qof_book_get_slots(book), opt_name);
 }
 
 void
 qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val)
 {
     qof_book_begin_edit(book);
-    kvp_frame_set_string(qof_instance_get_slots(QOF_INSTANCE (book)),
-						opt_name, opt_val);
+    kvp_frame_set_string(qof_book_get_slots(book), opt_name, opt_val);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
@@ -915,52 +750,6 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 {
     PERR ("Failed to commit: %d", errcode);
 //  gnc_engine_signal_commit_error( errcode );
-}
-
-#define GNC_FEATURES "/features/"
-static void
-add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
-{
-    gchar *descr = kvp_value_get_string (value);
-    g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
-}
-
-GHashTable *
-qof_book_get_features (QofBook *book)
-{
-    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    GHashTable *features = g_hash_table_new (g_str_hash, g_str_equal);
-
-    frame = kvp_frame_get_frame (frame, GNC_FEATURES);
-    kvp_frame_for_each_slot (frame, &add_feature_to_hash, &features);
-    return features;
-}
-
-void
-qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
-{
-    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    gchar *path = g_strconcat (GNC_FEATURES, key, NULL);
-    qof_book_begin_edit (book);
-    kvp_frame_set_string (frame, path, descr);
-    qof_instance_set_dirty (QOF_INSTANCE (book));
-    qof_book_commit_edit (book);
-}
-
-void
-qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
-{
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    load_cb (odb, slots);
-}
-
-void
-qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
-		       GNCOptionDB* odb, gboolean clear)
-{
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    save_cb (odb, slots, clear);
-    qof_instance_set_dirty (QOF_INSTANCE (book));
 }
 
 static void noop (G_GNUC_UNUSED QofInstance *inst) {}

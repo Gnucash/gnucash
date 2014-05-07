@@ -2091,23 +2091,31 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
     static char *name = NULL;
 
     SplitRegister *reg = user_data;
+    kvp_frame *kvpf;
     Split *split;
-    Account *account;
-    GncGUID *guid = NULL;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
         return NULL;
-    /* Caller either uses the return as a temporary in a boolean
-     * expression or g_strdups it, so we keep it static and free the
-     * old one on every call to avoid leaks. Ugly, but it works.
-     */
+
+    kvpf = xaccSplitGetSlots (split);
+
     g_free (name);
-    qof_instance_get (QOF_INSTANCE (split),
-		      "sx-account", &guid,
-		      NULL);
-    account = xaccAccountLookup (guid, gnc_get_current_book ());
-    name = account ? gnc_get_account_name_for_register (account) : NULL;
+
+    if (kvpf)
+    {
+        Account *account;
+        GncGUID *guid;
+
+        guid = kvp_value_get_guid(
+                   kvp_frame_get_slot_path(kvpf, "sched-xaction", "account", NULL));
+
+        account = xaccAccountLookup (guid, gnc_get_current_book ());
+
+        name = account ? gnc_get_account_name_for_register (account) : NULL;
+    }
+    else
+        name = NULL;
 
     return name;
 }
@@ -2120,13 +2128,10 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
-    char *formula = NULL;
+    kvp_frame *kvpf = xaccSplitGetSlots(split);
 
-    qof_instance_get (QOF_INSTANCE (split),
-		      "sx-debit-formula", &formula,
-		      NULL);
-
-    return formula;
+    return kvp_value_get_string(
+               kvp_frame_get_slot_path (kvpf, "sched-xaction", "debit-formula", NULL));
 }
 
 static char *
@@ -2150,15 +2155,14 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
                                        gpointer user_data)
 {
     SplitRegister *reg = user_data;
-    Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
-    char *formula = NULL;
+    kvp_frame *kvpf;
+    Split *split;
 
-    qof_instance_get (QOF_INSTANCE (split),
-		      "sx-credit-formula", &formula,
-		      NULL);
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    kvpf = xaccSplitGetSlots (split);
 
-    return formula;
-
+    return kvp_value_get_string(
+               kvp_frame_get_slot_path (kvpf, "sched-xaction", "credit-formula", NULL));
 }
 
 static char *
@@ -2190,13 +2194,8 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
         gboolean *conditionally_changed,
         gpointer user_data)
 {
-    PERR("The function called always returned either NULL or an empty string "
-	 "while issuing dire warnings about how incorrect it is. That code "
-	 "has been removed and the function if called raises this error and "
-	 "returns NULL");
-    return NULL;
-#if 0
     SplitRegister *reg = user_data;
+    kvp_frame *kvpf;
     Split *split;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
@@ -2242,7 +2241,6 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     }
 
     return NULL;
-#endif
 }
 
 static void

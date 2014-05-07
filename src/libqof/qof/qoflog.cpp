@@ -268,8 +268,6 @@ qof_log_prettify (const char *name)
     begin = g_strrstr (buffer, "*");
     if (begin == NULL)
 	begin = g_strrstr (buffer, " ");
-    else if (*(begin + 1) == ' ')
-	++ begin;
     if (begin != NULL)
 	p = begin + 1;
     else

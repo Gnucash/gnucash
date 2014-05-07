@@ -23,7 +23,7 @@ endif
 # test-nonrecursive: run tests only in cwd
 test-nonrecursive: ${TEST_PROGS}
 if !PLATFORM_WIN32
-	@test -z "${TEST_PROGS}" || MALLOC_CHECK_=2 MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256)) ${TESTS_ENVIRONMENT} ${GTESTER} --verbose ${TEST_PROGS}
+	@test -z "${TEST_PROGS}" || MALLOC_CHECK_=2 MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256)) ${GTESTER} --verbose ${TEST_PROGS}
 endif
 
 # test-report: run tests in subdirs and generate report

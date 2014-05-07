@@ -25,7 +25,6 @@
 #include <unittest-support.h>
 #include <gnc-event.h>
 #include <gnc-gdate-utils.h>
-#include <qofinstance-p.h>
 /* Add specific headers for this class */
 #include "../Account.h"
 #include "../AccountP.h"
@@ -445,11 +444,11 @@ test_gnc_account_name_violations_errmsg ()
     message = gnc_account_name_violations_errmsg (separator, nonames);
     g_assert (message == NULL);
     validation_message = g_strdup_printf (
-        "The separator character \"%s\" is used in one or more account "
-        "names.\n\nThis will result in unexpected behaviour. "
-        "Either change the account names or choose another separator "
-        "character.\n\nBelow you will find the list of invalid account names:\n"
-        "%s", separator, account_list);
+                             "The separator character \"%s\" is used in one or more account "
+                             "names.\n\nThis will result in unexpected behaviour. "
+                             "Either change the account names or choose another separator "
+                             "character.\n\nBelow you will find the list of invalid account names:\n"
+                             "%s", separator, account_list);
     message = gnc_account_name_violations_errmsg (separator, badnames);
     g_assert_cmpstr ( message, == , validation_message);
     g_free (validation_message);
@@ -1357,8 +1356,6 @@ test_xaccAccountOrder ( )
     g_assert (xaccAccountOrder (ab, aa) == 1);
 
     ab = xaccMallocAccount (book);
-    qof_instance_increase_editlevel (aa);
-    qof_instance_increase_editlevel (ab);
     g_object_set (G_OBJECT (aa),
                   "code", "3333",
                   "type", ACCT_TYPE_ASSET,
@@ -1401,8 +1398,6 @@ test_xaccAccountOrder ( )
                   "name", "bar",
                   NULL);
     g_assert_cmpint (xaccAccountOrder (aa, ab), < , 0);
-    qof_instance_decrease_editlevel (aa);
-    qof_instance_decrease_editlevel (ab);
 
     xaccAccountBeginEdit (aa);
     xaccAccountDestroy (aa);
@@ -2162,9 +2157,7 @@ test_xaccAccountType_Stuff (void)
             g_assert_cmpstr (typestr_uc, == , typename);
         g_free (typestr_uc);
 
-	qof_instance_increase_editlevel (acc);
         g_object_set (acc, "type", type, NULL);
-	qof_instance_decrease_editlevel (acc);
         if (type == ACCT_TYPE_STOCK || type == ACCT_TYPE_MUTUAL ||
                 type == ACCT_TYPE_CURRENCY)
             g_assert (xaccAccountIsPriced (acc));
@@ -2408,13 +2401,11 @@ test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
     */
     sig4 = test_signal_new (QOF_INSTANCE (div), QOF_EVENT_MODIFY, NULL);
     sig5 = test_signal_new (QOF_INSTANCE (div1), QOF_EVENT_MODIFY, NULL);
-    qof_instance_increase_editlevel (div1);
     g_object_set (div1, "name", "div", NULL);
-    qof_instance_decrease_editlevel (div1);
     gnc_account_merge_children (taxable);
     g_assert_cmpint (gnc_account_n_descendants (taxable), == , taxable_desc - 1);
     test_signal_assert_hits (sig4, 1);
-    test_signal_assert_hits (sig5, 3);
+    test_signal_assert_hits (sig5, 4);
     test_signal_free (sig4);
     test_signal_free (sig5);
     gnc_account_merge_children (expense);

@@ -29,11 +29,11 @@
 #define TRANSACTION_MATCHER_H
 
 #include "Transaction.h"
+#include "import-match-map.h"
 #include "import-settings.h"
 
 typedef struct _transactioninfo GNCImportTransInfo;
 typedef struct _matchinfo GNCImportMatchInfo;
-typedef struct _GncImportMatchMap GncImportMatchMap;
 
 typedef enum _action
 {

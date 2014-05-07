@@ -156,12 +156,6 @@ void          xaccTransDestroy (Transaction *trans);
  */
 Transaction * xaccTransClone (const Transaction *t);
 
-/**
- The xaccTransCloneNoKvp() method will create a complete copy of an
- existing transaction except that the KVP slots will be empty.
- */
-Transaction * xaccTransCloneNoKvp (const Transaction *t);
-
 /** Equality.
  *
  * @param ta First transaction to compare
@@ -229,7 +223,7 @@ Transaction * xaccTransLookup (const GncGUID *guid, QofBook *book);
 /*################## Added for Reg2 #################*/
 
 /** Copy a transaction to the 'clipboard' transaction using
- *  dupe_transaction. The 'clipboard' transaction must never
+ *  xaccDupeTransaction. The 'clipboard' transaction must never
  *  be dereferenced.
  */
 Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans);
@@ -755,6 +749,8 @@ void xaccTransDump (const Transaction *trans, const char *tag);
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
+/** \deprecated */
+#define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */
 /** @} */

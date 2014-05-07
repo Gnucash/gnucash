@@ -27,7 +27,7 @@ extern "C"
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include <unittest-support.h>
+#include "unittest-support.h"
 
 #ifdef __cplusplus
 }
@@ -41,22 +41,18 @@ void test_suite_kvp_frame ( void );
 typedef struct
 {
     KvpFrame *frame;
-    GSList *hdlrs;
 } Fixture;
 
 static void
 setup( Fixture *fixture, gconstpointer pData )
 {
     fixture->frame = kvp_frame_new();
-    fixture->hdlrs = NULL;
 }
 
 static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
     kvp_frame_delete( fixture->frame );
-    g_slist_free_full (fixture->hdlrs, test_free_log_handler);
-    test_clear_error_list ();
 }
 
 extern KvpFrame* ( *p_get_trailer_make )( KvpFrame *frame, const char *key_path, char **end_key );
@@ -71,7 +67,6 @@ static void
 setup_static( Fixture *fixture, gconstpointer pData )
 {
     fixture->frame = kvp_frame_new();
-    fixture->hdlrs = NULL;
     init_static_test_pointers();
     g_assert( p_get_trailer_make && p_kvp_value_glist_to_string &&
               p_get_or_make && p_kvp_frame_get_frame_or_null_slash_trash &&
@@ -82,8 +77,6 @@ static void
 teardown_static( Fixture *fixture, gconstpointer pData )
 {
     kvp_frame_delete( fixture->frame );
-    g_slist_free_full (fixture->hdlrs, test_free_log_handler);
-    test_clear_error_list ();
     p_get_trailer_make = NULL;
     p_kvp_value_glist_to_string = NULL;
     p_get_or_make = NULL;
@@ -91,19 +84,21 @@ teardown_static( Fixture *fixture, gconstpointer pData )
     p_get_trailer_or_null = NULL;
 }
 
-static GncGUID*
-populate_frame (KvpFrame *frame)
+static void
+test_kvp_frame_new_delete( void )
 {
-    GList *list = NULL;
+    KvpFrame *frame;
     Timespec ts;
     GncGUID *guid;
-    GDate gdate;
 
     ts.tv_sec = 1;
     ts.tv_nsec = 1;
-    guid = guid_malloc ();
-    guid_new (guid);
-    g_date_set_dmy (&gdate, 26, 1, 1957);
+    guid = guid_malloc();
+    guid_new( guid );
+
+    frame = kvp_frame_new();
+    g_assert( frame );
+    g_assert( kvp_frame_is_empty( frame ) );
 
     kvp_frame_set_gint64( frame, "gint64-type", 100 );
     kvp_frame_set_double( frame, "double-type", 3.14159 );
@@ -111,37 +106,14 @@ populate_frame (KvpFrame *frame)
     kvp_frame_set_timespec( frame, "timespec-type", ts );
     kvp_frame_set_string( frame, "string-type", "abcdefghijklmnop" );
     kvp_frame_set_guid( frame, "guid-type", guid );
-    kvp_frame_set_value_nc (frame, "gdate-type", kvp_value_new_gdate (gdate));
     kvp_frame_set_frame( frame, "frame-type", kvp_frame_new() );
-
-    list = g_list_prepend (list, kvp_value_new_guid (guid));
-    list = g_list_prepend (list, kvp_value_new_string ("qrstuvwxyz"));
-    list = g_list_prepend (list, kvp_value_new_timespec (ts));
-    list = g_list_prepend (list, kvp_value_new_numeric (gnc_numeric_create (256, 120)));
-    list = g_list_prepend (list, kvp_value_new_double (0.4342944819));
-    list = g_list_prepend (list, kvp_value_new_gint64 (0x1f2e3d4c5b6a79LL));
-    kvp_frame_set_value (frame, "list-type", kvp_value_new_glist_nc (list));
-
-    return guid;
-}
-
-static void
-test_kvp_frame_new_delete( void )
-{
-    KvpFrame *frame;
-    GncGUID *guid;
-
-    frame = kvp_frame_new();
-    g_assert( frame );
-    g_assert( kvp_frame_is_empty( frame ) );
-
-    guid = populate_frame (frame);
 
     g_assert( !kvp_frame_is_empty( frame ) );
 
     kvp_frame_delete( frame );
     g_assert( frame );
-    guid_free (guid);
+
+    guid_free( guid );
 }
 
 static void
@@ -1493,203 +1465,6 @@ test_get_trailer_or_null( Fixture *fixture, gconstpointer pData )
     g_assert_cmpstr( last_key, == , "test2" );
 }
 
-static void
-test_kvp_frame_get_gvalue (Fixture *fixture, gconstpointer pData)
-{
-    KvpFrame *frame = fixture->frame;
-    GValue *value;
-    Timespec ts = {1, 1};
-    GncGUID *guid = populate_frame (frame);
-    GDate date;
-    gchar *log_domain = "qof.kvp";
-    gint log_level = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
-    gchar *msg1 = "[gvalue_from_kvp_value()] Error! Attempt to transfer KvpFrame!";
-    gchar *msg2 = "[gvalue_from_kvp_value()] Error! Invalid KVP Transfer Request!";
-#undef _func
-    TestErrorStruct *check1 = test_error_struct_new (log_domain, log_level,
-							msg1);
-    TestErrorStruct *check2 = test_error_struct_new (log_domain, log_level,
-							msg2);
-    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check1,
-						 (GLogFunc)test_list_handler);
-    test_add_error (check1);
-    test_add_error (check2);
-
-    g_date_clear (&date, 1);
-    g_date_set_dmy (&date, 26, 1, 1957);
-
-    value = kvp_frame_get_gvalue (frame, "gint64-type");
-    g_assert (value != NULL);
-    g_assert (G_VALUE_HOLDS_INT64 (value));
-    g_assert_cmpint (g_value_get_int64 (value), ==, 100);
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "double-type");
-    g_assert (value != NULL);
-    g_assert (G_VALUE_HOLDS_DOUBLE (value));
-    g_assert_cmpfloat (g_value_get_double (value), ==, 3.14159);
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "numeric-type");
-    g_assert (value != NULL);
-    g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_NUMERIC);
-    g_assert (gnc_numeric_zero_p (*(gnc_numeric*)g_value_get_boxed (value)));
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "timespec-type");
-    g_assert (value != NULL);
-    g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_TIMESPEC);
-    g_assert (timespec_equal (&ts, (Timespec*)g_value_get_boxed (value)));
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "string-type");
-    g_assert (value != NULL);
-    g_assert (G_VALUE_HOLDS_STRING (value));
-    g_assert_cmpstr (g_value_get_string (value), ==, "abcdefghijklmnop");
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "guid-type");
-    g_assert (value != NULL);
-    g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_GUID);
-    g_assert (guid_equal (guid, (GncGUID*)g_value_get_boxed (value)));
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "gdate-type");
-    g_assert (value != NULL);
-    g_assert_cmpint (G_VALUE_TYPE (value), ==, G_TYPE_DATE);
-    g_assert_cmpint (g_date_compare (&date, (GDate*)g_value_get_boxed (value)), ==, 0);
-    gnc_gvalue_free (value);
-
-    value = kvp_frame_get_gvalue (frame, "frame-type");
-    g_assert (value == NULL);
-    g_assert_cmpint (check1->hits, ==, 1);
-    g_assert_cmpint (check2->hits, ==, 1);
-
-    value = kvp_frame_get_gvalue (frame, "list-type");
-    g_assert (value != NULL);
-    g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_VALUE_LIST);
-    {
-	GList *list = (GList*)g_value_get_boxed (value);
-	GValue *value = NULL;
-
-	value = (GValue*)(list->data);
-	g_assert (G_VALUE_HOLDS_INT64 (value));
-	g_assert (g_value_get_int64 (value) == 0x1f2e3d4c5b6a79LL);
-	list = g_list_next (list);
-
-	value = (GValue*)(list->data);
-	g_assert (G_VALUE_HOLDS_DOUBLE (value));
-	g_assert_cmpfloat (g_value_get_double (value), ==, 0.4342944819);
-	list = g_list_next (list);
-
-	value = (GValue*)(list->data);
-	g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_NUMERIC);
-	g_assert (gnc_numeric_eq (*(gnc_numeric*)g_value_get_boxed (value),
-				  gnc_numeric_create (256, 120)));
-	list = g_list_next (list);
-
-	value = (GValue*)(list->data);
-	g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_TIMESPEC);
-	g_assert (timespec_equal (&ts, (Timespec*)g_value_get_boxed (value)));
-	list = g_list_next (list);
-
-	value = (GValue*)(list->data);
-	g_assert (G_VALUE_HOLDS_STRING (value));
-	g_assert_cmpstr (g_value_get_string (value), ==, "qrstuvwxyz");
-	list = g_list_next (list);
-
-	value = (GValue*)(list->data);
-	g_assert_cmpint (G_VALUE_TYPE (value), ==, GNC_TYPE_GUID);
-	g_assert (guid_equal (guid, (GncGUID*)g_value_get_boxed (value)));
-	list = g_list_next (list);
-
-	g_assert (list == NULL);
-
-    }
-    gnc_gvalue_free (value);
-}
-
-static void
-test_kvp_frame_set_gvalue (Fixture *fixture, gconstpointer pData)
-{
-/* Bit of a shortcut: We'll use kvp_frame_get_item to make our KvpItem
- * and feed it into a new frame; something of a round-trip test.
- */
-    KvpFrame *o_frame = fixture->frame;
-    KvpFrame *n_frame = kvp_frame_new ();
-    GValue *value;
-    GList *o_list, *n_list;
-
-    populate_frame (o_frame);
-
-    value = kvp_frame_get_gvalue (o_frame, "gint64-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "gint64-type", value);
-    g_assert_cmpint (kvp_frame_get_gint64 (o_frame, "gint64-type"), ==,
-		     kvp_frame_get_gint64 (n_frame, "gint64-type"));
-
-    value = kvp_frame_get_gvalue (o_frame, "double-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "double-type", value);
-    g_assert_cmpint (kvp_frame_get_double (o_frame, "double-type"), ==,
-		     kvp_frame_get_double (n_frame, "double-type"));
-
-    value = kvp_frame_get_gvalue (o_frame, "numeric-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "numeric-type", value);
-    g_assert (gnc_numeric_equal (kvp_frame_get_numeric (o_frame, "numeric-type"),
-				 kvp_frame_get_numeric (n_frame, "numeric-type")));
-
-    value = kvp_frame_get_gvalue (o_frame, "timespec-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "timespec-type", value);
-    {
-	Timespec o_ts = kvp_frame_get_timespec (o_frame, "timespec-type");
-	Timespec n_ts = kvp_frame_get_timespec (n_frame, "timespec-type");
-	g_assert (timespec_equal (&o_ts, &n_ts));
-    }
-
-    value = kvp_frame_get_gvalue (o_frame, "string-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "string-type", value);
-    g_assert_cmpstr (kvp_frame_get_string (o_frame, "string-type"), ==,
-		     kvp_frame_get_string (n_frame, "string-type"));
-
-    value = kvp_frame_get_gvalue (o_frame, "gdate-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "gdate-type", value);
-    {
-	GDate o_date = kvp_value_get_gdate (kvp_frame_get_slot (o_frame,
-								"gdate-type"));
-	GDate n_date = kvp_value_get_gdate (kvp_frame_get_slot (n_frame,
-								"gdate-type"));
-	g_assert_cmpint (g_date_compare (&o_date, &n_date), ==, 0);
-    }
-
-    value = kvp_frame_get_gvalue (o_frame, "guid-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "guid-type", value);
-    g_assert (guid_equal (kvp_frame_get_guid (o_frame, "guid-type"),
-			  kvp_frame_get_guid (n_frame, "guid-type")));
-
-    value = kvp_frame_get_gvalue (o_frame, "list-type");
-    g_assert (value != NULL);
-    kvp_frame_set_gvalue (n_frame, "list-type", value);
-    o_list = kvp_value_get_glist (kvp_frame_get_slot (o_frame, "list_type"));
-    n_list = kvp_value_get_glist (kvp_frame_get_slot (n_frame, "list_type"));
-
-    g_assert_cmpint (g_list_length (o_list), ==, g_list_length (n_list));
-    while (o_list && n_list)
-    {
-	g_assert_cmpint (kvp_value_compare ((KvpValue*)o_list->data,
-					    (KvpValue*)n_list->data), ==, 0);
-	o_list = g_list_next (o_list);
-	n_list = g_list_next (n_list);
-    }
-    kvp_frame_delete (n_frame);
-}
-
-
 void
 test_suite_kvp_frame( void )
 {
@@ -1717,6 +1492,4 @@ test_suite_kvp_frame( void )
     GNC_TEST_ADD( suitename, "get or make", Fixture, NULL, setup_static, test_get_or_make, teardown_static );
     GNC_TEST_ADD( suitename, "kvp frame get frame or null slash trash", Fixture, NULL, setup_static, test_kvp_frame_get_frame_or_null_slash_trash, teardown_static );
     GNC_TEST_ADD( suitename, "get trailer or null", Fixture, NULL, setup_static, test_get_trailer_or_null, teardown_static );
-    GNC_TEST_ADD ( suitename, "kvp frame get gvalue", Fixture, NULL, setup, test_kvp_frame_get_gvalue, teardown);
-    GNC_TEST_ADD ( suitename, "kvp frame set gvalue", Fixture, NULL, setup, test_kvp_frame_set_gvalue, teardown);
 }

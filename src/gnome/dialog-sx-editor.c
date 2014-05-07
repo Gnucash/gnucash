@@ -549,7 +549,9 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         int numIters, i;
         GHashTable *vars, *txns;
         GList *splitList = NULL;
-        gchar *credit_formula = NULL, *debit_formula = NULL;
+        char *str;
+        kvp_frame *f;
+        kvp_value *v;
         Split *s;
         Transaction *t;
         gnc_numeric tmp;
@@ -557,10 +559,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         gpointer unusedKey, unusedValue;
 
         unbalanceable = FALSE; /* innocent until proven guilty */
-        vars = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
-				     (GDestroyNotify)gnc_sx_variable_free);
-        txns = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL,
-				     g_free);
+        vars = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
+        txns = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, g_free);
         numIters = NUM_ITERS_NO_VARS;
         /**
          * Plan:
@@ -604,10 +604,10 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
             for ( ; splitList; splitList = splitList->next )
             {
-                GncGUID *acct_guid = NULL;
-                Account *acct = NULL;
-                gnc_commodity *split_cmdty = NULL;
-                txnCreditDebitSums *tcds = NULL;
+                GncGUID *acct_guid;
+                Account *acct;
+                gnc_commodity *split_cmdty;
+                txnCreditDebitSums *tcds;
 
                 s = (Split*)splitList->data;
                 t = xaccSplitGetParent( s );
@@ -622,11 +622,14 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                     g_hash_table_insert( txns, (gpointer)t, (gpointer)tcds );
                 }
 
-		qof_instance_get (QOF_INSTANCE (s),
-				  "sx-account", &acct_guid,
-				  "sx-credit-formula", &credit_formula,
-				  "sx-debit-formula", &debit_formula,
-				  NULL);
+                f = xaccSplitGetSlots( s );
+
+                /* contains the guid of the split's actual account. */
+                v = kvp_frame_get_slot_path(f,
+                                            GNC_SX_ID,
+                                            GNC_SX_ACCOUNT,
+                                            NULL);
+                acct_guid = kvp_value_get_guid( v );
                 acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
                 split_cmdty = xaccAccountGetCommodity(acct);
                 if (base_cmdty == NULL)
@@ -635,48 +638,62 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 }
                 multi_commodity |= !gnc_commodity_equal(split_cmdty, base_cmdty);
 
-		if ( g_strcmp0 (credit_formula, "") != 0 &&
-		     gnc_sx_parse_vars_from_formula(credit_formula, vars,
-						    &tmp ) < 0 )
-		{
-		    GString *errStr;
+                v = kvp_frame_get_slot_path( f,
+                                             GNC_SX_ID,
+                                             GNC_SX_CREDIT_FORMULA,
+                                             NULL );
+                if ( v
+                        && (str = kvp_value_get_string(v))
+                        && strlen( str ) != 0 )
+                {
+                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 )
+                    {
+                        GString *errStr;
 
-		    errStr = g_string_sized_new( 32 );
-		    g_string_printf( errStr,
-				     _( "Couldn't parse credit formula for "
-					"split \"%s\"." ),
-				     xaccSplitGetMemo( s ) );
-		    gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
-				      errStr->str );
-		    g_string_free( errStr, TRUE );
+                        errStr = g_string_sized_new( 32 );
+                        g_string_printf( errStr,
+                                         _( "Couldn't parse credit formula for "
+                                            "split \"%s\"." ),
+                                         xaccSplitGetMemo( s ) );
+                        gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
+                                          errStr->str );
+                        g_string_free( errStr, TRUE );
 
-		    return FALSE;
-		}
-		tcds->creditSum =
-		    gnc_numeric_add( tcds->creditSum, tmp, 100,
-				     (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
-		tmp = gnc_numeric_zero();
-		if ( g_strcmp0 (debit_formula, "") != 0 &&
-		     gnc_sx_parse_vars_from_formula( debit_formula, vars,
-						     &tmp ) < 0 )
-		{
-		    GString *errStr;
+                        return FALSE;
+                    }
+                    tcds->creditSum =
+                        gnc_numeric_add( tcds->creditSum, tmp, 100,
+                                         (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
+                    tmp = gnc_numeric_zero();
+                }
+                v = kvp_frame_get_slot_path( f,
+                                             GNC_SX_ID,
+                                             GNC_SX_DEBIT_FORMULA,
+                                             NULL );
+                if ( v
+                        && (str = kvp_value_get_string(v))
+                        && strlen(str) != 0 )
+                {
+                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 )
+                    {
+                        GString *errStr;
 
-		    errStr = g_string_sized_new( 32 );
-		    g_string_printf( errStr,
-				     _( "Couldn't parse debit formula for "
-					"split \"%s\"." ),
-				     xaccSplitGetMemo( s ) );
-		    gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
-				      (gchar*)errStr->str );
-		    g_string_free( errStr, TRUE );
+                        errStr = g_string_sized_new( 32 );
+                        g_string_printf( errStr,
+                                         _( "Couldn't parse debit formula for "
+                                            "split \"%s\"." ),
+                                         xaccSplitGetMemo( s ) );
+                        gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
+                                          (gchar*)errStr->str );
+                        g_string_free( errStr, TRUE );
 
-		    return FALSE;
-		}
-		tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 100,
-						  (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
-		tmp = gnc_numeric_zero();
-	    }
+                        return FALSE;
+                    }
+                    tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 100,
+                                                      (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
+                    tmp = gnc_numeric_zero();
+                }
+            }
 
             g_hash_table_foreach( txns,
                                   check_credit_debit_balance,

@@ -114,8 +114,8 @@ build_acct_tree(AccountPickerDialog *picker)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     /* Add our custom column. */
-    col = gnc_tree_view_account_add_property_column (picker->account_tree,
-            _("Account ID"), "online-id");
+    col = gnc_tree_view_account_add_kvp_column (picker->account_tree,
+            _("Account ID"), "online_id");
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),

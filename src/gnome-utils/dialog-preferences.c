@@ -1054,7 +1054,7 @@ gnc_preferences_dialog_create(void)
     GtkWidget *dialog, *notebook, *label, *image;
     GtkWidget *box, *date, *period, *currency;
     GHashTable *prefs_table;
-    GDate* gdate = NULL;
+    GDate* gdate;
     gchar buf[128];
     GtkListStore *store;
     GtkTreePath *path;
@@ -1120,10 +1120,16 @@ gnc_preferences_dialog_create(void)
 
 
     book = gnc_get_current_book();
-    g_date_clear (&fy_end, 1);
-    qof_instance_get (QOF_INSTANCE (book),
-		      "fy-end", &fy_end,
-		      NULL);
+    book_frame = qof_book_get_slots(book);
+    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+    date_is_valid = g_date_valid_dmy(day, month, 2005 /* not leap year */);
+    if (date_is_valid)
+    {
+        g_date_clear(&fy_end, 1);
+        g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
+    }
+
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new(TRUE);

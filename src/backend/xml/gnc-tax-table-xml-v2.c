@@ -67,9 +67,6 @@ const gchar *taxtable_version_string = "2.0.0";
 #define ttentry_type_string "tte:type"
 #define ttentry_amount_string "tte:amount"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static void
 maybe_add_guid (xmlNodePtr ptr, const char *tag, GncTaxTable *table)
 {
@@ -385,7 +382,7 @@ taxtable_slots_handler (xmlNodePtr node, gpointer taxtable_pdata)
     struct taxtable_pdata *pdata = taxtable_pdata;
 
     return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->table)));
+           (node, xaccAccountGetSlots (pdata->table));
 }
 
 static struct dom_tree_handler taxtable_handlers_v2[] =

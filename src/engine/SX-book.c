@@ -150,9 +150,6 @@ sxtg_is_dirty(const QofCollection *col)
     return dirty;
 }
 
-/* EFFECTIVE FRIEND FUNCTION declared in qofinstance-p.h */
-extern void qof_instance_mark_clean (QofInstance *);
-
 static void
 sxtg_mark_clean(QofCollection *col)
 {
@@ -375,9 +372,9 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
         for (; splits != NULL; splits = splits->next)
         {
             Split *s = (Split*)splits->data;
-            GncGUID *guid = NULL;
-            qof_instance_get (QOF_INSTANCE (s), "sx-account", &guid, NULL);
-            if (guid_equal(acct_guid, guid))
+            KvpFrame *frame = kvp_frame_get_frame(xaccSplitGetSlots(s), GNC_SX_ID);
+            GncGUID *sx_split_acct_guid = kvp_frame_get_guid(frame, GNC_SX_ACCOUNT);
+            if (guid_equal(acct_guid, sx_split_acct_guid))
             {
                 rtn = g_list_append(rtn, sx);
             }

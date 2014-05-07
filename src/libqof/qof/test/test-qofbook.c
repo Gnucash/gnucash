@@ -365,80 +365,99 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
 }
 
 static void
+test_book_kvp_changed( Fixture *fixture, gconstpointer pData )
+{
+    g_test_message( "Testing book is marked dirty after kvp_changed" );
+    g_assert( !qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
+    qof_book_kvp_changed( fixture->book );
+    g_assert( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
+}
+
+static void
 test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 {
+    const char *slot_path;
+
+    /* create correct slot path */
+    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/", OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_TRADING_ACCOUNTS, NULL );
+    g_assert( slot_path != NULL );
+
+    g_test_message( "Testing when no trading accounts are used" );
+    g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with incorrect slot path and correct value - t" );
+    qof_book_set_string_option( fixture->book, OPTION_NAME_TRADING_ACCOUNTS, "t" );
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
 
     g_test_message( "Testing with existing trading accounts set to true - t" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "trading-accts", "t",
-		      NULL);
+    qof_book_set_string_option( fixture->book, slot_path, "t" );
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing trading accounts and incorrect value - tt" );
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "trading-accts", "tt",
-		      NULL);
+    qof_book_set_string_option( fixture->book, slot_path, "tt" );
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
-    qof_book_commit_edit (fixture->book);
 
 }
 
 static void
 test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
 {
+    const char *slot_path;
+
+    /* create correct slot path */
+    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/", OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_AUTO_READONLY_DAYS, NULL );
+    g_assert( slot_path != NULL );
+
     g_test_message( "Testing default: No auto-freeze days are set" );
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
+    g_test_message( "Testing with incorrect slot path and some correct value - 17" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), OPTION_NAME_AUTO_READONLY_DAYS, 17);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "autoreadonly-days", (gdouble)17,
-		      NULL);
+    g_test_message( "Testing when setting this correctly with some correct value - 17" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 17);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 17 );
 
     g_test_message( "Testing when setting this correctly to zero again" );
-
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "autoreadonly-days", (gdouble)0,
-		      NULL);
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 0);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "autoreadonly-days", (gdouble)32,
-		      NULL);
+    g_test_message( "Testing when setting this correctly with some correct value - 32" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 32);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 32 );
 
-    qof_book_commit_edit (fixture->book);
 }
 
 static void
 test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData )
 {
+    const char *slot_path;
+
+    /* create correct slot path */
+    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/",
+                                            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
+    g_assert( slot_path != NULL );
+
     g_test_message( "Testing default: No selection has been specified" );
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
 
-    g_test_message( "Testing with existing use split action for num set to true - t" );
+    g_test_message( "Testing with incorrect slot path and correct value - t" );
+    qof_book_set_string_option( fixture->book, OPTION_NAME_NUM_FIELD_SOURCE, "t" );
+    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
 
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "split-action-num-field", "t",
-		      NULL);
+    g_test_message( "Testing with existing use split action for num set to true - t" );
+    qof_book_set_string_option( fixture->book, slot_path, "t" );
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing use split action for num and incorrect value - tt" );
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "split-action-num-field", "tt",
-		      NULL);
+    qof_book_set_string_option( fixture->book, slot_path, "tt" );
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
-    qof_book_commit_edit (fixture->book);
 }
 
 static void
@@ -756,6 +775,7 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "get counter", Fixture, NULL, setup, test_book_get_counter, teardown );
     GNC_TEST_ADD( suitename, "get counter format", Fixture, NULL, setup, test_book_get_counter_format, teardown );
     GNC_TEST_ADD( suitename, "increment and format counter", Fixture, NULL, setup, test_book_increment_and_format_counter, teardown );
+    GNC_TEST_ADD( suitename, "kvp changed", Fixture, NULL, setup, test_book_kvp_changed, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
     GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
     GNC_TEST_ADD( suitename, "use split action for num field", Fixture, NULL, setup, test_book_use_split_action_for_num_field, teardown );

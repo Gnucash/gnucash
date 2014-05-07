@@ -184,7 +184,6 @@ const char *assoc_uri_str = "assoc_uri";
 #define TRANS_TXN_TYPE_KVP       "trans-txn-type"
 #define TRANS_READ_ONLY_REASON   "trans-read-only"
 #define TRANS_REVERSED_BY        "reversed-by"
-#define GNC_SX_FROM              "from-sched-xaction"
 
 #define ISO_DATELENGTH 32 /* length of an iso 8601 date string. */
 
@@ -194,14 +193,11 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 enum
 {
     PROP_0,
-    PROP_CURRENCY,	/* Table */
-    PROP_NUM,		/* Table */
-    PROP_POST_DATE,	/* Table */
-    PROP_ENTER_DATE,	/* Table */
-    PROP_DESCRIPTION,	/* Table */
-    PROP_INVOICE,	/* KVP */
-    PROP_SX_TXN,	/* KVP */
-    PROP_ONLINE_ACCOUNT,/* KVP */
+    PROP_NUM,
+    PROP_DESCRIPTION,
+    PROP_CURRENCY,
+    PROP_POST_DATE,
+    PROP_ENTER_DATE
 };
 
 void
@@ -307,9 +303,6 @@ gnc_transaction_get_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
-    KvpFrame *frame;
-    gchar *key;
-    GValue *temp;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -331,18 +324,6 @@ gnc_transaction_get_property(GObject* object,
     case PROP_ENTER_DATE:
         g_value_set_boxed(value, &tx->date_entered);
         break;
-    case PROP_INVOICE:
-	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
-	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
-	break;
-    case PROP_SX_TXN:
-	key = GNC_SX_FROM;
-	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
-	break;
-    case PROP_ONLINE_ACCOUNT:
-	key = "online_id";
-	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -356,14 +337,10 @@ gnc_transaction_set_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
-    KvpFrame *frame;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
     tx = GNC_TRANSACTION(object);
-    g_assert (qof_instance_get_editlevel(tx));
-
     switch (prop_id)
     {
     case PROP_NUM:
@@ -381,18 +358,6 @@ gnc_transaction_set_property(GObject* object,
     case PROP_ENTER_DATE:
         xaccTransSetDateEnteredTS(tx, g_value_get_boxed(value));
         break;
-    case PROP_INVOICE:
-	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
-	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
-	break;
-    case PROP_SX_TXN:
-	key = GNC_SX_FROM;
-	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
-	break;
-    case PROP_ONLINE_ACCOUNT:
-	key = "online_id";
-	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
-	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -461,36 +426,6 @@ gnc_transaction_class_init(TransactionClass* klass)
                         "The date the transaction was entered.",
                         GNC_TYPE_TIMESPEC,
                         G_PARAM_READWRITE));
-
-     g_object_class_install_property(
-       gobject_class,
-        PROP_INVOICE,
-        g_param_spec_boxed("invoice",
-			   "Invoice attached to lot",
-			   "Used by GncInvoice",
-			   GNC_TYPE_GUID,
-			   G_PARAM_READWRITE));
-
-     g_object_class_install_property(
-       gobject_class,
-        PROP_SX_TXN,
-        g_param_spec_boxed("from-sched-xaction",
-			   "From Scheduled Transaction",
-			   "Used by Scheduled Transastions to record the "
-			   "originating template transaction for created "
-			   "transactions",
-			   GNC_TYPE_GUID,
-			   G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_ONLINE_ACCOUNT,
-     g_param_spec_string ("online-id",
-                          "Online Account ID",
-                          "The online account which corresponds to this "
-			  "account for OFX/HCBI import",
-                          NULL,
-                          G_PARAM_READWRITE));
 }
 
 /********************************************************************\
@@ -597,8 +532,9 @@ xaccTransSortSplits (Transaction *trans)
  * This routine is prone to programmer snafu if not used correctly.
  * It is used only by the edit-rollback code.
  */
-static Transaction *
-dupe_trans (const Transaction *from)
+/* Actually, it *is* public, and used by Period.c */
+Transaction *
+xaccDupeTransaction (const Transaction *from)
 {
     Transaction *to;
     GList *node;
@@ -635,11 +571,10 @@ dupe_trans (const Transaction *from)
 
 /********************************************************************\
  * Use this routine to externally duplicate a transaction.  It creates
- * a full fledged transaction with unique guid, splits, etc. and
- * writes it to the database.
+ * a full fledged transaction with unique guid, splits, etc.
 \********************************************************************/
 Transaction *
-xaccTransCloneNoKvp (const Transaction *from)
+xaccTransClone (const Transaction *from)
 {
     Transaction *to;
     Split *split;
@@ -658,13 +593,14 @@ xaccTransCloneNoKvp (const Transaction *from)
 
     to->orig            = NULL;
 
-    qof_instance_init_data (&to->inst, GNC_ID_TRANS,
-			    qof_instance_get_book(from));
+    qof_instance_init_data (&to->inst, GNC_ID_TRANS, qof_instance_get_book(from));
+    kvp_frame_delete (to->inst.kvp_data);
+    to->inst.kvp_data    = kvp_frame_copy (from->inst.kvp_data);
 
     xaccTransBeginEdit(to);
     for (node = from->splits; node; node = node->next)
     {
-        split = xaccSplitCloneNoKvp(node->data);
+        split = xaccSplitClone(node->data);
         split->parent = to;
         to->splits = g_list_append (to->splits, split);
     }
@@ -675,28 +611,11 @@ xaccTransCloneNoKvp (const Transaction *from)
     return to;
 }
 
-Transaction *
-xaccTransClone (const Transaction *from)
-{
-    Transaction *to = xaccTransCloneNoKvp (from);
-    int i = 0;
-    int length = g_list_length (from->splits);
-
-    xaccTransBeginEdit (to);
-    to->inst.kvp_data = kvp_frame_copy (from->inst.kvp_data);
-    g_assert (g_list_length (to->splits) == length);
-    for (i = 0; i < length; ++i)
-	xaccSplitCopyKvp (g_list_nth_data (from->splits, i),
-			    g_list_nth_data (to->splits, i));
-    xaccTransCommitEdit (to);
-    return to;
-}
-
 /*################## Added for Reg2 #################*/
 
 /********************************************************************\
  * Copy a transaction to the 'clipboard' transaction using
- *  dupe_trans. The 'clipboard' transaction must never
+ *  xaccDupeTransaction. The 'clipboard' transaction must never
  *  be dereferenced.
 \********************************************************************/
 Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans)
@@ -706,7 +625,7 @@ Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans)
     if (!from_trans)
         return NULL;
 
-    to_trans = dupe_trans(from_trans);
+    to_trans = xaccDupeTransaction(from_trans);
     return to_trans;
 }
 
@@ -723,7 +642,7 @@ xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
 /********************************************************************\
  * This function explicitly must robustly handle some unusual input.
  *
- *  'from_trans' may be a duped trans (see dupe_trans), so its
+ *  'from_trans' may be a duped trans (see xaccDupeTransaction), so its
  *   splits may not really belong to the accounts that they say they do.
  *
  *  'from_acc' need not be a valid account. It may be an already freed
@@ -1390,7 +1309,7 @@ xaccTransBeginEdit (Transaction *trans)
 
     /* Make a clone of the transaction; we will use this
      * in case we need to roll-back the edit. */
-    trans->orig = dupe_trans (trans);
+    trans->orig = xaccDupeTransaction (trans);
 }
 
 /********************************************************************\
@@ -2696,7 +2615,6 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
     return NULL;
 }
 
-
 /********************************************************************\
 \********************************************************************/
 /* QofObject function implementation */
@@ -2858,7 +2776,6 @@ _utest_trans_fill_functions (void)
     func->trans_on_error = trans_on_error;
     func->trans_cleanup_commit = trans_cleanup_commit;
     func->xaccTransScrubGainsDate = xaccTransScrubGainsDate;
-    func->dupe_trans = dupe_trans;
     return func;
 }
 

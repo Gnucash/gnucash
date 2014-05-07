@@ -58,9 +58,6 @@ const gchar *address_version_string = "2.0.0";
 #define addr_email_string	"addr:email"
 #define addr_slots_string	"addr:slots"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
@@ -192,7 +189,7 @@ address_slots_handler (xmlNodePtr node, gpointer addr_pdata)
     struct address_pdata *pdata = addr_pdata;
 
     return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->address)));
+           (node, xaccAccountGetSlots (pdata->address));
 }
 
 static struct dom_tree_handler address_handlers_v2[] =

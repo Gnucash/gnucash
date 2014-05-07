@@ -109,10 +109,10 @@ gnc_book_dom_tree_create(QofBook *book)
     xmlAddChild(ret, guid_to_dom_tree(book_id_string,
                                       qof_book_get_guid(book)));
 
-    if (qof_instance_get_slots (QOF_INSTANCE (book)))
+    if (qof_book_get_slots(book))
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                             qof_instance_get_slots (QOF_INSTANCE (book)));
+                             qof_book_get_slots(book));
         if (kvpnode)
             xmlAddChild(ret, kvpnode);
     }
@@ -162,10 +162,10 @@ write_book_parts(FILE *out, QofBook *book)
     if (ferror(out) || fprintf(out, "\n") < 0)
         return FALSE;
 
-    if (qof_instance_get_slots (QOF_INSTANCE (book)))
+    if (qof_book_get_slots(book))
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                             qof_instance_get_slots (QOF_INSTANCE (book)));
+                             qof_book_get_slots(book));
         if (kvpnode)
         {
             xmlElemDump(out, NULL, kvpnode);
@@ -203,7 +203,7 @@ book_slots_handler (xmlNodePtr node, gpointer book_pdata)
 
     /* the below works only because the get is gaurenteed to return
      * a frame, even if its empty */
-    success = dom_tree_to_kvp_frame_given (node, qof_instance_get_slots (QOF_INSTANCE (book)));
+    success = dom_tree_to_kvp_frame_given (node, qof_book_get_slots (book));
 
     g_return_val_if_fail(success, FALSE);
 

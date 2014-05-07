@@ -46,7 +46,7 @@
 #include "gnc-order-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
 
-#define _GNC_MOD_NAME   GNC_ID_ORDER
+#define _GNC_MOD_NAME	GNC_ID_ORDER
 
 static QofLogModule log_module = GNC_MOD_IO;
 
@@ -63,9 +63,6 @@ const gchar *order_version_string = "2.0.0";
 #define order_reference_string "order:reference"
 #define order_active_string "order:active"
 #define order_slots_string "order:slots"
-
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -251,7 +248,7 @@ order_slots_handler (xmlNodePtr node, gpointer order_pdata)
     struct order_pdata *pdata = order_pdata;
 
     return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->order)));
+           (node, xaccAccountGetSlots (pdata->order));
 }
 
 static struct dom_tree_handler order_handlers_v2[] =

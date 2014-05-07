@@ -31,7 +31,6 @@ extern void test_suite_budget();
 extern void test_suite_gncInvoice();
 extern void test_suite_transaction();
 extern void test_suite_split();
-extern void test_suite_engine_kvp_properties (void);
 
 int
 main (int   argc,
@@ -50,7 +49,6 @@ main (int   argc,
     test_suite_gncInvoice();
     test_suite_transaction();
     test_suite_split();
-    test_suite_engine_kvp_properties ();
 
     return g_test_run( );
 }

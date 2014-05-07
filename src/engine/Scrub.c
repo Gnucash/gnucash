@@ -1133,9 +1133,6 @@ xaccAccountScrubCommodity (Account *account)
 
 /* ================================================================ */
 
-/* EFFECTIVE FRIEND FUNCTION declared in qofinstance-p.h */
-extern void qof_instance_set_dirty (QofInstance*);
-
 static void
 xaccAccountDeleteOldData (Account *account)
 {

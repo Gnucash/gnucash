@@ -186,7 +186,6 @@ typedef struct
     void (*trans_on_error)(Transaction*, QofBackendError);
     void (*trans_cleanup_commit)(Transaction*);
     void (*xaccTransScrubGainsDate)(Transaction*);
-    Transaction *(*dupe_trans)(const Transaction*);
 
 } TransTestFunctions;
 

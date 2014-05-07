@@ -62,9 +62,6 @@ const gchar *job_version_string = "2.0.0";
 #define job_active_string "job:active"
 #define job_slots_string "job:slots"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static xmlNodePtr
 job_dom_tree_create (GncJob *job)
 {
@@ -210,7 +207,7 @@ job_slots_handler (xmlNodePtr node, gpointer job_pdata)
     struct job_pdata *pdata = job_pdata;
 
     return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->job)));
+           (node, xaccAccountGetSlots (pdata->job));
 }
 
 static struct dom_tree_handler job_handlers_v2[] =

@@ -156,9 +156,7 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
 
     if ( table_row->gobj_param_name != NULL )
     {
-	qof_instance_increase_editlevel (pObject);
         g_object_set( pObject, table_row->gobj_param_name, &owner, NULL );
-	qof_instance_decrease_editlevel (pObject);
     }
     else
     {

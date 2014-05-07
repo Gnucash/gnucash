@@ -54,64 +54,8 @@ void qof_instance_set_last_update (QofInstance *inst, Timespec ts);
  *  collection flag at all. */
 void qof_instance_set_dirty_flag (gconstpointer inst, gboolean flag);
 
-/** Set the GncGUID of this instance */
-void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
-
-/** Copy the GncGUID from one instance to another.  This routine should
- *  be used with extreme caution, since GncGUID values are everywhere
- *  assumed to be unique. */
-void qof_instance_copy_guid (gpointer to, gconstpointer from);
-
-//QofIdType qof_instance_get_e_type (const QofInstance *inst);
-//void qof_instance_set_e_type (QofInstance *ent, QofIdType e_type);
-
-/** Return the pointer to the kvp_data */
-/*@ dependent @*/
-KvpFrame* qof_instance_get_slots (const QofInstance *);
-void qof_instance_set_editlevel(gpointer inst, gint level);
-void qof_instance_increase_editlevel (gpointer ptr);
-void qof_instance_decrease_editlevel (gpointer ptr);
-void qof_instance_reset_editlevel (gpointer ptr);
-/** Set the flag that indicates whether or not this object is about to
- *  be destroyed.
- *
- *  @param ptr The object whose flag should be set.
- *
- *  @param value The new value to be set for this object. */
-void qof_instance_set_destroying (gpointer ptr, gboolean value);
-
-/** \brief Set the dirty flag
-Sets this instance AND the collection as dirty.
-*/
-void qof_instance_set_dirty(QofInstance* inst);
-
-/* reset the dirty flag */
-void qof_instance_mark_clean (QofInstance *);
-/** Get the version number on this instance.  The version number is
- *  used to manage multi-user updates. */
-gint32 qof_instance_get_version (gconstpointer inst);
-
-/** Set the version number on this instance.  The version number is
- *  used to manage multi-user updates. */
-void qof_instance_set_version (gpointer inst, gint32 value);
-/** Copy the version number on this instance.  The version number is
- *  used to manage multi-user updates. */
-void qof_instance_copy_version (gpointer to, gconstpointer from);
-
-/** Get the instance version_check number */
-guint32 qof_instance_get_version_check (gconstpointer inst);
-/** Set the instance version_check number */
-void qof_instance_set_version_check (gpointer inst, guint32 value);
-/** copy the instance version_check number */
-void qof_instance_copy_version_check (gpointer to, gconstpointer from);
-void qof_instance_set_idata(gpointer inst, guint32 idata);
-/* Convenience functions to save some typing in property handlers */
-void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
-void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
-
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif /* QOF_INSTANCE_P_H */
