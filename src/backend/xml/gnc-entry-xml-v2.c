@@ -92,6 +92,9 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_bill_string "entry:bill"
 #define entry_slots_string "entry:slots"
 
+/* EFFECTIVE FRIEND FUNCTION */
+extern KvpFrame *qof_instance_get_slots (const QofInstance*);
+
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
@@ -675,7 +678,7 @@ entry_slots_handler (xmlNodePtr node, gpointer entry_pdata)
     struct entry_pdata *pdata = entry_pdata;
 
     return dom_tree_to_kvp_frame_given
-           (node, xaccAccountGetSlots (pdata->entry));
+        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->entry)));
 }
 
 static struct dom_tree_handler entry_handlers_v2[] =

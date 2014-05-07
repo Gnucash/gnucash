@@ -96,11 +96,11 @@ static void gnc_features_test_one(gpointer pkey, gpointer value,
 gchar *gnc_features_test_unknown (QofBook *book)
 {
 
-    /* Setup the known_features hash table */
-    gnc_features_init();
-
     GList* features_list = NULL;
     GHashTable *features_used = qof_book_get_features (book);
+
+    /* Setup the known_features hash table */
+    gnc_features_init();
 
     /* Iterate over the members of this frame for unknown features */
     g_hash_table_foreach (features_used, &gnc_features_test_one,

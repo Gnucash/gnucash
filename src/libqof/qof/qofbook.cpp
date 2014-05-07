@@ -80,7 +80,8 @@ QOF_GOBJECT_DISPOSE(qof_book);
 QOF_GOBJECT_FINALIZE(qof_book);
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
-
+#undef G_PARAM_READWRITE
+#define G_PARAM_READWRITE static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_WRITABLE)
 /* ====================================================================== */
 /* constructor / destructor */
 
@@ -151,11 +152,11 @@ qof_book_get_property (GObject* object,
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
     case PROP_OPT_FY_END:
-	key = "fy_end";
+	key = const_cast<char*>("fy_end");
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	break;
     case PROP_AB_TEMPLATES:
-	key = AB_KEY "/" AB_TEMPLATES;
+	key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	break;
     default:
@@ -208,11 +209,11 @@ qof_book_set_property (GObject      *object,
 	g_free (key);
 	break;
     case PROP_OPT_FY_END:
-	key = "fy_end";
+	key = const_cast<char*>("fy_end");
 	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
 	break;
     case PROP_AB_TEMPLATES:
-	key = AB_KEY "/" AB_TEMPLATES;
+	key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
 	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
 	break;
     default:

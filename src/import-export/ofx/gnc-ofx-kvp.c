@@ -26,8 +26,7 @@
 #include "config.h"
 #include "gnc-ofx-kvp.h"
 
-static void force_account_dirty(Account *acct);
-/* OUTSIDE SLOT ACCESS */
+static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
 
 
 Account *gnc_ofx_kvp_get_assoc_account(const Account* investment_account)
@@ -36,7 +35,7 @@ Account *gnc_ofx_kvp_get_assoc_account(const Account* investment_account)
     GncGUID *income_guid= NULL;
     g_assert(investment_account);
     qof_instance_get (QOF_INSTANCE (investment_account),
-		      "ofx-income-account", &income_guid,
+		      KEY_ASSOC_INCOME_ACCOUNT, &income_guid,
 		      NULL);
     return xaccAccountLookup(income_guid,
 			       gnc_account_get_book(investment_account));
@@ -53,7 +52,7 @@ void gnc_ofx_kvp_set_assoc_account(Account* investment_account,
     income_acc_guid = xaccAccountGetGUID(income_account);
     xaccAccountBeginEdit(investment_account);
     qof_instance_set (QOF_INSTANCE (investment_account),
-		      "ofx-income-account", income_acc_guid,
+		      KEY_ASSOC_INCOME_ACCOUNT, income_acc_guid,
 		      NULL);
     xaccAccountCommitEdit(investment_account);
 }

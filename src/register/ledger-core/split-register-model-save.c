@@ -682,7 +682,6 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
 
     /* set the actual account to the fake account for these templates */
     xaccAccountInsertSplit (template_acc, sd->split);
-    qof_instance_set_dirty (QOF_INSTANCE (sd->split));
 }
 
 static void

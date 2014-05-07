@@ -54,7 +54,7 @@ check_PROGRAMS = \
   test-print-queries \
   test-sx
 
-EXTRA_DIST = \
+EXTRA_DIST += \
   test-load-module
 
 AM_CPPFLAGS = \

@@ -113,4 +113,5 @@ void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
 }
 #endif
 
+
 #endif /* QOF_INSTANCE_P_H */
