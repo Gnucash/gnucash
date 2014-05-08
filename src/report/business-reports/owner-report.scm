@@ -323,7 +323,7 @@
 ;; Return a list of (printed? value odd-row?)
 ;;
 (define (add-txn-row table txn acc column-vector odd-row? printed?
-             inv-str reverse? start-date total)
+             reverse? start-date total)
   (let* ((type (xaccTransGetTxnType txn))
      (date (gnc-transaction-get-date-posted txn))
      (due-date #f)
@@ -338,8 +338,8 @@
         (gnc:make-html-text
          (gnc:html-markup-anchor
           (gnc:invoice-anchor-text invoice)
-          inv-str))
-        inv-str))
+          (gncInvoiceGetTypeString invoice)))
+        (_ "Unknown")))
        ((equal? type TXN-TYPE-PAYMENT)
         (gnc:make-html-text
 	 (gnc:html-markup-anchor
@@ -388,8 +388,6 @@
     (credit (gnc-numeric-zero))
     (currency (gnc-default-currency)) ;XXX
     (table (gnc:make-html-table))
-    (inv-str (gnc:option-value (gnc:lookup-option options "__reg"
-                              "inv-str")))
     (reverse? (gnc:option-value (gnc:lookup-option options "__reg"
                               "reverse?"))))
 
@@ -409,7 +407,7 @@
         (or (equal? type TXN-TYPE-INVOICE)
         (equal? type TXN-TYPE-PAYMENT))
         (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
-                       inv-str reverse? start-date total)))
+                       reverse? start-date total)))
 
           (set! printed? (car result))
           (if (and printed? total)
@@ -484,15 +482,12 @@
 
     table))
 
-(define (options-generator acct-type-list owner-type inv-str reverse?)
+(define (options-generator acct-type-list owner-type reverse?)
 
   (define gnc:*report-options* (gnc:new-options))
 
   (define (gnc:register-inv-option new-option)
    (gnc:register-option gnc:*report-options* new-option))
-
-  (gnc:register-inv-option
-   (gnc:make-internal-option "__reg" "inv-str" inv-str))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option "__reg" "reverse?" "" "" reverse?))
@@ -581,16 +576,13 @@
   gnc:*report-options*)
 
 (define (customer-options-generator)
-  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER
-                     (_ "Invoice") #f))
+  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER #f))
 
 (define (vendor-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR
-                     (_ "Bill") #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR #t))
 
 (define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE
-                     (_ "Expense Report") #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
