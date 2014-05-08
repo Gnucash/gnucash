@@ -384,7 +384,7 @@
           (set! sale (gncInvoiceGetTotalSubtotal invoice))
           (set! tax (gncInvoiceGetTotalTax invoice))))
 
-      (if reverse?
+      (if (gncInvoiceGetIsCreditNote invoice)
         (begin
           (set! tax (gnc-numeric-neg tax))
           (set! sale (gnc-numeric-neg sale))))
