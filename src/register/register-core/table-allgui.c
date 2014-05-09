@@ -1762,6 +1762,8 @@ gnc_table_traverse_update(Table *table,
     {
         VirtualLocation new_loc = *dest_loc;
         int increment;
+        int col_offset = 0;
+        gboolean second_traversal = FALSE;
 
         /* Keep going in the specified direction until we find a valid
          * row to land on, or we hit the end of the table. At the end,
@@ -1781,8 +1783,25 @@ gnc_table_traverse_update(Table *table,
 
             if (!gnc_table_move_vertical_position (table, &new_loc, increment))
             {
+                /* Special case: if there is no valid cell at all in the column
+                 * we are scanning, (both up and down directions didn't work)
+                 * attempt to do the same in the next column.
+                 * Hack alert: there is no check to see if there really is a
+                 * valid next column. However this situation so far only happens
+                 * after a pagedown/pageup key event in the SX transaction editor
+                 * which always tests the first column to start (which has no
+                 * editable cells) and in that situation there is a valid next column.
+                 */
+                if (!second_traversal)
+                    second_traversal = TRUE;
+                else
+                {
+                    second_traversal = FALSE;
+                    col_offset++;
+                }
                 increment *= -1;
                 new_loc = *dest_loc;
+                new_loc.phys_col_offset = new_loc.phys_col_offset + col_offset;
             }
         }
 
