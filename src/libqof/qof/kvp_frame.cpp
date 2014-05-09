@@ -1812,12 +1812,13 @@ kvp_frame_set_gvalue (KvpFrame *frame, const gchar *key, const GValue *value)
   kvp_frame_set_value_nc (frame, key, kvp_value_from_gvalue (value));
 }
 
-static GValue*
+static void
 gnc_gvalue_copy (GValue *src, gpointer uData)
 {
+    GList **new_list = (GList**)uData;
     GValue *dest = g_value_init (g_slice_new0 (GValue), G_VALUE_TYPE (src));
     g_value_copy (src, dest);
-    return dest;
+    *new_list = g_list_prepend(*new_list, dest);
 }
 
 void
@@ -1831,7 +1832,10 @@ gnc_gvalue_free (GValue *val)
 static GList*
 gnc_value_list_copy (GList *list)
 {
-    return g_list_copy_deep (list, (GCopyFunc)gnc_gvalue_copy, NULL);
+    GList *new_list = NULL;
+    g_list_foreach (list, (GFunc)gnc_gvalue_copy, &new_list);
+    new_list = g_list_reverse (new_list);
+    return new_list;
 }
 
 static void
