@@ -14,8 +14,13 @@
     </key>
     <key name="show-at-file-open" type="b">
       <default>true</default>
-      <summary>Show "since last run" dialog when a file is opened.</summary>
-      <description>This setting controls whether the scheduled transactions "since last run" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown.</description>
+      <summary>Run "since last run" dialog when a file is opened.</summary>
+      <description>This setting controls whether the scheduled transactions "since last run" processing is run automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, run the "since last run" process, otherwise it is not run.</description>
+    </key>
+    <key name="show-notify-window-at-file-open" type="b">
+      <default>true</default>
+      <summary>Show "since last run" notification dialog when a file is opened.</summary>
+      <description>This setting controls whether the scheduled transactions notification-only "since last run" dialog is shown when a data file is opened (if "since last run" processing is enabled on file open).  This includes the initial opening of the data file when GnuCash starts.  If this setting is active, show the dialog, otherwise it is not shown.</description>
     </key>
   </schema>
 

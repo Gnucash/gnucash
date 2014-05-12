@@ -1644,6 +1644,7 @@ sxed_excal_update_adapt_cb(GtkObject *o, gpointer ud)
 void
 on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
 {
+    GtkWidget *widget_auto;
     GtkWidget *widget_notify;
     GHashTable *table;
 
@@ -1652,9 +1653,21 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
 
     /* We need to use the hash table to find the required widget to activate. */
     table = g_object_get_data(G_OBJECT(user_data), "prefs_widget_hash");
+
+    /* "Auto-create" enables "notify before creation" setting */
+    widget_auto = g_hash_table_lookup(table, "pref/" GNC_PREFS_GROUP_SXED "/" GNC_PREF_CREATE_AUTO);
     widget_notify = g_hash_table_lookup(table, "pref/" GNC_PREFS_GROUP_SXED "/" GNC_PREF_NOTIFY);
 
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(togglebutton)))
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget_auto)))
+        gtk_widget_set_sensitive(widget_notify, TRUE);
+    else
+        gtk_widget_set_sensitive(widget_notify, FALSE);
+
+    /* "Run when opened" enables "show notification window" setting */
+    widget_auto = g_hash_table_lookup(table, "pref/" GNC_PREFS_GROUP_STARTUP "/" GNC_PREF_RUN_AT_FOPEN);
+    widget_notify = g_hash_table_lookup(table, "pref/" GNC_PREFS_GROUP_STARTUP "/" GNC_PREF_SHOW_AT_FOPEN);
+
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget_auto)))
         gtk_widget_set_sensitive(widget_notify, TRUE);
     else
         gtk_widget_set_sensitive(widget_notify, FALSE);

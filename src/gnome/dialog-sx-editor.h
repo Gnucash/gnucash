@@ -34,6 +34,10 @@
 #define GNC_PREF_CREATE_AUTO "create-auto"
 #define GNC_PREF_NOTIFY      "notify"
 
+#define GNC_PREFS_GROUP_STARTUP "dialogs.sxs.since-last-run"
+#define GNC_PREF_RUN_AT_FOPEN   "show-at-file-open"
+#define GNC_PREF_SHOW_AT_FOPEN  "show-notify-window-at-file-open"
+
 typedef struct _GncSxEditorDialog GncSxEditorDialog;
 
 GncSxEditorDialog* gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
