@@ -105,7 +105,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">6</property>
-        <property name="n_rows">8</property>
+        <property name="n_rows">9</property>
         <property name="n_columns">4</property>
         <property name="column_spacing">12</property>
         <child>
@@ -113,7 +113,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">&lt;b&gt;Since Last Run Dialog&lt;/b&gt;</property>
+            <property name="label" translatable="yes">&lt;b&gt;Since Last Run&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
           <packing>
@@ -128,8 +128,8 @@
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
           </packing>
@@ -143,8 +143,8 @@
             <property name="use_markup">True</property>
           </object>
           <packing>
-            <property name="top_attach">3</property>
-            <property name="bottom_attach">4</property>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
           </packing>
@@ -155,10 +155,11 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">Show the "since last run" window when a file is opened.</property>
+            <property name="tooltip_text" translatable="yes">Run the "since last run" process when a file is opened.</property>
             <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
           </object>
           <packing>
             <property name="right_attach">4</property>
@@ -167,6 +168,28 @@
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
             <property name="x_padding">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.since-last-run/show-notify-window-at-file-open">
+            <property name="label" translatable="yes">_Show notification window</property>
+            <property name="visible">True</property>
+            <property name="sensitive">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">Show the notification window for the "since last run" process when a file is opened.</property>
+            <property name="use_action_appearance">False</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="right_attach">4</property>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+            <property name="x_padding">30</property>
           </packing>
         </child>
         <child>
@@ -183,8 +206,8 @@
           </object>
           <packing>
             <property name="right_attach">4</property>
-            <property name="top_attach">4</property>
-            <property name="bottom_attach">5</property>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
             <property name="x_padding">12</property>
@@ -207,8 +230,8 @@
             </child>
           </object>
           <packing>
-            <property name="top_attach">6</property>
-            <property name="bottom_attach">7</property>
+            <property name="top_attach">7</property>
+            <property name="bottom_attach">8</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options">GTK_FILL</property>
           </packing>
@@ -230,8 +253,8 @@
             </child>
           </object>
           <packing>
-            <property name="top_attach">7</property>
-            <property name="bottom_attach">8</property>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options">GTK_FILL</property>
           </packing>
@@ -276,8 +299,8 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">7</property>
-            <property name="bottom_attach">8</property>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options">GTK_FILL</property>
           </packing>
@@ -322,8 +345,8 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">6</property>
-            <property name="bottom_attach">7</property>
+            <property name="top_attach">7</property>
+            <property name="bottom_attach">8</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options">GTK_FILL</property>
           </packing>
@@ -339,11 +362,12 @@
             <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
           </object>
           <packing>
             <property name="right_attach">4</property>
-            <property name="top_attach">5</property>
-            <property name="bottom_attach">6</property>
+            <property name="top_attach">6</property>
+            <property name="bottom_attach">7</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
             <property name="x_padding">30</property>

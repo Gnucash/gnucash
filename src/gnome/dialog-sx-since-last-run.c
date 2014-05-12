@@ -63,7 +63,8 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 
 #define GNC_PREFS_GROUP        "dialogs.sxs.since-last-run"
-#define GNC_PREF_SHOW_AT_FOPEN "show-at-file-open"
+#define GNC_PREF_RUN_AT_FOPEN  "show-at-file-open"
+#define GNC_PREF_SHOW_AT_FOPEN "show-notify-window-at-file-open"
 
 struct _GncSxSinceLastRunDialog
 {
@@ -801,7 +802,7 @@ gnc_sx_sxsincelast_book_opened(void)
     GncSxInstanceModel *inst_model;
     GncSxSummary summary;
 
-    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_SHOW_AT_FOPEN))
+    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_RUN_AT_FOPEN))
         return;
 
     if (qof_book_is_readonly(gnc_get_current_book()))
@@ -824,6 +825,9 @@ gnc_sx_sxsincelast_book_opened(void)
     {
         if (summary.num_auto_create_no_notify_instances != 0)
         {
+            if (!gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_AT_FOPEN))
+                return;
+
             gnc_info_dialog
             (NULL,
              ngettext
