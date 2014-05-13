@@ -3649,14 +3649,13 @@ msgid "How did you pay for this item?"
 msgstr "Как вы оплатили этот пункт?"
 
 #: ../src/core-utils/gnc-features.c:115
-#, fuzzy
 msgid ""
 "This Dataset contains features not supported by this version of GnuCash. You "
 "must use a newer version of GnuCash in order to support the following "
 "features:"
 msgstr ""
-"Возможно это файл или ссылка из более новой версии GnuCash. Вам необходимо "
-"обновить GnuCash для работы с этими данными."
+"Возможно этот набор данных содержит возможности, не поддерживаемые этой версией GnuCash. "
+"Вам необходимо использовать более новую версию GnuCash для поддержки следующих возможностей:"
 
 #: ../src/core-utils/gnc-filepath-utils.c:324
 #, c-format
@@ -3820,7 +3819,6 @@ msgid "A/Payable"
 msgstr "А/Оплачиваемо"
 
 #: ../src/engine/Account.c:3953
-#, fuzzy
 msgid "Root"
 msgstr "Корень"
 
@@ -5462,27 +5460,23 @@ msgstr "Удалить проводку"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:195
 #: ../src/gnome/gnc-plugin-page-register.c:199
-#, fuzzy
 msgid "Cu_t Split"
-msgstr "Авторазделение"
+msgstr "Вырезать часть"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:196
 #: ../src/gnome/gnc-plugin-page-register.c:200
-#, fuzzy
 msgid "_Copy Split"
-msgstr "Авторазделение"
+msgstr "Копировать часть"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:197
 #: ../src/gnome/gnc-plugin-page-register.c:201
-#, fuzzy
 msgid "_Paste Split"
-msgstr "Удалить часть"
+msgstr "Вставить часть"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:198
 #: ../src/gnome/gnc-plugin-page-register.c:202
-#, fuzzy
 msgid "Dup_licate Split"
-msgstr "Дублировать запись"
+msgstr "Дублировать часть"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:199
 #: ../src/gnome/gnc-plugin-page-register.c:203
@@ -5518,33 +5512,28 @@ msgstr "Удалить текущую проводку"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:205
 #: ../src/gnome/gnc-plugin-page-register.c:212
-#, fuzzy
 msgid "Cut the selected split into clipboard"
-msgstr "Вырезать выбранную проводку и скопировать в буфер обмена"
+msgstr "Вырезать выбранную часть и скопировать в буфер обмена"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:206
 #: ../src/gnome/gnc-plugin-page-register.c:213
-#, fuzzy
 msgid "Copy the selected split into clipboard"
-msgstr "Скопировать выбранную проводку в буфер обмена"
+msgstr "Скопировать выбранную часть в буфер обмена"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:207
 #: ../src/gnome/gnc-plugin-page-register.c:214
-#, fuzzy
 msgid "Paste the split from the clipboard"
-msgstr "Вставить проводку из буфера обмена"
+msgstr "Вставить часть из буфера обмена"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:208
 #: ../src/gnome/gnc-plugin-page-register.c:215
-#, fuzzy
 msgid "Make a copy of the current split"
-msgstr "Сделать копию текущей записи"
+msgstr "Сделать копию текущей части"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:209
 #: ../src/gnome/gnc-plugin-page-register.c:216
-#, fuzzy
 msgid "Delete the current split"
-msgstr "Удалить текущую запись"
+msgstr "Удалить текущую часть"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:219
 #: ../src/gnome/gnc-plugin-page-register.c:223
@@ -5587,9 +5576,8 @@ msgid "Paste the clipboard content at the cursor position"
 msgstr "Вставить содержимое буфера обмена в текущую позицию курсора"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:279
-#, fuzzy
 msgid "Remo_ve All Splits"
-msgstr "Удалить части"
+msgstr "Удалить все части"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:280
 #: ../src/gnome/gnc-plugin-page-register.c:284
@@ -5632,20 +5620,20 @@ msgid "Add _Reversing Transaction"
 msgstr "Добавить обратную проводку"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:306
-#, fuzzy
 msgid "Move Transaction _Up"
-msgstr "Сохранить проводку"
+msgstr "Переместить проводку вверх"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:307
 msgid ""
 "Move the current transaction one row upwards. Only available if the date and "
 "number of both rows are identical and the register window is sorted by date."
 msgstr ""
+"Переместить текущую проводку на одну строчку вверх. Действие возможно только "
+"если дата и номер обеих строк одинаковы и журнал отсортирован по дате." 
 
 #: ../src/gnome/gnc-plugin-page-register2.c:311
-#, fuzzy
 msgid "Move Transaction Do_wn"
-msgstr "Сохранить проводку"
+msgstr "Переместить проводку вниз"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:312
 msgid ""
@@ -5653,6 +5641,8 @@ msgid ""
 "and number of both rows are identical and the register window is sorted by "
 "date."
 msgstr ""
+"Переместить текущую проводку на одну строчку вниз. Действие возможно только "
+"если дата и номер обеих строк одинаковы и журнал отсортирован по дате." 
 
 #: ../src/gnome/gnc-plugin-page-register2.c:323
 #: ../src/gnome-utils/gnc-main-window.c:337
@@ -5668,12 +5658,12 @@ msgstr "Обновить это окно"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:342
 #: ../src/gnome/gnc-plugin-page-register.c:350
-#, fuzzy
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
-"Автоматическая очистка отдельных проводок для достижения определённой суммы"
+"Автоматическая очистка отдельных проводок для достижения определённого значения "
+"очищенной суммы"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:356
 #: ../src/gnome/gnc-plugin-page-register.c:364
@@ -5739,9 +5729,8 @@ msgstr "Открыть отчет по журналу этого счета"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:392
 #: ../src/gnome/gnc-plugin-page-register.c:400
-#, fuzzy
 msgid "Account Report - Single Transaction"
-msgstr "Введите онлайновую проводку"
+msgstr "Отчет по счету - одна проводка"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:393
 #: ../src/gnome/gnc-plugin-page-register.c:401
@@ -5757,17 +5746,15 @@ msgstr "_Две строки"
 #: ../src/gnome/gnc-plugin-page-register.c:412
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:89
 msgid "Show two lines of information for each transaction"
-msgstr "Показывать двухстрочную информацию по каждой проводке"
+msgstr "Показывать информацию по каждой проводке в две строки"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:409
-#, fuzzy
 msgid "Show _Extra Dates"
-msgstr "Отображать курсы обмена"
+msgstr "Показывать дополнительные даты"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:410
-#, fuzzy
 msgid "Show entered and reconciled dates"
-msgstr "Сортировать по дате согласования"
+msgstr "Показывать даты ввода и согласования"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:417
@@ -5846,11 +5833,11 @@ msgid ""
 "You have tried to open an account in the new register while it is open in "
 "the old register."
 msgstr ""
+"Вы попытались открыть счет в новом журнале в то время как он открыт в старом."
 
 #: ../src/gnome/gnc-plugin-page-register2.c:752
-#, fuzzy
 msgid "General Ledger2"
-msgstr "Главная книга"
+msgstr "Главная книга 2"
 
 #. Translators: %s is the name
 #. of the tab page
@@ -6077,28 +6064,24 @@ msgid "Create a new scheduled transaction"
 msgstr "Создание новой плановой проводки"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:140
-#, fuzzy
 msgid "_New 2"
-msgstr "Новый"
+msgstr "Новый 2"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:141
-#, fuzzy
 msgid "Create a new scheduled transaction 2"
-msgstr "Создание новой плановой проводки"
+msgstr "Создание новой плановой проводки 2"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:147
 msgid "Edit the selected scheduled transaction"
 msgstr "Изменить выбранную запланированную проводку"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:152
-#, fuzzy
 msgid "_Edit 2"
-msgstr "_Правка"
+msgstr "_Правка 2"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:153
-#, fuzzy
 msgid "Edit the selected scheduled transaction 2"
-msgstr "Изменить выбранную запланированную проводку"
+msgstr "Изменить выбранную запланированную проводку 2"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:159
 msgid "Delete the selected scheduled transaction"
@@ -6131,9 +6114,8 @@ msgstr "Открыть окно главной книги"
 
 #: ../src/gnome/gnc-plugin-register2.c:66
 #: ../src/gnome/gnc-plugin-register2.c:67
-#, fuzzy
 msgid "Register2 Open GL Account"
-msgstr "_Открыть счет"
+msgstr "_Открыть счет в книге нового стиля"
 
 #: ../src/gnome/gnc-plugin-register.c:54
 msgid "Old St_yle General Ledger"
@@ -6184,9 +6166,8 @@ msgid "Current Value:"
 msgstr "Текущее значение:"
 
 #: ../src/gnome/gnc-split-reg2.c:1019
-#, fuzzy
 msgid "Account Payable / Receivable Register"
-msgstr "Принимающие счета"
+msgstr "Журнал для расчетного счета"
 
 #: ../src/gnome/gnc-split-reg2.c:1021
 msgid ""
@@ -6194,6 +6175,9 @@ msgid ""
 "Changing the entries may cause harm, please use the business options to "
 "change the entries."
 msgstr ""
+"Реестр, отображаемый для расчетного счета (счет на оплату или зачисление). "
+"Изменения записей в нем может вызвать повреждение данных, пожалуйста используйте "
+"инструменты для бизнес операций, чтобы изменять в нем записи"
 
 #: ../src/gnome/gnc-split-reg2.c:1068 ../src/gnome/gnc-split-reg.c:2165
 msgid "This account register is read-only."
@@ -6238,6 +6222,8 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
+"Дата этой проводки выходит за границу изменяемых проводок, установленной в настройках "
+"для этой книги. Эта настройка может быть изменена в меню Файл -> Свойства -> Счета."
 
 #: ../src/gnome/gnc-split-reg.c:959
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:841
@@ -6259,9 +6245,8 @@ msgid "_Remove Splits"
 msgstr "Удалить части"
 
 #: ../src/gnome/gnc-split-reg.c:1180
-#, fuzzy
 msgid "This transaction is not associated with a URI."
-msgstr "Текущая проводка не сбалансирована."
+msgstr "С этой проводкой не связана ссылка."
 
 #: ../src/gnome/gnc-split-reg.c:1236
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:964
@@ -6319,12 +6304,10 @@ msgstr ""
 "баланса."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:1
-#, fuzzy
 msgid "GUID of predefined check format to use"
-msgstr "Индекс используемого формата чеков"
+msgstr "GUID используемого формата чеков"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:2
-#, fuzzy
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
@@ -6364,25 +6347,24 @@ msgid "Custom date format"
 msgstr "Настроенный формат даты"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:9
-#, fuzzy
 msgid ""
 "If the date format is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
-"Если формат даты установлен на \"настроить\", то это значение используется "
+"Если формат даты установлен на \"Настроенный\", то это значение используется "
 "как аргумент для strftime для задания даты. Оно может быть любой допустимой "
 "строкой strftime. Более подробную информацию об этом формате можно получить "
 "в документации strftime с помощью команды \"man 3 strftime\"."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:10
 msgid "Units in which the custom coordinates are expressed"
-msgstr ""
+msgstr "Единицы измерения для заданных координат."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:11
 msgid "Units in which the custom coordinates are expressed (inches, mm, ...)."
-msgstr ""
+msgstr "Единицы в которых измеряются указанные пользователем координаты (дюймы, мм, ...)"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:12
 msgid "Position of payee name"
@@ -6436,38 +6418,34 @@ msgstr ""
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:20
-#, fuzzy
 msgid "Position of payee address"
-msgstr "Расположение имени получателя"
+msgstr "Расположение имени получателя платежа"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:21
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Это значение содержит координаты X и Y первой строки даты на чеке. "
+"Это значение содержит координаты X и Y адреса получателя платежа на чеке. "
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:22
-#, fuzzy
 msgid "Position of notes line"
-msgstr "Расположение строки даты"
+msgstr "Расположение строки заметок"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:23
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Это значение содержит координаты X и Y первой строки даты на чеке. "
+"Это значение содержит координаты X и Y строки с заметками на чеке. "
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:24
 msgid "Position of memo line"
-msgstr "Расположении строки заметок"
+msgstr "Расположении строки памятки"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:25
 msgid ""
@@ -6480,70 +6458,61 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:26
 msgid "Offset for complete check"
-msgstr ""
+msgstr "Отступ для всего чека"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:27
-#, fuzzy
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
 msgstr ""
-"Это значение содержит координаты X и Y первой строки памятки на чеке. "
+"Это значение содержит координаты X и Y отступа для всего чека. "
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:28
-#, fuzzy
 msgid "Rotation angle"
-msgstr "Поворот"
+msgstr "Угол поворота"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:29
-#, fuzzy
 msgid "Number of degrees to rotate the check."
-msgstr "Заголовок номера"
+msgstr "Значения угла поворота чека в градусах."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:30
-#, fuzzy
 msgid "Position of split's amount in numbers"
-msgstr "Расположение числовой суммы по чеку"
+msgstr "Расположение суммы"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:31
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Это значение содержит координаты X и Y начала прописной суммы на чеке. "
+"Это значение содержит координаты X и Y начала суммы проводки на чеке. "
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:32
-#, fuzzy
 msgid "Position of split's memo line"
-msgstr "Расположении строки заметок"
+msgstr "Расположении памятки для части проводки"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:33
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Это значение содержит координаты X и Y первой строки памятки на чеке. "
+"Это значение содержит координаты X и Y памятки для части проводки на чеке. "
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:34
-#, fuzzy
 msgid "Position of split's account line"
-msgstr "Расположение строки даты"
+msgstr "Расположение строки счета"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:35
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Это значение содержит координаты X и Y начала прописной суммы на чеке. "
+"Это значение содержит координаты X и Y названия счета на чеке. "
 "Координаты указаны относительно левого нижнего угла чека."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:36
@@ -6579,9 +6548,8 @@ msgid "Show currencies in this dialog"
 msgstr "Показывать валюты в этом диалоге"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Position of the horizontal pane divider."
-msgstr "Расположение чека на странице"
+msgstr "Расположение горизонтального разделителя на странице"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:5
 msgid ""
@@ -6614,9 +6582,8 @@ msgstr ""
 "использоваться как начальный путь/имя файла при следующем открытии диалога."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:8
-#, fuzzy
 msgid "Position of the vertical pane divider."
-msgstr "Положение строки итогов"
+msgstr "Положение вертикального разделителя"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:9
 msgid "Show the new user window"
@@ -6743,7 +6710,6 @@ msgid "Set the \"notify\" flag by default"
 msgstr "Устанавливать флаг \"уведомлять\" по умолчанию"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:9
-#, fuzzy
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -6844,7 +6810,7 @@ msgstr ""
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:11
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:95
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr ""
+msgstr "Включить таймаут в диалоге \"Сохранить изменения перед закрытием?\""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:12
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:96
@@ -10865,8 +10831,8 @@ msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
-"База данных может использоваться другим пользователем, в этом случае вы не "
-"должны ее открывать. Продолжить?"
+"Открываемый файл (база данных) может использоваться другим пользователем, в этом случае вы не "
+"должны его открывать. Продолжить?"
 
 #: ../src/gnome-utils/gnc-file.c:752
 msgid ""
@@ -12155,57 +12121,48 @@ msgid "_Record Changes"
 msgstr "_Записать изменения"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2822
-#, fuzzy
 msgid "Date Entered"
 msgstr "Дата ввода"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2824
-#, fuzzy
 msgid "Date Reconciled"
-msgstr "Согласовано"
+msgstr "Дата согласования"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2826
 msgid "Date Posted / Entered / Reconciled"
-msgstr ""
+msgstr "Дата ввода / заведения / согласования"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2853
-#, fuzzy
 msgid "Reference / Action"
-msgstr "Ссылка"
+msgstr "Идентификатор / Действие"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2867
-#, fuzzy
 msgid "T-Number"
-msgstr "Номер"
+msgstr "Номер пров."
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2873
-#, fuzzy
 msgid "Number / Action"
-msgstr "Числовой параметр"
+msgstr "Номер / Действие"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2889
-#, fuzzy
 msgid "Customer / Memo"
-msgstr "Отчет клиента"
+msgstr "Клиент / Памятка"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2900
-#, fuzzy
 msgid "Vendor / Memo"
-msgstr "Отчет поставщика"
+msgstr "Поставщик / Памятка"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2918
 msgid "Description / Notes / Memo"
-msgstr ""
+msgstr "Описание / Заметки / Памятка"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2948
-#, fuzzy
 msgid "Void Reason"
-msgstr "Только аннулированные"
+msgstr "Причина аннулирования"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2952
-#, fuzzy
 msgid "Accounts / Void Reason"
-msgstr "Код счета"
+msgstr "Счета / Причина аннулирования"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2962
 #: ../src/import-export/import-main-matcher.c:492
@@ -17767,16 +17724,13 @@ msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
 msgstr "Строка удалена, производитель отсутствует: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:430
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"
-msgstr "Строка удалена, производитель отсутствует: id=%s\n"
+msgstr "Строка %d удалена, клиент не существует: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:474
-#, fuzzy
 msgid "These rows were deleted:"
-msgstr ""
-"Следующие строки были удалены:\n"
-"\n"
+msgstr "Следующие строки были удалены:"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:639
 msgid "Are you sure you have bills/invoices to update?"
@@ -18125,56 +18079,53 @@ msgid "Scheduled"
 msgstr "Запланировано"
 
 #: ../src/register/ledger-core/split-register-model.c:980
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
-msgstr "Введите ссылку на проводку, например на номер чека или счета-фактуры"
+msgstr "Введите идентификатор, например номер чека или счета-фактуры, "
+"общий для всех частей"
 
 #: ../src/register/ledger-core/split-register-model.c:982
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
-msgstr "Введите ссылку на проводку, например на номер чека или счета-фактуры"
+msgstr "Введите идентификатор, например номер чека или счета-фактуры, "
+"уникальный для каждой части"
 
 #: ../src/register/ledger-core/split-register-model.c:987
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
-msgstr "Введите ссылку на проводку, например на номер чека или счета-фактуры"
+msgstr "Введите идентификатор, например номер чека, общий для всех частей"
 
 #: ../src/register/ledger-core/split-register-model.c:989
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
-msgstr "Введите ссылку на проводку, например на номер чека или счета-фактуры"
+msgstr "Введите идентификатор, например номер чека, уникальный для " 
+"каждой части"
 
 #: ../src/register/ledger-core/split-register-model.c:1010
-#, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
-msgstr "Введите ссылку на проводку, например на номер чека или счета-фактуры"
+msgstr "Введите идентификатор проводки, например номер чека или счета-фактуры, "
+"общий для всех частей"
 
 #: ../src/register/ledger-core/split-register-model.c:1014
-#, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
-msgstr "Введите ссылку на проводку, например на номер чека или счета-фактуры"
+msgstr "Введите идентификатор проводки, общий для всех частей"
 
 #: ../src/register/ledger-core/split-register-model.c:1217
-#, fuzzy
 msgid "Enter an action type, or choose one from the list"
 msgstr "Введите тип проводки или выберите один из списка"
 
 #: ../src/register/ledger-core/split-register-model.c:1218
-#, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr ""
-"Введите счет приходов/расходов для этой позиции или выберите один из списка"
+"Введите идентификационный номер, например следующий номер чека, или выберите "
+"тип проводки из списка"
 
 #: ../src/register/ledger-core/split-register-model.c:1481
 msgid ""
@@ -18219,35 +18170,31 @@ msgstr "Вы должны выбрать отчет для удаления."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
 msgid "Unable to change report configuration name."
-msgstr ""
+msgstr "Не удается изменить имя настроек отчета."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:444
-#, fuzzy
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "Шаблон с таким именем уже существует. Введите другое имя."
+msgstr "Сохраненные настройки отчета с таким именем уже существуют, пожалуйста введите другое имя."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:468
-#, fuzzy
 msgid "Load report configuration"
-msgstr "Изменить параметры отчета"
+msgstr "Построить отчет с данными настройками"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:470
-#, fuzzy
 msgid "Edit report configuration name"
-msgstr "Изменить параметры отчета"
+msgstr "Изменить название сохраненных настроек отчета"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:472
-#, fuzzy
 msgid "Delete report configuration"
-msgstr "Изменить параметры отчета"
+msgstr "Удалить настройки отчета"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
 #: ../intl-scm/guile-strings.c:2036
 msgid "Saved Report Configurations"
-msgstr "_Сохраненные настройки отчетов"
+msgstr "Сохраненные настройки отчетов"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 msgid "Exit the saved report configurations dialog"
@@ -18270,7 +18217,7 @@ msgid ""
 "the Reports menu or tool bar."
 msgstr ""
 "Чтобы сохранить настройки для отчета, сначала выберите отчет из меню \"Отчеты\",\n"
-"установите необходивые вам параметры и затем выберите \"Сохранить настройки отчета\"\n"
+"установите необходимые вам параметры и затем выберите \"Сохранить настройки отчета\"\n"
 "из меню \"Отчеты\" или из панели инструментов."
 
 #: ../src/report/report-gnome/dialog-report-column-view.c:321
@@ -19008,7 +18955,8 @@ msgid ""
 "of transaction number; transaction number shown as 'T-Num' on second line of "
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
-msgstr ""
+msgstr "Отметьте для использования поля с типом проводки для ввода номеров проводок. "
+"Номер проводки отображаемый как" 
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:120
