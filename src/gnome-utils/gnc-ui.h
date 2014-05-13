@@ -68,6 +68,7 @@
 #define HL_SXEDITOR          "tool-sched"
 #define HL_BOOK_OPTIONS      "book-options"
 #define HL_CLOSE_BOOK        "tool-close-book"
+#define HL_USAGE_CUSTOMREP   "report-custom"
 
 /* GTK Windows - Common Response Codes */
 

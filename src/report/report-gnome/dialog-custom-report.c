@@ -80,6 +80,7 @@ typedef struct _CustomReportDialog
 } CustomReportDialog;
 
 void custom_report_dialog_close_cb(GtkWidget* widget, gpointer data);
+void custom_report_help_cb(GtkWidget* widget, gpointer data);
 void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
 void custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
         GtkTreeViewColumn *column, gpointer data);
@@ -102,6 +103,11 @@ custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
     g_free(crd);
 }
 
+void
+custom_report_help_cb (GtkWidget *widget, gpointer data)
+{
+    gnc_gnome_help(HF_HELP, HL_USAGE_CUSTOMREP);
+}
 
 void
 close_custom_report_clicked_cb(GtkWidget* widget, gpointer data)

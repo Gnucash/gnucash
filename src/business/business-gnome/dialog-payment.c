@@ -191,14 +191,6 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
         goto update_cleanup;
     }
 
-    /* Verify at least one document is selected */
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
-    if (!gtk_tree_selection_count_selected_rows (selection))
-    {
-        conflict_msg = _("You must select at least one document or pre-payment to process.");
-        goto update_cleanup;
-    }
-
     /* Test the total amount */
     amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
     amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
@@ -207,7 +199,9 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
                                       GNC_HOW_RND_ROUND_HALF_UP);
 
     if (gnc_numeric_check (pw->amount_tot) || gnc_numeric_zero_p (pw->amount_tot))
+    {
         enable_xfer_acct = FALSE;
+    }
     else
     {
         /* Verify the user has selected a transfer account */

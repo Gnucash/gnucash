@@ -262,26 +262,45 @@ billterm_to_ui (GncBillTerm *term, GtkWidget *desc, BillTermNB *notebook)
 static gboolean
 verify_term_ok (NewBillTerm *nbt)
 {
-    char *message;
-    gnc_numeric num;
+    char *message = _("Discount days cannot be more than due days.");
+    gboolean result;
+    BillTermNB *notebook;
+    gint days_due_days, days_disc_days;
+    gint prox_due_days, prox_disc_days;
 
-    return TRUE;
+    days_due_days=0;
+    days_disc_days=0;
+    prox_due_days=0;
+    prox_disc_days=0;
 
-    /* verify the discount day(s) is less than the due day(s) */
-    num = gnc_numeric_zero ();
-    if (gnc_numeric_negative_p (num))
+    notebook = &nbt->notebook;
+    result=TRUE;
+
+
+    days_due_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->days_due_days));
+    days_disc_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->days_disc_days));
+    prox_due_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->prox_due_day));
+    prox_disc_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->prox_disc_day));
+
+    switch (nbt->notebook.type)
     {
-        message = _("Negative amounts are not allowed.");
-        gnc_error_dialog (nbt->dialog, "%s", message);
-        return FALSE;
+    case GNC_TERM_TYPE_DAYS:
+        if (days_due_days<days_disc_days)
+        {
+              gnc_error_dialog (nbt->dialog, "%s", message);
+              result=FALSE;
+        }
+        break;
+    case GNC_TERM_TYPE_PROXIMO:
+	if (prox_due_days<prox_disc_days)
+        {
+            gnc_error_dialog (nbt->dialog, "%s", message);
+            result=FALSE;
+        }
+        break;
     }
-    if (gnc_numeric_compare (num, gnc_numeric_create (100, 1)) > 0)
-    {
-        message = _("Percentage amount must be between 0 and 100.");
-        gnc_error_dialog (nbt->dialog, "%s", message);
-        return FALSE;
-    }
-    return TRUE;
+
+    return result;
 }
 
 static gboolean
