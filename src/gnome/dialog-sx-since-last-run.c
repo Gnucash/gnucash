@@ -62,9 +62,6 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 
-#define GNC_PREFS_GROUP        "dialogs.sxs.since-last-run"
-#define GNC_PREF_SHOW_AT_FOPEN "show-at-file-open"
-
 struct _GncSxSinceLastRunDialog
 {
     GtkWidget *dialog;
@@ -801,7 +798,7 @@ gnc_sx_sxsincelast_book_opened(void)
     GncSxInstanceModel *inst_model;
     GncSxSummary summary;
 
-    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_SHOW_AT_FOPEN))
+    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_RUN_AT_FOPEN))
         return;
 
     if (qof_book_is_readonly(gnc_get_current_book()))
@@ -824,6 +821,9 @@ gnc_sx_sxsincelast_book_opened(void)
     {
         if (summary.num_auto_create_no_notify_instances != 0)
         {
+            if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_STARTUP, GNC_PREF_SHOW_AT_FOPEN))
+                return;
+
             gnc_info_dialog
             (NULL,
              ngettext
@@ -996,7 +996,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
     g_signal_connect(G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
     g_signal_connect(G_OBJECT(dialog->dialog), "destroy", G_CALLBACK(dialog_destroy_cb), dialog);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(dialog->dialog));
 
     dialog->component_id = gnc_register_gui_component
                            (DIALOG_SX_SINCE_LAST_RUN_CM_CLASS, NULL, close_handler, dialog);
@@ -1058,7 +1058,7 @@ close_handler(gpointer user_data)
 {
     GncSxSinceLastRunDialog *app_dialog = user_data;
 
-    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(app_dialog->dialog));
+    gnc_save_window_size(GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
     gtk_widget_destroy(app_dialog->dialog);
 }
 

@@ -31,6 +31,10 @@
 #include "gnc-sx-instance-model.h"
 #include "gnc-plugin-page-sx-list.h"
 
+#define GNC_PREFS_GROUP_STARTUP "dialogs.sxs.since-last-run"
+#define GNC_PREF_RUN_AT_FOPEN   "show-at-file-open"
+#define GNC_PREF_SHOW_AT_FOPEN  "show-notify-window-at-file-open"
+
 typedef struct _GncSxSlrTreeModelAdapter GncSxSlrTreeModelAdapter;
 typedef struct _GncSxSinceLastRunDialog GncSxSinceLastRunDialog;
 
