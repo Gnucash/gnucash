@@ -262,7 +262,7 @@ billterm_to_ui (GncBillTerm *term, GtkWidget *desc, BillTermNB *notebook)
 static gboolean
 verify_term_ok (NewBillTerm *nbt)
 {
-    char *message;
+    char *message = _("Discount days cannot be more than due days.");
     gboolean result;
     BillTermNB *notebook;
     gint days_due_days, days_disc_days;
@@ -287,7 +287,6 @@ verify_term_ok (NewBillTerm *nbt)
     case GNC_TERM_TYPE_DAYS:
         if (days_due_days<days_disc_days)
         {
-              message = _("Discount days cannot be more than due days.");
               gnc_error_dialog (nbt->dialog, "%s", message);
               result=FALSE;
         }
@@ -295,7 +294,6 @@ verify_term_ok (NewBillTerm *nbt)
     case GNC_TERM_TYPE_PROXIMO:
 	if (prox_due_days<prox_disc_days)
         {
-            message = _("Discount days cannot be more than due days.");
             gnc_error_dialog (nbt->dialog, "%s", message);
             result=FALSE;
         }
