@@ -68,6 +68,7 @@
 #include "gncCustomerP.h"
 #include "gncEmployee.h"
 #include "gncVendor.h"
+#include "gncVendorP.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
 #include "gncOwner.h"
@@ -195,6 +196,7 @@
 %include <gncCustomerP.h>
 %include <gncEmployee.h>
 %include <gncVendor.h>
+%include <gncVendorP.h>
 %include <gncAddress.h>
 %include <gncBillTerm.h>
 %include <gncInvoice.h>
