@@ -40,8 +40,8 @@ from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
     gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
     gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
-    gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id, gncInvoiceNextID, gncCustomerNextID, \
-    gncTaxTableGetTables
+    gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id, \
+    gncInvoiceNextID, gncCustomerNextID, gncTaxTableGetTables, gncVendorNextID
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
@@ -243,6 +243,11 @@ class Book(GnuCashCoreClass):
       ''' Return the next Customer ID. '''
       from gnucash.gnucash_core_c import gncCustomerNextID
       return gncCustomerNextID(self.get_instance())
+    
+    def VendorNextID(self):
+      ''' Return the next Vendor ID. '''
+      from gnucash.gnucash_core_c import gncVendorNextID
+      return gncVendorNextID(self.get_instance())
 
 class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
