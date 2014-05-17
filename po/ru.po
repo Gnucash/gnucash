@@ -3099,9 +3099,8 @@ msgstr ""
 "остаток платежа первому неоплаченному счёту этой компании."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:16
-#, fuzzy
 msgid "<b>Amount</b>"
-msgstr "<b>Счета</b>"
+msgstr "<b>Cумма</b>"
 
 #. set per book option
 #. Mark the transaction as a payment
@@ -3158,9 +3157,8 @@ msgid "Memo"
 msgstr "Памятка"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:21
-#, fuzzy
 msgid "Transaction Details"
-msgstr "Отчет о проводке"
+msgstr "Детали проводки"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:22
 msgid "Transfer Account"
@@ -3541,9 +3539,8 @@ msgstr "Введите тип позиции"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:594
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:460
 #: ../src/register/ledger-core/split-register-model.c:918
-#, fuzzy
 msgid "%A %d %B %Y"
-msgstr "%#d %B %Y"
+msgstr "%A %d %B %Y"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:606
 msgid "Enter the Entry Description"
@@ -4007,11 +4004,10 @@ msgstr "-- Разделенная проводка --"
 
 #. Translators: This string has a disambiguation prefix
 #: ../src/engine/Split.c:1467
-#, fuzzy
 msgid ""
 "Displayed account code of the other account in a multi-split transaction|"
 "Split"
-msgstr "Отображённый код счёта другого счёта в проводках из нескольких частей"
+msgstr "Часть"
 
 #: ../src/engine/Transaction.c:2401
 msgid "Voided transaction"
@@ -4030,7 +4026,7 @@ msgstr "Книга успешно закрыта."
 #. * that will be created. This is a ngettext(3) message (but
 #. * only for the %d part).
 #: ../src/gnome/assistant-acct-period.c:317
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d book."
@@ -4039,19 +4035,18 @@ msgid_plural ""
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
 "Самая ранняя проводка, найденная в книге, была %s. Основываясь на сделанном "
-"ранее выборе, эта книга будет поделена на %d книг(и). Нажмите \"Далее\" для "
-"запуска закрытия самой ранней книги."
+"ранее выборе, эта книга будет поделена на %d книгу."
 msgstr[1] ""
 "Самая ранняя проводка, найденная в книге, была %s. Основываясь на сделанном "
-"ранее выборе, эта книга будет поделена на %d книг(и). Нажмите \"Далее\" для "
+"ранее выборе, эта книга будет поделена на %d книги. Нажмите \"Далее\" для "
 "запуска закрытия самой ранней книги."
 msgstr[2] ""
 "Самая ранняя проводка, найденная в книге, была %s. Основываясь на сделанном "
-"ранее выборе, эта книга будет поделена на %d книг(и). Нажмите \"Далее\" для "
+"ранее выборе, эта книга будет поделена на %d книг. Нажмите \"Далее\" для "
 "запуска закрытия самой ранней книги."
 
 #: ../src/gnome/assistant-acct-period.c:371
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -4060,10 +4055,11 @@ msgid ""
 " Amend the Title and Notes or Click on 'Forward' to proceed.\n"
 " Click on 'Back' to adjust the dates or 'Cancel'."
 msgstr ""
-"Вас спросили про создаваемую книгу. Эта книга будет содержать все проводки "
-"вплоть до полуночи %s (всего %d проводок, распределенных по %d счетам). "
-"Нажмите \"Далее\" для создания этой книги. Нажмите \"Назад\" для "
-"корректировки дат."
+"Вы запросили создание новой книги. Эта книга будет содержать все проводки "
+"вплоть до полуночи %s (всего %d проводок, распределенных по %d счетам).\n"
+"\n"
+" Внесите правки в название и заметки или Нажмите \"Вперёд\" для продолжения.\n"
+" Нажмите \"Назад\" для корректировки дат или \"Отмена\"."
 
 #: ../src/gnome/assistant-acct-period.c:388
 #, c-format
@@ -4076,19 +4072,21 @@ msgid ""
 "The book will be created with the title %s when you click on 'Apply'. Click "
 "on 'Back' to adjust, or 'Cancel' to not create any book."
 msgstr ""
+"Книга будет создана с названием %s когда вы нажмете \"Применить\". Нажмите "
+"\"Назад\" для внесения изменений или \"Отмена\" для отмены создания книги."
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
 #. successfully ("success", "congratulations") or something else
 #. should be displayed anyway.
 #: ../src/gnome/assistant-acct-period.c:528
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Поздравляем! Вы успешно закрыли книги!"
+"Поздравляем! Вы успешно закрыли книги!\n"
 
 #. Change the text so that its more mainingful for this assistant
 #: ../src/gnome/assistant-acct-period.c:594
@@ -4116,7 +4114,6 @@ msgid "Accounts in '%s'"
 msgstr "Счета в '%s'"
 
 #: ../src/gnome/assistant-hierarchy.c:513
-#, fuzzy
 msgid "No description provided."
 msgstr "(нет описания)"
 
@@ -4416,9 +4413,8 @@ msgstr "Значение"
 #: ../src/gnome-search/dialog-search.c:865
 #: ../src/import-export/csv-exp/csv-transactions-export.c:348
 #: ../intl-scm/guile-strings.c:4580
-#, fuzzy
 msgid "Number/Action"
-msgstr "Числовой параметр"
+msgstr "Номер/Действие"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/dialog-find-transactions2.c:135
@@ -4433,9 +4429,8 @@ msgstr "Числовой параметр"
 #: ../src/gnome-search/dialog-search.c:867
 #: ../src/import-export/csv-exp/csv-transactions-export.c:344
 #: ../intl-scm/guile-strings.c:4584
-#, fuzzy
 msgid "Transaction Number"
-msgstr "Отчет о проводке"
+msgstr "Номер проводки"
 
 #. FIXME: All this does is leak.
 #: ../src/gnome/dialog-find-transactions2.c:207
@@ -4500,24 +4495,22 @@ msgstr "Наборы в счетах %s"
 #. Translators: %d is the number of prices. This
 #. is a ngettext(3) message.
 #: ../src/gnome/dialog-price-edit-db.c:185
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Вы действительно желаете удалить %d выбранный прайс?"
-msgstr[1] "Вы действительно желаете удалить %d выбранных прайса?"
-msgstr[2] "Вы действительно желаете удалить %d выбранных прайсов?"
+msgstr[0] "Вы действительно желаете удалить %d выбранную цену?"
+msgstr[1] "Вы действительно желаете удалить %d выбранных цены?"
+msgstr[2] "Вы действительно желаете удалить %d выбранных цен?"
 
 #: ../src/gnome/dialog-price-edit-db.c:193
 msgid "Delete prices?"
-msgstr "Удалить прайсы?"
+msgstr "Удалить цены?"
 
 #: ../src/gnome/dialog-price-editor.c:215
-#, fuzzy
 msgid "You must select a Security."
-msgstr "Вы должны выбрать валюту."
+msgstr "Вы должны выбрать ценную бумагу."
 
 #: ../src/gnome/dialog-price-editor.c:220
-#, fuzzy
 msgid "You must select a Currency."
 msgstr "Вы должны выбрать валюту."
 
@@ -4753,7 +4746,7 @@ msgid "(Need Value)"
 msgstr "(требуется значение)"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:830
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (One "
 "transaction automatically created)"
@@ -5042,13 +5035,13 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"В данный момент плановые проводки не введены. (%d проводка создана "
+"В данный момент нет плановых проводок для ввода. (%d проводка создана "
 "автоматически)"
 msgstr[1] ""
-"В данный момент плановые проводки не введены. (%d проводки созданы "
+"В данный момент нет плановых проводок для ввода. (%d проводки созданы "
 "автоматически)"
 msgstr[2] ""
-"В данный момент плановые проводки не введены. (%d проводок созданы "
+"В данный момент нет плановых проводок для ввода. (%d проводок созданы "
 "автоматически)"
 
 #: ../src/gnome/gnc-plugin-budget.c:59
@@ -5106,14 +5099,12 @@ msgid "Open the selected account"
 msgstr "Открыть выбранный счет"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:180
-#, fuzzy
 msgid "Open _Old Style Register Account"
-msgstr "Открыть выбранный счет"
+msgstr "Открыть открыть журнал счета в старом стиле"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
-#, fuzzy
 msgid "Open the old style register selected account"
-msgstr "Открыть выбранный счет"
+msgstr "Открыть счет в старой версии жунала"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
@@ -5129,14 +5120,12 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Открыть выбранный счет и все его субсчета"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:199
-#, fuzzy
 msgid "Open Old St_yle Subaccounts"
-msgstr "Открыть субсчета"
+msgstr "Открыть подсчета а старом стиле"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:200
-#, fuzzy
 msgid "Open the old style register selected account and all its subaccounts"
-msgstr "Открыть выбранный счет и все его субсчета"
+msgstr "Открыть счет и всего его подсчета в старой версии журнала"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:213
 #: ../src/gnome/gnc-plugin-page-register2.c:241
@@ -5267,14 +5256,12 @@ msgstr ""
 #. Extensions Menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:277
 #: ../src/gnome/gnc-plugin-register2.c:64
-#, fuzzy
 msgid "_Register2"
-msgstr "Журнал"
+msgstr "Журнал2"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:340
-#, fuzzy
 msgid "Open2"
-msgstr "Открыть"
+msgstr "Открыть2"
 
 #.
 #. * Various option sections and options within those sections
@@ -6820,10 +6807,13 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
+"Если включена, диалог \"Сохранить изменения перед выходом\" будет ждать ответа "
+"ограниченное число секунд. Если пользователь не ответил в течение этого времени, "
+"изменения будут сохранены автоматически и диалог будет закрыт."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:13
 msgid "Time to wait for answer"
-msgstr ""
+msgstr "Сколько времени ждать ответа пользователя"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:14
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:98
@@ -6831,6 +6821,8 @@ msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
 msgstr ""
+"Число секунд для ожилания ответа пользователя перед закрытием окна и "
+"автоматическим сохранением изменений."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:15
 msgid "Display negative amounts in red"
@@ -6867,6 +6859,8 @@ msgid ""
 "Tool to migrate preferences from old backend (CGonf) to new one (GSettings) "
 "has run successfully."
 msgstr ""
+"Инструмент для миграции настроек из старого движка (GConf) на новый (GSettings) "
+"отработал успешно."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:21
 msgid ""
@@ -6876,12 +6870,16 @@ msgid ""
 "once. This preference keeps track whether or not this migration tool has run "
 "successfully."
 msgstr ""
+"Gnucash перешел на другой движок хранения настроек между версиями 2.4 и 2.6. Для "
+"облегчения перехода, большинство настроек было смигрировано при первом запуске версии 2.6. "
+"Эта миграция должна быть запущена только 1 раз. Эта настройка служит для контроля "
+"успешности запуска инструмента миграции."
+
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:22
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:90
-#, fuzzy
 msgid "Do not create log/backup files."
-msgstr "Время (дни) хранения старых логов и файлов резервных копий."
+msgstr "Не создавать файлов логов и резервных файлов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:23
 msgid ""
@@ -6894,17 +6892,15 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:24
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:92
-#, fuzzy
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
 "Удалять старые логи и резервные файлы по истечении указанного количества "
-"дней (0 - никогда)"
+"дней (0 - никогда)."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:25
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:94
-#, fuzzy
 msgid "Do not delete log/backup files."
-msgstr "Время (дни) хранения старых логов и файлов резервных копий."
+msgstr "Не удалять файлов логов и резервных файлов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:26
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -6926,7 +6922,6 @@ msgid "Don't sign reverse any accounts."
 msgstr "Не помечать счета обратными."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:29
-#, fuzzy
 msgid ""
 "This setting allows certain accounts to have their balances reversed in sign "
 "from positive to negative, or vice versa. The setting \"income-expense\" is "
@@ -6937,7 +6932,7 @@ msgid ""
 msgstr ""
 "Эта настройка позволяет определенным счетам иметь баланс с обратным знаком. "
 "Значение \"приход_расход\" для пользователей, которые хотят видеть "
-"отрицательные расходы и положительные приходы. Значение \"кредит\" для "
+"отрицательные расходы и положительные доходы. Значение \"кредит\" для "
 "пользователей, которые предпочитают видеть баланс в виде кредитно-дебетного "
 "состояния счета. Если выбрать значение \"нет\", то знак нигде не будет "
 "обращен."
@@ -6957,9 +6952,8 @@ msgid "Sign reverse balances on income and expense accounts."
 msgstr "Менять знак у счетов Приход и Расход."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:32
-#, fuzzy
 msgid "Use account colors in the account hierarchy"
-msgstr "Введенный счет не найден."
+msgstr "Использовать цвет счета в иерархии счетов"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:33
 msgid ""
@@ -9731,9 +9725,8 @@ msgstr "не совпадает с регулярным выражением"
 
 #. Build and connect the case-sensitive check button; defaults to off
 #: ../src/gnome-search/search-string.c:329
-#, fuzzy
 msgid "Match case"
-msgstr "Подходит?"
+msgstr "Учитывать регистр"
 
 #: ../src/gnome/top-level.c:98
 #, c-format
