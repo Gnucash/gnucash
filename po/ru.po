@@ -5754,7 +5754,7 @@ msgstr "Показывать дополнительные даты"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:410
 msgid "Show entered and reconciled dates"
-msgstr "Показывать даты ввода и согласования"
+msgstr "Показывать даты создания и согласования"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:417
@@ -7206,6 +7206,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
+"Использовать поле \"Действие\" в частях проводки в качестве поля \"Номер\". "
+"Применяется для новых файлов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:63
@@ -7217,6 +7219,12 @@ msgid ""
 "files is set so that the 'Num' cell on registers shows/updates the "
 "transaction 'num' field."
 msgstr ""
+"При включении данной опции, при создании новых файлов в них будет по умолчанию "
+"включена настройка, для использования поля \"Номер \" всей проводки чтобы вводить/показывать тип "
+"действия, а номера для проводок вводить в частях проводки (колонка \"Номер\" для частей "
+"показыватеся только при режиме отображения проводки в несколько строк). "
+"При выключенной опции поведение будет обратное: колонка номер для проводки будет "
+"задать номер для всех частей и для каждой части будут указываться тип действия"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:70
 msgid "Color the register as specified by the system theme"
@@ -7255,14 +7263,13 @@ msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "Переместиться в поле передачи при автозаполнении запомненной проводки"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:76
-#, fuzzy
 msgid ""
 "If active then after a memorised transaction is automatically filled in the "
 "cursor will move to the Transfer field. If not active then it skips to the "
 "value field."
 msgstr ""
 "Если включено, то запомненная проводка автоматически заполнится и курсор "
-"переместится в область передачи. Если выключено, то переместится в область "
+"переместится в поле \"Перевести\". Если выключено, то переместится в поле ввода "
 "значения."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:77
@@ -7354,14 +7361,13 @@ msgid "All transactions are expanded to show all splits."
 msgstr "Все проводки развернуты, чтобы показать все части."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:90
-#, fuzzy
 msgid ""
 "Show two lines of information for each transaction in a register. This is "
 "the default setting for when a register is first opened. The setting can be "
 "changed at any time via the \"View-&gt;Double Line\" menu item."
 msgstr ""
-"Показывать две информационных линии для каждой проводки в журнале. Эта "
-"настройка включена по умолчанию для впервые открытых журналов. Она может "
+"Отобрадать информацию по каждой проводке в виде двух строк в журнале. Эта "
+"настройка используется при открытии журнала. Она может "
 "быть в любой момент изменена через пункт меню \"Вид\" -> \"Две строки\"."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
@@ -7381,42 +7387,39 @@ msgstr ""
 "названия подсчетов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:93
-#, fuzzy
 msgid "Show the entered and reconcile dates"
-msgstr "Отображать используемые курсы обмена"
+msgstr "Отображать даты создания и согласования"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:94
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:154
-#, fuzzy
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
-msgstr "Создать проводку за долго до ее даты вступления в силу."
+msgstr ""
+"Показывать дату создания проводки под датой на которую она создана "
+"и в частях проводки показывать даты согласования для каждой части."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:95
 msgid "Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "Показывать даты создания и согласования при выборе проводки"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
-#, fuzzy
 msgid "Show the entered date and reconciled date on transaction selection."
-msgstr "Выберите \"О+С\", чтобы обновить и согласовать подходящую проводку."
+msgstr "Показывать даты создания и согласования при выборе проводки"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
-#, fuzzy
 msgid "Show the calendar buttons"
-msgstr "Показать столбец имен"
+msgstr "Показать кнопки для календаря"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:98
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:156
 msgid "Show the calendar buttons Cancel, Today and Select."
-msgstr ""
+msgstr "Показывать кнопки для календаря: отмена, сегодня и выбор"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:99
-#, fuzzy
 msgid "Move the selection to the blank split on expand"
-msgstr "Переместить выделенный шаблон проводок на строку выше"
+msgstr "При разваорачивании проводки выбирать пустую строку"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:100
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:158
@@ -7424,11 +7427,12 @@ msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
 msgstr ""
+"Данная настройка будет переводить фокус ввода на пустую строку в частях разворачиваемой "
+"проводки."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:101
-#, fuzzy
 msgid "Number of transactions to show in a register."
-msgstr "Числ_о проводок:"
+msgstr "Число проводок для показа в журнале."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:102
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:144
@@ -7440,9 +7444,8 @@ msgstr ""
 "проводки."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:103
-#, fuzzy
 msgid "Number of characters for auto complete."
-msgstr "Заголовок номера"
+msgstr "Число символов для автозаполнения."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:104
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:152
@@ -7450,6 +7453,8 @@ msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
 msgstr ""
+"Задает число символов которые нужно ввести для срабатывания автозаполнения в "
+"полях описания, заметок и памятки."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:105
 msgid "Create a new window for each new report"
@@ -7471,14 +7476,13 @@ msgstr ""
 "отчетов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:108
-#, fuzzy
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
-"Этот параметр определяет валюту используемую в отчетах по умолчанию. Если "
+"Этот параметр определяет валюту используемую по умолчанию в отчетах. Если "
 "выбрано \"Местная\", то GnuCash использует региональные настройки системы. "
 "Если выбрано \"Другая\", то GnuCash использует значение параметра \"Другая "
 "валюта\"."
@@ -7494,7 +7498,7 @@ msgstr "Валюта по умолчанию для новых отчетов"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:111
 msgid "PDF export file name format"
-msgstr ""
+msgstr "Формат названия файла при экспорте в PDF"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:113
 #, no-c-format
@@ -13683,7 +13687,7 @@ msgstr "При разворачивании выбирать пустую стр
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:159
 msgid "_Show entered and reconciled dates on selection"
-msgstr "Отображать даты ввода и согласования при выборе"
+msgstr "Отображать даты создания и согласования при выборе"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:161
 msgid "Register Defaults"
@@ -16503,7 +16507,7 @@ msgstr "Не выводить более"
 
 #: ../src/import-export/dialog-import.glade.h:15
 msgid "Use _bayesian matching"
-msgstr "Использовать сравнение по _байясу"
+msgstr "Использовать сравнение по _Байясу"
 
 #: ../src/import-export/dialog-import.glade.h:16
 msgid ""
