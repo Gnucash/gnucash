@@ -332,6 +332,7 @@ AC_SUBST(SED)
 
 # Set some defaults, they may be overridden below
 REGEX_LIBS=""
+GCC_VERSION=`${CC} -dumpversion`
 
 AC_MSG_CHECKING(operating system)
 #NOUNDEF for use with mingw
@@ -358,7 +359,13 @@ update to latest  darwin])
       if test "x$_gtk_mac" = xyes; then
         GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
         GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -xobjective-c"
-      fi
+ 	if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 4; then
+	   if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 8; then
+      	   # This is gcc >= 4.8.x
+	      GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -fobjc-exceptions"
+	   fi
+	fi
+     fi
       AC_MSG_RESULT(${_gtk_mac})
       AC_SUBST(GTK_MAC_LIBS)
       AC_SUBST(GTK_MAC_CFLAGS)
@@ -1322,7 +1329,7 @@ then
   # For gcc >= 3.4.x, specifically enable the new warning switch
   # -Wdeclaration-after-statement in order to preserve source code
   # compatibility to gcc 2.95 and other compilers.
-  GCC_VERSION=`${CC} -dumpversion`
+
   if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 3; then
     # This is gcc 3.x.x
     if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
