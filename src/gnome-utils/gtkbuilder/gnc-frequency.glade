@@ -168,7 +168,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Every</property>
+                        <property name="label" translatable="yes" context="Daily">Every</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -202,7 +202,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">days.</property>
+                        <property name="label" translatable="yes" context="Daily">days.</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -247,7 +247,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Every</property>
+                                <property name="label" translatable="yes" context="Weekly">Every</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -280,7 +280,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">weeks.</property>
+                                <property name="label" translatable="yes" context="Weekly">weeks.</property>
                                 <property name="justify">fill</property>
                               </object>
                               <packing>
@@ -490,7 +490,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Every</property>
+                                <property name="label" translatable="yes" context="Semimonthly">Every</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -523,7 +523,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">months.</property>
+                                <property name="label" translatable="yes" context="Semimonthly">months.</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -732,7 +732,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Every</property>
+                                <property name="label" translatable="yes" context="Monthly">Every</property>
                                 <property name="justify">center</property>
                               </object>
                               <packing>
@@ -767,7 +767,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">months.</property>
+                                <property name="label" translatable="yes" context="Monthly">months.</property>
                                 <property name="justify">center</property>
                               </object>
                               <packing>
