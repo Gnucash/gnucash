@@ -6889,6 +6889,11 @@ msgid ""
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
 msgstr ""
+"Эта настройка определяет что делать со старыми файлами логов и резервных копий. "
+"\"вечно\" означает хранить все старые файлы. \"никогда\" означает не хранить никаких старых "
+"файлов. Удаление старых файлов происходит в момент сохранения основного. \"дни\" "
+"означает хранить старые файлы в течение заданного числа дней. Число дней хранится "
+"по ключу 'retain-days'"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:24
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:92
@@ -6961,11 +6966,13 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
+"Если включено, иерархия счетов будет раскрашена, используя цвета, определенные "
+"в настройках цвета счета. Эта настройка может быть использована для облегчения "
+"определения счетов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:34
-#, fuzzy
 msgid "Use account colors in the tabs of open account registers"
-msgstr "Отображать каждый счет в таблице, как гиперссылку на окно журнала"
+msgstr "Отображать цвета счетов в заголовках открытых счетов"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:35
 msgid ""
@@ -6973,6 +6980,9 @@ msgid ""
 "custom color if set. This can serve as a visual aid to quickly identify "
 "accounts."
 msgstr ""
+"Если включено, вкладки журналов счетов будут раскрашены в цвета заданные настройкой "
+"цвет счета. Эты настройка может быть использована для облегчения определения "
+"счетов."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:36
 msgid "Use formal account labels"
@@ -7507,9 +7517,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:114
-#, fuzzy
 msgid "PDF export file name date format choice"
-msgstr "Выбор формата даты"
+msgstr "Выбор формата имения файла для экспорта в PDF"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:115
 #, fuzzy
