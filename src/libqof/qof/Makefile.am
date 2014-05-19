@@ -109,6 +109,5 @@ test_qofmath_SOURCES = gnc-numeric.cpp
 test_qofmath_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_128_BIT_MULT
 test_qofmath_LDFLAGS = $(libgnc_qof_la_LDFLAGS)
 test_qofmath_LDADD = $(libgnc_qof_common_libs)
-test_qofmath_CXXFLAGS = -Wall -Werror
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"

@@ -1320,7 +1320,7 @@ then
   #We have a lot of unused variables. Don't warn until someone gets
   #around to cleaning them up.
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
-  AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"
+  AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
