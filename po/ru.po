@@ -7515,13 +7515,18 @@ msgid ""
 "in filenames, such as '/', will be replaced with underscores '_' in the "
 "resulting file name.)"
 msgstr ""
+"Этот параметр определяет имя файла при экспорте в PDF. Значение является строкой в "
+"формате sprintf(3) с тремя аргументами: \"%1;s\" - имя отчета, например \"Счет-фактура\"."
+"\"%2$s\" - номер отчета, например для отчета по счету-фактуре это номер счета-фактуры. "
+"\"%3$s\" - дата отчета, в формате определяемом настройкой finame-date-format. "
+"(Замечания: все символы, недопустимые в имени файла, такие как '/', будут заменены на символ '_' "
+"в итоговом имени файла.)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:114
 msgid "PDF export file name date format choice"
-msgstr "Выбор формата имения файла для экспорта в PDF"
+msgstr "Выбор формата даты в имени файла для экспорта в PDF"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:115
-#, fuzzy
 msgid ""
 "This setting chooses the way dates are used in the filename of PDF export. "
 "Possible values for this setting are \"locale\" to use the system locale "
@@ -7529,10 +7534,11 @@ msgid ""
 "standard dates , \"uk\" for United Kingdom style dates, and \"us\" for "
 "United States style dates."
 msgstr ""
-"Этот параметр определяет вид отображения даты в GnuCash. Возможные значения: "
-"\"Местный\" - используются настройки системной локали, \"Европа\" - стиль "
-"даты континентальной Европы, \"ISO\" - стиль, соответствующий стандарту ISO "
-"8601, \"Англия\" - стиль, применяемый в Соединенном Королевстве и \"США\" - "
+"Этот параметр опреляет способ использования дат в имени файла при экспорте PDF. "
+"Возможные значения: "
+"\"locale\" - используются настройки системной локали, \"ce\" - стиль "
+"даты континентальной Европы, \"iso\" - стиль, соответствующий стандарту ISO "
+"8601, \"uk\" - стиль, применяемый в Соединенном Королевстве и \"us\" - "
 "стиль, применяемый в Соединенных Штатах Америки."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:116
@@ -7571,12 +7577,10 @@ msgstr ""
 "например). В противном случае они будут скрыты."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "Use relative profit/loss starting date"
-msgstr "Тип начальной даты в расчетах прибыли/убытков"
+msgstr "Использовать относительную начальную дату расчетах прибыли/убытков"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:5
-#, fuzzy
 msgid ""
 "This setting controls the type of starting date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the starting "
@@ -7584,14 +7588,13 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 "Этот параметр определяет тип начальной даты, используемой для расчета "
-"прибыли/убытка. Если установлено в \"абсолютная\", то GnuCash использует "
-"значение из параметра \"start_date\". Если же выбрано другое значение, то "
-"GnuCash использует значение параметра \"start_period\"."
+"прибыли/убытка. Если установлено в \"absolute\", то GnuCash использует "
+"значение из параметра \"start-date\". Если же выбрано другое значение, то "
+"GnuCash использует значение параметра \"start-period\"."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:6
-#, fuzzy
 msgid "Use absolute profit/loss starting date"
-msgstr "Тип начальной даты в расчетах прибыли/убытков"
+msgstr "Использовать абсолютную начальную дату расчетах прибыли/убытков"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:7
 msgid "Starting date (in seconds from Jan 1, 1970)"
