@@ -470,6 +470,29 @@ const char* gnc_commodity_get_quote_tz(const gnc_commodity *cm);
  *  should not be freed by the caller.
  */
 const char* gnc_commodity_get_user_symbol(const gnc_commodity *cm);
+
+/** Retrieve the default symbol for the specified commodity. This will
+ *  be a pointer to a nul terminated string like "£", "US$", etc. Note
+ *  that for the locale currency, you probably want to look at the
+ *  system-provided symbol first. See gnc_commodity_get_nice_symbol.
+ *
+ * @param cm A pointer to a commodity data structure.
+ *
+ * @return A pointer to the default symbol for this commodity.
+ */
+const char* gnc_commodity_get_default_symbol(const gnc_commodity *cm);
+
+/** Retrieve a symbol for the specified commodity, suitable for
+ *  display to the user. This will be a pointer to a nul terminated
+ *  string like "£", "US$", etc. That function is locale-aware and
+ *  will base its choice of symbol on the user-configured symbol,
+ *  the locale a
+ *
+ * @param cm A pointer to a commodity data structure.
+ *
+ * @return A pointer to the symbol for this commodity.
+ */
+const char*gnc_commodity_get_nice_symbol(const gnc_commodity *cm);
 /** @} */
 
 /** @name Commodity Accessor Routines - Set

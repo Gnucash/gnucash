@@ -761,7 +761,8 @@ main(int argc, char ** argv)
     if(!gtk_init_check (&argc, &argv))
     {
         g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
-                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set."),
+                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
+                     "       Perhaps you need to set the $DISPLAY environment variable ?"),
                    argv[0]);
         return 1;
     }

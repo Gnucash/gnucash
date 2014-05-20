@@ -36,6 +36,7 @@
 #include <qofinstance-p.h>
 
 #include "gnc-commodity.h"
+#include "gnc-locale-utils.h"
 #include "gnc-prefs.h"
 
 static QofLogModule log_module = GNC_MOD_COMMODITY;
@@ -1142,16 +1143,49 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
 /********************************************************************
  * gnc_commodity_get_user_symbol
  ********************************************************************/
-
 const char*
 gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 {
     const char *str;
     if (!cm) return NULL;
-    str = kvp_frame_get_string(cm->inst.kvp_data, "user_symbol");
-    if (str && *str)
-	return str;
+    return kvp_frame_get_string(cm->inst.kvp_data, "user_symbol");
+}
+
+/********************************************************************
+ * gnc_commodity_get_default_symbol
+ *******************************************************************/
+const char*
+gnc_commodity_get_default_symbol(const gnc_commodity *cm)
+{
+    const char *str;
+    if (!cm) return NULL;
     return GET_PRIVATE(cm)->default_symbol;
+}
+
+/********************************************************************
+ * gnc_commodity_get_nice_symbol
+ *******************************************************************/
+const char*
+gnc_commodity_get_nice_symbol (const gnc_commodity *cm)
+{
+    const char *nice_symbol;
+    struct lconv *lc;
+    if (!cm) return NULL;
+
+    nice_symbol = gnc_commodity_get_user_symbol(cm);
+    if (nice_symbol && *nice_symbol)
+        return nice_symbol;
+
+    lc = gnc_localeconv();
+    nice_symbol = lc->currency_symbol;
+    if (!g_strcmp0(gnc_commodity_get_mnemonic(cm), lc->int_curr_symbol))
+        return nice_symbol;
+
+    nice_symbol = gnc_commodity_get_default_symbol(cm);
+    if (nice_symbol && *nice_symbol)
+        return nice_symbol;
+
+    return gnc_commodity_get_mnemonic(cm);
 }
 
 /********************************************************************
@@ -1395,11 +1429,25 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 void
 gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
 {
+    struct lconv *lc;
+
     if (!cm) return;
 
     ENTER ("(cm=%p, symbol=%s)", cm, user_symbol ? user_symbol : "(null)");
 
     gnc_commodity_begin_edit(cm);
+
+    lc = gnc_localeconv();
+    if (!user_symbol || !*user_symbol)
+	user_symbol = NULL;
+    else if (!g_strcmp0(lc->int_curr_symbol, gnc_commodity_get_mnemonic(cm)) &&
+	     !g_strcmp0(lc->currency_symbol, user_symbol))
+	/* if the user gives the ISO symbol for the locale currency or the
+	 * default symbol, actually remove the user symbol */
+	user_symbol = NULL;
+    else if (!g_strcmp0(user_symbol, gnc_commodity_get_default_symbol(cm)))
+	user_symbol = NULL;
+
     kvp_frame_set_string(cm->inst.kvp_data, "user_symbol", user_symbol);
     mark_commodity_dirty(cm);
     gnc_commodity_commit_edit(cm);

@@ -259,7 +259,6 @@ const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 
 const gchar *printable_value(gdouble val, gint denom);
-const char*gnc_commodity_get_nice_symbol(const gnc_commodity *cm);
 gchar *number_to_words(gdouble val, gint64 denom);
 gchar *numeric_to_words(gnc_numeric val);
 

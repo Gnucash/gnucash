@@ -1157,7 +1157,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
         namespace = gnc_commodity_get_namespace (commodity);
         fullname = gnc_commodity_get_fullname (commodity);
         mnemonic = gnc_commodity_get_mnemonic (commodity);
-        user_symbol = gnc_commodity_get_user_symbol (commodity);
+        user_symbol = gnc_commodity_get_nice_symbol (commodity);
         cusip = gnc_commodity_get_cusip (commodity);
         fraction = gnc_commodity_get_fraction (commodity);
     }
@@ -1316,10 +1316,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             else
                 gnc_commodity_set_quote_tz(c, NULL);
 
-            if (user_symbol && *user_symbol)
-                gnc_commodity_set_user_symbol(c, user_symbol);
-            else
-                gnc_commodity_set_user_symbol(c, NULL);
+	    gnc_commodity_set_user_symbol(c, user_symbol);
 
             gnc_commodity_commit_edit(c);
             return TRUE;
