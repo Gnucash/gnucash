@@ -1343,7 +1343,7 @@ char dateSeparator (void)
             gnc_localtime_r(&secs, &tm);
             qof_strftime(string, sizeof(string), GNC_D_FMT, &tm);
 
-            for (s = string; s != '\0'; s++)
+            for (s = string; *s != '\0'; s++)
                 if (!isdigit(*s))
                     return (locale_separator = *s);
         }
