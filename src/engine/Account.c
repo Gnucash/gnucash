@@ -3721,19 +3721,19 @@ xaccAccountGetSplitList (const Account *acc)
 }
 
 gint64
-xaccAccountGetNrSplits (const Account *acc, gboolean include_children)
+xaccAccountCountSplits (const Account *acc, gboolean include_children)
 {
     gint64 nr, i;
 
     nr = 0;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
 
     nr = g_list_length(xaccAccountGetSplitList(acc));
     if (include_children && (gnc_account_n_children(acc) != 0))
     {
 	for (i=0; i < gnc_account_n_children(acc); i++)
         {
-            nr += xaccAccountGetNrSplits(gnc_account_nth_child(acc, i), TRUE);
+            nr += xaccAccountCountSplits(gnc_account_nth_child(acc, i), TRUE);
         }
     }
     return nr;
