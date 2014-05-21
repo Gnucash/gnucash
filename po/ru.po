@@ -7601,14 +7601,13 @@ msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr "Начальная дата (в секундах с 1 января 1970 г.)"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:8
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Этот параметр определяет начальную дату, используемую для расчетов прибыли/"
-"убытка, если настройка \"start_choice\" имеет значение \"абсолютная\". Это "
+"убытка, если настройка \"start-choice\" имеет значение \"absolute\". Это "
 "поле должно содержать дату в секундах от 1 января 1970 года."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:9
@@ -7616,23 +7615,20 @@ msgid "Starting time period identifier"
 msgstr "Указатель начала периода"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:10
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
 "Этот параметр определяет начальную дату, используемую для расчетов прибыли/"
-"убытка, если настройка \"start_choice\" имеет значение отличное от "
-"\"абсолютная\". Это поле должно содержать числа от 0 до 8."
+"убытка, если настройка \"start-choice\" имеет значение отличное от "
+"\"absolute\". Это поле должно содержать числа от 0 до 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:11
-#, fuzzy
 msgid "Use relative profit/loss ending date"
-msgstr "Тип конечной даты в расчетах прибыли/убытков"
+msgstr "Использовать относительную дату в расчетах прибыли/убытков"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:12
-#, fuzzy
 msgid ""
 "This setting controls the type of ending date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the ending "
@@ -7640,28 +7636,26 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 "Этот параметр определяет тип конечной даты, используемой для расчета прибыли/"
-"убытка. Если установлено в \"абсолютная\", то GnuCash использует значение из "
-"параметра \"end_date\". Если же выбрано другое значение, то GnuCash "
-"использует значение параметра \"end_period\"."
+"убытка. Если установлено в \"absolute\", то GnuCash использует значение из "
+"параметра \"end-date\". Если же выбрано другое значение, то GnuCash "
+"использует значение параметра \"end-period\"."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:13
-#, fuzzy
 msgid "Use absolute profit/loss ending date"
-msgstr "Тип конечной даты в расчетах прибыли/убытков"
+msgstr "Использовать абсолютное значение конечной даты в расчетах прибыли/убытков"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:14
 msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr "Дата окончания (в секундах с 1-го января 1970 г.)"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:15
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 "Этот параметр определяет конечную дату, используемую для расчетов прибыли/"
-"убытка, если настройка \"end_choice\" имеет значение \"абсолютная\". Это "
+"убытка, если настройка \"end-choice\" имеет значение \"absolute\". Это "
 "поле должно содержать дату в секундах от 1 января 1970 года."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:16
@@ -7669,36 +7663,34 @@ msgid "Ending time period identifier"
 msgstr "Указатель конца периода"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:17
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 "Этот параметр определяет конечную дату, используемую для расчетов прибыли/"
-"убытка, если настройка \"end_choice\" имеет значение отличное от \"абсолютная"
+"убытка, если настройка \"end-choice\" имеет значение отличное от \"absolute"
 "\". Это поле должно содержать числа от 0 до 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:1
-#, fuzzy
 msgid "Display this column"
-msgstr "Показать счет?"
+msgstr "Отображать эту колонку"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:2
 msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
 msgstr ""
+"Этот параметр определяет будет ли показываться указаная колонка. TRUE включает "
+"отображение, FALSE делает скрывает колонку."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Width of this column"
-msgstr "Рас_ширить этот столбец"
+msgstr "Ширина этой колонки"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "This setting stores the width of the given column in pixels."
-msgstr "Этот параметр включает отображение столбца дат."
+msgstr "Этот параметр хранит ширину указанной колонки в пикселях."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:1
 msgid ""
@@ -7715,12 +7707,10 @@ msgstr ""
 "безвозвратно!"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:4
-#, fuzzy
 msgid "Setup Account Period"
 msgstr "Настройка расчетного периода"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:5
-#, fuzzy
 msgid ""
 "\n"
 "Select an accounting period and the closing date which must not be in the "
@@ -7728,8 +7718,11 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Выберите расчетный период и дату его закрытия. Книги будут закрыты в полночь "
-"выбранной даты."
+"\n"
+"Выберите расчетный период и дату его закрытия. Выбранная дата не должна быть в будущем и "
+"должна быть позже даты закрытия предыдущей книги.\n"
+"\n"
+"Книги будут закрыты в полночь выбранной даты."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:9
 msgid "xxx"
@@ -7754,18 +7747,16 @@ msgid "Close Book"
 msgstr "Закрыть книгу"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:14
-#, fuzzy
 msgid "Account Period Finish"
-msgstr "Расчетный период"
+msgstr "Окончание расчетного периода"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:15
 msgid "Press 'Close' to Exit."
-msgstr ""
+msgstr "Для выхода нажмите \"Закрыть\"."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:16
-#, fuzzy
 msgid "Summary Page"
-msgstr "Строка _итогов"
+msgstr "Страница итогов"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:1
 msgid ""
@@ -8020,6 +8011,8 @@ msgid ""
 "\n"
 "All enabled option pages must contain valid entries to continue.\n"
 msgstr ""
+"\n"
+"Для продолжения все выбранные ранее параметры для выплат должны быть корректно заполнены.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:35
 msgid "Payment To (Escrow):"
@@ -8058,25 +8051,25 @@ msgid "Payment Frequency"
 msgstr "Периодичность платежей"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:43
-#, fuzzy
 msgid "Previous Option"
-msgstr "Первый параметр"
+msgstr "Предыдущий параметр"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:44
-#, fuzzy
 msgid "Next Option"
-msgstr "Числовой параметр"
+msgstr "Следующий параметр"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:45
-#, fuzzy
 msgid "Loan Payment"
-msgstr "Налоговый платеж"
+msgstr "Платеж по займу"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:46
 msgid ""
 "\n"
 "Review the details below and if correct press Apply to create the schedule."
 msgstr ""
+"\n"
+"Проверьте детали плановых проводок ниже и если все правильно нажмите \"Применить\" "
+"для их создания."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:48
 msgid "Range: "
@@ -8095,19 +8088,16 @@ msgid "Date Range"
 msgstr "Диапазон дат"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:51
-#, fuzzy
 msgid "Loan Review"
-msgstr "Обзор"
+msgstr "Проверка настроенных выплат по займу"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:52
-#, fuzzy
 msgid "Schedule added successfully."
-msgstr "Книга успешно закрыта."
+msgstr "Расписание платежей успешно создано."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:53
-#, fuzzy
 msgid "Loan Summary"
-msgstr "Итого по счету"
+msgstr "Результаты создания выплат"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:54
@@ -8127,11 +8117,11 @@ msgstr "Текущий год"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:57
 msgid "Now + 1 Year"
-msgstr ""
+msgstr "Сейчас + 1 год"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:58
 msgid "Whole Loan"
-msgstr ""
+msgstr "Весь период займа"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:60
 msgid "Interest Rate"
@@ -8193,9 +8183,8 @@ msgstr ""
 "их объединение."
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:5
-#, fuzzy
 msgid "Stock Split Account"
-msgstr "Счет ценных бумаг"
+msgstr "Счет для разделения ценных бумаг"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:6
 msgid ""
@@ -8296,9 +8285,8 @@ msgstr ""
 "или \"Отменить\" для выхода без совершения изменений."
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:23
-#, fuzzy
 msgid "Stock Split Finish"
-msgstr "Разделение ценных бумаг"
+msgstr "Разделение ценных бумаг окончено"
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:1
 msgid "Securities"
@@ -8416,16 +8404,15 @@ msgstr "<b>Период:</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:25
 msgid "Annual"
-msgstr ""
+msgstr "Ежегодно"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:26
-#, fuzzy
 msgid "Semi-annual"
-msgstr "Дважды в месяц"
+msgstr "Дважды в год"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:27
 msgid "Tri-annual"
-msgstr ""
+msgstr "Трижды в год"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:28
@@ -8435,24 +8422,20 @@ msgid "Quarterly"
 msgstr "Ежеквартально"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:29
-#, fuzzy
 msgid "Bi-monthly"
-msgstr "Дважды в месяц"
+msgstr "Раз в два месяца"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:32
-#, fuzzy
 msgid "Bi-weekly"
-msgstr "Еженедельно"
+msgstr "Раз в две недели"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:34
-#, fuzzy
 msgid "Daily (360)"
-msgstr "Ежедневно"
+msgstr "Ежедневно (360)"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:35
-#, fuzzy
 msgid "Daily (365)"
-msgstr "Ежедневно"
+msgstr "Ежедневно (365)"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:1
 msgid "Lot Viewer"
@@ -8479,29 +8462,24 @@ msgid "<b>_Lots in This Account</b>"
 msgstr "<b>_Наборы на этом счете</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:7
-#, fuzzy
 msgid "Show only open lots"
-msgstr "Показать график"
+msgstr "Показать только открытые лоты"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:8
-#, fuzzy
 msgid "<b>Splits _free</b>"
-msgstr "<b>Информация о части</b>"
+msgstr "<b>Доступные части</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:9
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:10
-#, fuzzy
 msgid "<<"
-msgstr "<"
+msgstr "<<"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:11
-#, fuzzy
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>Информация о части</b>"
+msgstr "<b>Части в составе лота</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:12
 msgid "_New Lot"
@@ -8570,11 +8548,11 @@ msgid "_Open the new user tutorial"
 msgstr "Открыть самоучитель новичка"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:1
-#, fuzzy
 msgid ""
 "Delete all stock prices before the date below based upon the following "
 "criteria:"
-msgstr "Удалить все цены пакета акций, основываясь на следующих условиях:"
+msgstr "Удалить все цены по данным акциям до даты заданной ниже, "
+"основываясь на следующих условиях:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:2
 msgid "Delete _manually entered prices"
@@ -8608,9 +8586,8 @@ msgid "Price Editor"
 msgstr "Редактор цен"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:8
-#, fuzzy
 msgid "_Namespace:"
-msgstr "_Вид:"
+msgstr "_Категория:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:9
 #: ../src/gnome-utils/dialog-commodity.c:289
@@ -8635,18 +8612,16 @@ msgid "Add a new price."
 msgstr "Добавить новую цену."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
-#, fuzzy
 msgid "Remove the current price."
-msgstr "Удалить текущую цену"
+msgstr "Удалить текущую цену."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:16
 msgid "Edit the current price."
 msgstr "Изменить текущую цену."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:18
-#, fuzzy
 msgid "Remove prices older than a user-entered date."
-msgstr "Удалить цены старее указанной даты"
+msgstr "Удалить цены старее указанной даты."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:19
 msgid "Remove _Old"
@@ -8661,23 +8636,20 @@ msgid "Get _Quotes"
 msgstr "Получить _котировки"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:22
-#, fuzzy
 msgid "Bid"
-msgstr "id"
+msgstr "Цена покупки"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:23
 msgid "Ask"
-msgstr ""
+msgstr "Цена предложения"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:24
-#, fuzzy
 msgid "Last"
-msgstr "Последний номер"
+msgstr "Последняя цена"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:25
-#, fuzzy
 msgid "Net Asset Value"
-msgstr "Чистые активы:"
+msgstr "Стоимость чистых активов"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:27
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:26
@@ -8720,7 +8692,6 @@ msgid "_Date format:"
 msgstr "Формат даты:"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:7
-#, fuzzy
 msgid ""
 "Check format must have an\n"
 "ADDRESS item defined in order\n"
@@ -8837,15 +8808,15 @@ msgstr "Снизу"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:41
 msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr ""
+msgstr "Quicken/QuickBooks (tm) US-Letter"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:42
 msgid "Deluxe(tm) Personal Checks US-Letter"
-msgstr ""
+msgstr "Deluxe(tm) личные чеки US-Letter"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:43
 msgid "Quicken(tm) Wallet Checks w/ side stub"
-msgstr ""
+msgstr "Quicken(tm) чеки для бумажника с корешком сбоку"
 
 #: ../src/gnome/gtkbuilder/dialog-progress.glade.h:1
 msgid "Working..."
@@ -8853,7 +8824,7 @@ msgstr "Выполняется..."
 
 #: ../src/gnome/gtkbuilder/dialog-progress.glade.h:2
 msgid "1234567890123456789012345678901234567890"
-msgstr ""
+msgstr "1234567890123456789012345678901234567890"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:1
 msgid "Account Deletion"
@@ -9013,9 +8984,8 @@ msgid "Template Transaction"
 msgstr "Шаблон проводки"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:40
-#, fuzzy
 msgid "Bi-Weekly"
-msgstr "Еженедельно"
+msgstr "Раз в две недели"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:44
 msgid "Since Last Run..."
@@ -9044,26 +9014,23 @@ msgstr "Количество событий:"
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:54
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:2
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:55
-#, fuzzy
 msgid "End: "
-msgstr "Конец:"
+msgstr "Конец: "
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:1
 msgid "Income Tax Information"
 msgstr "Информация о подоходном налоге"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:2
-#, fuzzy
 msgid "<b>Income Tax Identity</b>"
 msgstr "<b>Декларация о доходах</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:5
-#, fuzzy
 msgid "Click to change Tax Name and/or Tax Type."
-msgstr "Щёлкните, чтобы сменить название или тип налога"
+msgstr "Щёлкните, чтобы сменить название или тип налога."
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:6
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:14
@@ -9106,9 +9073,8 @@ msgid "_Select Subaccounts"
 msgstr "Выбрать субсчета"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:14
-#, fuzzy
 msgid "<b>Account Tax Information</b>"
-msgstr "<b>Информация о налоге</b>"
+msgstr "<b>Налоговая информация по счету</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:15
 msgid "Tax _Related"
@@ -9298,9 +9264,8 @@ msgstr "Выбрать все"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:24
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:25
-#, fuzzy
 msgid "Sa_ve Filter"
-msgstr "Сохранить %s в файл"
+msgstr "Сохранить фильтр"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:25
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:51
@@ -9313,9 +9278,8 @@ msgid "Reason for voiding transaction:"
 msgstr "Причина аннулирования проводки:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:5
-#, fuzzy
 msgid "_Transaction Number:"
-msgstr "Развернутый _журнал"
+msgstr "Номер проводки"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:26
 msgid "Sort register by..."
@@ -9326,39 +9290,34 @@ msgid "_Standard Order"
 msgstr "Обычны_й порядок"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:28
-#, fuzzy
 msgid "Keep normal account order."
-msgstr "Сохранять нормальный порядок счетов"
+msgstr "Сохранять нормальный порядок счетов."
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:30
 #: ../intl-scm/guile-strings.c:4550 ../intl-scm/guile-strings.c:4606
-#, fuzzy
 msgid "Sort by date."
-msgstr "Упорядочить по дате"
+msgstr "Упорядочить по дате."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:32
-#, fuzzy
 msgid "Sort by the date of entry."
-msgstr "Упорядочить по дате записи"
+msgstr "Упорядочить по дате записи."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:33
 msgid "S_tatement Date"
 msgstr "_Дата декларации"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:34
-#, fuzzy
 msgid "Sort by the statement date (unreconciled items last)."
-msgstr "Упорядочить по дате согласования (несогласованные пункты в конце)"
+msgstr "Упорядочить по дате согласования (несогласованные пункты в конце)."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:35
 msgid "Num_ber"
 msgstr "Номер"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:36
-#, fuzzy
 msgid "Sort by number."
-msgstr "Упорядочить по номеру"
+msgstr "Упорядочить по номеру."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:37
 msgid "Amo_unt"
@@ -9367,9 +9326,8 @@ msgstr "Сумма"
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:38
 #: ../intl-scm/guile-strings.c:4574 ../intl-scm/guile-strings.c:4630
-#, fuzzy
 msgid "Sort by amount."
-msgstr "Упорядочить по сумме"
+msgstr "Упорядочить по сумме."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:39
 msgid "_Memo"
@@ -9378,54 +9336,46 @@ msgstr "_Памятка"
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:40
 #: ../intl-scm/guile-strings.c:4590 ../intl-scm/guile-strings.c:4642
-#, fuzzy
 msgid "Sort by memo."
-msgstr "Упорядочить по памятке"
+msgstr "Упорядочить по памятке."
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:42
 #: ../intl-scm/guile-strings.c:4578 ../intl-scm/guile-strings.c:4634
-#, fuzzy
 msgid "Sort by description."
-msgstr "Упорядочить по описанию"
+msgstr "Упорядочить по описанию."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:43
 msgid "_Action"
 msgstr "_Действие"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:44
-#, fuzzy
 msgid "Sort by action field."
-msgstr "Упорядочить по действию"
+msgstr "Упорядочить по действию."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:45
 msgid "_Notes"
 msgstr "_Заметки"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:46
-#, fuzzy
 msgid "Sort by notes field."
-msgstr "Упорядочить по заметкам"
+msgstr "Упорядочить по заметкам."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:47
-#, fuzzy
 msgid "Sa_ve Sort Order"
-msgstr "Порядок сортировки"
+msgstr "Сохранить порядок сортировки"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
-#, fuzzy
 msgid "Save the sort order for this register."
-msgstr "Редактировать главный счет этого журнала"
+msgstr "Сохранить порядок сортировки для этого журнала."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:49
-#, fuzzy
 msgid "Reverse Order"
-msgstr "Порядок журнала"
+msgstr "Обратный порядок"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:50
-#, fuzzy
 msgid "Sort in descending order."
-msgstr "Упорядочить столбцы по возрастанию или убыванию"
+msgstr "Упорядочить в убывающем порядке."
 
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:1
 msgid "<b>Auto-Clear Information</b>"
@@ -9479,9 +9429,8 @@ msgid "New Transaction"
 msgstr "Новая проводка"
 
 #: ../src/gnome-search/dialog-search.c:1053
-#, fuzzy
 msgid "New Split"
-msgstr "Части"
+msgstr "Новая часть"
 
 #: ../src/gnome-search/dialog-search.c:1062
 msgid "New item"
@@ -9761,7 +9710,6 @@ msgid "No such price: %s"
 msgstr "Нет такой цены: %s"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:160
-#, fuzzy
 msgid ""
 "\n"
 "The file you are trying to load is from an older version of GnuCash. The "
@@ -9783,19 +9731,21 @@ msgid ""
 "Press 'Forward' now to select the correct character encoding for your data "
 "file.\n"
 msgstr ""
-"Открываемый файл от старой версии GnuCash. Формат старых файлов не содержал "
+"\n"
+"Файл, который вы пытаетесь открыть, имеет формат старой версии GnuCash. "
+"Формат старых файлов не содержал "
 "точного указания используемой кодировки символов. Это значит, что содержимое "
-"файла можно нельзя трактовать однозначно. К сожалению, указанную проблему "
-"решить автоматически нельзя, но, так как новый формат файлов GnuCash "
-"содержит все необходимые параметры, не придется повторять этот шаг снова.\n"
+"файла нельзя прочитать однозначно. К сожалению, указанную проблему "
+"решить автоматически нельзя, но, так как новый формат файлов GnuCash версии 2.0.0"
+"содержит все необходимые параметры, вам не придется повторять этот шаг снова.\n"
 "\n"
 "GnuCash попытается угадать правильную кодировку файла данных. На следующей "
-"странице будут показаны результаты. Нужно будет только определить, выглядят "
+"странице будут показаны результаты определения кодировки. Вам нужно проверить, выглядят "
 "ли слова так, как должны. Если все в порядке, то можно продолжить, нажав на "
-"\"Далее\". Если же текст выглядит некорректно, то потребуется выбрать другую "
+"\"Вперёд\". Если же текст выглядит некорректно, то потребуется выбрать другую "
 "кодировку вручную.\n"
 "\n"
-"Нажмите \"Далее\", чтобы подобрать подходящую кодировку файла данных."
+"Нажмите \"Далее\", чтобы подобрать подходящую кодировку файла данных.\n"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:180
 msgid "Ambiguous character encoding"
@@ -10064,7 +10014,7 @@ msgid ""
 "Commodity: "
 msgstr ""
 "\n"
-"Предмет: "
+"Товар: "
 
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
@@ -10084,7 +10034,7 @@ msgid ""
 "Mnemonic (Ticker symbol or similar): "
 msgstr ""
 "\n"
-"Обозначение (символ банкноты и т.п.): "
+"Обозначение (тикер, символ банкноты и т.п.): "
 
 #: ../src/gnome-utils/dialog-commodity.c:284
 msgid "Select security/currency"
@@ -10121,11 +10071,11 @@ msgstr "Информация о валюте"
 
 #: ../src/gnome-utils/dialog-commodity.c:1048
 msgid "Edit security"
-msgstr "Изменить валюту"
+msgstr "Изменить ценную бумагу"
 
 #: ../src/gnome-utils/dialog-commodity.c:1048
 msgid "New security"
-msgstr "Новая валюта"
+msgstr "Новая ценная бумага"
 
 #: ../src/gnome-utils/dialog-commodity.c:1049
 msgid "Security Information"
@@ -10138,7 +10088,7 @@ msgstr "Вы не можете создать новую национальну�
 #: ../src/gnome-utils/dialog-commodity.c:1338
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
-msgstr ""
+msgstr "%s является зарезервированным типом товара. Пожалуйста укажите что-нибудь другое."
 
 #: ../src/gnome-utils/dialog-commodity.c:1353
 msgid "That commodity already exists."
@@ -10154,9 +10104,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: ../src/gnome-utils/dialog-dup-trans.c:235
-#, fuzzy
 msgid "Action/Number:"
-msgstr "_Номер:"
+msgstr "Номер/Действие:"
 
 #: ../src/gnome-utils/dialog-file-access.c:295
 msgid "Open..."
@@ -10238,7 +10187,7 @@ msgstr "Сбросить все значения в исходные."
 
 #: ../src/gnome-utils/dialog-options.c:1450
 msgid "Page"
-msgstr ""
+msgstr "Страница"
 
 #: ../src/gnome-utils/dialog-options.c:2065
 msgid "Clear"
@@ -10400,7 +10349,7 @@ msgid "Save file automatically?"
 msgstr "Сохранить файл автоматически?"
 
 #: ../src/gnome-utils/gnc-autosave.c:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
@@ -10421,29 +10370,29 @@ msgid_plural ""
 "Should your file be saved automatically?"
 msgstr[0] ""
 "Файл данных должен быть записан на диск для сохранения изменений. GnuCash "
-"имеет возможность сохранять файл автоматически каждые %d минут, причем так "
-"же, как-будто была нажата кнопка \"сохранить\".\n"
+"имеет возможность сохранять файл автоматически каждую %d минуту, причем так "
+"же, как-будто была нажата кнопка \"Сохранить\".\n"
 "\n"
 "Вы можете изменить период времени или выключить эту возможность: \"Правка\" "
-"- \"Настройки\" - \"Основное\" - \"период между автосохранениями\".\n"
+"- \"Настройки\" - \"Основное\" - \"Период между автосохранениями\".\n"
 "\n"
 "Должен ли файл быть сохранен автоматически?"
 msgstr[1] ""
 "Файл данных должен быть записан на диск для сохранения изменений. GnuCash "
-"имеет возможность сохранять файл автоматически каждые %d минут, причем так "
-"же, как-будто была нажата кнопка \"сохранить\".\n"
+"имеет возможность сохранять файл автоматически каждые %d минуты, причем так "
+"же, как-будто была нажата кнопка \"Сохранить\".\n"
 "\n"
 "Вы можете изменить период времени или выключить эту возможность: \"Правка\" "
-"- \"Настройки\" - \"Основное\" - \"период между автосохранениями\".\n"
+"- \"Настройки\" - \"Основное\" - \"Период между автосохранениями\".\n"
 "\n"
 "Должен ли файл быть сохранен автоматически?"
 msgstr[2] ""
 "Файл данных должен быть записан на диск для сохранения изменений. GnuCash "
 "имеет возможность сохранять файл автоматически каждые %d минут, причем так "
-"же, как-будто была нажата кнопка \"сохранить\".\n"
+"же, как-будто была нажата кнопка \"Сохранить\".\n"
 "\n"
 "Вы можете изменить период времени или выключить эту возможность: \"Правка\" "
-"- \"Настройки\" - \"Основное\" - \"период между автосохранениями\".\n"
+"- \"Настройки\" - \"Основное\" - \"Период между автосохранениями\".\n"
 "\n"
 "Должен ли файл быть сохранен автоматически?"
 
@@ -10754,7 +10703,6 @@ msgstr ""
 "базы или Отмену, чтобы отметить её только для чтения."
 
 #: ../src/gnome-utils/gnc-file.c:425
-#, fuzzy
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
@@ -10762,7 +10710,8 @@ msgid ""
 msgstr ""
 "Эта база данных от более новой версии GnuCash. Её можно прочитать, но "
 "сохранять в неё небезопасно. Она будет отмечена только для чтения пока не "
-"будет сохранена под другим именем."
+"будет сохранена под другим именем, тем не менее при записи старой версией части данных "
+"может быть утеряна."
 
 #: ../src/gnome-utils/gnc-file.c:434
 msgid ""
