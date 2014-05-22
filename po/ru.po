@@ -10745,6 +10745,10 @@ msgid ""
 "your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
+"GnuCash не может завершить важный тест для проверки наличия ошибки в библиотеке "
+"\"libdbi\". Это может быть связано с неправильно настроенными правами доступа в вашей "
+"SQL БД. Более подробную информацию смотрите на странице "
+"https://bugzilla.gnome.org/show_bug.cgi?id=645216."
 
 #: ../src/gnome-utils/gnc-file.c:466
 msgid ""
@@ -10769,9 +10773,9 @@ msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] ""
-"Если вы не сохранитесь, изменения за последние %d минуту будут потеряны."
+"Если вы не сохранитесь, изменения за последнюю %d минуту будут потеряны."
 msgstr[1] ""
-"Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
+"Если вы не сохранитесь, изменения за последние %d минуты будут потеряны."
 msgstr[2] ""
 "Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
 
@@ -10881,14 +10885,12 @@ msgstr "GnuCash не может найти файлы документации."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:415
 #: ../src/gnome-utils/gnc-gnome-utils.c:440
-#, fuzzy
 msgid "GnuCash could not find the associated file."
-msgstr "GnuCash не может заблокировать \"%s\"."
+msgstr "GnuCash не может найти связанный файл."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:466
-#, fuzzy
 msgid "GnuCash could not open the associated URI:"
-msgstr "GnuCash не может заблокировать \"%s\"."
+msgstr "GnuCash не может открыть связаннфую ссылку."
 
 #: ../src/gnome-utils/gnc-icons.c:19
 msgid "_Delete Account"
@@ -10918,7 +10920,7 @@ msgstr "Введите имя пользователя и пароль для п
 #: ../src/gnome-utils/gnc-main-window.c:123
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
-msgstr ""
+msgstr "Изменений будут сохранены автоматически через %u секунд"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:260
@@ -11170,7 +11172,7 @@ msgstr "Выйти _без сохранения"
 #. document is, well, read-only.
 #: ../src/gnome-utils/gnc-main-window.c:1496
 msgid "(read-only)"
-msgstr ""
+msgstr "(только чтение)"
 
 #: ../src/gnome-utils/gnc-main-window.c:1504
 msgid "Unsaved Book"
@@ -11223,7 +11225,7 @@ msgstr ""
 "Виталий Липатов\n"
 "Владимир Турбаевский\n"
 "Сергей Беляшов\n"
-"Дмитрий Павлов"
+"Дмитрий Павлов <zeldigas@gmail.com>"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:71 ../intl-scm/guile-strings.c:156
@@ -11333,6 +11335,7 @@ msgid ""
 "You can not change this transaction, the Book or Register is set to Read "
 "Only."
 msgstr ""
+"Вы не можете изменить эту проводку так книга или журнал достпны только для чтения."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:131
 msgid "Save Transaction before proceeding?"
@@ -11408,15 +11411,16 @@ msgstr "Две валюты равноценно включают друг др�
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1256
 #: ../src/register/ledger-core/split-register.c:507
-#, fuzzy
 msgid "New Split Information"
-msgstr "<b>Информация о части</b>"
+msgstr "Информация по новой части"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1306
 msgid ""
 "This is the split anchoring this transaction to the register. You can not "
 "duplicate it from this register window."
 msgstr ""
+"Эта часть связыает проводку с журналом. Вы не можете продублировать её "
+"из окна текущего журнала."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1359
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:501
@@ -11449,9 +11453,8 @@ msgstr ""
 "Вы хотите вернуться чтобы отредактировать проводку или отменить сохранение?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1738
-#, fuzzy
 msgid "_Return"
-msgstr "Кап. возврат"
+msgstr "Вернуться"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1781
 #: ../src/register/ledger-core/split-register-control.c:1828
@@ -11507,7 +11510,7 @@ msgstr "_Изменить часть"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:2123
 msgid "You can not paste from the general ledger to a register."
-msgstr ""
+msgstr "Вы не можете вставлять проводки из главной книги в журнал."
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:630
 msgid "New top level account"
@@ -11685,9 +11688,8 @@ msgid "Fee"
 msgstr "Гонорар"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2915
-#, fuzzy
 msgid "ATM Withdraw"
-msgstr "Снято"
+msgstr "Снятие наличных"
 
 #. src/app-utils/prefs.scm
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2945
@@ -11896,7 +11898,7 @@ msgstr "Всего (период)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:867
 msgid "C"
-msgstr ""
+msgstr "Ц"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:877
 msgid "Account Color"
@@ -11969,7 +11971,7 @@ msgstr "Уникальное название"
 #. National Securities Identifying Number.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:421
 msgid "ISIN/CUSIP"
-msgstr ""
+msgstr "ISIN/CUSIP"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:427
 msgid "Fraction"
@@ -12035,9 +12037,8 @@ msgstr "Электронная почта"
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-owner.c:483
-#, fuzzy
 msgid "Column letter for 'Active'|A"
-msgstr "К"
+msgstr "А"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:425
 msgid "Security"
