@@ -2767,7 +2767,7 @@ msgstr "Вопрос"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:2
 msgid "Dummy message"
-msgstr ""
+msgstr "сообщение-заглушка"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:3
 msgid "postd"
@@ -12038,7 +12038,7 @@ msgstr "Электронная почта"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-owner.c:483
 msgid "Column letter for 'Active'|A"
-msgstr "А"
+msgstr "Д"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:425
 msgid "Security"
@@ -12123,14 +12123,12 @@ msgid "R"
 msgstr "С"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3006
-#, fuzzy
 msgid "Amount / Value"
-msgstr "Сумма к получению"
+msgstr "Сумма / Значение"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3026
-#, fuzzy
 msgid "Rate"
-msgstr "Налоговая ставка"
+msgstr "Курс"
 
 #. src/app-utils/prefs.scm
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
@@ -12183,9 +12181,8 @@ msgid "Debit Formula"
 msgstr "Формула дебита"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3263
-#, fuzzy
 msgid "Enter Due Date"
-msgstr "Дата оплаты"
+msgstr "Введите срок оплаты"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3274
 msgid "Enter the transaction reference, such as the invoice or check number"
@@ -12266,9 +12263,8 @@ msgid "* Indicates the transaction Commodity."
 msgstr "* Отображает товар проводки"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3401
-#, fuzzy
 msgid "Enter the rate"
-msgstr "Процентная ставка"
+msgstr "Введите курс"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3411
 #: ../src/register/ledger-core/split-register-model.c:1318
@@ -12400,9 +12396,8 @@ msgstr ""
 "за один раз."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:13
-#, fuzzy
 msgid "Edit account payable/accounts receivable register"
-msgstr "Принимающие счета"
+msgstr "Редактрировать журнал расчетного счета (на оплату/получение)"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:14
 msgid ""
@@ -12410,6 +12405,8 @@ msgid ""
 "accounts receivable account. These account types are reserved for the "
 "business features and should rarely be manipulated manually."
 msgstr ""
+"Этот диалог отображается прежде чем разрешить вам редактировать журнал "
+"счета на оплату или получение. Эти типы счетов зарезервированы для бизнес "
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:15
 msgid "Read only register"
@@ -12558,12 +12555,11 @@ msgstr "<b>Выбранные кодировки</b>"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:5
 msgid "Introduction placeholder"
-msgstr ""
+msgstr "Вводный заполнитель"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:6
-#, fuzzy
 msgid "Title placeholder"
-msgstr "Виртуальный"
+msgstr "Заполнитель заголовка"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:7
 msgid "_Edit list of encodings"
@@ -12578,9 +12574,8 @@ msgid "Convert the file"
 msgstr "Конвертировать файл"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:10
-#, fuzzy
 msgid "finish placeholder"
-msgstr "Виртуальный"
+msgstr "Заполнитель для конца"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:11
 msgid "Finish GnuCash Datafile Import"
@@ -14199,59 +14194,48 @@ msgid "31st"
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:58
-#, fuzzy
 msgid "Last day of month"
-msgstr "Последний день следующего месяца"
+msgstr "Последний день месяца"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:59
-#, fuzzy
 msgid "Last Monday"
-msgstr "Понедельник"
+msgstr "Последний понедельник"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:60
-#, fuzzy
 msgid "Last Tuesday"
-msgstr "Вторник"
+msgstr "Последний вторник"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:61
-#, fuzzy
 msgid "Last Wednesday"
-msgstr "Среда"
+msgstr "Последния среда"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:62
-#, fuzzy
 msgid "Last Thursday"
-msgstr "Четверг"
+msgstr "Последний четверг"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:63
-#, fuzzy
 msgid "Last Friday"
-msgstr "Пятница"
+msgstr "Последняя пятница"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:64
-#, fuzzy
 msgid "Last Saturday"
-msgstr "Суббота"
+msgstr "Последняя суббота"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:65
-#, fuzzy
 msgid "Last Sunday"
-msgstr "Воскресенье"
+msgstr "Последнее воскресенье"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:66
-#, fuzzy
 msgid "No change"
-msgstr "Чистое изменение цен"
+msgstr "Без изменений"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:67
-#, fuzzy
 msgid "Use previous weekday"
-msgstr "Конец предыдущего года"
+msgstr "Последний рабочий день до"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:68
-#, fuzzy
 msgid "Use next weekday"
-msgstr "та же неделя и день"
+msgstr "Первый рабочий день после"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:69
 msgid "1st Mon"
@@ -14370,18 +14354,16 @@ msgid "day(s)"
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:2
-#, fuzzy
 msgid "week(s)"
-msgstr "недель."
+msgstr "недель"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:3
-#, fuzzy
 msgid "month(s)"
-msgstr "месяцев."
+msgstr "месяцев"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:4
 msgid "year(s)"
-msgstr ""
+msgstr "лет"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:5
 msgid "Every "
@@ -15155,34 +15137,25 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:598
-#, fuzzy
 msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
 msgstr ""
 "Вы не ввели имя получателя. Оно необходимо для интернет-перевода.\n"
-"\n"
-"Желаете повторить ввод задания?"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:618
-#, fuzzy
 msgid ""
 "You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
 msgstr ""
-"Вы не ввели имя получателя. Оно необходимо для интернет-перевода.\n"
-"\n"
-"Желаете повторить ввод задания?"
+"Вы не ввели счет получателя. Он необходим для интернет-перевода.\n"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:634
-#, fuzzy
 msgid ""
 "You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
 msgstr ""
-"Вы не ввели имя получателя. Оно необходимо для интернет-перевода.\n"
-"\n"
-"Желаете повторить ввод задания?"
+"Вы не ввели банк получателя. Он необходим для интернет-перевода.\n"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:652
 msgid ""
@@ -15192,14 +15165,11 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:669
-#, fuzzy
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
 msgstr ""
 "Вы не ввели назначение платежа. Оно необходимо для интернет-перевода.\n"
-"\n"
-"Желаете повторить ввод задания?"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:691
 msgid ""
@@ -16608,9 +16578,8 @@ msgid "Enable SKIP transaction action"
 msgstr "Разрешить пропуск проводки"
 
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Enable UPDATE match action"
-msgstr "Включить действие обновить сравнение"
+msgstr "Включить обновление при сравнении"
 
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:5
 msgid "Use bayesian matching"
@@ -17509,19 +17478,17 @@ msgid "Update your GnuCash accounts"
 msgstr "Обновить ваши счета GnuCash"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:85
-#, fuzzy
 msgid "Summary Text"
-msgstr "Строка _итогов"
+msgstr "Сообщение с итогами импорта"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:86
-#, fuzzy
 msgid "Qif Import Summary"
-msgstr "Итого по счету"
+msgstr "Результаты импорта Qif"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:87
 #: ../src/report/report-gnome/dialog-report.glade.h:21
 msgid "Dummy"
-msgstr ""
+msgstr "Макет"
 
 #: ../src/import-export/qif-imp/dialog-account-picker.c:219
 msgid "Enter a name for the account"
@@ -17611,29 +17578,29 @@ msgid "%B %e, %Y"
 msgstr "%e %B %Y"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, PRICE_NOT_SET: id=%s\n"
-msgstr "Строка удалена, цена не задана: id=%s\n"
+msgstr "Строка %d удалена, цена не задана: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, QTY_NOT_SET: id=%s\n"
-msgstr "Строка удалена, QTY не задано: id=%s\n"
+msgstr "Строка %d удалена, QTY не задано: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:302
-#, fuzzy, c-format
+#,  c-format
 msgid "ROW %d DELETED, ID_NOT_SET\n"
-msgstr "Строка удалена, ID не задан\n"
+msgstr "Строка %d удалена, ID не задан\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:391
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, OWNER_NOT_SET: id=%s\n"
-msgstr "Строка удалена, производитель не задан: id=%s\n"
+msgstr "Строка %d удалена, владелец не задан: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
-msgstr "Строка удалена, производитель отсутствует: id=%s\n"
+msgstr "Строка %d удалена, производитель отсутствует: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:430
 #, c-format
@@ -17832,13 +17799,12 @@ msgstr "<b>4. Предпросмотр</b>"
 
 #. Menu Items
 #: ../src/plugins/example/gnc-plugin.example.c:50
-#, fuzzy
 msgid "example description..."
-msgstr "_Название или описание:"
+msgstr "пример описания..."
 
 #: ../src/plugins/example/gnc-plugin.example.c:51
 msgid "example tooltip"
-msgstr ""
+msgstr "пример всплывающей подсказки"
 
 #: ../src/register/ledger-core/split-register.c:184
 msgid ""
@@ -17964,7 +17930,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:241
 #: ../intl-scm/guile-strings.c:4070
 msgid "T-Num"
-msgstr ""
+msgstr "№"
 
 #: ../src/register/ledger-core/split-register-model.c:377
 #: ../src/register/ledger-core/split-register-model.c:401
@@ -18071,14 +18037,12 @@ msgid "List"
 msgstr "Список"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:412
-#, fuzzy
 msgid "You must select a report configuration to load."
-msgstr "Вы должны выбрать отчет для выполнения."
+msgstr "Вы должны выбрать настройки отчета для построения отчета."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:423
-#, fuzzy
 msgid "You must select a report configuration to delete."
-msgstr "Вы должны выбрать отчет для удаления."
+msgstr "Вы должны выбрать настройки отчета для удаления."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
 msgid "Unable to change report configuration name."
@@ -18385,9 +18349,8 @@ msgid "There are no options for this report."
 msgstr "Нет параметров для этого отчета."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1626
-#, fuzzy
 msgid "GnuCash-Report"
-msgstr "Параметры GnuCash"
+msgstr "GnuCash Отчет"
 
 #: ../src/report/report-gnome/window-report.c:103
 msgid "Set the report options you want using this dialog."
@@ -18451,18 +18414,16 @@ msgid "Manage your stock, bond and mutual fund accounts with ease"
 msgstr ""
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:6
-#, fuzzy
 msgid "Keep your small business' accounting up to date"
-msgstr "Сохранять нормальный порядок счетов"
+msgstr "Поддерживать бухгалтерию вашего малого бизнеса в актуальном состоянии"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:7
 msgid "Create accurate reports and graphs from your financial data"
 msgstr ""
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:8
-#, fuzzy
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "Настроить плановые проводки для выплат ссуды"
+msgstr "Настроить плановые проводки для упрощения повторяющихся трат"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:9
 msgid "QIF/OFX/HBCI Import, Transaction Matching"
@@ -18862,13 +18823,14 @@ msgstr "Укажите число дней после истечения кот�
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:118
+#, fuzzy
 msgid ""
 "Check to have split action field used in registers for 'Num' field in place "
 "of transaction number; transaction number shown as 'T-Num' on second line of "
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
 msgstr "Отметьте для использования поля с типом проводки для ввода номеров проводок. "
-"Номер проводки отображаемый как" 
+"Номер проводки отображаемый как \"№\" на второй строке реестра" 
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:120
@@ -19298,13 +19260,11 @@ msgstr "Класс налогов"
 
 #. src/import-export/qif-imp/qif-file.scm
 #: ../intl-scm/guile-strings.c:398
-#, fuzzy
 msgid "Category budget amount"
 msgstr "Категория суммы бюджета"
 
 #. src/import-export/qif-imp/qif-file.scm
 #: ../intl-scm/guile-strings.c:400
-#, fuzzy
 msgid "Account budget amount"
 msgstr "Счёт суммы бюджета"
 
