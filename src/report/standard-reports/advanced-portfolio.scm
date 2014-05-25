@@ -438,12 +438,13 @@
 		 )
 
             (define (my-exchange-fn fromunits tocurrency)
-              (if (and use-txn
-                       (gnc-commodity-equiv currency tocurrency)
+              (if (and (gnc-commodity-equiv currency tocurrency)
                        (gnc-commodity-equiv (gnc:gnc-monetary-commodity fromunits) commodity))
                     (gnc:make-gnc-monetary tocurrency
                       (gnc-numeric-mul (gnc:gnc-monetary-amount fromunits)
-                                       (gnc:gnc-monetary-amount price)
+                                       (if use-txn
+                                           (gnc:gnc-monetary-amount price)
+                                           (gnc-price-get-value price))
                                        currency-frac GNC-RND-ROUND))
                     (exchange-fn fromunits tocurrency)))
             
