@@ -1901,11 +1901,14 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
 {
     gchar *str;
     gchar *prefix;
-    gint interval, num_digits;
+    gint interval;
+    unsigned int num_digits = 1;
 
     prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
     interval = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
-    num_digits = log10(data->num_children * interval) + 1;
+    if (interval <= 0)
+	interval = 10;
+    num_digits = (unsigned int)log10((double)(data->num_children * interval)) + 1;
 
     str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval);
     gtk_label_set_text(GTK_LABEL(data->example1), str);
@@ -1941,7 +1944,8 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
     GList *children, *tmp;
     gchar *str;
     gchar *prefix;
-    gint interval, num_digits, i;
+    gint interval;
+    unsigned int num_digits, i;
 
     if (response == GTK_RESPONSE_OK)
     {
@@ -1951,6 +1955,9 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
         interval =
             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
         num_digits = log10(data->num_children * interval) + 1;
+	if (interval <= 0)
+	    interval = 10;
+        num_digits = (unsigned int)log10 ((double)(data->num_children * interval) + 1);
 
         gnc_set_busy_cursor (NULL, TRUE);
         for (tmp = children, i = 1; tmp; tmp = g_list_next(tmp), i += 1)
