@@ -53,7 +53,11 @@ try:
     import getopt
     import gnucash
     import str_methods
-    from IPython.Shell import IPShellEmbed
+    from IPython import version_info as IPython_version_info
+    if IPython_version_info[0]>=1:
+        from IPython.terminal.ipapp import TerminalIPythonApp
+    else:
+        from IPython.frontend.terminal.ipapp import TerminalIPythonApp
     from gnucash.gnucash_business import Customer, Employee, Vendor, Job, \
         Address, Invoice, Entry, TaxTable, TaxTableEntry, GNC_AMT_TYPE_PERCENT, \
             GNC_DISC_PRETAX
@@ -120,7 +124,7 @@ def invoice_to_lco(invoice):
   add_str=u""
   owner = invoice.GetOwner()
   if owner.GetName() != "":
-    add_str += owner.GetName()+"\n"
+    add_str += owner.GetName().decode("UTF-8")+"\n"
 
   addr  = owner.GetAddr()
   if addr.GetName() != "":
@@ -191,9 +195,10 @@ def main(argv=None):
         prog_name = argv[0]
         with_ipshell = False
         ignore_lock = False
-        no_latex_output = False
+        no_latex_output = True
         list_invoices = False
         output_file_name = "data.lco"
+        invoice_number = None
 
         try:
             opts, args = getopt.getopt(argv[1:], "fhiln:po:", ["help"])
@@ -215,12 +220,10 @@ def main(argv=None):
             if opt[0] in ["-n"]:
                 invoice_number = int(opt[1])
                 print "using invoice number", invoice_number
+                no_latex_output = False
             if opt[0] in ["-o"]:
                 output_file_name = opt[1]
-                print "using outpu file", output_file_name
-            if opt[0] in ["-p"]:
-                print "no latex output"
-                no_latex_output=True
+                print "using output file", output_file_name
         if len(args)>1:
             print "opts:",opts,"args:",args
             raise Usage("Only one input can be accepted !")
@@ -249,9 +252,8 @@ def main(argv=None):
         print "-h or --help   for this help"
         print "-i             for ipython shell"
         print "-l             list all invoices"
-        print "-n number      use invoice number (no. from previous run -l)"
+        print "-n number      use invoice number (no. from previous run with -l)"
         print "-o name        use name as outputfile. default: data.lco"
-        print "-p             pretend (=no) latex output"
 
         return retcode
 
@@ -294,8 +296,9 @@ def main(argv=None):
         f.close()
 
     if with_ipshell:
-        ipshell= IPShellEmbed()
-        ipshell()
+        app = TerminalIPythonApp.instance()
+        app.initialize(argv=[]) # argv=[] instructs IPython to ignore sys.argv
+        app.start()
 
     #session.save()
     session.end()
