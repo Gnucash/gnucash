@@ -28,7 +28,7 @@
 # Additional information :
 #
 # - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
-# 
+#
 # Credits to and ideas from
 #
 # - Main function as proposed by Guido van Rossum
@@ -61,7 +61,7 @@ try:
 except ImportError as import_error:
     print "Problem importing modules."
     print import_error
-    sys.exit(2) 
+    sys.exit(2)
 
 class Usage(Exception):
     def __init__(self, msg):
@@ -97,7 +97,7 @@ def invoice_to_lco(invoice):
   """returns a string which forms a lco-file for use with LaTeX"""
 
   lco_out=u"\ProvidesFile{data.lco}[]\n"
-  
+
   def write_variable(ukey, uvalue, replace_linebreak=True):
 
     outstr = u""
@@ -154,18 +154,18 @@ def invoice_to_lco(invoice):
   # Write the entries
   ent_str = u""
   locale.setlocale(locale.LC_ALL,"de_DE")
-  for n,ent in enumerate(invoice.GetEntries()): 
-      
+  for n,ent in enumerate(invoice.GetEntries()):
+
       line_str = u""
 
       if type(ent) != Entry:
         ent=Entry(instance=ent)                                 # Add to method_returns_list
-      
+
       descr = ent.GetDescription()
-      price = gnucash.GncNumeric(instance=ent.GetInvPrice()).to_double()
-      n     = gnucash.GncNumeric(instance=ent.GetQuantity())    # change gncucash_core.py
-     
-      uprice = locale.currency(price).rstrip(" EUR") 
+      price = ent.GetInvPrice().to_double()
+      n     = ent.GetQuantity()
+
+      uprice = locale.currency(price).rstrip(" EUR")
       un = unicode(int(float(n.num())/n.denom()))               # choose best way to format numbers according to locale
 
       line_str =  u"\Artikel{"
@@ -199,7 +199,7 @@ def main(argv=None):
             opts, args = getopt.getopt(argv[1:], "fhiln:po:", ["help"])
         except getopt.error, msg:
              raise Usage(msg)
-        
+
         for opt in opts:
             if opt[0] in ["-f"]:
                 print "ignoring lock"
@@ -234,7 +234,7 @@ def main(argv=None):
             print >>sys.stderr, "Error:",err.msg
             print >>sys.stderr, "for help use --help"
             retcode=2
-        
+
         print "Prints out all invoices that have corresponding lots."
         print
         print "Usage:"
@@ -242,8 +242,8 @@ def main(argv=None):
         print "Invoke with",prog_name,"input."
         print "where input is"
         print "   filename"
-        print "or file://filename" 
-        print "or mysql://user:password@host/databasename" 
+        print "or file://filename"
+        print "or mysql://user:password@host/databasename"
         print
         print "-f             force open = ignore lock"
         print "-h or --help   for this help"
@@ -252,7 +252,7 @@ def main(argv=None):
         print "-n number      use invoice number (no. from previous run -l)"
         print "-o name        use name as outputfile. default: data.lco"
         print "-p             pretend (=no) latex output"
-        
+
         return retcode
 
     # Try to open the given input
@@ -262,7 +262,7 @@ def main(argv=None):
         print "Problem opening input."
         print exception
         return 2
-    
+
     book = session.book
     root_account = book.get_root_account()
     comm_table = book.get_table()
@@ -280,11 +280,11 @@ def main(argv=None):
         if invoice_number == None:
             print "Using the first invoice:"
             invoice_number=0
-        
+
         invoice=invoice_list[invoice_number]
         print "Using the following invoice:"
         print invoice
-    
+
         lco_str=invoice_to_lco(invoice)
 
         # Opening output file
@@ -295,7 +295,7 @@ def main(argv=None):
 
     if with_ipshell:
         ipshell= IPShellEmbed()
-        ipshell() 
+        ipshell()
 
     #session.save()
     session.end()
