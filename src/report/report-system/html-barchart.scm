@@ -359,12 +359,12 @@
                          (push "var d")
                          (push series-index)
                          (push " = [];\n")))
-         (series-data-add (lambda (series-index x y)
+         (series-data-add (lambda (series-index date y)
                          (push (string-append
                                "  d"
                                (number->string series-index)
                                ".push(["
-                               (number->string x)
+                               "\"" date "\""
                                ", "
                                (number->string y)
                                "]);\n"))))
@@ -385,10 +385,12 @@
             (push (gnc:html-js-include "jqplot/jquery.min.js"))
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-js-include "jqplot/jqplot.barRenderer.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.categoryAxisRenderer.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
+
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
@@ -404,15 +406,17 @@
             (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
-                (let loop ((col 0) (rowcnt 1))
+                (let loop ((col 0) (rowcnt 0))
                   (series-data-start col)
                   (if (list? (car data))
                       (begin 
                         (set! cols (length (car data)))))    
                   (for-each
                     (lambda (row)
-                      (series-data-add col rowcnt
+                      (if (< rowcnt rows)
+                        (series-data-add col (list-ref (gnc:html-barchart-row-labels barchart) rowcnt)
                                        (ensure-numeric (list-ref-safe row col)))
+                      )
                       (set! rowcnt (+ rowcnt 1)))
                     data)
                   (series-data-end col (list-ref-safe (gnc:html-barchart-col-labels barchart) col))
@@ -441,7 +445,7 @@
                    },
                    axes: {
                        xaxis: {
-                           renderer: $.jqplot.CategoryAxisRenderer,
+                           renderer:$.jqplot.DateAxisRenderer,
                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                            tickOptions: {
                                angle: -30,
@@ -452,8 +456,9 @@
                            autoscale: true,
                        },
                    },
-                   highlighter: {
-                       tooltipContentEditor: formatTooltip,
+                   cursor:{
+                       show: true,
+                       zoom: true
                    }
                 };\n")
 
@@ -484,15 +489,6 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
-            (if (and (string? row-labels) (> (string-length row-labels) 0))
-              (begin 
-                (push "  options.axes.xaxis.ticks = [")
-                (for-each (lambda (val)
-                        (push "\"")
-                        (push val)
-                        (push "\","))
-                    (gnc:html-barchart-row-labels barchart))
-                (push "];\n")))
 
 
             (push "$.jqplot.config.enablePlugins = true;")
