@@ -36,7 +36,7 @@ gboolean text2bool( const gchar *text )
 
     temp = g_strdup( text );
     g_strstrip( temp );
-    if ((g_ascii_strcasecmp( temp, "yes" ) == 0) || (g_ascii_strcasecmp( temp, "true" ) == 0) ||
+    if ((g_ascii_strncasecmp( temp, "y",1 ) == 0) || (g_ascii_strncasecmp( temp, "t",1 ) == 0) ||
             (g_ascii_strcasecmp( temp, "1" ) == 0) || (g_ascii_strcasecmp( temp, "x" ) == 0))
         erg = TRUE;
     g_free( temp );

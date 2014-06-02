@@ -289,7 +289,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                                     row, id);
         }
         else
-        {
+        {   // TODO: If id is empty get the next one in the series.  Bug 731105 
             if (strlen (id) == 0)
             {
                 // no invoice id specified
@@ -488,7 +488,7 @@ void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
                           guint * n_invoices_updated,
-                          gchar * type, gchar * open_mode )
+                          gchar * type, gchar * open_mode, GString * info)
 {
     gboolean valid;
     GtkTreeIter iter;
@@ -508,6 +508,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     GtkWidget *dialog;
     Timespec today;
     InvoiceWindow *iw;
+    gchar *new_id = NULL;
 
     // these arguments are needed
     g_return_if_fail (store && book);
@@ -726,38 +727,46 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
 
         // handle auto posting of invoices
+    
+        
+        if (valid)
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
+        if (g_strcmp0 (id, new_id) != 0)
         {
-            gchar *new_id = NULL;
-            if (valid)
-                gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
-            if (g_strcmp0 (id, new_id) != 0)
+            // the next invoice id is different => try to autopost this invoice
+            if (qof_scan_date (date_posted, &day, &month, &year))
             {
-                // the next invoice id is different => try to autopost this invoice
-                if (qof_scan_date (date_posted, &day, &month, &year))
-                {
-                    // autopost this invoice
-                    gboolean auto_pay;
-                    Timespec d1, d2;
+                // autopost this invoice
+                gboolean auto_pay;
+                Timespec d1, d2;
 
-                    if (g_ascii_strcasecmp (type, "INVOICE") == 0)
-                        auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
-                    else
-                        auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
+                if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                    auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
+                else
+                    auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-                    d1 = gnc_dmy2timespec (day, month, year);
-                    // FIXME: Must check for the return value of qof_scan_date!
-                    qof_scan_date (due_date, &day, &month, &year);	// obtains the due date, or leaves it at date_posted
-                    d2 = gnc_dmy2timespec (day, month, year);
-                    acc = gnc_account_lookup_for_register
-                          (gnc_get_current_root_account (), account_posted);
-                    gncInvoicePostToAccount (invoice, acc, &d1, &d2,
-                                             memo_posted,
-                                             text2bool (accumulatesplits),
-                                             auto_pay);
-                }
+                d1 = gnc_dmy2timespec (day, month, year);
+                // FIXME: Must check for the return value of qof_scan_date!
+                qof_scan_date (due_date, &day, &month, &year);	// obtains the due date, or leaves it at date_posted
+                d2 = gnc_dmy2timespec (day, month, year);
+                acc = gnc_account_lookup_for_register
+                      (gnc_get_current_root_account (), account_posted);
+                gncInvoicePostToAccount (invoice, acc, &d1, &d2,
+                                         memo_posted,
+                                         text2bool (accumulatesplits),
+                                         auto_pay);
             }
-            g_free (new_id);
+            else
+            {
+                PERR("Date format invalid in invoice import CSV.");
+                // Also report to user in dialog.
+                g_string_append_printf (info,
+                                        _("Date format invalid in invoice import CSV.")
+                                        );
+            }
         }
+        g_free (new_id);
+        
 
         // cleanup
         g_free (id);
