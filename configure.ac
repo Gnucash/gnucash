@@ -392,12 +392,6 @@ update to latest  darwin])
           ], [AC_MSG_RESULT(no)])
         LIBS="${saved_LIBS}"
         AC_SUBST(HTMLHELP_LIBS)
-
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-#include <stdio.h>
-	 ], [
-    printf("%lld\n", 3);
-         ])],[],[AC_DEFINE([__USE_MINGW_ANSI_STDIO], 1, [MinGW needs ANSI_STDIO hack.])])
         ;;
       *)
         AC_MSG_RESULT(no)
