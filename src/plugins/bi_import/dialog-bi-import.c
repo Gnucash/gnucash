@@ -233,11 +233,16 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 {
     GtkTreeIter iter;
     gboolean valid, row_deleted, row_fixed;
-    gchar *id, *date_opened, *date_posted, *owner_id, *date, *quantity, *price;
+    gchar *id, *date_opened, *date_posted, *due_date, *owner_id, *date, *quantity, *price;
     GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
     guint dummy;
     gint row = 1;
+    const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
+    
+    
+    //date_format_string = qof_date_format_get_string (qof_date_format_get());	
 
+    DEBUG("date_format_string: %s",date_format_string);
     // allow the call to this function with only GtkListeStore* specified
     if (!fixed)
         fixed = &dummy;
@@ -265,6 +270,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                             ID, &id,
                             DATE_OPENED, &date_opened,
                             DATE_POSTED, &date_posted,
+                            DUE_DATE, &due_date,
                             OWNER_ID, &owner_id,
                             DATE, &date,
                             QUANTITY, &quantity, PRICE, &price, -1);
@@ -279,6 +285,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                                     _("ROW %d DELETED, PRICE_NOT_SET: id=%s\n"),
                                     row, id);
         }
+        // TODO: QTY get set to 1 later if field is empty.  Delete this section?
         else if (strlen (quantity) == 0)
         {
             // invalid row (no quantity given)
@@ -324,7 +331,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         {
             // the row is valid (price and id are valid)
 
-            if (strlen (date_opened) == 0)
+            if(!isDateValid(date_opened))
             {
                 if (prev_date_opened->len == 0)
                 {
@@ -333,7 +340,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     GDate date;
                     g_date_clear (&date, 1);
                     gnc_gdate_set_today (&date);
-                    g_date_strftime (temp, 20, "%x", &date);	// create a locale specific date string
+                    g_date_strftime (temp, 20, date_format_string, &date);	// Create a user specified date string.
                     g_string_assign (prev_date_opened, temp);
                 }
                 // fix this by using the previous date_opened value (multi line invoice)
@@ -349,8 +356,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 
             // date_opened is valid
 
-            if (strlen (date_posted) == 0)
-            {
+             if(!isDateValid(date_posted))
+             {
                 if (prev_date_posted->len == 0)
                 {
                     // this invoice will have to get posted manually
@@ -370,13 +377,25 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             }
 
             // date_posted is valid
-
+            /*
+            // Check if due date is valid.  Set it to date_posted if not valid or missing.
+            if(!isDateValid(due_date))
+            {
+                gtk_list_store_set (store, &iter, DUE_DATE,
+                                        date_posted, -1);
+                row_fixed = TRUE;
+                
+            }
+            
+            // due_date is valid
+            */
             if (strlen (quantity) == 0)
             {
                 // quantity is unset => set to 1
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
+            
 
             // quantity is valid
 
@@ -566,12 +585,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             invoice = gnc_search_bill_on_id (book, id);
         else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
             invoice = gnc_search_invoice_on_id (book, id);
-        PINFO( "Existing %s ID: %s\n", type, gncInvoiceGetID(invoice));
+        DEBUG( "Existing %s ID: %s\n", type, gncInvoiceGetID(invoice));
 
         // If the search is empty then there is no existing invoice so make a new one
         if (invoice == NULL)
         {
-             PINFO( "Creating a new : %s\n", type );
+             DEBUG( "Creating a new : %s\n", type );
             // new invoice
             invoice = gncInvoiceCreate (book);
             /* Protect against thrashing the DB and trying to write the invoice
@@ -756,14 +775,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                          text2bool (accumulatesplits),
                                          auto_pay);
             }
-            else
-            {
-                PERR("Date format invalid in invoice import CSV.");
-                // Also report to user in dialog.
-                g_string_append_printf (info,
-                                        _("Date format invalid in invoice import CSV.")
-                                        );
-            }
+
         }
         g_free (new_id);
         
