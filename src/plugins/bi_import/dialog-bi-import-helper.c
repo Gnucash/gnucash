@@ -25,6 +25,10 @@
 
 #include "dialog-bi-import-helper.h"
 #include <ctype.h>
+#include <time.h>
+#ifndef HAVE_STRPTIME
+#include <strptime.h>
+#endif
 
 //! \brief helper function
 gboolean text2bool( const gchar *text )
