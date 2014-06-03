@@ -170,6 +170,8 @@ AC_CHECK_FUNCS(setenv,,[
 ])
 
 STRUCT_TM_GMTOFF_CHECK
+cflags_save=${CFLAGS}
+CFLAGS="${CFLAGS} -Wall -Werror"
 SCANF_LLD_CHECK
 if test x$am_cv_scanf_lld = "xno"; then
   SCANF_QD_CHECK
@@ -181,6 +183,7 @@ if test x$am_cv_scanf_lld = "xno"; then
     fi
   fi
 fi
+CFLAGS="${cflags_save}"
 
 # test whether we are building directly from svn/svk/git/bzr
 AC_MSG_CHECKING(if building from an scm managed directory)
