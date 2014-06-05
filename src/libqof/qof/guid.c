@@ -29,6 +29,7 @@
 # include <sys/types.h>
 #endif
 #include <ctype.h>
+#include <stdint.h>
 #ifdef HAVE_DIRENT_H
 # include <dirent.h>
 #endif
@@ -248,7 +249,7 @@ init_from_file(const char *filename, size_t max_size)
 
 #ifdef HAVE_SCANF_LLD
     PINFO ("guid_init got %" G_GUINT64_FORMAT " bytes from %s",
-	   (unsigned long long int) file_bytes,
+	   (uint64_t) file_bytes,
            filename);
 #else
     PINFO ("guid_init got %lu bytes from %s", (unsigned long int) file_bytes,
@@ -514,12 +515,12 @@ guid_init(void)
     /* time in secs and clock ticks */
     bytes += init_from_time();
 
-    PINFO ("got %" G_GUINT64_FORMAT " bytes", (unsigned long long int) bytes);
+    PINFO ("got %" G_GUINT64_FORMAT " bytes", (uint64_t) bytes);
 
     if (bytes < THRESHOLD)
         PWARN("only got %" G_GUINT64_FORMAT " bytes.\n"
               "The identifiers might not be very random.\n",
-              (unsigned long long int)bytes);
+              (uint64_t)bytes);
 
     guid_initialized = TRUE;
     LEAVE();
