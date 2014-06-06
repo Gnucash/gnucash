@@ -272,6 +272,8 @@ msgid ""
 "Set the prefix for gsettings schemas for gsettings queries. This can be "
 "useful to have a different settings tree while debugging."
 msgstr ""
+"Устанавливает префикс для настроек gsettings. Это может быть полезно для того, "
+"чтобы иметь различные наборы настроек при отладке."
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -903,16 +905,14 @@ msgstr "Всего удержано:"
 #: ../intl-scm/guile-strings.c:1152 ../intl-scm/guile-strings.c:1154
 #: ../intl-scm/guile-strings.c:1156 ../intl-scm/guile-strings.c:1334
 #: ../intl-scm/guile-strings.c:1336 ../intl-scm/guile-strings.c:1338
-#, fuzzy
 msgid "Credit Note"
-msgstr "Кредитный счет"
+msgstr "Сторно"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1896
 #: ../src/business/business-gnome/dialog-invoice.c:1915
 #: ../src/business/business-gnome/dialog-invoice.c:1934
-#, fuzzy
 msgid "New Credit Note"
-msgstr "Кредитный счет"
+msgstr "Новое сторно"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1897
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:275
@@ -924,9 +924,8 @@ msgstr "Новый счет-фактура"
 #: ../src/business/business-gnome/dialog-invoice.c:1902
 #: ../src/business/business-gnome/dialog-invoice.c:1921
 #: ../src/business/business-gnome/dialog-invoice.c:1940
-#, fuzzy
 msgid "Edit Credit Note"
-msgstr "Изменить параметры отчета"
+msgstr "Изменить сторно"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1903
 msgid "Edit Invoice"
@@ -935,9 +934,8 @@ msgstr "Изменить счет-фактуру"
 #: ../src/business/business-gnome/dialog-invoice.c:1906
 #: ../src/business/business-gnome/dialog-invoice.c:1925
 #: ../src/business/business-gnome/dialog-invoice.c:1944
-#, fuzzy
 msgid "View Credit Note"
-msgstr "Просмотреть/изменить операцию"
+msgstr "Просмотреть сторно"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1907
 msgid "View Invoice"
@@ -993,9 +991,8 @@ msgid "Voucher ID"
 msgstr "ID товарного чека"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2814
-#, fuzzy
 msgid "Date of duplicated entries"
-msgstr "Дублировать запись"
+msgstr "Дата дублированных записей"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2849
 msgid "Do you really want to post these invoices?"
@@ -1024,9 +1021,8 @@ msgstr "Ввести"
 #: ../src/business/business-gnome/dialog-invoice.c:2919
 #: ../src/business/business-gnome/dialog-invoice.c:2928
 #: ../src/business/business-gnome/dialog-invoice.c:2939
-#, fuzzy
 msgid "Printable Report"
-msgstr "Одиночный отчет"
+msgstr "Отчет для печати"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2924
 #: ../src/business/business-gnome/dialog-invoice.c:3188
@@ -1212,7 +1208,7 @@ msgstr "Найти счет-фактуру"
 #. the condition "Is this invoice a Credit Note?"
 #: ../src/business/business-gnome/dialog-invoice.c:3198
 msgid "CN?"
-msgstr ""
+msgstr "Ст?"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -1245,7 +1241,7 @@ msgstr "Сумма"
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
 #: ../src/business/business-gnome/dialog-invoice.c:3254
-#, fuzzy, c-format
+#, c-format
 msgid "The following bill is due:"
 msgid_plural "The following %d bills are due:"
 msgstr[0] "Следующий %d счёт должен быть оплачен к:"
@@ -1368,18 +1364,16 @@ msgid "Find Order"
 msgstr "Найти заказ"
 
 #: ../src/business/business-gnome/dialog-payment.c:182
-#, fuzzy
 msgid "You must enter a valid account name for posting."
-msgstr "Необходимо ввести название счета для зачисления."
+msgstr "Необходимо ввести корректное название счета для ввода."
 
 #: ../src/business/business-gnome/dialog-payment.c:190
 msgid "You must select a company for payment processing."
 msgstr "Вы должны выбрать фирму для осуществления платежа."
 
 #: ../src/business/business-gnome/dialog-payment.c:198
-#, fuzzy
 msgid "You must select at least one document or pre-payment to process."
-msgstr "Вы должны выбрать хотя бы один счет для оценки."
+msgstr "Вы должны выбрать хотя бы один документ или предоплату для обработки."
 
 #: ../src/business/business-gnome/dialog-payment.c:217
 msgid "You must select a transfer account from the account tree."
@@ -1409,7 +1403,6 @@ msgstr ""
 "или платеж?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:214
-#, fuzzy
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
 "company) you should enter the same value for:\n"
@@ -1417,7 +1410,9 @@ msgid ""
 "Payment Address - Name."
 msgstr ""
 "Вы должны ввести название фирмы. Если поставщик является физическим лицом, "
-"необходимо идентично заполнить поля \"название фирмы\" и \"контактное лицо\"."
+"необходимо ввести одинаковые значения для:\n"
+"Идентификация - Название фирмы, и\n"
+"Назначение платежа - Название."
 
 #: ../src/business/business-gnome/dialog-vendor.c:226
 msgid "You must enter a payment address."
@@ -1988,14 +1983,12 @@ msgid "Create a new employee"
 msgstr "Создать нового работника"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:173
-#, fuzzy
 msgid "_Delete Owner..."
-msgstr "Удалить счет..."
+msgstr "Удалить владельца..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:174
-#, fuzzy
 msgid "Delete selected owner"
-msgstr "Удалить выбранный счет"
+msgstr "Удалить выбранного владельца"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:181
 #: ../src/gnome/gnc-plugin-page-account-tree.c:230
@@ -2196,7 +2189,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:7
 msgid "Auto pay when posting."
-msgstr ""
+msgstr "Автоматически оплачивать при вводе"
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:8
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:26
@@ -2207,6 +2200,12 @@ msgid ""
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
+"Во время ввода, автоматически пытаться провести оплату документов клиента с "
+"неоплаченным авансом и обратными документами. "
+"Аванс и документы должны быть для одного и того же клиента. "
+"Обратными называются документы с обратным знаком. Например, для счета-фактуры обратными "
+"документами являются стонзо и отрицательные счета-фактуры."
+
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:9
 msgid "Enable extra toolbar buttons for business"
@@ -2264,6 +2263,11 @@ msgid ""
 "opposite sign. For example for a bill, vendor credit notes and negative "
 "bills are considered counter documents."
 msgstr ""
+"Во время ввода, автоматически пытаться провести оплату документов поставщика с "
+"неоплаченным авансом и обратными документами. "
+"Аванс и документы должны быть для одного и того же поставщика. "
+"Обратными называются документы с обратным знаком. Например, для счета-фактуры обратными "
+"документами являются стонзо и отрицательные счета-фактуры."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:18
 msgid "Show bills due reminder at startup"
@@ -2419,11 +2423,11 @@ msgstr "Отчет для печати:"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:25
 msgid "Auto pay on post_ing"
-msgstr ""
+msgstr "Автоматически оплачивать при вводе"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:27
 msgid "Auto _pay on posting"
-msgstr ""
+msgstr "Автоматически оплачитвать при вводе"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:1
 msgid "Cancel your changes"
@@ -2789,7 +2793,7 @@ msgstr "вопрос"
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:26
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:45
 msgid "label"
-msgstr ""
+msgstr "метка"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:2
 msgid "Employee Number: "
@@ -3130,7 +3134,7 @@ msgstr "Платеж"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:18
 msgid "Refund"
-msgstr ""
+msgstr "Возврат средств"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
@@ -3607,23 +3611,20 @@ msgid "Is the tax already included in the price of this entry?"
 msgstr "Включен ли налог в цену данной позиции?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:751
-#, fuzzy
 msgid "Is this entry invoiced?"
 msgstr "Включена ли эта позиция в счет-фактуру?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:757
-#, fuzzy
 msgid "Is this entry credited?"
-msgstr "Включена ли эта позиция в счет-фактуру?"
+msgstr "Включена ли эта позиция в сторно?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:761
 msgid "Include this entry on this invoice?"
 msgstr "Включить эту позицию в счет-фактуру?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:765
-#, fuzzy
 msgid "Include this entry on this credit note?"
-msgstr "Включить эту позицию в счет-фактуру?"
+msgstr "Включить эту позицию в сторно?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:768
 msgid "Unknown EntryLedger Type"
@@ -3872,11 +3873,11 @@ msgstr " (закрыто)"
 #. Strings used when creating splits later on.
 #: ../src/engine/gncOwner.c:886
 msgid "Lot Link"
-msgstr ""
+msgstr "Ссылка на набор"
 
 #: ../src/engine/gncOwner.c:887
 msgid "Internal link between invoice and payment lots"
-msgstr ""
+msgstr "Внутренняя ссылка между счетом-фактур и платежом"
 
 #. translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: ../src/engine/Recurrence.c:487
@@ -4684,7 +4685,7 @@ msgstr ""
 msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
-msgstr ""
+msgstr "Замечание: если вы уже приняли изменения в шаблон, отмена не отменит их."
 
 #: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1371
 msgid "(never)"
@@ -4778,12 +4779,10 @@ msgid "Created Transactions"
 msgstr "Созданные проводки"
 
 #: ../src/gnome/dialog-tax-info.c:284
-#, fuzzy
 msgid "Last Valid Year: "
 msgstr "Последний верный год: "
 
 #: ../src/gnome/dialog-tax-info.c:285
-#, fuzzy
 msgid "Form Line Data: "
 msgstr "Строчные данные формы: "
 
@@ -4825,9 +4824,8 @@ msgid "Expenses"
 msgstr "Расходы"
 
 #: ../src/gnome/gnc-budget-view.c:357
-#, fuzzy
 msgid "Transfers"
-msgstr "Перевести"
+msgstr "Переводы"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/balsheet-eg.eguile.scm
@@ -6319,7 +6317,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:5
 msgid "Number of checks to print on the first page."
-msgstr ""
+msgstr "Число чеков, печатаемых на первой странице."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:6
 msgid "Date format to use"
@@ -10757,6 +10755,10 @@ msgid ""
 "older version of Gnucash (it will report an \"error parsing the file\"). If "
 "you wish to preserve the old version, exit without saving."
 msgstr ""
+"Этот файл от более ранней версии GnuCash и он будет обновлен при сохранении этой "
+"версией. Вы не сможете прочитать вновь сохраненный файл из старой версии (она "
+"выдаст ошибку \"ошибка при обработке файла\"). "
+"Если вы хотите сохранить совместимость со старой версией, выйдите без сохранения."
 
 #: ../src/gnome-utils/gnc-file.c:477
 #, c-format
@@ -13014,6 +13016,8 @@ msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
 msgstr ""
+"Введите символ для отображения. Это поле можно не заполнять, в этом случае "
+"будет использован тикер или ISO код валюты."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:25
 msgid "_Display symbol"
@@ -13025,7 +13029,7 @@ msgstr "<b>Формат даты:</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:2
 msgid "Open _Read-Only"
-msgstr ""
+msgstr "Открыть только для чтения"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:3
 msgid "<b>File</b>"
@@ -13403,11 +13407,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:97
 msgid "Time to wait for answer:"
-msgstr ""
+msgstr "Время для ожидания ответа:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:99
 msgid "seconds"
-msgstr ""
+msgstr "секунд"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:101
 msgid "<b>Checks</b>"
@@ -13981,23 +13985,23 @@ msgstr "Формат даты:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:14
 msgid "US (12/31/2001)"
-msgstr ""
+msgstr "США (12/31/2001)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:15
 msgid "UK (31/12/2001)"
-msgstr ""
+msgstr "Великобритания (31/12/2001)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:16
 msgid "Europe (31.12.2001)"
-msgstr ""
+msgstr "Европа (31.12.2001)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:17
 msgid "ISO (2001-12-31)"
-msgstr ""
+msgstr "ISO (2001-12-31)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:18
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:3
 msgid "Not scheduled"
@@ -14401,7 +14405,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:2
 msgid "Only show _active owners"
-msgstr ""
+msgstr "Показывать только активных владельцев"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:3
 msgid "Show _zero balance owners"
@@ -15271,6 +15275,10 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"Во время проведения операции произошла ошибка. Пожалуйста посмотрите окно журнала "
+"для детального сообщения об ошибке.\n"
+"\n"
+"Вы хотите ввести операцию заново?.\n"
 
 #. src/import-export/qif-imp/qif-dialog-utils.scm
 #: ../src/import-export/aqb/gnc-ab-utils.c:409 ../intl-scm/guile-strings.c:348
@@ -22411,6 +22419,9 @@ msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
+"Некоторые найденные отчеты хранятся в устаревшем формате. Этот формат "
+"больше не поддерживается, поэтому эти отчеты могли быть восстановлены "
+"некорректно."
 
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/account-piecharts.scm
