@@ -24,6 +24,11 @@
 #endif
 
 #include "dialog-bi-import-helper.h"
+#include <ctype.h>
+#include <time.h>
+#ifndef HAVE_STRPTIME
+#include <strptime.h>
+#endif
 
 //! \brief helper function
 gboolean text2bool( const gchar *text )
@@ -36,11 +41,28 @@ gboolean text2bool( const gchar *text )
 
     temp = g_strdup( text );
     g_strstrip( temp );
-    if ((g_ascii_strcasecmp( temp, "yes" ) == 0) || (g_ascii_strcasecmp( temp, "true" ) == 0) ||
+    if ((g_ascii_strncasecmp( temp, "y",1 ) == 0) || (g_ascii_strncasecmp( temp, "t",1 ) == 0) ||
             (g_ascii_strcasecmp( temp, "1" ) == 0) || (g_ascii_strcasecmp( temp, "x" ) == 0))
         erg = TRUE;
     g_free( temp );
     return erg;
+}
+
+
+//! \brief helper function
+// Try to make a valid tm using the user set date format.  Return false if it fails.
+gboolean
+isDateValid(char * date_string)
+{
+    char  *tmp;
+    const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
+    
+    struct tm time_struct;
+    memset(&time_struct, 0, sizeof(struct tm));
+
+   tmp = strptime(date_string, date_format_string, &time_struct);
+   if (tmp == NULL) return FALSE;
+   return TRUE; 
 }
 
 //! \brief helper function

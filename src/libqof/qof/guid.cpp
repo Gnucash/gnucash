@@ -34,6 +34,7 @@ extern "C"
 # include <sys/types.h>
 #endif
 #include <ctype.h>
+#include <stdint.h>
 #ifdef HAVE_DIRENT_H
 # include <dirent.h>
 #endif
@@ -256,7 +257,8 @@ init_from_file(const char *filename, size_t max_size)
     file_bytes = init_from_stream(fp, max_size);
 
 #ifdef HAVE_SCANF_LLD
-    PINFO ("guid_init got %llu bytes from %s", (unsigned long long int) file_bytes,
+    PINFO ("guid_init got %" G_GUINT64_FORMAT " bytes from %s",
+	   (uint64_t) file_bytes,
            filename);
 #else
     PINFO ("guid_init got %lu bytes from %s", (unsigned long int) file_bytes,
@@ -522,21 +524,12 @@ guid_init(void)
     /* time in secs and clock ticks */
     bytes += init_from_time();
 
-#ifdef HAVE_SCANF_LLD
-    PINFO ("got %llu bytes", (unsigned long long int) bytes);
+    PINFO ("got %" G_GUINT64_FORMAT " bytes", (uint64_t) bytes);
 
     if (bytes < THRESHOLD)
-        PWARN("only got %llu bytes.\n"
+        PWARN("only got %" G_GUINT64_FORMAT " bytes.\n"
               "The identifiers might not be very random.\n",
-              (unsigned long long int)bytes);
-#else
-    PINFO ("got %lu bytes", (unsigned long int) bytes);
-
-    if (bytes < THRESHOLD)
-        PWARN("only got %lu bytes.\n"
-              "The identifiers might not be very random.\n",
-              (unsigned long int)bytes);
-#endif
+              (uint64_t)bytes);
 
     guid_initialized = TRUE;
     LEAVE();
