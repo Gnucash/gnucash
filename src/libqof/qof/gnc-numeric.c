@@ -42,13 +42,15 @@
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
 			       10000000, 100000000, 1000000000, 10000000000,
 			       100000000000, 1000000000000, 10000000000000,
-			       100000000000000, 10000000000000000};
+			       100000000000000, 10000000000000000,
+			       100000000000000000, 1000000000000000000,
+			       10000000000000000000};
 #define POWTEN_OVERFLOW -5
 
 static inline gint64
 powten (int exp)
 {
-    if (exp > 16 || exp < -16)
+    if (exp > 19 || exp < -19)
 	return POWTEN_OVERFLOW;
     return exp < 0 ? -pten[-exp] : pten[exp];
 }
@@ -1161,6 +1163,9 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
     gint64 frac_int = 0;
     double logval;
     double sigfigs;
+
+    if (isnan (in) || fabs (in) > 1e18)
+	return gnc_numeric_error (GNC_ERROR_OVERFLOW);
 
     if ((denom == GNC_DENOM_AUTO) && (how & GNC_HOW_DENOM_SIGFIG))
     {
