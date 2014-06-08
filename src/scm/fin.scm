@@ -33,26 +33,22 @@
 ;; interest payment amount:
 (define (gnc:ipmt rate per nper pv fv type)
   (* -1 (* rate
-           (- 0 (calc-principal pv
-                                (calc-pmt rate nper pv fv type)
-                                rate (- per 1)))
-        ))
+	   (- 0 (calc-principal pv
+				(calc-pmt rate nper pv fv type)
+				rate (- (if (> per nper) nper per) 1)))))
 )
 
 ;; principal payment amount:
 (define (gnc:ppmt rate per nper pv fv type)
   (let* ((pmt (calc-pmt rate nper pv fv type))
-         (ipmt (* rate
-                  (calc-principal pv pmt rate (- per 1)))))
-    (* -1 (-
-           pmt
-           (* -1 ipmt))))
+         (ipmt (gnc:ipmt rate per nper pv fv type)))
+    (* -1 (- pmt (* -1 ipmt))))
 )
 
 ;; payment amount:
 (define (gnc:pmt rate nper pv fv type)
-  (* -1 (calc-pmt rate nper pv fv type)))
-
+  (* -1 (calc-pmt rate nper pv fv type))
+)
 
 ;; 2 functions from http://lists.gnucash.org/pipermail/gnucash-user/2005-February/012964.html
 ;; future value of deposits with compound interests:
