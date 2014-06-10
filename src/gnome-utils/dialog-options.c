@@ -1637,7 +1637,7 @@ gnc_option_set_ui_widget_string (GNCOption *option, GtkBox *page_box,
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(*enclosing), value, TRUE, TRUE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
