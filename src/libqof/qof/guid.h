@@ -29,6 +29,10 @@ extern "C"
 {
 #endif
 
+typedef struct _gncGuid {
+    unsigned char reserved[16];
+} GncGUID;
+
 #include <stddef.h>
 #include <glib-object.h>
 
@@ -56,14 +60,6 @@ extern "C"
 
 /** The type used to store guids */
 #define GUID_DATA_SIZE	16
-typedef union GNC_INTERNAL_GUID
-{
-    guchar data[GUID_DATA_SIZE];
-
-    gint __align_me; /* this just ensures that GUIDs are 32-bit
-                   * aligned on systems that need them to be. */
-} GncGUID;
-
 
 #define GNC_TYPE_GUID (gnc_guid_get_type())
 #define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
@@ -105,7 +101,7 @@ void guid_shutdown (void);
  * you'd still have less than a one-in-a-million chance of coming up
  * with a duplicate id.  2^128 == 10^38 is a really really big number.)
  */
-void guid_new(GncGUID *guid);
+void guid_new (GncGUID *guid);
 
 /** Generate a new id. If no initialization function has been called,
  *  guid_init() will be called before the id is created.
@@ -113,16 +109,24 @@ void guid_new(GncGUID *guid);
  * @return guid A data structure containing a newly allocated GncGUID.
  *  Caller is responsible for calling guid_free().
  */
-GncGUID guid_new_return(void);
+GncGUID guid_new_return (void);
 
 /** Returns a GncGUID which is guaranteed
 to never reference any entity. */
 const GncGUID * guid_null (void);
 
-/** Efficiently allocate & free memory for GUIDs */
+/** Efficiently allocate & free memory for GUIDs
+ *  XXX This routine is deprecated. Please use guid_new_return_ptr
+ * instead.
+*/
 GncGUID * guid_malloc (void);
 
-/* Return a guid set to all zero's */
+/** Allocate and initialize a new guid, and return
+a pointer to it. Caller must call guid_free after to
+release this pointer*/
+GncGUID * guid_new_ptr_return (void);
+
+/*Free the guid pointed to. Do not use this guid any more.*/
 void   guid_free (GncGUID *guid);
 
 GncGUID *guid_copy (const GncGUID *guid);
@@ -132,9 +136,6 @@ GncGUID *guid_copy (const GncGUID *guid);
  *  numbers printed only with the characters '0' through '9' and
  *  'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH
  *  characters long.
- *
- *  XXX This routine is not thread safe and is deprecated. Please
- *  use the routine guid_to_string_buff() instead.
  *
  *  @param guid The guid to print.
  *
@@ -155,7 +156,8 @@ const gchar * guid_to_string (const GncGUID * guid);
  *
  *  @param buff The buffer to print it into.
  *
- *  @return A pointer to the terminating null character of the string.
+ *  @return A pointer to the terminating null character of the string,
+ *     or, if no copy took place, NULL.
  */
 gchar * guid_to_string_buff (const GncGUID * guid, /*@ out @*/ gchar *buff);
 
