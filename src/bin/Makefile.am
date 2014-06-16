@@ -58,6 +58,10 @@ gnucash_LDADD = \
   ${GLIB_LIBS} \
   ${GTK_LIBS}
 
+if WITH_GOOGLE_PROFILER
+gnucash_LDADD += -lprofiler
+endif
+
 GNUCASH_BIN_INSTALL_NAME=`echo ${BIN_NAME} | sed -e '$(transform)'`
 
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile

@@ -17,6 +17,7 @@ test_qof_SOURCES = \
 	test-qofobject.c \
 	test-qofsession.c \
 	test-qof-string-cache.c \
+	test-gnc-guid.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \
@@ -38,7 +39,7 @@ test_qof_LDADD = \
 	${top_builddir}/${MODULEPATH}/libgnc-qof.la \
 	$(GLIB_LIBS)
 
-test_qof_CFLAGS = \
+test_qof_CPPFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I$(top_srcdir)/${MODULEPATH} \
 	-I$(top_srcdir)/src/test-core \

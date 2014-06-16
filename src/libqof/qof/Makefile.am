@@ -4,17 +4,23 @@ TEST_SUBDIRS = test
 
 lib_LTLIBRARIES = libgnc-qof.la
 
-libgnc_qof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
+libgnc_qof_la_LDFLAGS= \
+	-version-info \
+	$(LIBQOF_LIBRARY_VERSION) \
+	$(BOOST_LDFLAGS)
+
 libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
+
 libgnc_qof_la_LIBADD = $(libgnc_qof_common_libs)
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
   -I$(top_srcdir)/src \
-  $(GLIB_CFLAGS)
+  $(GLIB_CFLAGS) \
+  $(BOOST_CPPFLAGS)
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.cpp        \
@@ -103,6 +109,5 @@ test_qofmath_SOURCES = gnc-numeric.cpp
 test_qofmath_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_128_BIT_MULT
 test_qofmath_LDFLAGS = $(libgnc_qof_la_LDFLAGS)
 test_qofmath_LDADD = $(libgnc_qof_common_libs)
-test_qofmath_CXXFLAGS = -Wall -Werror
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"
