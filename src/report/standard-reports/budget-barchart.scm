@@ -38,12 +38,13 @@
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
 (load-from-path "html-jqplot.scm") ;; for jqplot-escape-string
 
-(define reportname (N_ "Budget Barchart"))
+(define reportname (N_ "Budget Chart"))
 
 (define optname-accounts (N_ "Accounts"))
 (define optname-budget (N_ "Budget"))
 
 (define optname-running-sum (N_ "Running Sum"))
+(define optname-chart-type (N_ "Chart Type"))
 
 ;(define (options-generator inc-exp?)
 (define (options-generator)
@@ -69,6 +70,32 @@
       (N_ "Calculate as running sum?")
       #t))
 
+    ;; Display tab
+    (add-option
+      (gnc:make-multichoice-option
+        gnc:pagename-general                  ;; tab name
+        optname-chart-type                    ;; displayed option name
+        "c"                                   ;; localization in the tab
+        (N_ "This is a multi choice option.") ;; option help text
+        'bars                                 ;; default selectioin
+        (list
+          (list->vector
+            (list 'bars
+                  (N_ "Barchart")
+                  (N_ "Show the report as a bar chart.")
+            )
+          )
+          (list->vector
+            (list 'lines
+                  (N_ "Linechart")
+                  (N_ "Show the report as a line chart.")
+            )
+          )
+        )
+      )
+    )
+
+
     ;; Option to select the accounts to that will be displayed
     (add-option (gnc:make-account-list-option
         gnc:pagename-accounts optname-accounts
@@ -93,18 +120,36 @@
 ;;
 ;; Create bar and and vaules
 ;;
-(define (gnc:chart-create-budget-actual budget acct running-sum)
-  (let* ((chart (gnc:make-html-barchart)))
+(define (gnc:chart-create-budget-actual budget acct running-sum chart-type)
+  (let* ((chart #f))
 
-    ;; Setup barchart
-    (gnc:html-barchart-set-title! chart (xaccAccountGetName acct))
-    (gnc:html-barchart-set-width! chart 700)
-    (gnc:html-barchart-set-height! chart 400)
-    (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-    (gnc:html-barchart-set-col-labels! 
-      chart (list (_ "Budget") (_ "Actual")))
-    (gnc:html-barchart-set-col-colors! 
-      chart '("blue" "red"))
+    (if (eqv? chart-type 'bars)
+      (begin
+        ;; Setup barchart
+        (set! chart (gnc:make-html-barchart))
+        (gnc:html-barchart-set-title! chart (xaccAccountGetName acct))
+        (gnc:html-barchart-set-width! chart 700)
+        (gnc:html-barchart-set-height! chart 400)
+        (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+        (gnc:html-barchart-set-col-labels!
+          chart (list (_ "Budget") (_ "Actual")))
+        (gnc:html-barchart-set-col-colors!
+          chart '("blue" "red"))
+      )
+      ;; else
+      (begin
+        ;; Setup linechart
+        (set! chart (gnc:make-html-linechart))
+        (gnc:html-linechart-set-title! chart (xaccAccountGetName acct))
+        (gnc:html-linechart-set-width! chart 700)
+        (gnc:html-linechart-set-height! chart 400)
+        (gnc:html-linechart-set-row-labels-rotated?! chart #t)
+        (gnc:html-linechart-set-col-labels!
+          chart (list (_ "Budget") (_ "Actual")))
+        (gnc:html-linechart-set-col-colors!
+          chart '("blue" "red"))
+      )
+    )
 
     ;; Prepair vars for running sums, and to loop though periods
     (let* (
@@ -151,19 +196,42 @@
 	(set! period (+ period 1))
       )
 
-      ;; Add data to chart
-      (gnc:html-barchart-append-column! chart bgt-vals)
-      (gnc:html-barchart-append-column! chart act-vals)
-      (gnc:html-barchart-set-row-labels! chart date-list)
-      (if running-sum
-        (gnc:html-barchart-set-subtitle! chart
-          (string-append "Bgt:"
+      (if (eqv? chart-type 'bars)
+        (begin
+          ;; Add data to the bar chart
+          (gnc:html-barchart-append-column! chart bgt-vals)
+          (gnc:html-barchart-append-column! chart act-vals)
+          (gnc:html-barchart-set-row-labels! chart date-list)
+          (if running-sum
+            (gnc:html-barchart-set-subtitle! chart
+              (string-append "Bgt:"
                          (jqplot-escape-string (number->string bgt-sum))
                          "<br /> Act:"
-                         (jqplot-escape-string (number->string act-sum)))))
+                         (jqplot-escape-string (number->string act-sum))
+              )
+            )
+          )
+        )
+        ;; else
+        (begin
+          ;; Add data to the line chart
+          (gnc:html-linechart-append-column! chart bgt-vals)
+          (gnc:html-linechart-append-column! chart act-vals)
+          (gnc:html-linechart-set-row-labels! chart date-list)
+          (if running-sum
+            (gnc:html-linechart-set-subtitle! chart
+              (string-append "Bgt:"
+                         (jqplot-escape-string (number->string bgt-sum))
+                         "<br /> Act:"
+                         (jqplot-escape-string (number->string act-sum))
+              )
+            )
+          )
+        )
+      )
     )
 
-    ;; Reutrn newly created chart
+    ;; Return newly created chart
     chart
 ))
 
@@ -185,6 +253,7 @@
       (budget (get-option gnc:pagename-general optname-budget))
       (budget-valid? (and budget (not (null? budget))))
       (running-sum (get-option gnc:pagename-general optname-running-sum))
+      (chart-type (get-option gnc:pagename-general optname-chart-type))
       (accounts (get-option gnc:pagename-accounts optname-accounts))
       (report-title (get-option gnc:pagename-general
         gnc:optname-reportname))
@@ -205,11 +274,17 @@
 
       ;; Else create chart for each account
       (else
-        (for-each (lambda (acct)
-          (if (null? (gnc-account-get-descendants acct))
-            (gnc:html-document-add-object! document
-              (gnc:chart-create-budget-actual budget acct running-sum))))
-          accounts))
+        (for-each
+          (lambda (acct)
+            (if (null? (gnc-account-get-descendants acct))
+              (gnc:html-document-add-object! document
+                (gnc:chart-create-budget-actual budget acct running-sum chart-type)
+              )
+            )
+          )
+          accounts
+        )
+      )
     ) ;; end cond
     
     document
@@ -218,7 +293,7 @@
 ;; Here we define the actual report
 (gnc:define-report
  'version 1
- 'name (N_ "Budget Barchart")
+ 'name reportname
  'report-guid "415cd38d39054d9e9c4040455290c2b1"
  'menu-path (list gnc:menuname-budget)
  'options-generator (lambda () (options-generator))

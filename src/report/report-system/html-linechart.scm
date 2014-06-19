@@ -494,9 +494,9 @@
 
             (if subtitle
               (begin 
-                (push "  options.title += \" (")
-                (push (jqplot-escape-string subtitle))
-                (push ")\";\n")))
+                (push "  options.title += \" <br />")
+                (push subtitle)
+                (push "\";\n")))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin 
