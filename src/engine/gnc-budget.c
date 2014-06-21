@@ -35,8 +35,6 @@
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
 #include "gnc-gdate-utils.h"
-#include "gnc-prefs.h"
-/*#include "app-utils/gnc-ui-util.h" for gnc_reverse_balance */
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
@@ -498,52 +496,6 @@ gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
 
 }
 
-/******************************************************\
- * this helper function has been placed here, because *
- * the "original" function gnc_reverse_balance is not *
- * reachable from here with the current build setup   *
-\******************************************************/
-
-gboolean
-gnc_is_account_reverse_balance (const Account *account)
-{
-    int type;
-
-    type = xaccAccountGetType (account);
-
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "reversed-accounts-incomeexpense"))
-    {
-	switch (type) {
-            case ACCT_TYPE_INCOME: return TRUE;
-              break;
-            case ACCT_TYPE_EXPENSE: return TRUE;
-              break;
-            default: return FALSE;
-              break;
-        }
-    }
-    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "reversed-accounts-credit"))
-    {
-	switch (type) {
-            case ACCT_TYPE_LIABILITY: return TRUE;
-              break;
-            case ACCT_TYPE_PAYABLE: return TRUE;
-              break;
-            case ACCT_TYPE_EQUITY: return TRUE;
-              break;
-            case ACCT_TYPE_INCOME: return TRUE;
-              break;
-            case ACCT_TYPE_CREDIT: return TRUE;
-              break;
-            default: return FALSE;
-              break;
-        }
-    }
-
-    return FALSE;
-
-}
-
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
 void
@@ -572,12 +524,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     if (gnc_numeric_check(val))
         kvp_frame_set_value(frame, path, NULL);
     else
-    {
-        if (gnc_is_account_reverse_balance (account))
-            val = gnc_numeric_neg (val);
-
         kvp_frame_set_numeric(frame, path, val);
-    }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -623,10 +570,6 @@ gnc_budget_get_account_period_value(const GncBudget *budget, const Account *acco
     g_sprintf(bufend, "/%d", period_num);
 
     numeric = kvp_frame_get_numeric(frame, path);
-
-    if (gnc_is_account_reverse_balance (account))
-        numeric = gnc_numeric_neg (numeric);
-
     /* This still returns zero if unset, but callers can check for that. */
     return numeric;
 }

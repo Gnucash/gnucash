@@ -136,9 +136,6 @@ Timespec gnc_budget_get_period_start_date(const GncBudget* budget, guint period_
 /** Get the ending date of the Budget period*/
 Timespec gnc_budget_get_period_end_date(const GncBudget* budget, guint period_num);
 
-/* local helper to check what preferences have been set for account reverse */
-gboolean gnc_is_account_reverse_balance (const Account *account);
-
 /* Period indices are zero-based. */
 void gnc_budget_set_account_period_value(
     GncBudget* budget, const Account* account, guint period_num, gnc_numeric val);
