@@ -28,6 +28,7 @@
 
 extern void test_suite_account();
 extern void test_suite_budget();
+extern void test_suite_gncEntry();
 extern void test_suite_gncInvoice();
 extern void test_suite_transaction();
 extern void test_suite_split();
@@ -47,6 +48,7 @@ main (int   argc,
 
     test_suite_account();
     test_suite_budget();
+    test_suite_gncEntry();
     test_suite_gncInvoice();
     test_suite_transaction();
     test_suite_split();

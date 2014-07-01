@@ -48,7 +48,6 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>按揭贷款</act:name>

@@ -339,7 +339,15 @@ func_op(const char *fname, int argc, void **argv)
     result = g_new0( gnc_numeric, 1 );
     *result = double_to_gnc_numeric( scm_to_double(scmTmp),
                                      GNC_DENOM_AUTO,
-                                     GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP );
+                                     GNC_HOW_DENOM_SIGFIGS(12) | GNC_HOW_RND_ROUND_HALF_UP );
+    if (gnc_numeric_check (*result) != GNC_ERROR_OK)
+    {
+	PERR("Attempt to convert %f to GncNumeric Failed: %s",
+	     scm_to_double(scmTmp),
+	     gnc_numeric_errorCode_to_string (gnc_numeric_check (*result)));
+	g_free (result);
+	return NULL;
+    }
     /* FIXME: cleanup scmArgs = scm_list, cons'ed cells? */
     return (void*)result;
 }

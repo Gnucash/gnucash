@@ -563,7 +563,7 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
 void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_cn)
 {
     if (!entry) return;
-    if (gnc_numeric_eq (entry->quantity, quantity)) return;
+    if (gnc_numeric_eq (entry->quantity, (is_cn ? gnc_numeric_neg (quantity) : quantity))) return;
     gncEntryBeginEdit (entry);
     entry->quantity = (is_cn ? gnc_numeric_neg (quantity) : quantity);
     entry->values_dirty = TRUE;
