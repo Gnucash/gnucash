@@ -1,5 +1,3 @@
-SUBDIRS = win32
-
 EXTRA_DIST = \
   gnucash.spec.in \
   gnucash.spec
