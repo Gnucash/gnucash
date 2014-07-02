@@ -1440,7 +1440,6 @@ AC_CONFIG_FILES(
   lib/libc/Makefile
   lib/stf/Makefile
   packaging/Makefile
-  packaging/win32/Makefile
   src/Makefile
   src/app-utils/Makefile
   src/app-utils/test/Makefile
@@ -1558,7 +1557,6 @@ AC_CONFIG_FILES(
   src/plugins/customer_import/gtkbuilder/Makefile
   src/plugins/customer_import/ui/Makefile
   dnl # non-makefiles
-  packaging/win32/gnucash.iss
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
   src/engine/iso-currencies-to-c
