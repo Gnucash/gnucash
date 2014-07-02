@@ -249,7 +249,7 @@ init_from_file(const char *filename, size_t max_size)
 
 #ifdef HAVE_SCANF_LLD
     PINFO ("guid_init got %" G_GUINT64_FORMAT " bytes from %s",
-	   (uint64_t) file_bytes,
+	   (guint64) file_bytes,
            filename);
 #else
     PINFO ("guid_init got %lu bytes from %s", (unsigned long int) file_bytes,
@@ -515,12 +515,12 @@ guid_init(void)
     /* time in secs and clock ticks */
     bytes += init_from_time();
 
-    PINFO ("got %" G_GUINT64_FORMAT " bytes", (uint64_t) bytes);
+    PINFO ("got %" G_GUINT64_FORMAT " bytes", (guint64) bytes);
 
     if (bytes < THRESHOLD)
         PWARN("only got %" G_GUINT64_FORMAT " bytes.\n"
               "The identifiers might not be very random.\n",
-              (uint64_t)bytes);
+              (guint64)bytes);
 
     guid_initialized = TRUE;
     LEAVE();
