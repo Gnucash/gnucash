@@ -1313,9 +1313,9 @@ AC_ARG_ENABLE(python-bindings,
 
 # This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
 AC_LANG([C++])
-AX_CHECK_COMPILE_FLAG([-Werror -Wno-deprecated-register],
-    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"]
-    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"])
+AX_CHECK_COMPILE_FLAG([-Wno-deprecated-register],
+    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"],
+    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"], [-Werror])
 AC_LANG([C])
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
@@ -1367,7 +1367,9 @@ then
 #include <stdio.h>
 	 ]],
 	 [[ printf( "%s\n", "Hello World!");]])],
-	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
+	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+	 AC_MSG_RESULT(OK)],
+	 [AC_MSG_RESULT(No)])
   CFLAGS="$cflags_save"
 
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
