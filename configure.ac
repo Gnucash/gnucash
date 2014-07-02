@@ -1320,11 +1320,11 @@ then
   #We have a lot of unused variables. Don't warn until someone gets
   #around to cleaning them up.
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
-  if [[ "x$ac_cv_CLANG" = "xyes" ]]; then
-    AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"
-  else
-    AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"
-  fi
+  AC_LANG([C++])
+  AX_CHECK_COMPILE_FLAG([-Werror -Wno-deprecated-register],
+      [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"]
+      [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"])
+  AC_LANG([C])
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
