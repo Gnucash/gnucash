@@ -1312,6 +1312,11 @@ AC_ARG_ENABLE(python-bindings,
 ###-------------------------------------------------------------------------
 
 # This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+AC_LANG([C++])
+AX_CHECK_COMPILE_FLAG([-Werror -Wno-deprecated-register],
+    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"]
+    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"])
+AC_LANG([C])
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
@@ -1320,11 +1325,6 @@ then
   #We have a lot of unused variables. Don't warn until someone gets
   #around to cleaning them up.
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
-  AC_LANG([C++])
-  AX_CHECK_COMPILE_FLAG([-Werror -Wno-deprecated-register],
-      [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"]
-      [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"])
-  AC_LANG([C])
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
@@ -1367,9 +1367,7 @@ then
 #include <stdio.h>
 	 ]],
 	 [[ printf( "%s\n", "Hello World!");]])],
-	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	 AC_MSG_RESULT(OK)],
-	 [AC_MSG_RESULT(No)])
+	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
   CFLAGS="$cflags_save"
 
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
