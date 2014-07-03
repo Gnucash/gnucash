@@ -1367,9 +1367,7 @@ then
 #include <stdio.h>
 	 ]],
 	 [[ printf( "%s\n", "Hello World!");]])],
-	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	 AC_MSG_RESULT(OK)],
-	 [AC_MSG_RESULT(No)])
+	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
   CFLAGS="$cflags_save"
 
   AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
