@@ -1317,6 +1317,9 @@ AX_CHECK_COMPILE_FLAG([-Wno-deprecated-register],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"], [-Werror])
 AC_LANG([C])
+AX_CHECK_COMPILE_FLAG([-Wno-non-literal-null-conversion],
+    [AM_CFLAGS="${AM_CFLAGS} -Wno-non-literal-null-conversion"],
+    [], [-Werror])
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
