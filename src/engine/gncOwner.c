@@ -613,14 +613,16 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
     GncGUID *guid = NULL;
     QofBook *book;
     GncOwnerType type = GNC_OWNER_NONE;
+    guint64 type64 = 0;
 
     if (!lot || !owner) return FALSE;
 
     book = gnc_lot_get_book (lot);
     qof_instance_get (QOF_INSTANCE (lot),
-		      "owner-type", &type,
+		      "owner-type", &type64,
 		      "owner-guid", &guid,
 		      NULL);
+    type = (GncOwnerType) type64;
     switch (type)
     {
     case GNC_OWNER_CUSTOMER:
