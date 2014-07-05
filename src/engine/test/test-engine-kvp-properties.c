@@ -292,8 +292,8 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
     qof_begin_edit (QOF_INSTANCE (fixture->lot));
     qof_instance_set (QOF_INSTANCE (fixture->lot),
 		      "invoice", invoice,
-		      "owner-type", owner_type,
-		      "owner-guid", owner,
+		      GNC_OWNER_TYPE, owner_type,
+		      GNC_OWNER_GUID, owner,
 		      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->lot)));
@@ -301,8 +301,8 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_instance_get (QOF_INSTANCE (fixture->lot),
 		      "invoice", &invoice_r,
-		      "owner-type", &owner_type_r,
-		      "owner-guid", &owner_r,
+		      GNC_OWNER_TYPE, &owner_type_r,
+		      GNC_OWNER_GUID, &owner_r,
 		      NULL);
     g_assert (guid_equal (invoice, invoice_r));
     g_assert_cmpint (owner_type, ==, owner_type_r);
