@@ -691,8 +691,9 @@ qof_instance_print_dirty (const QofInstance *inst, gpointer dummy)
     priv = GET_PRIVATE(inst);
     if (priv->dirty)
     {
-        printf("%s instance %s is dirty.\n", inst->e_type,
-               guid_to_string(&priv->guid));
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(&priv->guid, guidstr);
+        printf("%s instance %s is dirty.\n", inst->e_type, guidstr);
     }
 }
 

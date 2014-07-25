@@ -69,16 +69,17 @@ static void test_gnc_guid_copy (void) {
 defined in the guid api. We then compare them.*/
 static void test_gnc_guid_to_string (void) {
     GncGUID * guid {guid_malloc()};
+    gchar guidstrp [GUID_ENCODING_LENGTH+1];
+    gchar guidstrp2[GUID_ENCODING_LENGTH+1];
     g_assert (guid != nullptr);
     guid_replace (guid);
     string message {" using guid_to_string (deprecated): "};
-    /*don't free the return value of guid_to_string!*/
-    string guidstr {guid_to_string (guid)};
+    guid_to_string_buff (guid,guidstrp);
+    string guidstr {guidstrp};
     g_assert (guidstr.size () == GUID_ENCODING_LENGTH);
     message += guidstr;
     g_test_message ("%s", message.c_str ());
     message = " using guid_to_string_buff: ";
-    gchar guidstrp2 [GUID_ENCODING_LENGTH+1];
     gchar * ret {guid_to_string_buff (guid, guidstrp2)};
     g_assert (ret == guidstrp2 + GUID_ENCODING_LENGTH);
     string guidstr2 {guidstrp2};

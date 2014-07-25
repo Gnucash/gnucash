@@ -127,15 +127,15 @@ GncGUID *guid_copy (const GncGUID *guid);
  *  encoding of the id. String encodings of identifiers are hex
  *  numbers printed only with the characters '0' through '9' and
  *  'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH
- *  characters long.
+ *  characters long (not including the null terminator).
  *
  *  @param guid The guid to print.
  *
  *  @return A pointer to the starting character of the string.  The
- *  returned memory is owned by this routine and may not be freed by
- *  the caller.
+ *  returned memory is owned by the calling routine and must be freed
+ *  using g_free.
  */
-const gchar * guid_to_string (const GncGUID * guid);
+gchar * guid_to_string (const GncGUID * guid);
 
 /** The guid_to_string_buff() routine puts a null-terminated string
  *  encoding of the id into the memory pointed at by buff.  The

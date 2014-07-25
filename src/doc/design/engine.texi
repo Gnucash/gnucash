@@ -287,12 +287,12 @@ Return the @code{memcmp} of the two GUID's.
 You can encode and decode GUIDs and their string representations using the
 next two functions.
 
-@deftypefun {const char *} guid_to_string (const GUID * @var{guid})
+@deftypefun {gchar *} guid_to_string (const GUID * @var{guid})
 Return a null-terminated string encoding of @var{guid}. String encodings
 of identifiers are hex numbers printed only with the characters @code{0}
 through @code{9} and @code{a} through @code{f}.  The encoding will
 always be @code{GUID_ENCODING_LENGTH} characters long. The returned
-string must NOT be freed when no longer needed.
+string must be freed when no longer needed using g_free.
 @end deftypefun
 
 @deftypefun {char *} guid_to_string_buff (const GUID * @var{guid}, char * @var{buff})

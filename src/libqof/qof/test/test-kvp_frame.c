@@ -980,7 +980,7 @@ test_binary_to_string( void )
 static void
 test_kvp_value_to_string( void )
 {
-    const gchar *str_tmp;
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
     gchar *str_tmp2, *str_tmp3;
     gchar *result;
     KvpValue *gint64_value;
@@ -1038,8 +1038,8 @@ test_kvp_value_to_string( void )
 
     result = kvp_value_to_string( guid_value );
     g_assert( result );
-    str_tmp = guid_to_string( kvp_value_get_guid( guid_value ) );
-    str_tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", str_tmp ? str_tmp : "");
+    guid_to_string_buff( kvp_value_get_guid( guid_value ), guidstr);
+    str_tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", guidstr);
     g_assert_cmpstr( result, == , str_tmp2 );
     g_free( result );
     g_free( str_tmp2 );

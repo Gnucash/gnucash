@@ -167,22 +167,22 @@ guid_new_return(void)
     return *ret;
 }
 
-const char *
+gchar *
 guid_to_string (const GncGUID * guid)
 {
     /* We need to malloc here, not 'new' because it will be freed
     by the caller which will use free (not delete).*/
-    char * ret {reinterpret_cast<char*> (malloc (sizeof (char)*GUID_ENCODING_LENGTH+1))};
-    gchar * temp {guid_to_string_buff(guid, ret)};
+    gchar * ret {reinterpret_cast<gchar*> (g_malloc (sizeof (gchar)*GUID_ENCODING_LENGTH+1))};
+    gchar * temp {guid_to_string_buff (guid, ret)};
     if (!temp){
-        delete[] ret;
-        return temp;
+        g_free (ret);
+        return nullptr;
     }
     return ret;
 }
 
 gchar *
-guid_to_string_buff(const GncGUID * guid, char *str)
+guid_to_string_buff (const GncGUID * guid, gchar *str)
 {
     if (!str || !guid) return NULL;
 
