@@ -124,19 +124,6 @@ guid_null(void)
     return nullguid;
 }
 
-/* Function implementations ****************************************/
-
-void
-guid_init(void)
-{
-    /*Boost takes care of this*/
-}
-
-void
-guid_shutdown (void)
-{
-}
-
 /*Takes an allocated guid pointer and constructs it in place*/
 void
 guid_replace(GncGUID *guid)

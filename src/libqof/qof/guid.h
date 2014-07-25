@@ -71,22 +71,6 @@ const GncGUID* gnc_value_get_guid (const GValue *value);
  * not including the null terminator. */
 #define GUID_ENCODING_LENGTH 32
 
-
-/** Initialize the id generator with a variety of random
- *  sources.
- *
- *  @note Only one of guid_init(), guid_init_with_salt() and
- *  guid_init_only_salt() should be called.  Calling any
- *  initialization function a second time will reset the generator and
- *  erase the effect of the first call.
- */
-void guid_init(void);
-
-/** Release the memory chunk associated with gui storage. Use this
- *  only when shutting down the program, as it invalidates *all*
- *  GUIDs at once. */
-void guid_shutdown (void);
-
 /** Generate a new guid.
  *
  *  @param guid A pointer to an allocated guid data structure.  The
@@ -94,11 +78,9 @@ void guid_shutdown (void);
  */
 void guid_replace (GncGUID *guid);
 
-/** Generate a new id. If no initialization function has been called,
- *  guid_init() will be called before the id is created.
+/** Generate a new id.
  *
- * @return guid A data structure containing a newly allocated GncGUID.
- *  Caller is responsible for calling guid_free().
+ * @return guid A data structure containing a copy of a newly constructed GncGUID.
  */
 GncGUID guid_new_return (void);
 
@@ -121,6 +103,10 @@ GncGUID * guid_new (void);
 /*Free the guid pointed to. Do not use this guid any more.*/
 void   guid_free (GncGUID *guid);
 
+/**
+ * Returns a newly allocated GncGUID that matches the passed-in GUID.
+ * The returned pointer must be freed using guid_free.
+ */
 GncGUID *guid_copy (const GncGUID *guid);
 
 /** The guid_to_string() routine returns a null-terminated string

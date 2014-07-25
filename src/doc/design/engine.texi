@@ -378,22 +378,6 @@ entity is not changed in any way.
 GUIDs are created by the GUID generator. The API for this generator is
 low-level and should not be used by user-code.
 
-@deftypefun void guid_init (void)
-Initialize the GUID generator with a variety of random sources including
-common system files and /dev/random.
-@end deftypefun
-
-@deftypefun void guid_init_with_salt (const void * @var{salt}, size_t @var{salt_len})
-Initialize the GUID generator with guid_init() and with the given
-sequence of arbitrary binary data.
-@end deftypefun
-
-@deftypefun void guid_init_only_salt (const void * @var{salt}, size_t @var{salt_len})
-Initialize the GUID generator using only the given sequence of arbitrary
-binary data. This provides a way to reliably obtain a given sequence of
-GUIDs.
-@end deftypefun
-
 @deftypefun void guid_replace (GUID * @var{guid})
 Create a new GUID and store it in @var{guid}. This is a low-level function!
 GnuCash code should use @code{xaccGUIDNew}.

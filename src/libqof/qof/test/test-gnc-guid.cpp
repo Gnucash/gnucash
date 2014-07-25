@@ -150,12 +150,10 @@ static void test_gnc_guid_roundtrip (void) {
 
 void test_suite_gnc_guid (void)
 {
-    guid_init ();
     GNC_TEST_ADD_FUNC (suitename, "gnc create guid", test_create_gnc_guid);
     GNC_TEST_ADD_FUNC (suitename, "gnc copy guid", test_gnc_guid_copy);
     GNC_TEST_ADD_FUNC (suitename, "gnc guid to string", test_gnc_guid_to_string);
     GNC_TEST_ADD_FUNC (suitename, "gnc guid equal", test_gnc_guid_equals);
     GNC_TEST_ADD_FUNC (suitename, "gnc guid string roundtrip", test_gnc_guid_roundtrip);
-    guid_shutdown ();
 }
 
