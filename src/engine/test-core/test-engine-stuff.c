@@ -243,7 +243,7 @@ get_random_guid(void)
     GncGUID *ret;
 
     ret = g_new(GncGUID, 1);
-    guid_new(ret);
+    guid_replace(ret);
 
     return ret;
 }

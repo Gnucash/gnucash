@@ -87,21 +87,12 @@ void guid_init(void);
  *  GUIDs at once. */
 void guid_shutdown (void);
 
-/** Generate a new id. If no initialization function has been called,
- *  guid_init() will be called before the id is created.
+/** Generate a new guid.
  *
- *  @param guid A pointer to an existing guid data structure.  The
+ *  @param guid A pointer to an allocated guid data structure.  The
  *  existing value will be replaced with a new value.
- *
- * This routine uses the md5 algorithm to build strong random guids.
- * Note that while guid's are generated randomly, the odds of this
- * routine returning a non-unique id are astronomically small.
- * (Literally astronomically: If you had Cray's on every solar
- * system in the universe running for the entire age of the universe,
- * you'd still have less than a one-in-a-million chance of coming up
- * with a duplicate id.  2^128 == 10^38 is a really really big number.)
  */
-void guid_new (GncGUID *guid);
+void guid_replace (GncGUID *guid);
 
 /** Generate a new id. If no initialization function has been called,
  *  guid_init() will be called before the id is created.

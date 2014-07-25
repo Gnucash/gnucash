@@ -767,7 +767,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     multip = pcd_get_custom_multip(pcd);
 
     key_file = g_key_file_new();
-    guid_new(&guid);
+    guid_replace(&guid);
     guid_to_string_buff(&guid, buf);
     g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_GUID, buf);
     g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE, title);

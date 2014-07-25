@@ -96,7 +96,7 @@ test_employee (void)
 
         do_test (gncEmployeeGetAddr (employee) != NULL, "Addr");
 
-        guid_new (&guid);
+        guid_replace (&guid);
         employee = gncEmployeeCreate (book);
         count++;
         gncEmployeeSetGUID (employee, &guid);

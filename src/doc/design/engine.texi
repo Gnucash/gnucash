@@ -353,7 +353,7 @@ entities such as Accounts and Transactions.
 Generate a new guid. This function is guaranteed to return a guid that
 is unique within the scope of all GnuCash entities being managed by the
 the current invocation of GnuCash. GnuCash routines should always use
-this function and not @code{guid_new}!
+this function and not @code{guid_replace}!
 @end deftypefun
 
 @deftypefun {void *} xaccLookupEntity (const GUID * @var{guid}, GNCIdType @var{entity_type})
@@ -394,7 +394,7 @@ binary data. This provides a way to reliably obtain a given sequence of
 GUIDs.
 @end deftypefun
 
-@deftypefun void guid_new (GUID * @var{guid})
+@deftypefun void guid_replace (GUID * @var{guid})
 Create a new GUID and store it in @var{guid}. This is a low-level function!
 GnuCash code should use @code{xaccGUIDNew}.
 @end deftypefun

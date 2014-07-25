@@ -99,7 +99,7 @@ GncGUID *
 guid_malloc (void)
 {
     /*We need to actually construct here (not just ::operator new (size_t) -- allocate)
-    because in guid_new, we assume that the object has already been constructed.
+    because in guid_replace, we assume that the object has already been constructed.
     Note the boost UUID is a POD, so its constructor is trivial.*/
     return reinterpret_cast<GncGUID*> (new boost::uuids::uuid);
 }
@@ -146,9 +146,9 @@ guid_shutdown (void)
 {
 }
 
-/*Takes an already-constructed guid pointer and re-constructs it in place*/
+/*Takes an allocated guid pointer and constructs it in place*/
 void
-guid_new(GncGUID *guid)
+guid_replace(GncGUID *guid)
 {
     static boost::uuids::random_generator gen;
     boost::uuids::uuid * val {reinterpret_cast<boost::uuids::uuid*> (guid)};
@@ -160,10 +160,10 @@ GncGUID
 guid_new_return(void)
 {
     /*we need to construct our value as a boost guid so that
-    it can be deconstructed (in place) in guid_new*/
+    it can be deconstructed (in place) in guid_replace*/
     boost::uuids::uuid guid;
     GncGUID * ret {reinterpret_cast<GncGUID*> (&guid)};
-    guid_new (ret);
+    guid_replace (ret);
     /*return a copy*/
     return *ret;
 }

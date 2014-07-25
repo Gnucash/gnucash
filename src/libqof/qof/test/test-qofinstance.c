@@ -98,7 +98,7 @@ test_instance_set_get_guid( Fixture *fixture, gconstpointer pData )
 
     /* set up */
     gncGuid = guid_malloc();
-    guid_new( gncGuid );
+    guid_replace( gncGuid );
     g_assert( QOF_IS_INSTANCE( fixture->inst ) );
     g_assert( gncGuid );
 

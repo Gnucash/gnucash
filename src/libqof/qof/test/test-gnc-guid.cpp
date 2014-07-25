@@ -47,7 +47,7 @@ static const gchar * suitename {"/qof/gnc-guid"};
 static void test_create_gnc_guid (void){
     GncGUID * guid {guid_malloc ()};
     g_assert (guid != nullptr);
-    guid_new (guid);
+    guid_replace (guid);
     /*We apparently don't need to free guid_null (based on its being const)*/
     const GncGUID * guidnull {guid_null ()};
     g_assert (!guid_equal (guid, guidnull));
@@ -58,7 +58,7 @@ static void test_create_gnc_guid (void){
 static void test_gnc_guid_copy (void) {
     GncGUID * guid {guid_malloc ()};
     g_assert (guid != nullptr);
-    guid_new (guid);
+    guid_replace (guid);
     GncGUID * cp {guid_copy (guid)};
     g_assert (guid_equal (guid, cp));
     guid_free (cp);
@@ -70,7 +70,7 @@ defined in the guid api. We then compare them.*/
 static void test_gnc_guid_to_string (void) {
     GncGUID * guid {guid_malloc()};
     g_assert (guid != nullptr);
-    guid_new (guid);
+    guid_replace (guid);
     string message {" using guid_to_string (deprecated): "};
     /*don't free the return value of guid_to_string!*/
     string guidstr {guid_to_string (guid)};
@@ -135,7 +135,7 @@ static void test_gnc_guid_roundtrip (void) {
     g_assert (guid1 != nullptr);
     GncGUID * guid2 {guid_malloc ()};
     g_assert (guid2 != nullptr);
-    guid_new (guid1);
+    guid_replace (guid1);
 
     gchar guidstrp [GUID_ENCODING_LENGTH+1];
     gchar * temp {guid_to_string_buff (guid1, guidstrp)};

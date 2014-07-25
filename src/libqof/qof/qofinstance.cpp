@@ -303,7 +303,7 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 
     do
     {
-        guid_new(&priv->guid);
+        guid_replace(&priv->guid);
 
         if (NULL == qof_collection_lookup_entity (col, &priv->guid))
             break;
