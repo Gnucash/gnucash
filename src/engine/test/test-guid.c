@@ -42,11 +42,12 @@ static void test_null_guid(void)
     GncGUID *gp;
 
     g = guid_new_return();
-    gp = guid_malloc();
-    guid_replace(gp);
+    gp = guid_new();
 
     do_test(guid_equal(guid_null(), guid_null()), "null guids equal");
     do_test(!guid_equal(&g, gp), "two guids equal");
+
+    guid_free(gp);
 }
 
 static void

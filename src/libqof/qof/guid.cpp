@@ -89,18 +89,9 @@ gnc_value_get_guid (const GValue *value)
 /* Memory management routines ***************************************/
 
 GncGUID *
-guid_new_ptr_return (void)
-{
-    return reinterpret_cast<GncGUID*> (new boost::uuids::uuid);
-}
-
-/* Deprecated*/
-GncGUID *
 guid_malloc (void)
 {
-    /*We need to actually construct here (not just ::operator new (size_t) -- allocate)
-    because in guid_replace, we assume that the object has already been constructed.
-    Note the boost UUID is a POD, so its constructor is trivial.*/
+    /*Note, the Boost uuid is a POD, so its constructor is trivial*/
     return reinterpret_cast<GncGUID*> (new boost::uuids::uuid);
 }
 
@@ -154,6 +145,14 @@ guid_replace(GncGUID *guid)
     boost::uuids::uuid * val {reinterpret_cast<boost::uuids::uuid*> (guid)};
     val->boost::uuids::uuid::~uuid();
     new (val) boost::uuids::uuid (gen ());
+}
+
+GncGUID *
+guid_new (void)
+{
+    GncGUID * ret {guid_malloc ()};
+    guid_replace (ret);
+    return ret;
 }
 
 GncGUID

@@ -106,16 +106,17 @@ GncGUID guid_new_return (void);
 to never reference any entity. */
 const GncGUID * guid_null (void);
 
-/** Efficiently allocate & free memory for GUIDs
- *  XXX This routine is deprecated. Please use guid_new_return_ptr
- * instead.
-*/
+/** 
+ * Allocate memory for a GUID. The returned pointer must be freed with
+ * guid_free.
+ */
 GncGUID * guid_malloc (void);
 
-/** Allocate and initialize a new guid, and return
-a pointer to it. Caller must call guid_free after to
-release this pointer*/
-GncGUID * guid_new_ptr_return (void);
+/**
+ * Allocate and construct a new GUID. The returned pointer must be 
+ * released with guid_free.
+ */
+GncGUID * guid_new (void);
 
 /*Free the guid pointed to. Do not use this guid any more.*/
 void   guid_free (GncGUID *guid);
