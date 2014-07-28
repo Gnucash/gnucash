@@ -85,6 +85,15 @@ gnc_value_get_guid (const GValue *value)
     return val;
 }
 
+static GncGUID * nullguid {reinterpret_cast<GncGUID*> (new boost::uuids::uuid{0})};
+
+/*It looks like we are expected to provide the same pointer every time from this function*/
+const GncGUID *
+guid_null (void)
+{
+    return nullguid;
+}
+
 /* Memory management routines ***************************************/
 
 GncGUID *
@@ -99,7 +108,11 @@ guid_free (GncGUID *guid)
 {
     if (!guid)
         return;
+    if (guid == nullguid)
+        /*!!Don't delete that!!*/
+        return;
     delete reinterpret_cast<boost::uuids::uuid*> (guid);
+    guid = nullptr;
 }
 
 
@@ -111,23 +124,15 @@ guid_copy (const GncGUID *guid)
     return reinterpret_cast<GncGUID*> (ret);
 }
 
-static GncGUID * nullguid {reinterpret_cast<GncGUID*> (new boost::uuids::uuid{0})};
-
-/*It looks like we are expected to provide the same pointer every time from this function*/
-const GncGUID *
-guid_null (void)
-{
-    return nullguid;
-}
-
 /*Takes an allocated guid pointer and constructs it in place*/
 void
 guid_replace (GncGUID *guid)
 {
     static boost::uuids::random_generator gen;
     boost::uuids::uuid * val {reinterpret_cast<boost::uuids::uuid*> (guid)};
-    val->boost::uuids::uuid::~uuid();
-    new (val) boost::uuids::uuid (gen ());
+    val->boost::uuids::uuid::~uuid ();
+    boost::uuids::uuid temp (gen ());
+    val->swap (temp);
 }
 
 GncGUID *
@@ -169,25 +174,13 @@ guid_to_string_buff (const GncGUID * guid, gchar *str)
 {
     if (!str || !guid) return NULL;
 
-    static boost::uuids::string_generator str_gen;
-    stringstream ostr;
-    boost::uuids::uuid const & tempg = *reinterpret_cast<boost::uuids::uuid const *>(guid);
-    ostr << tempg;
-    string const & val (ostr.str());
-    /*unsigned size {val.size()};
-     size must equal GUID_ENCODING_LENGTH*/
-    unsigned stringspot{0};
-    for (unsigned destspot{0}; destspot < GUID_ENCODING_LENGTH; ++destspot, ++stringspot){
-        switch (stringspot){
-            /*there are hyphens in boost's output, and we need to skip them in our output*/
-            case 8:
-            case 13:
-            case 18:
-            case 23:
-                ++stringspot;
-        }
-        str[destspot] = val[stringspot];
-    }
+    boost::uuids::uuid const & tempg = *reinterpret_cast<boost::uuids::uuid const *> (guid);
+    unsigned destspot {0};
+    string const & val {to_string (tempg)};
+    for (auto val_char : val)
+        if (val_char != '-')
+            str [destspot++] = val_char;
+
     str[GUID_ENCODING_LENGTH] = '\0';
     return &str[GUID_ENCODING_LENGTH];
 }
@@ -195,9 +188,19 @@ guid_to_string_buff (const GncGUID * guid, gchar *str)
 gboolean
 string_to_guid (const char * str, GncGUID * guid)
 {
-    static boost::uuids::string_generator strgen;
-    boost::uuids::uuid * converted {reinterpret_cast<boost::uuids::uuid*> (guid)};
-    new (converted) boost::uuids::uuid (strgen (str));
+    if (!guid || !str)
+        return false;
+
+    try 
+    {
+        static boost::uuids::string_generator strgen;
+        boost::uuids::uuid * converted {reinterpret_cast<boost::uuids::uuid*> (guid)};
+        new (converted) boost::uuids::uuid (strgen (str));
+    }
+    catch (...)
+    {
+        return false;
+    }
     return true;
 }
 
@@ -236,11 +239,10 @@ guid_hash_to_guint (gconstpointer ptr)
 
     guint hash {0};
     unsigned retspot {0};
-    boost::uuids::uuid::const_iterator guidspot {guid->begin ()};
-    while (guidspot != guid->end ()){
+    for (auto guidspot : *guid)
+    {
         hash <<= 4;
-        hash |= *guidspot;
-        ++guidspot;
+        hash |= guidspot;
     }
     return hash;
 }

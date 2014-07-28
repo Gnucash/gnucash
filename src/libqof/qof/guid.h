@@ -151,8 +151,8 @@ gchar * guid_to_string_buff (const GncGUID * guid, /*@ out @*/ gchar *buff);
  * This function accepts both uppor and lower case hex digits. If
  * letters outside the range of [a-fA-F] are passed, they are silently
  * replaced. If non-alphanumeric digits are given, this function will
- either return false or replace those values with others.
-. */
+ * either return false or replace those values with others.
+ */
 gboolean string_to_guid(const gchar * string, /*@ out @*/ GncGUID * guid);
 
 
