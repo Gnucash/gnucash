@@ -50,7 +50,6 @@ extern "C"
 # include <unistd.h>
 #endif
 #include "qof.h"
-#include "md5.h"
 
 }
 #include <boost/uuid/uuid.hpp>

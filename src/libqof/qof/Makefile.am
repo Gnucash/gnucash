@@ -75,7 +75,6 @@ qofinclude_HEADERS = \
    qof-gobject.h
 
 noinst_HEADERS = \
-   md5.h  \
    qofbook-p.h  \
    qofclass-p.h  \
    qofevent-p.h \
@@ -84,14 +83,6 @@ noinst_HEADERS = \
    qofquery-p.h  \
    qofquerycore-p.h \
    qofsession-p.h
-   
-# Must compile md5.c without strict aliasing, otherwise function md5_finish_ctx
-# gets "dereferencing type-punned pointer will break strict-aliasing rules"
-noinst_LTLIBRARIES = libmd5.la
-libmd5_la_SOURCES = md5.c
-libmd5_la_CFLAGS = ${AM_CFLAGS} -fno-strict-aliasing
-
-libgnc_qof_la_LIBADD += libmd5.la
 
 EXTRA_DIST += \
   qofmath128.cpp
