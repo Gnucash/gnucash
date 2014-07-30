@@ -148,6 +148,44 @@ static void test_gnc_guid_roundtrip (void) {
     guid_free (guid1);
 }
 
+/**
+ * guid_replace should put a newly generated guid into the parameter. In
+ * this test, we ensure that the first "new" guid doesn't match a subsequent
+ * "new" guid in the same memory location.
+ */
+static void test_gnc_guid_replace (void)
+{
+    GncGUID * guid1 {guid_malloc ()};
+
+    guid_replace (guid1);
+    GncGUID * guid2 {guid_copy (guid1)};
+    guid_replace (guid1);
+    g_assert (! guid_equal (guid1, guid2));
+
+    guid_free (guid2);
+    guid_free (guid1);
+}
+
+/**
+ * We create a bogus guid and ensure that it doesn't get parsed successfully,
+ * then we pass in a good GUID from string and ensure that the function returns true.
+ */
+static void test_gnc_guid_from_string (void) {
+    GncGUID * guid {guid_malloc ()};
+    const char * bogus {"01-23-45-6789a.cDeF0123z56789abcdef"};
+
+    /* string_to_guid should return false if either parameter is null*/
+    g_assert (!string_to_guid (nullptr, guid));
+    g_assert (!string_to_guid (bogus, nullptr));
+
+    g_assert (!string_to_guid (bogus, guid));
+
+    const char * good {"0123456789abcdef1234567890abcdef"};
+    g_assert (string_to_guid (good, guid));
+
+    guid_free (guid);
+}
+
 void test_suite_gnc_guid (void)
 {
     GNC_TEST_ADD_FUNC (suitename, "gnc create guid", test_create_gnc_guid);
@@ -155,5 +193,7 @@ void test_suite_gnc_guid (void)
     GNC_TEST_ADD_FUNC (suitename, "gnc guid to string", test_gnc_guid_to_string);
     GNC_TEST_ADD_FUNC (suitename, "gnc guid equal", test_gnc_guid_equals);
     GNC_TEST_ADD_FUNC (suitename, "gnc guid string roundtrip", test_gnc_guid_roundtrip);
+    GNC_TEST_ADD_FUNC (suitename, "gnc guid from string", test_gnc_guid_from_string);
+    GNC_TEST_ADD_FUNC (suitename, "gnc guid replace", test_gnc_guid_replace);
 }
 
