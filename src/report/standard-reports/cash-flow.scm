@@ -218,10 +218,8 @@
                       (lambda (parent-split)
                         (let* (
                                 (psv (xaccSplitGetValue parent-split))
-                                (acct-type (xaccAccountGetType(xaccSplitGetAccount parent-split)))
                               )
-                          (if (and (gnc-numeric-positive-p psv) ;; meaning: if (psv>0)
-                                   (not (eq? acct-type ACCT-TYPE-TRADING))) ;; not trading account split
+                          (if (gnc-numeric-positive-p psv) ;; meaning: if (psv>0)
                             (set! transaction-value
                               (gnc-numeric-add transaction-value psv GNC-DENOM-AUTO GNC-DENOM-LCD)
                             )
@@ -255,7 +253,6 @@
                           (if (and	 ;; make sure we don't have
                                 (not (null? s-account)) ;;  any dangling splits
 			        (not (account-in-list? s-account accounts))
-			        (not (eq? (xaccAccountGetType s-account) ACCT-TYPE-TRADING)) ;; not trading account
                                 ;; only consider splits of opposite sign
                                 (gnc-numeric-negative-p (gnc-numeric-mul s-value split-value GNC-DENOM-AUTO GNC-DENOM-REDUCE))
                               )
