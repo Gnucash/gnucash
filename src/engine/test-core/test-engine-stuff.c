@@ -475,6 +475,9 @@ get_random_gnc_numeric(void)
     return gnc_numeric_create(numer, deno);
 }
 
+
+/* Rate here really means price or exchange rate, this is used solely
+ * to compute an amount from a randomly-created value. */
 static gnc_numeric
 get_random_rate (void)
 {
@@ -1322,11 +1325,8 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
                                                xaccSplitGetAccount(ret)));
         do
         {
-            /* Large rates blow up xaccSplitAssignLot */
             rate = get_random_rate ();
-            amt = gnc_numeric_mul(val, rate,
-                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND_HALF_UP);
+            amt = gnc_numeric_div(val, rate, denom, GNC_HOW_RND_ROUND_HALF_UP);
         }
         while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }
