@@ -254,7 +254,7 @@
                                 (not (null? s-account)) ;;  any dangling splits
 			        (not (account-in-list? s-account accounts))
                                 ;; only consider splits of opposite sign
-                                (gnc-numeric-negative-p (gnc-numeric-mul s-value split-value GNC-DENOM-AUTO GNC-DENOM-REDUCE))
+                                (gnc-numeric-negative-p (gnc-numeric-mul s-value split-value 0 GNC-DENOM-REDUCE))
                               )
                             (if (not (split-in-list? s seen-split-list))
                               (let (
@@ -272,12 +272,11 @@
                                     (gnc:make-gnc-numeric 1 1)
                                     ;; else
                                     (gnc-numeric-abs
-                                      (gnc-numeric-div split-value transaction-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+                                      (gnc-numeric-div split-value transaction-value 0 GNC-DENOM-REDUCE)
                                     )
                                   )
                                 )
-				(set! s-value (gnc-numeric-mul split-transaction-ratio s-value 
-				                               (gnc-commodity-get-fraction parent-currency) GNC-RND-ROUND))
+				(set! s-value (gnc-numeric-mul split-transaction-ratio s-value GNC-DENOM-AUTO GNC-RND-ROUND))
 			        (set! seen-split-list (cons s seen-split-list))
 			        (if (gnc-numeric-negative-p s-value)
                                   ;; -----------------------------------------------
