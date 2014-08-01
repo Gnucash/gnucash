@@ -100,217 +100,7 @@
     options))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; global objects
-;; objects used by the cash-flow-calculator and the document-renderer
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-(define money-in-alist '())
-(define money-in-accounts '())
-(define money-in-collector (gnc:make-commodity-collector))
-
-(define money-out-accounts '())
-(define money-out-alist '())
-(define money-out-collector (gnc:make-commodity-collector))
-
-(define time-exchange-fn #f)
-
-(define work-done 0)
-(define work-to-do 0)
-
-;; is account in list of accounts?
-(define (same-account? a1 a2)
-  (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
-
-(define (same-split? s1 s2)
-  (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
-
-(define account-in-list?
-  (lambda (account accounts)
-    (cond
-      ((null? accounts) #f)
-      ((same-account? (car accounts) account) #t)
-      (else (account-in-list? account (cdr accounts))))))
-
-(define account-in-alist
-  (lambda (account alist)
-    (cond
-      ((null? alist) #f)
-      ((same-account? (caar alist) account) (car alist))
-      (else (account-in-alist account (cdr alist))))))
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; cash-flow-calculator
-;; do the cash flow calculations
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; function to add inflow and outflow of money
-(define (calc-money-in-out accounts to-date-tp from-date-tp report-currency)
-
-  (let* (
-	  (splits-to-do (gnc:accounts-count-splits accounts))
-	  ;;(seen-split-list '())
-        )
-
-  (define split-in-list?
-    (lambda (split splits)
-      (cond
-        ((null? splits) #f)
-        ((same-split? (car splits) split) #t)
-        (else (split-in-list? split (cdr splits))))))
-
-  ;; Helper function to convert currencies
-  (define (to-report-currency currency amount date)
-    (gnc:gnc-monetary-amount
-      (time-exchange-fn
-        (gnc:make-gnc-monetary currency amount)
-	report-currency
-        date
-      )
-    )
-  )
-
-  (define (calc-money-in-out-internal accounts-internal)
-    (if (not (null? accounts-internal))
-      (let* (
-              (current (car accounts-internal))
-              (rest (cdr accounts-internal))
-              (name (xaccAccountGetName current))
-              (curr-commodity (xaccAccountGetCommodity current))
-	      (seen-split-list '())
-            )
-
-        ;(gnc:debug "calc-money-in-out-internal---" name "---" (gnc-commodity-get-printname curr-commodity))
-
-        (for-each
-          (lambda (split)
-            (set! work-done (+ 1 work-done))
-            (gnc:report-percent-done (* 85 (/ work-done splits-to-do)))
-            (let (
-                   (parent (xaccSplitGetParent split))
-                 )
-              (if (and
-                    (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date-tp)
-                    (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp)
-                  )
-                (let* (
-                        (parent-description (xaccTransGetDescription parent))
-                        (parent-currency    (xaccTransGetCurrency    parent))
-                      )
-                  ;(gnc:debug parent-description
-                  ;           " - "
-                  ;           (gnc-commodity-get-printname parent-currency))
-                  (for-each
-                    (lambda (s)
-                      (let* (
-                              (s-account   (xaccSplitGetAccount s))
-                              (s-amount    (xaccSplitGetAmount s))
-                              (s-value     (xaccSplitGetValue s))
-                              (s-commodity (xaccAccountGetCommodity s-account))
-                            )
-		        ;; Check if this is a dangling split
-			;; and print a warning
-			(if (null? s-account)
-			  (display
-			    (string-append "WARNING: s-account is NULL for split: " (gncSplitGetGUID s) "\n")
-                          )
-                        )
-
-                        ;(gnc:debug (xaccAccountGetName s-account))
-                        (if (and	 ;; make sure we don't have
-			      (not (null? s-account)) ;;  any dangling splits
-			      (not (account-in-list? s-account accounts))
-                            )
-                          (if (not (split-in-list? s seen-split-list))
-			    (begin
-			      (set! seen-split-list (cons s seen-split-list))
-			      (if (gnc-numeric-negative-p s-value)
-				(let (
-                                       (pair (account-in-alist s-account money-in-alist))
-                                     )
-				  ;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
-				  ;  (gnc-numeric-to-double s-amount)
-				  ;  (gnc-commodity-get-printname parent-currency)
-				  ;  (gnc-numeric-to-double s-value))
-				  (if (not pair)
-				    (begin
-				      (set! pair (list s-account (gnc:make-commodity-collector)))
-				      (set! money-in-alist (cons pair money-in-alist))
-				      (set! money-in-accounts (cons s-account money-in-accounts))
-				      ;(gnc:debug money-in-alist)
-				    )
-				  )
-				  (let (
-                                         (s-account-in-collector (cadr pair))
-				         (s-report-value
-                                           (to-report-currency
-                                             parent-currency
-					     (gnc-numeric-neg s-value)
-					     (gnc-transaction-get-date-posted parent)
-                                           )
-                                         )
-                                        )
-				    (money-in-collector 'add report-currency s-report-value)
-				    (s-account-in-collector 'add report-currency s-report-value)
-                                  )
-				)
-				(let (
-                                       (pair (account-in-alist s-account money-out-alist))
-                                     )
-				  ;(gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
-				  ;	     (gnc-numeric-to-double s-amount)
-				  ;	     (gnc-commodity-get-printname parent-currency)
-				  ;	     (gnc-numeric-to-double s-value))
-				  (if (not pair)
-				    (begin
-				      (set! pair (list s-account (gnc:make-commodity-collector)))
-				      (set! money-out-alist (cons pair money-out-alist))
-				      (set! money-out-accounts (cons s-account money-out-accounts))
-				      ;(gnc:debug money-out-alist)
-				    )
-				  )
-				  (let (
-                                         (s-account-out-collector (cadr pair))
-				         (s-report-value
-					   (to-report-currency
-					     parent-currency
-					     s-value
-					     (gnc-transaction-get-date-posted parent)
-                                           )
-                                         )
-                                       )
-				    (money-out-collector 'add report-currency s-report-value)
-				    (s-account-out-collector 'add report-currency s-report-value)
-                                  )
-			        )
-			      )
-			    )
-			  )
-		        )
-		      )
-		    )
-                    (xaccTransGetSplitList parent)
-                  )
-                )
-              )
-            )
-          )
-          (xaccAccountGetSplitList current)
-        )
-        (calc-money-in-out-internal rest)
-      )
-    )
-  )
-
-  (calc-money-in-out-internal accounts)
-  );;let
-)
-
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; document-renderer
+;; cash-flow-renderer
 ;; set up the document and add the table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -330,6 +120,8 @@
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
          (row-num 0)
+	 (work-done 0)
+	 (work-to-do 0)
          (report-currency (get-option gnc:pagename-general
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
@@ -354,6 +146,34 @@
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
          (txt (gnc:make-html-text)))
+
+    ;; is account in list of accounts?
+    (define (same-account? a1 a2)
+      (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
+
+    (define (same-split? s1 s2) 
+      (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
+
+    (define account-in-list?
+      (lambda (account accounts)
+        (cond
+          ((null? accounts) #f)
+          ((same-account? (car accounts) account) #t)
+          (else (account-in-list? account (cdr accounts))))))
+
+    (define split-in-list? 
+      (lambda (split splits)
+	(cond 
+	 ((null? splits) #f)
+	 ((same-split? (car splits) split) #t)
+	 (else (split-in-list? split (cdr splits))))))
+
+    (define account-in-alist
+      (lambda (account alist)
+        (cond
+	   ((null? alist) #f)
+           ((same-account? (caar alist) account) (car alist))
+           (else (account-in-alist account (cdr alist))))))
 
     ;; helper for sorting of account list
     (define (account-full-name<? a b)
@@ -393,9 +213,133 @@
                                display-depth))
                (account-disp-list '())
 
+               (money-in-accounts '())
+               (money-in-alist '())
+               (money-in-collector (gnc:make-commodity-collector))
+
+               (money-out-accounts '())
+               (money-out-alist '())
+               (money-out-collector (gnc:make-commodity-collector))
+
                (money-diff-collector (gnc:make-commodity-collector))
+	       (splits-to-do (gnc:accounts-count-splits accounts))
+	       (seen-split-list '())
+	       (time-exchange-fn #f)
 	       (commodity-list #f))
 
+	  ;; Helper function to convert currencies
+	  (define (to-report-currency currency amount date)
+	    (gnc:gnc-monetary-amount
+	     (time-exchange-fn (gnc:make-gnc-monetary currency amount)
+			       report-currency
+			       date)))
+
+          ;; function to add inflow and outflow of money
+          (define (calc-money-in-out accounts)
+            (define (calc-money-in-out-internal accounts-internal)
+              (if (not (null? accounts-internal))
+                (let* ((current (car accounts-internal))
+                       (rest (cdr accounts-internal))
+                       (name (xaccAccountGetName current))
+                       (curr-commodity (xaccAccountGetCommodity current))
+                      )
+
+                  ;(gnc:debug "calc-money-in-out-internal---" name "---" (gnc-commodity-get-printname curr-commodity))
+
+                  (for-each
+                    (lambda (split)
+		      (set! work-done (+ 1 work-done))
+		      (gnc:report-percent-done (* 85 (/ work-done splits-to-do)))
+                      (let ((parent (xaccSplitGetParent split)))
+                        (if (and (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date-tp)
+                                 (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp))
+                          (let* ((parent-description (xaccTransGetDescription parent))
+                                 (parent-currency (xaccTransGetCurrency parent)))
+                            ;(gnc:debug parent-description
+                            ;           " - " 
+                            ;           (gnc-commodity-get-printname parent-currency))
+                            (for-each
+                              (lambda (s)
+                                (let* ((s-account (xaccSplitGetAccount s))
+                                       (s-amount (xaccSplitGetAmount s))
+                                       (s-value (xaccSplitGetValue s))
+                                       (s-commodity (xaccAccountGetCommodity s-account)))
+				  ;; Check if this is a dangling split
+				  ;; and print a warning
+				  (if (null? s-account)
+				      (display
+				       (string-append
+					"WARNING: s-account is NULL for split: "
+					(gncSplitGetGUID s) "\n")))
+
+                                  ;(gnc:debug (xaccAccountGetName s-account))
+                                  (if (and	 ;; make sure we don't have
+				       (not (null? s-account)) ;;  any dangling splits
+				       (not (account-in-list? s-account accounts)))
+				      (if (not (split-in-list? s seen-split-list))
+					  (begin  
+					    (set! seen-split-list (cons s seen-split-list))
+					    (if (gnc-numeric-negative-p s-value)
+						(let ((pair (account-in-alist s-account money-in-alist)))
+						  ;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
+						;	     (gnc-numeric-to-double s-amount)
+						;	     (gnc-commodity-get-printname parent-currency)
+						;	     (gnc-numeric-to-double s-value))
+						  (if (not pair)
+						      (begin
+							(set! pair (list s-account (gnc:make-commodity-collector)))
+							(set! money-in-alist (cons pair money-in-alist))
+							(set! money-in-accounts (cons s-account money-in-accounts))
+							;(gnc:debug money-in-alist)
+							)
+						      )
+						  (let ((s-account-in-collector (cadr pair))
+							(s-report-value (to-report-currency parent-currency
+											    (gnc-numeric-neg s-value)
+											    (gnc-transaction-get-date-posted
+											     parent))))
+						    (money-in-collector 'add report-currency s-report-value)
+						    (s-account-in-collector 'add report-currency s-report-value))
+						  )
+						(let ((pair (account-in-alist s-account money-out-alist)))
+						  ;(gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
+						;	     (gnc-numeric-to-double s-amount)
+						;	     (gnc-commodity-get-printname parent-currency)
+						;	     (gnc-numeric-to-double s-value))
+						  (if (not pair)
+						      (begin
+							(set! pair (list s-account (gnc:make-commodity-collector)))
+							(set! money-out-alist (cons pair money-out-alist))
+							(set! money-out-accounts (cons s-account money-out-accounts))
+							;(gnc:debug money-out-alist)
+							)
+						      )
+						  (let ((s-account-out-collector (cadr pair))
+							(s-report-value (to-report-currency parent-currency
+											    s-value
+											    (gnc-transaction-get-date-posted
+											     parent))))
+						    (money-out-collector 'add report-currency s-report-value)
+						    (s-account-out-collector 'add report-currency s-report-value))
+						  )
+						)
+					    )
+					  )
+				      )
+				  )
+				)
+                              (xaccTransGetSplitList parent)
+                            )
+                          )
+                        )
+                      )
+                    )
+                    (xaccAccountGetSplitList current)
+                  )
+
+                  (calc-money-in-out-internal rest))))
+
+            (calc-money-in-out-internal accounts))
 
 	  ;; Get an exchange function that will convert each transaction using the
 	  ;; nearest available exchange rate if that is what is specified
@@ -408,7 +352,7 @@
 				  0 0))
 
 
-          (calc-money-in-out accounts to-date-tp from-date-tp report-currency)
+          (calc-money-in-out accounts)
 
           (money-diff-collector 'merge money-in-collector #f)
           (money-diff-collector 'minusmerge money-out-collector #f)
