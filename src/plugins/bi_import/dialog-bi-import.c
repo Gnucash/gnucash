@@ -777,31 +777,32 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             }
 
         }
-        g_free (new_id);
         
-
-        // cleanup
-        g_free (id);
-        g_free (date_opened);
-        g_free (owner_id);
-        g_free (billing_id);
-        g_free (notes);
-        g_free (date);
-        g_free (desc);
-        g_free (action);
-        g_free (account);
-        g_free (quantity);
-        g_free (price);
-        g_free (disc_type);
-        g_free (disc_how);
-        g_free (discount);
-        g_free (taxable);
-        g_free (taxincluded);
-        g_free (tax_table);
-        g_free (date_posted);
-        g_free (due_date);
-        g_free (account_posted);
-        g_free (memo_posted);
-        g_free (accumulatesplits);
+        
     }
+    // cleanup
+    g_free (new_id);
+    g_free (id);
+    g_free (date_opened);
+    g_free (owner_id);
+    g_free (billing_id);
+    g_free (notes);
+    g_free (date);
+    g_free (desc);
+    g_free (action);
+    g_free (account);
+    g_free (quantity);
+    g_free (price);
+    g_free (disc_type);
+    g_free (disc_how);
+    g_free (discount);
+    g_free (taxable);
+    g_free (taxincluded);
+    g_free (tax_table);
+    g_free (date_posted);
+    g_free (due_date);
+    g_free (account_posted);
+    g_free (memo_posted);
+    g_free (accumulatesplits);
+    
 }
