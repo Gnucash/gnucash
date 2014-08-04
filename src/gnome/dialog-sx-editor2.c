@@ -1276,8 +1276,7 @@ schedXact_editor_create_ledger (GncSxEditorDialog2 *sxed)
     GtkWidget *label;
 
     /* Create the ledger */
-    /* THREAD-UNSAFE */
-    sxed->sxGUIDstr = g_strdup (guid_to_string (xaccSchedXactionGetGUID (sxed->sx)));
+    sxed->sxGUIDstr = guid_to_string (xaccSchedXactionGetGUID (sxed->sx));
     sxed->ledger = gnc_ledger_display2_template_gl (sxed->sxGUIDstr);
     model = gnc_ledger_display2_get_split_model_register (sxed->ledger);
 

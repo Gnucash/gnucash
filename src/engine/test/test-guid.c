@@ -42,11 +42,12 @@ static void test_null_guid(void)
     GncGUID *gp;
 
     g = guid_new_return();
-    gp = guid_malloc();
-    guid_new(gp);
+    gp = guid_new();
 
     do_test(guid_equal(guid_null(), guid_null()), "null guids equal");
     do_test(!guid_equal(&g, gp), "two guids equal");
+
+    guid_free(gp);
 }
 
 static void
@@ -70,7 +71,7 @@ run_test (void)
     for (i = 0; i < NENT; i++)
     {
         ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
-        guid_new(&guid);
+        guid_replace(&guid);
         ent = g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL);
         do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
                  "duplicate guid");

@@ -154,15 +154,15 @@ extern "C"
 
 /** \brief Initialise the Query Object Framework
 
-Use in place of separate init functions (like guid_init()
-and qof_query_init() etc.) to protect against future changes.
+Use in place of separate init functions (like qof_query_init(),
+etc.) to protect against future changes.
 */
 void qof_init (void);
 
 /** \brief Safely close down the Query Object Framework
 
 Use in place of separate close / shutdown functions
-(like guid_shutdown(), qof_query_shutdown() etc.) to protect
+(like qof_query_shutdown(), etc.) to protect
 against future changes.
 */
 void qof_close (void);

@@ -308,10 +308,12 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
     case KVP_TYPE_GUID:
-        /* THREAD-UNSAFE */
-        add_text_to_node(val_node, "guid",
-                         g_strdup(guid_to_string(kvp_value_get_guid(val))));
+    {
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(kvp_value_get_guid(val), guidstr);
+        add_text_to_node(val_node, "guid", guidstr);
         break;
+    }
     case KVP_TYPE_TIMESPEC:
     {
         Timespec ts = kvp_value_get_timespec (val);
