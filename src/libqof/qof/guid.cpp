@@ -85,7 +85,7 @@ gnc_value_get_guid (const GValue *value)
     return val;
 }
 
-static GncGUID * nullguid {reinterpret_cast<GncGUID*> (new boost::uuids::uuid{0})};
+static GncGUID * nullguid {reinterpret_cast<GncGUID*> (new boost::uuids::uuid{{0}})};
 
 /*It looks like we are expected to provide the same pointer every time from this function*/
 const GncGUID *
