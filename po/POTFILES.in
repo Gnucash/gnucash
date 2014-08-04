@@ -502,6 +502,7 @@ src/report/utility-reports/gncmod-utility-reports.c
 src/tax/us/gncmod-tax-us.c
 src/gnome/gnucash.appdata.xml.in
 src/gnome/gnucash.desktop.in.in
+src/libqof/qof/gnc-date.cpp
 src/libqof/qof/qofbookslots.h
 intl-scm/guile-strings.c
 doc/tip_of_the_day.list.in
