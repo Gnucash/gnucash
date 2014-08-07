@@ -971,8 +971,10 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
                 if (!node_b)
                 {
-                    PINFO ("first has split %s and second does not",
-                           guid_to_string (xaccSplitGetGUID (split_a)));
+                    gchar guidstr[GUID_ENCODING_LENGTH+1];
+                    guid_to_string_buff (xaccSplitGetGUID (split_a),guidstr);
+
+                    PINFO ("first has split %s and second does not",guidstr);
                     return FALSE;
                 }
 

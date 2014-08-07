@@ -426,7 +426,6 @@ src/import-export/qif-imp/gncmod-qif-import.c
 src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
 src/import-export/qif/qif-objects.c
-src/libqof/qof/md5.c
 src/plugins/bi_import/dialog-bi-import-gui.c
 src/plugins/bi_import/dialog-bi-import-helper.c
 src/plugins/bi_import/dialog-bi-import.c

@@ -105,7 +105,7 @@ GList * logged_in_users = NULL;
  */
 
 static const char *
-auth_user (const char * name, const char *passwd)
+auth_user (const char * name, const char *passwd, char *buff)
 {
     GncGUID *guid;
     const char *session_auth_string;
@@ -115,11 +115,11 @@ auth_user (const char * name, const char *passwd)
      */
     if (!name || !passwd) return NULL;
 
-    guid = g_new (GncGUID, 1);
-    guid_new (guid);
+    guid = guid_new();
     logged_in_users = g_list_prepend (logged_in_users, guid);
-    session_auth_string = guid_to_string (guid); /* THREAD UNSAFE */
-    return session_auth_string;
+
+    guid_to_string_buffer (guid, buff);
+    return buff;
 }
 
 /*
@@ -244,6 +244,7 @@ main (int argc, char *argv[])
         const char *user_agent;
         const char *auth_string;
         const char *content_length;
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
         int read_len = 0;
         int send_accts = 0;
 
@@ -301,7 +302,7 @@ main (int argc, char *argv[])
             char *name = NULL, *passwd = NULL;
             parse_for_login (request_bufp, &name, &passwd);
 
-            auth_string = auth_user (name, passwd);
+            auth_string = auth_user (name, passwd, guidstr);
             if (!auth_string)
             {
                 reject_auth();

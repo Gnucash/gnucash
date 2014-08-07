@@ -91,7 +91,7 @@ test_job (void)
 
         test_bool_fcn (book, "Active", gncJobSetActive, gncJobGetActive);
 
-        guid_new (&guid);
+        guid_replace (&guid);
         job = gncJobCreate (book);
         count++;
         gncJobSetGUID (job, &guid);

@@ -101,8 +101,7 @@ populate_frame (KvpFrame *frame)
 
     ts.tv_sec = 1;
     ts.tv_nsec = 1;
-    guid = guid_malloc ();
-    guid_new (guid);
+    guid = guid_new ();
     g_date_set_dmy (&gdate, 26, 1, 1957);
 
     kvp_frame_set_gint64( frame, "gint64-type", 100 );
@@ -163,8 +162,7 @@ test_kvp_frame_copy( Fixture *fixture, gconstpointer pData )
     test_ts.tv_sec = 1;
     test_ts.tv_nsec = 1;
     test_str = "abcdefghijklmnop";
-    test_guid = guid_malloc();
-    guid_new( test_guid );
+    test_guid = guid_new();
     test_frame = kvp_frame_new();
 
     g_assert( fixture->frame );
@@ -223,8 +221,7 @@ test_kvp_frame_set_foo( Fixture *fixture, gconstpointer pData )
     test_gnc_numeric = gnc_numeric_zero();
     test_ts.tv_sec = 1;
     test_ts.tv_nsec = 1;
-    test_guid = guid_malloc();
-    guid_new( test_guid );
+    test_guid = guid_new();
 
     g_assert( fixture->frame );
     g_assert( kvp_frame_is_empty( fixture->frame ) );
@@ -512,8 +509,7 @@ test_kvp_value_copy( void )
     KvpFrame *frame_orig, *frame_copy;
 
     gnc_numeric_orig = gnc_numeric_zero();
-    guid_orig = guid_malloc();
-    guid_new( guid_orig );
+    guid_orig = guid_new();
     ts_orig.tv_sec = 1;
     ts_orig.tv_nsec = 1;
     list_orig = NULL;
@@ -631,8 +627,7 @@ test_kvp_glist_copy( void )
     KvpFrame *frame_orig;
 
     gnc_numeric_orig = gnc_numeric_zero();
-    guid_orig = guid_malloc();
-    guid_new( guid_orig );
+    guid_orig = guid_new();
     ts_orig.tv_sec = 1;
     ts_orig.tv_nsec = 1;
     list_orig = NULL;
@@ -703,8 +698,7 @@ test_kvp_glist_compare( void )
     KvpFrame *frame_orig;
 
     gnc_numeric_orig = gnc_numeric_zero();
-    guid_orig = guid_malloc();
-    guid_new( guid_orig );
+    guid_orig = guid_new();
     ts_orig.tv_sec = 1;
     ts_orig.tv_nsec = 1;
     list_orig = NULL;
@@ -797,10 +791,8 @@ test_kvp_value_compare( void )
 
     gnc_numeric_orig = gnc_numeric_zero();
     gnc_numeric_copy = gnc_numeric_zero();
-    guid_orig = guid_malloc();
-    guid_new( guid_orig );
-    guid_copy = guid_malloc();
-    guid_new( guid_copy );
+    guid_orig = guid_new();
+    guid_copy = guid_new();
     ts_orig.tv_sec = 1;
     ts_orig.tv_nsec = 1;
     ts_copy.tv_sec = 2;
@@ -988,7 +980,7 @@ test_binary_to_string( void )
 static void
 test_kvp_value_to_string( void )
 {
-    const gchar *str_tmp;
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
     gchar *str_tmp2, *str_tmp3;
     gchar *result;
     KvpValue *gint64_value;
@@ -1007,8 +999,7 @@ test_kvp_value_to_string( void )
     KvpFrame *frame_orig;
 
     gnc_numeric_orig = gnc_numeric_zero();
-    guid_orig = guid_malloc();
-    guid_new( guid_orig );
+    guid_orig = guid_new();
     ts_orig.tv_sec = 1;
     ts_orig.tv_nsec = 1;
     list_orig = NULL;
@@ -1047,8 +1038,8 @@ test_kvp_value_to_string( void )
 
     result = kvp_value_to_string( guid_value );
     g_assert( result );
-    str_tmp = guid_to_string( kvp_value_get_guid( guid_value ) );
-    str_tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", str_tmp ? str_tmp : "");
+    guid_to_string_buff( kvp_value_get_guid( guid_value ), guidstr);
+    str_tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", guidstr);
     g_assert_cmpstr( result, == , str_tmp2 );
     g_free( result );
     g_free( str_tmp2 );
@@ -1093,8 +1084,7 @@ test_kvp_frame_to_string( Fixture *fixture, gconstpointer pData )
     KvpFrame *test_frame;
 
     test_gnc_numeric = gnc_numeric_zero();
-    test_guid = guid_malloc();
-    guid_new( test_guid );
+    test_guid = guid_new();
     test_ts.tv_sec = 1;
     test_ts.tv_nsec = 1;
     test_frame = kvp_frame_new();

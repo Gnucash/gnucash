@@ -225,10 +225,11 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row )
     /*# -ifempty */
     if (pSplit != xaccSplitLookup( &split_guid, be->book ))
     {
-	PERR("A malformed split with id %s was found in the dataset.",
-	     guid_to_string(qof_instance_get_guid(pSplit)));
-	qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
-	pSplit = NULL;
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(qof_instance_get_guid(pSplit), guidstr);
+        PERR("A malformed split with id %s was found in the dataset.", guidstr);
+        qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
+        pSplit = NULL;
     }
     return pSplit;
 }
@@ -305,10 +306,11 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
 
     if (pTx != xaccTransLookup( &tx_guid, be->book ))
     {
-	PERR("A malformed transaction with id %s was found in the dataset.",
-	     guid_to_string(qof_instance_get_guid(pTx)));
-	qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
-	pTx = NULL;
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(qof_instance_get_guid(pTx), guidstr);
+        PERR("A malformed transaction with id %s was found in the dataset.", guidstr);
+        qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
+        pTx = NULL;
     }
 
     return pTx;

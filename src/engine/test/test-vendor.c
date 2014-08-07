@@ -96,7 +96,7 @@ test_vendor (void)
 
         do_test (gncVendorGetAddr (vendor) != NULL, "Addr");
 
-        guid_new (&guid);
+        guid_replace (&guid);
         vendor = gncVendorCreate (book);
         count++;
         gncVendorSetGUID (vendor, &guid);

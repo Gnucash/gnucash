@@ -385,16 +385,15 @@ static
 void
 gsr_create_table( GNCSplitReg *gsr )
 {
-    GtkWidget *register_widget;
-    SplitRegister *sr;
+    GtkWidget *register_widget = NULL;
+    SplitRegister *sr = NULL;
 
-    gchar *state_section;
-    const GncGUID * guid;
-    Account * account;
-    
-    account = gnc_ledger_display_leader(gsr->ledger);
-    guid = xaccAccountGetGUID(account);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), NULL);
+    Account * account = gnc_ledger_display_leader(gsr->ledger);
+    const GncGUID * guid = xaccAccountGetGUID(account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    gchar *state_section = NULL;
+    guid_to_string_buff(guid, guidstr);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     ENTER("gsr=%p", gsr);
 
@@ -693,13 +692,14 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
 
+    Account * account = gnc_ledger_display_leader(ledger);
+    const GncGUID * guid = xaccAccountGetGUID(account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
     gchar *state_section;
-    const GncGUID * guid;
-    Account * account;
 
-    account = gnc_ledger_display_leader(ledger);
-    guid = xaccAccountGetGUID(account);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ",(gchar*)guid_to_string (guid), NULL);
+    guid_to_string_buff(guid, guidstr);
+
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     if (gsr)
     {

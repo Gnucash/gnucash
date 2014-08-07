@@ -1779,9 +1779,9 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                                 qof_query_printGuidMatch (pdata->options));
         for (node = pdata->guids; node; node = node->next)
         {
-            /* THREAD-UNSAFE */
-            g_string_append_printf (gs, ", guids: %s",
-                                    guid_to_string ((GncGUID *) node->data));
+            gchar guidstr[GUID_ENCODING_LENGTH+1];
+            guid_to_string_buff ((GncGUID *) node->data,guidstr);
+            g_string_append_printf (gs, ", guids: %s",guidstr);
         }
         return;
     }

@@ -588,8 +588,9 @@ billterm_scrub_cb (QofInstance *term_p, gpointer list_p)
         if (t)
         {
             /* Fix up the broken "copy" function */
-            PWARN("Fixing broken child billterm: %s",
-                  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
+            gchar guidstr[GUID_ENCODING_LENGTH+1];
+            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),guidstr);
+            PWARN("Fixing broken child billterm: %s", guidstr);
 
             gncBillTermBeginEdit(term);
             gncBillTermSetType(term, gncBillTermGetType(t));
@@ -624,8 +625,9 @@ billterm_scrub_invoices (QofInstance * invoice_p, gpointer ht_p)
     {
         if (billterm_is_grandchild(term))
         {
-            PWARN("Fixing i-billterm on invoice %s\n",
-                  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(invoice))));
+            gchar guidstr[GUID_ENCODING_LENGTH+1];
+            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(invoice)),guidstr);
+            PWARN("Fixing i-billterm on invoice %s\n", guidstr);
             new_bt = billterm_find_senior(term);
             gncInvoiceBeginEdit(invoice);
             gncInvoiceSetTerms(invoice, new_bt);
@@ -656,9 +658,13 @@ billterm_scrub_cust (QofInstance * cust_p, gpointer ht_p)
         count++;
         g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
         if (billterm_is_grandchild(term))
-            PWARN("customer %s has grandchild billterm %s\n",
-                  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(cust))),
-                  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
+        {
+            gchar custstr[GUID_ENCODING_LENGTH+1];
+            gchar termstr[GUID_ENCODING_LENGTH+1];
+            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(cust)),custstr);
+            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),termstr);
+            PWARN("customer %s has grandchild billterm %s\n", custstr,termstr);
+        }
     }
 }
 
@@ -677,9 +683,13 @@ billterm_scrub_vendor (QofInstance * vendor_p, gpointer ht_p)
         count++;
         g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
         if (billterm_is_grandchild(term))
-            PWARN("vendor %s has grandchild billterm %s\n",
-                  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(vendor))),
-                  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
+        {
+            gchar vendstr[GUID_ENCODING_LENGTH+1];
+            gchar termstr[GUID_ENCODING_LENGTH+1];
+            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(vendor)),vendstr);
+            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),termstr);
+            PWARN("vendor %s has grandchild billterm %s\n", vendstr, termstr);
+        }
     }
 }
 
@@ -691,9 +701,10 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
 
     if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term))
     {
+        gchar termstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),termstr);
         PWARN("Fixing refcount on billterm %s (%" G_GINT64_FORMAT " -> %d)\n",
-              guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))),
-              gncBillTermGetRefcount(term), count);
+                termstr, gncBillTermGetRefcount(term), count);
         gncBillTermSetRefcount(term, count);
     }
 }
@@ -715,10 +726,11 @@ billterm_scrub (QofBook *book)
     /* destroy the list of "grandchildren" bill terms */
     for (node = list; node; node = node->next)
     {
+        gchar termstr[GUID_ENCODING_LENGTH+1];
         term = node->data;
 
-        PWARN ("deleting grandchild billterm: %s\n",
-               guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
+        guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)), termstr);
+        PWARN ("deleting grandchild billterm: %s\n", termstr);
 
         /* Make sure the parent has no children */
         parent = gncBillTermGetParent(term);
@@ -770,11 +782,13 @@ GncBillTerm *
 gnc_billterm_xml_find_or_create(QofBook *book, GncGUID *guid)
 {
     GncBillTerm *term;
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
 
+    guid_to_string_buff(guid, guidstr);
     g_return_val_if_fail(book, NULL);
     g_return_val_if_fail(guid, NULL);
     term = gncBillTermLookup(book, guid);
-    DEBUG("looking for billterm %s, found %p", guid_to_string(guid), term);
+    DEBUG("looking for billterm %s, found %p", guidstr, term);
     if (!term)
     {
         term = gncBillTermCreate(book);

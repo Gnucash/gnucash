@@ -1,6 +1,7 @@
 /********************************************************************\
  * guid.h -- globally unique ID User API                            *
  * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ *               2014 Aaron Laws <dartmetrash@gmail.com>            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -35,114 +36,96 @@ extern "C"
 /** @addtogroup Entity
     @{ */
 /** @addtogroup GncGUID
-    Globally Unique ID's provide a way to uniquely identify
-    some thing.  A GncGUID is a unique, cryptographically
+    Globally Unique IDs provide a way to uniquely identify
+    something.  A GncGUID is a unique, cryptographically
     random 128-bit value.  The identifier is so random that
     it is safe to assume that there is no other such item
     on the planet Earth, and indeed, not even in the Galaxy
     or beyond.
 
-    QOF GncGUID's can be used independently of any other subsystem
+    QOF GncGUIDs can be used independently of any other subsystem
     in QOF. In particular, they do not require the use of
-    other parts of the object subsystem. New GncGUID's are usually
-    created by initialising a new entity using qof_instance_init,
+    other parts of the object subsystem. New GncGUIDs are usually
+    created by initializing a new entity using qof_instance_init,
     rather than calling GncGUID functions directly.
 
     @{ */
 /** @file guid.h
     @brief  globally unique ID User API
     @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+        Copyright 2014 Aaron Laws <dartmetrash@gmail.com>
 */
 
-/** The type used to store guids */
 #define GUID_DATA_SIZE	16
-typedef union GNC_INTERNAL_GUID
-{
-    guchar data[GUID_DATA_SIZE];
-
-    gint __align_me; /* this just ensures that GUIDs are 32-bit
-                   * aligned on systems that need them to be. */
-} GncGUID;
-
 
 #define GNC_TYPE_GUID (gnc_guid_get_type())
 #define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
 
+/** The type used to store guids */
+typedef struct _gncGuid {
+    unsigned char reserved[GUID_DATA_SIZE];
+} GncGUID;
+
 GType gnc_guid_get_type (void);
 const GncGUID* gnc_value_get_guid (const GValue *value);
 
-/** number of characters needed to encode a guid as a string
+/** Number of characters needed to encode a guid as a string
  * not including the null terminator. */
 #define GUID_ENCODING_LENGTH 32
 
-
-/** Initialize the id generator with a variety of random
- *  sources.
+/** Generate a new guid.
  *
- *  @note Only one of guid_init(), guid_init_with_salt() and
- *  guid_init_only_salt() should be called.  Calling any
- *  initialization function a second time will reset the generator and
- *  erase the effect of the first call.
- */
-void guid_init(void);
-
-/** Release the memory chunk associated with gui storage. Use this
- *  only when shutting down the program, as it invalidates *all*
- *  GUIDs at once. */
-void guid_shutdown (void);
-
-/** Generate a new id. If no initialization function has been called,
- *  guid_init() will be called before the id is created.
- *
- *  @param guid A pointer to an existing guid data structure.  The
+ *  @param guid A pointer to an allocated guid data structure.  The
  *  existing value will be replaced with a new value.
- *
- * This routine uses the md5 algorithm to build strong random guids.
- * Note that while guid's are generated randomly, the odds of this
- * routine returning a non-unique id are astronomically small.
- * (Literally astronomically: If you had Cray's on every solar
- * system in the universe running for the entire age of the universe,
- * you'd still have less than a one-in-a-million chance of coming up
- * with a duplicate id.  2^128 == 10^38 is a really really big number.)
  */
-void guid_new(GncGUID *guid);
+void guid_replace (GncGUID *guid);
 
-/** Generate a new id. If no initialization function has been called,
- *  guid_init() will be called before the id is created.
+/** Generate a new id.
  *
- * @return guid A data structure containing a newly allocated GncGUID.
- *  Caller is responsible for calling guid_free().
+ * @return guid A data structure containing a copy of a newly constructed GncGUID.
  */
-GncGUID guid_new_return(void);
+GncGUID guid_new_return (void);
 
-/** Returns a GncGUID which is guaranteed
-to never reference any entity. */
+/** Returns a GncGUID which is guaranteed to never reference any entity.
+ * 
+ * Do not free this value! The same pointer is returned on each call.*/
 const GncGUID * guid_null (void);
 
-/** Efficiently allocate & free memory for GUIDs */
+/** 
+ * Allocate memory for a GUID. This does not construct a GUID. In other words,
+ * the returned pointer has not necessarily been initialized. The returned 
+ * pointer must be freed with * guid_free.
+ */
 GncGUID * guid_malloc (void);
 
-/* Return a guid set to all zero's */
+/**
+ * Allocate and construct a new GUID. The returned pointer must be 
+ * released with guid_free.
+ */
+GncGUID * guid_new (void);
+
+/*Free the guid pointed to. Do not use this guid any more.*/
 void   guid_free (GncGUID *guid);
 
+/**
+ * Returns a newly allocated GncGUID that matches the passed-in GUID.
+ * The returned pointer must be freed using guid_free.
+ */
 GncGUID *guid_copy (const GncGUID *guid);
 
 /** The guid_to_string() routine returns a null-terminated string
  *  encoding of the id. String encodings of identifiers are hex
  *  numbers printed only with the characters '0' through '9' and
  *  'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH
- *  characters long.
- *
- *  XXX This routine is not thread safe and is deprecated. Please
- *  use the routine guid_to_string_buff() instead.
+ *  characters long (not including the null terminator).
  *
  *  @param guid The guid to print.
  *
  *  @return A pointer to the starting character of the string.  The
- *  returned memory is owned by this routine and may not be freed by
- *  the caller.
+ *  returned memory is owned by the calling routine and must be freed
+ *  using g_free.
  */
-const gchar * guid_to_string (const GncGUID * guid);
+gchar * guid_to_string (const GncGUID * guid);
 
 /** The guid_to_string_buff() routine puts a null-terminated string
  *  encoding of the id into the memory pointed at by buff.  The
@@ -155,16 +138,21 @@ const gchar * guid_to_string (const GncGUID * guid);
  *
  *  @param buff The buffer to print it into.
  *
- *  @return A pointer to the terminating null character of the string.
+ *  @return A pointer to the terminating null character of the string,
+ *     or, if no copy took place, NULL.
  */
 gchar * guid_to_string_buff (const GncGUID * guid, /*@ out @*/ gchar *buff);
 
 
-/** Given a string, decode the id into the guid if guid is non-NULL.
- * The function returns TRUE if the string was a valid 32 character
- * hexadecimal number. This function accepts both upper and lower case
- * hex digits. If the return value is FALSE, the effect on guid is
- * undefined. */
+/** Given a string, replace the given guid with the parsed one unless
+ * the given value is null.
+ * If null is passed as guid or string, false is returned and nothing
+ * is done, otherwise, the function returns true.
+ * This function accepts both uppor and lower case hex digits. If
+ * letters outside the range of [a-fA-F] are passed, they are silently
+ * replaced. If non-alphanumeric digits are given, this function will
+ * either return false or replace those values with others.
+ */
 gboolean string_to_guid(const gchar * string, /*@ out @*/ GncGUID * guid);
 
 
