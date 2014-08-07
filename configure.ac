@@ -34,7 +34,7 @@ GNUCASH_NANO_VERSION=0
 #src/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
 GNUCASH_RESAVE_VERSION=19920
 # Initialize automake -- make sure we have at least version 1.9
-AM_INIT_AUTOMAKE([1.9 dist-bzip2 subdir-objects])
+AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 
 # Parse out the version number
 GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
