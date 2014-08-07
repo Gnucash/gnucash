@@ -520,7 +520,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     GncInvoice *invoice;
     GncEntry *entry;
     gint day, month, year;
-    gnc_numeric n;
+    gnc_numeric value;
     GncOwner *owner;
     Account *acc;
     enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO} update;
@@ -528,7 +528,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     Timespec today;
     InvoiceWindow *iw;
     gchar *new_id = NULL;
-
+ 	gint64  	denom;
+    gnc_commodity *currency;
+    
     // these arguments are needed
     g_return_if_fail (store && book);
     // logic of this function only works for bills or invoices
@@ -693,6 +695,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
         // add entry to invoice/bill
         entry = gncEntryCreate (book);
+        gncEntryBeginEdit(entry);
+        currency = gncInvoiceGetCurrency(invoice);
+        if (currency) denom = gnc_commodity_get_fraction(currency);
         // FIXME: Must check for the return value of qof_scan_date!
         qof_scan_date (date, &day, &month, &year);
         {
@@ -705,42 +710,39 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gncEntrySetDescription (entry, desc);
         gncEntrySetAction (entry, action);
 
-        n = gnc_numeric_zero ();
-        gnc_exp_parser_parse (quantity, &n, NULL);
-        gncEntrySetQuantity (entry, n);
+        gnc_exp_parser_parse (quantity, &value, NULL);
+        gncEntrySetQuantity (entry, value);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
         
         if (g_ascii_strcasecmp (type, "BILL") == 0)
         {
             gncEntrySetBillAccount (entry, acc);
-            n = gnc_numeric_zero ();
-            gnc_exp_parser_parse (price, &n, NULL);
-            gncEntrySetBillPrice (entry, n);
+            gnc_exp_parser_parse (price, &value, NULL);
+            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
+            gncEntrySetBillPrice (entry, value);
             gncEntrySetBillTaxable (entry, text2bool (taxable));
             gncEntrySetBillTaxIncluded (entry, text2bool (taxincluded));
-            gncEntrySetBillTaxTable (entry,
-                                     gncTaxTableLookupByName (book, tax_table));
-            n = gnc_numeric_zero ();
-            gnc_exp_parser_parse (discount, &n, NULL);
+            gncEntrySetBillTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
+            gncEntryCommitEdit(entry);
             gncBillAddEntry (invoice, entry);
         }
         else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
         {
             gncEntrySetNotes (entry, notes);
             gncEntrySetInvAccount (entry, acc);
-            n = gnc_numeric_zero ();
-            gnc_exp_parser_parse (price, &n, NULL);
-            gncEntrySetInvPrice (entry, n);
+            gnc_exp_parser_parse (price, &value, NULL);
+            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
+            gncEntrySetInvPrice (entry, value);
             gncEntrySetInvTaxable (entry, text2bool (taxable));
             gncEntrySetInvTaxIncluded (entry, text2bool (taxincluded));
-            gncEntrySetInvTaxTable (entry,
-                                    gncTaxTableLookupByName (book, tax_table));
-            n = gnc_numeric_zero ();
-            gnc_exp_parser_parse (discount, &n, NULL);
-            gncEntrySetInvDiscount (entry, n);
+            gncEntrySetInvTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
+            gnc_exp_parser_parse (discount, &value, NULL);
+            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
+            gncEntrySetInvDiscount (entry, value);
             gncEntrySetInvDiscountType (entry, text2disc_type (disc_type));
             gncEntrySetInvDiscountHow (entry, text2disc_how (disc_how));
+            gncEntryCommitEdit(entry);
             gncInvoiceAddEntry (invoice, entry);
         }
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
