@@ -528,7 +528,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     Timespec today;
     InvoiceWindow *iw;
     gchar *new_id = NULL;
- 	gint64  	denom;
+    gint64 denom = 0;
     gnc_commodity *currency;
     
     // these arguments are needed
