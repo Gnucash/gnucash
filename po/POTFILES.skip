@@ -19,6 +19,10 @@ src/libqof/qof/qofquery-deserial.c
 src/libqof/qof/qofquery-serialize.c
 src/libqof/qof/qofsql.c
 
+# These we don't want to translate because they're experimental:
+src/gnc/.*
+src/optional/gtkmm/.*
+
 # The scheme files are handled by intl-scm/guile-strings.c because
 # intltool wouldn't scan scheme files. They're here now because
 # intltool 0.50 *does* scan them, and it creates an error during make

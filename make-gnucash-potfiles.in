@@ -27,9 +27,11 @@ while (<IN>) {
 close IN;
 
 
-my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' -o -name '*.glade' \\
+my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' \\
+                      -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.gschema.xml.in.in' |sort`;
+                      -o -name '*.gschema.xml.in.in' \\
+                      | sort`;
 ## For perl files add the following:
 # -o -name '*.pl'
 
