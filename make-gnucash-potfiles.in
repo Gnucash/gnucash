@@ -14,9 +14,18 @@ use File::Basename;
 
 # Note: These are perl regexp patterns, *not* normal shell wildcards!
 my @ignorepatterns = ('gw-', 'test', 'experimental', 'python-bindings', 'swig-.*\.c');
+my (@skipped_files, @ignored_files);
+open(IN, "< @-SRCDIR-@/po/POTFILES.skip");
+while (<IN>) {
+    push @skipped_files, $_ unless $_ =~ /^\#/;
+}
+close IN;
+open(IN, "< @-SRCDIR-@/po/POTFILES.ignore");
+while (<IN>) {
+    push @ignored_files, $_ unless $_ =~ /^\#/;
+}
+close IN;
 
-my @skipped_files = `grep -v \# @-SRCDIR-@/po/POTFILES.skip`;
-my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
 
 my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
