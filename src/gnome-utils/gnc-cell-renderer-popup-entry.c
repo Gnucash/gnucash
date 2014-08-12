@@ -38,7 +38,7 @@
 #include "gnc-date.h"
 
 static void     gnc_popup_entry_init       (GncPopupEntry        *entry);
-static void     gnc_popup_entry_class_init (GncPopupEntryClass   *class);
+static void     gnc_popup_entry_class_init (GncPopupEntryClass   *klass);
 static void     gpw_cell_editable_init     (GtkCellEditableIface *iface);
 static gboolean gpw_key_press_event        (GtkWidget            *box,
         GdkEventKey          *key_event);

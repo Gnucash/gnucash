@@ -484,7 +484,7 @@ close_handler (gpointer user_data)
 }
 
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     FinCalcDialog *fcd = user_data;

@@ -516,11 +516,11 @@ get_random_commodity_from_table (gnc_commodity_table *table)
     do
     {
         GList *commodities;
-        char *namespace;
+        char *name_space;
 
-        namespace = get_random_list_element (namespaces);
+        name_space = get_random_list_element (namespaces);
 
-        commodities = gnc_commodity_table_get_commodities (table, namespace);
+        commodities = gnc_commodity_table_get_commodities (table, name_space);
         if (!commodities)
             continue;
 

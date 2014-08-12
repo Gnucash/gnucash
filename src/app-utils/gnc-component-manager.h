@@ -104,7 +104,7 @@ typedef gboolean (*GNCComponentFindHandler) (gpointer find_data,
  *
  * Return: TRUE if the callback did something
  */
-typedef gboolean (*GNCComponentHandler) (const char *class,
+typedef gboolean (*GNCComponentHandler) (const char *component_class,
         gint component_id,
         gpointer user_data,
         gpointer iter_data);

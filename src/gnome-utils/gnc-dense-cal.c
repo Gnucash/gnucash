@@ -76,7 +76,7 @@ static const gchar* MARK_COLOR = "Yellow";
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.dense-cal"
 
-static void gnc_dense_cal_class_init(GncDenseCalClass *class);
+static void gnc_dense_cal_class_init(GncDenseCalClass *klass);
 static void gnc_dense_cal_init(GncDenseCal *dcal);
 static void gnc_dense_cal_finalize(GObject *object);
 static void gnc_dense_cal_dispose(GObject *object);

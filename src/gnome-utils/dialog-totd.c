@@ -174,7 +174,7 @@ gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-    gchar *filename, *contents, *new;
+    gchar *filename, *contents, *new_str;
     gsize length;
     GError *error;
 
@@ -209,9 +209,9 @@ gnc_totd_initialize (void)
                 contents = g_strdup (tip_list[tip_count]);
             else
             {
-                new = g_strjoin ("\n", contents, tip_list[tip_count], NULL);
+                new_str = g_strjoin ("\n", contents, tip_list[tip_count], NULL);
                 g_free (contents);
-                contents = new;
+                contents = new_str;
             }
         }
     }
@@ -223,9 +223,9 @@ gnc_totd_initialize (void)
     /* Convert any escaped characters while counting the strings */
     for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
     {
-        new = g_strcompress(tip_list[tip_count]);
+        new_str = g_strcompress(tip_list[tip_count]);
         g_free(tip_list[tip_count]);
-        tip_list[tip_count] = new;
+        tip_list[tip_count] = new_str;
     }
 
 
@@ -250,7 +250,7 @@ gnc_totd_initialize (void)
  *
  *  @internal
  *
- *  @param class Unused.
+ *  @param class_name Unused.
  *
  *  @param component_id Unused.
  *
@@ -259,7 +259,7 @@ gnc_totd_initialize (void)
  *  @param iter_data Unused.
  ***********************************************************************/
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     TotdDialog *totd_dialog = user_data;

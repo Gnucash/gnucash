@@ -2059,7 +2059,7 @@ commodity_restore_parser_new(void)
 
 typedef struct
 {
-    gchar *namespace;
+    gchar *name_space;
     gchar *id;
 } CommodityLookupParseInfo;
 
@@ -2095,8 +2095,8 @@ generic_gnc_commodity_lookup_after_child_handler(gpointer data_for_children,
 
     if (strcmp(child_result->tag, "space") == 0)
     {
-        if (cpi->namespace) return(FALSE);
-        cpi->namespace = (gchar *) child_result->data;
+        if (cpi->name_space) return(FALSE);
+        cpi->name_space = (gchar *) child_result->data;
         child_result->should_cleanup = FALSE;
     }
     else if (strcmp(child_result->tag, "id") == 0)
@@ -2127,14 +2127,14 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail(cpi, FALSE);
 
-    if (cpi->namespace && cpi->id)
+    if (cpi->name_space && cpi->id)
     {
         gnc_commodity_table *table;
         gnc_commodity *com;
 
         table = gnc_commodity_table_get_table (pstatus->book);
 
-        com = gnc_commodity_table_lookup(table, cpi->namespace, cpi->id);
+        com = gnc_commodity_table_lookup(table, cpi->name_space, cpi->id);
 
         if (com)
         {
@@ -2143,7 +2143,7 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
         }
     }
 
-    g_free(cpi->namespace);
+    g_free(cpi->name_space);
     g_free(cpi->id);
     g_free(cpi);
 
