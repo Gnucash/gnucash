@@ -51,6 +51,7 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define optname-show-full-names (N_ "Show Full Account Names"))
+(define optname-include-trading-accounts (N_ "Include Trading Accounts in report"))
 
 ;; options generator
 (define (cash-flow-options-generator)
@@ -93,6 +94,13 @@
               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
+     
+     ;; Trading accounts?
+     (gnc:register-option
+      options
+      (gnc:make-simple-boolean-option
+       gnc:pagename-accounts optname-include-trading-accounts
+       "b" (N_ "Include transfers to and from Trading Accounts in the report.")  #f))
     
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)      
@@ -119,6 +127,8 @@
                                      optname-show-subaccounts))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
+         (include-trading-accounts (get-option gnc:pagename-accounts
+                               optname-include-trading-accounts))
          (row-num 0)
 	 (work-done 0)
 	 (work-to-do 0)
@@ -261,6 +271,7 @@
                             (for-each
                               (lambda (s)
                                 (let* ((s-account (xaccSplitGetAccount s))
+                                       (s-account-type (xaccAccountGetType s-account)) 
                                        (s-amount (xaccSplitGetAmount s))
                                        (s-value (xaccSplitGetValue s))
                                        (s-commodity (xaccAccountGetCommodity s-account)))
@@ -275,6 +286,7 @@
                                   ;(gnc:debug (xaccAccountGetName s-account))
                                   (if (and	 ;; make sure we don't have
 				       (not (null? s-account)) ;;  any dangling splits
+				       (or include-trading-accounts (not (eq? s-account-type ACCT-TYPE-TRADING)))
 				       (not (account-in-list? s-account accounts)))
 				      (if (not (split-in-list? s seen-split-list))
 					  (begin  
