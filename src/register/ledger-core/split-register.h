@@ -256,7 +256,7 @@ struct split_register
                                                 or split action for number
                                                 field in register */
     gboolean is_template;
-    gboolean do_auto_complete; /**< whether to use auto-competion */
+    gboolean do_auto_complete; /**< whether to use auto-completion */
 
     SRInfo * sr_info;   /**< private data; outsiders should not access this */
 };

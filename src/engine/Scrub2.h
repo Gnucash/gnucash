@@ -53,7 +53,7 @@
  *   not in a lot will be used to close the oldest open lot(s).
  *   If there are no open lots, a new lot will be started.
  *   By trying to close the oldest lots, this effectively
- *   implements a FIFO acounting policy.
+ *   implements a FIFO accounting policy.
  */
 void xaccAccountAssignLots (Account *acc);
 
@@ -94,10 +94,13 @@ void xaccLotScrubDoubleBalance (GNCLot *lot);
  *
  *  The xaccScrubMergeTransSubSplits() routine does the same, except
  *    that it does it for all of the splits in the transaction.
- *  The xaccScrubMergeLotSubSplits() routine does the same, except
- *    that it does it for all of the splits in the lot.
  */
 gboolean xaccScrubMergeSubSplits (Split *split);
+
+/** The xaccScrubMergeLotSubSplits() routine does the same as
+ *    the xaccScrubMergSubSplits, except that it does it
+ *    for all of the splits in the lot.
+ */
 gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
 
 #endif /* XACC_SCRUB2_H */

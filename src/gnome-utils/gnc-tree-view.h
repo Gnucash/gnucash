@@ -259,7 +259,7 @@ gnc_tree_view_add_date_column (GncTreeView *view,
  *  column used to determine the foreground color of any text in this
  *  column.  It should be used to display negative numbers in red.
  *  Use GNC_TREE_VIEW_COLUMN_COLOR_NONE if the text in this column
- *  should always be displayed in black.
+ *  should always be displayed in the default theme color for text.
  *
  *  @param model_visibility_column The index of the GtkTreeModel data
  *  column used to determine whether or not a checkbox for each row
