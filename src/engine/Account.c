@@ -4036,6 +4036,30 @@ xaccAccountTypesValid(void)
     return mask;
 }
 
+gboolean xaccAccountIsAssetLiabType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
+        return FALSE;
+    default:
+        return (xaccAccountTypesCompatible(ACCT_TYPE_ASSET, t)
+                || xaccAccountTypesCompatible(ACCT_TYPE_LIABILITY, t));
+    }
+}
+gboolean xaccAccountIsAPARType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 gboolean
 xaccAccountIsPriced(const Account *acc)
 {

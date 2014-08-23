@@ -1113,37 +1113,13 @@ gnc_ui_payment_new (GncOwner *owner, QofBook *book)
 }
 
 // ////////////////////////////////////////////////////////////
-
-static gboolean isAssetLiabType(GNCAccountType t)
-{
-    switch (t)
-    {
-    case ACCT_TYPE_RECEIVABLE:
-    case ACCT_TYPE_PAYABLE:
-        return FALSE;
-    default:
-        return (xaccAccountTypesCompatible(ACCT_TYPE_ASSET, t)
-                || xaccAccountTypesCompatible(ACCT_TYPE_LIABILITY, t));
-    }
-}
-static gboolean isAPARType(GNCAccountType t)
-{
-    switch (t)
-    {
-    case ACCT_TYPE_RECEIVABLE:
-    case ACCT_TYPE_PAYABLE:
-        return TRUE;
-    default:
-        return FALSE;
-    }
-}
 static void increment_if_asset_account (gpointer data,
                                         gpointer user_data)
 {
     int *r = user_data;
     const Split *split = data;
     const Account *account = xaccSplitGetAccount(split);
-    if (isAssetLiabType(xaccAccountGetType(account)))
+    if (xaccAccountIsAssetLiabType(xaccAccountGetType(account)))
         ++(*r);
 }
 static int countAssetAccounts(SplitList* slist)
@@ -1158,7 +1134,7 @@ static gint predicate_is_asset_account(gconstpointer a,
 {
     const Split *split = a;
     const Account *account = xaccSplitGetAccount(split);
-    if (isAssetLiabType(xaccAccountGetType(account)))
+    if (xaccAccountIsAssetLiabType(xaccAccountGetType(account)))
         return 0;
     else
         return -1;
@@ -1168,7 +1144,7 @@ static gint predicate_is_apar_account(gconstpointer a,
 {
     const Split *split = a;
     const Account *account = xaccSplitGetAccount(split);
-    if (isAPARType(xaccAccountGetType(account)))
+    if (xaccAccountIsAPARType(xaccAccountGetType(account)))
         return 0;
     else
         return -1;
