@@ -344,7 +344,7 @@ merge_splits (Split *sa, Split *sb)
 }
 
 gboolean
-xaccScrubMergeSubSplits (Split *split)
+xaccScrubMergeSubSplits (Split *split, gboolean strict)
 {
     gboolean rc = FALSE;
     Transaction *txn;
@@ -352,7 +352,7 @@ xaccScrubMergeSubSplits (Split *split)
     GNCLot *lot;
     const GncGUID *guid;
 
-    if (FALSE == is_subsplit (split)) return FALSE;
+    if (strict && (FALSE == is_subsplit (split))) return FALSE;
 
     txn = split->parent;
     lot = xaccSplitGetLot (split);
@@ -392,7 +392,7 @@ restart:
 }
 
 gboolean
-xaccScrubMergeLotSubSplits (GNCLot *lot)
+xaccScrubMergeLotSubSplits (GNCLot *lot, gboolean strict)
 {
     gboolean rc = FALSE;
     SplitList *node;
@@ -404,7 +404,7 @@ restart:
     for (node = gnc_lot_get_split_list(lot); node; node = node->next)
     {
         Split *s = node->data;
-        if (!xaccScrubMergeSubSplits(s)) continue;
+        if (!xaccScrubMergeSubSplits(s, strict)) continue;
 
         rc = TRUE;
         goto restart;

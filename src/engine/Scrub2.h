@@ -89,19 +89,26 @@ void xaccLotScrubDoubleBalance (GNCLot *lot);
  *    the same lot, or in no lot.  Note that, by definition, all
  *    subsplits belong to the same transaction.
  *
+ *    There are two ways to find matching subsplits. The first
+ *    way will consider splits to be subsplits only if they
+ *    are explicitly marked as such while splitting the original
+ *    split. Set strict to TRUE for this matching algorhythm.
+ *
+ *    The second way is more relaxed. It will consider any two
+ *    splits that happen to be part of the same lot and the
+ *    same transaction to be subsplits. Set strict to FALSE for
+ *    this matching algorhythm.
+ *
  *    The routine returns TRUE if a merger was performed, else
  *    it returns FALSE.
- *
- *  The xaccScrubMergeTransSubSplits() routine does the same, except
- *    that it does it for all of the splits in the transaction.
  */
-gboolean xaccScrubMergeSubSplits (Split *split);
+gboolean xaccScrubMergeSubSplits (Split *split, gboolean strict);
 
 /** The xaccScrubMergeLotSubSplits() routine does the same as
  *    the xaccScrubMergSubSplits, except that it does it
  *    for all of the splits in the lot.
  */
-gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
+gboolean xaccScrubMergeLotSubSplits (GNCLot *lot, gboolean strict);
 
 #endif /* XACC_SCRUB2_H */
 /** @} */
