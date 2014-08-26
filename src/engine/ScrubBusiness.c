@@ -43,6 +43,14 @@
 
 static QofLogModule log_module = GNC_MOD_LOT;
 
+typedef enum
+{
+    is_equal     = 8,
+    is_more      = 4,
+    is_less      = 2,
+    is_pay_split = 1
+} split_flags;
+
 // A helper function that takes two splits. If the splits are  of opposite sign
 // it reduces the biggest split to have the same value (but with opposite sign)
 // of the smaller split.
@@ -93,9 +101,23 @@ static gboolean reduce_biggest_split (Split *splitA, Split *splitB)
     return TRUE;
 }
 
+
+// Find a split in pay_lot that best offsets ll_split
+// Obviously it should be of opposite sign.
+// If there are more splits of opposite sign the following
+// criteria are used in order of preference:
+// 1. exact match in abs value is preferred over larger abs value
+// 2. larger abs value is preferred over smaller abs value
+// 3. if previous and new candidate are in the same value category,
+//    prefer real payment splits over lot link splits
+// 6. if previous and new candiate are of same split type
+//    prefer biggest abs value.
 static Split *get_pay_split (GNCLot *pay_lot, Split *ll_split)
 {
     SplitList *pls_iter = NULL;
+    Split *best_split = NULL;
+    gnc_numeric best_val = { 0, 1};
+    gint best_flags = 0;
 
     if (!pay_lot)
         return NULL;
@@ -105,6 +127,8 @@ static Split *get_pay_split (GNCLot *pay_lot, Split *ll_split)
         Split *pay_split = pls_iter->data;
         Transaction *pay_txn;
         gnc_numeric ll_val, pay_val;
+        gint new_flags = 0;
+        gint cmp_ll = 0;
 
         if (!pay_split)
             continue;
@@ -120,26 +144,40 @@ static Split *get_pay_split (GNCLot *pay_lot, Split *ll_split)
             continue;
         }
 
-        // We're only interested in the non-lot link txn splits
-        if (xaccTransGetTxnType (pay_txn) == TXN_TYPE_LINK)
-            continue;
-
         // Check if this split has the opposite sign of the lot link split we want to scrub
         ll_val = xaccSplitGetValue (ll_split);
         pay_val = xaccSplitGetValue (pay_split);
         if (gnc_numeric_positive_p (ll_val) == gnc_numeric_positive_p (pay_val))
             continue;
 
-        // Bingo - if we get to this point, we have found a split that
+        // Ok we have found a split that
         // - does belong to a transaction
         // - has the opposite sign of the lot link split we're scrubbing
-        // - is not a lot link split in itself
-        return pay_split;
+        // Let's see if it's better than what we have found already.
+        cmp_ll = gnc_numeric_compare (gnc_numeric_abs (pay_val),
+                                      gnc_numeric_abs (ll_val));
+        if (cmp_ll == 0)
+            new_flags += is_equal;
+        else if (cmp_ll > 0)
+            new_flags += is_more;
+        else
+            new_flags += is_less;
 
+        if (xaccTransGetTxnType (pay_txn) != TXN_TYPE_LINK)
+            new_flags += is_pay_split;
+
+        if ((new_flags >= best_flags) &&
+            (gnc_numeric_compare (gnc_numeric_abs (pay_val),
+                                  gnc_numeric_abs (best_val)) > 0))
+        {
+            // The new split is a better match than what we found so far
+            best_split = pay_split;
+            best_flags = new_flags;
+            best_val   = pay_val;
+        }
     }
 
-    // Not valid split found
-    return NULL;
+    return best_split;
 }
 
 static void
