@@ -266,6 +266,14 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num, gboolean auto_pay);
 
+/** Helper function to reduce the value of a split to target_value. To make
+ *  sure the split's parent transaction remains balanced a second split
+ *  will be created with the remainder. Similarly if the split was part of a
+ *  (business) lot, the remainder split will be added to the same lot to
+ *  keep the lot's balance unchanged.
+ */
+gboolean gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value);
+
 /** To help a user understand what a lot link transaction does,
  *  we set the memo to name all documents involved in the link.
  *  The function below calculates this memo and sets it for

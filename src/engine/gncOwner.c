@@ -841,6 +841,38 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     return payment_lot;
 }
 
+gboolean
+gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value)
+{
+    gnc_numeric split_val = xaccSplitGetValue (split);
+    gnc_numeric rem_val;
+    Split *rem_split;
+    Transaction *txn;
+    GNCLot *lot;
+
+    if (gnc_numeric_positive_p (split_val) != gnc_numeric_positive_p (target_value))
+        return FALSE; // Split and target value have to be of the same sign
+
+    if (gnc_numeric_equal (split_val, target_value))
+        return FALSE; // Split already has the target value
+
+    rem_val = gnc_numeric_sub (split_val, target_value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); // note: values are of opposite sign
+    rem_split = xaccMallocSplit (xaccSplitGetBook (split));
+    xaccSplitCopyOnto (split, rem_split);
+    xaccSplitSetValue (rem_split, rem_val);
+
+    txn = xaccSplitGetParent (split);
+    xaccTransBeginEdit (txn);
+    xaccSplitSetValue (split, target_value);
+    xaccSplitSetParent (rem_split, txn);
+    xaccTransCommitEdit (txn);
+
+    lot = xaccSplitGetLot (split);
+    gnc_lot_add_split (lot, rem_split);
+
+    return TRUE;
+}
+
 void
 gncOwnerSetLotLinkMemo (Transaction *ll_txn)
 {

@@ -64,41 +64,11 @@ static gboolean reduce_biggest_split (Split *splitA, Split *splitB)
 {
     gnc_numeric valA = xaccSplitGetValue (splitA);
     gnc_numeric valB = xaccSplitGetValue (splitB);
-    gnc_numeric new_val, rem_val;
-    Split *to_reduce, *rem_split;
-    Transaction *txn;
-    GNCLot *lot;
 
-    if (gnc_numeric_positive_p (valA) == gnc_numeric_positive_p (valB))
-        return FALSE; //Splits are not of opposite sign
-
-    if (gnc_numeric_equal (gnc_numeric_abs (valA), gnc_numeric_abs (valB)))
-        return FALSE; // Splits have an equal value (but with opposite sign - nothing to do
-    else if (gnc_numeric_compare (gnc_numeric_abs (valA), gnc_numeric_abs (valB)) > 0)
-    {
-        to_reduce = splitA;
-        new_val = gnc_numeric_neg (valB);
-    }
+    if (gnc_numeric_compare (gnc_numeric_abs (valA), gnc_numeric_abs (valB)) >= 0)
+        return gncOwnerReduceSplitTo (splitA, gnc_numeric_neg (valB));
     else
-    {
-        to_reduce = splitB;
-        new_val = gnc_numeric_neg (valA);
-    }
-
-    rem_val = gnc_numeric_add (valA, valB, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); // note: values are of opposite sign
-    rem_split = xaccMallocSplit (xaccSplitGetBook (to_reduce));
-    xaccSplitCopyOnto (to_reduce, rem_split);
-    xaccSplitSetValue (rem_split, rem_val);
-
-    txn = xaccSplitGetParent (to_reduce);
-    xaccTransBeginEdit (txn);
-    xaccSplitSetValue (to_reduce, new_val);
-    xaccSplitSetParent (rem_split, txn);
-    xaccTransCommitEdit (txn);
-
-    lot = xaccSplitGetLot (to_reduce);
-    gnc_lot_add_split (lot, rem_split);
-    return TRUE;
+        return gncOwnerReduceSplitTo (splitB, gnc_numeric_neg (valA));
 }
 
 
