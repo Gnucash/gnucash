@@ -199,62 +199,76 @@ scrub_doc_doc_link (Transaction *ll_txn)
     g_free (new_memo);
 }
 
+// Attempt to eliminate or reduce the lot link splits (ll_*_split)
+// between from_lot and to_lot. To do so this function will attempt
+// to move a payment split from from_lot to to_lot in order to
+// balance the lot link split that will be deleted.
+// To ensure everything remains balanced at most
+// min (val-ll-*-split, val-pay-split) (in absolute values) can be moved.
+// If any split involved has a larger value, it will be split in two
+// and only the part matching the other splits' value will be used.
+// The leftover splits are kept in the respective transactions/lots.
+// A future scrub action can still act on those if needed.
+//
+// Note that this function assumes that ll_from_split and ll_to_split are
+// of opposite sign. The calling function should check this.
+
 static gboolean
-scrub_doc_pay_link (GNCLot *doc_lot, Split *ll_doc_split,
-                    GNCLot *pay_lot, Split *ll_pay_split)
+scrub_other_link (GNCLot *from_lot, Split *ll_from_split,
+                  GNCLot *to_lot,   Split *ll_to_split)
 {
-    Split *real_pay_split; // This refers to the split in the payment lot representing the payment itself
-    gnc_numeric doc_val, pay_val, real_pay_val;
+    Split *real_from_split; // This refers to the split in the payment lot representing the payment itself
+    gnc_numeric from_val, real_from_val, to_val;
     gboolean modified = FALSE;
-    Transaction *ll_txn = xaccSplitGetParent (ll_doc_split);
+    Transaction *ll_txn = xaccSplitGetParent (ll_to_split);
 
     // Per iteration we can only scrub at most max (val-doc-split, val-pay-split)
     // So split the bigger one in two if needed and continue with the equal valued splits only
     // The remainder is added to the lot link transaction and the lot to keep everything balanced
     // and will be processed in a future iteration
-    modified = reduce_biggest_split (ll_doc_split, ll_pay_split);
+    modified = reduce_biggest_split (ll_from_split, ll_to_split);
 
     // Next we have to find the original payment split so we can
     // add (part of) it to the document lot
-    real_pay_split = get_pay_split (pay_lot, ll_pay_split);
-    if (!real_pay_split)
+    real_from_split = get_pay_split (from_lot, ll_from_split);
+    if (!real_from_split)
         return modified; // No usable split in the payment lot
 
     // Here again per iteration we can only scrub at most max (val-other-pay-split, val-pay-split)
     // So split the bigger one in two if needed and continue with the equal valued splits only
     // The remainder is added to the lot link transaction and the lot to keep everything balanced
     // and will be processed in a future iteration
-    modified = reduce_biggest_split (real_pay_split, ll_pay_split);
+    modified = reduce_biggest_split (real_from_split, ll_from_split);
 
     // Once more check for max (val-doc-split, val-pay-split), and reduce if necessary.
     // It may have changed while looking for the real payment split
-    modified = reduce_biggest_split (ll_doc_split, ll_pay_split);
+    modified = reduce_biggest_split (ll_from_split, ll_to_split);
 
-    // At this point ll_doc_split and real_pay_split should have the same value
+    // At this point ll_to_split and real_from_split should have the same value
     // If not, flag a warning and skip to the next iteration
-    doc_val = xaccSplitGetValue (ll_doc_split);
-    pay_val = xaccSplitGetValue (ll_pay_split);
-    real_pay_val = xaccSplitGetValue (real_pay_split);
-    if (!gnc_numeric_equal (doc_val, real_pay_val))
+    to_val        = xaccSplitGetValue (ll_to_split);
+    from_val      = xaccSplitGetValue (ll_from_split);
+    real_from_val = xaccSplitGetValue (real_from_split);
+    if (!gnc_numeric_equal (real_from_val, to_val))
     {
         // This is unexpected - write a warning message and skip this split
-        PWARN("real_pay_val and doc_val differ. "
-              "This is unexpected! Skip scrubbing of real_pay_split %p against ll_doc_split %p.", real_pay_split, ll_doc_split);
+        PWARN("real_from_val and to_val differ. "
+              "This is unexpected! Skip scrubbing of real_from_split %p against ll_to_split %p.", real_from_split, ll_to_split);
         return modified;
     }
 
     // Now do the actual split dance
     // - move real payment split to doc lot
     // - delete both lot link splits from the lot link transaction
-    gnc_lot_add_split (doc_lot, real_pay_split);
+    gnc_lot_add_split (to_lot, real_from_split);
     xaccTransBeginEdit (ll_txn);
-    xaccSplitDestroy (ll_doc_split);
-    xaccSplitDestroy (ll_pay_split);
+    xaccSplitDestroy (ll_to_split);
+    xaccSplitDestroy (ll_from_split);
     xaccTransCommitEdit (ll_txn);
 
     // Cleanup the lots
-    xaccScrubMergeLotSubSplits (doc_lot, FALSE);
-    xaccScrubMergeLotSubSplits (pay_lot, FALSE);
+    xaccScrubMergeLotSubSplits (to_lot, FALSE);
+    xaccScrubMergeLotSubSplits (from_lot, FALSE);
 
     return TRUE; // We did change splits/transactions/lots...
 }
@@ -343,12 +357,12 @@ scrub_start:
                 continue; // next lot link transaction split
             else
             {
-                // Now determine the document lot/split and the payment lot/split
                 GNCLot *doc_lot = sl_is_doc_lot ? scrub_lot : remote_lot;
                 GNCLot *pay_lot = sl_is_doc_lot ? remote_lot : scrub_lot;
                 Split *ll_doc_split = sl_is_doc_lot ? sl_split : ll_txn_split;
                 Split *ll_pay_split = sl_is_doc_lot ? ll_txn_split : sl_split;
-                restart_needed = scrub_doc_pay_link ( doc_lot, ll_doc_split, pay_lot, ll_pay_split);
+                // Ok, let's try to move a payment from pay_lot to doc_lot
+                restart_needed = scrub_other_link (pay_lot, ll_pay_split, doc_lot, ll_doc_split);
             }
 
             // If we got here, the splits in our lot and ll_txn have been severely mixed up
