@@ -841,6 +841,69 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     return payment_lot;
 }
 
+void
+gncOwnerSetLotLinkMemo (Transaction *ll_txn)
+{
+    gchar *new_memo;
+    SplitList *lts_iter;
+    SplitList *splits = NULL, *siter;
+    GList *titles = NULL, *titer;
+
+    if (!ll_txn)
+        return;
+
+    if (xaccTransGetTxnType (ll_txn) != TXN_TYPE_LINK)
+        return;
+
+    // Find all splits in the lot link transaction that are also in a document lot
+    for (lts_iter = xaccTransGetSplitList (ll_txn); lts_iter; lts_iter = lts_iter->next)
+    {
+        Split *split = lts_iter->data;
+        GNCLot *lot;
+        GncInvoice *invoice;
+        gchar *title;
+
+        if (!split)
+            continue;
+
+        lot = xaccSplitGetLot (split);
+        if (!lot)
+            continue;
+
+        invoice = gncInvoiceGetInvoiceFromLot (lot);
+        if (!invoice)
+            continue;
+
+        title = g_strdup_printf ("%s %s", gncInvoiceGetTypeString (invoice), gncInvoiceGetID (invoice));
+
+        titles = g_list_insert_sorted (titles, title, (GCompareFunc)g_strcmp0);
+        splits = g_list_prepend (splits, split); // splits don't need to be sorted
+    }
+
+    if (!titles)
+        return; // We didn't find document lots
+
+    // Create the memo as we'd want it to be
+    new_memo = g_strconcat (_("Offset between documents: "), titles->data, NULL);
+    for (titer = titles->next; titer; titer = titer->next)
+    {
+        gchar *tmp_memo = g_strconcat (new_memo, " - ", titer->data, NULL);
+        g_free (new_memo);
+        new_memo = tmp_memo;
+    }
+    g_list_free_full (titles, g_free);
+
+    // Update the memos of all the splits we found previously (if needed)
+    for (siter = splits; siter; siter = siter->next)
+    {
+        if (g_strcmp0 (xaccSplitGetMemo (siter->data), new_memo) != 0)
+            xaccSplitSetMemo (siter->data, new_memo);
+    }
+
+    g_list_free (splits);
+    g_free (new_memo);
+}
+
 void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 {
     GList *base_iter;

@@ -266,6 +266,13 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num, gboolean auto_pay);
 
+/** To help a user understand what a lot link transaction does,
+ *  we set the memo to name all documents involved in the link.
+ *  The function below calculates this memo and sets it for
+ *  all splits in the lot link transaction.
+ */
+void gncOwnerSetLotLinkMemo (Transaction *ll_txn);
+
 /** Returns a GList of account-types based on the owner type */
 GList * gncOwnerGetAccountTypesList (const GncOwner *owner);
 

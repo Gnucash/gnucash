@@ -180,63 +180,6 @@ static Split *get_pay_split (GNCLot *pay_lot, Split *ll_split)
     return best_split;
 }
 
-static void
-scrub_doc_doc_link (Transaction *ll_txn)
-{
-    gchar *new_memo;
-    SplitList *lts_iter;
-    SplitList *splits = NULL, *siter;
-    GList *titles = NULL, *titer;
-
-    // Find all splits in the lot link transaction that are also in a document lot
-    for (lts_iter = xaccTransGetSplitList (ll_txn); lts_iter; lts_iter = lts_iter->next)
-    {
-        Split *split = lts_iter->data;
-        GNCLot *lot;
-        GncInvoice *invoice;
-        gchar *title;
-
-        if (!split)
-            continue;
-
-        lot = xaccSplitGetLot (split);
-        if (!lot)
-            continue;
-
-        invoice = gncInvoiceGetInvoiceFromLot (lot);
-        if (!invoice)
-            continue;
-
-        title = g_strdup_printf ("%s %s", gncInvoiceGetTypeString (invoice), gncInvoiceGetID (invoice));
-
-        titles = g_list_insert_sorted (titles, title, (GCompareFunc)g_strcmp0);
-        splits = g_list_prepend (splits, split); // splits don't need to be sorted
-    }
-
-    if (!titles)
-        return; // We didn't find document lots
-
-    // Create the memo as we'd want it to be
-    new_memo = g_strconcat (_("Offset between documents: "), titles->data, NULL);
-    for (titer = titles->next; titer; titer = titer->next)
-    {
-        gchar *tmp_memo = g_strconcat (new_memo, " - ", titer->data, NULL);
-        g_free (new_memo);
-        new_memo = tmp_memo;
-    }
-    g_list_free_full (titles, g_free);
-
-    // Update the memos of all the splits we found previously (if needed)
-    for (siter = splits; siter; siter = siter->next)
-    {
-        if (g_strcmp0 (xaccSplitGetMemo (siter->data), new_memo) != 0)
-            xaccSplitSetMemo (siter->data, new_memo);
-    }
-
-    g_list_free (splits);
-    g_free (new_memo);
-}
-
 // Attempt to eliminate or reduce the lot link splits (ll_*_split)
 // between from_lot and to_lot. To do so this function will attempt
 // to move a payment split from from_lot to to_lot in order to
@@ -390,7 +333,7 @@ scrub_start:
             //   (Part of) the link will be eliminated and instead (part of) the real
             //   payment will be added to the document lot to handle the payment.
             if (sl_is_doc_lot && rl_is_doc_lot)
-                scrub_doc_doc_link (ll_txn);
+                gncOwnerSetLotLinkMemo (ll_txn);
             else if (!sl_is_doc_lot && !rl_is_doc_lot)
             {
                 gint cmp = gnc_numeric_compare (gnc_numeric_abs (xaccSplitGetValue (sl_split)),
