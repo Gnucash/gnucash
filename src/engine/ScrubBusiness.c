@@ -382,17 +382,24 @@ scrub_start:
             //   Special treatment - look for all document lots linked via ll_txn
             //   and update the memo to be of more use to the uses.
             // - Two payment lots:
-            //   This situation will be skipped as it's not clear what the best solution
-            //   will be. In the most common case there's at least one document involved
-            //   in the transaction as well and the links will be resolved in a future iteration.
-            //   The more uncommon case of canceling a payment with a refund is not handled yet.
+            //   (Part of) the link will be eliminated and instead (part of)
+            //   one payment will be added to the other lot to keep the balance.
+            //   If the payments are not equal in abs value part of the bigger payment
+            //   will be moved to the smaller payment's lot.
             // - A document and a payment lot:
             //   (Part of) the link will be eliminated and instead (part of) the real
             //   payment will be added to the document lot to handle the payment.
             if (sl_is_doc_lot && rl_is_doc_lot)
                 scrub_doc_doc_link (ll_txn);
             else if (!sl_is_doc_lot && !rl_is_doc_lot)
-                continue; // next lot link transaction split
+            {
+                gint cmp = gnc_numeric_compare (gnc_numeric_abs (xaccSplitGetValue (sl_split)),
+                                                gnc_numeric_abs (xaccSplitGetValue (ll_txn_split)));
+                if (cmp >= 0)
+                    restart_needed = scrub_other_link (scrub_lot, sl_split, remote_lot, ll_txn_split);
+                else
+                    restart_needed = scrub_other_link (remote_lot, ll_txn_split, scrub_lot, sl_split);
+            }
             else
             {
                 GNCLot *doc_lot = sl_is_doc_lot ? scrub_lot : remote_lot;
