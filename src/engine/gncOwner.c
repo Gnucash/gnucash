@@ -43,8 +43,9 @@
 #include "gncVendorP.h"
 #include "gncInvoice.h"
 #include "gnc-commodity.h"
-#include "Transaction.h"
+#include "Scrub2.h"
 #include "Split.h"
+#include "Transaction.h"
 #include "engine-helpers.h"
 
 #define _GNC_MOD_NAME   GNC_ID_OWNER
@@ -52,6 +53,8 @@
 #define GNC_OWNER_ID    "gncOwner"
 #define GNC_OWNER_TYPE  "owner-type"
 #define GNC_OWNER_GUID  "owner-guid"
+
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 GncOwner * gncOwnerNew (void)
 {
@@ -949,6 +952,7 @@ gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value)
 void
 gncOwnerSetLotLinkMemo (Transaction *ll_txn)
 {
+    gchar *memo_prefix = _("Offset between documents: ");
     gchar *new_memo;
     SplitList *lts_iter;
     SplitList *splits = NULL, *siter;
@@ -989,7 +993,7 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
         return; // We didn't find document lots
 
     // Create the memo as we'd want it to be
-    new_memo = g_strconcat (_("Offset between documents: "), titles->data, NULL);
+    new_memo = g_strconcat (memo_prefix, titles->data, NULL);
     for (titer = titles->next; titer; titer = titer->next)
     {
         gchar *tmp_memo = g_strconcat (new_memo, " - ", titer->data, NULL);
@@ -1009,9 +1013,199 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
     g_free (new_memo);
 }
 
+/* Find an existing lot link transaction in the given lot
+ * Only use a lot link that already links at least two
+ * documents (to avoid perpetuating the lot link proliferation
+ * that happened in 2.6.0-2.6.3).
+ */
+static Transaction *
+get_ll_transaction_from_lot (GNCLot *lot)
+{
+    SplitList *ls_iter;
+
+    /* This should really only be called on a document lot */
+    if (!gncInvoiceGetInvoiceFromLot (lot))
+        return NULL;
+
+    /* The given lot is a valid document lot. Now iterate over all
+     * other lot links in this lot to find one more document lot.
+     */
+    for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
+    {
+        Split *ls = ls_iter->data;
+        Transaction *ll_txn = xaccSplitGetParent (ls);
+        SplitList *ts_iter;
+
+        if (xaccTransGetTxnType (ll_txn) != TXN_TYPE_LINK)
+            continue;
+
+        for (ts_iter = xaccTransGetSplitList (ll_txn); ts_iter; ts_iter = ts_iter->next)
+        {
+            Split *ts = ts_iter->data;
+            GNCLot *tslot = xaccSplitGetLot (ts);
+
+            if (!tslot)
+                continue;
+
+            if (tslot == lot)
+                continue;
+
+            if (gncInvoiceGetInvoiceFromLot (lot))
+                return ll_txn; /* Got one more document lot - mission accomplished */
+        }
+    }
+
+    /* The lot doesn't have an ll_txn with the requested criteria... */
+    return NULL;
+}
+
+static void
+gncOwnerCreateLotLink (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
+{
+    const gchar *action = _("Lot Link");
+    Account *acct = gnc_lot_get_account (from_lot);
+    const gchar *name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
+    Transaction *ll_txn = NULL;
+    gnc_numeric from_lot_bal, to_lot_bal;
+    Timespec from_ts, to_ts;
+    time64 time_posted;
+    Split *split;
+
+    /* Sanity check */
+    if (!gncInvoiceGetInvoiceFromLot (from_lot) ||
+        !gncInvoiceGetInvoiceFromLot (to_lot))
+        return;
+
+    /* Determine transaction date based on lot splits */
+    from_ts = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_latest_split (from_lot)));
+    to_ts   = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_latest_split (to_lot)));
+    if (timespecToTime64 (from_ts) >= timespecToTime64 (to_ts))
+        time_posted = timespecToTime64 (from_ts);
+    else
+        time_posted = timespecToTime64 (to_ts);
+
+    /* Figure out how much we can offset between the lots */
+    from_lot_bal = gnc_lot_get_balance (from_lot);
+    to_lot_bal = gnc_lot_get_balance (to_lot);
+    if (gnc_numeric_compare (gnc_numeric_abs (from_lot_bal),
+                             gnc_numeric_abs (to_lot_bal)) > 0)
+        from_lot_bal = gnc_numeric_neg (to_lot_bal);
+    else
+        to_lot_bal = gnc_numeric_neg (from_lot_bal);
+
+    xaccAccountBeginEdit (acct);
+
+    /* Look for a pre-existing lot link we can extend */
+    ll_txn = get_ll_transaction_from_lot (from_lot);
+
+    if (!ll_txn)
+        ll_txn = get_ll_transaction_from_lot (to_lot);
+
+    if (!ll_txn)
+    {
+        /* No pre-existing lot link. Create one. */
+        Timespec ts;
+
+        timespecFromTime64 (&ts, time_posted);
+
+        ll_txn = xaccMallocTransaction (gnc_lot_get_book (from_lot));
+        xaccTransBeginEdit (ll_txn);
+
+        xaccTransSetDescription (ll_txn, name ? name : "(Unknown)");
+        xaccTransSetCurrency (ll_txn, xaccAccountGetCommodity(acct));
+        xaccTransSetDateEnteredSecs (ll_txn, gnc_time (NULL));
+        xaccTransSetDatePostedTS (ll_txn, &ts);
+        xaccTransSetTxnType (ll_txn, TXN_TYPE_LINK);
+    }
+    else
+    {
+        Timespec ts = xaccTransRetDatePostedTS (ll_txn);
+        xaccTransBeginEdit (ll_txn);
+
+        /* Maybe we need to update the post date of the transaction ? */
+        if (time_posted > timespecToTime64 (ts))
+        {
+            timespecFromTime64 (&ts, time_posted);
+            xaccTransSetDatePostedTS (ll_txn, &ts);
+
+        }
+    }
+
+    /* Create a split for the from_lot */
+    split = xaccMallocSplit (gnc_lot_get_book (from_lot));
+    /* set Action using utility function */
+    gnc_set_num_action (NULL, split, NULL, action);
+    xaccAccountInsertSplit (acct, split);
+    xaccTransAppendSplit (ll_txn, split);
+    /* To offset the lot balance, the split must be of the opposite sign */
+    xaccSplitSetBaseValue (split, gnc_numeric_neg (from_lot_bal), xaccAccountGetCommodity(acct));
+    gnc_lot_add_split (from_lot, split);
+
+    /* Create a split for the to_lot */
+    split = xaccMallocSplit (gnc_lot_get_book (to_lot));
+    /* set Action using utility function */
+    gnc_set_num_action (NULL, split, NULL, action);
+    xaccAccountInsertSplit (acct, split);
+    xaccTransAppendSplit (ll_txn, split);
+    /* To offset the lot balance, the split must be of the opposite sign */
+    xaccSplitSetBaseValue (split, gnc_numeric_neg (to_lot_bal), xaccAccountGetCommodity(acct));
+    gnc_lot_add_split (to_lot, split);
+
+    xaccTransCommitEdit (ll_txn);
+
+
+    /* Do some post-cleaning on the lots
+     * The above actions may have created splits that are
+     * in the same transaction and lot. These can be merged.
+     */
+    xaccScrubMergeLotSubSplits (to_lot, FALSE);
+    xaccScrubMergeLotSubSplits (from_lot, FALSE);
+    /* And finally set the same memo for all remaining splits
+     * It's a convenience for the users to identify all documents
+     * involved in the link.
+     */
+    gncOwnerSetLotLinkMemo (ll_txn);
+    xaccAccountCommitEdit (acct);
+}
+
+static void gncOwnerOffsetLots (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
+{
+    gnc_numeric target_offset;
+    Split *split;
+
+    /* from lot should not be a document lot because we're removing a split from there ! */
+    if (gncInvoiceGetInvoiceFromLot (from_lot))
+    {
+        PWARN ("from_lot %p is a document lot. That is not allowed in gncOwnerOffsetLots", from_lot);
+        return;
+    }
+
+    /* Get best matching split from from_lot to offset to_lot */
+    target_offset = gnc_lot_get_balance (to_lot);
+    if (gnc_numeric_zero_p (target_offset))
+        return; // to_lot is already balanced, nothing more to do
+
+    split = gncOwnerFindOffsettingSplit (from_lot, target_offset);
+    if (!split)
+        return; // No suitable offsetting split found, nothing more to do
+
+    /* If the offsetting split is bigger than the amount needed to balance
+     * to_lot, reduce the split so its reduced value closes to_lot exactly.
+     * Note the negation in the reduction function. The split must be of
+     * opposite sign of to_lot's balance in order to be able to close it.
+     */
+    if (gnc_numeric_compare (gnc_numeric_abs (xaccSplitGetValue (split)),
+                             gnc_numeric_abs (target_offset)) > 0)
+        gncOwnerReduceSplitTo (split, gnc_numeric_neg (target_offset));
+
+    /* Move the reduced split from from_lot to to_lot */
+    gnc_lot_add_split (to_lot, split);
+
+}
+
 void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 {
-    GList *base_iter;
+    GList *left_iter;
 
     /* General note: in the code below the term "payment" can
      * both mean a true payment or a document of
@@ -1025,164 +1219,126 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
     if (!owner) return;
     if (!lots) return;
 
-    for (base_iter = lots; base_iter; base_iter = base_iter->next)
+    for (left_iter = lots; left_iter; left_iter = left_iter->next)
     {
-        GNCLot *base_lot = base_iter->data;
-        QofBook *book;
+        GNCLot *left_lot = left_iter->data;
+        gnc_numeric left_lot_bal;
+        gboolean left_lot_has_doc;
+        gboolean left_modified = FALSE;
         Account *acct;
-        const gchar *name;
-        GList *lot_list, *lot_iter;
-        Transaction *txn = NULL;
-        gnc_numeric base_lot_bal, val_to_pay, val_paid = { 0, 1 };
-        gboolean base_bal_is_pos;
-        const gchar *action, *memo;
+        GList *right_iter;
 
         /* Only attempt to apply payments to open lots.
          * Note that due to the iterative nature of this function lots
-         * in the list may become closed before they are evaluated as
+         * in the list may become empty/closed before they are evaluated as
          * base lot, so we should check this for each lot. */
-        base_lot_bal = gnc_lot_get_balance (base_lot);
-        if (gnc_numeric_zero_p (base_lot_bal))
+        if (!left_lot)
+            continue;
+        if (gnc_lot_count_splits (left_lot) == 0)
+        {
+            gnc_lot_destroy (left_lot);
+            left_iter->data = NULL;
+            continue;
+        }
+        if (gnc_lot_is_closed (left_lot))
             continue;
 
-        book = gnc_lot_get_book (base_lot);
-        acct = gnc_lot_get_account (base_lot);
-        name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
-        lot_list = base_iter->next;
+        acct = gnc_lot_get_account (left_lot);
+        xaccAccountBeginEdit (acct);
 
-        /* Strings used when creating splits later on. */
-        action = _("Lot Link");
-        memo   = _("Internal link between invoice and payment lots");
+        left_lot_bal = gnc_lot_get_balance (left_lot);
+        left_lot_has_doc = (gncInvoiceGetInvoiceFromLot (left_lot) != NULL);
 
-        /* Note: to balance the lot the payment to assign
-         * must have the opposite sign of the existing lot balance */
-        val_to_pay = gnc_numeric_neg (base_lot_bal);
-        base_bal_is_pos = gnc_numeric_positive_p (base_lot_bal);
-
-
-        /* Create splits in a linking transaction between lots until
-         * - either the invoice lot is balanced
-         * - or there are no more balancing lots.
+        /* Attempt to offset left_lot with any of the remaining lots. To do so
+         * iterate over the remaining lots adding lot links or moving payments
+         * around.
          */
-        for (lot_iter = lot_list; lot_iter; lot_iter = lot_iter->next)
+        for (right_iter = left_iter->next; right_iter; right_iter = right_iter->next)
         {
-            gnc_numeric payment_lot_balance;
-            Split *split;
-            Account *bal_acct;
-            gnc_numeric  split_amt;
-
-            GNCLot *balancing_lot = lot_iter->data;
+            GNCLot *right_lot = right_iter->data;
+            gnc_numeric right_lot_bal;
+            gboolean right_lot_has_doc;
 
             /* Only attempt to use open lots to balance the base lot.
              * Note that due to the iterative nature of this function lots
-             * in the list may become closed before they are evaluated as
+             * in the list may become empty/closed before they are evaluated as
              * base lot, so we should check this for each lot. */
-            if (gnc_lot_is_closed (balancing_lot))
+            if (!right_lot)
+                continue;
+            if (gnc_lot_count_splits (right_lot) == 0)
+            {
+                gnc_lot_destroy (right_lot);
+                right_iter->data = NULL;
+                continue;
+            }
+            if (gnc_lot_is_closed (right_lot))
                 continue;
 
             /* Balancing transactions for invoice/payments can only happen
              * in the same account. */
-            bal_acct = gnc_lot_get_account (balancing_lot);
-            if (acct != bal_acct)
+            if (acct != gnc_lot_get_account (right_lot))
                 continue;
 
-            payment_lot_balance = gnc_lot_get_balance (balancing_lot);
 
             /* Only attempt to balance if the base lot and balancing lot are
              * of the opposite sign. (Otherwise we would increase the balance
              * of the lot - Duh */
-            if (base_bal_is_pos == gnc_numeric_positive_p (payment_lot_balance))
+            right_lot_bal = gnc_lot_get_balance (right_lot);
+            if (gnc_numeric_positive_p (left_lot_bal) == gnc_numeric_positive_p (right_lot_bal))
                 continue;
 
-            /*
-             * If there is less to pay than there's open in the lot; we're done -- apply the base_lot_vale.
-             * Note that payment_value and balance are opposite in sign, so we have to compare absolute values here
-             *
-             * Otherwise, apply the balance, subtract that from the payment_value,
-             * and move on to the next one.
+            /* Ok we found two lots than can (partly) offset each other.
+             * Depending on the lot types, a different action is needed to accomplish this.
+             * 1. Both lots are document lots (invoices/credit notes)
+             *    -> Create a lot linking transaction between the lots
+             * 2. Both lots are payment lots (lots without a document attached)
+             *    -> Use part of the bigger lot to the close the smaller lot
+             * 3. One document lot with one payment lot
+             *    -> Use (part of) the payment to offset (part of) the document lot,
+             *       Which one will be closed depends on which is the bigger one
              */
-            if (gnc_numeric_compare (gnc_numeric_abs (val_to_pay), gnc_numeric_abs (payment_lot_balance)) <= 0)
+            right_lot_has_doc = (gncInvoiceGetInvoiceFromLot (right_lot) != NULL);
+            if (left_lot_has_doc && right_lot_has_doc)
+                gncOwnerCreateLotLink (left_lot, right_lot, owner);
+            else if (!left_lot_has_doc && !right_lot_has_doc)
             {
-                /* abs(val_to_pay) <= abs(balance) */
-                split_amt = val_to_pay;
+                gint cmp = gnc_numeric_compare (gnc_numeric_abs (left_lot_bal),
+                                                gnc_numeric_abs (right_lot_bal));
+                if (cmp >= 0)
+                    gncOwnerOffsetLots (left_lot, right_lot, owner);
+                else
+                    gncOwnerOffsetLots (right_lot, left_lot, owner);
             }
             else
             {
-                /* abs(val_to_pay) > abs(balance)
-                 * Remember payment_value and balance are opposite in sign,
-                 * and we want a payment to neutralize the current balance
-                 * so we need to negate here */
-                split_amt = payment_lot_balance;
+                GNCLot *doc_lot = left_lot_has_doc ? left_lot : right_lot;
+                GNCLot *pay_lot = left_lot_has_doc ? right_lot : left_lot;
+                // Ok, let's try to move a payment from pay_lot to doc_lot
+                gncOwnerOffsetLots (pay_lot, doc_lot, owner);
             }
 
-            /* If not created yet, create a new transaction linking
-             * the base lot and the balancing lot(s) */
-            if (!txn)
+            /* If we get here, then right_lot was modified
+             * If the lot has a document, send an event for send an event for it as well
+             * so it gets potentially updated as paid */
+
             {
-                Timespec ts = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_latest_split (base_lot)));
-
-                xaccAccountBeginEdit (acct);
-
-                txn = xaccMallocTransaction (book);
-                xaccTransBeginEdit (txn);
-
-                xaccTransSetDescription (txn, name ? name : "");
-                xaccTransSetCurrency (txn, xaccAccountGetCommodity(acct));
-                xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
-                xaccTransSetDatePostedTS (txn, &ts);
-                xaccTransSetTxnType (txn, TXN_TYPE_LINK);
-            }
-
-            /* Create the split for this link in current balancing lot */
-            split = xaccMallocSplit (book);
-            xaccSplitSetMemo (split, memo);
-            /* set Action using utility function */
-            gnc_set_num_action (NULL, split, NULL, action);
-            xaccAccountInsertSplit (acct, split);
-            xaccTransAppendSplit (txn, split);
-            xaccSplitSetBaseValue (split, gnc_numeric_neg (split_amt), xaccAccountGetCommodity(acct));
-            gnc_lot_add_split (balancing_lot, split);
-
-            /* If the balancing lot was linked to a document (invoice/credit note),
-             * send an event for it as well so it gets potentially updated as paid */
-            {
-                GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(balancing_lot);
+                GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(right_lot);
                 if (this_invoice)
                     qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
             }
-
-            val_paid   = gnc_numeric_add (val_paid, split_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            val_to_pay = gnc_numeric_sub (val_to_pay, split_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            if (gnc_numeric_zero_p (val_to_pay))
-                break;
+            left_modified = TRUE;
         }
 
-
-        /* If the above loop managed to create a transaction and some balancing splits,
-         * create the final split for the link transaction in the base lot */
-        if (txn)
+        /* If left_lot was modified and the lot has a document,
+         * send an event for send an event for it as well
+         * so it gets potentially updated as paid */
+        if (left_modified)
         {
-            GncInvoice *this_invoice;
-            Split *split = xaccMallocSplit (book);
-
-            xaccSplitSetMemo (split, memo);
-            /* set Action with utiltity function */
-            gnc_set_num_action (NULL, split, NULL, action);
-            xaccAccountInsertSplit (acct, split);
-            xaccTransAppendSplit (txn, split);
-            xaccSplitSetBaseValue (split, val_paid, xaccAccountGetCommodity(acct));
-            gnc_lot_add_split (base_lot, split);
-
-            xaccTransCommitEdit (txn);
-            xaccAccountCommitEdit (acct);
-
-            /* If the base lot was linked to a document (invoice/credit note),
-             * send an event for it as well so it gets potentially updated as paid */
-            this_invoice = gncInvoiceGetInvoiceFromLot(base_lot);
+            GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(left_lot);
             if (this_invoice)
                 qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
-
         }
+        xaccAccountCommitEdit (acct);
 
     }
 }

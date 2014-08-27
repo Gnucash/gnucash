@@ -154,6 +154,7 @@ void gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *pat
         GtkTreeViewColumn *column, PaymentWindow *pw);
 void gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
                                   PaymentWindow *pw);
+void gnc_payment_window_fill_docs_list (PaymentWindow *pw);
 
 
 static void
@@ -161,6 +162,7 @@ gnc_payment_window_refresh_handler (GHashTable *changes, gpointer data)
 {
     PaymentWindow *pw = data;
 
+    gnc_payment_window_fill_docs_list (pw);
     pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
 }
 
@@ -324,6 +326,8 @@ gnc_payment_dialog_highlight_document (PaymentWindow *pw)
                 lot = (GNCLot *) g_value_get_pointer (&value);
                 g_value_unset (&value);
 
+                if (!lot)
+                    continue; /* Lot has been deleted behind our back... */
 
                 invoice = gncInvoiceGetInvoiceFromLot (lot);
                 if (!invoice)
@@ -340,7 +344,7 @@ gnc_payment_dialog_highlight_document (PaymentWindow *pw)
     }
 }
 
-static void
+void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
     GtkListStore *store;
