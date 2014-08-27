@@ -841,6 +841,79 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     return payment_lot;
 }
 
+typedef enum
+{
+    is_equal     = 8,
+    is_more      = 4,
+    is_less      = 2,
+    is_pay_split = 1
+} split_flags;
+
+Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
+{
+    SplitList *ls_iter = NULL;
+    Split *best_split = NULL;
+    gnc_numeric best_val = { 0, 1};
+    gint best_flags = 0;
+
+    if (!lot)
+        return NULL;
+
+    for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
+    {
+        Split *split = ls_iter->data;
+        Transaction *txn;
+        gnc_numeric split_value;
+        gint new_flags = 0;
+        gint val_cmp = 0;
+
+        if (!split)
+            continue;
+
+
+        txn = xaccSplitGetParent (split);
+        if (!txn)
+        {
+            // Ooops - the split doesn't belong to any transaction !
+            // This is not expected so issue a warning and continue with next split
+            PWARN("Encountered a split in a payment lot that's not part of any transaction. "
+                  "This is unexpected! Skipping split %p.", split);
+            continue;
+        }
+
+        // Check if this split has the opposite sign of the target value we want to offset
+        split_value = xaccSplitGetValue (split);
+        if (gnc_numeric_positive_p (target_value) == gnc_numeric_positive_p (split_value))
+            continue;
+
+        // Ok we have found a split that potentially can offset the target value
+        // Let's see if it's better than what we have found already.
+        val_cmp = gnc_numeric_compare (gnc_numeric_abs (split_value),
+                                       gnc_numeric_abs (target_value));
+        if (val_cmp == 0)
+            new_flags += is_equal;
+        else if (val_cmp > 0)
+            new_flags += is_more;
+        else
+            new_flags += is_less;
+
+        if (xaccTransGetTxnType (txn) != TXN_TYPE_LINK)
+            new_flags += is_pay_split;
+
+        if ((new_flags >= best_flags) &&
+            (gnc_numeric_compare (gnc_numeric_abs (split_value),
+                                  gnc_numeric_abs (best_val)) > 0))
+        {
+            // The new split is a better match than what we found so far
+            best_split = split;
+            best_flags = new_flags;
+            best_val   = split_value;
+        }
+    }
+
+    return best_split;
+}
+
 gboolean
 gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value)
 {

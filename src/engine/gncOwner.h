@@ -266,6 +266,19 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num, gboolean auto_pay);
 
+/** Helper function to find a split in lot that best offsets target_value
+ *  Obviously it should be of opposite sign.
+ * If there are more splits of opposite sign the following
+ * criteria are used in order of preference:
+ * 1. exact match in abs value is preferred over larger abs value
+ * 2. larger abs value is preferred over smaller abs value
+ * 3. if previous and new candidate are in the same value category,
+ *    prefer real payment splits over lot link splits
+ * 4. if previous and new candiate are of same split type
+ *    prefer biggest abs value.
+ */
+Split *gncOwnerFindOffsettingSplit (GNCLot *pay_lot, gnc_numeric target_value);
+
 /** Helper function to reduce the value of a split to target_value. To make
  *  sure the split's parent transaction remains balanced a second split
  *  will be created with the remainder. Similarly if the split was part of a
