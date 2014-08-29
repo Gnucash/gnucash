@@ -108,14 +108,8 @@ public:
     {
         return qof_instance_get_dirty(gobj_const());
     }
-    void set_dirty()
-    {
-        return qof_instance_set_dirty(gobj());
-    }
-    void mark_clean()
-    {
-        return qof_instance_mark_clean(gobj());
-    }
+    void set_dirty();
+    void mark_clean();
 
     //bool check_type(const char* type_id) { return (0 == g_strcmp0(type_id, QOF_INSTANCE(base_class::get())->e_type)); }
     //Slots getSlots() const { return qof_instance_get_slots(QOF_INSTANCE(get())); }

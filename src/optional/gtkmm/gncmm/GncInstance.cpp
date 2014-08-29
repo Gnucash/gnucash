@@ -23,6 +23,7 @@
 #include "GncInstance.hpp"
 #include "private/GncInstance_p.hpp"
 #include "Book.hpp"
+#include "qofinstance-p.h"
 
 
 namespace Glib
@@ -113,6 +114,16 @@ GType GncInstance::get_base_type()
 {
     return qof_instance_get_type();
 }
+
+void GncInstance::set_dirty()
+{
+    return qof_instance_set_dirty(gobj());
+}
+void GncInstance::mark_clean()
+{
+    return qof_instance_mark_clean(gobj());
+}
+
 
 // ////////////////////////////////////////
 
