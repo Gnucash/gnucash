@@ -1507,6 +1507,7 @@ AC_CONFIG_FILES(
   src/import-export/log-replay/Makefile
   src/import-export/aqb/Makefile
   src/import-export/aqb/gschemas/Makefile
+  src/import-export/aqb/test/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
   src/libqof/qof/test/Makefile

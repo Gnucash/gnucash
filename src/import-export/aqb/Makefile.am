@@ -1,4 +1,4 @@
-SUBDIRS = . gschemas
+SUBDIRS = . gschemas test
 
 pkglib_LTLIBRARIES = libgncmod-aqbanking.la
 
