@@ -24,7 +24,6 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/app-utils)
 SET (libgnc_import_SOURCES
   import-utilities.c
   import-settings.c
-  import-match-map.c
 )
 
 # Add dependency on config.h
@@ -33,7 +32,6 @@ SET_SOURCE_FILES_PROPERTIES (${libgnc_import_SOURCES} PROPERTIES OBJECT_DEPENDS 
 SET (libgnc_import_HEADERS
   import-utilities.h
   import-settings.h
-  import-match-map.h
 )
 
 ADD_LIBRARY (gnc-import
