@@ -62,3 +62,7 @@ test_aqb_CFLAGS = \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}
+
+TESTS_ENVIRONMENT = \
+  SRCDIR=${srcdir} \
+  G_DEBUG=

@@ -30,7 +30,7 @@ Write and link other test files */
 #include "gnc-module/gnc-module.h"
 #include "engine/gnc-engine.h"
 
-GTestSuite* test_suite_kvp ( void );
+void test_qofsession_aqb_kvp( void );
 
 int
 main (int   argc,
@@ -51,8 +51,8 @@ main (int   argc,
     /* Add test functions and suites. See
      * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
      * details. Unfortunately, GLib-Testing doesn't provide the automatic
-     * registration features of more sophisitcated frameworks. */
-    g_test_add_func ("/AQBANKING/Kvp", test_suite_kvp);
+     * registration features of more sophisticated frameworks. */
+    g_test_add_func ("/src/import-export/aqb/kvp", test_qofsession_aqb_kvp);
 
     return g_test_run();
 }

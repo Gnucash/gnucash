@@ -31,7 +31,6 @@
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:book version="2.0.0">
 <book:id type="guid">df401b548fd313dc40a50051277a0ae6</book:id>
-</gnc:book>
 <book:slots>
   <slot>
     <slot:key>hbci</slot:key>
@@ -78,6 +77,7 @@
     </slot:value>
   </slot>
 </book:slots>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->

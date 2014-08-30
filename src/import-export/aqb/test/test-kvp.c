@@ -22,123 +22,107 @@
 
 #include <config.h>
 #include <glib.h>
-/* This is optional; you only need it if you have external fixtures or mocks. */
-//#include "test_module_support.h"
-/* Header for this module and any others that you need */
-//#include <module_1.h>
-#include "gnc-ab-kvp.h"
 
-/* Declare the test path for the suite. g_test_add_func automatically
- * creates a nested set of test suites for us based on this path. */
-static const gchar *suitename = "aqbanking/kvp";
+// for the gnc_ab_get_book_template_list() et al. functions
+#include "import-export/aqb/gnc-ab-kvp.h"
+#include "engine/gnc-hooks.h"
 
-/* Test fixture: A struct, a setup function, and a teardown function are passed to g_test_add(); add getters, setters, and whatever other functions you need to call from your test functions. */
-typedef struct
+static char* get_filepath(const char* filename)
 {
-    gint foo;
-    gdouble bar;
-} Fixture;
+    char *result;
 
-static void
-setup_module_test(Fixture *fixture, gconstpointer pData)
-{
-    /* Do something useful */
+    const char *srcdir = g_getenv("SRCDIR");
+    if (!srcdir)
+    {
+        srcdir = ".";
+    }
+
+    result = g_strdup_printf("%s/%s", srcdir, filename);
+
+    g_test_message("Using file path %s\n", result);
+
+    // Test whether the file really exists
+    g_assert(g_file_test(result, G_FILE_TEST_EXISTS));
+
+    return result;
 }
 
-static void
-teardown_module_test(Fixture *fixture, gconstpointer pData)
+void
+test_qofsession_aqb_kvp( void )
 {
-    /* Clean up after ourselves */
-}
-
-static void
-test_function( void )
-{
-    /* A simple test function */
-}
-
-static void
-test_function_with_data( gconstpointer data )
-{
-    /* a more complicated function that needs arguments at invocation */
-}
-
-/* Assert macros that you can use in your test functions. "cmp" is a
- * comparison operator, one of ==, !=, <, >, <=, >=.
- *
- *  g_assert( boolean_expression )
- *  g_assert_not_reached()
- *  g_assert_cmpstr( gchar *s1, cmp, gchar *s2 )
- *  g_assert_cmpint( int s1, cmp, int s2 )
- *  g_assert_cmpuint( unsigned int s1, cmp, unsigned int s2 )
- *  g_assert_cmphex( unsigned int s1, cmp, unsigned int s2 )
- *  g_assert_cmpfloat( double s1, cmp, double s2 )
- *  g_assert_no_error( GError *err )
- *  g_assert_error( GError *err, GQuark domain, gint code )
- *
- * You can also emit arbitrary messages into the test report with
- *  g_test_message( const char* format, ... )
- */
-GTestSuite*
-test_suite_kvp ( void )
-{
-#define TOP_SRCDIR "../../../../../"
     /* load the accounts from the users datafile */
     /* but first, check to make sure we've got a session going. */
-    QofSession *new_session;
-    const char* newfile;
     QofBackendError io_err;
+    char *file1 = get_filepath("file-book.gnucash");
+    char *file2 = get_filepath("file-book-hbcislot.gnucash");
 
-#if 0
-    // A file with no content at all, but a valid XML file
-    new_session = qof_session_new ();
-    newfile = "file://" TOP_SRCDIR "src/import-export/aqb/test/file-book.gnucash";
-    qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
-    io_err = qof_session_get_error (new_session);
-    printf("io_err1 = %d\n", io_err);
-    g_assert(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
-
-    g_assert(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
-    g_assert(io_err != ERR_BACKEND_LOCKED);
-    g_assert(io_err == 0);
-
+    if (1)
     {
-        GList *mylist = gnc_ab_get_book_template_list(qof_session_get_book(new_session));
-        g_assert(mylist == 0);
-    }
-#endif
+        // A file with no content at all, but a valid XML file
+        QofSession *new_session = qof_session_new ();
+        char *newfile = g_strdup_printf("file://%s", file1);
 
-    //qof_session_destroy(new_session);
+        qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
+        io_err = qof_session_get_error (new_session);
+        //printf("io_err1 = %d\n", io_err);
+        g_assert(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
 
-#if 0
-    // A file with no content except for the book_template_list kvp
-    // slot
-    new_session = qof_session_new ();
-    newfile = "file://" TOP_SRCDIR "src/import-export/aqb/test/file-book-hbcislot.gnucash";
-    qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
-    io_err = qof_session_get_error (new_session);
-    printf("io_err1 = %d\n", io_err);
-    g_assert(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
+        g_assert(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
+        g_assert(io_err != ERR_BACKEND_LOCKED);
+        g_assert(io_err == 0);
 
-    g_assert(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
-    g_assert(io_err != ERR_BACKEND_LOCKED);
-    g_assert(io_err == 0);
+        qof_session_load (new_session, NULL);
+        io_err = qof_session_get_error (new_session);
+        //printf("io_err2 = %d\n", io_err);
+        g_assert(io_err == 0);
 
-    {
-        GList *mylist = gnc_ab_get_book_template_list(qof_session_get_book(new_session));
-        g_assert(mylist != 0); // do we have the slot?!
+        // No HBCI slot exists, of course
+
+        {
+            // No HBCI slot exists, of course
+            GList *mylist = gnc_ab_get_book_template_list(qof_session_get_book(new_session));
+            g_assert(mylist == 0);
+        }
+
+        g_free(newfile);
+        g_free(file1);
+
+        gnc_hook_run(HOOK_BOOK_CLOSED, new_session);
+        //qof_session_destroy(new_session); // tries to delete the LCK file but it wasn't created in the first place
     }
 
-#endif
+    if (0)
+    {
+        // A file with no content except for the book_template_list kvp
+        // slot
+        QofSession *new_session = qof_session_new ();
+        char *newfile = g_strdup_printf("file://%s", file2);
 
-#if 0
-    g_test_add_func( suitename, test_function );
-    g_test_add_data_func( suitename, (gconstpointer)(&data),
-                          test_function_with_data );
-    g_test_add( suitename, Fixture,
-                data,
-                setup_module_test,
-                test_function_with_fixture,
-                teardown_module_test);
-#endif
+        qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
+        io_err = qof_session_get_error (new_session);
+        //printf("io_err1 = %d\n", io_err);
+        g_assert(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
+
+        g_assert(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
+        g_assert(io_err != ERR_BACKEND_LOCKED);
+        g_assert(io_err == 0);
+
+        qof_session_load (new_session, NULL);
+        io_err = qof_session_get_error (new_session);
+        //printf("io_err2 = %d\n", io_err);
+        g_assert(io_err == 0);
+
+        {
+            GList *mylist = gnc_ab_get_book_template_list(qof_session_get_book(new_session));
+            g_assert(mylist != 0); // do we have the slot?!
+        }
+
+        g_free(newfile);
+        g_free(file2);
+
+        gnc_hook_run(HOOK_BOOK_CLOSED, new_session);
+        //qof_session_destroy(new_session); // tries to delete the LCK file but it wasn't created in the first place
+    }
+
+
 }
