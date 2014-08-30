@@ -40,15 +40,41 @@
 #include "engine-helpers.h"
 
 
-static SplitRegisterColors reg_colors =
+typedef enum
 {
-    0x96B183,
-    0xBFDEB9,
-    0xF6FFDA,
-    0xFFEF98,
-    0xFFEF98,
-    0xEDE7D3,
-    0xFFEF98,
+    COLOR_TABLE_DEFAULT,
+    COLOR_TABLE_GTKRC,
+} SplitRegisterColorTable;
+
+/* Alternative color tables to use for the register.
+ * The colors in this array are ordered according to the RegisterColor Enum
+ * Be careful to respect this order !
+ */
+static const guint32 reg_colors_default [] =
+{
+    0x000000,     // COLOR_UNKNOWN
+    0x96B183,     // COLOR_HEADER
+    0xBFDEB9,     // COLOR_PRIMARY
+    0xFFEF98,     // COLOR_PRIMARY_ACTIVE
+    0xF6FFDA,     // COLOR_SECONDARY
+    0xFFEF98,     // COLOR_SECONDARY_ACTIVE
+    0xEDE7D3,     // COLOR_SPLIT
+    0xFFEF98,     // COLOR_SPLIT_ACTIVE
+};
+
+/* The colors in this array are ordered according to the RegisterColor Enum
+ * Be careful to respect this order !
+ */
+static const guint32 reg_colors_gtkrc [] =
+{
+    COLOR_UNKNOWN,          // COLOR_UNKNOWN
+    COLOR_HEADER,           // COLOR_HEADER
+    COLOR_PRIMARY,          // COLOR_PRIMARY
+    COLOR_PRIMARY_ACTIVE,   // COLOR_PRIMARY_ACTIVE
+    COLOR_SECONDARY,        // COLOR_SECONDARY
+    COLOR_SECONDARY_ACTIVE, // COLOR_SECONDARY_ACTIVE
+    COLOR_SPLIT,            // COLOR_SPLIT
+    COLOR_SPLIT_ACTIVE,     // COLOR_SPLIT_ACTIVE
 };
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -513,116 +539,84 @@ get_trans_total_balance (SplitRegister *reg, Transaction *trans)
 }
 
 static guint32
-gnc_split_register_get_shares_fg_color (VirtualLocation virt_loc,
-                                        gpointer user_data)
-{
-    SplitRegister *reg = user_data;
-    const guint32 black = 0x000000;
-    const guint32 red   = 0xff0000;
-    const char * cell_name;
-    gboolean is_current;
-    gnc_numeric shares;
-    Split *split;
-
-    if (!use_red_for_negative)
-        return black;
-
-    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    if (!split)
-        return black;
-
-    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
-
-    is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
-                                      virt_loc.vcell_loc);
-
-    if (gnc_cell_name_equal (cell_name, TSHRS_CELL))
-        shares = get_trans_total_amount (reg, xaccSplitGetParent (split));
-    else if (is_current)
-        shares = gnc_price_cell_get_value
-                 ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
-                         SHRS_CELL));
-    else
-        shares = xaccSplitGetAmount (split);
-
-    if (gnc_numeric_negative_p (shares))
-        return red;
-
-    return black;
-}
-
-static guint32
-gnc_split_register_get_balance_fg_color (VirtualLocation virt_loc,
-        gpointer user_data)
-{
-    SplitRegister *reg = user_data;
-    const guint32 black = 0x000000;
-    const guint32 red   = 0xff0000;
-    const char * cell_name;
-    gnc_numeric balance;
-    Split *split;
-
-    if (!use_red_for_negative)
-        return black;
-
-    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    if (!split)
-        return black;
-
-    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
-
-    if (gnc_cell_name_equal (cell_name, BALN_CELL))
-        balance = xaccSplitGetBalance (split);
-    else if (gnc_cell_name_equal (cell_name, RBALN_CELL))
-        balance = gnc_split_register_get_rbaln (virt_loc, user_data, TRUE);
-    else
-        balance = get_trans_total_balance (reg, xaccSplitGetParent (split));
-
-    {
-        Account *account;
-
-        account = xaccSplitGetAccount (split);
-
-        if (gnc_reverse_balance (account))
-            balance = gnc_numeric_neg (balance);
-    }
-
-    if (gnc_numeric_negative_p (balance))
-        return red;
-
-    return black;
-}
-
-static guint32
-gnc_split_register_get_bg_color (VirtualLocation virt_loc,
-                                 gboolean *hatching,
+gnc_split_register_get_fg_color (VirtualLocation virt_loc,
                                  gpointer user_data)
 {
     SplitRegister *reg = user_data;
+    const guint32 black = 0x000000;
+    const guint32 red   = 0xff0000;
+    const char * cell_name;
+    gboolean is_current;
+    gnc_numeric value;
+    Split *split;
+
+    if (!use_red_for_negative)
+        return black;
+
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    if (!split)
+        return black;
+
+    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
+
+    if (gnc_cell_name_equal (cell_name, TSHRS_CELL))
+        value = get_trans_total_amount (reg, xaccSplitGetParent (split));
+    else if (gnc_cell_name_equal (cell_name, SHRS_CELL))
+    {
+        if (virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
+                                      virt_loc.vcell_loc))
+            value = gnc_price_cell_get_value
+                     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                             SHRS_CELL));
+        else
+            value = xaccSplitGetAmount (split);
+    }
+    else if (gnc_cell_name_equal (cell_name, BALN_CELL))
+        value = xaccSplitGetBalance (split);
+    else if (gnc_cell_name_equal (cell_name, RBALN_CELL))
+        value = gnc_split_register_get_rbaln (virt_loc, user_data, TRUE);
+    else if (gnc_cell_name_equal (cell_name, TBALN_CELL))
+        value = get_trans_total_balance (reg, xaccSplitGetParent (split));
+
+    if ((gnc_cell_name_equal (cell_name, BALN_CELL)) ||
+            (gnc_cell_name_equal (cell_name, RBALN_CELL)) ||
+            (gnc_cell_name_equal (cell_name, TBALN_CELL)))
+        {
+            Account *account = xaccSplitGetAccount (split);
+            if (gnc_reverse_balance (account))
+                value = gnc_numeric_neg (value);
+        }
+
+    if (gnc_numeric_negative_p (value))
+        return red;
+
+    return black;
+}
+
+static guint32
+gnc_split_register_get_bg_color_internal (VirtualLocation virt_loc,
+                                          SplitRegister *reg,
+                                          const guint32 *color_table,
+                                          guint32 default_color)
+{
     const char *cursor_name;
     VirtualCell *vcell;
-    guint32 bg_color;
     gboolean is_current;
     gboolean double_alternate_virt;
 
-    if (hatching)
-        *hatching = FALSE;
-
-    bg_color = 0xffffff; /* white */
-
     if (!reg)
-        return bg_color;
+        return default_color;
 
     if (gnc_table_virtual_location_in_header (reg->table, virt_loc))
-        return reg_colors.header_bg_color;
+        return color_table[COLOR_HEADER];
 
     vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
     if (!vcell || !vcell->cellblock)
-        return bg_color;
+        return default_color;
 
     if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
             (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
-        return bg_color;
+        return default_color;
 
     is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
                                       virt_loc.vcell_loc);
@@ -634,11 +628,11 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
     {
         if (is_current)
             return vcell->start_primary_color ?
-                   reg_colors.primary_active_bg_color :
-                   reg_colors.secondary_active_bg_color;
+                    color_table[COLOR_PRIMARY_ACTIVE] :
+                    color_table[COLOR_SECONDARY_ACTIVE];
 
         return vcell->start_primary_color ?
-               reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
+                color_table[COLOR_PRIMARY] : color_table[COLOR_SECONDARY];
     }
 
     if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
@@ -652,36 +646,50 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
         {
             if (double_alternate_virt)
                 return vcell->start_primary_color ?
-                       reg_colors.primary_active_bg_color :
-                       reg_colors.secondary_active_bg_color;
+                        color_table[COLOR_PRIMARY_ACTIVE] :
+                        color_table[COLOR_SECONDARY_ACTIVE];
 
             return (virt_loc.phys_row_offset % 2 == 0) ?
-                   reg_colors.primary_active_bg_color :
-                   reg_colors.secondary_active_bg_color;
+                    color_table[COLOR_PRIMARY_ACTIVE] :
+                    color_table[COLOR_SECONDARY_ACTIVE];
         }
 
         if (double_alternate_virt)
             return vcell->start_primary_color ?
-                   reg_colors.primary_bg_color :
-                   reg_colors.secondary_bg_color;
+                    color_table[COLOR_PRIMARY] :
+                    color_table[COLOR_SECONDARY];
 
         return (virt_loc.phys_row_offset % 2 == 0) ?
-               reg_colors.primary_bg_color :
-               reg_colors.secondary_bg_color;
+                color_table[COLOR_PRIMARY] :
+                color_table[COLOR_SECONDARY];
     }
 
     if (g_strcmp0 (cursor_name, CURSOR_SPLIT) == 0)
     {
         if (is_current)
-            return reg_colors.split_active_bg_color;
+            return color_table[COLOR_SPLIT_ACTIVE];
 
-        return reg_colors.split_bg_color;
+        return color_table[COLOR_SPLIT];
     }
 
     PWARN ("Unexpected cursor: %s\n", cursor_name);
 
-    return bg_color;
+    return default_color;
 }
+
+static guint32
+gnc_split_register_get_bg_color (VirtualLocation virt_loc,
+        gboolean *hatching,
+        gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+
+    if (hatching)
+        *hatching = FALSE;
+
+    return gnc_split_register_get_bg_color_internal (virt_loc, reg, reg_colors_default, 0xffffff);
+}
+
 
 static RegisterColor
 gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
@@ -689,82 +697,11 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
                                        gpointer user_data)
 {
     SplitRegister *reg = user_data;
-    const char *cursor_name;
-    VirtualCell *vcell;
-    gboolean is_current;
-    gboolean double_alternate_virt;
 
-    if (!reg)
-        return COLOR_UNKNOWN;
+    if (hatching)
+        *hatching = FALSE;
 
-    if (gnc_table_virtual_location_in_header (reg->table, virt_loc))
-        return COLOR_HEADER;
-
-    vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
-    if (!vcell || !vcell->cellblock)
-        return COLOR_UNKNOWN;
-
-    if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
-            (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
-        return COLOR_UNKNOWN;
-
-    is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
-                                      virt_loc.vcell_loc);
-
-    cursor_name = vcell->cellblock->cursor_name;
-
-    if (g_strcmp0 (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
-            g_strcmp0 (cursor_name, CURSOR_SINGLE_LEDGER) == 0)
-    {
-        if (is_current)
-            return vcell->start_primary_color ?
-                   COLOR_PRIMARY_ACTIVE :
-                   COLOR_SECONDARY_ACTIVE;
-
-        return vcell->start_primary_color ?
-               COLOR_PRIMARY : COLOR_SECONDARY;
-    }
-
-    if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
-            g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL_NUM_ACTN) == 0 ||
-            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0 ||
-            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0)
-    {
-        double_alternate_virt = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                                    GNC_PREF_ALT_COLOR_BY_TRANS);
-        if (is_current)
-        {
-            if (double_alternate_virt)
-                return vcell->start_primary_color ?
-                       COLOR_PRIMARY_ACTIVE :
-                       COLOR_SECONDARY_ACTIVE;
-
-            return (virt_loc.phys_row_offset % 2 == 0) ?
-                   COLOR_PRIMARY_ACTIVE :
-                   COLOR_SECONDARY_ACTIVE;
-        }
-
-        if (double_alternate_virt)
-            return vcell->start_primary_color ?
-                   COLOR_PRIMARY :
-                   COLOR_SECONDARY;
-
-        return (virt_loc.phys_row_offset % 2 == 0) ?
-               COLOR_PRIMARY :
-               COLOR_SECONDARY;
-    }
-
-    if (g_strcmp0 (cursor_name, CURSOR_SPLIT) == 0)
-    {
-        if (is_current)
-            return COLOR_SPLIT_ACTIVE;
-
-        return COLOR_SPLIT;
-    }
-
-    PWARN ("Unexpected cursor: %s\n", cursor_name);
-
-    return COLOR_UNKNOWN;
+    return gnc_split_register_get_bg_color_internal (virt_loc, reg, reg_colors_gtkrc, COLOR_UNKNOWN);
 }
 
 static guint32
@@ -2660,19 +2597,19 @@ gnc_split_register_model_new (void)
 
 
     gnc_table_model_set_fg_color_handler(
-        model, gnc_split_register_get_shares_fg_color, SHRS_CELL);
+        model, gnc_split_register_get_fg_color, SHRS_CELL);
 
     gnc_table_model_set_fg_color_handler(
-        model, gnc_split_register_get_shares_fg_color, TSHRS_CELL);
+        model, gnc_split_register_get_fg_color, TSHRS_CELL);
 
     gnc_table_model_set_fg_color_handler(
-        model, gnc_split_register_get_balance_fg_color, BALN_CELL);
+        model, gnc_split_register_get_fg_color, BALN_CELL);
 
     gnc_table_model_set_fg_color_handler(
-        model, gnc_split_register_get_balance_fg_color, TBALN_CELL);
+        model, gnc_split_register_get_fg_color, TBALN_CELL);
 
     gnc_table_model_set_fg_color_handler(
-        model, gnc_split_register_get_balance_fg_color, RBALN_CELL);
+        model, gnc_split_register_get_fg_color, RBALN_CELL);
 
 
     gnc_table_model_set_default_bg_color_handler(
