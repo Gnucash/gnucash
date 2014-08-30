@@ -2618,22 +2618,22 @@ get_gtkrc_color (GnucashSheet *sheet,
     default:
         return white;
 
-    case COLOR_HEADER:
+    case COLOR_HEADER_BG:
         widget = sheet->header_color;
         break;
 
-    case COLOR_PRIMARY:
-    case COLOR_PRIMARY_ACTIVE:
+    case COLOR_PRIMARY_BG:
+    case COLOR_PRIMARY_BG_ACTIVE:
         widget = sheet->primary_color;
         break;
 
-    case COLOR_SECONDARY:
-    case COLOR_SECONDARY_ACTIVE:
+    case COLOR_SECONDARY_BG:
+    case COLOR_SECONDARY_BG_ACTIVE:
         widget = sheet->secondary_color;
         break;
 
-    case COLOR_SPLIT:
-    case COLOR_SPLIT_ACTIVE:
+    case COLOR_SPLIT_BG:
+    case COLOR_SPLIT_BG_ACTIVE:
         widget = sheet->split_color;
         break;
     }
@@ -2647,16 +2647,16 @@ get_gtkrc_color (GnucashSheet *sheet,
     default:
         return white;
 
-    case COLOR_HEADER:
-    case COLOR_PRIMARY:
-    case COLOR_SECONDARY:
-    case COLOR_SPLIT:
+    case COLOR_HEADER_BG:
+    case COLOR_PRIMARY_BG:
+    case COLOR_SECONDARY_BG:
+    case COLOR_SPLIT_BG:
         color = &style->base[GTK_STATE_NORMAL];
         break;
 
-    case COLOR_PRIMARY_ACTIVE:
-    case COLOR_SECONDARY_ACTIVE:
-    case COLOR_SPLIT_ACTIVE:
+    case COLOR_PRIMARY_BG_ACTIVE:
+    case COLOR_SECONDARY_BG_ACTIVE:
+    case COLOR_SPLIT_BG_ACTIVE:
         color = &style->base[GTK_STATE_SELECTED];
         break;
     }

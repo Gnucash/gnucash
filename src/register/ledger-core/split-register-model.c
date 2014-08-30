@@ -52,14 +52,14 @@ typedef enum
  */
 static const guint32 reg_colors_default [] =
 {
-    0x000000,     // COLOR_UNKNOWN
-    0x96B183,     // COLOR_HEADER
-    0xBFDEB9,     // COLOR_PRIMARY
-    0xFFEF98,     // COLOR_PRIMARY_ACTIVE
-    0xF6FFDA,     // COLOR_SECONDARY
-    0xFFEF98,     // COLOR_SECONDARY_ACTIVE
-    0xEDE7D3,     // COLOR_SPLIT
-    0xFFEF98,     // COLOR_SPLIT_ACTIVE
+    0xFFFFFF,     // COLOR_UNKNOWN_BG
+    0x96B183,     // COLOR_HEADER_BG
+    0xBFDEB9,     // COLOR_PRIMARY_BG
+    0xFFEF98,     // COLOR_PRIMARY_BG_ACTIVE
+    0xF6FFDA,     // COLOR_SECONDARY_BG
+    0xFFEF98,     // COLOR_SECONDARY_BG_ACTIVE
+    0xEDE7D3,     // COLOR_SPLIT_BG
+    0xFFEF98,     // COLOR_SPLIT_BG_ACTIVE
 };
 
 /* The colors in this array are ordered according to the RegisterColor Enum
@@ -67,14 +67,14 @@ static const guint32 reg_colors_default [] =
  */
 static const guint32 reg_colors_gtkrc [] =
 {
-    COLOR_UNKNOWN,          // COLOR_UNKNOWN
-    COLOR_HEADER,           // COLOR_HEADER
-    COLOR_PRIMARY,          // COLOR_PRIMARY
-    COLOR_PRIMARY_ACTIVE,   // COLOR_PRIMARY_ACTIVE
-    COLOR_SECONDARY,        // COLOR_SECONDARY
-    COLOR_SECONDARY_ACTIVE, // COLOR_SECONDARY_ACTIVE
-    COLOR_SPLIT,            // COLOR_SPLIT
-    COLOR_SPLIT_ACTIVE,     // COLOR_SPLIT_ACTIVE
+    COLOR_UNKNOWN_BG,          // COLOR_UNKNOWN_BG
+    COLOR_HEADER_BG,           // COLOR_HEADER_BG
+    COLOR_PRIMARY_BG,          // COLOR_PRIMARY_BG
+    COLOR_PRIMARY_BG_ACTIVE,   // COLOR_PRIMARY_BG_ACTIVE
+    COLOR_SECONDARY_BG,        // COLOR_SECONDARY_BG
+    COLOR_SECONDARY_BG_ACTIVE, // COLOR_SECONDARY_BG_ACTIVE
+    COLOR_SPLIT_BG,            // COLOR_SPLIT_BG
+    COLOR_SPLIT_BG_ACTIVE,     // COLOR_SPLIT_BG_ACTIVE
 };
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -608,7 +608,7 @@ gnc_split_register_get_bg_color_internal (VirtualLocation virt_loc,
         return default_color;
 
     if (gnc_table_virtual_location_in_header (reg->table, virt_loc))
-        return color_table[COLOR_HEADER];
+        return color_table[COLOR_HEADER_BG];
 
     vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
     if (!vcell || !vcell->cellblock)
@@ -628,11 +628,11 @@ gnc_split_register_get_bg_color_internal (VirtualLocation virt_loc,
     {
         if (is_current)
             return vcell->start_primary_color ?
-                    color_table[COLOR_PRIMARY_ACTIVE] :
-                    color_table[COLOR_SECONDARY_ACTIVE];
+                    color_table[COLOR_PRIMARY_BG_ACTIVE] :
+                    color_table[COLOR_SECONDARY_BG_ACTIVE];
 
         return vcell->start_primary_color ?
-                color_table[COLOR_PRIMARY] : color_table[COLOR_SECONDARY];
+                color_table[COLOR_PRIMARY_BG] : color_table[COLOR_SECONDARY_BG];
     }
 
     if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
@@ -646,30 +646,30 @@ gnc_split_register_get_bg_color_internal (VirtualLocation virt_loc,
         {
             if (double_alternate_virt)
                 return vcell->start_primary_color ?
-                        color_table[COLOR_PRIMARY_ACTIVE] :
-                        color_table[COLOR_SECONDARY_ACTIVE];
+                        color_table[COLOR_PRIMARY_BG_ACTIVE] :
+                        color_table[COLOR_SECONDARY_BG_ACTIVE];
 
             return (virt_loc.phys_row_offset % 2 == 0) ?
-                    color_table[COLOR_PRIMARY_ACTIVE] :
-                    color_table[COLOR_SECONDARY_ACTIVE];
+                    color_table[COLOR_PRIMARY_BG_ACTIVE] :
+                    color_table[COLOR_SECONDARY_BG_ACTIVE];
         }
 
         if (double_alternate_virt)
             return vcell->start_primary_color ?
-                    color_table[COLOR_PRIMARY] :
-                    color_table[COLOR_SECONDARY];
+                    color_table[COLOR_PRIMARY_BG] :
+                    color_table[COLOR_SECONDARY_BG];
 
         return (virt_loc.phys_row_offset % 2 == 0) ?
-                color_table[COLOR_PRIMARY] :
-                color_table[COLOR_SECONDARY];
+                color_table[COLOR_PRIMARY_BG] :
+                color_table[COLOR_SECONDARY_BG];
     }
 
     if (g_strcmp0 (cursor_name, CURSOR_SPLIT) == 0)
     {
         if (is_current)
-            return color_table[COLOR_SPLIT_ACTIVE];
+            return color_table[COLOR_SPLIT_BG_ACTIVE];
 
-        return color_table[COLOR_SPLIT];
+        return color_table[COLOR_SPLIT_BG];
     }
 
     PWARN ("Unexpected cursor: %s\n", cursor_name);
@@ -701,7 +701,7 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
     if (hatching)
         *hatching = FALSE;
 
-    return gnc_split_register_get_bg_color_internal (virt_loc, reg, reg_colors_gtkrc, COLOR_UNKNOWN);
+    return gnc_split_register_get_bg_color_internal (virt_loc, reg, reg_colors_gtkrc, COLOR_UNKNOWN_BG);
 }
 
 static guint32
