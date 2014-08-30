@@ -210,6 +210,8 @@ CellIOFlags    gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc);
 
 guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 
+guint32        gnc_table_get_gtkrc_fg_color (Table *table, VirtualLocation virt_loc);
+
 guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                                        gboolean *hatching);
 guint32        gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,

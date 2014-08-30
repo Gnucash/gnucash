@@ -605,17 +605,25 @@ draw_cell (GnucashGrid *grid,
     context = pango_layout_get_context (layout);
     font = pango_font_description_copy (pango_context_get_font_description (context));
 
-    argb = gnc_table_get_fg_color (table, virt_loc);
-#ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
-    // Are we in a read-only row? Then make the foreground color somewhat less black
-    if ((virt_loc.phys_row_offset == (block->style->nrows - 1))
-            && (table->model->dividing_row_upper >= 0)
-            && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
+    if (grid->sheet->use_theme_colors)
     {
-        argb = inc_intensity_10percent(argb);
+        color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
+        fg_color = get_gtkrc_color(grid->sheet, color_type);
     }
+    else
+    {
+        argb = gnc_table_get_fg_color (table, virt_loc);
+#ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
+        // Are we in a read-only row? Then make the foreground color somewhat less black
+        if ((virt_loc.phys_row_offset == (block->style->nrows - 1))
+                && (table->model->dividing_row_upper >= 0)
+                && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
+        {
+            argb = inc_intensity_10percent(argb);
+        }
 #endif
-    fg_color = gnucash_color_argb_to_gdk (argb);
+        fg_color = gnucash_color_argb_to_gdk (argb);
+    }
 
     gdk_gc_set_foreground (grid->gc, fg_color);
 

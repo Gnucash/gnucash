@@ -2609,31 +2609,49 @@ get_gtkrc_color (GnucashSheet *sheet,
 {
     GtkWidget *widget = NULL;
     GtkStyle *style;
-    GdkColor *white;
+    GdkColor *white, *black, *red;
     GdkColor *color = NULL;
 
     white = gnucash_color_argb_to_gdk (0xFFFFFF);
+    black = gnucash_color_argb_to_gdk (0x000000);
+    red   = gnucash_color_argb_to_gdk (0xFF0000); /* Hardcoded...*/
     switch (field_type)
     {
     default:
         return white;
 
+    case COLOR_UNKNOWN_BG:
+        return white;
+
+    case COLOR_UNKNOWN_FG:
+        return black;
+
+    case COLOR_NEGATIVE:
+        return red;
+
     case COLOR_HEADER_BG:
+    case COLOR_HEADER_FG:
         widget = sheet->header_color;
         break;
 
     case COLOR_PRIMARY_BG:
     case COLOR_PRIMARY_BG_ACTIVE:
+    case COLOR_PRIMARY_FG:
+    case COLOR_PRIMARY_FG_ACTIVE:
         widget = sheet->primary_color;
         break;
 
     case COLOR_SECONDARY_BG:
     case COLOR_SECONDARY_BG_ACTIVE:
+    case COLOR_SECONDARY_FG:
+    case COLOR_SECONDARY_FG_ACTIVE:
         widget = sheet->secondary_color;
         break;
 
     case COLOR_SPLIT_BG:
     case COLOR_SPLIT_BG_ACTIVE:
+    case COLOR_SPLIT_FG:
+    case COLOR_SPLIT_FG_ACTIVE:
         widget = sheet->split_color;
         break;
     }
@@ -2658,6 +2676,19 @@ get_gtkrc_color (GnucashSheet *sheet,
     case COLOR_SECONDARY_BG_ACTIVE:
     case COLOR_SPLIT_BG_ACTIVE:
         color = &style->base[GTK_STATE_SELECTED];
+        break;
+
+    case COLOR_HEADER_FG:
+    case COLOR_PRIMARY_FG:
+    case COLOR_SECONDARY_FG:
+    case COLOR_SPLIT_FG:
+        color = &style->text[GTK_STATE_NORMAL];
+        break;
+
+    case COLOR_PRIMARY_FG_ACTIVE:
+    case COLOR_SECONDARY_FG_ACTIVE:
+    case COLOR_SPLIT_FG_ACTIVE:
+        color = &style->text[GTK_STATE_SELECTED];
         break;
     }
 
