@@ -123,7 +123,7 @@ gnc_tree_model_owner_update_color (gpointer gsettings, gchar *key, gpointer user
     model = user_data;
     priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
     use_red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-    priv->negative_color = use_red ? "red" : "black";
+    priv->negative_color = use_red ? "red" : NULL;
 }
 /************************************************************/
 /*               g_object required functions                */
@@ -205,7 +205,7 @@ gnc_tree_model_owner_init (GncTreeModelOwner *model)
     priv->book       = NULL;
     priv->owner_list = NULL;
     priv->owner_type = GNC_OWNER_NONE;
-    priv->negative_color = red ? "red" : "black";
+    priv->negative_color = red ? "red" : NULL;
 
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                           gnc_tree_model_owner_update_color,
@@ -528,7 +528,7 @@ gnc_tree_model_owner_set_color(GncTreeModelOwner *model,
     if (negative)
         g_value_set_static_string (value, priv->negative_color);
     else
-        g_value_set_static_string (value, "black");
+        g_value_set_static_string (value, NULL);
 }
 
 static void

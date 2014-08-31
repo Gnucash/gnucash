@@ -1069,13 +1069,7 @@ gnc_plugin_page_owner_tree_filter_owners (GncOwner *owner,
 
     if (!fd->show_zero_total)
     {
-        /* FIXME I'm not aware of any functions to get an owner's "balance" yet.
-         *       This should be implemented before this function does anything useful.
-         *       The code below is copied from the tree-view-account source to serve
-         *       as an example.
-        total = gncOwnerGetBalanceInCurrency (owner, NULL, TRUE);
-        */
-        total = gnc_numeric_zero();
+        total = gncOwnerGetBalanceInCurrency (owner, NULL);
         if (gnc_numeric_zero_p(total))
         {
             LEAVE(" hide: zero balance");
@@ -1099,7 +1093,7 @@ gppot_filter_show_inactive_toggled_cb (GtkToggleButton *button,
     g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
 
     ENTER("button %p", button);
-    fd->show_inactive = gtk_toggle_button_get_active(button);
+    fd->show_inactive = !gtk_toggle_button_get_active(button);
     gnc_tree_view_owner_refilter(fd->tree_view);
     LEAVE("show_inactive %d", fd->show_inactive);
 }
@@ -1194,7 +1188,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
     /* Update the dialog widgets for the current state */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_inactive"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button),
-                                  fd->show_inactive);
+                                  !fd->show_inactive);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_zero"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button),
                                   fd->show_zero_total);
