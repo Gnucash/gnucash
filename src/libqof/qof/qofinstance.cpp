@@ -574,6 +574,7 @@ qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2)
     return (priv1->book == priv2->book);
 }
 
+/* Watch out: This function is still used (as a "friend") in src/import-export/aqb/gnc-ab-kvp.c */
 KvpFrame*
 qof_instance_get_slots (const QofInstance *inst)
 {
@@ -669,6 +670,7 @@ qof_instance_get_dirty_flag (gconstpointer ptr)
     return GET_PRIVATE(ptr)->dirty;
 }
 
+/* Watch out: This function is still used (as a "friend") in src/import-export/aqb/gnc-ab-kvp.c */
 void
 qof_instance_set_dirty_flag (gconstpointer inst, gboolean flag)
 {

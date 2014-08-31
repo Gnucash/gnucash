@@ -35,8 +35,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
-static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
-
 const gchar *
 gnc_ab_get_account_accountid(const Account *a)
 {
@@ -117,20 +115,43 @@ gnc_ab_set_account_trans_retrieval(Account *a, Timespec time)
     xaccAccountCommitEdit(a);
 }
 
+
+#define AB_KEY "hbci"
+#define AB_TEMPLATES "template-list"
+static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
+
+
+/* EFFECTIVE FRIEND FUNCTION */
+extern KvpFrame *qof_instance_get_slots (const QofInstance *);
+/* EFFECTIVE FRIEND FUNCTION */
+extern void qof_instance_set_dirty_flag (gconstpointer inst, gboolean flag);
+
 GList *
 gnc_ab_get_book_template_list(QofBook *b)
 {
-    GList *template_list = NULL;
-    qof_instance_get (QOF_INSTANCE (b),
-		      "ab-templates", &template_list,
-		      NULL);
-    return template_list;
+    kvp_frame *frame = gnc_ab_get_book_kvp(b, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_TEMPLATES);
+    return kvp_value_get_glist(value);
 }
 
 void
 gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
 {
-    qof_instance_set (QOF_INSTANCE (b),
-		      "ab-templates", &template_list,
-		      NULL);
+    kvp_frame *frame = gnc_ab_get_book_kvp(b, TRUE);
+    kvp_value *value = kvp_value_new_glist_nc(template_list);
+    kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
+    qof_instance_set_dirty_flag(QOF_INSTANCE(b), TRUE);
+}
+
+static kvp_frame *
+gnc_ab_get_book_kvp(QofBook *b, gboolean create)
+{
+    kvp_frame *toplevel = qof_instance_get_slots(QOF_INSTANCE(b));
+    kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
+    if (!result && create)
+    {
+        result = kvp_frame_new();
+        kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
+    }
+    return result;
 }
