@@ -1069,13 +1069,7 @@ gnc_plugin_page_owner_tree_filter_owners (GncOwner *owner,
 
     if (!fd->show_zero_total)
     {
-        /* FIXME I'm not aware of any functions to get an owner's "balance" yet.
-         *       This should be implemented before this function does anything useful.
-         *       The code below is copied from the tree-view-account source to serve
-         *       as an example.
-        total = gncOwnerGetBalanceInCurrency (owner, NULL, TRUE);
-        */
-        total = gnc_numeric_zero();
+        total = gncOwnerGetBalanceInCurrency (owner, NULL);
         if (gnc_numeric_zero_p(total))
         {
             LEAVE(" hide: zero balance");
