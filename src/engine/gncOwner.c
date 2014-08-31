@@ -1133,8 +1133,10 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
         {
             GNCLot *lot = lot_node->data;
             gnc_numeric lot_balance = gnc_lot_get_balance (lot);
-            balance = gnc_numeric_add (balance, lot_balance,
-                                       gnc_commodity_get_fraction (owner_currency), GNC_HOW_RND_ROUND_HALF_UP);
+            GncInvoice *invoice = gncInvoiceGetInvoiceFromLot(lot);
+            if (invoice)
+               balance = gnc_numeric_add (balance, lot_balance,
+                                          gnc_commodity_get_fraction (owner_currency), GNC_HOW_RND_ROUND_HALF_UP);
         }
     }
 
