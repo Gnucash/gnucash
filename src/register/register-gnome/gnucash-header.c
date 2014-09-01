@@ -222,7 +222,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 }
 
 
-static void
+void
 gnc_header_request_redraw (GncHeader *header)
 {
     GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;

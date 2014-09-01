@@ -348,6 +348,10 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
     gnucash_sheet_make_cell_visible (sheet, virt_loc);
 
     changed_cells = !virt_loc_equal (virt_loc, old_virt_loc);
+    
+    /* If we've changed cells, redraw the headers */
+    if (changed_cells)
+        gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
 
     /* Now turn on the editing controls. */
     gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
