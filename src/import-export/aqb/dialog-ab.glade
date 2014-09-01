@@ -1023,7 +1023,7 @@
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <signal name="changed" handler="gnc_ab_trans_dialog_verify_values" swapped="yes"/>
-                    <signal name="insert-text" handler="gnc_ab_trans_dialog_entry_filter_cb" swapped="no"/>
+                    <signal name="insert-text" handler="gnc_ab_trans_dialog_ibanentry_filter_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">3</property>
@@ -1055,7 +1055,7 @@
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <signal name="changed" handler="gnc_ab_trans_dialog_bankcode_changed_cb" swapped="no"/>
-                    <signal name="insert-text" handler="gnc_ab_trans_dialog_entry_filter_cb" swapped="no"/>
+                    <signal name="insert-text" handler="gnc_ab_trans_dialog_bicentry_filter_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
