@@ -22,6 +22,7 @@ libgncmod_engine_la_SOURCES = \
   Scrub.c \
   Scrub2.c \
   Scrub3.c \
+  ScrubBusiness.c \
   Split.c \
   TransLog.c \
   Transaction.c \
@@ -70,6 +71,7 @@ gncinclude_HEADERS = \
   Scrub.h \
   Scrub2.h \
   Scrub3.h \
+  ScrubBusiness.h \
   Split.h \
   TransLog.h \
   Transaction.h \

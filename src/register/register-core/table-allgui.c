@@ -345,19 +345,21 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
     return label;
 }
 
-guint32
-gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
+static guint32
+gnc_table_get_fg_color_internal (Table *table, VirtualLocation virt_loc,
+                                 gboolean want_gtkrc)
 {
     TableGetFGColorHandler fg_color_handler;
-    const char *cell_name;
+    const char *handler_name = "gtkrc";
 
     if (!table || !table->model)
         return 0x0; /* black */
 
-    cell_name = gnc_table_get_cell_name (table, virt_loc);
+    if (!want_gtkrc)
+        handler_name = gnc_table_get_cell_name (table, virt_loc);
 
     fg_color_handler = gnc_table_model_get_fg_color_handler (table->model,
-                       cell_name);
+                       handler_name);
     if (!fg_color_handler)
         return 0x0;
 
@@ -365,11 +367,24 @@ gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 }
 
 guint32
-gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
-                        gboolean *hatching)
+gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
+{
+    return gnc_table_get_fg_color_internal (table, virt_loc, FALSE);
+}
+
+guint32
+gnc_table_get_gtkrc_fg_color (Table *table, VirtualLocation virt_loc)
+{
+    return gnc_table_get_fg_color_internal (table, virt_loc, TRUE);
+}
+
+static guint32
+gnc_table_get_bg_color_internal (Table *table, VirtualLocation virt_loc,
+                                 gboolean *hatching,
+                                 gboolean want_gtkrc)
 {
     TableGetBGColorHandler bg_color_handler;
-    const char *cell_name;
+    const char *handler_name = "gtkrc";
 
     if (hatching)
         *hatching = FALSE;
@@ -377,10 +392,11 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
     if (!table || !table->model)
         return 0xffffff; /* white */
 
-    cell_name = gnc_table_get_cell_name (table, virt_loc);
+    if (!want_gtkrc)
+        handler_name = gnc_table_get_cell_name (table, virt_loc);
 
     bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
-                       cell_name);
+            handler_name);
     if (!bg_color_handler)
         return 0xffffff;
 
@@ -389,24 +405,17 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
 }
 
 guint32
+gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
+                        gboolean *hatching)
+{
+    return gnc_table_get_bg_color_internal (table, virt_loc, hatching, FALSE);
+}
+
+guint32
 gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
                               gboolean *hatching)
 {
-    TableGetBGColorHandler bg_color_handler;
-
-    if (hatching)
-        *hatching = FALSE;
-
-    if (!table || !table->model)
-        return 0xffffff; /* white */
-
-    bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
-                       "gtkrc");
-    if (!bg_color_handler)
-        return 0xffffff;
-
-    return bg_color_handler (virt_loc, hatching,
-                             table->model->handler_user_data);
+    return gnc_table_get_bg_color_internal (table, virt_loc, hatching, TRUE);
 }
 
 void

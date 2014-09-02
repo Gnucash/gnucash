@@ -309,6 +309,8 @@ gnc_lot_free(GNCLot* lot)
     priv->is_closed = TRUE;
     /* qof_instance_release (&lot->inst); */
     g_object_unref (lot);
+
+    LEAVE();
 }
 
 void
@@ -635,6 +637,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
     }
     gnc_lot_commit_edit(lot);
     qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_MODIFY, NULL);
+    LEAVE("removed from lot");
 }
 
 /* ============================================================== */

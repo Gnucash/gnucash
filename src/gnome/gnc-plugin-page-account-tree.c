@@ -42,6 +42,7 @@
 
 #include "Scrub.h"
 #include "Scrub3.h"
+#include "ScrubBusiness.h"
 #include "Transaction.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
@@ -1568,9 +1569,12 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
     xaccAccountScrubOrphans (account);
     xaccAccountScrubImbalance (account);
 
-    // XXX: Lots are disabled
+    // XXX: Lots/capital gains scrubbing is disabled
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountScrubLots(account);
+
+    gncScrubBusinessAccountLots(account);
+
 
     gnc_resume_gui_refresh ();
 }
@@ -1587,9 +1591,11 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
     xaccAccountTreeScrubOrphans (account);
     xaccAccountTreeScrubImbalance (account);
 
-    // XXX: Lots are disabled
+    // XXX: Lots/capital gains scrubbing is disabled
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountTreeScrubLots(account);
+
+    gncScrubBusinessAccountTreeLots(account);
 
     gnc_resume_gui_refresh ();
 }
@@ -1603,9 +1609,11 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
 
     xaccAccountTreeScrubOrphans (root);
     xaccAccountTreeScrubImbalance (root);
-    // XXX: Lots are disabled
+    // XXX: Lots/capital gains scrubbing is disabled
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountTreeScrubLots(root);
+
+    gncScrubBusinessAccountTreeLots(root);
 
     gnc_resume_gui_refresh ();
 }

@@ -868,7 +868,8 @@ gnc_plugin_page_set_page_color (GncPluginPage *page, const gchar *color)
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->page_color)
         g_free(priv->page_color);
-    priv->page_color = g_strdup(color);
+    if (color)
+        priv->page_color = g_strdup(color);
 }
 
 

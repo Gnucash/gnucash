@@ -43,7 +43,6 @@
 #include "Split.h"
 #include "AccountP.h"
 #include "Scrub.h"
-#include "Scrub3.h"
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "cap-gains.h"

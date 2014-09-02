@@ -529,7 +529,10 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
 
     /* Return immediately if things are balanced. */
     if (xaccTransIsBalanced (trans))
+    {
+        LEAVE ("transaction is balanced");
         return;
+    }
 
     currency = xaccTransGetCurrency (trans);
 
@@ -626,7 +629,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
         imbal_list = xaccTransGetImbalance (trans);
         if (!imbal_list)
         {
-            LEAVE("()");
+            LEAVE("transaction is balanced");
             return;
         }
 

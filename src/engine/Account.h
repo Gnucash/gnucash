@@ -943,6 +943,16 @@ gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
  *  root account types are stripped. */
 guint32 xaccAccountTypesValid(void);
 
+/** Convenience function to check if the account is a valid
+ *  Asset or Liability type, but not a business account type
+ *  (meaning not an Accounts Payable/Accounts Receivable). */
+gboolean xaccAccountIsAssetLiabType(GNCAccountType t);
+
+/** Convenience function to check if the account is a valid
+ *  business account type
+ *  (meaning an Accounts Payable/Accounts Receivable). */
+gboolean xaccAccountIsAPARType(GNCAccountType t);
+
 
 /** @} */
 

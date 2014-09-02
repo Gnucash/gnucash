@@ -238,20 +238,6 @@ typedef enum
     NUM_CURSOR_CLASSES
 } CursorClass;
 
-typedef struct split_register_colors
-{
-    guint32 header_bg_color;
-
-    guint32 primary_bg_color;
-    guint32 secondary_bg_color;
-
-    guint32 primary_active_bg_color;
-    guint32 secondary_active_bg_color;
-
-    guint32 split_bg_color;
-    guint32 split_active_bg_color;
-} SplitRegisterColors;
-
 
 /** @brief A split register created with ::gnc_split_register_new */
 typedef struct split_register SplitRegister;
@@ -270,7 +256,7 @@ struct split_register
                                                 or split action for number
                                                 field in register */
     gboolean is_template;
-    gboolean do_auto_complete; /**< whether to use auto-competion */
+    gboolean do_auto_complete; /**< whether to use auto-completion */
 
     SRInfo * sr_info;   /**< private data; outsiders should not access this */
 };
