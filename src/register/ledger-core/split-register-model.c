@@ -39,66 +39,6 @@
 #include "split-register-p.h"
 #include "engine-helpers.h"
 
-
-typedef enum
-{
-    COLOR_TABLE_DEFAULT,
-    COLOR_TABLE_GTKRC,
-} SplitRegisterColorTable;
-
-/* Alternative color tables to use for the register.
- * The colors in this array are ordered according to the RegisterColor Enum
- * Be careful to respect this order !
- */
-static const guint32 reg_colors_default [] =
-{
-    0xFFFFFF,     // COLOR_UNKNOWN_BG
-    0x96B183,     // COLOR_HEADER_BG
-    0xBFDEB9,     // COLOR_PRIMARY_BG
-    0xFFEF98,     // COLOR_PRIMARY_BG_ACTIVE
-    0xF6FFDA,     // COLOR_SECONDARY_BG
-    0xFFEF98,     // COLOR_SECONDARY_BG_ACTIVE
-    0xEDE7D3,     // COLOR_SPLIT_BG
-    0xFFEF98,     // COLOR_SPLIT_BG_ACTIVE
-
-    0x000000,     // COLOR_UNKNOWN_FG
-    0x000000,     // COLOR_HEADER_FG
-    0x000000,     // COLOR_PRIMARY_FG
-    0x000000,     // COLOR_PRIMARY_FG_ACTIVE
-    0x000000,     // COLOR_SECONDARY_FG
-    0x000000,     // COLOR_SECONDARY_FG_ACTIVE
-    0x000000,     // COLOR_SPLIT_FG
-    0x000000,     // COLOR_SPLIT_FG_ACTIVE
-
-    0xFF0000,     // COLOR_NEGATIVE
-};
-
-/* The colors in this array are ordered according to the RegisterColor Enum
- * Be careful to respect this order !
- */
-static const guint32 reg_colors_gtkrc [] =
-{
-    COLOR_UNKNOWN_BG,          // COLOR_UNKNOWN_BG
-    COLOR_HEADER_BG,           // COLOR_HEADER_BG
-    COLOR_PRIMARY_BG,          // COLOR_PRIMARY_BG
-    COLOR_PRIMARY_BG_ACTIVE,   // COLOR_PRIMARY_BG_ACTIVE
-    COLOR_SECONDARY_BG,        // COLOR_SECONDARY_BG
-    COLOR_SECONDARY_BG_ACTIVE, // COLOR_SECONDARY_BG_ACTIVE
-    COLOR_SPLIT_BG,            // COLOR_SPLIT_BG
-    COLOR_SPLIT_BG_ACTIVE,     // COLOR_SPLIT_BG_ACTIVE
-
-    COLOR_UNKNOWN_FG,          // COLOR_UNKNOWN_FG
-    COLOR_HEADER_FG,           // COLOR_HEADER_FG
-    COLOR_PRIMARY_FG,          // COLOR_PRIMARY_FG
-    COLOR_PRIMARY_FG_ACTIVE,   // COLOR_PRIMARY_FG_ACTIVE
-    COLOR_SECONDARY_FG,        // COLOR_SECONDARY_FG
-    COLOR_SECONDARY_FG_ACTIVE, // COLOR_SECONDARY_FG_ACTIVE
-    COLOR_SPLIT_FG,            // COLOR_SPLIT_FG
-    COLOR_SPLIT_FG_ACTIVE,     // COLOR_SPLIT_FG_ACTIVE
-
-    COLOR_NEGATIVE,            // COLOR_NEGATIVE
-};
-
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_LEDGER;
 

@@ -36,15 +36,6 @@
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerModel.h"
 
-static GncEntryLedgerColors reg_colors =
-{
-    0x96B183,
-    0xBFDEB9,
-    0xF6FFDA,
-
-    0xFFEF98,
-    0xFFEF98,
-};
 
 /** Private Interfaces ***********************************************/
 
@@ -927,42 +918,84 @@ static CellIOFlags get_qty_io_flags (VirtualLocation virt_loc, gpointer user_dat
 /* GET BG_COLORS */
 
 static guint32
+gnc_entry_ledger_get_color_internal (VirtualLocation virt_loc,
+                                     GncEntryLedger *ledger,
+                                     const guint32 *color_table,
+                                     gboolean foreground)
+{
+    const char *cursor_name;
+    VirtualCell *vcell;
+    gboolean is_current;
+    guint32 colorbase = 0; /* By default return background colors */
+
+    if (foreground)
+        colorbase = COLOR_UNKNOWN_FG; /* a bit of enum arithmetic */
+
+    if (!ledger)
+        return color_table[colorbase + COLOR_UNKNOWN_BG];
+
+    if (gnc_table_virtual_location_in_header (ledger->table, virt_loc))
+        return color_table[colorbase + COLOR_HEADER_BG];
+
+    vcell = gnc_table_get_virtual_cell (ledger->table, virt_loc.vcell_loc);
+    if (!vcell || !vcell->cellblock)
+        return color_table[colorbase + COLOR_UNKNOWN_BG];
+
+    if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
+            (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
+        return color_table[colorbase + COLOR_UNKNOWN_BG];
+
+    is_current = virt_cell_loc_equal (ledger->table->current_cursor_loc.vcell_loc,
+                                      virt_loc.vcell_loc);
+
+    if (is_current)
+        return vcell->start_primary_color ?
+                color_table[colorbase + COLOR_PRIMARY_BG_ACTIVE] :
+                color_table[colorbase + COLOR_SECONDARY_BG_ACTIVE];
+
+    return vcell->start_primary_color ?
+            color_table[colorbase + COLOR_PRIMARY_BG] : color_table[colorbase + COLOR_SECONDARY_BG];
+
+}
+
+static guint32
+gnc_entry_ledger_get_fg_color (VirtualLocation virt_loc,
+                               gpointer user_data)
+{
+    GncEntryLedger *ledger = user_data;
+    return gnc_entry_ledger_get_color_internal (virt_loc, ledger, reg_colors_default, TRUE);
+}
+
+static guint32
+gnc_entry_ledger_get_gtkrc_fg_color (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+    GncEntryLedger *ledger = user_data;
+    return gnc_entry_ledger_get_color_internal (virt_loc, ledger, reg_colors_gtkrc, TRUE);
+}
+
+static guint32
 gnc_entry_ledger_get_bg_color (VirtualLocation virt_loc,
                                gboolean *hatching, gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
-    VirtualCell *vcell;
-    guint32 bg_color;
-    gboolean is_current;
 
     if (hatching)
         *hatching = FALSE;
 
-    bg_color = 0xffffff; /* white */
+    return gnc_entry_ledger_get_color_internal (virt_loc, ledger, reg_colors_default, FALSE);
+}
 
-    if (!ledger) return bg_color;
+static guint32
+gnc_entry_ledger_get_gtkrc_bg_color (VirtualLocation virt_loc,
+                                     gboolean *hatching, gpointer user_data)
+{
+    GncEntryLedger *ledger = user_data;
 
-    if (gnc_table_virtual_location_in_header (ledger->table, virt_loc))
-        return reg_colors.header_bg_color;
+    if (hatching)
+        *hatching = FALSE;
 
-    vcell = gnc_table_get_virtual_cell (ledger->table, virt_loc.vcell_loc);
-    if (!vcell || !vcell->cellblock)
-        return bg_color;
-
-    if ((virt_loc.phys_col_offset < vcell->cellblock->start_col) ||
-            (virt_loc.phys_col_offset > vcell->cellblock->stop_col))
-        return bg_color;
-
-    is_current = virt_cell_loc_equal
-                 (ledger->table->current_cursor_loc.vcell_loc, virt_loc.vcell_loc);
-
-    if (is_current)
-        return vcell->start_primary_color ?
-               reg_colors.primary_active_bg_color :
-               reg_colors.secondary_active_bg_color;
-
-    return vcell->start_primary_color ?
-           reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
+    return gnc_entry_ledger_get_color_internal (virt_loc, ledger, reg_colors_gtkrc, FALSE);
 }
 
 /* SAVE CELLS */
@@ -1214,8 +1247,17 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     };
     unsigned int i;
 
+    gnc_table_model_set_default_fg_color_handler
+    (model, gnc_entry_ledger_get_fg_color);
+
+    gnc_table_model_set_fg_color_handler
+    (model, gnc_entry_ledger_get_gtkrc_fg_color, "gtkrc");
+
     gnc_table_model_set_default_bg_color_handler
     (model, gnc_entry_ledger_get_bg_color);
+
+    gnc_table_model_set_bg_color_handler
+    (model, gnc_entry_ledger_get_gtkrc_bg_color, "gtkrc");
 
 
     for (i = 0; i < (sizeof(models) / sizeof(*models)); i++)

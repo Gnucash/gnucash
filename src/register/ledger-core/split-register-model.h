@@ -28,33 +28,4 @@
 TableModel * gnc_split_register_model_new (void);
 TableModel * gnc_template_register_model_new (void);
 
-typedef enum
-{
-    /* Colors used for background drawing */
-    COLOR_UNKNOWN_BG,
-    COLOR_HEADER_BG,
-    COLOR_PRIMARY_BG,
-    COLOR_PRIMARY_BG_ACTIVE,
-    COLOR_SECONDARY_BG,
-    COLOR_SECONDARY_BG_ACTIVE,
-    COLOR_SPLIT_BG,
-    COLOR_SPLIT_BG_ACTIVE,
-
-    /* Colors used for foreground drawing (text etc)
-     * ATTENTION: the background and foreground lists should have
-     *            the same types (the same amount of entries) !
-     *            The code relies on this ! */
-    COLOR_UNKNOWN_FG,
-    COLOR_HEADER_FG,
-    COLOR_PRIMARY_FG,
-    COLOR_PRIMARY_FG_ACTIVE,
-    COLOR_SECONDARY_FG,
-    COLOR_SECONDARY_FG_ACTIVE,
-    COLOR_SPLIT_FG,
-    COLOR_SPLIT_FG_ACTIVE,
-
-    /* Other colors */
-    COLOR_NEGATIVE, /* Color to use for negative numbers */
-} RegisterColor;
-
 #endif
