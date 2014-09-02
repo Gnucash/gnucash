@@ -145,6 +145,44 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
     return balance;
 }
 
+static gnc_commodity *
+gnc_split_register_get_split_commodity (SplitRegister *reg,
+                                        VirtualLocation virt_loc)
+{
+    CursorClass cursor_class;
+    Account *account;
+    Split *split;
+
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    if (!split)
+        return NULL;
+
+    cursor_class = gnc_split_register_get_cursor_class (reg,
+                   virt_loc.vcell_loc);
+    if (cursor_class != CURSOR_CLASS_SPLIT)
+        return NULL;
+
+    account = NULL;
+
+    if (virt_cell_loc_equal (virt_loc.vcell_loc,
+                             reg->table->current_cursor_loc.vcell_loc) &&
+            gnc_table_layout_get_cell_changed (reg->table->layout, XFRM_CELL, FALSE))
+    {
+        const char *name;
+
+        name = gnc_table_layout_get_cell_value (reg->table->layout, XFRM_CELL);
+        account = gnc_account_lookup_for_register (gnc_get_current_root_account (), name);
+    }
+
+    if (!account)
+        account = xaccSplitGetAccount (split);
+
+    if (!account)
+        return NULL;
+        
+    return xaccAccountGetCommodity(account);
+}
+
 static gboolean
 gnc_split_register_use_security_cells (SplitRegister *reg,
                                        VirtualLocation virt_loc)
@@ -182,7 +220,9 @@ gnc_split_register_use_security_cells (SplitRegister *reg,
 
     if (xaccTransUseTradingAccounts (xaccSplitGetParent (split)))
     {
-        if (!gnc_commodity_is_iso(xaccAccountGetCommodity(account)))
+        gnc_commodity *commod = xaccAccountGetCommodity(account);
+        if (!gnc_commodity_is_iso(commod) ||
+            !gnc_commodity_equal(commod, xaccTransGetCurrency(xaccSplitGetParent(split))))
             return TRUE;
     }
 
@@ -341,11 +381,16 @@ gnc_split_register_get_price_label (VirtualLocation virt_loc,
                                     gpointer user_data)
 {
     SplitRegister *reg = user_data;
+    gnc_commodity *commod;
 
     if (!gnc_split_register_use_security_cells (reg, virt_loc))
         return NULL;
 
-    return _("Price");
+    commod = gnc_split_register_get_split_commodity (reg, virt_loc);
+    if (!commod || !gnc_commodity_is_iso(commod))
+        return _("Price");
+    else
+        return _("Exch. Rate");
 }
 
 static const char *
@@ -353,11 +398,16 @@ gnc_split_register_get_shares_label (VirtualLocation virt_loc,
                                      gpointer user_data)
 {
     SplitRegister *reg = user_data;
+    gnc_commodity *commod;
 
     if (!gnc_split_register_use_security_cells (reg, virt_loc))
         return NULL;
 
-    return _("Shares");
+    commod = gnc_split_register_get_split_commodity (reg, virt_loc);
+    if (!commod || !gnc_commodity_is_iso(commod))
+        return _("Shares");
+    else
+        return _("Oth. Curr.");
 }
 
 static const char *
