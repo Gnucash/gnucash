@@ -31,7 +31,7 @@
     xmlns:ts="http://www.gnucash.org/XML/ts"
     xmlns:tte="http://www.gnucash.org/XML/tte"
     xmlns:vendor="http://www.gnucash.org/XML/vendor">
-    <gnc-act:title>Yhdistys</gnc-act:title>
+    <gnc-act:title>Föreningar och stiftelser</gnc-act:title>
     <gnc-act:short-description>Föreningskonton (ideell sammanslutning eller stiftelse)</gnc-act:short-description>
     <gnc-act:long-description>Föreningskonton (ideell sammanslutning eller stiftelse).
         Se bokföringsförordningen 3 § (konton).
