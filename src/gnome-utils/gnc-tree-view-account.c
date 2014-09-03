@@ -60,6 +60,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);
 static void gnc_tree_view_account_init (GncTreeViewAccount *view);
 static void gnc_tree_view_account_finalize (GObject *object);
+static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data);
 
 static void gtva_update_column_names (GncTreeView *view);
 static void gtva_currency_changed_cb (void);
@@ -925,6 +926,9 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
                                          GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                                          GTK_SORT_ASCENDING);
+
+    /* Set account find-as-you-type search function */
+    gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW(view), gnc_tree_view_search_compare, NULL, NULL);
 
     gtk_widget_show(GTK_WIDGET(view));
     LEAVE("%p", view);
@@ -2578,4 +2582,61 @@ gnc_tree_view_account_set_notes_edited(GncTreeViewAccount *view,
     GncTreeViewAccountPrivate *priv;
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
     gtva_set_column_editor(view, priv->notes_column, edited_cb);
+}
+
+static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data)
+{
+    gchar *normalized_key;
+    gchar *case_normalized_key = NULL;
+    gboolean match = FALSE;
+
+    normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_ALL);
+    if (normalized_key)
+        case_normalized_key = g_utf8_casefold (normalized_key, -1);
+    if (case_normalized_key)
+    {
+        int i;
+
+        for (i=0;i<3;i++)
+        {
+            gchar *normalized_string;
+            gchar *case_normalized_string = NULL;
+            gchar *str = NULL;
+
+            switch (i)
+            {
+                case 0:
+                    gtk_tree_model_get(model,iter,GNC_TREE_MODEL_ACCOUNT_COL_NAME,&str,-1);
+                    break;
+                case 1:
+                    gtk_tree_model_get(model,iter,GNC_TREE_MODEL_ACCOUNT_COL_CODE,&str,-1);
+                    break;
+                case 2:
+                    gtk_tree_model_get(model,iter,GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,&str,-1);
+                    break;
+            }
+
+            if (!str)
+                continue;
+
+            normalized_string = g_utf8_normalize (str, -1, G_NORMALIZE_ALL);
+            if (normalized_string)
+                case_normalized_string = g_utf8_casefold (normalized_string, -1);
+            if (case_normalized_string&&NULL!=strstr(case_normalized_string,case_normalized_key))
+                match=TRUE;
+
+            g_free (str);
+            g_free (normalized_string);
+            g_free (case_normalized_string);
+
+            if (match)
+                break;
+        }
+    }
+
+    g_free (normalized_key);
+    g_free (case_normalized_key);
+
+    // inverted return (FALSE means a match)
+    return !match;
 }
