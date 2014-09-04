@@ -854,6 +854,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
     gnc_commodity_set_mnemonic(retval, mnemonic);
     gnc_commodity_set_cusip(retval, cusip);
     gnc_commodity_set_fraction(retval, fraction);
+    mark_commodity_dirty (retval);
     gnc_commodity_commit_edit(retval);
 
     qof_event_gen (&retval->inst, QOF_EVENT_CREATE, NULL);
@@ -1923,6 +1924,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
 	      "namespace User", priv->mnemonic);
 	gnc_commodity_set_namespace (comm, "User");
 	ns_name = "User";
+	mark_commodity_dirty (comm);
     }
 
     book = qof_instance_get_book (&comm->inst);
