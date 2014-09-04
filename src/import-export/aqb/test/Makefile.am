@@ -35,7 +35,6 @@ test_aqb_LDADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/backend/xml/libgncmod-backend-xml.la \
   ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \

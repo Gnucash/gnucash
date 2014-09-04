@@ -29,6 +29,7 @@ Write and link other test files */
 #include "backend/xml/gnc-backend-xml.h"
 #include "gnc-module/gnc-module.h"
 #include "engine/gnc-engine.h"
+#include <engine/TransLog.h>
 
 void test_qofsession_aqb_kvp( void );
 
@@ -46,7 +47,8 @@ main (int   argc,
 
     gnc_module_system_init();
     gnc_engine_init_static(argc, argv);
-    gnc_module_init_backend_xml(); // register the file:// handler
+    qof_load_backend_library ("../../../backend/xml/.libs/",
+			      "gncmod-backend-xml");
 
     /* Add test functions and suites. See
      * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
