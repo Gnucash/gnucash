@@ -85,7 +85,7 @@ struct _GNCDateFormatPriv
 static guint date_format_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_date_format_init         (GNCDateFormat      *gdf);
-static void gnc_date_format_class_init   (GNCDateFormatClass *class);
+static void gnc_date_format_class_init   (GNCDateFormatClass *klass);
 static void gnc_date_format_finalize     (GObject            *object);
 static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 

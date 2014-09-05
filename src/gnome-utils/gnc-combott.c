@@ -76,7 +76,7 @@ typedef struct GncCombottPrivate
 /** Declarations *********************************************************/
 static void gctt_init (GncCombott *combott);
 
-static void gctt_class_init (GncCombottClass *class);
+static void gctt_class_init (GncCombottClass *klass);
 
 static void gctt_set_property (GObject *object,
                                guint param_id,
@@ -143,22 +143,22 @@ gnc_combott_get_type (void)
 
 
 static void
-gctt_class_init (GncCombottClass *class)
+gctt_class_init (GncCombottClass *klass)
 {
     GObjectClass            *gobject_class;
 
-    parent_class = g_type_class_peek_parent (class);
-    gobject_class = G_OBJECT_CLASS (class);
+    parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
 
     gobject_class->set_property = gctt_set_property;
     gobject_class->get_property = gctt_get_property;
     gobject_class->finalize = gctt_finalize;
 
-    class->changed = gctt_changed;
+    klass->changed = gctt_changed;
 
     combott_signals[CHANGED] =
         g_signal_new ("changed",
-                      G_OBJECT_CLASS_TYPE (class),
+                      G_OBJECT_CLASS_TYPE (klass),
                       G_SIGNAL_RUN_LAST,
                       G_STRUCT_OFFSET (GncCombottClass, changed),
                       NULL, NULL,
@@ -196,7 +196,7 @@ gctt_class_init (GncCombottClass *class)
                           1,
                           G_PARAM_READWRITE));
 
-    g_type_class_add_private(class, sizeof(GncCombottPrivate));
+    g_type_class_add_private(klass, sizeof(GncCombottPrivate));
 }
 
 

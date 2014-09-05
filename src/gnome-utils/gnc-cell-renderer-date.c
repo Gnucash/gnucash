@@ -46,7 +46,7 @@ enum {
 
 static void     gcrd_init                    (GncCellRendererDate      *date);
 
-static void     gcrd_class_init              (GncCellRendererDateClass *class);
+static void     gcrd_class_init              (GncCellRendererDateClass *klass);
 
 static void     gcrd_set_property            (GObject                 *object,
 					      guint                    param_id,
@@ -187,16 +187,16 @@ gcrd_init (GncCellRendererDate *date)
 }
 
 static void
-gcrd_class_init (GncCellRendererDateClass *class)
+gcrd_class_init (GncCellRendererDateClass *klass)
 {
 	GncCellRendererPopupClass     *popup_class;
 	GtkCellRendererClass          *cell_class;
 	GObjectClass                  *gobject_class;
 
-	popup_class = GNC_CELL_RENDERER_POPUP_CLASS (class);
-	cell_class = GTK_CELL_RENDERER_CLASS (class);	
-	parent_class = GNC_CELL_RENDERER_POPUP_CLASS (g_type_class_peek_parent (class));
-	gobject_class = G_OBJECT_CLASS (class);
+	popup_class = GNC_CELL_RENDERER_POPUP_CLASS (klass);
+	cell_class = GTK_CELL_RENDERER_CLASS (klass);	
+	parent_class = GNC_CELL_RENDERER_POPUP_CLASS (g_type_class_peek_parent (klass));
+	gobject_class = G_OBJECT_CLASS (klass);
 
 	gobject_class->set_property = gcrd_set_property;
 	gobject_class->get_property = gcrd_get_property;

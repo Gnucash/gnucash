@@ -558,7 +558,7 @@ gnc_tree_view_price_filter_helper (GtkTreeModel *model,
                                    GtkTreeIter *iter,
                                    gpointer data)
 {
-    gnc_commodity_namespace *namespace;
+    gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
     GNCPrice *price;
     filter_user_data *fd = data;
@@ -570,8 +570,8 @@ gnc_tree_view_price_filter_helper (GtkTreeModel *model,
     {
         if (fd->user_ns_fn)
         {
-            namespace = gnc_tree_model_price_get_namespace (GNC_TREE_MODEL_PRICE(model), iter);
-            return fd->user_ns_fn(namespace, fd->user_data);
+            name_space = gnc_tree_model_price_get_namespace (GNC_TREE_MODEL_PRICE(model), iter);
+            return fd->user_ns_fn(name_space, fd->user_data);
         }
         return TRUE;
     }

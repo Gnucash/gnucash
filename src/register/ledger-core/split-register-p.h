@@ -116,9 +116,6 @@ struct sr_info
     /* hook to get parent widget */
     SRGetParentCallback get_parent;
 
-    /* flag indicating a template register */
-    gboolean template;
-
     /* The template account which template transaction should belong to */
     GncGUID template_account;
 

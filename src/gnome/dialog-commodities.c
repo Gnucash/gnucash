@@ -60,7 +60,7 @@ typedef struct
     GtkWidget * remove_button;
     gboolean    show_currencies;
 
-    gboolean new;
+    gboolean is_new;
 } CommoditiesDialog;
 
 
@@ -214,15 +214,15 @@ static void
 add_clicked (CommoditiesDialog *cd)
 {
     gnc_commodity *commodity;
-    const char *namespace;
+    const char *name_space;
 
     commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
     if (commodity)
-        namespace = gnc_commodity_get_namespace (commodity);
+        name_space = gnc_commodity_get_namespace (commodity);
     else
-        namespace = NULL;
+        name_space = NULL;
 
-    commodity = gnc_ui_new_commodity_modal (namespace, cd->dialog);
+    commodity = gnc_ui_new_commodity_modal (name_space, cd->dialog);
 }
 
 void
@@ -274,7 +274,7 @@ gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle,
 }
 
 static gboolean
-gnc_commodities_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
+gnc_commodities_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
                                        gpointer data)
 {
     CommoditiesDialog *cd = data;
@@ -282,7 +282,7 @@ gnc_commodities_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
     GList *list;
 
     /* Never show the template list */
-    name = gnc_commodity_namespace_get_name (namespace);
+    name = gnc_commodity_namespace_get_name (name_space);
     if (g_strcmp0 (name, "template") == 0)
         return FALSE;
 
@@ -291,7 +291,7 @@ gnc_commodities_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
         return FALSE;
 
     /* Show any other namespace that has commodities */
-    list = gnc_commodity_namespace_get_commodity_list(namespace);
+    list = gnc_commodity_namespace_get_commodity_list(name_space);
     return (list != NULL);
 }
 
@@ -385,7 +385,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     CommoditiesDialog *cd = user_data;

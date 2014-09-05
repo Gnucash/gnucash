@@ -2127,14 +2127,14 @@ test_xaccAccountType_Stuff (void)
     TestErrorStruct check3 = { loglevel, logdomain, msg3, 0 };
     Account *acc = g_object_new (GNC_TYPE_ACCOUNT, NULL);
 
-    for (type = ACCT_TYPE_NONE; type < ACCT_TYPE_LAST; type++)
+    for (type = ACCT_TYPE_NONE; type < ACCT_TYPE_LAST; type = type + 1)
     {
-        const gchar *typename = xaccAccountTypeEnumAsString (type);
+        const gchar *type_name = xaccAccountTypeEnumAsString (type);
         const gchar *typestr;
         gchar *typestr_uc;
 
-        g_assert (typename);
-        g_assert_cmpint (xaccAccountStringToEnum (typename), == , type);
+        g_assert (type_name);
+        g_assert_cmpint (xaccAccountStringToEnum (type_name), == , type);
         if (type < 0 || type >= NUM_ACCOUNT_TYPES)
             continue;
 
@@ -2142,24 +2142,24 @@ test_xaccAccountType_Stuff (void)
         typestr_uc = g_ascii_strup (typestr, strlen (typestr));
         if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE)
         {
-            gchar *cmpstr = g_strconcat ("A/", typename, NULL);
+            gchar *cmpstr = g_strconcat ("A/", type_name, NULL);
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
         else if (type == ACCT_TYPE_CREDIT)
         {
-            gchar *cmpstr = g_strconcat (typename, " CARD", NULL);
+            gchar *cmpstr = g_strconcat (type_name, " CARD", NULL);
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
         else if (type == ACCT_TYPE_MUTUAL)
         {
-            gchar *cmpstr = g_strconcat (typename, " FUND", NULL);
+            gchar *cmpstr = g_strconcat (type_name, " FUND", NULL);
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
         else
-            g_assert_cmpstr (typestr_uc, == , typename);
+            g_assert_cmpstr (typestr_uc, == , type_name);
         g_free (typestr_uc);
 
 	qof_instance_increase_editlevel (acc);
@@ -2232,7 +2232,7 @@ test_xaccAccountType_Compatibility (void)
     TestErrorStruct check2 = { loglevel, logdomain, msg2, 0 };
     gint loghandler;
 
-    for (type = ACCT_TYPE_BANK; type < NUM_ACCOUNT_TYPES; type++)
+    for (type = ACCT_TYPE_BANK; type < NUM_ACCOUNT_TYPES; type = type + 1)
     {
         GNCAccountType child;
         if (type == ACCT_TYPE_ROOT)
@@ -2259,7 +2259,7 @@ test_xaccAccountType_Compatibility (void)
             g_assert_cmpint (compat, == , equity_compat);
         else if (type == ACCT_TYPE_TRADING)
             g_assert_cmpint (compat, == , trading_compat);
-        for (child = ACCT_TYPE_NONE; child < ACCT_TYPE_LAST; child++)
+        for (child = ACCT_TYPE_NONE; child < ACCT_TYPE_LAST; child = child + 1)
             if (1 << child & compat)
                 g_assert (xaccAccountTypesCompatible (type, child));
             else
@@ -2269,7 +2269,7 @@ test_xaccAccountType_Compatibility (void)
     loghandler = g_log_set_handler (logdomain, loglevel,
                                     (GLogFunc)test_null_handler, &check2);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check2);
-    compat = xaccParentAccountTypesCompatibleWith (++type);
+    compat = xaccParentAccountTypesCompatibleWith (type = type + 1);
     g_log_remove_handler (logdomain, loghandler);
     g_assert_cmpint (compat, == , 0);
     g_assert_cmpint (check2.hits, ==, 1);

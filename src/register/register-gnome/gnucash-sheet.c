@@ -2727,15 +2727,15 @@ gnucash_sheet_create_color_hack(GnucashSheet *sheet)
 /*************************************************************/
 
 static void
-gnucash_sheet_class_init (GnucashSheetClass *class)
+gnucash_sheet_class_init (GnucashSheetClass *klass)
 {
     GObjectClass *gobject_class;
     GtkWidgetClass *widget_class;
 
-    gobject_class = G_OBJECT_CLASS (class);
-    widget_class = GTK_WIDGET_CLASS (class);
+    gobject_class = G_OBJECT_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS (klass);
 
-    sheet_parent_class = g_type_class_peek_parent (class);
+    sheet_parent_class = g_type_class_peek_parent (klass);
 
     /* Method override */
     gobject_class->finalize = gnucash_sheet_finalize;
@@ -2900,13 +2900,13 @@ gnucash_sheet_new (Table *table)
 
 
 static void
-gnucash_register_class_init (GnucashRegisterClass *class)
+gnucash_register_class_init (GnucashRegisterClass *klass)
 {
     GObjectClass *gobject_class;
 
-    gobject_class = G_OBJECT_CLASS (class);
+    gobject_class = G_OBJECT_CLASS (klass);
 
-    register_parent_class = g_type_class_peek_parent (class);
+    register_parent_class = g_type_class_peek_parent (klass);
 
     register_signals[ACTIVATE_CURSOR] =
         g_signal_new("activate_cursor",
@@ -2938,9 +2938,9 @@ gnucash_register_class_init (GnucashRegisterClass *class)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    class->activate_cursor = NULL;
-    class->redraw_all = NULL;
-    class->redraw_help = NULL;
+    klass->activate_cursor = NULL;
+    klass->redraw_all = NULL;
+    klass->redraw_help = NULL;
 }
 
 

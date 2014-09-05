@@ -1215,7 +1215,7 @@ gnc_preferences_dialog_create(void)
  *
  *  @internal
  *
- *  @param class Unused.
+ *  @param class_name Unused.
  *
  *  @param component_id Unused.
  *
@@ -1224,7 +1224,7 @@ gnc_preferences_dialog_create(void)
  *  @param iter_data Unused.
  */
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     GtkWidget *dialog;

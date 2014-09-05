@@ -42,7 +42,7 @@ enum {
 };
 
 static void      gcrp_init               (GncCellRendererPopup      *popup);
-static void      gcrp_class_init         (GncCellRendererPopupClass *class);
+static void      gcrp_class_init         (GncCellRendererPopupClass *klass);
 
 static GtkCellEditable *
 gcrp_start_editing                       (GtkCellRenderer          *cell,
@@ -141,21 +141,21 @@ gcrp_init (GncCellRendererPopup *popup)
 }
 
 static void
-gcrp_class_init (GncCellRendererPopupClass *class)
+gcrp_class_init (GncCellRendererPopupClass *klass)
 {
-	GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
+	GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
 	
-	parent_class = GTK_CELL_RENDERER_TEXT_CLASS (g_type_class_peek_parent (class));
+	parent_class = GTK_CELL_RENDERER_TEXT_CLASS (g_type_class_peek_parent (klass));
 	
 	cell_class->start_editing = gcrp_start_editing;
 	cell_class->get_size      = gcrp_get_size;
 
-	class->show_popup = gcrp_show_popup;
-	class->hide_popup = gcrp_hide_popup;
+	klass->show_popup = gcrp_show_popup;
+	klass->hide_popup = gcrp_hide_popup;
 
 	signals[SHOW_POPUP] = g_signal_new (
 		"show-popup",
-		G_TYPE_FROM_CLASS (class),
+		G_TYPE_FROM_CLASS (klass),
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GncCellRendererPopupClass, show_popup),
 		NULL, NULL,
@@ -169,7 +169,7 @@ gcrp_class_init (GncCellRendererPopupClass *class)
 
 	signals[HIDE_POPUP] = g_signal_new (
 		"hide-popup",
-		G_TYPE_FROM_CLASS (class),
+		G_TYPE_FROM_CLASS (klass),
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GncCellRendererPopupClass, hide_popup),
 		NULL, NULL,

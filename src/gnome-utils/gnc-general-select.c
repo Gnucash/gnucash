@@ -47,7 +47,7 @@ enum
 
 
 static void gnc_general_select_init         (GNCGeneralSelect      *gsl);
-static void gnc_general_select_class_init   (GNCGeneralSelectClass *class);
+static void gnc_general_select_class_init   (GNCGeneralSelectClass *klass);
 static void gnc_general_select_dispose      (GObject               *object);
 static void gnc_general_select_finalize     (GObject               *object);
 

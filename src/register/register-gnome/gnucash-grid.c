@@ -856,15 +856,15 @@ gnucash_grid_get_property (GObject         *object,
 
 
 static void
-gnucash_grid_class_init (GnucashGridClass *class)
+gnucash_grid_class_init (GnucashGridClass *klass)
 {
     GObjectClass  *object_class;
     GnomeCanvasItemClass *item_class;
 
-    object_class = G_OBJECT_CLASS (class);
-    item_class = GNOME_CANVAS_ITEM_CLASS (class);
+    object_class = G_OBJECT_CLASS (klass);
+    item_class = GNOME_CANVAS_ITEM_CLASS (klass);
 
-    gnucash_grid_parent_class = g_type_class_peek_parent (class);
+    gnucash_grid_parent_class = g_type_class_peek_parent (klass);
 
     /* GObject method overrides */
     object_class->set_property = gnucash_grid_set_property;

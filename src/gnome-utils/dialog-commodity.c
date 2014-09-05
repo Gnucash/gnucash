@@ -249,7 +249,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     SelectCommodityWindow * retval = g_new0(SelectCommodityWindow, 1);
     GtkBuilder *builder;
     const char *title, *text;
-    gchar *namespace;
+    gchar *name_space;
     GtkWidget *button, *label;
 
     builder = gtk_builder_new();
@@ -303,13 +303,13 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     gnc_ui_update_namespace_picker(retval->namespace_combo,
                                    gnc_commodity_get_namespace(orig_sel),
                                    mode);
-    namespace = gnc_ui_namespace_picker_ns(retval->namespace_combo);
-    gnc_ui_update_commodity_picker(retval->commodity_combo, namespace,
+    name_space = gnc_ui_namespace_picker_ns(retval->namespace_combo);
+    gnc_ui_update_commodity_picker(retval->commodity_combo, name_space,
                                    gnc_commodity_get_printname(orig_sel));
 
     g_object_unref(G_OBJECT(builder));
 
-    g_free(namespace);
+    g_free(name_space);
     return retval;
 }
 
@@ -334,10 +334,10 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
 {
     SelectCommodityWindow * w = user_data;
 
-    gchar * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
+    gchar * name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
 
     const gnc_commodity * new_commodity =
-        gnc_ui_new_commodity_modal_full(namespace,
+        gnc_ui_new_commodity_modal_full(name_space,
                                         w->dialog,
                                         w->default_cusip,
                                         w->default_fullname,
@@ -353,7 +353,7 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
                                        gnc_commodity_get_namespace(new_commodity),
                                        gnc_commodity_get_printname(new_commodity));
     }
-    g_free(namespace);
+    g_free(name_space);
 }
 
 
@@ -377,18 +377,18 @@ gnc_ui_select_commodity_changed_cb (GtkComboBox *cbwe,
                                     gpointer user_data)
 {
     SelectCommodityWindow * w = user_data;
-    gchar *namespace;
+    gchar *name_space;
     const gchar *fullname;
     gboolean ok;
 
     ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
-    namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
+    name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
     fullname = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(w->commodity_combo)))));
 
-    DEBUG("namespace=%s, name=%s", namespace, fullname);
+    DEBUG("namespace=%s, name=%s", name_space, fullname);
     w->selection = gnc_commodity_table_find_full(gnc_get_current_commodities(),
-                   namespace, fullname);
-    g_free(namespace);
+                   name_space, fullname);
+    g_free(name_space);
 
     ok = (w->selection != NULL);
     gtk_widget_set_sensitive(w->ok_button, ok);
@@ -418,13 +418,13 @@ gnc_ui_select_commodity_namespace_changed_cb (GtkComboBox *cbwe,
         gpointer user_data)
 {
     SelectCommodityWindow * w = user_data;
-    gchar *namespace;
+    gchar *name_space;
 
     ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
-    namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
-    DEBUG("namespace=%s", namespace);
-    gnc_ui_update_commodity_picker(w->commodity_combo, namespace, NULL);
-    g_free(namespace);
+    name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
+    DEBUG("name_space=%s", name_space);
+    gnc_ui_update_commodity_picker(w->commodity_combo, name_space, NULL);
+    g_free(name_space);
     LEAVE(" ");
 }
 
@@ -445,7 +445,7 @@ collate(gconstpointer a, gconstpointer b)
 
 void
 gnc_ui_update_commodity_picker (GtkWidget *cbwe,
-                                const gchar * namespace,
+                                const gchar * name_space,
                                 const gchar * init_string)
 {
     GList      * commodities;
@@ -460,7 +460,7 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     gchar *name;
 
     g_return_if_fail(GTK_IS_COMBO_BOX(cbwe));
-    g_return_if_fail(namespace);
+    g_return_if_fail(name_space);
 
     /* Erase the old entries */
     combo_box = GTK_COMBO_BOX(cbwe);
@@ -474,7 +474,7 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     gtk_combo_box_set_active(combo_box, -1);
 
     table = gnc_commodity_table_get_table (gnc_get_current_book ());
-    commodities = gnc_commodity_table_get_commodities(table, namespace);
+    commodities = gnc_commodity_table_get_commodities(table, name_space);
     for (iterator = commodities; iterator; iterator = iterator->next)
     {
         commodity_items =
@@ -710,19 +710,19 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
 gchar *
 gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
 {
-    const gchar *namespace;
+    const gchar *name_space;
 
     g_return_val_if_fail(GTK_IS_COMBO_BOX (cbwe), NULL);
 
-    namespace = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
+    name_space = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
 
-    if (g_strcmp0 (namespace, GNC_COMMODITY_NS_ISO) == 0)
+    if (g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO) == 0)
     {
         /* In case the user types in ISO4217, map it to CURRENCY. */
         return g_strdup(GNC_COMMODITY_NS_CURRENCY);
     }
     else
-        return g_strdup(namespace);
+        return g_strdup(name_space);
 }
 
 
@@ -765,7 +765,7 @@ void
 gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
 {
     CommodityWindow * w = user_data;
-    gchar *namespace;
+    gchar *name_space;
     const char * fullname;
     const char * mnemonic;
     gboolean ok;
@@ -773,13 +773,13 @@ gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
     ENTER("widget=%p, user_data=%p", dummy, user_data);
     if (!w->is_currency)
     {
-        namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
+        name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
         fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
         mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
-        DEBUG("namespace=%s, name=%s, mnemonic=%s", namespace, fullname, mnemonic);
-        ok = (fullname    && namespace    && mnemonic &&
-              fullname[0] && namespace[0] && mnemonic[0]);
-        g_free(namespace);
+        DEBUG("namespace=%s, name=%s, mnemonic=%s", name_space, fullname, mnemonic);
+        ok = (fullname    && name_space    && mnemonic &&
+              fullname[0] && name_space[0] && mnemonic[0]);
+        g_free(name_space);
     }
     else
     {
@@ -1137,7 +1137,7 @@ gnc_ui_commodity_update_quote_info(CommodityWindow *win,
 static gnc_commodity *
 gnc_ui_common_commodity_modal(gnc_commodity *commodity,
                               GtkWidget * parent,
-                              const char * namespace,
+                              const char * name_space,
                               const char * cusip,
                               const char * fullname,
                               const char * mnemonic,
@@ -1154,7 +1154,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     /* If a commodity was provided, copy out the existing info */
     if (commodity)
     {
-        namespace = gnc_commodity_get_namespace (commodity);
+        name_space = gnc_commodity_get_namespace (commodity);
         fullname = gnc_commodity_get_fullname (commodity);
         mnemonic = gnc_commodity_get_mnemonic (commodity);
         user_symbol = gnc_commodity_get_nice_symbol (commodity);
@@ -1164,13 +1164,13 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     else
     {
         /* Not allowed to create new currencies */
-        if (gnc_commodity_namespace_is_iso(namespace))
+        if (gnc_commodity_namespace_is_iso(name_space))
         {
-            namespace = NULL;
+            name_space = NULL;
         }
     }
 
-    win = gnc_ui_build_commodity_dialog(namespace, parent, fullname,
+    win = gnc_ui_build_commodity_dialog(name_space, parent, fullname,
                                         mnemonic, user_symbol, cusip,
                                         fraction, (commodity != NULL));
 
@@ -1217,7 +1217,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
  * Create and run the new/edit commodity dialog.        *
  ********************************************************/
 gnc_commodity *
-gnc_ui_new_commodity_modal_full(const char * namespace,
+gnc_ui_new_commodity_modal_full(const char * name_space,
                                 GtkWidget * parent,
                                 const char * cusip,
                                 const char * fullname,
@@ -1228,7 +1228,7 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
     gnc_commodity *result;
 
     ENTER(" ");
-    result = gnc_ui_common_commodity_modal(NULL, parent, namespace, cusip,
+    result = gnc_ui_common_commodity_modal(NULL, parent, name_space, cusip,
                                            fullname, mnemonic, user_symbol,
                                            10000);
     LEAVE(" ");
@@ -1284,7 +1284,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     gnc_quote_source *source;
     QuoteSourceType type;
     const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
-    gchar *namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
+    gchar *name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
     const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
     const char * user_symbol = gtk_entry_get_text(GTK_ENTRY(w->user_symbol_entry));
     const char * code      = gtk_entry_get_text(GTK_ENTRY(w->code_entry));
@@ -1297,7 +1297,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 
     ENTER(" ");
     /* Special case currencies */
-    if (gnc_commodity_namespace_is_iso (namespace))
+    if (gnc_commodity_namespace_is_iso (name_space))
     {
         if (w->edit_commodity)
         {
@@ -1329,7 +1329,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     /* Don't allow user to create commodities in namespace
      * "template". That's reserved for scheduled transaction use.
      */
-    if (g_utf8_collate(namespace, "template") == 0)
+    if (g_utf8_collate(name_space, "template") == 0)
     {
 	gnc_warning_dialog (w->dialog,
 			    _("%s is a reserved commodity type."
@@ -1338,23 +1338,23 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     }
 
     if (fullname && fullname[0] &&
-            namespace && namespace[0] &&
+            name_space && name_space[0] &&
             mnemonic && mnemonic[0])
     {
         c = gnc_commodity_table_lookup (gnc_get_current_commodities(),
-                                        namespace, mnemonic);
+                                        name_space, mnemonic);
 
         if ((!w->edit_commodity && c) ||
                 (w->edit_commodity && c && (c != w->edit_commodity)))
         {
             gnc_warning_dialog (w->dialog, "%s",  _("That commodity already exists."));
-            g_free(namespace);
+            g_free(name_space);
             return FALSE;
         }
 
         if (!w->edit_commodity)
         {
-            c = gnc_commodity_new(book, fullname, namespace, mnemonic, code, fraction);
+            c = gnc_commodity_new(book, fullname, name_space, mnemonic, code, fraction);
             w->edit_commodity = c;
             gnc_commodity_begin_edit(c);
         }
@@ -1367,7 +1367,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 
             gnc_commodity_set_fullname (c, fullname);
             gnc_commodity_set_mnemonic (c, mnemonic);
-            gnc_commodity_set_namespace (c, namespace);
+            gnc_commodity_set_namespace (c, name_space);
             gnc_commodity_set_cusip (c, code);
             gnc_commodity_set_fraction (c, fraction);
         }
@@ -1375,7 +1375,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         gnc_commodity_user_set_quote_flag (c, gtk_toggle_button_get_active
                                            (GTK_TOGGLE_BUTTON (w->get_quote_check)));
 
-        for (type = SOURCE_SINGLE; type < SOURCE_MAX; type++)
+        for (type = SOURCE_SINGLE; type < SOURCE_MAX; type=type+1)
         {
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w->source_button[type])))
                 break;
@@ -1398,10 +1398,10 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                            _("You must enter a non-empty \"Full name\", "
                              "\"Symbol/abbreviation\", "
                              "and \"Type\" for the commodity."));
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
-    g_free(namespace);
+    g_free(name_space);
     LEAVE(" ");
     return TRUE;
 }

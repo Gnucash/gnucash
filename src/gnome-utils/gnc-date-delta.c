@@ -59,7 +59,7 @@ static guint date_delta_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_date_delta_init       (GNCDateDelta      *gdd);
-static void gnc_date_delta_class_init (GNCDateDeltaClass *class);
+static void gnc_date_delta_class_init (GNCDateDeltaClass *klass);
 static void gnc_date_delta_forall     (GtkContainer      *container,
                                        gboolean	          include_internals,
                                        GtkCallback	  callback,

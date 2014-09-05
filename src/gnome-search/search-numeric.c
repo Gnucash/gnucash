@@ -43,7 +43,7 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_numeric_class_init	(GNCSearchNumericClass *class);
+static void gnc_search_numeric_class_init	(GNCSearchNumericClass *klass);
 static void gnc_search_numeric_init	(GNCSearchNumeric *gspaper);
 static void gnc_search_numeric_finalize	(GObject *obj);
 
@@ -90,13 +90,13 @@ gnc_search_numeric_get_type (void)
 }
 
 static void
-gnc_search_numeric_class_init (GNCSearchNumericClass *class)
+gnc_search_numeric_class_init (GNCSearchNumericClass *klass)
 {
     GObjectClass *object_class;
-    GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
+    GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
-    object_class = G_OBJECT_CLASS (class);
-    parent_class = g_type_class_peek_parent (class);
+    object_class = G_OBJECT_CLASS (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_numeric_finalize;
 
@@ -108,7 +108,7 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
     gnc_search_core_type->get_predicate = gncs_get_predicate;
     gnc_search_core_type->clone = gncs_clone;
 
-    g_type_class_add_private(class, sizeof(GNCSearchNumericPrivate));
+    g_type_class_add_private(klass, sizeof(GNCSearchNumericPrivate));
 }
 
 static void
