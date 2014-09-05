@@ -154,6 +154,8 @@ load_all_commodities( GncSqlBackend* be )
 
                 guid = *qof_instance_get_guid( QOF_INSTANCE(pCommodity) );
                 pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
+		if (qof_instance_is_dirty (QOF_INSTANCE (pCommodity)))
+		    gnc_sql_push_commodity_for_postload_processing (be, (gpointer)pCommodity);
                 qof_instance_set_guid( QOF_INSTANCE(pCommodity), &guid );
             }
             row = gnc_sql_result_get_next_row( result );
@@ -256,6 +258,15 @@ gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity )
     }
 
     return is_ok;
+}
+
+void
+gnc_sql_commit_commodity (gnc_commodity *pCommodity)
+{
+    g_return_if_fail (pCommodity != NULL);
+    g_return_if_fail (GNC_IS_COMMODITY (pCommodity));
+    gnc_commodity_begin_edit (pCommodity);
+    gnc_commodity_commit_edit (pCommodity);
 }
 
 /* ----------------------------------------------------------------- */

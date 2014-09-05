@@ -99,6 +99,8 @@ static GncSqlStatement* build_delete_statement( GncSqlBackend* be,
         QofIdTypeConst obj_name, gpointer pObject,
         const GncSqlColumnTableEntry* table );
 
+static GList *post_load_commodities = NULL;
+
 #define TRANSACTION_NAME "trans"
 
 typedef struct
@@ -209,6 +211,20 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
 }
 
 void
+gnc_sql_push_commodity_for_postload_processing (GncSqlBackend *be,
+						gpointer *comm)
+{
+    post_load_commodities = g_list_prepend(post_load_commodities, comm);
+}
+
+static void
+commit_commodity (gpointer data)
+{
+    gnc_commodity *comm = GNC_COMMODITY (data);
+    gnc_sql_commit_commodity (comm);
+}
+
+void
 gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoadType loadType )
 {
     GncSqlObjectBackend* pData;
@@ -264,6 +280,8 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
     }
 
     be->loading = FALSE;
+    g_list_free_full (post_load_commodities, commit_commodity);
+    post_load_commodities = NULL;
 
     /* Mark the sessoion as clean -- though it should never be marked
      * dirty with this backend

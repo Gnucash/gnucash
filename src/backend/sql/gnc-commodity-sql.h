@@ -34,5 +34,6 @@
 
 void gnc_sql_init_commodity_handler( void );
 gboolean gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity );
+void gnc_sql_commit_commodity (gnc_commodity* pCommodity);
 
 #endif /* GNC_COMMODITY_SQL_H */
