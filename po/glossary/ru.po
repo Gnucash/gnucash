@@ -530,9 +530,8 @@ msgid "passphrase"
 msgstr "пароль"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
-#, fuzzy
 msgid "Payables/Receivables"
-msgstr "счета к оплате/получению"
+msgstr "Cумма к оплате/получению"
 
 #. "A person to whom sth is paid"
 msgid "payee"
