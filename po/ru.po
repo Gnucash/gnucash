@@ -409,14 +409,14 @@ msgid "Loading data..."
 msgstr "Загружаются данные..."
 
 #: ../src/bin/gnucash-bin.c:764
-#, fuzzy
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
 "       Perhaps you need to set the $DISPLAY environment variable ?"
 msgstr ""
 "Ошибка: не удается создать графический интерфейс и опция add-price-quotes не "
-"задана"
+"задана.\n"
+"       Возможно вам нужно установить переменную среды $DISPLAY ?"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
@@ -2079,9 +2079,8 @@ msgstr "Создать новый товарный чек"
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:202
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:277
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:897
-#, fuzzy
 msgid "Vendor Listing"
-msgstr "Номенклатура"
+msgstr "Список поставщиков"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:203
 msgid "Show vendor aging overview for all vendors"
@@ -2090,9 +2089,8 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:207
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:278
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:903
-#, fuzzy
 msgid "Customer Listing"
-msgstr "Клиент: "
+msgstr "Список клиентов"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:208
 msgid "Show customer aging overview for all customers"
@@ -2107,9 +2105,8 @@ msgid "Vendor Report"
 msgstr "Отчет поставщика"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:213
-#, fuzzy
 msgid "Show vendor report"
-msgstr "Отчет поставщика"
+msgstr "Показать отчет поставщика"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -2120,9 +2117,8 @@ msgid "Customer Report"
 msgstr "Отчет клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:218
-#, fuzzy
 msgid "Show customer report"
-msgstr "Отчет клиента"
+msgstr "Показать отчет клиента"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -2133,9 +2129,8 @@ msgid "Employee Report"
 msgstr "Отчет работника"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:223
-#, fuzzy
 msgid "Show employee report"
-msgstr "Отчет работника"
+msgstr "Показать отчет работника"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:268
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:269
@@ -3186,9 +3181,8 @@ msgid "Number"
 msgstr "Номер"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:10
-#, fuzzy
 msgid "Documents"
-msgstr "Корректировки"
+msgstr "Документы"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:11
 msgid ""
@@ -6921,12 +6915,10 @@ msgstr ""
 "дату для операции, вместо даты последнего согласования."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Run \"since last run\" dialog when a file is opened."
-msgstr "Показвать диалог \"с последнего запуска\" при открытии файла."
+msgstr "Показвать диалог \"с момента последнего запуска\" при открытии файла."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:4
-#, fuzzy
 msgid ""
 "This setting controls whether the scheduled transactions \"since last run\" "
 "processing is run automatically when a data file is opened. This includes "
@@ -6941,7 +6933,7 @@ msgstr ""
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:5
 #, fuzzy
 msgid "Show \"since last run\" notification dialog when a file is opened."
-msgstr "Показвать диалог \"с последнего запуска\" при открытии файла."
+msgstr "Показывать диалог \"с момента последнего запуска\" при открытии файла."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:6
 #, fuzzy
@@ -9135,9 +9127,8 @@ msgstr ""
 "исправлены сейчас. Нажмите \"OK\" для их изменения."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:4
-#, fuzzy
 msgid "<b>Since Last Run</b>"
-msgstr "<b>Диалог \"с момента последнего запуска\"</b>"
+msgstr "<b>\"С момента последнего запуска\"</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:5
 msgid "<b>Transaction Editor Defaults</b>"
@@ -9148,21 +9139,18 @@ msgid "_Run when data file opened"
 msgstr "Запустить при открытии файла данных"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:7
-#, fuzzy
 msgid "Run the \"since last run\" process when a file is opened."
-msgstr "Показывать окно \"с прошлого запуска\" при открытии файла."
+msgstr "Показывать диалог \"с прошлого запуска\" при открытии файла."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:8
-#, fuzzy
 msgid "_Show notification window"
-msgstr "Показывать окно _лога"
+msgstr "Показывать окно уведомления"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:9
-#, fuzzy
 msgid ""
 "Show the notification window for the \"since last run\" process when a file "
 "is opened."
-msgstr "Показывать окно \"с прошлого запуска\" при открытии файла."
+msgstr "Показывать окно с уведомлением \"с момента последнего запуска\" при открытии файла."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:10
 msgid "_Auto-create new transactions"
@@ -9619,10 +9607,10 @@ msgid "S_tatement Date"
 msgstr "_Дата декларации"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:34
-#, fuzzy
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
-msgstr "Упорядочить по дате согласования (несогласованные пункты в конце)."
+msgstr "Упорядочить по дате записи (и сгруппировать по согласованности - "
+"очищенные, согласованные, несогласованные)."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:35
 msgid "Num_ber"
@@ -11555,9 +11543,8 @@ msgstr ""
 "деньгами!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4379
-#, fuzzy
 msgid "© 1997-2014 Contributors"
-msgstr "© 1997-2013 Участники"
+msgstr "© 1997-2014 Участники"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -13711,9 +13698,8 @@ msgid "How many days to keep old log/backup files."
 msgstr "Время (дни) хранения старых логов и файлов резервных копий."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:68
-#, fuzzy
 msgid "_Retain log/backup files:"
-msgstr "_Хранить журналы изменений:"
+msgstr "_Хранить журналы изменений и резервные копии:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:69
 msgid "Com_press files"
@@ -22026,7 +22012,6 @@ msgstr "Имя файла, содержащего логотип, использ
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1774
-#, fuzzy, c-format
 msgid ""
 "Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display "
 "the logo at its natural width. The height of the logo will be scaled "
@@ -22054,9 +22039,8 @@ msgstr "Платёж получен, спасибо"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1808
-#, fuzzy
 msgid "Invoice number: "
-msgstr "Номер счета-фактуры"
+msgstr "Номер счета-фактуры: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1810
@@ -22065,21 +22049,18 @@ msgstr "По: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1812
-#, fuzzy
 msgid "Your ref: "
 msgstr "Ваш номер: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1814
-#, fuzzy
 msgid "Job number: "
-msgstr "Номер операции"
+msgstr "Номер операции: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1816
-#, fuzzy
 msgid "Job name: "
-msgstr "Название операции"
+msgstr "Название операции: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1820
@@ -25015,15 +24996,13 @@ msgstr "Денежный поток"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3276
-#, fuzzy
 msgid "Include Trading Accounts in report"
-msgstr "Включить итоги торговых счетов"
+msgstr "Включить торговые счета в отчет"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3282
-#, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr "Включить только проводки с/на отобранные счета."
+msgstr "Включить переводы с/на торговые счета в отчет."
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3286
