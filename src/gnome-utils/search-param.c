@@ -33,7 +33,7 @@
 
 #include "search-param.h"
 
-static void gnc_search_param_class_init	(GNCSearchParamClass *class);
+static void gnc_search_param_class_init	(GNCSearchParamClass *klass);
 static void gnc_search_param_init	(GNCSearchParam *gspaper);
 static void gnc_search_param_finalize	(GObject *obj);
 

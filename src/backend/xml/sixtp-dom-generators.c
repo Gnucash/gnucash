@@ -106,7 +106,7 @@ xmlNodePtr
 commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
 {
     xmlNodePtr ret;
-    gchar *namespace, *mnemonic;
+    gchar *name_space, *mnemonic;
 
     g_return_val_if_fail(c, NULL);
 
@@ -116,13 +116,13 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
     {
         return NULL;
     }
-    namespace = g_strdup (gnc_commodity_get_namespace_compat(c));
+    name_space = g_strdup (gnc_commodity_get_namespace_compat(c));
     mnemonic = g_strdup (gnc_commodity_get_mnemonic(c));
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space",
-		    checked_char_cast (namespace));
+		    checked_char_cast (name_space));
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id",
 		    checked_char_cast (mnemonic));
-    g_free (namespace);
+    g_free (name_space);
     g_free (mnemonic);
     return ret;
 }

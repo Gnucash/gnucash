@@ -79,7 +79,7 @@ typedef struct
 
     GNCPrice *price;
     gboolean changed;
-    gboolean new;
+    gboolean is_new;
 
 } PriceEditDialog;
 
@@ -141,7 +141,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
 {
     gnc_commodity *commodity = NULL;
     gnc_commodity *currency = NULL;
-    const gchar *namespace, *fullname;
+    const gchar *name_space, *fullname;
     const char *source;
     const char *type;
     gnc_numeric value;
@@ -154,12 +154,12 @@ price_to_gui (PriceEditDialog *pedit_dialog)
 
     if (commodity)
     {
-        namespace = gnc_commodity_get_namespace(commodity);
+        name_space = gnc_commodity_get_namespace(commodity);
         fullname = gnc_commodity_get_printname(commodity);
         gnc_ui_update_namespace_picker(pedit_dialog->namespace_cbwe,
-                                       namespace, DIAG_COMM_ALL);
+                                       name_space, DIAG_COMM_ALL);
         gnc_ui_update_commodity_picker(pedit_dialog->commodity_cbwe,
-                                       namespace, fullname);
+                                       name_space, fullname);
 
         currency = gnc_price_get_currency (pedit_dialog->price);
         date = gnc_price_get_time (pedit_dialog->price);
@@ -200,17 +200,17 @@ gui_to_price (PriceEditDialog *pedit_dialog)
 {
     gnc_commodity *commodity;
     gnc_commodity *currency;
-    gchar         *namespace;
+    gchar         *name_space;
     const gchar   *fullname;
     const char *source;
     const char *type;
     gnc_numeric value;
     Timespec date;
 
-    namespace = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
+    name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
     fullname = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
 
-    commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), namespace, fullname);
+    commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), name_space, fullname);
     if (!commodity)
         return _("You must select a Security.");
 
@@ -244,7 +244,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     gnc_price_set_value (pedit_dialog->price, value);
     gnc_price_commit_edit (pedit_dialog->price);
 
-    g_free(namespace);
+    g_free(name_space);
 
     return NULL;
 }
@@ -262,7 +262,7 @@ pedit_dialog_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gnc_price_unref (pedit_dialog->price);
         pedit_dialog->price = NULL;
-        pedit_dialog->new = FALSE;
+        pedit_dialog->is_new = FALSE;
     }
 
     g_free (pedit_dialog);
@@ -286,7 +286,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         }
 
         gnc_prices_set_changed (pedit_dialog, FALSE);
-        if (TRUE == pedit_dialog->new)
+        if (TRUE == pedit_dialog->is_new)
         {
             gnc_pricedb_add_price (pedit_dialog->price_db, pedit_dialog->price);
         }
@@ -297,7 +297,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     if (response == GTK_RESPONSE_APPLY)
     {
         new_price = gnc_price_clone (pedit_dialog->price, pedit_dialog->book);
-        pedit_dialog->new = TRUE;
+        pedit_dialog->is_new = TRUE;
 
         gnc_price_unref (pedit_dialog->price);
         pedit_dialog->price = new_price;
@@ -315,14 +315,14 @@ void
 pedit_commodity_ns_changed_cb (GtkComboBox *cbwe, gpointer data)
 {
     PriceEditDialog *pedit_dialog = data;
-    gchar *namespace;
+    gchar *name_space;
 
     gnc_prices_set_changed (pedit_dialog, TRUE);
 
-    namespace = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
-    gnc_ui_update_commodity_picker (pedit_dialog->commodity_cbwe, namespace, NULL);
+    name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
+    gnc_ui_update_commodity_picker (pedit_dialog->commodity_cbwe, name_space, NULL);
 
-    g_free(namespace);
+    g_free(name_space);
 }
 
 
@@ -331,17 +331,17 @@ pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer data)
 {
     gnc_commodity   *commodity = NULL;
     gnc_commodity   *currency = NULL;
-    gchar           *namespace;
+    gchar           *name_space;
     const gchar     *fullname;
     GList           *price_list;
     PriceEditDialog *pedit_dialog = data;
 
     gnc_prices_set_changed (pedit_dialog, TRUE);
 
-    namespace = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
+    name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
     fullname = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
 
-    commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), namespace, fullname);
+    commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), name_space, fullname);
 
     if (commodity)
     {
@@ -364,7 +364,7 @@ pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer data)
         }
     }
 
-    g_free(namespace);
+    g_free(name_space);
 }
 
 
@@ -389,7 +389,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     GtkWidget *box;
     GtkWidget *w;
     GtkWidget *label;
-    gchar     *namespace;
+    gchar     *name_space;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore1");
@@ -419,9 +419,9 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     pedit_dialog->commodity_cbwe = w;
 
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(pedit_dialog->commodity_cbwe));
-    namespace = gnc_ui_namespace_picker_ns(pedit_dialog->namespace_cbwe);
-    gnc_ui_update_commodity_picker(pedit_dialog->commodity_cbwe, namespace, NULL);
-    g_free(namespace);
+    name_space = gnc_ui_namespace_picker_ns(pedit_dialog->namespace_cbwe);
+    gnc_ui_update_commodity_picker(pedit_dialog->commodity_cbwe, name_space, NULL);
+    g_free(name_space);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_box"));
     w = gnc_currency_edit_new ();
@@ -505,7 +505,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
 
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     PriceEditDialog *pedit_dialog = user_data;
@@ -556,12 +556,12 @@ gnc_price_edit_dialog (GtkWidget * parent,
             gnc_price_set_source (price, DIALOG_PRICE_EDIT_SOURCE);
         }
 
-        pedit_dialog->new = TRUE;
+        pedit_dialog->is_new = TRUE;
         /* New price will only have one ref, this dialog. */
         break;
     case GNC_PRICE_EDIT:
         gnc_price_ref(price); /* Add ref from this dialog */
-        pedit_dialog->new = FALSE;
+        pedit_dialog->is_new = FALSE;
         break;
     }
 

@@ -1275,11 +1275,11 @@ write_budget (QofInstance *ent, gpointer data)
 }
 
 gboolean
-gnc_xml2_write_namespace_decl (FILE *out, const char *namespace)
+gnc_xml2_write_namespace_decl (FILE *out, const char *name_space)
 {
-    g_return_val_if_fail(namespace, FALSE);
+    g_return_val_if_fail(name_space, FALSE);
     return fprintf(out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
-                   namespace, namespace) >= 0;
+                   name_space, name_space) >= 0;
 }
 
 static void

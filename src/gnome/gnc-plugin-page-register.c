@@ -74,6 +74,7 @@
 #include "gnucash-sheet.h"
 #include "dialog-lot-viewer.h"
 #include "Scrub.h"
+#include "ScrubBusiness.h"
 #include "qof.h"
 #include "window-reconcile.h"
 #include "window-autoclear.h"
@@ -3691,6 +3692,8 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
     Query *query;
     Account *root;
     Transaction *trans;
+    Split *split;
+    GNCLot *lot;
     SplitRegister *reg;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
@@ -3717,6 +3720,11 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
     root = gnc_get_current_root_account();
     xaccTransScrubOrphans(trans);
     xaccTransScrubImbalance(trans, root, NULL);
+
+    split = gnc_split_register_get_current_split (reg);
+    lot = xaccSplitGetLot (split);
+    if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+        gncScrubBusinessLot (lot);
     gnc_resume_gui_refresh();
     LEAVE(" ");
 }
@@ -3729,6 +3737,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     Query *query;
     Account *root;
     Transaction *trans;
+    GNCLot *lot;
     Split *split;
     GList *node;
 
@@ -3754,6 +3763,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
 
         xaccTransScrubOrphans(trans);
         xaccTransScrubImbalance(trans, root, NULL);
+
+        lot = xaccSplitGetLot (split);
+        if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+            gncScrubBusinessLot (lot);
     }
 
     gnc_resume_gui_refresh();

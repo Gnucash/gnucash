@@ -82,6 +82,16 @@ void gnc_sql_init( GncSqlBackend* be );
 void gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoadType loadType );
 
 /**
+ * Register a commodity to be committed after loading is complete.
+ *
+ * Necessary to save corrections made while loading.
+ * @param be SQL backend
+ * @param comm The commodity item to be committed.
+ */
+void gnc_sql_push_commodity_for_postload_processing (GncSqlBackend *be,
+						     gpointer *comm);
+
+/**
  * Save the contents of a book to an SQL database.
  *
  * @param be SQL backend

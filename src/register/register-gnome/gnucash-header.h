@@ -64,6 +64,7 @@ typedef struct
 
 GtkWidget *gnc_header_new (GnucashSheet *sheet);
 void gnc_header_reconfigure (GncHeader *header);
+void gnc_header_request_redraw (GncHeader *header);
 
 void gnc_header_set_header_rows (GncHeader *header,
                                  int num_phys_rows);

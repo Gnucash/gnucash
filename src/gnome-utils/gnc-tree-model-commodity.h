@@ -193,7 +193,7 @@ gnc_commodity *gnc_tree_model_commodity_get_commodity (GncTreeModelCommodity *mo
  *
  *  @return TRUE if the returned iter is valid, FALSE otherwise. */
 gboolean gnc_tree_model_commodity_get_iter_from_namespace (GncTreeModelCommodity *model,
-        gnc_commodity_namespace *namespace,
+        gnc_commodity_namespace *name_space,
         GtkTreeIter *iter);
 
 /** Convert a commodity pointer into a GtkTreeIter.

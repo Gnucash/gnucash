@@ -147,7 +147,7 @@ QofBookFileType gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encodi
 /** Write a name-space declaration for the provided namespace data type
  * within the GNC XML namespace at http://www.gnucash.org/XML.
  */
-gboolean gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
+gboolean gnc_xml2_write_namespace_decl (FILE *out, const char *name_space);
 
 
 typedef struct

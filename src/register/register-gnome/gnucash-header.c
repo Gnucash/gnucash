@@ -75,7 +75,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
     VirtualLocation virt_loc;
     VirtualCell *vcell;
     CellDimensions *cd;
-    GdkColor *bg_color;
+    GdkColor *bg_color, *fg_color;
     int xpaint, ypaint;
     const char *text;
     CellBlock *cb;
@@ -94,11 +94,15 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
                      NULL);
         bg_color = get_gtkrc_color(header->sheet, color_type);
+        color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
+        fg_color = get_gtkrc_color(header->sheet, color_type);
     }
     else
     {
         argb = gnc_table_get_bg_color (table, virt_loc, NULL);
         bg_color = gnucash_color_argb_to_gdk (argb);
+        argb = gnc_table_get_fg_color (table, virt_loc);
+        fg_color = gnucash_color_argb_to_gdk (argb);
     }
 
     h = style->dimensions->height;
@@ -111,7 +115,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         style->dimensions->width, h);
 
     gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-    gdk_gc_set_foreground (header->gc, &gn_black);
+    gdk_gc_set_foreground (header->gc, fg_color);
 
     gdk_draw_rectangle (drawable, header->gc, FALSE, -x, -y,
                         style->dimensions->width, h);
@@ -121,7 +125,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
     gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
     gdk_gc_set_background (header->gc, &gn_white);
-    gdk_gc_set_foreground (header->gc, &gn_black);
+    gdk_gc_set_foreground (header->gc, fg_color);
     /*font = gnucash_register_font;*/
 
     vcell = gnc_table_get_virtual_cell
@@ -222,7 +226,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 }
 
 
-static void
+void
 gnc_header_request_redraw (GncHeader *header)
 {
     GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;

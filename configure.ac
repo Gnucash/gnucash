@@ -33,7 +33,15 @@ GNUCASH_NANO_VERSION=0
 #storage-compatible with the current version. See the comments in
 #src/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
 GNUCASH_RESAVE_VERSION=19920
-# Initialize automake -- make sure we have at least version 1.9
+# Initialize automake -- make sure we have at least version 1.9 Note:
+# Automake 1.14 issues a ton of warnings about subdir-objects, which
+# will become the default in automake 2.0; unfortunately this option
+# is broken and prevents building without passing
+# --disable-dependency-tracking to configure, which make-distcheck
+# doesn't do. See
+# http://lists.gnu.org/archive/html/automake/2014-04/msg00002.html and
+# http://debbugs.gnu.org/cgi/bugreport.cgi?bug=13928 for details.
+# In the meantime the best option is to use Automake 1.13 or earlier.
 AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 
 # Parse out the version number
@@ -1397,7 +1405,6 @@ AC_CONFIG_FILES(
   lib/libc/Makefile
   lib/stf/Makefile
   packaging/Makefile
-  packaging/win32/Makefile
   src/Makefile
   src/app-utils/Makefile
   src/app-utils/test/Makefile
@@ -1515,7 +1522,6 @@ AC_CONFIG_FILES(
   src/plugins/customer_import/gtkbuilder/Makefile
   src/plugins/customer_import/ui/Makefile
   dnl # non-makefiles
-  packaging/win32/gnucash.iss
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
   src/engine/iso-currencies-to-c

@@ -72,7 +72,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
-static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);
+static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *klass);
 static void gnc_currency_edit_finalize     (GObject *object);
 static void gnc_currency_edit_mnemonic_changed (GObject    *gobject,
         GParamSpec *pspec,

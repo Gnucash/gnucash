@@ -220,7 +220,7 @@ GNCPrice *gnc_tree_model_price_get_price (GncTreeModelPrice *model,
  *
  *  @return TRUE if the returned iter is valid, FALSE otherwise. */
 gboolean gnc_tree_model_price_get_iter_from_namespace (GncTreeModelPrice *model,
-        gnc_commodity_namespace *namespace,
+        gnc_commodity_namespace *name_space,
         GtkTreeIter *iter);
 
 /** Convert a commodity pointer into a GtkTreeIter.

@@ -58,7 +58,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 /** Declarations *********************************************************/
 static void gnc_period_select_init         (GncPeriodSelect      *gce);
-static void gnc_period_select_class_init   (GncPeriodSelectClass *class);
+static void gnc_period_select_class_init   (GncPeriodSelectClass *klass);
 static void gnc_period_select_finalize     (GObject *object);
 
 static GtkComboBoxClass *parent_class;

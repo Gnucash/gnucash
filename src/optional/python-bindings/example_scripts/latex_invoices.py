@@ -28,7 +28,7 @@
 # Additional information :
 #
 # - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
-# 
+#
 # Credits to and ideas from
 #
 # - Main function as proposed by Guido van Rossum
@@ -53,7 +53,11 @@ try:
     import getopt
     import gnucash
     import str_methods
-    from IPython.Shell import IPShellEmbed
+    from IPython import version_info as IPython_version_info
+    if IPython_version_info[0]>=1:
+        from IPython.terminal.ipapp import TerminalIPythonApp
+    else:
+        from IPython.frontend.terminal.ipapp import TerminalIPythonApp
     from gnucash.gnucash_business import Customer, Employee, Vendor, Job, \
         Address, Invoice, Entry, TaxTable, TaxTableEntry, GNC_AMT_TYPE_PERCENT, \
             GNC_DISC_PRETAX
@@ -61,7 +65,7 @@ try:
 except ImportError as import_error:
     print "Problem importing modules."
     print import_error
-    sys.exit(2) 
+    sys.exit(2)
 
 class Usage(Exception):
     def __init__(self, msg):
@@ -97,7 +101,7 @@ def invoice_to_lco(invoice):
   """returns a string which forms a lco-file for use with LaTeX"""
 
   lco_out=u"\ProvidesFile{data.lco}[]\n"
-  
+
   def write_variable(ukey, uvalue, replace_linebreak=True):
 
     outstr = u""
@@ -120,7 +124,7 @@ def invoice_to_lco(invoice):
   add_str=u""
   owner = invoice.GetOwner()
   if owner.GetName() != "":
-    add_str += owner.GetName()+"\n"
+    add_str += owner.GetName().decode("UTF-8")+"\n"
 
   addr  = owner.GetAddr()
   if addr.GetName() != "":
@@ -154,18 +158,18 @@ def invoice_to_lco(invoice):
   # Write the entries
   ent_str = u""
   locale.setlocale(locale.LC_ALL,"de_DE")
-  for n,ent in enumerate(invoice.GetEntries()): 
-      
+  for n,ent in enumerate(invoice.GetEntries()):
+
       line_str = u""
 
       if type(ent) != Entry:
         ent=Entry(instance=ent)                                 # Add to method_returns_list
-      
+
       descr = ent.GetDescription()
-      price = gnucash.GncNumeric(instance=ent.GetInvPrice()).to_double()
-      n     = gnucash.GncNumeric(instance=ent.GetQuantity())    # change gncucash_core.py
-     
-      uprice = locale.currency(price).rstrip(" EUR") 
+      price = ent.GetInvPrice().to_double()
+      n     = ent.GetQuantity()
+
+      uprice = locale.currency(price).rstrip(" EUR")
       un = unicode(int(float(n.num())/n.denom()))               # choose best way to format numbers according to locale
 
       line_str =  u"\Artikel{"
@@ -191,15 +195,16 @@ def main(argv=None):
         prog_name = argv[0]
         with_ipshell = False
         ignore_lock = False
-        no_latex_output = False
+        no_latex_output = True
         list_invoices = False
         output_file_name = "data.lco"
+        invoice_number = None
 
         try:
             opts, args = getopt.getopt(argv[1:], "fhiln:po:", ["help"])
         except getopt.error, msg:
              raise Usage(msg)
-        
+
         for opt in opts:
             if opt[0] in ["-f"]:
                 print "ignoring lock"
@@ -215,12 +220,10 @@ def main(argv=None):
             if opt[0] in ["-n"]:
                 invoice_number = int(opt[1])
                 print "using invoice number", invoice_number
+                no_latex_output = False
             if opt[0] in ["-o"]:
                 output_file_name = opt[1]
-                print "using outpu file", output_file_name
-            if opt[0] in ["-p"]:
-                print "no latex output"
-                no_latex_output=True
+                print "using output file", output_file_name
         if len(args)>1:
             print "opts:",opts,"args:",args
             raise Usage("Only one input can be accepted !")
@@ -234,7 +237,7 @@ def main(argv=None):
             print >>sys.stderr, "Error:",err.msg
             print >>sys.stderr, "for help use --help"
             retcode=2
-        
+
         print "Prints out all invoices that have corresponding lots."
         print
         print "Usage:"
@@ -242,17 +245,16 @@ def main(argv=None):
         print "Invoke with",prog_name,"input."
         print "where input is"
         print "   filename"
-        print "or file://filename" 
-        print "or mysql://user:password@host/databasename" 
+        print "or file://filename"
+        print "or mysql://user:password@host/databasename"
         print
         print "-f             force open = ignore lock"
         print "-h or --help   for this help"
         print "-i             for ipython shell"
         print "-l             list all invoices"
-        print "-n number      use invoice number (no. from previous run -l)"
+        print "-n number      use invoice number (no. from previous run with -l)"
         print "-o name        use name as outputfile. default: data.lco"
-        print "-p             pretend (=no) latex output"
-        
+
         return retcode
 
     # Try to open the given input
@@ -262,7 +264,7 @@ def main(argv=None):
         print "Problem opening input."
         print exception
         return 2
-    
+
     book = session.book
     root_account = book.get_root_account()
     comm_table = book.get_table()
@@ -280,11 +282,11 @@ def main(argv=None):
         if invoice_number == None:
             print "Using the first invoice:"
             invoice_number=0
-        
+
         invoice=invoice_list[invoice_number]
         print "Using the following invoice:"
         print invoice
-    
+
         lco_str=invoice_to_lco(invoice)
 
         # Opening output file
@@ -294,8 +296,9 @@ def main(argv=None):
         f.close()
 
     if with_ipshell:
-        ipshell= IPShellEmbed()
-        ipshell() 
+        app = TerminalIPythonApp.instance()
+        app.initialize(argv=[]) # argv=[] instructs IPython to ignore sys.argv
+        app.start()
 
     #session.save()
     session.end()

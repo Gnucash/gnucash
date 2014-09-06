@@ -158,33 +158,33 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
                           GncMainWindow *window,
                           GQuark type)
 {
-    GncPluginClass *class;
+    GncPluginClass *klass;
     GtkActionGroup *action_group;
 
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
-    class = GNC_PLUGIN_GET_CLASS (plugin);
+    klass = GNC_PLUGIN_GET_CLASS (plugin);
     ENTER (": plugin %s(%p), window %p", gnc_plugin_get_name(plugin),
            plugin, window);
 
     /*
      * Update window with additional UI items
      */
-    if (class->actions_name)
+    if (klass->actions_name)
     {
         DEBUG ("%s: %d actions to merge with gui from %s",
-               class->actions_name, (class->n_actions + class->n_toggle_actions), class->ui_filename);
-        gnc_main_window_merge_actions (window, class->actions_name,
-                                       class->actions, class->n_actions,
-                                       class->toggle_actions, class->n_toggle_actions,
-                                       class->ui_filename, plugin);
+               klass->actions_name, (klass->n_actions + klass->n_toggle_actions), klass->ui_filename);
+        gnc_main_window_merge_actions (window, klass->actions_name,
+                                       klass->actions, klass->n_actions,
+                                       klass->toggle_actions, klass->n_toggle_actions,
+                                       klass->ui_filename, plugin);
 
 
-        if (class->important_actions)
+        if (klass->important_actions)
         {
             action_group =
-                gnc_main_window_get_action_group(window, class->actions_name);
+                gnc_main_window_get_action_group(window, klass->actions_name);
             gnc_plugin_set_important_actions(action_group,
-                                             class->important_actions);
+                                             klass->important_actions);
         }
     }
 
@@ -210,10 +210,10 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
                                GncMainWindow *window,
                                GQuark type)
 {
-    GncPluginClass *class;
+    GncPluginClass *klass;
 
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
-    class = GNC_PLUGIN_GET_CLASS (plugin);
+    klass = GNC_PLUGIN_GET_CLASS (plugin);
     ENTER (": plugin %s(%p), window %p", gnc_plugin_get_name(plugin),
            plugin, window);
 
@@ -230,11 +230,11 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
     /*
      * Update window to remove UI items
      */
-    if (class->actions_name)
+    if (klass->actions_name)
     {
         DEBUG ("%s: %d actions to unmerge",
-               class->actions_name, (class->n_actions + class->n_toggle_actions));
-        gnc_main_window_unmerge_actions (window, class->actions_name);
+               klass->actions_name, (klass->n_actions + klass->n_toggle_actions));
+        gnc_main_window_unmerge_actions (window, klass->actions_name);
     }
     LEAVE ("");
 }

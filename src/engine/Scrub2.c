@@ -106,14 +106,28 @@ xaccLotFill (GNCLot *lot)
     ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 
     /* If balance already zero, we have nothing to do. */
-    if (gnc_lot_is_closed (lot)) return;
-
+    if (gnc_lot_is_closed (lot))
+    {
+	LEAVE ("Lot Closed (lot=%s, acc=%s)", gnc_lot_get_title(lot),
+	       xaccAccountGetName(acc));
+	return;
+    }
     split = pcy->PolicyGetSplit (pcy, lot);
-    if (!split) return;   /* Handle the common case */
+    if (!split)
+    {
+	LEAVE ("No Split (lot=%s, acc=%s)", gnc_lot_get_title(lot),
+	       xaccAccountGetName(acc));
+	return;   /* Handle the common case */
+    }
 
     /* Reject voided transactions */
     if (gnc_numeric_zero_p(split->amount) &&
-            xaccTransGetVoidStatus(split->parent)) return;
+            xaccTransGetVoidStatus(split->parent))
+    {
+	LEAVE ("Voided transaction (lot=%s, acc=%s)",
+	       gnc_lot_get_title(lot), xaccAccountGetName(acc));
+	return;
+    }
 
     xaccAccountBeginEdit (acc);
 
@@ -166,7 +180,11 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
     }
 
     /* We double-check only closed lots */
-    if (FALSE == gnc_lot_is_closed (lot)) return;
+    if (FALSE == gnc_lot_is_closed (lot))
+    {
+	LEAVE ("lot=%s is closed", gnc_lot_get_title(lot));
+	return;
+    }
 
     for (snode = gnc_lot_get_split_list(lot); snode; snode = snode->next)
     {
@@ -326,7 +344,7 @@ merge_splits (Split *sa, Split *sb)
 }
 
 gboolean
-xaccScrubMergeSubSplits (Split *split)
+xaccScrubMergeSubSplits (Split *split, gboolean strict)
 {
     gboolean rc = FALSE;
     Transaction *txn;
@@ -334,7 +352,7 @@ xaccScrubMergeSubSplits (Split *split)
     GNCLot *lot;
     const GncGUID *guid;
 
-    if (FALSE == is_subsplit (split)) return FALSE;
+    if (strict && (FALSE == is_subsplit (split))) return FALSE;
 
     txn = split->parent;
     lot = xaccSplitGetLot (split);
@@ -374,7 +392,7 @@ restart:
 }
 
 gboolean
-xaccScrubMergeLotSubSplits (GNCLot *lot)
+xaccScrubMergeLotSubSplits (GNCLot *lot, gboolean strict)
 {
     gboolean rc = FALSE;
     SplitList *node;
@@ -386,7 +404,7 @@ restart:
     for (node = gnc_lot_get_split_list(lot); node; node = node->next)
     {
         Split *s = node->data;
-        if (!xaccScrubMergeSubSplits(s)) continue;
+        if (!xaccScrubMergeSubSplits(s, strict)) continue;
 
         rc = TRUE;
         goto restart;

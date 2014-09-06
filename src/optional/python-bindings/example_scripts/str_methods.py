@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-## @file 
+## @file
 #  @brief Add __str__ and __unicode__ methods to financial objects so that @code print object @endcode leads to human readable results
 """ @package str_methods.py -- Add __str__ and __unicode__ methods to financial objects
 
@@ -21,7 +21,7 @@
 #   @author Christoph Holtermann, c.holtermann@gmx.de
 #   @ingroup python_bindings_examples
 #   @date May 2011
-#   
+#
 #   ToDo :
 #
 #   * Testing for SWIGtypes
@@ -61,11 +61,11 @@ def ya_add_method(_class, function, method_name=None, clsmethod=False, noinstanc
 
     if method_name == None:
       method_name = function.__name__
-    
+
     setattr(gnucash.gnucash_core_c,function.__name__,function)
     if clsmethod:
       mf=_class.ya_add_classmethod(function.__name__,method_name)
-    elif noinstance: 
+    elif noinstance:
       mf=_class.add_method(function.__name__,method_name)
     else:
       mf=_class.ya_add_method(function.__name__,method_name)
@@ -73,7 +73,7 @@ def ya_add_method(_class, function, method_name=None, clsmethod=False, noinstanc
       setattr(mf, "__doc__", function.__doc__)
 
 def infect(_class, function, method_name):
-    if not getattr(_class, "OPTIONFLAGS_BY_NAME", None):    
+    if not getattr(_class, "OPTIONFLAGS_BY_NAME", None):
       _class.OPTIONFLAGS_BY_NAME={}
       _class.optionflags=0
       ya_add_method(_class,register_optionflag,clsmethod=True)
@@ -83,7 +83,7 @@ def infect(_class, function, method_name):
 
 class ClassWithCutting__format__():
     """This class provides a __format__ method which cuts values to a certain width.
-    
+
     If width is too big '...' will be put at the end of the resulting string."""
 
     def __init__(self,value):
@@ -110,7 +110,7 @@ class ClassWithCutting__format__():
 
             def do_width(fmt_spec):
                 n=""
-                
+
                 while len(fmt_spec)>0:
                     if fmt_spec[0].isdigit():
                       n+=fmt_spec[0]
@@ -135,17 +135,17 @@ class ClassWithCutting__format__():
 
         def cut(s, width, replace_string="..."):
             """Cuts s to width and puts replace_string at it's end."""
-            
+
             #s=s.decode('UTF-8', "replace")
-            
+
             if len(s)>width:
                 if len(replace_string)>width:
                     replace_string=replace_string[0:width]
                 s=s[0:width-len(replace_string)]
                 s=s+replace_string
-            
+
             return s
-     
+
         value=self.value
 
         # Replace Tabs and linebreaks
@@ -153,8 +153,8 @@ class ClassWithCutting__format__():
         if type(value) in [types.StringType, types.UnicodeType]:
             value=value.replace("\t","|")
             value=value.replace("\n","|")
-        
-        # Do regular formatting of object 
+
+        # Do regular formatting of object
         value=value.__format__(fmt)
 
         # Cut resulting value if longer than specified by width
@@ -197,9 +197,9 @@ def all_as_classwithcutting__format__keys(encoding=None, error=None, **keys):
 # Split
 def __split__unicode__(self, encoding=None, error=None):
     """__unicode__(self, encoding=None, error=None) -> object
-    
+
     Serialize the Split object and return as a new Unicode object.
-    
+
     Keyword arguments:
     encoding -- defaults to str_methods.default_encoding
     error -- defaults to str_methods.default_error
@@ -213,27 +213,27 @@ def __split__unicode__(self, encoding=None, error=None):
 
     lot=self.GetLot()
     if lot:
-        if type(lot).__name__ == 'SwigPyObject':  
+        if type(lot).__name__ == 'SwigPyObject':
           lot=gnucash.GncLot(instance=lot)
         lot_str=lot.get_title()
     else:
         lot_str='---'
 
     transaction=self.GetParent()
-   
-    # This dict and the return statement can be changed according to individual needs 
+
+    # This dict and the return statement can be changed according to individual needs
     fmt_dict={
         "account":self.GetAccount().name,
         "value":self.GetValue(),
         "memo":self.GetMemo(),
         "lot":lot_str}
-        
+
     fmt_str= (u"Account: {account:20} "+
             u"Value: {value:>10} "+
             u"Memo: {memo:30} ")
-    
+
     if self.optionflags & self.OPTIONFLAGS_BY_NAME["PRINT_TRANSACTION"]:
-        fmt_t_dict={      
+        fmt_t_dict={
             "transaction_time":time.ctime(transaction.GetDate()),
             "transaction2":transaction.GetDescription()}
         fmt_t_str=(
@@ -241,13 +241,13 @@ def __split__unicode__(self, encoding=None, error=None):
             u"- {transaction2:30} "+
             u"Lot: {lot:10}")
         fmt_dict.update(fmt_t_dict)
-        fmt_str += fmt_t_str 
-                
+        fmt_str += fmt_t_str
+
     return fmt_str.format(**all_as_classwithcutting__format__keys(encoding,error,**fmt_dict))
 
 def __split__str__(self):
     """Returns a bytestring representation of self.__unicode__"""
-    
+
     from gnucash import Split
     #self=Split(instance=self)
 
@@ -308,8 +308,8 @@ def __invoice__unicode__(self):
     from gnucash.gnucash_business import Invoice
     self=Invoice(instance=self)
 
-   
-    # This dict and the return statement can be changed according to individual needs 
+
+    # This dict and the return statement can be changed according to individual needs
     fmt_dict={
         "id_name":"ID:",
         "id_value":self.GetID(),
@@ -333,12 +333,12 @@ def __invoice__unicode__(self):
       if not(type(entry)==Entry):
         entry=Entry(instance=entry)
       ret_entries += "  "+unicode(entry)+"\n"
-    
+
     return ret_invoice+"\n"+ret_entries
-  
+
 def __invoice__str__(self):
     """__str__ method for invoice class"""
-    
+
     from gnucash.gnucash_business import Invoice
     self=Invoice(instance=self)
 
@@ -358,7 +358,7 @@ def __entry__unicode__(self):
     from gnucash.gnucash_business import Entry
     self=Entry(instance=self)
 
-    # This dict and the return statement can be changed according to individual needs 
+    # This dict and the return statement can be changed according to individual needs
     fmt_dict={
         "date_name":"Date:",
         "date_value":unicode(self.GetDate()),
@@ -367,9 +367,9 @@ def __entry__unicode__(self):
         "notes_name":"Notes:",
         "notes_value":self.GetNotes(),
         "quant_name":"Quantity:",
-        "quant_value":unicode(gnucash.GncNumeric(instance=self.GetQuantity())),
+        "quant_value":unicode(self.GetQuantity()),
         "invprice_name":"InvPrice:",
-        "invprice_value":unicode(gnucash.GncNumeric(instance=self.GetInvPrice()))}
+        "invprice_value":unicode(self.GetInvPrice())}
 
     return (u"{date_name:6}{date_value:15} {description_name:13}{description_value:20} {notes_name:7}{notes_value:20}"+
             u"{quant_name:12}{quant_value:7} {invprice_name:10}{invprice_value:7}").\
@@ -377,7 +377,7 @@ def __entry__unicode__(self):
 
 def __entry__str__(self):
     """__str__ method for Entry class"""
-    
+
     from gnucash.gnucash_business import Entry
     self=Entry(instance=self)
 

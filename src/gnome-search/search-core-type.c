@@ -44,7 +44,7 @@ static void grab_focus (GNCSearchCoreType *fe);
 static void editable_enters (GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 
-static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *class);
+static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *klass);
 static void gnc_search_core_type_init	(GNCSearchCoreType *gspaper);
 static void gnc_search_core_type_finalize	(GObject *obj);
 

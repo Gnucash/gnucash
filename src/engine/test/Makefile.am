@@ -114,7 +114,8 @@ noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 test_engine_SOURCES = \
 	test-engine.c \
 	utest-Account.c \
-    utest-Budget.c \
+	utest-Budget.c \
+	utest-Entry.c \
 	utest-Invoice.c
 
 test_engine_LDADD = \
