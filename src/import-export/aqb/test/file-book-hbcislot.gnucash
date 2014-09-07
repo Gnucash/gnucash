@@ -77,6 +77,45 @@
     </slot:value>
   </slot>
 </book:slots>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">4674e1c45a07c85461d59c72b19d8263</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>hbci</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>account-id</slot:key>
+          <slot:value type="string">1234567890</slot:value>
+        </slot>
+        <slot>
+          <slot:key>account-uid</slot:key>
+          <slot:value type="integer">123</slot:value>
+        </slot>
+        <slot>
+          <slot:key>bank-code</slot:key>
+          <slot:value type="string">10020034</slot:value>
+        </slot>
+        <slot>
+          <slot:key>country-code</slot:key>
+          <slot:value type="integer">280</slot:value>
+        </slot>
+        <slot>
+          <slot:key>trans-retrieval</slot:key>
+          <slot:value type="timespec">
+            <ts:date>2014-08-29 20:47:36 +0200</ts:date>
+          </slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
 </gnc:book>
 </gnc-v2>
 
