@@ -98,11 +98,11 @@ gnc_ab_set_account_uid(Account *a, guint32 uid)
 Timespec
 gnc_ab_get_account_trans_retrieval(const Account *a)
 {
-    Timespec t = {0LL, 0LL};
+    Timespec *t = NULL;
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-trans-retrieval", &t,
 		      NULL);
-    return t;
+    return *t;
 }
 
 void
