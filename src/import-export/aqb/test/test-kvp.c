@@ -166,11 +166,13 @@ test_qofsession_aqb_kvp( void )
 
             g_assert(account);
 
-            if (0)
+            // The interesting test case here: Can we read the correct date
+            // from the xml file?
+            if (1)
             {
                 Timespec retrieved_ts = gnc_ab_get_account_trans_retrieval(account);
                 g_test_message("retrieved_ts=%s\n", gnc_print_date(retrieved_ts));
-                printf("Time=%s\n", gnc_print_date(retrieved_ts));
+                //printf("Time=%s\n", gnc_print_date(retrieved_ts));
 
                 retrieved_date = timespec_to_gdate(retrieved_ts);
                 g_date_set_dmy(&original_date, 29, 8, 2014);
@@ -178,7 +180,10 @@ test_qofsession_aqb_kvp( void )
                 g_assert_cmpint(g_date_compare(&retrieved_date, &original_date), ==, 0);
             }
 
-            if (1)
+            // A lower-level test here: Can we write and read again the
+            // trans_retrieval date? This wouldn't need this particular
+            // Account, just a general Account object.
+            if (0)
             {
                 Timespec original_ts = timespec_now(), retrieved_ts;
 
@@ -187,17 +192,17 @@ test_qofsession_aqb_kvp( void )
                 gnc_ab_set_account_trans_retrieval(account, original_ts);
                 retrieved_ts = gnc_ab_get_account_trans_retrieval(account);
 
-                printf("original_ts=%s = %d  retrieved_ts=%s = %d\n",
-                       gnc_print_date(original_ts), original_ts.tv_sec,
-                       gnc_print_date(retrieved_ts), retrieved_ts.tv_sec);
+//                printf("original_ts=%s = %d  retrieved_ts=%s = %d\n",
+//                       gnc_print_date(original_ts), original_ts.tv_sec,
+//                       gnc_print_date(retrieved_ts), retrieved_ts.tv_sec);
 
                 original_date = timespec_to_gdate(original_ts);
                 retrieved_date = timespec_to_gdate(retrieved_ts);
 
                 qof_print_gdate (buff, sizeof (buff), &original_date);
-                printf("original_date=%s\n", buff);
+                //printf("original_date=%s\n", buff);
                 qof_print_gdate (buff, sizeof (buff), &retrieved_date);
-                printf("retrieved_date=%s\n", buff);
+                //printf("retrieved_date=%s\n", buff);
 
                 // Is the retrieved date identical to the one written
                 g_assert_cmpint(g_date_compare(&retrieved_date, &original_date), ==, 0);
