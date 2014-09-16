@@ -122,7 +122,7 @@ non-zero - failure
 # signature so this works OK.
 
 sub check_modules {
-  my @modules = qw(Finance::Quote LWP HTML::TableExtract Crypt::SSLeay);
+  my @modules = qw(Finance::Quote LWP HTTP::Request::Common HTML::TableExtract Crypt::SSLeay);
   my @missing;
 
   foreach my $mod (@modules) {
