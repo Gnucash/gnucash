@@ -62,7 +62,6 @@ gnc_scm_to_kvp_value_ptr(SCM val)
 #undef FUNC_NAME
         return kvp_value_new_frame (frame);
     }
-    /* FIXME: add binary handler here when it's figured out */
     /* FIXME: add list handler here */
     return NULL;
 }
@@ -107,7 +106,6 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
         return gnc_timespec2timepair(gdate_to_timespec(kvp_value_get_gdate(val)));
 
         /* FIXME: handle types below */
-    case KVP_TYPE_BINARY:
     case KVP_TYPE_GLIST:
     default:
 	break;

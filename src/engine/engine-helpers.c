@@ -764,10 +764,6 @@ gnc_kvp_value2scm (const KvpValue *value)
         scm = gnc_timespec2timepair (kvp_value_get_timespec (value));
         break;
 
-    case KVP_TYPE_BINARY:
-        scm = SCM_BOOL_F;
-        break;
-
     case KVP_TYPE_NUMERIC:
     {
         gnc_numeric n = kvp_value_get_numeric (value);
@@ -900,10 +896,6 @@ gnc_scm2KvpValue (SCM value_scm)
         value = kvp_value_new_gdate(timespec_to_gdate(ts));
         break;
     }
-
-    case KVP_TYPE_BINARY:
-        return NULL;
-        break;
 
     case KVP_TYPE_NUMERIC:
     {

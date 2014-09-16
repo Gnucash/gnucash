@@ -304,30 +304,6 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 }
 
 kvp_value*
-dom_tree_to_binary_kvp_value(xmlNodePtr node)
-{
-    gchar *text;
-    void *val;
-    guint64 len;
-    kvp_value *ret = NULL;
-
-    text = dom_tree_to_text(node);
-
-    if (string_to_binary(text, &val, &len))
-    {
-        ret = kvp_value_new_binary_nc(val, len);
-    }
-    else
-    {
-        PERR("string_to_binary returned false");
-    }
-
-    g_free(text);
-
-    return ret;
-}
-
-kvp_value*
 dom_tree_to_list_kvp_value(xmlNodePtr node)
 {
     GList *list = NULL;
@@ -387,7 +363,6 @@ struct kvp_val_converter val_converters[] =
     { "guid", dom_tree_to_guid_kvp_value },
     { "timespec", dom_tree_to_timespec_kvp_value },
     { "gdate", dom_tree_to_gdate_kvp_value },
-    { "binary", dom_tree_to_binary_kvp_value },
     { "list", dom_tree_to_list_kvp_value },
     { "frame", dom_tree_to_frame_kvp_value },
     { 0, 0 },

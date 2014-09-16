@@ -50,13 +50,6 @@ struct _KvpFrame
     GHashTable  * hash;
 };
 
-
-typedef struct
-{
-    void        *data;
-    int         datasize;
-} KvpValueBinaryData;
-
 struct _KvpValue
 {
     KvpValueType type;
@@ -68,7 +61,6 @@ struct _KvpValue
         gchar *str;
         GncGUID *guid;
         Timespec timespec;
-        KvpValueBinaryData binary;
         GList *list;
         KvpFrame *frame;
         GDate gdate;
@@ -995,33 +987,6 @@ kvp_value_new_gdate(GDate value)
 }
 
 KvpValue *
-kvp_value_new_binary(const void * value, guint64 datasize)
-{
-    KvpValue * retval;
-    if (!value) return NULL;
-
-    retval = g_new0(KvpValue, 1);
-    retval->type = KVP_TYPE_BINARY;
-    retval->value.binary.data = g_new0(char, datasize);
-    retval->value.binary.datasize = datasize;
-    memcpy(retval->value.binary.data, value, datasize);
-    return retval;
-}
-
-KvpValue *
-kvp_value_new_binary_nc(void * value, guint64 datasize)
-{
-    KvpValue * retval;
-    if (!value) return NULL;
-
-    retval = g_new0(KvpValue, 1);
-    retval->type = KVP_TYPE_BINARY;
-    retval->value.binary.data = value;
-    retval->value.binary.datasize = datasize;
-    return retval;
-}
-
-KvpValue *
 kvp_value_new_glist(const GList * value)
 {
     KvpValue * retval;
@@ -1081,9 +1046,6 @@ kvp_value_delete(KvpValue * value)
         break;
     case KVP_TYPE_GUID:
         g_free(value->value.guid);
-        break;
-    case KVP_TYPE_BINARY:
-        g_free(value->value.binary.data);
         break;
     case KVP_TYPE_GLIST:
         kvp_glist_delete(value->value.list);
@@ -1200,30 +1162,6 @@ kvp_value_get_gdate(const KvpValue * value)
         return date;
 }
 
-void *
-kvp_value_get_binary(const KvpValue * value, guint64 * size_return)
-{
-    if (!value)
-    {
-        if (size_return)
-            *size_return = 0;
-        return NULL;
-    }
-
-    if (value->type == KVP_TYPE_BINARY)
-    {
-        if (size_return)
-            *size_return = value->value.binary.datasize;
-        return value->value.binary.data;
-    }
-    else
-    {
-        if (size_return)
-            *size_return = 0;
-        return NULL;
-    }
-}
-
 GList *
 kvp_value_get_glist(const KvpValue * value)
 {
@@ -1306,10 +1244,6 @@ kvp_value_copy(const KvpValue * value)
     case KVP_TYPE_TIMESPEC:
         return kvp_value_new_timespec(value->value.timespec);
         break;
-    case KVP_TYPE_BINARY:
-        return kvp_value_new_binary(value->value.binary.data,
-                                    value->value.binary.datasize);
-        break;
     case KVP_TYPE_GLIST:
         return kvp_value_new_glist(value->value.list);
         break;
@@ -1384,15 +1318,6 @@ kvp_value_compare(const KvpValue * kva, const KvpValue * kvb)
     case KVP_TYPE_GDATE:
         return g_date_compare(&(kva->value.gdate), &(kvb->value.gdate));
         break;
-    case KVP_TYPE_BINARY:
-        /* I don't know that this is a good compare. Ab is bigger than Acef.
-           But I'm not sure that actually matters here. */
-        if (kva->value.binary.datasize < kvb->value.binary.datasize) return -1;
-        if (kva->value.binary.datasize > kvb->value.binary.datasize) return 1;
-        return memcmp(kva->value.binary.data,
-                      kvb->value.binary.data,
-                      kva->value.binary.datasize);
-        break;
     case KVP_TYPE_GLIST:
         return kvp_glist_compare(kva->value.list, kvb->value.list);
         break;
@@ -1459,23 +1384,6 @@ kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb)
     kvp_frame_for_each_slot((KvpFrame *) fb, kvp_frame_compare_helper, &status);
 
     return(-status.compare);
-}
-
-gchar*
-binary_to_string(const void *data, guint32 size)
-{
-    GString *output;
-    guint32 i;
-    guchar *data_str = (guchar*)data;
-
-    output = g_string_sized_new(size * sizeof(char));
-
-    for (i = 0; i < size; i++)
-    {
-        g_string_append_printf(output, "%02x", (unsigned int) (data_str[i]));
-    }
-
-    return output->str;
 }
 
 static gchar*
@@ -1580,16 +1488,6 @@ kvp_value_to_string(const KvpValue *val)
         tmp2 = g_strdup_printf("KVP_VALUE_TIMESPEC(%s)", tmp1);
         g_free(tmp1);
         return tmp2;
-        break;
-
-    case KVP_TYPE_BINARY:
-    {
-        guint64 len;
-        void *data;
-        data = kvp_value_get_binary(val, &len);
-        tmp1 = binary_to_string(data, len);
-        return g_strdup_printf("KVP_VALUE_BINARY(%s)", tmp1 ? tmp1 : "");
-    }
     break;
 
     case KVP_TYPE_GLIST:
@@ -1727,11 +1625,6 @@ gvalue_from_kvp_value (KvpValue *kval)
 	    g_value_init (val, GNC_TYPE_TIMESPEC);
 	    tm = kvp_value_get_timespec (kval);
 	    g_value_set_boxed (val, &tm);
-	    break;
-	case KVP_TYPE_BINARY:
-	    PWARN ("Error! Don't use Kvp Binary!");
-	    g_slice_free (GValue, val);
-	    val = NULL;
 	    break;
 	case KVP_TYPE_GDATE:
 	    g_value_init (val, G_TYPE_DATE);

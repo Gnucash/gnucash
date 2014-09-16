@@ -208,7 +208,7 @@ get_random_glist(void)
 }
 
 /* ========================================================== */
-/* Time/Date, GncGUID, binary data stuff */
+/* Time/Date, GncGUID data stuff */
 
 Timespec*
 get_random_timespec(void)
@@ -244,25 +244,6 @@ get_random_guid(void)
 
     ret = g_new(GncGUID, 1);
     guid_replace(ret);
-
-    return ret;
-}
-
-bin_data*
-get_random_binary_data(void)
-{
-    int len;
-    bin_data *ret;
-
-    len = get_random_int_in_range(20, 100);
-    ret = g_new(bin_data, 1);
-    ret->data = g_new(guchar, len);
-    ret->len = len;
-
-    for (len--; len >= 0; len--)
-    {
-        ret->data[len] = (guchar)get_random_int_in_range(0, 255);
-    }
 
     return ret;
 }
@@ -337,16 +318,6 @@ get_random_kvp_value_depth (int type, gint depth)
         Timespec *ts = get_random_timespec();
         ret = kvp_value_new_timespec (*ts);
         g_free(ts);
-    }
-    break;
-
-    case KVP_TYPE_BINARY:
-    {
-        bin_data *tmp_data;
-        tmp_data = get_random_binary_data();
-        ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
-        g_free(tmp_data->data);
-        g_free(tmp_data);
     }
     break;
 

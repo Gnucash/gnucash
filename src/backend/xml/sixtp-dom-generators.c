@@ -325,18 +325,6 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     break;
     case KVP_TYPE_GDATE:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "gdate");
-        break;
-    case KVP_TYPE_BINARY:
-    {
-        guint64 size;
-	gchar *tmp_str1;
-        void *binary_data = kvp_value_get_binary(val, &size);
-        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "binary");
-        g_return_if_fail(binary_data);
-        tmp_str1 = binary_to_string(binary_data, size);
-        xmlNodeSetContent(val_node, checked_char_cast (tmp_str1));
-        g_free(tmp_str1);
-    }
     break;
     case KVP_TYPE_GLIST:
     {

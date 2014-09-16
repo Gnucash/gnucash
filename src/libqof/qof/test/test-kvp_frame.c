@@ -873,19 +873,11 @@ test_kvp_value_compare( void )
 static void
 test_kvp_value_new_foo_nc( void )
 {
-    KvpValue *binary_value_nc, *glist_value_nc, *frame_value_nc;
+    KvpValue *glist_value_nc, *frame_value_nc;
     void *val;
     guint64 size;
     GList *list = NULL;
     KvpFrame *frame = NULL;
-
-    g_test_message( "Test new binary values are not copied" );
-    val = g_new0( char, 5 );
-    size = sizeof( val );
-    binary_value_nc = kvp_value_new_binary_nc( val, size );
-    g_assert( binary_value_nc );
-    g_assert( kvp_value_get_type( binary_value_nc ) == KVP_TYPE_BINARY );
-    g_assert( kvp_value_get_binary( binary_value_nc, &size ) == val );
 
     g_test_message( "Test new glist is not copied" );
     list = g_list_append( list, kvp_value_new_gint64( 2 ) );
@@ -902,7 +894,6 @@ test_kvp_value_new_foo_nc( void )
     g_assert( kvp_value_get_type( frame_value_nc ) == KVP_TYPE_FRAME );
     g_assert( kvp_value_get_frame( frame_value_nc ) == frame );
 
-    kvp_value_delete( binary_value_nc );
     kvp_value_delete( glist_value_nc );
     kvp_value_delete( frame_value_nc );
 }
@@ -953,28 +944,6 @@ test_kvp_frame_compare( Fixture *fixture, gconstpointer pData )
     g_assert_cmpint( kvp_frame_compare( fixture->frame, cmp_frame ), > , 0 );
 
     kvp_frame_delete( cmp_frame );
-}
-
-static void
-test_binary_to_string( void )
-{
-    gchar *result;
-    guchar *val;
-    guint32 size;
-    val = g_new0( guchar, 5 );
-    size = 5 * sizeof( guchar );
-    val[0] = (guchar) 0;
-    val[1] = (guchar) 9;
-    val[2] = (guchar) 10;
-    val[3] = (guchar) 255;
-    val[4] = (guchar) 256;
-
-    result = binary_to_string( val, size );
-    g_assert( result );
-    g_assert_cmpstr( result, == , "00090aff00" );
-
-    g_free( val );
-    g_free( result );
 }
 
 static void
@@ -1696,7 +1665,6 @@ test_suite_kvp_frame( void )
     GNC_TEST_ADD_FUNC( suitename, "kvp value compare", test_kvp_value_compare );
     GNC_TEST_ADD_FUNC( suitename, "kvp value new foo no copy", test_kvp_value_new_foo_nc );
     GNC_TEST_ADD( suitename, "kvp frame compare", Fixture, NULL, setup, test_kvp_frame_compare, teardown );
-    GNC_TEST_ADD_FUNC( suitename, "binary to string", test_binary_to_string );
     GNC_TEST_ADD_FUNC( suitename, "kvp value to string", test_kvp_value_to_string );
     GNC_TEST_ADD( suitename, "kvp frame to string", Fixture, NULL, setup, test_kvp_frame_to_string, teardown );
     GNC_TEST_ADD( suitename, "kvp frame set slot path", Fixture, NULL, setup, test_kvp_frame_set_slot_path, teardown );
