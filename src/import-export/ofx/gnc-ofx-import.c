@@ -672,8 +672,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     xaccTransAppendSplit(transaction, split);
                     xaccAccountInsertSplit(investment_account, split);
 
-                    gnc_amount = gnc_ofx_numeric_from_double (ofx_get_investment_amount(&data),
-                                 investment_commodity);
+                    gnc_amount = gnc_ofx_numeric_from_double_txn (ofx_get_investment_amount(&data),
+                                 transaction);
                     gnc_units = gnc_ofx_numeric_from_double (data.units, investment_commodity);
                     xaccSplitSetAmount(split, gnc_units);
                     xaccSplitSetValue(split, gnc_amount);
