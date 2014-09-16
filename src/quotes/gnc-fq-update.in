@@ -36,12 +36,11 @@ if ($( != 0) {
   exit 0 if ($input ne "y");
 }
 
-CPAN::Shell->install('LWP');
 CPAN::Shell->install('Date::Manip');
-CPAN::Shell->install('Mozilla::CA');
-CPAN::Shell->install('HTML::Parser');
 CPAN::Shell->install('HTML::TableExtract');
+CPAN::Shell->install('HTTP::Request::Common');
 CPAN::Shell->install('Crypt::SSLeay');
+CPAN::Shell->install('LWP');
 CPAN::Shell->install('Finance::Quote');
 
 ## Local Variables:
