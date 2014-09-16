@@ -1543,12 +1543,22 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 void
 gnc_ui_qif_import_load_file_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
+    QIFImportWindow * wind = user_data;
+    const gchar * path_to_load;
+    gboolean page_status = FALSE;
 
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Disable the Assistant Forward Button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    /* Get the file name. */
+    path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+
+    /* Calculate status for the Assistant Forward Button */
+    if (strlen(path_to_load) != 0)
+    {
+       page_status = gnc_ui_qif_import_load_file_complete(assistant, user_data);
+    }
+    gtk_assistant_set_page_complete (assistant, page, page_status);
 }
 
 
