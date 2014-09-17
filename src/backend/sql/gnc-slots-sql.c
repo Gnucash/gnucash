@@ -492,7 +492,7 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
     case KVP_TYPE_GLIST:
     {
         slot_info_t *newInfo = slot_info_copy( pInfo, (GncGUID*)pValue );
-        kvp_value *pValue = NULL;
+        KvpValue *pValue = NULL;
         gchar *key = get_key_from_path( pInfo->path );
 
         newInfo->context = LIST;
@@ -684,7 +684,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         g_return_if_fail( pSlot_info->is_ok );
         for (cursor = kvp_value_get_glist(value); cursor; cursor = cursor->next)
         {
-            kvp_value *val = (kvp_value*)cursor->data;
+            KvpValue *val = (KvpValue*)cursor->data;
             save_slot("", val, pNewInfo);
         }
         kvp_value_delete( pSlot_info->pKvpValue );

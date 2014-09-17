@@ -112,7 +112,7 @@ gnc_ab_trans_templ_list_new_from_kvp_list(GList *v)
 
     for (iter = v; iter; iter = iter->next)
     {
-        kvp_frame *frame = kvp_value_get_frame((kvp_value*) iter->data);
+        kvp_frame *frame = kvp_value_get_frame((KvpValue*) iter->data);
         res = g_list_prepend(res, gnc_ab_trans_templ_new_from_kvp(frame));
     }
     res = g_list_reverse(res);
@@ -171,7 +171,7 @@ gnc_ab_trans_templ_list_to_kvp_list(GList *k)
     for (iter = k; iter; iter = iter->next)
     {
         GncABTransTempl *t = (GncABTransTempl*) iter->data;
-        kvp_value *value = kvp_value_new_frame_nc(gnc_ab_trans_templ_to_kvp(t));
+        KvpValue *value = kvp_value_new_frame_nc(gnc_ab_trans_templ_to_kvp(t));
         res = g_list_prepend(res, value);
     }
     res = g_list_reverse(res);

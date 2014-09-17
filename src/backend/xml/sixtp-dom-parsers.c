@@ -78,12 +78,12 @@ dom_tree_to_guid(xmlNodePtr node)
     }
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_integer_kvp_value(xmlNodePtr node)
 {
     gchar *text;
     gint64 daint;
-    kvp_value* ret = NULL;
+    KvpValue* ret = NULL;
 
     text = dom_tree_to_text(node);
 
@@ -161,12 +161,12 @@ dom_tree_to_boolean(xmlNodePtr node, gboolean* b)
     }
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_double_kvp_value(xmlNodePtr node)
 {
     gchar *text;
     double dadoub;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     text = dom_tree_to_text(node);
 
@@ -180,11 +180,11 @@ dom_tree_to_double_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_numeric_kvp_value(xmlNodePtr node)
 {
     gnc_numeric *danum;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     danum = dom_tree_to_gnc_numeric(node);
 
@@ -198,11 +198,11 @@ dom_tree_to_numeric_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_string_kvp_value(xmlNodePtr node)
 {
     gchar *datext;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     datext = dom_tree_to_text(node);
     if (datext)
@@ -215,11 +215,11 @@ dom_tree_to_string_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_guid_kvp_value(xmlNodePtr node)
 {
     GncGUID *daguid;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     daguid = dom_tree_to_guid(node);
     if (daguid)
@@ -232,11 +232,11 @@ dom_tree_to_guid_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_timespec_kvp_value (xmlNodePtr node)
 {
     Timespec ts;
-    kvp_value * ret = NULL;
+    KvpValue * ret = NULL;
 
     ts = dom_tree_to_timespec (node);
     if (ts.tv_sec || ts.tv_nsec)
@@ -246,11 +246,11 @@ dom_tree_to_timespec_kvp_value (xmlNodePtr node)
     return ret;
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_gdate_kvp_value (xmlNodePtr node)
 {
     GDate *date;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     date = dom_tree_to_gdate(node);
 
@@ -303,16 +303,16 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
     return(TRUE);
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_list_kvp_value(xmlNodePtr node)
 {
     GList *list = NULL;
     xmlNodePtr mark;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        kvp_value *new_val;
+        KvpValue *new_val;
 
         if (g_strcmp0 ((char*)mark->name, "text") == 0)
             continue;
@@ -329,11 +329,11 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-kvp_value*
+KvpValue*
 dom_tree_to_frame_kvp_value(xmlNodePtr node)
 {
     kvp_frame *frame;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     frame = dom_tree_to_kvp_frame(node);
 
@@ -351,7 +351,7 @@ dom_tree_to_frame_kvp_value(xmlNodePtr node)
 struct kvp_val_converter
 {
     gchar *tag;
-    kvp_value* (*converter)(xmlNodePtr node);
+    KvpValue* (*converter)(xmlNodePtr node);
 };
 
 struct kvp_val_converter val_converters[] =
@@ -368,13 +368,13 @@ struct kvp_val_converter val_converters[] =
     { 0, 0 },
 };
 
-kvp_value*
+KvpValue*
 dom_tree_to_kvp_value(xmlNodePtr node)
 {
     xmlChar *xml_type;
     gchar *type;
     struct kvp_val_converter *mark;
-    kvp_value *ret = NULL;
+    KvpValue *ret = NULL;
 
     xml_type = xmlGetProp(node, BAD_CAST "type");
     if (xml_type)
@@ -417,7 +417,7 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
         {
             xmlNodePtr mark2;
             gchar *key = NULL;
-            kvp_value *val = NULL;
+            KvpValue *val = NULL;
 
             for (mark2 = mark->xmlChildrenNode; mark2; mark2 = mark2->next)
             {

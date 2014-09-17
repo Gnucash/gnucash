@@ -435,7 +435,7 @@ gnc_is_xml_data_file(const gchar *filename)
 static void
 kvp_value_result_cleanup(sixtp_child_result *cr)
 {
-    kvp_value *v = (kvp_value *) cr->data;;
+    KvpValue *v = (KvpValue *) cr->data;;
     if (v) kvp_value_delete(v);
 }
 
@@ -476,7 +476,7 @@ simple_kvp_value_parser_new(sixtp_end_handler end_handler)
 {								\
   gchar *txt = NULL;						\
   TYPE val;							\
-  kvp_value *kvpv;						\
+  KvpValue *kvpv;						\
   gboolean ok;							\
 								\
   txt = concatenate_child_result_chars(data_from_children);	\
@@ -559,7 +559,7 @@ string_kvp_value_end_handler(gpointer data_for_children,
                              const gchar *tag)
 {
     gchar *txt = NULL;
-    kvp_value *kvpv;
+    KvpValue *kvpv;
 
     txt = concatenate_child_result_chars(data_from_children);
     g_return_val_if_fail(txt, FALSE);
@@ -591,7 +591,7 @@ guid_kvp_value_end_handler(gpointer data_for_children,
 {
     gchar *txt = NULL;
     GncGUID val;
-    kvp_value *kvpv;
+    KvpValue *kvpv;
     gboolean ok;
 
     txt = concatenate_child_result_chars(data_from_children);
@@ -644,13 +644,13 @@ glist_kvp_value_end_handler(gpointer data_for_children,
 {
     GSList *lp;
     GList *result_glist;
-    kvp_value *kvp_result;
+    KvpValue *kvp_result;
 
     result_glist = NULL;
     for (lp = data_from_children; lp; lp = lp->next)
     {
         sixtp_child_result *cr = (sixtp_child_result *) lp->data;
-        kvp_value *kvp = (kvp_value *) cr->data;
+        KvpValue *kvp = (KvpValue *) cr->data;
 
         /* children are in reverse chron order, so this fixes it. */
         result_glist = g_list_prepend(result_glist, kvp);
@@ -764,7 +764,7 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
     guint64 key_node_count;
     gchar *key = NULL;
     sixtp_child_result *value_cr = NULL;
-    kvp_value *value = NULL;
+    KvpValue *value = NULL;
     gboolean delete_value = FALSE;
 
     g_return_val_if_fail(f, FALSE);

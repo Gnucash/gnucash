@@ -264,7 +264,7 @@ static void
 add_kvp_slot(gpointer key, gpointer value, gpointer data);
 
 static void
-add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
+add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
 {
     xmlNodePtr val_node;
     kvp_value_t kvp_type;
@@ -333,7 +333,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
         for (cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
-            kvp_value *val = (kvp_value*)cursor->data;
+            KvpValue *val = (KvpValue*)cursor->data;
             add_kvp_value_node(val_node, "slot:value", val);
         }
     }
@@ -369,7 +369,7 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
     xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key",
 		    checked_char_cast (newkey));
     g_free (newkey);
-    add_kvp_value_node(slot_node, "slot:value", (kvp_value*)value);
+    add_kvp_value_node(slot_node, "slot:value", (KvpValue*)value);
 }
 
 xmlNodePtr

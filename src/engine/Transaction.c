@@ -2553,7 +2553,7 @@ Transaction *
 xaccTransReverse (Transaction *orig)
 {
     Transaction *trans;
-    kvp_value *kvp_val;
+    KvpValue *kvp_val;
     g_return_val_if_fail(orig, NULL);
 
     trans = xaccTransClone(orig);

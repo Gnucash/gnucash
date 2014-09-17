@@ -862,7 +862,7 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
-    kvp_value *kvp_val;
+    KvpValue *kvp_val;
     double tmp = 0;
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
 

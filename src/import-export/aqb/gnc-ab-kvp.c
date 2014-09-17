@@ -130,7 +130,7 @@ GList *
 gnc_ab_get_book_template_list(QofBook *b)
 {
     kvp_frame *frame = gnc_ab_get_book_kvp(b, FALSE);
-    kvp_value *value = kvp_frame_get_slot(frame, AB_TEMPLATES);
+    KvpValue *value = kvp_frame_get_slot(frame, AB_TEMPLATES);
     return kvp_value_get_glist(value);
 }
 
@@ -138,7 +138,7 @@ void
 gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
 {
     kvp_frame *frame = gnc_ab_get_book_kvp(b, TRUE);
-    kvp_value *value = kvp_value_new_glist_nc(template_list);
+    KvpValue *value = kvp_value_new_glist_nc(template_list);
     kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
     qof_instance_set_dirty_flag(QOF_INSTANCE(b), TRUE);
 }

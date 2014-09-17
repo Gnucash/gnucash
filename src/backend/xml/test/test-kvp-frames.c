@@ -16,10 +16,10 @@ const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
 
 static void
 test_kvp_get_slot(int run,
-                  kvp_frame *test_frame1, const kvp_value *test_val1,
+                  kvp_frame *test_frame1, const KvpValue *test_val1,
                   const gchar *test_key)
 {
-    const kvp_value *test_val2;
+    const KvpValue *test_val2;
     test_val2 = kvp_frame_get_slot(test_frame1, test_key);
     if (kvp_value_compare(test_val1, test_val2) == 0)
     {
@@ -37,7 +37,7 @@ test_kvp_get_slot(int run,
 
 static void
 test_kvp_copy_compare(int run,
-                      kvp_frame *test_frame1, const kvp_value *test_val1,
+                      kvp_frame *test_frame1, const KvpValue *test_val1,
                       const gchar *test_key)
 {
     kvp_frame *test_frame2;
@@ -70,11 +70,11 @@ test_kvp_copy_compare(int run,
 
 static void
 test_kvp_copy_get_slot(int run,
-                       kvp_frame *test_frame1, const kvp_value *test_val1,
+                       kvp_frame *test_frame1, const KvpValue *test_val1,
                        const gchar *test_key)
 {
     kvp_frame *test_frame2;
-    const kvp_value *test_val2;
+    const KvpValue *test_val2;
 
     test_frame2 = kvp_frame_copy(test_frame1);
     test_val2 = kvp_frame_get_slot(test_frame2, test_key);
@@ -126,7 +126,7 @@ test_kvp_frames1(void)
     {
         kvp_frame *test_frame1;
         gchar *test_key;
-        kvp_value *test_val1;
+        KvpValue *test_val1;
 
         test_val1 = get_random_kvp_value(i % KVP_TYPE_FRAME);
 

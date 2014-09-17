@@ -170,7 +170,7 @@ get_random_list_element (GList *list)
                                     g_list_length (list) - 1));
 }
 
-static kvp_value* get_random_kvp_value_depth (int type, gint depth);
+static KvpValue* get_random_kvp_value_depth (int type, gint depth);
 
 static GList*
 get_random_glist_depth (gint depth)

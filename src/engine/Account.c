@@ -5047,7 +5047,7 @@ gnc_imap_find_account (GncImportMatchMap *imap,
 		       const char *category,
 		       const char *key)
 {
-    kvp_value *value;
+    KvpValue *value;
     GncGUID * guid;
 
     if (!imap || !key) return NULL;
@@ -5072,7 +5072,7 @@ gnc_imap_add_account (GncImportMatchMap *imap,
 		      const char *key,
 		      Account *acc)
 {
-    kvp_value *value;
+    KvpValue *value;
 
     if (!imap || !key || !acc || (strlen (key) == 0)) return;
     if (!category)
@@ -5120,7 +5120,7 @@ struct token_accounts_info
  * \note Can always assume that keys are unique, reduces code in this function
  */
 static void
-buildTokenInfo(const char *key, kvp_value *value, gpointer data)
+buildTokenInfo(const char *key, KvpValue *value, gpointer data)
 {
     struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
     struct account_token_count* this_account;
@@ -5242,7 +5242,7 @@ gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     GHashTable *final_probabilities = g_hash_table_new(g_str_hash,
 						       g_str_equal);
     struct account_info account_i;
-    kvp_value* value;
+    KvpValue* value;
     kvp_frame* token_frame;
 
     ENTER(" ");
@@ -5407,10 +5407,10 @@ gnc_imap_add_account_bayes(GncImportMatchMap *imap,
 			   Account *acc)
 {
     GList *current_token;
-    kvp_value *value;
+    KvpValue *value;
     gint64 token_count;
     char* account_fullname;
-    kvp_value *new_value; /* the value that will be added back into
+    KvpValue *new_value; /* the value that will be added back into
 			   * the kvp tree */
 
     ENTER(" ");
