@@ -38,6 +38,7 @@
 #include "split-register.h"
 #include "split-register-p.h"
 #include "engine-helpers.h"
+#include "gnc-prefs.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -354,6 +355,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     gboolean dynamic;
     gboolean we_own_slist = FALSE;
     gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
+    gboolean future_after_blank = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                     GNC_PREF_FUTURE_AFTER_BLANK);
+    gboolean added_blank_trans = FALSE;
 
     VirtualCellLocation vcell_loc;
     VirtualLocation save_loc;
@@ -486,6 +490,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     table->model->dividing_row_upper = -1;
     table->model->dividing_row = -1;
+    table->model->dividing_row_lower = -1;
 
     // Ensure that the transaction and splits being edited are in the split
     // list we're about to load.
@@ -569,6 +574,39 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         {
             table->model->dividing_row = vcell_loc.virt_row;
             found_divider = TRUE;
+
+            if (future_after_blank)
+            {
+                if (blank_trans == find_trans)
+                    new_trans_row = vcell_loc.virt_row;
+
+                if (blank_split == find_trans_split)
+                    new_trans_split_row = vcell_loc.virt_row;
+
+                /* go to blank on first pass */
+                if (info->first_pass)
+                {
+                    save_loc.vcell_loc = vcell_loc;
+                    save_loc.phys_row_offset = 0;
+                    save_loc.phys_col_offset = 0;
+                }
+
+                gnc_split_register_add_transaction (reg,
+                                            blank_trans, blank_split,
+                                            lead_cursor, split_cursor,
+                                            multi_line, start_primary_color,
+                                            info->blank_split_edited,
+                                            find_trans, find_split,
+                                            find_class, &new_split_row,
+                                            &vcell_loc);
+
+                table->model->dividing_row_lower = vcell_loc.virt_row;
+
+                if (!multi_line)
+                    start_primary_color = !start_primary_color;
+
+                added_blank_trans = TRUE;
+            }
         }
 
         /* If this is the first load of the register,
@@ -609,12 +647,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         found_divider_upper = TRUE;
     }
 
-    if (blank_trans == find_trans)
-        new_trans_row = vcell_loc.virt_row;
-
-    if (blank_split == find_trans_split)
-        new_trans_split_row = vcell_loc.virt_row;
-
     /* If we didn't find the pending transaction, it was removed
      * from the account. */
     if (!found_pending)
@@ -628,24 +660,40 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         pending_trans = NULL;
     }
 
+    if (!added_blank_trans) {
+        if (blank_trans == find_trans)
+            new_trans_row = vcell_loc.virt_row;
+
+        if (blank_split == find_trans_split)
+            new_trans_split_row = vcell_loc.virt_row;
+
+        /* go to blank on first pass */
+        if (info->first_pass)
+        {
+            save_loc.vcell_loc = vcell_loc;
+            save_loc.phys_row_offset = 0;
+            save_loc.phys_col_offset = 0;
+        }
+
+        gnc_split_register_add_transaction (reg, blank_trans, blank_split,
+                                            lead_cursor, split_cursor,
+                                            multi_line, start_primary_color,
+                                            info->blank_split_edited,
+                                            find_trans, find_split,
+                                            find_class, &new_split_row,
+                                            &vcell_loc);
+
+        if (future_after_blank)
+            table->model->dividing_row_lower = vcell_loc.virt_row;
+    }
+
     /* go to blank on first pass */
     if (info->first_pass)
     {
         new_split_row = -1;
         new_trans_split_row = -1;
         new_trans_row = -1;
-
-        save_loc.vcell_loc = vcell_loc;
-        save_loc.phys_row_offset = 0;
-        save_loc.phys_col_offset = 0;
     }
-
-    gnc_split_register_add_transaction (reg, blank_trans, blank_split,
-                                        lead_cursor, split_cursor,
-                                        multi_line, start_primary_color,
-                                        info->blank_split_edited, find_trans,
-                                        find_split, find_class, &new_split_row,
-                                        &vcell_loc);
 
     /* resize the table to the sizes we just counted above */
     /* num_virt_cols is always one. */
