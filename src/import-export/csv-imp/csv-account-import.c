@@ -119,8 +119,13 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
     }
 
     /* Setup the two different line endings */
+#ifdef G_OS_WIN32
     end1 = g_strconcat (_("#eol"),"\"\n", NULL);
     end2 = g_strconcat (_("#eol"),"\n", NULL);
+#else
+    end1 = g_strconcat (_("#eol"),"\"\r\n", NULL);
+    end2 = g_strconcat (_("#eol"),"\r\n", NULL);
+#endif
 
     // start the import
 #define buffer_size 1000
@@ -154,10 +159,13 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
                 break; // eof
          }
 
-        // now strip the '\n' from the end of the line
+        // now strip the '\r\n' from the end of the line
         l = strlen (currentline);
         if ((l > 0) && (currentline[l - 1] == '\n'))
             currentline[l - 1] = 0;
+
+        if ((l > 0) && (currentline[l - 2] == '\r'))
+            currentline[l - 2] = 0;
 
         // convert line from locale into utf8
         line_utf8 = g_locale_to_utf8 (currentline, -1, NULL, NULL, NULL);
