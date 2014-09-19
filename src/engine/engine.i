@@ -238,7 +238,7 @@ Account * gnc_book_get_template_root(QofBook *book);
 
 void gnc_kvp_frame_delete_at_path(KvpFrame *frame, GSList *key_path);
 void kvp_frame_set_slot_path_gslist(
-   KvpFrame *frame, const KvpValue *new_value, GSList *key_path);
+   KvpFrame *frame, KvpValue *new_value, GSList *key_path);
 KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
 %clear GSList *key_path;

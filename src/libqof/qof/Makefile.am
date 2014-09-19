@@ -24,10 +24,11 @@ AM_CPPFLAGS = \
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.cpp        \
-   gnc-numeric.cpp   \
+   gnc-numeric.cpp     \
    guid.cpp            \
    kvp-util.cpp        \
    kvp_frame.cpp       \
+   kvp-value.cpp       \
    qofbackend.cpp      \
    qofbook.cpp         \
    qofchoice.cpp       \

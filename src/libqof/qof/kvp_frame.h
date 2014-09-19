@@ -77,7 +77,7 @@ typedef struct _KvpFrame KvpFrame;
 
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */
-typedef struct _KvpValue KvpValue;
+typedef struct KvpValueImpl KvpValue;
 
 /** \brief possible types in the union KvpValue
  * \todo : People have asked for boolean values,
@@ -347,7 +347,7 @@ You probably shouldn't be using these low-level routines
  *    this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot(KvpFrame * frame,
-                                 const gchar * key, const KvpValue * value);
+                                 const gchar * key, KvpValue * value);
 /**
  * The kvp_frame_set_slot_nc() routine puts the value (without copying
  *    it) into the frame, associating it with a copy of 'key'.  This
@@ -365,7 +365,7 @@ void          kvp_frame_set_slot_nc(KvpFrame * frame,
  *     at this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path (KvpFrame *frame,
-                                       const KvpValue *value,
+                                       KvpValue *value,
                                        const gchar *first_key, ...);
 
 /** The kvp_frame_set_slot_path_gslist() routine walks the hierarchy,
@@ -374,7 +374,7 @@ void          kvp_frame_set_slot_path (KvpFrame *frame,
  *     location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
-        const KvpValue *value,
+        KvpValue *value,
         GSList *key_path);
 
 /** @} */

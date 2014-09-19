@@ -59,8 +59,15 @@ teardown( Fixture *fixture, gconstpointer pData )
     test_clear_error_list ();
 }
 
+static gchar* glist_to_string( const GList *list )
+{
+    KvpValue * val = kvp_value_new_glist( list );
+    gchar * ret = kvp_value_to_string( val );
+    kvp_value_delete( val );
+    return ret;
+}
+
 extern KvpFrame* ( *p_get_trailer_make )( KvpFrame *frame, const char *key_path, char **end_key );
-extern gchar* ( *p_kvp_value_glist_to_string )( const GList *list );
 extern KvpFrame* ( *p_get_or_make )( KvpFrame *fr, const char * key );
 extern const KvpFrame* ( *p_kvp_frame_get_frame_or_null_slash_trash )( const KvpFrame *frame, char *key_path );
 extern const KvpFrame* ( *p_get_trailer_or_null )( const KvpFrame * frame, const char * key_path, char **end_key );
@@ -73,9 +80,8 @@ setup_static( Fixture *fixture, gconstpointer pData )
     fixture->frame = kvp_frame_new();
     fixture->hdlrs = NULL;
     init_static_test_pointers();
-    g_assert( p_get_trailer_make && p_kvp_value_glist_to_string &&
-              p_get_or_make && p_kvp_frame_get_frame_or_null_slash_trash &&
-              p_get_trailer_or_null );
+    g_assert( p_get_trailer_make && p_get_or_make && p_get_trailer_or_null && 
+              p_kvp_frame_get_frame_or_null_slash_trash );
 }
 
 static void
@@ -85,7 +91,6 @@ teardown_static( Fixture *fixture, gconstpointer pData )
     g_slist_free_full (fixture->hdlrs, test_free_log_handler);
     test_clear_error_list ();
     p_get_trailer_make = NULL;
-    p_kvp_value_glist_to_string = NULL;
     p_get_or_make = NULL;
     p_kvp_frame_get_frame_or_null_slash_trash = NULL;
     p_get_trailer_or_null = NULL;
@@ -842,7 +847,7 @@ test_kvp_value_compare( void )
     g_test_message( "Test different kvpvalues of all the types" );
     g_assert_cmpint( kvp_value_compare( gint64_orig_value, gint64_copy_value ), == , -1 );
     g_assert_cmpint( kvp_value_compare( gint64_copy_value, gint64_orig_value ), == , 1 );
-    g_assert_cmpint( kvp_value_compare( double_orig_value, double_copy_value ), == , double_compare( 3.3, 3.5 ) );
+    g_assert_cmpint( kvp_value_compare( double_orig_value, double_copy_value ), == , -1 );
     g_assert_cmpint( kvp_value_compare( numeric_orig_value, numeric_copy_value ), == , gnc_numeric_compare( gnc_numeric_orig, gnc_numeric_copy ) );
     g_assert_cmpint( kvp_value_compare( string_orig_value, string_copy_value ), == , strcmp( "abcdefghijklmnop", "abcdefghijklmnop" ) );
     g_assert_cmpint( kvp_value_compare( guid_orig_value, guid_copy_value ), == , guid_compare( guid_orig, guid_copy ) );
@@ -1346,8 +1351,8 @@ test_kvp_value_glist_to_string( Fixture *fixture, gconstpointer pData )
     frame_orig = kvp_frame_new();
 
     g_test_message( "Test empty list" );
-    result = p_kvp_value_glist_to_string( value_list );
-    g_assert_cmpstr( result, == , "[  ]" );
+    result = glist_to_string( value_list );
+    g_assert_cmpstr( result, == , "" );
     g_free( result );
 
     g_test_message( "Test list with simple and complex values" );
@@ -1359,9 +1364,9 @@ test_kvp_value_glist_to_string( Fixture *fixture, gconstpointer pData )
     value_list = g_list_append( value_list, kvp_value_new_frame( frame_orig ) );
     g_assert( value_list );
     g_assert_cmpint( g_list_length( value_list ), == , 6 );
-    result = p_kvp_value_glist_to_string( value_list );
+    result = glist_to_string( value_list );
 
-    g_assert_cmpstr( result, == , "[  KVP_VALUE_GINT64(2), KVP_VALUE_DOUBLE(3.3), KVP_VALUE_NUMERIC(0/1), KVP_VALUE_STRING(abcdefghijklmnop), KVP_VALUE_GLIST([  KVP_VALUE_STRING(abcdefghijklmnop), ]), KVP_VALUE_FRAME({\n}\n), ]" );
+    g_assert_cmpstr( result, == , "KVP_VALUE_GLIST([  KVP_VALUE_GINT64(2), KVP_VALUE_DOUBLE(3.3), KVP_VALUE_NUMERIC(0/1), KVP_VALUE_STRING(abcdefghijklmnop), KVP_VALUE_GLIST([  KVP_VALUE_STRING(abcdefghijklmnop), ]), KVP_VALUE_FRAME({\n}\n), ])" );
     g_free( result );
 
     kvp_glist_delete( value_list );
