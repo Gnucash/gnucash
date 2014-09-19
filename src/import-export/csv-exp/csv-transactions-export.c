@@ -68,6 +68,43 @@ gboolean write_line_to_file (FILE *fh, char * line)
 
 
 /*******************************************************
+ * csv_txn_test_field_string
+ *
+ * Test the field string for ," and new lines
+ *******************************************************/
+static
+gchar *csv_txn_test_field_string (CsvExportInfo *info, const gchar *string_in)
+{
+    gboolean need_quote = FALSE;
+    gchar **parts;
+    gchar *string_parts;
+    gchar *string_out;
+
+    /* Check for " and then "" them */
+    parts = g_strsplit (string_in, "\"", -1);
+    string_parts = g_strjoinv ("\"\"", parts);
+    g_strfreev (parts);
+
+    /* Check for separator string and \n and " in field,
+       if so quote field if not allready quoted */
+    if (g_strrstr (string_parts, info->separator_str) != NULL)
+        need_quote = TRUE;
+    if (g_strrstr (string_parts, "\n") != NULL)
+        need_quote = TRUE;
+    if (g_strrstr (string_parts, "\"") != NULL)
+        need_quote = TRUE;
+
+    if (!info->use_quotes && need_quote)
+        string_out = g_strconcat ("\"", string_parts, "\"", NULL);
+    else
+        string_out = g_strdup (string_parts);
+
+    g_free (string_parts);
+    return string_out;
+}
+
+
+/*******************************************************
  * account_splits
  *
  * gather the splits / transactions for an account and
@@ -124,6 +161,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         gchar       *date;
         const gchar *currentSel;
         const gchar *split_amount;
+        gchar       *str_temp = NULL;
 
         split = splits->data;
         trans = xaccSplitGetParent(split);
@@ -131,40 +169,51 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         s_list = xaccTransGetSplitList(trans);
 
         /* Date */
-        date = qof_print_date ( xaccTransGetDate(trans));
-        part1 = g_strconcat ( end_sep, date, mid_sep, NULL);
-        g_free(date);
+        date = qof_print_date (xaccTransGetDate (trans));
+        part1 = g_strconcat (end_sep, date, mid_sep, NULL);
+        g_free (date);
         /* Name */
-        currentSel = xaccAccountGetName(acc);
-        part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
-        g_free(part1);
+        currentSel = xaccAccountGetName (acc);
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part1);
         /* Number */
-        currentSel = gnc_get_num_action(trans, NULL);
-        part1 = g_strconcat ( part2, currentSel, mid_sep, NULL);
-        g_free(part2);
+        currentSel = gnc_get_num_action (trans, NULL);
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part1 = g_strconcat (part2, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part2);
         /* Description */
-        currentSel = xaccTransGetDescription(trans);
-        part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
-        g_free(part1);
+        currentSel = xaccTransGetDescription (trans) ? xaccTransGetDescription (trans) : "" ;
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part1);
         /* Notes */
-        currentSel = xaccTransGetNotes(trans);
-        if (currentSel == NULL)
-            part1 = g_strconcat ( part2, mid_sep, NULL);
-        else
-            part1 = g_strconcat ( part2, currentSel, mid_sep, NULL);
-        g_free(part2);
+        currentSel = xaccTransGetNotes (trans) ? xaccTransGetNotes (trans) : "" ;
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part1 = g_strconcat (part2, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part2);
         /* Memo */
-        currentSel = xaccSplitGetMemo(split);
-        part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
-        g_free(part1);
+        currentSel = xaccSplitGetMemo (split) ? xaccSplitGetMemo (split) : "" ;
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part1);
         /* Category */
-        currentSel = xaccSplitGetCorrAccountName(split);
-        part1 = g_strconcat ( part2, currentSel, mid_sep, "T", mid_sep, NULL);
-        g_free(part2);
+        currentSel = xaccSplitGetCorrAccountName (split);
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part1 = g_strconcat (part2, str_temp, mid_sep, "T", mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part2);
         /* Action */
-        currentSel =  gnc_get_num_action(NULL, split);
-        part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
-        g_free(part1);
+        currentSel = gnc_get_num_action (NULL, split);
+        str_temp = csv_txn_test_field_string (info, currentSel);
+        part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part1);
         /* Reconcile */
         switch (xaccSplitGetReconcile (split))
         {
@@ -186,25 +235,29 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         default:
             currentSel = "N";
         }
-        part1 = g_strconcat ( part2, currentSel, mid_sep, NULL);
-        g_free(part2);
+        part1 = g_strconcat (part2, currentSel, mid_sep, NULL);
+        g_free (part2);
         /* To with Symbol */
-        split_amount = xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, TRUE));
-        part2 = g_strconcat ( part1, split_amount, mid_sep, NULL);
-        g_free(part1);
+        split_amount = xaccPrintAmount (xaccSplitGetAmount (split), gnc_split_amount_print_info (split, TRUE));
+        str_temp = csv_txn_test_field_string (info, split_amount);
+        part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part1);
 
         /* From with Symbol */
-        part1 = g_strconcat ( part2, "", mid_sep, NULL);
-        g_free(part2);
+        part1 = g_strconcat (part2, "", mid_sep, NULL);
+        g_free (part2);
 
         /* To Number Only */
-        split_amount = xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, FALSE));
-        part2 = g_strconcat ( part1, split_amount, mid_sep, NULL);
-        g_free(part1);
+        split_amount = xaccPrintAmount (xaccSplitGetAmount (split), gnc_split_amount_print_info (split, FALSE));
+        str_temp = csv_txn_test_field_string (info, split_amount);
+        part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+        g_free (str_temp);
+        g_free (part1);
 
         /* From Number Only */
-        part1 = g_strconcat ( part2, "", mid_sep, "", mid_sep, "", end_sep, "\n", NULL);
-        g_free(part2);
+        part1 = g_strconcat (part2, "", mid_sep, "", mid_sep, "", end_sep, "\n", NULL);
+        g_free (part2);
 
         /* Write to file */
         if (!write_line_to_file(fh, part1))
@@ -212,7 +265,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             info->failed = TRUE;
             break;
         }
-        g_free(part1);
+        g_free (part1);
 
         /* Loop through the list of splits for the Transcation */
         node = s_list;
@@ -225,19 +278,25 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             part1 = g_strconcat ( end_sep, mid_sep, mid_sep, mid_sep, mid_sep, mid_sep, NULL);
 
             /* Memo */
-            currentSel = xaccSplitGetMemo(t_split);
-            part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
-            g_free(part1);
+            currentSel = xaccSplitGetMemo (t_split) ? xaccSplitGetMemo (t_split) : "" ;
+            str_temp = csv_txn_test_field_string (info, currentSel);
+            part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+            g_free (str_temp);
+            g_free (part1);
 
             /* Account */
-            currentSel = xaccAccountGetName( xaccSplitGetAccount(t_split));
-            part1 = g_strconcat ( part2, currentSel, mid_sep, "S", mid_sep, NULL);
-            g_free(part2);
+            currentSel = xaccAccountGetName (xaccSplitGetAccount (t_split));
+            str_temp = csv_txn_test_field_string (info, currentSel);
+            part1 = g_strconcat (part2, str_temp, mid_sep, "S", mid_sep, NULL);
+            g_free (str_temp);
+            g_free (part2);
 
             /* Action */
-            currentSel = gnc_get_num_action(NULL, t_split);
-            part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
-            g_free(part1);
+            currentSel = gnc_get_num_action (NULL, t_split);
+            str_temp = csv_txn_test_field_string (info, currentSel);
+            part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+            g_free (str_temp);
+            g_free (part1);
 
             /* Reconcile */
             switch (xaccSplitGetReconcile (split))
@@ -260,44 +319,50 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             default:
                 currentSel = "N";
             }
-            part1 = g_strconcat ( part2, currentSel, mid_sep, NULL);
-            g_free(part2);
+            part1 = g_strconcat (part2, currentSel, mid_sep, NULL);
+            g_free (part2);
 
             /* From / To with Symbol */
-            split_amount = xaccPrintAmount(xaccSplitGetAmount(t_split), gnc_split_amount_print_info(t_split, TRUE));
+            split_amount = xaccPrintAmount (xaccSplitGetAmount (t_split), gnc_split_amount_print_info (t_split, TRUE));
+            str_temp = csv_txn_test_field_string (info, split_amount);
             if (xaccSplitGetAccount(t_split) == acc)
-                part2 = g_strconcat ( part1,  split_amount, mid_sep, mid_sep, NULL);
+                part2 = g_strconcat (part1,  str_temp, mid_sep, mid_sep, NULL);
             else
-                part2 = g_strconcat ( part1, mid_sep, split_amount, mid_sep, NULL);
-            g_free(part1);
+                part2 = g_strconcat (part1, mid_sep, str_temp, mid_sep, NULL);
+            g_free (str_temp);
+            g_free (part1);
 
             /* From / To Numbers only */
-            split_amount = xaccPrintAmount(xaccSplitGetAmount(t_split), gnc_split_amount_print_info(t_split, FALSE));
-            if (xaccSplitGetAccount(t_split) == acc)
-                part1 = g_strconcat ( part2,  split_amount, mid_sep, mid_sep, NULL);
+            split_amount = xaccPrintAmount (xaccSplitGetAmount (t_split), gnc_split_amount_print_info (t_split, FALSE));
+            str_temp = csv_txn_test_field_string (info, split_amount);
+            if (xaccSplitGetAccount (t_split) == acc)
+                part1 = g_strconcat (part2,  str_temp, mid_sep, mid_sep, NULL);
             else
-                part1 = g_strconcat ( part2, mid_sep, split_amount, mid_sep, NULL);
-            g_free(part2);
+                part1 = g_strconcat (part2, mid_sep, str_temp, mid_sep, NULL);
+            g_free (str_temp);
+            g_free (part2);
 
             /* From / To - Share Price / Conversion factor */
-            split_amount = xaccPrintAmount(xaccSplitGetSharePrice(t_split), gnc_split_amount_print_info(t_split, FALSE));
-            if (xaccSplitGetAccount(t_split) == acc)
-                part2 = g_strconcat ( part1,  split_amount, mid_sep, end_sep, "\n", NULL);
+            split_amount = xaccPrintAmount (xaccSplitGetSharePrice (t_split), gnc_split_amount_print_info (t_split, FALSE));
+            str_temp = csv_txn_test_field_string (info, split_amount);
+            if (xaccSplitGetAccount (t_split) == acc)
+                part2 = g_strconcat (part1,  str_temp, mid_sep, end_sep, "\n", NULL);
             else
-                part2 = g_strconcat ( part1, mid_sep, split_amount, end_sep, "\n", NULL);
-            g_free(part1);
+                part2 = g_strconcat (part1, mid_sep, str_temp, end_sep, "\n", NULL);
+            g_free (str_temp);
+            g_free (part1);
 
-            if (!write_line_to_file(fh, part2))
+            if (!write_line_to_file (fh, part2))
                 info->failed = TRUE;
 
-            g_free(part2);
+            g_free (part2);
             cnt++;
             node = node->next;
         }
     }
-    g_free(mid_sep);
+    g_free (mid_sep);
     qof_query_destroy (q);
-    g_list_free( splits );
+    g_list_free (splits);
 }
 
 

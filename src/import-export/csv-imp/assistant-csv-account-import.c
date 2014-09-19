@@ -225,19 +225,25 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data )
 
     name = gtk_buildable_get_name(GTK_BUILDABLE(radio));
 
-    if (g_strcmp0(name, g_strdup("radio_semi")) == 0)
-        g_string_assign (info->regexp, "^(?<type>[^;]*);(?<full_name>[^;]*);(?<name>[^;]*);(?<code>[^;]*);?(?<description>[^;]*);?(?<color>[^;]*);?(?<notes>[^;]*);?(?<commoditym>[^;]*);?(?<commodityn>[^;]*);?(?<hidden>[^;]*);?(?<tax>[^;]*);?(?<place_holder>[^;]*)$");
+    if (g_strcmp0 (name, "radio_semi") == 0)
+        g_string_assign (info->regexp, "^(?<type>[^;]*);?(?<full_name>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<name>\"(?:[^\"]|\"\")*\"|[^;]*);\
+	?(?<code>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<description>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<color>[^;]*);\
+	?(?<notes>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^;]*);\
+	?(?<hidden>[^;]*);?(?<tax>[^;]*);?(?<place_holder>[^;]*);(?<endofline>[^;]*)$");
 
-    if (g_strcmp0(name, g_strdup("radio_comma")) == 0)
-        g_string_assign (info->regexp, "^(?<type>[^,]*),(?<full_name>[^,]*),(?<name>[^,]*),(?<code>[^,]*),?(?<description>[^,]*),?(?<color>[^,]*),?(?<notes>[^,]*),?(?<commoditym>[^,]*),?(?<commodityn>[^,]*),?(?<hidden>[^,]*),?(?<tax>[^,]*),?(?<place_holder>[^,]*)$");
+    if (g_strcmp0 (name, "radio_colon") == 0)
+        g_string_assign (info->regexp, "^(?<type>[^:]*):?(?<full_name>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<name>\"(?:[^\"]|\"\")*\"|[^:]*):\
+	?(?<code>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<description>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<color>[^:]*):\
+	?(?<notes>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^:]*):\
+	?(?<hidden>[^:]*):?(?<tax>[^:]*):?(?<place_holder>[^:]*):(?<endofline>[^:]*)$");
 
-    if (g_strcmp0(name, g_strdup("radio_semiq")) == 0)
-        g_string_assign (info->regexp, "^((?<type>[^\";]*)|\"(?<type>[^\"]*)\");((?<full_name>[^\";]*)|\"(?<full_name>[^\"]*)\");((?<name>[^\";]*)|\"(?<name>[^\"]*)\");((?<code>[^\";]*)|\"(?<code>[^\"]*)\");((?<description>[^\";]*)|\"(?<description>[^\"]*)\");((?<color>[^\";]*)|\"(?<color>[^\"]*)\");((?<notes>[^\";]*)|\"(?<notes>[^\"]*)\");((?<commoditym>[^\";]*)|\"(?<commoditym>[^\"]*)\");((?<commodityn>[^\";]*)|\"(?<commodityn>[^\"]*)\");((?<hidden>[^\";]*)|\"(?<hidden>[^\"]*)\");((?<tax>[^\";]*)|\"(?<tax>[^\"]*)\");((?<place_holder>[^\";]*)|\"(?<place_holder>[^\"]*)\")$");
+    if (g_strcmp0 (name, "radio_comma") == 0)
+        g_string_assign (info->regexp, "^(?<type>[^,]*),?(?<full_name>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<name>\"(?:[^\"]|\"\")*\"|[^,]*),\
+	?(?<code>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<description>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<color>[^,]*),\
+	?(?<notes>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^,]*),\
+	?(?<hidden>[^,]*),?(?<tax>[^,]*),?(?<place_holder>[^,]*),(?<endofline>[^,]*)$");
 
-    if (g_strcmp0(name, g_strdup("radio_commaq")) == 0)
-        g_string_assign (info->regexp, "^((?<type>[^\",]*)|\"(?<type>[^\"]*)\"),((?<full_name>[^\",]*)|\"(?<full_name>[^\"]*)\"),((?<name>[^\",]*)|\"(?<name>[^\"]*)\"),((?<code>[^\",]*)|\"(?<code>[^\"]*)\"),((?<description>[^\",]*)|\"(?<description>[^\"]*)\"),((?<color>[^\",]*)|\"(?<color>[^\"]*)\"),((?<notes>[^\",]*)|\"(?<notes>[^\"]*)\"),((?<commoditym>[^\",]*)|\"(?<commoditym>[^\"]*)\"),((?<commodityn>[^\",]*)|\"(?<commodityn>[^\"]*)\"),((?<hidden>[^\",]*)|\"(?<hidden>[^\"]*)\"),((?<tax>[^\",]*)|\"(?<tax>[^\"]*)\"),((?<place_holder>[^\",]*)|\"(?<place_holder>[^\"]*)\")$");
-
-    if (g_strcmp0(name, g_strdup("radio_custom")) == 0)
+    if (g_strcmp0 (name, "radio_custom") == 0)
     {
         temp = gnc_input_dialog (0, _("Adjust regular expression used for import"), _("This regular expression is used to parse the import file. Modify according to your needs.\n"), info->regexp->str);
         if (temp)
@@ -555,6 +561,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     GtkWidget *button;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
+    gchar *mnemonic_desc = NULL;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-account-import.glade", "num_hrows_adj");
@@ -608,7 +615,11 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->header_row_spin = GTK_WIDGET(gtk_builder_get_object (builder, "num_hrows"));
     info->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
 
-    info->regexp = g_string_new ( "^(?<type>[^;]*);(?<full_name>[^;]*);(?<name>[^;]*);(?<code>[^;]*);?(?<description>[^;]*);?(?<color>[^;]*);?(?<notes>[^;]*);?(?<commoditym>[^;]*);?(?<commodityn>[^;]*);?(?<hidden>[^;]*);?(?<tax>[^;]*);?(?<place_holder>[^;]*)$");
+    /* Comma Separated file default */
+    info->regexp = g_string_new ( "^(?<type>[^,]*),?(?<full_name>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<name>\"(?:[^\"]|\"\")*\"|[^,]*),\
+	?(?<code>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<description>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<color>[^,]*),\
+	?(?<notes>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^,]*),\
+	?(?<hidden>[^,]*),?(?<tax>[^,]*),?(?<place_holder>[^,]*),(?<endofline>[^,]*)$");
 
     /* create model and bind to view */
     info->store = gtk_list_store_new (N_COLUMNS,
@@ -617,10 +628,12 @@ csv_import_assistant_create (CsvImportInfo *info)
     gtk_tree_view_set_model( GTK_TREE_VIEW(info->tree_view), GTK_TREE_MODEL(info->store) );
 #define CREATE_COLUMN(description,column_id) \
   renderer = gtk_cell_renderer_text_new (); \
-  column = gtk_tree_view_column_new_with_attributes (mnemonic_escape(_(description)), renderer, "text", column_id, NULL); \
+  mnemonic_desc = mnemonic_escape(_(description)); \
+  column = gtk_tree_view_column_new_with_attributes (mnemonic_desc, renderer, "text", column_id, NULL); \
   gtk_tree_view_column_add_attribute(column, renderer, "background", ROW_COLOR); \
   gtk_tree_view_column_set_resizable (column, TRUE); \
-  gtk_tree_view_append_column (GTK_TREE_VIEW (info->tree_view), column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (info->tree_view), column); \
+  g_free (mnemonic_desc);
     CREATE_COLUMN ("type", TYPE);
     CREATE_COLUMN ("full_name", FULL_NAME);
     CREATE_COLUMN ("name", NAME);

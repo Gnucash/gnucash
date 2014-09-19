@@ -41,13 +41,24 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
 /* This helper macro takes a regexp match and fills the model */
 #define FILL_IN_HELPER(match_name,column) \
-            temp = g_match_info_fetch_named (match_info, match_name); \
-            if (temp) \
-            { \
-		g_strstrip( temp ); \
+             temp = g_match_info_fetch_named (match_info, match_name); \
+             if (temp) \
+             { \
+		g_strstrip (temp); \
+                if (g_str_has_prefix (temp, "\""))\
+                { \
+                    if (strlen (temp) >= 2) \
+                    { \
+		        toptail = g_strndup (temp + 1, strlen (temp)-2); \
+                        parts = g_strsplit (toptail, "\"\"", -1); \
+                        temp = g_strjoinv ("\"", parts); \
+                        g_strfreev (parts); \
+                        g_free (toptail); \
+                    } \
+                } \
                 gtk_list_store_set (store, &iter, column, temp, -1); \
                 g_free (temp); \
-            }
+             }
 
 
 /*******************************************************
@@ -61,7 +72,9 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
 {
     FILE       *f;
     char       *line;
-    gchar      *line_utf8, *temp;
+    gchar      *line_utf8, *temp, *toptail;
+    gchar      **parts;
+    gchar      *end1, *end2;
     GMatchInfo *match_info;
     GError     *err;
     GRegex     *regexpat;
@@ -105,25 +118,49 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         return RESULT_ERROR_IN_REGEXP;
     }
 
+    /* Setup the two different line endings */
+    end1 = g_strconcat (_("#eol"),"\"\n", NULL);
+    end2 = g_strconcat (_("#eol"),"\n", NULL);
+
     // start the import
 #define buffer_size 1000
     line = g_malloc0 (buffer_size);
     while (!feof (f))
     {
+        gchar  *currentline = NULL;
         int l;
         row++;
         if (row == max_rows)
             break;
+
         // read one line
         if (!fgets (line, buffer_size, f))
-            break;			// eof
+            break; // eof
+
+        currentline = g_strdup (line);
+
+        while (!(g_str_has_suffix (line, end1) || g_str_has_suffix (line, end2)))
+        {
+            // read next line
+            if (fgets (line, buffer_size, f))
+            {
+                gchar *temp_str = NULL;
+                temp_str = g_strconcat (currentline, line, NULL);
+                g_free (currentline);
+                currentline = g_strdup (temp_str);
+                g_free (temp_str);
+            }
+            else
+                break; // eof
+         }
+
         // now strip the '\n' from the end of the line
-        l = strlen (line);
-        if ((l > 0) && (line[l - 1] == '\n'))
-            line[l - 1] = 0;
+        l = strlen (currentline);
+        if ((l > 0) && (currentline[l - 1] == '\n'))
+            currentline[l - 1] = 0;
 
         // convert line from locale into utf8
-        line_utf8 = g_locale_to_utf8 (line, -1, NULL, NULL, NULL);
+        line_utf8 = g_locale_to_utf8 (currentline, -1, NULL, NULL, NULL);
 
         // parse the line
         match_info = NULL;	// it seems, that in contrast to documentation, match_info is not always set -> g_match_info_free will segfault
@@ -147,11 +184,14 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
             gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
         }
 
+        g_free (currentline);
         g_match_info_free (match_info);
         match_info = 0;
         g_free (line_utf8);
         line_utf8 = 0;
     }
+    g_free (end1);
+    g_free (end2);
     g_free (line);
     line = 0;
 
@@ -313,17 +353,11 @@ csv_account_import (CsvImportInfo *info)
             }
 
             if (!g_strcmp0(notes, "") == 0)
-            {
-                /* Check for multiple lines */
-                gchar **parts;
-                parts = g_strsplit(notes, "\\n", -1);
-                notes = g_strjoinv("\n", parts);
-                g_strfreev(parts);
-            }
-            xaccAccountSetNotes (acc, notes);
+                xaccAccountSetNotes (acc, notes);
 
             if (!g_strcmp0(description, "") == 0)
                 xaccAccountSetDescription (acc, description);
+
             if (!g_strcmp0(code, "") == 0)
                 xaccAccountSetCode (acc, code);
         }
