@@ -125,10 +125,12 @@ src/report/standard-reports/trial-balance.scm
 src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 src/report/stylesheets/gnucash/report/stylesheet-footer.scm
+src/report/stylesheets/gnucash/report/stylesheet-head-or-tail.scm
 src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 src/report/stylesheets/stylesheet-easy.scm
 src/report/stylesheets/stylesheet-fancy.scm
 src/report/stylesheets/stylesheet-footer.scm
+src/report/stylesheets/stylesheet-head-or-tail.scm
 src/report/stylesheets/stylesheet-plain.scm
 src/report/utility-reports/gnucash/report/hello-world.scm
 src/report/utility-reports/gnucash/report/view-column.scm
