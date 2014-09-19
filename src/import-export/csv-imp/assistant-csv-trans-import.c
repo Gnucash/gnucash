@@ -1353,8 +1353,8 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
     adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(info->end_row_spin));
     if (gtk_adjustment_get_upper(adj) != info->num_of_rows)
     {
+        gtk_adjustment_set_upper (adj, info->num_of_rows);
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows);
-        gtk_adjustment_set_upper(adj, info->num_of_rows);
     }
 
     /* Update the row selection highlight */
