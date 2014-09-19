@@ -47,16 +47,16 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
  * successfull.
  *******************************************************/
 static
-gboolean write_line_to_file ( FILE *fh, char * line)
+gboolean write_line_to_file (FILE *fh, char * line)
 {
     int len, written;
     DEBUG("Account String: %s", line);
 
     /* Write account line */
-    len = strlen( line );
-    written = fwrite( line, 1, len, fh );
+    len = strlen (line);
+    written = fwrite (line, 1, len, fh);
 
-    if ( written != len )
+    if (written != len)
         return FALSE;
     else
         return TRUE;
@@ -114,13 +114,13 @@ void csv_tree_export (CsvExportInfo *info)
     DEBUG("File name is : %s", info->file_name);
 
     /* Get list of Accounts */
-    root = gnc_book_get_root_account( gnc_get_current_book() );
-    accts = gnc_account_get_descendants_sorted( root );
+    root = gnc_book_get_root_account (gnc_get_current_book());
+    accts = gnc_account_get_descendants_sorted (root);
     info->failed = FALSE;
 
     /* Open File for writing */
-    fh = g_fopen( info->file_name, "w" );
-    if ( fh != NULL )
+    fh = g_fopen (info->file_name, "w");
+    if (fh != NULL)
     {
         gchar *header;
         gchar *part1;
@@ -135,12 +135,12 @@ void csv_tree_export (CsvExportInfo *info)
         if (info->use_quotes)
         {
             end_sep = "\"";
-            mid_sep = g_strconcat ( "\"", info->separator_str, "\"", NULL);
+            mid_sep = g_strconcat ("\"", info->separator_str, "\"", NULL);
         }
         else
         {
             end_sep = "";
-            mid_sep = g_strconcat ( info->separator_str, NULL);
+            mid_sep = g_strconcat (info->separator_str, NULL);
         }
 
         /* Header string, 'eol = end of line marker' */
@@ -160,22 +160,22 @@ void csv_tree_export (CsvExportInfo *info)
         DEBUG("Header String: %s", header);
 
         /* Write header line */
-        if (!write_line_to_file(fh, header))
+        if (!write_line_to_file (fh, header))
         {
             info->failed = TRUE;
-            g_free(mid_sep);
-            g_free(header);
+            g_free (mid_sep);
+            g_free (header);
             return;
         }
-        g_free(header);
+        g_free (header);
 
         /* Go through list of accounts */
-        for (ptr = accts, i = 0; ptr; ptr = g_list_next(ptr), i++)
+        for (ptr = accts, i = 0; ptr; ptr = g_list_next (ptr), i++)
         {
             gchar *fullname = NULL;
             gchar *str_temp = NULL;
             acc = ptr->data;
-            DEBUG("Account being processed is : %s", xaccAccountGetName(acc));
+            DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
             /* Type */
             currentSel = xaccAccountTypeEnumAsString (xaccAccountGetType (acc));
             part1 = g_strconcat (end_sep, currentSel, mid_sep, NULL);
@@ -246,21 +246,21 @@ void csv_tree_export (CsvExportInfo *info)
             DEBUG("Account String: %s", part2);
 
             /* Write to file */
-            if (!write_line_to_file(fh, part2))
+            if (!write_line_to_file (fh, part2))
             {
                 info->failed = TRUE;
                 break;
             }
-            g_free(part2);
+            g_free (part2);
         }
-        g_free(mid_sep);
+        g_free (mid_sep);
     }
     else
         info->failed = TRUE;
     if (fh)
         fclose (fh);
 
-    g_list_free( accts );
+    g_list_free (accts);
     LEAVE("");
 }
 

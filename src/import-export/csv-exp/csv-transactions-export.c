@@ -57,10 +57,10 @@ gboolean write_line_to_file (FILE *fh, char * line)
     DEBUG("Account String: %s", line);
 
     /* Write account line */
-    len = strlen( line );
-    written = fwrite( line, 1, len, fh );
+    len = strlen (line);
+    written = fwrite (line, 1, len, fh);
 
-    if ( written != len )
+    if (written != len)
         return FALSE;
     else
         return TRUE;
@@ -121,7 +121,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
     gchar   *end_sep;
     gchar   *mid_sep;
 
-    q = qof_query_create_for(GNC_ID_SPLIT);
+    q = qof_query_create_for (GNC_ID_SPLIT);
     book = gnc_get_current_book();
     qof_query_set_book (q, book);
 
@@ -129,12 +129,12 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
     if (info->use_quotes)
     {
         end_sep = "\"";
-        mid_sep = g_strconcat ( "\"", info->separator_str, "\"", NULL);
+        mid_sep = g_strconcat ("\"", info->separator_str, "\"", NULL);
     }
     else
     {
         end_sep = "";
-        mid_sep = g_strconcat ( info->separator_str, NULL);
+        mid_sep = g_strconcat (info->separator_str, NULL);
     }
 
     /* Sort by transaction date */
@@ -147,7 +147,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
     xaccQueryAddDateMatchTT (q, TRUE, info->csvd.start_time, TRUE, info->csvd.end_time, QOF_QUERY_AND);
 
     /* Run the query */
-    for (splits = qof_query_run(q); splits; splits = splits->next)
+    for (splits = qof_query_run (q); splits; splits = splits->next)
     {
         Split       *split;
         Transaction *trans;
@@ -164,9 +164,9 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         gchar       *str_temp = NULL;
 
         split = splits->data;
-        trans = xaccSplitGetParent(split);
-        nSplits = xaccTransCountSplits(trans);
-        s_list = xaccTransGetSplitList(trans);
+        trans = xaccSplitGetParent (split);
+        nSplits = xaccTransCountSplits (trans);
+        s_list = xaccTransGetSplitList (trans);
 
         /* Date */
         date = qof_print_date (xaccTransGetDate (trans));
@@ -274,12 +274,12 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         /* Loop through the list of splits for the Transcation */
         node = s_list;
         cnt = 0;
-        while ( (cnt < nSplits) && (info->failed == FALSE))
+        while ((cnt < nSplits) && (info->failed == FALSE))
         {
             t_split = node->data;
 
             /* Start of line */
-            part1 = g_strconcat ( end_sep, mid_sep, mid_sep, mid_sep, mid_sep, mid_sep, NULL);
+            part1 = g_strconcat (end_sep, mid_sep, mid_sep, mid_sep, mid_sep, mid_sep, NULL);
 
             /* Memo */
             currentSel = xaccSplitGetMemo (t_split) ? xaccSplitGetMemo (t_split) : "" ;
@@ -396,8 +396,8 @@ void csv_transactions_export (CsvExportInfo *info)
     info->failed = FALSE;
 
     /* Open File for writing */
-    fh = g_fopen( info->file_name, "w" );
-    if ( fh != NULL )
+    fh = g_fopen (info->file_name, "w" );
+    if (fh != NULL)
     {
         gchar *header;
         gchar *end_sep;
@@ -408,16 +408,16 @@ void csv_transactions_export (CsvExportInfo *info)
         if (info->use_quotes)
         {
             end_sep = "\"";
-            mid_sep = g_strconcat ( "\"", info->separator_str, "\"", NULL);
+            mid_sep = g_strconcat ("\"", info->separator_str, "\"", NULL);
         }
         else
         {
             end_sep = "";
-            mid_sep = g_strconcat ( info->separator_str, NULL);
+            mid_sep = g_strconcat (info->separator_str, NULL);
         }
 
         /* Header string */
-        header = g_strconcat ( end_sep, _("Date"), mid_sep, _("Account Name"), mid_sep,
+        header = g_strconcat (end_sep, _("Date"), mid_sep, _("Account Name"), mid_sep,
                                (num_action ? _("Transaction Number") : _("Number")),
                                mid_sep, _("Description"), mid_sep, _("Notes"),
                                mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
@@ -435,21 +435,21 @@ void csv_transactions_export (CsvExportInfo *info)
         DEBUG("Header String: %s", header);
 
         /* Write header line */
-        if (!write_line_to_file(fh, header))
+        if (!write_line_to_file (fh, header))
         {
             info->failed = TRUE;
-            g_free(mid_sep);
-            g_free(header);
+            g_free (mid_sep);
+            g_free (header);
             return;
         }
-        g_free(mid_sep);
-        g_free(header);
+        g_free (mid_sep);
+        g_free (header);
 
         /* Go through list of accounts */
         for (ptr = info->csva.account_list, i = 0; ptr; ptr = g_list_next(ptr), i++)
         {
             acc = ptr->data;
-            DEBUG("Account being processed is : %s", xaccAccountGetName(acc));
+            DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
             account_splits (info, acc, fh);
         }
     }

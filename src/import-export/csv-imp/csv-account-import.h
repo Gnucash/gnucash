@@ -44,7 +44,7 @@ typedef enum _csv_import_result csv_import_result;
 csv_import_result
 csv_import_read_file (const gchar *filename, const gchar *parser_regexp, GtkListStore *store, guint max_rows );
 
-void csv_account_import(CsvImportInfo *info);
+void csv_account_import (CsvImportInfo *info);
 
 #endif /* CSV_ACCOUNT_IMPORT_H */
 

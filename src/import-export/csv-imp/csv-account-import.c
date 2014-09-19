@@ -68,7 +68,7 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
  *******************************************************/
 csv_import_result
 csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
-                      GtkListStore *store, guint max_rows )
+                      GtkListStore *store, guint max_rows)
 {
     FILE       *f;
     char       *line;
@@ -232,14 +232,14 @@ csv_account_import (CsvImportInfo *info)
 
     ENTER("");
     book = gnc_get_current_book();
-    root = gnc_book_get_root_account(book);
+    root = gnc_book_get_root_account (book);
 
     info->num_new = 0;
     info->num_updates = 0;
 
     /* Move to the first valid entry in store */
     row = info->header_rows;
-    valid = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(info->store), &iter, NULL, row );
+    valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(info->store), &iter, NULL, row );
     while (valid)
     {
         /* Walk through the list, reading each row */
@@ -258,13 +258,13 @@ csv_account_import (CsvImportInfo *info)
                             PLACE_HOLDER, &place_holder, -1);
 
         /* See if we can find the account by full name */
-        acc = gnc_account_lookup_by_full_name(root, full_name);
+        acc = gnc_account_lookup_by_full_name (root, full_name);
 
         DEBUG("Row is %u and full name is %s", row, full_name);
         if (acc == NULL)
         {
             /* Account does not exist, Lets try and add it */
-            if (g_strrstr(full_name, name) != NULL)
+            if (g_strrstr (full_name, name) != NULL)
             {
                 gint string_position;
                 gnc_commodity *commodity;
@@ -272,21 +272,21 @@ csv_account_import (CsvImportInfo *info)
                 gchar *full_parent;
 
                 /* Get full name of parent account, allow for separator */
-                string_position = strlen(full_name) - strlen(name) - 1;
+                string_position = strlen (full_name) - strlen (name) - 1;
 
                 if (string_position == -1)
-                    full_parent = g_strdup(full_name);
+                    full_parent = g_strdup (full_name);
                 else
-                    full_parent = g_strndup(full_name, string_position);
+                    full_parent = g_strndup (full_name, string_position);
 
-                parent = gnc_account_lookup_by_full_name(root, full_parent);
+                parent = gnc_account_lookup_by_full_name (root, full_parent);
                 g_free (full_parent);
 
                 if (parent == NULL && string_position != -1)
                 {
-                    gchar *text = g_strdup_printf( gettext("Row %u, path to account %s not found, added as top level\n"), row + 1, name );
-                    info->error = g_strconcat(info->error, text, NULL);
-                    g_free(text);
+                    gchar *text = g_strdup_printf (gettext("Row %u, path to account %s not found, added as top level\n"), row + 1, name);
+                    info->error = g_strconcat (info->error, text, NULL);
+                    g_free (text);
                     PINFO("Unable to import Row %u for account %s, path not found!", row, name);
                 }
 
@@ -295,7 +295,7 @@ csv_account_import (CsvImportInfo *info)
 
                 /* Do we have a valid commodity */
                 table = gnc_commodity_table_get_table (book);
-                commodity = gnc_commodity_table_lookup( table, commodityn, commoditym);
+                commodity = gnc_commodity_table_lookup (table, commodityn, commoditym);
 
                 if (commodity)
                 {
@@ -305,27 +305,27 @@ csv_account_import (CsvImportInfo *info)
                     acc = xaccMallocAccount (book);
                     xaccAccountBeginEdit (acc);
                     xaccAccountSetName (acc, name);
-                    xaccAccountSetType(acc, xaccAccountStringToEnum (type));
+                    xaccAccountSetType (acc, xaccAccountStringToEnum (type));
 
-                    if (!g_strcmp0(notes, "") == 0)
+                    if (!g_strcmp0 (notes, "") == 0)
                         xaccAccountSetNotes (acc, notes);
-                    if (!g_strcmp0(description, "") == 0)
+                    if (!g_strcmp0 (description, "") == 0)
                         xaccAccountSetDescription (acc, description);
-                    if (!g_strcmp0(code, "") == 0)
+                    if (!g_strcmp0 (code, "") == 0)
                         xaccAccountSetCode (acc, code);
 
-                    if (!g_strcmp0(color, "") == 0)
+                    if (!g_strcmp0 (color, "") == 0)
                     {
-                        if (gdk_color_parse(color, &testcolor))
+                        if (gdk_color_parse (color, &testcolor))
                             xaccAccountSetColor (acc, color);
                     }
 
-                    if (g_strcmp0(hidden, "T") == 0)
+                    if (g_strcmp0 (hidden, "T") == 0)
                         xaccAccountSetHidden (acc, TRUE);
-                    if (g_strcmp0(place_holder, "T") == 0)
+                    if (g_strcmp0 (place_holder, "T") == 0)
                         xaccAccountSetPlaceholder (acc, TRUE);
 
-                    xaccAccountSetCommodity(acc, commodity);
+                    xaccAccountSetCommodity (acc, commodity);
                     xaccAccountBeginEdit (parent);
                     gnc_account_append_child (parent, acc);
                     xaccAccountCommitEdit (parent);
@@ -334,18 +334,18 @@ csv_account_import (CsvImportInfo *info)
                 }
                 else
                 {
-                    gchar *err_string = g_strdup_printf( gettext("Row %u, commodity %s / %s not found\n"), row + 1,
+                    gchar *err_string = g_strdup_printf (gettext("Row %u, commodity %s / %s not found\n"), row + 1,
                                                          commoditym, commodityn);
-                    info->error = g_strconcat(info->error, err_string, NULL);
-                    g_free(err_string);
+                    info->error = g_strconcat (info->error, err_string, NULL);
+                    g_free (err_string);
                     PINFO("Unable to import Row %u for account %s, commodity!", row, full_name);
                 }
             }
             else
             {
-                gchar *err_string = g_strdup_printf( gettext("Row %u, account %s not in %s\n"), row + 1, name, full_name);
-                info->error = g_strconcat(info->error, err_string, NULL);
-                g_free(err_string);
+                gchar *err_string = g_strdup_printf (gettext("Row %u, account %s not in %s\n"), row + 1, name, full_name);
+                info->error = g_strconcat (info->error, err_string, NULL);
+                g_free (err_string);
                 PINFO("Unable to import Row %u for account %s, name!", row, full_name);
             }
         }
@@ -354,19 +354,19 @@ csv_account_import (CsvImportInfo *info)
             /* Lets try and update the color, notes, description, code entries */
             DEBUG("Existing account, will try and update account %s", full_name);
             info->num_updates = info->num_updates + 1;
-            if (!g_strcmp0(color, "") == 0)
+            if (!g_strcmp0 (color, "") == 0)
             {
-                if (gdk_color_parse(color, &testcolor))
+                if (gdk_color_parse (color, &testcolor))
                     xaccAccountSetColor (acc, color);
             }
 
-            if (!g_strcmp0(notes, "") == 0)
+            if (!g_strcmp0 (notes, "") == 0)
                 xaccAccountSetNotes (acc, notes);
 
-            if (!g_strcmp0(description, "") == 0)
+            if (!g_strcmp0 (description, "") == 0)
                 xaccAccountSetDescription (acc, description);
 
-            if (!g_strcmp0(code, "") == 0)
+            if (!g_strcmp0 (code, "") == 0)
                 xaccAccountSetCode (acc, code);
         }
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (info->store), &iter);
