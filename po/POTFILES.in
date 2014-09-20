@@ -171,6 +171,7 @@ src/engine/Recurrence.c
 src/engine/SchedXaction.c
 src/engine/Scrub2.c
 src/engine/Scrub3.c
+src/engine/ScrubBusiness.c
 src/engine/Scrub.c
 src/engine/Split.c
 src/engine/SX-book.c

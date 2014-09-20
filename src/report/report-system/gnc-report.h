@@ -28,6 +28,9 @@
 #include <glib.h>
 #include <libguile.h>
 
+#define SAVED_REPORTS_FILE "saved-reports-2.4"
+#define SAVED_REPORTS_FILE_OLD_REV "saved-reports-2.0"
+
 gboolean gnc_run_report (gint report_id, char ** data);
 gboolean gnc_run_report_id_string (const char * id_string, char **data);
 
@@ -47,5 +50,8 @@ void gnc_reports_flush_global(void);
 GHashTable *gnc_reports_get_global(void);
 
 gchar* gnc_get_default_report_font_family(void);
+
+gboolean gnc_saved_reports_backup (void);
+gboolean gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite);
 
 #endif

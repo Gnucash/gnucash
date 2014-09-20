@@ -620,22 +620,6 @@
          (guid (gnc:report-template-report-guid report-template)))
     (gnc:report-template-serialize-internal name type templ-name options guid)))
 
-(define gnc:current-saved-reports
-  (gnc-build-dotgnucash-path "saved-reports-2.4"))
-
-(define (gnc:open-saved-reports mode)
-  (let ((conf-file-name gnc:current-saved-reports))
-    (catch #t
-           (lambda () (open-file conf-file-name mode))
-           (lambda (key . args)
-             (gnc-error-dialog
-              '()
-              (sprintf
-               #f (_ "Could not open the file %s. The error is: %s")
-               conf-file-name
-               (string-append (symbol->string key) " - " (car (caddr args)))))
-             #f))))
-
 ;; Convert a report into a report template and save this template in the savefile
 ;; Under specific conditions the we will attempt to replace the current report's
 ;; template instead of simply adding a new template to the file.
@@ -692,27 +676,16 @@
   (gnc:report-to-template report #t))
 
 (define (gnc:report-template-save-to-savefile report-template)
-  (let* ((report-port (gnc:open-saved-reports "a")))
-    (if report-port
-        (let ((saved-form (gnc:report-template-serialize report-template)))
-          (display saved-form report-port)
-          (close report-port)
-          #t)
-        ;; Couldn't save report
-        #f)))
+  (let ((saved-form (gnc:report-template-serialize report-template)))
+          (gnc-saved-reports-write-to-file saved-form #f)))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
 ;; return #t if all templates were saved successfully
 (define (gnc:save-all-reports)
-  (let ((save-ok? #t)
-        (temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
-       (gnc:debug "saving all reports...")
-       ;; On windows, it seems to crash if we try to rename without deleting the old file first.
-       (if (access? temp-path F_OK)
-           (delete-file temp-path))
-       (if (access? gnc:current-saved-reports F_OK)
-           (rename-file gnc:current-saved-reports temp-path))
+  (let ((save-ok? #t))
+       (gnc-saved-reports-backup)
+       (gnc-saved-reports-write-to-file "" #t)
        (hash-for-each (lambda (k v)
                         (if (gnc:report-template-parent-type v)
                             (begin
