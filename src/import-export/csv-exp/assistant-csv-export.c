@@ -78,23 +78,23 @@ void csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
 static const gchar *finish_tree_string = N_(
             /* Translators: %s is the file name string. */
             "The account tree will be exported to the file '%s' when you click 'Apply'.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'"
-            " or 'Cancel' to Abort Export.\n");
+            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
 
 static const gchar *finish_trans_string = N_(
             /* Translators: %s is the file name string and %u the number of accounts. */
             "When you click 'Apply', the transactions will be exported to the file '%s' and"
-            " the number of accounts exported is %u.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'"
-            " or 'Cancel' to Abort Export.\n");
+            " the number of accounts exported will be %u.\n\n"
+            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
 
 static const gchar *start_tree_string = N_(
-        "This assistant will help you export the Account Tree to a file.\n\n"
+        "This assistant will help you export the Account Tree to a file\n"
+        " with the separator specified below.\n\n"
         "Select the settings you require for the file and then click 'Forward' to proceed"
         " or 'Cancel' to Abort Export.\n");
 
 static const gchar *start_trans_string = N_(
-            "This assistant will help you export the Transactions to a file.\n\n"
+            "This assistant will help you export the Transactions to a file\n"
+            " with the separator specified below.\n\n"
             "Select the settings you require for the file and then click 'Forward' to proceed"
             " or 'Cancel' to Abort Export.\n");
 
