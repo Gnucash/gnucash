@@ -421,7 +421,7 @@ get_random_gnc_numeric(void)
     }
     else
     {
-        gint64 norm = RAND_IN_RANGE (7ULL);
+        gint64 norm = RAND_IN_RANGE (11ULL);
 
         /* multiple of 10, between 1 and 1 million */
         deno = 1;
@@ -432,17 +432,27 @@ get_random_gnc_numeric(void)
         }
     }
 
-    /* Arbitrary random numbers can cause pointless overflow
-     * during calculations.  Limit dynamic range in hopes
-     * of avoiding overflow. Right now limit it to approx 2^44.
-     * The initial division is to help us down towards the range.
-     * The loop is to "make sure" we get there.  We might
-     * want to make this dependent on "deno" in the future.
-     */
-    numer = get_random_gint64 () % (2ULL << 44);
-    if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
+
+    /* Arbitrary random numbers can cause pointless overflow during
+     * calculations.  Limit dynamic range to 1E18 because int64_t
+     * overflows before 1E19. The initial division is to help us down
+     * towards the range.  The loop is to "make sure" we get there.
+     * We might want to make this dependent on "deno" in the future.
+     */
+    static const int64_t num_limit = 10000000000000LL; //1E14
+    static const int64_t max_denom_mult = 1000000LL; //1E6
+    numer = get_random_gint64 ();
+    if (numer > num_limit * (deno > max_denom_mult ? max_denom_mult : deno))
+    {
+	int64_t num = numer % (num_limit * (deno > max_denom_mult ? max_denom_mult : deno));
+	if (num)
+	    numer = num;
+	else
+	    numer = num_limit * (deno > max_denom_mult ? max_denom_mult : deno);
+    }
+    if (0 == numer) numer = 1;
     return gnc_numeric_create(numer, deno);
 }
 
