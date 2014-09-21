@@ -5,6 +5,7 @@ noinst_HEADERS = \
   gmtime_r.h \
   localtime_r.h \
   setenv.h \
+  strfmon.h \
   strptime.h \
   pow.h
 
@@ -15,6 +16,7 @@ EXTRA_libc_missing_la_SOURCES = \
   gmtime_r.c \
   localtime_r.c \
   setenv.c \
+  strfmon.c \
   strptime.c
 
 # This will automatically be filled in with the necessary object file

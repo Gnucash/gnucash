@@ -1265,7 +1265,7 @@ case $host_os in
     AC_LIBOBJ(strptime)
     ;;
   *)
-    AC_REPLACE_FUNCS(strptime localtime_r gmtime_r)
+    AC_REPLACE_FUNCS(strptime localtime_r gmtime_r strfmon)
     ;;
 esac
 

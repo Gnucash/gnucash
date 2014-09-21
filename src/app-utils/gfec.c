@@ -119,44 +119,6 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
 */
 
 static SCM
-gfec_file_helper(void *data)
-{
-    char *file = data;
-
-    return scm_c_primitive_load(file);
-}
-
-SCM
-gfec_eval_file(const char *file, gfec_error_handler error_handler)
-{
-    char *err_msg = NULL;
-    SCM result;
-
-    result = scm_internal_stack_catch(SCM_BOOL_T,
-                                      gfec_file_helper,
-                                      (void *) file,
-                                      gfec_catcher,
-                                      &err_msg);
-
-    if (err_msg != NULL)
-    {
-        if (error_handler)
-        {
-            gchar *full_msg = g_strdup_printf("Could not load file %s: %s",
-                                              file, err_msg);
-            error_handler(full_msg);
-            g_free(full_msg);
-        }
-
-        free(err_msg);
-
-        return SCM_UNDEFINED;
-    }
-
-    return result;
-}
-
-static SCM
 gfec_string_helper(void *data)
 {
     char *string = data;
@@ -185,6 +147,31 @@ gfec_eval_string(const char *str, gfec_error_handler error_handler)
 
         return SCM_UNDEFINED;
     }
+
+    return result;
+}
+
+SCM
+gfec_eval_file(const char *file, gfec_error_handler error_handler)
+{
+    char *err_msg = NULL;
+    gchar *contents = NULL;
+    GError *save_error = NULL;
+    SCM result;
+
+    if (!g_file_get_contents (file, &contents, NULL, &save_error))
+    {
+        gchar *full_msg = g_strdup_printf ("Couldn't read contents of %s.\nReason: %s", file, save_error->message);
+        error_handler(full_msg);
+
+        g_error_free (save_error);
+        g_free(full_msg);
+
+        return SCM_UNDEFINED;
+    }
+
+    result = gfec_eval_string (contents, error_handler);
+    g_free (contents);
 
     return result;
 }
