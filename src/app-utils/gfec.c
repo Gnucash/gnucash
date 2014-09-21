@@ -119,9 +119,42 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
 */
 
 static SCM
+gfec_string_helper(void *data)
+{
+    char *string = data;
+
+    return scm_c_eval_string(string);
+}
+
+SCM
+gfec_eval_string(const char *str, gfec_error_handler error_handler)
+{
+    char *err_msg = NULL;
+    SCM result;
+
+    result = scm_internal_stack_catch(SCM_BOOL_T,
+                                      gfec_string_helper,
+                                      (void *) str,
+                                      gfec_catcher,
+                                      &err_msg);
+
+    if (err_msg != NULL)
+    {
+        if (error_handler)
+            error_handler(err_msg);
+
+        free(err_msg);
+
+        return SCM_UNDEFINED;
+    }
+
+    return result;
+}
+
+static SCM
 gfec_file_helper(void *data)
 {
-    char *file = data;
+    char *string = data;
 
     return scm_c_primitive_load(file);
 }
@@ -147,39 +180,6 @@ gfec_eval_file(const char *file, gfec_error_handler error_handler)
             error_handler(full_msg);
             g_free(full_msg);
         }
-
-        free(err_msg);
-
-        return SCM_UNDEFINED;
-    }
-
-    return result;
-}
-
-static SCM
-gfec_string_helper(void *data)
-{
-    char *string = data;
-
-    return scm_c_eval_string(string);
-}
-
-SCM
-gfec_eval_string(const char *str, gfec_error_handler error_handler)
-{
-    char *err_msg = NULL;
-    SCM result;
-
-    result = scm_internal_stack_catch(SCM_BOOL_T,
-                                      gfec_string_helper,
-                                      (void *) str,
-                                      gfec_catcher,
-                                      &err_msg);
-
-    if (err_msg != NULL)
-    {
-        if (error_handler)
-            error_handler(err_msg);
 
         free(err_msg);
 
