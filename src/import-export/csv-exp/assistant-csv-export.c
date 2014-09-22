@@ -668,7 +668,13 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
 
     /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
+    {
+        GtkWidget *page = gtk_assistant_get_nth_page (assistant, num + 1);
+
+        /* Change the Account page from Content to Progress to make the back button work */
+        gtk_assistant_set_page_type (assistant, page, GTK_ASSISTANT_PAGE_PROGRESS);
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
+    }
     else
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
 
@@ -982,9 +988,6 @@ csv_export_assistant_create (CsvExportInfo *info)
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (csv_export_file_chooser_confirm_cb), info);
-
-
-
 
     box = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     gtk_box_pack_start (GTK_BOX (box), info->file_chooser, TRUE, TRUE, 6);
