@@ -22,7 +22,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Actifs</act:description>
@@ -34,7 +34,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Actifs actuels</act:description>
@@ -46,7 +46,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Compte chèque</act:description>
@@ -68,7 +68,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Compte d'épargne</act:description>
@@ -94,7 +94,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Liquidités</act:description>
@@ -116,7 +116,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Compte à recevoir</act:description>
@@ -138,7 +138,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Passif</act:description>
@@ -150,7 +150,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Carte de crédit</act:description>
@@ -172,7 +172,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Compte à payer</act:description>
@@ -194,7 +194,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Revenus</act:description>
@@ -206,7 +206,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Revenus d'intérêts</act:description>
@@ -218,7 +218,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Autres rentrées</act:description>
@@ -230,7 +230,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Dépenses remboursées</act:description>
@@ -252,7 +252,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Ventes</act:description>
@@ -274,7 +274,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Dépenses</act:description>
@@ -286,7 +286,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Ajustement</act:description>
@@ -298,7 +298,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Auto</act:description>
@@ -310,7 +310,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Frais</act:description>
@@ -322,7 +322,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Carburant</act:description>
@@ -334,7 +334,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Parking</act:description>
@@ -346,7 +346,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Réparations et entretien</act:description>
@@ -358,7 +358,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Frais bancaires</act:description>
@@ -370,7 +370,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Livres</act:description>
@@ -382,7 +382,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Remises</act:description>
@@ -404,7 +404,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Charité</act:description>
@@ -416,7 +416,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Dépréciation</act:description>
@@ -438,7 +438,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Repas</act:description>
@@ -450,7 +450,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Cotisations et abonnements</act:description>
@@ -472,7 +472,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Formation</act:description>
@@ -484,7 +484,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Location d'équipement</act:description>
@@ -506,7 +506,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Assurance</act:description>
@@ -518,7 +518,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Assurance incapacité</act:description>
@@ -540,7 +540,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Assurance responsabilité</act:description>
@@ -562,7 +562,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Personnel</act:description>
@@ -584,7 +584,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Licences et autorisations</act:description>
@@ -606,7 +606,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Divers</act:description>
@@ -618,7 +618,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Fournitures de bureau</act:description>
@@ -640,7 +640,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Services extérieurs</act:description>
@@ -662,7 +662,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Dépenses de personnel</act:description>
@@ -684,7 +684,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Poste et livraisons</act:description>
@@ -706,7 +706,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Impression et Reproduction</act:description>
@@ -728,7 +728,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Charges professionelles</act:description>
@@ -750,7 +750,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Comptabilité</act:description>
@@ -772,7 +772,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Charges légales</act:description>
@@ -794,7 +794,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Location</act:description>
@@ -816,7 +816,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Réparations</act:description>
@@ -838,7 +838,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Réparations des immeubles</act:description>
@@ -860,7 +860,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Réparations des ordinateurs</act:description>
@@ -882,7 +882,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Réparations des équipements</act:description>
@@ -904,7 +904,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Dépenses d'entretien</act:description>
@@ -926,7 +926,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Taxes</act:description>
@@ -938,7 +938,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Employeur SS/Med</act:description>
@@ -960,7 +960,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>SS/Med</act:description>
@@ -982,7 +982,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>URSSAF</act:description>
@@ -1004,7 +1004,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Federal</act:description>
@@ -1026,7 +1026,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Local</act:description>
@@ -1048,7 +1048,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Autres Taxes</act:description>
@@ -1060,7 +1060,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Immobilier</act:description>
@@ -1082,7 +1082,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>État/Département</act:description>
@@ -1094,7 +1094,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Voyages et divertissements</act:description>
@@ -1116,7 +1116,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Divertissements</act:description>
@@ -1138,7 +1138,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Repas</act:description>
@@ -1160,7 +1160,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Voyages</act:description>
@@ -1182,7 +1182,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Services</act:description>
@@ -1194,7 +1194,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Câble</act:description>
@@ -1216,7 +1216,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Téléphone portable</act:description>
@@ -1238,7 +1238,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Électricité</act:description>
@@ -1250,7 +1250,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Ordures ménagères</act:description>
@@ -1262,7 +1262,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gaz</act:description>
@@ -1274,7 +1274,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Internet</act:description>
@@ -1296,7 +1296,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Téléphone</act:description>
@@ -1318,7 +1318,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Eau</act:description>
@@ -1330,7 +1330,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Solde</act:description>
@@ -1342,7 +1342,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Soldes initiaux</act:description>
@@ -1354,7 +1354,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gains enregistrés</act:description>
