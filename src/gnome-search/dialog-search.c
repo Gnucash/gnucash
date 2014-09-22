@@ -1016,43 +1016,43 @@ close_handler (gpointer data)
 static const gchar *
 type_label_to_new_button(const gchar* type_label)
 {
-    if (g_strcmp0(type_label, "Bill") == 0)
+    if (g_strcmp0(type_label, _("Bill")) == 0)
     {
         return _("New Bill");
     }
-    else if (g_strcmp0(type_label, "Customer") == 0)
+    else if (g_strcmp0(type_label, _("Customer")) == 0)
     {
         return _("New Customer");
     }
-    else if (g_strcmp0(type_label, "Employee") == 0)
+    else if (g_strcmp0(type_label, _("Employee")) == 0)
     {
         return _("New Employee");
     }
-    else if (g_strcmp0(type_label, "Expense Voucher") == 0)
+    else if (g_strcmp0(type_label, _("Expense Voucher")) == 0)
     {
         return _("New Expense Voucher");
     }
-    else if (g_strcmp0(type_label, "Invoice") == 0)
+    else if (g_strcmp0(type_label, _("Invoice")) == 0)
     {
         return _("New Invoice");
     }
-    else if (g_strcmp0(type_label, "Job") == 0)
+    else if (g_strcmp0(type_label, _("Job")) == 0)
     {
         return _("New Job");
     }
-    else if (g_strcmp0(type_label, "Order") == 0)
+    else if (g_strcmp0(type_label, _("Order")) == 0)
     {
         return _("New Order");
     }
-    else if (g_strcmp0(type_label, "Transaction") == 0)
+    else if (g_strcmp0(type_label, _("Transaction")) == 0)
     {
         return _("New Transaction");
     }
-    else if (g_strcmp0(type_label, "Split") == 0)
+    else if (g_strcmp0(type_label, _("Split")) == 0)
     {
         return _("New Split");
     }
-    else if (g_strcmp0(type_label, "Vendor") == 0)
+    else if (g_strcmp0(type_label, _("Vendor")) == 0)
     {
         return _("New Vendor");
     }
