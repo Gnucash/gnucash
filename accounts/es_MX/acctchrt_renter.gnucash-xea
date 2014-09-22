@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Gastos de inquilino
@@ -7,7 +7,7 @@
       Gastos asociados a alquilar una casa
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deseará escoger este juego de cuentas si alquila una casa o
+    DesearÃ¡ escoger este juego de cuentas si alquila una casa o
       apartamento (alquiler, seguro de inquilino).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">

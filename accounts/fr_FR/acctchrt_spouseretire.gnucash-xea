@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Comptes d'épargne retraite du conjoint
+      Comptes d'Ã©pargne retraite du conjoint
     </gnc-act:title>
     <gnc-act:short-description>
-     Compte d'épargne retraite avec ses sous-comptes d'investissements relatifs du conjoint
+     Compte d'Ã©pargne retraite avec ses sous-comptes d'investissements relatifs du conjoint
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Vous devriez sélectionner cet ensemble de comptes si conjoint a des comptes d'épargne retraite (actions, obligations, fonds communs, fonds d'indices, intérêts, dividendes).
+    Vous devriez sÃ©lectionner cet ensemble de comptes si conjoint a des comptes d'Ã©pargne retraite (actions, obligations, fonds communs, fonds d'indices, intÃ©rÃªts, dividendes).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -77,14 +77,14 @@
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Marché d'indices</act:name>
+  <act:name>MarchÃ© d'indices</act:name>
   <act:id type="new">0ec1a5b402ceea10d95445a2b31c41a1</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Marché d'indices</act:description>
+  <act:description>MarchÃ© d'indices</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

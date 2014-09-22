@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Contas de Aposentadoria do Cônjuge
+      Contas de Aposentadoria do CÃ´njuge
     </gnc-act:title>
     <gnc-act:short-description>
-     Conta de aposentadoria com contas de investimentos relacionadas para o cônjuge
+     Conta de aposentadoria com contas de investimentos relacionadas para o cÃ´njuge
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas se tiver investimentos em nome do cônjuge (ações, obrigações, fundos de investimento, fundos de índices, juros, dividendos).
+    DeverÃ¡ selecionar este conjunto de contas se tiver investimentos em nome do cÃ´njuge (aÃ§Ãµes, obrigaÃ§Ãµes, fundos de investimento, fundos de Ã­ndices, juros, dividendos).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -38,53 +38,53 @@
   <act:parent type="new">96d9b17add59eb4c7edec7ed241af755</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aposentadoria do Cônjuge</act:name>
+  <act:name>Aposentadoria do CÃ´njuge</act:name>
   <act:id type="new">4426b41837adc284f96b291c31022844</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Aposentadoria do Cônjuge</act:description>
+  <act:description>Aposentadoria do CÃ´njuge</act:description>
   <act:slots>
     <slot>
       <slot:key>notas</slot:key>
-      <slot:value type="string">Fundo de pensões ou outra aposentadoria</slot:value>
+      <slot:value type="string">Fundo de pensÃµes ou outra aposentadoria</slot:value>
     </slot>
   </act:slots>
   <act:parent type="new">f46c9f777b1730c6b5f4a1faf9e31708</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Obrigações</act:name>
+  <act:name>ObrigaÃ§Ãµes</act:name>
   <act:id type="new">c8e7c315502547e51bfdd5a70b5cdd2e</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Obrigações</act:description>
+  <act:description>ObrigaÃ§Ãµes</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ações</act:name>
+  <act:name>AÃ§Ãµes</act:name>
   <act:id type="new">b8838eb77b9603e035e1f7b440d468ae</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Ações</act:description>
+  <act:description>AÃ§Ãµes</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Índice de Mercado</act:name>
+  <act:name>Ãndice de Mercado</act:name>
   <act:id type="new">0ec1a5b402ceea10d95445a2b31c41a1</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Índice de Mercado</act:description>
+  <act:description>Ãndice de Mercado</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
      Italian translation for GnuCash
      Copyright (C) 1998-2003 Free Software Foundation, Inc.
@@ -12,7 +12,7 @@
      L'insieme minimale di conti per usare GnuCash.
     </gnc-act:short-description>
     <gnc-act:long-description>
-     Utile per tenere il saldo delle proprie entrate e uscite. Successivamente, se ce ne sarà bisogno, sarà possibile incominciare a tenerne traccia in modo più dettagliato.
+     Utile per tenere il saldo delle proprie entrate e uscite. Successivamente, se ce ne sarÃ  bisogno, sarÃ  possibile incominciare a tenerne traccia in modo piÃ¹ dettagliato.
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -21,7 +21,7 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Attività</act:name>
+  <act:name>AttivitÃ </act:name>
   <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -29,11 +29,11 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Attività</act:description>
+  <act:description>AttivitÃ </act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Attività correnti</act:name>
+  <act:name>AttivitÃ  correnti</act:name>
   <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -41,7 +41,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Attività correnti</act:description>
+  <act:description>AttivitÃ  correnti</act:description>
   <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

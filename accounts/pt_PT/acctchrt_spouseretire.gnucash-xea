@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Contas de Reforma da Esposa
@@ -7,7 +7,7 @@
      Conta de reforma com contas de investimentos relacionadas para esposa
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Desejará seleccionar este conjunto de contas se tiver investimentos em nome da esposa (acções, obrigações, fundos de investimento, fundos de índices, juros, dividendos).
+    DesejarÃ¡ seleccionar este conjunto de contas se tiver investimentos em nome da esposa (acÃ§Ãµes, obrigaÃ§Ãµes, fundos de investimento, fundos de Ã­ndices, juros, dividendos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -49,42 +49,42 @@
   <act:slots>
     <slot>
       <slot:key>notas</slot:key>
-      <slot:value type="string">Fundo de pensões ou outra reforma</slot:value>
+      <slot:value type="string">Fundo de pensÃµes ou outra reforma</slot:value>
     </slot>
   </act:slots>
   <act:parent type="new">f46c9f777b1730c6b5f4a1faf9e31708</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Obrigação</act:name>
+  <act:name>ObrigaÃ§Ã£o</act:name>
   <act:id type="new">c8e7c315502547e51bfdd5a70b5cdd2e</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Obrigação</act:description>
+  <act:description>ObrigaÃ§Ã£o</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Acção</act:name>
+  <act:name>AcÃ§Ã£o</act:name>
   <act:id type="new">b8838eb77b9603e035e1f7b440d468ae</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Acção</act:description>
+  <act:description>AcÃ§Ã£o</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Índice de Mercado</act:name>
+  <act:name>Ãndice de Mercado</act:name>
   <act:id type="new">0ec1a5b402ceea10d95445a2b31c41a1</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Índice de Mercado</act:description>
+  <act:description>Ãndice de Mercado</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

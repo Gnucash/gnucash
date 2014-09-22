@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
      Conta de Investimentos
     </gnc-act:title>
     <gnc-act:short-description>
       Conta de corretagem com contas de investimentos relacionados
-        (ações, obrigações, fundos de investimento, fundos de índices, juros, dividendos)
+        (aÃ§Ãµes, obrigaÃ§Ãµes, fundos de investimento, fundos de Ã­ndices, juros, dividendos)
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas caso possua investimentos (ações, obrigações, fundos de investimento, fundos de índices, juros, dividendos).
+    DeverÃ¡ selecionar este conjunto de contas caso possua investimentos (aÃ§Ãµes, obrigaÃ§Ãµes, fundos de investimento, fundos de Ã­ndices, juros, dividendos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -50,36 +50,36 @@
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Obrigação</act:name>
+  <act:name>ObrigaÃ§Ã£o</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Obrigação</act:description>
+  <act:description>ObrigaÃ§Ã£o</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ação</act:name>
+  <act:name>AÃ§Ã£o</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Ação</act:description>
+  <act:description>AÃ§Ã£o</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Índice de Mercado</act:name>
+  <act:name>Ãndice de Mercado</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Índice de Mercado</act:description>
+  <act:description>Ãndice de Mercado</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -127,14 +127,14 @@
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Juros de Obigações</act:name>
+  <act:name>Juros de ObigaÃ§Ãµes</act:name>
   <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Juros de Obigações</act:description>
+  <act:description>Juros de ObigaÃ§Ãµes</act:description>
   <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -149,14 +149,14 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Comissões</act:name>
+  <act:name>ComissÃµes</act:name>
   <act:id type="new">77fdffddc79c662c93c482cefa5a4744</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Comissões</act:description>
+  <act:description>ComissÃµes</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
 </gnc:account>
 </gnc-account-example>
