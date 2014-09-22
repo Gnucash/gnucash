@@ -244,7 +244,7 @@ void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data )
 static
 void load_settings (CsvExportInfo *info)
 {
-    info->use_quotes = TRUE;
+    info->use_quotes = FALSE;
     info->separator_str = ",";
     info->file_name = NULL;
     info->starting_dir = NULL;
