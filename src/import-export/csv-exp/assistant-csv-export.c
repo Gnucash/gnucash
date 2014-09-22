@@ -668,13 +668,7 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
 
     /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
-    {
-        GtkWidget *page = gtk_assistant_get_nth_page (assistant, num + 1);
-
-        /* Change the Account page from Content to Progress to make the back button work */
-        gtk_assistant_set_page_type (assistant, page, GTK_ASSISTANT_PAGE_PROGRESS);
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
-    }
     else
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
 
@@ -690,10 +684,6 @@ csv_export_assistant_account_page_prepare (GtkAssistant *assistant,
     CsvExportInfo *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
-    /* If we are doing tree export, step over account select page */
-    if (info->export_type == XML_EXPORT_TREE)
-        gtk_assistant_set_current_page (assistant, num + 1 );
 
     /* Enable the Forward Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
@@ -771,31 +761,20 @@ void
 csv_export_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
                               gpointer user_data)
 {
-    gint currentpage = gtk_assistant_get_current_page(assistant);
+    CsvExportInfo *info = user_data;
 
-    switch (currentpage)
-    {
-    case 0:
-        /* Current page is Start page */
+    if (page == info->start_page)
         csv_export_assistant_start_page_prepare (assistant, user_data);
-        break;
-    case 1:
-        /* Current page is Account select page */
+    else if (page == info->account_page)
         csv_export_assistant_account_page_prepare (assistant, user_data);
-        break;
-    case 2:
-        /* Current page is file select page */
+    else if (page == info->file_page)
         csv_export_assistant_file_page_prepare (assistant, user_data);
-        break;
-    case 3:
-        /* Current page is Finish page */
+    else if (page == info->finish_label)
         csv_export_assistant_finish_page_prepare (assistant, user_data);
-        break;
-    case 4:
-        /* Current page is Summary page */
+    else if (page == info->summary_label)
         csv_export_assistant_summary_page_prepare (assistant, user_data);
-        break;
-    }
+    else
+        g_assert_not_reached();
 }
 
 
@@ -872,11 +851,17 @@ csv_export_assistant_create (CsvExportInfo *info)
     load_settings (info);
 
     /* Start Page */
+    info->start_page = GTK_WIDGET(gtk_builder_get_object(builder, "start_page"));
     info->start_label = GTK_WIDGET(gtk_builder_get_object(builder, "start_label"));
     info->custom_entry = GTK_WIDGET(gtk_builder_get_object(builder, "custom_entry"));
     gtk_widget_set_sensitive(info->custom_entry, FALSE);
 
     /* Account Page */
+    info->account_page = GTK_WIDGET(gtk_builder_get_object(builder, "account_page"));
+
+    if (info->export_type == XML_EXPORT_TREE)
+        gtk_widget_destroy (info->account_page);
+    else
     {
         GtkTreeView *tree_view;
         GtkTreeSelection *selection;
@@ -921,12 +906,8 @@ csv_export_assistant_create (CsvExportInfo *info)
                           G_CALLBACK  (csv_export_info_acct_type_cb), info);
         g_signal_connect (G_OBJECT (liab_eq_radio), "toggled",
                           G_CALLBACK  (csv_export_info_acct_type_cb), info);
-    }
 
-    /* select subaccounts button */
-    {
-        GtkWidget *button;
-
+        /* select subaccounts button */
         button = GTK_WIDGET(gtk_builder_get_object (builder, "select_subaccounts_button"));
         info->csva.select_button = button;
 
@@ -934,51 +915,52 @@ csv_export_assistant_create (CsvExportInfo *info)
                           G_CALLBACK  (csv_export_select_subaccounts_clicked_cb), info);
         g_signal_connect (G_OBJECT (info->csva.account_treeview), "cursor_changed",
                           G_CALLBACK  (csv_export_cursor_changed_cb), info);
+
+        /* Set the date info */
+        button = GTK_WIDGET(gtk_builder_get_object (builder, "show_range"));
+
+        /* Earliest and Latest in Book */
+        start_time = get_earliest_in_book (gnc_get_current_book());
+        end_time = gnc_time (NULL);
+
+        info->csvd.start_time = start_time;
+        info->csvd.end_time = end_time;
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+
+        table = GTK_WIDGET(gtk_builder_get_object (builder, "select_range_table"));
+        info->csvd.table = table;
+        gtk_widget_set_sensitive(GTK_WIDGET(table), FALSE);
+
+        info->csvd.start_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_choose"));
+        info->csvd.start_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_today"));
+        info->csvd.end_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_choose"));
+        info->csvd.end_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_today"));
+
+        /* Start date info */
+        info->csvd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
+        gtk_box_pack_start (GTK_BOX (hbox), info->csvd.start_date, TRUE, TRUE, 0);
+        gtk_widget_show (info->csvd.start_date);
+        gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.start_date), start_time);
+        g_signal_connect (G_OBJECT (info->csvd.start_date), "date-changed",
+                        G_CALLBACK (csv_export_date_changed_cb), info);
+
+        /* End date info */
+        info->csvd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
+        gtk_box_pack_start (GTK_BOX (hbox), info->csvd.end_date, TRUE, TRUE, 0);
+        gtk_widget_show (info->csvd.end_date);
+        gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.end_date), end_time);
+        g_signal_connect (G_OBJECT (info->csvd.end_date), "date-changed",
+                        G_CALLBACK (csv_export_date_changed_cb), info);
+
+        /* Load Accounts */
+        show_acct_type_accounts (info);
+        update_accounts_tree (info);
     }
 
-    /* Set the date info */
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_range"));
-
-    /* Earliest and Latest in Book */
-    start_time = get_earliest_in_book (gnc_get_current_book());
-    end_time = gnc_time (NULL);
-
-    info->csvd.start_time = start_time;
-    info->csvd.end_time = end_time;
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
-
-    table = GTK_WIDGET(gtk_builder_get_object (builder, "select_range_table"));
-    info->csvd.table = table;
-    gtk_widget_set_sensitive(GTK_WIDGET(table), FALSE);
-
-    info->csvd.start_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_choose"));
-    info->csvd.start_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_today"));
-    info->csvd.end_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_choose"));
-    info->csvd.end_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_today"));
-
-    /* Start date info */
-    info->csvd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), info->csvd.start_date, TRUE, TRUE, 0);
-    gtk_widget_show (info->csvd.start_date);
-    gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.start_date), start_time);
-    g_signal_connect (G_OBJECT (info->csvd.start_date), "date-changed",
-                      G_CALLBACK (csv_export_date_changed_cb), info);
-
-    /* End date info */
-    info->csvd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), info->csvd.end_date, TRUE, TRUE, 0);
-    gtk_widget_show (info->csvd.end_date);
-    gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.end_date), end_time);
-    g_signal_connect (G_OBJECT (info->csvd.end_date), "date-changed",
-                      G_CALLBACK (csv_export_date_changed_cb), info);
-
-    /* Load Accounts */
-    show_acct_type_accounts (info);
-    update_accounts_tree (info);
-
     /* File chooser Page */
+    info->file_page = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SAVE);
     button = gtk_button_new_from_stock(GTK_STOCK_OK);
     gtk_widget_set_size_request (button, 100, -1);
