@@ -786,7 +786,8 @@ gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
 
 static gboolean AccountTypeOkForPayments (GNCAccountType type)
 {
-    if (xaccAccountIsAssetLiabType(type))
+    if (xaccAccountIsAssetLiabType(type) ||
+        xaccAccountIsEquityType(type))
         return TRUE;
     else
         return FALSE;

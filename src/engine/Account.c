@@ -4048,12 +4048,24 @@ gboolean xaccAccountIsAssetLiabType(GNCAccountType t)
                 || xaccAccountTypesCompatible(ACCT_TYPE_LIABILITY, t));
     }
 }
+
 gboolean xaccAccountIsAPARType(GNCAccountType t)
 {
     switch (t)
     {
     case ACCT_TYPE_RECEIVABLE:
     case ACCT_TYPE_PAYABLE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+gboolean xaccAccountIsEquityType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_EQUITY:
         return TRUE;
     default:
         return FALSE;
