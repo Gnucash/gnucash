@@ -1173,7 +1173,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                   }
                 */
 
-                exchange_rate = gnc_numeric_zero();
+                exchange_rate = gnc_numeric_create (1, 1);
                 g_string_printf(exchange_rate_var_name, "%s -> %s",
                                 gnc_commodity_get_mnemonic(first_cmdty),
                                 gnc_commodity_get_mnemonic(split_cmdty));
