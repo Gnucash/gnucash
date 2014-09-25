@@ -38,6 +38,14 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+/* CSV spec requires CRLF line endings. Tweak the end-of-line string so this
+ * true for each platform */
+#ifdef G_OS_WIN32
+# define EOLSTR "\n"
+#else
+# define EOLSTR "\r\n"
+#endif
+
 /******************************************************************/
 
 /*******************************************************
@@ -144,19 +152,11 @@ void csv_tree_export (CsvExportInfo *info)
         }
 
         /* Header string, 'eol = end of line marker' */
-#ifdef G_OS_WIN32
         header = g_strconcat (end_sep, _("type"), mid_sep, _("full_name"), mid_sep, _("name"), mid_sep,
                                 _("code"), mid_sep, _("description"), mid_sep, _("color"), mid_sep,
                                 _("notes"), mid_sep, _("commoditym"), mid_sep, _("commodityn"), mid_sep,
                                 _("hidden"), mid_sep, _("tax"), mid_sep, _("place_holder"), mid_sep, _("#eol"),
-                                 end_sep, "\n", NULL);
-#else
-        header = g_strconcat (end_sep, _("type"), mid_sep, _("full_name"), mid_sep, _("name"), mid_sep,
-                                _("code"), mid_sep, _("description"), mid_sep, _("color"), mid_sep,
-                                _("notes"), mid_sep, _("commoditym"), mid_sep, _("commodityn"), mid_sep,
-                                _("hidden"), mid_sep, _("tax"), mid_sep, _("place_holder"), mid_sep, _("#eol"),
-                                 end_sep, "\r\n", NULL);
-#endif
+                                 end_sep, EOLSTR, NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */
@@ -236,11 +236,7 @@ void csv_tree_export (CsvExportInfo *info)
             g_free (part2);
             /* Place Holder / end of line marker */
             currentSel = xaccAccountGetPlaceholder (acc) ? "T" : "F" ;
-#ifdef G_OS_WIN32
-            part2 = g_strconcat (part1, currentSel, mid_sep, _("#eol"), end_sep, "\n", NULL);
-#else
-            part2 = g_strconcat (part1, currentSel, mid_sep, _("#eol"), end_sep, "\r\n", NULL);
-#endif
+            part2 = g_strconcat (part1, currentSel, mid_sep, _("#eol"), end_sep, EOLSTR, NULL);
             g_free (part1);
 
             DEBUG("Account String: %s", part2);

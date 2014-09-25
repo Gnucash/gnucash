@@ -42,6 +42,15 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+/* CSV spec requires CRLF line endings. Tweak the end-of-line string so this
+ * true for each platform */
+#ifdef G_OS_WIN32
+# define EOLSTR "\n"
+#else
+# define EOLSTR "\r\n"
+#endif
+
+
 /*******************************************************************/
 
 /*******************************************************
@@ -256,11 +265,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         g_free (part1);
 
         /* From Number Only */
-#ifdef G_OS_WIN32
-        part1 = g_strconcat (part2, "", mid_sep, "", mid_sep, "", end_sep, "\n", NULL);
-#else
-        part1 = g_strconcat (part2, "", mid_sep, "", mid_sep, "", end_sep, "\r\n", NULL);
-#endif
+        part1 = g_strconcat (part2, "", mid_sep, "", mid_sep, "", end_sep, EOLSTR, NULL);
         g_free (part2);
 
         /* Write to file */
@@ -350,17 +355,9 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             split_amount = xaccPrintAmount (xaccSplitGetSharePrice (t_split), gnc_split_amount_print_info (t_split, FALSE));
             str_temp = csv_txn_test_field_string (info, split_amount);
             if (xaccSplitGetAccount (t_split) == acc)
-#ifdef G_OS_WIN32
-                part2 = g_strconcat (part1,  str_temp, mid_sep, end_sep, "\n", NULL);
-#else
-                part2 = g_strconcat (part1,  str_temp, mid_sep, end_sep, "\r\n", NULL);
-#endif
+                part2 = g_strconcat (part1,  str_temp, mid_sep, end_sep, EOLSTR, NULL);
              else
-#ifdef G_OS_WIN32
-                part2 = g_strconcat (part1, mid_sep, str_temp, end_sep, "\n", NULL);
-#else
-                part2 = g_strconcat (part1, mid_sep, str_temp, end_sep, "\r\n", NULL);
-#endif
+                part2 = g_strconcat (part1, mid_sep, str_temp, end_sep, EOLSTR, NULL);
             g_free (str_temp);
             g_free (part1);
 
@@ -427,11 +424,7 @@ void csv_transactions_export (CsvExportInfo *info)
                                _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
                                _("To Num."), mid_sep, _("From Num."), mid_sep,
                                _("To Rate/Price"), mid_sep, _("From Rate/Price"),
-#ifdef G_OS_WIN32
-                               end_sep, "\n", NULL);
-#else
-                               end_sep, "\r\n", NULL);
-#endif
+                               end_sep, EOLSTR, NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */
