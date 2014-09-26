@@ -39,27 +39,38 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
-/* This helper macro takes a regexp match and fills the model */
-#define FILL_IN_HELPER(match_name,column) \
-             temp = g_match_info_fetch_named (match_info, match_name); \
-             if (temp) \
-             { \
-		g_strstrip (temp); \
-                if (g_str_has_prefix (temp, "\""))\
-                { \
-                    if (strlen (temp) >= 2) \
-                    { \
-		        toptail = g_strndup (temp + 1, strlen (temp)-2); \
-                        parts = g_strsplit (toptail, "\"\"", -1); \
-                        temp = g_strjoinv ("\"", parts); \
-                        g_strfreev (parts); \
-                        g_free (toptail); \
-                    } \
-                } \
-                gtk_list_store_set (store, &iter, column, temp, -1); \
-                g_free (temp); \
-             }
+/* This helper function takes a regexp match and fills the model */
+static void
+fill_model_with_match(GMatchInfo *match_info,
+               const gchar *match_name,
+               GtkListStore *store,
+               GtkTreeIter *iterptr,
+               gint column)
+{
+    gchar *temp;
 
+    if (!match_info || !match_name)
+        return;
+
+    temp = g_match_info_fetch_named (match_info, match_name);
+    if (temp)
+    {
+        g_strstrip (temp);
+        if (g_str_has_prefix (temp, "\""))
+        {
+            if (strlen (temp) >= 2)
+            {
+                gchar *toptail = g_strndup (temp + 1, strlen (temp)-2);
+                gchar **parts = g_strsplit (toptail, "\"\"", -1);
+                temp = g_strjoinv ("\"", parts);
+                g_strfreev (parts);
+                g_free (toptail);
+            }
+        }
+        gtk_list_store_set (store, iterptr, column, temp, -1);
+        g_free (temp);
+     }
+}
 
 /*******************************************************
  * csv_import_read_file
@@ -72,8 +83,7 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
 {
     FILE       *f;
     char       *line;
-    gchar      *line_utf8, *temp, *toptail;
-    gchar      **parts;
+    gchar      *line_utf8;
     gchar      *end1, *end2;
     GMatchInfo *match_info;
     GError     *err;
@@ -177,18 +187,18 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
             match_found = TRUE;
             // fill in the values
             gtk_list_store_append (store, &iter);
-            FILL_IN_HELPER ("type", TYPE);
-            FILL_IN_HELPER ("full_name", FULL_NAME);
-            FILL_IN_HELPER ("name", NAME);
-            FILL_IN_HELPER ("code", CODE);
-            FILL_IN_HELPER ("description", DESCRIPTION);
-            FILL_IN_HELPER ("color", COLOR);
-            FILL_IN_HELPER ("notes", NOTES);
-            FILL_IN_HELPER ("commoditym", COMMODITYM);
-            FILL_IN_HELPER ("commodityn", COMMODITYN);
-            FILL_IN_HELPER ("hidden", HIDDEN);
-            FILL_IN_HELPER ("tax", TAX);
-            FILL_IN_HELPER ("place_holder", PLACE_HOLDER);
+            fill_model_with_match (match_info, "type", store, &iter, TYPE);
+            fill_model_with_match (match_info, "full_name", store, &iter, FULL_NAME);
+            fill_model_with_match (match_info, "name", store, &iter, NAME);
+            fill_model_with_match (match_info, "code", store, &iter, CODE);
+            fill_model_with_match (match_info, "description", store, &iter, DESCRIPTION);
+            fill_model_with_match (match_info, "color", store, &iter, COLOR);
+            fill_model_with_match (match_info, "notes", store, &iter, NOTES);
+            fill_model_with_match (match_info, "commoditym", store, &iter, COMMODITYM);
+            fill_model_with_match (match_info, "commodityn", store, &iter, COMMODITYN);
+            fill_model_with_match (match_info, "hidden", store, &iter, HIDDEN);
+            fill_model_with_match (match_info, "tax", store, &iter, TAX);
+            fill_model_with_match (match_info, "place_holder", store, &iter, PLACE_HOLDER);
             gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
         }
 
