@@ -112,6 +112,21 @@ static gchar *mnemonic_escape (const gchar *source)
     return dest;
 }
 
+static
+void create_regex (GString regex_str, const gchar *sep)
+{
+    if (!sep) return;
+
+    g_string_printf (regex_str,
+            "^(?<type>[^%s]*)%s?(?<full_name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s\
+             ?(?<code>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<description>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<color>[^%s]*)%s\
+             ?(?<notes>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s\
+             ?(?<hidden>[^%s]*)%s?(?<tax>[^%s]*)%s?(?<place_holder>[^%s]*)%s(?<endofline>[^%s]*)$",
+            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep,
+            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep);
+
+}
+
 /*************************************************************************/
 
 /**************************************************
@@ -216,6 +231,7 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
     CsvImportInfo *info = user_data;
     const gchar *name;
     gchar *temp;
+    gchar *sep = NULL;
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
     {
@@ -224,24 +240,14 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
     }
 
     name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
-
     if (g_strcmp0 (name, "radio_semi") == 0)
-        g_string_assign (info->regexp, "^(?<type>[^;]*);?(?<full_name>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<name>\"(?:[^\"]|\"\")*\"|[^;]*);\
-	?(?<code>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<description>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<color>[^;]*);\
-	?(?<notes>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^;]*);?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^;]*);\
-	?(?<hidden>[^;]*);?(?<tax>[^;]*);?(?<place_holder>[^;]*);(?<endofline>[^;]*)$");
+        sep = ";";
+    else if (g_strcmp0 (name, "radio_colon") == 0)
+        sep = ":";
+    else
+        sep = ","; /* Use as default as well */
 
-    if (g_strcmp0 (name, "radio_colon") == 0)
-        g_string_assign (info->regexp, "^(?<type>[^:]*):?(?<full_name>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<name>\"(?:[^\"]|\"\")*\"|[^:]*):\
-	?(?<code>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<description>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<color>[^:]*):\
-	?(?<notes>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^:]*):?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^:]*):\
-	?(?<hidden>[^:]*):?(?<tax>[^:]*):?(?<place_holder>[^:]*):(?<endofline>[^:]*)$");
-
-    if (g_strcmp0 (name, "radio_comma") == 0)
-        g_string_assign (info->regexp, "^(?<type>[^,]*),?(?<full_name>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<name>\"(?:[^\"]|\"\")*\"|[^,]*),\
-	?(?<code>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<description>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<color>[^,]*),\
-	?(?<notes>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^,]*),\
-	?(?<hidden>[^,]*),?(?<tax>[^,]*),?(?<place_holder>[^,]*),(?<endofline>[^,]*)$");
+    create_regex (info->regexp, sep);
 
     if (g_strcmp0 (name, "radio_custom") == 0)
     {
@@ -616,10 +622,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
 
     /* Comma Separated file default */
-    info->regexp = g_string_new ( "^(?<type>[^,]*),?(?<full_name>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<name>\"(?:[^\"]|\"\")*\"|[^,]*),\
-	?(?<code>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<description>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<color>[^,]*),\
-	?(?<notes>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^,]*),?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^,]*),\
-	?(?<hidden>[^,]*),?(?<tax>[^,]*),?(?<place_holder>[^,]*),(?<endofline>[^,]*)$");
+    create_regex (info->regexp, ",");
 
     /* create model and bind to view */
     info->store = gtk_list_store_new (N_COLUMNS,
