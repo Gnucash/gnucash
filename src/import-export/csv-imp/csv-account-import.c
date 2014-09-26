@@ -81,30 +81,29 @@ csv_import_result
 csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
                       GtkListStore *store, guint max_rows)
 {
-    FILE       *f;
-    char       *line;
-    gchar      *line_utf8;
-    gchar      *end1, *end2;
-    GMatchInfo *match_info;
+    gchar      *locale_cont, *contents;
+    GMatchInfo *match_info = NULL;
+    GRegex     *regexpat = NULL;
     GError     *err;
-    GRegex     *regexpat;
-    int         row = 0;
-    gboolean match_found = FALSE;
+    gint       row = 0;
+    gboolean   match_found = FALSE;
 
     // model
     GtkTreeIter iter;
 
-    f = g_fopen (filename, "rt");
-    if (!f)
+    if (!g_file_get_contents (filename, &locale_cont, NULL, NULL))
     {
         //gnc_error_dialog( 0, _("File %s cannot be opened."), filename );
         return RESULT_OPEN_FAILED;
     }
 
+    contents = g_locale_to_utf8 (locale_cont, -1, NULL, NULL, NULL);
+    g_free (locale_cont);
+
     // compile the regular expression and check for errors
     err = NULL;
     regexpat =
-        g_regex_new (parser_regexp, G_REGEX_EXTENDED | G_REGEX_OPTIMIZE | G_REGEX_DUPNAMES, 0, &err);
+        g_regex_new (parser_regexp, G_REGEX_OPTIMIZE, 0, &err);
     if (err != NULL)
     {
         GtkWidget *dialog;
@@ -113,7 +112,6 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         errmsg = g_strdup_printf (_("Error in regular expression '%s':\n%s"),
                                   parser_regexp, err->message);
         g_error_free (err);
-        err = NULL;
 
         dialog = gtk_message_dialog_new (NULL,
                                          GTK_DIALOG_MODAL,
@@ -122,100 +120,47 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
         g_free (errmsg);
-        errmsg = 0;
+        g_free (contents);
 
-        fclose (f);
         return RESULT_ERROR_IN_REGEXP;
     }
 
-    /* Setup the two different line endings */
-#ifdef G_OS_WIN32
-    end1 = g_strconcat (_("#eol"),"\"\n", NULL);
-    end2 = g_strconcat (_("#eol"),"\n", NULL);
-#else
-    end1 = g_strconcat (_("#eol"),"\"\r\n", NULL);
-    end2 = g_strconcat (_("#eol"),"\r\n", NULL);
-#endif
-
-    // start the import
-#define buffer_size 1000
-    line = g_malloc0 (buffer_size);
-    while (!feof (f))
+    g_regex_match (regexpat, contents, 0, &match_info);
+    while (g_match_info_matches (match_info))
     {
-        gchar  *currentline = NULL;
-        int l;
+        match_found = TRUE;
+        // fill in the values
+        gtk_list_store_append (store, &iter);
+        fill_model_with_match (match_info, "type", store, &iter, TYPE);
+        fill_model_with_match (match_info, "full_name", store, &iter, FULL_NAME);
+        fill_model_with_match (match_info, "name", store, &iter, NAME);
+        fill_model_with_match (match_info, "code", store, &iter, CODE);
+        fill_model_with_match (match_info, "description", store, &iter, DESCRIPTION);
+        fill_model_with_match (match_info, "color", store, &iter, COLOR);
+        fill_model_with_match (match_info, "notes", store, &iter, NOTES);
+        fill_model_with_match (match_info, "commoditym", store, &iter, COMMODITYM);
+        fill_model_with_match (match_info, "commodityn", store, &iter, COMMODITYN);
+        fill_model_with_match (match_info, "hidden", store, &iter, HIDDEN);
+        fill_model_with_match (match_info, "tax", store, &iter, TAX);
+        fill_model_with_match (match_info, "place_holder", store, &iter, PLACE_HOLDER);
+        gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
+
         row++;
         if (row == max_rows)
             break;
-
-        // read one line
-        if (!fgets (line, buffer_size, f))
-            break; // eof
-
-        currentline = g_strdup (line);
-
-        while (!(g_str_has_suffix (line, end1) || g_str_has_suffix (line, end2)))
-        {
-            // read next line
-            if (fgets (line, buffer_size, f))
-            {
-                gchar *temp_str = NULL;
-                temp_str = g_strconcat (currentline, line, NULL);
-                g_free (currentline);
-                currentline = g_strdup (temp_str);
-                g_free (temp_str);
-            }
-            else
-                break; // eof
-         }
-
-        // now strip the '\r\n' from the end of the line
-        l = strlen (currentline);
-        if ((l > 0) && (currentline[l - 1] == '\n'))
-            currentline[l - 1] = 0;
-
-        if ((l > 0) && (currentline[l - 2] == '\r'))
-            currentline[l - 2] = 0;
-
-        // convert line from locale into utf8
-        line_utf8 = g_locale_to_utf8 (currentline, -1, NULL, NULL, NULL);
-
-        // parse the line
-        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not always set -> g_match_info_free will segfault
-        if (g_regex_match (regexpat, line_utf8, 0, &match_info))
-        {
-            match_found = TRUE;
-            // fill in the values
-            gtk_list_store_append (store, &iter);
-            fill_model_with_match (match_info, "type", store, &iter, TYPE);
-            fill_model_with_match (match_info, "full_name", store, &iter, FULL_NAME);
-            fill_model_with_match (match_info, "name", store, &iter, NAME);
-            fill_model_with_match (match_info, "code", store, &iter, CODE);
-            fill_model_with_match (match_info, "description", store, &iter, DESCRIPTION);
-            fill_model_with_match (match_info, "color", store, &iter, COLOR);
-            fill_model_with_match (match_info, "notes", store, &iter, NOTES);
-            fill_model_with_match (match_info, "commoditym", store, &iter, COMMODITYM);
-            fill_model_with_match (match_info, "commodityn", store, &iter, COMMODITYN);
-            fill_model_with_match (match_info, "hidden", store, &iter, HIDDEN);
-            fill_model_with_match (match_info, "tax", store, &iter, TAX);
-            fill_model_with_match (match_info, "place_holder", store, &iter, PLACE_HOLDER);
-            gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
-        }
-
-        g_free (currentline);
-        g_match_info_free (match_info);
-        match_info = 0;
-        g_free (line_utf8);
-        line_utf8 = 0;
+        g_match_info_next (match_info, &err);
     }
-    g_free (end1);
-    g_free (end2);
-    g_free (line);
-    line = 0;
 
+    g_match_info_free (match_info);
     g_regex_unref (regexpat);
-    regexpat = 0;
-    fclose (f);
+    g_free (contents);
+
+    if (err != NULL)
+    {
+        g_printerr ("Error while matching: %s\n", err->message);
+        g_error_free (err);
+    }
+
     if (match_found == TRUE)
         return MATCH_FOUND;
     else

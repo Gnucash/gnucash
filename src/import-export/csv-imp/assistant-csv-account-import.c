@@ -113,17 +113,25 @@ static gchar *mnemonic_escape (const gchar *source)
 }
 
 static
-void create_regex (GString regex_str, const gchar *sep)
+void create_regex (GString *regex_str, const gchar *sep)
 {
     if (!sep) return;
 
     g_string_printf (regex_str,
-            "^(?<type>[^%s]*)%s?(?<full_name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s\
-             ?(?<code>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<description>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<color>[^%s]*)%s\
-             ?(?<notes>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s\
-             ?(?<hidden>[^%s]*)%s?(?<tax>[^%s]*)%s?(?<place_holder>[^%s]*)%s(?<endofline>[^%s]*)$",
-            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep,
-            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep);
+            "\\G(?<type>[^%s]*)%s"
+            "(?<full_name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<code>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?"
+            "(?<description>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<color>[^%s]*)%s"
+            "(?<notes>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<hidden>[^%s]*)%s"
+            "(?<tax>[^%s]*)%s"
+            "(?<place_holder>[^%s[:cntrl:]]*)(?:\\R*)",
+            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep,
+            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep);
 
 }
 
@@ -622,6 +630,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
 
     /* Comma Separated file default */
+    info->regexp = g_string_new ("");
     create_regex (info->regexp, ",");
 
     /* create model and bind to view */
