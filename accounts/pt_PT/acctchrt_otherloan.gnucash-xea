@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Outros Empréstimos       
+      Outros EmprÃ©stimos       
     </gnc-act:title>
     <gnc-act:short-description>
-      Contas para controlar outros empréstimos e juros associados
+      Contas para controlar outros emprÃ©stimos e juros associados
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Desejará seleccionar este conjunto de contas se tiver outro empréstimo para além do crédito à habitação (outro empréstimo, juros do outro empréstimo).
+    DesejarÃ¡ seleccionar este conjunto de contas se tiver outro emprÃ©stimo para alÃ©m do crÃ©dito Ã  habitaÃ§Ã£o (outro emprÃ©stimo, juros do outro emprÃ©stimo).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -27,25 +27,25 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Empréstimos</act:name>
+  <act:name>EmprÃ©stimos</act:name>
   <act:id type="new">b5624a9d1a1b797b87b815774faccfe4</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
   </act:commodity>
-  <act:description>Empréstimos</act:description>
+  <act:description>EmprÃ©stimos</act:description>
   <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Outros Empréstimo</act:name>
+  <act:name>Outros EmprÃ©stimo</act:name>
   <act:id type="new">eb79670a4c9b0faab87485b7b2a4abe4</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
   </act:commodity>
-  <act:description>Outros Empréstimo</act:description>
+  <act:description>Outros EmprÃ©stimo</act:description>
   <act:parent type="new">b5624a9d1a1b797b87b815774faccfe4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Compte de commerce de devises/monnaies
     </gnc-act:title>
     <gnc-act:short-description>
-      Compte pour le commerce et la conversion d'une monnaie étrangère
+      Compte pour le commerce et la conversion d'une monnaie Ã©trangÃ¨re
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Vous devriez sélectionner cet ensemble de comptes si vous convertissez des monnaies étrangères.
+    Vous devriez sÃ©lectionner cet ensemble de comptes si vous convertissez des monnaies Ã©trangÃ¨res.
 
     Note: compte actuellement en DEM; editer le compte pour changer la monnaie.
   </gnc-act:long-description>    
@@ -23,7 +23,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Actif</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -34,20 +34,20 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Investissements</act:description>
   <act:parent type="new">b3c65be1c5d163746ddc0c506f3f4619</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Marché monétaire</act:name>
+  <act:name>MarchÃ© monÃ©taire</act:name>
   <act:id type="new">9206632307989cb5b244ad5da5d3131b</act:id>
   <act:type>CURRENCY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DEM</cmdty:id>
   </act:commodity>
-  <act:description>Marché monétaire</act:description>
+  <act:description>MarchÃ© monÃ©taire</act:description>
   <act:parent type="new">d9c796b35784533aee4309e28a3cbfc5</act:parent>
 </gnc:account>
 </gnc-account-example>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
      Italian translation for GnuCash
      Copyright (C) 1998-2003 Free Software Foundation, Inc.
@@ -12,10 +12,10 @@
       Conti comuni
     </gnc-act:title>
     <gnc-act:short-description>
-      Un insieme basilare comprendente i conti più comunemente usati
+      Un insieme basilare comprendente i conti piÃ¹ comunemente usati
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Questo insieme di conti è selezionato dalla maggior parte degli utenti. L'insieme comprende i conti usati più comunemente (conto corrente, di risparmio, contanti, carta di credito, entrate, uscite comuni).
+    Questo insieme di conti Ã¨ selezionato dalla maggior parte degli utenti. L'insieme comprende i conti usati piÃ¹ comunemente (conto corrente, di risparmio, contanti, carta di credito, entrate, uscite comuni).
   </gnc-act:long-description>
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
@@ -25,25 +25,25 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Attività</act:name>
+  <act:name>AttivitÃ </act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Attività</act:description>
+  <act:description>AttivitÃ </act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Attività correnti</act:name>
+  <act:name>AttivitÃ  correnti</act:name>
   <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Attività correnti</act:description>
+  <act:description>AttivitÃ  correnti</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -69,25 +69,25 @@
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Liquidità</act:name>
+  <act:name>LiquiditÃ </act:name>
   <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Liquidità</act:description>
+  <act:description>LiquiditÃ </act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Passività</act:name>
+  <act:name>PassivitÃ </act:name>
   <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Passività</act:description>
+  <act:description>PassivitÃ </act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -564,14 +564,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Prima necessità</act:name>
+  <act:name>Prima necessitÃ </act:name>
   <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Generi di prima necessità (cibo, vestiti, etc.)</act:description>
+  <act:description>Generi di prima necessitÃ  (cibo, vestiti, etc.)</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -652,14 +652,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Elettricità</act:name>
+  <act:name>ElettricitÃ </act:name>
   <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Elettricità</act:description>
+  <act:description>ElettricitÃ </act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

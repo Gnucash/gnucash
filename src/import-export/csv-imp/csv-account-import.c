@@ -39,16 +39,38 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
-/* This helper macro takes a regexp match and fills the model */
-#define FILL_IN_HELPER(match_name,column) \
-            temp = g_match_info_fetch_named (match_info, match_name); \
-            if (temp) \
-            { \
-		g_strstrip( temp ); \
-                gtk_list_store_set (store, &iter, column, temp, -1); \
-                g_free (temp); \
-            }
+/* This helper function takes a regexp match and fills the model */
+static void
+fill_model_with_match(GMatchInfo *match_info,
+               const gchar *match_name,
+               GtkListStore *store,
+               GtkTreeIter *iterptr,
+               gint column)
+{
+    gchar *temp;
 
+    if (!match_info || !match_name)
+        return;
+
+    temp = g_match_info_fetch_named (match_info, match_name);
+    if (temp)
+    {
+        g_strstrip (temp);
+        if (g_str_has_prefix (temp, "\""))
+        {
+            if (strlen (temp) >= 2)
+            {
+                gchar *toptail = g_strndup (temp + 1, strlen (temp)-2);
+                gchar **parts = g_strsplit (toptail, "\"\"", -1);
+                temp = g_strjoinv ("\"", parts);
+                g_strfreev (parts);
+                g_free (toptail);
+            }
+        }
+        gtk_list_store_set (store, iterptr, column, temp, -1);
+        g_free (temp);
+     }
+}
 
 /*******************************************************
  * csv_import_read_file
@@ -57,31 +79,31 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
  *******************************************************/
 csv_import_result
 csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
-                      GtkListStore *store, guint max_rows )
+                      GtkListStore *store, guint max_rows)
 {
-    FILE       *f;
-    char       *line;
-    gchar      *line_utf8, *temp;
-    GMatchInfo *match_info;
+    gchar      *locale_cont, *contents;
+    GMatchInfo *match_info = NULL;
+    GRegex     *regexpat = NULL;
     GError     *err;
-    GRegex     *regexpat;
-    int         row = 0;
-    gboolean match_found = FALSE;
+    gint       row = 0;
+    gboolean   match_found = FALSE;
 
     // model
     GtkTreeIter iter;
 
-    f = g_fopen (filename, "rt");
-    if (!f)
+    if (!g_file_get_contents (filename, &locale_cont, NULL, NULL))
     {
         //gnc_error_dialog( 0, _("File %s cannot be opened."), filename );
         return RESULT_OPEN_FAILED;
     }
 
+    contents = g_locale_to_utf8 (locale_cont, -1, NULL, NULL, NULL);
+    g_free (locale_cont);
+
     // compile the regular expression and check for errors
     err = NULL;
     regexpat =
-        g_regex_new (parser_regexp, G_REGEX_EXTENDED | G_REGEX_OPTIMIZE | G_REGEX_DUPNAMES, 0, &err);
+        g_regex_new (parser_regexp, G_REGEX_OPTIMIZE, 0, &err);
     if (err != NULL)
     {
         GtkWidget *dialog;
@@ -90,7 +112,6 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         errmsg = g_strdup_printf (_("Error in regular expression '%s':\n%s"),
                                   parser_regexp, err->message);
         g_error_free (err);
-        err = NULL;
 
         dialog = gtk_message_dialog_new (NULL,
                                          GTK_DIALOG_MODAL,
@@ -99,65 +120,47 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
         g_free (errmsg);
-        errmsg = 0;
+        g_free (contents);
 
-        fclose (f);
         return RESULT_ERROR_IN_REGEXP;
     }
 
-    // start the import
-#define buffer_size 1000
-    line = g_malloc0 (buffer_size);
-    while (!feof (f))
+    g_regex_match (regexpat, contents, 0, &match_info);
+    while (g_match_info_matches (match_info))
     {
-        int l;
+        match_found = TRUE;
+        // fill in the values
+        gtk_list_store_append (store, &iter);
+        fill_model_with_match (match_info, "type", store, &iter, TYPE);
+        fill_model_with_match (match_info, "full_name", store, &iter, FULL_NAME);
+        fill_model_with_match (match_info, "name", store, &iter, NAME);
+        fill_model_with_match (match_info, "code", store, &iter, CODE);
+        fill_model_with_match (match_info, "description", store, &iter, DESCRIPTION);
+        fill_model_with_match (match_info, "color", store, &iter, COLOR);
+        fill_model_with_match (match_info, "notes", store, &iter, NOTES);
+        fill_model_with_match (match_info, "commoditym", store, &iter, COMMODITYM);
+        fill_model_with_match (match_info, "commodityn", store, &iter, COMMODITYN);
+        fill_model_with_match (match_info, "hidden", store, &iter, HIDDEN);
+        fill_model_with_match (match_info, "tax", store, &iter, TAX);
+        fill_model_with_match (match_info, "place_holder", store, &iter, PLACE_HOLDER);
+        gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
+
         row++;
         if (row == max_rows)
             break;
-        // read one line
-        if (!fgets (line, buffer_size, f))
-            break;			// eof
-        // now strip the '\n' from the end of the line
-        l = strlen (line);
-        if ((l > 0) && (line[l - 1] == '\n'))
-            line[l - 1] = 0;
-
-        // convert line from locale into utf8
-        line_utf8 = g_locale_to_utf8 (line, -1, NULL, NULL, NULL);
-
-        // parse the line
-        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not always set -> g_match_info_free will segfault
-        if (g_regex_match (regexpat, line_utf8, 0, &match_info))
-        {
-            match_found = TRUE;
-            // fill in the values
-            gtk_list_store_append (store, &iter);
-            FILL_IN_HELPER ("type", TYPE);
-            FILL_IN_HELPER ("full_name", FULL_NAME);
-            FILL_IN_HELPER ("name", NAME);
-            FILL_IN_HELPER ("code", CODE);
-            FILL_IN_HELPER ("description", DESCRIPTION);
-            FILL_IN_HELPER ("color", COLOR);
-            FILL_IN_HELPER ("notes", NOTES);
-            FILL_IN_HELPER ("commoditym", COMMODITYM);
-            FILL_IN_HELPER ("commodityn", COMMODITYN);
-            FILL_IN_HELPER ("hidden", HIDDEN);
-            FILL_IN_HELPER ("tax", TAX);
-            FILL_IN_HELPER ("place_holder", PLACE_HOLDER);
-            gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
-        }
-
-        g_match_info_free (match_info);
-        match_info = 0;
-        g_free (line_utf8);
-        line_utf8 = 0;
+        g_match_info_next (match_info, &err);
     }
-    g_free (line);
-    line = 0;
 
+    g_match_info_free (match_info);
     g_regex_unref (regexpat);
-    regexpat = 0;
-    fclose (f);
+    g_free (contents);
+
+    if (err != NULL)
+    {
+        g_printerr ("Error while matching: %s\n", err->message);
+        g_error_free (err);
+    }
+
     if (match_found == TRUE)
         return MATCH_FOUND;
     else
@@ -184,14 +187,14 @@ csv_account_import (CsvImportInfo *info)
 
     ENTER("");
     book = gnc_get_current_book();
-    root = gnc_book_get_root_account(book);
+    root = gnc_book_get_root_account (book);
 
     info->num_new = 0;
     info->num_updates = 0;
 
     /* Move to the first valid entry in store */
     row = info->header_rows;
-    valid = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(info->store), &iter, NULL, row );
+    valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(info->store), &iter, NULL, row );
     while (valid)
     {
         /* Walk through the list, reading each row */
@@ -210,13 +213,13 @@ csv_account_import (CsvImportInfo *info)
                             PLACE_HOLDER, &place_holder, -1);
 
         /* See if we can find the account by full name */
-        acc = gnc_account_lookup_by_full_name(root, full_name);
+        acc = gnc_account_lookup_by_full_name (root, full_name);
 
         DEBUG("Row is %u and full name is %s", row, full_name);
         if (acc == NULL)
         {
             /* Account does not exist, Lets try and add it */
-            if (g_strrstr(full_name, name) != NULL)
+            if (g_strrstr (full_name, name) != NULL)
             {
                 gint string_position;
                 gnc_commodity *commodity;
@@ -224,21 +227,21 @@ csv_account_import (CsvImportInfo *info)
                 gchar *full_parent;
 
                 /* Get full name of parent account, allow for separator */
-                string_position = strlen(full_name) - strlen(name) - 1;
+                string_position = strlen (full_name) - strlen (name) - 1;
 
                 if (string_position == -1)
-                    full_parent = g_strdup(full_name);
+                    full_parent = g_strdup (full_name);
                 else
-                    full_parent = g_strndup(full_name, string_position);
+                    full_parent = g_strndup (full_name, string_position);
 
-                parent = gnc_account_lookup_by_full_name(root, full_parent);
+                parent = gnc_account_lookup_by_full_name (root, full_parent);
                 g_free (full_parent);
 
                 if (parent == NULL && string_position != -1)
                 {
-                    gchar *text = g_strdup_printf( gettext("Row %u, path to account %s not found, added as top level\n"), row + 1, name );
-                    info->error = g_strconcat(info->error, text, NULL);
-                    g_free(text);
+                    gchar *text = g_strdup_printf (gettext("Row %u, path to account %s not found, added as top level\n"), row + 1, name);
+                    info->error = g_strconcat (info->error, text, NULL);
+                    g_free (text);
                     PINFO("Unable to import Row %u for account %s, path not found!", row, name);
                 }
 
@@ -247,7 +250,7 @@ csv_account_import (CsvImportInfo *info)
 
                 /* Do we have a valid commodity */
                 table = gnc_commodity_table_get_table (book);
-                commodity = gnc_commodity_table_lookup( table, commodityn, commoditym);
+                commodity = gnc_commodity_table_lookup (table, commodityn, commoditym);
 
                 if (commodity)
                 {
@@ -257,27 +260,27 @@ csv_account_import (CsvImportInfo *info)
                     acc = xaccMallocAccount (book);
                     xaccAccountBeginEdit (acc);
                     xaccAccountSetName (acc, name);
-                    xaccAccountSetType(acc, xaccAccountStringToEnum (type));
+                    xaccAccountSetType (acc, xaccAccountStringToEnum (type));
 
-                    if (!g_strcmp0(notes, "") == 0)
+                    if (!g_strcmp0 (notes, "") == 0)
                         xaccAccountSetNotes (acc, notes);
-                    if (!g_strcmp0(description, "") == 0)
+                    if (!g_strcmp0 (description, "") == 0)
                         xaccAccountSetDescription (acc, description);
-                    if (!g_strcmp0(code, "") == 0)
+                    if (!g_strcmp0 (code, "") == 0)
                         xaccAccountSetCode (acc, code);
 
-                    if (!g_strcmp0(color, "") == 0)
+                    if (!g_strcmp0 (color, "") == 0)
                     {
-                        if (gdk_color_parse(color, &testcolor))
+                        if (gdk_color_parse (color, &testcolor))
                             xaccAccountSetColor (acc, color);
                     }
 
-                    if (g_strcmp0(hidden, "T") == 0)
+                    if (g_strcmp0 (hidden, "T") == 0)
                         xaccAccountSetHidden (acc, TRUE);
-                    if (g_strcmp0(place_holder, "T") == 0)
+                    if (g_strcmp0 (place_holder, "T") == 0)
                         xaccAccountSetPlaceholder (acc, TRUE);
 
-                    xaccAccountSetCommodity(acc, commodity);
+                    xaccAccountSetCommodity (acc, commodity);
                     xaccAccountBeginEdit (parent);
                     gnc_account_append_child (parent, acc);
                     xaccAccountCommitEdit (parent);
@@ -286,18 +289,18 @@ csv_account_import (CsvImportInfo *info)
                 }
                 else
                 {
-                    gchar *err_string = g_strdup_printf( gettext("Row %u, commodity %s / %s not found\n"), row + 1,
+                    gchar *err_string = g_strdup_printf (gettext("Row %u, commodity %s / %s not found\n"), row + 1,
                                                          commoditym, commodityn);
-                    info->error = g_strconcat(info->error, err_string, NULL);
-                    g_free(err_string);
+                    info->error = g_strconcat (info->error, err_string, NULL);
+                    g_free (err_string);
                     PINFO("Unable to import Row %u for account %s, commodity!", row, full_name);
                 }
             }
             else
             {
-                gchar *err_string = g_strdup_printf( gettext("Row %u, account %s not in %s\n"), row + 1, name, full_name);
-                info->error = g_strconcat(info->error, err_string, NULL);
-                g_free(err_string);
+                gchar *err_string = g_strdup_printf (gettext("Row %u, account %s not in %s\n"), row + 1, name, full_name);
+                info->error = g_strconcat (info->error, err_string, NULL);
+                g_free (err_string);
                 PINFO("Unable to import Row %u for account %s, name!", row, full_name);
             }
         }
@@ -306,25 +309,19 @@ csv_account_import (CsvImportInfo *info)
             /* Lets try and update the color, notes, description, code entries */
             DEBUG("Existing account, will try and update account %s", full_name);
             info->num_updates = info->num_updates + 1;
-            if (!g_strcmp0(color, "") == 0)
+            if (!g_strcmp0 (color, "") == 0)
             {
-                if (gdk_color_parse(color, &testcolor))
+                if (gdk_color_parse (color, &testcolor))
                     xaccAccountSetColor (acc, color);
             }
 
-            if (!g_strcmp0(notes, "") == 0)
-            {
-                /* Check for multiple lines */
-                gchar **parts;
-                parts = g_strsplit(notes, "\\n", -1);
-                notes = g_strjoinv("\n", parts);
-                g_strfreev(parts);
-            }
-            xaccAccountSetNotes (acc, notes);
+            if (!g_strcmp0 (notes, "") == 0)
+                xaccAccountSetNotes (acc, notes);
 
-            if (!g_strcmp0(description, "") == 0)
+            if (!g_strcmp0 (description, "") == 0)
                 xaccAccountSetDescription (acc, description);
-            if (!g_strcmp0(code, "") == 0)
+
+            if (!g_strcmp0 (code, "") == 0)
                 xaccAccountSetCode (acc, code);
         }
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (info->store), &iter);

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Conta de Conversão Monetária
+      Conta de ConversÃ£o MonetÃ¡ria
     </gnc-act:title>
     <gnc-act:short-description>
       Conta para converter e transacionar em moeda estrangeira
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas se converter em moedas estrangeiras.
+    DeverÃ¡ selecionar este conjunto de contas se converter em moedas estrangeiras.
 
     Nota: conta encontra-se em BRL; edite a conta para alterar a moeda.
   </gnc-act:long-description>    
@@ -40,14 +40,14 @@
   <act:parent type="new">b3c65be1c5d163746ddc0c506f3f4619</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Conversão de Moeda</act:name>
+  <act:name>ConversÃ£o de Moeda</act:name>
   <act:id type="new">9206632307989cb5b244ad5da5d3131b</act:id>
   <act:type>CURRENCY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Conversão de Moeda</act:description>
+  <act:description>ConversÃ£o de Moeda</act:description>
   <act:parent type="new">d9c796b35784533aee4309e28a3cbfc5</act:parent>
 </gnc:account>
 </gnc-account-example>

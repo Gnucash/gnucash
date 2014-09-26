@@ -773,6 +773,15 @@ gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
     gnc_payment_window_check_payment (pw);
 }
 
+static gboolean AccountTypeOkForPayments (GNCAccountType type)
+{
+    if (xaccAccountIsAssetLiabType(type) ||
+        xaccAccountIsEquityType(type))
+        return TRUE;
+    else
+        return FALSE;
+}
+
 /* Select the list of accounts to show in the tree */
 static void
 gnc_payment_set_account_types (GncTreeViewAccount *tree)
@@ -783,19 +792,7 @@ gnc_payment_set_account_types (GncTreeViewAccount *tree)
     gnc_tree_view_account_get_view_info (tree, &avi);
 
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-        switch (i)
-        {
-        case ACCT_TYPE_BANK:
-        case ACCT_TYPE_CASH:
-        case ACCT_TYPE_CREDIT:
-        case ACCT_TYPE_ASSET:
-        case ACCT_TYPE_LIABILITY:
-            avi.include_type[i] = TRUE;
-            break;
-        default:
-            avi.include_type[i] = FALSE;
-            break;
-        }
+        avi.include_type[i] = AccountTypeOkForPayments (i);
 
     gnc_tree_view_account_set_view_info (tree, &avi);
 }
@@ -1112,7 +1109,7 @@ static void increment_if_asset_account (gpointer data,
     int *r = user_data;
     const Split *split = data;
     const Account *account = xaccSplitGetAccount(split);
-    if (xaccAccountIsAssetLiabType(xaccAccountGetType(account)))
+    if (AccountTypeOkForPayments(xaccAccountGetType (account)))
         ++(*r);
 }
 static int countAssetAccounts(SplitList* slist)
@@ -1127,7 +1124,7 @@ static gint predicate_is_asset_account(gconstpointer a,
 {
     const Split *split = a;
     const Account *account = xaccSplitGetAccount(split);
-    if (xaccAccountIsAssetLiabType(xaccAccountGetType(account)))
+    if (AccountTypeOkForPayments(xaccAccountGetType(account)))
         return 0;
     else
         return -1;

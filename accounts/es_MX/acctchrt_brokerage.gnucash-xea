@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-     Cuentas de Inversión
+     Cuentas de InversiÃ³n
     </gnc-act:title>
     <gnc-act:short-description>
       Cuenta de corredor de bolsa con las cuentas de inversiones asociadas
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deberá escoger este juego de cuentas si tiene inversiones
-     (acciones, bonos, fondos de inversión, fondos indexados,
+    DeberÃ¡ escoger este juego de cuentas si tiene inversiones
+     (acciones, bonos, fondos de inversiÃ³n, fondos indexados,
      intereses, dividendos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
@@ -40,14 +40,14 @@
   <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cuenta de inversión</act:name>
+  <act:name>Cuenta de inversiÃ³n</act:name>
   <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Cuenta de inversión</act:description>
+  <act:description>Cuenta de inversiÃ³n</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -73,25 +73,25 @@
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fondo de índice</act:name>
+  <act:name>Fondo de Ã­ndice</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Fondo de índice</act:description>
+  <act:description>Fondo de Ã­ndice</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fondo de inversión</act:name>
+  <act:name>Fondo de inversiÃ³n</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Fondo de inversión</act:description>
+  <act:description>Fondo de inversiÃ³n</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Pagarés y mercado monetario
+      PagarÃ©s y mercado monetario
     </gnc-act:title>
     <gnc-act:short-description>
-     Cuentas para pagarés, e inversiones de mercado monetario
+     Cuentas para pagarÃ©s, e inversiones de mercado monetario
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Debería seleccionar este juego de cuentas si maneja pagarés o
-      cuentas de mercado monetario (pagarés, intereses de pagarés,
+    DeberÃ­a seleccionar este juego de cuentas si maneja pagarÃ©s o
+      cuentas de mercado monetario (pagarÃ©s, intereses de pagarÃ©s,
       mercado monetario, intereses de mercado monetario).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
@@ -40,14 +40,14 @@
   <act:parent type="new">7b1a39efc6234d1db148baa722c9471e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Pagaré de banco</act:name>
+  <act:name>PagarÃ© de banco</act:name>
   <act:id type="new">c1620f9c3082e33d8fd559e17f90a122</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Pagaré de banco</act:description>
+  <act:description>PagarÃ© de banco</act:description>
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -84,25 +84,25 @@
   <act:parent type="new">4b3e36f325569b80efc7d3331bdf851b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Interés de pagarés</act:name>
+  <act:name>InterÃ©s de pagarÃ©s</act:name>
   <act:id type="new">28d311f0f38da5e35628e76ad8bcc853</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Interés de pagarés</act:description>
+  <act:description>InterÃ©s de pagarÃ©s</act:description>
   <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Interés de mercado de dinero</act:name>
+  <act:name>InterÃ©s de mercado de dinero</act:name>
   <act:id type="new">dc537946f39e84ccef7ce38f016249af</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Interés de mercado de dinero</act:description>
+  <act:description>InterÃ©s de mercado de dinero</act:description>
   <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
 </gnc:account>
 </gnc-account-example>

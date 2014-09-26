@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Cuenta de Compra-Venta de monedas
@@ -7,7 +7,7 @@
       Cuenta para compra/venta de moneda extranjera
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deseará seleccionar este juego de cuentas si realiza compra/venta de
+    DesearÃ¡ seleccionar este juego de cuentas si realiza compra/venta de
       monedas extranjeras.
 
     Note: La cuenta se encuentra en USD; edite la cuenta para alterar

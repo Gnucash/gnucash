@@ -953,6 +953,10 @@ gboolean xaccAccountIsAssetLiabType(GNCAccountType t);
  *  (meaning an Accounts Payable/Accounts Receivable). */
 gboolean xaccAccountIsAPARType(GNCAccountType t);
 
+/** Convenience function to check if the account is a valid
+ *  Equity type. */
+gboolean xaccAccountIsEquityType(GNCAccountType t);
+
 
 /** @} */
 
