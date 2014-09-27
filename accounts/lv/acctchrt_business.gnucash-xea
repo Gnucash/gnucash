@@ -15,19 +15,19 @@
      xmlns:bgt="http://www.gnucash.org/XML/bgt"
      xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
      xmlns:lot="http://www.gnucash.org/XML/lot"
-     xmlns:job="http://www.gnucash.org/XML/job"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
     <gnc-act:title>
       Uzņēmējdarbības konti
@@ -130,6 +130,18 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1290</act:code>
+  <act:parent type="new">03c7b55c5f9e7e575eb860b27361d0aa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1260 Avansa maksājumi par pamatlīdzekļiem</act:name>
+  <act:id type="new">9dbcebfe6ce5a224707b19156ba7b508</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1260</act:code>
   <act:parent type="new">03c7b55c5f9e7e575eb860b27361d0aa</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -279,7 +291,7 @@
 <gnc:account version="2.0.0">
   <act:name>5.3. Norēķini ar piegādātājiem un darbuzņēmējiem</act:name>
   <act:id type="new">a8a5f40f126c8ad09d17d69a9f4bf20a</act:id>
-  <act:type>LIABILITY</act:type>
+  <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
@@ -306,18 +318,38 @@
   <act:code>5310</act:code>
   <act:slots>
     <slot>
-      <slot:key>tax-related</slot:key>
-      <slot:value type="integer">1</slot:value>
-    </slot>
-    <slot>
-      <slot:key>last-num</slot:key>
-      <slot:value type="string">112450</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Piem., saņemtie rēķini</slot:value>
     </slot>
+    <slot>
+      <slot:key>tax-related</slot:key>
+      <slot:value type="integer">1</slot:value>
+    </slot>
   </act:slots>
+  <act:parent type="new">a8a5f40f126c8ad09d17d69a9f4bf20a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5311 Norēķini ar piegādātājiem un darbuzņēmējiem Eiro</act:name>
+  <act:id type="new">754b4460b340b43aed2c4cedff406745</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5311</act:code>
+  <act:parent type="new">a8a5f40f126c8ad09d17d69a9f4bf20a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5312 Norēķini ar piegādātājiem un darbuzņēmējiem USD</act:name>
+  <act:id type="new">0e0d20c559b6b6a8084aa9b4e080e926</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5312 Norēķini ar piegādātājiem un darbuzņēmējiem USD</act:code>
   <act:parent type="new">a8a5f40f126c8ad09d17d69a9f4bf20a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -367,18 +399,6 @@
     </slot>
   </act:slots>
   <act:parent type="new">63436c16eef1271c1b20696e8c3a0d88</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>5721 Norēķini par PVN</act:name>
-  <act:id type="new">790a9d5d942fd48aeff7ffea84a19b36</act:id>
-  <act:type>LIABILITY</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>EUR</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:code>5721</act:code>
-  <act:parent type="new">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>5720 Norēķini par IIN</act:name>
@@ -441,7 +461,97 @@
   <act:parent type="new">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>5.5. Norēkini par parādiem ar personālu</act:name>
+  <act:name>5721 Norēķini par PVN</act:name>
+  <act:id type="new">3a9fd7f815bffce96b9006a38f13639c</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5721 Norēķini par PVN</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>57212 Norēkini par PVN 12%</act:name>
+  <act:id type="new">6f0b99d89a465c240e7bab2e2e5bf0c5</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5722 </act:code>
+  <act:parent type="new">3a9fd7f815bffce96b9006a38f13639c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>57213 Norēķini par PVN ar Eiropas Savienību</act:name>
+  <act:id type="new">4479ede8639954c4f34d945a0df9d5c0</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>57213</act:code>
+  <act:parent type="new">3a9fd7f815bffce96b9006a38f13639c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>57214 PVN uz robežas</act:name>
+  <act:id type="new">f5197f554273cf1ed9c843bab99b28ac</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>57214 </act:code>
+  <act:parent type="new">3a9fd7f815bffce96b9006a38f13639c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>57211 Norēķini par PVN 21%</act:name>
+  <act:id type="new">790a9d5d942fd48aeff7ffea84a19b36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>57211</act:code>
+  <act:parent type="new">3a9fd7f815bffce96b9006a38f13639c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>57219 PVN parāda nomaksa valsts budžetā</act:name>
+  <act:id type="new">ccd9e4d8e1d4b26491b1e09f528e47c4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>57219 </act:code>
+  <act:parent type="new">3a9fd7f815bffce96b9006a38f13639c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5727 Norēķini par transportlīdzekļa nodokli</act:name>
+  <act:id type="new">2bb664651876d27339b0ac9bb2404121</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5727 </act:code>
+  <act:parent type="new">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.5 Norēķini par parādiem ar personālu</act:name>
   <act:id type="new">8b4824ee28408402da7af3410e586301</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -449,6 +559,54 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5510 Norēķini par parādiem personālam</act:name>
+  <act:id type="new">b24bedfbd433f378404a5f5cbc5c10e1</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5510 Norēķini par parādiem ar personālu</act:code>
+  <act:parent type="new">8b4824ee28408402da7af3410e586301</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.9 Nākošo periodu ieņēmumi</act:name>
+  <act:id type="new">65bcdb13a47c915d9fe5d0f0232bf653</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.9</act:code>
+  <act:parent type="new">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5910 Nākošo periodu ieņēmumi</act:name>
+  <act:id type="new">eed8f963fea8d797cdef4822157bfad3</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5910</act:code>
+  <act:parent type="new">65bcdb13a47c915d9fe5d0f0232bf653</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.2 Norēķini par saņemtajiem avansiem</act:name>
+  <act:id type="new">1ac21831c16d0e446410e79026d72f5e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.2 Norēķini par saņemtajiem avansiem</act:code>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -458,22 +616,16 @@
   <act:parent type="new">63436c16eef1271c1b20696e8c3a0d88</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>5510 Norēķini par parādiem personālam</act:name>
-  <act:id type="new">b24bedfbd433f378404a5f5cbc5c10e1</act:id>
-  <act:type>PAYABLE</act:type>
+  <act:name>5210 Norēķini par saņemtajiem avansiem</act:name>
+  <act:id type="new">6ebc2ff9089d79f37428cec6d075c859</act:id>
+  <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>5510</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">#ededececebeb</slot:value>
-    </slot>
-  </act:slots>
-  <act:parent type="new">8b4824ee28408402da7af3410e586301</act:parent>
+  <act:code>5210 Norēķini par saņemtajiem avansiem</act:code>
+  <act:parent type="new">1ac21831c16d0e446410e79026d72f5e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>6. Ieņēmumi no uzņēmuma saimnieciskās darbības</act:name>
@@ -487,12 +639,12 @@
   <act:code>6.</act:code>
   <act:slots>
     <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">6110 Ieņēmumi no pamatdarbības</slot:value>
+    </slot>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
   <act:parent type="new">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -526,6 +678,66 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>6110</act:code>
   <act:parent type="new">e355fa0064ebe4f78ee7bfe3eb8eedcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6111 Projekti ar pašvaldību</act:name>
+  <act:id type="new">9a914c27ca058479ceddd13aae774884</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6111</act:code>
+  <act:parent type="new">e355fa0064ebe4f78ee7bfe3eb8eedcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6112 Citi ieņēmumi</act:name>
+  <act:id type="new">365b4fa4d3925ffced8593a81f93ff08</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6112 </act:code>
+  <act:parent type="new">e355fa0064ebe4f78ee7bfe3eb8eedcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6.5 Dažādi </act:name>
+  <act:id type="new">5f2fd0fce062c478fb50b931cd888f07</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6.5</act:code>
+  <act:parent type="new">d52bfba7a8020f9fdb13d95cdbc4a8a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6500 Dažādi - kļūdu novēršana</act:name>
+  <act:id type="new">aea6e669fe5322a78c997d6b664c28e0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6500</act:code>
+  <act:parent type="new">5f2fd0fce062c478fb50b931cd888f07</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6560 Ieņēmumos pātskaitītais uzkrājumu samazinājums</act:name>
+  <act:id type="new">8ebaf012f3599cd1eb9f30911d55509f</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6560</act:code>
+  <act:parent type="new">5f2fd0fce062c478fb50b931cd888f07</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>7. Saimnieciskās darbības izdevumi</act:name>
@@ -774,6 +986,18 @@
   <act:parent type="new">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>7771 Reprezentācijas izdevumi </act:name>
+  <act:id type="new">c2e81574d0fd6f0d48d68549d121739b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7771 </act:code>
+  <act:parent type="new">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>7.5 Pārējie saimnieciskās darbības izdevumi</act:name>
   <act:id type="new">8180fe22cdc7b0d83257918cbee48522</act:id>
   <act:type>EXPENSE</act:type>
@@ -822,6 +1046,42 @@
   <act:parent type="new">8180fe22cdc7b0d83257918cbee48522</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>7570 Komandējuma izdevumi</act:name>
+  <act:id type="new">403472bf4c2f655eb52727d85ba1cc88</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7570</act:code>
+  <act:parent type="new">8180fe22cdc7b0d83257918cbee48522</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7560 Darbinieku apmācības un apdrošināšanas izdevumi</act:name>
+  <act:id type="new">e992f3964e4f8d330e0cfde8d6c5b0f2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7560 </act:code>
+  <act:parent type="new">8180fe22cdc7b0d83257918cbee48522</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7590 Transportlīdzekļa nodoklis</act:name>
+  <act:id type="new">d1cb6f3bcbf33ceb70210dcf8e2d2a9a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7590</act:code>
+  <act:parent type="new">8180fe22cdc7b0d83257918cbee48522</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>7.4. Pamatlīdzekļu nolietojums</act:name>
   <act:id type="new">8dbac8e19acab0965568911995842d37</act:id>
   <act:type>EXPENSE</act:type>
@@ -831,12 +1091,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>7.4.</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">5bff8991d59134283c3c6d0d50add02b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -849,8 +1103,37 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>7420</act:code>
-
   <act:parent type="new">8dbac8e19acab0965568911995842d37</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.6 Pārdošanas izmaksas</act:name>
+  <act:id type="new">5e47b3c833cc8cd6aeb4c6f7ac9becb1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.6</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7610 Pārdošanas izmaksas</act:name>
+  <act:id type="new">9ad9a49a0f4e19bf2744302522d803a3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7610</act:code>
+  <act:parent type="new">5e47b3c833cc8cd6aeb4c6f7ac9becb1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Apgrozāmie līdzekļi</act:name>
@@ -891,19 +1174,13 @@
 <gnc:account version="2.0.0">
   <act:name>2380 Norēķini par prasībām pret personālu un īstermiņa aizdevumi personālam</act:name>
   <act:id type="new">697720154aa032750390fec327bdc66f</act:id>
-  <act:type>RECEIVABLE</act:type>
+  <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>2380</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>last-num</slot:key>
-      <slot:value type="string">6313</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">e1bf896bb23a38b84eb16d3e3a1f09bc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -916,12 +1193,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>2310</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>last-num</slot:key>
-      <slot:value type="string">15</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">e1bf896bb23a38b84eb16d3e3a1f09bc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -934,12 +1205,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>2390</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">#ededececebeb</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">e1bf896bb23a38b84eb16d3e3a1f09bc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -973,6 +1238,18 @@
   <act:parent type="new">9f327a18d3aa95242c78eb36d9ae95d0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>2680 Valūtas konvertācijas konts</act:name>
+  <act:id type="new">8d3effc83d7a78a7068424652081fe3c</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2680 Valūtas konvertācijas konts</act:code>
+  <act:parent type="new">9f327a18d3aa95242c78eb36d9ae95d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>2.1 Krājumi</act:name>
   <act:id type="new">68f6b8855f8df3cda8a9068b78fcc276</act:id>
   <act:type>ASSET</act:type>
@@ -984,12 +1261,12 @@
   <act:code>2.1</act:code>
   <act:slots>
     <slot>
-      <slot:key>tax-related</slot:key>
-      <slot:value type="integer">1</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>tax-related</slot:key>
+      <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
   <act:parent type="new">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
@@ -1028,12 +1305,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>2.4. </act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1105,12 +1376,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>8.6.</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">d46cf499346c8af7d669b92a49ecd710</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1135,12 +1400,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>8.8.</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">d46cf499346c8af7d669b92a49ecd710</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1156,7 +1415,7 @@
   <act:parent type="new">eb4c860bcbfd5fd03228bc14c7369fcc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>8.2. Dažādi izdevumi</act:name>
+  <act:name>8.2 Dažādi izdevumi</act:name>
   <act:id type="new">8bb800a4801a59e337b19ebe59c2e731</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -1164,13 +1423,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>8.2.</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
+  <act:code>8.2</act:code>
   <act:parent type="new">d46cf499346c8af7d669b92a49ecd710</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1186,6 +1439,66 @@
   <act:parent type="new">8bb800a4801a59e337b19ebe59c2e731</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>8270 Valūtu konvertēšanas izdevumi</act:name>
+  <act:id type="new">daa05eee07731acc4a02239977b8f44d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8270</act:code>
+  <act:parent type="new">8bb800a4801a59e337b19ebe59c2e731</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8260 Izdevumi par reprezentācijas materiāliem</act:name>
+  <act:id type="new">d3bb819d57a311cfe44e4facd6207858</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8260</act:code>
+  <act:parent type="new">8bb800a4801a59e337b19ebe59c2e731</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8290 Nesaimnieciskie izdevumi par auto</act:name>
+  <act:id type="new">e12b68d1370688ec1bdc72b987c082d1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8290</act:code>
+  <act:parent type="new">8bb800a4801a59e337b19ebe59c2e731</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8250 Samaksātās soda naudas un līgumsodi</act:name>
+  <act:id type="new">c5ead1b245f28cf443a6ec0508f8f345</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8250</act:code>
+  <act:parent type="new">8bb800a4801a59e337b19ebe59c2e731</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8291 Citi izdevumi</act:name>
+  <act:id type="new">a699ae93642dd0445d5b9d69e914763b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8291</act:code>
+  <act:parent type="new">8bb800a4801a59e337b19ebe59c2e731</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>4. Uzkrājumi</act:name>
   <act:id type="new">0cceaa8a8ffb8ebbd73506bd64437daf</act:id>
   <act:type>LIABILITY</act:type>
@@ -1194,13 +1507,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>4.</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
+  <act:code>4.3.</act:code>
   <act:parent type="new">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1213,12 +1520,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4.3.</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="new">0cceaa8a8ffb8ebbd73506bd64437daf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1230,8 +1531,19 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>4310</act:code>
+  <act:code>Citi uzkrājumi</act:code>
   <act:parent type="new">83bc52b49a1c0a03a7ff68ecf853aaeb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Imbalance-EUR</act:name>
+  <act:id type="new">0cfec028cb836cdfbb496f493a0a845d</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
 </gnc:account>
 </gnc-account-example>
 
