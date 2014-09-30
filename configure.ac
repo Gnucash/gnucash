@@ -1387,16 +1387,20 @@ AC_CONFIG_FILES(
   accounts/ja/Makefile
   accounts/ko/Makefile
   accounts/lv/Makefile
-  accounts/nl/Makefile
   accounts/nb/Makefile
+  accounts/nl/Makefile
   accounts/pl/Makefile
   accounts/pt_BR/Makefile
   accounts/pt_PT/Makefile
   accounts/ru/Makefile
   accounts/sk/Makefile
+  accounts/sv_AX/Makefile
+  accounts/sv_FI/Makefile
   accounts/sv_SE/Makefile
   accounts/tr_TR/Makefile
   accounts/zh_CN/Makefile
+  accounts/zh_HK/Makefile
+  accounts/zh_TW/Makefile
   checks/Makefile
   doc/Makefile
   doc/examples/Makefile
