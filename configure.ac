@@ -479,7 +479,9 @@ PKG_CHECK_MODULES(GUILE,
                   [guile-1.8 >= 1.8.5],
                   [m4_ifdef([GUILE1_8_PROGS],
                             [ GUILE1_8_PROGS ],
-                            [ GUILE_PROGS ])
+                            [ m4_ifdef([GUILE1_PROGS],
+                                       [ GUILE1_PROGS ],
+                                       [ GUILE_PROGS ])])
                   ], [
   PKG_CHECK_MODULES(GUILE,
                   [guile-2.0 >= 2.0.0],
