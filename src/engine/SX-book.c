@@ -45,6 +45,7 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "gnc-event.h"
+#include <qofinstance-p.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"
