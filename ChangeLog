@@ -1,6 +1,790 @@
+2014-09-27 John Ralls 
+
+	* Ensure that the root account is saved to the SQL backend. (HEAD, origin/maint, maint)
+
+2014-09-20 Robert Fewell 
+
+	* This patch allows the ability to skip rows when importing transactions.
+
+2014-09-23 valdis 
+
+	* Updated resource files for Latvian: po/lv.po and  accounts/lv/acctchrt_business.gnucash-xea
+
+2014-09-27 Chenxiong Qi 
+
+	* Bug 701052 - cannot click on 'cancel' or 'ok' button on dialogue box
+
+2014-09-26 Jeff Earickson 
+
+	* Repaired version of Marathi Language translation file
+
+2014-09-26 Jeff Earickson 
+
+	* Repaired version of latest Konkani language translation.
+
+2014-09-25 Jeff Earickson 
+
+	* Tamil Language Translation
+
+2014-09-25 Jeff Earickson 
+
+	* Deleted Raman language version of Konkani in favor of updated Devangari version.
+
+2014-09-25 Jeff Earickson 
+
+	* Updated translation of the Konkani Language.
+
+2014-09-25 Jeff Earickson 
+
+	* Updated Translation of the Bodo Language
+
+2014-09-25 Jeff Earickson 
+
+	* Added or updated the following Indic Language Translation Files:
+
+2014-09-25 Jeff Earickson 
+
+	* Urdu Language Translation file.
+
+2014-09-25 Jeff Earickson 
+
+	* Telugu Language Translation file.
+
+2014-09-25 Jeff Earickson 
+
+	* Marathi Language Translation File.
+
+2014-09-25 Jeff Earickson 
+
+	* Kashmiri Language translation file.
+
+2014-09-25 Jeff Earickson 
+
+	* Hindi Language Translation file
+
+2014-09-26 Geert Janssens 
+
+	* Rework assistant csv import regex code to eliminate the mandatory dummy field (#eol).
+
+2014-09-26 Geert Janssens 
+
+	* CSV Import transform macro into function
+
+2014-09-26 Geert Janssens 
+
+	* CSV Export: factor out function to generate regular expression
+
+2014-09-25 Geert Janssens 
+
+	* Refactor OS-specific ifdef to reduce code duplication
+
+2014-09-19 Robert Fewell 
+
+	* This patch just changes the white space to be of a consistent format.
+
+2014-09-19 Robert Fewell 
+
+	* Part Bug fix for 729476, this changes the line endings to \r\n to make it more compatible with CSV format.
+
+2014-09-19 Robert Fewell 
+
+	* Part Bug fix for 729476, this fixes the quoting of quotes, newlines and separator to make it more compatible with CSV format.
+
+2014-09-19 Robert Fewell 
+
+	* This patch fixes bug 731519. The fix sets the upper limit before it sets the value of the end row spin button.
+
+2014-09-25 John Ralls 
+
+	* Bug 736703 - Scheduled transaction are registered without credit/debit
+
+2014-09-23 Geert Janssens 
+
+	* Bug 630638 - 'Process payment' should allow to select equity accounts for payment
+
+2014-09-23 Geert Janssens 
+
+	* Use same test for payment dialog transfer accounts and assign as payment checks
+
+2014-09-22 Geert Janssens 
+
+	* Avoid undocumented dependency on progress page type in assistant to skip page
+
+2014-09-22 Robert Fewell 
+
+	* This patch fixes bug 726888, cancel button is available on all pages of assistant.
+
+2014-09-22 Robert Fewell 
+
+	* Use same default setting for quotes in csv import and export
+
+2014-09-22 Geert Janssens 
+
+	* Set default currency for French account chart templates
+
+2014-09-22 Geert Janssens 
+
+	* Convert ISO-8859-1 account chart templates to UTF-8
+
+2014-09-22 Geert Janssens 
+
+	* Add context to generic translatable string
+
+2014-09-22 Geert Janssens 
+
+	* Bug 671615 - French: 'New Customer' button in Find Customer dialog is translated to 'Nouvel onglet'
+
+2014-09-22 Geert Janssens 
+
+	* Bug 720427 - Review of french account templates
+
+2014-09-21 John Ralls 
+
+	* Bug 732545 - gnucash-2.6.3 segfaults when started
+
+2014-09-21 Mark Haanen 
+
+	* Update Dutch translation, copied from the Translation Project.
+
+2014-09-21 Geert Janssens 
+
+	* Rewrite gfec_eval_file to avoid opening the file itself in guile
+
+2014-09-21 Geert Janssens 
+
+	* Swap static functions so the lower one can reuse the upper one
+
+2014-09-20 Geert Janssens 
+
+	* Bug 711567 - Cannot save a custom report if a path contain diacritic chars
+
+2014-09-19 Geert Janssens 
+
+	* Bug 695240 - mortgage wizard empty table
+
+2014-09-20 Geert Janssens 
+
+	* Provide strfmon function for platforms that don't have it
+
+2014-09-16 David Maline 
+
+	* Bug 733506 - (ForwadDisableQIF) The forward button is not active even though a file is selected
+
+2014-09-16 Jethro Beekman 
+
+	* Bug 733283 - [PATCH] Loss of fractions when importing OFX investment transactions
+
+2014-09-16 Geert Janssens 
+
+	* Align perl module requirements with recent Finance::Quote versions
+
+2014-09-06 Dmitry Pavlov 
+
+	* Updated Russian translation from Dmitry Pavlov
+
+2014-09-06 Chenxiong Qi 
+
+	* - New Chart of Accounts Assistant is too large for screen
+
+2014-09-06 Alex Aycinena 
+
+	* Correct txf output to use a minus sign, rather than parenthesis, for debits, without regard to locale settings, as is required by the txf pseudo-standard; was previously incorrectly using parenthesis for negatives in Windows environments, for example.
+
+2014-08-12 lmat 
+
+	* Replace C++ reserved words for future compatibility with C++
+
+2014-09-04 John Ralls 
+
+	* SQL: Save commodity namespace changes from template
+
+2014-09-03 hawk-lord 
+
+	* Missing translation
+
+2014-09-03 hawk-lord 
+
+	* Added Swedish association accounts.
+
+2014-09-03 hawk-lord 
+
+	* Added Swedish account files
+
+2014-09-02 Geert Janssens 
+
+	* Add business lot scrubbing to Check & Repair->All/This transaction(s)
+
+2014-08-28 Geert Janssens 
+
+	* Make scrub in lot viewer scrub business lots using the new scrub functions.
+
+2014-08-27 Geert Janssens 
+
+	* Rewrite invoice payment logic to fix lot link proliferation
+
+2014-08-27 Geert Janssens 
+
+	* Refactor get_pay_split into gncOwnerFindOffsettingSplit
+
+2014-08-26 Geert Janssens 
+
+	* Refactor gncOwnerReduceSplitTo out of reduce_biggest_split
+
+2014-08-26 Geert Janssens 
+
+	* Refactor gnc_doc_doc_link into gncOwnerSetLotLinkMemo and move it
+
+2014-08-26 Geert Janssens 
+
+	* Handle the case of scrubbing a lot link between two non-document lots
+
+2014-08-26 Geert Janssens 
+
+	* Tweak the get_pay_split function to prefer the best possible match
+
+2014-08-26 Geert Janssens 
+
+	* Refactor scrub_doc_pay_link into scrub_other_link and make it more generic
+
+2014-08-23 Geert Janssens 
+
+	* Add scrub function to reduce the amount of lot links used.
+
+2014-08-23 Geert Janssens 
+
+	* Widen the scope of the subsplit merge scrub function
+
+2014-08-23 Geert Janssens 
+
+	* Move account type checking functions into the engine
+
+2014-08-16 Geert Janssens 
+
+	* Remove superfluous include statements
+
+2014-08-16 Geert Janssens 
+
+	* Small corrections in doxygen comments
+
+2014-08-23 Geert Janssens 
+
+	* More ENTER/LEAVE corrections at function exit points
+
+2014-07-31 John Ralls 
+
+	* Balance ENTER with a LEAVE for all exit points.
+
+2014-09-02 Geert Janssens 
+
+	* Bug 434462 - register color don't work correct with system theme color - Part 2
+
+2014-08-30 Geert Janssens 
+
+	* Bug 434462 - register color don't work correct with system theme color - Part 1
+
+2014-08-30 Geert Janssens 
+
+	* Rename enum elements to make room for foreground equivalents
+
+2014-08-30 Geert Janssens 
+
+	* Refactor register color functions to reduce duplication
+
+2014-08-30 Geert Janssens 
+
+	* Bug 711440 - Tab labels have different background colour than containing gui element
+
+2014-09-01 Mike Alexander 
+
+	* Bug 735769: Enable price and shares cells in a split if it is not in the trans currency. The label for the cells are changed to "Exch. Rate" and "Oth. Curr." in this case.
+
+2014-09-01 Mike Alexander 
+
+	* If the cursor moves from one register cell to another, refresh the register headers. If trading accounts are on and the transaction is expanded then the headers depend on the type of split the cursor is in.
+
+2014-07-01 Mike Alexander 
+
+	* Use guint64 instead of uint64_t with G_GUINT64_FORMAT to avoid warnings.
+
+2014-08-31 Mike Alexander 
+
+	* Change gncOwnerGetBalanceInCurrency to only cosider lots that contain an invoice. This function is currently only used in the owner tree code and this change will cause payments not properly linked to invoices to be ignored when computing owner balances.
+
+2014-08-31 Mike Alexander 
+
+	* Finish implementing the "Show zero balance owners" filter option. It always showed nothing before.
+
+2014-08-31 Mike Alexander 
+
+	* The sense of the "Only show active customers" checkbox was inverted.
+
+2014-08-29 Geert Janssens 
+
+	* Bug 707243 - Hard-coded font colors in account tree?
+
+2014-08-14 Mike Alexander 
+
+	* Bug 722140: Add option to control inclusion of trading accounts in cash flow report.
+
+2014-08-07 John Ralls 
+
+	* Fix test-backend-dbi segfault with libdbi-0.9.0.
+
+2014-08-07 John Ralls 
+
+	* Fix uninitialized variable warning.
+
+2014-08-07 John Ralls 
+
+	* Add note about automake 1.14 to configure.ac
+
+2014-08-07 John Ralls 
+
+	* Revert "Fix broken test-backend-dbi with libdbi 0.9."
+
+2014-08-07 John Ralls 
+
+	* Fix broken test-backend-dbi with libdbi 0.9.
+
+2014-08-07 Mike Evans 
+
+	* Bug 734183 - Set all of the denominators correctly on the currency values.
+
+2014-08-03 Mike Evans 
+
+	* Bill invoice importer crashing when invoice has multiple lines.
+
+2014-06-28 Michalis Kamprianis 
+
+	* Bug 120199 - Incorrect sort order in "Sort by Statement Date"
+
+2014-08-01 Geert Janssens 
+
+	* Revert "Bug #622778 Miscalculation in cashflow reports - Step 01"
+
+2014-08-01 Geert Janssens 
+
+	* Revert "Bug #622778 Miscalculation in cashflow reports - Step 02"
+
+2014-08-01 Geert Janssens 
+
+	* Revert "Bug #622778 Miscalculation in cashflow reports - Step 03"
+
+2014-08-01 Geert Janssens 
+
+	* Revert "Round properly when computing fraction of the transaction's value due to a given split."
+
+2014-08-01 Geert Janssens 
+
+	* Revert "The cash flow report should ignore splits in trading accounts."
+
+2014-08-01 Erik Johansson 
+
+	* Update Swedish translation
+
+2014-07-13 Mike Alexander 
+
+	* Bug 733107: Search for reconcile status doesn't work right.
+
+2014-07-01 Geert Janssens 
+
+	* Drop packaging/win32
+
+2014-06-21 Geert Janssens 
+
+	* First unit test for gncEntry and fix first bug it revealed
+
+2014-06-21 Geert Janssens 
+
+	* Fix whitespace
+
+2014-06-21 Geert Janssens 
+
+	* Revert "Bug726674-BudgetReverseSignSupport"
+
+2014-06-10 Geert Janssens 
+
+	* Bug 723442 - Report Options - Report Name too short
+
+2014-03-26 Carsten Rinke 
+
+	* Bug726674-BudgetReverseSignSupport
+
+2014-06-01 Michalis Kamprianis 
+
+	* Bug 719457 - Template for Home Mortgage Loan isn't properly nested. (local/maint)
+
+2014-05-29 Christoph Holtermann 
+
+	* Some adjustments, new IPython version
+
+2014-06-09 John Ralls 
+
+	* Fix signed int overflow warning.
+
+2014-06-08 John Ralls 
+
+	* double_to_gnc_numeric: Return overflow error immediately on invalid input.
+
+2014-06-08 John Ralls 
+
+	* Use more significant digits for SX function returns.
+
+2014-06-08 John Ralls 
+
+	* 725366 - Formula Parsing Error with Scheduled Mortgage Transactions
+
+2014-05-29 Christoph Holtermann 
+
+	* Python bindings - no instance necessary anymore
+
+2014-06-01 Carsten Rinke 
+
+	* Bug 720934 - Barcharts with many data points have overlapping x-axis labels
+
+2014-06-03 Jeff Earickson 
+
+	* New/revised version of the Brazilian Portuguese translation file, For version 2.6.3. Translator: Miguel Rozsas <miguel@rozsas.eng.br>
+
+2014-06-05 John Ralls 
+
+	* Fix broken build on 64-bit systems
+
+2014-06-03 John Ralls 
+
+	* 722200 - configure script does not pick the correct am_cv_scanf version
+
+2014-06-02 John Ralls 
+
+	* Fix broken win32 build; MinGW needs our strptime.
+
+2014-06-02 John Ralls 
+
+	* 722200 - configure script does not pick the correct am_cv_scanf version
+
+2014-06-02 John Ralls 
+
+	* Revert "722200 - configure script does not pick the correct am_cv_scanf version"
+
+2014-06-02 John Ralls 
+
+	* Revert "722200 - configure script does not pick the correct am_cv_scanf version"
+
+2014-06-02 Mike Evans 
+
+	* Merge branch 'maint' of https://github.com/Gnucash/gnucash into maint
+
+2014-06-01 John Ralls 
+
+	* 722200 - configure script does not pick the correct am_cv_scanf version
+
+2014-06-02 Mike Evans 
+
+	* Add some date format checking and make sure generated dates are the correct user selected format, not always locale format.
+
+2014-06-02 Mike Evans 
+
+	* Relax requirements for booleans in invoice line.
+
+2014-06-01 John Ralls 
+
+	* 722200 - configure script does not pick the correct am_cv_scanf version
+
+2014-06-01 Mike Evans 
+
+	* Bug 730255 - Python bindings: Assigns bill entries to non-existant invoice.
+
+2014-05-15 Mike Evans 
+
+	* Python bindings.  Add function gncVendorNextID, complementary to gncCustomerNextID.
+
+2014-05-31 John Ralls 
+
+	* 722200 - configure script does not pick the correct am_cv_scanf version
+
+2014-05-27 John Ralls 
+
+	* More fix-ups for the renumber subaccounts dialog.
+
+2014-05-27 John Ralls 
+
+	* Bug 725054 - Re-numbering sub accounts crashes the program
+
+2014-05-26 John Ralls 
+
+	* Bug 728717 - Ubuntu 14.04 - GNUcash crashes on close
+
+2014-05-25 Mike Alexander 
+
+	* Always use the price we display to calculate the current value of an account.
+
+2014-05-10 Michalis Kamprianis 
+
+	* Bug 719457 - Template for Home Mortgage Loan isn't properly nested.
+
+2014-03-26 Frédéric Perrin 
+
+	* Bug 723145 - Currency display does not respect locale
+
+2014-05-04 Michalis Kamprianis 
+
+	* Bug 728103 - Invoice opened does not contain the Job under circumstances
+
+2014-04-30 Michalis Kamprianis 
+
+	* Bug 509263 Since Last Run dialog won't allow resizing of Status column
+
+2014-05-20 Geert Janssens 
+
+	* Backport John's fix for a truly ancient bug
+
+2014-05-20 Geert Janssens 
+
+	* Merge branch 'scheduled_tx_i18n_prefix' of https://github.com/zeldigas/gnucash into maint
+
+2014-05-19 Geert Janssens 
+
+	* Bug 610202 - gnucash silently closes when no X11/$DISPLAY is present
+
+2014-05-19 Dmitry Pavlov 
+
+	* added context to ambigous i18n keys for scheduled transaction add/edit dialog
+
+2014-05-13 Mike Alexander 
+
+	* The cash flow report should ignore splits in trading accounts.
+
+2014-05-13 Simon Arlott 
+
+	* Bug 699687 - Add a configuration option to not display "since last run" window when opening a file
+
+2014-05-13 Geert Janssens 
+
+	* Fix regression in invoice pre-payments
+
+2014-05-11 Michalis Kamprianis 
+
+	* Bug 692249 - Add Help button in Custom Reports dialog box
+
+2014-05-13 Geert Janssens 
+
+	* Avoid defining the same translatable string twice
+
+2014-04-29 Michalis Kamprianis 
+
+	* Bug 729157 Bill Term discount days are allowed to be more than due days
+
+2014-05-09 Geert Janssens 
+
+	* Bug 688965 - Page Up, Page Down keys cause GnuCash to hang
+
+2014-05-08 Geert Janssens 
+
+	* Fix document type dispay for credit notes on owner report
+
+2014-05-08 Amm 
+
+	* Better period totals formatting
+
+2014-05-05 Mike Alexander 
+
+	* Don't nest AC_MSG_CHECKING calls, it produces confuing output.
+
+2014-05-05 Colin 
+
+	* Fix crash initialising dbi if libdbi version >= 0.9.0
+
+2014-05-05 Geert Janssens 
+
+	* Revert "Fix crash with libdib >= 0.9.0"
+
+2014-05-05 Geert Janssens 
+
+	* Bug 729497 - Saved Report Configuration selection window resize
+
+2014-05-05 Geert Janssens 
+
+	* Fix crash with libdib >= 0.9.0
+
+2014-05-02 Mike Alexander 
+
+	* Better test for conflict between optimization and FORTIFY_SOURCE
+
+2014-05-02 Geert Janssens 
+
+	* Add _FORTIFY_SOURCE directive only when compiling with optimization enabled
+
+2014-04-28 Jeff Earickson 
+
+	* The Dogri language in Devanagari Script.
+
+2014-04-28 Jeff Earickson 
+
+	* Addition of the Dogri language (doi) to LINGUAS
+
+2014-04-28 Jeff Earickson 
+
+	* Addition of the Bodo language translation file, in Devanagari script
+
+2014-04-28 Jeff Earickson 
+
+	* Addition of the Bodo language (brx) in Devanagari Script.
+
+2014-04-28 Geert Janssens 
+
+	* Revert error on warning default when building from svn
+
+2014-01-17 Gary Bilkus 
+
+	* Win32: Fix problem in gnc-split-reg.h caused by earlier preprocessor define of DELETE etc
+
+2014-01-17 Gary Bilkus 
+
+	* Win32: Fix configure.ac to cope with new gcc not understanding no-undefined flag
+
+2014-04-26 Mike Alexander 
+
+	* Ignore SIGTTOU while importing Python console class.
+
+2014-04-25 Mike Alexander 
+
+	* Fix code that customizes parameters for specific gcc versions to agree with the comments.
+
+2014-04-26 Geert Janssens 
+
+	* Additional changes to column calculations
+
+2014-04-25 Amish 
+
+	* calculate num-columns-required correctly
+
+2014-04-26 Geert Janssens 
+
+	* Fix price quotes after removal of yahoo-get-historical-quotes
+
+2014-04-24 Michalis Kamprianis 
+
+	* Minor corrections
+
+2014-04-16 Moritz Lipp 
+
+	* Use libsecret if available
+
+2014-04-24 Geert Janssens 
+
+	* Prevent older gnucash versions from opening a data file if previously unhandled kvps are used
+
+2014-04-24 Michalis Kamprianis 
+
+	* Bug 728841 - XML backend does not always store KVP slots
+
+2014-04-24 Geert Janssens 
+
+	* Remove unused function yahoo-get-historical-quotes
+
+2014-04-22 Jeff Earickson 
+
+	* Gnucash translation into Konkani, shown in Latin script.
+
+2014-04-22 Jeff Earickson 
+
+	* Gnucash translation into Konkani in the Devanagari script.
+
+2014-04-22 Jeff Earickson 
+
+	* Added kok and kok@latin to LINGUAS: Konkani in Devanagari script and latin script translations.
+
+2014-04-23 Geert Janssens 
+
+	* Update Latvian translation
+
+2014-04-23 Geert Janssens 
+
+	* Add fixed EUR-LVL conversion rate to gnc_euro_rates
+
+2014-04-07 Carsten Rinke 
+
+	* Bug726449 - Budget Barchart does not show up if running sum is selected
+
+2014-04-17 Moritz Lipp 
+
+	* Correct usage of realloc in gnc_xml_be_get_file_lock
+
+2014-04-15 Moritz Lipp 
+
+	* Make compatible to libdbi >= 0.9.0
+
+2014-04-13 John Ralls 
+
+	* Re-enable loading and saving gnucashdotdir/accelerator-home on OSX
+
+2014-04-15 Moritz Lipp 
+
+	* Replace deprecated g_dirname
+
+2014-04-07 Christian Stimming 
+
+	* Win32 build: Update gwenhywfar version after it has been fixed for compiling with mingw.
+
+2014-04-05 Cristian Marchi 
+
+	* Small improvement to italian translation.
+
+2014-04-05 Cristian Marchi 
+
+	* Related to bug #727338: currency for Latvia is EUR.
+
+2014-04-05 Cristian Marchi 
+
+	* Update it translation and a small fix for account.
+
+2014-04-05 Cristian Marchi 
+
+	* Fix spaces for some strings not correctly picked up by xgettext.scm script.
+
+2014-04-05 Cristian Marchi 
+
+	* Bump copyright year
+
+2014-04-05 Cristian Marchi 
+
+	* Bug #727338 - Translation and Account file updates for Latvian.
+
+2014-03-30 Carsten Rinke 
+
+	* Bug727130 - Crash when newline in Report Title
+
+2014-04-01 John Ralls 
+
+	* Rename _git files to plain, fix links.
+
+2014-04-01 John Ralls 
+
+	* Remove svn-based build files
+
+2014-04-01 John Ralls 
+
+	* Write a timestamp log file at the beginning of a build on the server.
+
+2014-03-31 Christian Stimming 
+
+	* Win32: Update gwenhyhwfar/aqbanking again, but slightly more cautious (gwen-4.11.0 does not compile on win/mingw right now)
+
+2014-03-30 John Ralls 
+
+	* Revert "Win32 build: Update aqbanking version numbers" (tag: 2.6.3)
+
+2014-03-30 John Ralls 
+
+	* Revert "Win32: Roll back Gwenhywfar to 4.9.0 to resolve broken build."
+
 2014-03-29 John Ralls 
 
-	* Work around some test issues. (HEAD, master)
+	* Release 2.6.3
+
+2014-03-29 John Ralls 
+
+	* Work around some test issues.
 
 2014-03-29 John Ralls 
 
@@ -8,7 +792,7 @@
 
 2014-03-28 John Ralls 
 
-	* Win32: Roll back Gwenhywfar to 4.9.0 to resolve broken build. (origin/trunk, origin/master, origin/HEAD)
+	* Win32: Roll back Gwenhywfar to 4.9.0 to resolve broken build.
 
 2014-03-28 John Ralls 
 
@@ -104,7 +888,7 @@
 
 2014-03-06 Christian Stimming 
 
-	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name. (trunk, master)
+	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name.
 
 2014-03-06 Christian Stimming 
 
@@ -112,7 +896,7 @@
 
 2014-03-01 John Ralls 
 
-	* Release GnuCash 2.6.2 (2.6.2)
+	* Release GnuCash 2.6.2 (tag: 2.6.2)
 
 2014-03-01 John Ralls 
 
@@ -2800,7 +3584,7 @@
 
 2013-05-21 Geert Janssens 
 
-	* Fix windows build after it got broken by r22982
+	* Fix windows build after it got broken by r22982 (github/trunk)
 
 2013-05-20 Christian Stimming 
 

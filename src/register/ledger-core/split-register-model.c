@@ -1075,7 +1075,7 @@ gnc_split_register_get_vnotes_entry (VirtualLocation virt_loc,
 
     if(trans == NULL)
         return NULL;
-    else 
+    else
         return xaccTransGetVoidReason(trans);
 }
 

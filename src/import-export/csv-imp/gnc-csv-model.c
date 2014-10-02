@@ -340,6 +340,7 @@ GncCsvParseData* gnc_csv_new_parse_data (void)
     parse_data->chunk = g_string_chunk_new(100 * 1024);
     parse_data->start_row = 0;
     parse_data->end_row = 1000;
+    parse_data->skip_rows = FALSE;
     return parse_data;
 }
 
@@ -1077,7 +1078,7 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
         /* This flag is TRUE if there are any errors in this row. */
         gboolean errors = FALSE;
         gchar* error_message = NULL;
-        TransPropertyList* list = trans_property_list_new (account, parse_data->date_format, parse_data->currency_format );
+        TransPropertyList* list = trans_property_list_new (account, parse_data->date_format, parse_data->currency_format);
         GncCsvTransLine* trans_line = NULL;
 
         for (j = 0; j < line->len; j++)
@@ -1184,7 +1185,10 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
         }
         else
         {
-            i++;
+            if (parse_data->skip_rows == FALSE)
+                i++;
+            else
+                i = i + 2;
         }
     }
 

@@ -115,6 +115,7 @@ typedef struct
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     int start_row;              /**< The start row to generate transactions from. */
     int end_row;                /**< The end row to generate transactions from. */
+    gboolean skip_rows;         /**< Skip Alternate Rows from start row. */
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
 } GncCsvParseData;
 

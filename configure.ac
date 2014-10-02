@@ -93,7 +93,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr he hu it ja ko kok kok@latin lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+ALL_LINGUAS="ar bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr he hi hu it ja ko kok ks lt lv mr nb ne nl pl pt_BR pt ro ru rw sk sv ta te tr uk ur vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -1428,16 +1428,20 @@ AC_CONFIG_FILES(
   accounts/ja/Makefile
   accounts/ko/Makefile
   accounts/lv/Makefile
-  accounts/nl/Makefile
   accounts/nb/Makefile
+  accounts/nl/Makefile
   accounts/pl/Makefile
   accounts/pt_BR/Makefile
   accounts/pt_PT/Makefile
   accounts/ru/Makefile
   accounts/sk/Makefile
+  accounts/sv_AX/Makefile
+  accounts/sv_FI/Makefile
   accounts/sv_SE/Makefile
   accounts/tr_TR/Makefile
   accounts/zh_CN/Makefile
+  accounts/zh_HK/Makefile
+  accounts/zh_TW/Makefile
   checks/Makefile
   doc/Makefile
   doc/examples/Makefile
