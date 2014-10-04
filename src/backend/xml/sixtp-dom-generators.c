@@ -258,10 +258,8 @@ add_text_to_node(xmlNodePtr node, gchar *type, gchar *val)
     g_free(newval);
 }
 
-
-
 static void
-add_kvp_slot(gpointer key, gpointer value, gpointer data);
+add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node);
 
 static void
 add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
@@ -342,15 +340,19 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
     case KVP_TYPE_FRAME:
     {
         KvpFrame *frame;
+        const char ** keys;
+        unsigned int i;
 
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 
         frame = kvp_value_get_frame (val);
-        if (!frame || !kvp_frame_get_hash (frame))
+        if (!frame)
             break;
 
-        g_hash_table_foreach_sorted(kvp_frame_get_hash(frame),
-                                    add_kvp_slot, val_node, (GCompareFunc)strcmp);
+        keys = kvp_frame_get_keys(frame);
+        for (i = 0; keys[i]; ++i)
+            add_kvp_slot(keys[i], kvp_frame_get_value(frame, keys[i]), val_node);
+        g_free(keys);
     }
     break;
     default:
@@ -359,43 +361,36 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
 }
 
 static void
-add_kvp_slot(gpointer key, gpointer value, gpointer data)
+add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node)
 {
     xmlNodePtr slot_node;
-    xmlNodePtr node = (xmlNodePtr)data;
     gchar *newkey = g_strdup ((gchar*)key);
     slot_node = xmlNewChild(node, NULL, BAD_CAST "slot", NULL);
 
     xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key",
 		    checked_char_cast (newkey));
     g_free (newkey);
-    add_kvp_value_node(slot_node, "slot:value", (KvpValue*)value);
+    add_kvp_value_node(slot_node, "slot:value", value);
 }
 
 xmlNodePtr
 kvp_frame_to_dom_tree(const char *tag, const KvpFrame *frame)
 {
     xmlNodePtr ret;
+    const char ** keys;
+    unsigned int i;
 
     if (!frame)
     {
         return NULL;
     }
 
-    if (!kvp_frame_get_hash(frame))
-    {
-        return NULL;
-    }
-
-    if (g_hash_table_size(kvp_frame_get_hash(frame)) == 0)
-    {
-        return NULL;
-    }
-
     ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    g_hash_table_foreach_sorted(kvp_frame_get_hash(frame),
-                                add_kvp_slot, ret, (GCompareFunc)strcmp);
+    keys = kvp_frame_get_keys(frame);
+    for (i = 0; keys[i]; ++i)
+        add_kvp_slot(keys[i], kvp_frame_get_value(frame, keys[i]), ret);
+    g_free(keys);
 
     return ret;
 }

@@ -2018,7 +2018,7 @@ xaccTransSetTxnType (Transaction *trans, char type)
     char s[2] = {type, '\0'};
     g_return_if_fail(trans);
     xaccTransBeginEdit(trans);
-    kvp_frame_set_str (trans->inst.kvp_data, TRANS_TXN_TYPE_KVP, s);
+    kvp_frame_set_string (trans->inst.kvp_data, TRANS_TXN_TYPE_KVP, s);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }
@@ -2041,7 +2041,7 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
     if (trans && reason)
     {
         xaccTransBeginEdit(trans);
-        kvp_frame_set_str (trans->inst.kvp_data,
+        kvp_frame_set_string (trans->inst.kvp_data,
                            TRANS_READ_ONLY_REASON, reason);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
@@ -2098,7 +2098,7 @@ xaccTransSetAssociation (Transaction *trans, const char *assoc)
     if (!trans || !assoc) return;
     xaccTransBeginEdit(trans);
 
-    kvp_frame_set_str (trans->inst.kvp_data, assoc_uri_str, assoc);
+    kvp_frame_set_string (trans->inst.kvp_data, assoc_uri_str, assoc);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }
@@ -2117,7 +2117,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
     if (!trans || !notes) return;
     xaccTransBeginEdit(trans);
 
-    kvp_frame_set_str (trans->inst.kvp_data, trans_notes_str, notes);
+    kvp_frame_set_string (trans->inst.kvp_data, trans_notes_str, notes);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }

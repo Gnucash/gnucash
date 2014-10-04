@@ -455,7 +455,7 @@ gnc_lot_set_title (GNCLot *lot, const char *str)
     if (!lot) return;
     qof_begin_edit(QOF_INSTANCE(lot));
     qof_instance_set_dirty(QOF_INSTANCE(lot));
-    kvp_frame_set_str (qof_instance_get_slots(QOF_INSTANCE (lot)),
+    kvp_frame_set_string (qof_instance_get_slots(QOF_INSTANCE (lot)),
 		       "/title", str);
     gnc_lot_commit_edit(lot);
 }
@@ -466,7 +466,7 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
     if (!lot) return;
     gnc_lot_begin_edit(lot);
     qof_instance_set_dirty(QOF_INSTANCE(lot));
-    kvp_frame_set_str (qof_instance_get_slots (QOF_INSTANCE (lot)),
+    kvp_frame_set_string (qof_instance_get_slots (QOF_INSTANCE (lot)),
 		       "/notes", str);
     gnc_lot_commit_edit(lot);
 }

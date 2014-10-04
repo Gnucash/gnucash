@@ -73,7 +73,7 @@ extern "C"
 #define QOF_MOD_KVP "qof.kvp"
 
 /** Opaque frame structure */
-typedef struct _KvpFrame KvpFrame;
+typedef struct KvpFrameImpl KvpFrame;
 
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */
@@ -138,6 +138,17 @@ gboolean     kvp_frame_is_empty(const KvpFrame * frame);
 @{
 */
 
+/**
+ * Retrieve the keys for the frame.
+ *
+ * Returns a null-terminated array of the keys which can be
+ * used to look up values and determine the pairs in this frame.
+ *
+ * The caller should free the array using g_free, but should
+ * not free the keys.
+ */
+const char ** kvp_frame_get_keys(const KvpFrame * frame);
+
 /**    store the value of the
  *     gint64 at the indicated path. If not all frame components of
  *     the path exist, they are created.
@@ -168,12 +179,6 @@ void kvp_frame_set_numeric(KvpFrame * frame, const gchar * path, gnc_numeric nva
  *     the path exist, they are created.
  */
 void kvp_frame_set_timespec(KvpFrame * frame, const gchar * path, Timespec ts);
-
-/** \deprecated
-
-Use kvp_frame_set_string instead of kvp_frame_set_str
-*/
-#define kvp_frame_set_str kvp_frame_set_string
 
 /** \brief Store a copy of the string at the indicated path.
 
@@ -572,7 +577,6 @@ void kvp_frame_for_each_slot(KvpFrame *f,
 
 /** Internal helper routines, you probably shouldn't be using these. */
 gchar* kvp_frame_to_string(const KvpFrame *frame);
-GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
 /** KvpItem: GValue Exchange
  * \brief Transfer of KVP to and from GValue, with the key
