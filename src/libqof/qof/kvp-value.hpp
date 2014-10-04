@@ -35,6 +35,16 @@ extern "C"
 #endif
 #include <boost/variant.hpp>
 
+/**
+ * KvpValueImpl should generally not be used on the stack because its
+ * destructor frees its contents, and it doesn't know anything
+ * about move semantics. Cases such as
+ *     KvpValueImpl v1;
+ *     auto guid = guid_new ();
+ *     v1 = KvpValueImpl {guid};
+ * fail because the third line deletes the guid in KvpValueImpl's destructor.
+ * Passing by value has similar problems.
+ */
 struct KvpValueImpl
 {
     public:
