@@ -274,7 +274,7 @@ gnc_option_db_new_for_type(QofIdType id_type)
 }
 
 void
-gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
+gnc_option_db_load_from_kvp(GNCOptionDB* odb, KvpFrame *slots)
 {
     static SCM kvp_to_scm = SCM_UNDEFINED;
     static SCM kvp_option_path = SCM_UNDEFINED;
@@ -308,7 +308,7 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
 }
 
 void
-gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots, gboolean clear_kvp)
+gnc_option_db_save_to_kvp(GNCOptionDB* odb, KvpFrame *slots, gboolean clear_kvp)
 {
     static SCM scm_to_kvp = SCM_UNDEFINED;
     static SCM kvp_option_path = SCM_UNDEFINED;

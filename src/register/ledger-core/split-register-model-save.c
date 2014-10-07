@@ -660,7 +660,7 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
     SRInfo *info = gnc_split_register_get_info (reg);
     Account *template_acc;
     const GncGUID *acctGUID;
-    kvp_frame *kvpf;
+    KvpFrame *kvpf;
     Account *acct;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, XFRM_CELL));

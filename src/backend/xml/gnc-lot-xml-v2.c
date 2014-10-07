@@ -60,7 +60,7 @@ xmlNodePtr
 gnc_lot_dom_tree_create(GNCLot *lot)
 {
     xmlNodePtr ret;
-    kvp_frame *kf;
+    KvpFrame *kf;
 
     ENTER("(lot=%p)", lot);
     ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);

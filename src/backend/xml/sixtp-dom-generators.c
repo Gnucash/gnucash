@@ -341,7 +341,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
     break;
     case KVP_TYPE_FRAME:
     {
-        kvp_frame *frame;
+        KvpFrame *frame;
 
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 
@@ -373,7 +373,7 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
 }
 
 xmlNodePtr
-kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
+kvp_frame_to_dom_tree(const char *tag, const KvpFrame *frame)
 {
     xmlNodePtr ret;
 

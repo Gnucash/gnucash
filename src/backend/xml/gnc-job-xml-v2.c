@@ -69,7 +69,7 @@ static xmlNodePtr
 job_dom_tree_create (GncJob *job)
 {
     xmlNodePtr ret;
-    kvp_frame *kf;
+    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_job_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST job_version_string);

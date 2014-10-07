@@ -332,7 +332,7 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
 KvpValue*
 dom_tree_to_frame_kvp_value(xmlNodePtr node)
 {
-    kvp_frame *frame;
+    KvpFrame *frame;
     KvpValue *ret = NULL;
 
     frame = dom_tree_to_kvp_frame(node);
@@ -404,7 +404,7 @@ dom_tree_to_kvp_value(xmlNodePtr node)
 }
 
 gboolean
-dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
+dom_tree_to_kvp_frame_given(xmlNodePtr node, KvpFrame *frame)
 {
     xmlNodePtr mark;
 
@@ -455,10 +455,10 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
 }
 
 
-kvp_frame*
+KvpFrame*
 dom_tree_to_kvp_frame(xmlNodePtr node)
 {
-    kvp_frame *ret;
+    KvpFrame *ret;
 
     g_return_val_if_fail(node, NULL);
 

@@ -1251,7 +1251,7 @@ xaccAccountScrubKvp (Account *account)
 {
     const gchar *str;
     gchar *str2;
-    kvp_frame *frame;
+    KvpFrame *frame;
 
     if (!account) return;
 

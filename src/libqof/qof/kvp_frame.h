@@ -107,8 +107,7 @@ typedef enum
 /** \deprecated Deprecated backwards compat token
 
 do \b not use these in new code.
-*/
-#define kvp_frame KvpFrame
+ */
 /** \deprecated Deprecated backwards compat token */
 #define kvp_value_t KvpValueType
 

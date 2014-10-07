@@ -413,8 +413,8 @@ gnc_is_xml_data_file(const gchar *filename)
        </s>
      </kvp-frame>
 
-   and return a kvp_frame*.  The start handler for the top allocates
-   the kvp_frame* and passes it to the children.  The <s> blocks add
+   and return a KvpFrame*.  The start handler for the top allocates
+   the KvpFrame* and passes it to the children.  The <s> blocks add
    slots according to their <k> (key) and value blocks.
 
    FIXME: right now this is totally inappropriate for cases where we
@@ -738,7 +738,7 @@ glist_kvp_value_parser_new(sixtp *kvp_frame_parser)
 
    kvp-frame slot handler.
 
-   input: kvp_frame*
+   input: KvpFrame*
    returns: NA
 
    start: NA
@@ -759,7 +759,7 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
                            gpointer parent_data, gpointer global_data,
                            gpointer *result, const gchar *tag)
 {
-    kvp_frame *f = (kvp_frame *) parent_data;
+    KvpFrame *f = (KvpFrame *) parent_data;
     GSList *lp;
     guint64 key_node_count;
     gchar *key = NULL;
@@ -787,7 +787,7 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
         {
             if (is_child_result_from_node_named(cr, "frame"))
             {
-                kvp_frame *frame = cr->data;
+                KvpFrame *frame = cr->data;
                 value = kvp_value_new_frame (frame);
                 delete_value = TRUE;
             }
@@ -858,16 +858,16 @@ kvp_frame_slot_parser_new(sixtp *kvp_frame_parser)
 /* <kvp-frame> - can be used anywhere.
 
    input: NA
-   returns: kvp_frame*
+   returns: KvpFrame*
 
-   start: Allocates kvp_frame* and places in data_for_children.
+   start: Allocates KvpFrame* and places in data_for_children.
    characters: none (whitespace only).
-   end: put kvp_frame* into result if everything's OK.
+   end: put KvpFrame* into result if everything's OK.
 
-   cleanup-result: delete kvp_frame*
+   cleanup-result: delete KvpFrame*
    cleanup-chars: NA
-   fail: delete kvp_frame*
-   result-fail: delete kvp_frame*
+   fail: delete KvpFrame*
+   result-fail: delete KvpFrame*
    chars-fail: NA
 
  */
@@ -877,7 +877,7 @@ kvp_frame_start_handler(GSList* sibling_data, gpointer parent_data,
                         gpointer global_data, gpointer *data_for_children,
                         gpointer *result, const gchar *tag, gchar **attrs)
 {
-    kvp_frame *f = kvp_frame_new();
+    KvpFrame *f = kvp_frame_new();
     g_return_val_if_fail(f, FALSE);
     *data_for_children = f;
     return(TRUE);
@@ -889,7 +889,7 @@ kvp_frame_end_handler(gpointer data_for_children,
                       gpointer parent_data, gpointer global_data,
                       gpointer *result, const gchar *tag)
 {
-    kvp_frame *f = (kvp_frame *) data_for_children;
+    KvpFrame *f = (KvpFrame *) data_for_children;
     g_return_val_if_fail(f, FALSE);
     *result = f;
     return(TRUE);
@@ -904,14 +904,14 @@ kvp_frame_fail_handler(gpointer data_for_children,
                        gpointer *result,
                        const gchar *tag)
 {
-    kvp_frame *f = (kvp_frame *) data_for_children;
+    KvpFrame *f = (KvpFrame *) data_for_children;
     if (f) kvp_frame_delete(f);
 }
 
 static void
 kvp_frame_result_cleanup(sixtp_child_result *cr)
 {
-    kvp_frame *f = (kvp_frame *) cr->data;;
+    KvpFrame *f = (KvpFrame *) cr->data;;
     if (f) kvp_frame_delete(f);
 }
 
@@ -1244,7 +1244,7 @@ account_restore_after_child_handler(gpointer data_for_children,
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
     if (strcmp(child_result->tag, "slots") == 0)
     {
-        kvp_frame *f = (kvp_frame *) child_result->data;
+        KvpFrame *f = (KvpFrame *) child_result->data;
         g_return_val_if_fail(f, FALSE);
         if (a->inst.kvp_data) kvp_frame_delete(a->inst.kvp_data);
         a->inst.kvp_data = f;
@@ -2173,7 +2173,7 @@ txn_restore_after_child_handler(gpointer data_for_children,
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
     if (strcmp(child_result->tag, "slots") == 0)
     {
-        kvp_frame *f = (kvp_frame *) child_result->data;
+        KvpFrame *f = (KvpFrame *) child_result->data;
         g_return_val_if_fail(f, FALSE);
         qof_instance_set_slots(QOF_INSTANCE(trans), f);
         child_result->should_cleanup = FALSE;
@@ -2478,7 +2478,7 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
 
     if (strcmp(child_result->tag, "slots") == 0)
     {
-        kvp_frame *f = (kvp_frame *) child_result->data;
+        KvpFrame *f = (KvpFrame *) child_result->data;
         g_return_val_if_fail(f, FALSE);
         if (s->inst.kvp_data) kvp_frame_delete(s->inst.kvp_data);
         s->inst.kvp_data = f;

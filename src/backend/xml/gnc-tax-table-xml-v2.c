@@ -107,7 +107,7 @@ taxtable_dom_tree_create (GncTaxTable *table)
 {
     xmlNodePtr ret, entries;
     GList *list;
-    kvp_frame *kf;
+    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_taxtable_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST taxtable_version_string);

@@ -5014,7 +5014,7 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 
 typedef struct _GncImportMatchMap
 {
-    kvp_frame *	frame;
+    KvpFrame *	frame;
     Account *	acc;
     QofBook *	book;
 } GncImportMatchMap;
@@ -5035,7 +5035,7 @@ GncImportMatchMap *
 gnc_account_create_imap (Account *acc)
 {
     GncImportMatchMap *imap;
-    kvp_frame *frame;
+    KvpFrame *frame;
 
     if (!acc) return NULL;
     frame = qof_instance_get_slots (QOF_INSTANCE (acc));
@@ -5256,7 +5256,7 @@ gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 						       g_str_equal);
     struct account_info account_i;
     KvpValue* value;
-    kvp_frame* token_frame;
+    KvpFrame* token_frame;
 
     ENTER(" ");
 
