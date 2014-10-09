@@ -23,6 +23,7 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <stdexcept>
 #include "kvp_frame-p.hpp"
 
 KvpValueImpl::KvpValueImpl(KvpValueImpl const & other) noexcept
