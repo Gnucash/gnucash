@@ -421,7 +421,7 @@
                     data)
                   (series-data-end col (list-ref-safe (gnc:html-barchart-col-labels barchart) col))
                   (if (< col (- cols 1))
-                      (loop (+ 1 col) 1)))))
+                      (loop (+ 1 col) 0)))))
 
 
             (push "var options = {
