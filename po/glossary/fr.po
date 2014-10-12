@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
-"POT-Creation-Date: 2013-05-08 22:16+0200\n"
+"POT-Creation-Date: 2014-10-13 00:33+0200\n"
 "PO-Revision-Date: 2013-12-25 13:16+0100\n"
 "Last-Translator: Sébastien Villemot <sebastien@debian.org>\n"
 "Language-Team: FR\n"
@@ -37,7 +37,12 @@ msgstr "hiérarchie du compte"
 msgid "account name"
 msgstr "nom du compte"
 
-#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#, fuzzy
+msgid "account type: Active"
+msgstr "type de compte : actif"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "type de compte : actif"
 
@@ -49,7 +54,7 @@ msgstr "type de compte : compte courant"
 msgid "account type: currency"
 msgstr "type de compte : devise"
 
-#. "see: Equity"
+#. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
 msgstr "type de compte : capitaux propres"
 
@@ -61,7 +66,7 @@ msgstr "type de compte : dépense"
 msgid "account type: Income"
 msgstr "type de compte : revenu"
 
-#. "A debt, a financial obligation"
+#. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
 msgstr "type de compte : passif"
 
@@ -72,6 +77,11 @@ msgstr "type de compte : marché monétaire"
 #. "-"
 msgid "account type: Mutual fund"
 msgstr "type de compte : fond mutuel"
+
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+#, fuzzy
+msgid "account type: Passive"
+msgstr "type de compte : actif"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -620,6 +630,14 @@ msgstr "registre : journal de transaction"
 #. "reload the current document"
 msgid "reload, to"
 msgstr "recharger, pour"
+
+#. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
+msgid "report form: T Account Form"
+msgstr ""
+
+#. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
+msgid "report form: Vertical Form"
+msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"

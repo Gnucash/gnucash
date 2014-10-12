@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2013-05-08 22:16+0200\n"
+"POT-Creation-Date: 2014-10-13 00:33+0200\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
@@ -38,7 +38,13 @@ msgid "account name"
 msgstr "科目名称"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
-#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#, fuzzy
+msgid "account type: Active"
+msgstr "科目类型：资产"
+
+# 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "科目类型：资产"
 
@@ -52,7 +58,7 @@ msgid "account type: currency"
 msgstr "科目类型：货币"
 
 # 见：所有者权益
-#. "see: Equity"
+#. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
 msgstr "科目类型：所有者权益"
 
@@ -65,7 +71,7 @@ msgid "account type: Income"
 msgstr "科目类型：收入"
 
 # 债务，财政义务
-#. "A debt, a financial obligation"
+#. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
 msgstr "科目类型：负债"
 
@@ -76,6 +82,12 @@ msgstr "科目类型：金融市场"
 #. "-"
 msgid "account type: Mutual fund"
 msgstr "科目类型：投资基金"
+
+# 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+#, fuzzy
+msgid "account type: Passive"
+msgstr "科目类型：资产"
 
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
@@ -760,6 +772,14 @@ msgstr "账簿：交易日记账"
 #. "reload the current document"
 msgid "reload, to"
 msgstr "重新加载"
+
+#. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
+msgid "report form: T Account Form"
+msgstr ""
+
+#. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
+msgid "report form: Vertical Form"
+msgstr ""
 
 # 一个所有者权益科目的名字，以区别开期初余额。“留存收益包括盈余公积和未分配利润 ” -- http://www.hudong.com/wiki/%E7%95%99%E5%AD%98%E6%94%B6%E7%9B%8A
 # Retained Losses = Accumulated losses, 所以翻译为累积亏损。
