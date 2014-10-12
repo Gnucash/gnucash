@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.4\n"
-"POT-Creation-Date: 2013-05-08 22:16+0200\n"
+"POT-Creation-Date: 2014-10-13 00:33+0200\n"
 "PO-Revision-Date: 2011-08-17 13:23-0000\n"
 "Last-Translator: Tiago Neiva <tneiva@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -37,7 +37,12 @@ msgstr "hierarquia de contas"
 msgid "account name"
 msgstr "nome de conta"
 
-#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#, fuzzy
+msgid "account type: Active"
+msgstr "tipo de conta: Ativo"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "tipo de conta: Ativo"
 
@@ -49,7 +54,7 @@ msgstr "tipo de conta: à ordem"
 msgid "account type: currency"
 msgstr "tipo de conta: moeda"
 
-#. "see: Equity"
+#. "see: Equity, but see also 'account type: Passive'"
 #, fuzzy
 msgid "account type: Equity"
 msgstr "tipo de conta: Capital Próprio"
@@ -62,7 +67,7 @@ msgstr "tipo de conta: Despesas"
 msgid "account type: Income"
 msgstr "tipo de conta: Receitas"
 
-#. "A debt, a financial obligation"
+#. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
 msgstr "tipo de conta: Passivo"
 
@@ -73,6 +78,11 @@ msgstr "tipo de conta: mercado cambial"
 #. "-"
 msgid "account type: Mutual fund"
 msgstr "tipo de conta: Fundo de investimento"
+
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+#, fuzzy
+msgid "account type: Passive"
+msgstr "tipo de conta: Ativo"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -644,6 +654,14 @@ msgstr "registo: diário de transacções"
 #, fuzzy
 msgid "reload, to"
 msgstr "reler"
+
+#. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
+msgid "report form: T Account Form"
+msgstr ""
+
+#. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
+msgid "report form: Vertical Form"
+msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 #, fuzzy

@@ -664,6 +664,7 @@ xaccSchedXactionGetLastOccurDate(const SchedXaction *sx )
 void
 xaccSchedXactionSetLastOccurDate(SchedXaction *sx, const GDate* new_last_occur)
 {
+    g_return_if_fail (new_last_occur != NULL);
     if (g_date_valid(&sx->last_date)
             && g_date_compare(&sx->last_date, new_last_occur) == 0)
         return;
