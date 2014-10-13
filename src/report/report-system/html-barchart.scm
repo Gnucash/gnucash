@@ -462,8 +462,8 @@
                    cursor:{
                        show: true,
                        showTooltip: false,
-                       zoom: true
-                   }
+                       zoom: true,
+                   },
                 };\n")
 
             (push "  options.stackSeries = ")
@@ -495,7 +495,7 @@
                 (push "\";\n")))
 
 
-            (push "$.jqplot.config.enablePlugins = true;")
+            (push "$.jqplot.config.enablePlugins = true;\n")
             (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
 
   function formatTooltip(str, seriesIndex, pointIndex) {
