@@ -456,8 +456,12 @@
                            autoscale: true,
                        },
                    },
+                   highlighter: {
+                       tooltipContentEditor: formatTooltip,
+                   },
                    cursor:{
                        show: true,
+                       showTooltip: false,
                        zoom: true
                    }
                 };\n")
@@ -495,12 +499,9 @@
             (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
 
   function formatTooltip(str, seriesIndex, pointIndex) {
-      if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-          x = options.axes.xaxis.ticks[pointIndex];
-      else
-          x = pointIndex;
+      x = data[seriesIndex][pointIndex][0];
       y = data[seriesIndex][pointIndex][1].toFixed(2);
-      return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
+      return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
   }\n") 
 
             (push "});\n</script>")
