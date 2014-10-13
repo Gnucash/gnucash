@@ -386,7 +386,7 @@
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-js-include "jqplot/jqplot.barRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.categoryAxisRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
@@ -445,7 +445,7 @@
                    },
                    axes: {
                        xaxis: {
-                           renderer:$.jqplot.DateAxisRenderer,
+                           renderer:$.jqplot.CategoryAxisRenderer,
                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                            tickOptions: {
                                angle: -30,
