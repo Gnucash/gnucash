@@ -32,6 +32,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Current Account</act:name>
@@ -73,6 +74,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Capital Equipment</act:name>
@@ -141,6 +143,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Owed Corporation Tax</act:name>
@@ -206,6 +209,7 @@
       <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Input</act:name>
@@ -277,6 +281,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Corporation Tax</act:name>
@@ -390,6 +395,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
@@ -521,6 +527,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Depreciation</act:name>
@@ -780,6 +787,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Accounts Receivable</act:name>
@@ -797,6 +805,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Cash</act:name>
@@ -807,5 +816,6 @@
     <cmdty:id>GBP</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 </gnc-account-example>
