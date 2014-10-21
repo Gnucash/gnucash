@@ -26422,13 +26422,12 @@ msgstr "Vakeant vaporpachea failichem nanv zantunt veparnixannicho aspav asa"
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2662 ../intl-scm/guile-strings.c:3320
-#, c-format
 msgid ""
-"Width of the logo in CSS format, e.g. 10 or 32px. Leave blank to display "
+"Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display "
 "the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
-"Veparnixannechi rundai CSS soruponnant, dekhik 10 vo 32 px. Sobhavik rundaie "
+"Veparnixannechi rundai CSS soruponnant, dekhik 10% vo 32 px. Sobhavik rundaie "
 "khatik korem dovor veparnixanni dakhol korunk. Veparnixannechi unchai tea "
 "pormonnem korpant ietli"
 

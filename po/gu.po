@@ -19019,13 +19019,12 @@ msgstr "એક ફાઈલનું નામ જેમાં અહેવા�
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2310 ../intl-scm/guile-strings.c:2840
-#, c-format
 msgid ""
-"Width of the logo in CSS format, e.g. 10 or 32px.  Leave blank to display "
+"Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display "
 "the logo at its natural width.  The height of the logo will be scaled "
 "accordingly."
 msgstr ""
-"CSS ફોર્મેટમાં લોગોની પહોળાઇ, જેમ કે 10  અથવા 32px. લોગોને તેની સ્વભાવિક પહોળાઇમાં "
+"CSS ફોર્મેટમાં લોગોની પહોળાઇ, જેમ કે 10% અથવા 32px. લોગોને તેની સ્વભાવિક પહોળાઇમાં "
 "પ્રદર્શિત કરવા માટે ખાલી છોડી દો. લોગોની ઊંચાઇનું માપ તે પ્રમાણમાં જ હશે."
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
