@@ -193,7 +193,7 @@
                 (N_ "Name of a file containing a logo to be used on the report.") 
                 ""))
   (add-option (gnc:make-string-option
-                displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10 percent or 32 pixels. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") ""))
+                displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") ""))
 (add-option (gnc:make-simple-boolean-option	displaypage	optname-border-collapse	"g" (N_ "Border-collapse?") #f))
 (add-option (gnc:make-string-option		displaypage	optname-border-color-th "h" (N_ "CSS color.") "black"))
 (add-option (gnc:make-string-option		displaypage	optname-border-color-td "i" (N_ "CSS color.") "black"))
