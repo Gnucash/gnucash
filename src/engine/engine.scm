@@ -94,7 +94,7 @@
 (export trans-splits)
 (export gnc:transaction-scm-onto-transaction)
 
-(load-from-path "gnc-numeric.scm")
-(load-from-path "commodity-table.scm")
-(load-from-path "engine-interface.scm")
-(load-from-path "engine-utilities.scm")
+(load-from-path "gnc-numeric")
+(load-from-path "commodity-table")
+(load-from-path "engine-interface")
+(load-from-path "engine-utilities")

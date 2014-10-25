@@ -37,7 +37,7 @@
 
 ;; included since Bug726449
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot.scm") ;; for jqplot-escape-string
+(load-from-path "html-jqplot") ;; for jqplot-escape-string
 
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only

@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot.scm")
+(load-from-path "html-jqplot")
 
 (define <html-barchart>
   (make-record-type "<html-barchart>"

@@ -42,8 +42,8 @@
 
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
-(load-from-path "string.scm")
-(load-from-path "fin.scm")
+(load-from-path "string")
+(load-from-path "fin")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
@@ -57,7 +57,7 @@
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 ;; Get the Makefile.am/configure.in generated variables.
-(load-from-path "build-config.scm")
+(load-from-path "build-config")
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.

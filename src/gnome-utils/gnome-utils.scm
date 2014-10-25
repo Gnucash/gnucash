@@ -19,7 +19,7 @@
 
 (export gnc:kvp-option-dialog)
 
-(load-from-path "gnc-menu-extensions.scm")
+(load-from-path "gnc-menu-extensions")
 
 (define (gnc:kvp-option-dialog id-type slots title changed_cb)
   (let* ((options (gnc-make-kvp-options id-type))

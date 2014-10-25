@@ -29,5 +29,5 @@
 
 (export gnc:*tax-label* gnc:*tax-nr-label*)
 
-(load-from-path "txf-de_DE.scm")
-(load-from-path "txf-help-de_DE.scm")
+(load-from-path "txf-de_DE")
+(load-from-path "txf-help-de_DE")

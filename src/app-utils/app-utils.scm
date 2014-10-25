@@ -300,13 +300,13 @@
 ;; make N_ available everywhere.
 (module-define! the-root-module 'N_ (module-ref (current-module) 'N_))
 
-(load-from-path "c-interface.scm")
-(load-from-path "config-var.scm")
-(load-from-path "options.scm")
-(load-from-path "hooks.scm")
-(load-from-path "prefs.scm")
-(load-from-path "date-utilities.scm")
-(load-from-path "simple-obj.scm")
+(load-from-path "c-interface")
+(load-from-path "config-var")
+(load-from-path "options")
+(load-from-path "hooks")
+(load-from-path "prefs")
+(load-from-path "date-utilities")
+(load-from-path "simple-obj")
 
 ;; Business options
 (define gnc:*business-label* (N_ "Business"))
@@ -343,5 +343,5 @@
 
 (export gnc:*option-section-budgeting* gnc:*option-name-default-budget*)
 
-(load-from-path "business-options.scm")
-(load-from-path "business-prefs.scm")
+(load-from-path "business-options")
+(load-from-path "business-prefs")
