@@ -15,7 +15,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/test-core
   
 TESTS_ENVIRONMENT = \
-  GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
+  GNC_BUILDDIR="${abs_top_builddir}" \
   PYTHON=${PYTHON} \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/optional/python-bindings \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/optional/python-bindings/.libs \
