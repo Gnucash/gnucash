@@ -83,21 +83,16 @@ libgncmod_business_gnome_la_LIBADD = \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}
 
-# For Business Reports
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmmod_DATA =
-
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = business-gnome.scm
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmod_DATA = business-gnome.scm
 
 EXTRA_DIST = \
-  ${gncmod_DATA} \
   ${gncscmmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
 #for running
-SCM_FILE_LINKS = ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 .scm-links: 
@@ -108,7 +103,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links

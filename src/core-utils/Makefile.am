@@ -67,13 +67,13 @@ AM_CPPFLAGS = \
   -I${top_builddir}/src \
   -I${top_srcdir}/src
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = core-utils.scm
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmod_DATA = core-utils.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
 #for running
-SCM_FILE_LINKS = ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 if WITH_PYTHON
@@ -106,7 +106,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
@@ -114,7 +114,7 @@ endif
 
 noinst_DATA = .scm-links
 BUILT_SOURCES = gncla-dir.h gnc-version.h
-EXTRA_DIST = $(gncmod_DATA) core-utils.i gncla-dir.h.in gnc-scm-info.h
+EXTRA_DIST = $(gncscmmod_DATA) core-utils.i gncla-dir.h.in gnc-scm-info.h
 clean-local:
 	rm -rf gnucash
 

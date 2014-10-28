@@ -62,8 +62,8 @@ endif
 endif
 endif
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
-gncmod_DATA = report-gnome.scm
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
+gncscmmod_DATA = report-gnome.scm
 
 noinst_DATA = .scm-links
 
@@ -80,13 +80,13 @@ ui_DATA = \
 EXTRA_DIST = \
   report-gnome.i \
   ${gtkbuilder_DATA} \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${ui_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
 # for running
-SCM_FILE_LINKS = ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 .scm-links: 
@@ -98,7 +98,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash/report; for A in $(gncmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links

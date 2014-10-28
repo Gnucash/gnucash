@@ -47,7 +47,7 @@ AM_CPPFLAGS = \
   ${GTK_CFLAGS} \
   ${GUILE_CFLAGS}
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = \
      commodity-utilities.scm  \
      html-acct-table.scm \
@@ -66,8 +66,6 @@ gncscm_DATA = \
      options-utilities.scm \
      report-utilities.scm \
      report.scm
-
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
 
 gncmodscmdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/report-system
 

@@ -77,10 +77,11 @@ _unittest_support_la_LIBADD = \
   libtest-core.la
 
 endif
-SCM_FILES = unittest-support.scm
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = $(SCM_FILES)
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmod_DATA = unittest-support.scm
+
+SCM_FILES = $(gncscmmod_DATA)
 
 .scm-links:
 	$(RM) -rf gnucash
@@ -90,7 +91,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(SCM_FILES) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links

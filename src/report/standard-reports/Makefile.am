@@ -22,8 +22,8 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
    standard-reports.scm
 
-gncscmreportmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports
-gncscmreportmod_DATA = \
+gncscmrptdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports
+gncscmrpt_DATA = \
    account-piecharts.scm \
    account-summary.scm \
    advanced-portfolio.scm \
@@ -54,7 +54,7 @@ gncscmreportmod_DATA = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = ${gncscmmod_DATA} ${gncscmreportmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA} ${gncscmrpt_DATA}
 endif
 
 .scm-links:
@@ -68,7 +68,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
-	( cd gnucash/report/standard-reports; for A in $(gncscmreportmod_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
+	( cd gnucash/report/standard-reports; for A in $(gncscmrpt_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
@@ -79,7 +79,7 @@ clean-local:
 
 noinst_DATA = .scm-links
 
-EXTRA_DIST = ${gncscmmod_DATA} ${gncscmreportmod_DATA}
+EXTRA_DIST = ${gncscmmod_DATA} ${gncscmrpt_DATA}
 
 CLEANFILES = .scm-links ${SCM_FILE_LINKS}
 DISTCLEANFILES =

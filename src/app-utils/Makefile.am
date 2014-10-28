@@ -136,10 +136,10 @@ libgncmod_app_utils_python_la_LIBADD = \
   libgncmod-app-utils.la
 endif
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = app-utils.scm 
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmod_DATA = app-utils.scm 
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = \
   business-options.scm \
   business-prefs.scm \
@@ -168,7 +168,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   swig-app-utils-python.c \
   app-utils.i \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA} \
   ${prefsmigration_DATA}
 
@@ -182,7 +182,7 @@ endif
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 endif
 
@@ -194,7 +194,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links

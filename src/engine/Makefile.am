@@ -143,11 +143,11 @@ libgncmod_engine_la_LIBADD = \
   ${GLIB_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = engine.scm \
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmod_DATA = engine.scm \
   business-core.scm
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = \
   commodity-table.scm \
   engine-interface.scm \
@@ -164,7 +164,7 @@ EXTRA_DIST = \
   SX-book-p.h \
   engine.i \
   business-core.i \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
@@ -172,7 +172,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 SCM_FILE_LINKS = iso-4217-currencies.scm
 #For executing test cases
 SCM_FILE_LINKS += \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 endif
 
@@ -184,7 +184,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links

@@ -19,7 +19,7 @@ AM_CPPFLAGS = \
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/tax
 gncscmmod_DATA = us.scm de_DE.scm
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = txf.scm txf-help.scm txf-de_DE.scm txf-help-de_DE.scm 
 
 if GNUCASH_SEPARATE_BUILDDIR
