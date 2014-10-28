@@ -25,6 +25,7 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash core-utils)) ; for gnc:version
+(use-modules (gnucash gettext))
 (use-modules (gnucash gnc-module))
 (use-modules (sw_report_system))
 

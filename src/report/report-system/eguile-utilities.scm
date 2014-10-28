@@ -32,8 +32,6 @@
 (use-modules (gnucash core-utils))
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/app-utils" 0)
-(use-modules (gnucash report standard-reports))
-(use-modules (gnucash report business-reports))
 ; Syncase is deprecated and redundant in guile 2
 (cond-expand
   (guile-2 )

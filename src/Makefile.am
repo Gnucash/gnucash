@@ -10,8 +10,7 @@ NONGUI_SUBDIRS = \
   engine \
   backend \
   scm \
-  quotes \
-  tax
+  quotes
 
 if WITH_PYTHON
    PYTHON_DIR = python
@@ -22,6 +21,7 @@ endif
 # app-utils. It should go away in the long run, though.
 ALMOST_NONGUI_SUBDIRS = \
   app-utils \
+  tax \
   ${PYTHON_DIR}
 
 # These directories contain the code with gtk dependency

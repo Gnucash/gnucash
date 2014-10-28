@@ -137,7 +137,9 @@ libgncmod_app_utils_python_la_LIBADD = \
 endif
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncscmmod_DATA = app-utils.scm 
+gncscmmod_DATA = \
+  gettext.scm \
+  app-utils.scm
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = \

@@ -9,6 +9,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
 

@@ -76,6 +76,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
 (use-modules (gnucash printf))

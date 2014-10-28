@@ -22,6 +22,7 @@
 
 (use-modules (gnucash main))
 (use-modules (gnucash printf))
+(use-modules (gnucash gettext))
 (use-modules (sw_report_system))
 
 ;; Terminology in this file:
@@ -66,6 +67,8 @@
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
+(define gnc:menuname-business-reports (N_ "_Business"))
+(define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 ;; We want to warn users if they've got an old-style, non-guid custom
 ;; report-template, but only once

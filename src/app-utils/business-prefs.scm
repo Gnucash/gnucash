@@ -19,6 +19,8 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (gnucash gettext))
+
 (define gnc:*option-section-counters* (N_ "Counters"))
 
 ;; This defines all available counter types to show options for. This a

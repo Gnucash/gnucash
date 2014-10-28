@@ -109,10 +109,12 @@
 (export gnc:menuname-taxes)
 (export gnc:menuname-utility)
 (export gnc:menuname-custom)
+(export gnc:menuname-business-reports)
 (export gnc:pagename-general)
 (export gnc:pagename-accounts)
 (export gnc:pagename-display)
 (export gnc:optname-reportname)
+(export gnc:optname-invoice-number)
 
 (export gnc:define-report)
 (export <report>)

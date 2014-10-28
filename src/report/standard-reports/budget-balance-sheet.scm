@@ -31,7 +31,7 @@
 (define-module (gnucash report standard-reports budget-balance-sheet))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 

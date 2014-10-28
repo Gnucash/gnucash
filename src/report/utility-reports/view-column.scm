@@ -29,6 +29,7 @@
 (define-module (gnucash report view-column))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 (use-modules (sw_report_system))
 
 (use-modules (gnucash printf))

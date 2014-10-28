@@ -1,7 +1,7 @@
 (define-module (gnucash tax de_DE))
 
 (use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/app-utils" 0)
+(use-modules (gnucash gettext))
 
 (export gnc:txf-get-payer-name-source)
 (export gnc:txf-get-form)
