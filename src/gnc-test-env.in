@@ -7,8 +7,12 @@ exec @GUILE@ -s $0 "$@"
 ;; library-dirs
 
 (use-modules (srfi srfi-13) (srfi srfi-14)) ;; for string-tokenize
+;; 'debug is deprecated and unused since guile 2
+(cond-expand
+  (guile-2 )
+  (else
+    (debug-enable 'debug)))
 (debug-enable 'backtrace)
-(debug-enable 'debug)
 (read-enable 'positions)
 
 ;; Are we on MS Windows here? If yes, make this a #t.
