@@ -101,7 +101,9 @@ if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/test-core
 
-%.go : %.scm .scm-links
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
