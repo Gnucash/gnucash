@@ -33,6 +33,23 @@ check_PROGRAMS = \
 
 TESTS = ${check_PROGRAMS}
 
+if WITH_GOOGLE_TEST
+test_qofint128_SOURCES = \
+        $(top_srcdir)/${MODULEPATH}/qofint128.cpp \
+        ${GTEST_ROOT}/src/gtest_main.cc \
+        gtest-qofint128.cpp
+
+test_qofint128_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+        ${GLIB_CFLAGS}
+
+test_qofint128_LDADD = \
+        ${GLIB_LIBS} \
+        $(top_builddir)/src/test-core/libgtest.a
+
+check_PROGRAMS += test-qofint128
+endif
+
 test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 
 #The tests might require more libraries, but try to keep them
