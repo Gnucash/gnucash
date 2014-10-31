@@ -51,6 +51,38 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/gnome-utils \
+  --gnc-module-dir ${top_builddir}/src/html \
+  --gnc-module-dir ${top_builddir}/src/report/report-system \
+  --gnc-module-dir ${top_builddir}/src/tax/us \
+  --guile-load-dir ${top_builddir}/src/app-utils \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/report/report-system \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --guile-load-dir ${top_builddir}/src/tax/us \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome-utils
+
+%.go : %.scm .scm-links
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmrptcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/locale-specific
+gncscmrptcache_DATA = $(gncscmrpt_DATA:.scm=.go)
+endif
+
 clean-local:
 	$(RM) -rf gnucash
 

@@ -12,9 +12,9 @@
   (guile-2
     (eval-when
       (compile load eval expand)
-      (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
+      (load-extension "libgnc-core-utils.so" "scm_init_sw_core_utils_module")))
   (else
-    (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
+    (load-extension "libgnc-core-utils.so" "scm_init_sw_core_utils_module")))
 
 (use-modules (sw_core_utils))
 

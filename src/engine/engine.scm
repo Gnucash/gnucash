@@ -1,5 +1,11 @@
 (define-module (gnucash engine))
 
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine.so" "scm_init_sw_engine_module")))
+  (else ))
 (use-modules (sw_engine))
 
 (export GNC-RND-FLOOR)

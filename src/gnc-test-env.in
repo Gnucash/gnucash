@@ -109,6 +109,10 @@ exec @GUILE@ -s $0 "$@"
 
 (display
  (adapt-dirsep
+  (get-dir-adder "GUILE_LOAD_COMPILED_PATH" guile-load-dirs "" path-sep-str)))
+
+(display
+ (adapt-dirsep
   (get-dir-adder "LD_LIBRARY_PATH" library-dirs "/.libs" path-sep-str)))
 
 (display
@@ -124,6 +128,7 @@ exec @GUILE@ -s $0 "$@"
       (display "; ")
       (display " export GNC_MODULE_PATH;")
       (display " export GUILE_LOAD_PATH;")
+      (display " export GUILE_LOAD_COMPILED_PATH;")
       (display " export LD_LIBRARY_PATH;")
       (display " export DYLD_LIBRARY_PATH;")
       (if is-windows?

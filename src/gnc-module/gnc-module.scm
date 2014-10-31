@@ -13,9 +13,9 @@
   (guile-2
     (eval-when
       (compile load eval expand)
-      (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
+      (load-extension "libgnc-module.so" "scm_init_sw_gnc_module_module")))
   (else
-    (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
+    (load-extension "libgnc-module.so" "scm_init_sw_gnc_module_module")))
 
 (use-modules (sw_gnc_module))
 

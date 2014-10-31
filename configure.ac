@@ -484,6 +484,7 @@ PKG_CHECK_MODULES(GUILE,
 ])
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
+AC_SUBST(GUILE_EFFECTIVE_VERSION)
 
 
 ### --------------------------------------------------------------------------

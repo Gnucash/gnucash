@@ -41,6 +41,25 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module
+
+%.go : %.scm .scm-links
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
+endif
+
 clean-local:
 	$(RM) -rf gnucash
 

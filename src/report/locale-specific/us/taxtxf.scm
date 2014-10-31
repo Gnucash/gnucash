@@ -77,6 +77,13 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-gnome-utils.so" "scm_init_sw_gnome_utils_module")))
+  (else ))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
 (use-modules (gnucash printf))

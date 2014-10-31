@@ -3,6 +3,12 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-gnome-utils.so" "scm_init_sw_gnome_utils_module")))
+  (else ))
 (use-modules (sw_gnome_utils))
 (gnc:module-load "gnucash/app-utils" 0)
 

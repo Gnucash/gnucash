@@ -16,6 +16,12 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define-module (gnucash app-utils))
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-app-utils.so" "scm_init_sw_app_utils_module")))
+  (else ))
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
