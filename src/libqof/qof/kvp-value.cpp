@@ -291,33 +291,35 @@ compare(const KvpValueImpl * one, const KvpValueImpl * two) noexcept
     return compare(*one, *two);
 }
 
-template <typename T> void
-delete_value(T & value)
+struct delete_visitor : boost::static_visitor<void>
 {
-    /*do nothing*/
-}
+    template <typename T> void 
+    operator()(T &) { /*do nothing*/ }
+};
+
 template <> void
-delete_value(GList * & value)
+delete_visitor::operator()(GList * & value)
 {
     kvp_glist_delete(value);
 }
 template <> void
-delete_value(gchar * & value)
+delete_visitor::operator()(gchar * & value)
 {
     g_free(value);
 }
 template <> void
-delete_value(GncGUID * & value)
+delete_visitor::operator()(GncGUID * & value)
 {
     guid_free(value);
 }
 template <> void
-delete_value(KvpFrame * & value)
+delete_visitor::operator()(KvpFrame * & value)
 {
     kvp_frame_delete(value);
 }
 
 KvpValueImpl::~KvpValueImpl() noexcept
 {
-    delete_value(datastore);
+    delete_visitor d;
+    boost::apply_visitor(d, datastore);
 }
