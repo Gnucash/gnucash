@@ -2,7 +2,7 @@
 SUBDIRS = gnumeric
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 
 gncscmmod_DATA = main.scm price-quotes.scm printf.scm
 
@@ -53,7 +53,7 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
 gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@

@@ -18,11 +18,11 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = \
    standard-reports.scm
 
-gncscmrptdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports
+gncscmrptdir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/standard-reports
 gncscmrpt_DATA = \
    account-piecharts.scm \
    account-summary.scm \
@@ -99,10 +99,10 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
-gncscmrptcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/standard-reports
+gncscmrptcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/standard-reports
 gncscmrptcache_DATA = $(gncscmrpt_DATA:.scm=.go)
 endif
 

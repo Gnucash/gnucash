@@ -31,7 +31,6 @@ CLEANFILES = guile
 gnucash-env: gnucash-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
             -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
             -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \

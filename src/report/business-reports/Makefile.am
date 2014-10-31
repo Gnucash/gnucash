@@ -1,4 +1,4 @@
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report
 gncscmmod_DATA = \
    aging.scm \
    customer-summary.scm \
@@ -16,7 +16,7 @@ gncscmmod_DATA = \
 # Note: list these files separately because they can't be compiled by guile2
 #       templates are a mixture of scheme and hmtl
 #       css files are not scheme at all
-gncscmtpldir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
+gncscmtpldir = ${GNC_SCM_INSTALL_DIR}/gnucash/report
 gncscmtpl_DATA = \
    taxinvoice.eguile.scm \
    taxinvoice.css \
@@ -69,7 +69,7 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 endif
 

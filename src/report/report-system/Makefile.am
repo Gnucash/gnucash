@@ -67,14 +67,14 @@ gncscm_DATA = \
      report-utilities.scm \
      report.scm
 
-gncmodscmdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/report-system
+gncmodscmdir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/report-system
 gncmodscm_DATA = \
      collectors.scm \
      list-extras.scm \
      report-collectors.scm
 
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = \
     report-system.scm \
 	eguile-gnc.scm \
@@ -131,10 +131,10 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
-gncmodscmcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/report-system
+gncmodscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/report-system
 gncmodscmcache_DATA = $(gncmodscm_DATA:.scm=.go)
 
 gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@

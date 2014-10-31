@@ -67,7 +67,7 @@ AM_CPPFLAGS = \
   -I${top_builddir}/src \
   -I${top_srcdir}/src
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 gncscmmod_DATA = core-utils.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
@@ -122,7 +122,7 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV})  \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 endif
 
@@ -135,7 +135,7 @@ clean-local:
 CLEANFILES = $(BUILT_SOURCES) .scm-links
 MAINTAINERCLEANFILES = swig-core-utils-guile.c swig-core-utils-python.c
 
-AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\" -DGNC_SCM_INSTALL_DIR="\"${GNC_SCM_INSTALL_DIR}\""
 
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp

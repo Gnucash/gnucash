@@ -28,7 +28,7 @@ libgncmod_qif_import_la_LIBADD = \
   ${GLIB_LIBS}
 
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/import-export
 gncscmmod_DATA = qif-import.scm 
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/qif-import
@@ -114,7 +114,7 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/import-export
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/import-export
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
 gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/qif-import

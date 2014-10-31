@@ -21,10 +21,10 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS} ${GLIB_CFLAGS}
 
 ## This is unused and therefore no longer installed and/or loaded
-gncscmrptdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
+gncscmrptdir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/locale-specific
 gncscmrpt_DATA = us.scm de_DE.scm
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = taxtxf.scm taxtxf-de_DE.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
@@ -78,10 +78,10 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
-gncscmrptcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/locale-specific
+gncscmrptcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/locale-specific
 gncscmrptcache_DATA = $(gncscmrpt_DATA:.scm=.go)
 endif
 

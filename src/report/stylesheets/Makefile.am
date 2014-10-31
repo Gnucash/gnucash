@@ -33,7 +33,7 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS}
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = \
   stylesheets.scm \
   stylesheet-plain.scm \
@@ -86,7 +86,7 @@ GUILE_COMPILE_ENV = \
 	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
-gncscmmodcachedir = ${GNC_SHAREDIR}/guile-modules/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 endif
 
