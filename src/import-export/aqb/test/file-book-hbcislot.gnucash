@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
+<gnc:book version="2.0.0">
+<book:id type="guid">df401b548fd313dc40a50051277a0ae6</book:id>
+<book:slots>
+  <slot>
+    <slot:key>hbci</slot:key>
+    <slot:value type="frame">
+      <slot>
+        <slot:key>config-filename</slot:key>
+        <slot:value type="string">/some/file</slot:value>
+      </slot>
+      <slot>
+        <slot:key>template-list</slot:key>
+        <slot:value type="list">
+          <slot:value type="frame">
+            <slot>
+              <slot:key>amou</slot:key>
+              <slot:value type="numeric">0/1</slot:value>
+            </slot>
+            <slot>
+              <slot:key>name</slot:key>
+              <slot:value type="string">Some Name</slot:value>
+            </slot>
+            <slot>
+              <slot:key>purc</slot:key>
+              <slot:value type="string"></slot:value>
+            </slot>
+            <slot>
+              <slot:key>purp</slot:key>
+              <slot:value type="string">Some Purpose</slot:value>
+            </slot>
+            <slot>
+              <slot:key>racc</slot:key>
+              <slot:value type="string">1234563065</slot:value>
+            </slot>
+            <slot>
+              <slot:key>rbcd</slot:key>
+              <slot:value type="string">12310517</slot:value>
+            </slot>
+            <slot>
+              <slot:key>rnam</slot:key>
+              <slot:value type="string">Recipient Name</slot:value>
+            </slot>
+          </slot:value>
+        </slot:value>
+      </slot>
+    </slot:value>
+  </slot>
+</book:slots>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">4674e1c45a07c85461d59c72b19d8263</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>hbci</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>account-id</slot:key>
+          <slot:value type="string">1234567890</slot:value>
+        </slot>
+        <slot>
+          <slot:key>account-uid</slot:key>
+          <slot:value type="integer">123</slot:value>
+        </slot>
+        <slot>
+          <slot:key>bank-code</slot:key>
+          <slot:value type="string">10020034</slot:value>
+        </slot>
+        <slot>
+          <slot:key>country-code</slot:key>
+          <slot:value type="integer">280</slot:value>
+        </slot>
+        <slot>
+          <slot:key>trans-retrieval</slot:key>
+          <slot:value type="timespec">
+            <ts:date>2014-08-29 20:47:36 +0200</ts:date>
+          </slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+</gnc:book>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

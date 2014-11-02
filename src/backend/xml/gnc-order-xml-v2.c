@@ -79,7 +79,7 @@ order_dom_tree_create (GncOrder *order)
 {
     xmlNodePtr ret;
     Timespec ts;
-    kvp_frame *kf;
+    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_order_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST order_version_string);

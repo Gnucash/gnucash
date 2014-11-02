@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Hypothèque d'emprunt immobilier
+      HypothÃ¨que d'emprunt immobilier
     </gnc-act:title>
     <gnc-act:short-description>
-     Comptes pour emprunt immobilier et les intérets associés.
+     Comptes pour emprunt immobilier et les intÃ©rets associÃ©s.
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Vous devriez sélectionner cet ensemble de comptes si vous avez un emprunt immobilier(Hypothèque d'un emprunt, Hypothèque sur des intérêts).
+    Vous devriez sÃ©lectionner cet ensemble de comptes si vous avez un emprunt immobilier(HypothÃ¨que d'un emprunt, HypothÃ¨que sur des intÃ©rÃªts).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -21,7 +21,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Passif</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -32,53 +32,53 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Emprunts</act:description>
   <act:parent type="new">6664763bd1ea41462cba5ef856d9c00c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Hypothèque d'emprunt</act:name>
+  <act:name>HypothÃ¨que d'emprunt</act:name>
   <act:id type="new">4df1b393c218d9047dd22d33d2737e83</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Hypothèque d'emprunt</act:description>
+  <act:description>HypothÃ¨que d'emprunt</act:description>
   <act:parent type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dépenses</act:name>
+  <act:name>DÃ©penses</act:name>
   <act:id type="new">2f076f5ae073173a11d33420cd39fa4d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Dépenses</act:description>
+  <act:description>DÃ©penses</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Intérêts</act:name>
+  <act:name>IntÃ©rÃªts</act:name>
   <act:id type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Intérêts</act:description>
+  <act:description>IntÃ©rÃªts</act:description>
   <act:parent type="new">2f076f5ae073173a11d33420cd39fa4d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Hypothèque d'intérêts</act:name>
+  <act:name>HypothÃ¨que d'intÃ©rÃªts</act:name>
   <act:id type="new">c1e23fa813d3c8c4a8ea1228a7615b79</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Hypothèque d'intérêts</act:description>
+  <act:description>HypothÃ¨que d'intÃ©rÃªts</act:description>
   <act:parent type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:parent>
 </gnc:account>
 </gnc-account-example>

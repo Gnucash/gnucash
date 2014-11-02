@@ -34,7 +34,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
-/* kvp_frame slot names */
+/* KvpFrame slot names */
 #define TT_NAME "name"
 #define TT_RNAME "rnam"
 #define TT_RACC "racc"
@@ -90,7 +90,7 @@ gnc_ab_trans_templ_new_full(const char *name, const char *recp_name,
 }
 
 GncABTransTempl *
-gnc_ab_trans_templ_new_from_kvp(const kvp_frame *k)
+gnc_ab_trans_templ_new_from_kvp(const KvpFrame *k)
 {
     g_return_val_if_fail(k, NULL);
 
@@ -112,7 +112,7 @@ gnc_ab_trans_templ_list_new_from_kvp_list(GList *v)
 
     for (iter = v; iter; iter = iter->next)
     {
-        kvp_frame *frame = kvp_value_get_frame((kvp_value*) iter->data);
+        KvpFrame *frame = kvp_value_get_frame((KvpValue*) iter->data);
         res = g_list_prepend(res, gnc_ab_trans_templ_new_from_kvp(frame));
     }
     res = g_list_reverse(res);
@@ -143,10 +143,10 @@ gnc_ab_trans_templ_list_free(GList *l)
     g_list_free(l);
 }
 
-kvp_frame *
+KvpFrame *
 gnc_ab_trans_templ_to_kvp(const GncABTransTempl *t)
 {
-    kvp_frame *k;
+    KvpFrame *k;
 
     g_return_val_if_fail(t, NULL);
 
@@ -171,7 +171,7 @@ gnc_ab_trans_templ_list_to_kvp_list(GList *k)
     for (iter = k; iter; iter = iter->next)
     {
         GncABTransTempl *t = (GncABTransTempl*) iter->data;
-        kvp_value *value = kvp_value_new_frame_nc(gnc_ab_trans_templ_to_kvp(t));
+        KvpValue *value = kvp_value_new_frame_nc(gnc_ab_trans_templ_to_kvp(t));
         res = g_list_prepend(res, value);
     }
     res = g_list_reverse(res);

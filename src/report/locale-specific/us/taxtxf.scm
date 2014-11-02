@@ -521,7 +521,6 @@
 (define (render-txf-account account account-value d? date x? x-date
                             type code copy tax-entity-type sold-desc)
   (let* ((print-info (gnc-account-print-info account #f))
-         (value (xaccPrintAmount account-value print-info))
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
              (not (gnc-numeric-zero-p account-value)))
@@ -570,10 +569,12 @@
                                    (xaccAccountGetName account)))
                              (else "")))
 
-               (value (string-append "$"  ; reverse signs on dr's & cr's
-                                     (xaccPrintAmount
-                                                 (gnc-numeric-neg account-value)
-                                                 print-info)))
+               (value (string-append "$"  ; in txf output, income is positive; expense negative
+                                          ; liabilities are positive, assets are negative;
+                                          ; essentially, just reverse signs on dr's & cr's
+                                     (sprintf #f "%.2f" (gnc-numeric-to-double
+                                                          (gnc-numeric-neg
+                                                            account-value)))))
           )
           ;; Based on TXF Spec of 6/16/06, V 041, and Quicken 98 output, the
           ;; fields by format are as follows, for F1040:

@@ -60,7 +60,7 @@ struct GncEntryLedger_s
 GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
                                        VirtualCellLocation vcell_loc);
 Account * gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
-        const char *name, gboolean *new);
+        const char *name, gboolean *isnew);
 Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
                                         const char * cell_name);
 GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,

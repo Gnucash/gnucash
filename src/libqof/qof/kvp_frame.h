@@ -77,7 +77,7 @@ typedef struct _KvpFrame KvpFrame;
 
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */
-typedef struct _KvpValue KvpValue;
+typedef struct KvpValueImpl KvpValue;
 
 /** \brief possible types in the union KvpValue
  * \todo : People have asked for boolean values,
@@ -99,7 +99,6 @@ typedef enum
     KVP_TYPE_STRING,     /**< QOF_TYPE_STRING gchar* */
     KVP_TYPE_GUID,       /**< QOF_TYPE_GUID */
     KVP_TYPE_TIMESPEC,   /**< QOF_TYPE_DATE */
-    KVP_TYPE_BINARY,     /**< no QOF equivalent. */
     KVP_TYPE_GLIST,      /**< no QOF equivalent. */
     KVP_TYPE_FRAME       /**< no QOF equivalent. */
     , KVP_TYPE_GDATE       /**< no QOF equivalent. */
@@ -108,10 +107,7 @@ typedef enum
 /** \deprecated Deprecated backwards compat token
 
 do \b not use these in new code.
-*/
-#define kvp_frame KvpFrame
-/** \deprecated Deprecated backwards compat token */
-#define kvp_value KvpValue
+ */
 /** \deprecated Deprecated backwards compat token */
 #define kvp_value_t KvpValueType
 
@@ -270,7 +266,7 @@ void kvp_frame_add_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
   If any part of the path does not exist, then NULL or zero will be
   returned.
 
-  The values returned for GncGUID, binary, GList, KvpFrame and string
+  The values returned for GncGUID, GList, KvpFrame and string
   are "non-copying" -- the returned item is the actual item stored.
   Do not delete this item unless you take the required care to avoid
   possible bad pointer derefrences (i.e. core dumps).  Also, be
@@ -278,7 +274,7 @@ void kvp_frame_add_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
   at the same path names: the referenced item will be freed during
   the store.
 
-  That is, if you get a string value (or guid, binary or frame),
+  That is, if you get a string value (or guid or frame),
   and then store something else at that path, the string that you've
   gotten will be freed during the store (internally, by the set_*()
   routines), and you will be left hanging onto an invalid pointer.
@@ -350,7 +346,7 @@ You probably shouldn't be using these low-level routines
  *    this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot(KvpFrame * frame,
-                                 const gchar * key, const KvpValue * value);
+                                 const gchar * key, KvpValue * value);
 /**
  * The kvp_frame_set_slot_nc() routine puts the value (without copying
  *    it) into the frame, associating it with a copy of 'key'.  This
@@ -368,7 +364,7 @@ void          kvp_frame_set_slot_nc(KvpFrame * frame,
  *     at this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path (KvpFrame *frame,
-                                       const KvpValue *value,
+                                       KvpValue *value,
                                        const gchar *first_key, ...);
 
 /** The kvp_frame_set_slot_path_gslist() routine walks the hierarchy,
@@ -377,7 +373,7 @@ void          kvp_frame_set_slot_path (KvpFrame *frame,
  *     location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
-        const KvpValue *value,
+        KvpValue *value,
         GSList *key_path);
 
 /** @} */
@@ -466,17 +462,12 @@ KvpValue   * kvp_value_new_numeric(gnc_numeric value);
 KvpValue   * kvp_value_new_string(const gchar * value);
 KvpValue   * kvp_value_new_guid(const GncGUID * guid);
 KvpValue   * kvp_value_new_timespec(Timespec timespec);
-KvpValue   * kvp_value_new_binary(const void * data, guint64 datasize);
 KvpValue   * kvp_value_new_frame(const KvpFrame * value);
 KvpValue   * kvp_value_new_gdate(GDate date);
 
 /** Creates a KvpValue from a <b>GList of kvp_value's</b>! (Not to be
  *  confused with GList's of something else!) */
 KvpValue   * kvp_value_new_glist(const GList * value);
-
-/** value constructors (non-copying - KvpValue takes pointer ownership)
-   values *must* have been allocated via glib allocators! (gnew, etc.) */
-KvpValue   * kvp_value_new_binary_nc(void * data, guint64 datasize);
 
 /** Creates a KvpValue from a <b>GList of kvp_value's</b>! (Not to be
  * confused with GList's of something else!)
@@ -514,7 +505,7 @@ GList * kvp_value_replace_glist_nc(KvpValue *value, GList *newlist);
 KvpValueType kvp_value_get_type(const KvpValue * value);
 
 
-/** Value accessors. Those for GncGUID, binary, GList, KvpFrame and
+/** Value accessors. Those for GncGUID, GList, KvpFrame and
  *   string are non-copying -- the caller can modify the value
  *   directly. Just don't free it, or you screw up everything.
  *   Note that if another value is stored at the key location
@@ -535,11 +526,6 @@ char        * kvp_value_get_string(const KvpValue * value);
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
 GncGUID        * kvp_value_get_guid(const KvpValue * value);
-
-/** Value accessor. This one is non-copying -- the caller can modify
- * the value directly. */
-void        * kvp_value_get_binary(const KvpValue * value,
-                                   guint64 * size_return);
 
 /** Returns the GList of kvp_frame's (not to be confused with GList's
  * of something else!) from the given kvp_frame.  This one is
@@ -569,11 +555,6 @@ itself a debugging and development utility function.
 */
 gchar* kvp_value_to_string(const KvpValue *val);
 
-/** Manipulator:
- *
- * copying - but more efficient than creating a new KvpValue manually. */
-gboolean kvp_value_binary_append(KvpValue *v, void *data, guint64 size);
-
 /** @name  Iterators
 @{
 */
@@ -591,7 +572,6 @@ void kvp_frame_for_each_slot(KvpFrame *f,
 
 /** Internal helper routines, you probably shouldn't be using these. */
 gchar* kvp_frame_to_string(const KvpFrame *frame);
-gchar* binary_to_string(const void *data, guint32 size);
 GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
 /** KvpItem: GValue Exchange

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Imobilizado Corpóreo
+      Imobilizado CorpÃ³reo
     </gnc-act:title>
     <gnc-act:short-description>
-      Contas para registar activos fixos de grandes dimensões
+      Contas para registar activos fixos de grandes dimensÃµes
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Desejará seleccionar este conjunto de contas se tiver activos fixos de grandes dimensões (casa, automóvel, casa de férias, outros activos).
+    DesejarÃ¡ seleccionar este conjunto de contas se tiver activos fixos de grandes dimensÃµes (casa, automÃ³vel, casa de fÃ©rias, outros activos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -60,14 +60,14 @@
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Automóvel</act:name>
+  <act:name>AutomÃ³vel</act:name>
   <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
   </act:commodity>
-  <act:description>Automóvel</act:description>
+  <act:description>AutomÃ³vel</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 </gnc-account-example>

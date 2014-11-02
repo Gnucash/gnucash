@@ -16,10 +16,10 @@ const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
 
 static void
 test_kvp_get_slot(int run,
-                  kvp_frame *test_frame1, const kvp_value *test_val1,
+                  KvpFrame *test_frame1, const KvpValue *test_val1,
                   const gchar *test_key)
 {
-    const kvp_value *test_val2;
+    const KvpValue *test_val2;
     test_val2 = kvp_frame_get_slot(test_frame1, test_key);
     if (kvp_value_compare(test_val1, test_val2) == 0)
     {
@@ -37,10 +37,10 @@ test_kvp_get_slot(int run,
 
 static void
 test_kvp_copy_compare(int run,
-                      kvp_frame *test_frame1, const kvp_value *test_val1,
+                      KvpFrame *test_frame1, const KvpValue *test_val1,
                       const gchar *test_key)
 {
-    kvp_frame *test_frame2;
+    KvpFrame *test_frame2;
 
     test_frame2 = kvp_frame_copy(test_frame1);
 
@@ -70,11 +70,11 @@ test_kvp_copy_compare(int run,
 
 static void
 test_kvp_copy_get_slot(int run,
-                       kvp_frame *test_frame1, const kvp_value *test_val1,
+                       KvpFrame *test_frame1, const KvpValue *test_val1,
                        const gchar *test_key)
 {
-    kvp_frame *test_frame2;
-    const kvp_value *test_val2;
+    KvpFrame *test_frame2;
+    const KvpValue *test_val2;
 
     test_frame2 = kvp_frame_copy(test_frame1);
     test_val2 = kvp_frame_get_slot(test_frame2, test_key);
@@ -101,7 +101,7 @@ test_kvp_copy_get_slot(int run,
 static void
 test_kvp_create_delete(void)
 {
-    kvp_frame *test_frame;
+    KvpFrame *test_frame;
 
     test_frame = kvp_frame_new();
 
@@ -124,9 +124,9 @@ test_kvp_frames1(void)
 
     for (i = 0; i < 20; i++)
     {
-        kvp_frame *test_frame1;
+        KvpFrame *test_frame1;
         gchar *test_key;
-        kvp_value *test_val1;
+        KvpValue *test_val1;
 
         test_val1 = get_random_kvp_value(i % KVP_TYPE_FRAME);
 
@@ -151,7 +151,7 @@ test_kvp_printing(void)
     int i;
     for (i = 0; i < 20; i++)
     {
-        kvp_frame *ran_frame;
+        KvpFrame *ran_frame;
         gchar *char_rep;
 
         ran_frame = get_random_kvp_frame();
@@ -171,8 +171,8 @@ test_kvp_xml_stuff(void)
     int i;
     for (i = 0; i < 20; i++)
     {
-        kvp_frame *test_frame1;
-        kvp_frame *test_frame2;
+        KvpFrame *test_frame1;
+        KvpFrame *test_frame2;
         xmlNodePtr test_node;
 
         test_frame1 = get_random_kvp_frame();

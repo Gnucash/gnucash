@@ -170,7 +170,7 @@ get_random_list_element (GList *list)
                                     g_list_length (list) - 1));
 }
 
-static kvp_value* get_random_kvp_value_depth (int type, gint depth);
+static KvpValue* get_random_kvp_value_depth (int type, gint depth);
 
 static GList*
 get_random_glist_depth (gint depth)
@@ -208,7 +208,7 @@ get_random_glist(void)
 }
 
 /* ========================================================== */
-/* Time/Date, GncGUID, binary data stuff */
+/* Time/Date, GncGUID data stuff */
 
 Timespec*
 get_random_timespec(void)
@@ -243,26 +243,7 @@ get_random_guid(void)
     GncGUID *ret;
 
     ret = g_new(GncGUID, 1);
-    guid_new(ret);
-
-    return ret;
-}
-
-bin_data*
-get_random_binary_data(void)
-{
-    int len;
-    bin_data *ret;
-
-    len = get_random_int_in_range(20, 100);
-    ret = g_new(bin_data, 1);
-    ret->data = g_new(guchar, len);
-    ret->len = len;
-
-    for (len--; len >= 0; len--)
-    {
-        ret->data[len] = (guchar)get_random_int_in_range(0, 255);
-    }
+    guid_replace(ret);
 
     return ret;
 }
@@ -337,16 +318,6 @@ get_random_kvp_value_depth (int type, gint depth)
         Timespec *ts = get_random_timespec();
         ret = kvp_value_new_timespec (*ts);
         g_free(ts);
-    }
-    break;
-
-    case KVP_TYPE_BINARY:
-    {
-        bin_data *tmp_data;
-        tmp_data = get_random_binary_data();
-        ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
-        g_free(tmp_data->data);
-        g_free(tmp_data);
     }
     break;
 
@@ -475,6 +446,9 @@ get_random_gnc_numeric(void)
     return gnc_numeric_create(numer, deno);
 }
 
+
+/* Rate here really means price or exchange rate, this is used solely
+ * to compute an amount from a randomly-created value. */
 static gnc_numeric
 get_random_rate (void)
 {
@@ -517,11 +491,11 @@ get_random_commodity_from_table (gnc_commodity_table *table)
     do
     {
         GList *commodities;
-        char *namespace;
+        char *name_space;
 
-        namespace = get_random_list_element (namespaces);
+        name_space = get_random_list_element (namespaces);
 
-        commodities = gnc_commodity_table_get_commodities (table, namespace);
+        commodities = gnc_commodity_table_get_commodities (table, name_space);
         if (!commodities)
             continue;
 
@@ -1322,11 +1296,8 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
                                                xaccSplitGetAccount(ret)));
         do
         {
-            /* Large rates blow up xaccSplitAssignLot */
             rate = get_random_rate ();
-            amt = gnc_numeric_mul(val, rate,
-                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND_HALF_UP);
+            amt = gnc_numeric_div(val, rate, denom, GNC_HOW_RND_ROUND_HALF_UP);
         }
         while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }

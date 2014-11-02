@@ -196,16 +196,20 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
                      item_edit->virt_loc,
                      &hatching);
         info->bg_color = get_gtkrc_color(item_edit->sheet, color_type);
+        color_type = gnc_table_get_gtkrc_fg_color (table,
+                     item_edit->virt_loc);
+        info->fg_color = get_gtkrc_color(item_edit->sheet, color_type);
     }
     else
     {
         argb = gnc_table_get_bg_color (table, item_edit->virt_loc,
                                        &hatching);
         info->bg_color = gnucash_color_argb_to_gdk (argb);
+        argb = gnc_table_get_fg_color (table, item_edit->virt_loc);
+        info->fg_color = gnucash_color_argb_to_gdk (argb);
     }
 
     info->hatching = hatching;
-    info->fg_color = &gn_black;
 
     info->bg_color2 = &gn_dark_gray;
     info->fg_color2 = &gn_white;

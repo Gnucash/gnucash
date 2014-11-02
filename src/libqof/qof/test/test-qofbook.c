@@ -261,7 +261,7 @@ test_book_get_counter( Fixture *fixture, gconstpointer pData )
     g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
-    counter = qof_book_get_counter( fixture->book, '\0' );
+    counter = qof_book_get_counter( fixture->book, NULL );
     g_assert_cmpint( counter, == , -1 );
     g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
@@ -298,7 +298,7 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format when counter name is empty string" );
-    r = qof_book_get_counter_format( fixture->book, '\0' );
+    r = qof_book_get_counter_format( fixture->book, NULL );
     g_assert_cmpstr( r, == , NULL );
     g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
@@ -340,7 +340,7 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     g_free( test_struct.msg );
 
     g_test_message( "Testing increment and format when counter name is empty string" );
-    r = qof_book_increment_and_format_counter( fixture->book, '\0' );
+    r = qof_book_increment_and_format_counter( fixture->book, NULL );
     g_assert_cmpstr( r, == , NULL );
     g_free( r );
     g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );

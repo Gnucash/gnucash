@@ -22,7 +22,7 @@ All transactions imported will be associated to one account for each import and 
 
 Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the bar above the displayed rows to set the column width.
 
-There is an option for specifying the start and end row which can be used if you have some header text or multiple accounts in the same file.</property>
+There is an option for specifying the start row, end row and an option to skip alternate rows begining from the start row. These can be used if you have some header text, a points collected status row or multiple accounts in the same file.</property>
         <property name="wrap">True</property>
       </object>
       <packing>
@@ -152,6 +152,21 @@ Select location and file name for the Import, then click 'OK'...
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="skip_rows">
+                    <property name="label" translatable="yes">Skip alternate rows from the start row</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="csv_import_trans_skiprows_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkHSeparator" id="hseparator7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -160,7 +175,7 @@ Select location and file name for the Import, then click 'OK'...
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="padding">8</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -219,7 +234,7 @@ Select location and file name for the Import, then click 'OK'...
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -232,7 +247,7 @@ Select location and file name for the Import, then click 'OK'...
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="padding">10</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -308,7 +323,7 @@ Select location and file name for the Import, then click 'OK'...
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -321,7 +336,7 @@ Select location and file name for the Import, then click 'OK'...
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="padding">10</property>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
               </object>

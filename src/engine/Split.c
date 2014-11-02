@@ -43,7 +43,6 @@
 #include "Split.h"
 #include "AccountP.h"
 #include "Scrub.h"
-#include "Scrub3.h"
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "cap-gains.h"
@@ -1450,8 +1449,10 @@ xaccSplitConvertAmount (const Split *split, const Account * account)
                 xaccAccountGetCommodity(xaccSplitGetAccount(osplit));
             if (!gnc_commodity_equal(to_commodity, split_comm))
             {
+                gchar guidstr[GUID_ENCODING_LENGTH+1];
+                guid_to_string_buff(xaccSplitGetGUID(osplit),guidstr);
                 PERR("The split's (%s) amount can't be converted from %s into %s.",
-                     guid_to_string(xaccSplitGetGUID(osplit)),
+                     guidstr,
                      gnc_commodity_get_mnemonic(split_comm),
                      gnc_commodity_get_mnemonic(to_commodity)
                     );

@@ -122,8 +122,11 @@ typedef struct
      * be visually distinguished. */
     int dividing_row;
     /* If positive, denotes a row that marks a boundary that should
-     * be visually distinguished, but different from the other. */
+     * be visually distinguished, but different from the others. */
     int dividing_row_upper;
+    /* If positive, denotes a row that marks a boundary that should
+     * be visually distinguished. */
+    int dividing_row_lower;
 
     VirtCellDataAllocator cell_data_allocator;
     VirtCellDataDeallocator cell_data_deallocator;

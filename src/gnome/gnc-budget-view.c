@@ -289,6 +289,7 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeIter iter;
     GtkWidget* h_separator;
     gchar *state_section;
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
     vbox = GTK_VBOX(view);
@@ -315,7 +316,8 @@ gbv_create_widget(GncBudgetView *view)
     tree_view = gnc_tree_view_account_new(FALSE);
     gtk_container_add(GTK_CONTAINER(inner_scrolled_window), GTK_WIDGET(tree_view));
 
-    state_section = g_strjoin(" ", STATE_SECTION_PREFIX, guid_to_string(&priv->key), NULL);
+    guid_to_string_buff(&priv->key, guidstr);
+    state_section = g_strjoin(" ", STATE_SECTION_PREFIX, guidstr, NULL);
     g_object_set(G_OBJECT(tree_view), "state-section", state_section, NULL);
     g_free (state_section);
 
@@ -487,13 +489,16 @@ void
 gnc_budget_view_delete_budget(GncBudgetView *view)
 {
     GncBudgetViewPrivate *priv;
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
 
     g_return_if_fail(view != NULL);
 
     ENTER("view %p", view);
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE (view);
-    gnc_state_drop_sections_for (guid_to_string (&priv->key));
+
+    guid_to_string_buff(&priv->key, guidstr);
+    gnc_state_drop_sections_for (guidstr);
     g_object_set (G_OBJECT (priv->tree_view), "state-section", NULL, NULL);
 
     LEAVE(" ");

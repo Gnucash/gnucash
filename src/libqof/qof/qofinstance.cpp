@@ -303,7 +303,7 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 
     do
     {
-        guid_new(&priv->guid);
+        guid_replace(&priv->guid);
 
         if (NULL == qof_collection_lookup_entity (col, &priv->guid))
             break;
@@ -574,6 +574,7 @@ qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2)
     return (priv1->book == priv2->book);
 }
 
+/* Watch out: This function is still used (as a "friend") in src/import-export/aqb/gnc-ab-kvp.c */
 KvpFrame*
 qof_instance_get_slots (const QofInstance *inst)
 {
@@ -669,6 +670,7 @@ qof_instance_get_dirty_flag (gconstpointer ptr)
     return GET_PRIVATE(ptr)->dirty;
 }
 
+/* Watch out: This function is still used (as a "friend") in src/import-export/aqb/gnc-ab-kvp.c */
 void
 qof_instance_set_dirty_flag (gconstpointer inst, gboolean flag)
 {
@@ -691,8 +693,9 @@ qof_instance_print_dirty (const QofInstance *inst, gpointer dummy)
     priv = GET_PRIVATE(inst);
     if (priv->dirty)
     {
-        printf("%s instance %s is dirty.\n", inst->e_type,
-               guid_to_string(&priv->guid));
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(&priv->guid, guidstr);
+        printf("%s instance %s is dirty.\n", inst->e_type, guidstr);
     }
 }
 

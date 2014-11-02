@@ -974,6 +974,7 @@ test_xaccSplitConvertAmount (void)
                            "GNCXX", "", 1000);
     gnc_commodity *gnm = gnc_commodity_new (book, "Gnome, Inc.", "NYSE",
                                             "GNM", "", 1000);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
 
     Account *acc = xaccMallocAccount (book);
     Account *o_acc = xaccMallocAccount (book);
@@ -991,7 +992,8 @@ test_xaccSplitConvertAmount (void)
     TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
 
-    check.msg = g_strdup_printf ("[xaccSplitConvertAmount()] The split's (%s) amount can't be converted from GNCXX into GNM.", guid_to_string(xaccSplitGetGUID(o_split)));
+    guid_to_string_buff(xaccSplitGetGUID(o_split), guidstr);
+    check.msg = g_strdup_printf ("[xaccSplitConvertAmount()] The split's (%s) amount can't be converted from GNCXX into GNM.", guidstr);
     xaccAccountSetCommodity (acc, gnaira);
     xaccAccountSetCommodity (o_acc, gnaira);
     xaccAccountSetCommodity (ya_acc, gnm);

@@ -81,7 +81,7 @@ static void
 gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
 {
 
-    gchar **tip_components;
+    gchar **tip_components = NULL;
     gchar *tip;
 
     ENTER("TotdDialog %p, offset %d", totd_dialog, offset);
@@ -99,7 +99,8 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
      *
      *  Welcome to GnuCash version %s|2.4
      */
-    tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
+    if (tip_list[current_tip_number])
+	tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
     /* If the tip is empty, g_strisplit will return an empty list. This
      * shouldn't normally happen, but make sure we don't crash just in
      * case */
@@ -174,7 +175,7 @@ gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-    gchar *filename, *contents, *new;
+    gchar *filename, *contents, *new_str;
     gsize length;
     GError *error;
 
@@ -195,7 +196,8 @@ gnc_totd_initialize (void)
 
     /* Split into multiple strings. Due to the nature of the
      * tip list file, this can contain empty strings */
-    tip_list = g_strsplit(contents, "\n", 0);
+    if (contents)
+	tip_list = g_strsplit(contents, "\n", 0);
     g_free(contents);
     contents = NULL;
 
@@ -209,23 +211,24 @@ gnc_totd_initialize (void)
                 contents = g_strdup (tip_list[tip_count]);
             else
             {
-                new = g_strjoin ("\n", contents, tip_list[tip_count], NULL);
+                new_str = g_strjoin ("\n", contents, tip_list[tip_count], NULL);
                 g_free (contents);
-                contents = new;
+                contents = new_str;
             }
         }
     }
 
     /* Split cleaned up contents into multiple strings again */
     g_strfreev (tip_list);
-    tip_list = g_strsplit(contents, "\n", 0);
+    if (contents)
+        tip_list = g_strsplit(contents, "\n", 0);
 
     /* Convert any escaped characters while counting the strings */
     for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
     {
-        new = g_strcompress(tip_list[tip_count]);
+        new_str = g_strcompress(tip_list[tip_count]);
         g_free(tip_list[tip_count]);
-        tip_list[tip_count] = new;
+        tip_list[tip_count] = new_str;
     }
 
 
@@ -250,7 +253,7 @@ gnc_totd_initialize (void)
  *
  *  @internal
  *
- *  @param class Unused.
+ *  @param class_name Unused.
  *
  *  @param component_id Unused.
  *
@@ -259,7 +262,7 @@ gnc_totd_initialize (void)
  *  @param iter_data Unused.
  ***********************************************************************/
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     TotdDialog *totd_dialog = user_data;

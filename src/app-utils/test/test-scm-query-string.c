@@ -96,14 +96,10 @@ main_helper (void *closure, int argc, char **argv)
 
     xaccLogDisable ();
 
-    /* scm conversion doesn't handle binary atm */
-    kvp_exclude_type (KVP_TYPE_BINARY);
-
     /* double->string->double is not idempotent */
     kvp_exclude_type (KVP_TYPE_DOUBLE);
 
     /* Initialize to a known RNG position */
-    guid_init();
     srand(1);
 
     run_tests ();

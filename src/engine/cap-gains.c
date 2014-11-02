@@ -93,6 +93,7 @@ xaccAccountHasTrades (const Account *acc)
     {
         Split *s = node->data;
         Transaction *t = s->parent;
+	if (s->gains == GAINS_STATUS_GAINS) continue;
         if (acc_comm != t->common_currency) return TRUE;
     }
 
@@ -444,6 +445,8 @@ xaccSplitAssign (Split *split)
      * have lots, we are done.
      */
     if (split->lot) return FALSE;
+    g_assert (split->gains == GAINS_STATUS_UNKNOWN ||
+	      (split->gains & GAINS_STATUS_GAINS) == FALSE);
     acc = split->acc;
     if (!xaccAccountHasTrades (acc))
         return FALSE;

@@ -1139,7 +1139,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                   }
                 */
 
-                exchange_rate = gnc_numeric_zero();
+                exchange_rate = gnc_numeric_create (1, 1);
                 g_string_printf(exchange_rate_var_name, "%s -> %s",
                                 gnc_commodity_get_mnemonic(first_cmdty),
                                 gnc_commodity_get_mnemonic(split_cmdty));
@@ -1490,6 +1490,8 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
      * modify it in-place; if not, insert the new element into the
      * hash. */
     gnc_numeric* elem = g_hash_table_lookup(hash, guid);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    guid_to_string_buff(guid, guidstr);
     if (!elem)
     {
         elem = g_new0(gnc_numeric, 1);
@@ -1503,7 +1505,7 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
         g_critical("Oops, the given amount [%s] has the error code %d, at guid [%s].",
                    gnc_num_dbg_to_string(*amount),
                    gnc_numeric_check(*amount),
-                   guid_to_string(guid));
+                   guidstr);
         return;
     }
     if (gnc_numeric_check(*elem) != GNC_ERROR_OK)
@@ -1511,7 +1513,7 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
         g_critical("Oops, the account's amount [%s] has the error code %d, at guid [%s].",
                    gnc_num_dbg_to_string(*elem),
                    gnc_numeric_check(*elem),
-                   guid_to_string(guid));
+                   guidstr);
         return;
     }
 
@@ -1527,7 +1529,7 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
     if (gnc_numeric_check(*elem) != GNC_ERROR_OK)
     {
         g_critical("Oops, after addition at guid [%s] the resulting amount [%s] has the error code %d; added amount = [%s].",
-                   guid_to_string(guid),
+                   guidstr,
                    gnc_num_dbg_to_string(*elem),
                    gnc_numeric_check(*elem),
                    gnc_num_dbg_to_string(*amount));
@@ -1536,7 +1538,7 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
 
     /* In case anyone wants to see this in the debug log. */
     g_debug("Adding to guid [%s] the value [%s]. Value now [%s].",
-            guid_to_string(guid),
+            guidstr,
             gnc_num_dbg_to_string(*amount),
             gnc_num_dbg_to_string(*elem));
 }

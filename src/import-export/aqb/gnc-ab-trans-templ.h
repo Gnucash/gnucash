@@ -67,16 +67,16 @@ GncABTransTempl *gnc_ab_trans_templ_new_full(
     const gchar *purpose_cont);
 
 /**
- * Create a template, taking the values from a kvp_frame.
+ * Create a template, taking the values from a KvpFrame.
  *
- * @param k kvp_frame
+ * @param k KvpFrame
  * @return A newly allocated GncABTransTempl
  */
-GncABTransTempl *gnc_ab_trans_templ_new_from_kvp(const kvp_frame *k);
+GncABTransTempl *gnc_ab_trans_templ_new_from_kvp(const KvpFrame *k);
 
 /**
  * Create a list of templates from a list of kvp_values which in turn
- * contain a kvp_frame.
+ * contain a KvpFrame.
  *
  * @param v GList of kvp_values
  * @return A GList of newly allocated GncABTransTempls
@@ -98,15 +98,15 @@ void gnc_ab_trans_templ_free(GncABTransTempl *t);
 void gnc_ab_trans_templ_list_free(GList *l);
 
 /**
- * Create a kvp_frame a given template.
+ * Create a KvpFrame a given template.
  *
  * @param t Template
- * @return A newly allocated kvp_frame
+ * @return A newly allocated KvpFrame
  */
-kvp_frame *gnc_ab_trans_templ_to_kvp(const GncABTransTempl *t);
+KvpFrame *gnc_ab_trans_templ_to_kvp(const GncABTransTempl *t);
 
 /**
- * Create a list of kvp_values, which in turn contain a kvp_frame, from a list
+ * Create a list of kvp_values, which in turn contain a KvpFrame, from a list
  * of templates.
  *
  * @param k GList of GncABTransTempls

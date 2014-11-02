@@ -40,7 +40,6 @@
 #include "Recurrence.h"
 #include "Query.h"
 #include "Scrub.h"
-#include "Scrub3.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
 #include "assistant-acct-period.h"

@@ -78,6 +78,17 @@ _unittest_support_la_LIBADD = \
   libtest-core.la
 
 endif
+
+if WITH_GOOGLE_TEST
+noinst_LIBRARIES = \
+        libgtest.a \
+        libgmock.a
+libgtest_a_SOURCES = ${GTEST_ROOT}/src/gtest-all.cc
+libgmock_a_SOURCES = ${GMOCK_ROOT}/src/gmock-all.cc
+libgtest_a_CPPFLAGS = ${AM_CPPFLAGS} -I${GTEST_HEADERS} -I${GTEST_ROOT}
+libgmock_a_CPPFLAGS = ${libgtest_a_CPPFLAGS} -I${GMOCK_HEADERS} -I${GMOCK_ROOT}
+endif
+
 SCM_FILES = unittest-support.scm
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash

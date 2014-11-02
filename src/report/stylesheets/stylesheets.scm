@@ -12,3 +12,4 @@
 (use-modules (gnucash report stylesheet-fancy))
 (use-modules (gnucash report stylesheet-footer))
 (use-modules (gnucash report stylesheet-easy))
+(use-modules (gnucash report stylesheet-head-or-tail))

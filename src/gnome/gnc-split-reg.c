@@ -166,7 +166,7 @@ void gnc_split_reg_size_allocate( GtkWidget *widget,
 
 void gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data);
 
-static void gnc_split_reg_class_init( GNCSplitRegClass *class );
+static void gnc_split_reg_class_init( GNCSplitRegClass *klass );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
 
@@ -230,7 +230,7 @@ enum gnc_split_reg_signal_enum
 static guint gnc_split_reg_signals[LAST_SIGNAL] = { 0 };
 
 static void
-gnc_split_reg_class_init( GNCSplitRegClass *class )
+gnc_split_reg_class_init( GNCSplitRegClass *klass )
 {
     int i;
     GtkObjectClass *object_class;
@@ -264,7 +264,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
         { LAST_SIGNAL, NULL, 0 }
     };
 
-    object_class = (GtkObjectClass*) class;
+    object_class = (GtkObjectClass*) klass;
 
     for ( i = 0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ )
     {
@@ -291,27 +291,27 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     g_assert( i == LAST_SIGNAL );
 
     /* Setup the default handlers. */
-    class->enter_ent_cb    = gsr_default_enter_handler;
-    class->cancel_ent_cb   = gsr_default_cancel_handler;
-    class->delete_ent_cb   = gsr_default_delete_handler;
-    class->reinit_ent_cb   = gsr_default_reinit_handler;
-    class->dup_ent_cb      = gsr_default_dup_handler;
-    class->schedule_ent_cb = gsr_default_schedule_handler;
-    class->expand_ent_cb   = gsr_default_expand_handler;
-    class->blank_cb        = gsr_default_blank_handler;
-    class->jump_cb         = gsr_default_jump_handler;
-    class->cut_cb          = gsr_default_cut_handler;
-    class->cut_txn_cb      = gsr_default_cut_txn_handler;
-    class->copy_cb         = gsr_default_copy_handler;
-    class->copy_txn_cb     = gsr_default_copy_txn_handler;
-    class->paste_cb        = gsr_default_paste_handler;
-    class->paste_txn_cb    = gsr_default_paste_txn_handler;
-    class->void_txn_cb     = gsr_default_void_txn_handler;
-    class->unvoid_txn_cb   = gsr_default_unvoid_txn_handler;
-    class->reverse_txn_cb  = gsr_default_reverse_txn_handler;
+    klass->enter_ent_cb    = gsr_default_enter_handler;
+    klass->cancel_ent_cb   = gsr_default_cancel_handler;
+    klass->delete_ent_cb   = gsr_default_delete_handler;
+    klass->reinit_ent_cb   = gsr_default_reinit_handler;
+    klass->dup_ent_cb      = gsr_default_dup_handler;
+    klass->schedule_ent_cb = gsr_default_schedule_handler;
+    klass->expand_ent_cb   = gsr_default_expand_handler;
+    klass->blank_cb        = gsr_default_blank_handler;
+    klass->jump_cb         = gsr_default_jump_handler;
+    klass->cut_cb          = gsr_default_cut_handler;
+    klass->cut_txn_cb      = gsr_default_cut_txn_handler;
+    klass->copy_cb         = gsr_default_copy_handler;
+    klass->copy_txn_cb     = gsr_default_copy_txn_handler;
+    klass->paste_cb        = gsr_default_paste_handler;
+    klass->paste_txn_cb    = gsr_default_paste_txn_handler;
+    klass->void_txn_cb     = gsr_default_void_txn_handler;
+    klass->unvoid_txn_cb   = gsr_default_unvoid_txn_handler;
+    klass->reverse_txn_cb  = gsr_default_reverse_txn_handler;
 
-    class->help_changed_cb = NULL;
-    class->include_date_cb = NULL;
+    klass->help_changed_cb = NULL;
+    klass->include_date_cb = NULL;
 }
 
 GtkWidget*
@@ -385,16 +385,15 @@ static
 void
 gsr_create_table( GNCSplitReg *gsr )
 {
-    GtkWidget *register_widget;
-    SplitRegister *sr;
+    GtkWidget *register_widget = NULL;
+    SplitRegister *sr = NULL;
 
-    gchar *state_section;
-    const GncGUID * guid;
-    Account * account;
-    
-    account = gnc_ledger_display_leader(gsr->ledger);
-    guid = xaccAccountGetGUID(account);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), NULL);
+    Account * account = gnc_ledger_display_leader(gsr->ledger);
+    const GncGUID * guid = xaccAccountGetGUID(account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    gchar *state_section = NULL;
+    guid_to_string_buff(guid, guidstr);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     ENTER("gsr=%p", gsr);
 
@@ -693,13 +692,14 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
 
+    Account * account = gnc_ledger_display_leader(ledger);
+    const GncGUID * guid = xaccAccountGetGUID(account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
     gchar *state_section;
-    const GncGUID * guid;
-    Account * account;
 
-    account = gnc_ledger_display_leader(ledger);
-    guid = xaccAccountGetGUID(account);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ",(gchar*)guid_to_string (guid), NULL);
+    guid_to_string_buff(guid, guidstr);
+
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     if (gsr)
     {

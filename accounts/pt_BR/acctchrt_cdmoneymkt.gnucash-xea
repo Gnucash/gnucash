@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Depósitos a Prazo e Mercado Monetário
+      DepÃ³sitos a Prazo e Mercado MonetÃ¡rio
     </gnc-act:title>
     <gnc-act:short-description>
-     Contas para Depósitos a Prazo e investimentos no mercado monetário
+     Contas para DepÃ³sitos a Prazo e investimentos no mercado monetÃ¡rio
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas caso tenha depósitos a prazo ou contas no mercado financeiro (DP, Juros DP, mercado monetário, juro mercado monetário).
+    DeverÃ¡ selecionar este conjunto de contas caso tenha depÃ³sitos a prazo ou contas no mercado financeiro (DP, Juros DP, mercado monetÃ¡rio, juro mercado monetÃ¡rio).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -49,14 +49,14 @@
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Mercado Monetário</act:name>
+  <act:name>Mercado MonetÃ¡rio</act:name>
   <act:id type="new">3a01e5b0132ba26803b49732a3242654</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Mercado Monetário</act:description>
+  <act:description>Mercado MonetÃ¡rio</act:description>
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -93,14 +93,14 @@
   <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Juros do Mercado Monetário</act:name>
+  <act:name>Juros do Mercado MonetÃ¡rio</act:name>
   <act:id type="new">dc537946f39e84ccef7ce38f016249af</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Juros do Mercado Monetário</act:description>
+  <act:description>Juros do Mercado MonetÃ¡rio</act:description>
   <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
 </gnc:account>
 </gnc-account-example>

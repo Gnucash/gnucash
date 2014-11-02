@@ -71,7 +71,8 @@ gnc_state_set_base (const QofSession *session)
 {
     gchar *basename, *original = NULL, *filename, *file_guid;
     gchar *sf_extension = NULL, *newstyle_filename = NULL;
-    const gchar *uri, *guid_string;
+    const gchar *uri;
+    gchar guid_string[GUID_ENCODING_LENGTH+1];
     QofBook *book;
     const GncGUID *guid;
     GKeyFile *key_file = NULL;
@@ -94,7 +95,7 @@ gnc_state_set_base (const QofSession *session)
     /* Get the book GncGUID */
     book = qof_session_get_book(session);
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
-    guid_string = guid_to_string(guid);
+    guid_to_string_buff(guid, guid_string);
 
     if (gnc_uri_is_file_uri (uri))
     {

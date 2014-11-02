@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Despesas da Casa
     </gnc-act:title>
     <gnc-act:short-description>
-      Despesas associadas à posse de uma habitação
+      Despesas associadas Ã  posse de uma habitaÃ§Ã£o
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Desejará seleccionar este conjunto de contas caso possua uma habitação própria. Este conjunto disponibiliza um grupo de contas para acompanhar despesas da casa (seguro, impostos, reparações).
+    DesejarÃ¡ seleccionar este conjunto de contas caso possua uma habitaÃ§Ã£o prÃ³pria. Este conjunto disponibiliza um grupo de contas para acompanhar despesas da casa (seguro, impostos, reparaÃ§Ãµes).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -27,14 +27,14 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Reparações na Casa</act:name>
+  <act:name>ReparaÃ§Ãµes na Casa</act:name>
   <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
   </act:commodity>
-  <act:description>Reparações na Casa</act:description>
+  <act:description>ReparaÃ§Ãµes na Casa</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -71,14 +71,14 @@
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Contribuição Autárquica</act:name>
+  <act:name>ContribuiÃ§Ã£o AutÃ¡rquica</act:name>
   <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
   </act:commodity>
-  <act:description>Contribuição Autárquica</act:description>
+  <act:description>ContribuiÃ§Ã£o AutÃ¡rquica</act:description>
   <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
 </gnc:account>
 </gnc-account-example>

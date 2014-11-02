@@ -1104,6 +1104,7 @@ gnc_account_create_root (QofBook *book)
     xaccAccountBeginEdit(root);
     rpriv->type = ACCT_TYPE_ROOT;
     CACHE_REPLACE(rpriv->accountName, "Root Account");
+    mark_account (root);
     xaccAccountCommitEdit(root);
     gnc_book_set_root_account(book, root);
     return root;
@@ -4208,6 +4209,42 @@ xaccAccountTypesValid(void)
     return mask;
 }
 
+gboolean xaccAccountIsAssetLiabType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
+        return FALSE;
+    default:
+        return (xaccAccountTypesCompatible(ACCT_TYPE_ASSET, t)
+                || xaccAccountTypesCompatible(ACCT_TYPE_LIABILITY, t));
+    }
+}
+
+gboolean xaccAccountIsAPARType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+gboolean xaccAccountIsEquityType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_EQUITY:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 gboolean
 xaccAccountIsPriced(const Account *acc)
 {
@@ -4977,7 +5014,7 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 
 typedef struct _GncImportMatchMap
 {
-    kvp_frame *	frame;
+    KvpFrame *	frame;
     Account *	acc;
     QofBook *	book;
 } GncImportMatchMap;
@@ -4998,7 +5035,7 @@ GncImportMatchMap *
 gnc_account_create_imap (Account *acc)
 {
     GncImportMatchMap *imap;
-    kvp_frame *frame;
+    KvpFrame *frame;
 
     if (!acc) return NULL;
     frame = qof_instance_get_slots (QOF_INSTANCE (acc));
@@ -5023,7 +5060,7 @@ gnc_imap_find_account (GncImportMatchMap *imap,
 		       const char *category,
 		       const char *key)
 {
-    kvp_value *value;
+    KvpValue *value;
     GncGUID * guid;
 
     if (!imap || !key) return NULL;
@@ -5048,7 +5085,7 @@ gnc_imap_add_account (GncImportMatchMap *imap,
 		      const char *key,
 		      Account *acc)
 {
-    kvp_value *value;
+    KvpValue *value;
 
     if (!imap || !key || !acc || (strlen (key) == 0)) return;
     if (!category)
@@ -5096,7 +5133,7 @@ struct token_accounts_info
  * \note Can always assume that keys are unique, reduces code in this function
  */
 static void
-buildTokenInfo(const char *key, kvp_value *value, gpointer data)
+buildTokenInfo(const char *key, KvpValue *value, gpointer data)
 {
     struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
     struct account_token_count* this_account;
@@ -5218,8 +5255,8 @@ gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     GHashTable *final_probabilities = g_hash_table_new(g_str_hash,
 						       g_str_equal);
     struct account_info account_i;
-    kvp_value* value;
-    kvp_frame* token_frame;
+    KvpValue* value;
+    KvpFrame* token_frame;
 
     ENTER(" ");
 
@@ -5383,10 +5420,10 @@ gnc_imap_add_account_bayes(GncImportMatchMap *imap,
 			   Account *acc)
 {
     GList *current_token;
-    kvp_value *value;
+    KvpValue *value;
     gint64 token_count;
     char* account_fullname;
-    kvp_value *new_value; /* the value that will be added back into
+    KvpValue *new_value; /* the value that will be added back into
 			   * the kvp tree */
 
     ENTER(" ");

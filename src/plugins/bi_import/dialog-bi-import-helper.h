@@ -31,3 +31,4 @@
 gboolean text2bool( const gchar *text );
 GncAmountType text2disc_type( const gchar *text );
 GncDiscountHow text2disc_how( const gchar *text );
+gboolean isDateValid(char * date_string);

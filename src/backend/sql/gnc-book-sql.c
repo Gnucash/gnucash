@@ -178,10 +178,14 @@ load_all_books( GncSqlBackend* be )
         {
             GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
-            // If there are no rows, try committing the book
+            /* If there are no rows, try committing the book; unset
+	     * loading so that it will actually get saved.
+	     */
             if ( row == NULL )
             {
+                be->loading = FALSE;
                 (void)gnc_sql_save_book( be, QOF_INSTANCE(be->book) );
+                be->loading = TRUE;
             }
             else
             {

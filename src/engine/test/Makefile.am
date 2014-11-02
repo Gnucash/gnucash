@@ -115,6 +115,7 @@ test_engine_SOURCES = \
 	test-engine.c \
 	utest-Account.c \
 	utest-Budget.c \
+	utest-Entry.c \
 	utest-Invoice.c \
 	test-engine-kvp-properties.c \
 	dummy.cpp

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Bilejer
     </gnc-act:title>
     <gnc-act:short-description>
-      Udgifter vedrørende bil
+      Udgifter vedrÃ¸rende bil
     </gnc-act:short-description>
     <gnc-act:long-description>
     Udgifter i forbindelse med at holde bil. Vedligehold, drift og skatter.
@@ -38,14 +38,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vægtafgift</act:name>
+  <act:name>VÃ¦gtafgift</act:name>
   <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
   </act:commodity>
-  <act:description>Vægtafgift</act:description>
+  <act:description>VÃ¦gtafgift</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

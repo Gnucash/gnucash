@@ -217,7 +217,15 @@ class Entry(GnuCashCoreClass):
             if invoice != None:
                 invoice.AddEntry(self)
         else:
-            GnuCashCoreClass.__init__(self, instance=instance)    
+
+            GnuCashCoreClass.__init__(self, instance=instance)
+
+    def test_type(self, invoice):
+        if invoice.GetTypeString() == "Invoice" and self.GetInvoice() == None:
+            raise Exception("Entry type error. Check that Entry type matches Invoice.")
+        if invoice.GetTypeString() == "Bill" and self.GetBill() == None:
+            raise Exception("Entry type error. Check that Entry type matches Bill.")
+
 
 # Owner
 GnuCashBusinessEntity.add_methods_with_prefix('gncOwner')

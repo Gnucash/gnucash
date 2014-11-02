@@ -17,7 +17,7 @@ Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
 void random_timespec_usec_resolution (gboolean usec_resolution);
 
-kvp_value* get_random_kvp_value(int type);
+KvpValue* get_random_kvp_value(int type);
 
 typedef struct
 {
@@ -27,7 +27,7 @@ typedef struct
 
 bin_data* get_random_binary_data(void);
 
-kvp_frame* get_random_kvp_frame(void);
+KvpFrame* get_random_kvp_frame(void);
 gnc_numeric get_random_gnc_numeric(void);
 GncGUID* get_random_guid(void);
 GList* get_random_glist(void);

@@ -52,7 +52,7 @@ non-zero - failure
 =cut
 
 sub check_modules {
-  my @modules = qw(Finance::Quote LWP HTML::Parser HTML::TableExtract Crypt::SSLeay Date::Manip);
+  my @modules = qw(Finance::Quote LWP HTTP::Request::Common HTML::TableExtract Crypt::SSLeay Date::Manip);
   my @missing;
 
   foreach my $mod (@modules) {

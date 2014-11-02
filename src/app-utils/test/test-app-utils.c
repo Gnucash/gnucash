@@ -52,5 +52,5 @@ main (int argc, char *argv[])
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     scm_boot_guile (argc, argv, guile_main, NULL);
-
+    return 0;
 }

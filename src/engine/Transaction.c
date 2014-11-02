@@ -971,8 +971,10 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
                 if (!node_b)
                 {
-                    PINFO ("first has split %s and second does not",
-                           guid_to_string (xaccSplitGetGUID (split_a)));
+                    gchar guidstr[GUID_ENCODING_LENGTH+1];
+                    guid_to_string_buff (xaccSplitGetGUID (split_a),guidstr);
+
+                    PINFO ("first has split %s and second does not",guidstr);
                     return FALSE;
                 }
 
@@ -2551,7 +2553,7 @@ Transaction *
 xaccTransReverse (Transaction *orig)
 {
     Transaction *trans;
-    kvp_value *kvp_val;
+    KvpValue *kvp_val;
     g_return_val_if_fail(orig, NULL);
 
     trans = xaccTransClone(orig);

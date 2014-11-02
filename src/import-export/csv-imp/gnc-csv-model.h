@@ -115,22 +115,23 @@ typedef struct
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     int start_row;              /**< The start row to generate transactions from. */
     int end_row;                /**< The end row to generate transactions from. */
+    gboolean skip_rows;         /**< Skip Alternate Rows from start row. */
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
 } GncCsvParseData;
 
-GncCsvParseData* gnc_csv_new_parse_data(void);
+GncCsvParseData* gnc_csv_new_parse_data (void);
 
-void gnc_csv_parse_data_free(GncCsvParseData* parse_data);
+void gnc_csv_parse_data_free (GncCsvParseData* parse_data);
 
-int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
+int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
                       GError** error);
 
-int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding, GError** error);
+int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding, GError** error);
 
-int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
+int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
 
-int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
+int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
 
-time64 parse_date(const char* date_str, int format);
+time64 parse_date (const char* date_str, int format);
 
 #endif

@@ -167,7 +167,7 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  *  @return The newly created commodity, or NULL if the user cancelled.
  */
 gnc_commodity *
-gnc_ui_new_commodity_modal_full(const char * namespace,
+gnc_ui_new_commodity_modal_full(const char * name_space,
                                 GtkWidget * parent,
                                 const char * cusip,
                                 const char * fullname,
@@ -255,7 +255,7 @@ gchar *gnc_ui_namespace_picker_ns (GtkWidget *cbwe);
  *  the combo box appears.
  */
 void gnc_ui_update_commodity_picker(GtkWidget *cbwe,
-                                    const gchar *namespace,
+                                    const gchar *name_space,
                                     const gchar *sel);
 /** @} */
 

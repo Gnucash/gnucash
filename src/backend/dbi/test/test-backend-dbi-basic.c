@@ -36,7 +36,7 @@
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
-static dbi_inst dbi_instance;
+static dbi_inst dbi_instance = NULL;
 #else
 #define HAVE_LIBDBI_R 0
 #endif
@@ -597,8 +597,11 @@ test_suite_gnc_backend_dbi (void)
     dbi_driver driver = NULL;
     GList *drivers = NULL;
     #if HAVE_LIBDBI_R
+    if (dbi_instance == NULL)
+      dbi_initialize_r (NULL, &dbi_instance);
     while ((driver = dbi_driver_list_r (driver, dbi_instance)))
     #else
+    dbi_initialize (NULL);
     while ((driver = dbi_driver_list (driver)))
     #endif
     {

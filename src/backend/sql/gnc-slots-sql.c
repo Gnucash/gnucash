@@ -492,7 +492,7 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
     case KVP_TYPE_GLIST:
     {
         slot_info_t *newInfo = slot_info_copy( pInfo, (GncGUID*)pValue );
-        kvp_value *pValue = NULL;
+        KvpValue *pValue = NULL;
         gchar *key = get_key_from_path( pInfo->path );
 
         newInfo->context = LIST;
@@ -684,7 +684,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         g_return_if_fail( pSlot_info->is_ok );
         for (cursor = kvp_value_get_glist(value); cursor; cursor = cursor->next)
         {
-            kvp_value *val = (kvp_value*)cursor->data;
+            KvpValue *val = (KvpValue*)cursor->data;
             save_slot("", val, pNewInfo);
         }
         kvp_value_delete( pSlot_info->pKvpValue );
@@ -709,7 +709,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 gboolean
 gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant, KvpFrame* pFrame )
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new('\0') };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new(NULL) };
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( guid != NULL, FALSE );
@@ -736,7 +736,7 @@ gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid )
     GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GncSqlStatement* stmt;
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new('\0') };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new(NULL) };
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( guid != NULL, FALSE );
@@ -818,7 +818,7 @@ load_slot( slot_info_t *pInfo, GncSqlRow* row )
 void
 gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
 {
-    slot_info_t info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new('\0') };
+    slot_info_t info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new(NULL) };
     g_return_if_fail( be != NULL );
     g_return_if_fail( inst != NULL );
 

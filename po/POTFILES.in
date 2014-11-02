@@ -171,6 +171,7 @@ src/engine/Recurrence.c
 src/engine/SchedXaction.c
 src/engine/Scrub2.c
 src/engine/Scrub3.c
+src/engine/ScrubBusiness.c
 src/engine/Scrub.c
 src/engine/Split.c
 src/engine/SX-book.c
@@ -239,6 +240,10 @@ src/gnome/gtkbuilder/gnc-plugin-page-register.glade
 src/gnome/gtkbuilder/window-autoclear.glade
 src/gnome/gtkbuilder/window-reconcile.glade
 src/gnome/reconcile-view.c
+src/gnome/top-level.c
+src/gnome/window-autoclear.c
+src/gnome/window-reconcile2.c
+src/gnome/window-reconcile.c
 src/gnome-search/dialog-search.c
 src/gnome-search/dialog-search.glade
 src/gnome-search/gnc-general-search.c
@@ -253,7 +258,6 @@ src/gnome-search/search-int64.c
 src/gnome-search/search-numeric.c
 src/gnome-search/search-reconciled.c
 src/gnome-search/search-string.c
-src/gnome/top-level.c
 src/gnome-utils/account-quickfill.c
 src/gnome-utils/assistant-utils.c
 src/gnome-utils/assistant-xml-encoding.c
@@ -355,9 +359,6 @@ src/gnome-utils/print-session.c
 src/gnome-utils/search-param.c
 src/gnome-utils/tree-view-utils.c
 src/gnome-utils/window-main-summarybar.c
-src/gnome/window-autoclear.c
-src/gnome/window-reconcile2.c
-src/gnome/window-reconcile.c
 src/html/gnc-html.c
 src/html/gnc-html-factory.c
 src/html/gnc-html-history.c
@@ -416,6 +417,9 @@ src/import-export/ofx/gnc-ofx-import.c
 src/import-export/ofx/gnc-ofx-kvp.c
 src/import-export/ofx/gnc-plugin-ofx.c
 [type: gettext/gsettings]src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in.in
+src/import-export/qif/qif-context.c
+src/import-export/qif/qif-file.c
+src/import-export/qif/qif-objects.c
 src/import-export/qif-imp/assistant-qif-import.c
 src/import-export/qif-imp/assistant-qif-import.glade
 src/import-export/qif-imp/dialog-account-picker.c
@@ -423,15 +427,11 @@ src/import-export/qif-imp/dialog-account-picker.glade
 src/import-export/qif-imp/gncmod-qif-import.c
 src/import-export/qif-imp/gnc-plugin-qif-import.c
 [type: gettext/gsettings]src/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in
-src/import-export/qif/qif-context.c
-src/import-export/qif/qif-file.c
-src/import-export/qif/qif-objects.c
 src/libqof/qof/gnc-date.cpp
 src/libqof/qof/gnc-numeric.cpp
 src/libqof/qof/guid.cpp
 src/libqof/qof/kvp_frame.cpp
 src/libqof/qof/kvp-util.cpp
-src/libqof/qof/md5.c
 src/libqof/qof/qofbackend.cpp
 src/libqof/qof/qofbook.cpp
 src/libqof/qof/qofchoice.cpp
@@ -442,13 +442,12 @@ src/libqof/qof/qofinstance.cpp
 src/libqof/qof/qoflog.cpp
 src/libqof/qof/qofmath128.cpp
 src/libqof/qof/qofobject.cpp
-src/libqof/qof/qofquery.cpp
 src/libqof/qof/qofquerycore.cpp
+src/libqof/qof/qofquery.cpp
 src/libqof/qof/qofsession.cpp
 src/libqof/qof/qof-string-cache.cpp
 src/libqof/qof/qofutil.cpp
 src/libqof/qof/qof-win32.cpp
-src/libqof/qof/qofbookslots.h
 src/plugins/bi_import/dialog-bi-import.c
 src/plugins/bi_import/dialog-bi-import-gui.c
 src/plugins/bi_import/dialog-bi-import-helper.c
@@ -524,5 +523,6 @@ src/report/utility-reports/gncmod-utility-reports.c
 src/tax/us/gncmod-tax-us.c
 src/gnome/gnucash.appdata.xml.in
 src/gnome/gnucash.desktop.in.in
+src/libqof/qof/qofbookslots.h
 intl-scm/guile-strings.c
 doc/tip_of_the_day.list.in

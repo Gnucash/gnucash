@@ -569,24 +569,21 @@ ab_account_longname(const AB_ACCOUNT *ab_acc)
 {
     gchar *bankname;
     gchar *result;
-    const char *ab_bankname, *bankcode;
+    const char *ab_bankname, *bankcode, *subAccountId;
 
     g_return_val_if_fail(ab_acc, NULL);
 
     ab_bankname = AB_Account_GetBankName(ab_acc);
     bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : NULL;
     bankcode = AB_Account_GetBankCode(ab_acc);
+    subAccountId = AB_Account_GetSubAccountId(ab_acc);
 
     /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-    if (bankname && *bankname)
-        result = g_strdup_printf(_("%s at %s (code %s)"),
-                                 AB_Account_GetAccountNumber(ab_acc),
-                                 bankname,
-                                 bankcode);
-    else
-        result = g_strdup_printf(_("%s at bank code %s"),
-                                 AB_Account_GetAccountNumber(ab_acc),
-                                 bankcode);
+    result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
+                             bankcode,
+                             bankname ? bankname : "",
+                             AB_Account_GetAccountNumber(ab_acc),
+                             subAccountId ? subAccountId : "");
     g_free(bankname);
 
     return result;

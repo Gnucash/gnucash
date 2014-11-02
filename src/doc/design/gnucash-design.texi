@@ -133,7 +133,7 @@ Key-Value Pair Frames
 
 * Key-Value Policy::            
 * kvp_frame::                   
-* kvp_value::                   
+* KvpValue::                   
 * kvp_list::                    
 
 Events

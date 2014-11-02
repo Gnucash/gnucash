@@ -1012,7 +1012,7 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     GtkWidget          *gtkpage;
     QIFAssistantPage   *page;
     const gchar        *mnemonic = NULL;
-    gchar              *namespace = NULL;
+    gchar              *name_space = NULL;
     const gchar        *fullname = NULL;
     gnc_commodity      *tab_commodity;
 
@@ -1023,17 +1023,17 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
 
         /* Get any changes from the commodity page. */
         mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->mnemonic_entry));
-        namespace = gnc_ui_namespace_picker_ns(page->namespace_combo);
+        name_space = gnc_ui_namespace_picker_ns(page->namespace_combo);
         fullname  = gtk_entry_get_text(GTK_ENTRY(page->name_entry));
 
         /* Update the commodity with the new values. */
-        gnc_commodity_set_namespace(page->commodity, namespace);
+        gnc_commodity_set_namespace(page->commodity, name_space);
         gnc_commodity_set_fullname(page->commodity, fullname);
         gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
         /* Add the commodity to the commodity table (if it isn't a duplicate). */
         tab_commodity = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                        namespace, mnemonic);
+                        name_space, mnemonic);
         if (!tab_commodity || tab_commodity == page->commodity)
             tab_commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                             page->commodity);
@@ -1044,7 +1044,7 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
                        SWIG_NewPointerObj(tab_commodity,
                                           SWIG_TypeQuery("_p_gnc_commodity"), 0));
 
-        g_free(namespace);
+        g_free(name_space);
     }
 }
 
@@ -1543,12 +1543,22 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 void
 gnc_ui_qif_import_load_file_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
+    QIFImportWindow * wind = user_data;
+    const gchar * path_to_load;
+    gboolean page_status = FALSE;
 
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Disable the Assistant Forward Button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    /* Get the file name. */
+    path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+
+    /* Calculate status for the Assistant Forward Button */
+    if (strlen(path_to_load) != 0)
+    {
+       page_status = gnc_ui_qif_import_load_file_complete(assistant, user_data);
+    }
+    gtk_assistant_set_page_complete (assistant, page, page_status);
 }
 
 
@@ -2638,7 +2648,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
     gnc_commodity_table     *table;
     gnc_commodity_namespace *newns;
 
-    gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->namespace_combo);
+    gchar       *name_space = gnc_ui_namespace_picker_ns(qpage->namespace_combo);
     const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->name_entry));
     const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->mnemonic_entry));
 
@@ -2646,7 +2656,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
     {
         gnc_warning_dialog(wind->window, "%s",
                            _("Enter a name or short description, such as \"Red Hat Stock\"."));
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
     else if (!mnemonic || (mnemonic[0] == 0))
@@ -2654,18 +2664,18 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
         gnc_warning_dialog(wind->window, "%s",
                            _("Enter the ticker symbol or other well known abbreviation, such as"
                              " \"RHT\". If there isn't one, or you don't know it, create your own."));
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
-    else if (!namespace || (namespace[0] == 0))
+    else if (!name_space || (name_space[0] == 0))
     {
         gnc_warning_dialog(wind->window, "%s",
                            _("Select the exchange on which the symbol is traded, or select the"
                              " type of investment (such as FUND for mutual funds.) If you don't"
                              " see your exchange or an appropriate investment type, you can"
                              " enter a new one."));
-        if (namespace)
-            g_free(namespace);
+        if (name_space)
+            g_free(name_space);
         return FALSE;
     }
 
@@ -2676,34 +2686,34 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
 
     book = gnc_get_current_book();
     table = gnc_commodity_table_get_table(book);
-    if (gnc_commodity_namespace_is_iso(namespace) &&
-            !gnc_commodity_table_lookup(table, namespace, mnemonic))
+    if (gnc_commodity_namespace_is_iso(name_space) &&
+            !gnc_commodity_table_lookup(table, name_space, mnemonic))
     {
         gnc_warning_dialog(wind->window, "%s",
                            _("You must enter an existing national "
                              "currency or enter a different type."));
 
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
 
     /* Is the namespace a new one? */
-    if (!gnc_commodity_table_has_namespace(table, namespace))
+    if (!gnc_commodity_table_has_namespace(table, name_space))
     {
         /* Register it so that it will appear as an option on other pages. */
-        newns = gnc_commodity_table_add_namespace(table, namespace, book);
+        newns = gnc_commodity_table_add_namespace(table, name_space, book);
 
         /* Remember it so it can be removed if the import gets canceled. */
         if (newns)
-            wind->new_namespaces = g_list_prepend(wind->new_namespaces, namespace);
+            wind->new_namespaces = g_list_prepend(wind->new_namespaces, name_space);
         else
         {
-            g_warning("QIF import: Couldn't create namespace %s", namespace);
-            g_free(namespace);
+            g_warning("QIF import: Couldn't create namespace %s", name_space);
+            g_free(name_space);
         }
     }
     else
-        g_free(namespace);
+        g_free(name_space);
 
     return TRUE;
 }

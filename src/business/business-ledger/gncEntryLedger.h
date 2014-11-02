@@ -49,17 +49,6 @@ typedef enum
     GNCENTRY_NUM_REGISTER_TYPES
 } GncEntryLedgerType;
 
-typedef struct entry_ledger_colors
-{
-    guint32 header_bg_color;
-
-    guint32 primary_bg_color;
-    guint32 secondary_bg_color;
-
-    guint32 primary_active_bg_color;
-    guint32 secondary_active_bg_color;
-} GncEntryLedgerColors;
-
 #define ENTRY_IACCT_CELL	"inv-account"
 #define ENTRY_BACCT_CELL	"bill-account"
 #define ENTRY_ACTN_CELL		"action"

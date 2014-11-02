@@ -1,5 +1,9 @@
 bin_SCRIPTS = gnc-fq-check gnc-fq-dump gnc-fq-helper gnc-fq-update
 
+man_MANS = \
+  gnc-fq-dump.1 \
+  gnc-fq-helper.1
+
 EXTRA_DIST = \
   Quote_example.pl \
   gnc-fq-check.in \
@@ -36,4 +40,12 @@ gnc-fq-update: gnc-fq-update.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
+gnc-fq-dump.1: gnc-fq-dump Makefile
+	pod2man $< > $@
+
+gnc-fq-helper.1: gnc-fq-helper Makefile
+	pod2man $< > $@
+
 CLEANFILES = gnc-fq-helper gnc-fq-check gnc-fq-update
+
+DISTCLEANFILES = gnc-fq-dump.1 gnc-fq-helper.1

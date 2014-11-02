@@ -80,7 +80,7 @@ gnc_account_dom_tree_create(Account *act,
                             gboolean allow_incompat)
 {
     const char *str;
-    kvp_frame *kf;
+    KvpFrame *kf;
     xmlNodePtr ret;
     GList *lots, *n;
     Account *parent;

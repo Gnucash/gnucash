@@ -698,7 +698,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 {
     GNCLedgerDisplay2 *ld;
     gint limit;
-    const char *class;
+    const char *klass;
     GList *splits;
     gboolean display_subaccounts = FALSE;
     gboolean is_gl = FALSE;
@@ -706,7 +706,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     switch (ld_type)
     {
     case LD2_SINGLE:
-        class = REGISTER_SINGLE_CM_CLASS;
+        klass = REGISTER_SINGLE_CM_CLASS;
 
         if (reg_type >= NUM_SINGLE_REGISTER_TYPES2)
         {
@@ -726,14 +726,14 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
             q = NULL;
         }
 
-        ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+        ld = gnc_find_first_gui_component (klass, find_by_leader, lead_account);
         if (ld)
             return ld;
 
         break;
 
     case LD2_SUBACCOUNT:
-        class = REGISTER_SUBACCOUNT_CM_CLASS;
+        klass = REGISTER_SUBACCOUNT_CM_CLASS;
 
         if (!lead_account)
         {
@@ -747,7 +747,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
             q = NULL;
         }
 
-        ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+        ld = gnc_find_first_gui_component (klass, find_by_leader, lead_account);
         if (ld)
             return ld;
 
@@ -755,7 +755,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
         break;
 
     case LD2_GL:
-        class = REGISTER_GL_CM_CLASS;
+        klass = REGISTER_GL_CM_CLASS;
 
         if (!q)
         {
@@ -790,7 +790,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     else
         gnc_ledger_display2_make_query (ld, limit, reg_type);
 
-    ld->component_id = gnc_register_gui_component (class,
+    ld->component_id = gnc_register_gui_component (klass,
                        refresh_handler,
                        close_handler, ld);
 

@@ -1254,6 +1254,7 @@ void
 schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
 {
     GtkBox *b;
+    GtkWidget *example_cal_scrolled_win = NULL;
 
     b = GTK_BOX(gtk_builder_get_object (sxed->builder, "gncfreq_hbox"));
 
@@ -1264,16 +1265,25 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
     g_signal_connect( sxed->gncfreq, "changed",
                       G_CALLBACK(gnc_sxed_freq_changed),
                       sxed );
-    gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->gncfreq) );
+
+    gtk_box_pack_start(GTK_BOX(b), GTK_WIDGET(sxed->gncfreq), TRUE, TRUE, 0);
 
     b = GTK_BOX(gtk_builder_get_object (sxed->builder, "example_cal_hbox" ));
+
+    example_cal_scrolled_win = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(example_cal_scrolled_win),
+                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+    gtk_box_pack_start(GTK_BOX(b), example_cal_scrolled_win, TRUE, TRUE, 0);
+
     sxed->dense_cal_model = gnc_dense_cal_store_new(EX_CAL_NUM_MONTHS * 31);
     sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxed->dense_cal_model)));
     g_assert(sxed->example_cal);
     gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
     gnc_dense_cal_set_months_per_col( sxed->example_cal, EX_CAL_MO_PER_COL );
-    gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->example_cal) );
-    gtk_widget_show( GTK_WIDGET(sxed->example_cal) );
+
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(example_cal_scrolled_win),
+                                          GTK_WIDGET(sxed->example_cal));
+    gtk_widget_show_all( example_cal_scrolled_win );
 }
 
 
@@ -1285,9 +1295,7 @@ schedXact_editor_create_ledger( GncSxEditorDialog *sxed )
     GtkWidget *main_vbox;
 
     /* Create the ledger */
-    /* THREAD-UNSAFE */
-    sxed->sxGUIDstr = g_strdup( guid_to_string(
-                                    xaccSchedXactionGetGUID(sxed->sx) ) );
+    sxed->sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID(sxed->sx) );
     sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
     splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
 

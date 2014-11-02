@@ -408,14 +408,14 @@ conv_free (conv_type *conv)
 static conv_type *
 conv_copy (const conv_type *conv)
 {
-    conv_type *new = NULL;
+    conv_type *new_type = NULL;
     if (conv)
     {
-        new = g_new(conv_type, 1);
-        new->encoding = conv->encoding;
-        new->utf8_string = g_strdup (conv->utf8_string);
+        new_type = g_new(conv_type, 1);
+        new_type->encoding = conv->encoding;
+        new_type->utf8_string = g_strdup (conv->utf8_string);
     }
-    return new;
+    return new_type;
 }
 
 static gint

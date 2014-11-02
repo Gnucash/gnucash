@@ -92,6 +92,26 @@ IF (NOT GUILE_EXECUTABLE)
   MESSAGe (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
 ENDIF (NOT GUILE_EXECUTABLE)
 
+#BOOST
+SET (Boost_USE_STATIC_LIBS OFF)
+SET (Boost_USE_MULTITHREADED ON)
+SET (Boost_USE_STATIC_RUNTIME OFF)
+SET (Boost_FIND_QUIETLY ON)
+FIND_PACKAGE (Boost 1.50.0 REQUIRED COMPONENTS chrono date_time filesystem log program_options regex signals system) # test)
+# boost-test currently can't be found by FindBoost.cmake because the
+# shared library might be named libboost_unit_test_framework.so
+
+IF (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+#    add_executable(progname file1.cxx file2.cxx)
+#    target_link_libraries(progname ${Boost_LIBRARIES})
+ELSE (Boost_FOUND)
+    MESSAGE (SEND_ERROR "Boost 1.50.0 or later is not installed, and is required. Please install it and ensure that the following libraries are built: chrono, date_time, filesystem, log, program_options, regex, signals, system, and test.")
+ENDIF (Boost_FOUND)
+
+# Also, set the C++ version to c++11
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 # ############################################################
 
 # libdbi

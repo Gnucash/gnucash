@@ -348,6 +348,10 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
     gnucash_sheet_make_cell_visible (sheet, virt_loc);
 
     changed_cells = !virt_loc_equal (virt_loc, old_virt_loc);
+    
+    /* If we've changed cells, redraw the headers */
+    if (changed_cells)
+        gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
 
     /* Now turn on the editing controls. */
     gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
@@ -2605,31 +2609,49 @@ get_gtkrc_color (GnucashSheet *sheet,
 {
     GtkWidget *widget = NULL;
     GtkStyle *style;
-    GdkColor *white;
+    GdkColor *white, *black, *red;
     GdkColor *color = NULL;
 
     white = gnucash_color_argb_to_gdk (0xFFFFFF);
+    black = gnucash_color_argb_to_gdk (0x000000);
+    red   = gnucash_color_argb_to_gdk (0xFF0000); /* Hardcoded...*/
     switch (field_type)
     {
     default:
         return white;
 
-    case COLOR_HEADER:
+    case COLOR_UNKNOWN_BG:
+        return white;
+
+    case COLOR_UNKNOWN_FG:
+        return black;
+
+    case COLOR_NEGATIVE:
+        return red;
+
+    case COLOR_HEADER_BG:
+    case COLOR_HEADER_FG:
         widget = sheet->header_color;
         break;
 
-    case COLOR_PRIMARY:
-    case COLOR_PRIMARY_ACTIVE:
+    case COLOR_PRIMARY_BG:
+    case COLOR_PRIMARY_BG_ACTIVE:
+    case COLOR_PRIMARY_FG:
+    case COLOR_PRIMARY_FG_ACTIVE:
         widget = sheet->primary_color;
         break;
 
-    case COLOR_SECONDARY:
-    case COLOR_SECONDARY_ACTIVE:
+    case COLOR_SECONDARY_BG:
+    case COLOR_SECONDARY_BG_ACTIVE:
+    case COLOR_SECONDARY_FG:
+    case COLOR_SECONDARY_FG_ACTIVE:
         widget = sheet->secondary_color;
         break;
 
-    case COLOR_SPLIT:
-    case COLOR_SPLIT_ACTIVE:
+    case COLOR_SPLIT_BG:
+    case COLOR_SPLIT_BG_ACTIVE:
+    case COLOR_SPLIT_FG:
+    case COLOR_SPLIT_FG_ACTIVE:
         widget = sheet->split_color;
         break;
     }
@@ -2643,17 +2665,30 @@ get_gtkrc_color (GnucashSheet *sheet,
     default:
         return white;
 
-    case COLOR_HEADER:
-    case COLOR_PRIMARY:
-    case COLOR_SECONDARY:
-    case COLOR_SPLIT:
+    case COLOR_HEADER_BG:
+    case COLOR_PRIMARY_BG:
+    case COLOR_SECONDARY_BG:
+    case COLOR_SPLIT_BG:
         color = &style->base[GTK_STATE_NORMAL];
         break;
 
-    case COLOR_PRIMARY_ACTIVE:
-    case COLOR_SECONDARY_ACTIVE:
-    case COLOR_SPLIT_ACTIVE:
+    case COLOR_PRIMARY_BG_ACTIVE:
+    case COLOR_SECONDARY_BG_ACTIVE:
+    case COLOR_SPLIT_BG_ACTIVE:
         color = &style->base[GTK_STATE_SELECTED];
+        break;
+
+    case COLOR_HEADER_FG:
+    case COLOR_PRIMARY_FG:
+    case COLOR_SECONDARY_FG:
+    case COLOR_SPLIT_FG:
+        color = &style->text[GTK_STATE_NORMAL];
+        break;
+
+    case COLOR_PRIMARY_FG_ACTIVE:
+    case COLOR_SECONDARY_FG_ACTIVE:
+    case COLOR_SPLIT_FG_ACTIVE:
+        color = &style->text[GTK_STATE_SELECTED];
         break;
     }
 
@@ -2692,15 +2727,15 @@ gnucash_sheet_create_color_hack(GnucashSheet *sheet)
 /*************************************************************/
 
 static void
-gnucash_sheet_class_init (GnucashSheetClass *class)
+gnucash_sheet_class_init (GnucashSheetClass *klass)
 {
     GObjectClass *gobject_class;
     GtkWidgetClass *widget_class;
 
-    gobject_class = G_OBJECT_CLASS (class);
-    widget_class = GTK_WIDGET_CLASS (class);
+    gobject_class = G_OBJECT_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS (klass);
 
-    sheet_parent_class = g_type_class_peek_parent (class);
+    sheet_parent_class = g_type_class_peek_parent (klass);
 
     /* Method override */
     gobject_class->finalize = gnucash_sheet_finalize;
@@ -2865,13 +2900,13 @@ gnucash_sheet_new (Table *table)
 
 
 static void
-gnucash_register_class_init (GnucashRegisterClass *class)
+gnucash_register_class_init (GnucashRegisterClass *klass)
 {
     GObjectClass *gobject_class;
 
-    gobject_class = G_OBJECT_CLASS (class);
+    gobject_class = G_OBJECT_CLASS (klass);
 
-    register_parent_class = g_type_class_peek_parent (class);
+    register_parent_class = g_type_class_peek_parent (klass);
 
     register_signals[ACTIVATE_CURSOR] =
         g_signal_new("activate_cursor",
@@ -2903,9 +2938,9 @@ gnucash_register_class_init (GnucashRegisterClass *class)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    class->activate_cursor = NULL;
-    class->redraw_all = NULL;
-    class->redraw_help = NULL;
+    klass->activate_cursor = NULL;
+    klass->redraw_all = NULL;
+    klass->redraw_help = NULL;
 }
 
 

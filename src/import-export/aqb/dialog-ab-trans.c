@@ -82,7 +82,12 @@ G_MODULE_EXPORT void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpoi
 G_MODULE_EXPORT void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
+G_MODULE_EXPORT void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
+        const gchar *text,
+        gint         length,
+        gint        *position,
+        gpointer     user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
@@ -485,6 +490,27 @@ static void
 gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
                                       const AB_TRANSACTION *trans)
 {
+    if (gnc_ab_trans_isSEPA(td->trans_type))
+    {
+        int rv = AB_Banking_CheckIban(AB_Transaction_GetRemoteIban(trans));
+        if (rv != 0) {
+            gchar *message = g_strdup_printf(_("The internal check of the destination IBAN '%s' "
+                                               "failed. This means "
+                                               "the account number might contain an error."),
+                                             AB_Transaction_GetRemoteIban(trans));
+            gnc_ab_trans_dialog_entry_set (td->recp_account_entry, message,
+                                           GTK_STOCK_DIALOG_WARNING);
+        }
+        else
+        {
+            gnc_ab_trans_dialog_entry_set (td->recp_account_entry, "",
+                                           NULL);
+            gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, "",
+                                           NULL);
+        }
+    }
+    else
+    {
 #ifndef HAVE_KTOBLZCHECK_H
     return;
 #else
@@ -543,6 +569,7 @@ gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
     LEAVE("KtoBlzCheck said check is %d = %s",
           blzresult, blztext ? blztext : "(none)");
 #endif
+    }
 }
 
 static void
@@ -628,7 +655,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     bankcode = gnc_ab_trans_isSEPA(td->trans_type)
             ? AB_Transaction_GetRemoteBic(td->ab_trans)
             : AB_Transaction_GetRemoteBankCode(td->ab_trans);
-    if (!bankcode || !strlen(bankcode))
+    if (!gnc_ab_trans_isSEPA(td->trans_type) && (!bankcode || !strlen(bankcode)))
     {
         gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry,
                                        _("You did not enter a recipient bank. A recipient bank is "
@@ -1300,7 +1327,7 @@ gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
 }
 
 void
-gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
+gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
                                      const gchar *text,
                                      gint         length,
                                      gint        *position,
@@ -1312,27 +1339,95 @@ gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
 
     if (length == -1)
         length = strlen(text);
+    g_assert(position);
+
+    /* Filter digits / non digits as needed */
+    for (i = 0; i < length; i++)
+    {
+        gchar c = text[i];
+
+        if (gnc_ab_trans_isSEPA(td->trans_type))
+        {
+            // SEPA: Only alphas in the first two places (only upper case, though), then only digits
+            if (*position + i < 2)
+            {
+                if (g_ascii_isalpha(c))
+                    g_string_append_c(result, g_ascii_toupper(c));
+            }
+            else
+            {
+                if (g_ascii_isdigit(c))
+                    g_string_append_c(result, c);
+            }
+        }
+        else
+        {
+            // Non-SEPA: Only accept digits.
+            if (g_ascii_isdigit(c))
+            {
+                g_string_append_c(result, c);
+            }
+        }
+    }
+
+    g_signal_handlers_block_by_func (editable,
+                                     (gpointer) gnc_ab_trans_dialog_ibanentry_filter_cb, data);
+    gtk_editable_insert_text (editable, result->str, result->len, position);
+    g_signal_handlers_unblock_by_func (editable,
+                                       (gpointer) gnc_ab_trans_dialog_ibanentry_filter_cb, data);
+    g_signal_stop_emission_by_name (editable, "insert_text");
+    g_string_free (result, TRUE);
+}
+
+void
+gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
+                                     const gchar *text,
+                                     gint         length,
+                                     gint        *position,
+                                     gpointer     data)
+{
+    GString* result = g_string_new(NULL);
+    gint i;
+    GncABTransDialog *td = data;
+
+    if (length == -1)
+        length = strlen(text);
+    g_assert(position);
 
     /* Filter non digits */
     for (i = 0; i < length; i++)
     {
         gchar c = text[i];
 
-        // Only accept digits. FIXME: In the SEPA dialogs, alphanumerics are
-        // allowed, but we could also verify the input according to actual BIC
-        // and IBAN rules. This is not yet done here.
-        if (g_ascii_isdigit(c)
-                || (gnc_ab_trans_isSEPA(td->trans_type) && g_ascii_isalnum(c)))
+        if (gnc_ab_trans_isSEPA(td->trans_type))
         {
-            g_string_append_c(result, c);
+            // SEPA: Only alphas in the first 6 places (only upper case, though), then both upper-case alphas and digits
+            if (*position + i < 6)
+            {
+                if (g_ascii_isalpha(c))
+                    g_string_append_c(result, g_ascii_toupper(c));
+            }
+            else
+            {
+                if (g_ascii_isalnum(c))
+                    g_string_append_c(result, g_ascii_toupper(c));
+            }
+        }
+        else
+        {
+            // Non-SEPA: Only digits accepted.
+            if (g_ascii_isdigit(c))
+            {
+                g_string_append_c(result, c);
+            }
         }
     }
 
     g_signal_handlers_block_by_func (editable,
-                                     (gpointer) gnc_ab_trans_dialog_entry_filter_cb, data);
+                                     (gpointer) gnc_ab_trans_dialog_bicentry_filter_cb, data);
     gtk_editable_insert_text (editable, result->str, result->len, position);
     g_signal_handlers_unblock_by_func (editable,
-                                       (gpointer) gnc_ab_trans_dialog_entry_filter_cb, data);
+                                       (gpointer) gnc_ab_trans_dialog_bicentry_filter_cb, data);
     g_signal_stop_emission_by_name (editable, "insert_text");
     g_string_free (result, TRUE);
 }

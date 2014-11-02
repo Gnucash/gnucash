@@ -239,9 +239,9 @@ equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com,
 }
 
 gboolean
-equals_node_val_vs_kvp_frame(xmlNodePtr node, const kvp_frame *frm)
+equals_node_val_vs_kvp_frame(xmlNodePtr node, const KvpFrame *frm)
 {
-    kvp_frame *cmpfrm;
+    KvpFrame *cmpfrm;
 
     g_return_val_if_fail(node, FALSE);
     g_return_val_if_fail(frm, FALSE);

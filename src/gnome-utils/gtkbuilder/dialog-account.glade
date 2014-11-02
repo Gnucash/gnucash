@@ -1617,6 +1617,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">interval_adjustment</property>
+		<property name="value">10</property>
                 <property name="climb_rate">1</property>
                 <signal name="value_changed" handler="gnc_account_renumber_interval_changed_cb"/>
               </object>
@@ -1736,7 +1737,7 @@
     <property name="value">10</property>
     <property name="lower">1</property>
     <property name="upper">10000</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">100</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">100</property>
   </object>
 </interface>

@@ -1076,6 +1076,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     GtkWidget *reset_button;
     GtkWidget *listitem = NULL;
     GtkWidget *buttonbox;
+    GtkWidget *options_scrolled_win;
     GtkTreeView *view;
     GtkListStore *list;
     GtkTreeIter iter;
@@ -1100,10 +1101,14 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     page_content_box = gtk_vbox_new(FALSE, 2);
     gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 12);
 
+    options_scrolled_win = gtk_scrolled_window_new(NULL, NULL);
+    gtk_box_pack_start(GTK_BOX(page_content_box), options_scrolled_win, TRUE, TRUE, 0);
+
     /* Build space for the content - the options box */
     options_box = gtk_vbox_new(FALSE, 5);
     gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
-    gtk_box_pack_start(GTK_BOX(page_content_box), options_box, TRUE, TRUE, 0);
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(options_scrolled_win), options_box);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
     /* Create all the options */
     num_options = gnc_option_section_num_options(section);
@@ -1637,7 +1642,7 @@ gnc_option_set_ui_widget_string (GNCOption *option, GtkBox *page_box,
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(*enclosing), value, TRUE, TRUE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }

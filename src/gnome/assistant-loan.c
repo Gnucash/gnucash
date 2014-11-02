@@ -48,6 +48,11 @@
 #include "gnc-frequency.h"
 #include "gnc-engine.h"
 
+#ifndef HAVE_STRFMON
+# include "strfmon.h"
+#else
+# include <monetary.h>
+#endif
 #define DIALOG_LOAN_ASSISTANT_CM_CLASS "assistant-loan-setup"
 
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
@@ -2264,87 +2269,62 @@ gfloat loan_apr_to_simple_formula (gfloat rate, gfloat compounding_periods)
     return (simple_rate);
 }
 
+#define MAX_FORMULA 1024
+
+static
+void
+loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar* template )
+{
+    gint rate_case;
+    gfloat pass_thru_rate, period_rate;
+    gfloat periods;
+    gfloat principal;
+    gchar formula[MAX_FORMULA];
+
+    g_assert( ldd != NULL );
+    g_assert( gstr != NULL );
+
+    pass_thru_rate = ldd->ld.interestRate / 100;
+    periods = (ldd->ld.numPer * (ldd->ld.perSize == GNC_MONTHS ? 1 : 12)) * 1.;
+    principal = gnc_numeric_to_double(ldd->ld.principal);
+
+    rate_case = ldd->ld.rateType;
+    switch (rate_case)
+    {
+    case GNC_IRATE_SIMPLE:
+        period_rate = pass_thru_rate;
+        break;
+    case GNC_IRATE_APR_DAILY:
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 365);
+        break;
+    case GNC_IRATE_APR_WEEKLY:
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 52);
+        break;
+    case GNC_IRATE_APR_MONTHLY:
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 12);
+        break;
+    case GNC_IRATE_APR_QUARTERLY:
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 4);
+        break;
+    case GNC_IRATE_APR_ANNUALLY:
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 1);
+        break;
+    default:
+        period_rate = ldd->ld.interestRate / 100;
+        break;
+    }
+
+    if (0 < strfmon (formula, MAX_FORMULA, template,
+                     period_rate, 12.0, periods, principal ))
+        g_string_append (gstr, formula);
+}
+
 
 static
 void
 loan_get_pmt_formula( LoanAssistantData *ldd, GString *gstr )
 {
-    gint rate_case;
-    gfloat pass_thru_rate;
-    g_assert( ldd != NULL );
-    g_assert( gstr != NULL );
-    rate_case = ldd->ld.rateType;
-    pass_thru_rate = ldd->ld.interestRate / 100;
-    switch (rate_case)
-    {
-    case GNC_IRATE_SIMPLE:
-    {
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                pass_thru_rate, 12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-    }
-    break;
-    case GNC_IRATE_APR_DAILY:
-    {
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                loan_apr_to_simple_formula(pass_thru_rate, 365),
-                                12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-    }
-    break;
-    case GNC_IRATE_APR_WEEKLY:
-    {
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                loan_apr_to_simple_formula(pass_thru_rate, 52),
-                                12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-    }
-    break;
-    case GNC_IRATE_APR_MONTHLY:
-    {
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                loan_apr_to_simple_formula(pass_thru_rate, 12),
-                                12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-    }
-    break;
-    case GNC_IRATE_APR_QUARTERLY:
-    {
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                loan_apr_to_simple_formula(pass_thru_rate, 4),
-                                12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-    }
-    break;
-    case GNC_IRATE_APR_ANNUALLY:
-    {
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                loan_apr_to_simple_formula(pass_thru_rate, 1),
-                                12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-    }
-    break;
-    default:
-        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
-                                (ldd->ld.interestRate / 100),
-                                12.0,
-                                ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                                gnc_numeric_to_double(ldd->ld.principal) );
-        break;
-    }
+    loan_get_formula_internal (ldd, gstr, "pmt( %!.5i / %!0.2i : %!0.2i : %!0.2i : 0 : 0 )");
 }
 
 
@@ -2352,83 +2332,7 @@ static
 void
 loan_get_ppmt_formula( LoanAssistantData *ldd, GString *gstr )
 {
-    gint rate_case;
-    gfloat pass_thru_rate;
-    g_assert( ldd != NULL );
-    g_assert( gstr != NULL );
-    rate_case = ldd->ld.rateType;
-    pass_thru_rate = ldd->ld.interestRate / 100;
-    switch (rate_case)
-    {
-    case GNC_IRATE_SIMPLE:
-    {
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         pass_thru_rate,
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_DAILY:
-    {
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 365),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_WEEKLY:
-    {
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 52),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_MONTHLY:
-    {
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 12),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_QUARTERLY:
-    {
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 4),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_ANNUALLY:
-    {
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 1),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    default:
-        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         (ldd->ld.interestRate / 100),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-        break;
-    }
+    loan_get_formula_internal (ldd, gstr, "ppmt( %!.5i / %!0.2i : i : %!0.2i : %!0.2i : 0 : 0 )");
 }
 
 
@@ -2436,83 +2340,7 @@ static
 void
 loan_get_ipmt_formula( LoanAssistantData *ldd, GString *gstr )
 {
-    gint rate_case;
-    gfloat pass_thru_rate;
-    g_assert( ldd != NULL );
-    g_assert( gstr != NULL );
-    rate_case = ldd->ld.rateType;
-    pass_thru_rate = ldd->ld.interestRate / 100;
-    switch (rate_case)
-    {
-    case GNC_IRATE_SIMPLE:
-    {
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         pass_thru_rate,
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_DAILY:
-    {
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 365),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_WEEKLY:
-    {
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 52),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_MONTHLY:
-    {
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 12),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_QUARTERLY:
-    {
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 4),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    case GNC_IRATE_APR_ANNUALLY:
-    {
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         loan_apr_to_simple_formula(pass_thru_rate, 1),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-    }
-    break;
-    default:
-        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
-                         (ldd->ld.interestRate / 100),
-                         12.0,
-                         ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
-                         gnc_numeric_to_double(ldd->ld.principal));
-        break;
-    }
+    loan_get_formula_internal (ldd, gstr, "ipmt( %!.5i / %!0.2i : i : %!0.2i : %!0.2i : 0 : 0 )");
 }
 
 /******************* Scheduled Transaction Functions ********************/

@@ -38,6 +38,7 @@
 #include "qof.h"
 #include "gnc-lot.h"
 #include "Scrub3.h"
+#include "ScrubBusiness.h"
 #include "Transaction.h"
 #include "engine-helpers.h"
 #include "gncInvoice.h"
@@ -750,14 +751,20 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_SCRUB_LOT:
         if (NULL == lot)
             return;
-        xaccScrubLot (lot);
+        if (xaccAccountIsAPARType (xaccAccountGetType(lv->account)))
+            gncScrubBusinessLot (lot);
+        else
+            xaccScrubLot (lot);
         gnc_lot_viewer_fill (lv);
         lv_show_splits_in_lot (lv);
         break;
 
     case RESPONSE_SCRUB_ACCOUNT:
         gnc_suspend_gui_refresh ();
-        xaccAccountScrubLots (lv->account);
+        if (xaccAccountIsAPARType (xaccAccountGetType(lv->account)))
+            gncScrubBusinessAccountLots (lv->account);
+        else
+            xaccAccountScrubLots (lv->account);
         gnc_resume_gui_refresh ();
         gnc_lot_viewer_fill (lv);
         lv_show_splits_free (lv);

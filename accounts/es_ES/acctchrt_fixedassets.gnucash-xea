@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Activos fijos
@@ -7,8 +7,8 @@
       Cuentas para gestionar varios activos fijos
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deberá seleccionar esta cuenta si tiene varios activos fijos
-      (casa, vehículo, casa de vacaciones, otros activos).
+    DeberÃ¡ seleccionar esta cuenta si tiene varios activos fijos
+      (casa, vehÃ­culo, casa de vacaciones, otros activos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -61,14 +61,14 @@
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vehículo</act:name>
+  <act:name>VehÃ­culo</act:name>
   <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Vehículo</act:description>
+  <act:description>VehÃ­culo</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 </gnc-account-example>

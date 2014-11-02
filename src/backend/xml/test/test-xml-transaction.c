@@ -218,7 +218,9 @@ equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
 
         if (!spl_node)
         {
-            g_print( "Split GUID %s", guid_to_string(xaccSplitGetGUID(spl_mark)) );
+            gchar guidstr[GUID_ENCODING_LENGTH+1];
+            guid_to_string_buff(xaccSplitGetGUID(spl_mark),guidstr);
+            g_print( "Split GUID %s", guidstr );
             return "no matching split found";
         }
 

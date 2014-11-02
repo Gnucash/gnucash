@@ -14,13 +14,42 @@ use File::Basename;
 
 # Note: These are perl regexp patterns, *not* normal shell wildcards!
 my @ignorepatterns = ('gw-', 'test', 'experimental', 'python-bindings', 'swig-.*\.c');
+my (@skipped_files, @ignored_files);
+open(IN, "< @-SRCDIR-@/po/POTFILES.skip");
+while (<IN>) {
+    push @skipped_files, $_ unless $_ =~ /^\#/;
+}
+close IN;
+open(IN, "< @-SRCDIR-@/po/POTFILES.ignore");
+while (<IN>) {
+    push @ignored_files, $_ unless $_ =~ /^\#/;
+}
+close IN;
 
-my @skipped_files = `grep -v \# @-SRCDIR-@/po/POTFILES.skip`;
-my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
+# Sort filenames in POTFILES.in in a consistent way
+# This reduces the amount of clutter in our version manangement system
+# The files will be sorted
+# * per directory
+# * case-insensitive
+# * ignoring punctuation (-,_,.)
+#
+sub sort_func
+{
+    my $stripped_a = $a;
+    my $stripped_b = $b;
+    $stripped_a =~ s/[-_.]//g;
+    $stripped_b =~ s/[-_.]//g;
 
-my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' -o -name '*.glade' \\
+    lc ($stripped_a) cmp lc ($stripped_b)
+      ||
+    lc ($a) cmp lc ($b)
+}
+
+my @possible_files = sort sort_func
+                      `cd @-SRCDIR-@ && find src -name '*.c' \\
+                      -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.gschema.xml.in.in' |sort`;
+                      -o -name '*.gschema.xml.in.in' `;
 ## For perl files add the following:
 # -o -name '*.pl'
 
@@ -58,7 +87,6 @@ foreach my $file (@possible_files) {
 # These are also added, even though they are outside of src/
 print "src/gnome/gnucash.appdata.xml.in\n";
 print "src/gnome/gnucash.desktop.in.in\n";
-print "src/libqof/qof/gnc-date.c\n";
 print "src/libqof/qof/qofbookslots.h\n";
 print "intl-scm/guile-strings.c\n";
 print "doc/tip_of_the_day.list.in\n";

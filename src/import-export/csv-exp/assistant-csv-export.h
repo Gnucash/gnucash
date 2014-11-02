@@ -70,6 +70,10 @@ typedef struct
     CsvExportType export_type;
     CsvExportDate csvd;
     CsvExportAcc  csva;
+    
+    GtkWidget    *start_page;
+    GtkWidget    *account_page;
+    GtkWidget    *file_page;
 
     GtkWidget    *window;
     GtkWidget    *assistant;

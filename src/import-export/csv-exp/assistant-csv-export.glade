@@ -77,7 +77,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="csv_export_quote_cb" swapped="no"/>
                       </object>
@@ -851,7 +850,6 @@ Select the type of Export required and the separator that will be used.
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
         <property name="title" translatable="yes">Account Selection</property>
       </packing>
     </child>

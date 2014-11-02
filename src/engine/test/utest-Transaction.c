@@ -577,20 +577,20 @@ test_dupe_trans (Fixture *fixture, gconstpointer pData)
 {
     Timespec posted = gnc_dmy2timespec (12, 7, 2011);
     Timespec entered = gnc_dmy2timespec (14, 7, 2011);
-    Transaction *new = NULL, *old = fixture->txn;
-    QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (old));
-    GList *newnode, *oldnode = old->splits;
+    Transaction *newtxn = NULL, *oldtxn = fixture->txn;
+    QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (oldtxn));
+    GList *newnode, *oldnode = oldtxn->splits;
 
-    old->date_posted = posted;
-    old->date_entered = entered;
-    kvp_frame_set_string (old->inst.kvp_data, "/foo/bar/baz",
+    oldtxn->date_posted = posted;
+    oldtxn->date_entered = entered;
+    kvp_frame_set_string (oldtxn->inst.kvp_data, "/foo/bar/baz",
                           "The Great Waldo Pepper");
 
-    new = fixture->func->dupe_trans (old);
+    newtxn = fixture->func->dupe_trans (oldtxn);
 
-    g_assert_cmpstr (new->num, ==, old->num);
-    g_assert_cmpstr (new->description, ==, old->description);
-    for (newnode = new->splits; newnode && oldnode;
+    g_assert_cmpstr (newtxn->num, ==, oldtxn->num);
+    g_assert_cmpstr (newtxn->description, ==, oldtxn->description);
+    for (newnode = newtxn->splits; newnode && oldnode;
             newnode = g_list_next (newnode))
     {
         g_assert (xaccSplitEqual (newnode->data, oldnode->data,
@@ -599,19 +599,19 @@ test_dupe_trans (Fixture *fixture, gconstpointer pData)
     }
     g_assert (newnode == NULL);
     g_assert (oldnode == NULL);
-    g_assert (timespec_equal (&(new->date_posted), &posted));
-    g_assert (timespec_equal (&(new->date_entered), &entered));
-    g_assert (qof_instance_version_cmp (QOF_INSTANCE (new),
-                                        QOF_INSTANCE (old)) == 0);
-    g_assert (new->orig == NULL);
-    g_assert (new->common_currency == fixture->curr);
-    g_assert (new->inst.e_type == NULL);
-    g_assert (guid_equal (qof_instance_get_guid (QOF_INSTANCE (new)),
+    g_assert (timespec_equal (&(newtxn->date_posted), &posted));
+    g_assert (timespec_equal (&(newtxn->date_entered), &entered));
+    g_assert (qof_instance_version_cmp (QOF_INSTANCE (newtxn),
+                                        QOF_INSTANCE (oldtxn)) == 0);
+    g_assert (newtxn->orig == NULL);
+    g_assert (newtxn->common_currency == fixture->curr);
+    g_assert (newtxn->inst.e_type == NULL);
+    g_assert (guid_equal (qof_instance_get_guid (QOF_INSTANCE (newtxn)),
                           guid_null ()));
-    g_assert (qof_instance_get_book (QOF_INSTANCE (new)) == old_book);
-    g_assert (kvp_frame_compare (old->inst.kvp_data, new->inst.kvp_data) == 0);
+    g_assert (qof_instance_get_book (QOF_INSTANCE (newtxn)) == old_book);
+    g_assert (kvp_frame_compare (oldtxn->inst.kvp_data, newtxn->inst.kvp_data) == 0);
 
-    test_destroy (new);
+    test_destroy (newtxn);
 }
 /* xaccTransClone
 Transaction *
@@ -622,26 +622,26 @@ test_xaccTransClone (Fixture *fixture, gconstpointer pData)
 {
     Timespec posted = gnc_dmy2timespec (12, 7, 2011);
     Timespec entered = gnc_dmy2timespec (14, 7, 2011);
-    Transaction *new = NULL, *old = fixture->txn;
-    QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (old));
+    Transaction *newtxn = NULL, *oldtxn = fixture->txn;
+    QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (oldtxn));
     GList *newnode, *oldnode;
     int foo, bar;
 
-    old->date_posted = posted;
-    old->date_entered = entered;
-    new = xaccTransClone (old);
+    oldtxn->date_posted = posted;
+    oldtxn->date_entered = entered;
+    newtxn = xaccTransClone (oldtxn);
 
-    g_assert_cmpstr (new->num, ==, old->num);
-    g_assert_cmpstr (new->description, ==, old->description);
+    g_assert_cmpstr (newtxn->num, ==, oldtxn->num);
+    g_assert_cmpstr (newtxn->description, ==, oldtxn->description);
 
-    g_assert_cmpint (xaccTransCountSplits (old), ==,
-                     xaccTransCountSplits (new));
+    g_assert_cmpint (xaccTransCountSplits (oldtxn), ==,
+                     xaccTransCountSplits (newtxn));
 
-    xaccTransSortSplits (new);
-    xaccTransSortSplits (old);
+    xaccTransSortSplits (newtxn);
+    xaccTransSortSplits (oldtxn);
 
-    oldnode = old->splits;
-    for (newnode = new->splits; newnode && oldnode;
+    oldnode = oldtxn->splits;
+    for (newnode = newtxn->splits; newnode && oldnode;
             newnode = g_list_next (newnode))
     {
         g_assert (xaccSplitEqual (newnode->data, oldnode->data,
@@ -650,19 +650,19 @@ test_xaccTransClone (Fixture *fixture, gconstpointer pData)
     }
     g_assert (newnode == NULL);
     g_assert (oldnode == NULL);
-    g_assert (timespec_equal (&(new->date_posted), &posted));
-    g_assert (timespec_equal (&(new->date_entered), &entered));
-    g_assert (qof_instance_version_cmp (QOF_INSTANCE (new),
-                                        QOF_INSTANCE (old)) == 0);
-    g_assert_cmpint (qof_instance_get_version_check (new), ==,
-                     qof_instance_get_version_check (old));
-    g_assert (new->orig == NULL);
-    g_assert (new->common_currency == fixture->curr);
+    g_assert (timespec_equal (&(newtxn->date_posted), &posted));
+    g_assert (timespec_equal (&(newtxn->date_entered), &entered));
+    g_assert (qof_instance_version_cmp (QOF_INSTANCE (newtxn),
+                                        QOF_INSTANCE (oldtxn)) == 0);
+    g_assert_cmpint (qof_instance_get_version_check (newtxn), ==,
+                     qof_instance_get_version_check (oldtxn));
+    g_assert (newtxn->orig == NULL);
+    g_assert (newtxn->common_currency == fixture->curr);
 
-    g_assert (qof_instance_get_book (QOF_INSTANCE (new)) == old_book);
-    g_assert (kvp_frame_compare (old->inst.kvp_data, new->inst.kvp_data) == 0);
+    g_assert (qof_instance_get_book (QOF_INSTANCE (newtxn)) == old_book);
+    g_assert (kvp_frame_compare (oldtxn->inst.kvp_data, newtxn->inst.kvp_data) == 0);
 
-    test_destroy (new);
+    test_destroy (newtxn);
 }
 
 /* xaccTransCopyOnto

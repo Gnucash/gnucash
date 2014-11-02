@@ -58,7 +58,7 @@ enum
 };
 
 static void gnc_general_search_init         (GNCGeneralSearch      *gsl);
-static void gnc_general_search_class_init   (GNCGeneralSearchClass *class);
+static void gnc_general_search_class_init   (GNCGeneralSearchClass *klass);
 static void gnc_general_search_destroy      (GtkObject             *object);
 
 typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;

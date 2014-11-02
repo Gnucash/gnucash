@@ -69,7 +69,7 @@
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
-static dbi_inst dbi_instance;
+static dbi_inst dbi_instance = NULL;
 #else
 #define HAVE_LIBDBI_R 0
 #endif
@@ -292,7 +292,10 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     }
 
     #if HAVE_LIBDBI_R
-    be->conn = dbi_conn_new_r( "sqlite3", dbi_instance );
+    if (dbi_instance)
+        be->conn = dbi_conn_new_r( "sqlite3", dbi_instance );
+    else
+        PERR ("Attempt to connect with an uninitialized dbi_instance");
     #else
     be->conn = dbi_conn_new( "sqlite3" );
     #endif
@@ -822,7 +825,10 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
         dbi_conn_close( be->conn );
     }
 #if HAVE_LIBDBI_R
-    be->conn = dbi_conn_new_r( "mysql", dbi_instance );
+    if (dbi_instance)
+        be->conn = dbi_conn_new_r( "mysql", dbi_instance );
+    else
+        PERR ("Attempt to connect with an uninitialized dbi_instance");
 #else
     be->conn = dbi_conn_new( "mysql" );
 #endif
@@ -911,7 +917,10 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 
             // Try again to connect to the db
             #if HAVE_LIBDBI_R
-            be->conn = dbi_conn_new_r( "mysql", dbi_instance );
+	    if (dbi_instance)
+	        be->conn = dbi_conn_new_r( "mysql", dbi_instance );
+	    else
+	        PERR ("Attempt to connect with an uninitialized dbi_instance");
             #else
             be->conn = dbi_conn_new( "mysql" );
             #endif
@@ -1168,7 +1177,10 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     }
 
     #if HAVE_LIBDBI_R
-    be->conn = dbi_conn_new_r( "pgsql", dbi_instance );
+    if (dbi_instance)
+        be->conn = dbi_conn_new_r( "pgsql", dbi_instance );
+    else
+        PERR ("Attempt to connect with an uninitialized dbi_instance");
     #else
     be->conn = dbi_conn_new( "pgsql" );
     #endif
@@ -1259,7 +1271,10 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 
             // Try again to connect to the db
             #if HAVE_LIBDBI_R
-            be->conn = dbi_conn_new_r( "pgsql", dbi_instance );
+            if (dbi_instance)
+                be->conn = dbi_conn_new_r( "pgsql", dbi_instance );
+            else
+	        PERR ("Attempt to connect with an uninitialized dbi_instance");
             #else
             be->conn = dbi_conn_new( "pgsql" );
             #endif
@@ -1869,6 +1884,8 @@ gnc_module_init_backend_dbi(void)
 
     /* dbi_initialize returns -1 in case of errors */
     #if HAVE_LIBDBI_R
+    if (dbi_instance)
+        return;
     num_drivers = dbi_initialize_r( driver_dir, &dbi_instance );
     #else
     num_drivers = dbi_initialize( driver_dir );
@@ -1983,11 +2000,15 @@ qof_backend_module_finalize( void )
 void
 gnc_module_finalize_backend_dbi( void )
 {
-    #if HAVE_LIBDBI_R
-    dbi_shutdown_r(dbi_instance);
-    #else
+#if HAVE_LIBDBI_R
+  if (dbi_instance)
+  {
+      dbi_shutdown_r(dbi_instance);
+      dbi_instance = NULL;
+  }
+#else
     dbi_shutdown();
-    #endif
+#endif
 }
 
 /* --------------------------------------------------------- */

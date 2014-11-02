@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Comptes d'épargne retraite
+      Comptes d'Ã©pargne retraite
     </gnc-act:title>
     <gnc-act:short-description>
-      Compte d'épargne retraite avec ses sous-comptes d'investissements relatifs
+      Compte d'Ã©pargne retraite avec ses sous-comptes d'investissements relatifs
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Vous devriez sélectionner cet ensemble de comptes si vous avez des comptes d'épargne retraite (actions, obligations, fonds communs, fonds d'indices).
+    Vous devriez sÃ©lectionner cet ensemble de comptes si vous avez des comptes d'Ã©pargne retraite (actions, obligations, fonds communs, fonds d'indices).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -21,7 +21,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Actif</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -32,7 +32,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Investissements</act:description>
   <act:parent type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:parent>
@@ -43,7 +43,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Retraite</act:description>
   <act:slots>
@@ -60,7 +60,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Obligations</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
@@ -71,20 +71,20 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Actions</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Marché d'indices</act:name>
+  <act:name>MarchÃ© d'indices</act:name>
   <act:id type="new">2326b032fe4e8f434159310fccf17091</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Marché d'indices</act:description>
+  <act:description>MarchÃ© d'indices</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -93,7 +93,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Fonds communs</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>

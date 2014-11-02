@@ -41,7 +41,7 @@ typedef struct
 /* Expose a mostly-private QofInstance function to load options into
  * the Book.
  */
-extern KvpFrame *qof_instance_get_slots (QofInstance*);
+extern KvpFrame *qof_instance_get_slots (const QofInstance*);
 
 static void
 setup (Fixture *fixture, gconstpointer pData)

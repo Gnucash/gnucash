@@ -41,7 +41,7 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_reconciled_class_init	(GNCSearchReconciledClass *class);
+static void gnc_search_reconciled_class_init	(GNCSearchReconciledClass *klass);
 static void gnc_search_reconciled_init	(GNCSearchReconciled *gspaper);
 static void gnc_search_reconciled_finalize	(GObject *obj);
 
@@ -86,13 +86,13 @@ gnc_search_reconciled_get_type (void)
 }
 
 static void
-gnc_search_reconciled_class_init (GNCSearchReconciledClass *class)
+gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
 {
     GObjectClass *object_class;
-    GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
+    GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
-    object_class = G_OBJECT_CLASS (class);
-    parent_class = g_type_class_peek_parent (class);
+    object_class = G_OBJECT_CLASS (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_reconciled_finalize;
 
@@ -102,13 +102,13 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *class)
     gnc_search_core_type->get_predicate = gncs_get_predicate;
     gnc_search_core_type->clone = gncs_clone;
 
-    g_type_class_add_private(class, sizeof(GNCSearchReconciledPrivate));
+    g_type_class_add_private(klass, sizeof(GNCSearchReconciledPrivate));
 }
 
 static void
 gnc_search_reconciled_init (GNCSearchReconciled *o)
 {
-    o->how = QOF_COMPARE_EQUAL;
+    o->how = QOF_CHAR_MATCH_ANY;;
     o->value = CLEARED_NO;
 }
 
@@ -145,7 +145,7 @@ gnc_search_reconciled_set_value (GNCSearchReconciled *fi, cleared_match_t value)
 }
 
 void
-gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofQueryCompare how)
+gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofCharMatch how)
 {
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
@@ -248,7 +248,6 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     char chars[6];
     cleared_match_t value;
     int i;
-    QofCharMatch cmatch_how = QOF_CHAR_MATCH_NONE;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (IS_GNCSEARCH_RECONCILED (fi), NULL);
@@ -270,9 +269,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
         chars[i++] = VREC;
     chars[i] = '\0';
 
-    if (fi->how == QOF_COMPARE_EQUAL)
-	cmatch_how = QOF_CHAR_MATCH_ANY;
-    return qof_query_char_predicate (cmatch_how, chars);
+    return qof_query_char_predicate (fi->how, chars);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

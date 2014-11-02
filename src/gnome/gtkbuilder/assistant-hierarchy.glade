@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
@@ -18,6 +18,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have.
+
+You can pick a set of accounts here that seem close to your needs. After the assistant completes you will be able to add, rename, modify, and remove accounts, at any time later on. You will also be able to add sub-accounts, as well as move accounts (along with their sub-accounts) from one parent to another.
 
 Click 'Cancel'  if you do not wish to create any new accounts now.</property>
         <property name="wrap">True</property>
@@ -109,7 +111,10 @@ Please choose the currency to use for new accounts.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Select categories that correspond to the ways that you will use GnuCash. Each category you select will cause several accounts to be created. Select the categories that are relevant to you. You can always create additional accounts by hand later.</property>
+Select categories that correspond to the ways that you foresee you will use GnuCash. Each category you select will cause several accounts to be created.
+
+&lt;b&gt;Note:&lt;/b&gt; the selection you make here is only the starting point for your personalized account hierarchy. Accounts can be added, renamed, moved, or deleted by hand later at any time.</property>
+            <property name="use_markup">True</property>
             <property name="wrap">True</property>
             <property name="width_chars">75</property>
           </object>
@@ -383,8 +388,9 @@ Some accounts are marked as "Placeholder". Placeholder accounts are used to crea
 
 If you would like an account to have an opening balance, click on the row containing the account, then click on the opening balance field and enter the starting balance.
 
-Note: all accounts except Equity and placeholder accounts may have an opening balance.
+&lt;b&gt;Note:&lt;/b&gt; all accounts except Equity and placeholder accounts may have an opening balance.
 </property>
+            <property name="use_markup">True</property>
             <property name="wrap">True</property>
             <property name="width_chars">75</property>
           </object>

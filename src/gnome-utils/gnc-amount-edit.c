@@ -59,7 +59,7 @@ static guint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_amount_edit_init         (GNCAmountEdit      *gae);
-static void gnc_amount_edit_class_init   (GNCAmountEditClass *class);
+static void gnc_amount_edit_class_init   (GNCAmountEditClass *klass);
 static void gnc_amount_edit_changed      (GtkEditable        *gae, gpointer data);
 static gint gnc_amount_edit_key_press    (GtkWidget          *widget,
         GdkEventKey        *event);

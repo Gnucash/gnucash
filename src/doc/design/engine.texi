@@ -287,12 +287,12 @@ Return the @code{memcmp} of the two GUID's.
 You can encode and decode GUIDs and their string representations using the
 next two functions.
 
-@deftypefun {const char *} guid_to_string (const GUID * @var{guid})
+@deftypefun {gchar *} guid_to_string (const GUID * @var{guid})
 Return a null-terminated string encoding of @var{guid}. String encodings
 of identifiers are hex numbers printed only with the characters @code{0}
 through @code{9} and @code{a} through @code{f}.  The encoding will
 always be @code{GUID_ENCODING_LENGTH} characters long. The returned
-string must NOT be freed when no longer needed.
+string must be freed when no longer needed using g_free.
 @end deftypefun
 
 @deftypefun {char *} guid_to_string_buff (const GUID * @var{guid}, char * @var{buff})
@@ -353,7 +353,7 @@ entities such as Accounts and Transactions.
 Generate a new guid. This function is guaranteed to return a guid that
 is unique within the scope of all GnuCash entities being managed by the
 the current invocation of GnuCash. GnuCash routines should always use
-this function and not @code{guid_new}!
+this function and not @code{guid_replace}!
 @end deftypefun
 
 @deftypefun {void *} xaccLookupEntity (const GUID * @var{guid}, GNCIdType @var{entity_type})
@@ -378,23 +378,7 @@ entity is not changed in any way.
 GUIDs are created by the GUID generator. The API for this generator is
 low-level and should not be used by user-code.
 
-@deftypefun void guid_init (void)
-Initialize the GUID generator with a variety of random sources including
-common system files and /dev/random.
-@end deftypefun
-
-@deftypefun void guid_init_with_salt (const void * @var{salt}, size_t @var{salt_len})
-Initialize the GUID generator with guid_init() and with the given
-sequence of arbitrary binary data.
-@end deftypefun
-
-@deftypefun void guid_init_only_salt (const void * @var{salt}, size_t @var{salt_len})
-Initialize the GUID generator using only the given sequence of arbitrary
-binary data. This provides a way to reliably obtain a given sequence of
-GUIDs.
-@end deftypefun
-
-@deftypefun void guid_new (GUID * @var{guid})
+@deftypefun void guid_replace (GUID * @var{guid})
 Create a new GUID and store it in @var{guid}. This is a low-level function!
 GnuCash code should use @code{xaccGUIDNew}.
 @end deftypefun
@@ -863,15 +847,15 @@ exchange.
 To meet this need for varying data storage, the GnuCash accounting
 entities use Key-Value Pair Frames (hereafter referred to as the
 datatype @code{kvp_frame}). A @code{kvp_frame} is a set of associations
-between character strings (keys) and @code{kvp_value} structures. A
-@code{kvp_value} is a union with possible types enumerated in the
+between character strings (keys) and @code{KvpValue} structures. A
+@code{KvpValue} is a union with possible types enumerated in the
 @code{kvp_value_t} enum which indicates the type of data stored in a
-@code{kvp_value} object.
+@code{KvpValue} object.
 
 @menu
 * Key-Value Policy::            
 * kvp_frame::                   
-* kvp_value::                   
+* KvpValue::                   
 * kvp_list::                    
 @end menu
 
@@ -926,12 +910,12 @@ same basic purpose.
 @end itemize
 
 
-@node kvp_frame, kvp_value, Key-Value Policy, Key-Value Pair Frames
+@node kvp_frame, KvpValue, Key-Value Policy, Key-Value Pair Frames
 @subsection kvp_frame
 @tindex kvp_frame
 
 A @code{kvp_frame} is the datatype used to associate key strings with
-@code{kvp_value} objects (@pxref{kvp_value}).
+@code{KvpValue} objects (@pxref{KvpValue}).
 
 @deftypefun kvp_frame* kvp_frame_new (void)
 Create and initialize a new @code{kvp_frame} object and return
@@ -946,40 +930,40 @@ Free all memory associated with @var{frame}.
 Return a deep copy of @var{frame}.
 @end deftypefun
 
-@deftypefun void kvp_frame_set_slot (kvp_frame * @var{frame}, const char * @var{key}, const kvp_value * @var{value})
+@deftypefun void kvp_frame_set_slot (kvp_frame * @var{frame}, const char * @var{key}, const KvpValue * @var{value})
 Associate @var{key} with @var{value} in @var{frame}.
 @end deftypefun
 
-@deftypefun void kvp_frame_set_slot_nc (kvp_frame * @var{frame}, const char * @var{key}, kvp_value * @var{value})
+@deftypefun void kvp_frame_set_slot_nc (kvp_frame * @var{frame}, const char * @var{key}, KvpValue * @var{value})
 Same as @code{kvp_frame_set_slot}, except that @var{value} is used
 directly, instead of being copied. This call transfers 'ownership'
 of @var{value} to @var{frame}.
 @end deftypefun
 
-@deftypefun kvp_value* kvp_frame_get_slot (kvp_frame * @var{frame}, const char * @var{key})
-Return the @code{kvp_value} object associated with @var{key}
+@deftypefun KvpValue* kvp_frame_get_slot (kvp_frame * @var{frame}, const char * @var{key})
+Return the @code{KvpValue} object associated with @var{key}
 in @var{frame} or return @code{NULL} if there is no association
 for @var{key}. The value returned is not a copy.
 @end deftypefun
 
-@deftypefun void kvp_frame_set_slot_path (kvp_frame * @var{frame}, const kvp_value * @var{value}, const char * @var{first_key}, ...)
+@deftypefun void kvp_frame_set_slot_path (kvp_frame * @var{frame}, const KvpValue * @var{value}, const char * @var{first_key}, ...)
 Associate @var{value} with the ``key path'' specified by the variable
 argument list. Each key in the path except the last denotes a sub-frame
 which is associated with the given key. The variable list must be
 terminated with NULL.
 @end deftypefun
 
-@deftypefun void kvp_frame_set_slot_path_gslist (kvp_frame * @var{frame}, const kvp_value * @var{value}, GSList * @var{key_path})
+@deftypefun void kvp_frame_set_slot_path_gslist (kvp_frame * @var{frame}, const KvpValue * @var{value}, GSList * @var{key_path})
 The same as @code{kvp_frame_set_slot_path}, except that the key path is
 specified using a GSList. All the keys in the list should be non-NULL.
 @end deftypefun
 
-@deftypefun {kvp_value *} kvp_frame_get_slot_path (kvp_frame * @var{frame}, const char * @var{first_key}, ...)
+@deftypefun {KvpValue *} kvp_frame_get_slot_path (kvp_frame * @var{frame}, const char * @var{first_key}, ...)
 Return the value associated with the key path, or @code{NULL} if none.
 The path is specified as in @code{kvp_frame_set_slot_path}.
 @end deftypefun
 
-@deftypefun {kvp_value *} kvp_frame_get_slot_path_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
+@deftypefun {KvpValue *} kvp_frame_get_slot_path_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
 Return the value associated with the key path, or @code{NULL} if none.
 The path is specified as in @code{kvp_frame_set_slot_path_gslist}.
 @end deftypefun
@@ -1006,23 +990,23 @@ is arguably a bug that needs fixing).
 @end deftypefun
 
 
-@node kvp_value, kvp_list, kvp_frame, Key-Value Pair Frames
-@subsection kvp_value
-@tindex kvp_value
+@node KvpValue, kvp_list, kvp_frame, Key-Value Pair Frames
+@subsection KvpValue
+@tindex KvpValue
 @tindex kvp_value_t
 
-The @code{kvp_value} object stores the 'value' part of a key-value
+The @code{KvpValue} object stores the 'value' part of a key-value
 association in a @code{kvp_frame} object.
 
-@deftypefun void kvp_value_delete (kvp_value * @var{value})
+@deftypefun void kvp_value_delete (KvpValue * @var{value})
 Free all of the memory associated with @var{value}.
 @end deftypefun
 
-@deftypefun kvp_value* kvp_value_copy (const kvp_value * @var{value})
+@deftypefun KvpValue* kvp_value_copy (const KvpValue * @var{value})
 Return a deep copy of @var{value}.
 @end deftypefun
 
-@deftypefun kvp_value_t kvp_value_get_type (const kvp_value * @var{value})
+@deftypefun kvp_value_t kvp_value_get_type (const KvpValue * @var{value})
 Return the type of value stored in @var{value}.
 @end deftypefun
 
@@ -1049,7 +1033,7 @@ A @code{GUID} value. @xref{Globally Unique Identifiers}.
 Arbitrary binary data.
 
 @item KVP_TYPE_LIST
-A @code{kvp_list} item which contains a list of @code{kvp_value} items.
+A @code{kvp_list} item which contains a list of @code{KvpValue} items.
 
 @item KVP_TYPE_FRAME
 A @code{kvp_frame} object. Thus, frames may contain other frames in a
@@ -1059,53 +1043,53 @@ recursive manner.
 
 @subsubsection Value Constructors
 
-The following functions create and return @code{kvp_value} objects with
+The following functions create and return @code{KvpValue} objects with
 particular values. In the case of pointer arguments, deep copies are
 performed.
 
-@deftypefun kvp_value* kvp_value_new_int64 (gint64 @var{value})
+@deftypefun KvpValue* kvp_value_new_int64 (gint64 @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_float64 (double @var{value})
+@deftypefun KvpValue* kvp_value_new_float64 (double @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_string (const char * @var{value})
+@deftypefun KvpValue* kvp_value_new_string (const char * @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_guid (const GUID * @var{guid})
+@deftypefun KvpValue* kvp_value_new_guid (const GUID * @var{guid})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_binary (const void * @var{data}, int @var{datasize})
+@deftypefun KvpValue* kvp_value_new_binary (const void * @var{data}, int @var{datasize})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_list (const kvp_list * @var{value})
+@deftypefun KvpValue* kvp_value_new_list (const kvp_list * @var{value})
 @end deftypefun
-@deftypefun kvp_value* kvp_value_new_frame (const kvp_frame * @var{value});
+@deftypefun KvpValue* kvp_value_new_frame (const kvp_frame * @var{value});
 @end deftypefun
 
 @subsubsection Value Accessors
 
-The following functions access the value of a given @code{kvp_value}
+The following functions access the value of a given @code{KvpValue}
 object. If the type of the object does not correspond to that named
 in the function, @code{NULL}, @code{0}, or @code{0.0} is returned
 as appropriate.
 
-@deftypefun gint64 kvp_value_get_int64 (const kvp_value * @var{value})
+@deftypefun gint64 kvp_value_get_int64 (const KvpValue * @var{value})
 @end deftypefun
-@deftypefun double kvp_value_get_float64 (const kvp_value * @var{value})
+@deftypefun double kvp_value_get_float64 (const KvpValue * @var{value})
 @end deftypefun
-@deftypefun char* kvp_value_get_string (const kvp_value * @var{value})
+@deftypefun char* kvp_value_get_string (const KvpValue * @var{value})
 @end deftypefun
-@deftypefun GUID* kvp_value_get_guid (const kvp_value * @var{value})
+@deftypefun GUID* kvp_value_get_guid (const KvpValue * @var{value})
 @end deftypefun
-@deftypefun void* kvp_value_get_binary (const kvp_value * @var{value}, int * @var{size_return})
+@deftypefun void* kvp_value_get_binary (const KvpValue * @var{value}, int * @var{size_return})
 @end deftypefun
-@deftypefun kvp_list* kvp_value_get_list (const kvp_value * @var{value})
+@deftypefun kvp_list* kvp_value_get_list (const KvpValue * @var{value})
 @end deftypefun
-@deftypefun kvp_frame* kvp_value_get_frame (const kvp_value * @var{value})
+@deftypefun kvp_frame* kvp_value_get_frame (const KvpValue * @var{value})
 @end deftypefun
 
 
-@node kvp_list,  , kvp_value, Key-Value Pair Frames
+@node kvp_list,  , KvpValue, Key-Value Pair Frames
 @subsection kvp_list
 @tindex kvp_list
 
-A @code{kvp_list} object abstract a list of @code{kvp_value} objects.
+A @code{kvp_list} object abstract a list of @code{KvpValue} objects.
 
 @deftypefun kvp_list* kvp_list_new ()
 Return a newly allocated @code{kvp_list} object.
@@ -1113,7 +1097,7 @@ Return a newly allocated @code{kvp_list} object.
 
 @deftypefun void kvp_list_delete (kvp_list * @var{list})
 Free all memory associated with @var{list}, including the
-@code{kvp_value} objects in @var{list}.
+@code{KvpValue} objects in @var{list}.
 @end deftypefun
 
 @deftypefun kvp_list* kvp_list_copy (const kvp_list * @var{list})
@@ -1124,9 +1108,9 @@ Return a deep copy of @var{list}.
 Return @code{TRUE} if @var{list} is the empty list.
 @end deftypefun
 
-@deftypefun kvp_value* kvp_list_car (kvp_list * @var{list})
+@deftypefun KvpValue* kvp_list_car (kvp_list * @var{list})
 If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
-Otherwise, return the first @code{kvp_value} object in the list.
+Otherwise, return the first @code{KvpValue} object in the list.
 @end deftypefun
 
 @deftypefun kvp_list* kvp_list_cdr (kvp_list * @var{list})
@@ -1135,7 +1119,7 @@ Otherwise, return a @code{kvp_list} object consisting of @var{list}
 with the first value removed. NOTE: the returned list is not a copy!
 @end deftypefun
 
-@deftypefun kvp_list* kvp_list_cons (kvp_value * @var{car}, kvp_list * @var{cdr})
+@deftypefun kvp_list* kvp_list_cons (KvpValue * @var{car}, kvp_list * @var{cdr})
 If either @var{car} or @var{cdr} is @code{NULL}, return @code{NULL}. Otherwise,
 return a @code{kvp_list} object consisting of the value of @var{car} followed
 by the values of @var{cdr}. This function uses 'hand-over' semantics, i.e.,
@@ -2090,12 +2074,12 @@ Return the Transaction associated with @var{GUID}, or @code{NULL} if
 there is no such Transaction.
 @end deftypefun
 
-@deftypefun {kvp_value *} xaccTransGetSlot (Transaction * @var{trans}, const char * @var{key})
-Return the @code{kvp_value} associated with @var{key} in @var{trans}.
+@deftypefun {KvpValue *} xaccTransGetSlot (Transaction * @var{trans}, const char * @var{key})
+Return the @code{KvpValue} associated with @var{key} in @var{trans}.
 If there is none, @code{NULL} is returned.
 @end deftypefun
 
-@deftypefun void xaccTransSetSlot (Split * @var{trans}, const char * @var{key}, const kvp_value * @var{value})
+@deftypefun void xaccTransSetSlot (Split * @var{trans}, const char * @var{key}, const KvpValue * @var{value})
 Associate a copy of @var{value} with @var{key} in @var{trans}.
 @end deftypefun
 

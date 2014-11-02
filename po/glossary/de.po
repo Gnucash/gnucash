@@ -1,19 +1,21 @@
 # Glossary of terms in GnuCash
 # Copyright (C) 2001 Free Software Foundation, Inc.
-# Christian Stimming <stimming@tuhh.de>, 2001 - 2013
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013.
 #
+# Christian Stimming <stimming@tuhh.de>, 2001 - 2013.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.5\n"
-"POT-Creation-Date: 2013-05-08 22:16+0200\n"
-"PO-Revision-Date: 2013-12-04 01:00+0000\n"
-"Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
-"Language-Team: DE\n"
+"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"PO-Revision-Date: 2014-10-13 00:45+0200\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"Language-Team: German <gnucash-de@gnucash.org>\n"
 "Language: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -35,7 +37,11 @@ msgstr "Kontenhierarchie"
 msgid "account name"
 msgstr "Kontobezeichnung"
 
-#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+msgid "account type: Active"
+msgstr "Aktiva"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "Aktiva"
 
@@ -47,7 +53,7 @@ msgstr "Girokonto"
 msgid "account type: currency"
 msgstr "Währung (Währungskonto)"
 
-#. "see: Equity"
+#. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
 msgstr "Eigenkapital"
 
@@ -59,7 +65,7 @@ msgstr "Aufwand (pl. Aufwendungen)"
 msgid "account type: Income"
 msgstr "Ertrag"
 
-#. "A debt, a financial obligation"
+#. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
 msgstr "Fremdkapital (bis <=2.2.8: Passiva)"
 
@@ -70,6 +76,10 @@ msgstr "Geldmarktfonds"
 #. "-"
 msgid "account type: Mutual fund"
 msgstr "Investmentfonds"
+
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+msgid "account type: Passive"
+msgstr "Passiva"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -626,9 +636,19 @@ msgstr "Buchungsansicht: Vollständig (bis 1.8.7: Amerikanisches Journal)"
 msgid "reload, to"
 msgstr "Erneut laden"
 
+#. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
+msgid "report form: T Account Form"
+msgstr "T-Konto-Form"
+
+#. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
+msgid "report form: Vertical Form"
+msgstr "Staffel-Form"
+
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Einbehaltener Gewinn, Gewinnvortrag (<=2.6: -rücklagen); TODO: ist das wirklich, was das balance sheet ausgibt?"
+msgstr ""
+"Einbehaltener Gewinn, Gewinnvortrag (<=2.6: -rücklagen); TODO: ist das "
+"wirklich, was das balance sheet ausgibt?"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"

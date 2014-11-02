@@ -25,7 +25,7 @@
     @{ */
 
 /** @file Scrub3.h
- *  @brief Hiogh-Level API for imposing Lot constraints
+ *  @brief High-Level API for imposing Lot constraints
  *  @author Created by Linas Vepstas Sept 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  */
@@ -44,7 +44,7 @@
  *    self-consistent and properly balanced, and fixes it if its not.
  *    This is an important routine to call if the amount of any split
  *    in the lot is changed.  That's because (obviously) changing
- *    split values is gaurenteed to throw off lot balances.
+ *    split values is guaranteed to throw off lot balances.
  *    This routine may end up closing the lot, or at least trying
  *    to. It will also cause cap gains to be recomputed.
  *

@@ -72,7 +72,7 @@ xmlNodePtr
 gnc_address_to_dom_tree (const char *tag, GncAddress *addr)
 {
     xmlNodePtr ret;
-    kvp_frame *kf;
+    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST tag);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST address_version_string);

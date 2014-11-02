@@ -93,7 +93,7 @@ static xmlNodePtr
 invoice_dom_tree_create (GncInvoice *invoice)
 {
     xmlNodePtr ret;
-    kvp_frame *kf;
+    KvpFrame *kf;
     Timespec ts;
     Transaction *txn;
     GNCLot *lot;

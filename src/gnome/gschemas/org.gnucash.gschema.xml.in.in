@@ -250,6 +250,11 @@
       <summary>Show vertical borders in a register</summary>
       <description>Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
     </key>
+    <key name="future-after-blank-transaction" type="b">
+      <default>false</default>
+      <summary>Show future transactions after the blank transaction in a register</summary>
+      <description>Show future transactions after the blank transaction in a register. If active then transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. Otherwise the blank transaction will be at the bottom of the register after all transactions.</description>
+    </key>
     <key name="default-style-ledger" type="b">
       <default>true</default>
       <summary>Show all transactions on one line. (Two in double line mode.)</summary>

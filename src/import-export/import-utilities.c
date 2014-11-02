@@ -53,7 +53,7 @@ void gnc_import_set_acc_online_id (Account *account, const gchar *id)
 {
     g_return_if_fail (account != NULL);
     xaccAccountBeginEdit (account);
-    qof_instance_set (QOF_INSTANCE (account), "online-id", &id, NULL);
+    qof_instance_set (QOF_INSTANCE (account), "online-id", id, NULL);
     xaccAccountCommitEdit (account);
 }
 
@@ -69,7 +69,7 @@ void gnc_import_set_trans_online_id (Transaction *transaction,
 {
     g_return_if_fail (transaction != NULL);
     xaccTransBeginEdit (transaction);
-    qof_instance_set (QOF_INSTANCE (transaction), "online-id", &id, NULL);
+    qof_instance_set (QOF_INSTANCE (transaction), "online-id", id, NULL);
     xaccTransCommitEdit (transaction);
 }
 
@@ -92,7 +92,7 @@ const gchar * gnc_import_get_split_online_id (Split * split)
 void gnc_import_set_split_online_id (Split *split, const gchar *id)
 {
     g_return_if_fail (split != NULL);
-    qof_instance_set (QOF_INSTANCE (split), "online-id", &id, NULL);
+    qof_instance_set (QOF_INSTANCE (split), "online-id", id, NULL);
 }
 
 gboolean gnc_import_split_has_online_id(Split * split)

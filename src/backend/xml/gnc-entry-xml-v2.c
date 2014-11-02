@@ -118,7 +118,7 @@ entry_dom_tree_create (GncEntry *entry)
     GncTaxTable *taxtable;
     GncOrder *order;
     GncInvoice *invoice;
-    kvp_frame *kf;
+    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_entry_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST entry_version_string);

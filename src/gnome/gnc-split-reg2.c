@@ -262,9 +262,17 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
         state_section = g_strdup (STATE_SECTION_GEN_LEDGER);
     else if (ledger_type == LD2_SUBACCOUNT)
-        state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), " w/subaccounts", NULL);
+    {
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff (guid, guidstr);
+        state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, " w/subaccounts", NULL);
+    }
     else
-        state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), NULL);
+    {
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff (guid, guidstr);
+        state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
+    }
     g_object_set (G_OBJECT (view), "state-section", state_section,
                  "show-column-menu", FALSE, NULL);
 
@@ -680,31 +688,6 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
 static void
 gnc_split_reg2_ld_destroy (GNCLedgerDisplay2 *ledger)
 {
-    GNCSplitReg2 *gsr = gnc_ledger_display2_get_user_data (ledger);
-    
-    gchar *state_key;
-    const GncGUID * guid;
-    Account * account;
-    
-    account = gnc_ledger_display2_leader (ledger);
-    guid = xaccAccountGetGUID (account);
-    state_key = (gchar*)guid_to_string (guid);
-    
-    if (gsr)
-    {
-        GncTreeModelSplitReg *model;
-
-        model = gnc_ledger_display2_get_split_model_register (ledger);
-
-/*FIXME This may not be required
-        if (model && model->table)
-            gnc_table_save_state (model->table, state_key);
-*/
-        /*
-         * Don't destroy the window here any more.  The register no longer
-         * owns it.
-         */
-    }
     gnc_ledger_display2_set_user_data (ledger, NULL);
 }
 

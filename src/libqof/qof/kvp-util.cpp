@@ -1,5 +1,5 @@
 /********************************************************************\
- * kvp_util.c -- misc odd-job kvp utils                             *
+ * kvp_util.cpp -- misc odd-job kvp utils                           *
  * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

@@ -158,12 +158,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Let the user enter the values */
         result = gnc_ab_trans_dialog_run_until_ok(td);
 
-        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
-        {
-            aborted = TRUE;
-            goto repeat;
-        }
-
         /* Save the templates */
         templates = gnc_ab_trans_dialog_get_templ(td, &changed);
         if (changed)
@@ -171,6 +165,12 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                            (result == GNC_RESPONSE_NOW));
         g_list_free(templates);
         templates = NULL;
+
+        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
+        {
+            aborted = TRUE;
+            goto repeat;
+        }
 
         /* Get a job and enqueue it */
         ab_trans = gnc_ab_trans_dialog_get_ab_trans(td);

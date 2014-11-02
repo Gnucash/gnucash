@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Crédito Educativo
+      CrÃ©dito Educativo
     </gnc-act:title>
     <gnc-act:short-description>
-      Contas para empréstimos para estudos e juros associados
+      Contas para emprÃ©stimos para estudos e juros associados
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas se possuir um crédito educativo (empréstimo para educação, juros do empréstimo para educação).
+    DeverÃ¡ selecionar este conjunto de contas se possuir um crÃ©dito educativo (emprÃ©stimo para educaÃ§Ã£o, juros do emprÃ©stimo para educaÃ§Ã£o).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -27,25 +27,25 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Empréstimos</act:name>
+  <act:name>EmprÃ©stimos</act:name>
   <act:id type="new">c3219e37044b0531d66a7b64433b026d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Empréstimos</act:description>
+  <act:description>EmprÃ©stimos</act:description>
   <act:parent type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Crédito Educativo</act:name>
+  <act:name>CrÃ©dito Educativo</act:name>
   <act:id type="new">ddeba367199bd025e00420a19d6f9ae4</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Crédito Educativo</act:description>
+  <act:description>CrÃ©dito Educativo</act:description>
   <act:parent type="new">c3219e37044b0531d66a7b64433b026d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -71,14 +71,14 @@
   <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Juros do Crédito Educativo</act:name>
+  <act:name>Juros do CrÃ©dito Educativo</act:name>
   <act:id type="new">04e3d970dc60d3920f40b93fce8924a2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Juros do Crédito Educativo</act:description>
+  <act:description>Juros do CrÃ©dito Educativo</act:description>
   <act:parent type="new">1cfcd30ea97b954ffb550ab87d561033</act:parent>
 </gnc:account>
 </gnc-account-example>

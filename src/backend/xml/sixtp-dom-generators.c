@@ -106,7 +106,7 @@ xmlNodePtr
 commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
 {
     xmlNodePtr ret;
-    gchar *namespace, *mnemonic;
+    gchar *name_space, *mnemonic;
 
     g_return_val_if_fail(c, NULL);
 
@@ -116,13 +116,13 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
     {
         return NULL;
     }
-    namespace = g_strdup (gnc_commodity_get_namespace_compat(c));
+    name_space = g_strdup (gnc_commodity_get_namespace_compat(c));
     mnemonic = g_strdup (gnc_commodity_get_mnemonic(c));
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space",
-		    checked_char_cast (namespace));
+		    checked_char_cast (name_space));
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id",
 		    checked_char_cast (mnemonic));
-    g_free (namespace);
+    g_free (name_space);
     g_free (mnemonic);
     return ret;
 }
@@ -264,7 +264,7 @@ static void
 add_kvp_slot(gpointer key, gpointer value, gpointer data);
 
 static void
-add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
+add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
 {
     xmlNodePtr val_node;
     kvp_value_t kvp_type;
@@ -308,10 +308,12 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
     case KVP_TYPE_GUID:
-        /* THREAD-UNSAFE */
-        add_text_to_node(val_node, "guid",
-                         g_strdup(guid_to_string(kvp_value_get_guid(val))));
+    {
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
+        guid_to_string_buff(kvp_value_get_guid(val), guidstr);
+        add_text_to_node(val_node, "guid", guidstr);
         break;
+    }
     case KVP_TYPE_TIMESPEC:
     {
         Timespec ts = kvp_value_get_timespec (val);
@@ -323,18 +325,6 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     break;
     case KVP_TYPE_GDATE:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "gdate");
-        break;
-    case KVP_TYPE_BINARY:
-    {
-        guint64 size;
-	gchar *tmp_str1;
-        void *binary_data = kvp_value_get_binary(val, &size);
-        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "binary");
-        g_return_if_fail(binary_data);
-        tmp_str1 = binary_to_string(binary_data, size);
-        xmlNodeSetContent(val_node, checked_char_cast (tmp_str1));
-        g_free(tmp_str1);
-    }
     break;
     case KVP_TYPE_GLIST:
     {
@@ -343,7 +333,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
         for (cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
-            kvp_value *val = (kvp_value*)cursor->data;
+            KvpValue *val = (KvpValue*)cursor->data;
             add_kvp_value_node(val_node, "slot:value", val);
         }
     }
@@ -351,7 +341,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     break;
     case KVP_TYPE_FRAME:
     {
-        kvp_frame *frame;
+        KvpFrame *frame;
 
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 
@@ -379,11 +369,11 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
     xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key",
 		    checked_char_cast (newkey));
     g_free (newkey);
-    add_kvp_value_node(slot_node, "slot:value", (kvp_value*)value);
+    add_kvp_value_node(slot_node, "slot:value", (KvpValue*)value);
 }
 
 xmlNodePtr
-kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
+kvp_frame_to_dom_tree(const char *tag, const KvpFrame *frame)
 {
     xmlNodePtr ret;
 

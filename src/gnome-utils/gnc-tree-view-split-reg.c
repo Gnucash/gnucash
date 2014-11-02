@@ -5306,7 +5306,7 @@ gtv_sr_type_cb (GtkEntry    *entry,
         {
             /* If it's not there (or the list is empty) use default_flag */
             g_free (result);
-            result  = g_strdup (TXN_TYPE_NONE);
+            result  = NULL;
         }
     }
     else
