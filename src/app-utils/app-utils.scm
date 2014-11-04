@@ -20,7 +20,7 @@
   (guile-2
     (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-app-utils.so" "scm_init_sw_app_utils_module")))
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
   (else ))
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))

@@ -24,7 +24,7 @@
     ;; Without it sw_app_utils can't be evaluated below
     (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-app-utils.so" "scm_init_sw_app_utils_module")))
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
   (else
     ;; Syncase is deprecated and redundant in guile 2
     (use-modules (ice-9 syncase))))

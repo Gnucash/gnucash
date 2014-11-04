@@ -17,8 +17,8 @@
   (guile-2
     (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils.so" "scm_init_sw_gnome_utils_module")
-      (load-extension "libgncmod-report-gnome.so" "scm_init_sw_report_gnome_module")))
+      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
+      (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module")))
   (else ))
 (use-modules (sw_report_gnome))
 

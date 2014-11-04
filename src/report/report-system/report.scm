@@ -27,7 +27,7 @@
   (guile-2
     (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-report-system.so" "scm_init_sw_report_system_module")))
+      (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module")))
   (else ))
 (use-modules (sw_report_system))
 

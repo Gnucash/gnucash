@@ -82,7 +82,7 @@
   (guile-2
     (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils.so" "scm_init_sw_gnome_utils_module")))
+      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")))
   (else ))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
