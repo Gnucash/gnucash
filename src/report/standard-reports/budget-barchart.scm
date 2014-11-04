@@ -46,6 +46,10 @@
 (define optname-running-sum (N_ "Running Sum"))
 (define optname-chart-type (N_ "Chart Type"))
 
+(define optname-depth-limit (N_ "Levels of Subaccounts"))
+(define opthelp-depth-limit
+  (N_ "Maximum number of levels in the account tree displayed."))
+
 ;(define (options-generator inc-exp?)
 (define (options-generator)
   (let* (
@@ -105,6 +109,10 @@
 	    (list ACCT-TYPE-BANK ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
 	    (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
         #f #t))
+
+    (gnc:options-add-account-levels!
+     options gnc:pagename-accounts optname-depth-limit
+     "b" opthelp-depth-limit 6)
 
     ;; Set default page
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -170,11 +178,11 @@
 	(if running-sum 
           (set! bgt-sum (+ bgt-sum 
             (gnc-numeric-to-double
-              (gnc-budget-get-account-period-value budget acct period))))
+              (gnc:get-account-period-rolledup-budget-value budget acct period))))
           
 	  (set! bgt-sum 
             (gnc-numeric-to-double
-              (gnc-budget-get-account-period-value budget acct period)))
+              (gnc:get-account-period-rolledup-budget-value budget acct period)))
         )
         (set! bgt-vals (append bgt-vals (list bgt-sum)))
 
@@ -249,12 +257,31 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  ;; This is a helper function to find out the level of the account
+  ;; with in the account tree
+  (define (get-account-level account level)
+    (let (
+           (parent (gnc-account-get-parent account))
+         )
+      (cond
+        (
+          (null? parent) ;; exit
+          level
+        )
+        (else
+          (get-account-level parent (+ level 1))
+        )
+      )
+    )
+  )
+
   (let* (
       (budget (get-option gnc:pagename-general optname-budget))
       (budget-valid? (and budget (not (null? budget))))
       (running-sum (get-option gnc:pagename-general optname-running-sum))
       (chart-type (get-option gnc:pagename-general optname-chart-type))
       (accounts (get-option gnc:pagename-accounts optname-accounts))
+      (depth-limit (get-option gnc:pagename-accounts optname-depth-limit))
       (report-title (get-option gnc:pagename-general
         gnc:optname-reportname))
       (document (gnc:make-html-document))
@@ -276,8 +303,20 @@
       (else
         (for-each
           (lambda (acct)
-            (if (null? (gnc-account-get-descendants acct))
-              (gnc:html-document-add-object! document
+            (if (or
+                  (and (equal? depth-limit 'all)
+                       (null? (gnc-account-get-descendants acct))
+                  )
+                  (and (not (equal? depth-limit 'all))
+                       (<= (get-account-level acct 0) depth-limit)
+                       (null? (gnc-account-get-descendants acct))
+                  )
+                  (and (not (equal? depth-limit 'all))
+                       (= (get-account-level acct 0) depth-limit)
+                  )
+                )
+              (gnc:html-document-add-object!
+                document
                 (gnc:chart-create-budget-actual budget acct running-sum chart-type)
               )
             )
