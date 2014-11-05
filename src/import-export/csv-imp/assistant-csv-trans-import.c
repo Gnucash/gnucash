@@ -119,6 +119,8 @@ typedef struct
     GtkWidget            *cancel_button;            /**< The widget for the new cancel button when going back is blocked */
     gboolean              match_parse_run;          /**< This is set after the first run */
 
+    gchar                *checked_date;             /**< the text checked to be a date, but failed */
+
     GtkWidget            *summary_label;            /**< The summary text */
 
     gboolean              new_book;                 /**< Are we importing into a new book?; if yes, call book options */
@@ -149,7 +151,7 @@ void csv_import_trans_auto_cb (GtkWidget *cb, gpointer user_data);
 void csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *info);
 
 static void gnc_csv_preview_update_assist (CsvImportTrans* info);
-gboolean preview_settings_valid (CsvImportTrans *info);
+int preview_settings_valid (CsvImportTrans *info);
 
 /*************************************************************************/
 
@@ -994,19 +996,23 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
 }
 
 
-/* Test for the required minimum number of coloumns selected and
+/** Test for the required minimum number of coloumns selected and
  * a valid date format.
- * Returns TRUE if we do or FALSE if we don't.
  *
- * @param info The data being previewed
+ *  @param info The data being previewed
+ *  @retval 0 all is ok
+ *  @retval 1 date format is wrong
+ *  @retval 2 too few columns selected
+ *  @retval 3 both conditions apply
  */
-gboolean preview_settings_valid (CsvImportTrans* info)
+int preview_settings_valid (CsvImportTrans* info)
 {
     /* Shorten the column_types identifier. */
     GArray* column_types = info->parse_data->column_types;
     int i, ncols = column_types->len; /* ncols is the number of columns in the data. */
     int weight = 0;
     gboolean valid = TRUE;
+    int ret = 0;
     /* store contains the actual strings appearing in the column types treeview. */
     GtkTreeModel* store = gtk_tree_view_get_model (info->ctreeview);
     /* datastore contains the actual strings appearing in the preview treeview. */
@@ -1046,8 +1052,12 @@ gboolean preview_settings_valid (CsvImportTrans* info)
                     weight = weight + 1000;
                     gtk_tree_model_get (datastore, &iter2, i + 1, &prevstr, -1);
 
-                    if (parse_date (prevstr, info->parse_data->date_format) == -1)
+                    if (parse_date (prevstr, info->parse_data->date_format) == -1) {
+                        if (info->checked_date == NULL) { /** no bad example yet? provide one */
+                            info->checked_date = g_strdup(prevstr);
+                        }
                         valid = FALSE;
+                    }
                     break;
 
                 case GNC_CSV_DESCRIPTION:
@@ -1078,10 +1088,11 @@ gboolean preview_settings_valid (CsvImportTrans* info)
         g_free (prevstr);
         g_free (accstr);
     }
-    if (weight < 1109 || valid == FALSE)
-        return FALSE;
-    else
-        return TRUE;
+
+    if (valid == FALSE) ret |= 1;
+    if (weight < 1109)  ret |= 2;
+
+    return ret;
 }
 
 
@@ -1417,11 +1428,22 @@ csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gchar *text, *mtext;
     Account * account = NULL;
+    int settings_ret;
 
-    if (!preview_settings_valid (info) && (info->approved == FALSE))
+    settings_ret = preview_settings_valid(info);
+    if ((settings_ret != 0) && (info->approved == FALSE))
     {
-        text = g_strdup_printf (gettext ("There are problems with the import settings!\nThe date format could be wrong "
-                                        "or there are not enough columns set..."));
+        text = g_strdup_printf(gettext ("There are problems with the import settings:\n"));
+        if (settings_ret & 0x1) {
+            mtext = g_strdup_printf("%s%s (\"%s\")\n", text, gettext("Date format is wrong!"), info->checked_date);
+            free(text);
+            text = mtext;
+        }
+        if (settings_ret & 0x2) {
+            mtext = g_strdup_printf("%s%s", text, gettext("Too few columns selected!\n"));
+            free(text);
+            text = mtext;
+        }
         mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
         gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
         g_free (mtext);
@@ -1446,6 +1468,9 @@ csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
         if (!(account == NULL) && (info->account_picker->auto_create == TRUE))
             gtk_assistant_set_current_page (assistant, num + 1);
     }
+
+    g_free(info->checked_date);
+    info->checked_date = NULL;
 
     /* Enable the Forward Assistant Button */
     if (account == NULL)
