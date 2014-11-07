@@ -36,7 +36,6 @@ TEST_GROUP_1 = \
   test-commodities \
   test-engine
 
-  test-create-account \
 TEST_GROUP_2 = \
   test-account-object \
   test-group-vs-book \
