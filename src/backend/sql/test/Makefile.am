@@ -6,8 +6,11 @@ MODULEPATH = src/backend/sql
 test_column_types_SOURCES = \
   test-column-types.c
 
-TESTS = \
-  test-column-types
+check_PROGRAMS = \
+  test-column-types \
+  test-sqlbe
+
+TESTS = ${check_PROGRAMS}
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -22,10 +25,6 @@ TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
   $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
-
-check_PROGRAMS = $(TESTS)
-
-#noinst_HEADERS = test-file-stuff.h
 
 LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
@@ -51,10 +50,7 @@ AM_CPPFLAGS = \
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
 
-TEST_PROGS += test-sqlbe
 #test_sqlbedir = ${top_srcdir}/${MODULEPATH}/test
-
-noinst_PROGRAMS = $(TESTS) $(TEST_PROGS)
 
 test_sqlbe_SOURCES = \
 	test-sqlbe.c \

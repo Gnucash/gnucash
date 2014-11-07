@@ -15,9 +15,9 @@ test_gtkmm_SOURCES = \
 test_gtkmm_HEADERSS = \
 	$(top_srcdir)/${MODULEPATH}/gncmm/Book.hpp
 
-TEST_PROGS += test-gtkmm
+check_PROGRAMS = test-gtkmm
 
-noinst_PROGRAMS = ${TEST_PROGS}
+TESTS = ${check_PROGRAMS}
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.

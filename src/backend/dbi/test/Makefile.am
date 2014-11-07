@@ -41,18 +41,16 @@ TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
   ${gnc_dbd_dir_override} \
-  $(shell ${top_builddir}/src/gnc-test-env ${GNC_TEST_DEPS})
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 EXTRA_DIST += \
     test-dbi-stuff.h \
     test-dbi-business-stuff.h \
     test-dbi.xml
 
-TEST_PROGS += \
-    test-backend-dbi
+check_PROGRAMS = test-backend-dbi
 
-noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
-
+TESTS = ${check_PROGRAMS}
 
 if CUSTOM_GNC_DBD_DIR
 gnc_dbd_dir_override = GNC_DBD_DIR="@GNC_DBD_DIR@"
@@ -76,4 +74,4 @@ AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 # If you let make run parallel builds it complains that there is no rule to make
 # libgncmod-test-dbi.la.  This is wrong, but I can't figure out how to fix it
 # so I'll turn off parallel builds
-.NOTPARALLEL:
+#.NOTPARALLEL:

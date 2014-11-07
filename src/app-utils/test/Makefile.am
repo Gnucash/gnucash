@@ -1,12 +1,16 @@
 include $(top_srcdir)/test-templates/Makefile.decl
 
-TESTS = \
+check_PROGRAMS = \
   test-link-module \
-  test-load-module \
   test-exp-parser \
   test-scm-query-string \
   test-print-parse-amount \
-  test-sx
+  test-sx \
+  test-app-utils
+
+TESTS =  \
+  test-load-module \
+  ${check_PROGRAMS}
 
 test_exp_parser_SOURCES = \
   test-exp-parser.c
@@ -46,14 +50,6 @@ LDADD = \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
    ${GUILE_LIBS}
 
-check_PROGRAMS = \
-  test-link-module \
-  test-exp-parser \
-  test-print-parse-amount \
-  test-scm-query-string \
-  test-print-queries \
-  test-sx
-
 EXTRA_DIST += \
   test-load-module
 
@@ -68,10 +64,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
-
-TEST_PROGS += test-app-utils
-
-noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 
 test_app_utils_SOURCES = \
 	test-app-utils.c \
