@@ -317,3 +317,23 @@ TEST(qofint128_functions, add_and_subtract)
     EXPECT_TRUE (bigger.isOverflow());
  }
 
+TEST(qofint128_functions, multiply)
+{
+    int64_t barg {INT64_C(4878849681579065407)};
+    int64_t sarg {INT64_C(4344522355275710400)};
+    uint64_t uarg {UINT64_C(13567894392130486208)};
+
+    QofInt128 smallest (sarg);
+    QofInt128 smaller (barg);
+    QofInt128 small (uarg);
+    QofInt128 big (sarg, barg);
+    QofInt128 bigger (static_cast<uint64_t>(barg), uarg);
+
+    small *= big;
+    EXPECT_TRUE (small.isOverflow());
+    big *= bigger;
+    EXPECT_TRUE (big.isOverflow());
+    EXPECT_EQ (QofInt128(UINT64_C(1149052180967758316), UINT64_C(6323251814974894144)), smallest *= smaller);
+    EXPECT_FALSE (smallest.isOverflow());
+
+}

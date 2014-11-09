@@ -50,6 +50,10 @@ class QofInt128
     uint64_t m_lo;
 
 public:
+static const uint numlegs = 2;
+static const uint legbits = 64;
+static const uint maxbits = legbits * numlegs;
+
 enum // Values for m_flags
 {
     pos = 0,

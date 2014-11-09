@@ -210,6 +210,108 @@ QofInt128::operator-= (const QofInt128& b) noexcept
 QofInt128&
 QofInt128::operator*= (const QofInt128& b) noexcept
 {
+    /* Test for 0 first */
+    if (isZero() || b.isZero())
+    {
+        m_hi = m_lo = 0;
+        return *this;
+    }
+    /* Test for overflow before spending time on the calculation */
+    if (m_hi && b.m_hi)
+    {
+        m_flags |= overflow;
+        return *this;
+    }
+    uint abits {}, bbits {};
+    uint64_t temp {m_lo};
+    do
+        ++abits;
+    while (temp >>= 1);
+    temp = m_hi;
+    do
+        ++abits;
+    while (temp >>= 1);
+    temp = b.m_lo;
+    do
+        ++bbits;
+    while (temp >>= 1);
+    temp = b.m_hi;
+    do
+        ++bbits;
+    while (temp >>= 1);
+    if (abits + bbits > maxbits)
+    {
+        m_flags |= overflow;
+        return *this;
+    }
+    /* Handle the sign; ^ flips if b is negative */
+    m_flags ^= (b.m_flags & neg);
+    /* The trivial case */
+    if (abits + bbits <= legbits)
+    {
+        m_lo *= b.m_lo;
+        return *this;
+    }
+
+/* This is Knuth's "classical" multi-precision multiplication algorithm
+ * truncated to a QofInt128 result with the loop unrolled for clarity and with
+ * overflow and zero checks beforehand to save time. See Donald Knuth, "The Art
+ * of Computer Programming Volume 2: Seminumerical Algorithms", Addison-Wesley,
+ * 1998, p 268.
+ *
+ * There are potentially faster algorithms (O(n^1.6) instead of O(n^2) for the
+ * full precision), but this is already close to that fast because of truncation
+ * and it's not clear that the truncation is applicable to the faster
+ * algorithms.
+ */
+
+    static const uint sublegs = numlegs * 2;
+    static const uint sublegbits = legbits / 2;
+    static const uint sublegmask = (UINT64_C(1) << sublegbits) - 1;
+    uint64_t av[sublegs] {(m_lo & sublegmask), (m_lo >> sublegbits),
+            (m_hi & sublegmask), (m_hi >> sublegbits)};
+    uint64_t bv[sublegs] {(b.m_lo & sublegmask), (b.m_lo >> sublegbits),
+            (b.m_hi & sublegmask), (b.m_hi >> sublegbits)};
+    uint64_t rv[sublegs] {};
+    int64_t carry {}, scratch {};
+
+    rv[0] = av[0] * bv[0];
+
+    rv[1] = av[1] * bv [0];
+    scratch = rv[1] + av[0] * bv[1];
+    carry = rv[1] > scratch ? 1 : 0;
+    rv[1] = scratch;
+
+    rv[2] = av[2] * bv[0] + carry; //0xffff^2 + 1 < 0xffffffff, can't overflow
+    scratch = rv[2] + av[1] * bv[1];
+    carry = rv[2] > scratch ? 1 : 0;
+    rv[2] = scratch + av[0] * bv[2];
+    carry += scratch > rv[2] ? 1 : 0;
+
+    rv[3] = av[3] * bv[0] + carry;
+    scratch = rv[3] + av[2] * bv[1];
+    carry = rv[3] > scratch ? 1 : 0;
+    rv[3] = scratch + av[1] * bv[2];
+    carry += scratch > rv[3] ? 1 : 0;
+    scratch = rv[3] + av[0] * bv[3];
+    carry += rv[3] > scratch ? 1 : 0;
+    rv[3] = scratch;
+
+    if (carry) //Shouldn't happen because of the checks above
+    {
+        m_flags |= overflow;
+        return *this;
+    }
+
+    m_lo = rv[0] + (rv[1] << sublegbits);
+    carry = rv[1] >> sublegbits;
+    carry += (rv[1] << sublegbits) > m_lo || rv[0] > m_lo ? 1 : 0;
+    m_hi = rv[2] + (rv[3] << sublegbits) + carry;
+    if ((rv[3] << sublegbits) > m_hi || rv[2] > m_hi || (rv[3] >> sublegbits))
+    {
+        m_flags |= overflow;
+        return *this;
+    }
     return *this;
 }
 
