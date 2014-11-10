@@ -1,8 +1,7 @@
-#ifndef gnc_kvp_value_type
-#define gnc_kvp_value_type
-
 /********************************************************************\
  * kvp-value.hpp -- Implements a key-value frame system             *
+ * Copyright (C) 2014 Aaron Laws                                    *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -22,6 +21,9 @@
  *                                                                  *
 \********************************************************************/
 
+#ifndef GNC_KVP_VALUE_TYPE
+#define GNC_KVP_VALUE_TYPE
+
 extern "C"
 {
 #include "config.h"
@@ -35,6 +37,7 @@ extern "C"
 
 struct KvpValueImpl
 {
+    public:
     /**
      * Performs a deep copy
      */
@@ -100,7 +103,7 @@ struct KvpValueImpl
         GncGUID *,
         Timespec,
         GList *,
-        boost::recursive_wrapper<KvpFrame *>,
+        KvpFrame *,
         GDate> datastore;
 };
 

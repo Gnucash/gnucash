@@ -2057,7 +2057,7 @@ xaccSplitMakeStockSplit(Split *s)
     xaccTransBeginEdit (s->parent);
 
     s->value = gnc_numeric_zero();
-    kvp_frame_set_str(s->inst.kvp_data, "split-type", "stock-split");
+    kvp_frame_set_string(s->inst.kvp_data, "split-type", "stock-split");
     SET_GAINS_VDIRTY(s);
     mark_split(s);
     qof_instance_set_dirty(QOF_INSTANCE(s));

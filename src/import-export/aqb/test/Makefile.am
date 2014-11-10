@@ -9,9 +9,10 @@ include $(top_srcdir)/test-templates/Makefile.decl
 MODULEPATH = src/import-export/aqb
 
 #The test program. You'll need to add to this if you have more than one module above.
-TEST_PROGS += test-aqb
 
-noinst_PROGRAMS = ${TEST_PROGS}
+check_PROGRAMS = test-aqb
+
+TESTS = ${check_PROGRAMS}
 
 test_aqbdir = ${top_srcdir}/${MODULEPATH}/test
 

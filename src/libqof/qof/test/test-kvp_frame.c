@@ -185,6 +185,7 @@ test_kvp_frame_copy( Fixture *fixture, gconstpointer pData )
     g_assert( to_copy );
     g_assert( !kvp_frame_is_empty( to_copy ) );
     g_assert( to_copy != fixture->frame );
+
     g_assert_cmpint( kvp_frame_compare( fixture->frame, to_copy ), == , 0 );
     copy_gint64 = kvp_frame_get_gint64( to_copy, "gint64-type" );
     g_assert( &copy_gint64 != &test_gint64 );
@@ -1114,7 +1115,6 @@ test_kvp_frame_to_string( Fixture *fixture, gconstpointer pData )
 static void
 test_kvp_frame_set_slot_path( Fixture *fixture, gconstpointer pData )
 {
-    GHashTable *frame_hash = NULL;
     KvpValue *input_value, *output_value;
 
     g_assert( fixture->frame );
@@ -1136,9 +1136,6 @@ test_kvp_frame_set_slot_path( Fixture *fixture, gconstpointer pData )
     g_assert( output_value );
     g_assert( input_value != output_value ); /* copied */
     g_assert_cmpint( kvp_value_compare( output_value, input_value ), == , 0 ); /* old value removed */
-    frame_hash = kvp_frame_get_hash( fixture->frame );
-    g_assert( frame_hash );
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 1 ); /* be sure it was replaced */
     kvp_value_delete( input_value );
 
     g_test_message( "Test when existing path elements are not frames" );
@@ -1146,7 +1143,6 @@ test_kvp_frame_set_slot_path( Fixture *fixture, gconstpointer pData )
     kvp_frame_set_slot_path( fixture->frame, input_value, "test", "test2", NULL );
     g_assert( kvp_frame_get_slot_path( fixture->frame, "test2", NULL ) == NULL );/* was not added */
     g_assert_cmpint( kvp_value_compare( output_value, kvp_frame_get_slot_path( fixture->frame, "test", NULL ) ), == , 0 ); /* nothing changed */
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 1 ); /* didn't change */
     kvp_value_delete( input_value );
 
     g_test_message( "Test frames are created along the path when needed" );
@@ -1159,7 +1155,6 @@ test_kvp_frame_set_slot_path( Fixture *fixture, gconstpointer pData )
     g_assert( output_value );
     g_assert( input_value != output_value ); /* copied */
     g_assert_cmpint( kvp_value_compare( output_value, input_value ), == , 0 );
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 2 );
     kvp_value_delete( input_value );
 }
 
@@ -1168,7 +1163,6 @@ test_kvp_frame_set_slot_path_gslist( Fixture *fixture, gconstpointer pData )
 {
     /* similar to previous test except path is passed as GSList*/
     GSList *path_list = NULL;
-    GHashTable *frame_hash = NULL;
     KvpValue *input_value, *output_value;
 
     g_assert( fixture->frame );
@@ -1191,9 +1185,6 @@ test_kvp_frame_set_slot_path_gslist( Fixture *fixture, gconstpointer pData )
     g_assert( output_value );
     g_assert( input_value != output_value ); /* copied */
     g_assert_cmpint( kvp_value_compare( output_value, input_value ), == , 0 ); /* old value removed */
-    frame_hash = kvp_frame_get_hash( fixture->frame );
-    g_assert( frame_hash );
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 1 ); /* be sure it was replaced */
     kvp_value_delete( input_value );
 
     g_test_message( "Test when existing path elements are not frames" );
@@ -1202,7 +1193,6 @@ test_kvp_frame_set_slot_path_gslist( Fixture *fixture, gconstpointer pData )
     kvp_frame_set_slot_path_gslist( fixture->frame, input_value, path_list );
     g_assert( kvp_frame_get_slot_path( fixture->frame, "test2", NULL ) == NULL );/* was not added */
     g_assert_cmpint( kvp_value_compare( output_value, kvp_frame_get_slot_path( fixture->frame, "test", NULL ) ), == , 0 ); /* nothing changed */
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 1 ); /* didn't change */
     kvp_value_delete( input_value );
 
     g_test_message( "Test frames are created along the path when needed" );
@@ -1217,7 +1207,6 @@ test_kvp_frame_set_slot_path_gslist( Fixture *fixture, gconstpointer pData )
     g_assert( output_value );
     g_assert( input_value != output_value ); /* copied */
     g_assert_cmpint( kvp_value_compare( output_value, input_value ), == , 0 );
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 2 );
     kvp_value_delete( input_value );
 
     g_slist_free( path_list );
@@ -1226,8 +1215,8 @@ test_kvp_frame_set_slot_path_gslist( Fixture *fixture, gconstpointer pData )
 static void
 test_kvp_frame_replace_slot_nc( Fixture *fixture, gconstpointer pData )
 {
-    GHashTable *frame_hash;
-    KvpValue *orig_value, *orig_value2, *copy_value;
+    KvpValue *orig_value, *orig_value2;
+    const char ** keys;
     /* test indirectly static function kvp_frame_replace_slot_nc */
     g_assert( fixture->frame );
     g_assert( kvp_frame_is_empty( fixture->frame ) );
@@ -1236,23 +1225,23 @@ test_kvp_frame_replace_slot_nc( Fixture *fixture, gconstpointer pData )
     orig_value = kvp_value_new_gint64( 2 );
     kvp_frame_set_slot( fixture->frame, "test", orig_value );
     g_assert( !kvp_frame_is_empty( fixture->frame ) );
-    frame_hash = kvp_frame_get_hash( fixture->frame );
-    g_assert( frame_hash );
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 1 );
-    copy_value = g_hash_table_lookup( frame_hash, "test" );
-    g_assert( orig_value != copy_value );
-    g_assert_cmpint( kvp_value_compare( orig_value, copy_value ), == , 0 );
+    keys = kvp_frame_get_keys( fixture->frame );
+    g_assert( keys );
+    g_assert( !keys[1] );
+    g_assert( orig_value != kvp_frame_get_value( fixture->frame, keys[0] ) );
+    g_assert_cmpint( kvp_value_compare( kvp_frame_get_value( fixture->frame, keys[0] ), orig_value ), ==, 0 );
+    g_free( keys );
 
     g_test_message( "Test when value is replaced" );
     orig_value2 = kvp_value_new_gint64( 5 );
     kvp_frame_set_slot( fixture->frame, "test", orig_value2 );
-    frame_hash = kvp_frame_get_hash( fixture->frame );
-    g_assert( frame_hash );
-    g_assert_cmpint( g_hash_table_size( frame_hash ), == , 1 );
-    copy_value = g_hash_table_lookup( frame_hash, "test" );
-    g_assert( orig_value2 != copy_value );
-    g_assert_cmpint( kvp_value_compare( orig_value2, copy_value ), == , 0 );
-    g_assert_cmpint( kvp_value_compare( orig_value, copy_value ), != , 0 );
+    keys = kvp_frame_get_keys( fixture->frame );
+    g_assert( keys );
+    g_assert( !keys[1] );
+    g_assert( orig_value != kvp_frame_get_value( fixture->frame, keys[0] ) );
+    g_assert_cmpint( kvp_value_compare( kvp_frame_get_value( fixture->frame, keys[0] ), orig_value2 ), ==, 0 );
+    g_assert_cmpint( kvp_value_compare( kvp_frame_get_value( fixture->frame, keys[0] ), orig_value ), !=, 0 );
+    g_free( keys );
 
     kvp_value_delete( orig_value );
     kvp_value_delete( orig_value2 );
@@ -1653,6 +1642,33 @@ test_kvp_frame_set_gvalue (Fixture *fixture, gconstpointer pData)
     kvp_frame_delete (n_frame);
 }
 
+static void
+test_kvp_frame_get_keys( void )
+{
+    KvpFrame * frame = kvp_frame_new();
+    const char * key1 = "number one";
+    const char * key2 = "number one/number two";
+    const char * key3 = "number three";
+    const char * val1 = "Value1";
+    const char * val2 = "Value2";
+    const char * val3 = "Value3";
+    unsigned int spot = 0;
+    const char ** keys;
+    kvp_frame_set_string(frame, key1, val1);
+    kvp_frame_set_string(frame, key2, val2);
+    kvp_frame_set_string(frame, key3, val3);
+    keys = kvp_frame_get_keys(frame);
+
+    g_assert(keys);
+    g_assert(keys[spot]);
+    g_assert(strcmp(keys[spot++], val1));
+    g_assert(keys[spot]);
+    g_assert(strcmp(keys[spot++], val3));
+    g_assert(!keys[spot]);
+
+    g_free(keys);
+    kvp_frame_delete(frame);
+}
 
 void
 test_suite_kvp_frame( void )
@@ -1675,6 +1691,7 @@ test_suite_kvp_frame( void )
     GNC_TEST_ADD( suitename, "kvp frame set slot path", Fixture, NULL, setup, test_kvp_frame_set_slot_path, teardown );
     GNC_TEST_ADD( suitename, "kvp frame set slot path gslist", Fixture, NULL, setup, test_kvp_frame_set_slot_path_gslist, teardown );
     GNC_TEST_ADD( suitename, "kvp frame replace slot nc", Fixture, NULL, setup, test_kvp_frame_replace_slot_nc, teardown );
+    GNC_TEST_ADD_FUNC( suitename, "kvp frame get keys", test_kvp_frame_get_keys );
     GNC_TEST_ADD( suitename, "get trailer make", Fixture, NULL, setup_static, test_get_trailer_make, teardown_static );
     GNC_TEST_ADD( suitename, "kvp value glist to string", Fixture, NULL, setup_static, test_kvp_value_glist_to_string, teardown_static );
     GNC_TEST_ADD( suitename, "get or make", Fixture, NULL, setup_static, test_get_or_make, teardown_static );

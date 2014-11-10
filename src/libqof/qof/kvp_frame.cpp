@@ -32,108 +32,188 @@ extern "C"
 #include <string.h>
 }
 
-#include <typeinfo>
-#include <iostream>
 #include "kvp-value.hpp"
-#include "kvp_frame-p.hpp"
+#include "kvp_frame.hpp"
+#include <typeinfo>
+#include <sstream>
+#include <algorithm>
+#include <vector>
 
+KvpFrameImpl::KvpFrameImpl(const KvpFrameImpl & rhs) noexcept
+{
+    std::for_each(rhs.m_valuemap.begin(), rhs.m_valuemap.end(),
+        [this](const map_type::value_type & a)
+        {
+            auto key = static_cast<char *>(qof_string_cache_insert(a.first));
+            auto val = new KvpValueImpl(*a.second);
+            this->m_valuemap.insert({key,val});
+        }
+    );
+}
+
+KvpValueImpl * KvpFrameImpl::replace_nc(const char * key, KvpValueImpl * value) noexcept
+{
+    if (!key) return nullptr;
+    auto spot = m_valuemap.find(key);
+    KvpValueImpl * ret {nullptr};
+    if (spot != m_valuemap.end())
+    {
+        qof_string_cache_remove(spot->first);
+        ret = spot->second;
+        m_valuemap.erase(spot);
+    }
+
+    if (value)
+    {
+        auto cachedkey = static_cast<const char *>(qof_string_cache_insert(key));
+        m_valuemap.insert({cachedkey,value});
+    }
+
+    return ret;
+}
+
+std::string
+KvpFrameImpl::to_string() const noexcept
+{
+    std::ostringstream ret;
+    ret << "{\n";
+
+    std::for_each(m_valuemap.begin(), m_valuemap.end(),
+        [this,&ret](const map_type::value_type &a)
+        {
+            ret << "    ";
+            if (a.first)
+                ret << a.first;
+            ret << " => ";
+            if (a.second)
+                ret << a.second->to_string();
+            ret << ",\n";
+        }
+    );
+
+    ret << "}\n";
+    return ret.str();
+}
+
+std::vector<std::string>
+KvpFrameImpl::get_keys() const noexcept
+{
+    std::vector<std::string> ret;
+    std::for_each(m_valuemap.begin(), m_valuemap.end(),
+        [&ret](const KvpFrameImpl::map_type::value_type &a)
+        {
+            ret.push_back(a.first);
+        }
+    );
+    return ret;
+}
+
+void
+KvpFrameImpl::for_each_slot(void (*proc)(const char *key, KvpValue *value, void * data),
+              void *data) const noexcept
+{
+    if (!proc) return;
+    std::for_each (m_valuemap.begin(), m_valuemap.end(),
+        [proc,data](const KvpFrameImpl::map_type::value_type & a)
+        {
+            proc (a.first, a.second, data);
+        }
+    );
+}
+
+KvpValueImpl *
+KvpFrameImpl::get_slot(const char * key) const noexcept
+{
+    auto spot = m_valuemap.find(key);
+    if (spot == m_valuemap.end())
+        return nullptr;
+    return spot->second;
+}
+
+int compare(const KvpFrameImpl * one, const KvpFrameImpl * two) noexcept
+{
+    if (one && !two) return 1;
+    if (!one && two) return -1;
+    if (!one && !two) return 0;
+    return compare(*one, *two);
+}
+
+/**
+ * If the first KvpFrameImpl has an item that the second does not, 1 is returned.
+ * The first item within the two KvpFrameImpl that is not similar, that comparison is returned.
+ * If all the items within the first KvpFrameImpl match items within the second, but the
+ *   second has more elements, -1 is returned.
+ * Otherwise, 0 is returned.
+ */
+int compare(const KvpFrameImpl & one, const KvpFrameImpl & two) noexcept
+{
+    for (const auto & a : one.m_valuemap)
+    {
+        auto otherspot = two.m_valuemap.find(a.first);
+        if (otherspot == two.m_valuemap.end())
+        {
+            return 1;
+        }
+        auto comparison = compare(a.second,otherspot->second);
+
+        if (comparison != 0)
+            return comparison;
+    }
+
+    if (one.m_valuemap.size() < two.m_valuemap.size())
+        return -1;
+    return 0;
+}
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_KVP;
 
-/* *******************************************************************
- * KvpFrame functions
- ********************************************************************/
-
-static guint
-kvp_hash_func(gconstpointer v)
-{
-    return g_str_hash(v);
-}
-
-static gint
-kvp_comp_func(gconstpointer v, gconstpointer v2)
-{
-    return g_str_equal(v, v2);
-}
-
-static gboolean
-init_frame_body_if_needed(KvpFrame *f)
-{
-    if (!f->hash)
-    {
-        f->hash = g_hash_table_new(&kvp_hash_func, &kvp_comp_func);
-    }
-    return(f->hash != NULL);
-}
-
 KvpFrame *
 kvp_frame_new(void)
 {
-    KvpFrame * retval = g_new0(KvpFrame, 1);
-
-    /* Save space until the frame is actually used */
-    retval->hash = NULL;
-    return retval;
-}
-
-static void
-kvp_frame_delete_worker(gpointer key, gpointer value, G_GNUC_UNUSED gpointer user_data)
-{
-    qof_string_cache_remove(key);
-    kvp_value_delete(static_cast<KvpValue *>(value));
+    auto ret = new KvpFrameImpl();
+    return static_cast<KvpFrame *>(ret);
 }
 
 void
 kvp_frame_delete(KvpFrame * frame)
 {
     if (!frame) return;
+    auto realframe = static_cast<KvpFrameImpl *>(frame);
+    delete realframe;
+}
 
-    if (frame->hash)
-    {
-        /* free any allocated resource for frame or its children */
-        g_hash_table_foreach(frame->hash, & kvp_frame_delete_worker,
-                             (gpointer)frame);
-
-        /* delete the hash table */
-        g_hash_table_destroy(frame->hash);
-        frame->hash = NULL;
-    }
-    g_free(frame);
+const char **
+kvp_frame_get_keys(const KvpFrame * frame)
+{
+    if (!frame) return nullptr;
+    auto realframe = static_cast<KvpFrameImpl const *>(frame);
+    const auto & keys = realframe->get_keys();
+    const char ** ret = g_new(const char *, keys.size() + 1);
+    unsigned int spot {0};
+    std::for_each(keys.begin(), keys.end(),
+        [&ret,&spot](const std::string &a)
+        {
+            ret[spot++] = g_strdup(a.c_str());
+        }
+    );
+    ret[keys.size()] = nullptr;
+    return ret;
 }
 
 gboolean
 kvp_frame_is_empty(const KvpFrame * frame)
 {
     if (!frame) return TRUE;
-    if (!frame->hash) return TRUE;
-    return FALSE;
-}
-
-static void
-kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data)
-{
-    KvpFrame * dest = (KvpFrame *)user_data;
-    g_hash_table_insert(dest->hash,
-                        qof_string_cache_insert(key),
-                        static_cast<void*>(kvp_value_copy(static_cast<KvpValue*>(value))));
+    auto realframe = static_cast<KvpFrameImpl const *>(frame);
+    return realframe->get_keys().size() == 0;
 }
 
 KvpFrame *
 kvp_frame_copy(const KvpFrame * frame)
 {
-    KvpFrame * retval = kvp_frame_new();
-
-    if (!frame) return retval;
-
-    if (frame->hash)
-    {
-        if (!init_frame_body_if_needed(retval)) return(NULL);
-        g_hash_table_foreach(frame->hash,
-                             & kvp_frame_copy_worker,
-                             (gpointer)retval);
-    }
-    return retval;
+    auto ret = new KvpFrameImpl(*static_cast<KvpFrameImpl const *>(frame));
+    return ret;
 }
 
 /* Replace the old value with the new value.  Return the old value.
@@ -144,33 +224,11 @@ static KvpValue *
 kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
                            KvpValue * new_value)
 {
-    gpointer orig_key;
-    gpointer orig_value = NULL;
-    int      key_exists;
+    if (!frame) return NULL;
 
-    if (!frame || !slot) return NULL;
-    if (!init_frame_body_if_needed(frame)) return NULL; /* Error ... */
-
-    key_exists = g_hash_table_lookup_extended(frame->hash, slot,
-                 & orig_key, & orig_value);
-    if (key_exists)
-    {
-        g_hash_table_remove(frame->hash, slot);
-        qof_string_cache_remove(orig_key);
-    }
-    else
-    {
-        orig_value = NULL;
-    }
-
-    if (new_value)
-    {
-        g_hash_table_insert(frame->hash,
-                            qof_string_cache_insert((gpointer) slot),
-                            new_value);
-    }
-
-    return (KvpValue *) orig_value;
+    auto realframe = static_cast<KvpFrameImpl *>(frame);
+    auto realnewvalue = static_cast<KvpValueImpl *>(new_value);
+    return realframe->replace_nc(slot, realnewvalue);
 }
 
 /* Passing in a null value into this routine has the effect
@@ -549,14 +607,10 @@ kvp_frame_set_slot_nc(KvpFrame * frame, const char * slot,
 KvpValue *
 kvp_frame_get_slot(const KvpFrame * frame, const char * slot)
 {
-    KvpValue *v;
     if (!frame) return NULL;
-    if (!frame->hash) return NULL;
-    v = static_cast<KvpValue*>(g_hash_table_lookup(frame->hash, slot));
-    return v;
+    auto realframe = static_cast<const KvpFrameImpl *>(frame);
+    return realframe->get_slot(slot);
 }
-
-/* ============================================================ */
 
 void
 kvp_frame_set_slot_path (KvpFrame *frame,
@@ -1060,10 +1114,8 @@ kvp_frame_for_each_slot(KvpFrame *f,
                         gpointer data)
 {
     if (!f) return;
-    if (!proc) return;
-    if (!(f->hash)) return;
-
-    g_hash_table_foreach(f->hash, (GHFunc) proc, data);
+    auto realframe = static_cast<KvpFrameImpl *>(f);
+    realframe->for_each_slot(proc, data);
 }
 
 int
@@ -1074,59 +1126,12 @@ kvp_value_compare(const KvpValue * okva, const KvpValue * okvb)
     return compare(kva, kvb);
 }
 
-typedef struct
-{
-    gint compare;
-    KvpFrame *other_frame;
-} kvp_frame_cmp_status;
-
-static void
-kvp_frame_compare_helper(const char *key, KvpValue * val, gpointer data)
-{
-    kvp_frame_cmp_status *status = (kvp_frame_cmp_status *) data;
-    if (status->compare == 0)
-    {
-        KvpFrame *other_frame = status->other_frame;
-        KvpValue *other_val = kvp_frame_get_slot(other_frame, key);
-
-        if (other_val)
-        {
-            status->compare = kvp_value_compare(val, other_val);
-        }
-        else
-        {
-            status->compare = 1;
-        }
-    }
-}
-
 gint
 kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb)
 {
-    kvp_frame_cmp_status status;
-
-    if (fa == fb) return 0;
-    /* nothing is always less than something */
-    if (!fa && fb) return -1;
-    if (fa && !fb) return 1;
-
-    /* nothing is always less than something */
-    if (!fa->hash && fb->hash) return -1;
-    if (fa->hash && !fb->hash) return 1;
-
-    status.compare = 0;
-    status.other_frame = (KvpFrame *) fb;
-
-    kvp_frame_for_each_slot((KvpFrame *) fa, kvp_frame_compare_helper, &status);
-
-    if (status.compare != 0)
-        return status.compare;
-
-    status.other_frame = (KvpFrame *) fa;
-
-    kvp_frame_for_each_slot((KvpFrame *) fb, kvp_frame_compare_helper, &status);
-
-    return(-status.compare);
+    auto realone = static_cast<const KvpFrameImpl *>(fa);
+    auto realtwo = static_cast<const KvpFrameImpl *>(fb);
+    return compare(realone, realtwo);
 }
 
 char *
@@ -1137,7 +1142,6 @@ kvp_value_to_string(const KvpValue * val)
     return realval->to_string();
 }
 
-/* struct for kvp frame static funtion testing*/
 #ifdef __cplusplus
 extern "C"
 {
@@ -1163,53 +1167,13 @@ init_static_test_pointers( void )
     p_get_trailer_or_null = get_trailer_or_null;
 }
 
-/* ----- */
-
-static void
-kvp_frame_to_string_helper(gpointer key, gpointer value, gpointer data)
-{
-    gchar *tmp_val;
-    gchar **str = (gchar**)data;
-    gchar *old_data = *str;
-
-    tmp_val = kvp_value_to_string((KvpValue *)value);
-
-    *str = g_strdup_printf("%s    %s => %s,\n",
-                           *str ? *str : "",
-                           key ? (char *) key : "",
-                           tmp_val ? tmp_val : "");
-
-    g_free(old_data);
-    g_free(tmp_val);
-}
-
-gchar*
+char*
 kvp_frame_to_string(const KvpFrame *frame)
 {
-    gchar *tmp1;
-
-    g_return_val_if_fail (frame != NULL, NULL);
-
-    tmp1 = g_strdup_printf("{\n");
-
-    if (frame->hash)
-        g_hash_table_foreach(frame->hash, kvp_frame_to_string_helper, &tmp1);
-
-    {
-        gchar *tmp2;
-        tmp2 = g_strdup_printf("%s}\n", tmp1);
-        g_free(tmp1);
-        tmp1 = tmp2;
-    }
-
-    return tmp1;
-}
-
-GHashTable*
-kvp_frame_get_hash(const KvpFrame *frame)
-{
-    g_return_val_if_fail (frame != NULL, NULL);
-    return frame->hash;
+    auto realframe = static_cast<KvpFrameImpl const *>(frame);
+    /*We'll use g_strdup
+     because it will be freed using g_free.*/
+    return g_strdup(realframe->to_string().c_str());
 }
 
 static GValue *gvalue_from_kvp_value (KvpValue *);

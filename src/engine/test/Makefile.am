@@ -26,7 +26,7 @@ LDADD = \
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
 #
-TESTS = \
+TEST_GROUP_1 = \
   test-link \
   test-load-engine \
   test-guid \
@@ -34,7 +34,9 @@ TESTS = \
   test-date \
   test-object \
   test-commodities \
-  test-create-account \
+  test-engine
+
+TEST_GROUP_2 = \
   test-account-object \
   test-group-vs-book \
   test-lots \
@@ -70,31 +72,9 @@ TESTS_ENVIRONMENT = \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-check_PROGRAMS = \
-  test-link \
-  test-commodities \
-  test-date \
-  test-recurrence \
-  test-guid \
-  test-account-object \
-  test-group-vs-book \
-  test-load-engine \
-  test-lots \
-  test-numeric \
-  test-object \
-  test-query \
-  test-querynew \
-  test-scm-query \
-  test-split-vs-account \
-  test-transaction-reversal \
-  test-transaction-voiding \
-  test-business \
-  test-address \
-  test-customer \
-  test-employee \
-  test-job \
-  test-vendor
+check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
 
+TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2}
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
@@ -107,9 +87,6 @@ EXTRA_DIST += \
   test-scm-query-import \
   test-scm-query-import.scm
 
-TEST_PROGS += test-engine
-
-noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 
 test_engine_SOURCES = \
 	test-engine.c \

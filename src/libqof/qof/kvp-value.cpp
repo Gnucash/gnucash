@@ -1,5 +1,7 @@
 /********************************************************************\
  * kvp-value.cpp -- Implements a key-value frame system             *
+ * Copyright (C) 2014 Aaron Laws                                    *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,11 +22,11 @@
 \********************************************************************/
 
 #include "kvp-value.hpp"
+#include "kvp_frame.hpp"
 #include <cmath>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
-#include "kvp_frame-p.hpp"
 
 KvpValueImpl::KvpValueImpl(KvpValueImpl const & other) noexcept
 {
@@ -75,7 +77,7 @@ KvpValueImpl::get_type() const noexcept
         return KvpValueType::KVP_TYPE_TIMESPEC;
     else if (datastore.type() == typeid(GList *))
         return KvpValueType::KVP_TYPE_GLIST;
-    else if (datastore.type() == typeid(KvpFrame *))
+    else if (datastore.type() == typeid(KvpFrameImpl *))
         return KvpValueType::KVP_TYPE_FRAME;
     else if (datastore.type() == typeid(GDate))
         return KvpValueType::KVP_TYPE_GDATE;
@@ -208,7 +210,6 @@ KvpValueImpl::to_string() const noexcept
     boost::apply_visitor(visitor, datastore);
 
     /*We still use g_strdup since the return value will be freed by g_free*/
-
     return g_strdup(ret.str().c_str());
 }
 
@@ -224,12 +225,11 @@ struct compare_visitor : boost::static_visitor<int>
     int operator()( T & one, T & two) const
     {
         /*This will work for any type that implements < and ==.*/
-        if ( one < two )
+        if (one < two)
             return -1;
-        else if (one == two)
-            return 0;
-        else
+        if (two < one)
             return 1;
+        return 0;
     }
 };
 template <> int compare_visitor::operator()(char * const & one, char * const & two) const
@@ -265,9 +265,8 @@ template <> int compare_visitor::operator()(double const & one, double const & t
     if (std::isnan(one) && std::isnan(two))
         return 0;
     if (one < two) return -1;
-    /*perhaps we should have tolerance here?*/
-    if (one == two) return 0;
-    return 1;
+    if (two < one) return 1;
+    return 0;
 }
 
 int compare(const KvpValueImpl & one, const KvpValueImpl & two) noexcept

@@ -792,10 +792,10 @@ AC_ARG_WITH([gmock-headers],
 
 if test x$enable_google_test = xyes; then
    AC_MSG_CHECKING([whether Google Test is available])
-   if test -n $ac_cv_gtest_root -a -r "$ac_cv_gtest_root/src/gtest-all.cc"; then
+   if test -n "$ac_cv_gtest_root" -a -r "$ac_cv_gtest_root/src/gtest-all.cc"; then
      AC_MSG_WARN([Skipped setting ac_cv_gtest_root, value $ac_cv_gtest_root])
    else
-      if test -n ${GTEST_ROOT} -a -r ${GTEST_ROOT}/src/gtest-all.cc; then
+      if test -n "${GTEST_ROOT}" -a -r "${GTEST_ROOT}/src/gtest-all.cc"; then
          ac_cv_gtest_root=${GTEST_ROOT}
       elif test "x$ac_cv_gtest_system_install" = "xyes"; then
          ac_cv_gtest_root="/usr/src/gtest"
@@ -803,15 +803,15 @@ if test x$enable_google_test = xyes; then
          ac_cv_gtest_root=""
       fi
    fi
-   if test -z $ac_cv_gtest_root; then
+   if test -z "$ac_cv_gtest_root"; then
       AC_MSG_RESULT([No gtest-root])
       enable_google_test=no
    else
-      if test ! -r $ac_cv_gtest_root/include/gtest/gtest.h; then
-         if test -n $ac_cv_gtest_headers -a -r $ac_cv_gtest_headers/gtest/gtest.h; then
+      if test ! -r "$ac_cv_gtest_root/include/gtest/gtest.h"; then
+         if test -n "$ac_cv_gtest_headers" -a -r "$ac_cv_gtest_headers/gtest/gtest.h"; then
             AC_MSG_WARN([Skipped setting ac_cv_gtest_headers, value $ac_cv_gtest_headers])
          else
-            if test  -n ${GTEST_HEADERS} -a -r ${GTEST_HEADERS}/gtest/gtest.h; then
+            if test  -n "${GTEST_HEADERS}" -a -r "${GTEST_HEADERS}/gtest/gtest.h"; then
                ac_cv_gtest_headers=${GTEST_HEADERS}
             elif test "x$ac_cv_gtest_system_install" = "xyes"; then
                ac_cv_gtest_headers="/usr/include"
@@ -819,7 +819,7 @@ if test x$enable_google_test = xyes; then
                ac_cv_gtest_headers=""
             fi
          fi
-         if test -z $ac_cv_gtest_headers; then
+         if test -z "$ac_cv_gtest_headers"; then
             AC_MSG_RESULT([No gtest-headers])
             enable_google_test=no
          fi
@@ -827,10 +827,10 @@ if test x$enable_google_test = xyes; then
          ac_cv_gtest_headers=$ac_cv_gtest_root/include
       fi
    fi
-   if test -n $ac_cv_gmock_root -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
+   if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
       AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
    else
-      if test -n ${GMOCK_ROOT} -a -r ${GMOCK_ROOT}/src/gmock-all.cc; then
+      if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
          ac_cv_gmock_root=${GMOCK_ROOT}
       elif test "x$ac_cv_gtest_system_install" = "xyes"; then
          ac_cv_gmock_root="/usr/src/gmock"
@@ -838,15 +838,15 @@ if test x$enable_google_test = xyes; then
          ac_cv_gmock_root=""
       fi
    fi
-   if test -z $ac_cv_gmock_root; then
+   if test -z "$ac_cv_gmock_root"; then
       AC_MSG_RESULT([No gmock-root])
       enable_google_test=no
    else
-      if test ! -r $ac_cv_gmock_root/include/gmock/gmock.h; then
-         if test -n $ac_cv_gmock_headers -a -r $ac_cv_gmock_headers/gmock/gmock.h; then
+      if test ! -r "$ac_cv_gmock_root/include/gmock/gmock.h"; then
+         if test -n "$ac_cv_gmock_headers" -a -r "$ac_cv_gmock_headers/gmock/gmock.h"; then
             AC_MSG_WARN([Skipped setting ac_cv_gmock_headers, value $ac_cv_gmock_headers])
          else
-            if test -n ${GMOCK_HEADERS} -a -r ${GMOCK_HEADERS}/gmock/gmock.h; then
+            if test -n "${GMOCK_HEADERS}" -a -r "${GMOCK_HEADERS}/gmock/gmock.h"; then
                ac_cv_gmock_headers=${GMOCK_HEADERS}
             elif test "x$ac_cv_gtest_system_install" = "xyes"; then
                ac_cv_gmock_headers="/usr/include"
@@ -854,7 +854,7 @@ if test x$enable_google_test = xyes; then
                ac_cv_gmock_headers=""
             fi
          fi
-         if test -z $ac_cv_gmock_headers; then
+         if test -z "$ac_cv_gmock_headers"; then
 	    AC_MSG_RESULT([No gmock-headers])
             enable_google_test=no
          fi

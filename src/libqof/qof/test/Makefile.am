@@ -28,9 +28,11 @@ test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/qofsession.h \
 	$(top_srcdir)/src/test-core/unittest-support.h
 
-TEST_PROGS += test-qof
+check_PROGRAMS = \
+  test-qof
 
-noinst_PROGRAMS = ${TEST_PROGS}
+TESTS = ${check_PROGRAMS}
+
 test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 
 #The tests might require more libraries, but try to keep them

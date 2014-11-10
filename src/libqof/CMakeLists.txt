@@ -15,6 +15,7 @@ SET (libgnc_qof_SOURCES
    qof/guid.cpp
    qof/kvp-util.cpp
    qof/kvp_frame.cpp
+   qof/kvp-value.cpp
    qof/qofbackend.cpp
    qof/qofbook.cpp
    qof/qofchoice.cpp
