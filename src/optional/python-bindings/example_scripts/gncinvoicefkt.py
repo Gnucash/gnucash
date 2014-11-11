@@ -39,17 +39,48 @@ def get_all_invoices_from_lots(account):
       invoice_list.append(Invoice(instance=invoice))
   return invoice_list
 
-def get_all_invoices(book):
-    """Returns all invoices in the book."""
+def get_all_invoices(book, is_paid=None, is_active=None):
+    """Returns a list of all invoices in the book.
+
+    posts a query to search for all invoices.
+
+    arguments:
+        book                the gnucash book to work with
+    keyword-arguments:
+        is_paid     int     1 to search for invoices having been paid, 0 for not, None to ignore.
+        is_active   int     1 to search for active invoices
+    """
+
+    query = gnucash.Query()
+    query.search_for('gncInvoice')
+    query.set_book(book)
+
+    if is_paid == 0:
+        query.add_boolean_match([gnucash.INVOICE_IS_PAID], False, gnucash.QOF_QUERY_AND)
+    elif is_paid == 1:
+        query.add_boolean_match([gnucash.INVOICE_IS_PAID], True, gnucash.QOF_QUERY_AND)
+    elif is_paid == None:
+        pass
+
+    # active = JOB_IS_ACTIVE
+    if is_active == 0:
+        query.add_boolean_match(['active'], False, gnucash.QOF_QUERY_AND)
+    elif is_active == 1:
+        query.add_boolean_match(['active'], True, gnucash.QOF_QUERY_AND)
+    elif is_active == None:
+        pass
+
+    # return only invoices (1 = invoices)
+    pred_data = gnucash.gnucash_core.QueryInt32Predicate(gnucash.QOF_COMPARE_EQUAL, 1)
+    query.add_term([gnucash.INVOICE_TYPE], pred_data, gnucash.QOF_QUERY_AND)
 
     invoice_list = []
-    invoice = True
-    invoice_id = 0
-    while invoice:
-        invoice_id += 1
-        invoice = book.InvoiceLookupByID('%06d' % invoice_id)
-        if invoice:
-            invoice_list.append(invoice)
+
+    result = query.run()
+    for result in query.run():
+        invoice_list.append(Invoice(instance=result))
+
+    query.destroy()
 
     return invoice_list
 
