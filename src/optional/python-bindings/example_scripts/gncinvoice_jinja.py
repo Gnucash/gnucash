@@ -17,7 +17,6 @@
 # more modular as it allows to use arbitrary templates
 #
 # Questions / Issues:
-# * How to print a list of all invoices ? ( Or to post a search via python )
 # * How much logic in the template, how much preprocessing in this file ?
 
 try:
