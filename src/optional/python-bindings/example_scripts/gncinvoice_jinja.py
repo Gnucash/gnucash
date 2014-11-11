@@ -20,6 +20,7 @@
 # * How much logic in the template, how much preprocessing in this file ?
 
 try:
+    import locale
     import sys
     import getopt
     import gnucash
@@ -160,7 +161,7 @@ def main(argv=None):
 
         #import IPython
         #IPython.embed()
-        output = template.render(invoice=invoice)
+        output = template.render(invoice=invoice, locale=locale)
 
         print "Writing output", filename_output, "."
         with open(filename_output, 'w') as f:
