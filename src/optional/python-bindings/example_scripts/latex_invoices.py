@@ -54,6 +54,7 @@ try:
     import getopt
     import gnucash
     import str_methods
+    from gncinvoicefkt import *
     from IPython import version_info as IPython_version_info
     if IPython_version_info[0]>=1:
         from IPython.terminal.ipapp import TerminalIPythonApp
@@ -71,32 +72,6 @@ except ImportError as import_error:
 class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
-
-def get_all_lots(account):
-  """Return all lots in account and descendants"""
-  ltotal=[]
-  descs = account.get_descendants()
-  for desc in descs:
-    if type(desc).__name__ == 'SwigPyObject':
-        desc = gnucash.Account(instance=desc)
-    ll=desc.GetLotList()
-    ltotal+=ll
-  return ltotal
-
-def get_all_invoices_from_lots(account):
-  """Return all invoices in account and descendants
-
-  This is based on lots. So invoices without lots will be missed."""
-
-  lot_list=get_all_lots(account)
-  invoice_list=[]
-  for lot in lot_list:
-    if type(lot).__name__ == 'SwigPyObject':
-        lot = gnucash.GncLot(instance=lot)
-    invoice=gnucash.gnucash_core_c.gncInvoiceGetInvoiceFromLot(lot.instance)
-    if invoice:
-      invoice_list.append(Invoice(instance=invoice))
-  return invoice_list
 
 def invoice_to_lco(invoice):
   """returns a string which forms a lco-file for use with LaTeX"""
