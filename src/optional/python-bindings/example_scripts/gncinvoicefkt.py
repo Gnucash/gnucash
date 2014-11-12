@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-# ##@file
+##@file
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
 # @date 2014-11
-# @brief some help for working with invoices
+# @brief some help for working with invoices, used in \ref py_invoice_export
 #
 # Credits to Tom Loft for the query to get_all_invoices
 # as used in his REST-Api
 #
 # Issues:
-# - get_all_invoices could be added to class book
+# - get_all_invoices could be added as a method to book Class
 # - get_all_customers should be a query like get_all_invoices
 
 try:
