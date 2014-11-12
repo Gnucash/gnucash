@@ -20,7 +20,7 @@
 # For an example where to get it see section credits below.
 #
 # Usage :
-# \code latex_invoice file://testfile \endcode
+# \code latex_invoice -l -f -n INVOICE_NUMBER file://testfile \endcode
 # will create file data.lco.
 # \code latex --output-format=pdf Invoice.tex \endcode
 # should run latex on file Invoice.tex and result in Invoice.pdf. Invoice.tex includes data.lco.
@@ -214,7 +214,7 @@ def main(argv=None):
             print >>sys.stderr, "for help use --help"
             retcode=2
 
-        print "Prints out all invoices that have corresponding lots."
+        print "Generate a LaTeX invoice or print out all invoices."
         print
         print "Usage:"
         print
