@@ -1,6 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+# ##@file
+# @ingroup python_bindings_examples
+# @author Christoph Holtermann (c.holtermann (at) gmx.de)
+# @date 2014-11
+# @brief some help for working with invoices
+#
+# Credits to Tom Loft for the query to get_all_invoices
+# as used in his REST-Api
+#
+# Issues:
+# - get_all_invoices could be added to class book
+# - get_all_customers should be a query like get_all_invoices
+
 try:
     import gnucash
     from gnucash.gnucash_business import Customer, Employee, Vendor, Job, \
@@ -85,7 +98,10 @@ def get_all_invoices(book, is_paid=None, is_active=None):
     return invoice_list
 
 def get_all_customers(book):
-    """Returns all customers in book."""
+    """Returns all customers in book.
+
+    Counts IDs upwards. May miss customers with irregular IDs.
+    Should be replaced by query as in get_all_invoices."""
 
     customer_list = []
     customer = True
