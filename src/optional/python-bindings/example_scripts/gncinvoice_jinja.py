@@ -11,13 +11,19 @@
 # gnucash Invoices. Jinja2 templating engine ist used. Templates can
 # be Latex, Html or anything.
 #
+# Example templates for german invoices:
+# - Invoice.tex.tmpl
+# - Invoice_2.tex.tmpl
+#
 # This is a sequel to latex_invoices.py that exported to a lco file
 # to be imported into a LaTeX letter.
 # The approach used here is not as dependent on external files and
 # more modular as it allows to use arbitrary templates
 #
 # Questions / Issues:
-# * How much logic in the template, how much preprocessing in this file ?
+# - How much logic in the template, how much preprocessing in this file ?
+# - Internationalization - currencies, formatting of numbers
+# - Providing data of gnucash owner
 
 try:
     import locale
