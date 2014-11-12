@@ -5,7 +5,7 @@
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
 # @date 2014-11
-# @brief exports an invoice from gnucash using a template file
+# @brief exports an invoice from gnucash using a template file, see \ref py_invoice_export
 #
 # Input is a template file that will be filled with information from
 # gnucash Invoices. Jinja2 templating engine ist used. Templates can
@@ -19,6 +19,8 @@
 # to be imported into a LaTeX letter.
 # The approach used here is not as dependent on external files and
 # more modular as it allows to use arbitrary templates
+#
+# Doxygen: see page \ref py_invoice_export
 #
 # Questions / Issues:
 # - How much logic in the template, how much preprocessing in this file ?
