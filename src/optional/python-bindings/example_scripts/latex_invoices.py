@@ -246,7 +246,7 @@ def main(argv=None):
     comm_table = book.get_table()
     EUR = comm_table.lookup("CURRENCY", "EUR")
 
-    invoice_list=get_all_invoices_from_lots(root_account)
+    invoice_list=get_all_invoices(book)
 
     if list_invoices:
         for number,invoice in enumerate(invoice_list):
