@@ -77,7 +77,8 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 environment: environment.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e '/@-NOTE.*-@/ D'
+	    -e '/@-NOTE.*-@/ D' \
+	    -e "s#@-GUILE_EFFECTIVE_VERSION-@#@GUILE_EFFECTIVE_VERSION@#g"
 if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif

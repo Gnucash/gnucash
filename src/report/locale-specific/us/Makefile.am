@@ -21,17 +21,17 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS} ${GLIB_CFLAGS}
 
 ## This is unused and therefore no longer installed and/or loaded
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
-gncscmmod_DATA = us.scm de_DE.scm
+gncscmrptdir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/locale-specific
+gncscmrpt_DATA = us.scm de_DE.scm
 
-gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmothermod_DATA = taxtxf.scm taxtxf-de_DE.scm
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
+gncscmmod_DATA = taxtxf.scm taxtxf-de_DE.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
-  ${gncscmmod_DATA} \
-  ${gncscmothermod_DATA}
+  ${gncscmrpt_DATA} \
+  ${gncscmmod_DATA}
 endif
 
 .scm-links:
@@ -44,11 +44,45 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash/report/locale-specific; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
-	( cd gnucash/report; for A in $(gncscmothermod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+	( cd gnucash/report/locale-specific; for A in $(gncscmrpt_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
+	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/gnome-utils \
+  --gnc-module-dir ${top_builddir}/src/html \
+  --gnc-module-dir ${top_builddir}/src/report/report-system \
+  --gnc-module-dir ${top_builddir}/src/tax/us \
+  --guile-load-dir ${top_builddir}/src/app-utils \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/report/report-system \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --guile-load-dir ${top_builddir}/src/tax/us \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome-utils
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmrptcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/locale-specific
+gncscmrptcache_DATA = $(gncscmrpt_DATA:.scm=.go)
 endif
 
 clean-local:
@@ -57,8 +91,8 @@ clean-local:
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
-  ${gncscmothermod_DATA} \
-  ${gncscmmod_DATA} 
+  ${gncscmmod_DATA} \
+  ${gncscmrpt_DATA}
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

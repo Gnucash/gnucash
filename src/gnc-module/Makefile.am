@@ -19,8 +19,8 @@ libgnc_module_la_LIBADD = \
   ${GLIB_LIBS} \
   ${GUILE_LIBS}
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = gnc-module.scm
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = gnc-module.scm
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -43,12 +43,12 @@ endif
 endif
 
 EXTRA_DIST = \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   gnc-module.i
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 .scm-links: 
@@ -59,10 +59,24 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --library-dir    ${top_builddir}/src/gnc-module
+
+%.go : %.scm .scm-links $(lib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 endif
 
 clean-local:

@@ -67,13 +67,13 @@ AM_CPPFLAGS = \
   -I${top_builddir}/src \
   -I${top_srcdir}/src
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = core-utils.scm
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = core-utils.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
 #for running
-SCM_FILE_LINKS = ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 if WITH_PYTHON
@@ -106,22 +106,36 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --library-dir    ${top_builddir}/src/core-utils
+
+%.go : %.scm .scm-links $(lib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV})  \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+endif
+
 noinst_DATA = .scm-links
 BUILT_SOURCES = gncla-dir.h gnc-version.h
-EXTRA_DIST = $(gncmod_DATA) core-utils.i gncla-dir.h.in gnc-scm-info.h
+EXTRA_DIST = $(gncscmmod_DATA) core-utils.i gncla-dir.h.in gnc-scm-info.h
 clean-local:
 	rm -rf gnucash
 
 CLEANFILES = $(BUILT_SOURCES) .scm-links
 MAINTAINERCLEANFILES = swig-core-utils-guile.c swig-core-utils-python.c
 
-AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\" -DGNC_SCM_INSTALL_DIR="\"${GNC_SCM_INSTALL_DIR}\""
 
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp

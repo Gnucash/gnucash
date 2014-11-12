@@ -26,6 +26,8 @@
 ;; http://www.felfri.de/winston/schnittstellen.htm
 ;;
 
+(use-modules (gnucash gettext))
+
 (define txf-tax-entity-types
   (list
    (cons 'Ind #("Individual, Joint, etc." "Umsatzsteuer-Kennzahlen"))

@@ -28,7 +28,7 @@ libgncmod_qif_import_la_LIBADD = \
   ${GLIB_LIBS}
 
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/import-export
 gncscmmod_DATA = qif-import.scm 
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/qif-import
@@ -97,6 +97,28 @@ endif
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnome \
+  --library-dir    ${top_builddir}/src/gnc-module
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/import-export
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/qif-import
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
 endif
 
 clean-local:

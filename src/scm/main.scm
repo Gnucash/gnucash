@@ -42,8 +42,8 @@
 
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
-(load-from-path "string.scm")
-(load-from-path "fin.scm")
+(load-from-path "string")
+(load-from-path "fin")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
@@ -57,18 +57,22 @@
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 ;; Get the Makefile.am/configure.in generated variables.
-(load-from-path "build-config.scm")
+(load-from-path "build-config")
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.
 ;; These are needed for a guile 1.3.4 bug
-(debug-enable 'debug)
 (debug-enable 'backtrace)
 (read-enable 'positions)
 
-;; maxdepth doesn't exist in guile 2 and onwards:
-(if (< (string->number (major-version)) 2)
-    (debug-set! maxdepth 100000))
+;; These options should only be set for guile < 2.0
+;; 'debug (deprecated and unused since guile 2)
+;; maxdepth (removed since guile 2)
+(cond-expand
+  (guile-2 )
+  (else
+    (debug-enable 'debug)
+    (debug-set! maxdepth 100000)))
 (debug-set! stack    200000)
 
 ;; Initalialize localization, otherwise reports may output

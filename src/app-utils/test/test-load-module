@@ -37,7 +37,7 @@ exec ${GUILE} -s "$0"
       (display "Failed - procedure gnc-default-currency not found\n")
       (set! exit-code -1)))
 
-(if (macro? (module-ref the-root-module 'N_))
+(if (macro? (module-ref (current-module) 'N_))
     (display "Macro N_ defined\n")
     (begin
       (display "Failed - macro N_ not defined\n")

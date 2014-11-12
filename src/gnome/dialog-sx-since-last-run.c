@@ -537,8 +537,8 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                                            SLR_MODEL_COL_VARAIBLE_VALUE, tmp_str->str,
                                            SLR_MODEL_COL_INSTANCE_VISIBILITY, FALSE,
                                            SLR_MODEL_COL_VARIABLE_VISIBILITY, TRUE,
-                                           SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE
-                                           - 1);
+                                           SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
+                                           -1);
                         g_string_free(tmp_str, TRUE);
                     }
                     g_list_free(vars);

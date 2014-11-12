@@ -25,7 +25,14 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash core-utils)) ; for gnc:version
+(use-modules (gnucash gettext))
 (use-modules (gnucash gnc-module))
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module")))
+  (else ))
 (use-modules (sw_report_system))
 
 (gnc:module-load "gnucash/report/report-system" 0)

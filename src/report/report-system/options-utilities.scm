@@ -21,6 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash gettext))
 
 ;; These are just a bunch of options which were useful in several
 ;; reports and hence they got defined in a seperate function.

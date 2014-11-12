@@ -21,5 +21,5 @@
 (export txf-asset-categories)
 (export txf-liab-eq-categories)
 
-(load-from-path "txf.scm")
-(load-from-path "txf-help.scm")
+(load-from-path "txf")
+(load-from-path "txf-help")

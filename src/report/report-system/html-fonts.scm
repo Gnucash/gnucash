@@ -6,6 +6,8 @@
 ;;  Copyright (c) Phil Longstaff <plongstaff@rogers.com>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash gettext))
+
 ;; Converts a font name to css style information
 (define (font-name-to-style-info font-name)
     (let*

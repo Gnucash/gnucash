@@ -89,10 +89,10 @@ libgtest_a_CPPFLAGS = ${AM_CPPFLAGS} -I${GTEST_HEADERS} -I${GTEST_ROOT}
 libgmock_a_CPPFLAGS = ${libgtest_a_CPPFLAGS} -I${GMOCK_HEADERS} -I${GMOCK_ROOT}
 endif
 
-SCM_FILES = unittest-support.scm
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = unittest-support.scm
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = $(SCM_FILES)
+SCM_FILES = $(gncscmmod_DATA)
 
 .scm-links:
 	$(RM) -rf gnucash
@@ -102,10 +102,24 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(SCM_FILES) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --library-dir    ${top_builddir}/src/test-core
+
+%.go : %.scm .scm-links $(noinst_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 endif
 
 clean-local:

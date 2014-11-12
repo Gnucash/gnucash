@@ -7,8 +7,12 @@ exec @GUILE@ -s $0 "$@"
 ;; library-dirs
 
 (use-modules (srfi srfi-13) (srfi srfi-14)) ;; for string-tokenize
+;; 'debug is deprecated and unused since guile 2
+(cond-expand
+  (guile-2 )
+  (else
+    (debug-enable 'debug)))
 (debug-enable 'backtrace)
-(debug-enable 'debug)
 (read-enable 'positions)
 
 ;; Are we on MS Windows here? If yes, make this a #t.
@@ -105,6 +109,10 @@ exec @GUILE@ -s $0 "$@"
 
 (display
  (adapt-dirsep
+  (get-dir-adder "GUILE_LOAD_COMPILED_PATH" guile-load-dirs "" path-sep-str)))
+
+(display
+ (adapt-dirsep
   (get-dir-adder "LD_LIBRARY_PATH" library-dirs "/.libs" path-sep-str)))
 
 (display
@@ -120,6 +128,7 @@ exec @GUILE@ -s $0 "$@"
       (display "; ")
       (display " export GNC_MODULE_PATH;")
       (display " export GUILE_LOAD_PATH;")
+      (display " export GUILE_LOAD_COMPILED_PATH;")
       (display " export LD_LIBRARY_PATH;")
       (display " export DYLD_LIBRARY_PATH;")
       (if is-windows?

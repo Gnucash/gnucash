@@ -149,7 +149,7 @@ gchar *gnc_path_get_accountsdir()
 }
 
 /** Returns the file path to the report directory, usually
- * "$prefix/share/gnucash/guile-modules/gnucash/report".
+ * "$prefix/share/gnucash/scm/gnucash/report".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir()
@@ -163,7 +163,7 @@ gchar *gnc_path_get_reportdir()
     else
     {
         gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-        result = g_build_filename (pkgdatadir, "guile-modules",
+        result = g_build_filename (GNC_SCM_INSTALL_DIR,
                                    "gnucash", "report", (char*)NULL);
         g_free (pkgdatadir);
     }
@@ -173,7 +173,7 @@ gchar *gnc_path_get_reportdir()
 
 /** Returns the file path to the standard
  * reports, usually
- * "$prefix/share/gnucash/guile-modules/gnucash/report/standard-reports".
+ * "$prefix/share/gnucash/scm/gnucash/report/standard-reports".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()

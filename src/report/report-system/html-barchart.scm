@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot.scm")
+(load-from-path "html-jqplot")
 
 (define <html-barchart>
   (make-record-type "<html-barchart>"
@@ -359,12 +359,12 @@
                          (push "var d")
                          (push series-index)
                          (push " = [];\n")))
-         (series-data-add (lambda (series-index date y)
+         (series-data-add (lambda (series-index x y)
                          (push (string-append
                                "  d"
                                (number->string series-index)
                                ".push(["
-                               "\"" date "\""
+                               (number->string x)
                                ", "
                                (number->string y)
                                "]);\n"))))
@@ -386,7 +386,7 @@
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-js-include "jqplot/jqplot.barRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.categoryAxisRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
@@ -406,15 +406,15 @@
             (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
-                (let loop ((col 0) (rowcnt 0))
+                (let loop ((col 0) (rowcnt 1))
                   (series-data-start col)
                   (if (list? (car data))
                       (begin 
                         (set! cols (length (car data)))))    
                   (for-each
                     (lambda (row)
-                      (if (< rowcnt rows)
-                        (series-data-add col (list-ref (gnc:html-barchart-row-labels barchart) rowcnt)
+                      (if (<= rowcnt rows)
+                        (series-data-add col rowcnt
                                        (ensure-numeric (list-ref-safe row col)))
                       )
                       (set! rowcnt (+ rowcnt 1)))
@@ -445,7 +445,7 @@
                    },
                    axes: {
                        xaxis: {
-                           renderer:$.jqplot.DateAxisRenderer,
+                           renderer:$.jqplot.CategoryAxisRenderer,
                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                            tickOptions: {
                                angle: -30,
@@ -456,10 +456,14 @@
                            autoscale: true,
                        },
                    },
+                   highlighter: {
+                       tooltipContentEditor: formatTooltip,
+                   },
                    cursor:{
                        show: true,
-                       zoom: true
-                   }
+                       showTooltip: false,
+                       zoom: true,
+                   },
                 };\n")
 
             (push "  options.stackSeries = ")
@@ -489,9 +493,18 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
+            (if (and (string? row-labels) (> (string-length row-labels) 0))
+              (begin 
+                (push "  options.axes.xaxis.ticks = [")
+                (for-each (lambda (val)
+                        (push "\"")
+                        (push val)
+                        (push "\","))
+                    (gnc:html-barchart-row-labels barchart))
+                (push "];\n")))
 
 
-            (push "$.jqplot.config.enablePlugins = true;")
+            (push "$.jqplot.config.enablePlugins = true;\n")
             (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
 
   function formatTooltip(str, seriesIndex, pointIndex) {
@@ -500,7 +513,7 @@
       else
           x = pointIndex;
       y = data[seriesIndex][pointIndex][1].toFixed(2);
-      return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
+      return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
   }\n") 
 
             (push "});\n</script>")

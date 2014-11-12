@@ -21,7 +21,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (use-modules (gnucash core-utils)
-             (gnucash printf))
+             (gnucash printf)
+             (gnucash gettext))
 
 (define gnc:reldate-list '())
 

@@ -239,24 +239,24 @@ endif
 endif
 endif
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = gnome-utils.scm 
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = gnome-utils.scm
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = gnc-menu-extensions.scm
 
 EXTRA_DIST = \
   gnome-utils.i \
   make-gnc-warnings-c.xsl \
   make-gnc-warnings-h.xsl \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 endif
 
@@ -268,10 +268,32 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome-utils
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
 endif
 
 noinst_DATA = .scm-links
