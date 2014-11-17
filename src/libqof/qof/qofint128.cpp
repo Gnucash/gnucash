@@ -577,6 +577,46 @@ QofInt128::operator%= (const QofInt128& b) noexcept
     return *this;
 }
 
+QofInt128&
+QofInt128::operator&= (const QofInt128& b) noexcept
+{
+    if (b.isOverflow())
+        m_flags |= overflow;
+    if (b.isNan())
+        m_flags |= NaN;
+
+    if (isOverflow() || isNan())
+        return *this;
+
+    m_hi &= b.m_hi;
+    m_lo &= b.m_lo;
+    return *this;
+}
+
+QofInt128&
+QofInt128::operator|= (const QofInt128& b) noexcept
+{
+    m_hi ^= b.m_hi;
+    m_lo ^= b.m_lo;
+    return *this;
+}
+
+QofInt128&
+QofInt128::operator^= (const QofInt128& b) noexcept
+{
+    if (b.isOverflow())
+        m_flags |= overflow;
+    if (b.isNan())
+        m_flags |= NaN;
+
+    if (isOverflow() || isNan())
+        return *this;
+
+    m_hi ^= b.m_hi;
+    m_lo ^= b.m_lo;
+    return *this;
+}
+
 static const uint8_t dec_array_size {5};
 /* Convert a uint128 represented as a binary number into 4 10-digit decimal
  * equivalents. Adapted from Douglas W. Jones, "Binary to Decimal Conversion in
@@ -697,5 +737,74 @@ bool
 operator>= (const QofInt128& a, const QofInt128& b) noexcept
 {
     return a.cmp(b) >= 0;
+}
+
+QofInt128
+operator+ (QofInt128 a, const QofInt128& b) noexcept
+{
+    a += b;
+    return a;
+}
+
+QofInt128
+operator- (QofInt128 a, const QofInt128& b) noexcept
+{
+    a -= b;
+    return a;
+}
+QofInt128
+operator* (QofInt128 a, const QofInt128& b) noexcept
+{
+    a *= b;
+    return a;
+}
+
+QofInt128
+operator/ (QofInt128 a, const QofInt128& b) noexcept
+{
+    a /= b;
+    return a;
+}
+
+QofInt128
+operator% (QofInt128 a, const QofInt128& b) noexcept
+{
+    a %= b;
+    return a;
+}
+
+QofInt128
+operator& (QofInt128 a, const QofInt128& b) noexcept
+{
+    a &= b;
+    return a;
+}
+
+QofInt128
+operator| (QofInt128 a, const QofInt128& b) noexcept
+{
+    a |= b;
+    return a;
+}
+
+QofInt128
+operator^ (QofInt128 a, const QofInt128& b) noexcept
+{
+    a ^= b;
+    return a;
+}
+
+QofInt128
+operator<< (QofInt128 a, uint b) noexcept
+{
+    a <<= b;
+    return a;
+}
+
+QofInt128
+operator>> (QofInt128 a, uint b) noexcept
+{
+    a >>= b;
+    return a;
 }
 

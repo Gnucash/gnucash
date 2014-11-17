@@ -205,17 +205,25 @@ enum // Values for m_flags
     QofInt128& operator*= (const QofInt128& b) noexcept;
     QofInt128& operator/= (const QofInt128& b) noexcept;
     QofInt128& operator%= (const QofInt128& b) noexcept;
+    QofInt128& operator&= (const QofInt128& b) noexcept;
+    QofInt128& operator|= (const QofInt128& b) noexcept;
+    QofInt128& operator^= (const QofInt128& b) noexcept;
 
 };
 
 static const QofInt128 k_qofInt128_Max {UINT64_MAX, UINT64_MAX, QofInt128::pos};
 static const QofInt128 k_qofInt128_Min {UINT64_MAX, UINT64_MAX, QofInt128::neg};
 
-QofInt128 operator+ (QofInt128 a, QofInt128 b) noexcept;
-QofInt128 operator- (QofInt128 a, QofInt128 b) noexcept;
-QofInt128 operator* (QofInt128 a, QofInt128 b) noexcept;
-QofInt128 operator/ (QofInt128 a, QofInt128 b) noexcept;
-QofInt128 operator% (QofInt128 a, QofInt128 b) noexcept;
+QofInt128 operator+ (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator- (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator* (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator/ (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator% (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator& (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator| (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator^ (QofInt128 a, const QofInt128& b) noexcept;
+QofInt128 operator<< (QofInt128 a, uint b) noexcept;
+QofInt128 operator>> (QofInt128 a, uint b) noexcept;
 
 bool operator== (const QofInt128& a, const QofInt128& b) noexcept;
 bool operator!= (const QofInt128& a, const QofInt128& b) noexcept;
