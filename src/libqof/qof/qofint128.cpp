@@ -163,6 +163,16 @@ QofInt128::abs() const noexcept
     return *this;
 }
 
+uint
+QofInt128::bits() const noexcept
+{
+    uint bits {static_cast<uint>(m_hi == 0 ? 0 : 64)};
+    uint64_t temp {(m_hi == 0 ? m_lo : m_hi)};
+    for (;temp > 0; temp >>= 1)
+        ++bits;
+    return bits;
+}
+
 
 QofInt128
 QofInt128::operator-() const noexcept
@@ -305,23 +315,8 @@ QofInt128::operator*= (const QofInt128& b) noexcept
         m_flags |= overflow;
         return *this;
     }
-    uint abits {}, bbits {};
-    uint64_t temp {m_lo};
-    do
-        ++abits;
-    while (temp >>= 1);
-    temp = m_hi;
-    do
-        ++abits;
-    while (temp >>= 1);
-    temp = b.m_lo;
-    do
-        ++bbits;
-    while (temp >>= 1);
-    temp = b.m_hi;
-    do
-        ++bbits;
-    while (temp >>= 1);
+
+    uint abits {bits()}, bbits {b.bits()};
     if (abits + bbits > maxbits)
     {
         m_flags |= overflow;

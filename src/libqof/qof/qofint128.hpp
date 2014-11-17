@@ -180,6 +180,11 @@ enum // Values for m_flags
     bool isZero() const noexcept;
 
 /**
+ * @return the number of bits used to represent the value
+ */
+    uint bits() const noexcept;
+
+/**
  * Fills a supplied buffer with a representation of the number in base 10. If
  * the QofInt128 is overflowed or NaN it will contain the words "Overflow" or
  * "NaN" respectively.
