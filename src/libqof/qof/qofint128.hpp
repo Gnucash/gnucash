@@ -42,6 +42,7 @@
  * on an overflowed or NaN QofInt128 will yield an overflowed or NaN
  * result, so calling routines need not check until the end of a
  * chained calculation.
+ * QofInt128 uses implicit copy and move constructors and implicit destructor.
  */
 class QofInt128
 {
@@ -75,6 +76,15 @@ enum // Values for m_flags
  */
     QofInt128 (int64_t upper, int64_t lower, unsigned char flags = '\0');
     QofInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
+
+/**
+ * Clear the object.
+ *
+ * Sets all member variables to zero.
+ * @return A reference to the object for chaining.
+ */
+    QofInt128& zero() noexcept;
+
 /**
  * Compare function.
  *
@@ -90,7 +100,7 @@ enum // Values for m_flags
  */
     QofInt128 gcd (const QofInt128& b) const noexcept;
 /**
- * Computes the Least Common Multiple between the object and paramter
+ * Computes the Least Common Multiple between the object and parameter
  *
  * @return A QofInt128 having the LCM.
  */
@@ -152,6 +162,7 @@ enum // Values for m_flags
  */
     char* asCharBufR(char* buf) const noexcept;
 
+    QofInt128 abs() const noexcept;
 
     QofInt128 operator-() const noexcept;
     explicit operator bool() const noexcept;

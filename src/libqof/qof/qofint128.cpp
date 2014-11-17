@@ -64,6 +64,14 @@ QofInt128::QofInt128 (int64_t upper, int64_t lower, unsigned char flags) :
     m_flags {flags}, m_hi {upper},
     m_lo {lower} {}
 
+QofInt128&
+QofInt128::zero () noexcept
+{
+    m_flags = 0;
+    m_lo = m_hi = UINT64_C(0);
+    return *this;
+}
+
 QofInt128::operator int64_t() const
 {
     if ((m_flags & neg) && isBig())
@@ -137,6 +145,16 @@ QofInt128::isZero() const noexcept
 {
     return ((m_flags & (overflow | NaN)) == 0 &&  m_hi == 0 && m_lo == 0);
 }
+
+QofInt128
+QofInt128::abs() const noexcept
+{
+    if (isNeg())
+        return operator-();
+
+    return *this;
+}
+
 
 QofInt128
 QofInt128::operator-() const noexcept
