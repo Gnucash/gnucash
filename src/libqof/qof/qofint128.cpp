@@ -217,6 +217,13 @@ QofInt128::operator-- (int) noexcept
 QofInt128&
 QofInt128::operator+= (const QofInt128& b) noexcept
 {
+    if (b.isOverflow())
+        m_flags |= overflow;
+    if (b.isNan())
+        m_flags |= NaN;
+
+    if (isOverflow() || isNan())
+        return *this;
     if ((isNeg () && !b.isNeg ()) || (!isNeg () && b.isNeg ()))
 	return this->operator-= (-b);
     uint64_t result = m_lo + b.m_lo;
@@ -266,6 +273,14 @@ QofInt128::operator>>= (uint i) noexcept
 QofInt128&
 QofInt128::operator-= (const QofInt128& b) noexcept
 {
+    if (b.isOverflow())
+        m_flags |= overflow;
+    if (b.isNan())
+        m_flags |= NaN;
+
+    if (isOverflow() || isNan())
+        return *this;
+
     if ((!isNeg() && b.isNeg()) || (isNeg() && !b.isNeg()))
 	return this->operator+= (-b);
     bool operand_bigger {cmp (b) < 0};
@@ -309,6 +324,14 @@ QofInt128::operator*= (const QofInt128& b) noexcept
         m_hi = m_lo = 0;
         return *this;
     }
+    if (b.isOverflow())
+        m_flags |= overflow;
+    if (b.isNan())
+        m_flags |= NaN;
+
+    if (isOverflow() || isNan())
+        return *this;
+
     /* Test for overflow before spending time on the calculation */
     if (m_hi && b.m_hi)
     {
@@ -517,10 +540,25 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, QofInt128& q, QofInt128& r) n
 void
 QofInt128::div (const QofInt128& b, QofInt128& q, QofInt128& r) noexcept
 {
+    if (isOverflow() || b.isOverflow())
+    {
+        q.m_flags |= overflow;
+        r.m_flags |= overflow;
+        return;
+    }
+
+    if (isNan() || b.isNan())
+    {
+        q.m_flags |= NaN;
+        r.m_flags |= NaN;
+        return;
+    }
+
     q.zero(), r.zero();
     if (b.isZero())
     {
         q.m_flags |= NaN;
+        r.m_flags |= NaN;
         return;
     }
     if (b.isNeg())
