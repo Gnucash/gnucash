@@ -64,6 +64,10 @@ enum // Values for m_flags
 };
 
     QofInt128 ();
+    QofInt128 (int16_t lower) : QofInt128{static_cast<int64_t>(lower)} {};
+    QofInt128 (uint16_t lower) : QofInt128{static_cast<uint64_t>(lower)} {};
+    QofInt128 (int32_t lower) : QofInt128{static_cast<int64_t>(lower)} {};
+    QofInt128 (uint32_t lower) : QofInt128{static_cast<uint64_t>(lower)} {};
     QofInt128 (int64_t lower);
     QofInt128 (uint64_t lower);
 /**
@@ -74,6 +78,18 @@ enum // Values for m_flags
  * upper, so the lower magnitude will be subracted from UINT64_MAX to
  * obtain the lower limb value.
  */
+    QofInt128 (int16_t upper, int16_t lower, unsigned char flags = '\0') :
+        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+                      flags} {};
+    QofInt128 (uint16_t upper, uint16_t lower, unsigned char flags = '\0') :
+        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+                      flags} {};
+    QofInt128 (int32_t upper, int32_t lower, unsigned char flags = '\0') :
+        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+                      flags} {};
+    QofInt128 (uint32_t upper, uint32_t lower, unsigned char flags = '\0') :
+        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+                      flags} {};
     QofInt128 (int64_t upper, int64_t lower, unsigned char flags = '\0');
     QofInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
 
