@@ -173,6 +173,30 @@ QofInt128::operator bool() const noexcept
 }
 
 QofInt128&
+QofInt128::operator++ () noexcept
+{
+    return operator+=(UINT64_C(1));
+}
+
+QofInt128&
+QofInt128::operator++ (int) noexcept
+{
+    return operator+=(UINT64_C(1));
+}
+
+QofInt128&
+QofInt128::operator-- () noexcept
+{
+    return operator-=(UINT64_C(1));
+}
+
+QofInt128&
+QofInt128::operator-- (int) noexcept
+{
+    return operator-=(UINT64_C(1));
+}
+
+QofInt128&
 QofInt128::operator+= (const QofInt128& b) noexcept
 {
     if ((isNeg () && !b.isNeg ()) || (!isNeg () && b.isNeg ()))
@@ -187,6 +211,39 @@ QofInt128::operator+= (const QofInt128& b) noexcept
     return *this;
 }
 
+QofInt128&
+QofInt128::operator<<= (uint i) noexcept
+{
+    if (i > maxbits)
+    {
+        m_flags &= 0xfe;
+        m_hi = 0;
+        m_lo = 0;
+        return *this;
+    }
+    uint64_t carry {(m_lo & (((1 << i) - 1) << (legbits - i)))};
+    m_lo <<= i;
+    m_hi <<= i;
+    m_hi += carry;
+    return *this;
+}
+
+QofInt128&
+QofInt128::operator>>= (uint i) noexcept
+{
+    if (i > maxbits)
+    {
+        m_flags &= 0xfe;
+        m_hi = 0;
+        m_lo = 0;
+        return *this;
+    }
+    uint64_t carry {(m_hi & ((1 << i) - 1))};
+    m_lo >>= i;
+    m_hi >>= i;
+    m_lo += (carry << (legbits - i));
+    return *this;
+}
 
 QofInt128&
 QofInt128::operator-= (const QofInt128& b) noexcept

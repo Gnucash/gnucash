@@ -168,7 +168,11 @@ enum // Values for m_flags
     explicit operator bool() const noexcept;
 
     QofInt128& operator++ () noexcept;
-    QofInt128 operator++ (int) noexcept;
+    QofInt128& operator++ (int) noexcept;
+    QofInt128& operator-- () noexcept;
+    QofInt128& operator-- (int) noexcept;
+    QofInt128& operator<<= (uint i) noexcept;
+    QofInt128& operator>>= (uint i) noexcept;
     QofInt128& operator+= (const QofInt128& b) noexcept;
     QofInt128& operator-= (const QofInt128& b) noexcept;
     QofInt128& operator*= (const QofInt128& b) noexcept;
