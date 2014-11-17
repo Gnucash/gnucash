@@ -114,6 +114,17 @@ enum // Values for m_flags
     QofInt128 pow (const QofInt128& b) const noexcept;
 
 /**
+ * Computes a quotient and a remainder, passed as reference parameters.
+ *
+ * 'this' is the dividend. The quotient and remainder args must be initialized
+ * to zero.
+ * @param d The divisor
+ * @param q The quotient; will be NaN if divisor = 0
+ * @param r The remainder; will be 0 if divisor = 0
+ */
+    void div (const QofInt128& d, QofInt128& q, QofInt128& r) noexcept;
+
+/**
  * Explicit conversion to int64_t.
  *
  * @return A int64_t

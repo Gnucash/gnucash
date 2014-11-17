@@ -30,11 +30,19 @@ extern "C"
 #include "qofint128.hpp"
 
 #include <iomanip>
+#include <utility>
+#include <cassert>
 
 /* All algorithms from Donald E. Knuth, "The Art of Computer
  * Programming, Volume 2: Seminumerical Algorithms", 3rd Ed.,
  * Addison-Wesley, 1998.
  */
+
+namespace {
+    static const uint sublegs = QofInt128::numlegs * 2;
+    static const uint sublegbits = QofInt128::legbits / 2;
+    static const uint64_t sublegmask = (UINT64_C(1) << sublegbits) - 1;
+}
 
 QofInt128::QofInt128 () : m_flags {}, m_hi {0}, m_lo {0}{}
 
@@ -340,9 +348,6 @@ QofInt128::operator*= (const QofInt128& b) noexcept
  * algorithms.
  */
 
-    static const uint sublegs = numlegs * 2;
-    static const uint sublegbits = legbits / 2;
-    static const uint sublegmask = (UINT64_C(1) << sublegbits) - 1;
     uint64_t av[sublegs] {(m_lo & sublegmask), (m_lo >> sublegbits),
             (m_hi & sublegmask), (m_hi >> sublegbits)};
     uint64_t bv[sublegs] {(b.m_lo & sublegmask), (b.m_lo >> sublegbits),
@@ -390,15 +395,185 @@ QofInt128::operator*= (const QofInt128& b) noexcept
     return *this;
 }
 
+namespace {
+/* Algorithm from Knuth (full citation at operator*=) p272ff.  Again, there
+ * are faster algorithms out there, but they require much larger numbers to
+ * be of benefit.
+ */
+/* We're using arrays here instead of vectors to avoid an alloc. */
+void
+div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, QofInt128& q, QofInt128& r) noexcept
+{
+/* D1, Normalization */
+    uint64_t qv[sublegs] {};
+    uint64_t d {(UINT64_C(1) << sublegbits)/(v[n - 1] + UINT64_C(1))};
+    uint64_t carry {UINT64_C(0)};
+    for (auto i = 0; i < m; ++i)
+    {
+        u[i] = u[i] * d + carry;
+        if (u[i] > sublegmask)
+        {
+            carry = u[i] >> sublegbits;
+            u[i] &= sublegmask;
+        }
+        else
+            carry = UINT64_C(0);
+        assert (u[i] <= sublegmask);
+    }
+    if (carry)
+    {
+        u[m++] = carry;
+        carry = UINT64_C(0);
+    }
+    for (auto i = 0; i < n; ++i)
+    {
+        v[i] = v[i] * d + carry;
+        if (v[i] > sublegmask)
+        {
+            carry = v[i] >> sublegbits;
+            v[i] &= sublegmask;
+        }
+        else
+            carry = UINT64_C(0);
+        assert (v[i] < sublegmask);
+    }
+    assert (carry == UINT64_C(0));
+    for (int j = m - n; j >= 0; j--) //D3
+    {
+        int64_t qhat, rhat;
+        qhat = ((u[j + n] << sublegbits) + u[j + n - 1]) / v[n - 1];
+        rhat = ((u[j + n] << sublegbits) + u[j + n - 1]) % v[n - 1];
+
+        while (qhat > sublegmask ||
+               (rhat <= sublegmask &&
+                ((qhat * v[n - 2]) > ((rhat << sublegbits) + u[j + n - 2]))))
+        {
+            --qhat;
+            rhat += v[n - 1];
+        }
+        carry = UINT64_C(0);
+        uint64_t borrow {};
+        for (auto k = 0; k < n; ++k) //D4
+        {
+            auto subend = qhat * v[k] + carry;
+            carry = subend >> sublegbits;
+            subend &= sublegmask;
+            if (u[j + k] >= subend)
+            {
+                u[j + k] = u[j + k] - subend;
+                borrow = UINT64_C(0);
+            }
+            else
+            {
+                if (u[j + k + 1] > 0)
+                    --u[j + k + 1];
+                else
+                    ++borrow;
+                u[j + k] = u[j + k] + sublegmask + 1 - subend;
+                u[j + k] &= sublegmask;
+            }
+        }
+        u[j + n] -= carry;
+        qv[j] = qhat;
+        if (borrow) //D5
+        { //D6
+            --qv[j];
+            carry = UINT64_C(0);
+            for (auto k = 0; k < n; ++k)
+            {
+                u[j + k] += v[k] + carry;
+                if (u[j + k] > sublegmask)
+                {
+                    carry = u[j + k] >> sublegbits;
+                    u[j + k] &= sublegmask;
+                }
+            }
+            u[j + n] += carry;
+        }
+    }//D7
+    q = QofInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
+    r = QofInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
+    r /= d;
+}
+
+void
+div_single_leg (uint64_t* u, size_t m, uint64_t v, QofInt128& q, QofInt128& r) noexcept
+{
+    uint64_t qv[sublegs] {};
+    uint64_t carry {};
+    for (int i = m - 1; i >= 0; --i)
+    {
+        qv[i] = u[i] / v;
+        if (i > 0)
+        {
+            u[i - 1] += ((u[i] % v) << sublegbits);
+            u[i] = UINT64_C(0);
+        }
+        else
+            u[i] %= v;
+    }
+
+    q = QofInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
+    r = QofInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
+}
+
+}// namespace
+
+void
+QofInt128::div (const QofInt128& b, QofInt128& q, QofInt128& r) noexcept
+{
+    q.zero(), r.zero();
+    if (b.isZero())
+    {
+        q.m_flags |= NaN;
+        return;
+    }
+    if (b.isNeg())
+        q.m_flags ^= neg;
+
+    if (abs() < b.abs())
+    {
+        r = *this;
+        return;
+    }
+    if (m_hi == 0 && b.m_hi == 0) //let the hardware do it
+    {
+        q.m_lo = m_lo / b.m_lo;
+        r.m_lo = m_lo % b.m_lo;
+        return;
+    }
+
+    uint64_t u[sublegs + 2] {(m_lo & sublegmask), (m_lo >> sublegbits),
+            (m_hi & sublegmask), (m_hi >> sublegbits), 0, 0};
+    uint64_t v[sublegs] {(b.m_lo & sublegmask), (b.m_lo >> sublegbits),
+            (b.m_hi & sublegmask), (b.m_hi >> sublegbits)};
+    auto m = u[3] ? 4 : u[2] ? 3 : u[1] ? 2 : u[0] ? 1 : 0;
+    auto n = v[3] ? 4 : v[2] ? 3 : v[1] ? 2 : v[0] ? 1 : 0;
+    if (m == 0 || n == 0) //Shouldn't happen
+        return;
+    if (n == 1)
+        return div_single_leg (u, m, v[0], q, r);
+
+    return div_multi_leg (u, m, v, n, q, r);
+}
+
 QofInt128&
 QofInt128::operator/= (const QofInt128& b) noexcept
 {
+    QofInt128 q {}, r {};
+    div(b, q, r);
+    std::swap (*this, q);
     return *this;
 }
 
 QofInt128&
 QofInt128::operator%= (const QofInt128& b) noexcept
 {
+    QofInt128 q {}, r {};
+    div(b, q, r);
+    std::swap (*this, r);
+    if (q.isNan())
+        m_flags |= NaN;
     return *this;
 }
 

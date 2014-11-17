@@ -337,3 +337,54 @@ TEST(qofint128_functions, multiply)
     EXPECT_FALSE (smallest.isOverflow());
 
 }
+
+TEST(qofint128_functions, divide)
+{
+    int64_t barg {INT64_C(4878849681579065407)};
+    int64_t sarg {INT64_C(4344522355275710400)};
+    uint64_t uarg {UINT64_C(13567894392130486208)};
+
+    QofInt128 zero (INT64_C(0));
+    QofInt128 one (INT64_C(1));
+    QofInt128 two (INT64_C(2));
+    QofInt128 smallest (sarg);
+    QofInt128 smaller (barg);
+    QofInt128 small (uarg);
+    QofInt128 big (sarg, barg);
+    QofInt128 bigger (static_cast<uint64_t>(barg), uarg);
+
+    EXPECT_EQ (QofInt128(INT64_C(0)), zero /= smallest);
+    EXPECT_EQ (QofInt128(INT64_C(0)), zero %= smallest);
+    smallest /= zero;
+    EXPECT_TRUE (smallest.isNan());
+
+    QofInt128 r {}, q {};
+
+    small.div (smaller, q, r);
+    EXPECT_EQ (two, q);
+    EXPECT_EQ (QofInt128(INT64_C(3810195028972355394)), r);
+
+    bigger.div (bigger, q, r);
+    EXPECT_EQ (one, q);
+    EXPECT_EQ (zero, r);
+
+    bigger.div (one, q, r);
+    EXPECT_EQ (bigger, q);
+    EXPECT_EQ (zero, r);
+
+    big.div (smaller, q, r);
+    EXPECT_EQ (QofInt128(INT64_C(8213236443097627766)), q);
+    EXPECT_EQ (QofInt128(INT64_C(3162679692459777845)), r);
+
+    bigger.div (big, q, r);
+    EXPECT_EQ (two, q);
+    EXPECT_EQ (QofInt128(UINT64_C(534327326303355007),
+                         UINT64_C(3810195028972355394)), r);
+
+    big.div (bigger, q, r);
+    EXPECT_EQ (zero, q);
+    EXPECT_EQ (big, r);
+
+    EXPECT_EQ (big, big %= bigger);
+    EXPECT_EQ (two, bigger /= big);
+}
