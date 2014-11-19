@@ -176,10 +176,14 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     {
         gchar *filepath = gnc_uri_get_path (file_name);
         gchar *filedir = g_path_get_dirname (filepath);
+        if (info->starting_dir)
+            g_free (info->starting_dir);
         info->starting_dir = g_strdup (filedir);
         g_free (filedir);
         g_free (filepath);
 
+        if (info->file_name)
+            g_free (info->file_name);
         info->file_name = g_strdup (file_name);
         error = NULL;
         /* Load the file into parse_data. */
@@ -190,6 +194,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
             gnc_error_dialog (NULL, "%s", error->message);
             if (error->code == GNC_CSV_FILE_OPEN_ERR)
             {
+                g_free (file_name);
                 gnc_csv_parse_data_free (parse_data);
                 return;
             }
@@ -208,6 +213,11 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
             }
             else
             {
+                if (info->parse_data) // Free parse_data if we have come back here
+                {
+                    gnc_csv_parse_data_free (info->parse_data);
+                    gnc_csv_reset_preview_setting (info);
+                }
                 info->parse_data = parse_data;
                 info->previewing_errors = FALSE; /* We're looking at all the data. */
                 info->approved = FALSE; /* This is FALSE until the user clicks "OK". */
@@ -547,6 +557,10 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
         }
 
         gnc_csv_preview_update_assist (info);
+
+        /* Refresh the row highlighting */
+        row_selection_update (info);
+
         info->encoding_selected_called = FALSE;
     }
     else /* If this is the first call of the function ... */
@@ -675,6 +689,9 @@ make_new_column (CsvImportTrans* info, int col, int dx, gboolean test_only)
             return FALSE;
         }
         gnc_csv_preview_update_assist (info);
+
+        /* Refresh the row highlighting */
+        row_selection_update (info);
     }
 
     return TRUE;
@@ -709,6 +726,9 @@ widen_column (CsvImportTrans* info, int col, gboolean test_only)
             return FALSE;
         }
         gnc_csv_preview_update_assist (info);
+
+        /* Refresh the row highlighting */
+        row_selection_update (info);
     }
     return TRUE;
 }
@@ -741,6 +761,9 @@ narrow_column (CsvImportTrans* info, int col, gboolean test_only)
             return FALSE;
         }
         gnc_csv_preview_update_assist (info);
+
+        /* Refresh the row highlighting */
+        row_selection_update (info);
     }
     return TRUE;
 }
@@ -763,6 +786,9 @@ delete_column (CsvImportTrans* info, int col, gboolean test_only)
             return FALSE;
         }
         gnc_csv_preview_update_assist (info);
+
+        /* Refresh the row highlighting */
+        row_selection_update (info);
     }
     return TRUE;
 }
@@ -1292,6 +1318,58 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
 
     /* It's now been filled with some stuff. */
     info->not_empty = TRUE;
+}
+
+
+/*******************************************************
+ * gnc_csv_reset_preview_setting
+ *
+ * Reset the widgets on the preview settings page
+ *******************************************************/
+void gnc_csv_reset_preview_setting (CsvImportTrans *info)
+{
+    int i;
+
+    // Reset Skip Rows
+    g_signal_handlers_block_by_func (info->skip_rows, csv_import_trans_skiprows_cb, info);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), FALSE);
+    g_signal_handlers_unblock_by_func (info->skip_rows, csv_import_trans_skiprows_cb, info);
+
+    // Reset Import Format
+    g_signal_handlers_block_by_func (info->csv_button, separated_or_fixed_selected, info);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), TRUE);
+    g_signal_handlers_unblock_by_func (info->csv_button, separated_or_fixed_selected, info);
+
+    // Reset the separators
+    for (i = 0; i < SEP_NUM_OF_TYPES; i++)
+    {
+        g_signal_handlers_block_by_func (info->sep_buttons[i], sep_button_clicked, info);
+        if (i == 2)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), TRUE);
+        else
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), FALSE);
+        g_signal_handlers_unblock_by_func (info->sep_buttons[i], sep_button_clicked, info);
+    }
+    g_signal_handlers_block_by_func (info->custom_cbutton, sep_button_clicked, info);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), FALSE);
+    g_signal_handlers_unblock_by_func (info->custom_cbutton, sep_button_clicked, info);
+
+    g_signal_handlers_block_by_func (info->custom_entry, sep_button_clicked, info);
+    gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
+    g_signal_handlers_unblock_by_func (info->custom_entry, sep_button_clicked, info);
+
+    // Reset the combo's and character encoding
+    g_signal_handlers_block_by_func (info->date_format_combo, date_format_selected, info);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo), 0);
+    g_signal_handlers_unblock_by_func (info->date_format_combo, date_format_selected, info);
+
+    g_signal_handlers_block_by_func (info->currency_format_combo, currency_format_selected, info);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo), 0);
+    g_signal_handlers_unblock_by_func (info->currency_format_combo, currency_format_selected, info);
+
+    g_signal_handlers_block_by_func (info->encselector, encoding_selected, info);
+    go_charmap_sel_set_encoding (info->encselector, "UTF-8");
+    g_signal_handlers_unblock_by_func (info->encselector, encoding_selected, info);
 }
 
 
