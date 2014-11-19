@@ -411,3 +411,24 @@ TEST(qofint128_functions, GCD)
     EXPECT_EQ (one, bigger.gcd (smallest));
     EXPECT_EQ (big, smaller.lcm (smallest));
 }
+
+TEST(qofint128_functions, pow)
+{
+
+    int64_t sarg {INT64_C(53309)};
+    int64_t barg {INT64_C(4878849681579065407)};
+    QofInt128 little (sarg);
+    QofInt128 big (barg);
+    auto minus = -little;
+
+    EXPECT_EQ (QofInt128(1), little.pow(0));
+    EXPECT_EQ (QofInt128(0), QofInt128(0).pow(123));
+    EXPECT_EQ (big * big, big.pow(2));
+    EXPECT_EQ (QofInt128(UINT64_C(66326033898754),
+                         UINT64_C(10251549987585143605)), little.pow(7));
+    EXPECT_EQ (QofInt128(UINT64_C(66326033898754),
+                         UINT64_C(10251549987585143605), QofInt128::neg),
+               minus.pow(7));
+    auto over = minus.pow(9);
+    EXPECT_TRUE(over.isOverflow());
+}

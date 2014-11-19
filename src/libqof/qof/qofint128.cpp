@@ -173,6 +173,25 @@ QofInt128::lcm(const QofInt128& b) const noexcept
     return *this / common * b;
 }
 
+/* Knuth section 4.6.3 */
+QofInt128
+QofInt128::pow(uint b) const noexcept
+{
+    if (isZero() || (m_lo == 1 && m_hi == 0) || isNan() || isOverflow())
+        return *this;
+    if (b == 0)
+        return QofInt128 (1);
+    QofInt128 retval (1), squares = *this;
+    while (b && !retval.isOverflow())
+    {
+        if (b & 1)
+            retval *= squares;
+        squares *= squares;
+        b >>= 1;
+    }
+    return retval;
+}
+
 bool
 QofInt128::isNeg () const noexcept
 {

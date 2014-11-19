@@ -125,9 +125,11 @@ enum // Values for m_flags
 /**
  * Computes the object raised to the parameter's power
  *
- * @return A QofInt128; it will be NaN if the parameter is negative.
+ * @param b The power to raise this to. No point in taking a QofInt128, any
+ * value greater than 128 would overflow on any value other than 1.
+ * @return A QofInt128
  */
-    QofInt128 pow (const QofInt128& b) const noexcept;
+    QofInt128 pow (uint n) const noexcept;
 
 /**
  * Computes a quotient and a remainder, passed as reference parameters.
