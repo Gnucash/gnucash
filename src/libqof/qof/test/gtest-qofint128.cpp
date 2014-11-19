@@ -388,3 +388,26 @@ TEST(qofint128_functions, divide)
     EXPECT_EQ (big, big %= bigger);
     EXPECT_EQ (two, bigger /= big);
 }
+
+TEST(qofint128_functions, GCD)
+{
+    int64_t barg {INT64_C(4878849681579065407)};
+    int64_t sarg {INT64_C(4344522355275710401)};
+    uint64_t uarg {UINT64_C(13567894392130486208)};
+
+    QofInt128 one (INT64_C(1));
+    QofInt128 smallest (sarg);
+    QofInt128 smaller (barg);
+    QofInt128 small (uarg);
+
+    QofInt128 big = smaller * smallest;
+    QofInt128 bigger = small * smaller;
+
+    EXPECT_EQ (smaller, big.gcd(smaller));
+    EXPECT_EQ (smallest, big.gcd(smallest));
+    EXPECT_EQ (small, bigger.gcd(small));
+    EXPECT_EQ (smaller, bigger.gcd(smaller));
+    EXPECT_EQ (one, big.gcd (small));
+    EXPECT_EQ (one, bigger.gcd (smallest));
+    EXPECT_EQ (big, smaller.lcm (smallest));
+}

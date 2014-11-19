@@ -68,7 +68,7 @@ QofInt128::QofInt128 (int64_t upper, int64_t lower, unsigned char flags) :
     m_hi >>= 1;
 }
 
-    QofInt128::QofInt128 (uint64_t upper, uint64_t lower, unsigned char flags) :
+QofInt128::QofInt128 (uint64_t upper, uint64_t lower, unsigned char flags) :
     m_flags {flags}, m_hi {upper},
     m_lo {lower} {}
 
@@ -122,6 +122,55 @@ QofInt128::cmp (const QofInt128& b) const noexcept
     if (m_lo < b.m_lo) return -4;
     if (m_lo > b.m_lo) return 4;
     return 0;
+}
+
+/* Knuth 4.5.3 Algo B, recommended by GMP as much faster than Algo A (Euclidean
+ * method).
+ */
+QofInt128
+QofInt128::gcd(QofInt128 b) const noexcept
+{
+    if (b.isZero())
+        return *this;
+    if (isZero())
+        return b;
+
+    if (b.isOverflow() || b.isNan())
+        return b;
+    if (isOverflow() || isNan())
+        return *this;
+
+    QofInt128 a (isNeg() ? -(*this) : *this);
+    if (b.isNeg()) b = -b;
+
+    uint k {};
+    const uint64_t one {1};
+    while (!((a & one) || (b & one))) //B1
+    {
+        a >>= 1;
+        b >>= 1;
+        ++k;
+    }
+    QofInt128 t {a & one ? -b : a}; //B2
+    while (a != b)
+    {
+        while (t && (t & one ^ one)) t >>= 1;  //B3 & B4
+        if (t.isNeg())  //B5
+            b = -t;
+        else
+            a = t;
+        t = a - b;  //B6
+    }
+    return a << k;
+}
+
+/* Since u * v = gcd(u, v) * lcm(u, v), we find lcm by u / gcd * v. */
+
+QofInt128
+QofInt128::lcm(const QofInt128& b) const noexcept
+{
+    auto common = gcd(b);
+    return *this / common * b;
 }
 
 bool

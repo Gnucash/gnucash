@@ -114,7 +114,7 @@ enum // Values for m_flags
  *
  * @return A QofInt128 having the GCD.
  */
-    QofInt128 gcd (const QofInt128& b) const noexcept;
+    QofInt128 gcd (QofInt128 b) const noexcept;
 /**
  * Computes the Least Common Multiple between the object and parameter
  *
