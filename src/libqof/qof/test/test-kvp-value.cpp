@@ -88,3 +88,12 @@ TEST (KvpValueTest, Copy)
     v1->set(5.2);
     EXPECT_NE (compare (*v1, *v2), 0);
 }
+
+TEST (KvpValueTest, Stack)
+{
+    KvpValueImpl v1 {5.2};
+    auto guid = guid_new ();
+    v1 = KvpValueImpl {guid};
+
+    EXPECT_NE (nullptr, guid);
+}
