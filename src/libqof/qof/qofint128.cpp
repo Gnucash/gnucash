@@ -170,7 +170,7 @@ QofInt128
 QofInt128::lcm(const QofInt128& b) const noexcept
 {
     auto common = gcd(b);
-    return *this / common * b;
+    return *this / common * b.abs(); //Preserve our sign, discard the other's.
 }
 
 /* Knuth section 4.6.3 */
@@ -351,7 +351,7 @@ QofInt128::operator-= (const QofInt128& b) noexcept
 
     if ((!isNeg() && b.isNeg()) || (isNeg() && !b.isNeg()))
 	return this->operator+= (-b);
-    bool operand_bigger {cmp (b) < 0};
+    bool operand_bigger {abs().cmp (b.abs()) < 0};
     if (operand_bigger)
     {
         m_flags ^= neg; // ^= flips the bit
@@ -494,6 +494,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, QofInt128& q, QofIn
     uint64_t qv[sublegs] {};
     uint64_t d {(UINT64_C(1) << sublegbits)/(v[n - 1] + UINT64_C(1))};
     uint64_t carry {UINT64_C(0)};
+    bool negative {q.isNeg()};
     for (auto i = 0; i < m; ++i)
     {
         u[i] = u[i] * d + carry;
@@ -580,6 +581,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, QofInt128& q, QofIn
     q = QofInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
     r = QofInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
     r /= d;
+    if (negative) q = -q;
 }
 
 void
@@ -587,6 +589,7 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, QofInt128& q, QofInt128& r) n
 {
     uint64_t qv[sublegs] {};
     uint64_t carry {};
+    bool negative {q.isNeg()};
     for (int i = m - 1; i >= 0; --i)
     {
         qv[i] = u[i] / v;
@@ -601,6 +604,7 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, QofInt128& q, QofInt128& r) n
 
     q = QofInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
     r = QofInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
+    if (negative) q = -q;
 }
 
 }// namespace
@@ -629,6 +633,10 @@ QofInt128::div (const QofInt128& b, QofInt128& q, QofInt128& r) noexcept
         r.m_flags |= NaN;
         return;
     }
+
+    if (isNeg())
+        q.m_flags |= neg;
+
     if (b.isNeg())
         q.m_flags ^= neg;
 
