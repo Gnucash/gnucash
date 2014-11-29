@@ -5,7 +5,7 @@
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
 # @date May 2011
-# @brief Exports an invoice to lco-file for use with LaTeX
+# @brief Exports an invoice to lco-file for use with LaTeX, see \ref py_invoice_export
 #
 # The output file can be imported into KOMA-Script-letters.
 # This works primarily for germany. Internationalization welcome!
@@ -20,13 +20,14 @@
 # For an example where to get it see section credits below.
 #
 # Usage :
-# \code latex_invoice file://testfile \endcode
+# \code latex_invoice -l -f -n INVOICE_NUMBER file://testfile \endcode
 # will create file data.lco.
 # \code latex --output-format=pdf Invoice.tex \endcode
 # should run latex on file Invoice.tex and result in Invoice.pdf. Invoice.tex includes data.lco.
 #
 # Additional information :
 #
+# - Doxygen: see page \ref py_invoice_export
 # - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
 #
 # Credits to and ideas from
@@ -53,6 +54,7 @@ try:
     import getopt
     import gnucash
     import str_methods
+    from gncinvoicefkt import *
     from IPython import version_info as IPython_version_info
     if IPython_version_info[0]>=1:
         from IPython.terminal.ipapp import TerminalIPythonApp
@@ -70,32 +72,6 @@ except ImportError as import_error:
 class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
-
-def get_all_lots(account):
-  """Return all lots in account and descendants"""
-  ltotal=[]
-  descs = account.get_descendants()
-  for desc in descs:
-    if type(desc).__name__ == 'SwigPyObject':
-        desc = gnucash.Account(instance=desc)
-    ll=desc.GetLotList()
-    ltotal+=ll
-  return ltotal
-
-def get_all_invoices_from_lots(account):
-  """Return all invoices in account and descendants
-
-  This is based on lots. So invoices without lots will be missed."""
-
-  lot_list=get_all_lots(account)
-  invoice_list=[]
-  for lot in lot_list:
-    if type(lot).__name__ == 'SwigPyObject':
-        lot = gnucash.GncLot(instance=lot)
-    invoice=gnucash.gnucash_core_c.gncInvoiceGetInvoiceFromLot(lot.instance)
-    if invoice:
-      invoice_list.append(Invoice(instance=invoice))
-  return invoice_list
 
 def invoice_to_lco(invoice):
   """returns a string which forms a lco-file for use with LaTeX"""
@@ -238,7 +214,7 @@ def main(argv=None):
             print >>sys.stderr, "for help use --help"
             retcode=2
 
-        print "Prints out all invoices that have corresponding lots."
+        print "Generate a LaTeX invoice or print out all invoices."
         print
         print "Usage:"
         print
@@ -270,7 +246,7 @@ def main(argv=None):
     comm_table = book.get_table()
     EUR = comm_table.lookup("CURRENCY", "EUR")
 
-    invoice_list=get_all_invoices_from_lots(root_account)
+    invoice_list=get_all_invoices(book)
 
     if list_invoices:
         for number,invoice in enumerate(invoice_list):
