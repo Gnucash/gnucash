@@ -625,6 +625,10 @@ QofInt128::div (const QofInt128& b, QofInt128& q, QofInt128& r) noexcept
         r.m_flags |= NaN;
         return;
     }
+    assert (&q != this);
+    assert (&r != this);
+    assert (&q != &b);
+    assert (&r != &b);
 
     q.zero(), r.zero();
     if (b.isZero())
