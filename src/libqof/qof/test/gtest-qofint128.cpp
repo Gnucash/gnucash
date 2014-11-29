@@ -218,37 +218,37 @@ TEST(qofint128_functions, test_compare)
     QofInt128 overflowed (INT64_C(0), INT64_C(0), QofInt128::overflow);
     QofInt128 not_a_number (INT64_C(0), INT64_C(0), QofInt128::NaN);
 
-    EXPECT_EQ (-9, overflowed.cmp (big));
-    EXPECT_EQ (-9, not_a_number.cmp (big));
-    EXPECT_EQ (9, big.cmp (overflowed));
-    EXPECT_EQ (9, big.cmp (not_a_number));
+    EXPECT_EQ (-1, overflowed.cmp (big));
+    EXPECT_EQ (-1, not_a_number.cmp (big));
+    EXPECT_EQ (1, big.cmp (overflowed));
+    EXPECT_EQ (1, big.cmp (not_a_number));
 
     EXPECT_EQ (-1, neg_big.cmp(big));
     EXPECT_EQ (-1, neg_big.cmp(small));
     EXPECT_EQ (-1, neg_small.cmp(big));
-    EXPECT_EQ (-2, neg_big.cmp(neg_small));
-    EXPECT_EQ (2, neg_small.cmp(neg_big));
+    EXPECT_EQ (-1, neg_big.cmp(neg_small));
+    EXPECT_EQ (1, neg_small.cmp(neg_big));
 
-    EXPECT_EQ (-4, small.cmp(big));
-    EXPECT_EQ (4, big.cmp(small));
+    EXPECT_EQ (-1, small.cmp(big));
+    EXPECT_EQ (1, big.cmp(small));
     EXPECT_EQ (1, small.cmp(neg_big));
     EXPECT_EQ (1, big.cmp(neg_small));
-    EXPECT_EQ (-5, big.cmp(a_little_smaller));
+    EXPECT_EQ (-1, big.cmp(a_little_smaller));
     EXPECT_EQ (1, big.cmp(neg_a_little_smaller));
 
-    EXPECT_EQ (-4, really_big.cmp(slightly_bigger));
-    EXPECT_EQ (5, really_big.cmp(not_as_big));
-    EXPECT_EQ (-5, big.cmp(really_big));
+    EXPECT_EQ (-1, really_big.cmp(slightly_bigger));
+    EXPECT_EQ (1, really_big.cmp(not_as_big));
+    EXPECT_EQ (-1, big.cmp(really_big));
 
     EXPECT_EQ (-1, neg_really_big.cmp(big));
     EXPECT_EQ (-1, neg_really_big.cmp(not_as_big));
     EXPECT_EQ (-1, neg_really_big.cmp(slightly_bigger));
-    EXPECT_EQ (-3, neg_really_big.cmp(neg_not_as_big));
-    EXPECT_EQ (-3, neg_really_big.cmp(neg_a_little_smaller));
-    EXPECT_EQ (2, neg_really_big.cmp(neg_slightly_bigger));
-    EXPECT_EQ (3, neg_not_as_big.cmp(neg_really_big));
-    EXPECT_EQ (-2, neg_not_as_big.cmp(neg_a_little_smaller));
-    EXPECT_EQ (-3, neg_really_big.cmp(neg_a_little_smaller));
+    EXPECT_EQ (-1, neg_really_big.cmp(neg_not_as_big));
+    EXPECT_EQ (-1, neg_really_big.cmp(neg_a_little_smaller));
+    EXPECT_EQ (1, neg_really_big.cmp(neg_slightly_bigger));
+    EXPECT_EQ (1, neg_not_as_big.cmp(neg_really_big));
+    EXPECT_EQ (-1, neg_not_as_big.cmp(neg_a_little_smaller));
+    EXPECT_EQ (-1, neg_really_big.cmp(neg_a_little_smaller));
 
     EXPECT_EQ (0, neg_really_big.cmp(QofInt128(barg, sarg, QofInt128::neg)));
     EXPECT_EQ (0, really_big.cmp(QofInt128(barg, sarg)));
@@ -303,8 +303,12 @@ TEST(qofint128_functions, add_and_subtract)
     QofInt128 big (sarg, barg);
     QofInt128 bigger (static_cast<uint64_t>(barg), uarg);
     QofInt128 biggest (uarg, static_cast<uint64_t>(barg));
+    QofInt128 nsmall (UINT64_C(0), uarg, QofInt128::neg);
 
     EXPECT_EQ (QofInt128(INT64_C(2), INT64_C(499)), small += smaller);
+    EXPECT_EQ (QofInt128(INT64_C(2), INT64_C(499), QofInt128::neg),
+               nsmall -= smaller);
+
     EXPECT_EQ (QofInt128(uarg), small -= smaller);
     EXPECT_EQ (QofInt128(static_cast<uint64_t>(barg + sarg/2), UINT64_MAX),
                bigger += big);
@@ -352,6 +356,8 @@ TEST(qofint128_functions, divide)
     QofInt128 small (uarg);
     QofInt128 big (sarg, barg);
     QofInt128 bigger (static_cast<uint64_t>(barg), uarg);
+    QofInt128 nsmall = -small;
+    QofInt128 nbig = -bigger;
 
     EXPECT_EQ (QofInt128(INT64_C(0)), zero /= smallest);
     EXPECT_EQ (QofInt128(INT64_C(0)), zero %= smallest);
@@ -361,6 +367,18 @@ TEST(qofint128_functions, divide)
     QofInt128 r {}, q {};
 
     small.div (smaller, q, r);
+    EXPECT_EQ (two, q);
+    EXPECT_EQ (QofInt128(INT64_C(3810195028972355394)), r);
+
+    small.div (-smaller, q, r);
+    EXPECT_EQ (-two, q);
+    EXPECT_EQ (QofInt128(INT64_C(3810195028972355394)), r);
+
+    nsmall.div (smaller, q, r);
+    EXPECT_EQ (-two, q);
+    EXPECT_EQ (QofInt128(INT64_C(3810195028972355394)), r);
+
+    nsmall.div (-smaller, q, r);
     EXPECT_EQ (two, q);
     EXPECT_EQ (QofInt128(INT64_C(3810195028972355394)), r);
 
@@ -377,6 +395,21 @@ TEST(qofint128_functions, divide)
     EXPECT_EQ (QofInt128(INT64_C(3162679692459777845)), r);
 
     bigger.div (big, q, r);
+    EXPECT_EQ (two, q);
+    EXPECT_EQ (QofInt128(UINT64_C(534327326303355007),
+                         UINT64_C(3810195028972355394)), r);
+
+    bigger.div (-big, q, r);
+    EXPECT_EQ (-two, q);
+    EXPECT_EQ (QofInt128(UINT64_C(534327326303355007),
+                         UINT64_C(3810195028972355394)), r);
+
+    nbig.div (-big, q, r);
+    EXPECT_EQ (two, q);
+    EXPECT_EQ (QofInt128(UINT64_C(534327326303355007),
+                         UINT64_C(3810195028972355394)), r);
+
+    nbig.div (-big, q, r);
     EXPECT_EQ (two, q);
     EXPECT_EQ (QofInt128(UINT64_C(534327326303355007),
                          UINT64_C(3810195028972355394)), r);

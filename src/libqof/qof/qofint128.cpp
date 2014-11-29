@@ -104,23 +104,23 @@ int
 QofInt128::cmp (const QofInt128& b) const noexcept
 {
     if (m_flags & (overflow | NaN))
-        return -9;
+        return -1;
     if (b.isOverflow () || b.isNan ())
-        return 9;
+        return 1;
     if (m_flags & neg)
     {
 	if (!b.isNeg()) return -1;
-	if (m_hi > b.m_hi) return -3;
-	if (m_hi < b.m_hi) return 3;
-	if (m_lo > b.m_lo) return -2;
-	if (m_lo < b.m_lo) return 2;
+	if (m_hi > b.m_hi) return -1;
+	if (m_hi < b.m_hi) return 1;
+	if (m_lo > b.m_lo) return -1;
+	if (m_lo < b.m_lo) return 1;
 	return 0;
     }
     if (b.isNeg()) return 1;
-    if (m_hi < b.m_hi) return -5;
-    if (m_hi > b.m_hi) return 5;
-    if (m_lo < b.m_lo) return -4;
-    if (m_lo > b.m_lo) return 4;
+    if (m_hi < b.m_hi) return -1;
+    if (m_hi > b.m_hi) return 1;
+    if (m_lo < b.m_lo) return -1;
+    if (m_lo > b.m_lo) return 1;
     return 0;
 }
 
