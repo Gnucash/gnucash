@@ -1262,7 +1262,7 @@ test_xaccTransGetAccountConvRate (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check->hits, ==, 0);
     split1->value = gnc_numeric_zero();
     rate = xaccTransGetAccountConvRate (fixture->txn, fixture->acc1);
-    g_assert_cmpint (gnc_numeric_check (rate), ==, GNC_ERROR_ARG);
+    g_assert_cmpint (gnc_numeric_check (rate), ==, GNC_ERROR_OVERFLOW);
     g_assert_cmpint (check->hits, ==, 1);
 }
 /* xaccTransGetAccountBalance

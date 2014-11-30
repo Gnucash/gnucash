@@ -1683,6 +1683,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check.hits, ==, 0);
 
     /* Now invent some value/ammount pairs which cause numeric errors to test the limits */
+/* This one was supposed to overflow, but it doesn't any more.
     split->amount = gnc_numeric_create (987654321, 10);
     split->value = gnc_numeric_create (3, 789304166);
     quotient = gnc_numeric_div (split->value, split->amount,
@@ -1702,7 +1703,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     g_assert (gnc_numeric_equal (result, expected));
     g_assert_cmpint (check.hits, ==, 2);
     g_free (check.msg);
-
+    */
     split->amount = gnc_numeric_create (987654321, 10);
     split->value = gnc_numeric_create (3, 0);
     quotient = gnc_numeric_div (split->value, split->amount,
@@ -1720,7 +1721,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     expected = gnc_numeric_create (0, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
-    g_assert_cmpint (check.hits, ==, 4);
+    g_assert_cmpint (check.hits, ==, 2);
     g_free (check.msg);
 
     split->amount = gnc_numeric_create (9, 0);
@@ -1740,7 +1741,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     expected = gnc_numeric_create (0, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
-    g_assert_cmpint (check.hits, ==, 6);
+    g_assert_cmpint (check.hits, ==, 4);
     g_free (check.msg);
 
     g_log_remove_handler (logdomain, hdlr);
