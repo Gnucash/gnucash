@@ -2,20 +2,20 @@
 # Messages in Deutsch für GnuCash
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
-# Christian Stimming <stimming@tuhh.de>, 2001-2010.
+# Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2010.
+# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2014.
 # Rolf Leggewie 2008
-# Mechtilde Stehmann <ooo@mechtilde.de>
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-03 11:48+0100\n"
-"PO-Revision-Date: 2013-12-03 12:31+0100\n"
-"Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
+"PO-Revision-Date: 2014-09-30 12:17+0200\n"
+"Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
 "MIME-Version: 1.0\n"
@@ -974,9 +974,8 @@ msgstr "Auslagenerstattung anzeigen"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2332
 #: ../src/business/business-gnome/dialog-invoice.c:2508
-#, fuzzy
 msgid "Bill Information"
-msgstr "Rechnungs-Informationen"
+msgstr "Lieferantenrechnungs-Informationen"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2334
 #: ../src/business/business-gnome/dialog-invoice.c:2511
@@ -986,9 +985,8 @@ msgstr "Rechnungsnummer des Lieferanten"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2337
 #: ../src/business/business-gnome/dialog-invoice.c:2515
-#, fuzzy
 msgid "Voucher Information"
-msgstr "Rechnungs-Informationen"
+msgstr "Auslagen-Informationen"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2339
 #: ../src/business/business-gnome/dialog-invoice.c:2518
@@ -1001,9 +999,8 @@ msgid "Date of duplicated entries"
 msgstr "Datum der kopierten Einträge"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2850
-#, fuzzy
 msgid "Do you really want to post these invoices?"
-msgstr "Wollen Sie diese Rechnung wirklich buchen?"
+msgstr "Wollen Sie diese Rechnungen wirklich buchen?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2916
 msgid "View/Edit Invoice"
@@ -1497,9 +1494,8 @@ msgid "Customers Overview"
 msgstr "Kundenübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
-#, fuzzy
 msgid "Open a Customer overview page"
-msgstr "Den Dialog für das Anlegen neuer Kunden öffnen"
+msgstr "Öffne eine Seite mit der Kundenübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:160
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:161
@@ -1574,9 +1570,8 @@ msgid "Vendors Overview"
 msgstr "Lieferantenübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
-#, fuzzy
 msgid "Open a Vendor overview page"
-msgstr "Neue Ansicht der Kontenhierarchie öffnen"
+msgstr "Öffne eine Seite mit der Lieferantenübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "_Vendor"
@@ -1623,10 +1618,8 @@ msgid "Employees Overview"
 msgstr "Mitarbeiterübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
-#, fuzzy
 msgid "Open a Employee overview page"
-msgstr ""
-"Den Dialog für das Anlegen neuer Mitarbeiterinnen und Mitarbeitern öffnen"
+msgstr "Öffne eine Seite mit der Mitarbeiterübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:244
 msgid "_Employee"
@@ -1991,29 +1984,24 @@ msgid "Edit the selected employee"
 msgstr "Ausgewählten Mitarbeiter bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:157
-#, fuzzy
 msgid "Create a new vendor"
-msgstr "Eine neue Datei anlegen"
+msgstr "Einen neuen Lieferanten anlegen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:162
-#, fuzzy
 msgid "Create a new customer"
-msgstr "Ein neues Konto eröffnen"
+msgstr "Einen neuen Kunden anlegen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:167
-#, fuzzy
 msgid "Create a new employee"
-msgstr "Eine neue Datei anlegen"
+msgstr "Einen neuen Mitarbeiter anlegen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:173
-#, fuzzy
 msgid "_Delete Owner..."
-msgstr "_Konto löschen..."
+msgstr "_Inhaber löschen..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:174
-#, fuzzy
 msgid "Delete selected owner"
-msgstr "Ausgewähltes Konto löschen"
+msgstr "Ausgewählten Inhaber löschen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:181
 #: ../src/gnome/gnc-plugin-page-account-tree.c:230
@@ -2025,24 +2013,20 @@ msgid "_Filter By..."
 msgstr "_Filtern nach..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:188
-#, fuzzy
 msgid "Create a new bill"
-msgstr "Eine neue Datei anlegen"
+msgstr "Eine neue Rechnung anlegen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:193
-#, fuzzy
 msgid "Create a new invoice"
-msgstr "Eine neue Datei anlegen"
+msgstr "Eine neue Rechnung anlegen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:197
-#, fuzzy
 msgid "New _Voucher..."
-msgstr "Neue Auslagen_erstattung..."
+msgstr "Neue Gutschrift..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:198
-#, fuzzy
 msgid "Create a new voucher"
-msgstr "Neues Budget erstellen"
+msgstr "Neue Gutschrift erstellen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:202
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:277
@@ -2142,13 +2126,13 @@ msgid "(no name)"
 msgstr "(unbenannt)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:1067
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
 msgstr ""
-"Das Konto ist nicht ausgeglichen. Sind Sie sicher, dass Sie das Abgleichen "
-"beenden wollen?"
+"Der Geschäftspartner %s wird gelöscht.\n"
+"Sind Sie sicher, dass Sie das wollen?"
 
 #. * @}
 #. * @}
@@ -2164,9 +2148,8 @@ msgstr ""
 #: ../src/import-export/csv-import/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in.h:1
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:17
 #: ../src/import-export/qif-import/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "Last window position and size"
-msgstr "Fensterposition und Größe"
+msgstr "Letzte Fensterposition und Größe"
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:2
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:42
@@ -2180,15 +2163,14 @@ msgstr "Fensterposition und Größe"
 #: ../src/import-export/csv-import/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in.h:2
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:18
 #: ../src/import-export/qif-import/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in.h:5
-#, fuzzy
 msgid ""
 "This setting describes the size and position of the window when it was last "
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"Diese Einstellung enthält die Bildschirmkoordinaten des Fensters vom letzten "
-"Öffnen. Die X/Y-Koordinaten sind für die linke obere Ecke des Fensters "
-"gespeichert, zusammen mit der Breite und Höhe des Fensters."
+"Diese Einstellung enthält die Bildschirmkoordinaten des Fensters vor dem letzten "
+"Schließen. Die X/Y-Koordinaten sind für die linke obere Ecke des Fensters "
+"gespeichert, gefolgt von der Breite und Höhe des Fensters."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:3
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:4
@@ -2218,7 +2200,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:7
 msgid "Auto pay when posting."
-msgstr ""
+msgstr "Beim Buchen existierende Zahlungen abgleichen."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:8
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:26
@@ -2228,7 +2210,11 @@ msgid ""
 "documents obviously have to be against the same customer. Counter documents "
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
-msgstr ""
+msgstr "Während des Buchungsvorgangs wird versucht Kundendokumente mit"
+" bereits geleisteten Vorauszahlungen und Gegendokumentenen zu verrechnen."
+" Die Vorauszahlungen und Gegendokumente müssen natürlich denselben Kunden betreffen."
+" Gegendokumente sind Dokumente mit umgekehrtem Vorzeichen. Zu einer Rechnung wären"
+" beispielsweise Gutschriften und negative Rechnungen als Gegendokumente zu betrachten."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:9
 msgid "Enable extra toolbar buttons for business"
@@ -2365,7 +2351,7 @@ msgstr "<b>Rechnungsausgang</b>"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:7
 msgid "Ta_x included"
-msgstr "Inklusive _Steuern"
+msgstr "_Inklusive Steuern"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:8
 msgid ""
@@ -2386,7 +2372,7 @@ msgstr "_Tage im Voraus:"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:11
 msgid "_Notify when due"
-msgstr "Bei Erstellung _benachrichtigen"
+msgstr "Bei Fälligkeit _benachrichtigen"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
@@ -2449,15 +2435,15 @@ msgstr "Zusätzliche _Werkzeugleisten-Knöpfe"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:24
 msgid "Report for printing:"
-msgstr "Bericht zum Drucken:"
+msgstr "Bericht zum _Drucken:"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:25
 msgid "Auto pay on post_ing"
-msgstr ""
+msgstr "Automatisch durchbuchen"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:27
 msgid "Auto _pay on posting"
-msgstr ""
+msgstr "Automatisch durchbuchen"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:1
 msgid "Cancel your changes"
@@ -3113,9 +3099,8 @@ msgid "Number"
 msgstr "Nummer"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:10
-#, fuzzy
 msgid "Documents"
-msgstr "Anpassungsbuchungen"
+msgstr "Buchungen"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:11
 msgid ""
@@ -3197,9 +3182,8 @@ msgid "Memo"
 msgstr "Buchungstext"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:21
-#, fuzzy
 msgid "Transaction Details"
-msgstr "Buchungsbericht"
+msgstr "Buchungsdetails"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:22
 msgid "Transfer Account"
@@ -5156,7 +5140,6 @@ msgstr "Gewähltes Konto öffnen"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
 #: ../src/gnome/gnc-plugin-page-account-tree.c:284
-#, fuzzy
 msgid "Open _SubAccounts"
 msgstr "_Unterkonten öffnen"
 
@@ -6133,7 +6116,6 @@ msgid "_Edit 2"
 msgstr "_Bearbeiten"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:151
-#, fuzzy
 msgid "Edit the selected scheduled transaction 2"
 msgstr "Ausgewählte terminierte Buchung bearbeiten"
 
@@ -6147,9 +6129,8 @@ msgid "Transactions"
 msgstr "Buchungen"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:432
-#, fuzzy, c-format
 msgid "Upcoming Transactions"
-msgstr "Stornierte Buchungssätze"
+msgstr "Bevorstehende Buchungen"
 
 #. FIXME: Does this always refer to only one transaction? Or could
 #. multiple SXs be deleted as well? Ideally, the number of
@@ -7866,9 +7847,9 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Dieser Assistent hilft Ihnen, Konten in GnuCash zu erstellen. Ein Konto kann "
-"entweder Aktiva (Vermögen), Passiva (Schulden), Erträge (Einnahmen) oder "
-"Aufwendungen (Ausgaben) repräsentieren.\n"
+"Dieser Assistent hilft Ihnen, in GnuCash Konten für Ihre Aktiva (Geld- "
+"entweder Aktiva (Vermögen), Verbindlichkeiten (Schulden), Erträge (Einnahmen) oder "
+"Aufwendungen (Ausgaben) und  Erträge (Einnahmen) zu erstellen.\n"
 "\n"
 "Drücken Sie »Abbrechen«, wenn Sie keine neuen Konten erstellen möchten."
 
@@ -8414,13 +8395,12 @@ msgstr ""
 "speichern."
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:23
-#, fuzzy
 msgid "Stock Split Finish"
-msgstr "Aktienteilung"
+msgstr "Abschluß der Aktienteilung"
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:1
 msgid "Securities"
-msgstr "Währungen"
+msgstr "Wertpapiere"
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:2
 msgid "<b>Securities</b>"
@@ -8456,7 +8436,6 @@ msgid "Payment periods"
 msgstr "Zahlungsintervalle"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:4
-#, fuzzy
 msgid "Clear the entry."
 msgstr "Löschen des Eintrages"
 
@@ -9130,9 +9109,8 @@ msgid "Template Transaction"
 msgstr "Buchungsvorlage"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:40
-#, fuzzy
 msgid "Bi-Weekly"
-msgstr "Wöchentlich"
+msgstr "Zwei-Wöchentlich"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:44
 msgid "Since Last Run..."
@@ -9429,9 +9407,8 @@ msgid "Reason for voiding transaction:"
 msgstr "Begründung für Buchung ungültig machen:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:5
-#, fuzzy
 msgid "_Transaction Number:"
-msgstr "_Vollständig"
+msgstr "_Buchungsnummer"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:26
 msgid "Sort register by..."
@@ -9442,19 +9419,16 @@ msgid "_Standard Order"
 msgstr "_Standardreihenfolge"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:28
-#, fuzzy
 msgid "Keep normal account order."
-msgstr "Beibehalten der normalen Kontoreihenfolge"
+msgstr "Beibehalten der normalen Kontenreihenfolge"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:30
 #: ../intl-scm/guile-strings.c:4542 ../intl-scm/guile-strings.c:4598
-#, fuzzy
 msgid "Sort by date."
 msgstr "Nach Datum sortieren"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:32
-#, fuzzy
 msgid "Sort by the date of entry."
 msgstr "Sortiere nach Datum der Einträge"
 
@@ -9474,9 +9448,8 @@ msgid "Num_ber"
 msgstr "_Nummer"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:36
-#, fuzzy
 msgid "Sort by number."
-msgstr "Sortiere nach Nummer"
+msgstr "Nach Nummer sortieren"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:37
 msgid "Amo_unt"
@@ -12183,9 +12156,8 @@ msgid "Print Name"
 msgstr "Gedruckter Name"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:408
-#, fuzzy
 msgid "Display symbol"
-msgstr "Das Tickersymbol anzeigen"
+msgstr "Anzeigesymbol"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:414
 msgid "Unique Name"
@@ -12221,39 +12193,32 @@ msgid "Timezone"
 msgstr "Zeitzone"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:398
-#, fuzzy
 msgid "Owner Name"
-msgstr "Mandantenname"
+msgstr "Inhabername"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:409
-#, fuzzy
 msgid "Owner ID"
-msgstr "Bestellungsnummer"
+msgstr "Inhaber ID"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:419
-#, fuzzy
 msgid "Address Name"
-msgstr "Adresse: "
+msgstr "Adressname: "
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:424
-#, fuzzy
 msgid "Address 1"
-msgstr "Adresse: "
+msgstr "Adresse 1: "
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:429
-#, fuzzy
 msgid "Address 2"
-msgstr "Adresse: "
+msgstr "Adresse 2: "
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:434
-#, fuzzy
 msgid "Address 3"
-msgstr "Adresse: "
+msgstr "Adresse 3: "
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:439
-#, fuzzy
 msgid "Address 4"
-msgstr "Adresse: "
+msgstr "Adresse 4: "
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../src/gnome-utils/gnc-tree-view-owner.c:449
@@ -12262,7 +12227,6 @@ msgid "Fax"
 msgstr "Fax:"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:454
-#, fuzzy
 msgid "E-mail"
 msgstr "E-Mail:"
 
@@ -12278,14 +12242,12 @@ msgid "Security"
 msgstr "Wertpapier"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:807
-#, fuzzy
 msgid "Status Bar"
-msgstr "_Statusleiste"
+msgstr "Statusleiste"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:1552
-#, fuzzy
 msgid " Scheduled "
-msgstr "Terminiert"
+msgstr " Terminiert "
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2413
 #: ../src/register/ledger-core/split-register-control.c:1531
@@ -13486,29 +13448,23 @@ msgid "Sample:"
 msgstr "Beispiel:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:38
-#, fuzzy
 msgid "<b>Account Color</b>"
-msgstr "<b>_Konten</b>"
+msgstr "<b>_Kontofarbe</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:39
-#, fuzzy
 msgid "Show the Account Color as background"
-msgstr "Kurs-Markierung Spalte anzeigen"
-
+msgstr "Kontofarbe als Hintergrund anzeigen"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:40
-#, fuzzy
 msgid "Show the Account Color as Account Name Background."
-msgstr "Lange Kontenbezeichung in der Legende anzeigen?"
+msgstr "Kontofarbe als Hintergrund für Kontoname anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:41
-#, fuzzy
 msgid "Show the Account Color on tabs"
-msgstr "Kontonummer anzeigen"
+msgstr "Kontofarbe auf Reiter anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:42
-#, fuzzy
 msgid "Show the Account Color as tab background."
-msgstr "Kontonummer für Zwischensummen anzeigen?"
+msgstr "Kontofarbe als Reiterhintergrund anzeigen?"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:44
 msgid "<b>Fancy Date Format</b>"
@@ -16335,79 +16291,78 @@ msgid ""
 "description, notes and color.\n"
 "\n"
 "Click on 'Forward' to proceed or 'Cancel' to Abort Import.\n"
-msgstr ""
+msgstr "\n"
+"Dieser Assistent wird Ihnen helfen, Konten aus einer Datei zu importieren.\n"
+"\n"
+"Die Datei muß im selben Format vorliegen wie das, welches von GnuCash beim"
+" Export erstellt wird, da es sich um ein festes Format handelt. Falls ein"
+" Konto mit dem vollständigen Name bisher nicht existiert wird es erstellt,"
+" sofern die Währung oder das Wertpapier, in dem es notiert wird bereits im"
+" Programm oder ihrer GnuCash-Datei definiert ist. Falls das Konto bereits"
+" existiert, werden vier Felder aktualisiert. Diese sind Kontonummer,"
+" Beschreibung, Bemerkungen und Farbe.\n"
+"\n"
+"Um fortzufahren drücken Sie 'Vor' oder 'Abbrechen', um den Import abzubrechen.\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:9
-#, fuzzy
 msgid "Import Account Assistant"
-msgstr "_Konten exportieren"
+msgstr "_Konten importieren"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:10
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Es gibt für diesen Bericht keine Optionen."
+msgstr "\n"
+"Bestimmen Sie Ort und Namen der Datei für den Import...\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:13
-#, fuzzy
 msgid "Choose File to Import"
-msgstr "Wählen Sie eine Datei, die importiert werden soll"
+msgstr "Wählen Sie die zu importierende Datei"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:14
-#, fuzzy
 msgid "Number of rows for the Header"
-msgstr "Zahlenüberschrift"
+msgstr "Spaltenanzahl der Kopfzeile"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:15
-#, fuzzy
 msgid "Semicolon Separated"
 msgstr "Semikolon-getrennt"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:16
-#, fuzzy
 msgid "Semicolon Separated with Quotes"
 msgstr "Semikolon-getrennt mit Anführungszeichen"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:17
-#, fuzzy
 msgid "Comma Separated"
 msgstr "Komma-getrennt"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:18
-#, fuzzy
 msgid "Comma Separated with Quotes"
 msgstr "Komma-getrennt mit Anführungszeichen"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:19
-#, fuzzy
 msgid "Custom regular Expression"
-msgstr "Benutzerdefinierter Regulärer Ausdruck"
+msgstr "Benutzerdefinierter regulärer Ausdruck"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:20
-#, fuzzy
 msgid "Select Separator Type"
-msgstr "2. Wählen Sie die Import-Art"
+msgstr "Wählen Sie das Trennzeichen"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:21
-#, fuzzy
 msgid "Preview"
-msgstr "4. Vorschau"
+msgstr "Vorschau"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:22
 msgid "Import Account Preview, first 10 rows only"
-msgstr ""
+msgstr "Kontenimport-Vorschau der ersten 10 Zeilen"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:25
-#, fuzzy
 msgid "Import Accounts Now"
-msgstr "_Konten exportieren"
+msgstr "_Konten jetzt importieren"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:27
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:47
-#, fuzzy
 msgid "Import Summary"
-msgstr "Kontenübersicht"
+msgstr "importiere Kontenübersicht"
 
 #. If it fails, change back to the old encoding.
 #: ../src/import-export/csv-import/assistant-csv-trans-import.c:502
@@ -16664,24 +16619,20 @@ msgid "%s column could not be understood."
 msgstr "Spalte %s konnte nicht verarbeitet werden."
 
 #: ../src/import-export/csv-import/gnc-plugin-csv-import.c:48
-#, fuzzy
 msgid "Import _Accounts from CSV..."
-msgstr "_Konten exportieren"
+msgstr "_Konten importieren"
 
 #: ../src/import-export/csv-import/gnc-plugin-csv-import.c:49
-#, fuzzy
 msgid "Import Accounts from a CSV file"
-msgstr "Buchungen aus Textdatei importieren"
+msgstr "Konten aus Textdatei importieren"
 
 #: ../src/import-export/csv-import/gnc-plugin-csv-import.c:53
-#, fuzzy
 msgid "Import _Transactions from CSV..."
-msgstr "Buchungen aus Textdatei importieren"
+msgstr "_Buchungen importieren aus CSV..."
 
 #: ../src/import-export/csv-import/gnc-plugin-csv-import.c:54
-#, fuzzy
 msgid "Import Transactions from a CSV file"
-msgstr "Buchungen aus Textdatei importieren"
+msgstr "Buchungen aus Datei mit durch Komma o.ä. getrennten Werten importieren"
 
 #: ../src/import-export/dialog-import.glade.h:2
 msgid "Enable skip transaction action"
@@ -17928,7 +17879,6 @@ msgstr ""
 "als »Unbestätigt« markiert."
 
 #: ../src/import-export/qif-import/dialog-account-picker.glade.h:11
-#, fuzzy
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
@@ -18103,24 +18053,23 @@ msgstr "4. Vorschau"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:15
 msgid "Open imported documents in tabs"
-msgstr ""
+msgstr "Importierte Dokumente in Tabs öffnen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:16
 msgid "Open not yet posted documents in tabs "
-msgstr ""
+msgstr "Öffne noch nicht gebuchte Dokumente in Unterfenstern "
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:17
 msgid "Don't open imported documents in tabs"
-msgstr ""
+msgstr "Importierte Dokumente nicht in Tabs öffnen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:18
 msgid "5. Afterwards"
-msgstr ""
+msgstr "5. Danach"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:169
-#, fuzzy
 msgid "Import Customers from csv"
-msgstr "Rechnungen oder Lieferantenrechnungen aus CSV-Datei importieren"
+msgstr "Kunden aus CSV-Datei importieren"
 
 #. import
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:185
@@ -18129,9 +18078,8 @@ msgid "customers"
 msgstr "Kunde"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:186
-#, fuzzy
 msgid "vendors"
-msgstr "Lieferant"
+msgstr "Lieferanten"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:194
 #, fuzzy, c-format
@@ -18156,50 +18104,44 @@ msgstr ""
 
 #. Menu Items
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
-#, fuzzy
 msgid "I_mport"
-msgstr "Import"
+msgstr "I_mport"
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "Import Customers and Vendors"
-msgstr ""
+msgstr "Importiert Kunden und Lieferanten"
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "customer_import tooltip"
 msgstr ""
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
-#, fuzzy
 msgid "Import customers or vendors from text file"
-msgstr "Buchungen aus Textdatei importieren"
+msgstr "Importiert Kunden oder Lieferanten aus Textdatei"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
-#, fuzzy
 msgid "<b>1. Choose the file to import</b>"
-msgstr "1. Wählen Sie eine Datei, die importiert werden soll"
+msgstr "<b>1. Wählen Sie die zu importierende Datei</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:4
 msgid "For importing customer lists."
-msgstr ""
+msgstr "Zum Import von Kunden-Listen"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:6
 msgid "For importing vendor lists."
-msgstr ""
+msgstr "Zum Import von Lieferanten-Listen"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:7
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "2. Wählen Sie die Import-Art"
+msgstr "<b>2. Wählen Sie die Import-Art</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:13
-#, fuzzy
 msgid "<b>3. Select import options</b>"
-msgstr "2. Wählen Sie die Importoptionen"
+msgstr "<b>3. Bestimmen Sie die Importoptionen</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
-#, fuzzy
 msgid "<b>3. Preview</b>"
-msgstr "4. Vorschau"
+msgstr "<b>4. Vorschau</b>"
 
 #: ../src/register/ledger-core/split-register.c:184
 msgid ""
@@ -18207,7 +18149,7 @@ msgid ""
 "editing it there first."
 msgstr ""
 "Diese Buchung wird bereits von einem anderen Kontofenster aus bearbeitet. "
-"Bitte beenden Sie zuerst diese Bearbeitung, indem Sie in dem anderen "
+"Bitte beenden Sie zuerst jene Bearbeitung, indem Sie in dem anderen "
 "Kontofenster »Eingabe« oder »Abbrechen« wählen. "
 
 #: ../src/register/ledger-core/split-register.c:451
@@ -18304,7 +18246,7 @@ msgstr "sample:Bemerkungsfeld irgendein Beispieltext"
 
 #: ../src/register/ledger-core/split-register-layout.c:801
 msgid "sample:No Particular Reason"
-msgstr "sample:No Particular Reason"
+msgstr "sample:Keinen besonderen Grund"
 
 #: ../src/register/ledger-core/split-register-layout.c:809
 #: ../src/register/ledger-core/split-register-layout.c:817
@@ -18349,7 +18291,7 @@ msgstr "Gesamt Soll"
 
 #: ../src/register/ledger-core/split-register-model.c:416
 msgid "Tot Shares"
-msgstr "Anzahl Aktien gesamt"
+msgstr "Anzahl Anteile gesamt"
 
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
@@ -18358,20 +18300,20 @@ msgid "Scheduled"
 msgstr "Terminiert"
 
 #: ../src/register/ledger-core/split-register-model.c:984
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
 msgstr ""
-"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+"Geben Sie die Buchungsreferenz, z.B. die Rechnungs- oder Scheck-Nummer,"
+" welche für die gesamte Buchung gilt, ein."
 
 #: ../src/register/ledger-core/split-register-model.c:986
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr ""
-"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+"Geben Sie die Buchungsreferenz, z.B. die Rechnungs- oder Scheck-Nummer,"
+" für diesen Buchungsteil ein."
 
 #: ../src/register/ledger-core/split-register-model.c:991
 #, fuzzy
@@ -20374,10 +20316,9 @@ msgstr "eine"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:604
-#, fuzzy
 msgid "Display liabilities and equity below assets."
 msgstr ""
-"Zeigt die Passiva Eigenkapital und Verbindlichkeiten unter den Aktiva an"
+"Zeigt die Passiva (Verbindlichkeiten und Eigenkapital) unter den Aktiva an."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:606
@@ -20386,9 +20327,8 @@ msgstr "zwei"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:608
-#, fuzzy
 msgid "Display assets on the left, liabilities and equity on the right."
-msgstr "Stellt Aktiva links und Passiva rechts dar"
+msgstr "Stellt Aktiva links und Passiva (Verbindlichkeiten und Eigenkapital) rechts dar."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:610
@@ -20397,7 +20337,6 @@ msgstr "Vorzeichen"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:612
-#, fuzzy
 msgid "Prefix negative amounts with a minus sign, e.g. -$10.00."
 msgstr "Stelle negativen Beträgen ein Minuszeichen voran, z.B. -10,00 €"
 
@@ -20486,7 +20425,6 @@ msgstr "Kostenspalte anzeigen"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:652
-#, fuzzy
 msgid "Show the column with the expenses per customer."
 msgstr "Die Spalte mit den Kosten pro Kunde anzeigen"
 
@@ -20497,7 +20435,6 @@ msgstr "Geschäftsadresse anzeigen"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:656
-#, fuzzy
 msgid "Show your own company's address and the date of printing."
 msgstr "Ihre eigene Geschäftsadresse und das Druckdatum anzeigen"
 
@@ -27219,7 +27156,6 @@ msgstr ""
 "Buchungsansicht »Aktive vollständig« oder »Vollständig« wählen."
 
 #: ../doc/tip_of_the_day.list.in:29
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
@@ -27229,8 +27165,8 @@ msgstr ""
 "Wenn Sie Beträge im Kontobuch eingeben, können Sie das Eingabefeld wie einen "
 "einfachen Taschenrechner benutzen. Es gibt die Funktionen Addieren, "
 "Subtrahieren, Multiplizieren und Dividieren. Tippen Sie einfach einen Wert, "
-"gefolgt von »+«, »-«, »*« oder »/«, gefolgt von einem zweiten Wert. Das "
-"anschließende Drücken von »Eingabe« wird den berechneten Betrag buchen."
+"gefolgt von »+«, »-«, »*« oder »/«, gefolgt von einem zweiten Wert. Nach "
+"anschließendem Drücken von »Eingabe« wird der berechnete Betrag gebucht."
 
 #: ../doc/tip_of_the_day.list.in:34
 msgid ""
@@ -27351,6 +27287,16 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"Der Editor für die terminierten Buchungen verfügt über eine sehr flexible Konfiguration "
+"der Häufigkeit. Die Standardhäufigkeit, um eine Buchung zu terminieren, sind "
+"täglich, wöchentlich und monatlich. Es können auch erweiterte Schemata eingerichtet "
+"werden. Einige Beispiele:\n"
+"\n"
+"Um eine Buchung für jede dritte Woche zu terminieren, können Sie die wöchtliche "
+"Standardhäufigkeit wählen und dann 'Jede 3. Woche'.\n"
+"\n"
+"Um eine Buchung für jedes Jahr zu terminieren, können Sie die monatliche Standard"
+"häufigkeit wählen und dann 'Alle 12 Monate'."
 
 #: ../doc/tip_of_the_day.list.in:86
 msgid ""
