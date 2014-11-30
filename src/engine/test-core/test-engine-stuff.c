@@ -436,21 +436,22 @@ get_random_gnc_numeric(void)
     if (0 == deno) deno = 1;
 
     /* Arbitrary random numbers can cause pointless overflow during
-     * calculations.  Limit dynamic range to 1E18 because int64_t
-     * overflows before 1E19. The initial division is to help us down
-     * towards the range.  The loop is to "make sure" we get there.
-     * We might want to make this dependent on "deno" in the future.
+     * calculations, in particular the revaluing in xaccSplitSetValue where an
+     * input gnc_numeric is converted to use a new denominator. To prevent that,
+     * the numerator is clamped to the larger of num_limit / deno or num_limit /
+     * max_denom_mult.
      */
-    static const int64_t num_limit = 10000000000000LL; //1E14
+    static const int64_t num_limit = 1000000000000000000LL; //1E18
     static const int64_t max_denom_mult = 1000000LL; //1E6
+    const int64_t limit = num_limit / (max_denom_mult / deno == 0 ? max_denom_mult : max_denom_mult / deno);
     numer = get_random_gint64 ();
-    if (numer > num_limit * (deno > max_denom_mult ? max_denom_mult : deno))
+    if (numer > limit)
     {
-	int64_t num = numer % (num_limit * (deno > max_denom_mult ? max_denom_mult : deno));
+         int64_t num = numer % limit;
 	if (num)
 	    numer = num;
 	else
-	    numer = num_limit * (deno > max_denom_mult ? max_denom_mult : deno);
+             numer = limit;
     }
     if (0 == numer) numer = 1;
     return gnc_numeric_create(numer, deno);
@@ -1287,7 +1288,14 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
             fprintf(stderr, "get_random_split: Created split with zero value: %p\n", ret);
 
         if (!do_bork())
+/* Another overflow-prevention measure. A numerator near the overflow limit can
+ * be made too large by replacing the denominator with a smaller scu.
+ */
+        {
+            if (val.denom > scu && val.num / val.denom > (1LL << 63) / scu)
+                val.num /=  scu;
             val.denom = scu;
+        }
     }
     while (gnc_numeric_check(val) != GNC_ERROR_OK);
     xaccSplitSetValue(ret, val);
@@ -1321,6 +1329,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     else
         g_assert(!gnc_numeric_positive_p(amt)); /* non-positive amt */
 
+//    g_assert(amt.num < (2LL << 56));
     qof_instance_set_slots(QOF_INSTANCE (ret), get_random_kvp_frame());
     xaccTransCommitEdit(trn);
 
