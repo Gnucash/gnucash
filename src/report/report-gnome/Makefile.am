@@ -114,10 +114,16 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/backend/xml \
+  --library-dir    ${top_builddir}/src/backend/sql \
+  --library-dir    ${top_builddir}/src/html \
+  --library-dir    ${top_builddir}/src/report/report-system \
   --library-dir    ${top_builddir}/src/report/report-gnome
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
@@ -133,7 +139,7 @@ endif
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = report .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = report .scm-links ${SCM_FILE_LINKS} ${gncscmmodcache_DATA}
 MAINTAINERCLEANFILES = swig-report-gnome.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.gui\"
