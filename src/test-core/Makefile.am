@@ -126,7 +126,7 @@ clean-local:
 	$(RM) -rf gnucash
 
 noinst_DATA = .scm-links
-CLEANFILES = .scm-links
+CLEANFILES = .scm-links ${gncscmmodcache_DATA}
 
 EXTRA_DIST = \
   $(SCM_FILES) \

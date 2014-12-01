@@ -210,9 +210,10 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
-  --library-dir    ${top_builddir}/src/app-utils \
-  --library-dir    ${top_builddir}/src/core-utils \
-  --library-dir    ${top_builddir}/src/gnc-module
+  --library-dir    ${top_builddir}/src/libqof/qof \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/app-utils
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
@@ -230,7 +231,12 @@ endif
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = ${SCM_FILE_LINKS}  .scm-links
+CLEANFILES = \
+	${SCM_FILE_LINKS} \
+	 .scm-links \
+	${gncscmcache_DATA} \
+	${gncscmmodcache_DATA}
+
 MAINTAINERCLEANFILES = swig-app-utils-guile.c swig-app-utils-python.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.app-utils\"

@@ -279,8 +279,11 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
@@ -300,7 +303,13 @@ noinst_DATA = .scm-links
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = $(BUILT_SOURCES) .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = \
+	$(BUILT_SOURCES) \
+	.scm-links \
+	${SCM_FILE_LINKS} \
+	${gncscmcache_DATA} \
+	${gncscmmodcache_DATA}
+
 MAINTAINERCLEANFILES = swig-gnome-utils.c
 
 # FIXME: Symlinking directories only works on non-win32.
