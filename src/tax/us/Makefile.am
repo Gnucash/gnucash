@@ -52,8 +52,6 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
-  --library-dir    ${top_builddir}/src/libqof/qof \
-  --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module
@@ -80,6 +78,5 @@ EXTRA_DIST = \
   ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
-CLEANFILES = .scm-links ${gncscmmodcache_DATA} ${gncscmcache_DATA}
-
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

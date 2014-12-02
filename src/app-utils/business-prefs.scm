@@ -19,7 +19,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gettext))
 
 (define gnc:*option-section-counters* (N_ "Counters"))
 

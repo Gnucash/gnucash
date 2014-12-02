@@ -132,8 +132,7 @@ EXTRA_DIST = $(gncscmmod_DATA) core-utils.i gncla-dir.h.in gnc-scm-info.h
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = $(BUILT_SOURCES) .scm-links ${gncscmmodcache_DATA}
-
+CLEANFILES = $(BUILT_SOURCES) .scm-links
 MAINTAINERCLEANFILES = swig-core-utils-guile.c swig-core-utils-python.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\" -DGNC_SCM_INSTALL_DIR="\"${GNC_SCM_INSTALL_DIR}\""
