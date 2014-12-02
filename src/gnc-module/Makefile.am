@@ -82,7 +82,7 @@ endif
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = .scm-links ${SCM_FILE_LINKS} ${gncscmmodcache_DATA}
 MAINTAINERCLEANFILES = swig-gnc-module.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.module\"
