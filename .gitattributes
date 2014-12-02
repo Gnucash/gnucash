@@ -43,4 +43,5 @@ gnc-scm-info     text eol=lf
 
 gnucash.iss.in text eol=crlf
 gnucash.rc.in  text eol=crlf
-README*win32-bin.txt text eol=crlf
+*.win32-bin.txt text eol=crlf
+*.mt940 text eol=crlf
