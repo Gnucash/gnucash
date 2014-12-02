@@ -81,6 +81,7 @@ build-config.scm: ${srcdir}/build-config.scm.in Makefile
             -e 's#@-GNC_HELPDIR-@#${GNC_HELPDIR}#'
 	mv $@.tmp $@
 
-CLEANFILES = .scm-links
+CLEANFILES = .scm-links ${gncscmmodcache_DATA} ${gncscmcache_DATA}
+
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = build-config.scm
