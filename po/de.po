@@ -6,7 +6,7 @@
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2014.
-# Rolf Leggewie 2008
+# Rolf Leggewie, 2008
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014
 #
 msgid ""
@@ -2779,7 +2779,7 @@ msgstr "Globale Steuertabelle ignorieren?"
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:13
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:8
 msgid "Billing Information"
-msgstr "Rechnungs-Informationen"
+msgstr "Abrechnungsdaten"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:23
 msgid "Shipping Information"
@@ -16444,9 +16444,8 @@ msgid "The transactions were imported from the file '%s'."
 msgstr "Beim Lesen der Datei »%s« ist ein Fehler aufgetreten."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:1
-#, fuzzy
 msgid "CSV Transaction Import"
-msgstr "Buchungsbericht"
+msgstr "CSV-Buchungen-Import"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:2
 msgid ""
@@ -16464,31 +16463,44 @@ msgid ""
 "There is an option for specifying the start and end row which can be used if "
 "you have some header text or multiple accounts in the same file."
 msgstr ""
+"Dieser Assistent möchte Ihnen helfen, Textdateien mit "
+"Buchungen zu importieren.\n"
+"\n"
+"Alle importierten Buchungen eines Imports werden mit einem bestimmten Konto "
+"pro Import assiziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
+"der ersten Zeile für den gesamten Import verwendet.\n"
+"\n"
+"Es gibt verschiedene Optionen, Trennzeichen zu bestimmen, ebenso, wie eine "
+"Option für feste Spaltenbreiten. Bei fester Spaltenbreite doppelklicken Sie "
+"auf den Balken über den dargestellten Zeilen, um die Breite festzulegen.\n"
+"\n"
+"Schließlich gibt es eine Option zur Bestimmung der ersten und letzten Zeile, "
+"welche benutzt werden kann, wenn sie einige Kopfzeilen oder mehrere Konten "
+"in einer Datei haben."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:9
-#, fuzzy
 msgid "Transaction Import Assistant"
-msgstr "GnuCash-Datei Import-Assistent"
+msgstr "Buchungen-Import-Assistent"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:10
 msgid ""
 "\n"
 "Select location and file name for the Import, then click 'OK'...\n"
 msgstr ""
+"\n"
+"Wählen Sie Ort und Dateinamen für den Import. Dann betätigen Sie »OK«...\n"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:13
-#, fuzzy
 msgid "Select File for Import"
 msgstr "Wählen Sie eine Datei, die importiert werden soll"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:14
-#, fuzzy
 msgid "Start import on row "
-msgstr "Start der Berichtsperiode"
+msgstr "Starte den Import auf Zeile "
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:15
 msgid " and stop on row "
-msgstr ""
+msgstr " und stoppe auf Zeile "
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:16
 msgid "Data type: "
@@ -16503,9 +16515,8 @@ msgid "Fixed-Width"
 msgstr "Feste Breite"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:20
-#, fuzzy
 msgid "Currency format"
-msgstr "Währungsinformationen"
+msgstr "WährungsFormat"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:21
 msgid "Encoding: "
@@ -16529,11 +16540,11 @@ msgstr "Wählen Sie die Bedeutung jeder Spalte."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:31
 msgid "Step over Account Page if Setup"
-msgstr ""
+msgstr "Konten-Seite überspringen, wenn bereits eingerichtet"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:32
 msgid "Preview Settings"
-msgstr ""
+msgstr "Vorschau-Einstellungen"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:33
 msgid "Error text."
@@ -17067,7 +17078,7 @@ msgstr "Neu (Buchung von %s nach »%s«, automatisch gewählt)"
 #: ../src/import-export/import-main-matcher.c:779
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Neu (Nicht ausgeglichen, %s noch auszugleichen)"
+msgstr "Neu (Nicht ausgeglichen, benötige Konto für verbleibende %s)"
 
 #: ../src/import-export/import-main-matcher.c:791
 msgid "Reconcile (manual) match"
@@ -17080,7 +17091,7 @@ msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
 #: ../src/import-export/import-main-matcher.c:801
 #: ../src/import-export/import-main-matcher.c:820
 msgid "Match missing!"
-msgstr "Zuordnung fehlt"
+msgstr "Zuordnung fehlt!"
 
 #: ../src/import-export/import-main-matcher.c:810
 msgid "Update and reconcile (manual) match"
@@ -17106,7 +17117,7 @@ msgstr "Zu ladende Log-Datei auswählen"
 #: ../src/import-export/log-replay/gnc-log-replay.c:590
 #, c-format
 msgid "Cannot open the current log file: %s"
-msgstr "Kann nicht die aktuelle Log-Datei öffnen: %s"
+msgstr "Kann die aktuelle Log-Datei nicht öffnen: %s"
 
 #. Translation note:
 #. * First argument is the filename,
@@ -17234,9 +17245,8 @@ msgstr ""
 "eintippen."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:864
-#, fuzzy
 msgid "Enter information about"
-msgstr "Informationen über »%s«"
+msgstr "Eingabe der Informationen über"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:880
 msgid "_Name or description:"
@@ -17253,11 +17263,11 @@ msgstr "_Börse oder Abkürzungsart:"
 #: ../src/import-export/qif-import/assistant-qif-import.c:1124
 #: ../src/import-export/qif-import/assistant-qif-import.c:3083
 msgid "(split)"
-msgstr "(Buchung)"
+msgstr "(Buchungsteil)"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:1510
 msgid "Please select a file to load."
-msgstr "Sie müssen eine Datei angeben, die geladen werden soll"
+msgstr "Sie müssen eine Datei angeben, die geladen werden soll."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:1513
 msgid "File not found or read permission denied. Please select another file."
@@ -17328,25 +17338,23 @@ msgid "Loading completed"
 msgstr "Vollständig geladen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:1929
-#, fuzzy
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"GnuCash wird Ihre QIF-Datei jetzt laden. Wenn keine Fehler oder Warnungen "
-"auftreten, kommt der nächste Schritt. Andernfalls werden die Meldungen unten "
-"angezeigt."
+"Sobald Sie den »Vor«-Knopf drücken, wird GnuCash Ihre QIF-Datei laden. Wenn "
+"dabei keine Fehler oder Warnungen auftreten, kommt der nächste Schritt. "
+"Andernfalls werden die Meldungen unten angezeigt."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2494
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:60
 msgid "Choose the QIF file currency and select Book Options"
-msgstr ""
+msgstr "Bestimmen Sie die Währung der QIF-Datei und die Buch-Optionen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2501
-#, fuzzy
 msgid "Choose the QIF file currency"
-msgstr "Geben Sie die Währung der QIF-Datei an"
+msgstr "Wählen Sie die Währung der QIF-Datei"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2681
 msgid "You must enter an existing national currency or enter a different type."
@@ -17373,31 +17381,26 @@ msgid "Conversion completed"
 msgstr "Vollständig konvertiert"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2982
-#, fuzzy
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"GnuCash wird Ihre QIF-Datei jetzt importieren. Wenn keine Fehler oder "
-"Warnungen auftreten, kommt der nächste Schritt. Andernfalls werden die "
-"Meldungen unten angezeigt."
+"Sobald Sie den »Start«-Knopf drücken, wird GnuCash Ihre QIF-Daten "
+"importieren. Wenn keine Fehler oder Warnungen auftreten, folgt der nächste "
+"Schritt. Andernfalls werden die Details unten angezeigt."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:3178
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash konnte die Zuordnungseinstellungen nicht speichern."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:3211
-#, fuzzy, c-format
 msgid "There was a problem with the import."
-msgstr ""
-"Es gibt ein Problem mit der Einstellung %s:%s.\n"
-"%s"
+msgstr "Es ist während des Importes ein Problem aufgetreten."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:3213
-#, fuzzy, c-format
 msgid "QIF Import Completed."
-msgstr "QIF-Import"
+msgstr "QIF-Import abgeschlossen."
 
 #. Set up the QIF account to GnuCash account matcher.
 #: ../src/import-export/qif-import/assistant-qif-import.c:3438
@@ -17407,7 +17410,7 @@ msgstr "QIF-Kontobezeichnung"
 #. Set up the QIF category to GnuCash account matcher.
 #: ../src/import-export/qif-import/assistant-qif-import.c:3444
 msgid "QIF category name"
-msgstr "QIF Kategorie"
+msgstr "QIF-Kategorie"
 
 #. Set up the QIF payee/memo to GnuCash account matcher.
 #: ../src/import-export/qif-import/assistant-qif-import.c:3450
@@ -17419,9 +17422,8 @@ msgid "Match?"
 msgstr "Passt?"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:1
-#, fuzzy
 msgid "QIF Import Assistant"
-msgstr "QIF-Import"
+msgstr "QIF-Import-Assistent"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:2
 msgid ""
@@ -17450,7 +17452,6 @@ msgid "Import QIF files"
 msgstr "QIF-Datei importieren"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:8
-#, fuzzy
 msgid ""
 "Please select a file to load. When you click \"Forward\", the file will be "
 "loaded and analyzed. You may need to answer some questions about the account"
@@ -17461,9 +17462,9 @@ msgid ""
 msgstr ""
 "Bitte wählen Sie eine Datei aus, die geladen werden soll. Wenn Sie »Vor« "
 "klicken, wird die Datei geladen und analysiert. Anschließend werden "
-"eventuell weitere Eingaben von Ihnen benötigt.\n"
+"eventuell weitere Angaben von Ihnen benötigt.\n"
 "\n"
-"Sie können soviele Dateien laden, wie Sie möchten. Es ist kein Problem, "
+"Sie können soviele Dateien laden, wie Sie möchten. Es ist also kein Problem, "
 "falls sich Ihre Daten in mehreren Dateien befinden.\n"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:12
@@ -17475,16 +17476,14 @@ msgid "Select a QIF file to load"
 msgstr "Zu ladende QIF-Datei auswählen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:14
-#, fuzzy
 msgid "_Start"
-msgstr "Start:"
+msgstr "_Start"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:15
 msgid "Load QIF files"
 msgstr "QIF Dateien laden"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:16
-#, fuzzy
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
 "components of a date are printed. In most cases, it is possible to "
@@ -17498,7 +17497,7 @@ msgid ""
 msgstr ""
 "Das QIF-Dateiformat macht keine Angaben darüber, in welcher Reihenfolge Tag, "
 "Monat und Jahr gespeichert sind. In den meisten Fällen kann dies automatisch "
-"festgestellt werden, aber in der von Ihnen importierten Datei gab es "
+"festgestellt werden, aber in der von Ihnen gerade importierten Datei gab es "
 "Mehrdeutigkeiten, die nicht aufgelöst werden konnten.\n"
 "\n"
 "Bitte wählen Sie daher ein Datumsformat für die Datei. QIF Dateien, die von "
@@ -17509,15 +17508,13 @@ msgstr ""
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:20
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
-"Drücken Sie »Zurück«, um nicht diese Datei zu laden, sondern eine andere "
-"auszuwählen."
+"Drücken Sie »Zurück«, um statt dieser Datei eine andere zu laden."
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:21
 msgid "Set a date format for this QIF file"
 msgstr "Ein Datumsformat für diese QIF-Datei setzen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:22
-#, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
 "one account, but the file does not specify a name for that account. \n"
@@ -17526,7 +17523,7 @@ msgid ""
 "accounting program, you should use the same account name that was used in "
 "that program.\n"
 msgstr ""
-"Die QIF-Datei, die Sie laden möchten, enthält Buchungssätze für ein "
+"Die QIF-Datei, die Sie gerade geladen haben, enthält Buchungssätze für ein "
 "einzelnes Konto, aber es ist kein Name für dieses Konto angegeben.\n"
 "\n"
 "Bitte geben Sie einen Namen für das Konto an. Wenn die Datei aus einem "
@@ -17539,7 +17536,7 @@ msgstr "Kontobezeichnung:"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:27
 msgid "Set the default QIF account name"
-msgstr "Den Namen des Standard QIF Konto setzen"
+msgstr "Den Namen des Standard QIF-Kontos setzen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:28
 msgid ""
@@ -17549,8 +17546,8 @@ msgid ""
 "Click \"Forward\" to finish loading files and move to the next step of the "
 "QIF import process. "
 msgstr ""
-"Wenn Sie noch mehr Dateien importieren möchten, klicken Sie bitte »Eine "
-"andere Datei laden«. Das ist insbesondere sinnvoll, wenn Sie Ihre Daten in "
+"Wenn Sie noch mehr Dateien importieren möchten, klicken Sie bitte auf »Eine "
+"weitere Datei öffnen«. Das ist insbesondere sinnvoll, wenn Sie Ihre Daten in "
 "mehreren seperaten QIF-Dateien gespeichert haben.\n"
 "\n"
 "Klicken Sie auf »Vor«, um das Laden von Dateien zu beenden und zum nächsten "
@@ -17566,8 +17563,10 @@ msgstr "Eine _weitere Datei öffnen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:33
 msgid "QIF files you have loaded"
-msgstr "QIF-Datei, die geladen wurde"
+msgstr "QIF-Datein, die geladen wurden"
 
+# "(subaccounts of Retained Earnings, by default)" /
+# "(Unterkonten von Gewinnrücklagen)" macht keinen Sinn! Veraltet?
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:34
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
@@ -17585,20 +17584,20 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"Auf der nächsten Seite werden die Konten und Aktiendepots aus den QIF "
-"Dateien nach GnuCash umgewandelt. Wenn bereits ein GnuCash Konto mit "
-"demselben oder einem ähnlichen Namen existiert, wird dieses Konto als Ziel "
-"vorgeschlagen. Andernfalls wird GnuCash einen neues Konto mit demselben Typ "
-"und Namen wie das QIF-Konto anlegen. Wenn das vorgeschlagene Konto nicht "
-"passt, können Sie mit Doppelklicken den Namen ändern oder ein anderes "
-"wählen.\n"
+"Auf der nächsten Seite werden die Konten und Wertpapierbestände aus den "
+"QIF-Dateien nach GnuCash umgewandelt. Wenn bereits ein GnuCash Konto mit "
+"demselben Namen - oder einem ähnlichen Namen und gleicher Art - existiert, "
+"wird dieses Konto als Ziel vorgeschlagen. Andernfalls wird GnuCash einen "
+"neues Konto mit demselben Typ und Namen wie das QIF-Konto anlegen. Wenn das "
+"vorgeschlagene Konto nicht passt, können Sie mit Doppelklicken den Namen "
+"ändern oder ein anderes wählen.\n"
 "\n"
 "Es kann sein, dass GnuCash viele Konten erzeugt, die es im anderen "
 "Finanzprogramm nicht gegeben hat. Das können sein: ein Konto für jedes "
-"Aktiendepot, separate Kontos für Maklergebühren, spezielle Ausgleichskonten "
-"(Unterkonten von Gewinnrücklagen) als Quelle des Anfangsbestand usw. Auf der "
-"nächsten Seite können Sie diese Konten bearbeiten. Allerdings wird "
-"empfohlen, die Auswahl zu übernehmen.\n"
+"Wertpapier, separate Konten für Maklergebühren, spezielle »Eigenkapital«-"
+"Konten als Quelle des Anfangsbestand usw. Diese Konten können Sie alle auf "
+"der nächsten Seite bearbeiten. Allerdings wird "
+"empfohlen, die Auswahl zuächst erstmal zu übernehmen.\n"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:38
 msgid "Accounts and stock holdings"
@@ -17618,7 +17617,7 @@ msgstr "GnuCash-_Konto ändern..."
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:42
 msgid "Match QIF accounts with GnuCash accounts"
-msgstr "Füge QIF-Konten in GnuCash Konten ein"
+msgstr "Gleiche QIF-Konten mit GnuCash Konten ab"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:43
 msgid ""
@@ -17635,7 +17634,7 @@ msgid ""
 "safely within GnuCash."
 msgstr ""
 "Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt GnuCash "
-"seperate Konten anstelle von »Kategorien«, um Buchungssätze zu "
+"seperate Konten anstelle von »Kategorien«, um Buchungen zu "
 "klassifizieren. Jede Kategorie in der QIF-Datei wird also in ein GnuCash "
 "Konto umgewandelt.\n"
 "\n"
@@ -17651,7 +17650,7 @@ msgstr "Erträge und Aufwendungen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:49
 msgid "Match QIF categories with GnuCash accounts"
-msgstr "Vereine QIF-Kategorien mit GnuCash Konten"
+msgstr "Verknüpfe QIF-Kategorien mit GnuCash Konten"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:50
 msgid ""
@@ -17681,21 +17680,22 @@ msgstr "Zahlungsempfänger, Buchungstext"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:54
 msgid "Match payees/memos to GnuCash accounts"
-msgstr "Finde passende GnuCash Konten für QIF-Zahlungsempfänger/Buchungstext"
+msgstr "Gleiche QIF-Zahlungsempfänger/Buchungstext mit den GnuCash Konten ab."
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:55
 msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
 "accounts you are importing must be denominated in the same currency.\n"
 msgstr ""
-"Der QIF-Importer kann bisher noch keine QIF-Dateien mit verschiedenen\n"
-"Währungen verarbeiten. Daher müssen alle Konten in der QIF-Datei die\n"
+"Der QIF-Importer kann bisher noch keine QIF-Dateien mit verschiedenen"
+"Währungen verarbeiten. Daher müssen alle Konten in der QIF-Datei die"
 "gleiche Währung haben.\n"
 
+# Soweit ich sehe, wird nur die Liste aus den ISO-Codes angezeigt, fell 2014
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:57
 msgid "_Select the currency to use for all imported transactions:"
 msgstr ""
-"Wählen Sie die _Währung/Wertpapier, die für alle importierten Buchungen gilt:"
+"Wählen Sie die _Währung, die für alle importierten Buchungen gilt:"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:59
 msgid ""
@@ -17705,6 +17705,12 @@ msgid ""
 "setting book options will not be shown a second time when you go forward. "
 "You can access it directly from the menu via File->Properties."
 msgstr ""
+"Da sie eine neue Datei erstellen, werden Sie als nächstes einen Dialog für "
+"die Grundeinstellungen diese »Buches« sehen. Diese Einstellungen können die "
+"Art beeinflussen, wie GnuCah Buchungen importiert. Sofern Sie diesen Import "
+"nicht abbrechen, wird dieser Dialog das nächste Mal nicht mehr angezeigt. Sie "
+"können die Einstellungen aber jederzeit über das Menü »Datei->Eigenschaften« "
+"ändern."
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:61
 msgid ""
@@ -17729,10 +17735,10 @@ msgstr ""
 "in der QIF-Datei zur Verfügung stehen.\n"
 "\n"
 "Jede Aktie, Investmentfonds oder andere Investition muss einen Namen und "
-"eine Abkürzung haben, zum Beispiel ein Tickersymbol. Weil manchmal "
-"unabhängig von einander zwei Finanzanlagen die gleiche Abkürzung haben, "
-"müssen Sie noch angeben um welche Art von Abkürzung es sich handelt. Sie "
-"können zum Beispiel den Börsenplatz angeben, welcher die Wertpapiere "
+"eine Abkürzung haben, zum Beispiel ein Tickersymbol, die WKN oder ISIN. Weil "
+"manchmal unabhängig von einander zwei Finanzanlagen die gleiche Abkürzung "
+"haben, müssen Sie noch angeben um welche Art von Abkürzung es sich handelt. "
+"Sie können zum Beispiel den Börsenplatz angeben, welcher die Wertpapiere "
 "gelistet hat (NASDAQ, SWX, etc.). Oder sie können auch die Anlageart "
 "auswählen.\n"
 "\n"
@@ -17742,7 +17748,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:66
 msgid "Tradable commodities"
-msgstr "Handelbare Währungen/Aktien"
+msgstr "Handelbare Wertpapiere incl. Währungen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:67
 #, fuzzy
@@ -17754,7 +17760,6 @@ msgid "QIF Import"
 msgstr "QIF-Import"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:69
-#, fuzzy
 msgid ""
 "\n"
 "If you are importing a QIF file from a bank or other financial institution, "
@@ -17769,13 +17774,14 @@ msgid ""
 "\n"
 "Click \"Forward\" to review the possible matches."
 msgstr ""
+"\n"
 "Falls Sie eine QIF Datei von einer Bank oder einem anderen Finanzinstitut "
 "einlesen, kann es sein, dass gewisse Buchungen schon in ihren GnuCash Konten "
 "gebucht sind. Um Duplikate zu vermeiden, versucht GnuCash die "
 "Übereinstimmungen zu finden. Sie müssen diese aber noch kontrollieren.\n"
 "\n"
 "Auf der nächsten Seite werden Sie eine Liste der eingelesenen Buchungen "
-"sehen. Bei jedem, den Sie auswählen, wird darunter eine Liste der möglichen "
+"sehen. Bei jeder, dien Sie auswählen, wird darunter eine Liste der möglichen "
 "Übereinstimmungen angezeigt. Falls Sie eine korrekte Übereinstimmung finden, "
 "klicken Sie diese an. Ihre Auswahl wird mittels eines Häkchen in der "
 "»Passt?«-Spalte bestätigt.\n"
@@ -17799,7 +17805,6 @@ msgid "Select possible duplicates"
 msgstr "Mögliche Duplikate auswählen"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:79
-#, fuzzy
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -17818,7 +17823,8 @@ msgstr ""
 "QIF-Import als Voreinstellung benutzt.\n"
 "\n"
 "Klicken Sie auf »Zurück«, wenn Sie die Konten- und Kategorien-Auswahl oder "
-"die Währungsangaben noch einmal überprüfen möchten oder wenn Sie noch mehr "
+"die Vorgaben für die in neuen Konten zu verwendenden Währungen and "
+"Wertpapiere noch einmal überprüfen möchten oder wenn Sie noch mehr "
 "Dateien laden möchten.\n"
 "\n"
 "Klicken Sie auf »Abbrechen«, um den QIF-Import-Prozess abzubrechen."
@@ -17828,14 +17834,12 @@ msgid "Update your GnuCash accounts"
 msgstr "Aktualisieren Ihrer GnuCash Konten"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:85
-#, fuzzy
 msgid "Summary Text"
-msgstr "_Zusammenfassungsleiste"
+msgstr "Text der Zusammenfassung"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:86
-#, fuzzy
 msgid "Qif Import Summary"
-msgstr "Kontenübersicht"
+msgstr "Zusammenfassung des Qif-Imports"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:87
 #: ../src/report/report-gnome/dialog-report.glade.h:21
@@ -17938,34 +17942,34 @@ msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, PRICE_NOT_SET: id=%s\n"
-msgstr "Zeile GELÖSCHT, Preis fehlt: id=%s\n"
+msgstr "Zeile %d GELÖSCHT, Preis fehlt: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, QTY_NOT_SET: id=%s\n"
-msgstr "Zeile GELÖSCHT, Anzahl fehlt: id=%s\n"
+msgstr "Zeile %d GELÖSCHT, Anzahl fehlt: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:302
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, ID_NOT_SET\n"
-msgstr "Zeile GELÖSCHT, ID fehlt\n"
+msgstr "Zeile %d GELÖSCHT, ID fehlt!\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:391
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, OWNER_NOT_SET: id=%s\n"
-msgstr "Zeile GELÖSCHT, Lieferant fehlt: id=%s\n"
+msgstr "Zeile %d GELÖSCHT, Lieferant fehlt: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
-msgstr "Zeile GELÖSCHT, Lieferant existiert nicht: id=%s\n"
+msgstr "Zeile %d GELÖSCHT, Lieferant existiert nicht: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:430
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"
-msgstr "Zeile GELÖSCHT, Lieferant existiert nicht: id=%s\n"
+msgstr "Zeile %d GELÖSCHT, Kunde existiert nicht: id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:474
 msgid "These rows were deleted:"
@@ -18060,7 +18064,7 @@ msgstr "Benutzerdefinierter Regulärer Ausdruck"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:13
 msgid "3. Select import options"
-msgstr "2. Wählen Sie die Importoptionen"
+msgstr "3. Wählen Sie die Importoptionen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:14
 msgid "4. Preview"
@@ -18088,16 +18092,15 @@ msgstr "Kunden aus CSV-Datei importieren"
 
 #. import
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:185
-#, fuzzy
 msgid "customers"
-msgstr "Kunde"
+msgstr "Kunden"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:186
 msgid "vendors"
 msgstr "Lieferanten"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:194
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import results:\n"
 "%i lines were ignored\n"
@@ -18111,11 +18114,11 @@ msgstr ""
 "Import-Ergebnis:\n"
 "%i Zeilen wurden ignoriert\n"
 "%i Zeilen wurden importiert:\n"
-"   %u repariert\n"
-"   %u ignoriert (reparieren nicht möglich)\n"
+"   %u %s repariert\n"
+"   %u %s ignoriert (reparieren nicht möglich)\n"
 "\n"
-"   %u neu angelegt\n"
-"   %u aktualisiert (gemäß ID)"
+"   %u %s neu angelegt\n"
+"   %u %s aktualisiert (gemäß ID)"
 
 #. Menu Items
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
@@ -18327,36 +18330,37 @@ msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr ""
-"Geben Sie die Buchungsreferenz, z.B. die Rechnungs- oder Scheck-Nummer,"
-" für diesen Buchungsteil ein."
+"Geben Sie die Buchungsreferenz, z.B. die Rechnungs- oder Scheck-Nummer, "
+"für diesen Buchungsteil ein."
 
 #: ../src/register/ledger-core/split-register-model.c:991
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
-"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+"Geben Sie eine für alle Teilbuchungen geltende Referenz ein, z.B. "
+"die Rechnungs- oder Scheck-Nummer"
 
 #: ../src/register/ledger-core/split-register-model.c:993
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
-"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+"Geben Sie eine für jede Teilbuchung eindeutige Referenz ein, z.B. die "
+"Rechnungs- oder Scheck-Nummer."
 
 #: ../src/register/ledger-core/split-register-model.c:1014
-#, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr ""
-"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+"Geben Sie eine für alle Teilbuchungen geltende Buchungsreferenz ein, z.B. die "
+"Rechnungs- oder Scheck-Nummer."
 
 #: ../src/register/ledger-core/split-register-model.c:1018
 msgid ""
 "Enter a transaction reference, that will be common to all entry lines "
 "(splits)"
 msgstr ""
+"Geben Sie eine Buchungsreferenz an, welche für alle Teilbuchungen gilt."
 
 #: ../src/register/ledger-core/split-register-model.c:1221
 msgid "Enter an action type, or choose one from the list"
@@ -18366,20 +18370,21 @@ msgstr "Geben Sie die Aktion ein, oder wählen Sie eine aus der Liste"
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
-msgstr ""
+msgstr "Geben Sie eine Refereenznummer wie etwa die nächste Schecknummer ein "
+"oder wählen sie eine Aktion aus der Liste."
 
 #: ../src/register/ledger-core/split-register-model.c:1485
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Dieser Buchungssatz hat mehrere Buchungsteile. Klicken Sie »Vollständig«, um "
-"alle sehen zu können."
+"Dieser Buchungssatz hat mehrere Buchungsteile. Klicken Sie auf »Vollständig«, "
+"um alle sehen zu können."
 
 #: ../src/register/ledger-core/split-register-model.c:1488
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
-"Dieser Buchungssatz ist eine Aktienteilung. Klicken Sie »Vollständig«, um "
+"Dieser Buchungssatz ist eine Aktienteilung. Klicken Sie auf »Vollständig«, um "
 "Einzelheiten sehen zu können."
 
 #: ../src/register/ledger-core/split-register-model.c:1975
@@ -18615,7 +18620,7 @@ msgstr "Zurück"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1055
 msgid "Move back one step in the history"
-msgstr "Einen Schritt zurück"
+msgstr "Einen Schritt zurück im Verlauf"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1059
 msgid "Forward"
@@ -18623,7 +18628,7 @@ msgstr "Vorwärts"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1060
 msgid "Move forward one step in the history"
-msgstr "Einen Schritt vorwärts"
+msgstr "Einen Schritt vorwärts im Verlauf"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1064
 msgid "Reload"
@@ -18818,7 +18823,7 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Das Zahlenformat für die automatische Kundennummer. Dies ist ein »printf« "
+"Das Zahlenformat für die fortlaufende Kundennummer. Dies ist ein »printf« "
 "Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -18846,7 +18851,7 @@ msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Das Zahlenformat für die automatische Mitarbeiternummer. Dies ist ein "
+"Das Zahlenformat für die fortlaufende Mitarbeiternummer. Dies ist ein "
 "»printf« Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -18874,7 +18879,7 @@ msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Das Zahlenformat für die automatische Rechnungsnummer. Dies ist ein »printf« "
+"Das Zahlenformat für die fortlaufende Rechnungsnummer. Dies ist ein »printf« "
 "Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -18902,7 +18907,7 @@ msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
-"Das Zahlenformat für die automatische Lieferantenrechnungsnummer. Dies ist "
+"Das Zahlenformat für die fortlaufende Lieferantenrechnungsnummer. Dies ist "
 "ein »printf« Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -18930,7 +18935,7 @@ msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"Das Zahlenformat für die automatische Auslagenerstattungsnummer. Dies ist "
+"Das Zahlenformat für die fortlaufende Auslagenerstattungsnummer. Dies ist "
 "ein »printf« Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -18959,7 +18964,7 @@ msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
 msgstr ""
-"Das Zahlenformat für die automatische Auftragsnummer. Dies ist ein »printf« "
+"Das Zahlenformat für die fortlaufende Auftragsnummer. Dies ist ein »printf« "
 "Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -18987,7 +18992,7 @@ msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Das Zahlenformat für die automatische Bestellungsnummer. Dies ist ein "
+"Das Zahlenformat für die fortlaufende Bestellungsnummer. Dies ist ein "
 "»printf« Formatstring."
 
 #. src/app-utils/business-prefs.scm
@@ -19104,7 +19109,6 @@ msgstr "Voreinstellung für Datumsformat im ausführlichen Datumsdruck."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:114
-#, fuzzy
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
@@ -19121,6 +19125,10 @@ msgid ""
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
 msgstr ""
+"Bestimmt die Anzahl Tage, nach der eine Buchung einen Schreibschutz erhält "
+"und nicht mehr geändert werden kann. Diese Schwelle wird durch eine rote "
+"Linie im Kontenblatt angezeigt. Eine Null hebt den Schreibschutz auf und "
+"erlaubt die Bearbeitung aller Buchungen."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:118
@@ -19130,13 +19138,16 @@ msgid ""
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
 msgstr ""
+"Setzen, um das Aktion-Feld für eine Nummerierung der Buchungsteile zu "
+"verwenden. Buchungsteil-Nummern werden als »B.-Nr.« auf der 2. Zeile des "
+"Kontenblatts dargestellt. Dies wirkt sich auf den Bereich Geschäft, die "
+"Berichte, sowie den Im- und Export aus."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:120
-#, fuzzy
 msgid "Budget to be used when none has been otherwise specified."
 msgstr ""
-"Budget, welches verwendet werden soll, wenn anderweitig keins angegeben "
+"Das Budget, welches verwendet werden soll, wenn anderweitig keins angegeben "
 "wurde."
 
 #. src/app-utils/date-utilities.scm
@@ -19162,27 +19173,23 @@ msgstr "%s bis %s"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:126
-#, fuzzy
 msgid "First day of the current calendar year."
-msgstr "Anfang des Kalenderjahres"
+msgstr "Anfang des aktuellen Kalenderjahres"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:130
-#, fuzzy
 msgid "Last day of the current calendar year."
-msgstr "Ende des Kalenderjahres"
+msgstr "Ende des aktuellen Kalenderjahres."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:134
-#, fuzzy
 msgid "First day of the previous calendar year."
-msgstr "Anfang des vorigen Kalenderjahres"
+msgstr "Anfang des vorigen Kalenderjahres."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:138
-#, fuzzy
 msgid "Last day of the previous calendar year."
-msgstr "Ende des vorigen Kalenderjahres"
+msgstr "Ende des vorigen Kalenderjahres."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:140
@@ -19191,9 +19198,8 @@ msgstr "Anfang nächsten Jahres"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:142
-#, fuzzy
 msgid "First day of the next calendar year."
-msgstr "Der erste Tag des nächsten Kalenderjahres"
+msgstr "Der erste Tag des nächsten Kalenderjahres."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:144
@@ -19202,9 +19208,8 @@ msgstr "Ende nächsten Jahres"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:146
-#, fuzzy
 msgid "Last day of the next calendar year."
-msgstr "Der letzte Tag des nächsten Kalenderjahres"
+msgstr "Der letzte Tag des nächsten Kalenderjahres."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:148
@@ -19213,11 +19218,10 @@ msgstr "Anfang der Buchführungsperiode"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:150
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
 "Anfang der Buchführungsperiode, wie in den programmweiten Einstellungen "
-"festgelegt"
+"festgelegt."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:152
@@ -19226,35 +19230,30 @@ msgstr "Ende der Buchführungsperiode"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:154
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
 "Ende der Buchführungsperiode, wie in den programmweiten Einstellungen "
-"festgelegt"
+"festgelegt."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:158
-#, fuzzy
 msgid "First day of the current month."
-msgstr "Anfang des Monats"
+msgstr "Anfang dieses Monats."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:162
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "Ende des Monats"
+msgstr "Ende dieses Monats."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:166
-#, fuzzy
 msgid "First day of the previous month."
-msgstr "Anfang des vorigen Monats"
+msgstr "Anfang des vorigen Monats."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:170
-#, fuzzy
 msgid "Last day of previous month."
-msgstr "Ende des vorigen Monats"
+msgstr "Ende des vorigen Monats."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:172
@@ -19263,9 +19262,8 @@ msgstr "Anfang nächsten Monats"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:174
-#, fuzzy
 msgid "First day of the next month."
-msgstr "Der erste Tag des nächsten Monats"
+msgstr "Der erste Tag des nächsten Monats."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:176
@@ -19274,9 +19272,8 @@ msgstr "Ende nächsten Monats"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:178
-#, fuzzy
 msgid "Last day of next month."
-msgstr "Der letzte Tag des nächsten Monats"
+msgstr "Der letzte Tag (Ultimo) des nächsten Monats."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:180
@@ -19285,9 +19282,8 @@ msgstr "Anfang des Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:182
-#, fuzzy
 msgid "First day of the current quarterly accounting period."
-msgstr "Anfang des momentanen Buchführungs-Quartals"
+msgstr "Anfang des momentanen Buchführungs-Quartals."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:184
@@ -19296,21 +19292,18 @@ msgstr "Ende des Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:186
-#, fuzzy
 msgid "Last day of the current quarterly accounting period."
-msgstr "Ende des momentanen Buchführungs-Quartals"
+msgstr "Ende des momentanen Buchführungs-Quartals."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:190
-#, fuzzy
 msgid "First day of the previous quarterly accounting period."
-msgstr "Anfang des vorigen Buchführungs-Quartals"
+msgstr "Anfang des vorigen Buchführungs-Quartals."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:194
-#, fuzzy
 msgid "Last day of previous quarterly accounting period."
-msgstr "Ende des vorigen Buchführungs-Quartals"
+msgstr "Ende des vorigen Buchführungs-Quartals."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:196
@@ -19319,9 +19312,8 @@ msgstr "Anfang nächsten Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:198
-#, fuzzy
 msgid "First day of the next quarterly accounting period."
-msgstr "Der erste Tag des nächsten Kalender-Quartals"
+msgstr "Der erste Tag des nächsten Buchführungs-Quartals."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:200
@@ -19330,15 +19322,13 @@ msgstr "Ende nächsten Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:202
-#, fuzzy
 msgid "Last day of next quarterly accounting period."
-msgstr "Der letzte Tag des nächsten Kalender-Quartals"
+msgstr "Der letzte Tag des nächsten Buchführungs-Quartals."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:206
-#, fuzzy
 msgid "The current date."
-msgstr "Das aktuelle Datum"
+msgstr "Das aktuelle Datum."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:208
@@ -19347,9 +19337,8 @@ msgstr "Einen Monat zuvor"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:210
-#, fuzzy
 msgid "One Month Ago."
-msgstr "Einen Monat zuvor"
+msgstr "Einen Monat zuvor."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:212
@@ -19358,9 +19347,8 @@ msgstr "Eine Woche zuvor"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:214
-#, fuzzy
 msgid "One Week Ago."
-msgstr "Eine Woche zuvor"
+msgstr "Eine Woche zuvor."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:216
@@ -19369,20 +19357,18 @@ msgstr "Drei Monate zuvor"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:218
-#, fuzzy
 msgid "Three Months Ago."
-msgstr "Drei Monate zuvor"
+msgstr "Drei Monate zuvor."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:220
 msgid "Six Months Ago"
-msgstr "sechs Monate zuvor"
+msgstr "Sechs Monate zuvor"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:222
-#, fuzzy
 msgid "Six Months Ago."
-msgstr "sechs Monate zuvor"
+msgstr "Sechs Monate zuvor."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:224
@@ -19391,9 +19377,8 @@ msgstr "Ein Jahr zuvor"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:226
-#, fuzzy
 msgid "One Year Ago."
-msgstr "Ein Jahr zuvor"
+msgstr "Ein Jahr zuvor."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:228
@@ -19402,9 +19387,8 @@ msgstr "Einen Monat voraus"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:230
-#, fuzzy
 msgid "One Month Ahead."
-msgstr "Einen Monat voraus"
+msgstr "Einen Monat voraus."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:232
@@ -19413,9 +19397,8 @@ msgstr "Eine Woche voraus"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:234
-#, fuzzy
 msgid "One Week Ahead."
-msgstr "Eine Woche voraus"
+msgstr "Eine Woche voraus."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:236
@@ -19424,9 +19407,8 @@ msgstr "Drei Monate voraus"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:238
-#, fuzzy
 msgid "Three Months Ahead."
-msgstr "Drei Monate voraus"
+msgstr "Drei Monate voraus."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:240
@@ -19435,9 +19417,8 @@ msgstr "Sechs Monate voraus"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:242
-#, fuzzy
 msgid "Six Months Ahead."
-msgstr "Sechs Monate voraus"
+msgstr "Sechs Monate voraus."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:244
@@ -19446,9 +19427,8 @@ msgstr "Ein Jahr voraus"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:246
-#, fuzzy
 msgid "One Year Ahead."
-msgstr "Ein Jahr voraus"
+msgstr "Ein Jahr voraus."
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:310
@@ -19656,7 +19636,7 @@ msgstr "Duplizierte Buchungen finden..."
 #: ../intl-scm/guile-strings.c:420
 #, c-format
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
-msgstr "Unbekannte Kontoart »%s«. Stattdessen »Bank« verwendet."
+msgstr "Unbekannte Kontenart »%s«. Stattdessen »Bank« verwendet."
 
 #. src/import-export/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:422
@@ -19829,15 +19809,13 @@ msgstr ""
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:458
-#, fuzzy
 msgid "Sort companies by."
-msgstr "Firmen sortieren nach"
+msgstr "Firmen sortieren nach..."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:462
-#, fuzzy
 msgid "Name of the company."
-msgstr "Name der Organisation/Firma"
+msgstr "Name der Organisation/Firma."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:464
@@ -19846,9 +19824,8 @@ msgstr "Gesamter offener Betrag"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:466
-#, fuzzy
 msgid "Total amount owed to/from Company."
-msgstr "Gesamter offener Betrag von/an Firma"
+msgstr "Gesamter offener Betrag von/an Firma."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:468
@@ -19857,17 +19834,15 @@ msgstr "Intervall Gesamter offener Betrag"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:470
-#, fuzzy
 msgid "Amount owed in oldest bracket - if same go to next oldest."
 msgstr ""
 "Offener Betrag in ältestem Intervall. Falls identisch, wird nächstältestes "
-"angezeigt"
+"angezeigt."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:472
-#, fuzzy
 msgid "Sort order."
-msgstr "Sortierreihenfolge"
+msgstr "Die Sortierreihenfolge."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:474
@@ -19876,9 +19851,8 @@ msgstr "Aufsteigend"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:476
-#, fuzzy
 msgid "0 -> $999,999.99, A->Z."
-msgstr "0,00 -> 9.999,99; A->Z"
+msgstr "0,00 € -> 999.999,99 €; A->Z"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:478
@@ -19887,19 +19861,17 @@ msgstr "Absteigend"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:480
-#, fuzzy
 msgid "$999,999.99 -> $0, Z->A."
-msgstr "9.999,99 -> 0,00; Z->A"
+msgstr "999.999,99 € -> 0,00 €; Z->A."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:482
-#, fuzzy
 msgid ""
 "Show multi-currency totals. If not selected, convert all totals to report "
 "currency."
 msgstr ""
 "Summen in mehreren Währungen anzeigen. Falls nicht aktiviert, werden alle "
-"Summen in die Berichtswährung umgerechnet"
+"Summen in die Berichtswährung umgerechnet."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:484
@@ -19909,23 +19881,20 @@ msgstr "Alle Kunden/Lieferanten anzeigen, auch wenn sie den Saldo Null haben."
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:486 ../intl-scm/guile-strings.c:1578
-#, fuzzy
 msgid "Leading date."
-msgstr "Datum für Stichtag"
+msgstr "Das Datum für den Stichtag."
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:490 ../intl-scm/guile-strings.c:1582
-#, fuzzy
 msgid "Due date is leading."
-msgstr "Fälligkeitsdatum wird als Stichtag verwendet"
+msgstr "Das Fälligkeitsdatum wird als Stichtag verwendet."
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:494 ../intl-scm/guile-strings.c:1586
-#, fuzzy
 msgid "Post date is leading."
-msgstr "Buchungsdatum wird als Stichtag verwendet"
+msgstr "Das Buchungsdatum wird als Stichtag verwendet."
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
@@ -19963,7 +19932,7 @@ msgstr "61-90 Tage"
 #: ../intl-scm/guile-strings.c:506 ../intl-scm/guile-strings.c:1378
 #: ../intl-scm/guile-strings.c:1524
 msgid "91+ days"
-msgstr "Mehr als 91 Tage"
+msgstr "Mehr als 90 Tage"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/job-report.scm
@@ -20053,9 +20022,8 @@ msgstr "Berichtstitel"
 #: ../intl-scm/guile-strings.c:3068 ../intl-scm/guile-strings.c:3462
 #: ../intl-scm/guile-strings.c:3634 ../intl-scm/guile-strings.c:4218
 #: ../intl-scm/guile-strings.c:4836
-#, fuzzy
 msgid "Title for this report."
-msgstr "Titel des Berichts"
+msgstr "Der Titel des Berichts."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -20104,9 +20072,8 @@ msgstr "Verschachtelungstiefe Unterkonten"
 #: ../intl-scm/guile-strings.c:2792 ../intl-scm/guile-strings.c:2906
 #: ../intl-scm/guile-strings.c:3096 ../intl-scm/guile-strings.c:3650
 #: ../intl-scm/guile-strings.c:4234 ../intl-scm/guile-strings.c:4856
-#, fuzzy
 msgid "Maximum number of levels in the account tree displayed."
-msgstr "Maximale Verschachtelungstiefe in der Kontenhierarchie"
+msgstr "Die maximale Verschachtelungstiefe in der Kontenhierarchie."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -20129,11 +20096,10 @@ msgstr "Baumstruktur ab Tiefenlimit flach darstellen"
 #: ../intl-scm/guile-strings.c:552 ../intl-scm/guile-strings.c:2796
 #: ../intl-scm/guile-strings.c:2910 ../intl-scm/guile-strings.c:3100
 #: ../intl-scm/guile-strings.c:3232 ../intl-scm/guile-strings.c:3654
-#, fuzzy
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr ""
-"Konten, die tiefer als das gegebene Tiefenlimit in der Baumstruktur stehen, "
-"am Tiefenlimit darstellen"
+"Stelle Konten, die tiefer als das gegebene Tiefenlimit in der Baumstruktur "
+"stehen, am Tiefenlimit dar."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:554
@@ -20142,13 +20108,12 @@ msgstr "Unterkonten ignorieren, die Kontostand Null haben"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:556
-#, fuzzy
 msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-"
 "accounts."
 msgstr ""
-"Untergeordnete Konten, die Kontostand Null haben, aber Unterkonten mit einem "
-"Kontostand ungleich Null, ausschließen."
+"Schließe untergeordnete Konten, die Kontostand Null haben, aber Unterkonten "
+"mit einem Kontostand ungleich Null, aus."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/account-summary.scm
@@ -20177,11 +20142,10 @@ msgstr "Kontonamen anklickbar anzeigen"
 #: ../intl-scm/guile-strings.c:2816 ../intl-scm/guile-strings.c:2930
 #: ../intl-scm/guile-strings.c:3120 ../intl-scm/guile-strings.c:3674
 #: ../intl-scm/guile-strings.c:4258 ../intl-scm/guile-strings.c:4900
-#, fuzzy
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr ""
-"Konto als klickbaren Hyperlink anzeigen, der beim Anklicken das Kontofenster "
-"öffnet"
+"Zeige Konten als Hyperlinks an, die beim Anklicken das jeweilige Kontofenster "
+"öffnen."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:562
@@ -20203,7 +20167,7 @@ msgstr "Schrifttypenfamilie"
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:568
 msgid "Font definition in CSS font-family format."
-msgstr "Schrifttypendefinition im CSS-font-family-Format"
+msgstr "Schrifttypendefinition im CSS-font-family-Format."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:570
@@ -20261,9 +20225,8 @@ msgstr "Zusätzliche Bemerkungen"
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:584 ../intl-scm/guile-strings.c:1818
-#, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup."
-msgstr "Zusätzlicher Text am Ende der Rechnung ─ darf HTML-Elemente enthalten"
+msgstr "Zusätzlicher Text am Ende der Rechnung ─ darf HTML-Elemente enthalten."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/account-summary.scm
@@ -20296,9 +20259,8 @@ msgstr "Fremdwährungen anzeigen"
 #: ../intl-scm/guile-strings.c:3146 ../intl-scm/guile-strings.c:3488
 #: ../intl-scm/guile-strings.c:3708 ../intl-scm/guile-strings.c:4288
 #: ../intl-scm/guile-strings.c:4910
-#, fuzzy
 msgid "Display any foreign currency amount in an account."
-msgstr "Fremdwährungen in Konten anzeigen"
+msgstr "Fremdwährungen in Konten anzeigen."
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/account-summary.scm
@@ -20324,9 +20286,8 @@ msgstr "automatisch"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:600
-#, fuzzy
 msgid "Adjust the layout to fit the width of the screen or page."
-msgstr "Paßt das Layout an die Breite des Fensters oder der Seite an"
+msgstr "Paßt das Layout an die Breite des Fensters oder der Seite an."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:602
@@ -20368,9 +20329,8 @@ msgstr "Klammern"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:616
-#, fuzzy
 msgid "Surround negative amounts with brackets, e.g. ($100.00)."
-msgstr "Klammere negative Beträge ein, z.B. (100,00 €)"
+msgstr "Klammere negative Beträge ein, z.B. (100,00 €)."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:618
@@ -20457,7 +20417,7 @@ msgstr "Geschäftsadresse anzeigen"
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:656
 msgid "Show your own company's address and the date of printing."
-msgstr "Ihre eigene Geschäftsadresse und das Druckdatum anzeigen"
+msgstr "Ihre eigene Geschäftsadresse und das Druckdatum anzeigen."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
@@ -20510,16 +20470,14 @@ msgstr "Sortierspalte"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:676
-#, fuzzy
 msgid "Choose the column by which the result table is sorted."
-msgstr "Wählen Sie die Spalte, nach der die Tabelle sortiert werden soll"
+msgstr "Wählen Sie die Spalte, nach der die Tabelle sortiert werden soll."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:680
-#, fuzzy
 msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr ""
-"Die Sortierreihenfolge für die Spalten wählen: Aufsteigend oder absteigend"
+"Die Sortierreihenfolge für die Spalten wählen: Aufsteigend oder absteigend."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:692
@@ -20528,9 +20486,8 @@ msgstr "Kundenname"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:694
-#, fuzzy
 msgid "Sort alphabetically by customer name."
-msgstr "Alphabetisch nach Kundennamen sortieren"
+msgstr "Alphabetisch nach Kundennamen sortieren."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/average-balance.scm
@@ -20541,9 +20498,8 @@ msgstr "Gewinn"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:698
-#, fuzzy
 msgid "Sort by profit amount."
-msgstr "Sortieren nach Gewinn"
+msgstr "Sortieren nach dem Betrag des Gewinns."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:700 ../intl-scm/guile-strings.c:738
@@ -20552,9 +20508,8 @@ msgstr "Bruttogewinn"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:702
-#, fuzzy
 msgid "Sort by markup (which is profit amount divided by sales)."
-msgstr "Sortieren nach Bruttogewinn (Gewinn pro Umsatz)"
+msgstr "Sortieren nach Bruttogewinn (Gewinn pro Umsatz)."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:704 ../intl-scm/guile-strings.c:740
@@ -20563,15 +20518,13 @@ msgstr "Umsatz"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:706
-#, fuzzy
 msgid "Sort by sales amount."
-msgstr "Sortieren nach Umsatz"
+msgstr "Sortieren nach Umsatz."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:710
-#, fuzzy
 msgid "Sort by expense amount."
-msgstr "Sortieren nach Kosten"
+msgstr "Sortieren nach Kosten."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -20581,9 +20534,8 @@ msgstr "Aufsteigend"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:714
-#, fuzzy
 msgid "A to Z, smallest to largest."
-msgstr "Von A bis Z, von klein zu groß"
+msgstr "Von A bis Z, von klein nach groß."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -20593,9 +20545,8 @@ msgstr "Absteigend"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:718
-#, fuzzy
 msgid "Z to A, largest to smallest."
-msgstr "Von Z bis A, von groß nach klein"
+msgstr "Von Z bis A, von groß nach klein."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -20636,7 +20587,7 @@ msgstr "Kundenübersicht"
 #: ../intl-scm/guile-strings.c:758 ../intl-scm/guile-strings.c:794
 #: ../intl-scm/guile-strings.c:964 ../intl-scm/guile-strings.c:1174
 msgid "Charge Type"
-msgstr "Einheit"
+msgstr "Leistungsart"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20679,9 +20630,9 @@ msgstr "Eigener Titel"
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:778 ../intl-scm/guile-strings.c:984
 #: ../intl-scm/guile-strings.c:1194
-#, fuzzy
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
-msgstr "Benutzerdefinierte Überschrift anstelle »Rechnung«"
+msgstr "Benutzerdefinierte Überschrift anstelle »Rechnung« bzw. "
+"»Auslagenerstattungen«."
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20709,7 +20660,7 @@ msgstr "Anzeigen der Beschreibung?"
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:796
 msgid "Display the charge type?"
-msgstr "Die Einheit anzeigen?"
+msgstr "Die Leistungsart anzeigen?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20717,7 +20668,7 @@ msgstr "Die Einheit anzeigen?"
 #: ../intl-scm/guile-strings.c:802 ../intl-scm/guile-strings.c:1008
 #: ../intl-scm/guile-strings.c:1218
 msgid "Display the quantity of items?"
-msgstr "Anzeigen Anzahl der Einträge?"
+msgstr "Anzeigen Anzahl der Einheiten?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20725,25 +20676,23 @@ msgstr "Anzeigen Anzahl der Einträge?"
 #: ../intl-scm/guile-strings.c:808 ../intl-scm/guile-strings.c:1014
 #: ../intl-scm/guile-strings.c:1224
 msgid "Display the price per item?"
-msgstr "Den Preis pro Artikel anzeigen?"
+msgstr "Den Preis pro Einheit anzeigen?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:814 ../intl-scm/guile-strings.c:1020
 #: ../intl-scm/guile-strings.c:1230
-#, fuzzy
 msgid "Display the entry's discount?"
-msgstr "Anzeigen der Ermäßigung des Postens"
+msgstr "Anzeigen der Ermäßigung des Postens?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:820 ../intl-scm/guile-strings.c:1026
 #: ../intl-scm/guile-strings.c:1236
-#, fuzzy
 msgid "Display the entry's taxable status?"
-msgstr "Anzeigen der Steuerwirksamkeit des Postens"
+msgstr "Anzeigen der Steuerwirksamkeit des Postens?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20759,9 +20708,8 @@ msgstr "Anzeigen des gesamten Steueranteils jedes Postens"
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:832 ../intl-scm/guile-strings.c:1038
 #: ../intl-scm/guile-strings.c:1248
-#, fuzzy
 msgid "Display the entry's value?"
-msgstr "Anzeigen des Betrags des Postens"
+msgstr "Anzeigen des Betrags des Postens?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20941,7 +20889,7 @@ msgstr "Zahlungen"
 #: ../intl-scm/guile-strings.c:898 ../intl-scm/guile-strings.c:1080
 #: ../intl-scm/guile-strings.c:1290
 msgid "Display the payments applied to this invoice?"
-msgstr "Die Zahlungen in dieser Rechnung anzeigen?"
+msgstr "Die berücksichtigten Zahlungen in dieser Rechnung anzeigen?"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:902
@@ -20960,11 +20908,10 @@ msgstr "Text"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:910
-#, fuzzy
 msgid "Extra notes to put on the invoice (simple HTML is accepted)."
 msgstr ""
 "Zusätzliche Bemerkungen, die auf die Rechnung gedruckt werden sollen "
-"(einfaches HTML möglich)"
+"(einfaches HTML möglich)."
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -20972,7 +20919,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:912 ../intl-scm/guile-strings.c:1094
 #: ../intl-scm/guile-strings.c:1304
 msgid "Thank you for your patronage"
-msgstr "Vielen Dank für Ihre Bestellung!"
+msgstr "Vielen Dank für das uns engegengebrachte Vertrauen!"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -20991,7 +20938,7 @@ msgstr "Datumsformat heute"
 #: ../intl-scm/guile-strings.c:918 ../intl-scm/guile-strings.c:1310
 #: ../intl-scm/guile-strings.c:1424 ../intl-scm/guile-strings.c:1576
 msgid "The format for the date->string conversion for today's date."
-msgstr "Das Datumsformat für den Ausdruck des heutigen Datums."
+msgstr "Das Datumsformat für den Ausdruck des heutigen Datums. (siehe 'man 3 strftime')"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -21014,6 +20961,7 @@ msgid "Net Price"
 msgstr "Nettobetrag"
 
 # strange, had fuzzy translation Saldo (Periodenbezogen)
+# Ja, der Kundenbericht hat einen solchen
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -21077,17 +21025,15 @@ msgstr "Mindestanzahl Einträge"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1086
-#, fuzzy
 msgid "The minimum number of invoice entries to display."
 msgstr ""
-"Die Mindestanzahl Einträge einer Rechnung, die angezeigt werden sollen. (-1)"
+"Die Mindestanzahl Positionen, die auf der Rechnung angezeigt werden sollen."
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1092 ../intl-scm/guile-strings.c:1302
-#, fuzzy
 msgid "Extra notes to put on the invoice."
-msgstr "Zusätzliche Bemerkungen, die auf die Rechnung gedruckt werden sollen"
+msgstr "Zusätzliche Bemerkungen, die auf die Rechnung gedruckt werden sollen."
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1098
@@ -21096,9 +21042,8 @@ msgstr "Zahlungsempfänger"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1100
-#, fuzzy
 msgid "Display the Payable to: information."
-msgstr "Die Zahlungsempfänger-Information anzeigen"
+msgstr "Die Zahlungsempfänger-Information anzeigen."
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1104
@@ -21107,11 +21052,10 @@ msgstr "Angabe Zahlungsempfänger"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1106
-#, fuzzy
 msgid "The phrase for specifying to whom payments should be made."
 msgstr ""
 "Die Angabe des Zahlungsempfängers, wie sie auf die Rechnung gedruckt werden "
-"soll"
+"soll."
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1108
@@ -21125,20 +21069,18 @@ msgstr "Name Ansprechpartner"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1114
-#, fuzzy
 msgid "Display the Company contact information."
-msgstr "Den Ansprechpartner einer Firma anzeigen"
+msgstr "Den Ansprechpartner der Firma anzeigen?"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1118
 msgid "Company contact string"
-msgstr "Erklärung Ansprechpartner"
+msgstr "Ansprechpartner-Text"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1120
-#, fuzzy
 msgid "The phrase used to introduce the company contact."
-msgstr "Der Satz, mit dem der Ansprechpartner vorgestellt wird"
+msgstr "Die Phrase, mit dem der Ansprechpartner vorgestellt wird."
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1122
@@ -21164,7 +21106,7 @@ msgstr "WWW:"
 #: ../intl-scm/guile-strings.c:1154
 #, c-format
 msgid "%s&nbsp;#"
-msgstr "%s&nbsp;Nr."
+msgstr "%s-Nr."
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1156
@@ -21182,21 +21124,18 @@ msgstr "Rechnung in Bearbeitung..."
 
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1294
-#, fuzzy
 msgid "Job Details"
-msgstr "Auftrag-Dialog"
+msgstr "Auftragsdetails"
 
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1296
-#, fuzzy
 msgid "Display the job name for this invoice?"
-msgstr "Die Zahlungen in dieser Rechnung anzeigen?"
+msgstr "Die Auftragsbezeichnung für diese Rechnung anzeigen?"
 
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1350
-#, fuzzy
 msgid "Job name"
-msgstr "Auftragsname"
+msgstr "Auftragsbezeichnung"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -21212,16 +21151,14 @@ msgstr "Gesamt fällig"
 
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:1390
-#, fuzzy
 msgid "The job for this report."
-msgstr "Der Auftrag für diesen Bericht"
+msgstr "Der Auftrag für diesen Bericht."
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1392 ../intl-scm/guile-strings.c:1540
-#, fuzzy
 msgid "The account to search for transactions."
-msgstr "Das Konto, in dem nach Buchungen gesucht werden soll"
+msgstr "Das Konto, in dem nach Buchungen gesucht werden soll."
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -21261,75 +21198,63 @@ msgstr "Auftragsbericht"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1494
-#, fuzzy
 msgid "No valid customer selected."
-msgstr "Keine Konten ausgewählt"
+msgstr "Kein passender Kunde ausgewählt!"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1496
-#, fuzzy
 msgid "No valid employee selected."
-msgstr "Ungültige Zeichenkodierung gewählt"
+msgstr "Kein passender Mitarbeiter gewählt!"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1498
-#, fuzzy
 msgid "No valid company selected."
-msgstr "Ungültige Zeichenkodierung gewählt"
+msgstr "Keine passende Firma gewählt!"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1500
-#, fuzzy
 msgid "This report requires a customer to be selected."
-msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
+msgstr "Für diesen Bericht muß ein Kunde ausgewählt werden."
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1502
-#, fuzzy
 msgid "This report requires a employee to be selected."
-msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
+msgstr "Für diesen Bericht muß ein Mitarbeiter ausgewählt werden."
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1504
-#, fuzzy
 msgid "This report requires a company to be selected."
-msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
+msgstr "Für diesen Bericht muß ein Geschäftspartner ausgewählt werden."
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1506
-#, fuzzy
 msgid "No valid account selected"
-msgstr "Keine Konten ausgewählt"
+msgstr "Kein passendes Konto ausgewählt"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1508
-#, fuzzy
 msgid "This report requires a valid account to be selected."
-msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
+msgstr "Für diesen Bericht muß ein Konto ausgewählt werden."
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1532
-#, fuzzy
 msgid "Period Totals"
-msgstr "Periodenbeginn"
+msgstr "Periodensaldo"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1538
-#, fuzzy
 msgid "The company for this report."
-msgstr "Die Firma dieses Berichts"
+msgstr "Der in diesem Bericht untersuchte Geschäftspartner."
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1564
-#, fuzzy
 msgid "Display the period credits column?"
-msgstr "Anzeigen der Ermäßigung des Postens"
+msgstr "Haben-Spalte pro Periode anzeigen?"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1568
-#, fuzzy
 msgid "Display a period debits column?"
-msgstr "Anzeigen der Ermäßigung des Postens"
+msgstr "Soll-Spalte pro Periode anzeigen?"
 
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1596
@@ -21343,9 +21268,8 @@ msgstr "Verbindlichkeiten Konto"
 
 #. src/report/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:1610
-#, fuzzy
 msgid "The payable account you wish to examine."
-msgstr "Folgendes Verbindlichkeiten-Konto wollen Sie untersuchen"
+msgstr "Das -Konto der Verbindlichkeiten, welche Sie untersuchen wollen."
 
 #. src/report/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:1612
@@ -21360,7 +21284,7 @@ msgstr "Forderungen Konto"
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1616
 msgid "The receivables account you wish to examine."
-msgstr "Das Forderungen-Konto, welches Sie untersuchen wollen."
+msgstr "Das Konto der Forderungen, welche Sie untersuchen wollen."
 
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1618
@@ -21396,9 +21320,9 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
-"Dieser Bericht wurde speziell für (Verkaufs-)Rechnungen an Kunden. Bitte "
-"wählen Sie in den Optionen eine <em>Rechnung</em>, keine Lieferantenrechnung "
-"und keinen Auslagenbeleg."
+"Dieser Bericht wurde speziell für (Verkaufs-)Rechnungen an Kunden gestaltet. "
+"Bitte wählen Sie in den Optionen eine <em>Rechnung</em>, keine "
+"Lieferantenrechnung und keinen Auslagenbeleg."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1650
@@ -21550,7 +21474,7 @@ msgstr "Logobreite"
 #: ../intl-scm/guile-strings.c:1716 ../intl-scm/guile-strings.c:1784
 #: ../intl-scm/guile-strings.c:3964
 msgid "Units"
-msgstr "Maßeinheiten"
+msgstr "Einheiten"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1718 ../intl-scm/guile-strings.c:1786
@@ -21589,57 +21513,48 @@ msgstr "Zusätzliche Bemerkungen"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1746
-#, fuzzy
 msgid "Display the Tax Rate?"
-msgstr "Anzeigen des Datums?"
+msgstr "Anzeigen des Steuersatzes?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1748
-#, fuzzy
 msgid "Display the Units?"
-msgstr "Anzeigen der Gesamtsumme"
+msgstr "Anzeigen der Einheiten?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1750
-#, fuzzy
 msgid "Display the contact?"
-msgstr "Konto anzeigen?"
+msgstr "Kontakt anzeigen?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1752
-#, fuzzy
 msgid "Display the address?"
-msgstr "Anzeigen des Datums?"
+msgstr "Anzeigen der Adresse?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1754
-#, fuzzy
 msgid "Display the Invoice Number?"
-msgstr "Anzeigen der Schecknummer?"
+msgstr "Anzeigen der Rechnungsnummer?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1756
-#, fuzzy
 msgid "Display the Company Name?"
-msgstr "Kontenbezeichnung anzeigen?"
+msgstr "Den Firmennamen anzeigen?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1758
-#, fuzzy
 msgid "Invoice Number next to title?"
-msgstr "Rechnungsnummer"
+msgstr "Rechnungsnummer neben Dokumentenüberschrift?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1760
-#, fuzzy
 msgid "Display Job name?"
-msgstr "Kontenbezeichnung anzeigen?"
+msgstr "Auftragsbezeichnung anzeigen?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1762
-#, fuzzy
 msgid "Invoice Job number?"
-msgstr "Rechnungsnummer"
+msgstr "Auftragsnummer?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1764
@@ -21665,23 +21580,20 @@ msgstr ""
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1768
-#, fuzzy
 msgid "Font to use for the main heading."
-msgstr "Zeichensatz für die Hauptüberschrift"
+msgstr "Zeichensatz für die Hauptüberschrift."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1770
-#, fuzzy
 msgid "Font to use for everything else."
-msgstr "Zeichensatz für alles andere"
+msgstr "Zeichensatz für alles andere."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1772
-#, fuzzy
 msgid "Name of a file containing a logo to be used on the report."
 msgstr ""
 "Name der Datei, welche das Logo enthält, das in diesem Bericht verwendet "
-"weerden soll"
+"weerden soll."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1774
@@ -21710,7 +21622,6 @@ msgstr "CSS-Farbe."
 msgid "Net Price"
 msgstr "Nettobetrag"
 
-# strange, had fuzzy translation Saldo (Periodenbezogen)
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1800
 msgid "Total Price"
@@ -21724,7 +21635,7 @@ msgstr "Fälliger_Betrag"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1806
 msgid "Payment received, thank you"
-msgstr "Vielen Dank für Ihre Zahlung."
+msgstr "Betrag dankend erhalten."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1808
@@ -21872,7 +21783,7 @@ msgstr "Steuerschätzung des 2. Quartals des letzten Jahres"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1868 ../intl-scm/guile-strings.c:1952
 msgid "Apr 1 - May 31, Last year."
-msgstr "1. April- 31. August letzten Jahres"
+msgstr "1. April- 31. Mai letzten Jahres"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -22017,22 +21928,19 @@ msgstr "Drucke Elster-Export-Parameter"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1980
-#, fuzzy
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
-"Zeige Elster-Export-Parameter für jede Kennziffer/jedes Konto im Bericht"
+"Zeige Elster-Export-Parameter für jede Kennziffer/jedes Konto im Bericht."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1982
-#, fuzzy
 msgid "Do not print T-Num:Memo data"
-msgstr "Keine Buchungstexte ausgeben"
+msgstr "Keine Nr./Buchungstexte ausgeben"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1984
-#, fuzzy
 msgid "Do not print T-Num:Memo data for transactions."
-msgstr "Keine Buchungstexte für Buchungen darstellen"
+msgstr "Keine Nr./Buchungstexte für Buchungen darstellen."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1986
@@ -22041,7 +21949,6 @@ msgstr "Keine Buchungstexte ausgeben"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1988
-#, fuzzy
 msgid "Do not print Action:Memo data for transactions."
 msgstr "Keine Buchungstexte für Buchungen darstellen"
 
@@ -22052,9 +21959,8 @@ msgstr "Keine Buchungsdetails darstellen"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1992
-#, fuzzy
 msgid "Do not print transaction detail for accounts."
-msgstr "Keine Buchungsdetails für Konten ausgeben"
+msgstr "Keine Buchungsdetails für Konten ausgeben."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1994
@@ -22063,9 +21969,8 @@ msgstr "Keine US-amerikanischen Steuerquartale (2-4 Monate) verwenden"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1996
-#, fuzzy
 msgid "Do not print transactions out of specified dates."
-msgstr "Gibt keine Buchungen außerhalb des spezifizierten Zeitraums aus"
+msgstr "Gibt keine Buchungen außerhalb des spezifizierten Zeitraums aus."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1998
@@ -22074,9 +21979,8 @@ msgstr "Währungsumtauschdatum"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2000
-#, fuzzy
 msgid "Select date to use for PriceDB lookups."
-msgstr "Wähle Datum für die Suche in der Kursdatenbank"
+msgstr "Wähle Datum für die Suche in der Kursdatenbank."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2002
@@ -22085,9 +21989,8 @@ msgstr "zeitlich nächstes Buchungsdatum"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2004
-#, fuzzy
 msgid "Use nearest to transaction date."
-msgstr "Verwende das dem Buchungsdatum nächste Datum"
+msgstr "Verwende das dem Buchungsdatum nächste Datum."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2006
@@ -22096,9 +21999,8 @@ msgstr "Zeitlich nächstes zum Bericht"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2008
-#, fuzzy
 msgid "Use nearest to report date."
-msgstr "Verwende das dem Berichtsdatum nächste Datum"
+msgstr "Verwende das dem Berichtsdatum nächste Datum."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2010
@@ -22107,11 +22009,10 @@ msgstr "Schattiere Buchungen alternierend"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2012
-#, fuzzy
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr ""
 "Schattiere den Hintergrund von Buchungen abwechselnd, falls mehr als eine "
-"dargestellt werden"
+"dargestellt werden."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2014
@@ -22212,9 +22113,8 @@ msgstr "Schriftarten"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2054
-#, fuzzy
 msgid "Font info for the report title."
-msgstr "Schriftart für den Berichtstitel"
+msgstr "Schriftart für den Berichtstitel."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2058
@@ -22223,9 +22123,8 @@ msgstr "Konto-Hyperlink"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2060
-#, fuzzy
 msgid "Font info for account name."
-msgstr "Schriftart für den Kontoname, der als Hyperlink dargestellt wird"
+msgstr "Schriftart für Kontonamen."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2064
@@ -22234,9 +22133,8 @@ msgstr "Zahlenfeld"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2066
-#, fuzzy
 msgid "Font info for regular number cells."
-msgstr "Schriftart für Felder mit normalen Zahlen"
+msgstr "Schriftart für Felder mit normalen Zahlen."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2070
@@ -22255,9 +22153,8 @@ msgstr "Zahlenüberschrift"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2078
-#, fuzzy
 msgid "Font info for number headers."
-msgstr "Schriftart für Überschriften mit Zahlen"
+msgstr "Schriftart für Überschriften mit Zahlen."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2082
@@ -22266,9 +22163,8 @@ msgstr "Textfeld"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2084
-#, fuzzy
 msgid "Font info for regular text cells."
-msgstr "Schriftart für normale Textfelder"
+msgstr "Schriftart für normale Textfelder."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2088
@@ -22277,9 +22173,8 @@ msgstr "Summenfeld"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2090
-#, fuzzy
 msgid "Font info for number cells containing a total."
-msgstr "Schriftart für Zahlenfelder mit Summen"
+msgstr "Schriftart für Zahlenfelder mit Summen."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2094
@@ -22288,9 +22183,8 @@ msgstr "Summenbeschriftung"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2096
-#, fuzzy
 msgid "Font info for cells containing total labels."
-msgstr "Schriftart für die Beschriftungsfelder von Summen"
+msgstr "Schriftart für die Beschriftungsfelder von Summen."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2100
@@ -22299,9 +22193,8 @@ msgstr "Zentriertes Textfeld"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2102
-#, fuzzy
 msgid "Font info for centered label cells."
-msgstr "Schriftart für zentrierte Textfelder"
+msgstr "Schriftart für zentrierte Textfelder."
 
 #. src/report/report-system/html-style-sheet.scm
 #: ../intl-scm/guile-strings.c:2104
@@ -22336,7 +22229,7 @@ msgstr "Für diesen Bericht müssen einige Optionen ausgewählt werden."
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:2124
 msgid "No accounts selected"
-msgstr "Keine Konten ausgewählt"
+msgstr "Keine Konten ausgewählt!"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:2126
@@ -22347,7 +22240,7 @@ msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:2128 ../intl-scm/guile-strings.c:4048
 msgid "No data"
-msgstr "Keine Daten gefunden"
+msgstr "Keine Daten gefunden!"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:2130
@@ -22360,27 +22253,23 @@ msgstr ""
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2132
-#, fuzzy
 msgid "Select a date to report on."
-msgstr "Datum des Berichts"
+msgstr "Wähle Datum des Berichts."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2134
-#, fuzzy
 msgid "Start of reporting period."
-msgstr "Start der Berichtsperiode"
+msgstr "Der Start der Berichtsperiode."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2136
-#, fuzzy
 msgid "End of reporting period."
-msgstr "Ende der Berichtsperiode"
+msgstr "Das Ende der Berichtsperiode."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2138
-#, fuzzy
 msgid "The amount of time between data points."
-msgstr "Die Zeitspanne zwischen den Datenpunkten"
+msgstr "Die Zeitspanne zwischen den Datenpunkten."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2140
@@ -22390,7 +22279,7 @@ msgstr "Tag"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2142
 msgid "One Day."
-msgstr "Ein Tag"
+msgstr "Ein Tag."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2144
@@ -22400,7 +22289,7 @@ msgstr "Woche"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2146
 msgid "One Week."
-msgstr "Eine Woche"
+msgstr "Eine Woche."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2148
@@ -22410,7 +22299,7 @@ msgstr "2 Wochen"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2150
 msgid "Two Weeks."
-msgstr "Zwei Wochen"
+msgstr "Zwei Wochen."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2152
@@ -22420,7 +22309,7 @@ msgstr "Monat"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2154
 msgid "One Month."
-msgstr "Ein Monat"
+msgstr "Ein Monat."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2156
@@ -22430,7 +22319,7 @@ msgstr "Quartal"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2158
 msgid "One Quarter."
-msgstr "Ein Quartal"
+msgstr "Ein Quartal."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2160
@@ -22440,7 +22329,7 @@ msgstr "Halbjahr"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2162
 msgid "Half Year."
-msgstr "Ein Halbjahr"
+msgstr "Ein Halbjahr."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2164
@@ -22450,7 +22339,7 @@ msgstr "Jahr"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2166
 msgid "One Year."
-msgstr "Ein Jahr"
+msgstr "Ein Jahr."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2168
@@ -22459,45 +22348,38 @@ msgstr "Alle"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2170
-#, fuzzy
 msgid "All accounts"
 msgstr "Alle Konten"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2172
-#, fuzzy
 msgid "Top-level."
-msgstr "Jeweils neues Fenster"
+msgstr "Oberste Ebene."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2174
-#, fuzzy
 msgid "Second-level."
-msgstr "Zweite Ebene"
+msgstr "Zweite Ebene."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2176
-#, fuzzy
 msgid "Third-level."
-msgstr "Dritte Ebene"
+msgstr "Dritte Ebene."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2178
-#, fuzzy
 msgid "Fourth-level."
-msgstr "Vierte Ebene"
+msgstr "Vierte Ebene."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2180
-#, fuzzy
 msgid "Fifth-level."
-msgstr "Fünfte Ebene"
+msgstr "Fünfte Ebene."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2182
-#, fuzzy
 msgid "Sixth-level."
-msgstr "Sechste Ebene"
+msgstr "Sechste Ebene."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2184
@@ -22557,9 +22439,8 @@ msgstr "Kontostände zusätzlich in Fremdwährung anzeigen?"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:2198 ../intl-scm/guile-strings.c:2602
 #: ../intl-scm/guile-strings.c:4006
-#, fuzzy
 msgid "The source of price information."
-msgstr "Quelle der Preisinformationen"
+msgstr "Die Quelle der Kursinformationen."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2200
@@ -22568,9 +22449,8 @@ msgstr "Durchschnittlicher Preis"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2202
-#, fuzzy
 msgid "The volume-weighted average cost of purchases."
-msgstr "Die Betrags-gewichteten durchschnittlichen Preise"
+msgstr "Der mit dem Volumen gewichtete Durchschnitt der Kaufpreise"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -22581,11 +22461,9 @@ msgstr "Gewichteter Durchschnitt"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:2206 ../intl-scm/guile-strings.c:4010
-#, fuzzy
 msgid "The weighted average of all currency transactions of the past."
 msgstr ""
-"Der gewichtete Durchschnitt aller bisherigen Währungsbuchungen der "
-"Vergangenheit"
+"Der gewichtete Durchschnitt aller vergangenen Währungsbuchungen"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -22596,9 +22474,8 @@ msgstr "Neuester"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2210 ../intl-scm/guile-strings.c:2606
-#, fuzzy
 msgid "The most recent recorded price."
-msgstr "Der neueste aufgezeichnete Preis"
+msgstr "Der neueste aufgezeichnete Kurs"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -22609,9 +22486,8 @@ msgstr "Zeitlich nächster"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2214 ../intl-scm/guile-strings.c:2610
-#, fuzzy
 msgid "The price recorded nearest in time to the report date."
-msgstr "Der Preis, der dem Berichtsdatum am nächsten kommt"
+msgstr "Der Kurs, der dem Berichtsdatum am nächsten kommt."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2216
@@ -22710,9 +22586,8 @@ msgstr "Wählen Sie eine Sortierreihenfolge für die Konten."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2262
-#, fuzzy
 msgid "Alphabetical by account code."
-msgstr "Nach Kontocode alphabetisch sortieren"
+msgstr "Nach Kontonummer alphabetisch sortieren."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2264
@@ -22721,21 +22596,18 @@ msgstr "Alphabetisch"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2266
-#, fuzzy
 msgid "Alphabetical by account name."
-msgstr "Nach Kontonamen alphabetisch sortieren"
+msgstr "Nach Kontonamen alphabetisch sortieren."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2270
-#, fuzzy
 msgid "By amount, largest to smallest."
-msgstr "Nach Betrag sortieren, vom größten zum kleinsten"
+msgstr "Nach Betrag sortieren, vom größten zum kleinsten."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2272
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "Anzeige der Salden von übergeordneten Konten"
+msgstr "Bestimmt die Anzeige der Salden von Konten mit Unterkonten."
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
@@ -22747,21 +22619,19 @@ msgstr "Kontosaldo"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2276
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
-"Nur unmittelbare Saldo von übergeordneten Konten anzeigen und dabei "
-"Unterkonten ignorieren"
+"Zeige nur den unmittelbaren Saldo vom übergeordneten Konto an und schließe "
+" dabei jegliche Unterkonten aus."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2280
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
 msgstr ""
-"Zwischensummen für Salden der übergeordneten Konten und Salden aller "
-"Unterkonten berechnen und als Salden der übergeordneten Konten anzeigen"
+"Berechne den Saldo für das übergeordnete Konto und alle seine"
+"Unterkonten und zeige diesen als Saldo des übergeordneten Konten an."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2282 ../intl-scm/guile-strings.c:2292
@@ -22770,15 +22640,14 @@ msgstr "Nicht anzeigen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2284
-#, fuzzy
 msgid "Do not show any balances of parent accounts."
-msgstr "Salden von übergeordneten Konten nicht anzeigen"
+msgstr "Zeige keine Salden von übergeordneten Konten an."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2286
-#, fuzzy
 msgid "How to show account subtotals for parent accounts."
-msgstr "Anzeige der Zwischensummen für übergeordnete Konten mit Unterkonten"
+msgstr "Wie sollen Zwischensummen für übergeordnete Konten mit Unterkonten "
+"angezeigt werden?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2288
@@ -22787,16 +22656,14 @@ msgstr "Zwischensummen anzeigen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2290
-#, fuzzy
 msgid "Show subtotals for selected parent accounts which have subaccounts."
 msgstr ""
-"Zwischensummen für übergeordnete Konten anzeigen, die Unterkonten haben"
+"Zeige Zwischensummen für übergeordnete Konten, die Unterkonten haben, an."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2294
-#, fuzzy
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Keine Zwischensummen von übergeordneten Konten anzeigen"
+msgstr "Zeige keine Zwischensummen von übergeordneten Konten an."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2296
@@ -22805,13 +22672,12 @@ msgstr "Rechnungswesen-Stil (experimentell)"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2298
-#, fuzzy
 msgid ""
 "Show parent account subtotals, indented per accounting text book practice "
 "(experimental)."
 msgstr ""
-"Zwischensummen für übergeordnete Konten eingerückt anzeigen, gemäß "
-"Rechnungswesen-Stil (experimentell)"
+"Zeige Zwischensummen für übergeordnete Konten gemäß Rechnungswesen-Stil "
+"eingerückt an. (experimentell)."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2300
@@ -22872,9 +22738,8 @@ msgstr ""
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2326
-#, fuzzy
 msgid "Enter a descriptive name for this report."
-msgstr "Geben Sie einen beschreibenden Namen für diesen Bericht an"
+msgstr "Geben Sie einen beschreibenden Namen für diesen Bericht an!"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2328
@@ -22892,6 +22757,9 @@ msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
+"Es wurden Berichte gefunden, welche im einem veralteten Format gespeichert "
+"waren. Da das Format leider nicht mehr gepflegt wird, wurden die Berichte "
+"möglicherweise unpassend wiederhergestellt."
 
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -22979,7 +22847,7 @@ msgstr "Bericht '%s' berechnen..."
 #: ../intl-scm/guile-strings.c:2376
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr "Bericht '%s' erstellen..."
+msgstr "Bericht '%s' darstellen..."
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2378
@@ -23141,13 +23009,12 @@ msgstr "Durchschnitt anzeigen"
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2430 ../intl-scm/guile-strings.c:3342
-#, fuzzy
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
-"Entweder die Beträge direkt anzeigen oder die durchschnittlichen Werte pro z."
-"B. Monat."
+"Bestimme. ob die Beträge über den gesamten Zeitraum oder gemittelte Werte "
+"z.B. pro Monat angezeigt werden sollen."
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -23158,29 +23025,25 @@ msgstr "Kein Durchschnitt"
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2434 ../intl-scm/guile-strings.c:3346
-#, fuzzy
 msgid "Just show the amounts, without any averaging."
-msgstr "Nur die Beträge anzeigen ohne weitere Durchschnittberechnung"
+msgstr "Zeige nur die Beträge ohne weitere Durchschnittberechnungen an."
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2438
-#, fuzzy
 msgid "Show the average yearly amount during the reporting period."
-msgstr "Jährlichen Durchschnitt anzeigen"
+msgstr "Zeige den jährlichen Durchschnitt  im Berichtszeitraum an."
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2442 ../intl-scm/guile-strings.c:3350
-#, fuzzy
 msgid "Show the average monthly amount during the reporting period."
-msgstr "Monatlichen Durchschnitt anzeigen"
+msgstr "Zeige den monatlichen Durchschnitt im Berichtszeitraum an."
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2446 ../intl-scm/guile-strings.c:3354
-#, fuzzy
 msgid "Show the average weekly amount during the reporting period."
-msgstr "Wöchentlichen Durchschnitt anzeigen"
+msgstr "Zeige den wöchentlichen Durchschnitt im Berichtszeitraum an."
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -23199,11 +23062,9 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:2450 ../intl-scm/guile-strings.c:3362
 #: ../intl-scm/guile-strings.c:3438
-#, fuzzy
 msgid "Show accounts to this depth and not further."
 msgstr ""
-"Konten nur bis zu dieser Verschachtelungstiefe anzeigen (überstimmt alle "
-"anderen Optionen)."
+"Konten nur bis zu dieser Verschachtelungstiefe anzeigen."
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -23224,9 +23085,8 @@ msgstr "Prozentangabe in der Legende anzeigen?"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2458
-#, fuzzy
 msgid "Maximum number of slices in pie."
-msgstr "Maximale Anzahl Segmente (Tortenstücke) im Diagramm"
+msgstr "Maximale Anzahl der Segmente (Tortenstücke) im Diagramm."
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2460
@@ -23290,9 +23150,8 @@ msgstr "Firmenname"
 #: ../intl-scm/guile-strings.c:2894 ../intl-scm/guile-strings.c:3072
 #: ../intl-scm/guile-strings.c:3466 ../intl-scm/guile-strings.c:3638
 #: ../intl-scm/guile-strings.c:4222 ../intl-scm/guile-strings.c:4840
-#, fuzzy
 msgid "Name of company/individual."
-msgstr "Name der Organisation/Firma"
+msgstr "Name der Organisation oder Person."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23303,11 +23162,9 @@ msgstr "Tiefenlimit Verwendung"
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2496 ../intl-scm/guile-strings.c:4238
-#, fuzzy
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr ""
-"Festlegen, wie das Tiefenlimit für Konten in der Baumstruktur verwendet "
-"werden soll"
+"Bestimmt, wie Konten unter dem Tiefenlimit behandelt werden soll."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23345,7 +23202,7 @@ msgstr "Zwischensummen für übergeordnete Konten"
 #: ../intl-scm/guile-strings.c:3660 ../intl-scm/guile-strings.c:4244
 #: ../intl-scm/guile-strings.c:4894
 msgid "Include accounts with zero total balances"
-msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
+msgstr "Konten, die Kontostand Null haben, mit einbeziehen."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23358,9 +23215,8 @@ msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
 #: ../intl-scm/guile-strings.c:2918 ../intl-scm/guile-strings.c:3108
 #: ../intl-scm/guile-strings.c:3662 ../intl-scm/guile-strings.c:4246
 #: ../intl-scm/guile-strings.c:4896
-#, fuzzy
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
+msgstr "Schließe Konten mit (rekursivem) Saldo von Null mit ein."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23383,9 +23239,8 @@ msgstr "Salden ignorieren, die Null betragen"
 #: ../intl-scm/guile-strings.c:2508 ../intl-scm/guile-strings.c:2808
 #: ../intl-scm/guile-strings.c:2922 ../intl-scm/guile-strings.c:3112
 #: ../intl-scm/guile-strings.c:3666 ../intl-scm/guile-strings.c:4250
-#, fuzzy
 msgid "Show blank space in place of any zero balances which would be shown."
-msgstr "Leerstellen anstatt Nullen bei Null-Salden anzeigen"
+msgstr "Zeige Leerraum statt Nullen für Null-Salden an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23412,30 +23267,26 @@ msgstr "Linien aus Rechnungswesen anzeigen"
 #: ../intl-scm/guile-strings.c:2926 ../intl-scm/guile-strings.c:3116
 #: ../intl-scm/guile-strings.c:3478 ../intl-scm/guile-strings.c:3670
 #: ../intl-scm/guile-strings.c:4254
-#, fuzzy
 msgid "Use rules beneath columns of added numbers like accountants do."
-msgstr "Linien neben Spalten mit Salden anzeigen, wie im Rechnungswesen üblich"
+msgstr "Zeige Linien neben Spalten mit Salden an, wie im Rechnungswesen üblich."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2520 ../intl-scm/guile-strings.c:4262
-#, fuzzy
 msgid "Show an account's balance."
-msgstr "Kontensaldo anzeigen"
+msgstr "Zeige den Kontensaldo an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2524 ../intl-scm/guile-strings.c:4266
-#, fuzzy
 msgid "Show an account's account code."
-msgstr "Kontonummer anzeigen"
+msgstr "Zeige die Kontonummer an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2528 ../intl-scm/guile-strings.c:4270
-#, fuzzy
 msgid "Show an account's account type."
-msgstr "Kontoart anzeigen"
+msgstr "Zeige die Kontenart an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23446,9 +23297,8 @@ msgstr "Kontenbeschreibung"
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2532 ../intl-scm/guile-strings.c:4274
-#, fuzzy
 msgid "Show an account's description."
-msgstr "Kontenbeschreibung anzeigen"
+msgstr "Zeige Kontenbeschreibung an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23459,9 +23309,8 @@ msgstr "Kontennotizen"
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2536 ../intl-scm/guile-strings.c:4278
-#, fuzzy
 msgid "Show an account's notes."
-msgstr "Kontennotizen anzeigen"
+msgstr "Zeige Kontennotizen an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -23495,9 +23344,8 @@ msgstr "Wechselkurse anzeigen"
 #: ../intl-scm/guile-strings.c:3268 ../intl-scm/guile-strings.c:3492
 #: ../intl-scm/guile-strings.c:3712 ../intl-scm/guile-strings.c:4292
 #: ../intl-scm/guile-strings.c:4914
-#, fuzzy
 msgid "Show the exchange rates used."
-msgstr "Aktuelle Wechselkurse anzeigen"
+msgstr "Zeige die verwendeten Wechselkurse an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -23508,13 +23356,12 @@ msgstr "Rekursiver Saldo"
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2554 ../intl-scm/guile-strings.c:4296
-#, fuzzy
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
 msgstr ""
-"Gesamten Saldo von allen Konten und allen Unterkonten anzeigen, unabhängig "
-"vom Tiefenlimit"
+"Zeige den Gesamt-Saldo einschließlich der Salden der Unterkonten bis zum "
+"Tiefenlimit an."
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
