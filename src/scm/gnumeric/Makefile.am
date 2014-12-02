@@ -33,6 +33,5 @@ noinst_DATA = .scm-links
 EXTRA_DIST = \
   ${gncscm_DATA}
 
-CLEANFILES = .scm-links ${gncscmcache_DATA}
-
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

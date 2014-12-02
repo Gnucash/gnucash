@@ -104,23 +104,9 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
-  --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
-  --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome \
-  --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/gnome-utils \
-  --library-dir    ${top_builddir}/src/backend/xml \
-  --library-dir    ${top_builddir}/src/backend/sql \
-  --library-dir    ${top_builddir}/src/html \
-  --library-dir    ${top_builddir}/src/report/report-system \
-  --library-dir    ${top_builddir}/src/report/report-gnome \
-  --library-dir    ${top_builddir}/src/register/register-gnome \
-  --library-dir    ${top_builddir}/src/register/register-core \
-  --library-dir    ${top_builddir}/src/register/ledger-core \
-  --library-dir    ${top_builddir}/src/gnome-search
-
+  --library-dir    ${top_builddir}/src/gnc-module
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
@@ -138,7 +124,7 @@ endif
 clean-local:
 	$(RM) -rf gnucash qif-import
 
-CLEANFILES += .scm-links ${gncscmmodcache_DATA} ${gncscmcache_DATA}
+CLEANFILES += .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.qif.import\"
