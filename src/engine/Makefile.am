@@ -240,8 +240,13 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 
 BUILT_SOURCES = iso-4217-currencies.c
 
-CLEANFILES = $(BUILT_SOURCES) .scm-links \
-	${SCM_FILE_LINKS}
+CLEANFILES = \
+	$(BUILT_SOURCES) \
+	.scm-links \
+	${SCM_FILE_LINKS} \
+	${gncscmmodcache_DATA} \
+	${gncscmcache_DATA}
+
 MAINTAINERCLEANFILES = swig-engine.c
 
 clean-local:
