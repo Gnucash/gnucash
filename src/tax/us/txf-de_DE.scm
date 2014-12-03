@@ -27,6 +27,14 @@
 ;;
 
 (use-modules (gnucash gettext))
+(use-modules (sw_app_utils))
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")))
+  (else ))
+(use-modules (sw_engine))
 
 (define txf-tax-entity-types
   (list
