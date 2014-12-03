@@ -286,10 +286,12 @@ GncDenom::GncDenom (GncNumeric& a, GncNumeric& b,
         {
             m_error = GNC_ERROR_DENOM_DIFF;
         }
+        m_auto = false;
         break;
 
     case DenomType::lcd:
         m_value = a.m_den.lcm(b.m_den);
+        m_auto = false;
         break;
     default:
         break;
@@ -324,6 +326,8 @@ GncDenom::reduce (const GncNumeric& a) noexcept
         }
         m_value = (a.m_num.abs() > a.m_den ? powten (m_sigfigs - digits - 1) :
                    powten (m_sigfigs + digits));
+        m_auto = false;
+        break;
     }
 }
 
