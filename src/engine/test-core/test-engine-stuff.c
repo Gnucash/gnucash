@@ -289,7 +289,7 @@ get_random_kvp_value_depth (int type, gint depth)
         break;
 
     case KVP_TYPE_NUMERIC:
-        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric());
+        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric(GNC_DENOM_AUTO));
         break;
 
     case KVP_TYPE_STRING:
@@ -409,11 +409,12 @@ get_random_kvp_value(int type)
 #define RAND_IN_RANGE(X) (((X)*((gint64) (rand()+1)))/RAND_MAX)
 
 gnc_numeric
-get_random_gnc_numeric(void)
+get_random_gnc_numeric(int64_t deno)
 {
     gint64 numer;
-    gint64 deno;
 
+    if (deno == GNC_DENOM_AUTO)
+    {
     if (RAND_MAX / 8 > rand())
     {
         /* Random number between 1 and 6000 */
@@ -431,7 +432,7 @@ get_random_gnc_numeric(void)
             norm --;
         }
     }
-
+    }
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
 
@@ -667,7 +668,7 @@ make_random_changes_to_price (QofBook *book, GNCPrice *p)
     gnc_price_set_typestr (p, string);
     g_free (string);
 
-    gnc_price_set_value (p, get_random_gnc_numeric ());
+    gnc_price_set_value (p, get_random_gnc_numeric (GNC_DENOM_AUTO));
 
     gnc_price_commit_edit (p);
 }
@@ -937,7 +938,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     /* Other split should have equal and opposite value */
     if (do_bork())
     {
-        val = get_random_gnc_numeric();
+        val = get_random_gnc_numeric(GNC_DENOM_AUTO);
     }
     val = gnc_numeric_neg(val);
     xaccSplitSetValue(s, val);
@@ -1283,7 +1284,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
 
     do
     {
-        val = get_random_gnc_numeric ();
+        val = get_random_gnc_numeric (scu);
         if (val.num == 0)
             fprintf(stderr, "get_random_split: Created split with zero value: %p\n", ret);
 
@@ -1834,7 +1835,7 @@ get_random_query(void)
         case 11: /*  PR_PRICE */
             xaccQueryAddSharePriceMatch
             (q,
-             get_random_gnc_numeric (),
+             get_random_gnc_numeric (GNC_DENOM_AUTO),
              get_random_int_in_range (1, QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
@@ -1842,7 +1843,7 @@ get_random_query(void)
         case 12: /* PR_SHRS */
             xaccQueryAddSharesMatch
             (q,
-             get_random_gnc_numeric (),
+             get_random_gnc_numeric (GNC_DENOM_AUTO),
              get_random_int_in_range (1, QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
@@ -1850,7 +1851,7 @@ get_random_query(void)
         case 13: /* PR_VALUE */
             xaccQueryAddValueMatch
             (q,
-             get_random_gnc_numeric (),
+             get_random_gnc_numeric (GNC_DENOM_AUTO),
              get_random_int_in_range (1, QOF_NUMERIC_MATCH_ANY),
              get_random_int_in_range (1, QOF_COMPARE_NEQ),
              get_random_queryop ());
