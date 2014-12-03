@@ -497,6 +497,7 @@ gnc_lot_get_balance (GNCLot *lot)
         Split *s = node->data;
         gnc_numeric amt = xaccSplitGetAmount (s);
         baln = gnc_numeric_add_fixed (baln, amt);
+        g_assert (gnc_numeric_check (baln) == GNC_ERROR_OK);
     }
 
     /* cache a zero balance as a closed lot */
