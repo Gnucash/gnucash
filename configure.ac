@@ -757,7 +757,7 @@ enable_google_profile=no
 AC_ARG_ENABLE( google-profiler,
   [AS_HELP_STRING([--enable-google-profiler], [link in Google Performance Tools profiler; allows enabling profiling by setting $CPUPROFILE=/path/to/logfile.])],
   [AC_MSG_CHECKING([Google PerfTools Profiler])
-   AC_CHECK_LIB([profiler], [enable_google_profile=yes],
+   AC_CHECK_LIB([profiler], [ProfilerEnable], [enable_google_profile=yes],
       [AC_MSG_WARN([Google Profiling Enabled but the library was not found.])])
 ])
 AM_CONDITIONAL(WITH_GOOGLE_PROFILER, [test x$enable_google_profile = xyes])

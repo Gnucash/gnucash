@@ -81,6 +81,10 @@ test_link_LDADD = ../libgncmod-engine.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
+if WITH_GOOGLE_PROFILER
+LDADD += -lprofiler
+endif
+
 EXTRA_DIST += \
   test-create-account \
   test-create-account.scm \
