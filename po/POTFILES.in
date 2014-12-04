@@ -430,6 +430,7 @@ src/import-export/qif-imp/gnc-plugin-qif-import.c
 [type: gettext/gsettings]src/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in
 src/libqof/qof/gnc-date.cpp
 src/libqof/qof/gnc-numeric.cpp
+src/libqof/qof/gnc-rational.cpp
 src/libqof/qof/guid.cpp
 src/libqof/qof/kvp_frame.cpp
 src/libqof/qof/kvp-util.cpp

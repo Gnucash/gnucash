@@ -25,6 +25,7 @@ AM_CPPFLAGS = \
 libgnc_qof_la_SOURCES =  \
    gnc-date.cpp        \
    gnc-numeric.cpp     \
+   gnc-rational.cpp    \
    guid.cpp            \
    kvp-util.cpp        \
    kvp_frame.cpp       \
@@ -51,6 +52,7 @@ qofinclude_HEADERS = \
    gnc-date-p.h      \
    gnc-date.h        \
    gnc-numeric.h     \
+   gnc-rational.hpp  \
    guid.h            \
    kvp-util-p.h      \
    kvp-util.h        \
