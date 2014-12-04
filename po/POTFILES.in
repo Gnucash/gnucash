@@ -441,7 +441,7 @@ src/libqof/qof/qofevent.cpp
 src/libqof/qof/qofid.cpp
 src/libqof/qof/qofinstance.cpp
 src/libqof/qof/qoflog.cpp
-src/libqof/qof/qofmath128.cpp
+src/libqof/qof/qofint128.cpp
 src/libqof/qof/qofobject.cpp
 src/libqof/qof/qofquerycore.cpp
 src/libqof/qof/qofquery.cpp
