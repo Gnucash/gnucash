@@ -1265,10 +1265,13 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
     xaccTransBeginEdit (s->parent);
     if (s->acc)
+    {
         s->amount = gnc_numeric_convert(amt, get_commodity_denom(s),
                                         GNC_HOW_RND_ROUND_HALF_UP);
+        g_assert (gnc_numeric_check (s->amount) == GNC_ERROR_OK);
+    }
     else
-        s->amount = amt;
+         s->amount = amt;
 
     SET_GAINS_ADIRTY(s);
     mark_split (s);
@@ -1283,6 +1286,7 @@ qofSplitSetValue (Split *split, gnc_numeric amt)
     g_return_if_fail(split);
     split->value = gnc_numeric_convert(amt,
                                        get_currency_denom(split), GNC_HOW_RND_ROUND_HALF_UP);
+    g_assert(gnc_numeric_check (split->value) != GNC_ERROR_OK);
 }
 
 /* The value of the split in the _transaction's_ currency. */
@@ -1300,7 +1304,8 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
     xaccTransBeginEdit (s->parent);
     new_val = gnc_numeric_convert(amt, get_currency_denom(s),
                                   GNC_HOW_RND_ROUND_HALF_UP);
-    if (gnc_numeric_check(new_val) == GNC_ERROR_OK)
+    if (gnc_numeric_check(new_val) == GNC_ERROR_OK &&
+        !(gnc_numeric_zero_p (new_val) && !gnc_numeric_zero_p (amt)))
         s->value = new_val;
     else PERR("numeric error %s in converting the split value's denominator with amount %s and denom  %d", gnc_numeric_errorCode_to_string(gnc_numeric_check(new_val)), gnc_numeric_to_string(amt), get_currency_denom(s));
 

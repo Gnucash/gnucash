@@ -56,6 +56,8 @@ static gint total_num_accounts = 0;
 /* SCU == smallest currency unit -- the value of the denominator */
 static gint max_scu = 100; //6000;
 static gint min_scu = 100; //1;
+static const int64_t num_limit = INT64_MAX; //1E19+
+static const int64_t max_denom_mult = 1000000LL; //1E6
 
 
 /* The inverse fraction of split/transaction data that should
@@ -289,7 +291,7 @@ get_random_kvp_value_depth (int type, gint depth)
         break;
 
     case KVP_TYPE_NUMERIC:
-        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric());
+        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric(GNC_DENOM_AUTO));
         break;
 
     case KVP_TYPE_STRING:
@@ -409,40 +411,51 @@ get_random_kvp_value(int type)
 #define RAND_IN_RANGE(X) (((X)*((gint64) (rand()+1)))/RAND_MAX)
 
 gnc_numeric
-get_random_gnc_numeric(void)
+get_random_gnc_numeric(int64_t deno)
 {
     gint64 numer;
-    gint64 deno;
 
-    if (RAND_MAX / 8 > rand())
+    if (deno == GNC_DENOM_AUTO)
     {
-        /* Random number between 1 and 6000 */
-        deno = RAND_IN_RANGE(6000ULL);
-    }
-    else
-    {
-        gint64 norm = RAND_IN_RANGE (7ULL);
-
-        /* multiple of 10, between 1 and 1 million */
-        deno = 1;
-        while (norm)
+        if (RAND_MAX / 8 > rand())
         {
-            deno *= 10;
-            norm --;
+            /* Random number between 1 and 6000 */
+            deno = RAND_IN_RANGE(6000ULL);
+        }
+        else
+        {
+            gint64 norm = RAND_IN_RANGE (11ULL);
+
+            /* multiple of 10, between 1 and 1 million */
+            deno = 1;
+            while (norm)
+            {
+                deno *= 10;
+                norm --;
+            }
         }
     }
-
-    /* Arbitrary random numbers can cause pointless overflow
-     * during calculations.  Limit dynamic range in hopes
-     * of avoiding overflow. Right now limit it to approx 2^44.
-     * The initial division is to help us down towards the range.
-     * The loop is to "make sure" we get there.  We might
-     * want to make this dependent on "deno" in the future.
-     */
-    numer = get_random_gint64 () % (2ULL << 44);
-    if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
+
+    /* Arbitrary random numbers can cause pointless overflow during
+     * calculations, in particular the revaluing in xaccSplitSetValue where an
+     * input gnc_numeric is converted to use a new denominator. To prevent that,
+     * the numerator is clamped to the larger of num_limit / deno or num_limit /
+     * max_denom_mult.
+     */
+    const int64_t limit = num_limit / (max_denom_mult / deno == 0 ? max_denom_mult : max_denom_mult / deno);
+    numer = get_random_gint64 ();
+    if (numer > limit)
+    {
+         int64_t num = numer % limit;
+	if (num)
+	    numer = num;
+	else
+             numer = limit;
+    }
+    if (0 == numer) numer = 1;
+    g_log("test.engine.suff", G_LOG_LEVEL_INFO, "New GncNumeric %lld / %lld !\n", numer, deno);
     return gnc_numeric_create(numer, deno);
 }
 
@@ -656,7 +669,7 @@ make_random_changes_to_price (QofBook *book, GNCPrice *p)
     gnc_price_set_typestr (p, string);
     g_free (string);
 
-    gnc_price_set_value (p, get_random_gnc_numeric ());
+    gnc_price_set_value (p, get_random_gnc_numeric (GNC_DENOM_AUTO));
 
     gnc_price_commit_edit (p);
 }
@@ -896,15 +909,16 @@ static void
 add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
     Account *acc, *bcc;
-    Split *s;
+    Split *s1, *s2;
     gnc_numeric val;
+    int s2_scu;
 
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
 
     acc = get_random_list_element (account_list);
     xaccTransBeginEdit(trn);
-    s = get_random_split(book, acc, trn);
+    s1 = get_random_split(book, acc, trn);
 
     bcc = get_random_list_element (account_list);
     if ((bcc == acc) && (!do_bork()))
@@ -920,17 +934,25 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     }
 
     /* Set up two splits whose values really are opposites. */
-    val = xaccSplitGetValue(s);
-    s = get_random_split(book, bcc, trn);
+    val = xaccSplitGetValue(s1);
+    s2 = get_random_split(book, bcc, trn);
+    s2_scu = gnc_commodity_get_fraction (xaccAccountGetCommodity(s2->acc));
 
     /* Other split should have equal and opposite value */
     if (do_bork())
     {
-        val = get_random_gnc_numeric();
+        val = get_random_gnc_numeric(GNC_DENOM_AUTO);
+        g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Borking second %lld / %lld, scu %d\n", val.num, val.denom, s2_scu);
     }
     val = gnc_numeric_neg(val);
-    xaccSplitSetValue(s, val);
-    xaccSplitSetAmount(s, val);
+    xaccSplitSetValue(s2, val);
+    if (val.denom != s2_scu)
+    {
+        if (val.denom > s2_scu)
+            val.num /= val.denom / s2_scu;
+        val.denom = s2_scu;
+    }
+    xaccSplitSetAmount(s2, val);
     xaccTransCommitEdit(trn);
 }
 
@@ -1242,7 +1264,7 @@ Split*
 get_random_split(QofBook *book, Account *acct, Transaction *trn)
 {
     Split *ret;
-    gnc_numeric amt, val, rate;
+    gnc_numeric amt = {0, 1}, val = {0, 1}, rate = {0, 0};
     const gchar *str;
     gnc_commodity *com;
     int scu, denom;
@@ -1272,18 +1294,32 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
 
     do
     {
-        val = get_random_gnc_numeric ();
+        val = get_random_gnc_numeric (scu);
         if (val.num == 0)
             fprintf(stderr, "get_random_split: Created split with zero value: %p\n", ret);
 
         if (!do_bork())
+/* Another overflow-prevention measure. A numerator near the overflow limit can
+ * be made too large by replacing the denominator with a smaller scu.
+ */
+        {
+            if (val.denom > scu && val.num > num_limit / (max_denom_mult / scu))
+            {
+                int64_t new_num = val.num / (val.denom / scu);
+                g_log("test.engine.suff", G_LOG_LEVEL_DEBUG, "Adjusting val.denom from %lld to %lld\n", val.num, new_num);
+                val.num = new_num;
+            }
             val.denom = scu;
+        }
     }
     while (gnc_numeric_check(val) != GNC_ERROR_OK);
+    g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Random split value: %lld / %lld, scu %d\n", val.num, val.denom, scu);
     xaccSplitSetValue(ret, val);
 
     /* If the currencies are the same, the split amount should equal
      * the split value (unless we bork it on purpose) */
+    denom = gnc_commodity_get_fraction(xaccAccountGetCommodity(
+                                           xaccSplitGetAccount(ret)));
     if (gnc_commodity_equal (xaccTransGetCurrency(trn),
                              xaccAccountGetCommodity(acct)) &&
             (!do_bork()))
@@ -1292,8 +1328,6 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     }
     else
     {
-        denom = gnc_commodity_get_fraction(xaccAccountGetCommodity(
-                                               xaccSplitGetAccount(ret)));
         do
         {
             rate = get_random_rate ();
@@ -1301,7 +1335,10 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
         }
         while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }
-    xaccSplitSetAmount(ret, amt);
+    g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Random split amount: %lld / %lld, rate %lld / %lld\n", amt.num, amt.denom, rate.num, rate.denom);
+
+
+     xaccSplitSetAmount(ret, amt);
 
     /* Make sure val and amt have the same sign. Note that amt is
        also allowed to be zero, because that is caused by a small
@@ -1311,6 +1348,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     else
         g_assert(!gnc_numeric_positive_p(amt)); /* non-positive amt */
 
+//    g_assert(amt.num < (2LL << 56));
     qof_instance_set_slots(QOF_INSTANCE (ret), get_random_kvp_frame());
     xaccTransCommitEdit(trn);
 
@@ -1815,7 +1853,7 @@ get_random_query(void)
         case 11: /*  PR_PRICE */
             xaccQueryAddSharePriceMatch
             (q,
-             get_random_gnc_numeric (),
+             get_random_gnc_numeric (GNC_DENOM_AUTO),
              get_random_int_in_range (1, QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
@@ -1823,7 +1861,7 @@ get_random_query(void)
         case 12: /* PR_SHRS */
             xaccQueryAddSharesMatch
             (q,
-             get_random_gnc_numeric (),
+             get_random_gnc_numeric (GNC_DENOM_AUTO),
              get_random_int_in_range (1, QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
@@ -1831,7 +1869,7 @@ get_random_query(void)
         case 13: /* PR_VALUE */
             xaccQueryAddValueMatch
             (q,
-             get_random_gnc_numeric (),
+             get_random_gnc_numeric (GNC_DENOM_AUTO),
              get_random_int_in_range (1, QOF_NUMERIC_MATCH_ANY),
              get_random_int_in_range (1, QOF_COMPARE_NEQ),
              get_random_queryop ());
