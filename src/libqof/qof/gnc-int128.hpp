@@ -22,8 +22,8 @@
  *                                                                  *
  *******************************************************************/
 
-#ifndef QOFINT128_H
-#define QOFINT128_H
+#ifndef GNCINT128_H
+#define GNCINT128_H
 
 #include <stdint.h>
 
@@ -39,12 +39,12 @@
  * All the usual operators are provided. Only the explicit integer
  * conversions throw; all other errors are indicated by the overflow
  * and NaN ("Not a Number") flags. Note that performing any operation
- * on an overflowed or NaN QofInt128 will yield an overflowed or NaN
+ * on an overflowed or NaN Gncint128 will yield an overflowed or NaN
  * result, so calling routines need not check until the end of a
  * chained calculation.
- * QofInt128 uses implicit copy and move constructors and implicit destructor.
+ * GncInt128 uses implicit copy and move constructors and implicit destructor.
  */
-class QofInt128
+class GncInt128
 {
     unsigned char m_flags;
     uint64_t m_hi;
@@ -63,35 +63,35 @@ enum // Values for m_flags
     NaN = 4
 };
 
-    QofInt128 ();
-    QofInt128 (int16_t lower) : QofInt128{static_cast<int64_t>(lower)} {};
-    QofInt128 (uint16_t lower) : QofInt128{static_cast<uint64_t>(lower)} {};
-    QofInt128 (int32_t lower) : QofInt128{static_cast<int64_t>(lower)} {};
-    QofInt128 (uint32_t lower) : QofInt128{static_cast<uint64_t>(lower)} {};
-    QofInt128 (int64_t lower);
-    QofInt128 (uint64_t lower);
+    GncInt128 ();
+    GncInt128 (int16_t lower) : GncInt128{static_cast<int64_t>(lower)} {};
+    GncInt128 (uint16_t lower) : GncInt128{static_cast<uint64_t>(lower)} {};
+    GncInt128 (int32_t lower) : GncInt128{static_cast<int64_t>(lower)} {};
+    GncInt128 (uint32_t lower) : GncInt128{static_cast<uint64_t>(lower)} {};
+    GncInt128 (int64_t lower);
+    GncInt128 (uint64_t lower);
 /**
- * Construct a QofInt128 from two int64_t.
+ * Construct a GncInt128 from two int64_t.
  *
  * N.B.: If the two parameters are of differing sign, it's taken to
  * mean that the lower magnitude is *reducing* the magnitude of the
  * upper, so the lower magnitude will be subracted from UINT64_MAX to
  * obtain the lower limb value.
  */
-    QofInt128 (int16_t upper, int16_t lower, unsigned char flags = '\0') :
-        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+    GncInt128 (int16_t upper, int16_t lower, unsigned char flags = '\0') :
+        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
                       flags} {};
-    QofInt128 (uint16_t upper, uint16_t lower, unsigned char flags = '\0') :
-        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+    GncInt128 (uint16_t upper, uint16_t lower, unsigned char flags = '\0') :
+        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
                       flags} {};
-    QofInt128 (int32_t upper, int32_t lower, unsigned char flags = '\0') :
-        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+    GncInt128 (int32_t upper, int32_t lower, unsigned char flags = '\0') :
+        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
                       flags} {};
-    QofInt128 (uint32_t upper, uint32_t lower, unsigned char flags = '\0') :
-        QofInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
+    GncInt128 (uint32_t upper, uint32_t lower, unsigned char flags = '\0') :
+        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
                       flags} {};
-    QofInt128 (int64_t upper, int64_t lower, unsigned char flags = '\0');
-    QofInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
+    GncInt128 (int64_t upper, int64_t lower, unsigned char flags = '\0');
+    GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
 
 /**
  * Clear the object.
@@ -99,7 +99,7 @@ enum // Values for m_flags
  * Sets all member variables to zero.
  * @return A reference to the object for chaining.
  */
-    QofInt128& zero() noexcept;
+    GncInt128& zero() noexcept;
 
 /**
  * Compare function.
@@ -107,29 +107,29 @@ enum // Values for m_flags
  * @return -1 if the object is less than the parameter, 0 if they're
  * equal, and 1 if the object is greater.
  */
-    int cmp (const QofInt128& b) const noexcept;
+    int cmp (const GncInt128& b) const noexcept;
 
 /**
  * Computes the Greatest Common Divisor between the object and paramter
  *
- * @return A QofInt128 having the GCD.
+ * @return A GncInt128 having the GCD.
  */
-    QofInt128 gcd (QofInt128 b) const noexcept;
+    GncInt128 gcd (GncInt128 b) const noexcept;
 /**
  * Computes the Least Common Multiple between the object and parameter
  *
- * @return A QofInt128 having the LCM.
+ * @return A GncInt128 having the LCM.
  */
-    QofInt128 lcm (const QofInt128& b) const noexcept;
+    GncInt128 lcm (const GncInt128& b) const noexcept;
 
 /**
  * Computes the object raised to the parameter's power
  *
- * @param b The power to raise this to. No point in taking a QofInt128, any
+ * @param b The power to raise this to. No point in taking a GncInt128, any
  * value greater than 128 would overflow on any value other than 1.
- * @return A QofInt128
+ * @return A GncInt128
  */
-    QofInt128 pow (uint n) const noexcept;
+    GncInt128 pow (uint n) const noexcept;
 
 /**
  * Computes a quotient and a remainder, passed as reference parameters.
@@ -140,7 +140,7 @@ enum // Values for m_flags
  * @param q The quotient; will be NaN if divisor = 0
  * @param r The remainder; will be 0 if divisor = 0
  */
-    void div (const QofInt128& d, QofInt128& q, QofInt128& r) noexcept;
+    void div (const GncInt128& d, GncInt128& q, GncInt128& r) noexcept;
 
 /**
  * Explicit conversion to int64_t.
@@ -188,7 +188,7 @@ enum // Values for m_flags
 
 /**
  * Fills a supplied buffer with a representation of the number in base 10. If
- * the QofInt128 is overflowed or NaN it will contain the words "Overflow" or
+ * the GncInt128 is overflowed or NaN it will contain the words "Overflow" or
  * "NaN" respectively.
  *
  * @param buf char[41], 39 digits plus sign and trailing 0.
@@ -196,59 +196,59 @@ enum // Values for m_flags
  */
     char* asCharBufR(char* buf) const noexcept;
 
-    QofInt128 abs() const noexcept;
+    GncInt128 abs() const noexcept;
 
-    QofInt128 operator-() const noexcept;
+    GncInt128 operator-() const noexcept;
     explicit operator bool() const noexcept;
 
-    QofInt128& operator++ () noexcept;
-    QofInt128& operator++ (int) noexcept;
-    QofInt128& operator-- () noexcept;
-    QofInt128& operator-- (int) noexcept;
-    QofInt128& operator<<= (uint i) noexcept;
-    QofInt128& operator>>= (uint i) noexcept;
-    QofInt128& operator+= (const QofInt128& b) noexcept;
-    QofInt128& operator-= (const QofInt128& b) noexcept;
-    QofInt128& operator*= (const QofInt128& b) noexcept;
-    QofInt128& operator/= (const QofInt128& b) noexcept;
-    QofInt128& operator%= (const QofInt128& b) noexcept;
-    QofInt128& operator&= (const QofInt128& b) noexcept;
-    QofInt128& operator|= (const QofInt128& b) noexcept;
-    QofInt128& operator^= (const QofInt128& b) noexcept;
+    GncInt128& operator++ () noexcept;
+    GncInt128& operator++ (int) noexcept;
+    GncInt128& operator-- () noexcept;
+    GncInt128& operator-- (int) noexcept;
+    GncInt128& operator<<= (uint i) noexcept;
+    GncInt128& operator>>= (uint i) noexcept;
+    GncInt128& operator+= (const GncInt128& b) noexcept;
+    GncInt128& operator-= (const GncInt128& b) noexcept;
+    GncInt128& operator*= (const GncInt128& b) noexcept;
+    GncInt128& operator/= (const GncInt128& b) noexcept;
+    GncInt128& operator%= (const GncInt128& b) noexcept;
+    GncInt128& operator&= (const GncInt128& b) noexcept;
+    GncInt128& operator|= (const GncInt128& b) noexcept;
+    GncInt128& operator^= (const GncInt128& b) noexcept;
 
 };
 
-static const QofInt128 k_qofInt128_Max {UINT64_MAX, UINT64_MAX, QofInt128::pos};
-static const QofInt128 k_qofInt128_Min {UINT64_MAX, UINT64_MAX, QofInt128::neg};
+static const GncInt128 k_gncint128_Max {UINT64_MAX, UINT64_MAX, GncInt128::pos};
+static const GncInt128 k_gncint128_Min {UINT64_MAX, UINT64_MAX, GncInt128::neg};
 
-QofInt128 operator+ (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator- (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator* (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator/ (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator% (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator& (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator| (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator^ (QofInt128 a, const QofInt128& b) noexcept;
-QofInt128 operator<< (QofInt128 a, uint b) noexcept;
-QofInt128 operator>> (QofInt128 a, uint b) noexcept;
+GncInt128 operator+ (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator- (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator* (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator/ (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator% (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator& (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator| (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator^ (GncInt128 a, const GncInt128& b) noexcept;
+GncInt128 operator<< (GncInt128 a, uint b) noexcept;
+GncInt128 operator>> (GncInt128 a, uint b) noexcept;
 
-bool operator== (const QofInt128& a, const QofInt128& b) noexcept;
-bool operator!= (const QofInt128& a, const QofInt128& b) noexcept;
-bool operator<= (const QofInt128& a, const QofInt128& b) noexcept;
-bool operator>= (const QofInt128& a, const QofInt128& b) noexcept;
-bool operator< (const QofInt128& a, const QofInt128& b) noexcept;
-bool operator> (const QofInt128& a, const QofInt128& b) noexcept;
+bool operator== (const GncInt128& a, const GncInt128& b) noexcept;
+bool operator!= (const GncInt128& a, const GncInt128& b) noexcept;
+bool operator<= (const GncInt128& a, const GncInt128& b) noexcept;
+bool operator>= (const GncInt128& a, const GncInt128& b) noexcept;
+bool operator< (const GncInt128& a, const GncInt128& b) noexcept;
+bool operator> (const GncInt128& a, const GncInt128& b) noexcept;
 
-std::ostream& operator<< (std::ostream&, const QofInt128&) noexcept;
+std::ostream& operator<< (std::ostream&, const GncInt128&) noexcept;
 
 /** Compute the greatest common denominator of two integers
  */
-QofInt128 gcd (int64_t a, int64_t b);
+GncInt128 gcd (int64_t a, int64_t b);
 
 /** Compute the least common multiple of two integers
  */
-QofInt128 lcm (int64_t a, int64_t b);
+GncInt128 lcm (int64_t a, int64_t b);
 
-#endif //QOFINT128_H
+#endif //GNCINT128_H
 
 /** @} */

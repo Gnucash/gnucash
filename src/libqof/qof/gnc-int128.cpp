@@ -27,7 +27,7 @@ extern "C"
 #include <inttypes.h>
 }
 
-#include "qofint128.hpp"
+#include "gnc-int128.hpp"
 
 #include <iomanip>
 #include <utility>
@@ -39,22 +39,22 @@ extern "C"
  */
 
 namespace {
-    static const uint sublegs = QofInt128::numlegs * 2;
-    static const uint sublegbits = QofInt128::legbits / 2;
+    static const uint sublegs = GncInt128::numlegs * 2;
+    static const uint sublegbits = GncInt128::legbits / 2;
     static const uint64_t sublegmask = (UINT64_C(1) << sublegbits) - 1;
 }
 
-QofInt128::QofInt128 () : m_flags {}, m_hi {0}, m_lo {0}{}
+GncInt128::GncInt128 () : m_flags {}, m_hi {0}, m_lo {0}{}
 
-QofInt128::QofInt128 (int64_t lower) :
+GncInt128::GncInt128 (int64_t lower) :
     m_flags {static_cast<unsigned char>(lower < 0 ? neg : pos)},
     m_hi {0},
     m_lo {static_cast<uint64_t>(lower < 0 ? -lower : lower)} {}
 
-QofInt128::QofInt128 (uint64_t lower) :
+GncInt128::GncInt128 (uint64_t lower) :
     m_flags {}, m_hi {0}, m_lo {lower} {}
 
-QofInt128::QofInt128 (int64_t upper, int64_t lower, unsigned char flags) :
+GncInt128::GncInt128 (int64_t upper, int64_t lower, unsigned char flags) :
     m_flags {static_cast<unsigned char>(flags ^ (upper < 0 ? neg :
     upper == 0 && lower < 0 ? neg : pos))},
     m_hi {static_cast<uint64_t>(upper < 0 ? -upper : upper)},
@@ -68,19 +68,19 @@ QofInt128::QofInt128 (int64_t upper, int64_t lower, unsigned char flags) :
     m_hi >>= 1;
 }
 
-QofInt128::QofInt128 (uint64_t upper, uint64_t lower, unsigned char flags) :
+GncInt128::GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags) :
     m_flags {flags}, m_hi {upper},
     m_lo {lower} {}
 
-QofInt128&
-QofInt128::zero () noexcept
+GncInt128&
+GncInt128::zero () noexcept
 {
     m_flags = 0;
     m_lo = m_hi = UINT64_C(0);
     return *this;
 }
 
-QofInt128::operator int64_t() const
+GncInt128::operator int64_t() const
 {
     if ((m_flags & neg) && isBig())
         throw std::underflow_error ("Negative value to large to represent as int64_t");
@@ -90,7 +90,7 @@ QofInt128::operator int64_t() const
     return m_flags & neg ? -retval : retval;
 }
 
-QofInt128::operator uint64_t() const
+GncInt128::operator uint64_t() const
 {
     if (m_flags & neg)
         throw std::underflow_error ("Can't represent negative value as uint64_t");
@@ -101,7 +101,7 @@ QofInt128::operator uint64_t() const
 
 
 int
-QofInt128::cmp (const QofInt128& b) const noexcept
+GncInt128::cmp (const GncInt128& b) const noexcept
 {
     if (m_flags & (overflow | NaN))
         return -1;
@@ -127,8 +127,8 @@ QofInt128::cmp (const QofInt128& b) const noexcept
 /* Knuth 4.5.3 Algo B, recommended by GMP as much faster than Algo A (Euclidean
  * method).
  */
-QofInt128
-QofInt128::gcd(QofInt128 b) const noexcept
+GncInt128
+GncInt128::gcd(GncInt128 b) const noexcept
 {
     if (b.isZero())
         return *this;
@@ -140,7 +140,7 @@ QofInt128::gcd(QofInt128 b) const noexcept
     if (isOverflow() || isNan())
         return *this;
 
-    QofInt128 a (isNeg() ? -(*this) : *this);
+    GncInt128 a (isNeg() ? -(*this) : *this);
     if (b.isNeg()) b = -b;
 
     uint k {};
@@ -151,7 +151,7 @@ QofInt128::gcd(QofInt128 b) const noexcept
         b >>= 1;
         ++k;
     }
-    QofInt128 t {a & one ? -b : a}; //B2
+    GncInt128 t {a & one ? -b : a}; //B2
     while (a != b)
     {
         while (t && (t & one ^ one)) t >>= 1;  //B3 & B4
@@ -166,22 +166,22 @@ QofInt128::gcd(QofInt128 b) const noexcept
 
 /* Since u * v = gcd(u, v) * lcm(u, v), we find lcm by u / gcd * v. */
 
-QofInt128
-QofInt128::lcm(const QofInt128& b) const noexcept
+GncInt128
+GncInt128::lcm(const GncInt128& b) const noexcept
 {
     auto common = gcd(b);
     return *this / common * b.abs(); //Preserve our sign, discard the other's.
 }
 
 /* Knuth section 4.6.3 */
-QofInt128
-QofInt128::pow(uint b) const noexcept
+GncInt128
+GncInt128::pow(uint b) const noexcept
 {
     if (isZero() || (m_lo == 1 && m_hi == 0) || isNan() || isOverflow())
         return *this;
     if (b == 0)
-        return QofInt128 (1);
-    QofInt128 retval (1), squares = *this;
+        return GncInt128 (1);
+    GncInt128 retval (1), squares = *this;
     while (b && !retval.isOverflow())
     {
         if (b & 1)
@@ -193,37 +193,37 @@ QofInt128::pow(uint b) const noexcept
 }
 
 bool
-QofInt128::isNeg () const noexcept
+GncInt128::isNeg () const noexcept
 {
     return (m_flags & neg);
 }
 
 bool
-QofInt128::isBig () const noexcept
+GncInt128::isBig () const noexcept
 {
     return (m_hi || m_lo > INT64_MAX);
 }
 
 bool
-QofInt128::isOverflow () const noexcept
+GncInt128::isOverflow () const noexcept
 {
     return (m_flags & overflow);
 }
 
 bool
-QofInt128::isNan () const noexcept
+GncInt128::isNan () const noexcept
 {
     return (m_flags & NaN);
 }
 
 bool
-QofInt128::isZero() const noexcept
+GncInt128::isZero() const noexcept
 {
     return ((m_flags & (overflow | NaN)) == 0 &&  m_hi == 0 && m_lo == 0);
 }
 
-QofInt128
-QofInt128::abs() const noexcept
+GncInt128
+GncInt128::abs() const noexcept
 {
     if (isNeg())
         return operator-();
@@ -232,7 +232,7 @@ QofInt128::abs() const noexcept
 }
 
 uint
-QofInt128::bits() const noexcept
+GncInt128::bits() const noexcept
 {
     uint bits {static_cast<uint>(m_hi == 0 ? 0 : 64)};
     uint64_t temp {(m_hi == 0 ? m_lo : m_hi)};
@@ -242,8 +242,8 @@ QofInt128::bits() const noexcept
 }
 
 
-QofInt128
-QofInt128::operator-() const noexcept
+GncInt128
+GncInt128::operator-() const noexcept
 {
     auto retval = *this;
     if (isNeg())
@@ -253,37 +253,37 @@ QofInt128::operator-() const noexcept
     return retval;
 }
 
-QofInt128::operator bool() const noexcept
+GncInt128::operator bool() const noexcept
 {
     return ! isZero ();
 }
 
-QofInt128&
-QofInt128::operator++ () noexcept
+GncInt128&
+GncInt128::operator++ () noexcept
 {
     return operator+=(UINT64_C(1));
 }
 
-QofInt128&
-QofInt128::operator++ (int) noexcept
+GncInt128&
+GncInt128::operator++ (int) noexcept
 {
     return operator+=(UINT64_C(1));
 }
 
-QofInt128&
-QofInt128::operator-- () noexcept
+GncInt128&
+GncInt128::operator-- () noexcept
 {
     return operator-=(UINT64_C(1));
 }
 
-QofInt128&
-QofInt128::operator-- (int) noexcept
+GncInt128&
+GncInt128::operator-- (int) noexcept
 {
     return operator-=(UINT64_C(1));
 }
 
-QofInt128&
-QofInt128::operator+= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator+= (const GncInt128& b) noexcept
 {
     if (b.isOverflow())
         m_flags |= overflow;
@@ -304,8 +304,8 @@ QofInt128::operator+= (const QofInt128& b) noexcept
     return *this;
 }
 
-QofInt128&
-QofInt128::operator<<= (uint i) noexcept
+GncInt128&
+GncInt128::operator<<= (uint i) noexcept
 {
     if (i > maxbits)
     {
@@ -321,8 +321,8 @@ QofInt128::operator<<= (uint i) noexcept
     return *this;
 }
 
-QofInt128&
-QofInt128::operator>>= (uint i) noexcept
+GncInt128&
+GncInt128::operator>>= (uint i) noexcept
 {
     if (i > maxbits)
     {
@@ -338,8 +338,8 @@ QofInt128::operator>>= (uint i) noexcept
     return *this;
 }
 
-QofInt128&
-QofInt128::operator-= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator-= (const GncInt128& b) noexcept
 {
     if (b.isOverflow())
         m_flags |= overflow;
@@ -383,8 +383,8 @@ QofInt128::operator-= (const QofInt128& b) noexcept
     return *this;
 }
 
-QofInt128&
-QofInt128::operator*= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator*= (const GncInt128& b) noexcept
 {
     /* Test for 0 first */
     if (isZero() || b.isZero())
@@ -423,7 +423,7 @@ QofInt128::operator*= (const QofInt128& b) noexcept
     }
 
 /* This is Knuth's "classical" multi-precision multiplication algorithm
- * truncated to a QofInt128 result with the loop unrolled for clarity and with
+ * truncated to a GncInt128 result with the loop unrolled for clarity and with
  * overflow and zero checks beforehand to save time. See Donald Knuth, "The Art
  * of Computer Programming Volume 2: Seminumerical Algorithms", Addison-Wesley,
  * 1998, p 268.
@@ -488,7 +488,7 @@ namespace {
  */
 /* We're using arrays here instead of vectors to avoid an alloc. */
 void
-div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, QofInt128& q, QofInt128& r) noexcept
+div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncInt128& r) noexcept
 {
 /* D1, Normalization */
     uint64_t qv[sublegs] {};
@@ -578,14 +578,14 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, QofInt128& q, QofIn
             u[j + n] += carry;
         }
     }//D7
-    q = QofInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
-    r = QofInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
+    q = GncInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
+    r = GncInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
     r /= d;
     if (negative) q = -q;
 }
 
 void
-div_single_leg (uint64_t* u, size_t m, uint64_t v, QofInt128& q, QofInt128& r) noexcept
+div_single_leg (uint64_t* u, size_t m, uint64_t v, GncInt128& q, GncInt128& r) noexcept
 {
     uint64_t qv[sublegs] {};
     uint64_t carry {};
@@ -602,15 +602,15 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, QofInt128& q, QofInt128& r) n
             u[i] %= v;
     }
 
-    q = QofInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
-    r = QofInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
+    q = GncInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
+    r = GncInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
     if (negative) q = -q;
 }
 
 }// namespace
 
 void
-QofInt128::div (const QofInt128& b, QofInt128& q, QofInt128& r) noexcept
+GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) noexcept
 {
     if (isOverflow() || b.isOverflow())
     {
@@ -670,19 +670,19 @@ QofInt128::div (const QofInt128& b, QofInt128& q, QofInt128& r) noexcept
     return div_multi_leg (u, m, v, n, q, r);
 }
 
-QofInt128&
-QofInt128::operator/= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator/= (const GncInt128& b) noexcept
 {
-    QofInt128 q {}, r {};
+    GncInt128 q {}, r {};
     div(b, q, r);
     std::swap (*this, q);
     return *this;
 }
 
-QofInt128&
-QofInt128::operator%= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator%= (const GncInt128& b) noexcept
 {
-    QofInt128 q {}, r {};
+    GncInt128 q {}, r {};
     div(b, q, r);
     std::swap (*this, r);
     if (q.isNan())
@@ -690,8 +690,8 @@ QofInt128::operator%= (const QofInt128& b) noexcept
     return *this;
 }
 
-QofInt128&
-QofInt128::operator&= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator&= (const GncInt128& b) noexcept
 {
     if (b.isOverflow())
         m_flags |= overflow;
@@ -706,16 +706,16 @@ QofInt128::operator&= (const QofInt128& b) noexcept
     return *this;
 }
 
-QofInt128&
-QofInt128::operator|= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator|= (const GncInt128& b) noexcept
 {
     m_hi ^= b.m_hi;
     m_lo ^= b.m_lo;
     return *this;
 }
 
-QofInt128&
-QofInt128::operator^= (const QofInt128& b) noexcept
+GncInt128&
+GncInt128::operator^= (const GncInt128& b) noexcept
 {
     if (b.isOverflow())
         m_flags |= overflow;
@@ -775,7 +775,7 @@ decimal_from_binary (uint64_t d[dec_array_size], uint64_t hi, uint64_t lo)
 static const uint8_t char_buf_size {41}; //39 digits plus sign and trailing null
 
 char*
-QofInt128::asCharBufR(char* buf) const noexcept
+GncInt128::asCharBufR(char* buf) const noexcept
 {
     if (isOverflow())
     {
@@ -809,7 +809,7 @@ QofInt128::asCharBufR(char* buf) const noexcept
 }
 
 std::ostream&
-operator<< (std::ostream& stream, const QofInt128& a) noexcept
+operator<< (std::ostream& stream, const GncInt128& a) noexcept
 {
     char buf[char_buf_size] {};
     stream << a.asCharBufR (buf);
@@ -817,105 +817,105 @@ operator<< (std::ostream& stream, const QofInt128& a) noexcept
 }
 
 bool
-operator== (const QofInt128& a, const QofInt128& b) noexcept
+operator== (const GncInt128& a, const GncInt128& b) noexcept
 {
     return a.cmp(b) == 0;
 }
 
 bool
-operator!= (const QofInt128& a, const QofInt128& b) noexcept
+operator!= (const GncInt128& a, const GncInt128& b) noexcept
 {
     return a.cmp(b) != 0;
 }
 
 bool
-operator< (const QofInt128& a, const QofInt128& b) noexcept
+operator< (const GncInt128& a, const GncInt128& b) noexcept
 {
     return a.cmp(b) < 0;
 }
 
 bool
-operator> (const QofInt128& a, const QofInt128& b) noexcept
+operator> (const GncInt128& a, const GncInt128& b) noexcept
 {
     return a.cmp(b) > 0;
 }
 
 bool
-operator<= (const QofInt128& a, const QofInt128& b) noexcept
+operator<= (const GncInt128& a, const GncInt128& b) noexcept
 {
     return a.cmp(b) <= 0;
 }
 
 bool
-operator>= (const QofInt128& a, const QofInt128& b) noexcept
+operator>= (const GncInt128& a, const GncInt128& b) noexcept
 {
     return a.cmp(b) >= 0;
 }
 
-QofInt128
-operator+ (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator+ (GncInt128 a, const GncInt128& b) noexcept
 {
     a += b;
     return a;
 }
 
-QofInt128
-operator- (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator- (GncInt128 a, const GncInt128& b) noexcept
 {
     a -= b;
     return a;
 }
-QofInt128
-operator* (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator* (GncInt128 a, const GncInt128& b) noexcept
 {
     a *= b;
     return a;
 }
 
-QofInt128
-operator/ (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator/ (GncInt128 a, const GncInt128& b) noexcept
 {
     a /= b;
     return a;
 }
 
-QofInt128
-operator% (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator% (GncInt128 a, const GncInt128& b) noexcept
 {
     a %= b;
     return a;
 }
 
-QofInt128
-operator& (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator& (GncInt128 a, const GncInt128& b) noexcept
 {
     a &= b;
     return a;
 }
 
-QofInt128
-operator| (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator| (GncInt128 a, const GncInt128& b) noexcept
 {
     a |= b;
     return a;
 }
 
-QofInt128
-operator^ (QofInt128 a, const QofInt128& b) noexcept
+GncInt128
+operator^ (GncInt128 a, const GncInt128& b) noexcept
 {
     a ^= b;
     return a;
 }
 
-QofInt128
-operator<< (QofInt128 a, uint b) noexcept
+GncInt128
+operator<< (GncInt128 a, uint b) noexcept
 {
     a <<= b;
     return a;
 }
 
-QofInt128
-operator>> (QofInt128 a, uint b) noexcept
+GncInt128
+operator>> (GncInt128 a, uint b) noexcept
 {
     a >>= b;
     return a;

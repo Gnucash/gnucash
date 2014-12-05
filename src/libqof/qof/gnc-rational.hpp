@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
-#include "qofint128.hpp"
+#include "gnc-int128.hpp"
 #include "gnc-numeric.h"
 
 struct GncDenom;
@@ -28,7 +28,7 @@ class GncRational
 {
 public:
     GncRational (gnc_numeric n) noexcept;
-    GncRational (QofInt128 num, QofInt128 den) noexcept;
+    GncRational (GncInt128 num, GncInt128 den) noexcept;
 /** Conversion operator; use static_cast<gnc_numeric>(foo). */
     operator gnc_numeric() const noexcept;
 /** Make a new GncRational with the opposite sign. */
@@ -46,8 +46,8 @@ public:
     GncRational& sub(const GncRational& b, GncDenom& d) noexcept;
 
 
-    QofInt128 m_num;
-    QofInt128 m_den;
+    GncInt128 m_num;
+    GncInt128 m_den;
     GNCNumericErrorCode m_error;
 };
 
@@ -55,7 +55,7 @@ struct GncDenom
 {
     GncDenom (GncRational& a, GncRational& b, int64_t spec, uint how) noexcept;
     void reduce (const GncRational& a) noexcept;
-    QofInt128 get () const noexcept { return m_value; }
+    GncInt128 get () const noexcept { return m_value; }
 
     enum class RoundType : int
     {
@@ -77,7 +77,7 @@ struct GncDenom
             sigfigs = GNC_HOW_DENOM_SIGFIG,
     };
 
-    QofInt128 m_value;
+    GncInt128 m_value;
     RoundType m_round;
     DenomType m_type;
     bool m_auto;

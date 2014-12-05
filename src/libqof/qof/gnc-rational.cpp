@@ -47,7 +47,7 @@ GncRational::GncRational (gnc_numeric n) noexcept :
     }
 }
 
-GncRational::GncRational (QofInt128 num, QofInt128 den) noexcept :
+GncRational::GncRational (GncInt128 num, GncInt128 den) noexcept :
     m_num (num), m_den (den), m_error {}
 {
 }
@@ -121,7 +121,7 @@ GncRational::div (GncRational b, GncDenom& d) noexcept
     if (m_num.isBig() || m_den.isBig() ||
         b.m_num.isBig() || b.m_den.isBig())
     {
-        QofInt128 gcd = b.m_den.gcd(m_den);
+        GncInt128 gcd = b.m_den.gcd(m_den);
         b.m_den /= gcd;
         m_den /= gcd;
     }
@@ -141,7 +141,7 @@ GncRational::add (const GncRational& b, GncDenom& d) noexcept
             m_error = b.m_error;
         return *this;
     }
-    QofInt128 lcm = m_den.lcm (b.m_den);
+    GncInt128 lcm = m_den.lcm (b.m_den);
     m_num = m_num * lcm / m_den + b.m_num * lcm / b.m_den;
     m_den = lcm;
     round (d);
@@ -163,7 +163,7 @@ GncRational::round (GncDenom& denom) noexcept
         m_error = denom.m_error;
         return;
     }
-    QofInt128 new_den = denom.get();
+    GncInt128 new_den = denom.get();
     if (new_den == 0) new_den = m_den;
     if (!(m_num.isBig() || new_den.isBig() ))
     {
@@ -176,7 +176,7 @@ GncRational::round (GncDenom& denom) noexcept
             return;
         }
     }
-    QofInt128 new_num {}, remainder {};
+    GncInt128 new_num {}, remainder {};
     if (new_den.isNeg())
         m_num.div(-new_den * m_den, new_num, remainder);
     else
@@ -198,7 +198,7 @@ GncRational::round (GncDenom& denom) noexcept
         }
 
       /* First, try to reduce it */
-        QofInt128 gcd = new_num.gcd(new_den);
+        GncInt128 gcd = new_num.gcd(new_den);
         new_num /= gcd;
         new_den /= gcd;
         remainder /= gcd;
@@ -332,7 +332,7 @@ GncDenom::reduce (const GncRational& a) noexcept
         break;
 
     case DenomType::sigfigs:
-        QofInt128 val {};
+        GncInt128 val {};
         if (a.m_num.abs() > a.m_den)
             val = a.m_num.abs() / a.m_den;
         else

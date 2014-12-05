@@ -24,6 +24,7 @@ AM_CPPFLAGS = \
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.cpp        \
+   gnc-int128.cpp      \
    gnc-numeric.cpp     \
    gnc-rational.cpp    \
    guid.cpp            \
@@ -37,7 +38,6 @@ libgnc_qof_la_SOURCES =  \
    qofevent.cpp        \
    qofid.cpp           \
    qofinstance.cpp     \
-   qofint128.cpp       \
    qoflog.cpp          \
    qofobject.cpp       \
    qofquery.cpp        \
@@ -82,7 +82,7 @@ noinst_HEADERS = \
    qofbook-p.h  \
    qofclass-p.h  \
    qofevent-p.h \
-   qofint128.hpp  \
+   gnc-int128.hpp  \
    qofobject-p.h  \
    qofquery-p.h  \
    qofquerycore-p.h \

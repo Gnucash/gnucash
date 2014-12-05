@@ -38,7 +38,6 @@ extern "C"
 #endif
 
 #include "gnc-numeric.h"
-#include "qofint128.hpp"
 #include "gnc-rational.hpp"
 
 using GncNumeric = GncRational;
