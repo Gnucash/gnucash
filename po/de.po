@@ -4070,7 +4070,7 @@ msgstr "Buchung ungültig gemacht"
 
 #: ../src/gnome/assistant-acct-period.c:192
 msgid "The book was closed successfully."
-msgstr "Der Buchabschluß wurde erfolgreich beendet."
+msgstr "Der Buchabschluss wurde erfolgreich beendet."
 
 #. Translators: %s is a date string. %d is the number of books
 #. * that will be created. This is a ngettext(3) message (but
@@ -4143,7 +4143,7 @@ msgstr "Periode:"
 #: ../src/gnome/assistant-acct-period.c:595
 #: ../src/gnome-utils/gtkbuilder/dialog-book-close.glade.h:2
 msgid "Closing Date:"
-msgstr "Abschlußdatum:"
+msgstr "Abschlussdatum:"
 
 #: ../src/gnome/assistant-hierarchy.c:397
 msgid "Selected"
@@ -5021,7 +5021,7 @@ msgstr "B_udget"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:177
 msgid "Close _Books"
-msgstr "_Buchabschluß"
+msgstr "_Buchabschluss"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:178
 msgid "Archive old data using accounting periods"
@@ -7821,8 +7821,8 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Wählen Sie einen Buchungszeitraum und ein Abschlußdatum für diesen Zeitraum. "
-"Der Buchabschluß wird für Mitternacht jenes Datums gespeichert."
+"Wählen Sie einen Buchungszeitraum und ein Abschlussdatum für diesen Zeitraum. "
+"Der Buchabschluss wird für Mitternacht jenes Datums gespeichert."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:9
 msgid "xxx"
@@ -7830,7 +7830,7 @@ msgstr "xxx"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:10
 msgid "Book Closing Dates"
-msgstr "Datum Buchabschluß"
+msgstr "Datum Buchabschluss"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:11
 msgid "Title:"
@@ -8217,7 +8217,7 @@ msgstr "Kontrolle"
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:52
 #, fuzzy
 msgid "Schedule added successfully."
-msgstr "Der Buchabschluß wurde erfolgreich beendet."
+msgstr "Der Buchabschluss wurde erfolgreich beendet."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:53
 #, fuzzy
