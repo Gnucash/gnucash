@@ -69,6 +69,91 @@ GncRational::operator gnc_numeric () const noexcept
     }
 }
 
+GncRational
+GncRational::operator-() const noexcept
+{
+    GncRational b(*this);
+    b.m_num = - b.m_num;
+    return b;
+}
+
+GncRational&
+GncRational::mul (const GncRational& b, GncDenom& d) noexcept
+{
+    if (m_error || b.m_error)
+    {
+        if (b.m_error)
+            m_error = b.m_error;
+        return *this;
+    }
+    m_num *= b.m_num;
+    m_den *= b.m_den;
+    round (d);
+    return *this;
+}
+
+GncRational&
+GncRational::div (GncRational b, GncDenom& d) noexcept
+{
+    if (m_error || b.m_error)
+    {
+        if (b.m_error)
+            m_error = b.m_error;
+        return *this;
+    }
+
+     if (b.m_num.isNeg())
+    {
+        m_num = -m_num;
+        b.m_num = -b.m_num;
+    }
+
+   /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
+     * and it's just a_num/b_num.
+     */
+    if (m_den == b.m_den)
+    {
+        m_den = b.m_num;
+        round(d);
+        return *this;
+    }
+    /* Protect against possibly preventable overflow: */
+    if (m_num.isBig() || m_den.isBig() ||
+        b.m_num.isBig() || b.m_den.isBig())
+    {
+        QofInt128 gcd = b.m_den.gcd(m_den);
+        b.m_den /= gcd;
+        m_den /= gcd;
+    }
+
+    m_num *= b.m_den;
+    m_den *= b.m_num;
+    round (d);
+    return *this;
+}
+
+GncRational&
+GncRational::add (const GncRational& b, GncDenom& d) noexcept
+{
+    if (m_error || b.m_error)
+    {
+        if (b.m_error)
+            m_error = b.m_error;
+        return *this;
+    }
+    QofInt128 lcm = m_den.lcm (b.m_den);
+    m_num = m_num * lcm / m_den + b.m_num * lcm / b.m_den;
+    m_den = lcm;
+    round (d);
+    return *this;
+}
+
+GncRational&
+GncRational::sub (const GncRational& b, GncDenom& d) noexcept
+{
+    return add(-b, d);
+}
+
 void
 GncRational::round (GncDenom& denom) noexcept
 {

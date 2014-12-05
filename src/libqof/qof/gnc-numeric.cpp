@@ -245,12 +245,8 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
 
-    QofInt128 lcm = an.m_den.lcm (bn.m_den);
-    GncNumeric  result(an.m_num * lcm / an.m_den + bn.m_num * lcm / bn.m_den,
-                       lcm);
-    result.round (new_denom);
 
-    return static_cast<gnc_numeric>(result);
+    return static_cast<gnc_numeric>(an.add(bn, new_denom));
 }
 
 /* *******************************************************************
@@ -289,10 +285,8 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     GncDenom new_denom (an, bn, denom, how);
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
-    GncNumeric  result(an.m_num * bn.m_num, an.m_den * bn.m_den);
-    result.round (new_denom);
 
-    return static_cast<gnc_numeric>(result);
+    return static_cast<gnc_numeric>(an.mul(bn, new_denom));
 }
 
 
@@ -314,33 +308,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
 
-     if (bn.m_num.isNeg())
-    {
-        an.m_num = -an.m_num;
-        bn.m_num = -bn.m_num;
-    }
-
-   /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
-     * and it's just a_num/b_num.
-     */
-    if (an.m_den == bn.m_den)
-    {
-        GncNumeric q(an.m_num, bn.m_num);
-        q.round(new_denom);
-        return static_cast<gnc_numeric>(q);
-    }
-    /* Protect against possibly preventable overflow: */
-    if (an.m_num.isBig() || an.m_den.isBig() ||
-        bn.m_num.isBig() || bn.m_den.isBig())
-    {
-        QofInt128 gcd = bn.m_den.gcd(an.m_den);
-        bn.m_den /= gcd;
-        an.m_den /= gcd;
-    }
-
-    GncNumeric q(an.m_num * bn.m_den, bn.m_num * an.m_den);
-    q.round (new_denom);
-    return static_cast<gnc_numeric>(q);
+    return static_cast<gnc_numeric>(an.div(bn, new_denom));
 }
 
 /* *******************************************************************

@@ -29,12 +29,21 @@ class GncRational
 public:
     GncRational (gnc_numeric n) noexcept;
     GncRational (QofInt128 num, QofInt128 den) noexcept;
+/** Conversion operator; use static_cast<gnc_numeric>(foo). */
     operator gnc_numeric() const noexcept;
+/** Make a new GncRational with the opposite sign. */
+    GncRational operator-() const noexcept;
+/** Round/convert this to the denominator provided by d, according to d's
+ * m_round value.
+ */
     void round (GncDenom& d) noexcept;
-    GncRational& mul(const GncRational&, GncDenom& d) noexcept;
-    GncRational& div(const GncRational&, GncDenom& d) noexcept;
-    GncRational& add(const GncRational&, GncDenom& d) noexcept;
-    GncRational& sub(const GncRational&, GncDenom& d) noexcept;
+/* These are mutators; in other words, they implement the equivalent of
+ * operators *=, /=, +=, and -=. They return a reference to this for chaining.
+ */
+    GncRational& mul(const GncRational& b, GncDenom& d) noexcept;
+    GncRational& div(GncRational b, GncDenom& d) noexcept;
+    GncRational& add(const GncRational& b, GncDenom& d) noexcept;
+    GncRational& sub(const GncRational& b, GncDenom& d) noexcept;
 
 
     QofInt128 m_num;
