@@ -10,6 +10,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2013 \
   ChangeLog.2012 \
   ChangeLog.2011 \
   ChangeLog.2010 \
