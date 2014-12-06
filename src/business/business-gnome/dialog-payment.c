@@ -348,6 +348,7 @@ void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
     GtkListStore *store;
+    GtkTreeSelection *selection;
     GList *list = NULL, *node;
 
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
@@ -358,6 +359,8 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
                                         &pw->owner, NULL);
 
     /* Clear the existing list */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+    gtk_tree_selection_unselect_all (selection);
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view)));
     gtk_list_store_clear(store);
 
