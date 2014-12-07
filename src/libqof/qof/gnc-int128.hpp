@@ -25,7 +25,13 @@
 #ifndef GNCINT128_H
 #define GNCINT128_H
 
-#include <stdint.h>
+extern "C"
+{
+#define  __STDC_LIMIT_MACROS 1
+#define  __STDC_CONSTANT_MACROS 1
+#define  __STDC_FORMAT_MACROS 1
+#include <inttypes.h>
+}
 
 #include <stdexcept>
 #include <string>
@@ -248,7 +254,6 @@ GncInt128 gcd (int64_t a, int64_t b);
 /** Compute the least common multiple of two integers
  */
 GncInt128 lcm (int64_t a, int64_t b);
-
 #endif //GNCINT128_H
 
 /** @} */

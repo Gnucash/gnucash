@@ -24,7 +24,6 @@
 extern "C"
 {
 #include "config.h"
-#include <inttypes.h>
 }
 
 #include "gnc-int128.hpp"
@@ -920,4 +919,3 @@ operator>> (GncInt128 a, uint b) noexcept
     a >>= b;
     return a;
 }
-
