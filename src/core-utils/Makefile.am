@@ -114,7 +114,8 @@ endif
 
 if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
-  --library-dir    ${top_builddir}/src/core-utils
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/libqof/qof
 
 %.go : %.scm .scm-links $(lib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
