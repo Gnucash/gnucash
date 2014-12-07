@@ -2,11 +2,12 @@
 # -*- coding: UTF-8 -*-
 
 ##@file
+# @brief Exports an invoice to lco-file for use with LaTeX, see \ref py_invoice_export
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
 # @date May 2011
-# @brief Exports an invoice to lco-file for use with LaTeX, see \ref py_invoice_export
 #
+# @details
 # The output file can be imported into KOMA-Script-letters.
 # This works primarily for germany. Internationalization welcome!
 #
@@ -27,7 +28,7 @@
 #
 # Additional information :
 #
-# - Doxygen: see page \ref py_invoice_export
+# - Doxygen docs: see page \ref py_invoice_export at http://svn.gnucash.org/docs/HEAD/
 # - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
 #
 # Credits to and ideas from
