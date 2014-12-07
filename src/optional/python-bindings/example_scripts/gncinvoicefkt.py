@@ -2,11 +2,12 @@
 # -*- coding: UTF-8 -*-
 
 ##@file
+# @brief some help for working with invoices, used in \ref py_invoice_export
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
 # @date 2014-11
-# @brief some help for working with invoices, used in \ref py_invoice_export
 #
+# @details
 # Credits to Tom Loft for the query to get_all_invoices
 # as used in his REST-Api
 #
