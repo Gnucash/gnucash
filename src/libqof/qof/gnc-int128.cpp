@@ -154,7 +154,7 @@ GncInt128::gcd(GncInt128 b) const noexcept
     GncInt128 t {a & one ? -b : a}; //B2
     while (a != b)
     {
-        while (t && (t & one ^ one)) t >>= 1;  //B3 & B4
+        while (t && ((t & one) ^ one)) t >>= 1;  //B3 & B4
         if (t.isNeg())  //B5
             b = -t;
         else
@@ -439,7 +439,7 @@ GncInt128::operator*= (const GncInt128& b) noexcept
     uint64_t bv[sublegs] {(b.m_lo & sublegmask), (b.m_lo >> sublegbits),
             (b.m_hi & sublegmask), (b.m_hi >> sublegbits)};
     uint64_t rv[sublegs] {};
-    int64_t carry {}, scratch {};
+    uint64_t carry {}, scratch {};
 
     rv[0] = av[0] * bv[0];
 
@@ -495,7 +495,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncIn
     uint64_t d {(UINT64_C(1) << sublegbits)/(v[n - 1] + UINT64_C(1))};
     uint64_t carry {UINT64_C(0)};
     bool negative {q.isNeg()};
-    for (auto i = 0; i < m; ++i)
+    for (size_t i = 0; i < m; ++i)
     {
         u[i] = u[i] * d + carry;
         if (u[i] > sublegmask)
@@ -512,7 +512,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncIn
         u[m++] = carry;
         carry = UINT64_C(0);
     }
-    for (auto i = 0; i < n; ++i)
+    for (size_t i = 0; i < n; ++i)
     {
         v[i] = v[i] * d + carry;
         if (v[i] > sublegmask)
@@ -527,7 +527,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncIn
     assert (carry == UINT64_C(0));
     for (int j = m - n; j >= 0; j--) //D3
     {
-        int64_t qhat, rhat;
+        uint64_t qhat, rhat;
         qhat = ((u[j + n] << sublegbits) + u[j + n - 1]) / v[n - 1];
         rhat = ((u[j + n] << sublegbits) + u[j + n - 1]) % v[n - 1];
 
@@ -540,7 +540,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncIn
         }
         carry = UINT64_C(0);
         uint64_t borrow {};
-        for (auto k = 0; k < n; ++k) //D4
+        for (size_t k = 0; k < n; ++k) //D4
         {
             auto subend = qhat * v[k] + carry;
             carry = subend >> sublegbits;
@@ -566,7 +566,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncIn
         { //D6
             --qv[j];
             carry = UINT64_C(0);
-            for (auto k = 0; k < n; ++k)
+            for (size_t k = 0; k < n; ++k)
             {
                 u[j + k] += v[k] + carry;
                 if (u[j + k] > sublegmask)

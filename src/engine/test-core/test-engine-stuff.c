@@ -22,6 +22,8 @@
 #include <fcntl.h>
 #include <glib.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -414,7 +416,7 @@ gnc_numeric
 get_random_gnc_numeric(int64_t deno)
 {
     gint64 numer;
-
+    int64_t limit;
     if (deno == GNC_DENOM_AUTO)
     {
         if (RAND_MAX / 8 > rand())
@@ -444,7 +446,7 @@ get_random_gnc_numeric(int64_t deno)
      * the numerator is clamped to the larger of num_limit / deno or num_limit /
      * max_denom_mult.
      */
-    const int64_t limit = num_limit / (max_denom_mult / deno == 0 ? max_denom_mult : max_denom_mult / deno);
+    limit = num_limit / (max_denom_mult / deno == 0 ? max_denom_mult : max_denom_mult / deno);
     numer = get_random_gint64 ();
     if (numer > limit)
     {
@@ -455,7 +457,7 @@ get_random_gnc_numeric(int64_t deno)
              numer = limit;
     }
     if (0 == numer) numer = 1;
-    g_log("test.engine.suff", G_LOG_LEVEL_INFO, "New GncNumeric %lld / %lld !\n", numer, deno);
+    g_log("test.engine.suff", G_LOG_LEVEL_INFO, "New GncNumeric %" PRIu64 " / %" PRIu64 " !\n", numer, deno);
     return gnc_numeric_create(numer, deno);
 }
 
@@ -942,7 +944,8 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     if (do_bork())
     {
         val = get_random_gnc_numeric(GNC_DENOM_AUTO);
-        g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Borking second %lld / %lld, scu %d\n", val.num, val.denom, s2_scu);
+        g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Borking second %" PRIu64
+	       " / %" PRIu64 ", scu %d\n", val.num, val.denom, s2_scu);
     }
     val = gnc_numeric_neg(val);
     xaccSplitSetValue(s2, val);
@@ -1306,14 +1309,18 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
             if (val.denom > scu && val.num > num_limit / (max_denom_mult / scu))
             {
                 int64_t new_num = val.num / (val.denom / scu);
-                g_log("test.engine.suff", G_LOG_LEVEL_DEBUG, "Adjusting val.denom from %lld to %lld\n", val.num, new_num);
+                g_log("test.engine.suff", G_LOG_LEVEL_DEBUG,
+		      "Adjusting val.denom from %" PRIu64 " to %" PRIu64 "\n",
+		      val.num, new_num);
                 val.num = new_num;
             }
             val.denom = scu;
         }
     }
     while (gnc_numeric_check(val) != GNC_ERROR_OK);
-    g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Random split value: %lld / %lld, scu %d\n", val.num, val.denom, scu);
+    g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG,
+	   "Random split value: %" PRIu64 " / %" PRIu64 ", scu %d\n",
+	   val.num, val.denom, scu);
     xaccSplitSetValue(ret, val);
 
     /* If the currencies are the same, the split amount should equal
@@ -1335,7 +1342,9 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
         }
         while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }
-    g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Random split amount: %lld / %lld, rate %lld / %lld\n", amt.num, amt.denom, rate.num, rate.denom);
+    g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Random split amount: %"
+	   PRIu64 " / %" PRIu64 ", rate %" PRIu64 " / %" PRIu64 "\n",
+	   amt.num, amt.denom, rate.num, rate.denom);
 
 
      xaccSplitSetAmount(ret, amt);
