@@ -31,6 +31,7 @@ extern "C"
 #include <iomanip>
 #include <utility>
 #include <cassert>
+#include <cstdio>
 
 /* All algorithms from Donald E. Knuth, "The Art of Computer
  * Programming, Volume 2: Seminumerical Algorithms", 3rd Ed.,
