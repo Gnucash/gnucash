@@ -27,121 +27,121 @@
 TEST(qofint128_constructors, test_default_constructor)
 {
     GncInt128 value {};
-    EXPECT_EQ (true, value.isZero());
-    EXPECT_EQ (false, value.isNeg());
-    EXPECT_EQ (false, value.isBig());
-    EXPECT_EQ (false, value.isOverflow());
-    EXPECT_EQ (false, value.isNan());
+    EXPECT_TRUE (value.isZero());
+    EXPECT_FALSE (value.isNeg());
+    EXPECT_FALSE (value.isBig());
+    EXPECT_FALSE (value.isOverflow());
+    EXPECT_FALSE (value.isNan());
 }
 
 TEST(qofint128_constructors, test_single_arg_constructor)
 {
     GncInt128 value1 (INT64_C(0));
-    EXPECT_EQ (true, value1.isZero());
-    EXPECT_EQ (false, value1.isNeg());
-    EXPECT_EQ (false, value1.isBig());
-    EXPECT_EQ (false, value1.isOverflow());
-    EXPECT_EQ (false, value1.isNan());
+    EXPECT_TRUE (value1.isZero());
+    EXPECT_FALSE (value1.isNeg());
+    EXPECT_FALSE (value1.isBig());
+    EXPECT_FALSE (value1.isOverflow());
+    EXPECT_FALSE (value1.isNan());
 
     GncInt128 value2 (INT64_C(567894392130486208));
-    EXPECT_EQ (false, value2.isZero());
-    EXPECT_EQ (false, value2.isNeg());
-    EXPECT_EQ (false, value2.isBig());
-    EXPECT_EQ (false, value2.isOverflow());
-    EXPECT_EQ (false, value2.isNan());
+    EXPECT_FALSE (value2.isZero());
+    EXPECT_FALSE (value2.isNeg());
+    EXPECT_FALSE (value2.isBig());
+    EXPECT_FALSE (value2.isOverflow());
+    EXPECT_FALSE (value2.isNan());
 
     GncInt128 value3 (INT64_C(-567894392130486208));
-    EXPECT_EQ (false, value3.isZero());
-    EXPECT_EQ (true, value3.isNeg());
-    EXPECT_EQ (false, value3.isBig());
-    EXPECT_EQ (false, value3.isOverflow());
-    EXPECT_EQ (false, value3.isNan());
+    EXPECT_FALSE (value3.isZero());
+    EXPECT_TRUE (value3.isNeg());
+    EXPECT_FALSE (value3.isBig());
+    EXPECT_FALSE (value3.isOverflow());
+    EXPECT_FALSE (value3.isNan());
 
     GncInt128 value4 (UINT64_C(13567894392130486208));
-    EXPECT_EQ (false, value4.isZero());
-    EXPECT_EQ (false, value4.isNeg());
-    EXPECT_EQ (true, value4.isBig());
-    EXPECT_EQ (false, value4.isOverflow());
-    EXPECT_EQ (false, value4.isNan());
+    EXPECT_FALSE (value4.isZero());
+    EXPECT_FALSE (value4.isNeg());
+    EXPECT_TRUE (value4.isBig());
+    EXPECT_FALSE (value4.isOverflow());
+    EXPECT_FALSE (value4.isNan());
 }
 
 TEST(qofint128_constructors, test_double_arg_constructor)
 {
     GncInt128 value1 (INT64_C(0), INT64_C(0));
-    EXPECT_EQ (true, value1.isZero());
-    EXPECT_EQ (false, value1.isNeg());
-    EXPECT_EQ (false, value1.isBig());
-    EXPECT_EQ (false, value1.isOverflow());
-    EXPECT_EQ (false, value1.isNan());
+    EXPECT_TRUE (value1.isZero());
+    EXPECT_FALSE (value1.isNeg());
+    EXPECT_FALSE (value1.isBig());
+    EXPECT_FALSE (value1.isOverflow());
+    EXPECT_FALSE (value1.isNan());
 
     GncInt128 value2 (INT64_C(0), INT64_C(567894392130486208));
-    EXPECT_EQ (false, value2.isZero());
-    EXPECT_EQ (false, value2.isNeg());
-    EXPECT_EQ (false, value2.isBig());
-    EXPECT_EQ (false, value2.isOverflow());
-    EXPECT_EQ (false, value2.isNan());
+    EXPECT_FALSE (value2.isZero());
+    EXPECT_FALSE (value2.isNeg());
+    EXPECT_FALSE (value2.isBig());
+    EXPECT_FALSE (value2.isOverflow());
+    EXPECT_FALSE (value2.isNan());
 
     GncInt128 value3 (INT64_C(567894392130486208), INT64_C(0));
-    EXPECT_EQ (false, value3.isZero());
-    EXPECT_EQ (false, value3.isNeg());
-    EXPECT_EQ (true, value3.isBig());
-    EXPECT_EQ (false, value3.isOverflow());
-    EXPECT_EQ (false, value3.isNan());
+    EXPECT_FALSE (value3.isZero());
+    EXPECT_FALSE (value3.isNeg());
+    EXPECT_TRUE (value3.isBig());
+    EXPECT_FALSE (value3.isOverflow());
+    EXPECT_FALSE (value3.isNan());
 
     GncInt128 value4 (INT64_C(567894392130486208), INT64_C(567894392130486208));
-    EXPECT_EQ (false, value4.isZero());
-    EXPECT_EQ (false, value4.isNeg());
-    EXPECT_EQ (true, value4.isBig());
-    EXPECT_EQ (false, value4.isOverflow());
-    EXPECT_EQ (false, value4.isNan());
+    EXPECT_FALSE (value4.isZero());
+    EXPECT_FALSE (value4.isNeg());
+    EXPECT_TRUE (value4.isBig());
+    EXPECT_FALSE (value4.isOverflow());
+    EXPECT_FALSE (value4.isNan());
 
     GncInt128 value5 (INT64_C(567894392130486208),
                       INT64_C(-567894392130486208));
-    EXPECT_EQ (false, value5.isZero());
-    EXPECT_EQ (false, value5.isNeg());
-    EXPECT_EQ (true, value5.isBig());
-    EXPECT_EQ (false, value5.isOverflow());
-    EXPECT_EQ (false, value5.isNan());
+    EXPECT_FALSE (value5.isZero());
+    EXPECT_FALSE (value5.isNeg());
+    EXPECT_TRUE (value5.isBig());
+    EXPECT_FALSE (value5.isOverflow());
+    EXPECT_FALSE (value5.isNan());
 
     GncInt128 value6 (INT64_C(-567894392130486208),
                       INT64_C(567894392130486208));
-    EXPECT_EQ (false, value6.isZero());
-    EXPECT_EQ (true, value6.isNeg());
-    EXPECT_EQ (true, value6.isBig());
-    EXPECT_EQ (false, value6.isOverflow());
-    EXPECT_EQ (false, value6.isNan());
+    EXPECT_FALSE (value6.isZero());
+    EXPECT_TRUE (value6.isNeg());
+    EXPECT_TRUE (value6.isBig());
+    EXPECT_FALSE (value6.isOverflow());
+    EXPECT_FALSE (value6.isNan());
 
     GncInt128 value7 (UINT64_C(13567894392130486208),
                       UINT64_C(13567894392130486208), GncInt128::pos);
-    EXPECT_EQ (false, value7.isZero());
-    EXPECT_EQ (false, value7.isNeg());
-    EXPECT_EQ (true, value7.isBig());
-    EXPECT_EQ (false, value7.isOverflow());
-    EXPECT_EQ (false, value7.isNan());
+    EXPECT_FALSE (value7.isZero());
+    EXPECT_FALSE (value7.isNeg());
+    EXPECT_TRUE (value7.isBig());
+    EXPECT_FALSE (value7.isOverflow());
+    EXPECT_FALSE (value7.isNan());
 
     GncInt128 value8 (UINT64_C(13567894392130486208),
                       UINT64_C(13567894392130486208), GncInt128::neg);
-    EXPECT_EQ (false, value8.isZero());
-    EXPECT_EQ (true, value8.isNeg());
-    EXPECT_EQ (true, value8.isBig());
-    EXPECT_EQ (false, value8.isOverflow());
-    EXPECT_EQ (false, value8.isNan());
+    EXPECT_FALSE (value8.isZero());
+    EXPECT_TRUE (value8.isNeg());
+    EXPECT_TRUE (value8.isBig());
+    EXPECT_FALSE (value8.isOverflow());
+    EXPECT_FALSE (value8.isNan());
 
     GncInt128 value9 (UINT64_C(13567894392130486208),
                       UINT64_C(13567894392130486208), GncInt128::overflow);
-    EXPECT_EQ (false, value9.isZero());
-    EXPECT_EQ (false, value9.isNeg());
-    EXPECT_EQ (true, value9.isBig());
-    EXPECT_EQ (true, value9.isOverflow());
-    EXPECT_EQ (false, value9.isNan());
+    EXPECT_FALSE (value9.isZero());
+    EXPECT_FALSE (value9.isNeg());
+    EXPECT_TRUE (value9.isBig());
+    EXPECT_TRUE (value9.isOverflow());
+    EXPECT_FALSE (value9.isNan());
 
    GncInt128 value10 (UINT64_C(13567894392130486208),
                       UINT64_C(13567894392130486208), GncInt128::NaN);
-    EXPECT_EQ (false, value10.isZero());
-    EXPECT_EQ (false, value10.isNeg());
-    EXPECT_EQ (true, value10.isBig());
-    EXPECT_EQ (false, value10.isOverflow());
-    EXPECT_EQ (true, value10.isNan());
+    EXPECT_FALSE (value10.isZero());
+    EXPECT_FALSE (value10.isNeg());
+    EXPECT_TRUE (value10.isBig());
+    EXPECT_FALSE (value10.isOverflow());
+    EXPECT_TRUE (value10.isNan());
 }
 
 TEST(qofint128_functions, test_int_functions)
