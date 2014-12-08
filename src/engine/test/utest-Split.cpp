@@ -1281,7 +1281,7 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     Account *acc3 = xaccMallocAccount (book);
-#ifdef __clang__
+#if defined __clang__ && __clang__major > 5
 #define _func "gboolean get_corr_account_split(const Split *, const Split **)"
 #else
 #define _func "get_corr_account_split"
