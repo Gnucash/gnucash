@@ -17,6 +17,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/gnome-utils \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
