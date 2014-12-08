@@ -778,6 +778,12 @@ if test x$enable_google_test = xyes; then
    AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc /usr/src/gmock/src/gmock-all.cc /usr/include/gtest/gtest.h /usr/include/gmock/gmock.h],
     [ac_cv_gtest_system_install=yes],[ac_cv_gtest_system_install=no])
 fi
+if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes -a x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
+  ac_cv_gtest_system_install=yes
+else
+  ac_cv_gtest_system_install=no
+fi
+
 AC_ARG_WITH([gtest-root],
     [AS_HELP_STRING([--with-gtest-root=PATH], [location of the google test sources])],
     [ac_cv_gtest_root="$with_gtest_root"])
