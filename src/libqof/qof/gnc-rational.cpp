@@ -272,7 +272,7 @@ GncRational::round (GncDenom& denom) noexcept
 }
 
 GncDenom::GncDenom (GncRational& a, GncRational& b,
-                    int64_t spec, uint how) noexcept :
+                    int64_t spec, unsigned int how) noexcept :
     m_value (spec),
     m_round (static_cast<GncDenom::RoundType>(how & GNC_NUMERIC_RND_MASK)),
     m_type (static_cast<GncDenom::DenomType>(how & GNC_NUMERIC_DENOM_MASK)),
@@ -337,7 +337,7 @@ GncDenom::reduce (const GncRational& a) noexcept
             val = a.m_num.abs() / a.m_den;
         else
             val = a.m_den / a.m_num.abs();
-        uint digits {};
+        unsigned int digits {};
         while (val >= 10)
         {
             ++digits;

@@ -53,7 +53,7 @@ public:
 
 struct GncDenom
 {
-    GncDenom (GncRational& a, GncRational& b, int64_t spec, uint how) noexcept;
+    GncDenom (GncRational& a, GncRational& b, int64_t spec, unsigned int how) noexcept;
     void reduce (const GncRational& a) noexcept;
     GncInt128 get () const noexcept { return m_value; }
 
@@ -81,7 +81,7 @@ struct GncDenom
     RoundType m_round;
     DenomType m_type;
     bool m_auto;
-    uint m_sigfigs;
+    unsigned int m_sigfigs;
     GNCNumericErrorCode m_error;
 };
 
