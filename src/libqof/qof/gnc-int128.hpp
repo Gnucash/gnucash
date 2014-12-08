@@ -27,9 +27,11 @@
 
 extern "C"
 {
+#ifndef __STDC_LIMIT_MACROS
 #define  __STDC_LIMIT_MACROS 1
 #define  __STDC_CONSTANT_MACROS 1
 #define  __STDC_FORMAT_MACROS 1
+#endif
 #include <inttypes.h>
 }
 
