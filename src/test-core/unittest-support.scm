@@ -1,5 +1,11 @@
 (define-module (gnucash unittest-support))
-(load-extension "libtest-core-guile" "scm_init_unittest_support_module")
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libtest-core-guile" "scm_init_unittest_support_module")))
+  (else
+    (load-extension "libtest-core-guile" "scm_init_unittest_support_module")))
 (use-modules (unittest_support))
 
 (re-export TestErrorStruct-log-level-set)

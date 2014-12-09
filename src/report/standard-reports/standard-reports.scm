@@ -74,24 +74,29 @@
 ;;   list of files in the directory
 
 (define (directory-files dir)
-  (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
-        (dir-stream (opendir dir)))
-    (let loop ((fname (readdir dir-stream))
-	               (acc '())
-				  )
-                  (if (eof-object? fname)
-                      (begin
-                          (closedir dir-stream)
-                          acc
-                      )
-                      (loop (readdir dir-stream)
-                            (if (regexp-exec fname-regexp fname)
-                                (cons fname acc)
-                                acc
-                            )
-                      )
-                  )
-    )
+  (if (file-exists? dir)
+      (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
+            (dir-stream (opendir dir)))
+
+           (let loop ((fname (readdir dir-stream))
+                      (acc '()))
+                     (if (eof-object? fname)
+                         (begin
+                             (closedir dir-stream)
+                             acc
+                         )
+                         (loop (readdir dir-stream)
+                               (if (regexp-exec fname-regexp fname)
+                                   (cons fname acc)
+                                   acc
+                               )
+                         )
+                     )
+           ))
+      (begin
+          (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
+          '() ;; return empty list
+      )
   )
 )
 
@@ -113,9 +118,8 @@
 ;; Return value:
 ;;  List of symbols for reports
 (define (get-report-list)
-	(map (lambda (s) (string->symbol s))
-         (process-file-list (directory-files (gnc-path-get-stdreportsdir)))
-    )
+    (map (lambda (s) (string->symbol s))
+         (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
 )
 
 (gnc:debug "stdrpt-dir=" (gnc-path-get-stdreportsdir))

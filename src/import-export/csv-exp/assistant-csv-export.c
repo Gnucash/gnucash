@@ -95,6 +95,8 @@ static const gchar *start_tree_string = N_(
 static const gchar *start_trans_string = N_(
             "This assistant will help you export the Transactions to a file\n"
             " with the separator specified below.\n\n"
+            "There will be multiple rows for each transaction and may"
+            " require further manipulation to get them in a format you can use.\n\n"
             "Select the settings you require for the file and then click 'Forward' to proceed"
             " or 'Cancel' to Abort Export.\n");
 

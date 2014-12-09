@@ -583,7 +583,8 @@ gnc_budget_get_account_period_value(const GncBudget *budget, const Account *acco
 Timespec
 gnc_budget_get_period_start_date(const GncBudget *budget, guint period_num)
 {
-    Timespec ts;
+    Timespec ts = {0, 0};
+    g_return_val_if_fail (GNC_IS_BUDGET(budget), ts);
     timespecFromTime64(
         &ts, recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence,
                                      period_num, FALSE));
@@ -593,7 +594,8 @@ gnc_budget_get_period_start_date(const GncBudget *budget, guint period_num)
 Timespec
 gnc_budget_get_period_end_date(const GncBudget *budget, guint period_num)
 {
-    Timespec ts;
+    Timespec ts = {0, 0};
+    g_return_val_if_fail (GNC_IS_BUDGET(budget), ts);
     timespecFromTime64(
         &ts,  recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence, period_num, TRUE));
     return ts;

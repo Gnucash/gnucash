@@ -30,10 +30,9 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash main))        ; for gnc:debug
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/app-utils" 0)
-
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
@@ -922,13 +921,6 @@
 
       (else #f))))
 
-(define (gnc:owner-report-create owner account)
-  ; Figure out an account to use if nothing exists here.
-  (if (null? account)
-      (set! account (find-first-account-for-owner owner)))
-
-  (owner-report-create owner account))
-
 (define (gnc:owner-report-create-internal
      account split query journal? double? title
      debit-string credit-string)
@@ -949,4 +941,4 @@
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t
               gnc:owner-report-create-internal)
 
-(export gnc:owner-report-create)
+(export find-first-account-for-owner owner-report-create)

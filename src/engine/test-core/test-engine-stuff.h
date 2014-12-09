@@ -28,7 +28,7 @@ typedef struct
 bin_data* get_random_binary_data(void);
 
 KvpFrame* get_random_kvp_frame(void);
-gnc_numeric get_random_gnc_numeric(void);
+gnc_numeric get_random_gnc_numeric(int64_t);
 GncGUID* get_random_guid(void);
 GList* get_random_glist(void);
 

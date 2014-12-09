@@ -153,21 +153,21 @@ check_reduce (void)
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (5011617, 167108327),
                     rval,
-                    val, "check_reduce(1) expected %s = %s = reduce(%s)");
+                    val, "check_reduce(1) expected %s got %s = reduce(%s)");
 
     val = gnc_numeric_create(17474724864LL, 136048896LL);
     rval = gnc_numeric_reduce (val);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (4 * 17 * 17, 9),
                     rval,
-                    val, "check_reduce(2) expected %s = %s = reduce(%s)");
+                    val, "check_reduce(2) expected %s got %s = reduce(%s)");
 
     val = gnc_numeric_create(1024LL, 1099511627776LL);
     rval = gnc_numeric_reduce (val);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (1, 1024 * 1024 * 1024),
                     rval,
-                    val, "check_reduce(3): expected %s = %s = reduce(%s)");
+                    val, "check_reduce(3): expected %s got %s = reduce(%s)");
 }
 
 /* ======================================================= */
@@ -235,7 +235,7 @@ check_equality_operator (void)
         bval = gnc_numeric_reduce (val);
         rval = gnc_numeric_reduce (mval);
         check_unary_op (gnc_numeric_eq,
-                        bval, rval, mval, "expected %s = %s = reduce(%s)");
+                        bval, rval, mval, "expected %s got %s = reduce(%s)");
 
         /* The unreduced versions should be equal */
         check_unary_op (gnc_numeric_equal,
@@ -277,56 +277,56 @@ check_rounding (void)
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (43, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_FLOOR),
-                    val, "expected %s = %s = (%s as 100th's floor)");
+                    val, "expected %s got %s = (%s as 100th's floor)");
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (44, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_CEIL),
-                    val, "expected %s = %s = (%s as 100th's ceiling)");
+                    val, "expected %s got %s = (%s as 100th's ceiling)");
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (43, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_TRUNC),
-                    val, "expected %s = %s = (%s as 100th's trunc)");
+                    val, "expected %s got %s = (%s as 100th's trunc)");
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (44, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 
     val = gnc_numeric_create(1511, 1000);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (151, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 
     val = gnc_numeric_create(1516, 1000);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (152, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 
     /* Half-values always get rounded to nearest even number */
     val = gnc_numeric_create(1515, 1000);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (152, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 
     val = gnc_numeric_create(1525, 1000);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (152, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 
     val = gnc_numeric_create(1535, 1000);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (154, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 
     val = gnc_numeric_create(1545, 1000);
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (154, 100),
                     gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
-                    val, "expected %s = %s = (%s as 100th's round)");
+                    val, "expected %s got %s = (%s as 100th's round)");
 }
 
 /* ======================================================= */
@@ -384,11 +384,11 @@ check_neg (void)
 
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (-2, 6), c,
-                    a, "expected %s = %s = -(%s)");
+                    a, "expected %s got %s = -(%s)");
 
     check_unary_op (gnc_numeric_eq,
                     gnc_numeric_create (-1, 4), d,
-                    b, "expected %s = %s = -(%s)");
+                    b, "expected %s got %s = -(%s)");
 
 }
 
@@ -546,6 +546,21 @@ check_add_subtract (void)
     }
 }
 
+static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
+			       10000000, 100000000, 1000000000, 10000000000,
+			       100000000000, 1000000000000, 10000000000000,
+			       100000000000000, 10000000000000000,
+			       100000000000000000, 1000000000000000000};
+#define POWTEN_OVERFLOW -5
+
+static inline gint64
+powten (int exp)
+{
+    if (exp > 18 || exp < -18)
+	return POWTEN_OVERFLOW;
+    return exp < 0 ? -pten[-exp] : pten[exp];
+}
+
 static void
 check_add_subtract_overflow (void)
 {
@@ -565,8 +580,8 @@ check_add_subtract_overflow (void)
 	gint64 bin_deno_a = (1 << exp_a);
 	gint64 bin_deno_b = (1 << exp_a);
 */
-	gint64 dec_deno_a = pwr64 (10, exp_a % 7);
-	gint64 dec_deno_b = pwr64 (10, exp_b % 7);
+	gint64 dec_deno_a = powten (exp_a % 7);
+	gint64 dec_deno_b = powten (exp_b % 7);
         gint64 na = get_random_gint64 () % (1000000 * dec_deno_a);
         gint64 nb = get_random_gint64 () % (1000000 * dec_deno_b);
 	gnc_numeric result;
@@ -808,9 +823,9 @@ check_mult_div (void)
      * an overflow error should be signalled; else the
      * divide routine should shift down the results till
      * the overflow is eliminated.
-     *
      */
-    check_binary_op (gnc_numeric_error (GNC_ERROR_OVERFLOW),
+/* Doesn't overflow any more! */
+    check_binary_op (gnc_numeric_error (GNC_ERROR_REMAINDER),
                      gnc_numeric_div(a, b, GNC_DENOM_AUTO,
                                      GNC_HOW_RND_NEVER | GNC_HOW_DENOM_EXACT),
                      a, b, "expected %s got %s = %s / %s for div exact");
@@ -869,7 +884,7 @@ check_mult_div (void)
     val_a = gnc_numeric_mul (frac, val_tot,
                              gnc_numeric_denom(val_tot),
                              GNC_HOW_RND_ROUND | GNC_HOW_DENOM_EXACT);
-    check_binary_op (gnc_numeric_create(562854125307LL, 100),
+    check_binary_op (gnc_numeric_create(562854124919LL, 100),
                      val_a, val_tot, frac,
                      "expected %s got %s = %s * %s for mult round");
 
@@ -897,7 +912,7 @@ check_reciprocal(void)
     check_unary_op (gnc_numeric_eq, gnc_numeric_create (-3, -1),
                     gnc_numeric_convert(val, GNC_DENOM_RECIPROCAL(1),
                                         GNC_HOW_RND_NEVER),
-                    val, "expected %s = %s = (%s as RECIP(1))");
+                    val, "expected %s got %s = (%s as RECIP(1))");
 
     a = gnc_numeric_create(200, 100);
     b = gnc_numeric_create(300, 100);

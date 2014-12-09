@@ -34,7 +34,7 @@
 (define-module (gnucash report balsheet-eg))
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gettext))
 (use-modules (gnucash report eguile-gnc))
 (use-modules (gnucash report eguile-utilities))
 

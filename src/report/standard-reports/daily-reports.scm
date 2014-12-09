@@ -32,6 +32,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
 

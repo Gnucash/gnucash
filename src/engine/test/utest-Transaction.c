@@ -485,7 +485,7 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_book_new ();
     TestSignal sig1 = test_signal_new (NULL, QOF_EVENT_CREATE,NULL);
     Transaction *txn;
-#ifdef __clang__
+#if defined __clang__ && __clang__major > 5
 #define _func "Transaction *xaccMallocTransaction(QofBook *)"
 #else
 #define _func "xaccMallocTransaction"
@@ -1262,7 +1262,7 @@ test_xaccTransGetAccountConvRate (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check->hits, ==, 0);
     split1->value = gnc_numeric_zero();
     rate = xaccTransGetAccountConvRate (fixture->txn, fixture->acc1);
-    g_assert_cmpint (gnc_numeric_check (rate), ==, GNC_ERROR_ARG);
+    g_assert_cmpint (gnc_numeric_check (rate), ==, GNC_ERROR_OVERFLOW);
     g_assert_cmpint (check->hits, ==, 1);
 }
 /* xaccTransGetAccountBalance
@@ -1272,7 +1272,7 @@ xaccTransGetAccountBalance (const Transaction *trans,// C: 1  Local: 0:0:0
 static void
 test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 {
-#ifdef __clang__
+#if defined __clang__ && __clang__major > 5
 #define _func "gnc_numeric xaccTransGetAccountBalance(const Transaction *, const Account *)"
 #else
 #define _func "xaccTransGetAccountBalance"

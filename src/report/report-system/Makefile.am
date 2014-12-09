@@ -47,7 +47,7 @@ AM_CPPFLAGS = \
   ${GTK_CFLAGS} \
   ${GUILE_CFLAGS}
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = \
      commodity-utilities.scm  \
      html-acct-table.scm \
@@ -67,17 +67,14 @@ gncscm_DATA = \
      report-utilities.scm \
      report.scm
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
-
-gncmodscmdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/report-system
-
+gncmodscmdir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/report-system
 gncmodscm_DATA = \
      collectors.scm \
      list-extras.scm \
      report-collectors.scm
 
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = \
     report-system.scm \
 	eguile-gnc.scm \
@@ -110,6 +107,46 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/html \
+  --gnc-module-dir ${top_builddir}/src/gnome-utils \
+  --gnc-module-dir ${top_builddir}/src/report/report-system \
+  --guile-load-dir ${top_builddir}/src/app-utils \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/libqof/qof \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/backend/xml \
+  --library-dir    ${top_builddir}/src/backend/sql \
+  --library-dir    ${top_builddir}/src/html \
+  --library-dir    ${top_builddir}/src/report/report-system
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncmodscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report/report-system
+gncmodscmcache_DATA = $(gncmodscm_DATA:.scm=.go)
+
+gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
+endif
+
 noinst_DATA = .scm-links
 
 EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA} ${gncmodscm_DATA}
@@ -117,7 +154,14 @@ EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA} ${gncmodscm_DATA}
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = report .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = \
+	report \
+	.scm-links \
+	${SCM_FILE_LINKS} \
+	${gncscmmodcache_DATA} \
+	${gncmodscmcache_DATA} \
+	${gncscmcache_DATA}
+
 MAINTAINERCLEANFILES = swig-report-system.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.core\"

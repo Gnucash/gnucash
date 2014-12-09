@@ -25,22 +25,12 @@
 
 (define-module (gnucash report business-reports))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report report-system))
 (gnc:module-load "gnucash/report/standard-reports" 0)
-(gnc:module-load "gnucash/app-utils" 0)
 
 ;; to define gnc-build-url
 (gnc:module-load "gnucash/html" 0)
-
-;; Guile 2 needs to find this macro at compile time already
-(cond-expand
-  (guile-2
-    (eval-when
-      (compile load eval expand)
-      (define gnc:menuname-business-reports (N_ "_Business"))))
-  (else
-    (define gnc:menuname-business-reports (N_ "_Business"))))
-
-(define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 (define (guid-ref idstr type guid)
   (gnc-build-url type (string-append idstr guid) ""))
@@ -120,8 +110,6 @@
         0
         ))
 
-(export gnc:menuname-business-reports gnc:optname-invoice-number)
-
 (use-modules (gnucash report fancy-invoice))
 (use-modules (gnucash report invoice))
 (use-modules (gnucash report easy-invoice))
@@ -139,8 +127,14 @@
 (define (gnc:receivables-report-create account title show-zeros?)
   (receivables-report-create-internal account title show-zeros?))
 
+(define (gnc:owner-report-create owner account)
+  ; Figure out an account to use if nothing exists here.
+  (if (null? account)
+      (set! account (find-first-account-for-owner owner)))
+  (owner-report-create owner account))
+
 (export gnc:invoice-report-create
 	gnc:customer-anchor-text gnc:job-anchor-text gnc:vendor-anchor-text
 	gnc:invoice-anchor-text gnc:owner-anchor-text gnc:owner-report-text
-	gnc:payables-report-create gnc:receivables-report-create)
-(re-export gnc:owner-report-create)
+	gnc:payables-report-create gnc:receivables-report-create
+	gnc:owner-report-create)

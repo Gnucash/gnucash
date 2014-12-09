@@ -41,6 +41,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/report/report-system \
   --guile-load-dir ${top_builddir}/src/report/report-system/test \
 \
+  --library-dir    ${top_builddir}/src/report/report-system \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/app-utils \
@@ -57,7 +58,7 @@ $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GUILE="${GUILE}" \
-  GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
+  GNC_BUILDDIR="${abs_top_builddir}" \
   $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 

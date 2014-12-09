@@ -163,10 +163,10 @@ try:
     invoice_entry.SetDateEntered(datetime.datetime.now())
 
     invoice_customer.PostToAccount(a2, datetime.date.today(), datetime.date.today(),
-                                   "the memo", True)
+                                   "the memo", True, False)
 
     new_customer.ApplyPayment(None, None, a2, a6, GncNumeric(100,100),
-                              GncNumeric(1), datetime.date.today(), "", "")
+                              GncNumeric(1), datetime.date.today(), "", "", True)
 
     invoice_customer.ApplyPayment(None, a6, GncNumeric(7,100),
                                   GncNumeric(1), datetime.date.today(), "", "")

@@ -49,7 +49,8 @@ GUILE_WARN_DEPRECATED=no
 # Tell Guile where to find GnuCash specific guile modules
 # GUILE_LIBS can be used to override the path to Guile's own modules
 # GUILE_LIBS=
-GUILE_LOAD_PATH={GNC_DATA}/guile-modules;{GNC_DATA}/scm;{GUILE_LIBS};{GUILE_LOAD_PATH}
+GUILE_LOAD_PATH={GNC_DATA}/scm;{GUILE_LIBS};{GUILE_LOAD_PATH}
+GUILE_LOAD_COMPILED_PATH={GNC_DATA}/scm/ccache/@-GUILE_EFFECTIVE_VERSION-@;{GUILE_LIBS};{GUILE_LOAD_PATH}
 
 # Tell Guile where to find GnuCash specific shared libraries
 GNC_LIBRARY_PATH={SYS_LIB}

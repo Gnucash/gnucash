@@ -31,14 +31,14 @@
 (gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/gnome-utils" 0)
 
-(load-from-path "qif-import/qif-objects.scm")      ;; class definitions
-(load-from-path "qif-import/qif-parse.scm")        ;; string-to-value
-(load-from-path "qif-import/qif-utils.scm")
-(load-from-path "qif-import/qif-file.scm")         ;; actual file reading
-(load-from-path "qif-import/qif-dialog-utils.scm") ;; build displays
-(load-from-path "qif-import/qif-guess-map.scm")    ;; build acct mappings
-(load-from-path "qif-import/qif-to-gnc.scm")       ;; conv QIF xtns to GNC
-(load-from-path "qif-import/qif-merge-groups.scm") ;; merge into user's acct
+(load-from-path "qif-import/qif-objects")      ;; class definitions
+(load-from-path "qif-import/qif-parse")        ;; string-to-value
+(load-from-path "qif-import/qif-utils")
+(load-from-path "qif-import/qif-file")         ;; actual file reading
+(load-from-path "qif-import/qif-dialog-utils") ;; build displays
+(load-from-path "qif-import/qif-guess-map")    ;; build acct mappings
+(load-from-path "qif-import/qif-to-gnc")       ;; conv QIF xtns to GNC
+(load-from-path "qif-import/qif-merge-groups") ;; merge into user's acct
 
 (export make-qif-file)
 (export make-ticker-map)

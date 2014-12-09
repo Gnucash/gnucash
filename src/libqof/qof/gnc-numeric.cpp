@@ -38,20 +38,16 @@ extern "C"
 #endif
 
 #include "gnc-numeric.h"
+#include "gnc-rational.hpp"
 
-/* Note: The qofmath128 functions are used mostly here and almost
-         nowhere else. Hence, we inline the C code directly into here so
-         that the compiler can potentially inline the code as-is and speed
-         up the gnc-numeric.c functions. */
-#include "qofmath128.cpp"
+using GncNumeric = GncRational;
 
-/* static short module = MOD_ENGINE; */
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
 			       10000000, 100000000, 1000000000, 10000000000,
 			       100000000000, 1000000000000, 10000000000000,
 			       100000000000000, 10000000000000000,
 			       100000000000000000, 1000000000000000000};
-#define POWTEN_OVERFLOW -5
+static const int POWTEN_OVERFLOW {-5};
 
 static inline gint64
 powten (int exp)
@@ -61,22 +57,6 @@ powten (int exp)
     return exp < 0 ? -pten[-exp] : pten[exp];
 }
 
-gint64
-pwr64 (gint64 op, int exp)
-{
-    qofint128 tmp;
-    if (exp == 0) return 1;
-    if (exp % 2)
-    {
-	tmp = mult128 (op, pwr64 (op, exp - 1));
-	if (tmp.isbig) return 0;
-	return tmp.lo;
-    }
-    tmp.lo = pwr64 (op, exp / 2);
-    tmp = mult128 (tmp.lo, tmp.lo);
-    if (tmp.isbig) return 0;
-    return tmp.lo;
-}
 
 /* =============================================================== */
 /* This function is small, simple, and used everywhere below,
@@ -103,70 +83,6 @@ gnc_numeric_check(gnc_numeric in)
     }
 }
 
-/*
- *  Find the least common multiple of the denominators of a and b.
- */
-
-static inline gint64
-gnc_numeric_lcd(gnc_numeric a, gnc_numeric b)
-{
-    qofint128 lcm;
-    if (gnc_numeric_check(a) || gnc_numeric_check(b))
-    {
-        return GNC_ERROR_ARG;
-    }
-
-    if (b.denom == a.denom) return a.denom;
-
-    /* Special case: smaller divides smoothly into larger */
-    if ((b.denom < a.denom) && ((a.denom % b.denom) == 0))
-    {
-        return a.denom;
-    }
-    if ((a.denom < b.denom) && ((b.denom % a.denom) == 0))
-    {
-        return b.denom;
-    }
-
-    lcm = lcm128 (a.denom, b.denom);
-    if (lcm.isbig) return GNC_ERROR_ARG;
-    return lcm.lo;
-}
-
-
-/* Return the ratio n/d reduced so that there are no common factors. */
-static inline gnc_numeric
-reduce128(qofint128 n, gint64 d)
-{
-    gint64   t;
-    gint64   num;
-    gint64   denom;
-    gnc_numeric out;
-    qofint128 red;
-
-    t =  rem128 (n, d);
-    num = d;
-    denom = t;
-
-    /* The strategy is to use Euclid's algorithm */
-    while (denom > 0)
-    {
-        t = num % denom;
-        num = denom;
-        denom = t;
-    }
-    /* num now holds the GCD (Greatest Common Divisor) */
-
-    red = div128 (n, num);
-    if (red.isbig)
-    {
-        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-    }
-    out.num   = red.lo;
-    if (red.isneg) out.num = -out.num;
-    out.denom = d / num;
-    return out;
-}
 
 /* *******************************************************************
  *  gnc_numeric_zero_p
@@ -240,6 +156,7 @@ gnc_numeric_positive_p(gnc_numeric a)
     }
 }
 
+
 /* *******************************************************************
  *  gnc_numeric_compare
  *  returns 1 if a>b, -1 if b>a, 0 if a == b
@@ -249,7 +166,6 @@ int
 gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
 {
     gint64 aa, bb;
-    qofint128 l, r;
 
     if (gnc_numeric_check(a) || gnc_numeric_check(b))
     {
@@ -263,28 +179,9 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
         return -1;
     }
 
-    if  ((a.denom > 0) && (b.denom > 0))
-    {
-        /* Avoid overflows using 128-bit intermediate math */
-        l = mult128 (a.num, b.denom);
-        r = mult128 (b.num, a.denom);
-        return cmp128 (l, r);
-    }
+    GncNumeric an (a), bn (b);
 
-    if (a.denom < 0)
-        a.denom *= -1;
-    if (b.denom < 0)
-        b.denom *= -1;
-
-    /* BUG: Possible overflow here..  Also, doesn't properly deal with
-     * reciprocal denominators.
-     */
-    aa = a.num * a.denom;
-    bb = b.num * b.denom;
-
-    if (aa == bb) return 0;
-    if (aa > bb) return 1;
-    return -1;
+    return (an.m_num * bn.m_den).cmp(bn.m_num * an.m_den);
 }
 
 
@@ -306,50 +203,7 @@ gnc_numeric_eq(gnc_numeric a, gnc_numeric b)
 gboolean
 gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
 {
-    qofint128 l, r;
-    if ((a.denom == b.denom) && (a.denom > 0))
-    {
-        return (a.num == b.num);
-    }
-    if ((a.denom > 0) && (b.denom > 0))
-    {
-        // return (a.num*b.denom == b.num*a.denom);
-        l = mult128 (a.num, b.denom);
-        r = mult128 (b.num, a.denom);
-        return equal128 (l, r);
-
-#if ALT_WAY_OF_CHECKING_EQUALITY
-        gnc_numeric ra = gnc_numeric_reduce (a);
-        gnc_numeric rb = gnc_numeric_reduce (b);
-        if (ra.denom != rb.denom) return 0;
-        if (ra.num != rb.num) return 0;
-        return 1;
-#endif
-    }
-    if ((a.denom < 0) && (b.denom < 0))
-    {
-        l = mult128 (a.num, -a.denom);
-        r = mult128 (b.num, -b.denom);
-        return equal128 (l, r);
-    }
-    else
-    {
-        /* BUG: One of the numbers has a reciprocal denom, and the other
-           does not. I just don't know to handle this case in any
-           reasonably overflow-proof yet simple way.  So, this function
-           will simply get it wrong whenever the three multiplies
-           overflow 64-bits.  -CAS */
-        if (a.denom < 0)
-        {
-            return ((a.num * -a.denom * b.denom) == b.num);
-        }
-        else
-        {
-            return (a.num == (b.num * a.denom * -b.denom));
-        }
-    }
-
-    return ((a.num * b.denom) == (a.denom * b.num));
+    return gnc_numeric_compare (a, b) == 0;
 }
 
 
@@ -372,7 +226,6 @@ gnc_numeric_same(gnc_numeric a, gnc_numeric b, gint64 denom,
 }
 
 
-
 /* *******************************************************************
  *  gnc_numeric_add
  ********************************************************************/
@@ -381,91 +234,18 @@ gnc_numeric
 gnc_numeric_add(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how)
 {
-    gnc_numeric sum;
-
     if (gnc_numeric_check(a) || gnc_numeric_check(b))
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    if ((denom == GNC_DENOM_AUTO) &&
-            (how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_FIXED)
-    {
-        if (a.denom == b.denom)
-        {
-            denom = a.denom;
-        }
-        else if (b.num == 0)
-        {
-            denom = a.denom;
-            b.denom = a.denom;
-        }
-        else if (a.num == 0)
-        {
-            denom = b.denom;
-            a.denom = b.denom;
-        }
-        else
-        {
-            return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
-        }
-    }
+    GncNumeric an (a), bn (b);
+    GncDenom new_denom (an, bn, denom, how);
+    if (new_denom.m_error)
+        return gnc_numeric_error (new_denom.m_error);
 
-    if (a.denom < 0)
-    {
-        a.num *= -a.denom;  /* BUG: overflow not handled.  */
-        a.denom = 1;
-    }
 
-    if (b.denom < 0)
-    {
-        b.num *= -b.denom;  /* BUG: overflow not handled.  */
-        b.denom = 1;
-    }
-
-    /* Get an exact answer.. same denominator is the common case. */
-    if (a.denom == b.denom)
-    {
-        sum.num = a.num + b.num;  /* BUG: overflow not handled.  */
-        sum.denom = a.denom;
-    }
-    else
-    {
-        /* We want to do this:
-         *    sum.num = a.num*b.denom + b.num*a.denom;
-         *    sum.denom = a.denom*b.denom;
-         * but the multiply could overflow.
-         * Computing the LCD minimizes likelihood of overflow
-         */
-        gint64 lcd;
-        qofint128 ca, cb, cab;
-        lcd = gnc_numeric_lcd(a, b);
-        if (GNC_ERROR_ARG == lcd)
-        {
-            return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-        }
-        ca = mult128 (a.num, lcd / a.denom);
-        if (ca.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-
-        cb = mult128 (b.num, lcd / b.denom);
-        if (cb.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-
-        cab = add128 (ca, cb);
-        if (cab.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-
-        sum.num   = cab.lo;
-        if (cab.isneg) sum.num = -sum.num;
-        sum.denom = lcd;
-    }
-
-    if ((denom == GNC_DENOM_AUTO) &&
-            ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD))
-    {
-        denom = gnc_numeric_lcd(a, b);
-        how   = how & GNC_NUMERIC_RND_MASK;
-    }
-
-    return gnc_numeric_convert(sum, denom, how);
+    return static_cast<gnc_numeric>(an.add(bn, new_denom));
 }
 
 /* *******************************************************************
@@ -495,115 +275,17 @@ gnc_numeric
 gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how)
 {
-    gnc_numeric product, result;
-    qofint128 bignume, bigdeno;
-
     if (gnc_numeric_check(a) || gnc_numeric_check(b))
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    if ((denom == GNC_DENOM_AUTO) &&
-            (how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_FIXED)
-    {
-        if (a.denom == b.denom)
-        {
-            denom = a.denom;
-        }
-        else if (b.num == 0)
-        {
-            denom = a.denom;
-        }
-        else if (a.num == 0)
-        {
-            denom = b.denom;
-        }
-        else
-        {
-            return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
-        }
-    }
+    GncNumeric an (a), bn (b);
+    GncDenom new_denom (an, bn, denom, how);
+    if (new_denom.m_error)
+        return gnc_numeric_error (new_denom.m_error);
 
-    if ((denom == GNC_DENOM_AUTO) &&
-            ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD))
-    {
-        denom = gnc_numeric_lcd(a, b);
-        how   = how & GNC_NUMERIC_RND_MASK;
-    }
-
-    if (a.denom < 0)
-    {
-        a.num *= -a.denom;  /* BUG: overflow not handled.  */
-        a.denom = 1;
-    }
-
-    if (b.denom < 0)
-    {
-        b.num *= -b.denom;  /* BUG: overflow not handled.  */
-        b.denom = 1;
-    }
-
-    bignume = mult128 (a.num, b.num);
-    bigdeno = mult128 (a.denom, b.denom);
-    product.num   = a.num * b.num;
-    product.denom = a.denom * b.denom;
-
-    /* If it looks to be overflowing, try to reduce the fraction ... */
-    if (bignume.isbig || bigdeno.isbig)
-    {
-        gint64 tmp;
-        a = gnc_numeric_reduce (a);
-        b = gnc_numeric_reduce (b);
-        tmp = a.num;
-        a.num = b.num;
-        b.num = tmp;
-        a = gnc_numeric_reduce (a);
-        b = gnc_numeric_reduce (b);
-
-        bignume = mult128 (a.num, b.num);
-        bigdeno = mult128 (a.denom, b.denom);
-        product.num   = a.num * b.num;
-        product.denom = a.denom * b.denom;
-    }
-
-    /* If it its still overflowing, and rounding is allowed then round */
-    if (bignume.isbig || bigdeno.isbig)
-    {
-        /* If rounding allowed, then shift until there's no
-         * more overflow. The conversion at the end will fix
-         * things up for the final value. Else overflow. */
-        if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
-        {
-            if (bigdeno.isbig)
-            {
-                return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-            }
-            product = reduce128 (bignume, product.denom);
-            if (gnc_numeric_check (product))
-            {
-                return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-            }
-        }
-        else
-        {
-            while (bignume.isbig || bigdeno.isbig)
-            {
-                bignume = shift128 (bignume);
-                bigdeno = shift128 (bigdeno);
-            }
-            product.num = bignume.lo;
-            if (bignume.isneg) product.num = -product.num;
-
-            product.denom = bigdeno.lo;
-            if (0 == product.denom)
-            {
-                return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-            }
-        }
-    }
-
-    result = gnc_numeric_convert(product, denom, how);
-    return result;
+    return static_cast<gnc_numeric>(an.mul(bn, new_denom));
 }
 
 
@@ -615,128 +297,17 @@ gnc_numeric
 gnc_numeric_div(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how)
 {
-    gnc_numeric quotient;
-    qofint128 nume, deno;
-
     if (gnc_numeric_check(a) || gnc_numeric_check(b))
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    if ((denom == GNC_DENOM_AUTO) &&
-            (how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_FIXED)
-    {
-        if (a.denom == b.denom)
-        {
-            denom = a.denom;
-        }
-        else if (a.denom == 0)
-        {
-            denom = b.denom;
-        }
-        else
-        {
-            return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
-        }
-    }
+    GncNumeric an (a), bn (b);
+    GncDenom new_denom (an, bn, denom, how);
+    if (new_denom.m_error)
+        return gnc_numeric_error (new_denom.m_error);
 
-
-    if (a.denom < 0)
-    {
-        a.num *= -a.denom;   /* BUG: overflow not handled.  */
-        a.denom = 1;
-    }
-
-    if (b.denom < 0)
-    {
-        b.num *= -b.denom;   /* BUG: overflow not handled.  */
-        b.denom = 1;
-    }
-
-    if (a.denom == b.denom)
-    {
-        quotient.num = a.num;
-        quotient.denom = b.num;
-    }
-    else
-    {
-        gint64 sgn = 1;
-        if (0 > a.num)
-        {
-            sgn = -sgn;
-            a.num = -a.num;
-        }
-        if (0 > b.num)
-        {
-            sgn = -sgn;
-            b.num = -b.num;
-        }
-        nume = mult128(a.num, b.denom);
-        deno = mult128(b.num, a.denom);
-
-        /* Try to avoid overflow by removing common factors */
-        if (nume.isbig && deno.isbig)
-        {
-            gnc_numeric ra = gnc_numeric_reduce (a);
-            gnc_numeric rb = gnc_numeric_reduce (b);
-
-            gint64 gcf_nume = gcf64(ra.num, rb.num);
-            gint64 gcf_deno = gcf64(rb.denom, ra.denom);
-            nume = mult128(ra.num / gcf_nume, rb.denom / gcf_deno);
-            deno = mult128(rb.num / gcf_nume, ra.denom / gcf_deno);
-        }
-
-        if ((0 == nume.isbig) && (0 == deno.isbig))
-        {
-            quotient.num = sgn * nume.lo;
-            quotient.denom = deno.lo;
-            goto dive_done;
-        }
-        else if (0 == deno.isbig)
-        {
-            quotient = reduce128 (nume, deno.lo);
-            if (0 == gnc_numeric_check (quotient))
-            {
-                quotient.num *= sgn;
-                goto dive_done;
-            }
-        }
-
-        /* If rounding allowed, then shift until there's no
-         * more overflow. The conversion at the end will fix
-         * things up for the final value. */
-        if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
-        {
-            return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-        }
-        while (nume.isbig || deno.isbig)
-        {
-            nume = shift128 (nume);
-            deno = shift128 (deno);
-        }
-        quotient.num = sgn * nume.lo;
-        quotient.denom = deno.lo;
-        if (0 == quotient.denom)
-        {
-            return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-        }
-    }
-
-    if (quotient.denom < 0)
-    {
-        quotient.num   = -quotient.num;
-        quotient.denom = -quotient.denom;
-    }
-
-dive_done:
-    if ((denom == GNC_DENOM_AUTO) &&
-            ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_LCD))
-    {
-        denom = gnc_numeric_lcd(a, b);
-        how   = how & GNC_NUMERIC_RND_MASK;
-    }
-
-    return gnc_numeric_convert(quotient, denom, how);
+    return static_cast<gnc_numeric>(an.div(bn, new_denom));
 }
 
 /* *******************************************************************
@@ -769,264 +340,18 @@ gnc_numeric_abs(gnc_numeric a)
     return gnc_numeric_create(ABS(a.num), a.denom);
 }
 
+
 /* *******************************************************************
  *  gnc_numeric_convert
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
+gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
 {
-    gnc_numeric out;
-    gnc_numeric temp;
-    gint64      temp_bc;
-    gint64      temp_a;
-    gint64      remainder;
-    gint64      sign;
-    gint        denom_neg = 0;
-    double      ratio, logratio;
-    double      sigfigs;
-    qofint128 nume, newm;
-
-    temp.num   = 0;
-    temp.denom = 0;
-
-    if (gnc_numeric_check(in))
-    {
-        return gnc_numeric_error(GNC_ERROR_ARG);
-    }
-
-    if (denom == GNC_DENOM_AUTO)
-    {
-        switch (how & GNC_NUMERIC_DENOM_MASK)
-        {
-        default:
-        case GNC_HOW_DENOM_LCD:   /* LCD is meaningless with AUTO in here */
-        case GNC_HOW_DENOM_EXACT:
-            return in;
-            break;
-
-        case GNC_HOW_DENOM_REDUCE:
-            /* reduce the input to a relatively-prime fraction */
-            return gnc_numeric_reduce(in);
-            break;
-
-        case GNC_HOW_DENOM_FIXED:
-            if (in.denom != denom)
-            {
-                return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
-            }
-            else
-            {
-                return in;
-            }
-            break;
-
-        case GNC_HOW_DENOM_SIGFIG:
-            ratio    = fabs(gnc_numeric_to_double(in));
-            if (ratio < 10e-20)
-            {
-                logratio = 0;
-            }
-            else
-            {
-                logratio = log10(ratio);
-                logratio = ((logratio > 0.0) ?
-                            (floor(logratio) + 1.0) : (ceil(logratio)));
-            }
-            sigfigs  = GNC_HOW_GET_SIGFIGS(how);
-
-            if ((denom = powten (sigfigs - logratio)) == POWTEN_OVERFLOW)
-                return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-
-            how = how & ~GNC_HOW_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
-            break;
-
-        }
-    }
-
-    /* Make sure we need to do the work */
-    if (in.denom == denom)
-    {
-        return in;
-    }
-    if (in.num == 0)
-    {
-        out.num = 0;
-        out.denom = denom;
-        return out;
-    }
-
-    /* If the denominator of the input value is negative, get rid of that. */
-    if (in.denom < 0)
-    {
-        in.num = in.num * (- in.denom);  /* BUG: overflow not handled.  */
-        in.denom = 1;
-    }
-
-    sign = (in.num < 0) ? -1 : 1;
-
-    /* If the denominator is less than zero, we are to interpret it as
-     * the reciprocal of its magnitude. */
-    if (denom < 0)
-    {
-
-        /* XXX FIXME: use 128-bit math here ... */
-        denom     = - denom;
-        denom_neg = 1;
-        temp_a    = (in.num < 0) ? -in.num : in.num;
-        temp_bc   = in.denom * denom;  /* BUG: overflow not handled.  */
-        remainder = temp_a % temp_bc;
-        out.num   = temp_a / temp_bc;
-        out.denom = - denom;
-    }
-    else
-    {
-        /* Do all the modulo and int division on positive values to make
-         * things a little clearer. Reduce the fraction denom/in.denom to
-         * help with range errors */
-        temp.num   = denom;
-        temp.denom = in.denom;
-        temp       = gnc_numeric_reduce(temp);
-
-        /* Symbolically, do the following:
-         * out.num   = in.num * temp.num;
-         * remainder = out.num % temp.denom;
-         * out.num   = out.num / temp.denom;
-         * out.denom = denom;
-         */
-        nume = mult128 (in.num, temp.num);
-        newm = div128 (nume, temp.denom);
-        remainder = rem128 (nume, temp.denom);
-
-        if (newm.isbig)
-        {
-            return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-        }
-
-        out.num = newm.lo;
-        out.denom = denom;
-    }
-
-    if (remainder)
-    {
-        switch (how & GNC_NUMERIC_RND_MASK)
-        {
-        case GNC_HOW_RND_FLOOR:
-            if (sign < 0)
-            {
-                out.num = out.num + 1;
-            }
-            break;
-
-        case GNC_HOW_RND_CEIL:
-            if (sign > 0)
-            {
-                out.num = out.num + 1;
-            }
-            break;
-
-        case GNC_HOW_RND_TRUNC:
-            break;
-
-        case GNC_HOW_RND_PROMOTE:
-            out.num = out.num + 1;
-            break;
-
-        case GNC_HOW_RND_ROUND_HALF_DOWN:
-            if (denom_neg)
-            {
-                if ((2 * remainder) > in.denom * denom)
-                {
-                    out.num = out.num + 1;
-                }
-            }
-            else if ((2 * remainder) > temp.denom)
-            {
-                out.num = out.num + 1;
-            }
-            /* check that 2*remainder didn't over-flow */
-            else if (((2 * remainder) < remainder) &&
-                     (remainder > (temp.denom / 2)))
-            {
-                out.num = out.num + 1;
-            }
-            break;
-
-        case GNC_HOW_RND_ROUND_HALF_UP:
-            if (denom_neg)
-            {
-                if ((2 * remainder) >= in.denom * denom)
-                {
-                    out.num = out.num + 1;
-                }
-            }
-            else if ((2 * remainder ) >= temp.denom)
-            {
-                out.num = out.num + 1;
-            }
-            /* check that 2*remainder didn't over-flow */
-            else if (((2 * remainder) < remainder) &&
-                     (remainder >= (temp.denom / 2)))
-            {
-                out.num = out.num + 1;
-            }
-            break;
-
-        case GNC_HOW_RND_ROUND:
-            if (denom_neg)
-            {
-                if ((2 * remainder) > in.denom * denom)
-                {
-                    out.num = out.num + 1;
-                }
-                else if ((2 * remainder) == in.denom * denom)
-                {
-                    if (out.num % 2)
-                    {
-                        out.num = out.num + 1;
-                    }
-                }
-            }
-            else
-            {
-                if ((2 * remainder ) > temp.denom)
-                {
-                    out.num = out.num + 1;
-                }
-                /* check that 2*remainder didn't over-flow */
-                else if (((2 * remainder) < remainder) &&
-                         (remainder > (temp.denom / 2)))
-                {
-                    out.num = out.num + 1;
-                }
-                else if ((2 * remainder) == temp.denom)
-                {
-                    if (out.num % 2)
-                    {
-                        out.num = out.num + 1;
-                    }
-                }
-                /* check that 2*remainder didn't over-flow */
-                else if (((2 * remainder) < remainder) &&
-                         (remainder ==  (temp.denom / 2)))
-                {
-                    if (out.num % 2)
-                    {
-                        out.num = out.num + 1;
-                    }
-                }
-            }
-            break;
-
-        case GNC_HOW_RND_NEVER:
-            return gnc_numeric_error(GNC_ERROR_REMAINDER);
-            break;
-        }
-    }
-
-    out.num = (sign > 0) ? out.num : (-out.num);
-
-    return out;
+    GncNumeric a (in), b (gnc_numeric_zero());
+    GncDenom d (a, b, denom, how);
+    a.round (d);
+    return static_cast<gnc_numeric>(a);
 }
 
 
@@ -1039,30 +364,17 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
 gnc_numeric
 gnc_numeric_reduce(gnc_numeric in)
 {
-    gint64   t;
-    gint64   num = (in.num < 0) ? (- in.num) : in.num ;
-    gint64   denom = in.denom;
-    gnc_numeric out;
-
     if (gnc_numeric_check(in))
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    /* The strategy is to use Euclid's algorithm */
-    while (denom > 0)
-    {
-        t = num % denom;
-        num = denom;
-        denom = t;
-    }
-    /* num now holds the GCD (Greatest Common Divisor) */
-
-    /* All calculations are done on positive num, since it's not
-     * well defined what % does for negative values */
-    out.num   = in.num / num;
-    out.denom = in.denom / num;
-    return out;
+    if (in.denom < 0) /* Negative denoms multiply num, can't be reduced. */
+        return in;
+    GncNumeric a (in), b (gnc_numeric_zero());
+    GncDenom d (a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
+    a.round (d);
+    return static_cast<gnc_numeric>(a);
 }
 
 
