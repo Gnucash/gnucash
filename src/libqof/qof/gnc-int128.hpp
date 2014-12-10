@@ -33,6 +33,7 @@ extern "C"
 #define  __STDC_FORMAT_MACROS 1
 #endif
 #include <inttypes.h>
+#include <glib.h>
 }
 
 #include <stdexcept>
@@ -76,6 +77,7 @@ enum // Values for m_flags
     GncInt128 (uint16_t lower) : GncInt128{static_cast<uint64_t>(lower)} {};
     GncInt128 (int32_t lower) : GncInt128{static_cast<int64_t>(lower)} {};
     GncInt128 (uint32_t lower) : GncInt128{static_cast<uint64_t>(lower)} {};
+    GncInt128 (gint64 lower) : GncInt128{static_cast<int64_t>(lower)} {};
     GncInt128 (int64_t lower);
     GncInt128 (uint64_t lower);
 /**

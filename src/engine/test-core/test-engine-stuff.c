@@ -457,7 +457,7 @@ get_random_gnc_numeric(int64_t deno)
              numer = limit;
     }
     if (0 == numer) numer = 1;
-    g_log("test.engine.suff", G_LOG_LEVEL_INFO, "New GncNumeric %" PRIu64 " / %" PRIu64 " !\n", numer, deno);
+    g_log("test.engine.suff", G_LOG_LEVEL_INFO, "New GncNumeric %" G_GINT64_FORMAT " / %" PRId64 " !\n", numer, deno);
     return gnc_numeric_create(numer, deno);
 }
 
@@ -944,8 +944,8 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     if (do_bork())
     {
         val = get_random_gnc_numeric(GNC_DENOM_AUTO);
-        g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Borking second %" PRIu64
-	       " / %" PRIu64 ", scu %d\n", val.num, val.denom, s2_scu);
+        g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Borking second %" G_GINT64_FORMAT
+	       " / %" G_GINT64_FORMAT ", scu %d\n", val.num, val.denom, s2_scu);
     }
     val = gnc_numeric_neg(val);
     xaccSplitSetValue(s2, val);
@@ -1310,7 +1310,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
             {
                 int64_t new_num = val.num / (val.denom / scu);
                 g_log("test.engine.suff", G_LOG_LEVEL_DEBUG,
-		      "Adjusting val.denom from %" PRIu64 " to %" PRIu64 "\n",
+		      "Adjusting val.denom from %" G_GINT64_FORMAT " to %" PRId64 "\n",
 		      val.num, new_num);
                 val.num = new_num;
             }
@@ -1319,7 +1319,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     }
     while (gnc_numeric_check(val) != GNC_ERROR_OK);
     g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG,
-	   "Random split value: %" PRIu64 " / %" PRIu64 ", scu %d\n",
+	   "Random split value: %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT ", scu %d\n",
 	   val.num, val.denom, scu);
     xaccSplitSetValue(ret, val);
 
@@ -1343,7 +1343,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
         while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }
     g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Random split amount: %"
-	   PRIu64 " / %" PRIu64 ", rate %" PRIu64 " / %" PRIu64 "\n",
+	   G_GINT64_FORMAT " / %" G_GINT64_FORMAT ", rate %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "\n",
 	   amt.num, amt.denom, rate.num, rate.denom);
 
 
