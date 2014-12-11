@@ -346,7 +346,7 @@ gnc_numeric_abs(gnc_numeric a)
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
+gnc_numeric_convert(gnc_numeric in, gint64 denom, int how)
 {
     GncNumeric a (in), b (gnc_numeric_zero());
     GncDenom d (a, b, denom, how);
