@@ -284,6 +284,7 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/gnome-utils
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)

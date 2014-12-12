@@ -194,7 +194,10 @@ if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/gnc-module
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/libqof/qof
+
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
