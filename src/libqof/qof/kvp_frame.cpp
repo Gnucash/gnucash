@@ -921,9 +921,9 @@ kvp_glist_compare(const GList * list1, const GList * list2)
  ********************************************************************/
 
 KvpValue *
-kvp_value_new_gint64(gint64 value)
+kvp_value_new_gint64(int64_t value)
 {
-    return new KvpValueImpl{static_cast<int64_t>(value)};
+    return new KvpValueImpl{value};
 }
 
 KvpValue *
@@ -1008,7 +1008,7 @@ kvp_value_get_type(const KvpValue * oldval)
     return value->get_type();
 }
 
-gint64
+int64_t
 kvp_value_get_gint64(const KvpValue * ovalue)
 {
     if (!ovalue) return {};
