@@ -1,8 +1,45 @@
 Version history:
 ------- -------
+2.6.5 - 16 December 2014
+Announcement: GnuCash 2.6.5 Release 2014-12-16
+GnuCash 2.6.5 released
+
+The GnuCash development team proudly announces GnuCash 2.6.5, the
+fifth maintenance release in the 2.6-stable series.
+
+The primary reason for this release is that the problems which plagued 2.6.4 on Microsoft Windows have been resolved.
+
+We've also fixed the following bugs:
+    736359 - Date of 0000-00-00 in MySQL backend crashes GnuCash.
+    737815 - Graphs Cannot Be Generated Correctly.
+    738113 - Crash on reload budget report.
+    738477 - WebKit is broken on Win32.
+
+Other fixes that weren't reported as bugs:
+    Pre-compile scm files when building with guile 2.
+    Fix build-time hard-coded path introduced by the guile2 compile changes
+    Prevent crash when standards-report dir doesn't exist.
+    QIF Import crashes when closing via the 'X' button on the last page
+    Omit extension on calls to load-extension.
+    Use one common base directory to store all scheme files and modules.
+    Guile module structure cleanup.
+    Harmonize variable names used to refer to guile modules in all makefiles.
+    Add missing comma in call to gtk_tree_store_set(). Thanks to Frédéric Bière for finding and fixing the problem.
+    Revert to using numerical indexes for the x-axis on bar charts.
+    Aqbanking: Add display of aqbanking subaccountid in initial correspondence setup.
+    Aqbanking online SEPA transfer: Allow transfers without BIC, only IBAN. Also add IBAN checking.
+    Aqbanking transfer: Make IBAN and BIC text entry fields filter digits or alphas correctly as needed.
+    Adapt german SKR03 account template to updated tax rate.
+    Allow GUILE1_PROGS as m4 name. Patch by dimstar@opensuse.org.
+    Add sv_AX, sv_FI, zh_HK, and zh_TW to Makefiles & configure.
+
+Updated Translations: Assamese Indic, Danish, German, Gujarati Indic, Italian, Kannada Indic, Konkani Latin,
+
+
+
 2.6.4 - 28 September 2014
 
-Announcpement: GnuCash 2.6.4 Release 2014-09-28
+Announcement: GnuCash 2.6.4 Release 2014-09-28
 GnuCash 2.6.4 released
 
 The GnuCash development team proudly announces GnuCash 2.6.4, the
