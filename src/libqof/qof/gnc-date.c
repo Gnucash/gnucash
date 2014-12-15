@@ -126,7 +126,7 @@ gnc_g_date_time_new_local (gint year, gint month, gint day, gint hour, gint minu
 }
 
 static GDateTime*
-g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
+gnc_g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
 {
     GDateTime *ngdt;
     g_return_val_if_fail (gdt != NULL, NULL);
@@ -142,6 +142,8 @@ gnc_g_date_time_new_from_unix_local (time64 time)
 {
     GTimeZone *tz = gnc_g_time_zone_new_local ();
     GDateTime *gdt = g_date_time_new_from_unix_utc (time);
+    if (gdt)
+	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
     return gdt;
 }
 
@@ -151,7 +153,7 @@ gnc_g_date_time_new_from_timeval_local (const GTimeVal* tv)
     GTimeZone *tz = gnc_g_time_zone_new_local ();
     GDateTime *gdt = g_date_time_new_from_timeval_utc (tv);
     if (gdt)
-	gdt = g_date_time_adjust_for_dst (gdt, tz);
+	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
     return gdt;
 }
 
@@ -161,7 +163,7 @@ gnc_g_date_time_new_now_local (void)
     GTimeZone *tz = gnc_g_time_zone_new_local ();
     GDateTime *gdt = g_date_time_new_now_utc ();
     if (gdt)
-	gdt = g_date_time_adjust_for_dst (gdt, tz);
+	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
     return gdt;
 
 }
@@ -173,7 +175,7 @@ gnc_g_date_time_to_local (GDateTime* gdt)
     if (gdt)
     {
 	tz = gnc_g_time_zone_new_local ();
-	gdt = g_date_time_adjust_for_dst (g_date_time_to_utc (gdt), tz);
+	gdt = gnc_g_date_time_adjust_for_dst (g_date_time_to_utc (gdt), tz);
     }
     return gdt;
 }
@@ -193,7 +195,7 @@ void
 _gnc_date_time_init (_GncDateTime *gncdt)
 {
     gncdt->new_local = gnc_g_date_time_new_local;
-    gncdt->adjust_for_dst = g_date_time_adjust_for_dst;
+    gncdt->adjust_for_dst = gnc_g_date_time_adjust_for_dst;
     gncdt->new_from_unix_local = gnc_g_date_time_new_from_unix_local;
     gncdt->new_from_timeval_local = gnc_g_date_time_new_from_timeval_local;
     gncdt->new_now_local = gnc_g_date_time_new_now_local;
