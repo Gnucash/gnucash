@@ -14,6 +14,7 @@ We've also fixed the following bugs:
     737815 - Graphs Cannot Be Generated Correctly.
     738113 - Crash on reload budget report.
     738477 - WebKit is broken on Win32.
+    741418 - Freeze unposting bill, 100% cpu usage.
 
 Other fixes that weren't reported as bugs:
     Pre-compile scm files when building with guile 2.
