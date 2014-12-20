@@ -403,7 +403,7 @@ msgid ""
 "This copy was built from %s rev %s on %s."
 msgstr ""
 "%s\n"
-"ही प्रत %एस आरईव्ही %s सुरु %एस मधून उभारण्यात आली होती."
+"ही प्रत %s एस आरईव्ही %s सुरु %s एस मधून उभारण्यात आली होती."
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:409 ../src/bin/gnucash-bin.c:527
@@ -421,7 +421,7 @@ msgid ""
 "This copy was built from rev %s on %s."
 msgstr ""
 "%s\n"
-"ही प्रत आरईव्ही %एस सुरु %एस मधून उभारण्यात आली होती."
+"ही प्रत आरईव्ही %s एस सुरु %s एस मधून उभारण्यात आली होती."
 
 #: ../src/bin/gnucash-bin.c:515 ../src/bin/gnucash-bin.c:631
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -20306,7 +20306,7 @@ msgstr "वर्तमान लॉग फाइल उघडू शकत न�
 #: ../src/import-export/log-replay/gnc-log-replay.c:603
 #, c-format
 msgid "Failed to open log file: %s: %s"
-msgstr "लॉग फाइल उघडण्यात अयशस्वी : %: s%s"
+msgstr "लॉग फाइल उघडण्यात अयशस्वी : %s: %s"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:616
 #: ../src/import-export/log-replay/gnc-log-replay.c:613

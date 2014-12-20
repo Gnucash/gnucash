@@ -1338,8 +1338,11 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 
 /*
  * Create a payment of "amount" for the owner and match it with
- * the set of lots passed in. If not lots were given all open
- * lots for the owner are considered.
+ * the set of lots passed in.
+ * If
+ * - no lots were given
+ * - auto_pay is true
+ * then all open lots for the owner are considered.
  */
 void
 gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,

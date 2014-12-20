@@ -1,6 +1,270 @@
+2014-12-14 John Ralls 
+
+	* Still more Guile library path additions, this time in tests. (HEAD, manjusri-maint/maint, maint)
+
+2014-12-14 John Ralls 
+
+	* Use standard macro INT64_C() to silence gcc-4.2 complaint
+
+2014-12-14 John Ralls 
+
+	* Correct inadvertent change to a still-needed function.
+
+2014-12-13 John Ralls 
+
+	* Remove Windows specializations from gnc-date.c (origin/maint)
+
+2014-12-12 John Ralls 
+
+	* Still more Guile precompilation fixes.
+
+2014-12-08 Mike Alexander 
+
+	* Fix line endings in repository to match recent change to .gitattributes
+
+2014-12-08 VERDOÏA Laurent 
+
+	* French typo correction
+
+2014-12-05 Frank H. Ellenberger 
+
+	* Add ChangeLog.2013 to dist_doc_DATA
+
+2014-12-02 Frank H. Ellenberger 
+
+	* Update of de.po: 152 + 38 remaining
+
+2014-12-03 Geert Janssens 
+
+	* Yet another guile 2 precompile fix of the German tax report
+
+2014-12-03 Geert Janssens 
+
+	* Fix guile 2 precompilation of German tax report
+
+2014-12-02 John Ralls 
+
+	* Guile compilation: One missed CLEANFILES.
+
+2014-12-02 John Ralls 
+
+	* Fix the *.win32-bin.txt and downloaded.mt940 attributes.
+
+2014-12-02 John Ralls 
+
+	* Guile precompilation: One more missing library-dir.
+
+2014-12-02 John Ralls 
+
+	* Reapply fix of Guile precompilation without unwanted change in gnc-numeric.c.
+
+2014-12-02 John Ralls 
+
+	* Revert "Fix Guile-2.0 precompilation."
+
+2014-12-01 John Ralls 
+
+	* Fix Guile-2.0 precompilation.
+
+2014-12-01 Frank H. Ellenberger 
+
+	* Update of de.po: 351 +50 remaining
+
+2014-11-30 John Ralls 
+
+	* Bug 738477 - WebKit is broken on Win32.
+
+2014-11-30 Frank H. Ellenberger 
+
+	* Update of de.po -still 530 + 53 to review
+
+2014-11-24 Geert Janssens 
+
+	* Python bindings - fix creation of new xml files
+
+2014-11-17 Geert Janssens 
+
+	* Fix a few typos in python example scripts and align them with the latest api changes
+
+2014-11-17 Geert Janssens 
+
+	* Fix build-time hard-coded path introduced by the guile2 compile changes
+
+2014-11-17 Geert Janssens 
+
+	* Prevent crash when standards-report dir doesn't exist
+
+2014-11-12 Geert Janssens 
+
+	* Fix parallel make for guile2 compilation
+
+2014-11-12 Geert Janssens 
+
+	* QIF Import crashes when closing via the 'X' button on the last page
+
+2014-11-04 Geert Janssens 
+
+	* Omit extension on calls to load-extension
+
+2014-10-31 Geert Janssens 
+
+	* Use one common base directory to store all scheme files and modules
+
+2014-10-30 Geert Janssens 
+
+	* Guile 2 pre-compilation improvements
+
+2014-10-31 Geert Janssens 
+
+	* Pre-compile scm files when building with guile 2
+
+2014-10-28 Geert Janssens 
+
+	* Guile module structure cleanup
+
+2014-10-28 Geert Janssens 
+
+	* Fix a few deprecation warnings when building and testing with guile 2
+
+2014-10-28 Geert Janssens 
+
+	* Harmonize variable names used to refer to guile modules in all makefiles
+
+2014-10-15 Jeff Earickson 
+
+	* Assamese Indic Language translation file (Devanagari script)
+
+2014-10-15 Jeff Earickson 
+
+	* Add Assamese Indic Language (as) to LINGUAS
+
+2014-11-08 Cristian Marchi 
+
+	* Update Italian translation.
+
+2014-10-17 Sébastien Villemot 
+
+	* Add missing comma in call to gtk_tree_store_set().
+
+2014-10-26 Geert Janssens 
+
+	* Rewrite old-fashioned makefile construct
+
+2014-10-25 Geert Janssens 
+
+	* Fix invocations of guile function 'load-from-path'
+
+2014-10-21 Geert Janssens 
+
+	* Fix some warnings found with msgfmt -c in the po files
+
+2014-10-21 Geert Janssens 
+
+	* Revert "Remove bare percent sign in taxinvoice.scm, replace with English."
+
+2014-10-19 Jeff Earickson 
+
+	* Indic Language Konkani translation in Latin script
+
+2014-10-19 Jeff Earickson 
+
+	* Add kok@latin to LINGUAS_ALL (Konkani in Latin script)
+
+2014-10-19 Jeff Earickson 
+
+	* Indic Language Gujarati Translation File
+
+2014-10-19 Jeff Earickson 
+
+	* Addition of Gujarati (gu) to LINGUAS_ALL po file list
+
+2014-10-19 Jeff Earickson 
+
+	* Indic Language Kannada Translation file
+
+2014-10-19 Jeff Earickson 
+
+	* Add kn (Kannada) to LINGUAS_ALL
+
+2014-10-21 Geert Janssens 
+
+	* Revert to using numerical indexes for the x-axis on bar charts
+
+2014-10-15 Joe Hansen 
+
+	* Updated Danish translation
+
+2014-10-13 John Ralls 
+
+	* Bug 738113 - Crash on reload budget report.
+
+2014-10-12 Jeff Earickson 
+
+	* Remove bare percent sign in taxinvoice.scm, replace with English.
+
+2014-10-08 Christian Stimming 
+
+	* Aqbanking: Add display of aqbanking subaccountid in initial correspondence setup
+
+2014-09-26 Christian Stimming 
+
+	* Aqbanking online SEPA transfer: Allow transfers without BIC, only IBAN. Also add IBAN checking.
+
+2014-09-01 Christian Stimming 
+
+	* Aqbanking transfer: Make IBAN and BIC text entry fields filter digits or alphas correctly as needed.
+
+2014-10-13 Geert Janssens 
+
+	* Some minor cosmetics in the barchart code
+
+2014-10-13 Geert Janssens 
+
+	* Redo the highlighter in barcharts.
+
+2014-10-13 Geert Janssens 
+
+	* Bug 737815 - Graphs cannot be generated correctly
+
+2014-10-11 Carsten Rinke 
+
+	* Bug737815 - Graphs Cannot Be Generated Correctly
+
+2014-10-13 Frank H. Ellenberger 
+
+	* Add report forms T-Account/Vertical and account types Active/Passive to glossary.
+
+2014-10-06 John Ralls 
+
+	* Bug 736359 - Date of 0000-00-00 in MySQL backend crashes GnuCash
+
+2014-10-06 John Ralls 
+
+	* Update Farsi translation from the Translation Project.
+
+2014-10-02 Ralf Habacker 
+
+	* Adapt german SKR03 account template to updated tax rate.
+
+2014-10-02 Frank H. Ellenberger 
+
+	* Allow GUILE1_PROGS as m4 name
+
+2014-09-30 John Ralls 
+
+	* Fix a bunch of non-literal-null-conversion warnings.
+
+2014-09-30 John Ralls 
+
+	* Add sv_AX, sv_FI, zh_HK, and zh_TW to Makefiles & configure.
+
 2014-09-27 John Ralls 
 
-	* Ensure that the root account is saved to the SQL backend. (HEAD, origin/maint, maint)
+	* Release 2.6.4 (tag: 2.6.4)
+
+2014-09-27 John Ralls 
+
+	* Ensure that the root account is saved to the SQL backend.
 
 2014-09-20 Robert Fewell 
 
@@ -412,7 +676,7 @@
 
 2014-06-01 Michalis Kamprianis 
 
-	* Bug 719457 - Template for Home Mortgage Loan isn't properly nested. (local/maint)
+	* Bug 719457 - Template for Home Mortgage Loan isn't properly nested.
 
 2014-05-29 Christoph Holtermann 
 
@@ -3584,7 +3848,7 @@
 
 2013-05-21 Geert Janssens 
 
-	* Fix windows build after it got broken by r22982 (github/trunk)
+	* Fix windows build after it got broken by r22982
 
 2013-05-20 Christian Stimming 
 
