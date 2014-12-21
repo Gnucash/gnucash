@@ -611,7 +611,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
     /* GLib assertion messages which aren't filtered to make clang's output like gcc's */
-#ifdef __clang__
+#if defined(__clang__) && __clang_major__ < 6
 #define _func "void qof_book_foreach_collection(const QofBook *, QofCollectionForeachCB, gpointer)"
 #else
 #define _func "qof_book_foreach_collection"
