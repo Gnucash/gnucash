@@ -58,7 +58,7 @@ struct timeval
 #include "gnc-lot.h"
 #include "gnc-event.h"
 #include <gnc-gdate-utils.h>
-
+#include "SchedXAction.h"
 #include "qofbackend-p.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
@@ -2242,11 +2242,21 @@ gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
     GDate trans_date;
     const QofBook *book = xaccTransGetBook (trans);
     gboolean result;
+    KvpFrame *split_frame;
+    Split *split0;
     g_assert(trans);
 
     if (!qof_book_uses_autoreadonly(book))
     {
         return FALSE;
+    }
+
+    split0 = xaccTransGetSplit (trans, 0);
+    if (split0 != NULL)
+    {
+	split_frame = xaccSplitGetSlots (split0);
+	if (kvp_frame_get_frame(split_frame, GNC_SX_ID))
+	    return FALSE;
     }
 
     threshold_date = qof_book_get_autoreadonly_gdate(book);
