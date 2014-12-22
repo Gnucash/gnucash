@@ -114,6 +114,7 @@
 (use-modules (gnucash report invoice))
 (use-modules (gnucash report easy-invoice))
 (use-modules (gnucash report taxinvoice))
+(use-modules (gnucash report receipt))
 (use-modules (gnucash report owner-report))
 (use-modules (gnucash report job-report))
 (use-modules (gnucash report payables))
