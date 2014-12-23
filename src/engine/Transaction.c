@@ -2236,14 +2236,25 @@ xaccTransGetReadOnly (const Transaction *trans)
                trans->inst.kvp_data, TRANS_READ_ONLY_REASON) : NULL;
 }
 
+static gboolean
+xaccTransIsSXTemplate (const Transaction * trans)
+{
+    Split *split0 = xaccTransGetSplit (trans, 0);
+    if (split0 != NULL)
+    {
+	KvpFrame *split_frame = xaccSplitGetSlots (split0);
+	if (kvp_frame_get_frame(split_frame, GNC_SX_ID))
+	    return TRUE;
+    }
+    return FALSE;
+}
+
 gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
 {
     GDate *threshold_date;
     GDate trans_date;
     const QofBook *book = xaccTransGetBook (trans);
     gboolean result;
-    KvpFrame *split_frame;
-    Split *split0;
     g_assert(trans);
 
     if (!qof_book_uses_autoreadonly(book))
@@ -2251,13 +2262,8 @@ gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
         return FALSE;
     }
 
-    split0 = xaccTransGetSplit (trans, 0);
-    if (split0 != NULL)
-    {
-	split_frame = xaccSplitGetSlots (split0);
-	if (kvp_frame_get_frame(split_frame, GNC_SX_ID))
-	    return FALSE;
-    }
+    if (xaccTransIsSXTemplate (trans))
+	return FALSE;
 
     threshold_date = qof_book_get_autoreadonly_gdate(book);
     g_assert(threshold_date); // ok because we checked uses_autoreadonly before
