@@ -299,12 +299,13 @@ gnc_path_find_localized_html_file (const gchar *file_name)
  *
  * @param dirname The path to check
  */
-static void
-gnc_validate_directory (const gchar *dirname)
+static gboolean
+gnc_validate_directory (const gchar *dirname, gchar **msg)
 {
     struct stat statbuf;
     gint rc;
 
+    *msg = NULL;
     rc = g_stat (dirname, &statbuf);
     if (rc)
     {
@@ -320,70 +321,72 @@ gnc_validate_directory (const gchar *dirname)
                          );
             if (rc)
             {
-                g_fprintf(stderr,
+                *msg = g_strdup_printf(
                           _("An error occurred while creating the directory:\n"
                             "  %s\n"
                             "Please correct the problem and restart GnuCash.\n"
                             "The reported error was '%s' (errno %d).\n"),
                           dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
-                exit(1);
+                return FALSE;
             }
             g_stat (dirname, &statbuf);
             break;
 
         case EACCES:
-            g_fprintf(stderr,
+            *msg = g_strdup_printf(
                       _("The directory\n"
                         "  %s\n"
                         "exists but cannot be accessed. This program \n"
                         "must have full access (read/write/execute) to \n"
                         "the directory in order to function properly.\n"),
                       dirname);
-            exit(1);
+            return FALSE;
 
         case ENOTDIR:
-            g_fprintf(stderr,
+            *msg = g_strdup_printf(
                       _("The path\n"
                         "  %s\n"
                         "exists but it is not a directory. Please delete\n"
                         "the file and start GnuCash again.\n"),
                       dirname);
-            exit(1);
+            return FALSE;
 
         default:
-            g_fprintf(stderr,
+            *msg = g_strdup_printf(
                       _("An unknown error occurred when validating that the\n"
                         "  %s\n"
                         "directory exists and is usable. Please correct the\n"
                         "problem and restart GnuCash. The reported error \n"
                         "was '%s' (errno %d)."),
                       dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
-            exit(1);
+            return FALSE;
         }
     }
 
     if ((statbuf.st_mode & S_IFDIR) != S_IFDIR)
     {
-        g_fprintf(stderr,
+        *msg = g_strdup_printf(
                   _("The path\n"
                     "  %s\n"
                     "exists but it is not a directory. Please delete\n"
                     "the file and start GnuCash again.\n"),
                   dirname);
-        exit(1);
+        return FALSE;
     }
 #ifndef G_OS_WIN32
     /* The mode argument is ignored on windows anyway */
     if ((statbuf.st_mode & S_IRWXU) != S_IRWXU)
     {
-        g_fprintf(stderr,
+        *msg = g_strdup_printf(
                   _("The permissions are wrong on the directory\n"
                     "  %s\n"
                     "They must be at least 'rwx' for the user.\n"),
                   dirname);
-        exit(1);
+        return FALSE;
     }
 #endif
+
+    return TRUE;
 }
 
 /** @fn const gchar * gnc_dotgnucash_dir ()
@@ -399,6 +402,7 @@ gnc_dotgnucash_dir (void)
 {
     static gchar *dotgnucash = NULL;
     gchar *tmp_dir;
+    gchar *errmsg = NULL;
 
     if (dotgnucash)
         return dotgnucash;
@@ -408,26 +412,31 @@ gnc_dotgnucash_dir (void)
     if (!dotgnucash)
     {
         const gchar *home = g_get_home_dir();
-        if (!home)
+        if (!home || !gnc_validate_directory(home, &errmsg))
         {
-            g_warning("Cannot find home directory. Using tmp directory instead.");
+            g_free(errmsg);
+            g_warning("Cannot find suitable home directory. Using tmp directory instead.");
             home = g_get_tmp_dir();
         }
         g_assert(home);
 
         dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
     }
-    gnc_validate_directory(dotgnucash);
+    if (!gnc_validate_directory(dotgnucash, &errmsg))
+        exit(1);
 
     /* Since we're in code that is only executed once.... */
     tmp_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
-    gnc_validate_directory(tmp_dir);
+    if (!gnc_validate_directory(tmp_dir, &errmsg))
+        exit(1);
     g_free(tmp_dir);
     tmp_dir = g_build_filename(dotgnucash, "checks", (gchar *)NULL);
-    gnc_validate_directory(tmp_dir);
+    if (!gnc_validate_directory(tmp_dir, &errmsg))
+        exit(1);
     g_free(tmp_dir);
-    tmp_dir = g_build_filename(dotgnucash, "translog", (gchar *)NULL);
-    gnc_validate_directory(tmp_dir);
+    tmp_dir = g_build_filename(tmp_dir, "translog", (gchar *)NULL);
+    if (!gnc_validate_directory(dotgnucash, &errmsg))
+        exit(1);
     g_free(tmp_dir);
 
     return dotgnucash;
