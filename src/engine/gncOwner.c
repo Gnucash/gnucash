@@ -1225,12 +1225,11 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
          * Note that due to the iterative nature of this function lots
          * in the list may become empty/closed before they are evaluated as
          * base lot, so we should check this for each lot. */
-        if (!left_lot)
+        if (!left_lot || qof_instance_get_destroying (left_lot))
             continue;
         if (gnc_lot_count_splits (left_lot) == 0)
         {
             gnc_lot_destroy (left_lot);
-            left_iter->data = NULL;
             continue;
         }
         if (gnc_lot_is_closed (left_lot))
@@ -1256,12 +1255,11 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
              * Note that due to the iterative nature of this function lots
              * in the list may become empty/closed before they are evaluated as
              * base lot, so we should check this for each lot. */
-            if (!right_lot)
+            if (!right_lot || qof_instance_get_destroying (right_lot))
                 continue;
             if (gnc_lot_count_splits (right_lot) == 0)
             {
                 gnc_lot_destroy (right_lot);
-                right_iter->data = NULL;
                 continue;
             }
             if (gnc_lot_is_closed (right_lot))

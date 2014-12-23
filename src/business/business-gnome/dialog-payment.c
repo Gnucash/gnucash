@@ -348,6 +348,7 @@ void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
     GtkListStore *store;
+    GtkTreeSelection *selection;
     GList *list = NULL, *node;
 
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
@@ -358,6 +359,8 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
                                         &pw->owner, NULL);
 
     /* Clear the existing list */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+    gtk_tree_selection_unselect_all (selection);
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view)));
     gtk_list_store_clear(store);
 
@@ -635,6 +638,17 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
      * and amount so we can proceed with the payment.
      * Note: make sure it's called before all entry points to this function !
      */
+
+    /* We're on our way out, stop watching for object changes that could
+     * trigger a gui refresh. Without this the gui suspend/resume
+     * pair could still trigger a gui update on the payment dialog
+     * before we close it. This is undesired because the lots may be in
+     * an inconsistent state until after all events are handled. So
+     * the gui refresh may result in a crash.
+     * See https://bugzilla.gnome.org/show_bug.cgi?id=740471
+     */
+    gnc_gui_component_clear_watches (pw->component_id);
+
     gnc_suspend_gui_refresh ();
     {
         const char *memo, *num;
