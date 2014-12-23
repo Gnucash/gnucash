@@ -34,6 +34,7 @@
 
 #include "swig-runtime.h"
 #include "dialog-options.h"
+#include "dialog-report-column-view.h"
 #include "file-utils.h"
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-guile-utils.h"
@@ -120,11 +121,28 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
     g_free(win);
 }
 
+static gboolean
+gnc_report_raise_editor(SCM report)
+{
+    SCM get_editor   = scm_c_eval_string("gnc:report-editor-widget");
+    SCM editor       = scm_call_1(get_editor, report);
+    if (editor != SCM_BOOL_F)
+    {
+#define FUNC_NAME "gnc-report-raise-editor"
+        GtkWidget *w = SWIG_MustGetPtr(editor,
+                                   SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
+#undef FUNC_NAME
+        gtk_window_present(GTK_WINDOW(w));
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
 
 GtkWidget *
 gnc_report_window_default_params_editor(SCM options, SCM report)
 {
-    SCM get_editor        = scm_c_eval_string("gnc:report-editor-widget");
     SCM get_report_type   = scm_c_eval_string("gnc:report-type");
     SCM get_template      = scm_c_eval_string("gnc:find-report-template");
     SCM get_template_name = scm_c_eval_string("gnc:report-template-name");
@@ -132,15 +150,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
 
     const gchar *title = NULL;
 
-    ptr = scm_call_1(get_editor, report);
-    if (ptr != SCM_BOOL_F)
-    {
-#define FUNC_NAME "gtk_window_present"
-        GtkWindow * w = SWIG_MustGetPtr(ptr, SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
-        gtk_window_present(w);
-#undef FUNC_NAME
+    if (gnc_report_raise_editor (report))
         return NULL;
-    }
     else
     {
         struct report_default_params_data * prm =
@@ -187,16 +198,48 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     }
 }
 
-void
-gnc_report_raise_editor(SCM report)
+gboolean
+gnc_report_edit_options(SCM report)
 {
-    SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
-    SCM editor = scm_call_1(get_editor, report);
-#define FUNC_NAME "gtk_window_present"
-    GtkWidget *w = SWIG_MustGetPtr(editor,
-                                   SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
+    SCM set_editor        = scm_c_eval_string("gnc:report-set-editor-widget!");
+    SCM get_options       = scm_c_eval_string("gnc:report-options");
+    SCM get_report_type   = scm_c_eval_string("gnc:report-type");
+    SCM ptr;
+    SCM options;
+    GtkWidget *options_widget = NULL;
+
+    /* If the options editor widget already exists we simply raise it */
+    if (gnc_report_raise_editor (report))
+        return TRUE;
+
+    /* Check if this report has options to edit */
+    options = scm_call_1(get_options, report);
+    if (options == SCM_BOOL_F)
+    {
+        gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()), "%s",
+                           _("There are no options for this report."));
+        return FALSE;
+    }
+
+    /* Multi-column type reports need a special options dialog */
+    ptr = scm_call_1(get_report_type, report);
+    if (scm_is_string(ptr))
+    {
+        gchar *rpt_type = gnc_scm_to_utf8_string (ptr);
+        if (g_strcmp0 (rpt_type, "d8ba4a2e89e8479ca9f6eccdeb164588") == 0)
+            options_widget = gnc_column_view_edit_options (options, report);
+        else
+            options_widget = gnc_report_window_default_params_editor (options, report);
+        g_free (rpt_type);
+    }
+
+    /* Store the options editor widget for future reuse */
+#define FUNC_NAME "gnc-report-edit-options"
+    ptr = SWIG_NewPointerObj (options_widget, SWIG_TypeQuery("_p_GtkWidget"), 0);
 #undef FUNC_NAME
-    gtk_window_present(GTK_WINDOW(w));
+    scm_call_2 (set_editor, report, ptr);
+
+    return TRUE;
 }
 
 static gboolean
@@ -236,7 +279,6 @@ static gboolean
 gnc_html_options_url_cb (const char *location, const char *label,
                          gboolean new_window, GNCURLResult *result)
 {
-    SCM start_editor = scm_c_eval_string ("gnc:report-edit-options");
     SCM report;
     int report_id;
 
@@ -266,7 +308,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
             return FALSE;
         }
 
-        scm_call_1 (start_editor, report);
+        gnc_report_edit_options (report);
 
         return TRUE;
     }
