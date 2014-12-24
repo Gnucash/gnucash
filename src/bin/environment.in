@@ -1,3 +1,8 @@
+@-NOTE If you make any changes here, you should probably    -@
+@-NOTE also change the equivalent sections in:              -@
+@-NOTE - src/bin/overrides/gnucash-env.in                   -@
+@-NOTE Check as well that modifications performed in        -@
+@-NOTE - gnucash-on-windows.git:gnucash.iss don't conflict. -@
 # environment
 #
 # This configuration file can be used to change/add environment variables
