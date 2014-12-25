@@ -36,6 +36,7 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
+#include <stdint.h>
 
 #include "gnc-numeric.h"
 #include "gnc-rational.hpp"
@@ -43,11 +44,14 @@ extern "C"
 using GncNumeric = GncRational;
 
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
-			       10000000, 100000000, 1000000000, 10000000000,
-			       100000000000, 1000000000000, 10000000000000,
-			       100000000000000, 10000000000000000,
-			       100000000000000000, 1000000000000000000};
-static const int POWTEN_OVERFLOW {-5};
+			       10000000, 100000000, 1000000000,
+			       INT64_C(10000000000), INT64_C(100000000000),
+			       INT64_C(1000000000000), INT64_C(10000000000000),
+			       INT64_C(100000000000000),
+			       INT64_C(10000000000000000),
+			       INT64_C(100000000000000000),
+			       INT64_C(1000000000000000000)};
+#define POWTEN_OVERFLOW -5
 
 static inline gint64
 powten (int exp)

@@ -184,6 +184,7 @@ static gnc_numeric
 gnc_xfer_dialog_compute_price (XferDialog *xferData)
 {
     gnc_numeric from_amt, to_amt;
+    g_return_val_if_fail (xferData != NULL, gnc_numeric_error (GNC_ERROR_ARG));
 
     from_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
     to_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
@@ -353,6 +354,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
     Account *from_account;
     gboolean curr_active;
 
+    g_return_if_fail (xferData != NULL);
     from_account =
         gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
 
@@ -395,6 +397,7 @@ void
 price_amount_radio_toggled_cb(GtkToggleButton *togglebutton, gpointer data)
 {
     XferDialog *xferData = data;
+    g_return_if_fail (xferData != NULL);
 
     gtk_widget_set_sensitive(xferData->price_edit, gtk_toggle_button_get_active
                              (GTK_TOGGLE_BUTTON(xferData->price_radio)));
@@ -536,6 +539,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     AccountTreeFilterInfo *info;
     GtkBuilder *builder = g_object_get_data (G_OBJECT (xferData->dialog), "builder");
 
+    g_return_if_fail (xferData != NULL);
     use_accounting_labels = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
                             GNC_PREF_ACCOUNTING_LABELS);
 
@@ -620,6 +624,7 @@ static void
 gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
 {
     const char * parse_error_string;
+    g_return_if_fail (xferData != NULL);
 
     parse_error_string = gnc_exp_parser_error_string ();
     if (parse_error_string == NULL)
@@ -777,6 +782,8 @@ gnc_xfer_description_insert_cb(GtkEditable *editable,
     const gchar *match_str;
     gint prefix_len, new_text_len, match_str_len;
 
+    g_return_if_fail (xferData != NULL);
+
     if (insert_text_len <= 0)
         return;
 
@@ -918,6 +925,7 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
                           gpointer data)
 {
     XferDialog * xferData = data;
+    g_return_val_if_fail (xferData != NULL, FALSE);
 
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
 
@@ -1363,6 +1371,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     Split *from_split;
     Split *to_split;
 
+    g_return_if_fail (xferData != NULL);
     ENTER(" ");
 
     if (response == GTK_RESPONSE_APPLY)
@@ -1695,6 +1704,7 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
         g_source_remove (xferData->desc_selection_source_id);
 
     g_free(xferData);
+    xferData = NULL;
 
     DEBUG("xfer dialog destroyed");
 }

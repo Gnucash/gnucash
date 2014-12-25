@@ -58,7 +58,7 @@ struct timeval
 #include "gnc-lot.h"
 #include "gnc-event.h"
 #include <gnc-gdate-utils.h>
-
+#include "SchedXAction.h"
 #include "qofbackend-p.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
@@ -2319,6 +2319,29 @@ xaccTransGetReadOnly (const Transaction *trans)
                trans->inst.kvp_data, TRANS_READ_ONLY_REASON) : NULL;
 }
 
+static gboolean
+xaccTransIsSXTemplate (const Transaction * trans)
+{
+    Split *split0 = xaccTransGetSplit (trans, 0);
+    if (split0 != NULL)
+    {
+	char* formula = NULL;
+	g_object_get (split0, "sx-debit-formula", &formula, NULL);
+	if (formula != NULL)
+	{
+	    g_free (formula);
+	    return TRUE;
+	}
+	g_object_get (split0, "sx-credit-formula", &formula, NULL);
+ 	if (formula != NULL)
+	{
+	    g_free (formula);
+	    return TRUE;
+	}
+    }
+    return FALSE;
+}
+
 gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
 {
     GDate *threshold_date;
@@ -2331,6 +2354,9 @@ gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
     {
         return FALSE;
     }
+
+    if (xaccTransIsSXTemplate (trans))
+	return FALSE;
 
     threshold_date = qof_book_get_autoreadonly_gdate(book);
     g_assert(threshold_date); // ok because we checked uses_autoreadonly before

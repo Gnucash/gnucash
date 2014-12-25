@@ -463,7 +463,7 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
     guint log_level = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *log_domain = "gnc.engine";
-#if defined __clang__ && __clang__major > 5
+#if defined(__clang__) && __clang_major__ < 6
 #define _func "GList *gnc_account_list_name_violations(QofBook *, const gchar *)"
 #else
 #define _func "gnc_account_list_name_violations"
@@ -750,7 +750,7 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
     Account *clone;
     QofBook *book = gnc_account_get_book (fixture->acct);
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-#if defined __clang__ && __clang__major > 5
+#if defined(__clang__) && __clang_major__ < 6
 #define _func "Account *xaccCloneAccount(const Account *, QofBook *)"
 #else
 #define _func "xaccCloneAccount"
@@ -853,7 +853,7 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 {
     gchar *msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
-#if defined __clang__ && __clang__major > 5
+#if defined(__clang__) && __clang_major__ < 6
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
 #define _func "xaccTransGetSplitIndex"
@@ -967,7 +967,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 {
     gchar *msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
-#if defined __clang__ && __clang__major > 5
+#if defined(__clang__) && __clang_major__ < 6
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
 #define _func "xaccTransGetSplitIndex"
@@ -1084,7 +1084,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     Split *split3 = xaccMallocSplit (book);
     TestSignal sig1, sig2, sig3;
     AccountPrivate *priv = fixture->func->get_private (fixture->acct);
-#if defined __clang__ && __clang__major > 5
+#if defined(__clang__) && __clang_major__ < 6
 #define _func "gboolean gnc_account_insert_split(Account *, Split *)"
 #else
 #define _func "gnc_account_insert_split"
