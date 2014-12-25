@@ -1,5 +1,11 @@
 (define-module (gnucash engine))
 
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")))
+  (else ))
 (use-modules (sw_engine))
 
 (export GNC-RND-FLOOR)
@@ -94,7 +100,7 @@
 (export trans-splits)
 (export gnc:transaction-scm-onto-transaction)
 
-(load-from-path "gnc-numeric.scm")
-(load-from-path "commodity-table.scm")
-(load-from-path "engine-interface.scm")
-(load-from-path "engine-utilities.scm")
+(load-from-path "gnc-numeric")
+(load-from-path "commodity-table")
+(load-from-path "engine-interface")
+(load-from-path "engine-utilities")

@@ -115,7 +115,7 @@ run_tests (void)
         gnc_numeric n;
         gnc_numeric n1;
 
-        n = get_random_gnc_numeric ();
+        n = get_random_gnc_numeric (GNC_DENOM_AUTO);
         IS_VALID_NUM(n, n);
         test_num (n);
 

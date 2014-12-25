@@ -12725,7 +12725,7 @@ msgstr "%s एकाउन्टाव लट्‌स"
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
 msgstr[0] "थारैनो नोंथाङा सायखखानाय दामखौ खोमोरनो लुबैयो नामा?"
-msgstr[1] "थारैनो नोंथाङा सायखखानाय दामखौ खोमोरनो लुबैयो नामा?"
+msgstr[1] "थारैनो नोंथाङा सायखखानाय दामखौ खोमोरनो%d लुबैयो नामा?"
 
 #: ../src/gnome/dialog-price-edit-db.c:193
 #: ../src/gnome/dialog-price-edit-db.c:185
@@ -30497,7 +30497,7 @@ msgstr "रिपर्ट खालामनाय सारिसिमा ज
 #: ../intl-scm/guile-strings.c:3022
 #, c-format
 msgid "for Budget %s Period %u"
-msgstr "%u समफारि %s बाजेतनि थाखाय"
+msgstr " %s बाजेतनि थाखाय %u समफारि"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -30506,7 +30506,7 @@ msgstr "%u समफारि %s बाजेतनि थाखाय"
 #: ../intl-scm/guile-strings.c:3024
 #, c-format
 msgid "for Budget %s Periods %u - %u"
-msgstr "%u - %u समफारि %s बाजेतनि थाखाय"
+msgstr "%s बाजेतनि थाखाय %u - %u समफारि"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm

@@ -1593,24 +1593,13 @@ static void
 gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
 {
     GncPluginPageReportPrivate *priv;
-    SCM start_editor = scm_c_eval_string("gnc:report-edit-options");
-    SCM result;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
         return;
 
-    result = gfec_apply(start_editor, scm_cons(priv->cur_report, SCM_EOL),
-                        error_handler);
-    if (result == SCM_BOOL_F || result == SCM_UNDEFINED)
-    {
-        gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()), "%s",
-                           _("There are no options for this report."));
-    }
-    else
-    {
+    if (gnc_report_edit_options (priv->cur_report))
         gnc_plugin_page_report_add_edited_report(priv, priv->cur_report);
-    }
 }
 
 static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)

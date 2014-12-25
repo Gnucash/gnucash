@@ -42,6 +42,13 @@ struct KvpValueImpl
      * Performs a deep copy
      */
     KvpValueImpl(KvpValueImpl const &) noexcept;
+    KvpValueImpl& operator=(const KvpValueImpl&) noexcept;
+
+    /**
+     * Move. The old object's datastore is set to int646_t 0.
+     */
+    KvpValueImpl(KvpValueImpl && b) noexcept;
+    KvpValueImpl& operator=(KvpValueImpl && b) noexcept;
 
     template <typename T>
     KvpValueImpl(T) noexcept;
@@ -95,6 +102,7 @@ struct KvpValueImpl
     friend int compare(const KvpValueImpl &, const KvpValueImpl &) noexcept;
 
     private:
+    void duplicate(const KvpValueImpl&) noexcept;
     boost::variant<
         int64_t,
         double,

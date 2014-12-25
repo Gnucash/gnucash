@@ -516,14 +516,6 @@ gboolean gnc_numeric_to_decimal(gnc_numeric * a,
 GType gnc_numeric_get_type( void );
 #define GNC_TYPE_NUMERIC (gnc_numeric_get_type ())
 
-/** @} */
-/** Int 64 exponentiation. Faster and more robust than casting the result of pow().
- * @param op The number to raise to exp.
- * @param exp The exponent
- * @return A gint64
- */
-gint64 pwr64 (gint64 op, int exp);
-/** @} */
 #ifdef __cplusplus
 }
 #endif

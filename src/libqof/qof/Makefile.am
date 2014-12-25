@@ -24,7 +24,9 @@ AM_CPPFLAGS = \
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.cpp        \
+   gnc-int128.cpp      \
    gnc-numeric.cpp     \
+   gnc-rational.cpp    \
    guid.cpp            \
    kvp-util.cpp        \
    kvp_frame.cpp       \
@@ -50,6 +52,7 @@ qofinclude_HEADERS = \
    gnc-date-p.h      \
    gnc-date.h        \
    gnc-numeric.h     \
+   gnc-rational.hpp  \
    guid.h            \
    kvp-util-p.h      \
    kvp-util.h        \
@@ -79,7 +82,7 @@ noinst_HEADERS = \
    qofbook-p.h  \
    qofclass-p.h  \
    qofevent-p.h \
-   qofmath128-p.h  \
+   gnc-int128.hpp  \
    qofobject-p.h  \
    qofquery-p.h  \
    qofquerycore-p.h \
@@ -93,13 +96,5 @@ libgnc_qof_la_SOURCES += qof-win32.cpp
 else
 EXTRA_DIST += qof-win32.cpp
 endif
-
-## For testing the qofmath128 routines
-# run "make check" (to build the test program) and then run test-qofmath
-check_PROGRAMS = test-qofmath
-test_qofmath_SOURCES = gnc-numeric.cpp
-test_qofmath_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_128_BIT_MULT
-test_qofmath_LDFLAGS = $(libgnc_qof_la_LDFLAGS)
-test_qofmath_LDADD = $(libgnc_qof_common_libs)
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"

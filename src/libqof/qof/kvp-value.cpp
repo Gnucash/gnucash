@@ -30,16 +30,27 @@
 
 KvpValueImpl::KvpValueImpl(KvpValueImpl const & other) noexcept
 {
-    if (other.datastore.type() == typeid(gchar *))
-        this->datastore = g_strdup(other.get<gchar *>());
-    else if (other.datastore.type() == typeid(GncGUID*))
-        this->datastore = guid_copy(other.get<GncGUID *>());
-    else if (other.datastore.type() == typeid(GList*))
-        this->datastore = kvp_glist_copy(other.get<GList *>());
-    else if (other.datastore.type() == typeid(KvpFrame*))
-        this->datastore = kvp_frame_copy(other.get<KvpFrame *>());
-    else
-        this->datastore = other.datastore;
+    duplicate(other);
+}
+
+KvpValueImpl&
+KvpValueImpl::operator=(KvpValueImpl const & other) noexcept
+{
+    duplicate(other);
+    return *this;
+}
+
+KvpValueImpl::KvpValueImpl(KvpValueImpl && b) noexcept
+{
+    datastore = b.datastore;
+    b.datastore = INT64_C(0);
+}
+
+KvpValueImpl&
+KvpValueImpl::operator=(KvpValueImpl && b) noexcept
+{
+    std::swap (datastore, b.datastore);
+    return *this;
 }
 
 KvpValueImpl *
@@ -321,4 +332,19 @@ KvpValueImpl::~KvpValueImpl() noexcept
 {
     delete_visitor d;
     boost::apply_visitor(d, datastore);
+}
+
+void
+KvpValueImpl::duplicate(const KvpValueImpl& other) noexcept
+{
+    if (other.datastore.type() == typeid(gchar *))
+        this->datastore = g_strdup(other.get<gchar *>());
+    else if (other.datastore.type() == typeid(GncGUID*))
+        this->datastore = guid_copy(other.get<GncGUID *>());
+    else if (other.datastore.type() == typeid(GList*))
+        this->datastore = kvp_glist_copy(other.get<GList *>());
+    else if (other.datastore.type() == typeid(KvpFrame*))
+        this->datastore = kvp_frame_copy(other.get<KvpFrame *>());
+    else
+        this->datastore = other.datastore;
 }

@@ -149,7 +149,7 @@ gchar *gnc_path_get_accountsdir()
 }
 
 /** Returns the file path to the report directory, usually
- * "$prefix/share/gnucash/guile-modules/gnucash/report".
+ * "$prefix/share/gnucash/scm/gnucash/report".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir()
@@ -162,8 +162,18 @@ gchar *gnc_path_get_reportdir()
     }
     else
     {
+        /* Careful: if the autoconf macro GNC_SCM_INSTALL_DIR gets changed
+         * in configure.ac, this path should probably change as well.
+         * Currently this code assumes GNC_SCM_INSTALL_DIR is set to
+         * pkgdatadir/scm
+         * We can't use the AC_MACRO GNC_SCM_INSTALL_DIR here directly
+         * because that's expanded at build time. On Windows and OS X
+         * the final path may get installed in a different location
+         * than assumed during build, invalidating the build path at
+         * runtime.
+         */
         gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-        result = g_build_filename (pkgdatadir, "guile-modules",
+        result = g_build_filename (pkgdatadir, "scm",
                                    "gnucash", "report", (char*)NULL);
         g_free (pkgdatadir);
     }
@@ -173,7 +183,7 @@ gchar *gnc_path_get_reportdir()
 
 /** Returns the file path to the standard
  * reports, usually
- * "$prefix/share/gnucash/guile-modules/gnucash/report/standard-reports".
+ * "$prefix/share/gnucash/scm/gnucash/report/standard-reports".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()

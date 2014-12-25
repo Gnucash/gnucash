@@ -27,7 +27,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-(use-modules (gnucash report report-system))
+(use-modules (gnucash gettext))
 (use-modules (srfi srfi-13))
 (use-modules (srfi srfi-14))
 

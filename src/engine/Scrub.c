@@ -126,6 +126,9 @@ xaccTransScrubOrphans (Transaction *trans)
     SplitList *node;
     QofBook *book = NULL;
     Account *root = NULL;
+
+    if (!trans) return;
+
     for (node = trans->splits; node; node = node->next)
     {
         Split *split = node->data;

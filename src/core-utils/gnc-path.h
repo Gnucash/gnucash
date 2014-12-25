@@ -87,14 +87,14 @@ gchar *gnc_path_get_localedir(void);
 gchar *gnc_path_get_accountsdir(void);
 
 /** Returns the file path to the report directory, usually
- * "$prefix/share/gnucash/guile-modules/gnucash/report".
+ * "$prefix/share/gnucash/scm/gnucash/report".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir(void);
 
 /** Returns the file path to the standard
  * reports, usually
- * "$prefix/share/gnucash/guile-modules/gnucash/report/standard-reports".
+ * "$prefix/share/gnucash/scm/gnucash/report/standard-reports".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir(void);

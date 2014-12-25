@@ -221,7 +221,7 @@ test_dom_tree_to_gnc_numeric(void)
     {
         gchar *message = NULL;
 
-        message = test_gnc_nums_internal(get_random_gnc_numeric());
+        message = test_gnc_nums_internal(get_random_gnc_numeric(GNC_DENOM_AUTO));
 
         do_test_args(message == NULL, "dom_tree_to_gnc_numeric",
                      __FILE__, __LINE__, message);

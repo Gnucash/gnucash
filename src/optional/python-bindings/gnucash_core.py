@@ -102,7 +102,13 @@ class Session(GnuCashCoreClass):
         if book_uri is not None:
             try:
                 self.begin(book_uri, ignore_lock, is_new, force_new)
-                self.load()
+                # Take care of backend inconsistency
+                # New xml file can't be loaded, new sql store
+                # has to be loaded before it can be altered
+                # Any existing store obviously has to be loaded
+                # More background: https://bugzilla.gnome.org/show_bug.cgi?id=726891
+                if book_uri[:3] != "xml" or not is_new:
+                    self.load()
             except GnuCashBackendException, backend_exception:
                 self.end()
                 self.destroy()

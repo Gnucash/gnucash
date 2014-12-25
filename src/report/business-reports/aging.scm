@@ -29,6 +29,7 @@
 (use-modules (gnucash main))
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 

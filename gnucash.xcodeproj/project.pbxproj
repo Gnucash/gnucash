@@ -8,7 +8,6 @@
 
 /* Begin PBXFileReference section */
 		6E056BF416C0F1E100B5E1F2 /* qof-string-cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "qof-string-cache.h"; path = "src/libqof/qof/qof-string-cache.h"; sourceTree = "<group>"; };
-		6E056BF516C0F1E100B5E1F2 /* qofmath128-p.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "qofmath128-p.h"; path = "src/libqof/qof/qofmath128-p.h"; sourceTree = "<group>"; };
 		6E0E95251851BC8F0033FCAD /* assistant-acct-period.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "assistant-acct-period.c"; path = "src/gnome/assistant-acct-period.c"; sourceTree = "<group>"; };
 		6E0E95261851BC8F0033FCAD /* assistant-acct-period.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "assistant-acct-period.h"; path = "src/gnome/assistant-acct-period.h"; sourceTree = "<group>"; };
 		6E0E95271851BC8F0033FCAD /* assistant-hierarchy.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "assistant-hierarchy.c"; path = "src/gnome/assistant-hierarchy.c"; sourceTree = "<group>"; };
@@ -176,8 +175,6 @@
 		6E4EC6520F9A359B00C6F6AC /* kvp-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "kvp-util.h"; path = "src/libqof/qof/kvp-util.h"; sourceTree = "<group>"; };
 		6E4EC6540F9A359B00C6F6AC /* kvp_frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kvp_frame.h; path = src/libqof/qof/kvp_frame.h; sourceTree = "<group>"; };
 		6E4EC6550F9A359B00C6F6AC /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/libqof/qof/Makefile.am; sourceTree = "<group>"; };
-		6E4EC6560F9A359B00C6F6AC /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = md5.c; path = src/libqof/qof/md5.c; sourceTree = "<group>"; };
-		6E4EC6570F9A359B00C6F6AC /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = md5.h; path = src/libqof/qof/md5.h; sourceTree = "<group>"; };
 		6E4EC6580F9A359B00C6F6AC /* qof-gobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qof-gobject.h"; path = "src/libqof/qof/qof-gobject.h"; sourceTree = "<group>"; };
 		6E4EC65A0F9A359B00C6F6AC /* qof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qof.h; path = src/libqof/qof/qof.h; sourceTree = "<group>"; };
 		6E4EC65B0F9A359B00C6F6AC /* qofbackend-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofbackend-p.h"; path = "src/libqof/qof/qofbackend-p.h"; sourceTree = "<group>"; };
@@ -200,7 +197,6 @@
 		6E4EC6800F9A359B00C6F6AC /* qofquery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofquery.h; path = src/libqof/qof/qofquery.h; sourceTree = "<group>"; };
 		6E4EC6810F9A359B00C6F6AC /* qofquerycore-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofquerycore-p.h"; path = "src/libqof/qof/qofquerycore-p.h"; sourceTree = "<group>"; };
 		6E4EC6830F9A359B00C6F6AC /* qofquerycore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofquerycore.h; path = src/libqof/qof/qofquerycore.h; sourceTree = "<group>"; };
-		6E4EC6850F9A359B00C6F6AC /* qofreference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofreference.h; path = src/libqof/qof/qofreference.h; sourceTree = "<group>"; };
 		6E4EC6860F9A359B00C6F6AC /* qofsession-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofsession-p.h"; path = "src/libqof/qof/qofsession-p.h"; sourceTree = "<group>"; };
 		6E4EC6880F9A359B00C6F6AC /* qofsession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofsession.h; path = src/libqof/qof/qofsession.h; sourceTree = "<group>"; };
 		6E4EC68C0F9A359B00C6F6AC /* qofutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofutil.h; path = src/libqof/qof/qofutil.h; sourceTree = "<group>"; };
@@ -936,12 +932,18 @@
 		6E97EB7E1915B9D90021442F /* qofid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofid.cpp; path = src/libqof/qof/qofid.cpp; sourceTree = "<group>"; };
 		6E97EB7F1915B9D90021442F /* qofinstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofinstance.cpp; path = src/libqof/qof/qofinstance.cpp; sourceTree = "<group>"; };
 		6E97EB801915B9D90021442F /* qoflog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qoflog.cpp; path = src/libqof/qof/qoflog.cpp; sourceTree = "<group>"; };
-		6E97EB811915B9D90021442F /* qofmath128.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofmath128.cpp; path = src/libqof/qof/qofmath128.cpp; sourceTree = "<group>"; };
 		6E97EB821915B9D90021442F /* qofobject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofobject.cpp; path = src/libqof/qof/qofobject.cpp; sourceTree = "<group>"; };
 		6E97EB831915B9D90021442F /* qofquery.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofquery.cpp; path = src/libqof/qof/qofquery.cpp; sourceTree = "<group>"; };
 		6E97EB841915B9D90021442F /* qofquerycore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofquerycore.cpp; path = src/libqof/qof/qofquerycore.cpp; sourceTree = "<group>"; };
 		6E97EB851915B9D90021442F /* qofsession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofsession.cpp; path = src/libqof/qof/qofsession.cpp; sourceTree = "<group>"; };
 		6E97EB861915B9D90021442F /* qofutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofutil.cpp; path = src/libqof/qof/qofutil.cpp; sourceTree = "<group>"; };
+		6EB956961A39565A002E3AC5 /* gnc-int128.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-int128.cpp"; path = "src/libqof/qof/gnc-int128.cpp"; sourceTree = "<group>"; };
+		6EB956971A39565A002E3AC5 /* gnc-int128.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "gnc-int128.hpp"; path = "src/libqof/qof/gnc-int128.hpp"; sourceTree = "<group>"; };
+		6EB956981A39565A002E3AC5 /* gnc-rational.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-rational.cpp"; path = "src/libqof/qof/gnc-rational.cpp"; sourceTree = "<group>"; };
+		6EB956991A39565A002E3AC5 /* gnc-rational.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "gnc-rational.hpp"; path = "src/libqof/qof/gnc-rational.hpp"; sourceTree = "<group>"; };
+		6EB9569A1A39565A002E3AC5 /* kvp_frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = kvp_frame.hpp; path = src/libqof/qof/kvp_frame.hpp; sourceTree = "<group>"; };
+		6EB9569B1A39565A002E3AC5 /* kvp-value.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "kvp-value.cpp"; path = "src/libqof/qof/kvp-value.cpp"; sourceTree = "<group>"; };
+		6EB9569C1A39565A002E3AC5 /* kvp-value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "kvp-value.hpp"; path = "src/libqof/qof/kvp-value.hpp"; sourceTree = "<group>"; };
 		6EBC06EF18B1D66300A5CEB7 /* gnc-state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-state.c"; path = "src/app-utils/gnc-state.c"; sourceTree = "<group>"; };
 		6EBC06F018B1D66300A5CEB7 /* gnc-state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-state.h"; path = "src/app-utils/gnc-state.h"; sourceTree = "<group>"; };
 		6EBC06F118B1D6E600A5CEB7 /* gnc-address-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-address-sql.c"; path = "src/backend/sql/gnc-address-sql.c"; sourceTree = "<group>"; };
@@ -1288,6 +1290,9 @@
 		6E7BB1300B955465000B79D4 /* libqof */ = {
 			isa = PBXGroup;
 			children = (
+				6EB956961A39565A002E3AC5 /* gnc-int128.cpp */,
+				6EB956981A39565A002E3AC5 /* gnc-rational.cpp */,
+				6EB9569B1A39565A002E3AC5 /* kvp-value.cpp */,
 				6E97EB721915B9D90021442F /* gnc-date.cpp */,
 				6E97EB731915B9D90021442F /* gnc-numeric.cpp */,
 				6E97EB741915B9D90021442F /* guid.cpp */,
@@ -1303,13 +1308,11 @@
 				6E97EB7E1915B9D90021442F /* qofid.cpp */,
 				6E97EB7F1915B9D90021442F /* qofinstance.cpp */,
 				6E97EB801915B9D90021442F /* qoflog.cpp */,
-				6E97EB811915B9D90021442F /* qofmath128.cpp */,
 				6E97EB821915B9D90021442F /* qofobject.cpp */,
 				6E97EB831915B9D90021442F /* qofquery.cpp */,
 				6E97EB841915B9D90021442F /* qofquerycore.cpp */,
 				6E97EB851915B9D90021442F /* qofsession.cpp */,
 				6E97EB861915B9D90021442F /* qofutil.cpp */,
-				6E4EC6560F9A359B00C6F6AC /* md5.c */,
 			);
 			name = libqof;
 			sourceTree = "<group>";
@@ -2185,6 +2188,10 @@
 		6E7BB1480B9558DE000B79D4 /* libqof */ = {
 			isa = PBXGroup;
 			children = (
+				6EB956971A39565A002E3AC5 /* gnc-int128.hpp */,
+				6EB956991A39565A002E3AC5 /* gnc-rational.hpp */,
+				6EB9569A1A39565A002E3AC5 /* kvp_frame.hpp */,
+				6EB9569C1A39565A002E3AC5 /* kvp-value.hpp */,
 				6EC70C2C1176DF50006E876C /* qofbookslots.h */,
 				6E4EC6490F9A359B00C6F6AC /* gnc-date-p.h */,
 				6E4EC64B0F9A359B00C6F6AC /* gnc-date.h */,
@@ -2193,7 +2200,6 @@
 				6E4EC6500F9A359B00C6F6AC /* kvp-util-p.h */,
 				6E4EC6520F9A359B00C6F6AC /* kvp-util.h */,
 				6E4EC6540F9A359B00C6F6AC /* kvp_frame.h */,
-				6E4EC6570F9A359B00C6F6AC /* md5.h */,
 				6E4EC6580F9A359B00C6F6AC /* qof-gobject.h */,
 				6E4EC65A0F9A359B00C6F6AC /* qof.h */,
 				6E4EC65B0F9A359B00C6F6AC /* qofbackend-p.h */,
@@ -2216,12 +2222,10 @@
 				6E4EC6800F9A359B00C6F6AC /* qofquery.h */,
 				6E4EC6810F9A359B00C6F6AC /* qofquerycore-p.h */,
 				6E4EC6830F9A359B00C6F6AC /* qofquerycore.h */,
-				6E4EC6850F9A359B00C6F6AC /* qofreference.h */,
 				6E4EC6860F9A359B00C6F6AC /* qofsession-p.h */,
 				6E4EC6880F9A359B00C6F6AC /* qofsession.h */,
 				6E4EC68C0F9A359B00C6F6AC /* qofutil.h */,
 				6E056BF416C0F1E100B5E1F2 /* qof-string-cache.h */,
-				6E056BF516C0F1E100B5E1F2 /* qofmath128-p.h */,
 			);
 			name = libqof;
 			sourceTree = "<group>";

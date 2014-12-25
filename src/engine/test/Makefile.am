@@ -69,7 +69,7 @@ TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GUILE="${GUILE}" \
   SRCDIR=${srcdir} \
-  GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
+  GNC_BUILDDIR="${abs_top_builddir}" \
   $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
@@ -80,6 +80,10 @@ test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la
+
+if WITH_GOOGLE_PROFILER
+LDADD += -lprofiler
+endif
 
 EXTRA_DIST += \
   test-create-account \

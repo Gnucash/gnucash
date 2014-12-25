@@ -16,11 +16,17 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define-module (gnucash app-utils))
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
+  (else ))
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
-(use-modules (ice-9 syncase))
+(use-modules (gnucash gettext))
 
 ;; Guile 2 needs to find the symbols from the c module at compile time already
 (cond-expand
@@ -30,6 +36,11 @@
       (gnc:module-load "gnucash/engine" 0)))
   (else
     (gnc:module-load "gnucash/engine" 0)))
+
+;; gettext.scm
+(re-export gnc:gettext)
+(re-export _)
+(re-export N_)
 
 ;; c-interface.scm
 (export gnc:error->string)
@@ -279,34 +290,13 @@
 (define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
 (export gnc:*kvp-option-path*)
 
-;; gettext functions
-(define gnc:gettext gnc-gettext-helper)
-(define _ gnc:gettext)
-(define-syntax N_
-  (syntax-rules ()
-    ((_ x) x)))
-
-(export gnc:gettext)
-(export _)
-
-(if (< (string->number (major-version)) 2)
-    (export-syntax N_))
-
-;; A lot of Gnucash's code uses procedural interfaces to load modules.
-;; This normally works, for procedures -- but for values that need to be
-;; known at expand time, like macros, it doesn't work (in Guile 2.0 at
-;; least). So instead of auditing all the code, since N_ is really the
-;; only Gnucash-defined macro in use, the surgical solution is just to
-;; make N_ available everywhere.
-(module-define! the-root-module 'N_ (module-ref (current-module) 'N_))
-
-(load-from-path "c-interface.scm")
-(load-from-path "config-var.scm")
-(load-from-path "options.scm")
-(load-from-path "hooks.scm")
-(load-from-path "prefs.scm")
-(load-from-path "date-utilities.scm")
-(load-from-path "simple-obj.scm")
+(load-from-path "c-interface")
+(load-from-path "config-var")
+(load-from-path "options")
+(load-from-path "hooks")
+(load-from-path "prefs")
+(load-from-path "date-utilities")
+(load-from-path "simple-obj")
 
 ;; Business options
 (define gnc:*business-label* (N_ "Business"))
@@ -343,5 +333,5 @@
 
 (export gnc:*option-section-budgeting* gnc:*option-name-default-budget*)
 
-(load-from-path "business-options.scm")
-(load-from-path "business-prefs.scm")
+(load-from-path "business-options")
+(load-from-path "business-prefs")

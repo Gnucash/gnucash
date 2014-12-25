@@ -99,6 +99,7 @@ typedef enum
     KVP_TYPE_STRING,     /**< QOF_TYPE_STRING gchar* */
     KVP_TYPE_GUID,       /**< QOF_TYPE_GUID */
     KVP_TYPE_TIMESPEC,   /**< QOF_TYPE_DATE */
+    KVP_TYPE_PLACEHOLDER_DONT_USE, /* Replaces KVP_TYPE_BINARY */
     KVP_TYPE_GLIST,      /**< no QOF equivalent. */
     KVP_TYPE_FRAME       /**< no QOF equivalent. */
     , KVP_TYPE_GDATE       /**< no QOF equivalent. */

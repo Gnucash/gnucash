@@ -29,6 +29,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
 (use-modules (gnucash report report-system report-collectors))
@@ -39,7 +40,7 @@
 
 ;; included since Bug726449
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot.scm") ;; for jqplot-escape-string
+(load-from-path "html-jqplot") ;; for jqplot-escape-string
 
 (define reportname (N_ "Income/Expense Chart"))
 

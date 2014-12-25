@@ -1,7 +1,16 @@
 (define-module (gnucash tax de_DE))
 
 (use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/app-utils" 0)
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
+  (else ))
+(use-modules (sw_app_utils))
+(use-modules (sw_engine))
+(use-modules (gnucash app-utils))
 
 (export gnc:txf-get-payer-name-source)
 (export gnc:txf-get-form)
@@ -29,5 +38,5 @@
 
 (export gnc:*tax-label* gnc:*tax-nr-label*)
 
-(load-from-path "txf-de_DE.scm")
-(load-from-path "txf-help-de_DE.scm")
+(load-from-path "txf-de_DE")
+(load-from-path "txf-help-de_DE")

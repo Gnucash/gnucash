@@ -338,6 +338,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         amt_tot = split->amount;
         amt_a = gnc_numeric_neg (baln);
         amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
+        g_assert (gnc_numeric_check(amt_b) == GNC_ERROR_OK);
 
         PINFO ("++++++++++++++ splitting split=%p into amt = %s + %s",
                split,
@@ -377,6 +378,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
                gnc_num_dbg_to_string(val_a),
                gnc_num_dbg_to_string(val_b) );
 
+        g_assert (!gnc_numeric_zero_p (amt_a));
+        g_assert (!gnc_numeric_zero_p (val_a));
         xaccSplitSetAmount (split, amt_a);
         xaccSplitSetValue (split, val_a);
 

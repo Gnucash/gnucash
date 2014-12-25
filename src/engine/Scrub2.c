@@ -366,18 +366,21 @@ restart:
         if (s == split) continue;
         if (qof_instance_get_destroying(s)) continue;
 
-        /* OK, this split is in the same lot (and thus same account)
-         * as the indicated split.  Make sure it is really a subsplit
-         * of the split we started with.  It's possible to have two
-         * splits in the same lot and transaction that are not subsplits
-         * of each other, the test-period test suite does this, for
-         * example.  Only worry about adjacent sub-splits.  By
-         * repeatedly merging adjacent subsplits, we'll get the non-
-         * adjacent ones too. */
-        guid = qof_instance_get_guid(s);
-        if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
-                                      "peer_guid", guid) == NULL)
-            continue;
+        if (strict)
+        {
+            /* OK, this split is in the same lot (and thus same account)
+             * as the indicated split.  Make sure it is really a subsplit
+             * of the split we started with.  It's possible to have two
+             * splits in the same lot and transaction that are not subsplits
+             * of each other, the test-period test suite does this, for
+             * example.  Only worry about adjacent sub-splits.  By
+             * repeatedly merging adjacent subsplits, we'll get the non-
+             * adjacent ones too. */
+            guid = qof_instance_get_guid(s);
+            if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
+                                          "peer_guid", guid) == NULL)
+                continue;
+        }
 
         merge_splits (split, s);
         rc = TRUE;

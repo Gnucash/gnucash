@@ -9,41 +9,25 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
 
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
+      (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module")))
+  (else ))
 (use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/report/utility-reports" 0)
 
-(export gnc:report-edit-options)
 (export gnc:report-menu-setup)
 (export gnc:add-report-template-menu-items)
-
-;; returns a function that takes a list: (options, report),
-;; and returns a widget
-(define (gnc:report-options-editor report) 
-  (if (equal? (gnc:report-type report) "d8ba4a2e89e8479ca9f6eccdeb164588")
-      gnc-column-view-edit-options
-      gnc-report-window-default-params-editor))
-
-;; do not rely on the return value of this function - it has none.
-;; instead, this function's side-effect is to set the report's editor widget.
-(define (gnc:report-edit-options report) 
-  (let* ((editor-widg (gnc:report-editor-widget report)))
-    (if (and editor-widg (not (null? editor-widg)))
-        (gnc-report-raise-editor report)
-        (begin
-          (if (gnc:report-options report) 
-              (begin 
-                (set! editor-widg
-                      ((gnc:report-options-editor report)
-                       (gnc:report-options report)
-                       report))
-                (gnc:report-set-editor-widget! report editor-widg))
-              (gnc-warning-dialog '() (_ "This report has no options.")))))))
 
 (define (gnc:add-report-template-menu-items)
   (define *template-items* '())

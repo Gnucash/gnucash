@@ -32,9 +32,11 @@
 (use-modules (gnucash core-utils))
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/app-utils" 0)
-(use-modules (gnucash report standard-reports))
-(use-modules (gnucash report business-reports))
-(use-modules (ice-9 syncase)) ; for define-syntax
+; Syncase is deprecated and redundant in guile 2
+(cond-expand
+  (guile-2 )
+  (else
+    (use-modules (ice-9 syncase)))) ; for define-syntax
 
 
 ;(use-modules (srfi srfi-13)) ; for extra string functions

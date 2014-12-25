@@ -93,7 +93,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr he hi hu it ja ko kok ks lt lv mr nb ne nl pl pt_BR pt ro ru rw sk sv ta te tr uk ur vi zh_CN zh_TW"
+ALL_LINGUAS="ar as bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr gu he hi hu it ja kn ko kok kok@latin ks lt lv mr nb ne nl pl pt_BR pt ro ru rw sk sv ta te tr uk ur vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -500,6 +500,7 @@ PKG_CHECK_MODULES(GUILE,
 ])
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
+AC_SUBST(GUILE_EFFECTIVE_VERSION)
 
 
 ### --------------------------------------------------------------------------
@@ -756,7 +757,7 @@ enable_google_profile=no
 AC_ARG_ENABLE( google-profiler,
   [AS_HELP_STRING([--enable-google-profiler], [link in Google Performance Tools profiler; allows enabling profiling by setting $CPUPROFILE=/path/to/logfile.])],
   [AC_MSG_CHECKING([Google PerfTools Profiler])
-   AC_CHECK_LIB([profiler], [enable_google_profile=yes],
+   AC_CHECK_LIB([profiler], [ProfilerEnable], [enable_google_profile=yes],
       [AC_MSG_WARN([Google Profiling Enabled but the library was not found.])])
 ])
 AM_CONDITIONAL(WITH_GOOGLE_PROFILER, [test x$enable_google_profile = xyes])
@@ -777,6 +778,12 @@ if test x$enable_google_test = xyes; then
    AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc /usr/src/gmock/src/gmock-all.cc /usr/include/gtest/gtest.h /usr/include/gmock/gmock.h],
     [ac_cv_gtest_system_install=yes],[ac_cv_gtest_system_install=no])
 fi
+if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes -a x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
+  ac_cv_gtest_system_install=yes
+else
+  ac_cv_gtest_system_install=no
+fi
+
 AC_ARG_WITH([gtest-root],
     [AS_HELP_STRING([--with-gtest-root=PATH], [location of the google test sources])],
     [ac_cv_gtest_root="$with_gtest_root"])

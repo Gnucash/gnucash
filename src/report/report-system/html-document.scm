@@ -155,8 +155,8 @@
               (begin 
                 ;;This is the only place where <html> appears
                 ;;with the exception of 2 reports: 
-                ;;./share/gnucash/guile-modules/gnucash/report/taxinvoice.eguile.scm:<html>
-                ;;./share/gnucash/guile-modules/gnucash/report/balsheet-eg.eguile.scm:<html>
+                ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
+                ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
 
                 ;; Validate against XHTML 1.0 Transitional
                 (push "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
