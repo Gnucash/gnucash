@@ -58,7 +58,7 @@ struct timeval
 #include "gnc-lot.h"
 #include "gnc-event.h"
 #include <gnc-gdate-utils.h>
-#include "SchedXAction.h"
+#include "SchedXaction.h"
 #include "qofbackend-p.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
