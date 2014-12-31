@@ -635,15 +635,13 @@ qof_session_save (QofSession *session,
                   QofPercentageFunc percentage_func)
 {
     QofBackend *be;
-    char *msg = NULL;
-
 
     if (!session) return;
     if (!g_atomic_int_dec_and_test(&session->lock))
         goto leave;
     ENTER ("sess=%p book_id=%s",
            session, session->book_id ? session->book_id : "(null)");
-    msg = g_strdup_printf(" ");
+
     /* If there is a backend, and the backend is reachable
     * (i.e. we can communicate with it), then synchronize with
     * the backend.  If we cannot contact the backend (e.g.
@@ -677,13 +675,13 @@ qof_session_save (QofSession *session,
     {
         if (ERR_BACKEND_NO_ERR != qof_session_get_error(session))
         {
-            msg = g_strdup_printf("failed to load backend");
+	    /* push_error strdups, stack const is fine. */
+	    const char *msg = "failed to load backend";
             qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
         }
     }
     LEAVE("error -- No backend!");
 leave:
-    if (msg != NULL) g_free(msg);
     g_atomic_int_inc(&session->lock);
     return;
 }
@@ -705,6 +703,8 @@ qof_session_safe_save(QofSession *session, QofPercentageFunc percentage_func)
         g_free(session->book_id);
         session->book_id = NULL;
         qof_session_push_error (session, err, msg);
+        /* qof_backend_get_message transfers ownership. */
+	g_free(msg);
     }
 }
 
