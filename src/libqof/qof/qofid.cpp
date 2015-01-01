@@ -177,7 +177,7 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
     {
         return;
     }
-    value = *(gint*)qof_collection_get_data(target);
+    value = GPOINTER_TO_INT(qof_collection_get_data(target));
     if (value != 0)
     {
         return;
@@ -186,7 +186,7 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
     if (guid_equal(guid, guid_null()))
     {
         value = -1;
-        qof_collection_set_data(target, &value);
+        qof_collection_set_data(target, GINT_TO_POINTER(value));
         return;
     }
     g_return_if_fail (target->e_type == ent->e_type);
@@ -194,11 +194,11 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
     if ( e == NULL )
     {
         value = 1;
-        qof_collection_set_data(target, &value);
+        qof_collection_set_data(target, GINT_TO_POINTER(value));
         return;
     }
     value = 0;
-    qof_collection_set_data(target, &value);
+    qof_collection_set_data(target, GINT_TO_POINTER(value));
 }
 
 gint
@@ -227,14 +227,14 @@ qof_collection_compare (QofCollection *target, QofCollection *merge)
     {
         return -1;
     }
-    qof_collection_set_data(target, &value);
+    qof_collection_set_data(target, GINT_TO_POINTER(value));
     qof_collection_foreach(merge, collection_compare_cb, target);
-    value = *(gint*)qof_collection_get_data(target);
+    value = GPOINTER_TO_INT(qof_collection_get_data(target));
     if (value == 0)
     {
-        qof_collection_set_data(merge, &value);
+        qof_collection_set_data(merge, GINT_TO_POINTER(value));
         qof_collection_foreach(target, collection_compare_cb, merge);
-        value = *(gint*)qof_collection_get_data(merge);
+        value = GPOINTER_TO_INT(qof_collection_get_data(merge));
     }
     return value;
 }
@@ -459,9 +459,11 @@ gboolean QofCollectionClass::add_entity (QofInstance* ent)
     return TRUE;
 }
 
+// FIXME: incorrect implementation
 void QofCollectionClass::remove_entity (QofInstance *ent)
 {
     if (!ent) return;
+    // HERE:
     QofCollection *col = qof_instance_get_collection (ent);
     if (!col) return;
 
