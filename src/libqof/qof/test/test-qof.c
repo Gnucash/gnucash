@@ -33,6 +33,8 @@ extern void test_suite_qofsession();
 extern void test_suite_gnc_date();
 extern void test_suite_qof_string_cache();
 extern void test_suite_gnc_guid ( void );
+extern void test_suite_qofcollection();
+extern void test_suite_qofcollection_class(void);
 
 int
 main (int   argc,
@@ -52,6 +54,8 @@ main (int   argc,
     test_suite_qofsession();
     test_suite_gnc_date();
     test_suite_qof_string_cache();
+    test_suite_qofcollection();
+    test_suite_qofcollection_class();
 
     return g_test_run( );
 }

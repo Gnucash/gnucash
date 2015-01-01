@@ -499,6 +499,15 @@ qof_instance_set_guid (gpointer ptr, const GncGUID *guid)
 }
 
 void
+qof_instance_set_a_guid (gpointer ptr)
+{
+    GncGUID *guid = NULL;
+
+    guid = guid_new ();
+    qof_instance_set_guid (ptr, guid);
+}
+
+void
 qof_instance_copy_guid (gpointer to, gconstpointer from)
 {
     g_return_if_fail(QOF_IS_INSTANCE(to));

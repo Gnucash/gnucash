@@ -260,6 +260,51 @@ qof_collection_from_glist (QofIdType type, const GList *glist);
 }
 #endif
 
+/* QofCollection C++ implementation */
+
+#ifdef __cplusplus
+namespace gnucash
+{
+    namespace qof
+    {
+        class QofCollectionClass
+        {
+        public:
+            QofCollectionClass (QofIdType type);
+            ~QofCollectionClass ();
+
+            static QofCollectionClass *from_glist (QofIdType type, const GList *inst_list);
+
+            guint count () { return g_hash_table_size (m_hash_of_entities); }
+            QofIdType get_type () { return m_e_type; }
+            gpointer get_data () { return m_data; }
+            void set_data (gpointer user_data) { m_data = user_data; }
+
+            gboolean is_dirty () { return m_dirty; }
+            void mark_dirty () { m_dirty = TRUE; }
+            void mark_clean () { m_dirty = FALSE; }
+            void print_dirty (gpointer dummy);
+
+            QofInstance* lookup_entity(const GncGUID *guid);
+            gboolean add_entity (QofInstance *ent);
+            void remove_entity (QofInstance *ent);
+            void insert_entity (QofInstance *ent);
+
+            gint compare_to (QofCollectionClass *rhs);
+            gint compare_to (QofCollectionClass &rhs);
+            void foreach (QofInstanceForeachCB, gpointer user_data);
+
+        private:
+            QofIdType m_e_type;
+            gboolean m_dirty;
+            // TODO: replace with std::map
+            GHashTable* m_hash_of_entities;
+            gpointer m_data;
+        };
+    }
+}
+#endif
+
 #endif /* QOF_ID_H */
 /** @} */
 /** @} */

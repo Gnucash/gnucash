@@ -57,6 +57,11 @@ void qof_instance_set_dirty_flag (gconstpointer inst, gboolean flag);
 /** Set the GncGUID of this instance */
 void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
 
+/* Set a GncGUID of this instance on behalf of you in a convenient way.
+ * If you want to set another GUID by yourself, please call qof_instance_set_guid instead.
+ */
+void qof_instance_set_a_guid (gpointer inst);
+
 /** Copy the GncGUID from one instance to another.  This routine should
  *  be used with extreme caution, since GncGUID values are everywhere
  *  assumed to be unique. */

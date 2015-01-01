@@ -18,6 +18,8 @@ test_qof_SOURCES = \
 	test-qofsession.c \
 	test-qof-string-cache.c \
 	test-gnc-guid.cpp \
+	test-qofcollection.c \
+	test-qofcollection-p.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \
@@ -26,6 +28,7 @@ test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/kvp_frame.h \
 	$(top_srcdir)/${MODULEPATH}/qofobject.h \
 	$(top_srcdir)/${MODULEPATH}/qofsession.h \
+	$(top_srcdir)/${MODULEPATH}/qofid.h \
 	$(top_srcdir)/src/test-core/unittest-support.h
 
 check_PROGRAMS = \
