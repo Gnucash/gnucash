@@ -712,7 +712,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
     strcpy(tmp_name, datafile);
     strcat(tmp_name, ".tmp-XXXXXX");
 
-    if (!mktemp(tmp_name))
+    if (!mkstemp(tmp_name))
     {
         qof_backend_set_error(be, ERR_BACKEND_MISC);
         qof_backend_set_message( be, "Failed to make temp file" );
