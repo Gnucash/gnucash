@@ -40,6 +40,7 @@ extern "C"
 #include "qofid-p.h"
 #include "qofinstance-p.h"
 
+
 static QofLogModule log_module = QOF_MOD_ENGINE;
 static gboolean qof_alt_dirty_mode = FALSE;
 
@@ -367,3 +368,188 @@ qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func,
     PINFO("Hash Table size of %s after is %d", col->e_type, g_hash_table_size(col->hash_of_entities));
 }
 /* =============================================================== */
+
+/* === QofCollection C++ class implementation === */
+
+QofCollectionClass::QofCollectionClass (QofIdType type)
+    : m_data (NULL)
+{
+    m_e_type = static_cast<QofIdType>(CACHE_INSERT (type));
+    m_hash_of_entities = guid_hash_table_new ();
+}
+
+QofCollectionClass::~QofCollectionClass ()
+{
+    CACHE_REMOVE (m_e_type);
+    g_hash_table_destroy (m_hash_of_entities);
+    m_e_type = NULL;
+    m_hash_of_entities = NULL;
+    m_data = NULL;   /** XXX there should be a destroy notifier for this */
+}
+
+QofCollectionClass *
+QofCollectionClass::from_glist (QofIdType type, const GList *inst_list)
+{
+    const GList *list;
+
+    QofCollectionClass *coll = new QofCollectionClass (type);
+    for (list = inst_list; list != NULL; list = list->next)
+    {
+        QofInstance *ent = QOF_INSTANCE(list->data);
+        if (FALSE == coll->add_entity (ent))
+        {
+            delete coll;
+            return NULL;
+        }
+    }
+    return coll;
+}
+
+void QofCollectionClass::foreach (QofInstanceForeachCB callback,
+                                  gpointer user_data)
+{
+    g_return_if_fail (callback);
+
+    struct _iterate iter;
+
+    iter.fcn = callback;
+    iter.data = user_data;
+
+    PINFO("Hash Table size of %s before is %d",
+          m_e_type, g_hash_table_size (m_hash_of_entities));
+
+    GList* entries = g_hash_table_get_values (m_hash_of_entities);
+    g_list_foreach (entries, foreach_cb, &iter);
+    g_list_free (entries);
+
+    PINFO("Hash Table size of %s after is %d",
+          m_e_type, g_hash_table_size (m_hash_of_entities));
+}
+
+void QofCollectionClass::print_dirty (gpointer dummy)
+{
+    if (is_dirty ())
+        printf("%s collection is dirty.\n", m_e_type);
+    foreach ((QofInstanceForeachCB)qof_instance_print_dirty, NULL);
+}
+
+QofInstance *QofCollectionClass::lookup_entity (const GncGUID *guid)
+{
+    if (guid == NULL) return NULL;
+    return static_cast<QofInstance*>(
+        g_hash_table_lookup (m_hash_of_entities, guid));
+}
+
+gboolean QofCollectionClass::add_entity (QofInstance* ent)
+{
+    if (!ent)
+        return FALSE;
+
+    g_return_val_if_fail (m_e_type == ent->e_type, FALSE);
+
+    const GncGUID *guid = qof_instance_get_guid (ent);
+    if (guid_equal (guid, guid_null ()))
+        return FALSE;
+    QofInstance *e = lookup_entity (guid);
+    if (e != NULL)
+        return FALSE;
+    g_hash_table_insert (m_hash_of_entities, (gpointer)guid, ent);
+    if (!qof_alt_dirty_mode)
+        mark_dirty ();
+    return TRUE;
+}
+
+void QofCollectionClass::remove_entity (QofInstance *ent)
+{
+    if (!ent) return;
+    QofCollection *col = qof_instance_get_collection (ent);
+    if (!col) return;
+
+    const GncGUID *guid = qof_instance_get_guid (ent);
+    g_hash_table_remove (m_hash_of_entities, guid);
+    if (!qof_alt_dirty_mode)
+        mark_dirty ();
+    qof_instance_set_collection (ent, NULL);
+}
+
+void QofCollectionClass::insert_entity (QofInstance *ent)
+{
+    if (!ent) return;
+    g_return_if_fail (m_e_type == ent->e_type);
+
+    const GncGUID *guid = qof_instance_get_guid (ent);
+    if (guid_equal (guid, guid_null ())) return;
+    remove_entity (ent);
+    g_hash_table_insert (m_hash_of_entities, (gpointer)guid, ent);
+    if (!qof_alt_dirty_mode)
+        mark_dirty ();
+    /*
+     * FIXME: fix the second argument. as of writing these code, QofInstance
+     * has not been migrated to C++ implementation. So, the second argument
+     * should be changed to this QofCollection C++ class instance.
+     *
+     * Although `this` is passed, it's not correct as of writing this code.
+     * And should not work correctly during the execution.
+     */
+    // qof_instance_set_collection (ent, this);
+    qof_instance_set_collection (ent, NULL);
+}
+
+static void
+collection_class_compare_cb (QofInstance *ent, gpointer user_data)
+{
+    QofCollectionClass *target = (QofCollectionClass *)user_data;
+    if (!target || !ent)
+    {
+        return;
+    }
+    gint value = *(gint*)target->get_data ();
+    if (value != 0)
+    {
+        return;
+    }
+    const GncGUID *guid = qof_instance_get_guid (ent);
+    if (guid_equal (guid, guid_null ()))
+    {
+        value = -1;
+        target->set_data (&value);
+        return;
+    }
+    g_return_if_fail (target->get_type () == ent->e_type);
+    QofInstance *e = target->lookup_entity (guid);
+    if (e == NULL)
+    {
+        value = 1;
+        target->set_data (&value);
+        return;
+    }
+    value = 0;
+    target->set_data (&value);
+}
+
+gint QofCollectionClass::compare_to (QofCollectionClass *another)
+{
+    if (another == NULL)
+        return 1;
+    return compare_to (*another);
+}
+
+gint QofCollectionClass::compare_to (QofCollectionClass &another)
+{
+    gint value = 0;
+
+    if (m_e_type != another.get_type ())
+    {
+        return -1;
+    }
+    set_data (&value);
+    another.foreach (collection_class_compare_cb, this);
+    value = *(gint*)get_data ();
+    if (value == 0)
+    {
+        another.set_data (&value);
+        foreach (collection_class_compare_cb, &another);
+        value = *(gint*)another.get_data ();
+    }
+    return value;
+}
