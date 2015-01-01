@@ -371,6 +371,8 @@ qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func,
 
 /* === QofCollection C++ class implementation === */
 
+using namespace gnucash::qof;
+
 QofCollectionClass::QofCollectionClass (QofIdType type)
     : m_data (NULL)
 {
@@ -459,19 +461,19 @@ gboolean QofCollectionClass::add_entity (QofInstance* ent)
     return TRUE;
 }
 
-// FIXME: incorrect implementation
 void QofCollectionClass::remove_entity (QofInstance *ent)
 {
+    gboolean ret;
+
     if (!ent) return;
-    // HERE:
-    QofCollection *col = qof_instance_get_collection (ent);
-    if (!col) return;
 
     const GncGUID *guid = qof_instance_get_guid (ent);
-    g_hash_table_remove (m_hash_of_entities, guid);
+    ret = g_hash_table_remove (m_hash_of_entities, guid);
+    /* if instance doesn't exist in collection, quit quietly and do nothing. */
+    if (ret == FALSE) return;
+
     if (!qof_alt_dirty_mode)
         mark_dirty ();
-    qof_instance_set_collection (ent, NULL);
 }
 
 void QofCollectionClass::insert_entity (QofInstance *ent)
@@ -485,27 +487,17 @@ void QofCollectionClass::insert_entity (QofInstance *ent)
     g_hash_table_insert (m_hash_of_entities, (gpointer)guid, ent);
     if (!qof_alt_dirty_mode)
         mark_dirty ();
-    /*
-     * FIXME: fix the second argument. as of writing these code, QofInstance
-     * has not been migrated to C++ implementation. So, the second argument
-     * should be changed to this QofCollection C++ class instance.
-     *
-     * Although `this` is passed, it's not correct as of writing this code.
-     * And should not work correctly during the execution.
-     */
-    // qof_instance_set_collection (ent, this);
-    qof_instance_set_collection (ent, NULL);
 }
 
 static void
 collection_class_compare_cb (QofInstance *ent, gpointer user_data)
 {
-    QofCollectionClass *target = (QofCollectionClass *)user_data;
+    QofCollectionClass *target = static_cast<QofCollectionClass *>(user_data);
     if (!target || !ent)
     {
         return;
     }
-    gint value = *(gint*)target->get_data ();
+    gint value = GPOINTER_TO_INT (target->get_data ());
     if (value != 0)
     {
         return;
@@ -514,7 +506,7 @@ collection_class_compare_cb (QofInstance *ent, gpointer user_data)
     if (guid_equal (guid, guid_null ()))
     {
         value = -1;
-        target->set_data (&value);
+        target->set_data (GINT_TO_POINTER (value));
         return;
     }
     g_return_if_fail (target->get_type () == ent->e_type);
@@ -522,36 +514,36 @@ collection_class_compare_cb (QofInstance *ent, gpointer user_data)
     if (e == NULL)
     {
         value = 1;
-        target->set_data (&value);
+        target->set_data (GINT_TO_POINTER (value));
         return;
     }
     value = 0;
-    target->set_data (&value);
+    target->set_data (GINT_TO_POINTER (value));
 }
 
-gint QofCollectionClass::compare_to (QofCollectionClass *another)
+gint QofCollectionClass::compare_to (QofCollectionClass *rhs)
 {
-    if (another == NULL)
+    if (rhs == NULL)
         return 1;
-    return compare_to (*another);
+    return compare_to (*rhs);
 }
 
-gint QofCollectionClass::compare_to (QofCollectionClass &another)
+gint QofCollectionClass::compare_to (QofCollectionClass &rhs)
 {
     gint value = 0;
 
-    if (m_e_type != another.get_type ())
+    if (m_e_type != rhs.get_type ())
     {
         return -1;
     }
-    set_data (&value);
-    another.foreach (collection_class_compare_cb, this);
-    value = *(gint*)get_data ();
+    set_data (GINT_TO_POINTER (value));
+    rhs.foreach (collection_class_compare_cb, this);
+    value = GPOINTER_TO_INT (get_data ());
     if (value == 0)
     {
-        another.set_data (&value);
-        foreach (collection_class_compare_cb, &another);
-        value = *(gint*)another.get_data ();
+        rhs.set_data (GINT_TO_POINTER (value));
+        foreach (collection_class_compare_cb, &rhs);
+        value = GPOINTER_TO_INT (rhs.get_data ());
     }
     return value;
 }

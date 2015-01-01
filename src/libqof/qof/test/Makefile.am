@@ -19,6 +19,7 @@ test_qof_SOURCES = \
 	test-qof-string-cache.c \
 	test-gnc-guid.cpp \
 	test-qofcollection.c \
+	test-qofcollection-p.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \
