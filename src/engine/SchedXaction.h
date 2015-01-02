@@ -303,7 +303,7 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
 */
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
-/* #defines for KvpFrame strings and QOF */
+/* #defines for Properties and GncModule */
 #define GNC_SX_SHARES                "shares"
 #define GNC_SX_FREQ_SPEC             "scheduled-frequency"
 #define GNC_SX_NAME                  "sched-xname"
