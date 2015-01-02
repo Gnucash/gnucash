@@ -1186,16 +1186,13 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 static void
 gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-
     if (!invoice || !txn)
         return;
 
     if (invoice->posted_txn) return;	/* Cannot reset invoice's txn */
 
     xaccTransBeginEdit (txn);
-    qof_instance_set (QOF_INSTANCE (txn), "invoice",
+    qof_instance_set (QOF_INSTANCE (txn), "invoice", //Prop INVOICE
 		      qof_instance_get_guid (QOF_INSTANCE (invoice)), NULL);
     xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
     xaccTransCommitEdit (txn);
