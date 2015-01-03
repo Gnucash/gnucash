@@ -11,7 +11,9 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src) # for platform.h
 
 SET (libgnc_qof_SOURCES
    qof/gnc-date.cpp
+   qof/gnc-int128.cpp
    qof/gnc-numeric.cpp
+   qof/gnc-rational.cpp
    qof/guid.cpp
    qof/kvp-util.cpp
    qof/kvp_frame.cpp
