@@ -115,9 +115,10 @@
 (define (lx-collector level action arg1 arg2)
   ((vector-ref levelx-collector (- level 1)) action arg1 arg2))
 
-;; IRS asked congress to make the tax quarters the same as real quarters
-;;   This is the year it is effective.  THIS IS A Y10K BUG!
-(define tax-qtr-real-qtr-year 10000)
+;; Unlike to the US the German tax quarters are real quarters.
+;; To allow for easily incorporating changes from the US version
+;; we simply set  tax-qtr-real-qtr-year to 0.
+(define tax-qtr-real-qtr-year 0)
 
 (define (tax-options-generator)
   (define options (gnc:new-options))
