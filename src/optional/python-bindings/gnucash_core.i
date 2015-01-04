@@ -124,23 +124,23 @@
     PyObject * swig_wrapper_object;
     if (owner_type == GNC_OWNER_CUSTOMER ){
         swig_wrapper_object = SWIG_NewPointerObj(
-	    gncOwnerGetCustomer($1), $descriptor(GncCustomer *), 0);
+        gncOwnerGetCustomer($1), $descriptor(GncCustomer *), 0);
     }
     else if (owner_type == GNC_OWNER_JOB){
         swig_wrapper_object = SWIG_NewPointerObj(
-	    gncOwnerGetJob($1), $descriptor(GncJob *), 0);
+        gncOwnerGetJob($1), $descriptor(GncJob *), 0);
     }
     else if (owner_type == GNC_OWNER_VENDOR){
         swig_wrapper_object = SWIG_NewPointerObj(
-	    gncOwnerGetVendor($1), $descriptor(GncVendor *), 0);
+        gncOwnerGetVendor($1), $descriptor(GncVendor *), 0);
     }
     else if (owner_type == GNC_OWNER_EMPLOYEE){
         swig_wrapper_object = SWIG_NewPointerObj(
-	    gncOwnerGetEmployee($1), $descriptor(GncEmployee *), 0);
+        gncOwnerGetEmployee($1), $descriptor(GncEmployee *), 0);
     }
     else {
         swig_wrapper_object = Py_None;
-	Py_INCREF(Py_None);
+    Py_INCREF(Py_None);
     }
     PyTuple_SetItem(owner_tuple, 1, swig_wrapper_object);
     $result = owner_tuple;
@@ -175,10 +175,10 @@
         $1 = temp_owner;
     }
     else {
-	PyErr_SetString(
-	    PyExc_ValueError,
-	    "Python object passed to function with GncOwner * argument "
-	    "couldn't be converted back to pointer of that type");
+    PyErr_SetString(
+        PyExc_ValueError,
+        "Python object passed to function with GncOwner * argument "
+        "couldn't be converted back to pointer of that type");
         return NULL;
     }
 }
@@ -187,6 +187,7 @@
     gncOwnerFree($1);
 }
 
+static const GncGUID * gncEntryGetGUID(GncEntry *x);
 
 %include <gnc-lot.h>
 
