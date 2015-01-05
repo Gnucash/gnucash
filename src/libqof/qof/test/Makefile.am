@@ -41,8 +41,8 @@ test_kvp_value_SOURCES = \
 test_kvp_value_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
          $(GLIB_LIBS) \
-	$(GTEST_LIBS) \
 	$(BOOST_LDFLAGS)
+
 if !GOOGLE_TEST_LIBS
 nodist_test_kvp_value_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
@@ -52,28 +52,39 @@ endif
 test_kvp_value_CPPFLAGS = \
     -I$(GTEST_HEADERS) \
     -I$(top_srcdir)/$(MODULEPATH) \
-    $(BOOST_CPPFLAGS) \
-    $(GLIB_CFLAGS)
+    $(BOOST_CPPFLAGS)
 
 check_PROGRAMS += test-kvp-value
 
 test_gnc_int128_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
         gtest-gnc-int128.cpp
-test_gnc_int128_CPPFLAGS = \
-        -I${GTEST_HEADERS} \
-        ${GLIB_CFLAGS}
+test_gnc_int128_CPPFLAGS = -I${GTEST_HEADERS}
 
-test_gnc_int128_LDADD = \
-        ${GLIB_LIBS} \
-	$(GTEST_LIBS)
+
+test_gnc_int128_LDADD = $(GTEST_LIBS)
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_int128_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
 test_gnc_int128_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
-
 check_PROGRAMS += test-gnc-int128
+
+test_gnc_timezone_SOURCES = \
+        $(top_srcdir)/${MODULEPATH}/gnc-timezone.cpp \
+        gtest-gnc-timezone.cpp
+
+test_gnc_timezone_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+	-I${top_srcdir}/src \
+	$(BOOST_CPPFLAGS)
+test_gnc_timezone_LDADD = $(GTEST_LIBS)
+if !GOOGLE_TEST_LIBS
+nodist_test_gnc_timezone_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+test_gnc_timezone_LDADD += $(top_builddir)/src/test-core/libgtest.a
+endif
+check_PROGRAMS += test-gnc-timezone
 endif
 
 test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
