@@ -36,8 +36,10 @@ TESTS = ${check_PROGRAMS}
 if WITH_GOOGLE_TEST
 test_gnc_int128_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
-        ${GTEST_ROOT}/src/gtest_main.cc \
         gtest-gnc-int128.cpp
+
+nodist_test_gnc_int128_SOURCES = \
+        ${GTEST_ROOT}/src/gtest_main.cc
 
 test_gnc_int128_CPPFLAGS = \
         -I${GTEST_HEADERS} \
@@ -69,9 +71,11 @@ test_qof_CPPFLAGS = \
 if WITH_GOOGLE_TEST
 test_kvp_value_SOURCES = \
     $(top_srcdir)/$(MODULEPATH)/kvp-value.cpp \
-    $(GTEST_ROOT)/src/gtest_main.cc \
     test-kvp-value.cpp \
     test-kvp-frame.cpp
+
+nodist_test_kvp_value_SOURCES = \
+    $(GTEST_ROOT)/src/gtest_main.cc
 
 test_kvp_value_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
