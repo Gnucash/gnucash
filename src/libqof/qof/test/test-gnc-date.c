@@ -1688,7 +1688,7 @@ test_gnc_iso8601_to_timespec_gmt (void)
 char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)// C: 18 in 7  Local: 0:0:0
 */
-#define ISO8601_SIZE 38
+#define ISO8601_SIZE MAX_DATE_LENGTH + 4
 static Timespec
 g_date_time_to_timespec (GDateTime *gdt)
 {
@@ -1701,17 +1701,21 @@ g_date_time_to_timespec (GDateTime *gdt)
 static gchar*
 format_timestring (GDateTime *gdt)
 {
+  static const unsigned tzlen = MAX_DATE_LENGTH - 26;
     gchar *fmt = "%Y-%m-%d %H:%M";
     GDateTime *ngdt = gncdt.to_local (gdt);
     gchar *date_base = g_date_time_format (ngdt, fmt);
+    gchar buf[tzlen], *retval;
 #ifdef G_OS_WIN32
     gchar *tz = g_date_time_format (ngdt, "%Z");
 #else
     gchar *tz = g_date_time_format (ngdt, "%z");
 #endif
-    gchar *retval = g_strdup_printf ("%s:%02d.%06d %s", date_base,
+    memset (buf, 0, tzlen);
+    g_snprintf (buf, tzlen, "%s", tz);
+    retval = g_strdup_printf ("%s:%02d.%06d %s", date_base,
                                      g_date_time_get_second (ngdt),
-                                     g_date_time_get_microsecond (ngdt), tz);
+                                     g_date_time_get_microsecond (ngdt), buf);
     g_date_time_unref (ngdt);
     g_free (date_base);
     g_free (tz);
