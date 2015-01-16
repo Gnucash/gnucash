@@ -88,9 +88,6 @@ noinst_HEADERS = \
    qofquerycore-p.h \
    qofsession-p.h
 
-EXTRA_DIST += \
-  qofmath128.cpp
-
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.cpp
 else
