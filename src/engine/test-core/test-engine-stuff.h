@@ -7,6 +7,7 @@
 
 #include <glib.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "qof.h"
 #include "Query.h"

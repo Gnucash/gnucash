@@ -173,7 +173,7 @@ struct to_string_visitor : boost::static_visitor<void>
 
     void operator()(Timespec val)
     {
-        char tmp1[40];
+        char tmp1[40] {};
         gnc_timespec_to_iso8601_buff (val, tmp1);
         output << "KVP_VALUE_TIMESPEC(" << tmp1 << ")";
     }
