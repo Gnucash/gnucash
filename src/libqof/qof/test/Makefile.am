@@ -34,6 +34,24 @@ check_PROGRAMS = \
 TESTS = ${check_PROGRAMS}
 
 if WITH_GOOGLE_TEST
+test_kvp_value_SOURCES = \
+    $(top_srcdir)/$(MODULEPATH)/kvp-value.cpp \
+    $(GTEST_ROOT)/src/gtest_main.cc \
+    test-kvp-value.cpp \
+    test-kvp-frame.cpp
+
+test_kvp_value_LDADD = \
+	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
+        $(top_builddir)/src/test-core/libgtest.a \
+        $(GLIB_LIBS) \
+	$(BOOST_LDFLAGS)
+
+test_kvp_value_CPPFLAGS = \
+    -I$(GTEST_HEADERS) \
+    -I$(top_srcdir)/$(MODULEPATH) \
+    $(BOOST_CPPFLAGS) \
+    $(GLIB_CFLAGS)
+
 test_gnc_int128_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
         gtest-gnc-int128.cpp
@@ -67,27 +85,3 @@ test_qof_CPPFLAGS = \
 	-DTESTPROG=test_qof \
 	-I$(top_srcdir)/lib/libc \
 	${GLIB_CFLAGS}
-
-if WITH_GOOGLE_TEST
-test_kvp_value_SOURCES = \
-    $(top_srcdir)/$(MODULEPATH)/kvp-value.cpp \
-    test-kvp-value.cpp \
-    test-kvp-frame.cpp
-
-nodist_test_kvp_value_SOURCES = \
-    $(GTEST_ROOT)/src/gtest_main.cc
-
-test_kvp_value_LDADD = \
-	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
-    $(top_builddir)/src/test-core/libgtest.a \
-    $(GLIB_LIBS) \
-	$(BOOST_LDFLAGS)
-test_kvp_value_CPPFLAGS = \
-    -I$(GTEST_HEADERS) \
-    -I$(top_srcdir)/$(MODULEPATH) \
-    $(BOOST_CPPFLAGS) \
-    $(GLIB_CFLAGS)
-
-check_PROGRAMS += test_kvp_value
-
-endif
