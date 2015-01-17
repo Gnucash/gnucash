@@ -40,6 +40,9 @@ test_kvp_value_SOURCES = \
     test-kvp-value.cpp \
     test-kvp-frame.cpp
 
+nodist_test_kvp_value_SOURCES = \
+        ${GTEST_ROOT}/src/gtest_main.cc
+
 test_kvp_value_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
         $(top_builddir)/src/test-core/libgtest.a \
