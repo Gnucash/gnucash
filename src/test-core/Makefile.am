@@ -80,13 +80,17 @@ _unittest_support_la_LIBADD = \
 endif
 
 if WITH_GOOGLE_TEST
+if GOOGLE_TEST_LIBS
+noinst_LIBRARIES = libgmock.a
+else
 noinst_LIBRARIES = \
         libgtest.a \
         libgmock.a
-nodist_libgtest_a_SOURCES = ${GTEST_ROOT}/src/gtest-all.cc
-nodist_libgmock_a_SOURCES = ${GMOCK_ROOT}/src/gmock-all.cc
-libgtest_a_CPPFLAGS = ${AM_CPPFLAGS} -I${GTEST_HEADERS} -I${GTEST_ROOT}
-libgmock_a_CPPFLAGS = ${libgtest_a_CPPFLAGS} -I${GMOCK_HEADERS} -I${GMOCK_ROOT}
+nodist_libgtest_a_SOURCES = ${GTEST_SRC}/src/gtest-all.cc
+libgtest_a_CPPFLAGS = ${AM_CPPFLAGS} -I${GTEST_HEADERS} -I${GTEST_SRC}
+endif
+nodist_libgmock_a_SOURCES = ${GMOCK_SRC_PATH}/gmock-all.cc
+libgmock_a_CPPFLAGS = ${libgtest_a_CPPFLAGS} -I${GMOCK_HEADERS} -I${GMOCK_SRC}
 endif
 
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash

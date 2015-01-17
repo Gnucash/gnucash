@@ -766,22 +766,40 @@ AM_CONDITIONAL(WITH_GOOGLE_PROFILER, [test x$enable_google_profile = xyes])
 ### Google Test and Mock Support: https://code.google.com/p/googletest/ and
 ### https://code.google.com/p/googlemock/
 ### ---------------------------------------------------------------------------
-enable_google_test=no
 ac_cv_gmock_root=""
 ac_cv_gmock_headers=""
 ac_cv_gtest_root=""
 ac_cv_gtest_headers=""
+ac_cv_gtest_libs=""
+ac_cv_gmock_libs=""
+
 AC_ARG_ENABLE( google-test,
-   [AS_HELP_STRING([--enable-google-test], [build the Google Test and Google Mock static libraries and enable C++ Unit Tests])],
-   [enable_google_test=yes])
-if test x$enable_google_test = xyes; then
-   AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc /usr/src/gmock/src/gmock-all.cc /usr/include/gtest/gtest.h /usr/include/gmock/gmock.h],
-    [ac_cv_gtest_system_install=yes],[ac_cv_gtest_system_install=no])
+   [AS_HELP_STRING([--disable-google-test], [do not build the Google Test and Google Mock static libraries and enable C++ Unit Tests])],,[enable_google_test=yes])
+if test x$enable_google_test != xno; then
+   AC_CHECK_LIB([gtest_main], [main],
+      [AC_CHECK_FILES([/usr/src/gmock/gmock-all.cc
+		       /usr/include/gtest/gtest.h
+		       /usr/include/gmock/gmock.h],
+      	[ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=yes],
+	[ac_cv_gtest_system_install=no])],
+      [AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc
+		       /usr/src/gtest/gtest-main.cc
+		       /usr/src/gmock/src/gmock-all.cc
+		       /usr/include/gtest/gtest.h
+		       /usr/include/gmock/gmock.h],
+        [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=no],
+        [ac_cv_gtest_system_install=no])]
+   )
 fi
-if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes -a x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
-  ac_cv_gtest_system_install=yes
-else
-  ac_cv_gtest_system_install=no
+if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes; then
+  if test x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
+     ac_cv_gtest_system_install=yes
+  elif test "x$ac_cv_have_gtest_libs" = xyes; then
+     ac_cv_gtest_system_install=yes
+     ac_cv_gtest_libs="-lgtest -lgtest_main"
+  else
+     ac_cv_gtest_system_install=no
+  fi
 fi
 
 AC_ARG_WITH([gtest-root],
@@ -810,7 +828,7 @@ if test x$enable_google_test = xyes; then
          ac_cv_gtest_root=""
       fi
    fi
-   if test -z "$ac_cv_gtest_root"; then
+   if test -z "$ac_cv_gtest_root" -a -z "$ac_cv_gtest_libs"; then
       AC_MSG_RESULT([No gtest-root])
       enable_google_test=no
    else
@@ -834,13 +852,28 @@ if test x$enable_google_test = xyes; then
          ac_cv_gtest_headers=$ac_cv_gtest_root/include
       fi
    fi
-   if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
+
+   dnl Fedora installs gmock sources in /usr/src/gmock without a src
+   dnl subdir, unlike Debian or the distribution tarball, so we have to
+   dnl make GMOCK_ROOT include src if it's there.
+
+   if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/gmock-all.cc"; then
+      ac_cv_gmock_src_path="$ac_cv_gmock_root"
+      AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+   elif test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
+      ac_cv_gmock_src_path="$ac_cv_gmock_root/src"
       AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
    else
       if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
-         ac_cv_gmock_root=${GMOCK_ROOT}
+         ac_cv_gmock_src_path=${GMOCK_ROOT}/src
       elif test "x$ac_cv_gtest_system_install" = "xyes"; then
-         ac_cv_gmock_root="/usr/src/gmock"
+         if test "x$ac_cv_file__usr_src_gmock_src_gmock_all_cc" = xyes; then
+            ac_cv_gmock_src_path="/usr/src/gmock/src"
+	 elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
+	    ac_cv_gmock_src_path="/usr/src/gmock"
+	 else
+	    ac_cv_gmock_root=""
+	 fi
       else
          ac_cv_gmock_root=""
       fi
@@ -866,19 +899,21 @@ if test x$enable_google_test = xyes; then
             enable_google_test=no
          fi
       else
-         ac_cv_gmock_headers=$ac_cv_gmock_root/include
+         ac_cv_gmock_headers="$ac_cv_gmock_root/include"
       fi
    fi
    if test "x$enable_google_test" = "xyes"; then
        AC_MSG_RESULT([Yes])
    fi
 fi
-AC_SUBST([GTEST_ROOT], [$ac_cv_gtest_root])
+AC_SUBST([GTEST_LIBS], [$ac_cv_gtest_libs])
+AC_SUBST([GTEST_SRC], [$ac_cv_gtest_root])
 AC_SUBST([GTEST_HEADERS], [$ac_cv_gtest_headers])
-AC_SUBST([GMOCK_ROOT], [$ac_cv_gmock_root])
+AC_SUBST([GMOCK_SRC_PATH], [$ac_cv_gmock_src_path])
+AC_SUBST([GMOCK_SRC], [$ac_cv_gmock_root])
 AC_SUBST([GMOCK_HEADERS], [$ac_cv_gmock_headers])
 AM_CONDITIONAL([WITH_GOOGLE_TEST], [test "x$enable_google_test" = "xyes"])
-
+AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_gtest_libs" != "x"])
 ### --------------------------------------------------------------------------
 ### Register2
 AC_ARG_ENABLE( register2,
