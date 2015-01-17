@@ -36,7 +36,6 @@ TESTS = ${check_PROGRAMS}
 if WITH_GOOGLE_TEST
 test_kvp_value_SOURCES = \
     $(top_srcdir)/$(MODULEPATH)/kvp-value.cpp \
-    $(GTEST_ROOT)/src/gtest_main.cc \
     test-kvp-value.cpp \
     test-kvp-frame.cpp
 
