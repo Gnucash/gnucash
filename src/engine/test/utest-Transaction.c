@@ -40,6 +40,9 @@
 #else
 #define _Q "`"
 #endif
+#if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
+#define USE_CLANG_FUNC_SIG 1
+#endif
 
 static const gchar *suitename = "/engine/Transaction";
 void test_suite_transaction ( void );
@@ -485,7 +488,7 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_book_new ();
     TestSignal sig1 = test_signal_new (NULL, QOF_EVENT_CREATE,NULL);
     Transaction *txn;
-#if defined(__clang__) && __clang_major__ < 6
+#ifdef USE_CLANG_FUNC_SIG
 #define _func "Transaction *xaccMallocTransaction(QofBook *)"
 #else
 #define _func "xaccMallocTransaction"
@@ -1272,7 +1275,7 @@ xaccTransGetAccountBalance (const Transaction *trans,// C: 1  Local: 0:0:0
 static void
 test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 {
-#if defined(__clang__) && __clang_major__ < 6
+#ifdef USE_CLANG_FUNC_SIG
 #define _func "gnc_numeric xaccTransGetAccountBalance(const Transaction *, const Account *)"
 #else
 #define _func "xaccTransGetAccountBalance"

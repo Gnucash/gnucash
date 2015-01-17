@@ -1742,7 +1742,7 @@ test_gnc_timespec_to_iso8601_buff (void)
     gchar *logdomain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
 #if defined(__clang__) && __clang_major__ < 6
-#define _func "gchar *gnc_timespec_to_iso8601_buff(Timespec, char *)"
+#define _func "char *gnc_timespec_to_iso8601_buff(Timespec, char *)"
 #else
 #define _func "char* gnc_timespec_to_iso8601_buff(Timespec, char*)"
 //#define _func "gnc_timespec_to_iso8601_buff"

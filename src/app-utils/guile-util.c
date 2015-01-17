@@ -308,7 +308,7 @@ gnc_split_scm_set_account(SCM split_scm, Account *account)
         return;
 
     guid_to_string_buff(xaccAccountGetGUID(account), guid_string);
-    if (guid_string == NULL)
+    if (strlen(guid_string) == 0)
         return;
 
     arg = scm_from_utf8_string(guid_string);
