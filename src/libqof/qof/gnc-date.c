@@ -654,7 +654,7 @@ gnc_gdate_range_check (GDate *gd)
     int year;
     if (!g_date_valid (gd))
     {
-	g_date_set_dmy (gd, 1, 1, 1970);
+	g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
 	return;
     }
     year = g_date_get_year (gd);
