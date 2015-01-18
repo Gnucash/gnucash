@@ -53,9 +53,6 @@ typedef struct
 typedef struct
 {
     GtkWidget        *acct_info;
-    GtkWidget        *expense_radio;
-    GtkWidget        *asset_radio;
-    GtkWidget        *liab_eq_radio;
     GtkWidget        *account_treeview;
     GtkWidget        *select_button;
     GtkWidget        *num_acct_label;

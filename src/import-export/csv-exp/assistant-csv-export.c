@@ -303,59 +303,23 @@ show_acct_type_accounts (CsvExportInfo *info)
 
     for (type = 0; type < NUM_ACCOUNT_TYPES; type++) /* from Account.h */
     {
-        if (info->csva.account_type == ACCT_TYPE_EXPENSE)
-            Viewinfo.include_type[type] = (type == ACCT_TYPE_EXPENSE);
-        else if (info->csva.account_type == ACCT_TYPE_INCOME)
-            Viewinfo.include_type[type] = (type == ACCT_TYPE_INCOME);
-        else if (info->csva.account_type == ACCT_TYPE_ASSET)
-            Viewinfo.include_type[type] = ((type == ACCT_TYPE_BANK)  ||
-                                           (type == ACCT_TYPE_CASH)      ||
-                                           (type == ACCT_TYPE_ASSET)     ||
-                                           (type == ACCT_TYPE_STOCK)     ||
-                                           (type == ACCT_TYPE_MUTUAL)    ||
-                                           (type == ACCT_TYPE_RECEIVABLE));
-        else if (info->csva.account_type == ACCT_TYPE_LIABILITY)
-            Viewinfo.include_type[type] = ((type == ACCT_TYPE_CREDIT) ||
-                                           (type == ACCT_TYPE_LIABILITY) ||
-                                           (type == ACCT_TYPE_EQUITY)    ||
-                                           (type == ACCT_TYPE_PAYABLE));
-        else
-            Viewinfo.include_type[type] = FALSE;
+        Viewinfo.include_type[type] = ((type == ACCT_TYPE_BANK)      ||
+                                       (type == ACCT_TYPE_CASH)      ||
+                                       (type == ACCT_TYPE_CREDIT)    ||
+                                       (type == ACCT_TYPE_ASSET)     ||
+                                       (type == ACCT_TYPE_LIABILITY) ||
+                                       (type == ACCT_TYPE_STOCK)     ||
+                                       (type == ACCT_TYPE_MUTUAL)    ||
+                                       (type == ACCT_TYPE_INCOME)    ||
+                                       (type == ACCT_TYPE_EXPENSE)   ||
+                                       (type == ACCT_TYPE_EQUITY)    ||
+                                       (type == ACCT_TYPE_RECEIVABLE)||
+                                       (type == ACCT_TYPE_PAYABLE)   ||
+                                       (type == ACCT_TYPE_ROOT)      ||
+                                       (type == ACCT_TYPE_TRADING));
     }
     gnc_tree_view_account_set_view_info (tree, &Viewinfo);
     csv_export_cursor_changed_cb (GTK_WIDGET(tree), info);
-}
-
-
-/*******************************************************
- * account_filter_func
- *
- * update filter for account tree
- *******************************************************/
-static gboolean
-account_filter_func (Account *account, gpointer user_data)
-{
-    CsvExportInfo *info = user_data;
-    gboolean included = FALSE;
-
-    if ((info->csva.account_type == ACCT_TYPE_INCOME) ||
-            (info->csva.account_type == ACCT_TYPE_EXPENSE))
-        included = (xaccAccountGetType (account) == info->csva.account_type);
-    else if (info->csva.account_type == ACCT_TYPE_ASSET)
-        included = ((xaccAccountGetType (account) == ACCT_TYPE_BANK) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_CASH) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_ASSET) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_STOCK) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_MUTUAL) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_RECEIVABLE));
-    else if (info->csva.account_type == ACCT_TYPE_LIABILITY)
-        included = ((xaccAccountGetType (account) == ACCT_TYPE_CREDIT) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_LIABILITY) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_EQUITY) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_PAYABLE));
-    else
-        included = FALSE;
-    return included;
 }
 
 
@@ -438,41 +402,6 @@ csv_export_select_subaccounts_clicked_cb (GtkWidget *widget, gpointer user_data)
     gnc_tree_view_account_select_subaccounts (account_tree, account);
 
     gtk_widget_grab_focus (info->csva.account_treeview);
-}
-
-
-/*******************************************************
- * csv_export_info_acct_type_cb
- *
- * select which type of accounts to display
- *******************************************************/
-static void
-csv_export_info_acct_type_cb (GtkWidget *w, gpointer user_data)
-{
-    CsvExportInfo *info = user_data;
-    const gchar *button_name;
-
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
-    {
-        button_name = gtk_buildable_get_name(GTK_BUILDABLE(w));
-        if (g_strcmp0 (button_name, "income_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_INCOME;
-        else if (g_strcmp0 (button_name, "expense_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_EXPENSE;
-        else if (g_strcmp0 (button_name, "asset_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_ASSET;
-        else if (g_strcmp0 (button_name, "liab_eq_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_LIABILITY;
-        else
-            return;
-
-        show_acct_type_accounts (info);
-        gnc_tree_view_account_refilter
-        (GNC_TREE_VIEW_ACCOUNT (info->csva.account_treeview));
-        update_accounts_tree (info);
-    }
-    else
-        return;
 }
 
 /* =============================================================== */
@@ -862,15 +791,12 @@ csv_export_assistant_create (CsvExportInfo *info)
     {
         GtkTreeView *tree_view;
         GtkTreeSelection *selection;
-        GtkWidget *income_radio, *expense_radio, *asset_radio,
-                  *liab_eq_radio, *box, *label;
+        GtkWidget *box, *label;
 
         info->csva.acct_info = GTK_WIDGET(gtk_builder_get_object (builder, "acct_info_vbox"));
         info->csva.num_acct_label = GTK_WIDGET(gtk_builder_get_object (builder, "num_accounts_label"));
 
         tree_view = gnc_tree_view_account_new (FALSE);
-        gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view),
-                                          account_filter_func, info, NULL);
         info->csva.account_treeview = GTK_WIDGET(tree_view);
 
         selection = gtk_tree_view_get_selection (tree_view);
@@ -884,25 +810,6 @@ csv_export_assistant_create (CsvExportInfo *info)
 
         label = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(tree_view));
-
-        income_radio = GTK_WIDGET(gtk_builder_get_object (builder, "income_radio"));
-        expense_radio = GTK_WIDGET(gtk_builder_get_object (builder, "expense_radio"));
-        info->csva.expense_radio = expense_radio;
-        asset_radio = GTK_WIDGET(gtk_builder_get_object (builder, "asset_radio"));
-        info->csva.asset_radio = asset_radio;
-        liab_eq_radio = GTK_WIDGET(gtk_builder_get_object (builder, "liab_eq_radio"));
-        info->csva.liab_eq_radio = liab_eq_radio;
-        info->csva.account_type = ACCT_TYPE_EXPENSE;
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(expense_radio), TRUE);
-
-        g_signal_connect (G_OBJECT(income_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
-        g_signal_connect (G_OBJECT(expense_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
-        g_signal_connect (G_OBJECT(asset_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
-        g_signal_connect (G_OBJECT(liab_eq_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
 
         /* select subaccounts button */
         button = GTK_WIDGET(gtk_builder_get_object (builder, "select_subaccounts_button"));
