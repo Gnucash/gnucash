@@ -87,7 +87,7 @@ test_gnc_localtime (void)
                       // difference between g_date_time and tm->tm_wday)
                      };
     guint ind;
-#if defined(__clang__) && __clang_major__ < 6
+#if defined(__clang__)
 #define _func "struct tm *gnc_localtime_r(const time64 *, struct tm *)"
 #else
 #define _func "tm* gnc_localtime_r(const time64*, tm*)"
@@ -159,7 +159,7 @@ test_gnc_gmtime (void)
 #endif
     };
     guint ind;
-#if defined(__clang__) && __clang_major__ < 6
+#if defined(__clang__)
 #define _func "struct tm *gnc_gmtime(const time64 *)"
 #else
 #define _func "tm* gnc_gmtime(const time64*)"
@@ -1741,7 +1741,7 @@ test_gnc_timespec_to_iso8601_buff (void)
     gchar *end;
     gchar *logdomain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-#if defined(__clang__) && __clang_major__ < 6
+#if defined(__clang__)
 #define _func "char *gnc_timespec_to_iso8601_buff(Timespec, char *)"
 #else
 #define _func "char* gnc_timespec_to_iso8601_buff(Timespec, char*)"
