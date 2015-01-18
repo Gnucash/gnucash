@@ -22,6 +22,7 @@
  *******************************************************************/
 
 #include <gtest/gtest.h>
+#include <string>
 #include "../gnc-timezone.hpp"
 
 TEST(gnc_timezone_constructors, test_default_constructor)
