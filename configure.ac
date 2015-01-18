@@ -1580,6 +1580,7 @@ AC_CONFIG_FILES(
   accounts/it/Makefile
   accounts/ja/Makefile
   accounts/ko/Makefile
+  accounts/lt/Makefile
   accounts/lv/Makefile
   accounts/nb/Makefile
   accounts/nl/Makefile

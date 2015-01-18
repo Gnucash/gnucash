@@ -664,11 +664,11 @@ static gboolean trans_property_set (TransProperty* prop, char* str)
     case GNC_CSV_DEPOSIT:
     case GNC_CSV_WITHDRAWAL:
         str_dupe = g_strdup (str); /* First, we make a copy so we can't mess up real data. */
-        /* If a cell is empty make its value = 0.0 */
+        /* If a cell is empty make its value = "0" */
         if (strcmp (str_dupe, "") == 0)
         { 
             g_free (str_dupe);
-            str_dupe = g_strdup ("0.0");
+            str_dupe = g_strdup ("0");
         }
         /* Go through str_dupe looking for currency symbols. */
         for (possible_currency_symbol = str_dupe; *possible_currency_symbol;

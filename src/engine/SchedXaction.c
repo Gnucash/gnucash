@@ -1130,8 +1130,11 @@ SXTmpStateData*
 gnc_sx_create_temporal_state(const SchedXaction *sx )
 {
     SXTmpStateData *toRet =
-        g_new0( SXTmpStateData, 1 );
-    toRet->last_date       = sx->last_date;
+	 g_new0( SXTmpStateData, 1 );
+    if (g_date_valid (&(sx->last_date)))
+	 toRet->last_date       = sx->last_date;
+    else
+	g_date_set_dmy (&(toRet->last_date), 1, 1, 1970);
     toRet->num_occur_rem   = sx->num_occurances_remain;
     toRet->num_inst   = sx->instance_num;
     return toRet;

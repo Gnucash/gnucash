@@ -1281,7 +1281,8 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
             case SX_INSTANCE_STATE_POSTPONED:
                 if (inst->orig_state != SX_INSTANCE_STATE_POSTPONED)
                 {
-                    gnc_sx_add_defer_instance(instances->sx, inst->temporal_state);
+		     gnc_sx_add_defer_instance(instances->sx,
+					       gnc_sx_clone_temporal_state (inst->temporal_state));
                 }
                 increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
                 break;
