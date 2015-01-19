@@ -441,12 +441,22 @@
             (define (my-exchange-fn fromunits tocurrency)
               (if (and (gnc-commodity-equiv currency tocurrency)
                        (gnc-commodity-equiv (gnc:gnc-monetary-commodity fromunits) commodity))
-                    (gnc:make-gnc-monetary tocurrency
-                      (gnc-numeric-mul (gnc:gnc-monetary-amount fromunits)
-                                       (if use-txn
-                                           (gnc:gnc-monetary-amount price)
-                                           (gnc-price-get-value price))
-                                       currency-frac GNC-RND-ROUND))
+                    ;; Have a price for this commodity, but not necessarily in the report's
+                    ;; currency.  Get the value in the commodity's currency and convert it to
+                    ;; report currency.
+                    (exchange-fn
+                      ;; This currency will usually be the same as tocurrency so the
+                      ;; call to exchange-fn below will do nothing
+                      (gnc:make-gnc-monetary 
+                        (if use-txn
+                            (gnc:gnc-monetary-commodity price)
+                            (gnc-price-get-currency price))
+                        (gnc-numeric-mul (gnc:gnc-monetary-amount fromunits)
+                                         (if use-txn
+                                             (gnc:gnc-monetary-amount price)
+                                             (gnc-price-get-value price))
+                                         currency-frac GNC-RND-ROUND))
+                      tocurrency)
                     (exchange-fn fromunits tocurrency)))
             
             (gnc:debug "Starting account " (xaccAccountGetName current) ", initial price: " 
@@ -780,6 +790,65 @@
 	       )
 	     (xaccAccountGetSplitList current)
 	     )
+	     
+	    ;; Look for income and expense transactions that don't have a split in the
+	    ;; the account we're processing.  We do this as follow
+	    ;; 1. Make sure the parent account is a currency-valued asset or bank account
+	    ;; 2. If so go through all the splits in that account
+	    ;; 3. If a split is part of a two split transaction where the other split is
+	    ;;    to an income or expense account and the leaf name of that account is the 
+	    ;;    same as the leaf name of the account we're processing, add it to the
+	    ;;    income or expense accumulator
+	    ;;
+	    ;; In other words with an account structure like
+	    ;;
+	    ;;   Assets (type ASSET)
+	    ;;     Broker (type ASSET)
+	    ;;       Widget Stock (type STOCK)
+	    ;;   Income (type INCOME)
+	    ;;     Dividends (type INCOME)
+	    ;;       Widget Stock (type INCOME)
+	    ;;
+	    ;; If you are producing a report on "Assets:Broker:Widget Stock" a 
+	    ;; transaction that debits the Assets:Broker account and credits the 
+	    ;; "Income:Dividends:Widget Stock" account will count as income in 
+	    ;; the report even though it doesn't have a split in the account 
+	    ;; being reported on.
+	    
+	    (let ((parent-account (gnc-account-get-parent current))
+	          (account-name (xaccAccountGetName current)))
+	      (if (and (not (null? parent-account))
+	               (member (xaccAccountGetType parent-account) (list ACCT-TYPE-ASSET ACCT-TYPE-BANK)) 
+	               (gnc-commodity-is-currency (xaccAccountGetCommodity parent-account)))
+	        (for-each
+	          (lambda (split)
+	            (let* ((other-split (xaccSplitGetOtherSplit split)) 
+	                   ;; This is safe because xaccSplitGetAccount returns null for a null split
+	                   (other-acct (xaccSplitGetAccount other-split)))
+	              (if (and (not (null? other-acct))
+	                       (string=? (xaccAccountGetName other-acct) account-name)
+	                       (gnc-commodity-is-currency (xaccAccountGetCommodity other-acct)))
+	                ;; This is a two split transaction where the other split is to an 
+	                ;; account with the same name as the current account.  If it's an
+	                ;; income or expense account accumulate the value of the transaction
+	                (let ((val (xaccSplitGetValue split))
+	                      (curr (xaccAccountGetCommodity other-acct)))
+                          (cond ((split-account-type? other-split ACCT-TYPE-INCOME)
+	                         (gnc:debug "More income " (gnc-numeric-to-string val))
+	                         (dividendcoll 'add curr val))
+                                ((split-account-type? other-split ACCT-TYPE-EXPENSE)
+                                 (gnc:debug "More expense " (gnc-numeric-to-string 
+                                                             (gnc-numeric-neg val)))
+                                 (brokeragecoll 'add curr (gnc-numeric-neg val)))
+	                  ) 
+	                ) 
+	              )
+	            )  
+	          )
+	          (xaccAccountGetSplitList parent-account)
+	        )
+	      )
+	    )
 
 	    (gnc:debug "pricing txn is " pricing-txn)
 	    (gnc:debug "use txn is " use-txn)
