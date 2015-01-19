@@ -59,7 +59,9 @@ typedef enum
     QOF_COMPARE_EQUAL,
     QOF_COMPARE_GT,
     QOF_COMPARE_GTE,
-    QOF_COMPARE_NEQ
+    QOF_COMPARE_NEQ,
+    QOF_COMPARE_CONTAINS,
+    QOF_COMPARE_NCONTAINS
 } QofQueryCompare;
 
 /** List of known core query data-types...

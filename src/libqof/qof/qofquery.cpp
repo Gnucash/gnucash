@@ -1761,6 +1761,10 @@ qof_query_printStringForHow (QofQueryCompare how)
         return "QOF_COMPARE_GTE";
     case QOF_COMPARE_NEQ:
         return "QOF_COMPARE_NEQ";
+    case QOF_COMPARE_CONTAINS:
+        return "QOF_COMPARE_CONTAINS";
+    case QOF_COMPARE_NCONTAINS:
+        return "QOF_COMPARE_NCONTAINS";
     }
 
     return "INVALID HOW";

@@ -1767,6 +1767,7 @@ get_random_query(void)
                                      string,
                                      get_random_boolean (),
                                      get_random_boolean (),
+                                     get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
                                      get_random_queryop ());
             g_free (string);
             break;
@@ -1809,6 +1810,7 @@ get_random_query(void)
                                           string,
                                           get_random_boolean (),
                                           get_random_boolean (),
+                                          get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
                                           get_random_queryop ());
             g_free (string);
             break;
@@ -1845,6 +1847,7 @@ get_random_query(void)
                                    string,
                                    get_random_boolean (),
                                    get_random_boolean (),
+                                   get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
                                    get_random_queryop ());
             g_free (string);
             break;
@@ -1855,6 +1858,7 @@ get_random_query(void)
                                      string,
                                      get_random_boolean (),
                                      get_random_boolean (),
+                                     get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
                                      get_random_queryop ());
             g_free (string);
             break;
@@ -2070,19 +2074,19 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         if (xaccTransGetDescription(trans) && *xaccTransGetDescription(trans) != '\0')
         {
             xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                          TRUE, FALSE, QOF_QUERY_AND);
+                                          TRUE, FALSE, QOF_COMPARE_CONTAINS, QOF_QUERY_AND);
         }
 
         if (xaccTransGetNum(trans) && *xaccTransGetNum(trans) != '\0')
         {
             xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
-                                     TRUE, FALSE, QOF_QUERY_AND);
+                                     TRUE, FALSE, QOF_COMPARE_CONTAINS, QOF_QUERY_AND);
         }
 
         if (xaccSplitGetAction(s) && *xaccSplitGetAction(s) != '\0')
         {
             xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
-                                     TRUE, FALSE, QOF_QUERY_AND);
+                                     TRUE, FALSE, QOF_COMPARE_CONTAINS, QOF_QUERY_AND);
         }
 
         n = xaccSplitGetValue (s);
@@ -2107,7 +2111,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 
         if (xaccSplitGetMemo(s) && *xaccSplitGetMemo(s) != '\0')
         {
-            xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
+            xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_COMPARE_CONTAINS, QOF_QUERY_AND);
         }
 
         {

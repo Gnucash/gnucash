@@ -1558,28 +1558,28 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
             if (!g_strcmp0 (pr_type, "pr-action"))
             {
                 xaccQueryAddActionMatch (q, matchstring, case_sens, use_regexp,
-                                         QOF_QUERY_OR);
+                                         QOF_COMPARE_CONTAINS, QOF_QUERY_OR);
                 ok = TRUE;
 
             }
             else if (!g_strcmp0 (pr_type, "pr-desc"))
             {
                 xaccQueryAddDescriptionMatch (q, matchstring, case_sens,
-                                              use_regexp, QOF_QUERY_OR);
+                                              use_regexp, QOF_COMPARE_CONTAINS, QOF_QUERY_OR);
                 ok = TRUE;
 
             }
             else if (!g_strcmp0 (pr_type, "pr-memo"))
             {
                 xaccQueryAddMemoMatch (q, matchstring, case_sens, use_regexp,
-                                       QOF_QUERY_OR);
+                                       QOF_COMPARE_CONTAINS, QOF_QUERY_OR);
                 ok = TRUE;
 
             }
             else if (!g_strcmp0 (pr_type, "pr-num"))
             {
                 xaccQueryAddNumberMatch (q, matchstring, case_sens, use_regexp,
-                                         QOF_QUERY_OR);
+                                         QOF_COMPARE_CONTAINS, QOF_QUERY_OR);
                 ok = TRUE;
 
             }

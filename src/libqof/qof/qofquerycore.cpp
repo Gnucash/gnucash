@@ -147,22 +147,43 @@ string_match_predicate (gpointer object,
         regmatch_t match;
         if (!regexec (&pdata->compiled, s, 1, &match, 0))
             ret = 1;
-
-    }
-    else if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE)
-    {
-        if (qof_utf8_substr_nocase (s, pdata->matchstring))
-            ret = 1;
-
     }
     else
     {
-        if (strstr (s, pdata->matchstring))
-            ret = 1;
+        if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE)
+        {
+            if (pd->how == QOF_COMPARE_CONTAINS || pd->how == QOF_COMPARE_NCONTAINS)
+            {
+                if (qof_utf8_substr_nocase (s, pdata->matchstring)) //uses strstr
+                    ret = 1;
+            }
+            else
+            {
+                 if (safe_strcasecmp (s, pdata->matchstring) == 0) //uses collate
+                    ret = 1;
+            }
+        }
+        else
+        {
+            if (pd->how == QOF_COMPARE_CONTAINS || pd->how == QOF_COMPARE_NCONTAINS)
+            {
+                if (strstr (s, pdata->matchstring))
+                    ret = 1;
+            }
+            else
+            {
+                if (g_strcmp0 (s, pdata->matchstring) == 0)
+                    ret = 1;
+            }
+        }
     }
 
     switch (pd->how)
     {
+    case QOF_COMPARE_CONTAINS:
+        return ret;
+    case QOF_COMPARE_NCONTAINS:
+        return !ret;
     case QOF_COMPARE_EQUAL:
         return ret;
     case QOF_COMPARE_NEQ:
@@ -264,8 +285,9 @@ qof_query_string_predicate (QofQueryCompare how,
     query_string_t pdata;
 
     g_return_val_if_fail (str, NULL);
-    g_return_val_if_fail (*str != '\0', NULL);
-    g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
+//    g_return_val_if_fail (*str != '\0', NULL);
+    g_return_val_if_fail (how == QOF_COMPARE_CONTAINS || how == QOF_COMPARE_NCONTAINS ||
+                          how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
 
     pdata = g_new0 (query_string_def, 1);
     pdata->pd.type_name = query_string_type;

@@ -318,7 +318,7 @@ xaccQueryAddSingleAccountMatch(QofQuery *q, Account *acc, QofQueryOp op)
 void
 xaccQueryAddStringMatch (QofQuery* q, const char *matchstring,
                          gboolean case_sens, gboolean use_regexp,
-                         QofQueryOp op,
+                         QofQueryCompare how, QofQueryOp op,
                          const char * path, ...)
 {
     QofQueryPredData *pred_data;
@@ -328,7 +328,7 @@ xaccQueryAddStringMatch (QofQuery* q, const char *matchstring,
     if (!path || !q)
         return;
 
-    pred_data = qof_query_string_predicate (QOF_COMPARE_EQUAL, (char *)matchstring,
+    pred_data = qof_query_string_predicate (how, (char *)matchstring,
                                             (case_sens ? QOF_STRING_MATCH_NORMAL :
                                                     QOF_STRING_MATCH_CASEINSENSITIVE),
                                             use_regexp);
@@ -658,32 +658,40 @@ xaccQueryGetLatestDateFound(QofQuery * q)
 
 void
 xaccQueryAddDescriptionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                             QofQueryOp o)
+                             QofQueryCompare h, QofQueryOp o)
 {
-    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS,
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_TRANS,
                              TRANS_DESCRIPTION, NULL);
 }
 
 void
-xaccQueryAddNumberMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                        QofQueryOp o)
+xaccQueryAddNotesMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
+                             QofQueryCompare h, QofQueryOp o)
 {
-    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS,
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_TRANS,
+                             TRANS_NOTES, NULL);
+}
+
+void
+xaccQueryAddNumberMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
+                        QofQueryCompare h, QofQueryOp o)
+{
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_TRANS,
                              TRANS_NUM, NULL);
 }
 
 void
 xaccQueryAddActionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                        QofQueryOp o)
+                        QofQueryCompare h, QofQueryOp o)
 {
-    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_ACTION, NULL);
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_ACTION, NULL);
 }
 
 void
 xaccQueryAddMemoMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                      QofQueryOp o)
+                      QofQueryCompare h, QofQueryOp o)
 {
-    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_MEMO, NULL);
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_MEMO, NULL);
 }
 
 void
