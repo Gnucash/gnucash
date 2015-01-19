@@ -97,6 +97,8 @@ static const gchar *start_trans_string = N_(
             " with the separator specified below.\n\n"
             "There will be multiple rows for each transaction and may"
             " require further manipulation to get them in a format you can use.\n\n"
+            "Each Transaction will appear once in the export and will be listed in"
+            " the order the accounts were processed\n\n"
             "Select the settings you require for the file and then click 'Forward' to proceed"
             " or 'Cancel' to Abort Export.\n");
 
@@ -250,6 +252,7 @@ void load_settings (CsvExportInfo *info)
     info->separator_str = ",";
     info->file_name = NULL;
     info->starting_dir = NULL;
+    info->trans_list = NULL;
 
     /* The default directory for the user to select files. */
     info->starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
