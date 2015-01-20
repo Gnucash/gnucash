@@ -824,8 +824,11 @@
 	          (lambda (split)
 	            (let* ((other-split (xaccSplitGetOtherSplit split)) 
 	                   ;; This is safe because xaccSplitGetAccount returns null for a null split
-	                   (other-acct (xaccSplitGetAccount other-split)))
+	                   (other-acct (xaccSplitGetAccount other-split))
+	                   (parent (xaccSplitGetParent split))
+	                   (txn-date (gnc-transaction-get-date-posted parent)))
 	              (if (and (not (null? other-acct))
+	                       (gnc:timepair-le txn-date to-date)
 	                       (string=? (xaccAccountGetName other-acct) account-name)
 	                       (gnc-commodity-is-currency (xaccAccountGetCommodity other-acct)))
 	                ;; This is a two split transaction where the other split is to an 
