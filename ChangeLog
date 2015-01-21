@@ -1,6 +1,141 @@
+2014-12-30 Romualdas Taluntis
+        * Added Lithuanian language accounts
+
+2014-12-26 John Ralls 
+
+	* Merge branch 'maint' (HEAD, origin/trunk, origin/master, origin/HEAD, master)
+
+2014-12-26 John Ralls 
+
+	* Fix typo in Transaction.c.
+
+2014-12-24 Geert Janssens 
+
+	* Revisit "Bug 741810 - Compilation fails because of creating .gnucash"
+
+2014-12-23 John Ralls 
+
+	* Merge branch 'maint'
+
+2014-12-23 John Ralls 
+
+	* Fix failure to load SX formulas, probably among other things.
+
+2014-12-23 John Ralls 
+
+	* Extract function to clarify intent.
+
+2014-12-22 John Ralls 
+
+	* Bug 741228 - "Red line" threshold applies to Template scheduled transactions
+
+2014-12-10 Mike Alexander 
+
+	* Tell Guile (and others) to look in install/lib/gnucash for libraries. Without this Guile can't find libgncmod-engine and GnuCash won't start. I don't know how this worked before, perhaps because the correct path was in src/bin/overrides/gnucash-env.in
+
+2014-12-23 Francisco 
+
+	* Update Spanish translation
+
+2014-12-23 Geert Janssens 
+
+	* Periodic merge of branch 'maint'
+
+2014-12-23 Geert Janssens 
+
+	* Cherry-pick "Bug 741810 - Compilation fails because of creating .gnucash"
+
+2014-12-23 Geert Janssens 
+
+	* Bug 741810 - Compilation fails because of creating .gnucash
+
+2014-12-23 Geert Janssens 
+
+	* Move code to open report options dialog from guile to C
+
+2014-12-22 Geert Janssens 
+
+	* New business report for printing receipts
+
+2014-12-10 Mike Alexander 
+
+	* Tell Guile (and others) to look in install/lib/gnucash for ligraries. Without this Guile can't find libgncmod-engine and GnuCash won't start, at least sometimes.
+
+2014-12-21 John Ralls 
+
+	* Replace GNC_HOME/bin with gnc_path_get_bindir().
+
+2014-12-21 John Ralls 
+
+	* Adjust #ifdef __clang__ to exclude clang versions > 6
+
+2014-12-21 John Ralls 
+
+	* Bug 739584 - gnucash-2.6.4 segfaults regularly on transfer .
+
+2014-12-21 John Ralls 
+
+	* Fix Guile compiled path in environment.in
+
+2014-12-21 John Ralls 
+
+	* Remove note from the top of environment.in. It's obsolete.
+
+2014-11-17 lmat 
+
+	* Kvp-Frame test cases
+
+2014-12-06 Geert Janssens 
+
+	* Bug 740471 -  Applying payment to invoice Segmentation fault
+
+2014-12-06 Geert Janssens 
+
+	* Bug 740471 -  Applying payment to invoice Segmentation fault
+
+2014-12-06 Geert Janssens 
+
+	* Bug 740471 -  Applying payment to invoice Segmentation fault
+
+2014-12-20 Geert Janssens 
+
+	* Periodic merge of branch 'maint'
+
+2014-12-20 Geert Janssens 
+
+	* Fix crash when running check & repair on an open AP/AR register
+
+2014-12-18 John Ralls 
+
+	* Update News for re-tag of 2.6.5 (tag: 2.6.5a)
+
+2014-12-17 Geert Janssens 
+
+	* Fix lot scrubbing for business lots
+
+2014-12-17 Geert Janssens 
+
+	* Improve comment for gncOwnerAutoApplyPaymentsWithLots
+
+2014-12-15 John Ralls 
+
+	* Release 2.6.5. (tag: 2.6.5)
+
+2014-12-15 John Ralls 
+
+	* Fix msgfmt errors in Indian-language .po files.
+
+2014-12-15 John Ralls 
+
+	* Update translation project po files.
+
 2014-12-14 John Ralls 
 
-	* Still more Guile library path additions, this time in tests. (HEAD, manjusri-maint/maint, maint)
+	* Merge branch 'maint'
+
+2014-12-14 John Ralls 
+
+	* Still more Guile library path additions, this time in tests.
 
 2014-12-14 John Ralls 
 
@@ -12,19 +147,91 @@
 
 2014-12-13 John Ralls 
 
-	* Remove Windows specializations from gnc-date.c (origin/maint)
+	* Remove Windows specializations from gnc-date.c
 
 2014-12-12 John Ralls 
 
 	* Still more Guile precompilation fixes.
 
+2014-12-11 Mike Alexander 
+
+	* Revert "Some type mismatch fixes to make it build with clang in MacOSX Mavericks."
+
+2014-12-11 Mike Alexander 
+
+	* Update XCode project for recent C++ related changes
+
+2014-12-10 Mike Alexander 
+
+	* Tell Guile (and others) to look in install/lib/gnucash for ligraries. Without this Guile can't find libgncmod-engine and GnuCash won't start. I don't know how this worked before, perhaps because the correct path was in src/bin/overrides/gnucash-env.in
+
+2014-12-10 Mike Alexander 
+
+	* Some type mismatch fixes to make it build with clang in MacOSX Mavericks. These may not be the best fixes, but they make things build again with XCode 6.1.1 in MacOSX 10.9.5.
+
 2014-12-08 Mike Alexander 
 
 	* Fix line endings in repository to match recent change to .gitattributes
 
+2014-12-08 Mike Alexander 
+
+	* Fix line endings in repository to match recent change to .gitattributes.
+
+2014-12-08 John Ralls 
+
+	* Ubuntu 14.04's C++ already defines these, so guard them.
+
+2014-12-08 John Ralls 
+
+	* MinGW needs cstdio included to find sprintf.
+
+2014-12-08 John Ralls 
+
+	* More uint fixes.
+
 2014-12-08 VERDOÏA Laurent 
 
 	* French typo correction
+
+2014-12-07 Christoph Holtermann 
+
+	* Correction to Doxygen in gncinvoicefkt.py
+
+2014-12-07 Christoph Holtermann 
+
+	* Small corrections (py invoice template, doxygen)
+
+2014-12-08 VERDOÏA Laurent 
+
+	* French typo correction
+
+2014-12-08 John Ralls 
+
+	* Merge branch 'maint'
+
+2014-12-08 John Ralls 
+
+	* Don't use uint as an alias for unsigned int.
+
+2014-12-07 John Ralls 
+
+	* Work around bug in some versions of gtest which error out on EXPECT_EQ (false, foo).
+
+2014-12-07 John Ralls 
+
+	* Make the gtest section fail properly when presented with the broken Fedora installation of gtest.
+
+2014-12-07 John Ralls 
+
+	* Except latest Apple clang from long-form error messages.
+
+2014-12-07 John Ralls 
+
+	* Fix up test makefiles to provide linkage paths for Guile2.
+
+2014-12-07 John Ralls 
+
+	* More Guile compilation library links, needed in master but not maint.
 
 2014-12-05 Frank H. Ellenberger 
 
@@ -78,9 +285,213 @@
 
 	* Update of de.po -still 530 + 53 to review
 
+2014-12-07 John Ralls 
+
+	* Fix build on older versions of gcc
+
+2014-12-07 John Ralls 
+
+	* C++-numeric: Fix up some 64-bit and GCC problems.
+
+2014-12-05 John Ralls 
+
+	* Merge branch 'c++-numeric'
+
+2014-12-05 John Ralls 
+
+	* Rename QofInt128 to GncInt128.
+
+2014-12-05 John Ralls 
+
+	* Move arithmetic functions into C++ implementation.
+
+2014-12-05 Frank H. Ellenberger 
+
+	* Add ChangeLog.2013 to dist_doc_DATA
+
+2014-12-02 Frank H. Ellenberger 
+
+	* Update of de.po: 152 + 38 remaining
+
+2014-12-04 John Ralls 
+
+	* Rename GncNumeric to GncRational and move to its own files.
+
+2014-12-03 John Ralls 
+
+	* Remove qofmath128, replaced by qofint128.
+
+2014-12-03 John Ralls 
+
+	* Disable rescaling big GncNumerics when there is a pre-calculated auto denom.
+
+2014-12-03 John Ralls 
+
+	* More overflow-avoidance.
+
+2014-12-03 John Ralls 
+
+	* Ensure random numeric denominator is the account SCU when creating splits.
+
+2014-12-03 John Ralls 
+
+	* Prevent overflow.
+
+2014-12-03 John Ralls 
+
+	* Ensure numeric errors aren't stored in split amounts or values.
+
+2014-11-29 John Ralls 
+
+	* A better, clearer approach to constraining random gnc_numerics
+
+2014-11-29 John Ralls 
+
+	* Reimplement gnc_numeric with QofInt128
+
+2014-11-29 John Ralls 
+
+	* Lose the value returns for various reasons of inequality.
+
+2014-11-29 John Ralls 
+
+	* Assert that the quotient and remainder references aren't this.
+
+2014-11-29 John Ralls 
+
+	* Ensure that the sign is correctly preserved and transferred.
+
+2014-11-19 John Ralls 
+
+	* Implement QofInt128.pow.
+
+2014-11-19 John Ralls 
+
+	* Implement QofInt128::gcd and lcm.
+
+2014-11-19 John Ralls 
+
+	* Fix mask error in operator<<= and operator>>=
+
+2014-11-17 John Ralls 
+
+	* Check for incoming overflow and NaN on all class computational operators.
+
+2014-11-17 John Ralls 
+
+	* Extract a class function bits() to return a size value.
+
+2014-11-17 John Ralls 
+
+	* Add bitwise operators and binary operators.
+
+2014-11-17 John Ralls 
+
+	* Some more constructors, for convenience.
+
+2014-11-17 John Ralls 
+
+	* Operators /= and %= plus function div() for QofInt128.
+
+2014-11-17 John Ralls 
+
+	* Add increment, decrement, and shift-eauals operators to QofInt128.
+
+2014-11-17 John Ralls 
+
+	* Add zero and abs functions to QofInt128.
+
+2014-11-09 John Ralls 
+
+	* Implement operator*= for QofInt128
+
+2014-10-29 John Ralls 
+
+	* Begin QofInt128 class.
+
+2014-09-20 John Ralls 
+
+	* More realistic get_random_gnc_numeric()
+
+2014-12-03 John Ralls 
+
+	* Fix gperformance-tools setup and apply it to src/engine/tests.
+
+2014-12-03 Geert Janssens 
+
+	* Yet another guile 2 precompile fix of the German tax report
+
+2014-12-03 Geert Janssens 
+
+	* Fix guile 2 precompilation of German tax report
+
+2014-12-02 John Ralls 
+
+	* Guile compilation: One missed CLEANFILES.
+
+2014-12-02 John Ralls 
+
+	* Fix the *.win32-bin.txt and downloaded.mt940 attributes.
+
+2014-12-02 John Ralls 
+
+	* Guile precompilation: One more missing library-dir.
+
+2014-12-02 John Ralls 
+
+	* Reapply fix of Guile precompilation without unwanted change in gnc-numeric.c.
+
+2014-12-02 John Ralls 
+
+	* Revert "Fix Guile-2.0 precompilation."
+
+2014-12-01 John Ralls 
+
+	* Fix Guile-2.0 precompilation.
+
+2014-12-01 Frank H. Ellenberger 
+
+	* Update of de.po: 351 +50 remaining
+
+2014-11-30 John Ralls 
+
+	* Bug 738477 - WebKit is broken on Win32.
+
+2014-11-18 Robert Fewell 
+
+	* Bug 738462 - CSV Import This patch adds some text to clarify that the transaction export is not a match for the import.
+
+2014-11-19 Robert Fewell 
+
+	* Bug 679791 - Import Template for importing CSV files - part2
+
+2014-11-19 Robert Fewell 
+
+	* Bug 679791 - Import Template for importing CSV files - part 1.
+
+2014-11-30 Frank H. Ellenberger 
+
+	* Update of de.po -still 530 + 53 to review
+
+2014-11-29 Geert Janssens 
+
+	* Merge branch 'master' of https://github.com/c-holtermann/gnucash
+
+2014-11-29 Geert Janssens 
+
+	* Merge branch 'maint'
+
 2014-11-24 Geert Janssens 
 
 	* Python bindings - fix creation of new xml files
+
+2014-11-18 John Ralls 
+
+	* Implement copy and move operator= and move constructor for KvpValueImpl
+
+2014-10-03 lmat 
+
+	* Adding KvpValueImpl test suite
 
 2014-11-17 Geert Janssens 
 
@@ -94,13 +505,73 @@
 
 	* Prevent crash when standards-report dir doesn't exist
 
+2014-11-12 Christoph Holtermann 
+
+	* Small doc changes
+
+2014-11-12 Christoph Holtermann 
+
+	* Change latex_invoices.py to query for all invoices
+
+2014-11-12 Christoph Holtermann 
+
+	* Additional doxygen doc
+
+2014-11-12 Christoph Holtermann 
+
+	* latex_invoices.py includes gncinvoicefkt.py
+
+2014-11-12 Geert Janssens 
+
+	* Fix head-or-tail stylesheet after guile2 compile changes
+
+2014-11-12 Geert Janssens 
+
+	* Periodic merge of branch 'maint'
+
+2014-11-12 Christoph Holtermann 
+
+	* Some doc for gncinvoicefkt.py
+
+2014-11-12 Christoph Holtermann 
+
+	* Doxygen doc extended for python invoice export
+
 2014-11-12 Geert Janssens 
 
 	* Fix parallel make for guile2 compilation
 
+2014-11-12 Christoph Holtermann 
+
+	* small fixes for doxygen
+
+2014-11-12 Christoph Holtermann 
+
+	* polishing the template
+
 2014-11-12 Geert Janssens 
 
 	* QIF Import crashes when closing via the 'X' button on the last page
+
+2014-11-11 Christoph Holtermann 
+
+	* Invoice templates
+
+2014-11-11 Christoph Holtermann 
+
+	* locale formatting added
+
+2014-11-11 Christoph Holtermann 
+
+	* This question has been solved
+
+2014-11-11 Christoph Holtermann 
+
+	* Querying and listing all invoices now possible
+
+2014-11-10 Christoph Holtermann 
+
+	* Invoice.tex is to be created not to be on github
 
 2014-11-04 Geert Janssens 
 
@@ -130,6 +601,14 @@
 
 	* Harmonize variable names used to refer to guile modules in all makefiles
 
+2014-11-10 Christoph Holtermann 
+
+	* Merge remote-tracking branch 'upstream/master'
+
+2014-11-10 Christoph Holtermann 
+
+	* Create invoices from templates with jinja2
+
 2014-10-15 Jeff Earickson 
 
 	* Assamese Indic Language translation file (Devanagari script)
@@ -138,9 +617,49 @@
 
 	* Add Assamese Indic Language (as) to LINGUAS
 
+2014-11-04 Carsten Rinke 
+
+	* Bug 731589 - Add account level selection on accounts option tab
+
 2014-11-08 Cristian Marchi 
 
 	* Update Italian translation.
+
+2014-10-31 lmat 
+
+	* Added quotes to gtest section in configure.ac
+
+2014-11-07 John Ralls 
+
+	* Fix stray left-over line which prevented most of the engine tests from running.
+
+2014-11-06 John Ralls 
+
+	* Build glib gtester based tests under check_PROGRAMS, run under TESTS
+
+2014-11-06 Christian Stimming 
+
+	* Update CMakeLists after recent file addition
+
+2014-10-03 lmat 
+
+	* Implement KvpFrame in C++ using std::vector
+
+2014-11-02 Christoph Holtermann 
+
+	* Merge branch 'master' of https://github.com/Gnucash/gnucash
+
+2014-10-31 lmat 
+
+	* Fixed kvp-value delete
+
+2014-10-30 John Ralls 
+
+	* Modify gtest/gmock tests to work around demented test implementation in Debian
+
+2014-10-21 John Ralls 
+
+	* Add Google Test and Google Mock
 
 2014-10-17 Sébastien Villemot 
 
@@ -153,6 +672,10 @@
 2014-10-25 Geert Janssens 
 
 	* Fix invocations of guile function 'load-from-path'
+
+2014-10-23 John Ralls 
+
+	* Fix missed file in fabbfdb0.
 
 2014-10-21 Geert Janssens 
 
@@ -214,6 +737,10 @@
 
 	* Aqbanking transfer: Make IBAN and BIC text entry fields filter digits or alphas correctly as needed.
 
+2014-10-07 lmat 
+
+	* Removing another deprecated #define
+
 2014-10-13 Geert Janssens 
 
 	* Some minor cosmetics in the barchart code
@@ -232,7 +759,23 @@
 
 2014-10-13 Frank H. Ellenberger 
 
+	* Merge branch 'maint'
+
+2014-10-13 Frank H. Ellenberger 
+
 	* Add report forms T-Account/Vertical and account types Active/Passive to glossary.
+
+2014-10-09 John Ralls 
+
+	* Fix a couple of build-breakages on Debian.
+
+2014-10-08 Christian Stimming 
+
+	* Aqbanking: Add display of aqbanking subaccountid in initial correspondence setup
+
+2014-09-19 lmat 
+
+	* Implement KvpValue in c++ using boost::variant
 
 2014-10-06 John Ralls 
 
@@ -242,9 +785,25 @@
 
 	* Update Farsi translation from the Translation Project.
 
+2014-10-02 Frank H. Ellenberger 
+
+	* Merge branch 'maint'
+
+2014-10-02 John Ralls 
+
+	* Fix implicit declaration error (function is private).
+
 2014-10-02 Ralf Habacker 
 
 	* Adapt german SKR03 account template to updated tax rate.
+
+2014-10-02 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2014-10-02 Frank H. Ellenberger 
+
+	* Allow GUILE1_PROGS as m4 name
 
 2014-10-02 Frank H. Ellenberger 
 
@@ -266,6 +825,10 @@
 
 	* Ensure that the root account is saved to the SQL backend.
 
+2014-09-27 Geert Janssens 
+
+	* Bug 695610 - GnuCash Tax Invoice for Australia
+
 2014-09-20 Robert Fewell 
 
 	* This patch allows the ability to skip rows when importing transactions.
@@ -273,6 +836,10 @@
 2014-09-23 valdis 
 
 	* Updated resource files for Latvian: po/lv.po and  accounts/lv/acctchrt_business.gnucash-xea
+
+2014-09-17 Simon Arlott 
+
+	* Bug 647230 - Display the blank split after the "now" line instead of at the end
 
 2014-09-27 Chenxiong Qi 
 
@@ -314,6 +881,10 @@
 
 	* Telugu Language Translation file.
 
+2014-09-26 Christian Stimming 
+
+	* Aqbanking online SEPA transfer: Allow transfers without BIC, only IBAN. Also add IBAN checking.
+
 2014-09-25 Jeff Earickson 
 
 	* Marathi Language Translation File.
@@ -325,6 +896,14 @@
 2014-09-25 Jeff Earickson 
 
 	* Hindi Language Translation file
+
+2014-09-20 Robert Fewell 
+
+	* This patch changes some strings.
+
+2014-09-26 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-09-26 Geert Janssens 
 
@@ -406,6 +985,14 @@
 
 	* Bug 732545 - gnucash-2.6.3 segfaults when started
 
+2014-09-21 John Ralls 
+
+	* Update gnucash-design.texi for removing old kvp_value macro.
+
+2014-09-21 Geert Janssens 
+
+	* Merge branch 'maint'
+
 2014-09-21 Mark Haanen 
 
 	* Update Dutch translation, copied from the Translation Project.
@@ -430,6 +1017,38 @@
 
 	* Provide strfmon function for platforms that don't have it
 
+2014-09-17 lmat 
+
+	* Removing deprecated #define
+
+2014-09-19 John Ralls 
+
+	* Fix the underlying non-literal-null-conversion instead of suppressing
+
+2014-09-19 Geert Janssens 
+
+	* Fix distcheck after introduction of finance quote man pages
+
+2014-09-19 Geert Janssens 
+
+	* Use consistent sorting in POTFILES.in
+
+2014-09-19 Geert Janssens 
+
+	* Fix distcheck after introduction of new stylesheet
+
+2014-09-16 lmat 
+
+	* Removed binary from kvpvalues
+
+2014-09-16 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2014-07-06 Carsten Rinke 
+
+	* introduce new stylesheet Head-or-Tail
+
 2014-09-16 David Maline 
 
 	* Bug 733506 - (ForwadDisableQIF) The forward button is not active even though a file is selected
@@ -440,7 +1059,23 @@
 
 2014-09-16 Geert Janssens 
 
+	* Merge branch 'maint'
+
+2014-09-16 Geert Janssens 
+
 	* Align perl module requirements with recent Finance::Quote versions
+
+2014-09-08 Christian Stimming 
+
+	* Fix aqbanking handling of transaction templates.
+
+2014-09-07 John Ralls 
+
+	* Fix bad getter for account-trans-retrieval
+
+2014-09-07 Christian Stimming 
+
+	* Add failing unittest for aqbanking lookup of trans_retrieval date.
 
 2014-09-06 Dmitry Pavlov 
 
@@ -452,11 +1087,23 @@
 
 2014-09-06 Alex Aycinena 
 
+	* Merge branch 'maint'
+
+2014-09-06 Alex Aycinena 
+
 	* Correct txf output to use a minus sign, rather than parenthesis, for debits, without regard to locale settings, as is required by the txf pseudo-standard; was previously incorrectly using parenthesis for negatives in Windows environments, for example.
+
+2014-09-05 John Ralls 
+
+	* Merge branch 'maint'
 
 2014-08-12 lmat 
 
 	* Replace C++ reserved words for future compatibility with C++
+
+2014-09-04 John Ralls 
+
+	* Merge branch 'maint'
 
 2014-09-04 John Ralls 
 
@@ -473,6 +1120,38 @@
 2014-09-03 hawk-lord 
 
 	* Added Swedish account files
+
+2014-09-04 John Ralls 
+
+	* Fix build on OSX, which doesn't allow linking shared modules.
+
+2014-09-03 hawk-lord 
+
+	* Missing translation
+
+2014-09-03 hawk-lord 
+
+	* Added Swedish association accounts.
+
+2014-09-03 hawk-lord 
+
+	* Added Swedish account files
+
+2014-09-03 Jethro Beekman 
+
+	* Bug 733186 - [PATCH] Extend account tree view search function
+
+2014-09-03 Geert Janssens 
+
+	* Bug 689489 - Be able to show file location
+
+2014-09-02 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2014-09-02 Frank H. Ellenberger 
+
+	* Bug 684719 - Man pages for gnc-fq-* perl scripts
 
 2014-09-02 Geert Janssens 
 
@@ -558,6 +1237,10 @@
 
 	* Bug 711440 - Tab labels have different background colour than containing gui element
 
+2014-09-02 Mike Alexander 
+
+	* Merge branch 'maint'
+
 2014-09-01 Mike Alexander 
 
 	* Bug 735769: Enable price and shares cells in a split if it is not in the trans currency. The label for the cells are changed to "Exch. Rate" and "Oth. Curr." in this case.
@@ -565,6 +1248,14 @@
 2014-09-01 Mike Alexander 
 
 	* If the cursor moves from one register cell to another, refresh the register headers. If trading accounts are on and the transaction is expanded then the headers depend on the type of split the cursor is in.
+
+2014-09-01 Christian Stimming 
+
+	* Aqbanking transfer: Make IBAN and BIC text entry fields filter digits or alphas correctly as needed.
+
+2014-08-31 Mike Alexander 
+
+	* Merge branch 'maint'
 
 2014-07-01 Mike Alexander 
 
@@ -582,13 +1273,93 @@
 
 	* The sense of the "Only show active customers" checkbox was inverted.
 
+2014-08-31 Christian Stimming 
+
+	* Get the Aqbanking transfer action to work again: Revert part of 7faed6540162ccd1fe.
+
+2014-08-30 Christian Stimming 
+
+	* Make aqbanking kvp test really working.
+
+2014-08-29 Christian Stimming 
+
+	* Add some initial aqbanking test with example file that should demonstrate the hbci template kvp problem.
+
 2014-08-29 Geert Janssens 
 
 	* Bug 707243 - Hard-coded font colors in account tree?
 
+2014-08-29 Christian Stimming 
+
+	* Gtkmm wrappers: Adapt to setting qof_instance_set_dirty as private functions.
+
+2014-08-29 Christian Stimming 
+
+	* CMake: Update build system to build again.
+
+2014-08-25 Geert Janssens 
+
+	* Improve messages in account hierarchy assistant.
+
+2014-07-31 John Ralls 
+
+	* Balance ENTER with a LEAVE for all exit points.
+
+2014-08-01 John Ralls 
+
+	* Divide the value by the rate to get the amount.
+
+2014-08-01 John Ralls 
+
+	* Prevent assigning capital gains splits to lots.
+
+2014-08-14 Mike Alexander 
+
+	* Merge branch 'maint'
+
 2014-08-14 Mike Alexander 
 
 	* Bug 722140: Add option to control inclusion of trading accounts in cash flow report.
+
+2014-08-14 Mike Alexander 
+
+	* Remove an AC_MSG_CHECKING/AC_MSG_RESULT that is redundant and confusing.
+
+2014-08-08 Mike Evans 
+
+	* Bug 734168 - Tax invoice can be a bill too.
+
+2014-08-08 John Ralls 
+
+	* POTFILES.in resulting from previous make-gnucash-potfiles changes.
+
+2014-08-08 John Ralls 
+
+	* Remove a bunch of no-longer-existing files from POTFILES.skip.
+
+2014-08-08 John Ralls 
+
+	* Add *.cpp to the search pattern for files to translate.
+
+2014-08-08 John Ralls 
+
+	* Use perl instead of grep to scan POTFILES.ignore and POTFILES.skip
+
+2014-08-07 John Ralls 
+
+	* Fix problem with gcc-4.9 failing to compile gfec.c.
+
+2014-08-07 John Ralls 
+
+	* Merge branch 'guidcpp'
+
+2014-08-04 John Ralls 
+
+	* Add gnc-date.cpp to POTFILES.in
+
+2014-08-07 John Ralls 
+
+	* Merge branch 'maint'
 
 2014-08-07 John Ralls 
 
@@ -618,9 +1389,33 @@
 
 	* Bill invoice importer crashing when invoice has multiple lines.
 
+2014-08-06 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2014-08-04 John Ralls 
+
+	* Two minor tweaks to pass make check.
+
+2014-08-04 John Ralls 
+
+	* Merge branch 'guidcpp' of https://github.com/limitedAtonement/gnucash
+
+2014-08-04 John Ralls 
+
+	* Add gnc-date.cpp to POTFILES.in
+
+2014-08-04 John Ralls 
+
+	* Replace built-in md5 hashing with GChecksum
+
 2014-06-28 Michalis Kamprianis 
 
 	* Bug 120199 - Incorrect sort order in "Sort by Statement Date"
+
+2014-07-30 lmat 
+
+	* Added new tests.
 
 2014-08-01 Geert Janssens 
 
@@ -646,13 +1441,113 @@
 
 	* Update Swedish translation
 
+2014-07-28 lmat 
+
+	* Simplified some of the GUID code.
+
+2014-07-28 lmat 
+
+	* Cleaned up some code and comments.
+
+2014-07-28 lmat 
+
+	* Removed the md5 file and updated the build system.
+
+2014-07-27 John Ralls 
+
+	* Fix a couple of minor issues noticed by Robert Frewell.
+
+2014-07-25 lmat 
+
+	* Remove guid_init and guid_shutdown
+
+2014-07-25 lmat 
+
+	* Corrected uses of guid_to_string.
+
+2014-07-25 lmat 
+
+	* Cleared up GUID construction and allocation
+
+2014-07-25 lmat 
+
+	* Rename guid_new to guid_replace
+
+2014-06-11 lmat 
+
+	* Implement GUID using boost's implementation
+
+2014-07-21 John Ralls 
+
+	* Really make it 1.48 instead of 1.49.
+
+2014-07-21 John Ralls 
+
+	* Lower Boost minimum version to 1.48.0 per user request.
+
+2014-07-13 Mike Alexander 
+
+	* Merge branch 'maint'
+
 2014-07-13 Mike Alexander 
 
 	* Bug 733107: Search for reconcile status doesn't work right.
 
+2014-07-05 Mike Alexander 
+
+	* Use symbols to access lot owner type and owner GUID properties.
+
+2014-07-05 Mike Alexander 
+
+	* Fix crash in gncOwnerGetOwnerFromLot due to clobbered stack variable.
+
+2014-07-04 Geert Janssens 
+
+	* Disable non-literal-null-conversion warning issued by clang
+
+2014-07-03 Geert Janssens 
+
+	* More '\0' -> NULL replacements to avoid clang warnings
+
+2014-07-03 John Ralls 
+
+	* Revert unintended restoration of AC_MSG_RESULT.
+
+2014-07-02 John Ralls 
+
+	* Replace '\0' with NULL as char* argument, avoiding warning.
+
+2014-07-02 John Ralls 
+
+	* Fix typo from 859866a.
+
+2014-07-02 Mike Alexander 
+
+	* Properly nest AC_MSG_CHECKING and AC_MSG_RESULT calls to avoid confusing output.
+
+2014-07-02 John Ralls 
+
+	* Replace clang check with ax_check_compile_flags for -Wno-deprecated-register
+
+2014-07-01 Mike Alexander 
+
+	* Use guint64 instead of uint64_t with G_GUINT64_FORMAT to avoid warnings.
+
+2014-07-01 Mike Alexander 
+
+	* Merge branch 'maint'
+
+2014-07-01 Mike Alexander 
+
+	* Merge branch 'maint' into 'master'
+
 2014-07-01 Geert Janssens 
 
 	* Drop packaging/win32
+
+2014-06-29 John Ralls 
+
+	* Don't try to use -Wno-deprecated-register with Clang.
 
 2014-06-21 Geert Janssens 
 
@@ -665,6 +1560,54 @@
 2014-06-21 Geert Janssens 
 
 	* Revert "Bug726674-BudgetReverseSignSupport"
+
+2014-06-19 Carsten Rinke 
+
+	* Bug 726535 - Budget BarChart Report - add option to change to a line chart
+
+2014-06-16 John Ralls 
+
+	* Merge branch 'c++-build'
+
+2014-06-16 John Ralls 
+
+	* Add Boost requirement to CMake.
+
+2014-06-15 John Ralls 
+
+	* Allow C/C++ extensions
+
+2014-05-02 lmat 
+
+	* Added a GUID test suite
+
+2014-05-19 John Ralls 
+
+	* Disable C++11 deprecation warning for register storage class
+
+2014-05-02 John Ralls 
+
+	* Better test for conflict between optimization and FORTIFY_SOURCE
+
+2014-05-02 John Ralls 
+
+	* Don't override CFLAGS, CPPFLAGS, etc.
+
+2014-05-02 John Ralls 
+
+	* Add optional use of Google Profiler.
+
+2014-05-02 John Ralls 
+
+	* Add dependency on Boost.
+
+2014-05-01 John Ralls 
+
+	* Check for C++11 support, fail if it's not there.
+
+2014-05-30 John Ralls 
+
+	* Fix reaches end of function error
 
 2014-06-10 Geert Janssens 
 
@@ -697,6 +1640,14 @@
 2014-06-08 John Ralls 
 
 	* 725366 - Formula Parsing Error with Scheduled Mortgage Transactions
+
+2014-05-29 Christoph Holtermann 
+
+	* Some adjustments, new IPython version
+
+2014-06-06 Geert Janssens 
+
+	* Merge branch 'maint' into master
 
 2014-05-29 Christoph Holtermann 
 
@@ -766,6 +1717,14 @@
 
 	* 722200 - configure script does not pick the correct am_cv_scanf version
 
+2014-05-29 Christoph Holtermann 
+
+	* Some adjustments, new IPython version
+
+2014-05-29 Christoph Holtermann 
+
+	* no instance necessary anymore
+
 2014-05-27 John Ralls 
 
 	* More fix-ups for the renumber subaccounts dialog.
@@ -780,11 +1739,27 @@
 
 2014-05-25 Mike Alexander 
 
+	* Merge branch 'maint'
+
+2014-05-25 Mike Alexander 
+
 	* Always use the price we display to calculate the current value of an account.
 
 2014-05-10 Michalis Kamprianis 
 
 	* Bug 719457 - Template for Home Mortgage Loan isn't properly nested.
+
+2014-05-20 Geert Janssens 
+
+	* Rename xaccAccountGetNrSplits to xaccAccountCountSplits for api consistency
+
+2014-05-03 Michalis Kamprianis 
+
+	* Bug 541541 - RFE: auto-hide unused accounts
+
+2014-05-20 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-03-26 Frédéric Perrin 
 
@@ -806,6 +1781,10 @@
 
 	* Merge branch 'scheduled_tx_i18n_prefix' of https://github.com/zeldigas/gnucash into maint
 
+2014-05-15 John Ralls 
+
+	* A truly ancient bug, discovered with an Xcode-5.1 compiler warning.
+
 2014-05-19 Geert Janssens 
 
 	* Bug 610202 - gnucash silently closes when no X11/$DISPLAY is present
@@ -814,13 +1793,33 @@
 
 	* added context to ambigous i18n keys for scheduled transaction add/edit dialog
 
+2014-05-18 John Ralls 
+
+	* Allow building for mac integration with gcc-4.8
+
+2014-05-15 Mike Evans 
+
+	* Python bindings.  Add function gncVendorNextID, complementary to gncCustomerNextID.
+
+2014-05-13 Mike Alexander 
+
+	* Merge branch 'maint'
+
 2014-05-13 Mike Alexander 
 
 	* The cash flow report should ignore splits in trading accounts.
 
+2014-04-26 Michalis Kamprianis 
+
+	* Bug 728136 - Rate in Job
+
 2014-05-13 Simon Arlott 
 
 	* Bug 699687 - Add a configuration option to not display "since last run" window when opening a file
+
+2014-05-13 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-05-13 Geert Janssens 
 
@@ -842,17 +1841,77 @@
 
 	* Bug 688965 - Page Up, Page Down keys cause GnuCash to hang
 
+2014-05-08 John Ralls 
+
+	* Replace glib 2.34-or-later g_list_copy_deep
+
+2014-05-08 Geert Janssens 
+
+	* Merge branch 'maint'
+
 2014-05-08 Geert Janssens 
 
 	* Fix document type dispay for credit notes on owner report
+
+2014-05-08 Geert Janssens 
+
+	* Fix sign for credit notes on owner report
+
+2014-05-08 Amm 
+
+	* Add sale and tax columns
+
+2014-05-08 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-05-08 Amm 
 
 	* Better period totals formatting
 
+2014-05-03 Mike Alexander 
+
+	* Update the XCode project for C++ changes
+
+2014-05-07 Geert Janssens 
+
+	* Reapply "Fix bad qof_instance crash in dialog-payments"
+
+2014-05-07 Geert Janssens 
+
+	* Reapply "Fix typo in test-engine-kvp-properties."
+
+2014-05-07 Geert Janssens 
+
+	* Fixes necessary to marry private-kvp branch with c++ work
+
+2014-05-07 Geert Janssens 
+
+	* Merge branch 'private-kvp' into master again
+
+2014-05-07 Geert Janssens 
+
+	* Revert "Merge branch 'private-kvp'"
+
+2014-05-07 Geert Janssens 
+
+	* Revert "Fix typo in test-engine-kvp-properties."
+
+2014-05-07 Geert Janssens 
+
+	* Revert "Fix bad qof_instance crash in dialog-payments"
+
+2014-05-05 Mike Alexander 
+
+	* Merge branch 'maint'
+
 2014-05-05 Mike Alexander 
 
 	* Don't nest AC_MSG_CHECKING calls, it produces confuing output.
+
+2014-05-05 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-05-05 Colin 
 
@@ -868,15 +1927,47 @@
 
 2014-05-05 Geert Janssens 
 
+	* Merge branch 'maint'
+
+2014-05-05 Geert Janssens 
+
 	* Fix crash with libdib >= 0.9.0
+
+2014-05-04 John Ralls 
+
+	* Fix bad qof_instance crash in dialog-payments
 
 2014-05-02 Mike Alexander 
 
 	* Better test for conflict between optimization and FORTIFY_SOURCE
 
+2014-05-02 John Ralls 
+
+	* Better test for conflict between optimization and FORTIFY_SOURCE
+
+2014-05-02 Herbert Muehlenberurger 
+
+	* Fix typo in test-engine-kvp-properties.
+
+2014-05-02 Geert Janssens 
+
+	* Merge branch 'maint'
+
 2014-05-02 Geert Janssens 
 
 	* Add _FORTIFY_SOURCE directive only when compiling with optimization enabled
+
+2014-05-01 John Ralls 
+
+	* Merge branch 'private-kvp'
+
+2014-05-01 John Ralls 
+
+	* Replace direct kvp access with qof_book_save_options.
+
+2014-05-01 John Ralls 
+
+	* Convert capital gains kvp access to properties on Split.
 
 2014-04-28 Jeff Earickson 
 
@@ -894,9 +1985,21 @@
 
 	* Addition of the Bodo language (brx) in Devanagari Script.
 
+2014-04-28 Christian Stimming 
+
+	* CMake: Remove removed file from cmake, so that it compiles fine again.
+
+2014-04-28 Geert Janssens 
+
+	* Merge branch 'maint'
+
 2014-04-28 Geert Janssens 
 
 	* Revert error on warning default when building from svn
+
+2014-04-28 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-01-17 Gary Bilkus 
 
@@ -906,6 +2009,18 @@
 
 	* Win32: Fix configure.ac to cope with new gcc not understanding no-undefined flag
 
+2014-04-27 John Ralls 
+
+	* C++: Rename files to be compiled as C++ to foo.cpp
+
+2014-04-27 John Ralls 
+
+	* C++ Windows fixes.
+
+2014-04-27 Mike Alexander 
+
+	* Merge branch 'maint'
+
 2014-04-26 Mike Alexander 
 
 	* Ignore SIGTTOU while importing Python console class.
@@ -913,6 +2028,26 @@
 2014-04-25 Mike Alexander 
 
 	* Fix code that customizes parameters for specific gcc versions to agree with the comments.
+
+2014-04-26 Mike Alexander 
+
+	* Bug 729001: Fix a minor typo affecting the profile option in the previous commit
+
+2014-04-26 Mike Alexander 
+
+	* Bug 729001: fix more build errors related to partial switch to C++.
+
+2014-04-26 John Ralls 
+
+	* Revert addition of lprofiler
+
+2014-04-26 John Ralls 
+
+	* C++: Fix compiler warnings from gcc-4.7 on Fedora 18
+
+2014-04-26 John Ralls 
+
+	* Bug 729001 - Work around warnings invalid for C++
 
 2014-04-26 Geert Janssens 
 
@@ -926,6 +2061,22 @@
 
 	* Fix price quotes after removal of yahoo-get-historical-quotes
 
+2014-04-25 Mike Alexander 
+
+	* Merge branch 'maint'
+
+2014-04-25 John Ralls 
+
+	* Merge branch 'c++-build'
+
+2014-04-25 John Ralls 
+
+	* Compile LibQOF as C++
+
+2014-04-22 John Ralls 
+
+	* Remove unused partial book handling.
+
 2014-04-24 Michalis Kamprianis 
 
 	* Minor corrections
@@ -933,6 +2084,10 @@
 2014-04-16 Moritz Lipp 
 
 	* Use libsecret if available
+
+2014-04-24 Geert Janssens 
+
+	* Merge branch 'maint'
 
 2014-04-24 Geert Janssens 
 
@@ -970,6 +2125,10 @@
 
 	* Bug726449 - Budget Barchart does not show up if running sum is selected
 
+2014-04-18 John Ralls 
+
+	* Merge branch 'maint' * Morritz Lipp's libdbi-0.9.0 compatibility fix * Morritz Lipp's realloc return value fix * Re-enable save and enable loading of $GNC_DOT_DIR/accelerator-map on OSX
+
 2014-04-17 Moritz Lipp 
 
 	* Correct usage of realloc in gnc_xml_be_get_file_lock
@@ -982,9 +2141,21 @@
 
 	* Re-enable loading and saving gnucashdotdir/accelerator-home on OSX
 
+2014-04-17 Geert Janssens 
+
+	* Periodic merge of branch 'maint'
+
 2014-04-15 Moritz Lipp 
 
 	* Replace deprecated g_dirname
+
+2014-02-22 Dmitry Pavlov 
+
+	* Implemented ranged report generation. User can build budget report on selected periods instead on all of them. Not included periods can be "folded" as a columns with summed values. To support report settings saving and range 'types' can be used instead of exact period numbers
+
+2014-04-12 John Ralls 
+
+	* Set revision on master branch to 2.6.99
 
 2014-04-07 Christian Stimming 
 
@@ -2482,6 +3653,22 @@
 
 	* Fix Application Menu Preferences Item
 
+2013-11-10 John Ralls 
+
+	* Fake edit level for tests and SQL backend.
+
+2013-11-10 John Ralls 
+
+	* Move edit level assert to persistent class set_property functions.
+
+2013-11-10 John Ralls 
+
+	* Fix Application Menu Preferences Item
+
+2013-11-10 John Ralls 
+
+	* Fix SX value calculation.
+
 2013-11-08 Mike Alexander 
 
 	* Handle multi-currency transactions in registers without a default currency. Editing a multi-currency transaction in a serach results register sometimes sets the exchange rate to 1 instead of the value you want.
@@ -2489,6 +3676,18 @@
 2013-11-05 Christian Stimming 
 
 	* Bug #711493: Fix unselected account that is NULL.
+
+2013-11-05 John Ralls 
+
+	* Fix a qof_instance_set call outside of an edit.
+
+2013-11-05 John Ralls 
+
+	* Ensure that all qof_instance_get target variables are initialized
+
+2013-11-05 John Ralls 
+
+	* Update dependencies and versions
 
 2013-11-05 John Ralls 
 
@@ -2505,6 +3704,122 @@
 2013-11-04 Geert Janssens 
 
 	* Use proper conversion modifier for unsigned int
+
+2013-11-04 John Ralls 
+
+	* Assert on entry to qof_instance_set() if editlevel is 0
+
+2013-10-27 John Ralls 
+
+	* Add a call to $TESTS_ENVIRONMENT in tests:
+
+2013-10-27 John Ralls 
+
+	* Contain getting slots for gnc_options_db inside QofBook
+
+2013-10-27 John Ralls 
+
+	* replace qof_book_kvp_changed with qof_instance_set_dirty
+
+2013-10-26 John Ralls 
+
+	* Remove QofBook KVP access for several options
+
+2013-10-21 John Ralls 
+
+	* Replace business kvp access with properties.
+
+2013-10-21 John Ralls 
+
+	* Replace Import KVP access with properties.
+
+2013-10-21 John Ralls 
+
+	* Replace usage of SX kvp access with SX properties.
+
+2013-10-21 John Ralls 
+
+	* Add GncOwner kvp properties
+
+2013-10-21 John Ralls 
+
+	* Add Transaction kvp properties from-sched-xaction, online-id.
+
+2013-10-21 John Ralls 
+
+	* Add several kvp properties to Account
+
+2013-10-21 John Ralls 
+
+	* Add kvp properties sx-credit-numeric, sx-debit-numeric, ax-shares, and online-id to Split.
+
+2013-10-27 John Ralls 
+
+	* Transfer the account-matching functions from import-export to Account
+
+2013-10-27 John Ralls 
+
+	* Use online-id properties of Account, Transaction, & Split
+
+2013-10-27 John Ralls 
+
+	* Remove QofBook functions qof_book_get_slots & qof_book_kvp_changed
+
+2013-10-27 John Ralls 
+
+	* Move features hash creation to QofBook
+
+2013-10-17 John Ralls 
+
+	* New Split properties sx-account, sx-credit-formula, sx-debit-formula
+
+2013-10-17 John Ralls 
+
+	* Remove kvp-data as a QofInstance object property
+
+2013-10-17 John Ralls 
+
+	* Replace xaccSplitCopy with xaccSplitCopyNoKvp and xaccSplitCopyKvp
+
+2013-10-16 John Ralls 
+
+	* Add xaccTransCopyNoKvm
+
+2013-10-15 John Ralls 
+
+	* Add properties "invoice", "owner-type", and "owner-guid"
+
+2013-10-15 John Ralls 
+
+	* Add Transaction property "invoice"
+
+2013-10-15 John Ralls 
+
+	* Add Account property "lot-next-id"
+
+2013-10-15 John Ralls 
+
+	* Remove convenience functions which return a pointer to kvm_data.
+
+2013-10-15 John Ralls 
+
+	* Move the capital gains account creation from cap-gains.c to Account.c
+
+2013-10-15 John Ralls 
+
+	* Remove unused functions.
+
+2013-10-15 John Ralls 
+
+	* Wrap g_object_get/set with qof_instance_get/set
+
+2013-10-15 John Ralls 
+
+	* Make most QofInstance functions private.
+
+2013-10-15 John Ralls 
+
+	* Provide for easily moving GValues to and from KVP
 
 2013-11-03 John Ralls 
 
