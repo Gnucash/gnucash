@@ -28,6 +28,11 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 using namespace gnc::date;
 
+using duration = boost::posix_time::time_duration;
+using time_zone = boost::local_time::custom_time_zone;
+using dst_offsets = boost::local_time::dst_adjustment_offsets;
+using calc_rule_ptr = boost::local_time::dst_calc_rule_ptr;
+
 #if PLATFORM(WINDOWS)
 /* libstdc++ to_string is broken on MinGW with no real interest in fixing it.
  * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52015
@@ -115,10 +120,9 @@ windows_tz_names (HKEY key)
 static TZ_Ptr
 zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 {
-    using duration = boost::posix_time::time_duration;
     using ndate = boost::gregorian::nth_day_of_the_week_in_month;
     using nth_day_rule = boost::local_time::nth_day_of_the_week_in_month_dst_rule;
-    using time_zone = boost::local_time::custom_time_zone;
+   using make_week_num = static_cast<boost::date_time::nth_kday_of_month<boost::gregorian::date>::week_num>;
 
     duration std_off (0, regtzi.StandardBias - regtzi.Bias, 0);
     duration dlt_off (0, regtzi.DaylightBias, 0);
@@ -126,15 +130,14 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 			 regtzi.StandardDate.wSecond);
     duration end_time (regtzi.DaylightDate.wHour, regtzi.DaylightDate.wMinute,
 		       regtzi.DaylightDate.wSecond);
-    boost::local_time::dst_adjustment_offsets offsets (dlt_off, start_time,
-						       end_time);
-    auto std_week_num = static_cast<boost::date_time::nth_kday_of_month<boost::gregorian::date>::week_num>(regtzi.StandardDate.wDay);
-    auto dlt_week_num = static_cast<boost::date_time::nth_kday_of_month<boost::gregorian::date>::week_num>(regtzi.DaylightDate.wDay);
+    dst_offsets offsets (dlt_off, start_time, end_time);
+    auto std_week_num = make_week_num(regtzi.StandardDate.wDay);
+    auto dlt_week_num = make_week_num(regtzi.DaylightDate.wDay);
     ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
 		 regtzi.StandardDate.wMonth);
     ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
 	      regtzi.DaylightDate.wMonth);
-    boost::local_time::dst_calc_rule_ptr dates(new nth_day_rule (start, end));
+    calc_rule_ptr dates(new nth_day_rule (start, end));
     return TZ_Ptr(new time_zone(names, std_off, offsets, dates));
 }
 
@@ -210,6 +213,8 @@ TimeZoneProvider::load_windows_classic_tz (HKEY key, time_zone_names names)
     RegCloseKey (key);
 }
 
+TimeZoneProvider::TimeZoneProvider ()  : TimeZoneProvider ("")) {}
+
 TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
     zone_vector ()
 {
@@ -241,13 +246,340 @@ TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
     else
 	throw std::invalid_argument ("No data for TZ " + key_name);
 }
-#else
+#elif PLATFORM(POSIX)
 using std::to_string;
-TimeZoneProvider::TimeZoneProvider(const std::string& tzname)
+#include <istream>
+#include <cstdlib>
+
+using boost::posix_time::ptime;;
+//To enable using Transition with different meanings for IANA files
+//and for DSTRules.
+namespace IANAParser
 {
+    struct TZHead
+    {
+	char magic[4];
+	char version;
+	uint8_t reserved[15];
+	uint8_t ttisgmtcnt[4];
+	uint8_t ttisstdcnt[4];
+	uint8_t leapcnt[4];
+	uint8_t timecnt[4];
+	uint8_t typecnt[4];
+	uint8_t charcnt[4];
+    };
+
+    struct TTInfo
+    {
+	uint32_t gmtoff;
+	uint8_t isdst;
+	uint8_t abbrind;
+    };
+
+    struct TZInfo
+    {
+	TTInfo info;
+	std::string name;
+	bool isstd;
+	bool isgmt;
+    };
+
+    struct Transition
+    {
+	time_t timestamp;
+	uint8_t index;
+    };
+
+    static std::ifstream
+    find_tz_file(const std::string& name)
+    {
+	if (name.empty())
+	    return std::ifstream("/etc/localtime", std::ios::binary);
+
+	std::string tzname = name;
+//POSIX specifies that that identifier should begin with ':', but we
+//should be liberal. If it's there, it's not part of the filename.
+	if (tzname[0] == ':')
+	    tzname.erase(tzname.begin());
+	if (tzname[0] == '/') //Absolute filename
+	    return std::ifstream(tzname, std::ios::binary);
+
+	std::string tzdir = std::getenv("TZDIR");
+	if (tzdir.empty())
+	    tzdir = "/usr/share/zoneinfo";
+//Note that we're not checking the filename.
+	return std::ifstream(std::move(tzdir + "/" + tzname), std::ios::binary);
+    }
+
+  struct IANAParser
+    {
+	IANAParser(const std::string& name) : IANAParser(find_tz_file(name)) {}
+	IANAParser(std::ifstream ifs);
+	std::vector<Transition>transitions;
+	std::vector<TZInfo>tzinfo;
+	int last_year;
+    };
+
+    IANAParser::IANAParser(std::ifstream ifs)
+    {
+	if (! ifs)
+	    throw std::invalid_argument("The timezone string failed to resolve to a valid filename");
+
+	TZHead tzh;
+	auto timesize = sizeof(int32_t);
+	last_year = 2037; //Constrained by 32-bit time_t.
+	ifs.get(reinterpret_cast<char*>(&tzh), sizeof(tzh));
+	auto time_count = *reinterpret_cast<uint32_t*>(tzh.timecnt);
+	auto type_count = *reinterpret_cast<uint32_t*>(tzh.typecnt);
+	auto char_count = *reinterpret_cast<uint32_t*>(tzh.charcnt);
+	auto isgmt_count = *reinterpret_cast<uint32_t*>(tzh.ttisgmtcnt);
+	auto isstd_count = *reinterpret_cast<uint32_t*>(tzh.ttisstdcnt);
+	auto leap_count = *reinterpret_cast<uint32_t*>(tzh.leapcnt);
+	if (tzh.version == '2' && sizeof(time_t) == sizeof(int64_t))
+	{
+	    ifs.seekg(sizeof(tzh) +
+		     timesize + sizeof(uint8_t) * time_count +
+		     sizeof(TTInfo) * type_count +
+		     sizeof(char) * char_count +
+		     sizeof(uint8_t) * isgmt_count +
+		     sizeof(uint8_t) * isstd_count +
+		     2 * timesize * leap_count +
+		     sizeof(tzh));
+	    timesize = sizeof(int64_t);
+	    //This might change at some point in the probably very distant future.
+	    last_year = 2499;
+	}
+
+	transitions.reserve(time_count);
+	tzinfo.reserve(type_count);
+
+	for(auto tr : transitions)
+	{
+	    uint8_t time[sizeof(time_t)];
+	    ifs.get(reinterpret_cast<char*>(time), timesize);
+	    tr.timestamp = *reinterpret_cast<time_t*>(time);
+	}
+
+	for (auto tr : transitions)
+	{
+	    char idx;
+	    ifs.get(idx);
+	    tr.index = std::move(idx);
+	}
+
+	for(auto tz : tzinfo)
+	{
+	    char infochars[sizeof(TTInfo)];
+	    ifs.get(infochars, sizeof(TTInfo));
+	    tz.info = *reinterpret_cast<TTInfo*>(infochars);
+	}
+
+	try
+	{
+	    std::unique_ptr<char[]>abbrev(new char[char_count]);
+	    ifs.get(abbrev.get(), char_count);
+
+	    for (auto tz : tzinfo)
+	    {
+		tz.name = abbrev[tz.info.abbrind];
+	    }
+	}
+	catch(std::bad_alloc)
+	{
+	    ;
+	}
+
+	if (isstd_count == type_count)
+	{
+	    char foo;
+	    for (auto tz : tzinfo)
+	    {
+		ifs.get(foo);
+		tz.isstd = foo != '\0';
+	    }
+	    for (auto tz : tzinfo)
+	    {
+		ifs.get(foo);
+		tz.isgmt = foo != '\0';
+	    }
+	}
+    }
 }
 
+namespace DSTRule
+{
+    using gregorian_date = boost::gregorian::date;
+    using IANAParser::TZInfo;
+    using ndate = boost::gregorian::nth_day_of_the_week_in_month;
+    using week_num =
+	boost::date_time::nth_kday_of_month<boost::gregorian::date>::week_num;
+
+    struct Transition
+    {
+	Transition() : month(0), dow(0), week(static_cast<week_num>(0)) {}
+	Transition(gregorian_date date);
+	bool operator==(const Transition& rhs);
+	ndate get();
+	boost::gregorian::greg_month month;
+	boost::gregorian::greg_weekday dow;
+	week_num week;
+    };
+
+    Transition::Transition(gregorian_date date) :
+	month(date.month()), dow(date.day_of_week()),
+	week(static_cast<week_num>((7 + date.day() - date.day_of_week()) / 7 + 1))
+    {}
+
+    bool
+    Transition::operator==(const Transition& rhs)
+    {
+	return (month == rhs.month && dow == rhs.dow && week == rhs.week);
+    }
+
+    ndate
+    Transition::get()
+    {
+	return ndate(week, dow, month);
+    }
+
+    struct DSTRule
+    {
+	DSTRule();
+	DSTRule(const TZInfo& info1, const TZInfo& info2,
+		ptime date1, ptime date2);
+	bool operator==(const DSTRule& rhs) const noexcept;
+	bool operator!=(const DSTRule& rhs) const noexcept;
+	Transition to_std;
+	Transition to_dst;
+	duration to_std_time;
+	duration to_dst_time;
+	const TZInfo& std_info;
+	const TZInfo& dst_info;
+    };
+
+    DSTRule::DSTRule() : to_std(), to_dst(), to_std_time {}, to_dst_time {},
+	std_info (), dst_info () {};
+
+    DSTRule::DSTRule (const TZInfo& info1, const TZInfo& info2,
+		      ptime date1, ptime date2) :
+	to_std(date1.date()), to_dst(date2.date()),
+	to_std_time(date1.time_of_day()), to_dst_time(date2.time_of_day()),
+	std_info(info1), dst_info(info2)
+    {
+	if (info1.info.isdst == info2.info.isdst)
+	    throw(std::invalid_argument("Both infos have the same dst value."));
+	if (info1.info.isdst && !info2.info.isdst)
+	{
+	    std::swap(to_std, to_dst);
+	    std::swap(to_std_time, to_dst_time);
+	    std::swap(std_info, dst_info);
+	}
+	if (dst_info.isgmt) to_dst_time += boost::posix_time::seconds(dst_info.info.gmtoff);
+	if (std_info.isgmt) to_std_time += boost::posix_time::seconds(std_info.info.gmtoff);
+
+    }
+
+    bool
+    DSTRule::operator==(const DSTRule& rhs) const noexcept
+    {
+	return (to_std == rhs.to_std &&
+		to_dst == rhs.to_dst &&
+		to_std_time == rhs.to_std_time &&
+		to_dst_time == rhs.to_dst_time &&
+		&std_info == &rhs.std_info &&
+		&dst_info == &rhs.dst_info);
+    }
+
+    bool
+    DSTRule::operator!=(const DSTRule& rhs) const noexcept
+    {
+	return ! operator==(rhs);
+    }
+}
+
+static TZ_Entry
+zone_no_dst(int year, IANAParser::TZInfo std_info)
+{
+    using boost::local_time::dst_calc_rule;
+
+    time_zone_names names(std_info.name, std_info.name, nullptr, nullptr);
+    duration std_off(0, 0, std_info.info.gmtoff);
+    dst_offsets offsets(NULL);
+    TZ_Ptr tz(new time_zone(names, std_off, offsets, dst_calc_rule));
+    return std::make_pair(year, tz);
+}
+
+static TZ_Entry
+zone_from_rule(int year, DSTRule::DSTRule rule)
+{
+    using boost::gregorian::partial_date;
+    using boost::local_time::partial_date_dst_rule;
+    using nth_day_rule =
+	boost::local_time::nth_day_of_the_week_in_month_dst_rule;
+
+    time_zone_names names(rule.std_info.name, rule.std_info.name,
+			  rule.dst_info.name, rule.dst_info.name);
+    duration std_off(0, 0, rule.std_info.info.gmtoff);
+    duration dlt_off(0, 0,
+		     rule.dst_info.info.gmtoff - rule.std_info.info.gmtoff);
+    dst_offsets offsets(dlt_off, rule.to_dst_time, rule.to_std_time);
+    calc_rule_ptr dates(new nth_day_rule(rule.to_dst.get(), rule.to_std.get()));
+    TZ_Ptr tz(new time_zone(names, std_off, offsets, dates));
+    return std::make_pair(year, tz);
+}
+
+TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
+{
+    IANAParser::IANAParser parser(tzname);
+    auto last_info = std::find_if(parser.tzinfo,
+				  [](IANAParser::TZInfo& tz)
+				  {return !tz.info.isdst;});
+    auto last_time = ptime();
+    DSTRule::DSTRule last_rule;
+    for (auto txi = parser.transitions.begin();
+	 txi != parser.transitions.end(); ++txi)
+    {
+	auto this_info = parser.tzinfo[txi->index];
+	auto this_time = boost::posix_time::from_time_t(txi->timestamp);
+	auto this_year = this_time.date().year();
+	auto last_year = last_time.date().year();
+	//Initial case, gap in transitions > 1 year, non-dst zone
+	//change. In the last case the exact date of the change will be
+	//wrong because boost::local_date::timezone isn't able to
+	//represent it. For GnuCash's purposes this isn't likely to be
+	//important as the last time this sort of transition happened
+	//was 1946, but we have to handle the case in order to parse
+	//the tz file.
+	if (last_time.is_not_a_date_time() ||
+	    this_year - last_year > 1 ||
+	    last_info.info.isdst == this_info.info.isdst)
+	{
+	    zone_vector.push_back(zone_no_dst(this_year, last_info));
+	}
+
+	else
+	{
+	    DSTRule::DSTRule new_rule(last_info, this_info,
+			     last_time.date(), this_time.date());
+	    if (new_rule != last_rule)
+	    {
+		last_rule = new_rule;
+		zone_vector.push_back(zone_from_rule (this_time.date().year(),
+						      new_rule));
+	    }
+	}
+	last_time = this_time;
+	last_info = this_info;
+    }
+
+    if (last_time.is_not_a_date_time() ||
+	last_time.date().year() < parser.last_year)
+	zone_vector.push_back(zone_no_dst(9999, last_info));
+    else //Last DST rule forever after.
+	zone_vector.push_back(zone_from_rule(9999, last_rule));
+}
 #endif
+
 
 TZ_Ptr
 TimeZoneProvider::get(int year)
