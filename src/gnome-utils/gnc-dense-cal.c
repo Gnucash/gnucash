@@ -261,7 +261,7 @@ _gdc_get_view_options(void)
 static void
 gnc_dense_cal_init(GncDenseCal *dcal)
 {
-    gboolean colorAllocSuccess;
+    gboolean colorAllocSuccess[MAX_COLORS];
 
     gtk_widget_push_composite_child();
 
@@ -348,10 +348,14 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     gdk_color_parse(MONTH_THIS_COLOR,  &dcal->weekColors[MONTH_THIS]);
     gdk_color_parse(MONTH_THAT_COLOR,  &dcal->weekColors[MONTH_THAT]);
+
+    /* success array must be as big as number of colors */
+    g_assert(MAX_COLORS == (sizeof(colorAllocSuccess)/sizeof(gboolean)));
+
     if (gdk_colormap_alloc_colors(gdk_colormap_get_system(),
                                   dcal->weekColors,
                                   MAX_COLORS, TRUE, TRUE,
-                                  &colorAllocSuccess) > 0)
+                                  colorAllocSuccess) > 0)
     {
         g_error("error allocating colors");
     }
