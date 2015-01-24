@@ -472,8 +472,9 @@ PKG_CHECK_MODULES(GUILE,
                   [m4_ifdef([GUILE_PROGS],
                             [ GUILE_PROGS
                               gnc_have_guile_2=yes ],
-                            [ AC_MSG_ERROR([ guile 2 is found on your system, but appears
-    to export different autoconf macros than what we expected. Please report this as a bug
+                            [ AC_MSG_ERROR([ guile 2 is found on your system, but we did
+    find the right autoconf macros. Please rerun autogen.sh first. If this
+    does not solve the problem, please report this as a bug
     in GnuCash, so we can fix this for your platform.]) ])
                   ],
                   [AC_MSG_ERROR([
