@@ -719,7 +719,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         {
             gncEntrySetBillAccount (entry, acc);
             gnc_exp_parser_parse (price, &value, NULL);
-            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
             gncEntrySetBillPrice (entry, value);
             gncEntrySetBillTaxable (entry, text2bool (taxable));
             gncEntrySetBillTaxIncluded (entry, text2bool (taxincluded));
@@ -732,13 +731,11 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetNotes (entry, notes);
             gncEntrySetInvAccount (entry, acc);
             gnc_exp_parser_parse (price, &value, NULL);
-            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
             gncEntrySetInvPrice (entry, value);
             gncEntrySetInvTaxable (entry, text2bool (taxable));
             gncEntrySetInvTaxIncluded (entry, text2bool (taxincluded));
             gncEntrySetInvTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
             gnc_exp_parser_parse (discount, &value, NULL);
-            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
             gncEntrySetInvDiscount (entry, value);
             gncEntrySetInvDiscountType (entry, text2disc_type (disc_type));
             gncEntrySetInvDiscountHow (entry, text2disc_how (disc_how));
