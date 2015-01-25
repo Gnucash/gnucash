@@ -647,6 +647,8 @@ static gboolean trans_property_set (TransProperty* prop, char* str)
 {
     char *endptr, *possible_currency_symbol, *str_dupe;
     gnc_numeric val;
+    int reti;
+    regex_t regex;
     switch (prop->type)
     {
     case GNC_CSV_DATE:
@@ -664,9 +666,11 @@ static gboolean trans_property_set (TransProperty* prop, char* str)
     case GNC_CSV_DEPOSIT:
     case GNC_CSV_WITHDRAWAL:
         str_dupe = g_strdup (str); /* First, we make a copy so we can't mess up real data. */
-        /* If a cell is empty make its value = "0" */
-        if (strcmp (str_dupe, "") == 0)
-        { 
+        /* If a cell is empty or just spaces make its value = "0" */
+        reti = regcomp(&regex, "[0-9]", 0);
+        reti = regexec(&regex, str_dupe, 0, NULL, 0);
+        if (reti == REG_NOMATCH)
+        {
             g_free (str_dupe);
             str_dupe = g_strdup ("0");
         }
