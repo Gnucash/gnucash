@@ -262,7 +262,7 @@ make_menu (GNCSearchCoreType *fe)
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
 
     gnc_combo_box_search_add(combo, _("contains"), SEARCH_STRING_CONTAINS);
-    gnc_combo_box_search_add(combo, _("equal"), SEARCH_STRING_EQUAL);
+    gnc_combo_box_search_add(combo, _("equals"), SEARCH_STRING_EQUAL);
     gnc_combo_box_search_add(combo, _("matches regex"),
                              SEARCH_STRING_MATCHES_REGEX);
     gnc_combo_box_search_add(combo, _("does not match regex"),
