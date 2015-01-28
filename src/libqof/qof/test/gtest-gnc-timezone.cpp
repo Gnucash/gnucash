@@ -38,12 +38,22 @@ TEST(gnc_timezone_constructors, test_default_constructor)
 
 TEST(gnc_timezone_constructors, test_pacific_time_constructor)
 {
-    TimeZoneProvider tzp ("Pacific Standard Time");
+#if PLATFORM(WINDOWS)
+    std::string timzone("Pacific Standard Time");
+#else
+    std::string timezone("America/Los_Angeles");
+#endif
+    TimeZoneProvider tzp (timezone);
     EXPECT_NO_THROW (tzp.get(2006));
     TZ_Ptr tz = tzp.get (2006);
 
     EXPECT_FALSE(tz->std_zone_abbrev().empty());
-    EXPECT_TRUE(tz->std_zone_abbrev() == "Pacific Standard Time");
+#if PLATFORM(WINDOWS)
+    EXPECT_TRUE(tz->std_zone_abbrev() == timezone);
+#else
+    EXPECT_TRUE(tz->std_zone_abbrev() == "PST");
+    EXPECT_TRUE(tz->dst_zone_abbrev() == "PDT");
+#endif
     EXPECT_TRUE(tz->base_utc_offset().hours() == -8);
 }
 
