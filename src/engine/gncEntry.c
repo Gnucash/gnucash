@@ -1327,7 +1327,6 @@ gncEntryRecomputeValues (GncEntry *entry)
     /* Determine the commodity denominator */
     denom = get_entry_commodity_denom (entry);
 
-    gncEntryBeginEdit (entry);
     /* Compute the invoice values */
     gncEntryComputeValue (entry->quantity, entry->i_price,
                           (entry->i_taxable ? entry->i_tax_table : NULL),
@@ -1360,8 +1359,6 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->b_tax_value_rounded = gnc_numeric_convert (entry->b_tax_value, denom,
                                  GNC_HOW_RND_ROUND_HALF_UP);
     entry->values_dirty = FALSE;
-    mark_entry (entry);
-    gncEntryCommitEdit (entry);
 }
 
 /* The "Int" functions below are for internal use only.
