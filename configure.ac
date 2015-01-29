@@ -1117,23 +1117,40 @@ then
 
   ###-----------------------------------------------------------------------
   ## Find a suitable password store
+  AC_ARG_ENABLE([password-storage],
+                AS_HELP_STRING([--disable-password-storage], [Ignore system wide password stores such as gnome-keyring, libsecret or Apple's keychain]))
 
-  case $host_os in
+  have_password_storage=no
+  if test "x$enable_password_storage" != "xno"
+  then
+    case $host_os in
     darwin*)
+      have_password_storage=yes
       AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
       ;;
     *)
       PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
-          [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
-          [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
+          [have_password_storage=yes
+           AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])
+          ],
+          [dummy_not_found=true])
 
       PKG_CHECK_MODULES(LIBSECRET, libsecret-1 >= "0.18",
-          [AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])],
-          [AC_DEFINE(HAVE_NO_LIBSECRET,1,[System has no suitable libsecret service])])
-      AC_SUBST(LIBSECRET_CFLAGS)
-      AC_SUBST(LIBSECRET_LIBS)
+          [have_password_storage=yes
+           AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])
+           AC_SUBST(LIBSECRET_CFLAGS)
+           AC_SUBST(LIBSECRET_LIBS)
+          ],
+          [dummy_not_found=true])
       ;;
-  esac
+    esac
+  fi
+
+  if test "x$have_password_storage" = "xno" && test "x$enable_password_storage" = "xyes"
+  then
+      AC_MSG_ERROR([password storage requested but no suitable backend found. Either gnome-keyring >= 0.6, libsecret >= 0.18 or Apple's keychain are supported])
+  fi
+
 
   ### ----------------------------------------------------------------------
 
