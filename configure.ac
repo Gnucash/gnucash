@@ -1550,7 +1550,6 @@ AC_CONFIG_FILES(
   dnl # non-makefiles
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
-  src/engine/iso-currencies-to-c
   src/gnome/gnucash.desktop.in
   dnl # GSettings schema files
   src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
