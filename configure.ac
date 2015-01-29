@@ -452,31 +452,16 @@ AC_CHECK_FUNCS(gethostid link)
 
 # - check minimum version
 # - determine GUILE_CFLAGS and GUILE_LIBS
-# Note: systems that install both guile 1.8 and guile 2 use different
-#       names for the 1.8 and 2.0 autoconf macros to avoid conflicts.
-#       So the tests below will check for known macro names in the order
-#       that we assume will always result in the proper macros being called
-#       for the guile version that has been detected.
 gnc_have_guile_2=no
 gnc_have_guile_www=no
 PKG_CHECK_MODULES(GUILE,
-                  [guile-1.8 >= 1.8.5],
-                  [m4_ifdef([GUILE1_8_PROGS],
-                            [ GUILE1_8_PROGS ],
-                            [ m4_ifdef([GUILE1_PROGS],
-                                       [ GUILE1_PROGS ],
-                                       [ GUILE_PROGS ])])
-                  ], [
-  PKG_CHECK_MODULES(GUILE,
                   [guile-2.0 >= 2.0.0],
-                  [m4_ifdef([GUILE_PROGS],
-                            [ GUILE_PROGS
-                              gnc_have_guile_2=yes ],
-                            [ AC_MSG_ERROR([ guile 2 is found on your system, but we did
-    find the right autoconf macros. Please rerun autogen.sh first. If this
-    does not solve the problem, please report this as a bug
-    in GnuCash, so we can fix this for your platform.]) ])
-                  ],
+		  [gnc_have_guile_2=yes
+		  GUILE_EFFECTIVE_VERSION=2.0
+		  AC_PATH_PROG([GUILD], guild)],
+   [PKG_CHECK_MODULES(GUILE,
+                  [guile-1.8 >= 1.8.5],
+		  [GUILE_EFFECTIVE_VERSION=1.8],
                   [AC_MSG_ERROR([
     guile does not appear to be installed correctly, or is not in the
     correct version range.  Perhaps you have not installed the guile
@@ -484,9 +469,9 @@ PKG_CHECK_MODULES(GUILE,
   ])])
 ])
 
-AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
+AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "x${gnc_have_guile_2}" = xyes)
 AC_SUBST(GUILE_EFFECTIVE_VERSION)
-
+AC_SUBST(GUILE, [`pwd`/gnc-guile])
 
 ### --------------------------------------------------------------------------
 ### SWIG version checks (only when building from SCM)

@@ -6,6 +6,11 @@ GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
 noinst_DATA = make-gnucash-potfiles
 
+noinst_PROGRAMS    = gnc-guile
+gnc_guile_SOURCES = util/guile.c
+gnc_guile_CFLAGS  = ${GUILE_CFLAGS}
+gnc_guile_LDADD   = ${GUILE_LIBS}
+
 dist_doc_DATA = \
   AUTHORS \
   COPYING \
