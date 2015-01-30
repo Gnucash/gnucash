@@ -23,7 +23,7 @@ TESTS_ENVIRONMENT = \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_srcdir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/.libs \
-  $(shell $(top_builddir)/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
   
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets below, instead of the usual @...@.  This prevents autoconf

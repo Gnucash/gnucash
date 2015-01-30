@@ -1575,7 +1575,6 @@ AC_CONFIG_FILES(
   dnl # init-commands go here
 )
 # A few files need extra actions at creation time
-AC_CONFIG_FILES([src/gnc-test-env], [chmod u+x src/gnc-test-env])
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT

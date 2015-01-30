@@ -34,6 +34,6 @@ TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GUILE="${GUILE}" \
   GNC_BUILDDIR="${abs_top_builddir}" \
-  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 EXTRA_DIST = test-load-module
