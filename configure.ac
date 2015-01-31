@@ -473,6 +473,11 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "x${gnc_have_guile_2}" = xyes)
 AC_SUBST(GUILE_EFFECTIVE_VERSION)
 AC_SUBST(GUILE, [`pwd`/gnc-guile])
 
+AC_CHECK_HEADERS(ltdl.h,
+         [],
+         [AC_MSG_ERROR([ltdl.h not found. Perhaps you need to install
+the intltool-ltdl development packages ?])])
+
 ### --------------------------------------------------------------------------
 ### SWIG version checks (only when building from SCM)
 #
