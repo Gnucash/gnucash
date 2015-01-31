@@ -40,7 +40,6 @@ doc/tip_of_the_day.list
 gnucash-*.*.*.tar.*
 gnucash-*.*.*/
 install-sh
-intl-scm/guile-strings.c
 intltool-extract
 intltool-extract.in
 intltool-merge

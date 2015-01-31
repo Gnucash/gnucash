@@ -41,7 +41,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/core-utils \
 
 TESTS_ENVIRONMENT = \
   GNC_TEST_FILES=${srcdir}/test-files \
-  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
   test-link \

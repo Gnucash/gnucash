@@ -468,30 +468,16 @@ AC_CHECK_FUNCS(gethostid link)
 
 # - check minimum version
 # - determine GUILE_CFLAGS and GUILE_LIBS
-# Note: systems that install both guile 1.8 and guile 2 use different
-#       names for the 1.8 and 2.0 autoconf macros to avoid conflicts.
-#       So the tests below will check for known macro names in the order
-#       that we assume will always result in the proper macros being called
-#       for the guile version that has been detected.
 gnc_have_guile_2=no
 gnc_have_guile_www=no
 PKG_CHECK_MODULES(GUILE,
-                  [guile-1.8 >= 1.8.5],
-                  [m4_ifdef([GUILE1_8_PROGS],
-                            [ GUILE1_8_PROGS ],
-                            [ m4_ifdef([GUILE1_PROGS],
-                                       [ GUILE1_PROGS ],
-                                       [ GUILE_PROGS ])])
-                  ], [
-  PKG_CHECK_MODULES(GUILE,
                   [guile-2.0 >= 2.0.0],
-                  [m4_ifdef([GUILE_PROGS],
-                            [ GUILE_PROGS
-                              gnc_have_guile_2=yes ],
-                            [ AC_MSG_ERROR([ guile 2 is found on your system, but appears
-    to export different autoconf macros than what we expected. Please report this as a bug
-    in GnuCash, so we can fix this for your platform.]) ])
-                  ],
+		  [gnc_have_guile_2=yes
+		  GUILE_EFFECTIVE_VERSION=2.0
+		  AC_PATH_PROG([GUILD], guild)],
+   [PKG_CHECK_MODULES(GUILE,
+                  [guile-1.8 >= 1.8.5],
+		  [GUILE_EFFECTIVE_VERSION=1.8],
                   [AC_MSG_ERROR([
     guile does not appear to be installed correctly, or is not in the
     correct version range.  Perhaps you have not installed the guile
@@ -499,9 +485,14 @@ PKG_CHECK_MODULES(GUILE,
   ])])
 ])
 
-AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
+AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "x${gnc_have_guile_2}" = xyes)
 AC_SUBST(GUILE_EFFECTIVE_VERSION)
+AC_SUBST(GUILE, [`pwd`/gnc-guile])
 
+AC_CHECK_HEADERS(ltdl.h,
+         [],
+         [AC_MSG_ERROR([ltdl.h not found. Perhaps you need to install
+the intltool-ltdl development packages ?])])
 
 ### --------------------------------------------------------------------------
 ### SWIG version checks (only when building from SCM)
@@ -1305,23 +1296,40 @@ then
 
   ###-----------------------------------------------------------------------
   ## Find a suitable password store
+  AC_ARG_ENABLE([password-storage],
+                AS_HELP_STRING([--disable-password-storage], [Ignore system wide password stores such as gnome-keyring, libsecret or Apple's keychain]))
 
-  case $host_os in
+  have_password_storage=no
+  if test "x$enable_password_storage" != "xno"
+  then
+    case $host_os in
     darwin*)
+      have_password_storage=yes
       AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
       ;;
     *)
       PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
-          [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
-          [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
+          [have_password_storage=yes
+           AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])
+          ],
+          [dummy_not_found=true])
 
       PKG_CHECK_MODULES(LIBSECRET, libsecret-1 >= "0.18",
-          [AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])],
-          [AC_DEFINE(HAVE_NO_LIBSECRET,1,[System has no suitable libsecret service])])
-      AC_SUBST(LIBSECRET_CFLAGS)
-      AC_SUBST(LIBSECRET_LIBS)
+          [have_password_storage=yes
+           AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])
+           AC_SUBST(LIBSECRET_CFLAGS)
+           AC_SUBST(LIBSECRET_LIBS)
+          ],
+          [dummy_not_found=true])
       ;;
-  esac
+    esac
+  fi
+
+  if test "x$have_password_storage" = "xno" && test "x$enable_password_storage" = "xyes"
+  then
+      AC_MSG_ERROR([password storage requested but no suitable backend found. Either gnome-keyring >= 0.6, libsecret >= 0.18 or Apple's keychain are supported])
+  fi
+
 
   ### ----------------------------------------------------------------------
 
@@ -1599,7 +1607,6 @@ AC_CONFIG_FILES(
   checks/Makefile
   doc/Makefile
   doc/examples/Makefile
-  intl-scm/Makefile
   lib/Makefile
   lib/libc/Makefile
   lib/stf/Makefile
@@ -1724,7 +1731,6 @@ AC_CONFIG_FILES(
   dnl # non-makefiles
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
-  src/engine/iso-currencies-to-c
   src/gnome/gnucash.desktop.in
   dnl # GSettings schema files
   src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
@@ -1750,7 +1756,6 @@ AC_CONFIG_FILES(
   dnl # init-commands go here
 )
 # A few files need extra actions at creation time
-AC_CONFIG_FILES([src/gnc-test-env], [chmod u+x src/gnc-test-env])
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT

@@ -41,7 +41,7 @@ TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
   ${gnc_dbd_dir_override} \
-  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 EXTRA_DIST += \
     test-dbi-stuff.h \

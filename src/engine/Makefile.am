@@ -128,8 +128,6 @@ noinst_HEADERS = \
   gnc-pricedb-p.h \
   policy-p.h
 
-noinst_SCRIPTS = iso-currencies-to-c
-
 libgncmod_engine_la_LDFLAGS = -avoid-version
 if CLANG
 libgncmod_engine_la_CFLAGS = ${AM_CFLAGS} -Wno-invalid-source-encoding
@@ -160,8 +158,8 @@ EXTRA_DIST = \
   README.query-api \
   design.txt \
   extensions.txt \
-  iso-4217-currencies.scm \
-  iso-currencies-to-c \
+  iso-4217-currencies.xml \
+  iso-currencies-to-c.xsl \
   kvp_doc.txt \
   SX-book-p.h \
   engine.i \
@@ -170,10 +168,8 @@ EXTRA_DIST = \
   ${gncscm_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = iso-4217-currencies.scm
 #For executing test cases
-SCM_FILE_LINKS += \
+SCM_FILE_LINKS = \
   ${gncscmmod_DATA} \
   ${gncscm_DATA}
 endif
@@ -203,7 +199,7 @@ GUILE_COMPILE_ENV = \
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
 	GNC_BUILDDIR=${top_builddir} \
-	$(shell ${top_builddir}/src/gnc-test-env --no-exports ${GUILE_COMPILE_ENV}) \
+	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<
 
 gncscmmodcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
@@ -238,9 +234,9 @@ endif
 endif
 endif
 
-iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
-	-chmod u+x ./iso-currencies-to-c
-	./iso-currencies-to-c "${srcdir}"
+
+iso-4217-currencies.c: iso-4217-currencies.xml iso-currencies-to-c.xsl
+	$(XSLTPROC) -o $@ $(srcdir)/iso-currencies-to-c.xsl $<
 
 BUILT_SOURCES = iso-4217-currencies.c
 

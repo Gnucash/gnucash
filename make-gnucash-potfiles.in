@@ -49,7 +49,7 @@ my @possible_files = sort sort_func
                       `cd @-SRCDIR-@ && find src -name '*.c' \\
                       -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.gschema.xml.in.in' `;
+                      -o -name '*.gschema.xml.in.in' -o -name '*.scm' | sort`;
 ## For perl files add the following:
 # -o -name '*.pl'
 
@@ -88,5 +88,4 @@ foreach my $file (@possible_files) {
 print "src/gnome/gnucash.appdata.xml.in\n";
 print "src/gnome/gnucash.desktop.in.in\n";
 print "src/libqof/qof/qofbookslots.h\n";
-print "intl-scm/guile-strings.c\n";
 print "doc/tip_of_the_day.list.in\n";
