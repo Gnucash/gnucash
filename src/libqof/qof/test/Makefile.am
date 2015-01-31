@@ -52,6 +52,7 @@ endif
 test_kvp_value_CPPFLAGS = \
     -I$(GTEST_HEADERS) \
     -I$(top_srcdir)/$(MODULEPATH) \
+    $(GLIB_CFLAGS) \
     $(BOOST_CPPFLAGS)
 
 check_PROGRAMS += test-kvp-value
