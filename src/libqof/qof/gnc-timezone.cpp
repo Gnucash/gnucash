@@ -598,7 +598,7 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 
 
 TZ_Ptr
-TimeZoneProvider::get(int year)
+TimeZoneProvider::get(int year) const noexcept
 {
     auto iter = find_if(zone_vector.begin(), zone_vector.end(),
 			[=](TZ_Entry e) { return e.first >= year; });

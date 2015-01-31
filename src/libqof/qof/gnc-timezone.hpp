@@ -54,7 +54,7 @@ public:
     TimeZoneProvider(const TimeZoneProvider&&) = delete;
     TimeZoneProvider operator=(const TimeZoneProvider&) = delete;
     TimeZoneProvider operator=(const TimeZoneProvider&&) = delete;
-    TZ_Ptr get (int year);
+    TZ_Ptr get (int year) const noexcept;
 private:
     TZ_Vector zone_vector;
 #if PLATFORM(WINDOWS)
