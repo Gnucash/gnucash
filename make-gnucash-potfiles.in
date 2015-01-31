@@ -49,7 +49,7 @@ my @possible_files = sort sort_func
                       `cd @-SRCDIR-@ && find src -name '*.c' \\
                       -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.gschema.xml.in.in' -o -name '*.scm' | sort`;
+                      -o -name '*.gschema.xml.in.in' -o -name '*.scm'`;
 ## For perl files add the following:
 # -o -name '*.pl'
 
