@@ -40,11 +40,12 @@
 
 typedef struct
 {
-    GtkWidget * hbox;
-    GtkWidget * totals_combo;
+    GtkWidget    *hbox;
+    GtkWidget    *totals_combo;
     GtkListStore *datamodel;
-    int       component_id;
-    int       cnxn_id;
+    int           component_id;
+    int           cnxn_id;
+    gboolean      combo_popped;
 } GNCMainSummary;
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
@@ -318,7 +319,7 @@ enum
     COLUMN_ASSETS_VALUE,
     COLUMN_PROFITS,
     COLUMN_PROFITS_VALUE,
-    N_COLUMNS,
+    N_COLUMNS
 };
 
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
@@ -342,8 +343,6 @@ static void
 gnc_main_window_summary_refresh (GNCMainSummary * summary)
 {
     Account *root;
-    char asset_string[256];
-    char profit_string[256];
     GNCCurrencyAcc *currency_accum;
     GList *currency_list;
     GList *current;
@@ -381,9 +380,6 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     {
         GtkTreeIter iter;
         char asset_amount_string[256], profit_amount_string[256];
-        struct lconv *lc;
-
-        lc = gnc_localeconv();
 
         g_object_ref(summary->datamodel);
         gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
@@ -399,12 +395,10 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
             if (mnemonic == NULL)
                 mnemonic = "";
 
-            *asset_string = '\0';
             xaccSPrintAmount(asset_amount_string,
                              currency_accum->assets,
                              gnc_commodity_print_info(currency_accum->currency, TRUE));
 
-            *profit_string = '\0';
             xaccSPrintAmount(profit_amount_string,
                              currency_accum->profits,
                              gnc_commodity_print_info(currency_accum->currency, TRUE));
@@ -459,23 +453,75 @@ prefs_changed_cb (gpointer prefs, gchar *pref, gpointer user_data)
     gnc_main_window_summary_refresh(summary);
 }
 
+static void
+cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter,
+                          gpointer user_data)
+{
+    GNCMainSummary * summary = user_data;
+    gchar *type, *assets, *assets_val, *profits, *profits_val;
+    gint viewcol;
+
+    viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "view_column"));
+
+    if (summary->combo_popped)
+        g_object_set (cell, "xalign", 0.0, NULL);
+    else
+        g_object_set (cell, "xalign", 0.5, NULL);
+
+    gtk_tree_model_get (GTK_TREE_MODEL (tree_model), iter,
+                            COLUMN_MNEMONIC_TYPE, &type,
+                            COLUMN_ASSETS, &assets,
+                            COLUMN_ASSETS_VALUE, &assets_val,
+                            COLUMN_PROFITS, &profits,
+                            COLUMN_PROFITS_VALUE, &profits_val, -1);
+
+    if (viewcol == 0)
+        g_object_set (cell, "text", type, NULL);
+
+    if (viewcol == 2)
+    {
+        gchar *a_string = g_strconcat (assets, " ", assets_val, NULL);
+        g_object_set (cell, "text", a_string, NULL);
+        g_free (a_string);
+    }
+
+    if (viewcol == 4)
+    {
+        gchar *p_string = g_strconcat (profits, " ", profits_val, NULL);
+        g_object_set (cell, "text", p_string, NULL);
+        g_free (p_string);
+    }
+
+    g_free (type);
+    g_free (assets);
+    g_free (assets_val);
+    g_free (profits);
+    g_free (profits_val);
+}
+
+static void
+summary_combo_popped (GObject *widget, GParamSpec *pspec, gpointer user_data)
+{
+    GNCMainSummary * summary = user_data;
+    if (summary->combo_popped)
+        summary->combo_popped = FALSE;
+    else
+        summary->combo_popped = TRUE;
+}
+
 GtkWidget *
 gnc_main_window_summary_new (void)
 {
     GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
     GtkCellRenderer *textRenderer;
     int i;
-    // These options lead to a better looking layout for the combo-box, where
-    // the "Assets: $####.##" and "Profit: $####.##" values are visually next
-    // to each other.
-    gboolean expandOptions[] = { TRUE, FALSE, TRUE, FALSE, TRUE };
 
-    retval->datamodel = gtk_list_store_new( N_COLUMNS,
+    retval->datamodel = gtk_list_store_new (N_COLUMNS,
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
-                                            G_TYPE_STRING );
+                                            G_TYPE_STRING);
 
     retval->hbox         = gtk_hbox_new (FALSE, 5);
     retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
@@ -489,11 +535,21 @@ gnc_main_window_summary_new (void)
                                          QOF_EVENT_DESTROY
                                          | GNC_EVENT_ITEM_CHANGED);
 
-    for ( i = 0; i < N_COLUMNS; i++ )
+    // Allows you to get when the popup menu is present
+    g_signal_connect (retval->totals_combo, "notify::popup-shown",G_CALLBACK (summary_combo_popped), retval);
+
+    retval->combo_popped = FALSE;
+
+    for (i = 0; i <= N_COLUMNS; i += 2)
     {
         textRenderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
-        gtk_cell_layout_pack_start( GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, expandOptions[i] );
-        gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, "text", i );
+
+        gtk_cell_renderer_set_fixed_size (textRenderer, 50, -1);
+
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, TRUE);
+
+        g_object_set_data (G_OBJECT(textRenderer), "view_column", GINT_TO_POINTER (i));
+        gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, cdf, retval, NULL);
     }
 
     gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
