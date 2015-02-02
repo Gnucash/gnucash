@@ -184,8 +184,6 @@ libtool: $(LIBTOOL_DEPS)
 
 .PHONY: pot
 pot: Makefile po/POTFILES.in
-	rm -f intl-scm/guile-strings.c
-	${MAKE} -C intl-scm
 	rm -f po/$(PACKAGE).pot
 	${MAKE} -C po $(PACKAGE).pot
 
