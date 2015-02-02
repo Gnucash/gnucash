@@ -133,16 +133,13 @@ void create_regex (GString *regex_str, const gchar *sep)
             "(?<row_type>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<action>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<reconcile>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<to_with_sym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<from_with_sym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<amount_with_sym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<to_num>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<from_num>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<to_rate>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<from_rate>\"(?:[^\"]|\"\")*\"|[^%s[:cntrl:]]*)(?:\\R*)",
-            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep,
-            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep);
+            "(?<amount_num>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<rate>\"(?:[^\"]|\"\")*\"|[^%s[:cntrl:]]*)(?:\\R*)",
+            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep,
+            sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep);
 }
 
 /*************************************************************************/
@@ -718,9 +715,9 @@ csv_fixed_trans_import_assistant_create (CsvFTImportInfo *info)
 
     /* create model and bind to view */
     info->store = gtk_list_store_new (FTN_COLUMNS,
-                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
                                       G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
     gtk_tree_view_set_model (GTK_TREE_VIEW(info->tree_view), GTK_TREE_MODEL(info->store));
@@ -746,14 +743,11 @@ csv_fixed_trans_import_assistant_create (CsvFTImportInfo *info)
     CREATE_COLUMN ("row_type", FTRTYPE);
     CREATE_COLUMN ("action", FTACTION);
     CREATE_COLUMN ("reconcile", FTRECONCILE);
-    CREATE_COLUMN ("to_with_sym", FTTO_WITH_SYM);
-    CREATE_COLUMN ("from_with_sym", FTFROM_WITH_SYM);
+    CREATE_COLUMN ("amount_with_sym", FTAMOUNT_WITH_SYM);
     CREATE_COLUMN ("commoditym", FTCOMMODITYM);
     CREATE_COLUMN ("commodityn", FTCOMMODITYN);
-    CREATE_COLUMN ("to_num", FTTO_NUM);
-    CREATE_COLUMN ("from_num", FTFROM_NUM);
-    CREATE_COLUMN ("to_rate", FTTO_RATE);
-    CREATE_COLUMN ("from_rate", FTFROM_RATE);
+    CREATE_COLUMN ("amount_num", FTAMOUNT_NUM);
+    CREATE_COLUMN ("rate", FTRATE);
 
     // Enable Horizontal and vertical grid lines
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(info->tree_view), GTK_TREE_VIEW_GRID_LINES_BOTH);

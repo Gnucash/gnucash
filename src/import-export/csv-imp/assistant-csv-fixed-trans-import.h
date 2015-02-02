@@ -28,15 +28,12 @@
 #ifndef GNC_ASSISTANT_CSV_FIXED_IMPORT_H
 #define GNC_ASSISTANT_CSV_FIXED_IMPORT_H
 
-
-
-
 // Account tree model
 enum fixed_trans_import_model_columns
 {
    FTDATE, FTTYPE, FTSDATE, FTACCT_NAME, FTNUMBER, FTDESCRIPTION, FTNOTES, FTMEMO, FTFULL_CAT_NAME,
-   FTCAT_NAME, FTRTYPE, FTACTION, FTRECONCILE, FTTO_WITH_SYM, FTFROM_WITH_SYM, FTCOMMODITYM, FTCOMMODITYN,
-   FTTO_NUM, FTFROM_NUM, FTTO_RATE, FTFROM_RATE, FTROW_COLOR, FTN_COLUMNS
+   FTCAT_NAME, FTRTYPE, FTACTION, FTRECONCILE, FTAMOUNT_WITH_SYM, FTCOMMODITYM, FTCOMMODITYN,
+   FTAMOUNT_NUM, FTRATE, FTROW_COLOR, FTN_COLUMNS
 };
 
 typedef struct
@@ -44,30 +41,29 @@ typedef struct
     GtkWidget       *window;
     GtkWidget       *assistant;
 
-    GtkWidget       *file_chooser;
-    GtkWidget       *tree_view;
-    GtkListStore    *store;
-    GString         *regexp;
-    GtkWidget       *header_row_spin;
+    GtkWidget       *file_chooser;           /**< The File Chooser widget on File page */
+    GtkWidget       *tree_view;              /**< The Preview Treeview */
+    GtkListStore    *store;                  /**< The Liststore of imported data */
+    GString         *regexp;                 /**< The Regular expression string */
+    GtkWidget       *header_row_spin;        /**< The Number of header rows widget */
     GtkComboBoxText *date_format_combo;      /**< The Combo Text widget for selecting the date format */
     GtkComboBoxText *currency_format_combo;  /**< The Combo Text widget for selecting the currency format */
-    GtkWidget       *progressbar;
-    GtkWidget       *finish_label;
-    GtkWidget       *summary_label;
-    GtkWidget       *summary_error_view;
+    GtkWidget       *progressbar;            /**< The Progress widget on the Finish page */
+    GtkWidget       *finish_label;           /**< The Label widget on the Finish page */
+    GtkWidget       *summary_label;          /**< The Label widget on the Summary page */
+    GtkWidget       *summary_error_view;     /**< The Text view widget on the Summary page */
 
-    gchar           *starting_dir;
-    gchar           *file_name;
-    gchar           *error;
+    gchar           *starting_dir;           /**< The starting directory where import file is */
+    gchar           *file_name;              /**< The File name to import */
+    gchar           *error;                  /**< The Error Text */
 
-    gint             header_rows;
-    gint             num_new;
-    gint             num_duplicates;
+    gint             header_rows;            /**< The Number of header rows, usually defaults to 1 */
+    gint             num_new;                /**< The Number of new transactions imported */
+    gint             num_duplicates;         /**< The Number of duplicate transactions not imported */
     gint             date_format;            /**< The format of the text in the date columns from date_format_internal. */
     gint             currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
     gboolean         new_book;               /**< Are we importing into a new book?; if yes, call book options */
 } CsvFTImportInfo;
-
 
 
 /** The gnc_file_csv_fixed_trans_import() will let the user import

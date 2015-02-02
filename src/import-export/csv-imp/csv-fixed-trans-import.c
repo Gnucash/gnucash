@@ -150,17 +150,11 @@ csv_fixed_trans_import_read_file (const gchar *filename, const gchar *parser_reg
         fill_model_with_match (match_info, "row_type", store, &iter, FTRTYPE);
         fill_model_with_match (match_info, "action", store, &iter, FTACTION);
         fill_model_with_match (match_info, "reconcile", store, &iter, FTRECONCILE);
-
-        fill_model_with_match (match_info, "to_with_sym", store, &iter, FTTO_WITH_SYM);
-        fill_model_with_match (match_info, "from_with_sym", store, &iter, FTFROM_WITH_SYM);
+        fill_model_with_match (match_info, "amount_with_sym", store, &iter, FTAMOUNT_WITH_SYM);
         fill_model_with_match (match_info, "commoditym", store, &iter, FTCOMMODITYM);
         fill_model_with_match (match_info, "commodityn", store, &iter, FTCOMMODITYN);
-
-        fill_model_with_match (match_info, "to_num", store, &iter, FTTO_NUM);
-        fill_model_with_match (match_info, "from_num", store, &iter, FTFROM_NUM);
-
-        fill_model_with_match (match_info, "to_rate", store, &iter, FTTO_RATE);
-        fill_model_with_match (match_info, "from_rate", store, &iter, FTFROM_RATE);
+        fill_model_with_match (match_info, "amount_num", store, &iter, FTAMOUNT_NUM);
+        fill_model_with_match (match_info, "rate", store, &iter, FTRATE);
         gtk_list_store_set (store, &iter, FTROW_COLOR, NULL, -1);
 
         row++;
@@ -263,7 +257,7 @@ csv_fixed_trans_test_one_line (CsvFTImportInfo *info)
 {
     gboolean     valid;
     GtkTreeIter  iter;
-    gchar       *date, *row_type, *to_num, *from_num;
+    gchar       *date, *row_type, *amount_num;
     gnc_numeric  amount;
     gint         row;
     gboolean     trans_found = FALSE;
@@ -280,8 +274,7 @@ csv_fixed_trans_test_one_line (CsvFTImportInfo *info)
         gtk_tree_model_get (GTK_TREE_MODEL (info->store), &iter,
                             FTDATE, &date,
                             FTRTYPE, &row_type,
-                            FTTO_NUM, &to_num,
-                            FTFROM_NUM, &from_num, -1);
+                            FTAMOUNT_NUM, &amount_num, -1);
 
         if (g_strcmp0 (row_type, "T") == 0) // We have the Transaction line
         {
@@ -294,29 +287,23 @@ csv_fixed_trans_test_one_line (CsvFTImportInfo *info)
 
         if (g_strcmp0 (row_type, "S") == 0) // We have the split line
         {
-            if (g_strcmp0 (to_num, "") == 0) // test for valid to number
+            if (g_strcmp0 (amount_num, "") != 0) // test for valid to number
             {
-                if (parse_number_string (info, from_num, &amount))
+                if (parse_number_string (info, amount_num, &amount))
                     num_ok = TRUE;
                 else
                     num_ok = FALSE;
             }
+            else
+                num_ok = FALSE;
 
-            if (g_strcmp0 (from_num, "") == 0) // test for valid to number
-            {
-                if (parse_number_string (info, to_num, &amount))
-                    num_ok = TRUE;
-                else
-                    num_ok = FALSE;
-            }
             split_found = TRUE;
         }
 
     /* free resources */
     g_free (date);
     g_free (row_type);
-    g_free (to_num);
-    g_free (from_num);
+    g_free (amount_num);
 
     if ((trans_found == TRUE) && (split_found == TRUE))
         break;
@@ -340,7 +327,6 @@ csv_fixed_trans_test_one_line (CsvFTImportInfo *info)
 static gboolean
 check_for_existing_trans (CsvFTImportInfo *info, Account *acc, Transaction *trans, gnc_numeric value)
 {
-
     Query       *q;
     GSList      *p1, *p2;
     GList       *splits;
@@ -420,8 +406,7 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
     GtkTreeIter          iter;
     gchar               *date, *type, *sdate, *acct_name, *number, *description, *notes, *memo;
     gchar               *full_cat_name, *cat_name, *row_type, *action, *reconcile;
-    gchar               *to_with_sym, *from_with_sym, *commoditym, *commodityn;
-    gchar               *to_num, *from_num, *to_rate, *from_rate;
+    gchar               *amount_with_sym, *commoditym, *commodityn, *amount_num, *rate;
     gchar               *void_reason;
     gboolean             void_trans = FALSE;
     gnc_commodity       *trans_commodity, *split_commodity;
@@ -477,14 +462,11 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
                             FTRTYPE, &row_type,
                             FTACTION, &action,
                             FTRECONCILE, &reconcile,
-                            FTTO_WITH_SYM, &to_with_sym,
-                            FTFROM_WITH_SYM, &from_with_sym,
+                            FTAMOUNT_WITH_SYM, &amount_with_sym,
                             FTCOMMODITYM, &commoditym,
                             FTCOMMODITYN, &commodityn,
-                            FTTO_NUM, &to_num,
-                            FTFROM_NUM, &from_num,
-                            FTTO_RATE, &to_rate,
-                            FTFROM_RATE, &from_rate, -1);
+                            FTAMOUNT_NUM, &amount_num,
+                            FTRATE, &rate, -1);
 
         if (g_strcmp0 (row_type, "T") == 0) // We have the Transaction line
         {
@@ -551,7 +533,7 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
         {
             Account    *acct;
             Split      *split;
-            gnc_numeric amount, value, rate;
+            gnc_numeric amount, value, price_rate;
             char        rec;
             char       *endptr, *str_num, *str_rate;
             gboolean    split_error = FALSE;
@@ -580,16 +562,10 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
                 split_error = TRUE;
             }
 
-            if (g_strcmp0 (to_num, "") == 0) // Are we debiting or crediting
-            {
-                num_error = parse_number_string (info, from_num, &amount);
-                rate_error = parse_number_string (info, from_rate, &rate);
-            }
-            else
-            {
-                num_error = parse_number_string (info, to_num, &amount);
-                rate_error = parse_number_string (info, to_rate, &rate);
-            }
+            // Lets get some numbers
+            num_error = parse_number_string (info, amount_num, &amount);
+            rate_error = parse_number_string (info, rate, &price_rate);
+
             if (!num_error) // invalid amount
             {
                 save_error_text (info, row, _("Numeric Amount is invalid for Split"));
@@ -603,7 +579,7 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
             }
 
             if (split_error == FALSE)
-                value = gnc_numeric_mul (amount, rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+                value = gnc_numeric_mul (amount, price_rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
 
             // Check to see if Transaction allready exists
             if ((acct != NULL) && (split_check == FALSE)) // we only check first split
@@ -697,14 +673,11 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
         g_free (row_type);
         g_free (action);
         g_free (reconcile);
-        g_free (to_with_sym);
-        g_free (from_with_sym);
+        g_free (amount_with_sym);
         g_free (commoditym);
         g_free (commodityn);
-        g_free (to_num);
-        g_free (from_num);
-        g_free (to_rate);
-        g_free (from_rate);
+        g_free (amount_num);
+        g_free (rate);
     }
 
     if (new_trans != NULL)
