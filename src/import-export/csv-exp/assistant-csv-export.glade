@@ -639,6 +639,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">end_date_latest</property>
                         <signal name="clicked" handler="csv_export_end_date_cb" swapped="no"/>
                       </object>
                       <packing>
@@ -659,7 +660,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">end_date_choose</property>
+                        <property name="group">end_date_latest</property>
                         <signal name="clicked" handler="csv_export_end_date_cb" swapped="no"/>
                       </object>
                       <packing>
@@ -681,7 +682,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">end_date_choose</property>
                         <signal name="clicked" handler="csv_export_end_date_cb" swapped="no"/>
                       </object>
                       <packing>

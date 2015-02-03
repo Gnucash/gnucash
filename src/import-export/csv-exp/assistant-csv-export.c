@@ -504,7 +504,7 @@ get_filter_times (CsvExportInfo *info)
     }
     else
     {
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->csvd.start_date_today)))
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->csvd.end_date_today)))
             info->csvd.end_time = gnc_time64_get_today_end();
         else
             info->csvd.end_time = gnc_time (NULL);
