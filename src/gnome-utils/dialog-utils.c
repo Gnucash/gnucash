@@ -254,6 +254,10 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     if ((tm->tm_mday <= 0) || (tm->tm_mon == -1) || (tm->tm_year == -1))
         return FALSE;
 
+    // Make sure we have a valid date before we proceed
+    if (!g_date_valid_dmy (tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900))
+        return FALSE;
+
     g_date_set_dmy (&gdate,
                     tm->tm_mday,
                     tm->tm_mon + 1,
