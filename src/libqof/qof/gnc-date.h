@@ -238,12 +238,6 @@ time64 gnc_time_utc (time64 *tbuf);
  */
 gdouble gnc_difftime (const time64 secs1, const time64 secs2);
 
-/** Wrapper for g_date_time_new_from_unix_local() that takes special care on
- * windows to take the local timezone into account. On unix, it just calles the
- * g_date function. */
-GDateTime*
-gnc_g_date_time_new_from_unix_local (time64 time);
-
 /** \brief free a struct tm* created with gnc_localtime() or gnc_gmtime()
  * \param time: The struct tm* to be freed.
  */
@@ -280,6 +274,19 @@ Note the reversed return values!
 */
 gboolean gnc_date_string_to_monthformat(const gchar *format_string,
                                         GNCDateMonthFormat *format);
+
+/** \brief print a time64 as a date string per format
+ * \param time
+ * \param format A date format conforming to the strftime format rules.
+ * \return a raw heap-allocated char* which must be freed.
+ */
+char* gnc_print_time64(time64 time, const char* format);
+
+/** Returns a newly allocated date of the current clock time, taken from
+ * time(2). The caller must g_date_free() the object afterwards. */
+GDate* gnc_g_date_new_today (void);
+
+
 // @}
 
 /* Datatypes *******************************************************/
@@ -337,10 +344,6 @@ void timespecFromTime64 (Timespec *ts, time64 t );
 
 /** Turns a Timespec into a time64 */
 time64 timespecToTime64 (Timespec ts);
-
-/** Returns a newly allocated date of the current clock time, taken from
- * time(2). The caller must g_date_free() the object afterwards. */
-GDate* gnc_g_date_new_today (void);
 
 /** Turns a Timespec into a GDate */
 GDate timespec_to_gdate (Timespec ts);
