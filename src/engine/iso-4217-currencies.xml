@@ -674,6 +674,7 @@
   local-symbol="$"
 />
 <!-- "CNY" - "Yuan Renminbi"
+  locale-symbol has been changed from 元 to ¥ following a discussion on bug 727466
 -->
 <currency
   isocode="CNY"
@@ -684,7 +685,7 @@
   exchange-code="156"
   parts-per-unit="100"
   smallest-fraction="100"
-  local-symbol="元"
+  local-symbol="¥"
 />
 <!-- "COP" - "Colombian Peso"
 -->
