@@ -661,7 +661,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
         }
         break;
 
-    case GENERAL_LEDGER2:
+    case GENERAL_JOURNAL2:
         {
         static ViewCol col_list[] = {
         COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
@@ -1688,7 +1688,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                 {
                     Account *acct = xaccSplitGetAccount (split);
 
-                    // This will be all but the General Ledger which has anchor == NULL
+                    // This will be all but the General Journal which has anchor == NULL
                     if ((xaccTransCountSplits (trans) == 0) && (anchor != NULL)) // First split on blank transaction
                         acct = anchor;
 
@@ -1703,7 +1703,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                     else
                         string = g_strdup (" ");
 
-                    if (anchor == acct && model->type != GENERAL_LEDGER2 && model->type != SEARCH_LEDGER2)
+                    if (anchor == acct && model->type != GENERAL_JOURNAL2 && model->type != SEARCH_LEDGER2)
                         editable = FALSE;
                     else
                         editable = TRUE;
@@ -3098,7 +3098,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
                         gtk_tree_view_column_set_title (tvc, _("Bill"));
                     break;
 
-                case GENERAL_LEDGER2:
+                case GENERAL_JOURNAL2:
                 if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Funds Out"));
                     break;
@@ -3179,7 +3179,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
                         gtk_tree_view_column_set_title (tvc, _("Payment"));
                     break;
 
-                case GENERAL_LEDGER2:
+                case GENERAL_JOURNAL2:
                 if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Funds In"));
                     break;
@@ -5412,7 +5412,7 @@ gtv_sr_ed_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_dat
                     {
                         gtk_tree_path_down (spath);
 
-                        if (gtk_tree_view_row_expanded (GTK_TREE_VIEW (view), spath) && model->type == GENERAL_LEDGER2)
+                        if (gtk_tree_view_row_expanded (GTK_TREE_VIEW (view), spath) && model->type == GENERAL_JOURNAL2)
                         {
                             gtk_tree_path_down (spath);
 

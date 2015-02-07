@@ -102,7 +102,7 @@ GncPluginPage *
 gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
 
 
-/** Create a new "register" plugin page containing a general ledger.
+/** Create a new "register" plugin page containing a general journal.
  *
  *  @return The newly created plugin page.
  */

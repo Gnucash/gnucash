@@ -2284,7 +2284,7 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
         return ACCT_TYPE_CURRENCY;
     case TRADING_REGISTER:
         return ACCT_TYPE_TRADING;
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
         return ACCT_TYPE_NONE;
     case EQUITY_REGISTER:
         return ACCT_TYPE_EQUITY;
@@ -2490,7 +2490,7 @@ gnc_split_register_config_action (SplitRegister *reg)
         gnc_combo_cell_add_menu_item (cell, _("Buy"));
         gnc_combo_cell_add_menu_item (cell, _("Sell"));
         break;
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case EQUITY_REGISTER:
         gnc_combo_cell_add_menu_item (cell, _("Buy"));
         gnc_combo_cell_add_menu_item (cell, _("Sell"));

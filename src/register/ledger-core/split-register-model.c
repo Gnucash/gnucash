@@ -77,7 +77,7 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
     /* Get a list of accounts for matching */
     account = gnc_split_register_get_default_account(reg);
     if (!account)
-        /* Register has no account (perhaps general ledger) so it has no
+        /* Register has no account (perhaps general journal) so it has no
            well defined balance, return zero. */
         return balance;
 
@@ -258,7 +258,7 @@ gnc_split_register_get_tran_num_label (VirtualLocation virt_loc,
     case RECEIVABLE_REGISTER:
     case PAYABLE_REGISTER:
         return _("T-Ref");
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case SEARCH_LEDGER:
     {
@@ -1473,7 +1473,7 @@ get_trans_total_amount_subaccounts (SplitRegister *reg, Transaction *trans)
     /* Get a list of all subaccounts for matching */
     parent = gnc_split_register_get_default_account(reg);
     if (!parent)
-        /* Register has no account, perhaps it's the general ledger.  If it
+        /* Register has no account, perhaps it's the general journal.  If it
            has no account then we have no way of picking out the desired splits,
            return zero. */
         return total;
@@ -1509,7 +1509,7 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
         total = get_trans_total_amount_subaccounts (reg, xaccSplitGetParent (split));
         break;
@@ -1551,7 +1551,7 @@ gnc_split_reg_has_rate_cell (SplitRegisterType type)
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
     case TRADING_REGISTER:
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case SEARCH_LEDGER:
         return TRUE;

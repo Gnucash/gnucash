@@ -755,7 +755,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("General Ledger"),
+                 "page-name",      _("General Journal"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-register-ui.xml",
                  "use-new-window", use_new,
@@ -1328,7 +1328,7 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
         g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME, name);
         g_free(name);
     }
-    else if (reg->type == GENERAL_LEDGER)
+    else if (reg->type == GENERAL_JOURNAL)
     {
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
                               LABEL_GL);
@@ -1603,9 +1603,9 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
     case LD_GL:
         switch (reg->type)
         {
-        case GENERAL_LEDGER:
+        case GENERAL_JOURNAL:
         case INCOME_LEDGER:
-            return g_strdup(_("General Ledger"));
+            return g_strdup(_("General Journal"));
         case PORTFOLIO_LEDGER:
             return g_strdup(_("Portfolio"));
         case SEARCH_LEDGER:
@@ -2557,10 +2557,10 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
         if (for_window)
-            reg_name = _("General Ledger");
+            reg_name = _("General Journal");
         else
             reg_name = _("Transaction Report");
         break;
@@ -2639,7 +2639,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     arg = SCM_BOOL (reg->use_double_line);
     args = scm_cons (arg, args);
 
-    arg = SCM_BOOL (reg->type == GENERAL_LEDGER || reg->type == INCOME_LEDGER
+    arg = SCM_BOOL (reg->type == GENERAL_JOURNAL || reg->type == INCOME_LEDGER
                                                 || reg->type == SEARCH_LEDGER);
     args = scm_cons (arg, args);
 

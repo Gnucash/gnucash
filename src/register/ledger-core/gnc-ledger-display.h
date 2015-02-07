@@ -84,7 +84,7 @@ GNCLedgerDisplay * gnc_ledger_display_simple (Account *account);
  * its children. */
 GNCLedgerDisplay * gnc_ledger_display_subaccounts (Account *account);
 
-/* opens up a general ledger window */
+/* opens up a general journal window */
 GNCLedgerDisplay * gnc_ledger_display_gl (void);
 
 /**
@@ -96,7 +96,7 @@ GNCLedgerDisplay * gnc_ledger_display_gl (void);
  **/
 GNCLedgerDisplay * gnc_ledger_display_template_gl (char *id);
 
-/* display a general ledger for an arbitrary query */
+/* display a general journal for an arbitrary query */
 GNCLedgerDisplay * gnc_ledger_display_query (Query *query,
         SplitRegisterType type,
         SplitRegisterStyle style);

@@ -164,7 +164,7 @@
       'current
       (list (vector 'current
 		    (N_ "Current Trial Balance")
-		    (N_ "Uses the exact balances in the general ledger"))
+		    (N_ "Uses the exact balances in the general journal"))
 	    (vector 'pre-adj
 		    (N_ "Pre-adjustment Trial Balance")
 		    (N_ "Ignores Adjusting/Closing entries"))
@@ -474,7 +474,7 @@
 	  (define atb-col 2) ;; adjusted trial balance column
 	  (define is-col  3) ;; income statement column
 	  (define bs-col  4) ;; balance sheet column
-	  (define bal-col 5) ;; for the current (general ledger) balance
+	  (define bal-col 5) ;; for the current (general journal) balance
 	  
 	  (define (report-val amt)
 	    (gnc:sum-collector-commodity

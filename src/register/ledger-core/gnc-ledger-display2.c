@@ -232,7 +232,7 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplay2Type ld_type)
     SplitRegisterType2 reg_type;
 
     if (ld_type == LD2_GL)
-        return GENERAL_LEDGER2;
+        return GENERAL_JOURNAL2;
 
     account_type = xaccAccountGetType (leader);
 
@@ -304,9 +304,9 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplay2Type ld_type)
     {
         /* If any of the sub-accounts have ACCT_TYPE_STOCK or
          * ACCT_TYPE_MUTUAL types, then we must use the PORTFOLIO_LEDGER
-         * ledger. Otherwise, a plain old GENERAL_LEDGER will do. */
+         * ledger. Otherwise, a plain old GENERAL_JOURNAL will do. */
         gpointer ret;
-        reg_type = GENERAL_LEDGER2;
+        reg_type = GENERAL_JOURNAL2;
 
         ret = gnc_account_foreach_descendant_until(leader, look_for_portfolio_cb, NULL);
         if (ret) reg_type = PORTFOLIO_LEDGER2;
@@ -326,12 +326,12 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplay2Type ld_type)
 
     case ACCT_TYPE_EQUITY:
     case ACCT_TYPE_TRADING:
-        reg_type = GENERAL_LEDGER2;
+        reg_type = GENERAL_JOURNAL2;
         break;
 
     default:
         PERR ("unknown account type:%d", account_type);
-        reg_type = GENERAL_LEDGER2;
+        reg_type = GENERAL_JOURNAL2;
         break;
     }
 
@@ -397,7 +397,7 @@ gnc_ledger_display2_subaccounts (Account *account)
     return ld;
 }
 
-/* Opens up a general ledger window. */
+/* Opens up a general journal window. */
 GNCLedgerDisplay2 *
 gnc_ledger_display2_gl (void)
 {
@@ -438,7 +438,7 @@ gnc_ledger_display2_gl (void)
                              FALSE, 0,
                              QOF_QUERY_AND);
 
-    ld = gnc_ledger_display2_internal (NULL, query, LD2_GL, GENERAL_LEDGER2,
+    ld = gnc_ledger_display2_internal (NULL, query, LD2_GL, GENERAL_JOURNAL2,
                                       REG2_STYLE_JOURNAL, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
@@ -759,7 +759,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
         if (!q)
         {
-            PWARN ("general ledger with no query");
+            PWARN ("general journal with no query");
         }
 
         is_gl = TRUE;
@@ -863,8 +863,8 @@ gnc_ledger_display2_find_by_query (Query *q)
     if (ledger_display)
     {
         model = ledger_display->model;
-        // To get a new search page from a general ledger, search register is a LD2_GL also.
-        if (model->type == GENERAL_LEDGER2)
+        // To get a new search page from a general journal, search register is a LD2_GL also.
+        if (model->type == GENERAL_JOURNAL2)
             ledger_display = NULL;
     }
     return ledger_display;

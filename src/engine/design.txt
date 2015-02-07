@@ -310,7 +310,7 @@ where the Commit() routine triggers the actual update of the SQL database.
 
 Note: 'Commit' is sometimes called 'post' in other systems:  The
 act of 'commiting' a transaction is the same as 'posting' the
-transaction to the general ledger.
+transaction to the general journal.
 
 Some important implementation details to understand:  the GUI currently
 uses begin/end as a convenience, and thus, may hold a transaction in

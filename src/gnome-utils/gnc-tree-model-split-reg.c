@@ -1088,7 +1088,7 @@ gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query
     }
 
     //FIXME Not sure why I need to do this, refresh / sort change segfaults on gl
-    if (model->priv->display_gl == TRUE && model->type == GENERAL_LEDGER2)
+    if (model->priv->display_gl == TRUE && model->type == GENERAL_JOURNAL2)
     {
         gnc_tm_get_today_start(&tm);
         tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
@@ -2647,7 +2647,7 @@ gnc_tree_model_split_reg_commit_blank_split (GncTreeModelSplitReg *model)
 }
 
 
-/* Update the display sub account and general ledger settings */
+/* Update the display sub account and general journal settings */
 void
 gnc_tree_model_split_reg_set_display (GncTreeModelSplitReg *model, gboolean subacc, gboolean gl)
 {
@@ -2952,7 +2952,7 @@ gnc_tree_model_split_reg_update_action_list (GncTreeModelSplitReg *model)
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Buy"), -1);
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Sell"), -1);
         break;
-    case GENERAL_LEDGER2:
+    case GENERAL_JOURNAL2:
     case EQUITY_REGISTER2:
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Buy"), -1);
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Sell"), -1);

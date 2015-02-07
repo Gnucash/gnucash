@@ -223,7 +223,7 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     SplitRegisterType reg_type;
 
     if (ld_type == LD_GL)
-        return GENERAL_LEDGER;
+        return GENERAL_JOURNAL;
 
     account_type = xaccAccountGetType (leader);
 
@@ -295,9 +295,9 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     {
         /* If any of the sub-accounts have ACCT_TYPE_STOCK or
          * ACCT_TYPE_MUTUAL types, then we must use the PORTFOLIO_LEDGER
-         * ledger. Otherwise, a plain old GENERAL_LEDGER will do. */
+         * ledger. Otherwise, a plain old GENERAL_JOURNAL will do. */
         gpointer ret;
-        reg_type = GENERAL_LEDGER;
+        reg_type = GENERAL_JOURNAL;
 
         ret = gnc_account_foreach_descendant_until(leader, look_for_portfolio_cb, NULL);
         if (ret) reg_type = PORTFOLIO_LEDGER;
@@ -317,12 +317,12 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 
     case ACCT_TYPE_EQUITY:
     case ACCT_TYPE_TRADING:
-        reg_type = GENERAL_LEDGER;
+        reg_type = GENERAL_JOURNAL;
         break;
 
     default:
         PERR ("unknown account type:%d", account_type);
-        reg_type = GENERAL_LEDGER;
+        reg_type = GENERAL_JOURNAL;
         break;
     }
 
@@ -388,7 +388,7 @@ gnc_ledger_display_subaccounts (Account *account)
     return ld;
 }
 
-/* Opens up a general ledger window. */
+/* Opens up a general journal window. */
 GNCLedgerDisplay *
 gnc_ledger_display_gl (void)
 {
@@ -429,7 +429,7 @@ gnc_ledger_display_gl (void)
                              FALSE, 0,
                              QOF_QUERY_AND);
 
-    ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_LEDGER,
+    ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_JOURNAL,
                                       REG_STYLE_JOURNAL, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
@@ -739,7 +739,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 
         if (!q)
         {
-            PWARN ("general ledger with no query");
+            PWARN ("general journal with no query");
         }
 
         break;

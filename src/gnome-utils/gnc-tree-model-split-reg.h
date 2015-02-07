@@ -70,7 +70,7 @@ typedef enum
     TRADING_REGISTER2,          //12
     NUM_SINGLE_REGISTER_TYPES2, //13
 
-    GENERAL_LEDGER2 = NUM_SINGLE_REGISTER_TYPES2, //13
+    GENERAL_JOURNAL2 = NUM_SINGLE_REGISTER_TYPES2, //13
     INCOME_LEDGER2,             //14
     PORTFOLIO_LEDGER2,          //15
     SEARCH_LEDGER2,             //16
@@ -233,7 +233,7 @@ Account * gnc_tree_model_split_reg_get_anchor (GncTreeModelSplitReg *model);
 /** Commit the blank split. */
 void gnc_tree_model_split_reg_commit_blank_split (GncTreeModelSplitReg *model);
 
-/** Set display general ledger and show sub accounts. */
+/** Set display general journal and show sub accounts. */
 void gnc_tree_model_split_reg_set_display (GncTreeModelSplitReg *model, gboolean subacc, gboolean gl);
 
 /** Change transactions in the tlist based on view movement. */

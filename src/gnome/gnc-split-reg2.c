@@ -43,7 +43,7 @@
 #include "dialog-utils.h"
 
 #define STATE_SECTION_REG_PREFIX "Register"
-#define STATE_SECTION_GEN_LEDGER "General Ledger"
+#define STATE_SECTION_GEN_JOURNAL "General Journal"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -259,8 +259,8 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     /* State_section is used to store per register state: column widths, sort order,... */
     ledger_type = gnc_ledger_display2_type (gsr->ledger);
-    if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
-        state_section = g_strdup (STATE_SECTION_GEN_LEDGER);
+    if (ledger_type == LD2_GL && model->type == GENERAL_JOURNAL2)
+        state_section = g_strdup (STATE_SECTION_GEN_JOURNAL);
     else if (ledger_type == LD2_SUBACCOUNT)
     {
         gchar guidstr[GUID_ENCODING_LENGTH+1];
@@ -322,7 +322,7 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW (view));
 
-    if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
+    if (ledger_type == LD2_GL && model->type == GENERAL_JOURNAL2)
         gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), TRUE);
     else
         gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), FALSE);
@@ -955,7 +955,7 @@ gnc_split_reg2_get_placeholder (GNCSplitReg2 *gsr)
 
     switch (model->type)
     {
-    case GENERAL_LEDGER2:
+    case GENERAL_JOURNAL2:
     case INCOME_LEDGER2:
     case PORTFOLIO_LEDGER2:
     case SEARCH_LEDGER2:

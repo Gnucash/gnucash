@@ -2110,7 +2110,7 @@ gnc_split_reg_get_placeholder( GNCSplitReg *gsr )
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case PORTFOLIO_LEDGER:
     case SEARCH_LEDGER:

@@ -642,7 +642,7 @@
           ;; ----------------------------------
           ;; add the splits to the table
           ;; ----------------------------------
-          ;; The general ledger has a split that doesn't have an account
+          ;; The general journal has a split that doesn't have an account
           ;; set yet (the new entry transaction).
           ;; This split should be skipped or the report errors out.
           ;; See bug #639082

@@ -749,7 +749,7 @@ gnc_plugin_page_register2_init (GncPluginPageRegister2 *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("General Ledger2"),
+                 "page-name",      _("General Journal2"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-register2-ui.xml",
                  "use-new-window", use_new,
@@ -1383,7 +1383,7 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
         g_key_file_set_string (key_file, group_name, KEY_ACCOUNT_NAME, name);
         g_free (name);
     }
-    else if (model->type == GENERAL_LEDGER2)
+    else if (model->type == GENERAL_JOURNAL2)
     {
         g_key_file_set_string (key_file, group_name, KEY_REGISTER_TYPE,
                               LABEL_GL);
@@ -1669,9 +1669,9 @@ gnc_plugin_page_register2_get_tab_name (GncPluginPage *plugin_page)
     case LD2_GL:
         switch (model->type)
         {
-        case GENERAL_LEDGER:
+        case GENERAL_JOURNAL:
         case INCOME_LEDGER:
-            return g_strdup(_("General Ledger"));
+            return g_strdup(_("General Journal"));
         case PORTFOLIO_LEDGER:
             return g_strdup(_("Portfolio"));
         case SEARCH_LEDGER:
@@ -2389,12 +2389,12 @@ gnc_reg_get_name (GNCLedgerDisplay2 *ledger, gboolean for_window) // this works
 
     switch (model->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
         if (for_window)
-            reg_name = _("General Ledger");
+            reg_name = _("General Journal");
         else
-            reg_name = _("General Ledger Report");
+            reg_name = _("General Journal Report");
         break;
     case PORTFOLIO_LEDGER:
         if (for_window)
@@ -2474,7 +2474,7 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query) //this wor
     arg = SCM_BOOL (model->use_double_line);
     args = scm_cons (arg, args);
 
-    arg = SCM_BOOL (model->type == GENERAL_LEDGER2 || model->type == INCOME_LEDGER2
+    arg = SCM_BOOL (model->type == GENERAL_JOURNAL2 || model->type == INCOME_LEDGER2
                                                    || model->type == SEARCH_LEDGER2);
     args = scm_cons (arg, args);
 
@@ -3014,7 +3014,7 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
     if (priv->fd.save_filter == TRUE)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
-    // General Ledgers can not save filters so disable button.
+    // General Journals can not save filters so disable button.
     ledger_type = gnc_ledger_display2_type (priv->ledger);
     if (ledger_type == LD2_GL)
        gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);

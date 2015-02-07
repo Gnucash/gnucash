@@ -146,7 +146,7 @@ balances, transfer accounts, etc. The register is where the cells,
 cursor and table get put together into a unified whole. The register
 defines specific, actual layouts and widths of the date, price, etc.
 cells in a table. It includes a table header, and defines more than
-ten specific layouts: bank, credit-card, stock, general ledger, etc.
+ten specific layouts: bank, credit-card, stock, general journal, etc.
 
 The split register implementation is divided into two components. The
 first component (src/register/splitreg.[ch]) defines the basic structure

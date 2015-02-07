@@ -298,7 +298,7 @@ gnc_tree_util_split_reg_has_rate (GncTreeViewSplitReg *view)
     case EXPENSE_REGISTER2:
     case EQUITY_REGISTER2:
     case TRADING_REGISTER2:
-    case GENERAL_LEDGER2:
+    case GENERAL_JOURNAL2:
     case INCOME_LEDGER2:
     case SEARCH_LEDGER2:
         return TRUE;

@@ -2120,7 +2120,7 @@ gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view)
 
         window = gnc_tree_view_split_reg_get_parent (view);
         gnc_error_dialog (window, "%s",
-                         _("You can not paste from the general ledger to a register."));
+                         _("You can not paste from the general journal to a register."));
         return;
     }
 
