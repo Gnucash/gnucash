@@ -52,59 +52,23 @@ extern "C"
 
 static const gchar *suitename = "/qof/gnc-date";
 void test_suite_gnc_date ( void );
-
-typedef struct
-{
-    GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
-    GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
-    GDateTime *(*new_from_unix_local)(time64);
-    GDateTime *(*new_from_timeval_local)(GTimeVal *);
-    GDateTime *(*new_now_local)(void);
-    GDateTime *(*to_local)(GDateTime *);
-} _GncDateTime;
-
-static _GncDateTime gncdt;
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-extern void _gnc_date_time_init (_GncDateTime *);
-
-#ifdef __cplusplus
-}
-#endif
-
+static GTimeZone *tz;
 /* gnc_localtime just creates a tm on the heap and calls
  * gnc_localtime_r with it, so this suffices to test both.
  */
 static void
 test_gnc_localtime (void)
 {
-    time64 secs[6] = {-43238956734LL, -1123692LL, 432761LL,
+    time64 secs[6] = {-15767956734LL, -1123692LL, 432761LL,
                       723349832LL, 887326459367LL,
                       1364160236LL // This is "Sunday 2013-03-24" (to verify the Sunday
                       // difference between g_date_time and tm->tm_wday)
                      };
     guint ind;
-#if defined(__clang__)
-#define _func "struct tm *gnc_localtime_r(const time64 *, struct tm *)"
-#else
-#define _func "tm* gnc_localtime_r(const time64*, tm*)"
-//#define _func "gnc_localtime_r"
-#endif
-    gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
-#undef _func
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof";
-    TestErrorStruct check = {loglevel, logdomain, msg, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
         struct tm* time = gnc_localtime (&secs[ind]);
-        GDateTime *gdt = gncdt.new_from_unix_local (secs[ind]);
+        GDateTime *gdt = g_date_time_new_from_unix_local (secs[ind]);
         if (gdt == NULL)
         {
             g_assert (time == NULL);
@@ -118,7 +82,9 @@ test_gnc_localtime (void)
         g_assert_cmpint (time->tm_sec, ==, g_date_time_get_second (gdt));
         // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
         g_assert_cmpint (time->tm_wday, ==, (g_date_time_get_day_of_week (gdt) % 7));
-        g_assert_cmpint (time->tm_yday, ==, g_date_time_get_day_of_year (gdt));
+	//tm_yday is 0-based, g_date_time_get_day_of_year is 1-based.
+        g_assert_cmpint (time->tm_yday, ==,
+			 g_date_time_get_day_of_year (gdt) - 1);
         if (g_date_time_is_daylight_savings (gdt))
             g_assert_cmpint (time->tm_isdst, ==, 1);
         else
@@ -130,49 +96,33 @@ test_gnc_localtime (void)
         g_date_time_unref (gdt);
         gnc_tm_free (time);
     }
-    g_assert_cmpint (check.hits, ==, 1);
-    g_log_set_default_handler (hdlr, NULL);
 }
 
 static void
 test_gnc_gmtime (void)
 {
-    time64 secs[6] = {-43238956734LL, -1123692LL, 432761LL,
+    time64 secs[6] = {-15767956734LL, -1123692LL, 432761LL,
                       723349832LL, 887326459367LL, 1175964426LL
                      };
     struct tm answers[6] =
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
-        { 6, 41, 2, 24, 9, -1301, 4, 297, 0, 0, NULL },
-        { 48, 51, 23, 18, 11, 69, 4, 352, 0, 0, NULL },
-        { 41, 12, 0, 6, 0, 70, 2, 6, 0, 0, NULL },
-        { 32, 30, 2, 3, 11, 92, 4, 338, 0, 0, NULL },
+        { 6, 1, 12, 2, 4, -430, 1, 121, 0, 0, NULL },
+        { 48, 51, 23, 18, 11, 69, 4, 351, 0, 0, NULL },
+        { 41, 12, 0, 6, 0, 70, 2, 5, 0, 0, NULL },
+        { 32, 30, 2, 3, 11, 92, 4, 337, 0, 0, NULL },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL },
-        { 6, 47, 16, 7, 3, 107, 6, 97, 0, 0, NULL },
+        { 6, 47, 16, 7, 3, 107, 6, 96, 0, 0, NULL },
 #else
-        { 6, 41, 2, 24, 9, -1301, 4, 297, 0 },
-        { 48, 51, 23, 18, 11, 69, 4, 352, 0 },
-        { 41, 12, 0, 6, 0, 70, 2, 6, 0 },
-        { 32, 30, 2, 3, 11, 92, 4, 338, 0 },
+        { 6, 1, 12, 2, 4 -430, 1, 121, 0 },
+        { 48, 51, 23, 18, 11, 69, 4, 351, 0 },
+        { 41, 12, 0, 6, 0, 70, 2, 5, 0 },
+        { 32, 30, 2, 3, 11, 92, 4, 337, 0 },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        { 6, 47, 16, 7, 3, 107, 6, 97, 0 },
+        { 6, 47, 16, 7, 3, 107, 6, 96, 0 },
 #endif
     };
     guint ind;
-#if defined(__clang__)
-#define _func "struct tm *gnc_gmtime(const time64 *)"
-#else
-#define _func "tm* gnc_gmtime(const time64*)"
-//#define _func "gnc_gmtime"
-#endif
-    gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
-#undef _func
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof";
-    TestErrorStruct check = {loglevel, logdomain, msg, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
         struct tm* time = gnc_gmtime (&secs[ind]);
@@ -190,15 +140,13 @@ test_gnc_gmtime (void)
         g_assert_cmpint (time->tm_sec, ==, answers[ind].tm_sec);
         g_assert_cmpint (time->tm_wday, ==, answers[ind].tm_wday);
         g_assert_cmpint (time->tm_yday, ==, answers[ind].tm_yday);
-        g_assert_cmpint (time->tm_isdst, ==, 0);
+        g_assert_cmpint (time->tm_isdst, ==, -1);
 #ifdef HAVE_STRUCT_TM_GMTOFF
         g_assert_cmpint (time->tm_gmtoff, ==, 0);
 #endif
         g_date_time_unref (gdt);
         gnc_tm_free (time);
     }
-    g_assert_cmpint (check.hits, ==, 1);
-    g_log_set_default_handler (hdlr, NULL);
 }
 
 static void
@@ -211,7 +159,7 @@ test_gnc_mktime (void)
         gint yday;
     } ans[5] =
     {
-        { -43238956734LL, 4, 297 },
+        { -15767956734LL, 4, 297 },
         { -1123692LL, 4, 352 },
         { 432761LL, 2, 6 },
         { 723349832LL, 4, 338 },
@@ -221,13 +169,13 @@ test_gnc_mktime (void)
     struct tm time[5] =
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
-        { 6, 41, 2, 24, 9, -1301, 0, 0, -1, 0, NULL },
+        { 6, 41, 2, 24, 9, -430, 0, 0, -1, 0, NULL },
         { 48, 51, 23, 18, 11, 69, 0, 0, -1, 0, NULL },
         { 41, 12, 0, 6, 0, 70, 0, 0, -1, 0, NULL },
         { 32, 30, 2, 3, 11, 92, 0, 0, -1, 0, NULL },
         { 6, 47, 16, 7, 3, 107, 0, 0, -1, 0, NULL },
 #else
-        { 6, 41, 2, 24, 9, -1301, 0, 0, -1 },
+        { 6, 41, 2, 24, 9, -430, 0, 0, -1 },
         { 48, 51, 23, 18, 11, 69, 0, 0, -1 },
         { 41, 12, 0, 6, 0, 70, 0, 0, -1 },
         { 32, 30, 2, 3, 11, 92, 0, 0, -1 },
@@ -239,7 +187,7 @@ test_gnc_mktime (void)
     for (ind = 0; ind < G_N_ELEMENTS (time); ind++)
     {
         time64 secs = gnc_mktime (&time[ind]);
-        GDateTime *gdt = gncdt.new_local (time[ind].tm_year + 1900,
+        GDateTime *gdt = g_date_time_new_local (time[ind].tm_year + 1900,
                                           time[ind].tm_mon + 1,
                                           time[ind].tm_mday,
                                           time[ind].tm_hour,
@@ -304,7 +252,7 @@ test_gnc_mktime_normalization (void)
     for (ind = 0; ind < G_N_ELEMENTS (time); ind++)
     {
         time64 secs = gnc_mktime (&time[ind]);
-        GDateTime *gdt = gncdt.new_local (time[ind].tm_year + 1900,
+        GDateTime *gdt = g_date_time_new_local (time[ind].tm_year + 1900,
                                           time[ind].tm_mon + 1,
                                           time[ind].tm_mday,
                                           time[ind].tm_hour,
@@ -334,13 +282,13 @@ test_gnc_mktime_normalization (void)
 static void
 test_gnc_ctime (void)
 {
-    time64 secs[5] = {-43238956734LL, -1123692LL, 432761LL,
+    time64 secs[5] = {-15767956734LL, -1123692LL, 432761LL,
                       723349832LL, 1175964426LL
                      };
     guint ind;
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
-        GDateTime *gdt = gncdt.new_from_unix_local (secs[ind]);
+        GDateTime *gdt = g_date_time_new_from_unix_local (secs[ind]);
         gchar* datestr = gnc_ctime (&secs[ind]);
         g_assert_cmpstr (datestr, ==,
                          g_date_time_format (gdt, "%a %b %e %H:%M:%S %Y"));
@@ -356,7 +304,7 @@ test_gnc_time (void)
     GDateTime *gdt;
     secs1 = gnc_time (NULL);
     secs1 = gnc_time (&secs2);
-    gdt = gncdt.new_now_local ();
+    gdt = g_date_time_new_now_local ();
     g_assert_cmpint (secs1, ==, secs2);
     g_assert_cmpint (secs1, ==, g_date_time_to_unix (gdt));
     g_date_time_unref (gdt);
@@ -683,14 +631,14 @@ timespecCanonicalDayTime(Timespec t)// C: 12 in 5 SCM: 19 in 10 Local: 0:0:0
 static Timespec
 compute_noon_of_day (Timespec *ts)
 {
-    GDateTime *g = gncdt.new_from_unix_local (ts->tv_sec);
+    GDateTime *g = g_date_time_new_from_unix_local (ts->tv_sec);
     gint yr = g_date_time_get_year (g);
     gint mo = g_date_time_get_month (g);
     gint da = g_date_time_get_day_of_month (g);
     Timespec nt = {0, 0 };
 
     g_date_time_unref (g);
-    g = gncdt.new_local (yr, mo, da, 12, 0, 0.0);
+    g = g_date_time_new_local (yr, mo, da, 12, 0, 0.0);
     nt.tv_sec = g_date_time_to_unix (g);
     g_date_time_unref (g);
     return nt;
@@ -997,9 +945,9 @@ test_qof_print_date_buff (void)
 {
     gchar buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    GDateTime *gd1 = gncdt.new_local (1974, 11, 23, 12, 0, 0.0);
-    GDateTime *gd2 = gncdt.new_local (1961, 2, 2, 12, 0, 0.0);
-    GDateTime *gd3 = gncdt.new_local (2045, 6, 16, 12, 0, 0.0);
+    GDateTime *gd1 = g_date_time_new_local (1974, 11, 23, 12, 0, 0.0);
+    GDateTime *gd2 = g_date_time_new_local (1961, 2, 2, 12, 0, 0.0);
+    GDateTime *gd3 = g_date_time_new_local (2045, 6, 16, 12, 0, 0.0);
 
     time64 tm1 = g_date_time_to_unix (gd1);
     time64 tm2 = g_date_time_to_unix (gd2);
@@ -1276,9 +1224,9 @@ static void
 test_qof_print_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    GDateTime *gd1 = gncdt.new_local (1974, 11, 23, 12, 0, 0.0);
-    GDateTime *gd2 = gncdt.new_local (1961, 2, 2, 12, 0, 0.0);
-    GDateTime *gd3 = gncdt.new_local (2045, 6, 16, 12, 0, 0.0);
+    GDateTime *gd1 = g_date_time_new_local (1974, 11, 23, 12, 0, 0.0);
+    GDateTime *gd2 = g_date_time_new_local (1961, 2, 2, 12, 0, 0.0);
+    GDateTime *gd3 = g_date_time_new_local (2045, 6, 16, 12, 0, 0.0);
 
     time64 tm1 = g_date_time_to_unix (gd1);
     time64 tm2 = g_date_time_to_unix (gd2);
@@ -1428,7 +1376,7 @@ test_qof_scan_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     int day = 0, mo = 0, yr = 0;
-    GDateTime *gdt = gncdt.new_now_local ();
+    GDateTime *gdt = g_date_time_new_now_local ();
     gint year = g_date_time_get_year (gdt);
     gint month = g_date_time_get_month (gdt);
     struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -1603,7 +1551,7 @@ gnc_date_timestamp (void)// C: 2 in 2  Local: 0:0:0
 static void
 test_gnc_date_timestamp (void)
 {
-    GDateTime *gdt = gncdt.new_now_local ();
+    GDateTime *gdt = g_date_time_new_now_local ();
     gchar *timestr = gnc_date_timestamp ();
     struct tm tm;
 
@@ -1703,7 +1651,7 @@ format_timestring (GDateTime *gdt)
 {
   static const unsigned tzlen = MAX_DATE_LENGTH - 26;
     gchar *fmt = "%Y-%m-%d %H:%M";
-    GDateTime *ngdt = gncdt.to_local (gdt);
+    GDateTime *ngdt = g_date_time_to_local (gdt);
     gchar *date_base = g_date_time_format (ngdt, fmt);
     gchar buf[tzlen], *retval;
 #ifdef G_OS_WIN32
@@ -1832,7 +1780,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt0);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = gncdt.to_local (gdt0);
+    gdt_local = g_date_time_to_local (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1841,7 +1789,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt1);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = gncdt.to_local (gdt1);
+    gdt_local = g_date_time_to_local (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1850,7 +1798,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt2);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = gncdt.to_local (gdt2);
+    gdt_local = g_date_time_to_local (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1859,7 +1807,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt3);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = gncdt.to_local (gdt3);
+    gdt_local = g_date_time_to_local (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1868,7 +1816,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt4);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = gncdt.to_local (gdt4);
+    gdt_local = g_date_time_to_local (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1877,7 +1825,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt5);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = gncdt.to_local (gdt5);
+    gdt_local = g_date_time_to_local (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     /* 2038 Bug */
@@ -1910,10 +1858,10 @@ gnc_dmy2timespec (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
 static void
 test_gnc_dmy2timespec (void)
 {
-    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21, 0, 0, 0);
-    GDateTime *gdt2 = gncdt.new_local (1918, 3, 31, 0, 0, 0);
-    GDateTime *gdt3 = gncdt.new_local (1918, 4, 1, 0, 0, 0);
-    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 0, 0, 0);
+    GDateTime *gdt1 = g_date_time_new_local (1999, 7, 21, 0, 0, 0);
+    GDateTime *gdt2 = g_date_time_new_local (1918, 3, 31, 0, 0, 0);
+    GDateTime *gdt3 = g_date_time_new_local (1918, 4, 1, 0, 0, 0);
+    GDateTime *gdt4 = g_date_time_new_local (2057, 11, 20, 0, 0, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -1954,10 +1902,10 @@ gnc_dmy2timespec_end (int day, int month, int year)// C: 1  Local: 0:0:0
 static void
 test_gnc_dmy2timespec_end (void)
 {
-    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21,23,59, 59);
-    GDateTime *gdt2 = gncdt.new_local (1918, 3, 30, 23, 59, 59);
-    GDateTime *gdt3 = gncdt.new_local (1918, 3, 31, 23, 59, 59);
-    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 23, 59, 59);
+    GDateTime *gdt1 = g_date_time_new_local (1999, 7, 21,23,59, 59);
+    GDateTime *gdt2 = g_date_time_new_local (1918, 3, 30, 23, 59, 59);
+    GDateTime *gdt3 = g_date_time_new_local (1918, 3, 31, 23, 59, 59);
+    GDateTime *gdt4 = g_date_time_new_local (2057, 11, 20, 23, 59, 59);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -2048,7 +1996,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt0);
     date1 = timespec_to_gdate (t);
-    gdt_local = gncdt.to_local (gdt0);
+    gdt_local = g_date_time_to_local (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -2056,7 +2004,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt1);
     date1 = timespec_to_gdate (t);
-    gdt_local = gncdt.to_local (gdt1);
+    gdt_local = g_date_time_to_local (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -2064,7 +2012,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt2);
     date1 = timespec_to_gdate (t);
-    gdt_local = gncdt.to_local (gdt2);
+    gdt_local = g_date_time_to_local (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -2072,14 +2020,14 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt3);
     date1 = timespec_to_gdate (t);
-    gdt_local = gncdt.to_local (gdt3);
+    gdt_local = g_date_time_to_local (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
     g_assert_cmpint (g_date_get_julian (&date1), ==, g_date_get_julian (&date2));
     t = g_date_time_to_timespec (gdt4);
     date1 = timespec_to_gdate (t);
-    gdt_local = gncdt.to_local (gdt4);
+    gdt_local = g_date_time_to_local (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -2087,7 +2035,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt5);
     date1 = timespec_to_gdate (t);
-    gdt_local = gncdt.to_local (gdt5);
+    gdt_local = g_date_time_to_local (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -2110,10 +2058,10 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (void)
 {
-    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21, 0, 0, 0);
-    GDateTime *gdt2 = gncdt.new_local (1918, 3, 31, 0, 0, 0);
-    GDateTime *gdt3 = gncdt.new_local (1918, 4, 1, 0, 0, 0);
-    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 0, 0, 0);
+    GDateTime *gdt1 = g_date_time_new_local (1999, 7, 21, 0, 0, 0);
+    GDateTime *gdt2 = g_date_time_new_local (1918, 3, 31, 0, 0, 0);
+    GDateTime *gdt3 = g_date_time_new_local (1918, 4, 1, 0, 0, 0);
+    GDateTime *gdt4 = g_date_time_new_local (2057, 11, 20, 0, 0, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -2191,51 +2139,51 @@ test_gnc_time64_get_day_start (void)
     gint day, mon, yr;
     time64 time, t_time, r_time;
 
-    gdt_local = gncdt.to_local (gdt0);
+    gdt_local = g_date_time_to_local (gdt0);
     time = g_date_time_to_unix (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_time64_get_day_start (time);
     /* This will work in the half of the world where localtime is later than UTC */
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt1);
+    gdt_local = g_date_time_to_local (gdt1);
     time = g_date_time_to_unix (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_time64_get_day_start (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt2);
+    gdt_local = g_date_time_to_local (gdt2);
     time = g_date_time_to_unix (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_time64_get_day_start (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt3);
+    gdt_local = g_date_time_to_local (gdt3);
     time = g_date_time_to_unix (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_time64_get_day_start (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt4);
+    gdt_local = g_date_time_to_local (gdt4);
     time = g_date_time_to_unix (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_time64_get_day_start (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt5);
+    gdt_local = g_date_time_to_local (gdt5);
     time = g_date_time_to_unix (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_time64_get_day_start (time);
     g_assert_cmpint (t_time, ==, r_time);
@@ -2271,50 +2219,50 @@ test_gnc_time64_get_day_end (void)
     gint day, mon, yr;
     time64 time, t_time, r_time;
 
-    gdt_local = gncdt.to_local (gdt0);
+    gdt_local = g_date_time_to_local (gdt0);
     time = g_date_time_to_unix (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_time64_get_day_end (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt1);
+    gdt_local = g_date_time_to_local (gdt1);
     time = g_date_time_to_unix (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_time64_get_day_end (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt2);
+    gdt_local = g_date_time_to_local (gdt2);
     time = g_date_time_to_unix (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_time64_get_day_end (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt3);
+    gdt_local = g_date_time_to_local (gdt3);
     time = g_date_time_to_unix (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_time64_get_day_end (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt4);
+    gdt_local = g_date_time_to_local (gdt4);
     time = g_date_time_to_unix (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_time64_get_day_end (time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = gncdt.to_local (gdt5);
+    gdt_local = g_date_time_to_local (gdt5);
     time = g_date_time_to_unix (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_time64_get_day_end (time);
     g_assert_cmpint (t_time, ==, r_time);
@@ -2392,9 +2340,7 @@ timespec_get_type( void )// Local: 0:0:0
 void
 test_suite_gnc_date (void)
 {
-    _gnc_date_time_init (&gncdt);
-
-
+    tz = g_time_zone_new_local();
     GNC_TEST_ADD_FUNC (suitename, "gnc localtime", test_gnc_localtime);
     GNC_TEST_ADD_FUNC (suitename, "gnc gmtime", test_gnc_gmtime);
     GNC_TEST_ADD_FUNC (suitename, "gnc mktime", test_gnc_mktime);
@@ -2451,5 +2397,5 @@ test_suite_gnc_date (void)
 // GNC_TEST_ADD_FUNC (suitename, "gnc dow abbrev", test_gnc_dow_abbrev);
 // GNC_TEST_ADD_FUNC (suitename, "timespec boxed copy func", test_timespec_boxed_copy_func);
 // GNC_TEST_ADD_FUNC (suitename, "timespec boxed free func", test_timespec_boxed_free_func);
-
+    g_time_zone_unref(tz);
 }
