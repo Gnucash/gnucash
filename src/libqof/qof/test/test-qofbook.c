@@ -364,6 +364,9 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     g_free( r );
 }
 
+/* keep this testing of trading accounts, while adding testing of currency-
+   accounting-based trading accounts, so that files prior to version 2.7
+   can be read/processed */
 static void
 test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 {
@@ -381,6 +384,48 @@ test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 		      "trading-accts", "tt",
 		      NULL);
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+    qof_book_commit_edit (fixture->book);
+
+}
+
+static void
+test_book_use_trading_accounts_currency_accounting( Fixture *fixture, gconstpointer pData )
+{
+    g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with existing currency-accounting set to 'trading'" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "currency-accounting", "trading",
+		      NULL);
+    g_assert( qof_book_use_trading_accounts( fixture-> book ) == TRUE );
+
+    g_test_message( "Testing with existing currency-accounting set to 'book-currency'" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "currency-accounting", "book-currency",
+		      NULL);
+    g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+    qof_book_commit_edit (fixture->book);
+
+}
+
+static void
+test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
+{
+    g_assert( qof_book_use_book_currency( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with existing currency-accounting set to 'book-currency'" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "currency-accounting", "book-currency",
+		      NULL);
+    g_assert( qof_book_use_book_currency( fixture-> book ) == TRUE );
+
+    g_test_message( "Testing with existing currency-accounting set to 'trading'" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "currency-accounting", "trading",
+		      NULL);
+    g_assert( qof_book_use_book_currency( fixture-> book ) == FALSE );
     qof_book_commit_edit (fixture->book);
 
 }
@@ -757,6 +802,8 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "get counter format", Fixture, NULL, setup, test_book_get_counter_format, teardown );
     GNC_TEST_ADD( suitename, "increment and format counter", Fixture, NULL, setup, test_book_increment_and_format_counter, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
+    GNC_TEST_ADD( suitename, "use trading accounts - currency accounting", Fixture, NULL, setup, test_book_use_trading_accounts_currency_accounting, teardown );
+    GNC_TEST_ADD( suitename, "use book-currency", Fixture, NULL, setup, test_book_use_book_currency, teardown );
     GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
     GNC_TEST_ADD( suitename, "use split action for num field", Fixture, NULL, setup, test_book_use_split_action_for_num_field, teardown );
     GNC_TEST_ADD( suitename, "mark session dirty", Fixture, NULL, setup, test_book_mark_session_dirty, teardown );

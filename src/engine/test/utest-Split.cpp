@@ -1808,7 +1808,7 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     g_assert (kvp_frame_get_slot (split1->inst.kvp_data, "lot-split") == NULL);
     qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
-		      "trading-accts", "t",
+		      "currency-accounting", "trading",
 		      NULL);
     qof_book_commit_edit (book);
     g_assert (xaccTransUseTradingAccounts (txn));

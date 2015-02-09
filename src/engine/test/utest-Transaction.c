@@ -1053,7 +1053,7 @@ test_xaccTransGetImbalance_trading (Fixture *fixture,
     MonetaryList *mlist;
     qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
-		      "trading-accts", "t",
+		      "currency-accounting", "trading",
 		      NULL);
     qof_book_commit_edit (book);
 
@@ -1140,7 +1140,7 @@ test_xaccTransIsBalanced_trading (Fixture *fixture, gconstpointer pData)
 
     qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
-		      "trading-accts", "t",
+		      "currency-accounting", "trading",
 		      NULL);
     qof_book_commit_edit (book);
 
