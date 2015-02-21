@@ -859,7 +859,7 @@
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
     (xaccQueryAddDescriptionMatch
-     str-query matchstr case-sens regexp QOF-QUERY-AND)
+     str-query matchstr case-sens regexp QOF-COMPARE-CONTAINS QOF-QUERY-AND)
     (set! total-query
           ;; this is a tad inefficient, but its a simple way to accomplish
           ;; description match inversion...
@@ -925,7 +925,7 @@
          (begin
            (set! query2 (qof-query-create-for-splits))
            (if matchstr (xaccQueryAddDescriptionMatch
-                         query2 matchstr case-sens regexp QOF-QUERY-OR))
+                         query2 matchstr case-sens regexp QOF-COMPARE-CONTAINS QOF-QUERY-OR))
            (if closing (xaccQueryAddClosingTransMatch query2 1 QOF-QUERY-OR))
            (qof-query-merge-in-place query query2 QOF-QUERY-AND)
            (qof-query-destroy query2)
