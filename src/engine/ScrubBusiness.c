@@ -82,31 +82,33 @@ scrub_other_link (GNCLot *from_lot, Split *ll_from_split,
                   GNCLot *to_lot,   Split *ll_to_split)
 {
     Split *real_from_split; // This refers to the split in the payment lot representing the payment itself
-    gnc_numeric from_val, real_from_val, to_val;
     gboolean modified = FALSE;
+    gnc_numeric real_from_val;
+    gnc_numeric from_val = xaccSplitGetValue (ll_from_split);
+    gnc_numeric to_val = xaccSplitGetValue (ll_to_split);
     Transaction *ll_txn = xaccSplitGetParent (ll_to_split);
 
-    // Per iteration we can only scrub at most max (val-doc-split, val-pay-split)
-    // So split the bigger one in two if needed and continue with the equal valued splits only
-    // The remainder is added to the lot link transaction and the lot to keep everything balanced
-    // and will be processed in a future iteration
-    modified = reduce_biggest_split (ll_from_split, ll_to_split);
+    // Per iteration we can only scrub at most min (val-doc-split, val-pay-split)
+    // So set the ceiling for finding a potential offsetting split in the lot
+    if (gnc_numeric_compare (gnc_numeric_abs (from_val), gnc_numeric_abs (to_val)) >= 0)
+        from_val = gnc_numeric_neg (to_val);
 
     // Next we have to find the original payment split so we can
     // add (part of) it to the document lot
-    real_from_split = gncOwnerFindOffsettingSplit (from_lot, xaccSplitGetValue (ll_from_split));
+    real_from_split = gncOwnerFindOffsettingSplit (from_lot, from_val);
     if (!real_from_split)
-        return modified; // No usable split in the payment lot
+        return FALSE; // No usable split in the payment lot
 
-    // Here again per iteration we can only scrub at most max (val-other-pay-split, val-pay-split)
-    // So split the bigger one in two if needed and continue with the equal valued splits only
+    // We now have found 3 splits involved in the scrub action:
+    // 2 lot link splits which we want to reduce
+    // 1 other split to move into the original lot instead of the lot link split
+    // As said only value of the split can be offset.
+    // So split the bigger ones in two if needed and continue with equal valued splits only
     // The remainder is added to the lot link transaction and the lot to keep everything balanced
     // and will be processed in a future iteration
-    modified = reduce_biggest_split (real_from_split, ll_from_split);
-
-    // Once more check for max (val-doc-split, val-pay-split), and reduce if necessary.
-    // It may have changed while looking for the real payment split
     modified = reduce_biggest_split (ll_from_split, ll_to_split);
+    modified |= reduce_biggest_split (real_from_split, ll_from_split);
+    modified |= reduce_biggest_split (ll_from_split, ll_to_split);
 
     // At this point ll_to_split and real_from_split should have the same value
     // If not, flag a warning and skip to the next iteration
@@ -116,8 +118,11 @@ scrub_other_link (GNCLot *from_lot, Split *ll_from_split,
     if (!gnc_numeric_equal (real_from_val, to_val))
     {
         // This is unexpected - write a warning message and skip this split
-        PWARN("real_from_val and to_val differ. "
-              "This is unexpected! Skip scrubbing of real_from_split %p against ll_to_split %p.", real_from_split, ll_to_split);
+        PWARN("real_from_val (%s) and to_val (%s) differ. "
+              "This is unexpected! Skip scrubbing of real_from_split %p against ll_to_split %p.",
+              gnc_numeric_to_string (real_from_val), // gnc_numeric_denom (real_from_val),
+              gnc_numeric_to_string (to_val), // gnc_numeric_denom (to_val),
+              real_from_split, ll_to_split);
         return modified;
     }
 
