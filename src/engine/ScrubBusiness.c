@@ -190,7 +190,7 @@ scrub_start:
             if (sl_split == ll_txn_split)
                 continue; // next lot link transaction split
 
-            // Only splits of opposite sign can be scrubbed
+            // Only splits of opposite signed values can be scrubbed
             if (gnc_numeric_positive_p (xaccSplitGetValue (sl_split)) ==
                 gnc_numeric_positive_p (xaccSplitGetValue (ll_txn_split)))
                 continue; // next lot link transaction split
@@ -256,11 +256,160 @@ scrub_start:
     return modified;
 }
 
+// Note this is a recursive function. It presumes the number of splits
+// in avail_splits is relatively low. With many splits the performance will
+// quickly degrade.
+// Careful: this function assumes all splits in avail_splits to be valid
+// and with values of opposite sign of target_value
+// Ignoring this can cause unexpected results!
+static SplitList *
+gncSLFindOffsSplits (SplitList *avail_splits, gnc_numeric target_value)
+{
+    gint curr_recurse_level = 0;
+    gint max_recurse_level = g_list_length (avail_splits) - 1;
+
+    if (!avail_splits)
+        return NULL;
+
+    for (curr_recurse_level = 0;
+         curr_recurse_level <= max_recurse_level;
+         curr_recurse_level++)
+    {
+        SplitList *split_iter = NULL;
+        for (split_iter = avail_splits; split_iter; split_iter = split_iter->next)
+        {
+            Split *split = split_iter->data;
+            SplitList *match_splits = NULL;
+            gnc_numeric split_value, remaining_value;
+
+            split_value = xaccSplitGetValue (split);
+            // Attention: target_value and split_value are of opposite sign
+            // So to get the remaining target value, they should be *added*
+            remaining_value = gnc_numeric_add (target_value, split_value,
+                                               GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+
+            if (curr_recurse_level == 0)
+            {
+                if (gnc_numeric_zero_p (remaining_value))
+                    match_splits = g_list_prepend (NULL, split);
+            }
+            else
+            {
+                if (gnc_numeric_positive_p (target_value) ==
+                    gnc_numeric_positive_p (remaining_value))
+                    match_splits = gncSLFindOffsSplits (split_iter->next,
+                                                        remaining_value);
+            }
+
+            if (match_splits)
+                return g_list_prepend (match_splits, split);
+        }
+    }
+
+    return NULL;
+}
+
+
+static gboolean
+gncScrubLotDanglingPayments (GNCLot *lot)
+{
+    SplitList * split_list, *filtered_list = NULL, *match_list = NULL, *node;
+    Split *ll_split = gnc_lot_get_earliest_split (lot);
+    Transaction *ll_trans = xaccSplitGetParent (ll_split);
+    gnc_numeric ll_val = xaccSplitGetValue (ll_split);
+    time64 ll_date = xaccTransGetDate (ll_trans);
+    const char *ll_desc = xaccTransGetDescription (ll_trans);
+
+    // look for free splits (i.e. not in any lot) which,
+    // compared to the lot link split
+    // - have the same date
+    // - have the same description
+    // - have an opposite sign amount
+    // - free split's abs value is less than or equal to ll split's abs value
+    split_list = xaccAccountGetSplitList(gnc_lot_get_account (lot));
+    for (node = split_list; node; node = node->next)
+    {
+        Split *free_split = node->data;
+        Transaction *free_trans;
+        gnc_numeric free_val;
+
+        if (NULL != xaccSplitGetLot(free_split))
+            continue;
+
+        free_trans = xaccSplitGetParent (free_split);
+        if (ll_date != xaccTransGetDate (free_trans))
+            continue;
+
+        if (0 != g_strcmp0 (ll_desc, xaccTransGetDescription (free_trans)))
+            continue;
+
+        free_val = xaccSplitGetValue (free_split);
+        if (gnc_numeric_positive_p (ll_val) ==
+            gnc_numeric_positive_p (free_val))
+            continue;
+
+        if (gnc_numeric_compare (gnc_numeric_abs (free_val), gnc_numeric_abs (ll_val)) > 0)
+            continue;
+
+        filtered_list = g_list_append(filtered_list, free_split);
+    }
+
+    match_list = gncSLFindOffsSplits (filtered_list, ll_val);
+    g_list_free (filtered_list);
+
+    for (node = match_list; node; node = node->next)
+    {
+        Split *match_split = node->data;
+        gnc_lot_add_split (lot, match_split);
+    }
+
+    if (match_list)
+    {
+        g_list_free (match_list);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+static gboolean
+gncScrubLotIsSingleLotLinkSplit (GNCLot *lot)
+{
+    Split *split = NULL;
+    Transaction *trans = NULL;
+
+    // Lots with a single split which is also a lot link transaction split
+    // may be sign of a dangling payment. Let's try to fix that
+
+    // Only works for single split lots...
+    if (1 != gnc_lot_count_splits (lot))
+        return FALSE;
+
+    split = gnc_lot_get_earliest_split (lot);
+    trans = xaccSplitGetParent (split);
+
+    if (!trans)
+    {
+        // Ooops - the split doesn't belong to any transaction !
+        // This is not expected so issue a warning and continue with next split
+        PWARN("Encountered a split in a business lot that's not part of any transaction. "
+              "This is unexpected! Skipping split %p.", split);
+        return FALSE;
+    }
+
+    // Only works if single split belongs to a lot link transaction...
+    if (xaccTransGetTxnType (trans) != TXN_TYPE_LINK)
+        return FALSE;
+
+    return TRUE;
+}
 
 gboolean
 gncScrubBusinessLot (GNCLot *lot)
 {
     gboolean splits_deleted = FALSE;
+    gboolean dangling_payments = FALSE;
+    gboolean dangling_lot_link = FALSE;
     Account *acc;
     gchar *lotname=NULL;
 
@@ -277,6 +426,21 @@ gncScrubBusinessLot (GNCLot *lot)
     xaccScrubMergeLotSubSplits (lot, FALSE);
     splits_deleted = gncScrubLotLinks (lot);
 
+    // Look for dangling payments and repair if found
+    dangling_lot_link = gncScrubLotIsSingleLotLinkSplit (lot);
+    if (dangling_lot_link)
+    {
+        dangling_payments = gncScrubLotDanglingPayments (lot);
+        if (dangling_payments)
+            splits_deleted |= gncScrubLotLinks (lot);
+        else
+        {
+            Split *split = gnc_lot_get_earliest_split (lot);
+            Transaction *trans = xaccSplitGetParent (split);
+            xaccTransDestroy (trans);
+        }
+    }
+
     // If lot is empty now, delete it
     if (0 == gnc_lot_count_splits (lot))
     {
@@ -287,7 +451,9 @@ gncScrubBusinessLot (GNCLot *lot)
     if (acc)
         xaccAccountCommitEdit(acc);
 
-    LEAVE ("(lot=%s, deleted=%d)", lotname ? lotname : "(no lotname)", splits_deleted);
+    LEAVE ("(lot=%s, deleted=%d, dangling lot link=%d, dangling_payments=%d)",
+            lotname ? lotname : "(no lotname)", splits_deleted, dangling_lot_link,
+            dangling_payments);
     g_free (lotname);
 
     return splits_deleted;
