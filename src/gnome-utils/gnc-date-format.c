@@ -345,7 +345,7 @@ gnc_date_format_get_months (GNCDateFormat *gdf)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->months_abbrev)))
         return GNCDATE_MONTH_ABBREV;
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->months_name)))
-        return GNCDATE_MONTH_ABBREV;
+        return GNCDATE_MONTH_NAME;
 
     /* We should never reach this point */
     g_assert(FALSE);

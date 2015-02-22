@@ -260,7 +260,8 @@
                   (for-each
                     (lambda (split)
 		      (set! work-done (+ 1 work-done))
-		      (gnc:report-percent-done (* 85 (/ work-done splits-to-do)))
+		      (if (= (modulo work-done 100) 0)
+		          (gnc:report-percent-done (* 85 (/ work-done splits-to-do))))
                       (let ((parent (xaccSplitGetParent split)))
                         (if (and (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date-tp)
                                  (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp))

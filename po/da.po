@@ -5747,7 +5747,7 @@ msgstr "_Dobbelt linje"
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register.c:413
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:89
 msgid "Show two lines of information for each transaction"
-msgstr "Vis to linier med oplysninger for hver transaktion"
+msgstr "Vis to linjer med oplysninger for hver transaktion"
 
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register2.c:409
 msgid "Show _Extra Dates"
@@ -5776,7 +5776,7 @@ msgstr "_Basishovedbog"
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register2.c:428
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register.c:431
 msgid "Show transactions on one or two lines"
-msgstr "Vis transaktioner på én eller to linier"
+msgstr "Vis transaktioner på én eller to linjer"
 
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register2.c:432
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register.c:435
@@ -5786,7 +5786,7 @@ msgstr "_Autoopdel hovedbog"
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register2.c:433
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register.c:436
 msgid "Show transactions on one or two lines and expand the current transaction"
-msgstr "Vis transaktioner på én eller to linier og ekspandér den aktuelle transaktion"
+msgstr "Vis transaktioner på én eller to linjer og ekspander den aktuelle transaktion"
 
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register2.c:437
 #: ../../gnucash/po/../src/gnome/gnc-plugin-page-register.c:440
@@ -6959,9 +6959,8 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:85
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:138
-#, fuzzy
 msgid "Show all transactions on one line. (Two in double line mode.)"
-msgstr "Vis transaktioner på én eller to linier"
+msgstr "Vis transaktioner på en eller to linjer. (to i dobbelt linje-tilstand.)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:86
 msgid "This field specifies the default view style when opening a new register window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The \"ledger\" setting says to show each transaction on one or two lines. The \"auto-ledger\" setting does the same, but also expands only the current transaction to show all splits. The \"journal\" setting shows all transactions in expanded form."
@@ -6969,9 +6968,8 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:87
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:140
-#, fuzzy
 msgid "Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)"
-msgstr "Vis transaktioner på én eller to linier"
+msgstr "Udvid automatisk den nuværende transakton til at vise alle opdelinger. Alle andre transaktioner vises på en linje. (To i dobbelt linje-tilstand.)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:88
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:142
@@ -10703,9 +10701,8 @@ msgstr ""
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-tree-control-split-reg.c:1256
 #: ../../gnucash/po/../src/register/ledger-core/split-register.c:507
-#, fuzzy
 msgid "New Split Information"
-msgstr "<ingen information>"
+msgstr "Ny opdelingsinformation"
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-tree-control-split-reg.c:1306
 msgid "This is the split anchoring this transaction to the register. You can not duplicate it from this register window."
@@ -10715,9 +10712,8 @@ msgstr ""
 #: ../../gnucash/po/../src/gnome-utils/gnc-tree-util-split-reg.c:501
 #: ../../gnucash/po/../src/register/ledger-core/split-register.c:609
 #: ../../gnucash/po/../src/register/register-gnome/datecell-gnome.c:104
-#, fuzzy
 msgid "Cannot store a transaction at this date"
-msgstr "Indsæt fra transaktionsklippebordet"
+msgstr "Kan ikke lagre en transakton på denne dato"
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-tree-control-split-reg.c:1361
 #: ../../gnucash/po/../src/register/ledger-core/split-register.c:611
@@ -10725,9 +10721,8 @@ msgid "The entered date of the duplicated transaction is older than the \"Read-O
 msgstr ""
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-tree-control-split-reg.c:1725
-#, fuzzy
 msgid "Not enough information for Blank Transaction?"
-msgstr "Vis to linier med oplysninger for hver transaktion"
+msgstr "Ikke nok information for tom transaktion?"
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-tree-control-split-reg.c:1727
 #, fuzzy
@@ -12673,14 +12668,12 @@ msgid "<b>Actions</b>"
 msgstr "<b>Handlinger</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:110
-#, fuzzy
 msgid "'_Enter' moves to blank transaction"
-msgstr "'Retur' hopper til tom transaktion"
+msgstr "»_Retur« går til tom transaktion"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:111
-#, fuzzy
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register. If clear, pressing the 'Enter' key will move down one row."
-msgstr "Flyt til den tomme transaktion efter brugeren trykker 'Retur'. Ellers flyttes en linie ned."
+msgstr "Hvis afkrydset vil tryk på tasten »Retur« gå til den tomme transaktion i bunden af kassekladen. Uden afkrydsning, vil tasten »Retur« flytte dig en række ned."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:112
 msgid "_Auto-raise lists"
@@ -12695,24 +12688,20 @@ msgid "<b>Reconciling</b>"
 msgstr "<b>Afstemmer</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:115
-#, fuzzy
 msgid "Check cleared _transactions"
-msgstr "Kryds kontrollerede transaktioner af"
+msgstr "Kryds kontrollerede _transaktioner af"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:116
-#, fuzzy
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr "Afkryds automatisk kontrollerede transaktioner, når de afstemmes"
+msgstr "Afkryds automatisk kontrollerede transaktioner, når de afstemmes."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:117
-#, fuzzy
 msgid "Automatic _interest transfer"
-msgstr "Automatiske kreditkortbetalinger"
+msgstr "Automatisk _renteoverførsel"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:119
-#, fuzzy
 msgid "Automatic credit card _payment"
-msgstr "Automatiske kreditkortbetalinger"
+msgstr "Automatisk kreditkort_betaling"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:120
 #, fuzzy
@@ -12793,22 +12782,20 @@ msgid "_Auto-split ledger"
 msgstr "_Autoopdel hovedbog"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:143
-#, fuzzy
 msgid "Number of _transactions:"
-msgstr "Antal kolonner"
+msgstr "Antal af _transaktioner:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:145
 msgid "_Double line mode"
 msgstr "_Dobbelt linje-tilstand"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:146
-#, fuzzy
 msgid "Show two lines of information for each transaction instead of one. Does not affect expanded transactions."
-msgstr "Vis to linier med oplysninger for hver transaktion"
+msgstr "Vis to linjer med information for hver transaktion i stedet for en. Påvirker ikke udvidede transaktioner."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:147
 msgid "Register opens in a new _window"
-msgstr ""
+msgstr "Klasseklade åbner i et nyt _vindue"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:148
 msgid "If checked, each register will be opened in its own top level window. If clear, the register will be opened in the current window."
@@ -16252,7 +16239,6 @@ msgid "Match QIF accounts with GnuCash accounts"
 msgstr "Par QIF-konti med GnuCash-konti"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:43
-#, fuzzy
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to classify your transactions. Each of the categories in your QIF file will be converted to a GnuCash account. \n"
 "\n"
@@ -16260,16 +16246,11 @@ msgid ""
 "\n"
 "If you change your mind later, you can reorganize the account structure safely within GnuCash."
 msgstr ""
-"GnuCash benytter separate indtægts- og udgiftskonti i stedet for kategorier\n"
-"til at klassificere dine transaktioner. Hver af disse kategorier i din QIF-fil\n"
-"vil blive omsat til en GnuCash-konto. \n"
+"GnuCash benytter separate indtægts- og udgiftskonti i stedet for kategorier til at klassificere dine transaktioner. Hver af disse kategorier i din QIF-fil vil blive omsat til en GnuCash-konto. \n"
 "\n"
-"På den næste side vil du få mulighed for at se de foreslåede parringer mellem\n"
-"QIF-kategorier og GnuCash-konti. Du kan ændre parringer, du ikke kan lide\n"
-"ved at klikke på den linie, der indeholder kategoriens navn.\n"
+"På den næste side vil du få mulighed for at se de foreslåede parringer mellem QIF-kategorier og GnuCash-konti. Du kan ændre parringer, du ikke kan lide ved at klikke på den linje, der indeholder kategoriens navn.\n"
 "\n"
-"Hvis du senere skifter mening, kan du uden videre omorganisere kontostrukturen\n"
-"i GnuCash."
+"Hvis du senere skifter mening, kan du uden videre omorganisere kontostrukturen i GnuCash."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:48
 msgid "Income and Expense categories"
@@ -21580,19 +21561,19 @@ msgstr "Kontonavn"
 #. src/report/report-system/report-utilities.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:2368
 msgid "Credit Lines"
-msgstr "Kreditlinier"
+msgstr "Kreditlinjer"
 
 #. src/report/report-system/report-utilities.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:2372
 #, c-format
 msgid "Building '%s' report ..."
-msgstr "Bygger rapport '%s'..."
+msgstr "Bygger rapport »%s« ..."
 
 #. src/report/report-system/report-utilities.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:2374
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr "Optegner rapport '%s'..."
+msgstr "Optegner rapport »%s« ..."
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:2376
@@ -24027,9 +24008,8 @@ msgstr "Prisdatabase"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4024
-#, fuzzy
 msgid "The recorded prices."
-msgstr "De registrerede pristilbud"
+msgstr "De registrerede pristilbud."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4026
@@ -24038,9 +24018,8 @@ msgstr ""
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4028
-#, fuzzy
 msgid "Color of the marker."
-msgstr "Markørens farve"
+msgstr "Markørens farve."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4036
@@ -24055,7 +24034,7 @@ msgstr "Alle priser ens"
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4044
 msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr "Alle fundne priser er ens. Dette ville give et graf med kun en vandret linie. Desværre kan grafværktøjet ikke håndtere dette."
+msgstr "Alle fundne priser er ens. Dette ville give et graf med kun en vandret linje. Desværre kan grafværktøjet ikke håndtere dette."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4046
@@ -24065,7 +24044,7 @@ msgstr "Alle priser fra samme dato"
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4048
 msgid "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr "Alle de fundne priser er fra samme dato. Dette ville give en graf med kun en lodret linie. Desværre kan grafværktøjet ikke håndtere dette."
+msgstr "Alle de fundne priser er fra samme dato. Dette ville give en graf med kun en lodret linje. Desværre kan grafværktøjet ikke håndtere dette."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4050
@@ -24302,9 +24281,8 @@ msgstr "Overfør fra/til"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4482
-#, fuzzy
 msgid "Report style."
-msgstr "Rapportstil"
+msgstr "Rapportstil."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4484
@@ -24313,44 +24291,38 @@ msgstr "Flerrækkers"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4486
-#, fuzzy
 msgid "Display N lines."
-msgstr "Vis N linjer"
+msgstr "Vis N linjer."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4490
-#, fuzzy
 msgid "Display 1 line."
-msgstr "Vis 1 linje"
+msgstr "Vis 1 linje."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4492
-#, fuzzy
 msgid "Convert all transactions into a common currency."
-msgstr "Konverter alle transaktioner til en fælles valuta"
+msgstr "Konverter alle transaktioner til en fælles valuta."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4494
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
-msgstr ""
+msgstr "Formater tabellen egnet for klip og indsæt-eksport med ekstra celler."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4502
-#, fuzzy
 msgid "Filter on these accounts."
-msgstr "Filtrér på disse konti"
+msgstr "Filtrer på disse konti."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4506
-#, fuzzy
 msgid "Filter account."
-msgstr "Filtrér konto"
+msgstr "Filtrer konto."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4510
-#, fuzzy
 msgid "Do not do any filtering."
-msgstr "Lav ikke nogen filtrering"
+msgstr "Lav ikke nogen filtrering."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4512
@@ -24359,9 +24331,8 @@ msgstr "Inkluder transaktioner til/fra filtreringskonti"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4514
-#, fuzzy
 msgid "Include transactions to/from filter accounts only."
-msgstr "Inkluder kun transaktioner til/fra filtreringskonti"
+msgstr "Inkluder kun transaktioner til/fra filtreringskonti."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4516
@@ -24370,15 +24341,13 @@ msgstr "Udelad transaktioner til/fra filtreringskonti"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4518
-#, fuzzy
 msgid "Exclude transactions to/from all filter accounts."
-msgstr "Udelad transaktioner til/fra alle filtreringskonti"
+msgstr "Udelad transaktioner til/fra alle filtreringskonti."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4520
-#, fuzzy
 msgid "How to handle void transactions."
-msgstr "Hvordan skal ugyldige transaktioner håndteres"
+msgstr "Hvordan skal ugyldige transaktioner håndteres."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4522
@@ -24387,9 +24356,8 @@ msgstr "Kun gyldige"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4524
-#, fuzzy
 msgid "Show only non-voided transactions."
-msgstr "Vis kun gyldige transaktioner"
+msgstr "Vis kun gyldige transaktioner."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4526
@@ -24398,9 +24366,8 @@ msgstr "Kun ugyldige"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4528
-#, fuzzy
 msgid "Show only voided transactions."
-msgstr "Vis kun ugyldige transaktioner"
+msgstr "Vis kun ugyldige transaktioner."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4530
@@ -24409,30 +24376,26 @@ msgstr "Begge"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4532
-#, fuzzy
 msgid "Show both (and include void transactions in totals)."
-msgstr "Vis begge (og inkluder ugyldige transaktioner i totaler)"
+msgstr "Vis begge (og inkluder ugyldige transaktioner i totaler)."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4536
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4592
-#, fuzzy
 msgid "Do not sort."
-msgstr "Sorter ikke"
+msgstr "Sorter ikke."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4540
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4596
-#, fuzzy
 msgid "Sort & subtotal by account name."
-msgstr "Sortering & delsum efter kontonavn"
+msgstr "Sortering & delsum efter kontonavn."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4544
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4600
-#, fuzzy
 msgid "Sort & subtotal by account code."
-msgstr "Sortering & delsum efter kontonummer"
+msgstr "Sortering & delsum efter kontonummer."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4550
@@ -24443,16 +24406,14 @@ msgstr "Eksakt indtastningstid"
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4552
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4608
-#, fuzzy
 msgid "Sort by exact time."
-msgstr "Sorter efter præcis indtastningstid"
+msgstr "Sorter efter eksakt indtastningstid."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4556
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4612
-#, fuzzy
 msgid "Sort by the Reconciled Date."
-msgstr "Sorter efter udskriftsdato"
+msgstr "Sorter efter afstemningsdato."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4558
@@ -24463,90 +24424,76 @@ msgstr "Kassekladdesortering"
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4560
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4616
-#, fuzzy
 msgid "Sort as with the register."
-msgstr "Sorter som i kassekladden"
+msgstr "Sorter som i kassekladden."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4564
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4620
-#, fuzzy
 msgid "Sort by account transferred from/to's name."
-msgstr "Sorter efter navnet på konti, der er overført fra/til"
+msgstr "Sorter efter navnet på konti, der er overført fra/til."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4568
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4624
-#, fuzzy
 msgid "Sort by account transferred from/to's code."
-msgstr "Sorter efter kontonummeret, der er overført fra/til"
+msgstr "Sorter efter kontonummeret, der er overført fra/til."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4580
-#, fuzzy
 msgid "Sort by check number/action."
-msgstr "Sorter efter nummer"
+msgstr "Sorter efter checknummer/handling."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4584
-#, fuzzy
 msgid "Sort by transaction number."
-msgstr "Sorter efter check/transaktionsnummer"
+msgstr "Sorter efter transaktionsnummer."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4636
-#, fuzzy
 msgid "Sort by check/transaction number."
-msgstr "Sorter efter check/transaktionsnummer"
+msgstr "Sorter efter check/transaktionsnummer."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4644
-#, fuzzy
 msgid "Smallest to largest, earliest to latest."
-msgstr "mindste til største, tidligste til seneste"
+msgstr "mindste til største, tidligste til seneste."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4648
-#, fuzzy
 msgid "Largest to smallest, latest to earliest."
-msgstr "største til mindste, seneste til tidligste"
+msgstr "største til mindste, seneste til tidligste."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4652
-#, fuzzy
 msgid "None."
-msgstr "Ingen"
+msgstr "Ingen."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4656
-#, fuzzy
 msgid "Weekly."
-msgstr "Ugentligt"
+msgstr "Ugentligt."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4660
-#, fuzzy
 msgid "Monthly."
-msgstr "Månedligt"
+msgstr "Månedligt."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4664
-#, fuzzy
 msgid "Quarterly."
-msgstr "Kvartalsvist"
+msgstr "Kvartalsvist."
 
 # Den her har jeg rettet til t da ovenfor er i den form.
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4668
-#, fuzzy
 msgid "Yearly."
-msgstr "Årligt"
+msgstr "Årligt."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4670
-#, fuzzy
 msgid "Sort by this criterion first."
-msgstr "Sorter efter dette kriterie først"
+msgstr "Sorter efter dette kriterie først."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4674
@@ -24566,21 +24513,18 @@ msgstr "Delsum ifølge den primære nøgle?"
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4682
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4692
-#, fuzzy
 msgid "Do a date subtotal."
-msgstr "Lav en datodelsum"
+msgstr "Lav en datodelsum."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4686
-#, fuzzy
 msgid "Order of primary sorting."
-msgstr "Primær sorteringsorden"
+msgstr "Primær sorteringsorden."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4688
-#, fuzzy
 msgid "Sort by this criterion second."
-msgstr "Sorter efter dette kriterie som nummer to"
+msgstr "Sorter efter dette kriterie som nummer to."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4690
@@ -24589,9 +24533,8 @@ msgstr "Delsum ifølge den sekundære nøgle?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4696
-#, fuzzy
 msgid "Order of Secondary sorting."
-msgstr "Sekundær sorteringsorden"
+msgstr "Sekundær sorteringsorden."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4704
@@ -24611,15 +24554,13 @@ msgstr "Vis kontonavnet?"
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4728
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4740
-#, fuzzy
 msgid "Display the full account name?"
 msgstr "Vis hele kontonavnet"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4732
-#, fuzzy
 msgid "Display the account code?"
-msgstr "Vis kontonummeret"
+msgstr "Vis kontonummeret?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4736
@@ -24628,9 +24569,8 @@ msgstr "Vis det andet kontonavn? (hvis dette er en opdelt transaktion, gættes v
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4744
-#, fuzzy
 msgid "Display the other account code?"
-msgstr "Vis det anden kontonummer"
+msgstr "Vis det andet kontonummer?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4764
@@ -24639,21 +24579,18 @@ msgstr "Vis transaktionsnummeret?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4778
-#, fuzzy
 msgid "No amount display."
-msgstr "Vis intet beløb"
+msgstr "Vis intet beløb."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4790
-#, fuzzy
 msgid "Reverse amount display for certain account types."
-msgstr "Omvendt beløbsvisning for visse kontotyper"
+msgstr "Omvendt beløbsvisning for visse kontotyper."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4794
-#, fuzzy
 msgid "Don't change any displayed amounts."
-msgstr "Ret ikke i nogen af de viste beløb"
+msgstr "Ret ikke i nogen af de viste beløb."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4796
@@ -24662,9 +24599,8 @@ msgstr "Indtægter og udgifter"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4798
-#, fuzzy
 msgid "Reverse amount display for Income and Expense Accounts."
-msgstr "Omvendt beløbsvisning for indtægts- og udgiftskonti"
+msgstr "Omvendt beløbsvisning for indtægts- og udgiftskonti."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4800
@@ -24673,9 +24609,8 @@ msgstr "Kreditkonti"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4802
-#, fuzzy
 msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts."
-msgstr "Omvendt beløbsvisning for passiv-, kreditor-, egenkapital-, kreditkort- og indtægtskonti"
+msgstr "Omvendt beløbsvisning for passiv-, kreditor-, egenkapital-, kreditkort- og indtægtskonti."
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4804
@@ -24772,21 +24707,19 @@ msgstr "Fandt ingen passende transaktioner"
 
 #. src/report/standard-reports/transaction.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4836
-#, fuzzy
 msgid "No transactions were found that match the time interval and account selection specified in the Options panel."
-msgstr "Der blev ikke fundet transaktioner, der passede til de angivne tidsinterval- og kontovalg."
+msgstr "Der blev ikke fundet transaktioner, der passede til de angivne tidsinterval- og kontovalg specificeret i indstillingspanelet."
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4838
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4948
-#, fuzzy
 msgid "Trial Balance"
-msgstr "Gennemsnitlig saldo"
+msgstr "Prøvebalance"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4848
 msgid "Start of Adjusting/Closing"
-msgstr ""
+msgstr "Start på justering/lukning"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4850
@@ -24795,14 +24728,13 @@ msgstr "Rapportens dato"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4852
-#, fuzzy
 msgid "Report variation"
-msgstr "Nedskrivning"
+msgstr "Rapportvariation"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4854
 msgid "Kind of trial balance to generate."
-msgstr ""
+msgstr "Typen af prøvebalance til oprettelse."
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4864
@@ -24864,34 +24796,33 @@ msgstr ""
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4926
-#, fuzzy
 msgid "Current Trial Balance"
-msgstr "Valutaoverførsel"
+msgstr "Nuværende prøvebalance"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4928
 msgid "Uses the exact balances in the general ledger"
-msgstr ""
+msgstr "Bruger de præcise balancer i hovedbogen"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4930
 msgid "Pre-adjustment Trial Balance"
-msgstr ""
+msgstr "Præjusteret prøvebalance"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4932
 msgid "Ignores Adjusting/Closing entries"
-msgstr ""
+msgstr "Ignorerer justerings-/luknings-poster"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4934
 msgid "Work Sheet"
-msgstr ""
+msgstr "Arbejdsark"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4936
 msgid "Creates a complete end-of-period work sheet"
-msgstr ""
+msgstr "Opretter et fuldstændig slut på perioden-arbejdsark"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4950
@@ -24900,21 +24831,18 @@ msgstr "Justeringer"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4952
-#, fuzzy
 msgid "Adjusted Trial Balance"
-msgstr "Gennemsnitlig saldo"
+msgstr "Justeret prøvebalance"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4968
-#, fuzzy
 msgid "Net Income"
-msgstr "Indtægt"
+msgstr "Nettoindtægt"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4970
-#, fuzzy
 msgid "Net Loss"
-msgstr "Netto aktiver"
+msgstr "Nettotab"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -24934,9 +24862,8 @@ msgstr "Udført af"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4976
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5188
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5400
-#, fuzzy
 msgid "Name of person preparing the report."
-msgstr "Navn på den person, der lavede rapporten"
+msgstr "Navn på den person, der lavede rapporten."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -24956,9 +24883,8 @@ msgstr "Udført for"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:4982
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5194
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5406
-#, fuzzy
 msgid "Name of organization or company prepared for."
-msgstr "Navn på organisation eller firma, rapport blev udført for"
+msgstr "Navn på organisation eller firma, rapport blev udført for."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25103,7 +25029,7 @@ msgstr "Rapporthoved"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5226
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5444
 msgid "Left"
-msgstr ""
+msgstr "Venstre"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25112,7 +25038,7 @@ msgstr ""
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5228
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5446
 msgid "Align the banner to the left."
-msgstr ""
+msgstr "Juster banneret mod venstre."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25120,9 +25046,8 @@ msgstr ""
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5018
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5230
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5448
-#, fuzzy
 msgid "Center"
-msgstr "Retur"
+msgstr "Centrer"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25131,7 +25056,7 @@ msgstr "Retur"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5232
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5450
 msgid "Align the banner in the center."
-msgstr ""
+msgstr "Placer banneret i centrum."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25140,7 +25065,7 @@ msgstr ""
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5234
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5452
 msgid "Right"
-msgstr ""
+msgstr "Højre"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25149,7 +25074,7 @@ msgstr ""
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5236
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5454
 msgid "Align the banner to the right."
-msgstr ""
+msgstr "Juster banneret mod højre."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25324,9 +25249,8 @@ msgstr "Cellefarve for under-undertitel/total"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5072
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5284
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5502
-#, fuzzy
 msgid "Color for subsubtotals."
-msgstr "Farve på delsummer"
+msgstr "Farve på deldelsummer."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25346,9 +25270,8 @@ msgstr "Hovedtotal cellefarve"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5078
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5290
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5508
-#, fuzzy
 msgid "Color for grand totals."
-msgstr "Farve for hovedtotaler"
+msgstr "Farve for hovedtotaler."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25400,9 +25323,8 @@ msgstr "Tabelcelleafstand"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5296
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5514
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5646
-#, fuzzy
 msgid "Space between table cells."
-msgstr "Afstand mellem tabelceller"
+msgstr "Afstand mellem tabelceller."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25426,9 +25348,8 @@ msgstr "Tabelcelle-indrykning"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5302
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5520
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5652
-#, fuzzy
 msgid "Space between table cell edge and content."
-msgstr "Afstand mellem tabelceller"
+msgstr "Afstand mellem tabelcellekant og indhold."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25452,9 +25373,8 @@ msgstr "Tabelkantbredde"
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5308
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5526
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5658
-#, fuzzy
 msgid "Bevel depth on tables."
-msgstr "Niveaudybde for tabeller"
+msgstr "Niveaudybde for tabeller."
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -25478,7 +25398,7 @@ msgstr "Oprettet for: "
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5180
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5182
 msgid "Easy"
-msgstr ""
+msgstr "Nem"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #: ../../gnucash/po/../intl-scm/guile-strings.c:5392
@@ -26033,58 +25953,28 @@ msgid "You can easily import your existing financial data from Quicken, MS Money
 msgstr "Du kan let importere dine eksisterende økonomidata fra Quicken, MS Money eller andre programmer, der kan eksportere QIF-filer eller OFX-filer. I filmenuen trykker du på undermenuen Importer og klik så på QIF- eller OFX-fil, respektivt. Følg de angivne instruktioner."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:9
-#, fuzzy
 msgid "If you are familiar with other financial programs such as Quicken, note that GnuCash uses accounts instead of categories to track income and expenses. For more information on income and expense accounts, please see the GnuCash online manual."
-msgstr ""
-"Hvis du kender til andre økonomiprogrammer såsom Quicken, skal du\n"
-"lægge mærke til, at GnuCash benytter konti i stedet for kategorier\n"
-"for at følge indtægter og udgifter. Læs mere om indtægts- og udgift-\n"
-"konti i GnuCash's brugervejledning."
+msgstr "Hvis du kender til andre økonomiprogrammer såsom Quicken, skal du lægge mærke til, at GnuCash benytter konti i stedet for kategorier for at følge indtægter og udgifter. Læs mere om indtægts- og udgiftskonti i GnuCashs manual på nettet."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:14
-#, fuzzy
 msgid "Create new accounts by clicking the New button in the main window tool bar. This will bring up a dialog box where you can enter account details. For more information on choosing an account type or setting up a chart of accounts, please see the GnuCash online manual."
-msgstr ""
-"Opret nye konti ved at trykke på \"Ny\"-knappen i hovedvinduets\n"
-"værktøjslinie. Dette vil frembringe en dialogboks, hvor du kan\n"
-"angive kontodetaljer. Læs mere om opsætning af kontoplaner\n"
-"i GnuCash's brugervejledning."
+msgstr "Opret nye konti ved at trykke på knappen Ny i hovedvinduets værktøjslinje. Dette vil frembringe en dialogboks, hvor du kan angive kontodetaljer. For yderligere information om valg af kontotype eller opsætning af en kontoplan så se GnuCashs manual på nettet."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:20
-#, fuzzy
 msgid "Click the right mouse button in the main window to bring up the account menu options. Within each register, clicking the right mouse button brings up the transaction menu options."
-msgstr ""
-"Brug den højre museknap i hovedvinduet til at vise kontoens\n"
-"menuvalg. I hver kassekladde vil højre museknap frembringe\n"
-"transaktionens menuvalg."
+msgstr "Brug den højre museknap i hovedvinduet til at vise kontoens menuvalg. I hver kassekladde vil højre museknap frembringe transaktionens menuvalg."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:24
-#, fuzzy
 msgid "To enter multiple-split transactions such as a paycheck with multiple deductions, click the Split button in the tool bar. Alternatively, in the View menu, you can choose the register style Auto-Split Ledger or Transaction Journal."
-msgstr ""
-"For at indtaste transaktioner med flere dele, såsom en betaling\n"
-"med flere afdrag, kan du bruge Opdel-knappen i værktøjslinien.\n"
-"Alternativt kan du bruge kassekladdestilen Autoopdel Hovedbog eller\n"
-"Transaktionsrapport fra Kassekladde|Stil-menuen."
+msgstr "For at indtaste transaktioner med flere dele, såsom en betaling med flere afdrag, kan du bruge knappen Opdel i værktøjslinjen. Alternativt, i visningsmenuen, kan du vælge kassekladdestilen Autoopdel hovedbog eller Transaktionsrapport."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:29
-#, fuzzy
 msgid "As you enter amounts in the register, you can use the GnuCash calculator to add, subtract, multiply and divide. Simply type the first value, then select '+', '-','*', or '/'. Type the second value and press Enter to record the calculated amount."
-msgstr ""
-"Når du indtaster beløb i kassekladden, kan du bruge GnuCash's\n"
-"lommeregner til at addere, subtrahere, gange og dividere.\n"
-"Indtast ganske enkelt den første værdi, derefter '+', '-', '*'\n"
-"eller '/'. Indtast den anden værdi og tryk Retur for at registrere\n"
-"den beregnede værdi."
+msgstr "Når du indtaster beløb i kassekladden, kan du bruge GnuCashs lommeregner til at addere, subtrahere, gange og dividere. Indtast ganske enkelt den første værdi, derefter »+«, »-«, »*« eller »/«. Indtast den anden værdi og tryk Retur for at udregne beløbet."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:34
-#, fuzzy
 msgid "Quick-fill makes it easy to enter common transactions. When you type the first letter(s) of a common transaction description, then press the Tab key, GnuCash will automatically complete the remainder of the transaction as it was last entered."
-msgstr ""
-"Hurtig-udfyldning gør det let at indtaste almindelige transaktioner.\n"
-"Når du indtaster de første bogstaver i en almindelig transaktions-\n"
-"beskrivelse, vil GnuCash automatisk udfylde resten af transaktionen\n"
-"som den sidst blev indtastet."
+msgstr "Hurtig-udfyldning gør det let at indtaste almindelige transaktioner. Når du indtaster de første bogstaver i en almindelig transaktionsbeskrivelse, så tryk på Tab-tasten og GnuCash vil automatisk udfylde resten af transaktionen, som den sidst blev indtastet."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:39
 msgid "Type the first letter(s) of an existing account name in the Transfer register column, and GnuCash will complete the name from your list of accounts. For subaccounts, type the first letter(s) of the parent account, followed by ':' and the first letter(s) of the subaccount (e.g. A:C for Assets:Cash.)"
@@ -26095,46 +25985,26 @@ msgid "Want to see all your subaccount transactions in one register? From the ma
 msgstr "Vil du se transaktioner for alle dine underkonti i en kassekladde? Marker samlekontoen i hovedmenuen og vælg Konti -> Åbn underkonti i menuen."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:49
-#, fuzzy
 msgid "When entering dates, you can type '+' or '-' to increment or decrement the selected date. You can use '+' and '-' to increment and decrement check numbers as well."
-msgstr ""
-"Når du indtaster checknumre i kassekladden, kan du skrive\n"
-"'+' for at bruge det næste nummer eller '-' for det forrige\n"
-"nummer. Du kan bruge '+' og '-' på samme måde til datoer."
+msgstr "Når du indtaster datoer, så kan du taste »+« eller »-« for at øge eller sænke den valgte dato. Du kan også bruge »+« og »-« til at øge og sænke checknumre."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:53
 msgid "To switch between multiple tabs in the main window, press Control+Page Up/Down."
-msgstr ""
+msgstr "For at skifte mellem flere faneblade i hovedvinduet trykkes på Control+Side op/ned."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:56
-#, fuzzy
 msgid "In the reconcile window, you can press the spacebar to mark transactions as reconciled. You can also press Tab and Shift-Tab to move between deposits and withdrawals."
-msgstr ""
-"Du kan trykke mellemrum i afstemningsvinduet for at\n"
-"markere transaktioner som afstemte.\n"
-"Du kan også trykke <tabulator> og <Skift>-<Tabulator>\n"
-"for at bevæge dig mellem ind- og udbetalinger."
+msgstr "Du kan trykke mellemrum i afstemningsvinduet for at markere transaktioner som afstemte. Du kan også trykke Tab og Skift-tab for at bevæge dig mellem ind- og udbetalinger."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:60
-#, fuzzy
 msgid "To transfer funds between accounts with different currencies, click on the Transfer button in the register toolbar, select the accounts, and the Currency Transfer options for entering the exchange rate or the other currency's amount will be available."
-msgstr ""
-"For at overføre beløb mellem konti med forskellige valutaer,\n"
-"er du nødt til at bruge en mellemliggende valutahandelskonto.\n"
-"Tryk \"Overførsel\"-knappen i kassekladdens værktøjslinie for at\n"
-"lade GnuCash oprette den mellemliggende transaktion.\n"
-"Se GnuCash's brugervejledning for detaljer."
+msgstr "For at overføre beløb mellem konti med forskellige valutaer klikkes på knappen Overfør i kassekladdens værktøjslinje, der vælges konti og indstillingerne for valutaoverførsel til at indtaste kursen ellers vil den anden valutas værdi ikke være tilgængelig."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:65
-#, fuzzy
 msgid "You can pack multiple reports into a single window,  providing all the financial information you want at a glance. To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" report."
-msgstr ""
-"Du kan samle flere rapporter i et enkelt vindue, så du kan se\n"
-"alle de økonomiske oplysninger, du ønsker med et enkelt øjekast.\n"
-"Brug rapporten \"Flerkolonnevisning\" for at opnå dette."
+msgstr "Du kan samle flere rapporter i et enkelt vindue, så du kan se alle de økonomiske oplysninger, du ønsker med et enkelt øjekast. Brug Prøv & tilpas-rapporten »Tilpasset rapport med flere kolonner« for at opnå dette."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:70
-#, fuzzy
 msgid "Style Sheets affect how reports are displayed. Choose a style sheet for your report as a report option, and use the Edit -> Style Sheets menu to customize style sheets."
 msgstr "Stilark påvirker den måde, rapporter fremstår. Vælg et stilark for din rapport som et rapportvalg og brug menuen Rediger -> Stilark for at ændre i stilarkene."
 
@@ -26153,737 +26023,24 @@ msgstr ""
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:86
 msgid "If you work overnight, you should close and reopen your working register after midnight, to get the new date as default for new transactions. It is not necessary to restart GnuCash therefore."
-msgstr ""
+msgstr "Hvis du arbejder over natten, så bør du lukke og genåbne din arbejdsklasse efter midnat, så du får den nye dato som standard for nye transaktioner. Det er ikke nødvendigt at genstarte GnuCash for at opnå dette."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:90
-#, fuzzy
 msgid "The GnuCash developers are easy to contact. As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
-msgstr "GnuCas's udviklerne er nemme at komme i kontakt med. Udover flere postlister kan du sludre med dem direkte på IRC! Du finder dem på #gnucash på irc.gnome.org."
+msgstr "GnuCash udviklerne er nemme at komme i kontakt med. Udover flere postlister kan du sludre med dem direkte på IRC! Du finder dem på #gnucash på irc.gnome.org."
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:94
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable.\n"
 "There is another theory that this has already happened.\n"
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
-msgstr "Der findes en teori om, at hvis nogen finder ud af, hvad universet er og hvorfor det er der, vil det forsvinde i samme øjeblik og erstattes af noget, der er endnu mere bizart og uforklarligt. Der er en anden teori, der siger, at dette allerede er sket. Douglas Adams, »The Restaurant at the End of the Universe«"
+msgstr ""
+"Der findes en teori om, at hvis nogen finder ud af, hvad universet er og hvorfor det er der, vil det forsvinde i samme øjeblik og erstattes af noget, der er endnu mere bizart og uforklarligt.\n"
+"Der er en anden teori, der siger, at dette allerede er sket.\n"
+"\n"
+"Douglas Adams, »The Restaurant at the End of the Universe«"
 
 #: ../../gnucash/po/../doc/tip_of_the_day.list.in:101
 msgid "To search through all your transactions, start a search (Edit -> Find...) from the main accounts hierarchy page. To limit your search to a single account, start the search from that account's register."
-msgstr ""
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negative beløb er ikke tilladt."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Procentbeløb skal være mellem 0 og 100."
-
-#, fuzzy
-#~ msgid "You must select at least one document or pre-payment to process."
-#~ msgstr "Du skal vælge mindst én konto at estimere."
-
-#~ msgid "New item"
-#~ msgstr "Ny post"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Adskilt"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Adskilt"
-
-#, fuzzy
-#~ msgid "Run preconfigured report"
-#~ msgstr "Afstemt (rapport)"
-
-#, fuzzy
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Afstemt (rapport)"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "Nettopris"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Samlet pris"
-
-#~ msgid "Amount Due"
-#~ msgstr "Forfalden beløb"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Fakturanummer: "
-
-#~ msgid "Job number: "
-#~ msgstr "Jobnummer: "
-
-#~ msgid "Job name: "
-#~ msgstr "Jobnavn: "
-
-#~ msgid "You must enter the amount of the payment. The payment amount must not be zero."
-#~ msgstr "Du skal indtaste beløbet på betalingen. Betalingsbeløbet skal være større end nul."
-
-#~ msgid "and"
-#~ msgstr "og"
-
-#~ msgid "Ignore brokerage fees when calculating returns"
-#~ msgstr "Ignorer handelsomkostninger når gevinst beregnes"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Seneste til rapportering"
-
-#, fuzzy
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "Den seneste registrerede pris før rapporttidspunkt"
-
-#~ msgid "FILO"
-#~ msgstr "FISU"
-
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr "Brug først ind sidst ud-metode som udgangspunkt."
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Angiv præfikssti for gconf-forespørgsler"
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Kunderapport"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Leverandørrapport"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Medarbejderrapport"
-
-#~ msgid "_Setup"
-#~ msgstr "Op_sætning"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "GnuCash opsætningsmuligheder"
-
-#~ msgid "_Update search path"
-#~ msgstr "_Opdater søgesti"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Installer i hjemmemappe"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Vælg metode"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash opdaterer søgestien"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Du opdaterer selv søgestien"
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash vil opdatere systemstien for dig."
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "_Opdater søgesti"
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "_GnuCash installerer dataene"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Du installerer selv dataene"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash vil installere dataene for dig."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "_Installer i hjemmemappe"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Værdiændring"
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Brug datoformatet angivet af ISO-8601-standarden."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Europa:"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Brug gængs datoformat for kontinentaleuropa."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Brug gængs datoformat for Storbritannien."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Brug gængs datoformat for USA."
-
-#~ msgid "_Text only"
-#~ msgstr "Kun _tekst"
-
-#~ msgid "_Icons only"
-#~ msgstr "Kun _ikoner"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Tekst _under ikoner"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Brug systemets _standard"
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr "Brug systemindstillingen for visning af punkter på værktøjslinjen."
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "_Fjern transaktionsopdelinger"
-
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "_Flyt transaktion fremad"
-
-#, fuzzy
-#~ msgid "Account Transaction Report"
-#~ msgstr "Transaktionsrapport"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Vis kolonnen for navnerum"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Vis symbolkolonnen"
-
-#~ msgid "Show the name column"
-#~ msgstr "Vis navnekolonnen"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Vis kolonnen med det fulde navn"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "Vis kolonnen for udskriftsnavn"
-
-#, fuzzy
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Vis indtægts- og udgiftskonti"
-
-# for eller med
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Vis kolonnen med ISIN/CUSIP-kode (Exchange Specific Data)"
-
-#, fuzzy
-#~ msgid "Show the fraction column"
-#~ msgstr "Vis alle transaktioner i kontoen"
-
-#, fuzzy
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Pristilbudskilde"
-
-#, fuzzy
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Vis indtægts- og udgiftskonti"
-
-#~ msgid "Window position"
-#~ msgstr "Vinduesposition"
-
-#, fuzzy
-#~ msgid "Show the currency column"
-#~ msgstr "Genindlæs det aktuelle dokument"
-
-#~ msgid "Show the date column"
-#~ msgstr "Vis datokolonnen"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Vis typekolonnen"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Vis priskolonnen"
-
-#~ msgid "This value contains the Y coordinate for the bottom edge of the check. This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr "Denne værdi indeholder y-koordinaten på den nederste kant af checken. Denne koordinat er fra den nederste kant af papirarket."
-
-#, fuzzy
-#~ msgid "Enables Euro support"
-#~ msgstr "Anvend EURO-understøttelse"
-
-#, fuzzy
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Aktiverer understøttelse af den Europæiske Unions EURO-valuta"
-
-#, fuzzy
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Aktiemængder, der rapporteres om"
-
-#, fuzzy
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Værktøjslinjeknapper"
-
-#, fuzzy
-#~ msgid "Source of default account currency"
-#~ msgstr "Sæt standard QIF-kontonavn"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Vis navnekolonnen"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Vis datokolonnen"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Vis antal af aktier"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Antal kolonner"
-
-#, fuzzy
-#~ msgid "Default view style for new register"
-#~ msgstr "Vælg standardtype for kassekladdevinduer"
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Kolonnebredde i dialogen"
-
-#~ msgid "Do you really want to overwrite your changes with the contents of the template \"%s\"?"
-#~ msgstr "Er du sikker på, at du vil overskrive dine ændringer med indholdet i skabelonen »%s«?"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "Genindlæs den aktuelle rapport"
-
-#~ msgid "_Run"
-#~ msgstr "_Kør"
-
-#~ msgid "Add _Report"
-#~ msgstr "Tilføj _rapport"
-
-#~ msgid "Custom Reports"
-#~ msgstr "Tilpassede rapporter"
-
-#~ msgid "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr "Din rapport »%s« er blevet gemt i konfigurationsfilen »%s«."
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Aktivér henvisninger i rapporter"
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Velkommen til GnuCash 2.0!"
-
-#~ msgid "The last stable version was "
-#~ msgstr "Den sidste stabile version var "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Den næste stabile version vil blive "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Installeret %s fra r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Du kan ikke bogføre en faktura med en samlet negativ værdi."
-
-#~ msgid "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "Du kan ikke bogføre et udgiftsbilag med en samlet negativ værdi."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Din valgte bogføringskonto, %s,  eksisterer ikke"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Hvilken skattetabel bør anvendes på denne kunde?"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Hvilken skattetabel bør anvendes for denne leverandør?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Genindlæs fakturarapport"
-
-#, fuzzy
-#~ msgid "Reload owner report"
-#~ msgstr "Genindlæs den aktuelle rapport"
-
-#, fuzzy
-#~ msgid "Reload receivable report"
-#~ msgstr "Genindlæs den aktuelle rapport"
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Forskel på små/store bogstaver?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr "Den GnuCash XML-fil er allerede indlæst. Vælg venligst en anden fil."
-
-#~ msgid "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr "Ingen filer at flette. Tilføj venligst en ved at klikke på 'Indlæs en anden fil'."
-
-#~ msgid "Finish changes"
-#~ msgstr "Fuldfør ændringer"
-
-#, fuzzy
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "QIF-filer er indlæst"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Tryk \"Indlæs endnu en fil\", hvis du har flere data at indlæse i denne \n"
-#~ "omgang. Vælg dette, hvis du har gemt dine konti i separate QIF-filer.\n"
-#~ "\n"
-#~ "Tryk \"Næste\" for at afslutte indlæsningen af filer og gå til næste trin \n"
-#~ "i QIF-indlæsningsprocessen."
-
-#~ msgid "Unload selected file"
-#~ msgstr "Luk valgte fil"
-
-#~ msgid "Load another file"
-#~ msgstr "Indlæs endnu en fil"
-
-#, fuzzy
-#~ msgid "Do not merge"
-#~ msgstr "Sortér ikke"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Tryk \"Indlæs endnu en fil\", hvis du har flere data at indlæse i denne \n"
-#~ "omgang. Vælg dette, hvis du har gemt dine konti i separate QIF-filer.\n"
-#~ "\n"
-#~ "Tryk \"Næste\" for at afslutte indlæsningen af filer og gå til næste trin \n"
-#~ "i QIF-indlæsningsprocessen."
-
-#, fuzzy
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "Prisinformation"
-
-#, fuzzy
-#~ msgid "_From:"
-#~ msgstr "Fra"
-
-#, fuzzy
-#~ msgid "_To:"
-#~ msgstr "Til"
-
-#, fuzzy
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Vekselkurs:"
-
-#, fuzzy
-#~ msgid "To A_mount:"
-#~ msgstr "Til-beløb:"
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Kunne ikke behandle fil: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Kunne ikke åbne fil: %s: %s"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Du skal vælge en vare."
-
-#~ msgid "You must select closing date that is greater than the closing date of the previous book."
-#~ msgstr "du skal vælge en lukkedato som er større end lukkedatoen på den forrige bog."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Du skal være en lukkedato som ikke er fremadrettet."
-
-#, fuzzy
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr ""
-#~ "Er du sikker på at du vil slette den\n"
-#~ "aktuelle pris?"
-
-#~ msgid "Please select a valid loan account."
-#~ msgstr "Vælg venligst en gyldig lånekonto."
-
-#~ msgid "Please select a valid Escrow Account."
-#~ msgstr "Vælg venligst en gyldig Escrowkonto."
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Vælg venligst en gyldig »frakonto«."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Vælg venligst en gyldig »tilkonto«."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Vælg venligst en gyldig »rentekonto«."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Betaling: »%s«"
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Du skal angive et gyldigt udlodningsbeløb."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Du skal angive et udlodningsbeløb."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Du skal enten indtaste en gyldig pris eller lade den være tom."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Prisen skal være et positivt tal."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "Du skal enten indtaste et gyldigt kontantbeløb eller lade den være tom."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Kontantudlodningen skal være positiv."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Du skal vælge en indtægtskonto til kontantudlodningen."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "Du skal vælge en aktivkonto til kontantudlodningen."
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Vælg eller tilføj en GnuCash-konto"
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Ny konto (ikke implementeret)"
-
-#, fuzzy
-#~ msgid "Enter a title for this book."
-#~ msgstr "Indtast et beskrivende navn for denne rapport"
-
-#~ msgid "Account Information"
-#~ msgstr "Kontooplysninger"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "_Effektiv dato:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Startbetal_ing:"
-
-#, fuzzy
-#~ msgid "Co_mpounding:"
-#~ msgstr "Renters rente:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Betalinger:"
-
-#, fuzzy
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "Vis alle transaktioner i kontoen"
-
-#~ msgid "Jump"
-#~ msgstr "Spring"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Klip transaktion"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Kopiér den valgte transaktion"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Kopiér transaktion"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Sortér efter dato"
-
-#~ msgid "_Statement Date"
-#~ msgstr "_Udskriftsdato"
-
-#, fuzzy
-#~ msgid "Sort by Number"
-#~ msgstr "Sortér efter nummer"
-
-#~ msgid "_Number"
-#~ msgstr "_Nummer"
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Sortér efter beløb"
-
-#~ msgid "_Amount"
-#~ msgstr "B_eløb"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Sortér efter note"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Sortér efter beskrivelse"
-
-#~ msgid "St_yle"
-#~ msgstr "St_il"
-
-#, fuzzy
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Transaktionsdublet"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Slet alle opdelinger undtagen den for denne konto."
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Fjern transaktionsopdelinger"
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Rediger vekselkurs"
-
-#~ msgid "Schedule..."
-#~ msgstr "Planlæg..."
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Rediger vekselkursen for den nuværende opdeling"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1.\n"
-#~ "2.\n"
-#~ "3.\n"
-#~ "4.\n"
-#~ "5.\n"
-#~ "6.\n"
-#~ "7.\n"
-#~ "8.\n"
-#~ "9.\n"
-#~ "10.\n"
-#~ "11.\n"
-#~ "12.\n"
-#~ "13.\n"
-#~ "14.\n"
-#~ "15.\n"
-#~ "16.\n"
-#~ "17.\n"
-#~ "18.\n"
-#~ "19.\n"
-#~ "20.\n"
-#~ "21.\n"
-#~ "22.\n"
-#~ "23.\n"
-#~ "24.\n"
-#~ "25.\n"
-#~ "26.\n"
-#~ "27.\n"
-#~ "28.\n"
-#~ "29.\n"
-#~ "30.\n"
-#~ "31.\n"
-#~ "Sidste dag i måneden\n"
-#~ "Sidste mandag\n"
-#~ "Sidste tirsdag\n"
-#~ "Sidste onsdag\n"
-#~ "Sidste torsdag\n"
-#~ "Sidste fredag\n"
-#~ "Sidste lørdag\n"
-#~ "Sidste søndag"
-
-#~ msgid "Start Date: "
-#~ msgstr "Startdato: "
-
-#~ msgid "Loan Information"
-#~ msgstr "Låninformation"
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "måneder\n"
-#~ "år"
-
-#~ msgid "Repayment Type"
-#~ msgstr "Genbetalingstype"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Tryk anvend for at acceptere disse ændringer."
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Angiv budgetindstillinger med denne dialog."
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Tilføj en ny transaktion til kontoen"
-
-#~ msgid "Use Transaction Template"
-#~ msgstr "Brug transaktionsskabelon"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Vælg en CSV/fast bredde-fil, der skal indlæses"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "Indlæs CSV-/fast bredde-fil"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Indlæs _CSV/fast bredde..."
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr " en CSV-/fast bredde-fil"
-
-#~ msgid "Other Account"
-#~ msgstr "Anden konto"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Punktum som decimal (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Komma som decimal (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "å-d-m"
-
-#, fuzzy
-#~ msgid "Sample data:"
-#~ msgstr "Startdato:"
-
-#~ msgid "(no)"
-#~ msgstr "(nej)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Du skal vælge en kontotype."
-
-#, fuzzy
-#~ msgid "No valid customer selected. Click on the Options button to select a customer."
-#~ msgstr "Ingen gyldig %s valgt.  Klik på opsætningsknappen for at vælge et firma."
-
-#, fuzzy
-#~ msgid "No valid employee selected. Click on the Options button to select an employee."
-#~ msgstr "Ingen gyldig %s valgt.  Klik på opsætningsknappen for at vælge et firma."
-
-#, fuzzy
-#~ msgid "No valid company selected. Click on the Options button to select a company."
-#~ msgstr "Ingen gyldig %s valgt.  Klik på opsætningsknappen for at vælge et firma."
-
-#, fuzzy
-#~ msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-#~ msgstr "En liste med strenge, der angiver hvor html og parsed-html-filer skal findes. Hvert element skal være en streng, der repræsenterer et katalog eller en kode, hvor 'default' angiver standardstien og 'current' angiver det aktuelle katalog."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Angiv søgestien for dokumentationsfiler"
+msgstr "For at søge igennem alle dine transaktioner, start en søgning (Rediger -> Søg ...) fra hovedkontoens hierarkiside. For at begrænse din søgning til en enkel konto, start søgningen fra den kontos kasseklade."
