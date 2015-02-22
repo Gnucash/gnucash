@@ -41,7 +41,10 @@
 #include "ScrubBusiness.h"
 #include "Transaction.h"
 
-static QofLogModule log_module = GNC_MOD_LOT;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.engine.scrub"
+
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 // A helper function that takes two splits. If the splits are  of opposite sign
 // it reduces the biggest split to have the same value (but with opposite sign)
@@ -465,22 +468,39 @@ void
 gncScrubBusinessAccountLots (Account *acc)
 {
     LotList *lots, *node;
+    gint lot_count = 0;
+    gint curr_lot_no = 1;
+    const gchar *str;
+
     if (!acc) return;
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
-    ENTER ("(acc=%s)", xaccAccountGetName(acc));
+    str = xaccAccountGetName(acc);
+    str = str ? str : "(null)";
+
+    ENTER ("(acc=%s)", str);
+    PINFO ("Cleaning up superfluous lot links in account %s \n", str);
     xaccAccountBeginEdit(acc);
 
     lots = xaccAccountGetLotList(acc);
+    lot_count = g_list_length (lots);
     for (node = lots; node; node = node->next)
     {
         GNCLot *lot = node->data;
+
+        PINFO("Start processing lot %d of %d",
+              curr_lot_no, lot_count);
+
         if (lot)
             gncScrubBusinessLot (lot);
+
+        PINFO("Finished processing lot %d of %d",
+              curr_lot_no, lot_count);
+        curr_lot_no++;
     }
     g_list_free(lots);
     xaccAccountCommitEdit(acc);
-    LEAVE ("(acc=%s)", xaccAccountGetName(acc));
+    LEAVE ("(acc=%s)", str);
 }
 
 /* ============================================================== */
