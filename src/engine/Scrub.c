@@ -283,8 +283,9 @@ xaccAccountTreeScrubImbalance (Account *acc)
 void
 xaccAccountScrubImbalance (Account *acc)
 {
-    GList *node;
+    GList *node, *splits;
     const char *str;
+    gint split_count = 0, curr_split_no = 1;
 
     if (!acc) return;
 
@@ -292,14 +293,23 @@ xaccAccountScrubImbalance (Account *acc)
     str = str ? str : "(null)";
     PINFO ("Looking for imbalance in account %s \n", str);
 
-    for (node = xaccAccountGetSplitList(acc); node; node = node->next)
+    splits = xaccAccountGetSplitList(acc);
+    split_count = g_list_length (splits);
+    for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
         Transaction *trans = xaccSplitGetParent(split);
 
+        PINFO("Start processing split %d of %d",
+              curr_split_no, split_count);
+
         xaccTransScrubCurrency(trans);
 
         xaccTransScrubImbalance (trans, gnc_account_get_root (acc), NULL);
+
+        PINFO("Finished processing split %d of %d",
+              curr_split_no, split_count);
+        curr_split_no++;
     }
 }
 

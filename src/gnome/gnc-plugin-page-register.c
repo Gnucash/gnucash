@@ -3736,10 +3736,8 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     GncPluginPageRegisterPrivate *priv;
     Query *query;
     Account *root;
-    Transaction *trans;
-    GNCLot *lot;
-    Split *split;
-    GList *node;
+    GList *node, *splits;
+    gint split_count = 0, curr_split_no = 1;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
@@ -3756,10 +3754,17 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     gnc_suspend_gui_refresh();
     root = gnc_get_current_root_account();
 
-    for (node = qof_query_run(query); node; node = node->next)
+    splits = qof_query_run(query);
+    split_count = g_list_length (splits);
+    for (node = splits; node; node = node->next)
     {
-        split = node->data;
-        trans = xaccSplitGetParent(split);
+        GNCLot *lot;
+        Split *split = node->data;
+        Transaction *trans = xaccSplitGetParent(split);
+
+
+        PINFO("Start processing split %d of %d",
+              curr_split_no, split_count);
 
         xaccTransScrubOrphans(trans);
         xaccTransScrubImbalance(trans, root, NULL);
@@ -3767,6 +3772,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
         lot = xaccSplitGetLot (split);
         if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
             gncScrubBusinessLot (lot);
+
+        PINFO("Finished processing split %d of %d",
+              curr_split_no, split_count);
+        curr_split_no++;
     }
 
     gnc_resume_gui_refresh();
