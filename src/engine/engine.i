@@ -355,7 +355,7 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("GNC-HOW-RND-ROUND");
     SET_ENUM("GNC-HOW-RND-NEVER");
 
-#undefine SET_ENUM
+#undef SET_ENUM
   }
 
 }

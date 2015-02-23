@@ -51,7 +51,7 @@ SCM scm_init_sw_gnc_html_module(void);
     SET_ENUM("URL-TYPE-PRICE");
     SET_ENUM("URL-TYPE-OTHER");
 
-#undefine SET_ENUM
+#undef SET_ENUM
   }
 
 }

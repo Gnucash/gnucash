@@ -77,6 +77,6 @@ const char * gnc_locale_default_iso_currency_code (void);
     return gnc_utf8_validate(str, -1, 0);
   }
 %}
-#elsif defined(SWIGPYTHON)
+#elif defined(SWIGPYTHON)
 gboolean gnc_utf8_validate(const gchar *, gssize, const gchar**);
 #endif
