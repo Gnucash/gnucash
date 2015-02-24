@@ -98,9 +98,9 @@ static const PTime unix_epoch (Date(1970, boost::gregorian::Jan, 1),
 	boost::posix_time::seconds(0));
 /* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
 #ifndef BOOST_DATE_TIME_HAS_NANOSECONDS
-static constexpr uint64_t ticks_per_second = UINT64_C(1000000);
+static constexpr auto ticks_per_second = INT64_C(1000000);
 #else
-static constexpr uint64_t ticks_per_second = UINT64_C(1000000000);
+static constexpr auto ticks_per_second = INT64_C(1000000000);
 #endif
 static LDT
 gnc_get_LDT(int year, int month, int day, int hour, int minute, int seconds)
@@ -126,7 +126,19 @@ static time64
 time64_from_date_time(T time)
 {
     auto duration = time - unix_epoch;
-    return duration.ticks() / ticks_per_second;
+    auto secs = duration.ticks();
+    secs /= ticks_per_second;
+    return secs;
+}
+
+template<>
+time64
+time64_from_date_time<LDT>(LDT time)
+{
+    auto duration = time.utc_time() - unix_epoch;
+    auto secs = duration.ticks();
+    secs /= ticks_per_second;
+    return secs;
 }
 
 /****************** Posix Replacement Functions ***************************/
@@ -186,7 +198,8 @@ gnc_gmtime (const time64 *secs)
 }
 
 static void
-normalize_time_component (gint *inner, gint *outer, guint divisor, gint base)
+normalize_time_component (int *inner, int *outer, unsigned int divisor,
+			  int base)
 {
      while (*inner < base)
      {
@@ -200,11 +213,12 @@ normalize_time_component (gint *inner, gint *outer, guint divisor, gint base)
      }
 }
 
-static gint
-normalize_month (gint month)
+static void
+normalize_month(int *month, int *year)
 {
-     month = (month % 12 + 12) % 12;
-     return month == 0 ? 12 : month;
+    ++(*month);
+    normalize_time_component(month, year, 12, 1);
+    --(*month);
 }
 
 static void
@@ -213,7 +227,6 @@ normalize_struct_tm (struct tm* time)
      gint year = time->tm_year + 1900;
      gint last_day;
 
-     ++time->tm_mon;
      /* Gregorian_date throws if it gets an out-of-range year
       * so clamp year into gregorian_date's range.
       */
@@ -223,20 +236,21 @@ normalize_struct_tm (struct tm* time)
      normalize_time_component (&(time->tm_sec), &(time->tm_min), 60, 0);
      normalize_time_component (&(time->tm_min), &(time->tm_hour), 60, 0);
      normalize_time_component (&(time->tm_hour), &(time->tm_mday), 24, 0);
-     normalize_time_component (&(time->tm_mon), &year, 12, 1);
+     normalize_month (&(time->tm_mon), &year);
+
+     // auto month_in_range = []int (int m){ return (m + 12) % 12; }
      while (time->tm_mday < 1)
      {
-	  last_day = gnc_date_get_last_mday (normalize_month (--time->tm_mon), year);
-	  time->tm_mday += last_day;
-	  normalize_time_component (&(time->tm_mon), &year, 12, 1);
+	 normalize_month (&(--time->tm_mon), &year);
+	 last_day = gnc_date_get_last_mday (time->tm_mon, year);
+	 time->tm_mday += last_day;
      }
-     last_day = gnc_date_get_last_mday (normalize_month (time->tm_mon), year);
+     last_day = gnc_date_get_last_mday (time->tm_mon, year);
      while (time->tm_mday > last_day)
      {
-	  ++time->tm_mon;
 	  time->tm_mday -= last_day;
-	  normalize_time_component (&(time->tm_mon), &year, 12, 1);
-	  last_day = gnc_date_get_last_mday (normalize_month (time->tm_mon), year);
+	  normalize_month(&(++time->tm_mon), &year);
+	  last_day = gnc_date_get_last_mday (time->tm_mon, year);
      }
      time->tm_year = year - 1900;
 }
@@ -245,7 +259,10 @@ time64
 gnc_mktime (struct tm* time)
 {
     normalize_struct_tm (time);
-    return time64_from_date_time(boost::posix_time::ptime_from_tm(*time));
+    auto ldt = gnc_get_LDT (time->tm_year + 1900, time->tm_mon + 1,
+			    time->tm_mday, time->tm_hour, time->tm_min,
+			    time->tm_sec);
+    return time64_from_date_time(ldt);
 }
 
 time64
@@ -265,7 +282,9 @@ gnc_ctime (const time64 *secs)
 time64
 gnc_time (time64 *tbuf)
 {
-    auto pdt = boost::posix_time::second_clock::local_time();
+    auto pdt = boost::posix_time::second_clock::universal_time();
+    auto tz = tzp.get(pdt.date().year());
+    LDT ldt(pdt, tz);
     auto secs = time64_from_date_time(pdt);
     if (tbuf != nullptr)
 	  *tbuf = secs;
@@ -516,10 +535,10 @@ int gnc_date_get_last_mday (int month, int year)
     };
 
     /* Is this a leap year? */
-    if (year % 2000 == 0) return last_day_of_month[1][month-1];
-    if (year % 400 == 0 ) return last_day_of_month[0][month-1];
-    if (year % 4   == 0 ) return last_day_of_month[1][month-1];
-    return last_day_of_month[0][month-1];
+    if (year % 2000 == 0) return last_day_of_month[1][month];
+    if (year % 400 == 0 ) return last_day_of_month[0][month];
+    if (year % 4   == 0 ) return last_day_of_month[1][month];
+    return last_day_of_month[0][month];
 }
 
 /* Safety function */
@@ -1276,7 +1295,7 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 gchar *
 gnc_date_timestamp (void)
 {
-    return gnc_print_time64(gnc_time(nullptr), "%Y-%M-%d %H:%M%S");
+    return gnc_print_time64(gnc_time(nullptr), "%Y%m%d%H%M%S");
 }
 
 /********************************************************************\
@@ -1288,11 +1307,43 @@ gnc_date_timestamp (void)
 
 #define ISO_DATE_FORMAT "%d-%d-%d %d:%d:%lf%s"
 Timespec
-gnc_iso8601_to_timespec_gmt(const char *str)
+gnc_iso8601_to_timespec_gmt(const char *cstr)
 {
-    auto pdt = boost::posix_time::time_from_string(str);
-    auto time = time64_from_date_time(pdt);
-    return {time, 0};
+    using std::string;
+    using PTZ = boost::local_time::posix_time_zone;
+
+    if (!cstr) return {0, 0};
+//    try
+    {
+	string str(cstr);
+	if (str.empty())
+	    return {0, 0};
+	time64 time;
+	uint32_t nsecs;
+	auto tzpos = str.find_first_of("+-", str.find(":"));
+	if (tzpos != str.npos)
+	{
+	    string tzstr = "XXX" + str.substr(tzpos) ;
+	    TZ_Ptr tzp(new PTZ(tzstr));
+	    if (str[tzpos - 1] == ' ') --tzpos;
+	    auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
+	    LDT ldt(pdt.date(), pdt.time_of_day(), tzp,
+		    LDTBase::NOT_DATE_TIME_ON_ERROR);
+	    time = time64_from_date_time(ldt);
+	    nsecs = (ldt.utc_time() - unix_epoch).ticks() % ticks_per_second;
+	}
+	else
+	{
+	    auto pdt = boost::posix_time::time_from_string(str);
+	    time = time64_from_date_time(pdt);
+	    nsecs = (pdt - unix_epoch).ticks() % ticks_per_second;
+	}
+	return {time, static_cast<int32_t>(nsecs) * INT32_C(1000)};
+    }
+//    catch(...)
+    //  {
+//	return {0, 0};
+//    }
 }
 
 /********************************************************************\
@@ -1302,15 +1353,10 @@ char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
     constexpr size_t max_iso_date_length = 32;
-    std::string fmt1 = "%Y-%m-%d %H:%M";
+    std::string fmt1 = "%Y-%m-%d %H:%M:%s %q";
 
-    g_return_val_if_fail (buff != NULL, NULL);
+    if (! buff) return NULL;
 
-#ifdef G_OS_WIN32
-    fmt1 += "%Z";
-#else
-    fmt1 += "%z";
-#endif
     char* str = gnc_print_time64(ts.tv_sec, fmt1.c_str());
     strncpy (buff, str, max_iso_date_length);
     free(str);
