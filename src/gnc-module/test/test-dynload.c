@@ -28,7 +28,7 @@ guile_main(void *closure, int argc, char ** argv)
 #ifdef G_OS_WIN32
 /* MinGW builds libgnc-module-0.dll */
     modpath = g_module_build_path ("../.libs", "gnc-module-0");
-#elif defined(PLATFORM_OSX)
+#elif defined(GNC_PLATFORM_OSX)
 /* We build libgnc-module as a shared library for testing, and on OSX
  * that means that g_module_build_path (), which uses ".so", doesn't
  * build the right path name.
