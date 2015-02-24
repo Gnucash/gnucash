@@ -166,7 +166,7 @@ static GncInvoiceList * qof_query_run_for_invoices(QofQuery *q) {
     SET_ENUM("GNC-INVOICE-VEND-CREDIT-NOTE");
     SET_ENUM("GNC-INVOICE-EMPL-CREDIT-NOTE");
 
-#undefine SET_ENUM
+#undef SET_ENUM
   }
 
 }
