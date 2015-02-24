@@ -31,6 +31,7 @@
 
 #include "gnc-date.h"
 #include "qof.h"
+#include "qofbook.h"
 #include "Transaction.h"
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
@@ -354,6 +355,8 @@ gnc_reconcile_view_init (GNCReconcileView *view)
 {
     GNCSearchParam *param;
     GList          *columns = NULL;
+    gboolean num_action =
+                qof_book_use_split_action_for_num_field(gnc_get_current_book());
 
     view->reconciled = g_hash_table_new (NULL, NULL);
     view->account = NULL;
@@ -374,7 +377,12 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     columns = gnc_search_param_prepend (columns, _("Description"), NULL,
                                         GNC_ID_SPLIT, SPLIT_TRANS,
                                         TRANS_DESCRIPTION, NULL);
-    columns = gnc_search_param_prepend_with_justify (columns, _("Num"),
+    columns = num_action ?
+              gnc_search_param_prepend_with_justify (columns, _("Num"),
+              GTK_JUSTIFY_CENTER,
+              NULL, GNC_ID_SPLIT,
+              SPLIT_ACTION, NULL) :
+              gnc_search_param_prepend_with_justify (columns, _("Num"),
               GTK_JUSTIFY_CENTER,
               NULL, GNC_ID_SPLIT,
               SPLIT_TRANS, TRANS_NUM, NULL);
