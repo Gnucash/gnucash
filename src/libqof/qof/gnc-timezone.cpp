@@ -559,15 +559,17 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 	auto this_info = parser.tzinfo.begin() + txi->index;
 	auto this_time = boost::posix_time::from_time_t(txi->timestamp);
 	auto this_year = this_time.date().year();
-	//Initial case, gap in transitions > 1 year, non-dst zone
+	//Initial case
+	if (last_time.is_not_a_date_time())
+	    zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
+	//gap in transitions > 1 year, non-dst zone
 	//change. In the last case the exact date of the change will be
 	//wrong because boost::local_date::timezone isn't able to
 	//represent it. For GnuCash's purposes this isn't likely to be
 	//important as the last time this sort of transition happened
 	//was 1946, but we have to handle the case in order to parse
 	//the tz file.
-	if (last_time.is_not_a_date_time() ||
-	    this_year - last_time.date().year() > 1 ||
+	else if (this_year - last_time.date().year() > 1 ||
 	    last_info->info.isdst == this_info->info.isdst)
 	{
 	    zone_vector.push_back(zone_no_dst(this_year, last_info));
