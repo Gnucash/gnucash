@@ -134,7 +134,7 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
 char *
 timespec_sec_to_string(const Timespec *ts)
 {
-     return gnc_print_time64(ts->tv_sec, "%Y-%m-%d %H:%M:%S %z");
+     return gnc_print_time64(ts->tv_sec, "%Y-%m-%d %H:%M:%S %q");
 }
 
 gchar *
