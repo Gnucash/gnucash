@@ -39,7 +39,7 @@ gnc_gdate_set_time64 (GDate* gd, time64 time)
 {
     struct tm tm;
     gnc_localtime_r(&time, &tm);
-    g_date_set_dmy (gd, tm.tm_mday, tm.tm_mon, tm.tm_year + 1900);
+    g_date_set_dmy (gd, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
 
 }
 
