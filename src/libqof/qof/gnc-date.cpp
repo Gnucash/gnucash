@@ -1358,15 +1358,23 @@ char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
     constexpr size_t max_iso_date_length = 32;
-    std::string fmt1 = "%Y-%m-%d %H:%M:%s %q";
+    const char* format = "%Y-%m-%d %H:%M:%s %q";
 
     if (! buff) return NULL;
 
-    memset(buff, 0, max_iso_date_length + 1);
-    char* str = gnc_print_time64(ts.tv_sec, fmt1.c_str());
-    strncpy (buff, str, max_iso_date_length);
-    free(str);
-    return buff + strlen (buff);
+    using Facet = boost::local_time::local_time_facet;
+    auto date_time = LDT_from_unix_local(ts.tv_sec);
+    date_time = date_time + boost::posix_time::microseconds(ts.tv_nsec / 1000);
+    std::stringstream ss;
+    //The stream destructor frees the facet, so it must be heap-allocated.
+    auto output_facet(new Facet(format));
+    ss.imbue(std::locale(std::locale(), output_facet));
+    ss << date_time;
+    auto sstr = ss.str();
+
+    memset(buff, 0, sstr.length() + 1);
+    strncpy(buff, sstr.c_str(), sstr.length());
+    return buff + sstr.length();
 }
 
 void
