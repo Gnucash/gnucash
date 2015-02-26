@@ -1358,6 +1358,7 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 
     if (! buff) return NULL;
 
+    memset(buff, 0, max_iso_date_length + 1);
     char* str = gnc_print_time64(ts.tv_sec, fmt1.c_str());
     strncpy (buff, str, max_iso_date_length);
     free(str);
