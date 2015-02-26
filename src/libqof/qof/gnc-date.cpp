@@ -1324,7 +1324,11 @@ gnc_iso8601_to_timespec_gmt(const char *cstr)
 	auto tzpos = str.find_first_of("+-", str.find(":"));
 	if (tzpos != str.npos)
 	{
-	    string tzstr = "XXX" + str.substr(tzpos) ;
+	    string tzstr = "XXX" + str.substr(tzpos);
+	    if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
+		tzstr.insert(6, ":");
+	    if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
+		tzstr.insert(9, ":");
 	    TZ_Ptr tzp(new PTZ(tzstr));
 	    if (str[tzpos - 1] == ' ') --tzpos;
 	    auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
