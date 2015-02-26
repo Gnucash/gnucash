@@ -269,8 +269,9 @@ time64
 gnc_timegm (struct tm* time)
 {
     auto newtime = *time;
-    newtime.tm_gmtoff = 0;
-    return gnc_mktime(&newtime);
+    normalize_struct_tm(time);
+    auto pdt = boost::posix_time::ptime_from_tm(*time);
+    return time64_from_date_time(pdt);
 }
 
 char*
