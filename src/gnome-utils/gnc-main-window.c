@@ -1655,8 +1655,8 @@ static gchar *generate_statusbar_lastmodified_message()
                 {
                     /* Translators: This is the date and time that is shown in
                     the status bar after opening a file: The date and time of
-                    last modification. The string is the format string for
-                    glib's function g_date_time_format(), see there for an
+                    last modification. The string is a format string using
+                    boost::date_time's format flags, see the boost docs for an
                     explanation of the modifiers. First string is for a locale
                     that has the a.m. or p.m. string in its locale, second
                     string is for locales that do not have that string. */

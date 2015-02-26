@@ -159,8 +159,7 @@ typedef enum
  * versions of Unix. 32-bit time_t overflows at 03:14:07 UTC on
  * Tuesday, 19 January 2038 and so cannot represent dates after that.
  *
- * These functions use GLib's GDateTime internally, and include a
- * workaround for the lack of Win32 support before GLib 2.36.
+ * These functions use boost::date_time internally.
  */
 /** \brief fill out a time struct from a 64-bit time value.
  *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
@@ -242,14 +241,6 @@ gdouble gnc_difftime (const time64 secs1, const time64 secs2);
  * \param time: The struct tm* to be freed.
  */
 void gnc_tm_free (struct tm* time);
-
-/** \brief Create a GDateTime from a Timespec
- *  \param ts: A local (int64-based) Timespec
- *  \note: GDateTimes use microseconds, not nanoseconds, so in theory we lose precision. In practice, there's no portable way to get either.
- *  \note: Works around the lack of Win32 support in GTimeZone before GLib 2.36.
- *  \return A GDateTime pointer. Free it with g_date_time_unref () when you're done with it.
- */
-GDateTime* gnc_g_date_time_new_from_timespec_local (Timespec tm);
 
 /** \name String / DateFormat conversion. */
 //@{

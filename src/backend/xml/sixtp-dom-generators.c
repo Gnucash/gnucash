@@ -127,10 +127,6 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
     return ret;
 }
 
-/* gnc_g_date_time_new_from_timespec_local normalizes the timespec,
- * but we want to serialize it un-normalized, so we make a partial
- * copy.
- */
 char *
 timespec_sec_to_string(const Timespec *ts)
 {
