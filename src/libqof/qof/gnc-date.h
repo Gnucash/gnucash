@@ -186,7 +186,7 @@ struct tm* gnc_localtime_r (const time64 *secs, struct tm* time);
 struct tm* gnc_gmtime (const time64 *secs);
 
 /** \brief calculate seconds from the epoch given a time struct
- *  \param time: A struct tm* for the function to fill.
+ *  \param time: A struct tm* containing the date-time information.
  *  The time is understood to be in the current local time zone.
  *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment).
@@ -194,7 +194,7 @@ struct tm* gnc_gmtime (const time64 *secs);
 time64 gnc_mktime (struct tm* time);
 
 /** \brief calculate seconds from the epoch given a time struct
- *  \param time: A struct tm* for the function to fill.
+ *  \param time: A struct tm* containing the date-time information
  *  The time is understood to be utc.
  *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment).
