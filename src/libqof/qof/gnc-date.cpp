@@ -284,18 +284,6 @@ time64
 gnc_time (time64 *tbuf)
 {
     auto pdt = boost::posix_time::second_clock::universal_time();
-    auto tz = tzp.get(pdt.date().year());
-    LDT ldt(pdt, tz);
-    auto secs = time64_from_date_time(pdt);
-    if (tbuf != nullptr)
-	  *tbuf = secs;
-     return secs;
-}
-
-time64
-gnc_time_utc (time64 *tbuf)
-{
-    auto pdt = boost::posix_time::second_clock::universal_time();
     auto secs = time64_from_date_time(pdt);
      if (tbuf != NULL)
 	  *tbuf = secs;

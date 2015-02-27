@@ -219,14 +219,6 @@ gchar* gnc_ctime (const time64 *secs);
  */
 time64 gnc_time (time64 *tbuf);
 
-/** \brief get the current utc time
- *  \param A time64* which, if not NULL, will be filled in with the same
- * value as is returned.
- * \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
- * are seconds before that moment)
- */
-time64 gnc_time_utc (time64 *tbuf);
-
 /** \brief Find the difference in seconds between two time values
  *  \param secs1: The first time value, in Seconds since
  * 00:00:01 UTC 01 January 1970 (negative values are seconds before that moment)
