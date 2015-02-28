@@ -392,7 +392,7 @@ namespace IANAParser
 	tzinfo.reserve(type_count);
 	auto start_index = fb_index;
 	auto info_index_zero = start_index + time_count * sizeof(time_t);
-	for(auto index = 0; index < time_count; ++index)
+	for(uint32_t index = 0; index < time_count; ++index)
 	{
 	    fb_index = start_index + index * sizeof(time_t);
 	    auto info_index = info_index_zero + index;
@@ -408,7 +408,7 @@ namespace IANAParser
 	auto abbrev = start_index + type_count * tzinfo_size;
 	auto std_dist = abbrev + char_count;
 	auto gmt_dist = std_dist + type_count;
-	for(auto index = 0; index < type_count; ++index)
+	for(uint32_t index = 0; index < type_count; ++index)
 	{
 	    fb_index = start_index + index * tzinfo_size;
 	    TTInfo info = *reinterpret_cast<TTInfo*>(&fileblock[fb_index]);
