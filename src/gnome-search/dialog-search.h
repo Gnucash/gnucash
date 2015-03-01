@@ -85,8 +85,9 @@ typedef struct
  * buttons.  The caller MUST NOT supply both.
  *
  * Both the param_list and display_list are the property of the dialog
- * but will NOT be destroyed..  They should be a GList of
- * GNCSearchParam objects.  The display_list defines which paramters
+ * but will NOT be destroyed..  The param_list should be a GList of
+ * GNCSearchParam objects.  The display_list should be a GList of
+ * GNCSearchParamSimple objects which defines which paramters
  * of the found transactions are printed, and how.
  *
  * The start_query is the property of the caller and will only be copied.

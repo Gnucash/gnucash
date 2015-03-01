@@ -120,7 +120,7 @@ struct _GNCSearchWindow
     /* The list of criteria */
     GNCSearchParam           *last_param;
     GList                    *params_list;  /* List of GNCSearchParams */
-    GList                    *display_list; /* List of GNCSearchParams for Display */
+    GList                    *display_list; /* List of GNCSearchParamSimples for Display */
     gint                      num_cols;     /* Number of Display Columns */
     GList                    *crit_list;    /* List of crit_data */
 
@@ -426,6 +426,38 @@ search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
                        gtk_toggle_button_get_active (button));
 }
 
+static QofQuery *
+create_query_fragment (QofIdTypeConst search_for, GNCSearchParam *param, QofQueryPredData *pdata)
+{
+    GNCSearchParamKind kind = gnc_search_param_get_kind (param);
+    QofQuery *q = qof_query_create_for (search_for);
+    
+    if (kind == SEARCH_PARAM_ELEM)
+    {
+        /* The "op" parameter below will be ignored since q has no terms. */
+        qof_query_add_term (q, gnc_search_param_get_param_path (GNC_SEARCH_PARAM_SIMPLE (param)),
+                            pdata, QOF_QUERY_OR);
+    } 
+    else
+    {
+        GList *plist = gnc_search_param_get_search (GNC_SEARCH_PARAM_COMPOUND (param));
+        
+        for ( ; plist; plist  = plist->next)
+        {
+            QofQuery *new_q;
+            GNCSearchParam *param2 = plist->data;
+            QofQuery *q2 = create_query_fragment (search_for, param2, 
+                                                  qof_query_core_predicate_copy (pdata));
+            new_q = qof_query_merge (q, q2, kind == SEARCH_PARAM_ANY ? 
+                                                    QOF_QUERY_OR : QOF_QUERY_AND);
+            qof_query_destroy (q);
+            qof_query_destroy (q2);
+            q = new_q;
+        }
+        qof_query_core_predicate_free (pdata);
+    }
+    return q;
+}
 
 static void
 search_update_query (GNCSearchWindow *sw)
@@ -434,7 +466,6 @@ search_update_query (GNCSearchWindow *sw)
     QofQuery *q, *q2, *new_q;
     GList *node;
     QofQueryOp op;
-    QofQueryPredData* pdata;
 
     if (sw->grouping == GNC_SEARCH_MATCH_ANY)
         op = QOF_QUERY_OR;
@@ -463,11 +494,14 @@ search_update_query (GNCSearchWindow *sw)
     for (node = sw->crit_list; node; node = node->next)
     {
         struct _crit_data *data = node->data;
+        QofQueryPredData* pdata;
 
         pdata = gnc_search_core_type_get_predicate (data->element);
         if (pdata)
-            qof_query_add_term (q, gnc_search_param_get_param_path (data->param),
-                                pdata, op);
+        {
+            q2 = create_query_fragment(sw->search_for, GNC_SEARCH_PARAM (data->param), pdata);
+            q = qof_query_merge (q, q2, op);
+        }
     }
 
     /* Now combine this query with the existing query, depending on
