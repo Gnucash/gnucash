@@ -412,20 +412,40 @@ test_book_use_trading_accounts_currency_accounting( Fixture *fixture, gconstpoin
 static void
 test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
 {
+    const char *cur;
+
     g_assert( qof_book_use_book_currency( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_book_currency_unique_name( fixture-> book ) == FALSE );
 
-    g_test_message( "Testing with existing currency-accounting set to 'book-currency'" );
     qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "currency-accounting", "book-currency",
-		      NULL);
-    g_assert( qof_book_use_book_currency( fixture-> book ) == TRUE );
-
-    g_test_message( "Testing with existing currency-accounting set to 'trading'" );
+    g_test_message( "Testing with currency-accounting set to 'trading' and no book-currency" );
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "currency-accounting", "trading",
 		      NULL);
     g_assert( qof_book_use_book_currency( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_book_currency_unique_name( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with currency-accounting set to 'book-currency' and no book-currency set" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "currency-accounting", "book-currency",
+		      NULL);
+    g_assert( qof_book_use_book_currency( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_book_currency_unique_name( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with currency-accounting set to 'book-currency' and  book-currency set" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "book-currency", "CURRENCY::USD",
+		      NULL);
+    g_assert( qof_book_use_book_currency( fixture-> book ) == TRUE );
+    cur = qof_book_get_book_currency_unique_name( fixture->book );
+    g_assert_cmpstr( cur, == , "CURRENCY::USD");
+
+    g_test_message( "Testing with currency-accounting set to 'trading' and book-currency still set" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "currency-accounting", "trading",
+		      NULL);
+    g_assert( qof_book_use_book_currency( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_book_currency_unique_name( fixture-> book ) == FALSE );
     qof_book_commit_edit (fixture->book);
 
 }

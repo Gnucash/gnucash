@@ -248,6 +248,9 @@ gboolean qof_book_use_trading_accounts (const QofBook *book);
 /** Returns TRUE if this book uses a book-currency */
 gboolean qof_book_use_book_currency (const QofBook *book);
 
+/** Returns pointer to Book Currency unique_name for book or NULL */
+const gchar * qof_book_get_book_currency_unique_name (QofBook *book);
+
 /** Returns TRUE if the auto-read-only feature should be used, otherwise
  * FALSE. This is just a wrapper on qof_book_get_num_days_autoreadonly() == 0. */
 gboolean qof_book_uses_autoreadonly (const QofBook *book);

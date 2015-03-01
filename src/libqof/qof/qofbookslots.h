@@ -65,6 +65,7 @@
 #define OPTION_SECTION_ACCOUNTS        N_("Accounts")
 #define OPTION_NAME_TRADING_ACCOUNTS   N_("Use Trading Accounts")
 #define OPTION_NAME_CURRENCY_ACCOUNTING   N_("Select Currency Accounting Method")
+#define OPTION_NAME_BOOK_CURRENCY      N_("Select Book Currency")
 #define OPTION_NAME_AUTO_READONLY_DAYS N_("Day Threshold for Read-Only Transactions (red line)")
 #define OPTION_NAME_NUM_FIELD_SOURCE   N_("Use Split Action Field for Number")
 
@@ -78,6 +79,7 @@
  * OPTION-SECTION-ACCOUNTS
  * OPTION-NAME-TRADING-ACCOUNTS
  * OPTION-NAME-CURRENCY-ACCOUNTING
+ * OPTION-NAME-BOOK-CURRENCY
  * OPTION-NAME-AUTO-READONLY-DAYS
  * OPTION-NAME_NUM-FIELD-SOURCE
  * OPTION-SECTION-BUDGETING
