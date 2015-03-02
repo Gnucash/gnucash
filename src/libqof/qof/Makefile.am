@@ -11,6 +11,7 @@ libgnc_qof_la_LDFLAGS= \
 libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
+  -lboost_date_time \
   $(top_builddir)/lib/libc/libc-missing.la
 
 libgnc_qof_la_LIBADD = $(libgnc_qof_common_libs)

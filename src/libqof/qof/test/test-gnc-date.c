@@ -54,7 +54,7 @@ extern "C"
 
 static const gchar *suitename = "/qof/gnc-date";
 static const time64 secs_per_year = INT64_C(3600) * (INT64_C(24) * INT64_C(365) + 6);
-static const time64 max_secs = secs_per_year * (INT64_C(9999) - INT64_C(1970));
+static const time64 max_secs = (INT64_C(3600) * (INT64_C(24) * INT64_C(365) + 6)) * (INT64_C(9999) - INT64_C(1970));
 
 typedef struct
 {
@@ -147,14 +147,17 @@ test_gnc_localtime (void)
 	secs[0] = -432761LL;
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
+	if (sizeof(time_t) == sizeof())
         struct tm* time = gnc_localtime (&secs[ind]);
+	time_t tsecs;
+	struct tm* ans;
         if (secs[ind] > max_secs)
         {
             g_assert (time == NULL);
             continue;
         }
-	time_t tsecs = (time_t)(secs[ind]);
-	struct tm* ans = localtime(&tsecs);
+	tsecs = (time_t)(secs[ind]);
+	ans = localtime(&tsecs);
         g_assert_cmpint (time->tm_year, ==, ans->tm_year);
         g_assert_cmpint (time->tm_mon, ==, ans->tm_mon);
         g_assert_cmpint (time->tm_mday, ==, ans->tm_mday);
@@ -312,10 +315,12 @@ test_gnc_ctime (void)
     guint ind;
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
+	 time_t time;
+	 char *datestr;
 	if (secs[ind] < INT32_MIN)
 	    continue;
-	time_t time = (time_t)secs[ind];
-        char* datestr = gnc_ctime (&secs[ind]);
+	time = (time_t)secs[ind];
+        datestr = gnc_ctime (&secs[ind]);
         g_assert_cmpstr (datestr, ==, strtok(ctime(&time), "\n"));
         g_free (datestr);
     }
@@ -1375,6 +1380,7 @@ test_qof_scan_date (void)
     int day = 0, mo = 0, yr = 0;
     gint year, month;
     time64 now = gnc_time(NULL);
+    gchar buff[MAX_DATE_LENGTH];
     struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
 #ifndef G_OS_WIN32
         , 0, 0
@@ -1383,7 +1389,6 @@ test_qof_scan_date (void)
     gnc_localtime_r(&now, &tm);
     year = tm.tm_year + 1900;
     month = tm.tm_mon + 1;
-    gchar buff[MAX_DATE_LENGTH];
 
     g_assert (!qof_scan_date (NULL, &day, &mo, &yr));
     g_assert_cmpint (day, ==, 0);

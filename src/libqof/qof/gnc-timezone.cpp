@@ -357,6 +357,7 @@ namespace IANAParser
     {
 	unsigned int fb_index = 0;
 	TZHead tzh = *reinterpret_cast<TZHead*>(&fileblock[fb_index]);
+	static constexpr int ttinfo_size = 6; //struct TTInfo gets padded
 	last_year = 2037; //Constrained by 32-bit time_t.
 
 	auto time_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.timecnt)));
@@ -368,12 +369,12 @@ namespace IANAParser
 	if (tzh.version == '2' && sizeof(time_t) == sizeof(int64_t))
 	{
 	    fb_index = (sizeof(tzh) +
-			sizeof(time_t) + sizeof(uint8_t) * time_count +
-			sizeof(TTInfo) * type_count +
+			(sizeof(uint32_t) + sizeof(uint8_t)) * time_count +
+			ttinfo_size * type_count +
 			sizeof(char) * char_count +
 			sizeof(uint8_t) * isgmt_count +
 			sizeof(uint8_t) * isstd_count +
-			2 * sizeof(time_t) * leap_count);
+			2 * sizeof(uint32_t) * leap_count);
 
 	    //This might change at some point in the probably very
 	    //distant future.
@@ -387,9 +388,6 @@ namespace IANAParser
 	    leap_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.leapcnt)));
 	}
 	fb_index += sizeof(tzh);
-	
-	transitions.reserve(time_count);
-	tzinfo.reserve(type_count);
 	auto start_index = fb_index;
 	auto info_index_zero = start_index + time_count * sizeof(time_t);
 	for(uint32_t index = 0; index < time_count; ++index)
