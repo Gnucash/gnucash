@@ -981,7 +981,7 @@ qof_book_get_book_currency_unique_name (QofBook *book)
        /* No currency accounting method selected; therefore no book-currency */
        return NULL;
 
-    if (!strcmp (kvp_value_get_string (value), "book-currency") == 0)
+    if (!(strcmp (kvp_value_get_string (value), "book-currency") == 0))
        /* Not book-currency currency accounting method; therefore no
            book-currency */
        return NULL;
