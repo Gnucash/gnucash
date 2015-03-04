@@ -353,7 +353,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 static void
 gnc_reconcile_view_init (GNCReconcileView *view)
 {
-    GNCSearchParam *param;
+    GNCSearchParamSimple *param;
     GList          *columns = NULL;
     gboolean num_action =
                 qof_book_use_split_action_for_num_field(gnc_get_current_book());
@@ -362,13 +362,13 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     view->account = NULL;
     view->sibling = NULL;
 
-    param = gnc_search_param_new();
+    param = gnc_search_param_simple_new();
     gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
                                     gnc_reconcile_view_is_reconciled, view);
-    gnc_search_param_set_title (param, _("Reconciled:R") + 11);
-    gnc_search_param_set_justify (param, GTK_JUSTIFY_CENTER);
-    gnc_search_param_set_passive (param, TRUE);
-    gnc_search_param_set_non_resizeable (param, TRUE);
+    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
+    gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
+    gnc_search_param_set_passive ((GNCSearchParam *) param, TRUE);
+    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
     columns = g_list_prepend (columns, param);
     columns = gnc_search_param_prepend_with_justify (columns, _("Amount"),
               GTK_JUSTIFY_RIGHT,

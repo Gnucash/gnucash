@@ -124,8 +124,6 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
         params = gnc_search_param_prepend (params, N_("Date Posted"), NULL,
                                            type, SPLIT_TRANS, TRANS_DATE_POSTED,
                                            NULL);
-        params = gnc_search_param_prepend (params, N_("Notes"), NULL,
-                                           type, SPLIT_TRANS, TRANS_NOTES, NULL);
         params = gnc_search_param_prepend (params, (num_action
                                                     ? N_("Number/Action")
                                                     : N_("Action")), NULL,
@@ -134,8 +132,24 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
                                                     ? N_("Transaction Number")
                                                     : N_("Number")), NULL,
                                            type, SPLIT_TRANS, TRANS_NUM, NULL);
+        {
+            GList *params2 = NULL;
+            params2 = gnc_search_param_prepend (params2, "", NULL,
+                                               type, SPLIT_MEMO, NULL);
+            params2 = gnc_search_param_prepend (params2, "", NULL,
+                                               type, SPLIT_TRANS, TRANS_DESCRIPTION,
+                                               NULL);
+            params2 = gnc_search_param_prepend (params2, "", NULL,
+                                               type, SPLIT_TRANS, TRANS_NOTES, NULL);
+            params = gnc_search_param_prepend_compound (params, 
+                                                        N_("Description, Notes, or Memo"),
+                                                        params2,
+                                                        GTK_JUSTIFY_LEFT, SEARCH_PARAM_ANY);
+        }
         params = gnc_search_param_prepend (params, N_("Memo"), NULL,
                                            type, SPLIT_MEMO, NULL);
+        params = gnc_search_param_prepend (params, N_("Notes"), NULL,
+                                           type, SPLIT_TRANS, TRANS_NOTES, NULL);
         params = gnc_search_param_prepend (params, N_("Description"), NULL,
                                            type, SPLIT_TRANS, TRANS_DESCRIPTION,
                                            NULL);
