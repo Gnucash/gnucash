@@ -796,11 +796,13 @@ gnc_query_view_fill (GNCQueryView *qview)
         {
             gboolean result;
             GNCSearchParamSimple *param = node->data;
-            g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
-            GSList *converters = gnc_search_param_get_converters (param);
+            GSList *converters = NULL;
             const char *type = gnc_search_param_get_param_type ((GNCSearchParam *) param);
             gpointer res = item->data;
             gchar *qofstring;
+
+            g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
+            converters = gnc_search_param_get_converters (param);
 
             /* Test for boolean type */
             if (g_strcmp0 (type, QOF_TYPE_BOOLEAN) == 0)

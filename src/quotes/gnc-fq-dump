@@ -21,7 +21,7 @@
 use strict;
 
 sub check_modules {
-  my @modules = qw(Finance::Quote LWP HTTP::Request::Common HTML::TableExtract Crypt::SSLeay);
+  my @modules = qw(Finance::Quote);
   my @missing;
 
   foreach my $mod (@modules) {
