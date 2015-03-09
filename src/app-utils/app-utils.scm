@@ -303,10 +303,12 @@
 (define gnc:*company-name* (N_ "Company Name"))
 (define gnc:*company-addy* (N_ "Company Address"))
 (define gnc:*company-id* (N_ "Company ID"))
+(define gnc:*company-id2* (N_ "Company ID 2"))
 (define gnc:*company-phone* (N_ "Company Phone Number"))
 (define gnc:*company-fax* (N_ "Company Fax Number"))
 (define gnc:*company-url* (N_ "Company Website URL"))
 (define gnc:*company-email* (N_ "Company Email Address"))
+(define gnc:*company-email2* (N_ "Company Email Address 2"))
 (define gnc:*company-contact* (N_ "Company Contact Person"))
 
 (define (gnc:company-info key)
@@ -317,8 +319,8 @@
 
 (export gnc:*business-label* gnc:*company-name*  gnc:*company-addy* 
         gnc:*company-id*     gnc:*company-phone* gnc:*company-fax* 
-        gnc:*company-url*    gnc:*company-email* gnc:*company-contact*
-        gnc:company-info)
+        gnc:*company-url*    gnc:*company-email* gnc:*company-email2*
+	gnc:*company-contact* gnc:company-info gnc:*company-id2*)
 
 (define gnc:*option-section-accounts* OPTION-SECTION-ACCOUNTS)
 (define gnc:*option-name-trading-accounts* OPTION-NAME-TRADING-ACCOUNTS)
