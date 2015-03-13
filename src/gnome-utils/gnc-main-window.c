@@ -1668,7 +1668,7 @@ static gchar *generate_statusbar_lastmodified_message()
                         g_date_time_format (gdt, (dummy_strftime_has_ampm &&
 						  strlen(dummy_strftime_has_ampm) > 0)
                                             ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
-                                            : _("Last modified on %a, %b %e, %Y at %H:%M"));
+                                            : _("Last modified on %x %X"));
 
                     g_date_time_unref (gdt);
 
