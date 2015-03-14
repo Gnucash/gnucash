@@ -5,17 +5,17 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2014.
+# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2015.
 # Rolf Leggewie, 2008
-# Mechtilde Stehmann <ooo@mechtilde.de>, 2014
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014,2015
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-19 21:02+0100\n"
-"PO-Revision-Date: 2015-01-19 21:07+0100\n"
-"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
+"PO-Revision-Date: 2015-03-13 20:14+0100\n"
+"Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
 "MIME-Version: 1.0\n"
@@ -324,11 +324,11 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:160
 msgid "To find the last stable version, please refer to http://www.gnucash.org"
-msgstr ""
+msgstr "Um die letzte stabile Version zu finden, sehen Sie bitte auf http://www.gnucash.org nach."
 
 #: ../src/bin/gnucash-bin.c:379
 msgid "- GnuCash personal and small business finance management"
-msgstr ""
+msgstr "- GnuCash, die Finanzverwaltung für Privatanwender und Kleinbetriebe"
 
 #: ../src/bin/gnucash-bin.c:385 ../src/bin/gnucash-bin.c:764
 #, c-format
@@ -336,6 +336,8 @@ msgid ""
 "%s\n"
 "Run '%s --help' to see a full list of available command line options.\n"
 msgstr ""
+"%s\n"
+ "Starten Sie '%s --help', um die ganze Liste der verfügbaren Kommandozeilenparameter zu sehen.\n"
 
 #: ../src/bin/gnucash-bin.c:398
 #, c-format
@@ -4876,9 +4878,8 @@ msgid "Expenses"
 msgstr "Aufwand"
 
 #: ../src/gnome/gnc-budget-view.c:357
-#, fuzzy
 msgid "Transfers"
-msgstr "Buchen"
+msgstr "Überweisungen"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/balsheet-eg.eguile.scm
@@ -7322,6 +7323,7 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
+""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:63
@@ -13569,7 +13571,6 @@ msgstr ""
 "liegen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:53
-#, fuzzy
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month:"
@@ -18564,27 +18565,26 @@ msgid "Edit report configuration name"
 msgstr "Name der Konfiguration ändern"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:481
-#, fuzzy
 msgid "Delete report configuration"
-msgstr "Konfigurierten Bericht löschen"
+msgstr "Berichtskonfiguration löschen"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
 #: ../intl-scm/guile-strings.c:2026
-#, fuzzy
 msgid "Saved Report Configurations"
-msgstr "Optionen _Steuerbericht"
+msgstr "Gespeicherte Berichtskonfigurationen"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
-#, fuzzy
 msgid "Exit the saved report configurations dialog"
-msgstr "Benutzerdefinierte-Berichte-Fenster schließen"
+msgstr "Berichtskonfigurationsdialog schließen"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:3
 msgid ""
 "\n"
 "Currently you have no saved reports.\n"
 msgstr ""
+"\n"
+"Aktuell haben Sie keine gespeicherten Berichte.\n"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:6
 msgid ""
@@ -18597,7 +18597,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/dialog-report-column-view.c:321
 msgid "Contents"
-msgstr "Inhalt"
+msgstr "Inhalte"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/owner-report.scm
@@ -18725,7 +18725,6 @@ msgid "Export the current report as a PDF document"
 msgstr "Aktuellen Bericht in eine PDF-Datei exportieren"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
-#, fuzzy
 msgid "Save _Report Configuration"
 msgstr "Berichtskonfiguration _speichern"
 
@@ -18738,12 +18737,10 @@ msgstr ""
 "wird in der Datei ~/.gnucash/saved-reports-2.4 gespeichert."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1044
-#, fuzzy
 msgid "Save Report Configuration As..."
-msgstr "Berichtskonfiguration speichern unter..."
+msgstr "Berichtskonfiguration speichern _unter..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1045
-#, fuzzy
 msgid ""
 "Add the current report's configuration to the `Saved Report Configurations' "
 "menu. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
@@ -22883,7 +22880,7 @@ msgstr "_Steuern"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2302
 msgid "_Sample & Custom"
-msgstr "Bei_spiel & Benutzerdefiniert"
+msgstr "Beispiel & Benutzer_definiert"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2304
@@ -26767,7 +26764,7 @@ msgstr "Test"
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5766
 msgid "Crash the report"
-msgstr "Verwerfe den Bericht"
+msgstr "Den Bericht verwerfen"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5768
