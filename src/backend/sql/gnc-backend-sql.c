@@ -1892,6 +1892,9 @@ gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts )
 
     year = tm->tm_year + 1900;
 
+    // Note: This implementation will trigger -Wformat-nonliteral and -Werror
+    // Remove -Wno-error=format-nonliteral in Makefile.am if this is resolved
+
     datebuf = g_strdup_printf( be->timespec_format,
                                year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
     gnc_tm_free (tm);
