@@ -354,7 +354,7 @@
    (gnc:make-text-option
     (N_ "Text") (N_ "Extra Notes")
      "v" (N_ "Extra notes to put on the invoice (simple HTML is accepted).")
-     (_ "Thank you for your patronage")))
+     (_ "Thank you for your patronage!")))
 
   (gnc:register-inv-option
    (gnc:make-string-option

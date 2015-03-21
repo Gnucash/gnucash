@@ -6,7 +6,7 @@
 # Johnny Ernst Nielsen <j.e.nielsen@iname.com>, 2001.
 # Claus Hindsgaul <claus_h@image.dk>, 2001.
 # Ole Laursen <olau@hardworking.dk>, 2001.
-# Joe Hansen <joedalton2@yahoo.dk>, 2009, 2010, 2012, 2013, 2014.
+# Joe Hansen <joedalton2@yahoo.dk>, 2009, 2010, 2012, 2013, 2014, 2015.
 #
 # konventioner:
 # account code -> kontonummer (ikke kontokode)
@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.6.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-27 18:00-0700\n"
-"PO-Revision-Date: 2014-10-05 22:41+0200\n"
+"PO-Revision-Date: 2015-03-07 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -6807,99 +6807,93 @@ msgstr "Det nuværende kalenderår"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:52
 msgid "When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time."
-msgstr ""
+msgstr "Når en dato indtastes uden angivelse af år, så kan året automatisk udfyldes inden for det nuværende kalenderår eller tæt på den nuværende dato baseret på et glidende vindue, der begynder et angivet antal måneder tilbage i tid."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:53
 msgid "In a sliding 12-month window starting a configurable number of months before the current month"
-msgstr ""
+msgstr "I et glidende 12-måneds vindue der starter et indstillet antal af måneder før den nuværende måned"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:54
-#, fuzzy
 msgid "Maximum number of months to go back."
-msgstr "Maksimalt antal søjler i diagrammet"
+msgstr "Maksimalt antal måneder at gå tilbage."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:55
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:55
 msgid "Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates."
-msgstr ""
+msgstr "Datoer vil blive automatisk udfyldt, så de er tæt på den nuværende dato. Indtast det maksimale antal måneder der skal gås tilbage i tid, når datoer automatisk skal udfyldes."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:56
 msgid "Show splash screen"
-msgstr ""
+msgstr "Vis opstartsskærm"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:57
 msgid "If active, a splash screen will be shown at startup. Otherwise no splash screen will be shown."
-msgstr ""
+msgstr "Hvis aktiv, vil en opstartsskærm blive vist ved opstart. Ellers vil en opstartsskærm ikke blive vist."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:58
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:176
-#, fuzzy
 msgid "Display the notebook tabs at the top of the window."
-msgstr "Nye vinduer oprettes som faneblade i det aktuelle topniveau-vindue"
+msgstr "Vis notebogsfanebladene øverst i vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:59
 msgid "This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and \"right\". It defaults to \"top\"."
-msgstr ""
+msgstr "Denne indstilling bestemmer kanten hvor faneblade for skift af sider i notebøger tegnes. Mulige værdier er »top«, »left«, »bottom« og »right«. Standarden er »top«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:60
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:178
-#, fuzzy
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "Flyt til den tomme transaktion i slutningen af kassekladden"
+msgstr "Vis notebogsfaneblade i bunden af vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:61
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:180
-#, fuzzy
 msgid "Display the notebook tabs at the left of the window."
-msgstr "Nye vinduer oprettes som faneblade i det aktuelle topniveau-vindue"
+msgstr "Vis notebogsfaneblade til venstre i vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:62
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:182
-#, fuzzy
 msgid "Display the notebook tabs at the right of the window."
-msgstr "Nye vinduer oprettes som faneblade i det aktuelle topniveau-vindue"
+msgstr "Vis notebogsfaneblade til højre i vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:63
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:185
-#, fuzzy
 msgid "Display the summary bar at the top of the page."
-msgstr "Vis antal aktier"
+msgstr "Vis referatbjælken øverst på siden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:64
 msgid "This setting determines the edge at which the summary bar for various pages is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom\"."
-msgstr ""
+msgstr "Denne indstilling bestemmer kanten hvor referatbjælken for diverse sider tegnes. Mulige værdier er »top«, og »bottom«. Standarden er »bottom«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:65
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:187
 msgid "Display the summary bar at the bottom of the page."
-msgstr ""
+msgstr "Vis referatbjælken i bunden af siden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:66
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:173
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr ""
+msgstr "Ved lukning af et faneblad flyttes til det senest besøgte faneblad."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:67
 msgid "If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left."
-msgstr ""
+msgstr "Hvis aktiv, ved lukning af et faneblad flyttes til det senest besøgte faneblad. Ellers vil lukning af et faneblad flytte et faneblad til venstre."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:68
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:62
 msgid "Set book option on new files to use split \"action\" field for \"Num\" field on registers/reports"
-msgstr ""
+msgstr "Sæt bogtilvalg på nye filer til at bruge opdelt »handlingsfelt« for »Num-felt« på klassekladder/rapporter"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:63
 msgid "If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field."
-msgstr ""
+msgstr "Hvis valgt vil standardbogindstillingen for nye filer være sat så, at »Num-cellen« på klassekladder viser/opdaterer opdelingsfeltet »action« og transaktionsfeltet »num« vises på den anden linje i dobbelt linje-tilstand (og er ikke synlig i enkel linje-tilstand). Ellers sættes standardbogindstilligen for nye filer så at cellen »Num« på klassekladder viser/opdaterer transaktionsfeltet »num«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:70
 msgid "Color the register as specified by the system theme"
-msgstr ""
+msgstr "Farvelæg klassekladden som specificeret af systemtemaet"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:71
 msgid "If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used."
-msgstr ""
+msgstr "Hvis aktiv vil klassekladden blive farvelagt som specificeret af systemtemaet. Dette kan overskrives for at tilbyde tilpassede farver ved at redigere gtkrc-filen i brugerens hjemmemappe. Ellers vil standardklassekladdens farver, som GnuCash altid har brugt, blive anvendt."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:72
 msgid "\"Enter\" key moves to bottom of register"
@@ -6907,20 +6901,19 @@ msgstr "»Returtast« flytter dig til bunden af kassekladen"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:73
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
-msgstr ""
+msgstr "Hvis aktiv, vil tryk på retur-tasten flytte dig til bunden af klassekladden. Ellers vil tryk på retur-tasten flytte til næste transaktionslinje."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:74
-#, fuzzy
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "Sæt automatisk listen af konti eller handlinger i forgrunden under indlæsning af data."
+msgstr "Fremhæv automatisk listen med konti eller handlinger under indtastning"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:75
 msgid "Move to Transfer field when memorised transaction auto filled"
-msgstr ""
+msgstr "Flyt til Overførselsfelt når husket transaktion er automatisk udfyldt"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:76
 msgid "If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field."
-msgstr ""
+msgstr "Hvis aktiv vil markøren efter at en husket transaktion automatisk er udfyldt flytte til Overførselsfeltet. Hvis ikke aktiv går markøren til værdifeltet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:77
 msgid "Create a new window for each new register"
@@ -6928,34 +6921,31 @@ msgstr "Opret et nyt vindue for hver ny kassekladde"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:78
 msgid "If active, each new register will be opened in a new window. Otherwise each new register will be opened as a tab in the main window."
-msgstr ""
+msgstr "Hvis aktiv, vil hver ny klassekladde blive åbnet i et nyt vindue. Ellers vil hver klassekladde blive åbnet som et faneblad i hovedvinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:79
-#, fuzzy
 msgid "Color all lines of a transaction the same"
-msgstr "Vis alle transaktioner i kontoen"
+msgstr "Farvelæg alle linjer i en transaktion med samme farve"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:80
 msgid "If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line."
-msgstr ""
+msgstr "Hvis aktiv vil alle linjer som udgør en enkel transaktion bruge den samme farve for deres baggrund. Ellers vil baggrundsfarverne ændre sig for hver linje."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:81
-#, fuzzy
 msgid "Show horizontal borders in a register"
-msgstr "Vis vandrette kanter"
+msgstr "Vis vandrette kanter i en klassekladde"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:82
 msgid "Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
-msgstr ""
+msgstr "Vis vandrette kanter mellem rækker i en klassekladde. Hvis aktiv vil kanten mellem cellerne indikeres med en tyk lije. Ellers vil kanten mellem cellerne ikke blive markeret."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:83
-#, fuzzy
 msgid "Show vertical borders in a register"
-msgstr "Vis lodrette kanter"
+msgstr "Vis lodrette kanter i en klassekladde"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:84
 msgid "Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
-msgstr ""
+msgstr "Vis lodrette kanter mellem kolonner i en klassekladde. Hvis aktiv vil kanten mellem cellerne indikeres med en tyk lije. Ellers vil kanten mellem cellerne ikke blive markeret."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:85
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:138
@@ -6964,7 +6954,7 @@ msgstr "Vis transaktioner på en eller to linjer. (to i dobbelt linje-tilstand.)
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:86
 msgid "This field specifies the default view style when opening a new register window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The \"ledger\" setting says to show each transaction on one or two lines. The \"auto-ledger\" setting does the same, but also expands only the current transaction to show all splits. The \"journal\" setting shows all transactions in expanded form."
-msgstr ""
+msgstr "Dette felt angiver standardstilen for visning når et ny klassekladdevindue åbnes. Mulige værdier er »ledger«, »auto-ledger« og »journal«. Indstillingen »ledger« viser hver transaktion på en eller to linjer. Indstillingen »auto-ledger« gør det samme, men udvider også den nuværende transaktion til at vise alle opdelinger. Indstillingen »journal« viser alle transaktioner i udvidet form."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:87
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:140
@@ -6974,11 +6964,11 @@ msgstr "Udvid automatisk den nuværende transakton til at vise alle opdelinger. 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:88
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:142
 msgid "All transactions are expanded to show all splits."
-msgstr ""
+msgstr "Alle transaktioner udvides til at vise alle opdelinger."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:90
 msgid "Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the \"View-&gt;Double Line\" menu item."
-msgstr ""
+msgstr "Vis to linjer med information for hver transaktion i en klassekladde. Dette er standardinstillingen for første gang en klassekladde åbnes. Indstillignen kan ændres på ethvert tidspunkt via menupunktet »Vis-&gt;dobbeltlinje«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
 #, fuzzy
@@ -12765,9 +12755,8 @@ msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:135
-#, fuzzy
 msgid "<b>Default Style</b>"
-msgstr "Standard kassekladdetype"
+msgstr "<b>Standardstil</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:136
 msgid "<b>Other Defaults</b>"
@@ -12802,9 +12791,8 @@ msgid "If checked, each register will be opened in its own top level window. If 
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:149
-#, fuzzy
 msgid "_Only display leaf account names"
-msgstr "Vis kontoen?"
+msgstr "_Vis kun bladkontonavne"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:150
 msgid "If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names."
@@ -12830,12 +12818,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:159
 msgid "_Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "_Vis indtastede og afstemte datoer ved valg"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:161
-#, fuzzy
 msgid "Register Defaults"
-msgstr "Kassekladde-skrift"
+msgstr "Kassekladdestandarder"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:164
 msgid "<b>Default Report Currency</b>"
@@ -12847,11 +12834,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:166
 msgid "Report opens in a new _window"
-msgstr ""
+msgstr "Rapport åbner i et nyt _vindue"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:167
 msgid "If checked, each report will be opened in its own top level window. If clear, the report will be opened in the current window."
-msgstr ""
+msgstr "Hvis afkrydset vil hver rapport blive åbnet i sit eget topniveauvindue. Hvis ryddet vil rapporten blive åbnet i det nuværende vindue."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:168
 msgid "Reports"
@@ -12866,26 +12853,24 @@ msgid "_Save window size and position"
 msgstr "_Gem vinduesstørrelse og -position"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
-#, fuzzy
 msgid "Save window size and location when it is closed."
-msgstr "Gem vinduesstørrelser og -positioner."
+msgstr "Gem vinduesstørrelse og position når det lukkes."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:172
 msgid "Bring the most _recent tab to the front"
-msgstr ""
+msgstr "Vis det _seneste faneblad forrest"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:174
 msgid "<b>Tab Position</b>"
-msgstr ""
+msgstr "<b>Fanebladposition</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:175
 msgid "To_p"
 msgstr "_Øverst"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:177
-#, fuzzy
 msgid "B_ottom"
-msgstr "Nederst"
+msgstr "_Nederst"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:179
 msgid "_Left"
@@ -12901,7 +12886,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:188
 msgid "<b>Tabs</b>"
-msgstr ""
+msgstr "<b>Faneblade</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:189
 msgid "Show close button on _notebook tabs"
@@ -12928,54 +12913,46 @@ msgid "Windows"
 msgstr "Vinduer"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:195
-#, fuzzy
 msgid "US"
-msgstr "_US:"
+msgstr "US"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:196
-#, fuzzy
 msgid "07/31/2013"
-msgstr "07/31/2005"
+msgstr "07/31/2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:197
-#, fuzzy
 msgid "UK"
-msgstr "_UK:"
+msgstr "UK"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:198
-#, fuzzy
 msgid "31/07/2013"
-msgstr "31/07/2005"
+msgstr "31/07/2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:199
-#, fuzzy
 msgid "Europe"
-msgstr "Europæisk"
+msgstr "Europa"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
-#, fuzzy
 msgid "31.07.2013"
-msgstr "31.07.2005"
+msgstr "31.07.2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
-#, fuzzy
 msgid "ISO"
-msgstr "_ISO:"
+msgstr "ISO"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:202
-#, fuzzy
 msgid "2013-07-31"
-msgstr "2005-07-31"
+msgstr "2013-07-31"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
 #: ../../gnucash/po/../src/import-export/csv-imp/gnc-csv-model.c:38
 msgid "Locale"
-msgstr ""
+msgstr "Sprog"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:204
 msgid "(dummy)"
-msgstr ""
+msgstr "(standard)"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:1
 msgid "Reset Warnings"
@@ -12983,7 +12960,7 @@ msgstr "Nulstil advarsler"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:2
 msgid "You have requested that the following warning dialogs not be presented. To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
-msgstr ""
+msgstr "Du har anmodt om at de følgende advarselsdialoger ikke vises. For at genaktivere disse dialoger vælges afkrydsningsboksen ved siden af dialogen og der trykkes på O.k."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:4
 msgid "_Unselect All"
@@ -13038,16 +13015,13 @@ msgid "<b>Tax Table Entries</b>"
 msgstr "<b>Skattetabelposter</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:10
-#, fuzzy
 msgid "Value $"
-msgstr "Værdi"
+msgstr "Værdi $"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:12
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percent %"
-msgstr ""
-"Værdi $\n"
-"Procent %"
+msgstr "Procent %"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-totd.glade.h:1
 msgid "GnuCash Tip Of The Day"
@@ -13112,9 +13086,8 @@ msgid "Exchange Rate:"
 msgstr "Vekselkurs:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:15
-#, fuzzy
 msgid "_Fetch Rate"
-msgstr "Match dato"
+msgstr "_Hent kurs"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-userpass.glade.h:1
 msgid "Username and Password"
@@ -13196,32 +13169,25 @@ msgid "Not scheduled"
 msgstr "Ikke planlagt"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:5
-#, fuzzy
 msgid "Select occurrence date above."
-msgstr "Vælg valuta/værdipapir"
+msgstr "Vælg forekomstdato ovenfor."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
-#, fuzzy
 msgctxt "Daily"
 msgid "Every"
-msgstr "Punkt"
+msgstr "Hver"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
-#, fuzzy
-#| msgid "days."
 msgctxt "Daily"
 msgid "days."
 msgstr "dage."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
-#, fuzzy
 msgctxt "Weekly"
 msgid "Every"
-msgstr "Punkt"
+msgstr "Hver"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
-#, fuzzy
-#| msgid "weeks."
 msgctxt "Weekly"
 msgid "weeks."
 msgstr "uger."
@@ -13269,53 +13235,44 @@ msgid "Tuesday"
 msgstr "Tirsdag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "Every"
-msgstr "Punkt"
+msgstr "Hver"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
-#, fuzzy
-#| msgid "months."
 msgctxt "Semimonthly"
 msgid "months."
 msgstr "måneder."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
-#, fuzzy
 msgid "First on the:"
-msgstr "Første Option"
+msgstr "Først den:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:24
 msgid "except on weekends:"
-msgstr "undtagen på weekender:"
+msgstr "undtagen i weekender:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:25
 msgid "then on the:"
-msgstr ""
+msgstr "så den:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
-#, fuzzy
 msgid "Semi-Monthly"
 msgstr "Halvmånedligt"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
-#, fuzzy
 msgctxt "Monthly"
 msgid "Every"
-msgstr "Punkt"
+msgstr "Hver"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
-#, fuzzy
-#| msgid "months."
 msgctxt "Monthly"
 msgid "months."
 msgstr "måneder."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
-#, fuzzy
 msgid "On the"
-msgstr "Andet"
+msgstr "Den"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:35
 msgid "5th"
@@ -14449,36 +14406,33 @@ msgstr ""
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-transfer.c:208
 msgid "Online Banking Direct Debit Note"
-msgstr ""
+msgstr "Online Banking Direct Debit Note"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-transfer.c:213
 msgid "Online Banking Bank-Internal Transfer"
-msgstr ""
+msgstr "Online Banking Bank-Internal-overførsel"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-transfer.c:218
-#, fuzzy
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "Opsætning af netbank er færdig"
+msgstr "Online Banking European-overførsel (SEPA)"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-transfer.c:223
-#, fuzzy
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr "Netbank-kontonavn"
+msgstr "Online Banking European (SEPA) Debit Note"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-transfer.c:229
 msgid "Online Banking Transaction"
 msgstr "Netbanktransaktion"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-transfer.c:294
-#, fuzzy
 msgid ""
 "An error occurred while executing the job. Please check the log window for the exact error message.\n"
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Der opstod en fejl under afvikling af jobbet.  Den præcise fejlbesked kan findes i logvinduet.\n"
+"Der opstod en fejl under afvikling af jobbet. Den præcise fejlbesked kan findes i logvinduet.\n"
 "\n"
-"Ønsker du at indtaste jobbet igen?"
+"Ønsker du at gå til jobbet igen?"
 
 #. src/import-export/qif-imp/qif-dialog-utils.scm
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-utils.c:409
@@ -14487,7 +14441,6 @@ msgid "Unspecified"
 msgstr "Uspecificeret"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-ab-utils.c:662
-#, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not possible to execute this job. \n"
 "\n"
@@ -14657,14 +14610,12 @@ msgid "Issue a new transaction online through Online Banking"
 msgstr "Indsæt en ny transaktion online via netbanken"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:118
-#, fuzzy
 msgid "_Issue SEPA Transaction..."
-msgstr "_Indsæt transaktion ..."
+msgstr "_Udsted SEPA-transaktion ..."
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:119
-#, fuzzy
 msgid "Issue a new international European (SEPA) transaction online through Online Banking"
-msgstr "Indsæt en ny bankintern transaktion online via netbanken"
+msgstr "Udsted en ny international europæisk (SEPA) transaktion online via netbanken"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:123
 msgid "I_nternal Transaction..."
@@ -14680,17 +14631,15 @@ msgstr "_Direkte debet..."
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:129
 msgid "Issue a new direct debit note online through Online Banking"
-msgstr ""
+msgstr "Udsted en ny direkte debet note online via netbanken"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:133
-#, fuzzy
 msgid "_Issue SEPA Direct Debit..."
-msgstr "_Direkte debet..."
+msgstr "_Udsted SEPA Direct Debit ..."
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:134
-#, fuzzy
 msgid "Issue a new international European (SEPA) direct debit note online through Online Banking"
-msgstr "Indsæt en ny bankintern transaktion online via netbanken"
+msgstr "Udsted en ny internatinal europæiske (SEPA) direkte debet note online via netbanken"
 
 #: ../../gnucash/po/../src/import-export/aqb/gnc-plugin-aqbanking.c:140
 msgid "Import _MT940"
@@ -14839,16 +14788,16 @@ msgid ""
 "\n"
 "Select the type of Export required and the separator that will be used.\n"
 msgstr ""
+"\n"
+"Vælg eksporttypen som kræves og adskillelsestegnet som bliver anvendt.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:5
-#, fuzzy
 msgid "Quotes"
-msgstr "Hent kurser"
+msgstr "Kurser"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:6
-#, fuzzy
 msgid "Use Quotes"
-msgstr "Hent kurser"
+msgstr "Brug kurser"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:7
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:25
@@ -14871,36 +14820,33 @@ msgid "Separators"
 msgstr "Adskillelsestegn"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:12
-#, fuzzy
 msgid "Choose Export Settings"
-msgstr "Vælg eksportformat"
+msgstr "Vælg eksportopsætning"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:13
 msgid "Select the accounts to be exported and date range if required."
-msgstr ""
+msgstr "Vælg konti som eksporteres og datointerval hvis krævet."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:22
-#, fuzzy
 msgid "<b>_Dates</b>"
-msgstr "<b>_Bemærkninger</b>"
+msgstr "<b>_Datoer</b>"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:33
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
-#, fuzzy
 msgid "Account Selection"
-msgstr "Kontosletning"
+msgstr "Kontovalg"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:34
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Der er ingen indstillinger for denne rapport."
+msgstr ""
+"\n"
+"Indtast filnavn og placering for eksporten ...\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:37
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Vælg eksportformat"
+msgstr "Vælg filnavn for eksport"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:38
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:22
@@ -14908,131 +14854,113 @@ msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
 msgstr ""
+"Vælg Anvend for at oprette eksportfil.\n"
+"Afbryd for at afbryde."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:40
-#, fuzzy
 msgid "Export Now..."
-msgstr "Eksporterer fil ..."
+msgstr "Eksporter nu ..."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:41
-#, fuzzy
 msgid "Summary"
-msgstr "Resu_mebjælke"
+msgstr "Resume"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:42
-#, fuzzy
 msgid "Export Summary"
-msgstr "Kontoopsummering"
+msgstr "Eksportresume"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:420
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:424
 msgid "To With Sym"
-msgstr ""
+msgstr "Til med sym"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:424
 msgid "From With Sym"
-msgstr ""
+msgstr "Fra med sym"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:425
 msgid "To Num."
-msgstr ""
+msgstr "Til num."
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:425
-#, fuzzy
 msgid "From Num."
-msgstr "Fra nu"
+msgstr "Fra num."
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:426
-#, fuzzy
 msgid "To Rate/Price"
-msgstr "Samlet pris"
+msgstr "Til kurs/pris"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-transactions-export.c:426
 msgid "From Rate/Price"
-msgstr ""
+msgstr "Fra kurs/pris"
 
 #. Header string, 'eol = end of line marker'
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:155
 msgid "type"
-msgstr ""
+msgstr "type"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:155
-#, fuzzy
 msgid "full_name"
-msgstr "_Fulde navn:"
+msgstr "fulde_navn"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:155
-#, fuzzy
 msgid "name"
-msgstr "Brugernavn"
+msgstr "navn"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "code"
-msgstr "Unicode"
+msgstr "kode"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "description"
-msgstr "Beskrivelse"
+msgstr "beskrivelse"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "color"
-msgstr "Farver"
+msgstr "farve"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
 msgid "notes"
-msgstr "Bemærkninger"
+msgstr "bemærkninger"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
 msgid "commoditym"
-msgstr "Vare"
+msgstr "varem"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
 msgid "commodityn"
-msgstr "Vare"
+msgstr "varen"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "hidden"
-msgstr "Skj_ult"
+msgstr "skjult"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "tax"
-msgstr "Skat"
+msgstr "skat"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "place_holder"
-msgstr "Sumkonto"
+msgstr "sum_konto"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
-#, fuzzy
 msgid "Export Account T_ree to CSV..."
-msgstr "Eksporter _konti"
+msgstr "Eksporter konto_træ til CSV ..."
 
 #: ../../gnucash/po/../src/import-export/csv-exp/gnc-plugin-csv-export.c:48
-#, fuzzy
 msgid "Export the Account Tree to a CSV file"
-msgstr "Eksporter kontohierarkiet til en ny GnuCash-datafil"
+msgstr "Eksporter kontotræet til en CSV-fil"
 
 #: ../../gnucash/po/../src/import-export/csv-exp/gnc-plugin-csv-export.c:52
-#, fuzzy
 msgid "Export _Transactions to CSV..."
-msgstr "Hent _transaktioner..."
+msgstr "Eksporter _transaktioner til CSV ..."
 
 #: ../../gnucash/po/../src/import-export/csv-exp/gnc-plugin-csv-export.c:53
-#, fuzzy
 msgid "Export the Transactions to a CSV file"
-msgstr "Indlæste transaktioner med dubletter"
+msgstr "Eksporter transaktionerne til en CSV-fil"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:5
 msgid "Window geometry"
@@ -15063,21 +14991,20 @@ msgstr ""
 #: ../../gnucash/po/../src/import-export/csv-imp/assistant-csv-account-import.c:173
 #: ../../gnucash/po/../src/plugins/bi_import/dialog-bi-import-gui.c:219
 #: ../../gnucash/po/../src/plugins/customer_import/dialog-customer-import-gui.c:205
-#, fuzzy
 msgid "The input file can not be opened."
-msgstr "Filen kunne ikke genåbnes."
+msgstr "Inddatafilen kan åbnes."
 
 #: ../../gnucash/po/../src/import-export/csv-imp/assistant-csv-account-import.c:262
 #: ../../gnucash/po/../src/plugins/bi_import/dialog-bi-import-gui.c:334
 #: ../../gnucash/po/../src/plugins/customer_import/dialog-customer-import-gui.c:319
 msgid "Adjust regular expression used for import"
-msgstr ""
+msgstr "Juster regulært udtryk brugt ved import"
 
 #: ../../gnucash/po/../src/import-export/csv-imp/assistant-csv-account-import.c:262
 #: ../../gnucash/po/../src/plugins/bi_import/dialog-bi-import-gui.c:334
 #: ../../gnucash/po/../src/plugins/customer_import/dialog-customer-import-gui.c:319
 msgid "This regular expression is used to parse the import file. Modify according to your needs.\n"
-msgstr ""
+msgstr "Dette regulære udtryk bruges til at fortolke importfilen. Ændr til dine behov.\n"
 
 #: ../../gnucash/po/../src/import-export/csv-imp/assistant-csv-account-import.c:467
 #, c-format

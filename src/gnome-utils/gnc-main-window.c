@@ -1665,9 +1665,10 @@ static gchar *generate_statusbar_lastmodified_message()
                     that has the a.m. or p.m. string in its locale, second
                     string is for locales that do not have that string. */
                     gchar *time_string =
-                        g_date_time_format (gdt, (strlen(dummy_strftime_has_ampm) > 0)
+                        g_date_time_format (gdt, (dummy_strftime_has_ampm &&
+						  strlen(dummy_strftime_has_ampm) > 0)
                                             ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
-                                            : _("Last modified on %a, %b %e, %Y at %H:%M"));
+                                            : _("Last modified on %x %X"));
 
                     g_date_time_unref (gdt);
 

@@ -838,7 +838,7 @@
     report-title-string
     report-id
     (_ "No accounts selected")
-    (_ "This report requires accounts to be selected.")))
+    (_ "This report requires accounts to be selected in the report options.")))
 
 (define (gnc:html-make-empty-data-warning
          report-title-string report-id)

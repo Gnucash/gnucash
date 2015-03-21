@@ -10741,11 +10741,11 @@ msgstr "未保存の帳簿"
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-main-window.c:1669
 msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
-msgstr ""
+msgstr "最終更新: %x %X"
 
 #: ../../gnucash/po/../src/gnome-utils/gnc-main-window.c:1670
 msgid "Last modified on %a, %b %e, %Y at %H:%M"
-msgstr ""
+msgstr "最終更新: %x %X"
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.

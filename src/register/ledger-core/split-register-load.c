@@ -39,6 +39,7 @@
 #include "split-register-p.h"
 #include "engine-helpers.h"
 #include "gnc-prefs.h"
+#include "pricecell.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -380,6 +381,15 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                      gnc_get_current_book ());
+
+    /* Bug 742089: Set the debit and credit cells' print_info to the account */
+    gnc_price_cell_set_print_info
+    ((PriceCell *) gnc_table_layout_get_cell (table->layout, DEBT_CELL),
+     gnc_account_print_info (default_account, FALSE));
+
+    gnc_price_cell_set_print_info
+    ((PriceCell *) gnc_table_layout_get_cell (table->layout, CRED_CELL),
+     gnc_account_print_info (default_account, FALSE));
 
     /* make sure we have a blank split */
     if (blank_split == NULL)
