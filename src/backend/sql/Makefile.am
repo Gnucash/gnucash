@@ -17,7 +17,12 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
-  ${WARN_CFLAGS}
+  ${WARN_CFLAGS} \
+  -Wno-error=format-nonliteral
+
+# Note: -Wno-error=format-noliteral
+# is *only* to allow gnc_sql_convert_timespec_to_string()
+# to use the format string from GncSqlBackend* be->timespec_format
 
 libgnc_backend_sql_la_SOURCES = \
   gnc-backend-sql.c \
