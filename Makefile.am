@@ -15,6 +15,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2014 \
   ChangeLog.2013 \
   ChangeLog.2012 \
   ChangeLog.2011 \
@@ -209,7 +210,7 @@ if BUILDING_FROM_SCM
 ChangeLog: NEWS
 	cd $(abs_srcdir) ; \
 	if test x$(SCM_TYPE) = xsvn ; then \
-	  $(SVN) log -v --xml -r HEAD:'{2013-01-01}' http://svn.gnucash.org/repo/gnucash | \
+	  $(SVN) log -v --xml -r HEAD:'{2015-01-01}' http://svn.gnucash.org/repo/gnucash | \
 	    $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
 	else \

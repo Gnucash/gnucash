@@ -1,5 +1,60 @@
 Version history:
 ------- -------
+2.6.6 - 29 March 2015
+Announcement: GnuCash 2.6.6 Release 2015-03-29
+GnuCash 2.6.6 released
+
+The GnuCash development team proudly announces GnuCash 2.6.6, the
+sixth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+	619899 - Use normal gettext or intltool toolchain also for scm files
+	649933 - Creating cash flow report takes a long tim
+	672760 - Postponed transaction applied invalid date
+	721196 - Fixed for locales where decimal point is a comma.
+	721196 - Use a regex for checking for a valid numeric value.
+	723409 - Incorrect symbol for Turkish lira
+	727466 - The symbol of CNY changed to 元
+	727647 - "gncInvoiceGetTotal" is not read-only function?
+	731889 - guile 2 exports different autoconf macros than what is expecte
+	733685 - Fancy Date Format doesn't stick
+	738749 - Broken account template en_GB/uk-vat.gnucash-xea.
+	739228 - Advanced Portfolio report: wrong calculation of Value Correctly convert the value into the report's currency.
+	739584 - gnucash-2.6.4 segfaults regularly on transfer .
+	740471 - Applying payment to invoice Segmentation fault
+	741228 - "Red line" threshold applies to Template scheduled transactions
+	741810 - Compilation fails because of creating .gnucash
+	742089 - Decimal places. Set the debit and credit cells' print_info to the account so that the decimal places are correct for the commodity.
+	742332 - German tax report uses US tax quarters and not real quarters.
+	742624 - Scheduled Transaction Editor results in immediate segfault
+	743609 - Add configure options to disable libsecret detection
+	743807 - Stops critical error messages.
+	745265 - Segfault in generate_statusbar_lastmodified_message on Windows. Actually change the default date format without AM/PM
+	745354 - Enhance the Find Transactions dialog. Make it possible to define search criteria that consist of multiple terms anded or ored together. Use this to define a new criterion to look for specified text in any of the Description, Notes, or Memo fields
+	746517 - gnc-sql-backend.c compile fails with -Werror=format-nonliteral. Use GCC pragma to disable the warning in the one place that trips it
+
+
+Other repairs that weren't reported in bugs:
+      Let CPAN and ActiveState package managers take care of dependencies instead of explicitly installing a few of them directly.
+      Correct the number field displayed in the reconcile window to correspond with the source specified in File->Options
+      Fix some bugs found by SWIG version 3.0.5. Prior to version 3.0.3 SWIG silently ignored invalid preprocessor directives
+      Scrubbing Improvements, including avoiding a potential infinite loop.
+      Remove build and run of no-longer-existant intl-scm/guile-strings.
+      Rewrite gnc-test-env in perl. This eliminates another guile dependency in the build chain.
+      Switch from guile to xml to manage our iso-currencies source file
+      Numeric values with more than commodity smallest fraction get silently dropped.
+      Update US Income Tax data to reflect minor changes for 2014
+      Advanced portfolio should respect report date when looking for other income/expense
+      Improve income and expense reporting in advanced portfolio report
+      Accept prices of the form n.nnne[+-]nn, i.e. with an exponent. An example requiring this is currency conversion from IDR to USD
+      Added Lithuanian language business accounts
+      Fix crash when running check & repair on an open AP/AR register
+
+Updated Translations: Danish, Dutch, German, Spanish
+
+New Translations: Maithili, Manipuri-Bengali Script, Manipuri-Meetei Mayek Script,
+
+
 2.6.5 - 16 December 2014
 Announcement: GnuCash 2.6.5 Release 2014-12-16
 GnuCash 2.6.5 released
