@@ -86,6 +86,23 @@ nodist_test_gnc_timezone_SOURCES = \
 test_gnc_timezone_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
 check_PROGRAMS += test-gnc-timezone
+
+test_gnc_datetime_SOURCES = \
+	$(top_srcdir)/$(MODULEPATH)/gnc-datetime.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-timezone.cpp \
+	gtest-gnc-datetime.cpp
+test_gnc_datetime_CPPFLAGS =\
+	-I$(GTEST_HEADERS) \
+	-I$(top_srcdir)/src \
+	$(BOOST_CPPFLAGS)
+test_gnc_datetime_LDADD = $(GTEST_LIBS)
+if !GOOGLE_TEST_LIBS
+nodist_test_gnc_datetime_SOURCES = \
+	$(GTEST_SRC)/src/gtest_main.cc
+test_gnc_datetime_LDADD += $(top_builddir)/src/test-core/libgtest.a
+endif
+check_PROGRAMS += test-gnc-datetime
+
 endif
 
 test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
