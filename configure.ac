@@ -170,13 +170,15 @@ AC_PROG_LN_S
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
+oldcflags="$CFLAGS"
+CFLAGS=
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
     AC_MSG_ERROR([Must have one of the setenv or putenv functions.])
   ])
 ])
-
+CFLAGS="$oldcflags"
 STRUCT_TM_GMTOFF_CHECK
 cflags_save=${CFLAGS}
 CFLAGS="${CFLAGS} -Wall -Werror"
@@ -615,7 +617,7 @@ then
         if test $? -eq 0; then
           EXTRA_SEARCH_LIBS="$(pkg-config --variable=libdir dbi)/dbd"
         else
-          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd"
+          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd:$(prefix)/lib/dbd"
         fi]]
        )
     case $host_os in
