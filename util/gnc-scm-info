@@ -165,7 +165,7 @@ if test $? != 0 ; then exit 1 ; fi
 # If we're only interested in the vcs type, then we're done here
 if [ "$request" = "type" ]
 then
-  echo "bzr"
+  echo "svk"
   exit 0
 fi
 
