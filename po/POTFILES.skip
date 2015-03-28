@@ -19,16 +19,30 @@ src/libqof/qof/qofquery-deserial.c
 src/libqof/qof/qofquery-serialize.c
 src/libqof/qof/qofsql.c
 
-# Skip softlinks to scm files. These softlinks are created
-# for testing purposes. Unfortunately distcheck doesn't appear
-# smart enough to ignore them.
+# Skip softlinks to scm files. These softlinks are created in builddir
+# for testing purposes, intltool-extract isn't smart enough to ignore
+# them when bulddir and srcdir are the same, and both intltool-extract
+# and intltool-update use absolute paths to the srcdir when it's not
+# the same as builddir which messes up the file names in gnucash.pot.
 
 src/app-utils/gnucash/app-utils.scm
+src/app-utils/gnucash/gettext.scm
+src/business/business-gnome/gnucash/business-gnome.scm
+src/core-utils/gnucash/core-utils.scm
+src/engine/gnucash/business-core.scm
+src/engine/gnucash/engine.scm
+src/gnc-module/gnucash/gnc-module.scm
+src/gnome-utils/gnucash/gnome-utils.scm
+src/import-export/qif-imp/gnucash/import-export/qif-import.scm
 src/import-export/qif-imp/qif-import/qif-dialog-utils.scm
 src/import-export/qif-imp/qif-import/qif-file.scm
+src/import-export/qif-imp/qif-import/qif-guess-map.scm
+src/import-export/qif-imp/qif-import/qif-import.scm
 src/import-export/qif-imp/qif-import/qif-merge-groups.scm
+src/import-export/qif-imp/qif-import/qif-objects.scm
 src/import-export/qif-imp/qif-import/qif-parse.scm
 src/import-export/qif-imp/qif-import/qif-to-gnc.scm
+src/import-export/qif-imp/qif-import/qif-utils.scm
 src/report/business-reports/gnucash/report/aging.scm
 src/report/business-reports/gnucash/report/balsheet-eg.eguile.scm
 src/report/business-reports/gnucash/report/balsheet-eg.scm
@@ -43,10 +57,19 @@ src/report/business-reports/gnucash/report/payables.scm
 src/report/business-reports/gnucash/report/receivables.scm
 src/report/business-reports/gnucash/report/taxinvoice.eguile.scm
 src/report/business-reports/gnucash/report/taxinvoice.scm
+src/report/locale-specific/us/gnucash/report/locale-specific/de_DE.scm
+src/report/locale-specific/us/gnucash/report/locale-specific/us.scm
 src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 src/report/locale-specific/us/gnucash/report/taxtxf.scm
 src/report/report-gnome/gnucash/report/report-gnome.scm
 src/report/report-system/gnucash/report/eguile-gnc.scm
+src/report/report-system/gnucash/report/eguile-html-utilities.scm
+src/report/report-system/gnucash/report/eguile-utilities.scm
+src/report/report-system/gnucash/report/report-system.scm
+src/report/report-system/gnucash/report/report-system/collectors.scm
+src/report/report-system/gnucash/report/report-system/list-extras.scm
+src/report/report-system/gnucash/report/report-system/report-collectors.scm
+src/report/standard-reports/gnucash/report/standard-reports.scm
 src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
 src/report/standard-reports/gnucash/report/standard-reports/account-summary.scm
 src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
@@ -76,10 +99,15 @@ src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 src/report/stylesheets/gnucash/report/stylesheet-footer.scm
 src/report/stylesheets/gnucash/report/stylesheet-plain.scm
+src/report/stylesheets/gnucash/report/stylesheets.scm
 src/report/utility-reports/gnucash/report/hello-world.scm
+src/report/utility-reports/gnucash/report/utility-reports.scm
 src/report/utility-reports/gnucash/report/view-column.scm
 src/report/utility-reports/gnucash/report/welcome-to-gnucash.scm
 src/scm/build-config.scm
 src/scm/build-config.scm.in
+src/scm/gnucash/main.scm
 src/scm/gnucash/price-quotes.scm
+src/scm/gnucash/printf.scm
 src/tax/us/gnucash/tax/de_DE.scm
+src/tax/us/gnucash/tax/us.scm
