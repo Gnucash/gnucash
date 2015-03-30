@@ -11,12 +11,11 @@ The following bugs are fixed:
 	619899 - Use normal gettext or intltool toolchain also for scm files
 	649933 - Creating cash flow report takes a long tim
 	672760 - Postponed transaction applied invalid date
-	721196 - Fixed for locales where decimal point is a comma.
-	721196 - Use a regex for checking for a valid numeric value.
+	721196 - CSV. Cannot import lines with empty fields for deposit or withdrawal in bank transaction download.
 	723409 - Incorrect symbol for Turkish lira
 	727466 - The symbol of CNY changed to 元
 	727647 - "gncInvoiceGetTotal" is not read-only function?
-	731889 - guile 2 exports different autoconf macros than what is expecte
+	731889 - guile 2 exports different autoconf macros than what is expected
 	733685 - Fancy Date Format doesn't stick
 	738749 - Broken account template en_GB/uk-vat.gnucash-xea.
 	739228 - Advanced Portfolio report: wrong calculation of Value Correctly convert the value into the report's currency.
@@ -32,7 +31,7 @@ The following bugs are fixed:
 	745265 - Segfault in generate_statusbar_lastmodified_message on Windows. Actually change the default date format without AM/PM
 	745354 - Enhance the Find Transactions dialog. Make it possible to define search criteria that consist of multiple terms anded or ored together. Use this to define a new criterion to look for specified text in any of the Description, Notes, or Memo fields
 	746517 - gnc-sql-backend.c compile fails with -Werror=format-nonliteral. Use GCC pragma to disable the warning in the one place that trips it
-
+	746977 - scm ccache files should be in pkglibdir not pkgdatadir.
 
 Other repairs that weren't reported in bugs:
       Let CPAN and ActiveState package managers take care of dependencies instead of explicitly installing a few of them directly.
@@ -52,7 +51,7 @@ Other repairs that weren't reported in bugs:
 
 Updated Translations: Danish, Dutch, German, Spanish
 
-New Translations: Maithili, Manipuri-Bengali Script, Manipuri-Meetei Mayek Script,
+New Translations: Maithili, Manipuri-Bengali Script, Manipuri-Meetei Mayek Script.
 
 
 2.6.5 - 16 December 2014
