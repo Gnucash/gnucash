@@ -24,7 +24,7 @@ if GNC_HAVE_GUILE_2
 	$(GUILD) compile \
 	-o $@ $<
 
-gncscmcachedir = ${GNC_SCM_INSTALL_DIR}/ccache/@GUILE_EFFECTIVE_VERSION@/gnumeric
+gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnumeric
 gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
 endif
 
