@@ -89,7 +89,7 @@ EXTRA_DIST = \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in \
-  util/gnc-scm-info
+  util/gnc-vcs-info
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
