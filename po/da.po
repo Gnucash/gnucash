@@ -70,12 +70,14 @@
 # record -> gem
 # register -> kasseklade
 # reminder -> påmindelse (rykker)
+# resume -> oversigt
 # Retained Earnings -> overført resultat (equity og retained earnings ser ikke ud til at være 
 #                                         korrekt i den nuværende oversættelse).
 # revenue -> indtægt
 # security -> værdipapir (http://en.wikipedia.org/wiki/Bond_%28finance%29)
 # split -> opdeling
 # subtotal -> delsum (ikke brugt: undertotal)
+# summary bar -> oversigtsbjælken
 # tax invoice -> skatteopgørelse
 # value -> beløb (værdi - alt efter sammenhæng)
 # vendor -> leverandør (alternativ sælger)
@@ -89,10 +91,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 2.6.4\n"
+"Project-Id-Version: gnucash 2.6.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-18 09:09-0800\n"
-"PO-Revision-Date: 2015-03-07 22:41+0200\n"
+"PO-Revision-Date: 2015-03-29 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -6810,11 +6812,11 @@ msgstr "Når en dato indtastes uden angivelse af år, så kan året automatisk u
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:53
 msgid "In a sliding 12-month window starting a configurable number of months before the current month"
-msgstr "I et glidende 12-måneds vindue der starter et indstillet antal af måneder før den nuværende måned"
+msgstr "I et glidende 12-måneders vindue der starter et indstillet antal af måneder før den nuværende måned"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:54
 msgid "Maximum number of months to go back."
-msgstr "Maksimalt antal måneder at gå tilbage."
+msgstr "Maksimalt antal måneder tilbage i tiden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:55
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:55
@@ -6832,40 +6834,40 @@ msgstr "Hvis aktiv, vil en opstartsskærm blive vist ved opstart. Ellers vil en 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:58
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:176
 msgid "Display the notebook tabs at the top of the window."
-msgstr "Vis notebogsfanebladene øverst i vinduet."
+msgstr "Vis notesbogfanebladene øverst i vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:59
 msgid "This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and \"right\". It defaults to \"top\"."
-msgstr "Denne indstilling bestemmer kanten hvor faneblade for skift af sider i notebøger tegnes. Mulige værdier er »top«, »left«, »bottom« og »right«. Standarden er »top«."
+msgstr "Denne indstilling bestemmer kanten, hvor faneblade for skift af sider i notebøger tegnes. Mulige værdier er »top«, »left«, »bottom« og »right«. Standarden er »top«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:60
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:178
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "Vis notebogsfaneblade i bunden af vinduet."
+msgstr "Vis notesbogfaneblade i bunden af vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:61
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:180
 msgid "Display the notebook tabs at the left of the window."
-msgstr "Vis notebogsfaneblade til venstre i vinduet."
+msgstr "Vis notesbogfaneblade til venstre i vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:62
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:182
 msgid "Display the notebook tabs at the right of the window."
-msgstr "Vis notebogsfaneblade til højre i vinduet."
+msgstr "Vis notesbogfaneblade til højre i vinduet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:63
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:185
 msgid "Display the summary bar at the top of the page."
-msgstr "Vis referatbjælken øverst på siden."
+msgstr "Vis oversigtsbjælken øverst på siden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:64
 msgid "This setting determines the edge at which the summary bar for various pages is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom\"."
-msgstr "Denne indstilling bestemmer kanten hvor referatbjælken for diverse sider tegnes. Mulige værdier er »top«, og »bottom«. Standarden er »bottom«."
+msgstr "Denne indstilling bestemmer kanten, hvor oversigtsbjælken for diverse sider tegnes. Mulige værdier er »top«, og »bottom«. Standarden er »bottom«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:65
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:187
 msgid "Display the summary bar at the bottom of the page."
-msgstr "Vis referatbjælken i bunden af siden."
+msgstr "Vis oversigtsbjælken i bunden af siden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:66
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:173
@@ -6884,7 +6886,7 @@ msgstr "Sæt bogtilvalg på nye filer til at bruge opdelt »handlingsfelt« for 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:63
 msgid "If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field."
-msgstr "Hvis valgt vil standardbogindstillingen for nye filer være sat så, at »Num-cellen« på klassekladder viser/opdaterer opdelingsfeltet »action« og transaktionsfeltet »num« vises på den anden linje i dobbelt linje-tilstand (og er ikke synlig i enkel linje-tilstand). Ellers sættes standardbogindstilligen for nye filer så at cellen »Num« på klassekladder viser/opdaterer transaktionsfeltet »num«."
+msgstr "Hvis valgt vil standardbogindstillingen for nye filer være sat, så »Num-cellen« på klassekladder viser/opdaterer opdelingsfeltet »action« og transaktionsfeltet »num« vises på den anden linje i dobbelt linje-tilstand (og er ikke synlig i enkel linje-tilstand). Ellers sættes standardbogindstillingen for nye filer, så cellen »Num« på klassekladder viser/opdaterer transaktionsfeltet »num«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:70
 msgid "Color the register as specified by the system theme"
@@ -6912,7 +6914,7 @@ msgstr "Flyt til Overførselsfelt når husket transaktion er automatisk udfyldt"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:76
 msgid "If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field."
-msgstr "Hvis aktiv vil markøren efter at en husket transaktion automatisk er udfyldt flytte til Overførselsfeltet. Hvis ikke aktiv går markøren til værdifeltet."
+msgstr "Hvis aktiv vil markøren, efter en husket transaktion automatisk er udfyldt, flytte til Overførselsfeltet. Hvis ikke aktiv går markøren til værdifeltet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:77
 msgid "Create a new window for each new register"
@@ -6928,7 +6930,7 @@ msgstr "Farvelæg alle linjer i en transaktion med samme farve"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:80
 msgid "If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line."
-msgstr "Hvis aktiv vil alle linjer som udgør en enkel transaktion bruge den samme farve for deres baggrund. Ellers vil baggrundsfarverne ændre sig for hver linje."
+msgstr "Hvis aktiv vil alle linjer, som udgør en enkel transaktion, bruge den samme farve for deres baggrund. Ellers vil baggrundsfarverne ændre sig for hver linje."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:81
 msgid "Show horizontal borders in a register"
@@ -6967,7 +6969,7 @@ msgstr "Alle transaktioner udvides til at vise alle opdelinger."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:90
 msgid "Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the \"View-&gt;Double Line\" menu item."
-msgstr "Vis to linjer med information for hver transaktion i en klassekladde. Dette er standardinstillingen for første gang en klassekladde åbnes. Indstillignen kan ændres på ethvert tidspunkt via menupunktet »Vis-&gt;dobbeltlinje«."
+msgstr "Vis to linjer med information for hver transaktion i en klassekladde. Dette er standardinstillingen for første gang en klassekladde åbnes. Indstillingen kan ændres på ethvert tidspunkt via menupunktet »Vis-&gt;dobbeltlinje«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
 #, fuzzy
@@ -10356,7 +10358,7 @@ msgstr "Resu_mebjælke"
 
 #: ../src/gnome-utils/gnc-main-window.c:400
 msgid "Show/hide the summary bar on this window"
-msgstr "Vis/skjul resumebjælken på dette vindue"
+msgstr "Vis/skjul oversigtsbjælken på dette vindue"
 
 #: ../src/gnome-utils/gnc-main-window.c:404
 msgid "Stat_us Bar"
@@ -12314,7 +12316,7 @@ msgstr "Inkluder totaler _uden valuta"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:6
 msgid "If checked, non-currency commodities will be shown in the summary bar. If clear, only currencies will be shown."
-msgstr ""
+msgstr "Hvis afkrydset vil ikke-valuta varer blive vist i oversigtsbjælken. Hvis ryddet vil kun valutaer blive vist."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:7
 msgid "<b>Start Date</b>"
@@ -12881,7 +12883,7 @@ msgstr "Høj_re"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:183
 msgid "<b>Summary Bar Position</b>"
-msgstr ""
+msgstr "<b>Oversigtsbjælkeposition</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:188
 msgid "<b>Tabs</b>"
@@ -12959,7 +12961,7 @@ msgstr "Nulstil advarsler"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:2
 msgid "You have requested that the following warning dialogs not be presented. To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
-msgstr "Du har anmodt om at de følgende advarselsdialoger ikke vises. For at genaktivere disse dialoger vælges afkrydsningsboksen ved siden af dialogen og der trykkes på O.k."
+msgstr "Du har anmodet om, at de følgende advarselsdialoger ikke vises. For at genaktivere disse dialoger vælges afkrydsningsboksen ved siden af dialogen og der trykkes på O.k."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:4
 msgid "_Unselect All"
@@ -13255,9 +13257,10 @@ msgstr "undtagen i weekender:"
 msgid "then on the:"
 msgstr "så den:"
 
+# måske halvmånedligt (hvis det skal være kort)
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
 msgid "Semi-Monthly"
-msgstr "Halvmånedligt"
+msgstr "To gange om måneden"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
 msgctxt "Monthly"
@@ -14863,11 +14866,11 @@ msgstr "Eksporter nu ..."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:41
 msgid "Summary"
-msgstr "Resume"
+msgstr "Oversigt"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:42
 msgid "Export Summary"
-msgstr "Eksportresume"
+msgstr "Eksporter oversigt"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:420
 msgid "Category"
@@ -14948,7 +14951,7 @@ msgstr "sum_konto"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
 msgid "Export Account T_ree to CSV..."
-msgstr "Eksporter konto_træ til CSV ..."
+msgstr "Eksporter _kontotræ til CSV ..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:48
 msgid "Export the Account Tree to a CSV file"
@@ -14992,7 +14995,7 @@ msgstr ""
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:219
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:205
 msgid "The input file can not be opened."
-msgstr "Inddatafilen kan åbnes."
+msgstr "Inddatafilen kan ikke åbnes."
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:262
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:334
