@@ -198,8 +198,8 @@ CFLAGS="${cflags_save}"
 # test whether we are building directly from svn/svk/git/bzr
 AC_MSG_CHECKING(if building from an scm managed directory)
 "$srcdir/util/gnc-scm-info" -r "$srcdir" >/dev/null 2>&1
-if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
-  BUILDING_FROM_SCM=yes
+if test $? = 0 -o "x${BUILDING_FROM_VCS}" = "xyes" ; then
+  BUILDING_FROM_VCS=yes
   SCM_TYPE=$("$srcdir/util/gnc-scm-info" -t "$srcdir")
   AC_MSG_RESULT($SCM_TYPE)
 
@@ -215,7 +215,7 @@ if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
   fi
 else
   AC_MSG_RESULT(no)
-  BUILDING_FROM_SCM=no
+  BUILDING_FROM_VCS=no
   SCM_TYPE=
 
   # Make sure we've got swig-runtime.h and gnc-scm-info.h
@@ -240,7 +240,7 @@ the tarball you downloaded is broken.
 
     ])])
 fi
-AM_CONDITIONAL(BUILDING_FROM_SCM, test "x$BUILDING_FROM_SCM" = "xyes")
+AM_CONDITIONAL(BUILDING_FROM_VCS, test "x$BUILDING_FROM_VCS" = "xyes")
 AC_SUBST(SCM_TYPE)
 AC_SUBST(GIT_CMD)
 
@@ -494,7 +494,7 @@ the intltool-ltdl development packages ?])])
 # with that tarball so we have to prepare the tarball for guile 2
 # compatibility.
 #
-if test "${BUILDING_FROM_SCM}" = yes
+if test "${BUILDING_FROM_VCS}" = yes
 then
     AX_PKG_SWIG(2.0.10, [gnc_have_swig_2_0_10=yes], [gnc_have_swig_2_0_10=no])
 
@@ -1304,7 +1304,7 @@ then
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   # error-on-warning should not be active in (stable) release tarballs
-  if test "x$BUILDING_FROM_SCM" = "xyes"
+  if test "x$BUILDING_FROM_VCS" = "xyes"
   then
     # This code is from svn/svk/git/bzr, so enable error-on-warning
     error_on_warning_as_default="yes"

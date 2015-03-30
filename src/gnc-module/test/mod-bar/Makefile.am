@@ -22,7 +22,7 @@ libgncmodbar_la_LIBADD=libbar.la \
   $(GUILE_LIBS) \
   $(GLIB_LIBS)
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-bar.c: bar.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 if ! OS_WIN32

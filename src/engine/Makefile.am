@@ -210,7 +210,7 @@ endif
 
 noinst_DATA = .scm-links
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 
 # The generated file depends on various libqof headers. Out of
 # laziness I only include a few here - more might be needed

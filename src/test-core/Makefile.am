@@ -23,7 +23,7 @@ libtest_core_la_CPPFLAGS = \
 libtest_core_la_LDFLAGS = \
   -rpath ${exec-prefix}/lib
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-unittest-support-guile.c: unittest-support.i $(top_srcdir)/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src \

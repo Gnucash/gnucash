@@ -23,7 +23,7 @@ libgncmod_report_system_la_LIBADD = \
   ${GLIB_LIBS} \
   ${GTK_LIBS}
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-report-system.c: report-system.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<

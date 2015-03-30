@@ -201,7 +201,7 @@ po/gnucash.pot: po/POTFILES.in
 
 SVN = svn
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
 # all additional branches that are added in
 # ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
