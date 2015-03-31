@@ -70,7 +70,7 @@
 #include "gnc-autosave.h"
 #include "print-session.h"
 #ifdef MAC_INTEGRATION
-#include <gtkmacintegration/gtkosxapplication.h>
+#include <gtkmacintegration-gtk2/gtkosxapplication.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
 # include <sys/types.h>
