@@ -374,7 +374,7 @@ update to latest  darwin])
       platform=darwin/quartz
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
-      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration,
+      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration-gtk2,
                         [_gtk_mac=yes], [_gtk_mac=no])
       if test "x$_gtk_mac" = xyes; then
         GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
