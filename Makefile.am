@@ -15,6 +15,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2014 \
   ChangeLog.2013 \
   ChangeLog.2012 \
   ChangeLog.2011 \
@@ -88,7 +89,7 @@ EXTRA_DIST = \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in \
-  util/gnc-scm-info
+  util/gnc-vcs-info
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -200,7 +201,7 @@ po/gnucash.pot: po/POTFILES.in
 
 SVN = svn
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
 # all additional branches that are added in
 # ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
@@ -209,7 +210,7 @@ if BUILDING_FROM_SCM
 ChangeLog: NEWS
 	cd $(abs_srcdir) ; \
 	if test x$(SCM_TYPE) = xsvn ; then \
-	  $(SVN) log -v --xml -r HEAD:'{2013-01-01}' http://svn.gnucash.org/repo/gnucash | \
+	  $(SVN) log -v --xml -r HEAD:'{2015-01-01}' http://svn.gnucash.org/repo/gnucash | \
 	    $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
 	else \

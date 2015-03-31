@@ -1,6 +1,370 @@
+2015-03-30 John Ralls 
+
+	* Update NEWS and ChangeLog to include Bug 746977 and fix some typos. (HEAD, maint)
+
+2015-03-30 Geert Janssens 
+
+	* Updated Danish translation from the translation project (origin/maint)
+
+2015-03-30 Simon Arlott 
+
+	* Bug 746977 - scm ccache files should be in pkglibdir not pkgdatadir
+
+2015-03-28 Geert Janssens 
+
+	* Fix bzr/svk copy/paste typo
+
+2015-03-28 Geert Janssens 
+
+	* Check proper env variable in gnc-scm-info
+
+2015-03-28 John Ralls 
+
+	* Remove extraneous path noise from translation project files. (2.6.6)
+
+2015-03-28 John Ralls 
+
+	* Add more scheme symlinks plus a better explanation of why they're needed.
+
+2015-03-28 John Ralls 
+
+	* Protect the function tests from -Werror passed in from CFLAGS.
+
+2015-03-27 John Ralls 
+
+	* Bump Version to 2.6.6 for release.
+
+2015-03-24 Mark Haanen 
+
+	* Updated Dutch translation.
+
+2015-03-21 John Ralls 
+
+	* Bug 746517 - gnc-sql-backend.c compile fails with -Werror=format-nonliteral
+
+2015-03-20 Frank H. Ellenberger 
+
+	* Fix minor I18n issues
+
+2015-03-14 Mechtilde Stehmann 
+
+	* Update de.po
+
+2015-03-14 John Ralls 
+
+	* Bug 742089 - Decimal places
+
+2015-03-13 Javier Serrador 
+
+	* Bug 742164 - Updated Spanish translation
+
+2015-03-13 John Ralls 
+
+	* Bug 745265 - Segfault in generate_statusbar_lastmodified_message on Windows
+
+2015-03-13 Frank H. Ellenberger 
+
+	* html-utilities.scm: Tell the user, where to select account.
+
+2015-03-12 Chandrakant Dhutadmal 
+
+	* Bug 745598 - GNUCash Translation for Manipuri Language - Bengali Script
+
+2015-03-11 Sangeeta 
+
+	* Bug 745596 - GNUCash Translation for Maithili Language
+
+2015-03-11 John Ralls 
+
+	* Bug 745265 - Segfault in generate_statusbar_lastmodified_message on Windows
+
+2015-03-10 Chandrakant Dhutadmal 
+
+	* Bug 745597 - GNUCash Translation for Manipuri Language - Meetei Mayek Script (New)
+
+2015-03-08 Cristian Marchi 
+
+	* Update Danish translation from the translation project
+
+2015-03-04 gnucash-dev 
+
+	* To fix build error: ISO C90 forbids mixed declarations and code
+
+2015-03-04 Geert Janssens 
+
+	* Stop checking for F::Q dependencies
+
+2015-03-01 Mike Alexander 
+
+	* Bug 745354: Enhance the Find Transactions dialog
+
+2015-02-27 Geert Janssens 
+
+	* Remove absolute paths in es.po
+
+2015-02-23 Alex Aycinena 
+
+	* Correct the number field displayed in the reconcile window to correspond with the source specified in File->Options.
+
+2015-02-23 Mike Alexander 
+
+	* Fix some bugs found by SWIG version 3.0.5. Prior to version 3.0.3 SWIG silently ignored invalid preprocessor directives. See <https://github.com/swig/swig/issues/217>
+
+2015-02-23 Geert Janssens 
+
+	* Bug 723409 - Incorrect symbol for Turkish lira
+
+2015-02-23 Geert Janssens 
+
+	* Add some verbosity to scrubbing
+
+2015-02-22 Geert Janssens 
+
+	* Add scrubbing function to recover dangling lot links and payments
+
+2015-02-21 Geert Janssens 
+
+	* Fix potential infinite loop in business lot scrubbing
+
+2015-02-11 Geert Janssens 
+
+	* Bug 733685 - Fancy Date Format doesn't stick
+
+2015-02-10 Mike 
+
+	* Bug 649933 - Creating cash flow report takes a long time
+
+2015-02-09 Geert Janssens 
+
+	* Updated Danish translation. From the translation project.
+
+2015-02-09 John Ralls 
+
+	* Remove explicit install of Finance::Quote dependencies.
+
+2015-02-07 Geert Janssens 
+
+	* Bug 727466 - The symbol of CNY changed to 元
+
+2015-02-07 Geert Janssens 
+
+	* Bug 727466 - The symbol of CNY changed to 元
+
+2015-02-03 Robert Fewell 
+
+	* Bug 743807 Stops critical error messages.
+
+2015-02-03 Robert Fewell 
+
+	* Bug 743807 Wrong date value being used.
+
+2015-02-02 John Ralls 
+
+	* Remove build and run of no-longer-existant intl-scm/guile-strings.
+
+2015-01-31 Geert Janssens 
+
+	* Bug 731889 - guile 2 exports different autoconf macros than what is expected
+
+2015-01-29 John Ralls 
+
+	* Bug 731889 - guile 2 exports different autoconf macros than what is expected
+
+2011-05-31 Geert Janssens 
+
+	* Bug 619899 - Use normal gettext or intltool toolchain also for scm files
+
+2015-01-30 Geert Janssens 
+
+	* Rewrite gnc-test-env in perl
+
+2015-01-29 Geert Janssens 
+
+	* Switch from guile to xml to manage our iso-currencies source file
+
+2015-01-29 Geert Janssens 
+
+	* Bug 743609 - Add configure options to disable libsecret detection
+
+2015-01-28 Geert Janssens 
+
+	* Bug 727647 - "gncInvoiceGetTotal" is not read-only function?
+
+2015-01-25 Mike Evans 
+
+	* Bug 721196 - Use a regex for checking for a valid numeric value.
+
+2015-01-25 Mike Evans 
+
+	* Numeric values with more than commodity smallest fraction get silently dropped.
+
+2015-01-24 Geert Janssens 
+
+	* Bug 742624 - [patch] Scheduled Transaction Editor results in immediate segfault
+
+2015-01-24 Geert Janssens 
+
+	* Bug 731889 - guile 2 exports different autoconf macros than what is expected
+
+2015-01-20 gnucash-dev 
+
+	* Update US Income Tax data to reflect minor changes for 2014
+
+2015-01-20 Mike Alexander 
+
+	* Advanced portfolio should respect report date when looking for other income/expense.
+
+2015-01-19 Christian Stimming 
+
+	* Update German translation to recent pot template. Very minor translation update.
+
+2014-11-24 Mike Alexander 
+
+	* book.not_saved should be book.session_not_saved
+
+2015-01-18 Mike Alexander 
+
+	* Bug 739228 -  Advanced Portfolio report: wrong calculation of Value Correctly convert the value into the report's currency.
+
+2015-01-18 Mike Alexander 
+
+	* Improve income and expense reporting in advanced portfolio report
+
+2014-11-23 Mike Alexander 
+
+	* Accept prices of the form n.nnne[+-]nn, i.e. with an exponent. An example requiring this is currency conversion from IDR to USD.
+
+2015-01-18 Geert Janssens 
+
+	* Use the enum name instead of a number for GDateMonth
+
+2015-01-04 Markus Blatt 
+
+	* [Bug 742332] - German tax report uses US tax quarters and not real quarters.
+
+2015-01-15 Romas 
+
+	* Added Lithuanian language business accounts
+
+2015-01-11 John Ralls 
+
+	* Bug 672760 - Postponed transaction applied invalid date
+
+2015-01-11 John Ralls 
+
+	* Bug 672760 - Postponed transaction applied invalid date
+
+2015-01-11 John Ralls 
+
+	* Bug 672760 - Postponed transaction applied invalid date, causing segfault
+
+2015-01-11 Mike Evans 
+
+	* Bug 721196 - Fixed for locales where decimal point is a comma.
+
+2014-10-19 Ralf Habacker 
+
+	* Bug 738749 - Broken account template en_GB/uk-vat.gnucash-xea.
+
+2014-12-29 Geert Janssens 
+
+	* Revert "Bug 740471 -  Applying payment to invoice Segmentation fault"
+
+2014-12-26 John Ralls 
+
+	* Fix typo in Transaction.c.
+
+2014-12-24 Geert Janssens 
+
+	* Revisit "Bug 741810 - Compilation fails because of creating .gnucash"
+
+2014-12-23 John Ralls 
+
+	* Extract function to clarify intent.
+
+2014-12-22 John Ralls 
+
+	* Bug 741228 - "Red line" threshold applies to Template scheduled transactions
+
+2014-12-10 Mike Alexander 
+
+	* Tell Guile (and others) to look in install/lib/gnucash for libraries. Without this Guile can't find libgncmod-engine and GnuCash won't start. I don't know how this worked before, perhaps because the correct path was in src/bin/overrides/gnucash-env.in
+
+2014-12-23 Francisco 
+
+	* Update Spanish translation
+
+2014-12-23 Geert Janssens 
+
+	* Cherry-pick "Bug 741810 - Compilation fails because of creating .gnucash"
+
+2014-12-10 Mike Alexander 
+
+	* Tell Guile (and others) to look in install/lib/gnucash for ligraries. Without this Guile can't find libgncmod-engine and GnuCash won't start, at least sometimes.
+
+2014-12-21 John Ralls 
+
+	* Replace GNC_HOME/bin with gnc_path_get_bindir().
+
+2014-12-21 John Ralls 
+
+	* Adjust #ifdef __clang__ to exclude clang versions > 6
+
+2014-12-21 John Ralls 
+
+	* Bug 739584 - gnucash-2.6.4 segfaults regularly on transfer .
+
+2014-12-21 John Ralls 
+
+	* Fix Guile compiled path in environment.in
+
+2014-12-21 John Ralls 
+
+	* Remove note from the top of environment.in. It's obsolete.
+
+2014-12-06 Geert Janssens 
+
+	* Bug 740471 -  Applying payment to invoice Segmentation fault
+
+2014-12-06 Geert Janssens 
+
+	* Bug 740471 -  Applying payment to invoice Segmentation fault
+
+2014-12-06 Geert Janssens 
+
+	* Bug 740471 -  Applying payment to invoice Segmentation fault
+
+2014-12-20 Geert Janssens 
+
+	* Fix crash when running check & repair on an open AP/AR register
+
+2014-12-18 John Ralls 
+
+	* Update News for re-tag of 2.6.5 (2.6.5a)
+
+2014-12-17 Geert Janssens 
+
+	* Fix lot scrubbing for business lots
+
+2014-12-17 Geert Janssens 
+
+	* Improve comment for gncOwnerAutoApplyPaymentsWithLots
+
+2014-12-15 John Ralls 
+
+	* Release 2.6.5. (2.6.5)
+
+2014-12-15 John Ralls 
+
+	* Fix msgfmt errors in Indian-language .po files.
+
+2014-12-15 John Ralls 
+
+	* Update translation project po files.
+
 2014-12-14 John Ralls 
 
-	* Still more Guile library path additions, this time in tests. (HEAD, manjusri-maint/maint, maint)
+	* Still more Guile library path additions, this time in tests.
 
 2014-12-14 John Ralls 
 
@@ -12,7 +376,7 @@
 
 2014-12-13 John Ralls 
 
-	* Remove Windows specializations from gnc-date.c (origin/maint)
+	* Remove Windows specializations from gnc-date.c
 
 2014-12-12 John Ralls 
 
@@ -260,7 +624,7 @@
 
 2014-09-27 John Ralls 
 
-	* Release 2.6.4 (tag: 2.6.4)
+	* Release 2.6.4 (2.6.4)
 
 2014-09-27 John Ralls 
 
@@ -816,7 +1180,7 @@
 
 2014-05-13 Mike Alexander 
 
-	* The cash flow report should ignore splits in trading accounts.
+	* The cash flow report should ignore splits in trading accounts. (local/maint)
 
 2014-05-13 Simon Arlott 
 
@@ -1036,7 +1400,7 @@
 
 2014-03-30 John Ralls 
 
-	* Revert "Win32 build: Update aqbanking version numbers" (tag: 2.6.3)
+	* Revert "Win32 build: Update aqbanking version numbers"
 
 2014-03-30 John Ralls 
 
@@ -1044,7 +1408,7 @@
 
 2014-03-29 John Ralls 
 
-	* Release 2.6.3
+	* Release 2.6.3 (2.6.3)
 
 2014-03-29 John Ralls 
 
@@ -1152,7 +1516,7 @@
 
 2014-03-06 Christian Stimming 
 
-	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name.
+	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name. (trunk, master)
 
 2014-03-06 Christian Stimming 
 
@@ -1160,7 +1524,7 @@
 
 2014-03-01 John Ralls 
 
-	* Release GnuCash 2.6.2 (tag: 2.6.2)
+	* Release GnuCash 2.6.2 (2.6.2)
 
 2014-03-01 John Ralls 
 
@@ -3848,7 +4212,7 @@
 
 2013-05-21 Geert Janssens 
 
-	* Fix windows build after it got broken by r22982
+	* Fix windows build after it got broken by r22982 (github/trunk)
 
 2013-05-20 Christian Stimming 
 

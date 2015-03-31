@@ -26,14 +26,14 @@ my_die()
   exit 1
 }
 
-if [ "$BUILDING_FROM_SVN" = "0" -o \
-     "$BUILDING_FROM_SVN" = "no" -o \
-     "$BUILDING_FROM_SVN" = "false" ]; then
+if [ "$BUILDING_FROM_VCS" = "0" -o \
+     "$BUILDING_FROM_VCS" = "no" -o \
+     "$BUILDING_FROM_VCS" = "false" ]; then
   # Something outside of the Gnucash build system knows that we
   # are NOT building from svn, svk or git checkout.
   # We should believe it (needed by packagers that maintain the
   # packaging code in svn, svk or git too)
-  echo "Environment variable BUILDING_FROM_SVN=$BUILDING_FROM_SVN" >&2
+  echo "Environment variable BUILDING_FROM_VCS=$BUILDING_FROM_VCS" >&2
   exit 1
 fi
 
@@ -165,7 +165,7 @@ if test $? != 0 ; then exit 1 ; fi
 # If we're only interested in the vcs type, then we're done here
 if [ "$request" = "type" ]
 then
-  echo "bzr"
+  echo "svk"
   exit 0
 fi
 

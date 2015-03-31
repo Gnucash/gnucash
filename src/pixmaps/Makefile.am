@@ -78,7 +78,7 @@ gncextrasmallicon_DATA = 16x16/gnucash-icon.png
 gncscalableicondir = ${datadir}/icons/hicolor/scalable/apps
 gncscalableicon_DATA = scalable/gnucash-icon.svg
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 256x256/gnucash-icon.png: gnucash-icon-256x256.png
 	-mkdir -p 256x256
 	cp ${srcdir}/gnucash-icon-256x256.png 256x256/gnucash-icon.png
@@ -161,7 +161,7 @@ EXTRA_DIST = \
   ${gncscalableicon_DATA}
 
 # Only clean up if we're building from svn/svk/git/bzr
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 clean-local:
 	-rm -rf 256x256 128x128 96x96 64x64 48x48 32x32 24x24 22x22 16x16 scalable
 endif

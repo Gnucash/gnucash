@@ -51,7 +51,7 @@ endif
 noinst_HEADERS = \
   swig-runtime.h
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-runtime.h:
 	$(SWIG) -guile -external-runtime $@
 endif
