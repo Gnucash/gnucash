@@ -200,10 +200,10 @@ AC_MSG_CHECKING(if building from an scm managed directory)
 "$srcdir/util/gnc-vcs-info" -r "$srcdir" >/dev/null 2>&1
 if test $? = 0 -o "x${BUILDING_FROM_VCS}" = "xyes" ; then
   BUILDING_FROM_VCS=yes
-  SCM_TYPE=$("$srcdir/util/gnc-vcs-info" -t "$srcdir")
-  AC_MSG_RESULT($SCM_TYPE)
+  VCS_TYPE=$("$srcdir/util/gnc-vcs-info" -t "$srcdir")
+  AC_MSG_RESULT($VCS_TYPE)
 
-  if test "x${SCM_TYPE}" = "xgit"; then
+  if test "x${VCS_TYPE}" = "xgit"; then
     AC_MSG_CHECKING(git command to use due to detected git repo)
     # The windows build uses environment variable $GIT_CMD to invoke git (adding git
     # to the PATH in Windows results in a build failure).
@@ -216,7 +216,7 @@ if test $? = 0 -o "x${BUILDING_FROM_VCS}" = "xyes" ; then
 else
   AC_MSG_RESULT(no)
   BUILDING_FROM_VCS=no
-  SCM_TYPE=
+  VCS_TYPE=
 
   # Make sure we've got swig-runtime.h and gnc-vcs-info.h
   AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
@@ -241,7 +241,7 @@ the tarball you downloaded is broken.
     ])])
 fi
 AM_CONDITIONAL(BUILDING_FROM_VCS, test "x$BUILDING_FROM_VCS" = "xyes")
-AC_SUBST(SCM_TYPE)
+AC_SUBST(VCS_TYPE)
 AC_SUBST(GIT_CMD)
 
 # Build dir adjustments
@@ -503,7 +503,7 @@ then
         if test "${gnc_have_swig_2_0_10}" = no
         then
             AC_MSG_ERROR([
-    You are building from ${SCM_TYPE} but swig was not found or too old.
+    You are building from ${VCS_TYPE} but swig was not found or too old.
     To build gnucash you need at least swig version 2.0.10.
             ])
         fi
@@ -512,7 +512,7 @@ then
         then
             AX_PKG_SWIG(1.3.31, [],
                 [AC_MSG_ERROR([
-    You are building from ${SCM_TYPE} but swig was not found or too old.
+    You are building from ${VCS_TYPE} but swig was not found or too old.
     To build gnucash with guile 1.8 you need at least swig version 1.3.31.
             ])])
         fi
