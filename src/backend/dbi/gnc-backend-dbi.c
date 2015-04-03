@@ -48,6 +48,7 @@
 
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
+#include <gnc-path.h>
 #include "gnc-locale-utils.h"
 
 #include "gnc-backend-dbi.h"
@@ -1883,13 +1884,25 @@ gnc_module_init_backend_dbi(void)
     }
 
     /* dbi_initialize returns -1 in case of errors */
-    #if HAVE_LIBDBI_R
+#if HAVE_LIBDBI_R
     if (dbi_instance)
         return;
     num_drivers = dbi_initialize_r( driver_dir, &dbi_instance );
-    #else
+#else
     num_drivers = dbi_initialize( driver_dir );
-    #endif
+#endif
+    if ( num_drivers <= 0 )
+    {
+	gchar *dir = g_build_filename(gnc_path_get_libdir(), "dbd", NULL);
+#if HAVE_LIBDBI_R
+	if (dbi_instance)
+	    return;
+	num_drivers = dbi_initialize_r( dir, &dbi_instance );
+#else
+	num_drivers = dbi_initialize( dir );
+#endif
+	g_free (dir);
+    }
     if ( num_drivers <= 0 )
     {
         PWARN( "No DBD drivers found\n" );
