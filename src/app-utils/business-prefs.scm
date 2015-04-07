@@ -98,13 +98,24 @@
 
   (reg-option
    (gnc:make-string-option
+    gnc:*business-label* gnc:*company-email2*
+    "c4" (N_ "Alternative email address of your business.") ""))
+
+  (reg-option
+   (gnc:make-string-option
     gnc:*business-label* gnc:*company-url*
-    "c4" (N_ "The URL address of your website.") ""))
+    "c5" (N_ "The URL address of your website.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-id*
-    "c5" (N_ "The ID for your company (eg 'Tax-ID: 00-000000).")
+    "c6" (N_ "The ID for your company (eg 'Tax-ID: 00-000000).")
+    ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-id2*
+    "c7" (N_ "Alternative ID for your company.")
     ""))
  
   (reg-option
