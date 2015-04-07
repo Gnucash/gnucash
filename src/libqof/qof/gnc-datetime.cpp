@@ -45,30 +45,30 @@ static const TimeZoneProvider tzp;
 static const PTime unix_epoch (Date(1970, boost::gregorian::Jan, 1),
 	boost::posix_time::seconds(0));
 
+/* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
+#ifndef BOOST_DATE_TIME_HAS_NANOSECONDS
+static constexpr auto ticks_per_second = INT64_C(1000000);
+#else
+static constexpr auto ticks_per_second = INT64_C(1000000000);
+#endif
 
 /** Private implementation of GncDate. See the documentation for that class.
  */
 class GncDateImpl
 {
 public:
-    GncDateImpl(): m_greg(boost::gregorian::day_clock::local_day()) {}
+    GncDateImpl(): m_greg(unix_epoch.date()) {}
     GncDateImpl(const int year, const int month, const int day) :
 	m_greg(year, static_cast<Month>(month), day) {}
+    GncDateImpl(Date d) : m_greg(d) {}
+
+    void today() { m_greg = boost::gregorian::day_clock::local_day(); }
 private:
     Date m_greg;
 };
 
 /** Private implementation of GncDateTime. See the documentation for that class.
  */
-class GncDateTimeImpl
-{
-public:
-    GncDateTimeImpl() : m_time(boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year()))) {}
-    GncDateTimeImpl(const time64 time);
-private:
-    LDT m_time;
-};
-
 static LDT
 LDT_from_unix_local(const time64 time)
 {
@@ -79,14 +79,39 @@ LDT_from_unix_local(const time64 time)
     return LDT(temp, tz);
 }
 
-GncDateTimeImpl::GncDateTimeImpl(const time64 time) :
-    m_time(LDT_from_unix_local(time)) {}
+class GncDateTimeImpl
+{
+public:
+    GncDateTimeImpl() : m_time(unix_epoch, tzp.get(unix_epoch.date().year())) {}
+    GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
+    GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
+    GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
+    void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
 
+private:
+    LDT m_time;
+};
+}
+
+/* =================== Presentation-class Implementations ====================*/
 GncDate::GncDate() : m_impl{new GncDateImpl} {}
 GncDate::GncDate(int year, int month, int day) :
     m_impl(new GncDateImpl(year, month, day)) {}
 GncDate::~GncDate() = default;
 
+void
+GncDate::today()
+{
+    m_impl->today();
+}
+
 GncDateTime::GncDateTime() : m_impl(new GncDateTimeImpl) {}
 GncDateTime::GncDateTime(time64 time) : m_impl(new GncDateTimeImpl(time)) {}
 GncDateTime::~GncDateTime() = default;
+
+void
+GncDateTime::now()
+{
+    m_impl->now();
+}
+}

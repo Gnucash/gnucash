@@ -53,7 +53,9 @@ public:
  */
     GncDate(int year, int month, int day);
     ~GncDate();
-
+/** Set the date object to the computer clock's current day. */
+    void today();
+/** Test that the Date has an implementation. */
     bool isnull (void) { return m_impl == nullptr; }
 
 private:
@@ -87,7 +89,7 @@ public:
  */
     GncDateTime(time64 time);
     ~GncDateTime();
-
+    void now();
     bool isnull (void) { return m_impl == nullptr; }
 
 private:
