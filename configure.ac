@@ -631,7 +631,7 @@ then
         if test $? -eq 0; then
           EXTRA_SEARCH_LIBS="$(pkg-config --variable=libdir dbi)/dbd"
         else
-          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd"
+          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd:${prefix}/lib/dbd"
         fi]]
        )
     case $host_os in
@@ -647,12 +647,14 @@ then
 	 export LIBS="$lt_cv_dlopen_libs $LIBS"
 	 ;;
       esac
-      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
-      AC_MSG_CHECKING([Looking for at least one supported DBD module])
-      AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+    old_ld_library_path="$LD_LIBRARY_PATH"
+    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
+    AC_MSG_NOTICE([Search Path $(LD_LIBRARY_PATH)])
+    AC_MSG_CHECKING([Looking for at least one supported DBD module])
+    AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
 				     [[if (!$lt_cv_dlopen("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
 				     ]])],AC_MSG_RESULT([SQLite3]),
-      	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+    	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
 				     [[if (!$lt_cv_dlopen("libdbdmysql.$LDEXT"$LDFUNCARGS)) return -1;
 					]])],AC_MSG_RESULT([MySql]),
 	  AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
@@ -675,6 +677,7 @@ to the configure argument list and run it again.
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
     LIBS=$saved_libs
+    LD_LIBRARY_PATH="$old_ld_library_path"
   else
     AC_MSG_ERROR([
 
