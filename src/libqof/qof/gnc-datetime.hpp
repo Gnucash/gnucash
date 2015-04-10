@@ -90,6 +90,7 @@ public:
     GncDateTime(time64 time);
     ~GncDateTime();
     void now();
+    explicit operator time64() const;
     bool isnull (void) { return m_impl == nullptr; }
 
 private:

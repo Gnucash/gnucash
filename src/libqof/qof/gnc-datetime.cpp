@@ -86,11 +86,20 @@ public:
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
+
+    operator time64() const;
     void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
 
 private:
     LDT m_time;
 };
+
+GncDateTimeImpl::operator time64() const
+{
+    auto duration = m_time.utc_time() - unix_epoch;
+    auto secs = duration.ticks();
+    secs /= ticks_per_second;
+    return secs;
 }
 
 /* =================== Presentation-class Implementations ====================*/
@@ -114,4 +123,8 @@ GncDateTime::now()
 {
     m_impl->now();
 }
+
+GncDateTime::operator time64() const
+{
+    return m_impl->operator time64();
 }

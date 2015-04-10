@@ -40,12 +40,13 @@ TEST(gnc_date_constructors, test_ymd_constructor)
 TEST(gnc_datetime_constructors, test_default_constructor)
 {
     GncDateTime atime;
-    EXPECT_FALSE(atime.isnull());
+    EXPECT_EQ(static_cast<time64>(atime), static_cast<time64>(INT64_C(0)));
 }
 
 TEST(gnc_datetime_constructors, test_time64_constructor)
 {
     const time64 time = 2394187200; //2045-11-13 12:00:00 Z
     GncDateTime atime(time);
-    EXPECT_FALSE(atime.isnull());
+    EXPECT_EQ(static_cast<time64>(atime), time);
 }
+
