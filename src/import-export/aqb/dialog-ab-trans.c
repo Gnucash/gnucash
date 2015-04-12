@@ -1348,16 +1348,53 @@ gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
 
         if (gnc_ab_trans_isSEPA(td->trans_type))
         {
-            // SEPA: Only alphas in the first two places (only upper case, though), then only digits
+            enum {
+                ALPHA
+                , ALNUM
+                , NUMERIC
+            } allowed_characterclass;
+
+            // SEPA: Only alphas in the first two places (at index 0, 1)
             if (*position + i < 2)
             {
-                if (g_ascii_isalpha(c))
-                    g_string_append_c(result, g_ascii_toupper(c));
+                allowed_characterclass = ALPHA;
             }
+            // SEPA: Next two places are digits only (index 2, 3)
+            else if (*position + i < 4)
+            {
+                allowed_characterclass = NUMERIC;
+            }
+            // SEPA: The rest depends on the country code: Either Alpha-numeric or numeric only
             else
             {
+                const gchar* acct_text = gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry));
+                // Special case for German ("DE") IBAN: Numeric only. Otherwise allow alpha-numeric
+                if (acct_text[0] == 'D' && acct_text[1] == 'E')
+                {
+                    allowed_characterclass = NUMERIC;
+                }
+                else
+                {
+                    allowed_characterclass = ALNUM;
+                }
+            }
+
+            // Do the actual character class check. Alphas are only allowed in
+            // uppercase, though.
+            switch (allowed_characterclass)
+            {
+            case ALPHA:
+                if (g_ascii_isalpha(c))
+                    g_string_append_c(result, g_ascii_toupper(c));
+                break;
+            case ALNUM:
+                if (g_ascii_isalnum(c))
+                    g_string_append_c(result, g_ascii_toupper(c));
+                break;
+            case NUMERIC:
                 if (g_ascii_isdigit(c))
                     g_string_append_c(result, c);
+                break;
             }
         }
         else
