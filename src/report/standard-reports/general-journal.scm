@@ -105,7 +105,9 @@
      ;; One list per option here with: option-name, default-value
      (list
       (list (N_ "Date") #t)
-      (list (N_ "Num") #f)
+      (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+          (list (N_ "Num/Action") #f)
+          (list (N_ "Num") #f))
       (list (N_ "Description") #t)
       (list (N_ "Account") #t)
       (list (N_ "Shares") #f)

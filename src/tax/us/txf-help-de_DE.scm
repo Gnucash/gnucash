@@ -12,6 +12,7 @@
 ;;
 ;; This file holds the explanations to the categories from txf-de_DE.scm.
 ;;
+;; Changes in this file should also be applied on gnucash-docs/help/de/Help_txf-categories.xml
 
 (define txf-help-strings
   '(

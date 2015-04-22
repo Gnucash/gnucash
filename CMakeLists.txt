@@ -114,6 +114,11 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # ############################################################
 
+# xsltproc
+FIND_PROGRAM (XSLTPROC xsltproc)
+
+# ############################################################
+
 # libdbi
 FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h)
 FIND_LIBRARY (LIBDBI_LIBRARY dbi)

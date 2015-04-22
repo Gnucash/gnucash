@@ -6,6 +6,7 @@
 ;;
 ;; (n <- TurboTax      (N <- IRS
 ;;
+;; Changes in this file should also be applied on gnucash-docs/help/C/Help_txf-categories.xml
 
 (define txf-help-strings
   '(

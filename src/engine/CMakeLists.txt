@@ -76,9 +76,9 @@ GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${li
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
 ADD_CUSTOM_COMMAND (
   OUTPUT ${ISO_4217_C}
-  DEPENDS iso-4217-currencies.scm iso-currencies-to-c.in
+  DEPENDS iso-4217-currencies.xml iso-currencies-to-c.xsl
   COMMAND
-    ${GUILE_EXECUTABLE} -s "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.in" "${CMAKE_CURRENT_SOURCE_DIR}"
+    ${XSLTPROC} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
 )
 # Add dependency on iso-4217-currencies.c
 SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS ${ISO_4217_C})
