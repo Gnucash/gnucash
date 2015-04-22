@@ -94,6 +94,11 @@ ENDIF (NOT GUILE_EXECUTABLE)
 
 # ############################################################
 
+# xsltproc
+FIND_PROGRAM (XSLTPROC xsltproc)
+
+# ############################################################
+
 # libdbi
 FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h)
 FIND_LIBRARY (LIBDBI_LIBRARY dbi)
