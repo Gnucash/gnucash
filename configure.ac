@@ -634,8 +634,8 @@ then
 	 ;;
       esac
     old_ld_library_path="$LD_LIBRARY_PATH"
-    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
-    AC_MSG_NOTICE([Search Path $(LD_LIBRARY_PATH)])
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
+    AC_MSG_NOTICE([Search Path $LD_LIBRARY_PATH])
     AC_MSG_CHECKING([Looking for at least one supported DBD module])
     AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
 				     [[if (!$lt_cv_dlopen("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
@@ -663,7 +663,7 @@ to the configure argument list and run it again.
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
     LIBS=$saved_libs
-    LD_LIBRARY_PATH="$old_ld_library_path"
+    export LD_LIBRARY_PATH="$old_ld_library_path"
   else
     AC_MSG_ERROR([
 
