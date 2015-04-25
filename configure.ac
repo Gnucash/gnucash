@@ -172,6 +172,8 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
 oldcflags="$CFLAGS"
 CFLAGS=
+oldldflags="$LDFLAGS"
+LDFLAGS=
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
@@ -179,6 +181,7 @@ AC_CHECK_FUNCS(setenv,,[
   ])
 ])
 CFLAGS="$oldcflags"
+LDFLAGS="$oldldflags"
 STRUCT_TM_GMTOFF_CHECK
 cflags_save=${CFLAGS}
 CFLAGS="${CFLAGS} -Wall -Werror"
