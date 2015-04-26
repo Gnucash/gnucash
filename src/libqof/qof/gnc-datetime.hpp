@@ -87,10 +87,13 @@ public:
  * @param time: Seconds from the POSIX epoch.
  * @exception std::invalid_argument if the year is outside the constraints.
  */
-    GncDateTime(time64 time);
+    GncDateTime(const time64 time);
+    GncDateTime(const struct tm tm);
     ~GncDateTime();
     void now();
     explicit operator time64() const;
+    explicit operator struct tm() const;
+    long offset() const;
     bool isnull (void) { return m_impl == nullptr; }
 
 private:

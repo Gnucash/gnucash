@@ -79,16 +79,29 @@ LDT_from_unix_local(const time64 time)
     return LDT(temp, tz);
 }
 
+static LDT
+LDT_from_struct_tm(const struct tm tm)
+{
+    auto tdate = boost::gregorian::date_from_tm(tm);
+    auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+						 tm.tm_sec, 0);
+    auto tz = tzp.get(tdate.year());
+    return LDT(PTime(tdate, tdur), tz);
+}
+
 class GncDateTimeImpl
 {
 public:
     GncDateTimeImpl() : m_time(unix_epoch, tzp.get(unix_epoch.date().year())) {}
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
+    GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
     GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
 
     operator time64() const;
+    operator struct tm() const;
     void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
+    long offset() const;
 
 private:
     LDT m_time;
@@ -100,6 +113,18 @@ GncDateTimeImpl::operator time64() const
     auto secs = duration.ticks();
     secs /= ticks_per_second;
     return secs;
+}
+
+GncDateTimeImpl::operator struct tm() const
+{
+    return to_tm(m_time);
+}
+
+long
+GncDateTimeImpl::offset() const
+{
+    auto offset = m_time.local_time() - m_time.utc_time();
+    return offset.total_seconds();
 }
 
 /* =================== Presentation-class Implementations ====================*/
@@ -115,7 +140,10 @@ GncDate::today()
 }
 
 GncDateTime::GncDateTime() : m_impl(new GncDateTimeImpl) {}
-GncDateTime::GncDateTime(time64 time) : m_impl(new GncDateTimeImpl(time)) {}
+GncDateTime::GncDateTime(const time64 time) :
+    m_impl(new GncDateTimeImpl(time)) {}
+GncDateTime::GncDateTime(const struct tm tm) :
+    m_impl(new GncDateTimeImpl(tm)) {}
 GncDateTime::~GncDateTime() = default;
 
 void
@@ -127,4 +155,15 @@ GncDateTime::now()
 GncDateTime::operator time64() const
 {
     return m_impl->operator time64();
+}
+
+GncDateTime::operator struct tm() const
+{
+    return m_impl->operator struct tm();
+}
+
+long
+GncDateTime::offset() const
+{
+    return m_impl->offset();
 }

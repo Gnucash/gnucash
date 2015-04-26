@@ -50,3 +50,22 @@ TEST(gnc_datetime_constructors, test_time64_constructor)
     EXPECT_EQ(static_cast<time64>(atime), time);
 }
 
+TEST(gnc_datetime_constructors, test_struct_tm_constructor)
+{
+#ifdef HAVE_STRUCT_TM_GMTOFF
+    const struct tm tm {0, 0, 12, 13, 10, 145, 0, 0, 0, NULL, 0 };
+#else
+    const struct tm tm {0, 0, 12, 13, 10, 145, 0, 0, 0 };
+#endif
+
+    const time64 time = 2394187200; //2045-11-13 12:00:00 Z
+    GncDateTime atime(tm);
+    EXPECT_EQ(static_cast<time64>(atime), time);
+    const struct tm tm1 = static_cast<struct tm>(atime);
+    EXPECT_EQ(tm1.tm_year, tm.tm_year);
+    EXPECT_EQ(tm1.tm_mon, tm.tm_mon);
+    EXPECT_EQ(tm1.tm_mday, tm.tm_mday);
+// We have to contort this a bit to handle offsets > 12, e.g. New Zealand during DST.
+    EXPECT_EQ((24 + tm1.tm_hour - atime.offset() / 3600) % 24, tm.tm_hour);
+    EXPECT_EQ(tm1.tm_min, tm.tm_min);
+}
