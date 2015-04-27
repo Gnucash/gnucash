@@ -69,3 +69,10 @@ TEST(gnc_datetime_constructors, test_struct_tm_constructor)
     EXPECT_EQ((24 + tm1.tm_hour - atime.offset() / 3600) % 24, tm.tm_hour);
     EXPECT_EQ(tm1.tm_min, tm.tm_min);
 }
+
+TEST(gnc_datetime_functions, test_format)
+{
+    GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
+    //Date only to finesse timezone issues. It will still fail in +12 DST.
+    EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");
+}

@@ -102,7 +102,7 @@ public:
     operator struct tm() const;
     void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
     long offset() const;
-
+    std::string format(const char* format) const;
 private:
     LDT m_time;
 };
@@ -125,6 +125,18 @@ GncDateTimeImpl::offset() const
 {
     auto offset = m_time.local_time() - m_time.utc_time();
     return offset.total_seconds();
+}
+
+std::string
+GncDateTimeImpl::format(const char* format) const
+{
+    using Facet = boost::local_time::local_time_facet;
+    std::stringstream ss;
+    //The stream destructor frees the facet, so it must be heap-allocated.
+    auto output_facet(new Facet(format));
+    ss.imbue(std::locale(std::locale(), output_facet));
+    ss << m_time;
+    return ss.str();
 }
 
 /* =================== Presentation-class Implementations ====================*/
@@ -166,4 +178,10 @@ long
 GncDateTime::offset() const
 {
     return m_impl->offset();
+}
+
+std::string
+GncDateTime::format(const char* format) const
+{
+    return m_impl->format(format);
 }

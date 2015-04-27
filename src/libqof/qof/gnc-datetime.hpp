@@ -95,6 +95,7 @@ public:
     explicit operator struct tm() const;
     long offset() const;
     bool isnull (void) { return m_impl == nullptr; }
+    std::string format(const char* format) const;
 
 private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
