@@ -47,6 +47,9 @@ extern "C"
 #include "gnc-date.h"
 #include "gnc-date-p.h"
 #include "gnc-datetime.hpp"
+#include "gnc-timezone.hpp"
+#define BOOST_ERROR_CODE_HEADER_ONLY
+#include <boost/date_time/local_time/local_time.hpp>
 
 #define N_(string) string //So that xgettext will find it
 
@@ -164,37 +167,7 @@ gnc_localtime (const time64 *secs)
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
 {
-    try
-    {
-	auto ldt = LDT_from_unix_local(*secs);
-	*time = boost::local_time::to_tm(ldt);
-#ifdef HAVE_STRUCT_TM_GMTOFF
-	auto offset = ldt.zone()->base_utc_offset();
-	if (ldt.is_dst())
-	    offset += ldt.zone()->dst_offset();
-	time->tm_gmtoff = offset.total_seconds();
-#endif
-    }
-    catch(boost::gregorian::bad_year)
-    {
-	return NULL; //Yeah, it should be nullptr, but this is a C-linkage func.
-    }
-    return time;
-}
-
-struct tm*
-gnc_gmtime (const time64 *secs)
-{
-    auto time = static_cast<struct tm*>(calloc(1, sizeof (struct tm)));
-    try {
-	PTime pdt(unix_epoch.date(), boost::posix_time::hours(*secs / 3600) +
-		  boost::posix_time::seconds(*secs % 3600));
-	*time = boost::posix_time::to_tm(pdt);
-    }
-    catch(boost::gregorian::bad_year)
-    {
-	return NULL; //Yeah, it should be nullptr, but this is a C-linkage func.
-    }
+    *time = static_cast<struct tm>(GncDateTime(*secs));
     return time;
 }
 
@@ -254,6 +227,20 @@ normalize_struct_tm (struct tm* time)
 	  last_day = gnc_date_get_last_mday (time->tm_mon, year);
      }
      time->tm_year = year - 1900;
+}
+
+struct tm*
+gnc_gmtime (const time64 *secs)
+{
+    auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+    GncDateTime gncdt(*secs);
+    *time = static_cast<struct tm>(gncdt);
+    auto gmtoff = gncdt.offset();
+    time->tm_hour -= gmtoff / 3600;
+    time->tm_min -= (gmtoff % 3600 / 60);
+    time->tm_sec -= gmtoff % 60;
+    normalize_struct_tm(time);
+    return time;
 }
 
 time64
