@@ -31,6 +31,7 @@ extern "C"
 #include "config.h"
 #include <glib.h>
 #include <libintl.h>
+#include <stdlib.h>
 #include "platform.h"
 #include "qof.h"
 
@@ -45,9 +46,8 @@ extern "C"
 
 #include "gnc-date.h"
 #include "gnc-date-p.h"
-//#include "gnc-datetime.hpp"
+#include "gnc-datetime.hpp"
 
-#include "gnc-timezone.hpp"
 #define N_(string) string //So that xgettext will find it
 
 using Date = boost::gregorian::date;
