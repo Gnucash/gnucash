@@ -81,21 +81,35 @@ GncDateImpl::ymd() const
 static LDT
 LDT_from_unix_local(const time64 time)
 {
-    PTime temp(unix_epoch.date(),
-	       boost::posix_time::hours(time / 3600) +
-	       boost::posix_time::seconds(time % 3600));
-    auto tz = tzp.get(temp.date().year());
-    return LDT(temp, tz);
+    try
+    {
+	PTime temp(unix_epoch.date(),
+		   boost::posix_time::hours(time / 3600) +
+		   boost::posix_time::seconds(time % 3600));
+	auto tz = tzp.get(temp.date().year());
+	return LDT(temp, tz);
+    }
+    catch(boost::gregorian::bad_year)
+    {
+	throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
 }
 
 static LDT
 LDT_from_struct_tm(const struct tm tm)
 {
-    auto tdate = boost::gregorian::date_from_tm(tm);
-    auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-						 tm.tm_sec, 0);
-    auto tz = tzp.get(tdate.year());
-    return LDT(PTime(tdate, tdur), tz);
+    try
+    {
+	auto tdate = boost::gregorian::date_from_tm(tm);
+	auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+						     tm.tm_sec, 0);
+	auto tz = tzp.get(tdate.year());
+	return LDT(PTime(tdate, tdur), tz);
+    }
+    catch(boost::gregorian::bad_year)
+    {
+	throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
 }
 
 class GncDateTimeImpl
@@ -113,6 +127,7 @@ public:
     void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
     long offset() const;
     long nsecs() const;
+    struct tm utc_tm() const { return to_tm(m_time.utc_time()); }
     std::unique_ptr<GncDateImpl> date() const;
     std::string format(const char* format) const;
 private:
@@ -157,7 +172,11 @@ GncDateTimeImpl::operator time64() const
 
 GncDateTimeImpl::operator struct tm() const
 {
-    return to_tm(m_time);
+    struct tm time = to_tm(m_time);
+#if HAVE_STRUCT_TM_GMTOFF
+    time.tm_gmtoff = offset();
+#endif
+    return time;
 }
 
 long
@@ -250,6 +269,12 @@ long
 GncDateTime::nsecs() const
 {
     return m_impl->nsecs();
+}
+
+struct tm
+GncDateTime::utc_tm() const
+{
+    return m_impl->utc_tm();
 }
 
 GncDate

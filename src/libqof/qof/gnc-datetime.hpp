@@ -123,8 +123,7 @@ public:
     void now();
 /** Cast the GncDateTime to a time64, seconds from the POSIX epoch. */
     explicit operator time64() const;
-/** Cast the GncDateTime to a struct tm. Timezone and offset fields
- * are not filled.
+/** Cast the GncDateTime to a struct tm. Timezone field isn't filled.
  */
     explicit operator struct tm() const;
 /** Obtain the UTC offset in seconds
@@ -137,6 +136,10 @@ public:
  *  with the time.
  */
     long nsecs() const;
+/** Obtain a struct tm representing the time in UTC.
+ * @return struct tm
+ */
+    struct tm utc_tm() const;
 /** Obtain the date from the time, as a GncDate, in the current timezone.
  *  @return GncDate represented by the GncDateTime.
  */

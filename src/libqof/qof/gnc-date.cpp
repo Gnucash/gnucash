@@ -155,20 +155,34 @@ gnc_tm_free (struct tm* time)
 struct tm*
 gnc_localtime (const time64 *secs)
 {
-    auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
-    if (gnc_localtime_r (secs, time) == NULL)
+    try
     {
-	gnc_tm_free (time);
+	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+	if (gnc_localtime_r (secs, time) == NULL)
+	{
+	    gnc_tm_free (time);
+	    return NULL;
+	}
+	return time;
+    }
+    catch(std::invalid_argument)
+    {
 	return NULL;
     }
-    return time;
 }
 
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
 {
-    *time = static_cast<struct tm>(GncDateTime(*secs));
-    return time;
+    try
+    {
+	*time = static_cast<struct tm>(GncDateTime(*secs));
+	return time;
+    }
+    catch(std::invalid_argument)
+    {
+	return NULL;
+    }
 }
 
 static void
@@ -232,34 +246,48 @@ normalize_struct_tm (struct tm* time)
 struct tm*
 gnc_gmtime (const time64 *secs)
 {
-    auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
-    GncDateTime gncdt(*secs);
-    *time = static_cast<struct tm>(gncdt);
-    auto gmtoff = gncdt.offset();
-    time->tm_hour -= gmtoff / 3600;
-    time->tm_min -= (gmtoff % 3600 / 60);
-    time->tm_sec -= gmtoff % 60;
-    normalize_struct_tm(time);
-    return time;
+    try
+    {
+	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+	GncDateTime gncdt(*secs);
+	*time = gncdt.utc_tm();
+	return time;
+    }
+    catch(std::invalid_argument)
+    {
+	return NULL;
+    }
+
 }
 
 time64
 gnc_mktime (struct tm* time)
 {
-    normalize_struct_tm (time);
-    auto ldt = gnc_get_LDT (time->tm_year + 1900, time->tm_mon + 1,
-			    time->tm_mday, time->tm_hour, time->tm_min,
-			    time->tm_sec);
-    return time64_from_date_time(ldt);
+    try
+    {
+	normalize_struct_tm (time);
+	GncDateTime gncdt(*time);
+	return static_cast<time64>(gncdt) - gncdt.offset();
+    }
+    catch(std::invalid_argument)
+    {
+	return 0;
+    }
 }
 
 time64
 gnc_timegm (struct tm* time)
 {
-    auto newtime = *time;
-    normalize_struct_tm(time);
-    auto pdt = boost::posix_time::ptime_from_tm(*time);
-    return time64_from_date_time(pdt);
+    try
+    {
+	normalize_struct_tm(time);
+	return static_cast<time64>(GncDateTime(*time));
+    }
+    catch(std::invalid_argument)
+    {
+	return 0;
+    }
+
 }
 
 char*
