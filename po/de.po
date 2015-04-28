@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-19 21:02+0100\n"
-"PO-Revision-Date: 2015-03-13 20:14+0100\n"
+"PO-Revision-Date: 2015-04-11 08:40+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -1037,7 +1037,7 @@ msgstr "Auslagenerstattung anzeigen/bearbeiten"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2959
 msgid "Invoice Owner"
-msgstr "Rechnungsmandant"
+msgstr "Rechnungsempfänger"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -1108,7 +1108,7 @@ msgstr "Rechnungsnummer"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2993
 msgid "Bill Owner"
-msgstr "Rechnungsmandant"
+msgstr "Lieferant"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2996
 msgid "Bill Notes"
@@ -1116,7 +1116,7 @@ msgstr "Bemerkungen Rechnung"
 
 #: ../src/business/business-gnome/dialog-invoice.c:3027
 msgid "Voucher Owner"
-msgstr "Auslagenerstattung Mandant"
+msgstr "Mitarbeiter"
 
 #: ../src/business/business-gnome/dialog-invoice.c:3030
 msgid "Voucher Notes"
@@ -1257,7 +1257,7 @@ msgstr "Der Auftrag muss einen Namen erhalten."
 
 #: ../src/business/business-gnome/dialog-job.c:145
 msgid "You must choose an owner for this job."
-msgstr "Sie müssen einen Mandanten für diesen Auftrag auswählen."
+msgstr "Sie müssen einen Geschäftspartner für diesen Auftrag auswählen."
 
 #: ../src/business/business-gnome/dialog-job.c:245
 msgid "Edit Job"
@@ -7071,7 +7071,6 @@ msgid "Sign reverse balances on income and expense accounts."
 msgstr "Ertrags- und Aufwandskonten mit umgekehrten Vorzeichen"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:32
-#, fuzzy
 msgid "Use account colors in the account hierarchy"
 msgstr "Verwende Farben für die Konten in der Übersicht"
 
@@ -15381,9 +15380,8 @@ msgstr "(unbekannt)"
 #. * from the import-export/hbci
 #. * subdirectory.
 #: ../src/import-export/aqb/dialog-ab-trans.c:371
-#, fuzzy
 msgid "Enter a SEPA Online Transfer"
-msgstr "Online-Überweisung eingeben"
+msgstr "SEPA Online-Überweisung eingeben"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:373
 msgid "Recipient IBAN (International Account Number)"
@@ -15394,14 +15392,12 @@ msgid "Recipient BIC (Bank Code)"
 msgstr "BIC des Empfängers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:378
-#, fuzzy
 msgid "Originator IBAN (International Account Number)"
-msgstr "IBAN des Empfängers"
+msgstr "IBAN des Auftraggebers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:380
-#, fuzzy
 msgid "Originator BIC (Bank Code)"
-msgstr "BIC des Empfängers"
+msgstr "BIC des Auftraggebers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:385
 msgid "Enter an Online Direct Debit Note"
@@ -15447,24 +15443,21 @@ msgid "Debited BIC (Bank Code)"
 msgstr "BIC des Zahlungspflichtigen"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:416
-#, fuzzy
 msgid "Credited IBAN (International Account Number)"
-msgstr "IBAN des Zahlungspflichtigen"
+msgstr "IBAN des Zahlungsempfänger"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:418
-#, fuzzy
 msgid "Credited BIC (Bank Code)"
-msgstr "BIC des Zahlungspflichtigen"
+msgstr "BIC des Zahlungsempfänger"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:497
-#, fuzzy, c-format
+# c-format
 msgid ""
 "The internal check of the destination IBAN '%s' failed. This means the "
 "account number might contain an error."
 msgstr ""
-"Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit "
-"der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
-"Fehler enthält."
+"Die interne Überprüfung der angegebenen IBAN »%s« ist fehlgeschlagen. Die Kontonummer enthält "
+"wahrscheinlich einen Fehler enthält."
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:537
 #, c-format
@@ -16166,21 +16159,20 @@ msgstr "<b>Be_schreibung</b>"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:33
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
-#, fuzzy
 msgid "Account Selection"
-msgstr "Kontenlöschung"
+msgstr "Kontenauswahl"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:34
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Es gibt für diesen Bericht keine Optionen."
+msgstr ""
+"\n"
+"Geben Sie einen Dateinamen und einen Pfad für den Export an...\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:37
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Wählen Sie eine Datei, die importiert werden soll"
+msgstr "Wählen Sie einen Dateinamen für den Export"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:38
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:22
@@ -16190,23 +16182,20 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:40
-#, fuzzy
 msgid "Export Now..."
-msgstr "Datei exportieren..."
+msgstr "Datei jetzt exportieren..."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:41
-#, fuzzy
 msgid "Summary"
-msgstr "_Zusammenfassungsleiste"
+msgstr "_Zusammenfassung"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:42
-#, fuzzy
 msgid "Export Summary"
-msgstr "Kontenübersicht"
+msgstr "Exportzusammenfassung"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:420
 msgid "Category"
-msgstr ""
+msgstr "Kategorie"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:424
 msgid "To With Sym"
@@ -16218,12 +16207,12 @@ msgstr ""
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:425
 msgid "To Num."
-msgstr ""
+msgstr "Bis Nr."
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:425
 #, fuzzy
 msgid "From Num."
-msgstr "Von jetzt"
+msgstr "Von Nr."
 
 # strange, had fuzzy translation Saldo (Periodenbezogen)
 #: ../src/import-export/csv-exp/csv-transactions-export.c:426
@@ -16240,32 +16229,26 @@ msgid "type"
 msgstr ""
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
-#, fuzzy
 msgid "full_name"
-msgstr "_Voller Name:"
+msgstr "Vollständige_Bezeichnung"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
-#, fuzzy
 msgid "name"
-msgstr "Benutzername"
+msgstr "Name"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "code"
-msgstr "Unicode"
+msgstr "Kontonummer"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "description"
 msgstr "Beschreibung"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "color"
-msgstr "Farben"
+msgstr "Farbe"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
 msgid "notes"
 msgstr "Bemerkung"
 
@@ -16280,17 +16263,14 @@ msgid "commodityn"
 msgstr "Devise/Wertpapier"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "hidden"
-msgstr "_Versteckt"
+msgstr "Versteckt"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "tax"
-msgstr "Steuern"
+msgstr "Steuerrelevant"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "place_holder"
 msgstr "Platzhalter"
 
@@ -16310,9 +16290,8 @@ msgid "Export _Transactions to CSV..."
 msgstr "Abfrage Konto_umsätze..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:53
-#, fuzzy
 msgid "Export the Transactions to a CSV file"
-msgstr "Buchungen aus Textdatei importieren"
+msgstr "Buchungen in eine CSV-Textdatei exportieren"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:5
 msgid "Window geometry"
@@ -16387,9 +16366,8 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:1
-#, fuzzy
 msgid "CSV Import Assistant"
-msgstr "GnuCash-Datei Import-Assistent"
+msgstr "CSV Import-Assistent"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:2
 msgid ""
@@ -16451,9 +16429,8 @@ msgid "Custom regular Expression"
 msgstr "Benutzerdefinierter regulärer Ausdruck"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:18
-#, fuzzy
 msgid "Colon Separated"
-msgstr "Semikolon-getrennt"
+msgstr "Punkt-getrennt"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:19
 msgid "Select Separator Type"
@@ -17858,9 +17835,8 @@ msgid "Tradable commodities"
 msgstr "Handelbare Wertpapiere incl. Währungen"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:67
-#, fuzzy
 msgid "_Start Import"
-msgstr "_Importieren"
+msgstr "_Importieren starten"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:68
 msgid "QIF Import"
@@ -20658,15 +20634,13 @@ msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:668
-#, fuzzy
 msgid "Show Inactive Customers"
-msgstr "Nur _aktive Mandanten zeigen"
+msgstr "_Inaktive Kunden zeigen"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:670
-#, fuzzy
 msgid "Include customers that have been marked inactive."
-msgstr "Konten anzeigen, die als »Versteckt« markiert sind."
+msgstr "Kunden einschließen, die als »Inaktiv« markiert sind."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:672
@@ -21831,7 +21805,6 @@ msgstr "Betrag dankend erhalten."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1802
-#, fuzzy
 msgid "Invoice number: "
 msgstr "Rechnungsnummer"
 
@@ -21842,19 +21815,16 @@ msgstr "An: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1806
-#, fuzzy
 msgid "Your ref: "
 msgstr "Ihr_Zeichen: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1808
-#, fuzzy
 msgid "Job number: "
 msgstr "Auftragsnummer"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1810
-#, fuzzy
 msgid "Job name: "
 msgstr "Auftragsbezeichnung"
 
@@ -23704,9 +23674,8 @@ msgstr ""
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2632
-#, fuzzy
 msgid "Ignore"
-msgstr "Ignoriert"
+msgstr "Ignorieren"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2634

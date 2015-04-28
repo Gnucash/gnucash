@@ -93,7 +93,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar as bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr gu he hi hu it ja kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt_BR pt ro ru rw sk sv ta te tr uk ur vi zh_CN zh_TW"
+ALL_LINGUAS="ar as bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr gu he hi hu it ja kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt_BR pt ro ru rw sk sr sv ta te tr uk ur vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -179,6 +179,10 @@ AC_PROG_LN_S
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
+oldcflags="$CFLAGS"
+CFLAGS=
+oldldflags="$LDFLAGS"
+LDFLAGS=
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
@@ -186,6 +190,8 @@ AC_CHECK_FUNCS(setenv,,[
   ])
 ])
 
+CFLAGS="$oldcflags"
+LDFLAGS="$oldldflags"
 STRUCT_TM_GMTOFF_CHECK
 cflags_save=${CFLAGS}
 CFLAGS="${CFLAGS} -Wall -Werror"
@@ -648,8 +654,8 @@ then
 	 ;;
       esac
     old_ld_library_path="$LD_LIBRARY_PATH"
-    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
-    AC_MSG_NOTICE([Search Path $(LD_LIBRARY_PATH)])
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
+    AC_MSG_NOTICE([Search Path $LD_LIBRARY_PATH])
     AC_MSG_CHECKING([Looking for at least one supported DBD module])
     AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
 				     [[if (!$lt_cv_dlopen("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
@@ -677,7 +683,7 @@ to the configure argument list and run it again.
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
     LIBS=$saved_libs
-    LD_LIBRARY_PATH="$old_ld_library_path"
+    export LD_LIBRARY_PATH="$old_ld_library_path"
   else
     AC_MSG_ERROR([
 
