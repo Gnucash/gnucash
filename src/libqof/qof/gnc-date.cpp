@@ -155,8 +155,6 @@ gnc_tm_free (struct tm* time)
 struct tm*
 gnc_localtime (const time64 *secs)
 {
-    try
-    {
 	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
 	if (gnc_localtime_r (secs, time) == NULL)
 	{
@@ -165,11 +163,6 @@ gnc_localtime (const time64 *secs)
 	}
 	return time;
     }
-    catch(std::invalid_argument)
-    {
-	return NULL;
-    }
-}
 
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
