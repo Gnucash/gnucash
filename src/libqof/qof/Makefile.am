@@ -27,7 +27,8 @@ libgnc_qof_la_SOURCES =  \
    gnc-int128.cpp      \
    gnc-numeric.cpp     \
    gnc-rational.cpp    \
-   gnc-timezone.cpp     \
+   gnc-timezone.cpp    \
+   gnc-datetime.cpp    \
    guid.cpp            \
    kvp-util.cpp        \
    kvp_frame.cpp       \
@@ -55,6 +56,7 @@ qofinclude_HEADERS = \
    gnc-numeric.h     \
    gnc-rational.hpp  \
    gnc-timezone.hpp  \
+   gnc-datetime.hpp  \
    guid.h            \
    kvp-util-p.h      \
    kvp-util.h        \
