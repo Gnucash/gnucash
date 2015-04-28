@@ -44,6 +44,7 @@ static const TimeZoneProvider tzp;
 // For converting to/from POSIX time.
 static const PTime unix_epoch (Date(1970, boost::gregorian::Jan, 1),
 	boost::posix_time::seconds(0));
+static const TZ_Ptr utc_zone(new boost::local_time::posix_time_zone("UTC-0"));
 
 /* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
 #ifndef BOOST_DATE_TIME_HAS_NANOSECONDS
@@ -63,9 +64,17 @@ public:
     GncDateImpl(Date d) : m_greg(d) {}
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
+    ymd ymd() const;
 private:
     Date m_greg;
 };
+
+ymd
+GncDateImpl::ymd() const
+{
+    auto boost_ymd = m_greg.year_month_day();
+    return {boost_ymd.year, boost_ymd.month.as_number(), boost_ymd.day};
+}
 
 /** Private implementation of GncDateTime. See the documentation for that class.
  */
@@ -95,6 +104,7 @@ public:
     GncDateTimeImpl() : m_time(unix_epoch, tzp.get(unix_epoch.date().year())) {}
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
+    GncDateTimeImpl(const std::string str);
     GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
 
@@ -102,10 +112,40 @@ public:
     operator struct tm() const;
     void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
     long offset() const;
+    long nsecs() const;
+    std::unique_ptr<GncDateImpl> date() const;
     std::string format(const char* format) const;
 private:
     LDT m_time;
 };
+
+GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
+    m_time(unix_epoch, utc_zone)
+{
+    if (str.empty()) return;
+
+    using std::string;
+    using PTZ = boost::local_time::posix_time_zone;
+    TZ_Ptr tzptr;
+    auto tzpos = str.find_first_of("+-", str.find(":"));
+    if (tzpos != str.npos)
+    {
+	string tzstr = "XXX" + str.substr(tzpos);
+	if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
+	    tzstr.insert(6, ":");
+	if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
+	    tzstr.insert(9, ":");
+	tzptr.reset(new PTZ(tzstr));
+	if (str[tzpos - 1] == ' ') --tzpos;
+    }
+    else
+    {
+	tzptr = utc_zone;
+    }
+
+    auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
+    m_time = LDT(pdt, tzptr);
+}
 
 GncDateTimeImpl::operator time64() const
 {
@@ -127,6 +167,18 @@ GncDateTimeImpl::offset() const
     return offset.total_seconds();
 }
 
+long
+GncDateTimeImpl::nsecs() const
+{
+	return (m_time.utc_time() - unix_epoch).ticks() % ticks_per_second;
+}
+
+std::unique_ptr<GncDateImpl>
+GncDateTimeImpl::date() const
+{
+    return std::unique_ptr<GncDateImpl>(new GncDateImpl(m_time.local_time().date()));
+}
+
 std::string
 GncDateTimeImpl::format(const char* format) const
 {
@@ -143,7 +195,13 @@ GncDateTimeImpl::format(const char* format) const
 GncDate::GncDate() : m_impl{new GncDateImpl} {}
 GncDate::GncDate(int year, int month, int day) :
     m_impl(new GncDateImpl(year, month, day)) {}
+GncDate::GncDate(std::unique_ptr<GncDateImpl> impl) :
+    m_impl(std::move(impl)) {}
+GncDate::GncDate(GncDate&&) = default;
 GncDate::~GncDate() = default;
+
+GncDate&
+GncDate::operator=(GncDate&&) = default;
 
 void
 GncDate::today()
@@ -151,11 +209,19 @@ GncDate::today()
     m_impl->today();
 }
 
+ymd
+GncDate::ymd() const
+{
+    return m_impl->ymd();
+}
+
 GncDateTime::GncDateTime() : m_impl(new GncDateTimeImpl) {}
 GncDateTime::GncDateTime(const time64 time) :
     m_impl(new GncDateTimeImpl(time)) {}
 GncDateTime::GncDateTime(const struct tm tm) :
     m_impl(new GncDateTimeImpl(tm)) {}
+GncDateTime::GncDateTime(const std::string str) :
+    m_impl(new GncDateTimeImpl(str)) {}
 GncDateTime::~GncDateTime() = default;
 
 void
@@ -178,6 +244,18 @@ long
 GncDateTime::offset() const
 {
     return m_impl->offset();
+}
+
+long
+GncDateTime::nsecs() const
+{
+    return m_impl->nsecs();
+}
+
+GncDate
+GncDateTime::date() const
+{
+    return std::move(GncDate(m_impl->date()));
 }
 
 std::string

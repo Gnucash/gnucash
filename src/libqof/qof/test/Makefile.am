@@ -95,7 +95,9 @@ test_gnc_datetime_CPPFLAGS =\
 	-I$(GTEST_HEADERS) \
 	-I$(top_srcdir)/src \
 	$(BOOST_CPPFLAGS)
-test_gnc_datetime_LDADD = $(GTEST_LIBS)
+test_gnc_datetime_LDADD = \
+	-lboost_date_time \
+	$(GTEST_LIBS)
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_datetime_SOURCES = \
 	$(GTEST_SRC)/src/gtest_main.cc

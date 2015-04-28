@@ -27,6 +27,14 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
+
+typedef struct
+{
+    int year;  //1400-9999
+    int month; //1-12
+    int day; //1-31
+} ymd;
 
 class GncDateImpl;
 class GncDateTimeImpl;
@@ -34,8 +42,7 @@ using time64 = int64_t;
 
 class GncDate
 {
-public:
-/** Construct a GncDate representing the current day.
+public:/** Construct a GncDate representing the current day.
  */
     GncDate();;
 /** Construct a GncDate representing the given year, month, and day in
@@ -52,14 +59,21 @@ public:
  * of the constrained range.
  */
     GncDate(int year, int month, int day);
+    GncDate(std::unique_ptr<GncDateImpl> impl);
+    GncDate(GncDate&&);
     ~GncDate();
+    GncDate& operator=(GncDate&&);
 /** Set the date object to the computer clock's current day. */
     void today();
+/** Get the year, month, and day from the date as a ymd.
+    @return ymd struct
+ */
+    ymd ymd() const;
 /** Test that the Date has an implementation. */
     bool isnull (void) { return m_impl == nullptr; }
 
 private:
-	std::unique_ptr<GncDateImpl> m_impl;
+    std::unique_ptr<GncDateImpl> m_impl;
 };
 
 /** GnuCash DateTime class
@@ -88,13 +102,54 @@ public:
  * @exception std::invalid_argument if the year is outside the constraints.
  */
     GncDateTime(const time64 time);
+/** Construct a GncDateTime in the current timezone representing the
+ * standard struct tm provided.
+ * @param tm: A C-standard struct tm representing the date and
+ * time. Note that the timezone and offset are ignored on those
+ * systems which include them in struct tm.
+ * @exception std::invalid_argument if the year is outside the constraints.
+ */
     GncDateTime(const struct tm tm);
+/** Construct a GncDateTime 
+ * @param str: A string representing the date and time in some
+ * recognizable format. Note that if a timezone is not specified the
+ * default is UTC, not the local one.
+ * @exception std::invalid_argument if the year is outside the constraints.
+ */
+    GncDateTime(const std::string str);
     ~GncDateTime();
+/** Set the GncDateTime to the date and time indicated in the computer's clock.
+ */
     void now();
+/** Cast the GncDateTime to a time64, seconds from the POSIX epoch. */
     explicit operator time64() const;
+/** Cast the GncDateTime to a struct tm. Timezone and offset fields
+ * are not filled.
+ */
     explicit operator struct tm() const;
-    long offset() const;
+/** Obtain the UTC offset in seconds
+ *  @return seconds difference between this local time and UTC. West
+ *  is negative.
+ */
+    long offset()const;
+/** Obtain the fractional seconds from the GncDateTime
+ *  @return Fractional seconds, represented as nanoseconds, associated
+ *  with the time.
+ */
+    long nsecs() const;
+/** Obtain the date from the time, as a GncDate, in the current timezone.
+ *  @return GncDate represented by the GncDateTime.
+ */
+    GncDate date() const;
+/** Test if the GncDateTime has a member pointer. Testing only. */
     bool isnull (void) { return m_impl == nullptr; }
+/** Format the GncDateTime into a std::string
+
+ *  @return a std::string containing a representation of the date
+ *  according to the format. Consult the boost::date_time
+ *  documentation for format characters; while they mostly compy with
+ *  POSIX there are a few differences.
+ */
     std::string format(const char* format) const;
 
 private:

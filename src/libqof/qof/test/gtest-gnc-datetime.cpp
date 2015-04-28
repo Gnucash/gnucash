@@ -76,3 +76,14 @@ TEST(gnc_datetime_functions, test_format)
     //Date only to finesse timezone issues. It will still fail in +12 DST.
     EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");
 }
+
+//This is a bit convoluted because it uses GncDate's GncDateImpl constructor and ymd() function. There's no good way to test the former without violating the privacy of the implementation.
+TEST(gnc_datetime_functions, test_date)
+{
+    GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
+    GncDate gncd = std::move(atime.date());
+    auto ymd = gncd.ymd();
+    EXPECT_EQ(ymd.year, 2045);
+    EXPECT_EQ(ymd.month, 11);
+    EXPECT_EQ(ymd.day, 13);
+}
