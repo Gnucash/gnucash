@@ -585,7 +585,7 @@ gnc_dense_cal_set_num_months(GncDenseCal *dcal, guint num_months)
             gint months_val, delta_months;
 
             gtk_tree_model_get(GTK_TREE_MODEL(options), &view_opts_iter, VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val, -1);
-            delta_months = abs(months_val - num_months);
+            delta_months = abs(months_val - (int)num_months);
             if (delta_months < closest_index_distance)
             {
                 iter_closest_to_req = view_opts_iter;

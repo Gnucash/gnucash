@@ -643,7 +643,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         /* Date heuristics */
         match_time = xaccTransGetDate (xaccSplitGetParent (split));
         download_time = xaccTransGetDate (new_trans);
-        datediff_day = abs(match_time - download_time) / 86400;
+        datediff_day = llabs(match_time - download_time) / 86400;
         /* Sorry, there are not really functions around at all that
         	 provide for less hacky calculation of days of date
         	 differences. Whatever. On the other hand, the difference
