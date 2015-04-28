@@ -292,11 +292,12 @@ gnc_ctime (const time64 *secs)
 time64
 gnc_time (time64 *tbuf)
 {
-    auto pdt = boost::posix_time::second_clock::universal_time();
-    auto secs = time64_from_date_time(pdt);
-     if (tbuf != NULL)
-	  *tbuf = secs;
-     return secs;
+    GncDateTime gncdt;
+    gncdt.now();
+    auto time = static_cast<time64>(gncdt);
+    if (tbuf != NULL)
+        *tbuf = time;
+    return time;
 }
 
 gdouble
