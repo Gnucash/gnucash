@@ -131,11 +131,6 @@ public:
  *  is negative.
  */
     long offset()const;
-/** Obtain the fractional seconds from the GncDateTime
- *  @return Fractional seconds, represented as nanoseconds, associated
- *  with the time.
- */
-    long nsecs() const;
 /** Obtain a struct tm representing the time in UTC.
  * @return struct tm
  */

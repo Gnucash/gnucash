@@ -126,7 +126,6 @@ public:
     operator struct tm() const;
     void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
     long offset() const;
-    long nsecs() const;
     struct tm utc_tm() const { return to_tm(m_time.utc_time()); }
     std::unique_ptr<GncDateImpl> date() const;
     std::string format(const char* format) const;
@@ -184,12 +183,6 @@ GncDateTimeImpl::offset() const
 {
     auto offset = m_time.local_time() - m_time.utc_time();
     return offset.total_seconds();
-}
-
-long
-GncDateTimeImpl::nsecs() const
-{
-	return (m_time.utc_time() - unix_epoch).ticks() % ticks_per_second;
 }
 
 std::unique_ptr<GncDateImpl>
@@ -263,12 +256,6 @@ long
 GncDateTime::offset() const
 {
     return m_impl->offset();
-}
-
-long
-GncDateTime::nsecs() const
-{
-    return m_impl->nsecs();
 }
 
 struct tm

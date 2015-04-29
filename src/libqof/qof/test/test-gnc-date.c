@@ -93,7 +93,7 @@ static void setup (FixtureA *f, gconstpointer pData)
     f->off_zulu = (TZOffset){0, 0};
     f->off_05w = (TZOffset){-5, 0};
     f->off_0840e = (TZOffset){8, 40};
-    f->ts1 = (Timespec){607009407, 345678000}; //1989-3-27 13:43:27.345678 Z
+    f->ts1 = (Timespec){607009407, 0}; //1989-3-27 13:43:27 Z
     f->ts2 = (Timespec){1604748079, 0}; //2020-11-7 06:21:19 -05:00
     f->ts3 = (Timespec){1341398864, 0}; //2012-07-04 19:27:44 +08:40
     f->ts4 = (Timespec){-261104801, 0}; //1961-09-22 17:53:19 -05:00
@@ -1590,7 +1590,7 @@ test_gnc_iso8601_to_timespec_gmt (FixtureA *f, gconstpointer pData)
     g_assert_cmpint (t.tv_sec, ==, 0);
     g_assert_cmpint (t.tv_nsec, ==, 0);
 
-    t = gnc_iso8601_to_timespec_gmt ("1989-03-27 13:43:27.345678");
+    t = gnc_iso8601_to_timespec_gmt ("1989-03-27 13:43:27");
     g_assert_cmpint (t.tv_sec, ==, f->ts1.tv_sec);
     /* MinGW has some precision issues in the last microsecond digit */
 #ifdef G_OS_WIN32

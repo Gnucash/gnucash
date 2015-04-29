@@ -1246,12 +1246,11 @@ Timespec
 gnc_iso8601_to_timespec_gmt(const char *cstr)
 {
 	time64 time;
-	uint32_t nsecs;
     if (!cstr) return {0, 0};
     try
 	{
         GncDateTime gncdt(cstr);
-        return {static_cast<time64>(gncdt), gncdt.nsecs()};
+        return {static_cast<time64>(gncdt), 0};
 	}
     catch(...)
     {
