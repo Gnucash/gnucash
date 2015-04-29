@@ -397,14 +397,8 @@ gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)
 char*
 gnc_print_time64(time64 time, const char* format)
 {
-    using Facet = boost::local_time::local_time_facet;
-    auto date_time = LDT_from_unix_local(time);
-    std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
-    ss.imbue(std::locale(std::locale(), output_facet));
-    ss << date_time;
-    auto sstr = ss.str();
+    GncDateTime gncdt(time);
+    auto sstr = gncdt.format(format);
     //ugly C allocation so that the ptr can be freed at the other end
     char* cstr = static_cast<char*>(malloc(sstr.length() + 1));
     memset(cstr, 0, sstr.length() + 1);
@@ -1308,45 +1302,18 @@ gnc_date_timestamp (void)
 Timespec
 gnc_iso8601_to_timespec_gmt(const char *cstr)
 {
-    using std::string;
-    using PTZ = boost::local_time::posix_time_zone;
-
-    if (!cstr) return {0, 0};
-//    try
-    {
-	string str(cstr);
-	if (str.empty())
-	    return {0, 0};
 	time64 time;
 	uint32_t nsecs;
-	auto tzpos = str.find_first_of("+-", str.find(":"));
-	if (tzpos != str.npos)
+    if (!cstr) return {0, 0};
+    try
 	{
-	    string tzstr = "XXX" + str.substr(tzpos);
-	    if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
-		tzstr.insert(6, ":");
-	    if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
-		tzstr.insert(9, ":");
-	    TZ_Ptr tzp(new PTZ(tzstr));
-	    if (str[tzpos - 1] == ' ') --tzpos;
-	    auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
-	    LDT ldt(pdt.date(), pdt.time_of_day(), tzp,
-		    LDTBase::NOT_DATE_TIME_ON_ERROR);
-	    time = time64_from_date_time(ldt);
-	    nsecs = (ldt.utc_time() - unix_epoch).ticks() % ticks_per_second;
+        GncDateTime gncdt(cstr);
+        return {static_cast<time64>(gncdt), gncdt.nsecs()};
 	}
-	else
-	{
-	    auto pdt = boost::posix_time::time_from_string(str);
-	    time = time64_from_date_time(pdt);
-	    nsecs = (pdt - unix_epoch).ticks() % ticks_per_second;
-	}
-	return {time, static_cast<int32_t>(nsecs) * INT32_C(1000)};
+    catch(...)
+    {
+        return {0, 0};
     }
-//    catch(...)
-    //  {
-//	return {0, 0};
-//    }
 }
 
 /********************************************************************\
@@ -1360,15 +1327,8 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 
     if (! buff) return NULL;
 
-    using Facet = boost::local_time::local_time_facet;
-    auto date_time = LDT_from_unix_local(ts.tv_sec);
-    date_time = date_time + boost::posix_time::microseconds(ts.tv_nsec / 1000);
-    std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
-    ss.imbue(std::locale(std::locale(), output_facet));
-    ss << date_time;
-    auto sstr = ss.str();
+    GncDateTime gncdt(ts.tv_sec);
+    auto sstr = gncdt.format(format);
 
     memset(buff, 0, sstr.length() + 1);
     strncpy(buff, sstr.c_str(), sstr.length());
