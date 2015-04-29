@@ -53,13 +53,6 @@ extern "C"
 
 #define N_(string) string //So that xgettext will find it
 
-using Date = boost::gregorian::date;
-using Month = boost::gregorian::greg_month;
-using PTime = boost::posix_time::ptime;
-using LDT = boost::local_time::local_date_time;
-using Duration = boost::posix_time::time_duration;
-using LDTBase = boost::local_time::local_date_time_base<PTime, boost::date_time::time_zone_base<PTime, char>>;
-
 #ifdef HAVE_LANGINFO_D_FMT
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
 #  define GNC_D_T_FMT (nl_langinfo (D_T_FMT))
@@ -94,56 +87,6 @@ static int dateCompletionBackMonths = 6;
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = QOF_MOD_ENGINE;
-
-// Default constructor Initializes to the current locale.
-static const TimeZoneProvider tzp;
-// For converting to/from POSIX time.
-static const PTime unix_epoch (Date(1970, boost::gregorian::Jan, 1),
-	boost::posix_time::seconds(0));
-/* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
-#ifndef BOOST_DATE_TIME_HAS_NANOSECONDS
-static constexpr auto ticks_per_second = INT64_C(1000000);
-#else
-static constexpr auto ticks_per_second = INT64_C(1000000000);
-#endif
-static LDT
-gnc_get_LDT(int year, int month, int day, int hour, int minute, int seconds)
-{
-    Date date(year, static_cast<Month>(month), day);
-    Duration time(hour, minute, seconds);
-    auto tz = tzp.get(year);
-    return LDT(date, time, tz, LDTBase::NOT_DATE_TIME_ON_ERROR);
-}
-
-static LDT
-LDT_from_unix_local(const time64 time)
-{
-    PTime temp(unix_epoch.date(),
-	       boost::posix_time::hours(time / 3600) +
-	       boost::posix_time::seconds(time % 3600));
-    auto tz = tzp.get(temp.date().year());
-    return LDT(temp, tz);
-}
-
-template<typename T>
-static time64
-time64_from_date_time(T time)
-{
-    auto duration = time - unix_epoch;
-    auto secs = duration.ticks();
-    secs /= ticks_per_second;
-    return secs;
-}
-
-template<>
-time64
-time64_from_date_time<LDT>(LDT time)
-{
-    auto duration = time.utc_time() - unix_epoch;
-    auto secs = duration.ticks();
-    secs /= ticks_per_second;
-    return secs;
-}
 
 /****************** Posix Replacement Functions ***************************/
 void
