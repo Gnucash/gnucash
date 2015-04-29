@@ -43,7 +43,7 @@ using time64 = int64_t;
 static const TimeZoneProvider tzp;
 // For converting to/from POSIX time.
 static const PTime unix_epoch (Date(1970, boost::gregorian::Jan, 1),
-	boost::posix_time::seconds(0));
+        boost::posix_time::seconds(0));
 static const TZ_Ptr utc_zone(new boost::local_time::posix_time_zone("UTC-0"));
 
 /* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
@@ -60,7 +60,7 @@ class GncDateImpl
 public:
     GncDateImpl(): m_greg(unix_epoch.date()) {}
     GncDateImpl(const int year, const int month, const int day) :
-	m_greg(year, static_cast<Month>(month), day) {}
+        m_greg(year, static_cast<Month>(month), day) {}
     GncDateImpl(Date d) : m_greg(d) {}
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
@@ -83,15 +83,15 @@ LDT_from_unix_local(const time64 time)
 {
     try
     {
-	PTime temp(unix_epoch.date(),
-		   boost::posix_time::hours(time / 3600) +
-		   boost::posix_time::seconds(time % 3600));
-	auto tz = tzp.get(temp.date().year());
-	return LDT(temp, tz);
+        PTime temp(unix_epoch.date(),
+                   boost::posix_time::hours(time / 3600) +
+                   boost::posix_time::seconds(time % 3600));
+        auto tz = tzp.get(temp.date().year());
+        return LDT(temp, tz);
     }
     catch(boost::gregorian::bad_year)
     {
-	throw(std::invalid_argument("Time value is outside the supported year range."));
+        throw(std::invalid_argument("Time value is outside the supported year range."));
     }
 }
 
@@ -100,15 +100,15 @@ LDT_from_struct_tm(const struct tm tm)
 {
     try
     {
-	auto tdate = boost::gregorian::date_from_tm(tm);
-	auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-						     tm.tm_sec, 0);
-	auto tz = tzp.get(tdate.year());
-	return LDT(PTime(tdate, tdur), tz);
+        auto tdate = boost::gregorian::date_from_tm(tm);
+        auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+                                                     tm.tm_sec, 0);
+        auto tz = tzp.get(tdate.year());
+        return LDT(PTime(tdate, tdur), tz);
     }
     catch(boost::gregorian::bad_year)
     {
-	throw(std::invalid_argument("Time value is outside the supported year range."));
+        throw(std::invalid_argument("Time value is outside the supported year range."));
     }
 }
 
@@ -144,21 +144,28 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
     auto tzpos = str.find_first_of("+-", str.find(":"));
     if (tzpos != str.npos)
     {
-	string tzstr = "XXX" + str.substr(tzpos);
-	if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
-	    tzstr.insert(6, ":");
-	if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
-	    tzstr.insert(9, ":");
-	tzptr.reset(new PTZ(tzstr));
-	if (str[tzpos - 1] == ' ') --tzpos;
+        string tzstr = "XXX" + str.substr(tzpos);
+        if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
+            tzstr.insert(6, ":");
+        if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
+            tzstr.insert(9, ":");
+        tzptr.reset(new PTZ(tzstr));
+        if (str[tzpos - 1] == ' ') --tzpos;
     }
     else
     {
-	tzptr = utc_zone;
+        tzptr = utc_zone;
     }
-
-    auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
-    m_time = LDT(pdt, tzptr);
+    try
+    {
+        auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
+        m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
+                     LDTBase::NOT_DATE_TIME_ON_ERROR);
+    }
+    catch(boost::gregorian::bad_year)
+    {
+        throw(std::invalid_argument("The date string was outside of the supported year range."));
+    }
 }
 
 GncDateTimeImpl::operator time64() const
