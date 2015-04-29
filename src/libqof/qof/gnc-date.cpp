@@ -98,14 +98,14 @@ gnc_tm_free (struct tm* time)
 struct tm*
 gnc_localtime (const time64 *secs)
 {
-	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
-	if (gnc_localtime_r (secs, time) == NULL)
-	{
-	    gnc_tm_free (time);
-	    return NULL;
-	}
-	return time;
+    auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+    if (gnc_localtime_r (secs, time) == NULL)
+    {
+	gnc_tm_free (time);
+	return NULL;
     }
+    return time;
+}
 
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
@@ -123,17 +123,17 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
 
 static void
 normalize_time_component (int *inner, int *outer, unsigned int divisor,
-			  int base)
+                          int base)
 {
      while (*inner < base)
      {
-	  --(*outer);
-	  *inner += divisor;
+          --(*outer);
+          *inner += divisor;
      }
      while (*inner > static_cast<gint>(divisor))
      {
-	  ++(*outer);
-	  *inner -= divisor;
+          ++(*outer);
+          *inner -= divisor;
      }
 }
 
@@ -165,16 +165,16 @@ normalize_struct_tm (struct tm* time)
      // auto month_in_range = []int (int m){ return (m + 12) % 12; }
      while (time->tm_mday < 1)
      {
-	 normalize_month (&(--time->tm_mon), &year);
-	 last_day = gnc_date_get_last_mday (time->tm_mon, year);
-	 time->tm_mday += last_day;
+         normalize_month (&(--time->tm_mon), &year);
+         last_day = gnc_date_get_last_mday (time->tm_mon, year);
+         time->tm_mday += last_day;
      }
      last_day = gnc_date_get_last_mday (time->tm_mon, year);
      while (time->tm_mday > last_day)
      {
-	  time->tm_mday -= last_day;
-	  normalize_month(&(++time->tm_mon), &year);
-	  last_day = gnc_date_get_last_mday (time->tm_mon, year);
+          time->tm_mday -= last_day;
+          normalize_month(&(++time->tm_mon), &year);
+          last_day = gnc_date_get_last_mday (time->tm_mon, year);
      }
      time->tm_year = year - 1900;
 }
@@ -484,8 +484,8 @@ gnc_gdate_range_check (GDate *gd)
     int year;
     if (!g_date_valid (gd))
     {
-	g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
-	return;
+        g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
+        return;
     }
     year = g_date_get_year (gd);
     // Adjust the GDate to fit in the range of GDateTime.
@@ -677,7 +677,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard
-	 says, it's not a Y2K thing */
+         says, it's not a Y2K thing */
 
         gnc_tm_set_day_start (&tm_str);
         t = gnc_mktime (&tm_str);
@@ -708,7 +708,7 @@ qof_print_date_buff (char * buff, size_t len, time64 t)
     size_t actual;
     if (!buff) return 0 ;
     if (!gnc_localtime_r(&bt, &theTime))
-	return 0;
+        return 0;
 
     actual = qof_print_date_dmy_buff (buff, len,
                                     theTime.tm_mday,
@@ -807,7 +807,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     if (which_format == QOF_DATE_FORMAT_UTC)
     {
         if (strptime(buff, QOF_UTC_DATE_FORMAT, &utc)
-	    || strptime (buff, "%Y-%m-%d", &utc))
+            || strptime (buff, "%Y-%m-%d", &utc))
         {
             *day = utc.tm_mday;
             *month = utc.tm_mon + 1;
@@ -1245,13 +1245,13 @@ gnc_date_timestamp (void)
 Timespec
 gnc_iso8601_to_timespec_gmt(const char *cstr)
 {
-	time64 time;
+    time64 time;
     if (!cstr) return {0, 0};
     try
-	{
+    {
         GncDateTime gncdt(cstr);
         return {static_cast<time64>(gncdt), 0};
-	}
+    }
     catch(...)
     {
         return {0, 0};
@@ -1398,10 +1398,10 @@ GDate timespec_to_gdate (Timespec ts)
 
 GDate* gnc_g_date_new_today ()
 {
-
-    auto pdt = boost::posix_time::second_clock::local_time();
-    auto ymd = pdt.date().year_month_day();
-    auto month = static_cast<GDateMonth>(ymd.month.as_number());
+    GncDate gncd;
+    gncd.today();
+    auto ymd = gncd.ymd();
+    auto month = static_cast<GDateMonth>(ymd.month);
     auto result = g_date_new_dmy (ymd.day, month, ymd.year);
     g_assert(g_date_valid (result));
     return result;
@@ -1420,7 +1420,7 @@ gnc_tm_get_day_start (struct tm *tm, time64 time_val)
 {
     /* Get the equivalent time structure */
     if (!gnc_localtime_r(&time_val, tm))
-	return;
+        return;
     gnc_tm_set_day_start(tm);
 }
 
@@ -1429,7 +1429,7 @@ gnc_tm_get_day_end (struct tm *tm, time64 time_val)
 {
     /* Get the equivalent time structure */
     if (!gnc_localtime_r(&time_val, tm))
-	return;
+        return;
     gnc_tm_set_day_end(tm);
 }
 
