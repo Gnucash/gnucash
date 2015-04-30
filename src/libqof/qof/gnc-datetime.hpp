@@ -68,7 +68,7 @@ public:/** Construct a GncDate representing the current day.
 /** Get the year, month, and day from the date as a ymd.
     @return ymd struct
  */
-    ymd ymd() const;
+    ymd year_month_day() const;
 /** Test that the Date has an implementation. */
     bool isnull (void) { return m_impl == nullptr; }
 

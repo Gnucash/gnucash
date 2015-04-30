@@ -1400,7 +1400,7 @@ GDate* gnc_g_date_new_today ()
 {
     GncDate gncd;
     gncd.today();
-    auto ymd = gncd.ymd();
+    auto ymd = gncd.year_month_day();
     auto month = static_cast<GDateMonth>(ymd.month);
     auto result = g_date_new_dmy (ymd.day, month, ymd.year);
     g_assert(g_date_valid (result));

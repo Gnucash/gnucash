@@ -64,13 +64,13 @@ public:
     GncDateImpl(Date d) : m_greg(d) {}
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
-    ymd ymd() const;
+    ymd year_month_day() const;
 private:
     Date m_greg;
 };
 
 ymd
-GncDateImpl::ymd() const
+GncDateImpl::year_month_day() const
 {
     auto boost_ymd = m_greg.year_month_day();
     return {boost_ymd.year, boost_ymd.month.as_number(), boost_ymd.day};
@@ -229,9 +229,9 @@ GncDate::today()
 }
 
 ymd
-GncDate::ymd() const
+GncDate::year_month_day() const
 {
-    return m_impl->ymd();
+    return m_impl->year_month_day();
 }
 
 GncDateTime::GncDateTime() : m_impl(new GncDateTimeImpl) {}
