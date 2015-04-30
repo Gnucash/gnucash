@@ -129,12 +129,13 @@ windows_tz_names (HKEY key)
     return time_zone_names (std_name, std_name, dlt_name, dlt_name);
 }
 
+#define make_week_num(x)  static_cast<boost::date_time::nth_kday_of_month<boost::gregorian::date>::week_num>(x)
+
 static TZ_Ptr
 zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 {
     using ndate = boost::gregorian::nth_day_of_the_week_in_month;
     using nth_day_rule = boost::local_time::nth_day_of_the_week_in_month_dst_rule;
-   using make_week_num = static_cast<boost::date_time::nth_kday_of_month<boost::gregorian::date>::week_num>;
 
     duration std_off (0, regtzi.StandardBias - regtzi.Bias, 0);
     duration dlt_off (0, regtzi.DaylightBias, 0);
@@ -224,8 +225,6 @@ TimeZoneProvider::load_windows_classic_tz (HKEY key, time_zone_names names)
     }
     RegCloseKey (key);
 }
-
-TimeZoneProvider::TimeZoneProvider ()  : TimeZoneProvider ("")) {}
 
 TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
     zone_vector ()
