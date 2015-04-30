@@ -38,7 +38,9 @@ extern "C"
 #ifdef HAVE_LANGINFO_D_FMT
 # include <langinfo.h>
 #endif
-
+#ifndef HAVE_STRPTIME
+#include <strptime.h>
+#endif
 #ifdef G_OS_WIN32
 #  include <windows.h>
 #endif
