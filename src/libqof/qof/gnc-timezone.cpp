@@ -550,11 +550,18 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 				  {return !tz.info.isdst;});
     auto last_time = ptime();
     DSTRule::DSTRule last_rule;
+    using boost::gregorian::date;
+    using boost::posix_time::ptime;
+    using boost::posix_time::time_duration;
     for (auto txi = parser.transitions.begin();
 	 txi != parser.transitions.end(); ++txi)
     {
 	auto this_info = parser.tzinfo.begin() + txi->index;
-	auto this_time = boost::posix_time::from_time_t(txi->timestamp);
+//Can't use boost::posix_date::from_time_t() constructor because it
+//silently casts the time_t to an int32_t.
+	auto this_time = ptime(date(1970, 1, 1),
+			       time_duration(txi->timestamp / 3600, 0,
+					     txi->timestamp % 3600));
 	auto this_year = this_time.date().year();
 	//Initial case
 	if (last_time.is_not_a_date_time())
