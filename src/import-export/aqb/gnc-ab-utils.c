@@ -506,7 +506,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     else
         g_warning("transaction_cb: Oops, date 'valuta_date' was NULL");
 
-    xaccTransSetDateEnteredSecs(gnc_trans, gnc_time_utc (NULL));
+    xaccTransSetDateEnteredSecs(gnc_trans, gnc_time (NULL));
 
     /* Currency.  We take simply the default currency of the gnucash account */
     xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));

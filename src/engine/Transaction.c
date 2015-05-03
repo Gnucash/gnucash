@@ -1627,15 +1627,7 @@ xaccTransCommitEdit (Transaction *trans)
     /* Record the time of last modification */
     if (0 == trans->date_entered.tv_sec)
     {
-        struct timeval tv;
-#ifdef HAVE_GETTIMEOFDAY
-        gettimeofday (&tv, NULL);
-#else
-        time (&(tv.tv_sec));
-        tv.tv_usec = 0;
-#endif
-        trans->date_entered.tv_sec = tv.tv_sec;
-//        trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
+	trans->date_entered.tv_sec = gnc_time(NULL);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
     }
 

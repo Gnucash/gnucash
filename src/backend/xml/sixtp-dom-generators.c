@@ -127,21 +127,10 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
     return ret;
 }
 
-/* gnc_g_date_time_new_from_timespec_local normalizes the timespec,
- * but we want to serialize it un-normalized, so we make a partial
- * copy.
- */
-gchar *
+char *
 timespec_sec_to_string(const Timespec *ts)
 {
-     gchar *time_string;
-     GDateTime *gdt;
-     Timespec sts = { ts->tv_sec, 0};
-     gdt = gnc_g_date_time_new_from_timespec_local (sts);
-     g_return_val_if_fail (gdt != NULL, NULL);
-     time_string = g_date_time_format (gdt, "%Y-%m-%d %H:%M:%S %z");
-     g_date_time_unref (gdt);
-     return time_string;
+     return gnc_print_time64(ts->tv_sec, "%Y-%m-%d %H:%M:%S %q");
 }
 
 gchar *

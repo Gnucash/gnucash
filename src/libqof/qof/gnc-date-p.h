@@ -23,10 +23,15 @@
 
 #ifndef __GNC_DATE_P_H__
 #define __GNC_DATE_P_H__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
+#include <stdint.h>
 #include "gnc-date.h"
 
-#define NANOS_PER_SECOND 1000000000
+#define NANOS_PER_SECOND INT32_C(1000000000)
 
 /** Convert a given date/time format from UTF-8 to an encoding suitable for the
  *  strftime system call.
@@ -74,4 +79,7 @@ typedef struct
 
 Testfuncs *gnc_date_load_funcs (void);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __GNC_DATE_P_H__ */

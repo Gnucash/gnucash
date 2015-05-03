@@ -371,13 +371,16 @@ update to latest  darwin])
     ;;
   darwin*)
     platform=darwin
-    AC_DEFINE(PLATFORM_OSX,1,[Running on OSX, either X11 or Quartz])
+    AC_DEFINE(GNC_PLATFORM_OSX, 1,[Running on OSX, either X11 or Quartz])
+    AC_DEFINE(GNC_PLATFORM_POSIX, 1, [POSIX-compliant OS])
+    AC_DEFINE(GNC_PLATFORM_DARWIN, 1, [Darwin-based OS])
     AC_MSG_RESULT($platform)
     AC_MSG_CHECKING(For GDK-Quartz)
     platform=osx
     _gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
     if test "x$_gdk_tgt" = xquartz; then
       platform=darwin/quartz
+      AC_DEFINE(GNC_PLATFORM_COCOA, 1, [Cocoa/Nexstep/GnuStep framework])
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
       PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration-gtk2,
@@ -402,6 +405,7 @@ update to latest  darwin])
   mingw*|cygwin*)
     platform=win32
     AC_MSG_RESULT($platform)
+    AC_DEFINE(GNC_PLATFORM_WINDOWS, 1, [Microsoft Windows OS])
     LT_PROG_RC
 
     AC_MSG_CHECKING(for native win32)
@@ -443,6 +447,7 @@ update to latest  darwin])
 
   *)
     platform=linux/other
+    AC_DEFINE(GNC_PLATFORM_POSIX, 1, [POSIX-compliant OS])
     AC_MSG_RESULT($platform)
     ;;
 esac

@@ -1,9 +1,9 @@
 /********************************************************************\
- * gnc-date.c -- misc utility functions to handle date and time     *
- *         (to be renamed qofdate.c in libqof2)                     *
+ * gnc-date.cpp -- C interface for date and time                    *
  *                                                                  *
- * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
- * Copyright (C) 1998-2000, 2003 Linas Vepstas <linas@linas.org>    *
+ * Copyright 1997 Robin D. Clark <rclark@cs.hmc.edu>                *
+ * Copyright 1998-2000, 2003 Linas Vepstas <linas@linas.org>        *
+ * Copyright 2011-2015 John Ralls <jralls@ceridwen.us               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,46 +25,35 @@
 \********************************************************************/
 
 #define __EXTENSIONS__
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 #include "config.h"
 #include <glib.h>
-#include <glib/gprintf.h>
-/* to be renamed qofdate.c */
-#include <ctype.h>
-
-#ifdef HAVE_LANGINFO_D_FMT
-#  include <langinfo.h>
-#endif
-
-#include <stdio.h>
+#include <libintl.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
-#include <glib.h>
-#include <glib/gi18n.h>
-
-#include "gnc-date-p.h"
+#include "platform.h"
 #include "qof.h"
 
+#ifdef HAVE_LANGINFO_D_FMT
+# include <langinfo.h>
+#endif
 #ifndef HAVE_STRPTIME
-#include "strptime.h"
+#include <strptime.h>
 #endif
-#ifndef HAVE_LOCALTIME_R
-#include "localtime_r.h"
-#endif
-#include "platform.h"
-
 #ifdef G_OS_WIN32
 #  include <windows.h>
 #endif
-#ifdef __cplusplus
 }
-#endif
+
+#include "gnc-date.h"
+#include "gnc-date-p.h"
+#include "gnc-datetime.hpp"
+#include "gnc-timezone.hpp"
+#define BOOST_ERROR_CODE_HEADER_ONLY
+#include <boost/date_time/local_time/local_time.hpp>
+
+#define N_(string) string //So that xgettext will find it
 
 #ifdef HAVE_LANGINFO_D_FMT
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
@@ -101,151 +90,17 @@ static int dateCompletionBackMonths = 6;
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
-/* Getting a timezone is expensive, and we do it a lot. Cache the value. */
-static GTimeZone*
-gnc_g_time_zone_new_local (void)
-{
-    static GTimeZone* tz = NULL;
-    if (tz)
-        return tz;
-    tz = g_time_zone_new_local();
-    return tz;
-}
-
-static GDateTime*
-gnc_g_date_time_new_local (gint year, gint month, gint day, gint hour, gint minute, gdouble seconds)
-{
-    GTimeZone *tz = gnc_g_time_zone_new_local();
-    GDateTime *gdt = g_date_time_new (tz, year, month, day,
-				      hour, minute, seconds);
-    if (!gdt)
-	return gdt;
-    g_date_time_unref (gdt);
-/* g_date_time_new truncates nanoseconds to microseconds. Sometimes in
- * converting (particularly when parsing from a string) the
- * nanoseconds will have lost 1/2 a femtosecond or so. Adding 1/2 a
- * nano second ensures that the truncation doesn't lose a micorsecond
- * in translation.
- */
-    seconds += 5e-10;
-    gdt =  g_date_time_new (tz, year, month, day, hour, minute, seconds);
-    return gdt;
-}
-
-static GDateTime*
-gnc_g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
-{
-    GDateTime *ngdt;
-    g_return_val_if_fail (gdt != NULL, NULL);
-    ngdt = g_date_time_to_timezone (gdt, tz);
-    g_date_time_unref (gdt);
-    gdt = g_date_time_to_timezone (ngdt, tz);
-    g_date_time_unref (ngdt);
-    return gdt;
-}
-
-GDateTime*
-gnc_g_date_time_new_from_unix_local (time64 time)
-{
-    GTimeZone *tz = gnc_g_time_zone_new_local ();
-    GDateTime *gdt = g_date_time_new_from_unix_utc (time);
-    if (gdt)
-	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
-    return gdt;
-}
-
-static GDateTime*
-gnc_g_date_time_new_from_timeval_local (const GTimeVal* tv)
-{
-    GTimeZone *tz = gnc_g_time_zone_new_local ();
-    GDateTime *gdt = g_date_time_new_from_timeval_utc (tv);
-    if (gdt)
-	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
-    return gdt;
-}
-
-static GDateTime*
-gnc_g_date_time_new_now_local (void)
-{
-    GTimeZone *tz = gnc_g_time_zone_new_local ();
-    GDateTime *gdt = g_date_time_new_now_utc ();
-    if (gdt)
-	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
-    return gdt;
-
-}
-
-static GDateTime*
-gnc_g_date_time_to_local (GDateTime* gdt)
-{
-    GTimeZone *tz = NULL;
-    if (gdt)
-    {
-	tz = gnc_g_time_zone_new_local ();
-	gdt = gnc_g_date_time_adjust_for_dst (g_date_time_to_utc (gdt), tz);
-    }
-    return gdt;
-}
-
-typedef struct
-{
-    GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
-    GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
-    GDateTime *(*new_from_unix_local)(time64);
-    GDateTime *(*new_from_timeval_local)(const GTimeVal *);
-    GDateTime *(*new_now_local)(void);
-    GDateTime *(*to_local)(GDateTime *);
-} _GncDateTime;
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-void _gnc_date_time_init(_GncDateTime*);
-void
-_gnc_date_time_init (_GncDateTime *gncdt)
-{
-    gncdt->new_local = gnc_g_date_time_new_local;
-    gncdt->adjust_for_dst = gnc_g_date_time_adjust_for_dst;
-    gncdt->new_from_unix_local = gnc_g_date_time_new_from_unix_local;
-    gncdt->new_from_timeval_local = gnc_g_date_time_new_from_timeval_local;
-    gncdt->new_now_local = gnc_g_date_time_new_now_local;
-    gncdt->to_local = gnc_g_date_time_to_local;
-}
-
-#ifdef __cplusplus
-}
-#endif
-
 /****************** Posix Replacement Functions ***************************/
 void
 gnc_tm_free (struct tm* time)
 {
-     g_slice_free1 (sizeof (struct tm), time);
-}
-
-#define MAX_TZ_SIZE
-static void
-gnc_g_date_time_fill_struct_tm (GDateTime *gdt, struct tm* time)
-{
-     memset (time, 0, sizeof (struct tm));
-     g_date_time_get_ymd (gdt, &(time->tm_year), &(time->tm_mon), &(time->tm_mday));
-     time->tm_sec = g_date_time_get_second (gdt);
-     time->tm_min = g_date_time_get_minute (gdt);
-     time->tm_hour = g_date_time_get_hour (gdt);
-     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
-     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
-     time->tm_yday = g_date_time_get_day_of_year (gdt);
-     time->tm_isdst = g_date_time_is_daylight_savings (gdt);
-     time->tm_year -= 1900;
-     --time->tm_mon;
+    free(time);
 }
 
 struct tm*
 gnc_localtime (const time64 *secs)
 {
-    struct tm *time = static_cast<struct tm*>(g_slice_alloc0 (sizeof (struct tm)));
+    auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
     if (gnc_localtime_r (secs, time) == NULL)
     {
 	gnc_tm_free (time);
@@ -254,61 +109,42 @@ gnc_localtime (const time64 *secs)
     return time;
 }
 
-/* Linux, Darwin, and MSWindows implementations of this function set the
- * globals timezone and daylight; BSD doesn't have those globals, and
- * Gnucash never uses them, so they're omitted from this
- * implementation. Bug 704185.
- */
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
 {
-     GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
-     g_return_val_if_fail (gdt != NULL, NULL);
-
-     gnc_g_date_time_fill_struct_tm (gdt, time);
-     if (g_date_time_is_daylight_savings (gdt))
-          time->tm_isdst = 1;
-
-#ifdef HAVE_STRUCT_TM_GMTOFF
-     time->tm_gmtoff = g_date_time_get_utc_offset (gdt) / G_TIME_SPAN_SECOND;
-#endif
-
-     g_date_time_unref (gdt);
-     return time;
-}
-
-struct tm*
-gnc_gmtime (const time64 *secs)
-{
-     struct tm *time;
-     GDateTime *gdt = g_date_time_new_from_unix_utc (*secs);
-     g_return_val_if_fail (gdt != NULL, NULL);
-     time = static_cast<struct tm*>(g_slice_alloc0 (sizeof (struct tm)));
-     gnc_g_date_time_fill_struct_tm (gdt, time);
-     g_date_time_unref (gdt);
-     return time;
+    try
+    {
+	*time = static_cast<struct tm>(GncDateTime(*secs));
+	return time;
+    }
+    catch(std::invalid_argument)
+    {
+	return NULL;
+    }
 }
 
 static void
-normalize_time_component (gint *inner, gint *outer, guint divisor, gint base)
+normalize_time_component (int *inner, int *outer, unsigned int divisor,
+                          int base)
 {
      while (*inner < base)
      {
-	  --(*outer);
-	  *inner += divisor;
+          --(*outer);
+          *inner += divisor;
      }
      while (*inner > static_cast<gint>(divisor))
      {
-	  ++(*outer);
-	  *inner -= divisor;
+          ++(*outer);
+          *inner -= divisor;
      }
 }
 
-static gint
-normalize_month (gint month)
+static void
+normalize_month(int *month, int *year)
 {
-     month = (month % 12 + 12) % 12;
-     return month == 0 ? 12 : month;
+    ++(*month);
+    normalize_time_component(month, year, 12, 1);
+    --(*month);
 }
 
 static void
@@ -317,112 +153,96 @@ normalize_struct_tm (struct tm* time)
      gint year = time->tm_year + 1900;
      gint last_day;
 
-     ++time->tm_mon;
-     /* GDateTime doesn't protect itself against out-of range years,
-      * so clamp year into GDateTime's range.
+     /* Gregorian_date throws if it gets an out-of-range year
+      * so clamp year into gregorian_date's range.
       */
-     if (year < 0) year = -year;
+     if (year < 1400) year += 1400;
      if (year > 9999) year %= 10000;
 
      normalize_time_component (&(time->tm_sec), &(time->tm_min), 60, 0);
      normalize_time_component (&(time->tm_min), &(time->tm_hour), 60, 0);
      normalize_time_component (&(time->tm_hour), &(time->tm_mday), 24, 0);
-     normalize_time_component (&(time->tm_mon), &year, 12, 1);
+     normalize_month (&(time->tm_mon), &year);
+
+     // auto month_in_range = []int (int m){ return (m + 12) % 12; }
      while (time->tm_mday < 1)
      {
-	  last_day = gnc_date_get_last_mday (normalize_month (--time->tm_mon), year);
-	  time->tm_mday += last_day;
-	  normalize_time_component (&(time->tm_mon), &year, 12, 1);
+         normalize_month (&(--time->tm_mon), &year);
+         last_day = gnc_date_get_last_mday (time->tm_mon, year);
+         time->tm_mday += last_day;
      }
-     last_day = gnc_date_get_last_mday (normalize_month (time->tm_mon), year);
+     last_day = gnc_date_get_last_mday (time->tm_mon, year);
      while (time->tm_mday > last_day)
      {
-	  ++time->tm_mon;
-	  time->tm_mday -= last_day;
-	  normalize_time_component (&(time->tm_mon), &year, 12, 1);
-	  last_day = gnc_date_get_last_mday (normalize_month (time->tm_mon), year);
+          time->tm_mday -= last_day;
+          normalize_month(&(++time->tm_mon), &year);
+          last_day = gnc_date_get_last_mday (time->tm_mon, year);
      }
      time->tm_year = year - 1900;
+}
+
+struct tm*
+gnc_gmtime (const time64 *secs)
+{
+    try
+    {
+	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+	GncDateTime gncdt(*secs);
+	*time = gncdt.utc_tm();
+	return time;
+    }
+    catch(std::invalid_argument)
+    {
+	return NULL;
+    }
+
 }
 
 time64
 gnc_mktime (struct tm* time)
 {
-     GDateTime *gdt;
-     time64 secs;
-     normalize_struct_tm (time);
-     gdt = gnc_g_date_time_new_local (time->tm_year + 1900, time->tm_mon,
-				      time->tm_mday, time->tm_hour,
-				      time->tm_min, (gdouble)(time->tm_sec));
-     if (gdt == NULL)
-     {
-         g_warning("Invalid time passed to gnc_mktime");
-         return -1;
-     }
-     time->tm_mon = time->tm_mon > 0 ? time->tm_mon - 1 : 11;
-     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
-     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
-     time->tm_yday = g_date_time_get_day_of_year (gdt);
-     time->tm_isdst = g_date_time_is_daylight_savings (gdt);
-
-#ifdef HAVE_STRUCT_TM_GMTOFF
-     time->tm_gmtoff = g_date_time_get_utc_offset (gdt) / G_TIME_SPAN_SECOND;
-#endif
-
-     secs = g_date_time_to_unix (gdt);
-     g_date_time_unref (gdt);
-     return secs;
+    try
+    {
+	normalize_struct_tm (time);
+	GncDateTime gncdt(*time);
+	return static_cast<time64>(gncdt) - gncdt.offset();
+    }
+    catch(std::invalid_argument)
+    {
+	return 0;
+    }
 }
 
 time64
 gnc_timegm (struct tm* time)
 {
-     GDateTime *gdt;
-     time64 secs;
-     normalize_struct_tm (time);
-     gdt = g_date_time_new_utc (time->tm_year + 1900, time->tm_mon,
-				time->tm_mday, time->tm_hour, time->tm_min,
-				(gdouble)(time->tm_sec));
-     time->tm_mon = time->tm_mon > 0 ? time->tm_mon - 1 : 11;
-     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
-     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
-     time->tm_yday = g_date_time_get_day_of_year (gdt);
-     time->tm_isdst = g_date_time_is_daylight_savings (gdt);
+    try
+    {
+	normalize_struct_tm(time);
+	return static_cast<time64>(GncDateTime(*time));
+    }
+    catch(std::invalid_argument)
+    {
+	return 0;
+    }
 
-     secs = g_date_time_to_unix (gdt);
-     g_date_time_unref (gdt);
-     return secs;
 }
 
-gchar*
+char*
 gnc_ctime (const time64 *secs)
 {
-     GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
-     gchar *string = g_date_time_format (gdt, "%a %b %e %H:%M:%S %Y");
-     g_date_time_unref (gdt);
-     return string;
+    return gnc_print_time64(*secs, "%a %b %e %H:%M:%S %Y");
 }
 
 time64
 gnc_time (time64 *tbuf)
 {
-     GDateTime *gdt = gnc_g_date_time_new_now_local ();
-     time64 secs = g_date_time_to_unix (gdt);
-     g_date_time_unref (gdt);
-     if (tbuf != NULL)
-	  *tbuf = secs;
-     return secs;
-}
-
-time64
-gnc_time_utc (time64 *tbuf)
-{
-     GDateTime *gdt = g_date_time_new_now_utc ();
-     time64 secs = g_date_time_to_unix (gdt);
-     g_date_time_unref (gdt);
-     if (tbuf != NULL)
-	  *tbuf = secs;
-     return secs;
+    GncDateTime gncdt;
+    gncdt.now();
+    auto time = static_cast<time64>(gncdt);
+    if (tbuf != NULL)
+        *tbuf = time;
+    return time;
 }
 
 gdouble
@@ -433,17 +253,6 @@ gnc_difftime (const time64 secs1, const time64 secs2)
 
 /****************************************************************************/
 
-
-GDateTime*
-gnc_g_date_time_new_from_timespec_local (Timespec ts)
-{
-    GDateTime *gdt1 = gnc_g_date_time_new_from_unix_local (ts.tv_sec);
-    double nsecs = ((double)ts.tv_nsec + 0.5)/ 1000000000.0L;
-    GDateTime *gdt2 = g_date_time_add_seconds (gdt1, nsecs);
-    g_date_time_unref (gdt1);
-    g_assert (g_date_time_to_unix (gdt2) == ts.tv_sec + (nsecs >= 1.0 ? (gint64)nsecs : 0));
-    return gdt2;
-}
 
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
@@ -528,6 +337,18 @@ gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)
         return TRUE;
 
     return FALSE;
+}
+
+char*
+gnc_print_time64(time64 time, const char* format)
+{
+    GncDateTime gncdt(time);
+    auto sstr = gncdt.format(format);
+    //ugly C allocation so that the ptr can be freed at the other end
+    char* cstr = static_cast<char*>(malloc(sstr.length() + 1));
+    memset(cstr, 0, sstr.length() + 1);
+    strncpy(cstr, sstr.c_str(), sstr.length());
+    return cstr;
 }
 
 /********************************************************************\
@@ -652,10 +473,10 @@ int gnc_date_get_last_mday (int month, int year)
     };
 
     /* Is this a leap year? */
-    if (year % 2000 == 0) return last_day_of_month[1][month-1];
-    if (year % 400 == 0 ) return last_day_of_month[0][month-1];
-    if (year % 4   == 0 ) return last_day_of_month[1][month-1];
-    return last_day_of_month[0][month-1];
+    if (year % 2000 == 0) return last_day_of_month[1][month];
+    if (year % 400 == 0 ) return last_day_of_month[0][month];
+    if (year % 4   == 0 ) return last_day_of_month[1][month];
+    return last_day_of_month[0][month];
 }
 
 /* Safety function */
@@ -665,8 +486,8 @@ gnc_gdate_range_check (GDate *gd)
     int year;
     if (!g_date_valid (gd))
     {
-	g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
-	return;
+        g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
+        return;
     }
     year = g_date_get_year (gd);
     // Adjust the GDate to fit in the range of GDateTime.
@@ -858,7 +679,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard
-	 says, it's not a Y2K thing */
+         says, it's not a Y2K thing */
 
         gnc_tm_set_day_start (&tm_str);
         t = gnc_mktime (&tm_str);
@@ -889,7 +710,7 @@ qof_print_date_buff (char * buff, size_t len, time64 t)
     size_t actual;
     if (!buff) return 0 ;
     if (!gnc_localtime_r(&bt, &theTime))
-	return 0;
+        return 0;
 
     actual = qof_print_date_dmy_buff (buff, len,
                                     theTime.tm_mday,
@@ -988,7 +809,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     if (which_format == QOF_DATE_FORMAT_UTC)
     {
         if (strptime(buff, QOF_UTC_DATE_FORMAT, &utc)
-	    || strptime (buff, "%Y-%m-%d", &utc))
+            || strptime (buff, "%Y-%m-%d", &utc))
         {
             *day = utc.tm_mday;
             *month = utc.tm_mon + 1;
@@ -1412,10 +1233,7 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 gchar *
 gnc_date_timestamp (void)
 {
-    GDateTime *gdt = gnc_g_date_time_new_now_local ();
-    gchar *timestr = g_date_time_format (gdt, "%Y%m%d%H%M%S");
-    g_date_time_unref (gdt);
-    return timestr;
+    return gnc_print_time64(gnc_time(nullptr), "%Y%m%d%H%M%S");
 }
 
 /********************************************************************\
@@ -1427,40 +1245,19 @@ gnc_date_timestamp (void)
 
 #define ISO_DATE_FORMAT "%d-%d-%d %d:%d:%lf%s"
 Timespec
-gnc_iso8601_to_timespec_gmt(const char *str)
+gnc_iso8601_to_timespec_gmt(const char *cstr)
 {
-    Timespec time = { 0L, 0L };
-    GDateTime *gdt;
-    gint hour = 0, minute = 0, day = 0, month = 0, year = 0;
-    gchar zone[12];
-    gdouble second = 0.0;
-    gint fields;
-
-    memset (zone, 0, sizeof (zone));
-
-    if (!str)
-	return time;
-
-    fields = sscanf (str, ISO_DATE_FORMAT, &year, &month,
-			  &day, &hour, &minute, &second, zone);
-    if (fields < 1)
-	return time;
-    else if (fields > 6 && strlen (zone) > 0) /* Date string included a timezone */
+    time64 time;
+    if (!cstr) return {0, 0};
+    try
     {
-	GTimeZone *tz = g_time_zone_new (zone);
-	second += 5e-10;
-	gdt = g_date_time_new (tz, year, month, day, hour, minute, second);
+        GncDateTime gncdt(cstr);
+        return {static_cast<time64>(gncdt), 0};
     }
-    else /* No zone info, assume UTC */
+    catch(...)
     {
-	second += 5e-10;
-	gdt = g_date_time_new_utc (year, month, day, hour, minute, second);
+        return {0, 0};
     }
-
-    time.tv_sec = g_date_time_to_unix (gdt);
-    time.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
-    g_date_time_unref (gdt);
-    return time;
 }
 
 /********************************************************************\
@@ -1469,28 +1266,17 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
-    const gchar *fmt1 = "%Y-%m-%d %H:%M", *fmt2 = "%s:%02d.%06d %s";
-    GDateTime *gdt;
-    gchar *time_base, *tz;
+    constexpr size_t max_iso_date_length = 32;
+    const char* format = "%Y-%m-%d %H:%M:%s %q";
 
-    g_return_val_if_fail (buff != NULL, NULL);
-    gdt = gnc_g_date_time_new_from_timespec_local (ts);
-    g_return_val_if_fail (gdt != NULL, NULL);
-    time_base = g_date_time_format (gdt, fmt1);
-#ifdef G_OS_WIN32
-    tz = g_date_time_format (gdt, "%Z");
-#else
-    tz = g_date_time_format (gdt, "%z");
-#endif
-    snprintf (buff, MAX_DATE_LENGTH, fmt2, time_base,
-	      g_date_time_get_second (gdt), g_date_time_get_microsecond (gdt),
-	      tz);
+    if (! buff) return NULL;
 
-    g_free (time_base);
-    g_free (tz);
-    g_date_time_unref (gdt);
-    return buff + strlen (buff);
+    GncDateTime gncdt(ts.tv_sec);
+    auto sstr = gncdt.format(format);
 
+    memset(buff, 0, sstr.length() + 1);
+    strncpy(buff, sstr.c_str(), sstr.length());
+    return buff + sstr.length();
 }
 
 void
@@ -1614,16 +1400,13 @@ GDate timespec_to_gdate (Timespec ts)
 
 GDate* gnc_g_date_new_today ()
 {
-     GDateTime *gdt = gnc_g_date_time_new_now_local ();
-     gint day, month, year;
-     GDate *result;
-
-     g_date_time_get_ymd (gdt, &year, &month, &day);
-     result = g_date_new_dmy (day, static_cast<GDateMonth>(month), year);
-     g_date_time_unref (gdt);
-     g_assert(g_date_valid (result));
-
-     return result;
+    GncDate gncd;
+    gncd.today();
+    auto ymd = gncd.year_month_day();
+    auto month = static_cast<GDateMonth>(ymd.month);
+    auto result = g_date_new_dmy (ymd.day, month, ymd.year);
+    g_assert(g_date_valid (result));
+    return result;
 }
 
 Timespec gdate_to_timespec (GDate d)
@@ -1639,7 +1422,7 @@ gnc_tm_get_day_start (struct tm *tm, time64 time_val)
 {
     /* Get the equivalent time structure */
     if (!gnc_localtime_r(&time_val, tm))
-	return;
+        return;
     gnc_tm_set_day_start(tm);
 }
 
@@ -1648,7 +1431,7 @@ gnc_tm_get_day_end (struct tm *tm, time64 time_val)
 {
     /* Get the equivalent time structure */
     if (!gnc_localtime_r(&time_val, tm))
-	return;
+        return;
     gnc_tm_set_day_end(tm);
 }
 

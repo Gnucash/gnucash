@@ -109,7 +109,7 @@
         <slot>
           <slot:key>trans-retrieval</slot:key>
           <slot:value type="timespec">
-            <ts:date>2014-08-29 20:47:36 +0200</ts:date>
+            <ts:date>2014-08-29 13:47:36 +0200</ts:date>
           </slot:value>
         </slot>
       </slot:value>

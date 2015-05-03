@@ -1653,31 +1653,21 @@ static gchar *generate_statusbar_lastmodified_message()
                 int r = stat(filepath, &statbuf);
                 if (r == 0)
                 {
-                    // File mtime could be accessed ok
-                    gint64 mtime = statbuf.st_mtime;
-                    GDateTime *gdt = gnc_g_date_time_new_from_unix_local (mtime);
-                    gchar *dummy_strftime_has_ampm = g_date_time_format (gdt, "%P");
                     /* Translators: This is the date and time that is shown in
                     the status bar after opening a file: The date and time of
-                    last modification. The string is the format string for
-                    glib's function g_date_time_format(), see there for an
+                    last modification. The string is a format string using
+                    boost::date_time's format flags, see the boost docs for an
                     explanation of the modifiers. First string is for a locale
                     that has the a.m. or p.m. string in its locale, second
                     string is for locales that do not have that string. */
-                    gchar *time_string =
-                        g_date_time_format (gdt, (dummy_strftime_has_ampm &&
-						  strlen(dummy_strftime_has_ampm) > 0)
-                                            ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
-                                            : _("Last modified on %x %X"));
-
-                    g_date_time_unref (gdt);
-
+                    char *time_string =
+			gnc_print_time64(statbuf.st_mtime,
+					 _("Last modified on %a, %b %e, %Y at %I:%M%P"));
                     //g_warning("got time %ld, str=%s\n", mtime, time_string);
                     /* Translators: This message appears in the status bar after opening the file. */
                     message = g_strdup_printf(_("File %s opened. %s"),
                                               filename, time_string);
-                    g_free(time_string);
-                    g_free(dummy_strftime_has_ampm);
+                    free(time_string);
                 }
                 else
                 {

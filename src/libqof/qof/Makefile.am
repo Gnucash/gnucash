@@ -6,12 +6,12 @@ lib_LTLIBRARIES = libgnc-qof.la
 
 libgnc_qof_la_LDFLAGS= \
 	-version-info \
-	$(LIBQOF_LIBRARY_VERSION) \
-	$(BOOST_LDFLAGS)
+	$(LIBQOF_LIBRARY_VERSION)
 
 libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
+  $(BOOST_LDFLAGS) -lboost_date_time \
   $(top_builddir)/lib/libc/libc-missing.la
 
 libgnc_qof_la_LIBADD = $(libgnc_qof_common_libs)
@@ -27,6 +27,8 @@ libgnc_qof_la_SOURCES =  \
    gnc-int128.cpp      \
    gnc-numeric.cpp     \
    gnc-rational.cpp    \
+   gnc-timezone.cpp    \
+   gnc-datetime.cpp    \
    guid.cpp            \
    kvp-util.cpp        \
    kvp_frame.cpp       \
@@ -53,6 +55,8 @@ qofinclude_HEADERS = \
    gnc-date.h        \
    gnc-numeric.h     \
    gnc-rational.hpp  \
+   gnc-timezone.hpp  \
+   gnc-datetime.hpp  \
    guid.h            \
    kvp-util-p.h      \
    kvp-util.h        \

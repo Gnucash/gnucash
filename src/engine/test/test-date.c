@@ -325,7 +325,7 @@ run_test (void)
     check_time (ts, do_print);
 
     ts.tv_sec = 1162088421;
-    ts.tv_nsec = 12548000;
+    ts.tv_nsec = 0;
     check_time (ts, do_print);
 
     ts.tv_sec = 325659000 - 6500;
@@ -337,15 +337,15 @@ run_test (void)
     check_time (ts, do_print);
 
     ts.tv_sec = 1603591171;
-    ts.tv_nsec = 595311000;
+    ts.tv_nsec = 0;
     check_time (ts, do_print);
 
     ts.tv_sec = 1738909365;
-    ts.tv_nsec = 204102000;
+    ts.tv_nsec = 0;
     check_time (ts, do_print);
 
     ts.tv_sec = 1603591171;
-    ts.tv_nsec = 595311000;
+    ts.tv_nsec = 0;
     check_time (ts, do_print);
 
     ts.tv_sec = 1143943200 - 1;

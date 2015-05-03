@@ -2057,12 +2057,10 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 	if (G_VALUE_HOLDS_INT64 (val))
 	{
 	    gint64 time = g_value_get_int64 (val);
-	    GDateTime *gdt = g_date_time_new_from_unix_utc (time);
+	    Timespec ts = {time, 0};
+	    struct tm tm;
 	    gint day, month, year;
-	    GDate *date;
-	    g_date_time_get_ymd (gdt, &year, &month, &day);
-	    date = g_date_new_dmy (day, month, year);
-	    g_date_time_unref (gdt);
+	    GDate date = timespec_to_gdate(ts);
 	    if ( table_row->gobj_param_name != NULL )
 	    {
 		if (QOF_IS_INSTANCE (pObject))
@@ -2073,9 +2071,8 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 	    }
 	    else
 	    {
-		(*setter)( pObject, date );
+		(*setter)( pObject, &date );
 	    }
-	    g_date_free( date );
 	}
         else if ( G_VALUE_HOLDS_STRING( val ) )
         {
