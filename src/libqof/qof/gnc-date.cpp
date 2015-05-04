@@ -479,29 +479,11 @@ int gnc_date_get_last_mday (int month, int year)
     return last_day_of_month[0][month];
 }
 
-
-/* Return the set dateFormat.
-
-return QofDateFormat: enumeration indicating preferred format
-
-Global: dateFormat
-*/
 QofDateFormat qof_date_format_get (void)
 {
     return dateFormat;
 }
 
-/* set date format
-
-set date format to one of US, UK, CE, ISO OR UTC
-checks to make sure it's a legal value
-
-param QofDateFormat: enumeration indicating preferred format
-
-return void
-
-Globals: dateFormat
-*/
 void qof_date_format_set(QofDateFormat df)
 {
     if (df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
@@ -590,15 +572,6 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
     return GNC_D_FMT;
 }
 
-/* get the date format string for the current format
-
-get the date format string for the current format
-
-param df Required date format.
-return string
-
-Globals: dateFormat
-*/
 const gchar *qof_date_text_format_get_string(QofDateFormat df)
 {
     switch (df)
@@ -619,21 +592,6 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
     return GNC_D_FMT;
 }
 
-/* Convert day, month and year values to a date string
-
-  Convert a date as day / month / year integers into a localized string
-  representation
-
-param   buff - pointer to previously allocated character array; its size
-         must be at lease MAX_DATE_LENTH bytes.
-param   day - value to be set with the day of the month as 1 ... 31
-param   month - value to be set with the month of the year as 1 ... 12
-param   year - value to be set with the year (4-digit)
-
-return length of string created in buff.
-
-Globals: global dateFormat value
-*/
 size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
