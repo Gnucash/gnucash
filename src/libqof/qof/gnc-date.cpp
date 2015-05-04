@@ -556,11 +556,11 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
     switch (df)
     {
     case QOF_DATE_FORMAT_US:
-        return "%m/%d/%y";
+        return "%m/%d/%Y";
     case QOF_DATE_FORMAT_UK:
-        return "%d/%m/%y";
+        return "%d/%m/%Y";
     case QOF_DATE_FORMAT_CE:
-        return "%d.%m.%y";
+        return "%d.%m.%Y";
     case QOF_DATE_FORMAT_UTC:
         return "%Y-%m-%dT%H:%M:%SZ";
     case QOF_DATE_FORMAT_ISO:
@@ -577,10 +577,10 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
     switch (df)
     {
     case QOF_DATE_FORMAT_US:
-        return "%b %d, %y";
+        return "%b %d, %Y";
     case QOF_DATE_FORMAT_UK:
     case QOF_DATE_FORMAT_CE:
-        return "%d %b, %y";
+        return "%d %b %Y";
     case QOF_DATE_FORMAT_UTC:
         return "%Y-%m-%dT%H:%M:%SZ";
     case QOF_DATE_FORMAT_ISO:
@@ -595,71 +595,27 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
 size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
-    int flen;
     if (!buff) return 0;
 
-    /* Note that when printing year, we use %-4d in format string;
-     * this causes a one, two or three-digit year to be left-adjusted
-     * when printed (i.e. padded with blanks on the right).  This is
-     * important while the user is editing the year, since erasing a
-     * digit can temporarily cause a three-digit year, and having the
-     * blank on the left is a real pain for the user.  So pad on the
-     * right.
-     */
-    switch (dateFormat)
-    {
-    case QOF_DATE_FORMAT_UK:
-        flen = g_snprintf (buff, len, "%02d/%02d/%-4d", day, month, year);
-        break;
-    case QOF_DATE_FORMAT_CE:
-        flen = g_snprintf (buff, len, "%02d.%02d.%-4d", day, month, year);
-        break;
-    case QOF_DATE_FORMAT_LOCALE:
-    {
-        struct tm tm_str;
-        time64 t;
-
-        tm_str.tm_mday = day;
-        tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
-        tm_str.tm_year = year - 1900; /* this is what the standard
-         says, it's not a Y2K thing */
-
-        gnc_tm_set_day_start (&tm_str);
-        t = gnc_mktime (&tm_str);
-        gnc_localtime_r (&t, &tm_str);
-        flen = qof_strftime (buff, len, GNC_D_FMT, &tm_str);
-        if (flen != 0)
-            break;
-    }
-    /* FALL THROUGH */
-    case QOF_DATE_FORMAT_ISO:
-    case QOF_DATE_FORMAT_UTC:
-        flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
-        break;
-    case QOF_DATE_FORMAT_US:
-    default:
-        flen = g_snprintf (buff, len, "%02d/%02d/%-4d", month, day, year);
-        break;
-    }
-
-    return flen;
+    GncDate date(year, month, day);
+    std::string str = date.format(qof_date_format_get_string(dateFormat));
+    strncpy(buff, str.c_str(), len);
+    if (str.length() >= len)
+	buff[len - 1] = '\0';
+    return strlen(buff);
 }
 
 size_t
 qof_print_date_buff (char * buff, size_t len, time64 t)
 {
-    struct tm theTime;
-    time64 bt = t;
-    size_t actual;
-    if (!buff) return 0 ;
-    if (!gnc_localtime_r(&bt, &theTime))
-        return 0;
+    if (!buff) return 0;
 
-    actual = qof_print_date_dmy_buff (buff, len,
-                                    theTime.tm_mday,
-                                    theTime.tm_mon + 1,
-                                    theTime.tm_year + 1900);
-    return actual;
+    GncDateTime gncdt(t);
+    std::string str = gncdt.format(qof_date_format_get_string(dateFormat));
+    strncpy(buff, str.c_str(), len);
+    if (str.length() >= len)
+	buff[len - 1] = '\0';
+    return strlen(buff);
 }
 
 size_t
