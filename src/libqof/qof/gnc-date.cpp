@@ -479,22 +479,7 @@ int gnc_date_get_last_mday (int month, int year)
     return last_day_of_month[0][month];
 }
 
-/* Safety function */
-static void
-gnc_gdate_range_check (GDate *gd)
-{
-    int year;
-    if (!g_date_valid (gd))
-    {
-        g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
-        return;
-    }
-    year = g_date_get_year (gd);
-    // Adjust the GDate to fit in the range of GDateTime.
-    year = (year < 1 ? 1 : year > 9999 ? 9999 : year);
-    g_date_set_year (gd, year);
-    return;
-}
+
 /* Return the set dateFormat.
 
 return QofDateFormat: enumeration indicating preferred format
@@ -725,7 +710,6 @@ qof_print_gdate( char *buf, size_t len, const GDate *gd )
     GDate date;
     g_date_clear (&date, 1);
     date = *gd;
-    gnc_gdate_range_check (&date);
     return qof_print_date_dmy_buff( buf, len,
                                     g_date_get_day(&date),
                                     g_date_get_month(&date),
@@ -1411,7 +1395,6 @@ GDate* gnc_g_date_new_today ()
 
 Timespec gdate_to_timespec (GDate d)
 {
-    gnc_gdate_range_check (&d);
     return gnc_dmy2timespec(g_date_get_day(&d),
                             g_date_get_month(&d),
                             g_date_get_year(&d));
