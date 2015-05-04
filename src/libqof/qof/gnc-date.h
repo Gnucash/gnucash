@@ -385,19 +385,6 @@ gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
  */
 void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
-/** The gnc_timezone function returns the number of seconds *west*
- * of UTC represented by the tm argument, adjusted for daylight
- * savings time.
- *
- * This function requires a tm argument returned by localtime or set
- * by mktime. This is a strange function! It requires that localtime
- * or mktime be called before use. Subsequent calls to localtime or
- * mktime *may* invalidate the result! The actual contents of tm *may*
- * be used for both timezone offset and daylight savings time, or only
- * daylight savings time! Timezone stuff under unix is not
- * standardized and is a big mess.
- */
-glong gnc_timezone (const struct tm *tm);
 // @}
 
 /* ------------------------------------------------------------------------ */
