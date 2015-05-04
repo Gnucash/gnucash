@@ -69,6 +69,15 @@ public:/** Construct a GncDate representing the current day.
     @return ymd struct
  */
     ymd year_month_day() const;
+/** Format the GncDate into a std::string
+ *  @param format: A cstr describing the way the date and time are
+ *  presented. Code letters preceded with % stand in for arguments;
+ *  most are the same as described in strftime(3), but there are a few
+ *  differences. Consult the boost::date_time documentation.
+ *  @return a std::string containing a representation of the date
+ *  according to the format.
+ */
+    std::string format(const char* format);
 /** Test that the Date has an implementation. */
     bool isnull (void) { return m_impl == nullptr; }
 
@@ -83,7 +92,7 @@ private:
  * between 1400 and 9999 CE.
  *
  * Be careful when using times: A particular time is represented
- * differently depending on the timezone, which can shif the displayed
+ * differently depending on the timezone, which can shift the displayed
  * date. Accounting is generally not sensitive to the time of day, but
  * is sensitive to the recorded day. Since GncDates are not timezone
  * dependent they should be preferred for accounting entries.
@@ -110,7 +119,7 @@ public:
  * @exception std::invalid_argument if the year is outside the constraints.
  */
     GncDateTime(const struct tm tm);
-/** Construct a GncDateTime 
+/** Construct a GncDateTime
  * @param str: A string representing the date and time in some
  * recognizable format. Note that if a timezone is not specified the
  * default is UTC, not the local one.
@@ -142,11 +151,12 @@ public:
 /** Test if the GncDateTime has a member pointer. Testing only. */
     bool isnull (void) { return m_impl == nullptr; }
 /** Format the GncDateTime into a std::string
-
+ *  @param format: A cstr describing the way the date and time are
+ *  presented. Code letters preceded with % stand in for arguments;
+ *  most are the same as described in strftime(3), but there are a few
+ *  differences. Consult the boost::date_time documentation.
  *  @return a std::string containing a representation of the date
- *  according to the format. Consult the boost::date_time
- *  documentation for format characters; while they mostly compy with
- *  POSIX there are a few differences.
+ *  according to the format.
  */
     std::string format(const char* format) const;
 

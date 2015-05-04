@@ -71,6 +71,8 @@ AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 # Ensure the compiler supports C++ 11:
 AX_CXX_COMPILE_STDCXX_11(ext)
+# We require C99 for the C parts:
+AC_PROG_CC_C99
 
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
@@ -877,8 +879,9 @@ if test x$enable_google_test = xyes; then
 	 elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
 	    ac_cv_gmock_src_path="/usr/src/gmock"
 	 else
-	    ac_cv_gmock_root=""
+	    ac_cv_gmock_src_path=""
 	 fi
+	 ac_cv_gmock_root="$ac_cv_gmock_src_path"
       else
          ac_cv_gmock_root=""
       fi

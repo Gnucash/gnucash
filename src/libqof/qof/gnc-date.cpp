@@ -479,44 +479,11 @@ int gnc_date_get_last_mday (int month, int year)
     return last_day_of_month[0][month];
 }
 
-/* Safety function */
-static void
-gnc_gdate_range_check (GDate *gd)
-{
-    int year;
-    if (!g_date_valid (gd))
-    {
-        g_date_set_dmy (gd, 1, G_DATE_JANUARY, 1970);
-        return;
-    }
-    year = g_date_get_year (gd);
-    // Adjust the GDate to fit in the range of GDateTime.
-    year = (year < 1 ? 1 : year > 9999 ? 9999 : year);
-    g_date_set_year (gd, year);
-    return;
-}
-/* Return the set dateFormat.
-
-return QofDateFormat: enumeration indicating preferred format
-
-Global: dateFormat
-*/
 QofDateFormat qof_date_format_get (void)
 {
     return dateFormat;
 }
 
-/* set date format
-
-set date format to one of US, UK, CE, ISO OR UTC
-checks to make sure it's a legal value
-
-param QofDateFormat: enumeration indicating preferred format
-
-return void
-
-Globals: dateFormat
-*/
 void qof_date_format_set(QofDateFormat df)
 {
     if (df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
@@ -589,11 +556,11 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
     switch (df)
     {
     case QOF_DATE_FORMAT_US:
-        return "%m/%d/%y";
+        return "%m/%d/%Y";
     case QOF_DATE_FORMAT_UK:
-        return "%d/%m/%y";
+        return "%d/%m/%Y";
     case QOF_DATE_FORMAT_CE:
-        return "%d.%m.%y";
+        return "%d.%m.%Y";
     case QOF_DATE_FORMAT_UTC:
         return "%Y-%m-%dT%H:%M:%SZ";
     case QOF_DATE_FORMAT_ISO:
@@ -605,24 +572,15 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
     return GNC_D_FMT;
 }
 
-/* get the date format string for the current format
-
-get the date format string for the current format
-
-param df Required date format.
-return string
-
-Globals: dateFormat
-*/
 const gchar *qof_date_text_format_get_string(QofDateFormat df)
 {
     switch (df)
     {
     case QOF_DATE_FORMAT_US:
-        return "%b %d, %y";
+        return "%b %d, %Y";
     case QOF_DATE_FORMAT_UK:
     case QOF_DATE_FORMAT_CE:
-        return "%d %b, %y";
+        return "%d %b %Y";
     case QOF_DATE_FORMAT_UTC:
         return "%Y-%m-%dT%H:%M:%SZ";
     case QOF_DATE_FORMAT_ISO:
@@ -634,89 +592,30 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
     return GNC_D_FMT;
 }
 
-/* Convert day, month and year values to a date string
-
-  Convert a date as day / month / year integers into a localized string
-  representation
-
-param   buff - pointer to previously allocated character array; its size
-         must be at lease MAX_DATE_LENTH bytes.
-param   day - value to be set with the day of the month as 1 ... 31
-param   month - value to be set with the month of the year as 1 ... 12
-param   year - value to be set with the year (4-digit)
-
-return length of string created in buff.
-
-Globals: global dateFormat value
-*/
 size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
-    int flen;
     if (!buff) return 0;
 
-    /* Note that when printing year, we use %-4d in format string;
-     * this causes a one, two or three-digit year to be left-adjusted
-     * when printed (i.e. padded with blanks on the right).  This is
-     * important while the user is editing the year, since erasing a
-     * digit can temporarily cause a three-digit year, and having the
-     * blank on the left is a real pain for the user.  So pad on the
-     * right.
-     */
-    switch (dateFormat)
-    {
-    case QOF_DATE_FORMAT_UK:
-        flen = g_snprintf (buff, len, "%02d/%02d/%-4d", day, month, year);
-        break;
-    case QOF_DATE_FORMAT_CE:
-        flen = g_snprintf (buff, len, "%02d.%02d.%-4d", day, month, year);
-        break;
-    case QOF_DATE_FORMAT_LOCALE:
-    {
-        struct tm tm_str;
-        time64 t;
-
-        tm_str.tm_mday = day;
-        tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
-        tm_str.tm_year = year - 1900; /* this is what the standard
-         says, it's not a Y2K thing */
-
-        gnc_tm_set_day_start (&tm_str);
-        t = gnc_mktime (&tm_str);
-        gnc_localtime_r (&t, &tm_str);
-        flen = qof_strftime (buff, len, GNC_D_FMT, &tm_str);
-        if (flen != 0)
-            break;
-    }
-    /* FALL THROUGH */
-    case QOF_DATE_FORMAT_ISO:
-    case QOF_DATE_FORMAT_UTC:
-        flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
-        break;
-    case QOF_DATE_FORMAT_US:
-    default:
-        flen = g_snprintf (buff, len, "%02d/%02d/%-4d", month, day, year);
-        break;
-    }
-
-    return flen;
+    GncDate date(year, month, day);
+    std::string str = date.format(qof_date_format_get_string(dateFormat));
+    strncpy(buff, str.c_str(), len);
+    if (str.length() >= len)
+	buff[len - 1] = '\0';
+    return strlen(buff);
 }
 
 size_t
 qof_print_date_buff (char * buff, size_t len, time64 t)
 {
-    struct tm theTime;
-    time64 bt = t;
-    size_t actual;
-    if (!buff) return 0 ;
-    if (!gnc_localtime_r(&bt, &theTime))
-        return 0;
+    if (!buff) return 0;
 
-    actual = qof_print_date_dmy_buff (buff, len,
-                                    theTime.tm_mday,
-                                    theTime.tm_mon + 1,
-                                    theTime.tm_year + 1900);
-    return actual;
+    GncDateTime gncdt(t);
+    std::string str = gncdt.format(qof_date_format_get_string(dateFormat));
+    strncpy(buff, str.c_str(), len);
+    if (str.length() >= len)
+	buff[len - 1] = '\0';
+    return strlen(buff);
 }
 
 size_t
@@ -725,7 +624,6 @@ qof_print_gdate( char *buf, size_t len, const GDate *gd )
     GDate date;
     g_date_clear (&date, 1);
     date = *gd;
-    gnc_gdate_range_check (&date);
     return qof_print_date_dmy_buff( buf, len,
                                     g_date_get_day(&date),
                                     g_date_get_month(&date),
@@ -1332,33 +1230,6 @@ gnc_dmy2timespec_end (int day, int month, int year)
 
 /********************************************************************\
 \********************************************************************/
-
-long int
-gnc_timezone (const struct tm *tm)
-{
-    g_return_val_if_fail (tm != NULL, 0);
-
-#ifdef HAVE_STRUCT_TM_GMTOFF
-    /* tm_gmtoff is seconds *east* of UTC and is
-     * already adjusted for daylight savings time. */
-    return -(tm->tm_gmtoff);
-#else
-    {
-        long tz_seconds;
-        /* timezone is seconds *west* of UTC and is
-         * not adjusted for daylight savings time.
-         * In Spring, we spring forward, wheee! */
-# if COMPILER(MSVC)
-        _get_timezone(&tz_seconds);
-# else
-        tz_seconds = timezone;
-# endif
-        return (long int)(tz_seconds - (tm->tm_isdst > 0 ? 3600 : 0));
-    }
-#endif
-}
-
-
 void
 timespecFromTime64 ( Timespec *ts, time64 t )
 {
@@ -1411,7 +1282,6 @@ GDate* gnc_g_date_new_today ()
 
 Timespec gdate_to_timespec (GDate d)
 {
-    gnc_gdate_range_check (&d);
     return gnc_dmy2timespec(g_date_get_day(&d),
                             g_date_get_month(&d),
                             g_date_get_year(&d));

@@ -65,6 +65,7 @@ public:
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
     ymd year_month_day() const;
+    std::string format(const char* format) const;
 private:
     Date m_greg;
 };
@@ -74,6 +75,18 @@ GncDateImpl::year_month_day() const
 {
     auto boost_ymd = m_greg.year_month_day();
     return {boost_ymd.year, boost_ymd.month.as_number(), boost_ymd.day};
+}
+
+std::string
+GncDateImpl::format(const char* format) const
+{
+    using Facet = boost::gregorian::date_facet;
+    std::stringstream ss;
+    //The stream destructor frees the facet, so it must be heap-allocated.
+    auto output_facet(new Facet(format));
+    ss.imbue(std::locale(std::locale(), output_facet));
+    ss << m_greg;
+    return ss.str();
 }
 
 /** Private implementation of GncDateTime. See the documentation for that class.
@@ -211,6 +224,7 @@ GncDateTimeImpl::format(const char* format) const
 }
 
 /* =================== Presentation-class Implementations ====================*/
+/* GncDate */
 GncDate::GncDate() : m_impl{new GncDateImpl} {}
 GncDate::GncDate(int year, int month, int day) :
     m_impl(new GncDateImpl(year, month, day)) {}
@@ -228,11 +242,19 @@ GncDate::today()
     m_impl->today();
 }
 
+std::string
+GncDate::format(const char* format)
+{
+    return m_impl->format(format);
+}
+
 ymd
 GncDate::year_month_day() const
 {
     return m_impl->year_month_day();
 }
+
+/* GncDateTime */
 
 GncDateTime::GncDateTime() : m_impl(new GncDateTimeImpl) {}
 GncDateTime::GncDateTime(const time64 time) :
