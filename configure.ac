@@ -879,8 +879,9 @@ if test x$enable_google_test = xyes; then
 	 elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
 	    ac_cv_gmock_src_path="/usr/src/gmock"
 	 else
-	    ac_cv_gmock_root=""
+	    ac_cv_gmock_src_path=""
 	 fi
+	 ac_cv_gmock_root="$ac_cv_gmock_src_path"
       else
          ac_cv_gmock_root=""
       fi
