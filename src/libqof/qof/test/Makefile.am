@@ -51,7 +51,7 @@ test_kvp_value_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
 
 test_kvp_value_CPPFLAGS = \
-    $(GTEST_HEADERS) \
+    -I$(GTEST_HEADERS) \
     -I$(top_srcdir)/$(MODULEPATH) \
     $(GLIB_CFLAGS) \
     $(BOOST_CPPFLAGS)
