@@ -358,6 +358,7 @@ namespace IANAParser
 	TZHead tzh = *reinterpret_cast<TZHead*>(&fileblock[fb_index]);
 	static constexpr int ttinfo_size = 6; //struct TTInfo gets padded
 	last_year = 2037; //Constrained by 32-bit time_t.
+	int transition_size = 4; // length of a transition time in the file
 
 	auto time_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.timecnt)));
 	auto type_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.typecnt)));
@@ -385,17 +386,27 @@ namespace IANAParser
 	    isgmt_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.ttisgmtcnt)));
 	    isstd_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.ttisstdcnt)));
 	    leap_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.leapcnt)));
+	    transition_size = 8;
 	}
 	fb_index += sizeof(tzh);
 	auto start_index = fb_index;
-	auto info_index_zero = start_index + time_count * sizeof(time_t);
+	auto info_index_zero = start_index + time_count * transition_size;
 	for(uint32_t index = 0; index < time_count; ++index)
 	{
-	    fb_index = start_index + index * sizeof(time_t);
+	    fb_index = start_index + index * transition_size;
 	    auto info_index = info_index_zero + index;
-	    transitions.push_back(
-		{*(endian_swap(reinterpret_cast<time_t*>(&fileblock[fb_index]))),
-			static_cast<uint8_t>(fileblock[info_index])});
+	    if (transition_size  == 4)
+	    {
+		transitions.push_back(
+		    {*(endian_swap(reinterpret_cast<int32_t*>(&fileblock[fb_index]))),
+			    static_cast<uint8_t>(fileblock[info_index])});
+	    }
+	    else
+	    {
+		transitions.push_back(
+		    {*(endian_swap(reinterpret_cast<int64_t*>(&fileblock[fb_index]))),
+			    static_cast<uint8_t>(fileblock[info_index])});
+	    }
 	}
 
 	//Add in the tzinfo indexes consumed in the previous loop
