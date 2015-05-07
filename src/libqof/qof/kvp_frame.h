@@ -95,14 +95,15 @@ typedef enum
     KVP_TYPE_INVALID = -1,
     KVP_TYPE_GINT64 = 1, /**< QOF_TYPE_INT64  gint64 */
     KVP_TYPE_DOUBLE,     /**< QOF_TYPE_DOUBLE  gdouble */
+    KVP_TYPE_BOOLEAN,    /**< QOF_TYPE_BOOLEAN gboolean */
     KVP_TYPE_NUMERIC,    /**< QOF_TYPE_NUMERIC */
     KVP_TYPE_STRING,     /**< QOF_TYPE_STRING gchar* */
     KVP_TYPE_GUID,       /**< QOF_TYPE_GUID */
     KVP_TYPE_TIMESPEC,   /**< QOF_TYPE_DATE */
     KVP_TYPE_PLACEHOLDER_DONT_USE, /* Replaces KVP_TYPE_BINARY */
     KVP_TYPE_GLIST,      /**< no QOF equivalent. */
-    KVP_TYPE_FRAME       /**< no QOF equivalent. */
-    , KVP_TYPE_GDATE       /**< no QOF equivalent. */
+    KVP_TYPE_FRAME,       /**< no QOF equivalent. */
+    KVP_TYPE_GDATE       /**< no QOF equivalent. */
 } KvpValueType;
 
 /** \deprecated Deprecated backwards compat token

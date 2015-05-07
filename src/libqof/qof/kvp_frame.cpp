@@ -933,6 +933,13 @@ kvp_value_new_double(double value)
 }
 
 KvpValue *
+kvp_value_new_boolean(gboolean value)
+{
+    if (!value) return {};
+    return new KvpValueImpl{g_strdup("true")};
+}
+
+KvpValue *
 kvp_value_new_numeric(gnc_numeric value)
 {
     return new KvpValueImpl{value};
@@ -1022,6 +1029,15 @@ kvp_value_get_double(const KvpValue * ovalue)
     if (!ovalue) return {};
     const KvpValueImpl * value {static_cast<const KvpValueImpl *>(ovalue)};
     return value->get<double>();
+}
+
+bool
+kvp_value_get_boolean (const KvpValue *ovalue)
+{
+    if (!ovalue) return {};
+    const KvpValueImpl *value {static_cast<const KvpValueImpl*>(ovalue)};
+    const char* str = value->get<char*>();
+    return str && strcmp(str, "true") == 0;
 }
 
 gnc_numeric
@@ -1186,7 +1202,7 @@ gvalue_list_from_kvp_value (KvpValue *kval, gpointer pList)
     GValue *gval = gvalue_from_kvp_value (kval);
     gvlist =  (GList**)pList;
     if (G_VALUE_TYPE (gval))
-	*gvlist = g_list_prepend (*gvlist, gval);
+        *gvlist = g_list_prepend (*gvlist, gval);
 }
 
 static void
@@ -1195,7 +1211,7 @@ kvp_value_list_from_gvalue (GValue *gval, gpointer pList)
     GList **kvplist = (GList**)pList;
     KvpValue *kvp;
     if (!(gval && G_VALUE_TYPE (gval)))
-	return;
+        return;
     kvp = kvp_value_from_gvalue (gval);
     *kvplist = g_list_prepend (*kvplist, kvp);
 }
@@ -1213,55 +1229,59 @@ gvalue_from_kvp_value (KvpValue *kval)
 
     switch (kvp_value_get_type(kval))
     {
-	case KVP_TYPE_GINT64:
-	    g_value_init (val, G_TYPE_INT64);
-	    g_value_set_int64 (val, kvp_value_get_gint64 (kval));
-	    break;
-	case KVP_TYPE_DOUBLE:
-	    g_value_init (val, G_TYPE_DOUBLE);
-	    g_value_set_double (val, kvp_value_get_double (kval));
-	    break;
-	case KVP_TYPE_NUMERIC:
-	    g_value_init (val, GNC_TYPE_NUMERIC);
-	    num = kvp_value_get_numeric (kval);
-	    g_value_set_boxed (val, &num);
-	    break;
-	case KVP_TYPE_STRING:
-	    g_value_init (val, G_TYPE_STRING);
-	    g_value_set_string (val, kvp_value_get_string (kval));
-	    break;
-	case KVP_TYPE_GUID:
-	    g_value_init (val, GNC_TYPE_GUID);
-	    g_value_set_boxed (val, kvp_value_get_guid (kval));
-	    break;
-	case KVP_TYPE_TIMESPEC:
-	    g_value_init (val, GNC_TYPE_TIMESPEC);
-	    tm = kvp_value_get_timespec (kval);
-	    g_value_set_boxed (val, &tm);
-	    break;
-	case KVP_TYPE_GDATE:
-	    g_value_init (val, G_TYPE_DATE);
-	    gdate = kvp_value_get_gdate (kval);
-	    g_value_set_boxed (val, &gdate);
-	    break;
-	case KVP_TYPE_GLIST:
-	{
-	    GList *gvalue_list = NULL;
-	    GList *kvp_list = kvp_value_get_glist (kval);
-	    g_list_foreach (kvp_list, (GFunc)gvalue_list_from_kvp_value, &gvalue_list);
-	    g_value_init (val, GNC_TYPE_VALUE_LIST);
-	    gvalue_list = g_list_reverse (gvalue_list);
-	    g_value_set_boxed (val, gvalue_list);
-	    break;
-	}
+        case KVP_TYPE_GINT64:
+            g_value_init (val, G_TYPE_INT64);
+            g_value_set_int64 (val, kvp_value_get_gint64 (kval));
+            break;
+        case KVP_TYPE_DOUBLE:
+            g_value_init (val, G_TYPE_DOUBLE);
+            g_value_set_double (val, kvp_value_get_double (kval));
+            break;
+        case KVP_TYPE_BOOLEAN:
+            g_value_init (val, G_TYPE_BOOLEAN);
+            g_value_set_boolean (val, kvp_value_get_boolean (kval));
+            break;
+        case KVP_TYPE_NUMERIC:
+            g_value_init (val, GNC_TYPE_NUMERIC);
+            num = kvp_value_get_numeric (kval);
+            g_value_set_boxed (val, &num);
+            break;
+        case KVP_TYPE_STRING:
+            g_value_init (val, G_TYPE_STRING);
+            g_value_set_string (val, kvp_value_get_string (kval));
+            break;
+        case KVP_TYPE_GUID:
+            g_value_init (val, GNC_TYPE_GUID);
+            g_value_set_boxed (val, kvp_value_get_guid (kval));
+            break;
+        case KVP_TYPE_TIMESPEC:
+            g_value_init (val, GNC_TYPE_TIMESPEC);
+            tm = kvp_value_get_timespec (kval);
+            g_value_set_boxed (val, &tm);
+            break;
+        case KVP_TYPE_GDATE:
+            g_value_init (val, G_TYPE_DATE);
+            gdate = kvp_value_get_gdate (kval);
+            g_value_set_boxed (val, &gdate);
+            break;
+        case KVP_TYPE_GLIST:
+        {
+            GList *gvalue_list = NULL;
+            GList *kvp_list = kvp_value_get_glist (kval);
+            g_list_foreach (kvp_list, (GFunc)gvalue_list_from_kvp_value, &gvalue_list);
+            g_value_init (val, GNC_TYPE_VALUE_LIST);
+            gvalue_list = g_list_reverse (gvalue_list);
+            g_value_set_boxed (val, gvalue_list);
+            break;
+        }
 /* No transfer of KVP frames outside of QofInstance-derived classes! */
-	case KVP_TYPE_FRAME:
-	    PWARN ("Error! Attempt to transfer KvpFrame!");
-	default:
-	    PWARN ("Error! Invalid KVP Transfer Request!");
-	    g_slice_free (GValue, val);
-	    val = NULL;
-	    break;
+        case KVP_TYPE_FRAME:
+            PWARN ("Error! Attempt to transfer KvpFrame!");
+        default:
+            PWARN ("Error! Invalid KVP Transfer Request!");
+            g_slice_free (GValue, val);
+            val = NULL;
+            break;
     }
     return val;
 }
@@ -1270,36 +1290,41 @@ KvpValue*
 kvp_value_from_gvalue (const GValue *gval)
 {
     KvpValue *val = NULL;
-    GType type = G_VALUE_TYPE (gval);
+    GType type;
+    if (gval == NULL)
+        return NULL;
+    type = G_VALUE_TYPE (gval);
     g_return_val_if_fail (G_VALUE_TYPE (gval), NULL);
 
     if (type == G_TYPE_INT64)
-	val = kvp_value_new_gint64 (g_value_get_int64 (gval));
+        val = kvp_value_new_gint64 (g_value_get_int64 (gval));
     else if (type == G_TYPE_DOUBLE)
-	val = kvp_value_new_double (g_value_get_double (gval));
+        val = kvp_value_new_double (g_value_get_double (gval));
+    else if (type == G_TYPE_BOOLEAN)
+        val = kvp_value_new_boolean (g_value_get_boolean (gval));
     else if (type == GNC_TYPE_NUMERIC)
-	val = kvp_value_new_numeric (*(gnc_numeric*)g_value_get_boxed (gval));
+        val = kvp_value_new_numeric (*(gnc_numeric*)g_value_get_boxed (gval));
     else if (type == G_TYPE_STRING)
-	val = kvp_value_new_string (g_value_get_string (gval));
+        val = kvp_value_new_string (g_value_get_string (gval));
     else if (type == GNC_TYPE_GUID)
-	val = kvp_value_new_guid ((GncGUID*)g_value_get_boxed (gval));
+        val = kvp_value_new_guid ((GncGUID*)g_value_get_boxed (gval));
     else if (type == GNC_TYPE_TIMESPEC)
-	val = kvp_value_new_timespec (*(Timespec*)g_value_get_boxed (gval));
+        val = kvp_value_new_timespec (*(Timespec*)g_value_get_boxed (gval));
     else if (type == G_TYPE_DATE)
-	val = kvp_value_new_gdate (*(GDate*)g_value_get_boxed (gval));
+        val = kvp_value_new_gdate (*(GDate*)g_value_get_boxed (gval));
     else if (type == GNC_TYPE_VALUE_LIST)
     {
-	GList *gvalue_list = (GList*)g_value_get_boxed (gval);
-	GList *kvp_list = NULL;
-	g_list_foreach (gvalue_list, (GFunc)kvp_value_list_from_gvalue, &kvp_list);
-	kvp_list = g_list_reverse (kvp_list);
-	val = kvp_value_new_glist_nc (kvp_list);
-//	g_list_free_full (gvalue_list, (GDestroyNotify)g_value_unset);
-//	gvalue_list = NULL;
+        GList *gvalue_list = (GList*)g_value_get_boxed (gval);
+        GList *kvp_list = NULL;
+        g_list_foreach (gvalue_list, (GFunc)kvp_value_list_from_gvalue, &kvp_list);
+        kvp_list = g_list_reverse (kvp_list);
+        val = kvp_value_new_glist_nc (kvp_list);
+//      g_list_free_full (gvalue_list, (GDestroyNotify)g_value_unset);
+//      gvalue_list = NULL;
     }
     else
-	PWARN ("Error! Don't know how to make a KvpValue from a %s",
-	       G_VALUE_TYPE_NAME (gval));
+        PWARN ("Error! Don't know how to make a KvpValue from a %s",
+               G_VALUE_TYPE_NAME (gval));
 
     return val;
 }
@@ -1315,7 +1340,7 @@ kvp_frame_get_gvalue (KvpFrame *frame, const gchar *key)
 void
 kvp_frame_set_gvalue (KvpFrame *frame, const gchar *key, const GValue *value)
 {
-  kvp_frame_set_value_nc (frame, key, kvp_value_from_gvalue (value));
+    kvp_frame_set_value_nc (frame, key, kvp_value_from_gvalue (value));
 }
 
 static void
@@ -1356,9 +1381,9 @@ gnc_value_list_get_type (void)
     static GType type = 0;
     if (type == 0)
     {
-	type = g_boxed_type_register_static ("gnc_value_list",
-					     (GBoxedCopyFunc)gnc_value_list_copy,
-					     (GBoxedFreeFunc)gnc_value_list_free);
+        type = g_boxed_type_register_static ("gnc_value_list",
+                                             (GBoxedCopyFunc)gnc_value_list_copy,
+                                             (GBoxedFreeFunc)gnc_value_list_free);
     }
     return type;
 }
