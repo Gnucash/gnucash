@@ -370,7 +370,6 @@ GncCsvParseData::GncCsvParseData()
     raw_str.begin = raw_str.end = file_str.begin = file_str.end = NULL;
     orig_lines = NULL;
     orig_row_lengths = NULL;
-    column_types = NULL;
     error_lines = transactions = NULL;
     options = default_parse_options();
     date_format = -1;
@@ -403,9 +402,6 @@ GncCsvParseData::~GncCsvParseData()
 
     if (options != NULL)
         stf_parse_options_free (options);
-
-    if (column_types != NULL)
-        g_array_free (column_types, TRUE);
 
     if (error_lines != NULL)
         g_list_free (error_lines);
@@ -576,32 +572,25 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
     if (guessColTypes)
     {
         /* Free column_types if it's already been created. */
-        if (column_types != NULL)
-            g_array_free (column_types, TRUE);
+        column_types.clear();
 
         /* Create column_types and fill it with guesses based
          * on the contents of each column. */
-        column_types = g_array_sized_new (FALSE, FALSE, sizeof(int),
-                                   max_cols);
-        g_array_set_size (column_types, max_cols);
         /* TODO Make it actually guess. */
-        for (i = 0; i < column_types->len; i++)
+        for (i = 0; i < max_cols; i++)
         {
-            column_types->data[i] = GNC_CSV_NONE;
+            column_types.push_back(GNC_CSV_NONE);
         }
     }
     else
     {
         /* If we don't need to guess column types, we will simply set any
          * new columns that are created that didn't exist before to "None"
-         * since we don't want gibberish to appear. Note:
-         * column_types should have already been
-         * initialized, so we don't check for it being NULL. */
-        i = column_types->len;
-        g_array_set_size (column_types, max_cols);
-        for (; i < column_types->len; i++)
+         * since we don't want gibberish to appear. */
+        i = column_types.size();
+        for (; i < max_cols; i++)
         {
-            column_types->data[i] = GNC_CSV_NONE;
+            column_types.push_back(GNC_CSV_NONE);
         }
     }
     return 0;
@@ -1163,7 +1152,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
             for (j = 0; j < line->len; j++)
             {
                 /* Look for "Account" columns. */
-                if (column_types->data[j] == GNC_CSV_ACCOUNT)
+                if (column_types[j] == GNC_CSV_ACCOUNT)
                 {
                     home_account = gnc_csv_account_map_search ((gchar*) line->pdata[j]);
                 }
@@ -1182,10 +1171,10 @@ int GncCsvParseData::parse_to_trans (Account* account,
             for (j = 0; j < line->len; j++)
             {
                 /* We do nothing in "None" or "Account" columns. */
-                if ((column_types->data[j] != GNC_CSV_NONE) && (column_types->data[j] != GNC_CSV_ACCOUNT))
+                if ((column_types[j] != GNC_CSV_NONE) && (column_types[j] != GNC_CSV_ACCOUNT))
                 {
                     /* Affect the transaction appropriately. */
-                    TransProperty* property = trans_property_new (column_types->data[j], list);
+                    TransProperty* property = trans_property_new (column_types[j], list);
                     gboolean succeeded = trans_property_set (property, (gchar *) line->pdata[j]);
 
                     /* TODO Maybe move error handling to within TransPropertyList functions? */
@@ -1290,9 +1279,9 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
     /* If we have a balance column, set the appropriate amounts on the transactions. */
     hasBalanceColumn = FALSE;
-    for (i = 0; i < column_types->len; i++)
+    for (i = 0; i < column_types.size(); i++)
     {
-        if (column_types->data[i] == GNC_CSV_BALANCE)
+        if (column_types[i] == GNC_CSV_BALANCE)
         {
             hasBalanceColumn = TRUE;
             break;
@@ -1367,12 +1356,10 @@ int GncCsvParseData::parse_to_trans (Account* account,
         if (max_cols < ((GPtrArray*)(orig_lines->pdata[i]))->len)
             max_cols = ((GPtrArray*)(orig_lines->pdata[i]))->len;
     }
-    i = column_types->len;
-    column_types = g_array_set_size (column_types, max_cols);
+    i = column_types.size();
     for (; i < max_cols; i++)
-    {
-        column_types->data[i] = GNC_CSV_NONE;
-    }
+        column_types.push_back(GNC_CSV_NONE);
+
     return 0;
 }
 
@@ -1381,11 +1368,11 @@ bool
 GncCsvParseData::check_for_column_type (int type)
 {
     gboolean ret = FALSE;
-    int j, ncols = column_types->len; /* ncols is the number of columns in the data. */
+    int j, ncols = column_types.size(); /* ncols is the number of columns in the data. */
 
     for (j = 0; j < ncols; j++)
     {
-        if (column_types->data[j] == type)
+        if (column_types[j] == type)
             ret = TRUE;
     }
     return ret;

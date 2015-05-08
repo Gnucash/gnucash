@@ -34,9 +34,11 @@ extern "C" {
 
 #include "Account.h"
 #include "Transaction.h"
+#include "stf/stf-parse.h"
 }
 
-#include "stf/stf-parse.h"
+#include <vector>
+
 
 /** Enumeration for column types. These are the different types of
  * columns that can exist in a CSV/Fixed-Width file. There should be
@@ -132,7 +134,7 @@ public:
     int orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
     GList* error_lines;         /**< List of row numbers in orig_lines that have errors */
     StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
-    GArray* column_types;       /**< Array of values from the GncCsvColumnType enumeration */
+    std::vector<GncCsvColumnType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
     GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     guint start_row;            /**< The start row to generate transactions from. */
