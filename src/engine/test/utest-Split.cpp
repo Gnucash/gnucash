@@ -1777,7 +1777,7 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     Split *split1 = xaccMallocSplit (book);
     Split *split2 = xaccMallocSplit (book);
     Account *acc2 = xaccMallocAccount (book);
-    KvpValue *kvptrue = kvp_value_new_string ("t");
+    KvpValue *kvpnow = kvp_value_new_gint64 (gnc_time (NULL));
 
     g_assert (xaccSplitGetOtherSplit (NULL) == NULL);
     g_assert (xaccSplitGetOtherSplit (split1) == NULL);
@@ -1794,11 +1794,11 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     xaccSplitSetParent (split2, txn);
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
-    kvp_frame_set_slot (split->inst.kvp_data, "lot-split", kvptrue);
+    kvp_frame_set_slot (split->inst.kvp_data, "lot-split", kvpnow);
     g_assert (kvp_frame_get_slot (split->inst.kvp_data, "lot-split"));
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
-    kvp_frame_set_slot (split1->inst.kvp_data, "lot-split", kvptrue);
+    kvp_frame_set_slot (split1->inst.kvp_data, "lot-split", kvpnow);
     g_assert (kvp_frame_get_slot (split1->inst.kvp_data, "lot-split"));
     g_assert (xaccSplitGetOtherSplit (split) == split2);
 
