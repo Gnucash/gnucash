@@ -28,18 +28,13 @@
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include "config.h"
 #include <glib.h>
-
-#ifdef __cplusplus
 }
-#endif
 
+#include <utility>
 #include "qof.h"
 #include "kvp-util-p.h"
 #include "qofbook-p.h"
@@ -1090,6 +1085,29 @@ qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value)
     }
 }
 
+void
+qof_instance_copy_kvp (QofInstance *to, const QofInstance *from)
+{
+    to->kvp_data = kvp_frame_copy(from->kvp_data);
+}
+
+void
+qof_instance_swap_kvp (QofInstance *a, QofInstance *b)
+{
+    std::swap(a->kvp_data, b->kvp_data);
+}
+
+int
+qof_instance_compare_kvp (const QofInstance *a, const QofInstance *b)
+{
+    return kvp_frame_compare (a->kvp_data, b->kvp_data);
+}
+
+char*
+qof_instance_kvp_as_string (const QofInstance *inst)
+{
+    return kvp_frame_to_string (inst->kvp_data);
+}
 
 /* ========================== END OF FILE ======================= */
 

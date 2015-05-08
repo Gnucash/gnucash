@@ -108,6 +108,11 @@ void qof_instance_set_idata(gpointer inst, guint32 idata);
 /* Convenience functions to save some typing in property handlers */
 void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
 void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
+void qof_instance_copy_kvp (QofInstance *to, const QofInstance *from);
+void qof_instance_swap_kvp (QofInstance *a, QofInstance *b);
+int qof_instance_compare_kvp (const QofInstance *a, const QofInstance *b);
+char* qof_instance_kvp_as_string (const QofInstance *inst);
+
 
 #ifdef __cplusplus
 }
