@@ -180,6 +180,24 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     *password = NULL;
 
 #ifdef HAVE_LIBSECRET
+    /* Workaround for https://bugzilla.gnome.org/show_bug.cgi?id=746873
+     * and by extension for https://bugzilla.gnome.org/show_bug.cgi?id=748625
+     * Store a dummy password and delete it again. This forces libsecret
+     * to open the keychain, where only a call to secret_password_lookup_sync
+     * sometimes fails to do so. More details can be found in the bug reports
+     * referenced above. */
+    secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                                "Dummy password", "dummy", NULL, &error,
+                                "protocol", "gnucash",
+                                "server", "gnucash",
+                                "user", "gnucash",
+                                NULL);
+    secret_password_clear_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+                                "protocol", "gnucash",
+                                "server", "gnucash",
+                                "user", "gnucash",
+                                NULL);
+
     /* Note: only use the port attribute if it  was set by the user. */
     if (port == 0)
         libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
