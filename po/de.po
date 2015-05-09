@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-19 21:02+0100\n"
-"PO-Revision-Date: 2015-04-11 08:40+0200\n"
+"PO-Revision-Date: 2015-05-09 11:42+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -14921,7 +14921,7 @@ msgstr "Ausgewählte Buchungen abgleichen löschen"
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
 #, fuzzy
 msgid "_Unreconcile Selection"
-msgstr "_Nicht abgeglichen"
+msgstr "_Nicht abgeglichen/Auswahl"
 
 #: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
 #, fuzzy
@@ -18570,6 +18570,11 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
+"Gespeicherte Berichtskonfigurationen werden erstellt, wenn ein Bericht das "
+"erste Mal aus dem Menü 'Berichte' geöffnet wird.\n"
+"Nachdem Sie die Berichtsoptionen an Ihren Bedarf angepasst haben, wählen "
+"Sie \" Berichtskonfiguration speichern\" aus\n"
+"dem Menü 'Bericht' oder der Symbolleiste."
 
 #: ../src/report/report-gnome/dialog-report-column-view.c:321
 msgid "Contents"
