@@ -297,7 +297,7 @@ namespace IANAParser
 
     struct Transition
     {
-	time_t timestamp;
+	int64_t timestamp;
 	uint8_t index;
     };
 
