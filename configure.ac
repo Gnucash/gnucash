@@ -70,7 +70,7 @@ AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 # Ensure the compiler supports C++ 11:
-AX_CXX_COMPILE_STDCXX_11(ext)
+AX_CXX_COMPILE_STDCXX_11(noext)
 # We require C99 for the C parts:
 AC_PROG_CC_C99
 
@@ -134,9 +134,9 @@ AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 ###--------------------------------------------------------
 ### Begin C++ dependencies
 ###--------------------------------------------------------
-AX_BOOST_BASE([1.55.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
+AX_BOOST_BASE([1.53.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
 if test x$ac_cv_BOOST != xyes; then
-    AC_MSG_ERROR([Boost 1.48.0 or later was not found and is required to build GnuCash])
+    AC_MSG_ERROR([Boost 1.53.0 or later was not found and is required to build GnuCash])
 fi
 ###--------------------------------------------------------
 ### Optionally enable gtkmm plugin (requires c++ compiler)
@@ -183,6 +183,53 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
 oldcflags="$CFLAGS"
 CFLAGS=
+AC_LANG_PUSH([C++])
+oldcxxflags="$CXXFLAGS"
+CXXFLAGS="-Werror -std=c++11"
+AC_MSG_CHECKING([boost/date_time/local_time/custom_time_zone.hpp])
+AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([
+#include <boost/date_time/local_time/local_time.hpp>
+
+using duration = boost::posix_time::time_duration;
+using time_zone = boost::local_time::custom_time_zone;
+using dst_offsets = boost::local_time::dst_adjustment_offsets;
+using TZ_Ptr = boost::local_time::time_zone_ptr;
+using time_zone_names = boost::local_time::time_zone_names;
+
+struct TTInfo
+{
+int32_t gmtoff;
+uint8_t isdst;
+uint8_t abbrind;
+};
+
+struct TZInfo
+{
+TTInfo info;
+std::string name;
+bool isstd;
+bool isgmt;
+};
+
+static TZ_Ptr
+zone_no_dst(int year, TZInfo *std_info)
+{
+    time_zone_names names(std_info->name, std_info->name, "", "");
+    duration std_off(0, 0, std_info->info.gmtoff);
+    dst_offsets offsets({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
+    boost::local_time::dst_calc_rule_ptr calc_rule(nullptr);
+    TZ_Ptr tz(new time_zone(names, std_off, offsets, calc_rule));
+    return tz;
+}
+
+	 ])],
+	 [AC_MSG_RESULT([yes])],
+	 [AC_MSG_FAILURE([Boost Header Fails to compile with C++11. To fix this, open it and change line 67 to
+      return (bool) dst_calc_rules_; //if calc_rule is set the tz has dst
+])])
+CXXFLAGS="$oldcxxflags"
+AC_LANG_POP([C++])
 oldldflags="$LDFLAGS"
 LDFLAGS=
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
@@ -191,7 +238,6 @@ AC_CHECK_FUNCS(setenv,,[
     AC_MSG_ERROR([Must have one of the setenv or putenv functions.])
   ])
 ])
-
 CFLAGS="$oldcflags"
 LDFLAGS="$oldldflags"
 STRUCT_TM_GMTOFF_CHECK
