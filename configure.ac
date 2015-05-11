@@ -1480,6 +1480,7 @@ AC_CONFIG_FILES(
   src/import-export/ofx/test/Makefile
   src/import-export/csv-imp/Makefile
   src/import-export/csv-imp/gschemas/Makefile
+  src/import-export/csv-imp/test/Makefile
   src/import-export/csv-exp/Makefile
   src/import-export/csv-exp/gschemas/Makefile
   src/import-export/log-replay/Makefile
