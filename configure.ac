@@ -134,7 +134,7 @@ AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 ###--------------------------------------------------------
 ### Begin C++ dependencies
 ###--------------------------------------------------------
-AX_BOOST_BASE([1.48.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
+AX_BOOST_BASE([1.55.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
 if test x$ac_cv_BOOST != xyes; then
     AC_MSG_ERROR([Boost 1.48.0 or later was not found and is required to build GnuCash])
 fi
