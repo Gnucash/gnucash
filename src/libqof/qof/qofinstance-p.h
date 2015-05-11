@@ -106,6 +106,7 @@ void qof_instance_set_version_check (gpointer inst, guint32 value);
 void qof_instance_copy_version_check (gpointer to, gconstpointer from);
 void qof_instance_set_idata(gpointer inst, guint32 idata);
 /* Convenience functions to save some typing in property handlers */
+gboolean qof_instance_has_kvp (QofInstance *inst);
 void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
 void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
 void qof_instance_copy_kvp (QofInstance *to, const QofInstance *from);

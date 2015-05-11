@@ -1066,6 +1066,13 @@ qof_commit_edit_part2(QofInstance *inst,
     return TRUE;
 }
 
+gboolean
+qof_instance_has_kvp (QofInstance *inst)
+{
+    KvpFrame *frame = qof_instance_get_slots (inst);
+    return (frame != NULL && !kvp_frame_is_empty (frame));
+}
+
 void
 qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value)
 {
