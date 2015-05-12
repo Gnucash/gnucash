@@ -38,17 +38,18 @@
  * columns that can exist in a CSV/Fixed-Width file. There should be
  * no two columns with the same type except for the GNC_CSV_NONE
  * type. */
-enum GncCsvColumnType {GNC_CSV_NONE,
-                       GNC_CSV_DATE,
-                       GNC_CSV_NUM,
-                       GNC_CSV_DESCRIPTION,
-                       GNC_CSV_NOTES,
-                       GNC_CSV_ACCOUNT,
-                       GNC_CSV_DEPOSIT,
-                       GNC_CSV_WITHDRAWAL,
-                       GNC_CSV_BALANCE,
-                       GNC_CSV_NUM_COL_TYPES
-                      };
+enum GncCsvColumnType {
+    GNC_CSV_NONE,
+    GNC_CSV_DATE,
+    GNC_CSV_NUM,
+    GNC_CSV_DESCRIPTION,
+    GNC_CSV_NOTES,
+    GNC_CSV_ACCOUNT,
+    GNC_CSV_DEPOSIT,
+    GNC_CSV_WITHDRAWAL,
+    GNC_CSV_BALANCE,
+    GNC_CSV_NUM_COL_TYPES
+};
 
 /** Enumeration for error types. These are the different types of
  * errors that various functions used for the CSV/Fixed-Width importer
