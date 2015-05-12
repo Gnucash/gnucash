@@ -44,6 +44,12 @@
 #include <stdlib.h>
 #include <math.h>
 
+GQuark
+gnc_csv_imp_error_quark (void)
+{
+  return g_quark_from_static_string ("g-csv-imp-error-quark");
+}
+
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 const int num_date_formats = 5;
@@ -466,14 +472,13 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
     const char* guess_enc = NULL;
 
     /* Get the raw data first and handle an error if one occurs. */
-    parse_data->raw_mapping = g_mapped_file_new (filename, FALSE, error);
+    parse_data->raw_mapping = g_mapped_file_new (filename, FALSE, NULL);
     if (parse_data->raw_mapping == NULL)
     {
         /* TODO Handle file opening errors more specifically,
          * e.g. inexistent file versus no read permission. */
         parse_data->raw_str.begin = NULL;
-        g_clear_error (error);
-        g_set_error (error, 0, GNC_CSV_FILE_OPEN_ERR, "%s", _("File opening failed."));
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_OPEN, "%s", _("File opening failed."));
         return 1;
     }
 
@@ -488,7 +493,7 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
                                       "UTF-8", NULL);
     if (guess_enc == NULL)
     {
-        g_set_error (error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
         return 1;
     }
     /* Convert using the guessed encoding into parse_data->file_str and
@@ -496,7 +501,7 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
     gnc_csv_convert_encoding (parse_data, guess_enc, error);
     if (parse_data->file_str.begin == NULL)
     {
-        g_set_error (error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
         return 1;
     }
     else
@@ -559,7 +564,7 @@ int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError**
     /* If it failed, generate an error. */
     if (parse_data->orig_lines == NULL)
     {
-        g_set_error (error, 0, 0, "Parsing failed.");
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_PARSE, "Parsing failed.");
         return 1;
     }
 

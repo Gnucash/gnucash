@@ -187,7 +187,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
         {
             /* If we couldn't load the file ... */
             gnc_error_dialog (NULL, "%s", error->message);
-            if (error->code == GNC_CSV_FILE_OPEN_ERR)
+            if (error->code == GNC_CSV_IMP_ERROR_OPEN)
             {
                 gnc_csv_parse_data_free (parse_data);
                 return;
