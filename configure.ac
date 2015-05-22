@@ -185,7 +185,7 @@ oldcflags="$CFLAGS"
 CFLAGS=
 AC_LANG_PUSH([C++])
 oldcxxflags="$CXXFLAGS"
-CXXFLAGS="-Werror -std=c++11"
+CXXFLAGS="-Werror -std=c++11 $BOOST_CPPFLAGS"
 AC_MSG_CHECKING([boost/date_time/local_time/custom_time_zone.hpp])
 AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([
