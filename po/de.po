@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-19 21:02+0100\n"
-"PO-Revision-Date: 2015-05-09 11:42+0200\n"
+"PO-Revision-Date: 2015-05-23 16:19+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -8982,7 +8982,6 @@ msgstr ""
 "müssen nun geändert werden. Klicken Sie Ok, um sie zu ändern."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:4
-#, fuzzy
 msgid "<b>Since Last Run</b>"
 msgstr "<b>Seit-letztem-Aufruf Fenster</b>"
 
@@ -8995,25 +8994,21 @@ msgid "_Run when data file opened"
 msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:7
-#, fuzzy
 msgid "Run the \"since last run\" process when a file is opened."
 msgstr ""
-"Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird "
-"oder beim Programmstart von GnuCash."
+"Lasse den »Seit letztem Aufruf« Pozess laufen, eine Datei geöffnet wird "
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:8
-#, fuzzy
 msgid "_Show notification window"
-msgstr "Verlaufs_fenster anzeigen"
+msgstr "Benachrichtigungs_fenster anzeigen"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:9
-#, fuzzy
 msgid ""
 "Show the notification window for the \"since last run\" process when a file "
 "is opened."
 msgstr ""
-"Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird "
-"oder beim Programmstart von GnuCash."
+"Das Benachrichtigungsfenster »Seit letztem Aufruf« anzeigen, wenn eine "
+"Datei geöffnet wird "
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:10
 msgid "_Auto-create new transactions"
@@ -9194,7 +9189,6 @@ msgid "<b>Income Tax Identity</b>"
 msgstr "<b>Art der Steuererklärung</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:5
-#, fuzzy
 msgid "Click to change Tax Name and/or Tax Type."
 msgstr "Anklicken, um Name oder Typ der Steuern zu ändern"
 
@@ -9432,9 +9426,8 @@ msgstr "Alle auswählen"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:24
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:25
-#, fuzzy
 msgid "Sa_ve Filter"
-msgstr "%s in Datei speichern"
+msgstr "Filter speichern"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:25
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:51
@@ -9499,7 +9492,6 @@ msgstr "_Betrag"
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:38
 #: ../intl-scm/guile-strings.c:4570 ../intl-scm/guile-strings.c:4626
-#, fuzzy
 msgid "Sort by amount."
 msgstr "Sortieren nach Summe"
 
@@ -9510,14 +9502,12 @@ msgstr "Buchungstext"
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:40
 #: ../intl-scm/guile-strings.c:4586 ../intl-scm/guile-strings.c:4638
-#, fuzzy
 msgid "Sort by memo."
 msgstr "Sortiere nach Buchungstext"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:42
 #: ../intl-scm/guile-strings.c:4574 ../intl-scm/guile-strings.c:4630
-#, fuzzy
 msgid "Sort by description."
 msgstr "Sortieren nach Beschreibung"
 
@@ -9526,23 +9516,20 @@ msgid "_Action"
 msgstr "A_ktionen"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:44
-#, fuzzy
 msgid "Sort by action field."
-msgstr "Sortiere nach Aktion"
+msgstr "Sortiere nach Aktionsfeld"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:45
 msgid "_Notes"
 msgstr "_Bemerkung"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:46
-#, fuzzy
 msgid "Sort by notes field."
-msgstr "Sortiere nach Bemerkung"
+msgstr "Sortiere nach Bemerkungsfeld"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:47
-#, fuzzy
 msgid "Sa_ve Sort Order"
-msgstr "Sortierreihenfolge"
+msgstr "Sortierreihenfolge speichern"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
 #, fuzzy
@@ -11107,7 +11094,6 @@ msgid "View..."
 msgstr "Ansicht..."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:236
-#, fuzzy
 msgid ""
 "GnuCash could not find the files for the help documentation. This is likely "
 "because the 'gnucash-docs' package is not installed"
@@ -11463,9 +11449,8 @@ msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #: ../src/gnome-utils/gnc-main-window.c:4379
-#, fuzzy
 msgid "© 1997-2014 Contributors"
-msgstr "© 1997-2013 Mitarbeiter"
+msgstr "© 1997-2015 Mitwirkende"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -13452,7 +13437,6 @@ msgid "Use _formal accounting labels"
 msgstr "Buchungsüberschriften aus _Rechnungswesen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:20
-#, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
 msgstr "Nur 'Soll' und 'Haben' anstatt informeller Bezeichnungen benutzen"
 
@@ -13656,7 +13640,6 @@ msgid "Display ne_gative amounts in red"
 msgstr "Negative Beträge in rot anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:77
-#, fuzzy
 msgid "Display negative amounts in red."
 msgstr "Negative Beträge in rot anzeigen"
 
@@ -16210,7 +16193,6 @@ msgid "To Num."
 msgstr "Bis Nr."
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:425
-#, fuzzy
 msgid "From Num."
 msgstr "Von Nr."
 
@@ -16253,14 +16235,12 @@ msgid "notes"
 msgstr "Bemerkung"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
 msgid "commoditym"
-msgstr "Devise/Wertpapier"
+msgstr "Devise/Wertpapier M"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
 msgid "commodityn"
-msgstr "Devise/Wertpapier"
+msgstr "Devise/Wertpapier N"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
 msgid "hidden"
@@ -18386,13 +18366,12 @@ msgid "T-Num"
 msgstr "B.-Nr."
 
 #: ../src/register/ledger-core/split-register-model.c:381
-#, fuzzy
 msgid "Exch. Rate"
 msgstr "Wechselkurs:"
 
 #: ../src/register/ledger-core/split-register-model.c:398
 msgid "Oth. Curr."
-msgstr ""
+msgstr "Andere Währung"
 
 #: ../src/register/ledger-core/split-register-model.c:415
 #: ../src/register/ledger-core/split-register-model.c:439
@@ -18507,22 +18486,18 @@ msgid "List"
 msgstr "Liste"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:421
-#, fuzzy
 msgid "You must select a report configuration to load."
-msgstr "Sie müssen einen Bericht auswählen, den Sie erstellen wollen."
+msgstr "Sie müssen eine Berichtskonfiguration auswählen, die Sie erstellen wollen."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
-#, fuzzy
 msgid "You must select a report configuration to delete."
-msgstr "Sie müssen einen Bericht auswählen, den Sie löschen wollen."
+msgstr "Sie müssen einen Berichtskonfiguration auswählen, die Sie löschen wollen."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:441
-#, fuzzy
 msgid "Unable to change report configuration name."
-msgstr "Berichtsname konnte nicht geändert werden."
+msgstr "Berichtskonfiguration konnte nicht geändert werden."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:453
-#, fuzzy
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
@@ -18531,14 +18506,12 @@ msgstr ""
 "Sie einen anderen Namen ein."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:477
-#, fuzzy
 msgid "Load report configuration"
-msgstr "Name der Konfiguration ändern"
+msgstr "Berichtskonfiguration laden"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:479
-#, fuzzy
 msgid "Edit report configuration name"
-msgstr "Name der Konfiguration ändern"
+msgstr "Berichtskonfiguration ändern"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:481
 msgid "Delete report configuration"
@@ -21101,7 +21074,7 @@ msgstr ""
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:910 ../intl-scm/guile-strings.c:1092
 #: ../intl-scm/guile-strings.c:1302
-msgid "Thank you for your patronage"
+msgid "Thank you for your patronage!"
 msgstr "Vielen Dank für das uns engegengebrachte Vertrauen!"
 
 #. src/report/business-reports/easy-invoice.scm
@@ -26931,16 +26904,14 @@ msgstr "Willkommen zu GnuCash"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:5846
-#, fuzzy
 msgid "Welcome to GnuCash ~a !"
 msgstr "Willkommen zu GnuCash"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:5848
-#, fuzzy
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr ""
-"GnuCash 2.4 hat viele neue Funktionen. Hier werden einige Beispiele gegeben."
+"GnuCash hat viele neue Funktionen. Hier sind einige Beispiele."
 
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:5852 ../intl-scm/guile-strings.c:5854
