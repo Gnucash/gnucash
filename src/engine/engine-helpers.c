@@ -477,32 +477,6 @@ gnc_scm2amt_match_how (SCM how_scm)
     return res;
 }
 
-static QofQueryCompare
-gnc_scm2kvp_match_how (SCM how_scm)
-{
-    QofQueryCompare res;
-    gchar *how = gnc_scm_symbol_to_locale_string (how_scm);
-
-    if (!g_strcmp0 (how, "kvp-match-lt"))
-        res = QOF_COMPARE_LT;
-    else if (!g_strcmp0 (how, "kvp-match-lte"))
-        res = QOF_COMPARE_LTE;
-    else if (!g_strcmp0 (how, "kvp-match-eq"))
-        res = QOF_COMPARE_EQUAL;
-    else if (!g_strcmp0 (how, "kvp-match-gte"))
-        res = QOF_COMPARE_GTE;
-    else if (!g_strcmp0 (how, "kvp-match-gt"))
-        res = QOF_COMPARE_GT;
-    else
-    {
-        PINFO ("invalid kvp match: %s", how);
-        res = QOF_COMPARE_EQUAL;
-    }
-
-    g_free (how);
-    return res;
-}
-
 static int
 gnc_scm2bitfield (SCM field_scm)
 {
@@ -556,33 +530,6 @@ gnc_scm2balance_match_how (SCM how_scm, gboolean *resp)
 
     g_free (how);
     return TRUE;
-}
-
-static QofIdType
-gnc_scm2kvp_match_where (SCM where_scm)
-{
-    QofIdType res;
-    gchar *where;
-
-    if (!scm_is_list (where_scm))
-        return NULL;
-
-    where = gnc_scm_symbol_to_locale_string (SCM_CAR(where_scm));
-
-    if (!g_strcmp0 (where, "kvp-match-split"))
-        res = GNC_ID_SPLIT;
-    else if (!g_strcmp0 (where, "kvp-match-trans"))
-        res = GNC_ID_TRANS;
-    else if (!g_strcmp0 (where, "kvp-match-account"))
-        res = GNC_ID_ACCOUNT;
-    else
-    {
-        PINFO ("Unknown kvp-match-where: %s", where);
-        res = NULL;
-    }
-
-    g_free (where);
-    return res;
 }
 
 static SCM
@@ -1643,48 +1590,6 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
             xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
             g_free ((void *) id_type);
-            ok = TRUE;
-
-        }
-        else if (!g_strcmp0 (pd_type, "pd-kvp"))
-        {
-            GSList *path;
-            KvpValue *value;
-            QofQueryCompare how;
-            QofIdType where;
-
-            /* how */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            how = gnc_scm2kvp_match_how (scm);
-
-            /* where */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            where = gnc_scm2kvp_match_where (scm);
-
-            /* path */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            path = gnc_query_scm2path (scm);
-
-            /* value */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            value = gnc_scm2KvpValue (scm);
-
-            xaccQueryAddKVPMatch (q, path, value, how, where, QOF_QUERY_OR);
-
-            gnc_query_path_free (path);
-            kvp_value_delete (value);
             ok = TRUE;
 
         }

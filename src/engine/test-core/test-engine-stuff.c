@@ -1812,20 +1812,6 @@ get_random_query(void)
             break;
 
         case 8: /* PR_KVP */
-            path = get_random_kvp_path ();
-            do
-            {
-                value = get_random_kvp_value_depth (-2, kvp_max_depth);
-            }
-            while (!value);
-            xaccQueryAddKVPMatch (q,
-                                  path,
-                                  value,
-                                  get_random_int_in_range (1, QOF_COMPARE_NEQ),
-                                  get_random_id_type (),
-                                  get_random_queryop ());
-            kvp_value_delete (value);
-            free_random_kvp_path (path);
             break;
 
         case 9: /* PR_MEMO */
@@ -1977,39 +1963,6 @@ typedef struct
     QofQuery *q;
 } KVPQueryData;
 
-static void
-add_kvp_value_query (const char *key, KvpValue *value, gpointer data)
-{
-    KVPQueryData *kqd = data;
-    GSList *node;
-
-    kqd->path = g_slist_append (kqd->path, (gpointer) key);
-
-    if (kvp_value_get_type (value) == KVP_TYPE_FRAME)
-        kvp_frame_for_each_slot (kvp_value_get_frame (value),
-                                 add_kvp_value_query, data);
-    else
-        xaccQueryAddKVPMatch (kqd->q, kqd->path, value,
-                              QOF_COMPARE_EQUAL, kqd->where,
-                              QOF_QUERY_AND);
-
-    node = g_slist_last (kqd->path);
-    kqd->path = g_slist_remove_link (kqd->path, node);
-    g_slist_free_1 (node);
-}
-
-static void
-add_kvp_query (QofQuery *q, KvpFrame *frame, QofIdType where)
-{
-    KVPQueryData kqd;
-
-    kqd.where = where;
-    kqd.path = NULL;
-    kqd.q = q;
-
-    kvp_frame_for_each_slot (frame, add_kvp_value_query, &kqd);
-}
-
 static gboolean include_price = TRUE;
 
 void
@@ -2021,17 +1974,11 @@ trans_query_include_price (gboolean include_price_in)
 TestQueryTypes
 get_random_query_type (void)
 {
-    switch (get_random_int_in_range (0, 4))
+    switch (get_random_int_in_range (0, 1))
     {
     case 0:
         return SIMPLE_QT;
     case 1:
-        return SPLIT_KVP_QT;
-    case 2:
-        return TRANS_KVP_QT;
-    case 3:
-        return ACCOUNT_KVP_QT;
-    case 4:
         return GUID_QT;
     default:
         return SIMPLE_QT;
@@ -2177,15 +2124,6 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a),
                                GNC_ID_ACCOUNT, QOF_QUERY_AND);
     }
-
-    if (query_types & SPLIT_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (s)), GNC_ID_SPLIT);
-
-    if (query_types & TRANS_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (trans)), GNC_ID_TRANS);
-
-    if (query_types & ACCOUNT_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (a)), GNC_ID_ACCOUNT);
 
     return q;
 }
