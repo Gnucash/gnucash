@@ -24,6 +24,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <sys/types.h>
 #include <ctype.h>
 #ifdef HAVE_DIRENT_H

@@ -32,6 +32,11 @@ extern "C"
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <glib.h>
 #include <glib/gstdio.h>
 #ifdef HAVE_UNISTD_H
@@ -44,6 +49,7 @@ extern "C"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"
@@ -167,7 +173,7 @@ qof_log_init_filename(const gchar* log_filename)
 
         if ((fd = g_mkstemp(fname)) != -1)
         {
-#ifdef _MSC_VER
+#if PLATFORM(WINDOWS)
             /* MSVC compiler: Somehow the OS thinks file descriptor from above
              * still isn't open. So we open normally with the file name and that's it. */
             fout = fopen(fname, "wb");

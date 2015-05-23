@@ -24,6 +24,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>

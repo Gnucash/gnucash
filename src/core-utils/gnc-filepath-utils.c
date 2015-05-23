@@ -28,6 +28,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>

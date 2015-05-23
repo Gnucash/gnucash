@@ -28,6 +28,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>

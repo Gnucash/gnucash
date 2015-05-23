@@ -33,6 +33,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>

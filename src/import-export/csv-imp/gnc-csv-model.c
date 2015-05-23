@@ -1,5 +1,9 @@
 #include "gnc-csv-model.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
 
 #include <glib/gi18n.h>
 

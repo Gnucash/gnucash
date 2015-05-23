@@ -23,6 +23,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <ctype.h>
 #include <glib.h>
 #include <math.h>
