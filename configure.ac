@@ -370,8 +370,9 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 GLIB_GSETTINGS
-CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,-std=${ac_cv_cstd},g"`
-echo "New CFLAGS are $CFLAGS"
+dnl First remove any existing -std= setting from CFLAGS then add the one we want.
+CFLAGS=`echo "${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
+CFLAGS="${CFLAGS} -std=${ac_cv_cstd}"
 
 # I'm sure we (used to?) require this in various places, so don't remove
 # this test unless you've done sufficient code review/testing.
