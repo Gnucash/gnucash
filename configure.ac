@@ -71,9 +71,7 @@ AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 # Ensure the compiler supports C++ 11:
 AX_CXX_COMPILE_STDCXX_11(noext)
-# We require C99 for the C parts:
 AC_PROG_CC_C99
-
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -327,37 +325,53 @@ fi
 ### Glib checks.
 
 # We require glib >= 2.28, released together with gtk-2.24;
-# We first check for other versions due to deprecations.
+# We first check for other versions due to required C standard and deprecations.
+# 2.44 requires C11.
 # 2.36 deprecated g_type_init
 # 2.32 deprecated some gthread functions
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
+ac_cv_cstd=c99
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
+                        gobject-2.0 gmodule-2.0,
 [
+  ac_cv_cstd=c11
+  AC_DEFINE([HAVE_GLIB_2_44], [1], [Requires C11])
   AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
   AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
   AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
 ],
 [
-  PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
+  PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0
+                          gobject-2.0 gmodule-2.0,
   [
+    AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
     AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
     AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
   ],
   [
-    PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
-    [
+    PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0
+			    gobject-2.0 gmodule-2.0,
+   [
+      AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
+      AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
+   ],
+   [
+      PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0
+                              gobject-2.0 gmodule-2.0,
+      [
         AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-    ],
-    [
-	PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0)
+      ],
+      [
+	PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0
+	                        gobject-2.0 gmodule-2.0)
+      ])
     ])
   ])
 ])
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 GLIB_GSETTINGS
+CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,-std=${ac_cv_cstd},g"`
+echo "New CFLAGS are $CFLAGS"
 
 # I'm sure we (used to?) require this in various places, so don't remove
 # this test unless you've done sufficient code review/testing.
