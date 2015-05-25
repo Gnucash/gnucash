@@ -24,7 +24,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #ifdef MAC_INTEGRATION
-#include <gtkmacintegration-gtk2/gtkosxapplication.h>
+#include <gtkmacintegration/gtkosxapplication.h>
 #endif
 #endif /* ENABLE_BINRELOC */
 #include <stdio.h>
