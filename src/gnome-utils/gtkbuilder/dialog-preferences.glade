@@ -2465,13 +2465,13 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general.register/use-theme-colors">
-                    <property name="label" translatable="yes">_Use system theme colors</property>
+                    <property name="label" translatable="yes">Don't _use GnuCash built-in colors</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used.</property>
+                    <property name="tooltip_markup">GnuCash uses a yellow/green theme by default for register windows. Check this if you want to use the system color theme instead.</property>
+                    <property name="tooltip_text" translatable="yes">GnuCash uses a yellow/green theme by default for register windows. Check this if you want to use the system color theme instead.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
