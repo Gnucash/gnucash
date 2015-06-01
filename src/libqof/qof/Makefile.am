@@ -30,7 +30,6 @@ libgnc_qof_la_SOURCES =  \
    gnc-timezone.cpp    \
    gnc-datetime.cpp    \
    guid.cpp            \
-   kvp-util.cpp        \
    kvp_frame.cpp       \
    kvp-value.cpp       \
    qofbackend.cpp      \
@@ -58,8 +57,6 @@ qofinclude_HEADERS = \
    gnc-timezone.hpp  \
    gnc-datetime.hpp  \
    guid.h            \
-   kvp-util-p.h      \
-   kvp-util.h        \
    kvp_frame.h       \
    kvp_frame.hpp     \
    kvp-value.hpp     \

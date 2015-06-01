@@ -80,8 +80,6 @@
 #include "qofutil.h"
 #include "guid.h"
 #include "kvp_frame.h"
-#include "kvp-util.h"
-#include "kvp-util-p.h"
 #include "qofbackend.h"
 #include "qofid-p.h"
 #include "qofbook.h"

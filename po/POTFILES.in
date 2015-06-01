@@ -469,7 +469,6 @@ src/libqof/qof/gnc-numeric.cpp
 src/libqof/qof/gnc-rational.cpp
 src/libqof/qof/guid.cpp
 src/libqof/qof/kvp_frame.cpp
-src/libqof/qof/kvp-util.cpp
 src/libqof/qof/kvp-value.cpp
 src/libqof/qof/qofbackend.cpp
 src/libqof/qof/qofbook.cpp
