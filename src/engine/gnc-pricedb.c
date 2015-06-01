@@ -49,6 +49,38 @@ enum
     PROP_VALUE,		/* Table, 2 fields (numeric) */
 };
 
+typedef struct
+{
+     gpointer key;
+     gpointer value;
+} GHashTableKVPair;
+
+static void
+kv_pair_helper(gpointer key, gpointer val, gpointer user_data)
+{
+    GSList **result = (GSList **) user_data;
+    GHashTableKVPair *kvp = g_new(GHashTableKVPair, 1);
+
+    kvp->key = key;
+    kvp->value = val;
+    *result = g_slist_prepend(*result, kvp);
+}
+
+static GSList *
+g_hash_table_key_value_pairs(GHashTable *table)
+{
+    GSList *result_list = NULL;
+    g_hash_table_foreach(table, kv_pair_helper, &result_list);
+    return result_list;
+}
+
+static void
+g_hash_table_kv_pair_free_gfunc(gpointer data, G_GNUC_UNUSED gpointer user_data)
+{
+    GHashTableKVPair *kvp = (GHashTableKVPair *) data;
+    g_free(kvp);
+}
+
 /* GObject Initialization */
 G_DEFINE_TYPE(GNCPrice, gnc_price, QOF_TYPE_INSTANCE);
 
