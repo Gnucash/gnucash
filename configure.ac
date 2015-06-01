@@ -371,7 +371,7 @@ AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.
 
 GLIB_GSETTINGS
 dnl First remove any existing -std= setting from CFLAGS then add the one we want.
-CFLAGS=`echo "${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
+CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
 CFLAGS="${CFLAGS} -std=${ac_cv_cstd}"
 
 # I'm sure we (used to?) require this in various places, so don't remove
