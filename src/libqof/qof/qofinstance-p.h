@@ -109,11 +109,23 @@ void qof_instance_set_idata(gpointer inst, guint32 idata);
 gboolean qof_instance_has_kvp (QofInstance *inst);
 void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
 void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
+/* Functions to isolate the KVP mechanism inside QOF for cases where GValue
+ * operations won't work.
+ */
 void qof_instance_copy_kvp (QofInstance *to, const QofInstance *from);
 void qof_instance_swap_kvp (QofInstance *a, QofInstance *b);
 int qof_instance_compare_kvp (const QofInstance *a, const QofInstance *b);
 char* qof_instance_kvp_as_string (const QofInstance *inst);
-
+void qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
+                                const Timespec time, const char* key,
+                                const GncGUID *guid);
+void qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
+                                   const char* key, const GncGUID *guid);
+gboolean qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
+                                    const char* key, const GncGUID *guid);
+void qof_instance_kvp_merge_guids (const QofInstance *target,
+                                   const QofInstance *donor, const char* path);
+gboolean qof_instance_has_slot (const QofInstance *inst, const char *path);
 
 #ifdef __cplusplus
 }
