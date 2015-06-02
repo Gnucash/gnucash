@@ -709,7 +709,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gncEntrySetDateEntered (entry, today);
         gncEntrySetDescription (entry, desc);
         gncEntrySetAction (entry, action);
-
+        value = gnc_numeric_zero();
         gnc_exp_parser_parse (quantity, &value, NULL);
         gncEntrySetQuantity (entry, value);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
@@ -718,6 +718,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         if (g_ascii_strcasecmp (type, "BILL") == 0)
         {
             gncEntrySetBillAccount (entry, acc);
+            value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
             gncEntrySetBillPrice (entry, value);
             gncEntrySetBillTaxable (entry, text2bool (taxable));
@@ -730,11 +731,13 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         {
             gncEntrySetNotes (entry, notes);
             gncEntrySetInvAccount (entry, acc);
+            value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
             gncEntrySetInvPrice (entry, value);
             gncEntrySetInvTaxable (entry, text2bool (taxable));
             gncEntrySetInvTaxIncluded (entry, text2bool (taxincluded));
             gncEntrySetInvTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
+            value = gnc_numeric_zero();
             gnc_exp_parser_parse (discount, &value, NULL);
             gncEntrySetInvDiscount (entry, value);
             gncEntrySetInvDiscountType (entry, text2disc_type (disc_type));
