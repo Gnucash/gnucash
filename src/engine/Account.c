@@ -2314,12 +2314,9 @@ static const char*
 get_kvp_string_tag (const Account *acc, const char *tag)
 {
     GValue v = G_VALUE_INIT;
-    const char* s;
     if (acc == NULL || tag == NULL) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (acc), tag, &v);
-    s = g_value_get_string (&v);
-    return s;
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 void
@@ -3110,13 +3107,13 @@ gnc_commodity *
 DxaccAccountGetCurrency (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
-    const char *s;
+    const char *s = NULL;
     gnc_commodity_table *table;
 
     if (!acc) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "old-currency", &v);
-    s = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        s = g_value_get_string (&v);
     if (!s) return NULL;
 
     table = gnc_commodity_table_get_table (qof_instance_get_book(acc));
@@ -3789,9 +3786,8 @@ xaccAccountGetTaxRelated (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_BOOLEAN);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "tax-related", &v);
-    return g_value_get_boolean (&v);
+    return G_VALUE_HOLDS_BOOLEAN (&v) ? g_value_get_boolean (&v) : FALSE;
 }
 
 void
@@ -3814,10 +3810,8 @@ xaccAccountGetTaxUSCode (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "/tax-US/code", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_STRING (&v), FALSE);
-    return g_value_get_string (&v);
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 void
@@ -3839,11 +3833,9 @@ xaccAccountGetTaxUSPayerNameSource (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "/tax-US/payer-name-source", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_STRING (&v), FALSE);
-    return g_value_get_string (&v);
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
  }
 
 void
@@ -3863,13 +3855,12 @@ xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 gint64
 xaccAccountGetTaxUSCopyNumber (const Account *acc)
 {
-    gint64 copy_number;
+    gint64 copy_number = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_INT64);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "/tax-US/copy-number", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_INT64 (&v), FALSE);
-    copy_number = g_value_get_int64 (&v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+        copy_number = g_value_get_int64 (&v);
 
     return (copy_number == 0) ? 1 : copy_number;
 }
@@ -3902,10 +3893,12 @@ xaccAccountGetPlaceholder (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_BOOLEAN);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "placeholder", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&v), FALSE);
-    return g_value_get_boolean (&v);
+    if (G_VALUE_HOLDS_BOOLEAN (&v))
+         return g_value_get_boolean (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         return strcmp (g_value_get_string (&v), "true") == 0;
+    return FALSE;
 }
 
 void
@@ -3951,10 +3944,8 @@ xaccAccountGetHidden (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_BOOLEAN);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "hidden", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&v), FALSE);
-    return g_value_get_boolean (&v);
+    return G_VALUE_HOLDS_BOOLEAN (&v) ? g_value_get_boolean (&v) : FALSE;
 }
 
 void
@@ -4256,13 +4247,12 @@ xaccAccountIsPriced(const Account *acc)
 gboolean
 xaccAccountGetReconcileLastDate (const Account *acc, time64 *last_date)
 {
-    gint64 date;
+    gint64 date = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_INT64);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "reconcile-info/last-date", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_INT64 (&v), FALSE);
-    date = g_value_get_int64 (&v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+        date = g_value_get_int64 (&v);
 
     if (date)
     {
@@ -4298,18 +4288,18 @@ xaccAccountGetReconcileLastInterval (const Account *acc,
                                      int *months, int *days)
 {
     GValue v1, v2;
-    int m, d;
+    int64_t m = 0, d = 0;
 
     if (!acc) return FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v1, G_TYPE_INT64);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "reconcile-info/last-interval/months", &v1);
-    g_value_init (&v2, G_TYPE_INT64);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "reconcile-info/last-interval/days", &v2);
-    m = g_value_get_int64 (&v1);
-    d = g_value_get_int64 (&v2);
+    if (G_VALUE_HOLDS_INT64 (&v1))
+        m = g_value_get_int64 (&v1);
+    if (G_VALUE_HOLDS_INT64 (&v2))
+        d = g_value_get_int64 (&v2);
     if (m && d)
     {
         if (months)
@@ -4349,14 +4339,13 @@ xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
 gboolean
 xaccAccountGetReconcilePostponeDate (const Account *acc, time64 *postpone_date)
 {
-    gint64 date;
+    gint64 date = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_INT64);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "reconcile-info/postpone/date", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_INT64 (&v), FALSE);
-    date = g_value_get_int64 (&v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+        date = g_value_get_int64 (&v);
 
     if (date)
     {
@@ -4392,14 +4381,13 @@ gboolean
 xaccAccountGetReconcilePostponeBalance (const Account *acc,
                                         gnc_numeric *balance)
 {
-    gnc_numeric bal;
+    gnc_numeric bal = gnc_numeric_zero ();
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, GNC_TYPE_NUMERIC);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "reconcile-info/postpone/balance", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_INT64 (&v), FALSE);
-    bal = *(gnc_numeric*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+        bal = *(gnc_numeric*)g_value_get_boxed (&v);
 
     if (bal.denom)
     {
@@ -4455,11 +4443,9 @@ xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_BOOLEAN);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "reconcile-info/auto-interest-transfer", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_BOOLEAN (&v), FALSE);
-    return g_value_get_boolean (&v);
+    return G_VALUE_HOLDS_BOOLEAN (&v) ? g_value_get_boolean (&v) : FALSE;
 }
 
 /********************************************************************\
@@ -4488,10 +4474,8 @@ xaccAccountGetLastNum (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "last-num", &v);
-    g_return_val_if_fail (G_VALUE_HOLDS_STRING (&v), FALSE);
-    return g_value_get_string (&v);
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 /********************************************************************\
@@ -4562,13 +4546,13 @@ xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
     GValue v = G_VALUE_INIT;
     gchar *curr_name = g_strdup_printf ("/lot-mgmt/gains-act/%s",
                                       gnc_commodity_get_unique_name (curr));
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     Account *gains_account;
 
     g_return_val_if_fail (acc != NULL, NULL);
-    g_value_init (&v, GNC_TYPE_GUID);
     qof_instance_get_kvp (QOF_INSTANCE(acc), curr_name, &v);
-    guid = (GncGUID*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        guid = (GncGUID*)g_value_get_boxed (&v);
     if (guid == NULL) /* No gains account for this currency */
     {
         gains_account = GetOrMakeOrphanAccount (gnc_account_get_root (acc),
@@ -4630,9 +4614,8 @@ dxaccAccountGetPriceSrc(const Account *acc)
 
     if (!xaccAccountIsPriced(acc)) return NULL;
 
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE(acc), "old-price-source", &v);
-    return g_value_get_string (&v);
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 /********************************************************************\
@@ -4661,9 +4644,8 @@ dxaccAccountGetQuoteTZ(const Account *acc)
     GValue v = G_VALUE_INIT;
     if (!acc) return NULL;
     if (!xaccAccountIsPriced(acc)) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (acc), "old-quote-tz", &v);
-    return g_value_get_string (&v);
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 /********************************************************************\
@@ -4700,10 +4682,9 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
      */
     GValue v = G_VALUE_INIT;
     if (!acc) return FALSE;
-    g_value_init (&v, G_TYPE_BOOLEAN);
     qof_instance_get_kvp (QOF_INSTANCE (acc),
                           "reconcile-info/include-children", &v);
-    return g_value_get_int64 (&v);
+    return G_VALUE_HOLDS_INT64 (&v) ? g_value_get_int64 (&v) : FALSE;
 }
 
 /********************************************************************\
@@ -5095,7 +5076,7 @@ gnc_imap_find_account (GncImportMatchMap *imap,
                        const char *key)
 {
     GValue v = G_VALUE_INIT;
-    GncGUID * guid;
+    GncGUID * guid = NULL;
     char *kvp_path;
 
     if (!imap || !key) return NULL;
@@ -5103,9 +5084,9 @@ gnc_imap_find_account (GncImportMatchMap *imap,
         kvp_path = g_strdup_printf (IMAP_FRAME "/%s", key);
     else
         kvp_path = g_strdup_printf (IMAP_FRAME "/%s/%s", category, key);
-    g_value_init (&v, GNC_TYPE_GUID);
     qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &v);
-    guid = (GncGUID*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        guid = (GncGUID*)g_value_get_boxed (&v);
     g_free (kvp_path);
     return xaccAccountLookup (guid, imap->book);
 }
@@ -5483,7 +5464,6 @@ gnc_imap_add_account_bayes(GncImportMatchMap *imap,
                                     (char*)current_token->data,
                                     account_fullname);
 
-        g_value_init (&value, G_TYPE_INT64);
         qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
         /* if the token/account is already in the tree, read the current
          * value from the tree and use this for the basis of the value we

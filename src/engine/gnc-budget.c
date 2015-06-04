@@ -554,14 +554,16 @@ gnc_budget_is_account_period_value_set(const GncBudget *budget,
 {
     GValue v = G_VALUE_INIT;
     gchar path[BUF_SIZE];
+    gconstpointer ptr = NULL;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), FALSE);
     g_return_val_if_fail(account, FALSE);
 
     make_period_path (account, period_num, path);
-    g_value_init (&v, GNC_TYPE_NUMERIC);
     qof_instance_get_kvp (QOF_INSTANCE (budget), path, &v);
-    return (g_value_get_boxed (&v) != NULL);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        ptr = g_value_get_boxed (&v);
+    return (ptr != NULL);
 }
 
 gnc_numeric
@@ -569,17 +571,17 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
                                     const Account *account,
                                     guint period_num)
 {
-    gnc_numeric *numeric;
+    gnc_numeric *numeric = NULL;
     gchar path[BUF_SIZE];
     GValue v = G_VALUE_INIT;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), gnc_numeric_zero());
     g_return_val_if_fail(account, gnc_numeric_zero());
 
-    g_value_init (&v, GNC_TYPE_NUMERIC);
     make_period_path (account, period_num, path);
     qof_instance_get_kvp (QOF_INSTANCE (budget), path, &v);
-    numeric = (gnc_numeric*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        numeric = (gnc_numeric*)g_value_get_boxed (&v);
 
     if (numeric)
         return *numeric;

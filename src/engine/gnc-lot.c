@@ -436,9 +436,10 @@ gnc_lot_get_title (const GNCLot *lot)
 {
     GValue v = G_VALUE_INIT;
     if (!lot) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (lot), "/title", &v);
-    return g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        return g_value_get_string (&v);
+    return NULL;
 }
 
 const char *
@@ -446,9 +447,10 @@ gnc_lot_get_notes (const GNCLot *lot)
 {
     GValue v = G_VALUE_INIT;
     if (!lot) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (lot), "/notes", &v);
-    return g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        return g_value_get_string (&v);
+    return NULL;
 }
 
 void

@@ -1085,7 +1085,7 @@ xaccSplitDetermineGainStatus (Split *split)
 {
     Split *other;
     GValue v = G_VALUE_INIT;
-    GncGUID *guid;
+    GncGUID *guid = NULL;
 
     if (GAINS_STATUS_UNKNOWN != split->gains) return;
 
@@ -1097,9 +1097,9 @@ xaccSplitDetermineGainStatus (Split *split)
         return;
     }
 
-    g_value_init (&v, GNC_TYPE_GUID);
     qof_instance_get_kvp (QOF_INSTANCE (split), "gains-source", &v);
-    guid = (GncGUID*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        guid = (GncGUID*)g_value_get_boxed (&v);
     if (!guid)
     {
         // CHECKME: We leave split->gains_split alone.  Is that correct?
@@ -2012,12 +2012,12 @@ const char *
 xaccSplitGetType(const Split *s)
 {
     GValue v = G_VALUE_INIT;
-    const char *split_type;
+    const char *split_type = NULL;
 
     if (!s) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (s), "split-type", &v);
-    split_type = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        split_type = g_value_get_string (&v);
     return split_type ? split_type : "normal";
 }
 
@@ -2167,11 +2167,11 @@ gnc_numeric
 xaccSplitVoidFormerAmount(const Split *split)
 {
     GValue v = G_VALUE_INIT;
-    gnc_numeric *num;
+    gnc_numeric *num = NULL;
     g_return_val_if_fail(split, gnc_numeric_zero());
-    g_value_init (&v, GNC_TYPE_NUMERIC);
     qof_instance_get_kvp (QOF_INSTANCE (split), void_former_amt_str, &v);
-    num = (gnc_numeric*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        num = (gnc_numeric*)g_value_get_boxed (&v);
     return num ? *num : gnc_numeric_zero();
 }
 
@@ -2179,11 +2179,11 @@ gnc_numeric
 xaccSplitVoidFormerValue(const Split *split)
 {
     GValue v = G_VALUE_INIT;
-    gnc_numeric *num;
+    gnc_numeric *num = NULL;
     g_return_val_if_fail(split, gnc_numeric_zero());
-    g_value_init (&v, GNC_TYPE_NUMERIC);
     qof_instance_get_kvp (QOF_INSTANCE (split), void_former_val_str, &v);
-    num = (gnc_numeric*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        num = (gnc_numeric*)g_value_get_boxed (&v);
     return num ? *num : gnc_numeric_zero();
 }
 

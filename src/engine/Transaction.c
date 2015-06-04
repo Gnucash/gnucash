@@ -2200,9 +2200,10 @@ xaccTransGetAssociation (const Transaction *trans)
 {
     GValue v = G_VALUE_INIT;
     if (!trans) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), assoc_uri_str, &v);
-    return g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         return g_value_get_string (&v);
+    return NULL;
 }
 
 const char *
@@ -2210,9 +2211,10 @@ xaccTransGetNotes (const Transaction *trans)
 {
     GValue v = G_VALUE_INIT;
     if (!trans) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), trans_notes_str, &v);
-    return g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         return g_value_get_string (&v);
+    return NULL;
 }
 
 gboolean
@@ -2220,9 +2222,10 @@ xaccTransGetIsClosingTxn (const Transaction *trans)
 {
     GValue v = G_VALUE_INIT;
     if (!trans) return FALSE;
-    g_value_init (&v, G_TYPE_INT64);
     qof_instance_get_kvp (QOF_INSTANCE (trans), trans_is_closing_str, &v);
-    return g_value_get_int64 (&v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+         return g_value_get_int64 (&v);
+    return FALSE;
 }
 
 /********************************************************************\
@@ -2273,9 +2276,9 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
          * from there because it doesn't suffer from time zone
          * shifts. */
 	GValue v = G_VALUE_INIT;
-	g_value_init (&v, G_TYPE_DATE);
 	qof_instance_get_kvp (QOF_INSTANCE (trans), TRANS_DATE_POSTED, &v);
-	result = *(GDate*)g_value_get_boxed (&v);
+        if (G_VALUE_HOLDS_BOXED (&v))
+             result = *(GDate*)g_value_get_boxed (&v);
 	if (! g_date_valid (&result))
             result = timespec_to_gdate(xaccTransRetDatePostedTS(trans));
     }
@@ -2299,9 +2302,9 @@ xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts)
     GValue v = G_VALUE_INIT;
     if (!trans || !ts) return;
 
-    g_value_init (&v, GNC_TYPE_TIMESPEC);
     qof_instance_get_kvp (QOF_INSTANCE (trans), TRANS_DATE_DUE_KVP, &v);
-    *ts = *(Timespec*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+         *ts = *(Timespec*)g_value_get_boxed (&v);
     if (ts->tv_sec == 0)
         xaccTransGetDatePostedTS (trans, ts);
 }
@@ -2317,13 +2320,13 @@ xaccTransRetDateDueTS (const Transaction *trans)
 char
 xaccTransGetTxnType (const Transaction *trans)
 {
-    const char *s;
+    const char *s = NULL;
     GValue v = G_VALUE_INIT;
 
     if (!trans) return TXN_TYPE_NONE;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), TRANS_TXN_TYPE_KVP, &v);
-    s = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         s = g_value_get_string (&v);
     if (s && strlen (s) == 0)
 	return *s;
 
@@ -2337,11 +2340,11 @@ xaccTransGetReadOnly (const Transaction *trans)
      * for performance reasons, since its checked every trans commit.
      */
     GValue v = G_VALUE_INIT;
-    const char *s;
+    const char *s = NULL;
     if (trans == NULL) return NULL;
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE(trans), TRANS_READ_ONLY_REASON, &v);
-    s = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         s = g_value_get_string (&v);
     if (s && strlen (s))
 	return s;
 
@@ -2529,9 +2532,11 @@ xaccTransVoid(Transaction *trans, const char *reason)
     g_return_if_fail(trans && reason);
 
     xaccTransBeginEdit(trans);
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), trans_notes_str, &v);
-    qof_instance_set_kvp (QOF_INSTANCE (trans), void_former_notes_str, &v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        qof_instance_set_kvp (QOF_INSTANCE (trans), void_former_notes_str, &v);
+    else
+        g_value_init (&v, G_TYPE_STRING);
 
     g_value_set_string (&v, _("Voided transaction"));
     qof_instance_set_kvp (QOF_INSTANCE (trans), trans_notes_str, &v);
@@ -2552,13 +2557,13 @@ xaccTransVoid(Transaction *trans, const char *reason)
 gboolean
 xaccTransGetVoidStatus(const Transaction *trans)
 {
-    const char *s;
+    const char *s = NULL;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(trans, FALSE);
 
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), void_reason_str, &v);
-    s = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         s = g_value_get_string (&v);
     return s && strlen(s);
 }
 
@@ -2568,22 +2573,23 @@ xaccTransGetVoidReason(const Transaction *trans)
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(trans, FALSE);
 
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), void_reason_str, &v);
-    return g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         return g_value_get_string (&v);
+    return NULL;
 }
 
 Timespec
 xaccTransGetVoidTime(const Transaction *tr)
 {
     GValue v = G_VALUE_INIT;
-    const char *s;
+    const char *s = NULL;
     Timespec void_time = {0, 0}, *ts;
 
     g_return_val_if_fail(tr, void_time);
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (tr), void_time_str, &v);
-    s = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        s = g_value_get_string (&v);
     if (s)
 	return gnc_iso8601_to_timespec_gmt (s);
     return void_time;
@@ -2593,17 +2599,18 @@ void
 xaccTransUnvoid (Transaction *trans)
 {
     GValue v = G_VALUE_INIT;
-    const char *s;
+    const char *s = NULL;
     g_return_if_fail(trans);
 
-    g_value_init (&v, G_TYPE_STRING);
     qof_instance_get_kvp (QOF_INSTANCE (trans), void_reason_str, &v);
-    s = g_value_get_string (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        s = g_value_get_string (&v);
     if (s == NULL) return; /* Transaction isn't voided. Bail. */
     xaccTransBeginEdit(trans);
 
     qof_instance_get_kvp (QOF_INSTANCE (trans), void_former_notes_str, &v);
-    qof_instance_set_kvp (QOF_INSTANCE (trans), trans_notes_str, &v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        qof_instance_set_kvp (QOF_INSTANCE (trans), trans_notes_str, &v);
     qof_instance_set_kvp (QOF_INSTANCE (trans), void_former_notes_str, NULL);
     qof_instance_set_kvp (QOF_INSTANCE (trans), void_reason_str, NULL);
     qof_instance_set_kvp (QOF_INSTANCE (trans), void_time_str, NULL);
@@ -2648,10 +2655,11 @@ xaccTransGetReversedBy(const Transaction *trans)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(trans, NULL);
-    g_value_init (&v, GNC_TYPE_GUID);
     qof_instance_get_kvp (QOF_INSTANCE(trans), TRANS_REVERSED_BY, &v);
-    return xaccTransLookup((GncGUID*)g_value_get_boxed (&v),
-			   qof_instance_get_book(trans));
+    if (G_VALUE_HOLDS_BOXED (&v))
+        return xaccTransLookup((GncGUID*)g_value_get_boxed (&v),
+                               qof_instance_get_book(trans));
+    return NULL;
 }
 
 void
@@ -2698,9 +2706,9 @@ xaccTransScrubGainsDate (Transaction *trans)
         xaccSplitDetermineGainStatus(s);
 
         if ((GAINS_STATUS_GAINS & s->gains) &&
-                s->gains_split &&
-                ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
-                 (s->gains & GAINS_STATUS_DATE_DIRTY)))
+            s->gains_split &&
+            ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
+             (s->gains & GAINS_STATUS_DATE_DIRTY)))
         {
             Transaction *source_trans = s->gains_split->parent;
             ts = source_trans->date_posted;
@@ -2752,8 +2760,8 @@ restart:
                    if ((s->gains & GAINS_STATUS_VDIRTY) ||
                        (s->gains_split &&
                         (s->gains_split->gains & GAINS_STATUS_VDIRTY)))
-                   xaccSplitComputeCapGains(s, gain_acc);
-                  );
+                       xaccSplitComputeCapGains(s, gain_acc);
+        );
 
     LEAVE("(trans=%p)", trans);
 }
@@ -2825,85 +2833,85 @@ trans_is_balanced_p (const Transaction *trans)
 gboolean xaccTransRegister (void)
 {
     static QofParam params[] =
-    {
         {
-            TRANS_NUM, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccTransGetNum,
-            (QofSetterFunc)qofTransSetNum,
-            qof_string_number_compare_func
-        },
-        {
-            TRANS_DESCRIPTION, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccTransGetDescription,
-            (QofSetterFunc)qofTransSetDescription
-        },
-        {
-            TRANS_DATE_ENTERED, QOF_TYPE_DATE,
-            (QofAccessFunc)xaccTransRetDateEnteredTS,
-            (QofSetterFunc)qofTransSetDateEntered
-        },
-        {
-            TRANS_DATE_POSTED, QOF_TYPE_DATE,
-            (QofAccessFunc)xaccTransRetDatePostedTS,
-            (QofSetterFunc)qofTransSetDatePosted
-        },
-        {
-            TRANS_DATE_DUE, QOF_TYPE_DATE,
-            (QofAccessFunc)xaccTransRetDateDueTS, NULL
-        },
-        {
-            TRANS_IMBALANCE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccTransGetImbalanceValue, NULL
-        },
-        {
-            TRANS_NOTES, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccTransGetNotes,
-            (QofSetterFunc)qofTransSetNotes
-        },
-        {
-            TRANS_ASSOCIATION, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccTransGetAssociation,
-            (QofSetterFunc)xaccTransSetAssociation
-        },
-        {
-            TRANS_IS_CLOSING, QOF_TYPE_BOOLEAN,
-            (QofAccessFunc)xaccTransGetIsClosingTxn, NULL
-        },
-        {
-            TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN,
-            (QofAccessFunc)trans_is_balanced_p, NULL
-        },
-        {
-            TRANS_TYPE, QOF_TYPE_CHAR,
-            (QofAccessFunc)xaccTransGetTxnType,
-            (QofSetterFunc)xaccTransSetTxnType
-        },
-        {
-            TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN,
-            (QofAccessFunc)xaccTransGetVoidStatus, NULL
-        },
-        {
-            TRANS_VOID_REASON, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccTransGetVoidReason, NULL
-        },
-        {
-            TRANS_VOID_TIME, QOF_TYPE_DATE,
-            (QofAccessFunc)xaccTransGetVoidTime, NULL
-        },
-        {
-            TRANS_SPLITLIST, GNC_ID_SPLIT,
-            (QofAccessFunc)xaccTransGetSplitList, NULL
-        },
-        {
-            QOF_PARAM_BOOK, QOF_ID_BOOK,
-            (QofAccessFunc)qof_instance_get_book, NULL
-        },
-        {
-            QOF_PARAM_GUID, QOF_TYPE_GUID,
-            (QofAccessFunc)qof_entity_get_guid, NULL
-        },
-        { NULL },
-    };
+            {
+                TRANS_NUM, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccTransGetNum,
+                (QofSetterFunc)qofTransSetNum,
+                qof_string_number_compare_func
+            },
+            {
+                TRANS_DESCRIPTION, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccTransGetDescription,
+                (QofSetterFunc)qofTransSetDescription
+            },
+            {
+                TRANS_DATE_ENTERED, QOF_TYPE_DATE,
+                (QofAccessFunc)xaccTransRetDateEnteredTS,
+                (QofSetterFunc)qofTransSetDateEntered
+            },
+            {
+                TRANS_DATE_POSTED, QOF_TYPE_DATE,
+                (QofAccessFunc)xaccTransRetDatePostedTS,
+                (QofSetterFunc)qofTransSetDatePosted
+            },
+            {
+                TRANS_DATE_DUE, QOF_TYPE_DATE,
+                (QofAccessFunc)xaccTransRetDateDueTS, NULL
+            },
+            {
+                TRANS_IMBALANCE, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccTransGetImbalanceValue, NULL
+            },
+            {
+                TRANS_NOTES, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccTransGetNotes,
+                (QofSetterFunc)qofTransSetNotes
+            },
+            {
+                TRANS_ASSOCIATION, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccTransGetAssociation,
+                (QofSetterFunc)xaccTransSetAssociation
+            },
+            {
+                TRANS_IS_CLOSING, QOF_TYPE_BOOLEAN,
+                (QofAccessFunc)xaccTransGetIsClosingTxn, NULL
+            },
+            {
+                TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN,
+                (QofAccessFunc)trans_is_balanced_p, NULL
+            },
+            {
+                TRANS_TYPE, QOF_TYPE_CHAR,
+                (QofAccessFunc)xaccTransGetTxnType,
+                (QofSetterFunc)xaccTransSetTxnType
+            },
+            {
+                TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN,
+                (QofAccessFunc)xaccTransGetVoidStatus, NULL
+            },
+            {
+                TRANS_VOID_REASON, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccTransGetVoidReason, NULL
+            },
+            {
+                TRANS_VOID_TIME, QOF_TYPE_DATE,
+                (QofAccessFunc)xaccTransGetVoidTime, NULL
+            },
+            {
+                TRANS_SPLITLIST, GNC_ID_SPLIT,
+                (QofAccessFunc)xaccTransGetSplitList, NULL
+            },
+            {
+                QOF_PARAM_BOOK, QOF_ID_BOOK,
+                (QofAccessFunc)qof_instance_get_book, NULL
+            },
+            {
+                QOF_PARAM_GUID, QOF_TYPE_GUID,
+                (QofAccessFunc)qof_entity_get_guid, NULL
+            },
+            { NULL },
+        };
 
     qof_class_register (GNC_ID_TRANS, (QofSortFunc)xaccTransOrder, params);
 

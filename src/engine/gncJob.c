@@ -454,11 +454,11 @@ const char * gncJobGetReference (const GncJob *job)
 gnc_numeric gncJobGetRate (const GncJob *job)
 {
     GValue v = G_VALUE_INIT;
-    gnc_numeric *rate;
+    gnc_numeric *rate = NULL;
     if (!job) return gnc_numeric_zero ();
-    g_value_init (&v, GNC_TYPE_NUMERIC);
     qof_instance_get_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, &v);
-    rate = (gnc_numeric*)g_value_get_boxed (&v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        rate = (gnc_numeric*)g_value_get_boxed (&v);
     if (rate)
         return *rate;
     return gnc_numeric_zero();
