@@ -1273,5 +1273,19 @@ qof_instance_has_slot (const QofInstance *inst, const char *path)
     return kvp_frame_get_value (inst->kvp_data, path) != NULL;
 }
 
+void
+qof_instance_slot_delete (const QofInstance *inst, const char *path)
+{
+    kvp_frame_set_frame_nc (inst->kvp_data, path, NULL);
+}
+
+void
+qof_instance_slot_delete_if_empty (const QofInstance *inst, const char *path)
+{
+    KvpFrame *frame = kvp_frame_get_frame (inst->kvp_data, path);
+    if (frame && kvp_frame_is_empty (frame))
+        kvp_frame_set_frame_nc (inst->kvp_data, path, NULL);
+}
+
 /* ========================== END OF FILE ======================= */
 

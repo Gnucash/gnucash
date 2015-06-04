@@ -126,6 +126,9 @@ gboolean qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
 void qof_instance_kvp_merge_guids (const QofInstance *target,
                                    const QofInstance *donor, const char* path);
 gboolean qof_instance_has_slot (const QofInstance *inst, const char *path);
+void qof_instance_slot_delete (const QofInstance *inst, const char *path);
+void qof_instance_slot_delete_if_empty (const QofInstance *inst,
+                                        const char *path);
 
 #ifdef __cplusplus
 }
