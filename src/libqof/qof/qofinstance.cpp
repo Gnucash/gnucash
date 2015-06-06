@@ -1078,7 +1078,7 @@ qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value)
 }
 
 void
-qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value)
+qof_instance_get_kvp (const QofInstance *inst, const gchar *key, GValue *value)
 {
     GValue *temp = kvp_frame_get_gvalue (inst->kvp_data, key);
     if (G_IS_VALUE (temp))

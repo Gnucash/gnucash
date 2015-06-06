@@ -108,7 +108,7 @@ void qof_instance_set_idata(gpointer inst, guint32 idata);
 /* Convenience functions to save some typing in property handlers */
 gboolean qof_instance_has_kvp (QofInstance *inst);
 void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
-void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
+void qof_instance_get_kvp (const QofInstance *inst, const gchar *key, GValue *value);
 /* Functions to isolate the KVP mechanism inside QOF for cases where GValue
  * operations won't work.
  */
