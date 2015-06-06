@@ -33,8 +33,13 @@
 #ifndef GNC_AB_TRANS_TEMPL_H
 #define GNC_AB_TRANS_TEMPL_H
 
-#include <glib.h>
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
+#include <config.h>
+#include <glib.h>
 #include "qof.h"
 
 G_BEGIN_DECLS
@@ -67,25 +72,25 @@ GncABTransTempl *gnc_ab_trans_templ_new_full(
     const gchar *purpose_cont);
 
 /**
- * Create a template, taking the values from a KvpFrame.
+ * Obtain the list of QofTemplates saved in a Book.
  *
- * @param k KvpFrame
- * @return A newly allocated GncABTransTempl
- */
-GncABTransTempl *gnc_ab_trans_templ_new_from_kvp(const KvpFrame *k);
-
-/**
- * Create a list of templates from a list of kvp_values which in turn
- * contain a KvpFrame.
- *
- * @param v GList of kvp_values
+ * @param b QofBook containing the templates.
  * @return A GList of newly allocated GncABTransTempls
  */
-GList *gnc_ab_trans_templ_list_new_from_kvp_list(GList *v);
+GList *gnc_ab_trans_templ_list_new_from_book(QofBook *b);
+
+/**
+ * Set the GList of kvp_frames of template transactions in the Book @a b to @a
+ * template_list.  No copy of the GList will be stored, the callee becomes the
+ * owner and the caller must not free it.  The book will be marked "dirty".
+ *
+ * @param b Book
+ * @param template_list Template list
+ */
+void gnc_ab_set_book_template_list(QofBook *b, GList *template_list);
 
 /**
  * Free the memory used by a template.
- *
  * @param t GncABTransTempl to be freed
  */
 void gnc_ab_trans_templ_free(GncABTransTempl *t);
@@ -96,23 +101,6 @@ void gnc_ab_trans_templ_free(GncABTransTempl *t);
  * @param l GList of GncABTransTempl
  */
 void gnc_ab_trans_templ_list_free(GList *l);
-
-/**
- * Create a KvpFrame a given template.
- *
- * @param t Template
- * @return A newly allocated KvpFrame
- */
-KvpFrame *gnc_ab_trans_templ_to_kvp(const GncABTransTempl *t);
-
-/**
- * Create a list of kvp_values, which in turn contain a KvpFrame, from a list
- * of templates.
- *
- * @param k GList of GncABTransTempls
- * @return GList of newly allocated kvp_values
- */
-GList *gnc_ab_trans_templ_list_to_kvp_list(GList *k);
 
 /**
  * @param t Template
@@ -217,7 +205,9 @@ void gnc_ab_trans_templ_set_purpose_cont(GncABTransTempl *t,
         const gchar *purpose_cont);
 
 G_END_DECLS
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* GNC_AB_TRANS_TEMPL_H */
 /** @} */
 /** @} */

@@ -396,7 +396,6 @@ src/import-export/aqb/gnc-ab-getbalance.c
 src/import-export/aqb/gnc-ab-gettrans.c
 src/import-export/aqb/gnc-ab-kvp.c
 src/import-export/aqb/gnc-ab-transfer.c
-src/import-export/aqb/gnc-ab-trans-templ.c
 src/import-export/aqb/gnc-ab-utils.c
 src/import-export/aqb/gnc-file-aqb-import.c
 src/import-export/aqb/gnc-gwen-gui.c
@@ -463,6 +462,7 @@ src/import-export/qif-imp/qif-objects.scm
 src/import-export/qif-imp/qif-parse.scm
 src/import-export/qif-imp/qif-to-gnc.scm
 src/import-export/qif-imp/qif-utils.scm
+src/libqof/qof/gnc-aqbanking-templates.cpp
 src/libqof/qof/gnc-date.cpp
 src/libqof/qof/gnc-int128.cpp
 src/libqof/qof/gnc-numeric.cpp

@@ -23,6 +23,7 @@ AM_CPPFLAGS = \
   $(BOOST_CPPFLAGS)
 
 libgnc_qof_la_SOURCES =  \
+   gnc-aqbanking-templates.cpp \
    gnc-date.cpp        \
    gnc-int128.cpp      \
    gnc-numeric.cpp     \
@@ -50,6 +51,7 @@ libgnc_qof_la_SOURCES =  \
 qofincludedir = ${pkgincludedir}
 
 qofinclude_HEADERS = \
+   gnc-aqbanking-templates.h \
    gnc-date-p.h      \
    gnc-date.h        \
    gnc-numeric.h     \
