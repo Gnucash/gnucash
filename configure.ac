@@ -329,7 +329,7 @@ fi
 # 2.44 requires C11.
 # 2.36 deprecated g_type_init
 # 2.32 deprecated some gthread functions
-ac_cv_cstd=c99
+ac_cv_cstd=gnu99
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
                         gobject-2.0 gmodule-2.0,
 [
