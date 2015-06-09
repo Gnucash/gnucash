@@ -1,5 +1,5 @@
 # Danish translation of Gnucash.
-# Copyright (C) 2014 Free Software Foundation, Inc.
+# Copyright (C) 2015 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnucash package.
 # Kenneth Christiansen <kenneth@gnome.org>, 2000.
 # Keld Simonsen <keld@dkuug.dk>, 2000-2002.
@@ -19,6 +19,7 @@
 # bill -> regning
 # billing term -> betalingsbetingelse
 # book -> bog (regnskab)
+# business -> forretning (afklar om det skal være virksomhed)
 # Cash Flow -> pengestrømsopgørelse
 # charge -> betaling
 # Chart of Accounts -> kontoplan
@@ -95,7 +96,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.6.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-30 13:18-0700\n"
-"PO-Revision-Date: 2015-04-03 22:41+0200\n"
+"PO-Revision-Date: 2015-05-02 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -160,11 +161,11 @@ msgstr "Kundenummer"
 
 #: ../src/app-utils/business-prefs.scm:33
 msgid "The format string to use for generating customer numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge til oprettelse af kundenumre. Dette er en formatsstreng i printf-stil."
+msgstr "Formatstreng der anvendes ved oprettelse af kundenumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:34
 msgid "The previous customer number generated. This number will be incremented to generate the next customer number."
-msgstr "Det forrige kundenummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste kundenummer."
+msgstr "Det forrige oprettet kundenummer. Dette nummer vil blive trinvist øget for at oprette det næste kundenummer."
 
 #: ../src/app-utils/business-prefs.scm:35
 msgid "Employee number format"
@@ -176,11 +177,11 @@ msgstr "Medarbejdernummer"
 
 #: ../src/app-utils/business-prefs.scm:37
 msgid "The format string to use for generating employee numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge til oprettelse af medarbejdernummer. Dette er en formatstreng i printf-stil."
+msgstr "Formatstreng der anvendes ved oprettelse af medarbejdernumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:38
 msgid "The previous employee number generated. This number will be incremented to generate the next employee number."
-msgstr "Det forrige medarbejdernummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste medarbejdernummer."
+msgstr "Det forrige oprettet medarbejdernummer. Dette nummer vil blive trinvist øget for at oprette det næste medarbejdernummer."
 
 #: ../src/app-utils/business-prefs.scm:39
 msgid "Invoice number format"
@@ -192,11 +193,11 @@ msgstr "Fakturanummer"
 
 #: ../src/app-utils/business-prefs.scm:41
 msgid "The format string to use for generating invoice numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge for oprettelse af fakturanumre. Dette er en formatstreng i printf-stil."
+msgstr "Formatstreng der anvendes ved oprettelse af fakturanumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:42
 msgid "The previous invoice number generated. This number will be incremented to generate the next invoice number."
-msgstr "Det forrige fakturanummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste fakturanummer."
+msgstr "Det forrige oprettet fakturanummer. Dette nummer vil blive trinvist øget for at oprette det næste fakturanummer."
 
 #: ../src/app-utils/business-prefs.scm:43
 msgid "Bill number format"
@@ -208,11 +209,11 @@ msgstr "Regningsnummer"
 
 #: ../src/app-utils/business-prefs.scm:45
 msgid "The format string to use for generating bill numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge for oprettelse af regningsnumre. Dette er en formatstreng i printf-stil."
+msgstr "Formatstreng der anvendes ved oprettelse af regningsnumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:46
 msgid "The previous bill number generated. This number will be incremented to generate the next bill number."
-msgstr "Det forrige regningsnummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste regningsnummer."
+msgstr "Det forrige oprettet regningsnummer. Dette nummer vil blive trinvist øget for at oprette det næste regningsnummer."
 
 #: ../src/app-utils/business-prefs.scm:47
 msgid "Expense voucher number format"
@@ -224,11 +225,11 @@ msgstr "Udgiftsbilagsnummer"
 
 #: ../src/app-utils/business-prefs.scm:49
 msgid "The format string to use for generating expense voucher numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge for at oprette udgiftsbilagsnumre. Dette er en formatstreng i printf-stil."
+msgstr "Formatstreng er anvendes ved oprettelse af udgiftsbilagsnumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:50
 msgid "The previous expense voucher number generated. This number will be incremented to generate the next voucher number."
-msgstr "Det forrige udgiftsbilagsnummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste bilagsnummer."
+msgstr "Det forrige oprettet udgiftsbilagsnummer. Dette nummer vil blive trinvist øget for at oprette det næste bilagsnummer."
 
 #: ../src/app-utils/business-prefs.scm:51
 msgid "Job number format"
@@ -241,11 +242,11 @@ msgstr "Jobnummer"
 
 #: ../src/app-utils/business-prefs.scm:53
 msgid "The format string to use for generating job numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge for oprettelse af jobnumre. Dette er en formatstreng i printf-stil."
+msgstr "Formatstreng der anvendes ved oprettelse af jobnumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:54
 msgid "The previous job number generated. This number will be incremented to generate the next job number."
-msgstr "Det forrige jobnummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste jobnummer."
+msgstr "Det forrige oprettet jobnummer. Dette nummer vil blive trinvist øget for at oprette det næste jobnummer."
 
 #: ../src/app-utils/business-prefs.scm:55
 msgid "Order number format"
@@ -257,11 +258,11 @@ msgstr "Ordrenummer"
 
 #: ../src/app-utils/business-prefs.scm:57
 msgid "The format string to use for generating order numbers. This is a printf-style format string."
-msgstr "Formatstregnen at bruge for at oprette ordrenumre. Dette er en formatstreng i printf-stil."
+msgstr "Formatstregn der anvendes ved oprettelse af ordrenumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:58
 msgid "The previous order number generated. This number will be incremented to generate the next order number."
-msgstr "Det forrige ordrenummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste ordrenummer."
+msgstr "Det forrige oprettet ordrenummer. Dette nummer vil blive trinvist øget for at oprette det næste ordrenummer."
 
 #: ../src/app-utils/business-prefs.scm:59
 msgid "Vendor number format"
@@ -273,11 +274,11 @@ msgstr "Leverandørnummer"
 
 #: ../src/app-utils/business-prefs.scm:61
 msgid "The format string to use for generating vendor numbers. This is a printf-style format string."
-msgstr "Formatstrengen at bruge for oprettelse af leverandørnumre. Dette er en formatstreng i printf-stil."
+msgstr "Formatstreng er anvendes ved oprettelse af leverandørnumre. Dette er en formatstreng i printf-stil."
 
 #: ../src/app-utils/business-prefs.scm:62
 msgid "The previous vendor number generated. This number will be incremented to generate the next vendor number."
-msgstr "Det forrige leverandørnummer oprettet. Dette nummer vil blive trinvist øget for at oprette det næste leverandørnummer."
+msgstr "Det forrige oprettet leverandørnummer. Dette nummer vil blive trinvist øget for at oprette det næste leverandørnummer."
 
 #: ../src/app-utils/business-prefs.scm:72
 msgid "The name of your business."
@@ -305,12 +306,12 @@ msgstr "Din forretnings e-postadresse."
 
 #: ../src/app-utils/business-prefs.scm:102
 msgid "The URL address of your website."
-msgstr "URL-adressen på din internetside."
+msgstr "Din internetsides URL-adresse."
 
 # ' forkert på engelsk?
 #: ../src/app-utils/business-prefs.scm:107
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "Id'et på dit firma (f.eks. tax-id: 00-000000)."
+msgstr "Dit firmas id (f.eks. tax-id: 00-000000)."
 
 #: ../src/app-utils/business-prefs.scm:112
 msgid "Default Customer TaxTable"
@@ -338,7 +339,7 @@ msgstr "Standarddatoformatet brugt til smarte udskrevne datoer."
 
 #: ../src/app-utils/business-prefs.scm:133
 msgid "Check to have trading accounts used for transactions involving more than one currency or commodity."
-msgstr "Kontroller for at der er anvendt handelskonti for transaktioner, der involverer mere end en valuta eller vare."
+msgstr "Afkryds for at handelskonti bruges til transaktioner, der involverer mere end en valuta eller vare."
 
 #: ../src/app-utils/business-prefs.scm:139
 msgid "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only."
@@ -346,7 +347,7 @@ msgstr "Vælg antallet af dage hvorefter transaktioner vil være skrivebeskyttet
 
 #: ../src/app-utils/business-prefs.scm:150
 msgid "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports."
-msgstr "Kontroller for at have del handling-feltet brugt i kassekladder for »Num«-feltet i stedet for transaktionsnummeret; transaktionsnummer vises som »T-Num« på den anden linje af kladden. Har tilsvarende effekt på forrentingsfunktioner, rapportering og import/eksport."
+msgstr "Afkryds for at have del handling-feltet brugt i kassekladder for »Num«-feltet i stedet for transaktionsnummeret; transaktionsnummer vises som »T-Num« på den anden linje af kladden. Har tilsvarende effekt på forrentingsfunktioner, rapportering og import/eksport."
 
 #: ../src/app-utils/business-prefs.scm:158
 msgid "Budget to be used when none has been otherwise specified."
@@ -424,15 +425,15 @@ msgstr "Regnskabsperiodens start"
 
 #: ../src/app-utils/date-utilities.scm:877
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "Første dag for regnskabsperioden, som angivet under globale præferencer."
+msgstr "Første dag i regnskabsperioden, som angivet under globale præferencer."
 
 #: ../src/app-utils/date-utilities.scm:881
 msgid "End of accounting period"
-msgstr "Regnskabsperiodens slutning"
+msgstr "Regnskabsperiodens afslutning"
 
 #: ../src/app-utils/date-utilities.scm:884
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "Sidste dag for regnskabsperioden, som angivet under globale præferencer."
+msgstr "Sidste dag i regnskabsperioden, som angivet under globale præferencer."
 
 #: ../src/app-utils/date-utilities.scm:888
 #: ../src/gnome-utils/gnc-period-select.c:71
@@ -472,7 +473,7 @@ msgstr "Sidste dag i forrige måned."
 
 #: ../src/app-utils/date-utilities.scm:916
 msgid "Start of next month"
-msgstr "Start på næste måned"
+msgstr "Begyndelsen af næste måned"
 
 #: ../src/app-utils/date-utilities.scm:919
 msgid "First day of the next month."
@@ -509,7 +510,7 @@ msgstr "Start af forrige kvartal"
 
 #: ../src/app-utils/date-utilities.scm:947
 msgid "First day of the previous quarterly accounting period."
-msgstr "Første dag for den forrige kvartalsmæssige regnskabsperiode."
+msgstr "Første dag i den forrige kvartalsmæssige regnskabsperiode."
 
 #: ../src/app-utils/date-utilities.scm:951
 #: ../src/gnome-utils/gnc-period-select.c:90
@@ -518,15 +519,15 @@ msgstr "Slutningen af forrige kvartal."
 
 #: ../src/app-utils/date-utilities.scm:954
 msgid "Last day of previous quarterly accounting period."
-msgstr "Sidste dag for forrige kvartalsmæssige regnskabsperiode."
+msgstr "Sidste dag i forrige kvartalsmæssige regnskabsperiode."
 
 #: ../src/app-utils/date-utilities.scm:958
 msgid "Start of next quarter"
-msgstr "Starten af næste kvartal"
+msgstr "Begyndelsen af næste kvartal"
 
 #: ../src/app-utils/date-utilities.scm:961
 msgid "First day of the next quarterly accounting period."
-msgstr "Første dag for næste kvartalsmæssige regnskabsperiode."
+msgstr "Første dag i næste kvartalsmæssige regnskabsperiode."
 
 #: ../src/app-utils/date-utilities.scm:965
 msgid "End of next quarter"
@@ -534,7 +535,7 @@ msgstr "Slutningen af næste kvartal"
 
 #: ../src/app-utils/date-utilities.scm:968
 msgid "Last day of next quarterly accounting period."
-msgstr "Sidste dag for næste kvartalsmæssige regnskabsperiode."
+msgstr "Sidste dag i næste kvartalsmæssige regnskabsperiode."
 
 #. CY Strings
 #: ../src/app-utils/date-utilities.scm:972
@@ -2948,7 +2949,7 @@ msgstr "Smart faktura"
 #: ../src/import-export/dialog-import.glade.h:1
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:1
 msgid "Preferences"
-msgstr "Indstillinger"
+msgstr "Præferencer"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:6
 msgid "<b>Invoices</b>"
@@ -6141,7 +6142,7 @@ msgstr "Gem ændringer til %s?"
 #: ../src/gnome/gnc-plugin-page-register2.c:1617
 #: ../src/gnome/gnc-plugin-page-register.c:1548
 msgid "This register has pending changes to a transaction. Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
-msgstr "Denne kassekladde har igangværende ændringer til en transaktion. Vil du gemme ændringerne til denne transaktion, fjerne transaktionen eller afbryde operationen?"
+msgstr "Denne kassekladde har igangværende ændringer til en transaktion. Vil du gemme ændringerne til denne transaktion, fjerne transaktionen eller afbryde handlingen?"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:1620
 #: ../src/gnome/gnc-plugin-page-register.c:1551
@@ -6557,7 +6558,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:5
 msgid "Number of checks to print on the first page."
-msgstr "Antallet af check at udskrive på den første side."
+msgstr "Antallet af check der udskrives på den første side."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:6
 msgid "Date format to use"

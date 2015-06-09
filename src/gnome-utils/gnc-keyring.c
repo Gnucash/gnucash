@@ -28,8 +28,7 @@
 #include "gnc-keyring.h"
 #ifdef HAVE_LIBSECRET
 #include <libsecret/secret.h>
-#endif
-#if HAVE_GNOME_KEYRING
+#elif HAVE_GNOME_KEYRING
 #define GNOME_KEYRING_DEPRECATED
 #define GNOME_KEYRING_DEPRECATED_FOR(x)
 #include <gnome-keyring.h>
@@ -77,13 +76,21 @@ void gnc_keyring_set_password (const gchar *access_method,
 
   label = g_strdup_printf("GnuCash password for %s://%s@%s", access_method, user, server);
 
-  secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
-                            label, password, NULL, &error,
-                            "protocol", access_method,
-                            "server", server,
-                            "port", port,
-                            "user", user,
-                            NULL);
+  if (port == 0)
+    secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                                label, password, NULL, &error,
+                                "protocol", access_method,
+                                "server", server,
+                                "user", user,
+                                NULL);
+  else
+    secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                                label, password, NULL, &error,
+                                "protocol", access_method,
+                                "server", server,
+                                "port", port,
+                                "user", user,
+                                NULL);
 
   g_free(label);
 
@@ -117,7 +124,7 @@ void gnc_keyring_set_password (const gchar *access_method,
      * distinguish between these two.
      */
     // FIXME I'm not sure this works if a password was already in the keychain
-    //       I may have to do a lookup first and if it exists, run some update
+    //       I may have to do a lookup first and if it exists, run some
     //       update function instead
     status = SecKeychainAddInternetPassword ( NULL, /* keychain */
              strlen(server), server,                /* servername */
@@ -152,11 +159,11 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
                                     gchar **password)
 {
     gboolean password_found = FALSE;
+    gchar *db_path, *heading;
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     char* libsecret_password;
-#endif
-#if HAVE_GNOME_KEYRING
+#elif HAVE_GNOME_KEYRING
     GnomeKeyringResult  gkr_result;
     GList *found_list = NULL;
     GnomeKeyringNetworkPasswordData *found;
@@ -173,55 +180,119 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     *password = NULL;
 
 #ifdef HAVE_LIBSECRET
+    /* Workaround for https://bugzilla.gnome.org/show_bug.cgi?id=746873
+     * and by extension for https://bugzilla.gnome.org/show_bug.cgi?id=748625
+     * Store a dummy password and delete it again. This forces libsecret
+     * to open the keychain, where only a call to secret_password_lookup_sync
+     * sometimes fails to do so. More details can be found in the bug reports
+     * referenced above. */
+    secret_password_store_sync (SECRET_SCHEMA_GNUCASH, SECRET_COLLECTION_DEFAULT,
+                                "Dummy password", "dummy", NULL, &error,
+                                "protocol", "gnucash",
+                                "server", "gnucash",
+                                "user", "gnucash",
+                                NULL);
+    secret_password_clear_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+                                "protocol", "gnucash",
+                                "server", "gnucash",
+                                "user", "gnucash",
+                                NULL);
+
+    /* Note: only use the port attribute if it  was set by the user. */
+    if (port == 0)
+        libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+            "protocol", access_method,
+            "server", server,
+            "user", *user,
+            NULL);
+    else
+        libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
+            "protocol", access_method,
+            "server", server,
+            "port", port,
+            "user", *user,
+            NULL);
+
+    if (libsecret_password != NULL) {
+        *password = g_strdup (libsecret_password);
+        secret_password_free (libsecret_password);
+        return TRUE;
+    }
+
+    /* No password found yet. Perhaps it was written with a port equal to 0.
+     * Gnucash versions prior to 2.6.7 did this unfortunately... */
     libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_GNUCASH, NULL, &error,
         "protocol", access_method,
         "server", server,
-        "port", port,
+        "port", 0,
         "user", *user,
         NULL);
 
-    if (libsecret_password == NULL) {
-        if (error != NULL) {
-            PWARN ("libsecret access failed: %s.", error->message);
-            g_error_free(error);
-        }
-    } else {
-        password_found = TRUE;
+    if (libsecret_password != NULL) {
         *password = g_strdup (libsecret_password);
         secret_password_free (libsecret_password);
-    }
-#endif /* HAVE_LIBSECRET */
 
-#if HAVE_GNOME_KEYRING
-    if (password_found == FALSE) {
-        gkr_result = gnome_keyring_find_network_password_sync
-                     ( *user, NULL, server, service,
-                       access_method, NULL, port, &found_list );
-
-        if (gkr_result == GNOME_KEYRING_RESULT_OK)
-        {
-            found = (GnomeKeyringNetworkPasswordData *) found_list->data;
-            if (found->password)
-                *password = g_strdup(found->password);
-            password_found = TRUE;
-        }
-        else
-            PWARN ("Gnome-keyring access failed: %s.",
-                   gnome_keyring_result_to_message(gkr_result));
-
-        gnome_keyring_network_password_list_free(found_list);
-    }
-#endif /* HAVE_GNOME_KEYRING */
-
-#if defined(HAVE_LIBSECRET) && defined(HAVE_GNOME_KEYRING)
-    /* If we were not able to retrieve the password with libsecret and the new
-     * schema and libgnome-keyring was successful to retrieve the password using
-     * the old schema, we immediatly store it in the new schema.
-     */
-    if (libsecret_password == NULL && password_found == TRUE) {
+        /* Ok, got an password with 0 port.
+           Store a copy in a more recent gnucash style. */
         gnc_keyring_set_password(access_method, server, port, service, *user, *password);
+        return TRUE;
     }
-#endif /* HAVE_LIBSECRET && HAVE_GNOME_KEYRING */
+
+    /* No password was found while querying libsecret using the gnucash schema,
+       Look for a password stored via gnome-keyring instead */
+    if (port == 0)
+        libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_COMPAT_NETWORK, NULL, &error,
+            "protocol", access_method,
+            "server", server,
+            "object", service,
+            "user", *user,
+            NULL);
+    else
+        libsecret_password = secret_password_lookup_sync (SECRET_SCHEMA_COMPAT_NETWORK, NULL, &error,
+            "protocol", access_method,
+            "server", server,
+            "port", port,
+            "object", service,
+            "user", *user,
+            NULL);
+
+    if (libsecret_password != NULL) {
+        *password = g_strdup (libsecret_password);
+        secret_password_free (libsecret_password);
+
+        /* Ok, got an old gnome-keyring password.
+         * Store a copy of it in a libsecret compatible format. */
+        gnc_keyring_set_password(access_method, server, port, service, *user, *password);
+        return TRUE;
+    }
+
+    /* Something went wrong while attempting to access libsecret
+     * Log the error message and carry on... */
+    if (error != NULL) {
+        PWARN ("libsecret access failed: %s.", error->message);
+        g_error_free(error);
+    }
+
+#elif HAVE_GNOME_KEYRING
+    gkr_result = gnome_keyring_find_network_password_sync
+                    ( *user, NULL, server, service,
+                    access_method, NULL, port, &found_list );
+
+    if (gkr_result == GNOME_KEYRING_RESULT_OK)
+    {
+        found = (GnomeKeyringNetworkPasswordData *) found_list->data;
+        if (found->password)
+            *password = g_strdup(found->password);
+        gnome_keyring_network_password_list_free(found_list);
+        return TRUE;
+    }
+
+    /* Something went wrong while attempting to access libsecret
+     * Log the error message and carry on... */
+    PWARN ("Gnome-keyring access failed: %s.",
+            gnome_keyring_result_to_message(gkr_result));
+    gnome_keyring_network_password_list_free(found_list);
+#endif /* HAVE_LIBSECRET or HAVE_GNOME_KEYRING */
 
 #ifdef HAVE_OSX_KEYCHAIN
     /* mysql and postgres aren't valid protocols on Mac OS X.
@@ -244,8 +315,8 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
         if ( status == noErr )
         {
             *password = g_strndup(password_data, password_length);
-            password_found = TRUE;
             SecKeychainItemFreeContent(NULL, password_data);
+            return TRUE;
         }
         else
         {
@@ -258,46 +329,42 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 
-    if ( !password_found )
+    /* If we got here, either no proper password store is
+        * available on this system, or we couldn't retrieve
+        * a password from it. In both cases, just ask the user
+        * to enter one
+        */
+
+    if ( port == 0 )
+        db_path = g_strdup_printf ( "%s://%s/%s", access_method, server, service );
+    else
+        db_path = g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
+    heading = g_strdup_printf ( /* Translators: %s is a path to a database or any other url,
+                like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes */
+                    _("Enter a user name and password to connect to: %s"),
+                    db_path );
+
+    password_found = gnc_get_username_password ( parent, heading,
+                        *user, NULL,
+                        user, password );
+    g_free ( db_path );
+    g_free ( heading );
+
+    if ( password_found )
     {
-        /* If we got here, either no proper password store is
-         * available on this system, or we couldn't retrieve
-         * a password from it. In both cases, just ask the user
-         * to enter one
-         */
-        gchar *db_path, *heading;
-
-        if ( port == 0 )
-            db_path = g_strdup_printf ( "%s://%s/%s", access_method, server, service );
-        else
-            db_path = g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
-        heading = g_strdup_printf ( /* Translators: %s is a path to a database or any other url,
-                 like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes */
-                      _("Enter a user name and password to connect to: %s"),
-                      db_path );
-
-        password_found = gnc_get_username_password ( parent, heading,
-                         *user, NULL,
-                         user, password );
-        g_free ( db_path );
-        g_free ( heading );
-
-        if ( password_found )
-        {
-            /* User entered new user/password information
-             * Let's try to add it to a password store.
-             */
-            gchar *newuser = g_strdup( *user );
-            gchar *newpassword = g_strdup( *password );
-            gnc_keyring_set_password ( access_method,
-                                       server,
-                                       port,
-                                       service,
-                                       newuser,
-                                       newpassword );
-            g_free ( newuser );
-            g_free ( newpassword );
-        }
+        /* User entered new user/password information
+            * Let's try to add it to a password store.
+            */
+        gchar *newuser = g_strdup( *user );
+        gchar *newpassword = g_strdup( *password );
+        gnc_keyring_set_password ( access_method,
+                                    server,
+                                    port,
+                                    service,
+                                    newuser,
+                                    newpassword );
+        g_free ( newuser );
+        g_free ( newpassword );
     }
 
     return password_found;
