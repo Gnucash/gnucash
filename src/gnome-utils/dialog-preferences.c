@@ -1062,7 +1062,6 @@ gnc_preferences_dialog_create(void)
     gnc_commodity *locale_currency;
     const gchar *currency_name;
     QofBook *book;
-    KvpFrame *book_frame;
     gint64 month, day;
     GDate fy_end;
     gboolean date_is_valid = FALSE;
