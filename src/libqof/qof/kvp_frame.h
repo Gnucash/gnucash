@@ -580,6 +580,12 @@ void kvp_frame_for_each_slot(KvpFrame *f,
 /** Internal helper routines, you probably shouldn't be using these. */
 gchar* kvp_frame_to_string(const KvpFrame *frame);
 
+/** Convert a kvp_value into a GValue. Frames aren't converted.
+ * @param kval: A KvpValue.
+ * @return GValue*. Must be freed with g_free().
+ */
+GValue* gvalue_from_kvp_value (const KvpValue *kval);
+
 /** KvpItem: GValue Exchange
  * \brief Transfer of KVP to and from GValue, with the key
  *

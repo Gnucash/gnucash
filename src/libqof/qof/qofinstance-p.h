@@ -129,7 +129,9 @@ gboolean qof_instance_has_slot (const QofInstance *inst, const char *path);
 void qof_instance_slot_delete (const QofInstance *inst, const char *path);
 void qof_instance_slot_delete_if_empty (const QofInstance *inst,
                                         const char *path);
-
+void qof_instance_foreach_slot (const QofInstance *inst, const char *path,
+                                void(*proc)(const char*, const GValue*, void*),
+                                void* data);
 #ifdef __cplusplus
 }
 #endif

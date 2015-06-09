@@ -1287,5 +1287,31 @@ qof_instance_slot_delete_if_empty (const QofInstance *inst, const char *path)
         kvp_frame_set_frame_nc (inst->kvp_data, path, NULL);
 }
 
+struct wrap_param
+{
+    void (*proc)(const char*, const GValue*, void*);
+    void *user_data;
+};
+
+static void
+wrap_gvalue_function (const char* key, KvpValue *val, gpointer data)
+{
+    auto param = static_cast<wrap_param*>(data);
+    GValue *gv = gvalue_from_kvp_value(val);
+    param->proc(key, gv, param->user_data);
+    g_slice_free (GValue, gv);
+}
+
+void
+qof_instance_foreach_slot (const QofInstance *inst, const char* path,
+                           void (*proc)(const char*, const GValue*, void*),
+                           void* data)
+{
+    KvpFrame* frame = kvp_frame_get_frame (inst->kvp_data, path);
+    if (!frame) return;
+    wrap_param new_data {proc, data};
+    kvp_frame_for_each_slot(frame, wrap_gvalue_function, &new_data);
+}
+
 /* ========================== END OF FILE ======================= */
 

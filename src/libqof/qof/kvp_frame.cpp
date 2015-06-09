@@ -1192,7 +1192,6 @@ kvp_frame_to_string(const KvpFrame *frame)
     return g_strdup(realframe->to_string().c_str());
 }
 
-static GValue *gvalue_from_kvp_value (KvpValue *);
 static KvpValue *kvp_value_from_gvalue (const GValue*);
 
 static void
@@ -1216,8 +1215,8 @@ kvp_value_list_from_gvalue (GValue *gval, gpointer pList)
     *kvplist = g_list_prepend (*kvplist, kvp);
 }
 
-static GValue*
-gvalue_from_kvp_value (KvpValue *kval)
+GValue*
+gvalue_from_kvp_value (const KvpValue *kval)
 {
     GValue *val;
     gnc_numeric num;
