@@ -338,7 +338,7 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
  *
  * @param check_txn_splits If the pointers are not equal, but
  * everything else so far is equal (including memo, amount, value,
- * kvp_frame), then, when comparing the parenting transactions with
+ * kvp), then, when comparing the parenting transactions with
  * xaccTransEqual(), set its argument check_splits to be TRUE.
  */
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
@@ -515,8 +515,6 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
  * override so the gnome-search dialog displays the right type.
  @{
 */
-#define SPLIT_KVP		"kvp"
-
 #define SPLIT_DATE_RECONCILED	"date-reconciled"
 #define SPLIT_BALANCE		"balance"
 #define SPLIT_CLEARED_BALANCE	"cleared-balance"

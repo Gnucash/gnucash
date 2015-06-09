@@ -940,8 +940,7 @@ gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
     gnc_commodity_set_quote_flag (dest, src_priv->quote_flag);
     gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
     gnc_commodity_set_quote_tz (dest, src_priv->quote_tz);
-    kvp_frame_delete (dest->inst.kvp_data);
-    dest->inst.kvp_data = kvp_frame_copy (src->inst.kvp_data);
+    qof_instance_copy_kvp (QOF_INSTANCE (dest), QOF_INSTANCE (src));
 }
 
 gnc_commodity *
@@ -967,8 +966,7 @@ gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book)
 
     gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
 
-    kvp_frame_delete (dest->inst.kvp_data);
-    dest->inst.kvp_data = kvp_frame_copy (src->inst.kvp_data);
+    qof_instance_copy_kvp (QOF_INSTANCE (dest), QOF_INSTANCE (src));
 
     reset_printname(dest_priv);
     reset_unique_name(dest_priv);
@@ -1087,11 +1085,14 @@ static gboolean
 gnc_commodity_get_auto_quote_control_flag(const gnc_commodity *cm)
 {
     const char *str;
+    GValue v = G_VALUE_INIT;
 
     if (!cm) return FALSE;
-
-    str = kvp_frame_get_string(cm->inst.kvp_data, "auto_quote_control");
-    return !str || (strcmp(str, "false") != 0);
+    qof_instance_get_kvp (QOF_INSTANCE (cm), "auto_quote_control", &v);
+    if (G_VALUE_HOLDS_STRING (&v) &&
+        strcmp(g_value_get_string (&v), "false") == 0)
+        return FALSE;
+    return TRUE;
 }
 
 /********************************************************************
@@ -1148,8 +1149,12 @@ const char*
 gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 {
     const char *str;
+    GValue v = G_VALUE_INIT;
     if (!cm) return NULL;
-    return kvp_frame_get_string(cm->inst.kvp_data, "user_symbol");
+    qof_instance_get_kvp (QOF_INSTANCE(cm), "user_symbol", &v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        return g_value_get_string (&v);
+    return NULL;
 }
 
 /********************************************************************
@@ -1308,6 +1313,7 @@ static void
 gnc_commodity_set_auto_quote_control_flag(gnc_commodity *cm,
         const gboolean flag)
 {
+    GValue v = G_VALUE_INIT;
     ENTER ("(cm=%p, flag=%d)", cm, flag);
 
     if (!cm)
@@ -1315,10 +1321,15 @@ gnc_commodity_set_auto_quote_control_flag(gnc_commodity *cm,
         LEAVE("");
         return;
     }
-
     gnc_commodity_begin_edit(cm);
-    kvp_frame_set_string(cm->inst.kvp_data,
-                         "auto_quote_control", flag ? NULL : "false");
+    if (flag)
+        qof_instance_set_kvp (QOF_INSTANCE (cm), "auto_quote_control", NULL);
+    else
+    {
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, "false");
+        qof_instance_set_kvp (QOF_INSTANCE (cm), "auto_quote_control", &v);
+    }
     mark_commodity_dirty(cm);
     gnc_commodity_commit_edit(cm);
     LEAVE("");
@@ -1431,7 +1442,7 @@ void
 gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
 {
     struct lconv *lc;
-
+    GValue v = G_VALUE_INIT;
     if (!cm) return;
 
     ENTER ("(cm=%p, symbol=%s)", cm, user_symbol ? user_symbol : "(null)");
@@ -1448,8 +1459,15 @@ gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
 	user_symbol = NULL;
     else if (!g_strcmp0(user_symbol, gnc_commodity_get_default_symbol(cm)))
 	user_symbol = NULL;
+    if (user_symbol)
+    {
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, user_symbol);
+        qof_instance_set_kvp (QOF_INSTANCE(cm), "user_symbol", &v);
+    }
+    else
+        qof_instance_set_kvp (QOF_INSTANCE(cm), "user_symbol", NULL);
 
-    kvp_frame_set_string(cm->inst.kvp_data, "user_symbol", user_symbol);
     mark_commodity_dirty(cm);
     gnc_commodity_commit_edit(cm);
 

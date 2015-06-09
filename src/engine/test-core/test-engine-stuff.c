@@ -1464,7 +1464,7 @@ get_random_transaction_with_currency(QofBook *book,
     trn_add_ran_timespec(trans, xaccTransSetDateEnteredTS);
 
     f = get_random_kvp_frame();
-    xaccTransSetSlots_nc(trans, f);
+    qof_instance_set_slots (QOF_INSTANCE (trans), f);
 
     add_random_splits(book, trans, account_list);
 
@@ -1525,7 +1525,7 @@ make_random_changes_to_transaction (QofBook *book, Transaction *trans)
 
     set_tran_random_string (trans, xaccTransSetDescription);
 
-    xaccTransSetSlots_nc (trans, get_random_kvp_frame());
+    qof_instance_set_slots (QOF_INSTANCE (trans), get_random_kvp_frame());
 
     /* Do split manipulations in higher-level functions */
 

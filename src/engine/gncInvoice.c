@@ -338,7 +338,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     GncInvoice *invoice;
     QofBook* book;
     GList *node;
-    gint64 is_cn;
+    GValue v = G_VALUE_INIT;
 
     g_assert(from);
     book = qof_instance_get_book(from);
@@ -354,8 +354,9 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     invoice->billing_id = CACHE_INSERT (from->billing_id);
     invoice->active = from->active;
 
-    is_cn = kvp_frame_get_gint64(from->inst.kvp_data, GNC_INVOICE_IS_CN);
-    kvp_frame_set_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN, is_cn);
+    qof_instance_get_kvp (QOF_INSTANCE (from), GNC_INVOICE_IS_CN, &v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+         qof_instance_set_kvp (QOF_INSTANCE (invoice), GNC_INVOICE_IS_CN, &v);
 
     invoice->terms = from->terms;
     gncBillTermIncRef (invoice->terms);
@@ -545,10 +546,12 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 
 void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note)
 {
+     GValue v = G_VALUE_INIT;
     if (!invoice) return;
     gncInvoiceBeginEdit (invoice);
-    kvp_frame_set_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN,
-                         credit_note ? 1 : 0);
+    g_value_init (&v, G_TYPE_INT64);
+    g_value_set_int64(&v, credit_note ? 1 : 0);
+    qof_instance_set_kvp (QOF_INSTANCE (invoice), GNC_INVOICE_IS_CN, &v);
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 
@@ -1035,8 +1038,10 @@ gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 
 gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice)
 {
+    GValue v = G_VALUE_INIT;
     if (!invoice) return FALSE;
-    if (kvp_frame_get_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN))
+    qof_instance_get_kvp (QOF_INSTANCE(invoice), GNC_INVOICE_IS_CN, &v);
+    if (G_VALUE_HOLDS_INT64(&v) && g_value_get_int64(&v))
         return TRUE;
     else
         return FALSE;
