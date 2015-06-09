@@ -128,6 +128,32 @@ libutest_Trans_la_SOURCES = \
 
 libutest_Trans_la_LIBADD = $(LDADD)
 
+if WITH_GOOGLE_TEST
+test_import_map_SOURCES = \
+        gtest-import-map.cpp
+test_import_map_LDADD = \
+        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+        ${top_builddir}/src/engine/libgncmod-engine.la \
+        ${GLIB_LIBS} \
+        ${GTEST_LIBS}
+
+if !GOOGLE_TEST_LIBS
+nodist_test_import_map_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+test_import_map_LDADD += ${top_builddir}/src/test-core/libgtest.a
+endif
+
+test_import_map_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+        -I${top_srcdir}/${MODULEPATH} \
+        -I${top_srcdir}/src/libqof/qof \
+        -I${top_srcdir}/src/core-utils \
+        ${GLIB_CFLAGS}
+
+TEST_GROUP_1 += test-import-map
+endif
+
+
 
 clean-local:
 	rm -f translog.*

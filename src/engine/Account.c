@@ -5029,7 +5029,6 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 
 typedef struct _GncImportMatchMap
 {
-    KvpFrame *  frame;
     Account *   acc;
     QofBook *   book;
 } GncImportMatchMap;
@@ -5050,15 +5049,10 @@ GncImportMatchMap *
 gnc_account_create_imap (Account *acc)
 {
     GncImportMatchMap *imap;
-    KvpFrame *frame;
 
     if (!acc) return NULL;
-    frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    g_return_val_if_fail (frame != NULL, NULL);
-    g_return_val_if_fail (frame != NULL, NULL);
 
     imap = g_new0(GncImportMatchMap, 1);
-    imap->frame = frame;
 
     /* Cache the book for easy lookups; store the account/book for
      * marking dirtiness
@@ -5140,16 +5134,16 @@ struct token_accounts_info
  * \note Can always assume that keys are unique, reduces code in this function
  */
 static void
-buildTokenInfo(const char *key, KvpValue *value, gpointer data)
+buildTokenInfo(const char *key, const GValue *value, gpointer data)
 {
     struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
     struct account_token_count* this_account;
 
     //  PINFO("buildTokenInfo: account '%s', token_count: '%ld'\n", (char*)key,
-    //                  (long)kvp_value_get_gint64(value));
+    //                  (long)g_value_get_int64(value));
 
     /* add the count to the total_count */
-    tokenInfo->total_count += kvp_value_get_gint64(value);
+    tokenInfo->total_count += g_value_get_int64(value);
 
     /* allocate a new structure for this account and it's token count */
     this_account = (struct account_token_count*)
@@ -5157,7 +5151,7 @@ buildTokenInfo(const char *key, KvpValue *value, gpointer data)
 
     /* fill in the account name and number of tokens found for this account name */
     this_account->account_name = (char*)key;
-    this_account->token_count = kvp_value_get_gint64(value);
+    this_account->token_count = g_value_get_int64(value);
 
     /* append onto the glist a pointer to the new account_token_count structure */
     tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
@@ -5262,8 +5256,6 @@ gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     GHashTable *final_probabilities = g_hash_table_new(g_str_hash,
                                                        g_str_equal);
     struct account_info account_i;
-    KvpValue* value;
-    KvpFrame* token_frame;
 
     ENTER(" ");
 
@@ -5281,40 +5273,20 @@ gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     for (current_token = tokens; current_token;
          current_token = current_token->next)
     {
-        /* zero out the token_accounts_info structure */
+        char* path = g_strdup_printf (IMAP_FRAME_BAYES "/%s",
+                                            (char*)current_token->data);
+   /* zero out the token_accounts_info structure */
         memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
 
         PINFO("token: '%s'", (char*)current_token->data);
-
-        /* find the slot for the given token off of the source account
-         * for these tokens, search off of the IMAP_FRAME_BAYES path so
-         * we aren't looking from the parent of the entire kvp tree
-         */
-        value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
-                                        (char*)current_token->data, NULL);
-
-        /* if value is null we should skip over this token */
-        if (!value)
-            continue;
-
-        /* convert the slot(value) into a the frame that contains the
-         * list of accounts
-         */
-        token_frame = kvp_value_get_frame(value);
-
-        /* token_frame should NEVER be null */
-        if (!token_frame)
-        {
-            PERR("token '%s' has no accounts", (char*)current_token->data);
-            continue; /* skip over this token */
-        }
 
         /* process the accounts for this token, adding the account if it
          * doesn't already exist or adding to the existing accounts token
          * count if it does
          */
-        kvp_frame_for_each_slot(token_frame, buildTokenInfo, &tokenInfo);
-
+        qof_instance_foreach_slot(QOF_INSTANCE (imap->acc), path,
+                                  buildTokenInfo, &tokenInfo);
+        g_free (path);
         /* for each account we have just found, see if the account
          * already exists in the list of account probabilities, if not
          * add it
@@ -5477,7 +5449,8 @@ gnc_imap_add_account_bayes(GncImportMatchMap *imap,
             token_count += count;
         }
         token_count++;
-        g_value_init (&value, G_TYPE_INT64);
+        if (!G_IS_VALUE (&value))
+            g_value_init (&value, G_TYPE_INT64);
         g_value_set_int64 (&value, token_count);
         qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
         g_free (kvp_path);
