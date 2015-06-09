@@ -109,8 +109,9 @@ KvpFrameImpl::get_keys() const noexcept
 }
 
 void
-KvpFrameImpl::for_each_slot(void (*proc)(const char *key, KvpValue *value, void * data),
-              void *data) const noexcept
+KvpFrameImpl::for_each_slot(void (*proc)(const char *key, KvpValue *value,
+                                         void * data),
+                            void *data) const noexcept
 {
     if (!proc) return;
     std::for_each (m_valuemap.begin(), m_valuemap.end(),
