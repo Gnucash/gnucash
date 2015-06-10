@@ -101,7 +101,6 @@ static GDate *
 get_fy_end(void)
 {
     QofBook *book;
-    KvpFrame *book_frame;
     GDate *date = NULL;
 
     book = gnc_get_current_book();
