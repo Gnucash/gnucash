@@ -2155,20 +2155,24 @@ gnc_split_register_get_default_help (VirtualLocation virt_loc,
     return g_strdup (help);
 }
 
+/* This function has been #if-zeroed for a year; in all released versions since
+ * 2001 it has issued dire warnings about being wrong, and returned nothing
+ * because it was querying a non-existent slot.
+ *
+ * Now it retrieves the sx-debit-numeric or sx-credit-numeric properties from
+ * the split. I'm not sure that it's what was originally intended, but at least
+ * it can do something now.	<jralls, 8 June 2015>
+ */
 static const char *
 gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
         gboolean translate,
         gboolean *conditionally_changed,
         gpointer user_data)
 {
-    PERR("The function called always returned either NULL or an empty string "
-	 "while issuing dire warnings about how incorrect it is. That code "
-	 "has been removed and the function if called raises this error and "
-	 "returns NULL");
-    return NULL;
-#if 0
     SplitRegister *reg = user_data;
     Split *split;
+    gnc_numeric amount;
+    const char * cell_name;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
@@ -2177,43 +2181,20 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
                 conditionally_changed,
                 user_data);
 
-    kvpf = xaccSplitGetSlots (split);
-    PWARN( "We're very close to \"wrong\".  \"Fix it immediately!!!\"" );
+    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
+    if (gnc_cell_name_equal (cell_name, DEBT_CELL))
+        qof_instance_get (QOF_INSTANCE (split),
+                          "sx-debit-numeric", &amount,
+                          NULL);
+    else
+        qof_instance_get (QOF_INSTANCE (split),
+                          "sx-credit-numeric", &amount,
+                          NULL);
+    if (gnc_numeric_zero_p (amount))
+        return "";
 
-    if (kvpf)
-    {
-        gnc_numeric amount;
-        const char * cell_name;
-        char *str;
-
-        PWARN("This code is wrong.  Fix it immediately!!!!");
-        str = kvp_value_get_string(
-                  kvp_frame_get_slot_path(kvpf, "sched-xaction", "amnt", NULL));
-
-        amount = gnc_numeric_zero ();
-        string_to_gnc_numeric (str, &amount);
-
-        if (gnc_numeric_zero_p (amount))
-            return "";
-
-        cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
-
-        if (gnc_numeric_negative_p (amount) &&
-                gnc_cell_name_equal (cell_name, DEBT_CELL))
-            return "";
-
-        if (gnc_numeric_positive_p (amount) &&
-                gnc_cell_name_equal (cell_name, CRED_CELL))
-            return "";
-
-        amount = gnc_numeric_abs (amount);
-
-        /* FIXME: This should be fixed to be correct for the "fake" account. */
-        return xaccPrintAmount (amount, gnc_default_print_info (FALSE));
-    }
-
-    return NULL;
-#endif
+    amount = gnc_numeric_abs (amount);
+    return xaccPrintAmount (amount, gnc_default_print_info (FALSE));
 }
 
 static void
