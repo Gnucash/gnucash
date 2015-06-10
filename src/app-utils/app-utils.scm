@@ -146,6 +146,12 @@
 (export gnc:send-options)
 (export gnc:save-options)
 
+(define (gnc:option-get-value category key)
+  ;;Access an option directly
+    (kvp-frame-get-slot-path-gslist
+    (qof-book-get-slots (gnc-get-current-book))
+    (append gnc:*kvp-option-path* (list category key))))
+(export gnc:option-get-value)
 ;; config-var.scm
 (export gnc:make-config-var)
 (export gnc:config-var-description-get)
@@ -318,9 +324,7 @@
 
 (define (gnc:company-info key)
   ;; Access company info from key-value pairs for current book
-  (kvp-frame-get-slot-path-gslist
-    (qof-book-get-slots (gnc-get-current-book))
-    (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
+ (gnc:option-get-value gnc:*business-label* key))
 
 (export gnc:*business-label* gnc:*company-name*  gnc:*company-addy* 
         gnc:*company-id*     gnc:*company-phone* gnc:*company-fax* 

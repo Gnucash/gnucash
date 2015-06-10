@@ -688,28 +688,13 @@
 
 (define (make-myname-table book date-format title)
   (let* ((table (gnc:make-html-table))
-	 (slots (qof-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-name*))))
-;;	 (contact (kvp-frame-get-slot-path-gslist
-;;		slots (append gnc:*kvp-option-path*
-;;			      (list gnc:*business-label* gnc:*company-contact*))))
-	 (addy (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-addy*))))
-	 (id (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-id*))))
-	 (phone (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-phone*))))
-	 (fax (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-fax*))))
-	 (url (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-url*))))
+	 (name (gnc:company-info gnc:*company-name*))
+;;	 (contact (gnc:company-info gnc:*company-contact*))
+	 (addy (gnc:company-info gnc:*company-addy*))
+	 (id (gnc:company-info gnc:*company-id*))
+	 (phone (gnc:company-info gnc:*company-phone*))
+	 (fax (gnc:company-info gnc:*company-fax*))
+	 (url (gnc:company-info gnc:*company-url*))
 	 (invoice-cell (gnc:make-html-table-cell))
 	 (name-cell (gnc:make-html-table-cell))
 
@@ -830,9 +815,7 @@
 
 
     (if (not (null? invoice))
-	(let* ((book (gncInvoiceGetBook invoice))
-	      (slots (qof-book-get-slots book))
-	      (date-object #f)
+	(let* ((date-object #f)
 	      (helper-table (gnc:make-html-table))
 	      (title (title-string default-title custom-title)))
 	  (set! table (make-entry-table invoice
@@ -964,10 +947,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (kvp-frame-get-slot-path-gslist
-			    slots (append gnc:*kvp-option-path*
-					  (list gnc:*business-label*
-						gnc:*company-name*))))
+	      (let* ((name (gnc:company-info gnc:*company-name*))
 		     (name-str (opt-val "Display" "Payable to string")))
 		(if (and name (> (string-length name) 0))
 		(gnc:html-document-add-object!
@@ -979,10 +959,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (kvp-frame-get-slot-path-gslist
-			       slots (append gnc:*kvp-option-path*
-					     (list gnc:*business-label*
-						   gnc:*company-contact*))))
+	      (let* ((contact (gnc:company-info gnc:*company-contact*))
 		     (contact-str (opt-val "Display" "Company contact string")))
 		(if (and contact (> (string-length contact) 0))
 	        (gnc:html-document-add-object!
