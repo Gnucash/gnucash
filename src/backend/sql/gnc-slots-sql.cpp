@@ -708,7 +708,8 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 }
 
 gboolean
-gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant, KvpFrame* pFrame )
+gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant,
+                    QofInstance *inst)
 {
      slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KVP_TYPE_INVALID, NULL, FRAME, NULL, g_string_new(NULL) };
      KvpFrame *pFrame = qof_instance_get_slots (inst);

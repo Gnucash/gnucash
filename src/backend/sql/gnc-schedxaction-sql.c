@@ -206,7 +206,7 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
         // Now, commit any slots
         if ( op == OP_DB_INSERT || op == OP_DB_UPDATE )
         {
-            is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+            is_ok = gnc_sql_slots_save( be, guid, is_infant, inst);
         }
         else
         {

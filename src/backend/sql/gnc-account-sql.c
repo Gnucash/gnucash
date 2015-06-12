@@ -383,7 +383,7 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
         guid = qof_instance_get_guid( inst );
         if ( !qof_instance_get_destroying(inst) )
         {
-            is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+            is_ok = gnc_sql_slots_save( be, guid, is_infant, inst);
         }
         else
         {
