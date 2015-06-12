@@ -269,6 +269,39 @@ gnc_option_db_find (SCM guile_options)
 }
 
 /* Create an option DB for a particular data type */
+/* For now, this is global, just like when it was in guile.
+   But, it should be make per-book. */
+static GHashTable *kvp_registry = NULL;
+
+static void
+init_table(void)
+{
+    if (!kvp_registry)
+        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
+}
+
+
+/*  create a new options object for the requested type */
+static SCM
+gnc_make_kvp_options(QofIdType id_type)
+{
+    GList *list, *p;
+    SCM gnc_new_options = SCM_UNDEFINED;
+    SCM options = SCM_UNDEFINED;
+
+    init_table();
+    list = g_hash_table_lookup(kvp_registry, id_type);
+    gnc_new_options = scm_c_eval_string("gnc:new-options");
+    options = scm_call_0(gnc_new_options);
+
+    for (p = list; p; p = p->next)
+    {
+        SCM generator = p->data;
+        scm_call_1(generator, options);
+    }
+    return options;
+}
+
 GNCOptionDB *
 gnc_option_db_new_for_type(QofIdType id_type)
 {
@@ -2928,17 +2961,6 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
     return value;
 }
 
-/* For now, this is global, just like when it was in guile.
-   But, it should be make per-book. */
-static GHashTable *kvp_registry = NULL;
-
-static void
-init_table(void)
-{
-    if (!kvp_registry)
-        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
-}
-
 /*
  * the generator should be a procedure that takes one argument,
  * an options object.  The procedure should fill in the options with
@@ -2953,26 +2975,4 @@ gnc_register_kvp_option_generator(QofIdType id_type, SCM generator)
     list = g_list_prepend(list, generator);
     g_hash_table_insert(kvp_registry, (gpointer) id_type, list);
     scm_gc_protect_object(generator);
-}
-
-
-/*  create a new options object for the requested type */
-SCM
-gnc_make_kvp_options(QofIdType id_type)
-{
-    GList *list, *p;
-    SCM gnc_new_options = SCM_UNDEFINED;
-    SCM options = SCM_UNDEFINED;
-
-    init_table();
-    list = g_hash_table_lookup(kvp_registry, id_type);
-    gnc_new_options = scm_c_eval_string("gnc:new-options");
-    options = scm_call_0(gnc_new_options);
-
-    for (p = list; p; p = p->next)
-    {
-        SCM generator = p->data;
-        scm_call_1(generator, options);
-    }
-    return options;
 }

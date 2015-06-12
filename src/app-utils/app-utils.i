@@ -106,7 +106,6 @@ gnc_numeric gnc_convert_from_euro(const gnc_commodity * currency,
 time64 gnc_accounting_period_fiscal_start(void);
 time64 gnc_accounting_period_fiscal_end(void);
 
-SCM gnc_make_kvp_options(QofIdType id_type);
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
 
 %typemap(in) GList * {
