@@ -6,7 +6,6 @@
 
 KvpValue* gnc_scm_to_kvp_value_ptr(SCM kvpval);
 SCM gnc_kvp_value_ptr_to_scm(KvpValue* val);
-void gnc_kvp_frame_delete_at_path(KvpFrame *frame, GSList *key_path);
 
 #endif /* KVP_SCM_H */
 

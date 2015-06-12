@@ -71,8 +71,8 @@ typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
 typedef struct gnc_option_db GNCOptionDB;
 
-typedef void (*GNCOptionSave) (GNCOptionDB*, KvpFrame*, gboolean);
-typedef void (*GNCOptionLoad) (GNCOptionDB*, KvpFrame*);
+typedef void (*GNCOptionSave) (GNCOptionDB*, QofBook*, gboolean);
+typedef void (*GNCOptionLoad) (GNCOptionDB*, QofBook*);
 
 /* Book structure */
 struct _QofBook
@@ -353,13 +353,47 @@ void qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr);
 void qof_book_begin_edit(QofBook *book);
 void qof_book_commit_edit(QofBook *book);
 
-/* Access functions for loading and saving the file options */
+/* Access functions for options. */
+/** Load a GNCOptionsDB from KVP data.
+ * @param book: The book.
+ * @param load_cb: A callback function that does the loading.
+ * @param odb: The GNCOptionDB to load.
+ */
 void qof_book_load_options (QofBook *book, GNCOptionLoad load_cb,
 			    GNCOptionDB *odb);
-void
-qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
-		       GNCOptionDB* odb, gboolean clear);
+/** Save a GNCOptionsDB back to the book's KVP.
+ * @param book: The book.
+ * @param save_cb: A callback function that does the saving.
+ * @param odb: The GNCOptionsDB to save from.
+ * @param clear: Should the GNCOptionsDB be emptied after the save?
+ */
+void qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
+                            GNCOptionDB* odb, gboolean clear);
+/** Save a single option value.
+ * Used from Scheme, the KvpValue<-->SCM translation is handled by the functions
+ * in kvp-scm.c and automated by SWIG. The starting element is set as
+ * KVP_OPTION_PATH in qofbookslots.h.
+ * @param book: The book.
+ * @param value: The KvpValue to store.
+ * @param path: A GSList of keys which form a path under KVP_OPTION_PATH.
+ */
+void qof_book_set_option (QofBook *book, KvpValue *value, GSList *path);
 
+/** Read a single option value.
+ * Used from Scheme, the KvpValue<-->SCM translation is handled by the functions
+ * in kvp-scm.c and automated by SWIG. The starting element is set as
+ * KVP_OPTION_PATH in qofbookslots.h.
+ * @param book: The book.
+ * @param path: A GSList of keys which form a path under KVP_OPTION_PATH.
+ */
+KvpValue* qof_book_get_option (QofBook *book, GSList *path);
+
+/** Delete the options.
+ * Primarily used from Scheme to clear out the options before saving a new set.
+ * @param book: The book.
+ * @param list: A GList of keys which from a path under KVP_OPTION_PATH.
+ */
+void qof_book_options_delete (QofBook *book);
 
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))

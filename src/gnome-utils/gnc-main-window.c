@@ -3950,7 +3950,7 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
 
     gnc_option_db_commit (options);
     qof_book_begin_edit (book);
-    qof_book_save_options (book, gnc_option_db_save_to_kvp, options, TRUE);
+    qof_book_save_options (book, gnc_option_db_save, options, TRUE);
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (gnc_get_current_book ());
     if (use_split_action_for_num_before != use_split_action_for_num_after)
@@ -3976,7 +3976,7 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title)
     GNCOptionWin *optionwin;
 
     options = gnc_option_db_new_for_type (QOF_ID_BOOK);
-    qof_book_load_options (book, gnc_option_db_load_from_kvp, options);
+    qof_book_load_options (book, gnc_option_db_load, options);
     gnc_option_db_clean (options);
 
     optionwin = gnc_options_dialog_new_modal (modal,

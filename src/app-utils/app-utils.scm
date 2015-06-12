@@ -148,9 +148,8 @@
 
 (define (gnc:option-get-value category key)
   ;;Access an option directly
-    (kvp-frame-get-slot-path-gslist
-    (qof-book-get-slots (gnc-get-current-book))
-    (append gnc:*kvp-option-path* (list category key))))
+  (qof-book-get-option (gnc-get-current-book)
+                       (list category key)))
 (export gnc:option-get-value)
 ;; config-var.scm
 (export gnc:make-config-var)

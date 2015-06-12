@@ -1096,17 +1096,20 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 void
 qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
 {
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    load_cb (odb, slots);
+    load_cb (odb, book);
 }
 
 void
 qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
 		       GNCOptionDB* odb, gboolean clear)
 {
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    save_cb (odb, slots, clear);
-    qof_instance_set_dirty (QOF_INSTANCE (book));
+    /* Wrap this in begin/commit so that it commits only once instead of doing
+     * so for every option. Qof_book_set_option will take care of dirtying the
+     * book.
+     */
+    qof_book_begin_edit (book);
+    save_cb (odb, book, clear);
+    qof_book_commit_edit (book);
 }
 
 static void noop (QofInstance *inst) {}
@@ -1116,6 +1119,32 @@ qof_book_commit_edit(QofBook *book)
 {
     if (!qof_commit_edit (QOF_INSTANCE(book))) return;
     qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
+}
+
+void
+qof_book_set_option (QofBook *book, KvpValue *value, GSList *path)
+{
+    KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE (book));
+    KvpFrame *options = kvp_frame_get_frame_slash (root, KVP_OPTION_PATH);
+    qof_book_begin_edit (book);
+    kvp_frame_set_slot_path_gslist (options, value, path);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit (book);
+}
+
+KvpValue*
+qof_book_get_option (QofBook *book, GSList *path)
+{
+    KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
+    KvpFrame *options = kvp_frame_get_frame(root, KVP_OPTION_PATH);
+    return kvp_frame_get_slot_path_gslist(options, path);
+}
+
+void
+qof_book_options_delete (QofBook *book)
+{
+    KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
+    kvp_frame_delete (kvp_frame_get_frame(root, KVP_OPTION_PATH));
 }
 
 /* QofObject function implementation and registration */

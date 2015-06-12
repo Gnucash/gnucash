@@ -142,18 +142,6 @@ functions. */
 
 QofSession * qof_session_new (void);
 QofBook * qof_session_get_book (QofSession *session);
-/* This horror is to permit the scheme options in
- * src/app-utils/options.scm to read and write the book's KVP (another
- * horror) directly. It should be refactored into book functions that
- * handle the KVP access.
- */
-%inline {
-  KvpFrame *qof_book_get_slots (QofBook *book);
-  extern KvpFrame *qof_instance_get_slots (QofInstance*);
-  KvpFrame *qof_book_get_slots (QofBook *book) {
-       return qof_instance_get_slots (QOF_INSTANCE (book));
-  }
-}
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
@@ -238,10 +226,9 @@ Account * gnc_book_get_template_root(QofBook *book);
 %typemap(out) KvpValue * " $result = gnc_kvp_value_ptr_to_scm($1); "
 %typemap(in) GSList *key_path " $1 = gnc_scm_to_gslist_string($input);"
 
-void gnc_kvp_frame_delete_at_path(KvpFrame *frame, GSList *key_path);
-void kvp_frame_set_slot_path_gslist(
-   KvpFrame *frame, KvpValue *new_value, GSList *key_path);
-KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
+void qof_book_options_delete (QofBook *book);
+void qof_book_set_option (QofBook *book, KvpValue *new_value, GSList *key_path);
+KvpValue* qof_book_get_option (QofBook *book, GSList *key_path);
 
 %clear GSList *key_path;
 

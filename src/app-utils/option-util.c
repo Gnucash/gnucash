@@ -313,13 +313,12 @@ gnc_option_db_new_for_type(QofIdType id_type)
 }
 
 void
-gnc_option_db_load_from_kvp(GNCOptionDB* odb, KvpFrame *slots)
+gnc_option_db_load(GNCOptionDB* odb, QofBook *book)
 {
     static SCM kvp_to_scm = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
+    SCM scm_book;
 
-    if (!odb || !slots) return;
+    if (!odb || !book) return;
 
     if (kvp_to_scm == SCM_UNDEFINED)
     {
@@ -332,29 +331,19 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, KvpFrame *slots)
         }
     }
 
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
+    scm_book = SWIG_NewPointerObj(book, SWIG_TypeQuery("_p_QofBook"), 0);
 
-    scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
+    scm_call_2 (kvp_to_scm, odb->guile_options, scm_book);
 }
 
 void
-gnc_option_db_save_to_kvp(GNCOptionDB* odb, KvpFrame *slots, gboolean clear_kvp)
+gnc_option_db_save(GNCOptionDB* odb, QofBook *book, gboolean clear_all)
 {
     static SCM scm_to_kvp = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
-    SCM scm_clear_kvp;
+    SCM scm_book;
+    SCM scm_clear_all;
 
-    if (!odb || !slots) return;
+    if (!odb || !book) return;
 
     if (scm_to_kvp == SCM_UNDEFINED)
     {
@@ -367,19 +356,10 @@ gnc_option_db_save_to_kvp(GNCOptionDB* odb, KvpFrame *slots, gboolean clear_kvp)
         }
     }
 
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
-    scm_clear_kvp = scm_from_bool (clear_kvp);
+    scm_book = SWIG_NewPointerObj(book, SWIG_TypeQuery("_p_QofBook"), 0);
+    scm_clear_all = scm_from_bool (clear_all);
 
-    scm_call_4 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path, scm_clear_kvp);
+    scm_call_3 (scm_to_kvp, odb->guile_options, scm_book, scm_clear_all);
 }
 /********************************************************************\
  * gnc_option_db_destroy                                            *

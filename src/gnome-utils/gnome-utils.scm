@@ -23,7 +23,5 @@
 (export gnc:make-menu)
 (export gnc:make-separator)
 
-(export gnc:kvp-option-dialog)
-
 (load-from-path "gnc-menu-extensions")
 
