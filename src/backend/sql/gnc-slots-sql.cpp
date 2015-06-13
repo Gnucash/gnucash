@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -40,7 +41,7 @@
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
-
+}
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
@@ -323,7 +324,7 @@ get_slot_type( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
-    g_return_val_if_fail( pObject != NULL, 0 );
+    g_return_val_if_fail( pObject != NULL, KVP_TYPE_INVALID );
 
 //    return (gpointer)kvp_value_get_type( pInfo->pKvpValue );
     return pInfo->value_type;
@@ -337,7 +338,7 @@ set_slot_type( gpointer pObject, /*@ null @*/ gpointer pValue )
     g_return_if_fail( pObject != NULL );
     g_return_if_fail( pValue != NULL );
 
-    pInfo->value_type = (KvpValueType)pValue;
+    pInfo->value_type = static_cast<KvpValueType>(GPOINTER_TO_INT(pValue));
 }
 
 static gint64
@@ -709,7 +710,8 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 gboolean
 gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant, KvpFrame* pFrame )
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new(NULL) };
+     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KVP_TYPE_INVALID, NULL, FRAME, NULL, g_string_new(NULL) };
+     KvpFrame *pFrame = qof_instance_get_slots (inst);
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( guid != NULL, FALSE );
@@ -736,7 +738,7 @@ gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid )
     GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GncSqlStatement* stmt;
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new(NULL) };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KVP_TYPE_INVALID, NULL, FRAME, NULL, g_string_new(NULL) };
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( guid != NULL, FALSE );
@@ -818,7 +820,7 @@ load_slot( slot_info_t *pInfo, GncSqlRow* row )
 void
 gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
 {
-    slot_info_t info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new(NULL) };
+    slot_info_t info = { NULL, NULL, TRUE, NULL, KVP_TYPE_INVALID, NULL, FRAME, NULL, g_string_new(NULL) };
     g_return_if_fail( be != NULL );
     g_return_if_fail( inst != NULL );
 
@@ -883,7 +885,7 @@ load_obj_guid( const GncSqlBackend* be, GncSqlRow* row )
 static void
 load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll )
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, NULL };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KVP_TYPE_INVALID, NULL, FRAME, NULL, NULL };
     const GncGUID* guid;
     QofInstance* inst;
 
@@ -969,7 +971,7 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 static void
 load_slot_for_book_object( GncSqlBackend* be, GncSqlRow* row, BookLookupFn lookup_fn )
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, NULL };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KVP_TYPE_INVALID, NULL, FRAME, NULL, NULL };
     const GncGUID* guid;
     QofInstance* inst;
 

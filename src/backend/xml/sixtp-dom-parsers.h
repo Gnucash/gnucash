@@ -23,6 +23,10 @@
 
 #ifndef SIXTP_DOM_PARSERS_H
 #define SIXTP_DOM_PARSERS_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <glib.h>
 
@@ -88,5 +92,7 @@ gboolean dom_tree_generic_parse(xmlNodePtr node,
                                 struct dom_tree_handler *handlers,
                                 gpointer data);
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* _SIXTP_DOM_PARSERS_H_ */

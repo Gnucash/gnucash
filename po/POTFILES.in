@@ -58,7 +58,7 @@ src/backend/sql/gnc-owner-sql.c
 src/backend/sql/gnc-price-sql.c
 src/backend/sql/gnc-recurrence-sql.c
 src/backend/sql/gnc-schedxaction-sql.c
-src/backend/sql/gnc-slots-sql.c
+src/backend/sql/gnc-slots-sql.cpp
 src/backend/sql/gnc-tax-table-sql.c
 src/backend/sql/gnc-transaction-sql.c
 src/backend/sql/gnc-vendor-sql.c
@@ -91,8 +91,8 @@ src/backend/xml/io-gncxml-v1.c
 src/backend/xml/io-gncxml-v2.c
 src/backend/xml/io-utils.c
 src/backend/xml/sixtp.c
-src/backend/xml/sixtp-dom-generators.c
-src/backend/xml/sixtp-dom-parsers.c
+src/backend/xml/sixtp-dom-generators.cpp
+src/backend/xml/sixtp-dom-parsers.cpp
 src/backend/xml/sixtp-stack.c
 src/backend/xml/sixtp-to-dom-parser.c
 src/backend/xml/sixtp-utils.c

@@ -20,7 +20,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-
+extern "C"
+{
 #define __EXTENSIONS__
 
 #include "config.h"
@@ -31,6 +32,7 @@
 
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
+}
 
 static QofLogModule log_module = GNC_MOD_IO;
 
@@ -237,11 +239,11 @@ double_to_string(double value)
 }
 
 static void
-add_text_to_node(xmlNodePtr node, gchar *type, gchar *val)
+add_text_to_node(xmlNodePtr node, const gchar *type, gchar *val)
 {
     gchar *newtype = g_strdup (type);
     gchar *newval = g_strdup (val);
-    xmlSetProp(node, BAD_CAST "type", checked_char_cast (type));
+    xmlSetProp(node, BAD_CAST "type", BAD_CAST type);
     xmlNodeSetContent(node, checked_char_cast (val));
     g_free (newtype);
     g_free(newval);
@@ -251,7 +253,7 @@ static void
 add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node);
 
 static void
-add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
+add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
 {
     xmlNodePtr val_node;
     kvp_value_t kvp_type;

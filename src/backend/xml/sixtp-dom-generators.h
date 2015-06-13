@@ -24,6 +24,10 @@
 #ifndef SIXTP_DOM_GENERATORS_H
 #define SIXTP_DOM_GENERATORS_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <glib.h>
 
 #include "gnc-xml-helper.h"
@@ -49,4 +53,7 @@ xmlNodePtr recurrence_to_dom_tree(const gchar *tag, const Recurrence *r);
 
 gchar* double_to_string(double value);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* _SIXTP_DOM_GENERATORS_H_ */

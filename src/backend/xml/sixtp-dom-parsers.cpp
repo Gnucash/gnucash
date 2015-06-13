@@ -20,7 +20,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -30,7 +31,7 @@
 #include "gnc-engine.h"
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
-
+}
 static QofLogModule log_module = GNC_MOD_IO;
 
 GncGUID*
@@ -350,7 +351,7 @@ dom_tree_to_frame_kvp_value(xmlNodePtr node)
 
 struct kvp_val_converter
 {
-    gchar *tag;
+    const gchar *tag;
     KvpValue* (*converter)(xmlNodePtr node);
 };
 
@@ -683,7 +684,8 @@ dom_tree_to_gdate(xmlNodePtr node)
                     }
                     g_free(content);
                     seen_date = TRUE;
-                    g_date_set_dmy( ret, day, month, year );
+                    g_date_set_dmy( ret, day, static_cast<GDateMonth>(month),
+                                    year );
                     if ( !g_date_valid( ret ) )
                     {
                         PWARN("invalid date");
