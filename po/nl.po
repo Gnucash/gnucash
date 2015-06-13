@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.6.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-30 13:18-0700\n"
-"PO-Revision-Date: 2015-03-31 22:20+0100\n"
+"PO-Revision-Date: 2015-06-12 21:30+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
@@ -226,9 +226,8 @@ msgid "The URL address of your website."
 msgstr "De URL voor de website van uw bedrijf."
 
 #: ../src/app-utils/business-prefs.scm:107
-#, fuzzy
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "Een identificatienummer voor uw bedrijf (\"BTW-nummer: NL123456789B01\")"
+msgstr "Het identificatienummer voor uw bedrijf (bijvoorbeeld \"BTW-nummer: NL123456789B01\")."
 
 #: ../src/app-utils/business-prefs.scm:112
 msgid "Default Customer TaxTable"
@@ -260,7 +259,7 @@ msgstr "Deze instelling selecteren om boekingen die betrekking hebben op meerder
 
 #: ../src/app-utils/business-prefs.scm:139
 msgid "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only."
-msgstr ""
+msgstr "Het aantal dagen kiezen waarna boekingen als “alleen-lezen” worden aangemerkt. Deze waarde wordt gemarkeerd door een rode lijn in grootboekkaarten-vensters. Voer hier als waarde ‘0’ in om altijd alle boekingen te kunnen bewerken."
 
 #: ../src/app-utils/business-prefs.scm:150
 msgid "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports."
@@ -4070,6 +4069,9 @@ msgid ""
 "  %s\n"
 "doesn't exist. This is however not fatal.\n"
 msgstr ""
+"NB: de map\n"
+" %s\n"
+"bestaat niet. Dit is echter niet fataal.\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:349
 #, c-format
@@ -4519,7 +4521,7 @@ msgstr "… ‘%s’ betalen?"
 
 #: ../src/gnome/assistant-loan.c:763
 msgid "via Escrow account?"
-msgstr "via een geblokkeerde rekening?"
+msgstr "via een depotrekening?"
 
 #: ../src/gnome/assistant-loan.c:918
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2926
@@ -4556,7 +4558,7 @@ msgstr "Rente"
 
 #: ../src/gnome/assistant-loan.c:2745
 msgid "Escrow Payment"
-msgstr "Geblokkeerde betaling"
+msgstr "Betaling uit depot"
 
 #. Set split-action with gnc_set_num_action which is the same as
 #. * xaccSplitSetAction with these arguments
@@ -4738,10 +4740,8 @@ msgstr "Boekstuknummer"
 
 #: ../src/gnome/dialog-find-transactions2.c:146
 #: ../src/gnome/dialog-find-transactions.c:145
-#, fuzzy
-#| msgid "Description / Notes / Memo"
 msgid "Description, Notes, or Memo"
-msgstr "Omschrijving / Toelichting / Notitie"
+msgstr "Omschrijving, toelichting of notitie"
 
 #. FIXME: All this does is leak.
 #: ../src/gnome/dialog-find-transactions2.c:221
@@ -6829,7 +6829,7 @@ msgstr "Geen log-/backupbestanden aanmaken."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:23
 msgid "This setting specifies what to do with old log/backups files. \"forever\" means keep all old files. \"never\" means no old log/backup files are kept. Each time you save, older versions of the file are removed. \"days\" means keep old files for a number of days. How many days is defined in key 'retain-days'"
-msgstr ""
+msgstr "Deze instelling bepaalt wat er moet gebeuren met oude log-/backupbestanden. De waarde “forever” betekent dat alle oude bestanden worden bewaard. De waarde “never” betekent dat er geen oude logs/backups worden bewaard. Bij het opslaan worden alle oudere bestandsversies telkens verwijderd. De waarde “days” betekent dat oude bestanden een aantal dagen worden bewaard. Het aantal dagen wordt bepaald door de instelling ‘retain-days’."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:24
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:92
@@ -7125,25 +7125,22 @@ msgid "Show only the names of the leaf accounts in the register and in the accou
 msgstr "Uitsluitend het laatste onderdeel van rekeningnamen op de grootboekkaart en in het popup-scherm voor rekeningselectie weergegeven. Standaard wordt de volledige rekeningnaam inclusief alle bovenliggende rekeningen weergegeven. Deze optie heeft alleen zin als op het laagste niveau geen dubbele rekeningnamen voorkomen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:93
-#, fuzzy
 msgid "Show the entered and reconcile dates"
-msgstr "De gehanteerde wisselkoersen weergeven"
+msgstr "De datums van invoer en afstemming weergeven"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:94
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:154
-#, fuzzy
 msgid "Show the date when the transaction was entered below the posted date and reconciled date on split row."
-msgstr "De boeking zoveel dagen voor de feitelijke boekdatum aanmaken."
+msgstr "De datum waarop de transactie is ingevoerd weergeven onder de boekdatum en de datum van afstemming in de rij van de boekregel."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:95
 msgid "Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "De datums van invoer en afstemming weergeven bij selectie"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
-#, fuzzy
 msgid "Show the entered date and reconciled date on transaction selection."
-msgstr "Kies ‘B+A’ om een overeenkomende (bestaande) boeking bij te werken en af te stemmen."
+msgstr "De datums van invoer en afstemming weergeven wanneer de boeking geselecteerd wordt."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 msgid "Show the calendar buttons"
@@ -7155,14 +7152,13 @@ msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "De kalenderknoppen Annuleren, Vandaag en Selecteren weergeven."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:99
-#, fuzzy
 msgid "Move the selection to the blank split on expand"
-msgstr "Het geselecteerde boekingssjabloon een regel omhoog verplaatsen"
+msgstr "Selectie naar lege boekregel verplaatsen bij uitklappen"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:100
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:158
 msgid "This will move the selection to the blank split when the transaction is expanded."
-msgstr ""
+msgstr "Hierdoor zal de selectie verplaatsen naar de lege boekregel wanneer de boeking wordt uitgeklapt."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:101
 msgid "Number of transactions to show in a register."
@@ -7492,7 +7488,7 @@ msgstr "De betalingen met betrekking tot een hypotheek of lening instellen"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:5
 msgid "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
-msgstr ""
+msgstr "De details van de lening invoeren (ondergrens: het bedrag en een geldige rekening).\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:7
 msgid "Interest Rate:"
@@ -7541,14 +7537,16 @@ msgid ""
 "\n"
 "Do you utilise an escrow account, if so an account must be specified..."
 msgstr ""
+"\n"
+"Wanneer een depotrekening wordt gebruikt, moet hiervoor een rekening worden gespecificeerd…"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:20
 msgid "... utilize an escrow account for payments?"
-msgstr "… een geblokkeerde rekening gebruiken voor betalingen?"
+msgstr "… een depotrekening gebruiken voor betalingen?"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:21
 msgid "Escrow Account:"
-msgstr "Geblokkeerde rekening:"
+msgstr "Depotrekening:"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:22
 msgid "Loan Repayment Options"
@@ -7559,6 +7557,8 @@ msgid ""
 "\n"
 "All accounts must have valid entries to continue.\n"
 msgstr ""
+"\n"
+"Alle rekeningen moeten geldige invoer hebben om verder te kunnen gaan.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:26
 msgid "Payment From:"
@@ -7591,14 +7591,16 @@ msgid ""
 "\n"
 "All enabled option pages must contain valid entries to continue.\n"
 msgstr ""
+"\n"
+"Alle actieve optiepagina's moeten geldige invoer bevatten om verder te kunnen gaan.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:35
 msgid "Payment To (Escrow):"
-msgstr "Betaling aan (geblokkeerde rekening):"
+msgstr "Betaling aan (depot):"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:36
 msgid "Payment From (Escrow):"
-msgstr "Betaling vanaf (geblokkeerde rekening):"
+msgstr "Betaling vanaf (depot):"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:37
 msgid "Payment To:"
@@ -7610,7 +7612,7 @@ msgstr "Herkomstrekening opgeven"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:39
 msgid "Use Escrow Account"
-msgstr "Geblokkeerde rekening gebruiken"
+msgstr "Depotrekening gebruiken"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:40
 msgid "Part of Payment Transaction"
@@ -9193,9 +9195,8 @@ msgstr "komt niet overeen met reguliere expressie"
 
 #. Build and connect the case-sensitive check button; defaults to off
 #: ../src/gnome-search/search-string.c:329
-#, fuzzy
 msgid "Match case"
-msgstr "Overeenkomst?"
+msgstr "Hoofdlettergevoelig"
 
 #: ../src/gnome/top-level.c:98
 #, c-format
@@ -9447,9 +9448,9 @@ msgid "New Account"
 msgstr "Nieuwe rekening"
 
 #: ../src/gnome-utils/dialog-account.c:2024
-#, fuzzy, c-format
+#, c-format
 msgid "Renumber the immediate sub-accounts of %s? This will replace the account code field of each child account with a newly generated code."
-msgstr "Wilt u de subrekeningen van %s opnieuw nummeren? Hierdoor wordt het rekeningnummer van elke subrekening met een nieuw gegenereerd nummer overschreven."
+msgstr "Wilt u de onmiddellijke subrekeningen van %s opnieuw nummeren? Hierdoor wordt het rekeningnummer van elke subrekening met een nieuw gegenereerd nummer overschreven."
 
 #: ../src/gnome-utils/dialog-book-close.c:301
 msgid "Please select an Equity account to hold the total Period Income."
@@ -10222,7 +10223,7 @@ msgstr "Een gebruikersnaam en wachtwoord invoeren om verbinding te maken met: %s
 #: ../src/gnome-utils/gnc-main-window.c:123
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
-msgstr ""
+msgstr "Wijzigingen worden automatisch opgeslagen over %u secondes"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:259
@@ -10474,12 +10475,12 @@ msgstr "Niet opgeslagen boekhouding"
 
 #: ../src/gnome-utils/gnc-main-window.c:1670
 msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
-msgstr ""
+msgstr "Laatst gewijzigd op %a %e %b %Y om %H:%M"
 
 #: ../src/gnome-utils/gnc-main-window.c:1671
 #, c-format
 msgid "Last modified on %x %X"
-msgstr ""
+msgstr "Laatst gewijzigd op %x %X"
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.
@@ -10895,7 +10896,7 @@ msgstr "De opgegeven datum van deze nieuwe boeking ligt vóór de “alleen-leze
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:886
 msgid "Exchange Rate Canceled, using existing rate or default 1 to 1 rate if this is a new transaction."
-msgstr ""
+msgstr "Wisselkoers geannuleerd, er wordt teruggevallen op de bestaande koers (of op de standaard 1-op-1 koers bij een nieuwe boeking)."
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:1148
 #: ../src/register/ledger-core/split-register.c:1920
@@ -12133,24 +12134,20 @@ msgid "<b>Account Color</b>"
 msgstr "<b>Rekeningkleur</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:39
-#, fuzzy
 msgid "Show the Account Color as background"
-msgstr "Kolom ‘Koersmarker’ weergeven"
+msgstr "De rekeningkleur als achtergrond weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:40
-#, fuzzy
 msgid "Show the Account Color as Account Name Background."
-msgstr "Volledige rekeningnamen in de legenda weergeven?"
+msgstr "De rekeningkleur als achtergrond bij de rekeningnaam weergeven."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:41
-#, fuzzy
 msgid "Show the Account Color on tabs"
-msgstr "Rekeningnummer weergeven"
+msgstr "De rekeningkleur op tabs weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:42
-#, fuzzy
 msgid "Show the Account Color as tab background."
-msgstr "Het rekeningnummer bij subtotalen en subtitels weergeven?"
+msgstr "De rekeningkleur als achtergrond bij de tab weergeven."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:44
 msgid "<b>Fancy Date Format</b>"
@@ -12209,7 +12206,6 @@ msgid "Perform account list _setup on new file"
 msgstr "Bij aanmaken nieuw bestand rekeningschema instellen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
-#, fuzzy
 msgid "Present the new account list dialog when you choose File -> New File."
 msgstr "Het venster ‘Nieuw rekeningschema’ weergegeven na menukeuze ‘Bestand ‣ Nieuw bestand’. "
 
@@ -12226,9 +12222,8 @@ msgid "How many days to keep old log/backup files."
 msgstr "Het aantal dagen dat oude log-/backupbestanden bewaard moeten blijven."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:68
-#, fuzzy
 msgid "_Retain log/backup files:"
-msgstr "Logbestanden _vasthouden:"
+msgstr "Log-/backupbestanden _vasthouden:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:69
 msgid "Com_press files"
@@ -12356,7 +12351,6 @@ msgid "'_Enter' moves to blank transaction"
 msgstr "Met _Enter-toets naar een nieuwe boeking springen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:111
-#, fuzzy
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register. If clear, pressing the 'Enter' key will move down one row."
 msgstr "Door activering van deze optie wordt bij het indrukken van de ‘Enter’-toets naar de lege boeking onderaan de grootboekkaart gegaan. Zonder deze optie wordt de naar volgende regel gegaan."
 
@@ -12429,9 +12423,8 @@ msgid "_Use system theme colors"
 msgstr "_Systeemkleuren gebruiken"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:130
-#, fuzzy
 msgid "If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used."
-msgstr "Als deze optie wordt geactiveerd, zal het kleurschema uit de systeem- instellingen worden toegepast op de grootboekkaarten. Zonder deze optie zal het GnuCash-kleurschema worden toegepast."
+msgstr "Als deze optie wordt geactiveerd, zal het kleurschema uit de systeeminstellingen worden toegepast op de grootboekkaarten. Zonder deze optie zal het originele GnuCash-kleurschema worden gebruikt."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:131
 msgid "<b>Graphics</b>"
@@ -12470,7 +12463,6 @@ msgid "_Double line mode"
 msgstr "_Tweeregelige modus"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:146
-#, fuzzy
 msgid "Show two lines of information for each transaction instead of one. Does not affect expanded transactions."
 msgstr "Niet een, maar twee regels voor iedere boeking weergeven. Heeft geen effect op uitgeklapte transacties."
 
@@ -12495,9 +12487,8 @@ msgid "Number of _characters for auto complete:"
 msgstr "Aantal _karakters voor auto-aanvullen:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:153
-#, fuzzy
 msgid "Show the _entered and reconcile dates"
-msgstr "De gehanteerde wisselkoersen weergeven"
+msgstr "De _invoer- en afstemmingsdatums weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:155
 #, fuzzy
@@ -22665,11 +22656,11 @@ msgstr "Geen hulp beschikbaar."
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:1
 msgid "GnuCash is a program for personal and small-business financial-accounting."
-msgstr ""
+msgstr "GnuCash is boekhoudsoftware voor thuis en voor kleine ondernemingen."
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:2
 msgid "Designed to be easy to use, yet powerful and flexible, GnuCash allows you to track bank accounts, stocks, income and expenses. As quick and intuitive to use as a checkbook register, it is based on professional accounting principles like double-entry accounting to ensure balanced books and accurate reports."
-msgstr ""
+msgstr "GnuCash stelt u in staat om heel eenvoudig bankrekeningen, beleggingen, inkomsten en uitgaven bij te houden, zonder in te leveren op kracht of flexibiliteit. Net zo snel en intuïtief te gebruiken als een dagboek, maar gestoeld op boekhoudkundige principes om te zorgen voor een sluitende boekhouding en accurate rapporten."
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:3
 msgid "With GnuCash you can (but are not limited to):"
@@ -22677,33 +22668,31 @@ msgstr "Met GnuCash kunt u (maar bent u niet beperkt tot):"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:4
 msgid "Keep track of your day to day personal income and expenses"
-msgstr ""
+msgstr "uw persoonlijke inkomsten en uitgaven van dag tot dag volgen"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:5
 msgid "Manage your stock, bond and mutual fund accounts with ease"
-msgstr ""
+msgstr "uw aandelen, obligaties en beleggingsfondsen eenvoudig beheren"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:6
-#, fuzzy
 msgid "Keep your small business' accounting up to date"
-msgstr "De normale rekeningvolgorde handhaven."
+msgstr "de boekhouding van uw kleine onderneming bijhouden"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:7
 msgid "Create accurate reports and graphs from your financial data"
-msgstr ""
+msgstr "accurate rapporten en grafieken maken van uw financiële gegevens"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:8
-#, fuzzy
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "Vaste journaalposten voor de aflossing van een lening instellen"
+msgstr "vaste journaalposten instellen om te voorkomen dat telkens dezelfde gegevens moeten worden ingevoerd"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:9
 msgid "QIF/OFX/HBCI Import, Transaction Matching"
-msgstr ""
+msgstr "QIF-, OFX- en HCBI-bestanden importeren en koppelen aan bestaande boekingen"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:10
 msgid "Perform financial calculations, such as a loan repayment"
-msgstr ""
+msgstr "financiële berekeningen maken, zoals de annuïtaire aflossing van een lening"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
 msgid "GnuCash"
