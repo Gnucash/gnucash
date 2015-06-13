@@ -691,10 +691,10 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
             text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
-            xfer = gnc_xfer_dialog(pw->dialog, pw->xfer_acct);
+            xfer = gnc_xfer_dialog(pw->dialog, pw->post_acct);
             gnc_info_dialog(pw->dialog, "%s", text);
 
-            gnc_xfer_dialog_select_to_account(xfer, pw->post_acct);
+            gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
             gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
 
             /* All we want is the exchange rate so prevent the user from thinking

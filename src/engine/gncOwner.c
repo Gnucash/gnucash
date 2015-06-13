@@ -809,12 +809,17 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
         }
         else
         {
-            /* Need to value the payment in terms of the owner commodity */
-            gnc_numeric payment_value = gnc_numeric_mul(amount,
-                                        exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+            /* This will be a multi-currency transaction. The amount passed to this
+             * function is in the owner commodity (also used by the post account).
+             * For the xfer split we also need to value the payment in the xfer account's
+             * commodity.
+             * exch is from post account to xfer account so that can be used directly
+             * to calculate the equivalent amount in the xfer account's commodity. */
+            gnc_numeric xfer_amount = gnc_numeric_mul (amount, exch, GNC_DENOM_AUTO,
+                                                 GNC_HOW_RND_ROUND_HALF_UP);
 
-            xaccSplitSetAmount(split, amount);
-            xaccSplitSetValue(split, payment_value);
+            xaccSplitSetAmount(split, xfer_amount); /* Payment in xfer account currency */
+            xaccSplitSetValue(split, amount); /* Payment in transaction currency */
         }
     }
 
