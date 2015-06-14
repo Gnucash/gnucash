@@ -47,7 +47,8 @@ gchar * timespec_nsec_to_string(const Timespec *ts);
 gchar * timespec_sec_to_string(const Timespec *ts);
 xmlNodePtr gdate_to_dom_tree(const char *tag, const GDate *spec);
 xmlNodePtr gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num);
-xmlNodePtr kvp_frame_to_dom_tree(const char *tag, const KvpFrame *frame);
+xmlNodePtr qof_instance_slots_to_dom_tree(const char *tag,
+                                          const QofInstance *inst);
 xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int);
 xmlNodePtr recurrence_to_dom_tree(const gchar *tag, const Recurrence *r);
 

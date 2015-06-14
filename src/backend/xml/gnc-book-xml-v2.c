@@ -109,13 +109,9 @@ gnc_book_dom_tree_create(QofBook *book)
     xmlAddChild(ret, guid_to_dom_tree(book_id_string,
                                       qof_book_get_guid(book)));
 
-    if (qof_instance_get_slots (QOF_INSTANCE (book)))
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                             qof_instance_get_slots (QOF_INSTANCE (book)));
-        if (kvpnode)
-            xmlAddChild(ret, kvpnode);
-    }
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(book_slots_string,
+                                                    QOF_INSTANCE(book)));
 
 #ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
     /* theoretically, we should be adding all the below to the book
@@ -153,7 +149,7 @@ gnc_book_dom_tree_create(QofBook *book)
 gboolean
 write_book_parts(FILE *out, QofBook *book)
 {
-    xmlNodePtr domnode;
+     xmlNodePtr domnode, slotsnode;
 
     domnode = guid_to_dom_tree(book_id_string, qof_book_get_guid(book));
     xmlElemDump(out, NULL, domnode);
@@ -162,18 +158,16 @@ write_book_parts(FILE *out, QofBook *book)
     if (ferror(out) || fprintf(out, "\n") < 0)
         return FALSE;
 
-    if (qof_instance_get_slots (QOF_INSTANCE (book)))
+ 
+    slotsnode = qof_instance_slots_to_dom_tree(book_slots_string,
+                                             QOF_INSTANCE(book));
+    if (slotsnode)
     {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                             qof_instance_get_slots (QOF_INSTANCE (book)));
-        if (kvpnode)
-        {
-            xmlElemDump(out, NULL, kvpnode);
-            xmlFreeNode(kvpnode);
+         xmlElemDump(out, NULL, slotsnode);
+         xmlFreeNode(slotsnode);
 
-            if (ferror(out) || fprintf(out, "\n") < 0)
-                return FALSE;
-        }
+         if (ferror(out) || fprintf(out, "\n") < 0)
+              return FALSE;
     }
 
     return TRUE;
@@ -203,7 +197,7 @@ book_slots_handler (xmlNodePtr node, gpointer book_pdata)
 
     /* the below works only because the get is gaurenteed to return
      * a frame, even if its empty */
-    success = dom_tree_to_kvp_frame_given (node, qof_instance_get_slots (QOF_INSTANCE (book)));
+    success = dom_tree_create_instance_slots(node, QOF_INSTANCE (book));
 
     g_return_val_if_fail(success, FALSE);
 

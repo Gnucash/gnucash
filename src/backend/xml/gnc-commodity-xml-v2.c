@@ -66,11 +66,10 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     const char *string;
     xmlNodePtr ret;
     gboolean currency = gnc_commodity_is_iso(com);
-    xmlNodePtr kvpnode =
-        kvp_frame_to_dom_tree(cmdty_slots,
-                              qof_instance_get_slots(QOF_INSTANCE(com)));
+    xmlNodePtr slotsnode =
+        qof_instance_slots_to_dom_tree(cmdty_slots, QOF_INSTANCE(com));
 
-    if (currency && !gnc_commodity_get_quote_flag(com) && !kvpnode)
+    if (currency && !gnc_commodity_get_quote_flag(com) && !slotsnode)
         return NULL;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_commodity_string);
@@ -114,8 +113,8 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
             xmlAddChild(ret, text_to_dom_tree(cmdty_quote_tz, string));
     }
 
-    if (kvpnode)
-        xmlAddChild(ret, kvpnode);
+    if (slotsnode)
+        xmlAddChild(ret, slotsnode);
 
     return ret;
 }
@@ -172,8 +171,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
     else if (g_strcmp0((char*)node->name, cmdty_slots) == 0)
     {
         /* We ignore the results here */
-        dom_tree_to_kvp_frame_given(node,
-                                    qof_instance_get_slots(QOF_INSTANCE(com)));
+        dom_tree_create_instance_slots(node, QOF_INSTANCE(com));
     }
     else
     {

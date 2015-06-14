@@ -71,16 +71,12 @@ const gchar *account_version_string = "2.0.0";
 #define act_hidden_string "act:hidden"
 #define act_placeholder_string "act:placeholder"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance *);
-
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act,
                             gboolean exporting,
                             gboolean allow_incompat)
 {
     const char *str;
-    KvpFrame *kf;
     xmlNodePtr ret;
     GList *lots, *n;
     Account *parent;
@@ -137,16 +133,9 @@ gnc_account_dom_tree_create(Account *act,
         xmlAddChild(ret, text_to_dom_tree(act_description_string, str));
     }
 
-    kf = qof_instance_get_slots (QOF_INSTANCE (act));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(act_slots_string,
+                                                    QOF_INSTANCE(act)));
     parent = gnc_account_get_parent(act);
     if (parent)
     {
@@ -371,9 +360,7 @@ static gboolean
 account_slots_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
-
-    return dom_tree_to_kvp_frame_given
-           (node, qof_instance_get_slots (QOF_INSTANCE (pdata->account)));
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->account));
 }
 
 static gboolean

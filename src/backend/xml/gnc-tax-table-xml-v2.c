@@ -67,9 +67,6 @@ const gchar *taxtable_version_string = "2.0.0";
 #define ttentry_type_string "tte:type"
 #define ttentry_amount_string "tte:amount"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static void
 maybe_add_guid (xmlNodePtr ptr, const char *tag, GncTaxTable *table)
 {
@@ -107,7 +104,6 @@ taxtable_dom_tree_create (GncTaxTable *table)
 {
     xmlNodePtr ret, entries;
     GList *list;
-    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_taxtable_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST taxtable_version_string);
@@ -134,16 +130,9 @@ taxtable_dom_tree_create (GncTaxTable *table)
         xmlAddChild(entries, ttentry_dom_tree_create (entry));
     }
 
-    kf = qof_instance_get_slots (QOF_INSTANCE(table));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(taxtable_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(taxtable_slots_string,
+                                                    QOF_INSTANCE(table)));
     return ret;
 }
 
@@ -384,8 +373,7 @@ taxtable_slots_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata *pdata = taxtable_pdata;
 
-    return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->table)));
+    return dom_tree_create_instance_slots(node, QOF_INSTANCE (pdata->table));
 }
 
 static struct dom_tree_handler taxtable_handlers_v2[] =

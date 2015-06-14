@@ -49,9 +49,6 @@
 
 const gchar *transaction_version_string = "2.0.0";
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance *);
-
 static void
 add_gnc_num(xmlNodePtr node, const gchar *tag, gnc_numeric num)
 {
@@ -130,15 +127,9 @@ split_to_dom_tree(const gchar *tag, Split *spl)
                                                gnc_lot_get_guid(lot)));
         }
     }
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
-                             qof_instance_get_slots (QOF_INSTANCE (spl)));
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree("split:slots",
+                                                    QOF_INSTANCE(spl)));
     return ret;
 }
 
@@ -193,14 +184,9 @@ gnc_transaction_dom_tree_create(Transaction *trn)
     }
     g_free (str);
 
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree("trn:slots",
-                             qof_instance_get_slots (QOF_INSTANCE (trn)));
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree("trn:slots",
+                                                    QOF_INSTANCE(trn)));
 
     add_trans_splits(ret, trn);
 
@@ -370,8 +356,8 @@ spl_slots_handler(xmlNodePtr node, gpointer data)
     struct split_pdata *pdata = data;
     gboolean successful;
 
-    successful = dom_tree_to_kvp_frame_given(node,
-                 qof_instance_get_slots (QOF_INSTANCE (pdata->split)));
+    successful = dom_tree_create_instance_slots(node,
+                                                QOF_INSTANCE (pdata->split));
     g_return_val_if_fail(successful, FALSE);
 
     return TRUE;
@@ -530,7 +516,7 @@ trn_slots_handler(xmlNodePtr node, gpointer trans_pdata)
     Transaction *trn = pdata->trans;
     gboolean successful;
 
-    successful = dom_tree_to_kvp_frame_given(node, qof_instance_get_slots (QOF_INSTANCE (trn)));
+    successful = dom_tree_create_instance_slots(node, QOF_INSTANCE (trn));
 
     g_return_val_if_fail(successful, FALSE);
 

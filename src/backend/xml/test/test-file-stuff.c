@@ -46,6 +46,8 @@
 */
 /***********************************************************************/
 
+extern KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
+
 static int
 files_return(int ret, const char* msg)
 {

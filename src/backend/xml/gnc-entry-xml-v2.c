@@ -92,9 +92,6 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_bill_string "entry:bill"
 #define entry_slots_string "entry:slots"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
@@ -118,7 +115,6 @@ entry_dom_tree_create (GncEntry *entry)
     GncTaxTable *taxtable;
     GncOrder *order;
     GncInvoice *invoice;
-    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_entry_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST entry_version_string);
@@ -215,16 +211,9 @@ entry_dom_tree_create (GncEntry *entry)
         xmlAddChild (ret, guid_to_dom_tree (entry_order_string,
                                             qof_instance_get_guid(QOF_INSTANCE (order))));
 
-    kf = qof_instance_get_slots (QOF_INSTANCE(entry));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(entry_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(entry_slots_string,
+                                                    QOF_INSTANCE(entry)));
     return ret;
 }
 
@@ -677,8 +666,7 @@ entry_slots_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
 
-    return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->entry)));
+    return dom_tree_create_instance_slots(node, QOF_INSTANCE (pdata->entry));
 }
 
 static struct dom_tree_handler entry_handlers_v2[] =

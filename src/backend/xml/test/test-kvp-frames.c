@@ -13,6 +13,7 @@
 
 #define GNC_V2_STRING "gnc-v2"
 const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
+extern KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
 
 static void
 test_kvp_get_slot(int run,
@@ -171,13 +172,13 @@ test_kvp_xml_stuff(void)
     int i;
     for (i = 0; i < 20; i++)
     {
-        KvpFrame *test_frame1;
+        QofInstance *inst = g_object_new (QOF_TYPE_INSTANCE, NULL);
         KvpFrame *test_frame2;
         xmlNodePtr test_node;
 
-        test_frame1 = get_random_kvp_frame();
+        inst->kvp_data = get_random_kvp_frame();
 
-        test_node = kvp_frame_to_dom_tree("test-kvp", test_frame1);
+        test_node = qof_instance_slots_to_dom_tree("test-kvp", inst);
 
         if (!test_node)
         {
@@ -188,7 +189,7 @@ test_kvp_xml_stuff(void)
         {
             test_frame2 = dom_tree_to_kvp_frame(test_node);
 
-            if (kvp_frame_compare(test_frame1, test_frame2) == 0)
+            if (kvp_frame_compare(inst->kvp_data, test_frame2) == 0)
             {
                 success("xml stuff");
             }
@@ -196,7 +197,7 @@ test_kvp_xml_stuff(void)
             {
                 gchar *tmp;
                 failure("xml stuff");
-                tmp = kvp_frame_to_string(test_frame1);
+                tmp = kvp_frame_to_string(inst->kvp_data);
                 printf("   with kvp_frame 1:\n%s\n", tmp);
                 g_free(tmp);
                 printf("   and xml:\n");
@@ -209,8 +210,7 @@ test_kvp_xml_stuff(void)
             kvp_frame_delete(test_frame2);
             xmlFreeNode(test_node);
         }
-
-        kvp_frame_delete(test_frame1);
+        g_object_unref (inst);
     }
 }
 

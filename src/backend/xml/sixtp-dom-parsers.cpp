@@ -79,7 +79,7 @@ dom_tree_to_guid(xmlNodePtr node)
     }
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_integer_kvp_value(xmlNodePtr node)
 {
     gchar *text;
@@ -162,7 +162,7 @@ dom_tree_to_boolean(xmlNodePtr node, gboolean* b)
     }
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_double_kvp_value(xmlNodePtr node)
 {
     gchar *text;
@@ -181,7 +181,7 @@ dom_tree_to_double_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_numeric_kvp_value(xmlNodePtr node)
 {
     gnc_numeric *danum;
@@ -199,7 +199,7 @@ dom_tree_to_numeric_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_string_kvp_value(xmlNodePtr node)
 {
     gchar *datext;
@@ -216,7 +216,7 @@ dom_tree_to_string_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_guid_kvp_value(xmlNodePtr node)
 {
     GncGUID *daguid;
@@ -233,7 +233,7 @@ dom_tree_to_guid_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_timespec_kvp_value (xmlNodePtr node)
 {
     Timespec ts;
@@ -247,7 +247,7 @@ dom_tree_to_timespec_kvp_value (xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_gdate_kvp_value (xmlNodePtr node)
 {
     GDate *date;
@@ -304,7 +304,14 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
     return(TRUE);
 }
 
-KvpValue*
+static KvpValue* dom_tree_to_kvp_value(xmlNodePtr node);
+//needed for test access as well as internal use.
+extern "C"
+{
+    KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
+}
+
+static KvpValue*
 dom_tree_to_list_kvp_value(xmlNodePtr node)
 {
     GList *list = NULL;
@@ -330,7 +337,7 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_frame_kvp_value(xmlNodePtr node)
 {
     KvpFrame *frame;
@@ -369,7 +376,7 @@ struct kvp_val_converter val_converters[] =
     { 0, 0 },
 };
 
-KvpValue*
+static KvpValue*
 dom_tree_to_kvp_value(xmlNodePtr node)
 {
     xmlChar *xml_type;
@@ -404,7 +411,7 @@ dom_tree_to_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-gboolean
+static gboolean
 dom_tree_to_kvp_frame_given(xmlNodePtr node, KvpFrame *frame)
 {
     xmlNodePtr mark;
@@ -473,6 +480,12 @@ dom_tree_to_kvp_frame(xmlNodePtr node)
     return NULL;
 }
 
+gboolean
+dom_tree_create_instance_slots(xmlNodePtr node, QofInstance *inst)
+{
+    KvpFrame *frame = qof_instance_get_slots(inst);
+    return dom_tree_to_kvp_frame_given(node, frame);
+}
 
 gchar *
 dom_tree_to_text(xmlNodePtr tree)

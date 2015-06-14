@@ -72,9 +72,6 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_tochargeamt_string "invoice:charge-amt"
 #define invoice_slots_string "invoice:slots"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance *);
-
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
@@ -93,7 +90,6 @@ static xmlNodePtr
 invoice_dom_tree_create (GncInvoice *invoice)
 {
     xmlNodePtr ret;
-    KvpFrame *kf;
     Timespec ts;
     Transaction *txn;
     GNCLot *lot;
@@ -160,16 +156,9 @@ invoice_dom_tree_create (GncInvoice *invoice)
     if (! gnc_numeric_zero_p (amt))
         xmlAddChild (ret, gnc_numeric_to_dom_tree (invoice_tochargeamt_string, &amt));
 
-    kf = qof_instance_get_slots (QOF_INSTANCE(invoice));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(invoice_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
-
+     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(invoice_slots_string,
+                                                    QOF_INSTANCE(invoice)));
     return ret;
 }
 
@@ -411,9 +400,7 @@ static gboolean
 invoice_slots_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
-
-    return dom_tree_to_kvp_frame_given
-           (node, qof_instance_get_slots (QOF_INSTANCE (pdata->invoice)));
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->invoice));
 }
 
 static struct dom_tree_handler invoice_handlers_v2[] =

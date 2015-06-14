@@ -190,17 +190,9 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
         }
     }
 
-    /* output kvp_frame */
-    {
-        xmlNodePtr kvpnode =
-            kvp_frame_to_dom_tree( SX_SLOTS,
-                                   xaccSchedXactionGetSlots(sx) );
-        if ( kvpnode )
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(SX_SLOTS,
+                                                    QOF_INSTANCE(sx)));
     return ret;
 }
 
@@ -629,7 +621,7 @@ sx_slots_handler( xmlNodePtr node, gpointer sx_pdata )
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
 
-    return dom_tree_to_kvp_frame_given( node, xaccSchedXactionGetSlots (sx) );
+    return dom_tree_create_instance_slots(node, QOF_INSTANCE(sx));
 }
 
 struct dom_tree_handler sx_dom_handlers[] =

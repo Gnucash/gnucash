@@ -365,18 +365,18 @@ add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node)
 }
 
 xmlNodePtr
-kvp_frame_to_dom_tree(const char *tag, const KvpFrame *frame)
+qof_instance_slots_to_dom_tree(const char *tag, const QofInstance* inst)
 {
     xmlNodePtr ret;
     const char ** keys;
     unsigned int i;
-
+    KvpFrame *frame = qof_instance_get_slots(QOF_INSTANCE (inst));
     if (!frame)
     {
-        return NULL;
+        return nullptr;
     }
 
-    ret = xmlNewNode(NULL, BAD_CAST tag);
+    ret = xmlNewNode(nullptr, BAD_CAST tag);
 
     keys = kvp_frame_get_keys(frame);
     for (i = 0; keys[i]; ++i)

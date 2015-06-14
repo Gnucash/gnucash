@@ -79,7 +79,7 @@ const gchar *billterm_version_string = "2.0.0";
 static xmlNodePtr
 billterm_dom_tree_create (GncBillTerm *term)
 {
-    xmlNodePtr ret, data, kvpnode;
+    xmlNodePtr ret, data;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_billterm_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST billterm_version_string);
@@ -95,10 +95,9 @@ billterm_dom_tree_create (GncBillTerm *term)
     xmlAddChild(ret, int_to_dom_tree (billterm_invisible_string,
                                       gncBillTermGetInvisible (term)));
 
-    kvpnode = kvp_frame_to_dom_tree (billterm_slots_string,
-                                     qof_instance_get_slots (QOF_INSTANCE(term)));
-    if (kvpnode) xmlAddChild (ret, kvpnode);
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(billterm_slots_string,
+                                                    QOF_INSTANCE(term)));
 
     /* We should not be our own child */
     if (gncBillTermGetChild(term) != term)
@@ -401,8 +400,7 @@ static gboolean
 billterm_slots_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
     struct billterm_pdata *pdata = billterm_pdata;
-    return dom_tree_to_kvp_frame_given (node,
-                                        qof_instance_get_slots (QOF_INSTANCE(pdata->term)));
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE(pdata->term));
 }
 
 static struct dom_tree_handler billterm_handlers_v2[] =
