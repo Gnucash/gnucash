@@ -1763,8 +1763,6 @@ init_sql_backend( GncDbiBackend* dbi_be )
      * configured for multiuser access. */
     be->sync = gnc_dbi_safe_sync_all;
     be->safe_sync = gnc_dbi_safe_sync_all;
-    be->load_config = NULL;
-    be->get_config = NULL;
 
     be->compile_query = gnc_sql_compile_query;
     be->run_query = gnc_sql_run_query;

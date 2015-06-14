@@ -1251,8 +1251,6 @@ gnc_backend_new(void)
     be->process_events = NULL;
 
     be->sync = xml_sync_all;
-    be->load_config = NULL;
-    be->get_config = NULL;
 
     be->export_fn = gnc_xml_be_write_accounts_to_file;
 
