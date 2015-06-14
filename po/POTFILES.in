@@ -87,7 +87,7 @@ src/backend/xml/gnc-vendor-xml-v2.c
 src/backend/xml/gnc-xml-helper.c
 src/backend/xml/io-example-account.c
 src/backend/xml/io-gncxml-gen.c
-src/backend/xml/io-gncxml-v1.c
+src/backend/xml/io-gncxml-v1.cpp
 src/backend/xml/io-gncxml-v2.c
 src/backend/xml/io-utils.c
 src/backend/xml/sixtp.c

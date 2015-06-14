@@ -24,7 +24,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
-
+extern "C"
+{
 #include "config.h"
 
 #include <stdlib.h>
@@ -49,6 +50,7 @@
 #include "sixtp-stack.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
+}
 
 /* from Transaction-xml-parser-v1.c */
 static sixtp* gnc_transaction_parser_new(void);
@@ -787,13 +789,13 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
         {
             if (is_child_result_from_node_named(cr, "frame"))
             {
-                KvpFrame *frame = cr->data;
+                KvpFrame *frame = static_cast<KvpFrame*>(cr->data);
                 value = kvp_value_new_frame (frame);
                 delete_value = TRUE;
             }
             else
             {
-                value = cr->data;
+                value = static_cast<KvpValue*>(cr->data);
                 delete_value = FALSE;
             }
 
@@ -1401,7 +1403,7 @@ acc_restore_type_end_handler(gpointer data_for_children,
 {
     Account *acc = (Account *) parent_data;
     gchar *txt = NULL;
-    int type;
+    GNCAccountType type;
     gboolean ok;
 
     g_return_val_if_fail(acc, FALSE);
