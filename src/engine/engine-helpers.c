@@ -1024,14 +1024,6 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
         qt_scm = scm_cons (pdata->char_list ? scm_from_utf8_string (pdata->char_list) : SCM_BOOL_F, qt_scm);
 
     }
-    else if (!g_strcmp0 (pd->type_name, QOF_TYPE_KVP))
-    {
-        query_kvp_t pdata = (query_kvp_t) pd;
-
-        qt_scm = scm_cons (gnc_query_path2scm (pdata->path), qt_scm);
-        qt_scm = scm_cons (gnc_kvp_value2scm (pdata->value), qt_scm);
-
-    }
     else
     {
         PWARN ("query core type %s not supported", pd->type_name);
@@ -1233,31 +1225,6 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
             pd = qof_query_char_predicate (options, char_list);
             g_free (char_list);
-        }
-        else if (!g_strcmp0 (type, QOF_TYPE_KVP))
-        {
-            GSList *kvp_path;
-            KvpValue *value;
-
-            scm = SCM_CAR (qt_scm);
-            qt_scm = SCM_CDR (qt_scm);
-            if (!scm_is_list (scm))
-                break;
-            kvp_path = gnc_query_scm2path (scm);
-
-            scm = SCM_CAR (qt_scm);
-            qt_scm = SCM_CDR (qt_scm);
-            if (scm_is_null (scm))
-            {
-                gnc_query_path_free (kvp_path);
-                break;
-            }
-            value = gnc_scm2KvpValue (scm);
-
-            pd = qof_query_kvp_predicate (compare_how, kvp_path, value);
-            gnc_query_path_free (kvp_path);
-            kvp_value_delete (value);
-
         }
         else
         {

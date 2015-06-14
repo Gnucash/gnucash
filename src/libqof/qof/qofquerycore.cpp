@@ -81,9 +81,6 @@ static const char * query_boolean_type = QOF_TYPE_BOOLEAN;
 typedef char (*query_char_getter) (gpointer, QofParam *);
 static const char * query_char_type = QOF_TYPE_CHAR;
 
-typedef KvpFrame * (*query_kvp_getter) (gpointer, QofParam *);
-static const char * query_kvp_type = QOF_TYPE_KVP;
-
 typedef QofCollection * (*query_collect_getter) (gpointer, QofParam*);
 static const char * query_collect_type = QOF_TYPE_COLLECT;
 
@@ -1219,152 +1216,6 @@ char_to_string (gpointer object, QofParam *getter)
     return g_strdup_printf ("%c", num);
 }
 
-/* QOF_TYPE_KVP ================================================ */
-
-static int
-kvp_match_predicate (gpointer object, QofParam *getter,
-                     QofQueryPredData *pd)
-{
-    int compare;
-    KvpFrame *kvp;
-    KvpValue *value;
-    query_kvp_t pdata = (query_kvp_t)pd;
-
-    VERIFY_PREDICATE (query_kvp_type);
-
-    kvp = ((query_kvp_getter)getter->param_getfcn) (object, getter);
-    if (!kvp)
-        return 0;
-
-    value = kvp_frame_get_slot_path_gslist (kvp, pdata->path);
-    if (!value)
-        return 0;
-
-    if (kvp_value_get_type (value) != kvp_value_get_type (pdata->value))
-        return 0;
-
-    compare = kvp_value_compare (value, pdata->value);
-
-    switch (pd->how)
-    {
-    case QOF_COMPARE_LT:
-        return (compare < 0);
-    case QOF_COMPARE_LTE:
-        return (compare <= 0);
-    case QOF_COMPARE_EQUAL:
-        return (compare == 0);
-    case QOF_COMPARE_GTE:
-        return (compare >= 0);
-    case QOF_COMPARE_GT:
-        return (compare > 0);
-    case QOF_COMPARE_NEQ:
-        return (compare != 0);
-    default:
-        PWARN ("bad match type: %d", pd->how);
-        return 0;
-    }
-}
-
-static void
-kvp_free_pdata (QofQueryPredData *pd)
-{
-    query_kvp_t pdata = (query_kvp_t)pd;
-    QofQueryParamList *node;
-
-    VERIFY_PDATA (query_kvp_type);
-    kvp_value_delete (pdata->value);
-    for (node = pdata->path; node; node = node->next)
-    {
-        g_free (node->data);
-        node->data = NULL;
-    }
-    g_slist_free (pdata->path);
-    g_free (pdata);
-}
-
-static QofQueryPredData *
-kvp_copy_predicate (const QofQueryPredData *pd)
-{
-    const query_kvp_t pdata = (const query_kvp_t)pd;
-    VERIFY_PDATA_R (query_kvp_type);
-    return qof_query_kvp_predicate (pd->how, pdata->path, pdata->value);
-}
-
-static gboolean
-kvp_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
-{
-    const query_kvp_t pd1 = (const query_kvp_t) p1;
-    const query_kvp_t pd2 = (const query_kvp_t) p2;
-    QofQueryParamList *n1, *n2;
-
-    n1 = pd1->path;
-    n2 = pd2->path;
-
-    for ( ; n1 && n2; n1 = n1->next, n2 = n2->next)
-    {
-        if (g_strcmp0 (static_cast<char*>(n1->data),
-		       static_cast<char*>(n2->data)) != 0)
-            return FALSE;
-    }
-
-    if (n1 || n2)
-        return FALSE;
-
-    return (kvp_value_compare (pd1->value, pd2->value) == 0);
-}
-
-QofQueryPredData *
-qof_query_kvp_predicate (QofQueryCompare how,
-                         QofQueryParamList *path, const KvpValue *value)
-{
-    query_kvp_t pdata;
-    QofQueryParamList *node;
-
-    g_return_val_if_fail (path && value, NULL);
-
-    pdata = g_new0 (query_kvp_def, 1);
-    pdata->pd.type_name = query_kvp_type;
-    pdata->pd.how = how;
-    pdata->value = kvp_value_copy (value);
-    pdata->path = g_slist_copy (path);
-    for (node = pdata->path; node; node = node->next)
-        node->data = g_strdup (static_cast<char*>(node->data));
-
-    return ((QofQueryPredData*)pdata);
-}
-
-QofQueryPredData *
-qof_query_kvp_predicate_path (QofQueryCompare how,
-                              const char *path, const KvpValue *value)
-{
-    QofQueryPredData *pd;
-    QofQueryParamList *spath = NULL;
-    char *str, *p;
-
-    if (!path) return NULL;
-
-    str = g_strdup (path);
-    p = str;
-    if (0 == *p) return NULL;
-    if ('/' == *p) p++;
-
-    while (p)
-    {
-        spath = g_slist_append (spath, p);
-        p = strchr (p, '/');
-        if (p)
-        {
-            *p = 0;
-            p++;
-        }
-    }
-
-    pd = qof_query_kvp_predicate (how, spath, value);
-    g_free (str);
-    return pd;
-}
-
-
 /* QOF_TYPE_COLLECT =============================================== */
 
 static int
@@ -1824,10 +1675,6 @@ static void init_tables (void)
             QOF_TYPE_CHAR, char_match_predicate, char_compare_func,
             char_copy_predicate, char_free_pdata, char_to_string,
             char_predicate_equal
-        },
-        {
-            QOF_TYPE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
-            kvp_free_pdata, NULL, kvp_predicate_equal
         },
         {
             QOF_TYPE_COLLECT, collect_match_predicate, collect_compare_func,

@@ -79,7 +79,6 @@
 #include "gnc-numeric.h"
 #include "qofutil.h"
 #include "guid.h"
-#include "kvp_frame.h"
 #include "qofbackend.h"
 #include "qofid-p.h"
 #include "qofbook.h"
