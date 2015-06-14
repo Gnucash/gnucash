@@ -38,6 +38,7 @@ extern "C"
 #include "qof.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
+#include "kvp_frame.h"
 #include "qofinstance-p.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;

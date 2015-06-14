@@ -33,16 +33,17 @@ extern "C"
 
 #include <glib.h>
 
-#include "gnc-xml-helper.h"
-#include "Account.h"
-#include "AccountP.h"
-#include "Query.h"
-#include "Scrub.h"
-#include "Transaction.h"
-#include "TransactionP.h"
-#include "TransLog.h"
-#include "gnc-pricedb.h"
-#include "gnc-pricedb-p.h"
+#include <gnc-xml-helper.h>
+#include <Account.h>
+#include <AccountP.h>
+#include <Query.h>
+#include <Scrub.h>
+#include <Transaction.h>
+#include <TransactionP.h>
+#include <TransLog.h>
+#include <gnc-pricedb.h>
+#include <gnc-pricedb-p.h>
+#include <kvp_frame.h>
 #include "io-gncxml.h"
 
 #include "sixtp.h"

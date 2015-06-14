@@ -24,6 +24,7 @@
 #include <unittest-support.h>
 #include "../qof.h"
 #include "../qofbackend-p.h"
+#include "../kvp_frame.h"
 
 static const gchar *suitename = "/qof/qofinstance";
 void test_suite_qofinstance ( void );

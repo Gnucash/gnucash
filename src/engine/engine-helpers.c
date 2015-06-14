@@ -37,8 +37,10 @@
 #include "gnc-session.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "qof.h"
-#include "qofbookslots.h"
+#include <qof.h>
+#include <kvp_frame.h>
+#include <qofbookslots.h>
+
 /** \todo Code dependent on the private query headers
 qofquery-p.h and qofquerycore-p.h may need to be modified.
 These files are temporarily exported for QOF 0.6.0 but

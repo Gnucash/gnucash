@@ -34,17 +34,18 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
-#include "qof.h"
-#include "qofquery-p.h"
-#include "qofquerycore-p.h"
-#include "Account.h"
-#include "TransLog.h"
-#include "gnc-engine.h"
-#include "SX-book.h"
-#include "Recurrence.h"
-#include "gncBillTerm.h"
-#include "gncTaxTable.h"
-#include "gncInvoice.h"
+#include <qof.h>
+#include <qofquery-p.h>
+#include <qofquerycore-p.h>
+#include <kvp_frame.h>
+#include <Account.h>
+#include <TransLog.h>
+#include <gnc-engine.h>
+#include <SX-book.h>
+#include <Recurrence.h>
+#include <gncBillTerm.h>
+#include <gncTaxTable.h>
+#include <gncInvoice.h>
 
 #include "gnc-backend-sql.h"
 

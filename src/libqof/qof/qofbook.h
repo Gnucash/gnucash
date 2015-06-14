@@ -49,9 +49,9 @@ extern "C"
 #ifndef SWIG
 
 typedef struct _QofBookClass  QofBookClass;
+typedef struct KvpValueImpl KvpValue;
 
 #include "qofid.h"
-#include "kvp_frame.h"
 #include "qofinstance.h"
 
 /* --- type macros --- */

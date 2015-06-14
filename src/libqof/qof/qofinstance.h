@@ -46,7 +46,6 @@ typedef struct _QofBook       QofBook;
 #include "qofid.h"
 #include "guid.h"
 #include "gnc-date.h"
-#include "kvp_frame.h"
 #include "qof-gobject.h"
 
 /* --- type macros --- */
@@ -61,6 +60,8 @@ typedef struct _QofBook       QofBook;
      (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_INSTANCE))
 #define QOF_INSTANCE_GET_CLASS(o)    \
      (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_INSTANCE, QofInstanceClass))
+
+typedef struct KvpFrameImpl KvpFrame;
 
 struct QofInstance_s
 {

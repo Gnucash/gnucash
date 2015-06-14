@@ -29,6 +29,7 @@ extern "C"
 
 #include "gnc-xml-helper.h"
 #include <gnc-date.h>
+#include <kvp_frame.h>
 
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"

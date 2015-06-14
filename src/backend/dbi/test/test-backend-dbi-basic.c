@@ -12,6 +12,7 @@
 #include <glib/gstdio.h>
 
 #include <qof.h>
+#include <kvp_frame.h>
 #include <unittest-support.h>
 #include <test-stuff.h>
 #include <test-dbi-stuff.h>

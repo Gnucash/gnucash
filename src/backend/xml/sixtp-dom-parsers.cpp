@@ -28,7 +28,8 @@ extern "C"
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine.h"
+#include <gnc-engine.h>
+#include <kvp_frame.h>
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
 }

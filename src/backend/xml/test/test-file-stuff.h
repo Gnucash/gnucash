@@ -7,11 +7,12 @@
 
 #include <glib.h>
 
-#include "gnc-commodity.h"
-#include "gnc-engine.h"
-#include "gnc-xml-helper.h"
-#include "io-gncxml-gen.h"
-#include "sixtp.h"
+#include <kvp_frame.h>
+#include <gnc-commodity.h>
+#include <gnc-engine.h>
+#include <gnc-xml-helper.h>
+#include <io-gncxml-gen.h>
+#include <sixtp.h>
 
 
 

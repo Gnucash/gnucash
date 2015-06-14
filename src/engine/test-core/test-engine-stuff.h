@@ -10,6 +10,7 @@
 #include <stdint.h>
 
 #include "qof.h"
+#include <kvp_frame.h>
 #include "Query.h"
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"

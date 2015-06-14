@@ -28,6 +28,7 @@ extern "C"
 {
 #include "config.h"
 #include "qof.h"
+#include "kvp_frame.h"
 }
 #include <boost/version.hpp>
 #if BOOST_VERSION == 105600

@@ -27,13 +27,14 @@ extern "C"
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "unittest-support.h"
-
+#include <unittest-support.h>
+#include <qof.h>
+#include <kvp_frame.h>
 #ifdef __cplusplus
 }
 #endif
 
-#include "qof.h"
+
 
 static const gchar *suitename = "/qof/kvp_frame";
 void test_suite_kvp_frame ( void );

@@ -38,6 +38,7 @@ extern "C"
 #include <TransactionP.h>
 #include <gnc-lot.h>
 #include <gnc-event.h>
+#include <kvp_frame.h>
 #include <qofinstance-p.h>
 
 #ifdef HAVE_GLIB_2_38

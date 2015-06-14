@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <unittest-support.h>
 #include <qofbookslots.h>
+#include <kvp_frame.h>
 
 #include "../option-util.h"
 

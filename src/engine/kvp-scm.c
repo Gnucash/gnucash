@@ -1,6 +1,7 @@
 #include "config.h"
 
-#include "qof.h"
+#include <qof.h>
+#include <kvp_frame.h>
 #include <libguile.h>
 #include "engine-helpers-guile.h"
 

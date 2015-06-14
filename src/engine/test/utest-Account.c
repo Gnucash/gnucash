@@ -25,6 +25,7 @@
 #include <unittest-support.h>
 #include <gnc-event.h>
 #include <gnc-gdate-utils.h>
+#include <kvp_frame.h>
 #include <qofinstance-p.h>
 /* Add specific headers for this class */
 #include "../Account.h"

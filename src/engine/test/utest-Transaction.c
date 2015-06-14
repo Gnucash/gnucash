@@ -33,6 +33,7 @@
 #include "../gnc-lot.h"
 #include "../gnc-event.h"
 #include <qof.h>
+#include <kvp_frame.h>
 #include <qofbackend-p.h>
 
 #ifdef HAVE_GLIB_2_38

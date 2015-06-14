@@ -31,8 +31,9 @@ extern "C"
 
 #include <glib.h>
 
-#include "qof.h"
-#include "gnc-engine.h"
+#include <qof.h>
+#include <gnc-engine.h>
+#include <kvp_frame.h>
 
 #include "gnc-backend-sql.h"
 
