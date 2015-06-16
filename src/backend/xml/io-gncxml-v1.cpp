@@ -43,7 +43,6 @@ extern "C"
 #include <TransLog.h>
 #include <gnc-pricedb.h>
 #include <gnc-pricedb-p.h>
-#include <kvp_frame.h>
 #include "io-gncxml.h"
 
 #include "sixtp.h"
@@ -52,6 +51,7 @@ extern "C"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 }
+#include <kvp_frame.hpp>
 
 /* from Transaction-xml-parser-v1.c */
 static sixtp* gnc_transaction_parser_new(void);
@@ -438,8 +438,8 @@ gnc_is_xml_data_file(const gchar *filename)
 static void
 kvp_value_result_cleanup(sixtp_child_result *cr)
 {
-    KvpValue *v = (KvpValue *) cr->data;;
-    if (v) kvp_value_delete(v);
+    KvpValue *v = static_cast<KvpValue*>(cr->data);
+    if (v) delete v;
 }
 
 static sixtp*
@@ -489,7 +489,7 @@ simple_kvp_value_parser_new(sixtp_end_handler end_handler)
   g_free(txt);							\
   g_return_val_if_fail(ok, FALSE);				\
 								\
-  kvpv = kvp_value_new_##TYPE(val);				\
+  kvpv = new KvpValue{val};                                     \
   g_return_val_if_fail(kvpv, FALSE);				\
     								\
   *result = kvpv;						\
@@ -567,7 +567,7 @@ string_kvp_value_end_handler(gpointer data_for_children,
     txt = concatenate_child_result_chars(data_from_children);
     g_return_val_if_fail(txt, FALSE);
 
-    kvpv = kvp_value_new_string(txt);
+    kvpv = new KvpValue{g_strdup(txt)};
     g_free(txt);
     g_return_val_if_fail(kvpv, FALSE);
 
@@ -605,7 +605,7 @@ guid_kvp_value_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail(ok, FALSE);
 
-    kvpv = kvp_value_new_guid(&val);
+    kvpv = new KvpValue{guid_copy(&val)};
     g_return_val_if_fail(kvpv, FALSE);
 
     *result = kvpv;
@@ -660,11 +660,10 @@ glist_kvp_value_end_handler(gpointer data_for_children,
         cr->should_cleanup = FALSE;
     }
 
-    kvp_result = kvp_value_new_glist_nc(result_glist);
+    kvp_result = new KvpValue{result_glist};
     if (!kvp_result)
-    {
-        kvp_glist_delete(result_glist);
-    }
+        g_list_free_full(result_glist,
+                         [](void* data){ delete static_cast<KvpValue*>(data);});
     *result = kvp_result;
     return(TRUE);
 }
@@ -791,7 +790,7 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
             if (is_child_result_from_node_named(cr, "frame"))
             {
                 KvpFrame *frame = static_cast<KvpFrame*>(cr->data);
-                value = kvp_value_new_frame (frame);
+                value = new KvpValue{frame};
                 delete_value = TRUE;
             }
             else
@@ -807,9 +806,9 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
     if (key_node_count != 1) return(FALSE);
 
     value_cr->should_cleanup = TRUE;
-    kvp_frame_set_slot(f, key, value);
+    f->replace_nc(key, value);
     if (delete_value)
-        kvp_value_delete (value);
+        delete value;
     return(TRUE);
 }
 
@@ -880,8 +879,7 @@ kvp_frame_start_handler(GSList* sibling_data, gpointer parent_data,
                         gpointer global_data, gpointer *data_for_children,
                         gpointer *result, const gchar *tag, gchar **attrs)
 {
-    KvpFrame *f = kvp_frame_new();
-    g_return_val_if_fail(f, FALSE);
+    auto f = new KvpFrame;
     *data_for_children = f;
     return(TRUE);
 }
@@ -892,9 +890,8 @@ kvp_frame_end_handler(gpointer data_for_children,
                       gpointer parent_data, gpointer global_data,
                       gpointer *result, const gchar *tag)
 {
-    KvpFrame *f = (KvpFrame *) data_for_children;
-    g_return_val_if_fail(f, FALSE);
-    *result = f;
+    g_return_val_if_fail(data_for_children != NULL, FALSE);
+    *result = data_for_children;
     return(TRUE);
 }
 
@@ -907,15 +904,15 @@ kvp_frame_fail_handler(gpointer data_for_children,
                        gpointer *result,
                        const gchar *tag)
 {
-    KvpFrame *f = (KvpFrame *) data_for_children;
-    if (f) kvp_frame_delete(f);
+    auto f = static_cast<KvpFrame*>(data_for_children);
+    if (f) delete f;
 }
 
 static void
 kvp_frame_result_cleanup(sixtp_child_result *cr)
 {
-    KvpFrame *f = (KvpFrame *) cr->data;;
-    if (f) kvp_frame_delete(f);
+    auto f = static_cast<KvpFrame*>(cr->data);;
+    if (f) delete f;
 }
 
 static sixtp*
@@ -1247,9 +1244,9 @@ account_restore_after_child_handler(gpointer data_for_children,
     if (child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
     if (strcmp(child_result->tag, "slots") == 0)
     {
-        KvpFrame *f = (KvpFrame *) child_result->data;
+        auto f = static_cast<KvpFrame*>(child_result->data);
         g_return_val_if_fail(f, FALSE);
-        if (a->inst.kvp_data) kvp_frame_delete(a->inst.kvp_data);
+        if (a->inst.kvp_data) delete a->inst.kvp_data;
         a->inst.kvp_data = f;
         child_result->should_cleanup = FALSE;
     }
@@ -2481,9 +2478,9 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
 
     if (strcmp(child_result->tag, "slots") == 0)
     {
-        KvpFrame *f = (KvpFrame *) child_result->data;
+        KvpFrame *f = static_cast<KvpFrame*>(child_result->data);
         g_return_val_if_fail(f, FALSE);
-        if (s->inst.kvp_data) kvp_frame_delete(s->inst.kvp_data);
+        if (s->inst.kvp_data) delete s->inst.kvp_data;
         s->inst.kvp_data = f;
         child_result->should_cleanup = FALSE;
     }
