@@ -329,12 +329,9 @@ fi
 # 2.44 requires C11.
 # 2.36 deprecated g_type_init
 # 2.32 deprecated some gthread functions
-ac_cv_cstd=gnu99
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
                         gobject-2.0 gmodule-2.0,
 [
-  ac_cv_cstd=c11
-  AC_DEFINE([HAVE_GLIB_2_44], [1], [Requires C11])
   AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
   AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
   AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
@@ -370,9 +367,6 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 GLIB_GSETTINGS
-dnl First remove any existing -std= setting from CFLAGS then add the one we want.
-CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
-CFLAGS="${CFLAGS} -std=${ac_cv_cstd}"
 
 # I'm sure we (used to?) require this in various places, so don't remove
 # this test unless you've done sufficient code review/testing.
@@ -394,8 +388,18 @@ AC_TRY_RUN([
 ],[
   AC_MSG_RESULT(assuming yes)
 ])
+dnl Check for redefinition of typedef GListStore, briefly in GLib 2.44.
+dnl Redefinition of typdefs is a C11 feature.
+dnl Note that We use gnu99 or gnu11 because strdup is a gnu extension in gcc.
+CFLAGS="${CFLAGS} -Werror"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <gio/gio.h>
+])], [ac_cv_cstd=gnu99], [ac_cv_cstd=gnu11])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
+dnl First remove any existing -std= setting from CFLAGS then add the one we want.
+CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
+CFLAGS="${CFLAGS} -std=${ac_cv_cstd}"
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.
