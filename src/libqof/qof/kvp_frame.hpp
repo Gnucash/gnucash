@@ -41,9 +41,11 @@ class cstring_comparer
     }
 };
 
+using Path = std::vector<const char*>;
+
 struct KvpFrameImpl
 {
-    typedef std::map<const char *, KvpValueImpl *, cstring_comparer> map_type;
+    typedef std::map<const char *, KvpValue*, cstring_comparer> map_type;
 
     public:
     KvpFrameImpl() noexcept {};
@@ -54,22 +56,67 @@ struct KvpFrameImpl
     KvpFrameImpl(const KvpFrameImpl &) noexcept;
 
     /**
-     * Replaces the KvpValueImpl at the specified spot, and returns
-     * the old KvpValueImpl which used to occupy the spot.
-     *
-     * If no KvpValueImpl was at the spot, nullptr is returned.
+     * Set the value with the key in the immediate frame, replacing and
+     * returning the old value if it exists or nullptr if it doesn't.
+     * @param key: The key to insert/replace.
+     * @param newvalue: The value to set at key.
+     * @return The old value if there was one or nullptr.
      */
-    KvpValueImpl * replace_nc(const char * key, KvpValueImpl * newvalue) noexcept;
-
+    KvpValue* set(const char * key, KvpValue* newvalue) noexcept;
+    /**
+     * Set the value with the key in a subframe following the keys in path,
+     * replacing and returning the old value if it exists or nullptr if it
+     * doesn't.
+     * @throw invalid_argument if the path doesn't exist.
+     * @param path: The path of subframes leading to the frame in which to
+     * insert/replace.
+     * @param newvalue: The value to set at key.
+     * @return The old value if there was one or nullptr.
+     */
+    KvpValue* set(Path path, KvpValue* newvalue) noexcept;
+    /**
+     * Set the value with the key in a subframe following the keys in path,
+     * replacing and returning the old value if it exists or nullptr if it
+     * doesn't. Creates any missing intermediate frames.
+     * @param path: The path of subframes leading to the frame in which to
+     * insert/replace.
+     * @param newvalue: The value to set at key.
+     * @return The old value if there was one or nullptr.
+     */
+    KvpValue* set_path(Path path, KvpValue* newvalue) noexcept;
+    /**
+     * Make a string representation of the frame. Mostly useful for debugging.
+     * @return A std::string representing the frame and all its children.
+     */
     std::string to_string() const noexcept;
-
+    /**
+     * Report the keys in the immediate frame. Be sensible about using this, it
+     * isn't a very efficient way to iterate.
+     * @return std::vector of keys as std::strings.
+     */
     std::vector<std::string> get_keys() const noexcept;
 
-    KvpValueImpl * get_slot(const char * key) const noexcept;
+    /** Get the value for the key or nullptr if it doesn't exist.
+     * @param key: The key.
+     * @return The value at the key or nullptr.
+     */
+    KvpValue* get_slot(const char * key) const noexcept;
+    /** Get the value for the tail of the path or nullptr if it doesn't exist.
+     * @param path: Path of keys leading to the desired value.
+     * @return The value at the key or nullptr.
+     */
+    KvpValue* get_slot(Path keys) const noexcept;
+    /** Convenience wrapper for std::for_each, which should be preferred.
+     */
+    void for_each_slot(void (*proc)(const char *key, KvpValue *value,
+                                    void * data),
+                       void *data) const noexcept;
 
-    void for_each_slot(void (*proc)(const char *key, KvpValue *value, void * data), void *data) const noexcept;
-
-    friend int compare(const KvpFrameImpl &, const KvpFrameImpl &) noexcept;
+    /** Test for emptiness
+     * @return true if the frame contains nothing.
+     */
+    bool empty() const noexcept { return m_valuemap.empty(); }
+    friend int compare(const KvpFrameImpl&, const KvpFrameImpl&) noexcept;
 
     private:
     map_type m_valuemap;

@@ -315,10 +315,10 @@ KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
  *  exist.
 */
 /*@ dependent @*/
-KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
+KvpFrame* kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
 
-KvpFrame    * kvp_frame_get_frame_slash (KvpFrame *frame,
-        const gchar *path);
+KvpFrame* kvp_frame_get_frame_slash (KvpFrame *frame,
+                                     const gchar *path);
 
 /** @} */
 /** @name KvpFrame KvpValue low-level storing routines.

@@ -325,7 +325,7 @@ delete_visitor::operator()(GncGUID * & value)
 template <> void
 delete_visitor::operator()(KvpFrame * & value)
 {
-    kvp_frame_delete(value);
+    delete value;
 }
 
 KvpValueImpl::~KvpValueImpl() noexcept

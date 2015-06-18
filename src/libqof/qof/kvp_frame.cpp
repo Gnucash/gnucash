@@ -51,11 +51,12 @@ KvpFrameImpl::KvpFrameImpl(const KvpFrameImpl & rhs) noexcept
     );
 }
 
-KvpValueImpl * KvpFrameImpl::replace_nc(const char * key, KvpValueImpl * value) noexcept
+KvpValue*
+KvpFrameImpl::set(const char* key, KvpValue* value) noexcept
 {
     if (!key) return nullptr;
     auto spot = m_valuemap.find(key);
-    KvpValueImpl * ret {nullptr};
+    KvpValue* ret {nullptr};
     if (spot != m_valuemap.end())
     {
         qof_string_cache_remove(spot->first);
@@ -70,6 +71,53 @@ KvpValueImpl * KvpFrameImpl::replace_nc(const char * key, KvpValueImpl * value) 
     }
 
     return ret;
+}
+
+static inline KvpFrameImpl*
+walk_path_or_nullptr(const KvpFrameImpl* frame, Path& path)
+{
+    KvpFrameImpl* cur_frame = const_cast<KvpFrameImpl*>(frame);
+    for(auto key:path)
+    {
+        auto slot = cur_frame->get_slot(key);
+        if (slot == nullptr || slot->get_type() != KVP_TYPE_FRAME)
+            return nullptr;
+        cur_frame = slot->get<KvpFrame*>();
+    }
+    return cur_frame;
+}
+
+
+KvpValue*
+KvpFrameImpl::set(Path path, KvpValue* value) noexcept
+{
+    const char* last_key = path.back();
+    path.pop_back();
+    auto cur_frame = walk_path_or_nullptr(this, path);
+    if (cur_frame == nullptr)
+        return nullptr;
+    return cur_frame->set(last_key, value);
+}
+
+KvpValue*
+KvpFrameImpl::set_path(Path path, KvpValue* value) noexcept
+{
+    auto cur_frame = this;
+    const char* last_key = path.back();
+    path.pop_back();
+    for(auto key:path)
+    {
+        auto slot = cur_frame->get_slot(key);
+        if (slot == nullptr || slot->get_type() != KVP_TYPE_FRAME)
+        {
+            auto new_frame = new KvpFrame;
+            delete cur_frame->set(key, new KvpValue{new_frame});
+            cur_frame = new_frame;
+            continue;
+        }
+        cur_frame = slot->get<KvpFrame*>();
+    }
+    return cur_frame->set(last_key, value);
 }
 
 std::string
@@ -129,6 +177,18 @@ KvpFrameImpl::get_slot(const char * key) const noexcept
     if (spot == m_valuemap.end())
         return nullptr;
     return spot->second;
+}
+
+KvpValueImpl *
+KvpFrameImpl::get_slot(Path path) const noexcept
+{
+    const char* last_key = path.back();
+    path.pop_back();
+    auto cur_frame = walk_path_or_nullptr(this, path);
+    if (cur_frame == nullptr)
+        return nullptr;
+    return cur_frame->get_slot(last_key);
+
 }
 
 int compare(const KvpFrameImpl * one, const KvpFrameImpl * two) noexcept
@@ -205,9 +265,7 @@ kvp_frame_get_keys(const KvpFrame * frame)
 gboolean
 kvp_frame_is_empty(const KvpFrame * frame)
 {
-    if (!frame) return TRUE;
-    auto realframe = static_cast<KvpFrameImpl const *>(frame);
-    return realframe->get_keys().size() == 0;
+    return frame->empty();
 }
 
 KvpFrame *
@@ -222,26 +280,20 @@ kvp_frame_copy(const KvpFrame * frame)
  * removing the key from the KVP tree.
  */
 static KvpValue *
-kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
-                           KvpValue * new_value)
+kvp_frame_replace_slot_nc (KvpFrame* frame, const char* slot, KvpValue* value)
 {
-    if (!frame) return NULL;
-
-    auto realframe = static_cast<KvpFrameImpl *>(frame);
-    auto realnewvalue = static_cast<KvpValueImpl *>(new_value);
-    return realframe->replace_nc(slot, realnewvalue);
+    if (!frame) return nullptr;
+    return frame->set(slot, value);
 }
 
 /* Passing in a null value into this routine has the effect
  * of deleting the old value stored at this slot.
  */
 static inline void
-kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot,
-                                 KvpValue * new_value)
+kvp_frame_set_slot_destructively(KvpFrame* frame, const char* slot,
+                                 KvpValue* value)
 {
-    KvpValue * old_value;
-    old_value = kvp_frame_replace_slot_nc (frame, slot, new_value);
-    kvp_value_delete (old_value);
+    delete frame->set(slot, value);
 }
 
 /* ============================================================ */
@@ -584,14 +636,12 @@ void
 kvp_frame_set_slot(KvpFrame * frame, const char * slot,
                    KvpValue * value)
 {
-    KvpValue *new_value = NULL;
-
+    KvpValue* new_value{nullptr};
     if (!frame) return;
-
     g_return_if_fail (slot && *slot != '\0');
 
     if (value) new_value = kvp_value_copy(value);
-    kvp_frame_set_slot_destructively(frame, slot, new_value);
+    delete frame->set(slot, new_value);
 }
 
 void
@@ -599,18 +649,16 @@ kvp_frame_set_slot_nc(KvpFrame * frame, const char * slot,
                       KvpValue * value)
 {
     if (!frame) return;
-
     g_return_if_fail (slot && *slot != '\0');
 
-    kvp_frame_set_slot_destructively(frame, slot, value);
+    frame->set(slot, value);
 }
 
 KvpValue *
 kvp_frame_get_slot(const KvpFrame * frame, const char * slot)
 {
-    if (!frame) return NULL;
-    auto realframe = static_cast<const KvpFrameImpl *>(frame);
-    return realframe->get_slot(slot);
+    if (!frame) return nullptr;
+    return frame->get_slot(slot);
 }
 
 void
