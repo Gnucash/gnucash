@@ -1068,7 +1068,7 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 static void
 add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
 {
-    gchar *descr = kvp_value_get_string (value);
+    gchar *descr = g_strdup(kvp_value_get_string (value));
     g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
 }
 
@@ -1076,7 +1076,8 @@ GHashTable *
 qof_book_get_features (QofBook *book)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    GHashTable *features = g_hash_table_new (g_str_hash, g_str_equal);
+    GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                  NULL, g_free);
 
     frame = kvp_frame_get_frame (frame, GNC_FEATURES);
     kvp_frame_for_each_slot (frame, &add_feature_to_hash, &features);

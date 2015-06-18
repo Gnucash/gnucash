@@ -262,7 +262,7 @@ add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
     {
     case KVP_TYPE_STRING:
     {
-	auto newstr = g_strdup(val->get<char*>());
+	auto newstr = g_strdup(val->get<const char*>());
         val_node = xmlNewTextChild(node, NULL, BAD_CAST tag,
 				   checked_char_cast (newstr));
 	g_free (newstr);

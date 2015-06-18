@@ -528,7 +528,7 @@ gnc_numeric kvp_value_get_numeric(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
-char        * kvp_value_get_string(const KvpValue * value);
+const char* kvp_value_get_string(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */

@@ -1050,12 +1050,12 @@ kvp_value_get_numeric(const KvpValue * ovalue)
     return value->get<gnc_numeric>();
 }
 
-char *
+const char *
 kvp_value_get_string(const KvpValue * ovalue)
 {
     if (!ovalue) return {};
     const KvpValueImpl * value {static_cast<const KvpValueImpl *>(ovalue)};
-    return value->get<char*>();
+    return value->get<const char*>();
 }
 
 GncGUID *

@@ -108,7 +108,7 @@ struct KvpValueImpl
         int64_t,
         double,
         gnc_numeric,
-        char *,
+        const char*,
         GncGUID *,
         Timespec,
         GList *,

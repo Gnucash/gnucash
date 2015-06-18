@@ -80,7 +80,7 @@ KvpValueImpl::get_type() const noexcept
         return KvpValueType::KVP_TYPE_DOUBLE;
     else if (datastore.type() == typeid(gnc_numeric))
         return KvpValueType::KVP_TYPE_NUMERIC;
-    else if (datastore.type() == typeid(gchar *))
+    else if (datastore.type() == typeid(const gchar *))
         return KvpValueType::KVP_TYPE_STRING;
     else if (datastore.type() == typeid(GncGUID *))
         return KvpValueType::KVP_TYPE_GUID;
@@ -202,7 +202,7 @@ struct to_string_visitor : boost::static_visitor<void>
         output << ")";
     }
 
-    void operator()(char * val)
+    void operator()(const char * val)
     {
         output << "KVP_VALUE_STRING(" << val << ")";
     }
@@ -243,7 +243,7 @@ struct compare_visitor : boost::static_visitor<int>
         return 0;
     }
 };
-template <> int compare_visitor::operator()(char * const & one, char * const & two) const
+template <> int compare_visitor::operator()(const char * const & one, const char * const & two) const
 {
     return strcmp(one, two);
 }
@@ -337,8 +337,8 @@ KvpValueImpl::~KvpValueImpl() noexcept
 void
 KvpValueImpl::duplicate(const KvpValueImpl& other) noexcept
 {
-    if (other.datastore.type() == typeid(gchar *))
-        this->datastore = g_strdup(other.get<gchar *>());
+    if (other.datastore.type() == typeid(const gchar *))
+        this->datastore = g_strdup(other.get<const gchar *>());
     else if (other.datastore.type() == typeid(GncGUID*))
         this->datastore = guid_copy(other.get<GncGUID *>());
     else if (other.datastore.type() == typeid(GList*))
