@@ -132,7 +132,7 @@ test_kvp_frames1(void)
         test_val1 = get_random_kvp_value(i % KVP_TYPE_FRAME);
 
         test_frame1 = kvp_frame_new();
-        test_key = get_random_string();
+        test_key = get_random_string_without("/");
 
         kvp_frame_set_slot(test_frame1, test_key, test_val1);
 

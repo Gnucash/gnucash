@@ -41,7 +41,7 @@ class cstring_comparer
     }
 };
 
-using Path = std::vector<const char*>;
+using Path = std::vector<std::string>;
 
 struct KvpFrameImpl
 {
