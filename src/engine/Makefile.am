@@ -38,7 +38,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-session.c \
   gncmod-engine.c \
   swig-engine.c \
-  kvp-scm.c \
+  kvp-scm.cpp \
   engine-helpers.c \
   glib-helpers.c  \
   policy.c \
