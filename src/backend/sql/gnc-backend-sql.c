@@ -37,7 +37,6 @@
 #include <qof.h>
 #include <qofquery-p.h>
 #include <qofquerycore-p.h>
-#include <kvp_frame.h>
 #include <Account.h>
 #include <TransLog.h>
 #include <gnc-engine.h>

@@ -33,8 +33,6 @@ extern "C"
 
 #include <qof.h>
 #include <gnc-engine.h>
-#include <kvp_frame.h>
-
 #include "gnc-backend-sql.h"
 
 #include "gnc-slots-sql.h"
@@ -43,6 +41,9 @@ extern "C"
 #include "splint-defs.h"
 #endif
 }
+
+#include <kvp_frame.hpp>
+
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
@@ -252,7 +253,7 @@ set_slot_from_value( slot_info_t *pInfo, KvpValue *pValue)
     case FRAME:
     {
         gchar *key = get_key_from_path( pInfo->path );
-        kvp_frame_set_value_nc( pInfo->pKvpFrame, key, pValue );
+        pInfo->pKvpFrame->set(key, pValue);
         g_free( key );
         break;
     }
@@ -266,13 +267,13 @@ set_slot_from_value( slot_info_t *pInfo, KvpValue *pValue)
     {
         gchar *key = get_key_from_path( pInfo->path );
         gchar *path = get_path_from_path( pInfo->path );
-        KvpFrame* frame = pInfo->pKvpFrame;
+        auto frame = pInfo->pKvpFrame;
         if ( path )
         {
-            frame = kvp_frame_get_frame_slash( frame, path );
+            frame = frame->get_slot(path)->get<KvpFrame*>();
             g_free( path );
         }
-        kvp_frame_set_value_nc( frame, key, pValue );
+        frame->set(key, pValue);
         g_free( key );
         break;
     }
@@ -349,9 +350,9 @@ get_int64_val( gpointer pObject )
 
     g_return_val_if_fail( pObject != NULL, 0 );
 
-    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GINT64 )
+    if ( pInfo->pKvpValue->get_type() == KVP_TYPE_GINT64 )
     {
-        return kvp_value_get_gint64( pInfo->pKvpValue );
+        return pInfo->pKvpValue->get<int64_t>();
     }
     else
     {
@@ -368,7 +369,7 @@ set_int64_val( gpointer pObject, gint64 value )
     g_return_if_fail( pObject != NULL );
 
     if ( pInfo->value_type != KVP_TYPE_GINT64 ) return;
-    pValue = kvp_value_new_gint64( value );
+    pValue = new KvpValue{value};
     set_slot_from_value( pInfo, pValue );
 }
 
@@ -379,9 +380,9 @@ get_string_val( gpointer pObject )
 
     g_return_val_if_fail( pObject != NULL, NULL );
 
-    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_STRING )
+    if ( pInfo->pKvpValue->get_type() == KVP_TYPE_STRING )
     {
-        return (gpointer)kvp_value_get_string( pInfo->pKvpValue );
+        return (gpointer)pInfo->pKvpValue->get<const char*>();
     }
     else
     {
@@ -393,12 +394,12 @@ static void
 set_string_val( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
-    KvpValue *value = NULL;
-
     g_return_if_fail( pObject != NULL );
 
-    if ( pInfo->value_type != KVP_TYPE_STRING || pValue == NULL ) return;
-    value = kvp_value_new_string( (gchar*)pValue );
+    if (pInfo->value_type != KVP_TYPE_STRING || pValue == NULL)
+        return;
+    auto string = g_strdup(static_cast<const char*>(pValue));
+    auto value = new KvpValue{string};
     set_slot_from_value( pInfo, value );
 }
 
@@ -410,9 +411,9 @@ get_double_val( gpointer pObject )
 
     g_return_val_if_fail( pObject != NULL, NULL );
 
-    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_DOUBLE )
+    if (pInfo->pKvpValue->get_type() == KVP_TYPE_DOUBLE)
     {
-        d_val = kvp_value_get_double( pInfo->pKvpValue );
+        d_val = pInfo->pKvpValue->get<double>();
         return (gpointer)&d_val;
     }
     else
@@ -430,7 +431,7 @@ set_double_val( gpointer pObject, /*@ null @*/ gpointer pValue )
     g_return_if_fail( pObject != NULL );
 
     if ( pInfo->value_type != KVP_TYPE_DOUBLE || pValue == NULL ) return;
-    value = kvp_value_new_double( *((double*)pValue) );
+    value = new KvpValue{*(static_cast<double*>(pValue))};
     set_slot_from_value( pInfo, value );
 }
 
@@ -442,7 +443,7 @@ get_timespec_val( gpointer pObject )
     g_return_val_if_fail( pObject != NULL, gnc_dmy2timespec( 1, 1, 1970 ) );
 
 //if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_TIMESPEC ) {
-    return kvp_value_get_timespec( pInfo->pKvpValue );
+    return pInfo->pKvpValue->get<Timespec>();
 }
 
 static void
@@ -454,7 +455,7 @@ set_timespec_val( gpointer pObject, Timespec ts )
     g_return_if_fail( pObject != NULL );
 
     if ( pInfo->value_type != KVP_TYPE_TIMESPEC ) return;
-    value = kvp_value_new_timespec( ts );
+    value = new KvpValue{ts};
     set_slot_from_value( pInfo, value );
 }
 
@@ -465,9 +466,9 @@ get_guid_val( gpointer pObject )
 
     g_return_val_if_fail( pObject != NULL, NULL );
 
-    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GUID )
+    if (pInfo->pKvpValue->get_type() == KVP_TYPE_GUID)
     {
-        return (gpointer)kvp_value_get_guid( pInfo->pKvpValue );
+        return (gpointer)pInfo->pKvpValue->get<GncGUID*>();
     }
     else
     {
@@ -487,8 +488,8 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
     {
     case KVP_TYPE_GUID:
     {
-        KvpValue *value = kvp_value_new_guid( (GncGUID*)pValue );
-        set_slot_from_value( pInfo, value );
+        auto new_guid = guid_copy(static_cast<GncGUID*>(pValue));
+        set_slot_from_value(pInfo, new KvpValue{new_guid});
         break;
     }
     case KVP_TYPE_GLIST:
@@ -500,8 +501,8 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
         newInfo->context = LIST;
 
         slots_load_info( newInfo );
-        pValue = kvp_value_new_glist_nc( newInfo->pList );
-        kvp_frame_set_slot_nc(pInfo->pKvpFrame, key, pValue);
+        pValue = new KvpValue{newInfo->pList};
+        pInfo->pKvpFrame->set(key, pValue);
         g_string_free( newInfo->path, TRUE );
         g_slice_free( slot_info_t, newInfo );
         g_free( key );
@@ -510,14 +511,14 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
     case KVP_TYPE_FRAME:
     {
         slot_info_t *newInfo = slot_info_copy( pInfo, (GncGUID*)pValue ) ;
-        KvpFrame *newFrame = kvp_frame_new();
+        auto newFrame = new KvpFrame;
         newInfo->pKvpFrame = newFrame;
 
         switch ( pInfo->context )
         {
         case LIST:
         {
-            KvpValue *value = kvp_value_new_frame_nc( newFrame );
+            auto value = new KvpValue{newFrame};
             gchar *key = get_key_from_path( pInfo->path );
             newInfo->path = g_string_assign( newInfo->path, key );
             pInfo->pList = g_list_append( pInfo->pList, value );
@@ -528,7 +529,7 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
         default:
         {
             gchar *key = get_key_from_path( pInfo->path );
-            kvp_frame_set_frame_nc( pInfo->pKvpFrame, key, newFrame );
+            pInfo->pKvpFrame->set(key, new KvpValue{newFrame});
             g_free( key );
             break;
         }
@@ -552,9 +553,9 @@ get_numeric_val( gpointer pObject )
 
     g_return_val_if_fail( pObject != NULL, gnc_numeric_zero() );
 
-    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_NUMERIC )
+    if (pInfo->pKvpValue->get_type() == KVP_TYPE_NUMERIC)
     {
-        return kvp_value_get_numeric( pInfo->pKvpValue );
+        return pInfo->pKvpValue->get<gnc_numeric>();
     }
     else
     {
@@ -571,8 +572,7 @@ set_numeric_val( gpointer pObject, gnc_numeric value )
     g_return_if_fail( pObject != NULL );
 
     if ( pInfo->value_type != KVP_TYPE_NUMERIC ) return;
-    pValue = kvp_value_new_numeric( value );
-    set_slot_from_value( pInfo, pValue );
+    set_slot_from_value(pInfo, new KvpValue{value});
 }
 
 static GDate*
@@ -583,9 +583,9 @@ get_gdate_val( gpointer pObject )
 
     g_return_val_if_fail( pObject != NULL, NULL );
 
-    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GDATE )
+    if (pInfo->pKvpValue->get_type() == KVP_TYPE_GDATE)
     {
-        date = kvp_value_get_gdate( pInfo->pKvpValue );
+        date = pInfo->pKvpValue->get<GDate>();
         return &date;
     }
     else
@@ -603,8 +603,7 @@ set_gdate_val( gpointer pObject, GDate* value )
     g_return_if_fail( pObject != NULL );
 
     if ( pInfo->value_type != KVP_TYPE_GDATE ) return;
-    pValue = kvp_value_new_gdate( *value );
-    set_slot_from_value( pInfo, pValue );
+    set_slot_from_value(pInfo, new KvpValue{*value});
 }
 
 static slot_info_t *
@@ -649,24 +648,24 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         (void)g_string_append( pSlot_info->path, "/" );
     }
     (void)g_string_append( pSlot_info->path, key );
-    pSlot_info->value_type = kvp_value_get_type( value );
+    pSlot_info->value_type = value->get_type();
 
     switch ( pSlot_info->value_type )
     {
     case KVP_TYPE_FRAME:
     {
-        KvpFrame* pKvpFrame = kvp_value_get_frame( value );
-        GncGUID guid = guid_new_return();
-        slot_info_t *pNewInfo = slot_info_copy( pSlot_info, &guid );
+        auto pKvpFrame = value->get<KvpFrame*>();
+        auto guid = guid_new();
+        slot_info_t *pNewInfo = slot_info_copy( pSlot_info, guid );
         KvpValue *oldValue = pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = kvp_value_new_guid( &guid );
+        pSlot_info->pKvpValue = new KvpValue{guid};
         pSlot_info->is_ok = gnc_sql_do_db_operation( pSlot_info->be,
                             OP_DB_INSERT, TABLE_NAME,
                             TABLE_NAME, pSlot_info,
                             col_table );
         g_return_if_fail( pSlot_info->is_ok );
-        kvp_frame_for_each_slot( pKvpFrame, save_slot, pNewInfo );
-        kvp_value_delete( pSlot_info->pKvpValue );
+        pKvpFrame->for_each_slot(save_slot, pNewInfo);
+        delete pSlot_info->pKvpValue;
         pSlot_info->pKvpValue = oldValue;
         g_string_free( pNewInfo->path, TRUE );
         g_slice_free( slot_info_t, pNewInfo );
@@ -674,22 +673,21 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
     break;
     case KVP_TYPE_GLIST:
     {
-        GList *cursor;
         GncGUID guid = guid_new_return();
         slot_info_t *pNewInfo = slot_info_copy( pSlot_info, &guid );
         KvpValue *oldValue = pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = kvp_value_new_guid( &guid );
+        pSlot_info->pKvpValue = new KvpValue{&guid};
         pSlot_info->is_ok = gnc_sql_do_db_operation( pSlot_info->be,
                             OP_DB_INSERT, TABLE_NAME,
                             TABLE_NAME, pSlot_info,
                             col_table );
         g_return_if_fail( pSlot_info->is_ok );
-        for (cursor = kvp_value_get_glist(value); cursor; cursor = cursor->next)
+        for (auto cursor = value->get<GList*>(); cursor; cursor = cursor->next)
         {
-            KvpValue *val = (KvpValue*)cursor->data;
+            auto val = static_cast<KvpValue*>(cursor->data);
             save_slot("", val, pNewInfo);
         }
-        kvp_value_delete( pSlot_info->pKvpValue );
+        delete pSlot_info->pKvpValue;
         pSlot_info->pKvpValue = oldValue;
         g_string_free( pNewInfo->path, TRUE );
         g_slice_free( slot_info_t, pNewInfo );
@@ -727,7 +725,7 @@ gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant,
 
     slot_info.be = be;
     slot_info.guid = guid;
-    kvp_frame_for_each_slot( pFrame, save_slot, &slot_info );
+    pFrame->for_each_slot(save_slot, &slot_info);
     (void)g_string_free( slot_info.path, TRUE );
 
     return slot_info.is_ok;
