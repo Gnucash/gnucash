@@ -1280,8 +1280,6 @@ kvp_frame_to_string(const KvpFrame *frame)
     return g_strdup(realframe->to_string().c_str());
 }
 
-static KvpValue *kvp_value_from_gvalue (const GValue*);
-
 static void
 gvalue_list_from_kvp_value (KvpValue *kval, gpointer pList)
 {

@@ -586,6 +586,12 @@ gchar* kvp_frame_to_string(const KvpFrame *frame);
  */
 GValue* gvalue_from_kvp_value (const KvpValue *kval);
 
+/** Convert a gvalue into a kvpvalue.
+ * @param gval: A GValue of a type KvpValue can digest.
+ * @return KvpValue created from the GValue's contents.
+ */
+KvpValue* kvp_value_from_gvalue (const GValue *gval);
+
 /** KvpItem: GValue Exchange
  * \brief Transfer of KVP to and from GValue, with the key
  *

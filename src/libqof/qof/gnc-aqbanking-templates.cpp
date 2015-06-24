@@ -30,10 +30,10 @@
 extern "C"
 {
 #include "gnc-aqbanking-templates.h"
-#include "kvp_frame.h"
 #include "qofinstance-p.h"
 }
 
+#include "kvp_frame.hpp"
 #include "gnc-rational.hpp"
 
 namespace {
@@ -106,18 +106,13 @@ KvpFrame*
 _GncABTransTempl::make_kvp_frame()
 {
     auto frame = kvp_frame_new();
-    kvp_frame_set_slot(frame, TT_NAME, kvp_value_new_string(m_name.c_str()));
-    kvp_frame_set_slot(frame, TT_RNAME,
-                       kvp_value_new_string(m_recipient_name.c_str()));
-    kvp_frame_set_slot(frame, TT_RACC,
-                       kvp_value_new_string(m_recipient_account.c_str()));
-    kvp_frame_set_slot(frame, TT_RBCODE,
-                       kvp_value_new_string(m_recipient_bankcode.c_str()));
-    kvp_frame_set_slot(frame, TT_AMOUNT, kvp_value_new_gnc_numeric(m_amount));
-    kvp_frame_set_slot(frame, TT_PURPOS,
-                       kvp_value_new_string(m_purpose.c_str()));
-    kvp_frame_set_slot(frame, TT_PURPOSCT,
-                       kvp_value_new_string(m_purpose_continuation.c_str()));
+    frame->set(TT_NAME, new KvpValue(m_name.c_str()));
+    frame->set(TT_RNAME, new KvpValue(m_recipient_name.c_str()));
+    frame->set(TT_RACC, new KvpValue(m_recipient_account.c_str()));
+    frame->set(TT_RBCODE, new KvpValue(m_recipient_bankcode.c_str()));
+    frame->set(TT_AMOUNT, new KvpValue(m_amount));
+    frame->set(TT_PURPOS, new KvpValue(m_purpose.c_str()));
+    frame->set(TT_PURPOSCT, new KvpValue(m_purpose_continuation.c_str()));
     return frame;
 }
 
@@ -141,19 +136,25 @@ GList*
 gnc_ab_trans_templ_list_new_from_book(QofBook *b)
 {
     GList *retval = NULL;
-    KvpFrame *toplevel = qof_instance_get_slots (QOF_INSTANCE (b));
-    KvpFrame *hbci = kvp_frame_get_frame (toplevel, "hbci");
-    KvpValue *listval = kvp_frame_get_slot (hbci, "template-list");
-    GList *list = kvp_value_get_glist (listval);
+    auto toplevel = qof_instance_get_slots (QOF_INSTANCE (b));
+    auto slot = toplevel->get_slot({"hbci", "template-list"});
+    if (slot == nullptr)
+        return retval;
+    auto list = slot->get<GList*>();
     for (auto node = list; node != NULL; node = g_list_next (node))
     {
-        KvpFrame *frame = kvp_value_get_frame (static_cast<KvpValue*>(node->data));
-        auto func = [frame](const char* key)
-            {return kvp_value_get_string(kvp_frame_get_slot(frame, key));};
-        auto templ = new _GncABTransTempl (func(TT_NAME), func(TT_RNAME),
-                                           func(TT_RACC), func(TT_RBCODE),
-                                           kvp_value_get_numeric(kvp_frame_get_slot(frame, TT_AMOUNT)),
-                                           func(TT_PURPOS), func(TT_PURPOSCT));
+        KvpFrame *frame = static_cast<KvpValue*>(node->data)->get<KvpFrame*>();
+        auto c_func = [frame](const char* key)
+            { auto slot = frame->get_slot(key);
+              return slot == nullptr ? std::string("") : std::string(slot->get<const char*>());};
+        auto n_func = [frame](const char* key)
+            { auto slot = frame->get_slot(key);
+              return slot == nullptr ? gnc_numeric_zero() : slot->get<gnc_numeric>();};
+        auto amt_slot = frame->get_slot(TT_AMOUNT);
+        auto templ = new _GncABTransTempl (c_func(TT_NAME), c_func(TT_RNAME),
+                                           c_func(TT_RACC), c_func(TT_RBCODE),
+                                           n_func(TT_AMOUNT), c_func(TT_PURPOS),
+                                           c_func(TT_PURPOSCT));
         retval = g_list_prepend (retval, templ);
     }
     retval = g_list_reverse (retval);
@@ -172,6 +173,12 @@ gnc_ab_trans_templ_list_free (GList *l)
     for(GList *node = l; node != NULL; node = g_list_next(node))
         delete static_cast<_GncABTransTempl*>(node->data);
 }
+static void*
+copy_list_value(const void* pvalue, void* pdata)
+{
+    auto new_value = new KvpValue(*static_cast<const KvpValue*>(pvalue));
+    return new_value;
+}
 
 void
 gnc_ab_set_book_template_list (QofBook *b, GList *template_list)
@@ -179,14 +186,15 @@ gnc_ab_set_book_template_list (QofBook *b, GList *template_list)
     GList *kvp_list = NULL;
     for (auto node = template_list; node != NULL; node = g_list_next (node))
     {
-        auto value = kvp_value_new_frame_nc (static_cast<_GncABTransTempl*>(node->data)->make_kvp_frame());
+        auto templ = static_cast<_GncABTransTempl*>(node->data);
+        auto value = new KvpValue(templ->make_kvp_frame());
         kvp_list = g_list_prepend (kvp_list, value);
     }
     kvp_list = g_list_reverse (kvp_list);
-    auto value = kvp_value_new_glist_nc(kvp_list);
+    auto value = new KvpValue(g_list_copy_deep(kvp_list, copy_list_value,
+                                               nullptr));
     KvpFrame *toplevel = qof_instance_get_slots (QOF_INSTANCE (b));
-    KvpFrame *hbci = kvp_frame_get_frame (toplevel, "hbci");
-    kvp_frame_set_slot_nc (hbci, "template-list", value);
+    delete toplevel->set_path({"hbci", "template-list"}, value);
     qof_instance_set_dirty_flag (QOF_INSTANCE (b), TRUE);
 }
 

@@ -270,10 +270,11 @@ set_slot_from_value( slot_info_t *pInfo, KvpValue *pValue)
         auto frame = pInfo->pKvpFrame;
         if ( path )
         {
-            frame = frame->get_slot(path)->get<KvpFrame*>();
+            frame->set_path({path, key}, pValue);
             g_free( path );
         }
-        frame->set(key, pValue);
+        else
+            frame->set(key, pValue);
         g_free( key );
         break;
     }

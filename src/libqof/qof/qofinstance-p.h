@@ -115,6 +115,7 @@ void qof_instance_get_kvp (const QofInstance *inst, const gchar *key, GValue *va
 void qof_instance_copy_kvp (QofInstance *to, const QofInstance *from);
 void qof_instance_swap_kvp (QofInstance *a, QofInstance *b);
 int qof_instance_compare_kvp (const QofInstance *a, const QofInstance *b);
+/** Returns a g_strdup'd string which must be g_freed. */
 char* qof_instance_kvp_as_string (const QofInstance *inst);
 void qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
                                 const Timespec time, const char* key,
