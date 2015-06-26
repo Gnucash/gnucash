@@ -26,7 +26,6 @@ extern "C"
 #include "../Account.h"
 #include <qof.h>
 #include <qofinstance-p.h>
-#include <kvp_frame.h>
 
 struct GncImportMatchMap
 {
@@ -48,6 +47,7 @@ extern void gnc_imap_add_account_bayes (GncImportMatchMap *imap,
 					Account *acc);
 }
 
+#include <kvp_frame.hpp>
 #include <gtest/gtest.h>
 
 class ImapTest : public testing::Test
@@ -103,14 +103,12 @@ protected:
 TEST_F(ImapPlainTest, FindAccount)
 {
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto acc1_val = kvp_value_new_guid(xaccAccountGetGUID(t_expense_account1));
-    auto acc2_val = kvp_value_new_guid(xaccAccountGetGUID(t_expense_account2));
-    kvp_frame_set_slot_path(root, acc1_val, IMAP_FRAME, "foo", "bar", NULL);
-    kvp_frame_set_slot_path(root, acc2_val, IMAP_FRAME, "baz", "waldo", NULL);
-    kvp_frame_set_slot_path(root, acc1_val, IMAP_FRAME, "pepper", NULL);
-    kvp_frame_set_slot_path(root, acc2_val, IMAP_FRAME, "salt", NULL);
-    kvp_value_delete(acc1_val);
-    kvp_value_delete(acc2_val);
+    auto acc1_val = new KvpValue(const_cast<GncGUID*>(xaccAccountGetGUID(t_expense_account1)));
+    auto acc2_val = new KvpValue(const_cast<GncGUID*>(xaccAccountGetGUID(t_expense_account2)));
+    root->set_path({IMAP_FRAME, "foo", "bar"}, acc1_val);
+    root->set_path({IMAP_FRAME, "baz", "waldo"}, acc2_val);
+    root->set_path({IMAP_FRAME, "pepper"}, acc1_val);
+    root->set_path({IMAP_FRAME, "salt"}, acc2_val);
 
     EXPECT_EQ(t_expense_account1, gnc_imap_find_account(t_imap, "foo", "bar"));
     EXPECT_EQ(t_expense_account2,
@@ -140,17 +138,17 @@ TEST_F(ImapPlainTest, AddAccount)
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
 
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto value = kvp_frame_get_slot_path(root, IMAP_FRAME, "foo", "bar", NULL);
+    auto value = root->get_slot({IMAP_FRAME, "foo", "bar"});
     auto check_account = [this](KvpValue* v) {
-        return xaccAccountLookup(kvp_value_get_guid(v), this->t_imap->book); };
+        return xaccAccountLookup(v->get<GncGUID*>(), this->t_imap->book); };
     EXPECT_EQ(t_expense_account1, check_account(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME, "baz", "waldo", NULL);
+    value = root->get_slot({IMAP_FRAME, "baz", "waldo"});
     EXPECT_EQ(t_expense_account2, check_account(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME, "pepper", NULL);
+    value = root->get_slot({IMAP_FRAME, "pepper"});
     EXPECT_EQ(t_expense_account1, check_account(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME, "salt", NULL);
+    value = root->get_slot({IMAP_FRAME, "salt"});
     EXPECT_EQ(t_expense_account2, check_account(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME, "pork", "sausage", NULL);
+    value = root->get_slot({IMAP_FRAME, "pork", "sausage"});
     EXPECT_EQ(nullptr, value);
 }
 
@@ -205,21 +203,14 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     auto acct1_name = gnc_account_get_full_name(t_expense_account1);
     auto acct2_name = gnc_account_get_full_name(t_expense_account2);
-    auto value = kvp_value_new_gint64(42);
+    auto value = new KvpValue(INT64_C(42));
 
-    kvp_frame_set_slot_path(root, value, IMAP_FRAME_BAYES,
-                            foo, acct1_name, NULL);
-    kvp_frame_set_slot_path(root, value, IMAP_FRAME_BAYES,
-                            bar, acct1_name, NULL);
-    kvp_frame_set_slot_path(root, value, IMAP_FRAME_BAYES,
-                            baz, acct2_name, NULL);
-    kvp_frame_set_slot_path(root, value, IMAP_FRAME_BAYES,
-                            waldo, acct2_name, NULL);
-    kvp_frame_set_slot_path(root, value, IMAP_FRAME_BAYES,
-                            pepper, acct1_name, NULL);
-    kvp_frame_set_slot_path(root, value, IMAP_FRAME_BAYES,
-                            salt, acct2_name, NULL);
-    kvp_value_delete(value);
+    root->set_path({IMAP_FRAME_BAYES, foo, acct1_name}, value);
+    root->set_path({IMAP_FRAME_BAYES, bar, acct1_name}, value);
+    root->set_path({IMAP_FRAME_BAYES, baz, acct2_name}, value);
+    root->set_path({IMAP_FRAME_BAYES, waldo, acct2_name}, value);
+    root->set_path({IMAP_FRAME_BAYES, pepper, acct1_name}, value);
+    root->set_path({IMAP_FRAME_BAYES, salt, acct2_name}, value);
 
     auto account = gnc_imap_find_account_bayes(t_imap, t_list1);
     EXPECT_EQ(t_expense_account1, account);
@@ -252,37 +243,28 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     auto acct1_name = gnc_account_get_full_name(t_expense_account1);
     auto acct2_name = gnc_account_get_full_name(t_expense_account2);
-    auto value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, "foo", "bar", NULL);
+    auto value = root->get_slot({IMAP_FRAME_BAYES, "foo", "bar"});
     auto check_account = [this](KvpValue* v) {
-        return (kvp_value_get_string(v),
-                                 this->t_imap->book); };
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, foo, acct1_name,
-                                    NULL);
-    EXPECT_EQ(1, kvp_value_get_gint64(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, bar, acct1_name,
-                                    NULL);
-    EXPECT_EQ(1, kvp_value_get_gint64(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, baz, acct2_name,
-                                    NULL);
-    EXPECT_EQ(1, kvp_value_get_gint64(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, waldo, acct2_name,
-                                    NULL);
-    EXPECT_EQ(1, kvp_value_get_gint64(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, pepper, acct1_name,
-                                    NULL);
-    EXPECT_EQ(1, kvp_value_get_gint64(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, salt, acct2_name,
-                                    NULL);
-    EXPECT_EQ(1, kvp_value_get_gint64(value));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, baz, acct1_name,
-                                    NULL);
-    EXPECT_EQ(0, kvp_value_get_gint64(value));
+        return (v->get<const char*>(), this->t_imap->book); };
+    value = root->get_slot({IMAP_FRAME_BAYES, foo, acct1_name});
+    EXPECT_EQ(1, value->get<int64_t>());
+    value = root->get_slot({IMAP_FRAME_BAYES, bar, acct1_name});
+    EXPECT_EQ(1, value->get<int64_t>());
+    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct2_name});
+    EXPECT_EQ(1, value->get<int64_t>());
+    value = root->get_slot({IMAP_FRAME_BAYES, waldo, acct2_name});
+    EXPECT_EQ(1, value->get<int64_t>());
+    value = root->get_slot({IMAP_FRAME_BAYES, pepper, acct1_name});
+    EXPECT_EQ(1, value->get<int64_t>());
+    value = root->get_slot({IMAP_FRAME_BAYES, salt, acct2_name});
+    EXPECT_EQ(1, value->get<int64_t>());
+    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct1_name});
+    EXPECT_EQ(nullptr, value);
 
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     gnc_imap_add_account_bayes(t_imap, t_list2, t_expense_account2);
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
-    value = kvp_frame_get_slot_path(root, IMAP_FRAME_BAYES, baz, acct2_name,
-                                    NULL);
-    EXPECT_EQ(2, kvp_value_get_gint64(value));
+    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct2_name});
+    EXPECT_EQ(2, value->get<int64_t>());
 }

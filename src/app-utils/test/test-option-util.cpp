@@ -21,17 +21,19 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
-
+#include <kvp_frame.hpp>
+#include <gmp.h> 
+extern "C"
+{
 #include <config.h>
 #include <glib.h>
 #include <unittest-support.h>
 #include <qofbookslots.h>
-#include <kvp_frame.h>
-
 #include "../option-util.h"
+}
 
 static const gchar *suitename = "/app-utils/option-util";
-void test_suite_option_util (void);
+extern "C" void test_suite_option_util (void);
 
 typedef struct
 {
@@ -42,7 +44,7 @@ typedef struct
 /* Expose a mostly-private QofInstance function to load options into
  * the Book.
  */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
+extern "C" KvpFrame *qof_instance_get_slots (const QofInstance*);
 
 static void
 setup (Fixture *fixture, gconstpointer pData)
@@ -66,8 +68,8 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
                      "autoreadonly-days", (double)21,
                      NULL);
 
-    kvp_frame_set_string (slots, "options/Business/Company Name",
-			  "Bogus Company");
+    slots->set_path("options/Business/Company Name",
+               new KvpValue("Bogus Company"));
     qof_commit_edit (QOF_INSTANCE (book));
 }
 
@@ -205,10 +207,10 @@ test_option_save (Fixture *fixture, gconstpointer pData)
 					       OPTION_NAME_AUTO_READONLY_DAYS,
 					       17));
     qof_book_save_options (book, gnc_option_db_save, odb, TRUE);
-    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Use Trading Accounts"), == , "t");
-    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Use Split Action Field for Number"), == , "t");
-    g_assert_cmpstr (kvp_frame_get_string (slots, "options/Business/Company Name"), ==, "Bogus Company");
-    g_assert_cmpfloat (kvp_frame_get_double (slots, "options/Accounts/Day Threshold for Read-Only Transactions (red line)"), ==, 17);
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Use Trading Accounts")->get<const char*>(), == , "t");
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Use Split Action Field for Number")->get<const char*>(), == , "t");
+    g_assert_cmpstr (slots->get_slot("options/Business/Company Name")->get<const char*>(), ==, "Bogus Company");
+    g_assert_cmpfloat (slots->get_slot("options/Accounts/Day Threshold for Read-Only Transactions (red line)")->get<double>(), ==, 17);
 
     gnc_option_db_destroy (odb);
 }
@@ -232,7 +234,7 @@ test_option_save_book_currency (Fixture *fixture, gconstpointer pData)
     gnc_option_db_destroy (odb);
 }
 
-void
+extern "C" void
 test_suite_option_util (void)
 {
     GNC_TEST_ADD (suitename, "Option DB Load", Fixture, NULL, setup_kvp, test_option_load, teardown);

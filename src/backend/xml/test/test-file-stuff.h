@@ -4,17 +4,19 @@
 
 #ifndef TEST_FILE_STUFF_H
 #define TEST_FILE_STUFF_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <glib.h>
 
-#include <kvp_frame.h>
 #include <gnc-commodity.h>
 #include <gnc-engine.h>
 #include <gnc-xml-helper.h>
 #include <io-gncxml-gen.h>
 #include <sixtp.h>
 
-
+typedef struct KvpFrameImpl KvpFrame;
 
 void write_dom_node_to_file(xmlNodePtr node, int fd);
 
@@ -40,5 +42,7 @@ void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,
                   sixtp *parser, const char *parser_tag,
                   QofBook *book);
-
+#ifdef __cplusplus
+}
+#endif
 #endif

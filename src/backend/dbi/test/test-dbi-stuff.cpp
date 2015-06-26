@@ -22,10 +22,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include <config.h>
 #include <qof.h>
-#include <kvp_frame.h>
 #include <qofsession-p.h>
 #include <cashobjects.h>
 #include <test-dbi-stuff.h>
@@ -38,6 +38,9 @@
 #include <SX-book.h>
 #include <gnc-lot.h>
 #include "../gnc-backend-dbi-priv.h"
+}
+
+#include <kvp_frame.hpp>
 
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
@@ -98,7 +101,7 @@ get_sx_by_guid (QofBook* book, const GncGUID *guid)
         const GncGUID *sx_guid;
         sx_guid = qof_instance_get_guid (QOF_INSTANCE(sxitem->data));
         if (guid_equal (sx_guid, guid))
-            return sxitem->data;
+            return static_cast<SchedXaction*>(sxitem->data);
     }
     return NULL;
 }
@@ -127,7 +130,8 @@ compare_recurrences (GList *rl_1, GList *rl_2)
     for (ritem1 = rl_1, ritem2 = rl_2; ritem1 != NULL && ritem2 != NULL;
             ritem1 = g_list_next (ritem1), ritem2 = g_list_next (ritem2))
     {
-        Recurrence *r1 = ritem1->data, *r2 = ritem2->data;
+        auto r1 = static_cast<Recurrence*>(ritem1->data);
+        auto r2 = static_cast<Recurrence*>(ritem2->data);
 
         TEST_GDATES_EQUAL (&r1->start, &r2->start);
         g_assert_cmpint (r1->ptype, ==, r2->ptype);
@@ -185,8 +189,8 @@ compare_single_lot( QofInstance* inst, gpointer user_data )
                                 gnc_lot_get_account (lot_2), FALSE ));
     g_assert_cmpint (gnc_lot_is_closed (lot_1), ==, gnc_lot_is_closed (lot_2));
 
-    g_assert (kvp_frame_compare (qof_instance_get_slots (QOF_INSTANCE (lot_1)),
-                                 qof_instance_get_slots (QOF_INSTANCE (lot_2))) == 0);
+    g_assert (compare (qof_instance_get_slots (QOF_INSTANCE (lot_1)),
+                       qof_instance_get_slots (QOF_INSTANCE (lot_2))) == 0);
     splits1 = gnc_lot_get_split_list (lot_1);
     splits2 = gnc_lot_get_split_list (lot_2);
     g_assert_cmpint (g_list_length (splits1), ==, g_list_length (splits2));
@@ -197,7 +201,8 @@ compare_single_lot( QofInstance* inst, gpointer user_data )
         split2 = xaccSplitLookup (qof_instance_get_guid (split1->data),
                                   info->book_2);
         g_assert (GNC_IS_SPLIT (split2));
-        g_assert (xaccSplitEqual (split1->data, split2, TRUE, TRUE, TRUE));
+        g_assert (xaccSplitEqual (static_cast<Split*>(split1->data),
+                                  split2, TRUE, TRUE, TRUE));
     }
 }
 
@@ -221,7 +226,8 @@ test_conn_index_functions( QofBackend *qbe )
     for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
     {
         const char *errmsg;
-        conn->provider->drop_index (be->conn, iter->data);
+        conn->provider->drop_index (be->conn,
+                                    static_cast<const char*>(iter->data));
         g_assert (DBI_ERROR_NONE == dbi_conn_error( conn->conn, &errmsg));
     }
 

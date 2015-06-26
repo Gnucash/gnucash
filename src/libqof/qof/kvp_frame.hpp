@@ -78,7 +78,21 @@ struct KvpFrameImpl
      * Set the value with the key in a subframe following the keys in path,
      * replacing and returning the old value if it exists or nullptr if it
      * doesn't. Creates any missing intermediate frames.
-     * @param path: The path of subframes leading to the frame in which to
+     * @param path: The path of subframes as a '/'-delimited string leading to the frame in which to
+     * insert/replace.
+     * @param newvalue: The value to set at key.
+     * @return The old value if there was one or nullptr.
+     */
+    KvpValue* set_path(const char* path, KvpValue* newvalue) noexcept;
+    /**
+     * Make a string representation of the frame. Mostly useful for debugging.
+     * @return A std::string representing the frame and all its children.
+     */
+    /**
+     * Set the value with the key in a subframe following the keys in path,
+     * replacing and returning the old value if it exists or nullptr if it
+     * doesn't. Creates any missing intermediate frames.
+     * @param path: The path of subframes as a std::vector leading to the frame in which to
      * insert/replace.
      * @param newvalue: The value to set at key.
      * @return The old value if there was one or nullptr.

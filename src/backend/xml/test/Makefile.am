@@ -29,7 +29,7 @@ test_kvp_frames_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
   ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-kvp-frames.c
+  test-kvp-frames.cpp
 
 # the xml backend is now a GModule - this test does
 # not load it as a module and cannot link to it
@@ -221,7 +221,7 @@ TESTS_ENVIRONMENT = \
 
 check_LTLIBRARIES = libgnc-test-file-stuff.la
 
-libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
+libgnc_test_file_stuff_la_SOURCES = test-file-stuff.cpp
 libgnc_test_file_stuff_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la
 

@@ -58,8 +58,8 @@ endif
 
 test_backend_dbi_SOURCES = \
     test-backend-dbi.c \
-    test-backend-dbi-basic.c \
-    test-dbi-stuff.c \
+    test-backend-dbi-basic.cpp \
+    test-dbi-stuff.cpp \
     test-dbi-business-stuff.c
 
 test_backend_dbi_LDFLAGS="-ldbi"

@@ -94,7 +94,7 @@ EXTRA_DIST += \
 
 test_engine_SOURCES = \
 	test-engine.c \
-	utest-Account.c \
+	utest-Account.cpp \
 	utest-Budget.c \
 	utest-Entry.c \
 	utest-Invoice.c \
@@ -124,7 +124,7 @@ libutest_Split_la_CXXFLAGS = -Wno-write-strings $(AM_CXXFLAGS)
 libutest_Split_la_LIBADD = $(LDADD)
 
 libutest_Trans_la_SOURCES = \
-	utest-Transaction.c
+	utest-Transaction.cpp
 
 libutest_Trans_la_LIBADD = $(LDADD)
 

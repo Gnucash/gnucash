@@ -67,11 +67,10 @@ AM_CPPFLAGS = \
 
 test_app_utils_SOURCES = \
 	test-app-utils.c \
-	test-option-util.c \
+	test-option-util.cpp \
 	test-gnc-ui-util.c
 
-
-test_app_utils_CFLAGS = \
+test_app_utils_CXXFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I${top_srcdir}/${MODULEPATH}/ \
 	-DTESTPROG=test_app_utils \

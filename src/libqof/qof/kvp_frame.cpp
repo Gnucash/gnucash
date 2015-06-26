@@ -143,6 +143,12 @@ walk_path_and_create(KvpFrameImpl* frame, Path path)
 }
 
 KvpValue*
+KvpFrameImpl::set_path(const char* path, KvpValue* value) noexcept
+{
+    return set_path(make_vector(path), value);
+}
+
+KvpValue*
 KvpFrameImpl::set_path(Path path, KvpValue* value) noexcept
 {
     auto cur_frame = this;

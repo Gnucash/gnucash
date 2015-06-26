@@ -87,8 +87,8 @@
 typedef struct
 {
     GLogLevelFlags log_level;
-    gchar *log_domain;
-    gchar *msg;
+    char *log_domain;
+    char *msg;
     guint hits;
 } TestErrorStruct;
 
@@ -105,9 +105,9 @@ typedef struct
  * @param msg: The exact error message that the logger will emit
  * @return: A TestErrorStruct *
  */
-TestErrorStruct* test_error_struct_new (gchar *log_domain,
-                                        GLogLevelFlags log_level,
-                                        gchar *msg);
+TestErrorStruct* test_error_struct_new (const char *log_domain,
+                                        const GLogLevelFlags log_level,
+                                        const char *msg);
 
 /**
  * Free a TestErrorStruct created with test_error_struct_new

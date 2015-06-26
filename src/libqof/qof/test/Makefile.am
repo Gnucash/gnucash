@@ -12,8 +12,7 @@ test_qof_SOURCES = \
 	test-gnc-date.c \
 	test-qof.c \
 	test-qofbook.c \
-	test-qofinstance.c \
-	test-kvp_frame.c \
+	test-qofinstance.cpp \
 	test-qofobject.c \
 	test-qofsession.c \
 	test-qof-string-cache.c \

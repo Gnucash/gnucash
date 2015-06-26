@@ -20,7 +20,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+#include <kvp_frame.hpp>
 
+extern "C"
+{
 #include "config.h"
 
 #include <unistd.h>
@@ -40,13 +43,13 @@
 #include "test-stuff.h"
 #include "io-gncxml-gen.h"
 #include "sixtp-utils.h"
-
 /*
 #define __DEBUG 1
 */
 /***********************************************************************/
 
 extern KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
+}
 
 static int
 files_return(int ret, const char* msg)
@@ -109,7 +112,7 @@ print_dom_tree(gpointer data_for_children, GSList* data_from_children,
     if (parent_data == NULL)
     {
         xmlElemDump((FILE*)global_data, NULL, (xmlNodePtr)data_for_children);
-        xmlFreeNode(data_for_children);
+        xmlFreeNode(static_cast<xmlNodePtr>(data_for_children));
     }
     return TRUE;
 }
@@ -252,25 +255,22 @@ equals_node_val_vs_kvp_frame(xmlNodePtr node, const KvpFrame *frm)
 
     g_return_val_if_fail(cmpfrm, FALSE);
 
-    if (kvp_frame_compare(frm, cmpfrm) == 0)
+    if (compare(frm, cmpfrm) == 0)
     {
-        kvp_frame_delete(cmpfrm);
+        delete cmpfrm;
         return TRUE;
     }
     else
     {
-        gchar *frm1str;
-        gchar *frm2str;
-
-        frm1str = kvp_frame_to_string(frm);
-        frm2str = kvp_frame_to_string(cmpfrm);
+        auto frm1str = g_strdup(frm->to_string().c_str());
+        auto frm2str = g_strdup(cmpfrm->to_string().c_str());
 
         printf("%s vs %s\n", frm1str, frm2str);
 
         g_free(frm1str);
         g_free(frm2str);
 
-        kvp_frame_delete(cmpfrm);
+        delete cmpfrm;
         return FALSE;
     }
 }
