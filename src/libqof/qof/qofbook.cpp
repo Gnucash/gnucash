@@ -21,7 +21,7 @@
 
 /*
  * FILE:
- * qofbook.c
+ * qofbook.cpp
  *
  * FUNCTION:
  * Encapsulate all the information about a QOF dataset.
@@ -66,27 +66,23 @@ enum
     PROP_0,
 //  PROP_ROOT_ACCOUNT,		/* Table */
 //  PROP_ROOT_TEMPLATE,		/* Table */
-/*   keep trading accounts property, while adding currency accounting
-     preperty, so that files prior to 2.7 can be read/processed; GUI changed
-     to use currency accounting property as of 2.7 */
+/*   keep trading accounts property, while adding book-currency and default
+     gains properties, so that files prior to 2.7 can be read/processed; GUI
+     changed to use all three properties as of 2.7. Trading accounts, on the
+     one hand, and book-currency plus default-gains-policy, on the other,
+     are mutually exclusive */
     PROP_OPT_TRADING_ACCOUNTS,	/* KVP */
-    PROP_OPT_CURRENCY_ACCOUNTING,	/* KVP */
-/*   Book currency property only applies if currency accounting method is
-     set to 'book-currency' */
+/*   Book currency and default gains properties only apply if currency
+     accounting method selected in GUI is 'book-currency'; both required and
+     both are exclusive with trading accounts */
     PROP_OPT_BOOK_CURRENCY, 	/* KVP */
+    PROP_OPT_DEFAULT_GAINS_POLICY, 	/* KVP */
     PROP_OPT_AUTO_READONLY_DAYS,/* KVP */
     PROP_OPT_NUM_FIELD_SOURCE,	/* KVP */
     PROP_OPT_DEFAULT_BUDGET,	/* KVP */
     PROP_OPT_FY_END,		/* KVP */
     PROP_AB_TEMPLATES,		/* KVP */
     N_PROPERTIES		/* Just a counter */
-};
-
-enum
-{
-    CURRENCY_ACCOUNTING_TRADING,
-    CURRENCY_ACCOUNTING_BOOK_CURRENCY,
-    CURRENCY_ACCOUNTING_NEITHER,
 };
 
 QOF_GOBJECT_GET_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE, {});
@@ -145,17 +141,17 @@ qof_book_get_property (GObject* object,
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
 	break;
-    case PROP_OPT_CURRENCY_ACCOUNTING:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_CURRENCY_ACCOUNTING);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
     case PROP_OPT_BOOK_CURRENCY:
 	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
 			       OPTION_SECTION_ACCOUNTS,
                    OPTION_NAME_BOOK_CURRENCY);
+	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
+	g_free (key);
+	break;
+    case PROP_OPT_DEFAULT_GAINS_POLICY:
+	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
+			       OPTION_SECTION_ACCOUNTS,
+                   OPTION_NAME_DEFAULT_GAINS_POLICY);
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
 	break;
@@ -179,6 +175,7 @@ qof_book_get_property (GObject* object,
 			       OPTION_NAME_DEFAULT_BUDGET);
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
+	break;
     case PROP_OPT_FY_END:
 	key = const_cast<char*>("fy_end");
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
@@ -215,17 +212,17 @@ qof_book_set_property (GObject      *object,
 	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
 	break;
-    case PROP_OPT_CURRENCY_ACCOUNTING:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_CURRENCY_ACCOUNTING);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
     case PROP_OPT_BOOK_CURRENCY:
 	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
 			       OPTION_SECTION_ACCOUNTS,
                    OPTION_NAME_BOOK_CURRENCY);
+	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
+	g_free (key);
+	break;
+    case PROP_OPT_DEFAULT_GAINS_POLICY:
+	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
+			       OPTION_SECTION_ACCOUNTS,
+                   OPTION_NAME_DEFAULT_GAINS_POLICY);
 	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
 	break;
@@ -286,28 +283,24 @@ qof_book_class_init (QofBookClass *klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_OPT_CURRENCY_ACCOUNTING,
-     g_param_spec_string("currency-accounting",
-                         "Select Currency Accounting Method",
-			 "Scheme 'trading', 'book-currency', or 'neither' (or NULL). "
-			 "If 'trading', then the book uses trading accounts for "
-			 "managing multiple-currency transactions.  If 'book-currency', "
-			 "then the book uses the 'book-currency' as a reference currency "
-             "for managing multiple-currency transactions. If 'neither', or "
-             "if the property is not set or NULL, then the book handles "
-             "multiple-currency transactions in the traditional way gnucash "
-             "has in the past.",
-                         NULL,
-                         G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
      PROP_OPT_BOOK_CURRENCY,
      g_param_spec_string("book-currency",
                          "Select Book Currency",
 			 "The reference currency used to manage multiple-currency "
              "transactions when 'book-currency' currency accounting method "
-             "selected.",
+             "selected; requires valid default gains/loss policy.",
+                         NULL,
+                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_OPT_DEFAULT_GAINS_POLICY,
+     g_param_spec_string("default-gains-policy",
+                         "Select Default Gains Policy",
+			 "The default policy to be used to calculate gains/losses on "
+             "dispositions of currencies/commodities other than "
+             "'book-currency' when 'book-currency' currency accounting "
+             "method selected; requires valid book-currency.",
                          NULL,
                          G_PARAM_READWRITE));
 
@@ -895,63 +888,13 @@ qof_book_validate_counter_format_internal(const gchar *p,
     return NULL;
 }
 
-/* Returns Currency Accounting Method for book */
-gint
-qof_book_currency_accounting_method (const QofBook *book)
-{
-    KvpFrame *kvp;
-    KvpValue *value;
-
-    if (!book)
-    {
-        PWARN ("No book!!!");
-        return CURRENCY_ACCOUNTING_NEITHER;
-    }
-
-    /* Get the KVP from the current book */
-    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
-
-    if (!kvp)
-    {
-        PWARN ("Book has no KVP_Frame");
-        return CURRENCY_ACCOUNTING_NEITHER;
-    }
-
-    /* Get the Currency Accounting Method */
-    value = kvp_frame_get_slot_path (kvp,
-                                     KVP_OPTION_PATH,
-                                     OPTION_SECTION_ACCOUNTS,
-                                     OPTION_NAME_CURRENCY_ACCOUNTING,
-                                     NULL);
-    if (value)
-    {
-        if (strcmp (kvp_value_get_string (value), "trading") == 0)
-           return CURRENCY_ACCOUNTING_TRADING;
-        if (strcmp (kvp_value_get_string (value), "book-currency") == 0)
-        /* Must have a specified book-currency for 'book-currency' Currency
-           Accounting Method to be valid */
-        {
-            value = kvp_frame_get_slot_path (kvp,
-                                             KVP_OPTION_PATH,
-                                             OPTION_SECTION_ACCOUNTS,
-                                             OPTION_NAME_BOOK_CURRENCY,
-                                             NULL);
-            if (!value)
-            /* Book-currency currency accounting method selected but no
-               book-currency specified - something is wrong */
-            {
-                return CURRENCY_ACCOUNTING_NEITHER;
-            }
-            /* Something is stored there - presumably a valid currency */
-            return CURRENCY_ACCOUNTING_BOOK_CURRENCY;
-        }
-    }
-    return CURRENCY_ACCOUNTING_NEITHER;
-}
-
-/* Returns pointer to Book Currency unique_name for book or NULL */
+/** Returns pointer to book-currency name for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * default gain/loss policy, both of which are required, for the
+  * 'book-currency' currency accounting method to apply. Use instead
+  * 'gnc_book_get_book_currency' which does these validations. */
 const gchar *
-qof_book_get_book_currency_unique_name (QofBook *book)
+qof_book_get_book_currency (QofBook *book)
 {
     KvpFrame *kvp;
     KvpValue *value;
@@ -971,30 +914,14 @@ qof_book_get_book_currency_unique_name (QofBook *book)
         return NULL;
     }
 
-    /* Get the Currency Accounting Method */
-    value = kvp_frame_get_slot_path (kvp,
-                                     KVP_OPTION_PATH,
-                                     OPTION_SECTION_ACCOUNTS,
-                                     OPTION_NAME_CURRENCY_ACCOUNTING,
-                                     NULL);
-    if (!value)
-       /* No currency accounting method selected; therefore no book-currency */
-       return NULL;
-
-    if (!(strcmp (kvp_value_get_string (value), "book-currency") == 0))
-       /* Not book-currency currency accounting method; therefore no
-           book-currency */
-       return NULL;
-
-    /* Book-currency is the currency accounting method; get the book currency */
+    /* See if there is a book currency */
     value = kvp_frame_get_slot_path (kvp,
                                      KVP_OPTION_PATH,
                                      OPTION_SECTION_ACCOUNTS,
                                      OPTION_NAME_BOOK_CURRENCY,
                                      NULL);
     if (!value)
-    /* Book-currency currency accounting method selected but no book-currency
-       specified - something is wrong */
+    /* No book-currency */
     {
         return NULL;
     }
@@ -1002,31 +929,58 @@ qof_book_get_book_currency_unique_name (QofBook *book)
     return kvp_value_get_string (value);
 }
 
+/** Returns pointer to default gain/loss policy for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * book-currency, both of which are required, for the 'book-currency'
+  * currency accounting method to apply. Use instead
+  * 'gnc_book_get_default_gains_policy' which does these validations. */
+const gchar *
+qof_book_get_default_gains_policy (QofBook *book)
+{
+    KvpFrame *kvp;
+    KvpValue *value;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return NULL;
+    }
+
+    /* Get the KVP from the current book */
+    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
+
+    if (!kvp)
+    {
+        PWARN ("Book has no KVP_Frame");
+        return NULL;
+    }
+
+    /* See if there is a default gain/loss policy */
+    value = kvp_frame_get_slot_path (kvp,
+                                     KVP_OPTION_PATH,
+                                     OPTION_SECTION_ACCOUNTS,
+                                     OPTION_NAME_DEFAULT_GAINS_POLICY,
+                                     NULL);
+    if (!value)
+    /* No default gain/loss policy, therefore not valid book-currency
+       accounting method */
+    {
+        return NULL;
+    }
+
+    return kvp_value_get_string (value);
+}
+
+
 /* Determine whether this book uses trading accounts */
 gboolean
 qof_book_use_trading_accounts (const QofBook *book)
 {
-    /* Prior to version 2.7, Gnucash had a boolean flag for trading accounts;
-       need to accommodate files from version 2.6 and earlier */
     const char *opt = NULL;
     qof_instance_get (QOF_INSTANCE (book),
 		      "trading-accts", &opt,
 		      NULL);
     if (opt && opt[0] == 't' && opt[1] == 0)
-        return TRUE;
-
-    /* Else, get the Currency Accounting Method */
-    if (qof_book_currency_accounting_method (book) == CURRENCY_ACCOUNTING_TRADING)
-        return TRUE;
-    return FALSE;
-}
-
-/* Returns TRUE if this book uses a book-currency */
-gboolean
-qof_book_use_book_currency (const QofBook *book)
-{
-    /* Get the Currency Accounting Method */
-    if (qof_book_currency_accounting_method (book) == CURRENCY_ACCOUNTING_BOOK_CURRENCY)
         return TRUE;
     return FALSE;
 }

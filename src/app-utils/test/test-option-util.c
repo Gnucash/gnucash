@@ -60,13 +60,27 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
     slots = qof_instance_get_slots (QOF_INSTANCE (book));
     qof_begin_edit (QOF_INSTANCE (book));
     qof_instance_set (QOF_INSTANCE (book),
-		      "trading-accts", "t",
-		      "split-action-num-field", "t",
-		      "autoreadonly-days", (double)21,
-		      NULL);
+                     "trading-accts", "t",
+                     "split-action-num-field", "t",
+                     "autoreadonly-days", (double)21,
+                     NULL);
 
     kvp_frame_set_string (slots, "options/Business/Company Name",
 			  "Bogus Company");
+    qof_commit_edit (QOF_INSTANCE (book));
+}
+
+static void
+setup_kvp_book_currency (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book;
+    setup (fixture, pData);
+    book = fixture->book;
+    qof_begin_edit (QOF_INSTANCE (book));
+    qof_instance_set (QOF_INSTANCE (book),
+                     "book-currency", "GTQ",
+                     "default-gains-policy", "fifo",
+                     NULL);
     qof_commit_edit (QOF_INSTANCE (book));
 }
 
@@ -81,14 +95,92 @@ teardown (Fixture *fixture, gconstpointer pData)
 static void
 test_option_load_from_kvp (Fixture *fixture, gconstpointer pData)
 {
+    gchar *str = NULL;
+    SCM symbol_value;
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
 
     qof_book_load_options (book, gnc_option_db_load_from_kvp, odb);
-    g_assert (gnc_option_db_lookup_boolean_option (odb, OPTION_SECTION_ACCOUNTS,
- OPTION_NAME_TRADING_ACCOUNTS, FALSE));
+    symbol_value = gnc_currency_accounting_option_value_get_method (
+                        gnc_option_db_lookup_option (odb,
+                            OPTION_SECTION_ACCOUNTS,
+                            OPTION_NAME_CURRENCY_ACCOUNTING,
+                            SCM_BOOL_F));
+    if (scm_is_symbol(symbol_value))
+    {
+        SCM string_value = scm_symbol_to_string (symbol_value);
+        if (scm_is_string (string_value))
+        {
+            str = scm_to_utf8_string (string_value);
+        }
+    }
+    g_assert_cmpstr (str, ==, "trading");
+    if (str)
+        g_free (str);
+    g_assert (gnc_option_db_lookup_boolean_option (odb,
+                        OPTION_SECTION_ACCOUNTS,
+                        OPTION_NAME_NUM_FIELD_SOURCE, FALSE));
     g_assert_cmpstr (gnc_option_db_lookup_string_option (odb, "Business", "Company Name", FALSE), ==, "Bogus Company");
     g_assert_cmpfloat (gnc_option_db_lookup_number_option (odb, OPTION_SECTION_ACCOUNTS, OPTION_NAME_AUTO_READONLY_DAYS, FALSE), ==, 21);
+
+    gnc_option_db_destroy (odb);
+}
+
+static void
+test_option_load_from_kvp_book_currency (Fixture *fixture, gconstpointer pData)
+{
+    gchar *str = NULL;
+    SCM symbol_value;
+    const gchar *curr = NULL;
+    SCM curr_scm;
+    gnc_commodity *commodity;
+    QofBook *book = fixture->book;
+    GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
+
+    qof_book_load_options (book, gnc_option_db_load_from_kvp, odb);
+    symbol_value = gnc_currency_accounting_option_value_get_method (
+                        gnc_option_db_lookup_option (odb,
+                            OPTION_SECTION_ACCOUNTS,
+                            OPTION_NAME_CURRENCY_ACCOUNTING,
+                            SCM_BOOL_F));
+    if (scm_is_symbol(symbol_value))
+    {
+        SCM string_value = scm_symbol_to_string (symbol_value);
+        if (scm_is_string (string_value))
+        {
+            str = scm_to_utf8_string (string_value);
+        }
+    }
+    g_assert_cmpstr (str, ==, "book-currency");
+    if (str)
+        g_free (str);
+    symbol_value = gnc_currency_accounting_option_value_get_default_policy (
+                        gnc_option_db_lookup_option (odb,
+                            OPTION_SECTION_ACCOUNTS,
+                            OPTION_NAME_CURRENCY_ACCOUNTING,
+                            SCM_BOOL_F));
+    if (scm_is_symbol(symbol_value))
+    {
+        SCM string_value = scm_symbol_to_string (symbol_value);
+        if (scm_is_string (string_value))
+        {
+            str = scm_to_utf8_string (string_value);
+        }
+    }
+    g_assert_cmpstr (str, ==, "fifo");
+    if (str)
+        g_free (str);
+    curr_scm = gnc_currency_accounting_option_value_get_book_currency(
+                        gnc_option_db_lookup_option(odb,
+                            OPTION_SECTION_ACCOUNTS,
+                            OPTION_NAME_CURRENCY_ACCOUNTING,
+                            SCM_BOOL_F));
+    commodity = gnc_scm_to_commodity (curr_scm);
+    if (commodity)
+    {
+        curr = gnc_commodity_get_mnemonic (commodity);
+    }
+    g_assert_cmpstr (curr, ==, "GTQ");
 
     gnc_option_db_destroy (odb);
 }
@@ -100,9 +192,12 @@ test_option_save_to_kvp (Fixture *fixture, gconstpointer pData)
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
     KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
 
+    g_assert (gnc_option_db_set_option (odb, OPTION_SECTION_ACCOUNTS,
+						OPTION_NAME_CURRENCY_ACCOUNTING,
+						scm_cons (scm_from_locale_symbol("trading"), SCM_EOL)));
     g_assert (gnc_option_db_set_boolean_option (odb, OPTION_SECTION_ACCOUNTS,
-						OPTION_NAME_TRADING_ACCOUNTS,
-						TRUE));
+                                               OPTION_NAME_NUM_FIELD_SOURCE,
+                                               TRUE));
     g_assert (gnc_option_db_set_string_option (odb, "Business", "Company Name",
 					       "Bogus Company"));
     g_assert (gnc_option_db_set_number_option (odb, OPTION_SECTION_ACCOUNTS,
@@ -110,17 +205,38 @@ test_option_save_to_kvp (Fixture *fixture, gconstpointer pData)
 					       17));
     qof_book_save_options (book, gnc_option_db_save_to_kvp, odb, TRUE);
     g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Use Trading Accounts"), == , "t");
+    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Use Split Action Field for Number"), == , "t");
     g_assert_cmpstr (kvp_frame_get_string (slots, "options/Business/Company Name"), ==, "Bogus Company");
     g_assert_cmpfloat (kvp_frame_get_double (slots, "options/Accounts/Day Threshold for Read-Only Transactions (red line)"), ==, 17);
 
     gnc_option_db_destroy (odb);
 }
 
+static void
+test_option_save_to_kvp_book_currency (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = fixture->book;
+    GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
+    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
+
+    g_assert (gnc_option_db_set_option (odb, OPTION_SECTION_ACCOUNTS,
+						OPTION_NAME_CURRENCY_ACCOUNTING,
+						scm_cons (scm_from_locale_symbol("book-currency"),
+                        scm_cons (scm_from_utf8_string("GTQ"),
+                        scm_cons (scm_from_locale_symbol("fifo"), SCM_EOL)))));
+    qof_book_save_options (book, gnc_option_db_save_to_kvp, odb, TRUE);
+    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Book Currency"), == , "GTQ");
+    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Default Gains Policy"), == , "fifo");
+
+    gnc_option_db_destroy (odb);
+}
 
 void
 test_suite_option_util (void)
 {
     GNC_TEST_ADD (suitename, "Option DB Load from KVP", Fixture, NULL, setup_kvp, test_option_load_from_kvp, teardown);
+    GNC_TEST_ADD (suitename, "Option DB Load from KVP - Book Currency", Fixture, NULL, setup_kvp_book_currency, test_option_load_from_kvp_book_currency, teardown);
     GNC_TEST_ADD (suitename, "Option DB Save to KVP", Fixture, NULL, setup, test_option_save_to_kvp, teardown);
+    GNC_TEST_ADD (suitename, "Option DB Save to KVP - Book Currency", Fixture, NULL, setup, test_option_save_to_kvp_book_currency, teardown);
 
 }

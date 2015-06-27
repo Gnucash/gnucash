@@ -29,6 +29,7 @@
 #include "guile-mappings.h"
 
 #include "gnc-commodity.h"
+#include "engine-helpers-guile.h"
 #include "qof.h"
 
 typedef struct gnc_option GNCOption;
@@ -250,6 +251,14 @@ char * gnc_option_date_option_get_subtype(GNCOption *option);
 char * gnc_date_option_value_get_type (SCM option_value);
 Timespec gnc_date_option_value_get_absolute (SCM option_value);
 SCM gnc_date_option_value_get_relative (SCM option_value);
+
+char * gnc_currency_accounting_option_currency_documentation(GNCOption *option);
+SCM gnc_currency_accounting_option_get_default_currency(GNCOption *option);
+char * gnc_currency_accounting_option_policy_documentation(GNCOption *option);
+SCM gnc_currency_accounting_option_get_default_policy(GNCOption *option);
+SCM gnc_currency_accounting_option_value_get_method (SCM option_value);
+SCM gnc_currency_accounting_option_value_get_book_currency (SCM option_value);
+SCM gnc_currency_accounting_option_value_get_default_policy (SCM option_value);
 
 void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
         const char *section,

@@ -266,6 +266,69 @@ gnc_book_option_num_field_source_change_cb (gboolean num_action)
     gnc_gui_refresh_all ();
 }
 
+/** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
+  * and are valid and trading accounts are not used. */
+gboolean
+gnc_book_use_book_currency (QofBook *book)
+{
+    const gchar *policy;
+    const gchar *currency;
+
+    if (!book) return FALSE;
+
+    policy = qof_book_get_default_gains_policy (book);
+    currency = qof_book_get_book_currency (book);
+
+    /* If either a default gain/loss policy or a book-currency does not exist,
+       book-currency accounting method not valid */
+    if (!policy || !currency)
+       return FALSE;
+
+    /* If both exist, both must be valid */
+    if (!gnc_valid_policy (policy) || !gnc_commodity_table_lookup
+                                        (gnc_commodity_table_get_table
+                                          (gnc_get_current_book()),
+                                            GNC_COMMODITY_NS_CURRENCY,
+                                             currency))
+       return FALSE;
+
+    /* If both exist and are valid, there must be no trading accounts flag */
+    if (qof_book_use_trading_accounts (book))
+       return FALSE;
+
+    return TRUE;
+}
+
+/** Returns pointer to Book Currency name for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+const gchar *
+gnc_book_get_book_currency (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return qof_book_get_book_currency (book);
+
+    return NULL;
+}
+
+/** Returns pointer to default gain/loss policy for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+const gchar *
+gnc_book_get_default_gains_policy (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return qof_book_get_default_gains_policy (book);
+
+    return NULL;
+}
+
 Account *
 gnc_get_current_root_account (void)
 {

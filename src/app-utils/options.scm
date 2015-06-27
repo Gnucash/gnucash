@@ -1313,6 +1313,217 @@
 (define (gnc:dateformat-get-format v)
   (cadddr v))
 
+(define (gnc:make-currency-accounting-option
+         section
+         name
+         sort-tag
+         radiobutton-documentation-string
+         default-radiobutton-value
+         ok-radiobutton-values
+         book-currency-documentation-string
+         default-book-currency-value
+         default-cap-gains-policy-documentation-string
+         default-cap-gains-policy-value
+        )
+  (define (legal-val val p-vals)
+    (cond ((null? p-vals) #f)
+          ((not (symbol? val)) #f)
+          ((eq? val (vector-ref (car p-vals) 0)) #t)
+          (else (legal-val val (cdr p-vals)))))
+
+  (define (currency-lookup currency-string)
+    (if (string? currency-string)
+        (gnc-commodity-table-lookup
+         (gnc-commodity-table-get-table (gnc-get-current-book))
+         GNC_COMMODITY_NS_CURRENCY currency-string)
+        #f))
+
+  (define (currency? val)
+    (gnc-commodity-is-currency (currency-lookup val)))
+
+  (define (vector-strings p-vals)
+    (if (null? p-vals)
+        '()
+        (cons (vector-ref (car p-vals) 1)
+              (cons (vector-ref (car p-vals) 2)
+                    (vector-strings (cdr p-vals))))))
+
+  (define (currency->scm currency)
+    (if (string? currency)
+        currency
+        (gnc-commodity-get-mnemonic currency)))
+
+  (define (scm->currency currency)
+    (currency-lookup currency))
+
+  (let* ((value (if (eq? 'book-currency default-radiobutton-value)
+                    (cons default-radiobutton-value
+                          (cons default-book-currency-value
+                                (cons default-cap-gains-policy-value '())))
+                    (cons default-radiobutton-value '())))
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string
+                                               (car value)))))
+         (trading-accounts-path (list (car gnc:*kvp-option-path*)
+                                      gnc:*option-section-accounts*
+                                      gnc:*option-name-trading-accounts*))
+         (book-currency-path (list (car gnc:*kvp-option-path*)
+                                   gnc:*option-section-accounts*
+                                   gnc:*option-name-book-currency*))
+         (gains-policy-path (list (car gnc:*kvp-option-path*)
+                                  gnc:*option-section-accounts*
+                                  gnc:*option-name-default-gains-policy*)))
+    (gnc:make-option
+     section name sort-tag 'currency-accounting
+     radiobutton-documentation-string
+     (lambda () value)
+     (lambda (x)
+       (if (legal-val (car x) ok-radiobutton-values)
+           (set! value x)
+           (gnc:error "Illegal Radiobutton option set")))
+     (lambda () (if (eq? 'book-currency default-radiobutton-value)
+                    (cons default-radiobutton-value
+                          (cons default-book-currency-value
+                                (cons default-cap-gains-policy-value '())))
+                    (cons default-radiobutton-value '())))
+     (gnc:restore-form-generator value->string)
+     (lambda (f p)
+       (if (eq? 'book-currency (car value))
+           (begin
+             ;; Currency = selected currency
+             (kvp-frame-set-slot-path-gslist
+                f
+                (currency->scm (cadr value))
+                book-currency-path)
+             ;; Default Gains Policy = selected policy
+             (kvp-frame-set-slot-path-gslist
+                f
+                (symbol->string (caddr value))
+                gains-policy-path))
+           (if (eq? 'trading (car value))
+               ;; Use Trading Accounts = "t"
+               (kvp-frame-set-slot-path-gslist f "t" trading-accounts-path))))
+     (lambda (f p)
+       (let* ((trading-option-path-kvp?
+                       (kvp-frame-get-slot-path-gslist
+                        f trading-accounts-path))
+              (trading? (if (and trading-option-path-kvp?
+                                 (string=? "t" trading-option-path-kvp?))
+                            #t
+                            #f))
+              (book-currency #f)
+              (cap-gains-policy #f)
+              (v (if trading?
+                     'trading
+                     (let* ((book-currency-option-path-kvp?
+                                 (kvp-frame-get-slot-path-gslist
+                                     f book-currency-path))
+                            (gains-policy-option-path-kvp?
+                                 (kvp-frame-get-slot-path-gslist
+                                     f gains-policy-path))
+                            (book-currency?
+                               (if (and book-currency-option-path-kvp?
+                                        gains-policy-option-path-kvp?
+                                        (string?
+                                           book-currency-option-path-kvp?)
+                                        (string?
+                                           gains-policy-option-path-kvp?)
+                                        (if book-currency-option-path-kvp?
+                                            (currency?
+                                              book-currency-option-path-kvp?))
+                                        (if gains-policy-option-path-kvp?
+                                            (gnc-valid-policy
+                                              gains-policy-option-path-kvp?)))
+                                   (begin
+                                     (set! book-currency
+                                               book-currency-option-path-kvp?)
+                                     (set! cap-gains-policy
+                                               gains-policy-option-path-kvp?)
+                                     #t)
+                                   #f)))
+                           (if book-currency?
+                               'book-currency
+                               'neither)))))
+         (if (and v (symbol? v) (legal-val v ok-radiobutton-values))
+             (set! value (cons v (if (eq? 'book-currency v)
+                                     (list (scm->currency book-currency)
+                                           (string->symbol cap-gains-policy))
+                                     '())))
+             (set! value (cons 'neither '())))))
+     (lambda (x)
+       (if (list? x)
+           (if (legal-val (car x) ok-radiobutton-values)
+               (if (eq? 'book-currency (car x))
+                   (if (currency? (currency->scm (cadr x)))
+                       (if (gnc-valid-policy (symbol->string (caddr x)))
+                           (list #t x)
+                           (list #f "cap-gains-policy-option: illegal value"))
+                       (list #f "currency-option: illegal value"))
+                   (list #t x))
+               (list #f "radiobutton-option: illegal choice"))
+           (list #f "value not a list")))
+     (vector book-currency-documentation-string
+             default-book-currency-value
+             default-cap-gains-policy-documentation-string
+             default-cap-gains-policy-value)
+     (vector (lambda () (length ok-radiobutton-values))
+             (lambda (x) (vector-ref (list-ref ok-radiobutton-values x) 0))
+             (lambda (x) (vector-ref (list-ref ok-radiobutton-values x) 1))
+             (lambda (x) (vector-ref (list-ref ok-radiobutton-values x) 2))
+             (lambda (x)
+               (gnc:multichoice-list-lookup ok-radiobutton-values x)))
+     (lambda () (vector-strings ok-radiobutton-values))
+     #f)))
+
+(define (gnc:get-currency-accounting-option-data-curr-doc-string option-data)
+  (vector-ref option-data 0))
+
+(define (gnc:get-currency-accounting-option-data-default-curr option-data)
+  (vector-ref option-data 1))
+
+(define (gnc:get-currency-accounting-option-data-policy-doc-string option-data)
+  (vector-ref option-data 2))
+
+(define (gnc:get-currency-accounting-option-data-policy-default option-data)
+  (vector-ref option-data 3))
+
+(define (gnc:currency-accounting-option-get-curr-doc-string option)
+  (if (eq? (gnc:option-type option) 'currency-accounting)
+      (gnc:get-currency-accounting-option-data-curr-doc-string
+        (gnc:option-data option))
+      (gnc:error "Not a currency accounting option")))
+
+(define (gnc:currency-accounting-option-get-default-curr option)
+  (if (eq? (gnc:option-type option) 'currency-accounting)
+      (gnc:get-currency-accounting-option-data-default-curr
+        (gnc:option-data option))
+      (gnc:error "Not a currency accounting option")))
+
+(define (gnc:currency-accounting-option-get-policy-doc-string option)
+  (if (eq? (gnc:option-type option) 'currency-accounting)
+      (gnc:get-currency-accounting-option-data-policy-doc-string
+        (gnc:option-data option))
+      (gnc:error "Not a currency accounting option")))
+
+(define (gnc:currency-accounting-option-get-default-policy option)
+  (if (eq? (gnc:option-type option) 'currency-accounting)
+      (gnc:get-currency-accounting-option-data-policy-default
+        (gnc:option-data option))
+      (gnc:error "Not a currency accounting option")))
+
+(define (gnc:currency-accounting-option-selected-method option-value)
+  (car option-value))
+
+(define (gnc:currency-accounting-option-selected-currency option-value)
+  (if (eq? (car option-value) 'book-currency)
+      (cadr option-value)
+      #f))
+
+(define (gnc:currency-accounting-option-selected-policy option-value)
+  (if (eq? (car option-value) 'book-currency)
+      (caddr option-value)
+      #f))
+
 ;; Create a new options database
 (define (gnc:new-options)
   (define option-hash (make-hash-table 23))

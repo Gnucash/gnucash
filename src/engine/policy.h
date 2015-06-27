@@ -39,6 +39,23 @@
 
 typedef struct gncpolicy_s GNCPolicy;
 
+/** Valid Policy List
+ *  Provides a glist of glists for implemented policies. For each implemented
+ *  policy, this glist contains: name, description, hint, as follows:
+ *    glist(
+ *       glist("fifo", "First In First Out", "Use oldest lots first.")
+ *       glist("lifo", "Last In First Out", "Use newest lots first.")
+ *       etc.
+ *         )
+ *  Both levels of lists must be freed with g_list_free().
+ */
+GList * gnc_get_valid_policy_list (void);
+
+/** Valid Policy
+ *  Uses the Valid Policy List to determine if a policy name is valid.
+ */
+gboolean gnc_valid_policy (const gchar *name);
+
 /** First-in, First-out Policy
  *  This policy will create FIFO Lots.  FIFO Lots have the following
  *  properties:

@@ -67,7 +67,9 @@ AM_CPPFLAGS = \
 
 test_app_utils_SOURCES = \
 	test-app-utils.c \
-	test-option-util.c
+	test-option-util.c \
+	test-gnc-ui-util.c
+
 
 test_app_utils_CFLAGS = \
 	${DEFAULT_INCLUDES} \

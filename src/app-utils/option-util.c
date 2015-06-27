@@ -31,7 +31,6 @@
 
 #include "Account.h"
 #include "option-util.h"
-#include "engine-helpers-guile.h"
 #include "glib-helpers.h"
 #include "gnc-guile-utils.h"
 #include "qof.h"
@@ -109,6 +108,13 @@ struct _Getters
     SCM date_option_value_type;
     SCM date_option_value_absolute;
     SCM date_option_value_relative;
+    SCM currency_accounting_option_currency_doc_string;
+    SCM currency_accounting_option_default_currency;
+    SCM currency_accounting_option_policy_doc_string;
+    SCM currency_accounting_option_default_policy;
+    SCM currency_accounting_option_method;
+    SCM currency_accounting_option_book_currency;
+    SCM currency_accounting_option_selected_default_policy;
 };
 
 
@@ -577,6 +583,20 @@ initialize_getters(void)
         scm_c_eval_string("gnc:date-option-absolute-time");
     getters.date_option_value_relative =
         scm_c_eval_string("gnc:date-option-relative-time");
+    getters.currency_accounting_option_currency_doc_string =
+        scm_c_eval_string("gnc:currency-accounting-option-get-curr-doc-string");
+    getters.currency_accounting_option_default_currency =
+        scm_c_eval_string("gnc:currency-accounting-option-get-default-curr");
+    getters.currency_accounting_option_policy_doc_string =
+        scm_c_eval_string("gnc:currency-accounting-option-get-policy-doc-string");
+    getters.currency_accounting_option_default_policy =
+        scm_c_eval_string("gnc:currency-accounting-option-get-default-policy");
+    getters.currency_accounting_option_method =
+        scm_c_eval_string("gnc:currency-accounting-option-selected-method");
+    getters.currency_accounting_option_book_currency =
+        scm_c_eval_string("gnc:currency-accounting-option-selected-currency");
+    getters.currency_accounting_option_selected_default_policy =
+        scm_c_eval_string("gnc:currency-accounting-option-selected-policy");
 
     getters_initialized = TRUE;
 }
@@ -653,8 +673,8 @@ gnc_option_sort_tag(GNCOption *option)
 
 /********************************************************************\
  * gnc_option_documentation                                         *
- *   returns the malloc'ed sort tag of the option, or NULL          *
- *   if it can't be retrieved.                                      *
+ *   returns the malloc'ed documentation string of the option, or   *
+ *   NULL if it can't be retrieved.                                 *
  *                                                                  *
  * Args: option - the GNCOption                                     *
  * Returns: malloc'ed char * or NULL                                *
@@ -2632,6 +2652,133 @@ gnc_date_option_value_get_relative (SCM option_value)
     initialize_getters();
 
     return scm_call_1 (getters.date_option_value_relative, option_value);
+}
+
+/********************************************************************\
+ * gnc_currency_accounting_option_currency_documentation            *
+ *   returns the malloc'ed documentation string for currency        *
+ *   selector of the currency-accounting option, or NULL if it      *
+ *   can't be retrieved.                                            *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: malloc'ed char * or NULL                                *
+\********************************************************************/
+char *
+gnc_currency_accounting_option_currency_documentation(GNCOption *option)
+{
+    initialize_getters();
+
+    return gnc_scm_call_1_to_string
+              (getters.currency_accounting_option_currency_doc_string,
+                                     option->guile_option);
+}
+
+
+/********************************************************************\
+ * gnc_currency_accounting_option_get_default_currency              *
+ *   returns the SCM value for the currency-accounting option       *
+ *   default currency.                                              *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: SCM value                                               *
+\********************************************************************/
+SCM
+gnc_currency_accounting_option_get_default_currency(GNCOption *option)
+{
+    initialize_getters();
+
+    return scm_call_1
+              (getters.currency_accounting_option_default_currency,
+                                        option->guile_option);
+}
+
+
+/********************************************************************\
+ * gnc_currency_accounting_option_policy_documentation              *
+ *   returns the malloc'ed documentation string for policy          *
+ *   selector of the currency-accounting option, or NULL if it      *
+ *   can't be retrieved.                                            *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: malloc'ed char * or NULL                                *
+\********************************************************************/
+char *
+gnc_currency_accounting_option_policy_documentation(GNCOption *option)
+{
+    initialize_getters();
+
+    return gnc_scm_call_1_to_string
+              (getters.currency_accounting_option_policy_doc_string,
+                                     option->guile_option);
+}
+
+
+/********************************************************************\
+ * gnc_currency_accounting_option_get_default_policy                *
+ *   returns the SCM value for the currency-accounting option       *
+ *   default policy.                                                *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: SCM value                                               *
+\********************************************************************/
+SCM
+gnc_currency_accounting_option_get_default_policy(GNCOption *option)
+{
+    initialize_getters();
+
+    return scm_call_1
+              (getters.currency_accounting_option_default_policy,
+                                        option->guile_option);
+}
+
+
+/*******************************************************************\
+ * gnc_currency_accounting_option_value_get_method                 *
+ *   get the currency accounting method of the option as a symbol  *
+ *                                                                 *
+ * Args: option_value - option value to get method of              *
+ * Return: SCM value                                               *
+\*******************************************************************/
+SCM
+gnc_currency_accounting_option_value_get_method (SCM option_value)
+{
+    initialize_getters();
+
+    return scm_call_1 (getters.currency_accounting_option_method, option_value);
+}
+
+/*******************************************************************\
+ * gnc_currency_accounting_option_value_get_book_currency          *
+ *   get the book-currency if that is the currency accounting      *
+ *   method of the option as a symbol                              *
+ *                                                                 *
+ * Args: option_value - option value to get method of              *
+ * Return: SCM value                                               *
+\*******************************************************************/
+SCM
+gnc_currency_accounting_option_value_get_book_currency (SCM option_value)
+{
+    initialize_getters();
+
+    return scm_call_1 (getters.currency_accounting_option_book_currency, option_value);
+}
+
+/*******************************************************************\
+ * gnc_currency_accounting_option_value_get_default_policy         *
+ *   get the default policy if book-currency is the currency       *
+ *   accounting  method of the option as a symbol                  *
+ *                                                                 *
+ * Args: option_value - option value to get method of              *
+ * Return: SCM value                                               *
+\*******************************************************************/
+SCM
+gnc_currency_accounting_option_value_get_default_policy (SCM option_value)
+{
+    initialize_getters();
+
+    return scm_call_1
+        (getters.currency_accounting_option_selected_default_policy,
+          option_value);
 }
 
 /*******************************************************************\

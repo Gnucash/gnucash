@@ -14,6 +14,7 @@
 #include "gnc-hooks-scm.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
+#include "policy.h"
 #include "SX-book.h"
 #include "kvp-scm.h"
 #include "glib-helpers.h"
@@ -136,6 +137,7 @@ functions. */
 %typemap(in) char * num;
 %typemap(in) char * action;
 
+%include <policy.h>
 %include <gnc-pricedb.h>
 
 QofSession * qof_session_new (void);
@@ -348,6 +350,9 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
     SET_ENUM("OPTION-SECTION-ACCOUNTS");
     SET_ENUM("OPTION-NAME-TRADING-ACCOUNTS");
+    SET_ENUM("OPTION-NAME-CURRENCY-ACCOUNTING");
+    SET_ENUM("OPTION-NAME-BOOK-CURRENCY");
+    SET_ENUM("OPTION-NAME-DEFAULT-GAINS-POLICY");
     SET_ENUM("OPTION-NAME-AUTO-READONLY-DAYS");
     SET_ENUM("OPTION-NAME-NUM-FIELD-SOURCE");
 

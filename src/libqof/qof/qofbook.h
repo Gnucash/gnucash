@@ -245,11 +245,19 @@ void qof_book_mark_readonly(QofBook *book);
 /** Returns flag indicating whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book);
 
-/** Returns TRUE if this book uses a book-currency */
-gboolean qof_book_use_book_currency (const QofBook *book);
+/** Returns pointer to book-currency name for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * default gain/loss policy, both of which are required, for the
+  * 'book-currency' currency accounting method to apply. Use instead
+  * 'gnc_book_get_book_currency' which does these validations. */
+const gchar * qof_book_get_book_currency (QofBook *book);
 
-/** Returns pointer to Book Currency unique_name for book or NULL */
-const gchar * qof_book_get_book_currency_unique_name (QofBook *book);
+/** Returns pointer to default gain/loss policy for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * book-currency, both of which are required, for the 'book-currency'
+  * currency accounting method to apply. Use instead
+  * 'gnc_book_get_default_gains_policy' which does these validations. */
+const gchar * qof_book_get_default_gains_policy (QofBook *book);
 
 /** Returns TRUE if the auto-read-only feature should be used, otherwise
  * FALSE. This is just a wrapper on qof_book_get_num_days_autoreadonly() == 0. */
