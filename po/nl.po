@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.6.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-30 13:18-0700\n"
-"PO-Revision-Date: 2015-06-12 21:30+0100\n"
+"PO-Revision-Date: 2015-06-21 15:18+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
@@ -263,7 +263,7 @@ msgstr "Het aantal dagen kiezen waarna boekingen als “alleen-lezen” worden a
 
 #: ../src/app-utils/business-prefs.scm:150
 msgid "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports."
-msgstr ""
+msgstr "Deze instelling selecteren om op grootboekkaarten de actie weer te geven onder ‘Nr’ (in plaats van het boeknummer); het boeknummer wordt  als ‘Boeknr’ op de tweede regel getoond. Dit werkt door bij de MKB-functionaliteiten, bij rapporten en bij import/export."
 
 #: ../src/app-utils/business-prefs.scm:158
 msgid "Budget to be used when none has been otherwise specified."
@@ -7026,12 +7026,12 @@ msgstr "Door activering van deze optie wordt na het afsluiten van een tab de laa
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:68
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:62
 msgid "Set book option on new files to use split \"action\" field for \"Num\" field on registers/reports"
-msgstr ""
+msgstr "Instellen dat bij nieuwe bestanden in grootboekkaarten en rapporten standaard de “actie” wordt gebruikt in plaats van “Nr”."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:63
 msgid "If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field."
-msgstr ""
+msgstr "Door activering van deze optie wordt de standaard instelling voor nieuwe bestanden dat in kolom “Nr” van grootboekkaarten de “actie” van de boekregel wordt weergegeven/aangepast en dat het veld “Nr” wordt weergegeven op de tweede regel in tweeregelige modus (en niet zichtbaar is in éénregelige modus). Zonder deze optie wordt standaard in kolom “Nr” van grootboekkaarten het veld “Nr” weergegeven/aangepast."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:70
 msgid "Color the register as specified by the system theme"
@@ -7646,6 +7646,8 @@ msgid ""
 "\n"
 "Review the details below and if correct press Apply to create the schedule."
 msgstr ""
+"\n"
+"Beoordeel de kenmerken hieronder en klik op [Toepassen] om het betalingsschema in te stellen als deze correct zijn."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:48
 msgid "Range: "
@@ -8945,7 +8947,7 @@ msgstr "Nieuwe boekregel"
 
 #: ../src/gnome-search/dialog-search.c:1096
 msgid "Item represents an unknown object type (in the sense of bill, customer, invoice, transaction, split,...)|New item"
-msgstr ""
+msgstr "Nieuw item"
 
 #: ../src/gnome-search/dialog-search.c:1145
 msgid "all criteria are met"
@@ -9548,7 +9550,7 @@ msgstr "U kunt geen nieuwe nationale munteenheid aanmaken."
 #: ../src/gnome-utils/dialog-commodity.c:1335
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
-msgstr ""
+msgstr "%s is een gereserveerde goederensoort. Gebruik iets anders."
 
 #: ../src/gnome-utils/dialog-commodity.c:1350
 msgid "That commodity already exists."
@@ -9789,7 +9791,7 @@ msgid "Save file automatically?"
 msgstr "Bestand automatisch opslaan?"
 
 #: ../src/gnome-utils/gnc-autosave.c:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. GnuCash has a feature to save the file automatically every %d minute, just as if you had pressed the \"Save\" button each time. \n"
 "\n"
@@ -9803,7 +9805,7 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"Uw gegevens moeten worden opgeslagen om uw wijzigingen te bewaren. GnuCash heeft de mogelijkheid om uw gegevens automatisch elke %d minuten op te slaan, net alsof u telkens op de knop [Opslaan] zou hebben geklikt.\n"
+"Uw gegevens moeten worden opgeslagen om uw wijzigingen te bewaren. GnuCash heeft de mogelijkheid om uw gegevens automatisch elke %d minuut op te slaan, net alsof u telkens op de knop [Opslaan] zou hebben geklikt.\n"
 "\n"
 "U kunt het tijdsinterval aanpassen of deze mogelijkheid uitschakelen via menukeuze\"Bewerken ‣ Voorkeuren ‣ Algemeen ‣ Tijdsinterval automatisch opslaan\".\n"
 "\n"
@@ -10031,7 +10033,7 @@ msgid "Could not make a backup of the file %s"
 msgstr "Kon geen backup maken van het bestand %s"
 
 #: ../src/gnome-utils/gnc-file.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write to file %s. Check that you have permission to write to this file and that there is sufficient space to create it."
 msgstr "Kon niet schrijven naar bestand %s. Controleer of u schrijfrechten heeft op dit bestand en of er voldoende schijfruimte aanwezig is."
 
@@ -10044,7 +10046,7 @@ msgstr "U hebt geen leesrechten op bestand %s."
 #. * the second %s is PACKAGE_NAME, which by default is "GnuCash"
 #.
 #: ../src/gnome-utils/gnc-file.c:409
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You attempted to save in\n"
 "%s\n"
@@ -10071,7 +10073,6 @@ msgid "The SQL database is in use by other users, and the upgrade cannot be perf
 msgstr "De SQL databank wordt gebruikt door andere gebruikers; de upgrade kan niet worden uitgevoerd tot deze zijn afgemeld. Als er op dit moment geen andere gebruikers zijn, raadpleeg dan de documentatie om uit te zoeken hoe u problemen met onafgesloten sessies kunt verhelpen."
 
 #: ../src/gnome-utils/gnc-file.c:444
-#, fuzzy
 msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers. This means GnuCash cannot use SQL databases correctly. Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\". Please see https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more information."
 msgstr "De op uw systeem geïnstalleerde bibliotheek “libdbi” slaat grote getallen niet juist op. Dit betekent dat GnuCash geen juist gebruik kan maken van SQL-databanken. Gnucash zal geen SQL-databank openen of opslaan tot dit is opgelost door de installatie van een andere versie van “libdbi”. Zie https://bugzilla.gnome.org/show_bug.cgi?id=611936 voor meer informatie."
 
@@ -10161,22 +10162,19 @@ msgstr ""
 "%s"
 
 #: ../src/gnome-utils/gnc-file.c:1257
-#, fuzzy
 msgid "The database was opened read-only. Do you want to save it to a different place?"
-msgstr "Databank %s lijkt niet te bestaan. Wilt u deze aanmaken?"
+msgstr "De databank was geopend voor alleen-lezen. Wilt u deze op een andere plaats opslaan?"
 
 #: ../src/gnome-utils/gnc-general-select.c:218
 msgid "View..."
 msgstr "Bekijken…"
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:236
-#, fuzzy
 msgid "GnuCash could not find the files for the help documentation. This is likely because the 'gnucash-docs' package is not installed"
 msgstr "GnuCash kon de bestanden met hulp-documentatie niet vinden. Dit komt waarschijnlijk doordat het pakket ‘gnucash-docs’ niet is geïnstalleerd."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:329
 #: ../src/gnome-utils/gnc-gnome-utils.c:391
-#, fuzzy
 msgid "GnuCash could not find the files for the help documentation. This is likely because the 'gnucash-docs' package is not installed."
 msgstr "GnuCash kon de bestanden met hulp-documentatie niet vinden. Dit komt waarschijnlijk doordat het pakket ‘gnucash-docs’ niet is geïnstalleerd."
 
@@ -10186,14 +10184,12 @@ msgstr "GnuCash kon de bestanden met hulp-documentatie niet vinden."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:415
 #: ../src/gnome-utils/gnc-gnome-utils.c:440
-#, fuzzy
 msgid "GnuCash could not find the associated file."
-msgstr "GnuCash kon geen exclusieve schrijfrechten op %s verkrijgen."
+msgstr "GnuCash kon het gekoppelde bestand niet vinden."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:466
-#, fuzzy
 msgid "GnuCash could not open the associated URI:"
-msgstr "GnuCash kon geen exclusieve schrijfrechten op %s verkrijgen."
+msgstr "GnuCash kon de gekoppelde URI niet openen:"
 
 #: ../src/gnome-utils/gnc-icons.c:19
 msgid "_Delete Account"
@@ -10589,19 +10585,16 @@ msgid "You can not change this transaction, the Book or Register is set to Read 
 msgstr "U kunt deze boeking niet aanpassen, de boekhouding of grootboekkaart is ingesteld als alleen-lezen."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:131
-#, fuzzy
 msgid "Save Transaction before proceeding?"
-msgstr "Boeking vóór het dupliceren opslaan?"
+msgstr "Boeking opslaan alvorens verder te gaan?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:133
-#, fuzzy
 msgid "The current transaction has been changed. Would you like to record the changes before proceeding, or cancel?"
-msgstr "De huidige boeking is gewijzigd. Wilt u deze wijziging vóór het dupliceren vastleggen of wilt u uw actie annuleren?"
+msgstr "De huidige boeking is gewijzigd. Wilt u deze wijzigingen opslaan alvorens verder te gaan of wilt u uw actie annuleren?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:185
-#, fuzzy
 msgid "This transaction is being edited in a different register."
-msgstr "Deze boeking wordt al vanuit een andere grootboekkaart bewerkt. Rond die bewerking eerst af."
+msgstr "Deze boeking wordt al vanuit een andere grootboekkaart bewerkt."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:205
 #: ../src/register/ledger-core/split-register-control.c:58
@@ -10671,30 +10664,25 @@ msgstr "Dit is de boekregel die deze boeking aan de rekening koppelt; deze mag n
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:501
 #: ../src/register/ledger-core/split-register.c:609
 #: ../src/register/register-gnome/datecell-gnome.c:104
-#, fuzzy
 msgid "Cannot store a transaction at this date"
-msgstr "Reden voor het storneren van de boeking"
+msgstr "Kan geen boeking op deze datum invoeren"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1361
 #: ../src/register/ledger-core/split-register.c:611
-#, fuzzy
 msgid "The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr "De opgegeven datum van deze gedupliceerde boeking ligt vóór de “alleen-lezen”-drempel die is ingesteld voor deze boekhouding. Deze instelling kan gewijzigd worden onder menukeuze ‘Bestand ‣ Eigenschappen ‣ Rekeningen’."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
-#, fuzzy
 msgid "Not enough information for Blank Transaction?"
-msgstr "Alle boekingen op twee regels weergeven"
+msgstr "Onvoldoende gegevens voor lege boeking"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1727
-#, fuzzy
 msgid "The blank transaction does not have enough information to save it. Would you like to return to the transaction to update, or cancel the save?"
-msgstr "De huidige boeking is gewijzigd. Wilt u deze wijzigingen vóór het dupliceren vastleggen of wilt u uw actie annuleren?"
+msgstr "De lege boeking bevat onvoldoende gegevens om deze op te slaan. Wilt u terugkeren naar de boeking om deze aan te vullen of wilt u het opslaan annuleren?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1738
-#, fuzzy
 msgid "_Return"
-msgstr "Rentevergoeding kapitaal"
+msgstr "_Terugkeren"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1781
 #: ../src/register/ledger-core/split-register-control.c:1828
@@ -11444,13 +11432,12 @@ msgid "This dialog is presented before allowing you to delete multiple price quo
 msgstr "Dit venster wordt getoond voordat u wordt toegestaan meerdere koersnoteringen tegelijkertijd te verwijderen."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:13
-#, fuzzy
 msgid "Edit account payable/accounts receivable register"
-msgstr "Debiteuren"
+msgstr "Grootboekkaart debiteuren/crediteuren bewerken"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:14
 msgid "This dialog is presented before allowing you to edit an accounts payable/accounts receivable account. These account types are reserved for the business features and should rarely be manipulated manually."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat wordt toegestaan om een debiteuren- of crediteurenrekening te bewerken. Rekeningen met deze types zijn gereserveerd voor de MKB-functionaliteiten en zouden slechts zelden handmatig bewerkt moeten worden."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:15
 msgid "Read only register"
@@ -11581,11 +11568,8 @@ msgid "Finish GnuCash Datafile Import"
 msgstr "Importeren GnuCash-bestand afronden"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:1
-#, fuzzy
 msgid "Use Commodity Value"
-msgstr ""
-"\n"
-"Goed (effect/valuta): "
+msgstr "Waarde van goed gebruiken"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:3
 msgid "1/10"
@@ -11952,11 +11936,11 @@ msgstr "Tijd_zone:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:24
 msgid "Enter a display symbol. This can safely be left blank, in which case the ticker symbol or the currency ISO code will be used."
-msgstr ""
+msgstr "Een weergavesymbool invoeren. Dit kan zonder problemen worden leeggelaten, in welk geval het tickersymbool of de ISO-code van de valuta zal worden gebruikt."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:25
 msgid "_Display symbol"
-msgstr "Symbool _weergeven"
+msgstr "Weergavesymbool _weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
@@ -12036,7 +12020,7 @@ msgstr "_Relatief:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:10
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr "De relatieve begindatum voor de winst- en verliesrekening."
+msgstr "De opgegeven relatieve begindatum gebruiken voor de winst- en verliesrekening."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:11
 msgid "_Absolute:"
@@ -12044,25 +12028,23 @@ msgstr "_Absoluut:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:12
 msgid "Use the specified absolute starting date for profit/loss calculations."
-msgstr "De absolute begindatum voor de winst- en verliesrekening."
+msgstr "De opgegeven absolute begindatum gebruiken voor de winst- en verliesrekening."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:13
 msgid "Re_lative:"
-msgstr "_Relatief:"
+msgstr "Re_latief:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:14
-#, fuzzy
 msgid "Use the specified relative ending date for profit/loss calculations. Also use this date for net assets calculations."
-msgstr "De relatieve einddatum voor de winst- en verliesrekening. Tevens de balansdatum."
+msgstr "De opgegeven relatieve einddatum gebruiken voor de winst- en verliesrekening en als balansdatum."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:15
 msgid "Ab_solute:"
-msgstr "_Absoluut:"
+msgstr "Ab_soluut:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:16
-#, fuzzy
 msgid "Use the specified absolute ending date for profit/loss calculations. Also use this date for net assets calculations."
-msgstr "De absolute einddatum voor de winst- en verliesrekening. Tevens de balansdatum."
+msgstr "De opgegeven absolute einddatum gebruiken voor de winst- en verliesrekening en als balansdatum."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:17
 msgid "Accounting Period"
@@ -12491,9 +12473,8 @@ msgid "Show the _entered and reconcile dates"
 msgstr "De _invoer- en afstemmingsdatums weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:155
-#, fuzzy
 msgid "Show the calendar b_uttons"
-msgstr "Kolom ‘Naam’ weergeven"
+msgstr "Kalenderk_noppen weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:157
 msgid "_Move the selection to the blank split on expand"
@@ -12536,9 +12517,8 @@ msgid "_Save window size and position"
 msgstr "Venstergrootte en -positie _opslaan"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
-#, fuzzy
 msgid "Save window size and location when it is closed."
-msgstr "Vensterafmetingen en -posities opslaan"
+msgstr "Venstergrootte en -posities opslaan wanneer dit wordt afgesloten."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:172
 msgid "Bring the most _recent tab to the front"
@@ -12577,9 +12557,8 @@ msgid "Show close button on _notebook tabs"
 msgstr "Sluitknop op _tabbladen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:190
-#, fuzzy
 msgid "Show a close button on each notebook tab. These function identically to the 'Close' menu item."
-msgstr "Aan elk tabblad een sluitknop toevoegen. Deze heeft dezelfde functie als menukeuze ‘Bestand ‣ Sluiten’."
+msgstr "Aan elk tabblad een sluitknop toevoegen. Deze heeft dezelfde functie als menukeuze ‘Sluiten’."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:191
 msgid "_Width:"
@@ -13231,9 +13210,8 @@ msgid "Only show _active owners"
 msgstr "Uitsluitend _actieve eigenaars weergeven"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:3
-#, fuzzy
 msgid "Show _zero balance owners"
-msgstr "Nulsaldi weergeven"
+msgstr "Eigenaars met _nulsaldo weergeven"
 
 #: ../src/gnome-utils/window-main-summarybar.c:298
 #, c-format
@@ -13264,19 +13242,16 @@ msgid "Profits:"
 msgstr "Winsten:"
 
 #: ../src/gnome/window-autoclear.c:138
-#, fuzzy
 msgid "Searching for splits to clear ..."
-msgstr "Zoeken op items die"
+msgstr "Zoeken naar boekregels om te bevestigen…"
 
 #: ../src/gnome/window-autoclear.c:240
-#, fuzzy
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr "Kan de boekregels niet eenduidig bevestigen. Meerdere mogelijkheden gevonden."
 
 #: ../src/gnome/window-autoclear.c:247
-#, fuzzy
 msgid "The selected amount cannot be cleared."
-msgstr "Het rentepercentage mag niet nul zijn."
+msgstr "Het geselecteerde bedrag kan niet worden bevestigd."
 
 #: ../src/gnome/window-reconcile2.c:455 ../src/gnome/window-reconcile.c:455
 msgid "Interest Payment"
@@ -13519,7 +13494,7 @@ msgstr "Nieuw?"
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:1
 msgid "AqBanking Initial Assistant"
-msgstr ""
+msgstr "Initiële AqBanking-assistent"
 
 #: ../src/import-export/aqb/assistant-ab-initial.glade.h:2
 msgid ""
@@ -13813,9 +13788,8 @@ msgstr "(onbekend)"
 #. * from the import-export/hbci
 #. * subdirectory.
 #: ../src/import-export/aqb/dialog-ab-trans.c:371
-#, fuzzy
 msgid "Enter a SEPA Online Transfer"
-msgstr "Een online transactie invoeren"
+msgstr "Een online SEPA-transactie invoeren"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:373
 msgid "Recipient IBAN (International Account Number)"
@@ -13826,14 +13800,12 @@ msgid "Recipient BIC (Bank Code)"
 msgstr "BIC (bankcode) ontvanger"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:378
-#, fuzzy
 msgid "Originator IBAN (International Account Number)"
-msgstr "IBAN (internationaal rekeningnummer) ontvanger"
+msgstr "IBAN (internationaal rekeningnummer) verzender"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:380
-#, fuzzy
 msgid "Originator BIC (Bank Code)"
-msgstr "BIC (bankcode) ontvanger"
+msgstr "BIC (bankcode) verzender"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:385
 msgid "Enter an Online Direct Debit Note"
@@ -13866,9 +13838,8 @@ msgid "Credited Account Bank Code"
 msgstr "Bankcode gecrediteerde rekening"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:404
-#, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Een online eenmalige machtiging invoeren"
+msgstr "Een online eenmalige SEPA-machtiging invoeren"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:409
 msgid "Debited IBAN (International Account Number)"
@@ -13879,19 +13850,17 @@ msgid "Debited BIC (Bank Code)"
 msgstr "Gedebiteerde BIC (bankcode)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:416
-#, fuzzy
 msgid "Credited IBAN (International Account Number)"
-msgstr "Gedebiteerd IBAN (internationaal rekeningnummer)"
+msgstr "Gecrediteerd IBAN (internationaal rekeningnummer)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:418
-#, fuzzy
 msgid "Credited BIC (Bank Code)"
-msgstr "Gedebiteerde BIC (bankcode)"
+msgstr "Gecrediteerde BIC (bankcode)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:497
-#, fuzzy, c-format
+#, c-format
 msgid "The internal check of the destination IBAN '%s' failed. This means the account number might contain an error."
-msgstr "De interne controle van het doelrekeningnummer ‘%s’ bij de aangegeven bank met bankcode ‘%s’ is mislukt. Dit betekent dat het rekeningnummer misschien een fout bevat."
+msgstr "De interne controle van het doel-IBAN ‘%s’ is mislukt. Dit betekent dat het rekeningnummer misschien een fout bevat."
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:537
 #, c-format
@@ -13929,6 +13898,9 @@ msgid ""
 "\n"
 "In particular, neither Umlauts nor an ampersand (&) is allowed, neither in the recipient or sender name nor in any purpose line."
 msgstr ""
+"De ingevoerde tekst bevat ten minste één karakter dat ongeldig is bij een SEPA-transactie.\n"
+"Binnen SEPA zijn helaas alleen de volgende karakters toegestaan: a…z, A…Z, 0…9 en de lettertekens ':?,-(+.)/.\n"
+"In het bijzonder zijn trema’s ( ̈ ) en ampersands (&) niet toegestaan in de naam van verzender of ontvanger, noch in een regel voor een ander doel."
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:1183
 msgid "A template with the given name already exists. Please enter another name."
@@ -14185,29 +14157,27 @@ msgstr "De boekingen op de rekening via Online bankieren opvragen"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:113
 msgid "_Issue Transaction..."
-msgstr "Boeking _doorgeven…"
+msgstr "Transactie _doorgeven…"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:114
 msgid "Issue a new transaction online through Online Banking"
 msgstr "Een nieuwe transactie-opdracht via Online bankieren doorgeven"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:118
-#, fuzzy
 msgid "_Issue SEPA Transaction..."
-msgstr "SEPA-boeking _doorgeven…"
+msgstr "SEPA-transactie _doorgeven…"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:119
-#, fuzzy
 msgid "Issue a new international European (SEPA) transaction online through Online Banking"
-msgstr "Een nieuwe intrabank-overboekingsopdracht via Online bankieren doorgeven"
+msgstr "Een nieuwe SEPA-transactieopdracht via Online bankieren doorgeven"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:123
 msgid "I_nternal Transaction..."
-msgstr "_Intrabank-boeking…"
+msgstr "I_ntrabank-transactie…"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:124
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "Een nieuwe intrabank-overboekingsopdracht via Online bankieren doorgeven"
+msgstr "Een nieuwe intrabank-transactieopdracht via Online bankieren doorgeven"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:128
 msgid "_Direct Debit..."
@@ -14218,14 +14188,12 @@ msgid "Issue a new direct debit note online through Online Banking"
 msgstr "Een nieuwe eenmalige machtiging via Online bankieren afgeven"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:133
-#, fuzzy
 msgid "_Issue SEPA Direct Debit..."
-msgstr "_Eenmalige machtiging…"
+msgstr "_Eenmalige SEPA-machtiging…"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:134
-#, fuzzy
 msgid "Issue a new international European (SEPA) direct debit note online through Online Banking"
-msgstr "Een nieuwe eenmalige machtiging via Online bankieren afgeven"
+msgstr "Een nieuwe eenmalige SEPA-machtiging via Online bankieren afgeven"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:140
 msgid "Import _MT940"
@@ -14375,6 +14343,8 @@ msgid ""
 "\n"
 "Select the type of Export required and the separator that will be used.\n"
 msgstr ""
+"\n"
+"Het vereiste type export en het te gebruiken scheidingsteken selecteren.\n"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:5
 msgid "Quotes"
@@ -15849,7 +15819,7 @@ msgstr "Samenvatting Qif-import"
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:87
 #: ../src/report/report-gnome/dialog-report.glade.h:21
 msgid "Dummy"
-msgstr ""
+msgstr "Dummy"
 
 #: ../src/import-export/qif-imp/dialog-account-picker.c:219
 msgid "Enter a name for the account"
@@ -16277,11 +16247,11 @@ msgstr "Geïmporteerde documenten als tabbladen openen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:16
 msgid "Open not yet posted documents in tabs "
-msgstr ""
+msgstr "Nog niet geboekte documenten als tabbladeren openen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:17
 msgid "Don't open imported documents in tabs"
-msgstr ""
+msgstr "Nog niet geïmporteerde doucmenten als tabbladeren openen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:18
 msgid "5. Afterwards"
