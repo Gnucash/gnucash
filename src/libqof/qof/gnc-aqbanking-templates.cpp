@@ -105,7 +105,7 @@ private:
 KvpFrame*
 _GncABTransTempl::make_kvp_frame()
 {
-    auto frame = kvp_frame_new();
+    auto frame = new KvpFrame;
     frame->set(TT_NAME, new KvpValue(m_name.c_str()));
     frame->set(TT_RNAME, new KvpValue(m_recipient_name.c_str()));
     frame->set(TT_RACC, new KvpValue(m_recipient_account.c_str()));

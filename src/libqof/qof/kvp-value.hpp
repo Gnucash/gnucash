@@ -34,11 +34,27 @@ extern "C"
 #include <boost/type_traits/is_nothrow_move_assignable.hpp>
 #endif
 #include <boost/variant.hpp>
-#include "kvp_frame.h"
 
+//Must be a struct because it's exposed to C so that it can in turn be
+//translated to/from Scheme.
 struct KvpValueImpl
 {
     public:
+    enum Type
+    {
+        INVALID = -1,
+        INT64 = 1, /**< QOF_TYPE_INT64  gint64 */
+        DOUBLE,     /**< QOF_TYPE_DOUBLE  gdouble */
+        NUMERIC,    /**< QOF_TYPE_NUMERIC */
+        STRING,     /**< QOF_TYPE_STRING gchar* */
+        GUID,       /**< QOF_TYPE_GUID */
+        TIMESPEC,   /**< QOF_TYPE_DATE */
+        PLACEHOLDER_DONT_USE, /* Replaces KVP_TYPE_BINARY */
+        GLIST,      /**< no QOF equivalent. */
+        FRAME,      /**< no QOF equivalent. */
+        GDATE,      /**< no QOF equivalent. */
+    };
+
     /**
      * Performs a deep copy
      */
@@ -90,7 +106,7 @@ struct KvpValueImpl
      */
     KvpValueImpl * add (KvpValueImpl *) noexcept;
 
-    KvpValueType get_type() const noexcept;
+    KvpValueImpl::Type get_type() const noexcept;
 
     char * to_string() const noexcept;
 
@@ -137,5 +153,7 @@ KvpValueImpl::set(T val) noexcept
 {
     this->datastore = val;
 }
+extern "C" GType gnc_value_list_get_type (void);
+#define GNC_TYPE_VALUE_LIST (gnc_value_list_get_type ())
 
 #endif

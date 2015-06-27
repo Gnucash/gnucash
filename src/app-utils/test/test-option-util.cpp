@@ -228,8 +228,8 @@ test_option_save_book_currency (Fixture *fixture, gconstpointer pData)
                         scm_cons (scm_from_utf8_string("GTQ"),
                         scm_cons (scm_from_locale_symbol("fifo"), SCM_EOL)))));
     qof_book_save_options (book, gnc_option_db_save, odb, TRUE);
-    g_assert_cmpstr (kvp_frame_get_string(slots, "options/Accounts/Book Currency"), == , "GTQ");
-    g_assert_cmpstr (kvp_frame_get_string(slots, "options/Accounts/Default Gains Policy"), == , "fifo");
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Book Currency")->get<const char*>(), == , "GTQ");
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Default Gains Policy")->get<const char*>(), == , "fifo");
 
     gnc_option_db_destroy (odb);
 }

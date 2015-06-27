@@ -23,6 +23,8 @@ LDADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLIB_LIBS}
 
+test_guid_SOURCES = test-guid.cpp
+
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
 #
@@ -73,6 +75,7 @@ TESTS_ENVIRONMENT = \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
+AM_DEFAULT_SOURCE_EXT = .cpp
 
 TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2}
 

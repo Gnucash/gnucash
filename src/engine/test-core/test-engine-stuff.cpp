@@ -105,8 +105,8 @@ set_max_kvp_frame_elements (gint max_kvp_frame_elements)
     kvp_frame_max_elements = MAX (max_kvp_frame_elements, 1);
 }
 
-void
-kvp_exclude_type (KvpValueType kvp_type)
+static void
+kvp_exclude_type (KvpValue::Type kvp_type)
 {
     gint *key;
 
@@ -120,7 +120,7 @@ kvp_exclude_type (KvpValueType kvp_type)
 }
 
 static gboolean
-kvp_type_excluded (KvpValueType kvp_type)
+kvp_type_excluded (KvpValue::Type kvp_type)
 {
     gint key = kvp_type;
 
@@ -238,25 +238,25 @@ static KvpFrame* get_random_kvp_frame_depth (gint depth);
 static KvpValue*
 get_random_kvp_value_depth (int type, gint depth)
 {
-    KvpValueType datype;
+    KvpValue::Type datype;
     KvpValue *ret;
 
     if (type == -1)
     {
-        datype = static_cast<KvpValueType>(get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME));
+        datype = static_cast<KvpValue::Type>(get_random_int_in_range(KvpValue::Type::INT64, KvpValue::Type::FRAME));
     }
 
     else if (type == -2)
     {
-        datype = static_cast<KvpValueType>(get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME - 1));
+        datype = static_cast<KvpValue::Type>(get_random_int_in_range(KvpValue::Type::INT64, KvpValue::Type::FRAME - 1));
     }
     else
-        datype = static_cast<KvpValueType>(type);
-    
-    if (datype == KVP_TYPE_FRAME && depth >= kvp_max_depth)
+        datype = static_cast<KvpValue::Type>(type);
+
+    if (datype == KvpValue::Type::FRAME && depth >= kvp_max_depth)
         return NULL;
 
-    if (datype == KVP_TYPE_GLIST && depth >= kvp_max_depth)
+    if (datype == KvpValue::Type::GLIST && depth >= kvp_max_depth)
         return NULL;
 
     if (kvp_type_excluded (datype))
@@ -264,57 +264,50 @@ get_random_kvp_value_depth (int type, gint depth)
 
     switch (datype)
     {
-    case KVP_TYPE_GINT64:
-        ret = kvp_value_new_gint64(get_random_gint64());
+    case KvpValue::Type::INT64:
+        ret = new KvpValue(get_random_gint64());
         break;
 
-    case KVP_TYPE_DOUBLE:
+    case KvpValue::Type::DOUBLE:
         ret = NULL;
         break;
 
-    case KVP_TYPE_NUMERIC:
-        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric(GNC_DENOM_AUTO));
+    case KvpValue::Type::NUMERIC:
+        ret = new KvpValue(get_random_gnc_numeric(GNC_DENOM_AUTO));
         break;
 
-    case KVP_TYPE_STRING:
+    case KvpValue::Type::STRING:
     {
         gchar *tmp_str;
         tmp_str = get_random_string();
         if (!tmp_str)
             return NULL;
 
-        ret = kvp_value_new_string(tmp_str);
-        g_free(tmp_str);
+        ret = new KvpValue(tmp_str);
     }
     break;
 
-    case KVP_TYPE_GUID:
+    case KvpValue::Type::GUID:
     {
-        GncGUID *tmp_guid;
-        tmp_guid = get_random_guid();
-        ret = kvp_value_new_guid(tmp_guid);
-        g_free(tmp_guid);
+        return new KvpValue(get_random_guid());
     }
     break;
 
-    case KVP_TYPE_TIMESPEC:
+    case KvpValue::Type::TIMESPEC:
     {
         Timespec *ts = get_random_timespec();
-        ret = kvp_value_new_timespec (*ts);
+        ret = new KvpValue(*ts);
         g_free(ts);
     }
     break;
 
-    case KVP_TYPE_GLIST:
-        ret = kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
+    case KvpValue::Type::GLIST:
+        ret = new KvpValue(get_random_glist_depth (depth + 1));
         break;
 
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
     {
-        KvpFrame *tmp_frame;
-        tmp_frame = get_random_kvp_frame_depth(depth + 1);
-        ret = kvp_value_new_frame(tmp_frame);
-        kvp_frame_delete(tmp_frame);
+        return new KvpValue(get_random_kvp_frame_depth(depth + 1));
     }
     break;
 
@@ -328,14 +321,13 @@ get_random_kvp_value_depth (int type, gint depth)
 static KvpFrame*
 get_random_kvp_frame_depth (gint depth)
 {
-    KvpFrame *ret;
     int vals_to_add;
     gboolean val_added;
 
     if (depth >= kvp_max_depth)
         return NULL;
 
-    ret = kvp_frame_new();
+    auto ret = new KvpFrame;
 
     vals_to_add = get_random_int_in_range(1, kvp_frame_max_elements);
     val_added = FALSE;
@@ -367,7 +359,7 @@ get_random_kvp_frame_depth (gint depth)
 
         val_added = TRUE;
 
-        kvp_frame_set_slot_nc(ret, key, val);
+        ret->set_path(key, val);
 
         g_free(key);
     }

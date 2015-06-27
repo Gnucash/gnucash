@@ -96,9 +96,6 @@ main_helper (void *closure, int argc, char **argv)
 
     xaccLogDisable ();
 
-    /* double->string->double is not idempotent */
-    kvp_exclude_type (KVP_TYPE_DOUBLE);
-
     /* Initialize to a known RNG position */
     srand(1);
 

@@ -110,7 +110,7 @@ test_kvp_frames1(void)
 
     for (i = 0; i < 20; i++)
     {
-        auto test_val1 = get_random_kvp_value(i % KVP_TYPE_FRAME);
+        auto test_val1 = get_random_kvp_value(i % KvpValue::Type::FRAME);
         auto test_frame1 = new KvpFrame;
         auto test_key = get_random_string_without("/");
 

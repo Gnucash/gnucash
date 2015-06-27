@@ -30,6 +30,7 @@ extern "C"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include "kvp_frame.h"
 }
 
 #include "kvp-value.hpp"
@@ -38,6 +39,9 @@ extern "C"
 #include <sstream>
 #include <algorithm>
 #include <vector>
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = "qof.kvp";
 
 static const char delim = '/';
 
@@ -99,7 +103,7 @@ walk_path_or_nullptr(const KvpFrameImpl* frame, Path& path)
     for(auto key:path)
     {
         auto slot = cur_frame->get_slot(key.c_str());
-        if (slot == nullptr || slot->get_type() != KVP_TYPE_FRAME)
+        if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
             return nullptr;
         cur_frame = slot->get<KvpFrame*>();
     }
@@ -130,7 +134,7 @@ walk_path_and_create(KvpFrameImpl* frame, Path path)
             continue;
         }
         auto slot = frame->get_slot(key.c_str());
-        if (slot == nullptr || slot->get_type() != KVP_TYPE_FRAME)
+        if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
         {
             auto new_frame = new KvpFrame;
             delete frame->set(key.c_str(), new KvpValue{new_frame});
@@ -270,9 +274,6 @@ int compare(const KvpFrameImpl & one, const KvpFrameImpl & two) noexcept
         return -1;
     return 0;
 }
-
-/* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = QOF_MOD_KVP;
 
 KvpFrame *
 kvp_frame_new(void)
@@ -940,78 +941,9 @@ kvp_frame_get_slot_path_gslist (KvpFrame *frame,
     return NULL;
 }
 
-/* *******************************************************************
- * kvp glist functions
- ********************************************************************/
-
-void
-kvp_glist_delete(GList * list)
-{
-    GList *node;
-    if (!list) return;
-
-    /* Delete the data in the list */
-    for (node = list; node; node = node->next)
-    {
-        KvpValue *val = static_cast<KvpValue*>(node->data);
-        kvp_value_delete(val);
-    }
-
-    /* Free the backbone */
-    g_list_free(list);
-}
-
-GList *
-kvp_glist_copy(const GList * list)
-{
-    GList * retval = NULL;
-    GList * lptr;
-
-    if (!list) return retval;
-
-    /* Duplicate the backbone of the list (this duplicates the POINTERS
-     * to the values; we need to deep-copy the values separately) */
-    retval = g_list_copy((GList *) list);
-
-    /* This step deep-copies the values */
-    for (lptr = retval; lptr; lptr = lptr->next)
-    {
-        lptr->data = kvp_value_copy(static_cast<KvpValue *>(lptr->data));
-    }
-
-    return retval;
-}
-
-gint
-kvp_glist_compare(const GList * list1, const GList * list2)
-{
-    const GList *lp1;
-    const GList *lp2;
-
-    if (list1 == list2) return 0;
-
-    /* Nothing is always less than something */
-    if (!list1 && list2) return -1;
-    if (list1 && !list2) return 1;
-
-    lp1 = list1;
-    lp2 = list2;
-    while (lp1 && lp2)
-    {
-        KvpValue *v1 = (KvpValue *) lp1->data;
-        KvpValue *v2 = (KvpValue *) lp2->data;
-        gint vcmp = kvp_value_compare(v1, v2);
-        if (vcmp != 0) return vcmp;
-        lp1 = lp1->next;
-        lp2 = lp2->next;
-    }
-    if (!lp1 && lp2) return -1;
-    if (!lp2 && lp1) return 1;
-    return 0;
-}
 
 /* *******************************************************************
- * KvpValue functions
+ * Kvpvalue functions
  ********************************************************************/
 
 KvpValue *
@@ -1069,7 +1001,7 @@ KvpValue *
 kvp_value_new_glist(const GList * value)
 {
     if (!value) return {};
-    return new KvpValueImpl{kvp_glist_copy(value)};
+    return nullptr;
 }
 
 KvpValue *
@@ -1099,14 +1031,6 @@ kvp_value_delete(KvpValue * value)
     if (!value) return;
     KvpValueImpl * realvalue {static_cast<KvpValueImpl *>(value)};
     delete realvalue;
-}
-
-KvpValueType
-kvp_value_get_type(const KvpValue * oldval)
-{
-    if (!oldval) return KVP_TYPE_INVALID;
-    const KvpValueImpl * value {static_cast<const KvpValueImpl *>(oldval)};
-    return value->get_type();
 }
 
 int64_t
@@ -1318,44 +1242,40 @@ gvalue_from_kvp_value (const KvpValue *kval)
     if (kval == NULL) return NULL;
     val = g_slice_new0 (GValue);
 
-    switch (kvp_value_get_type(kval))
+    switch (kval->get_type())
     {
-        case KVP_TYPE_GINT64:
+        case KvpValue::Type::INT64:
             g_value_init (val, G_TYPE_INT64);
             g_value_set_int64 (val, kvp_value_get_gint64 (kval));
             break;
-        case KVP_TYPE_DOUBLE:
+        case KvpValue::Type::DOUBLE:
             g_value_init (val, G_TYPE_DOUBLE);
             g_value_set_double (val, kvp_value_get_double (kval));
             break;
-        case KVP_TYPE_BOOLEAN:
-            g_value_init (val, G_TYPE_BOOLEAN);
-            g_value_set_boolean (val, kvp_value_get_boolean (kval));
-            break;
-        case KVP_TYPE_NUMERIC:
+        case KvpValue::Type::NUMERIC:
             g_value_init (val, GNC_TYPE_NUMERIC);
             num = kvp_value_get_numeric (kval);
             g_value_set_boxed (val, &num);
             break;
-        case KVP_TYPE_STRING:
+        case KvpValue::Type::STRING:
             g_value_init (val, G_TYPE_STRING);
             g_value_set_string (val, kvp_value_get_string (kval));
             break;
-        case KVP_TYPE_GUID:
+        case KvpValue::Type::GUID:
             g_value_init (val, GNC_TYPE_GUID);
             g_value_set_boxed (val, kvp_value_get_guid (kval));
             break;
-        case KVP_TYPE_TIMESPEC:
+        case KvpValue::Type::TIMESPEC:
             g_value_init (val, GNC_TYPE_TIMESPEC);
             tm = kvp_value_get_timespec (kval);
             g_value_set_boxed (val, &tm);
             break;
-        case KVP_TYPE_GDATE:
+        case KvpValue::Type::GDATE:
             g_value_init (val, G_TYPE_DATE);
             gdate = kvp_value_get_gdate (kval);
             g_value_set_boxed (val, &gdate);
             break;
-        case KVP_TYPE_GLIST:
+        case KvpValue::Type::GLIST:
         {
             GList *gvalue_list = NULL;
             GList *kvp_list = kvp_value_get_glist (kval);
@@ -1366,7 +1286,7 @@ gvalue_from_kvp_value (const KvpValue *kval)
             break;
         }
 /* No transfer of KVP frames outside of QofInstance-derived classes! */
-        case KVP_TYPE_FRAME:
+        case KvpValue::Type::FRAME:
             PWARN ("Error! Attempt to transfer KvpFrame!");
         default:
             PWARN ("Error! Invalid KVP Transfer Request!");

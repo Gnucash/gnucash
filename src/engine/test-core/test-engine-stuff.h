@@ -13,11 +13,12 @@ extern "C"
 #include <stdint.h>
 
 #include "qof.h"
-#include <kvp_frame.h>
 #include "Query.h"
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
+typedef struct KvpValueImpl KvpValue;
+typedef struct KvpFrameImpl KvpFrame;
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
 void random_timespec_usec_resolution (gboolean usec_resolution);
@@ -36,7 +37,7 @@ KvpFrame* get_random_kvp_frame(void);
 gnc_numeric get_random_gnc_numeric(int64_t);
 GncGUID* get_random_guid(void);
 
-void kvp_exclude_type (KvpValueType kvp_type);
+//void kvp_exclude_type (KvpValueType kvp_type);
 void set_max_kvp_depth (gint max_kvp_depth);
 void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
 void set_max_account_tree_depth (gint max_tree_depth);

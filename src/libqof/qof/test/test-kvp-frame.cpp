@@ -144,7 +144,7 @@ TEST_F (KvpFrameTest, GetKeys)
 
     assert_contains (keys, k1);
     auto frameval = t_root.get_slot(k1);
-    ASSERT_EQ(frameval->get_type(), KVP_TYPE_FRAME);
+    ASSERT_EQ(frameval->get_type(), KvpValue::Type::FRAME);
     keys = frameval->get<KvpFrame*>()->get_keys();
     assert_contains (keys, k2);
     assert_contains (keys, k3);
@@ -158,7 +158,7 @@ TEST_F (KvpFrameTest, GetLocalSlot)
     auto k4 = "top/first";
 
     auto frameval = t_root.get_slot("top");
-    ASSERT_EQ(frameval->get_type(), KVP_TYPE_FRAME);
+    ASSERT_EQ(frameval->get_type(), KvpValue::Type::FRAME);
     auto f1 = frameval->get<KvpFrame*>();
     EXPECT_EQ (t_int_val, f1->get_slot(k1));
     EXPECT_EQ (t_str_val, f1->get_slot(k2));

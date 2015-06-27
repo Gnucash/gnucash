@@ -72,45 +72,47 @@ gnc_scm_to_kvp_value_ptr(SCM val)
 SCM
 gnc_kvp_value_ptr_to_scm(KvpValue* val)
 {
-    switch (kvp_value_get_type(val))
+    if (val == nullptr) return SCM_BOOL_F;
+    
+    switch (val->get_type())
     {
-    case KVP_TYPE_GINT64:
+    case KvpValue::Type::INT64:
         return scm_from_int64(val->get<int64_t>());
         break;
-    case KVP_TYPE_DOUBLE:
+    case KvpValue::Type::DOUBLE:
         return scm_from_double (val->get<double>());
         break;
-    case KVP_TYPE_NUMERIC:
+    case KvpValue::Type::NUMERIC:
         return gnc_numeric_to_scm(val->get<gnc_numeric>());
         break;
-    case KVP_TYPE_STRING:
+    case KvpValue::Type::STRING:
     {
         auto string = val->get<const char*>();
         return string ? scm_from_utf8_string(string) : SCM_BOOL_F;
         break;
     }
-    case KVP_TYPE_GUID:
+    case KvpValue::Type::GUID:
     {
-        auto tempguid = kvp_value_get_guid(val);
+        auto tempguid = val->get<GncGUID*>();
         return gnc_guid2scm(*tempguid);
     }
     break;
-    case KVP_TYPE_TIMESPEC:
+    case KvpValue::Type::TIMESPEC:
         return gnc_timespec2timepair(val->get<Timespec>());
         break;
 
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
     {
         auto frame = val->get<KvpFrame*>();
         if (frame != nullptr)
             return SWIG_NewPointerObj(frame, SWIG_TypeQuery("_p_KvpFrame"), 0);
     }
     break;
-    case KVP_TYPE_GDATE:
+    case KvpValue::Type::GDATE:
         return gnc_timespec2timepair(gdate_to_timespec(val->get<GDate>()));
 
         /* FIXME: handle types below */
-    case KVP_TYPE_GLIST:
+    case KvpValue::Type::GLIST:
     default:
 	break;
     }

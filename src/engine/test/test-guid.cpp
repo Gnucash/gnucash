@@ -25,7 +25,8 @@
  * Try to create duplicate GncGUID's, which should never happen.
  *
  */
-
+extern "C"
+{
 #include "config.h"
 #include <ctype.h>
 #include <glib.h>
@@ -33,7 +34,7 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "qof.h"
-
+}
 #define NENT 50123
 
 static void test_null_guid(void)
@@ -70,9 +71,10 @@ run_test (void)
 
     for (i = 0; i < NENT; i++)
     {
-        ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
+        ent = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, NULL));
         guid_replace(&guid);
-        ent = g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL);
+        ent = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE,
+                                                     "guid", &guid, NULL));
         do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
                  "duplicate guid");
         ent->e_type = type;

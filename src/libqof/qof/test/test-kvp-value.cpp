@@ -65,7 +65,7 @@ TEST (KvpValueTest, Add)
     auto v4 = new KvpValueImpl {*v3};
     auto new_one = v3->add (v4);
     EXPECT_NE (new_one, v3);
-    EXPECT_EQ (new_one->get_type (), KvpValueType::KVP_TYPE_GLIST);
+    EXPECT_EQ (new_one->get_type (), KvpValue::Type::GLIST);
     EXPECT_NE (new_one->get<GList*> (), nullptr);
     /* also deletes v3 and v4 because they're "in" new_one */
     delete new_one;

@@ -260,7 +260,7 @@ add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
 
     switch (val->get_type())
     {
-    case KVP_TYPE_STRING:
+    case KvpValue::Type::STRING:
     {
 	auto newstr = g_strdup(val->get<const char*>());
         val_node = xmlNewTextChild(node, NULL, BAD_CAST tag,
@@ -268,10 +268,10 @@ add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
 	g_free (newstr);
         break;
     }
-    case KVP_TYPE_TIMESPEC:
+    case KvpValue::Type::TIMESPEC:
         val_node = NULL;
         break;
-    case KVP_TYPE_GDATE:
+    case KvpValue::Type::GDATE:
     {
         auto d = val->get<GDate>();
         val_node = gdate_to_dom_tree(tag, &d);
@@ -285,30 +285,30 @@ add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
 
     switch (val->get_type())
     {
-    case KVP_TYPE_GINT64:
+    case KvpValue::Type::INT64:
         add_text_to_node(val_node, "integer",
                          g_strdup_printf("%" G_GINT64_FORMAT,
                                          val->get<int64_t>()));
         break;
-    case KVP_TYPE_DOUBLE:
+    case KvpValue::Type::DOUBLE:
         add_text_to_node(val_node, "double",
                          double_to_string(val->get<double>()));
         break;
-    case KVP_TYPE_NUMERIC:
+    case KvpValue::Type::NUMERIC:
         add_text_to_node(val_node, "numeric",
                          gnc_numeric_to_string(val->get<gnc_numeric>()));
         break;
-    case KVP_TYPE_STRING:
+    case KvpValue::Type::STRING:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
-    case KVP_TYPE_GUID:
+    case KvpValue::Type::GUID:
     {
         gchar guidstr[GUID_ENCODING_LENGTH+1];
         guid_to_string_buff(val->get<GncGUID*>(), guidstr);
         add_text_to_node(val_node, "guid", guidstr);
         break;
     }
-    case KVP_TYPE_TIMESPEC:
+    case KvpValue::Type::TIMESPEC:
     {
         auto ts = val->get<Timespec>();
         val_node = timespec_to_dom_tree (tag, &ts);
@@ -316,10 +316,10 @@ add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
         xmlAddChild (node, val_node);
         break;
     }
-    case KVP_TYPE_GDATE:
+    case KvpValue::Type::GDATE:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "gdate");
         break;
-    case KVP_TYPE_GLIST:
+    case KvpValue::Type::GLIST:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
         for (auto cursor = val->get<GList*>(); cursor; cursor = cursor->next)
         {
@@ -327,7 +327,7 @@ add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
             add_kvp_value_node(val_node, "slot:value", val);
         }
         break;
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
     {
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 

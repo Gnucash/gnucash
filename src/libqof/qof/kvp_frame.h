@@ -22,7 +22,7 @@
 
  * A KvpFrame is a set of associations between character strings
  * (keys) and KvpValue structures.  A KvpValue is a union with
- * possible types enumerated in the KvpValueType enum, and includes,
+ * possible types enumerated in the KvpValue::Type enum, and includes,
  * among other things, ints, doubles, strings, guid's, lists, time
  * and numeric values.  KvpValues may also be other frames, so
  * KVP is inherently hierarchical.
@@ -75,43 +75,7 @@ extern "C"
 /** Opaque frame structure */
 typedef struct KvpFrameImpl KvpFrame;
 
-/** A KvpValue is a union with possible types enumerated in the
- * KvpValueType enum. */
 typedef struct KvpValueImpl KvpValue;
-
-/** \brief possible types in the union KvpValue
- * \todo : People have asked for boolean values,
- *  e.g. in xaccAccountSetAutoInterestXfer
- *
- * \todo In the long run, this should be synchronized with the
- * core QOF types, which in turn should be synced to the g_types
- * in GLib.  Unfortunately, this requires writing a pile of code
- * to handle all of the different cases.
- * An alternative might be to make kvp values inherit from the
- * core g_types (i.e. add new core g_types) ??
- */
-typedef enum
-{
-    KVP_TYPE_INVALID = -1,
-    KVP_TYPE_GINT64 = 1, /**< QOF_TYPE_INT64  gint64 */
-    KVP_TYPE_DOUBLE,     /**< QOF_TYPE_DOUBLE  gdouble */
-    KVP_TYPE_NUMERIC,    /**< QOF_TYPE_NUMERIC */
-    KVP_TYPE_STRING,     /**< QOF_TYPE_STRING gchar* */
-    KVP_TYPE_GUID,       /**< QOF_TYPE_GUID */
-    KVP_TYPE_TIMESPEC,   /**< QOF_TYPE_DATE */
-    KVP_TYPE_PLACEHOLDER_DONT_USE, /* Replaces KVP_TYPE_BINARY */
-    KVP_TYPE_GLIST,      /**< no QOF equivalent. */
-    KVP_TYPE_FRAME,      /**< no QOF equivalent. */
-    KVP_TYPE_GDATE,      /**< no QOF equivalent. */
-    KVP_TYPE_BOOLEAN,    /**< QOF_TYPE_BOOLEAN gboolean */
-} KvpValueType;
-
-/** \deprecated Deprecated backwards compat token
-
-do \b not use these in new code.
- */
-/** \deprecated Deprecated backwards compat token */
-#define kvp_value_t KvpValueType
 
 /** @name KvpFrame Constructors
  @{
@@ -420,31 +384,6 @@ gint          kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb);
 
 gint          double_compare(double v1, double v2);
 /** @} */
-/** @name KvpValue List Convenience Functions
-
-  You probably shouldn't be using these low-level routines
-
- kvp_glist_compare() compares <b>GLists of kvp_values</b> (not to
- be confused with GLists of something else):  it iterates over
- the list elements, performing a kvp_value_compare on each.
- @{
-*/
-gint        kvp_glist_compare(const GList * list1, const GList * list2);
-
-/** kvp_glist_copy() performs a deep copy of a <b>GList of
- *     kvp_values</b> (not to be confused with GLists of something
- *     else): same as mapping kvp_value_copy() over the elements and
- *     then copying the spine.
- */
-GList     * kvp_glist_copy(const GList * list);
-
-/** kvp_glist_delete() performs a deep delete of a <b>GList of
- *     kvp_values</b> (not to be confused with GLists of something
- *     else): same as mapping * kvp_value_delete() over the elements
- *     and then deleting the GList.
- */
-void        kvp_glist_delete(GList * list);
-/** @} */
 
 
 /** @name KvpValue Constructors
@@ -508,9 +447,6 @@ GList * kvp_value_replace_glist_nc(KvpValue *value, GList *newlist);
  You probably shouldn't be using these low-level routines
  @{
 */
-
-KvpValueType kvp_value_get_type(const KvpValue * value);
-
 
 /** Value accessors. Those for GncGUID, GList, KvpFrame and
  *   string are non-copying -- the caller can modify the value
@@ -642,10 +578,7 @@ void kvp_frame_set_gvalue (KvpFrame *frame, const gchar *key, const GValue *valu
  */
 void gnc_gvalue_free (GValue *value);
 
-GType gnc_value_list_get_type (void);
-#define GNC_TYPE_VALUE_LIST (gnc_value_list_get_type ())
-
-/** @} */
+ /** @} */
 #ifdef __cplusplus
 }
 #endif

@@ -1134,11 +1134,11 @@ qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
 inline static gboolean
 kvp_match_guid (KvpValue *v, const char *key, const GncGUID *guid)
 {
-    if (v->get_type() != KVP_TYPE_FRAME)
+    if (v->get_type() != KvpValue::Type::FRAME)
         return FALSE;
     auto frame = v->get<KvpFrame*>();
     auto val = frame->get_slot(key);
-    if (val == nullptr || val->get_type() != KVP_TYPE_GUID)
+    if (val == nullptr || val->get_type() != KvpValue::Type::GUID)
         return FALSE;
     auto this_guid = val->get<GncGUID*>();
 
@@ -1157,10 +1157,10 @@ qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
 
     switch (v->get_type())
     {
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
         return kvp_match_guid (v, key, guid);
         break;
-    case KVP_TYPE_GLIST:
+    case KvpValue::Type::GLIST:
     {
         auto list = v->get<GList*>();
         for (auto node = list; node != NULL; node = node->next)
@@ -1192,14 +1192,14 @@ qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
 
     switch (v->get_type())
     {
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
         if (kvp_match_guid (v, key, guid))
         {
             delete inst->kvp_data->set_path({path}, nullptr);
             delete v;
         }
         break;
-    case KVP_TYPE_GLIST:
+    case KvpValue::Type::GLIST:
     {
         auto list = v->get<GList*>();
         for (auto node = list; node != nullptr; node = node->next)
@@ -1236,14 +1236,14 @@ qof_instance_kvp_merge_guids (const QofInstance *target,
     auto target_val = target->kvp_data->get_slot(path);
     switch (v->get_type())
     {
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
         if (target_val)
             target_val->add(v);
         else
             target->kvp_data->set_path({path}, v);
         donor->kvp_data->set(path, nullptr); //Contents moved, Don't delete!
         break;
-    case KVP_TYPE_GLIST:
+    case KvpValue::Type::GLIST:
         if (target_val)
         {
             auto list = target_val->get<GList*>();
@@ -1305,7 +1305,7 @@ qof_instance_foreach_slot (const QofInstance *inst, const char* path,
                            void* data)
 {
     auto slot = inst->kvp_data->get_slot(path);
-    if (slot == nullptr || slot->get_type() != KVP_TYPE_FRAME)
+    if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
         return;
     auto frame = slot->get<KvpFrame*>();
     wrap_param new_data {proc, data};
