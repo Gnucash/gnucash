@@ -1,10 +1,142 @@
+2015-06-27 John Ralls 
+
+	* Get latest translations from the Translation Project. (HEAD, maint)
+
+2015-06-16 Geert Janssens 
+
+	* Bug 681225 - income statement displays blank base currency entries when trading account transactions are present during the report period (origin/maint)
+
+2015-06-15 Geert Janssens 
+
+	* Bug 739271 - pt_BR translation wrong word "limpesa". Should be "limpeza"
+
+2015-06-15 Geert Janssens 
+
+	* Bug 744858 - Update exchange rate on bill only possible once per session (after unpost/repost)
+
+2015-06-13 Mark Haanen 
+
+	* Updated Dutch translations
+
+2015-06-13 Geert Janssens 
+
+	* Bug 746792 - process payment in foreign currency leads to broken equation
+
+2015-06-13 Geert Janssens 
+
+	* Bug 746792 - process payment in foreign currency leads to broken equation
+
+2015-06-02 Mike Evans 
+
+	* Bug 734183 - Set value to zero before calling gnc_exp_parser_parse.
+
+2015-05-31 Geert Janssens 
+
+	* Bug 746163 - Custom register colors (table rows) not recognized from .gtkrc-2.0.gnucash file
+
+2015-05-29 Joe Hansen 
+
+	* Updated Danish translation
+
+2015-05-16 Geert Janssens 
+
+	* Fix hidden panes in lot viewer
+
+2015-05-08 Geert Janssens 
+
+	* Bug 746873 - Gnucash asks sql passwords before wallet password
+
+2015-04-28 Geert Janssens 
+
+	* Bug 746873 - Gnucash asks sql passwords before wallet password
+
+2015-04-28 John Ralls 
+
+	* Fix some abs() errors from new clang and gcc versions. (manjusri/maint)
+
+2015-04-28 Geert Janssens 
+
+	* Add missing language in configure.ac
+
+2015-04-28 Мирослав Николић 
+
+	* New translation: serbian
+
+2015-04-25 Bill Nottingham 
+
+	* Bug 747812 - unset LDFLAGS when unsetting CFLAGS
+
+2015-04-25 Geert Janssens 
+
+	* Fix dbi driver detection on linux and similar
+
+2015-04-22 Mechtilde 
+
+	* Update of de.po
+
+2015-04-22 Christian Stimming 
+
+	* Cutecash: Switch from guile to xml to manage our iso-currencies source file
+
+2014-12-02 Frank H. Ellenberger 
+
+	* Improve "Auto pay on posting" message
+
+2015-04-12 Christian Stimming 
+
+	* Bug 747377: Fix overly restrictive input validation for IBAN of SEPA transfer.
+
+2015-04-10 Frank H. Ellenberger 
+
+	* Note in txf-help*.scm that changes should be applied to gnucash-docs/help/*/Help_txf-categories.xml
+
+2015-04-08 Alex Aycinena 
+
+	* Bug 740955 - Correct general journal and general ledger reports to properly handle Use-Split-Action-For-Num option in File->Properties.
+
+2015-04-03 John Ralls 
+
+	* Bug 747300 - SQL backend missing from most recent DMG?
+
+2015-04-03 Joe Hansen 
+
+	* Updated Danish translation
+
+2015-04-03 Geert Janssens 
+
+	* Enable travis continuous integration tests on the gnucash repository
+
+2015-04-02 Mark Haanen 
+
+	* Updated Dutch translation
+
+2015-03-31 John Ralls 
+
+	* Change gtk-mac-integration package name and includes.
+
+2015-03-31 John Ralls 
+
+	* Re-commit ja.po edits inadvertently overwritten during release.
+
+2015-03-31 Frank H. Ellenberger 
+
+	* Build system: Rename SCM_TYPE to VCS_TYPE
+
+2015-03-30 Frank H. Ellenberger 
+
+	* Build system: rename gnc-scm-info to gnc-vcs-info
+
+2015-03-30 Frank H. Ellenberger 
+
+	* Build system: Rename BUILDING_FROM_SCM to BUILDING_FROM_VCS
+
 2015-03-30 John Ralls 
 
-	* Update NEWS and ChangeLog to include Bug 746977 and fix some typos. (HEAD, maint)
+	* Update NEWS and ChangeLog to include Bug 746977 and fix some typos. (tag: 2.6.6a)
 
 2015-03-30 Geert Janssens 
 
-	* Updated Danish translation from the translation project (origin/maint)
+	* Updated Danish translation from the translation project
 
 2015-03-30 Simon Arlott 
 
@@ -20,7 +152,7 @@
 
 2015-03-28 John Ralls 
 
-	* Remove extraneous path noise from translation project files. (2.6.6)
+	* Remove extraneous path noise from translation project files. (tag: 2.6.6)
 
 2015-03-28 John Ralls 
 
@@ -340,7 +472,7 @@
 
 2014-12-18 John Ralls 
 
-	* Update News for re-tag of 2.6.5 (2.6.5a)
+	* Update News for re-tag of 2.6.5 (tag: 2.6.5a)
 
 2014-12-17 Geert Janssens 
 
@@ -352,7 +484,7 @@
 
 2014-12-15 John Ralls 
 
-	* Release 2.6.5. (2.6.5)
+	* Release 2.6.5. (tag: 2.6.5)
 
 2014-12-15 John Ralls 
 
@@ -364,7 +496,7 @@
 
 2014-12-14 John Ralls 
 
-	* Still more Guile library path additions, this time in tests.
+	* Still more Guile library path additions, this time in tests. (manjusri-maint/maint)
 
 2014-12-14 John Ralls 
 
@@ -624,7 +756,7 @@
 
 2014-09-27 John Ralls 
 
-	* Release 2.6.4 (2.6.4)
+	* Release 2.6.4 (tag: 2.6.4)
 
 2014-09-27 John Ralls 
 
@@ -1180,7 +1312,7 @@
 
 2014-05-13 Mike Alexander 
 
-	* The cash flow report should ignore splits in trading accounts. (local/maint)
+	* The cash flow report should ignore splits in trading accounts.
 
 2014-05-13 Simon Arlott 
 
@@ -1400,7 +1532,7 @@
 
 2014-03-30 John Ralls 
 
-	* Revert "Win32 build: Update aqbanking version numbers"
+	* Revert "Win32 build: Update aqbanking version numbers" (tag: 2.6.3)
 
 2014-03-30 John Ralls 
 
@@ -1408,7 +1540,7 @@
 
 2014-03-29 John Ralls 
 
-	* Release 2.6.3 (2.6.3)
+	* Release 2.6.3
 
 2014-03-29 John Ralls 
 
@@ -1516,7 +1648,7 @@
 
 2014-03-06 Christian Stimming 
 
-	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name. (trunk, master)
+	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name.
 
 2014-03-06 Christian Stimming 
 
@@ -1524,7 +1656,7 @@
 
 2014-03-01 John Ralls 
 
-	* Release GnuCash 2.6.2 (2.6.2)
+	* Release GnuCash 2.6.2 (tag: 2.6.2)
 
 2014-03-01 John Ralls 
 
@@ -4212,7 +4344,7 @@
 
 2013-05-21 Geert Janssens 
 
-	* Fix windows build after it got broken by r22982 (github/trunk)
+	* Fix windows build after it got broken by r22982
 
 2013-05-20 Christian Stimming 
 
