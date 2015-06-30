@@ -5050,7 +5050,7 @@ msgstr "Reconciliar a conta selecionada"
 #: ../src/gnome/gnc-plugin-page-register2.c:330
 #: ../src/gnome/gnc-plugin-page-register.c:330
 msgid "_Auto-clear..."
-msgstr "_Auto-Limpesa..."
+msgstr "_Auto-Limpeza..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:225
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -5662,7 +5662,7 @@ msgstr "Programar"
 #: ../src/gnome/gnc-plugin-page-register.c:468
 #: ../src/gnome/window-autoclear.c:94
 msgid "Auto-clear"
-msgstr "_Auto-limpesa"
+msgstr "_Auto-limpeza"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:660
 msgid ""
@@ -7775,7 +7775,7 @@ msgstr "Número de Transação:"
 # Auto-Clear ? What that means ? I need to check.
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:1
 msgid "<b>Auto-Clear Information</b>"
-msgstr "<b>Informação de Auto-Limpesa</b>"
+msgstr "<b>Informação de Auto-Limpeza</b>"
 
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:2
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:6

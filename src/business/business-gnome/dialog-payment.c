@@ -71,6 +71,7 @@ struct _payment_window
     GtkWidget   * date_edit;
     GtkWidget   * acct_tree;
     GtkWidget   * docs_list_tree_view;
+    GtkWidget   * commodity_label;
 
     gint          component_id;
     QofBook     * book;
@@ -122,6 +123,21 @@ void gnc_ui_payment_window_set_amount (PaymentWindow *pw, gnc_numeric amount)
     }
 
 }
+
+static void gnc_ui_payment_window_set_commodity (PaymentWindow *pw, const Account* account)
+{
+    gchar *comm_string;
+    gnc_commodity *comm;
+
+    g_assert(pw);
+    g_assert(account);
+
+    comm = xaccAccountGetCommodity (account);
+    comm_string = g_strconcat ("(", gnc_commodity_get_nice_symbol (comm), ")", NULL);
+    gtk_label_set_text (GTK_LABEL(pw->commodity_label), comm_string);
+    g_free (comm_string);
+}
+
 void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* account)
 {
     g_assert(pw);
@@ -131,7 +147,10 @@ void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* ac
         gnc_cbwe_set_by_string(GTK_COMBO_BOX(pw->post_combo), acct_string);
         g_free(acct_string);
     }
+
+    gnc_ui_payment_window_set_commodity (pw, account);
 }
+
 void gnc_ui_payment_window_set_xferaccount (PaymentWindow *pw, const Account* account)
 {
     g_assert(pw);
@@ -481,6 +500,10 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
         pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
     pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
 
+    if (pw->post_acct)
+        gnc_ui_payment_window_set_commodity (pw, pw->post_acct);
+
+
     /* Update list of documents and pre-payments */
     gnc_payment_window_fill_docs_list (pw);
 
@@ -680,10 +703,10 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
             text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
-            xfer = gnc_xfer_dialog(pw->dialog, pw->xfer_acct);
+            xfer = gnc_xfer_dialog(pw->dialog, pw->post_acct);
             gnc_info_dialog(pw->dialog, "%s", text);
 
-            gnc_xfer_dialog_select_to_account(xfer, pw->post_acct);
+            gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
             gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
 
             /* All we want is the exchange rate so prevent the user from thinking
@@ -898,6 +921,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw->ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
     pw->num_entry = GTK_WIDGET (gtk_builder_get_object (builder, "num_entry"));
     pw->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
+    pw->commodity_label = GTK_WIDGET (gtk_builder_get_object (builder, "commodity_label"));
     pw->post_combo = GTK_WIDGET (gtk_builder_get_object (builder, "post_combo"));
     gtk_combo_box_set_entry_text_column( GTK_COMBO_BOX( pw->post_combo ), 0 );
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(pw->post_combo));

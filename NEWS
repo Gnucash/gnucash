@@ -1,5 +1,44 @@
 Version history:
 ------- -------
+2.6.7 - 28 June 2015
+Announcement: GnuCash 2.6.6 Release 2015-06-28
+GnuCash 2.6.7 released
+
+The GnuCash development team proudly announces GnuCash 2.6.7, the
+seventh maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+     681225 - income statement displays blank base currency entries when
+     	      trading account transactions are present during the report period.
+     734183 - Set value to zero before calling gnc_exp_parser_parse.
+     739271 - pt_BR translation wrong word "limpesa". Should be "limpeza".
+     740955 - Correct general journal and general ledger reports to properly.
+      	      handle Use-Split-Action-For-Num option in File->Properties.
+     744858 - Update exchange rate on bill only possible once per session
+     	      (after unpost/repost).
+     746163 - Custom register colors (table rows) not recognized from
+     	      .gtkrc-2.0.gnucash file.
+     746792 - process payment in foreign currency leads to broken equation.
+     746873 - Gnucash asks sql passwords before wallet password.
+     746977 - scm ccache files should be in pkglibdir not pkgdatadir.
+     747300 - SQL backend missing from most recent DMG?
+     747377 - Fix overly restrictive input validation for IBAN of SEPA transfer.
+     747812 - unset LDFLAGS when unsetting CFLAGS.
+
+Other repairs that weren't marked with bugs in git:
+     Fix hidden panes in lot viewer.
+     Fix some abs() errors from new clang and gcc versions.
+     Fix dbi driver detection on linux and similar.
+     Improve "Auto pay on posting" message.
+     Enable travis continuous integration tests on the gnucash repository.
+
+Updated Translations:
+     Azerbaijani, Basque, Catalan, Chinese (Simplified), Czech, Danish, Dutch,
+     German, Kinyarwanda, Persian (Farsi), Portuguese, Slovak, Swedish,
+     Turkish, Ukrainian.
+
+New Translations: Serbian
+
 2.6.6 - 29 March 2015
 Announcement: GnuCash 2.6.6 Release 2015-03-29
 GnuCash 2.6.6 released
