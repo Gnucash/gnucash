@@ -1,6 +1,7 @@
 /********************************************************************\
  * kvp-frame.hpp -- Implements a key-value frame system             *
  * Copyright (C) 2014 Aaron Laws                                    *
+ * Copyright 2015 John Ralls                                        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,6 +21,25 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup KVP
+
+ * A KvpFrame is a set of associations between character strings
+ * (keys) and KvpValues.  A KvpValue is notionally a union with
+ * possible types enumerated in the KvpValue::Type enum, and includes,
+ * among other things, ints, doubles, strings, guids, lists, time
+ * and numeric values.  KvpValues may also be other frames, so
+ * KVP is inherently hierarchical.
+ *
+ * Values are stored in a 'slot' associated with a key.
+ * Pointers passed as arguments into set_slot and get_slot are the
+ * responsibility of the caller.  Pointers returned by get_slot are
+ * owned by the kvp_frame.  Make copies as needed.
+ *
+ * A 'path' is a sequence of keys that can be followed to a value.  Paths are
+ * passed as either '/'-delimited strings or as std::vectors of keys. Unlike
+ * file system paths, the tokens '.' and '..' have no special meaning.
+ *
+*/
 
 #ifndef GNC_KVP_FRAME_TYPE
 #define GNC_KVP_FRAME_TYPE

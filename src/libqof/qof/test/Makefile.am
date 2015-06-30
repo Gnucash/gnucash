@@ -22,7 +22,7 @@ test_qof_SOURCES = \
 test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/qofbook.h \
 	$(top_srcdir)/${MODULEPATH}/qofinstance.h \
-	$(top_srcdir)/${MODULEPATH}/kvp_frame.h \
+	$(top_srcdir)/${MODULEPATH}/kvp_frame.hpp \
 	$(top_srcdir)/${MODULEPATH}/qofobject.h \
 	$(top_srcdir)/${MODULEPATH}/qofsession.h \
 	$(top_srcdir)/src/test-core/unittest-support.h

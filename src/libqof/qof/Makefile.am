@@ -59,7 +59,6 @@ qofinclude_HEADERS = \
    gnc-timezone.hpp  \
    gnc-datetime.hpp  \
    guid.h            \
-   kvp_frame.h       \
    kvp_frame.hpp     \
    kvp-value.hpp     \
    qof.h             \

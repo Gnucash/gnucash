@@ -153,6 +153,26 @@ KvpValueImpl::set(T val) noexcept
 {
     this->datastore = val;
 }
+
+/** Convert a kvp_value into a GValue. Frames aren't converted.
+ * @param kval: A KvpValue.
+ * @return GValue*. Must be freed with g_free().
+ */
+GValue* gvalue_from_kvp_value (const KvpValue *kval);
+
+/** Convert a gvalue into a kvpvalue.
+ * @param gval: A GValue of a type KvpValue can digest.
+ * @return KvpValue created from the GValue's contents.
+ */
+KvpValue* kvp_value_from_gvalue (const GValue *gval);
+
+/**
+ * \brief Convenience function to release the value in a GValue
+ * acquired by kvp_frame_get_gvalue and to free the GValue.
+ * \param value: A GValue* created by kvp_frame_get_gvalue
+ */
+void gnc_gvalue_free (GValue *value);
+
 extern "C" GType gnc_value_list_get_type (void);
 #define GNC_TYPE_VALUE_LIST (gnc_value_list_get_type ())
 
