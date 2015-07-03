@@ -6,7 +6,7 @@ API: \ref KVP
 
 This file documents the use of keys in the key-value pair system
 used by the GnuCash Application (both the engine, and non-engine, GUI
-pieces).  Before assigning keys for use, please read the Key-Value 
+pieces).  Before assigning keys for use, please read the Key-Value
 Policy in the GnuCash Design Document located under src/doc/design.
 
 The format of the data below is:
@@ -16,7 +16,7 @@ Name: The name of the key, including key names of parent frames
       filename. Use the '/' character to separate keys.
 
 Type: The type of value stored in the key. The types are listed in
-      'kvp_frame.h'.
+      'kvp-value.hpp'.
 
 Entities: Which engine entities (Accounts, Transactions, Splits)
           can use this key. Use 'All' if every entity could have
@@ -24,7 +24,7 @@ Entities: Which engine entities (Accounts, Transactions, Splits)
 
 Use: The use to which the key will be put. Include any requirements
      for using the key here. Also include any API calls which use
-     the key. If more than one entity can use the key, 
+     the key. If more than one entity can use the key,
 
 Example:
 
@@ -44,7 +44,7 @@ Please put the keys in alphabetical order.
 
 [ \ref kvpA ] [ \ref kvpB ] [ \ref kvpC ] [ \ref kvpD ] [ \ref kvpE ]
 [ \ref kvpF ] [ \ref kvpG ] [ \ref kvpH ] [ \ref kvpJ ] [ \ref kvpK ] [ \ref kvpL ]\n
-[ \ref kvpM ] [ \ref kvpN ] [ \ref kvpO ] [ \ref kvpP ] [ \ref kvpQ ] 
+[ \ref kvpM ] [ \ref kvpN ] [ \ref kvpO ] [ \ref kvpP ] [ \ref kvpQ ]
 [ \ref kvpR ] [ \ref kvpS ] [ \ref kvpT ] [ \ref kvpU ] [ \ref kvpV ] [ \ref kvpW ]
 
 \subsection kvpA A
@@ -62,7 +62,7 @@ Use:  kvp subdirectory holding info relating to accounting periods, including
 
 \verbatim
 Name: /book/accounting-period
-Type: string, enum {none, week, month, quarter, trimester, year} 
+Type: string, enum {none, week, month, quarter, trimester, year}
 	XXX not used, should be UIFreqSpec stuff ..
 Entities: Book
 Use:  An enumerated identifier indicating how often books are supposed
@@ -74,7 +74,7 @@ Use:  An enumerated identifier indicating how often books are supposed
 Name: /book/close-date
 Type: Timespec
 Entities: Book
-Use:  The posted closing date of this book.  This book only contains 
+Use:  The posted closing date of this book.  This book only contains
       transactions whose posted date is earlier than this closing date.
 \endverbatim
 
@@ -82,7 +82,7 @@ Use:  The posted closing date of this book.  This book only contains
 Name: /book/closed-acct
 Type: GUID
 Entities: Transaction
-Use:  The GUID of the account for which this transaction represents the 
+Use:  The GUID of the account for which this transaction represents the
       opening balance.  This value will occur *only* in transactions that
       are opening balances.
 \endverbatim
@@ -91,7 +91,7 @@ Use:  The GUID of the account for which this transaction represents the
 Name: /book/closed-book
 Type: GUID
 Entities: Transaction
-Use:  The GUID of the book for which this transaction represents the 
+Use:  The GUID of the book for which this transaction represents the
       opening balance.  This value will occur *only* in transactions that
       are opening balances.
 \endverbatim
@@ -173,7 +173,7 @@ Entities: Book
 Use:  Holders for a bunch of counters for various types.  Used specifically
       in the business objects for ID counters.  The counter name is the path
       that follows /counters/, e.g. "/counters/GncCustomer"
-\endverbatim      
+\endverbatim
 
 \verbatim
 Name: /counter_formats/...
@@ -224,7 +224,7 @@ Use:  GUID of the split that records the capital gains for this split.
 Name: /gemini/
 Type: kvp_glist
 Entities: Account, Book
-Use:  kvp bag holding frames that identify accounts or books 
+Use:  kvp bag holding frames that identify accounts or books
       that are copies of this account.
 \endverbatim
 
@@ -247,7 +247,7 @@ Use:  guid of another account that is a copy of this one.
 Name: /gemini/<type>/book_guid
 Type: guid
 Entities: Account, Book
-Use:  When this appears in an account, then it contains the guid of 
+Use:  When this appears in an account, then it contains the guid of
       the book that the other account belongs to.  When this appears
       in a book, then this is the guid of the other book.
 \endverbatim
@@ -304,7 +304,7 @@ Name: /hbci/config-filename
 Type: string
 Entitied: Book
 Use: OpenHBCI configuration file name, where the real HBCI
-configuration for the OpenHBCI library can be found 
+configuration for the OpenHBCI library can be found
 \endverbatim
 
 \subsection kvpJ J
@@ -328,15 +328,15 @@ Type: kvp_frame
 Entities: Account
 Use: Frame holding info regarding how lots should be managed in this
      account, including what accounting policy to use, where realized
-     gains should be reported, and etc. 
+     gains should be reported, and etc.
 \endverbatim
 
 \verbatim
 Name: /lot-mgmt/gains-acct/
 Type: frame
 Entities: Account
-Use: When a lot in this account is double-balanced, this frame 
-     holds per-currency accounts to which realized gains are to 
+Use: When a lot in this account is double-balanced, this frame
+     holds per-currency accounts to which realized gains are to
      be posted.
 \endverbatim
 
@@ -361,7 +361,7 @@ Name: /lot-split/
 Type: kvp_glist
 Entities: Split
 Use:  A bag of kvp frames holding identification of splits
-      that were split off of this split.  Same style as the 
+      that were split off of this split.  Same style as the
       /gemini/, look there for additional doco's.
 \endverbatim
 
@@ -380,7 +380,7 @@ Use:  The GUID of the peer split which was split from this split.
 Name: /notes
 Type: string
 Entities: Account, Lot, Transaction
-Use: A user-suplied 'Notes' text field.  The user can set this to 
+Use: A user-suplied 'Notes' text field.  The user can set this to
      any value and change it at any time for any reason.
      Accessors: xaccAccountGetNotes(), xaccAccountSetNotes(),
      xaccTransGetNotes(), xaccTransSetNotes()
@@ -533,7 +533,7 @@ Use: Store the formula for the credit side of the split
 Name: /sched-xaction/debit-formula
 Type: string
 Entities: Split associated with a SchedXaction
-Use: Formula for the debit.  Either the credit or the 
+Use: Formula for the debit.  Either the credit or the
      debit formula must be empty.
 \endverbatim
 
@@ -571,7 +571,7 @@ Use: A boolean flag indicated whether the Account is tax-related.
 Name: /title
 Type: string
 Entities: Lot
-Use:  A user-supplied title for the lot.  The user can set this to 
+Use:  A user-supplied title for the lot.  The user can set this to
       any value and change it at any time for any reason.
 \endverbatim
 
@@ -606,7 +606,7 @@ Use: This frame is used to store keys which are editable directly by
 Name: void-reason
 Type: string
 Entities: Transaction
-Use: This string is used to store the reason why a transaction has been 
+Use: This string is used to store the reason why a transaction has been
 voided.  Note that it should only exist if the transaction has been voided.
 \endverbatim
 

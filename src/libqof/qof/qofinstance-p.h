@@ -106,11 +106,33 @@ void qof_instance_set_version_check (gpointer inst, guint32 value);
 void qof_instance_copy_version_check (gpointer to, gconstpointer from);
 void qof_instance_set_idata(gpointer inst, guint32 idata);
 /* Convenience functions to save some typing in property handlers */
+/** @ingroup KVP
+ * @{ */
+/** Report whether a QofInstance has anything stored in KVP
+ * @param inst The QofInstance
+ * @return TRUE if Kvp isn't empty.
+ */
 gboolean qof_instance_has_kvp (QofInstance *inst);
+/** Sets a KVP slot to a value from a GValue. The key can be a '/'-delimited
+ * path, and intermediate container frames will be created if necessary.
+ * Commits the change to the QofInstance.
+ * @param inst: The QofInstance on which to set the value.
+ * @param key: The key for the slot or '/'-delimited path
+ * @param value: A GValue containing an item of a type which KvpValue knows
+ * how to store.
+ */
 void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
-void qof_instance_get_kvp (const QofInstance *inst, const gchar *key, GValue *value);
-/* Functions to isolate the KVP mechanism inside QOF for cases where GValue
- * operations won't work.
+/** Retrieves the contents of a KVP slot into a provided GValue.
+ * @param inst: The QofInstance
+ * @param key: The key of or '/'-delimited path to the slot.
+ * @param value: A GValue into which to store the value of the slot. It will be
+ *               set to the correct type.
+ */
+void qof_instance_get_kvp (const QofInstance *inst, const gchar *key, GValue
+*value);
+/** @} Close out the DOxygen ingroup */
+/* Functions to isolate the KVP mechanism inside QOF for cases where
+GValue * operations won't work.
  */
 void qof_instance_copy_kvp (QofInstance *to, const QofInstance *from);
 void qof_instance_swap_kvp (QofInstance *a, QofInstance *b);

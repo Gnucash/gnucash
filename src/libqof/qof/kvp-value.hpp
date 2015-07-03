@@ -37,6 +37,12 @@ extern "C"
 
 //Must be a struct because it's exposed to C so that it can in turn be
 //translated to/from Scheme.
+/** @addtogroup KVP
+ * @{
+ */
+
+/** Implements KvpValue using boost::variant.
+ */
 struct KvpValueImpl
 {
     public:
@@ -134,7 +140,7 @@ struct KvpValueImpl
 
 int
 compare(const KvpValueImpl *, const KvpValue *) noexcept;
-
+/** @} Close Doxygen AddToGroup */
 template <typename T>
 KvpValueImpl::KvpValueImpl(T newvalue) noexcept:
     datastore(newvalue)
@@ -153,7 +159,9 @@ KvpValueImpl::set(T val) noexcept
 {
     this->datastore = val;
 }
-
+/** @ingroup KVP
+    @{ */
+/** @internal @{ */
 /** Convert a kvp_value into a GValue. Frames aren't converted.
  * @param kval: A KvpValue.
  * @return GValue*. Must be freed with g_free().
@@ -172,7 +180,8 @@ KvpValue* kvp_value_from_gvalue (const GValue *gval);
  * \param value: A GValue* created by kvp_frame_get_gvalue
  */
 void gnc_gvalue_free (GValue *value);
-
+/** @} Close Doxygen Internal */
+/** @} Close Doxygen Group */
 extern "C" GType gnc_value_list_get_type (void);
 #define GNC_TYPE_VALUE_LIST (gnc_value_list_get_type ())
 

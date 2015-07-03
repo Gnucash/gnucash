@@ -66,13 +66,7 @@ typedef struct KvpFrameImpl KvpFrame;
 struct QofInstance_s
 {
     GObject object;
-
     QofIdType        e_type;		   /**<	Entity type */
-
-    /* kvp_data is a key-value pair database for storing arbirtary
-     * information associated with this instance.
-     * See src/engine/kvp_doc.txt for a list and description of the
-     * important keys. */
     KvpFrame *kvp_data;
 };
 

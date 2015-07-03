@@ -354,6 +354,9 @@ void qof_book_begin_edit(QofBook *book);
 void qof_book_commit_edit(QofBook *book);
 
 /* Access functions for options. */
+/** @ingroup KVP
+ @{
+ */
 /** Load a GNCOptionsDB from KVP data.
  * @param book: The book.
  * @param load_cb: A callback function that does the loading.
@@ -394,7 +397,7 @@ KvpValue* qof_book_get_option (QofBook *book, GSList *path);
  * @param list: A GList of keys which from a path under KVP_OPTION_PATH.
  */
 void qof_book_options_delete (QofBook *book);
-
+/** @} End of Doxygen Include */
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
 
