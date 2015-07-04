@@ -236,13 +236,10 @@ static KvpValue*
 dom_tree_to_timespec_kvp_value (xmlNodePtr node)
 {
     Timespec ts;
-    KvpValue * ret = NULL;
+    KvpValue * ret = nullptr;
 
     ts = dom_tree_to_timespec (node);
-    if (ts.tv_sec || ts.tv_nsec)
-    {
-        ret = new KvpValue{ts};
-    }
+    ret = new KvpValue{ts};
     return ret;
 }
 
