@@ -8996,7 +8996,7 @@ msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:7
 msgid "Run the \"since last run\" process when a file is opened."
 msgstr ""
-"Lasse den »Seit letztem Aufruf« Pozess laufen, eine Datei geöffnet wird "
+"Lasse den »Seit letztem Aufruf« Pozess laufen, wenn eine Datei geöffnet wird "
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:8
 msgid "_Show notification window"
@@ -14904,7 +14904,7 @@ msgstr "Ausgewählte Buchungen abgleichen löschen"
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
 #, fuzzy
 msgid "_Unreconcile Selection"
-msgstr "_Nicht abgeglichen/Auswahl"
+msgstr "_Nicht abgegliche Auswahl"
 
 #: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
 #, fuzzy
