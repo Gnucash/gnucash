@@ -193,9 +193,11 @@ gnc_ab_set_book_template_list (QofBook *b, GList *template_list)
     kvp_list = g_list_reverse (kvp_list);
     auto value = new KvpValue(g_list_copy_deep(kvp_list, copy_list_value,
                                                nullptr));
+    qof_book_begin_edit(b);
     KvpFrame *toplevel = qof_instance_get_slots (QOF_INSTANCE (b));
     delete toplevel->set_path({"hbci", "template-list"}, value);
     qof_instance_set_dirty_flag (QOF_INSTANCE (b), TRUE);
+    qof_book_commit_edit(b);
 }
 
 const gchar *
