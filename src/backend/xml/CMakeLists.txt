@@ -46,7 +46,7 @@ SET (libgnc_backend_xml_SOURCES
   gnc-xml-helper.c
   io-example-account.c 
   io-gncxml-gen.c 
-  io-gncxml-v1.c 
+  io-gncxml-v1.cpp
   io-gncxml-v2.c 
   io-utils.c 
   sixtp-dom-generators.cpp

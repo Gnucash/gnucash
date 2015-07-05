@@ -84,7 +84,7 @@ ADD_CUSTOM_COMMAND (
 SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS ${ISO_4217_C})
 
 # Add dependency on swig-runtime.h
-SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.c glib-helpers.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
+SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.cpp glib-helpers.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
 
 SET (libgncmod_engine_SOURCES
   Account.c
@@ -110,7 +110,7 @@ SET (libgncmod_engine_SOURCES
   gnc-pricedb.c
   gnc-session.c
   gncmod-engine.c
-  kvp-scm.c
+  kvp-scm.cpp
   engine-helpers.c
   glib-helpers.c
   policy.c

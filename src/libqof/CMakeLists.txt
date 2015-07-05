@@ -10,10 +10,13 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for strptime.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src) # for platform.h
 
 SET (libgnc_qof_SOURCES
+   qof/gnc-aqbanking-templates.cpp
    qof/gnc-date.cpp
+   qof/gnc-datetime.cpp
    qof/gnc-int128.cpp
    qof/gnc-numeric.cpp
    qof/gnc-rational.cpp
+   qof/gnc-timezone.cpp
    qof/guid.cpp
    qof/kvp_frame.cpp
    qof/kvp-value.cpp
@@ -50,7 +53,8 @@ SET (libgnc_qof_HEADERS
    qof/gnc-date.h
    qof/gnc-numeric.h
    qof/guid.h
-   qof/kvp_frame.h
+   qof/kvp_frame.hpp
+   qof/kvp-value.hpp
    qof/qof.h
    qof/qofbackend-p.h
    qof/qofbackend.h
