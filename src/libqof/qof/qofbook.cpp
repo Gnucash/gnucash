@@ -1066,8 +1066,12 @@ qof_book_get_features (QofBook *book)
     GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   NULL, g_free);
 
-    frame = frame->get_slot(GNC_FEATURES)->get<KvpFrame*>();
-    frame->for_each_slot(&add_feature_to_hash, &features);
+    auto slot = frame->get_slot(GNC_FEATURES);
+    if (slot != nullptr)
+    {
+	frame = slot->get<KvpFrame*>();
+	frame->for_each_slot(&add_feature_to_hash, &features);
+    }
     return features;
 }
 
