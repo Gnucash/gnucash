@@ -1021,7 +1021,7 @@ finish_book_options_helper(GNCOptionWin * optionwin,
     if (!options) return;
 
     gnc_option_db_commit (options);
-    qof_book_save_options (book, gnc_option_db_save_to_kvp, options, TRUE);
+    qof_book_save_options (book, gnc_option_db_save, options, TRUE);
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (book);
     if (use_split_action_for_num_before != use_split_action_for_num_after)
@@ -1127,7 +1127,7 @@ assistant_instert_book_options_page (hierarchy_data *data)
 
     data->options = gnc_option_db_new_for_type (QOF_ID_BOOK);
     qof_book_load_options (gnc_get_current_book (),
-			   gnc_option_db_load_from_kvp, data->options);
+			   gnc_option_db_load, data->options);
     gnc_option_db_clean (data->options);
 
     data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"));

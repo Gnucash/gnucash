@@ -20,16 +20,20 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine.h"
+#include <gnc-engine.h>
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
+}
+
+#include <kvp_frame.hpp>
 
 static QofLogModule log_module = GNC_MOD_IO;
 
@@ -57,7 +61,7 @@ dom_tree_to_guid(xmlNodePtr node)
         /* handle new and guid the same for the moment */
         if ((g_strcmp0("guid", type) == 0) || (g_strcmp0("new", type) == 0))
         {
-            GncGUID *gid = g_new(GncGUID, 1);
+            auto gid = guid_new();
             char *guid_str;
 
             guid_str = (char*)xmlNodeGetContent (node->xmlChildrenNode);
@@ -78,7 +82,7 @@ dom_tree_to_guid(xmlNodePtr node)
     }
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_integer_kvp_value(xmlNodePtr node)
 {
     gchar *text;
@@ -89,7 +93,7 @@ dom_tree_to_integer_kvp_value(xmlNodePtr node)
 
     if (string_to_gint64(text, &daint))
     {
-        ret = kvp_value_new_gint64(daint);
+        ret = new KvpValue{daint};
     }
     g_free(text);
 
@@ -161,7 +165,7 @@ dom_tree_to_boolean(xmlNodePtr node, gboolean* b)
     }
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_double_kvp_value(xmlNodePtr node)
 {
     gchar *text;
@@ -172,7 +176,7 @@ dom_tree_to_double_kvp_value(xmlNodePtr node)
 
     if (string_to_double(text, &dadoub))
     {
-        ret = kvp_value_new_double(dadoub);
+        ret = new KvpValue{dadoub};
     }
 
     g_free(text);
@@ -180,7 +184,7 @@ dom_tree_to_double_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_numeric_kvp_value(xmlNodePtr node)
 {
     gnc_numeric *danum;
@@ -190,7 +194,7 @@ dom_tree_to_numeric_kvp_value(xmlNodePtr node)
 
     if (danum)
     {
-        ret = kvp_value_new_gnc_numeric(*danum);
+        ret = new KvpValue{*danum};
     }
 
     g_free(danum);
@@ -198,7 +202,7 @@ dom_tree_to_numeric_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_string_kvp_value(xmlNodePtr node)
 {
     gchar *datext;
@@ -207,15 +211,13 @@ dom_tree_to_string_kvp_value(xmlNodePtr node)
     datext = dom_tree_to_text(node);
     if (datext)
     {
-        ret = kvp_value_new_string(datext);
+        ret = new KvpValue{datext};
     }
-
-    g_free(datext);
 
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_guid_kvp_value(xmlNodePtr node)
 {
     GncGUID *daguid;
@@ -224,29 +226,24 @@ dom_tree_to_guid_kvp_value(xmlNodePtr node)
     daguid = dom_tree_to_guid(node);
     if (daguid)
     {
-        ret = kvp_value_new_guid(daguid);
+        ret = new KvpValue{daguid};
     }
-
-    g_free(daguid);
 
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_timespec_kvp_value (xmlNodePtr node)
 {
     Timespec ts;
-    KvpValue * ret = NULL;
+    KvpValue * ret = nullptr;
 
     ts = dom_tree_to_timespec (node);
-    if (ts.tv_sec || ts.tv_nsec)
-    {
-        ret = kvp_value_new_timespec (ts);
-    }
+    ret = new KvpValue{ts};
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_gdate_kvp_value (xmlNodePtr node)
 {
     GDate *date;
@@ -256,7 +253,7 @@ dom_tree_to_gdate_kvp_value (xmlNodePtr node)
 
     if (date)
     {
-        ret = kvp_value_new_gdate(*date);
+        ret = new KvpValue{*date};
     }
 
     g_free(date);
@@ -303,7 +300,14 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
     return(TRUE);
 }
 
-KvpValue*
+static KvpValue* dom_tree_to_kvp_value(xmlNodePtr node);
+//needed for test access as well as internal use.
+extern "C"
+{
+    KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
+}
+
+static KvpValue*
 dom_tree_to_list_kvp_value(xmlNodePtr node)
 {
     GList *list = NULL;
@@ -324,12 +328,12 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
         }
     }
 
-    ret = kvp_value_new_glist_nc(list);
+    ret = new KvpValue{list};
 
     return ret;
 }
 
-KvpValue*
+static KvpValue*
 dom_tree_to_frame_kvp_value(xmlNodePtr node)
 {
     KvpFrame *frame;
@@ -339,10 +343,8 @@ dom_tree_to_frame_kvp_value(xmlNodePtr node)
 
     if (frame)
     {
-        ret = kvp_value_new_frame(frame);
+        ret = new KvpValue{frame};
     }
-
-    kvp_frame_delete(frame);
 
     return ret;
 }
@@ -350,7 +352,7 @@ dom_tree_to_frame_kvp_value(xmlNodePtr node)
 
 struct kvp_val_converter
 {
-    gchar *tag;
+    const gchar *tag;
     KvpValue* (*converter)(xmlNodePtr node);
 };
 
@@ -368,7 +370,7 @@ struct kvp_val_converter val_converters[] =
     { 0, 0 },
 };
 
-KvpValue*
+static KvpValue*
 dom_tree_to_kvp_value(xmlNodePtr node)
 {
     xmlChar *xml_type;
@@ -403,7 +405,7 @@ dom_tree_to_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-gboolean
+static gboolean
 dom_tree_to_kvp_frame_given(xmlNodePtr node, KvpFrame *frame)
 {
     xmlNodePtr mark;
@@ -440,7 +442,8 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, KvpFrame *frame)
             {
                 if (val)
                 {
-                    kvp_frame_set_slot_nc(frame, key, val);
+                    //We're deleting the old KvpValue returned by replace_nc().
+                    delete frame->set(key, val);
                 }
                 else
                 {
@@ -458,20 +461,23 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, KvpFrame *frame)
 KvpFrame*
 dom_tree_to_kvp_frame(xmlNodePtr node)
 {
-    KvpFrame *ret;
-
     g_return_val_if_fail(node, NULL);
 
-    ret = kvp_frame_new();
+    auto ret = new KvpFrame;
 
     if (dom_tree_to_kvp_frame_given(node, ret))
         return ret;
 
-    kvp_frame_delete(ret);
-
+    delete ret;
     return NULL;
 }
 
+gboolean
+dom_tree_create_instance_slots(xmlNodePtr node, QofInstance *inst)
+{
+    KvpFrame *frame = qof_instance_get_slots(inst);
+    return dom_tree_to_kvp_frame_given(node, frame);
+}
 
 gchar *
 dom_tree_to_text(xmlNodePtr tree)
@@ -683,7 +689,8 @@ dom_tree_to_gdate(xmlNodePtr node)
                     }
                     g_free(content);
                     seen_date = TRUE;
-                    g_date_set_dmy( ret, day, month, year );
+                    g_date_set_dmy( ret, day, static_cast<GDateMonth>(month),
+                                    year );
                     if ( !g_date_valid( ret ) )
                     {
                         PWARN("invalid date");

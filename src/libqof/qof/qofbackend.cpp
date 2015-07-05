@@ -138,7 +138,6 @@ qof_backend_init(QofBackend *be)
 
     be->sync = NULL;
     be->safe_sync = NULL;
-    be->load_config = NULL;
 
     be->events_pending = NULL;
     be->process_events = NULL;
@@ -147,7 +146,6 @@ qof_backend_init(QofBackend *be)
     if (be->error_msg) g_free (be->error_msg);
     be->error_msg = NULL;
     be->percentage = NULL;
-    be->backend_configuration = kvp_frame_new();
 
     /* to be removed */
     be->price_lookup = NULL;
@@ -159,8 +157,6 @@ qof_backend_destroy(QofBackend *be)
 {
     g_free(be->error_msg);
     be->error_msg = NULL;
-    kvp_frame_delete(be->backend_configuration);
-    be->backend_configuration = NULL;
 }
 
 void

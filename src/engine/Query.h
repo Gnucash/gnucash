@@ -186,10 +186,6 @@ void xaccQueryAddClearedMatch(QofQuery * q, cleared_match_t how, QofQueryOp op);
 void xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
                            QofIdType id_type, QofQueryOp op);
 
-/** given kvp value is on right side of comparison */
-void xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
-                          QofQueryCompare how, QofIdType id_type,
-                          QofQueryOp op);
 
 /*******************************************************************
  *  compatibility interface with old QofQuery API

@@ -37,8 +37,9 @@
 #include "gnc-session.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "qof.h"
-#include "qofbookslots.h"
+#include <qof.h>
+#include <qofbookslots.h>
+
 /** \todo Code dependent on the private query headers
 qofquery-p.h and qofquerycore-p.h may need to be modified.
 These files are temporarily exported for QOF 0.6.0 but
@@ -477,32 +478,6 @@ gnc_scm2amt_match_how (SCM how_scm)
     return res;
 }
 
-static QofQueryCompare
-gnc_scm2kvp_match_how (SCM how_scm)
-{
-    QofQueryCompare res;
-    gchar *how = gnc_scm_symbol_to_locale_string (how_scm);
-
-    if (!g_strcmp0 (how, "kvp-match-lt"))
-        res = QOF_COMPARE_LT;
-    else if (!g_strcmp0 (how, "kvp-match-lte"))
-        res = QOF_COMPARE_LTE;
-    else if (!g_strcmp0 (how, "kvp-match-eq"))
-        res = QOF_COMPARE_EQUAL;
-    else if (!g_strcmp0 (how, "kvp-match-gte"))
-        res = QOF_COMPARE_GTE;
-    else if (!g_strcmp0 (how, "kvp-match-gt"))
-        res = QOF_COMPARE_GT;
-    else
-    {
-        PINFO ("invalid kvp match: %s", how);
-        res = QOF_COMPARE_EQUAL;
-    }
-
-    g_free (how);
-    return res;
-}
-
 static int
 gnc_scm2bitfield (SCM field_scm)
 {
@@ -556,33 +531,6 @@ gnc_scm2balance_match_how (SCM how_scm, gboolean *resp)
 
     g_free (how);
     return TRUE;
-}
-
-static QofIdType
-gnc_scm2kvp_match_where (SCM where_scm)
-{
-    QofIdType res;
-    gchar *where;
-
-    if (!scm_is_list (where_scm))
-        return NULL;
-
-    where = gnc_scm_symbol_to_locale_string (SCM_CAR(where_scm));
-
-    if (!g_strcmp0 (where, "kvp-match-split"))
-        res = GNC_ID_SPLIT;
-    else if (!g_strcmp0 (where, "kvp-match-trans"))
-        res = GNC_ID_TRANS;
-    else if (!g_strcmp0 (where, "kvp-match-account"))
-        res = GNC_ID_ACCOUNT;
-    else
-    {
-        PINFO ("Unknown kvp-match-where: %s", where);
-        res = NULL;
-    }
-
-    g_free (where);
-    return res;
 }
 
 static SCM
@@ -719,287 +667,6 @@ gnc_query_path_free (GSList *path)
     g_slist_free (path);
 }
 
-static KvpValueType
-gnc_scm2KvpValueType (SCM value_type_scm)
-{
-    return scm_to_int(value_type_scm);
-}
-
-static SCM gnc_kvp_frame2scm (KvpFrame *frame);
-
-static SCM
-gnc_kvp_value2scm (const KvpValue *value)
-{
-    SCM value_scm = SCM_EOL;
-    KvpValueType value_t;
-    SCM scm;
-    const gchar *string;
-
-    if (!value) return SCM_BOOL_F;
-
-    value_t = kvp_value_get_type (value);
-
-    value_scm = scm_cons (scm_from_long  (value_t), value_scm);
-
-    switch (value_t)
-    {
-    case KVP_TYPE_GINT64:
-        scm = scm_from_int64 (kvp_value_get_gint64 (value));
-        break;
-
-    case KVP_TYPE_DOUBLE:
-        scm = scm_from_double  (kvp_value_get_double (value));
-        break;
-
-    case KVP_TYPE_STRING:
-        string = kvp_value_get_string (value);
-        scm = string ? scm_from_utf8_string (string) : SCM_BOOL_F;
-        break;
-
-    case KVP_TYPE_GUID:
-        scm = gnc_guid2scm (*kvp_value_get_guid (value));
-        break;
-
-    case KVP_TYPE_TIMESPEC:
-        scm = gnc_timespec2timepair (kvp_value_get_timespec (value));
-        break;
-
-    case KVP_TYPE_NUMERIC:
-    {
-        gnc_numeric n = kvp_value_get_numeric (value);
-        scm = gnc_query_numeric2scm (n);
-        break;
-    }
-
-    case KVP_TYPE_GLIST:
-    {
-        GList *node;
-
-        scm = SCM_EOL;
-        for (node = kvp_value_get_glist (value); node; node = node->next)
-            scm = scm_cons (gnc_kvp_value2scm (node->data), scm);
-        scm = scm_reverse (scm);
-        break;
-    }
-
-    case KVP_TYPE_FRAME:
-        scm = gnc_kvp_frame2scm (kvp_value_get_frame (value));
-        break;
-
-    default:
-        scm = SCM_BOOL_F;
-        break;
-    }
-
-    value_scm = scm_cons (scm, value_scm);
-
-    return scm_reverse (value_scm);
-}
-
-typedef struct
-{
-    SCM scm;
-} KVPSCMData;
-
-static void
-kvp_frame_slot2scm (const char *key, KvpValue *value, gpointer data)
-{
-    KVPSCMData *ksd = data;
-    SCM value_scm;
-    SCM key_scm;
-    SCM pair;
-
-    key_scm = key ? scm_from_utf8_string (key) : SCM_BOOL_F;
-    value_scm = gnc_kvp_value2scm (value);
-    pair = scm_cons (key_scm, value_scm);
-
-    ksd->scm = scm_cons (pair, ksd->scm);
-}
-
-static SCM
-gnc_kvp_frame2scm (KvpFrame *frame)
-{
-    KVPSCMData ksd;
-
-    if (!frame) return SCM_BOOL_F;
-
-    ksd.scm = SCM_EOL;
-
-    kvp_frame_for_each_slot (frame, kvp_frame_slot2scm, &ksd);
-
-    return ksd.scm;
-}
-
-static KvpFrame * gnc_scm2KvpFrame (SCM frame_scm);
-
-static KvpValue *
-gnc_scm2KvpValue (SCM value_scm)
-{
-    KvpValueType value_t;
-    KvpValue *value = NULL;
-    SCM type_scm;
-    SCM val_scm;
-
-    if (!scm_is_list (value_scm) || scm_is_null (value_scm))
-        return NULL;
-
-    type_scm = SCM_CAR (value_scm);
-    value_t = gnc_scm2KvpValueType (type_scm);
-
-    value_scm = SCM_CDR (value_scm);
-    if (!scm_is_list (value_scm) || scm_is_null (value_scm))
-        return NULL;
-
-    val_scm = SCM_CAR (value_scm);
-
-    switch (value_t)
-    {
-    case KVP_TYPE_GINT64:
-        value = kvp_value_new_gint64 (scm_to_int64 (val_scm));
-        break;
-
-    case KVP_TYPE_DOUBLE:
-        value = kvp_value_new_double (scm_to_double (val_scm));
-        break;
-
-    case KVP_TYPE_STRING:
-    {
-        gchar * str;
-        str = gnc_scm_to_utf8_string (val_scm);
-        value = kvp_value_new_string (str);
-        g_free (str);
-        break;
-    }
-
-    case KVP_TYPE_GUID:
-    {
-        if (val_scm != SCM_BOOL_F)
-        {
-            GncGUID guid = gnc_scm2guid (val_scm);
-            value = kvp_value_new_guid (&guid);
-        }
-        else
-            value = NULL;
-        break;
-    }
-
-    case KVP_TYPE_TIMESPEC:
-    {
-        Timespec ts = gnc_timepair2timespec (val_scm);
-        value = kvp_value_new_timespec(ts);
-        break;
-    }
-
-    case KVP_TYPE_GDATE:
-    {
-        Timespec ts = gnc_timepair2timespec (val_scm);
-        value = kvp_value_new_gdate(timespec_to_gdate(ts));
-        break;
-    }
-
-    case KVP_TYPE_NUMERIC:
-    {
-        gnc_numeric n;
-
-        if (!gnc_query_numeric_p (val_scm))
-            return NULL;
-
-        n = gnc_query_scm2numeric (val_scm);
-
-        value = kvp_value_new_gnc_numeric (n);
-        break;
-    }
-
-    case KVP_TYPE_GLIST:
-    {
-        GList *list = NULL;
-        GList *node;
-
-        for (; scm_is_list (val_scm) && !scm_is_null (val_scm);
-                val_scm = SCM_CDR (val_scm))
-        {
-            SCM scm = SCM_CAR (val_scm);
-
-            list = g_list_prepend (list, gnc_scm2KvpValue (scm));
-        }
-
-        list = g_list_reverse (list);
-
-        value = kvp_value_new_glist (list);
-
-        for (node = list; node; node = node->next)
-            kvp_value_delete (node->data);
-        g_list_free (list);
-        break;
-    }
-
-    case KVP_TYPE_FRAME:
-    {
-        KvpFrame *frame;
-
-        frame = gnc_scm2KvpFrame (val_scm);
-        value = kvp_value_new_frame (frame);
-        kvp_frame_delete (frame);
-        break;
-    }
-    default:
-	break;
-    }
-
-    return value;
-}
-
-static KvpFrame *
-gnc_scm2KvpFrame (SCM frame_scm)
-{
-    KvpFrame * frame;
-
-    if (!scm_is_list (frame_scm)) return NULL;
-
-    frame = kvp_frame_new ();
-
-    for (; scm_is_list (frame_scm) && !scm_is_null (frame_scm);
-            frame_scm = SCM_CDR (frame_scm))
-    {
-        SCM pair = SCM_CAR (frame_scm);
-        KvpValue *value;
-        SCM key_scm;
-        SCM val_scm;
-        gchar *key;
-
-        if (!scm_is_pair (pair))
-            continue;
-
-        key_scm = SCM_CAR (pair);
-        val_scm = SCM_CDR (pair);
-
-        if (!scm_is_string (key_scm))
-            continue;
-
-        key = scm_to_utf8_string (key_scm); /* key should be freed with free !
-                                                 This is automatically taken care
-                                                 of by scm_dynwind_free below. */
-        scm_dynwind_begin (0);
-        scm_dynwind_free (key); /* free key whenever the dynwind context ends */
-        if (!key)
-        {
-            scm_dynwind_end ();
-            continue;
-        }
-        value = gnc_scm2KvpValue (val_scm); /* can exit non-locally so justifies
-                                               the use of scm_dynwind context
-                                               protection */
-        if (!value)
-        {
-            scm_dynwind_end ();
-            continue;
-        }
-        kvp_frame_set_slot_nc (frame, key, value);
-        scm_dynwind_end ();
-    }
-
-    return frame;
-}
 
 static SCM
 gnc_queryterm2scm (const QofQueryTerm *qt)
@@ -1075,14 +742,6 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
 
         qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (pdata->char_list ? scm_from_utf8_string (pdata->char_list) : SCM_BOOL_F, qt_scm);
-
-    }
-    else if (!g_strcmp0 (pd->type_name, QOF_TYPE_KVP))
-    {
-        query_kvp_t pdata = (query_kvp_t) pd;
-
-        qt_scm = scm_cons (gnc_query_path2scm (pdata->path), qt_scm);
-        qt_scm = scm_cons (gnc_kvp_value2scm (pdata->value), qt_scm);
 
     }
     else
@@ -1286,31 +945,6 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
             pd = qof_query_char_predicate (options, char_list);
             g_free (char_list);
-        }
-        else if (!g_strcmp0 (type, QOF_TYPE_KVP))
-        {
-            GSList *kvp_path;
-            KvpValue *value;
-
-            scm = SCM_CAR (qt_scm);
-            qt_scm = SCM_CDR (qt_scm);
-            if (!scm_is_list (scm))
-                break;
-            kvp_path = gnc_query_scm2path (scm);
-
-            scm = SCM_CAR (qt_scm);
-            qt_scm = SCM_CDR (qt_scm);
-            if (scm_is_null (scm))
-            {
-                gnc_query_path_free (kvp_path);
-                break;
-            }
-            value = gnc_scm2KvpValue (scm);
-
-            pd = qof_query_kvp_predicate (compare_how, kvp_path, value);
-            gnc_query_path_free (kvp_path);
-            kvp_value_delete (value);
-
         }
         else
         {
@@ -1643,48 +1277,6 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
             xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
             g_free ((void *) id_type);
-            ok = TRUE;
-
-        }
-        else if (!g_strcmp0 (pd_type, "pd-kvp"))
-        {
-            GSList *path;
-            KvpValue *value;
-            QofQueryCompare how;
-            QofIdType where;
-
-            /* how */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            how = gnc_scm2kvp_match_how (scm);
-
-            /* where */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            where = gnc_scm2kvp_match_where (scm);
-
-            /* path */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            path = gnc_query_scm2path (scm);
-
-            /* value */
-            if (scm_is_null (query_term_scm))
-                break;
-            scm = SCM_CAR (query_term_scm);
-            query_term_scm = SCM_CDR (query_term_scm);
-            value = gnc_scm2KvpValue (scm);
-
-            xaccQueryAddKVPMatch (q, path, value, how, where, QOF_QUERY_OR);
-
-            gnc_query_path_free (path);
-            kvp_value_delete (value);
             ok = TRUE;
 
         }

@@ -23,6 +23,8 @@ LDADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLIB_LIBS}
 
+test_guid_SOURCES = test-guid.cpp
+
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
 #
@@ -73,6 +75,7 @@ TESTS_ENVIRONMENT = \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
+AM_DEFAULT_SOURCE_EXT = .cpp
 
 TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2}
 
@@ -94,7 +97,7 @@ EXTRA_DIST += \
 
 test_engine_SOURCES = \
 	test-engine.c \
-	utest-Account.c \
+	utest-Account.cpp \
 	utest-Budget.c \
 	utest-Entry.c \
 	utest-Invoice.c \
@@ -124,9 +127,35 @@ libutest_Split_la_CXXFLAGS = -Wno-write-strings $(AM_CXXFLAGS)
 libutest_Split_la_LIBADD = $(LDADD)
 
 libutest_Trans_la_SOURCES = \
-	utest-Transaction.c
+	utest-Transaction.cpp
 
 libutest_Trans_la_LIBADD = $(LDADD)
+
+if WITH_GOOGLE_TEST
+test_import_map_SOURCES = \
+        gtest-import-map.cpp
+test_import_map_LDADD = \
+        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+        ${top_builddir}/src/engine/libgncmod-engine.la \
+        ${GLIB_LIBS} \
+        ${GTEST_LIBS}
+
+if !GOOGLE_TEST_LIBS
+nodist_test_import_map_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+test_import_map_LDADD += ${top_builddir}/src/test-core/libgtest.a
+endif
+
+test_import_map_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+        -I${top_srcdir}/${MODULEPATH} \
+        -I${top_srcdir}/src/libqof/qof \
+        -I${top_srcdir}/src/core-utils \
+        ${GLIB_CFLAGS}
+
+TEST_GROUP_1 += test-import-map
+endif
+
 
 
 clean-local:

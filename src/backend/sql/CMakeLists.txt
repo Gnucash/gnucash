@@ -34,7 +34,7 @@ SET (libgnc_backend_sql_SOURCES
   gnc-price-sql.c
   gnc-recurrence-sql.c
   gnc-schedxaction-sql.c
-  gnc-slots-sql.c
+  gnc-slots-sql.cpp
   gnc-tax-table-sql.c
   gnc-transaction-sql.c
   gnc-vendor-sql.c

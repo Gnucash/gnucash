@@ -15,7 +15,6 @@ SET (libgnc_qof_SOURCES
    qof/gnc-numeric.cpp
    qof/gnc-rational.cpp
    qof/guid.cpp
-   qof/kvp-util.cpp
    qof/kvp_frame.cpp
    qof/kvp-value.cpp
    qof/qofbackend.cpp
@@ -51,8 +50,6 @@ SET (libgnc_qof_HEADERS
    qof/gnc-date.h
    qof/gnc-numeric.h
    qof/guid.h
-   qof/kvp-util-p.h
-   qof/kvp-util.h
    qof/kvp_frame.h
    qof/qof.h
    qof/qofbackend-p.h

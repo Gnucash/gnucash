@@ -73,13 +73,13 @@ void mark_job (GncJob *job)
 enum
 {
     PROP_0,
-//  PROP_ID,		/* Table */
-    PROP_NAME,		/* Table */
-//  PROP_REFERENCE,	/* Table */
-//  PROP_ACTIVE,	/* Table */
-//  PROP_OWNER_TYPE,	/* Table */
-//  PROP_OWNER,		/* Table */
-    PROP_PDF_DIRNAME,	/* KVP */
+//  PROP_ID,            /* Table */
+    PROP_NAME,          /* Table */
+//  PROP_REFERENCE,     /* Table */
+//  PROP_ACTIVE,        /* Table */
+//  PROP_OWNER_TYPE,    /* Table */
+//  PROP_OWNER,         /* Table */
+    PROP_PDF_DIRNAME,   /* KVP */
 };
 
 /* GObject Initialization */
@@ -120,9 +120,9 @@ gnc_job_get_property (GObject         *object,
         g_value_set_string(value, job->name);
         break;
     case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_get_kvp (QOF_INSTANCE (job), key, value);
-	break;
+        key = OWNER_EXPORT_PDF_DIRNAME;
+        qof_instance_get_kvp (QOF_INSTANCE (job), key, value);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -149,9 +149,9 @@ gnc_job_set_property (GObject         *object,
         gncJobSetName(job, g_value_get_string(value));
         break;
     case PROP_PDF_DIRNAME:
-	key = OWNER_EXPORT_PDF_DIRNAME;
-	qof_instance_set_kvp (QOF_INSTANCE (job), key, value);
-	break;
+        key = OWNER_EXPORT_PDF_DIRNAME;
+        qof_instance_set_kvp (QOF_INSTANCE (job), key, value);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -204,10 +204,10 @@ gnc_job_class_init (GncJobClass *klass)
      g_param_spec_string ("export-pdf-dir",
                           "Export PDF Directory Name",
                           "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
+                          "appended to the target directory when writing them "
+                          "out. It is retrieved from preferences and stored on "
+                          "each 'Owner' object which prints items after "
+                          "printing.",
                           NULL,
                           G_PARAM_READWRITE));
 }
@@ -314,16 +314,15 @@ void gncJobSetRate (GncJob *job, gnc_numeric rate)
 
     gncJobBeginEdit (job);
     if (!gnc_numeric_zero_p(rate))
-        kvp_frame_set_numeric(job->inst.kvp_data, GNC_JOB_RATE, rate);
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, GNC_TYPE_NUMERIC);
+        g_value_set_boxed (&v, &rate);
+        qof_instance_set_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, &v);
+    }
     else
     {
-        KvpFrame *frame;
-        KvpValue *value;
-
-        value = NULL;
-        frame = kvp_frame_set_value_nc (job->inst.kvp_data,
-                                        GNC_JOB_RATE, value);
-        if (!frame) kvp_value_delete (value);
+        qof_instance_set_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, NULL);
     }
     mark_job (job);
     gncJobCommitEdit (job);
@@ -423,7 +422,7 @@ static void gncJobOnDone (QofInstance *qof) { }
 void gncJobCommitEdit (GncJob *job)
 {
     /* GnuCash 2.6.3 and earlier didn't handle job kvp's... */
-    if (!kvp_frame_is_empty (job->inst.kvp_data))
+    if (qof_instance_has_kvp (QOF_INSTANCE (job)))
         gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (job)), GNC_FEATURE_KVP_EXTRA_DATA);
 
     if (!qof_commit_edit (QOF_INSTANCE(job))) return;
@@ -454,8 +453,15 @@ const char * gncJobGetReference (const GncJob *job)
 
 gnc_numeric gncJobGetRate (const GncJob *job)
 {
+    GValue v = G_VALUE_INIT;
+    gnc_numeric *rate = NULL;
     if (!job) return gnc_numeric_zero ();
-    return kvp_frame_get_numeric(job->inst.kvp_data, GNC_JOB_RATE);
+    qof_instance_get_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        rate = (gnc_numeric*)g_value_get_boxed (&v);
+    if (rate)
+        return *rate;
+    return gnc_numeric_zero();
 }
 
 GncOwner * gncJobGetOwner (GncJob *job)

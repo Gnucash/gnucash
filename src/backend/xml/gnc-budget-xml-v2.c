@@ -57,7 +57,6 @@ xmlNodePtr
 gnc_budget_dom_tree_create(GncBudget *bgt)
 {
     xmlNodePtr ret;
-    KvpFrame *kf;
 
     ENTER ("(budget=%p)", bgt);
 
@@ -79,14 +78,9 @@ gnc_budget_dom_tree_create(GncBudget *bgt)
     /* field: Recurrence*  */
     xmlAddChild(ret, recurrence_to_dom_tree(bgt_recurrence_string,
                                             gnc_budget_get_recurrence(bgt)));
-    /* slots */
-    kf = qof_instance_get_slots(QOF_INSTANCE(bgt));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(bgt_slots_string, kf);
-        if (kvpnode)
-            xmlAddChild(ret, kvpnode);
-    }
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(bgt_slots_string,
+                                                    QOF_INSTANCE(bgt)));
 
     LEAVE (" ");
     return ret;
@@ -159,8 +153,7 @@ budget_recurrence_handler (xmlNodePtr node, gpointer bgt)
 static gboolean
 budget_slots_handler (xmlNodePtr node, gpointer bgt)
 {
-    return dom_tree_to_kvp_frame_given(
-               node, qof_instance_get_slots(QOF_INSTANCE(bgt)));
+     return dom_tree_create_instance_slots(node, QOF_INSTANCE(bgt));
 }
 
 static struct dom_tree_handler budget_handlers[] =

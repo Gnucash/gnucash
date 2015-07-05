@@ -1,5 +1,5 @@
 /********************************************************************
- * test-option-util.c: GLib g_test test suite for Split.c.	    *
+ * test-option-util.cpp: GLib test suite for option-util.c.	    *
  * Copyright 2013 John Ralls <jralls@ceridwen.us>		    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,16 +21,19 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
-
+#include <kvp_frame.hpp>
+#include <gmp.h> 
+extern "C"
+{
 #include <config.h>
 #include <glib.h>
 #include <unittest-support.h>
 #include <qofbookslots.h>
-
 #include "../option-util.h"
+}
 
 static const gchar *suitename = "/app-utils/option-util";
-void test_suite_option_util (void);
+extern "C" void test_suite_option_util (void);
 
 typedef struct
 {
@@ -41,7 +44,7 @@ typedef struct
 /* Expose a mostly-private QofInstance function to load options into
  * the Book.
  */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
+extern "C" KvpFrame *qof_instance_get_slots (const QofInstance*);
 
 static void
 setup (Fixture *fixture, gconstpointer pData)
@@ -65,8 +68,8 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
                      "autoreadonly-days", (double)21,
                      NULL);
 
-    kvp_frame_set_string (slots, "options/Business/Company Name",
-			  "Bogus Company");
+    slots->set_path("options/Business/Company Name",
+               new KvpValue("Bogus Company"));
     qof_commit_edit (QOF_INSTANCE (book));
 }
 
@@ -93,14 +96,14 @@ teardown (Fixture *fixture, gconstpointer pData)
 }
 
 static void
-test_option_load_from_kvp (Fixture *fixture, gconstpointer pData)
+test_option_load (Fixture *fixture, gconstpointer pData)
 {
     gchar *str = NULL;
     SCM symbol_value;
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
 
-    qof_book_load_options (book, gnc_option_db_load_from_kvp, odb);
+    qof_book_load_options (book, gnc_option_db_load, odb);
     symbol_value = gnc_currency_accounting_option_value_get_method (
                         gnc_option_db_lookup_option (odb,
                             OPTION_SECTION_ACCOUNTS,
@@ -127,7 +130,7 @@ test_option_load_from_kvp (Fixture *fixture, gconstpointer pData)
 }
 
 static void
-test_option_load_from_kvp_book_currency (Fixture *fixture, gconstpointer pData)
+test_option_load_book_currency (Fixture *fixture, gconstpointer pData)
 {
     gchar *str = NULL;
     SCM symbol_value;
@@ -137,7 +140,7 @@ test_option_load_from_kvp_book_currency (Fixture *fixture, gconstpointer pData)
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
 
-    qof_book_load_options (book, gnc_option_db_load_from_kvp, odb);
+    qof_book_load_options (book, gnc_option_db_load, odb);
     symbol_value = gnc_currency_accounting_option_value_get_method (
                         gnc_option_db_lookup_option (odb,
                             OPTION_SECTION_ACCOUNTS,
@@ -186,7 +189,7 @@ test_option_load_from_kvp_book_currency (Fixture *fixture, gconstpointer pData)
 }
 
 static void
-test_option_save_to_kvp (Fixture *fixture, gconstpointer pData)
+test_option_save (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
@@ -203,17 +206,17 @@ test_option_save_to_kvp (Fixture *fixture, gconstpointer pData)
     g_assert (gnc_option_db_set_number_option (odb, OPTION_SECTION_ACCOUNTS,
 					       OPTION_NAME_AUTO_READONLY_DAYS,
 					       17));
-    qof_book_save_options (book, gnc_option_db_save_to_kvp, odb, TRUE);
-    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Use Trading Accounts"), == , "t");
-    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Use Split Action Field for Number"), == , "t");
-    g_assert_cmpstr (kvp_frame_get_string (slots, "options/Business/Company Name"), ==, "Bogus Company");
-    g_assert_cmpfloat (kvp_frame_get_double (slots, "options/Accounts/Day Threshold for Read-Only Transactions (red line)"), ==, 17);
+    qof_book_save_options (book, gnc_option_db_save, odb, TRUE);
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Use Trading Accounts")->get<const char*>(), == , "t");
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Use Split Action Field for Number")->get<const char*>(), == , "t");
+    g_assert_cmpstr (slots->get_slot("options/Business/Company Name")->get<const char*>(), ==, "Bogus Company");
+    g_assert_cmpfloat (slots->get_slot("options/Accounts/Day Threshold for Read-Only Transactions (red line)")->get<double>(), ==, 17);
 
     gnc_option_db_destroy (odb);
 }
 
 static void
-test_option_save_to_kvp_book_currency (Fixture *fixture, gconstpointer pData)
+test_option_save_book_currency (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
@@ -224,19 +227,18 @@ test_option_save_to_kvp_book_currency (Fixture *fixture, gconstpointer pData)
 						scm_cons (scm_from_locale_symbol("book-currency"),
                         scm_cons (scm_from_utf8_string("GTQ"),
                         scm_cons (scm_from_locale_symbol("fifo"), SCM_EOL)))));
-    qof_book_save_options (book, gnc_option_db_save_to_kvp, odb, TRUE);
-    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Book Currency"), == , "GTQ");
-    g_assert_cmpstr (kvp_frame_get_string (slots,  "options/Accounts/Default Gains Policy"), == , "fifo");
+    qof_book_save_options (book, gnc_option_db_save, odb, TRUE);
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Book Currency")->get<const char*>(), == , "GTQ");
+    g_assert_cmpstr (slots->get_slot("options/Accounts/Default Gains Policy")->get<const char*>(), == , "fifo");
 
     gnc_option_db_destroy (odb);
 }
 
-void
+extern "C" void
 test_suite_option_util (void)
 {
-    GNC_TEST_ADD (suitename, "Option DB Load from KVP", Fixture, NULL, setup_kvp, test_option_load_from_kvp, teardown);
-    GNC_TEST_ADD (suitename, "Option DB Load from KVP - Book Currency", Fixture, NULL, setup_kvp_book_currency, test_option_load_from_kvp_book_currency, teardown);
-    GNC_TEST_ADD (suitename, "Option DB Save to KVP", Fixture, NULL, setup, test_option_save_to_kvp, teardown);
-    GNC_TEST_ADD (suitename, "Option DB Save to KVP - Book Currency", Fixture, NULL, setup, test_option_save_to_kvp_book_currency, teardown);
-
+    GNC_TEST_ADD (suitename, "Option DB Load", Fixture, NULL, setup_kvp, test_option_load, teardown);
+    GNC_TEST_ADD (suitename, "Option DB Load - Book Currency", Fixture, NULL, setup_kvp_book_currency, test_option_load_book_currency, teardown);
+    GNC_TEST_ADD (suitename, "Option DB Save", Fixture, NULL, setup, test_option_save, teardown);
+    GNC_TEST_ADD (suitename, "Option DB Save - Book Currency", Fixture, NULL, setup, test_option_save_book_currency, teardown);
 }

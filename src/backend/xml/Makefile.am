@@ -42,11 +42,11 @@ libgnc_backend_xml_utils_la_SOURCES = \
   gnc-xml-helper.c \
   io-example-account.c \
   io-gncxml-gen.c \
-  io-gncxml-v1.c \
+  io-gncxml-v1.cpp \
   io-gncxml-v2.c \
   io-utils.c \
-  sixtp-dom-generators.c \
-  sixtp-dom-parsers.c \
+  sixtp-dom-generators.cpp \
+  sixtp-dom-parsers.cpp \
   sixtp-stack.c \
   sixtp-to-dom-parser.c \
   sixtp-utils.c \

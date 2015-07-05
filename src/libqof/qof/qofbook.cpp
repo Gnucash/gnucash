@@ -56,6 +56,7 @@ extern "C"
 #include "qofid-p.h"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
+#include "kvp_frame.hpp"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 #define AB_KEY "hbci"
@@ -648,11 +649,11 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
         return -1;
     }
 
-    value = kvp_frame_get_slot_path (kvp, "counters", counter_name, NULL);
+    value = kvp->get_slot({"counters", counter_name});
     if (value)
     {
         /* found it */
-        return kvp_value_get_gint64 (value);
+        return value->get<int64_t>();
     }
     else
     {
@@ -702,9 +703,8 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 
     /* Save off the new counter */
     qof_book_begin_edit(book);
-    value = kvp_value_new_gint64 (counter);
-    kvp_frame_set_slot_path (kvp, value, "counters", counter_name, NULL);
-    kvp_value_delete (value);
+    value = new KvpValue(counter);
+    delete kvp->set_path({"counters", counter_name}, value);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 
@@ -752,10 +752,10 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
     format = NULL;
 
     /* Get the format string */
-    value = kvp_frame_get_slot_path (kvp, "counter_formats", counter_name, NULL);
+    value = kvp->get_slot({"counter_formats", counter_name});
     if (value)
     {
-        format = kvp_value_get_string (value);
+        format = value->get<const char*>();
         error = qof_book_validate_counter_format(format);
         if (error != NULL)
         {
@@ -914,19 +914,13 @@ qof_book_get_book_currency (QofBook *book)
         return NULL;
     }
 
-    /* See if there is a book currency */
-    value = kvp_frame_get_slot_path (kvp,
-                                     KVP_OPTION_PATH,
-                                     OPTION_SECTION_ACCOUNTS,
-                                     OPTION_NAME_BOOK_CURRENCY,
-                                     NULL);
-    if (!value)
-    /* No book-currency */
-    {
-        return NULL;
-    }
+    /* See if there is a book currency. */
+    value = kvp->get_slot({KVP_OPTION_PATH, OPTION_SECTION_ACCOUNTS,
+                           OPTION_NAME_BOOK_CURRENCY});
+    if (!value) /* No book-currency */
+        return nullptr;
 
-    return kvp_value_get_string (value);
+    return value->get<const char*>();
 }
 
 /** Returns pointer to default gain/loss policy for book, if one exists in the
@@ -956,19 +950,14 @@ qof_book_get_default_gains_policy (QofBook *book)
     }
 
     /* See if there is a default gain/loss policy */
-    value = kvp_frame_get_slot_path (kvp,
-                                     KVP_OPTION_PATH,
-                                     OPTION_SECTION_ACCOUNTS,
-                                     OPTION_NAME_DEFAULT_GAINS_POLICY,
-                                     NULL);
+    value = kvp->get_slot({KVP_OPTION_PATH, OPTION_SECTION_ACCOUNTS,
+                           OPTION_NAME_DEFAULT_GAINS_POLICY});
     if (!value)
     /* No default gain/loss policy, therefore not valid book-currency
        accounting method */
-    {
-        return NULL;
-    }
+        return nullptr;
 
-    return kvp_value_get_string (value);
+    return g_strdup(value->get<const char*>());
 }
 
 
@@ -1008,11 +997,8 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
-    KvpValue *kvp_val;
-    double tmp = 0;
-    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-
     g_assert(book);
+    double tmp;
     qof_instance_get (QOF_INSTANCE (book),
 		      "autoreadonly-days", &tmp,
 		      NULL);
@@ -1037,16 +1023,18 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    return kvp_frame_get_string(qof_instance_get_slots(QOF_INSTANCE (book)),
-				opt_name);
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name);
+    if (slot == nullptr)
+        return nullptr;
+    return slot->get<const char*>();
 }
 
 void
 qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val)
 {
     qof_book_begin_edit(book);
-    kvp_frame_set_string(qof_instance_get_slots(QOF_INSTANCE (book)),
-						opt_name, opt_val);
+    auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+    delete frame->set(opt_name, new KvpValue(opt_val));
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
@@ -1067,7 +1055,7 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 static void
 add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
 {
-    gchar *descr = kvp_value_get_string (value);
+    gchar *descr = g_strdup(value->get<const char*>());
     g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
 }
 
@@ -1075,10 +1063,11 @@ GHashTable *
 qof_book_get_features (QofBook *book)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    GHashTable *features = g_hash_table_new (g_str_hash, g_str_equal);
+    GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                  NULL, g_free);
 
-    frame = kvp_frame_get_frame (frame, GNC_FEATURES);
-    kvp_frame_for_each_slot (frame, &add_feature_to_hash, &features);
+    frame = frame->get_slot(GNC_FEATURES)->get<KvpFrame*>();
+    frame->for_each_slot(&add_feature_to_hash, &features);
     return features;
 }
 
@@ -1086,9 +1075,8 @@ void
 qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    gchar *path = g_strconcat (GNC_FEATURES, key, NULL);
     qof_book_begin_edit (book);
-    kvp_frame_set_string (frame, path, descr);
+    delete frame->set_path({GNC_FEATURES, key}, new KvpValue(descr));
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit (book);
 }
@@ -1096,17 +1084,20 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 void
 qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
 {
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    load_cb (odb, slots);
+    load_cb (odb, book);
 }
 
 void
 qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
 		       GNCOptionDB* odb, gboolean clear)
 {
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    save_cb (odb, slots, clear);
-    qof_instance_set_dirty (QOF_INSTANCE (book));
+    /* Wrap this in begin/commit so that it commits only once instead of doing
+     * so for every option. Qof_book_set_option will take care of dirtying the
+     * book.
+     */
+    qof_book_begin_edit (book);
+    save_cb (odb, book, clear);
+    qof_book_commit_edit (book);
 }
 
 static void noop (QofInstance *inst) {}
@@ -1116,6 +1107,38 @@ qof_book_commit_edit(QofBook *book)
 {
     if (!qof_commit_edit (QOF_INSTANCE(book))) return;
     qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
+}
+
+void
+qof_book_set_option (QofBook *book, KvpValue *value, GSList *path)
+{
+    KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE (book));
+    Path path_v {KVP_OPTION_PATH};
+    for (auto item = path; item != nullptr; item = g_slist_next(item))
+        path_v.push_back(static_cast<const char*>(item->data));
+    qof_book_begin_edit (book);
+    delete root->set_path(path_v, value);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit (book);
+}
+
+KvpValue*
+qof_book_get_option (QofBook *book, GSList *path)
+{
+    KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
+    Path path_v {KVP_OPTION_PATH};
+    for (auto item = path; item != nullptr; item = g_slist_next(item))
+        path_v.push_back(static_cast<const char*>(item->data));
+    return root->get_slot(path_v);
+}
+
+void
+qof_book_options_delete (QofBook *book)
+{
+    KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
+    auto option = root->get_slot(KVP_OPTION_PATH);
+    if (option != nullptr)
+        delete option->get<KvpFrame*>();
 }
 
 /* QofObject function implementation and registration */

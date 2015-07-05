@@ -752,11 +752,8 @@
                                 (localtime 
                                  (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
-	  (tax-nr (or 
-		   (kvp-frame-get-slot-path-gslist
-		    (qof-book-get-slots (gnc-get-current-book))
-		    (append gnc:*kvp-option-path*
-			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
+	  (tax-nr (or
+                   (gnc:option-get-value gnc:*tax-label* gnc:*tax-nr-label*)
 		   ""))
 	  )
 

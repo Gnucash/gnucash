@@ -1808,19 +1808,6 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                                 gnc_num_dbg_to_string (pdata->amount));
         return;
     }
-    if (!g_strcmp0 (pd->type_name, QOF_TYPE_KVP))
-    {
-        GSList *node;
-        query_kvp_t pdata = (query_kvp_t) pd;
-        g_string_append_printf (gs, " kvp path: ");
-        for (node = pdata->path; node; node = node->next)
-        {
-            g_string_append_printf (gs, "/%s", (gchar *) node->data);
-        }
-        g_string_append_printf (gs, " kvp value: %s ",
-                                kvp_value_to_string (pdata->value));
-        return;
-    }
     if (!g_strcmp0 (pd->type_name, QOF_TYPE_INT64))
     {
         query_int64_t pdata = (query_int64_t) pd;

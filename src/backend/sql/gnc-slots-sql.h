@@ -28,10 +28,13 @@
 
 #ifndef GNC_SLOTS_SQL_H
 #define GNC_SLOTS_SQL_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <glib.h>
 #include "guid.h"
-#include "kvp_frame.h"
 #include "qof.h"
 #include "gnc-backend-sql.h"
 
@@ -41,11 +44,11 @@
  * @param be SQL backend
  * @param guid Object guid
  * @param is_infant Is this an infant object?
- * @param pFrame Top-level KVP frame
+ * @param inst The QodInstance owning the slots.
  * @return TRUE if successful, FALSE if error
  */
 gboolean gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid,
-                             gboolean is_infant, KvpFrame* pFrame );
+                             gboolean is_infant, QofInstance *inst );
 
 /**
  * gnc_sql_slots_delete - Deletes slots for an object from the db.
@@ -88,4 +91,7 @@ void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subque
 
 void gnc_sql_init_slots_handler( void );
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* GNC_SLOTS_SQL_H */

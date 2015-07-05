@@ -53,30 +53,20 @@ const gchar *lot_version_string = "2.0.0";
 #define gnc_lot_string "gnc:lot"
 #define lot_id_string "lot:id"
 #define lot_slots_string "lot:slots"
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance *);
 
 xmlNodePtr
 gnc_lot_dom_tree_create(GNCLot *lot)
 {
     xmlNodePtr ret;
-    KvpFrame *kf;
 
     ENTER("(lot=%p)", lot);
     ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST lot_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(lot_id_string, gnc_lot_get_guid(lot)));
-
-    kf = qof_instance_get_slots (QOF_INSTANCE (lot));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(lot_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(lot_slots_string,
+                                                    QOF_INSTANCE(lot)));
 
     LEAVE("");
     return ret;
@@ -113,8 +103,7 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
     gboolean success;
 
     ENTER("(lot=%p)", pdata->lot);
-    success = dom_tree_to_kvp_frame_given
-	(node, qof_instance_get_slots (QOF_INSTANCE (pdata->lot)));
+    success = dom_tree_create_instance_slots(node, QOF_INSTANCE (pdata->lot));
 
     LEAVE("");
     g_return_val_if_fail(success, FALSE);

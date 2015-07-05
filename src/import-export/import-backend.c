@@ -1116,7 +1116,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 /********************************************************************\
  * check_trans_online_id() Callback function used by
  * gnc_import_exists_online_id.  Takes pointers to transaction and split,
- * returns 0 if their online_id kvp_frames do NOT match, or if the split
+ * returns 0 if their online_ids  do NOT match, or if the split
  * belongs to the transaction
 \********************************************************************/
 static gint check_trans_online_id(Transaction *trans1, void *user_data)

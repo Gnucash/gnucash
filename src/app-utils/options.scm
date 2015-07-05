@@ -37,8 +37,8 @@
          ;; value.
          generate-restore-form
          ;; the scm->kvp and kvp->scm functions should save and load
-         ;; the option to a kvp.  The arguments to these function will be
-         ;; a kvp-frame and a base key-path list for this option.
+         ;; the option to the book.  The arguments to these function will be
+         ;; a book and a base key-path list for this option.
          scm->kvp
          kvp->scm
          ;; Validation func should accept a value and return (#t value)
@@ -211,9 +211,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b value p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
              (set! value v))))
      (lambda (x)
@@ -235,9 +235,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b value p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
              (set! value v))))
      (lambda (x)
@@ -269,9 +269,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)     
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b value p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
              (set! value v))))
      (lambda (x)
@@ -308,9 +308,9 @@
       (lambda (x) (set! value (currency->scm x)))
       (lambda ()  (scm->currency default-value))
       (gnc:restore-form-generator value->string)
-      (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
-      (lambda (f p)
-        (let ((v (kvp-frame-get-slot-path-gslist f p)))
+      (lambda (b p) (qof-book-set-option b value p))
+      (lambda (b p)
+        (let ((v (qof-book-get-option b p)))
           (if (and v (string? v))
               (set! value v))))
       (lambda (x) (list #t x))
@@ -369,14 +369,14 @@
 	" (gnc-get-current-book)))))"))
 
      ;; scm->kvp -- commit the change
-     ;; f -- kvp-frame;  p -- key-path
-     (lambda (f p) 
-       (kvp-frame-set-slot-path-gslist 
-	f (gncBudgetGetGUID selection-budget) p))
+     ;; b -- book;  p -- key-path
+     (lambda (b p) 
+       (qof-book-set-option 
+	b (gncBudgetGetGUID selection-budget) p))
 
      ;; kvp->scm -- get the stored value
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
 	     (begin 
 	       (set! selection-budget (gnc-budget-lookup v (gnc-get-current-book)))))))
@@ -441,12 +441,12 @@
                       (set! value (commodity->scm x))))
       (lambda () default-value)
       (gnc:restore-form-generator value->string)
-      (lambda (f p) 
-        (kvp-frame-set-slot-path-gslist f (cadr value) (append p '("ns")))
-        (kvp-frame-set-slot-path-gslist f (caddr value) (append p '("monic"))))
-      (lambda (f p)
-        (let ((ns (kvp-frame-get-slot-path-gslist f (append p '("ns"))))
-              (monic (kvp-frame-get-slot-path-gslist f (append p '("monic")))))
+      (lambda (b p) 
+        (qof-book-set-option b (cadr value) (append p '("ns")))
+        (qof-book-set-option b (caddr value) (append p '("monic"))))
+      (lambda (b p)
+        (let ((ns (qof-book-get-option b (append p '("ns"))))
+              (monic (qof-book-get-option b (append p '("monic")))))
           (if (and ns monic (string? ns) (string? monic))
               (set! value (list 'commodity-scm ns monic)))))
       (lambda (x) (list #t x))
@@ -500,14 +500,14 @@
                  (setter-function-called-cb x)))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f 
+     (lambda (b p) (qof-book-set-option b
 		    ;; As no boolean KvpValue exists, as a workaround
 		    ;; we store the string "t" for TRUE and "f" for
 		    ;; FALSE in a string KvpValue.
                     (if value "t" "f") 
                     p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
 	 ;; As no boolean KvpValue exists, as a workaround we store
 	 ;; the string "t" for TRUE and "f" for FALSE.
          (cond ((equal? v "t") (set! v #t))
@@ -582,17 +582,17 @@
            (gnc:error "Illegal date value set:" date)))
      default-getter
      (gnc:restore-form-generator value->string)
-     (lambda (f p)
-       (kvp-frame-set-slot-path-gslist f (symbol->string (car value))
+     (lambda (b p)
+       (qof-book-set-option b (symbol->string (car value))
                                        (append p '("type")))
-       (kvp-frame-set-slot-path-gslist f
+       (qof-book-set-option b
                                        (if (symbol? (cdr value))
                                            (symbol->string (cdr value))
                                            (cdr value))
                                        (append p '("value"))))
-     (lambda (f p)
-       (let ((t (kvp-frame-get-slot-path-gslist f (append p '("type"))))
-             (v (kvp-frame-get-slot-path-gslist f (append p '("value")))))
+     (lambda (b p)
+       (let ((t (qof-book-get-option b (append p '("type"))))
+             (v (qof-book-get-option b (append p '("value")))))
          (if (and t v (string? t))
              (set! value (cons (string->symbol t)
                                (if (string? v) (string->symbol v) v))))))
@@ -720,25 +720,25 @@
              (gnc:error "Illegal account list value set"))))
      (lambda () (map convert-to-account (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p)
+     (lambda (b p)
        (define (save-acc list count)
          (if (not (null? list))
              (let ((key (string-append "acc" (gnc:value->string count))))
-               (kvp-frame-set-slot-path-gslist f (car list) (append p (list key)))
+               (qof-book-set-option b (car list) (append p (list key)))
                (save-acc (cdr list) (+ 1 count)))))
 
        (if option-set
            (begin
-             (kvp-frame-set-slot-path-gslist f (length option)
+             (qof-book-set-option b (length option)
                                              (append p '("len")))
              (save-acc option 0))))
-     (lambda (f p)
-       (let ((len (kvp-frame-get-slot-path-gslist f (append p '("len")))))
+     (lambda (b p)
+       (let ((len (qof-book-get-option b (append p '("len")))))
          (define (load-acc count)
            (if (< count len)
                (let* ((key (string-append "acc" (gnc:value->string count)))
-                      (guid (kvp-frame-get-slot-path-gslist
-                             f (append p (list key)))))
+                      (guid (qof-book-get-option
+                             b (append p (list key)))))
                  (cons guid (load-acc (+ count 1))))
                '()))
          
@@ -839,9 +839,9 @@
              (gnc:error "Illegal account value set"))))
      (lambda () (convert-to-account (get-default)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b option p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
              (set! option v))))
      validator
@@ -918,9 +918,9 @@
            (gnc:error "Illegal Multichoice option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f (symbol->string value) p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b (symbol->string value) p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
              (set! value (string->symbol v)))))
      (lambda (x)
@@ -1004,9 +1004,9 @@
            (gnc:error "Illegal Radiobutton option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f (symbol->string value) p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b (symbol->string value) p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
              (set! value (string->symbol v)))))
      (lambda (x)
@@ -1066,21 +1066,21 @@
            (gnc:error "Illegal list option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p)
+     (lambda (b p)
        (define (save-item list count)
          (if (not (null? list))
              (let ((key (string-append "item" (gnc:value->string count))))
-               (kvp-frame-set-slot-path-gslist f (car list) (append p (list key)))
+               (qof-book-set-option b (car list) (append p (list key)))
                (save-item (cdr list) (+ 1 count)))))
-       (kvp-frame-set-slot-path-gslist f (length value) (append p '("len")))
+       (qof-book-set-option b (length value) (append p '("len")))
        (save-item value 0))
-     (lambda (f p)
-       (let ((len (kvp-frame-get-slot-path-gslist f (append p '("len")))))
+     (lambda (b p)
+       (let ((len (qof-book-get-option b (append p '("len")))))
          (define (load-item count)
            (if (< count len)
                (let* ((key (string-append "item" (gnc:value->string count)))
-                      (val (kvp-frame-get-slot-path-gslist
-                            f (append p (list key)))))
+                      (val (qof-book-get-option
+                            b (append p (list key)))))
                  (cons val (load-item (+ count 1))))
                '()))
 
@@ -1118,9 +1118,9 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b value p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
          (if (and v (number? v))
              (set! value v))))
      (lambda (x)
@@ -1277,19 +1277,19 @@
      (lambda (x) (set! value x))
      (lambda () (def-value))
      (gnc:restore-form-generator value->string)
+     (lambda (b p)
+       (qof-book-set-option
+        b (symbol->string (car value)) (append p '("fmt")))
+       (qof-book-set-option
+        b (symbol->string (cadr value)) (append p '("month")))
+       (qof-book-set-option
+        b (if (caddr value) 1 0) (append p '("years")))
+       (qof-book-set-option  (cadddr value) (append p '("custom"))))
      (lambda (f p)
-       (kvp-frame-set-slot-path-gslist
-        f (symbol->string (car value)) (append p '("fmt")))
-       (kvp-frame-set-slot-path-gslist
-        f (symbol->string (cadr value)) (append p '("month")))
-       (kvp-frame-set-slot-path-gslist
-        f (if (caddr value) 1 0) (append p '("years")))
-       (kvp-frame-set-slot-path-gslist f (cadddr value) (append p '("custom"))))
-     (lambda (f p)
-       (let ((fmt (kvp-frame-get-slot-path-gslist f (append p '("fmt"))))
-             (month (kvp-frame-get-slot-path-gslist f (append p '("month"))))
-             (years (kvp-frame-get-slot-path-gslist f (append p '("years"))))
-             (custom (kvp-frame-get-slot-path-gslist f (append p '("custom")))))
+       (let ((fmt (qof-book-get-option f (append p '("fmt"))))
+             (month (qof-book-get-option f (append p '("month"))))
+             (years (qof-book-get-option f (append p '("years"))))
+             (custom (qof-book-get-option f (append p '("custom")))))
          (if (and
               fmt (string? fmt)
               month (string? month)
@@ -1364,14 +1364,11 @@
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string
                                                (car value)))))
-         (trading-accounts-path (list (car gnc:*kvp-option-path*)
-                                      gnc:*option-section-accounts*
+         (trading-accounts-path (list gnc:*option-section-accounts*
                                       gnc:*option-name-trading-accounts*))
-         (book-currency-path (list (car gnc:*kvp-option-path*)
-                                   gnc:*option-section-accounts*
+         (book-currency-path (list gnc:*option-section-accounts*
                                    gnc:*option-name-book-currency*))
-         (gains-policy-path (list (car gnc:*kvp-option-path*)
-                                  gnc:*option-section-accounts*
+         (gains-policy-path (list gnc:*option-section-accounts*
                                   gnc:*option-name-default-gains-policy*)))
     (gnc:make-option
      section name sort-tag 'currency-accounting
@@ -1387,26 +1384,26 @@
                                 (cons default-cap-gains-policy-value '())))
                     (cons default-radiobutton-value '())))
      (gnc:restore-form-generator value->string)
-     (lambda (f p)
+     (lambda (b p)
        (if (eq? 'book-currency (car value))
            (begin
              ;; Currency = selected currency
-             (kvp-frame-set-slot-path-gslist
-                f
+             (qof-book-set-option
+                b
                 (currency->scm (cadr value))
                 book-currency-path)
              ;; Default Gains Policy = selected policy
-             (kvp-frame-set-slot-path-gslist
-                f
+             (qof-book-set-option
+                b
                 (symbol->string (caddr value))
                 gains-policy-path))
            (if (eq? 'trading (car value))
                ;; Use Trading Accounts = "t"
-               (kvp-frame-set-slot-path-gslist f "t" trading-accounts-path))))
-     (lambda (f p)
+               (qof-book-set-option b "t" trading-accounts-path))))
+     (lambda (b p)
        (let* ((trading-option-path-kvp?
-                       (kvp-frame-get-slot-path-gslist
-                        f trading-accounts-path))
+                       (qof-book-get-option
+                        b trading-accounts-path))
               (trading? (if (and trading-option-path-kvp?
                                  (string=? "t" trading-option-path-kvp?))
                             #t
@@ -1416,11 +1413,11 @@
               (v (if trading?
                      'trading
                      (let* ((book-currency-option-path-kvp?
-                                 (kvp-frame-get-slot-path-gslist
-                                     f book-currency-path))
+                                 (qof-book-get-option
+                                     b book-currency-path))
                             (gains-policy-option-path-kvp?
-                                 (kvp-frame-get-slot-path-gslist
-                                     f gains-policy-path))
+                                 (qof-book-get-option
+                                     b gains-policy-path))
                             (book-currency?
                                (if (and book-currency-option-path-kvp?
                                         gains-policy-option-path-kvp?
@@ -1650,7 +1647,7 @@
 
     (call-with-output-string generate-forms))
 
-  (define (scm->kvp kvp-frame key-path)
+  (define (scm->kvp book)
     (options-for-each
      (lambda (option)
        (let ((value (gnc:option-value option))
@@ -1663,18 +1660,16 @@
              (let ((save-fcn (gnc:option-scm->kvp option)))
                (gnc:debug "save-fcn: " save-fcn)
                (if save-fcn
-                   (save-fcn kvp-frame (append key-path
-                                               (list section name))))))))))
+                   (save-fcn book (list section name)))))))))
 
-  (define (kvp->scm kvp-frame key-path)
+  (define (kvp->scm book)
     (options-for-each
      (lambda (option)
        (let ((section (gnc:option-section option))
              (name (gnc:option-name option))
              (load-fcn (gnc:option-kvp->scm option)))
          (if load-fcn
-             (load-fcn kvp-frame (append key-path
-                                         (list section name))))))))
+             (load-fcn book (list section name)))))))
 
   (define (register-callback section name callback)
     (let ((id last-callback-id)
@@ -1774,13 +1769,13 @@
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))
 
-(define (gnc:options-scm->kvp options kvp-frame key-path clear-kvp?)
-  (if clear-kvp?
-      (gnc-kvp-frame-delete-at-path kvp-frame key-path))
-  ((options 'scm->kvp) kvp-frame key-path))
+(define (gnc:options-scm->kvp options book clear-option?)
+  (if clear-option?
+      (qof-book-options-delete book))
+  ((options 'scm->kvp) book))
 
-(define (gnc:options-kvp->scm options kvp-frame key-path)
-  ((options 'kvp->scm) kvp-frame key-path))
+(define (gnc:options-kvp->scm options book)
+  ((options 'kvp->scm) book))
 
 (define (gnc:options-clear-changes options)
   ((options 'clear-changes)))

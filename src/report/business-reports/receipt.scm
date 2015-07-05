@@ -69,12 +69,6 @@
         (display-comm-coll-total amttot #f))
       (if (and (not amt?) (not pc?)) (display (_ "n/a"))))))        ; neither
 
-(define (coy-info slots key)
-  ;; Extract a value from the company info key-value pairs
-  (kvp-frame-get-slot-path-gslist
-    slots
-    (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define all the options
 

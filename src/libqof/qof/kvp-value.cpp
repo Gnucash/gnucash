@@ -71,29 +71,29 @@ KvpValueImpl::add(KvpValueImpl * val) noexcept
     return new KvpValueImpl(list);
 }
 
-KvpValueType
+KvpValue::Type
 KvpValueImpl::get_type() const noexcept
 {
     if (datastore.type() == typeid(int64_t))
-        return KvpValueType::KVP_TYPE_GINT64;
+        return KvpValue::Type::INT64;
     else if (datastore.type() == typeid(double))
-        return KvpValueType::KVP_TYPE_DOUBLE;
+        return KvpValue::Type::DOUBLE;
     else if (datastore.type() == typeid(gnc_numeric))
-        return KvpValueType::KVP_TYPE_NUMERIC;
-    else if (datastore.type() == typeid(gchar *))
-        return KvpValueType::KVP_TYPE_STRING;
+        return KvpValue::Type::NUMERIC;
+    else if (datastore.type() == typeid(const gchar *))
+        return KvpValue::Type::STRING;
     else if (datastore.type() == typeid(GncGUID *))
-        return KvpValueType::KVP_TYPE_GUID;
+        return KvpValue::Type::GUID;
     else if (datastore.type() == typeid(Timespec))
-        return KvpValueType::KVP_TYPE_TIMESPEC;
+        return KvpValue::Type::TIMESPEC;
     else if (datastore.type() == typeid(GList *))
-        return KvpValueType::KVP_TYPE_GLIST;
+        return KvpValue::Type::GLIST;
     else if (datastore.type() == typeid(KvpFrameImpl *))
-        return KvpValueType::KVP_TYPE_FRAME;
+        return KvpValue::Type::FRAME;
     else if (datastore.type() == typeid(GDate))
-        return KvpValueType::KVP_TYPE_GDATE;
+        return KvpValue::Type::GDATE;
 
-    return KVP_TYPE_INVALID;
+    return KvpValue::Type::INVALID;
 }
 
 KvpFrame *
@@ -129,14 +129,7 @@ struct to_string_visitor : boost::static_visitor<void>
 
     void operator()(KvpFrame * val)
     {
-        auto tmp1 = kvp_frame_to_string(val);
-        output << "KVP_VALUE_FRAME(";
-        if (tmp1)
-        {
-            output << tmp1;
-            g_free(tmp1);
-        }
-        output << ")";
+        output << "KVP_VALUE_FRAME(" << val->to_string() << ")";
     }
 
     void operator()(GDate val)
@@ -202,7 +195,7 @@ struct to_string_visitor : boost::static_visitor<void>
         output << ")";
     }
 
-    void operator()(char * val)
+    void operator()(const char * val)
     {
         output << "KVP_VALUE_STRING(" << val << ")";
     }
@@ -224,6 +217,55 @@ KvpValueImpl::to_string() const noexcept
     return g_strdup(ret.str().c_str());
 }
 
+static int
+kvp_glist_compare(const GList * list1, const GList * list2)
+{
+    const GList *lp1;
+    const GList *lp2;
+
+    if (list1 == list2) return 0;
+
+    /* Nothing is always less than something */
+    if (!list1 && list2) return -1;
+    if (list1 && !list2) return 1;
+
+    lp1 = list1;
+    lp2 = list2;
+    while (lp1 && lp2)
+    {
+        KvpValue *v1 = (KvpValue *) lp1->data;
+        KvpValue *v2 = (KvpValue *) lp2->data;
+        gint vcmp = compare(v1, v2);
+        if (vcmp != 0) return vcmp;
+        lp1 = lp1->next;
+        lp2 = lp2->next;
+    }
+    if (!lp1 && lp2) return -1;
+    if (!lp2 && lp1) return 1;
+    return 0;
+}
+
+static GList *
+kvp_glist_copy(const GList * list)
+{
+    GList * retval = NULL;
+    GList * lptr;
+
+    if (!list) return retval;
+
+    /* Duplicate the backbone of the list (this duplicates the POINTERS
+     * to the values; we need to deep-copy the values separately) */
+    retval = g_list_copy((GList *) list);
+
+    /* This step deep-copies the values */
+    for (lptr = retval; lptr; lptr = lptr->next)
+    {
+        lptr->data = new KvpValue(*static_cast<KvpValue *>(lptr->data));
+    }
+
+    return retval;
+}
+
 struct compare_visitor : boost::static_visitor<int>
 {
     template <typename T, typename U>
@@ -243,7 +285,7 @@ struct compare_visitor : boost::static_visitor<int>
         return 0;
     }
 };
-template <> int compare_visitor::operator()(char * const & one, char * const & two) const
+template <> int compare_visitor::operator()(const char * const & one, const char * const & two) const
 {
     return strcmp(one, two);
 }
@@ -269,7 +311,7 @@ template <> int compare_visitor::operator()(GList * const & one, GList * const &
 }
 template <> int compare_visitor::operator()(KvpFrame * const & one, KvpFrame * const & two) const
 {
-    return kvp_frame_compare(one, two);
+    return compare(one, two);
 }
 template <> int compare_visitor::operator()(double const & one, double const & two) const
 {
@@ -307,10 +349,16 @@ struct delete_visitor : boost::static_visitor<void>
     operator()(T &) { /*do nothing*/ }
 };
 
+static void
+destroy_value(void* item)
+{
+    delete static_cast<KvpValue*>(item);
+}
+
 template <> void
 delete_visitor::operator()(GList * & value)
 {
-    kvp_glist_delete(value);
+    g_list_free_full(value, destroy_value);
 }
 template <> void
 delete_visitor::operator()(gchar * & value)
@@ -325,7 +373,7 @@ delete_visitor::operator()(GncGUID * & value)
 template <> void
 delete_visitor::operator()(KvpFrame * & value)
 {
-    kvp_frame_delete(value);
+    delete value;
 }
 
 KvpValueImpl::~KvpValueImpl() noexcept
@@ -337,14 +385,15 @@ KvpValueImpl::~KvpValueImpl() noexcept
 void
 KvpValueImpl::duplicate(const KvpValueImpl& other) noexcept
 {
-    if (other.datastore.type() == typeid(gchar *))
-        this->datastore = g_strdup(other.get<gchar *>());
+    if (other.datastore.type() == typeid(const gchar *))
+        this->datastore = g_strdup(other.get<const gchar *>());
     else if (other.datastore.type() == typeid(GncGUID*))
         this->datastore = guid_copy(other.get<GncGUID *>());
     else if (other.datastore.type() == typeid(GList*))
         this->datastore = kvp_glist_copy(other.get<GList *>());
     else if (other.datastore.type() == typeid(KvpFrame*))
-        this->datastore = kvp_frame_copy(other.get<KvpFrame *>());
+        this->datastore = new KvpFrame(*other.get<KvpFrame *>());
     else
         this->datastore = other.datastore;
 }
+

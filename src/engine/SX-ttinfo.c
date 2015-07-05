@@ -27,7 +27,6 @@
 
 #include "SX-ttinfo.h"
 
-/* KvpFrame policy? */
 struct TTInfo_s
 {
     /* FIXME add notes field */
@@ -41,7 +40,6 @@ struct TTInfo_s
 struct TTSplitInfo_s
 {
     char *action; /* owned by us */
-    /* FIXME: What about the split's KvpFrame */
     char *memo; /* owned by us */
     char *credit_formula, *debit_formula; /* owned by us */
     Account *acc;

@@ -627,10 +627,7 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
 
     if ( is_ok && !qof_instance_get_destroying (inst))
     {
-        is_ok = gnc_sql_slots_save( be,
-                                    guid,
-                                    is_infant,
-                                    qof_instance_get_slots( inst ) );
+        is_ok = gnc_sql_slots_save( be, guid, is_infant, inst);
     }
 
     return is_ok;
@@ -724,7 +721,7 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
         guid = qof_instance_get_guid( inst );
         if ( !qof_instance_get_destroying(inst) )
         {
-            is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+            is_ok = gnc_sql_slots_save( be, guid, is_infant, inst);
             if ( ! is_ok )
             {
                 err = "Slots save failed. Check trace log for SQL errors";

@@ -21,11 +21,8 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include "config.h"
 #include <string.h>
 #include <glib.h>
@@ -51,10 +48,9 @@ extern "C"
 
 static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
-
-#ifdef __cplusplus
 }
-#endif
+
+#include <kvp_frame.hpp>
 
 typedef struct
 {
@@ -307,7 +303,7 @@ test_xaccDupeSplit (Fixture *fixture, gconstpointer pData)
     g_assert (split->lot == f_split->lot);
     g_assert_cmpstr (split->memo, ==, f_split->memo);
     g_assert_cmpstr (split->action, ==, f_split->action);
-    g_assert (kvp_frame_compare (split->inst.kvp_data, f_split->inst.kvp_data) == 0);
+    g_assert (compare (split->inst.kvp_data, f_split->inst.kvp_data) == 0);
     g_assert_cmpint (split->reconciled, ==, f_split->reconciled);
     g_assert (timespec_equal (&(split->date_reconciled), &(f_split->date_reconciled)));
     g_assert (gnc_numeric_equal (split->value, f_split->value));
@@ -342,7 +338,7 @@ test_xaccSplitCloneNoKvp (Fixture *fixture, gconstpointer pData)
     g_assert (split->lot == f_split->lot);
     g_assert_cmpstr (split->memo, ==, f_split->memo);
     g_assert_cmpstr (split->action, ==, f_split->action);
-    g_assert (kvp_frame_is_empty (split->inst.kvp_data));
+    g_assert (split->inst.kvp_data->empty());
     g_assert_cmpint (split->reconciled, ==, f_split->reconciled);
     g_assert (timespec_equal (&(split->date_reconciled), &(f_split->date_reconciled)));
     g_assert (gnc_numeric_equal (split->value, f_split->value));
@@ -742,12 +738,12 @@ test_xaccSplitDetermineGainStatus (Fixture *fixture, gconstpointer pData)
 
     fixture->split->gains = GAINS_STATUS_UNKNOWN;
     fixture->split->gains_split = NULL;
-    g_assert (kvp_frame_get_slot (fixture->split->inst.kvp_data, "gains_source") == NULL);
+    g_assert (fixture->split->inst.kvp_data->get_slot("gains_source") == NULL);
     xaccSplitDetermineGainStatus (fixture->split);
     g_assert (fixture->split->gains_split == NULL);
     g_assert_cmpint (fixture->split->gains, ==, GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY);
 
-    kvp_frame_set_guid (fixture->split->inst.kvp_data, "gains-source", g_guid);
+    fixture->split->inst.kvp_data->set("gains-source", new KvpValue(const_cast<GncGUID*>(g_guid)));
     g_assert (fixture->split->gains_split == NULL);
     fixture->split->gains = GAINS_STATUS_UNKNOWN;
     xaccSplitDetermineGainStatus (fixture->split);
@@ -1777,13 +1773,13 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     Split *split1 = xaccMallocSplit (book);
     Split *split2 = xaccMallocSplit (book);
     Account *acc2 = xaccMallocAccount (book);
-    KvpValue *kvptrue = kvp_value_new_string ("t");
+    KvpValue *kvpnow = new KvpValue (gnc_time (NULL));
 
     g_assert (xaccSplitGetOtherSplit (NULL) == NULL);
     g_assert (xaccSplitGetOtherSplit (split1) == NULL);
 
     g_assert (xaccTransUseTradingAccounts (txn) == FALSE);
-    g_assert (kvp_frame_get_slot (split->inst.kvp_data, "lot-split") == NULL);
+    g_assert (split->inst.kvp_data->get_slot("lot-split") == NULL);
     g_assert_cmpint (xaccTransCountSplits (txn), !=, 2);
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
@@ -1794,18 +1790,18 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     xaccSplitSetParent (split2, txn);
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
-    kvp_frame_set_slot (split->inst.kvp_data, "lot-split", kvptrue);
-    g_assert (kvp_frame_get_slot (split->inst.kvp_data, "lot-split"));
+    split->inst.kvp_data->set("lot-split", kvpnow);
+    g_assert (split->inst.kvp_data->get_slot("lot-split"));
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
-    kvp_frame_set_slot (split1->inst.kvp_data, "lot-split", kvptrue);
-    g_assert (kvp_frame_get_slot (split1->inst.kvp_data, "lot-split"));
+    split1->inst.kvp_data->set("lot-split", kvpnow);
+    g_assert (split1->inst.kvp_data->get_slot("lot-split"));
     g_assert (xaccSplitGetOtherSplit (split) == split2);
 
-    kvp_frame_set_slot (split->inst.kvp_data, "lot-split", NULL);
-    g_assert (kvp_frame_get_slot (split->inst.kvp_data, "lot-split") == NULL);
-    kvp_frame_set_slot (split1->inst.kvp_data, "lot-split", NULL);
-    g_assert (kvp_frame_get_slot (split1->inst.kvp_data, "lot-split") == NULL);
+    split->inst.kvp_data->set("lot-split", NULL);
+    g_assert (split->inst.kvp_data->get_slot("lot-split") == NULL);
+    split1->inst.kvp_data->set("lot-split", NULL);
+    g_assert (split1->inst.kvp_data->get_slot("lot-split") == NULL);
     qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "trading-accts", "t",

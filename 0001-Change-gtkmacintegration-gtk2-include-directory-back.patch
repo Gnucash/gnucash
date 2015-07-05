@@ -1,0 +1,41 @@
+From b9de55c8711b07c0fdf83d9838c8a5d65222e887 Mon Sep 17 00:00:00 2001
+From: John Ralls <jralls@ceridwen.us>
+Date: Sun, 24 May 2015 18:05:04 -0700
+Subject: [PATCH] Change gtkmacintegration-gtk2 include directory back to
+ gtkmacintegration.
+
+As of gtk-mac-integration-2.0.8.
+---
+ src/core-utils/binreloc.c         | 2 +-
+ src/gnome-utils/gnc-main-window.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/core-utils/binreloc.c b/src/core-utils/binreloc.c
+index 6a2a55f..4e72494 100644
+--- a/src/core-utils/binreloc.c
++++ b/src/core-utils/binreloc.c
+@@ -24,7 +24,7 @@
+ #include <sys/stat.h>
+ #include <unistd.h>
+ #ifdef MAC_INTEGRATION
+-#include <gtkmacintegration-gtk2/gtkosxapplication.h>
++#include <gtkmacintegration/gtkosxapplication.h>
+ #endif
+ #endif /* ENABLE_BINRELOC */
+ #include <stdio.h>
+diff --git a/src/gnome-utils/gnc-main-window.c b/src/gnome-utils/gnc-main-window.c
+index 89462ef..c77637d 100644
+--- a/src/gnome-utils/gnc-main-window.c
++++ b/src/gnome-utils/gnc-main-window.c
+@@ -70,7 +70,7 @@
+ #include "gnc-autosave.h"
+ #include "print-session.h"
+ #ifdef MAC_INTEGRATION
+-#include <gtkmacintegration-gtk2/gtkosxapplication.h>
++#include <gtkmacintegration/gtkosxapplication.h>
+ #endif
+ #ifdef HAVE_SYS_STAT_H
+ # include <sys/types.h>
+-- 
+2.2.2
+

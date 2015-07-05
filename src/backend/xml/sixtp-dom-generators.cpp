@@ -20,7 +20,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-
+extern "C"
+{
 #define __EXTENSIONS__
 
 #include "config.h"
@@ -31,6 +32,9 @@
 
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
+}
+
+#include <kvp_frame.hpp>
 
 static QofLogModule log_module = GNC_MOD_IO;
 
@@ -237,124 +241,113 @@ double_to_string(double value)
 }
 
 static void
-add_text_to_node(xmlNodePtr node, gchar *type, gchar *val)
+add_text_to_node(xmlNodePtr node, const gchar *type, gchar *val)
 {
     gchar *newtype = g_strdup (type);
     gchar *newval = g_strdup (val);
-    xmlSetProp(node, BAD_CAST "type", checked_char_cast (type));
+    xmlSetProp(node, BAD_CAST "type", BAD_CAST type);
     xmlNodeSetContent(node, checked_char_cast (val));
     g_free (newtype);
     g_free(newval);
 }
 
-static void
-add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node);
+static void add_kvp_slot(const char * key, KvpValue* value, void* data);
 
 static void
-add_kvp_value_node(xmlNodePtr node, gchar *tag, KvpValue* val)
+add_kvp_value_node(xmlNodePtr node, const gchar *tag, KvpValue* val)
 {
     xmlNodePtr val_node;
-    kvp_value_t kvp_type;
 
-    kvp_type = kvp_value_get_type(val);
-
-    if (kvp_type == KVP_TYPE_STRING)
+    switch (val->get_type())
     {
-	gchar *newstr = g_strdup (kvp_value_get_string(val));
+    case KvpValue::Type::STRING:
+    {
+	auto newstr = g_strdup(val->get<const char*>());
         val_node = xmlNewTextChild(node, NULL, BAD_CAST tag,
 				   checked_char_cast (newstr));
 	g_free (newstr);
+        break;
     }
-    else if (kvp_type == KVP_TYPE_TIMESPEC)
+    case KvpValue::Type::TIMESPEC:
         val_node = NULL;
-    else if (kvp_type == KVP_TYPE_GDATE)
+        break;
+    case KvpValue::Type::GDATE:
     {
-        GDate d = kvp_value_get_gdate(val);
+        auto d = val->get<GDate>();
         val_node = gdate_to_dom_tree(tag, &d);
         xmlAddChild (node, val_node);
+        break;
     }
-    else
+    default:
         val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, NULL);
+        break;
+    }
 
-    switch (kvp_value_get_type(val))
+    switch (val->get_type())
     {
-    case KVP_TYPE_GINT64:
+    case KvpValue::Type::INT64:
         add_text_to_node(val_node, "integer",
                          g_strdup_printf("%" G_GINT64_FORMAT,
-                                         kvp_value_get_gint64(val)));
+                                         val->get<int64_t>()));
         break;
-    case KVP_TYPE_DOUBLE:
+    case KvpValue::Type::DOUBLE:
         add_text_to_node(val_node, "double",
-                         double_to_string(kvp_value_get_double(val)));
+                         double_to_string(val->get<double>()));
         break;
-    case KVP_TYPE_NUMERIC:
+    case KvpValue::Type::NUMERIC:
         add_text_to_node(val_node, "numeric",
-                         gnc_numeric_to_string(kvp_value_get_numeric(val)));
+                         gnc_numeric_to_string(val->get<gnc_numeric>()));
         break;
-    case KVP_TYPE_STRING:
+    case KvpValue::Type::STRING:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
-    case KVP_TYPE_GUID:
+    case KvpValue::Type::GUID:
     {
         gchar guidstr[GUID_ENCODING_LENGTH+1];
-        guid_to_string_buff(kvp_value_get_guid(val), guidstr);
+        guid_to_string_buff(val->get<GncGUID*>(), guidstr);
         add_text_to_node(val_node, "guid", guidstr);
         break;
     }
-    case KVP_TYPE_TIMESPEC:
+    case KvpValue::Type::TIMESPEC:
     {
-        Timespec ts = kvp_value_get_timespec (val);
-
+        auto ts = val->get<Timespec>();
         val_node = timespec_to_dom_tree (tag, &ts);
         xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
         xmlAddChild (node, val_node);
+        break;
     }
-    break;
-    case KVP_TYPE_GDATE:
+    case KvpValue::Type::GDATE:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "gdate");
-    break;
-    case KVP_TYPE_GLIST:
-    {
-        GList *cursor;
-
+        break;
+    case KvpValue::Type::GLIST:
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
-        for (cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
+        for (auto cursor = val->get<GList*>(); cursor; cursor = cursor->next)
         {
-            KvpValue *val = (KvpValue*)cursor->data;
+            auto val = static_cast<KvpValue*>(cursor->data);
             add_kvp_value_node(val_node, "slot:value", val);
         }
-    }
-
-    break;
-    case KVP_TYPE_FRAME:
+        break;
+    case KvpValue::Type::FRAME:
     {
-        KvpFrame *frame;
-        const char ** keys;
-        unsigned int i;
-
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 
-        frame = kvp_value_get_frame (val);
+        auto frame = val->get<KvpFrame*>();
         if (!frame)
             break;
-
-        keys = kvp_frame_get_keys(frame);
-        for (i = 0; keys[i]; ++i)
-            add_kvp_slot(keys[i], kvp_frame_get_value(frame, keys[i]), val_node);
-        g_free(keys);
+        frame->for_each_slot(add_kvp_slot, static_cast<void*>(val_node));
+        break;
     }
-    break;
     default:
 	break;
     }
 }
 
 static void
-add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node)
+add_kvp_slot(const char * key, KvpValue* value, void* data)
 {
-    xmlNodePtr slot_node;
-    gchar *newkey = g_strdup ((gchar*)key);
-    slot_node = xmlNewChild(node, NULL, BAD_CAST "slot", NULL);
+    auto newkey = g_strdup ((gchar*)key);
+    auto node = static_cast<xmlNodePtr>(data);
+    auto slot_node = xmlNewChild(node, NULL, BAD_CAST "slot", NULL);
 
     xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key",
 		    checked_char_cast (newkey));
@@ -363,24 +356,17 @@ add_kvp_slot(const char * key, KvpValue* value, xmlNodePtr node)
 }
 
 xmlNodePtr
-kvp_frame_to_dom_tree(const char *tag, const KvpFrame *frame)
+qof_instance_slots_to_dom_tree(const char *tag, const QofInstance* inst)
 {
     xmlNodePtr ret;
     const char ** keys;
     unsigned int i;
-
+    KvpFrame *frame = qof_instance_get_slots(inst);
     if (!frame)
-    {
-        return NULL;
-    }
+        return nullptr;
 
-    ret = xmlNewNode(NULL, BAD_CAST tag);
-
-    keys = kvp_frame_get_keys(frame);
-    for (i = 0; keys[i]; ++i)
-        add_kvp_slot(keys[i], kvp_frame_get_value(frame, keys[i]), ret);
-    g_free(keys);
-
+    ret = xmlNewNode(nullptr, BAD_CAST tag);
+    frame->for_each_slot(add_kvp_slot, static_cast<void*>(ret));
     return ret;
 }
 

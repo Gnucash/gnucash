@@ -117,12 +117,6 @@
       '()
       (cadr l))))
 
-(define (gnc:company-info key) ; this should be in business-utils.scm soon
-  ;; Access company info from key-value pairs for current book
-  (kvp-frame-get-slot-path-gslist
-    (qof-book-get-slots (gnc-get-current-book))
-    (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
-
 (define (add-to-cc cc com num neg?)
   ; add a numeric and commodity to a commodity-collector,
   ; changing sign if required

@@ -1027,7 +1027,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                      g_date_get_month(&creation_data->instance->date),
                      g_date_get_year(&creation_data->instance->date));
 
-    /* the accounts and amounts are in the kvp_frames of the splits. */
     template_splits = xaccTransGetSplitList(template_txn);
     txn_splits = xaccTransGetSplitList(new_txn);
     if ((template_splits == NULL) || (txn_splits == NULL))
@@ -1555,9 +1554,6 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
             xaccTransGetDescription(template_txn),
             xaccSchedXactionGetName(creation_data->sx));
 
-    /* The accounts and amounts are in the kvp_frames of the
-     * splits. Hence, we iterate over all splits of this
-     * transaction. */
     template_splits = xaccTransGetSplitList(template_txn);
 
     if (template_splits == NULL)

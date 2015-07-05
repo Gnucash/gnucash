@@ -23,6 +23,10 @@
 
 #ifndef SIXTP_DOM_PARSERS_H
 #define SIXTP_DOM_PARSERS_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <glib.h>
 
@@ -46,21 +50,7 @@ GDate* dom_tree_to_gdate(xmlNodePtr node);
 gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
 gchar * dom_tree_to_text(xmlNodePtr tree);
 gboolean string_to_binary(const gchar *str,  void **v, guint64 *data_len);
-
-gboolean dom_tree_to_kvp_frame_given(xmlNodePtr node, KvpFrame *frame);
-
-KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
-KvpValue* dom_tree_to_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_integer_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_double_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_numeric_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_string_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_guid_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_timespec_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_binary_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_list_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_frame_kvp_value(xmlNodePtr node);
-KvpValue* dom_tree_to_gdate_kvp_value (xmlNodePtr node);
+gboolean dom_tree_create_instance_slots(xmlNodePtr node, QofInstance *inst);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 gboolean dom_tree_to_guint16(xmlNodePtr node, guint16 *i);
@@ -88,5 +78,7 @@ gboolean dom_tree_generic_parse(xmlNodePtr node,
                                 struct dom_tree_handler *handlers,
                                 gpointer data);
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* _SIXTP_DOM_PARSERS_H_ */

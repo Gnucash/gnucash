@@ -73,7 +73,7 @@ const gchar *vendor_version_string = "2.0.0";
 static xmlNodePtr
 vendor_dom_tree_create (GncVendor *vendor)
 {
-    xmlNodePtr ret, kvpnode;
+    xmlNodePtr ret;
     GncBillTerm *term;
     GncTaxTable *taxtable;
 
@@ -118,10 +118,9 @@ vendor_dom_tree_create (GncVendor *vendor)
         xmlAddChild (ret, guid_to_dom_tree (vendor_taxtable_string,
                                             qof_instance_get_guid(QOF_INSTANCE(taxtable))));
 
-    kvpnode = kvp_frame_to_dom_tree (vendor_slots_string,
-                                     qof_instance_get_slots (QOF_INSTANCE(vendor)));
-    if (kvpnode) xmlAddChild (ret, kvpnode);
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(vendor_slots_string,
+                                                    QOF_INSTANCE(vendor)));
     return ret;
 }
 
@@ -313,8 +312,7 @@ static gboolean
 vendor_slots_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    return dom_tree_to_kvp_frame_given (
-               node, qof_instance_get_slots (QOF_INSTANCE(pdata->vendor)));
+    return dom_tree_create_instance_slots(node, QOF_INSTANCE(pdata->vendor));
 
 }
 

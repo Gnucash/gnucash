@@ -49,8 +49,8 @@ SET (libgnc_backend_xml_SOURCES
   io-gncxml-v1.c 
   io-gncxml-v2.c 
   io-utils.c 
-  sixtp-dom-generators.c 
-  sixtp-dom-parsers.c 
+  sixtp-dom-generators.cpp
+  sixtp-dom-parsers.cpp
   sixtp-stack.c 
   sixtp-to-dom-parser.c 
   sixtp-utils.c 

@@ -52,11 +52,11 @@ typedef struct
 } AccountPickerDialog;
 
 /**  Must be called with a string containing a unique identifier for the
-  account.  If an account with a matching online_id kvp_frame is
+  account.  If an account with a matching online_id is
   found, the function immediately returns with a pointer to that
   account.  Otherwise, the user is prompted to select a GnuCash
   account or create a new one (in both cases, the unique identifier is
-  written to the account's kvp_frame, so the user won't be prompted
+  written to the account, so the user won't be prompted
   again).  If the user refuses to select or create an account, NULL is
   returned.
 
@@ -70,7 +70,7 @@ typedef struct
     selector that allows you to select an account whose GncGUID will be
     remembered elsewhere.  You would fill account_human_description to tell
     the user what he is looking for.  In this mode, the  online_id
-    kvp_frame of the found account will not be touched.  To use this mode,
+    field of the found account will not be touched.  To use this mode,
     auto_create must NOT be set to 0.
 
     @param account_human_description
@@ -136,7 +136,7 @@ AccountPickerDialog * gnc_import_account_assist_setup (GtkWidget *parent);
 
 
 /**  Must be called with an AccountPickerDialog structure allready setup.
-     If an account with a matching online_id kvp_frame is found, which is
+     If an account with a matching online_id is found, which is
      allready present in the dialog structure, the function returns with a
      pointer to that account or NULL if not found.
 

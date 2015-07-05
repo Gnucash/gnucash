@@ -76,7 +76,7 @@ maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 static xmlNodePtr
 employee_dom_tree_create (GncEmployee *employee)
 {
-    xmlNodePtr ret, kvpnode;
+    xmlNodePtr ret;
     gnc_numeric num;
     Account* ccard_acc;
 
@@ -118,10 +118,9 @@ employee_dom_tree_create (GncEmployee *employee)
         xmlAddChild(ret, guid_to_dom_tree(employee_ccard_string,
                                           qof_instance_get_guid(QOF_INSTANCE(ccard_acc))));
 
-    kvpnode = kvp_frame_to_dom_tree (employee_slots_string,
-                                     qof_instance_get_slots (QOF_INSTANCE(employee)));
-    if (kvpnode) xmlAddChild (ret, kvpnode);
-
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(employee_slots_string,
+                                                    QOF_INSTANCE(employee)));
     return ret;
 }
 
@@ -294,8 +293,7 @@ static gboolean
 employee_slots_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata *pdata = employee_pdata;
-    return dom_tree_to_kvp_frame_given (
-               node, qof_instance_get_slots (QOF_INSTANCE(pdata->employee)));
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE(pdata->employee));
 }
 
 static struct dom_tree_handler employee_handlers_v2[] =

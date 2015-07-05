@@ -124,7 +124,7 @@ gchar *gnc_features_test_unknown (QofBook *book)
 	g_list_free(features_list);
 	return msg;
     }
-
+    g_hash_table_unref (features_used);
     return NULL;
 }
 

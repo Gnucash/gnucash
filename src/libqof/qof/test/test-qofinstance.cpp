@@ -19,14 +19,17 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+extern "C"
+{
 #include <config.h>
 #include <glib.h>
 #include <unittest-support.h>
 #include "../qof.h"
 #include "../qofbackend-p.h"
-
+}
+#include "../kvp_frame.hpp"
 static const gchar *suitename = "/qof/qofinstance";
-void test_suite_qofinstance ( void );
+extern "C" void test_suite_qofinstance ( void );
 static gchar* error_message;
 static gboolean is_called;
 
@@ -55,7 +58,7 @@ fatal_handler ( const char * log_domain,
 static void
 setup( Fixture *fixture, gconstpointer pData )
 {
-    fixture->inst = g_object_new(QOF_TYPE_INSTANCE, NULL);
+    fixture->inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, NULL));
 }
 
 static void
@@ -121,16 +124,16 @@ test_instance_new_destroy( void )
     QofInstanceClass *klass;
     /* test var */
     Timespec *timespec_priv;
-    gchar *msg1 = "qof_instance_get_collection: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    gchar *msg2 = "qof_instance_get_editlevel: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    gchar *msg3 = "qof_instance_get_destroying: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    gchar *msg4 = "qof_instance_get_dirty_flag: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    gchar *log_domain = "qof";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
-    TestErrorStruct check = { loglevel, log_domain, msg1 };
+    const char *msg1 = "qof_instance_get_collection: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg2 = "qof_instance_get_editlevel: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg3 = "qof_instance_get_destroying: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg4 = "qof_instance_get_dirty_flag: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
+    const char *log_domain = "qof";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto check = test_error_struct_new(log_domain, loglevel, msg1);
 
     g_test_message( "Testing qofinstance object initialization" );
-    inst = g_object_new(QOF_TYPE_INSTANCE, NULL);
+    inst = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, NULL));
     g_assert( QOF_IS_INSTANCE( inst ) );
     /* test class fields */
     klass = QOF_INSTANCE_GET_CLASS( inst );
@@ -161,27 +164,31 @@ test_instance_new_destroy( void )
     g_assert( !QOF_IS_INSTANCE( inst ) );
     /* set fatal handler */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
-    hdlr = g_log_set_handler (log_domain, loglevel,
-                              (GLogFunc)test_checked_handler, &check);
+    auto hdlr = g_log_set_handler (log_domain, loglevel,
+                                   (GLogFunc)test_checked_handler, check);
     g_assert( qof_instance_get_collection( inst ) == NULL );
     g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
-    check.msg = msg2;
+    g_free(check->msg);
+    check->msg = g_strdup(msg2);
     g_assert_cmpint( qof_instance_get_editlevel( inst ), == , 0 );
     g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
-    check.msg = msg3;
+    g_free(check->msg);
+    check->msg = g_strdup(msg3);
     g_assert( !qof_instance_get_destroying( inst ) );
     g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
-    check.msg = msg4;
+    g_free(check->msg);
+    check->msg = g_strdup(msg4);
     g_assert( !qof_instance_get_dirty_flag( inst ) );
     g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
     g_log_remove_handler (log_domain, hdlr);
+    test_error_struct_free(check);
 }
 
 static void
@@ -196,7 +203,7 @@ test_instance_init_data( void )
     char guid_id_after[GUID_ENCODING_LENGTH + 1];
 
     /* set up */
-    inst = g_object_new( QOF_TYPE_INSTANCE, NULL );
+    inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
     g_assert( QOF_IS_INSTANCE( inst ) );
     book = qof_book_new();
     g_assert( QOF_IS_BOOK( book ) );
@@ -243,7 +250,7 @@ test_instance_get_set_slots( Fixture *fixture, gconstpointer pData )
     g_assert( qof_instance_get_dirty_flag( fixture->inst ) );
 
     g_test_message( "Test when kvp frame is not the same" );
-    kvp_frame2 = kvp_frame_new();
+    kvp_frame2 = new KvpFrame;
     g_assert( kvp_frame != kvp_frame2 );
     qof_instance_set_slots( fixture->inst, kvp_frame2 );
     g_assert( kvp_frame2 == qof_instance_get_slots( fixture->inst ) );
@@ -264,8 +271,8 @@ test_instance_version_cmp( void )
     Timespec timespec_left, timespec_right;
 
     /* set up*/
-    left = g_object_new( QOF_TYPE_INSTANCE, NULL );
-    right = g_object_new( QOF_TYPE_INSTANCE, NULL );
+    left = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
+    right = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
 
     g_test_message( "Test both null" );
     result = qof_instance_version_cmp( NULL, NULL );
@@ -497,10 +504,10 @@ static void
 test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
 {
     gboolean result;
-    gchar *msg = "[qof_commit_edit()] unbalanced call - resetting (was -2)";
-    gchar *log_domain = "qof.engine";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
-    TestErrorStruct check = { loglevel, log_domain, msg };
+    const gchar *msg = "[qof_commit_edit()] unbalanced call - resetting (was -2)";
+    const gchar *log_domain = "qof.engine";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto check = test_error_struct_new(log_domain, loglevel, msg);
 
     g_test_message( "Test when instance set to null" );
     result = qof_commit_edit( NULL );
@@ -521,8 +528,8 @@ test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Test when instance's editlevel < 0" );
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
-    hdlr = g_log_set_handler (log_domain, loglevel,
-                              (GLogFunc)test_checked_handler, &check);
+    auto hdlr = g_log_set_handler (log_domain, loglevel,
+                                   (GLogFunc)test_checked_handler, check);
     qof_instance_decrease_editlevel( fixture->inst );
     g_assert_cmpint( qof_instance_get_editlevel( fixture->inst ), == , -1 );
     result = qof_commit_edit( fixture->inst );
@@ -530,6 +537,7 @@ test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
     g_assert_cmpstr( error_message, == , "[qof_commit_edit()] unbalanced call - resetting (was -2)" );
     g_free( error_message );
     g_log_remove_handler (log_domain, hdlr);
+    test_error_struct_free(check);
 }
 
 /* backend commit test start */
@@ -727,7 +735,7 @@ test_instance_refers_to_object( Fixture *fixture, gconstpointer pData )
 {
     QofInstance * ref;
 
-    ref = g_object_new( QOF_TYPE_INSTANCE, NULL );
+    ref = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
     g_assert( fixture->inst );
     g_assert( ref );
     g_assert( QOF_INSTANCE_GET_CLASS( fixture->inst )->refers_to_object == NULL );
@@ -783,7 +791,7 @@ test_instance_get_referring_object_list_from_collection( void )
     book = qof_book_new();
     g_assert( book );
     g_assert( QOF_IS_BOOK( book ) );
-    ref =  g_object_new( QOF_TYPE_INSTANCE, NULL );
+    ref =  static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
     g_assert( ref );
     g_assert( QOF_IS_INSTANCE( ref ) );
     QOF_INSTANCE_GET_CLASS( ref )->refers_to_object = NULL;
@@ -794,7 +802,7 @@ test_instance_get_referring_object_list_from_collection( void )
      */
     for (i = 0; i < list_length; i++ )
     {
-        QofInstance *inst = g_object_new( QOF_TYPE_INSTANCE, NULL );
+        auto inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
         g_assert( inst );
         qof_instance_init_data( inst, type, book );
         inst_list = g_list_append ( inst_list, inst );
@@ -859,8 +867,8 @@ test_instance_get_typed_referring_object_list( void )
     GList* result = NULL;
 
     /* setup */
-    inst = g_object_new( QOF_TYPE_INSTANCE, NULL );
-    ref = g_object_new( QOF_TYPE_INSTANCE, NULL );
+    inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
+    ref = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
     book = qof_book_new();
     g_assert( inst );
     g_assert( ref );
@@ -944,9 +952,9 @@ test_instance_get_referring_object_list( void )
     book = qof_book_new();
     g_assert( book );
     g_assert( QOF_IS_BOOK( book ) );
-    ref1 = g_object_new( QOF_TYPE_INSTANCE, NULL );
+    ref1 = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
     g_assert( ref1 );
-    ref2 = g_object_new( QOF_TYPE_INSTANCE, NULL );
+    ref2 = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
     g_assert( ref2 );
     qof_instance_init_data( ref1, type1, book );
     qof_instance_init_data( ref2, type2, book );
@@ -962,7 +970,7 @@ test_instance_get_referring_object_list( void )
      */
     for (i = 0; i < col1_length; i++ )
     {
-        QofInstance *inst = g_object_new( QOF_TYPE_INSTANCE, NULL );
+        auto inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
         g_assert( inst );
         qof_instance_init_data( inst, type1, book );
         inst_list1 = g_list_append ( inst_list1, inst );
@@ -973,7 +981,7 @@ test_instance_get_referring_object_list( void )
 
     for (j = 0; j < col2_length; j++ )
     {
-        QofInstance *inst = g_object_new( QOF_TYPE_INSTANCE, NULL );
+        auto inst = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
         g_assert( inst );
         qof_instance_init_data( inst, type2, book );
         inst_list2 = g_list_append ( inst_list2, inst );
@@ -1045,7 +1053,7 @@ test_instance_get_referring_object_list( void )
     qof_book_destroy( book );
 }
 
-void
+extern "C" void
 test_suite_qofinstance ( void )
 {
     GNC_TEST_ADD( suitename, "set get book", Fixture, NULL, setup, test_instance_set_get_book, teardown );

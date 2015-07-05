@@ -77,7 +77,7 @@ const gchar *customer_version_string = "2.0.0";
 static xmlNodePtr
 customer_dom_tree_create (GncCustomer *cust)
 {
-    xmlNodePtr ret, kvpnode;
+    xmlNodePtr ret;
     gnc_numeric num;
     GncBillTerm *term;
     GncTaxTable *taxtable;
@@ -132,9 +132,9 @@ customer_dom_tree_create (GncCustomer *cust)
         xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
                                             qof_instance_get_guid(QOF_INSTANCE(taxtable))));
 
-    kvpnode = kvp_frame_to_dom_tree (cust_slots_string,
-                                     qof_instance_get_slots (QOF_INSTANCE(cust)));
-    if (kvpnode) xmlAddChild (ret, kvpnode);
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(cust_slots_string,
+                                                    QOF_INSTANCE(cust)));
 
     return ret;
 }
@@ -367,8 +367,7 @@ static gboolean
 customer_slots_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
-    return dom_tree_to_kvp_frame_given (node,
-                                        qof_instance_get_slots (QOF_INSTANCE(pdata->customer)));
+    return dom_tree_create_instance_slots(node, QOF_INSTANCE(pdata->customer));
 }
 
 static struct dom_tree_handler customer_handlers_v2[] =

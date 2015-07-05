@@ -404,16 +404,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         /* Set the lot-split and peer_guid properties on the two
          * splits to indicate that they're linked. 
          */
-        qof_instance_set (QOF_INSTANCE (split),
-                          "lot-split", now,
-                          "peer_guid", xaccSplitGetGUID (new_split),
-                          NULL);
-
-        qof_instance_set (QOF_INSTANCE (new_split),
-                          "lot-split", now,
-                          "peer_guid", xaccSplitGetGUID (split),
-                          NULL);
-
+        xaccSplitAddPeerSplit(split, new_split, now);
+        xaccSplitAddPeerSplit(new_split, split, now);
         xaccAccountInsertSplit (acc, new_split);
         xaccTransAppendSplit (trans, new_split);
         /* Set the amount and value after the split is in the transaction

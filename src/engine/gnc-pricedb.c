@@ -49,6 +49,38 @@ enum
     PROP_VALUE,		/* Table, 2 fields (numeric) */
 };
 
+typedef struct
+{
+     gpointer key;
+     gpointer value;
+} HashEntry;
+
+static void
+hash_entry_insert(gpointer key, gpointer val, gpointer user_data)
+{
+    GSList **result = (GSList **) user_data;
+    HashEntry *entry = g_new(HashEntry, 1);
+
+    entry->key = key;
+    entry->value = val;
+    *result = g_slist_prepend(*result, entry);
+}
+
+static GSList *
+hash_table_to_list(GHashTable *table)
+{
+    GSList *result_list = NULL;
+    g_hash_table_foreach(table, hash_entry_insert, &result_list);
+    return result_list;
+}
+
+static void
+hash_entry_free_gfunc(gpointer data, G_GNUC_UNUSED gpointer user_data)
+{
+    HashEntry *entry = (HashEntry *) data;
+    g_free(entry);
+}
+
 /* GObject Initialization */
 G_DEFINE_TYPE(GNCPrice, gnc_price, QOF_TYPE_INSTANCE);
 
@@ -2261,10 +2293,10 @@ unstable_price_traversal(GNCPriceDB *db,
 }
 
 static gint
-compare_kvpairs_by_commodity_key(gconstpointer a, gconstpointer b)
+compare_hash_entries_by_commodity_key(gconstpointer a, gconstpointer b)
 {
-    GHashTableKVPair *kvpa = (GHashTableKVPair *) a;
-    GHashTableKVPair *kvpb = (GHashTableKVPair *) b;
+    HashEntry *he_a = (HashEntry *) a;
+    HashEntry *he_b = (HashEntry *) b;
     gnc_commodity *ca;
     gnc_commodity *cb;
     int cmp_result;
@@ -2274,8 +2306,8 @@ compare_kvpairs_by_commodity_key(gconstpointer a, gconstpointer b)
     if (!a) return -1;
     if (!b) return 1;
 
-    ca = (gnc_commodity *) kvpa->key;
-    cb = (gnc_commodity *) kvpb->key;
+    ca = (gnc_commodity *) he_a->key;
+    cb = (gnc_commodity *) he_b->key;
 
     cmp_result = g_strcmp0(gnc_commodity_get_namespace(ca),
                            gnc_commodity_get_namespace(cb));
@@ -2297,22 +2329,22 @@ stable_price_traversal(GNCPriceDB *db,
 
     if (!db || !f) return FALSE;
 
-    currency_hashes = g_hash_table_key_value_pairs(db->commodity_hash);
+    currency_hashes = hash_table_to_list(db->commodity_hash);
     currency_hashes = g_slist_sort(currency_hashes,
-                                   compare_kvpairs_by_commodity_key);
+                                   compare_hash_entries_by_commodity_key);
 
     for (i = currency_hashes; i; i = i->next)
     {
-        GHashTableKVPair *kv_pair = (GHashTableKVPair *) i->data;
-        GHashTable *currency_hash = (GHashTable *) kv_pair->value;
-        GSList *price_lists = g_hash_table_key_value_pairs(currency_hash);
+        HashEntry *entry = (HashEntry *) i->data;
+        GHashTable *currency_hash = (GHashTable *) entry->value;
+        GSList *price_lists = hash_table_to_list(currency_hash);
         GSList *j;
 
-        price_lists = g_slist_sort(price_lists, compare_kvpairs_by_commodity_key);
+        price_lists = g_slist_sort(price_lists, compare_hash_entries_by_commodity_key);
         for (j = price_lists; j; j = j->next)
         {
-            GHashTableKVPair *pricelist_kvp = (GHashTableKVPair *) j->data;
-            GList *price_list = (GList *) pricelist_kvp->value;
+            HashEntry *pricelist_entry = (HashEntry *) j->data;
+            GList *price_list = (GList *) pricelist_entry->value;
             GList *node;
 
             for (node = (GList *) price_list; node; node = node->next)
@@ -2326,7 +2358,7 @@ stable_price_traversal(GNCPriceDB *db,
         }
         if (price_lists)
         {
-            g_slist_foreach(price_lists, g_hash_table_kv_pair_free_gfunc, NULL);
+            g_slist_foreach(price_lists, hash_entry_free_gfunc, NULL);
             g_slist_free(price_lists);
             price_lists = NULL;
         }
@@ -2334,7 +2366,7 @@ stable_price_traversal(GNCPriceDB *db,
 
     if (currency_hashes)
     {
-        g_slist_foreach(currency_hashes, g_hash_table_kv_pair_free_gfunc, NULL);
+        g_slist_foreach(currency_hashes, hash_entry_free_gfunc, NULL);
         g_slist_free(currency_hashes);
     }
     return ok;

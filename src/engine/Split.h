@@ -338,7 +338,7 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
  *
  * @param check_txn_splits If the pointers are not equal, but
  * everything else so far is equal (including memo, amount, value,
- * kvp_frame), then, when comparing the parenting transactions with
+ * kvp), then, when comparing the parenting transactions with
  * xaccTransEqual(), set its argument check_splits to be TRUE.
  */
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
@@ -356,6 +356,29 @@ Split      * xaccSplitLookup (const GncGUID *guid, QofBook *book);
 /* Get a GList of unique transactions containing the given list of Splits. */
 GList *xaccSplitListGetUniqueTransactions(const GList *splits);
 /*################## Added for Reg2 #################*/
+/** Add a peer split to this split's lot-split list.
+ * @param other_split: The split whose guid to add
+ * @param timestamp: The time to be recorded for the split.
+ */
+void xaccSplitAddPeerSplit (Split *split, const Split *other_split,
+                            const time64 timestamp);
+/** Does this split have peers?
+ */
+gboolean xaccSplitHasPeers (const Split *split);
+/** Report if a split is a peer of this one.
+ * @param other_split: The split to test for being a peer of this one.
+ * @return: True if other_split is registered as a peer of this one.
+ */
+gboolean xaccSplitIsPeerSplit (const Split *split, const Split *other_split);
+/** Remove a peer split from this split's lot-split list.
+ * @param other_split: The split whose guid to remove
+ */
+void xaccSplitRemovePeerSplit (Split *split, const Split *other_split);
+
+/** Merge the other_split's peer splits into split's peers.
+ * @param other_split: The split donating the peer splits.
+ */
+void xaccSplitMergePeerSplits (Split *split, const Split *other_split);
 
 /**
  * The xaccSplitGetOtherSplit() is a convenience routine that returns
@@ -492,8 +515,6 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
  * override so the gnome-search dialog displays the right type.
  @{
 */
-#define SPLIT_KVP		"kvp"
-
 #define SPLIT_DATE_RECONCILED	"date-reconciled"
 #define SPLIT_BALANCE		"balance"
 #define SPLIT_CLEARED_BALANCE	"cleared-balance"

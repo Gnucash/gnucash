@@ -15,6 +15,10 @@
  * Created by Linux Developers Group, 2001
  * Updates Linas Vepstas July 2004
  */
+#include <kvp_frame.hpp>
+
+extern "C"
+{
 #include "config.h"
 
 #include <sys/types.h>
@@ -28,6 +32,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <qof.h>
 #include <qofinstance-p.h>
 
 #include "Account.h"
@@ -43,6 +48,7 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "test-engine-strings.h"
+}
 
 static gboolean glist_strings_only = FALSE;
 
@@ -99,8 +105,8 @@ set_max_kvp_frame_elements (gint max_kvp_frame_elements)
     kvp_frame_max_elements = MAX (max_kvp_frame_elements, 1);
 }
 
-void
-kvp_exclude_type (KvpValueType kvp_type)
+static void
+kvp_exclude_type (KvpValue::Type kvp_type)
 {
     gint *key;
 
@@ -114,7 +120,7 @@ kvp_exclude_type (KvpValueType kvp_type)
 }
 
 static gboolean
-kvp_type_excluded (KvpValueType kvp_type)
+kvp_type_excluded (KvpValue::Type kvp_type)
 {
     gint key = kvp_type;
 
@@ -125,12 +131,6 @@ kvp_type_excluded (KvpValueType kvp_type)
         return TRUE;
 
     return FALSE;
-}
-
-void
-random_glist_strings_only (gboolean strings_only)
-{
-    glist_strings_only = strings_only;
 }
 
 static gboolean zero_nsec = FALSE;
@@ -188,14 +188,11 @@ get_random_glist_depth (gint depth)
 
     for (i = 0; i < count; i++)
     {
-        KvpValueType kvpt;
-        KvpValue *value;
-
-        kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
+        KvpValue *value = nullptr;
 
         do
         {
-            value = get_random_kvp_value_depth (kvpt, depth + 1);
+            value = get_random_kvp_value_depth (-2, depth + 1);
         }
         while (!value);
 
@@ -203,12 +200,6 @@ get_random_glist_depth (gint depth)
     }
 
     return ret;
-}
-
-GList*
-get_random_glist(void)
-{
-    return get_random_glist_depth (0);
 }
 
 /* ========================================================== */
@@ -247,23 +238,25 @@ static KvpFrame* get_random_kvp_frame_depth (gint depth);
 static KvpValue*
 get_random_kvp_value_depth (int type, gint depth)
 {
-    int datype = type;
+    KvpValue::Type datype;
     KvpValue *ret;
 
-    if (datype == -1)
+    if (type == -1)
     {
-        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME);
+        datype = static_cast<KvpValue::Type>(get_random_int_in_range(KvpValue::Type::INT64, KvpValue::Type::FRAME));
     }
 
-    if (datype == -2)
+    else if (type == -2)
     {
-        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME - 1);
+        datype = static_cast<KvpValue::Type>(get_random_int_in_range(KvpValue::Type::INT64, KvpValue::Type::FRAME - 1));
     }
+    else
+        datype = static_cast<KvpValue::Type>(type);
 
-    if (datype == KVP_TYPE_FRAME && depth >= kvp_max_depth)
+    if (datype == KvpValue::Type::FRAME && depth >= kvp_max_depth)
         return NULL;
 
-    if (datype == KVP_TYPE_GLIST && depth >= kvp_max_depth)
+    if (datype == KvpValue::Type::GLIST && depth >= kvp_max_depth)
         return NULL;
 
     if (kvp_type_excluded (datype))
@@ -271,57 +264,50 @@ get_random_kvp_value_depth (int type, gint depth)
 
     switch (datype)
     {
-    case KVP_TYPE_GINT64:
-        ret = kvp_value_new_gint64(get_random_gint64());
+    case KvpValue::Type::INT64:
+        ret = new KvpValue(get_random_gint64());
         break;
 
-    case KVP_TYPE_DOUBLE:
+    case KvpValue::Type::DOUBLE:
         ret = NULL;
         break;
 
-    case KVP_TYPE_NUMERIC:
-        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric(GNC_DENOM_AUTO));
+    case KvpValue::Type::NUMERIC:
+        ret = new KvpValue(get_random_gnc_numeric(GNC_DENOM_AUTO));
         break;
 
-    case KVP_TYPE_STRING:
+    case KvpValue::Type::STRING:
     {
         gchar *tmp_str;
         tmp_str = get_random_string();
         if (!tmp_str)
             return NULL;
 
-        ret = kvp_value_new_string(tmp_str);
-        g_free(tmp_str);
+        ret = new KvpValue(tmp_str);
     }
     break;
 
-    case KVP_TYPE_GUID:
+    case KvpValue::Type::GUID:
     {
-        GncGUID *tmp_guid;
-        tmp_guid = get_random_guid();
-        ret = kvp_value_new_guid(tmp_guid);
-        g_free(tmp_guid);
+        return new KvpValue(get_random_guid());
     }
     break;
 
-    case KVP_TYPE_TIMESPEC:
+    case KvpValue::Type::TIMESPEC:
     {
         Timespec *ts = get_random_timespec();
-        ret = kvp_value_new_timespec (*ts);
+        ret = new KvpValue(*ts);
         g_free(ts);
     }
     break;
 
-    case KVP_TYPE_GLIST:
-        ret = kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
+    case KvpValue::Type::GLIST:
+        ret = new KvpValue(get_random_glist_depth (depth + 1));
         break;
 
-    case KVP_TYPE_FRAME:
+    case KvpValue::Type::FRAME:
     {
-        KvpFrame *tmp_frame;
-        tmp_frame = get_random_kvp_frame_depth(depth + 1);
-        ret = kvp_value_new_frame(tmp_frame);
-        kvp_frame_delete(tmp_frame);
+        return new KvpValue(get_random_kvp_frame_depth(depth + 1));
     }
     break;
 
@@ -335,14 +321,13 @@ get_random_kvp_value_depth (int type, gint depth)
 static KvpFrame*
 get_random_kvp_frame_depth (gint depth)
 {
-    KvpFrame *ret;
     int vals_to_add;
     gboolean val_added;
 
     if (depth >= kvp_max_depth)
         return NULL;
 
-    ret = kvp_frame_new();
+    auto ret = new KvpFrame;
 
     vals_to_add = get_random_int_in_range(1, kvp_frame_max_elements);
     val_added = FALSE;
@@ -374,7 +359,7 @@ get_random_kvp_frame_depth (gint depth)
 
         val_added = TRUE;
 
-        kvp_frame_set_slot_nc(ret, key, val);
+        ret->set_path(key, val);
 
         g_free(key);
     }
@@ -495,13 +480,13 @@ get_random_commodity_from_table (gnc_commodity_table *table)
         GList *commodities;
         char *name_space;
 
-        name_space = get_random_list_element (namespaces);
+        name_space = static_cast<char*>(get_random_list_element (namespaces));
 
         commodities = gnc_commodity_table_get_commodities (table, name_space);
         if (!commodities)
             continue;
 
-        com = get_random_list_element (commodities);
+        com = static_cast<gnc_commodity*>(get_random_list_element (commodities));
 
         g_list_free (commodities);
 
@@ -603,7 +588,7 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
 
     for (node = namespaces; node; node = node->next)
     {
-        const char *ns = node->data;
+        auto ns = static_cast<const char *>(node->data);
         GList *commodities;
         GList *com_node;
 
@@ -614,7 +599,7 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
 
         for (com_node = commodities; com_node; com_node = com_node->next)
         {
-            gnc_commodity *com = com_node->data;
+            auto com = static_cast<gnc_commodity *>(com_node->data);
 
             gnc_commodity_table_remove (table, com);
             make_random_changes_to_commodity (com);
@@ -747,7 +732,7 @@ get_random_pricedb(QofBook *book)
 static gboolean
 price_accumulator (GNCPrice *p, gpointer data)
 {
-    GList **list = data;
+    auto list = static_cast<GList**>(data);
 
     *list = g_list_prepend (*list, p);
 
@@ -766,7 +751,7 @@ make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb)
 
     for (node = list; node; node = node->next)
     {
-        GNCPrice *p = node->data;
+        auto p = static_cast<GNCPrice *>(node->data);
 
         switch (get_random_int_in_range (0, 5))
         {
@@ -897,7 +882,6 @@ get_random_account_tree (QofBook *book)
 static void
 add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
-    Account *acc, *bcc;
     Split *s1, *s2;
     gnc_numeric val;
     int s2_scu;
@@ -905,11 +889,11 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
 
-    acc = get_random_list_element (account_list);
+    auto acc = static_cast<Account*>(get_random_list_element (account_list));
     xaccTransBeginEdit(trn);
     s1 = get_random_split(book, acc, trn);
 
-    bcc = get_random_list_element (account_list);
+    auto bcc = static_cast<Account*>(get_random_list_element (account_list));
     if ((bcc == acc) && (!do_bork()))
     {
         /* Make sure that each side of the transaction is in
@@ -918,7 +902,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
          * this case? */
         while (bcc == acc)
         {
-            bcc = get_random_list_element (account_list);
+            bcc = static_cast<Account*>(get_random_list_element (account_list));
         }
     }
 
@@ -993,10 +977,8 @@ make_random_changes_to_transaction_and_splits (QofBook *book,
         splits = xaccTransGetSplitList (trans);
         for (node = splits; node; node = node->next)
         {
-            Split *split = node->data;
-            Account *account;
-
-            account = get_random_list_element (accounts);
+            auto split = static_cast<Split *>(node->data);
+            auto account = static_cast<Account*>(get_random_list_element (accounts));
 
             xaccAccountInsertSplit (account, split);
         }
@@ -1021,7 +1003,7 @@ make_random_changes_to_transaction_and_splits (QofBook *book,
     splits = xaccTransGetSplitList (trans);
     for (node = splits; node; node = node->next)
     {
-        Split *split = node->data;
+        auto split = static_cast<Split *>(node->data);
 
         if (get_random_boolean ())
             make_random_changes_to_split (split);
@@ -1037,7 +1019,7 @@ static int
 add_trans_helper (Transaction *trans, gpointer data)
 {
     TransInfo *ti;
-    GList **list = data;
+    auto list = static_cast<GList **>(data);
 
     ti = g_new (TransInfo, 1);
 
@@ -1068,7 +1050,7 @@ make_random_changes_to_level (QofBook *book, Account *parent)
         gnc_account_append_child (parent, new_account);
     else
     {
-        account = get_random_list_element (accounts);
+        account = static_cast<Account*>(get_random_list_element (accounts));
 
         gnc_account_append_child (account, new_account);
     }
@@ -1082,7 +1064,7 @@ make_random_changes_to_level (QofBook *book, Account *parent)
     /* Mess with the accounts */
     for (node = accounts; node; node = node->next)
     {
-        Account *account = node->data;
+        auto account = static_cast<Account *>(node->data);
 
         if (get_random_boolean ())
             make_random_changes_to_account (book, account);
@@ -1094,7 +1076,7 @@ make_random_changes_to_level (QofBook *book, Account *parent)
 
     for (node = transes; node; node = node->next)
     {
-        TransInfo *ti = node->data;
+        auto ti = static_cast<TransInfo *>(node->data);
         Transaction *trans = xaccTransLookup (&ti->guid, book);
 
         if (!trans)
@@ -1105,7 +1087,7 @@ make_random_changes_to_level (QofBook *book, Account *parent)
 
     for (node = transes; node; node = node->next)
     {
-        TransInfo *ti = node->data;
+        auto ti = static_cast<TransInfo *>(node->data);
 
         g_free (ti);
     }
@@ -1113,18 +1095,18 @@ make_random_changes_to_level (QofBook *book, Account *parent)
     transes = NULL;
 
     /* delete an account */
-    account = get_random_list_element (accounts);
+    account = static_cast<Account*>(get_random_list_element (accounts));
 
     splits = xaccAccountGetSplitList (account);
     splits = g_list_copy (splits);
 
     for (node = splits; node; node = node->next)
     {
-        Split *split = node->data;
+        auto split = static_cast<Split *>(node->data);
 
         do
         {
-            new_account = get_random_list_element (accounts);
+            new_account = static_cast<Account*>(get_random_list_element (accounts));
         }
         while (new_account == account);
 
@@ -1146,12 +1128,12 @@ make_random_changes_to_level (QofBook *book, Account *parent)
 
         while (i--)
         {
-            Account *a1, *a2;
+            Account *a2;
 
-            a1 = get_random_list_element (accounts);
+            auto a1 = static_cast<Account*>(get_random_list_element (accounts));
 
             if (get_random_boolean ())
-                a2 = get_random_list_element (accounts);
+                a2 = static_cast<Account*>(get_random_list_element (accounts));
             else
                 a2 = NULL;
 
@@ -1190,7 +1172,7 @@ get_random_account(QofBook *book)
                                          sane_account_names);
 
     tmp_int = get_random_int_in_range(ACCT_TYPE_BANK, NUM_ACCOUNT_TYPES - 1);
-    xaccAccountSetType(ret, tmp_int);
+    xaccAccountSetType(ret, static_cast<GNCAccountType>(tmp_int));
 
     set_account_random_string(ret, xaccAccountSetCode);
     set_account_random_string(ret, xaccAccountSetDescription);
@@ -1223,7 +1205,7 @@ make_random_changes_to_account (QofBook *book, Account *account)
     set_account_random_string (account, xaccAccountSetName);
 
     tmp_int = get_random_int_in_range (ACCT_TYPE_BANK, NUM_ACCOUNT_TYPES - 1);
-    xaccAccountSetType (account, tmp_int);
+    xaccAccountSetType (account, static_cast<GNCAccountType>(tmp_int));
 
     set_account_random_string (account, xaccAccountSetCode);
     set_account_random_string (account, xaccAccountSetDescription);
@@ -1386,7 +1368,7 @@ set_tran_random_string(Transaction* trn,
                        void(*func)(Transaction *act, const gchar*str))
 {
     gchar *tmp_str = get_random_string();
-    if (!trn || !(&trn->inst))
+    if (!trn)
     {
         return;
     }
@@ -1464,7 +1446,7 @@ get_random_transaction_with_currency(QofBook *book,
     trn_add_ran_timespec(trans, xaccTransSetDateEnteredTS);
 
     f = get_random_kvp_frame();
-    xaccTransSetSlots_nc(trans, f);
+    qof_instance_set_slots (QOF_INSTANCE (trans), f);
 
     add_random_splits(book, trans, account_list);
 
@@ -1525,7 +1507,7 @@ make_random_changes_to_transaction (QofBook *book, Transaction *trans)
 
     set_tran_random_string (trans, xaccTransSetDescription);
 
-    xaccTransSetSlots_nc (trans, get_random_kvp_frame());
+    qof_instance_set_slots (QOF_INSTANCE (trans), get_random_kvp_frame());
 
     /* Do split manipulations in higher-level functions */
 
@@ -1659,7 +1641,7 @@ set_query_sort (QofQuery *q, sort_type_t sort_code)
 {
     GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
 
-    standard = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+    standard = g_slist_prepend (NULL, const_cast<char*>(QUERY_DEFAULT_SORT));
 
     switch (sort_code)
     {
@@ -1667,36 +1649,36 @@ set_query_sort (QofQuery *q, sort_type_t sort_code)
         p1 = standard;
         break;
     case BY_DATE:
-        p1 = g_slist_prepend (p1, TRANS_DATE_POSTED);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
+        p1 = g_slist_prepend (p1, const_cast<char*>(TRANS_DATE_POSTED));
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_TRANS));
         p2 = standard;
         break;
     case BY_DATE_ENTERED:
-        p1 = g_slist_prepend (p1, TRANS_DATE_ENTERED);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
+        p1 = g_slist_prepend (p1, const_cast<char*>(TRANS_DATE_ENTERED));
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_TRANS));
         p2 = standard;
         break;
     case BY_DATE_RECONCILED:
-        p1 = g_slist_prepend (p1, SPLIT_RECONCILE);
-        p2 = g_slist_prepend (p2, SPLIT_DATE_RECONCILED);
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_RECONCILE));
+        p2 = g_slist_prepend (p2, const_cast<char*>(SPLIT_DATE_RECONCILED));
         p3 = standard;
         break;
     case BY_NUM:
-        p1 = g_slist_prepend (p1, TRANS_NUM);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
+        p1 = g_slist_prepend (p1, const_cast<char*>(TRANS_NUM));
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_TRANS));
         p2 = standard;
         break;
     case BY_AMOUNT:
-        p1 = g_slist_prepend (p1, SPLIT_VALUE);
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_VALUE));
         p2 = standard;
         break;
     case BY_MEMO:
-        p1 = g_slist_prepend (p1, SPLIT_MEMO);
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_MEMO));
         p2 = standard;
         break;
     case BY_DESC:
-        p1 = g_slist_prepend (p1, TRANS_DESCRIPTION);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
+        p1 = g_slist_prepend (p1, const_cast<char*>(TRANS_DESCRIPTION));
+        p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_TRANS));
         p2 = standard;
         break;
     case BY_NONE:
@@ -1709,6 +1691,13 @@ set_query_sort (QofQuery *q, sort_type_t sort_code)
     }
 
     qof_query_set_sort_order (q, p1, p2, p3);
+}
+
+template <typename T> inline T
+compare_param(int max)
+{
+    auto ret = get_random_int_in_range (max == 1 ? 0 : 1, max);
+    return static_cast<T>(ret);
 }
 
 QofQuery *
@@ -1743,7 +1732,7 @@ get_random_query(void)
             xaccQueryAddAccountGUIDMatch
             (q,
              guids,
-             get_random_int_in_range (1, QOF_GUID_MATCH_NONE),
+             compare_param<QofGuidMatch>(QOF_GUID_MATCH_NONE),
              get_random_queryop ());
             free_random_guids (guids);
             break;
@@ -1754,7 +1743,7 @@ get_random_query(void)
                                      string,
                                      get_random_boolean (),
                                      get_random_boolean (),
-                                     get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
+                                     compare_param<QofQueryCompare>(QOF_COMPARE_CONTAINS),
                                      get_random_queryop ());
             g_free (string);
             break;
@@ -1762,19 +1751,19 @@ get_random_query(void)
         case 3: /* PR_BALANCE */
             xaccQueryAddBalanceMatch
             (q,
-             get_random_boolean (),
+             compare_param<QofQueryCompare> (1),
              get_random_queryop ());
             break;
 
         case 4: /* PR_CLEARED */
             xaccQueryAddClearedMatch
             (q,
-             get_random_int_in_range (1,
+             static_cast<cleared_match_t>(get_random_int_in_range (1,
                                       CLEARED_NO |
                                       CLEARED_CLEARED |
                                       CLEARED_RECONCILED |
                                       CLEARED_FROZEN |
-                                      CLEARED_VOIDED),
+                                                                   CLEARED_VOIDED)),
              get_random_queryop ());
             break;
 
@@ -1797,7 +1786,7 @@ get_random_query(void)
                                           string,
                                           get_random_boolean (),
                                           get_random_boolean (),
-                                          get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
+                                          compare_param<QofQueryCompare>(QOF_COMPARE_CONTAINS),
                                           get_random_queryop ());
             g_free (string);
             break;
@@ -1812,20 +1801,6 @@ get_random_query(void)
             break;
 
         case 8: /* PR_KVP */
-            path = get_random_kvp_path ();
-            do
-            {
-                value = get_random_kvp_value_depth (-2, kvp_max_depth);
-            }
-            while (!value);
-            xaccQueryAddKVPMatch (q,
-                                  path,
-                                  value,
-                                  get_random_int_in_range (1, QOF_COMPARE_NEQ),
-                                  get_random_id_type (),
-                                  get_random_queryop ());
-            kvp_value_delete (value);
-            free_random_kvp_path (path);
             break;
 
         case 9: /* PR_MEMO */
@@ -1834,7 +1809,7 @@ get_random_query(void)
                                    string,
                                    get_random_boolean (),
                                    get_random_boolean (),
-                                   get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
+                                   compare_param<QofQueryCompare>(QOF_COMPARE_CONTAINS),
                                    get_random_queryop ());
             g_free (string);
             break;
@@ -1845,7 +1820,7 @@ get_random_query(void)
                                      string,
                                      get_random_boolean (),
                                      get_random_boolean (),
-                                     get_random_int_in_range (1, QOF_COMPARE_CONTAINS),
+                                     compare_param<QofQueryCompare>(QOF_COMPARE_CONTAINS),
                                      get_random_queryop ());
             g_free (string);
             break;
@@ -1854,7 +1829,7 @@ get_random_query(void)
             xaccQueryAddSharePriceMatch
             (q,
              get_random_gnc_numeric (GNC_DENOM_AUTO),
-             get_random_int_in_range (1, QOF_COMPARE_NEQ),
+             compare_param<QofQueryCompare> (QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
 
@@ -1862,7 +1837,7 @@ get_random_query(void)
             xaccQueryAddSharesMatch
             (q,
              get_random_gnc_numeric (GNC_DENOM_AUTO),
-             get_random_int_in_range (1, QOF_COMPARE_NEQ),
+             compare_param<QofQueryCompare> (QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
 
@@ -1870,8 +1845,8 @@ get_random_query(void)
             xaccQueryAddValueMatch
             (q,
              get_random_gnc_numeric (GNC_DENOM_AUTO),
-             get_random_int_in_range (1, QOF_NUMERIC_MATCH_ANY),
-             get_random_int_in_range (1, QOF_COMPARE_NEQ),
+             compare_param<QofNumericMatch> (QOF_NUMERIC_MATCH_ANY),
+             compare_param<QofQueryCompare> (QOF_COMPARE_NEQ),
              get_random_queryop ());
             break;
 
@@ -1883,7 +1858,7 @@ get_random_query(void)
     }
 
     if (gnc_engine_debug_random) printf ("\n");
-    set_query_sort (q, get_random_int_in_range (1, BY_NONE));
+    set_query_sort (q, compare_param<sort_type_t>(BY_NONE));
 
     qof_query_set_sort_increasing (q,
                                    get_random_boolean (),
@@ -1977,39 +1952,6 @@ typedef struct
     QofQuery *q;
 } KVPQueryData;
 
-static void
-add_kvp_value_query (const char *key, KvpValue *value, gpointer data)
-{
-    KVPQueryData *kqd = data;
-    GSList *node;
-
-    kqd->path = g_slist_append (kqd->path, (gpointer) key);
-
-    if (kvp_value_get_type (value) == KVP_TYPE_FRAME)
-        kvp_frame_for_each_slot (kvp_value_get_frame (value),
-                                 add_kvp_value_query, data);
-    else
-        xaccQueryAddKVPMatch (kqd->q, kqd->path, value,
-                              QOF_COMPARE_EQUAL, kqd->where,
-                              QOF_QUERY_AND);
-
-    node = g_slist_last (kqd->path);
-    kqd->path = g_slist_remove_link (kqd->path, node);
-    g_slist_free_1 (node);
-}
-
-static void
-add_kvp_query (QofQuery *q, KvpFrame *frame, QofIdType where)
-{
-    KVPQueryData kqd;
-
-    kqd.where = where;
-    kqd.path = NULL;
-    kqd.q = q;
-
-    kvp_frame_for_each_slot (frame, add_kvp_value_query, &kqd);
-}
-
 static gboolean include_price = TRUE;
 
 void
@@ -2021,17 +1963,11 @@ trans_query_include_price (gboolean include_price_in)
 TestQueryTypes
 get_random_query_type (void)
 {
-    switch (get_random_int_in_range (0, 4))
+    switch (get_random_int_in_range (0, 1))
     {
     case 0:
         return SIMPLE_QT;
     case 1:
-        return SPLIT_KVP_QT;
-    case 2:
-        return TRANS_KVP_QT;
-    case 3:
-        return ACCOUNT_KVP_QT;
-    case 4:
         return GUID_QT;
     default:
         return SIMPLE_QT;
@@ -2140,7 +2076,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         list = NULL;
         for (node = xaccTransGetSplitList (trans); node; node = node->next)
         {
-            Split * split = node->data;
+            auto split = static_cast<Split * >(node->data);
             list = g_list_prepend (list, xaccSplitGetAccount (split));
         }
         xaccQueryAddAccountMatch (q, list, QOF_GUID_MATCH_ALL, QOF_QUERY_AND);
@@ -2177,15 +2113,6 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a),
                                GNC_ID_ACCOUNT, QOF_QUERY_AND);
     }
-
-    if (query_types & SPLIT_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (s)), GNC_ID_SPLIT);
-
-    if (query_types & TRANS_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (trans)), GNC_ID_TRANS);
-
-    if (query_types & ACCOUNT_KVP_QT)
-        add_kvp_query (q, qof_instance_get_slots (QOF_INSTANCE (a)), GNC_ID_ACCOUNT);
 
     return q;
 }

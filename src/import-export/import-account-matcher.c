@@ -76,7 +76,7 @@ static AccountPickerDialog* gnc_import_new_account_picker(void)
 /**************************************************
  * test_acct_online_id_match
  *
- * test for match of kvp_frame of account
+ * test for match of account online_ids.
  **************************************************/
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {

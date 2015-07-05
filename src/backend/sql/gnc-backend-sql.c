@@ -34,17 +34,17 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
-#include "qof.h"
-#include "qofquery-p.h"
-#include "qofquerycore-p.h"
-#include "Account.h"
-#include "TransLog.h"
-#include "gnc-engine.h"
-#include "SX-book.h"
-#include "Recurrence.h"
-#include "gncBillTerm.h"
-#include "gncTaxTable.h"
-#include "gncInvoice.h"
+#include <qof.h>
+#include <qofquery-p.h>
+#include <qofquerycore-p.h>
+#include <Account.h>
+#include <TransLog.h>
+#include <gnc-engine.h>
+#include <SX-book.h>
+#include <Recurrence.h>
+#include <gncBillTerm.h>
+#include <gncTaxTable.h>
+#include <gncInvoice.h>
 
 #include "gnc-backend-sql.h"
 
@@ -3072,7 +3072,7 @@ gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar*
         guid = qof_instance_get_guid( inst );
         if ( !qof_instance_get_destroying(inst) )
         {
-            is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+            is_ok = gnc_sql_slots_save( be, guid, is_infant, inst);
         }
         else
         {

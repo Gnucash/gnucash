@@ -269,6 +269,39 @@ gnc_option_db_find (SCM guile_options)
 }
 
 /* Create an option DB for a particular data type */
+/* For now, this is global, just like when it was in guile.
+   But, it should be make per-book. */
+static GHashTable *kvp_registry = NULL;
+
+static void
+init_table(void)
+{
+    if (!kvp_registry)
+        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
+}
+
+
+/*  create a new options object for the requested type */
+static SCM
+gnc_make_kvp_options(QofIdType id_type)
+{
+    GList *list, *p;
+    SCM gnc_new_options = SCM_UNDEFINED;
+    SCM options = SCM_UNDEFINED;
+
+    init_table();
+    list = g_hash_table_lookup(kvp_registry, id_type);
+    gnc_new_options = scm_c_eval_string("gnc:new-options");
+    options = scm_call_0(gnc_new_options);
+
+    for (p = list; p; p = p->next)
+    {
+        SCM generator = p->data;
+        scm_call_1(generator, options);
+    }
+    return options;
+}
+
 GNCOptionDB *
 gnc_option_db_new_for_type(QofIdType id_type)
 {
@@ -280,13 +313,12 @@ gnc_option_db_new_for_type(QofIdType id_type)
 }
 
 void
-gnc_option_db_load_from_kvp(GNCOptionDB* odb, KvpFrame *slots)
+gnc_option_db_load(GNCOptionDB* odb, QofBook *book)
 {
     static SCM kvp_to_scm = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
+    SCM scm_book;
 
-    if (!odb || !slots) return;
+    if (!odb || !book) return;
 
     if (kvp_to_scm == SCM_UNDEFINED)
     {
@@ -299,29 +331,19 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, KvpFrame *slots)
         }
     }
 
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
+    scm_book = SWIG_NewPointerObj(book, SWIG_TypeQuery("_p_QofBook"), 0);
 
-    scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
+    scm_call_2 (kvp_to_scm, odb->guile_options, scm_book);
 }
 
 void
-gnc_option_db_save_to_kvp(GNCOptionDB* odb, KvpFrame *slots, gboolean clear_kvp)
+gnc_option_db_save(GNCOptionDB* odb, QofBook *book, gboolean clear_all)
 {
     static SCM scm_to_kvp = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
-    SCM scm_clear_kvp;
+    SCM scm_book;
+    SCM scm_clear_all;
 
-    if (!odb || !slots) return;
+    if (!odb || !book) return;
 
     if (scm_to_kvp == SCM_UNDEFINED)
     {
@@ -334,19 +356,10 @@ gnc_option_db_save_to_kvp(GNCOptionDB* odb, KvpFrame *slots, gboolean clear_kvp)
         }
     }
 
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
-    scm_clear_kvp = scm_from_bool (clear_kvp);
+    scm_book = SWIG_NewPointerObj(book, SWIG_TypeQuery("_p_QofBook"), 0);
+    scm_clear_all = scm_from_bool (clear_all);
 
-    scm_call_4 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path, scm_clear_kvp);
+    scm_call_3 (scm_to_kvp, odb->guile_options, scm_book, scm_clear_all);
 }
 /********************************************************************\
  * gnc_option_db_destroy                                            *
@@ -2928,17 +2941,6 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
     return value;
 }
 
-/* For now, this is global, just like when it was in guile.
-   But, it should be make per-book. */
-static GHashTable *kvp_registry = NULL;
-
-static void
-init_table(void)
-{
-    if (!kvp_registry)
-        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
-}
-
 /*
  * the generator should be a procedure that takes one argument,
  * an options object.  The procedure should fill in the options with
@@ -2953,26 +2955,4 @@ gnc_register_kvp_option_generator(QofIdType id_type, SCM generator)
     list = g_list_prepend(list, generator);
     g_hash_table_insert(kvp_registry, (gpointer) id_type, list);
     scm_gc_protect_object(generator);
-}
-
-
-/*  create a new options object for the requested type */
-SCM
-gnc_make_kvp_options(QofIdType id_type)
-{
-    GList *list, *p;
-    SCM gnc_new_options = SCM_UNDEFINED;
-    SCM options = SCM_UNDEFINED;
-
-    init_table();
-    list = g_hash_table_lookup(kvp_registry, id_type);
-    gnc_new_options = scm_c_eval_string("gnc:new-options");
-    options = scm_call_0(gnc_new_options);
-
-    for (p = list; p; p = p->next)
-    {
-        SCM generator = p->data;
-        scm_call_1(generator, options);
-    }
-    return options;
 }

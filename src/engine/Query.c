@@ -565,32 +565,6 @@ xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
     qof_query_add_guid_match (q, param_list, guid, op);
 }
 
-void
-xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
-                     QofQueryCompare how, QofIdType id_type,
-                     QofQueryOp op)
-{
-    GSList *param_list = NULL;
-    QofQueryPredData *pred_data;
-
-    if (!q || !path || !value || !id_type)
-        return;
-
-    pred_data = qof_query_kvp_predicate (how, path, value);
-    if (!pred_data)
-        return;
-
-    if (!g_strcmp0 (id_type, GNC_ID_SPLIT))
-        param_list = qof_query_build_param_list (SPLIT_KVP, NULL);
-    else if (!g_strcmp0 (id_type, GNC_ID_TRANS))
-        param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_KVP, NULL);
-    else if (!g_strcmp0 (id_type, GNC_ID_ACCOUNT))
-        param_list = qof_query_build_param_list (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
-    else
-        PERR ("Invalid match type: %s", id_type);
-
-    qof_query_add_term (q, param_list, pred_data, op);
-}
 
 /********************************************************************
  * xaccQueryAddClosingTransMatch

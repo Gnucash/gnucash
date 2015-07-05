@@ -583,7 +583,7 @@ test_gnc_sql_convert_timespec_to_string ()
     GncSqlBackend be = {{
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-            0, NULL, 0, "", NULL, 0, "", NULL, NULL
+            0, NULL, 0, "", NULL
         },
         NULL, NULL, FALSE, FALSE, FALSE, 0, 0, NULL,
         "%4d-%02d-%02d %02d:%02d:%02d"

@@ -64,9 +64,6 @@ const gchar *order_version_string = "2.0.0";
 #define order_active_string "order:active"
 #define order_slots_string "order:slots"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
@@ -79,7 +76,6 @@ order_dom_tree_create (GncOrder *order)
 {
     xmlNodePtr ret;
     Timespec ts;
-    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_order_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST order_version_string);
@@ -106,15 +102,9 @@ order_dom_tree_create (GncOrder *order)
     xmlAddChild(ret, int_to_dom_tree(order_active_string,
                                      gncOrderGetActive (order)));
 
-    kf = qof_instance_get_slots (QOF_INSTANCE(order));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(order_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(order_slots_string,
+                                                    QOF_INSTANCE(order)));
 
     return ret;
 }
@@ -250,8 +240,7 @@ order_slots_handler (xmlNodePtr node, gpointer order_pdata)
 {
     struct order_pdata *pdata = order_pdata;
 
-    return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->order)));
+    return dom_tree_create_instance_slots(node, QOF_INSTANCE (pdata->order));
 }
 
 static struct dom_tree_handler order_handlers_v2[] =

@@ -40,7 +40,7 @@
 #include "Account.h"
 
 /** @name Setter-getters
-    Setter and getter functions for the online_id kvp_frame for
+    Setter and getter functions for the online_id field for
     Accounts.
 	@{
 */
@@ -49,7 +49,7 @@ void gnc_import_set_acc_online_id(Account * account,
                                   const gchar * string_value);
 /** @} */
 /** @name Setter-getters
-    Setter and getter functions for the online_id kvp_frame for
+    Setter and getter functions for the online_id field for
     Transactions.
 	@{
 */
@@ -61,7 +61,7 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
 gboolean gnc_import_trans_has_online_id(Transaction * transaction);
 
 /** @name Setter-getters
-    Setter and getter functions for the online_id kvp_frame for
+    Setter and getter functions for the online_id field for
     Splits.
 	@{
 */

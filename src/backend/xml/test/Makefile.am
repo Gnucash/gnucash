@@ -2,8 +2,8 @@
 SUBDIRS = test-files
 
 test_date_converting_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -12,8 +12,8 @@ test_date_converting_SOURCES = \
   test-date-converting.c
 
 test_dom_converters1_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -22,22 +22,22 @@ test_dom_converters1_SOURCES = \
   test-dom-converters1.c
 
 test_kvp_frames_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
   ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-kvp-frames.c
+  test-kvp-frames.cpp
 
 # the xml backend is now a GModule - this test does
 # not load it as a module and cannot link to it
 # and remain portable.
 
 test_load_example_account_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -60,8 +60,8 @@ test_load_example_account_SOURCES = \
   test-load-example-account.c
 
 test_string_converters_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -70,8 +70,8 @@ test_string_converters_SOURCES = \
   test-string-converters.c
 
 test_xml_account_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -93,8 +93,8 @@ test_xml_account_SOURCES = \
   test-xml-account.c
 
 test_xml_commodity_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -116,8 +116,8 @@ test_xml_commodity_SOURCES = \
   test-xml-commodity.c
 
 test_xml_pricedb_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -139,8 +139,8 @@ test_xml_pricedb_SOURCES = \
   test-xml-pricedb.c
 
 test_xml_transaction_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -162,8 +162,8 @@ test_xml_transaction_SOURCES = \
   test-xml-transaction.c
 
 test_xml2_is_file_SOURCES = \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-utils.c \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
@@ -221,7 +221,7 @@ TESTS_ENVIRONMENT = \
 
 check_LTLIBRARIES = libgnc-test-file-stuff.la
 
-libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
+libgnc_test_file_stuff_la_SOURCES = test-file-stuff.cpp
 libgnc_test_file_stuff_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la
 

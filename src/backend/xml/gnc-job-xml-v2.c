@@ -62,14 +62,10 @@ const gchar *job_version_string = "2.0.0";
 #define job_active_string "job:active"
 #define job_slots_string "job:slots"
 
-/* EFFECTIVE FRIEND FUNCTION */
-extern KvpFrame *qof_instance_get_slots (const QofInstance*);
-
 static xmlNodePtr
 job_dom_tree_create (GncJob *job)
 {
     xmlNodePtr ret;
-    KvpFrame *kf;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_job_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST job_version_string);
@@ -91,15 +87,9 @@ job_dom_tree_create (GncJob *job)
     xmlAddChild(ret, int_to_dom_tree(job_active_string,
                                      gncJobGetActive (job)));
 
-    kf = qof_instance_get_slots (QOF_INSTANCE(job));
-    if (kf)
-    {
-        xmlNodePtr kvpnode = kvp_frame_to_dom_tree(job_slots_string, kf);
-        if (kvpnode)
-        {
-            xmlAddChild(ret, kvpnode);
-        }
-    }
+    /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
+    xmlAddChild(ret, qof_instance_slots_to_dom_tree(job_slots_string,
+                                                    QOF_INSTANCE(job)));
 
     return ret;
 }
@@ -209,8 +199,7 @@ job_slots_handler (xmlNodePtr node, gpointer job_pdata)
 {
     struct job_pdata *pdata = job_pdata;
 
-    return dom_tree_to_kvp_frame_given
-        (node, qof_instance_get_slots (QOF_INSTANCE (pdata->job)));
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->job));
 }
 
 static struct dom_tree_handler job_handlers_v2[] =

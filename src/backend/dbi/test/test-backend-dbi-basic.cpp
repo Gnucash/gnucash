@@ -4,7 +4,10 @@
  *  Created on: 2011-04-23
  *      Author: phil
  */
+#include <kvp_frame.hpp>
 
+extern "C"
+{
 #include "config.h"
 
 #include <sys/types.h>
@@ -33,6 +36,7 @@
 /* For version_control */
 #include <gnc-prefs.h>
 #include <qofsession-p.h>
+}
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
@@ -42,7 +46,7 @@ static dbi_inst dbi_instance = NULL;
 #endif
 
 static const gchar* suitename = "/backend/dbi";
-void test_suite_gnc_backend_dbi (void);
+extern "C" void test_suite_gnc_backend_dbi (void);
 
 typedef struct
 {
@@ -79,7 +83,6 @@ setup_memory (Fixture *fixture, gconstpointer pData)
     gchar *url = (gchar*)pData;
     QofBook* book;
     Account *root, *acct1, *acct2;
-    KvpFrame* frame;
     Transaction* tx;
     Split *spl1, *spl2;
     gnc_commodity_table* table;
@@ -97,15 +100,16 @@ setup_memory (Fixture *fixture, gconstpointer pData)
     xaccAccountSetName (acct1, "Bank 1");
     xaccAccountSetCommodity (acct1, currency);
 
-    frame = qof_instance_get_slots (QOF_INSTANCE(acct1));
-    kvp_frame_set_gint64 (frame, "int64-val", 100);
-    kvp_frame_set_double (frame, "double-val", 3.14159);
-    kvp_frame_set_numeric (frame, "numeric-val", gnc_numeric_zero());
+    auto frame = qof_instance_get_slots (QOF_INSTANCE(acct1));
+    frame->set("int64-val", new KvpValue(INT64_C(100)));
+    frame->set("double-val", new KvpValue(3.14159));
+    frame->set("numeric-val", new KvpValue(gnc_numeric_zero()));
 
-    kvp_frame_set_timespec (frame, "timespec-val", timespec_now ());
+    frame->set("timespec-val", new KvpValue(timespec_now ()));
 
-    kvp_frame_set_string (frame, "string-val", "abcdefghijklmnop");
-    kvp_frame_set_guid (frame, "guid-val", qof_instance_get_guid (QOF_INSTANCE(acct1)));
+    frame->set("string-val", new KvpValue("abcdefghijklmnop"));
+    auto guid = qof_instance_get_guid (QOF_INSTANCE(acct1));
+    frame->set("guid-val", new KvpValue(const_cast<GncGUID*>(guid)));
 
     gnc_account_append_child (root, acct1);
 
@@ -227,9 +231,9 @@ destroy_database (gchar* url)
     gchar *basename = NULL;
     gint portnum = 0;
     gchar *port = NULL;
-    gchar *pgsql = "pgsql";
+    auto pgsql = "pgsql";
     dbi_conn conn = NULL;
-    gchar *errfmt = "Unable to delete tables in %s: %s";
+    auto errfmt = "Unable to delete tables in %s: %s";
     gint fail = 0;
     dbi_result tables;
     GSList *list = NULL;
@@ -295,11 +299,11 @@ destroy_database (gchar* url)
 static void
 teardown (Fixture *fixture, gconstpointer pData)
 {
-    gchar *lockfile = g_strdup_printf ("%s/test-dbi.xml.LCK",
+    auto lockfile = g_strdup_printf ("%s/test-dbi.xml.LCK",
                                        g_path_get_dirname (DBI_TEST_XML_FILENAME));
-    gchar *msg = g_strdup_printf ("[xml_session_end()] Error on g_unlink(%s): 2: No such file or directory", lockfile);
-    gchar *logdomain = "gnc.backend";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
+    auto msg = g_strdup_printf ("[xml_session_end()] Error on g_unlink(%s): 2: No such file or directory", lockfile);
+    auto logdomain = "gnc.backend";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct *check = test_error_struct_new (logdomain, loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
                      (GLogFunc)test_checked_handler);
@@ -334,7 +338,8 @@ test_conn_index_functions (QofBackend *qbe)
     for  (iter = index_list; iter != NULL; iter = g_slist_next (iter))
     {
         const char *errmsg;
-        conn->provider->drop_index (be->conn, iter->data);
+        conn->provider->drop_index (be->conn,
+                                    static_cast<const char*>(iter->data));
         g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn, &errmsg));
     }
 
@@ -353,9 +358,9 @@ test_dbi_store_and_reload (Fixture *fixture, gconstpointer pData)
     QofSession* session_3;
     QofBackend *be;
 
-    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    gchar *log_domain = "gnc.backend.dbi";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
+    auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    auto log_domain = "gnc.backend.dbi";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
                      (GLogFunc)test_checked_handler);
@@ -401,13 +406,13 @@ test_dbi_store_and_reload (Fixture *fixture, gconstpointer pData)
 static void
 test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
 {
-    gchar *url = (gchar*)pData;
+    auto url = (gchar*)pData;
     QofSession *session_1 = NULL, *session_2 = NULL;
     QofBackend *be;
 
-    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    gchar *log_domain = "gnc.backend.dbi";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
+    auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    auto log_domain = "gnc.backend.dbi";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
 
     if (fixture->filename)
@@ -478,7 +483,7 @@ cleanup:
 static void
 test_dbi_version_control (Fixture *fixture, gconstpointer pData)
 {
-    gchar *url = (gchar*)pData;
+    auto url = (gchar*)pData;
     QofSession *sess;
     QofBook *book;
     QofBackend *qbe;
@@ -547,9 +552,9 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
     QofSession* session_3;
     const gchar* url = (gchar*)pData;
 
-    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    gchar *log_domain = "gnc.backend.dbi";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
+    auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    auto log_domain = "gnc.backend.dbi";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
     if (fixture->filename)
         url = fixture->filename;
@@ -576,9 +581,9 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
 }
 
 static void
-create_dbi_test_suite (gchar *dbm_name, gchar *url)
+create_dbi_test_suite (const char *dbm_name, const char *url)
 {
-    gchar *subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
+    auto subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
     GNC_TEST_ADD (subsuite, "store_and_reload", Fixture, url, setup,
                   test_dbi_store_and_reload, teardown);
     GNC_TEST_ADD (subsuite, "safe_save", Fixture, url, setup_memory,
@@ -591,7 +596,7 @@ create_dbi_test_suite (gchar *dbm_name, gchar *url)
 
 }
 
-void
+extern "C" void
 test_suite_gnc_backend_dbi (void)
 {
     dbi_driver driver = NULL;

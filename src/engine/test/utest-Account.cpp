@@ -18,7 +18,9 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
-********************************************************************/
+ ********************************************************************/
+extern "C"
+{
 #include "config.h"
 #include <string.h>
 #include <glib.h>
@@ -43,6 +45,9 @@
 #endif
 static const gchar *suitename = "/engine/Account";
 void test_suite_account (void);
+}
+
+#include <kvp_frame.hpp>
 
 typedef struct
 {
@@ -53,20 +58,20 @@ typedef struct
 typedef struct
 {
     GNCAccountType type;
-    char *name;
-    char *parent;
-    char *code;
-    char *desc;
-    char *color;
-    char *notes;
-    char *num;
+    const char *name;
+    const char *parent;
+    const char *code;
+    const char *desc;
+    const char *color;
+    const char *notes;
+    const char *num;
     GNCPolicy *policy;
 } AccountParms;
 
 typedef struct
 {
-    char *memo;
-    char *account;
+    const char *memo;
+    const char *account;
     char reconciled;
     gnc_numeric amount;
     gnc_numeric value;
@@ -75,7 +80,7 @@ typedef struct
 
 typedef struct
 {
-    gchar *desc;
+    const char *desc;
     gint date_offset;
     SplitParms splits[2];
 } TxnParms;
@@ -264,10 +269,10 @@ static SetupData complex_data = {G_N_ELEMENTS (complex_accts),
 static Split*
 insert_split (Account *parent, Transaction *txn, SplitParms *p)
 {
-    QofBook *book = gnc_account_get_book (parent);
-    Split *split = xaccMallocSplit (book);
-    Account *acct = gnc_account_lookup_by_name (parent, p->account);
-    LotList* lotlist = xaccAccountGetLotList (acct);
+    auto book = gnc_account_get_book (parent);
+    auto split = xaccMallocSplit (book);
+    auto acct = gnc_account_lookup_by_name (parent, p->account);
+    auto lotlist = xaccAccountGetLotList (acct);
     GNCLot* lot = NULL;
     g_assert (acct != NULL);
     xaccSplitSetParent (split, txn);
@@ -296,31 +301,32 @@ insert_split (Account *parent, Transaction *txn, SplitParms *p)
 static void
 setup (Fixture *fixture, gconstpointer pData)
 {
-    QofBook *book = qof_book_new ();
-    Account *root = gnc_account_create_root (book), *acct = NULL;
-    SetupData *parms = (SetupData *)pData;
+    auto book = qof_book_new ();
+    auto root = gnc_account_create_root (book);
+    auto parms = static_cast<const SetupData*>(pData);
     TxnParms *t_arr;
     AccountParms *p_arr;
-    GHashTable *accts = g_hash_table_new (g_str_hash, g_str_equal);
+    auto accts = g_hash_table_new (g_str_hash, g_str_equal);
     guint ind;
 
-    g_hash_table_insert (accts, "root", root);
+    auto root_str = static_cast<char*>(CACHE_INSERT("root"));
+    g_hash_table_insert (accts, root_str, root);
     fixture->func = _utest_account_fill_functions ();
     if (parms == NULL)
     {
         fixture->acct = root;
         return;
     }
-    acct = root;
+    auto acct = root;
 
     p_arr  = (AccountParms*)parms->accounts;
     for (ind = 0; ind < parms->num_accounts; ind++)
     {
-        Account *child = xaccMallocAccount (book);
+        auto child = xaccMallocAccount (book);
         AccountParms p = p_arr[ind];
         if (p.parent && strlen (p.parent) > 0)
         {
-            Account *parent = g_hash_table_lookup (accts, p.parent);
+            auto parent = static_cast<Account*>(g_hash_table_lookup (accts, p.parent));
             g_assert (parent != NULL);
             gnc_account_append_child (parent, child);
         }
@@ -331,7 +337,7 @@ setup (Fixture *fixture, gconstpointer pData)
         if (p.name)
         {
             xaccAccountSetName (acct, p.name);
-            g_hash_table_insert (accts, p.name, acct);
+            g_hash_table_insert (accts, const_cast<char*>(p.name), acct);
         }
         if (p.code)
             xaccAccountSetCode (acct, p.code);
@@ -426,27 +432,28 @@ static void
 test_gnc_account_name_violations_errmsg ()
 {
     GList *badnames = NULL, *nonames = NULL, *node = NULL;
-    gchar *separator = ":", *message, *validation_message, *account_list = NULL;
+    auto separator = ":";
+    char *account_list = NULL;
     /* FUT wants to free the strings, so we alloc them */
     badnames = g_list_prepend (badnames, g_strdup ("Foo:bar"));
     badnames = g_list_prepend (badnames, g_strdup ("baz"));
     badnames = g_list_prepend (badnames, g_strdup ("waldo:pepper"));
-    message = gnc_account_name_violations_errmsg (separator, nonames);
+    auto message = gnc_account_name_violations_errmsg (separator, nonames);
     for (node = badnames; node; node = g_list_next (node))
     {
         if (!account_list)
-            account_list = g_strdup (node->data);
+            account_list = g_strdup (static_cast<char*>(node->data));
         else
         {
-            gchar *tmp_list = g_strconcat ( account_list, "\n",
-                                            node->data, NULL);
+            auto tmp_list = g_strconcat ( account_list, "\n",
+                                          static_cast<char*>(node->data), NULL);
             g_free (account_list);
             account_list = tmp_list;
         }
     }
     message = gnc_account_name_violations_errmsg (separator, nonames);
     g_assert (message == NULL);
-    validation_message = g_strdup_printf (
+    auto validation_message = g_strdup_printf (
         "The separator character \"%s\" is used in one or more account "
         "names.\n\nThis will result in unexpected behaviour. "
         "Either change the account names or choose another separator "
@@ -463,33 +470,33 @@ GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)/
 static void
 test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
-    guint log_level = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *log_domain = "gnc.engine";
+    auto log_level = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto log_domain = "gnc.engine";
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "GList *gnc_account_list_name_violations(QofBook *, const gchar *)"
 #else
 #define _func "gnc_account_list_name_violations"
 #endif
-    gchar *msg = _func ": assertion " _Q "separator != NULL' failed";
+    auto msg = _func ": assertion " _Q "separator != NULL' failed";
 #undef _func
-    TestErrorStruct check = { log_level, log_domain, msg, 0 };
+    auto check = test_error_struct_new(log_domain, log_level, msg);
     GList *results, *res_iter;
-    gchar *sep = ":";
+    auto sep = ":";
     QofBook *book = gnc_account_get_book (fixture->acct);
     /* Because of GLib bug 653052, we have to set the logging user_data to
      * affect the test_log_fatal_handler
      */
-    GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+    GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check);
     g_assert (gnc_account_list_name_violations (NULL, NULL) == NULL);
-    g_assert_cmpint (check.hits, ==, 1);
+    g_assert_cmpint (check->hits, ==, 1);
     g_assert (gnc_account_list_name_violations (book, NULL) == NULL);
-    g_assert_cmpint (check.hits, ==, 2);
+    g_assert_cmpint (check->hits, ==, 2);
     g_assert (gnc_account_list_name_violations (NULL, sep) == NULL);
     g_log_set_default_handler (oldlogger, NULL);
     results = gnc_account_list_name_violations (book, sep);
     g_assert_cmpuint (g_list_length (results), == , 2);
-    g_assert_cmpint (check.hits, ==, 2);
+    g_assert_cmpint (check->hits, ==, 2);
     for (res_iter = results; res_iter; res_iter = g_list_next (res_iter))
         test_free (res_iter->data);
     g_list_free (results);
@@ -545,8 +552,8 @@ gnc_account_init (Account* acc)// 1
 static void
 test_gnc_account_create_and_destroy (void)
 {
-    Account *acc = g_object_new (GNC_TYPE_ACCOUNT, NULL);
-    gchar *name, *fname, *code, *desc, *color, *notes, *tax_code, *tax_src;
+    auto acc = static_cast<Account*>(g_object_new (GNC_TYPE_ACCOUNT, NULL));
+    char *name, *fname, *code, *desc, *color, *notes, *tax_code, *tax_src;
     GNCAccountType type;
     gnc_commodity *commo;
     gint commo_scu, mark;
@@ -659,10 +666,10 @@ Simple pass-through for qof_collection_get_data ()
 static void
 test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
 {
-    guint log_level = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *log_domain = "gnc.account";
-    gchar *msg = "[gnc_book_set_root_account()] cannot mix and match books freely!";
-    TestErrorStruct check = { log_level, log_domain, msg, 0 };
+    auto log_level = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto log_domain = "gnc.account";
+    auto msg = "[gnc_book_set_root_account()] cannot mix and match books freely!";
+    auto check = test_error_struct_new(log_domain, log_level, msg);
     Account *acc1, *acc2;
     QofBook* book1 = qof_book_new ();
     GLogFunc oldlogger;
@@ -678,12 +685,12 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
     /* Now try to set the book's root account to the fixture
      * accout. Should throw an error.
      */
-    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
-                                  &check);
+                                  check);
     gnc_book_set_root_account (book1, fixture->acct);
     g_assert (gnc_book_get_root_account (book1) == acc1);
-    g_assert_cmpint (check.hits, ==, 1);
+    g_assert_cmpint (check->hits, ==, 1);
     g_log_set_default_handler (oldlogger, NULL);
     /* Check that if we set the same root, it stays set */
     gnc_book_set_root_account (book2, fixture->acct);
@@ -727,7 +734,7 @@ test_gnc_account_create_root (void)
     QofBook *book = qof_book_new ();
     QofCollection *coll = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
     Account *acc;
-    gchar *name;
+    char *name;
     AccountTestFunctions *func = _utest_account_fill_functions ();
     /* Can't use gnc_book_get_root_account, it creates one if it doesn't
      * yet exist */
@@ -751,27 +758,28 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
 {
     Account *clone;
     QofBook *book = gnc_account_get_book (fixture->acct);
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "Account *xaccCloneAccount(const Account *, QofBook *)"
 #else
 #define _func "xaccCloneAccount"
 #endif
-    gchar *msg1 = _func ": assertion " _Q "GNC_IS_ACCOUNT(from)' failed";
-    gchar *msg2 = _func ": assertion " _Q "QOF_IS_BOOK(book)' failed";
+    auto msg1 = _func ": assertion " _Q "GNC_IS_ACCOUNT(from)' failed";
+    auto msg2 = _func ": assertion " _Q "QOF_IS_BOOK(book)' failed";
 #undef _func
-    TestErrorStruct check = { loglevel, "gnc.engine", msg1, 0 };
-    GLogFunc oldlogger;
+    auto check = test_error_struct_new("gnc.engine", loglevel, msg1);
     AccountPrivate *acct_p, *clone_p;
-    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+    auto oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler,
+                                                check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check);
     clone = xaccCloneAccount (NULL, book);
     g_assert (clone == NULL);
-    g_assert_cmpint (check.hits, ==, 1);
-    check.msg = msg2;
+    g_assert_cmpint (check->hits, ==, 1);
+    g_free(check->msg);
+    check->msg = g_strdup(msg2);
     clone = xaccCloneAccount (fixture->acct, NULL);
     g_assert (clone == NULL);
-    g_assert_cmpint (check.hits, ==, 2);
+    g_assert_cmpint (check->hits, ==, 2);
     g_log_set_default_handler (oldlogger, NULL);
     /* Now test the real clone */
     clone = xaccCloneAccount (fixture->acct, book);
@@ -782,12 +790,13 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
     g_assert (clone_p->accountName == acct_p->accountName);
     g_assert (clone_p->accountCode == acct_p->accountCode);
     g_assert (clone_p->description == acct_p->description);
-    g_assert (kvp_frame_compare (clone->inst.kvp_data,
-                                 fixture->acct->inst.kvp_data) == 0);
+    g_assert (compare (clone->inst.kvp_data,
+                       fixture->acct->inst.kvp_data) == 0);
     g_assert (gnc_commodity_equal (clone_p->commodity, acct_p->commodity));
     g_assert (clone_p->commodity_scu == acct_p->commodity_scu);
     g_assert (clone_p->non_standard_scu == acct_p->non_standard_scu);
     /* Clean Up */
+    test_error_struct_free(check);
     g_object_unref (clone);
 
 }
@@ -853,18 +862,18 @@ acc_free
 static void
 test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 {
-    gchar *msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
+    auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
 #define _func "xaccTransGetSplitIndex"
 #endif
-    gchar *msg2 = _func ": assertion " _Q "trans && split' failed";
+    auto msg2 = _func ": assertion " _Q "trans && split' failed";
 #undef _func
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check1 = { loglevel, "gnc.account", msg1, 0 };
-    TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto check1 = test_error_struct_new("gnc.account", loglevel, msg1);
+    auto check2 = test_error_struct_new("gnc.engine", loglevel, msg2);
     QofBook *book = gnc_account_get_book (fixture->acct);
     Account *parent = gnc_account_get_parent (fixture->acct);
     AccountPrivate *p_priv = fixture->func->get_private (parent);
@@ -872,12 +881,12 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     guint i = 0;
     guint hdlr1, hdlr2;
     gnc_commodity *commodity = gnc_commodity_new (book, "US Dollar", "CURRENCY", "USD", "0", 100);
-    test_add_error (&check1);
-    test_add_error (&check2);
+    test_add_error (check1);
+    test_add_error (check2);
     hdlr1 = g_log_set_handler ("gnc.account", loglevel,
-                               (GLogFunc)test_checked_handler, &check1);
+                               (GLogFunc)test_checked_handler, check1);
     hdlr2 = g_log_set_handler ("gnc.engine", loglevel,
-                               (GLogFunc)test_checked_handler, &check2);
+                               (GLogFunc)test_checked_handler, check2);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
     for (i = 0; i < numItems; i++)
     {
@@ -893,8 +902,8 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     g_assert (p_priv->splits != NULL);
     g_assert (p_priv->parent != NULL);
     g_assert (p_priv->commodity != NULL);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
+    g_assert_cmpint (check1->hits, ==, 0);
+    g_assert_cmpint (check2->hits, ==, 0);
     /* Now set the other private parts to something so that they can be set back */
     p_priv->cleared_balance = gnc_numeric_create ( 5, 12);
     p_priv->reconciled_balance = gnc_numeric_create ( 5, 12);
@@ -902,8 +911,8 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     p_priv->balance_dirty = TRUE;
     p_priv->sort_dirty = TRUE;
     fixture->func->xaccFreeAccount (parent);
-    g_assert_cmpint (check1.hits, ==, 6);
-    g_assert_cmpint (check2.hits, ==, 6);
+    g_assert_cmpint (check1->hits, ==, 6);
+    g_assert_cmpint (check2->hits, ==, 6);
     /* cleanup what's left */
     g_log_remove_handler ("gnc.account", hdlr1);
     g_log_remove_handler ("gnc.engine", hdlr2);
@@ -967,18 +976,18 @@ Also tests:
 static void
 test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 {
-    gchar *msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
+    auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
 #define _func "xaccTransGetSplitIndex"
 #endif
-    gchar *msg2 = _func ": assertion " _Q "trans && split' failed";
+    auto msg2 = _func ": assertion " _Q "trans && split' failed";
 #undef _func
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check1 = { loglevel, "gnc.account", msg1, 0 };
-    TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto check1 = test_error_struct_new("gnc.account", loglevel, msg1);
+    auto check2 = test_error_struct_new("gnc.engine", loglevel, msg2);
     guint hdlr1, hdlr2;
     TestSignal sig1, sig2;
     QofBook *book = gnc_account_get_book (fixture->acct);
@@ -987,12 +996,12 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     const guint numItems = 3;
     guint i = 0;
     gnc_commodity *commodity = gnc_commodity_new (book, "US Dollar", "CURRENCY", "USD", "0", 100);
-    test_add_error (&check1);
-    test_add_error (&check2);
+    test_add_error (check1);
+    test_add_error (check2);
     hdlr1 = g_log_set_handler ("gnc.account", loglevel,
-                               (GLogFunc)test_checked_handler, &check1);
+                               (GLogFunc)test_checked_handler, check1);
     hdlr2 = g_log_set_handler ("gnc.engine", loglevel,
-                               (GLogFunc)test_checked_handler, &check2);
+                               (GLogFunc)test_checked_handler, check2);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
     for (i = 0; i < numItems; i++)
     {
@@ -1008,8 +1017,8 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert (p_priv->splits != NULL);
     g_assert (p_priv->parent != NULL);
     g_assert (p_priv->commodity != NULL);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
+    g_assert_cmpint (check1->hits, ==, 0);
+    g_assert_cmpint (check2->hits, ==, 0);
 
     sig1 = test_signal_new (&parent->inst, QOF_EVENT_MODIFY, NULL);
     sig2 = test_signal_new (&parent->inst, QOF_EVENT_DESTROY, NULL);
@@ -1024,8 +1033,8 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert (p_priv->splits != NULL);
     g_assert (p_priv->parent != NULL);
     g_assert (p_priv->commodity != NULL);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
+    g_assert_cmpint (check1->hits, ==, 0);
+    g_assert_cmpint (check2->hits, ==, 0);
     /* xaccAccountDestroy destroys the account by calling
      * qof_instance_set_destroying (), then xaccAccountCommitEdit ();
      */
@@ -1034,8 +1043,8 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     /* So this time we make sure that the account is destroyed */
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig2, 1);
-    g_assert_cmpint (check1.hits, ==, 2);
-    g_assert_cmpint (check2.hits, ==, 12);
+    g_assert_cmpint (check1->hits, ==, 2);
+    g_assert_cmpint (check2->hits, ==, 12);
     /* And clean up */
     test_signal_free (sig1);
     test_signal_free (sig2);
@@ -1091,22 +1100,22 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "gnc_account_insert_split"
 #endif
-    gchar *msg1 = _func ": assertion " _Q "GNC_IS_ACCOUNT(acc)' failed";
-    gchar *msg2 = _func ": assertion " _Q "GNC_IS_SPLIT(s)' failed";
+    auto msg1 = _func ": assertion " _Q "GNC_IS_ACCOUNT(acc)' failed";
+    auto msg2 = _func ": assertion " _Q "GNC_IS_SPLIT(s)' failed";
 #undef _func
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-//    gchar *log_domain = "gnc.engine";
-    TestErrorStruct check1 = { loglevel, "gnc.engine", msg1, 0 };
-    TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
-    TestErrorStruct check3 = { loglevel, "gnc.engine", NULL, 0 };
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+//    auto log_domain = "gnc.engine";
+    auto check1 = test_error_struct_new("gnc.engine", loglevel, msg1);
+    auto check2 = test_error_struct_new("gnc.engine", loglevel, msg2);
+    auto check3 = test_error_struct_new("gnc.engine", loglevel, NULL);
     guint logger;
     sig1 = test_signal_new (&fixture->acct->inst, QOF_EVENT_MODIFY, NULL);
     sig2 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_ADDED, split1);
 
-    test_add_error (&check1);
-    test_add_error (&check2);
+    test_add_error (check1);
+    test_add_error (check2);
     logger = g_log_set_handler ("gnc.engine", loglevel,
-                                (GLogFunc)test_null_handler, &check3);
+                                (GLogFunc)test_null_handler, check3);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
 
     /* Check that the call fails with invalid account and split (throws) */
@@ -1128,9 +1137,9 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     /* g_assert (!priv->balance_dirty); */
     /* test_signal_assert_hits (sig1, 0); */
     /* test_signal_assert_hits (sig2, 0); */
-    g_assert_cmpint (check1.hits, ==, 1);
-    g_assert_cmpint (check2.hits, ==, 1);
-    g_assert_cmpint (check3.hits, ==, 0);
+    g_assert_cmpint (check1->hits, ==, 1);
+    g_assert_cmpint (check2->hits, ==, 1);
+    g_assert_cmpint (check3->hits, ==, 0);
     g_log_remove_handler ("gnc.engine", logger);
     test_clear_error_list ();
 
@@ -1320,10 +1329,9 @@ test_xaccAccountRecomputeBalance (Fixture *fixture, gconstpointer pData)
                 clr_bal = gnc_numeric_zero ();
     SetupData *sdata = (SetupData*)pData;
     TxnParms* t_arr;
-    int ind;
     g_assert (sdata != NULL);
     t_arr = (TxnParms*)sdata->txns;
-    for (ind = 0; ind < sdata->num_txns; ind++)
+    for (unsigned int ind = 0; ind < sdata->num_txns; ind++)
     {
         SplitParms p = t_arr[ind].splits[1];
         bal = gnc_numeric_add_fixed (bal, p.amount);
@@ -1473,12 +1481,14 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     QofBook *fbook = qof_book_new ();
     Account *froot = gnc_account_create_root (fbook);
     Account *account = xaccMallocAccount (fbook);
-    gchar *logdomain = "gnc.account";
-    gchar *msg1 = "[gnc_account_append_child()] reparenting accounts across books is not correctly supported\n";
-    gchar *msg2 = "[gnc_account_remove_child()] account not a child of parent";
+    auto logdomain = "gnc.account";
+    auto msg1 = "[gnc_account_append_child()] reparenting accounts across books is not correctly supported\n";
+    auto msg2 = "[gnc_account_remove_child()] account not a child of parent";
     guint log_handler = 0;
-    TestErrorStruct check_warn = {G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL, "gnc.account", msg1, 0 };
-    TestErrorStruct check_err = {G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, "gnc.account", msg2, 0 };
+    auto loglevelc = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto loglevelw = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
+    auto check_warn = test_error_struct_new("gnc.account", loglevelw, msg1);
+    auto check_err = test_error_struct_new("gnc.account", loglevelc, msg2);
     TestSignal sig1, sig2, sig3;
     AccountTestFunctions *func = _utest_account_fill_functions ();
     AccountPrivate *frpriv = func->get_private (froot),
@@ -1493,25 +1503,29 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 0);
     test_signal_assert_hits (sig3, 0);
-    g_assert_cmpint (check_warn.hits, ==, 0);
-    g_assert_cmpint (check_err.hits, ==, 0);
+    g_assert_cmpint (check_warn->hits, ==, 0);
+    g_assert_cmpint (check_err->hits, ==, 0);
     g_assert (qof_instance_get_dirty (QOF_INSTANCE (froot)));
     g_assert (qof_instance_get_dirty (QOF_INSTANCE (account)));
     g_assert (g_list_find (frpriv->children, account));
     g_assert (qof_collection_lookup_entity (
                   qof_book_get_collection (fbook, GNC_ID_ACCOUNT),
                   acct_guid));
-    log_handler = g_log_set_handler (logdomain, G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, (GLogFunc)test_null_handler, &check_warn);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check_warn);
+    auto loglevelr = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL |
+                                                 G_LOG_FLAG_RECURSION);
+    log_handler = g_log_set_handler (logdomain, loglevelr,
+                                     (GLogFunc)test_null_handler, check_warn);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check_warn);
     gnc_account_append_child (fixture->acct, account);
     g_log_remove_handler (logdomain, log_handler);
-    g_assert_cmpstr (msg1, == , check_warn.msg);
+    g_assert_cmpstr (msg1, == , check_warn->msg);
     g_assert (gnc_account_get_parent (account) == fixture->acct);
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig2, 1);
     test_signal_assert_hits (sig3, 1);
-    g_assert_cmpint (check_warn.hits, ==, 1);
-    g_assert_cmpint (check_err.hits, ==, 0);
+    g_assert_cmpint (check_warn->hits, ==, 1);
+    g_assert_cmpint (check_err->hits, ==, 0);
     g_assert (!qof_collection_lookup_entity (
                   qof_book_get_collection (fbook, GNC_ID_ACCOUNT),
                   acct_guid));
@@ -1527,24 +1541,24 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     test_signal_free (sig3);
     sig1 = test_signal_new (&account->inst, QOF_EVENT_REMOVE, NULL);
     sig2 = test_signal_new (&(fixture->acct)->inst, QOF_EVENT_MODIFY, NULL);
-    log_handler = g_log_set_handler (logdomain, G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL,
-                                     (GLogFunc)test_null_handler, &check_err);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check_err);
+    log_handler = g_log_set_handler (logdomain, loglevelc,
+                                     (GLogFunc)test_null_handler, check_err);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check_err);
     gnc_account_remove_child (froot, account);
     g_log_remove_handler (logdomain, log_handler);
 
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
-    g_assert_cmpint (check_err.hits, ==, 1);
-    g_assert_cmpint (check_warn.hits, ==, 1);
+    g_assert_cmpint (check_err->hits, ==, 1);
+    g_assert_cmpint (check_warn->hits, ==, 1);
 
     gnc_account_remove_child (fixture->acct, account);
     g_assert (gnc_account_get_parent (account) == NULL);
     g_assert (g_list_find (apriv->children, account) == NULL);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
-    g_assert_cmpint (check_warn.hits, ==, 1);
-    g_assert_cmpint (check_err.hits, ==, 1);
+    g_assert_cmpint (check_warn->hits, ==, 1);
+    g_assert_cmpint (check_err->hits, ==, 1);
     test_signal_free (sig1);
     test_signal_free (sig2);
     xaccAccountBeginEdit (account);
@@ -1705,23 +1719,23 @@ test_gnc_account_lookup_by_full_name_helper ( Fixture *fixture,
         gconstpointer pData )
 {
     Account *root, *target;
-    gchar *names1[] = {"income", "taxable", "int", NULL};
-    gchar *names2[] =  {"income", "exempt", "int", NULL};
-    gchar *names3[] = {"expense", "taxable", "int", NULL};
-    gchar *code;
+    const char *names1[] = {"income", "taxable", "int", NULL};
+    const char *names2[] =  {"income", "exempt", "int", NULL};
+    const char *names3[] = {"expense", "taxable", "int", NULL};
+    char *code;
     AccountTestFunctions *func = _utest_account_fill_functions ();
 
     root = gnc_account_get_root (fixture->acct);
-    target = func->gnc_account_lookup_by_full_name_helper (root, names1);
+    target = func->gnc_account_lookup_by_full_name_helper (root, const_cast<char**>(names1));
     g_assert (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4160");
     g_free (code);
-    target = func->gnc_account_lookup_by_full_name_helper (root, names2);
+    target = func->gnc_account_lookup_by_full_name_helper (root, const_cast<char**>(names2));
     g_assert (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4210");
-    target = func->gnc_account_lookup_by_full_name_helper (root, names3);
+    target = func->gnc_account_lookup_by_full_name_helper (root, const_cast<char**>(names3));
     g_assert (target == NULL);
     g_free (code);
 }
@@ -1732,9 +1746,9 @@ static void
 test_gnc_account_lookup_by_full_name (Fixture *fixture, gconstpointer pData)
 {
     Account *root, *target;
-    gchar *names1 = "income:taxable:int";
-    gchar *names2 =  "income:exempt:int";
-    gchar *names3 = "expense:taxable:int";
+    auto names1 = "income:taxable:int";
+    auto names2 =  "income:exempt:int";
+    auto names3 = "expense:taxable:int";
     gchar *code;
 
     root = gnc_account_get_root (fixture->acct);
@@ -1830,13 +1844,12 @@ test_gnc_account_foreach_descendant_until (Fixture *fixture, gconstpointer pData
     Account *first = gnc_account_lookup_by_code (root, "2000");
     Account *second = gnc_account_lookup_by_code (root, "4000");
     Account *expected = gnc_account_lookup_by_code (root, "4160");
-    Account *result;
-    guint counter = 0;
-    result = gnc_account_foreach_descendant_until (first, thunk2, &counter);
+    unsigned int counter = 0;
+    auto result = static_cast<Account*>(gnc_account_foreach_descendant_until (first, thunk2, &counter));
     g_assert_cmpint (counter, == , 11);
     g_assert (result == NULL);
     counter = 0;
-    result = gnc_account_foreach_descendant_until (second, thunk2, &counter);
+    result = static_cast<Account*>(gnc_account_foreach_descendant_until (second, thunk2, &counter));
     g_assert (result == expected);
     g_assert_cmpint (counter, == , 6);
 }
@@ -2050,7 +2063,7 @@ test_xaccAccountFindOpenLots (Fixture *fixture, gconstpointer pData)
 static gpointer
 bogus_for_each_lot_func (GNCLot *lot, gpointer data)
 {
-    guint *count = data;
+    auto count = static_cast<unsigned int *>(data);
     ++*count;
     return (*count > 4 ? lot : NULL);
 }
@@ -2107,6 +2120,14 @@ test_xaccAccountHasAncestor (Fixture *fixture, gconstpointer pData)
     g_assert (!xaccAccountHasAncestor (ltcg, expense));
 
 }
+inline GNCAccountType& operator++(GNCAccountType& x)
+{
+    using AcctTypeType = std::underlying_type<GNCAccountType>;
+    if (x < ACCT_TYPE_LAST)
+        x = static_cast<GNCAccountType>(x + 1);
+    return x;
+}
+
 /* xaccAccountTypeEnumAsString
  * xaccAccountStringToType
  * xaccAccountStringToEnum
@@ -2117,19 +2138,19 @@ xaccAccountTypeEnumAsString (GNCAccountType type)// C: 5 in 3 */
 static void
 test_xaccAccountType_Stuff (void)
 {
-    GNCAccountType  type;
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "gnc.account";
-    gchar *msg1 = g_strdup_printf ("[xaccAccountTypeEnumAsString()] asked to translate unknown account type %d.\n", ACCT_TYPE_LAST);
-    gchar *msg2 = "[xaccAccountStringToType()] asked to translate unknown account type string (null).\n";
-    gchar *msg3 = "[xaccAccountStringToType()] asked to translate unknown account type string LAST.\n";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto logdomain = "gnc.account";
+    auto msg1 = g_strdup_printf ("[xaccAccountTypeEnumAsString()] asked to translate unknown account type %d.\n", ACCT_TYPE_LAST);
+    auto msg2 = "[xaccAccountStringToType()] asked to translate unknown account type string (null).\n";
+    auto msg3 = "[xaccAccountStringToType()] asked to translate unknown account type string LAST.\n";
     guint loghandler = 0;
-    TestErrorStruct check1 = { loglevel, logdomain, msg1, 0 };
-    TestErrorStruct check2 = { loglevel, logdomain, msg2, 0 };
-    TestErrorStruct check3 = { loglevel, logdomain, msg3, 0 };
-    Account *acc = g_object_new (GNC_TYPE_ACCOUNT, NULL);
+    auto check1 = test_error_struct_new(logdomain, loglevel, msg1);
+    auto check2 = test_error_struct_new(logdomain, loglevel, msg2);
+    auto check3 = test_error_struct_new(logdomain, loglevel, msg3);
+    auto acc = static_cast<Account*>(g_object_new (GNC_TYPE_ACCOUNT, NULL));
+    GNCAccountType type;
 
-    for (type = ACCT_TYPE_NONE; type < ACCT_TYPE_LAST; type = type + 1)
+    for (type = ACCT_TYPE_NONE; type < ACCT_TYPE_LAST; ++type)
     {
         const gchar *type_name = xaccAccountTypeEnumAsString (type);
         const gchar *typestr;
@@ -2144,19 +2165,19 @@ test_xaccAccountType_Stuff (void)
         typestr_uc = g_ascii_strup (typestr, strlen (typestr));
         if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE)
         {
-            gchar *cmpstr = g_strconcat ("A/", type_name, NULL);
+            auto cmpstr = g_strconcat ("A/", type_name, NULL);
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
         else if (type == ACCT_TYPE_CREDIT)
         {
-            gchar *cmpstr = g_strconcat (type_name, " CARD", NULL);
+            auto cmpstr = g_strconcat (type_name, " CARD", NULL);
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
         else if (type == ACCT_TYPE_MUTUAL)
         {
-            gchar *cmpstr = g_strconcat (type_name, " FUND", NULL);
+            auto cmpstr = g_strconcat (type_name, " FUND", NULL);
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
@@ -2177,25 +2198,25 @@ test_xaccAccountType_Stuff (void)
     g_object_unref (acc);
 
     loghandler = g_log_set_handler (logdomain, loglevel,
-                                    (GLogFunc)test_null_handler, &check1);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check1);
+                                    (GLogFunc)test_null_handler, check1);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check1);
     g_assert (!xaccAccountTypeEnumAsString (ACCT_TYPE_LAST));
-    g_assert_cmpint (check1.hits, ==, 1);
+    g_assert_cmpint (check1->hits, ==, 1);
 
     g_log_remove_handler (logdomain, loghandler);
     g_free (msg1);
     loghandler = g_log_set_handler (logdomain, loglevel,
-                                    (GLogFunc)test_null_handler, &check2);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check2);
+                                    (GLogFunc)test_null_handler, check2);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check2);
     g_assert (!xaccAccountStringToType (NULL, &type));
-    g_assert_cmpint (check2.hits, ==, 1);
+    g_assert_cmpint (check2->hits, ==, 1);
 
     g_log_remove_handler (logdomain, loghandler);
     loghandler = g_log_set_handler (logdomain, loglevel,
-                                    (GLogFunc)test_null_handler, &check3);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check3);
+                                    (GLogFunc)test_null_handler, check3);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check3);
     g_assert (!xaccAccountStringToType ("LAST", &type));
-    g_assert_cmpint (check3.hits, ==, 1);
+    g_assert_cmpint (check3->hits, ==, 1);
 
     g_log_remove_handler (logdomain, loghandler);
 
@@ -2226,27 +2247,27 @@ test_xaccAccountType_Compatibility (void)
     guint32 trading_compat = ((1 << ACCT_TYPE_TRADING) | (1 << ACCT_TYPE_ROOT));
     guint32 compat;
     GNCAccountType  type;
-    gchar *msg1 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_ROOT);
-    gchar *msg2 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_SAVINGS);
-    gchar *logdomain = "gnc.account";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check1 = { loglevel, logdomain, msg1, 0 };
-    TestErrorStruct check2 = { loglevel, logdomain, msg2, 0 };
+    auto msg1 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_ROOT);
+    auto msg2 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_SAVINGS);
+    auto logdomain = "gnc.account";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto check1 = test_error_struct_new(logdomain, loglevel, msg1);
+    auto check2 = test_error_struct_new(logdomain, loglevel, msg2);
     gint loghandler;
 
-    for (type = ACCT_TYPE_BANK; type < NUM_ACCOUNT_TYPES; type = type + 1)
+    for (type = ACCT_TYPE_BANK; type < NUM_ACCOUNT_TYPES; type = ++type)
     {
         GNCAccountType child;
         if (type == ACCT_TYPE_ROOT)
         {
             loghandler = g_log_set_handler (logdomain, loglevel,
-                                            (GLogFunc)test_null_handler, &check1);
+                                            (GLogFunc)test_null_handler, check1);
             g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
-                                          &check1);
+                                          check1);
             compat = xaccParentAccountTypesCompatibleWith (type);
             g_log_remove_handler (logdomain, loghandler);
             g_assert_cmpint (compat, == , 0);
-            g_assert_cmpint (check1.hits, ==, 1);
+            g_assert_cmpint (check1->hits, ==, 1);
             g_free (msg1);
             continue;
         }
@@ -2261,7 +2282,7 @@ test_xaccAccountType_Compatibility (void)
             g_assert_cmpint (compat, == , equity_compat);
         else if (type == ACCT_TYPE_TRADING)
             g_assert_cmpint (compat, == , trading_compat);
-        for (child = ACCT_TYPE_NONE; child < ACCT_TYPE_LAST; child = child + 1)
+        for (child = ACCT_TYPE_NONE; child < ACCT_TYPE_LAST; child = ++child)
             if (1 << child & compat)
                 g_assert (xaccAccountTypesCompatible (type, child));
             else
@@ -2269,12 +2290,12 @@ test_xaccAccountType_Compatibility (void)
     }
 
     loghandler = g_log_set_handler (logdomain, loglevel,
-                                    (GLogFunc)test_null_handler, &check2);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check2);
-    compat = xaccParentAccountTypesCompatibleWith (type = type + 1);
+                                    (GLogFunc)test_null_handler, check2);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check2);
+    compat = xaccParentAccountTypesCompatibleWith (++type);
     g_log_remove_handler (logdomain, loghandler);
     g_assert_cmpint (compat, == , 0);
-    g_assert_cmpint (check2.hits, ==, 1);
+    g_assert_cmpint (check2->hits, ==, 1);
     g_free (msg2);
 }
 /* More KVP getters & setters
@@ -2378,13 +2399,13 @@ test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
     gfloat baz_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz));
     gfloat baz2_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz2));
     TestSignal sig1, sig2, sig3;
-    gchar *logdomain = "gnc.engine";
-    gint loglevel =  G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *msg = "[xaccSplitCommitEdit ()] Account grabbed split prematurely.";
-    TestErrorStruct check = { loglevel, logdomain, msg, 0 };
+    auto logdomain = "gnc.engine";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    auto msg = "[xaccSplitCommitEdit ()] Account grabbed split prematurely.";
+    auto check = test_error_struct_new(logdomain, loglevel, msg);
     guint hdlr = g_log_set_handler (logdomain, loglevel,
-    			   (GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+    			   (GLogFunc)test_null_handler, check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check);
 
     sig1 = test_signal_new (QOF_INSTANCE (baz), QOF_EVENT_MODIFY, NULL);
     sig2 = test_signal_new (QOF_INSTANCE (baz2), QOF_EVENT_MODIFY, NULL);
@@ -2479,10 +2500,11 @@ test_xaccAccountTreeForEachTransaction (Fixture *fixture, gconstpointer pData )
     g_assert_cmpint (td.count, == , 9);
     g_assert_cmpint (result, == , 0);
     td.count = 0;
-    td.name = "pepper";
+    td.name = g_strdup("pepper");
     result = xaccAccountTreeForEachTransaction (root, thunk3, &td);
     g_assert_cmpint (td.count, == , result);
     g_assert_cmpint (result, < , 9);
+    g_free(td.name);
 }
 /* xaccAccountForEachTransaction
 gint
@@ -2501,10 +2523,11 @@ test_xaccAccountForEachTransaction (Fixture *fixture, gconstpointer pData )
     g_assert_cmpint (td.count, == , 9);
     g_assert_cmpint (result, == , 0);
     td.count = 0;
-    td.name = "pepper";
+    td.name = g_strdup("pepper");
     result = xaccAccountForEachTransaction (money, thunk3, &td);
     g_assert_cmpint (td.count, == , result);
     g_assert_cmpint (result, < , 9);
+    g_free(td.name);
 }
 
 
