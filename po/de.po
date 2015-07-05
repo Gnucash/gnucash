@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-19 21:02+0100\n"
-"PO-Revision-Date: 2015-05-25 17:38+0200\n"
+"PO-Revision-Date: 2015-07-04 19:03+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -5777,9 +5777,9 @@ msgstr "Kontobuch als Bericht für dieses Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:392
 #: ../src/gnome/gnc-plugin-page-register.c:401
-#, fuzzy
+
 msgid "Account Report - Single Transaction"
-msgstr "Online-Überweisung eingeben"
+msgstr "Kontenbuch - Einzelüberweisung"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:393
 #: ../src/gnome/gnc-plugin-page-register.c:402
@@ -14787,8 +14787,7 @@ msgstr "Haben"
 
 #: ../src/gnome/window-reconcile2.c:1270 ../src/gnome/window-reconcile.c:1270
 msgid "Are you sure you want to delete the selected transaction?"
-msgstr ""
-"Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
 
 #. statement date title/value
 #: ../src/gnome/window-reconcile2.c:1800 ../src/gnome/window-reconcile.c:1800
@@ -14902,14 +14901,12 @@ msgid "Reconcile the selected transactions"
 msgstr "Ausgewählte Buchungen abgleichen löschen"
 
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
-#, fuzzy
 msgid "_Unreconcile Selection"
-msgstr "_Nicht abgegliche Auswahl"
+msgstr "_Nicht abgeglichene Auswahl"
 
 #: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
-#, fuzzy
 msgid "Unreconcile the selected transactions"
-msgstr "Ausgewählten Buchungssatz löschen"
+msgstr "Ausgewählten Buchungssatz nicht abgleichen"
 
 #: ../src/gnome/window-reconcile2.c:2227 ../src/gnome/window-reconcile.c:2227
 msgid "Open the GnuCash help window"
@@ -15706,14 +15703,13 @@ msgid ""
 "Result of Online Banking job: \n"
 "Account booked balance is %s"
 msgstr ""
-"Ergebnis der Saldenabfrage:\n"
+"Ergebnis der Saldenabfrage: \n"
 "Gebuchter Saldo des Kontos ist %s"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:969
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
-msgstr ""
-"Zu Ihrer Information: Dieses Konto hat außerdem folgenden Saldo an zur "
+msgstr "Zu Ihrer Information: Dieses Konto hat außerdem folgenden Saldo an zur "
 "Ausführung vorgemerkten Aufträgen: %s\n"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:976
