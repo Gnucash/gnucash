@@ -2327,7 +2327,7 @@ xaccTransGetTxnType (const Transaction *trans)
     qof_instance_get_kvp (QOF_INSTANCE (trans), TRANS_TXN_TYPE_KVP, &v);
     if (G_VALUE_HOLDS_STRING (&v))
          s = g_value_get_string (&v);
-    if (s && strlen (s) == 0)
+    if (s && strlen (s) == 1)
 	return *s;
 
     return TXN_TYPE_NONE;

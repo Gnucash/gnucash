@@ -1844,8 +1844,20 @@ test_xaccTransOrder_num_action (Fixture *fixture, gconstpointer pData)
  * xaccTransRetDateEnteredTS C: 1  Local: 0:1:0
  * xaccTransGetDateDueTS C: 1  Local: 1:0:0
  * xaccTransRetDateDueTS C: 1 SCM: 2 in 2 Local: 0:1:0
- * xaccTransGetTxnType C: 3 in 2 SCM: 12 in 6 Local: 0:1:0
- * xaccTransGetReadOnly C: 7 in 5  Local: 1:0:0
+ * xaccTransGetTxnType C: 3 in 2 SCM: 12 in 6 Local: 0:1:0*/
+static void
+test_xaccTransGetTxnType (Fixture *fixture, gconstpointer pData)
+{
+    const char i = 'I';
+    const char p = 'P';
+    auto txn = fixture->txn;
+    xaccTransSetTxnType(txn, i);
+    g_assert_cmpint (i, ==, xaccTransGetTxnType(txn));
+    xaccTransSetTxnType(txn, p);
+    g_assert_cmpint (p, ==, xaccTransGetTxnType(txn));
+}
+
+/* xaccTransGetReadOnly C: 7 in 5  Local: 1:0:0
  * xaccTransIsReadonlyByPostedDate C: 2 in 2  Local: 0:0:0
  * xaccTransHasReconciledSplitsByAccount Local: 1:0:0
  * xaccTransHasReconciledSplits C: 4 in 3  Local: 0:0:0
@@ -2070,6 +2082,7 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransRollbackEdit", Fixture, NULL, setup, test_xaccTransRollbackEdit, teardown);
     GNC_TEST_ADD (suitename, "xaccTransRollbackEdit - Backend Errors", Fixture, NULL, setup, test_xaccTransRollbackEdit_BackendErrors, teardown);
     GNC_TEST_ADD (suitename, "xaccTransOrder_num_action", Fixture, NULL, setup, test_xaccTransOrder_num_action, teardown);
+    GNC_TEST_ADD (suitename, "xaccTransGetTxnType", Fixture, NULL, setup, test_xaccTransGetTxnType, teardown);
     GNC_TEST_ADD (suitename, "xaccTransVoid", Fixture, NULL, setup, test_xaccTransVoid, teardown);
     GNC_TEST_ADD (suitename, "xaccTransReverse", Fixture, NULL, setup, test_xaccTransReverse, teardown);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_no_dirty, teardown_with_gains);
