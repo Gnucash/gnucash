@@ -115,6 +115,11 @@ struct KvpFrameImpl
     KvpFrameImpl(const KvpFrameImpl &) noexcept;
 
     /**
+     * Perform a deep delete.
+     */
+    ~KvpFrameImpl() noexcept;
+
+    /**
      * Set the value with the key in the immediate frame, replacing and
      * returning the old value if it exists or nullptr if it doesn't.
      * @param key: The key to insert/replace.

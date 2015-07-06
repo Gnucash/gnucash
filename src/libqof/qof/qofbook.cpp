@@ -1140,9 +1140,7 @@ void
 qof_book_options_delete (QofBook *book)
 {
     KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
-    auto option = root->get_slot(KVP_OPTION_PATH);
-    if (option != nullptr)
-        delete option->get<KvpFrame*>();
+    delete root->set_path(KVP_OPTION_PATH, nullptr);
 }
 
 /* QofObject function implementation and registration */

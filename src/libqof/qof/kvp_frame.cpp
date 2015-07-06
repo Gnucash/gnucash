@@ -56,6 +56,17 @@ KvpFrameImpl::KvpFrameImpl(const KvpFrameImpl & rhs) noexcept
     );
 }
 
+KvpFrameImpl::~KvpFrameImpl() noexcept
+{
+    std::for_each(m_valuemap.begin(), m_valuemap.end(),
+		 [](const map_type::value_type &a){
+		      qof_string_cache_remove(a.first);
+		      delete a.second;
+		  }
+	);
+    m_valuemap.clear();
+}
+
 static inline Path
 make_vector(std::string key)
 {
