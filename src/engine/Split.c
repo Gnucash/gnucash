@@ -2051,7 +2051,7 @@ xaccSplitAddPeerSplit (Split *split, const Split *other_split,
     guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
     xaccTransBeginEdit (split->parent);
     qof_instance_kvp_add_guid (QOF_INSTANCE (split), "lot-split",
-                               timespec_now(), "peer_guid", guid);
+                               timespec_now(), "peer_guid", guid_copy(guid));
     mark_split (split);
     qof_instance_set_dirty (QOF_INSTANCE (split));
     xaccTransCommitEdit (split->parent);

@@ -179,6 +179,7 @@ TEST_F (KvpFrameTest, GetSlotPath)
     EXPECT_EQ (nullptr, t_root.set(path2, v2));
     EXPECT_EQ (v1, t_root.get_slot(path1));
     EXPECT_EQ (nullptr, t_root.get_slot(path2));
+    t_root.set_path(path1, nullptr);
     t_root.set_path(path3, v1);
     EXPECT_EQ (v1, t_root.get_slot(path3a));
 }

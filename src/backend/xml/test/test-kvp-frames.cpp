@@ -120,7 +120,6 @@ test_kvp_frames1(void)
         test_kvp_copy_compare(i, test_frame1, test_val1, test_key);
         test_kvp_copy_get_slot(i, test_frame1, test_val1, test_key);
 
-        delete test_val1;
         g_free(test_key);
         delete test_frame1;
     }

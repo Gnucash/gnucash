@@ -319,7 +319,7 @@ test_xaccDupeSplit (Fixture *fixture, gconstpointer pData)
 }
 /* xaccSplitCloneNoKvp
 Split *
-xaccSplitCloneNoKvp (const Split *s)// C: 1 
+xaccSplitCloneNoKvp (const Split *s)// C: 1
 */
 static void
 test_xaccSplitCloneNoKvp (Fixture *fixture, gconstpointer pData)
@@ -743,7 +743,7 @@ test_xaccSplitDetermineGainStatus (Fixture *fixture, gconstpointer pData)
     g_assert (fixture->split->gains_split == NULL);
     g_assert_cmpint (fixture->split->gains, ==, GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY);
 
-    fixture->split->inst.kvp_data->set("gains-source", new KvpValue(const_cast<GncGUID*>(g_guid)));
+    fixture->split->inst.kvp_data->set("gains-source", new KvpValue(const_cast<GncGUID*>(guid_copy(g_guid))));
     g_assert (fixture->split->gains_split == NULL);
     fixture->split->gains = GAINS_STATUS_UNKNOWN;
     xaccSplitDetermineGainStatus (fixture->split);

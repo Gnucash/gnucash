@@ -109,7 +109,7 @@ setup_memory (Fixture *fixture, gconstpointer pData)
 
     frame->set("string-val", new KvpValue("abcdefghijklmnop"));
     auto guid = qof_instance_get_guid (QOF_INSTANCE(acct1));
-    frame->set("guid-val", new KvpValue(const_cast<GncGUID*>(guid)));
+    frame->set("guid-val", new KvpValue(const_cast<GncGUID*>(guid_copy(guid))));
 
     gnc_account_append_child (root, acct1);
 
