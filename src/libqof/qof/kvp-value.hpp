@@ -53,7 +53,7 @@ extern "C"
  * * KvpFrame*
  * * GDate
  */
- */
+
 struct KvpValueImpl
 {
     public:
