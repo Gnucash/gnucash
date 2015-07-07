@@ -41,7 +41,18 @@ extern "C"
  * @{
  */
 
-/** Implements KvpValue using boost::variant.
+/** Implements KvpValue using boost::variant. Capable of holding the following
+ * types:
+ * * int64_t
+ * * double
+ * * gnc_numeric
+ * * const char*
+ * * GncGUID*
+ * * Timepsec
+ * * GList*
+ * * KvpFrame*
+ * * GDate
+ */
  */
 struct KvpValueImpl
 {
@@ -68,10 +79,22 @@ struct KvpValueImpl
     KvpValueImpl& operator=(const KvpValueImpl&) noexcept;
 
     /**
-     * Move. The old object's datastore is set to int646_t 0.
+     * Move. The old object's datastore is set to int64_t 0.
      */
     KvpValueImpl(KvpValueImpl && b) noexcept;
     KvpValueImpl& operator=(KvpValueImpl && b) noexcept;
+
+    /** Create a KvpValue containing the passed in item. Note that for pointer
+     * types const char*, KvpFrame*, GncGUID*, and GList* the KvpValue takes
+     * ownership of the objcet and will delete/free it when the KvpValue is
+     * destroyed. That means these objects must be allocated in the free store
+     * or heap as follows:
+     * * const char*: GLib string allocation, e.g. g_strdup()/
+     * * KvpFrame*: operator new
+     * * GncGUID*: guid_new() or guid_copy()
+     * * GList*: Uses g_list_free(), so it's up to classes using this to empty
+         the list before destroying the KvpValue.
+     */
 
     template <typename T>
     KvpValueImpl(T) noexcept;

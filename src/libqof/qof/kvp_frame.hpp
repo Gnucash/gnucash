@@ -55,18 +55,33 @@
  * they're part of and how they're used.
  *
  * ## Purpose
- * KVP is used to extend the class structure without directly reflecting the extension in the database or xML schema. The backend will directly load and store KVP slots without any checking, which allows older versions of GnuCash to load the database without complaint and without damaging the KVP data that they don't understand.
+ * KVP is used to extend the class structure without directly reflecting the
+ * extension in the database or xML schema. The backend will directly load and
+ * store KVP slots without any checking, which allows older versions of GnuCash
+ * to load the database without complaint and without damaging the KVP data that
+ * they don't understand.
  *
- * When a feature is entirely implemented in KVP and doesn't affect the meaning of the books or other features, this isn't a problem, but when it's not true then it should be registered in @ref UtilFeature so that older versions of GnuCash will refuse to load the database.
+ * When a feature is entirely implemented in KVP and doesn't affect the meaning
+ * of the books or other features, this isn't a problem, but when it's not true
+ * then it should be registered in @ref UtilFeature so that older versions of
+ * GnuCash will refuse to load the database.
  *
  * ## Policy
  * * Document every KVP slot in src/engine/kvp_doc.txt so that it is presented
  * in @ref kvpvalues.
- * * Register a feature in @ref UtilFeature if the use of the KVP in any way affects the books or business computations.
- * * Key strings should be all lower case with '-', not spaces, separating words and '/' separating frames. Prefer longer and more descriptive names to abbreviations, and define a global const char[] to the key or path string so that the compiler will catch any typos.
- * * Make good use of the hierarchical nature of KVP by using frames to group related slots.
- * * Don't use the KVP API directly outside of libqof, and prefer to use the QofInstance and QofBook functions whenever feasible. If those functions aren't feasible write a class in libqof to abstract the use of KVP.
- * * Avoid re-using key names in different contexts (e.g. Transactions and Splits) unless the slot is used for the same purpose in both.
+ * * Register a feature in @ref UtilFeature if the use of the KVP in any way
+    affects the books or business computations.
+ * * Key strings should be all lower case with '-', not spaces, separating words
+    and '/' separating frames. Prefer longer and more descriptive names to
+    abbreviations, and define a global const char[] to the key or path string so
+    that the compiler will catch any typos.
+ * * Make good use of the hierarchical nature of KVP by using frames to group
+    related slots.
+ * * Don't use the KVP API directly outside of libqof, and prefer to use the
+     QofInstance and QofBook functions whenever feasible. If those functions
+     aren't feasible write a class in libqof to abstract the use of KVP.
+ * * Avoid re-using key names in different contexts (e.g. Transactions and
+    Splits) unless the slot is used for the same purpose in both.
  * @{
 */
 
@@ -121,7 +136,9 @@ struct KvpFrameImpl
 
     /**
      * Set the value with the key in the immediate frame, replacing and
-     * returning the old value if it exists or nullptr if it doesn't.
+     * returning the old value if it exists or nullptr if it doesn't. Takes
+     * ownership of new value and releases ownership of the returned old
+     * value. Values must be allocated on the free store with operator new.
      * @param key: The key to insert/replace.
      * @param newvalue: The value to set at key.
      * @return The old value if there was one or nullptr.
@@ -130,7 +147,10 @@ struct KvpFrameImpl
     /**
      * Set the value with the key in a subframe following the keys in path,
      * replacing and returning the old value if it exists or nullptr if it
-     * doesn't.
+     * doesn't. Takes ownership of new value and releases ownership of the
+     * returned old value. Values must be allocated on the free store with
+     * operator new.
+     * @param key: The key to insert/replace.
      * @throw invalid_argument if the path doesn't exist.
      * @param path: The path of subframes leading to the frame in which to
      * insert/replace.
@@ -141,21 +161,21 @@ struct KvpFrameImpl
     /**
      * Set the value with the key in a subframe following the keys in path,
      * replacing and returning the old value if it exists or nullptr if it
-     * doesn't. Creates any missing intermediate frames.
+     * doesn't. Creates any missing intermediate frames. Takes
+     * ownership of new value and releases ownership of the returned old
+     * value. Values must be allocated on the free store with operator new.
      * @param path: The path of subframes as a '/'-delimited string leading to
      * the frame in which to insert/replace.
      * @param newvalue: The value to set at key.
      * @return The old value if there was one or nullptr.
      */
     KvpValue* set_path(const char* path, KvpValue* newvalue) noexcept;
-    /**
-     * Make a string representation of the frame. Mostly useful for debugging.
-     * @return A std::string representing the frame and all its children.
-     */
-    /**
+     /**
      * Set the value with the key in a subframe following the keys in path,
      * replacing and returning the old value if it exists or nullptr if it
-     * doesn't. Creates any missing intermediate frames.
+     * doesn't. Creates any missing intermediate frames.Takes
+     * ownership of new value and releases ownership of the returned old
+     * value. Values must be allocated on the free store with operator new.
      * @param path: The path of subframes as a std::vector leading to the
      * frame in which to insert/replace.
      * @param newvalue: The value to set at key.
