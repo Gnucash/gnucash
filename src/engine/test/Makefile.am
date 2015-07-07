@@ -143,7 +143,6 @@ test_import_map_LDADD = \
 if !GOOGLE_TEST_LIBS
 nodist_test_import_map_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
-test_import_map_LDADD += ${top_builddir}/src/test-core/libgtest.a
 endif
 
 test_import_map_CPPFLAGS = \

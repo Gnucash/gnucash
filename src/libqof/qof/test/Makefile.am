@@ -46,7 +46,6 @@ test_kvp_value_LDADD = \
 if !GOOGLE_TEST_LIBS
 nodist_test_kvp_value_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
-test_kvp_value_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
 
 test_kvp_value_CPPFLAGS = \
@@ -66,7 +65,6 @@ test_gnc_int128_LDADD = ${GTEST_LIBS}
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_int128_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
-test_gnc_int128_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
 check_PROGRAMS += test-gnc-int128
 
@@ -82,7 +80,6 @@ test_gnc_timezone_LDADD = $(GTEST_LIBS)
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_timezone_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
-test_gnc_timezone_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
 check_PROGRAMS += test-gnc-timezone
 
@@ -100,7 +97,6 @@ test_gnc_datetime_LDADD = \
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_datetime_SOURCES = \
 	$(GTEST_SRC)/src/gtest_main.cc
-test_gnc_datetime_LDADD += $(top_builddir)/src/test-core/libgtest.a
 endif
 check_PROGRAMS += test-gnc-datetime
 

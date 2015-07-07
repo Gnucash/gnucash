@@ -866,6 +866,7 @@ fi
 if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes; then
   if test x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
      ac_cv_gtest_system_install=yes
+     ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a -pthread"
   elif test "x$ac_cv_have_gtest_libs" = xyes; then
      ac_cv_gtest_system_install=yes
      ac_cv_gtest_libs="-lgtest -lgtest_main"
@@ -925,9 +926,6 @@ if test x$enable_google_test = xyes; then
       fi
    fi
 
-   dnl Fedora installs gmock sources in /usr/src/gmock without a src
-   dnl subdir, unlike Debian or the distribution tarball, so we have to
-   dnl make GMOCK_ROOT include src if it's there.
 
    if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/gmock-all.cc"; then
       ac_cv_gmock_src_path="$ac_cv_gmock_root"
@@ -946,7 +944,7 @@ if test x$enable_google_test = xyes; then
 	 else
 	    ac_cv_gmock_src_path=""
 	 fi
-	 ac_cv_gmock_root="$ac_cv_gmock_src_path"
+	 ac_cv_gmock_root="/usr/src/gmock"
       else
          ac_cv_gmock_root=""
       fi
@@ -986,7 +984,7 @@ AC_SUBST([GMOCK_SRC_PATH], [$ac_cv_gmock_src_path])
 AC_SUBST([GMOCK_SRC], [$ac_cv_gmock_root])
 AC_SUBST([GMOCK_HEADERS], [$ac_cv_gmock_headers])
 AM_CONDITIONAL([WITH_GOOGLE_TEST], [test "x$enable_google_test" = "xyes"])
-AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_gtest_libs" != "x"])
+AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_have_gtest_libs" == "xyes"])
 ### --------------------------------------------------------------------------
 ### Register2
 AC_ARG_ENABLE( register2,
