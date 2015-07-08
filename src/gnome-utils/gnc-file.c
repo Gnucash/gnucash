@@ -1091,6 +1091,35 @@ gnc_file_export (void)
     LEAVE (" ");
 }
 
+static gboolean
+check_file_path (const char *path)
+{
+     /* Remember the directory as the default. */
+     gchar *default_dir = g_path_get_dirname(path);
+     const gchar *dotgnucash = gnc_dotgnucash_dir();
+     gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
+
+     /* Prevent user to store file in GnuCash' private configuration
+      * directory (~/.gnucash by default in linux, but can be overridden)
+      */
+     DEBUG("User path: %s, dotgnucash_dir: %s", path,
+	   gnc_dotgnucash_dir());
+     while (strcmp (default_dir, "/") != 0 && strcmp(default_dir, ".") != 0)
+     {
+	  char *dirpath = default_dir;
+	  if (strcmp(default_dir, dotgnucash) == 0)
+	  {
+	       g_free (dirpath);
+	       return TRUE;
+	  }
+	  default_dir = g_path_get_dirname (dirpath);
+	  g_free (dirpath);
+     }
+     g_free(default_dir);
+     return FALSE;
+}
+
+
 void
 gnc_file_do_export(const char * filename)
 {
@@ -1139,24 +1168,12 @@ gnc_file_do_export(const char * filename)
     }
 
     /* Some extra steps for file based uri's only */
-    if (gnc_uri_is_file_protocol(protocol))
+    if (gnc_uri_is_file_protocol(protocol) && check_file_path (path))
     {
-        /* Remember the directory as the default. */
-        gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
-        g_free(default_dir);
-
-        /* Prevent user to store file in GnuCash' private configuration
-         * directory (~/.gnucash by default in linux, but can be overridden)
-         */
-        DEBUG("User path: %s, dotgnucash_dir: %s", path, gnc_dotgnucash_dir());
-        if (g_str_has_prefix(path, gnc_dotgnucash_dir()))
-        {
-            show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile, GNC_FILE_DIALOG_SAVE);
-            return;
-        }
+	 show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile,
+			     GNC_FILE_DIALOG_SAVE);
+	 return;
     }
-
     /* Check to see if the user specified the same file as the current
      * file. If so, prevent the export from happening to avoid killing this file */
     current_session = gnc_get_current_session ();
@@ -1377,22 +1394,11 @@ gnc_file_do_save_as (const char* filename)
     }
 
     /* Some extra steps for file based uri's only */
-    if (gnc_uri_is_file_protocol(protocol))
+    if (gnc_uri_is_file_protocol(protocol) && check_file_path (path))
     {
-        /* Remember the directory as the default. */
-        gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
-        g_free(default_dir);
-
-        /* Prevent user to store file in GnuCash' private configuration
-         * directory (~/.gnucash by default in linux, but can be overridden)
-         */
-        DEBUG("User path: %s, dotgnucash_dir: %s", path, gnc_dotgnucash_dir());
-        if (g_str_has_prefix(path, gnc_dotgnucash_dir()))
-        {
-            show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile, GNC_FILE_DIALOG_SAVE);
-            return;
-        }
+	 show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile,
+			     GNC_FILE_DIALOG_SAVE);
+	 return;
     }
 
     /* Check to see if the user specified the same file as the current
