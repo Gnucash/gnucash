@@ -17,8 +17,14 @@ extern "C"
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
+#ifndef __KVP_VALUE
 typedef struct KvpValueImpl KvpValue;
+#define __KVP_VALUE
+#endif
+#ifndef __KVP_FRAME
 typedef struct KvpFrameImpl KvpFrame;
+#define __KVP_FRAME
+#endif
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
 void random_timespec_usec_resolution (gboolean usec_resolution);

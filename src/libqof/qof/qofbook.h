@@ -49,7 +49,10 @@ extern "C"
 #ifndef SWIG
 
 typedef struct _QofBookClass  QofBookClass;
+#ifndef __KVP_VALUE
 typedef struct KvpValueImpl KvpValue;
+#define __KVP_VALUE
+#endif
 
 #include "qofid.h"
 #include "qofinstance.h"

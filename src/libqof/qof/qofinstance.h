@@ -60,8 +60,10 @@ typedef struct _QofBook       QofBook;
      (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_INSTANCE))
 #define QOF_INSTANCE_GET_CLASS(o)    \
      (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_INSTANCE, QofInstanceClass))
-
+#ifndef __KVP_FRAME
 typedef struct KvpFrameImpl KvpFrame;
+#define __KVP_FRAME
+#endif
 
 struct QofInstance_s
 {

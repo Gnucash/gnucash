@@ -16,7 +16,10 @@ extern "C"
 #include <io-gncxml-gen.h>
 #include <sixtp.h>
 
+#ifndef __KVP_FRAME
 typedef struct KvpFrameImpl KvpFrame;
+#define __KVP_FRAME
+#endif
 
 void write_dom_node_to_file(xmlNodePtr node, int fd);
 
