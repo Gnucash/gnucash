@@ -102,7 +102,7 @@ gnc_environment_setup (void)
     gchar *config_path;
     gchar *env_file;
     GKeyFile    *keyfile = g_key_file_new();
-    GError      *error;
+    GError      *error = NULL;
     gchar **env_vars;
     gsize param_count;
     gint i;
