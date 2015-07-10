@@ -123,6 +123,7 @@ EXTRA_DIST = \
   $(SCM_FILES) \
   swig-unittest-support-python.c \
   swig-unittest-support-guile.c \
+  unittest_support.py \
   unittest-support.i
 
 MAINTAINERCLEANFILES = \
