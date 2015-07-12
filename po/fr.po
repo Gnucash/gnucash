@@ -17520,12 +17520,12 @@ msgstr "Virgule (,)"
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:8
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:25
 msgid "Colon (:)"
-msgstr "Colonne (:)"
+msgstr "Deux-points (:)"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:9
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:26
 msgid "Semicolon (;)"
-msgstr "Demie-colonne (;)"
+msgstr "Point-virgule (;)"
 
 # messages-i18n.c:257
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:11
