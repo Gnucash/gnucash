@@ -12,7 +12,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/core-utils \
   ${GUILE_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \

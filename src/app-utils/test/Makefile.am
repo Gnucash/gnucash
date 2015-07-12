@@ -65,7 +65,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 test_app_utils_SOURCES = \
 	test-app-utils.c \

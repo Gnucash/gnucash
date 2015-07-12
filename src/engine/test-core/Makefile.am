@@ -23,4 +23,5 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
-  ${GUILE_CFLAGS}
+  ${GUILE_CFLAGS} \
+  ${BOOST_CPPFLAGS}

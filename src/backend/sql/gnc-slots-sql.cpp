@@ -187,9 +187,9 @@ get_key_from_path( GString *path )
 {
     gchar *str = NULL, *key = NULL, *ret = NULL;
 
-    g_return_val_if_fail( path != NULL, strdup("") );
+    g_return_val_if_fail( path != NULL, g_strdup("") );
 
-    if ( path->str == NULL ) return strdup("");
+    if ( path->str == NULL ) return g_strdup("");
     str = g_strdup( path->str );
     key = strrchr( str, '/');
 
@@ -204,7 +204,7 @@ get_key_from_path( GString *path )
     /* Now advance key past the last intermediate / to get the post-delimiter string */
     while ( *key == '/') ++key;
 
-    ret = strdup( key );
+    ret = g_strdup (key);
     g_free( str );
     return ret;
 }

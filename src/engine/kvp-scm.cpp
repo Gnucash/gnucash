@@ -1,3 +1,4 @@
+#include <kvp_frame.hpp>
 #include <libguile.h>
 
 extern "C"
@@ -12,8 +13,6 @@ extern "C"
 #include "swig-runtime.h"
 #include "kvp-scm.h"
 }
-
-#include <kvp_frame.hpp>
 
 /* NOTE: There are some problems with this approach. Currently,
  *       guids are stored simply as strings in scheme, so some

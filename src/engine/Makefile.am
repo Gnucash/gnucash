@@ -10,7 +10,9 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src/gnc-module \
 	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
-	${GUILE_CFLAGS}
+	${GUILE_CFLAGS} \
+	$(BOOST_CPPFLAGS)
+
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -129,6 +131,9 @@ noinst_HEADERS = \
   policy-p.h
 
 libgncmod_engine_la_LDFLAGS = -avoid-version
+if PLATFORM_WIN32
+libgncmod_engine_la_LDFLAGS += -Wl,-export-all-symbols
+endif
 if CLANG
 libgncmod_engine_la_CFLAGS = ${AM_CFLAGS} -Wno-invalid-source-encoding
 else

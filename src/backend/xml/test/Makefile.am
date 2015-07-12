@@ -266,7 +266,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GUILE_CFLAGS}
+  ${GUILE_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 EXTRA_DIST = \
   grab-types.pl \

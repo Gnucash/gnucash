@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "AccountP.h"

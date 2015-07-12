@@ -15,7 +15,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src \
   ${LIBXML2_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 libgnc_backend_xml_utils_la_SOURCES = \
   gnc-account-xml-v2.c \

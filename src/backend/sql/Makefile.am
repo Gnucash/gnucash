@@ -17,7 +17,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
-  ${WARN_CFLAGS}
+  ${WARN_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 libgnc_backend_sql_la_SOURCES = \
   gnc-backend-sql.c \

@@ -19,8 +19,10 @@
 
 extern "C"
 {
-#include "config.h"
-
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#define __STDC_FORMAT_MACROS
+#endif
 #include <sys/types.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -31,7 +33,6 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <qof.h>
 #include <qofinstance-p.h>
 
