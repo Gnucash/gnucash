@@ -1051,7 +1051,7 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 //  gnc_engine_signal_commit_error( errcode );
 }
 
-#define GNC_FEATURES "/features/"
+#define GNC_FEATURES "features"
 static void
 add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
 {
