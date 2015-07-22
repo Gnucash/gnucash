@@ -4288,7 +4288,7 @@ gboolean
 xaccAccountGetReconcileLastInterval (const Account *acc,
                                      int *months, int *days)
 {
-    GValue v1, v2;
+    GValue v1 = G_VALUE_INIT, v2 = G_VALUE_INIT;
     int64_t m = 0, d = 0;
 
     if (!acc) return FALSE;
