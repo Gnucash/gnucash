@@ -73,7 +73,8 @@ make_vector(std::string key)
     Path path;
     for (auto length = key.find(delim); length != std::string::npos;)
     {
-        path.push_back(key.substr(0, length));
+        if (length != 0)
+            path.push_back(key.substr(0, length));
         key = key.substr(length + 1);
         length = key.find(delim);
     }
