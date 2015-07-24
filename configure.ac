@@ -866,10 +866,8 @@ fi
 if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes; then
   if test x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
      ac_cv_gtest_system_install=yes
-     ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a -pthread"
   elif test "x$ac_cv_have_gtest_libs" = xyes; then
      ac_cv_gtest_system_install=yes
-     ac_cv_gtest_libs="-lgtest -lgtest_main"
   else
      ac_cv_gtest_system_install=no
   fi
@@ -977,6 +975,21 @@ if test x$enable_google_test = xyes; then
        AC_MSG_RESULT([Yes])
    fi
 fi
+
+if test "x$ac_cv_have_gtest_libs" = xyes; then
+   ac_cv_gtest_libs="-lgtest -lgtest_main"
+else
+dnl Google test requires pthreads and this seems the easiest way to check.
+    AX_PTHREAD([
+    ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a $PTHREAD_CFLAGS"
+    ],[
+    AC_MSG_WARN(
+      [Disabling GTest because pthreads, which it requires, wasn't found.])
+      dnl Google test requires pthreads and this seems the easiest way to check.
+    enable_google_test="no"
+    ])
+fi
+
 AC_SUBST([GTEST_LIBS], [$ac_cv_gtest_libs])
 AC_SUBST([GTEST_SRC], [$ac_cv_gtest_root])
 AC_SUBST([GTEST_HEADERS], [$ac_cv_gtest_headers])
