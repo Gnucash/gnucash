@@ -27,6 +27,10 @@
 #include <istream>
 #include <algorithm>
 #include <boost/date_time/gregorian/gregorian.hpp>
+#if PLATFORM(WINDOWS)
+#include <codecvt>
+#endif
+
 using namespace gnc::date;
 
 using duration = boost::posix_time::time_duration;
@@ -226,6 +230,21 @@ TimeZoneProvider::load_windows_classic_tz (HKEY key, time_zone_names names)
     RegCloseKey (key);
 }
 
+void
+TimeZoneProvider::load_windows_default_tz()
+{
+    TIME_ZONE_INFORMATION tzi {};
+    if (GetTimeZoneInformation (&tzi) == TIME_ZONE_INVALID)
+        throw std::system_error("No default time zone.");
+    RegTZI regtzi { tzi.Bias, tzi.StandardBias, tzi.DaylightBias,
+            tzi.StandardDate, tzi.DaylightDate };
+    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> conversion;
+    auto std_name = conversion.to_bytes(tzi.StandardName);
+    auto dlt_name = conversion.to_bytes(tzi.DaylightName);
+    time_zone_names names (std_name, std_name, dlt_name, dlt_name);
+    zone_vector.push_back(std::make_pair(0, zone_from_regtzi(regtzi, names)));
+}
+
 TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
     zone_vector ()
 {
@@ -237,8 +256,10 @@ TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
 		     identifier);
 
     if (key_name.empty())
-	throw std::invalid_argument ("No identifier or default tzname.");
-
+    {
+        load_windows_default_tz();
+        return;
+    }
     std::string subkey = reg_key + key_name;
     if (RegOpenKeyExA (HKEY_LOCAL_MACHINE, subkey.c_str(), 0,
 		       KEY_QUERY_VALUE, &key) != ERROR_SUCCESS)
