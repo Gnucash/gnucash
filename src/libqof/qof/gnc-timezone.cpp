@@ -28,7 +28,8 @@
 #include <algorithm>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #if PLATFORM(WINDOWS)
-#include <codecvt>
+//We'd prefer to use std::codecvt, but it's not supported by gcc until 5.0.
+#include <boost/locale/encoding_utf.hpp>
 #endif
 
 using namespace gnc::date;
@@ -37,6 +38,9 @@ using duration = boost::posix_time::time_duration;
 using time_zone = boost::local_time::custom_time_zone;
 using dst_offsets = boost::local_time::dst_adjustment_offsets;
 using calc_rule_ptr = boost::local_time::dst_calc_rule_ptr;
+
+const unsigned int TimeZoneProvider::min_year = 1400;
+const unsigned int TimeZoneProvider::max_year = 9999;
 
 template<typename T>
 T*
@@ -193,7 +197,7 @@ TimeZoneProvider::load_windows_dynamic_tz (HKEY key, time_zone_names names)
 		zone_vector.push_back (std::make_pair(0, tz));
 	    zone_vector.push_back (std::make_pair(year, tz));
 	}
-	zone_vector.push_back (std::make_pair(9999, tz));
+	zone_vector.push_back (std::make_pair(max_year, tz));
    }
     catch (std::invalid_argument)
     {
@@ -234,15 +238,16 @@ void
 TimeZoneProvider::load_windows_default_tz()
 {
     TIME_ZONE_INFORMATION tzi {};
-    if (GetTimeZoneInformation (&tzi) == TIME_ZONE_INVALID)
-        throw std::system_error("No default time zone.");
+    GetTimeZoneInformation (&tzi);
     RegTZI regtzi { tzi.Bias, tzi.StandardBias, tzi.DaylightBias,
             tzi.StandardDate, tzi.DaylightDate };
-    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> conversion;
-    auto std_name = conversion.to_bytes(tzi.StandardName);
-    auto dlt_name = conversion.to_bytes(tzi.DaylightName);
+    using boost::locale::conv::utf_to_utf;
+    auto std_name = utf_to_utf<char>(tzi.StandardName,
+				tzi.StandardName + sizeof(tzi.StandardName));
+    auto dlt_name = utf_to_utf<char>(tzi.DaylightName,
+				tzi.DaylightName + sizeof(tzi.DaylightName));
     time_zone_names names (std_name, std_name, dlt_name, dlt_name);
-    zone_vector.push_back(std::make_pair(0, zone_from_regtzi(regtzi, names)));
+    zone_vector.push_back(std::make_pair(max_year, zone_from_regtzi(regtzi, names)));
 }
 
 TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
@@ -635,9 +640,9 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 
     if (last_time.is_not_a_date_time() ||
 	last_time.date().year() < parser.last_year)
-	zone_vector.push_back(zone_no_dst(9999, last_info));
+	zone_vector.push_back(zone_no_dst(max_year, last_info));
     else //Last DST rule forever after.
-	zone_vector.push_back(zone_from_rule(9999, last_rule));
+	zone_vector.push_back(zone_from_rule(max_year, last_rule));
 }
 #endif
 
