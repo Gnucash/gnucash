@@ -78,7 +78,8 @@ make_vector(std::string key)
         key = key.substr(length + 1);
         length = key.find(delim);
     }
-    path.push_back(key);
+    if (!key.empty())
+	path.push_back(key);
     return path;
 }
 
@@ -139,6 +140,8 @@ walk_path_and_create(KvpFrameImpl* frame, Path path)
 {
      for(auto key:path)
     {
+	if (key.empty())
+	    continue;
         if (key.find(delim) != std::string::npos)
         {
             frame = walk_path_and_create(frame, make_vector(key));

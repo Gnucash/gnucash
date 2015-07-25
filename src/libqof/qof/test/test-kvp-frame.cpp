@@ -109,7 +109,7 @@ TEST_F (KvpFrameTest, SetPathIgnoreBeginEndSlash)
     Path path2 {"top", "second", "twenty-first"};
     auto v1 = new KvpValueImpl {15.0};
 
-    EXPECT_EQ (nullptr, t_root.set(path1, v1));
+    EXPECT_EQ (nullptr, t_root.set_path(path1, v1));
     EXPECT_EQ (v1, t_root.get_slot(path2));
 }
 
