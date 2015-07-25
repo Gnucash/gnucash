@@ -598,7 +598,7 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
     g_string_printf(buf, "%s", _("Weekly"));
     if (multiplier > 1)
     {
-        /* translators: %u is the recurrence multipler, i.e. this
+        /* translators: %u is the recurrence multiplier, i.e. this
         	   event should occur every %u'th week. */
         g_string_append_printf(buf, _(" (x%u)"), multiplier);
     }

@@ -22,7 +22,7 @@ All transactions imported will be associated to one account for each import and 
 
 Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the bar above the displayed rows to set the column width.
 
-There is an option for specifying the start row, end row and an option to skip alternate rows begining from the start row. These can be used if you have some header text, a points collected status row or multiple accounts in the same file.
+There is an option for specifying the start row, end row and an option to skip alternate rows beginning from the start row. These can be used if you have some header text, a points collected status row or multiple accounts in the same file.
 
 On the preview page you can Load and Save the settings. To save the settings, select a previously saved entry or replace the text and press the Save Settings button.</property>
         <property name="wrap">True</property>

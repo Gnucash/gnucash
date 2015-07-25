@@ -174,7 +174,7 @@
 	  (if (not gnc:old-style-report-warned)
 	      (begin
 		(set! gnc:old-style-report-warned #t)
-		(gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transfered into a new format. If you experience trouble with saved reports, please contact the GnuCash development team.")))))
+		(gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team.")))))
 	  (hash-set! *gnc:_report-templates_*
 		     (gnc:report-template-report-guid report-rec) report-rec)
 	  (gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)))

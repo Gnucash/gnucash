@@ -1612,7 +1612,7 @@ create_balancing_transaction(QofBook *book, Account *account,
     // fill Transaction
     xaccTransSetCurrency(trans, gnc_account_or_default_currency(account, NULL));
     xaccTransSetDatePostedSecsNormalized(trans, statement_date);
-    xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+    xaccTransSetDescription(trans, _("Balancing entry from reconciliation"));
     /* We also must set a new DateEntered on the new entry
      * because otherwise the ordering is not deterministic */
     xaccTransSetDateEnteredSecs(trans, gnc_time(NULL));

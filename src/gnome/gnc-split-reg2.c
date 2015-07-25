@@ -744,7 +744,7 @@ gsr2_create_balancing_transaction (QofBook *book, Account *account,
     // fill Transaction
     xaccTransSetCurrency (trans, gnc_account_or_default_currency (account, NULL));
     xaccTransSetDatePostedSecsNormalized (trans, statement_date);
-    xaccTransSetDescription (trans, _("Balancing entry from reconcilation"));
+    xaccTransSetDescription (trans, _("Balancing entry from reconciliation"));
 
     // 1. Split
     split = xaccMallocSplit (book);
