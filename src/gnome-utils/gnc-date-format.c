@@ -41,10 +41,6 @@
 #include "dialog-utils.h"
 #include "gnc-engine.h"
 
-#ifndef HAVE_LOCALTIME_R
-# include "localtime_r.h"
-#endif
-
 /* Perhaps it's better just to use MAX_DATE_LENGTH defined in gnc-date.h */
 #define MAX_DATE_LEN 80
 

@@ -1384,10 +1384,7 @@ then
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 
-  dnl if Mac OSX, also scrub /sw/include
-  dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
-
-  ###-----------------------------------------------------------------------
+    ###-----------------------------------------------------------------------
   ## Find a suitable password store
   AC_ARG_ENABLE([password-storage],
                 AS_HELP_STRING([--disable-password-storage], [Ignore system wide password stores such as gnome-keyring, libsecret or Apple's keychain]))
@@ -1510,20 +1507,8 @@ then
   AC_DEFINE(GNOME_DISABLE_DEPRECATED,1, [Don't use deprecated gnome functions])
 fi
 
-###-------------------------------------------------------------------------
-### Stuff from Mac OS X Port
-###-------------------------------------------------------------------------
-
 AC_CHECK_FUNCS(pthread_mutex_init)
-case $host_os in
-  darwin*)
-    AC_REPLACE_FUNCS(localtime_r gmtime_r)
-    AC_LIBOBJ(strptime)
-    ;;
-  *)
-    AC_REPLACE_FUNCS(strptime localtime_r gmtime_r strfmon)
-    ;;
-esac
+AC_REPLACE_FUNCS(strptime strfmon)
 
 if test x$am_cv_val_LC_MESSAGES = "xno"; then
   LC_MESSAGES_ENUM="LC_ALL"

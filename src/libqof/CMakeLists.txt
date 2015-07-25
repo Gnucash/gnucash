@@ -40,8 +40,6 @@ IF (WIN32)
   SET (libgnc_qof_SOURCES ${libgnc_qof_SOURCES}
     qof/qof-win32.c
 	../../lib/libc/strptime.c
-	../../lib/libc/localtime_r.c
-	../../lib/libc/gmtime_r.c
   )
 ENDIF (WIN32)
 

@@ -54,10 +54,6 @@ extern "C"
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"
 
-#ifndef HAVE_LOCALTIME_R
-#include "localtime_r.h"
-#endif
-
 #ifdef __cplusplus
 }
 #endif

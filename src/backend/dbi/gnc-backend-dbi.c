@@ -36,9 +36,6 @@
 #include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#if !HAVE_GMTIME_R
-#include "gmtime_r.h"
-#endif
 
 #include "gnc-backend-dbi-priv.h"
 
