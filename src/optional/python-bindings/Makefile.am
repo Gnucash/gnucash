@@ -133,3 +133,6 @@ CLEANFILES = $(BUILT_SOURCES) .py-links gnucash_core.c.py
 
 clean-local:
 	rm -rf gnucash
+
+uninstall-local:
+	rm -rf ${pkgpyexecdir}
