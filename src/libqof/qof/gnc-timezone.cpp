@@ -154,11 +154,15 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
     dst_offsets offsets (dlt_off, start_time, end_time);
     auto std_week_num = make_week_num(regtzi.StandardDate.wDay);
     auto dlt_week_num = make_week_num(regtzi.DaylightDate.wDay);
-    ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
-		 regtzi.StandardDate.wMonth);
-    ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
-	      regtzi.DaylightDate.wMonth);
-    calc_rule_ptr dates(new nth_day_rule (start, end));
+    calc_rule_ptr dates;
+    if (regtzi.DaylightBias != 0)
+    {
+	ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
+		     regtzi.StandardDate.wMonth);
+	ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
+		  regtzi.DaylightDate.wMonth);
+	dates.reset(new nth_day_rule (start, end));
+    }
     return TZ_Ptr(new time_zone(names, std_off, offsets, dates));
 }
 
