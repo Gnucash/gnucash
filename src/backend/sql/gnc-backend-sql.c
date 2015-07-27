@@ -512,7 +512,8 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     }
     else
     {
-        qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_SERVER_ERR );
+        if (!qof_backend_check_error ((QofBackend*)be))
+            qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_SERVER_ERR );
         is_ok = gnc_sql_connection_rollback_transaction( be->conn );
     }
     finish_progress( be );

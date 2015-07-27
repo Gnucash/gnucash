@@ -1033,7 +1033,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                       g_list_length(gnc_book_get_schedxactions(book)->sx_list),
                       "budget", qof_collection_count(
                           qof_book_get_collection(book, GNC_ID_BUDGET)),
-                      "price", gnc_pricedb_get_num_prices(gnc_pricedb_get_db(book)), 
+                      "price", gnc_pricedb_get_num_prices(gnc_pricedb_get_db(book)),
                       NULL))
         return FALSE;
 
@@ -1131,11 +1131,11 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     /* Write out the parent pricedb tag then loop to write out each price.
        We do it this way instead of just calling xmlElemDump so that we can
        increment the progress bar as we go. */
-       
-    if (fprintf( out, "<%s version=\"%s\">\n", parent->name, 
+
+    if (fprintf( out, "<%s version=\"%s\">\n", parent->name,
                  xmlGetProp(parent, BAD_CAST "version")) < 0)
         return FALSE;
-        
+
     /* We create our own output buffer so we can call xmlNodeDumpOutput to get
        the indendation correct. */
     outbuf = xmlOutputBufferCreateFile(out, NULL);
@@ -1144,7 +1144,7 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
         xmlFreeNode(parent);
         return FALSE;
     }
-       
+
     for (node = parent->children; node; node = node->next)
     {
         /* Write two spaces since xmlNodeDumpOutput doesn't indent the first line */
@@ -1152,14 +1152,14 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
         xmlNodeDumpOutput(outbuf, NULL, node, 1, 1, NULL);
         /* It also doesn't terminate the last line */
         xmlOutputBufferWrite(outbuf, 1, "\n");
-        if (ferror(out)) 
+        if (ferror(out))
             break;
         gd->counter.prices_loaded += 1;
         run_callback(gd, "prices");
     }
-    
+
     xmlOutputBufferClose(outbuf);
-    
+
     if (ferror(out) || fprintf(out, "</%s>\n", parent->name) < 0)
     {
         xmlFreeNode(parent);
@@ -1670,8 +1670,7 @@ gnc_book_write_accounts_to_xml_file_v2(
     if (out && fclose(out))
         success = FALSE;
 
-    if (!success
-            && qof_backend_get_error(be) == ERR_BACKEND_NO_ERR)
+    if (!success && !qof_backend_check_error(be))
     {
 
         /* Use a generic write error code */
@@ -2186,4 +2185,3 @@ gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
 
     return success;
 }
-

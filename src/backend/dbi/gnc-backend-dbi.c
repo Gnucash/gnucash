@@ -1685,7 +1685,7 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
     be->primary_book = book;
 
     gnc_sql_sync_all( &be->sql_be, book );
-    if ( ERR_BACKEND_NO_ERR != qof_backend_get_error( qbe ) )
+    if (qof_backend_check_error (qbe))
     {
         conn_table_operation( (GncSqlConnection*)conn, table_list,
                               rollback );

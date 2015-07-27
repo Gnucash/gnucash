@@ -166,6 +166,14 @@ void qof_backend_set_error (QofBackend *be, QofBackendError err);
  */
 QofBackendError qof_backend_get_error (QofBackend *be);
 
+/** Report if the backend is in an error state.
+ *  Since get_error resets the error state, its use for branching as the backend
+ *  bubbles back up to the session would make the session think that there was
+ *  no error.
+ * \param be The backend being tested.
+ * \return TRUE if the backend has an error set.
+ */
+gboolean qof_backend_check_error (QofBackend *be);
 
 /** \brief Load a QOF-compatible backend shared library.
 

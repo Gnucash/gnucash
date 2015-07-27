@@ -64,6 +64,13 @@ qof_backend_get_error (QofBackend *be)
     return err;
 }
 
+gboolean
+qof_backend_check_error (QofBackend *be)
+{
+    g_return_val_if_fail (be != NULL, TRUE);
+    return be->last_err != ERR_BACKEND_NO_ERR;
+}
+
 void
 qof_backend_set_message (QofBackend *be, const char *format, ...)
 {
