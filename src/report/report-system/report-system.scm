@@ -648,7 +648,6 @@
 (export gnc:account-get-type-string-plural)
 (export gnc:accounts-get-commodities)
 (export gnc:get-current-account-tree-depth)
-(export gnc:split-get-corr-account-full-name)
 (export gnc:acccounts-get-all-subaccounts)
 (export gnc:make-stats-collector)
 (export gnc:make-drcr-collector)

@@ -1378,40 +1378,45 @@ Credit Card, and Income accounts.")))))
      name-sortkey name-subtotal name-date-subtotal
      3 2))
 
-  (define (get-other-account-names account-list)
-    ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
+  ;;(define (get-other-account-names account-list)
+  ;;  ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
 
-  (define (is-filter-member split account-list splits-ok?)
-    (let ((fullname (gnc:split-get-corr-account-full-name split)))
+  (define (is-filter-member split account-list)
+    (let* ((txn (xaccSplitGetParent split))
+           (splitcount (xaccTransCountSplits txn)))
 
-      (if (string=? fullname (_ "-- Split Transaction --"))
-	  ;; Yep, this is a split transaction.
+      (cond
+        ;; A 2-split transaction - test separately so it can be optimized
+        ;; to significantly reduce the number of splits to traverse
+        ;; in guile code
+        ((= splitcount 2)
+         (let* ((other      (xaccSplitGetOtherSplit split))
+                (other-acct (xaccSplitGetAccount other)))
+               (member other-acct account-list)))
 
-	  (if splits-ok?
-	      (let* ((txn (xaccSplitGetParent split))
-		     (splits (xaccTransGetSplitList txn)))
+        ;; A multi-split transaction - run over all splits
+        ((> splitcount 2)
+         (let ((splits (xaccTransGetSplitList txn)))
 
-		;; Walk through the list of splits.
-		;; if we reach the end, return #f
-		;; if the 'this' != 'split' and the split->account is a member
-		;; of the account-list, then return #t, else recurse
-		(define (is-member splits)
-		  (if (null? splits)
-		      #f
-		      (let* ((this (car splits))
-			     (rest (cdr splits))
-			     (acct (xaccSplitGetAccount this)))
-			(if (and (not (eq? this split))
-				 (member acct account-list))
-			    #t
-			    (is-member rest)))))
+                ;; Walk through the list of splits.
+                ;; if we reach the end, return #f
+                ;; if the 'this' != 'split' and the split->account is a member
+                ;; of the account-list, then return #t, else recurse
+                (define (is-member splits)
+                  (if (null? splits)
+                      #f
+                      (let* ((this (car splits))
+                             (rest (cdr splits))
+                             (acct (xaccSplitGetAccount this)))
+                        (if (and (not (eq? this split))
+                                 (member acct account-list))
+                            #t
+                            (is-member rest)))))
 
-		(is-member splits))
-	      #f)
+                (is-member splits)))
 
-	  ;; Nope, this is a regular transaction
-	  (member fullname (get-other-account-names account-list))
-	  )))
+        ;; Single transaction splits
+        (else #f))))
 
 
   (gnc:report-starting reportname)
@@ -1467,7 +1472,7 @@ Credit Card, and Income accounts.")))))
 
           (set! splits (qof-query-run query))
 
-          ;;(gnc:warn "Splits in trep-renderer:" splits)
+          (gnc:warn "Splits in trep-renderer:" splits)
 
 	  ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
 
@@ -1477,7 +1482,7 @@ Credit Card, and Income accounts.")))))
 	      (begin
 		;;(gnc:warn "Including Filter Accounts")
 		(set! splits (filter (lambda (split) 
-				       (is-filter-member split c_account_2 #t))
+				       (is-filter-member split c_account_2))
 				     splits))
 		)
 	      )
@@ -1486,7 +1491,7 @@ Credit Card, and Income accounts.")))))
 	      (begin
 		;;(gnc:warn "Excluding Filter Accounts")
 		(set! splits (filter (lambda (split) 
-				       (not (is-filter-member split c_account_2 #t)))
+				       (not (is-filter-member split c_account_2)))
 				     splits))
 		)
 	      )

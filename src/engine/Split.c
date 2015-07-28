@@ -1383,40 +1383,18 @@ get_corr_account_split(const Split *sa, const Split **retval)
 {
 
     const Split *current_split;
-    GList *node;
-    gnc_numeric sa_value, current_value;
-    gboolean sa_value_positive, current_value_positive, seen_one = FALSE;
 
     *retval = NULL;
     g_return_val_if_fail(sa, FALSE);
 
-    sa_value = xaccSplitGetValue (sa);
-    sa_value_positive = gnc_numeric_positive_p(sa_value);
+    if (xaccTransCountSplits (sa->parent) > 2)
+        return FALSE;
 
-    for (node = sa->parent->splits; node; node = node->next)
-    {
-        current_split = node->data;
-        if (current_split == sa) continue;
-
-        if (!xaccTransStillHasSplit(sa->parent, current_split)) continue;
-        current_value = xaccSplitGetValue (current_split);
-        current_value_positive = gnc_numeric_positive_p(current_value);
-        if ((sa_value_positive && !current_value_positive) ||
-                (!sa_value_positive && current_value_positive))
-        {
-            if (seen_one)
-            {
-                *retval = NULL;
-                return FALSE;
-            }
-            else
-            {
-                *retval = current_split;
-                seen_one = TRUE;
-            }
-        }
-    }
-    return seen_one;
+    *retval = xaccSplitGetOtherSplit (sa);
+    if (*retval)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 /* TODO: these static consts can be shared. */

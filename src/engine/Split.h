@@ -441,6 +441,12 @@ int xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb);
  * were added for the transaction report, and is in C because the code
  * was already written in C for the above functions and duplication
  * is silly.
+ *
+ * Note that this will only return a real value in case of a
+ * two-split transaction as that is the only situation in which
+ * a reliable value can be returned. In other situations
+ * "-- Split Transaction --" will be returned as Account Name
+ * or "Split" for Account Code.
  */
 
 char * xaccSplitGetCorrAccountFullName(const Split *sa);

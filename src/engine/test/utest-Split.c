@@ -1265,10 +1265,15 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     Split *split1 = xaccMallocSplit (book);
     Split *split2 = xaccMallocSplit (book);
     Split *split3 = xaccMallocSplit (book);
+    Split *split4 = xaccMallocSplit (book);
+    Split *split5 = xaccMallocSplit (book);
     const Split *result = NULL;
+    const gnc_numeric factor = gnc_numeric_create (2, 1);
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     Account *acc3 = xaccMallocAccount (book);
+    Account *acc4 = xaccMallocAccount (book);
+    Account *acc5 = xaccMallocAccount (book);
 #if defined(__clang__) && __clang_major__ < 6
 #define _func "gboolean get_corr_account_split(const Split *, const Split **)"
 #else
@@ -1285,14 +1290,23 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     xaccAccountSetCommodity (acc1, fixture->curr);
     xaccAccountSetCommodity (acc2, fixture->curr);
     xaccAccountSetCommodity (acc3, fixture->curr);
+    xaccAccountSetCommodity (acc4, fixture->curr);
+    xaccAccountSetCommodity (acc5, fixture->curr);
 
     split1->acc = acc1;
     split2->acc = acc2;
     split3->acc = acc3;
+    split4->acc = acc4;
+    split5->acc = acc5;
 
     split1->value = gnc_numeric_create (456, 240);
     split2->value = gnc_numeric_neg (fixture->split->value);
     split3->value = gnc_numeric_neg (split1->value);
+    split4->value = gnc_numeric_neg (gnc_numeric_mul (fixture->split->value,
+                                                      factor,
+                                                      GNC_DENOM_AUTO,
+                                                      GNC_HOW_RND_NEVER));
+    split5->value = fixture->split->value;
 
     g_assert (!fixture->func->get_corr_account_split(fixture->split, &result));
     g_assert (result == NULL);
@@ -1307,6 +1321,18 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     xaccTransBeginEdit (txn);
     xaccSplitSetParent (split1, txn);
     xaccSplitSetParent (split3, txn);
+    xaccTransCommitEdit (txn);
+
+    g_assert (!fixture->func->get_corr_account_split(fixture->split, &result));
+    g_assert (result == NULL);
+
+    /* Test for bug 752035 */
+    xaccTransBeginEdit (txn);
+    xaccSplitSetParent (split1, NULL);
+    xaccSplitSetParent (split2, NULL);
+    xaccSplitSetParent (split3, NULL);
+    xaccSplitSetParent (split4, txn);
+    xaccSplitSetParent (split5, txn);
     xaccTransCommitEdit (txn);
 
     g_assert (!fixture->func->get_corr_account_split(fixture->split, &result));
