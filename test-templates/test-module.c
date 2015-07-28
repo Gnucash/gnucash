@@ -31,8 +31,7 @@ extern GTestSuite *test_suite_module3();
 extern GTestSuite *test_suite_module4();
 
 int
-main (int   argc,
-      char *argv[])
+main (int argc, char *argv[])
 {
     qof_init();     /* You may or may not need this, depending on
 			* whether the module you're testing or any
@@ -48,5 +47,3 @@ main (int   argc,
 
     return g_test_run();           /* Run the result */
 }
-
-
