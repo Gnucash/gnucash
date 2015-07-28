@@ -40,4 +40,5 @@ and http://library.gnome.org/devel/glib/stable/glib-Testing.html
 for detailed documentation.
 
 There are some helpful macros and message-trapping functions in
-src/test-core/unittest-support.h.
+src/test-core/unittest-support.h, whose Doxygen documentation is at
+http://code.gnucash.org/docs/head/unittest-support_8h_source.html

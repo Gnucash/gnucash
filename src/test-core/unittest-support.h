@@ -25,11 +25,22 @@
 
 #include <glib.h>
 #include <qof.h>
+/** @file unittest-support.h
+ * @brief Macros and logging-capture functions to ease writing GLib-testing
+ *  based unit tests.
+ */
+
+/** @name Unit Test Macros
+ * These macros facilitate combining a suite name and a test name to make a path
+ * when registering a test function with the corresponding g_test_add and
+ * g_test_add_func. Create a const char* suitename somewhere in the file and
+ * pass it as the first parameter, and the test name as the second. The
+ * remaining parameters are the same as in the underlying function.
+ */
 
 /**
- * Use this macro to format informative test path output when using g_test_add.
- * Suite stands for tests' pack, while path for individual test name.
-*/
+ * Wraps gnc_test_add() for test functions needing a fixture.
+ */
 
 #define GNC_TEST_ADD( suite, path, fixture, data, setup, test, teardown )\
 {\
@@ -39,9 +50,8 @@
 }
 
 /**
- * Use this macro to format informative test path output when using g_test_add_func.
- * Suite stands for tests' pack, while path for individual test name.
-*/
+ * Wraps gnc_test_add_func() for test functions which don't require a fixture.
+ */
 
 #define GNC_TEST_ADD_FUNC( suite, path, test )\
 {\
@@ -49,9 +59,8 @@
     g_test_add_func( testpath, test );\
     g_free( testpath );\
 }
-
-/**
- * Suppressing Expected Errors
+/** @} */
+/** @name Suppressing Expected Errors
  *
  * Functions for suppressing expected errors during tests. Pass
  *
@@ -74,6 +83,7 @@
  * NB: If you have more than one fatal error in a test function be
  * sure to use the test_list_handler: You can have only one fatal
  * handler.
+ * @{
  */
 
 /**
@@ -115,6 +125,11 @@ TestErrorStruct* test_error_struct_new (gchar *log_domain,
  */
 void test_error_struct_free (TestErrorStruct *);
 
+/**
+ * Holds a handler instance with its TestErrorStruct, handler id, and whether
+ * it's a list handler. A test fixture can be set up to hold a GSList of these
+ * so that they can be automatically unregistered and freed during teardown.
+ */
 typedef struct
 {
     TestErrorStruct *error;
@@ -158,7 +173,9 @@ GSList *test_log_set_handler (GSList *list, TestErrorStruct *error,
 GSList *test_log_set_fatal_handler (GSList *list, TestErrorStruct *error,
                                     GLogFunc handler);
 
-/* Clears all the log handlers. Pass this to g_slist_free() in teardown */
+/**
+ * Clears all the log handlers. Pass this to g_slist_free() in teardown.
+ */
 void test_free_log_handler (gpointer item);
 
 /**
@@ -193,8 +210,7 @@ gboolean test_null_handler (const char *log_domain, GLogLevelFlags log_level,
  * Call test_add_error for each TestErrorStruct to check against and
  * test_clear_error_list when you no longer expect the errors.
  */
-void test_add_error (TestErrorStruct *error);
-void test_clear_error_list (void);
+void test_add_error (TestErrorStruct *error)voidvoid test_clear_error_list (void);
 
 /**
  * Checks received errors against the list created by
@@ -236,7 +252,14 @@ gpointer test_reset_data( void );
  */
 void test_free( gpointer data );
 
-/* TestSignal is an opaque struct used to mock handling signals
+/** @}
+ */
+/** @name Test Signals
+ * Test the emission of signals from objects. Signals are used to coordinate the
+ * behavior of the GUI with events in other parts of the program.  @{
+ */
+/**
+ * TestSignal is an opaque struct used to mock handling signals
  * emitted by functions-under-test. It registers a handler and counts
  * how many times it is called with the right instance and type.  The
  * struct is allocated using g_slice_new, and it registers a
@@ -249,30 +272,51 @@ void test_free( gpointer data );
  * passed to test_signal_new should be NULL to avoid the test.
  */
 typedef gpointer TestSignal;
+
+/**
+ * Create a test signal.
+ * @param entity: The QofInstance emitting the signal
+ * @param eventType: The type of the signal
+ * @param event_data: Any data required by the signal or NULL if none is.
+ * @return A newly created TestSignal. Use test_signal_free to release it.
+ */
+
 TestSignal test_signal_new (QofInstance *entity, QofEventId eventType,
                             gpointer event_data);
-/* test_signal_return_hits gets the number of times the TestSignal has
- * been called.
+/**
+ * gets the number of times the TestSignal has been called.
  */
 guint test_signal_return_hits (TestSignal sig);
 
-/* test_signal_assert_hits is a convenience macro which wraps
- * test_signal_return_hits with and equality assertion.
+/**
+ * Convenience macro which wraps test_signal_return_hits with and equality
+ * assertion.
  */
 
 #define test_signal_assert_hits(sig, hits) \
     g_assert_cmpint (test_signal_return_hits (sig), ==, hits)
 
+/**
+ * Free a test signal.
+ */
 void test_signal_free (TestSignal sig);
 
-/* test_object_checked_destroy unrefs obj and returns true if its finalize
- * method was called.
+/** @}
+ */
+
+/** @name Testing for object disposal
+ * Sometimes we need to make sure that certain objects that we've created aren't leaking. These functions can help.
+ * @{
+ */
+
+/**
+ * Unrefs obj and returns true if its finalize method was called.
  */
 
 gboolean test_object_checked_destroy (GObject *obj);
 
 /**
- * test_destroy() ensures that a GObject is still alive at the time
+ * Ensures that a GObject is still alive at the time
  * it's called and that it is finalized. The first assertion will
  * trigger if you pass it a ponter which isn't a GObject -- which
  * could be the case if the object has already been finalized. Then it
@@ -284,6 +328,7 @@ gboolean test_object_checked_destroy (GObject *obj);
     g_assert (obj != NULL && G_IS_OBJECT (obj));		\
     g_assert (test_object_checked_destroy (G_OBJECT (obj)))
 
+/** @} */
 /* For Scheme testing access:
 void gnc_log_init_filename_special (gchar *filename);
 void gnc_log_shutdown (void);
