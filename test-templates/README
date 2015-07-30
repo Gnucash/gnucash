@@ -29,6 +29,13 @@ each test-suite file. Add tests and fixtures as needed to the
 test-suite files and register them in the (renamed) test_suite_module()
 function.
 
+Alternatively you can use the make_testfile perl program in this directory to
+create a skeleton test-suite file for your target file. In addition to creating
+a template test function for each function in the target source file and a
+template test-suite function at the end, it will comment each template function
+with the usage of that function both internally and externally. Run `perldoc
+make_testfile` to read more.
+
 Edit Makefile.am according to the comments in the file.
 
 Run autogen.sh and configure. "make check" will run all tests; "make test" will
