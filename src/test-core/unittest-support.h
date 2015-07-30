@@ -210,7 +210,8 @@ gboolean test_null_handler (const char *log_domain, GLogLevelFlags log_level,
  * Call test_add_error for each TestErrorStruct to check against and
  * test_clear_error_list when you no longer expect the errors.
  */
-void test_add_error (TestErrorStruct *error)voidvoid test_clear_error_list (void);
+void test_add_error (TestErrorStruct *error);
+void test_clear_error_list (void);
 
 /**
  * Checks received errors against the list created by
