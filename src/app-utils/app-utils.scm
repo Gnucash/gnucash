@@ -149,7 +149,9 @@
 (define (gnc:option-get-value category key)
   ;;Access an option directly
   (qof-book-get-option (gnc-get-current-book)
-                       (list category key)))
+                       (if (list? key)
+                           (append (list category) key)
+                           (list category key))))
 (export gnc:option-get-value)
 ;; config-var.scm
 (export gnc:make-config-var)
@@ -320,15 +322,22 @@
 (define gnc:*company-url* (N_ "Company Website URL"))
 (define gnc:*company-email* (N_ "Company Email Address"))
 (define gnc:*company-contact* (N_ "Company Contact Person"))
+(define gnc:*fancy-date-label* (N_ "Fancy Date Format"))
+(define gnc:*fancy-date-format* (N_ "custom"))
 
 (define (gnc:company-info key)
   ;; Access company info from key-value pairs for current book
  (gnc:option-get-value gnc:*business-label* key))
 
+(define (gnc:fancy-date-info key)
+  ;; Access fancy date info from key-value pairs for current book
+ (gnc:option-get-value gnc:*business-label* (list gnc:*fancy-date-label* key)))
+
 (export gnc:*business-label* gnc:*company-name*  gnc:*company-addy* 
         gnc:*company-id*     gnc:*company-phone* gnc:*company-fax* 
         gnc:*company-url*    gnc:*company-email* gnc:*company-contact*
-        gnc:company-info)
+        gnc:*fancy-date-label* gnc:*fancy-date-format*
+        gnc:company-info gnc:fancy-date-info)
 
 (define gnc:*option-section-accounts* OPTION-SECTION-ACCOUNTS)
 (define gnc:*option-name-trading-accounts* OPTION-NAME-TRADING-ACCOUNTS)

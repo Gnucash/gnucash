@@ -121,7 +121,7 @@
 
   (reg-option
    (gnc:make-dateformat-option
-    gnc:*business-label* (N_ "Fancy Date Format")
+    gnc:*business-label* gnc:*fancy-date-label*
     "g" (N_ "The default date format used for fancy printed dates.")
     #f))
 
