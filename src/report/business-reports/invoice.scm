@@ -587,12 +587,15 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
+    (string-expand (strftime date-format
+                             (localtime (car date)))
+                             #\space "&nbsp;")
+    )))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -665,7 +668,7 @@
 
     (if (not (null? invoice))
 	(begin
-	  (set! owner (gncInvoiceGetOwner invoice)) 
+          (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncInvoiceGetType invoice)))
 	    (cond
 	      ((eqv? type GNC-INVOICE-CUST-INVOICE)
@@ -694,7 +697,8 @@
 						    (gncInvoiceGetID invoice)))
 
     (if (not (null? invoice))
-	(let ((book (gncInvoiceGetBook invoice)))
+	(let* ((book (gncInvoiceGetBook invoice))
+               (date-format (gnc:fancy-date-info gnc:*fancy-date-format*)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -716,8 +720,8 @@
 	    (if (not (equal? post-date (cons 0 0)))
 		(begin
 		  (set! date-table (make-date-table))
-		  (make-date-row! date-table (string-append title " " (_ "Date")) post-date)
-		  (make-date-row! date-table (_ "Due Date") due-date)
+		  (make-date-row! date-table (string-append title " " (_ "Date")) post-date date-format)
+		  (make-date-row! date-table (_ "Due Date") due-date date-format)
 		  (gnc:html-document-add-object! document date-table))
 		(gnc:html-document-add-object!
 		 document

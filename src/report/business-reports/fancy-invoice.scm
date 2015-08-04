@@ -661,18 +661,14 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
     (string-append label ":&nbsp;")
-    ;; oli-custom - modified to display a custom format
-    ;; for the invoice date/due date fields
-    ;; I could have taken the format from the report options, but... ;)
-    (string-expand (strftime (gnc-default-strftime-date-format)
+    (string-expand (strftime date-format
                              (localtime (car date)))
-                   #\space "&nbsp;")
-    ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
+                             #\space "&nbsp;")
     )))
 
 (define (make-date-table)
@@ -815,7 +811,9 @@
 
 
     (if (not (null? invoice))
-	(let* ((date-object #f)
+	(let ((book (gncInvoiceGetBook invoice))
+              (date-object #f)
+              (date-format (gnc:fancy-date-info gnc:*fancy-date-format*))
 	      (helper-table (gnc:make-html-table))
 	      (title (title-string default-title custom-title)))
 	  (set! table (make-entry-table invoice
@@ -877,8 +875,8 @@
                   ;; options. This string sucks for i18n, but I don't
                   ;; have a better solution right now without breaking
                   ;; other people's invoices.
-		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date)
-		  (make-date-row! date-table (_ "Due Date") due-date)
+		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date date-format)
+		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date date-format)
 		  date-table)
 		(gnc:make-html-text
 		  ;; oli-custom - FIXME: I have a feeling I broke a

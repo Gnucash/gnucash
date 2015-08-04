@@ -47,6 +47,7 @@
            (currency     (gncInvoiceGetCurrency   opt-invoice))
            (entries      (gncInvoiceGetEntries    opt-invoice))
            (splits      '());'
+           (dateformat   (gnc:fancy-date-info gnc:*fancy-date-format*))
            (coyname      (gnc:company-info gnc:*company-name*))
            (coycontact   (gnc:company-info gnc:*company-contact*))
            (coyaddr      (gnc:company-info gnc:*company-addy*))
@@ -249,11 +250,13 @@
       <?scm ) (begin ?>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Invoice Date")) ?>:&nbsp;</td>
-           <td align="right"><?scm:d (gnc-print-date postdate) ?></td>
+           <td align="right"><?scm:d (nbsp (strftime dateformat
+                                            (localtime (car postdate)))) ?></td>
         </tr>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
-           <td align="right"><?scm:d (gnc-print-date duedate) ?></td>
+           <td align="right"><?scm:d (nbsp (strftime dateformat
+                                            (localtime (car duedate)))) ?></td>
         </tr> <?scm )) ?>
         <?scm (if (not (string=? billingid "")) (begin ?>
           <tr>

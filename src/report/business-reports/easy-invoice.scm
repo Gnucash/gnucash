@@ -611,12 +611,14 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
+    (string-expand (strftime date-format
+                             (localtime (car date)))
+                             #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -731,7 +733,7 @@
     (add-html! document "<tr><td align='left'>")
 
     (if (not (null? invoice))
-      (begin
+      (let* ((date-format (gnc:fancy-date-info gnc:*fancy-date-format*)))
         ; invoice number and ID String table
         (add-html! document "<table width='100%'><tr>")
         (add-html! document "<td align='left'>")
@@ -779,26 +781,16 @@
         )
 
         ; add the date
-        (let ((post-date (gncInvoiceGetDatePosted invoice))
+        (let ((date-table #f)
+              (post-date (gncInvoiceGetDatePosted invoice))
               (due-date (gncInvoiceGetDateDue invoice)))
           (if (not (equal? post-date (cons 0 0)))
             (begin
-              (add-html! document "<table border=0><tr>")
-              (add-html! document "<td>")
-              (add-html! document (string-append (_ "Date") ": "))
-              (add-html! document "</td>")
-              (add-html! document "<td>")
-              (add-html! document (gnc-print-date post-date))
-              (add-html! document "</td>")
+              (set! date-table (make-date-table))
+              (make-date-row! date-table (_ "Date") post-date date-format)
               (if (opt-val "Display" "Due Date")
-                (begin
-                  (add-html! document "<tr><td>")
-                  (add-html! document (string-append (_ "Due") ": "))
-                  (add-html! document "</td>")
-                  (add-html! document "<td>")
-                  (add-html! document (gnc-print-date due-date))
-                  (add-html! document "</td>")))
-              (add-html! document "</tr></table>"))
+                  (make-date-row! date-table (_ "Due") due-date date-format))
+              (gnc:html-document-add-object! document date-table))
             (add-html! document
 		       (string-append "<font color='red'>"
 				      (_ "INVOICE NOT POSTED")
