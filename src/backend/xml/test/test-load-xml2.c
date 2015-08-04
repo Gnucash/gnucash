@@ -42,6 +42,7 @@
 #include <gnc-engine.h>
 #include "../gnc-backend-xml.h"
 #include "../io-gncxml-v2.h"
+#include <gnc-prefs.h>
 
 #include <test-stuff.h>
 #include <unittest-support.h>
@@ -91,6 +92,7 @@ test_load_file(const char *filename)
     remove_locks(filename);
 
     ignore_lock = (g_strcmp0(g_getenv("SRCDIR"), ".") != 0);
+/*    gnc_prefs_set_file_save_compressed(FALSE); */
     qof_session_begin(session, filename, ignore_lock, FALSE, TRUE);
 
     qof_session_load(session, NULL);
@@ -105,7 +107,7 @@ test_load_file(const char *filename)
                  "qof error=%d for file [%s]",
                  qof_session_get_error(session), filename);
     /* Uncomment the line below to generate corrected files */
-    qof_session_save( session, NULL );
+/*    qof_session_save( session, NULL ); */
     qof_session_end(session);
 }
 

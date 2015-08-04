@@ -494,7 +494,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
 
         /* We are on a split in an expanded transaction.
          * Just copy the split and add it to the transaction.
-         * However, if the split-action field is being used as the register 
+         * However, if the split-action field is being used as the register
          * number, and the action field is a number, request a new value or
          * cancel. Need to get next number and update account last num from
          * split account not register account, which may be the same or not */
@@ -566,8 +566,8 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         int split_index;
         const char *in_num = NULL;
         const char *in_tnum = NULL;
-        char *out_num;
-        char *out_tnum;
+        char *out_num = NULL;
+        char *out_tnum = NULL;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 

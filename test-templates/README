@@ -9,22 +9,43 @@ If there is already a test directory with make check tests in it, copy
 the contents of the Makefile.am in this directory to the existing
 Makefile.am; otherwise, copy the Makefile.am to your test directory.
 
-Copy test-module.c and test-suite.c to your test directory and rename
-them appropriately. You will very likely want several copies of
-test-suite.c, one corresponding to each c file in the module directory
-that you're testing.
+There are two groups of templates here: testmain.c is for a standalone test
+program that doesn't group tests into suites. test-module.c and test-suite.c
+support collecting a large number of tests separated in suites into a single
+test program. In most cases you'll want to use the latter.
+
+For a single file test program, copy testmain.c into your test directory,
+renaming it appropriately. Write fixtures and test functions as needed and
+register them in main(). Create a target in Makefile.am which has this file as
+its source.
+
+To use suites, copy test-module.c and test-suite.c to your test directory and
+rename them appropriately. You will very likely want several copies of
+test-suite.c, one corresponding to each c file in the module directory that
+you're testing.
 
 Edit the test module file to call the (renamed) test_suite_module() in
 each test-suite file. Add tests and fixtures as needed to the
-test-suite files and add them to the (renamed) test_suite_module()
+test-suite files and register them in the (renamed) test_suite_module()
 function.
+
+Alternatively you can use the make_testfile perl program in this directory to
+create a skeleton test-suite file for your target file. In addition to creating
+a template test function for each function in the target source file and a
+template test-suite function at the end, it will comment each template function
+with the usage of that function both internally and externally. Run `perldoc
+make_testfile` to read more.
 
 Edit Makefile.am according to the comments in the file.
 
-Run autogen.sh and configure. "make check" will run all tests; "make
-test" will run only the GLib unit tests not guarded by conditionals
-(see test-suite.c).
+Run autogen.sh and configure. "make check" will run all tests; "make test" will
+run only the GLib unit tests not guarded by conditionals (see test-suite.c). For
+more control, use gtester as documented in the GLib docs.
 
 See http://www.mail-archive.com/gtk-devel-list@gnome.org/msg06994.html
 and http://library.gnome.org/devel/glib/stable/glib-Testing.html
 for detailed documentation.
+
+There are some helpful macros and message-trapping functions in
+src/test-core/unittest-support.h, whose Doxygen documentation is at
+http://code.gnucash.org/docs/head/unittest-support_8h_source.html

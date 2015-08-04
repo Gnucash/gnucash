@@ -143,9 +143,6 @@
   (let ((root (gnc-get-current-root-account)))
     (gnc-account-get-tree-depth root)))
 
-(define (gnc:split-get-corr-account-full-name split)
-  (xaccSplitGetCorrAccountFullName split))
-
 
 ;; Get all children of this list of accounts.
 (define (gnc:acccounts-get-all-subaccounts accountlist)
