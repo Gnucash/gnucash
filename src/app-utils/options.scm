@@ -1284,7 +1284,8 @@
         b (symbol->string (cadr value)) (append p '("month")))
        (qof-book-set-option
         b (if (caddr value) 1 0) (append p '("years")))
-       (qof-book-set-option  (cadddr value) (append p '("custom"))))
+       (qof-book-set-option
+        b (cadddr value) (append p '("custom"))))
      (lambda (f p)
        (let ((fmt (qof-book-get-option f (append p '("fmt"))))
              (month (qof-book-get-option f (append p '("month"))))
