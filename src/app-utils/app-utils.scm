@@ -146,9 +146,9 @@
 (export gnc:send-options)
 (export gnc:save-options)
 
-(define (gnc:option-get-value category key)
+(define (gnc:option-get-value book category key)
   ;;Access an option directly
-  (qof-book-get-option (gnc-get-current-book)
+  (qof-book-get-option book
                        (if (list? key)
                            (append (list category) key)
                            (list category key))))
@@ -325,13 +325,13 @@
 (define gnc:*fancy-date-label* (N_ "Fancy Date Format"))
 (define gnc:*fancy-date-format* (N_ "custom"))
 
-(define (gnc:company-info key)
+(define (gnc:company-info book key)
   ;; Access company info from key-value pairs for current book
- (gnc:option-get-value gnc:*business-label* key))
+ (gnc:option-get-value book gnc:*business-label* key))
 
-(define (gnc:fancy-date-info key)
+(define (gnc:fancy-date-info book key)
   ;; Access fancy date info from key-value pairs for current book
- (gnc:option-get-value gnc:*business-label* (list gnc:*fancy-date-label* key)))
+ (gnc:option-get-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
 
 (export gnc:*business-label* gnc:*company-name*  gnc:*company-addy* 
         gnc:*company-id*     gnc:*company-phone* gnc:*company-fax* 

@@ -625,10 +625,10 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table)
+(define (make-myname-table book)
   (let* ((table (gnc:make-html-table))
-	 (name (gnc:company-info gnc:*company-name*))
-	 (addy (gnc:company-info gnc:*company-addy*)))
+	 (name (gnc:company-info book gnc:*company-name*))
+	 (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -727,7 +727,8 @@
     (add-html! document "<tr><td align='left'>")
 
     (if (not (null? invoice))
-      (let* ((date-format (gnc:fancy-date-info gnc:*fancy-date-format*)))
+      (let* ((book (gncInvoiceGetBook invoice))
+             (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
         ; invoice number and ID String table
         (add-html! document "<table width='100%'><tr>")
         (add-html! document "<td align='left'>")
@@ -739,7 +740,7 @@
         (add-html! document "<td align='right'>")
 
         (if (opt-val "Display" "My Company ID")
-          (let* ((taxid (gnc:company-info gnc:*company-id*)))
+          (let* ((taxid (gnc:company-info book gnc:*company-id*)))
                  (if (and taxid (> (string-length taxid) 0))
                    (begin
                      (add-html! document taxid)
@@ -753,7 +754,7 @@
         (make-break! document)
 
         ; add the client and company name table
-	(begin
+	(let ((book (gncInvoiceGetBook invoice)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -769,7 +770,7 @@
               (add-html! document "<td align='right' valign='top'>")
               (gnc:html-document-add-object!
                document
-               (make-myname-table))
+               (make-myname-table book))
               (add-html! document "</td>")))
           (add-html! document "</tr></table>")
         )

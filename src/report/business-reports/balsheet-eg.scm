@@ -434,7 +434,8 @@
          ; to avoid duplicates.
          (xlist '())
 
-         (coyname (or (gnc:company-info gnc:*company-name*) ""))
+         ;; XXX I haven't found a way to get the book for which the report was opened here
+         (coyname (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
 
          (css? (gnc-html-engine-supports-css))
 

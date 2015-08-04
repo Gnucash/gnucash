@@ -711,10 +711,10 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table date-format)
+(define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-     (name (gnc:company-info gnc:*company-name*))
-     (addy (gnc:company-info gnc:*company-addy*)))
+     (name (gnc:company-info book gnc:*company-name*))
+     (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -756,7 +756,8 @@
      (end-date (gnc:timepair-end-day-time 
                (gnc:date-option-absolute-time
                (opt-val gnc:pagename-general optname-to-date))))
-     (date-format (gnc:fancy-date-info gnc:*fancy-date-format*))
+     (book (gnc-account-get-book account))
+     (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
      (type (opt-val "__reg" "owner-type"))
      (owner-descr (owner-string type))
      (date-type (opt-val gnc:pagename-general optname-date-driver)) 
@@ -802,7 +803,7 @@
 
         (gnc:html-document-add-object!
          document
-         (make-myname-table date-format))
+         (make-myname-table book date-format))
 
         (gnc:html-document-add-object!
          document

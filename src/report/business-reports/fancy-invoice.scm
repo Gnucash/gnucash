@@ -675,15 +675,15 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table title)
+(define (make-myname-table book title)
   (let* ((table (gnc:make-html-table))
-	 (name (gnc:company-info gnc:*company-name*))
-;;	 (contact (gnc:company-info gnc:*company-contact*))
-	 (addy (gnc:company-info gnc:*company-addy*))
-	 (id (gnc:company-info gnc:*company-id*))
-	 (phone (gnc:company-info gnc:*company-phone*))
-	 (fax (gnc:company-info gnc:*company-fax*))
-	 (url (gnc:company-info gnc:*company-url*))
+	 (name (gnc:company-info book gnc:*company-name*))
+;;	 (contact (gnc:company-info book gnc:*company-contact*))
+	 (addy (gnc:company-info book gnc:*company-addy*))
+	 (id (gnc:company-info book gnc:*company-id*))
+	 (phone (gnc:company-info book gnc:*company-phone*))
+	 (fax (gnc:company-info book gnc:*company-fax*))
+	 (url (gnc:company-info book gnc:*company-url*))
 	 (invoice-cell (gnc:make-html-table-cell))
 	 (name-cell (gnc:make-html-table-cell))
 
@@ -796,10 +796,11 @@
 
 
     (if (not (null? invoice))
-	(let ((date-object #f)
-              (date-format (gnc:fancy-date-info gnc:*fancy-date-format*))
-	      (helper-table (gnc:make-html-table))
-	      (title (title-string default-title custom-title)))
+        (let* ((book (gncInvoiceGetBook invoice))
+               (date-object #f)
+               (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
+               (helper-table (gnc:make-html-table))
+               (title (title-string default-title custom-title)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -827,7 +828,8 @@
 					"50%" "60%")))
 
 	  (gnc:html-document-add-object!
-	   document (make-myname-table title))
+	   document (make-myname-table
+		     book title))
 
 	  (make-break! document)
 	  (make-break! document)
@@ -927,7 +929,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (gnc:company-info gnc:*company-name*))
+	      (let* ((name (gnc:company-info book gnc:*company-name*))
 		     (name-str (opt-val "Display" "Payable to string")))
 		(if (and name (> (string-length name) 0))
 		(gnc:html-document-add-object!
@@ -939,7 +941,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (gnc:company-info gnc:*company-contact*))
+	      (let* ((contact (gnc:company-info book gnc:*company-contact*))
 		     (contact-str (opt-val "Display" "Company contact string")))
 		(if (and contact (> (string-length contact) 0))
 	        (gnc:html-document-add-object!

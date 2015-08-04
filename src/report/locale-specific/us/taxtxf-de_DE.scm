@@ -488,6 +488,7 @@
                                 (validate (reverse 
                                            (gnc-account-get-children-sorted
                                             (gnc-get-current-root-account))))))
+         (book (gnc:account-get-book (car selected-accounts)))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -753,7 +754,7 @@
                                  (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
 	  (tax-nr (or
-                   (gnc:option-get-value gnc:*tax-label* gnc:*tax-nr-label*)
+                   (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
 		   ""))
 	  )
 

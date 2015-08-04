@@ -138,6 +138,7 @@
 ;; options generator
 (define (trial-balance-options-generator)
   (let* ((options (gnc:new-options))
+         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -149,7 +150,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
+      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; the period over which to collect adjusting/closing entries and
     ;; date at which to report the balance

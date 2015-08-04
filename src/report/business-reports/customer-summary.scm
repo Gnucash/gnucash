@@ -611,11 +611,11 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book)
+(define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
          (table-outer (gnc:make-html-table))
-         (name (gnc:company-info gnc:*company-name*))
-         (addy (gnc:company-info gnc:*company-addy*)))
+         (name (gnc:company-info book gnc:*company-name*))
+         (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -631,7 +631,9 @@
                                              (if addy addy "")
                                              #\newline "<br>")))
     (gnc:html-table-append-row! table (list
-                                       (gnc-print-date (gnc:get-today))))
+                                       (strftime
+                                        date-format
+                                        (localtime (car (gnc:get-today))))))
 
     (gnc:html-table-set-style!
      table-outer "table"
@@ -701,7 +703,8 @@
          (expense-accounts (opt-val pagename-expenseaccounts optname-expenseaccounts))
          (income-accounts (opt-val pagename-incomeaccounts optname-incomeaccounts))
          (all-accounts (append income-accounts expense-accounts))
-         (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
+         (book (gnc-account-get-book (car all-accounts)))
+         (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
          (type (opt-val "__reg" "owner-type"))
          (reverse? (opt-val "__reg" "reverse?"))
          (ownerlist (gncBusinessGetOwnerList
@@ -818,7 +821,7 @@
           (if show-own-address?
               (gnc:html-document-add-object!
                document
-               (make-myname-table book)))
+               (make-myname-table book date-format)))
 
           ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
