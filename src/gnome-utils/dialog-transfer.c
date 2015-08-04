@@ -1442,7 +1442,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
     {
         gnc_parse_error_dialog (xferData, _("You must enter a valid amount."));
-        LEAVE("no account");
+        LEAVE("no amount");
         return;
     }
 
