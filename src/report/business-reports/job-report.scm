@@ -506,7 +506,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book date-format)
+(define (make-myname-table date-format)
   (let* ((table (gnc:make-html-table))
 	 (name (gnc:company-info gnc:*company-name*))
 	 (addy (gnc:company-info gnc:*company-addy*)))
@@ -552,7 +552,6 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
          (date-format (gnc:fancy-date-info gnc:*fancy-date-format*))
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str "")
@@ -607,7 +606,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table book date-format))
+	   (make-myname-table date-format))
 
 	  (gnc:html-document-add-object!
 	   document

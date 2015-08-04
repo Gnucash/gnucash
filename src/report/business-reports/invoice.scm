@@ -602,7 +602,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book date-format)
+(define (make-myname-table date-format)
   (let* ((table (gnc:make-html-table))
 	 (name (gnc:company-info gnc:*company-name*))
 	 (addy (gnc:company-info gnc:*company-addy*)))
@@ -691,8 +691,7 @@
 						    (gncInvoiceGetID invoice)))
 
     (if (not (null? invoice))
-	(let* ((book (gncInvoiceGetBook invoice))
-               (date-format (gnc:fancy-date-info gnc:*fancy-date-format*)))
+	(let* ((date-format (gnc:fancy-date-info gnc:*fancy-date-format*)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -705,7 +704,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table book date-format))
+	   (make-myname-table date-format))
 
 	  (let ((date-table #f)
 		(post-date (gncInvoiceGetDatePosted invoice))

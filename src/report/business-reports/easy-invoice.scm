@@ -625,7 +625,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book)
+(define (make-myname-table)
   (let* ((table (gnc:make-html-table))
 	 (name (gnc:company-info gnc:*company-name*))
 	 (addy (gnc:company-info gnc:*company-addy*)))
@@ -753,7 +753,7 @@
         (make-break! document)
 
         ; add the client and company name table
-	(let ((book (gncInvoiceGetBook invoice)))
+	(begin
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -769,7 +769,7 @@
               (add-html! document "<td align='right' valign='top'>")
               (gnc:html-document-add-object!
                document
-               (make-myname-table book))
+               (make-myname-table))
               (add-html! document "</td>")))
           (add-html! document "</tr></table>")
         )

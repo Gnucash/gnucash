@@ -35,7 +35,6 @@
     (let* (; invoice and company details
            (invoiceid    (gncInvoiceGetID         opt-invoice))
            (credit-note? (gncInvoiceGetIsCreditNote opt-invoice))
-           (book         (gncInvoiceGetBook       opt-invoice))
            (postdate     (gncInvoiceGetDatePosted opt-invoice))
            (duedate      (gncInvoiceGetDateDue    opt-invoice))
            (billingid    (gncInvoiceGetBillingID  opt-invoice))

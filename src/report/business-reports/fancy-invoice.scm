@@ -675,7 +675,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book date-format title)
+(define (make-myname-table title)
   (let* ((table (gnc:make-html-table))
 	 (name (gnc:company-info gnc:*company-name*))
 ;;	 (contact (gnc:company-info gnc:*company-contact*))
@@ -796,8 +796,7 @@
 
 
     (if (not (null? invoice))
-	(let ((book (gncInvoiceGetBook invoice))
-              (date-object #f)
+	(let ((date-object #f)
               (date-format (gnc:fancy-date-info gnc:*fancy-date-format*))
 	      (helper-table (gnc:make-html-table))
 	      (title (title-string default-title custom-title)))
@@ -828,8 +827,7 @@
 					"50%" "60%")))
 
 	  (gnc:html-document-add-object!
-	   document (make-myname-table
-		     book date-format title)) ;; Note: date-format is not used for this report
+	   document (make-myname-table title))
 
 	  (make-break! document)
 	  (make-break! document)
