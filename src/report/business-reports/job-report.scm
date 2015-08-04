@@ -406,13 +406,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
-    "hb" (N_ "Display the transaction amount?") #t)) 
-
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    gnc:pagename-general (N_ "Today Date Format")
-    "p" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
+    "hb" (N_ "Display the transaction amount?") #t))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -559,6 +553,7 @@
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
+         (date-format (gnc:fancy-date-info gnc:*fancy-date-format*))
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str "")
          (report-title-str ""))
@@ -612,7 +607,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table book (opt-val gnc:pagename-general (N_ "Today Date Format"))))
+	   (make-myname-table book date-format))
 
 	  (gnc:html-document-add-object!
 	   document

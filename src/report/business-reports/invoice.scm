@@ -331,12 +331,6 @@
      "u" (N_ "Extra notes to put on the invoice.")
      (_ "Thank you for your patronage!")))
 
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    (N_ "Display") (N_ "Today Date Format")
-    "v" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
@@ -711,7 +705,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table book (opt-val "Display" "Today Date Format")))
+	   (make-myname-table book date-format))
 
 	  (let ((date-table #f)
 		(post-date (gncInvoiceGetDatePosted invoice))

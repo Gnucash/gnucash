@@ -356,12 +356,6 @@
      "v" (N_ "Extra notes to put on the invoice (simple HTML is accepted).")
      (_ "Thank you for your patronage!")))
 
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    (N_ "Text") (N_ "Today Date Format")
-    "x" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
@@ -795,8 +789,6 @@
 		       (string-append "<font color='red'>"
 				      (_ "INVOICE NOT POSTED")
 				      "</font>"))))
-            ;(add-html! document (strftime (opt-val "Text" "Today Date Format")
-            ;             (localtime (car (gnc:get-today))))))
 
         (make-break! document)
 

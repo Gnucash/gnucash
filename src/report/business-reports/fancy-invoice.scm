@@ -372,13 +372,6 @@
     "ub2" (N_ "The phrase used to introduce the company contact.")
     (_ "Direct all inquiries to")))
 
-; not used
-;  (gnc:register-inv-option
-;   (gnc:make-string-option
-;    (N_ "Display") (N_ "Today Date Format")
-;    "v" (N_ "The format for the date->string conversion for today's date.")
-;    (gnc-default-strftime-date-format)))
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
@@ -736,14 +729,6 @@
 				     ""))
 		  #\newline "<br>" )
 		 (if url (string-append (_ "Web:") " " url) "")))
-
-;; oli-custom - I didn't want today's date on the invoice.
-;; The invoice already has a date.
-;; Today's date can be in the email, fax or letter accompanying the invoice.
-;;    (gnc:html-table-append-row! table (list
-;;				       (strftime
-;;					date-format
-;;					(localtime (car (gnc:get-today))))))
     table))
 
 (define (make-break! document)
@@ -844,8 +829,7 @@
 
 	  (gnc:html-document-add-object!
 	   document (make-myname-table
-		     book ;;(opt-val "Display" "Today Date Format")))
-		     "" title))
+		     book date-format title)) ;; Note: date-format is not used for this report
 
 	  (make-break! document)
 	  (make-break! document)
