@@ -207,6 +207,20 @@ gnc_numeric_eq(gnc_numeric a, gnc_numeric b)
 gboolean
 gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
 {
+    if (gnc_numeric_check(a))
+    {
+        /* a is not a valid number, check b */
+        if (gnc_numeric_check(b))
+            /* Both invalid, consider them equal */
+            return TRUE;
+        else
+            /* a invalid, b valid */
+            return FALSE;
+    }
+    if (gnc_numeric_check(b))
+        /* a valid, b invalid */
+        return FALSE;
+    
     return gnc_numeric_compare (a, b) == 0;
 }
 
