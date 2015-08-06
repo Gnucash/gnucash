@@ -633,7 +633,8 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate *newEnd )
  * the SX is to run "forever". See gnc_sxed_save_sx() and
  * schedXact_editor_populate() in dialog-sx-editor.c.
  */
-    if (newEnd == NULL || g_date_compare( newEnd, &sx->start_date ) < 0 )
+    if (newEnd == NULL ||
+        (g_date_valid(newEnd) && g_date_compare( newEnd, &sx->start_date ) < 0 ))
     {
         /* XXX: I reject the bad data - is this the right
          * thing to do <rgmerk>.
