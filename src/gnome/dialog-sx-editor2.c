@@ -626,7 +626,8 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
                 }
                 multi_commodity |= !gnc_commodity_equal(split_cmdty, base_cmdty);
 
-		if ( g_strcmp0 (credit_formula, "") != 0 &&
+		if ( credit_formula &&
+		     g_strcmp0 (credit_formula, "") != 0 &&
 		     gnc_sx_parse_vars_from_formula(credit_formula, vars,
 						    &tmp ) < 0 )
 		{
@@ -647,7 +648,8 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
 		    gnc_numeric_add( tcds->creditSum, tmp, 100,
 				     (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
 		tmp = gnc_numeric_zero();
-		if ( g_strcmp0 (debit_formula, "") != 0 &&
+		if ( debit_formula &&
+		     g_strcmp0 (debit_formula, "") != 0 &&
 		     gnc_sx_parse_vars_from_formula( debit_formula, vars,
 						     &tmp ) < 0 )
 		{
