@@ -2093,9 +2093,12 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
     char *formula = NULL;
 
-    qof_instance_get (QOF_INSTANCE (split),
-		      "sx-debit-formula", &formula,
-		      NULL);
+    if (split)
+    {
+        qof_instance_get (QOF_INSTANCE (split),
+                  "sx-debit-formula", &formula,
+                  NULL);
+    }
 
     return formula;
 }
@@ -2124,9 +2127,12 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
     char *formula = NULL;
 
-    qof_instance_get (QOF_INSTANCE (split),
-		      "sx-credit-formula", &formula,
-		      NULL);
+    if (split)
+    {
+        qof_instance_get (QOF_INSTANCE (split),
+                  "sx-credit-formula", &formula,
+                  NULL);
+    }
 
     return formula;
 

@@ -714,7 +714,8 @@ _find_unreferenced_vars(gchar *key,
                         gpointer value,
                         HashListPair *cb_pair)
 {
-    if (!g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
+    if (cb_pair->hash ==  NULL ||
+        !g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
     {
         g_debug("variable [%s] not found", key);
         cb_pair->list = g_list_append(cb_pair->list, key);
@@ -788,20 +789,27 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
 
     // handle variables
     {
-        HashListPair removed_cb_data, added_cb_data;
         GList *removed_var_names = NULL, *added_var_names = NULL;
         GList *inst_iter = NULL;
 
-        removed_cb_data.hash = new_instances->variable_names;
-        removed_cb_data.list = NULL;
-        g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
-        removed_var_names = removed_cb_data.list;
+        if (existing->variable_names != NULL)
+        {
+            HashListPair removed_cb_data;
+            removed_cb_data.hash = new_instances->variable_names;
+            removed_cb_data.list = NULL;
+            g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
+            removed_var_names = removed_cb_data.list;
+        }
         g_debug("%d removed variables", g_list_length(removed_var_names));
 
-        added_cb_data.hash = existing->variable_names;
-        added_cb_data.list = NULL;
-        g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
-        added_var_names = added_cb_data.list;
+        if (new_instances->variable_names != NULL)
+        {
+            HashListPair added_cb_data;
+            added_cb_data.hash = existing->variable_names;
+            added_cb_data.list = NULL;
+            g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
+            added_var_names = added_cb_data.list;
+        }
         g_debug("%d added variables", g_list_length(added_var_names));
 
         if (existing->variable_names != NULL)
