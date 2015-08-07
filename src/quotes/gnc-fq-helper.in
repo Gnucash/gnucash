@@ -204,7 +204,7 @@ sub get_quote_time {
 
   my $datestr = $$quotehash{$item, 'date'};
   my $timestr = $$quotehash{$item, 'time'};
-  my $format = "%Y-%m-%d %H:%M:%S";
+  my $format = "\"%Y-%m-%d %H:%M:%S\"";
 
   if ($datestr) {
       my $parsestr = $datestr . " " . ($timestr ? $timestr : "12:00:00");
