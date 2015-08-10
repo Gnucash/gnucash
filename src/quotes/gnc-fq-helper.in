@@ -204,19 +204,24 @@ sub get_quote_time {
 
   my $datestr = $$quotehash{$item, 'date'};
   my $timestr = $$quotehash{$item, 'time'};
-  my $format = "\"%Y-%m-%d %H:%M:%S\"";
+  my $format = "%Y-%m-%d %H:%M:%S";
+  my $result;
 
   if ($datestr) {
       my $parsestr = $datestr . " " . ($timestr ? $timestr : "12:00:00");
       my $date = $base_date->new();
       my $err = $date->parse($parsestr);
       if ($err) {
-	  print $date->err(), " $parsestr\n";
-	  return $base_date->printf($format);
+          print $date->err(), " $parsestr\n";
+          $result = $base_date->printf($format);
       }
-      return $date->printf($format);
+      else {
+          $result = $date->printf($format);
+      }
+  } else {
+      $result = $base_date->printf($format);
   }
-  return $base_date->printf($format);
+  return("\"$result\"");
 }
 
 sub schemify_quote {
