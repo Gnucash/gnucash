@@ -98,7 +98,7 @@ static GOptionEntry options[] =
 
     {
         "debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
-        N_("Enable debugging mode: increasing logging to provide deep detail."), NULL
+        N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""), NULL
     },
 
     {
@@ -108,7 +108,7 @@ static GOptionEntry options[] =
 
     {
         "log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
-        N_("Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""),
+        N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."),
         NULL
     },
 
