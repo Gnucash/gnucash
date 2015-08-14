@@ -44,6 +44,7 @@
 #define GNC_FEATURE_CREDIT_NOTES "Credit Notes"
 #define GNC_FEATURE_NUM_FIELD_SOURCE "Number Field Source"
 #define GNC_FEATURE_KVP_EXTRA_DATA "Extra data in addresses, jobs or invoice entries"
+#define GNC_FEATURE_BOOK_CURRENCY "Use a Book-Currency"
 
 /** @} */
 

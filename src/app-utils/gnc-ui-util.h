@@ -81,6 +81,11 @@ const gchar * gnc_get_current_book_tax_type (void);
   * registers/reports can update themselves; sets feature flag */
 void gnc_book_option_num_field_source_change_cb (gboolean num_action);
 
+/** Calls gnc_book_option_book_currency_selected to initiate registered
+  * callbacks when currency accounting book option changes to book-currency so
+  * that registers/reports can update themselves; sets feature flag */
+void gnc_book_option_book_currency_selected_cb (gboolean use_book_currency);
+
 /** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
   * and are valid and trading accounts are not used */
 gboolean gnc_book_use_book_currency (QofBook *book);

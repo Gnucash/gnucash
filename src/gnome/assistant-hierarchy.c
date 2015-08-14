@@ -1009,26 +1009,6 @@ on_cancel (GtkAssistant      *gtkassistant,
 }
 
 static void
-finish_book_options_helper(GNCOptionWin * optionwin,
-                          gpointer user_data)
-{
-    GNCOptionDB * options = user_data;
-    QofBook *book = gnc_get_current_book ();
-    gboolean use_split_action_for_num_before =
-        qof_book_use_split_action_for_num_field (book);
-    gboolean use_split_action_for_num_after;
-
-    if (!options) return;
-
-    gnc_option_db_commit (options);
-    qof_book_save_options (book, gnc_option_db_save, options, TRUE);
-    use_split_action_for_num_after =
-        qof_book_use_split_action_for_num_field (book);
-    if (use_split_action_for_num_before != use_split_action_for_num_after)
-        gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
-}
-
-static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
     gnc_numeric balance;
@@ -1062,7 +1042,7 @@ on_finish (GtkAssistant  *gtkassistant,
 
     /* Set book options based on the user's choices */
     if (data->new_book)
-        finish_book_options_helper(data->optionwin, data->options);
+        gnc_book_options_dialog_apply_helper(data->options);
 
     // delete before we suspend GUI events, and then muck with the model,
     // because the model doesn't seem to handle this correctly.

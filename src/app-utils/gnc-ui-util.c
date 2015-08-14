@@ -266,6 +266,26 @@ gnc_book_option_num_field_source_change_cb (gboolean num_action)
     gnc_gui_refresh_all ();
 }
 
+/** Calls gnc_book_option_book_currency_selected to initiate registered
+  * callbacks when currency accounting book option changes to book-currency so
+  * that registers/reports can update themselves; sets feature flag */
+void
+gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
+{
+    gnc_suspend_gui_refresh ();
+    if (use_book_currency)
+    {
+    /* Set a feature flag in the book for use of book currency. This will
+     * prevent older GnuCash versions that don't support this feature from
+     * opening this file. */
+        gnc_features_set_used (gnc_get_current_book(),
+                                GNC_FEATURE_BOOK_CURRENCY);
+    }
+    gnc_book_option_book_currency_selected (use_book_currency);
+    gnc_resume_gui_refresh ();
+    gnc_gui_refresh_all ();
+}
+
 /** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
   * and are valid and trading accounts are not used. */
 gboolean

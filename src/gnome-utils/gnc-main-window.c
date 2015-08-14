@@ -3936,15 +3936,16 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
     gnc_ui_page_setup(gtk_window);
 }
 
-static void
-gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
-                                 gpointer user_data)
+void
+gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
 {
-    GNCOptionDB * options = user_data;
-    gboolean use_split_action_for_num_before =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
-    gboolean use_split_action_for_num_after;
     QofBook *book = gnc_get_current_book ();
+    gboolean use_split_action_for_num_before =
+        qof_book_use_split_action_for_num_field (book);
+    gboolean use_book_currency_before =
+        gnc_book_use_book_currency (book);
+    gboolean use_split_action_for_num_after;
+    gboolean use_book_currency_after;
 
     if (!options) return;
 
@@ -3952,10 +3953,23 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
     qof_book_begin_edit (book);
     qof_book_save_options (book, gnc_option_db_save, options, TRUE);
     use_split_action_for_num_after =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
+        qof_book_use_split_action_for_num_field (book);
+    use_book_currency_after = gnc_book_use_book_currency (book);
     if (use_split_action_for_num_before != use_split_action_for_num_after)
-        gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
+        gnc_book_option_num_field_source_change_cb (
+                                                use_split_action_for_num_after);
+    if (use_book_currency_before != use_book_currency_after)
+        gnc_book_option_book_currency_selected_cb (use_book_currency_after);
     qof_book_commit_edit (book);
+}
+
+static void
+gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
+                                 gpointer user_data)
+{
+    GNCOptionDB * options = user_data;
+    if (!options) return;
+    gnc_book_options_dialog_apply_helper (options);
 }
 
 static void

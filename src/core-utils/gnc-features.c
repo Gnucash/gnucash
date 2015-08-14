@@ -44,6 +44,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
     { GNC_FEATURE_NUM_FIELD_SOURCE, "User specifies source of 'num' field'; either transaction number or split action (requires at least GnuCash 2.5.0)" },
     { GNC_FEATURE_KVP_EXTRA_DATA, "Extra data for addresses, jobs or invoice entries (requires at least GnuCash 2.6.4)" },
+    { GNC_FEATURE_BOOK_CURRENCY, "User specifies a 'book-currency'; costs of other currencies/commodities tracked in terms of book-currency (requires at least GnuCash 2.7.0)" },
     { NULL },
 };
 
