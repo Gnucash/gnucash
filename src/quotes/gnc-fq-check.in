@@ -96,7 +96,7 @@ my @sources = $quoter->sources();
 foreach my $source (@sources) {
   push(@qsources, "\"$source\"");
 }
-printf "(\"%s\" %s)\n", $Finance::Quote::VERSION, join(" ", qq/@qsources/);
+printf "(\"%s\" %s)\n", $Finance::Quote::VERSION, join(" ", sort(@qsources));
 
 ## Local Variables:
 ## mode: perl
