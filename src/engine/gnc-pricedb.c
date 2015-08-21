@@ -966,6 +966,18 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
     return equal_data.equal;
 }
 
+static gboolean
+insert_or_replace_price(GNCPriceDB *db, GNCPrice *p)
+{
+    GNCPrice *old_price = gnc_pricedb_lookup_day (db, p->commodity,
+                                                  p->currency, p->tmspec);
+    if (old_price == NULL)
+        return TRUE;
+    if (strcmp(p->source, "PRICE_SOURCE_FQ"))
+        return TRUE;
+    return FALSE;
+}
+
 /* ==================================================================== */
 /* The add_price() function is a utility that only manages the
  * dual hash table instertion */
@@ -1028,6 +1040,12 @@ add_price(GNCPriceDB *db, GNCPrice *p)
     if (!price_list)
     {
         LEAVE (" no price list");
+        return FALSE;
+    }
+
+    if (!insert_or_replace_price(db, p))
+    {
+        LEAVE("A better price already exists");
         return FALSE;
     }
     g_hash_table_insert(currency_hash, currency, price_list);

@@ -207,6 +207,15 @@ void gnc_price_set_typestr(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 /** @} */
 
+#define PRICE_SOURCE_FQ  "Finance::Quote"
+#define PRICE_SOURCE_INVOICE "user:invoice-post"
+#define PRICE_SOURCE_STOCK_SPLIT "user:stock-split"
+#define PRICE_SOURCE_XFER_DLG "user:xfer-dialog"
+#define PRICE_SOURCE_SPLIT_REG "user:split-register"
+#define PRICE_SOURCE_EDIT_DLG "user:price-editor"
+#define PRICE_TYPE_LAST "last"
+#define PRICE_TYPE_UNK "unknown"
+
 /* ------------------ */
 /** @name  Getters
     All of the getters return data that's internal
