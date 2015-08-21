@@ -2067,7 +2067,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
     gnc_price_set_commodity (price, comm);
     gnc_price_set_currency (price, curr);
     gnc_price_set_time (price, ts);
-    gnc_price_set_source (price, "user:split-register");
+    gnc_price_set_source (price, PRICE_SOURCE_SPLIT_REG);
     gnc_price_set_value (price, value);
     gnc_pricedb_add_price (pricedb, price);
     gnc_price_commit_edit (price);

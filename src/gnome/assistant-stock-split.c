@@ -399,8 +399,8 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
         gnc_price_set_commodity (price, xaccAccountGetCommodity (account));
         gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
         gnc_price_set_time (price, ts);
-        gnc_price_set_source (price, "user:stock-split");
-        gnc_price_set_typestr (price, "unknown");
+        gnc_price_set_source (price, PRICE_SOURCE_STOCK_SPLIT);
+        gnc_price_set_typestr (price, PRICE_TYPE_UNK);
         gnc_price_set_value (price, amount);
         gnc_price_commit_edit (price);
 

@@ -1648,7 +1648,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                 gnc_price_set_commodity (price, from);
                 gnc_price_set_currency (price, to);
                 gnc_price_set_time (price, ts);
-                gnc_price_set_source (price, "user:xfer-dialog");
+                gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
                 gnc_price_set_value (price, value);
                 gnc_pricedb_add_price (xferData->pricedb, price);
                 gnc_price_commit_edit (price);
