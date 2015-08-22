@@ -233,7 +233,7 @@ static void
 gnc_split_reg_class_init( GNCSplitRegClass *klass )
 {
     int i;
-    GtkObjectClass *object_class;
+    GObjectClass *object_class;
     static struct similar_signal_info
     {
         enum gnc_split_reg_signal_enum s;
@@ -264,7 +264,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *klass )
         { LAST_SIGNAL, NULL, 0 }
     };
 
-    object_class = (GtkObjectClass*) klass;
+    object_class = (GObjectClass*) klass;
 
     for ( i = 0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ )
     {

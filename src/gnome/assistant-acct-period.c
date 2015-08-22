@@ -199,7 +199,7 @@ get_close_status_str (AcctPeriodInfo *info)
 /* =============================================================== */
 
 static void
-ap_assistant_destroy_cb (GtkObject *object, gpointer data)
+ap_assistant_destroy_cb (GtkWidget *object, gpointer data)
 {
     AcctPeriodInfo *info = data;
 

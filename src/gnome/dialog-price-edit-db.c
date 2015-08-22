@@ -59,7 +59,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 
-void gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data);
+void gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data);
 void gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data);
 void gnc_prices_dialog_response (GtkDialog *dialog, gint response_id, gpointer data);
 void gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data);
@@ -84,7 +84,7 @@ typedef struct
 
 
 void
-gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data)
+gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
 

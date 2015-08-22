@@ -146,7 +146,7 @@ void gnc_account_renumber_prefix_changed_cb (GtkEditable *editable, RenumberDial
 void gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton, RenumberDialog *data);
 void gnc_account_renumber_response_cb (GtkDialog *dialog, gint response, RenumberDialog *data);
 
-void gnc_account_window_destroy_cb (GtkObject *object, gpointer data);
+void gnc_account_window_destroy_cb (GtkWidget *object, gpointer data);
 void opening_equity_cb (GtkWidget *w, gpointer data);
 void gnc_account_name_changed_cb(GtkWidget *widget, gpointer data);
 void gnc_account_color_default_cb(GtkWidget *widget, gpointer data);
@@ -970,7 +970,7 @@ gnc_account_window_response_cb (GtkDialog *dialog,
 }
 
 void
-gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
+gnc_account_window_destroy_cb (GtkWidget *object, gpointer data)
 {
     AccountWindow *aw = data;
     Account *account;

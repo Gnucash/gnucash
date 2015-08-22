@@ -254,9 +254,9 @@ fill_polarity_combo(GNCDateDelta *gdd)
 static void
 create_children (GNCDateDelta *gdd)
 {
-    GtkObject *adj;
+    GInitiallyUnowned *adj;
 
-    adj = gtk_adjustment_new(1.0, 1.0, 1000.0, 1.0, 5.0, 5.0);
+    adj = G_INITIALLY_UNOWNED (gtk_adjustment_new(1.0, 1.0, 1000.0, 1.0, 5.0, 5.0));
     gdd->value_spin = gtk_spin_button_new(GTK_ADJUSTMENT(adj), 1.0, 0);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(gdd->value_spin), TRUE);
     gtk_box_pack_start(GTK_BOX(gdd), gdd->value_spin, FALSE, FALSE, 0);

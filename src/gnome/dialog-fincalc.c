@@ -243,7 +243,7 @@ fincalc_update_calc_button_cb(GtkWidget *unused, FinCalcDialog *fcd)
 
 /* Free the calc button list and free the FinCalcDialog structure. */
 static void
-fincalc_dialog_destroy(GtkObject *object, gpointer data)
+fincalc_dialog_destroy(GObject *object, gpointer data)
 {
     FinCalcDialog *fcd = data;
 

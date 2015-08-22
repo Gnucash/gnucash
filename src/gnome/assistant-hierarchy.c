@@ -135,7 +135,7 @@ destroy_hash_helper (gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-gnc_hierarchy_destroy_cb (GtkObject *obj,   hierarchy_data *data)
+gnc_hierarchy_destroy_cb (GtkWidget *obj,   hierarchy_data *data)
 {
     GHashTable *hash;
 

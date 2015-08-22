@@ -64,14 +64,14 @@ typedef struct
 } CommoditiesDialog;
 
 
-void gnc_commodities_window_destroy_cb (GtkObject *object, CommoditiesDialog *cd);
+void gnc_commodities_window_destroy_cb (GtkWidget *object, CommoditiesDialog *cd);
 void gnc_commodities_dialog_response (GtkDialog *dialog, gint response, CommoditiesDialog *cd);
 void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
 
 
 
 void
-gnc_commodities_window_destroy_cb (GtkObject *object,   CommoditiesDialog *cd)
+gnc_commodities_window_destroy_cb (GtkWidget *object,   CommoditiesDialog *cd)
 {
     gnc_unregister_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 

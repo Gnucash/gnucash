@@ -518,7 +518,7 @@ csv_import_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
  * Assistant call back functions
  *******************************************************/
 static void
-csv_import_assistant_destroy_cb (GtkObject *object, gpointer user_data)
+csv_import_assistant_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gnc_unregister_gui_component_by_data (ASSISTANT_CSV_IMPORT_CM_CLASS, info);

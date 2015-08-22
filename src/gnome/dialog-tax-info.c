@@ -741,7 +741,7 @@ identity_edit_destroy_cb (GtkDialog *dialog, gpointer data)
 }
 
 static void
-window_destroy_cb (GtkObject *object, gpointer data)
+window_destroy_cb (GtkWidget *object, gpointer data)
 {
     TaxInfoDialog *ti_dialog = data;
 

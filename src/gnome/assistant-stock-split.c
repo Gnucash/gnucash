@@ -80,7 +80,7 @@ typedef struct
 
 
 /** declarations *******************************************************/
-void     gnc_stock_split_assistant_window_destroy_cb (GtkObject *object, gpointer user_data);
+void     gnc_stock_split_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data);
 void     gnc_stock_split_assistant_prepare           (GtkAssistant  *assistant,
         GtkWidget *page,
         gpointer user_data);
@@ -97,7 +97,7 @@ void     gnc_stock_split_assistant_cancel            (GtkAssistant *gtkassistant
 
 /******* implementations ***********************************************/
 void
-gnc_stock_split_assistant_window_destroy_cb (GtkObject *object, gpointer user_data)
+gnc_stock_split_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 

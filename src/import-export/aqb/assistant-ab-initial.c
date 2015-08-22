@@ -74,7 +74,7 @@ void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
 
 void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
-void aai_destroy_cb(GtkObject *object, gpointer user_data);
+void aai_destroy_cb(GtkWidget *object, gpointer user_data);
 
 gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
@@ -170,7 +170,7 @@ aai_on_cancel (GtkAssistant *gtkassistant, gpointer user_data)
 }
 
 void
-aai_destroy_cb(GtkObject *object, gpointer user_data)
+aai_destroy_cb(GtkWidget *object, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 

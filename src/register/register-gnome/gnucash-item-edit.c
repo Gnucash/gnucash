@@ -993,12 +993,12 @@ gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 static void
 block_toggle_signals(GncItemEdit *item_edit)
 {
-    GtkObject *obj;
+    GObject *obj;
 
     if (!item_edit->popup_toggle.signals_connected)
         return;
 
-    obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
+    obj = G_OBJECT (item_edit->popup_toggle.toggle_button);
 
     g_signal_handlers_block_matched (obj, G_SIGNAL_MATCH_DATA,
                                      0, 0, NULL, NULL, item_edit);
@@ -1008,12 +1008,12 @@ block_toggle_signals(GncItemEdit *item_edit)
 static void
 unblock_toggle_signals(GncItemEdit *item_edit)
 {
-    GtkObject *obj;
+    GObject *obj;
 
     if (!item_edit->popup_toggle.signals_connected)
         return;
 
-    obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
+    obj = G_OBJECT (item_edit->popup_toggle.toggle_button);
 
     g_signal_handlers_unblock_matched (obj, G_SIGNAL_MATCH_DATA,
                                        0, 0, NULL, NULL, item_edit);
@@ -1023,14 +1023,14 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 static void
 connect_popup_toggle_signals (GncItemEdit *item_edit)
 {
-    GtkObject *object;
+    GObject *object;
 
     g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
     if (item_edit->popup_toggle.signals_connected)
         return;
 
-    object = GTK_OBJECT(item_edit->popup_toggle.toggle_button);
+    object = G_OBJECT(item_edit->popup_toggle.toggle_button);
 
     g_signal_connect (object, "toggled",
                       G_CALLBACK(gnc_item_edit_popup_toggled),

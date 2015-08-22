@@ -140,9 +140,9 @@ static guint gnc_split_reg2_signals[LAST_SIGNAL] = { 0 };
 static void
 gnc_split_reg2_class_init (GNCSplitReg2Class *klass)
 {
-    GtkObjectClass *object_class;
+    GObjectClass *object_class;
 
-    object_class = (GtkObjectClass*) klass;
+    object_class = (GObjectClass*) klass;
 
     gnc_split_reg2_signals[HELP_CHANGED] =
         g_signal_new("help-changed",

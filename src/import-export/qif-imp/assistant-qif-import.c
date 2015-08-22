@@ -200,7 +200,7 @@ struct _qifassistantpage
 
 typedef struct _qifassistantpage QIFAssistantPage;
 
-static void gnc_ui_qif_import_assistant_destroy (GtkObject *object, gpointer user_data);
+static void gnc_ui_qif_import_assistant_destroy (GtkWidget *object, gpointer user_data);
 static void gnc_ui_qif_import_assistant_close_handler (gpointer user_data );
 
 void gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data);
@@ -421,7 +421,7 @@ gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
  * close the QIF Import assistant window
  **********************************************/
 static void
-gnc_ui_qif_import_assistant_destroy(GtkObject *object, gpointer user_data)
+gnc_ui_qif_import_assistant_destroy(GtkWidget *object, gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
 

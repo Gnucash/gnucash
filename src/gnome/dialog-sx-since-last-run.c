@@ -126,7 +126,7 @@ GtkTreeModel* gnc_sx_get_slr_state_model(void);
 static void _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_txn_guids);
 
 static void close_handler(gpointer user_data);
-static void dialog_destroy_cb(GtkObject *object, GncSxSinceLastRunDialog *app_dialog);
+static void dialog_destroy_cb(GtkWidget *object, GncSxSinceLastRunDialog *app_dialog);
 static void dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog);
 
 /* ------------------------------------------------------------ */
@@ -1064,7 +1064,7 @@ close_handler(gpointer user_data)
 }
 
 static void
-dialog_destroy_cb(GtkObject *object, GncSxSinceLastRunDialog *app_dialog)
+dialog_destroy_cb(GtkWidget *object, GncSxSinceLastRunDialog *app_dialog)
 {
     gnc_unregister_gui_component(app_dialog->component_id);
 

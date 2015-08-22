@@ -306,7 +306,7 @@ typedef struct toCreateSX_
 
 /**************************************************************************/
 
-static void loan_assistant_window_destroy_cb( GtkObject *object, gpointer user_data );
+static void loan_assistant_window_destroy_cb( GtkWidget *object, gpointer user_data );
 static void loan_assistant_close_handler( gpointer user_data );
 static void loan_assistant_data_init( LoanAssistantData *ldd );
 
@@ -382,7 +382,7 @@ loan_assistant_close_handler( gpointer user_data )
 
 static
 void
-loan_assistant_window_destroy_cb( GtkObject *object, gpointer user_data )
+loan_assistant_window_destroy_cb( GtkWidget *object, gpointer user_data )
 {
     LoanAssistantData *ldd = user_data;
 

@@ -121,7 +121,7 @@ static void gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitL
 
 void lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data);
 void lv_response_cb (GtkDialog *dialog, gint response, gpointer data);
-void lv_window_destroy_cb (GtkObject *object, gpointer user_data);
+void lv_window_destroy_cb (GtkWidget *object, gpointer user_data);
 void lv_paned_notify_cb (GObject *gobject,
                          GParamSpec *pspec,
                          gpointer user_data);
@@ -659,7 +659,7 @@ lv_selection_changed_cb (GtkTreeSelection *selection,
 /* Lot viewer window closed */
 
 void
-lv_window_destroy_cb (GtkObject *object, gpointer user_data)
+lv_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     GNCLotViewer *lv = user_data;
     gnc_close_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
