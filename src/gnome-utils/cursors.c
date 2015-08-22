@@ -50,7 +50,7 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
         return;
 
     if (type != GNC_CURSOR_NORMAL)
-        cursor = gdk_cursor_new ((GdkCursorType)type);
+        cursor = gdk_cursor_new_for_display (gdk_display_get_default (), (GdkCursorType)type);
 
     gdk_window_set_cursor (win, cursor);
 
@@ -61,7 +61,7 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
     }
 
     if (type != GNC_CURSOR_NORMAL)
-        gdk_cursor_unref (cursor);
+        g_object_unref (cursor);
 }
 
 
@@ -88,7 +88,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
         {
             w = node->data;
 
-            if (!w || !GTK_IS_WIDGET (w) || !gtk_widget_get_has_window(w))
+            if (!w || !GTK_IS_WIDGET (w) || (!gtk_widget_get_has_window(w)))
                 continue;
 
             gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
