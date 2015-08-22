@@ -666,7 +666,7 @@ verify_children_compatible (AccountWindow *aw)
         gint size;
         PangoFontDescription *font_desc;
 
-        size = pango_font_description_get_size (label->style->font_desc);
+        size = pango_font_description_get_size (gtk_widget_get_style (label)->font_desc);
         font_desc = pango_font_description_new ();
         pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
         pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
@@ -695,16 +695,16 @@ verify_children_compatible (AccountWindow *aw)
 
     gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
 
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), hbox,
                         TRUE, TRUE, 0);
 
     /* spacings */
     gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
     gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-    gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
+    gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), 14);
     gtk_container_set_border_width (
-        GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
-    gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
+        GTK_CONTAINER (gtk_dialog_get_action_area (GTK_DIALOG (dialog))), 5);
+    gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog))), 6);
 
     gtk_widget_show_all (hbox);
 

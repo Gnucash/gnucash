@@ -217,7 +217,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
         return;
 
     g_return_if_fail(GTK_IS_WINDOW(window));
-    if (GTK_WIDGET(window)->window == NULL)
+    if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
 
     screen_width = gdk_screen_width();
@@ -234,7 +234,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     height = MIN(height, screen_height - 10);
     height = MAX(height, 0);
 
-    gdk_window_resize(GTK_WIDGET(window)->window, width, height);
+    gdk_window_resize(gtk_widget_get_window (GTK_WIDGET(window)), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
@@ -552,8 +552,8 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
             : _("Don't tell me again this _session."));
     gtk_widget_show(perm);
     gtk_widget_show(temp);
-    gtk_box_pack_start(GTK_BOX(dialog->vbox), perm, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(dialog->vbox), temp, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), perm, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), temp, TRUE, TRUE, 0);
     g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
 
     /* OK. Present the dialog. */

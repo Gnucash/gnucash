@@ -962,8 +962,12 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
 {
     /* col is the number of the column that was clicked, and offset is
        to correct for the indentation of button. */
-    int i, col = 0, offset = GTK_BIN(button)->child->allocation.x - button->allocation.x,
-           ncols = info->parse_data->column_types->len;
+    int i, offset;
+    GtkAllocation alloc;
+    int col = 0, ncols = info->parse_data->column_types->len;
+
+    gtk_widget_get_allocation (gtk_bin_get_child (GTK_BIN(button)), &alloc);
+    offset = alloc.x - alloc.x;
     /* Find the column that was clicked. */
     for (i = 0; i < ncols; i++)
     {

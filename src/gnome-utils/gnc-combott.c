@@ -469,27 +469,32 @@ gctt_combott_menu_position (GtkMenu  *menu,
     gint sx, sy;
     GtkWidget *child;
     GtkRequisition req;
+    GtkAllocation alloc;
 
-    child = GTK_BIN (priv->button)->child;
+    child = gtk_bin_get_child (GTK_BIN (priv->button));
 
     sx = sy = 0;
 
     if (!gtk_widget_get_has_window (child))
     {
-        sx += child->allocation.x;
-        sy += child->allocation.y;
+        gtk_widget_get_allocation (child, &alloc);
+        sx += alloc.x;
+        sy += alloc.y;
     }
 
-    gdk_window_get_root_coords (child->window, sx, sy, &sx, &sy);
+    gdk_window_get_root_coords (gtk_widget_get_window (child), sx, sy, &sx, &sy);
 
-    sx -= GTK_WIDGET (priv->button)->style->xthickness;
+    sx -= gtk_widget_get_style (GTK_WIDGET (priv->button))->xthickness;
 
     gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
     if (gtk_widget_get_direction (GTK_WIDGET (priv->button)) == GTK_TEXT_DIR_LTR)
         *x = sx;
     else
-        *x = sx + child->allocation.width - req.width;
+    {
+        gtk_widget_get_allocation (child, &alloc);
+        *x = sx + alloc.width - req.width;
+    }
 
     if(priv->active == -1 || priv->active == 0)
         *y = sy;

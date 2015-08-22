@@ -215,15 +215,17 @@ position_popup (GNCDateEdit *gde)
     gint x, y;
     gint bwidth, bheight;
     GtkRequisition req;
+    GtkAllocation alloc;
 
     gtk_widget_size_request (gde->cal_popup, &req);
 
-    gdk_window_get_origin (gde->date_button->window, &x, &y);
+    gdk_window_get_origin (gtk_widget_get_window (gde->date_button), &x, &y);
 
-    x += gde->date_button->allocation.x;
-    y += gde->date_button->allocation.y;
-    bwidth = gde->date_button->allocation.width;
-    bheight = gde->date_button->allocation.height;
+    gtk_widget_get_allocation (gde->date_button, &alloc);
+    x += alloc.x;
+    y += alloc.y;
+    bwidth = alloc.width;
+    bheight = alloc.height;
 
     x += bwidth - req.width;
     y += bheight;
@@ -322,7 +324,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     if (!gtk_widget_has_focus (gde->calendar))
         gtk_widget_grab_focus (gde->calendar);
 
-    if (!popup_grab_on_window ((GTK_WIDGET(gde->cal_popup))->window,
+    if (!popup_grab_on_window (gtk_widget_get_window ((GTK_WIDGET(gde->cal_popup))),
                                GDK_CURRENT_TIME, TRUE))
     {
         gtk_widget_hide (gde->cal_popup);

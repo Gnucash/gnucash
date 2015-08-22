@@ -350,7 +350,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     /* default to ok */
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
-    dvbox = GTK_DIALOG(dialog)->vbox;
+    dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
 
     gtk_box_pack_start(GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
 

@@ -263,9 +263,9 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
                    NULL));
 
     /* Put the dialog together */
-    gtk_box_pack_start ((GtkBox *)dialog->vbox, label,
+    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), label,
                         FALSE, FALSE, 3);
-    gtk_box_pack_start ((GtkBox *)dialog->vbox, accounts_scroller,
+    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), accounts_scroller,
                         TRUE, TRUE, 3);
 
     gtk_widget_show_all (GTK_WIDGET (dialog));
@@ -280,7 +280,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
             gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
 
         desc = describe_button (fi);
-        gtk_label_set_text (GTK_LABEL (GTK_BIN (button)->child), desc);
+        gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
     }
 
     gtk_widget_destroy (GTK_WIDGET (dialog));

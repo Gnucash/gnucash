@@ -372,7 +372,7 @@ gnucash_cursor_realize (GnomeCanvasItem *item)
         (*GNOME_CANVAS_ITEM_CLASS
          (gnucash_cursor_parent_class)->realize)(item);
 
-    window = GTK_WIDGET (item->canvas)->window;
+    window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
 
     cursor->gc = gdk_gc_new (window);
 }

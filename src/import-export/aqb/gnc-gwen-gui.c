@@ -1126,7 +1126,7 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
     gtk_container_add(GTK_CONTAINER(vbox), label);
     gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
-    gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), vbox);
     gtk_widget_show_all(dialog);
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));

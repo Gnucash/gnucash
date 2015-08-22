@@ -973,7 +973,7 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
         data = g_object_get_data (G_OBJECT (w), "data");
         sw->crit_list = g_list_append (sw->crit_list, data);
 
-        rows = GTK_TABLE (sw->criteria_table)->nrows;
+        gtk_table_get_size (GTK_TABLE (sw->criteria_table), &rows, NULL);
         gtk_table_resize (GTK_TABLE (sw->criteria_table), rows + 1, 2);
         attach_element (w, sw, rows);
 

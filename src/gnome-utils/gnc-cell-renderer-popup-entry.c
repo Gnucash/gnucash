@@ -230,7 +230,7 @@ gpw_key_press_event (GtkWidget   *box,
     /* Hackish :/ Synthesize a key press event for the entry. */
     memcpy (&tmp_event, key_event, sizeof (GdkEventKey));
 
-    tmp_event.key.window = widget->entry->window;
+    tmp_event.key.window = gtk_widget_get_window (widget->entry);
     tmp_event.key.send_event = TRUE;
 
     gtk_widget_event (widget->entry, &tmp_event);

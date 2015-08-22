@@ -107,8 +107,8 @@ read_widget (GtkBuilder *builder, char *name, gboolean read_only)
         GtkAdjustment *adj;
         gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
         adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-        adj->step_increment = 0.0;
-        adj->page_increment = 0.0;
+        gtk_adjustment_set_step_increment (adj, 0.0);
+        gtk_adjustment_set_page_increment (adj, 0.0);
         gtk_adjustment_changed (adj);
     }
 

@@ -249,7 +249,7 @@ gnc_header_realize (GnomeCanvasItem *item)
     if (GNOME_CANVAS_ITEM_CLASS (parent_class)->realize)
         GNOME_CANVAS_ITEM_CLASS (parent_class)->realize (item);
 
-    window = GTK_WIDGET (item->canvas)->window;
+    window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
 
     header->gc = gdk_gc_new (window);
 }
@@ -488,10 +488,10 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
 
         if (pointer_on_resize_line(header, x, y, &col) &&
                 gnucash_style_col_is_resizable (header->style, col))
-            gdk_window_set_cursor (GTK_WIDGET(canvas)->window,
+            gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET(canvas)),
                                    header->resize_cursor);
         else
-            gdk_window_set_cursor (GTK_WIDGET(canvas)->window,
+            gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET(canvas)),
                                    header->normal_cursor);
         break;
 
@@ -747,7 +747,7 @@ gnc_header_get_type (void)
 static void
 gnc_header_realized (GtkWidget *widget, gpointer data)
 {
-    gdk_window_set_back_pixmap (GTK_LAYOUT (widget)->bin_window,
+    gdk_window_set_back_pixmap (gtk_layout_get_bin_window (GTK_LAYOUT (widget)),
                                 NULL, FALSE);
 }
 

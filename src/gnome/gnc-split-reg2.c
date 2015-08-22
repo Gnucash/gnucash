@@ -843,7 +843,7 @@ gnc_split_reg2_style_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM (w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (w)))
         return;
 
     gnc_split_reg2_change_style (gsr, REG2_STYLE_LEDGER);
@@ -854,7 +854,7 @@ gnc_split_reg2_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM (w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (w)))
         return;
 
     gnc_split_reg2_change_style (gsr, REG2_STYLE_AUTO_LEDGER);
@@ -865,7 +865,7 @@ gnc_split_reg2_style_journal_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM (w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (w)))
         return;
 
     gnc_split_reg2_change_style (gsr, REG2_STYLE_JOURNAL);
@@ -878,7 +878,7 @@ gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data)
     GncTreeModelSplitReg *model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
     gboolean use_double_line;
 
-    use_double_line = GTK_CHECK_MENU_ITEM (w)->active;
+    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (w));
     if (use_double_line == model->use_double_line)
         return;
 
