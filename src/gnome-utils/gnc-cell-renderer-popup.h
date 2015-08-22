@@ -78,7 +78,7 @@ struct _GncCellRendererPopupClass
 	void   (* hide_popup) (GncCellRendererPopup *cell);
 };
 
-GtkType          gnc_cell_renderer_popup_get_type (void) G_GNUC_CONST;
+GType            gnc_cell_renderer_popup_get_type (void) G_GNUC_CONST;
 
 GtkCellRenderer *gnc_cell_renderer_popup_new      (void);
 

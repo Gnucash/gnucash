@@ -59,7 +59,7 @@ struct _GncPopupEntryClass
     GtkEventBoxClass parent_class;
 };
 
-GtkType      gnc_popup_entry_get_type   (void) G_GNUC_CONST;
+GType        gnc_popup_entry_get_type   (void) G_GNUC_CONST;
 
 GtkWidget   *gnc_popup_entry_new        (void);
 
