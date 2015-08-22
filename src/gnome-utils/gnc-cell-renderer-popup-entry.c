@@ -174,7 +174,7 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
     gint year = 0, month = 0, day = 0;
     struct tm when;
 
-    if (key_event->keyval == GDK_Escape)
+    if (key_event->keyval == GDK_KEY_Escape)
     {
         widget->editing_canceled = TRUE;
 
@@ -213,7 +213,7 @@ gpw_key_press_event (GtkWidget   *box,
 
     gtk_widget_grab_focus (widget->entry);
 
-    if (key_event->keyval == GDK_Escape)
+    if (key_event->keyval == GDK_KEY_Escape)
     {
         widget->editing_canceled = TRUE;
 
@@ -223,13 +223,13 @@ gpw_key_press_event (GtkWidget   *box,
         return TRUE;
     }
 
-    if (key_event->keyval == GDK_Left)
+    if (key_event->keyval == GDK_KEY_Left)
     {
         gtk_editable_set_position (GTK_EDITABLE (widget->entry), 0);
         return TRUE;
     }
 
-    if (key_event->keyval == GDK_Right)
+    if (key_event->keyval == GDK_KEY_Right)
     {
         gtk_editable_set_position (GTK_EDITABLE (widget->entry), -1);
         return TRUE;

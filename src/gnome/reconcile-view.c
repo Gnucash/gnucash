@@ -714,7 +714,7 @@ gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
 
     switch (event->keyval)
     {
-    case GDK_space:
+    case GDK_KEY_space:
         g_signal_stop_emission_by_name (widget, "key_press_event");
 
         toggle = gnc_reconcile_view_set_toggle (view);

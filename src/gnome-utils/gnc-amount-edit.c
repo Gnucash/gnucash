@@ -158,11 +158,11 @@ gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
     gint result;
 
 #ifdef G_OS_WIN32
-    /* gdk never sends GDK_KP_Decimal on win32. See #486658 */
+    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
     if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KP_Decimal;
+        event->keyval = GDK_KEY_KP_Decimal;
 #endif
-    if (event->keyval == GDK_KP_Decimal)
+    if (event->keyval == GDK_KEY_KP_Decimal)
     {
         if (gae->print_info.monetary)
         {
@@ -176,13 +176,13 @@ gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
 
     switch (event->keyval)
     {
-    case GDK_Return:
+    case GDK_KEY_Return:
         if (gae->evaluate_on_enter)
             break;
         if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK))
             break;
         return result;
-    case GDK_KP_Enter:
+    case GDK_KEY_KP_Enter:
         break;
     default:
         return result;

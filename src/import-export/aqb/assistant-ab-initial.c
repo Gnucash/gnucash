@@ -150,7 +150,7 @@ enum account_list_cols
 gboolean
 aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    if (event->keyval == GDK_Escape)
+    if (event->keyval == GDK_KEY_Escape)
     {
         gtk_widget_destroy(widget);
         return TRUE;

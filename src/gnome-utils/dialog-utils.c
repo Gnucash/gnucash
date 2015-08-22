@@ -269,9 +269,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
      */
     switch (event->keyval)
     {
-    case GDK_KP_Add:
-    case GDK_plus:
-    case GDK_equal:
+    case GDK_KEY_KP_Add:
+    case GDK_KEY_plus:
+    case GDK_KEY_equal:
         if (event->state & GDK_SHIFT_MASK)
             g_date_add_days (&gdate, 7);
         else if (event->state & GDK_MOD1_MASK)
@@ -283,9 +283,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
-    case GDK_minus:
-    case GDK_KP_Subtract:
-    case GDK_underscore:
+    case GDK_KEY_minus:
+    case GDK_KEY_KP_Subtract:
+    case GDK_KEY_underscore:
         if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
         {
             const char *c;
@@ -333,41 +333,41 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     /* Now check for the remaining keystrokes. */
     switch (event->keyval)
     {
-    case GDK_braceright:
-    case GDK_bracketright:
+    case GDK_KEY_braceright:
+    case GDK_KEY_bracketright:
         /* increment month */
         g_date_add_months (&gdate, 1);
         break;
 
-    case GDK_braceleft:
-    case GDK_bracketleft:
+    case GDK_KEY_braceleft:
+    case GDK_KEY_bracketleft:
         /* decrement month */
         g_date_subtract_months (&gdate, 1);
         break;
 
-    case GDK_M:
-    case GDK_m:
+    case GDK_KEY_M:
+    case GDK_KEY_m:
         /* beginning of month */
         g_date_set_day (&gdate, 1);
         break;
 
-    case GDK_H:
-    case GDK_h:
+    case GDK_KEY_H:
+    case GDK_KEY_h:
         /* end of month */
         g_date_set_day (&gdate, 1);
         g_date_add_months (&gdate, 1);
         g_date_subtract_days (&gdate, 1);
         break;
 
-    case GDK_Y:
-    case GDK_y:
+    case GDK_KEY_Y:
+    case GDK_KEY_y:
         /* beginning of year */
         g_date_set_day (&gdate, 1);
         g_date_set_month (&gdate, 1);
         break;
 
-    case GDK_R:
-    case GDK_r:
+    case GDK_KEY_R:
+    case GDK_KEY_r:
         /* end of year */
         g_date_set_day (&gdate, 1);
         g_date_set_month (&gdate, 1);
@@ -375,8 +375,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_subtract_days (&gdate, 1);
         break;
 
-    case GDK_T:
-    case GDK_t:
+    case GDK_KEY_T:
+    case GDK_KEY_t:
         /* today */
         gnc_gdate_set_today (&gdate);
         break;

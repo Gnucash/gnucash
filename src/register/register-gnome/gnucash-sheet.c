@@ -1808,7 +1808,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
         case GDK_KEY_KP_Down:
         case GDK_KEY_Down:
         case GDK_KEY_Menu:
-            if (event->keyval == GDK_Menu ||
+            if (event->keyval == GDK_KEY_Menu ||
                     (event->state & GDK_CONTROL_MASK))
             {
                 GncItemEdit *item_edit;
@@ -1884,12 +1884,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
     /* bug#60582 comment#27 2
            save shift state to enable <shift minus> and <shift equal>
        bug#618434
-           save keyval to handle GDK_KP_Decimal event
+           save keyval to handle GDK_KEY_KP_Decimal event
      */
 #ifdef G_OS_WIN32
-    /* gdk never sends GDK_KP_Decimal on win32. See #486658 */
+    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
     if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KP_Decimal;
+        event->keyval = GDK_KEY_KP_Decimal;
 #endif
     if (sheet->preedit_length)
     {
