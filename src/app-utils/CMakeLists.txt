@@ -79,9 +79,9 @@ SET (app_utils_SOURCES
 SET_SOURCE_FILES_PROPERTIES (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 SET(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
-SET(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GTK2_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
+SET(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GTK3_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
 SET(app_utils_ALL_INCLUDES  ${CMAKE_CURRENT_SOURCE_DIR}/calculation  ${LIBXML2_INCLUDE_DIRS}
-                               ${LIBXSLT_INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS})
+                               ${LIBXSLT_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS})
 
 IF (WIN32)
   LIST(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)

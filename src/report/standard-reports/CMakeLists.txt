@@ -5,7 +5,7 @@ SET(standard_reports_SOURCES gncmod-standard-reports.c)
 
 ADD_LIBRARY (gncmod-standard-reports ${standard_reports_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-standard-reports gnc-module ${GTK2_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-standard-reports gnc-module ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-standard-reports PRIVATE -DG_LOG_DOMAIN=\"gnc.report.standard\")
 

@@ -22,7 +22,7 @@ ADD_LIBRARY (gnc-business-ledger
 )
 
 TARGET_LINK_LIBRARIES(gnc-business-ledger gncmod-ledger-core  gncmod-register-core gncmod-engine gncmod-gnome-utils
-                            gnc-core-utils ${GTK2_LDFLAGS})
+                            gnc-core-utils ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gnc-business-ledger PRIVATE -DG_LOG_DOMAIN=\"gnc.business.ledger\")
 
