@@ -30,7 +30,6 @@
 #include "TransLog.h"
 #include "assistant-xml-encoding.h"
 #include "dialog-utils.h"
-#include "assistant-utils.h"
 #include "gnc-backend-xml.h"
 #include "gnc-component-manager.h"
 #include "gnc-uri-utils.h"
@@ -305,8 +304,6 @@ gnc_xml_convert_single_file (const gchar *filename)
         builder = gtk_builder_new();
         gnc_builder_add_from_file  (builder , "assistant-xml-encoding.glade", "assistant_xml_encoding");
         data->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "assistant_xml_encoding"));
-
-        gnc_assistant_set_colors (GTK_ASSISTANT (data->assistant));
 
         /* Enable buttons on all pages. */
         gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),

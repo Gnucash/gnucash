@@ -44,7 +44,6 @@
 
 #include "dialog-utils.h"
 #include "assistant-ab-initial.h"
-#include "assistant-utils.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-component-manager.h"
@@ -854,8 +853,6 @@ gnc_ab_initial_assistant(void)
     gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "AqBanking Init Assistant");
 
     info->window = GTK_WIDGET(gtk_builder_get_object (builder, "AqBanking Init Assistant"));
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->assistant));
 
     info->api = gnc_AB_BANKING_new();
     info->deferred_info = NULL;

@@ -45,7 +45,6 @@
 #include "gnc-ui-balances.h"
 #include "dialog-utils.h"
 #include "window-main-summarybar.h"
-#include "assistant-utils.h"
 
 #define SAMPLE_OWNER_VALUE "$1,000,000.00"
 

@@ -37,7 +37,6 @@
 
 #include "gnc-component-manager.h"
 
-#include "assistant-utils.h"
 #include "assistant-csv-account-import.h"
 #include "csv-account-import.h"
 
@@ -582,9 +581,6 @@ csv_import_assistant_create (CsvImportInfo *info)
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "CSV Account Import Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Account Import Assistant"));
     info->window = window;
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
     /* Load default settings */
     load_settings (info);

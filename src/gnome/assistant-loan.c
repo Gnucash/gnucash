@@ -33,7 +33,6 @@
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
-#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
 #include "gnc-date.h"
@@ -464,10 +463,6 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "Loan-Mortgage Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Loan-Mortgage Assistant"));
     ldd->window = window;
-
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (ldd->window));
 
     /* Enable buttons on complete pages. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),

@@ -40,7 +40,6 @@
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "assistant-qif-import.h"
-#include "assistant-utils.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-file.h"
@@ -3415,8 +3414,6 @@ get_assistant_widgets(QIFImportWindow *wind, GtkBuilder *builder)
         GTK_WIDGET(gtk_builder_get_object (builder, "new_transaction_view"));
     wind->old_transaction_view =
         GTK_WIDGET(gtk_builder_get_object (builder, "old_transaction_view"));
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (wind->window));
 }
 
 

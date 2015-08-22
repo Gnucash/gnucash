@@ -37,7 +37,6 @@
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "assistant-hierarchy.h"
-#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-exp-parser.h"
@@ -1169,8 +1168,6 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     /* If we have a callback, make this window stay on top */
     if (when_completed != NULL)
         gtk_window_set_keep_above (GTK_WINDOW(data->dialog), TRUE);
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (data->dialog));
 
     /* Enable buttons on first and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
