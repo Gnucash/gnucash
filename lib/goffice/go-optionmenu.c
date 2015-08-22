@@ -353,13 +353,13 @@ static void go_option_menu_get_property(GObject *object, guint prop_id,
     }
 }
 
-static void go_option_menu_destroy(GtkObject *object)
+static void go_option_menu_destroy(GtkWidget *widget)
 {
     GOOptionMenu *option_menu;
 
-    g_return_if_fail(GO_IS_OPTION_MENU(object));
+    g_return_if_fail(GO_IS_OPTION_MENU(widget));
 
-    option_menu = GO_OPTION_MENU(object);
+    option_menu = GO_OPTION_MENU(widget);
 
     if (option_menu->menu)
     {
@@ -369,13 +369,12 @@ static void go_option_menu_destroy(GtkObject *object)
     }
     option_menu->selected = NULL;
 
-    GTK_OBJECT_CLASS(parent_class)->destroy(object);
+    GTK_WIDGET_CLASS(parent_class)->destroy(widget);
 }
 
 static void go_option_menu_class_init(GOOptionMenuClass *class)
 {
     GObjectClass *gobject_class = (GObjectClass*) class;
-    GtkObjectClass *object_class = (GtkObjectClass*) class;
     GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
 
     parent_class = g_type_class_peek_parent(class);
@@ -386,7 +385,7 @@ static void go_option_menu_class_init(GOOptionMenuClass *class)
 
     gobject_class->set_property = go_option_menu_set_property;
     gobject_class->get_property = go_option_menu_get_property;
-    object_class->destroy = go_option_menu_destroy;
+    widget_class->destroy = go_option_menu_destroy;
     widget_class->button_press_event = go_option_menu_button_press;
     widget_class->key_press_event = go_option_menu_key_press;
 

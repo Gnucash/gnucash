@@ -50,7 +50,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass);
 static void gnc_tree_view_commodity_init (GncTreeViewCommodity *view);
 static void gnc_tree_view_commodity_finalize (GObject *object);
-static void gnc_tree_view_commodity_destroy (GtkObject *object);
+static void gnc_tree_view_commodity_destroy (GtkWidget *widget);
 
 typedef struct GncTreeViewCommodityPrivate
 {
@@ -99,18 +99,18 @@ static void
 gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
 {
     GObjectClass *o_class;
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class;
 
     parent_class = g_type_class_peek_parent (klass);
 
     o_class = G_OBJECT_CLASS (klass);
-    object_class = GTK_OBJECT_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS (klass);
 
     /* GObject signals */
     o_class->finalize = gnc_tree_view_commodity_finalize;
 
-    /* GtkObject signals */
-    object_class->destroy = gnc_tree_view_commodity_destroy;
+    /* GtkWidget signals */
+    widget_class->destroy = gnc_tree_view_commodity_destroy;
 
     g_type_class_add_private(klass, sizeof(GncTreeViewCommodityPrivate));
 }
@@ -133,15 +133,15 @@ gnc_tree_view_commodity_finalize (GObject *object)
 }
 
 static void
-gnc_tree_view_commodity_destroy (GtkObject *object)
+gnc_tree_view_commodity_destroy (GtkWidget *widget)
 {
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (widget));
 
-    ENTER("view %p", object);
+    ENTER("view %p", widget);
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        (* GTK_WIDGET_CLASS (parent_class)->destroy) (widget);
     LEAVE(" ");
 }
 

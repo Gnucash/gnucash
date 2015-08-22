@@ -126,7 +126,7 @@ static guint secs_to_save = 0;
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
 static void gnc_main_window_init (GncMainWindow *window, GncMainWindowClass *klass);
 static void gnc_main_window_finalize (GObject *object);
-static void gnc_main_window_destroy (GtkObject *object);
+static void gnc_main_window_destroy (GtkWidget *widget);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
@@ -2443,7 +2443,7 @@ static void
 gnc_main_window_class_init (GncMainWindowClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-    GtkObjectClass *gtkobject_class = GTK_OBJECT_CLASS(klass);
+    GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
     parent_class = g_type_class_peek_parent (klass);
 
@@ -2451,8 +2451,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
     object_class->finalize = gnc_main_window_finalize;
 
-    /* GtkObject signals */
-    gtkobject_class->destroy = gnc_main_window_destroy;
+    /* GtkWidget signals */
+    gtkwidget_class->destroy = gnc_main_window_destroy;
 
     g_type_class_add_private(klass, sizeof(GncMainWindowPrivate));
 
@@ -2578,17 +2578,17 @@ gnc_main_window_finalize (GObject *object)
 
 
 static void
-gnc_main_window_destroy (GtkObject *object)
+gnc_main_window_destroy (GtkWidget *widget)
 {
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GncPluginManager *manager;
     GList *plugins;
 
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_MAIN_WINDOW (widget));
 
-    window = GNC_MAIN_WINDOW (object);
+    window = GNC_MAIN_WINDOW (widget);
 
     active_windows = g_list_remove (active_windows, window);
 
@@ -2626,7 +2626,7 @@ gnc_main_window_destroy (GtkObject *object)
     }
     if (priv->about_dialog)
 	g_object_unref (priv->about_dialog);
-    GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
 

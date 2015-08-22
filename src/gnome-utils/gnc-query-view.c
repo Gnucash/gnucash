@@ -68,7 +68,7 @@ static void gnc_query_view_double_click_cb (GtkTreeView *tree_view,
                                              GtkTreeViewColumn *column,
                                              gpointer           user_data);
 
-static void gnc_query_view_destroy (GtkObject *object);
+static void gnc_query_view_destroy (GtkWidget *widget);
 static void gnc_query_view_fill (GNCQueryView *qview);
 static void gnc_query_view_set_query_sort (GNCQueryView *qview, gboolean new_column);
 
@@ -412,10 +412,10 @@ gnc_query_view_init_view (GNCQueryView *qview)
 static void
 gnc_query_view_class_init (GNCQueryViewClass *klass)
 {
-    GtkObjectClass       *object_class;
+    GtkWidgetClass       *widget_class;
     GtkTreeViewClass     *view_class;
 
-    object_class = (GtkObjectClass*) klass;
+    widget_class = (GtkWidgetClass*) klass;
     view_class =   (GtkTreeViewClass*) klass;
 
     parent_class = g_type_class_peek (GTK_TYPE_TREE_VIEW);
@@ -424,7 +424,7 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
 
     query_view_signals[COLUMN_TOGGLED] =
         g_signal_new("column_toggled",
-                     G_TYPE_FROM_CLASS (object_class),
+                     G_TYPE_FROM_CLASS (widget_class),
                      G_SIGNAL_RUN_FIRST,
                      G_STRUCT_OFFSET (GNCQueryViewClass, column_toggled),
                      NULL, NULL,
@@ -435,7 +435,7 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
 
     query_view_signals[ROW_SELECTED] =
         g_signal_new("row_selected",
-                     G_TYPE_FROM_CLASS (object_class),
+                     G_TYPE_FROM_CLASS (widget_class),
                      G_SIGNAL_RUN_FIRST,
                      G_STRUCT_OFFSET (GNCQueryViewClass, row_selected),
                      NULL, NULL,
@@ -446,7 +446,7 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
 
     query_view_signals[DOUBLE_CLICK_ENTRY] =
         g_signal_new("double_click_entry",
-                     G_TYPE_FROM_CLASS (object_class),
+                     G_TYPE_FROM_CLASS (widget_class),
                      G_SIGNAL_RUN_FIRST,
                      G_STRUCT_OFFSET (GNCQueryViewClass, double_click_entry),
                      NULL, NULL,
@@ -455,7 +455,7 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
                      1,
                      G_TYPE_POINTER);
 
-    object_class->destroy = gnc_query_view_destroy;
+    widget_class->destroy = gnc_query_view_destroy;
 
     klass->column_toggled = NULL;
     klass->row_selected = NULL;
@@ -571,9 +571,9 @@ gnc_query_view_toggled_cb (GtkCellRendererToggle *cell_renderer,
 
 
 static void
-gnc_query_view_destroy (GtkObject *object)
+gnc_query_view_destroy (GtkWidget *widget)
 {
-    GNCQueryView     *qview = GNC_QUERY_VIEW (object);
+    GNCQueryView     *qview = GNC_QUERY_VIEW (widget);
     GNCQueryViewPriv *priv;
 
     priv = GNC_QUERY_VIEW_GET_PRIVATE (qview);
@@ -594,8 +594,8 @@ gnc_query_view_destroy (GtkObject *object)
         qof_query_destroy (qview->query);
         qview->query = NULL;
     }
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
 

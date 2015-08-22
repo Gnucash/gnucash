@@ -77,7 +77,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);
 static void gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass);
 static void gnc_tree_view_finalize (GObject *object);
-static void gnc_tree_view_destroy (GtkObject *object);
+static void gnc_tree_view_destroy (GtkWidget *widget);
 static void gnc_tree_view_set_property (GObject         *object,
                                         guint            prop_id,
                                         const GValue    *value,
@@ -183,12 +183,12 @@ static void
 gnc_tree_view_class_init (GncTreeViewClass *klass)
 {
     GObjectClass *gobject_class;
-    GtkObjectClass *gtkobject_class;
+    GtkWidgetClass *gtkwidget_class;
 
     parent_class = g_type_class_peek_parent (klass);
 
     gobject_class = G_OBJECT_CLASS (klass);
-    gtkobject_class = GTK_OBJECT_CLASS (klass);
+    gtkwidget_class = GTK_WIDGET_CLASS (klass);
 
     gobject_class->set_property = gnc_tree_view_set_property;
     gobject_class->get_property = gnc_tree_view_get_property;
@@ -213,8 +213,8 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
     /* GObject signals */
     gobject_class->finalize = gnc_tree_view_finalize;
 
-    /* GtkObject signals */
-    gtkobject_class->destroy = gnc_tree_view_destroy;
+    /* GtkWidget signals */
+    gtkwidget_class->destroy = gnc_tree_view_destroy;
 }
 
 /** Initialize a new instance of a base gnucash tree view.  This
@@ -313,28 +313,28 @@ gnc_tree_view_finalize (GObject *object)
     LEAVE(" ");
 }
 
-/** Destroy the GncTreeView object.  This function is called (possibly
- *  multiple times) from the Gtk_Object level to destroy the object.
- *  It should release any memory owned by the object that isn't
+/** Destroy the GncTreeView widget.  This function is called (possibly
+ *  multiple times) from the Gtk_Object level to destroy the widget.
+ *  It should release any memory owned by the widget that isn't
  *  fundamental to the implementation.  In this function any active
  *  callbacks are disconnected, all memory other than the private data
  *  structure are freed.
  *
- *  @param object The object being destroyed.
+ *  @param widget The widget being destroyed.
  *
  *  @internal
  */
 static void
-gnc_tree_view_destroy (GtkObject *object)
+gnc_tree_view_destroy (GtkWidget *widget)
 {
     GncTreeView *view;
     GncTreeViewPrivate *priv;
 
-    ENTER("view %p", object);
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_TREE_VIEW (object));
+    ENTER("view %p", widget);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_TREE_VIEW (widget));
 
-    view = GNC_TREE_VIEW (object);
+    view = GNC_TREE_VIEW (widget);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
@@ -352,8 +352,8 @@ gnc_tree_view_destroy (GtkObject *object)
         priv->column_menu = NULL;
     }
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
     LEAVE(" ");
 }
 

@@ -59,7 +59,7 @@ enum
 
 static void gnc_general_search_init         (GNCGeneralSearch      *gsl);
 static void gnc_general_search_class_init   (GNCGeneralSearchClass *klass);
-static void gnc_general_search_destroy      (GtkObject             *object);
+static void gnc_general_search_destroy      (GtkWidget             *widget);
 
 typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;
 
@@ -117,9 +117,7 @@ gnc_general_search_get_type (void)
 static void
 gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 {
-    GtkObjectClass *object_class = (GtkObjectClass *) klass;
-
-    object_class = (GtkObjectClass*) klass;
+    GtkWidgetClass *object_class = (GtkWidgetClass *) klass;
 
     parent_class = g_type_class_peek_parent (klass);
 
@@ -146,15 +144,15 @@ gnc_general_search_init (GNCGeneralSearch *gsl)
 }
 
 static void
-gnc_general_search_destroy (GtkObject *object)
+gnc_general_search_destroy (GtkWidget *widget)
 {
     GNCGeneralSearch *gsl;
     GNCGeneralSearchPrivate *priv;
 
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_GENERAL_SEARCH (object));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_GENERAL_SEARCH (widget));
 
-    gsl = GNC_GENERAL_SEARCH (object);
+    gsl = GNC_GENERAL_SEARCH (widget);
 
     gsl->entry = NULL;
     gsl->button = NULL;
@@ -174,8 +172,8 @@ gnc_general_search_destroy (GtkObject *object)
         priv->component_id = 0;
     }
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
 /* The "selection" contents have changed.  Change the text. */

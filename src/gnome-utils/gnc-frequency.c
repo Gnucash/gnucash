@@ -58,7 +58,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 /** Private Prototypes ********************/
 
 static void gnc_frequency_class_init( GncFrequencyClass *klass );
-static void gnc_frequency_class_destroy( GtkObject *object );
+static void gnc_frequency_class_destroy( GtkWidget *widget );
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -140,12 +140,12 @@ static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
-    GtkObjectClass *gtkobject_class;
+    GtkWidgetClass *gtkwidget_class;
 
     parent_class = g_type_class_peek_parent (klass);
 
     object_class = G_OBJECT_CLASS (klass);
-    gtkobject_class = GTK_OBJECT_CLASS (klass);
+    gtkwidget_class = GTK_WIDGET_CLASS (klass);
 
     gnc_frequency_signals[GNCFREQ_CHANGED] =
         g_signal_new ("changed",
@@ -158,8 +158,8 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       G_TYPE_NONE,
                       0);
 
-    /* GtkObject signals */
-    gtkobject_class->destroy = gnc_frequency_class_destroy;
+    /* GtkWidget signals */
+    gtkwidget_class->destroy = gnc_frequency_class_destroy;
 }
 
 
@@ -273,23 +273,23 @@ gnc_frequency_init(GncFrequency *gf)
 }
 
 
-/** Destroy the GncFrequency object.  This function is called (possibly
- *  multiple times) from the Gtk_Object level to destroy the object.
+/** Destroy the GncFrequency widget.  This function is called (possibly
+ *  multiple times) from the Gtk_Object level to destroy the widget.
  *
- *  @param object The object being destroyed.
+ *  @param widget The widget being destroyed.
  *
  *  @internal
  */
 static void
-gnc_frequency_class_destroy (GtkObject *object)
+gnc_frequency_class_destroy (GtkWidget *widget)
 {
     GncFrequency *gf;
 
-    ENTER("frequency %p", object);
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_FREQUENCY (object));
+    ENTER("frequency %p", widget);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_FREQUENCY (widget));
 
-    gf = GNC_FREQUENCY (object);
+    gf = GNC_FREQUENCY (widget);
 
     if (gf->builder)
     {
@@ -298,8 +298,8 @@ gnc_frequency_class_destroy (GtkObject *object)
         gf->builder = NULL;
     }
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
