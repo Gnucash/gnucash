@@ -1353,23 +1353,255 @@ gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rat
     gnc_xfer_update_to_amount (xferData);
 }
 
+static gboolean
+check_accounts  (XferDialog* xferData, Account* from_account,
+                 Account* to_account)
+{
+    if ((from_account == NULL) || (to_account == NULL))
+    {
+        const char *message = _("You must specify an account to transfer from, "
+                                "or to, or both, for this transaction. "
+                                "Otherwise, it will not be recorded.");
+        gnc_error_dialog(xferData->dialog, "%s", message);
+        LEAVE("bad account");
+        return TRUE;
+    }
+
+    if (from_account == to_account)
+    {
+        const char *message = _("You can't transfer from and to the same "
+                                "account!");
+        gnc_error_dialog(xferData->dialog, "%s", message);
+        LEAVE("same account");
+        return TRUE;
+    }
+
+    if (xaccAccountGetPlaceholder(from_account) ||
+        xaccAccountGetPlaceholder(to_account))
+    {
+        const char *placeholder_format =
+            _("The account %s does not allow transactions.");
+        char *name;
+
+        if (xaccAccountGetPlaceholder(from_account))
+            name = gnc_account_get_full_name(from_account);
+        else
+            name = gnc_account_get_full_name(to_account);
+        gnc_error_dialog(xferData->dialog, placeholder_format, name);
+        g_free(name);
+        LEAVE("placeholder");
+        return TRUE;
+    }
+
+    if (!gnc_commodity_is_iso (xferData->from_commodity))
+    {
+        const char *message =
+            _("You can't transfer from a non-currency account. "
+              "Try reversing the \"from\" and \"to\" accounts "
+              "and making the \"amount\" negative.");
+        gnc_error_dialog(xferData->dialog, "%s", message);
+        LEAVE("non-currency");
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static gboolean
+check_edit(XferDialog *xferData)
+{        if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit)))
+    {
+        if (gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON(xferData->price_radio)))
+        {
+            gnc_parse_error_dialog (xferData, _("You must enter a valid price."));
+            LEAVE("invalid price");
+            return TRUE;
+        }
+    }
+
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit)))
+    {
+        if (gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
+        {
+            gnc_parse_error_dialog (xferData,
+                                    _("You must enter a valid `to' amount."));
+            LEAVE("invalid to amount");
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static void
+create_transaction(XferDialog *xferData, Timespec *ts,
+                   Account *from_account, Account* to_account,
+                   gnc_numeric amount, gnc_numeric to_amount)
+{
+    Transaction *trans;
+    Split *from_split;
+    Split *to_split;
+    const char *string;
+    /* Create the transaction */
+    trans = xaccMallocTransaction(xferData->book);
+
+    xaccTransBeginEdit(trans);
+
+    xaccTransSetCurrency(trans, xferData->from_commodity);
+    xaccTransSetDatePostedTS(trans, ts);
+
+    /* Trans-Num or Split-Action set with gnc_set_num_action below per book
+     * option */
+
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
+    xaccTransSetDescription(trans, string);
+
+    /* create from split */
+    from_split = xaccMallocSplit(xferData->book);
+    xaccTransAppendSplit(trans, from_split);
+
+    /* create to split */
+    to_split = xaccMallocSplit(xferData->book);
+    xaccTransAppendSplit(trans, to_split);
+
+    xaccAccountBeginEdit(from_account);
+    xaccAccountInsertSplit(from_account, from_split);
+
+    xaccAccountBeginEdit(to_account);
+    xaccAccountInsertSplit(to_account, to_split);
+
+    xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount),
+                          xferData->from_commodity);
+    xaccSplitSetBaseValue(to_split, amount, xferData->from_commodity);
+    xaccSplitSetBaseValue(to_split, to_amount, xferData->to_commodity);
+
+    /* Set the transaction number or split action field based on book option*/
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+    gnc_set_num_action (trans, from_split, string, NULL);
+
+    /* Set the memo fields */
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
+    xaccSplitSetMemo(from_split, string);
+    xaccSplitSetMemo(to_split, string);
+
+    /* finish transaction */
+    xaccTransCommitEdit(trans);
+    xaccAccountCommitEdit(from_account);
+    xaccAccountCommitEdit(to_account);
+
+    /* If there is a registered callback handler that should be
+       notified of the newly created Transaction, call it now. */
+    if (xferData->transaction_cb)
+        xferData->transaction_cb(trans, xferData->transaction_user_data);
+}
+
+static void
+swap_amount (gnc_commodity *from, gnc_commodity *to, gnc_numeric *value,
+             gnc_numeric *from_amt, gnc_numeric *to_amt)
+{
+    gnc_commodity *tmp;
+    gnc_numeric *tmp_amt;
+    tmp = from;
+    from = to;
+    to = tmp;
+    tmp_amt = from_amt;
+    from_amt = to_amt;
+    to_amt = tmp_amt;
+    *value = gnc_numeric_div (gnc_numeric_create(1, 1), *value,
+                             GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+}
+static void
+create_price(XferDialog *xferData, Timespec ts)
+{
+    gnc_commodity *from = xferData->from_commodity;
+    gnc_commodity *to = xferData->to_commodity;
+    GNCPrice *price;
+    gnc_numeric price_value;
+    gnc_numeric value;
+    gnc_numeric from_amt, to_amt;
+
+/* Bail in the unlikely event that both currencies have joined the Euro. */
+    if (gnc_is_euro_currency (from) && gnc_is_euro_currency (to))
+        return;
+
+    from_amt =
+        gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
+    to_amt =
+        gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
+
+    /* compute the price -- maybe we need to swap? */
+    value = gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO,
+                            GNC_HOW_DENOM_REDUCE);
+    value = gnc_numeric_abs (value);
+
+    /* Try to be consistent about how quotes are installed. */
+    if (from == gnc_default_currency() ||
+        ((to != gnc_default_currency()) &&
+         (strcmp (gnc_commodity_get_mnemonic(from),
+                  gnc_commodity_get_mnemonic(to)) < 0)))
+        swap_amount (from, to, &value, &from_amt, &to_amt);
+    /* First see if the closest entry on the same day has an equivalent rate */
+    price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
+    if (price)
+    {
+        price_value = gnc_price_get_value(price);
+    }
+    else
+    {
+        price = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
+        if (price)
+        {
+            price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
+                                           gnc_price_get_value(price),
+                                           GNC_DENOM_AUTO,
+                                           GNC_HOW_DENOM_REDUCE);
+        }
+    }
+
+    /* See if we found a good enough price */
+    if (price)
+    {
+        int scu = gnc_commodity_get_fraction (to);
+        if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value,
+                                                 scu, GNC_HOW_RND_ROUND_HALF_UP),
+                                to_amt))
+        {
+            gnc_price_unref (price);
+            price = NULL;
+        }
+    }
+
+    if (price)
+    {
+        PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
+              gnc_commodity_get_mnemonic(to));
+    }
+    else
+    {
+        price = gnc_price_create (xferData->book);
+        gnc_price_begin_edit (price);
+        gnc_price_set_commodity (price, from);
+        gnc_price_set_currency (price, to);
+        gnc_price_set_time (price, ts);
+        gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
+        gnc_price_set_value (price, value);
+        gnc_pricedb_add_price (xferData->pricedb, price);
+        gnc_price_commit_edit (price);
+        PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
+              gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
+    }
+
+    gnc_price_unref (price);
+}
+
 void
 gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 {
     XferDialog *xferData = data;
     Account *to_account;
     Account *from_account;
-    gnc_commodity *from_commodity;
-    gnc_commodity *to_commodity;
     gnc_numeric amount, to_amount;
-    const char *string;
     Timespec ts;
-
-    gboolean curr_trans;
-
-    Transaction *trans;
-    Split *from_split;
-    Split *to_split;
 
     g_return_if_fail (xferData != NULL);
     ENTER(" ");
@@ -1390,54 +1622,9 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     from_account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
     to_account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
 
-    if (xferData->exch_rate == NULL)
-    {
-        if ((from_account == NULL) || (to_account == NULL))
-        {
-            const char *message = _("You must specify an account to transfer from, "
-                                    "or to, or both, for this transaction. "
-                                    "Otherwise, it will not be recorded.");
-            gnc_error_dialog(xferData->dialog, "%s", message);
-            LEAVE("bad account");
-            return;
-        }
-
-        if (from_account == to_account)
-        {
-            const char *message = _("You can't transfer from and to the same "
-                                    "account!");
-            gnc_error_dialog(xferData->dialog, "%s", message);
-            LEAVE("same account");
-            return;
-        }
-
-        if (xaccAccountGetPlaceholder(from_account) ||
-                xaccAccountGetPlaceholder(to_account))
-        {
-            const char *placeholder_format =
-                _("The account %s does not allow transactions.");
-            char *name;
-
-            if (xaccAccountGetPlaceholder(from_account))
-                name = gnc_account_get_full_name(from_account);
-            else
-                name = gnc_account_get_full_name(to_account);
-            gnc_error_dialog(xferData->dialog, placeholder_format, name);
-            g_free(name);
-            LEAVE("placeholder");
-            return;
-        }
-
-        if (!gnc_commodity_is_iso (xferData->from_commodity))
-        {
-            const char *message = _("You can't transfer from a non-currency account. "
-                                    "Try reversing the \"from\" and \"to\" accounts "
-                                    "and making the \"amount\" negative.");
-            gnc_error_dialog(xferData->dialog, "%s", message);
-            LEAVE("non-currency");
-            return;
-        }
-    }
+    if (xferData->exch_rate == NULL &&
+        check_accounts(xferData, from_account, to_account))
+        return;
 
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
     {
@@ -1445,11 +1632,6 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         LEAVE("no account");
         return;
     }
-
-    from_commodity = xferData->from_commodity;
-    to_commodity = xferData->to_commodity;
-
-    curr_trans = !gnc_commodity_equiv(from_commodity, to_commodity);
 
     amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
 
@@ -1463,33 +1645,12 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     ts = gnc_date_edit_get_date_ts(GNC_DATE_EDIT(xferData->date_entry));
 
-    if (curr_trans)
+    if (!gnc_commodity_equiv(xferData->from_commodity, xferData->to_commodity))
     {
-        if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit)))
-        {
-            if (gtk_toggle_button_get_active
-                    (GTK_TOGGLE_BUTTON(xferData->price_radio)))
-            {
-                gnc_parse_error_dialog (xferData, _("You must enter a valid price."));
-                LEAVE("invalid price");
-                return;
-            }
-        }
-
-        if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit)))
-        {
-            if (gtk_toggle_button_get_active
-                    (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
-            {
-                gnc_parse_error_dialog (xferData,
-                                        _("You must enter a valid `to' amount."));
-                LEAVE("invalid to amount");
-                return;
-            }
-        }
-
+        if (check_edit(xferData))
+            return;
         to_amount = gnc_amount_edit_get_amount
-                    (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
+            (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
     }
     else
         to_amount = amount;
@@ -1510,156 +1671,12 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         *(xferData->exch_rate) = gnc_numeric_abs(price);
     }
     else
-    {
-        /* Create the transaction */
-        trans = xaccMallocTransaction(xferData->book);
-
-        xaccTransBeginEdit(trans);
-
-        xaccTransSetCurrency(trans, from_commodity);
-        xaccTransSetDatePostedTS(trans, &ts);
-
-        /* Trans-Num or Split-Action set with gnc_set_num_action below per book
-         * option */
-
-        string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-        xaccTransSetDescription(trans, string);
-
-        /* create from split */
-        from_split = xaccMallocSplit(xferData->book);
-        xaccTransAppendSplit(trans, from_split);
-
-        /* create to split */
-        to_split = xaccMallocSplit(xferData->book);
-        xaccTransAppendSplit(trans, to_split);
-
-        xaccAccountBeginEdit(from_account);
-        xaccAccountInsertSplit(from_account, from_split);
-
-        xaccAccountBeginEdit(to_account);
-        xaccAccountInsertSplit(to_account, to_split);
-
-        xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_commodity);
-        xaccSplitSetBaseValue(to_split, amount, from_commodity);
-        xaccSplitSetBaseValue(to_split, to_amount, to_commodity);
-
-        /* Set the transaction number or split action field based on book option*/
-        string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-        gnc_set_num_action (trans, from_split, string, NULL);
-
-        /* Set the memo fields */
-        string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-        xaccSplitSetMemo(from_split, string);
-        xaccSplitSetMemo(to_split, string);
-
-        /* finish transaction */
-        xaccTransCommitEdit(trans);
-        xaccAccountCommitEdit(from_account);
-        xaccAccountCommitEdit(to_account);
-
-        /* If there is a registered callback handler that should be
-           notified of the newly created Transaction, call it now. */
-        if (xferData->transaction_cb)
-            xferData->transaction_cb(trans, xferData->transaction_user_data);
-    }
-
+        create_transaction (xferData, &ts, from_account, to_account,
+                            amount, to_amount);
     /* try to save this to the pricedb */
-    if (xferData->pricedb)
-    {
-        gnc_commodity *from = xferData->from_commodity;
-        gnc_commodity *to = xferData->to_commodity;
-
-        /* only continue if the currencies are DIFFERENT and are
-         * not both euroland currencies
-         */
-        if (!gnc_commodity_equal (from, to) &&
-                !(gnc_is_euro_currency (from) && gnc_is_euro_currency (to)))
-        {
-            GNCPrice *price;
-            gnc_numeric price_value;
-            gnc_numeric value;
-            gnc_commodity *tmp;
-            gnc_numeric from_amt, to_amt;
-            gnc_numeric tmp_amt;
-
-            from_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
-            to_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-
-            /* compute the price -- maybe we need to swap? */
-
-            value = gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            value = gnc_numeric_abs (value);
-
-            /* Try to be consistent about how quotes are installed. */
-            if (from == gnc_default_currency() ||
-                    ((to != gnc_default_currency()) &&
-                     (strcmp (gnc_commodity_get_mnemonic(from),
-                              gnc_commodity_get_mnemonic(to)) < 0)))
-            {
-                tmp = from;
-                from = to;
-                to = tmp;
-                tmp_amt = from_amt;
-                from_amt = to_amt;
-                to_amt = tmp_amt;
-                value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
-                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            }
-
-            /* First see if the closest entry on the same day has an equivalent rate */
-            price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
-            if (price)
-            {
-                price_value = gnc_price_get_value(price);
-            }
-            else
-            {
-                price = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
-                if (price)
-                {
-                    price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
-                                                   gnc_price_get_value(price),
-                                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-                }
-            }
-
-            /* See if we found a good enough price */
-            if (price)
-            {
-                int scu = gnc_commodity_get_fraction (to);
-                if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value,
-                                        scu, GNC_HOW_RND_ROUND_HALF_UP),
-                                        to_amt))
-                {
-                    gnc_price_unref (price);
-                    price = NULL;
-                }
-            }
-
-            if (price)
-            {
-                PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
-                      gnc_commodity_get_mnemonic(to));
-            }
-            else
-            {
-                price = gnc_price_create (xferData->book);
-                gnc_price_begin_edit (price);
-                gnc_price_set_commodity (price, from);
-                gnc_price_set_currency (price, to);
-                gnc_price_set_time (price, ts);
-                gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
-                gnc_price_set_value (price, value);
-                gnc_pricedb_add_price (xferData->pricedb, price);
-                gnc_price_commit_edit (price);
-                PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
-                      gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
-            }
-
-            gnc_price_unref (price);
-        }
-    }
-
+    if (xferData->pricedb && !gnc_commodity_equal (xferData->from_commodity,
+                                                   xferData->to_commodity))
+        create_price(xferData, ts);
     /* Refresh everything */
     gnc_resume_gui_refresh ();
 
