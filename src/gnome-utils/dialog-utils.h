@@ -29,7 +29,6 @@
 #include <gtk/gtk.h>
 #include "qof.h"
 
-void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 
 /********************************************************************\

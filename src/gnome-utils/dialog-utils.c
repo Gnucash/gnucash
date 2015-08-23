@@ -50,22 +50,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define GNC_PREF_LAST_GEOMETRY "last-geometry"
 
-
-/********************************************************************\
- * gnc_get_deficit_color                                            *
- *   fill in the 3 color values for the color of deficit values     *
- *                                                                  *
- * Args: color - color structure                                    *
- * Returns: none                                                    *
- \*******************************************************************/
-void
-gnc_get_deficit_color(GdkColor *color)
-{
-    color->red   = 50000;
-    color->green = 0;
-    color->blue  = 0;
-}
-
+const gchar *css_default_color = "* { color: currentColor }";
+const gchar *css_red_color     = "* { color: rgb(75%, 0%, 0%) }";
 
 /********************************************************************\
  * gnc_set_label_color                                              *
@@ -79,31 +65,30 @@ void
 gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 {
     gboolean deficit;
-    GdkColormap *cm;
-    GtkStyle *style;
+    GtkStyleContext *stylecontext;
+    GtkCssProvider *provider;
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED))
         return;
 
-    cm = gtk_widget_get_colormap(GTK_WIDGET(label));
-    gtk_widget_ensure_style(GTK_WIDGET(label));
-    style = gtk_widget_get_style(GTK_WIDGET(label));
+    provider = GTK_CSS_PROVIDER(g_object_get_data (G_OBJECT (label), "custom-provider"));
 
-    style = gtk_style_copy(style);
+    if (!provider)
+    {
+        provider = gtk_css_provider_new();
+        gtk_css_provider_load_from_data (provider, css_default_color, -1, NULL);
+        stylecontext = gtk_widget_get_style_context (label);
+        gtk_style_context_add_provider (stylecontext, GTK_STYLE_PROVIDER (provider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_set_data (G_OBJECT (label), "custom-provider", provider);
+    }
 
     deficit = gnc_numeric_negative_p (value);
 
     if (deficit)
-    {
-        gnc_get_deficit_color(&style->fg[GTK_STATE_NORMAL]);
-        gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
-    }
+        gtk_css_provider_load_from_data (provider, css_red_color, -1, NULL);
     else
-        style->fg[GTK_STATE_NORMAL] = style->black;
-
-    gtk_widget_set_style(label, style);
-
-    g_object_unref(style);
+        gtk_css_provider_load_from_data (provider, css_default_color, -1, NULL);
 }
 
 
