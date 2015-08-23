@@ -86,7 +86,7 @@ struct _xferDialog
     gnc_commodity *to_commodity;
 
     QuickFill *qf;     /* Quickfill on transfer descriptions,
-                           defaults to matching on the "From" account. */
+                          defaults to matching on the "From" account. */
 
     XferDirection quickfill;    /* direction match on the account instead. */
 
@@ -1549,26 +1549,46 @@ create_price(XferDialog *xferData, Timespec ts)
         }
     }
 
-    if (price && gnc_numeric_equal(value, price_value))
+    if (price)
     {
-        PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
-              gnc_commodity_get_mnemonic(to));
-    }
-    else
-    {
-        price = gnc_price_create (xferData->book);
+        if (gnc_numeric_equal(value, price_value))
+        {
+            PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
+                  gnc_commodity_get_mnemonic(to));
+            gnc_price_unref (price);
+            return;
+        }
+        if (strcmp (gnc_price_get_source(price), PRICE_SOURCE_FQ) == 0)
+        {
+            PINFO("Existing price is from Finance::Quote, so won't supersede.");
+            gnc_price_unref (price);
+            return;
+        }
+        if (!gnc_numeric_eq(price_value, gnc_price_get_value(price)))
+            value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
+                                           PRECISION, GNC_HOW_DENOM_REDUCE);
+
         gnc_price_begin_edit (price);
-        gnc_price_set_commodity (price, from);
-        gnc_price_set_currency (price, to);
         gnc_price_set_time (price, ts);
         gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
         gnc_price_set_value (price, value);
-        gnc_pricedb_add_price (xferData->pricedb, price);
         gnc_price_commit_edit (price);
-        PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
+        PINFO("Modified price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
               gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
+        gnc_price_unref (price);
+        return;
     }
-
+    price = gnc_price_create (xferData->book);
+    gnc_price_begin_edit (price);
+    gnc_price_set_commodity (price, from);
+    gnc_price_set_currency (price, to);
+    gnc_price_set_time (price, ts);
+    gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
+    gnc_price_set_value (price, value);
+    gnc_pricedb_add_price (xferData->pricedb, price);
+    gnc_price_commit_edit (price);
+    PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
+          gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
     gnc_price_unref (price);
 }
 

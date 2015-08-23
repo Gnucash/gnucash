@@ -64,6 +64,7 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static CursorClass copied_class = CURSOR_CLASS_NONE;
 static SCM copied_item = SCM_UNDEFINED;
 static GncGUID copied_leader_guid;
+static const int PRECISION = 1000000;
 
 
 /** static prototypes *****************************************************/
@@ -2078,9 +2079,31 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
                                            GNC_HOW_DENOM_REDUCE);
         }
     }
+    if (price)
+    {
+        if (gnc_numeric_equal(value, price_value))
+        {
+            gnc_price_unref (price);
+            return;
+        }
+        if (strcmp (gnc_price_get_source(price), PRICE_SOURCE_FQ) == 0)
+        {
+            gnc_price_unref(price);
+            return;
+        }
+        if (!gnc_numeric_eq(price_value, gnc_price_get_value(price)))
+            value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
+                                           PRECISION, GNC_HOW_DENOM_REDUCE);
 
-    if (price && gnc_numeric_equal(value, price_value))
+        gnc_price_begin_edit (price);
+        gnc_price_set_time (price, ts);
+        gnc_price_set_source (price, PRICE_SOURCE_SPLIT_REG);
+        gnc_price_set_value (price, value);
+        gnc_price_commit_edit (price);
+        gnc_price_unref (price);
         return;
+    }
+
     price = gnc_price_create (book);
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, comm);
@@ -2566,7 +2589,7 @@ gnc_split_register_config_cells (SplitRegister *reg)
     /* Use 6 decimal places for prices and "exchange rates"  */
     gnc_price_cell_set_fraction
     ((PriceCell *)
-     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), 1000000);
+     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), PRECISION);
 
     /* Initialize shares and share balance cells */
     gnc_price_cell_set_print_info
