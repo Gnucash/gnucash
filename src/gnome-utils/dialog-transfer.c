@@ -1523,16 +1523,7 @@ create_price(XferDialog *xferData, Timespec ts)
     if (gnc_is_euro_currency (from) && gnc_is_euro_currency (to))
         return;
 
-    from_amt =
-        gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
-    to_amt =
-        gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-
-    /* compute the price -- maybe we need to swap? */
-    value = gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO,
-                            GNC_HOW_DENOM_REDUCE);
-    value = gnc_numeric_abs (value);
-
+    value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
     /* Try to be consistent about how quotes are installed. */
     if (from == gnc_default_currency() ||
         ((to != gnc_default_currency()) &&
@@ -1557,20 +1548,7 @@ create_price(XferDialog *xferData, Timespec ts)
         }
     }
 
-    /* See if we found a good enough price */
-    if (price)
-    {
-        int scu = gnc_commodity_get_fraction (to);
-        if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value,
-                                                 scu, GNC_HOW_RND_ROUND_HALF_UP),
-                                to_amt))
-        {
-            gnc_price_unref (price);
-            price = NULL;
-        }
-    }
-
-    if (price)
+    if (price && gnc_numeric_equal(value, price_value))
     {
         PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
               gnc_commodity_get_mnemonic(to));
