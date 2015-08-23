@@ -2051,8 +2051,9 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
     gnc_commodity *comm = xaccAccountGetCommodity (account);
     gnc_commodity *curr = xaccTransGetCurrency (trans);
     GNCPrice *price;
+    gnc_numeric price_value;
     Timespec ts;
-    BasicCell *cell;
+    BasicCell *cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
 
     /* Only record the price for account types that don't have a
      * "rate" cell. They'll get handled later by
@@ -2060,8 +2061,26 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
      */
     if (gnc_split_reg_has_rate_cell (reg->type))
         return;
-    cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
     gnc_date_cell_get_date ((DateCell*)cell, &ts);
+    price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
+    if (price)
+    {
+        price_value = gnc_price_get_value(price);
+    }
+    else
+    {
+        price = gnc_pricedb_lookup_day (pricedb, curr, comm, ts);
+        if (price)
+        {
+            price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
+                                           gnc_price_get_value(price),
+                                           GNC_DENOM_AUTO,
+                                           GNC_HOW_DENOM_REDUCE);
+        }
+    }
+
+    if (price && gnc_numeric_equal(value, price_value))
+        return;
     price = gnc_price_create (book);
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, comm);
