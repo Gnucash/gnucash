@@ -77,8 +77,8 @@ GtkCellEditable *gcrd_start_editing          (GtkCellRenderer         *cell,
 					      GdkEvent                *event,
 					      GtkWidget               *widget,
 					      const gchar             *path,
-					      GdkRectangle            *background_area,
-					      GdkRectangle            *cell_area,
+					      const GdkRectangle      *background_area,
+					      const GdkRectangle      *cell_area,
 					      GtkCellRendererState     flags);
 
 static void     gcrd_show                    (GncCellRendererPopup     *cell,
@@ -269,8 +269,8 @@ gcrd_start_editing (GtkCellRenderer      *cell,
 		    GdkEvent             *event,
 		    GtkWidget            *widget,
 		    const gchar          *path,
-		    GdkRectangle         *background_area,
-		    GdkRectangle         *cell_area,
+		    const GdkRectangle   *background_area,
+		    const GdkRectangle   *cell_area,
 		    GtkCellRendererState  flags)
 {
 	GNC_CELL_RENDERER_POPUP (cell)->editing_canceled = FALSE;
