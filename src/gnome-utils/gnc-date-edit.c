@@ -937,9 +937,7 @@ create_children (GNCDateEdit *gde)
     gtk_calendar_set_display_options
     (GTK_CALENDAR (gde->calendar),
      (GTK_CALENDAR_SHOW_DAY_NAMES
-      | GTK_CALENDAR_SHOW_HEADING
-      | ((gde->flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY)
-         ? GTK_CALENDAR_WEEK_START_MONDAY : 0)));
+      | GTK_CALENDAR_SHOW_HEADING));
     g_signal_connect (gde->calendar, "button-release-event",
                       G_CALLBACK(gnc_date_edit_button_released), gde);
     g_signal_connect (G_OBJECT (gde->calendar), "day-selected",
@@ -1212,20 +1210,6 @@ gnc_date_edit_set_flags (GNCDateEdit *gde, GNCDateEditFlags flags)
         /* This will destroy the old menu properly */
         fill_time_combo (NULL, gde);
 
-    if ((flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY)
-            != (old_flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY))
-    {
-        if (flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY)
-            gtk_calendar_set_display_options
-            (GTK_CALENDAR (gde->calendar),
-             (GTK_CALENDAR (gde->calendar)->display_flags
-              | GTK_CALENDAR_WEEK_START_MONDAY));
-        else
-            gtk_calendar_set_display_options
-            (GTK_CALENDAR (gde->calendar),
-             (GTK_CALENDAR (gde->calendar)->display_flags
-              & ~GTK_CALENDAR_WEEK_START_MONDAY));
-    }
 }
 
 /**
