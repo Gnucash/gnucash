@@ -49,12 +49,6 @@ enum
     LAST_SIGNAL
 };
 
-enum
-{
-    ARG_0,
-    ARG_EDITING_CANCELED
-};
-
 static GtkEventBoxClass *parent_class;
 static guint signals[LAST_SIGNAL];
 
@@ -134,8 +128,6 @@ gnc_popup_entry_class_init (GncPopupEntryClass *klass)
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
     widget_class->key_press_event = gpw_key_press_event;
-
-    gtk_object_add_arg_type ("GncPopupEntry::editing-canceled", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITING_CANCELED);
 
     parent_class = GTK_EVENT_BOX_CLASS (g_type_class_peek_parent (klass));
 
