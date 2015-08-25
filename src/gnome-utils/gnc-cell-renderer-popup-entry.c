@@ -123,7 +123,7 @@ gnc_popup_entry_init (GncPopupEntry *widget)
 
     gtk_container_add (GTK_CONTAINER (widget), widget->hbox);
 
-    GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+    gtk_widget_set_can_focus (GTK_WIDGET (widget), TRUE);
     gtk_widget_add_events (GTK_WIDGET (widget), GDK_KEY_PRESS_MASK);
     gtk_widget_add_events (GTK_WIDGET (widget), GDK_KEY_RELEASE_MASK);
 }
