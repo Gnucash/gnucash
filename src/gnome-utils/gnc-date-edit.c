@@ -254,7 +254,7 @@ popup_grab_on_window (GdkWindow *window,
             return TRUE;
         else
         {
-            gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
+            gdk_display_pointer_ungrab (gdk_window_get_display (window),
                                         activate_time);
             return FALSE;
         }
