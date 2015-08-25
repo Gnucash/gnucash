@@ -101,7 +101,7 @@ gnc_popup_entry_init (GncPopupEntry *widget)
     gtk_widget_show (widget->hbox);
 
     widget->entry = g_object_new (GTK_TYPE_ENTRY, "has_frame", FALSE, NULL);
-    GTK_ENTRY (widget->entry)->is_cell_renderer = TRUE;
+    gtk_entry_set_visibility (GTK_ENTRY (widget->entry), TRUE);
     gtk_widget_show (widget->entry);
 
     widget->button = gtk_button_new ();
