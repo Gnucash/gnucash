@@ -55,8 +55,6 @@
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
 #define GNC_PREFS_GROUP "dialogs.transfer"
 
-#define PRECISION 1000000
-
 typedef enum
 {
     XFER_DIALOG_FROM,
@@ -1002,15 +1000,16 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog *xferData = data;
     gnc_numeric price_value;
     Account *account;
+    int scu;
 
     account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
     if (account == NULL)
         account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
-
+    scu = xaccAccountGetCommoditySCU(account);
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
     price_value = gnc_xfer_dialog_compute_price_value(xferData);
-    price_value = gnc_numeric_convert (price_value, PRECISION,
+    price_value = gnc_numeric_convert (price_value, scu * COMMODITY_DENOM_MULT,
                                        GNC_HOW_RND_ROUND_HALF_UP);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
@@ -1507,6 +1506,16 @@ swap_amount (gnc_commodity **from, gnc_commodity **to, gnc_numeric *value,
     to_amt = tmp_amt;
     *value = gnc_numeric_invert (*value);
 }
+
+static gnc_numeric
+swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
+{
+    gnc_commodity *tmp = *to;
+    *to = *from;
+    *from = tmp;
+    return gnc_numeric_invert(value);
+}
+
 static void
 create_price(XferDialog *xferData, Timespec ts)
 {
@@ -1516,6 +1525,7 @@ create_price(XferDialog *xferData, Timespec ts)
     gnc_numeric price_value;
     gnc_numeric value;
     gnc_numeric from_amt, to_amt;
+    gboolean swap = FALSE;
 
 /* Bail in the unlikely event that both currencies have joined the Euro. */
     if (gnc_is_euro_currency (from) && gnc_is_euro_currency (to))
@@ -1530,21 +1540,17 @@ create_price(XferDialog *xferData, Timespec ts)
         swap_amount (&from, &to, &value, &from_amt, &to_amt);
     /* First see if the closest entry on the same day has an equivalent rate */
     price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
-    if (price)
-    {
-        price_value = gnc_price_get_value(price);
-    }
-    else
+    if (!price)
     {
         price = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
         if (price)
-
-            price_value = gnc_numeric_invert(gnc_price_get_value(price));
+            swap = TRUE;
     }
 
     if (price)
     {
-        if (gnc_numeric_equal(value, price_value))
+        if (gnc_numeric_equal(swap ? gnc_numeric_invert(value) : value,
+                              price_value))
         {
             PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
                   gnc_commodity_get_mnemonic(to));
@@ -1557,10 +1563,18 @@ create_price(XferDialog *xferData, Timespec ts)
             gnc_price_unref (price);
             return;
         }
-        if (!gnc_numeric_eq(price_value, gnc_price_get_value(price)))
+        if (swap)
         {
-            value = gnc_numeric_invert(value);
-            value = gnc_numeric_convert(value, PRECISION, GNC_HOW_DENOM_REDUCE);
+            value = swap_commodities(&from, &to, value);
+        }
+        if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
+            value = gnc_numeric_convert(value, CURRENCY_DENOM,
+                                        GNC_HOW_RND_ROUND_HALF_UP);
+        else if (gnc_commodity_is_currency(to))
+        {
+            int scu = gnc_commodity_get_fraction (to);
+            value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                        GNC_HOW_RND_ROUND_HALF_UP);
         }
         gnc_price_begin_edit (price);
         gnc_price_set_time (price, ts);
@@ -1571,6 +1585,24 @@ create_price(XferDialog *xferData, Timespec ts)
               gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
         gnc_price_unref (price);
         return;
+    }
+    if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
+    {
+        if (value.num < value.denom)
+        {
+            value = swap_commodities(&from, &to, value);
+        }
+        value = gnc_numeric_convert(value, CURRENCY_DENOM,
+                                    GNC_HOW_RND_ROUND_HALF_UP);
+    }
+    else if (gnc_commodity_is_currency(from) || gnc_commodity_is_currency(to))
+    {
+        int scu;
+        if (gnc_commodity_is_currency(from))
+            value = swap_commodities(&from, &to, value);
+        scu = gnc_commodity_get_fraction (to);
+        value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                    GNC_HOW_RND_ROUND_HALF_UP);
     }
     price = gnc_price_create (xferData->book);
     gnc_price_begin_edit (price);

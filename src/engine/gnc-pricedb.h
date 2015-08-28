@@ -243,6 +243,15 @@ gboolean        gnc_price_equal(const GNCPrice *p1, const GNCPrice *p2);
 /** This simple function can be useful for debugging the price code */
 void gnc_price_print(GNCPrice *db, FILE *f, int indent);
 /** @} */
+/** @name Denominator Constants Price policy: In order to avoid rounding
+ * problems, currency prices (often called exchange rates) are saved in terms of
+ * the smaller currency, so that price > 1, with a fixed denominator of
+ * 1/1000. Commodity prices in currency are always expressed as value per unit
+ * of the commodity with a fixed denominator of the pricing currency's
+ * SCU * 10000.
+ */
+#define CURRENCY_DENOM 1000
+#define COMMODITY_DENOM_MULT 10000
 
 /* ================================================================ */
 /** @name GNCPrice lists
