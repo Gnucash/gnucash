@@ -160,6 +160,7 @@ static Account *gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
 static void gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
                                                       Account *account,
                                                       XferDirection direction);
+static void _gnc_xfer_dialog_set_price_edit(XferDialog*, gnc_numeric);
 
 void gnc_xfer_description_insert_cb(GtkEditable *editable,
                                     const gchar *insert_text,
@@ -259,7 +260,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     }
 
     /* and set the price entry */
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit), price_value);
+    _gnc_xfer_dialog_set_price_edit(xferData, price_value);
 
     /* And then update the to_amount */
     gnc_xfer_update_to_amount (xferData);
@@ -313,9 +314,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
     if (!currency_active)
     {
         GtkEntry *entry;
-
-        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
-                                   gnc_numeric_zero ());
+        _gnc_xfer_dialog_set_price_edit(xferData, gnc_numeric_zero());
         entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
                           (GNC_AMOUNT_EDIT(xferData->price_edit)));
         gtk_entry_set_text(entry, "");
@@ -1338,16 +1337,16 @@ void gnc_xfer_dialog_set_date_sensitive(XferDialog *xferData,
 }
 
 void
-gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rate)
+_gnc_xfer_dialog_set_price_edit(XferDialog *xferData, gnc_numeric price_value)
 {
     if (xferData == NULL)
         return;
 
-    if (gnc_numeric_zero_p (exchange_rate))
+    if (gnc_numeric_zero_p (price_value))
         return;
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
-                                exchange_rate);
+                                price_value);
 
     gnc_xfer_update_to_amount (xferData);
 }
@@ -1770,7 +1769,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
     if (prc)
     {
         rate = gnc_price_get_value (prc);
-        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
+        _gnc_xfer_dialog_set_price_edit(xferData, rate);
         gnc_price_unref (prc);
         have_price = TRUE;
     }
@@ -1781,9 +1780,9 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
         prc = gnc_pricedb_lookup_latest (xferData->pricedb, to, from);
         if (prc)
         {
-            gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
 /* FIXME: We probably want to swap the result price's to and from, not invert the price. */
             rate = gnc_numeric_invert(gnc_price_get_value (prc));
+            _gnc_xfer_dialog_set_price_edit(xferData, rate);
             gnc_price_unref (prc);
             have_price = TRUE;
         }
@@ -2424,7 +2423,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
      */
 
     /* Set the exchange rate */
-    gnc_xfer_dialog_set_exchange_rate(xfer, *exch_rate);
+    _gnc_xfer_dialog_set_price_edit(xfer, *exch_rate);
 
     /* and run it... */
     if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
@@ -2434,7 +2433,6 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
      * it back now...
      */
     if (swap_amounts)
-        *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
-                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        *exch_rate = gnc_numeric_invert(*exch_rate);
     return FALSE;
 }
