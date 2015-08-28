@@ -250,8 +250,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     {
         PINFO("Found reverse price: 1 %s = %f %s", gnc_commodity_get_mnemonic(to),
               gnc_numeric_to_double(price_value), gnc_commodity_get_mnemonic(from));
-        price_value = gnc_numeric_div (gnc_numeric_create (1, 1), price_value,
-                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        price_value = gnc_numeric_invert(price_value);
     }
     else
     {
@@ -910,8 +909,7 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
         gtk_label_set_text(GTK_LABEL(xferData->conv_forward), string);
         g_free(string);
 
-        rate = gnc_numeric_div(gnc_numeric_create (1, 1), rate,
-                               GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        rate = gnc_numeric_invert(rate);
         string = g_strdup_printf("1 %s = %f %s", to_mnemonic,
                                  gnc_numeric_to_double(rate), from_mnemonic);
         gtk_label_set_text(GTK_LABEL(xferData->conv_reverse), string);
@@ -1509,8 +1507,7 @@ swap_amount (gnc_commodity **from, gnc_commodity **to, gnc_numeric *value,
     tmp_amt = from_amt;
     from_amt = to_amt;
     to_amt = tmp_amt;
-    *value = gnc_numeric_div (gnc_numeric_create(1, 1), *value,
-                              GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+    *value = gnc_numeric_invert (*value);
 }
 static void
 create_price(XferDialog *xferData, Timespec ts)
@@ -1543,12 +1540,8 @@ create_price(XferDialog *xferData, Timespec ts)
     {
         price = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
         if (price)
-        {
-            price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
-                                           gnc_price_get_value(price),
-                                           GNC_DENOM_AUTO,
-                                           GNC_HOW_DENOM_REDUCE);
-        }
+
+            price_value = gnc_numeric_invert(gnc_price_get_value(price));
     }
 
     if (price)
@@ -1567,9 +1560,10 @@ create_price(XferDialog *xferData, Timespec ts)
             return;
         }
         if (!gnc_numeric_eq(price_value, gnc_price_get_value(price)))
-            value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
-                                           PRECISION, GNC_HOW_DENOM_REDUCE);
-
+        {
+            value = gnc_numeric_invert(value);
+            value = gnc_numeric_convert(value, PRECISION, GNC_HOW_DENOM_REDUCE);
+        }
         gnc_price_begin_edit (price);
         gnc_price_set_time (price, ts);
         gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
@@ -1788,10 +1782,9 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
         prc = gnc_pricedb_lookup_latest (xferData->pricedb, to, from);
         if (prc)
         {
-            rate = gnc_numeric_div (gnc_numeric_create (1, 1), gnc_price_get_value (prc),
-                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-
             gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
+/* FIXME: We probably want to swap the result price's to and from, not invert the price. */
+            rate = gnc_numeric_invert(gnc_price_get_value (prc));
             gnc_price_unref (prc);
             have_price = TRUE;
         }
@@ -2397,9 +2390,9 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
 
         /* XXX: should we tell the user we've done the conversion? */
-        amount = gnc_numeric_div(
-            amount, rate,
-            gnc_commodity_get_fraction(txn_cur), GNC_HOW_DENOM_REDUCE);
+        amount = gnc_numeric_div(amount, rate,
+                                 gnc_commodity_get_fraction(txn_cur),
+                                 GNC_HOW_DENOM_REDUCE);
     }
 
     /* enter the accounts */
@@ -2408,8 +2401,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
         gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
         if (!gnc_numeric_zero_p(*exch_rate))
-            *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
-                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+            *exch_rate = gnc_numeric_invert(*exch_rate);
         amount = gnc_numeric_neg(amount);
     }
     else
