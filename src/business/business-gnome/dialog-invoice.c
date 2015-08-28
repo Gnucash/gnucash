@@ -878,7 +878,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             {
                 exch_rate = gnc_numeric_div ((gnc_numeric){1, 1}, exch_rate,
                             GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                gnc_xfer_dialog_set_exchange_rate (xfer, exch_rate);
+                gnc_xfer_dialog_set_price_edit (xfer, exch_rate);
             }
         }
 
