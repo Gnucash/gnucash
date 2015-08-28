@@ -180,7 +180,7 @@ void gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data);
 /** Implementations **********************************************/
 
 static gnc_numeric
-gnc_xfer_dialog_compute_price (XferDialog *xferData)
+gnc_xfer_dialog_compute_price_value (XferDialog *xferData)
 {
     gnc_numeric from_amt, to_amt;
     g_return_val_if_fail (xferData != NULL, gnc_numeric_error (GNC_ERROR_ARG));
@@ -196,7 +196,7 @@ static void
 gnc_xfer_dialog_update_price (XferDialog *xferData)
 {
     GNCPrice *prc;
-    gnc_numeric price;
+    gnc_numeric price_value;
     Timespec date;
     gnc_commodity *from = xferData->from_commodity;
     gnc_commodity *to = xferData->to_commodity;
@@ -245,22 +245,22 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
         return;
 
     /* grab the price from the pricedb */
-    price = gnc_price_get_value (prc);
+    price_value = gnc_price_get_value (prc);
     if (reverse)
     {
         PINFO("Found reverse price: 1 %s = %f %s", gnc_commodity_get_mnemonic(to),
-              gnc_numeric_to_double(price), gnc_commodity_get_mnemonic(from));
-        price = gnc_numeric_div (gnc_numeric_create (1, 1), price,
+              gnc_numeric_to_double(price_value), gnc_commodity_get_mnemonic(from));
+        price_value = gnc_numeric_div (gnc_numeric_create (1, 1), price_value,
                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
     }
     else
     {
         PINFO("Found price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
-              gnc_numeric_to_double(price), gnc_commodity_get_mnemonic(to));
+              gnc_numeric_to_double(price_value), gnc_commodity_get_mnemonic(to));
     }
 
     /* and set the price entry */
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit), price);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit), price_value);
 
     /* And then update the to_amount */
     gnc_xfer_update_to_amount (xferData);
@@ -309,7 +309,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
 {
     gnc_numeric from_rate;
     gnc_numeric to_rate;
-    gnc_numeric price;
+    gnc_numeric price_value;
 
     if (!currency_active)
     {
@@ -339,9 +339,9 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
     if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
         gnc_xfer_dialog_update_price (xferData);
 
-    price = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+    price_value = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price_value);
 
     gnc_xfer_update_to_amount (xferData);
 }
@@ -938,7 +938,7 @@ static void
 gnc_xfer_update_to_amount (XferDialog *xferData)
 {
     GNCAmountEdit *amount_edit, *price_edit, *to_amount_edit;
-    gnc_numeric price, to_amount;
+    gnc_numeric price_value, to_amount;
     Account *account;
     int scu = 0;
 
@@ -961,11 +961,11 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
 
     /* Determine the amount to transfer. */
     if (!gnc_amount_edit_evaluate(price_edit) ||
-        gnc_numeric_zero_p(price = gnc_amount_edit_get_amount(price_edit)))
+        gnc_numeric_zero_p(price_value = gnc_amount_edit_get_amount(price_edit)))
         to_amount = gnc_numeric_zero();
     else
         to_amount = gnc_numeric_mul(gnc_amount_edit_get_amount(amount_edit),
-                                    price, scu, GNC_HOW_RND_ROUND_HALF_UP);
+                                    price_value, scu, GNC_HOW_RND_ROUND_HALF_UP);
 
     /* Update the dialog. */
     gnc_amount_edit_set_amount(to_amount_edit, to_amount);
@@ -1004,7 +1004,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
                              gpointer data)
 {
     XferDialog *xferData = data;
-    gnc_numeric price;
+    gnc_numeric price_value;
     Account *account;
 
     account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
@@ -1013,9 +1013,11 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
-    price = gnc_xfer_dialog_compute_price(xferData);
-    price = gnc_numeric_convert (price, PRECISION, GNC_HOW_RND_ROUND_HALF_UP);
-    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
+    price_value = gnc_xfer_dialog_compute_price_value(xferData);
+    price_value = gnc_numeric_convert (price_value, PRECISION,
+                                       GNC_HOW_RND_ROUND_HALF_UP);
+    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
+                               price_value);
     gnc_xfer_dialog_update_conv_info(xferData);
 
     return FALSE;
@@ -1656,7 +1658,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     if (xferData->exch_rate)
     {
-        gnc_numeric price;
+        gnc_numeric price_value;
 
         /* If we've got the price-button set, then make sure we update the
          * to-amount before we use it.
@@ -1664,8 +1666,8 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(xferData->price_radio)))
             gnc_xfer_update_to_amount(xferData);
 
-        price = gnc_xfer_dialog_compute_price(xferData);
-        *(xferData->exch_rate) = gnc_numeric_abs(price);
+        price_value = gnc_xfer_dialog_compute_price_value(xferData);
+        *(xferData->exch_rate) = gnc_numeric_abs(price_value);
     }
     else
         create_transaction (xferData, &ts, from_account, to_account,
