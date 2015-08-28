@@ -64,9 +64,9 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static CursorClass copied_class = CURSOR_CLASS_NONE;
 static SCM copied_item = SCM_UNDEFINED;
 static GncGUID copied_leader_guid;
-static const int PRECISION = 1000000;
-
-
+/* A denominator representing number of digits to the right of the decimal point
+ * displayed in a price cell. */
+static int PRICE_CELL_DENOM = 1000000;
 /** static prototypes *****************************************************/
 
 static gboolean gnc_split_register_save_to_scm (SplitRegister *reg,
@@ -2053,6 +2053,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
     gnc_commodity *curr = xaccTransGetCurrency (trans);
     GNCPrice *price;
     gnc_numeric price_value;
+    int scu = gnc_commodity_get_fraction(curr);
     Timespec ts;
     BasicCell *cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
 
@@ -2073,10 +2074,10 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
         price = gnc_pricedb_lookup_day (pricedb, curr, comm, ts);
         if (price)
         {
-            price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
-                                           gnc_price_get_value(price),
-                                           GNC_DENOM_AUTO,
-                                           GNC_HOW_DENOM_REDUCE);
+/* It might be better to raise an error here: We shouldn't be creating
+ * currency->commodity prices.
+ */
+            price_value = gnc_numeric_invert(gnc_price_get_value(price));
         }
     }
     if (price)
@@ -2092,9 +2093,15 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
             return;
         }
         if (!gnc_numeric_eq(price_value, gnc_price_get_value(price)))
-            value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
-                                           PRECISION, GNC_HOW_DENOM_REDUCE);
-
+        {
+            value = gnc_numeric_invert(value);
+            scu = gnc_commodity_get_fraction(comm);
+            value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                        GNC_HOW_RND_ROUND_HALF_UP);
+        }
+        else
+            value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                        GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_begin_edit (price);
         gnc_price_set_time (price, ts);
         gnc_price_set_source (price, PRICE_SOURCE_SPLIT_REG);
@@ -2104,6 +2111,8 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
         return;
     }
 
+    value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                GNC_HOW_RND_ROUND_HALF_UP);
     price = gnc_price_create (book);
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, comm);
@@ -2589,7 +2598,8 @@ gnc_split_register_config_cells (SplitRegister *reg)
     /* Use 6 decimal places for prices and "exchange rates"  */
     gnc_price_cell_set_fraction
     ((PriceCell *)
-     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), PRECISION);
+     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+     PRICE_CELL_DENOM);
 
     /* Initialize shares and share balance cells */
     gnc_price_cell_set_print_info
