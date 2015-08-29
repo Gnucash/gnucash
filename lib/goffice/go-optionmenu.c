@@ -251,8 +251,7 @@ void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu)
 
     if (option_menu->menu)
     {
-        if (option_menu->menu->active)
-            gtk_menu_shell_cancel(option_menu->menu);
+        gtk_menu_shell_cancel(option_menu->menu);
 
         handle_menu_signals(option_menu, FALSE);
 
