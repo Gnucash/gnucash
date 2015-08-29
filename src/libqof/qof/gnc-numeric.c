@@ -1149,6 +1149,13 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
     return TRUE;
 }
 
+gnc_numeric
+gnc_numeric_invert(gnc_numeric num)
+{
+    if (num.num == 0)
+        return gnc_numeric_zero();
+    return gnc_numeric_create (num.denom, num.num);
+}
 
 /* *******************************************************************
  *  double_to_gnc_numeric

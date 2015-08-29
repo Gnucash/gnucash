@@ -510,10 +510,7 @@ gboolean gnc_numeric_to_decimal(gnc_numeric * a,
  * @param num The number to be inverted
  * @return a gnc_numeric that is the inverse of num
  */
-inline gnc_numeric gnc_numeric_invert (gnc_numeric num)
-{
-    return gnc_numeric_create (num.num, num.denom);
-}
+gnc_numeric gnc_numeric_invert (gnc_numeric num);
 /** @} */
 
 /** @name GValue
