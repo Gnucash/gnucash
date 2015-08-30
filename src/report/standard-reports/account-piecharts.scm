@@ -536,39 +536,57 @@ balance at a given time"))
       (gnc:report-finished)
       document)))
 
-(for-each 
- (lambda (l)
-   (let ((tip-and-rev (cddddr l)))
-     (gnc:define-report
-      'version 1
-      'name (car l)
-      'report-guid (car (reverse l))
-      'menu-path (if (caddr l)
-		     (list gnc:menuname-income-expense)
-		     (list gnc:menuname-asset-liability)) 
-      'menu-name (cadddr l) 
-      'menu-tip (car tip-and-rev)
-      'options-generator (lambda () (options-generator (cadr l)  
-						       (cadr tip-and-rev)
-						       (caddr l)))
-      'renderer (lambda (report-obj)
-		  (piechart-renderer report-obj 
-				     (car l) 
-				     (car (reverse l))
-				     (cadr l)
-				     (caddr l))))))
- (list 
-  ;; reportname, account-types, do-intervals?, 
-  ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) "e1bd09b8a1dd49dd85760db9d82b045c")
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) "9bf1892805cb4336be6320fe48ce5446")
-  (list reportname-assets
-        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
-              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
-              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
-              ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f) "5c7fd8a1fe9a4cd38884ff54214aa88a")
-  (list reportname-liabilities 
-        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
-              ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t) "3fe6dce77da24c66bdc8f8efdea7f9ac")))
+(define (build-report!
+          name acct-types income-expense? menuname menutip
+          reverse-balance? uuid)
+  (gnc:define-report
+    'version 1
+    'name name
+    'report-guid uuid
+    'menu-path (if income-expense?
+                   (list gnc:menuname-income-expense)
+                   (list gnc:menuname-asset-liability))
+    'menu-name menuname
+    'menu-tip menutip
+    'options-generator (lambda () (options-generator acct-types
+                                                     reverse-balance?
+                                                     income-expense?))
+    'renderer (lambda (report-obj)
+                (piechart-renderer report-obj name uuid
+                                   acct-types income-expense?))))
+
+(build-report!
+  reportname-income
+  (list ACCT-TYPE-INCOME)
+  #t
+  menuname-income menutip-income
+  (lambda (x) #t)
+  "e1bd09b8a1dd49dd85760db9d82b045c")
+
+(build-report!
+  reportname-expense
+  (list ACCT-TYPE-EXPENSE)
+  #t
+  menuname-expense menutip-expense
+  (lambda (x) #f)
+  "9bf1892805cb4336be6320fe48ce5446")
+
+(build-report!
+  reportname-assets
+  (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+        ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+        ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+        ACCT-TYPE-CURRENCY)
+  #f
+  menuname-assets menutip-assets
+  (lambda (x) #f)
+  "5c7fd8a1fe9a4cd38884ff54214aa88a")
+
+(build-report!
+  reportname-liabilities
+  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+        ACCT-TYPE-CREDITLINE)
+  #f
+  menuname-liabilities menutip-liabilities
+  (lambda (x) #t)
+  "3fe6dce77da24c66bdc8f8efdea7f9ac")
