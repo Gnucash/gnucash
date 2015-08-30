@@ -1361,7 +1361,7 @@ check_accounts  (XferDialog* xferData, Account* from_account,
                                 "Otherwise, it will not be recorded.");
         gnc_error_dialog(xferData->dialog, "%s", message);
         LEAVE("bad account");
-        return TRUE;
+        return FALSE;
     }
 
     if (from_account == to_account)
@@ -1370,7 +1370,7 @@ check_accounts  (XferDialog* xferData, Account* from_account,
                                 "account!");
         gnc_error_dialog(xferData->dialog, "%s", message);
         LEAVE("same account");
-        return TRUE;
+        return FALSE;
     }
 
     if (xaccAccountGetPlaceholder(from_account) ||
@@ -1398,9 +1398,9 @@ check_accounts  (XferDialog* xferData, Account* from_account,
               "and making the \"amount\" negative.");
         gnc_error_dialog(xferData->dialog, "%s", message);
         LEAVE("non-currency");
-        return TRUE;
+        return FALSE;
     }
-    return FALSE;
+    return TRUE;
 }
 
 static gboolean
@@ -1412,7 +1412,7 @@ check_edit(XferDialog *xferData)
         {
             gnc_parse_error_dialog (xferData, _("You must enter a valid price."));
             LEAVE("invalid price");
-            return TRUE;
+            return FALSE;
         }
     }
 
@@ -1424,10 +1424,10 @@ check_edit(XferDialog *xferData)
             gnc_parse_error_dialog (xferData,
                                     _("You must enter a valid `to' amount."));
             LEAVE("invalid to amount");
-            return TRUE;
+            return FALSE;
         }
     }
-    return FALSE;
+    return TRUE;
 }
 
 static void
@@ -1647,7 +1647,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     to_account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
 
     if (xferData->exch_rate == NULL &&
-        check_accounts(xferData, from_account, to_account))
+        !check_accounts(xferData, from_account, to_account))
         return;
 
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
@@ -1671,7 +1671,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     if (!gnc_commodity_equiv(xferData->from_commodity, xferData->to_commodity))
     {
-        if (check_edit(xferData))
+        if (!check_edit(xferData))
             return;
         to_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
