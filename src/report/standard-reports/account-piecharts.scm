@@ -315,13 +315,15 @@ balance at a given time"))
 
       (define (count-accounts current-depth accts)
 	(if (< current-depth tree-depth)
-	    (let ((sum 0))
-	      (for-each
-	       (lambda (a)
-		 (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
-						       (gnc-account-get-children a))))))
-	       accts)
-	      sum)
+            (let iter ((sum 0)
+                       (remaining accts))
+              (if (null? remaining)
+                  sum
+                  (let* ((cur (car remaining))
+                         (tail (cdr remaining))
+                         (subaccts (count-accounts (1+ current-depth)
+                                                   (gnc-account-get-children cur))))
+                    (iter (+ sum (1+ subaccts)) tail))))
 	    (length (filter show-acct? accts))))
 
       ;; Calculates all account's balances. Returns a list of
@@ -336,23 +338,28 @@ balance at a given time"))
       ;; parent.
       (define (traverse-accounts current-depth accts)
         (if (< current-depth tree-depth)
-            (let ((res '()))
-              (for-each
-               (lambda (a)
-                 (begin
-		   (set! work-done (+ 1 work-done))
-		   (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-                   (if (show-acct? a)
-                       (set! res (cons (list (collector->double 
-                                              (profit-fn a #f)) a)
-                                       res)))
-                   (set! res (append
-                              (traverse-accounts
-                               (+ 1 current-depth)
-                               (gnc-account-get-children a))
-                              res))))
-               accts)
-              res)
+            (let iter ((res '())
+                       (remaining accts))
+              (if (null? remaining)
+                  res
+                  (begin
+		    (set! work-done (+ 1 work-done))
+		    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+                    (let* ((cur (car remaining))
+                           (tail (cdr remaining))
+                           (subaccts (traverse-accounts
+                                       (1+ current-depth)
+                                       (gnc-account-get-children cur))))
+                      (iter
+                        (append
+                          subaccts
+                          (if (show-acct? cur)
+                              (cons
+                                (list (collector->double (profit-fn cur #f))
+                                      cur)
+                                res)
+                              res))
+                        tail)))))
             (map
              (lambda (a)
 	       (set! work-done (+ 1 work-done))
