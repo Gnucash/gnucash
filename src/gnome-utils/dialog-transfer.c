@@ -1493,14 +1493,14 @@ create_transaction(XferDialog *xferData, Timespec *ts,
 }
 
 static void
-swap_amount (gnc_commodity *from, gnc_commodity *to, gnc_numeric *value,
+swap_amount (gnc_commodity **from, gnc_commodity **to, gnc_numeric *value,
              gnc_numeric *from_amt, gnc_numeric *to_amt)
 {
     gnc_commodity *tmp;
     gnc_numeric *tmp_amt;
-    tmp = from;
-    from = to;
-    to = tmp;
+    tmp = *from;
+    *from = *to;
+    *to = tmp;
     tmp_amt = from_amt;
     from_amt = to_amt;
     to_amt = tmp_amt;
@@ -1537,7 +1537,7 @@ create_price(XferDialog *xferData, Timespec ts)
         ((to != gnc_default_currency()) &&
          (strcmp (gnc_commodity_get_mnemonic(from),
                   gnc_commodity_get_mnemonic(to)) < 0)))
-        swap_amount (from, to, &value, &from_amt, &to_amt);
+        swap_amount (&from, &to, &value, &from_amt, &to_amt);
     /* First see if the closest entry on the same day has an equivalent rate */
     price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
     if (!price)
