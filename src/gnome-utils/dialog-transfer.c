@@ -190,6 +190,32 @@ gnc_xfer_dialog_compute_price_value (XferDialog *xferData)
     return(gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE));
 }
 
+/* Round a price value according to this policy:
+ * If both commodities are currencies, round to a fixed denominator.
+ * If only one is a currency, round to the currency's scu * a fixed factor.
+ * The fixed values are defined in gnc-pricedb.h
+ */
+static gnc_numeric
+round_price(gnc_commodity *from, gnc_commodity *to, gnc_numeric value)
+{
+    if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
+        value = gnc_numeric_convert(value, CURRENCY_DENOM,
+                                    GNC_HOW_RND_ROUND_HALF_UP);
+    else if (gnc_commodity_is_currency(to))
+    {
+        int scu = gnc_commodity_get_fraction (to);
+        value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                    GNC_HOW_RND_ROUND_HALF_UP);
+    }
+    else if (gnc_commodity_is_currency(from))
+    {
+        int scu = gnc_commodity_get_fraction (from);
+        value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                    GNC_HOW_RND_ROUND_HALF_UP);
+    }
+    return value;
+}
+
 /* (maybe) update the price from the pricedb. */
 static void
 gnc_xfer_dialog_update_price (XferDialog *xferData)
@@ -249,7 +275,8 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     {
         PINFO("Found reverse price: 1 %s = %f %s", gnc_commodity_get_mnemonic(to),
               gnc_numeric_to_double(price_value), gnc_commodity_get_mnemonic(from));
-        price_value = gnc_numeric_invert(price_value);
+        price_value = gnc_numeric_invert (price_value);
+        price_value = round_price(from, to, price_value);
     }
     else
     {
@@ -1001,17 +1028,11 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog *xferData = data;
     gnc_numeric price_value;
     Account *account;
-    int scu;
 
-    account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
-    if (account == NULL)
-        account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
-    scu = xaccAccountGetCommoditySCU(account);
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
-
     price_value = gnc_xfer_dialog_compute_price_value(xferData);
-    price_value = gnc_numeric_convert (price_value, scu * COMMODITY_DENOM_MULT,
-                                       GNC_HOW_RND_ROUND_HALF_UP);
+    price_value = round_price(xferData->from_commodity, xferData->to_commodity,
+                              price_value);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
     gnc_xfer_dialog_update_conv_info(xferData);
@@ -1496,24 +1517,26 @@ static void
 swap_amount (gnc_commodity **from, gnc_commodity **to, gnc_numeric *value,
              gnc_numeric *from_amt, gnc_numeric *to_amt)
 {
-    gnc_commodity *tmp;
-    gnc_numeric *tmp_amt;
-    tmp = *from;
+    gnc_commodity *tmp = *from;
+    gnc_numeric *tmp_amt = from_amt;
     *from = *to;
     *to = tmp;
-    tmp_amt = from_amt;
     from_amt = to_amt;
     to_amt = tmp_amt;
     *value = gnc_numeric_invert (*value);
+    *value = round_price(*from, *to, *value);
 }
 
 static gnc_numeric
 swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
 {
     gnc_commodity *tmp = *to;
+
     *to = *from;
     *from = tmp;
-    return gnc_numeric_invert(value);
+    value = gnc_numeric_invert(value);
+    value = round_price(*from, *to, value);
+    return value;
 }
 
 static void
@@ -1546,6 +1569,11 @@ create_price(XferDialog *xferData, Timespec ts)
         if (price)
             swap = TRUE;
     }
+/* Normally we want to store currency rates such that the rate > 1 and commodity
+ * prices in terms of a currency regardless of value. However, if we already
+ * have a price in either direction we want to continue using that direction for
+ * the rest of the day so that we don't wind up with two prices if the rate
+ * shifts to be < 1. */
 
     if (price)
     {
@@ -1566,16 +1594,10 @@ create_price(XferDialog *xferData, Timespec ts)
         if (swap)
         {
             value = swap_commodities(&from, &to, value);
+            xferData->from_commodity = from;
+            xferData->to_commodity = to;
         }
-        if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
-            value = gnc_numeric_convert(value, CURRENCY_DENOM,
-                                        GNC_HOW_RND_ROUND_HALF_UP);
-        else if (gnc_commodity_is_currency(to))
-        {
-            int scu = gnc_commodity_get_fraction (to);
-            value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
-                                        GNC_HOW_RND_ROUND_HALF_UP);
-        }
+        value = round_price(from, to, value);
         gnc_price_begin_edit (price);
         gnc_price_set_time (price, ts);
         gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
@@ -1814,6 +1836,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
         {
 /* FIXME: We probably want to swap the result price's to and from, not invert the price. */
             rate = gnc_numeric_invert(gnc_price_get_value (prc));
+            rate = round_price(from, to, rate);
             _gnc_xfer_dialog_set_price_edit(xferData, rate);
             gnc_price_unref (prc);
             have_price = TRUE;
@@ -2370,6 +2393,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     gboolean swap_amounts = FALSE;
     gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
     gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
+    gnc_numeric dialog_rate = *exch_rate;
 
     g_return_val_if_fail(txn_cur, TRUE);
 
@@ -2431,7 +2455,10 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
         gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
         if (!gnc_numeric_zero_p(*exch_rate))
-            *exch_rate = gnc_numeric_invert(*exch_rate);
+        {
+            dialog_rate = gnc_numeric_invert(*exch_rate);
+            dialog_rate = round_price(xfer_com, txn_cur, *exch_rate);
+        }
         amount = gnc_numeric_neg(amount);
     }
     else
@@ -2455,16 +2482,11 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
      */
 
     /* Set the exchange rate */
-    _gnc_xfer_dialog_set_price_edit(xfer, *exch_rate);
+    _gnc_xfer_dialog_set_price_edit(xfer, dialog_rate);
 
     /* and run it... */
     if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
         return TRUE;
 
-    /* If we swapped the amounts for the dialog, then make sure we swap
-     * it back now...
-     */
-    if (swap_amounts)
-        *exch_rate = gnc_numeric_invert(*exch_rate);
     return FALSE;
 }
