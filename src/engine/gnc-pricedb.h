@@ -250,7 +250,7 @@ void gnc_price_print(GNCPrice *db, FILE *f, int indent);
  * of the commodity with a fixed denominator of the pricing currency's
  * SCU * 10000.
  */
-#define CURRENCY_DENOM 1000
+#define CURRENCY_DENOM 10000
 #define COMMODITY_DENOM_MULT 10000
 
 /* ================================================================ */
