@@ -1577,6 +1577,7 @@ create_price(XferDialog *xferData, Timespec ts)
 
     if (price)
     {
+        price_value = gnc_price_get_value(price);
         if (gnc_numeric_equal(swap ? gnc_numeric_invert(value) : value,
                               price_value))
         {
