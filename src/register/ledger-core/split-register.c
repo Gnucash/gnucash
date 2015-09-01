@@ -2056,6 +2056,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
     int scu = gnc_commodity_get_fraction(curr);
     Timespec ts;
     BasicCell *cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
+    gboolean swap = FALSE;
 
     /* Only record the price for account types that don't have a
      * "rate" cell. They'll get handled later by
@@ -2065,24 +2066,20 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
         return;
     gnc_date_cell_get_date ((DateCell*)cell, &ts);
     price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
-    if (price)
-    {
-        price_value = gnc_price_get_value(price);
-    }
-    else
+    if (!price)
     {
         price = gnc_pricedb_lookup_day (pricedb, curr, comm, ts);
         if (price)
-        {
 /* It might be better to raise an error here: We shouldn't be creating
  * currency->commodity prices.
  */
-            price_value = gnc_numeric_invert(gnc_price_get_value(price));
-        }
+            swap = TRUE;
     }
     if (price)
     {
-        if (gnc_numeric_equal(value, price_value))
+        price_value = gnc_price_get_value(price);
+        if (gnc_numeric_equal(swap ? gnc_numeric_invert(value) : value,
+                              price_value))
         {
             gnc_price_unref (price);
             return;
@@ -2092,16 +2089,13 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
             gnc_price_unref(price);
             return;
         }
-        if (!gnc_numeric_eq(price_value, gnc_price_get_value(price)))
+        if (swap)
         {
             value = gnc_numeric_invert(value);
             scu = gnc_commodity_get_fraction(comm);
-            value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
-                                        GNC_HOW_RND_ROUND_HALF_UP);
         }
-        else
-            value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
-                                        GNC_HOW_RND_ROUND_HALF_UP);
+        value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
+                                    GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_begin_edit (price);
         gnc_price_set_time (price, ts);
         gnc_price_set_source (price, PRICE_SOURCE_SPLIT_REG);
