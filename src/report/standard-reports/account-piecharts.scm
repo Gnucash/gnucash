@@ -287,9 +287,9 @@ balance at a given time"))
   (if (< current-depth tree-depth)
       (let iter ((res '())
                  (remaining accts)
-                 (cur-work-done (1+ work-done)))
+                 (cur-work-done work-done))
         (if (null? remaining)
-            (cons (1- cur-work-done) res)
+            (cons cur-work-done res)
             (begin
               (gnc:report-percent-done (* 100 (/ cur-work-done work-to-do)))
               (let* ((cur (car remaining))
@@ -309,7 +309,7 @@ balance at a given time"))
                         (cons (list (account-balance cur #f) cur) res)
                         res))
                   tail
-                  subaccts-work)))))
+                  (1+ subaccts-work))))))
       (let* ((proc-account (lambda (a)
                               (set! work-done (1+ work-done))
                               (gnc:report-percent-done
@@ -322,9 +322,8 @@ balance at a given time"))
 ;; to traverse-accounts, but it does not consider the depth and also does not
 ;; construct data based on the accounts.  Instead, it builds up a map
 ;; indexed by securities and sums up all balances for each security.
-; FIXME: Implement proper progress reporting.
 (define (sum-securities account-balance show-acct? work-to-do tree-depth
-                        work-done current-dpeth accts)
+                        work-done current-depth accts)
 
   (define table (make-hash-table))
   (define (add! sec balance)
@@ -333,20 +332,23 @@ balance at a given time"))
            (val (cadr handle)))
       (hash-set! table key (cons (+ val balance) sec))))
 
-  (define (traverse! remaining)
-    (if (not (null? remaining))
-      (let ((cur (car remaining))
-            (tail (cdr remaining)))
+  (define (traverse! remaining initial-work)
+    (if (null? remaining)
+      initial-work
+      (let* ((cur (car remaining))
+             (tail (cdr remaining))
+             (cur-work-done (1+ initial-work))
+             (subaccts (gnc-account-get-children cur)))
+        (gnc:report-percent-done (* 100 (/ cur-work-done work-to-do)))
         (if (show-acct? cur)
           (add! (xaccAccountGetCommodity cur) (account-balance cur #f)))
-        (traverse! (gnc-account-get-children cur))
-        (traverse! tail))))
+        (traverse! tail (traverse! subaccts cur-work-done)))))
 
   (define (translate key value)
     (list (car value) (cdr value)))
 
-  (traverse! accts)
-  (hash-map->list translate table))
+  (let ((final-work (traverse! accts work-done)))
+    (cons final-work (hash-map->list translate table))))
 
 ;; The rendering function. Since it works for a bunch of different
 ;; account settings, you have to give the reportname, the
