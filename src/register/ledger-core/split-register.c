@@ -2084,7 +2084,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
             gnc_price_unref (price);
             return;
         }
-        if (strcmp (gnc_price_get_source(price), PRICE_SOURCE_FQ) == 0)
+        if (gnc_price_get_source(price) == PRICE_SOURCE_FQ)
         {
             gnc_price_unref(price);
             return;
