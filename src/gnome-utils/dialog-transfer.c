@@ -216,16 +216,87 @@ round_price(gnc_commodity *from, gnc_commodity *to, gnc_numeric value)
     return value;
 }
 
+typedef struct
+{
+    GNCPrice *price;
+    GNCPriceDB *pricedb;
+    gnc_commodity *from;
+    gnc_commodity *to;
+    Timespec ts;
+    gboolean reverse;
+} PriceReq;
+
+static void
+price_request_from_xferData(PriceReq *pr, XferDialog *xd)
+{
+    g_return_if_fail (pr != NULL);
+    g_return_if_fail (xd != NULL);
+    pr->price = NULL;
+    pr->pricedb = xd->pricedb;
+    pr->from = xd->from_commodity;
+    pr->to = xd->to_commodity;
+    pr->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xd->date_entry));
+    pr->reverse = FALSE;
+}
+
+static gboolean
+lookup_price(PriceReq *pr, gboolean day_only)
+{
+    GNCPrice *prc = NULL;
+    g_return_val_if_fail (pr != NULL, FALSE);
+    g_return_val_if_fail (pr->pricedb != NULL, FALSE);
+    g_return_val_if_fail (pr->from != NULL, FALSE);
+    g_return_val_if_fail (pr->to != NULL, FALSE);
+
+    pr->reverse = FALSE;
+    if (day_only)
+    {
+        prc = gnc_pricedb_lookup_day (pr->pricedb, pr->from, pr->to, pr->ts);
+    if (!prc)
+    {
+            prc = gnc_pricedb_lookup_day (pr->pricedb, pr->to,
+                                          pr->from, pr->ts);
+            pr->reverse = TRUE;
+    }
+    }
+    else
+    {
+        prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->from,
+                                                  pr->to, pr->ts);
+    if (!prc)
+    {
+            prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->to,
+                                                      pr->from, pr->ts);
+            pr->reverse = TRUE;
+    }
+    }
+    if (pr->reverse)
+    {
+        PINFO("Found reverse price: 1 %s = %f %s",
+              gnc_commodity_get_mnemonic(pr->to),
+              gnc_numeric_to_double(gnc_price_get_value(prc)),
+              gnc_commodity_get_mnemonic(pr->from));
+
+    }
+    else
+    {
+        PINFO("Found price: 1 %s = %f %s",
+              gnc_commodity_get_mnemonic(pr->from),
+              gnc_numeric_to_double(gnc_price_get_value(prc)),
+              gnc_commodity_get_mnemonic(pr->to));
+    }
+    if (!prc)
+        return FALSE;
+    pr->price = prc;
+    return TRUE;
+}
+
 /* (maybe) update the price from the pricedb. */
 static void
 gnc_xfer_dialog_update_price (XferDialog *xferData)
 {
-    GNCPrice *prc;
+    PriceReq pr;
     gnc_numeric price_value;
-    Timespec date;
-    gnc_commodity *from = xferData->from_commodity;
-    gnc_commodity *to = xferData->to_commodity;
-    gboolean reverse;
 
     if (!xferData) return;
     if (!xferData->from_commodity || ! xferData->to_commodity) return;
@@ -233,56 +304,19 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
         return;
     if (!xferData->pricedb) return;
 
-    /* when do we update, and when do we NOT update? */
-
-    /* XXX: I'm ALWAYS going to update whenever we get called */
-
-    /* grab the price on the same day or nearest to the DATE out of the pricedb */
-    date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xferData->date_entry));
-
-    /* Look for a price on the same day or, failing that, closest in time. */
-    prc = gnc_pricedb_lookup_day (xferData->pricedb, from, to, date);
-    reverse = FALSE;
-
-    if (!prc)
-    {
-        /* Look for reverse price on same day */
-        prc = gnc_pricedb_lookup_day (xferData->pricedb, to, from, date);
-        reverse = TRUE;
-    }
-
-    if (!prc)
-    {
-        /* Didn't find one on the same day, look for nearest in time */
-        prc = gnc_pricedb_lookup_nearest_in_time (xferData->pricedb, from,
-                                                  to, date);
-        reverse = FALSE;
-    }
-
-    if (!prc)
-    {
-        prc = gnc_pricedb_lookup_nearest_in_time (xferData->pricedb, to,
-                                                  from, date);
-        reverse = TRUE;
-    }
-
-    if (!prc)
+    price_request_from_xferData(&pr, xferData);
+    if (!lookup_price(&pr, TRUE))
+        if (!lookup_price(&pr, FALSE))
         return;
 
     /* grab the price from the pricedb */
-    price_value = gnc_price_get_value (prc);
-    if (reverse)
+    price_value = gnc_price_get_value (pr.price);
+    if (pr.reverse)
     {
-        PINFO("Found reverse price: 1 %s = %f %s", gnc_commodity_get_mnemonic(to),
-              gnc_numeric_to_double(price_value), gnc_commodity_get_mnemonic(from));
         price_value = gnc_numeric_invert (price_value);
-        price_value = round_price(from, to, price_value);
+        price_value = round_price(pr.from, pr.to, price_value);
     }
-    else
-    {
-        PINFO("Found price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
-              gnc_numeric_to_double(price_value), gnc_commodity_get_mnemonic(to));
-    }
+    gnc_price_unref(pr.price);
 
     /* and set the price entry */
     _gnc_xfer_dialog_set_price_edit(xferData, price_value);
@@ -1542,9 +1576,10 @@ swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
 static void
 create_price(XferDialog *xferData, Timespec ts)
 {
+    PriceReq pr;
+    GNCPrice *price = NULL;
     gnc_commodity *from = xferData->from_commodity;
     gnc_commodity *to = xferData->to_commodity;
-    GNCPrice *price;
     gnc_numeric price_value;
     gnc_numeric value;
     gnc_numeric from_amt, to_amt;
@@ -1561,52 +1596,49 @@ create_price(XferDialog *xferData, Timespec ts)
          (strcmp (gnc_commodity_get_mnemonic(from),
                   gnc_commodity_get_mnemonic(to)) < 0)))
         swap_amount (&from, &to, &value, &from_amt, &to_amt);
-    /* First see if the closest entry on the same day has an equivalent rate */
-    price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
-    if (!price)
-    {
-        price = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
-        if (price)
-            swap = TRUE;
-    }
+
 /* Normally we want to store currency rates such that the rate > 1 and commodity
  * prices in terms of a currency regardless of value. However, if we already
  * have a price in either direction we want to continue using that direction for
  * the rest of the day so that we don't wind up with two prices if the rate
  * shifts to be < 1. */
 
-    if (price)
+    price_request_from_xferData(&pr, xferData);
+    if (lookup_price(&pr, TRUE))
     {
-        price_value = gnc_price_get_value(price);
-        if (gnc_numeric_equal(swap ? gnc_numeric_invert(value) : value,
+        price_value = gnc_price_get_value(pr.price);
+        if (gnc_numeric_equal(pr.reverse ? gnc_numeric_invert(value) : value,
                               price_value))
         {
-            PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
-                  gnc_commodity_get_mnemonic(to));
-            gnc_price_unref (price);
+            PINFO("Found price for %s in %s",
+                  gnc_commodity_get_mnemonic(pr.from),
+                  gnc_commodity_get_mnemonic(pr.to));
+            gnc_price_unref (pr.price);
             return;
         }
-        if (strcmp (gnc_price_get_source(price), PRICE_SOURCE_FQ) == 0)
+        if (strcmp (gnc_price_get_source(pr.price), PRICE_SOURCE_FQ) == 0)
         {
             PINFO("Existing price is from Finance::Quote, so won't supersede.");
-            gnc_price_unref (price);
+            gnc_price_unref (pr.price);
             return;
         }
-        if (swap)
+        if (pr.reverse)
         {
             value = swap_commodities(&from, &to, value);
             xferData->from_commodity = from;
             xferData->to_commodity = to;
         }
-        value = round_price(from, to, value);
-        gnc_price_begin_edit (price);
-        gnc_price_set_time (price, ts);
-        gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
-        gnc_price_set_value (price, value);
-        gnc_price_commit_edit (price);
-        PINFO("Modified price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
-              gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
-        gnc_price_unref (price);
+        value = round_price(pr.from, pr.to, value);
+        gnc_price_begin_edit (pr.price);
+        gnc_price_set_time (pr.price, ts);
+        gnc_price_set_source (pr.price, PRICE_SOURCE_XFER_DLG);
+        gnc_price_set_value (pr.price, value);
+        gnc_price_commit_edit (pr.price);
+        PINFO("Modified price: 1 %s = %f %s",
+              gnc_commodity_get_mnemonic(from),
+              gnc_numeric_to_double(value),
+              gnc_commodity_get_mnemonic(to));
+        gnc_price_unref (pr.price);
         return;
     }
     if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
