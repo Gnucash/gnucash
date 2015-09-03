@@ -1460,7 +1460,8 @@ check_accounts  (XferDialog* xferData, Account* from_account,
 
 static gboolean
 check_edit(XferDialog *xferData)
-{        if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit)))
+{
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit)))
     {
         if (gtk_toggle_button_get_active
             (GTK_TOGGLE_BUTTON(xferData->price_radio)))
