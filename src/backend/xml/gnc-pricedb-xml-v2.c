@@ -120,7 +120,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
     {
         char *text = dom_tree_to_text(sub_node);
         if (!text) return FALSE;
-        gnc_price_set_source(p, text);
+        gnc_price_set_source_string(p, text);
         g_free(text);
     }
     else if (g_strcmp0("price:type", (char*)sub_node->name) == 0)
@@ -440,7 +440,7 @@ gnc_price_to_dom_tree(const xmlChar *tag, GNCPrice *price)
     tmpnode = timespec_to_dom_tree("price:time", &timesp);
     if (!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;
 
-    sourcestr = gnc_price_get_source(price);
+    sourcestr = gnc_price_get_source_string(price);
     if (sourcestr && (strlen(sourcestr) != 0))
     {
         tmpnode = text_to_dom_tree("price:source", sourcestr);

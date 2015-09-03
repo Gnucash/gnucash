@@ -1617,7 +1617,7 @@ create_price(XferDialog *xferData, Timespec ts)
             gnc_price_unref (pr.price);
             return;
         }
-        if (strcmp (gnc_price_get_source(pr.price), PRICE_SOURCE_FQ) == 0)
+        if (gnc_price_get_source(pr.price) == PRICE_SOURCE_FQ)
         {
             PINFO("Existing price is from Finance::Quote, so won't supersede.");
             gnc_price_unref (pr.price);
