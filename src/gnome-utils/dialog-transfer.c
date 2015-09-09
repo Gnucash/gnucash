@@ -1573,20 +1573,6 @@ create_transaction(XferDialog *xferData, Timespec *ts,
         xferData->transaction_cb(trans, xferData->transaction_user_data);
 }
 
-static void
-swap_amount (gnc_commodity **from, gnc_commodity **to, gnc_numeric *value,
-             gnc_numeric *from_amt, gnc_numeric *to_amt)
-{
-    gnc_commodity *tmp = *from;
-    gnc_numeric *tmp_amt = from_amt;
-    *from = *to;
-    *to = tmp;
-    from_amt = to_amt;
-    to_amt = tmp_amt;
-    *value = gnc_numeric_invert (*value);
-    *value = round_price(*from, *to, *value);
-}
-
 static gnc_numeric
 swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
 {
