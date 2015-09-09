@@ -121,6 +121,8 @@ struct _xferDialog
      * creating a transaction)
      */
     gnc_numeric *exch_rate;
+    PriceSource price_source;
+    const char *price_type;
 
     /* Callback function to notify of the newly created Transaction */
     gnc_xfer_dialog_cb transaction_cb;
@@ -1058,6 +1060,9 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog *xferData = data;
 
     gnc_xfer_update_to_amount (xferData);
+    xferData->price_source = PRICE_SOURCE_USER_PRICE;
+    xferData->price_type = PRICE_TYPE_TRN;
+
 
     return FALSE;
 }
@@ -1087,6 +1092,8 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
                               price_value);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
+    xferData->price_source = PRICE_SOURCE_XFER_DLG_VAL;
+    xferData->price_type = PRICE_TYPE_TRN;
     gnc_xfer_dialog_update_conv_info(xferData);
 
     return FALSE;
@@ -1635,9 +1642,9 @@ create_price(XferDialog *xferData, Timespec ts)
             gnc_price_unref (pr.price);
             return;
         }
-        if (gnc_price_get_source(pr.price) == PRICE_SOURCE_FQ)
+        if (gnc_price_get_source(pr.price) < xferData->price_source)
         {
-            PINFO("Existing price is from Finance::Quote, so won't supersede.");
+            PINFO("Existing price is preferred, so won't supersede.");
             gnc_price_unref (pr.price);
             return;
         }
@@ -1650,7 +1657,8 @@ create_price(XferDialog *xferData, Timespec ts)
         value = round_price(pr.from, pr.to, value);
         gnc_price_begin_edit (pr.price);
         gnc_price_set_time (pr.price, ts);
-        gnc_price_set_source (pr.price, PRICE_SOURCE_XFER_DLG);
+        gnc_price_set_source (pr.price, xferData->price_source);
+        gnc_price_set_typestr(pr.price, xferData->price_type);
         gnc_price_set_value (pr.price, value);
         gnc_price_commit_edit (pr.price);
         PINFO("Modified price: 1 %s = %f %s",
@@ -1683,7 +1691,8 @@ create_price(XferDialog *xferData, Timespec ts)
     gnc_price_set_commodity (price, from);
     gnc_price_set_currency (price, to);
     gnc_price_set_time (price, ts);
-    gnc_price_set_source (price, PRICE_SOURCE_XFER_DLG);
+    gnc_price_set_source (price, xferData->price_source);
+    gnc_price_set_typestr (price, xferData->price_type);
     gnc_price_set_value (price, value);
     gnc_pricedb_add_price (xferData->pricedb, price);
     gnc_price_commit_edit (price);
