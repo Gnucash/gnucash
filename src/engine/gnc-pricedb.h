@@ -165,7 +165,8 @@ typedef enum
 {
     PRICE_SOURCE_EDIT_DLG,         // "user:price-editor"
     PRICE_SOURCE_FQ,               // "Finance::Quote"
-    PRICE_SOURCE_XFER_DLG,         // "user:xfer-dialog"
+    PRICE_SOURCE_USER_PRICE,       // "user:price"
+    PRICE_SOURCE_XFER_DLG_VAL,     // "user:xfer-dialog"
     PRICE_SOURCE_SPLIT_REG,        // "user:split-register"
     PRICE_SOURCE_STOCK_SPLIT,      // "user:stock-split"
     PRICE_SOURCE_INVOICE,          // "user:invoice-post"
@@ -174,7 +175,7 @@ typedef enum
 
 #define PRICE_TYPE_LAST "last"
 #define PRICE_TYPE_UNK "unknown"
-
+#define PRICE_TYPE_TRN "transaction"
 /* ------------------ */
 /** @name Constructors
     @{ */

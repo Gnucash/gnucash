@@ -2044,7 +2044,8 @@ recalculate_value (Split *split, SplitRegister *reg,
 }
 
 static void
-record_price (SplitRegister *reg, Account *account, gnc_numeric value)
+record_price (SplitRegister *reg, Account *account, gnc_numeric value,
+              PriceSource source)
 {
     Transaction *trans = gnc_split_register_get_current_trans (reg);
     QofBook *book = qof_instance_get_book (QOF_INSTANCE (account));
@@ -2084,8 +2085,9 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
             gnc_price_unref (price);
             return;
         }
-        if (gnc_price_get_source(price) == PRICE_SOURCE_FQ)
+        if (gnc_price_get_source(price) < PRICE_SOURCE_XFER_DLG_VAL)
         {
+            /* Existing price is preferred over this one. */
             gnc_price_unref(price);
             return;
         }
@@ -2098,7 +2100,8 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
                                     GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_begin_edit (price);
         gnc_price_set_time (price, ts);
-        gnc_price_set_source (price, PRICE_SOURCE_SPLIT_REG);
+        gnc_price_set_source (price, source);
+        gnc_price_set_typestr (price, PRICE_TYPE_TRN);
         gnc_price_set_value (price, value);
         gnc_price_commit_edit (price);
         gnc_price_unref (price);
@@ -2112,7 +2115,8 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
     gnc_price_set_commodity (price, comm);
     gnc_price_set_currency (price, curr);
     gnc_price_set_time (price, ts);
-    gnc_price_set_source (price, PRICE_SOURCE_SPLIT_REG);
+    gnc_price_set_source (price, source);
+    gnc_price_set_typestr (price, PRICE_TYPE_TRN);
     gnc_price_set_value (price, value);
     gnc_pricedb_add_price (pricedb, price);
     gnc_price_commit_edit (price);
@@ -2135,6 +2139,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     Account *account;
     int denom;
     int choice;
+    PriceSource source = PRICE_SOURCE_USER_PRICE;
 
     if (STOCK_REGISTER    != reg->type &&
         CURRENCY_REGISTER != reg->type &&
@@ -2283,6 +2288,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     {
         recalculate_price (split, reg, value, amount);
         price_changed = TRUE;
+        source = PRICE_SOURCE_SPLIT_REG;
     }
     if (recalc_value)
         recalculate_value (split, reg, price, amount, shares_changed);
@@ -2293,7 +2299,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
                 PRIC_CELL);
         price = gnc_price_cell_get_value (cell);
 	if (gnc_numeric_positive_p(price))
-	    record_price (reg, account, price);
+	    record_price (reg, account, price, source);
     }
     return TRUE;
 }

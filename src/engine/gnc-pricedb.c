@@ -71,8 +71,12 @@ gnc_price_init(GNCPrice* price)
  */
 static const char* source_names[] =
 {
-    "user:price-editor", //sync with price_to_gui in dialog-price-editor.c
-    "Finance::Quote",    //sync with
+    /* sync with price_to_gui in dialog-price-editor.c */
+    "user:price-editor",
+    /* sync with commidity-tz-quote->price in price-quotes.scm */
+    "Finance::Quote",
+    "user:price",
+    /* String retained for backwards compatibility. */
     "user:xfer-dialog",
     "user:split-register",
     "user:stock-split",
@@ -1004,7 +1008,7 @@ insert_or_replace_price(GNCPriceDB *db, GNCPrice *p)
                                                   p->currency, p->tmspec);
     if (old_price == NULL)
         return TRUE;
-    if (p->source != PRICE_SOURCE_FQ)
+    if (p->source < old_price->source)
         return TRUE;
     return FALSE;
 
