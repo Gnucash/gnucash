@@ -1,8 +1,11 @@
-/********************************************************************
- * gnc-budget_view.c -- Budget display widget                       *
- *                                                                  *
- * Copyright (C) 2013, Phil Longstaff <phil.longstaff@yahoo.ca>     *
- *                                                                  *
+/** gnc-budget_view.c -- Budget display widget
+ *
+ * @addtogroup budget Budgets
+ * @{
+ * @file gnc-budget-view.c
+ * @brief File to define budget views for gnucash (the actual display of the budget, along with some calculations and event handlers).
+ * @author Phil Longstaff Copyright (C) 2013 phil.longstaff@yahoo.ca
+ *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,7 +22,8 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *******************************************************************/
+ ******************************************************************
+*/
 
 /*
  * TODO:
@@ -85,11 +89,16 @@ struct _GncBudgetViewClass
 
 enum
 {
-    TOTALS_TYPE_INCOME,
-    TOTALS_TYPE_EXPENSES,
-    TOTALS_TYPE_TRANSFERS,
-    TOTALS_TYPE_TOTAL
+    TOTALS_TYPE_INCOME, /**< This total is Income type*/
+    TOTALS_TYPE_EXPENSES, /**< This total is Expenses type*/
+    TOTALS_TYPE_TRANSFERS, /**< This total is Transfers type*/
+    TOTALS_TYPE_TOTAL /**< This total is for Totals*/
 };
+/**< \brief ENUM for different budget totals types.
+
+This enum is used to specify the specific type of account that the selected account belongs to. This is important to ensure that the sum of the different types of accounts can be calculated.
+*/
+
 
 /************************************************************
  *                        Prototypes                        *
@@ -116,6 +125,18 @@ static void gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation
 static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
         Account* account, guint period_num);
 
+/** \brief the private budget view structure
+
+	This structure defines the different elements required 	for a budget view - the actual display of how a budget 	looks when you open it.
+		@param The tree view is a breakdown of the different 		accounts.
+		@param The totals tree view is the totals tree at 		the bottom of the budget screen.
+		@param The GncBudget contains much of the data 			required to implement a budget.
+		@param Each budget struct has its own GUID.
+		@param I AM NOT SURE WHAT THIS ONE DOES
+		@param I AM NOT SURE WHAT THIS DOES. I THINK IT IS 		THE TOTALS COLUMN ON THE RIGHT OF THE DISPLAY.
+		@param Tht totals column on the right of all the 			accounts.
+		@param No idea what this does.
+*/
 struct GncBudgetViewPrivate
 {
     GtkTreeView *tree_view;
@@ -140,6 +161,10 @@ struct GncBudgetViewPrivate
 
 G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_VBOX)
 
+/** \brief Create new gnc budget view.
+
+	As the name suggests, this creates a new gnc budget view.
+*/
 GncBudgetView *
 gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd)
 {
@@ -236,7 +261,10 @@ gnc_budget_view_finalize(GObject *object)
     LEAVE(" ");
 }
 
+/** \brief returns the current selection in the gnc budget view.
 
+	Returns the current selection in the gnc budget view by using the macro GNC_BUDGET_VIEW_GET_PRIVATE.
+*/
 GtkTreeSelection*
 gnc_budget_view_get_selection(GncBudgetView* view)
 {
@@ -273,6 +301,10 @@ gnc_budget_view_get_selected_accounts(GncBudgetView* view)
 /****************************
  * GncPluginPage Functions  *
  ***************************/
+/** \brief Creates necessary widgets for display of gnc budget.
+
+	This function steps through and performs the necessary actions for creating the widgets associated with a budget view. For example, creating the trees for the accounts, creating the graphics objects, creating the links between actions and events etc.
+*/
 static void
 gbv_create_widget(GncBudgetView *view)
 {
@@ -526,6 +558,9 @@ gbv_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 }
 #endif
 
+
+/** \brief Key press action for gnc budget view.
+*/
 static gboolean
 gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
 {
@@ -556,6 +591,9 @@ gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
     return TRUE;
 }
 
+
+/** \brief gnc budget view actions for resize of treeview.
+*/
 static void
 gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetView* view)
 {
@@ -593,6 +631,8 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
     LEAVE("");
 }
 
+/** \brief Actions for when a Gnc budget view row is activated.
+*/
 static void
 gbv_row_activated_cb(GtkTreeView *treeview, GtkTreePath *path,
                      GtkTreeViewColumn *col, GncBudgetView *view)
@@ -612,7 +652,8 @@ gbv_row_activated_cb(GtkTreeView *treeview, GtkTreePath *path,
     g_signal_emit_by_name(view, "account-activated", account);
 }
 
-
+/** \brief Action for when a selection in a gnc budget view is changed
+*/
 #if 0
 static void
 gbv_selection_changed_cb(GtkTreeSelection *selection, GncBudgetView *view)
@@ -639,6 +680,13 @@ gbv_selection_changed_cb(GtkTreeSelection *selection, GncBudgetView *view)
 }
 #endif
 
+/** \brief Structure to assist in calculating of sub account totals.
+
+This structure is utilised by the functions \ref budget_accum_helper and \ref gbv_get_accumulated_budget_amount to find the totals of sub-accounts in an account tree.
+@param total. The running total of the account in question
+@param budget. The gnc budget under examination.
+@param period_num. The specific period_num that we are finding the totals for.
+*/
 typedef struct
 {
     gnc_numeric total;
@@ -646,6 +694,10 @@ typedef struct
     guint period_num;
 } BudgetAccumulationInfo;
 
+/** \brief Function to assist in the calculation of sub-account totals.
+
+This function is used in conjunction with the function \ref gbv_get_accumulated_budget_amount to find the total of sub accounts. \ref gbv_get_accumulated_budget_amount passes this function to \ref gnc_account_foreach_child function in order to perform this operation. The latter method then calls \ref budget_accum_helper on all of the sub accounts of the main account passed in order to calculate the accumulated total.
+*/
 static void
 budget_accum_helper(Account* account, gpointer data)
 {
@@ -664,6 +716,10 @@ budget_accum_helper(Account* account, gpointer data)
     }
 }
 
+/** \brief Function to calculate the accumulated budget amount in a given account for a specified period.
+
+This function uses the \ref budget_accum_helper to calculate the accumulated budget amount in a given budget account for a specified period. Specifically, it uses the function \ref gnc_account_foreach_child function passing through an instance of \ref budget_accum_helper.
+*/
 static gnc_numeric
 gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint period_num)
 {
@@ -677,7 +733,9 @@ gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint per
     return info.total;
 }
 
-/* Displays budget amount for a period for an account.  If a budget
+/** \brief Calculates and displays budget amount for a period in a defined account.
+
+Displays budget amount for a period for an account.  If a budget
    amount is set, it is displayed in black.  If no budget amount is
    set and the account has children, the total of the children's
    budget amounts (if any) is displayed in dark grey.
@@ -727,6 +785,8 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     return g_strdup(amtbuff);
 }
 
+/** \brief Function to find the total for an account for display in the totals column to the right.
+*/
 static gnc_numeric
 bgv_get_total_for_account(Account* account, GncBudget* budget)
 {
@@ -759,6 +819,8 @@ bgv_get_total_for_account(Account* account, GncBudget* budget)
     return total;
 }
 
+/** \brief Function to find and display the total for a specified account.
+*/
 static gchar *
 budget_total_col_source(Account *account, GtkTreeViewColumn *col,
                         GtkCellRenderer *cell)
@@ -774,6 +836,10 @@ budget_total_col_source(Account *account, GtkTreeViewColumn *col,
     return g_strdup(amtbuff);
 }
 
+/** \brief Function to perform actions if an account has been edited (e.g. when removing or adding data values).
+
+Primarily this function is here to check to see if a cell has been updated to be zero so that the values in the children of that account can then be tallied for the value.
+*/
 static void
 budget_col_edited(Account *account, GtkTreeViewColumn *col,
                   const gchar *new_text)
@@ -798,7 +864,10 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
                                             numeric);
 }
 
+/** \brief Function to find the total in a column of budget provided and display the info in the totals tree widget.
 
+This function looks at which type of account is in question, and then calls the function \ref gbv_get_accumulated_budget_amount on the root account (assuming that we are not at a totals column) or \ref bgv_get_total_for_account if we are. It then displays this information in the totals tree widget.
+*/
 static void
 totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
                   GtkTreeModel *s_model, GtkTreeIter *s_iter,
@@ -912,6 +981,12 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     g_object_set(G_OBJECT(cell), "text", amtbuff, "xalign", 1.0, NULL);
 }
 
+
+/**
+ \brief Function to refresh the titles of each column.
+
+The function steps through the number of periods adding the dates to the first row of each of the columns that are listed as visible.
+*/
 static void
 gbv_refresh_col_titles(GncBudgetView *view)
 {
@@ -947,7 +1022,8 @@ gbv_refresh_col_titles(GncBudgetView *view)
     }
 }
 
-
+/** \brief Function to create the totals column to the right of the view.
+*/
 static GtkTreeViewColumn*
 gbv_create_totals_column(GncBudgetView* view, gint period_num)
 {
@@ -969,7 +1045,10 @@ gbv_create_totals_column(GncBudgetView* view, gint period_num)
     return col;
 }
 
+/** \brief Function that updates the tree view when a column has been edited.
 
+The function simply calls \ref gtk_widget_queue_draw on the current totals_tree_view.
+*/
 static void
 gbv_col_edited_cb(GtkCellRendererText* cell, gchar* path_string, gchar* new_text, gpointer user_data)
 {
@@ -983,6 +1062,11 @@ gbv_col_edited_cb(GtkCellRendererText* cell, gchar* path_string, gchar* new_text
     gtk_widget_queue_draw(GTK_WIDGET(priv->totals_tree_view));
 }
 
+
+/** \brief refreshes the current budget view
+
+The function will step through to only display the columns that are set as visible, and will add any needed columns (e.g. the totals column).
+*/
 void
 gnc_budget_view_refresh(GncBudgetView *view)
 {
