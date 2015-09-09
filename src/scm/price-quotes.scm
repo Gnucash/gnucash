@@ -375,7 +375,15 @@
            (saved-price #f)
            (commodity-str (gnc-commodity-get-printname commodity))
            )
-
+      (if (equal? (gnc-commodity-get-printname currency) commodity-str)
+          (let* ((symbol (assq-ref quote-data 'symbol))
+                 (other-curr
+                  (and commodity-table
+                       (string? symbol)
+                       (gnc-commodity-table-lookup commodity-table "ISO4217"
+                                                   (string-upcase symbol)))))
+            (set! commodity other-curr))
+        )
       (or-map (lambda (price-sym)
                 (let ((p (assq-ref quote-data price-sym)))
                   (if p
