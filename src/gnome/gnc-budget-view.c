@@ -127,15 +127,15 @@ static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
 
 /** \brief the private budget view structure
 
-	This structure defines the different elements required 	for a budget view - the actual display of how a budget 	looks when you open it.
-		@param The tree view is a breakdown of the different 		accounts.
-		@param The totals tree view is the totals tree at 		the bottom of the budget screen.
-		@param The GncBudget contains much of the data 			required to implement a budget.
-		@param Each budget struct has its own GUID.
-		@param I AM NOT SURE WHAT THIS ONE DOES
-		@param I AM NOT SURE WHAT THIS DOES. I THINK IT IS 		THE TOTALS COLUMN ON THE RIGHT OF THE DISPLAY.
-		@param Tht totals column on the right of all the 			accounts.
-		@param No idea what this does.
+    This structure defines the different elements required for a budget view - the actual display of how a budget looks when you open it.
+        @param tree_view Pointer to the widget to display the detailed budget.
+        @param totals_tree_view Pointer to the widget to display the totals tree at the bottom of the budget screen.
+        @param budget Contains much of the data required to implement a budget.
+        @param key Each budget struct has its own GUID.
+        @param period_col_list List of columns in the tree_view widget (this list varies depending on the number of periods)
+        @param totals_col_list List of columns in the totals_tree_view
+        @param total_col The totals column on the right of all the accounts.
+        @param fd No idea what this does.
 */
 struct GncBudgetViewPrivate
 {
@@ -163,7 +163,7 @@ G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_VBOX)
 
 /** \brief Create new gnc budget view.
 
-	As the name suggests, this creates a new gnc budget view.
+    As the name suggests, this creates a new gnc budget view.
 */
 GncBudgetView *
 gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd)
@@ -263,7 +263,7 @@ gnc_budget_view_finalize(GObject *object)
 
 /** \brief returns the current selection in the gnc budget view.
 
-	Returns the current selection in the gnc budget view by using the macro GNC_BUDGET_VIEW_GET_PRIVATE.
+    Returns the current selection in the gnc budget view by using the macro GNC_BUDGET_VIEW_GET_PRIVATE.
 */
 GtkTreeSelection*
 gnc_budget_view_get_selection(GncBudgetView* view)
@@ -303,7 +303,7 @@ gnc_budget_view_get_selected_accounts(GncBudgetView* view)
  ***************************/
 /** \brief Creates necessary widgets for display of gnc budget.
 
-	This function steps through and performs the necessary actions for creating the widgets associated with a budget view. For example, creating the trees for the accounts, creating the graphics objects, creating the links between actions and events etc.
+    This function steps through and performs the necessary actions for creating the widgets associated with a budget view. For example, creating the trees for the accounts, creating the graphics objects, creating the links between actions and events etc.
 */
 static void
 gbv_create_widget(GncBudgetView *view)
@@ -683,9 +683,9 @@ gbv_selection_changed_cb(GtkTreeSelection *selection, GncBudgetView *view)
 /** \brief Structure to assist in calculating of sub account totals.
 
 This structure is utilised by the functions \ref budget_accum_helper and \ref gbv_get_accumulated_budget_amount to find the totals of sub-accounts in an account tree.
-@param total. The running total of the account in question
-@param budget. The gnc budget under examination.
-@param period_num. The specific period_num that we are finding the totals for.
+@param total The running total of the account in question
+@param budget The gnc budget under examination.
+@param period_num The specific period_num that we are finding the totals for.
 */
 typedef struct
 {
