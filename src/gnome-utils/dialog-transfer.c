@@ -215,6 +215,13 @@ round_price(gnc_commodity *from, gnc_commodity *to, gnc_numeric value)
     return value;
 }
 
+typedef enum
+{
+    SAME_DAY,
+    NEAREST,
+    LATEST
+} PriceDate;
+
 typedef struct
 {
     GNCPrice *price;
@@ -239,7 +246,7 @@ price_request_from_xferData(PriceReq *pr, XferDialog *xd)
 }
 
 static gboolean
-lookup_price(PriceReq *pr, gboolean day_only)
+lookup_price(PriceReq *pr, PriceDate pd)
 {
     GNCPrice *prc = NULL;
     g_return_val_if_fail (pr != NULL, FALSE);
@@ -248,26 +255,37 @@ lookup_price(PriceReq *pr, gboolean day_only)
     g_return_val_if_fail (pr->to != NULL, FALSE);
 
     pr->reverse = FALSE;
-    if (day_only)
+    switch (pd)
     {
-        prc = gnc_pricedb_lookup_day (pr->pricedb, pr->from, pr->to, pr->ts);
-    if (!prc)
-    {
-            prc = gnc_pricedb_lookup_day (pr->pricedb, pr->to,
-                                          pr->from, pr->ts);
-            pr->reverse = TRUE;
-    }
-    }
-    else
-    {
-        prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->from,
-                                                  pr->to, pr->ts);
-    if (!prc)
-    {
-            prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->to,
-                                                      pr->from, pr->ts);
-            pr->reverse = TRUE;
-    }
+        default:
+        case SAME_DAY:
+            prc = gnc_pricedb_lookup_day (pr->pricedb, pr->from,
+                                          pr->to, pr->ts);
+            if (!prc)
+            {
+                prc = gnc_pricedb_lookup_day (pr->pricedb, pr->to,
+                                              pr->from, pr->ts);
+                pr->reverse = TRUE;
+            }
+        break;
+        case NEAREST:
+            prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->from,
+                                                      pr->to, pr->ts);
+            if (!prc)
+            {
+                prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->to,
+                                                          pr->from, pr->ts);
+                pr->reverse = TRUE;
+            }
+        break;
+        case LATEST:
+            prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->from, pr->to);
+            if (!prc)
+            {
+                prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->to, pr->from);
+                pr->reverse = TRUE;
+            }
+            break;
     }
     if (pr->reverse)
     {
@@ -304,8 +322,8 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     if (!xferData->pricedb) return;
 
     price_request_from_xferData(&pr, xferData);
-    if (!lookup_price(&pr, TRUE))
-        if (!lookup_price(&pr, FALSE))
+    if (!lookup_price(&pr, SAME_DAY))
+        if (!lookup_price(&pr, NEAREST))
         return;
 
     /* grab the price from the pricedb */
@@ -1604,7 +1622,7 @@ create_price(XferDialog *xferData, Timespec ts)
  * shifts to be < 1. */
 
     price_request_from_xferData(&pr, xferData);
-    if (lookup_price(&pr, TRUE))
+    if (lookup_price(&pr, SAME_DAY))
     {
         price_value = gnc_price_get_value(pr.price);
         if (gnc_numeric_equal(pr.reverse ? gnc_numeric_invert(value) : value,
@@ -1809,14 +1827,11 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
 void
 gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 {
-    gnc_numeric rate;
     GNCPrice *prc;
-    gnc_commodity *from = xferData->from_commodity;
-    gnc_commodity *to = xferData->to_commodity;
+    PriceReq pr;
     SCM quotes_func;
     SCM book_scm;
     SCM scm_window;
-    gboolean have_price = FALSE;
 
     g_return_if_fail (xferData);
 
@@ -1851,29 +1866,15 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
     gnc_unset_busy_cursor (NULL);
 
     /*the results should be in the price db now, but don't crash if not. */
-
-    prc = gnc_pricedb_lookup_latest(xferData->pricedb, from, to);
-    if (prc)
+    price_request_from_xferData(&pr, xferData);
+    if (lookup_price(&pr, LATEST))
     {
-        rate = gnc_price_get_value (prc);
-        gnc_xfer_dialog_set_price_edit(xferData, rate);
-        gnc_price_unref (prc);
-        have_price = TRUE;
-    }
-
-    /* Lets try reversing the commodities */
-    if(!have_price)
-    {
-        prc = gnc_pricedb_lookup_latest (xferData->pricedb, to, from);
-        if (prc)
-        {
-/* FIXME: We probably want to swap the result price's to and from, not invert the price. */
-            rate = gnc_numeric_invert(gnc_price_get_value (prc));
-            rate = round_price(from, to, rate);
-            gnc_xfer_dialog_set_price_edit(xferData, rate);
-            gnc_price_unref (prc);
-            have_price = TRUE;
-        }
+        gnc_numeric price_value = gnc_price_get_value(pr.price);
+        if (pr.reverse)
+            price_value = round_price(pr.from, pr.to,
+                                      gnc_numeric_invert(price_value));
+         gnc_xfer_dialog_set_price_edit(xferData, price_value);
+        gnc_price_unref (pr.price);
     }
 
     LEAVE("quote retrieved");
