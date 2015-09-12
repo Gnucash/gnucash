@@ -1567,20 +1567,6 @@ create_transaction(XferDialog *xferData, Timespec *ts,
         xferData->transaction_cb(trans, xferData->transaction_user_data);
 }
 
-static void
-swap_amount (gnc_commodity **from, gnc_commodity **to, gnc_numeric *value,
-             gnc_numeric *from_amt, gnc_numeric *to_amt)
-{
-    gnc_commodity *tmp = *from;
-    gnc_numeric *tmp_amt = from_amt;
-    *from = *to;
-    *to = tmp;
-    from_amt = to_amt;
-    to_amt = tmp_amt;
-    *value = gnc_numeric_invert (*value);
-    *value = round_price(*from, *to, *value);
-}
-
 static gnc_numeric
 swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
 {
@@ -1609,12 +1595,6 @@ create_price(XferDialog *xferData, Timespec ts)
         return;
 
     value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
-    /* Try to be consistent about how quotes are installed. */
-    if (from == gnc_default_currency() ||
-        ((to != gnc_default_currency()) &&
-         (strcmp (gnc_commodity_get_mnemonic(from),
-                  gnc_commodity_get_mnemonic(to)) < 0)))
-        swap_amount (&from, &to, &value, &from_amt, &to_amt);
 
 /* Normally we want to store currency rates such that the rate > 1 and commodity
  * prices in terms of a currency regardless of value. However, if we already
