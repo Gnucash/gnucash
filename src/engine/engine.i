@@ -334,7 +334,7 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("TRANS-DATE-POSTED");
     SET_ENUM("TRANS-DESCRIPTION");
     SET_ENUM("TRANS-NUM");
-    
+
     SET_ENUM("KVP-OPTION-PATH");
 
     SET_ENUM("OPTION-SECTION-ACCOUNTS");
@@ -354,6 +354,15 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("GNC-HOW-RND-ROUND-HALF-UP");
     SET_ENUM("GNC-HOW-RND-ROUND");
     SET_ENUM("GNC-HOW-RND-NEVER");
+
+    SET_ENUM("PRICE-SOURCE-EDIT-DLG");
+    SET_ENUM("PRICE-SOURCE-FQ");
+    SET_ENUM("PRICE-SOURCE-USER-PRICE");
+    SET_ENUM("PRICE-SOURCE-XFER-DLG-VAL");
+    SET_ENUM("PRICE-SOURCE-SPLIT-REG");
+    SET_ENUM("PRICE-SOURCE-STOCK-SPLIT");
+    SET_ENUM("PRICE-SOURCE-INVOICE");
+    SET_ENUM("PRICE-SOURCE-INVALID");
 
 #undef SET_ENUM
   }
