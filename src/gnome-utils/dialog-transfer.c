@@ -332,10 +332,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     /* grab the price from the pricedb */
     price_value = gnc_price_get_value (pr.price);
     if (pr.reverse)
-    {
         price_value = gnc_numeric_invert (price_value);
-        price_value = round_price(pr.from, pr.to, price_value);
-    }
     gnc_price_unref(pr.price);
 
     /* and set the price entry */
@@ -1088,8 +1085,6 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
     price_value = gnc_xfer_dialog_compute_price_value(xferData);
-    price_value = round_price(xferData->from_commodity, xferData->to_commodity,
-                              price_value);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
     xferData->price_source = PRICE_SOURCE_XFER_DLG_VAL;
@@ -1581,7 +1576,6 @@ swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
     *to = *from;
     *from = tmp;
     value = gnc_numeric_invert(value);
-    value = round_price(*from, *to, value);
     return value;
 }
 
@@ -1861,8 +1855,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
     {
         gnc_numeric price_value = gnc_price_get_value(pr.price);
         if (pr.reverse)
-            price_value = round_price(pr.from, pr.to,
-                                      gnc_numeric_invert(price_value));
+            price_value = gnc_numeric_invert(price_value);
          _gnc_xfer_dialog_set_price_edit(xferData, price_value);
         gnc_price_unref (pr.price);
     }
@@ -2479,10 +2472,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
         gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
         if (!gnc_numeric_zero_p(*exch_rate))
-        {
             dialog_rate = gnc_numeric_invert(*exch_rate);
-            dialog_rate = round_price(xfer_com, txn_cur, *exch_rate);
-        }
         amount = gnc_numeric_neg(amount);
     }
     else
