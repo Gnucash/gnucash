@@ -1602,12 +1602,6 @@ create_price(XferDialog *xferData, Timespec ts)
         return;
 
     value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
-    /* Try to be consistent about how quotes are installed. */
-    if (from == gnc_default_currency() ||
-        ((to != gnc_default_currency()) &&
-         (strcmp (gnc_commodity_get_mnemonic(from),
-                  gnc_commodity_get_mnemonic(to)) < 0)))
-        swap_amount (&from, &to, &value, &from_amt, &to_amt);
 
 /* Normally we want to store currency rates such that the rate > 1 and commodity
  * prices in terms of a currency regardless of value. However, if we already
