@@ -254,18 +254,6 @@ AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 AM_BINRELOC
 
 ### --------------------------------------------------------------------------
-### See if we have pkg-config
-
-AC_PATH_PROG(PKG_CONFIG,pkg-config)
-if test "x$PKG_CONFIG" = x; then
-  # @*%&$ Ximian programmers renamed this application
-  AC_PATH_PROG(PKG_CONFIG,pkgconfig)
-  if test "x$PKG_CONFIG" = x; then
-    AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
-  fi
-fi
-
-### --------------------------------------------------------------------------
 ### Glib checks.
 
 # We require glib >= 2.28, released together with gtk-2.24;
