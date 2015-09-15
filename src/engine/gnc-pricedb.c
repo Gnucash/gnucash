@@ -58,8 +58,31 @@ gnc_price_init(GNCPrice* price)
     price->refcount = 1;
     price->value = gnc_numeric_zero();
     price->type = NULL;
-    price->source = NULL;
+    price->source = PRICE_SOURCE_INVALID;
 }
+
+/* Array of char constants for converting price-source enums. Be sure to keep in
+ * sync with the enum values in gnc-pricedb.h The string user:price-editor is
+ * explicitly used by price_to_gui() in dialog-price-editor.c and the string
+ * Finance::Quote is explicitly used by fq-results->commod-tz-quote-triples in
+ * price-quotes.scm. Take care to keep them in sync if you make changes. Beware
+ * that the strings are used to store the enum values in the backends so any
+ * changes will affect backward data compatibility.
+ */
+static const char* source_names[] =
+{
+    /* sync with price_to_gui in dialog-price-editor.c */
+    "user:price-editor",
+    /* sync with commidity-tz-quote->price in price-quotes.scm */
+    "Finance::Quote",
+    "user:price",
+    /* String retained for backwards compatibility. */
+    "user:xfer-dialog",
+    "user:split-register",
+    "user:stock-split",
+    "user:invoice-post",
+    "invalid"
+};
 
 static void
 gnc_price_dispose(GObject *pricep)
@@ -90,7 +113,7 @@ gnc_price_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec
     switch (prop_id)
     {
     case PROP_SOURCE:
-        g_value_set_string(value, price->source);
+        g_value_set_string(value, gnc_price_get_source_string(price));
         break;
     case PROP_TYPE:
         g_value_set_string(value, price->type);
@@ -126,7 +149,7 @@ gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GPar
     switch (prop_id)
     {
     case PROP_SOURCE:
-        gnc_price_set_source(price, g_value_get_string(value));
+        gnc_price_set_source_string(price, g_value_get_string(value));
         break;
     case PROP_TYPE:
         gnc_price_set_typestr(price, g_value_get_string(value));
@@ -188,10 +211,10 @@ gnc_price_class_init(GNCPriceClass *klass)
      PROP_SOURCE,
      g_param_spec_string ("source",
                           "Price source",
-                          "The price source is a string describing the "
-                          "source of a price quote.  It will be something "
-                          "like this: 'Finance::Quote', 'user:misc', "
-                          "'user:foo', etc.",
+                          "The price source is PriceSource enum describing how"
+                          " the price was created. This property works on the"
+                          " string values in source_names for SQL database"
+                          " compatibility.",
                           NULL,
                           G_PARAM_READWRITE));
 
@@ -252,7 +275,6 @@ gnc_price_destroy (GNCPrice *p)
     qof_event_gen (&p->inst, QOF_EVENT_DESTROY, NULL);
 
     if (p->type) CACHE_REMOVE(p->type);
-    if (p->source) CACHE_REMOVE(p->source);
 
     /* qof_instance_release (&p->inst); */
     g_object_unref(p);
@@ -439,22 +461,29 @@ gnc_price_set_time(GNCPrice *p, Timespec t)
 }
 
 void
-gnc_price_set_source(GNCPrice *p, const char *s)
+gnc_price_set_source(GNCPrice *p, PriceSource s)
 {
     if (!p) return;
-    if (g_strcmp0(p->source, s) != 0)
-    {
-        char *tmp;
-
-        gnc_price_begin_edit (p);
-        tmp = CACHE_INSERT((gpointer) s);
-        if (p->source) CACHE_REMOVE(p->source);
-        p->source = tmp;
-        gnc_price_set_dirty(p);
-        gnc_price_commit_edit (p);
-    }
+    gnc_price_begin_edit (p);
+    p->source = s;
+    gnc_price_set_dirty(p);
+    gnc_price_commit_edit(p);
 }
 
+void
+gnc_price_set_source_string(GNCPrice *p, const char* str)
+{
+    if (!p) return;
+    for (PriceSource s = PRICE_SOURCE_EDIT_DLG;
+         s < PRICE_SOURCE_INVALID; ++s)
+        if (strcmp(source_names[s], str) == 0)
+        {
+            gnc_price_set_source(p, s);
+            return;
+        }
+
+
+}
 void
 gnc_price_set_typestr(GNCPrice *p, const char* type)
 {
@@ -518,11 +547,18 @@ gnc_price_get_time(const GNCPrice *p)
     return p->tmspec;
 }
 
-const char *
+PriceSource
 gnc_price_get_source(const GNCPrice *p)
 {
-    if (!p) return NULL;
+    if (!p) return PRICE_SOURCE_INVALID;
     return p->source;
+}
+
+const char*
+gnc_price_get_source_string(const GNCPrice *p)
+{
+    if (!p) return NULL;
+    return source_names[p->source];
 }
 
 const char *
@@ -573,8 +609,7 @@ gnc_price_equal (const GNCPrice *p1, const GNCPrice *p2)
     if (!timespec_equal (&ts1, &ts2))
         return FALSE;
 
-    if (g_strcmp0 (gnc_price_get_source (p1),
-                   gnc_price_get_source (p2)) != 0)
+    if (gnc_price_get_source (p1) != gnc_price_get_source (p2))
         return FALSE;
 
     if (g_strcmp0 (gnc_price_get_typestr (p1),
@@ -966,6 +1001,18 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
     return equal_data.equal;
 }
 
+static gboolean
+insert_or_replace_price(GNCPriceDB *db, GNCPrice *p)
+{
+    GNCPrice *old_price = gnc_pricedb_lookup_day (db, p->commodity,
+                                                  p->currency, p->tmspec);
+    if (old_price == NULL)
+        return TRUE;
+    if (p->source < old_price->source)
+        return TRUE;
+    return FALSE;
+
+}
 /* ==================================================================== */
 /* The add_price() function is a utility that only manages the
  * dual hash table instertion */
@@ -1028,6 +1075,12 @@ add_price(GNCPriceDB *db, GNCPrice *p)
     if (!price_list)
     {
         LEAVE (" no price list");
+        return FALSE;
+    }
+
+    if (!insert_or_replace_price(db, p))
+    {
+        LEAVE("A better price already exists");
         return FALSE;
     }
     g_hash_table_insert(currency_hash, currency, price_list);
@@ -1192,7 +1245,7 @@ static gboolean
 check_one_price_date (GNCPrice *price, gpointer user_data)
 {
     remove_info *data = user_data;
-    const gchar *source;
+    PriceSource source;
     Timespec pt;
 
     ENTER("price %p (%s), data %p", price,
@@ -1201,7 +1254,7 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
     if (!data->delete_user)
     {
         source = gnc_price_get_source (price);
-        if (g_strcmp0(source, "Finance::Quote") != 0)
+        if (source != PRICE_SOURCE_FQ)
         {
             LEAVE("Not an automatic quote");
             return TRUE;
@@ -2454,8 +2507,8 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
     str = str ? str : "(null)";
     fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr, str);
     fprintf(f, "%s  </pdb:currency>\n", istr);
-    str = gnc_price_get_source(p);
-    str = str ? str : "(null)";
+    str = source_names[gnc_price_get_source(p)];
+    str = str ? str : "invalid";
     fprintf(f, "%s  %s\n", istr, str);
     str = gnc_price_get_typestr(p);
     str = str ? str : "(null)";

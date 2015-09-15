@@ -203,7 +203,7 @@ write_price( GNCPrice* p, gpointer data )
     g_return_val_if_fail( p != NULL, FALSE );
     g_return_val_if_fail( data != NULL, FALSE );
 
-    if ( s->is_ok )
+    if ( s->is_ok && gnc_price_get_source(p) == PRICE_SOURCE_INVOICE)
     {
         s->is_ok = save_price( s->be, QOF_INSTANCE(p) );
     }

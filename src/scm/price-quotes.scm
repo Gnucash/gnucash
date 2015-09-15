@@ -1,17 +1,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; price-quotes.scm - manage sub-processes.
 ;;; Copyright 2001 Rob Browning <rlb@cs.utexas.edu>
-;;; 
-;;; This program is free software; you can redistribute it and/or    
-;;; modify it under the terms of the GNU General Public License as   
-;;; published by the Free Software Foundation; either version 2 of   
-;;; the License, or (at your option) any later version.              
-;;;                                                                  
-;;; This program is distributed in the hope that it will be useful,  
-;;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;;; GNU General Public License for more details.                     
-;;;                                                                  
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License as
+;;; published by the Free Software Foundation; either version 2 of
+;;; the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, contact:
 ;;;
@@ -35,7 +35,7 @@
 
 (define (item-list->hash! lst hash
 			  getkey getval
-			  hashref hashset 
+			  hashref hashset
 			  list-duplicates?)
   ;; Takes a list of the form (item item item item) and returns a hash
   ;; formed by traversing the list, and getting the key and val from
@@ -58,7 +58,7 @@
 	  (if existing-val
 	      (hashset hash key (cons val existing-val))
 	      (hashset hash key (list val))))))
-  
+
   (for-each handle-item lst)
   hash)
 
@@ -205,7 +205,7 @@
     ;; a list of the corresponding commodities.  Also perform a bit of
     ;; optimization, merging calls for symbols to the same
     ;; Finance::Quote method.
-    ;; 
+    ;;
     ;; Returns a list of the info needed for a set of calls to
     ;; gnc-fq-helper.  Each item will of the list will be of the
     ;; form:
@@ -223,7 +223,7 @@
 	   (commodity-list #f)
 	   (currency-list (filter
 			   (lambda (a) (not (gnc-commodity-equiv (cadr a) (caddr a))))
-			   (call-with-values 
+			   (call-with-values
                                (lambda () (partition!
                                            (lambda (cmd)
                                              (not (string=? (car cmd) "currency")))
@@ -257,7 +257,7 @@
     ;;
     ;; ("yahoo" (commodity-1 currency-1 tz-1)
     ;;          (commodity-2 currency-2 tz-2) ...)
-    ;; 
+    ;;
     ;; ("yahoo" "IBM" "AMD" ...)
     ;;
 
@@ -370,8 +370,20 @@
                  (string? currency-str)
                  (gnc-commodity-table-lookup commodity-table
                                              "ISO4217"
-                                             (string-upcase currency-str)))))
-
+                                             (string-upcase currency-str))))
+           (pricedb (gnc-pricedb-get-db book))
+           (saved-price #f)
+           (commodity-str (gnc-commodity-get-printname commodity))
+           )
+      (if (equal? (gnc-commodity-get-printname currency) commodity-str)
+          (let* ((symbol (assq-ref quote-data 'symbol))
+                 (other-curr
+                  (and commodity-table
+                       (string? symbol)
+                       (gnc-commodity-table-lookup commodity-table "ISO4217"
+                                                   (string-upcase symbol)))))
+            (set! commodity other-curr))
+        )
       (or-map (lambda (price-sym)
                 (let ((p (assq-ref quote-data price-sym)))
                   (if p
@@ -403,27 +415,52 @@
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
            currency-str ":" (gnc-commodity-get-mnemonic commodity))
-          (let ((gnc-price (gnc-price-create book)))
-            (if (not gnc-price)
-                (string-append
-                 currency-str ":" (gnc-commodity-get-mnemonic commodity))
+          (begin
+            (set! saved-price (gnc-pricedb-lookup-day pricedb
+                                                      commodity currency
+                                                      gnc-time))
+            (if (null? saved-price)
                 (begin
-				  (gnc-price-begin-edit gnc-price)
-                  (gnc-price-set-commodity gnc-price commodity)
-                  (gnc-price-set-currency gnc-price currency)
-                  (gnc-price-set-time gnc-price gnc-time)
-                  (gnc-price-set-source gnc-price "Finance::Quote")
-                  (gnc-price-set-typestr gnc-price price-type)
-                  (gnc-price-set-value gnc-price price)
-				  (gnc-price-commit-edit gnc-price)
-                  gnc-price))))))
+                  (set! saved-price (gnc-pricedb-lookup-day pricedb currency
+                                                            commodity gnc-time))
+                  (if (not (null? saved-price))
+                      (set! price (gnc-numeric-invert(price))))))
+            (if (not (null? saved-price))
+                (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
+                    (begin
+                      (gnc-price-begin-edit saved-price)
+                      (gnc-price-set-time saved-price gnc-time)
+                      (gnc-price-set-source saved-price PRICE-SOURCE-FQ)
+                      (gnc-price-set-typestr saved-price price-type)
+                      (gnc-price-set-value saved-price price)
+                      (gnc-price-commit-edit saved-price)
+                      #f)
+                    #f)
+              (let ((gnc-price (gnc-price-create book)))
+                (if (not gnc-price)
+                    (string-append
+                     currency-str ":" (gnc-commodity-get-mnemonic commodity))
+                    (begin
+                      (gnc-price-begin-edit gnc-price)
+                      (gnc-price-set-commodity gnc-price commodity)
+                      (gnc-price-set-currency gnc-price currency)
+                      (gnc-price-set-time gnc-price gnc-time)
+                      (gnc-price-set-source gnc-price PRICE-SOURCE-FQ)
+                      (gnc-price-set-typestr gnc-price price-type)
+                      (gnc-price-set-value gnc-price price)
+                      (gnc-price-commit-edit gnc-price)
+                      gnc-price)))))
+          )))
 
   (define (book-add-prices! book prices)
     (let ((pricedb (gnc-pricedb-get-db book)))
       (for-each
        (lambda (price)
-         (gnc-pricedb-add-price pricedb price)
-         (gnc-price-unref price))
+         (if price
+             (begin
+               (gnc-pricedb-add-price pricedb price)
+               (gnc-price-unref price)
+               #f)))
        prices)))
 
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right

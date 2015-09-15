@@ -39,7 +39,7 @@ struct gnc_price_s
     gnc_commodity *commodity;
     gnc_commodity *currency;
     Timespec tmspec;
-    char *source;
+    PriceSource source;
     char *type;
     gnc_numeric value;
 
