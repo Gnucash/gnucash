@@ -412,14 +412,16 @@
                                                       commodity currency
                                                       gnc-time))
             (if (not (null? saved-price))
-              (begin
-                (gnc-price-begin-edit saved-price)
-                (gnc-price-set-time saved-price gnc-time)
+                (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
+                    (begin
+                      (gnc-price-begin-edit saved-price)
+                      (gnc-price-set-time saved-price gnc-time)
                       (gnc-price-set-source saved-price PRICE-SOURCE-FQ)
-                (gnc-price-set-typestr saved-price price-type)
-                (gnc-price-set-value saved-price price)
-                (gnc-price-commit-edit saved-price)
-                #f)
+                      (gnc-price-set-typestr saved-price price-type)
+                      (gnc-price-set-value saved-price price)
+                      (gnc-price-commit-edit saved-price)
+                      #f)
+                    #f)
               (let ((gnc-price (gnc-price-create book)))
                 (if (not gnc-price)
                     (string-append

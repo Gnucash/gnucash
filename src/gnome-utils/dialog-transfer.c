@@ -1324,7 +1324,7 @@ gnc_xfer_dialog_set_fetch_sensitive (GtkWidget *fetch)
     if (gnc_quote_source_fq_installed ())
     {
         gtk_widget_set_sensitive (fetch, TRUE);
-        gtk_widget_set_tooltip_text (fetch, _("Retrieve the current online quote"));
+        gtk_widget_set_tooltip_text (fetch, _("Retrieve the current online quote. This will fail if there is a manually-created price for today."));
         return;
     }
     gtk_widget_set_sensitive (fetch, FALSE);
