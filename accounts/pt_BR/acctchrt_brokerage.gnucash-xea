@@ -52,7 +52,7 @@
 <gnc:account version="2.0.0">
   <act:name>Obrigação</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
-  <act:type>STOCK</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
@@ -63,7 +63,7 @@
 <gnc:account version="2.0.0">
   <act:name>Ação</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
-  <act:type>STOCK</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
@@ -74,7 +74,7 @@
 <gnc:account version="2.0.0">
   <act:name>Índice de Mercado</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
-  <act:type>MUTUAL</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
@@ -85,7 +85,7 @@
 <gnc:account version="2.0.0">
   <act:name>Fundo de Investimento</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
-  <act:type>MUTUAL</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>

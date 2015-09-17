@@ -51,7 +51,7 @@
 <gnc:account version="2.0.0">
   <act:name>Kötvény</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
-  <act:type>STOCK</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
@@ -62,7 +62,7 @@
 <gnc:account version="2.0.0">
   <act:name>Részvény</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
-  <act:type>STOCK</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
@@ -73,7 +73,7 @@
 <gnc:account version="2.0.0">
   <act:name>Befektetési alap</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
-  <act:type>MUTUAL</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
