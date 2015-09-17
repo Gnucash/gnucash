@@ -1381,7 +1381,7 @@ set_tran_random_string(Transaction* trn,
                        void(*func)(Transaction *act, const gchar*str))
 {
     gchar *tmp_str = get_random_string();
-    if (!trn || !(&trn->inst))
+    if (!trn)
     {
         return;
     }
