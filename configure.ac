@@ -311,6 +311,9 @@ AC_TRY_RUN([
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
+dnl First remove any existing -std= setting from CFLAGS then add the one we want.
+CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
+CFLAGS="${CFLAGS} -std=gnu99"
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.
