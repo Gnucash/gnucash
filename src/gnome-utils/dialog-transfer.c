@@ -160,7 +160,6 @@ static Account *gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
 static void gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
                                                       Account *account,
                                                       XferDirection direction);
-static void _gnc_xfer_dialog_set_price_edit(XferDialog*, gnc_numeric);
 
 void gnc_xfer_description_insert_cb(GtkEditable *editable,
                                     const gchar *insert_text,
@@ -336,7 +335,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     gnc_price_unref(pr.price);
 
     /* and set the price entry */
-    _gnc_xfer_dialog_set_price_edit(xferData, price_value);
+    gnc_xfer_dialog_set_price_edit(xferData, price_value);
 
     /* And then update the to_amount */
     gnc_xfer_update_to_amount (xferData);
@@ -390,7 +389,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
     if (!currency_active)
     {
         GtkEntry *entry;
-        _gnc_xfer_dialog_set_price_edit(xferData, gnc_numeric_zero());
+        gnc_xfer_dialog_set_price_edit(xferData, gnc_numeric_zero());
         entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
                           (GNC_AMOUNT_EDIT(xferData->price_edit)));
         gtk_entry_set_text(entry, "");
@@ -1411,7 +1410,7 @@ void gnc_xfer_dialog_set_date_sensitive(XferDialog *xferData,
 }
 
 void
-_gnc_xfer_dialog_set_price_edit(XferDialog *xferData, gnc_numeric price_value)
+gnc_xfer_dialog_set_price_edit(XferDialog *xferData, gnc_numeric price_value)
 {
     if (xferData == NULL)
         return;
@@ -1856,7 +1855,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
         gnc_numeric price_value = gnc_price_get_value(pr.price);
         if (pr.reverse)
             price_value = gnc_numeric_invert(price_value);
-         _gnc_xfer_dialog_set_price_edit(xferData, price_value);
+         gnc_xfer_dialog_set_price_edit(xferData, price_value);
         gnc_price_unref (pr.price);
     }
 
@@ -2496,7 +2495,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
      */
 
     /* Set the exchange rate */
-    _gnc_xfer_dialog_set_price_edit(xfer, dialog_rate);
+    gnc_xfer_dialog_set_price_edit(xfer, dialog_rate);
 
     /* and run it... */
     if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
