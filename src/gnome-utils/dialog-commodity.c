@@ -1370,6 +1370,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             gnc_commodity_set_namespace (c, name_space);
             gnc_commodity_set_cusip (c, code);
             gnc_commodity_set_fraction (c, fraction);
+            gnc_commodity_set_user_symbol(c, user_symbol);
         }
 
         gnc_commodity_user_set_quote_flag (c, gtk_toggle_button_get_active

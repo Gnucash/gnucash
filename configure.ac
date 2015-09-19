@@ -93,7 +93,13 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar as bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr gu he hi hu it ja kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt_BR pt ro ru rw sk sr sv ta te tr uk ur vi zh_CN zh_TW"
+TP_LINGUAS="az ca cs da eu fa ja nl pt rw sk sr sv tr uk zh_CN"
+dnl already marked as external at TP:
+GC_LINGUAS="ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt_BR ro ru ta te ur vi zh_TW "
+dnl not marked or no TP team:
+NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali"
+
+ALL_LINGUAS="$TP_LINGUAS $GC_LINGUAS $NEW_LINGUAS"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -308,18 +314,6 @@ AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 
 # Init binreloc
 AM_BINRELOC
-
-### --------------------------------------------------------------------------
-### See if we have pkg-config
-
-AC_PATH_PROG(PKG_CONFIG,pkg-config)
-if test "x$PKG_CONFIG" = x; then
-  # @*%&$ Ximian programmers renamed this application
-  AC_PATH_PROG(PKG_CONFIG,pkgconfig)
-  if test "x$PKG_CONFIG" = x; then
-    AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
-  fi
-fi
 
 ### --------------------------------------------------------------------------
 ### Glib checks.

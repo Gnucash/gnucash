@@ -619,6 +619,7 @@ void
 make_random_changes_to_price (QofBook *book, GNCPrice *p)
 {
     Timespec *ts;
+    PriceSource ps;
     char *string;
     gnc_commodity *c;
 
@@ -636,9 +637,9 @@ make_random_changes_to_price (QofBook *book, GNCPrice *p)
     gnc_price_set_time (p, *ts);
     g_free (ts);
 
-    string = get_random_string ();
-    gnc_price_set_source (p, string);
-    g_free (string);
+    ps = (PriceSource)get_random_int_in_range((int)PRICE_SOURCE_EDIT_DLG,
+                                              (int)PRICE_SOURCE_INVALID);
+    gnc_price_set_source (p, ps);
 
     string = get_random_string ();
     gnc_price_set_typestr (p, string);

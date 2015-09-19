@@ -50,8 +50,6 @@
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"
 #define GNC_PREFS_GROUP "dialogs.price-editor"
-#define DIALOG_PRICE_EDIT_SOURCE "user:price-editor"
-
 
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
@@ -163,7 +161,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
 
         currency = gnc_price_get_currency (pedit_dialog->price);
         date = gnc_price_get_time (pedit_dialog->price);
-        source = gnc_price_get_source (pedit_dialog->price);
+        source = gnc_price_get_source_string (pedit_dialog->price);
         type = gnc_price_get_typestr (pedit_dialog->price);
         value = gnc_price_get_value (pedit_dialog->price);
     }
@@ -172,7 +170,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
         currency = gnc_default_currency ();
         date.tv_sec = gnc_time (NULL);
         date.tv_nsec = 0;
-        source = DIALOG_PRICE_EDIT_SOURCE;
+        source = "user:price-editor"; //Sync with source_names in gnc-pricedb.c
         type = "";
         value = gnc_numeric_zero ();
     }
@@ -239,7 +237,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     gnc_price_set_commodity (pedit_dialog->price, commodity);
     gnc_price_set_currency (pedit_dialog->price, currency);
     gnc_price_set_time (pedit_dialog->price, date);
-    gnc_price_set_source (pedit_dialog->price, source);
+    gnc_price_set_source_string (pedit_dialog->price, source);
     gnc_price_set_typestr (pedit_dialog->price, type);
     gnc_price_set_value (pedit_dialog->price, value);
     gnc_price_commit_edit (pedit_dialog->price);
@@ -553,7 +551,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
             price = gnc_price_clone(price, pedit_dialog->book);
 //  } else {
 //      price = gnc_price_create (pedit_dialog->book);
-            gnc_price_set_source (price, DIALOG_PRICE_EDIT_SOURCE);
+            gnc_price_set_source (price, PRICE_SOURCE_EDIT_DLG);
         }
 
         pedit_dialog->is_new = TRUE;
