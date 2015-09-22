@@ -468,7 +468,7 @@ gnc_item_edit_realize (GnomeCanvasItem *item)
          (gnc_item_edit_parent_class)->realize) (item);
 
     item_edit = GNC_ITEM_EDIT (item);
-    window = GTK_WIDGET (canvas)->window;
+    window = gtk_widget_get_window (GTK_WIDGET (canvas));
 
     item_edit->gc = gdk_gc_new (window);
 }
@@ -491,7 +491,7 @@ gnc_item_edit_focus_in (GncItemEdit *item_edit)
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
     ev.type = GDK_FOCUS_CHANGE;
-    ev.window = GTK_WIDGET (item_edit->sheet)->window;
+    ev.window = gtk_widget_get_window (GTK_WIDGET (item_edit->sheet));
     ev.in = TRUE;
     gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
     queue_sync(item_edit);
@@ -506,7 +506,7 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
     ev.type = GDK_FOCUS_CHANGE;
-    ev.window = GTK_WIDGET (item_edit->sheet)->window;
+    ev.window = gtk_widget_get_window (GTK_WIDGET (item_edit->sheet));
     ev.in = FALSE;
     gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
     queue_sync(item_edit);
@@ -993,12 +993,12 @@ gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 static void
 block_toggle_signals(GncItemEdit *item_edit)
 {
-    GtkObject *obj;
+    GObject *obj;
 
     if (!item_edit->popup_toggle.signals_connected)
         return;
 
-    obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
+    obj = G_OBJECT (item_edit->popup_toggle.toggle_button);
 
     g_signal_handlers_block_matched (obj, G_SIGNAL_MATCH_DATA,
                                      0, 0, NULL, NULL, item_edit);
@@ -1008,12 +1008,12 @@ block_toggle_signals(GncItemEdit *item_edit)
 static void
 unblock_toggle_signals(GncItemEdit *item_edit)
 {
-    GtkObject *obj;
+    GObject *obj;
 
     if (!item_edit->popup_toggle.signals_connected)
         return;
 
-    obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
+    obj = G_OBJECT (item_edit->popup_toggle.toggle_button);
 
     g_signal_handlers_unblock_matched (obj, G_SIGNAL_MATCH_DATA,
                                        0, 0, NULL, NULL, item_edit);
@@ -1023,14 +1023,14 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 static void
 connect_popup_toggle_signals (GncItemEdit *item_edit)
 {
-    GtkObject *object;
+    GObject *object;
 
     g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
     if (item_edit->popup_toggle.signals_connected)
         return;
 
-    object = GTK_OBJECT(item_edit->popup_toggle.toggle_button);
+    object = G_OBJECT(item_edit->popup_toggle.toggle_button);
 
     g_signal_connect (object, "toggled",
                       G_CALLBACK(gnc_item_edit_popup_toggled),
@@ -1280,6 +1280,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 {
     GtkToggleButton *toggle;
     GtkAnchorType popup_anchor;
+    GtkAllocation alloc;
     GnucashSheet *sheet;
     gint x, y, w, h;
     gint y_offset;
@@ -1300,8 +1301,9 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     sheet = item_edit->sheet;
 
-    view_height = GTK_WIDGET (sheet)->allocation.height;
-    view_width  = GTK_WIDGET (sheet)->allocation.width;
+    gtk_widget_get_allocation (GTK_WIDGET (sheet), &alloc);
+    view_height = alloc.height;
+    view_width  = alloc.width;
 
     gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &y_offset);
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);

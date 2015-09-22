@@ -130,7 +130,7 @@ gnc_tree_model_owner_update_color (gpointer gsettings, gchar *key, gpointer user
 /************************************************************/
 
 /** A pointer to the parent class of an owner tree model. */
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 GType
 gnc_tree_model_owner_get_type (void)

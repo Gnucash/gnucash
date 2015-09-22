@@ -379,11 +379,7 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
                                           NULL);
-#ifdef HAVE_GTK_2_14
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-#else
-    content_area = GTK_DIALOG (dialog)->vbox;
-#endif
 
     // add a label
     label = gtk_label_new (msg);
@@ -439,11 +435,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           NULL);
-#ifdef HAVE_GTK_2_14
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-#else
-    content_area = GTK_DIALOG (dialog)->vbox;
-#endif
 
     // add a scroll area
     scrolledwindow = gtk_scrolled_window_new (NULL, NULL);

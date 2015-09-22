@@ -38,7 +38,7 @@ static GtkWidget * progress = NULL;
 static GtkWidget * progress_bar = NULL;
 
 static void
-splash_destroy_cb (GtkObject *object, gpointer user_data)
+splash_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     splash = NULL;
 }

@@ -37,7 +37,6 @@
 
 #include "gnc-component-manager.h"
 
-#include "assistant-utils.h"
 #include "assistant-csv-fixed-trans-import.h"
 #include "csv-fixed-trans-import.h"
 #include "gnc-csv-model.h"
@@ -632,9 +631,6 @@ csv_fixed_trans_import_assistant_create (CsvFTImportInfo *info)
     window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Fixed Transaction Import Assistant"));
     info->window = window;
 
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
-
     /* Load default settings */
     load_settings (info);
 
@@ -799,4 +795,3 @@ gnc_file_csv_fixed_trans_import(void)
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }
-

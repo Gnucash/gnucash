@@ -1033,8 +1033,8 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
 
     switch (event->keyval)
     {
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
         break;
 
     default:
@@ -1951,7 +1951,7 @@ recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     RecnWindow *recnData = data;
 
-    if (event->keyval == GDK_Escape)
+    if (event->keyval == GDK_KEY_Escape)
     {
         recn_cancel(recnData);
         return TRUE;

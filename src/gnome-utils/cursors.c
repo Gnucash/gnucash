@@ -88,7 +88,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
         {
             w = node->data;
 
-            if (!w || !GTK_IS_WIDGET (w) || !w->window)
+            if (!w || !GTK_IS_WIDGET (w) || !gtk_widget_get_has_window(w))
                 continue;
 
             gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);

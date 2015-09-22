@@ -33,7 +33,6 @@
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
-#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
 #include "gnc-date.h"
@@ -307,7 +306,7 @@ typedef struct toCreateSX_
 
 /**************************************************************************/
 
-static void loan_assistant_window_destroy_cb( GtkObject *object, gpointer user_data );
+static void loan_assistant_window_destroy_cb( GtkWidget *object, gpointer user_data );
 static void loan_assistant_close_handler( gpointer user_data );
 static void loan_assistant_data_init( LoanAssistantData *ldd );
 
@@ -383,7 +382,7 @@ loan_assistant_close_handler( gpointer user_data )
 
 static
 void
-loan_assistant_window_destroy_cb( GtkObject *object, gpointer user_data )
+loan_assistant_window_destroy_cb( GtkWidget *object, gpointer user_data )
 {
     LoanAssistantData *ldd = user_data;
 
@@ -464,10 +463,6 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "Loan-Mortgage Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Loan-Mortgage Assistant"));
     ldd->window = window;
-
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (ldd->window));
 
     /* Enable buttons on complete pages. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),

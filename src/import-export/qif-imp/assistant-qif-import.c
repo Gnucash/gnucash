@@ -45,7 +45,6 @@
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "assistant-qif-import.h"
-#include "assistant-utils.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-file.h"
@@ -206,7 +205,7 @@ struct _qifassistantpage
 
 typedef struct _qifassistantpage QIFAssistantPage;
 
-static void gnc_ui_qif_import_assistant_destroy (GtkObject *object, gpointer user_data);
+static void gnc_ui_qif_import_assistant_destroy (GtkWidget *object, gpointer user_data);
 static void gnc_ui_qif_import_assistant_close_handler (gpointer user_data );
 
 void gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data);
@@ -427,7 +426,7 @@ gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
  * close the QIF Import assistant window
  **********************************************/
 static void
-gnc_ui_qif_import_assistant_destroy(GtkObject *object, gpointer user_data)
+gnc_ui_qif_import_assistant_destroy(GtkWidget *object, gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
 
@@ -3420,8 +3419,6 @@ get_assistant_widgets(QIFImportWindow *wind, GtkBuilder *builder)
         GTK_WIDGET(gtk_builder_get_object (builder, "new_transaction_view"));
     wind->old_transaction_view =
         GTK_WIDGET(gtk_builder_get_object (builder, "old_transaction_view"));
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (wind->window));
 }
 
 

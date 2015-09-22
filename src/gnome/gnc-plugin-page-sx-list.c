@@ -261,8 +261,6 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                                  gnc_plugin_page_sx_list_n_actions,
                                  plugin_page);
     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
-	gnc_gobject_tracking_remember (G_OBJECT (plugin_page),
-				       G_OBJECT_CLASS (klass));
 }
 
 
@@ -301,7 +299,6 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
     g_return_if_fail(priv != NULL);
-    gnc_gobject_tracking_forget (G_OBJECT (page));
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

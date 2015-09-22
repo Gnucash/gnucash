@@ -49,19 +49,13 @@ enum
     LAST_SIGNAL
 };
 
-enum
-{
-    ARG_0,
-    ARG_EDITING_CANCELED
-};
-
 static GtkEventBoxClass *parent_class;
 static guint signals[LAST_SIGNAL];
 
-GtkType
+GType
 gnc_popup_entry_get_type (void)
 {
-    static GtkType widget_type = 0;
+    static GType widget_type = 0;
 
     if (!widget_type)
     {
@@ -123,7 +117,7 @@ gnc_popup_entry_init (GncPopupEntry *widget)
 
     gtk_container_add (GTK_CONTAINER (widget), widget->hbox);
 
-    GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+    gtk_widget_set_can_focus (GTK_WIDGET (widget), TRUE);
     gtk_widget_add_events (GTK_WIDGET (widget), GDK_KEY_PRESS_MASK);
     gtk_widget_add_events (GTK_WIDGET (widget), GDK_KEY_RELEASE_MASK);
 }
@@ -134,8 +128,6 @@ gnc_popup_entry_class_init (GncPopupEntryClass *klass)
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
     widget_class->key_press_event = gpw_key_press_event;
-
-    gtk_object_add_arg_type ("GncPopupEntry::editing-canceled", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITING_CANCELED);
 
     parent_class = GTK_EVENT_BOX_CLASS (g_type_class_peek_parent (klass));
 
@@ -174,7 +166,7 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
     gint year = 0, month = 0, day = 0;
     struct tm when;
 
-    if (key_event->keyval == GDK_Escape)
+    if (key_event->keyval == GDK_KEY_Escape)
     {
         widget->editing_canceled = TRUE;
 
@@ -213,7 +205,7 @@ gpw_key_press_event (GtkWidget   *box,
 
     gtk_widget_grab_focus (widget->entry);
 
-    if (key_event->keyval == GDK_Escape)
+    if (key_event->keyval == GDK_KEY_Escape)
     {
         widget->editing_canceled = TRUE;
 
@@ -223,13 +215,13 @@ gpw_key_press_event (GtkWidget   *box,
         return TRUE;
     }
 
-    if (key_event->keyval == GDK_Left)
+    if (key_event->keyval == GDK_KEY_Left)
     {
         gtk_editable_set_position (GTK_EDITABLE (widget->entry), 0);
         return TRUE;
     }
 
-    if (key_event->keyval == GDK_Right)
+    if (key_event->keyval == GDK_KEY_Right)
     {
         gtk_editable_set_position (GTK_EDITABLE (widget->entry), -1);
         return TRUE;
@@ -238,7 +230,7 @@ gpw_key_press_event (GtkWidget   *box,
     /* Hackish :/ Synthesize a key press event for the entry. */
     memcpy (&tmp_event, key_event, sizeof (GdkEventKey));
 
-    tmp_event.key.window = widget->entry->window;
+    tmp_event.key.window = gtk_widget_get_window (widget->entry);
     tmp_event.key.send_event = TRUE;
 
     gtk_widget_event (widget->entry, &tmp_event);

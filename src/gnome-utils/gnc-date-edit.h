@@ -39,7 +39,6 @@ typedef enum
 {
     GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
     GNC_DATE_EDIT_24_HR                 = 1 << 1,
-    GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY = 1 << 2,
 } GNCDateEditFlags;
 
 #define GNC_TYPE_DATE_EDIT          (gnc_date_edit_get_type ())

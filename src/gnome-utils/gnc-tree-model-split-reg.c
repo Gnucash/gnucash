@@ -227,7 +227,7 @@ gtm_sr_make_iter (GncTreeModelSplitReg *model, gint f, GList *tnode, GList *snod
 /************************************************************/
 
 /** A pointer to the parent class of the split register tree model. */
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 GType
 gnc_tree_model_split_reg_get_type (void)

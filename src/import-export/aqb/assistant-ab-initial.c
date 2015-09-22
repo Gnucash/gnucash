@@ -49,7 +49,6 @@
 
 #include "dialog-utils.h"
 #include "assistant-ab-initial.h"
-#include "assistant-utils.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-component-manager.h"
@@ -80,7 +79,7 @@ void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
 
 void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
-void aai_destroy_cb(GtkObject *object, gpointer user_data);
+void aai_destroy_cb(GtkWidget *object, gpointer user_data);
 
 gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
@@ -156,7 +155,7 @@ enum account_list_cols
 gboolean
 aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    if (event->keyval == GDK_Escape)
+    if (event->keyval == GDK_KEY_Escape)
     {
         gtk_widget_destroy(widget);
         return TRUE;
@@ -176,7 +175,7 @@ aai_on_cancel (GtkAssistant *gtkassistant, gpointer user_data)
 }
 
 void
-aai_destroy_cb(GtkObject *object, gpointer user_data)
+aai_destroy_cb(GtkWidget *object, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
@@ -859,8 +858,6 @@ gnc_ab_initial_assistant(void)
     gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "AqBanking Init Assistant");
 
     info->window = GTK_WIDGET(gtk_builder_get_object (builder, "AqBanking Init Assistant"));
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->assistant));
 
     info->api = gnc_AB_BANKING_new();
     info->deferred_info = NULL;

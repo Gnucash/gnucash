@@ -255,7 +255,7 @@ gcrp_show_popup (GncCellRendererPopup *cell,
 	gtk_window_move (GTK_WINDOW (cell->popup_window), -500, -500);
 	gtk_widget_show (cell->popup_window);
 
-	alloc = cell->popup_window->allocation;
+	gtk_widget_get_allocation (cell->popup_window, &alloc);
 
 	x = x2;
 	y = y2;
@@ -298,7 +298,7 @@ gcrp_show_popup (GncCellRendererPopup *cell,
 
 	gtk_widget_grab_focus (cell->focus_window);
 
-	gcrp_grab_on_window (cell->popup_window->window,
+	gcrp_grab_on_window (gtk_widget_get_window (cell->popup_window),
 			     gtk_get_current_event_time ());
 }
 
@@ -345,16 +345,16 @@ gcrp_arrow_clicked (GtkCellEditable     *entry,
 	 * events generated when the window is mapped, such as enter
 	 * notify events on subwidgets. If the grab fails, bail out.
 	 */
-	if (!gcrp_grab_on_window (GTK_WIDGET (entry)->window,
+	if (!gcrp_grab_on_window (gtk_widget_get_window (GTK_WIDGET (entry)),
 				  gtk_get_current_event_time ())) {
 		return;
 	}
 	
 	gtk_editable_select_region (GTK_EDITABLE (GNC_POPUP_ENTRY (entry)->entry), 0, 0);
 
-	gdk_window_get_origin (GTK_WIDGET (entry)->window, &x, &y);
+	gdk_window_get_origin (gtk_widget_get_window (GTK_WIDGET (entry)), &x, &y);
 	
-	alloc = GTK_WIDGET (entry)->allocation;
+	gtk_widget_get_allocation (GTK_WIDGET (entry), &alloc);
 
 	g_signal_emit (cell, signals[SHOW_POPUP], 0,
 		       path, 
@@ -376,17 +376,19 @@ gcrp_start_editing (GtkCellRenderer      *cell,
 	GncCellRendererPopup *popup;
 	GtkWidget           *editable;
 	gchar               *text;
+        gboolean             iseditable;
 	
 	popup = GNC_CELL_RENDERER_POPUP (cell);
 
+        g_object_get (G_OBJECT (popup), "editable", &iseditable, NULL);
 	/* If the cell isn't editable we return NULL. */
-	if (GTK_CELL_RENDERER_TEXT (popup)->editable == FALSE) {
+	if (iseditable == FALSE) {
 		return NULL;
 	}
 	
 	editable = g_object_new (GNC_TYPE_POPUP_ENTRY, NULL);
 
-	text = GTK_CELL_RENDERER_TEXT (cell)->text;
+	g_object_get (G_OBJECT (cell), "text", &text, NULL);
         popup->cell_text = text;
 
 	gnc_popup_entry_set_text (GNC_POPUP_ENTRY (editable), text ? text : "");
@@ -467,14 +469,14 @@ gcrp_key_press_event (GtkWidget           *popup_window,
 		      GdkEventKey         *event,
 		      GncCellRendererPopup *cell)
 {
-	if (event->keyval != GDK_Escape &&
-	    event->keyval != GDK_Return &&
-	    event->keyval != GDK_KP_Enter &&
-	    event->keyval != GDK_ISO_Enter &&
-	    event->keyval != GDK_3270_Enter) {
+	if (event->keyval != GDK_KEY_Escape &&
+	    event->keyval != GDK_KEY_Return &&
+	    event->keyval != GDK_KEY_KP_Enter &&
+	    event->keyval != GDK_KEY_ISO_Enter &&
+	    event->keyval != GDK_KEY_3270_Enter) {
 		return FALSE;
 	}
-	if (event->keyval == GDK_Escape) {
+	if (event->keyval == GDK_KEY_Escape) {
 		cell->editing_canceled = TRUE;
 	} else {
 		cell->editing_canceled = FALSE;
@@ -506,14 +508,15 @@ gcrp_button_press_event (GtkWidget           *widget,
 	x = event->x_root;
 	y = event->y_root;
 
-	gdk_window_get_root_origin (widget->window,
+	gdk_window_get_root_origin (gtk_widget_get_window (widget),
 				    &xoffset,
 				    &yoffset);
 
-	xoffset += widget->allocation.x;
-	yoffset += widget->allocation.y;
+        gtk_widget_get_allocation (widget, &alloc);
+	xoffset += alloc.x;
+	yoffset += alloc.y;
 	
-	alloc = popup->popup_window->allocation;
+	gtk_widget_get_allocation (popup->popup_window, &alloc);
 	x1 = alloc.x + xoffset;
 	y1 = alloc.y + yoffset;
 	x2 = x1 + alloc.width;

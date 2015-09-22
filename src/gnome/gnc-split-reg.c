@@ -233,7 +233,7 @@ static void
 gnc_split_reg_class_init( GNCSplitRegClass *klass )
 {
     int i;
-    GtkObjectClass *object_class;
+    GObjectClass *object_class;
     static struct similar_signal_info
     {
         enum gnc_split_reg_signal_enum s;
@@ -264,7 +264,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *klass )
         { LAST_SIGNAL, NULL, 0 }
     };
 
-    object_class = (GtkObjectClass*) klass;
+    object_class = (GObjectClass*) klass;
 
     for ( i = 0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ )
     {
@@ -1103,7 +1103,7 @@ gsr_default_associate_handler_location( GNCSplitReg *gsr, gpointer data )
                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                      NULL);
 
-    content_area = GTK_DIALOG (dialog)->vbox;
+    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
     // add a label
     label = gtk_label_new ("Please enter URL:");
@@ -1463,8 +1463,8 @@ gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data )
 
     /* These should all be in agreement. */
     activeCount =
-        ( ( GTK_CHECK_MENU_ITEM(gsr->split_menu_check)->active ? 1 : -1 )
-          + ( GTK_CHECK_MENU_ITEM(gsr->split_popup_check)->active ? 1 : -1 )
+        ( ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_menu_check)) ? 1 : -1 )
+          + ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_popup_check)) ? 1 : -1 )
           + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
               ? 1 : -1 ) );
 
@@ -1690,7 +1690,7 @@ gnc_split_reg_style_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER);
@@ -1701,7 +1701,7 @@ gnc_split_reg_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER);
@@ -1712,7 +1712,7 @@ gnc_split_reg_style_journal_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL);
@@ -1725,7 +1725,7 @@ gnc_split_reg_double_line_cb (GtkWidget *w, gpointer data)
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     gboolean use_double_line;
 
-    use_double_line = GTK_CHECK_MENU_ITEM(w)->active;
+    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w));
     if ( use_double_line == reg->use_double_line )
         return;
 

@@ -33,12 +33,12 @@
 #include <pango/pango.h>
 #include <gtk/gtkcellrenderertext.h>
 
-#define GNC_TYPE_CELL_RENDERER_POPUP		(gnc_cell_renderer_popup_get_type ())
-#define GNC_CELL_RENDERER_POPUP(obj)		(GTK_CHECK_CAST ((obj), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopup))
-#define GNC_CELL_RENDERER_POPUP_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopupClass))
-#define GNC_IS_CELL_RENDERER_POPUP(obj)		(GTK_CHECK_TYPE ((obj), GNC_TYPE_CELL_RENDERER_POPUP))
-#define GNC_IS_CELL_RENDERER_POPUP_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GNC_TYPE_CELL_RENDERER_POPUP))
-#define GNC_CELL_RENDERER_POPUP_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopupClass))
+#define GNC_TYPE_CELL_RENDERER_POPUP            (gnc_cell_renderer_popup_get_type ())
+#define GNC_CELL_RENDERER_POPUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopup))
+#define GNC_CELL_RENDERER_POPUP_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopupClass))
+#define GNC_IS_CELL_RENDERER_POPUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_CELL_RENDERER_POPUP))
+#define GNC_IS_CELL_RENDERER_POPUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GNC_TYPE_CELL_RENDERER_POPUP))
+#define GNC_CELL_RENDERER_POPUP_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopupClass))
 
 typedef struct _GncCellRendererPopup      GncCellRendererPopup;
 typedef struct _GncCellRendererPopupClass GncCellRendererPopupClass;
@@ -78,7 +78,7 @@ struct _GncCellRendererPopupClass
 	void   (* hide_popup) (GncCellRendererPopup *cell);
 };
 
-GtkType          gnc_cell_renderer_popup_get_type (void) G_GNUC_CONST;
+GType            gnc_cell_renderer_popup_get_type (void) G_GNUC_CONST;
 
 GtkCellRenderer *gnc_cell_renderer_popup_new      (void);
 

@@ -222,7 +222,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
     gtk_entry_set_max_length(GTK_ENTRY(entry), 250);
     gtk_widget_show(entry);
-    gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dlg)->vbox), entry);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), entry);
 
     /* Run the dialog to get the new account name. */
     response = gtk_dialog_run(GTK_DIALOG(dlg));

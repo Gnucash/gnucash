@@ -139,7 +139,7 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
     {
         w = GTK_WIDGET(gtk_builder_get_object(sxfti->builder, callbacks[i].name));
 
-        g_signal_connect (GTK_OBJECT(w), callbacks[i].signal,
+        g_signal_connect (G_OBJECT(w), callbacks[i].signal,
                           G_CALLBACK(callbacks[i].handlerFn),
                           sxfti );
     }
@@ -433,7 +433,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     start_tt = gnc_time64_get_day_start_gdate (&nextDate);
     gnc_date_edit_set_time( sxfti->startDateGDE, start_tt );
 
-    g_signal_connect( GTK_OBJECT(sxfti->name), "destroy",
+    g_signal_connect( G_OBJECT(sxfti->name), "destroy",
                       G_CALLBACK(sxftd_destroy),
                       sxfti );
 

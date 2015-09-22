@@ -577,11 +577,11 @@ gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
 
     switch (event->keyval)
     {
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
-    case GDK_KP_Tab:
-    case GDK_Return:
-    case GDK_KP_Enter:
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
+    case GDK_KEY_KP_Tab:
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
         gtk_tree_view_get_cursor(tv, &path, &col);
         if (!path) return TRUE;
         //finish_edit(col);

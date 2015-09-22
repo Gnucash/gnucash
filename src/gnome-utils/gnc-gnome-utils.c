@@ -676,9 +676,6 @@ gnc_gui_init(void)
     g_list_foreach(icons, (GFunc)g_object_unref, NULL);
     g_list_free(icons);
 
-    /* initialization required for gtkhtml (is it also needed for webkit?) */
-    gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
-
     g_set_application_name(PACKAGE_NAME);
 
     gnc_prefs_init();

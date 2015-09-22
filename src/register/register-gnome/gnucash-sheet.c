@@ -389,6 +389,7 @@ void
 gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 {
     VirtualCellLocation vcell_loc;
+    GtkAllocation alloc;
     gint height;
     gint cy;
     gint old_visible_blocks, old_visible_rows;
@@ -396,7 +397,8 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-    height = GTK_WIDGET(sheet)->allocation.height;
+    gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
+    height = alloc.height;
 
     gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &cy);
 
@@ -449,6 +451,7 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
 {
     VirtualCellLocation vcell_loc = { virt_row, 0 };
     SheetBlock *block;
+    GtkAllocation alloc;
     gint block_height;
     gint height;
     gint cx, cy;
@@ -465,7 +468,8 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), &cx, &cy);
     x = cx;
 
-    height = GTK_WIDGET(sheet)->allocation.height;
+    gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
+    height = alloc.height;
 
     block = gnucash_sheet_get_block (sheet, vcell_loc);
 
@@ -519,6 +523,7 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
 {
     SheetBlock *start_block;
     SheetBlock *end_block;
+    GtkAllocation alloc;
     gint block_height;
     gint height;
     gint cx, cy;
@@ -538,7 +543,8 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
     gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), &cx, &cy);
     x = cx;
 
-    height = GTK_WIDGET(sheet)->allocation.height;
+    gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
+    height = alloc.height;
 
     start_block = gnucash_sheet_get_block (sheet, start_loc);
     end_block = gnucash_sheet_get_block (sheet, end_loc);
@@ -584,10 +590,10 @@ gnucash_sheet_update_adjustments (GnucashSheet *sheet)
     vadj = sheet->vadj;
 
     if (sheet->num_visible_blocks > 0)
-        vadj->step_increment =
-            vadj->page_size / sheet->num_visible_blocks;
+        gtk_adjustment_set_step_increment (vadj,
+            gtk_adjustment_get_page_size (vadj) / sheet->num_visible_blocks);
     else
-        vadj->step_increment = 0;
+        gtk_adjustment_set_step_increment (vadj, 0);
 
     gtk_adjustment_changed(vadj);
 }
@@ -612,7 +618,8 @@ gnucash_sheet_hadjustment_changed (GtkAdjustment *adj,
     reg = GNUCASH_REGISTER(sheet->reg);
     g_return_if_fail (reg != NULL);
 
-    if (adj->upper - adj->lower > adj->page_size)
+    if (gtk_adjustment_get_upper (adj) - gtk_adjustment_get_lower (adj)
+        > gtk_adjustment_get_page_size (adj))
     {
         if (!reg->hscrollbar_visible)
         {
@@ -658,6 +665,7 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
     gint x, y, w, h;
     GnomeCanvas *canvas;
     SheetBlock *block;
+    GtkAllocation alloc;
 
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -671,9 +679,10 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
     x = block->origin_x;
     y = block->origin_y;
 
+    gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
     h = block->style->dimensions->height;
     w = MIN(block->style->dimensions->width,
-            GTK_WIDGET(sheet)->allocation.width);
+            alloc.width);
 
     gnome_canvas_request_redraw (canvas, x, y, x + w + 1, y + h + 1);
 }
@@ -714,8 +723,8 @@ gnucash_sheet_realize (GtkWidget *widget)
     if (GTK_WIDGET_CLASS (sheet_parent_class)->realize)
         (*GTK_WIDGET_CLASS (sheet_parent_class)->realize)(widget);
 
-    window = widget->window;
-    gdk_window_set_back_pixmap (GTK_LAYOUT (widget)->bin_window,
+    window = gtk_widget_get_window (widget);
+    gdk_window_set_back_pixmap (gtk_layout_get_bin_window (GTK_LAYOUT (widget)),
                                 NULL, FALSE);
     gtk_im_context_set_client_window( GNUCASH_SHEET (widget)->im_context,
                                       window);
@@ -1326,21 +1335,21 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 
     sheet = GNUCASH_SHEET (widget);
     vadj = sheet->vadj;
-    v_value = vadj->value;
+    v_value = gtk_adjustment_get_value (vadj);
 
     switch (event->direction)
     {
     case GDK_SCROLL_UP:
-        v_value -= vadj->step_increment;
+        v_value -= gtk_adjustment_get_step_increment (vadj);
         break;
     case GDK_SCROLL_DOWN:
-        v_value += vadj->step_increment;
+        v_value += gtk_adjustment_get_step_increment (vadj);
         break;
     default:
         return FALSE;
     }
 
-    v_value = CLAMP(v_value, vadj->lower, vadj->upper - vadj->page_size);
+    v_value = CLAMP(v_value, gtk_adjustment_get_lower (vadj), gtk_adjustment_get_upper (vadj) - gtk_adjustment_get_page_size (vadj));
 
     gtk_adjustment_set_value(vadj, v_value);
 
@@ -1358,7 +1367,7 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
 
     device = gdk_device_get_core_pointer ();
 
-    gdk_device_get_state (device, GTK_WIDGET(sheet)->window,
+    gdk_device_get_state (device, gtk_widget_get_window (GTK_WIDGET(sheet)),
                           0, &mods);
 
     if (!(mods & GDK_BUTTON1_MASK))
@@ -1808,7 +1817,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
         case GDK_KEY_KP_Down:
         case GDK_KEY_Down:
         case GDK_KEY_Menu:
-            if (event->keyval == GDK_Menu ||
+            if (event->keyval == GDK_KEY_Menu ||
                     (event->state & GDK_CONTROL_MASK))
             {
                 GncItemEdit *item_edit;
@@ -1884,12 +1893,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
     /* bug#60582 comment#27 2
            save shift state to enable <shift minus> and <shift equal>
        bug#618434
-           save keyval to handle GDK_KP_Decimal event
+           save keyval to handle GDK_KEY_KP_Decimal event
      */
 #ifdef G_OS_WIN32
-    /* gdk never sends GDK_KP_Decimal on win32. See #486658 */
+    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
     if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KP_Decimal;
+        event->keyval = GDK_KEY_KP_Decimal;
 #endif
     if (sheet->preedit_length)
     {
@@ -2419,6 +2428,7 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 {
     int height, width;
     GtkWidget *widget;
+    GtkAllocation alloc;
     double x, y;
 
     if (!sheet)
@@ -2432,8 +2442,9 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
     gnome_canvas_get_scroll_region (GNOME_CANVAS(sheet),
                                     NULL, NULL, &x, &y);
 
-    height = MAX (sheet->height, widget->allocation.height);
-    width  = MAX (sheet->width, widget->allocation.width);
+    gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
+    height = MAX (sheet->height, alloc.height);
+    width  = MAX (sheet->width, alloc.width);
 
     if (width != (int)x || height != (int)y)
         gnome_canvas_set_scroll_region (GNOME_CANVAS(sheet),

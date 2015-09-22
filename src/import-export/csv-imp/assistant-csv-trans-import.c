@@ -40,7 +40,7 @@
 #include "gnc-component-manager.h"
 
 #include "gnc-state.h"
-#include "assistant-utils.h"
+
 #include "assistant-csv-trans-import.h"
 #include "gnc-csv-trans-settings.h"
 
@@ -525,7 +525,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         GtkTreeIter   iter;
         gchar        *details = NULL;
 
-        /* This section deals with the header and rows */ 
+        /* This section deals with the header and rows */
         info->settings_data->header_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->start_row_spin));
         info->settings_data->footer_rows = info->num_of_rows - gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->end_row_spin));
         info->settings_data->skip_alt_rows = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->skip_rows));
@@ -576,7 +576,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         info->settings_data->column_types = g_strdup (details);
         g_free (details);
 
-        /* Save the column widths in fixed mode */ 
+        /* Save the column widths in fixed mode */
         if (info->settings_data->csv_format)
             info->settings_data->column_widths = "5,10,15";
         else
@@ -1492,8 +1492,12 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
 {
     /* col is the number of the column that was clicked, and offset is
        to correct for the indentation of button. */
-    int i, col = 0, offset = GTK_BIN(button)->child->allocation.x - button->allocation.x,
-           ncols = info->parse_data->column_types->len;
+    int i, offset;
+    GtkAllocation alloc;
+    int col = 0, ncols = info->parse_data->column_types->len;
+
+    gtk_widget_get_allocation (gtk_bin_get_child (GTK_BIN(button)), &alloc);
+    offset = alloc.x - alloc.x;
     /* Find the column that was clicked. */
     for (i = 0; i < ncols; i++)
     {
@@ -2235,7 +2239,7 @@ csv_import_trans_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
  * Assistant call back functions
  *******************************************************/
 static void
-csv_import_trans_assistant_destroy_cb (GtkObject *object, gpointer user_data)
+csv_import_trans_assistant_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     CsvImportTrans *info = user_data;
     gnc_unregister_gui_component_by_data (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS, info);
@@ -2311,9 +2315,6 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "CSV Transaction Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Transaction Assistant"));
     info->window = window;
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
     /* Load default settings */
     load_settings (info);

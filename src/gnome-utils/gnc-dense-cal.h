@@ -58,7 +58,7 @@ struct _GncDenseCal
     GtkComboBox *view_options;
     GtkDrawingArea *cal_drawing_area;
 
-    GdkPixmap *drawbuf;
+    cairo_surface_t *surface;
 
     gboolean initialized;
 

@@ -678,7 +678,6 @@ gboolean
 make_random_pricedb (QofBook *book, GNCPriceDB *db)
 {
     int num_prices;
-    gboolean check;
 
     num_prices = get_random_int_in_range (1, 41);
     if (num_prices < 1) /* should be impossible */
@@ -700,11 +699,9 @@ make_random_pricedb (QofBook *book, GNCPriceDB *db)
             return FALSE;
         }
 
-        check = gnc_pricedb_add_price (db, p);
-        if (!check)
-        {
-            return check;
-        }
+        if (!gnc_pricedb_add_price (db, p))
+            /* probably the same date as another price, just try again. */
+            ++num_prices;
 
         gnc_price_unref (p);
     }

@@ -90,7 +90,7 @@ gnucash_grid_realize (GnomeCanvasItem *item)
          (gnucash_grid_parent_class)->realize)(item);
 
     gnucash_grid = GNUCASH_GRID (item);
-    window = GTK_WIDGET (item->canvas)->window;
+    window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
 
     /* Configure the default grid gc */
     gnucash_grid->grid_gc = gc = gdk_gc_new (window);

@@ -217,12 +217,13 @@ gnc_window_adjust_for_screen(GtkWindow * window)
         return;
 
     g_return_if_fail(GTK_IS_WINDOW(window));
-    if (GTK_WIDGET(window)->window == NULL)
+    if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
 
     screen_width = gdk_screen_width();
     screen_height = gdk_screen_height();
-    gdk_drawable_get_size(GTK_WIDGET(window)->window, &width, &height);
+    width = gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET(window)));
+    height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET(window)));
 
     if ((width <= screen_width) && (height <= screen_height))
         return;
@@ -233,7 +234,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     height = MIN(height, screen_height - 10);
     height = MAX(height, 0);
 
-    gdk_window_resize(GTK_WIDGET(window)->window, width, height);
+    gdk_window_resize(gtk_widget_get_window (GTK_WIDGET(window)), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
@@ -269,9 +270,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
      */
     switch (event->keyval)
     {
-    case GDK_KP_Add:
-    case GDK_plus:
-    case GDK_equal:
+    case GDK_KEY_KP_Add:
+    case GDK_KEY_plus:
+    case GDK_KEY_equal:
         if (event->state & GDK_SHIFT_MASK)
             g_date_add_days (&gdate, 7);
         else if (event->state & GDK_MOD1_MASK)
@@ -283,9 +284,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
-    case GDK_minus:
-    case GDK_KP_Subtract:
-    case GDK_underscore:
+    case GDK_KEY_minus:
+    case GDK_KEY_KP_Subtract:
+    case GDK_KEY_underscore:
         if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
         {
             const char *c;
@@ -333,41 +334,41 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     /* Now check for the remaining keystrokes. */
     switch (event->keyval)
     {
-    case GDK_braceright:
-    case GDK_bracketright:
+    case GDK_KEY_braceright:
+    case GDK_KEY_bracketright:
         /* increment month */
         g_date_add_months (&gdate, 1);
         break;
 
-    case GDK_braceleft:
-    case GDK_bracketleft:
+    case GDK_KEY_braceleft:
+    case GDK_KEY_bracketleft:
         /* decrement month */
         g_date_subtract_months (&gdate, 1);
         break;
 
-    case GDK_M:
-    case GDK_m:
+    case GDK_KEY_M:
+    case GDK_KEY_m:
         /* beginning of month */
         g_date_set_day (&gdate, 1);
         break;
 
-    case GDK_H:
-    case GDK_h:
+    case GDK_KEY_H:
+    case GDK_KEY_h:
         /* end of month */
         g_date_set_day (&gdate, 1);
         g_date_add_months (&gdate, 1);
         g_date_subtract_days (&gdate, 1);
         break;
 
-    case GDK_Y:
-    case GDK_y:
+    case GDK_KEY_Y:
+    case GDK_KEY_y:
         /* beginning of year */
         g_date_set_day (&gdate, 1);
         g_date_set_month (&gdate, 1);
         break;
 
-    case GDK_R:
-    case GDK_r:
+    case GDK_KEY_R:
+    case GDK_KEY_r:
         /* end of year */
         g_date_set_day (&gdate, 1);
         g_date_set_month (&gdate, 1);
@@ -375,8 +376,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_subtract_days (&gdate, 1);
         break;
 
-    case GDK_T:
-    case GDK_t:
+    case GDK_KEY_T:
+    case GDK_KEY_t:
         /* today */
         gnc_gdate_set_today (&gdate);
         break;
@@ -551,8 +552,8 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
             : _("Don't tell me again this _session."));
     gtk_widget_show(perm);
     gtk_widget_show(temp);
-    gtk_box_pack_start(GTK_BOX(dialog->vbox), perm, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(dialog->vbox), temp, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), perm, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), temp, TRUE, TRUE, 0);
     g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
 
     /* OK. Present the dialog. */

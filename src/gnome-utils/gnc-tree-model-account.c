@@ -131,7 +131,7 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
 /************************************************************/
 
 /** A pointer to the parent class of an account tree model. */
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 GType
 gnc_tree_model_account_get_type (void)

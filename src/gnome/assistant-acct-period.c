@@ -43,7 +43,6 @@
 #include "Transaction.h"
 #include "dialog-utils.h"
 #include "assistant-acct-period.h"
-#include "assistant-utils.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-file.h"
@@ -200,7 +199,7 @@ get_close_status_str (AcctPeriodInfo *info)
 /* =============================================================== */
 
 static void
-ap_assistant_destroy_cb (GtkObject *object, gpointer data)
+ap_assistant_destroy_cb (GtkWidget *object, gpointer data)
 {
     AcctPeriodInfo *info = data;
 
@@ -545,9 +544,6 @@ ap_assistant_create (AcctPeriodInfo *info)
     gnc_builder_add_from_file  (builder , "assistant-acct-period.glade", "Account Period Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Account Period Assistant"));
     info->window = window;
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
     /* Enable all pages except menu page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),

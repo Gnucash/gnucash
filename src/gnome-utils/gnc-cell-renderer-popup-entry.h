@@ -33,12 +33,12 @@
 #include <pango/pango.h>
 #include <gtk/gtkeventbox.h>
 
-#define GNC_TYPE_POPUP_ENTRY		(gnc_popup_entry_get_type ())
-#define GNC_POPUP_ENTRY(obj)		(GTK_CHECK_CAST ((obj), GNC_TYPE_POPUP_ENTRY, GncPopupEntry))
-#define GNC_POPUP_ENTRY_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GNC_TYPE_POPUP_ENTRY, GncPopupEntryClass))
-#define GNC_IS_POPUP_ENTRY(obj)		(GTK_CHECK_TYPE ((obj), GNC_TYPE_POPUP_ENTRY))
-#define GNC_IS_POPUP_ENTRY_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GNC_TYPE_POPUP_ENTRY))
-#define GNC_POPUP_ENTRY_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), GNC_TYPE_POPUP_ENTRY, GncPopupEntryClass))
+#define GNC_TYPE_POPUP_ENTRY            (gnc_popup_entry_get_type ())
+#define GNC_POPUP_ENTRY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_POPUP_ENTRY, GncPopupEntry))
+#define GNC_POPUP_ENTRY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_POPUP_ENTRY, GncPopupEntryClass))
+#define GNC_IS_POPUP_ENTRY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_POPUP_ENTRY))
+#define GNC_IS_POPUP_ENTRY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GNC_TYPE_POPUP_ENTRY))
+#define GNC_POPUP_ENTRY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_POPUP_ENTRY, GncPopupEntryClass))
 
 typedef struct _GncPopupEntry      GncPopupEntry;
 typedef struct _GncPopupEntryClass GncPopupEntryClass;
@@ -59,7 +59,7 @@ struct _GncPopupEntryClass
     GtkEventBoxClass parent_class;
 };
 
-GtkType      gnc_popup_entry_get_type   (void) G_GNUC_CONST;
+GType        gnc_popup_entry_get_type   (void) G_GNUC_CONST;
 
 GtkWidget   *gnc_popup_entry_new        (void);
 

@@ -364,7 +364,7 @@ gnc_xfer_dialog_key_press_cb (GtkWidget   *widget,
 {
     GtkWidget *toplevel;
 
-    if ((event->keyval == GDK_Return) || (event->keyval == GDK_KP_Enter))
+    if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
     {
         toplevel = gtk_widget_get_toplevel (widget);
         if (gtk_widget_is_toplevel(toplevel) && GTK_IS_WINDOW(toplevel))
@@ -920,14 +920,14 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
     ENTER(" ");
     switch ( event->keyval )
     {
-        case GDK_Return:
-        case GDK_KP_Enter:
+        case GDK_KEY_Return:
+        case GDK_KEY_KP_Enter:
             gnc_xfer_dialog_quickfill( xferData );
             /* NOT done with input, activate the default button of the dialog. */
             break;
 
-        case GDK_Tab:
-        case GDK_ISO_Left_Tab:
+        case GDK_KEY_Tab:
+        case GDK_KEY_ISO_Left_Tab:
             if ( !( event->state & GDK_SHIFT_MASK) )    /* Complete on Tab,
                                                          * but not Shift-Tab */
             {
@@ -2035,12 +2035,12 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         if (use_accounting_labels)
         {
-            gtk_label_set_text(GTK_LABEL(GTK_BIN(xferData->amount_radio)->child),
+            gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(xferData->amount_radio))),
                                _("Debit Amount:"));
         }
         else
         {
-            gtk_label_set_text(GTK_LABEL(GTK_BIN(xferData->amount_radio)->child),
+            gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(xferData->amount_radio))),
                                _("To Amount:"));
         }
     }

@@ -66,15 +66,15 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 
     is_return = FALSE;
 
-    /* FIXME!! This code is almost identical (except for GDK_KP_Enter
+    /* FIXME!! This code is almost identical (except for GDK_KEY_KP_Enter
      * handling) to pricecell-gnome.c:gnc_price_cell_direct_update.  I write
      * this after fixing a bug where one copy was kept up to date, and the
      * other not.  So, fix this.
      */
 #ifdef G_OS_WIN32
-    /* gdk never sends GDK_KP_Decimal on win32. See #486658 */
+    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
     if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KP_Decimal;
+        event->keyval = GDK_KEY_KP_Decimal;
 #endif
     switch (event->keyval)
     {

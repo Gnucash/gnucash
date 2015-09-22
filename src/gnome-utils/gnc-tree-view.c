@@ -2093,9 +2093,9 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
 
     switch (event->keyval)
     {
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
-    case GDK_KP_Tab:
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
+    case GDK_KEY_KP_Tab:
         shifted = event->state & GDK_SHIFT_MASK;
         if (get_column_next_to(tv, col, shifted))
         {
@@ -2131,8 +2131,8 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
         }
         break;
 
-    case GDK_Return:
-    case GDK_KP_Enter:
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
         if (gtk_tree_view_row_expanded(tv, path))
         {
             gtk_tree_path_down(path);

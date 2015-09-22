@@ -58,7 +58,7 @@ struct _GNCSearchCoreTypePrivate
 #define _PRIVATE(o) \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypePrivate))
 
-static GtkObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 static GHashTable *typeTable = NULL;
 

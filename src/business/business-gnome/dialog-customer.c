@@ -1271,8 +1271,8 @@ gnc_customer_common_key_press_cb( GtkEntry *entry,
      */
     switch ( event->keyval )
     {
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
         if ( !( event->state & GDK_SHIFT_MASK) )    /* Complete on Tab,
                                                   * but not Shift-Tab */
         {

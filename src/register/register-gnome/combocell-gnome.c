@@ -833,7 +833,9 @@ static int
 popup_get_width (GnomeCanvasItem *item,
                  gpointer user_data)
 {
-    return GTK_WIDGET (GNC_ITEM_LIST (item)->tree_view)->allocation.width;
+    GtkAllocation alloc;
+    gtk_widget_get_allocation (GTK_WIDGET (GNC_ITEM_LIST (item)->tree_view), &alloc);
+    return alloc.width;
 }
 
 static gboolean

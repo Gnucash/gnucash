@@ -40,7 +40,6 @@
 #include "Query.h"
 #include "Transaction.h"
 
-#include "assistant-utils.h"
 #include "assistant-csv-export.h"
 #include "csv-tree-export.h"
 #include "csv-transactions-export.h"
@@ -708,7 +707,7 @@ csv_export_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
  * Assistant call back functions
  *******************************************************/
 static void
-csv_export_assistant_destroy_cb (GtkObject *object, gpointer user_data)
+csv_export_assistant_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
     gnc_unregister_gui_component_by_data (ASSISTANT_CSV_EXPORT_CM_CLASS, info);
@@ -769,9 +768,6 @@ csv_export_assistant_create (CsvExportInfo *info)
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "CSV Export Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Export Assistant"));
     info->window = window;
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
     /* Load default settings */
     load_settings (info);
