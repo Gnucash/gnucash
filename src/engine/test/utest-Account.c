@@ -825,7 +825,7 @@ xaccAccountCommitEdit checks the flag and finding it true:
    Again checking that the book isn't shutting down:
       run destroy_pending_splits_for_account
       destroy all of the lots in the lots list (again, destroy, not unref or even dispose)
-  free the lot list (regardless of whether the book is shuttin down) and NULL the pointer
+  free the lot list (regardless of whether the book is shutting down) and NULL the pointer
   set the instance dirty
 unconditionally calls qof_commit_edit_part2 with acc_free
 qof_commit_edit_part2:

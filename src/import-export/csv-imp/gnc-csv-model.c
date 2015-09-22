@@ -172,7 +172,7 @@ static time64 parse_date_with_year (const char* date_str, int format)
             date_segment[mem_length] = '\0';
 
             /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if the change when we use gnc_mktime
+             * values so that we can check if they change when we use gnc_mktime
              * below. */
             switch (segment_type)
             {
@@ -284,7 +284,7 @@ static time64 parse_date_without_year (const char* date_str, int format)
             date_segment[mem_length] = '\0';
 
             /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if the change when we use gnc_mktime
+             * values so that we can check if they change when we use gnc_mktime
              * below. */
             switch (segment_type)
             {
