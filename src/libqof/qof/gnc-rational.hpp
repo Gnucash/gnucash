@@ -44,13 +44,15 @@ public:
     GncRational& div(GncRational b, GncDenom& d) noexcept;
     GncRational& add(const GncRational& b, GncDenom& d) noexcept;
     GncRational& sub(const GncRational& b, GncDenom& d) noexcept;
-
+/** Inverts the number, equivalent of /= {1, 1} */
+    GncRational& inv() noexcept;
 
     GncInt128 m_num;
     GncInt128 m_den;
     GNCNumericErrorCode m_error;
 };
 
+/** Encapsulates the rounding specifications computations. */
 struct GncDenom
 {
     GncDenom (GncRational& a, GncRational& b, int64_t spec, unsigned int how) noexcept;
@@ -84,4 +86,3 @@ struct GncDenom
     unsigned int m_sigfigs;
     GNCNumericErrorCode m_error;
 };
-

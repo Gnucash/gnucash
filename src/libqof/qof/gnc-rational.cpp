@@ -78,6 +78,19 @@ GncRational::operator-() const noexcept
 }
 
 GncRational&
+GncRational::inv () noexcept
+{
+    auto tmp = m_num;
+    m_num = m_den;
+    m_den = tmp;
+
+    GncRational b {1, 1};
+    GncDenom d {*this, b, INT64_C(0), GNC_HOW_RND_NEVER };
+    d.reduce(*this);
+    return *this;
+}
+
+GncRational&
 GncRational::mul (const GncRational& b, GncDenom& d) noexcept
 {
     if (m_error || b.m_error)
