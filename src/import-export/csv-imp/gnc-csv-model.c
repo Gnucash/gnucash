@@ -155,10 +155,14 @@ static time64 parse_date_with_year (const char* date_str, int format)
         }
     }
 
-    /* Put some sane values in retvalue by using the current time for
+    /* Put some sane values in retvalue by using a fixed time for
      * the non-year-month-day parts of the date. */
     gnc_time (&rawtime);
     gnc_localtime_r (&rawtime, &retvalue);
+    retvalue.tm_hour = 11;
+    retvalue.tm_min = 0;
+    retvalue.tm_sec = 0;
+    retvalue.tm_isdst = -1;
 
     /* j traverses pmatch (index 0 contains the entire string, so we
      * start at index 1 for the first meaningful match). */
@@ -265,10 +269,14 @@ static time64 parse_date_without_year (const char* date_str, int format)
     if (pmatch[0].rm_eo == 0)
         return -1;
 
-    /* Put some sane values in retvalue by using the current time for
+    /* Put some sane values in retvalue by using a fixed time for
      * the non-year-month-day parts of the date. */
     gnc_time (&rawtime);
     gnc_localtime_r (&rawtime, &retvalue);
+    retvalue.tm_hour = 11;
+    retvalue.tm_min = 0;
+    retvalue.tm_sec = 0;
+    retvalue.tm_isdst = -1;
     orig_year = retvalue.tm_year;
 
     /* j traverses pmatch (index 0 contains the entire string, so we
