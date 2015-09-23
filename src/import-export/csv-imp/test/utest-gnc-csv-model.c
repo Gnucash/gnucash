@@ -297,45 +297,27 @@ test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
 /* trans_property_free
 static void trans_property_free (TransProperty* prop)// Local: 2:0:0
 */
-/* static void
-test_trans_property_free (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Internal helper function - no test
 /* trans_property_set
 static gboolean trans_property_set (TransProperty* prop, char* str)// Local: 1:0:0
 */
-/* static void
-test_trans_property_set (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Internal helper function - no test
 /* trans_property_list_free
 static void trans_property_list_free (TransPropertyList* list)// Local: 1:0:0
 */
-/* static void
-test_trans_property_list_free (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Internal helper function - no test
 /* trans_property_list_add
 static void trans_property_list_add (TransProperty* property)// Local: 1:0:0
 */
-/* static void
-test_trans_property_list_add (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Internal helper function - no test
 /* trans_add_split
 static void trans_add_split (Transaction* trans, Account* account, QofBook* book,// Local: 2:0:0
 */
-/* static void
-test_trans_add_split (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Internal helper function - no test
 /* trans_property_list_verify_essentials
 static gboolean trans_property_list_verify_essentials (TransPropertyList* list, gchar** error)// Local: 1:0:0
 */
-/* static void
-test_trans_property_list_verify_essentials (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Internal helper function - no test
 /* gnc_csv_parse_to_trans
 int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,// C: 2 in 1  Local: 0:0:0
 */
