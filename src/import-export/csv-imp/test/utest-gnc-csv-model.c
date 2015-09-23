@@ -234,13 +234,22 @@ test_parse_date (Fixture *fixture, gconstpointer pData)
 
 
 }
+/* gnc_csv_new_parse_data
+GncCsvParseData* gnc_csv_new_parse_data (void)// C: 1 in 1  Local: 0:0:0
+*/
+static void
+test_gnc_csv_new_parse_data (Fixture *fixture, gconstpointer pData)
+{
+    GncCsvParseData* parse_data = gnc_csv_new_parse_data ();
+    g_assert (parse_data != NULL);
+    g_assert (parse_data->chunk != NULL);
+    gnc_csv_parse_data_free (parse_data);
+}
+
 /* gnc_csv_parse_data_free
 void gnc_csv_parse_data_free (GncCsvParseData* parse_data)// C: 3 in 1  Local: 0:0:0
 */
-/* static void
-test_gnc_csv_parse_data_free (Fixture *fixture, gconstpointer pData)
-{
-}*/
+// Basic freeing of memory - no test
 /* gnc_csv_convert_encoding
 int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding,// C: 1  Local: 1:0:0
 */
@@ -330,6 +339,7 @@ test_suite_gnc_csv_model (void)
 // GNC_TEST_ADD (suitename, "parse date with year", Fixture, NULL, setup, test_parse_date_with_year, teardown);
 // GNC_TEST_ADD (suitename, "parse date without year", Fixture, NULL, setup, test_parse_date_without_year, teardown);
 GNC_TEST_ADD (suitename, "parse date", Fixture, NULL, NULL, test_parse_date, NULL);
+GNC_TEST_ADD (suitename, "gnc csv new parse data", Fixture, NULL, NULL, test_gnc_csv_new_parse_data, NULL);
 // GNC_TEST_ADD (suitename, "gnc csv parse data free", Fixture, NULL, setup, test_gnc_csv_parse_data_free, teardown);
 // GNC_TEST_ADD (suitename, "gnc csv convert encoding", Fixture, NULL, setup, test_gnc_csv_convert_encoding, teardown);
 // GNC_TEST_ADD (suitename, "gnc csv load file", Fixture, NULL, setup, test_gnc_csv_load_file, teardown);
