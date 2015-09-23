@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-27 10:47-0700\n"
-"PO-Revision-Date: 2015-07-10 20:51+0200\n"
+"PO-Revision-Date: 2015-09-20 11:32+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -2022,7 +2022,7 @@ msgstr "Rechnung suchen"
 #. the condition "Is this invoice a Credit Note?"
 #: ../../gnucash-git/po/../src/business/business-gnome/dialog-invoice.c:3216
 msgid "CN?"
-msgstr "G?"
+msgstr "Gutschrift?"
 
 #. note the "Amount" multichoice option here
 #: ../../gnucash-git/po/../src/business/business-gnome/dialog-invoice.c:3218
@@ -5187,7 +5187,6 @@ msgstr "Buchungsnummer"
 
 #: ../../gnucash-git/po/../src/gnome/dialog-find-transactions2.c:146
 #: ../../gnucash-git/po/../src/gnome/dialog-find-transactions.c:145
-#, fuzzy
 msgid "Description, Notes, or Memo"
 msgstr "Beschreibung / Notizen / Buchungstext"
 
@@ -7739,7 +7738,9 @@ msgid ""
 "first time a 2.6 version of GnuCash is run. This migration should only run "
 "once. This preference keeps track whether or not this migration tool has run "
 "successfully."
-msgstr ""
+msgstr "GnuCash wechselte zwischen Version 2.4 und 2.6 zu einem anderen Backend um die Nutzereinstellungen zu speichern."
+"Um den Übergang zu ebnen, werden viele Eisntellungen beim ersten Start einer 2.6er Version migriert."
+"Diese Migration sollte nur einmal laufen. Diese Eisntellungen halten fest, ob das Migrationswerkzeug erfolgreich gelaufen ist."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:22
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:90
@@ -19285,7 +19286,6 @@ msgstr ""
 "die Rechnungs- oder Scheck-Nummer."
 
 #: ../../gnucash-git/po/../src/register/ledger-core/split-register-model.c:985
-#, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
@@ -20191,9 +20191,8 @@ msgstr "Anzeigen der Steuerwirksamkeit des Postens?"
 #: ../../gnucash-git/po/../src/report/business-reports/easy-invoice.scm:285
 #: ../../gnucash-git/po/../src/report/business-reports/fancy-invoice.scm:295
 #: ../../gnucash-git/po/../src/report/business-reports/invoice.scm:280
-#, fuzzy
 msgid "Display each entry's total total tax?"
-msgstr "Anzeigen des gesamten Steueranteils jedes Postens"
+msgstr "Zeigen jeden Eintrag des gesamten Steueranteils an"
 
 #: ../../gnucash-git/po/../src/report/business-reports/easy-invoice.scm:290
 #: ../../gnucash-git/po/../src/report/business-reports/fancy-invoice.scm:300
@@ -25682,12 +25681,12 @@ msgid "Welcome to GnuCash"
 msgstr "Willkommen zu GnuCash"
 
 #: ../../gnucash-git/po/../src/report/utility-reports/welcome-to-gnucash.scm:97
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Welcome to GnuCash ~a !"
-msgstr "Willkommen zu GnuCash"
+msgstr "Willkommen bei GnuCash"
 
 #: ../../gnucash-git/po/../src/report/utility-reports/welcome-to-gnucash.scm:99
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr "GnuCash hat viele neue Funktionen. Hier sind einige Beispiele."
 
@@ -25791,18 +25790,16 @@ msgid "Manage your stock, bond and mutual fund accounts with ease"
 msgstr ""
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:6
-#, fuzzy
 msgid "Keep your small business' accounting up to date"
-msgstr "Beibehalten der normalen Kontenreihenfolge"
+msgstr "Behalten Sie Ihre Buchhaltung aktuell"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:7
 msgid "Create accurate reports and graphs from your financial data"
 msgstr ""
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:8
-#, fuzzy
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "Terminierte Buchungen einrichten, die ein Darlehen tilgen sollen"
+msgstr "Terminierte Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:9
 msgid "QIF/OFX/HBCI Import, Transaction Matching"
