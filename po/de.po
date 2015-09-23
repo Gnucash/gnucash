@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-27 10:47-0700\n"
-"PO-Revision-Date: 2015-09-20 11:32+0200\n"
+"PO-Revision-Date: 2015-09-23 20:26+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -4780,7 +4780,7 @@ msgstr "Buchung ungültig gemacht"
 
 #: ../../gnucash-git/po/../src/gnome/assistant-acct-period.c:191
 msgid "The book was closed successfully."
-msgstr "Der Buchabschluß wurde erfolgreich beendet."
+msgstr "Der Buchabschluss wurde erfolgreich beendet."
 
 #. Translators: %s is a date string. %d is the number of books
 #. * that will be created. This is a ngettext(3) message (but
@@ -4855,7 +4855,7 @@ msgstr "Periode:"
 #: ../../gnucash-git/po/../src/gnome/assistant-acct-period.c:594
 #: ../src/gnome-utils/gtkbuilder/dialog-book-close.glade.h:2
 msgid "Closing Date:"
-msgstr "Abschlußdatum:"
+msgstr "Abschlussdatum:"
 
 #: ../../gnucash-git/po/../src/gnome/assistant-hierarchy.c:402
 msgid "Selected"
@@ -5763,7 +5763,7 @@ msgstr "B_udget"
 
 #: ../../gnucash-git/po/../src/gnome/gnc-plugin-basic-commands.c:177
 msgid "Close _Books"
-msgstr "_Buchabschluß"
+msgstr "_Buchabschluss"
 
 #: ../../gnucash-git/po/../src/gnome/gnc-plugin-basic-commands.c:178
 msgid "Archive old data using accounting periods"
@@ -8583,8 +8583,8 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Wählen Sie einen Buchungszeitraum und ein Abschlußdatum für diesen Zeitraum. "
-"Der Buchabschluß wird für Mitternacht jenes Datums gespeichert."
+"Wählen Sie einen Buchungszeitraum und ein Abschlussdatum für diesen Zeitraum. "
+"Der Buchabschluss wird für Mitternacht jenes Datums gespeichert."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:9
 msgid "xxx"
@@ -8592,7 +8592,7 @@ msgstr "xxx"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:10
 msgid "Book Closing Dates"
-msgstr "Datum Buchabschluß"
+msgstr "Datum Buchabschluss"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:11
 msgid "Title:"
@@ -9039,7 +9039,7 @@ msgstr "10/1-Jahr ARM"
 msgid "This assistant will help you record a stock split or stock merger.\n"
 msgstr ""
 "Dieser Assistent hilft Ihnen, eine Aktienteilung oder einen "
-"Aktienzusammenschluß einzugeben.\n"
+"Aktienzusammenschluss einzugeben.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:3
 msgid "Stock Split Assistant"
@@ -9065,7 +9065,7 @@ msgid ""
 "transaction, or accept the default one."
 msgstr ""
 "Geben Sie die Anzahl der Aktien ein, die sie durch die Aktienteilung oder "
-"Zusammenschluß gewonnen oder verloren haben. Für einen Zusammenschluß geben "
+"Zusammenschluss gewonnen oder verloren haben. Für einen Zusammenschluss geben "
 "Sie eine negative Zahl ein. Sie können auch eine Beschreibung des "
 "Buchungssatzes eingeben."
 
@@ -9158,7 +9158,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:23
 msgid "Stock Split Finish"
-msgstr "Abschluß der Aktienteilung"
+msgstr "Abschluss der Aktienteilung"
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:1
 msgid "Securities"
@@ -10290,7 +10290,7 @@ msgstr "<b>Information zum automatischen Kontenabgleich</b>"
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:2
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:4
 msgid "_Ending Balance:"
-msgstr "_Schlußsaldo:"
+msgstr "_Schlusssaldo:"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:1
 msgid "<b>Reconcile Information</b>"
@@ -15409,7 +15409,7 @@ msgstr "Datum des Kontoauszugs:"
 #: ../../gnucash-git/po/../src/gnome/window-reconcile2.c:1820
 #: ../../gnucash-git/po/../src/gnome/window-reconcile.c:1820
 msgid "Ending Balance:"
-msgstr "Schlußsaldo:"
+msgstr "Schlusssaldo:"
 
 #. reconciled balance title/value
 #: ../../gnucash-git/po/../src/gnome/window-reconcile2.c:1830
@@ -15467,7 +15467,7 @@ msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Informationen zum Abgleich ändern, zum Beispiel das Datum und der "
-"Schlußsaldo des Kontoauszugs."
+"Schlusssaldo des Kontoauszugs."
 
 #: ../../gnucash-git/po/../src/gnome/window-reconcile2.c:2156
 #: ../../gnucash-git/po/../src/gnome/window-reconcile.c:2156
@@ -24817,7 +24817,7 @@ msgstr ""
 
 #: ../../gnucash-git/po/../src/report/standard-reports/trial-balance.scm:88
 msgid "Income summary accounts"
-msgstr "Abschlußkonten"
+msgstr "Abschlusskonten"
 
 #: ../../gnucash-git/po/../src/report/standard-reports/trial-balance.scm:90
 msgid ""
