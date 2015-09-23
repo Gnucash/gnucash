@@ -422,7 +422,7 @@ void gnc_csv_parse_data_free (GncCsvParseData* parse_data)
         g_list_free (parse_data->transactions);
     }
 
-    g_free (parse_data->chunk);
+    g_string_chunk_free (parse_data->chunk);
     g_free (parse_data);
 }
 
