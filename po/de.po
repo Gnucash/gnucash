@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-27 10:47-0700\n"
-"PO-Revision-Date: 2015-09-23 20:26+0200\n"
+"PO-Revision-Date: 2015-09-23 20:32+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -10309,7 +10309,7 @@ msgstr "Anfangssaldo:"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:5
 msgid "Include _subaccounts"
-msgstr "_Unterkonten mit einbeziehen"
+msgstr "_Unterkonten einbeziehen"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:6
 #: ../../gnucash-git/po/../src/gnome/window-reconcile2.c:762
