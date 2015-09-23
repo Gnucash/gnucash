@@ -30,6 +30,7 @@
 
 typedef struct
 {
+    GncCsvParseData* parse_data;
 } Fixture;
 
 typedef struct
@@ -44,12 +45,13 @@ typedef struct
 static void
 setup( Fixture *fixture, gconstpointer pData )
 {
-
+    fixture->parse_data = gnc_csv_new_parse_data ();
 }
 
 static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
+    gnc_csv_parse_data_free (fixture->parse_data);
 }
 
 static const gchar *suitename = "/import-export/csv-imp/gnc-csv-model";
@@ -265,34 +267,28 @@ test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
     GError *the_error = NULL;
     int resultcode = 0;
 
-    GncCsvParseData* parse_data = gnc_csv_new_parse_data ();
-
-    /* Test if object creation worked */
-    g_assert (parse_data != NULL);
-
     /* Test loading of a non-existing file */
-    resultcode = gnc_csv_load_file (parse_data, file1,
+    resultcode = gnc_csv_load_file (fixture->parse_data, file1,
                                     &the_error);
     g_assert ((the_error->domain == GNC_CSV_IMP_ERROR) &&
               (the_error->code == GNC_CSV_IMP_ERROR_OPEN));
 
     /* Test loading of a valid csv file */
-    resultcode = gnc_csv_load_file (parse_data, file2,
-                                        &the_error);
+    resultcode = gnc_csv_load_file (fixture->parse_data, file2,
+                                    &the_error);
     g_assert (resultcode == 0);
 
     /* Test basic parsing of the loaded file
      * A few fields are sampled in the parsed data. */
-    resultcode = gnc_csv_parse (parse_data, TRUE, &the_error);
-    g_assert (g_strcmp0 ((char*)((GPtrArray*)(parse_data->orig_lines->pdata[0]))->pdata[0],
+    resultcode = gnc_csv_parse (fixture->parse_data, TRUE, &the_error);
+    g_assert (g_strcmp0 ((char*)((GPtrArray*)(fixture->parse_data->orig_lines->pdata[0]))->pdata[0],
                          "Date") == 0);
-    g_assert (g_strcmp0 ((char*)((GPtrArray*)(parse_data->orig_lines->pdata[1]))->pdata[6],
+    g_assert (g_strcmp0 ((char*)((GPtrArray*)(fixture->parse_data->orig_lines->pdata[1]))->pdata[6],
                          "1,100.00") == 0);
 
     /* Clean up */
     g_free(file1);
     g_free(file2);
-    gnc_csv_parse_data_free (parse_data);
 }
 /* trans_property_free
 static void trans_property_free (TransProperty* prop)// Local: 2:0:0
