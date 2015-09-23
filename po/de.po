@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-27 10:47-0700\n"
-"PO-Revision-Date: 2015-09-23 20:26+0200\n"
+"PO-Revision-Date: 2015-09-23 20:32+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -10309,7 +10309,7 @@ msgstr "Anfangssaldo:"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:5
 msgid "Include _subaccounts"
-msgstr "_Unterkonten mit einbeziehen"
+msgstr "_Unterkonten einbeziehen"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:6
 #: ../../gnucash-git/po/../src/gnome/window-reconcile2.c:762
@@ -25683,12 +25683,12 @@ msgstr "Willkommen zu GnuCash"
 #: ../../gnucash-git/po/../src/report/utility-reports/welcome-to-gnucash.scm:97
 #, scheme-format
 msgid "Welcome to GnuCash ~a !"
-msgstr "Willkommen bei GnuCash"
+msgstr "Willkommen bei GnuCash ~a"
 
 #: ../../gnucash-git/po/../src/report/utility-reports/welcome-to-gnucash.scm:99
 #, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
-msgstr "GnuCash hat viele neue Funktionen. Hier sind einige Beispiele."
+msgstr "GnuCash ~a hat viele neue Funktionen. Hier sind einige Beispiele."
 
 #: ../../gnucash-git/po/../src/scm/price-quotes.scm:463
 #: ../../gnucash-git/po/../src/scm/price-quotes.scm:464
