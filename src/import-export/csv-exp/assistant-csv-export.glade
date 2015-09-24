@@ -34,9 +34,6 @@ Select the type of Export required and the separator that will be used.
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkHSeparator" id="hseparator1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -47,9 +44,6 @@ Select the type of Export required and the separator that will be used.
             <property name="padding">6</property>
             <property name="position">2</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <object class="GtkFrame" id="frame1">
@@ -72,16 +66,29 @@ Select the type of Export required and the separator that will be used.
                     <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="quote_tbutton">
-                        <property name="label" translatable="yes">Quotes</property>
+                        <property name="label" translatable="yes">Use Quotes</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="csv_export_quote_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="simple_layout">
+                        <property name="label" translatable="yes">Simple Layout</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="csv_export_simple_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
                       </packing>
                     </child>
                   </object>
@@ -92,7 +99,7 @@ Select the type of Export required and the separator that will be used.
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Use Quotes</property>
+                <property name="label" translatable="yes">Options</property>
                 <property name="use_markup">True</property>
               </object>
             </child>
@@ -130,7 +137,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="csv_export_sep_cb" swapped="no"/>
@@ -145,7 +151,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">comma_radio</property>
@@ -164,7 +169,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">comma_radio</property>
@@ -183,7 +187,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">comma_radio</property>
@@ -200,7 +203,7 @@ Select the type of Export required and the separator that will be used.
                       <object class="GtkEntry" id="custom_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">&#x25CF;</property>
+                        <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
@@ -382,7 +385,6 @@ Select the type of Export required and the separator that will be used.
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="border_width">3</property>
-                                <property name="use_action_appearance">False</property>
                                 <child>
                                   <object class="GtkAlignment" id="alignment5">
                                     <property name="visible">True</property>
@@ -478,7 +480,6 @@ Select the type of Export required and the separator that will be used.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -495,7 +496,6 @@ Select the type of Export required and the separator that will be used.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">show_all</property>
@@ -523,7 +523,7 @@ Select the type of Export required and the separator that will be used.
                       </object>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                         <property name="x_padding">12</property>
                       </packing>
                     </child>
@@ -533,7 +533,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -543,7 +542,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -552,7 +551,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">end_date_latest</property>
@@ -564,7 +562,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">6</property>
                         <property name="bottom_attach">7</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -573,7 +571,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">end_date_latest</property>
@@ -585,7 +582,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -594,7 +591,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -606,7 +602,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -619,7 +615,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -633,7 +629,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                         <property name="x_padding">12</property>
                       </packing>
                     </child>
@@ -643,7 +639,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">start_date_earliest</property>
@@ -655,7 +650,7 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -664,7 +659,6 @@ Select the type of Export required and the separator that will be used.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">start_date_earliest</property>
@@ -676,70 +670,34 @@ Select the type of Export required and the separator that will be used.
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="start_date_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                        <property name="x_options"></property>
+                        <property name="x_options"/>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="end_date_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">6</property>
                         <property name="bottom_attach">7</property>
-                        <property name="x_options"></property>
+                        <property name="x_options"/>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -760,9 +718,6 @@ Select the type of Export required and the separator that will be used.
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>
@@ -788,9 +743,6 @@ Enter file name and location for the Export...
             <property name="fill">False</property>
             <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>

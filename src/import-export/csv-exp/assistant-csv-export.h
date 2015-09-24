@@ -87,8 +87,12 @@ typedef struct
 
     char           *separator_str;
     gboolean        use_quotes;
+    gboolean        simple_layout;
     gboolean        use_custom;
     gboolean        failed;
+
+    gchar          *end_sep;
+    gchar          *mid_sep;
 } CsvExportInfo;
 
 

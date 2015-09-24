@@ -44,8 +44,8 @@
 #include "csv-tree-export.h"
 #include "csv-transactions-export.h"
 
-#define GNC_PREFS_GROUP    "dialogs.export.csv"
-#define GNC_PREF_PANED_POS "paned-position"
+#define GNC_PREFS_GROUP               "dialogs.export.csv"
+#define GNC_PREF_PANED_POS            "paned-position"
 #define ASSISTANT_CSV_EXPORT_CM_CLASS "assistant-csv-export"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -65,6 +65,7 @@ void csv_export_assistant_finish_page_prepare (GtkAssistant *assistant, gpointer
 void csv_export_assistant_summary_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data);
+void csv_export_simple_cb (GtkToggleButton *button, gpointer user_data);
 void csv_export_sep_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data);
 
@@ -94,10 +95,12 @@ static const gchar *start_tree_string = N_(
 static const gchar *start_trans_string = N_(
             "This assistant will help you export the Transactions to a file\n"
             " with the separator specified below.\n\n"
-            "There will be multiple rows for each transaction and may"
-            " require further manipulation to get them in a format you can use.\n\n"
-            "Each Transaction will appear once in the export and will be listed in"
-            " the order the accounts were processed\n\n"
+            "There will be multiple rows for each transaction and may require further"
+            " manipulation to get them in a format you can use. Each Transaction will"
+            " appear once in the export and will be listed in the order the accounts"
+            " were processed\n\n"
+            "By selecting the simple layout, the output will be equivalent to a single"
+            " row register view and as such some of the transfer detail could be lost.\n\n"
             "Select the settings you require for the file and then click 'Forward' to proceed"
             " or 'Cancel' to Abort Export.\n");
 
@@ -160,7 +163,8 @@ csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
  *
  * call back for type of separartor required
  *******************************************************/
-void csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
+void
+csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
     const gchar *name;
@@ -203,7 +207,8 @@ void csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
  *
  * call back for use of quotes
  *******************************************************/
-void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data)
+void
+csv_export_quote_cb (GtkToggleButton *button, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
 
@@ -213,13 +218,29 @@ void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data)
         info->use_quotes = FALSE;
 }
 
+/*******************************************************
+ * csv_export_simple_cb
+ *
+ * call back for use of simple_layout
+ *******************************************************/
+void
+csv_export_simple_cb (GtkToggleButton *button, gpointer user_data)
+{
+    CsvExportInfo *info = user_data;
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+        info->simple_layout = TRUE;
+    else
+        info->simple_layout = FALSE;
+}
 
 /*******************************************************
  * csv_export_custom_entry_cb
  *
  * call back for custom separator
  *******************************************************/
-void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
+void
+csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
     const gchar *custom_str;
@@ -244,10 +265,11 @@ void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
  *
  * load the default settings for the assistant
  *******************************************************/
-static
-void load_settings (CsvExportInfo *info)
+static void
+load_settings (CsvExportInfo *info)
 {
     info->use_quotes = FALSE;
+    info->simple_layout = FALSE;
     info->separator_str = ",";
     info->file_name = NULL;
     info->starting_dir = NULL;
@@ -746,6 +768,8 @@ csv_export_close_handler (gpointer user_data)
 
     g_free (info->file_name);
     g_free (info->starting_dir);
+    if (info->mid_sep)
+        g_free (info->mid_sep);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
@@ -782,7 +806,12 @@ csv_export_assistant_create (CsvExportInfo *info)
     info->account_page = GTK_WIDGET(gtk_builder_get_object(builder, "account_page"));
 
     if (info->export_type == XML_EXPORT_TREE)
+    {
+        GtkWidget *chkbox = GTK_WIDGET(gtk_builder_get_object(builder, "simple_layout"));
+
+        gtk_widget_destroy (chkbox);
         gtk_widget_destroy (info->account_page);
+    }
     else
     {
         GtkTreeView *tree_view;
