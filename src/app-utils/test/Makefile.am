@@ -8,17 +8,13 @@ check_PROGRAMS = \
   test-sx \
   test-app-utils
 
-AM_DEFAULT_SOURCE_EXT = .cpp
-
 TESTS =  \
   test-load-module \
   ${check_PROGRAMS}
 
-test_exp_parser_SOURCES = \
-  test-exp-parser.c
-
-test_print_parse_amount_SOURCES = \
-  test-print-parse-amount.cpp
+test_scm_query_string_SOURCES = test-scm-query-string.cpp
+test_sx_SOURCES = test-sx.cpp
+test_print_parse_amount_SOURCES = test-print-parse-amount.cpp
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \

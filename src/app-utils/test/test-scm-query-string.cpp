@@ -1,7 +1,9 @@
+#include <libguile.h>
 
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
-#include <libguile.h>
 #include "guile-mappings.h"
 
 #include "engine-helpers-guile.h"
@@ -11,7 +13,7 @@
 #include "test-stuff.h"
 #include "Query.h"
 #include "TransLog.h"
-
+}
 
 static void
 test_query (Query *q, SCM val2str)

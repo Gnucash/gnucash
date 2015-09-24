@@ -24,7 +24,8 @@
  * @brief Minimal test of reading/writing account parameters
  * @author David Hampton <hampton@employees.org>
  */
-
+extern "C"
+{
 #include "config.h"
 #include <unistd.h>
 #include <glib.h>
@@ -34,6 +35,7 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include <qofinstance-p.h>
+}
 
 static void
 run_test (void)
@@ -89,7 +91,7 @@ main (int argc, char **argv)
 
     /* Any tests that cause an error or warning to be printed
      * automatically fail! */
-    g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+    g_log_set_always_fatal((GLogLevelFlags)(G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING));
     /* Set up a reproducible test-case */
     srand(0);
 

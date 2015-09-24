@@ -20,7 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
 #include "qof.h"
@@ -30,11 +31,12 @@
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+}
 
 static int
 test_trans_query (Transaction *trans, gpointer data)
 {
-    QofBook *book = data;
+    QofBook *book = QOF_BOOK(data);
     GList *list;
     QofQuery *q;
 
@@ -89,7 +91,7 @@ main (int argc, char **argv)
     int i;
 
     qof_init();
-    g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+    g_log_set_always_fatal((GLogLevelFlags)(G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING));
 
     xaccLogDisable ();
 

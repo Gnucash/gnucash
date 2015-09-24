@@ -2133,7 +2133,8 @@ once_freq(const GDate *when)
 }
 
 static SchedXaction*
-add_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur, Recurrence *r)
+add_sx(const gchar *name, const GDate *start, const GDate *end,
+       const GDate *last_occur, Recurrence *r)
 {
     QofBook *book = qof_session_get_book(gnc_get_current_session());
     SchedXaction *sx = xaccSchedXactionMalloc(book);
@@ -2155,13 +2156,14 @@ add_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occu
 }
 
 SchedXaction*
-add_daily_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur)
+add_daily_sx(const gchar *name, const GDate *start,
+	     const GDate *end, const GDate *last_occur)
 {
     return add_sx(name, start, end, last_occur, daily_freq(start, 1));
 }
 
 SchedXaction*
-add_once_sx(gchar *name, const GDate *when)
+add_once_sx(const gchar *name, const GDate *when)
 {
     return add_sx(name, when, NULL, NULL, once_freq(when));
 }

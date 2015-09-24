@@ -22,7 +22,8 @@
  *  02110-1301, USA.
  */
 
-
+extern "C"
+{
 #include "config.h"
 #include <ctype.h>
 #include <glib.h>
@@ -30,6 +31,7 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "gnc-numeric.h"
+}
 
 #define NREPS 2000
 

@@ -21,7 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
 #include <string.h>
@@ -31,6 +32,7 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
+}
 
 #define print_gnc_numeric(num) fprintf(stderr, "%s\n", gnc_numeric_to_string(num))
 
@@ -59,7 +61,7 @@ run_test (void)
     Timespec ts;
     time64 now;
 
-    char *reason = "because I can";
+    const char *reason = "because I can";
 
     book = qof_book_new();
 

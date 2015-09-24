@@ -22,7 +22,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
 
@@ -30,6 +31,7 @@
 #include "qof.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+}
 
 static void
 test_commodity(void)
@@ -50,7 +52,7 @@ test_commodity(void)
 
     {
         char *fullname;
-        const char *namespace;
+        const char *name_space;
         char *mnemonic;
         char *cusip;
         int fraction;
@@ -59,12 +61,12 @@ test_commodity(void)
 
         book = qof_book_new ();
         fullname = get_random_string();
-        namespace = get_random_commodity_namespace();
+        name_space = get_random_commodity_namespace();
         mnemonic = get_random_string();
         cusip = get_random_string();
         fraction = get_random_int_in_range(0, 10000);
 
-        com = gnc_commodity_new(book, fullname, namespace, mnemonic,
+        com = gnc_commodity_new(book, fullname, name_space, mnemonic,
                                 cusip, fraction);
 
         do_test(
@@ -75,7 +77,7 @@ test_commodity(void)
             "fullnames equal test");
 
         do_test(
-            g_strcmp0(namespace, gnc_commodity_get_namespace(com)) == 0,
+            g_strcmp0(name_space, gnc_commodity_get_namespace(com)) == 0,
             "namespace equal test");
 
         do_test(
@@ -96,10 +98,10 @@ test_commodity(void)
             g_strcmp0(fullname, gnc_commodity_get_fullname(com)) == 0,
             "reset fullnames equal test");
 
-        namespace = get_random_commodity_namespace();
-        gnc_commodity_set_namespace(com, namespace);
+        name_space = get_random_commodity_namespace();
+        gnc_commodity_set_namespace(com, name_space);
         do_test(
-            g_strcmp0(namespace, gnc_commodity_get_namespace(com)) == 0,
+            g_strcmp0(name_space, gnc_commodity_get_namespace(com)) == 0,
             "reset namespace equal test");
 
         mnemonic = get_random_string();
@@ -120,7 +122,7 @@ test_commodity(void)
             gnc_commodity_get_fraction(com) == fraction,
             "reset fraction code equal test");
 
-        com2 = gnc_commodity_new(book, fullname, namespace, mnemonic,
+        com2 = gnc_commodity_new(book, fullname, name_space, mnemonic,
                                  cusip, fraction);
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");

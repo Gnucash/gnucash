@@ -68,6 +68,18 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql
 
+test_account_object_SOURCES = test-account-object.cpp
+test_commodities_SOURCES = test-commodities.cpp
+test_date_SOURCES = test-date.cpp
+test_group_vs_book_SOURCES = test-group-vs-book.cpp
+test_lots_SOURCES = test-lots.cpp
+test_numeric_SOURCES = test-numeric.cpp
+test_query_SOURCES = test-query.cpp
+test_scm_query_SOURCES = test-scm-query.cpp
+test_split_vs_account_SOURCES = test-split-vs-account.cpp
+test_transaction_reversal_SOURCES = test-transaction-reversal.cpp
+test_transaction_voiding_SOURCES = test-transaction-voiding.cpp
+
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GUILE="${GUILE}" \
@@ -76,7 +88,6 @@ TESTS_ENVIRONMENT = \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
-AM_DEFAULT_SOURCE_EXT = .cpp
 
 TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2}
 

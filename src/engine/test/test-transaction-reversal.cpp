@@ -21,7 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
 #include <string.h>
@@ -31,6 +32,7 @@
 #include "TransLog.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+}
 
 #define print_gnc_numeric(num) fprintf(stderr, "%s\n", gnc_numeric_to_string(num))
 
@@ -53,7 +55,7 @@ run_test (void)
 {
     Account *acc1, *acc2;
     Transaction *transaction, *new_trans;
-    gnc_numeric old, new;
+    gnc_numeric old_num, new_num;
     QofBook *book;
     char *msg;
     int i;
@@ -91,17 +93,17 @@ run_test (void)
     new_trans = xaccTransReverse(transaction);
     for (i = 0; i < 2; i++)
     {
-        old = xaccSplitGetAmount(xaccTransGetSplit(transaction, i));
-        new = xaccSplitGetAmount(xaccTransGetSplit(new_trans, i));
-        if (gnc_numeric_eq(old, gnc_numeric_neg(new)))
+        old_num = xaccSplitGetAmount(xaccTransGetSplit(transaction, i));
+        new_num = xaccSplitGetAmount(xaccTransGetSplit(new_trans, i));
+        if (gnc_numeric_eq(old_num, gnc_numeric_neg(new_num)))
         {
             msg = g_strdup_printf("Amount of split %d wrong after reversal\n", i);
             failure(msg);
         }
 
-        old = xaccSplitGetValue(xaccTransGetSplit(transaction, i));
-        new = xaccSplitGetValue(xaccTransGetSplit(new_trans, i));
-        if (gnc_numeric_eq(old, gnc_numeric_neg(new)))
+        old_num = xaccSplitGetValue(xaccTransGetSplit(transaction, i));
+        new_num = xaccSplitGetValue(xaccTransGetSplit(new_trans, i));
+        if (gnc_numeric_eq(old_num, gnc_numeric_neg(new_num)))
         {
             msg = g_strdup_printf("Value of split %d wrong after reversal\n", i);
             failure(msg);

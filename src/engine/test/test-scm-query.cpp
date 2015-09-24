@@ -1,7 +1,9 @@
+#include <libguile.h>
 
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
-#include <libguile.h>
 
 #include "engine-helpers-guile.h"
 #include "gnc-module.h"
@@ -9,7 +11,7 @@
 #include "test-stuff.h"
 #include "Query.h"
 #include "TransLog.h"
-
+}
 
 static void
 test_query (QofQuery *q)

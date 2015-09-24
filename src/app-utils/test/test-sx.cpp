@@ -1,3 +1,5 @@
+extern "C"
+{
 #include "config.h"
 #include <stdlib.h>
 #include <glib.h>
@@ -8,6 +10,7 @@
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
+}
 
 static void
 test_basic()
@@ -67,7 +70,7 @@ test_empty()
     GDate *end;
     GncSxInstanceModel *model;
 
-    end = g_date_new_dmy(31, 12, way_in_the_future_year);
+    end = g_date_new_dmy(31, (GDateMonth)12, way_in_the_future_year);
     model = gnc_sx_get_instances(end, TRUE);
     do_test(g_list_length(model->sx_instance_list) == 0, "no instances");
     g_object_unref(G_OBJECT(model));

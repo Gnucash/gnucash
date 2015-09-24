@@ -20,7 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include <glib.h>
 #include "qof.h"
@@ -30,6 +31,7 @@
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+}
 
 static gboolean
 account_tree_has_book (Account *parent, QofBook *book)
@@ -45,7 +47,7 @@ account_tree_has_book (Account *parent, QofBook *book)
     children = gnc_account_get_children(parent);
     for (node = children; node; node = node->next)
     {
-        if (!account_tree_has_book (node->data, book))
+        if (!account_tree_has_book (GNC_ACCOUNT(node->data), book))
             return FALSE;
     }
     g_list_free(children);

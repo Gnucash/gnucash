@@ -24,7 +24,8 @@
  * @brief Minimal test to see if automatic lot scrubbing works.
  * @author Linas Vepstas <linas@linas.org>
  */
-
+extern "C"
+{
 #include "config.h"
 #include <ctype.h>
 #include <glib.h>
@@ -35,6 +36,7 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "Transaction.h"
+}
 
 static gint transaction_num = 320;
 static gint	max_iterate = 10;
@@ -80,7 +82,7 @@ main (int argc, char **argv)
 
     /* Any tests that cause an error or warning to be printed
      * automatically fail! */
-    g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+    g_log_set_always_fatal((GLogLevelFlags)(G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING));
     /* Set up a reproducible test-case */
     srand(0);
     /* Iterate the test a number of times */

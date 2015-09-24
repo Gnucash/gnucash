@@ -99,8 +99,9 @@ void make_random_changes_to_level (QofBook *book, Account *parent);
 void make_random_changes_to_book (QofBook *book);
 void make_random_changes_to_session (QofSession *session);
 
-SchedXaction* add_daily_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur);
-SchedXaction* add_once_sx(gchar *name, const GDate *when);
+SchedXaction* add_daily_sx(const gchar *name, const GDate *start,
+			   const GDate *end, const GDate *last_occur);
+SchedXaction* add_once_sx(const gchar *name, const GDate *when);
 void remove_sx(SchedXaction *sx);
 
 #ifdef __cplusplus

@@ -1,7 +1,8 @@
 /*
  * -- fix borken timezone test -- linas May 2004
  */
-
+extern "C"
+{
 #include "config.h"
 #include <ctype.h>
 #include <glib.h>
@@ -11,7 +12,7 @@
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
-
+}
 
 static gboolean
 check_time (Timespec ts, gboolean always_print)
