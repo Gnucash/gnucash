@@ -463,9 +463,11 @@ src/import-export/qif-imp/qif-to-gnc.scm
 src/import-export/qif-imp/qif-utils.scm
 src/libqof/qof/gnc-aqbanking-templates.cpp
 src/libqof/qof/gnc-date.cpp
+src/libqof/qof/gnc-datetime.cpp
 src/libqof/qof/gnc-int128.cpp
 src/libqof/qof/gnc-numeric.cpp
 src/libqof/qof/gnc-rational.cpp
+src/libqof/qof/gnc-timezone.cpp
 src/libqof/qof/guid.cpp
 src/libqof/qof/kvp_frame.cpp
 src/libqof/qof/kvp-value.cpp
