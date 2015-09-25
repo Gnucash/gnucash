@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-27 10:47-0700\n"
-"PO-Revision-Date: 2015-09-25 16:31+0200\n"
+"PO-Revision-Date: 2015-09-25 20:55+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -1955,7 +1955,7 @@ msgstr "Bemerkungen Auslagenerstattung"
 #: ../../gnucash-git/po/../src/report/standard-reports/account-summary.scm:441
 #: ../../gnucash-git/po/../src/report/standard-reports/sx-summary.scm:446
 msgid "Type"
-msgstr "Art"
+msgstr "Kontoart"
 
 #: ../../gnucash-git/po/../src/business/business-gnome/dialog-invoice.c:3074
 #: ../../gnucash-git/po/../src/register/ledger-core/split-register-model.c:300
@@ -12668,10 +12668,11 @@ msgstr "_Berechnen"
 msgid "Account Name"
 msgstr "Kontobezeichnung"
 
+#, this is improved in the UI
 #: ../../gnucash-git/po/../src/gnome-utils/gnc-tree-view-account.c:737
 #: ../../gnucash-git/po/../src/gnome-utils/gnc-tree-view-split-reg.c:3016
 msgid "Commodity"
-msgstr "Devise/Wertpapier"
+msgstr "Währung"
 
 #: ../../gnucash-git/po/../src/gnome-utils/gnc-tree-view-account.c:743
 #: ../../gnucash-git/po/../src/report/report-system/options-utilities.scm:242
@@ -21807,9 +21808,8 @@ msgid "No accounts selected"
 msgstr "Keine Konten ausgewählt!"
 
 #: ../../gnucash-git/po/../src/report/report-system/html-utilities.scm:841
-#, fuzzy
 msgid "This report requires accounts to be selected in the report options."
-msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
+msgstr "Für diesen Bericht müssen Konten in den Berichtsoptionen ausgewählt werden."
 
 #: ../../gnucash-git/po/../src/report/report-system/html-utilities.scm:848
 #: ../../gnucash-git/po/../src/report/standard-reports/price-scatter.scm:330
@@ -23604,7 +23604,7 @@ msgstr "%s: %s"
 #. for gnc-build-url
 #: ../../gnucash-git/po/../src/report/standard-reports/cash-flow.scm:40
 msgid "Cash Flow"
-msgstr "Cash Flow"
+msgstr "Kapitalfluss"
 
 #: ../../gnucash-git/po/../src/report/standard-reports/cash-flow.scm:55
 #, fuzzy
