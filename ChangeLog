@@ -1,10 +1,410 @@
+2015-09-26 John Ralls 
+
+	* Fix empty Language tag in tr.po. (HEAD, maint)
+
+2015-09-25 Mechtilde 
+
+	* corr some translations (origin/maint)
+
+2015-09-25 Mechtilde 
+
+	* some translations
+
+2015-09-23 Mechtilde 
+
+	* update translation
+
+2015-09-23 Mechtilde 
+
+	* some corrections
+
+2015-09-23 Mechtilde 
+
+	* update translation
+
+2015-09-22 John Ralls 
+
+	* Failing to add a price to the db isn't a test failure.
+
+2015-09-22 Geert Janssens 
+
+	* Update POTFILES.in after removal of assistant-utils.c
+
+2015-09-04 Geert Janssens 
+
+	* Gtk code cleanups: setting a default color map is deprecated
+
+2015-09-03 Geert Janssens 
+
+	* Gtk code cleanups: Convert dense-cal from gdk_gc_* to cairo
+
+2015-08-22 Geert Janssens 
+
+	* Gtk code cleanups: Use accessor functions on GtkWidget instead of deprecated direct access
+
+2015-08-25 Geert Janssens 
+
+	* Gtk code cleanups: drop use of deprecated GTK_CALENDAR_WEEK_START_ON_MONDAY
+
+2015-08-25 Geert Janssens 
+
+	* Gtk code cleanups: replace deprecated gdk_drawable_get_display with gdk_window_get_display
+
+2015-08-25 Geert Janssens 
+
+	* Gtk code cleanups: drop custom arg type registration
+
+2015-08-25 Geert Janssens 
+
+	* Gtk code cleanups: GTK_WIDGET_SET_FLAGS is deprecated
+
+2015-08-24 Geert Janssens 
+
+	* Gtk code cleanups: use G_TYPE_CHECK_* instead of obsolete GTK_CHECK_*
+
+2015-08-23 Geert Janssens 
+
+	* Gtk code cleanups: use gdk_window_get_width/height functions
+
+2015-08-22 Geert Janssens 
+
+	* Gtk code cleanups: consistently use new style key codes
+
+2015-08-22 Geert Janssens 
+
+	* Gtk code cleanups: Avoid GtkObject where possible
+
+2015-08-22 Geert Janssens 
+
+	* Gtk code cleanups: Fix obsolete use of GtkType type.
+
+2015-08-22 Geert Janssens 
+
+	* Drop function gnc_assistant_set_colors
+
+2015-09-19 John Ralls 
+
+	* Update the translations from the Translation project.
+
+2015-09-19 John Ralls 
+
+	* Rearrange the LINGUAS as suggested by Frank Ellenberger in the wiki.
+
+2015-09-19 John Ralls 
+
+	* Update all message catalogs with the 2.6.7 gnucash.pot and fix all warnings.
+
+2015-09-17 John Ralls 
+
+	* Fix rename failure for gnc_xfer_dialog_set_exchange_rate.
+
+2015-09-17 John Ralls 
+
+	* Correct the Stock, Bond, Market Index, and Mutual Fund account types in all locales.
+
+2015-09-17 John Ralls 
+
+	* Fix warning about always-true condition.
+
+2015-09-16 John Ralls 
+
+	* Set -std=gnu99, matching master.
+
+2015-09-15 John Ralls 
+
+	* Merge branch 'single-price' into maint
+
+2015-09-15 John Ralls 
+
+	* Prevent F::Q from updating PRICE_SOURCE_EDIT_DLG prices.
+
+2015-09-12 John Ralls 
+
+	* Remove unnecessary and harmful price rounding.
+
+2015-09-12 John Ralls 
+
+	* Remove the preference for storing prices relative to the base currency.
+
+2015-09-12 John Ralls 
+
+	* Export the price-source enums to Guile and use them in price-quotes.scm.
+
+2015-09-09 John Ralls 
+
+	* Remove static function swap_amount(), not used.
+
+2015-09-09 John Ralls 
+
+	* Implement user-entered-price preference.
+
+2015-09-09 John Ralls 
+
+	* Fold separate call of gnc_pricedb_lookup_latest() into lookup_price.
+
+2015-09-09 John Ralls 
+
+	* Recognize and handle reversed price quotes from gnc-fq-helper.
+
+2015-09-03 John Ralls 
+
+	* Use an enum for internal representation of Price Sources.
+
+2015-09-03 John Ralls 
+
+	* Fix whitespace error.
+
+2015-09-03 John Ralls 
+
+	* Extract function lookup_price in dialog_transfer.c
+
+2015-09-01 John Ralls 
+
+	* Invert the F::Q price if there's already one in the other direction.
+
+2015-09-01 John Ralls 
+
+	* Handle currencies with one-directional quotes and quotes < 1 in F::Q.
+
+2015-09-01 John Ralls 
+
+	* Adjust split_register to match transfer dialog checking inverted prices.
+
+2015-09-01 John Ralls 
+
+	* Fix missing initialization of price_value.
+
+2015-09-01 John Ralls 
+
+	* Change CURRENCY_DENOM to 10000, matching what F::Q returns.
+
+2015-09-01 John Ralls 
+
+	* Extract function round_price(), consistently apply it.
+
+2015-08-31 John Ralls 
+
+	* Fix swap_amount so that it swaps the account pointers.
+
+2015-08-31 John Ralls 
+
+	* Fix gnc_numeric_invert to correctly handle negative values.
+
+2015-08-30 John Ralls 
+
+	* Flip return values of check_edit() and check_accounts().
+
+2015-08-29 John Ralls 
+
+	* Move gnc_numeric_invert to be not-inline.
+
+2015-08-28 John Ralls 
+
+	* Create a rounding policy for prices in the pricedb.
+
+2015-08-28 John Ralls 
+
+	* Rename _gnc_xfer_dialog_set_exchange_rate and use it consistently.
+
+2015-08-28 John Ralls 
+
+	* Provide gnc_numeric_invert() convenience function.
+
+2015-08-28 John Ralls 
+
+	* Use price_value when referring to a gnc_numeric.
+
+2015-08-25 John Ralls 
+
+	* Price-quotes: Modify quotes on same day instead of creating new ones.
+
+2015-08-23 John Ralls 
+
+	* Edit split-based prices instead of adding.
+
+2015-08-23 John Ralls 
+
+	* Check for an existing price before adding one in split_reg.
+
+2015-08-23 John Ralls 
+
+	* In the transfer dialog use the price_edit value for the saved price.
+
+2015-08-22 John Ralls 
+
+	* Fix up whitespace in dialog-transfer.c.
+
+2015-08-22 John Ralls 
+
+	* Refactor gnc_xfer_dialog_response_cb with several extract-functions.
+
+2015-08-22 John Ralls 
+
+	* Don't store prices of source invoice.
+
+2015-08-21 John Ralls 
+
+	* Replace the price source and type strings with defines.
+
+2015-09-15 John Ralls 
+
+	* Correct the Stock, Bond, Market Index, and Mutual Fund account types.
+
+2015-09-12 John Ralls 
+
+	* Bug 754617 - Gnucash should use PKG_PROG_PKG_CONFIG
+
+2015-09-09 Geert Janssens 
+
+	* Small doxigen improvements to previous commit
+
+2015-09-09 Matt 
+
+	* Bug754764Fix
+
+2015-04-04 yomlogs 
+
+	* Bug 724738 - Value in "Display Symbol" field not saved
+
+2015-08-19 Alex Aycinena 
+
+	* Remove e-mail form AUTHORS and DOCUMENTERS
+
+2015-08-17 John Ralls 
+
+	* Sort the source list from gnc-fq-check.
+
+2015-08-10 Alex Aycinena 
+
+	* Correct wording on AUTHORS and DOCUMENTERS
+
+2015-08-06 Mike Alexander 
+
+	* Avoid passing invalid arguments to functions to get rid of some non-fatal asserts.
+
+2015-08-10 John Ralls 
+
+	* Add note at the top to disuade users from contacting authors directly for support.
+
+2015-08-02 John Ralls 
+
+	* Put the quotes back around the date string in gnc-fq-helper.
+
+2015-08-01 John Ralls 
+
+	* Bug 753146 - free(): invalid pointer on duplicate transaction
+
+2015-07-10 Mechtilde 
+
+	* More new German translation
+
+2015-07-05 Mechtilde 
+
+	* New German translations - after sending the others to Frank
+
+2015-07-04 Mechtilde 
+
+	* some more German translations
+
+2015-05-25 Mechtilde 
+
+	* even more German translation
+
+2015-05-23 Mechtilde 
+
+	* added more German translation
+
+2015-05-09 Mechtilde 
+
+	* add translation for reports
+
+2015-07-30 John Ralls 
+
+	* Add make_testfile suggestion to test-templates README.
+
+2015-07-30 Mike Evans 
+
+	* Fix apparent typo preventing build.
+
+2015-07-28 John Ralls 
+
+	* Fix up and improve the Doxygen documentation in unittest-support.h.
+
+2015-07-28 John Ralls 
+
+	* Improve the test-templates README and update the templates to current practice.
+
+2015-07-28 Geert Janssens 
+
+	* Bug 752035 - Transaction Report Filter By not Always Working
+
+2015-07-27 John Ralls 
+
+	* Make backend sync errors survive to the session.
+
+2015-07-26 John Ralls 
+
+	* Bug 752879 - Finance::Quote TZ Date::Manip config variable is deprecated
+
+2015-07-25 John Ralls 
+
+	* Uninstall the python bindings.
+
+2015-07-11 Bastien Scher 
+
+	* Fix two French strings
+
+2015-07-12 John Ralls 
+
+	* Bug 746998 - "Months Remaining" spinbox in Loan Assistant is non-obvious
+
+2015-07-11 John Ralls 
+
+	* Bug 747795 - Attached file not found.
+
+2015-07-11 John Ralls 
+
+	* Bug 752204 - .gml2 files are modified during build, take 2.
+
+2015-07-10 John Ralls 
+
+	* Bug 752203 - `make check` fails in "runTests.py":
+
+2015-07-10 John Ralls 
+
+	* Bug 752204 - .gml2 files are modified during build
+
+2015-07-10 John Ralls 
+
+	* Initialize GError to NULL or it doesn't work.
+
+2015-07-07 John Ralls 
+
+	* Bug 749077 - wrongfully invalidating any account save location/path starting with ".gnucash"
+
+2015-07-07 John Ralls 
+
+	* Restore Date::Manip to quotes modules.
+
+2015-07-05 John Ralls 
+
+	* Update the copyright date for Help|About to 2015.
+
+2015-05-24 John Ralls 
+
+	* Change gtkmacintegration-gtk2 include directory back to gtkmacintegration.
+
 2015-06-27 John Ralls 
 
-	* Get latest translations from the Translation Project. (HEAD, maint)
+	* Release 2.6.7 (tag: 2.6.7)
+
+2015-06-27 John Ralls 
+
+	* Get latest translations from the Translation Project.
 
 2015-06-16 Geert Janssens 
 
-	* Bug 681225 - income statement displays blank base currency entries when trading account transactions are present during the report period (origin/maint)
+	* Bug 681225 - income statement displays blank base currency entries when trading account transactions are present during the report period
 
 2015-06-15 Geert Janssens 
 
@@ -28,7 +428,7 @@
 
 2015-06-02 Mike Evans 
 
-	* Bug 734183 - Set value to zero before calling gnc_exp_parser_parse.
+	* Bug 734183 - Set value to zero before calling gnc_exp_parser_parse. (github/maint)
 
 2015-05-31 Geert Janssens 
 
@@ -52,7 +452,7 @@
 
 2015-04-28 John Ralls 
 
-	* Fix some abs() errors from new clang and gcc versions. (manjusri/maint)
+	* Fix some abs() errors from new clang and gcc versions.
 
 2015-04-28 Geert Janssens 
 
@@ -496,7 +896,7 @@
 
 2014-12-14 John Ralls 
 
-	* Still more Guile library path additions, this time in tests. (manjusri-maint/maint)
+	* Still more Guile library path additions, this time in tests.
 
 2014-12-14 John Ralls 
 
