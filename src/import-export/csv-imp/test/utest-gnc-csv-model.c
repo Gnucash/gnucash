@@ -42,20 +42,7 @@ typedef struct
     int          exp_day;
 } parse_date_data;
 
-static void
-setup( Fixture *fixture, gconstpointer pData )
-{
-    fixture->parse_data = gnc_csv_new_parse_data ();
-}
-
-static void
-teardown( Fixture *fixture, gconstpointer pData )
-{
-    gnc_csv_parse_data_free (fixture->parse_data);
-}
-
-static const gchar *suitename = "/import-export/csv-imp/gnc-csv-model";
-void test_suite_gnc_csv_model ( void );
+static const gchar* samplefile1 = "sample1.csv";
 
 static char* get_filepath(const char* filename, gboolean test_existence)
 {
@@ -78,6 +65,36 @@ static char* get_filepath(const char* filename, gboolean test_existence)
 
     return result;
 }
+
+static void
+setup( Fixture *fixture, gconstpointer pData )
+{
+    fixture->parse_data = gnc_csv_new_parse_data ();
+}
+
+static void
+setup_one_file( Fixture *fixture, gconstpointer pData )
+{
+    const gchar *filename = (const gchar*) pData;
+    char *filepath = get_filepath (filename, TRUE);
+    GError *the_error = NULL;
+    int resultcode = 0;
+
+    fixture->parse_data = gnc_csv_new_parse_data ();
+    resultcode = gnc_csv_load_file (fixture->parse_data, filepath,
+                                    &the_error);
+    g_assert (resultcode == 0);
+    g_free(filepath);
+}
+
+static void
+teardown( Fixture *fixture, gconstpointer pData )
+{
+    gnc_csv_parse_data_free (fixture->parse_data);
+}
+
+static const gchar *suitename = "/import-export/csv-imp/gnc-csv-model";
+void test_suite_gnc_csv_model ( void );
 
 /* parse_date_with_year
 time64 parse_date_with_year (const char* date_str, int format)// Local: 1:0:0
@@ -260,15 +277,8 @@ test_gnc_csv_convert_encoding (Fixture *fixture, gconstpointer pData)
 /* gnc_csv_load_file
 int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,// C: 1  Local: 0:0:0
 */
-/* static void
-test_gnc_csv_load_file (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* gnc_csv_parse
-int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)// C: 13 in 1  Local: 0:0:0
-*/
 static void
-test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
+test_gnc_csv_load_file (Fixture *fixture, gconstpointer pData)
 {
 
     char *file1 = get_filepath ("notexist.csv", FALSE);
@@ -286,6 +296,16 @@ test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
     resultcode = gnc_csv_load_file (fixture->parse_data, file2,
                                     &the_error);
     g_assert (resultcode == 0);
+}
+/* gnc_csv_parse
+int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)// C: 13 in 1  Local: 0:0:0
+*/
+static void
+test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
+{
+
+    GError *the_error = NULL;
+    int resultcode = 0;
 
     /* Test basic parsing of the loaded file
      * A few fields are sampled in the parsed data. */
@@ -294,10 +314,6 @@ test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
                          "Date") == 0);
     g_assert (g_strcmp0 ((char*)((GPtrArray*)(fixture->parse_data->orig_lines->pdata[1]))->pdata[6],
                          "1,100.00") == 0);
-
-    /* Clean up */
-    g_free(file1);
-    g_free(file2);
 }
 /* trans_property_free
 static void trans_property_free (TransProperty* prop)// Local: 2:0:0
@@ -342,8 +358,8 @@ GNC_TEST_ADD (suitename, "parse date", Fixture, NULL, NULL, test_parse_date, NUL
 GNC_TEST_ADD (suitename, "gnc csv new parse data", Fixture, NULL, NULL, test_gnc_csv_new_parse_data, NULL);
 // GNC_TEST_ADD (suitename, "gnc csv parse data free", Fixture, NULL, setup, test_gnc_csv_parse_data_free, teardown);
 // GNC_TEST_ADD (suitename, "gnc csv convert encoding", Fixture, NULL, setup, test_gnc_csv_convert_encoding, teardown);
-// GNC_TEST_ADD (suitename, "gnc csv load file", Fixture, NULL, setup, test_gnc_csv_load_file, teardown);
-GNC_TEST_ADD (suitename, "gnc csv parse", Fixture, NULL, setup, test_gnc_csv_parse, teardown);
+GNC_TEST_ADD (suitename, "gnc csv load file", Fixture, NULL, setup, test_gnc_csv_load_file, teardown);
+GNC_TEST_ADD (suitename, "gnc csv parse", Fixture, samplefile1, setup_one_file, test_gnc_csv_parse, teardown);
 // GNC_TEST_ADD (suitename, "trans property free", Fixture, NULL, setup, test_trans_property_free, teardown);
 // GNC_TEST_ADD (suitename, "trans property set", Fixture, NULL, setup, test_trans_property_set, teardown);
 // GNC_TEST_ADD (suitename, "trans property list free", Fixture, NULL, setup, test_trans_property_list_free, teardown);
