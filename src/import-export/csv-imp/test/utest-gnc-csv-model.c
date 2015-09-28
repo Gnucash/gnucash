@@ -109,7 +109,7 @@ static time64 parse_date_without_year (const char* date_str, int format)// Local
 time64 parse_date (const char* date_str, int format)// C: 14 in 7 SCM: 9 in 2 Local: 1:0:0
 */
 static void
-test_parse_date (Fixture *fixture, gconstpointer pData)
+test_parse_date (void)
 {
     time64 rawtime = gnc_time_utc (NULL);
     struct tm *tm = gnc_gmtime (&rawtime);
@@ -354,7 +354,7 @@ test_suite_gnc_csv_model (void)
 
 // GNC_TEST_ADD (suitename, "parse date with year", Fixture, NULL, setup, test_parse_date_with_year, teardown);
 // GNC_TEST_ADD (suitename, "parse date without year", Fixture, NULL, setup, test_parse_date_without_year, teardown);
-GNC_TEST_ADD (suitename, "parse date", Fixture, NULL, NULL, test_parse_date, NULL);
+GNC_TEST_ADD_FUNC (suitename, "parse date", test_parse_date);
 GNC_TEST_ADD_FUNC (suitename, "gnc csv new parse data", test_gnc_csv_new_parse_data);
 // GNC_TEST_ADD (suitename, "gnc csv parse data free", Fixture, NULL, setup, test_gnc_csv_parse_data_free, teardown);
 // GNC_TEST_ADD (suitename, "gnc csv convert encoding", Fixture, NULL, setup, test_gnc_csv_convert_encoding, teardown);
