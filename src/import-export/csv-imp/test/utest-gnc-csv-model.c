@@ -255,13 +255,12 @@ test_parse_date (Fixture *fixture, gconstpointer pData)
 GncCsvParseData* gnc_csv_new_parse_data (void)// C: 1 in 1  Local: 0:0:0
 */
 static void
-test_gnc_csv_new_parse_data (Fixture *fixture, gconstpointer pData)
+test_gnc_csv_new_parse_data (void)
 {
     GncCsvParseData* parse_data = gnc_csv_new_parse_data ();
     g_assert (parse_data != NULL);
     g_assert (parse_data->chunk != NULL);
-    /* This makes the test-suite segfault, so I have disabled it for now */
-    // gnc_csv_parse_data_free (parse_data);
+    gnc_csv_parse_data_free (parse_data);
 }
 
 /* gnc_csv_parse_data_free
@@ -356,7 +355,7 @@ test_suite_gnc_csv_model (void)
 // GNC_TEST_ADD (suitename, "parse date with year", Fixture, NULL, setup, test_parse_date_with_year, teardown);
 // GNC_TEST_ADD (suitename, "parse date without year", Fixture, NULL, setup, test_parse_date_without_year, teardown);
 GNC_TEST_ADD (suitename, "parse date", Fixture, NULL, NULL, test_parse_date, NULL);
-GNC_TEST_ADD (suitename, "gnc csv new parse data", Fixture, NULL, NULL, test_gnc_csv_new_parse_data, NULL);
+GNC_TEST_ADD_FUNC (suitename, "gnc csv new parse data", test_gnc_csv_new_parse_data);
 // GNC_TEST_ADD (suitename, "gnc csv parse data free", Fixture, NULL, setup, test_gnc_csv_parse_data_free, teardown);
 // GNC_TEST_ADD (suitename, "gnc csv convert encoding", Fixture, NULL, setup, test_gnc_csv_convert_encoding, teardown);
 GNC_TEST_ADD (suitename, "gnc csv load file", Fixture, NULL, setup, test_gnc_csv_load_file, teardown);
