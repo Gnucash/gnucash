@@ -1,4 +1,4 @@
-SUBDIRS = . test-core test 
+SUBDIRS = . test-core test
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
@@ -161,6 +161,7 @@ EXTRA_DIST = \
   kvp_doc.txt \
   SX-book-p.h \
   engine.i \
+  engine-common.i \
   business-core.i \
   ${gncscmmod_DATA} \
   ${gncscm_DATA}
@@ -172,7 +173,7 @@ SCM_FILE_LINKS = \
   ${gncscm_DATA}
 endif
 
-.scm-links: 
+.scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
