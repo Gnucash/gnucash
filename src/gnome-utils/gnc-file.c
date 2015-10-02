@@ -1101,7 +1101,6 @@ check_file_path (const char *path)
      gchar *dir = g_path_get_dirname(path);
      const gchar *dotgnucash = gnc_dotgnucash_dir();
      char *dirpath = dir;
-     gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, dir);
 
      /* Prevent user from storing file in GnuCash' private configuration
       * directory (~/.gnucash by default in linux, but can be overridden)
