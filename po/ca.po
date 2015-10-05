@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 10:40-0700\n"
+"POT-Creation-Date: 2015-09-26 10:44-0700\n"
 "PO-Revision-Date: 2014-03-06 20:03+0100\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -718,8 +718,8 @@ msgid "Opening Balances"
 msgstr "Saldos d'obertura"
 
 #: ../src/app-utils/gnc-ui-util.c:672
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:72
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:76
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:57
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:200
 #: ../src/report/standard-reports/balance-sheet.scm:673
 msgid "Retained Earnings"
@@ -727,8 +727,8 @@ msgstr "Guanys retinguts"
 
 #: ../src/app-utils/gnc-ui-util.c:744 ../src/engine/Account.c:3951
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:71
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:75
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:52
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:56
 #: ../src/register/ledger-core/split-register.c:2548
 #: ../src/report/standard-reports/balance-sheet.scm:661
 #: ../src/report/standard-reports/budget-balance-sheet.scm:812
@@ -749,7 +749,7 @@ msgstr "Saldo d'obertura"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:373
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -769,7 +769,7 @@ msgstr "Deure"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:394
+#: ../src/report/standard-reports/register.scm:375
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -792,7 +792,7 @@ msgstr "Ingressat"
 
 #: ../src/app-utils/prefs.scm:64
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3133
-#: ../src/import-export/csv-imp/gnc-csv-model.c:70
+#: ../src/import-export/csv-imp/gnc-csv-model.c:50
 msgid "Deposit"
 msgstr "Ingrés"
 
@@ -892,7 +892,7 @@ msgstr "Compra"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:826
 msgid "Charge"
 msgstr "Càrrec"
 
@@ -928,7 +928,7 @@ msgstr "Despeses"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:832
+#: ../src/report/standard-reports/register.scm:813
 msgid "Invoice"
 msgstr "Factura"
 
@@ -940,7 +940,7 @@ msgstr "Retirat"
 
 #: ../src/app-utils/prefs.scm:81
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
-#: ../src/import-export/csv-imp/gnc-csv-model.c:71
+#: ../src/import-export/csv-imp/gnc-csv-model.c:51
 msgid "Withdrawal"
 msgstr "Càrrec"
 
@@ -976,12 +976,12 @@ msgstr "Venda"
 #: ../src/engine/Scrub.c:393 ../src/gnome/gnc-budget-view.c:385
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2975
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3076
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:32
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:38
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:59
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:13
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:19
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:28
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:34
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:40
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:46
 #: ../src/register/ledger-core/split-register.c:2564
 #: ../src/report/report-system/report-utilities.scm:117
 #: ../src/report/standard-reports/advanced-portfolio.scm:1078
@@ -1159,6 +1159,7 @@ msgstr "S'estan carregant les dades..."
 
 #: ../src/bin/gnucash-bin.c:765
 #, fuzzy
+#| msgid "Error: could not initialize graphical user interface and option add-price-quotes was not set."
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
 "       Perhaps you need to set the $DISPLAY environment variable ?"
@@ -1188,7 +1189,7 @@ msgstr "Comprovant"
 #: ../src/business/business-gnome/business-gnome-utils.c:448
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:668
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
-#: ../src/import-export/csv-imp/gnc-csv-model.c:64
+#: ../src/import-export/csv-imp/gnc-csv-model.c:44
 #: ../src/report/standard-reports/transaction.scm:685
 #: ../src/report/standard-reports/transaction.scm:722
 #: ../src/report/standard-reports/transaction.scm:777
@@ -1844,13 +1845,13 @@ msgstr "Obert"
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
 #: ../src/gnome/reconcile-view.c:385
-#: ../src/import-export/csv-imp/gnc-csv-model.c:66
+#: ../src/import-export/csv-imp/gnc-csv-model.c:46
 #: ../src/register/ledger-core/split-register-model.c:246
 #: ../src/register/ledger-core/split-register-model.c:266
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
-#: ../src/report/standard-reports/register.scm:146
-#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:127
+#: ../src/report/standard-reports/register.scm:395
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -1902,8 +1903,8 @@ msgstr "NC?"
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:826
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -2976,12 +2977,14 @@ msgstr "Informe per imprimir:"
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:26
 #, fuzzy
+#| msgid "Auto _pay on posting"
 msgid "_Process payments on posting"
 msgstr "_Paga automàticament quan s'estigui fent un assentament"
 
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:29
 #, fuzzy
+#| msgid "Auto _pay on posting"
 msgid "Pro_cess payments on posting"
 msgstr "_Paga automàticament quan s'estigui fent un assentament"
 
@@ -3124,7 +3127,7 @@ msgstr "Diàleg per a triar el propietari"
 #: ../src/gnome-utils/gnc-tree-view-account.c:749
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:67
+#: ../src/import-export/csv-imp/gnc-csv-model.c:47
 #: ../src/import-export/import-main-matcher.c:485
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
@@ -3145,8 +3148,8 @@ msgstr "Diàleg per a triar el propietari"
 #: ../src/report/standard-reports/general-journal.scm:111
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
-#: ../src/report/standard-reports/register.scm:148
-#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:129
+#: ../src/report/standard-reports/register.scm:400
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3229,7 +3232,7 @@ msgstr "Adreça de facturació"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:474
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2914
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:68
+#: ../src/import-export/csv-imp/gnc-csv-model.c:48
 #: ../src/register/ledger-core/split-register-model.c:468
 #: ../src/report/business-reports/balsheet-eg.scm:301
 #: ../src/report/business-reports/taxinvoice.scm:91
@@ -3542,7 +3545,7 @@ msgstr "Envia a"
 #: ../src/gnome/reconcile-view.c:389
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/import-export/csv-imp/gnc-csv-model.c:65
+#: ../src/import-export/csv-imp/gnc-csv-model.c:45
 #: ../src/import-export/import-main-matcher.c:481
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
@@ -3570,9 +3573,9 @@ msgstr "Envia a"
 #: ../src/report/standard-reports/net-barchart.scm:410
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
-#: ../src/report/standard-reports/register.scm:140
-#: ../src/report/standard-reports/register.scm:404
-#: ../src/report/standard-reports/register.scm:806
+#: ../src/report/standard-reports/register.scm:121
+#: ../src/report/standard-reports/register.scm:385
+#: ../src/report/standard-reports/register.scm:787
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3639,8 +3642,8 @@ msgstr "Devolució"
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
-#: ../src/report/standard-reports/register.scm:150
-#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:131
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -3977,7 +3980,7 @@ msgstr "Subtotal"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:121
 #: ../src/report/business-reports/easy-invoice.scm:478
 #: ../src/report/business-reports/fancy-invoice.scm:517
-#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:55
+#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:36
 msgid "Tax"
 msgstr "Impostos"
 
@@ -4277,8 +4280,8 @@ msgstr "Generat des d'una factura.  Proveu de decomptabilitzar la factura."
 msgid " (posted)"
 msgstr " (comptabilitzat)"
 
-#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:139
+#: ../src/report/standard-reports/register.scm:420
 msgid "Lot"
 msgstr "Molt"
 
@@ -4407,7 +4410,7 @@ msgstr "Desequilibri"
 
 #: ../src/engine/Split.c:1410 ../src/engine/Split.c:1427
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
-#: ../src/report/standard-reports/register.scm:251
+#: ../src/report/standard-reports/register.scm:232
 msgid "-- Split Transaction --"
 msgstr "-- Assentament desglossat --"
 
@@ -4603,7 +4606,7 @@ msgstr "Capital total"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2970
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:39
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:20
 #: ../src/register/ledger-core/split-register.c:2471
 #: ../src/register/ledger-core/split-register.c:2508
 #: ../src/register/ledger-core/split-register.c:2516
@@ -4635,9 +4638,9 @@ msgstr "S'ha produït un error en afegir la cotització."
 #: ../src/gnome/assistant-stock-split.c:570
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
-#: ../src/gnome-utils/gnc-icons.c:38
+#: ../src/gnome-utils/gnc-icons.c:18
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
-#: ../src/import-export/csv-imp/gnc-csv-model.c:69
+#: ../src/import-export/csv-imp/gnc-csv-model.c:49
 #: ../src/import-export/import-main-matcher.c:482
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
@@ -4650,8 +4653,8 @@ msgstr "S'ha produït un error en afegir la cotització."
 #: ../src/report/standard-reports/cash-flow.scm:49
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
-#: ../src/report/standard-reports/register.scm:153
-#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:134
+#: ../src/report/standard-reports/register.scm:410
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "Compte"
@@ -4671,8 +4674,8 @@ msgstr "Símbol"
 #: ../src/report/standard-reports/general-journal.scm:113
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
-#: ../src/report/standard-reports/register.scm:156
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:137
+#: ../src/report/standard-reports/register.scm:415
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -4761,8 +4764,8 @@ msgstr "Cotització de l'acció"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3002
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
-#: ../src/report/standard-reports/register.scm:168
-#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:149
+#: ../src/report/standard-reports/register.scm:439
 msgid "Value"
 msgstr "Valor"
 
@@ -4799,6 +4802,7 @@ msgstr "Transacció número"
 #: ../src/gnome/dialog-find-transactions2.c:146
 #: ../src/gnome/dialog-find-transactions.c:145
 #, fuzzy
+#| msgid "Description / Notes / Memo"
 msgid "Description, Notes, or Memo"
 msgstr "Descripció / Notes / Informe"
 
@@ -4818,9 +4822,9 @@ msgid "Open"
 msgstr "Obre"
 
 #: ../src/gnome/dialog-lot-viewer.c:857
-#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:70
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:379
 msgid "Title"
 msgstr "Títol"
 
@@ -4829,7 +4833,7 @@ msgstr "Títol"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:458
 #: ../src/gnome-utils/gnc-tree-view-owner.c:466
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3212
-#: ../src/import-export/csv-imp/gnc-csv-model.c:72
+#: ../src/import-export/csv-imp/gnc-csv-model.c:52
 #: ../src/register/ledger-core/split-register-model.c:311
 #: ../src/register/ledger-core/split-register-model.c:461
 #: ../src/report/business-reports/customer-summary.scm:184
@@ -4837,7 +4841,7 @@ msgstr "Títol"
 #: ../src/report/business-reports/owner-report.scm:309
 #: ../src/report/report-system/html-utilities.scm:727
 #: ../src/report/standard-reports/account-summary.scm:460
-#: ../src/report/standard-reports/register.scm:174
+#: ../src/report/standard-reports/register.scm:155
 #: ../src/report/standard-reports/sx-summary.scm:465
 #: ../src/report/standard-reports/transaction.scm:465
 msgid "Balance"
@@ -4848,7 +4852,7 @@ msgid "Gains"
 msgstr "Guanys"
 
 #: ../src/gnome/dialog-lot-viewer.c:938
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:108
 msgid "Gain/Loss"
 msgstr "Guanys/pèrdues"
 
@@ -5132,8 +5136,8 @@ msgid "Form"
 msgstr "Formulari"
 
 #: ../src/gnome/gnc-budget-view.c:387
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:79
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:84
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
 #: ../src/report/report-system/report-utilities.scm:118
 #: ../src/report/standard-reports/budget-income-statement.scm:674
 #: ../src/report/standard-reports/income-statement.scm:610
@@ -5161,7 +5165,7 @@ msgstr "Transferències"
 #: ../src/report/business-reports/fancy-invoice.scm:299
 #: ../src/report/business-reports/invoice.scm:120
 #: ../src/report/business-reports/invoice.scm:284
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:306
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:287
 #: ../src/report/report-system/html-acct-table.scm:899
 #: ../src/report/report-system/html-utilities.scm:619
 #: ../src/report/standard-reports/advanced-portfolio.scm:1043
@@ -5483,7 +5487,7 @@ msgstr "Neteja automàticament els assentaments individuals, donada una quantita
 #: ../src/gnome/gnc-plugin-page-account-tree.c:247
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
-#: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
+#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/window-reconcile2.c:2184
 #: ../src/gnome/window-reconcile.c:2184
 msgid "_Transfer..."
 msgstr "_Transferència..."
@@ -5576,8 +5580,8 @@ msgstr "Obre2"
 #: ../src/report/standard-reports/account-piecharts.scm:68
 #: ../src/report/standard-reports/account-summary.scm:75
 #: ../src/report/standard-reports/advanced-portfolio.scm:158
-#: ../src/report/standard-reports/average-balance.scm:88
-#: ../src/report/standard-reports/average-balance.scm:337
+#: ../src/report/standard-reports/average-balance.scm:69
+#: ../src/report/standard-reports/average-balance.scm:318
 #: ../src/report/standard-reports/balance-sheet.scm:88
 #: ../src/report/standard-reports/budget-balance-sheet.scm:53
 #: ../src/report/standard-reports/budget-barchart.scm:44
@@ -5943,7 +5947,7 @@ msgstr "Edita el tipus de canvi de l'assentament actual"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:366
 #: ../src/gnome/gnc-plugin-page-register.c:375
-#: ../src/gnome-utils/gnc-icons.c:45
+#: ../src/gnome-utils/gnc-icons.c:25
 msgid "_Jump"
 msgstr "_Salta"
 
@@ -6013,7 +6017,7 @@ msgstr "Mostra les dates entrades i reconciliades"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:418
-#: ../src/gnome-utils/gnc-icons.c:44
+#: ../src/gnome-utils/gnc-icons.c:24
 msgid "S_plit Transaction"
 msgstr "Des_glossa l'assentament"
 
@@ -6059,7 +6063,7 @@ msgstr "Mostra les transaccions ampliades amb tots els desglossaments"
 #: ../src/register/ledger-core/split-register.c:2489
 #: ../src/register/ledger-core/split-register-layout.c:687
 #: ../src/register/ledger-core/split-register-model.c:332
-#: ../src/report/standard-reports/register.scm:154
+#: ../src/report/standard-reports/register.scm:135
 msgid "Transfer"
 msgstr "Transferència"
 
@@ -6169,12 +6173,12 @@ msgstr "Informe dels resultats de la cerca"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:888
+#: ../src/report/standard-reports/register.scm:869
 msgid "Register"
 msgstr "Registre"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:381
 msgid "Register Report"
 msgstr "Informe de del registre"
 
@@ -6748,21 +6752,25 @@ msgstr "Si està actiu, obre sempre el diàleg de conciliació usant la data d'a
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:3
 #, fuzzy
+#| msgid "Show \"since last run\" dialog when a file is opened."
 msgid "Run \"since last run\" dialog when a file is opened."
 msgstr "Mostra el diàleg \"des de l'última execució\" quan sobre un fitxer."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:4
 #, fuzzy
+#| msgid "This setting controls whether the scheduled transactions \"since last run\" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown."
 msgid "This setting controls whether the scheduled transactions \"since last run\" processing is run automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, run the \"since last run\" process, otherwise it is not run."
 msgstr "Aquest paràmetre controla si el diàleg dels assentaments programats \"des de l'última execució\" es mostra automàticament quan s'obre un fitxer de dades. Això inclou l'obertura inicial del fitxer de dades quan s'inicia el GnuCash. Si aquest paràmetre està actiu, mostra el diàleg, si no no es mostra."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:5
 #, fuzzy
+#| msgid "Show \"since last run\" dialog when a file is opened."
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr "Mostra el diàleg \"des de l'última execució\" quan sobre un fitxer."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:6
 #, fuzzy
+#| msgid "This setting controls whether the scheduled transactions \"since last run\" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown."
 msgid "This setting controls whether the scheduled transactions notification-only \"since last run\" dialog is shown when a data file is opened (if \"since last run\" processing is enabled on file open). This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown."
 msgstr "Aquest paràmetre controla si el diàleg dels assentaments programats \"des de l'última execució\" es mostra automàticament quan s'obre un fitxer de dades. Això inclou l'obertura inicial del fitxer de dades quan s'inicia el GnuCash. Si aquest paràmetre està actiu, mostra el diàleg, si no no es mostra."
 
@@ -8430,6 +8438,7 @@ msgstr "Els assentaments periòdics següents fan referència al compte suprimit
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:4
 #, fuzzy
+#| msgid "<b>Since Last Run Dialog</b>"
 msgid "<b>Since Last Run</b>"
 msgstr "<b>Diàleg «Des de la darrera execució»</b>"
 
@@ -8443,16 +8452,19 @@ msgstr "_Executa'l en obrir el fitxer de dades"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:7
 #, fuzzy
+#| msgid "Show the \"since last run\" window when a file is opened."
 msgid "Run the \"since last run\" process when a file is opened."
 msgstr "Mostra la finestra «Des de la darrera execució» en obrir un fitxer."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:8
 #, fuzzy
+#| msgid "Show _log window"
 msgid "_Show notification window"
 msgstr "Mostra la finestra del _registre"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:9
 #, fuzzy
+#| msgid "Show the \"since last run\" window when a file is opened."
 msgid "Show the notification window for the \"since last run\" process when a file is opened."
 msgstr "Mostra la finestra «Des de la darrera execució» en obrir un fitxer."
 
@@ -8906,6 +8918,7 @@ msgstr "Da_ta de l'extracte de compte"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:34
 #, fuzzy
+#| msgid "Sort by the statement date (unreconciled items last)."
 msgid "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr "Ordena per la data de l'extracte bancari (els elements no conciliats al final)"
 
@@ -9462,7 +9475,7 @@ msgid "There was an error parsing the file."
 msgstr "Hi ha hagut un error en analitzar el fitxer."
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1293 ../src/gnome-utils/gnc-file.c:1527
+#: ../src/gnome-utils/gnc-file.c:1286 ../src/gnome-utils/gnc-file.c:1515
 msgid "Writing file..."
 msgstr "S'està escrivint el fitxer..."
 
@@ -10003,7 +10016,7 @@ msgid "Import"
 msgstr "_Importa"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
-#: ../src/gnome-utils/gnc-file.c:1343
+#: ../src/gnome-utils/gnc-file.c:1336
 msgid "Save"
 msgstr "Desa"
 
@@ -10245,19 +10258,19 @@ msgstr "S'estan carregant les dades d'usuari..."
 msgid "Re-saving user data..."
 msgstr "S'estan recarregant les dades d'usuari..."
 
-#: ../src/gnome-utils/gnc-file.c:1207 ../src/gnome-utils/gnc-file.c:1442
+#: ../src/gnome-utils/gnc-file.c:1200 ../src/gnome-utils/gnc-file.c:1430
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "El fitxer %s  ja existeix. Esteu segur de voler sobreescriure'l?"
 
-#: ../src/gnome-utils/gnc-file.c:1236
+#: ../src/gnome-utils/gnc-file.c:1229
 msgid "Exporting file..."
 msgstr "S'està exportant el fitxer..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1249
+#: ../src/gnome-utils/gnc-file.c:1242
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -10268,7 +10281,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/gnome-utils/gnc-file.c:1281
+#: ../src/gnome-utils/gnc-file.c:1274
 msgid "The database was opened read-only. Do you want to save it to a different place?"
 msgstr "La base de dades s'ha obert com de sols-lectura. Voleu desar-la en un lloc diferent?"
 
@@ -10295,6 +10308,7 @@ msgstr "El GnuCash no ha pogut trobar el fitxer associat."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:452
 #, fuzzy
+#| msgid "GnuCash could not find the associated file."
 msgid "GnuCash could not find the associated file"
 msgstr "El GnuCash no ha pogut trobar el fitxer associat."
 
@@ -10302,20 +10316,20 @@ msgstr "El GnuCash no ha pogut trobar el fitxer associat."
 msgid "GnuCash could not open the associated URI:"
 msgstr "El GnuCash no ha pogut obrit l'URI associat:"
 
-#: ../src/gnome-utils/gnc-icons.c:39
+#: ../src/gnome-utils/gnc-icons.c:19
 msgid "_Delete Account"
 msgstr "_Suprimeix el compte"
 
-#: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile2.c:2179
 #: ../src/gnome/window-reconcile.c:2179
 msgid "_Edit Account"
 msgstr "_Edita el compte"
 
-#: ../src/gnome-utils/gnc-icons.c:41
+#: ../src/gnome-utils/gnc-icons.c:21
 msgid "_New Account"
 msgstr "Compte _nou"
 
-#: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
+#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile2.c:2174
 #: ../src/gnome/window-reconcile.c:2174
 msgid "_Open Account"
 msgstr "_Obre el compte"
@@ -10586,6 +10600,7 @@ msgstr "Modificat per últim cop en %a, %b %e, %Y a %I:%M%P"
 
 #: ../src/gnome-utils/gnc-main-window.c:1671
 #, fuzzy, c-format
+#| msgid "Last modified on %a, %b %e, %Y at %H:%M"
 msgid "Last modified on %x %X"
 msgstr "Modificat per últim cop en %a, %b %e, %Y a %H:%M"
 
@@ -10614,6 +10629,7 @@ msgstr "GnuCash, el gestor de finances personal. La manera GNU de gestionar els 
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy
+#| msgid "© 1997-2013 Contributors"
 msgid "© 1997-2015 Contributors"
 msgstr "© 1997-2013 Contribuïdors"
 
@@ -10942,8 +10958,8 @@ msgstr "Xec"
 #: ../src/report/standard-reports/portfolio.scm:247
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
-#: ../src/report/standard-reports/register.scm:160
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:141
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -11027,7 +11043,7 @@ msgstr "_Recalcula"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:718
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:303
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:284
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
@@ -11772,7 +11788,7 @@ msgstr "<b>Compte _pare</b>"
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:379
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -12305,6 +12321,7 @@ msgstr "Quants dies conservar fitxers vells de registre/còpia de seguretat."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:68
 #, fuzzy
+#| msgid "_Retain log files:"
 msgid "_Retain log/backup files:"
 msgstr "_Mantingues els fitxers de registre:"
 
@@ -12712,7 +12729,7 @@ msgstr "2013-07-31"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
-#: ../src/import-export/csv-imp/gnc-csv-model.c:58
+#: ../src/import-export/csv-imp/gnc-csv-model.c:38
 msgid "Locale"
 msgstr "Local"
 
@@ -13894,6 +13911,7 @@ msgstr "(desconegut)"
 #. * subdirectory.
 #: ../src/import-export/aqb/dialog-ab-trans.c:371
 #, fuzzy
+#| msgid "Enter an Online Transaction"
 msgid "Enter a SEPA Online Transfer"
 msgstr "Introduïu una transacció en línia"
 
@@ -13907,11 +13925,13 @@ msgstr "Beneficiari BIC (Codi de banc)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:378
 #, fuzzy
+#| msgid "Recipient IBAN (International Account Number)"
 msgid "Originator IBAN (International Account Number)"
 msgstr "Beneficiari IBAN (Número de compte internacional)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:380
 #, fuzzy
+#| msgid "Recipient BIC (Bank Code)"
 msgid "Originator BIC (Bank Code)"
 msgstr "Beneficiari BIC (Codi de banc)"
 
@@ -13947,6 +13967,7 @@ msgstr "Codi de banc del compte del beneficiari"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:404
 #, fuzzy
+#| msgid "Enter an Online Direct Debit Note"
 msgid "Enter a SEPA Online Direct Debit Note"
 msgstr "Introduïu una ordre de domiciliació"
 
@@ -13960,16 +13981,19 @@ msgstr "BIC carregat (Codi de banc)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:416
 #, fuzzy
+#| msgid "Debited IBAN (International Account Number)"
 msgid "Credited IBAN (International Account Number)"
 msgstr "IBAN carregat (Número de compte internacional)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:418
 #, fuzzy
+#| msgid "Debited BIC (Bank Code)"
 msgid "Credited BIC (Bank Code)"
 msgstr "BIC carregat (Codi de banc)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:497
 #, fuzzy, c-format
+#| msgid "The internal check of the destination account number '%s' at the specified bank with bank code '%s' failed. This means the account number might contain an error."
 msgid "The internal check of the destination IBAN '%s' failed. This means the account number might contain an error."
 msgstr "Ha fallat la verificació interna del número de compte de  '%s' al banc especficat amb codi bancari '%s'.Això significa que el número de compte pot contenir un error."
 
@@ -14105,7 +14129,7 @@ msgstr ""
 "Voleu entrar la tasca un altre cop?"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:409
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:70
 msgid "Unspecified"
 msgstr "No especificat"
 
@@ -14239,7 +14263,7 @@ msgid "The Online Banking job is still running; are you sure you want to cancel?
 msgstr "La tasca de banca electrònica encara s'està executant; teniu seguretat que voleu cancel·lar-la?"
 
 #: ../src/import-export/aqb/gncmod-aqbanking.c:79
-#: ../src/import-export/gncmod-generic-import.c:79
+#: ../src/import-export/gncmod-generic-import.c:59
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:162
 msgid "Online Banking"
 msgstr "Banca electrònica"
@@ -14780,6 +14804,7 @@ msgstr "Expressió regular personalitzada"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:18
 #, fuzzy
+#| msgid "Semicolon Separated"
 msgid "Colon Separated"
 msgstr "Separat per punt i comes"
 
@@ -14868,6 +14893,14 @@ msgstr "Importació de transacción CSV"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:2
 #, fuzzy
+#| msgid ""
+#| "This assistant will help you import a delimited file containing a list of transactions.\n"
+#| "\n"
+#| "All transactions imported will be associated to one account for each import and if you select the account column, the account in the first row will be used for all rows.\n"
+#| "\n"
+#| "Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the bar above the displayed rows to set the column width.\n"
+#| "\n"
+#| "There is an option for specifying the start and end row which can be used if you have some header text or multiple accounts in the same file."
 msgid ""
 "This assistant will help you import a delimited file containing a list of transactions.\n"
 "\n"
@@ -15007,54 +15040,54 @@ msgstr "Fila %u, acció/divisa %s / %s no s'ha trobat\n"
 msgid "Row %u, account %s not in %s\n"
 msgstr "Línia %u, compte %s no està en %s\n"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:50
+#: ../src/import-export/csv-imp/gnc-csv-model.c:30
 msgid "y-m-d"
 msgstr "a-m-d"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:51
+#: ../src/import-export/csv-imp/gnc-csv-model.c:31
 msgid "d-m-y"
 msgstr "d-m-a"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:52
+#: ../src/import-export/csv-imp/gnc-csv-model.c:32
 msgid "m-d-y"
 msgstr "m-d-a"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:53
+#: ../src/import-export/csv-imp/gnc-csv-model.c:33
 msgid "d-m"
 msgstr "d-m"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:54
+#: ../src/import-export/csv-imp/gnc-csv-model.c:34
 msgid "m-d"
 msgstr "m-d"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:59
+#: ../src/import-export/csv-imp/gnc-csv-model.c:39
 #: ../src/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr "Punt: 123,456.78"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:60
+#: ../src/import-export/csv-imp/gnc-csv-model.c:40
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr "Coma: 123.456,78"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:476
+#: ../src/import-export/csv-imp/gnc-csv-model.c:456
 msgid "File opening failed."
 msgstr "No s'ha pogut obrir el fitxer."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:491
-#: ../src/import-export/csv-imp/gnc-csv-model.c:499
+#: ../src/import-export/csv-imp/gnc-csv-model.c:471
+#: ../src/import-export/csv-imp/gnc-csv-model.c:479
 msgid "Unknown encoding."
 msgstr "Codificació desconeguda"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:830
+#: ../src/import-export/csv-imp/gnc-csv-model.c:810
 msgid "No date column."
 msgstr "No hi ha una columna de data."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:831
+#: ../src/import-export/csv-imp/gnc-csv-model.c:811
 msgid "No balance, deposit, or withdrawal column."
 msgstr "No hi ha una columna de saldo, dipòsit o reintegrament."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1125
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1105
 #, c-format
 msgid "%s column could not be understood."
 msgstr "No s'ha pogut entendre la columna %s."
@@ -16039,216 +16072,216 @@ msgstr "Estat predeterminat per assentaments QIF quan no està especificat al fi
 msgid "Show documentation"
 msgstr "Mostra la documentació"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:33
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:14
 msgid "Dividends"
 msgstr "Dividends"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:48
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:29
 msgid "Cap Return"
 msgstr "Rendiment del capital"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:54
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:35
 msgid "Cap. gain (long)"
 msgstr "Guany de cap. (llarg)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:41
 msgid "Cap. gain (mid)"
 msgstr "Guany de cap. (mig)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
 msgid "Cap. gain (short)"
 msgstr "Guany de cap. (curt)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:80
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:61
 msgid "Commissions"
 msgstr "Comissions"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:85
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
 msgid "Margin Interest"
 msgstr "Interès al marge"
 
-#: ../src/import-export/qif-imp/qif-file.scm:85
-#: ../src/import-export/qif-imp/qif-file.scm:93
+#: ../src/import-export/qif-imp/qif-file.scm:66
+#: ../src/import-export/qif-imp/qif-file.scm:74
 msgid "Line"
 msgstr "Línia"
 
-#: ../src/import-export/qif-imp/qif-file.scm:96
+#: ../src/import-export/qif-imp/qif-file.scm:77
 msgid "Read aborted."
 msgstr "S'ha avortat la lectura"
 
-#: ../src/import-export/qif-imp/qif-file.scm:111
+#: ../src/import-export/qif-imp/qif-file.scm:92
 msgid "Reading"
 msgstr "S'està llegint"
 
-#: ../src/import-export/qif-imp/qif-file.scm:140
+#: ../src/import-export/qif-imp/qif-file.scm:121
 msgid "Some characters have been discarded."
 msgstr "S'han descartat alguns caràcters"
 
-#: ../src/import-export/qif-imp/qif-file.scm:141
-#: ../src/import-export/qif-imp/qif-file.scm:145
+#: ../src/import-export/qif-imp/qif-file.scm:122
+#: ../src/import-export/qif-imp/qif-file.scm:126
 msgid "Converted to: "
 msgstr "S'ha convertit a: "
 
-#: ../src/import-export/qif-imp/qif-file.scm:144
+#: ../src/import-export/qif-imp/qif-file.scm:125
 msgid "Some characters have been converted according to your locale."
 msgstr "S'han convertit alguns caràcters d'acord amb la vostra configuració local."
 
-#: ../src/import-export/qif-imp/qif-file.scm:203
+#: ../src/import-export/qif-imp/qif-file.scm:184
 msgid "Ignoring unknown option"
 msgstr "S'ignorarà l'opció desconeguda"
 
 #. The date is missing! Warn the user.
-#: ../src/import-export/qif-imp/qif-file.scm:337
+#: ../src/import-export/qif-imp/qif-file.scm:318
 msgid "Date required."
 msgstr "Es requereix la data."
 
-#: ../src/import-export/qif-imp/qif-file.scm:338
+#: ../src/import-export/qif-imp/qif-file.scm:319
 msgid "Discarding this transaction."
 msgstr "S'està descartant aquest assentament."
 
-#: ../src/import-export/qif-imp/qif-file.scm:370
+#: ../src/import-export/qif-imp/qif-file.scm:351
 msgid "Ignoring class line"
 msgstr "S'ignorarà la línia de classe"
 
-#: ../src/import-export/qif-imp/qif-file.scm:438
+#: ../src/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring category line"
 msgstr "S'està ignorant la línia de categoria"
 
-#: ../src/import-export/qif-imp/qif-file.scm:469
+#: ../src/import-export/qif-imp/qif-file.scm:450
 msgid "Ignoring security line"
 msgstr "S'ignorarà la línia de valor"
 
-#: ../src/import-export/qif-imp/qif-file.scm:477
+#: ../src/import-export/qif-imp/qif-file.scm:458
 msgid "File does not appear to be in QIF format"
 msgstr "El fitxer no sembla tenir format QIF"
 
-#: ../src/import-export/qif-imp/qif-file.scm:653
+#: ../src/import-export/qif-imp/qif-file.scm:634
 msgid "Transaction date"
 msgstr "Data de l'assentament"
 
-#: ../src/import-export/qif-imp/qif-file.scm:654
+#: ../src/import-export/qif-imp/qif-file.scm:635
 msgid "Transaction amount"
 msgstr "Quantitat de l'assentament"
 
-#: ../src/import-export/qif-imp/qif-file.scm:655
+#: ../src/import-export/qif-imp/qif-file.scm:636
 msgid "Share price"
 msgstr "Cotització de l'acció"
 
-#: ../src/import-export/qif-imp/qif-file.scm:656
+#: ../src/import-export/qif-imp/qif-file.scm:637
 msgid "Share quantity"
 msgstr "Quantitat de l'acció"
 
-#: ../src/import-export/qif-imp/qif-file.scm:657
+#: ../src/import-export/qif-imp/qif-file.scm:638
 msgid "Investment action"
 msgstr "Acció de la inversió"
 
-#: ../src/import-export/qif-imp/qif-file.scm:658
+#: ../src/import-export/qif-imp/qif-file.scm:639
 msgid "Reconciliation status"
 msgstr "Estat de la conciliació"
 
-#: ../src/import-export/qif-imp/qif-file.scm:659
+#: ../src/import-export/qif-imp/qif-file.scm:640
 msgid "Commission"
 msgstr "Comissió"
 
-#: ../src/import-export/qif-imp/qif-file.scm:660
+#: ../src/import-export/qif-imp/qif-file.scm:641
 msgid "Account type"
 msgstr "Tipus de compte"
 
-#: ../src/import-export/qif-imp/qif-file.scm:661
+#: ../src/import-export/qif-imp/qif-file.scm:642
 msgid "Tax class"
 msgstr "Classe de l'impost"
 
-#: ../src/import-export/qif-imp/qif-file.scm:662
+#: ../src/import-export/qif-imp/qif-file.scm:643
 msgid "Category budget amount"
 msgstr "Quantitat del pressupost de categoria"
 
-#: ../src/import-export/qif-imp/qif-file.scm:663
+#: ../src/import-export/qif-imp/qif-file.scm:644
 msgid "Account budget amount"
 msgstr "Quantitat del pressupost de compte"
 
-#: ../src/import-export/qif-imp/qif-file.scm:664
+#: ../src/import-export/qif-imp/qif-file.scm:645
 msgid "Credit limit"
 msgstr "Límit de crèdit"
 
 #.
 #. Fields of categories.
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:677
+#: ../src/import-export/qif-imp/qif-file.scm:658
 msgid "Parsing categories"
 msgstr "S'estan analitzant les categories"
 
 #.
 #. Fields of accounts
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:709
+#: ../src/import-export/qif-imp/qif-file.scm:690
 msgid "Parsing accounts"
 msgstr "S'estan analitzant els comptes"
 
 #.
 #. fields of transactions
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:750
+#: ../src/import-export/qif-imp/qif-file.scm:731
 msgid "Parsing transactions"
 msgstr "S'estan analitzant els assentaments"
 
 #. Data was not in any of the supplied formats.
-#: ../src/import-export/qif-imp/qif-file.scm:926
+#: ../src/import-export/qif-imp/qif-file.scm:907
 msgid "Unrecognized or inconsistent format."
 msgstr "Format no reconegut o inconsistent."
 
-#: ../src/import-export/qif-imp/qif-file.scm:968
+#: ../src/import-export/qif-imp/qif-file.scm:949
 msgid "Parsing failed."
 msgstr "Ha fallat l'anàlisi."
 
-#: ../src/import-export/qif-imp/qif-file.scm:1009
+#: ../src/import-export/qif-imp/qif-file.scm:990
 msgid "Parse ambiguity between formats"
 msgstr "Analitza l'ambigüitat entre els formats"
 
-#: ../src/import-export/qif-imp/qif-file.scm:1011
+#: ../src/import-export/qif-imp/qif-file.scm:992
 msgid "Value '%s' could be %s or %s."
 msgstr "El valor '%s' podria ser %s o %s."
 
-#: ../src/import-export/qif-imp/qif-merge-groups.scm:113
+#: ../src/import-export/qif-imp/qif-merge-groups.scm:94
 msgid "Finding duplicate transactions"
 msgstr "S'estan cercant els assentaments duplicats"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:194
+#: ../src/import-export/qif-imp/qif-parse.scm:175
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
 msgstr "Tipus desconegut '%s' de compte. S'usarà banc com a predeterminat."
 
-#: ../src/import-export/qif-imp/qif-parse.scm:301
+#: ../src/import-export/qif-imp/qif-parse.scm:282
 msgid "Unrecognized action '%s'."
 msgstr "Acció no reconeguda '%s'."
 
-#: ../src/import-export/qif-imp/qif-parse.scm:326
+#: ../src/import-export/qif-imp/qif-parse.scm:307
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
 msgstr "Estat '%s' no reconegut. S'usarà no netejat com a predeterminat."
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:190
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:171
 msgid "QIF import: Name conflict with another account."
 msgstr "Importació QIF: conflicte amb el nom d'un altre compte."
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:275
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:256
 msgid "Preparing to convert your QIF data"
 msgstr "S'està preparant la conversió de les vostres dades QIF"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:326
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:307
 msgid "Creating accounts"
 msgstr "S'estan creant els comptes"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:375
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:356
 msgid "Matching transfers between accounts"
 msgstr "S'estan fent concordar les transferències entre els comptes"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:393
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:374
 msgid "Converting"
 msgstr "S'està convertint"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:478
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:459
 msgid "Missing transaction date."
 msgstr "No hi ha una data d'assentament."
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:487
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:468
 msgid "Dates earlier than 1970 are not supported."
 msgstr "No estan suportades les dates anteriors a 1970."
 
@@ -16591,12 +16624,13 @@ msgid "T-Ref"
 msgstr "T-Ref"
 
 #: ../src/register/ledger-core/split-register-model.c:269
-#: ../src/report/standard-reports/register.scm:144
+#: ../src/report/standard-reports/register.scm:125
 msgid "T-Num"
 msgstr "T-Num"
 
 #: ../src/register/ledger-core/split-register-model.c:381
 #, fuzzy
+#| msgid "Exchange Rate:"
 msgid "Exch. Rate"
 msgstr "Tipus de canvi:"
 
@@ -16689,8 +16723,8 @@ msgstr "Llista"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:565
 #: ../src/report/business-reports/owner-report.scm:40
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
+#: ../src/report/locale-specific/us/taxtxf.scm:156
 msgid "To"
 msgstr "A"
 
@@ -16708,7 +16742,7 @@ msgstr "Ordenació"
 #: ../src/report/standard-reports/account-piecharts.scm:65
 #: ../src/report/standard-reports/account-summary.scm:114
 #: ../src/report/standard-reports/advanced-portfolio.scm:71
-#: ../src/report/standard-reports/average-balance.scm:41
+#: ../src/report/standard-reports/average-balance.scm:22
 #: ../src/report/standard-reports/balance-sheet.scm:138
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
@@ -16733,7 +16767,7 @@ msgstr "Divisa de l'informe"
 #: ../src/report/standard-reports/account-piecharts.scm:66
 #: ../src/report/standard-reports/account-summary.scm:115
 #: ../src/report/standard-reports/advanced-portfolio.scm:41
-#: ../src/report/standard-reports/average-balance.scm:42
+#: ../src/report/standard-reports/average-balance.scm:23
 #: ../src/report/standard-reports/balance-sheet.scm:139
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
@@ -17169,8 +17203,8 @@ msgstr "Mostra el balanç de situació (usant la plantilla eguile)"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:562
 #: ../src/report/business-reports/owner-report.scm:39
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
+#: ../src/report/locale-specific/us/taxtxf.scm:156
 msgid "From"
 msgstr "De"
 
@@ -17305,8 +17339,8 @@ msgstr "Ordena alfabèticament per nom del client."
 
 #: ../src/report/business-reports/customer-summary.scm:452
 #: ../src/report/business-reports/customer-summary.scm:839
-#: ../src/report/standard-reports/average-balance.scm:126
-#: ../src/report/standard-reports/average-balance.scm:147
+#: ../src/report/standard-reports/average-balance.scm:107
+#: ../src/report/standard-reports/average-balance.scm:128
 msgid "Profit"
 msgstr "Beneficis"
 
@@ -17363,7 +17397,7 @@ msgstr "Informe de despeses"
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/owner-report.scm:719
 #: ../src/report/report-gnome/dialog-report-column-view.c:351
-#: ../src/report/report-gnome/report-gnome.scm:80
+#: ../src/report/report-gnome/report-gnome.scm:61
 msgid "Report"
 msgstr "Informe"
 
@@ -17435,7 +17469,7 @@ msgstr "Una cadena de lletres per reemplaçar Factura, Nota de pagament o Provis
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:386
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "Voleu mostrar la data?"
@@ -17443,7 +17477,7 @@ msgstr "Voleu mostrar la data?"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:401
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "Voleu mostrar la descripció?"
@@ -17526,19 +17560,19 @@ msgstr "Voleu mostrar el valor de l'entrada?"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:404
+#: ../src/report/standard-reports/register.scm:385
+#: ../src/report/standard-reports/register.scm:391
+#: ../src/report/standard-reports/register.scm:395
+#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:414
-#: ../src/report/standard-reports/register.scm:419
-#: ../src/report/standard-reports/register.scm:424
-#: ../src/report/standard-reports/register.scm:429
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:430
 #: ../src/report/standard-reports/register.scm:439
 #: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:458
-#: ../src/report/standard-reports/register.scm:463
-#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -17599,7 +17633,7 @@ msgstr "Voleu mostrar tots els impostos individuals?"
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:449
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "Totals"
@@ -17607,7 +17641,7 @@ msgstr "Totals"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "Voleu mostrar els totals?"
@@ -17686,6 +17720,7 @@ msgstr "Notes addicionals a afegir a la factura (s'accepta HTML simple)."
 #: ../src/report/business-reports/invoice.scm:332
 #: ../src/report/business-reports/taxinvoice.scm:243
 #, fuzzy
+#| msgid "Thank you for your patronage"
 msgid "Thank you for your patronage!"
 msgstr "Us agraïm la vostra confiança"
 
@@ -18244,6 +18279,7 @@ msgstr "Pagament rebut, gràcies"
 
 #: ../src/report/business-reports/taxinvoice.scm:230
 #, fuzzy
+#| msgid "Invoice number"
 msgid "Invoice number: "
 msgstr "Número de factura"
 
@@ -18253,16 +18289,19 @@ msgstr "A: "
 
 #: ../src/report/business-reports/taxinvoice.scm:234
 #, fuzzy
+#| msgid "Your ref: "
 msgid "Your ref: "
 msgstr "La vostra referència: "
 
 #: ../src/report/business-reports/taxinvoice.scm:236
 #, fuzzy
+#| msgid "Job number"
 msgid "Job number: "
 msgstr "Número de tasca"
 
 #: ../src/report/business-reports/taxinvoice.scm:238
 #, fuzzy
+#| msgid "Job name"
 msgid "Job name: "
 msgstr "Nom de la tasca"
 
@@ -18274,302 +18313,302 @@ msgstr "CSS incorporat."
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr "Mostra una factura de client amb columnes d'impostos (usant la plantilla eguile)"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:81
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:62
 msgid "Tax Report / TXF Export"
 msgstr "Informe d'impostos / Exportar a TXF"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
-#: ../src/report/locale-specific/us/taxtxf.scm:179
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:135
+#: ../src/report/locale-specific/us/taxtxf.scm:160
 msgid "Alternate Period"
 msgstr "Període alternatiu"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
-#: ../src/report/locale-specific/us/taxtxf.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:136
+#: ../src/report/locale-specific/us/taxtxf.scm:161
 msgid "Override or modify From: & To:."
 msgstr "Anul·la o modifica De. i A:."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
+#: ../src/report/locale-specific/us/taxtxf.scm:164
 msgid "Use From - To"
 msgstr "Usa De - A"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
+#: ../src/report/locale-specific/us/taxtxf.scm:164
 msgid "Use From - To period."
 msgstr "Usa el període De - A."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
+#: ../src/report/locale-specific/us/taxtxf.scm:166
 msgid "1st Est Tax Quarter"
 msgstr "1r trimestre fiscal est"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
+#: ../src/report/locale-specific/us/taxtxf.scm:166
 msgid "Jan 1 - Mar 31."
 msgstr "Gen 1 - Mar 31."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
-#: ../src/report/locale-specific/us/taxtxf.scm:187
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
+#: ../src/report/locale-specific/us/taxtxf.scm:168
 msgid "2nd Est Tax Quarter"
 msgstr "2n trimestre fiscal est"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
-#: ../src/report/locale-specific/us/taxtxf.scm:187
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
+#: ../src/report/locale-specific/us/taxtxf.scm:168
 msgid "Apr 1 - May 31."
 msgstr "Abr 1 - Mai 31."
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
+#: ../src/report/locale-specific/us/taxtxf.scm:173
 msgid "3rd Est Tax Quarter"
 msgstr "3r trimestre fiscal est"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
+#: ../src/report/locale-specific/us/taxtxf.scm:173
 msgid "Jun 1 - Aug 31."
 msgstr "Jun 1 - Ago 31."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:194
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "4th Est Tax Quarter"
 msgstr "4rt trimestre fiscal est"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:194
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "Sep 1 - Dec 31."
 msgstr "Sep 1 - Des 31."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
+#: ../src/report/locale-specific/us/taxtxf.scm:177
 msgid "Last Year"
 msgstr "Últim any"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
+#: ../src/report/locale-specific/us/taxtxf.scm:177
 msgid "Last Year."
 msgstr "Últim any."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
-#: ../src/report/locale-specific/us/taxtxf.scm:198
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
+#: ../src/report/locale-specific/us/taxtxf.scm:179
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "1r trimestre fiscal est de l'últim any"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
-#: ../src/report/locale-specific/us/taxtxf.scm:199
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
+#: ../src/report/locale-specific/us/taxtxf.scm:180
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "Gen 1 - Mar 31, últim any."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
-#: ../src/report/locale-specific/us/taxtxf.scm:201
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:157
+#: ../src/report/locale-specific/us/taxtxf.scm:182
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "2n trimestre fiscal est de l'últim any"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
-#: ../src/report/locale-specific/us/taxtxf.scm:202
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 msgid "Apr 1 - May 31, Last year."
 msgstr "Abr 1 - Mai 31, últim any."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
-#: ../src/report/locale-specific/us/taxtxf.scm:204
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "3r trimestre fiscal est de l'últim any"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
-#: ../src/report/locale-specific/us/taxtxf.scm:208
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:161
+#: ../src/report/locale-specific/us/taxtxf.scm:189
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "Jun 1 - Ago 31, últim any."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
-#: ../src/report/locale-specific/us/taxtxf.scm:210
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:163
+#: ../src/report/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "4t trimestre fiscal est de l'últim any"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
-#: ../src/report/locale-specific/us/taxtxf.scm:211
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:164
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "Sep 1 - Des 31, últim any."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:187
-#: ../src/report/locale-specific/us/taxtxf.scm:215
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:168
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 msgid "Select Accounts (none = all)"
 msgstr "Seleccioneu els comptes (cap = tot)"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:188
-#: ../src/report/locale-specific/us/taxtxf.scm:216
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:197
 msgid "Select accounts."
 msgstr "Selecciona els comptes."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:194
-#: ../src/report/locale-specific/us/taxtxf.scm:222
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:175
+#: ../src/report/locale-specific/us/taxtxf.scm:203
 msgid "Suppress $0.00 values"
 msgstr "Suprimeix valors 0,00 €"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:195
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
 msgid "$0.00 valued Accounts won't be printed."
 msgstr "No s'imprimiran els comptes amb valor 0,00 €"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:199
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
 msgid "Print Full account names"
 msgstr "Imprimeix el nom complet dels comptes"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:200
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:181
 msgid "Print all Parent account names."
 msgstr "Imprimeix tots els noms de comptes pare."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:278
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:259
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
 msgstr "ADVERTIMENT: Hi ha codis TFX duplicats assignats a alguns comptes. Sols es poden repetir codis TFX amb fonts de pagadors."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:832
 msgid "Period from %s to %s"
 msgstr "Període de %s a %s"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:888
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:869
 msgid "Tax Report & XML Export"
 msgstr "Informe d'impostos i exportació a XML"
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:890
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:871
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr "Ingressos imposables / despeses deduïbles / exporta a fitxer .XML"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:894
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:903
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:875
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:884
 msgid "Taxable Income / Deductible Expenses"
 msgstr "Ingressos imposables / despeses deduïbles"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:895
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:876
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr "Aquest informe mostra els vostres ingressos imposables i despeses deduïbles."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:900
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:881
 msgid "XML"
 msgstr "XML"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:904
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:885
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "Aquesta pàgina mostra els vostres ingressos imposables i despeses deduïbles."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:115
+#: ../src/report/locale-specific/us/taxtxf.scm:96
 msgid "Tax Schedule Report/TXF Export"
 msgstr "Informe de calendari d'impostos / Exportar a TXF"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:223
+#: ../src/report/locale-specific/us/taxtxf.scm:204
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "No s'imprimiran codis CIF amb valor 0,00 €."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:227
+#: ../src/report/locale-specific/us/taxtxf.scm:208
 msgid "Do not print full account names"
 msgstr "No imprimeixis el nom complet dels comptes"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:228
+#: ../src/report/locale-specific/us/taxtxf.scm:209
 msgid "Do not print all Parent account names."
 msgstr "No immprimeixis tots els noms de comptes pare."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:232
+#: ../src/report/locale-specific/us/taxtxf.scm:213
 msgid "Print all Transfer To/From Accounts"
 msgstr "Imprimeix tots els comptes de transferències a/de"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:233
+#: ../src/report/locale-specific/us/taxtxf.scm:214
 msgid "Print all split details for multi-split transactions."
 msgstr "Imprimeix tots els detalls de desglossament per a assentaments de desglossaments múltiples."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:237
+#: ../src/report/locale-specific/us/taxtxf.scm:218
 msgid "Print TXF export parameters"
 msgstr "Imprimeix els paràmetres d'exportació TXF"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:238
+#: ../src/report/locale-specific/us/taxtxf.scm:219
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr "Mostra els paràmetres d'exportació TXF per a cada codi/compte TXF a l'informe."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:243
+#: ../src/report/locale-specific/us/taxtxf.scm:224
 msgid "Do not print T-Num:Memo data"
 msgstr "No imprimeixis les dades T-Num:Memo"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:244
+#: ../src/report/locale-specific/us/taxtxf.scm:225
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "No imprimeixis les dades T-Num:Memo per als assentaments."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:228
 msgid "Do not print Action:Memo data"
 msgstr "No imprimeixis dades Acció:Nota"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:248
+#: ../src/report/locale-specific/us/taxtxf.scm:229
 msgid "Do not print Action:Memo data for transactions."
 msgstr "No imprimeixis les dades Action:Memo per als assentaments."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:252
+#: ../src/report/locale-specific/us/taxtxf.scm:233
 msgid "Do not print transaction detail"
 msgstr "No imprimeixis els detalls dels assentaments"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:253
+#: ../src/report/locale-specific/us/taxtxf.scm:234
 msgid "Do not print transaction detail for accounts."
 msgstr "No imprimeixis els detalls dels assentaments per als comptes."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:257
+#: ../src/report/locale-specific/us/taxtxf.scm:238
 msgid "Do not use special date processing"
 msgstr "No usis processament de dates especials"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:258
+#: ../src/report/locale-specific/us/taxtxf.scm:239
 msgid "Do not print transactions out of specified dates."
 msgstr "No imprimeixis els assentaments fora de les dades especificades."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:262
+#: ../src/report/locale-specific/us/taxtxf.scm:243
 msgid "Currency conversion date"
 msgstr "Data de la conversió de la divisa"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:263
+#: ../src/report/locale-specific/us/taxtxf.scm:244
 msgid "Select date to use for PriceDB lookups."
 msgstr "Seleccioneu la data a usar per a cerques PriceDB."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:266
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 msgid "Nearest transaction date"
 msgstr "Data més propera de l'assentament"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:266
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 msgid "Use nearest to transaction date."
 msgstr "Usa la data més propera a l'assentament."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:268
+#: ../src/report/locale-specific/us/taxtxf.scm:249
 msgid "Nearest report date"
 msgstr "La data del informe més proper"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:268
+#: ../src/report/locale-specific/us/taxtxf.scm:249
 msgid "Use nearest to report date."
 msgstr "Usa la data més propera a l'informe."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:275
+#: ../src/report/locale-specific/us/taxtxf.scm:256
 msgid "Shade alternate transactions"
 msgstr "Sombreja els assentaments alternatius"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:276
+#: ../src/report/locale-specific/us/taxtxf.scm:257
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr "Sombreja el fons per alternar els assentaments, si es mostra més d'un."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3532
+#: ../src/report/locale-specific/us/taxtxf.scm:3513
 msgid "Tax Schedule Report & TXF Export"
 msgstr "Informe de calendari d'impostos i exportació TXF"
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf.scm:3534
+#: ../src/report/locale-specific/us/taxtxf.scm:3515
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
 msgstr "Ingressos imposables / despeses deduïbles amb detall d'assentament/ exporta a fitxer .TXF"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3538
-#: ../src/report/locale-specific/us/taxtxf.scm:3547
+#: ../src/report/locale-specific/us/taxtxf.scm:3519
+#: ../src/report/locale-specific/us/taxtxf.scm:3528
 msgid "Taxable Income/Deductible Expenses"
 msgstr "Ingressos imposablef/despeses deduïbles"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3539
+#: ../src/report/locale-specific/us/taxtxf.scm:3520
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
 msgstr "Aquest informe mostra detalls dels assentaments per als vostres comptes relacionats amb l'Impost sobre la Renda."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3548
+#: ../src/report/locale-specific/us/taxtxf.scm:3529
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr ""
 "Aquesta pàgina mostra detalls d'assentaments per al comptes rellevants\n"
@@ -18577,47 +18616,56 @@ msgstr ""
 
 #: ../src/report/report-gnome/dialog-custom-report.c:421
 #, fuzzy
+#| msgid "You must select a report to run."
 msgid "You must select a report configuration to load."
 msgstr "Heu de seleccionar un informe a realitzar."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
 #, fuzzy
+#| msgid "You must select a report to delete."
 msgid "You must select a report configuration to delete."
 msgstr "Heu de seleccionar un informa a esborrar."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:441
 #, fuzzy
+#| msgid "Unable to change report name."
 msgid "Unable to change report configuration name."
 msgstr "No s'ha pogut canviar el nom de l'informe."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:453
 #, fuzzy
+#| msgid "A custom report with this name already exists, please choose another name."
 msgid "A saved report configuration with this name already exists, please choose another name."
 msgstr "Ja existeix un informe personalitzat amb aquest nom, si us plau escolliu un altre nom."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:477
 #, fuzzy
+#| msgid "Edit configuration name"
 msgid "Load report configuration"
 msgstr "Edita el nom de configuració"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:479
 #, fuzzy
+#| msgid "Edit configuration name"
 msgid "Edit report configuration name"
 msgstr "Edita el nom de configuració"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:481
 #, fuzzy
+#| msgid "Delete preconfigured report"
 msgid "Delete report configuration"
 msgstr "Esborra l'informe preconfigurat"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#: ../src/report/report-gnome/report-gnome.scm:141
+#: ../src/report/report-gnome/report-gnome.scm:122
 #, fuzzy
+#| msgid "Ta_x Report Options"
 msgid "Saved Report Configurations"
 msgstr "Opcions d'informe d'impos_tos"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 #, fuzzy
+#| msgid "Exit the custom report dialog"
 msgid "Exit the saved report configurations dialog"
 msgstr "Surt del diàleg d'informe personalitzat"
 
@@ -18756,6 +18804,7 @@ msgstr "Esporta l'informe actual com un document PDF"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
 #, fuzzy
+#| msgid "Save _Report"
 msgid "Save _Report Configuration"
 msgstr "Desa l'info_rme"
 
@@ -18765,11 +18814,13 @@ msgstr "Actualitza la configuració desada de l'informe actual. Es desarà l'inf
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1044
 #, fuzzy
+#| msgid "Save Report As..."
 msgid "Save Report Configuration As..."
 msgstr "Anomena i desa l'informe..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1045
 #, fuzzy
+#| msgid "Add the current report's configuration to the `Preconfigured Reports' menu. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgid "Add the current report's configuration to the `Saved Report Configurations' menu. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgstr "Afegeix la configuració de l'informe actual al menú 'Informes preconfigurats'. Es desarà l'informe al fitxer ~/.gnucash/saved-reports-2.4. "
 
@@ -18874,24 +18925,25 @@ msgstr "Aquest informe no té cap opció."
 msgid "GnuCash-Report"
 msgstr "Informe del GnuCash"
 
-#: ../src/report/report-gnome/report-gnome.scm:73
+#: ../src/report/report-gnome/report-gnome.scm:54
 msgid "This report has no options."
 msgstr "Aquest informe no té opcions"
 
-#: ../src/report/report-gnome/report-gnome.scm:97
+#: ../src/report/report-gnome/report-gnome.scm:78
 msgid "Display the %s report"
 msgstr "Mostra l'informe %s"
 
-#: ../src/report/report-gnome/report-gnome.scm:143
+#: ../src/report/report-gnome/report-gnome.scm:124
 #, fuzzy
+#| msgid "Manage and run preconfigured reports"
 msgid "Manage and run saved report configurations"
 msgstr "Gestiona i executa l'informe preconfigurat"
 
-#: ../src/report/report-gnome/report-gnome.scm:163
+#: ../src/report/report-gnome/report-gnome.scm:144
 msgid "Welcome Sample Report"
 msgstr "Informe mostra de benvinguda"
 
-#: ../src/report/report-gnome/report-gnome.scm:165
+#: ../src/report/report-gnome/report-gnome.scm:146
 msgid "Welcome-to-GnuCash report screen"
 msgstr "Pantalla de l'informe de benvinguda al GnuCash"
 
@@ -18933,83 +18985,83 @@ msgstr "No s'ha pogat el fitxer plantilla \"%s\""
 msgid "Adjusting Entries"
 msgstr "S'estan ajustant els elements"
 
-#: ../src/report/report-system/html-fonts.scm:88
-#: ../src/report/report-system/html-fonts.scm:93
-#: ../src/report/report-system/html-fonts.scm:98
-#: ../src/report/report-system/html-fonts.scm:103
-#: ../src/report/report-system/html-fonts.scm:108
-#: ../src/report/report-system/html-fonts.scm:113
-#: ../src/report/report-system/html-fonts.scm:118
-#: ../src/report/report-system/html-fonts.scm:123
-#: ../src/report/report-system/html-fonts.scm:128
+#: ../src/report/report-system/html-fonts.scm:69
+#: ../src/report/report-system/html-fonts.scm:74
+#: ../src/report/report-system/html-fonts.scm:79
+#: ../src/report/report-system/html-fonts.scm:84
+#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:109
 msgid "Fonts"
 msgstr "Tipus de lletra"
 
-#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:70
 msgid "Font info for the report title."
 msgstr "Informació de tipus de lletra per al títol de l'informe."
 
-#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:75
 msgid "Account link"
 msgstr "Enllaç del compte"
 
-#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:75
 msgid "Font info for account name."
 msgstr "Informació de tipus de lletra per al nom del compte."
 
-#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:80
 msgid "Number cell"
 msgstr "Cel·la de número"
 
-#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:80
 msgid "Font info for regular number cells."
 msgstr "Informació de tipus de lletra per a cel·les de nombres regulars."
 
-#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:85
 msgid "Negative Values in Red"
 msgstr "Valors negatius en vermell"
 
-#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:85
 msgid "Display negative values in red."
 msgstr "Mostra els imports negatius en vermell"
 
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:90
 msgid "Number header"
 msgstr "Capçalera de número"
 
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:90
 msgid "Font info for number headers."
 msgstr "Informació de tipus de lletra per a capçaleres de número."
 
-#: ../src/report/report-system/html-fonts.scm:114
+#: ../src/report/report-system/html-fonts.scm:95
 msgid "Text cell"
 msgstr "Cel·la de text"
 
-#: ../src/report/report-system/html-fonts.scm:114
+#: ../src/report/report-system/html-fonts.scm:95
 msgid "Font info for regular text cells."
 msgstr "Informació de tipus de lletra per a cel·les de text regular."
 
-#: ../src/report/report-system/html-fonts.scm:119
+#: ../src/report/report-system/html-fonts.scm:100
 msgid "Total number cell"
 msgstr "Cel·la de número total"
 
-#: ../src/report/report-system/html-fonts.scm:119
+#: ../src/report/report-system/html-fonts.scm:100
 msgid "Font info for number cells containing a total."
 msgstr "Informació de tipus de lletra per a cel·les de número que contenen un total."
 
-#: ../src/report/report-system/html-fonts.scm:124
+#: ../src/report/report-system/html-fonts.scm:105
 msgid "Total label cell"
 msgstr "Cel·la d'etiqueta total"
 
-#: ../src/report/report-system/html-fonts.scm:124
+#: ../src/report/report-system/html-fonts.scm:105
 msgid "Font info for cells containing total labels."
 msgstr "Informació  de tipus de lletra per a cel·les que contenen etiquetes de total."
 
-#: ../src/report/report-system/html-fonts.scm:129
+#: ../src/report/report-system/html-fonts.scm:110
 msgid "Centered label cell"
 msgstr "Cel·la d'etiqueta centrada"
 
-#: ../src/report/report-system/html-fonts.scm:129
+#: ../src/report/report-system/html-fonts.scm:110
 msgid "Font info for centered label cells."
 msgstr "Nom del compte QIF"
 
@@ -19043,6 +19095,7 @@ msgstr "No s'ha seleccionat cap compte"
 
 #: ../src/report/report-system/html-utilities.scm:841
 #, fuzzy
+#| msgid "This report requires accounts to be selected."
 msgid "This report requires accounts to be selected in the report options."
 msgstr "Heu de seleccionar algun compte per a aquest informe."
 
@@ -19546,7 +19599,7 @@ msgstr "Mostra un diagrama circular amb el balanç del passiu en una data especi
 #. in *one* place.
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
-#: ../src/report/standard-reports/average-balance.scm:38
+#: ../src/report/standard-reports/average-balance.scm:19
 #: ../src/report/standard-reports/cash-flow.scm:44
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
@@ -19561,7 +19614,7 @@ msgid "Start Date"
 msgstr "Data d'inici:"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
-#: ../src/report/standard-reports/average-balance.scm:39
+#: ../src/report/standard-reports/average-balance.scm:20
 #: ../src/report/standard-reports/cash-flow.scm:45
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
@@ -19602,8 +19655,8 @@ msgid "Maximum Slices"
 msgstr "Núm. màxim de sectors"
 
 #: ../src/report/standard-reports/account-piecharts.scm:75
-#: ../src/report/standard-reports/average-balance.scm:130
-#: ../src/report/standard-reports/average-balance.scm:466
+#: ../src/report/standard-reports/average-balance.scm:111
+#: ../src/report/standard-reports/average-balance.scm:447
 #: ../src/report/standard-reports/category-barchart.scm:87
 #: ../src/report/standard-reports/daily-reports.scm:68
 #: ../src/report/standard-reports/net-barchart.scm:61
@@ -19613,8 +19666,8 @@ msgid "Plot Width"
 msgstr "Amplada del diagrama"
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
-#: ../src/report/standard-reports/average-balance.scm:130
-#: ../src/report/standard-reports/average-balance.scm:468
+#: ../src/report/standard-reports/average-balance.scm:111
+#: ../src/report/standard-reports/average-balance.scm:449
 #: ../src/report/standard-reports/category-barchart.scm:88
 #: ../src/report/standard-reports/daily-reports.scm:69
 #: ../src/report/standard-reports/net-barchart.scm:62
@@ -19975,8 +20028,8 @@ msgid "Basis calculation method."
 msgstr "Mètode de càlcul de base"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:90
-#: ../src/report/standard-reports/average-balance.scm:125
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:106
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Average"
 msgstr "Mitjana"
 
@@ -20122,11 +20175,11 @@ msgstr "Si esteu en una situació multi-divisa, els tipus de canvi poden ser inc
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr "** aquest valor/divisa no té un preu i s'ha usat un preu igual a 1."
 
-#: ../src/report/standard-reports/average-balance.scm:36
+#: ../src/report/standard-reports/average-balance.scm:17
 msgid "Average Balance"
 msgstr "Saldo mitjà"
 
-#: ../src/report/standard-reports/average-balance.scm:40
+#: ../src/report/standard-reports/average-balance.scm:21
 #: ../src/report/standard-reports/category-barchart.scm:77
 #: ../src/report/standard-reports/net-barchart.scm:49
 #: ../src/report/standard-reports/net-linechart.scm:45
@@ -20134,30 +20187,30 @@ msgstr "Saldo mitjà"
 msgid "Step Size"
 msgstr "Mida de pas"
 
-#: ../src/report/standard-reports/average-balance.scm:43
+#: ../src/report/standard-reports/average-balance.scm:24
 #: ../src/report/standard-reports/daily-reports.scm:63
 msgid "Include Sub-Accounts"
 msgstr "Inclou els subcomptes"
 
-#: ../src/report/standard-reports/average-balance.scm:44
+#: ../src/report/standard-reports/average-balance.scm:25
 msgid "Exclude transactions between selected accounts"
 msgstr "Exclou els assentaments entre els comptes seleccionats"
 
-#: ../src/report/standard-reports/average-balance.scm:76
+#: ../src/report/standard-reports/average-balance.scm:57
 #: ../src/report/standard-reports/daily-reports.scm:95
 msgid "Include sub-accounts of all selected accounts."
 msgstr "Inclou els subcomptes de tots els comptes seleccionats."
 
-#: ../src/report/standard-reports/average-balance.scm:82
+#: ../src/report/standard-reports/average-balance.scm:63
 msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr "Exclou els assentaments que sols involucrin dos comptes, els dos estan seleccionats a sota. Això sols afecta les columnes de pèrdues i guanys de la taula."
 
-#: ../src/report/standard-reports/average-balance.scm:89
+#: ../src/report/standard-reports/average-balance.scm:70
 msgid "Do transaction report on this account."
 msgstr "Fes un informe d'assentament per a aquest compte."
 
-#: ../src/report/standard-reports/average-balance.scm:112
-#: ../src/report/standard-reports/average-balance.scm:342
+#: ../src/report/standard-reports/average-balance.scm:93
+#: ../src/report/standard-reports/average-balance.scm:323
 #: ../src/report/standard-reports/category-barchart.scm:184
 #: ../src/report/standard-reports/category-barchart.scm:253
 #: ../src/report/standard-reports/net-barchart.scm:133
@@ -20167,66 +20220,66 @@ msgstr "Fes un informe d'assentament per a aquest compte."
 msgid "Show table"
 msgstr "Mostra la taula"
 
-#: ../src/report/standard-reports/average-balance.scm:113
+#: ../src/report/standard-reports/average-balance.scm:94
 #: ../src/report/standard-reports/category-barchart.scm:185
 #: ../src/report/standard-reports/net-barchart.scm:134
 #: ../src/report/standard-reports/net-linechart.scm:140
 msgid "Display a table of the selected data."
 msgstr "Mostra una taula de les dades seleccionades."
 
-#: ../src/report/standard-reports/average-balance.scm:117
-#: ../src/report/standard-reports/average-balance.scm:341
+#: ../src/report/standard-reports/average-balance.scm:98
+#: ../src/report/standard-reports/average-balance.scm:322
 msgid "Show plot"
 msgstr "Mostra el diagrama"
 
-#: ../src/report/standard-reports/average-balance.scm:118
+#: ../src/report/standard-reports/average-balance.scm:99
 msgid "Display a graph of the selected data."
 msgstr "Mostra un diagrama de les dades seleccionades."
 
-#: ../src/report/standard-reports/average-balance.scm:122
-#: ../src/report/standard-reports/average-balance.scm:340
+#: ../src/report/standard-reports/average-balance.scm:103
+#: ../src/report/standard-reports/average-balance.scm:321
 msgid "Plot Type"
 msgstr "Tipus de diagrama"
 
-#: ../src/report/standard-reports/average-balance.scm:123
+#: ../src/report/standard-reports/average-balance.scm:104
 msgid "The type of graph to generate."
 msgstr "El tipus de diagrama a generar."
 
-#: ../src/report/standard-reports/average-balance.scm:125
+#: ../src/report/standard-reports/average-balance.scm:106
 msgid "Average Balance."
 msgstr "Saldo mitjà."
 
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:107
 msgid "Profit (Gain minus Loss)."
 msgstr "Beneficis (guanys menys pèrdues)."
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:108
 msgid "Gain And Loss."
 msgstr "Pèrdues i guanys."
 
 #. Watch out -- these names should be consistent with the display
 #. option where you choose them, otherwise users are confused.
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Period start"
 msgstr "Inici del període"
 
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Period end"
 msgstr "Final del període"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Maximum"
 msgstr "Valor màxim"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Minimum"
 msgstr "Valor mínim"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Gain"
 msgstr "Guanys"
 
-#: ../src/report/standard-reports/average-balance.scm:147
+#: ../src/report/standard-reports/average-balance.scm:128
 msgid "Loss"
 msgstr "Pèrdues"
 
@@ -20733,11 +20786,13 @@ msgstr "Flux de Caixa"
 
 #: ../src/report/standard-reports/cash-flow.scm:55
 #, fuzzy
+#| msgid "Include trading accounts total"
 msgid "Include Trading Accounts in report"
 msgstr "Inclou el total dels comptes d'operacions"
 
 #: ../src/report/standard-reports/cash-flow.scm:104
 #, fuzzy
+#| msgid "Include transactions to/from filter accounts only."
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "Inclou els assentaments de/a comptes amb filtre únicament."
 
@@ -20959,8 +21014,8 @@ msgstr "Llibre diari general"
 
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
-#: ../src/report/standard-reports/register.scm:145
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:126
+#: ../src/report/standard-reports/register.scm:391
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 msgid "Num/Action"
@@ -20970,7 +21025,7 @@ msgstr "Num/Acció"
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -21353,111 +21408,111 @@ msgstr "El producte seleccionat i la divisa de l'informe són idèntics. No té 
 msgid "Price Scatterplot"
 msgstr "Diagrama de dispersió de les cotitzacions"
 
-#: ../src/report/standard-reports/register.scm:170
+#: ../src/report/standard-reports/register.scm:151
 msgid "Debit Value"
 msgstr "Valor del deure"
 
-#: ../src/report/standard-reports/register.scm:172
+#: ../src/report/standard-reports/register.scm:153
 msgid "Credit Value"
 msgstr "Valor de l'haver"
 
-#: ../src/report/standard-reports/register.scm:399
+#: ../src/report/standard-reports/register.scm:380
 msgid "The title of the report."
 msgstr "El títol de l'informe"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:392
 msgid "Display the check number/action?"
 msgstr "Voleu mostrar el número de xec/acció?"
 
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:396
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "Voleu mostrar el número de xec?"
 
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:406
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "Voleu mostrar la nota d'abonament?"
 
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:411
 msgid "Display the account?"
 msgstr "Voleu mostrar el compte?"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr "Voleu mostrar el nombre d'accions?"
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:421
 msgid "Display the name of lot the shares are in?"
 msgstr "Mostra el paquet on s'ubiquen les accions?"
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:426
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr "Voleu mostrar la cotització de les accions?"
 
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:431
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr "Voleu mostrar la quantitat?"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "Línia senzilla"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single Column Display."
 msgstr "Visualització de columna única."
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr "Doble"
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Two Column Display."
 msgstr "Visualització de dues columnes."
 
-#: ../src/report/standard-reports/register.scm:459
+#: ../src/report/standard-reports/register.scm:440
 msgid "Display the value in transaction currency?"
 msgstr "Voleu mostrar la divisa de la transacció?"
 
-#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:445
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Display a running balance?"
 msgstr "Voleu mostrar el saldo actual"
 
-#: ../src/report/standard-reports/register.scm:617
+#: ../src/report/standard-reports/register.scm:598
 msgid "Total Debits"
 msgstr "Deure total"
 
-#: ../src/report/standard-reports/register.scm:619
+#: ../src/report/standard-reports/register.scm:600
 msgid "Total Credits"
 msgstr "Haver total"
 
-#: ../src/report/standard-reports/register.scm:621
+#: ../src/report/standard-reports/register.scm:602
 msgid "Total Value Debits"
 msgstr "Valor total del deure"
 
-#: ../src/report/standard-reports/register.scm:623
+#: ../src/report/standard-reports/register.scm:604
 msgid "Total Value Credits"
 msgstr "Valor total de l'haver"
 
-#: ../src/report/standard-reports/register.scm:626
+#: ../src/report/standard-reports/register.scm:607
 msgid "Net Change"
 msgstr "Canvi net"
 
-#: ../src/report/standard-reports/register.scm:629
+#: ../src/report/standard-reports/register.scm:610
 msgid "Value Change"
 msgstr "Canvi de valor"
 
-#: ../src/report/standard-reports/register.scm:788
+#: ../src/report/standard-reports/register.scm:769
 msgid "Client"
 msgstr "Client"
 
@@ -22146,7 +22201,7 @@ msgstr "Imatge de logotip de l'empresa."
 #: ../src/report/stylesheets/stylesheet-footer.scm:116
 #: ../src/report/stylesheets/stylesheet-footer.scm:209
 #: ../src/report/stylesheets/stylesheet-plain.scm:48
-#: ../src/report/utility-reports/hello-world.scm:160
+#: ../src/report/utility-reports/hello-world.scm:141
 msgid "Background Color"
 msgstr "Color del fons"
 
@@ -22162,7 +22217,7 @@ msgstr "Color de fons general per a l'informe."
 #: ../src/report/stylesheets/stylesheet-fancy.scm:190
 #: ../src/report/stylesheets/stylesheet-footer.scm:123
 #: ../src/report/stylesheets/stylesheet-footer.scm:210
-#: ../src/report/utility-reports/hello-world.scm:167
+#: ../src/report/utility-reports/hello-world.scm:148
 msgid "Text Color"
 msgstr "Color del text"
 
@@ -22390,72 +22445,72 @@ msgstr "Color de fons per a les línies alternes.."
 msgid "Plain"
 msgstr "Senzilla"
 
-#: ../src/report/utility-reports/hello-world.scm:61
-#: ../src/report/utility-reports/hello-world.scm:71
-#: ../src/report/utility-reports/hello-world.scm:97
-#: ../src/report/utility-reports/hello-world.scm:108
-#: ../src/report/utility-reports/hello-world.scm:117
-#: ../src/report/utility-reports/hello-world.scm:124
-#: ../src/report/utility-reports/hello-world.scm:131
-#: ../src/report/utility-reports/hello-world.scm:142
-#: ../src/report/utility-reports/hello-world.scm:160
-#: ../src/report/utility-reports/hello-world.scm:167
+#: ../src/report/utility-reports/hello-world.scm:42
+#: ../src/report/utility-reports/hello-world.scm:52
+#: ../src/report/utility-reports/hello-world.scm:78
+#: ../src/report/utility-reports/hello-world.scm:89
+#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:105
+#: ../src/report/utility-reports/hello-world.scm:112
+#: ../src/report/utility-reports/hello-world.scm:123
+#: ../src/report/utility-reports/hello-world.scm:141
+#: ../src/report/utility-reports/hello-world.scm:148
 msgid "Hello, World!"
 msgstr "Hola, Món!"
 
-#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:42
 msgid "Boolean Option"
 msgstr "Opció booleana"
 
-#: ../src/report/utility-reports/hello-world.scm:62
+#: ../src/report/utility-reports/hello-world.scm:43
 msgid "This is a boolean option."
 msgstr "Això és una opció booleana."
 
-#: ../src/report/utility-reports/hello-world.scm:71
+#: ../src/report/utility-reports/hello-world.scm:52
 msgid "Multi Choice Option"
 msgstr "Opció d'elecció múltiple"
 
-#: ../src/report/utility-reports/hello-world.scm:72
+#: ../src/report/utility-reports/hello-world.scm:53
 msgid "This is a multi choice option."
 msgstr "Això és una opció d'elecció múltiple."
 
-#: ../src/report/utility-reports/hello-world.scm:75
+#: ../src/report/utility-reports/hello-world.scm:56
 msgid "First Option"
 msgstr "Primera opció"
 
-#: ../src/report/utility-reports/hello-world.scm:76
+#: ../src/report/utility-reports/hello-world.scm:57
 msgid "Help for first option."
 msgstr "Ajuda per a la primera opció."
 
-#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:60
 msgid "Second Option"
 msgstr "Segona opció"
 
-#: ../src/report/utility-reports/hello-world.scm:80
+#: ../src/report/utility-reports/hello-world.scm:61
 msgid "Help for second option."
 msgstr "Ajuda per a la segona opció."
 
-#: ../src/report/utility-reports/hello-world.scm:83
+#: ../src/report/utility-reports/hello-world.scm:64
 msgid "Third Option"
 msgstr "Tercera opció"
 
-#: ../src/report/utility-reports/hello-world.scm:84
+#: ../src/report/utility-reports/hello-world.scm:65
 msgid "Help for third option."
 msgstr "Ajuda per a la tercera opció."
 
-#: ../src/report/utility-reports/hello-world.scm:87
+#: ../src/report/utility-reports/hello-world.scm:68
 msgid "Fourth Options"
 msgstr "Quart opció"
 
-#: ../src/report/utility-reports/hello-world.scm:88
+#: ../src/report/utility-reports/hello-world.scm:69
 msgid "The fourth option rules!"
 msgstr "La quarta opció és la pera!"
 
-#: ../src/report/utility-reports/hello-world.scm:97
+#: ../src/report/utility-reports/hello-world.scm:78
 msgid "String Option"
 msgstr "Opció de cadena de text"
 
-#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:79
 msgid "This is a string option."
 msgstr "Això és una opció de cadena de text."
 
@@ -22470,211 +22525,211 @@ msgstr "Això és una opció de cadena de text."
 #. The name of this report. This will be used, among other things,
 #. for making its menu item in the main menu. You need to use the
 #. untranslated value here!
-#: ../src/report/utility-reports/hello-world.scm:98
-#: ../src/report/utility-reports/hello-world.scm:332
-#: ../src/report/utility-reports/hello-world.scm:497
+#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:313
+#: ../src/report/utility-reports/hello-world.scm:478
 msgid "Hello, World"
 msgstr "Hola, món!"
 
-#: ../src/report/utility-reports/hello-world.scm:108
+#: ../src/report/utility-reports/hello-world.scm:89
 msgid "Just a Date Option"
 msgstr "Simplement una opció de data"
 
-#: ../src/report/utility-reports/hello-world.scm:109
+#: ../src/report/utility-reports/hello-world.scm:90
 msgid "This is a date option."
 msgstr "Això és una opció de data."
 
-#: ../src/report/utility-reports/hello-world.scm:117
+#: ../src/report/utility-reports/hello-world.scm:98
 msgid "Time and Date Option"
 msgstr "Opció d'hora i data"
 
-#: ../src/report/utility-reports/hello-world.scm:118
+#: ../src/report/utility-reports/hello-world.scm:99
 msgid "This is a date option with time."
 msgstr "Això és una opció de data amb hora."
 
-#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:105
 msgid "Combo Date Option"
 msgstr "Opció de data combinada"
 
-#: ../src/report/utility-reports/hello-world.scm:125
+#: ../src/report/utility-reports/hello-world.scm:106
 msgid "This is a combination date option."
 msgstr "Això és una opció de combinació de data."
 
-#: ../src/report/utility-reports/hello-world.scm:131
+#: ../src/report/utility-reports/hello-world.scm:112
 msgid "Relative Date Option"
 msgstr "Opció de data relativa"
 
-#: ../src/report/utility-reports/hello-world.scm:132
+#: ../src/report/utility-reports/hello-world.scm:113
 msgid "This is a relative date option."
 msgstr "Això és una opció de data relativa."
 
-#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:123
 msgid "Number Option"
 msgstr "Opció numèrica"
 
-#: ../src/report/utility-reports/hello-world.scm:143
+#: ../src/report/utility-reports/hello-world.scm:124
 msgid "This is a number option."
 msgstr "Això és una opció numèrica."
 
-#: ../src/report/utility-reports/hello-world.scm:161
-#: ../src/report/utility-reports/hello-world.scm:168
+#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:149
 msgid "This is a color option."
 msgstr "Això és una opció de color."
 
-#: ../src/report/utility-reports/hello-world.scm:189
-#: ../src/report/utility-reports/hello-world.scm:202
+#: ../src/report/utility-reports/hello-world.scm:170
+#: ../src/report/utility-reports/hello-world.scm:183
 msgid "Hello Again"
 msgstr "Bones de nou"
 
-#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:170
 msgid "An account list option"
 msgstr "Una opció de llista de comptes"
 
-#: ../src/report/utility-reports/hello-world.scm:190
+#: ../src/report/utility-reports/hello-world.scm:171
 msgid "This is an account list option."
 msgstr "Això és una opció de llista de comptes."
 
-#: ../src/report/utility-reports/hello-world.scm:202
+#: ../src/report/utility-reports/hello-world.scm:183
 msgid "A list option"
 msgstr "Una opció de llista"
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:184
 msgid "This is a list option."
 msgstr "Això és una opció de llista."
 
-#: ../src/report/utility-reports/hello-world.scm:207
+#: ../src/report/utility-reports/hello-world.scm:188
 msgid "The Good"
 msgstr "La bona"
 
-#: ../src/report/utility-reports/hello-world.scm:208
+#: ../src/report/utility-reports/hello-world.scm:189
 msgid "Good option."
 msgstr "Opció bona."
 
-#: ../src/report/utility-reports/hello-world.scm:211
+#: ../src/report/utility-reports/hello-world.scm:192
 msgid "The Bad"
 msgstr "La dolenta"
 
-#: ../src/report/utility-reports/hello-world.scm:212
+#: ../src/report/utility-reports/hello-world.scm:193
 msgid "Bad option."
 msgstr "Opció dolenta."
 
-#: ../src/report/utility-reports/hello-world.scm:215
+#: ../src/report/utility-reports/hello-world.scm:196
 msgid "The Ugly"
 msgstr "La lletja"
 
-#: ../src/report/utility-reports/hello-world.scm:216
+#: ../src/report/utility-reports/hello-world.scm:197
 msgid "Ugly option."
 msgstr "Opció lletja."
 
-#: ../src/report/utility-reports/hello-world.scm:222
+#: ../src/report/utility-reports/hello-world.scm:203
 msgid "Testing"
 msgstr "Proves"
 
-#: ../src/report/utility-reports/hello-world.scm:222
+#: ../src/report/utility-reports/hello-world.scm:203
 msgid "Crash the report"
 msgstr "Fes fallar l'informe"
 
-#: ../src/report/utility-reports/hello-world.scm:224
+#: ../src/report/utility-reports/hello-world.scm:205
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
 msgstr "Això és només per a fer proves. El vostre informe no hauria de tenir cap opció com aquesta"
 
-#: ../src/report/utility-reports/hello-world.scm:347
+#: ../src/report/utility-reports/hello-world.scm:328
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
 msgstr "Aquest és un exemple d'informe de GnuCash. Mireu el codi font en guile (scheme) a la carpeta scm/report per tenir més detalls sobre com escriure els vostres propis informes, o ampliar i personalitzar els ja existents."
 
-#: ../src/report/utility-reports/hello-world.scm:353
+#: ../src/report/utility-reports/hello-world.scm:334
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
 msgstr "Si voleu ajut per escriure informes, o bé voleu contribuir enviant el vostre flamant i totalment genial informe, consulteu la llista de distribució %s."
 
-#: ../src/report/utility-reports/hello-world.scm:358
+#: ../src/report/utility-reports/hello-world.scm:339
 msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr "Vegeu &lt;http://www.gnucash.org/&gt; per a obtenir detalls de com subscriure's a aquesta llista."
 
-#: ../src/report/utility-reports/hello-world.scm:359
+#: ../src/report/utility-reports/hello-world.scm:340
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
 msgstr "Podeu aprendre més coses sobre el llenguatge scheme en aquesta adreça: &lt;http://www.scheme.com/tspl2d/&gt;."
 
-#: ../src/report/utility-reports/hello-world.scm:363
+#: ../src/report/utility-reports/hello-world.scm:344
 msgid "The current time is %s."
 msgstr "L'hora actual és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:368
+#: ../src/report/utility-reports/hello-world.scm:349
 msgid "The boolean option is %s."
 msgstr "L'opció booleana és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:350
 msgid "true"
 msgstr "cert"
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:350
 msgid "false"
 msgstr "fals"
 
-#: ../src/report/utility-reports/hello-world.scm:373
+#: ../src/report/utility-reports/hello-world.scm:354
 msgid "The multi-choice option is %s."
 msgstr "L'opció d'elecció múltiple és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:378
+#: ../src/report/utility-reports/hello-world.scm:359
 msgid "The string option is %s."
 msgstr "L'opció de cadena és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:383
+#: ../src/report/utility-reports/hello-world.scm:364
 msgid "The date option is %s."
 msgstr "L'opció de data és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:388
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "The date and time option is %s."
 msgstr "L'opció de data i hora és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:393
+#: ../src/report/utility-reports/hello-world.scm:374
 msgid "The relative date option is %s."
 msgstr "L'opció de data relativa és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:398
+#: ../src/report/utility-reports/hello-world.scm:379
 msgid "The combination date option is %s."
 msgstr "L'opció de data de combinació és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:403
+#: ../src/report/utility-reports/hello-world.scm:384
 msgid "The number option is %s."
 msgstr "L'opció de nombre és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:414
+#: ../src/report/utility-reports/hello-world.scm:395
 msgid "The number option formatted as currency is %s."
 msgstr "L'opció de nombre formatat com a moneda és %s."
 
-#: ../src/report/utility-reports/hello-world.scm:426
+#: ../src/report/utility-reports/hello-world.scm:407
 msgid "Items you selected:"
 msgstr "Elements que heu escollit:"
 
-#: ../src/report/utility-reports/hello-world.scm:433
+#: ../src/report/utility-reports/hello-world.scm:414
 msgid "List items selected"
 msgstr "Elements de la llista que heu escollit"
 
-#: ../src/report/utility-reports/hello-world.scm:438
+#: ../src/report/utility-reports/hello-world.scm:419
 msgid "(You selected no list items.)"
 msgstr "(No heu escollit cap element de la llista.)"
 
-#: ../src/report/utility-reports/hello-world.scm:474
+#: ../src/report/utility-reports/hello-world.scm:455
 msgid "You have selected no accounts."
 msgstr "No heu escollit cap compte"
 
-#: ../src/report/utility-reports/hello-world.scm:479
+#: ../src/report/utility-reports/hello-world.scm:460
 msgid "Display help"
 msgstr "Mostra l'ajuda"
 
-#: ../src/report/utility-reports/hello-world.scm:484
+#: ../src/report/utility-reports/hello-world.scm:465
 msgid "Have a nice day!"
 msgstr "Que tingueu un bon dia!"
 
 #. The name in the menu
 #. (only necessary if it differs from the name)
-#: ../src/report/utility-reports/hello-world.scm:508
+#: ../src/report/utility-reports/hello-world.scm:489
 msgid "Sample Report with Examples"
 msgstr "Informe de mostra amb exemples"
 
 #. A tip that is used to provide additional information about the
 #. report to the user.
-#: ../src/report/utility-reports/hello-world.scm:512
+#: ../src/report/utility-reports/hello-world.scm:493
 msgid "A sample report with examples."
 msgstr "Un informe de mostra amb exemple."
 
@@ -22768,15 +22823,15 @@ msgstr "Voleu afegir les cotitzacions vàlides restants?"
 msgid "Adding remaining good quotes."
 msgstr "S'estan afegint les cotitzacions vàlides restants."
 
-#: ../src/tax/us/de_DE.scm:56
+#: ../src/tax/us/de_DE.scm:37
 msgid "Tax Number"
 msgstr "Número d'identificació fiscal"
 
-#: ../src/tax/us/txf-de_DE.scm:349
+#: ../src/tax/us/txf-de_DE.scm:330
 msgid "The electronic tax number of your business"
 msgstr "El número d'identificació fiscal (NIF) del vostre negoci"
 
-#: ../src/tax/us/txf.scm:106
+#: ../src/tax/us/txf.scm:87
 msgid "No help available."
 msgstr "No hi ha ajuda disponible."
 
@@ -22970,57 +23025,6 @@ msgstr ""
 msgid "To search through all your transactions, start a search (Edit -> Find...) from the main accounts hierarchy page. To limit your search to a single account, start the search from that account's register."
 msgstr "Per cercar a través de totes les vostres transaccions inicieu una cerca (Edita -> Cerca...) des de la pàgina de jerarquia dels comptes principals. Per limitar la cerca a un compte únic, comenceu la  des del registre d'aquest compte."
 
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Recupera la cotització actual de banca electrònica"
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Cada"
-
-#, fuzzy
-#~| msgid "days."
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "dies."
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Cada"
-
-#, fuzzy
-#~| msgid "weeks."
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "setmanes."
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Cada"
-
-#, fuzzy
-#~| msgid "months."
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "mesos."
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Cada"
-
-#, fuzzy
-#~| msgid "months."
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "mesos."
-
 #~ msgid "Negative amounts are not allowed."
 #~ msgstr "El valors negatius no estan permesos."
 
@@ -23039,11 +23043,26 @@ msgstr "Per cercar a través de totes les vostres transaccions inicieu una cerca
 #~ msgid "New item"
 #~ msgstr "Element nou..."
 
+#~ msgid "Retrieve the current online quote"
+#~ msgstr "Recupera la cotització actual de banca electrònica"
+
 #~ msgid "_Use system theme colors"
 #~ msgstr "_Utilitza els colors del tema del sistema"
 
 #~ msgid "If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used."
 #~ msgstr "Si s'habilita, s'utilitzaran els colors del tema de sistema en les finestres de registre. Si no s'habilita, s'utilitzaran els colors originals del GnuCash per als registres."
+
+#~ msgid "Every"
+#~ msgstr "Cada"
+
+#~ msgid "days."
+#~ msgstr "dies."
+
+#~ msgid "weeks."
+#~ msgstr "setmanes."
+
+#~ msgid "months."
+#~ msgstr "mesos."
 
 #~ msgid "%s at %s (code %s)"
 #~ msgstr "%s a %s (codi %s)"

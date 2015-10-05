@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 10:40-0700\n"
+"POT-Creation-Date: 2015-09-26 10:44-0700\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
-"Language: Kinyarwanda\n"
+"Language: rw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -141,6 +141,7 @@ msgstr ""
 
 #: ../src/app-utils/business-prefs.scm:43
 #, fuzzy
+#| msgid "Billing Information"
 msgid "Bill number format"
 msgstr "Amakuru yo kurihisha"
 
@@ -176,6 +177,7 @@ msgstr ""
 
 #: ../src/app-utils/business-prefs.scm:51
 #, fuzzy
+#| msgid "Custom format"
 msgid "Job number format"
 msgstr "Imiterere isanzwe"
 
@@ -772,8 +774,8 @@ msgid "Opening Balances"
 msgstr ""
 
 #: ../src/app-utils/gnc-ui-util.c:672
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:72
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:76
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:57
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:200
 #: ../src/report/standard-reports/balance-sheet.scm:673
 msgid "Retained Earnings"
@@ -781,8 +783,8 @@ msgstr ""
 
 #: ../src/app-utils/gnc-ui-util.c:744 ../src/engine/Account.c:3951
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:71
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:75
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:52
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:56
 #: ../src/register/ledger-core/split-register.c:2548
 #: ../src/report/standard-reports/balance-sheet.scm:661
 #: ../src/report/standard-reports/budget-balance-sheet.scm:812
@@ -803,7 +805,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:373
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -823,7 +825,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:394
+#: ../src/report/standard-reports/register.scm:375
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -844,7 +846,7 @@ msgstr ""
 
 #: ../src/app-utils/prefs.scm:64
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3133
-#: ../src/import-export/csv-imp/gnc-csv-model.c:70
+#: ../src/import-export/csv-imp/gnc-csv-model.c:50
 msgid "Deposit"
 msgstr ""
 
@@ -944,7 +946,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:826
 msgid "Charge"
 msgstr ""
 
@@ -980,7 +982,7 @@ msgstr ""
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:832
+#: ../src/report/standard-reports/register.scm:813
 msgid "Invoice"
 msgstr ""
 
@@ -992,7 +994,7 @@ msgstr ""
 
 #: ../src/app-utils/prefs.scm:81
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
-#: ../src/import-export/csv-imp/gnc-csv-model.c:71
+#: ../src/import-export/csv-imp/gnc-csv-model.c:51
 msgid "Withdrawal"
 msgstr ""
 
@@ -1028,12 +1030,12 @@ msgstr ""
 #: ../src/engine/Scrub.c:393 ../src/gnome/gnc-budget-view.c:385
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2975
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3076
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:32
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:38
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:59
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:13
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:19
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:28
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:34
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:40
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:46
 #: ../src/register/ledger-core/split-register.c:2564
 #: ../src/report/report-system/report-utilities.scm:117
 #: ../src/report/standard-reports/advanced-portfolio.scm:1078
@@ -1241,7 +1243,7 @@ msgstr "Inkomoko"
 #: ../src/business/business-gnome/business-gnome-utils.c:448
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:668
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
-#: ../src/import-export/csv-imp/gnc-csv-model.c:64
+#: ../src/import-export/csv-imp/gnc-csv-model.c:44
 #: ../src/report/standard-reports/transaction.scm:685
 #: ../src/report/standard-reports/transaction.scm:722
 #: ../src/report/standard-reports/transaction.scm:777
@@ -1767,6 +1769,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-invoice.c:2346
 #: ../src/business/business-gnome/dialog-invoice.c:2522
 #, fuzzy
+#| msgid "Billing Information"
 msgid "Bill Information"
 msgstr "Amakuru yo kurihisha"
 
@@ -1968,13 +1971,13 @@ msgstr ""
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
 #: ../src/gnome/reconcile-view.c:385
-#: ../src/import-export/csv-imp/gnc-csv-model.c:66
+#: ../src/import-export/csv-imp/gnc-csv-model.c:46
 #: ../src/register/ledger-core/split-register-model.c:246
 #: ../src/register/ledger-core/split-register-model.c:266
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
-#: ../src/report/standard-reports/register.scm:146
-#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:127
+#: ../src/report/standard-reports/register.scm:395
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -2026,8 +2029,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:826
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -2346,6 +2349,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
 #, fuzzy
+#| msgid "Overview"
 msgid "Vendors Overview"
 msgstr "Incamake"
 
@@ -2400,6 +2404,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:240
 #, fuzzy
+#| msgid "Overview"
 msgid "Employees Overview"
 msgstr "Incamake"
 
@@ -2562,6 +2567,7 @@ msgstr "iyi"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:134
 #, fuzzy
+#| msgid "Duplicate"
 msgid "_Duplicate Invoice"
 msgstr "Gusubiramo"
 
@@ -2883,6 +2889,7 @@ msgstr "a Gishya IDOSIYE"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:162
 #, fuzzy
+#| msgid "Create a new account"
 msgid "Create a new customer"
 msgstr "Himba konti nshya"
 
@@ -2934,6 +2941,7 @@ msgstr "a Gishya"
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:277
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:897
 #, fuzzy
+#| msgid "Vendor"
 msgid "Vendor Listing"
 msgstr "Umucuruzi"
 
@@ -3019,6 +3027,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:616
 #, fuzzy
+#| msgid "Vendor"
 msgid "Vendors"
 msgstr "Umucuruzi"
 
@@ -3457,7 +3466,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-account.c:749
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:67
+#: ../src/import-export/csv-imp/gnc-csv-model.c:47
 #: ../src/import-export/import-main-matcher.c:485
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
@@ -3478,8 +3487,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:111
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
-#: ../src/report/standard-reports/register.scm:148
-#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:129
+#: ../src/report/standard-reports/register.scm:400
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3578,7 +3587,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-owner.c:474
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2914
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:68
+#: ../src/import-export/csv-imp/gnc-csv-model.c:48
 #: ../src/register/ledger-core/split-register-model.c:468
 #: ../src/report/business-reports/balsheet-eg.scm:301
 #: ../src/report/business-reports/taxinvoice.scm:91
@@ -3674,6 +3683,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:2
 #, fuzzy
+#| msgid "Error message"
 msgid "Dummy message"
 msgstr "irangakosa"
 
@@ -3918,7 +3928,7 @@ msgstr ""
 #: ../src/gnome/reconcile-view.c:389
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/import-export/csv-imp/gnc-csv-model.c:65
+#: ../src/import-export/csv-imp/gnc-csv-model.c:45
 #: ../src/import-export/import-main-matcher.c:481
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
@@ -3946,9 +3956,9 @@ msgstr ""
 #: ../src/report/standard-reports/net-barchart.scm:410
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
-#: ../src/report/standard-reports/register.scm:140
-#: ../src/report/standard-reports/register.scm:404
-#: ../src/report/standard-reports/register.scm:806
+#: ../src/report/standard-reports/register.scm:121
+#: ../src/report/standard-reports/register.scm:385
+#: ../src/report/standard-reports/register.scm:787
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -4013,8 +4023,8 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
-#: ../src/report/standard-reports/register.scm:150
-#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:131
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -4389,7 +4399,7 @@ msgstr "IGITERANYOCYUNGIRIJE"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:121
 #: ../src/report/business-reports/easy-invoice.scm:478
 #: ../src/report/business-reports/fancy-invoice.scm:517
-#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:55
+#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:36
 msgid "Tax"
 msgstr ""
 
@@ -4655,6 +4665,7 @@ msgstr ""
 #: ../src/engine/Scrub.c:466
 #: ../src/report/standard-reports/income-statement.scm:621
 #, fuzzy
+#| msgid "Heading"
 msgid "Trading"
 msgstr "umutwe"
 
@@ -4690,8 +4701,8 @@ msgstr "Bivuye i"
 msgid " (posted)"
 msgstr ""
 
-#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:139
+#: ../src/report/standard-reports/register.scm:420
 msgid "Lot"
 msgstr ""
 
@@ -4749,6 +4760,7 @@ msgstr ""
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:32
 #, fuzzy
+#| msgid "End"
 msgid "2nd"
 msgstr "Impera"
 
@@ -4826,7 +4838,7 @@ msgstr ""
 
 #: ../src/engine/Split.c:1410 ../src/engine/Split.c:1427
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
-#: ../src/report/standard-reports/register.scm:251
+#: ../src/report/standard-reports/register.scm:232
 msgid "-- Split Transaction --"
 msgstr ""
 
@@ -5037,7 +5049,7 @@ msgstr "Umutahe"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2970
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:39
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:20
 #: ../src/register/ledger-core/split-register.c:2471
 #: ../src/register/ledger-core/split-register.c:2508
 #: ../src/register/ledger-core/split-register.c:2516
@@ -5072,9 +5084,9 @@ msgstr "Wongera Igiciro"
 #: ../src/gnome/assistant-stock-split.c:570
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
-#: ../src/gnome-utils/gnc-icons.c:38
+#: ../src/gnome-utils/gnc-icons.c:18
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
-#: ../src/import-export/csv-imp/gnc-csv-model.c:69
+#: ../src/import-export/csv-imp/gnc-csv-model.c:49
 #: ../src/import-export/import-main-matcher.c:482
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
@@ -5087,8 +5099,8 @@ msgstr "Wongera Igiciro"
 #: ../src/report/standard-reports/cash-flow.scm:49
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
-#: ../src/report/standard-reports/register.scm:153
-#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:134
+#: ../src/report/standard-reports/register.scm:410
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "konti"
@@ -5108,8 +5120,8 @@ msgstr "ikimenyetso"
 #: ../src/report/standard-reports/general-journal.scm:113
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
-#: ../src/report/standard-reports/register.scm:156
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:137
+#: ../src/report/standard-reports/register.scm:415
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -5210,8 +5222,8 @@ msgstr "Igiciro"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3002
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
-#: ../src/report/standard-reports/register.scm:168
-#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:149
+#: ../src/report/standard-reports/register.scm:439
 msgid "Value"
 msgstr "Agaciro"
 
@@ -5228,6 +5240,7 @@ msgstr "Agaciro"
 #: ../src/import-export/csv-exp/csv-transactions-export.c:422
 #: ../src/report/standard-reports/transaction.scm:766
 #, fuzzy
+#| msgid "Action"
 msgid "Number/Action"
 msgstr "Igikorwa"
 
@@ -5270,9 +5283,9 @@ msgid "Open"
 msgstr "Gufungura"
 
 #: ../src/gnome/dialog-lot-viewer.c:857
-#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:70
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:379
 msgid "Title"
 msgstr "Umutwe"
 
@@ -5281,7 +5294,7 @@ msgstr "Umutwe"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:458
 #: ../src/gnome-utils/gnc-tree-view-owner.c:466
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3212
-#: ../src/import-export/csv-imp/gnc-csv-model.c:72
+#: ../src/import-export/csv-imp/gnc-csv-model.c:52
 #: ../src/register/ledger-core/split-register-model.c:311
 #: ../src/register/ledger-core/split-register-model.c:461
 #: ../src/report/business-reports/customer-summary.scm:184
@@ -5289,7 +5302,7 @@ msgstr "Umutwe"
 #: ../src/report/business-reports/owner-report.scm:309
 #: ../src/report/report-system/html-utilities.scm:727
 #: ../src/report/standard-reports/account-summary.scm:460
-#: ../src/report/standard-reports/register.scm:174
+#: ../src/report/standard-reports/register.scm:155
 #: ../src/report/standard-reports/sx-summary.scm:465
 #: ../src/report/standard-reports/transaction.scm:465
 msgid "Balance"
@@ -5301,7 +5314,7 @@ msgid "Gains"
 msgstr "ifite"
 
 #: ../src/gnome/dialog-lot-viewer.c:938
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:108
 msgid "Gain/Loss"
 msgstr ""
 
@@ -5619,6 +5632,7 @@ msgstr "ITEGEKONGENGA"
 # filter/source\xsltdialog\xmlfilterdialogstrings.src:STR_UNKNOWN_APPLICATION.text
 #: ../src/gnome/dialog-tax-info.c:361
 #, fuzzy
+#| msgid "Unknown"
 msgid "now"
 msgstr "Kitazwi"
 
@@ -5635,8 +5649,8 @@ msgid "Form"
 msgstr "Ifishi"
 
 #: ../src/gnome/gnc-budget-view.c:387
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:79
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:84
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
 #: ../src/report/report-system/report-utilities.scm:118
 #: ../src/report/standard-reports/budget-income-statement.scm:674
 #: ../src/report/standard-reports/income-statement.scm:610
@@ -5665,7 +5679,7 @@ msgstr "Bivuye Kuri"
 #: ../src/report/business-reports/fancy-invoice.scm:299
 #: ../src/report/business-reports/invoice.scm:120
 #: ../src/report/business-reports/invoice.scm:284
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:306
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:287
 #: ../src/report/report-system/html-acct-table.scm:899
 #: ../src/report/report-system/html-utilities.scm:619
 #: ../src/report/standard-reports/advanced-portfolio.scm:1043
@@ -6045,7 +6059,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:247
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
-#: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
+#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/window-reconcile2.c:2184
 #: ../src/gnome/window-reconcile.c:2184
 msgid "_Transfer..."
 msgstr ""
@@ -6116,11 +6130,13 @@ msgstr "kugirango Na Gusana Ibikorwa by'ubucuruzi Na in Byose Konti"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:278
 #: ../src/gnome/gnc-plugin-register2.c:64
 #, fuzzy
+#| msgid "Register"
 msgid "_Register2"
 msgstr "Kwiyandikisha"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:341
 #, fuzzy
+#| msgid "Open"
 msgid "Open2"
 msgstr "Gufungura"
 
@@ -6146,8 +6162,8 @@ msgstr "Gufungura"
 #: ../src/report/standard-reports/account-piecharts.scm:68
 #: ../src/report/standard-reports/account-summary.scm:75
 #: ../src/report/standard-reports/advanced-portfolio.scm:158
-#: ../src/report/standard-reports/average-balance.scm:88
-#: ../src/report/standard-reports/average-balance.scm:337
+#: ../src/report/standard-reports/average-balance.scm:69
+#: ../src/report/standard-reports/average-balance.scm:318
 #: ../src/report/standard-reports/balance-sheet.scm:88
 #: ../src/report/standard-reports/budget-balance-sheet.scm:53
 #: ../src/report/standard-reports/budget-barchart.scm:44
@@ -6581,7 +6597,7 @@ msgstr "i Igipimo kugirango i KIGEZWEHO Gutandukanya"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:366
 #: ../src/gnome/gnc-plugin-page-register.c:375
-#: ../src/gnome-utils/gnc-icons.c:45
+#: ../src/gnome-utils/gnc-icons.c:25
 #, fuzzy
 msgid "_Jump"
 msgstr "Simbuka"
@@ -6664,7 +6680,7 @@ msgstr "ku i"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:418
-#: ../src/gnome-utils/gnc-icons.c:44
+#: ../src/gnome-utils/gnc-icons.c:24
 msgid "S_plit Transaction"
 msgstr ""
 
@@ -6715,7 +6731,7 @@ msgstr "Cyagutse Ibikorwa by'ubucuruzi Na: Byose"
 #: ../src/register/ledger-core/split-register.c:2489
 #: ../src/register/ledger-core/split-register-layout.c:687
 #: ../src/register/ledger-core/split-register-model.c:332
-#: ../src/report/standard-reports/register.scm:154
+#: ../src/report/standard-reports/register.scm:135
 msgid "Transfer"
 msgstr ""
 
@@ -6754,6 +6770,7 @@ msgstr ""
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 #: ../src/gnome/gnc-plugin-page-register2.c:752
 #, fuzzy
+#| msgid "General"
 msgid "General Ledger2"
 msgstr "Rusange"
 
@@ -6839,12 +6856,12 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:888
+#: ../src/report/standard-reports/register.scm:869
 msgid "Register"
 msgstr "Kwiyandikisha"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:381
 msgid "Register Report"
 msgstr ""
 
@@ -8568,6 +8585,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:52
 #, fuzzy
+#| msgid "Review"
 msgid "Loan Review"
 msgstr "Isubiramo"
 
@@ -9030,11 +9048,13 @@ msgstr "Amakuru yo kwohereza"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:9
 #, fuzzy
+#| msgid ">"
 msgid ">>"
 msgstr ">"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:10
 #, fuzzy
+#| msgid "<"
 msgid "<<"
 msgstr "<"
 
@@ -9684,6 +9704,7 @@ msgstr "Ibisohoka"
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:9
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:17
 #, fuzzy
+#| msgid "Assets"
 msgid "_Asset"
 msgstr "Ikintu"
 
@@ -10067,6 +10088,7 @@ msgstr "ku"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:47
 #, fuzzy
+#| msgid "Sort Order"
 msgid "Sa_ve Sort Order"
 msgstr "Uburyo bw'ishungura"
 
@@ -10166,6 +10188,7 @@ msgstr "Ibikorwa by'ubucuruzi"
 
 #: ../src/gnome-search/dialog-search.c:1087
 #, fuzzy
+#| msgid "Split"
 msgid "New Split"
 msgstr "gucamo uduce"
 
@@ -10678,7 +10701,7 @@ msgid "There was an error parsing the file."
 msgstr "Ikosa Mu kubika i IDOSIYE"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1293 ../src/gnome-utils/gnc-file.c:1527
+#: ../src/gnome-utils/gnc-file.c:1286 ../src/gnome-utils/gnc-file.c:1515
 #, fuzzy
 msgid "Writing file..."
 msgstr "IDOSIYE"
@@ -11287,7 +11310,7 @@ msgid "Import"
 msgstr "Kuzana"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
-#: ../src/gnome-utils/gnc-file.c:1343
+#: ../src/gnome-utils/gnc-file.c:1336
 msgid "Save"
 msgstr "Kubika"
 
@@ -11537,20 +11560,20 @@ msgstr "Ibyatanzwe"
 msgid "Re-saving user data..."
 msgstr "Ibyatanzwe"
 
-#: ../src/gnome-utils/gnc-file.c:1207 ../src/gnome-utils/gnc-file.c:1442
+#: ../src/gnome-utils/gnc-file.c:1200 ../src/gnome-utils/gnc-file.c:1430
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, fuzzy, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "Idosiyeisanzweho."
 
-#: ../src/gnome-utils/gnc-file.c:1236
+#: ../src/gnome-utils/gnc-file.c:1229
 #, fuzzy
 msgid "Exporting file..."
 msgstr "IDOSIYE"
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1249
+#: ../src/gnome-utils/gnc-file.c:1242
 #, fuzzy, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -11558,7 +11581,7 @@ msgid ""
 "%s"
 msgstr "Ikosa Mu kubika i IDOSIYE"
 
-#: ../src/gnome-utils/gnc-file.c:1281
+#: ../src/gnome-utils/gnc-file.c:1274
 #, fuzzy
 msgid "The database was opened read-only. Do you want to save it to a different place?"
 msgstr "Kuri Kuri Kurema"
@@ -11592,22 +11615,22 @@ msgstr ""
 msgid "GnuCash could not open the associated URI:"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-icons.c:39
+#: ../src/gnome-utils/gnc-icons.c:19
 msgid "_Delete Account"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile2.c:2179
 #: ../src/gnome/window-reconcile.c:2179
 msgid "_Edit Account"
 msgstr ""
 
 # svtools/source\dialogs\logindlg.src:DLG_LOGIN.FT_LOGIN_ACCOUNT.text
-#: ../src/gnome-utils/gnc-icons.c:41
+#: ../src/gnome-utils/gnc-icons.c:21
 #, fuzzy
 msgid "_New Account"
 msgstr "Aderesi"
 
-#: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
+#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile2.c:2174
 #: ../src/gnome/window-reconcile.c:2174
 msgid "_Open Account"
 msgstr ""
@@ -12227,6 +12250,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2888
 #: ../src/register/ledger-core/split-register.c:2477
 #, fuzzy
+#| msgid "Receive"
 msgid "Receipt"
 msgstr "Akira"
 
@@ -12283,6 +12307,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2946
 #: ../src/register/ledger-core/split-register.c:2535
 #, fuzzy
+#| msgid "Check"
 msgid "Paycheck"
 msgstr "Kugenzura"
 
@@ -12301,8 +12326,8 @@ msgstr "Kugenzura"
 #: ../src/report/standard-reports/portfolio.scm:247
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
-#: ../src/report/standard-reports/register.scm:160
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:141
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -12391,7 +12416,7 @@ msgstr "Bara"
 # 20
 #: ../src/gnome-utils/gnc-tree-view-account.c:718
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:303
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:284
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
@@ -12711,11 +12736,13 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2853
 #, fuzzy
+#| msgid "Reference"
 msgid "Reference / Action"
 msgstr "Indango"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2867
 #, fuzzy
+#| msgid "Number"
 msgid "T-Number"
 msgstr "Umubare"
 
@@ -13109,11 +13136,13 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:5
 #, fuzzy
+#| msgid "Introduction"
 msgid "Introduction placeholder"
 msgstr "Intangiriro"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:6
 #, fuzzy
+#| msgid "Placeholder"
 msgid "Title placeholder"
 msgstr "Akarindamwanya"
 
@@ -13132,6 +13161,7 @@ msgstr "i Ibyatanzwe IDOSIYE"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:10
 #, fuzzy
+#| msgid "Placeholder"
 msgid "finish placeholder"
 msgstr "Akarindamwanya"
 
@@ -13263,7 +13293,7 @@ msgstr ""
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:379
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -13626,6 +13656,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:7
 #, fuzzy
+#| msgid "Password:"
 msgid "Password"
 msgstr "Ijambobanga:"
 
@@ -14381,7 +14412,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
-#: ../src/import-export/csv-imp/gnc-csv-model.c:58
+#: ../src/import-export/csv-imp/gnc-csv-model.c:38
 msgid "Locale"
 msgstr ""
 
@@ -14854,6 +14885,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:70
 #, fuzzy
+#| msgid "Changed"
 msgid "No change"
 msgstr "Byahinduwe"
 
@@ -15881,7 +15913,7 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:409
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:70
 msgid "Unspecified"
 msgstr ""
 
@@ -15997,7 +16029,7 @@ msgid "The Online Banking job is still running; are you sure you want to cancel?
 msgstr "Byahinduwe Kuri Kureka"
 
 #: ../src/import-export/aqb/gncmod-aqbanking.c:79
-#: ../src/import-export/gncmod-generic-import.c:79
+#: ../src/import-export/gncmod-generic-import.c:59
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:162
 #, fuzzy
 msgid "Online Banking"
@@ -16245,6 +16277,7 @@ msgstr ""
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:5
 #, fuzzy
+#| msgid "Notes"
 msgid "Quotes"
 msgstr "ibisobanuro"
 
@@ -16336,6 +16369,7 @@ msgstr "i"
 # filter/source\xsltdialog\xmlfiltertestdialog.src:DLG_XML_FILTER_TEST_DIALOG.FL_EXPORT.text
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:42
 #, fuzzy
+#| msgid "Export"
 msgid "Export Summary"
 msgstr "Kohereza"
 
@@ -16357,6 +16391,7 @@ msgstr ""
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:425
 #, fuzzy
+#| msgid "From"
 msgid "From Num."
 msgstr "Bivuye"
 
@@ -16381,6 +16416,7 @@ msgstr "Izina:"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
+#| msgid "Username"
 msgid "name"
 msgstr "Izina ry'ukoresha"
 
@@ -16390,16 +16426,19 @@ msgstr ""
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:156
 #, fuzzy
+#| msgid "Description"
 msgid "description"
 msgstr "Insobanuramiterere"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:156
 #, fuzzy
+#| msgid "Colors"
 msgid "color"
 msgstr "Amabara"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:157
 #, fuzzy
+#| msgid "Notes"
 msgid "notes"
 msgstr "ibisobanuro"
 
@@ -16423,6 +16462,7 @@ msgstr ""
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
+#| msgid "Placeholder"
 msgid "place_holder"
 msgstr "Akarindamwanya"
 
@@ -16571,6 +16611,7 @@ msgstr "i"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:20
 #, fuzzy
+#| msgid "Review"
 msgid "Preview"
 msgstr "Isubiramo"
 
@@ -16624,6 +16665,7 @@ msgstr ""
 #. Set check button label
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1390
 #, fuzzy
+#| msgid "Error"
 msgid "Skip Errors"
 msgstr "Ikosa"
 
@@ -16709,6 +16751,7 @@ msgstr "kurema"
 # officecfg/registry\schema\org\openoffice\Office\Writer.xcs:....Table.Change.Effect..0.text
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:19
 #, fuzzy
+#| msgid "Fixed"
 msgid "Fixed-Width"
 msgstr "Bidahinduka"
 
@@ -16727,6 +16770,7 @@ msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:24
 #, fuzzy
+#| msgid "Table"
 msgid "Tab"
 msgstr "Imbonerahamwe"
 
@@ -16749,6 +16793,7 @@ msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:34
 #, fuzzy
+#| msgid "Error"
 msgid "Error text."
 msgstr "Ikosa"
 
@@ -16790,56 +16835,56 @@ msgstr ""
 msgid "Row %u, account %s not in %s\n"
 msgstr "Aderesi Amazina"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:50
+#: ../src/import-export/csv-imp/gnc-csv-model.c:30
 msgid "y-m-d"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:51
+#: ../src/import-export/csv-imp/gnc-csv-model.c:31
 msgid "d-m-y"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:52
+#: ../src/import-export/csv-imp/gnc-csv-model.c:32
 msgid "m-d-y"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:53
+#: ../src/import-export/csv-imp/gnc-csv-model.c:33
 msgid "d-m"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:54
+#: ../src/import-export/csv-imp/gnc-csv-model.c:34
 msgid "m-d"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:59
+#: ../src/import-export/csv-imp/gnc-csv-model.c:39
 #: ../src/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:60
+#: ../src/import-export/csv-imp/gnc-csv-model.c:40
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:476
+#: ../src/import-export/csv-imp/gnc-csv-model.c:456
 #, fuzzy
 msgid "File opening failed."
 msgstr "IDOSIYE Byanze"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:491
-#: ../src/import-export/csv-imp/gnc-csv-model.c:499
+#: ../src/import-export/csv-imp/gnc-csv-model.c:471
+#: ../src/import-export/csv-imp/gnc-csv-model.c:479
 msgid "Unknown encoding."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:830
+#: ../src/import-export/csv-imp/gnc-csv-model.c:810
 #, fuzzy
 msgid "No date column."
 msgstr "Umwandiko"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:831
+#: ../src/import-export/csv-imp/gnc-csv-model.c:811
 msgid "No balance, deposit, or withdrawal column."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1125
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1105
 #, fuzzy, c-format
 msgid "%s column could not be understood."
 msgstr "IDOSIYE OYA Byabonetse"
@@ -17428,6 +17473,7 @@ msgstr ""
 #: ../src/import-export/qif-imp/assistant-qif-import.c:1822
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2860
 #, fuzzy
+#| msgid "Cancel"
 msgid "Canceled"
 msgstr "Kureka"
 
@@ -17499,6 +17545,7 @@ msgstr ""
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2933
 #, fuzzy
+#| msgid "Cancel"
 msgid "Canceling"
 msgstr "Kureka"
 
@@ -17580,6 +17627,7 @@ msgstr "Guhitamo a IDOSIYE Kuri Ibirimo Kanda i IDOSIYE Gicurasi Kuri Ibyerekeye
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:12
 #, fuzzy
+#| msgid "Select..."
 msgid "_Select..."
 msgstr "Guhitamo..."
 
@@ -17901,159 +17949,162 @@ msgstr ""
 msgid "Show documentation"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:33
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:14
 msgid "Dividends"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:48
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:29
 msgid "Cap Return"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:54
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:35
 msgid "Cap. gain (long)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:41
 #, fuzzy
 msgid "Cap. gain (mid)"
 msgstr "MID"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
 msgid "Cap. gain (short)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:80
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:61
 msgid "Commissions"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:85
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
 #, fuzzy
 msgid "Margin Interest"
 msgstr "Inyungu"
 
-#: ../src/import-export/qif-imp/qif-file.scm:85
-#: ../src/import-export/qif-imp/qif-file.scm:93
+#: ../src/import-export/qif-imp/qif-file.scm:66
+#: ../src/import-export/qif-imp/qif-file.scm:74
 msgid "Line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:96
+#: ../src/import-export/qif-imp/qif-file.scm:77
 msgid "Read aborted."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:111
+#: ../src/import-export/qif-imp/qif-file.scm:92
 #, fuzzy
+#| msgid "Heading"
 msgid "Reading"
 msgstr "umutwe"
 
-#: ../src/import-export/qif-imp/qif-file.scm:140
+#: ../src/import-export/qif-imp/qif-file.scm:121
 #, fuzzy
 msgid "Some characters have been discarded."
 msgstr "Ibikorwa by'ubucuruzi Gicurasi"
 
-#: ../src/import-export/qif-imp/qif-file.scm:141
-#: ../src/import-export/qif-imp/qif-file.scm:145
+#: ../src/import-export/qif-imp/qif-file.scm:122
+#: ../src/import-export/qif-imp/qif-file.scm:126
 #, fuzzy
 msgid "Converted to: "
 msgstr "i Ibyatanzwe IDOSIYE"
 
-#: ../src/import-export/qif-imp/qif-file.scm:144
+#: ../src/import-export/qif-imp/qif-file.scm:125
 msgid "Some characters have been converted according to your locale."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:203
+#: ../src/import-export/qif-imp/qif-file.scm:184
 msgid "Ignoring unknown option"
 msgstr ""
 
 #. The date is missing! Warn the user.
-#: ../src/import-export/qif-imp/qif-file.scm:337
+#: ../src/import-export/qif-imp/qif-file.scm:318
 msgid "Date required."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:338
+#: ../src/import-export/qif-imp/qif-file.scm:319
 #, fuzzy
 msgid "Discarding this transaction."
 msgstr "Bya"
 
-#: ../src/import-export/qif-imp/qif-file.scm:370
+#: ../src/import-export/qif-imp/qif-file.scm:351
 msgid "Ignoring class line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:438
+#: ../src/import-export/qif-imp/qif-file.scm:419
 #, fuzzy
 msgid "Ignoring category line"
 msgstr "Icyiciro Izina:"
 
-#: ../src/import-export/qif-imp/qif-file.scm:469
+#: ../src/import-export/qif-imp/qif-file.scm:450
 msgid "Ignoring security line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:477
+#: ../src/import-export/qif-imp/qif-file.scm:458
 msgid "File does not appear to be in QIF format"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:653
+#: ../src/import-export/qif-imp/qif-file.scm:634
 #, fuzzy
 msgid "Transaction date"
 msgstr "Ibikorwa by'ubucuruzi"
 
-#: ../src/import-export/qif-imp/qif-file.scm:654
+#: ../src/import-export/qif-imp/qif-file.scm:635
 #, fuzzy
 msgid "Transaction amount"
 msgstr "Ibikorwa by'ubucuruzi"
 
-#: ../src/import-export/qif-imp/qif-file.scm:655
+#: ../src/import-export/qif-imp/qif-file.scm:636
 #, fuzzy
 msgid "Share price"
 msgstr "Igiciro"
 
-#: ../src/import-export/qif-imp/qif-file.scm:656
+#: ../src/import-export/qif-imp/qif-file.scm:637
 #, fuzzy
 msgid "Share quantity"
 msgstr "ku Ingano"
 
-#: ../src/import-export/qif-imp/qif-file.scm:657
+#: ../src/import-export/qif-imp/qif-file.scm:638
 #, fuzzy
+#| msgid "Investments"
 msgid "Investment action"
 msgstr "Ishoramari"
 
-#: ../src/import-export/qif-imp/qif-file.scm:658
+#: ../src/import-export/qif-imp/qif-file.scm:639
 #, fuzzy
 msgid "Reconciliation status"
 msgstr "Ikiyega BIHUYE"
 
-#: ../src/import-export/qif-imp/qif-file.scm:659
+#: ../src/import-export/qif-imp/qif-file.scm:640
 msgid "Commission"
 msgstr ""
 
 # 20
-#: ../src/import-export/qif-imp/qif-file.scm:660
+#: ../src/import-export/qif-imp/qif-file.scm:641
 #, fuzzy
 msgid "Account type"
 msgstr "Izina rya konti"
 
-#: ../src/import-export/qif-imp/qif-file.scm:661
+#: ../src/import-export/qif-imp/qif-file.scm:642
 msgid "Tax class"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:662
+#: ../src/import-export/qif-imp/qif-file.scm:643
 #, fuzzy
 msgid "Category budget amount"
 msgstr "ku Igiteranyo"
 
-#: ../src/import-export/qif-imp/qif-file.scm:663
+#: ../src/import-export/qif-imp/qif-file.scm:644
 #, fuzzy
 msgid "Account budget amount"
 msgstr "Aderesi Urutonde Ihitamo"
 
-#: ../src/import-export/qif-imp/qif-file.scm:664
+#: ../src/import-export/qif-imp/qif-file.scm:645
 #, fuzzy
+#| msgid "Credit Card"
 msgid "Credit limit"
 msgstr "ikarita y'inguzanyo"
 
 #.
 #. Fields of categories.
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:677
+#: ../src/import-export/qif-imp/qif-file.scm:658
 #, fuzzy
 msgid "Parsing categories"
 msgstr "IDOSIYE"
@@ -18061,7 +18112,7 @@ msgstr "IDOSIYE"
 #.
 #. Fields of accounts
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:709
+#: ../src/import-export/qif-imp/qif-file.scm:690
 #, fuzzy
 msgid "Parsing accounts"
 msgstr "Hejuru"
@@ -18069,76 +18120,77 @@ msgstr "Hejuru"
 #.
 #. fields of transactions
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:750
+#: ../src/import-export/qif-imp/qif-file.scm:731
 #, fuzzy
 msgid "Parsing transactions"
 msgstr "Ibikorwa by'ubucuruzi"
 
 #. Data was not in any of the supplied formats.
-#: ../src/import-export/qif-imp/qif-file.scm:926
+#: ../src/import-export/qif-imp/qif-file.scm:907
 msgid "Unrecognized or inconsistent format."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:968
+#: ../src/import-export/qif-imp/qif-file.scm:949
 #, fuzzy
 msgid "Parsing failed."
 msgstr "IDOSIYE"
 
-#: ../src/import-export/qif-imp/qif-file.scm:1009
+#: ../src/import-export/qif-imp/qif-file.scm:990
 msgid "Parse ambiguity between formats"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:1011
+#: ../src/import-export/qif-imp/qif-file.scm:992
 msgid "Value '%s' could be %s or %s."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-merge-groups.scm:113
+#: ../src/import-export/qif-imp/qif-merge-groups.scm:94
 #, fuzzy
 msgid "Finding duplicate transactions"
 msgstr "Gusubiramo Ibikorwa by'ubucuruzi"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:194
+#: ../src/import-export/qif-imp/qif-parse.scm:175
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-parse.scm:301
+#: ../src/import-export/qif-imp/qif-parse.scm:282
 msgid "Unrecognized action '%s'."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-parse.scm:326
+#: ../src/import-export/qif-imp/qif-parse.scm:307
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:190
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:171
 #, fuzzy
 msgid "QIF import: Name conflict with another account."
 msgstr "Kuzana Na: Aderesi"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:275
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:256
 msgid "Preparing to convert your QIF data"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:326
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:307
 #, fuzzy
 msgid "Creating accounts"
 msgstr "Hejuru"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:375
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:356
 #, fuzzy
 msgid "Matching transfers between accounts"
 msgstr "Oya Konti"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:393
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:374
 #, fuzzy
+#| msgid "Sorting"
 msgid "Converting"
 msgstr "Ishungura"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:478
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:459
 #, fuzzy
 msgid "Missing transaction date."
 msgstr "i Itariki"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:487
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:468
 msgid "Dates earlier than 1970 are not supported."
 msgstr ""
 
@@ -18281,6 +18333,7 @@ msgstr "Icyegeranyo Amahitamo"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:14
 #, fuzzy
+#| msgid "Review"
 msgid "4. Preview"
 msgstr "Isubiramo"
 
@@ -18313,6 +18366,7 @@ msgstr "Abakiriya"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:186
 #, fuzzy
+#| msgid "Vendor"
 msgid "vendors"
 msgstr "Umucuruzi"
 
@@ -18499,7 +18553,7 @@ msgid "T-Ref"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:269
-#: ../src/report/standard-reports/register.scm:144
+#: ../src/report/standard-reports/register.scm:125
 msgid "T-Num"
 msgstr ""
 
@@ -18601,8 +18655,8 @@ msgstr "ni"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:565
 #: ../src/report/business-reports/owner-report.scm:40
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
+#: ../src/report/locale-specific/us/taxtxf.scm:156
 msgid "To"
 msgstr "Ku"
 
@@ -18620,7 +18674,7 @@ msgstr "Uburyo bw'ishungura"
 #: ../src/report/standard-reports/account-piecharts.scm:65
 #: ../src/report/standard-reports/account-summary.scm:114
 #: ../src/report/standard-reports/advanced-portfolio.scm:71
-#: ../src/report/standard-reports/average-balance.scm:41
+#: ../src/report/standard-reports/average-balance.scm:22
 #: ../src/report/standard-reports/balance-sheet.scm:138
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
@@ -18646,7 +18700,7 @@ msgstr "Ifaranga"
 #: ../src/report/standard-reports/account-piecharts.scm:66
 #: ../src/report/standard-reports/account-summary.scm:115
 #: ../src/report/standard-reports/advanced-portfolio.scm:41
-#: ../src/report/standard-reports/average-balance.scm:42
+#: ../src/report/standard-reports/average-balance.scm:23
 #: ../src/report/standard-reports/balance-sheet.scm:139
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
@@ -18716,6 +18770,7 @@ msgstr "in NIBA Gyayo Kuri Komeza>>"
 
 #: ../src/report/business-reports/aging.scm:362
 #, fuzzy
+#| msgid "Sort order"
 msgid "Sort order."
 msgstr "uburyo bw'ishungura"
 
@@ -18765,6 +18820,7 @@ msgstr ""
 #: ../src/report/business-reports/aging.scm:465
 #: ../src/report/business-reports/owner-report.scm:254
 #, fuzzy
+#| msgid "Currency"
 msgid "Current"
 msgstr "Ifaranga"
 
@@ -19002,6 +19058,7 @@ msgstr ""
 #: ../src/report/business-reports/balsheet-eg.scm:285
 #: ../src/report/business-reports/taxinvoice.scm:118
 #, fuzzy
+#| msgid "Stylesheet"
 msgid "CSS stylesheet file"
 msgstr "Ipaji y'imisusire"
 
@@ -19077,6 +19134,7 @@ msgstr ""
 
 #: ../src/report/business-reports/balsheet-eg.scm:338
 #, fuzzy
+#| msgid "To"
 msgid "Two"
 msgstr "Ku"
 
@@ -19118,8 +19176,8 @@ msgstr ""
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:562
 #: ../src/report/business-reports/owner-report.scm:39
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
+#: ../src/report/locale-specific/us/taxtxf.scm:156
 msgid "From"
 msgstr "Bivuye"
 
@@ -19263,8 +19321,8 @@ msgstr "ku Aderesi Izina:"
 
 #: ../src/report/business-reports/customer-summary.scm:452
 #: ../src/report/business-reports/customer-summary.scm:839
-#: ../src/report/standard-reports/average-balance.scm:126
-#: ../src/report/standard-reports/average-balance.scm:147
+#: ../src/report/standard-reports/average-balance.scm:107
+#: ../src/report/standard-reports/average-balance.scm:128
 msgid "Profit"
 msgstr ""
 
@@ -19326,7 +19384,7 @@ msgstr ""
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/owner-report.scm:719
 #: ../src/report/report-gnome/dialog-report-column-view.c:351
-#: ../src/report/report-gnome/report-gnome.scm:80
+#: ../src/report/report-gnome/report-gnome.scm:61
 msgid "Report"
 msgstr "Icyegeranyo"
 
@@ -19403,7 +19461,7 @@ msgstr ""
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:386
 #: ../src/report/standard-reports/transaction.scm:942
 #, fuzzy
 msgid "Display the date?"
@@ -19412,7 +19470,7 @@ msgstr "i Itariki"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:401
 #: ../src/report/standard-reports/transaction.scm:947
 #, fuzzy
 msgid "Display the description?"
@@ -19503,19 +19561,19 @@ msgstr "i Agaciro"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:404
+#: ../src/report/standard-reports/register.scm:385
+#: ../src/report/standard-reports/register.scm:391
+#: ../src/report/standard-reports/register.scm:395
+#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:414
-#: ../src/report/standard-reports/register.scm:419
-#: ../src/report/standard-reports/register.scm:424
-#: ../src/report/standard-reports/register.scm:429
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:430
 #: ../src/report/standard-reports/register.scm:439
 #: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:458
-#: ../src/report/standard-reports/register.scm:463
-#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -19581,7 +19639,7 @@ msgstr "Byose i"
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:449
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr ""
@@ -19589,7 +19647,7 @@ msgstr ""
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:960
 #, fuzzy
 msgid "Display the totals?"
@@ -19953,6 +20011,7 @@ msgstr "i Itariki"
 #: ../src/report/business-reports/job-report.scm:577
 #: ../src/report/business-reports/job-report.scm:689
 #, fuzzy
+#| msgid "Report"
 msgid "Job Report"
 msgstr "Icyegeranyo"
 
@@ -20078,16 +20137,19 @@ msgstr ""
 #. option pages
 #: ../src/report/business-reports/taxinvoice.scm:89
 #, fuzzy
+#| msgid "Heading"
 msgid "Headings 1"
 msgstr "umutwe"
 
 #: ../src/report/business-reports/taxinvoice.scm:90
 #, fuzzy
+#| msgid "Heading"
 msgid "Headings 2"
 msgstr "umutwe"
 
 #: ../src/report/business-reports/taxinvoice.scm:94
 #, fuzzy
+#| msgid "Investments"
 msgid "Elements"
 msgstr "Ishoramari"
 
@@ -20160,6 +20222,7 @@ msgstr "Aderesi:"
 # Box Headings
 #: ../src/report/business-reports/taxinvoice.scm:100
 #, fuzzy
+#| msgid "Contact"
 msgid "row: Contact"
 msgstr "Umuntu"
 
@@ -20169,6 +20232,7 @@ msgstr ""
 
 #: ../src/report/business-reports/taxinvoice.scm:102
 #, fuzzy
+#| msgid "Company Name"
 msgid "row: Company Name"
 msgstr "Izina ry'isosiyete"
 
@@ -20234,6 +20298,7 @@ msgstr "IMISUSIRE"
 
 #: ../src/report/business-reports/taxinvoice.scm:119
 #, fuzzy
+#| msgid "Heading"
 msgid "Heading font"
 msgstr "umutwe"
 
@@ -20417,51 +20482,51 @@ msgstr ""
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:81
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:62
 msgid "Tax Report / TXF Export"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
-#: ../src/report/locale-specific/us/taxtxf.scm:179
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:135
+#: ../src/report/locale-specific/us/taxtxf.scm:160
 #, fuzzy
 msgid "Alternate Period"
 msgstr "Igihe"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
-#: ../src/report/locale-specific/us/taxtxf.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:136
+#: ../src/report/locale-specific/us/taxtxf.scm:161
 #, fuzzy
 msgid "Override or modify From: & To:."
 msgstr "Cyangwa Guhindura"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
+#: ../src/report/locale-specific/us/taxtxf.scm:164
 msgid "Use From - To"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
+#: ../src/report/locale-specific/us/taxtxf.scm:164
 #, fuzzy
 msgid "Use From - To period."
 msgstr "Igihe"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
+#: ../src/report/locale-specific/us/taxtxf.scm:166
 msgid "1st Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
+#: ../src/report/locale-specific/us/taxtxf.scm:166
 #, fuzzy
 msgid "Jan 1 - Mar 31."
 msgstr "1."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
-#: ../src/report/locale-specific/us/taxtxf.scm:187
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
+#: ../src/report/locale-specific/us/taxtxf.scm:168
 msgid "2nd Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
-#: ../src/report/locale-specific/us/taxtxf.scm:187
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
+#: ../src/report/locale-specific/us/taxtxf.scm:168
 #, fuzzy
 msgid "Apr 1 - May 31."
 msgstr "1."
@@ -20469,289 +20534,289 @@ msgstr "1."
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
+#: ../src/report/locale-specific/us/taxtxf.scm:173
 msgid "3rd Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
+#: ../src/report/locale-specific/us/taxtxf.scm:173
 #, fuzzy
 msgid "Jun 1 - Aug 31."
 msgstr "1."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:194
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "4th Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:194
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 #, fuzzy
 msgid "Sep 1 - Dec 31."
 msgstr "1."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
+#: ../src/report/locale-specific/us/taxtxf.scm:177
 msgid "Last Year"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
+#: ../src/report/locale-specific/us/taxtxf.scm:177
 msgid "Last Year."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
-#: ../src/report/locale-specific/us/taxtxf.scm:198
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
+#: ../src/report/locale-specific/us/taxtxf.scm:179
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
-#: ../src/report/locale-specific/us/taxtxf.scm:199
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
+#: ../src/report/locale-specific/us/taxtxf.scm:180
 #, fuzzy
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "1. Umwaka"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
-#: ../src/report/locale-specific/us/taxtxf.scm:201
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:157
+#: ../src/report/locale-specific/us/taxtxf.scm:182
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
-#: ../src/report/locale-specific/us/taxtxf.scm:202
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 #, fuzzy
 msgid "Apr 1 - May 31, Last year."
 msgstr "1. Umwaka"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
-#: ../src/report/locale-specific/us/taxtxf.scm:204
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr ""
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
-#: ../src/report/locale-specific/us/taxtxf.scm:208
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:161
+#: ../src/report/locale-specific/us/taxtxf.scm:189
 #, fuzzy
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "1. Umwaka"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
-#: ../src/report/locale-specific/us/taxtxf.scm:210
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:163
+#: ../src/report/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
-#: ../src/report/locale-specific/us/taxtxf.scm:211
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:164
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 #, fuzzy
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "1. Umwaka"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:187
-#: ../src/report/locale-specific/us/taxtxf.scm:215
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:168
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 #, fuzzy
 msgid "Select Accounts (none = all)"
 msgstr "Ntacyo Byose"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:188
-#: ../src/report/locale-specific/us/taxtxf.scm:216
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:197
 #, fuzzy
 msgid "Select accounts."
 msgstr "Konti"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:194
-#: ../src/report/locale-specific/us/taxtxf.scm:222
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:175
+#: ../src/report/locale-specific/us/taxtxf.scm:203
 #, fuzzy
 msgid "Suppress $0.00 values"
 msgstr "0 Uduciro"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:195
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
 #, fuzzy
 msgid "$0.00 valued Accounts won't be printed."
 msgstr "$0."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:199
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
 #, fuzzy
 msgid "Print Full account names"
 msgstr "Aderesi Amazina"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:200
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:181
 #, fuzzy
 msgid "Print all Parent account names."
 msgstr "Byose Aderesi Amazina"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:278
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:259
 #, fuzzy
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
 msgstr "Gusubiramo Kuri Konti Na: Gicurasi byasubiyemo"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:832
 #, fuzzy
 msgid "Period from %s to %s"
 msgstr "Igihe Bivuye Kuri"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:888
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:869
 msgid "Tax Report & XML Export"
 msgstr ""
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:890
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:871
 #, fuzzy
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr "Kuri IDOSIYE"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:894
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:903
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:875
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:884
 msgid "Taxable Income / Deductible Expenses"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:895
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:876
 #, fuzzy
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr "Icyegeranyo Na"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:900
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:881
 msgid "XML"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:904
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:885
 #, fuzzy
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "Ipaji Na"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:115
+#: ../src/report/locale-specific/us/taxtxf.scm:96
 msgid "Tax Schedule Report/TXF Export"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:223
+#: ../src/report/locale-specific/us/taxtxf.scm:204
 #, fuzzy
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "$0."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:227
+#: ../src/report/locale-specific/us/taxtxf.scm:208
 #, fuzzy
 msgid "Do not print full account names"
 msgstr "Aderesi Amazina"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:228
+#: ../src/report/locale-specific/us/taxtxf.scm:209
 #, fuzzy
 msgid "Do not print all Parent account names."
 msgstr "Byose Aderesi Amazina"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:232
+#: ../src/report/locale-specific/us/taxtxf.scm:213
 #, fuzzy
 msgid "Print all Transfer To/From Accounts"
 msgstr "Byose Aderesi Amazina"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:233
+#: ../src/report/locale-specific/us/taxtxf.scm:214
 msgid "Print all split details for multi-split transactions."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:237
+#: ../src/report/locale-specific/us/taxtxf.scm:218
 msgid "Print TXF export parameters"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:238
+#: ../src/report/locale-specific/us/taxtxf.scm:219
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:243
+#: ../src/report/locale-specific/us/taxtxf.scm:224
 msgid "Do not print T-Num:Memo data"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:244
+#: ../src/report/locale-specific/us/taxtxf.scm:225
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:228
 msgid "Do not print Action:Memo data"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:248
+#: ../src/report/locale-specific/us/taxtxf.scm:229
 #, fuzzy
 msgid "Do not print Action:Memo data for transactions."
 msgstr "Aderesi Kuri Gushaka kugirango Ibikorwa by'ubucuruzi"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:252
+#: ../src/report/locale-specific/us/taxtxf.scm:233
 #, fuzzy
 msgid "Do not print transaction detail"
 msgstr "OYA Kuzana Oya Igikorwa Byahiswemo"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:253
+#: ../src/report/locale-specific/us/taxtxf.scm:234
 #, fuzzy
 msgid "Do not print transaction detail for accounts."
 msgstr "Icyegeranyo ku iyi Aderesi"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:257
+#: ../src/report/locale-specific/us/taxtxf.scm:238
 msgid "Do not use special date processing"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:258
+#: ../src/report/locale-specific/us/taxtxf.scm:239
 #, fuzzy
 msgid "Do not print transactions out of specified dates."
 msgstr "Kuri Kwagura i in Itondekanya Kuri Guhindura"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:262
+#: ../src/report/locale-specific/us/taxtxf.scm:243
 #, fuzzy
 msgid "Currency conversion date"
 msgstr "Amakuru rusange"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:263
+#: ../src/report/locale-specific/us/taxtxf.scm:244
 #, fuzzy
 msgid "Select date to use for PriceDB lookups."
 msgstr "a Itariki Kuri Icyegeranyo ku"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:266
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 #, fuzzy
 msgid "Nearest transaction date"
 msgstr "i Itariki"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:266
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 #, fuzzy
 msgid "Use nearest to transaction date."
 msgstr "i Itariki"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:268
+#: ../src/report/locale-specific/us/taxtxf.scm:249
 #, fuzzy
 msgid "Nearest report date"
 msgstr "in Igihe"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:268
+#: ../src/report/locale-specific/us/taxtxf.scm:249
 #, fuzzy
 msgid "Use nearest to report date."
 msgstr "Igiciro"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:275
+#: ../src/report/locale-specific/us/taxtxf.scm:256
 #, fuzzy
 msgid "Shade alternate transactions"
 msgstr "Bidakora Ibikorwa by'ubucuruzi"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:276
+#: ../src/report/locale-specific/us/taxtxf.scm:257
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3532
+#: ../src/report/locale-specific/us/taxtxf.scm:3513
 msgid "Tax Schedule Report & TXF Export"
 msgstr ""
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf.scm:3534
+#: ../src/report/locale-specific/us/taxtxf.scm:3515
 #, fuzzy
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
 msgstr "Kuri IDOSIYE"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3538
-#: ../src/report/locale-specific/us/taxtxf.scm:3547
+#: ../src/report/locale-specific/us/taxtxf.scm:3519
+#: ../src/report/locale-specific/us/taxtxf.scm:3528
 #, fuzzy
 msgid "Taxable Income/Deductible Expenses"
 msgstr "Kuri IDOSIYE"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3539
+#: ../src/report/locale-specific/us/taxtxf.scm:3520
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3548
+#: ../src/report/locale-specific/us/taxtxf.scm:3529
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr ""
 
@@ -20789,7 +20854,7 @@ msgid "Delete report configuration"
 msgstr "Iboneza Inzira"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#: ../src/report/report-gnome/report-gnome.scm:141
+#: ../src/report/report-gnome/report-gnome.scm:122
 #, fuzzy
 msgid "Saved Report Configurations"
 msgstr "Iboneza Inzira"
@@ -21082,25 +21147,25 @@ msgstr "Oya Amahitamo kugirango iyi Icyegeranyo"
 msgid "GnuCash-Report"
 msgstr "Amahitamo"
 
-#: ../src/report/report-gnome/report-gnome.scm:73
+#: ../src/report/report-gnome/report-gnome.scm:54
 #, fuzzy
 msgid "This report has no options."
 msgstr "Icyegeranyo Oya Amahitamo"
 
-#: ../src/report/report-gnome/report-gnome.scm:97
+#: ../src/report/report-gnome/report-gnome.scm:78
 #, fuzzy
 msgid "Display the %s report"
 msgstr "i Icyegeranyo"
 
-#: ../src/report/report-gnome/report-gnome.scm:143
+#: ../src/report/report-gnome/report-gnome.scm:124
 msgid "Manage and run saved report configurations"
 msgstr ""
 
-#: ../src/report/report-gnome/report-gnome.scm:163
+#: ../src/report/report-gnome/report-gnome.scm:144
 msgid "Welcome Sample Report"
 msgstr ""
 
-#: ../src/report/report-gnome/report-gnome.scm:165
+#: ../src/report/report-gnome/report-gnome.scm:146
 #, fuzzy
 msgid "Welcome-to-GnuCash report screen"
 msgstr "Kuri Icyegeranyo Mugaragaza"
@@ -21148,90 +21213,92 @@ msgstr "IDOSIYE OYA Byabonetse"
 msgid "Adjusting Entries"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:88
-#: ../src/report/report-system/html-fonts.scm:93
-#: ../src/report/report-system/html-fonts.scm:98
-#: ../src/report/report-system/html-fonts.scm:103
-#: ../src/report/report-system/html-fonts.scm:108
-#: ../src/report/report-system/html-fonts.scm:113
-#: ../src/report/report-system/html-fonts.scm:118
-#: ../src/report/report-system/html-fonts.scm:123
-#: ../src/report/report-system/html-fonts.scm:128
+#: ../src/report/report-system/html-fonts.scm:69
+#: ../src/report/report-system/html-fonts.scm:74
+#: ../src/report/report-system/html-fonts.scm:79
+#: ../src/report/report-system/html-fonts.scm:84
+#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:109
 msgid "Fonts"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:70
 msgid "Font info for the report title."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:75
 #, fuzzy
 msgid "Account link"
 msgstr "Aderesi Urutonde Ihitamo"
 
-#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:75
 #, fuzzy
 msgid "Font info for account name."
 msgstr "Injiza Aderesi Izina:"
 
-#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:80
 #, fuzzy
+#| msgid "Number"
 msgid "Number cell"
 msgstr "Umubare"
 
-#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:80
 msgid "Font info for regular number cells."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:85
 #, fuzzy
 msgid "Negative Values in Red"
 msgstr "in Umutuku"
 
-#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:85
 #, fuzzy
 msgid "Display negative values in red."
 msgstr "in Umutuku"
 
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:90
 #, fuzzy
+#| msgid "Number"
 msgid "Number header"
 msgstr "Umubare"
 
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:90
 msgid "Font info for number headers."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:114
+#: ../src/report/report-system/html-fonts.scm:95
 #, fuzzy
 msgid "Text cell"
 msgstr "amagambo gusa"
 
-#: ../src/report/report-system/html-fonts.scm:114
+#: ../src/report/report-system/html-fonts.scm:95
 msgid "Font info for regular text cells."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:119
+#: ../src/report/report-system/html-fonts.scm:100
 msgid "Total number cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:119
+#: ../src/report/report-system/html-fonts.scm:100
 msgid "Font info for number cells containing a total."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:124
+#: ../src/report/report-system/html-fonts.scm:105
 msgid "Total label cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:124
+#: ../src/report/report-system/html-fonts.scm:105
 msgid "Font info for cells containing total labels."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:129
+#: ../src/report/report-system/html-fonts.scm:110
 msgid "Centered label cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:129
+#: ../src/report/report-system/html-fonts.scm:110
 msgid "Font info for centered label cells."
 msgstr ""
 
@@ -21317,6 +21384,7 @@ msgstr "Icyumweru"
 
 #: ../src/report/report-system/options-utilities.scm:52
 #, fuzzy
+#| msgid "Week"
 msgid "One Week."
 msgstr "Icyumweru"
 
@@ -21336,6 +21404,7 @@ msgstr "Ukwezi"
 
 #: ../src/report/report-system/options-utilities.scm:54
 #, fuzzy
+#| msgid "Month"
 msgid "One Month."
 msgstr "Ukwezi"
 
@@ -21361,6 +21430,7 @@ msgstr "Umwaka"
 
 #: ../src/report/report-system/options-utilities.scm:57
 #, fuzzy
+#| msgid "Year"
 msgid "One Year."
 msgstr "Umwaka"
 
@@ -21453,6 +21523,7 @@ msgstr "Inkomoko Bya Igiciro Ibisobanuro"
 
 #: ../src/report/report-system/options-utilities.scm:176
 #, fuzzy
+#| msgid "Average"
 msgid "Average Cost"
 msgstr "Impuzandengo"
 
@@ -21721,6 +21792,7 @@ msgstr "a Ipaji y'imisusire kugirango i Icyegeranyo"
 
 #: ../src/report/report-system/report.scm:255
 #, fuzzy
+#| msgid "Stylesheet"
 msgid "stylesheet."
 msgstr "Ipaji y'imisusire"
 
@@ -21856,7 +21928,7 @@ msgstr "a Na: i ku a Igihe"
 #. in *one* place.
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
-#: ../src/report/standard-reports/average-balance.scm:38
+#: ../src/report/standard-reports/average-balance.scm:19
 #: ../src/report/standard-reports/cash-flow.scm:44
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
@@ -21882,7 +21954,7 @@ msgstr "Itariki y'itangira"
 # #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
 # scaddins/source\datefunc\datefunc.src:RID_DATE_FUNCTION_DESCRIPTIONS.DATE_FUNCDESC_DiffYears.4.text
 #: ../src/report/standard-reports/account-piecharts.scm:64
-#: ../src/report/standard-reports/average-balance.scm:39
+#: ../src/report/standard-reports/average-balance.scm:20
 #: ../src/report/standard-reports/cash-flow.scm:45
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
@@ -21927,8 +21999,8 @@ msgid "Maximum Slices"
 msgstr ""
 
 #: ../src/report/standard-reports/account-piecharts.scm:75
-#: ../src/report/standard-reports/average-balance.scm:130
-#: ../src/report/standard-reports/average-balance.scm:466
+#: ../src/report/standard-reports/average-balance.scm:111
+#: ../src/report/standard-reports/average-balance.scm:447
 #: ../src/report/standard-reports/category-barchart.scm:87
 #: ../src/report/standard-reports/daily-reports.scm:68
 #: ../src/report/standard-reports/net-barchart.scm:61
@@ -21938,8 +22010,8 @@ msgid "Plot Width"
 msgstr ""
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
-#: ../src/report/standard-reports/average-balance.scm:130
-#: ../src/report/standard-reports/average-balance.scm:468
+#: ../src/report/standard-reports/average-balance.scm:111
+#: ../src/report/standard-reports/average-balance.scm:449
 #: ../src/report/standard-reports/category-barchart.scm:88
 #: ../src/report/standard-reports/daily-reports.scm:69
 #: ../src/report/standard-reports/net-barchart.scm:62
@@ -21957,6 +22029,7 @@ msgstr ""
 #: ../src/report/standard-reports/account-piecharts.scm:79
 #: ../src/report/standard-reports/category-barchart.scm:91
 #, fuzzy
+#| msgid "Average"
 msgid "Show Average"
 msgstr "Impuzandengo"
 
@@ -21968,6 +22041,7 @@ msgstr ""
 #: ../src/report/standard-reports/account-piecharts.scm:116
 #: ../src/report/standard-reports/category-barchart.scm:126
 #, fuzzy
+#| msgid "Average"
 msgid "No Averaging"
 msgstr "Impuzandengo"
 
@@ -22030,6 +22104,7 @@ msgstr "Umubare Bya in"
 
 #: ../src/report/standard-reports/account-piecharts.scm:287
 #, fuzzy
+#| msgid "Average"
 msgid "Yearly Average"
 msgstr "Impuzandengo"
 
@@ -22042,6 +22117,7 @@ msgstr "Buri kwezi"
 #: ../src/report/standard-reports/account-piecharts.scm:289
 #: ../src/report/standard-reports/category-barchart.scm:299
 #, fuzzy
+#| msgid "Average"
 msgid "Weekly Average"
 msgstr "Impuzandengo"
 
@@ -22340,8 +22416,8 @@ msgid "Basis calculation method."
 msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:90
-#: ../src/report/standard-reports/average-balance.scm:125
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:106
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Average"
 msgstr "Impuzandengo"
 
@@ -22500,11 +22576,11 @@ msgstr ""
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:36
+#: ../src/report/standard-reports/average-balance.scm:17
 msgid "Average Balance"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:40
+#: ../src/report/standard-reports/average-balance.scm:21
 #: ../src/report/standard-reports/category-barchart.scm:77
 #: ../src/report/standard-reports/net-barchart.scm:49
 #: ../src/report/standard-reports/net-linechart.scm:45
@@ -22512,34 +22588,34 @@ msgstr ""
 msgid "Step Size"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:43
+#: ../src/report/standard-reports/average-balance.scm:24
 #: ../src/report/standard-reports/daily-reports.scm:63
 msgid "Include Sub-Accounts"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:44
+#: ../src/report/standard-reports/average-balance.scm:25
 #, fuzzy
 msgid "Exclude transactions between selected accounts"
 msgstr "Ibikorwa by'ubucuruzi Kuri Bivuye Byose Muyunguruzi... Konti"
 
-#: ../src/report/standard-reports/average-balance.scm:76
+#: ../src/report/standard-reports/average-balance.scm:57
 #: ../src/report/standard-reports/daily-reports.scm:95
 #, fuzzy
 msgid "Include sub-accounts of all selected accounts."
 msgstr "Konti Bya Byose Byahiswemo Konti"
 
-#: ../src/report/standard-reports/average-balance.scm:82
+#: ../src/report/standard-reports/average-balance.scm:63
 msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:89
+#: ../src/report/standard-reports/average-balance.scm:70
 #, fuzzy
 msgid "Do transaction report on this account."
 msgstr "Icyegeranyo ku iyi Aderesi"
 
 # wizards/source\formwizard\dbwizres.src:RID_DB_TABLE_WIZARD_START_+_18.text
-#: ../src/report/standard-reports/average-balance.scm:112
-#: ../src/report/standard-reports/average-balance.scm:342
+#: ../src/report/standard-reports/average-balance.scm:93
+#: ../src/report/standard-reports/average-balance.scm:323
 #: ../src/report/standard-reports/category-barchart.scm:184
 #: ../src/report/standard-reports/category-barchart.scm:253
 #: ../src/report/standard-reports/net-barchart.scm:133
@@ -22549,7 +22625,7 @@ msgstr "Icyegeranyo ku iyi Aderesi"
 msgid "Show table"
 msgstr "Kwerekana imbonerahamwe"
 
-#: ../src/report/standard-reports/average-balance.scm:113
+#: ../src/report/standard-reports/average-balance.scm:94
 #: ../src/report/standard-reports/category-barchart.scm:185
 #: ../src/report/standard-reports/net-barchart.scm:134
 #: ../src/report/standard-reports/net-linechart.scm:140
@@ -22557,64 +22633,64 @@ msgstr "Kwerekana imbonerahamwe"
 msgid "Display a table of the selected data."
 msgstr "a imbonerahamwe# Bya i Byahiswemo Ibyatanzwe"
 
-#: ../src/report/standard-reports/average-balance.scm:117
-#: ../src/report/standard-reports/average-balance.scm:341
+#: ../src/report/standard-reports/average-balance.scm:98
+#: ../src/report/standard-reports/average-balance.scm:322
 msgid "Show plot"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:118
+#: ../src/report/standard-reports/average-balance.scm:99
 #, fuzzy
 msgid "Display a graph of the selected data."
 msgstr "a Bya i Byahiswemo Ibyatanzwe"
 
-#: ../src/report/standard-reports/average-balance.scm:122
-#: ../src/report/standard-reports/average-balance.scm:340
+#: ../src/report/standard-reports/average-balance.scm:103
+#: ../src/report/standard-reports/average-balance.scm:321
 msgid "Plot Type"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:123
+#: ../src/report/standard-reports/average-balance.scm:104
 #, fuzzy
 msgid "The type of graph to generate."
 msgstr "Ubwoko Bya Kuri"
 
-#: ../src/report/standard-reports/average-balance.scm:125
+#: ../src/report/standard-reports/average-balance.scm:106
 #, fuzzy
 msgid "Average Balance."
 msgstr "Bya"
 
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:107
 msgid "Profit (Gain minus Loss)."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:108
 msgid "Gain And Loss."
 msgstr ""
 
 #. Watch out -- these names should be consistent with the display
 #. option where you choose them, otherwise users are confused.
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:126
 #, fuzzy
 msgid "Period start"
 msgstr "Igihe Gutangira"
 
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:126
 #, fuzzy
 msgid "Period end"
 msgstr "Igihe Impera"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Maximum"
 msgstr "kinini bishoboka"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Minimum"
 msgstr "gito gishoboka"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Gain"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:147
+#: ../src/report/standard-reports/average-balance.scm:128
 msgid "Loss"
 msgstr ""
 
@@ -23112,6 +23188,7 @@ msgstr "i Agaciro"
 # wizards/source\formwizard\dbwizres.src:RID_DB_TABLE_WIZARD_START_+_18.text
 #: ../src/report/standard-reports/budget.scm:55
 #, fuzzy
+#| msgid "Show table"
 msgid "Show Actual"
 msgstr "Kwerekana imbonerahamwe"
 
@@ -23122,6 +23199,7 @@ msgstr "Byose i"
 
 #: ../src/report/standard-reports/budget.scm:57
 #, fuzzy
+#| msgid "Difference"
 msgid "Show Difference"
 msgstr "Ikinyuranyo/Itandukaniro"
 
@@ -23316,6 +23394,7 @@ msgstr "Umubare Bya Imirongo- ntambike in i Igishushanyo"
 
 #: ../src/report/standard-reports/category-barchart.scm:300
 #, fuzzy
+#| msgid "Average"
 msgid "Daily Average"
 msgstr "Impuzandengo"
 
@@ -23451,11 +23530,12 @@ msgstr "Amakuru rusange"
 
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
-#: ../src/report/standard-reports/register.scm:145
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:126
+#: ../src/report/standard-reports/register.scm:391
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 #, fuzzy
+#| msgid "Action"
 msgid "Num/Action"
 msgstr "Igikorwa"
 
@@ -23463,7 +23543,7 @@ msgstr "Igikorwa"
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -23513,6 +23593,7 @@ msgstr "Umubare"
 #: ../src/report/standard-reports/transaction.scm:406
 #: ../src/report/standard-reports/transaction.scm:950
 #, fuzzy
+#| msgid "Account Name"
 msgid "Use Full Account Name"
 msgstr "Izina rya konti"
 
@@ -23886,128 +23967,129 @@ msgid "Price Scatterplot"
 msgstr ""
 
 # padmin/source\rtsetup.src:RID_RTS_DEVICEPAGE.RID_RTS_DEVICE_PPDVALUE_TXT.text
-#: ../src/report/standard-reports/register.scm:170
+#: ../src/report/standard-reports/register.scm:151
 #, fuzzy
 msgid "Debit Value"
 msgstr "Agaciro"
 
 # padmin/source\rtsetup.src:RID_RTS_DEVICEPAGE.RID_RTS_DEVICE_PPDVALUE_TXT.text
-#: ../src/report/standard-reports/register.scm:172
+#: ../src/report/standard-reports/register.scm:153
 #, fuzzy
 msgid "Credit Value"
 msgstr "Agaciro"
 
-#: ../src/report/standard-reports/register.scm:399
+#: ../src/report/standard-reports/register.scm:380
 #, fuzzy
 msgid "The title of the report."
 msgstr "Umutwe Bya i Icyegeranyo"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:392
 #, fuzzy
 msgid "Display the check number/action?"
 msgstr "i Kugenzura... Umubare"
 
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:396
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 #, fuzzy
 msgid "Display the check number?"
 msgstr "i Kugenzura... Umubare"
 
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:406
 #: ../src/report/standard-reports/transaction.scm:973
 #, fuzzy
 msgid "Display the memo?"
 msgstr "i Umwandikorusobe..."
 
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:411
 #, fuzzy
 msgid "Display the account?"
 msgstr "i Aderesi"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:956
 #, fuzzy
 msgid "Display the number of shares?"
 msgstr "i Umubare Bya"
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:421
 #, fuzzy
 msgid "Display the name of lot the shares are in?"
 msgstr "i Umubare Bya"
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:426
 #: ../src/report/standard-reports/transaction.scm:957
 #, fuzzy
 msgid "Display the shares price?"
 msgstr "i Igiciro"
 
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:431
 #: ../src/report/standard-reports/transaction.scm:984
 #, fuzzy
 msgid "Display the amount?"
 msgstr "i Igiteranyo"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "cyonyine"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single Column Display."
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr "Bibiri"
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:989
 #, fuzzy
 msgid "Two Column Display."
 msgstr "Igiteranyo Kugaragaza"
 
-#: ../src/report/standard-reports/register.scm:459
+#: ../src/report/standard-reports/register.scm:440
 #, fuzzy
 msgid "Display the value in transaction currency?"
 msgstr "i Indango"
 
-#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:445
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
 msgid "Display a running balance?"
 msgstr "a"
 
-#: ../src/report/standard-reports/register.scm:617
+#: ../src/report/standard-reports/register.scm:598
 msgid "Total Debits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:619
+#: ../src/report/standard-reports/register.scm:600
 msgid "Total Credits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:621
+#: ../src/report/standard-reports/register.scm:602
 #, fuzzy
 msgid "Total Value Debits"
 msgstr "Ikintu"
 
-#: ../src/report/standard-reports/register.scm:623
+#: ../src/report/standard-reports/register.scm:604
 msgid "Total Value Credits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:626
+#: ../src/report/standard-reports/register.scm:607
 msgid "Net Change"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:629
+#: ../src/report/standard-reports/register.scm:610
 #, fuzzy
+#| msgid "Changed"
 msgid "Value Change"
 msgstr "Byahinduwe"
 
-#: ../src/report/standard-reports/register.scm:788
+#: ../src/report/standard-reports/register.scm:769
 msgid "Client"
 msgstr "Umukiriya"
 
@@ -24223,6 +24305,7 @@ msgstr "Kinini Kuri Gitoya Kuri"
 
 #: ../src/report/standard-reports/transaction.scm:839
 #, fuzzy
+#| msgid "None"
 msgid "None."
 msgstr "Ntacyo"
 
@@ -24243,6 +24326,7 @@ msgstr "X"
 
 #: ../src/report/standard-reports/transaction.scm:843
 #, fuzzy
+#| msgid "Year"
 msgid "Yearly."
 msgstr "Umwaka"
 
@@ -24789,7 +24873,7 @@ msgstr "ikirango Ishusho"
 #: ../src/report/stylesheets/stylesheet-footer.scm:116
 #: ../src/report/stylesheets/stylesheet-footer.scm:209
 #: ../src/report/stylesheets/stylesheet-plain.scm:48
-#: ../src/report/utility-reports/hello-world.scm:160
+#: ../src/report/utility-reports/hello-world.scm:141
 msgid "Background Color"
 msgstr "Ibara rya mbuganyuma"
 
@@ -24806,7 +24890,7 @@ msgstr "Mbuganyuma Ibara kugirango Icyegeranyo"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:190
 #: ../src/report/stylesheets/stylesheet-footer.scm:123
 #: ../src/report/stylesheets/stylesheet-footer.scm:210
-#: ../src/report/utility-reports/hello-world.scm:167
+#: ../src/report/utility-reports/hello-world.scm:148
 msgid "Text Color"
 msgstr "Ibara y'inyandiko"
 
@@ -25052,79 +25136,79 @@ msgstr "Ibara kugirango Raporo"
 msgid "Plain"
 msgstr "Byuzuye"
 
-#: ../src/report/utility-reports/hello-world.scm:61
-#: ../src/report/utility-reports/hello-world.scm:71
-#: ../src/report/utility-reports/hello-world.scm:97
-#: ../src/report/utility-reports/hello-world.scm:108
-#: ../src/report/utility-reports/hello-world.scm:117
-#: ../src/report/utility-reports/hello-world.scm:124
-#: ../src/report/utility-reports/hello-world.scm:131
-#: ../src/report/utility-reports/hello-world.scm:142
-#: ../src/report/utility-reports/hello-world.scm:160
-#: ../src/report/utility-reports/hello-world.scm:167
+#: ../src/report/utility-reports/hello-world.scm:42
+#: ../src/report/utility-reports/hello-world.scm:52
+#: ../src/report/utility-reports/hello-world.scm:78
+#: ../src/report/utility-reports/hello-world.scm:89
+#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:105
+#: ../src/report/utility-reports/hello-world.scm:112
+#: ../src/report/utility-reports/hello-world.scm:123
+#: ../src/report/utility-reports/hello-world.scm:141
+#: ../src/report/utility-reports/hello-world.scm:148
 #, fuzzy
 msgid "Hello, World!"
 msgstr "Wiriwe Isi!"
 
-#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:42
 msgid "Boolean Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:62
+#: ../src/report/utility-reports/hello-world.scm:43
 #, fuzzy
 msgid "This is a boolean option."
 msgstr "ni a Icyungo Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:71
+#: ../src/report/utility-reports/hello-world.scm:52
 msgid "Multi Choice Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:72
+#: ../src/report/utility-reports/hello-world.scm:53
 #, fuzzy
 msgid "This is a multi choice option."
 msgstr "ni a Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:75
+#: ../src/report/utility-reports/hello-world.scm:56
 msgid "First Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:76
+#: ../src/report/utility-reports/hello-world.scm:57
 #, fuzzy
 msgid "Help for first option."
 msgstr "kugirango Itangira Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:60
 msgid "Second Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:80
+#: ../src/report/utility-reports/hello-world.scm:61
 #, fuzzy
 msgid "Help for second option."
 msgstr "kugirango ISEGONDA Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:83
+#: ../src/report/utility-reports/hello-world.scm:64
 msgid "Third Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:84
+#: ../src/report/utility-reports/hello-world.scm:65
 #, fuzzy
 msgid "Help for third option."
 msgstr "kugirango Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:87
+#: ../src/report/utility-reports/hello-world.scm:68
 msgid "Fourth Options"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:88
+#: ../src/report/utility-reports/hello-world.scm:69
 #, fuzzy
 msgid "The fourth option rules!"
 msgstr "Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:97
+#: ../src/report/utility-reports/hello-world.scm:78
 msgid "String Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:79
 #, fuzzy
 msgid "This is a string option."
 msgstr "ni a Ikurikiranyanyuguti Ihitamo"
@@ -25140,250 +25224,251 @@ msgstr "ni a Ikurikiranyanyuguti Ihitamo"
 #. The name of this report. This will be used, among other things,
 #. for making its menu item in the main menu. You need to use the
 #. untranslated value here!
-#: ../src/report/utility-reports/hello-world.scm:98
-#: ../src/report/utility-reports/hello-world.scm:332
-#: ../src/report/utility-reports/hello-world.scm:497
+#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:313
+#: ../src/report/utility-reports/hello-world.scm:478
 #, fuzzy
 msgid "Hello, World"
 msgstr "Wiriwe Isi!"
 
-#: ../src/report/utility-reports/hello-world.scm:108
+#: ../src/report/utility-reports/hello-world.scm:89
 #, fuzzy
 msgid "Just a Date Option"
 msgstr "a"
 
-#: ../src/report/utility-reports/hello-world.scm:109
+#: ../src/report/utility-reports/hello-world.scm:90
 #, fuzzy
 msgid "This is a date option."
 msgstr "ni a Itariki Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:117
+#: ../src/report/utility-reports/hello-world.scm:98
 #, fuzzy
 msgid "Time and Date Option"
 msgstr "Na"
 
-#: ../src/report/utility-reports/hello-world.scm:118
+#: ../src/report/utility-reports/hello-world.scm:99
 #, fuzzy
 msgid "This is a date option with time."
 msgstr "ni a Itariki Ihitamo Na: Igihe"
 
-#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:105
 msgid "Combo Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:125
+#: ../src/report/utility-reports/hello-world.scm:106
 #, fuzzy
 msgid "This is a combination date option."
 msgstr "ni a Ivanga Itariki Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:131
+#: ../src/report/utility-reports/hello-world.scm:112
 msgid "Relative Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:132
+#: ../src/report/utility-reports/hello-world.scm:113
 #, fuzzy
 msgid "This is a relative date option."
 msgstr "ni a Bifitanye isano Itariki Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:123
 msgid "Number Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:143
+#: ../src/report/utility-reports/hello-world.scm:124
 #, fuzzy
 msgid "This is a number option."
 msgstr "ni a Umubare Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:161
-#: ../src/report/utility-reports/hello-world.scm:168
+#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:149
 #, fuzzy
 msgid "This is a color option."
 msgstr "ni a Ibara Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:189
-#: ../src/report/utility-reports/hello-world.scm:202
+#: ../src/report/utility-reports/hello-world.scm:170
+#: ../src/report/utility-reports/hello-world.scm:183
 msgid "Hello Again"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:170
 #, fuzzy
 msgid "An account list option"
 msgstr "Aderesi Urutonde Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:190
+#: ../src/report/utility-reports/hello-world.scm:171
 #, fuzzy
 msgid "This is an account list option."
 msgstr "ni Aderesi Urutonde Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:202
+#: ../src/report/utility-reports/hello-world.scm:183
 #, fuzzy
 msgid "A list option"
 msgstr "A Urutonde Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:184
 #, fuzzy
 msgid "This is a list option."
 msgstr "ni a Urutonde Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:207
+#: ../src/report/utility-reports/hello-world.scm:188
 msgid "The Good"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:208
+#: ../src/report/utility-reports/hello-world.scm:189
 #, fuzzy
 msgid "Good option."
 msgstr "Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:211
+#: ../src/report/utility-reports/hello-world.scm:192
 msgid "The Bad"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:212
+#: ../src/report/utility-reports/hello-world.scm:193
 #, fuzzy
 msgid "Bad option."
 msgstr "Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:215
+#: ../src/report/utility-reports/hello-world.scm:196
 msgid "The Ugly"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:216
+#: ../src/report/utility-reports/hello-world.scm:197
 #, fuzzy
 msgid "Ugly option."
 msgstr "Ihitamo"
 
-#: ../src/report/utility-reports/hello-world.scm:222
+#: ../src/report/utility-reports/hello-world.scm:203
 msgid "Testing"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:222
+#: ../src/report/utility-reports/hello-world.scm:203
 #, fuzzy
 msgid "Crash the report"
 msgstr "i Icyegeranyo"
 
-#: ../src/report/utility-reports/hello-world.scm:224
+#: ../src/report/utility-reports/hello-world.scm:205
 #, fuzzy
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
 msgstr "ni kugirango Raporo Ihitamo nka iyi"
 
-#: ../src/report/utility-reports/hello-world.scm:347
+#: ../src/report/utility-reports/hello-world.scm:328
 #, fuzzy
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
 msgstr "ni a Urugero Icyegeranyo i Igishusho Inkomoko ITEGEKONGENGA in i Icyegeranyo bushyinguro kugirango Birambuye ku Raporo Cyangwa Raporo"
 
-#: ../src/report/utility-reports/hello-world.scm:353
+#: ../src/report/utility-reports/hello-world.scm:334
 #, fuzzy
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
 msgstr "Ifashayobora ku Raporo Cyangwa Kuri Akarango k'ikorwa Gishya Kumera neza Icyegeranyo i Urutonde"
 
-#: ../src/report/utility-reports/hello-world.scm:358
+#: ../src/report/utility-reports/hello-world.scm:339
 #, fuzzy
 msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr "Birambuye ku Kuri Urutonde"
 
-#: ../src/report/utility-reports/hello-world.scm:359
+#: ../src/report/utility-reports/hello-world.scm:340
 #, fuzzy
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
 msgstr "Birenzeho Ibyerekeye Igishusho ikoresha iyi"
 
-#: ../src/report/utility-reports/hello-world.scm:363
+#: ../src/report/utility-reports/hello-world.scm:344
 #, fuzzy
 msgid "The current time is %s."
 msgstr "KIGEZWEHO Igihe ni"
 
-#: ../src/report/utility-reports/hello-world.scm:368
+#: ../src/report/utility-reports/hello-world.scm:349
 #, fuzzy
 msgid "The boolean option is %s."
 msgstr "Icyungo Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:350
 msgid "true"
 msgstr "ukuri"
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:350
 msgid "false"
 msgstr "Sibyo"
 
-#: ../src/report/utility-reports/hello-world.scm:373
+#: ../src/report/utility-reports/hello-world.scm:354
 #, fuzzy
 msgid "The multi-choice option is %s."
 msgstr "Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:378
+#: ../src/report/utility-reports/hello-world.scm:359
 #, fuzzy
 msgid "The string option is %s."
 msgstr "Ikurikiranyanyuguti Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:383
+#: ../src/report/utility-reports/hello-world.scm:364
 #, fuzzy
 msgid "The date option is %s."
 msgstr "Itariki Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:388
+#: ../src/report/utility-reports/hello-world.scm:369
 #, fuzzy
 msgid "The date and time option is %s."
 msgstr "Itariki Na Igihe Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:393
+#: ../src/report/utility-reports/hello-world.scm:374
 #, fuzzy
 msgid "The relative date option is %s."
 msgstr "Bifitanye isano Itariki Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:398
+#: ../src/report/utility-reports/hello-world.scm:379
 #, fuzzy
 msgid "The combination date option is %s."
 msgstr "Ivanga Itariki Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:403
+#: ../src/report/utility-reports/hello-world.scm:384
 #, fuzzy
 msgid "The number option is %s."
 msgstr "Umubare Ihitamo ni"
 
-#: ../src/report/utility-reports/hello-world.scm:414
+#: ../src/report/utility-reports/hello-world.scm:395
 #, fuzzy
 msgid "The number option formatted as currency is %s."
 msgstr "Umubare Ihitamo Byahanaguwe Nka Ifaranga ni"
 
-#: ../src/report/utility-reports/hello-world.scm:426
+#: ../src/report/utility-reports/hello-world.scm:407
 #, fuzzy
 msgid "Items you selected:"
 msgstr "Byahiswemo"
 
-#: ../src/report/utility-reports/hello-world.scm:433
+#: ../src/report/utility-reports/hello-world.scm:414
 #, fuzzy
 msgid "List items selected"
 msgstr "Byahiswemo"
 
-#: ../src/report/utility-reports/hello-world.scm:438
+#: ../src/report/utility-reports/hello-world.scm:419
 #, fuzzy
 msgid "(You selected no list items.)"
 msgstr "(Byahiswemo Oya Urutonde"
 
-#: ../src/report/utility-reports/hello-world.scm:474
+#: ../src/report/utility-reports/hello-world.scm:455
 #, fuzzy
 msgid "You have selected no accounts."
 msgstr "Byahiswemo Oya Konti"
 
-#: ../src/report/utility-reports/hello-world.scm:479
+#: ../src/report/utility-reports/hello-world.scm:460
 #, fuzzy
+#| msgid "Display"
 msgid "Display help"
 msgstr "igaragaza"
 
-#: ../src/report/utility-reports/hello-world.scm:484
+#: ../src/report/utility-reports/hello-world.scm:465
 #, fuzzy
 msgid "Have a nice day!"
 msgstr "a UMUNSI"
 
 #. The name in the menu
 #. (only necessary if it differs from the name)
-#: ../src/report/utility-reports/hello-world.scm:508
+#: ../src/report/utility-reports/hello-world.scm:489
 #, fuzzy
 msgid "Sample Report with Examples"
 msgstr "Na:"
 
 #. A tip that is used to provide additional information about the
 #. report to the user.
-#: ../src/report/utility-reports/hello-world.scm:512
+#: ../src/report/utility-reports/hello-world.scm:493
 #, fuzzy
 msgid "A sample report with examples."
 msgstr "A Urugero Icyegeranyo Na:"
@@ -25489,17 +25574,17 @@ msgstr ""
 msgid "Adding remaining good quotes."
 msgstr ""
 
-#: ../src/tax/us/de_DE.scm:56
+#: ../src/tax/us/de_DE.scm:37
 #, fuzzy
 msgid "Tax Number"
 msgstr "Umubare"
 
-#: ../src/tax/us/txf-de_DE.scm:349
+#: ../src/tax/us/txf-de_DE.scm:330
 #, fuzzy
 msgid "The electronic tax number of your business"
 msgstr "Izina: Bya Imirimo"
 
-#: ../src/tax/us/txf.scm:106
+#: ../src/tax/us/txf.scm:87
 #, fuzzy
 msgid "No help available."
 msgstr "a IMPINDURAGACIRO"
@@ -25711,64 +25796,6 @@ msgstr "ni a NIBA ni kugirango Na ni Na Na: ATARIIGIHARWE Birenzeho ni iyi ku i 
 #: ../doc/tip_of_the_day.list.in:101
 msgid "To search through all your transactions, start a search (Edit -> Find...) from the main accounts hierarchy page. To limit your search to a single account, start the search from that account's register."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "i KIGEZWEHO Igiciro"
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Buri"
-
-# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Workday.4.text
-#, fuzzy
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "Iminsi"
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Buri"
-
-# scaddins/source\datefunc\datefunc.src:RID_DATE_FUNCTION_NAMES.DATE_FUNCNAME_DiffWeeks.text
-#, fuzzy
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "IBYUMWERU"
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Buri"
-
-# #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
-# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Edate.4.text
-# #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
-# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Eomonth.4.text
-#, fuzzy
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "Amezi"
-
-#, fuzzy
-#~| msgid "Every"
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Buri"
-
-# #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
-# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Edate.4.text
-# #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
-# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Eomonth.4.text
-#, fuzzy
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "Amezi"
 
 #, fuzzy
 #~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
@@ -26038,6 +26065,9 @@ msgstr ""
 #~ msgid "Create as scheduled"
 #~ msgstr "a Gishya IDOSIYE"
 
+#~ msgid "Every"
+#~ msgstr "Buri"
+
 #, fuzzy
 #~ msgid "Repayment Type"
 #~ msgstr "<Ubwoko"
@@ -26085,6 +26115,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "What to do, what to do?"
 #~ msgstr "Kuri Kuri"
+
+# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Workday.4.text
+#, fuzzy
+#~ msgid "days."
+#~ msgstr "Iminsi"
 
 # #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
 # scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Edate.4.text

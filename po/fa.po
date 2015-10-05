@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 10:40-0700\n"
+"POT-Creation-Date: 2015-09-26 10:44-0700\n"
 "PO-Revision-Date: 2013-09-17 19:27+0330\n"
 "Last-Translator: سید‌علی‌اکبر نجفیان <s.ali.najafian@chmail.ir>\n"
 "Language-Team: Persian <translation-team-fa@lists.sourceforge.net>\n"
@@ -195,6 +195,7 @@ msgstr ""
 
 #: ../src/app-utils/business-prefs.scm:72
 #, fuzzy
+#| msgid "The number option is %s."
 msgid "The name of your business."
 msgstr "گزینه‌ی عددی %s است."
 
@@ -208,11 +209,13 @@ msgstr ""
 
 #: ../src/app-utils/business-prefs.scm:87
 #, fuzzy
+#| msgid "The number option is %s."
 msgid "The phone number of your business."
 msgstr "گزینه‌ی عددی %s است."
 
 #: ../src/app-utils/business-prefs.scm:92
 #, fuzzy
+#| msgid "The number option is %s."
 msgid "The fax number of your business."
 msgstr "گزینه‌ی عددی %s است."
 
@@ -289,6 +292,7 @@ msgstr "آغاز امسال"
 
 #: ../src/app-utils/date-utilities.scm:835
 #, fuzzy
+#| msgid "First day of the current calendar year"
 msgid "First day of the current calendar year."
 msgstr "اولین روز سال جاری تقویم"
 
@@ -299,6 +303,7 @@ msgstr "پایان امسال"
 
 #: ../src/app-utils/date-utilities.scm:842
 #, fuzzy
+#| msgid "Last day of the current calendar year"
 msgid "Last day of the current calendar year."
 msgstr "آخرین  روز سال جاری تقویم"
 
@@ -309,6 +314,7 @@ msgstr "آغاز سال گذشته"
 
 #: ../src/app-utils/date-utilities.scm:849
 #, fuzzy
+#| msgid "First day of the previous calendar year"
 msgid "First day of the previous calendar year."
 msgstr "اولین روز سال گذشته تقویم"
 
@@ -319,6 +325,7 @@ msgstr "پایان سال گذشته"
 
 #: ../src/app-utils/date-utilities.scm:856
 #, fuzzy
+#| msgid "Last day of the previous calendar year"
 msgid "Last day of the previous calendar year."
 msgstr "آخرین روز سال گذشته تقویم"
 
@@ -328,6 +335,7 @@ msgstr "آغاز سال بعد"
 
 #: ../src/app-utils/date-utilities.scm:863
 #, fuzzy
+#| msgid "First day of the next calendar year"
 msgid "First day of the next calendar year."
 msgstr "اولین روز سال بعد تقویم"
 
@@ -337,6 +345,7 @@ msgstr "پایان سال بعد"
 
 #: ../src/app-utils/date-utilities.scm:870
 #, fuzzy
+#| msgid "Last day of the next calendar year"
 msgid "Last day of the next calendar year."
 msgstr "آخرین روز سال بعد تقویم"
 
@@ -363,6 +372,7 @@ msgstr "آغاز ماه جاری"
 
 #: ../src/app-utils/date-utilities.scm:891
 #, fuzzy
+#| msgid "First day of the current month"
 msgid "First day of the current month."
 msgstr "اولین روز ماه جاری"
 
@@ -373,6 +383,7 @@ msgstr "پایان ماه جاری"
 
 #: ../src/app-utils/date-utilities.scm:898
 #, fuzzy
+#| msgid "Last day of the current month"
 msgid "Last day of the current month."
 msgstr "آخرین روز ماه جاری"
 
@@ -383,6 +394,7 @@ msgstr "آغاز ماه گذشته"
 
 #: ../src/app-utils/date-utilities.scm:905
 #, fuzzy
+#| msgid "First day of the previous month"
 msgid "First day of the previous month."
 msgstr "اولین روز ماه گذشته"
 
@@ -393,6 +405,7 @@ msgstr "پایان ماه گذشته"
 
 #: ../src/app-utils/date-utilities.scm:912
 #, fuzzy
+#| msgid "Last day of previous month"
 msgid "Last day of previous month."
 msgstr "آخرین روز ماه گذشته"
 
@@ -402,6 +415,7 @@ msgstr "آغاز ماه بعد"
 
 #: ../src/app-utils/date-utilities.scm:919
 #, fuzzy
+#| msgid "First day of the next month"
 msgid "First day of the next month."
 msgstr "اولین روز ماه بعد"
 
@@ -411,6 +425,7 @@ msgstr "پایان ماه بعد"
 
 #: ../src/app-utils/date-utilities.scm:926
 #, fuzzy
+#| msgid "Last day of next month"
 msgid "Last day of next month."
 msgstr "آخرین روز ماه بعد"
 
@@ -420,6 +435,7 @@ msgstr "شروع سه ماهه جاری"
 
 #: ../src/app-utils/date-utilities.scm:933
 #, fuzzy
+#| msgid "First day of the current calendar year"
 msgid "First day of the current quarterly accounting period."
 msgstr "اولین روز سال جاری تقویم"
 
@@ -429,6 +445,7 @@ msgstr "پایان سه ماهه جاری"
 
 #: ../src/app-utils/date-utilities.scm:940
 #, fuzzy
+#| msgid "Last day of the current calendar year"
 msgid "Last day of the current quarterly accounting period."
 msgstr "آخرین  روز سال جاری تقویم"
 
@@ -439,6 +456,7 @@ msgstr "آغاز سه ماهه‌ی گذشته"
 
 #: ../src/app-utils/date-utilities.scm:947
 #, fuzzy
+#| msgid "Start of previous accounting period"
 msgid "First day of the previous quarterly accounting period."
 msgstr "آغز دوره‌ی حسابداری گذشته"
 
@@ -449,6 +467,7 @@ msgstr "پایان سه ماهه‌ی گذشته"
 
 #: ../src/app-utils/date-utilities.scm:954
 #, fuzzy
+#| msgid "Start of previous accounting period"
 msgid "Last day of previous quarterly accounting period."
 msgstr "آغز دوره‌ی حسابداری گذشته"
 
@@ -458,6 +477,7 @@ msgstr ""
 
 #: ../src/app-utils/date-utilities.scm:961
 #, fuzzy
+#| msgid "First day of the next calendar year"
 msgid "First day of the next quarterly accounting period."
 msgstr "اولین روز سال بعد تقویم"
 
@@ -467,6 +487,7 @@ msgstr ""
 
 #: ../src/app-utils/date-utilities.scm:968
 #, fuzzy
+#| msgid "Start of this accounting period"
 msgid "Last day of next quarterly accounting period."
 msgstr "آغاز این دوره‌ی حساب‌داری"
 
@@ -480,6 +501,7 @@ msgstr "امروز"
 
 #: ../src/app-utils/date-utilities.scm:974
 #, fuzzy
+#| msgid "The current date"
 msgid "The current date."
 msgstr "تاریخ جاری"
 
@@ -489,6 +511,7 @@ msgstr "یک ماه گذشته"
 
 #: ../src/app-utils/date-utilities.scm:980
 #, fuzzy
+#| msgid "One Month Ago"
 msgid "One Month Ago."
 msgstr "یک ماه گذشته"
 
@@ -498,6 +521,7 @@ msgstr "یک هفته گذشته"
 
 #: ../src/app-utils/date-utilities.scm:986
 #, fuzzy
+#| msgid "One Week Ago"
 msgid "One Week Ago."
 msgstr "یک هفته گذشته"
 
@@ -507,6 +531,7 @@ msgstr "سه ماه گذشته"
 
 #: ../src/app-utils/date-utilities.scm:992
 #, fuzzy
+#| msgid "Three Months Ago"
 msgid "Three Months Ago."
 msgstr "سه ماه گذشته"
 
@@ -516,6 +541,7 @@ msgstr "شش ماه قبل"
 
 #: ../src/app-utils/date-utilities.scm:998
 #, fuzzy
+#| msgid "Six Months Ago"
 msgid "Six Months Ago."
 msgstr "شش ماه قبل"
 
@@ -525,6 +551,7 @@ msgstr "یک سال پیش"
 
 #: ../src/app-utils/date-utilities.scm:1003
 #, fuzzy
+#| msgid "One Year Ago"
 msgid "One Year Ago."
 msgstr "یک سال پیش"
 
@@ -534,6 +561,7 @@ msgstr "یک ماه بعد"
 
 #: ../src/app-utils/date-utilities.scm:1009
 #, fuzzy
+#| msgid "One Month Ahead"
 msgid "One Month Ahead."
 msgstr "یک ماه بعد"
 
@@ -543,6 +571,7 @@ msgstr ""
 
 #: ../src/app-utils/date-utilities.scm:1015
 #, fuzzy
+#| msgid "One Year Ahead"
 msgid "One Week Ahead."
 msgstr "یک‌سال آینده"
 
@@ -552,6 +581,7 @@ msgstr "سه ماه بعد"
 
 #: ../src/app-utils/date-utilities.scm:1021
 #, fuzzy
+#| msgid "Three Months Ahead"
 msgid "Three Months Ahead."
 msgstr "سه ماه بعد"
 
@@ -561,6 +591,7 @@ msgstr "شش ماه بعد"
 
 #: ../src/app-utils/date-utilities.scm:1027
 #, fuzzy
+#| msgid "Six Months Ahead"
 msgid "Six Months Ahead."
 msgstr "شش ماه بعد"
 
@@ -570,6 +601,7 @@ msgstr "یک‌سال آینده"
 
 #: ../src/app-utils/date-utilities.scm:1032
 #, fuzzy
+#| msgid "One Year Ahead"
 msgid "One Year Ahead."
 msgstr "یک‌سال آینده"
 
@@ -708,8 +740,8 @@ msgid "Opening Balances"
 msgstr "مانده‌ی اولیه"
 
 #: ../src/app-utils/gnc-ui-util.c:672
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:72
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:76
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:57
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:200
 #: ../src/report/standard-reports/balance-sheet.scm:673
 msgid "Retained Earnings"
@@ -717,8 +749,8 @@ msgstr "درآمد انباشته"
 
 #: ../src/app-utils/gnc-ui-util.c:744 ../src/engine/Account.c:3951
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:71
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:75
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:52
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:56
 #: ../src/register/ledger-core/split-register.c:2548
 #: ../src/report/standard-reports/balance-sheet.scm:661
 #: ../src/report/standard-reports/budget-balance-sheet.scm:812
@@ -739,7 +771,7 @@ msgstr "مانده‌ی اولیه"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:373
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -759,7 +791,7 @@ msgstr "بدهی"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:394
+#: ../src/report/standard-reports/register.scm:375
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -782,7 +814,7 @@ msgstr "واریزی‌ها"
 
 #: ../src/app-utils/prefs.scm:64
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3133
-#: ../src/import-export/csv-imp/gnc-csv-model.c:70
+#: ../src/import-export/csv-imp/gnc-csv-model.c:50
 msgid "Deposit"
 msgstr ""
 
@@ -882,7 +914,7 @@ msgstr "خرید"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:826
 msgid "Charge"
 msgstr ""
 
@@ -918,7 +950,7 @@ msgstr "هزینه"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:832
+#: ../src/report/standard-reports/register.scm:813
 msgid "Invoice"
 msgstr "فاکتور"
 
@@ -930,7 +962,7 @@ msgstr "پرداخت‌ها"
 
 #: ../src/app-utils/prefs.scm:81
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
-#: ../src/import-export/csv-imp/gnc-csv-model.c:71
+#: ../src/import-export/csv-imp/gnc-csv-model.c:51
 msgid "Withdrawal"
 msgstr ""
 
@@ -966,12 +998,12 @@ msgstr "فروش"
 #: ../src/engine/Scrub.c:393 ../src/gnome/gnc-budget-view.c:385
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2975
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3076
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:32
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:38
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:59
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:13
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:19
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:28
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:34
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:40
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:46
 #: ../src/register/ledger-core/split-register.c:2564
 #: ../src/report/report-system/report-utilities.scm:117
 #: ../src/report/standard-reports/advanced-portfolio.scm:1078
@@ -1170,7 +1202,7 @@ msgstr ""
 #: ../src/business/business-gnome/business-gnome-utils.c:448
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:668
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
-#: ../src/import-export/csv-imp/gnc-csv-model.c:64
+#: ../src/import-export/csv-imp/gnc-csv-model.c:44
 #: ../src/report/standard-reports/transaction.scm:685
 #: ../src/report/standard-reports/transaction.scm:722
 #: ../src/report/standard-reports/transaction.scm:777
@@ -1273,6 +1305,7 @@ msgstr "ناشناخته"
 
 #: ../src/business/business-gnome/dialog-billterms.c:662
 #, fuzzy, c-format
+#| msgid "Term \"%s\" is in use.  You cannot delete it."
 msgid "Term \"%s\" is in use. You cannot delete it."
 msgstr "دوره‌ی \"%s\" استفاده شده است. شما نمی توانید آنرا حذف کنید "
 
@@ -1284,11 +1317,13 @@ msgstr "آیا از حذف عنوان \"%s\" اطمینان دارید؟"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:75
 #, fuzzy
+#| msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
 msgid "This transaction needs to be assigned to a Customer. Please choose the Customer below."
 msgstr "تراکنش باید به یک مشتری منتسب شود. لطفا یکی از مشتری‌های زیر را انتخاب کنید."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:82
 #, fuzzy
+#| msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
 msgid "This transaction needs to be assigned to a Vendor. Please choose the Vendor below."
 msgstr "این تراکنش باید به یک فروشنده منتسب شود. لطفا یکی از فروشنده‌های زیر را انتخاب کنید."
 
@@ -1399,11 +1434,13 @@ msgstr "یافتن مشتری"
 
 #: ../src/business/business-gnome/dialog-date-close.c:75
 #, fuzzy
+#| msgid "No Account selected.  Please try again."
 msgid "No Account selected. Please try again."
 msgstr "هیچ حسابی انتخاب نشده است.لطفا دوباره امتحان کنید."
 
 #: ../src/business/business-gnome/dialog-date-close.c:82
 #, fuzzy
+#| msgid "Placeholder account selected.  Please try again."
 msgid "Placeholder account selected. Please try again."
 msgstr "حساب موضوعی انتخاب شده است، لطفا مجددا تلاش کنید"
 
@@ -1532,6 +1569,7 @@ msgstr "آیا مطمئنید می خواهید این فاکتور را ثبت 
 #. Fill in the conversion prices with feedback from the user
 #: ../src/business/business-gnome/dialog-invoice.c:822
 #, fuzzy
+#| msgid "One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each."
 msgid "One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each."
 msgstr "یکی یا چند تا از ورودی‌ها برای حسابهایی با واحد پولی متفاوت وارد شده‌اند..از شما برای هزینه تبدیل هر کدام پرسش می‌شود."
 
@@ -1644,6 +1682,7 @@ msgstr "مشاهده سند هزینه"
 #: ../src/business/business-gnome/dialog-invoice.c:2346
 #: ../src/business/business-gnome/dialog-invoice.c:2522
 #, fuzzy
+#| msgid "Job Information"
 msgid "Bill Information"
 msgstr "اطلاعات شغل"
 
@@ -1656,6 +1695,7 @@ msgstr "شماره‌ی صورت‌حساب"
 #: ../src/business/business-gnome/dialog-invoice.c:2351
 #: ../src/business/business-gnome/dialog-invoice.c:2529
 #, fuzzy
+#| msgid "Owner Information"
 msgid "Voucher Information"
 msgstr "اطلاعات مالک"
 
@@ -1672,6 +1712,7 @@ msgstr "تاریخ ورودی‌های تکراری"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2864
 #, fuzzy
+#| msgid "Do you really want to post the invoice?"
 msgid "Do you really want to post these invoices?"
 msgstr "آیا مطمئنید می خواهید این فاکتور را ثبت کنید."
 
@@ -1843,13 +1884,13 @@ msgstr "باز شده"
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
 #: ../src/gnome/reconcile-view.c:385
-#: ../src/import-export/csv-imp/gnc-csv-model.c:66
+#: ../src/import-export/csv-imp/gnc-csv-model.c:46
 #: ../src/register/ledger-core/split-register-model.c:246
 #: ../src/register/ledger-core/split-register-model.c:266
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
-#: ../src/report/standard-reports/register.scm:146
-#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:127
+#: ../src/report/standard-reports/register.scm:395
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -1901,8 +1942,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:826
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -2051,11 +2092,13 @@ msgstr "پیش پرداخت"
 
 #: ../src/business/business-gnome/dialog-payment.c:715
 #, fuzzy
+#| msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
 msgid "The transfer and post accounts are associated with different currencies. Please specify the conversion rate."
 msgstr "حساب مبدا و مقصد از دو ارز مختلف ثبت شده اند. لطفا نرخ تبدیل ارز را  تعیین کنید."
 
 #: ../src/business/business-gnome/dialog-payment.c:1108
 #, fuzzy, c-format
+#| msgid "You have no valid \"Post To\" accounts.  Please create an account of type \"%s\" before you continue to process this payment.  Perhaps you want to create an Invoice or Bill first?"
 msgid "You have no valid \"Post To\" accounts. Please create an account of type \"%s\" before you continue to process this payment. Perhaps you want to create an Invoice or Bill first?"
 msgstr "شما حساب معتبری برای ثبت ندارید. لطفا یک حساب از نوع  \"%s\" قبل از ادامه روند پرداخت ایجاد کنید. همچنین ممکن است لازم باشد یک فاکتور یا صورتحساب در ابتدا ایجاد کنید. "
 
@@ -2776,6 +2819,7 @@ msgstr "آیا از انجام این کار اطمینان دارید؟"
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:17
 #: ../src/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in.h:4
 #, fuzzy
+#| msgid "Window position and size"
 msgid "Last window position and size"
 msgstr "موقعیت و اندازه پنجره"
 
@@ -2981,12 +3025,14 @@ msgstr "گزارش برای چاپ:"
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:26
 #, fuzzy
+#| msgid "Process Payment"
 msgid "_Process payments on posting"
 msgstr "پردازش پرداخت"
 
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:29
 #, fuzzy
+#| msgid "Process Payment"
 msgid "Pro_cess payments on posting"
 msgstr "پردازش پرداخت"
 
@@ -3130,7 +3176,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-account.c:749
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:67
+#: ../src/import-export/csv-imp/gnc-csv-model.c:47
 #: ../src/import-export/import-main-matcher.c:485
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
@@ -3151,8 +3197,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:111
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
-#: ../src/report/standard-reports/register.scm:148
-#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:129
+#: ../src/report/standard-reports/register.scm:400
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3235,7 +3281,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-owner.c:474
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2914
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:68
+#: ../src/import-export/csv-imp/gnc-csv-model.c:48
 #: ../src/register/ledger-core/split-register-model.c:468
 #: ../src/report/business-reports/balsheet-eg.scm:301
 #: ../src/report/business-reports/taxinvoice.scm:91
@@ -3545,7 +3591,7 @@ msgstr ""
 #: ../src/gnome/reconcile-view.c:389
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/import-export/csv-imp/gnc-csv-model.c:65
+#: ../src/import-export/csv-imp/gnc-csv-model.c:45
 #: ../src/import-export/import-main-matcher.c:481
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
@@ -3573,9 +3619,9 @@ msgstr ""
 #: ../src/report/standard-reports/net-barchart.scm:410
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
-#: ../src/report/standard-reports/register.scm:140
-#: ../src/report/standard-reports/register.scm:404
-#: ../src/report/standard-reports/register.scm:806
+#: ../src/report/standard-reports/register.scm:121
+#: ../src/report/standard-reports/register.scm:385
+#: ../src/report/standard-reports/register.scm:787
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3638,8 +3684,8 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
-#: ../src/report/standard-reports/register.scm:150
-#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:131
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -3977,7 +4023,7 @@ msgstr ""
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:121
 #: ../src/report/business-reports/easy-invoice.scm:478
 #: ../src/report/business-reports/fancy-invoice.scm:517
-#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:55
+#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:36
 msgid "Tax"
 msgstr "مالیات"
 
@@ -4250,8 +4296,8 @@ msgstr ""
 msgid " (posted)"
 msgstr ""
 
-#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:139
+#: ../src/report/standard-reports/register.scm:420
 msgid "Lot"
 msgstr ""
 
@@ -4380,7 +4426,7 @@ msgstr ""
 
 #: ../src/engine/Split.c:1410 ../src/engine/Split.c:1427
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
-#: ../src/report/standard-reports/register.scm:251
+#: ../src/report/standard-reports/register.scm:232
 msgid "-- Split Transaction --"
 msgstr "--تراکنش تکه‌ای--"
 
@@ -4568,7 +4614,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2970
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:39
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:20
 #: ../src/register/ledger-core/split-register.c:2471
 #: ../src/register/ledger-core/split-register.c:2508
 #: ../src/register/ledger-core/split-register.c:2516
@@ -4600,9 +4646,9 @@ msgstr ""
 #: ../src/gnome/assistant-stock-split.c:570
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
-#: ../src/gnome-utils/gnc-icons.c:38
+#: ../src/gnome-utils/gnc-icons.c:18
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
-#: ../src/import-export/csv-imp/gnc-csv-model.c:69
+#: ../src/import-export/csv-imp/gnc-csv-model.c:49
 #: ../src/import-export/import-main-matcher.c:482
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
@@ -4615,8 +4661,8 @@ msgstr ""
 #: ../src/report/standard-reports/cash-flow.scm:49
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
-#: ../src/report/standard-reports/register.scm:153
-#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:134
+#: ../src/report/standard-reports/register.scm:410
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "حساب"
@@ -4636,8 +4682,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:113
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
-#: ../src/report/standard-reports/register.scm:156
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:137
+#: ../src/report/standard-reports/register.scm:415
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -4726,8 +4772,8 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3002
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
-#: ../src/report/standard-reports/register.scm:168
-#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:149
+#: ../src/report/standard-reports/register.scm:439
 msgid "Value"
 msgstr "مقدار"
 
@@ -4782,9 +4828,9 @@ msgid "Open"
 msgstr "بازکردن"
 
 #: ../src/gnome/dialog-lot-viewer.c:857
-#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:70
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:379
 msgid "Title"
 msgstr "عنوان"
 
@@ -4793,7 +4839,7 @@ msgstr "عنوان"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:458
 #: ../src/gnome-utils/gnc-tree-view-owner.c:466
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3212
-#: ../src/import-export/csv-imp/gnc-csv-model.c:72
+#: ../src/import-export/csv-imp/gnc-csv-model.c:52
 #: ../src/register/ledger-core/split-register-model.c:311
 #: ../src/register/ledger-core/split-register-model.c:461
 #: ../src/report/business-reports/customer-summary.scm:184
@@ -4801,7 +4847,7 @@ msgstr "عنوان"
 #: ../src/report/business-reports/owner-report.scm:309
 #: ../src/report/report-system/html-utilities.scm:727
 #: ../src/report/standard-reports/account-summary.scm:460
-#: ../src/report/standard-reports/register.scm:174
+#: ../src/report/standard-reports/register.scm:155
 #: ../src/report/standard-reports/sx-summary.scm:465
 #: ../src/report/standard-reports/transaction.scm:465
 msgid "Balance"
@@ -4812,7 +4858,7 @@ msgid "Gains"
 msgstr "سود"
 
 #: ../src/gnome/dialog-lot-viewer.c:938
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:108
 msgid "Gain/Loss"
 msgstr "سود/زیان"
 
@@ -5097,8 +5143,8 @@ msgid "Form"
 msgstr ""
 
 #: ../src/gnome/gnc-budget-view.c:387
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:79
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:84
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
 #: ../src/report/report-system/report-utilities.scm:118
 #: ../src/report/standard-reports/budget-income-statement.scm:674
 #: ../src/report/standard-reports/income-statement.scm:610
@@ -5107,6 +5153,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-budget-view.c:389
 #, fuzzy
+#| msgid "Transfer"
 msgid "Transfers"
 msgstr "انتفال"
 
@@ -5127,7 +5174,7 @@ msgstr "انتفال"
 #: ../src/report/business-reports/fancy-invoice.scm:299
 #: ../src/report/business-reports/invoice.scm:120
 #: ../src/report/business-reports/invoice.scm:284
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:306
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:287
 #: ../src/report/report-system/html-acct-table.scm:899
 #: ../src/report/report-system/html-utilities.scm:619
 #: ../src/report/standard-reports/advanced-portfolio.scm:1043
@@ -5449,7 +5496,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:247
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
-#: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
+#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/window-reconcile2.c:2184
 #: ../src/gnome/window-reconcile.c:2184
 msgid "_Transfer..."
 msgstr "_T انتقال..."
@@ -5515,6 +5562,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:278
 #: ../src/gnome/gnc-plugin-register2.c:64
 #, fuzzy
+#| msgid "Register Order"
 msgid "_Register2"
 msgstr "ترتیب ثبات"
 
@@ -5544,8 +5592,8 @@ msgstr "بازکردن۲"
 #: ../src/report/standard-reports/account-piecharts.scm:68
 #: ../src/report/standard-reports/account-summary.scm:75
 #: ../src/report/standard-reports/advanced-portfolio.scm:158
-#: ../src/report/standard-reports/average-balance.scm:88
-#: ../src/report/standard-reports/average-balance.scm:337
+#: ../src/report/standard-reports/average-balance.scm:69
+#: ../src/report/standard-reports/average-balance.scm:318
 #: ../src/report/standard-reports/balance-sheet.scm:88
 #: ../src/report/standard-reports/budget-balance-sheet.scm:53
 #: ../src/report/standard-reports/budget-barchart.scm:44
@@ -5862,6 +5910,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:306
 #, fuzzy
+#| msgid "_Save Transaction"
 msgid "Move Transaction _Up"
 msgstr "_S ذخیره‌ی تراکنش"
 
@@ -5871,6 +5920,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:311
 #, fuzzy
+#| msgid "_Save Transaction"
 msgid "Move Transaction Do_wn"
 msgstr "_S ذخیره‌ی تراکنش"
 
@@ -5917,7 +5967,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:366
 #: ../src/gnome/gnc-plugin-page-register.c:375
-#: ../src/gnome-utils/gnc-icons.c:45
+#: ../src/gnome-utils/gnc-icons.c:25
 msgid "_Jump"
 msgstr "_J پرش"
 
@@ -5959,6 +6009,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register2.c:392
 #: ../src/gnome/gnc-plugin-page-register.c:401
 #, fuzzy
+#| msgid "Account Transaction Report"
 msgid "Account Report - Single Transaction"
 msgstr "گزارش تراکنش حساب"
 
@@ -5980,17 +6031,19 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:409
 #, fuzzy
+#| msgid "Show Exchange Rates"
 msgid "Show _Extra Dates"
 msgstr "نمایش نرخ تبدیل"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:410
 #, fuzzy
+#| msgid "Sort by the Reconciled Date"
 msgid "Show entered and reconciled dates"
 msgstr "مرتب‌سازی بر اساس تاریخ مطابقت"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:418
-#: ../src/gnome-utils/gnc-icons.c:44
+#: ../src/gnome-utils/gnc-icons.c:24
 msgid "S_plit Transaction"
 msgstr "_p تراکنش تکه‌ای"
 
@@ -6036,7 +6089,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:2489
 #: ../src/register/ledger-core/split-register-layout.c:687
 #: ../src/register/ledger-core/split-register-model.c:332
-#: ../src/report/standard-reports/register.scm:154
+#: ../src/report/standard-reports/register.scm:135
 msgid "Transfer"
 msgstr "انتفال"
 
@@ -6078,6 +6131,7 @@ msgstr "تغییرات در %s ذخیره‌ شوند؟"
 #: ../src/gnome/gnc-plugin-page-register2.c:1617
 #: ../src/gnome/gnc-plugin-page-register.c:1548
 #, fuzzy
+#| msgid "The current transaction has been changed. Would you like to record the changes before duplicating this entry, or cancel the duplication?"
 msgid "This register has pending changes to a transaction. Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
 msgstr "تراکنش جاری تغییر یافته است.آیا می‌خواهید تغییرات را قبل از نسخه برداری این ورودی،اعمال کنید یا نسخه برداری را لغو می‌کنید؟"
 
@@ -6147,12 +6201,12 @@ msgstr "گزارش نتایج جستجو"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:888
+#: ../src/report/standard-reports/register.scm:869
 msgid "Register"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:381
 msgid "Register Report"
 msgstr "ثبات"
 
@@ -6197,11 +6251,13 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:197
 #, fuzzy
+#| msgid "_Delete Transaction"
 msgid "_Associate File with Transaction"
 msgstr "_D حذف تراکنش"
 
 #: ../src/gnome/gnc-plugin-page-register.c:198
 #, fuzzy
+#| msgid "Part of Payment Transaction"
 msgid "_Associate Location with Transaction"
 msgstr "بخشی از تراکنش پرداخت"
 
@@ -6211,21 +6267,25 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:210
 #, fuzzy
+#| msgid "Delete the current transaction"
 msgid "Associate a file with the current transaction"
 msgstr "پاک‌کردن تراکنش جاری"
 
 #: ../src/gnome/gnc-plugin-page-register.c:211
 #, fuzzy
+#| msgid "Make a copy of the current transaction"
 msgid "Associate a location with the current transaction"
 msgstr "ساخت یک رونوشت از تراکنش جاری"
 
 #: ../src/gnome/gnc-plugin-page-register.c:212
 #, fuzzy
+#| msgid "Show all splits in the current transaction"
 msgid "Open the associated file or location with the current transaction"
 msgstr "نمایش تمام انشعابات در تراکنش جاری"
 
 #: ../src/gnome/gnc-plugin-page-register.c:284
 #, fuzzy
+#| msgid "Remove the current price"
 msgid "Remo_ve Other Splits"
 msgstr "پاک کردن قیمت فعلی"
 
@@ -6336,6 +6396,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-register2.c:66
 #: ../src/gnome/gnc-plugin-register2.c:67
 #, fuzzy
+#| msgid "_Open Account"
 msgid "Register2 Open GL Account"
 msgstr "_O گشودن حساب"
 
@@ -6349,6 +6410,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-register.c:59
 #, fuzzy
+#| msgid "Open the GnuCash help window"
 msgid "Open general ledger window"
 msgstr "باز کردن پنجره‌ی راهنمای برنامه‌یGnuCash"
 
@@ -6562,6 +6624,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:20
 #, fuzzy
+#| msgid "You must enter a payment address."
 msgid "Position of payee address"
 msgstr "لازم است آدرس پرداخت کننده را ثبت کنید."
 
@@ -6875,6 +6938,7 @@ msgstr ""
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:22
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:90
 #, fuzzy
+#| msgid "Could not create opening balance."
 msgid "Do not create log/backup files."
 msgstr "نمی‌توان مانده‌ی اولیه را ایجاد کرد."
 
@@ -6921,6 +6985,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:32
 #, fuzzy
+#| msgid "Use the account color as background"
 msgid "Use account colors in the account hierarchy"
 msgstr "استفاده از رنگ حساب مورد نظر به عنوان پس زمینه"
 
@@ -7179,6 +7244,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:93
 #, fuzzy
+#| msgid "Show the income and expense accounts"
 msgid "Show the entered and reconcile dates"
 msgstr "نمایش حساب‌های درآمدی و هزینه‌ای"
 
@@ -7198,6 +7264,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 #, fuzzy
+#| msgid "Show the Price column"
 msgid "Show the calendar buttons"
 msgstr "نمایش ستون قیمت"
 
@@ -7217,6 +7284,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:101
 #, fuzzy
+#| msgid "The number of transactions displayed"
 msgid "Number of transactions to show in a register."
 msgstr "شماره‌ی تراکنش‌های نمایش داده شد"
 
@@ -7227,6 +7295,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:103
 #, fuzzy
+#| msgid "The number of Characters needed"
 msgid "Number of characters for auto complete."
 msgstr "تعداد حروف مورد نیاز"
 
@@ -7356,6 +7425,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:1
 #, fuzzy
+#| msgid "Display the account?"
 msgid "Display this column"
 msgstr "نمایش حساب؟"
 
@@ -7365,16 +7435,22 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:3
 #, fuzzy
+#| msgid "End of this month"
 msgid "Width of this column"
 msgstr "پایان ماه جاری"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:4
 #, fuzzy
+#| msgid "This setting enables the Price column."
 msgid "This setting stores the width of the given column in pixels."
 msgstr "این تنظیمات ستون مربوط به قیمت‌ّها را فعال می‌کند."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:1
 #, fuzzy
+#| msgid ""
+#| "This assistant will help you setup and use accounting periods. \n"
+#| " \n"
+#| "Danger: this feature does not work correctly at this time; it is still under development.  It will probably damage your data in such a way that it cannot be repaired!"
 msgid ""
 "This assistant will help you setup and use accounting periods. \n"
 " \n"
@@ -7897,6 +7973,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:6
 #, fuzzy
+#| msgid "Edit the current price."
 msgid "Edit the current commodity."
 msgstr "ویرایش قیمت فعلی"
 
@@ -7914,6 +7991,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:4
 #, fuzzy
+#| msgid "Enter the type of Entry"
 msgid "Clear the entry."
 msgstr "نوع ورودی را وارد نمایید"
 
@@ -8173,6 +8251,7 @@ msgstr "افزودن قیمت جدید."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
 #, fuzzy
+#| msgid "Remove the current price"
 msgid "Remove the current price."
 msgstr "پاک کردن قیمت فعلی"
 
@@ -8182,6 +8261,7 @@ msgstr "ویرایش قیمت فعلی"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:18
 #, fuzzy
+#| msgid "Remove prices older than a user-entered date"
 msgid "Remove prices older than a user-entered date."
 msgstr "پاک کردن قیمت‌هایی که قدیمی‌تر از تاریخی هستند که کاربر وارد کرده"
 
@@ -8845,6 +8925,7 @@ msgstr "_S ترتیب استاندارد"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:28
 #, fuzzy
+#| msgid "Select all accounts."
 msgid "Keep normal account order."
 msgstr "انتخاب همه‌ی حساب‌ها"
 
@@ -8852,11 +8933,13 @@ msgstr "انتخاب همه‌ی حساب‌ها"
 #: ../src/report/standard-reports/transaction.scm:735
 #: ../src/report/standard-reports/transaction.scm:790
 #, fuzzy
+#| msgid "Sort by date"
 msgid "Sort by date."
 msgstr "مرتب سازی بر اساس تاریخ"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:32
 #, fuzzy
+#| msgid "Sort by the date of entry"
 msgid "Sort by the date of entry."
 msgstr "مرتب‌سازی بر اساس تاریخ ورودی"
 
@@ -8874,6 +8957,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:36
 #, fuzzy
+#| msgid "Sort by number"
 msgid "Sort by number."
 msgstr "مرتب کردن بر اساس شماره"
 
@@ -8885,6 +8969,7 @@ msgstr ""
 #: ../src/report/standard-reports/transaction.scm:759
 #: ../src/report/standard-reports/transaction.scm:814
 #, fuzzy
+#| msgid "Sort by amount"
 msgid "Sort by amount."
 msgstr "مرتب کردن بر اساس مقدار"
 
@@ -8896,6 +8981,7 @@ msgstr "_M یادداشت"
 #: ../src/report/standard-reports/transaction.scm:775
 #: ../src/report/standard-reports/transaction.scm:826
 #, fuzzy
+#| msgid "Sort by memo"
 msgid "Sort by memo."
 msgstr "مرتب کردن بر اساس یادداشت"
 
@@ -8903,6 +8989,7 @@ msgstr "مرتب کردن بر اساس یادداشت"
 #: ../src/report/standard-reports/transaction.scm:763
 #: ../src/report/standard-reports/transaction.scm:818
 #, fuzzy
+#| msgid "Sort by description"
 msgid "Sort by description."
 msgstr "مرتب سازی بر اساس توضیحات"
 
@@ -8912,6 +8999,7 @@ msgstr "_A کنش"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:44
 #, fuzzy
+#| msgid "Sort by notes field"
 msgid "Sort by action field."
 msgstr "مرتب کردن بر اساس فیلد نکات"
 
@@ -8921,6 +9009,7 @@ msgstr "_N نکات"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:46
 #, fuzzy
+#| msgid "Sort by notes field"
 msgid "Sort by notes field."
 msgstr "مرتب کردن بر اساس فیلد نکات"
 
@@ -8930,6 +9019,7 @@ msgstr " _v ذخیره‌ی الگوی مرتب‌سازی"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
 #, fuzzy
+#| msgid "Choose the export format for this report:"
 msgid "Save the sort order for this register."
 msgstr "قالب صدور این گزارش را انتخاب نمایید"
 
@@ -8990,6 +9080,7 @@ msgstr "انتخاب"
 
 #: ../src/gnome-search/dialog-search.c:1077
 #, fuzzy
+#| msgid "Order ID"
 msgid "Order"
 msgstr "شماره‌ی سفارش"
 
@@ -9417,7 +9508,7 @@ msgid "There was an error parsing the file."
 msgstr "خطایی در تحلیل فایل رخ داده است."
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1293 ../src/gnome-utils/gnc-file.c:1527
+#: ../src/gnome-utils/gnc-file.c:1286 ../src/gnome-utils/gnc-file.c:1515
 msgid "Writing file..."
 msgstr "در حال نوشتن روی پرونده..."
 
@@ -9731,6 +9822,7 @@ msgstr "باید یک حساب مالیاتی انتخاب کنید."
 
 #: ../src/gnome-utils/dialog-tax-table.c:563
 #, fuzzy, c-format
+#| msgid "Term \"%s\" is in use.  You cannot delete it."
 msgid "Tax table \"%s\" is in use. You cannot delete it."
 msgstr "دوره‌ی \"%s\" استفاده شده است. شما نمی توانید آنرا حذف کنید "
 
@@ -9930,7 +10022,7 @@ msgid "Import"
 msgstr "ورود"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
-#: ../src/gnome-utils/gnc-file.c:1343
+#: ../src/gnome-utils/gnc-file.c:1336
 msgid "Save"
 msgstr "ذخیره"
 
@@ -10161,19 +10253,19 @@ msgstr "در حال بارگذاری اطلاعات کاربر..."
 msgid "Re-saving user data..."
 msgstr "ذخیره سازی مجدد اطلاعات کاربر..."
 
-#: ../src/gnome-utils/gnc-file.c:1207 ../src/gnome-utils/gnc-file.c:1442
+#: ../src/gnome-utils/gnc-file.c:1200 ../src/gnome-utils/gnc-file.c:1430
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:1236
+#: ../src/gnome-utils/gnc-file.c:1229
 msgid "Exporting file..."
 msgstr "صادر کردن پرونده..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1249
+#: ../src/gnome-utils/gnc-file.c:1242
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -10181,7 +10273,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:1281
+#: ../src/gnome-utils/gnc-file.c:1274
 msgid "The database was opened read-only. Do you want to save it to a different place?"
 msgstr ""
 
@@ -10214,20 +10306,20 @@ msgstr ""
 msgid "GnuCash could not open the associated URI:"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-icons.c:39
+#: ../src/gnome-utils/gnc-icons.c:19
 msgid "_Delete Account"
 msgstr "_D حذف حساب"
 
-#: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile2.c:2179
 #: ../src/gnome/window-reconcile.c:2179
 msgid "_Edit Account"
 msgstr "_E ویرایش حساب"
 
-#: ../src/gnome-utils/gnc-icons.c:41
+#: ../src/gnome-utils/gnc-icons.c:21
 msgid "_New Account"
 msgstr "_N حساب جدید"
 
-#: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
+#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile2.c:2174
 #: ../src/gnome/window-reconcile.c:2174
 msgid "_Open Account"
 msgstr "_O گشودن حساب"
@@ -10858,8 +10950,8 @@ msgstr "چک دریافتی"
 #: ../src/report/standard-reports/portfolio.scm:247
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
-#: ../src/report/standard-reports/register.scm:160
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:141
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -10943,7 +11035,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:718
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:303
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:284
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
@@ -11085,6 +11177,7 @@ msgstr "چاپ نام"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:408
 #, fuzzy
+#| msgid "Display help"
 msgid "Display symbol"
 msgstr "نمایش راهنما"
 
@@ -11203,6 +11296,7 @@ msgstr "تاریخ ورود"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2824
 #, fuzzy
+#| msgid "Reconciled"
 msgid "Date Reconciled"
 msgstr "مطابقت شده"
 
@@ -11446,6 +11540,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:9
 #, fuzzy
+#| msgid "Delete a commodity"
 msgid "Delete a commodity with price quotes"
 msgstr "حذف یک کالا"
 
@@ -11702,7 +11797,7 @@ msgstr ""
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:379
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -11833,6 +11928,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:55
 #, fuzzy
+#| msgid "Show accounts that have been marked hidden."
 msgid "Show accounts which have the option \"Hidden\" checked."
 msgstr "نمایش‌ حساب‌هایی که به عنوان مخفی علامت گذاری شده‌اند"
 
@@ -11842,6 +11938,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:57
 #, fuzzy
+#| msgid "Include accounts with zero total balances"
 msgid "Show accounts which have a zero total value."
 msgstr "حساب‌ها با مجموع موجودی صفر را شامل شود"
 
@@ -11972,6 +12069,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:25
 #, fuzzy
+#| msgid "Display Columns"
 msgid "_Display symbol"
 msgstr "نمایش ستون‌ها"
 
@@ -12154,6 +12252,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:40
 #, fuzzy
+#| msgid "Use the account color as background"
 msgid "Show the Account Color as Account Name Background."
 msgstr "استفاده از رنگ حساب مورد نظر به عنوان پس زمینه"
 
@@ -12163,6 +12262,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:42
 #, fuzzy
+#| msgid "Use the account color as background"
 msgid "Show the Account Color as tab background."
 msgstr "استفاده از رنگ حساب مورد نظر به عنوان پس زمینه"
 
@@ -12274,6 +12374,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:77
 #, fuzzy
+#| msgid "Negative amounts are not allowed."
 msgid "Display negative amounts in red."
 msgstr "مقادیر منفی مجاز نیستند."
 
@@ -12506,6 +12607,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:153
 #, fuzzy
+#| msgid "Show the income and expense accounts"
 msgid "Show the _entered and reconcile dates"
 msgstr "نمایش حساب‌های درآمدی و هزینه‌ای"
 
@@ -12555,6 +12657,7 @@ msgstr "_S ذخیره‌ی اندازه و موقعیت پنجره"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
 #, fuzzy
+#| msgid "Save window sizes and locations"
 msgid "Save window size and location when it is closed."
 msgstr "ذخیره‌ی اندازه و موقعیت پنجره"
 
@@ -12620,6 +12723,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:196
 #, fuzzy
+#| msgid "07/31/2005"
 msgid "07/31/2013"
 msgstr "07/31/2005"
 
@@ -12629,21 +12733,25 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:198
 #, fuzzy
+#| msgid "31/07/2005"
 msgid "31/07/2013"
 msgstr "31/07/2005"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:199
 #, fuzzy
+#| msgid "European"
 msgid "Europe"
 msgstr "اروپایی"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
 #, fuzzy
+#| msgid "31.07.2005"
 msgid "31.07.2013"
 msgstr "31.07.2005"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
 #, fuzzy
+#| msgid "_ISO:"
 msgid "ISO"
 msgstr "_ISO:"
 
@@ -12653,7 +12761,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
-#: ../src/import-export/csv-imp/gnc-csv-model.c:58
+#: ../src/import-export/csv-imp/gnc-csv-model.c:38
 msgid "Locale"
 msgstr ""
 
@@ -13872,11 +13980,13 @@ msgstr ""
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:416
 #, fuzzy
+#| msgid "Credited Account Number"
 msgid "Credited IBAN (International Account Number)"
 msgstr "شماره حساب بستانکار"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:418
 #, fuzzy
+#| msgid "Debited Account Bank Code"
 msgid "Credited BIC (Bank Code)"
 msgstr "کد بانک مربوط به حساب بدهکار"
 
@@ -13999,7 +14109,7 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:409
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:70
 msgid "Unspecified"
 msgstr ""
 
@@ -14111,7 +14221,7 @@ msgid "The Online Banking job is still running; are you sure you want to cancel?
 msgstr ""
 
 #: ../src/import-export/aqb/gncmod-aqbanking.c:79
-#: ../src/import-export/gncmod-generic-import.c:79
+#: ../src/import-export/gncmod-generic-import.c:59
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:162
 msgid "Online Banking"
 msgstr ""
@@ -14447,6 +14557,7 @@ msgstr "نوع"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
+#| msgid "_Full name:"
 msgid "full_name"
 msgstr "_F نام کامل:"
 
@@ -14821,54 +14932,54 @@ msgstr ""
 msgid "Row %u, account %s not in %s\n"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:50
+#: ../src/import-export/csv-imp/gnc-csv-model.c:30
 msgid "y-m-d"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:51
+#: ../src/import-export/csv-imp/gnc-csv-model.c:31
 msgid "d-m-y"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:52
+#: ../src/import-export/csv-imp/gnc-csv-model.c:32
 msgid "m-d-y"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:53
+#: ../src/import-export/csv-imp/gnc-csv-model.c:33
 msgid "d-m"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:54
+#: ../src/import-export/csv-imp/gnc-csv-model.c:34
 msgid "m-d"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:59
+#: ../src/import-export/csv-imp/gnc-csv-model.c:39
 #: ../src/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:60
+#: ../src/import-export/csv-imp/gnc-csv-model.c:40
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:476
+#: ../src/import-export/csv-imp/gnc-csv-model.c:456
 msgid "File opening failed."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:491
-#: ../src/import-export/csv-imp/gnc-csv-model.c:499
+#: ../src/import-export/csv-imp/gnc-csv-model.c:471
+#: ../src/import-export/csv-imp/gnc-csv-model.c:479
 msgid "Unknown encoding."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:830
+#: ../src/import-export/csv-imp/gnc-csv-model.c:810
 msgid "No date column."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:831
+#: ../src/import-export/csv-imp/gnc-csv-model.c:811
 msgid "No balance, deposit, or withdrawal column."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1125
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1105
 #, c-format
 msgid "%s column could not be understood."
 msgstr ""
@@ -15807,216 +15918,216 @@ msgstr ""
 msgid "Show documentation"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:33
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:14
 msgid "Dividends"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:48
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:29
 msgid "Cap Return"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:54
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:35
 msgid "Cap. gain (long)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:41
 msgid "Cap. gain (mid)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
 msgid "Cap. gain (short)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:80
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:61
 msgid "Commissions"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:85
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
 msgid "Margin Interest"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:85
-#: ../src/import-export/qif-imp/qif-file.scm:93
+#: ../src/import-export/qif-imp/qif-file.scm:66
+#: ../src/import-export/qif-imp/qif-file.scm:74
 msgid "Line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:96
+#: ../src/import-export/qif-imp/qif-file.scm:77
 msgid "Read aborted."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:111
+#: ../src/import-export/qif-imp/qif-file.scm:92
 msgid "Reading"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:140
+#: ../src/import-export/qif-imp/qif-file.scm:121
 msgid "Some characters have been discarded."
 msgstr "برخی حروف حذف شدند"
 
-#: ../src/import-export/qif-imp/qif-file.scm:141
-#: ../src/import-export/qif-imp/qif-file.scm:145
+#: ../src/import-export/qif-imp/qif-file.scm:122
+#: ../src/import-export/qif-imp/qif-file.scm:126
 msgid "Converted to: "
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:144
+#: ../src/import-export/qif-imp/qif-file.scm:125
 msgid "Some characters have been converted according to your locale."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:203
+#: ../src/import-export/qif-imp/qif-file.scm:184
 msgid "Ignoring unknown option"
 msgstr ""
 
 #. The date is missing! Warn the user.
-#: ../src/import-export/qif-imp/qif-file.scm:337
+#: ../src/import-export/qif-imp/qif-file.scm:318
 msgid "Date required."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:338
+#: ../src/import-export/qif-imp/qif-file.scm:319
 msgid "Discarding this transaction."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:370
+#: ../src/import-export/qif-imp/qif-file.scm:351
 msgid "Ignoring class line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:438
+#: ../src/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring category line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:469
+#: ../src/import-export/qif-imp/qif-file.scm:450
 msgid "Ignoring security line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:477
+#: ../src/import-export/qif-imp/qif-file.scm:458
 msgid "File does not appear to be in QIF format"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:653
+#: ../src/import-export/qif-imp/qif-file.scm:634
 msgid "Transaction date"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:654
+#: ../src/import-export/qif-imp/qif-file.scm:635
 msgid "Transaction amount"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:655
+#: ../src/import-export/qif-imp/qif-file.scm:636
 msgid "Share price"
 msgstr "قیمت سهم"
 
-#: ../src/import-export/qif-imp/qif-file.scm:656
+#: ../src/import-export/qif-imp/qif-file.scm:637
 msgid "Share quantity"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:657
+#: ../src/import-export/qif-imp/qif-file.scm:638
 msgid "Investment action"
 msgstr "فعالیت سرمایه‌گذاری"
 
-#: ../src/import-export/qif-imp/qif-file.scm:658
+#: ../src/import-export/qif-imp/qif-file.scm:639
 msgid "Reconciliation status"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:659
+#: ../src/import-export/qif-imp/qif-file.scm:640
 msgid "Commission"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:660
+#: ../src/import-export/qif-imp/qif-file.scm:641
 msgid "Account type"
 msgstr "نوع حساب"
 
-#: ../src/import-export/qif-imp/qif-file.scm:661
+#: ../src/import-export/qif-imp/qif-file.scm:642
 msgid "Tax class"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:662
+#: ../src/import-export/qif-imp/qif-file.scm:643
 msgid "Category budget amount"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:663
+#: ../src/import-export/qif-imp/qif-file.scm:644
 msgid "Account budget amount"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:664
+#: ../src/import-export/qif-imp/qif-file.scm:645
 msgid "Credit limit"
 msgstr ""
 
 #.
 #. Fields of categories.
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:677
+#: ../src/import-export/qif-imp/qif-file.scm:658
 msgid "Parsing categories"
 msgstr ""
 
 #.
 #. Fields of accounts
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:709
+#: ../src/import-export/qif-imp/qif-file.scm:690
 msgid "Parsing accounts"
 msgstr ""
 
 #.
 #. fields of transactions
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:750
+#: ../src/import-export/qif-imp/qif-file.scm:731
 msgid "Parsing transactions"
 msgstr ""
 
 #. Data was not in any of the supplied formats.
-#: ../src/import-export/qif-imp/qif-file.scm:926
+#: ../src/import-export/qif-imp/qif-file.scm:907
 msgid "Unrecognized or inconsistent format."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:968
+#: ../src/import-export/qif-imp/qif-file.scm:949
 msgid "Parsing failed."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:1009
+#: ../src/import-export/qif-imp/qif-file.scm:990
 msgid "Parse ambiguity between formats"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:1011
+#: ../src/import-export/qif-imp/qif-file.scm:992
 msgid "Value '%s' could be %s or %s."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-merge-groups.scm:113
+#: ../src/import-export/qif-imp/qif-merge-groups.scm:94
 msgid "Finding duplicate transactions"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-parse.scm:194
+#: ../src/import-export/qif-imp/qif-parse.scm:175
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-parse.scm:301
+#: ../src/import-export/qif-imp/qif-parse.scm:282
 msgid "Unrecognized action '%s'."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-parse.scm:326
+#: ../src/import-export/qif-imp/qif-parse.scm:307
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:190
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:171
 msgid "QIF import: Name conflict with another account."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:275
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:256
 msgid "Preparing to convert your QIF data"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:326
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:307
 msgid "Creating accounts"
 msgstr "ایجاد حساب‌ها"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:375
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:356
 msgid "Matching transfers between accounts"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:393
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:374
 msgid "Converting"
 msgstr "تبدیل"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:478
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:459
 msgid "Missing transaction date."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:487
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:468
 msgid "Dates earlier than 1970 are not supported."
 msgstr ""
 
@@ -16242,6 +16353,7 @@ msgstr "<b>دوره‌ی زمانی:</b>"
 #. Menu Items
 #: ../src/plugins/example/gnc-plugin.example.c:50
 #, fuzzy
+#| msgid "description"
 msgid "example description..."
 msgstr "شرح"
 
@@ -16283,6 +16395,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:1533
 #, fuzzy
+#| msgid "The current transaction has been changed. Would you like to record the changes before duplicating this entry, or cancel the duplication?"
 msgid "The current transaction has been changed. Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
 msgstr "تراکنش جاری تغییر یافته است.آیا می‌خواهید تغییرات را قبل از نسخه برداری این ورودی،اعمال کنید یا نسخه برداری را لغو می‌کنید؟"
 
@@ -16347,12 +16460,13 @@ msgid "T-Ref"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:269
-#: ../src/report/standard-reports/register.scm:144
+#: ../src/report/standard-reports/register.scm:125
 msgid "T-Num"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:381
 #, fuzzy
+#| msgid "Exchange Rate:"
 msgid "Exch. Rate"
 msgstr "نرخ تبدیل:"
 
@@ -16442,8 +16556,8 @@ msgstr "لیست"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:565
 #: ../src/report/business-reports/owner-report.scm:40
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
+#: ../src/report/locale-specific/us/taxtxf.scm:156
 msgid "To"
 msgstr "به"
 
@@ -16461,7 +16575,7 @@ msgstr "ترتیب مرتب‌سازی"
 #: ../src/report/standard-reports/account-piecharts.scm:65
 #: ../src/report/standard-reports/account-summary.scm:114
 #: ../src/report/standard-reports/advanced-portfolio.scm:71
-#: ../src/report/standard-reports/average-balance.scm:41
+#: ../src/report/standard-reports/average-balance.scm:22
 #: ../src/report/standard-reports/balance-sheet.scm:138
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
@@ -16486,7 +16600,7 @@ msgstr "گزارش ارز"
 #: ../src/report/standard-reports/account-piecharts.scm:66
 #: ../src/report/standard-reports/account-summary.scm:115
 #: ../src/report/standard-reports/advanced-portfolio.scm:41
-#: ../src/report/standard-reports/average-balance.scm:42
+#: ../src/report/standard-reports/average-balance.scm:23
 #: ../src/report/standard-reports/balance-sheet.scm:139
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
@@ -16529,6 +16643,7 @@ msgstr ""
 
 #: ../src/report/business-reports/aging.scm:353
 #, fuzzy
+#| msgid "Name of the company"
 msgid "Name of the company."
 msgstr "نام شرکت"
 
@@ -16550,6 +16665,7 @@ msgstr ""
 
 #: ../src/report/business-reports/aging.scm:362
 #, fuzzy
+#| msgid "Sort order"
 msgid "Sort order."
 msgstr "ترتیب مرتب‌سازی"
 
@@ -16580,6 +16696,7 @@ msgstr ""
 #: ../src/report/business-reports/aging.scm:390
 #: ../src/report/business-reports/owner-report.scm:567
 #, fuzzy
+#| msgid "Loading data..."
 msgid "Leading date."
 msgstr "بارگذاری داده‌ّها ..."
 
@@ -16625,6 +16742,7 @@ msgstr "۹۱+روز"
 #: ../src/report/business-reports/aging.scm:676
 #: ../src/report/business-reports/job-report.scm:616
 #, fuzzy
+#| msgid "No valid account selected.  Click on the Options button and select the account to use."
 msgid "No valid account selected. Click on the Options button and select the account to use."
 msgstr "حساب معتبری انتخاب نشده است. بر روی کلید گزینه ها کلیک کرده و حسابی را انتخاب کنید."
 
@@ -16692,6 +16810,7 @@ msgstr "عنوان گزارش"
 #: ../src/report/standard-reports/sx-summary.scm:48
 #: ../src/report/standard-reports/trial-balance.scm:66
 #, fuzzy
+#| msgid "Title for this report"
 msgid "Title for this report."
 msgstr "عنوان این گزارش"
 
@@ -16728,6 +16847,7 @@ msgstr ""
 #: ../src/report/standard-reports/sx-summary.scm:61
 #: ../src/report/standard-reports/trial-balance.scm:82
 #, fuzzy
+#| msgid "Maximum number of slices in pie"
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "بیشینه تعداد قطعات در در نمودار تکه ای"
 
@@ -16855,6 +16975,7 @@ msgstr "نمایش ارزهای خارجی"
 #: ../src/report/standard-reports/sx-summary.scm:99
 #: ../src/report/standard-reports/trial-balance.scm:134
 #, fuzzy
+#| msgid "Display any foreign currency amount in an account"
 msgid "Display any foreign currency amount in an account."
 msgstr "نمایش هر ارز خارجی در یک حساب"
 
@@ -16884,6 +17005,7 @@ msgstr "یک"
 
 #: ../src/report/business-reports/balsheet-eg.scm:336
 #, fuzzy
+#| msgid "Display liabilities and equity below assets"
 msgid "Display liabilities and equity below assets."
 msgstr "نمایش بدهی‌ها و کل سرمایه،در زیر آورده‌ها"
 
@@ -16893,6 +17015,7 @@ msgstr "دو"
 
 #: ../src/report/business-reports/balsheet-eg.scm:339
 #, fuzzy
+#| msgid "Display liabilities and equity below assets"
 msgid "Display assets on the left, liabilities and equity on the right."
 msgstr "نمایش بدهی‌ها و کل سرمایه،در زیر آورده‌ها"
 
@@ -16929,8 +17052,8 @@ msgstr ""
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:562
 #: ../src/report/business-reports/owner-report.scm:39
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
+#: ../src/report/locale-specific/us/taxtxf.scm:156
 msgid "From"
 msgstr "از"
 
@@ -16966,6 +17089,7 @@ msgstr "نمایش ستون هزینه‌ها"
 
 #: ../src/report/business-reports/customer-summary.scm:62
 #, fuzzy
+#| msgid "Shows a piechart with the Expenses per given time interval"
 msgid "Show the column with the expenses per customer."
 msgstr "نمایش یک نمودار تکه ای هزینه  بر اساس دوره زمانی داده شده"
 
@@ -16975,6 +17099,7 @@ msgstr "نمایش آدرس شرکت"
 
 #: ../src/report/business-reports/customer-summary.scm:64
 #, fuzzy
+#| msgid "Show your own company's address and the date of printing"
 msgid "Show your own company's address and the date of printing."
 msgstr "نمایش آدرس شرکت شما و تاریخ چاپ"
 
@@ -17039,11 +17164,13 @@ msgstr ""
 
 #: ../src/report/business-reports/customer-summary.scm:84
 #, fuzzy
+#| msgid "Show customer report"
 msgid "Show Inactive Customers"
 msgstr "نمایش گزارش‌های مشتری"
 
 #: ../src/report/business-reports/customer-summary.scm:85
 #, fuzzy
+#| msgid "Show accounts that have been marked hidden."
 msgid "Include customers that have been marked inactive."
 msgstr "نمایش‌ حساب‌هایی که به عنوان مخفی علامت گذاری شده‌اند"
 
@@ -17065,18 +17192,20 @@ msgstr ""
 
 #: ../src/report/business-reports/customer-summary.scm:450
 #, fuzzy
+#| msgid "Alphabetical by account name"
 msgid "Sort alphabetically by customer name."
 msgstr "الفبایی(با نام حساب)"
 
 #: ../src/report/business-reports/customer-summary.scm:452
 #: ../src/report/business-reports/customer-summary.scm:839
-#: ../src/report/standard-reports/average-balance.scm:126
-#: ../src/report/standard-reports/average-balance.scm:147
+#: ../src/report/standard-reports/average-balance.scm:107
+#: ../src/report/standard-reports/average-balance.scm:128
 msgid "Profit"
 msgstr "سود"
 
 #: ../src/report/business-reports/customer-summary.scm:453
 #, fuzzy
+#| msgid "Sort by profit amount"
 msgid "Sort by profit amount."
 msgstr "مرتب سازی بر اساس مبلغ سود"
 
@@ -17097,11 +17226,13 @@ msgstr "فروش‌ها"
 
 #: ../src/report/business-reports/customer-summary.scm:460
 #, fuzzy
+#| msgid "Sort by amount"
 msgid "Sort by sales amount."
 msgstr "مرتب کردن بر اساس مقدار"
 
 #: ../src/report/business-reports/customer-summary.scm:463
 #, fuzzy
+#| msgid "Sort by amount"
 msgid "Sort by expense amount."
 msgstr "مرتب کردن بر اساس مقدار"
 
@@ -17112,6 +17243,7 @@ msgstr "افزایشی"
 
 #: ../src/report/business-reports/customer-summary.scm:473
 #, fuzzy
+#| msgid "A to Z, smallest to largest"
 msgid "A to Z, smallest to largest."
 msgstr "از «الف» تا «ی»،از کوچکترین به بزرگترین"
 
@@ -17122,6 +17254,7 @@ msgstr "کاهشی"
 
 #: ../src/report/business-reports/customer-summary.scm:476
 #, fuzzy
+#| msgid "By amount, largest to smallest"
 msgid "Z to A, largest to smallest."
 msgstr "از بزرگترین به کوچکترین مقدار"
 
@@ -17133,7 +17266,7 @@ msgstr "گزارش هزینه‌ها"
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/owner-report.scm:719
 #: ../src/report/report-gnome/dialog-report-column-view.c:351
-#: ../src/report/report-gnome/report-gnome.scm:80
+#: ../src/report/report-gnome/report-gnome.scm:61
 msgid "Report"
 msgstr "گزارش"
 
@@ -17148,6 +17281,7 @@ msgstr ""
 #: ../src/report/business-reports/customer-summary.scm:1018
 #: ../src/report/business-reports/job-report.scm:647
 #, fuzzy
+#| msgid "No valid %s selected.  Click on the Options button to select a company."
 msgid "No valid %s selected. Click on the Options button to select a company."
 msgstr "%s  معتبری انتخاب نشده است. بر روی کلید گزینه ها کلیک کنید تا یک شرکت انتخاب کنید"
 
@@ -17206,7 +17340,7 @@ msgstr ""
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:386
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "نمایش تاریخ؟"
@@ -17214,7 +17348,7 @@ msgstr "نمایش تاریخ؟"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:401
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "نمایش توضیحات؟"
@@ -17239,6 +17373,7 @@ msgstr "نمایش قیمت هر واحد؟"
 #: ../src/report/business-reports/fancy-invoice.scm:285
 #: ../src/report/business-reports/invoice.scm:270
 #, fuzzy
+#| msgid "Display the account?"
 msgid "Display the entry's discount?"
 msgstr "نمایش حساب؟"
 
@@ -17246,6 +17381,7 @@ msgstr "نمایش حساب؟"
 #: ../src/report/business-reports/fancy-invoice.scm:290
 #: ../src/report/business-reports/invoice.scm:275
 #, fuzzy
+#| msgid "Display the totals?"
 msgid "Display the entry's taxable status?"
 msgstr "نمایش مجموع؟"
 
@@ -17253,6 +17389,7 @@ msgstr "نمایش مجموع؟"
 #: ../src/report/business-reports/fancy-invoice.scm:295
 #: ../src/report/business-reports/invoice.scm:280
 #, fuzzy
+#| msgid "Display the totals?"
 msgid "Display each entry's total total tax?"
 msgstr "نمایش مجموع؟"
 
@@ -17260,6 +17397,7 @@ msgstr "نمایش مجموع؟"
 #: ../src/report/business-reports/fancy-invoice.scm:300
 #: ../src/report/business-reports/invoice.scm:285
 #, fuzzy
+#| msgid "Display the trans number?"
 msgid "Display the entry's value?"
 msgstr "شماره‌ی تراکنش نمایش داده شود؟"
 
@@ -17301,19 +17439,19 @@ msgstr "شماره‌ی تراکنش نمایش داده شود؟"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:404
+#: ../src/report/standard-reports/register.scm:385
+#: ../src/report/standard-reports/register.scm:391
+#: ../src/report/standard-reports/register.scm:395
+#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:414
-#: ../src/report/standard-reports/register.scm:419
-#: ../src/report/standard-reports/register.scm:424
-#: ../src/report/standard-reports/register.scm:429
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:430
 #: ../src/report/standard-reports/register.scm:439
 #: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:458
-#: ../src/report/standard-reports/register.scm:463
-#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -17374,7 +17512,7 @@ msgstr "نمایش همه‌ی مالیات‌های انفرادی؟"
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:449
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "مجموع"
@@ -17382,7 +17520,7 @@ msgstr "مجموع"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "نمایش مجموع؟"
@@ -17461,6 +17599,7 @@ msgstr ""
 #: ../src/report/business-reports/invoice.scm:332
 #: ../src/report/business-reports/taxinvoice.scm:243
 #, fuzzy
+#| msgid "Thank you for your patronage"
 msgid "Thank you for your patronage!"
 msgstr "سپاس بابت حمایت‌تان"
 
@@ -17531,6 +17670,7 @@ msgstr ""
 #: ../src/report/business-reports/fancy-invoice.scm:1005
 #: ../src/report/business-reports/invoice.scm:818
 #, fuzzy
+#| msgid "No valid account selected.  Click on the Options button and select the account to use."
 msgid "No valid invoice selected. Click on the Options button and select the invoice to use."
 msgstr "حساب معتبری انتخاب نشده است. بر روی کلید گزینه ها کلیک کرده و حسابی را انتخاب کنید."
 
@@ -17545,12 +17685,14 @@ msgstr ""
 
 #: ../src/report/business-reports/fancy-invoice.scm:340
 #, fuzzy
+#| msgid "The number of transactions displayed"
 msgid "The minimum number of invoice entries to display."
 msgstr "شماره‌ی تراکنش‌های نمایش داده شد"
 
 #: ../src/report/business-reports/fancy-invoice.scm:346
 #: ../src/report/business-reports/invoice.scm:331
 #, fuzzy
+#| msgid "Do you really want to post the invoice?"
 msgid "Extra notes to put on the invoice."
 msgstr "آیا مطمئنید می خواهید این فاکتور را ثبت کنید."
 
@@ -17560,6 +17702,7 @@ msgstr "پرداختی به"
 
 #: ../src/report/business-reports/fancy-invoice.scm:352
 #, fuzzy
+#| msgid "Display the Company contact information"
 msgid "Display the Payable to: information."
 msgstr "نمایش اطلاعات تماس شرکت"
 
@@ -17581,6 +17724,7 @@ msgstr "اطلاعات تماس شرکت"
 
 #: ../src/report/business-reports/fancy-invoice.scm:365
 #, fuzzy
+#| msgid "Display the Company contact information"
 msgid "Display the Company contact information."
 msgstr "نمایش اطلاعات تماس شرکت"
 
@@ -17653,12 +17797,14 @@ msgstr ""
 
 #: ../src/report/business-reports/job-report.scm:366
 #, fuzzy
+#| msgid "The job for this report"
 msgid "The job for this report."
 msgstr "کار مربوط به این گزارش"
 
 #: ../src/report/business-reports/job-report.scm:374
 #: ../src/report/business-reports/owner-report.scm:504
 #, fuzzy
+#| msgid "The account to search for transactions"
 msgid "The account to search for transactions."
 msgstr "حساب مورد جستجو برای تراکنش‌ها"
 
@@ -17739,6 +17885,7 @@ msgstr "آغاز دوره"
 
 #: ../src/report/business-reports/owner-report.scm:496
 #, fuzzy
+#| msgid "The company for this report"
 msgid "The company for this report."
 msgstr "شرکت مربوط به این گزارش"
 
@@ -17762,6 +17909,7 @@ msgstr "حساب پرداختنی"
 
 #: ../src/report/business-reports/payables.scm:50
 #, fuzzy
+#| msgid "There is already an account with that name."
 msgid "The payable account you wish to examine."
 msgstr "در حال حاضر یک حساب با این نام وجود دارد."
 
@@ -17775,6 +17923,7 @@ msgstr "حساب دریافتنی"
 
 #: ../src/report/business-reports/receivables.scm:50
 #, fuzzy
+#| msgid "There is already an account with that name."
 msgid "The receivables account you wish to examine."
 msgstr "در حال حاضر یک حساب با این نام وجود دارد."
 
@@ -18039,6 +18188,7 @@ msgstr ""
 #: ../src/report/business-reports/taxinvoice.scm:197
 #: ../src/report/business-reports/taxinvoice.scm:198
 #, fuzzy
+#| msgid "color"
 msgid "CSS color."
 msgstr "رنگ"
 
@@ -18048,6 +18198,7 @@ msgstr ""
 
 #: ../src/report/business-reports/taxinvoice.scm:230
 #, fuzzy
+#| msgid "Invoice number"
 msgid "Invoice number: "
 msgstr "شماره‌ی فاکتور"
 
@@ -18061,11 +18212,13 @@ msgstr ""
 
 #: ../src/report/business-reports/taxinvoice.scm:236
 #, fuzzy
+#| msgid "Job number: "
 msgid "Job number: "
 msgstr "شماره شغل:"
 
 #: ../src/report/business-reports/taxinvoice.scm:238
 #, fuzzy
+#| msgid "Job name"
 msgid "Job name: "
 msgstr "نام شغل"
 
@@ -18077,329 +18230,348 @@ msgstr ""
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:81
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:62
 msgid "Tax Report / TXF Export"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
-#: ../src/report/locale-specific/us/taxtxf.scm:179
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:135
+#: ../src/report/locale-specific/us/taxtxf.scm:160
 msgid "Alternate Period"
 msgstr "دوره متناوب"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
-#: ../src/report/locale-specific/us/taxtxf.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:136
+#: ../src/report/locale-specific/us/taxtxf.scm:161
 msgid "Override or modify From: & To:."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
+#: ../src/report/locale-specific/us/taxtxf.scm:164
 msgid "Use From - To"
 msgstr "استفاده از - تا"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
+#: ../src/report/locale-specific/us/taxtxf.scm:164
 #, fuzzy
+#| msgid "Use From - To period"
 msgid "Use From - To period."
 msgstr "استفاده از - تا دوره "
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
+#: ../src/report/locale-specific/us/taxtxf.scm:166
 msgid "1st Est Tax Quarter"
 msgstr "اولین دوره سه ماهه مالیات"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
+#: ../src/report/locale-specific/us/taxtxf.scm:166
 #, fuzzy
+#| msgid "Jan 1 - Mar 31"
 msgid "Jan 1 - Mar 31."
 msgstr "Jan 1 - Mar 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
-#: ../src/report/locale-specific/us/taxtxf.scm:187
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
+#: ../src/report/locale-specific/us/taxtxf.scm:168
 msgid "2nd Est Tax Quarter"
 msgstr "دومین دوره سه ماهه مالیات"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
-#: ../src/report/locale-specific/us/taxtxf.scm:187
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
+#: ../src/report/locale-specific/us/taxtxf.scm:168
 #, fuzzy
+#| msgid "Apr 1 - May 31"
 msgid "Apr 1 - May 31."
 msgstr "Apr 1 - May 31"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
+#: ../src/report/locale-specific/us/taxtxf.scm:173
 msgid "3rd Est Tax Quarter"
 msgstr "سومین دوره سه ماهه مالیات"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
+#: ../src/report/locale-specific/us/taxtxf.scm:173
 #, fuzzy
+#| msgid "Jun 1 - Aug 31"
 msgid "Jun 1 - Aug 31."
 msgstr "Jun 1 - Aug 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:194
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "4th Est Tax Quarter"
 msgstr "چهارمین دوره سه ماهه مالیات"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:194
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 #, fuzzy
+#| msgid "Sep 1 - Dec 31, Last year"
 msgid "Sep 1 - Dec 31."
 msgstr "Sep 1 - Dec 31 سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
+#: ../src/report/locale-specific/us/taxtxf.scm:177
 msgid "Last Year"
 msgstr "سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
+#: ../src/report/locale-specific/us/taxtxf.scm:177
 #, fuzzy
+#| msgid "Last Year"
 msgid "Last Year."
 msgstr "سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
-#: ../src/report/locale-specific/us/taxtxf.scm:198
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
+#: ../src/report/locale-specific/us/taxtxf.scm:179
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
-#: ../src/report/locale-specific/us/taxtxf.scm:199
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
+#: ../src/report/locale-specific/us/taxtxf.scm:180
 #, fuzzy
+#| msgid "Jan 1 - Mar 31, Last year"
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "Jan 1 - Mar 31 سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
-#: ../src/report/locale-specific/us/taxtxf.scm:201
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:157
+#: ../src/report/locale-specific/us/taxtxf.scm:182
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
-#: ../src/report/locale-specific/us/taxtxf.scm:202
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 #, fuzzy
+#| msgid "Apr 1 - May 31, Last year"
 msgid "Apr 1 - May 31, Last year."
 msgstr "Apr 1 - May 31 سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
-#: ../src/report/locale-specific/us/taxtxf.scm:204
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr ""
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
-#: ../src/report/locale-specific/us/taxtxf.scm:208
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:161
+#: ../src/report/locale-specific/us/taxtxf.scm:189
 #, fuzzy
+#| msgid "Jun 1 - Aug 31, Last year"
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "Jun 1 - Aug 31 سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
-#: ../src/report/locale-specific/us/taxtxf.scm:210
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:163
+#: ../src/report/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
-#: ../src/report/locale-specific/us/taxtxf.scm:211
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:164
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 #, fuzzy
+#| msgid "Sep 1 - Dec 31, Last year"
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "Sep 1 - Dec 31 سال گذشته"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:187
-#: ../src/report/locale-specific/us/taxtxf.scm:215
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:168
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 msgid "Select Accounts (none = all)"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:188
-#: ../src/report/locale-specific/us/taxtxf.scm:216
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:197
 #, fuzzy
+#| msgid "Select all accounts."
 msgid "Select accounts."
 msgstr "انتخاب همه‌ی حساب‌ها"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:194
-#: ../src/report/locale-specific/us/taxtxf.scm:222
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:175
+#: ../src/report/locale-specific/us/taxtxf.scm:203
 msgid "Suppress $0.00 values"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:195
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
 msgid "$0.00 valued Accounts won't be printed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:199
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
 msgid "Print Full account names"
 msgstr "چاپ اسامی کامل حساب‌ها"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:200
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:181
 #, fuzzy
+#| msgid "Print Full account names"
 msgid "Print all Parent account names."
 msgstr "چاپ اسامی کامل حساب‌ها"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:278
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:259
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:832
 msgid "Period from %s to %s"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:888
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:869
 msgid "Tax Report & XML Export"
 msgstr ""
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:890
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:871
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:894
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:903
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:875
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:884
 msgid "Taxable Income / Deductible Expenses"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:895
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:876
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:900
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:881
 msgid "XML"
 msgstr "XML"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:904
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:885
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:115
+#: ../src/report/locale-specific/us/taxtxf.scm:96
 msgid "Tax Schedule Report/TXF Export"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:223
+#: ../src/report/locale-specific/us/taxtxf.scm:204
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:227
+#: ../src/report/locale-specific/us/taxtxf.scm:208
 msgid "Do not print full account names"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:228
+#: ../src/report/locale-specific/us/taxtxf.scm:209
 #, fuzzy
+#| msgid "Print Full account names"
 msgid "Do not print all Parent account names."
 msgstr "چاپ اسامی کامل حساب‌ها"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:232
+#: ../src/report/locale-specific/us/taxtxf.scm:213
 msgid "Print all Transfer To/From Accounts"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:233
+#: ../src/report/locale-specific/us/taxtxf.scm:214
 msgid "Print all split details for multi-split transactions."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:237
+#: ../src/report/locale-specific/us/taxtxf.scm:218
 msgid "Print TXF export parameters"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:238
+#: ../src/report/locale-specific/us/taxtxf.scm:219
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:243
+#: ../src/report/locale-specific/us/taxtxf.scm:224
 msgid "Do not print T-Num:Memo data"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:244
+#: ../src/report/locale-specific/us/taxtxf.scm:225
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:228
 msgid "Do not print Action:Memo data"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:248
+#: ../src/report/locale-specific/us/taxtxf.scm:229
 #, fuzzy
+#| msgid "The account to search for transactions"
 msgid "Do not print Action:Memo data for transactions."
 msgstr "حساب مورد جستجو برای تراکنش‌ها"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:252
+#: ../src/report/locale-specific/us/taxtxf.scm:233
 msgid "Do not print transaction detail"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:253
+#: ../src/report/locale-specific/us/taxtxf.scm:234
 #, fuzzy
+#| msgid "Exclude transactions to/from all filter accounts"
 msgid "Do not print transaction detail for accounts."
 msgstr "مستثنی کردن تراکنش‌ها به/از تمام حساب‌های فیلتر شده"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:257
+#: ../src/report/locale-specific/us/taxtxf.scm:238
 msgid "Do not use special date processing"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:258
+#: ../src/report/locale-specific/us/taxtxf.scm:239
 msgid "Do not print transactions out of specified dates."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:262
+#: ../src/report/locale-specific/us/taxtxf.scm:243
 msgid "Currency conversion date"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:263
+#: ../src/report/locale-specific/us/taxtxf.scm:244
 msgid "Select date to use for PriceDB lookups."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:266
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 msgid "Nearest transaction date"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:266
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 #, fuzzy
+#| msgid "Display the transaction date?"
 msgid "Use nearest to transaction date."
 msgstr "نمایش تاریخ تراکنش؟"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:268
+#: ../src/report/locale-specific/us/taxtxf.scm:249
 msgid "Nearest report date"
 msgstr "تاریخ جدیدترین گزارش"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:268
+#: ../src/report/locale-specific/us/taxtxf.scm:249
 #, fuzzy
+#| msgid "Nearest report date"
 msgid "Use nearest to report date."
 msgstr "تاریخ جدیدترین گزارش"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:275
+#: ../src/report/locale-specific/us/taxtxf.scm:256
 msgid "Shade alternate transactions"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:276
+#: ../src/report/locale-specific/us/taxtxf.scm:257
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3532
+#: ../src/report/locale-specific/us/taxtxf.scm:3513
 msgid "Tax Schedule Report & TXF Export"
 msgstr ""
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf.scm:3534
+#: ../src/report/locale-specific/us/taxtxf.scm:3515
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3538
-#: ../src/report/locale-specific/us/taxtxf.scm:3547
+#: ../src/report/locale-specific/us/taxtxf.scm:3519
+#: ../src/report/locale-specific/us/taxtxf.scm:3528
 msgid "Taxable Income/Deductible Expenses"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3539
+#: ../src/report/locale-specific/us/taxtxf.scm:3520
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3548
+#: ../src/report/locale-specific/us/taxtxf.scm:3529
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr ""
 
 #: ../src/report/report-gnome/dialog-custom-report.c:421
 #, fuzzy
+#| msgid "You must select a report to run."
 msgid "You must select a report configuration to load."
 msgstr "باید یک گزارش را انتخاب کرده باشید تا بتوان آن را اجرا کرد."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
 #, fuzzy
+#| msgid "You must select a report to delete."
 msgid "You must select a report configuration to delete."
 msgstr "باید یک گزارش را انتخاب کرده باشید تا بتوان آن را پاک کرد."
 
@@ -18413,27 +18585,32 @@ msgstr ""
 
 #: ../src/report/report-gnome/dialog-custom-report.c:477
 #, fuzzy
+#| msgid "Edit report options"
 msgid "Load report configuration"
 msgstr "ویرایش گزینه‌های گزارش"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:479
 #, fuzzy
+#| msgid "Edit report options"
 msgid "Edit report configuration name"
 msgstr "ویرایش گزینه‌های گزارش"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:481
 #, fuzzy
+#| msgid "Edit report options"
 msgid "Delete report configuration"
 msgstr "ویرایش گزینه‌های گزارش"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#: ../src/report/report-gnome/report-gnome.scm:141
+#: ../src/report/report-gnome/report-gnome.scm:122
 #, fuzzy
+#| msgid "Edit report options"
 msgid "Saved Report Configurations"
 msgstr "ویرایش گزینه‌های گزارش"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 #, fuzzy
+#| msgid "Exit the custom report dialog"
 msgid "Exit the saved report configurations dialog"
 msgstr "خروج از پنجره‌ی گزارش سفارشی"
 
@@ -18684,24 +18861,25 @@ msgstr "هیچ گزینه‌ای برای این گزارش نیست"
 msgid "GnuCash-Report"
 msgstr "گزارش گنوکش"
 
-#: ../src/report/report-gnome/report-gnome.scm:73
+#: ../src/report/report-gnome/report-gnome.scm:54
 msgid "This report has no options."
 msgstr "این گزارش هیچ گزینه‌ای ندارد."
 
-#: ../src/report/report-gnome/report-gnome.scm:97
+#: ../src/report/report-gnome/report-gnome.scm:78
 msgid "Display the %s report"
 msgstr "نمایش گزارش‌های %s"
 
-#: ../src/report/report-gnome/report-gnome.scm:143
+#: ../src/report/report-gnome/report-gnome.scm:124
 #, fuzzy
+#| msgid "Manage and run custom reports"
 msgid "Manage and run saved report configurations"
 msgstr "مدیریت و اجرای گزارش‌های معمولی"
 
-#: ../src/report/report-gnome/report-gnome.scm:163
+#: ../src/report/report-gnome/report-gnome.scm:144
 msgid "Welcome Sample Report"
 msgstr "به مثال نمونه خوش‌آمدید"
 
-#: ../src/report/report-gnome/report-gnome.scm:165
+#: ../src/report/report-gnome/report-gnome.scm:146
 msgid "Welcome-to-GnuCash report screen"
 msgstr ""
 
@@ -18743,91 +18921,99 @@ msgstr ""
 msgid "Adjusting Entries"
 msgstr "تنظیم ورودی‌ها"
 
-#: ../src/report/report-system/html-fonts.scm:88
-#: ../src/report/report-system/html-fonts.scm:93
-#: ../src/report/report-system/html-fonts.scm:98
-#: ../src/report/report-system/html-fonts.scm:103
-#: ../src/report/report-system/html-fonts.scm:108
-#: ../src/report/report-system/html-fonts.scm:113
-#: ../src/report/report-system/html-fonts.scm:118
-#: ../src/report/report-system/html-fonts.scm:123
-#: ../src/report/report-system/html-fonts.scm:128
+#: ../src/report/report-system/html-fonts.scm:69
+#: ../src/report/report-system/html-fonts.scm:74
+#: ../src/report/report-system/html-fonts.scm:79
+#: ../src/report/report-system/html-fonts.scm:84
+#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:109
 msgid "Fonts"
 msgstr "دست‌خط"
 
-#: ../src/report/report-system/html-fonts.scm:89
+#: ../src/report/report-system/html-fonts.scm:70
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for the report title."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
-#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:75
 msgid "Account link"
 msgstr "پیوند حساب"
 
-#: ../src/report/report-system/html-fonts.scm:94
+#: ../src/report/report-system/html-fonts.scm:75
 #, fuzzy
+#| msgid "QIF account name"
 msgid "Font info for account name."
 msgstr "نام حساب QIF"
 
-#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:80
 msgid "Number cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:99
+#: ../src/report/report-system/html-fonts.scm:80
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for regular number cells."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
-#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:85
 msgid "Negative Values in Red"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:104
+#: ../src/report/report-system/html-fonts.scm:85
 msgid "Display negative values in red."
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:90
 msgid "Number header"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:90
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for number headers."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
-#: ../src/report/report-system/html-fonts.scm:114
+#: ../src/report/report-system/html-fonts.scm:95
 msgid "Text cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:114
+#: ../src/report/report-system/html-fonts.scm:95
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for regular text cells."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
-#: ../src/report/report-system/html-fonts.scm:119
+#: ../src/report/report-system/html-fonts.scm:100
 msgid "Total number cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:119
+#: ../src/report/report-system/html-fonts.scm:100
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for number cells containing a total."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
-#: ../src/report/report-system/html-fonts.scm:124
+#: ../src/report/report-system/html-fonts.scm:105
 msgid "Total label cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:124
+#: ../src/report/report-system/html-fonts.scm:105
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for cells containing total labels."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
-#: ../src/report/report-system/html-fonts.scm:129
+#: ../src/report/report-system/html-fonts.scm:110
 msgid "Centered label cell"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:129
+#: ../src/report/report-system/html-fonts.scm:110
 #, fuzzy
+#| msgid "Font info for the report title"
 msgid "Font info for centered label cells."
 msgstr "اطلاعات قلم برای عنوان گزارش"
 
@@ -18861,6 +19047,7 @@ msgstr "هیچ‌کدام از حساب‌ها انتخاب نشده‌اند"
 
 #: ../src/report/report-system/html-utilities.scm:841
 #, fuzzy
+#| msgid "This report requires accounts to be selected."
 msgid "This report requires accounts to be selected in the report options."
 msgstr "این گزارش نیاز به انتخاب حساب(ها)دارد."
 
@@ -18875,16 +19062,19 @@ msgstr ""
 
 #: ../src/report/report-system/options-utilities.scm:33
 #, fuzzy
+#| msgid "Select a file to import"
 msgid "Select a date to report on."
 msgstr "انتخاب یک فایل برای ورود"
 
 #: ../src/report/report-system/options-utilities.scm:39
 #, fuzzy
+#| msgid "Start of accounting period"
 msgid "Start of reporting period."
 msgstr "آغاز دوره‌ی زمانی حسابداری"
 
 #: ../src/report/report-system/options-utilities.scm:40
 #, fuzzy
+#| msgid "End of accounting period"
 msgid "End of reporting period."
 msgstr "پایان دوره‌ی زمانی حسابداری"
 
@@ -18906,6 +19096,7 @@ msgstr "هفته"
 
 #: ../src/report/report-system/options-utilities.scm:52
 #, fuzzy
+#| msgid "One Week Ago"
 msgid "One Week."
 msgstr "یک هفته گذشته"
 
@@ -18915,6 +19106,7 @@ msgstr "دو هفته"
 
 #: ../src/report/report-system/options-utilities.scm:53
 #, fuzzy
+#| msgid "Two Weeks"
 msgid "Two Weeks."
 msgstr "دو هفته"
 
@@ -18924,6 +19116,7 @@ msgstr "ماه"
 
 #: ../src/report/report-system/options-utilities.scm:54
 #, fuzzy
+#| msgid "One Month Ago"
 msgid "One Month."
 msgstr "یک ماه گذشته"
 
@@ -18933,6 +19126,7 @@ msgstr "سه ماهه"
 
 #: ../src/report/report-system/options-utilities.scm:55
 #, fuzzy
+#| msgid "Quarter"
 msgid "One Quarter."
 msgstr "سه ماهه"
 
@@ -18942,6 +19136,7 @@ msgstr "نیم سال"
 
 #: ../src/report/report-system/options-utilities.scm:56
 #, fuzzy
+#| msgid "Half Year"
 msgid "Half Year."
 msgstr "نیم سال"
 
@@ -18951,6 +19146,7 @@ msgstr "سال"
 
 #: ../src/report/report-system/options-utilities.scm:57
 #, fuzzy
+#| msgid "One Year Ago"
 msgid "One Year."
 msgstr "یک سال پیش"
 
@@ -18964,31 +19160,37 @@ msgstr "همه حساب‌ها"
 
 #: ../src/report/report-system/options-utilities.scm:76
 #, fuzzy
+#| msgid "Top-level"
 msgid "Top-level."
 msgstr "بالاترین سطح"
 
 #: ../src/report/report-system/options-utilities.scm:78
 #, fuzzy
+#| msgid "Second-level"
 msgid "Second-level."
 msgstr "سطح دوم"
 
 #: ../src/report/report-system/options-utilities.scm:80
 #, fuzzy
+#| msgid "Third-level"
 msgid "Third-level."
 msgstr "سطح سوم"
 
 #: ../src/report/report-system/options-utilities.scm:82
 #, fuzzy
+#| msgid "Fourth-level"
 msgid "Fourth-level."
 msgstr "سطح چهارم"
 
 #: ../src/report/report-system/options-utilities.scm:84
 #, fuzzy
+#| msgid "Fifth-level"
 msgid "Fifth-level."
 msgstr "سطح پنجم"
 
 #: ../src/report/report-system/options-utilities.scm:86
 #, fuzzy
+#| msgid "Sixth-level"
 msgid "Sixth-level."
 msgstr "سطح ششم"
 
@@ -19058,6 +19260,7 @@ msgstr "آخرین‌ّها"
 #: ../src/report/report-system/options-utilities.scm:183
 #: ../src/report/standard-reports/advanced-portfolio.scm:79
 #, fuzzy
+#| msgid "Next most recently opened file"
 msgid "The most recent recorded price."
 msgstr "فایل‌های باز شده اخیر بعدی"
 
@@ -19149,6 +19352,7 @@ msgstr "روش مرتب کردن حساب‌ها را انتخاب نمایید.
 
 #: ../src/report/report-system/options-utilities.scm:242
 #, fuzzy
+#| msgid "Alphabetical by account code"
 msgid "Alphabetical by account code."
 msgstr "الفبایی(با کد حساب)"
 
@@ -19158,16 +19362,19 @@ msgstr "الفبایی"
 
 #: ../src/report/report-system/options-utilities.scm:243
 #, fuzzy
+#| msgid "Alphabetical by account name"
 msgid "Alphabetical by account name."
 msgstr "الفبایی(با نام حساب)"
 
 #: ../src/report/report-system/options-utilities.scm:244
 #, fuzzy
+#| msgid "By amount, largest to smallest"
 msgid "By amount, largest to smallest."
 msgstr "از بزرگترین به کوچکترین مقدار"
 
 #: ../src/report/report-system/options-utilities.scm:260
 #, fuzzy
+#| msgid "You must choose a valid parent account."
 msgid "How to show the balances of parent accounts."
 msgstr "شما باید یک حساب والد معتبر وارد نمایید."
 
@@ -19192,11 +19399,13 @@ msgstr "عدم نمایش"
 
 #: ../src/report/report-system/options-utilities.scm:270
 #, fuzzy
+#| msgid "You must choose a valid parent account."
 msgid "Do not show any balances of parent accounts."
 msgstr "شما باید یک حساب والد معتبر وارد نمایید."
 
 #: ../src/report/report-system/options-utilities.scm:278
 #, fuzzy
+#| msgid "Show full account names (including parent accounts)"
 msgid "How to show account subtotals for parent accounts."
 msgstr "نمایش نام کامل حساب‌ها(شامل حساب‌های پایه)"
 
@@ -19210,6 +19419,7 @@ msgstr ""
 
 #: ../src/report/report-system/options-utilities.scm:285
 #, fuzzy
+#| msgid "You must choose a valid parent account."
 msgid "Do not show any subtotals for parent accounts."
 msgstr "شما باید یک حساب والد معتبر وارد نمایید."
 
@@ -19267,6 +19477,7 @@ msgstr ""
 
 #: ../src/report/report-system/report.scm:242
 #, fuzzy
+#| msgid "Enter a description of the split"
 msgid "Enter a descriptive name for this report."
 msgstr "شرح یک انشعاب را وارد کنید"
 
@@ -19276,6 +19487,7 @@ msgstr ""
 
 #: ../src/report/report-system/report.scm:255
 #, fuzzy
+#| msgid "New Style Sheet"
 msgid "stylesheet."
 msgstr "سبک جدید برای برگه"
 
@@ -19389,7 +19601,7 @@ msgstr "نمایش یک نمودار تکه ای بدهی ها بر اساس د�
 #. in *one* place.
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
-#: ../src/report/standard-reports/average-balance.scm:38
+#: ../src/report/standard-reports/average-balance.scm:19
 #: ../src/report/standard-reports/cash-flow.scm:44
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
@@ -19404,7 +19616,7 @@ msgid "Start Date"
 msgstr "تاریخ آغاز"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
-#: ../src/report/standard-reports/average-balance.scm:39
+#: ../src/report/standard-reports/average-balance.scm:20
 #: ../src/report/standard-reports/cash-flow.scm:45
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
@@ -19445,8 +19657,8 @@ msgid "Maximum Slices"
 msgstr "بیشینه‌ی قطعات"
 
 #: ../src/report/standard-reports/account-piecharts.scm:75
-#: ../src/report/standard-reports/average-balance.scm:130
-#: ../src/report/standard-reports/average-balance.scm:466
+#: ../src/report/standard-reports/average-balance.scm:111
+#: ../src/report/standard-reports/average-balance.scm:447
 #: ../src/report/standard-reports/category-barchart.scm:87
 #: ../src/report/standard-reports/daily-reports.scm:68
 #: ../src/report/standard-reports/net-barchart.scm:61
@@ -19456,8 +19668,8 @@ msgid "Plot Width"
 msgstr "عرض ترسیم"
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
-#: ../src/report/standard-reports/average-balance.scm:130
-#: ../src/report/standard-reports/average-balance.scm:468
+#: ../src/report/standard-reports/average-balance.scm:111
+#: ../src/report/standard-reports/average-balance.scm:449
 #: ../src/report/standard-reports/category-barchart.scm:88
 #: ../src/report/standard-reports/daily-reports.scm:69
 #: ../src/report/standard-reports/net-barchart.scm:62
@@ -19536,6 +19748,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/account-piecharts.scm:172
 #, fuzzy
+#| msgid "Maximum number of slices in pie"
 msgid "Maximum number of slices in pie."
 msgstr "بیشینه تعداد قطعات در در نمودار تکه ای"
 
@@ -19584,6 +19797,7 @@ msgstr "نام شرکت"
 #: ../src/report/standard-reports/sx-summary.scm:51
 #: ../src/report/standard-reports/trial-balance.scm:69
 #, fuzzy
+#| msgid "Name of company/individual"
 msgid "Name of company/individual."
 msgstr "نام شرکت/افرد"
 
@@ -19638,6 +19852,7 @@ msgstr "حساب‌ها با مجموع موجودی صفر را شامل شود
 #: ../src/report/standard-reports/sx-summary.scm:71
 #: ../src/report/standard-reports/trial-balance.scm:124
 #, fuzzy
+#| msgid "Include accounts with zero total (recursive) balances in this report"
 msgid "Include accounts with zero total (recursive) balances in this report."
 msgstr "این گزارش حساب‌ها با جمع موجودی صفر ( به صورت بازگشتی ) را شامل شود"
 
@@ -19682,18 +19897,21 @@ msgstr ""
 #: ../src/report/standard-reports/account-summary.scm:103
 #: ../src/report/standard-reports/sx-summary.scm:84
 #, fuzzy
+#| msgid "Show an account's balance"
 msgid "Show an account's balance."
 msgstr "نمایش مانده یک حساب"
 
 #: ../src/report/standard-reports/account-summary.scm:105
 #: ../src/report/standard-reports/sx-summary.scm:86
 #, fuzzy
+#| msgid "Show an account's balance"
 msgid "Show an account's account code."
 msgstr "نمایش مانده یک حساب"
 
 #: ../src/report/standard-reports/account-summary.scm:107
 #: ../src/report/standard-reports/sx-summary.scm:88
 #, fuzzy
+#| msgid "Show an account's balance"
 msgid "Show an account's account type."
 msgstr "نمایش مانده یک حساب"
 
@@ -19705,6 +19923,7 @@ msgstr "شرح حساب"
 #: ../src/report/standard-reports/account-summary.scm:109
 #: ../src/report/standard-reports/sx-summary.scm:90
 #, fuzzy
+#| msgid "Account Description"
 msgid "Show an account's description."
 msgstr "شرح حساب"
 
@@ -19716,6 +19935,7 @@ msgstr "یادداشت‌های حساب"
 #: ../src/report/standard-reports/account-summary.scm:111
 #: ../src/report/standard-reports/sx-summary.scm:92
 #, fuzzy
+#| msgid "Show an account's balance"
 msgid "Show an account's notes."
 msgstr "نمایش مانده یک حساب"
 
@@ -19742,6 +19962,7 @@ msgstr "نمایش نرخ تبدیل"
 #: ../src/report/standard-reports/sx-summary.scm:101
 #: ../src/report/standard-reports/trial-balance.scm:136
 #, fuzzy
+#| msgid "Show the exchange rates used"
 msgid "Show the exchange rates used."
 msgstr "نمایش نرخ تبدیل استفاده شده"
 
@@ -19827,8 +20048,8 @@ msgid "Basis calculation method."
 msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:90
-#: ../src/report/standard-reports/average-balance.scm:125
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:106
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Average"
 msgstr "میانگین"
 
@@ -19886,16 +20107,19 @@ msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:125
 #, fuzzy
+#| msgid "Display the totals?"
 msgid "Display the ticker symbols."
 msgstr "نمایش مجموع؟"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:132
 #, fuzzy
+#| msgid "Display the Units?"
 msgid "Display exchange listings."
 msgstr "نمایش واحدها؟"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:139
 #, fuzzy
+#| msgid "Display the account?"
 msgid "Display numbers of shares in accounts."
 msgstr "نمایش حساب؟"
 
@@ -19912,6 +20136,7 @@ msgstr "نمایش تاریخ؟"
 #: ../src/report/standard-reports/advanced-portfolio.scm:160
 #: ../src/report/standard-reports/portfolio.scm:73
 #, fuzzy
+#| msgid "Show customer report"
 msgid "Stock Accounts to report on."
 msgstr "نمایش گزارش‌های مشتری"
 
@@ -19979,11 +20204,11 @@ msgstr ""
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:36
+#: ../src/report/standard-reports/average-balance.scm:17
 msgid "Average Balance"
 msgstr "میانگین مانده حساب"
 
-#: ../src/report/standard-reports/average-balance.scm:40
+#: ../src/report/standard-reports/average-balance.scm:21
 #: ../src/report/standard-reports/category-barchart.scm:77
 #: ../src/report/standard-reports/net-barchart.scm:49
 #: ../src/report/standard-reports/net-linechart.scm:45
@@ -19991,32 +20216,34 @@ msgstr "میانگین مانده حساب"
 msgid "Step Size"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:43
+#: ../src/report/standard-reports/average-balance.scm:24
 #: ../src/report/standard-reports/daily-reports.scm:63
 msgid "Include Sub-Accounts"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:44
+#: ../src/report/standard-reports/average-balance.scm:25
 msgid "Exclude transactions between selected accounts"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:76
+#: ../src/report/standard-reports/average-balance.scm:57
 #: ../src/report/standard-reports/daily-reports.scm:95
 #, fuzzy
+#| msgid "Exclude transactions to/from all filter accounts"
 msgid "Include sub-accounts of all selected accounts."
 msgstr "مستثنی کردن تراکنش‌ها به/از تمام حساب‌های فیلتر شده"
 
-#: ../src/report/standard-reports/average-balance.scm:82
+#: ../src/report/standard-reports/average-balance.scm:63
 msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:89
+#: ../src/report/standard-reports/average-balance.scm:70
 #, fuzzy
+#| msgid "All transactions in this account will be deleted."
 msgid "Do transaction report on this account."
 msgstr "همه‌ی تراکنش‌های این حساب پاک خواهند شد."
 
-#: ../src/report/standard-reports/average-balance.scm:112
-#: ../src/report/standard-reports/average-balance.scm:342
+#: ../src/report/standard-reports/average-balance.scm:93
+#: ../src/report/standard-reports/average-balance.scm:323
 #: ../src/report/standard-reports/category-barchart.scm:184
 #: ../src/report/standard-reports/category-barchart.scm:253
 #: ../src/report/standard-reports/net-barchart.scm:133
@@ -20026,69 +20253,72 @@ msgstr "همه‌ی تراکنش‌های این حساب پاک خواهند ش
 msgid "Show table"
 msgstr "نمایش جدول"
 
-#: ../src/report/standard-reports/average-balance.scm:113
+#: ../src/report/standard-reports/average-balance.scm:94
 #: ../src/report/standard-reports/category-barchart.scm:185
 #: ../src/report/standard-reports/net-barchart.scm:134
 #: ../src/report/standard-reports/net-linechart.scm:140
 msgid "Display a table of the selected data."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:117
-#: ../src/report/standard-reports/average-balance.scm:341
+#: ../src/report/standard-reports/average-balance.scm:98
+#: ../src/report/standard-reports/average-balance.scm:322
 msgid "Show plot"
 msgstr "نمایش قطعه"
 
-#: ../src/report/standard-reports/average-balance.scm:118
+#: ../src/report/standard-reports/average-balance.scm:99
 msgid "Display a graph of the selected data."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:122
-#: ../src/report/standard-reports/average-balance.scm:340
+#: ../src/report/standard-reports/average-balance.scm:103
+#: ../src/report/standard-reports/average-balance.scm:321
 msgid "Plot Type"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:123
+#: ../src/report/standard-reports/average-balance.scm:104
 msgid "The type of graph to generate."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:125
+#: ../src/report/standard-reports/average-balance.scm:106
 #, fuzzy
+#| msgid "Average Balance"
 msgid "Average Balance."
 msgstr "میانگین مانده حساب"
 
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:107
 #, fuzzy
+#| msgid "Profit & Loss"
 msgid "Profit (Gain minus Loss)."
 msgstr "سود و زیان"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:108
 #, fuzzy
+#| msgid "Gain And Loss"
 msgid "Gain And Loss."
 msgstr "سود و زیان"
 
 #. Watch out -- these names should be consistent with the display
 #. option where you choose them, otherwise users are confused.
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Period start"
 msgstr "آغاز دوره"
 
-#: ../src/report/standard-reports/average-balance.scm:145
+#: ../src/report/standard-reports/average-balance.scm:126
 msgid "Period end"
 msgstr "پایان دوره"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Maximum"
 msgstr "بیشینه"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Minimum"
 msgstr "کمینه"
 
-#: ../src/report/standard-reports/average-balance.scm:146
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Gain"
 msgstr "سود"
 
-#: ../src/report/standard-reports/average-balance.scm:147
+#: ../src/report/standard-reports/average-balance.scm:128
 msgid "Loss"
 msgstr "زیان"
 
@@ -20310,6 +20540,7 @@ msgstr ""
 #: ../src/report/standard-reports/transaction.scm:653
 #: ../src/report/standard-reports/trial-balance.scm:79
 #, fuzzy
+#| msgid "Report only on these accounts"
 msgid "Report on these accounts."
 msgstr "تهیه گزارش،صرفا برای این حساب‌ها"
 
@@ -20335,6 +20566,7 @@ msgstr "دوره"
 #. currently selected budget
 #: ../src/report/standard-reports/budget-flow.scm:72
 #, fuzzy
+#| msgid "Period end"
 msgid "Period number."
 msgstr "پایان دوره"
 
@@ -20526,6 +20758,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/budget.scm:56
 #, fuzzy
+#| msgid "Display all the individual taxes?"
 msgid "Display a column for the actual values."
 msgstr "نمایش همه‌ی مالیات‌های انفرادی؟"
 
@@ -20543,6 +20776,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/budget.scm:60
 #, fuzzy
+#| msgid "Display the totals?"
 msgid "Display a column with the row totals."
 msgstr "نمایش مجموع؟"
 
@@ -20560,6 +20794,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/budget.scm:64
 #, fuzzy
+#| msgid "Include accounts with zero total (recursive) balances in this report"
 msgid "Include accounts with zero total (recursive) balances and budget values in this report."
 msgstr "این گزارش حساب‌ها با جمع موجودی صفر ( به صورت بازگشتی ) را شامل شود"
 
@@ -20574,6 +20809,7 @@ msgstr ""
 #: ../src/report/standard-reports/budget.scm:104
 #: ../src/report/standard-reports/cash-flow.scm:85
 #, fuzzy
+#| msgid "Show full account names (including parent accounts)"
 msgid "Show full account names (including parent accounts)."
 msgstr "نمایش نام کامل حساب‌ها(شامل حساب‌های پایه)"
 
@@ -20604,6 +20840,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/cash-flow.scm:104
 #, fuzzy
+#| msgid "Include transactions to/from filter accounts only"
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "شامل تراکنش‌ها به/از حساب‌های فیلتر شده "
 
@@ -20703,6 +20940,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/category-barchart.scm:178
 #, fuzzy
+#| msgid "Maximum number of slices in pie"
 msgid "Maximum number of bars in the chart."
 msgstr "بیشینه تعداد قطعات در در نمودار تکه ای"
 
@@ -20747,6 +20985,7 @@ msgstr "صورت حقوق صاحبان سهام"
 
 #: ../src/report/standard-reports/equity-statement.scm:72
 #, fuzzy
+#| msgid "Report only on these accounts"
 msgid "Report only on these accounts."
 msgstr "تهیه گزارش،صرفا برای این حساب‌ها"
 
@@ -20826,8 +21065,8 @@ msgstr "روزنامه‌ی عمومی"
 
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
-#: ../src/report/standard-reports/register.scm:145
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:126
+#: ../src/report/standard-reports/register.scm:391
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 msgid "Num/Action"
@@ -20837,7 +21076,7 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -21166,6 +21405,7 @@ msgstr "پایگاه‌داده‌ی قیمت‌ّها"
 
 #: ../src/report/standard-reports/price-scatter.scm:97
 #, fuzzy
+#| msgid "Edit the current price."
 msgid "The recorded prices."
 msgstr "ویرایش قیمت فعلی"
 
@@ -21175,6 +21415,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/price-scatter.scm:120
 #, fuzzy
+#| msgid "Color of the marker"
 msgid "Color of the marker."
 msgstr "رنگ نشانه‌گذاری"
 
@@ -21222,114 +21463,117 @@ msgstr ""
 msgid "Price Scatterplot"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:170
+#: ../src/report/standard-reports/register.scm:151
 msgid "Debit Value"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:172
+#: ../src/report/standard-reports/register.scm:153
 msgid "Credit Value"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:399
+#: ../src/report/standard-reports/register.scm:380
 #, fuzzy
+#| msgid "The title of the report"
 msgid "The title of the report."
 msgstr "عنوان گزارش"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:392
 msgid "Display the check number/action?"
 msgstr "نمایش شماره/کنش بررسی"
 
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:396
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "نمایش شماره چک؟"
 
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:406
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "نمایش یادداشت‌ها؟"
 
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:411
 msgid "Display the account?"
 msgstr "نمایش حساب؟"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:421
 msgid "Display the name of lot the shares are in?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:426
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:431
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "تکی"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:988
 #, fuzzy
+#| msgid "Select Columns"
 msgid "Single Column Display."
 msgstr "انتخاب ستون"
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Two Column Display."
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:459
+#: ../src/report/standard-reports/register.scm:440
 msgid "Display the value in transaction currency?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:445
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
+#| msgid "Display the transaction date?"
 msgid "Display a running balance?"
 msgstr "نمایش تاریخ تراکنش؟"
 
-#: ../src/report/standard-reports/register.scm:617
+#: ../src/report/standard-reports/register.scm:598
 msgid "Total Debits"
 msgstr "مجموع بدهی‌ّها"
 
-#: ../src/report/standard-reports/register.scm:619
+#: ../src/report/standard-reports/register.scm:600
 msgid "Total Credits"
 msgstr "مجموع بستانکاری‌ها"
 
-#: ../src/report/standard-reports/register.scm:621
+#: ../src/report/standard-reports/register.scm:602
 msgid "Total Value Debits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:623
+#: ../src/report/standard-reports/register.scm:604
 msgid "Total Value Credits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:626
+#: ../src/report/standard-reports/register.scm:607
 msgid "Net Change"
 msgstr "تغییر خالص"
 
-#: ../src/report/standard-reports/register.scm:629
+#: ../src/report/standard-reports/register.scm:610
 msgid "Value Change"
 msgstr "تغییر ارزش"
 
-#: ../src/report/standard-reports/register.scm:788
+#: ../src/report/standard-reports/register.scm:769
 msgid "Client"
 msgstr ""
 
@@ -21363,6 +21607,7 @@ msgstr "انتقال از/به"
 
 #: ../src/report/standard-reports/transaction.scm:618
 #, fuzzy
+#| msgid "Report style"
 msgid "Report style."
 msgstr "سبک گزارش"
 
@@ -21372,16 +21617,19 @@ msgstr "چند خطی"
 
 #: ../src/report/standard-reports/transaction.scm:622
 #, fuzzy
+#| msgid "Display N lines"
 msgid "Display N lines."
 msgstr "نمایش چند خط"
 
 #: ../src/report/standard-reports/transaction.scm:625
 #, fuzzy
+#| msgid "Display 1 line"
 msgid "Display 1 line."
 msgstr "نمایش یک خط"
 
 #: ../src/report/standard-reports/transaction.scm:630
 #, fuzzy
+#| msgid "Convert all transactions into a common currency"
 msgid "Convert all transactions into a common currency."
 msgstr "تبدیل تمام تراکنش‌ها به یک ارز عمومی"
 
@@ -21391,16 +21639,19 @@ msgstr ""
 
 #: ../src/report/standard-reports/transaction.scm:666
 #, fuzzy
+#| msgid "Filter on these accounts"
 msgid "Filter on these accounts."
 msgstr "فیلتر(پالایه) روی این حساب‌ها"
 
 #: ../src/report/standard-reports/transaction.scm:682
 #, fuzzy
+#| msgid "Filter account"
 msgid "Filter account."
 msgstr "فیلتر(پالایه) حساب"
 
 #: ../src/report/standard-reports/transaction.scm:686
 #, fuzzy
+#| msgid "Do not do any filtering"
 msgid "Do not do any filtering."
 msgstr "عدم اجرای هیچ فیلتری"
 
@@ -21410,6 +21661,7 @@ msgstr "شامل تراکنش‌ها به/از حساب‌های فیلتر شد
 
 #: ../src/report/standard-reports/transaction.scm:689
 #, fuzzy
+#| msgid "Include transactions to/from filter accounts only"
 msgid "Include transactions to/from filter accounts only."
 msgstr "شامل تراکنش‌ها به/از حساب‌های فیلتر شده "
 
@@ -21419,11 +21671,13 @@ msgstr "مستثنی کردن تراکنش‌ها به/از تمام حساب‌
 
 #: ../src/report/standard-reports/transaction.scm:692
 #, fuzzy
+#| msgid "Exclude transactions to/from all filter accounts"
 msgid "Exclude transactions to/from all filter accounts."
 msgstr "مستثنی کردن تراکنش‌ها به/از تمام حساب‌های فیلتر شده"
 
 #: ../src/report/standard-reports/transaction.scm:700
 #, fuzzy
+#| msgid "How to handle void transactions"
 msgid "How to handle void transactions."
 msgstr "چگونگی رفتار با تراکنش های باطل شده"
 
@@ -21433,6 +21687,7 @@ msgstr "فقط غیر باطل‌ها"
 
 #: ../src/report/standard-reports/transaction.scm:705
 #, fuzzy
+#| msgid "Show only non-voided transactions"
 msgid "Show only non-voided transactions."
 msgstr "صرفا نمایش تراکنش‌های غیر باطل"
 
@@ -21442,6 +21697,7 @@ msgstr "فقط باطل شده‌ها"
 
 #: ../src/report/standard-reports/transaction.scm:709
 #, fuzzy
+#| msgid "Show only voided transactions"
 msgid "Show only voided transactions."
 msgstr "صرفا نمایش تراکنش‌های باطل"
 
@@ -21451,24 +21707,28 @@ msgstr "هردو"
 
 #: ../src/report/standard-reports/transaction.scm:713
 #, fuzzy
+#| msgid "Show both (and include void transactions in totals)"
 msgid "Show both (and include void transactions in totals)."
 msgstr "نمایش هر دو ( و شامل تراکنش‌های باطل در جمع‌ها)"
 
 #: ../src/report/standard-reports/transaction.scm:723
 #: ../src/report/standard-reports/transaction.scm:778
 #, fuzzy
+#| msgid "Do not sort"
 msgid "Do not sort."
 msgstr "مرتب سازی نشود"
 
 #: ../src/report/standard-reports/transaction.scm:727
 #: ../src/report/standard-reports/transaction.scm:782
 #, fuzzy
+#| msgid "Sort & subtotal by account name"
 msgid "Sort & subtotal by account name."
 msgstr "مرتب سازی و جمع جزئی بر اساس نام حساب"
 
 #: ../src/report/standard-reports/transaction.scm:731
 #: ../src/report/standard-reports/transaction.scm:786
 #, fuzzy
+#| msgid "Sort & subtotal by account code"
 msgid "Sort & subtotal by account code."
 msgstr "مرتب‌سازی و جمع جزئی بر اساس کد حساب"
 
@@ -21480,12 +21740,14 @@ msgstr "زمان دقیق"
 #: ../src/report/standard-reports/transaction.scm:739
 #: ../src/report/standard-reports/transaction.scm:794
 #, fuzzy
+#| msgid "Sort by exact time"
 msgid "Sort by exact time."
 msgstr "مرتب سازی بر اساس زمان"
 
 #: ../src/report/standard-reports/transaction.scm:743
 #: ../src/report/standard-reports/transaction.scm:798
 #, fuzzy
+#| msgid "Sort by the Reconciled Date"
 msgid "Sort by the Reconciled Date."
 msgstr "مرتب‌سازی بر اساس تاریخ مطابقت"
 
@@ -21497,6 +21759,7 @@ msgstr "ترتیب ثبات"
 #: ../src/report/standard-reports/transaction.scm:747
 #: ../src/report/standard-reports/transaction.scm:802
 #, fuzzy
+#| msgid "Sort as with the register"
 msgid "Sort as with the register."
 msgstr "مرتب سازی بر اساس ثبات"
 
@@ -21512,56 +21775,67 @@ msgstr ""
 
 #: ../src/report/standard-reports/transaction.scm:767
 #, fuzzy
+#| msgid "Sort by check number/action"
 msgid "Sort by check number/action."
 msgstr "مرتب کردن بر اساس شماره/کنش بررسی"
 
 #: ../src/report/standard-reports/transaction.scm:771
 #, fuzzy
+#| msgid "Sort by transaction number"
 msgid "Sort by transaction number."
 msgstr "مرتب کردن بر اساس شماره‌ی تراکنش"
 
 #: ../src/report/standard-reports/transaction.scm:822
 #, fuzzy
+#| msgid "Sort by transaction number"
 msgid "Sort by check/transaction number."
 msgstr "مرتب کردن بر اساس شماره‌ی تراکنش"
 
 #: ../src/report/standard-reports/transaction.scm:832
 #, fuzzy
+#| msgid "smallest to largest, earliest to latest"
 msgid "Smallest to largest, earliest to latest."
 msgstr "کوچک‌تر به بزرگ‌تر، جدیدتر به قدیم‌تر"
 
 #: ../src/report/standard-reports/transaction.scm:835
 #, fuzzy
+#| msgid "largest to smallest, latest to earliest"
 msgid "Largest to smallest, latest to earliest."
 msgstr "بزرگ‌تر به کوچک‌تر ، قدیمی‌تر به جدیدتر"
 
 #: ../src/report/standard-reports/transaction.scm:839
 #, fuzzy
+#| msgid "None"
 msgid "None."
 msgstr "هیچ"
 
 #: ../src/report/standard-reports/transaction.scm:840
 #, fuzzy
+#| msgid "Weekly"
 msgid "Weekly."
 msgstr "هفتگی"
 
 #: ../src/report/standard-reports/transaction.scm:841
 #, fuzzy
+#| msgid "Monthly"
 msgid "Monthly."
 msgstr "ماهانه"
 
 #: ../src/report/standard-reports/transaction.scm:842
 #, fuzzy
+#| msgid "Quarterly"
 msgid "Quarterly."
 msgstr "سه ماهه"
 
 #: ../src/report/standard-reports/transaction.scm:843
 #, fuzzy
+#| msgid "Yearly"
 msgid "Yearly."
 msgstr "سالانه"
 
 #: ../src/report/standard-reports/transaction.scm:849
 #, fuzzy
+#| msgid "Sort by this criterion first"
 msgid "Sort by this criterion first."
 msgstr "مرتب‌سازی اول بر اساس این معیار"
 
@@ -21580,16 +21854,19 @@ msgstr "جمع جزئی بر اساس کلید اولیه صورت گیرد؟"
 #: ../src/report/standard-reports/transaction.scm:884
 #: ../src/report/standard-reports/transaction.scm:921
 #, fuzzy
+#| msgid "Display the subtotals?"
 msgid "Do a date subtotal."
 msgstr "نمایش جمع‌ّهای جزئی؟"
 
 #: ../src/report/standard-reports/transaction.scm:891
 #, fuzzy
+#| msgid "Order of primary sorting"
 msgid "Order of primary sorting."
 msgstr "ترتیب مرتب سازی اصلی"
 
 #: ../src/report/standard-reports/transaction.scm:900
 #, fuzzy
+#| msgid "Sort by this criterion second"
 msgid "Sort by this criterion second."
 msgstr "مرتب سازی بر اساس این ضابطه‌ی دومی"
 
@@ -21599,6 +21876,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/transaction.scm:928
 #, fuzzy
+#| msgid "Order of primary sorting"
 msgid "Order of Secondary sorting."
 msgstr "ترتیب مرتب سازی اصلی"
 
@@ -21617,11 +21895,13 @@ msgstr ""
 #: ../src/report/standard-reports/transaction.scm:950
 #: ../src/report/standard-reports/transaction.scm:954
 #, fuzzy
+#| msgid "Display the account?"
 msgid "Display the full account name?"
 msgstr "نمایش حساب؟"
 
 #: ../src/report/standard-reports/transaction.scm:951
 #, fuzzy
+#| msgid "Display the account?"
 msgid "Display the account code?"
 msgstr "نمایش حساب؟"
 
@@ -21631,6 +21911,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/transaction.scm:955
 #, fuzzy
+#| msgid "Display the other account code"
 msgid "Display the other account code?"
 msgstr "نمایش کد سایر حساب‌ها"
 
@@ -21644,6 +21925,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/transaction.scm:994
 #, fuzzy
+#| msgid "You must select an account type."
 msgid "Reverse amount display for certain account types."
 msgstr "شما باید یک نوع حساب را انتخاب نمایید"
 
@@ -21657,6 +21939,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/transaction.scm:999
 #, fuzzy
+#| msgid "Show the income and expense accounts"
 msgid "Reverse amount display for Income and Expense Accounts."
 msgstr "نمایش حساب‌های درآمدی و هزینه‌ای"
 
@@ -21780,6 +22063,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/trial-balance.scm:85
 #, fuzzy
+#| msgid "You have selected no accounts."
 msgid "Gross adjustment accounts."
 msgstr "هیچ کدام از حساب‌ها را انتخاب نکرده‌اید."
 
@@ -21865,6 +22149,7 @@ msgstr ""
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:52
 #, fuzzy
+#| msgid "Edit report options"
 msgid "Edit report style sheets"
 msgstr "ویرایش گزینه‌های گزارش"
 
@@ -21911,6 +22196,7 @@ msgstr ""
 #: ../src/report/stylesheets/stylesheet-fancy.scm:54
 #: ../src/report/stylesheets/stylesheet-footer.scm:65
 #, fuzzy
+#| msgid "Name of the company"
 msgid "Name of organization or company."
 msgstr "نام شرکت"
 
@@ -22012,6 +22298,7 @@ msgstr "چپ"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:80
 #: ../src/report/stylesheets/stylesheet-footer.scm:99
 #, fuzzy
+#| msgid "Align the banner to the left"
 msgid "Align the banner to the left."
 msgstr "تراز بندی نشان به سمت چپ"
 
@@ -22025,6 +22312,7 @@ msgstr "مرکز"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:83
 #: ../src/report/stylesheets/stylesheet-footer.scm:102
 #, fuzzy
+#| msgid "Align the banner in the center"
 msgid "Align the banner in the center."
 msgstr "تراز بندی نشان در وسط"
 
@@ -22038,6 +22326,7 @@ msgstr "راست"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:86
 #: ../src/report/stylesheets/stylesheet-footer.scm:105
 #, fuzzy
+#| msgid "Align the banner to the right"
 msgid "Align the banner to the right."
 msgstr "ترازبندی نشان به سمت راست"
 
@@ -22063,7 +22352,7 @@ msgstr "تصویر لوگوی شرکت."
 #: ../src/report/stylesheets/stylesheet-footer.scm:116
 #: ../src/report/stylesheets/stylesheet-footer.scm:209
 #: ../src/report/stylesheets/stylesheet-plain.scm:48
-#: ../src/report/utility-reports/hello-world.scm:160
+#: ../src/report/utility-reports/hello-world.scm:141
 msgid "Background Color"
 msgstr ""
 
@@ -22079,7 +22368,7 @@ msgstr "رتگ عمومی برای پس‌زمینه گزارش."
 #: ../src/report/stylesheets/stylesheet-fancy.scm:190
 #: ../src/report/stylesheets/stylesheet-footer.scm:123
 #: ../src/report/stylesheets/stylesheet-footer.scm:210
-#: ../src/report/utility-reports/hello-world.scm:167
+#: ../src/report/utility-reports/hello-world.scm:148
 msgid "Text Color"
 msgstr ""
 
@@ -22163,6 +22452,7 @@ msgstr ""
 #: ../src/report/stylesheets/stylesheet-fancy.scm:142
 #: ../src/report/stylesheets/stylesheet-footer.scm:161
 #, fuzzy
+#| msgid "Color for grand totals"
 msgid "Color for subsubtotals."
 msgstr "رنگ زمینه‌ی «جمع کل»"
 
@@ -22179,6 +22469,7 @@ msgstr "رنگ زمینه‌ی«جمع کل»"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:150
 #: ../src/report/stylesheets/stylesheet-footer.scm:169
 #, fuzzy
+#| msgid "Color for grand totals"
 msgid "Color for grand totals."
 msgstr "رنگ زمینه‌ی «جمع کل»"
 
@@ -22309,74 +22600,76 @@ msgstr ""
 msgid "Plain"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:61
-#: ../src/report/utility-reports/hello-world.scm:71
-#: ../src/report/utility-reports/hello-world.scm:97
-#: ../src/report/utility-reports/hello-world.scm:108
-#: ../src/report/utility-reports/hello-world.scm:117
-#: ../src/report/utility-reports/hello-world.scm:124
-#: ../src/report/utility-reports/hello-world.scm:131
-#: ../src/report/utility-reports/hello-world.scm:142
-#: ../src/report/utility-reports/hello-world.scm:160
-#: ../src/report/utility-reports/hello-world.scm:167
+#: ../src/report/utility-reports/hello-world.scm:42
+#: ../src/report/utility-reports/hello-world.scm:52
+#: ../src/report/utility-reports/hello-world.scm:78
+#: ../src/report/utility-reports/hello-world.scm:89
+#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:105
+#: ../src/report/utility-reports/hello-world.scm:112
+#: ../src/report/utility-reports/hello-world.scm:123
+#: ../src/report/utility-reports/hello-world.scm:141
+#: ../src/report/utility-reports/hello-world.scm:148
 msgid "Hello, World!"
 msgstr "سلام بر جهان!"
 
-#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:42
 msgid "Boolean Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:62
+#: ../src/report/utility-reports/hello-world.scm:43
 msgid "This is a boolean option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:71
+#: ../src/report/utility-reports/hello-world.scm:52
 msgid "Multi Choice Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:72
+#: ../src/report/utility-reports/hello-world.scm:53
 msgid "This is a multi choice option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:75
+#: ../src/report/utility-reports/hello-world.scm:56
 msgid "First Option"
 msgstr "اولین گزینه"
 
-#: ../src/report/utility-reports/hello-world.scm:76
+#: ../src/report/utility-reports/hello-world.scm:57
 msgid "Help for first option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:60
 msgid "Second Option"
 msgstr "دومین گزینه"
 
-#: ../src/report/utility-reports/hello-world.scm:80
+#: ../src/report/utility-reports/hello-world.scm:61
 #, fuzzy
+#| msgid "Second Option"
 msgid "Help for second option."
 msgstr "دومین گزینه"
 
-#: ../src/report/utility-reports/hello-world.scm:83
+#: ../src/report/utility-reports/hello-world.scm:64
 msgid "Third Option"
 msgstr "سومین گزینه"
 
-#: ../src/report/utility-reports/hello-world.scm:84
+#: ../src/report/utility-reports/hello-world.scm:65
 msgid "Help for third option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:87
+#: ../src/report/utility-reports/hello-world.scm:68
 msgid "Fourth Options"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:88
+#: ../src/report/utility-reports/hello-world.scm:69
 msgid "The fourth option rules!"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:97
+#: ../src/report/utility-reports/hello-world.scm:78
 msgid "String Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:79
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is a string option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
@@ -22391,221 +22684,231 @@ msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 #. The name of this report. This will be used, among other things,
 #. for making its menu item in the main menu. You need to use the
 #. untranslated value here!
-#: ../src/report/utility-reports/hello-world.scm:98
-#: ../src/report/utility-reports/hello-world.scm:332
-#: ../src/report/utility-reports/hello-world.scm:497
+#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:313
+#: ../src/report/utility-reports/hello-world.scm:478
 msgid "Hello, World"
 msgstr "سلام بر جهان"
 
-#: ../src/report/utility-reports/hello-world.scm:108
+#: ../src/report/utility-reports/hello-world.scm:89
 msgid "Just a Date Option"
 msgstr "فقط یک گزینه‌ی تاریخ"
 
-#: ../src/report/utility-reports/hello-world.scm:109
+#: ../src/report/utility-reports/hello-world.scm:90
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is a date option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
-#: ../src/report/utility-reports/hello-world.scm:117
+#: ../src/report/utility-reports/hello-world.scm:98
 msgid "Time and Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:118
+#: ../src/report/utility-reports/hello-world.scm:99
 #, fuzzy
+#| msgid "The date option is %s."
 msgid "This is a date option with time."
 msgstr "گزینه‌ی تاریخ %s است."
 
-#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:105
 msgid "Combo Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:125
+#: ../src/report/utility-reports/hello-world.scm:106
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is a combination date option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
-#: ../src/report/utility-reports/hello-world.scm:131
+#: ../src/report/utility-reports/hello-world.scm:112
 msgid "Relative Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:132
+#: ../src/report/utility-reports/hello-world.scm:113
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is a relative date option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
-#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:123
 msgid "Number Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:143
+#: ../src/report/utility-reports/hello-world.scm:124
 msgid "This is a number option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:161
-#: ../src/report/utility-reports/hello-world.scm:168
+#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:149
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is a color option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
-#: ../src/report/utility-reports/hello-world.scm:189
-#: ../src/report/utility-reports/hello-world.scm:202
+#: ../src/report/utility-reports/hello-world.scm:170
+#: ../src/report/utility-reports/hello-world.scm:183
 msgid "Hello Again"
 msgstr "دوباره سلام"
 
-#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:170
 msgid "An account list option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:190
+#: ../src/report/utility-reports/hello-world.scm:171
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is an account list option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
-#: ../src/report/utility-reports/hello-world.scm:202
+#: ../src/report/utility-reports/hello-world.scm:183
 msgid "A list option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:184
 #, fuzzy
+#| msgid "This is a color option"
 msgid "This is a list option."
 msgstr "این یک گزینه‌ی انتخاب رنگ می‌باشد"
 
-#: ../src/report/utility-reports/hello-world.scm:207
+#: ../src/report/utility-reports/hello-world.scm:188
 msgid "The Good"
 msgstr "خوب"
 
-#: ../src/report/utility-reports/hello-world.scm:208
+#: ../src/report/utility-reports/hello-world.scm:189
 #, fuzzy
+#| msgid "Good option"
 msgid "Good option."
 msgstr "گزینه‌ی خوب"
 
-#: ../src/report/utility-reports/hello-world.scm:211
+#: ../src/report/utility-reports/hello-world.scm:192
 msgid "The Bad"
 msgstr "بد"
 
-#: ../src/report/utility-reports/hello-world.scm:212
+#: ../src/report/utility-reports/hello-world.scm:193
 #, fuzzy
+#| msgid "Bad option"
 msgid "Bad option."
 msgstr "گزینه‌ی بد"
 
-#: ../src/report/utility-reports/hello-world.scm:215
+#: ../src/report/utility-reports/hello-world.scm:196
 msgid "The Ugly"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:216
+#: ../src/report/utility-reports/hello-world.scm:197
 #, fuzzy
+#| msgid "Bad option"
 msgid "Ugly option."
 msgstr "گزینه‌ی بد"
 
-#: ../src/report/utility-reports/hello-world.scm:222
+#: ../src/report/utility-reports/hello-world.scm:203
 msgid "Testing"
 msgstr "در حال آزمایش"
 
-#: ../src/report/utility-reports/hello-world.scm:222
+#: ../src/report/utility-reports/hello-world.scm:203
 msgid "Crash the report"
 msgstr "گزارش پولی"
 
-#: ../src/report/utility-reports/hello-world.scm:224
+#: ../src/report/utility-reports/hello-world.scm:205
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:347
+#: ../src/report/utility-reports/hello-world.scm:328
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:353
+#: ../src/report/utility-reports/hello-world.scm:334
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:358
+#: ../src/report/utility-reports/hello-world.scm:339
 msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:359
+#: ../src/report/utility-reports/hello-world.scm:340
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:363
+#: ../src/report/utility-reports/hello-world.scm:344
 msgid "The current time is %s."
 msgstr "زمان فعلی %s می‌باشد."
 
-#: ../src/report/utility-reports/hello-world.scm:368
+#: ../src/report/utility-reports/hello-world.scm:349
 msgid "The boolean option is %s."
 msgstr "گزینه‌ی بولین %s است."
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:350
 msgid "true"
 msgstr "درست"
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:350
 msgid "false"
 msgstr "نادرست"
 
-#: ../src/report/utility-reports/hello-world.scm:373
+#: ../src/report/utility-reports/hello-world.scm:354
 msgid "The multi-choice option is %s."
 msgstr "گزینه‌ی چند انتخابی %s است."
 
-#: ../src/report/utility-reports/hello-world.scm:378
+#: ../src/report/utility-reports/hello-world.scm:359
 msgid "The string option is %s."
 msgstr "گزینه‌ی رشته‌ای %s است."
 
-#: ../src/report/utility-reports/hello-world.scm:383
+#: ../src/report/utility-reports/hello-world.scm:364
 msgid "The date option is %s."
 msgstr "گزینه‌ی تاریخ %s است."
 
-#: ../src/report/utility-reports/hello-world.scm:388
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "The date and time option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:393
+#: ../src/report/utility-reports/hello-world.scm:374
 msgid "The relative date option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:398
+#: ../src/report/utility-reports/hello-world.scm:379
 msgid "The combination date option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:403
+#: ../src/report/utility-reports/hello-world.scm:384
 msgid "The number option is %s."
 msgstr "گزینه‌ی عددی %s است."
 
-#: ../src/report/utility-reports/hello-world.scm:414
+#: ../src/report/utility-reports/hello-world.scm:395
 msgid "The number option formatted as currency is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:426
+#: ../src/report/utility-reports/hello-world.scm:407
 msgid "Items you selected:"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:433
+#: ../src/report/utility-reports/hello-world.scm:414
 msgid "List items selected"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:438
+#: ../src/report/utility-reports/hello-world.scm:419
 msgid "(You selected no list items.)"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:474
+#: ../src/report/utility-reports/hello-world.scm:455
 msgid "You have selected no accounts."
 msgstr "هیچ کدام از حساب‌ها را انتخاب نکرده‌اید."
 
-#: ../src/report/utility-reports/hello-world.scm:479
+#: ../src/report/utility-reports/hello-world.scm:460
 msgid "Display help"
 msgstr "نمایش راهنما"
 
-#: ../src/report/utility-reports/hello-world.scm:484
+#: ../src/report/utility-reports/hello-world.scm:465
 msgid "Have a nice day!"
 msgstr "انشاالله روز خیلی خوبی داشته باشید!"
 
 #. The name in the menu
 #. (only necessary if it differs from the name)
-#: ../src/report/utility-reports/hello-world.scm:508
+#: ../src/report/utility-reports/hello-world.scm:489
 msgid "Sample Report with Examples"
 msgstr "گزارش نمونه با مثال"
 
 #. A tip that is used to provide additional information about the
 #. report to the user.
-#: ../src/report/utility-reports/hello-world.scm:512
+#: ../src/report/utility-reports/hello-world.scm:493
 msgid "A sample report with examples."
 msgstr "یک گزارش ساده با نمونه‌ها."
 
@@ -22641,6 +22944,7 @@ msgstr "به گنوکش خوش آمدید."
 
 #: ../src/report/utility-reports/welcome-to-gnucash.scm:97
 #, fuzzy, scheme-format
+#| msgid "Welcome to GnuCash"
 msgid "Welcome to GnuCash ~a !"
 msgstr "به گنوکش خوش آمدید."
 
@@ -22697,15 +23001,15 @@ msgstr ""
 msgid "Adding remaining good quotes."
 msgstr ""
 
-#: ../src/tax/us/de_DE.scm:56
+#: ../src/tax/us/de_DE.scm:37
 msgid "Tax Number"
 msgstr "شماره مالیاتی"
 
-#: ../src/tax/us/txf-de_DE.scm:349
+#: ../src/tax/us/txf-de_DE.scm:330
 msgid "The electronic tax number of your business"
 msgstr ""
 
-#: ../src/tax/us/txf.scm:106
+#: ../src/tax/us/txf.scm:87
 msgid "No help available."
 msgstr "هیچ کمکی در دسترس نیست."
 
@@ -22874,6 +23178,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:90
 #, fuzzy
+#| msgid "The GnuCash developers are easy to contact.  As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
 msgid "The GnuCash developers are easy to contact. As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
 msgstr "ارتباط با توسعه‌دهندگان گنوکش راحت است.از طریق لیست رایانامه و یا گپ از طریق ارتباط با کانال IRC و عضویت در #gnucash در irc.gnome.org"
 
@@ -22888,59 +23193,6 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:101
 msgid "To search through all your transactions, start a search (Edit -> Find...) from the main accounts hierarchy page. To limit your search to a single account, start the search from that account's register."
 msgstr ""
-
-#, fuzzy
-#~| msgid "Remove the current price"
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "پاک کردن قیمت فعلی"
-
-#, fuzzy
-#~| msgid "Every "
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "هر"
-
-#, fuzzy
-#~| msgid "days."
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "روزها."
-
-#, fuzzy
-#~| msgid "Every "
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "هر"
-
-#, fuzzy
-#~| msgid "weeks."
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "هفته‌ها."
-
-#, fuzzy
-#~| msgid "Every "
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "هر"
-
-#, fuzzy
-#~| msgid "months."
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "ماه."
-
-#, fuzzy
-#~| msgid "Every "
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "هر"
-
-#, fuzzy
-#~| msgid "months."
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "ماه."
 
 #~ msgid "GCONFPATH"
 #~ msgstr "GCONFPATH"
@@ -22980,6 +23232,15 @@ msgstr ""
 
 #~ msgid "_Icons only"
 #~ msgstr "_I فقط نشانک"
+
+#~ msgid "days."
+#~ msgstr "روزها."
+
+#~ msgid "weeks."
+#~ msgstr "هفته‌ها."
+
+#~ msgid "months."
+#~ msgstr "ماه."
 
 #~ msgid "Order of columns in the dialog"
 #~ msgstr "ترتیب ستون‌ّها در این گفتنگو"
