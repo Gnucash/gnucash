@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-27 10:47-0700\n"
-"PO-Revision-Date: 2015-09-27 09:32+0200\n"
+"PO-Revision-Date: 2015-10-04 21:43+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -1955,7 +1955,7 @@ msgstr "Bemerkungen Auslagenerstattung"
 #: ../../gnucash-git/po/../src/report/standard-reports/account-summary.scm:441
 #: ../../gnucash-git/po/../src/report/standard-reports/sx-summary.scm:446
 msgid "Type"
-msgstr "Kontoart"
+msgstr "Art"
 
 #: ../../gnucash-git/po/../src/business/business-gnome/dialog-invoice.c:3074
 #: ../../gnucash-git/po/../src/register/ledger-core/split-register-model.c:300
@@ -5380,7 +5380,7 @@ msgstr "A_ktionen"
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
-"Diese terminierte Buchung wurde geändert. Sind Sie sicher, dass Sie"
+"Diese terminierte Buchung wurde geändert. Sind Sie sicher, dass Sie\n"
 "abbrechen wollen?"
 
 #: ../../gnucash-git/po/../src/gnome/dialog-sx-editor2.c:648
@@ -6395,7 +6395,7 @@ msgstr "Ungültige Buchung wieder_herstellen"
 #: ../../gnucash-git/po/../src/gnome/gnc-plugin-page-register2.c:302
 #: ../../gnucash-git/po/../src/gnome/gnc-plugin-page-register.c:307
 msgid "Add _Reversing Transaction"
-msgstr "Stornierungsbuchung _hinzufügen"
+msgstr "Stornobuchung _hinzufügen"
 
 #: ../../gnucash-git/po/../src/gnome/gnc-plugin-page-register2.c:306
 msgid "Move Transaction _Up"
@@ -9064,8 +9064,8 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
-"Geben Sie die Anzahl der Aktien ein, die sie durch die Aktienteilung oder "
-"Zusammenschluss gewonnen oder verloren haben. Für einen Zusammenschluss geben "
+"Geben Sie die Anzahl der Aktien ein, die Sie durch die Aktienteilung oder "
+"-zusammenschluss gewonnen oder verloren haben. Für einen Zusammenschluss geben "
 "Sie eine negative Zahl ein. Sie können auch eine Beschreibung des "
 "Buchungssatzes eingeben."
 
@@ -9181,9 +9181,8 @@ msgid "Remove the current commodity."
 msgstr "Aktuelle Devise/Wertpapier entfernen."
 
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:6
-#, fuzzy
 msgid "Edit the current commodity."
-msgstr "Aktuelle Devise/Wertpapier entfernen."
+msgstr "Aktuelle Devise/Wertpapier bearbeiten."
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:1
 msgid "Loan Repayment Calculator"
@@ -9522,11 +9521,11 @@ msgstr "Briefkurs"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:24
 msgid "Last"
-msgstr "Letzter"
+msgstr "Vortag"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:25
 msgid "Net Asset Value"
-msgstr "Nettoinventarwert"
+msgstr "Nettoanteilswert"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:27
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:26
@@ -12668,11 +12667,10 @@ msgstr "_Berechnen"
 msgid "Account Name"
 msgstr "Kontobezeichnung"
 
-#, this is improved in the UI
 #: ../../gnucash-git/po/../src/gnome-utils/gnc-tree-view-account.c:737
 #: ../../gnucash-git/po/../src/gnome-utils/gnc-tree-view-split-reg.c:3016
 msgid "Commodity"
-msgstr "Währung"
+msgstr "Devise/Wertpapier"
 
 #: ../../gnucash-git/po/../src/gnome-utils/gnc-tree-view-account.c:743
 #: ../../gnucash-git/po/../src/report/report-system/options-utilities.scm:242
@@ -14863,21 +14861,25 @@ msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
+#, fuzzy
 msgctxt "Daily"
 msgid "Every"
 msgstr "Alle"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
+#, fuzzy
 msgctxt "Daily"
 msgid "days."
 msgstr "Tage."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
+#, fuzzy
 msgctxt "Weekly"
 msgid "Every"
 msgstr "Alle"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
+#, fuzzy
 msgctxt "Weekly"
 msgid "weeks."
 msgstr "Wochen."
@@ -14924,11 +14926,13 @@ msgid "Tuesday"
 msgstr "Dienstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
+#, fuzzy
 msgctxt "Semimonthly"
 msgid "Every"
 msgstr "Alle"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
+#, fuzzy
 msgctxt "Semimonthly"
 msgid "months."
 msgstr "Monate."
@@ -14950,10 +14954,13 @@ msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
+#, fuzzy
 msgctxt "Monthly"
 msgid "Every"
 msgstr "Alle"
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
+#, fuzzy
 msgctxt "Monthly"
 msgid "months."
 msgstr "Monate."
@@ -19281,7 +19288,7 @@ msgstr ""
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
-"Geben Sie eine Buchungsreferenz an, die für alle Teilbuchungen gilt."
+"Geben Sie eine Buchungsreferenz an, welche für alle Teilbuchungen gilt."
 
 #: ../../gnucash-git/po/../src/register/ledger-core/split-register-model.c:1188
 msgid "Enter an action type, or choose one from the list"
@@ -21808,8 +21815,9 @@ msgid "No accounts selected"
 msgstr "Keine Konten ausgewählt!"
 
 #: ../../gnucash-git/po/../src/report/report-system/html-utilities.scm:841
+#, fuzzy
 msgid "This report requires accounts to be selected in the report options."
-msgstr "Für diesen Bericht müssen Konten in den Berichtsoptionen ausgewählt werden."
+msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
 
 #: ../../gnucash-git/po/../src/report/report-system/html-utilities.scm:848
 #: ../../gnucash-git/po/../src/report/standard-reports/price-scatter.scm:330
@@ -25652,7 +25660,7 @@ msgstr "Anzahl Spalten, bevor eine neue Zeile begonnen wird."
 
 #: ../../gnucash-git/po/../src/report/utility-reports/view-column.scm:179
 msgid "Edit Options"
-msgstr "Optionen"
+msgstr "Optionen bearbeiten"
 
 #: ../../gnucash-git/po/../src/report/utility-reports/view-column.scm:187
 msgid "Single Report"
