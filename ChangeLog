@@ -1,10 +1,46 @@
+2015-10-05 Mechtilde 
+
+	* some more translation (HEAD, pull-37)
+
+2015-10-05 Mechtilde 
+
+	* more corrections
+
+2015-09-27 Mechtilde 
+
+	* small corrections
+
+2015-10-02 John Ralls 
+
+	* Remove duplicate call to gnc_set_default_directory(). (origin/maint, maint)
+
+2015-10-01 John Ralls 
+
+	* Bug 755920 - Crash (Freeze) when using File Save As.. in Windows OS
+
+2015-09-29 John Ralls 
+
+	* Add engine-common.i to EXTRA_DIST for consistency.
+
+2015-09-29 Dmitry Smirnov 
+
+	* Bug 755778 - Test failure: test-engine:
+
+2015-09-29 John Ralls 
+
+	* Bug 755781 - Files with copyright but no grant of license. Non-free?
+
 2015-09-26 John Ralls 
 
-	* Fix empty Language tag in tr.po. (HEAD, maint)
+	* Release Gnucash-2.6.8 (tag: 2.6.8)
+
+2015-09-26 John Ralls 
+
+	* Fix empty Language tag in tr.po.
 
 2015-09-25 Mechtilde 
 
-	* corr some translations (origin/maint)
+	* corr some translations
 
 2015-09-25 Mechtilde 
 

@@ -4,6 +4,22 @@ Version history:
 Announcement: GnuCash 2.6.8 Release 2015-09-27
 GnuCash 2.6.8 released
 
+The GnuCash development team humbly announces GnuCash 2.6.9, the
+ninth maintenance release in the 2.6-stable series, a snap release to repair a serious bug on Microsoft Windows.
+
+The following bugs are fixed:
+     Bug 755920 - Crash (Freeze) when using File Save As.. in Windows OS
+     	 	  Fix termination of the loop so that it's not dependent
+		  upon Linux paths.
+     Bug 755778 - Test failure: test-engine: duplicate test case paths
+     Bug 755781 - Files with copyright but no grant of license.
+
+Updated Translations:
+     German
+2.6.8 - 27 September 2015
+Announcement: GnuCash 2.6.8 Release 2015-09-27
+GnuCash 2.6.8 released
+
 The GnuCash development team proudly announces GnuCash 2.6.8, the
 eighth maintenance release in the 2.6-stable series.
 
