@@ -1,7 +1,76 @@
 Version history:
 ------- -------
+2.6.8 - 27 September 2015
+Announcement: GnuCash 2.6.8 Release 2015-09-27
+GnuCash 2.6.8 released
+
+The GnuCash development team humbly announces GnuCash 2.6.9, the
+ninth maintenance release in the 2.6-stable series, a snap release to repair a serious bug on Microsoft Windows.
+
+The following bugs are fixed:
+     Bug 755920 - Crash (Freeze) when using File Save As.. in Windows OS
+     	 	  Fix termination of the loop so that it's not dependent
+		  upon Linux paths.
+     Bug 755778 - Test failure: test-engine: duplicate test case paths
+     Bug 755781 - Files with copyright but no grant of license.
+
+Updated Translations:
+     German
+2.6.8 - 27 September 2015
+Announcement: GnuCash 2.6.8 Release 2015-09-27
+GnuCash 2.6.8 released
+
+The GnuCash development team proudly announces GnuCash 2.6.8, the
+eighth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+
+     Bug 724738 - Value in "Display Symbol" field not saved.
+     Bug 746998 - "Months Remaining" spinbox in Loan Assistant is
+         non-obvious. Provide a tool tip explaining what it's for.
+     Bug 747795 - Attached file not found. MSWin only. ShellExecuteW("open")
+         doesn't decode http escapes on file: IRIs.
+     Bug 749077 - wrongfully invalidating any account save
+         location/path starting with ".gnucash"
+     Bug 752035 - Transaction Report "Filter By" Not Always Working.
+     Bug 752204 - .gml2 files are modified during build. Since there's
+         no real benefit to saving the files most of the time, don't,
+         but leave the save line in, commented out, to make it easy to
+         write new files if necessary.
+     Bug 752879 - Finance::Quote TZ Date::Manip config variable is
+         deprecated.
+     Bug 753146 - free(): invalid pointer on duplicate transaction
+         when Use Split Action Field for Number is set.
+     Bug 754617 - Gnucash should use PKG_PROG_PKG_CONFIG
+     Bug 754764 Budget Doxygen documentation - gnc-budget-view.c.
+
+Other repairs that weren't marked as bugs in git:
+     Clean up deprecated Gtk functions to make eventual migration to
+     Gtk3 easier.
+
+     Improve storage of prices in the price db so that there is only
+     one per day and a preference list determines what sources can
+     overwrite existing prices. Prices are stored in the direction
+     that the price is greater than one to preserve precision for
+     large prices that would be small in the other direction.
+
+     Correct the Stock, Bond, Market Index, and Mutual Fund account
+     types to ASSET in the template accounts.  STOCK and MUTUAL are
+     not compatible with currency.
+
+     Clean up some non-fatal asserts.
+
+     Developer documentation improvements.
+
+     Fix backend Sync errors not being reported.
+
+     Restore Date::Manip as an explicit dependency in gnc-fq-update;
+     it's required for gnc-fq-helper, not Finance::Quote.
+
+Updated Translations:
+     Danish, Dutch, French, German
 2.6.7 - 28 June 2015
-Announcement: GnuCash 2.6.6 Release 2015-06-28
+Announcement: GnuCash 2.6.7 Release 2015-06-28
 GnuCash 2.6.7 released
 
 The GnuCash development team proudly announces GnuCash 2.6.7, the

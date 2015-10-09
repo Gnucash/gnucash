@@ -419,12 +419,12 @@
             (set! saved-price (gnc-pricedb-lookup-day pricedb
                                                       commodity currency
                                                       gnc-time))
-            (if (null? saved-price)
+            (if (null? saved-price) ;;See if there's a reversed price.
                 (begin
                   (set! saved-price (gnc-pricedb-lookup-day pricedb currency
                                                             commodity gnc-time))
                   (if (not (null? saved-price))
-                      (set! price (gnc-numeric-invert(price))))))
+                      (set! price (gnc-numeric-invert price)))))
             (if (not (null? saved-price))
                 (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
                     (begin

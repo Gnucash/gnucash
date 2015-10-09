@@ -209,7 +209,10 @@ gnc_ui_find_transactions_dialog_create2 (GNCLedgerDisplay2 * orig_ledg)
 
             tRoot = gnc_book_get_template_root( gnc_get_current_book() );
             al = gnc_account_get_descendants( tRoot );
-            xaccQueryAddAccountMatch( start_q, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
+
+            if (g_list_length(al) != 0)
+                xaccQueryAddAccountMatch( start_q, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
+
             g_list_free (al);
             al = NULL;
             tRoot = NULL;
