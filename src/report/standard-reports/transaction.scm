@@ -376,7 +376,8 @@
   (define (opt-val section name)
     (gnc:option-value 
      (gnc:lookup-option options section name)))
-  (let ((column-list (make-vector columns-used-size #f)))
+  (let ((column-list (make-vector columns-used-size #f))
+        (is-single? (eq? (opt-val (N_ "Display") (N_ "Detail level")) 'single)))
     (if (opt-val (N_ "Display") (N_ "Date"))
         (vector-set! column-list 0 #t))
     (if (opt-val (N_ "Display") (N_ "Reconciled Date"))
@@ -389,7 +390,7 @@
         (vector-set! column-list 3 #t))
     (if (opt-val (N_ "Display") (N_ "Account Name"))
         (vector-set! column-list 4 #t))
-    (if (opt-val (N_ "Display") (N_ "Other Account Name"))
+    (if (and is-single? (opt-val (N_ "Display") (N_ "Other Account Name")))
         (vector-set! column-list 5 #t))
     (if (opt-val (N_ "Display") (N_ "Shares"))
         (vector-set! column-list 6 #t))
@@ -409,9 +410,9 @@
         (vector-set! column-list 13 #t))
     (if (opt-val (N_ "Display") (N_ "Account Code"))
         (vector-set! column-list 14 #t))
-    (if (opt-val (N_ "Display") (N_ "Other Account Code"))
+    (if (and is-single? (opt-val (N_ "Display") (N_ "Other Account Code")))
         (vector-set! column-list 15 #t))
-    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name"))
+    (if (and is-single? (opt-val (N_ "Display") (N_ "Use Full Other Account Name")))
         (vector-set! column-list 16 #t))
     (if (opt-val (N_ "Sorting") (N_ "Show Account Code"))
         (vector-set! column-list 17 #t))
@@ -612,18 +613,6 @@
    gnc:pagename-general (N_ "Start Date") (N_ "End Date") "a")
   
   
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    gnc:pagename-general (N_ "Style")
-    "d" (N_ "Report style.")
-    'single
-    (list (vector 'multi-line
-                  (N_ "Multi-Line")
-                  (N_ "Display N lines."))
-          (vector 'single
-                  (N_ "Single")
-                  (N_ "Display 1 line.")))))
-
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
     gnc:pagename-general optname-common-currency
@@ -949,7 +938,7 @@
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
     (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name?") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code?") #f)
-    (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name?\
+    (list (N_ "Other Account Name")           "h1" (N_ "Display the other account name?\
  (if this is a split transaction, this parameter is guessed).") #f)
     (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #t)
     (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code?") #f)
@@ -977,6 +966,31 @@
 		 gnc:pagename-display
 		 (N_ "Notes")
 		 x))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-callback-option
+    gnc:pagename-display (N_ "Detail level")
+    "h" (N_ "Amount of detail to display per transaction.")
+    'single
+    (list (vector 'multi-line
+                  (N_ "Multi-Line")
+                  (N_ "Display all splits in a transaction on a separate line."))
+          (vector 'single
+                  (N_ "Single")
+                  (N_ "Display one line per transaction, merging multiple splits where required.")))
+    #f
+    (lambda (x)
+      (let ((is-single? (eq? x 'single)))
+           (gnc-option-db-set-option-selectable-by-name
+                gnc:*transaction-report-options*
+                gnc:pagename-display (N_ "Other Account Name") is-single?)
+           (gnc-option-db-set-option-selectable-by-name
+                gnc:*transaction-report-options*
+                gnc:pagename-display (N_ "Use Full Other Account Name") is-single?)
+           (gnc-option-db-set-option-selectable-by-name
+                gnc:*transaction-report-options*
+                gnc:pagename-display (N_ "Other Account Code") is-single?)))))
+
 
   (gnc:register-trep-option
    (gnc:make-multichoice-option
@@ -1067,7 +1081,7 @@ Credit Card, and Income accounts.")))))
 
   (define (transaction-report-multi-rows-p options)
     (eq? (gnc:option-value
-          (gnc:lookup-option options gnc:pagename-general (N_ "Style")))
+          (gnc:lookup-option options gnc:pagename-display (N_ "Detail level")))
          'multi-line))
 
   (define (transaction-report-export-p options)
