@@ -697,7 +697,6 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeSelection *selection;
 
     tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
-    gtk_tree_view_expand_all(GTK_TREE_VIEW(tree_view));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_select_all(selection);
     gnc_option_changed_widget_cb(widget, option);
