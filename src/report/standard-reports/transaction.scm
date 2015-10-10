@@ -46,6 +46,7 @@
 ;; Define the strings here to avoid typos and make changes easier.
 
 (define reportname (N_ "Transaction Report"))
+(define optname-detail-level (N_ "Detail Level"))
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
@@ -377,48 +378,48 @@
     (gnc:option-value 
      (gnc:lookup-option options section name)))
   (let ((column-list (make-vector columns-used-size #f))
-        (is-single? (eq? (opt-val (N_ "Display") (N_ "Detail level")) 'single)))
-    (if (opt-val (N_ "Display") (N_ "Date"))
+        (is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single)))
+    (if (opt-val gnc:pagename-display (N_ "Date"))
         (vector-set! column-list 0 #t))
-    (if (opt-val (N_ "Display") (N_ "Reconciled Date"))
+    (if (opt-val gnc:pagename-display (N_ "Reconciled Date"))
         (vector-set! column-list 1 #t))
-    (if (if (gnc:lookup-option options (N_ "Display") (N_ "Num"))
-            (opt-val (N_ "Display") (N_ "Num"))
-            (opt-val (N_ "Display") (N_ "Num/Action")))
+    (if (if (gnc:lookup-option options gnc:pagename-display (N_ "Num"))
+            (opt-val gnc:pagename-display (N_ "Num"))
+            (opt-val gnc:pagename-display (N_ "Num/Action")))
         (vector-set! column-list 2 #t))
-    (if (opt-val (N_ "Display") (N_ "Description"))
+    (if (opt-val gnc:pagename-display (N_ "Description"))
         (vector-set! column-list 3 #t))
-    (if (opt-val (N_ "Display") (N_ "Account Name"))
+    (if (opt-val gnc:pagename-display (N_ "Account Name"))
         (vector-set! column-list 4 #t))
-    (if (and is-single? (opt-val (N_ "Display") (N_ "Other Account Name")))
+    (if (and is-single? (opt-val gnc:pagename-display (N_ "Other Account Name")))
         (vector-set! column-list 5 #t))
-    (if (opt-val (N_ "Display") (N_ "Shares"))
+    (if (opt-val gnc:pagename-display (N_ "Shares"))
         (vector-set! column-list 6 #t))
-    (if (opt-val (N_ "Display") (N_ "Price"))
+    (if (opt-val gnc:pagename-display (N_ "Price"))
         (vector-set! column-list 7 #t))
-    (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
+    (let ((amount-setting (opt-val gnc:pagename-display (N_ "Amount"))))
       (if (eq? amount-setting 'single)
           (vector-set! column-list 8 #t))
       (if (eq? amount-setting 'double)
           (begin (vector-set! column-list 9 #t)
                  (vector-set! column-list 10 #t))))
-    (if (opt-val (N_ "Display") (N_ "Running Balance"))
+    (if (opt-val gnc:pagename-display (N_ "Running Balance"))
         (vector-set! column-list 11 #t))
-    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name"))
+    (if (opt-val gnc:pagename-display  (N_ "Use Full Account Name"))
         (vector-set! column-list 12 #t))
-    (if (opt-val (N_ "Display") (N_ "Memo"))
+    (if (opt-val gnc:pagename-display (N_ "Memo"))
         (vector-set! column-list 13 #t))
-    (if (opt-val (N_ "Display") (N_ "Account Code"))
+    (if (opt-val gnc:pagename-display (N_ "Account Code"))
         (vector-set! column-list 14 #t))
-    (if (and is-single? (opt-val (N_ "Display") (N_ "Other Account Code")))
+    (if (and is-single? (opt-val gnc:pagename-display (N_ "Other Account Code")))
         (vector-set! column-list 15 #t))
-    (if (and is-single? (opt-val (N_ "Display") (N_ "Use Full Other Account Name")))
+    (if (and is-single? (opt-val gnc:pagename-display (N_ "Use Full Other Account Name")))
         (vector-set! column-list 16 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Account Code"))
+    (if (opt-val pagename-sorting (N_ "Show Account Code"))
         (vector-set! column-list 17 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name"))
+    (if (opt-val pagename-sorting (N_ "Show Full Account Name"))
         (vector-set! column-list 18 #t))
-    (if (opt-val (N_ "Display") (N_ "Notes"))
+    (if (opt-val gnc:pagename-display (N_ "Notes"))
         (vector-set! column-list 19 #t))
     column-list))
 
@@ -969,7 +970,7 @@
 
   (gnc:register-trep-option
    (gnc:make-multichoice-callback-option
-    gnc:pagename-display (N_ "Detail level")
+    gnc:pagename-display optname-detail-level
     "h" (N_ "Amount of detail to display per transaction.")
     'single
     (list (vector 'multi-line
@@ -1074,14 +1075,14 @@ Credit Card, and Income accounts.")))))
   (define (get-account-types-to-reverse options)
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
-                                   (N_ "Display")
+                                   gnc:pagename-display
                                    (N_ "Sign Reverses")))
                account-types-to-reverse-assoc-list)))
   
 
   (define (transaction-report-multi-rows-p options)
     (eq? (gnc:option-value
-          (gnc:lookup-option options gnc:pagename-display (N_ "Detail level")))
+          (gnc:lookup-option options gnc:pagename-display optname-detail-level))
          'multi-line))
 
   (define (transaction-report-export-p options)
