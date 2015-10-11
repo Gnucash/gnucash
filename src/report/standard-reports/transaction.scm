@@ -734,7 +734,7 @@
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register."))
+                           (N_ "Sort as in the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
@@ -789,7 +789,7 @@
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register."))
+                           (N_ "Sort as in the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
