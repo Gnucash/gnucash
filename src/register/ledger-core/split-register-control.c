@@ -250,7 +250,7 @@ gnc_split_register_check_debcred (SplitRegister *reg,
             }
         }
     }
-    
+
     return TRUE;
 }
 
@@ -302,7 +302,7 @@ gnc_split_register_check_account (SplitRegister *reg,
                cell->cell.value);
     if (!new_acct)
         return FALSE;
-    
+
     split = gnc_split_register_get_current_split(reg);
     gnc_split_register_set_cell_fractions (reg, split);
 
@@ -1151,7 +1151,7 @@ gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
         LEAVE("account check failed");
         return FALSE;
     }
-    
+
     /* See if we are leaving a debit or credit cell */
     if (!gnc_split_register_check_debcred (reg, cell_name))
     {
@@ -1287,10 +1287,13 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     return xfer;
 }
 
-/* This function checks to see if we need to determine an exchange rate.
+/** Check to see if we need to determine an exchange rate.
  * If we need to determine an exchange rate, then pop up the dialog.
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
+ * @param reg the register to operate on
+ * @param force_dialog pop a dialog even if we don't think we need it.
+ * @return whether more handling is required.
  */
 gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
