@@ -475,7 +475,7 @@
      (gnc:lookup-option options section name)))
 
   (let* ((row-contents '())
-	 (dummy  (gnc:debug "split is originally" split))
+         (dummy  (gnc:debug "split is originally" split))
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
          (account-type (xaccAccountGetType account))
