@@ -17,15 +17,18 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/* formulacell-gnome.h
- *
- * Implements gnome dependent formula cell functions.
+/** @ingroup Register
+ * @{
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file formulacell-gnome.h
+ *  @brief Implements gnome dependent formula cell functions.
  */
 
 #ifndef FORMULACELL_GNOME_H
 #define FORMULACELL_GNOME_H
 
 BasicCell * gnc_formula_cell_gnome_new( void );
-
+/** @} */
 #endif /* !FORMULACELL_GNOME_H */

@@ -25,6 +25,10 @@
 
 #include "register-common.h"
 
+/** @addtogroup Table Table
+ * @{
+ * @file table-control.h
+ */
 typedef enum
 {
     GNC_TABLE_TRAVERSE_POINTER,
@@ -61,4 +65,5 @@ void gnc_table_control_destroy (TableControl *control);
 void gnc_table_control_allow_move (TableControl *control,
                                    gboolean allow_move);
 
+/** @} */
 #endif

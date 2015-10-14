@@ -19,14 +19,18 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup GUI
- *  @{
- */
-/** @addtogroup Register Registers, Ledgers and Journals
- *  @{
- */
 /** @addtogroup RegisterCore Register Core
- *  @{
+ * @{
+ * @addtogroup Cellblock Cellblock
+ * @brief A "Cellblock" is an array of active cells. The cells are laid out in
+ * rows and columns. The cellblock serves as a convenient container for
+ * organizing active cells in an array. Through the mechanism of Cursors
+ * (defined below), it allows a group of cells to be treated as a single
+ * transactional entity. That is, the cursor/cellblock allows all edits to a
+ * groups of cells to be simultaneously committed or rejected by underlying
+ * engines. This makes it appropriate for use as a GUI for
+ * transaction-processing applications with two-phase commit requirements.
+ * @{
  */
 /** @file cellblock.h
  *  @brief Declarations for the CellBlock object
@@ -97,6 +101,5 @@ int         gnc_cellblock_changed (CellBlock *cursor,
 void        gnc_cellblock_clear_changes (CellBlock *cursor);
 
 #endif
-/** @} */
 /** @} */
 /** @} */

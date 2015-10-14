@@ -20,15 +20,14 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * numcell.h
- *
- * FUNCTION:
- * The NumCell object implements a number handling cell. It
+/** @addtogroup Cell Cell
+ * @{
+ * @file numcell.h
+ * @struct NumCell
+ * @brief  The NumCell object implements a number handling cell. It
  * supports a number of accelerator keys for number entry.
- *
- * HISTORY:
+ */
+ /* HISTORY:
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
@@ -48,5 +47,5 @@ BasicCell * gnc_num_cell_new (void);
 
 void      gnc_num_cell_set_value (NumCell *cell, const char *str);
 gboolean  gnc_num_cell_set_last_num (NumCell *cell, const char *str);
-
+/** @} */
 #endif

@@ -25,6 +25,12 @@
 
 #include "split-register.h"
 
+/** @addtogroup SplitRegister
+ * @{
+ */
+/** @file split-register-p.h
+ * @brief private declarations for SplitRegister
+ */
 
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
 #define STOCK_SPLIT_STR _("-- Stock Split --")
@@ -40,92 +46,92 @@ typedef enum {
 
 struct sr_info
 {
-    /* The blank split at the bottom of the register */
+    /** The blank split at the bottom of the register */
     GncGUID blank_split_guid;
 
-    /* The currently open transaction, if any */
+    /** The currently open transaction, if any */
     GncGUID pending_trans_guid;
 
-    /* A transaction used to remember where to put the cursor */
+    /** A transaction used to remember where to put the cursor */
     Transaction *cursor_hint_trans;
 
-    /* A split used to remember where to put the cursor */
+    /** A split used to remember where to put the cursor */
     Split *cursor_hint_split;
 
-    /* A split used to remember where to put the cursor */
+    /** A split used to remember where to put the cursor */
     Split *cursor_hint_trans_split;
 
-    /* Used to remember where to put the cursor */
+    /** Used to remember where to put the cursor */
     CursorClass cursor_hint_cursor_class;
 
-    /* If the hints were set by the traverse callback */
+    /** If the hints were set by the traverse callback */
     gboolean hint_set_by_traverse;
 
-    /* If traverse is to the newly created split */
+    /** If traverse is to the newly created split */
     gboolean traverse_to_new;
 
-    /* A flag indicating if the last traversal was 'exact'.
+    /** A flag indicating if the last traversal was 'exact'.
      * See table-allgui.[ch] for details. */
     gboolean exact_traversal;
 
-    /* Indicates that the current transaction is expanded
+    /** Indicates that the current transaction is expanded
      * in ledger mode. Meaningless in other modes. */
     gboolean trans_expanded;
 
-    /* set to TRUE after register is loaded */
+    /** set to TRUE after register is loaded */
     gboolean reg_loaded;
 
-    /* flag indicating whether full refresh is ok */
+    /** flag indicating whether full refresh is ok */
     gboolean full_refresh;
 
-    /* The default account where new splits are added */
+    /** The default account where new splits are added */
     GncGUID default_account;
 
-    /* The last date recorded in the blank split */
+    /** The last date recorded in the blank split */
     time64 last_date_entered;
 
-    /* true if the current blank split has been edited and commited */
+    /** true if the current blank split has been edited and commited */
     gboolean blank_split_edited;
 
-    /* true if the demarcation between 'past' and 'future' transactions
+    /** true if the demarcation between 'past' and 'future' transactions
      * should be visible */
     gboolean show_present_divider;
 
-    /* true if we are loading the register for the first time */
+    /** true if we are loading the register for the first time */
     gboolean first_pass;
 
-    /* true if the user has already confirmed changes of a reconciled
+    /** true if the user has already confirmed changes of a reconciled
      * split */
     gboolean change_confirmed;
 
-    /* RATE_RESET_NOT_REQD => No exchange rate dialog needed for current split
+    /** RATE_RESET_NOT_REQD => No exchange rate dialog needed for current split
      * RATE_RESET_REQD => Need new exchange rate for current split
      * RATE_RESET_DONE => Already got a new exchange rate for current split
      */
     RateReset_t rate_reset;
-    
-    /* true if the transaction being edited was auto-filled */
+
+    /** true if the transaction being edited was auto-filled */
     gboolean auto_complete;
 
-    /* account on the current split when the exchange rate was last set */
+    /** account on the current split when the exchange rate was last set */
     Account *rate_account;
 
-    /* User data for users of SplitRegisters */
+    /** User data for users of SplitRegisters */
     gpointer user_data;
 
-    /* hook to get parent widget */
+    /** hook to get parent widget */
     SRGetParentCallback get_parent;
 
-    /* The template account which template transaction should belong to */
+    /** The template account which template transaction should belong to */
     GncGUID template_account;
 
-    /* configured strings for debit/credit headers */
+    /** configured strings for debit/credit headers */
     char *debit_str;
     char *credit_str;
     char *tdebit_str;
     char *tcredit_str;
 
-    /* true if the account separator has changed */
+    /** true if the account separator has changed */
     gboolean separator_changed;
 };
 
@@ -155,15 +161,16 @@ gboolean gnc_split_register_find_split (SplitRegister *reg,
 void gnc_split_register_show_trans (SplitRegister *reg,
                                     VirtualCellLocation start_loc);
 
-// Set the visibility of the split rows belonging to a transaction located at
-// vcell_loc.
-//
-// If only_blank_split is TRUE, only the row used for entering an
-// additional split is affected. Despite the name, this should not be confused
-// with the "blank split" row used for entering the first split of a brand-new
-// transaction. Instead, here it only refers to rows not tied to any split at
-// all, such as those created for entering new splits on old transactions or
-// the 2nd through nth split on brand-new transactions.
+/** Set the visibility of the split rows belonging to a transaction located at
+ * vcell_loc.
+ *
+ * If only_blank_split is TRUE, only the row used for entering an
+ * additional split is affected. Despite the name, this should not be confused
+ * with the "blank split" row used for entering the first split of a brand-new
+ * transaction. Instead, here it only refers to rows not tied to any split at
+ * all, such as those created for entering new splits on old transactions or
+ * the 2nd through nth split on brand-new transactions.
+ */
 void gnc_split_register_set_trans_visible (SplitRegister *reg,
         VirtualCellLocation vcell_loc,
         gboolean visible,
@@ -190,7 +197,7 @@ CursorClass gnc_split_register_cursor_name_to_class (const char *cursor_name);
 
 gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
 
-/* Determine if we need to perform any conversion on the splits in this
+/** Determine if we need to perform any conversion on the splits in this
  * transaction, and if so, what conversion we need
  */
 gboolean gnc_split_reg_has_rate_cell (SplitRegisterType type);
@@ -199,4 +206,5 @@ gboolean gnc_split_register_split_needs_amount(
 gboolean gnc_split_register_needs_conv_rate(
     SplitRegister *reg, Transaction *txn, Account *acc);
 
+/** @} */
 #endif

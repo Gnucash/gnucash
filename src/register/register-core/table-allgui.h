@@ -19,14 +19,38 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup GUI
- *  @{
- */
-/** @addtogroup Register Registers, Ledgers and Journals
- *  @{
- */
 /** @addtogroup RegisterCore Register Core
  *  @{
+ */
+/** @addtogroup Table Table
+ * @brief The "Table" is a displayed matrix. The table
+ * is a complex object; it is @b not merely a @ref Cellblock. The table provides
+ * all of the GUI infrastructure for displaying a row-column matrix of strings.
+ *
+ * The table provides one very important function for minimizing memory usage
+ * for large matrixes - the notion of a "Cursor". The cursor is a @ref Cellblock
+ * (an array of active cells) that is moved to the location that the user is
+ * currently editing. The cursor "virtualizes" @ref Cell functions; that is, it
+ * makes it seem to the user as if all cells in the table are active, when in
+ * fact the only cell that actually needs to be active is the one that the user
+ * is currently editing.
+ *
+ * The table design allows multiple cursors to be defined. When a user enters a
+ * cell, the appropriate cursor is positioned within the table. Cursors cannot
+ * overlap: any given cell can be mapped to at most one cursor. Multiple-cursor
+ * support allows tables to be designed that have a non-uniform layout. For
+ * example, the multiple-cursor support can be used to define a tree structure
+ * of headings and sub-headings, where the layout/format of the heading is
+ * different from the sub-headings. A financial example is a table which lists
+ * splits underneath their parent transaction. This is very different from a
+ * checkbook register, where all entries are uniform, and can be handled with a
+ * single repeated cursor.
+ *
+ * Users of the table must provide a TableView object which provides an API the
+ * table uses to obtain information about the data it is displaying such as
+ * strings, colors, etc. Thus, the table represents the non-GUI portion of the
+ * View object in the Model-View-Controller paradigm.
+ * @{
  */
 /** @file table-allgui.h
  *  @brief Declarations for the Table object
@@ -42,8 +66,6 @@
  *     - a user data pointer
  *  - Tab-traversing mechanism so that operator can tab in a
  *     predefined order between cells.
- *
- *  Please see src/doc/design/gnucash-design.info for additional information.
  *
  *  This implements the gui-independent parts of the table
  *  infrastructure. Additional, GUI-dependent parts are implemented
@@ -106,15 +128,15 @@ physical row 11   virtual row 9   B
 #include "table-layout.h"
 #include "table-model.h"
 
-/* The VirtualCell structure holds information about each virtual cell. */
+/** holds information about each virtual cell. */
 typedef struct
 {
-    CellBlock *cellblock;  /* Array of physical cells */
-    gpointer   vcell_data; /* Used by higher-level code */
+    CellBlock *cellblock;  /** Array of physical cells */
+    gpointer   vcell_data; /** Used by higher-level code */
 
     /* flags */
-    unsigned int visible : 1;             /* visible in the GUI */
-    unsigned int start_primary_color : 1; /* color usage flag */
+    unsigned int visible : 1;             /** visible in the GUI */
+    unsigned int start_primary_color : 1; /** color usage flag */
 } VirtualCell;
 
 typedef struct table Table;
@@ -189,7 +211,7 @@ typedef enum
 
 
 
-/* Alternative color tables to use for the register.
+/** Alternative color tables to use for the register.
  * The colors in this array are ordered according to the RegisterColor Enum
  * Be careful to respect this order !
  */
@@ -243,7 +265,7 @@ static const guint32 reg_colors_gtkrc [] =
 };
 
 
-/* Set the default gui handlers used by new tables. */
+/** Set the default gui handlers used by new tables. */
 void gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers);
 
 /* Functions to create and destroy Tables.  */
@@ -273,8 +295,8 @@ gboolean    gnc_table_get_current_cell_location (Table *table,
         VirtualLocation *virt_loc);
 
 
-/* This function checks the given location and returns true
- * if it is out of bounds of the table. */
+/** checks the given location and returns true if it is out of bounds of the
+ * table. */
 gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
         VirtualCellLocation vcell_loc);
 
@@ -282,9 +304,8 @@ gboolean gnc_table_virtual_location_in_header (Table *table,
         VirtualLocation virt_loc);
 
 
-/* This function returns the virtual cell associated with a particular
- *   virtual location. If the location is out of bounds, NULL is *
- *   returned. */
+/** returns the virtual cell associated with a particular virtual location. If
+ * the location is out of bounds, NULL is * returned. */
 VirtualCell *  gnc_table_get_virtual_cell (Table *table,
         VirtualCellLocation vcell_loc);
 
@@ -326,88 +347,84 @@ gboolean       gnc_table_get_cell_location (Table *table,
 void           gnc_table_save_cells (Table *table, gpointer save_data);
 
 
-/* Return the virtual cell of the header */
+/** Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);
 
-/* The gnc_table_set_size() method will resize the table to the
+/** The gnc_table_set_size() method will resize the table to the
  *   indicated dimensions.  */
 void        gnc_table_set_size (Table * table, int virt_rows, int virt_cols);
 
-/* Indicate what handler should be used for a given virtual block */
+/** Indicate what handler should be used for a given virtual block */
 void        gnc_table_set_vcell (Table *table, CellBlock *cursor,
                                  gconstpointer vcell_data,
                                  gboolean visible,
                                  gboolean start_primary_color,
                                  VirtualCellLocation vcell_loc);
 
-/* Set the virtual cell data for a particular location. */
+/** Set the virtual cell data for a particular location. */
 void        gnc_table_set_virt_cell_data (Table *table,
         VirtualCellLocation vcell_loc,
         gconstpointer vcell_data);
 
-/* Set the visibility flag for a particular location. */
+/** Set the visibility flag for a particular location. */
 void        gnc_table_set_virt_cell_visible (Table *table,
         VirtualCellLocation vcell_loc,
         gboolean visible);
 
-/* Set the cellblock handler for a virtual cell. */
+/** Set the cellblock handler for a virtual cell. */
 void        gnc_table_set_virt_cell_cursor (Table *table,
         VirtualCellLocation vcell_loc,
         CellBlock *cursor);
 
-/* The gnc_table_move_cursor() method will move the cursor (but not
- *   the cursor GUI) to the indicated location. This function is
- *   useful when loading the table from the cursor: data can be loaded
- *   into the cursor, then committed to the table, all without the
- *   annoying screen flashing associated with GUI redraw. */
+/** will move the cursor (but not the cursor GUI) to the indicated
+ * location. This function is useful when loading the table from the cursor:
+ * data can be loaded into the cursor, then committed to the table, all
+ * without the annoying screen flashing associated with GUI redraw. */
 void        gnc_table_move_cursor (Table *table, VirtualLocation virt_loc);
 
-/* The gnc_table_move_cursor_gui() method will move the cursor and its
- *   GUI to the indicated location. Through a series of callbacks, all
- *   GUI elements get repositioned. */
+/** will move the cursor and its GUI to the indicated location. Through a series
+ * of callbacks, all GUI elements get repositioned. */
 void        gnc_table_move_cursor_gui (Table *table, VirtualLocation virt_loc);
 
-/* The gnc_table_verify_cursor_position() method checks the location
- *   of the cursor with respect to a virtual location position, and if
- *   the resulting virtual location has changed, repositions the
- *   cursor and gui to the new position. Returns true if the cell
- *   cursor was repositioned. */
+/** checks the location of the cursor with respect to a virtual location
+ * position, and if the resulting virtual location has changed, repositions
+ * the cursor and gui to the new position. Returns true if the cell cursor was
+ * repositioned. */
 gboolean    gnc_table_verify_cursor_position (Table *table,
         VirtualLocation virt_loc);
 
-/* The gnc_table_get_vcell_data() method returns the virtual cell data
- *   associated with a cursor located at the given virtual coords, or
- *   NULL if the coords are out of bounds. */
+/** returns the virtual cell data associated with a cursor located at the given
+ * virtual coords, or NULL if the coords are out of bounds. */
 gpointer    gnc_table_get_vcell_data (Table *table,
                                       VirtualCellLocation vcell_loc);
 
-/* Find a close valid cell. If exact_cell is true, cells that must
- *   be explicitly selected by the user (as opposed to just tabbing
- *   into), are considered valid cells. */
+/** Find a close valid cell. If exact_cell is true, cells that must
+ * be explicitly selected by the user (as opposed to just tabbing
+ * into), are considered valid cells. */
 gboolean    gnc_table_find_close_valid_cell (Table *table,
         VirtualLocation *virt_loc,
         gboolean exact_cell);
 
 /** UI-specific functions *******************************/
 
-/* Initialize the GUI from a table */
+/** Initialize the GUI from a table */
 void        gnc_table_init_gui (GtkWidget *widget, gchar * state_section);
 
 void        gnc_table_realize_gui (Table *table);
 
-/* Refresh the current cursor gui */
+/** Refresh the current cursor gui */
 void        gnc_table_refresh_current_cursor_gui (Table * table,
         gboolean do_scroll);
 
-/* Refresh the whole GUI from the table. */
+/** Refresh the whole GUI from the table. */
 void        gnc_table_refresh_gui (Table *table, gboolean do_scroll);
 
-/* Try to show the whole range in the register. */
+/** Try to show the whole range in the register. */
 void        gnc_table_show_range (Table *table,
                                   VirtualCellLocation start_loc,
                                   VirtualCellLocation end_loc);
 
-/* Refresh the cursor in the given location. If do_scroll is TRUE,
+/** Refresh the cursor in the given location. If do_scroll is TRUE,
  * scroll the register so the location is in view. */
 void        gnc_table_refresh_cursor_gui (Table * table,
         VirtualCellLocation vcell_loc,
@@ -478,6 +495,5 @@ gboolean     gnc_table_traverse_update(Table *table,
                                        VirtualLocation *dest_loc);
 
 #endif /* TABLE_ALLGUI_H */
-/** @} */
 /** @} */
 /** @} */

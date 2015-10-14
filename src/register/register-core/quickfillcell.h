@@ -20,26 +20,19 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * quickfillcell.h
- *
- * FUNCTION:
- * The QuickFillCell implements a text cell with quick-fill
+/** @addtogroup Cell Cell
+ * @{
+ * @file quickfillcell.h
+ * @struct QuickFillCell
+ * @brief The QuickFillCell implements a text cell with quick-fill
  * capabilities.  By "quick fill" we mean a cell that will
  * automatically sentence-complete the entry after the user
  * typed a sufficient number of letters to identify a unique
  * entry.
  *
  * On the output side, this is just a plain text cell.
- *
- * METHODS:
- * The xaccSetQuickFillCellValue() method sets the
- * current cell value to the indicated string,
- * simultaneously adding the string to the quick-fill
- * tree.
- *
- * HISTORY:
+ */
+/* HISTORY:
  * Copyright (c) 1997, 1998 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas
  */
@@ -53,31 +46,31 @@
 typedef struct
 {
     BasicCell cell;
-    QuickFill *qf;       /* quickfill-tree handled by this cell */
-
-    QuickFillSort sort;  /* determines order of strings matched.
-                        * default is QUICKFILL_LIFO. */
-
-    char *original;  /* original string entered in original case */
-
-    gboolean use_quickfill_cache;  /* If TRUE, we don't own the qf */
+    QuickFill *qf;       /** quickfill-tree handled by this cell */
+    QuickFillSort sort;  /** determines order of strings matched.
+                          * default is QUICKFILL_LIFO. */
+    char *original;  /** original string entered in original case */
+    gboolean use_quickfill_cache;  /** If TRUE, we don't own the qf */
 } QuickFillCell;
 
 BasicCell *      gnc_quickfill_cell_new (void);
 
+/** sets the current cell value to the indicated string, simultaneously adding
+ * the string to the quick-fill tree.
+ */
 void             gnc_quickfill_cell_set_value (QuickFillCell *cell,
-        const char *value);
+                                               const char *value);
 
 void             gnc_quickfill_cell_set_sort (QuickFillCell *cell,
-        QuickFillSort sort);
+                                              QuickFillSort sort);
 
 void             gnc_quickfill_cell_add_completion (QuickFillCell *cell,
-        const char *completion);
+                                                    const char *completion);
 
 /** Lets the cell use the given shared quickfill object instead of the
  * one it owns internally. The cell will not delete the shared
  * quickfill upon destruction. */
 void
 gnc_quickfill_cell_use_quickfill_cache (QuickFillCell *cell, QuickFill *shared_qf);
-
+/** @} */
 #endif

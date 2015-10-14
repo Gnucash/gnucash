@@ -19,13 +19,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * FILE:
- * checkboxcell.h
- *
- * FUNCTION:
- * The CheckboxCell object implements a cell handler
+/** @addtogroup Cell Cell
+ * @{
+ * @file checkboxcell.h
+ * @struct CheckboxCell
+ * @brief The CheckboxCell object implements a cell handler
  * that will toggle between yes and no values when clicked upon by the mouse.
  *
  * HISTORY:
@@ -52,5 +50,5 @@ BasicCell * gnc_checkbox_cell_new (void);
 void        gnc_checkbox_cell_set_flag (CheckboxCell *cell, gboolean flag);
 gboolean    gnc_checkbox_cell_get_flag (CheckboxCell *cell);
 const char* gnc_checkbox_cell_get_string (gboolean flag);
-
+/** @} */
 #endif

@@ -1287,8 +1287,8 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     return xfer;
 }
 
-/** Check to see if we need to determine an exchange rate.
- * If we need to determine an exchange rate, then pop up the dialog.
+/** If needed display the transfer dialog to get a price/exchange rate and
+ * adjust the price cell accordingly.
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
  * @param reg the register to operate on
