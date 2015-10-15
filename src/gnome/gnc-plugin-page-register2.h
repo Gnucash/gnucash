@@ -22,16 +22,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                     *
  **********************************************************************/
 
-/** @addtogroup ContentPlugins
-    @{ */
-/** @addtogroup Register2Plugin Register2 Page
-    @{ */
-/** @file gnc-plugin-page-register.h
-    @brief  Functions providing a register page for the GnuCash UI
-    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
-    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
-*/
-
 #ifndef __GNC_PLUGIN_PAGE_REGISTER2_H
 #define __GNC_PLUGIN_PAGE_REGISTER2_H
 
@@ -43,7 +33,12 @@
 #include "gnc-split-reg2.h"
 
 G_BEGIN_DECLS
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-plugin-page-register2.h
+ */
 /* type macros */
 #define GNC_TYPE_PLUGIN_PAGE_REGISTER2            (gnc_plugin_page_register2_get_type ())
 #define GNC_PLUGIN_PAGE_REGISTER2(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_PAGE_REGISTER2, GncPluginPageRegister2))
@@ -153,7 +148,5 @@ gnc_plugin_page_register2_get_account (GncPluginPageRegister2 *page);
 
 G_END_DECLS
 /** @} */
-/** @} */
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER2_H */
-

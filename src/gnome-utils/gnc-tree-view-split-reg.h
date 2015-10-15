@@ -35,7 +35,12 @@
 #include "gnc-ui-util.h"
 
 G_BEGIN_DECLS
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-tree-view-split-reg.h
+ */
 #define GNC_TYPE_TREE_VIEW_SPLIT_REG            (gnc_tree_view_split_reg_get_type ())
 #define GNC_TREE_VIEW_SPLIT_REG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_VIEW_SPLIT_REG, GncTreeViewSplitReg))
 #define GNC_TREE_VIEW_SPLIT_REG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_VIEW_SPLIT_REG, GncTreeViewSplitRegClass))
@@ -181,7 +186,7 @@ void gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean re
 
 void gnc_tree_view_split_reg_finish_edit (GncTreeViewSplitReg *view);
 
-
+/** @} */
 G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_SPLIT_REG_H */

@@ -31,6 +31,12 @@
 #include "gnc-tree-view-split-reg.h"
 
 G_BEGIN_DECLS
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-tree-control-split-reg.h
+ */
 
 /*****************************************************************************/
 
@@ -120,7 +126,7 @@ void gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view);
 void gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  const gchar *new_text);
 
 /*****************************************************************************/
-
+/** @} */
 G_END_DECLS
 
 #endif /* __GNC_TREE_CONTROL_SPLIT_REG_H */

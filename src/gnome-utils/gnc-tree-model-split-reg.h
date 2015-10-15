@@ -34,7 +34,12 @@
 
 
 G_BEGIN_DECLS
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-tree-model-split-reg.h
+ */
 /* type macros */
 #define GNC_TYPE_TREE_MODEL_SPLIT_REG            (gnc_tree_model_split_reg_get_type ())
 #define GNC_TREE_MODEL_SPLIT_REG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_MODEL_SPLIT_REG, GncTreeModelSplitReg))
@@ -128,7 +133,7 @@ typedef enum
 typedef struct GncTreeModelSplitRegPrivate GncTreeModelSplitRegPrivate;
 
 /** The instance data structure for an account tree model. */
-typedef struct 
+typedef struct
 {
     GncTreeModel                 gnc_tree_model;        /**< The parent object data. */
     GncTreeModelSplitRegPrivate *priv;
@@ -145,8 +150,8 @@ typedef struct
     GtkSortType                  sort_direction;        /**< This is the direction of sort */
 
     gboolean                     use_accounting_labels; /**< whether to use accounting Labels */
-    gboolean                     separator_changed;     /**< whether the separator has changed */ 
-    gboolean                     alt_colors_by_txn;     /**< whether to use alternative colors by transaction */ 
+    gboolean                     separator_changed;     /**< whether the separator has changed */
+    gboolean                     alt_colors_by_txn;     /**< whether to use alternative colors by transaction */
     gboolean                     use_theme_colors;      /**< whether to use theme colors */
 
     gboolean                     read_only;             /**< register is read only */
@@ -325,7 +330,7 @@ Split * gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (const Transa
 gint gnc_tree_model_split_reg_sort_iter_compare_func (GtkTreeModel *tm, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
 
 /*****************************************************************************/
-
+/** @} */
 G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_SPLIT_REG_H */
