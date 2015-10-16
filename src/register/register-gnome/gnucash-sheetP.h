@@ -159,5 +159,5 @@ GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_rows (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_cols (GnucashSheet *sheet);
 
-/** @} @/
+/** @} */
 #endif
