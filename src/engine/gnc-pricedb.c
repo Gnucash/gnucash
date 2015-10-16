@@ -1364,24 +1364,9 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
     GList *price_list;
     GNCPrice *result;
     GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !commodity || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_LATEST;
-        pl.prdb = db;
-        pl.commodity = commodity;
-        pl.currency = currency;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
 
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
     if (!currency_hash)
@@ -1426,26 +1411,11 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
 {
     GList *result;
     GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
 
     result = NULL;
 
     if (!db || !commodity) return NULL;
     ENTER ("db=%p commodity=%p", db, commodity);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_LATEST;
-        pl.prdb = db;
-        pl.commodity = commodity;
-        pl.currency = NULL;  /* can the backend handle this??? */
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
     if (!currency_hash)
     {
@@ -1483,24 +1453,9 @@ gnc_pricedb_has_prices(GNCPriceDB *db,
     GList *price_list;
     GHashTable *currency_hash;
     gint size;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !commodity) return FALSE;
     ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (book && be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_ALL;
-        pl.prdb = db;
-        pl.commodity = commodity;
-        pl.currency = currency;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
     if (!currency_hash)
     {
@@ -1535,27 +1490,13 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
     GList *result;
     GList *node;
     GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !commodity) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_ALL;
-        pl.prdb = db;
-        pl.commodity = commodity;
-        pl.currency = currency;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
     if (!currency_hash)
     {
+        currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
         LEAVE (" no currency hash");
         return NULL;
     }
@@ -1602,25 +1543,9 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
     GList *result = NULL;
     GList *item = NULL;
     GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_AT_TIME;
-        pl.prdb = db;
-        pl.commodity = c;
-        pl.currency = currency;
-        pl.date = t;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, c);
     if (!currency_hash)
     {
@@ -1664,25 +1589,9 @@ lookup_nearest_in_time(GNCPriceDB *db,
     GNCPrice *result = NULL;
     GList *item = NULL;
     GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_NEAREST_IN_TIME;
-        pl.prdb = db;
-        pl.commodity = c;
-        pl.currency = currency;
-        pl.date = t;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, c);
     if (!currency_hash)
     {
@@ -1812,26 +1721,10 @@ gnc_pricedb_lookup_latest_before (GNCPriceDB *db,
         GNCPrice *result = NULL;*/
     GList *item = NULL;
     GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
     Timespec price_time;
 
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_LATEST_BEFORE;
-        pl.prdb = db;
-        pl.commodity = c;
-        pl.currency = currency;
-        pl.date = t;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, c);
     if (!currency_hash)
     {
@@ -1963,25 +1856,9 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
     GList *result = NULL;
     GHashTable *currency_hash;
     GNCPriceLookupHelper lookup_helper;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !c) return NULL;
     ENTER ("db=%p commodity=%p", db, c);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_NEAREST_IN_TIME;
-        pl.prdb = db;
-        pl.commodity = c;
-        pl.currency = NULL;  /* can the backend handle this??? */
-        pl.date = t;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, c);
     if (!currency_hash)
     {
@@ -2014,25 +1891,9 @@ gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
     GList *result = NULL;
     GHashTable *currency_hash;
     GNCPriceLookupHelper lookup_helper;
-    QofBook *book;
-    QofBackend *be;
 
     if (!db || !c) return NULL;
     ENTER ("db=%p commodity=%p", db, c);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_LATEST_BEFORE;
-        pl.prdb = db;
-        pl.commodity = c;
-        pl.currency = NULL;  /* can the backend handle this??? */
-        pl.date = t;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
     currency_hash = g_hash_table_lookup(db->commodity_hash, c);
     if (!currency_hash)
     {

@@ -78,17 +78,6 @@ typedef enum
     LOOKUP_EARLIEST_AFTER
 } PriceLookupType;
 
-
-struct gnc_price_lookup_s
-{
-    PriceLookupType type;
-    GNCPriceDB     *prdb;
-    const gnc_commodity  *commodity;
-    const gnc_commodity  *currency;
-    Timespec        date;
-};
-
-
 typedef struct gnc_price_lookup_helper_s
 {
     GList    **return_list;

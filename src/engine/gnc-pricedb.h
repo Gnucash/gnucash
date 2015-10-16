@@ -153,7 +153,6 @@ GType gnc_pricedb_get_type(void);
  @{ */
 
 /** */
-typedef struct gnc_price_lookup_s GNCPriceLookup;
 typedef GList PriceList;
 
 /** Price source enum. Be sure to keep in sync with the source_name array in
