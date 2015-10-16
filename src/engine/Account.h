@@ -65,6 +65,12 @@ typedef struct
     QofInstanceClass parent_class;
 } AccountClass;
 
+typedef struct
+{
+    Account *acc;
+    QofBook *book;
+} GncImportMatchMap;
+
 /* --- type macros --- */
 #define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
 #define GNC_ACCOUNT(o)              \
@@ -1371,6 +1377,34 @@ int gnc_account_tree_staged_transaction_traversal(const Account *account,
 
 int xaccAccountTreeForEachTransaction(Account *acc,
                                       TransactionCallback proc, void *data);
+
+/** Obtain an ImportMatchMap object from an Account or a Book
+ */
+GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
+
+/* Look up an Account in the map non Baysian
+ */
+Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
+                                        const char *key);
+
+/* Store an Account in the map non Baysian
+ */
+void gnc_account_imap_add_account (GncImportMatchMap *imap, const char *category,
+                                   const char *key, Account *acc);
+
+/* Remove a reference to an Account in the map non Baysian
+ */
+void gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category,
+                                      const char *key);
+
+/** Look up an Account in the map using Baysian
+ */
+Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
+
+/** Updates the imap for a given account using a list of tokens
+ */
+void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
+                                         Account *acc);
 
 /** @} */
 

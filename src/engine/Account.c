@@ -5028,26 +5028,12 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
  * matching data. See src/import-export/import-backend.c for explanations.
  */
 
-typedef struct _GncImportMatchMap
-{
-    Account *   acc;
-    QofBook *   book;
-} GncImportMatchMap;
-
 #define IMAP_FRAME              "import-map"
 #define IMAP_FRAME_BAYES        "import-map-bayes"
-GncImportMatchMap * gnc_account_create_imap (Account *acc);
-Account* gnc_imap_find_account(GncImportMatchMap *imap, const char* category,
-                               const char *key);
-void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
-                           const char *key, Account *acc);
-Account* gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
-void gnc_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
-                                 Account *acc);
 
 /* Obtain an ImportMatchMap object from an Account or a Book */
 GncImportMatchMap *
-gnc_account_create_imap (Account *acc)
+gnc_account_imap_create_imap (Account *acc)
 {
     GncImportMatchMap *imap;
 
@@ -5066,9 +5052,9 @@ gnc_account_create_imap (Account *acc)
 
 /* Look up an Account in the map */
 Account*
-gnc_imap_find_account (GncImportMatchMap *imap,
-                       const char *category,
-                       const char *key)
+gnc_account_imap_find_account (GncImportMatchMap *imap,
+                               const char *category,
+                               const char *key)
 {
     GValue v = G_VALUE_INIT;
     GncGUID * guid = NULL;
@@ -5088,10 +5074,10 @@ gnc_imap_find_account (GncImportMatchMap *imap,
 
 /* Store an Account in the map */
 void
-gnc_imap_add_account (GncImportMatchMap *imap,
-                      const char *category,
-                      const char *key,
-                      Account *acc)
+gnc_account_imap_add_account (GncImportMatchMap *imap,
+                              const char *category,
+                              const char *key,
+                              Account *acc)
 {
     GValue v = G_VALUE_INIT;
     char *kvp_path;
@@ -5107,6 +5093,39 @@ gnc_imap_add_account (GncImportMatchMap *imap,
     xaccAccountBeginEdit (imap->acc);
     qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &v);
     g_free (kvp_path);
+    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
+    xaccAccountCommitEdit (imap->acc);
+}
+
+/* Remove a reference to an Account in the map */
+void
+gnc_account_imap_delete_account (GncImportMatchMap *imap,
+                                 const char *category,
+                                 const char *key)
+{
+    char *kvp_path;
+
+    if (!imap || !key) return;
+    if (!category)
+        kvp_path = g_strdup_printf (IMAP_FRAME "/%s", key);
+    else
+        kvp_path = g_strdup_printf (IMAP_FRAME "/%s/%s", category, key);
+
+    xaccAccountBeginEdit (imap->acc);
+
+    if (qof_instance_has_slot (QOF_INSTANCE (imap->acc), kvp_path))
+    {
+        qof_instance_slot_delete (QOF_INSTANCE (imap->acc), kvp_path);
+        g_free (kvp_path);
+
+        if (category)
+        {
+            kvp_path = g_strdup_printf (IMAP_FRAME "/%s", category);
+            qof_instance_slot_delete_if_empty (QOF_INSTANCE (imap->acc), kvp_path);
+            g_free (kvp_path);
+        }
+        qof_instance_slot_delete_if_empty (QOF_INSTANCE (imap->acc), IMAP_FRAME);
+    }
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
 }
@@ -5237,7 +5256,7 @@ highestProbability(gpointer key, gpointer value, gpointer data)
 
 /** Look up an Account in the map */
 Account*
-gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
+gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 {
     struct token_accounts_info tokenInfo; /**< holds the accounts and total
                                            * token count for a single token */
@@ -5395,9 +5414,9 @@ gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 
 /** Updates the imap for a given account using a list of tokens */
 void
-gnc_imap_add_account_bayes(GncImportMatchMap *imap,
-                           GList *tokens,
-                           Account *acc)
+gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
+                                    GList *tokens,
+                                    Account *acc)
 {
     GList *current_token;
     gint64 token_count;

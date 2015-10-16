@@ -33,7 +33,6 @@
 
 typedef struct _transactioninfo GNCImportTransInfo;
 typedef struct _matchinfo GNCImportMatchInfo;
-typedef struct _GncImportMatchMap GncImportMatchMap;
 
 typedef enum _action
 {
