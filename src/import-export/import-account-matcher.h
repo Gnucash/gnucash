@@ -39,6 +39,7 @@ typedef struct
 {
     GtkWidget           *dialog;                         /* Dialog Widget */
     GtkWidget           *assistant;                      /* assistant Widget */
+    GtkWidget           *new_button;                     /* new account button Widget */
     GncTreeViewAccount  *account_tree;                   /* Account tree */
     GtkWidget           *account_tree_sw;                /* Scroll Window for Account tree */
     gboolean             auto_create;                    /* Auto create retAccount, can be used to step over this stage */
@@ -145,6 +146,16 @@ AccountPickerDialog * gnc_import_account_assist_setup (GtkWidget *parent);
   @return A pointer to the found account, or NULL if account not found.
 */
 Account * gnc_import_account_assist_update (AccountPickerDialog *picker);
+
+
+/**  Must be called with an AccountPickerDialog structure allready setup.
+     Set the sensitivity of the account picker to disable input.
+
+  @param Account picker Dialog structure, AccountPickerDialog
+
+  @param TRUE to make picker insensitve.
+*/
+void gnc_import_account_assist_disable (AccountPickerDialog *picker, gboolean disable);
 
 #endif
 /**@}*/

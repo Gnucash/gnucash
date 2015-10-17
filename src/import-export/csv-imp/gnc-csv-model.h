@@ -47,6 +47,9 @@ enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DEPOSIT,
                        GNC_CSV_WITHDRAWAL,
                        GNC_CSV_BALANCE,
+                       GNC_CSV_MEMO,
+                       GNC_CSV_OACCOUNT,
+                       GNC_CSV_OMEMO,
                        GNC_CSV_NUM_COL_TYPES
                       };
 
@@ -80,9 +83,9 @@ typedef struct
 {
     int line_no;
     Transaction* trans;
-    gnc_numeric balance; /**< The (supposed) balance after this transaction takes place */
+    gnc_numeric balance;  /**< The (supposed) balance after this transaction takes place */
     gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
-    gchar *num; /**< Saves the 'num'for use if balance has been set from user data */
+    gchar *num;           /**< Saves the 'num'for use if balance has been set from user data */
 } GncCsvTransLine;
 
 /* A set of currency formats that the user sees. */
@@ -133,5 +136,7 @@ int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError**
 int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
 
 time64 parse_date (const char* date_str, int format);
+
+gboolean gnc_csv_parse_check_for_column_type (GncCsvParseData* parse_data, gint type);
 
 #endif

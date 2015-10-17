@@ -46,6 +46,7 @@
 
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
+#include "gnc-csv-account-map.h"
 
 #include "gnc-csv-model.h"
 #include "gnc-csv-gnumeric-popup.h"
@@ -63,10 +64,15 @@ typedef struct
 
     GtkWidget       *window;
 
+    GtkWidget       *start_page;                    /**< Assistant start page widget */
+
+    GtkWidget       *file_page;                     /**< Assistant file page widget */
     GtkWidget       *file_chooser;                  /**< The widget for the file chooser */
     gchar           *starting_dir;                  /**< The starting directory for import file */
     gchar           *file_name;                     /**< The import file name */
+    gchar           *error_text;                    /**< Error Text */
 
+    GtkWidget       *preview_page;                  /**< Assistant preview page widget */
     GtkWidget       *settings_combo;                /**< The Settings Combo */
     GtkWidget       *combo_hbox;                    /**< The Settings Combo hbox */
     GtkWidget       *check_label;                   /**< The widget for the check label */
@@ -78,6 +84,7 @@ typedef struct
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
     int              start_row;                     /**< The liststore start row, smallest is 0 */
     int              end_row;                       /**< The liststore end row, max number of rows -1 */
+    int              home_account_number;           /**< The number of unique home account strings */
 
     GncCsvParseData *parse_data;                    /**< The actual data we are previewing */
     CsvSettings     *settings_data;                 /**< The settings to be saved and loaded */
@@ -100,7 +107,7 @@ typedef struct
                                                        * changes encselector, this is set to
                                                        * 2. encoding_selected is called twice,
                                                        * each time decrementing this by 1. */
-    gboolean         approved;                      /**< This is FALSE until the user clicks "OK". */
+    gboolean         skip_errors;                   /**< This is FALSE until the user checks the skip errors. */
     GtkWidget      **treeview_buttons;              /**< This array contains the header buttons in treeview */
     int              num_of_rows;                   /**< The number of rows in the store */
     int              longest_line;                  /**< The length of the longest row */
@@ -108,21 +115,32 @@ typedef struct
     int              fixed_context_dx;              /**< The horizontal coordinate of the pixel in the header of the column
                                                        * the user has clicked */
 
-    GtkWidget           *account_page;              /**< The widget for the account page, to be packed with the account matcher */
-    GtkWidget           *account_label;             /**< The account page label at bottom of page */
-    AccountPickerDialog *account_picker;            /**< The AccountPickerDialog structure */
-    gboolean             account_page_step;         /**< Allows for auto stepping the account page if we match online id */
+    GtkWidget            *account_page;             /**< Assistant account page widget, to be packed with account picker */
+    GtkWidget            *account_label;            /**< The account page label at bottom of page */
+    AccountPickerDialog  *account_picker;           /**< The AccountPickerDialog structure */
+    Account              *account;                  /**< Account returned by AccountPickerDialog */
+
+    GtkWidget            *account_match_page;       /**< Assistant account matcher page widget */
+    GtkWidget            *account_match_view;       /**< Assistant account matcher view widget */
+    GtkWidget            *account_match_label;      /**< Assistant account matcher label widget */
+    GtkWidget            *account_match_btn;        /**< Assistant account matcher button widget */
+
+    GtkWidget            *doc_page;                 /**< Assistant doc page widget */
 
     GNCImportMainMatcher *gnc_csv_importer_gui;     /**< The GNCImportMainMatcher structure */
-    GtkWidget            *match_page;               /**< The widget for the matcher page, to be packed with the transaction matcher */
+    GtkWidget            *match_page;               /**< Assistant match page widget, to be packed with the transaction matcher */
     GtkWidget            *match_label;              /**< The match label at the bottom of the page */
     GtkWidget            *help_button;              /**< The widget for the help button on the matcher page */
     GtkWidget            *cancel_button;            /**< The widget for the new cancel button when going back is blocked */
     gboolean              match_parse_run;          /**< This is set after the first run */
 
+    GtkWidget            *summary_page;             /**< Assistant summary page widget */
     GtkWidget            *summary_label;            /**< The summary text */
 
     gboolean              new_book;                 /**< Are we importing into a new book?; if yes, call book options */
+    gint                  callcount;                /**< Number of times the assistant page forward function called */
+    gint                  next_page;                /**< The saved assistant next page number */
+    gboolean              settings_valid;           /**< Are the settings valid */
 
 } CsvImportTrans;
 
@@ -138,6 +156,7 @@ void csv_import_trans_assistant_start_page_prepare (GtkAssistant *gtkassistant, 
 void csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_preview_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
 void csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_finish_page_prepare (GtkAssistant *assistant, gpointer user_data);
@@ -145,6 +164,7 @@ void csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant, g
 
 void csv_import_trans_srow_cb (GtkWidget *spin, gpointer user_data);
 void csv_import_trans_erow_cb (GtkWidget *spin, gpointer user_data);
+void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data);
 void csv_import_trans_skiprows_cb (GtkWidget *checkbox, gpointer user_data);
 void csv_import_trans_auto_cb (GtkWidget *cb, gpointer user_data);
 void csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *info);
@@ -158,6 +178,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info);
 void gnc_csv_reset_preview_setting (CsvImportTrans* info, gboolean block);
 gboolean preview_settings_valid (CsvImportTrans *info);
 static gboolean delete_column (CsvImportTrans* info, int col, gboolean test_only);
+gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
 
 /*************************************************************************/
 
@@ -724,7 +745,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
                 }
                 info->parse_data = parse_data;
                 info->previewing_errors = FALSE; /* We're looking at all the data. */
-                info->approved = FALSE; /* This is FALSE until the user clicks "OK". */
+                info->skip_errors = FALSE; // Set skip_errors to False
                 gtk_assistant_set_page_complete (assistant, page, TRUE);
             }
         }
@@ -735,7 +756,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     DEBUG("starting directory is %s", info->starting_dir);
 
     /* Step to next page if page is complete */
-    if(gtk_assistant_get_page_complete (assistant, page))
+    if (gtk_assistant_get_page_complete (assistant, page))
         gtk_assistant_set_current_page (assistant, num + 1);
 }
 
@@ -756,7 +777,7 @@ void row_selection_update (CsvImportTrans* info)
     store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
 
     /* Start of file */
-    for ( i = 0; i <= info->start_row; i++)
+    for (i = 0; i <= info->start_row; i++)
     {
         /* Modify background color of rows less than start row */
         if (info->start_row == i)
@@ -777,7 +798,7 @@ void row_selection_update (CsvImportTrans* info)
     }
 
     /* End of File */
-    for ( i = info->num_of_rows - 1; i >= info->end_row; i--)
+    for (i = info->num_of_rows - 1; i >= info->end_row; i--)
     {
         /* Modify background color of rows more than end row */
         if (i == info->end_row)
@@ -798,7 +819,7 @@ void row_selection_update (CsvImportTrans* info)
     }
 
     /* Remove background color from the start row to end row */
-    for ( i = info->start_row + 1; i <= info->end_row; i++)
+    for (i = info->start_row + 1; i <= info->end_row; i++)
     {
         valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
         if (valid)
@@ -808,7 +829,7 @@ void row_selection_update (CsvImportTrans* info)
     /* Skip rows */
     if (info->parse_data->skip_rows == TRUE)
     {
-        for ( i = info->start_row + 1; i <= info->end_row; i = i + 2)
+        for (i = info->start_row + 1; i <= info->end_row; i = i + 2)
         {
             /* Modify background color of alternate rows from the start row */
             valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
@@ -866,28 +887,18 @@ void csv_import_trans_erow_cb (GtkWidget *spin, gpointer user_data)
 
 
 /*******************************************************
- * csv_import_trans_auto_cb
+ * csv_import_trans_skip_errors_cb
  *
- * call back for auto create account / Skip Errors
+ * call back for Skip Errors
  *******************************************************/
-void csv_import_trans_auto_cb (GtkWidget *cb, gpointer user_data)
+void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data)
 {
     CsvImportTrans *info = user_data;
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(cb)))
-    {
-        if (info->previewing_errors == TRUE)
-            info->approved = TRUE;
-        else
-            info->account_picker->auto_create = TRUE;
-    }
+        info->skip_errors = TRUE;
     else
-    {
-        if (info->previewing_errors == TRUE)
-            info->approved = FALSE;
-        else
-            info->account_picker->auto_create = FALSE;
-    }
+        info->skip_errors = FALSE;
 }
 
 
@@ -1527,7 +1538,7 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
 }
 
 
-/* Test for the required minimum number of coloumns selected and
+/* Test for the required minimum number of columns selected and
  * a valid date format.
  * Returns TRUE if we do or FALSE if we don't.
  *
@@ -1539,17 +1550,23 @@ gboolean preview_settings_valid (CsvImportTrans* info)
     GArray* column_types = info->parse_data->column_types;
     int i, ncols = column_types->len; /* ncols is the number of columns in the data. */
     int weight = 0;
+    int oweight = 0;
     gboolean valid = TRUE;
+    gboolean havebalance = FALSE;
     /* store contains the actual strings appearing in the column types treeview. */
     GtkTreeModel* store = gtk_tree_view_get_model (info->ctreeview);
     /* datastore contains the actual strings appearing in the preview treeview. */
     GtkTreeModel* datastore = gtk_tree_view_get_model (info->treeview);
-    GtkTreeIter iter, iter2;
+    GtkTreeIter iter1, iter2;
     /* Get an iterator for the first (and only) row. */
-    gtk_tree_model_get_iter_first (store, &iter);
+    gtk_tree_model_get_iter_first (store, &iter1);
 
     /* Get an iterator for the first required row in the data store. */
     gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, info->start_row);
+
+    // If we are looking at errors, remove the error column
+    if (info->previewing_errors)
+        ncols = ncols - 1;
 
     /* Go through each of the columns. */
     for (i = 0; i < ncols; i++)
@@ -1557,12 +1574,11 @@ gboolean preview_settings_valid (CsvImportTrans* info)
         int type; /* The column type contained in this column. */
         gchar* contents = NULL; /* The column type string in this column. */
         gchar* prevstr = NULL; /* The string in this column from datastore. */
-        gchar* accstr = NULL; /* The string in this column from datastore. */
         /* Get the type string first. (store is arranged so that every two
          * columns is a pair of the model used for the combobox and the
          * string that appears, so that store looks like:
          * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
-        gtk_tree_model_get (store, &iter, 2 * i + 1, &contents, -1);
+        gtk_tree_model_get (store, &iter1, 2 * i + 1, &contents, -1);
 
         /* Go through each column type until ... */
         for (type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
@@ -1584,23 +1600,32 @@ gboolean preview_settings_valid (CsvImportTrans* info)
                     break;
 
                 case GNC_CSV_DESCRIPTION:
-                case GNC_CSV_NOTES:
                     weight = weight + 100;
                     break;
 
                 case GNC_CSV_BALANCE:
+                    havebalance = TRUE;
                 case GNC_CSV_DEPOSIT:
                 case GNC_CSV_WITHDRAWAL:
                     weight = weight + 10;
                     break;
 
                 case GNC_CSV_NUM:
+                case GNC_CSV_NOTES:
+                case GNC_CSV_MEMO:
                     weight = weight + 1;
                     break;
+
                 case GNC_CSV_ACCOUNT:
                     weight = weight + 1;
-                    gtk_tree_model_get (datastore, &iter2, i + 1, &accstr, -1);
-                    info->account_picker->account_online_id_value = strdup (accstr);
+                    break;
+
+                case GNC_CSV_OACCOUNT:
+                    oweight = oweight + 100;
+                    break;
+
+                case GNC_CSV_OMEMO:
+                    oweight = oweight + 1;
                     break;
                 }
                 break;
@@ -1609,18 +1634,164 @@ gboolean preview_settings_valid (CsvImportTrans* info)
         /* Free the type string created by gtk_tree_model_get() */
         g_free (contents);
         g_free (prevstr);
-        g_free (accstr);
     }
-    if (weight < 1109 || valid == FALSE)
+
+    if ((havebalance == TRUE) && (info->home_account_number > 1))
+    {
+        g_free (info->error_text);
+        info->error_text = g_strdup_printf (gettext ("There are problems with the import settings!\nIf you have a Balance column "
+                                        "and an Account column there must be only one account listed..."));
         return FALSE;
+    }
+
+    if ((oweight > 0) && (oweight < 99))
+    {
+        g_free (info->error_text);
+        info->error_text = g_strdup_printf (gettext ("There are problems with the import settings!\nIf you have an Other Memo column "
+                                        "you must have an Other Account column..."));
+        return FALSE;
+    }
+
+    if (weight < 1109 || valid == FALSE)
+    {
+        g_free (info->error_text);
+        info->error_text = g_strdup_printf (gettext ("There are problems with the import settings!\nThe date format could be wrong "
+                                        "or there are not enough columns set..."));
+        return FALSE;
+    }
     else
         return TRUE;
+}
+
+
+/* Test for the string being in the liststore
+ * Returns TRUE if it is or FALSE if not.
+ *
+ * @param liststore The data being reviewed
+ *
+ * @param string to check for
+ */
+static gboolean
+check_for_duplicates (GtkListStore *liststore, const gchar *string)
+{
+    GtkTreeIter iter;
+    gboolean valid;
+
+    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(liststore), &iter);
+    while (valid)
+    {
+        gchar *text;
+        // Walk through the list, reading each row of column string
+        gtk_tree_model_get (GTK_TREE_MODEL(liststore), &iter, MAPPING_STRING, &text, -1);
+
+        if(!(g_strcmp0 (text, string)))
+        {
+            g_free (text);
+            return TRUE;
+        }
+        g_free (text);
+
+        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(liststore), &iter);
+    }
+    return FALSE;
+}
+
+
+/* Get the list of accounts
+ * Returns TRUE if we have any accounts
+ *
+ * @param info The data being previewed
+ *
+ * @param store for the account match page
+ */
+gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
+{
+    /* Shorten the column_types identifier. */
+    GArray  *column_types = info->parse_data->column_types;
+    int      i, j, ncols = column_types->len; /* ncols is the number of columns in the data. */
+    gboolean have_accounts = FALSE;
+    gint     home_account_number = 0;
+    gint     other_account_number = 0;
+
+    /* store contains the actual strings appearing in the column types treeview. */
+    GtkTreeModel* columnstore = gtk_tree_view_get_model (info->ctreeview);
+    /* datastore contains the actual strings appearing in the preview treeview. */
+    GtkTreeModel* datastore = gtk_tree_view_get_model (info->treeview);
+
+    GtkTreeIter iter1, iter2, iter3;
+
+    /* Get an iterator for the first (and only) row of the column store. */
+    gtk_tree_model_get_iter_first (columnstore, &iter1);
+
+    // If we are looking at errors, remove the error column
+    if (info->previewing_errors)
+        ncols = ncols - 1;
+
+    for (j = info->start_row; j <= info->end_row; j++)
+    {
+        /* Go through each of the columns. */
+        for (i = 0; i < ncols; i++)
+        {
+            int type;               /* The column type contained in this column. */
+            gchar* contents = NULL; /* The column type string in this column. */
+            gchar* accstr = NULL;   /* The string in this column from datastore. */
+
+            /* Get the type string first. (store is arranged so that every two
+             * columns is a pair of the model used for the combobox and the
+             * string that appears, so that store looks like:
+             * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
+            gtk_tree_model_get (columnstore, &iter1, 2 * i + 1, &contents, -1);
+
+            /* Go through each column type until ... */
+            for (type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
+            {
+                /* ... we find one that matches with what's in the column. */
+                if (!g_strcmp0 (contents, _(gnc_csv_column_type_strs[type])))
+                {
+                    switch (type)
+                    {
+                    case GNC_CSV_ACCOUNT:
+                    case GNC_CSV_OACCOUNT:
+
+                        /* Get an iterator for the  row in the data store. */
+                        if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, j))
+                        {
+                            gtk_tree_model_get (datastore, &iter2, i + 1, &accstr, -1);
+
+                            // Append the entry
+                            if (!check_for_duplicates (GTK_LIST_STORE(store), accstr))
+                            {
+                                if (type == GNC_CSV_ACCOUNT) // Count the number of unique account strings
+                                    home_account_number = home_account_number + 1;
+                                else
+                                    other_account_number = other_account_number + 1;
+
+                                gtk_list_store_append (GTK_LIST_STORE(store), &iter3);
+                                gtk_list_store_set (GTK_LIST_STORE(store), &iter3, MAPPING_STRING, accstr,
+                                                    MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, NULL, -1);
+                                have_accounts = TRUE;
+                            }
+                            g_free (accstr);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            /* Free the type string created by gtk_tree_model_get() */
+            g_free (contents);
+        }
+    }
+    info->home_account_number = home_account_number;
+
+    return have_accounts;
 }
 
 
 /* Loads the preview's data into its data treeview. not_empty is TRUE
  * when the data treeview already contains data, FALSE otherwise
  * (e.g. the first time this function is called on a preview).
+ *
  * @param info The data being previewed
  */
 static void gnc_csv_preview_update_assist (CsvImportTrans* info)
@@ -1908,10 +2079,10 @@ static
 void load_settings (CsvImportTrans *info)
 {
     info->start_row = 0;
-    info->account_page_step = TRUE;
     info->match_parse_run = FALSE;
     info->file_name = NULL;
     info->starting_dir = NULL;
+    info->error_text = NULL;
 
     /* Init Settings data. */
     info->settings_data = gnc_csv_trans_new_settings_data();
@@ -1931,9 +2102,14 @@ csv_import_trans_assistant_start_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvImportTrans *info = user_data;
+    GtkTreeModel   *store;
 
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+
+    // Clear the treemodel list store
+    store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+    gtk_list_store_clear (GTK_LIST_STORE(store));
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -1950,9 +2126,8 @@ csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant,
     gint            num = gtk_assistant_get_current_page (assistant);
     GtkWidget      *page = gtk_assistant_get_nth_page (assistant, num);
 
-    info->account_picker->auto_create = TRUE; /* Step over account page if we find matching online id */
-    info->previewing_errors = FALSE;          /* We're looking at all the data. */
-    info->approved = FALSE;                   /* This is FALSE until the user clicks "OK". */
+    info->previewing_errors = FALSE; // We're looking at all the data.
+    info->skip_errors = FALSE; // Set skip_errors to False to start with.
 
     /* Set the default directory */
     if (info->starting_dir)
@@ -1986,7 +2161,11 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
     g_signal_connect (G_OBJECT(info->treeview), "size-allocate",
                      G_CALLBACK(treeview_resized), (gpointer)info);
 
-    if (info->previewing_errors == TRUE)
+    // Hide the check button label and toggle
+    gtk_widget_hide (GTK_WIDGET(info->check_label));
+    gtk_widget_hide (GTK_WIDGET(info->check_butt));
+
+    if (info->previewing_errors == TRUE) // We are looking at errors to display
     {
         gchar* name;
         GtkIconSize size;
@@ -2012,9 +2191,19 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         gtk_widget_set_sensitive (info->skip_rows, FALSE);
         info->parse_data->skip_rows = FALSE;
 
-        /* Set check button label */
-        gtk_label_set_text (GTK_LABEL(info->check_label), _("Skip Errors"));
+        /* Show the check button label and toggle */
+        gtk_widget_show (GTK_WIDGET(info->check_label));
+        gtk_widget_show (GTK_WIDGET(info->check_butt));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->check_butt), FALSE);
+    }
+    else
+    {
+        GtkTreeModel *store;
+
+        // Load the account strings into the store
+        store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+        gtk_list_store_clear (GTK_LIST_STORE(store)); // Clear list of accounts unless we are looking at errors
+        info->account = NULL; // Reset home account unless we are looking at errors
     }
 
     /* Load the data into the treeview. */
@@ -2041,42 +2230,224 @@ csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gchar *text, *mtext;
-    Account * account = NULL;
 
-    if (!preview_settings_valid (info) && (info->approved == FALSE))
+    info->settings_valid = preview_settings_valid (info);
+
+    if (!info->settings_valid && (info->skip_errors == FALSE))
     {
-        text = g_strdup_printf (gettext ("There are problems with the import settings!\nThe date format could be wrong "
-                                        "or there are not enough columns set..."));
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
+        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text);
         gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
         g_free (mtext);
-        g_free (text);
 
-        gtk_widget_set_sensitive (info->account_page, FALSE);
-    }
-    else
-    {
-        text = g_strdup_printf (gettext ("To Change the account, double click on the required account, click Forward to proceed."));
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
-        gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
-        g_free (mtext);
-        g_free (text);
-
-        gtk_widget_set_sensitive (info->account_page, TRUE);
-
-        /* Let the user select an account to put the transactions in. */
-        account = gnc_import_account_assist_update (info->account_picker);
-
-        /* If we have a valid account and auto_create is TRUE, move on to matcher */
-        if (!(account == NULL) && (info->account_picker->auto_create == TRUE))
-            gtk_assistant_set_current_page (assistant, num + 1);
-    }
-
-    /* Enable the Forward Assistant Button */
-    if (account == NULL)
+        // Disable the account picker when we have an error
+        gnc_import_account_assist_disable (info->account_picker, TRUE);
         gtk_assistant_set_page_complete (assistant, page, FALSE);
+    }
     else
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+    {
+        // Check to see if we do not have an account column
+        if (!gnc_csv_parse_check_for_column_type (info->parse_data, GNC_CSV_ACCOUNT))
+        {
+            text = g_strdup_printf (gettext ("No Account column present, to select import account double click on the required account and then click Forward to proceed."));
+            mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
+            gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
+            g_free (mtext);
+            g_free (text);
+
+            // Enable the account picker, possibly after an error
+            gnc_import_account_assist_disable (info->account_picker, FALSE);
+            gtk_widget_set_sensitive (info->account_page, TRUE);
+
+            // Get account from picker, will be null to start but have value if we come back
+            info->account = gnc_import_account_assist_update (info->account_picker);
+
+            // If we have a valid account enable forward button
+            if (info->account == NULL)
+                gtk_assistant_set_page_complete (assistant, page, FALSE);
+            else
+                gtk_assistant_set_page_complete (assistant, page, TRUE);
+        }
+        else
+            gtk_assistant_set_page_complete (assistant, page, TRUE);
+    }
+}
+
+
+static gboolean
+import_account_check_all (GtkTreeModel *model)
+{
+    GtkTreeIter iter;
+    gboolean valid, ret = TRUE;
+
+    // Set iter to first entry of store
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+
+    // Walk through the store looking for Null accounts
+    while (valid)
+    {
+        Account *account;
+
+        // Walk through the list, reading each row
+        gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+
+        if (account == NULL)
+            ret = FALSE;
+
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
+    return ret;
+}
+
+
+static void
+import_account_select_cb (GtkWidget *widget, gpointer user_data)
+{
+    CsvImportTrans *info = user_data;
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->account_match_view));
+
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+        Account *gnc_acc = NULL, *account = NULL;
+        gchar *text = NULL;
+        gchar *fullpath = NULL;
+
+        // Get the the String
+        gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
+
+        // Get the pointer to the Account
+        gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+
+        gnc_acc = gnc_import_select_account (NULL, NULL, 1, text, NULL, ACCT_TYPE_NONE, account, NULL);
+
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_ACCOUNT, gnc_acc, -1);
+
+        fullpath = gnc_account_get_full_name (gnc_acc);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_FULLPATH, fullpath, -1);
+
+        // Update the account kvp mappings
+        gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+
+        g_free (text);
+        g_free (fullpath);
+    }
+    if (import_account_check_all (model))
+        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), info->account_match_page, TRUE);
+}
+
+
+/* This is the callback for the mouse click */
+static gboolean
+import_account_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+    CsvImportTrans     *info = user_data;
+    GtkTreeModel       *model;
+    GtkTreeIter         iter;
+    GtkTreePath        *path;
+    GtkTreeViewColumn  *col;
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+
+    /* This is for a double click */
+    if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+    {
+        GdkWindow *window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (info->account_match_view));
+
+        if (event->window != window)
+            return FALSE;
+
+        /* Get tree path for row that was clicked, true if row exists */
+        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (info->account_match_view), (gint) event->x, (gint) event->y,
+                                             &path, &col, NULL, NULL))
+        {
+            DEBUG("event->x is %d and event->y is %d", (gint)event->x, (gint)event->y);
+
+            if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+            {
+                Account *gnc_acc = NULL, *account = NULL;
+                gchar *text = NULL;
+                gchar *fullpath = NULL;
+
+                // Get the the String
+                gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
+
+                // Get the pointer to the Account
+                gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+
+                gnc_acc = gnc_import_select_account (NULL, NULL, 1, text, NULL, ACCT_TYPE_NONE, account, NULL);
+
+                gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_ACCOUNT, gnc_acc, -1);
+
+                fullpath = gnc_account_get_full_name (gnc_acc);
+                gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_FULLPATH, fullpath, -1);
+
+                // Update the account kvp mappings
+                gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+
+                g_free (text);
+                g_free (fullpath);
+            }
+            gtk_tree_path_free (path);
+        }
+        if (import_account_check_all (model))
+            gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), info->account_match_page, TRUE);
+
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
+void
+csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant,
+        gpointer user_data)
+{
+    CsvImportTrans *info = user_data;
+    gint            num = gtk_assistant_get_current_page (assistant);
+    gchar          *text, *mtext;
+
+    info->settings_valid = preview_settings_valid (info);
+
+    if (!info->settings_valid && (info->skip_errors == FALSE))
+    {
+        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text);
+        gtk_label_set_markup (GTK_LABEL(info->account_match_label), mtext);
+        g_free (mtext);
+
+        // Disable the view when we have an error
+        gtk_widget_set_sensitive (info->account_match_view, FALSE);
+        gtk_widget_set_sensitive (info->account_match_btn, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->account_match_page, FALSE);
+    }
+    else
+    {
+        GtkTreeModel *store;
+
+        // Match the account strings to the mappings
+        store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+        gnc_csv_account_map_load_mappings (store);
+
+        text = g_strdup_printf (gettext ("To change mapping, Double Click on a row or select a row and press the button..."));
+        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
+        gtk_label_set_markup (GTK_LABEL(info->account_match_label), mtext);
+        g_free (mtext);
+        g_free (text);
+
+        // Enable the view, possibly after an error
+        gtk_widget_set_sensitive (info->account_match_view, TRUE);
+        gtk_widget_set_sensitive (info->account_match_btn, TRUE);
+
+        /* Enable the Forward Assistant Button */
+        if (import_account_check_all (store))
+           gtk_assistant_set_page_complete (assistant, info->account_match_page, TRUE);
+        else
+            gtk_assistant_set_page_complete (assistant, info->account_match_page, FALSE);
+    }
 }
 
 
@@ -2089,7 +2460,12 @@ csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant,
     /* Block going back */
     gtk_assistant_commit (GTK_ASSISTANT(info->window));
 
-    if ( info->match_parse_run == FALSE)
+    /* Before creating transactions, if this is a new book, let user specify
+     * book options, since they affect how transactions are created */
+    if (info->new_book)
+        info->new_book = gnc_new_book_option_display (info->window);
+
+    if (info->match_parse_run == FALSE)
     {
         /* Add the Cancel button for the matcher */
         info->cancel_button = gtk_button_new_with_mnemonic (_("_Cancel"));
@@ -2098,6 +2474,7 @@ csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant,
                          G_CALLBACK(csv_import_trans_assistant_cancel), info);
         gtk_widget_show (GTK_WIDGET(info->cancel_button));
     }
+    info->match_parse_run = TRUE;
 }
 
 
@@ -2113,29 +2490,7 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
     /* Block going back */
     gtk_assistant_commit (GTK_ASSISTANT(info->window));
 
-    /* Before creating transactions, if this is a new book, let user specify
-     * book options, since they affect how transactions are created */
-    if (info->new_book)
-        info->new_book = gnc_new_book_option_display (info->window);
-
-    /* Create transactions from the parsed data, first time with FALSE
-       Subsequent times with TRUE */
-    if ( info->match_parse_run == FALSE)
-    {
-        gnc_csv_parse_to_trans (info->parse_data, info->account_picker->retAccount, FALSE);
-    }
-    else
-        gnc_csv_parse_to_trans (info->parse_data, info->account_picker->retAccount, TRUE);
-    info->match_parse_run = TRUE;
-
-    /* if there are errors, we jump back to preview to correct */
-    if (!(info->parse_data->error_lines == NULL) && (info->approved == FALSE) )
-    {
-        info->previewing_errors = TRUE; /* We're looking at errors. */
-        gtk_assistant_set_current_page (assistant, 2);
-    }
-
-    if ((info->parse_data->error_lines == NULL) || (info->approved == TRUE) )
+    if ((info->parse_data->error_lines == NULL) || (info->skip_errors == TRUE))
     {
         GList* transactions; /* A list of the transactions we create */
 
@@ -2195,43 +2550,179 @@ csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant,
 }
 
 
+static gint
+csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
+{
+    CsvImportTrans *info = user_data;
+    gint next_page = 0;
+
+    /* Note: This function gets called multiple times by the GtkAssistant code and so
+       as we need to run tests only once I have used a counter that gets incremented on
+       every call but the tests only get run when the counter is at 1 */
+
+    info->callcount = info->callcount + 1;
+
+    switch (current_page)
+    {
+	case 0: //from start page
+            if (info->callcount == 1)
+            {
+                next_page = 1;
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 1: //from file page
+            if (info->callcount == 1)
+            {
+                next_page = 2;
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 2: //from preview page
+            if (info->callcount == 1)
+            {
+                GtkTreeModel *store;
+                gboolean      valid;
+
+                // Load the account strings into the store
+                store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+                valid = get_list_of_accounts (info, store);
+
+                info->settings_valid = preview_settings_valid (info);
+
+                // Check to see if we have an account column
+                if (gnc_csv_parse_check_for_column_type (info->parse_data, GNC_CSV_ACCOUNT))
+                    next_page = 4;
+                else
+                    next_page = 3;
+
+                // Skip Errors set, goto to doc page
+                if (info->skip_errors == TRUE)
+                    next_page = 5;
+
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 3: //from account page
+            if (info->callcount == 1)
+            {
+                info->account = gnc_import_account_assist_update (info->account_picker);
+
+                // Check to see if we have an account / other account columns
+                if (gnc_csv_parse_check_for_column_type (info->parse_data, GNC_CSV_ACCOUNT) ||
+                    gnc_csv_parse_check_for_column_type (info->parse_data, GNC_CSV_OACCOUNT))
+                    next_page = 4;
+                else
+                    next_page = 5;
+
+                // Skip Errors set, goto to doc page
+                if (info->skip_errors == TRUE)
+                    next_page = 5;
+
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 4: //from account match page
+            if (info->callcount == 1)
+            {
+                next_page = 5;
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 5: //from doc page
+            if (info->callcount == 1)
+            {
+                /* Create transactions from the parsed data, first time with FALSE
+                   Subsequent times with TRUE */
+                if (info->match_parse_run == FALSE)
+                    gnc_csv_parse_to_trans (info->parse_data, info->account, FALSE);
+                else
+                    gnc_csv_parse_to_trans (info->parse_data, info->account, TRUE);
+
+                /* if there are errors, we jump back to preview to correct */
+                if (!(info->parse_data->error_lines == NULL) && (info->skip_errors == FALSE) )
+                {
+                    info->previewing_errors = TRUE; /* We're looking at errors. */
+                    next_page = 2;
+                }
+                else
+                    next_page = 6;
+
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 6: //from match page
+            if (info->callcount == 1)
+            {
+                next_page = 7;
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 7: //from summary page
+            if (info->callcount == 1)
+            {
+                next_page = 8;
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        default:
+            next_page = -1;
+    }
+    return next_page;
+}
+
+
 void
 csv_import_trans_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
                                     gpointer user_data)
 {
-    gint currentpage = gtk_assistant_get_current_page (assistant);
+    CsvImportTrans *info = user_data;
 
-    switch (currentpage)
-    {
-    case 0:
-        /* Current page is Import Start page */
+    // Reset callcount on every prepare
+    info->callcount = 0;
+
+    if (page == info->start_page)
         csv_import_trans_assistant_start_page_prepare (assistant, user_data);
-        break;
-    case 1:
-        /* Current page is File select page */
+    else if (page == info->file_page)
         csv_import_trans_assistant_file_page_prepare (assistant, user_data);
-        break;
-    case 2:
-        /* Current page is Preview page */
+    else if (page == info->preview_page)
         csv_import_trans_assistant_preview_page_prepare (assistant, user_data);
-        break;
-    case 3:
-        /* Current page is Account page */
+    else if (page == info->account_page)
         csv_import_trans_assistant_account_page_prepare (assistant, user_data);
-        break;
-    case 4:
-        /* Current page is Transaction Doc page */
+    else if (page == info->account_match_page)
+        csv_import_trans_assistant_account_match_page_prepare (assistant, user_data);
+    else if (page == info->doc_page)
         csv_import_trans_assistant_doc_page_prepare (assistant, user_data);
-        break;
-    case 5:
-        /* Current page is Match page */
+    else if (page == info->match_page)
         csv_import_trans_assistant_match_page_prepare (assistant, user_data);
-        break;
-    case 6:
-        /* Current page is Summary page */
+    else if (page == info->summary_page)
         csv_import_trans_assistant_summary_page_prepare (assistant, user_data);
-        break;
-    }
+    else
+        g_assert_not_reached();
 }
 
 
@@ -2250,6 +2741,10 @@ void
 csv_import_trans_assistant_cancel (GtkAssistant *assistant, gpointer user_data)
 {
     CsvImportTrans *info = user_data;
+
+    if (!(info->gnc_csv_importer_gui == NULL))
+        gnc_gen_trans_list_delete (info->gnc_csv_importer_gui);
+
     gnc_close_gui_component_by_data (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS, info);
 }
 
@@ -2279,6 +2774,7 @@ csv_import_trans_close_handler (gpointer user_data)
 
     g_free(info->file_name);
     g_free(info->starting_dir);
+    g_free(info->error_text);
 
     /* Free the memory we allocated. */
     if (!(info->parse_data == NULL))
@@ -2312,12 +2808,16 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "end_row_adj");
+    gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "account_match_store");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "CSV Transaction Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Transaction Assistant"));
     info->window = window;
 
     /* Load default settings */
     load_settings (info);
+
+    /* Set the forward function */
+    gtk_assistant_set_forward_page_func (GTK_ASSISTANT(window), csv_import_trans_forward_page_func, info, NULL);
 
     /* Enable buttons on all page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
@@ -2333,6 +2833,9 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
                                      GTK_WIDGET(gtk_builder_get_object (builder, "account_page")),
                                      FALSE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
+                                     GTK_WIDGET(gtk_builder_get_object (builder, "account_match_page")),
+                                     FALSE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
                                      GTK_WIDGET(gtk_builder_get_object (builder, "doc_page")),
                                      TRUE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
@@ -2343,8 +2846,10 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
                                      TRUE);
 
     /* Start Page */
+    info->start_page = GTK_WIDGET(gtk_builder_get_object (builder, "start_page"));
 
     /* File chooser Page */
+    info->file_page = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
                       G_CALLBACK(csv_import_trans_file_chooser_confirm_cb), info);
@@ -2374,6 +2879,8 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         int           i;
         GtkTable     *enctable;
         GtkListStore *settings_store;
+
+        info->preview_page = GTK_WIDGET(gtk_builder_get_object (builder, "preview_page"));
 
         // Add Settings combo
         settings_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
@@ -2506,13 +3013,26 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     /* Initialise the Account Picker and add to the Assistant */
     info->account_page  = GTK_WIDGET(gtk_builder_get_object (builder, "account_page"));
     info->account_picker = gnc_import_account_assist_setup (info->account_page);
-    info->account_label = GTK_WIDGET(gtk_builder_get_object (builder, "account_label"));
+    info->account_label = GTK_WIDGET(gtk_builder_get_object (builder, "account_page_label"));
+
+    /* Account Match Page */
+    info->account_match_page  = GTK_WIDGET(gtk_builder_get_object (builder, "account_match_page"));
+    info->account_match_view  = GTK_WIDGET(gtk_builder_get_object (builder, "account_match_view"));
+    info->account_match_label = GTK_WIDGET(gtk_builder_get_object (builder, "account_match_label"));
+    info->account_match_btn = GTK_WIDGET(gtk_builder_get_object (builder, "account_match_change"));
+    // This is for double click mouse and buttons...
+    g_signal_connect (G_OBJECT(info->account_match_view), "button_press_event", G_CALLBACK(import_account_button_cb), info);
+    g_signal_connect (G_OBJECT(info->account_match_btn), "clicked", G_CALLBACK(import_account_select_cb), info);
+
+    /* Doc Page */
+    info->doc_page = GTK_WIDGET(gtk_builder_get_object (builder, "doc_page"));
 
     /* Matcher page */
     info->match_page  = GTK_WIDGET(gtk_builder_get_object (builder, "match_page"));
     info->match_label = GTK_WIDGET(gtk_builder_get_object (builder, "match_label"));
 
     /* Summary Page */
+    info->summary_page  = GTK_WIDGET(gtk_builder_get_object (builder, "summary_page"));
     info->summary_label = GTK_WIDGET(gtk_builder_get_object (builder, "summary_label"));
 
     g_signal_connect (G_OBJECT(window), "destroy",

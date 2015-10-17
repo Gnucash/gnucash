@@ -412,7 +412,7 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
 {
     AccountPickerDialog * picker;
     GtkBuilder *builder;
-    GtkWidget  *button, *box, *h_box;
+    GtkWidget  *box, *h_box;
 
     /* Init the account picker structure */
     picker = gnc_import_new_account_picker();
@@ -435,13 +435,13 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
     picker->account_online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
 
     /* Add the New Account Button */
-    button = gtk_button_new_with_mnemonic ("_New Account");
+    picker->new_button = gtk_button_new_with_mnemonic ("_New Account");
     h_box = gtk_hbox_new(TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), picker->new_button, FALSE, FALSE, 0);
     gtk_box_pack_start( GTK_BOX(box), h_box, FALSE, FALSE, 6);
-    gtk_button_set_use_stock (GTK_BUTTON(button), TRUE);
-    gtk_widget_show (button);
-    g_signal_connect(button, "clicked",
+    gtk_button_set_use_stock (GTK_BUTTON(picker->new_button), TRUE);
+    gtk_widget_show (picker->new_button);
+    g_signal_connect(picker->new_button, "clicked",
                      G_CALLBACK(gnc_import_add_account), picker);
 
     build_acct_tree(picker);
@@ -451,6 +451,19 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
 
     g_object_unref(G_OBJECT(builder));
     return picker;
+}
+
+
+/*******************************************************
+ * gnc_import_account_assist_disable
+ *
+ * disables account picker input.
+ *******************************************************/
+void
+gnc_import_account_assist_disable (AccountPickerDialog *picker, gboolean disable)
+{
+    gtk_widget_set_sensitive (picker->account_tree_sw, !disable);
+    gtk_widget_set_sensitive (picker->new_button, !disable);
 }
 
 
