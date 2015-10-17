@@ -570,26 +570,29 @@ make_complex_split_line (Transaction *trans, Split *split, CsvExportInfo *info)
 static
 void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 {
-    Query   *q;
     GSList  *p1, *p2;
     GList   *splits;
     QofBook *book;
 
-    q = qof_query_create_for (GNC_ID_SPLIT);
-    book = gnc_get_current_book();
-    qof_query_set_book (q, book);
+    // Setup the query for normal transaction export
+    if (info->export_type == XML_EXPORT_TRANS)
+    {
+        info->query = qof_query_create_for (GNC_ID_SPLIT);
+        book = gnc_get_current_book();
+        qof_query_set_book (info->query, book);
 
-    /* Sort by transaction date */
-    p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    p1 = g_slist_prepend (p1, SPLIT_TRANS);
-    p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
-    qof_query_set_sort_order (q, p1, p2, NULL);
+        /* Sort by transaction date */
+        p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
+        p1 = g_slist_prepend (p1, SPLIT_TRANS);
+        p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+        qof_query_set_sort_order (info->query, p1, p2, NULL);
 
-    xaccQueryAddSingleAccountMatch (q, acc, QOF_QUERY_AND);
-    xaccQueryAddDateMatchTT (q, TRUE, info->csvd.start_time, TRUE, info->csvd.end_time, QOF_QUERY_AND);
+        xaccQueryAddSingleAccountMatch (info->query, acc, QOF_QUERY_AND);
+        xaccQueryAddDateMatchTT (info->query, TRUE, info->csvd.start_time, TRUE, info->csvd.end_time, QOF_QUERY_AND);
+    }
 
     /* Run the query */
-    for (splits = qof_query_run (q); splits; splits = splits->next)
+    for (splits = qof_query_run (info->query); splits; splits = splits->next)
     {
         Split       *split;
         Transaction *trans;
@@ -609,7 +612,11 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         if (g_list_find (info->trans_list, trans) != NULL)
             continue;
 
-        // Simple Layout
+        // Look for blank split
+        if (xaccSplitGetAccount (split) == NULL)
+            continue;
+
+        // This will be a simple layout equivalent to a single line register view.
         if (info->simple_layout)
         {
             line = make_simple_trans_line (acc, trans, split, info);
@@ -655,7 +662,8 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         }
         info->trans_list = g_list_prepend (info->trans_list, trans); // add trans to trans_list
     }
-    qof_query_destroy (q);
+    if (info->export_type == XML_EXPORT_TRANS)
+        qof_query_destroy (info->query);
     g_list_free (splits);
 }
 
@@ -729,13 +737,19 @@ void csv_transactions_export (CsvExportInfo *info)
         }
         g_free (header);
 
-        /* Go through list of accounts */
-        for (ptr = info->csva.account_list, i = 0; ptr; ptr = g_list_next(ptr), i++)
+        if (info->export_type == XML_EXPORT_TRANS)
         {
-            acc = ptr->data;
-            DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
-            account_splits (info, acc, fh);
+            /* Go through list of accounts */
+            for (ptr = info->csva.account_list, i = 0; ptr; ptr = g_list_next(ptr), i++)
+            {
+                acc = ptr->data;
+                DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
+                account_splits (info, acc, fh);
+            }
         }
+        else
+            account_splits (info, info->account, fh);
+
         g_list_free (info->trans_list); // free trans_list
     }
     else

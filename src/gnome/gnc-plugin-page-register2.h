@@ -31,6 +31,7 @@
 #include "gnc-ledger-display2.h"
 #include "gnc-plugin-page.h"
 #include "gnc-split-reg2.h"
+#include "Query.h"
 
 G_BEGIN_DECLS
 /** @ingroup Register
@@ -134,6 +135,16 @@ gnc_plugin_page_register2_get_gsr (GncPluginPage *plugin_page);
  */
 GNCLedgerDisplay2 *
 gnc_plugin_page_register2_get_ledger (GncPluginPage *plugin_page);
+
+
+/** Get the Query associated with this "register" plugin page.
+ *
+ *  @param plugin_page A "register" page.
+ *
+ *  @return The query.
+ */
+Query *
+gnc_plugin_page_register2_get_query (GncPluginPage *plugin_page);
 
 
 /** Get the Account associated with this register page.

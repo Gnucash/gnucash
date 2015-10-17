@@ -1825,6 +1825,24 @@ gnc_plugin_page_register2_summarybar_position_changed (gpointer prefs, gchar* pr
                           (position == GTK_POS_TOP ? 0 : -1) );
 }
 
+/** This function is called to get the query associated with this
+ *  plugin page.
+ *
+ *  @param page A pointer to the GncPluginPage.
+ */
+Query *
+gnc_plugin_page_register2_get_query (GncPluginPage *plugin_page)
+{
+    GncPluginPageRegister2 *page;
+    GncPluginPageRegister2Private *priv;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+
+    page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
+    return gnc_ledger_display2_get_query (priv->ledger);
+}
+
 /*#################################################################################*/
 /*#################################################################################*/
 

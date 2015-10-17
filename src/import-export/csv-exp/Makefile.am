@@ -38,6 +38,9 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/lib/libc \

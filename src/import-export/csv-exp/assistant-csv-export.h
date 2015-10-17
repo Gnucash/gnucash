@@ -29,11 +29,13 @@
 #define GNC_ASSISTANT_CSV_EXPORT_H
 
 #include "Account.h"
+#include "Query.h"
 
 typedef enum
 {
     XML_EXPORT_TREE,
-    XML_EXPORT_TRANS
+    XML_EXPORT_TRANS,
+    XML_EXPORT_REGISTER
 } CsvExportType;
 
 typedef struct
@@ -68,6 +70,9 @@ typedef struct
     CsvExportDate   csvd;
     CsvExportAcc    csva;
     GList          *trans_list;
+
+    Query          *query;
+    Account        *account;
     
     GtkWidget      *start_page;
     GtkWidget      *account_page;
@@ -96,9 +101,14 @@ typedef struct
 } CsvExportInfo;
 
 
-/** The gnc_file_csv_export() will let the user export thte
+/** The gnc_file_csv_export() will let the user export the
  *  account tree or transactions to a delimited file.
  */
 void gnc_file_csv_export (CsvExportType export_type);
+
+/** The gnc_file_csv_export_register() will let the user export the
+ *  active register transactions to a delimited file.
+ */
+void gnc_file_csv_export_register (CsvExportType export_type, Query *query, Account *acc);
 
 #endif
