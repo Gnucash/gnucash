@@ -419,8 +419,8 @@
   (let ((retval '()))
     (if (or (not (string? date-string))
             (not (> (string-length date-string) 0)))
-        (set! retval possible-formats))
-    (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
+        (set! retval possible-formats)
+        (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
       (if match
           (if (match:substring match 1)
               (set! retval (parse-check-date-format match possible-formats))
@@ -442,7 +442,8 @@
                         (memq 'm-d-y possible-formats))
                     (set! res2 (parse-check-date-format date-mdy possible-formats)))
 
-                (set! retval (append res1 res2))))))
+                (set! retval (append res1 res2)))))))
+
     retval))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

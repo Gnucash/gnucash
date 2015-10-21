@@ -1965,7 +1965,7 @@ gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton *button,
 void
 gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
         GncPluginPageRegister *page)
-        
+
 {
     GncPluginPageRegisterPrivate *priv;
 
@@ -2738,7 +2738,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
                     gnc_ui_print_check_dialog_create(plugin_page, splits);
                     g_list_free(splits);
                 }
-            }           
+            }
         }
     }
     else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
@@ -3089,9 +3089,9 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
     if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-    
+
     /* Set the button for the current reverse_order order */
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));    
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));
     if(priv->sd.reverse_order == TRUE)
        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
@@ -3573,6 +3573,8 @@ gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *action,
     LEAVE(" ");
 }
 
+/** Callback for "Edit Exchange Rate" menu item.
+ */
 static void
 gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action,
         GncPluginPageRegister *plugin_page)

@@ -20,8 +20,10 @@
  *                                                                  *
 \********************************************************************/
 
-/**
+/** @addtogroup Cell Cell
+ * @{
  * @file combocell.h
+ * @struct ComboCell
  * @brief The ComboCell object implements a cell handler with a
  *        "combination-box" pull-down menu in it.
  *
@@ -99,4 +101,5 @@ void gnc_combo_cell_use_quickfill_cache (ComboCell *cell, QuickFill *shared_qf);
 
 void gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data);
 
+/** @} */
 #endif

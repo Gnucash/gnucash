@@ -20,12 +20,11 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * pricecell.h
- *
- * FUNCTION:
- * The PriceCell object implements a cell handler that stores
+/** @addtogroup Cell Cell
+ * @{
+ * @file pricecell.h
+ * @struct PriceCell
+ * @brief The PriceCell object implements a cell handler that stores
  * a single double-precision value, and has the smarts to
  * display it as a price/amount as well as accepting monetary
  * or general numeric input.
@@ -34,8 +33,8 @@
  *
  * On output, it will display negative values in red text.
  * hack alert -- the actual color (red) should be user configurable.
- *
- * HISTORY:
+ */
+ /* HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  * Copyright (c) 2001 Free Software Foundation
@@ -51,47 +50,42 @@
 typedef struct
 {
     BasicCell cell;
-
-    gnc_numeric amount;    /* the amount associated with this cell */
-
-    int fraction;          /* fraction used for rounding, if 0 no rounding */
-
-    gboolean blank_zero;   /* controls printing of zero values */
-
-    GNCPrintAmountInfo print_info; /* amount printing context */
-
-    gboolean need_to_parse; /* internal */
+    gnc_numeric amount;    /** the amount associated with this cell */
+    int fraction;          /** fraction used for rounding, if 0 no rounding */
+    gboolean blank_zero;   /** controls printing of zero values */
+    GNCPrintAmountInfo print_info; /** amount printing context */
+    gboolean need_to_parse; /** internal */
 } PriceCell;
 
-/* installs a callback to handle price recording */
+/** installs a callback to handle price recording */
 BasicCell *  gnc_price_cell_new (void);
 
-/* return the value of a price cell */
+/** return the value of a price cell */
 gnc_numeric  gnc_price_cell_get_value (PriceCell *cell);
 
-/* updates amount, returns TRUE if string representation
+/** updates amount, returns TRUE if string representation
  * actually changed */
 gboolean     gnc_price_cell_set_value (PriceCell *cell, gnc_numeric amount);
 
-/* Sets the fraction used for rounding. If 0, no rounding is performed. */
+/** Sets the fraction used for rounding. If 0, no rounding is performed. */
 void         gnc_price_cell_set_fraction (PriceCell *cell, int fraction);
 
-/* Sets the cell as blank, regardless of the blank_zero value */
+/** Sets the cell as blank, regardless of the blank_zero value */
 void         gnc_price_cell_blank (PriceCell *cell);
 
-/* determines whether 0 values are left blank or printed.
+/** determines whether 0 values are left blank or printed.
  * defaults to true. */
 void         gnc_price_cell_set_blank_zero (PriceCell *cell,
         gboolean blank_zero);
 
-/* set the printing context of the price cell */
+/** set the printing context of the price cell */
 void         gnc_price_cell_set_print_info (PriceCell *cell,
         GNCPrintAmountInfo print_info);
 
-/* updates two cells; the deb cell if amt is negative, the credit cell
+/** updates two cells; the deb cell if amt is negative, the credit cell
  * if amount is positive, and makes the other cell blank. */
 void         gnc_price_cell_set_debt_credit_value (PriceCell *debit,
         PriceCell *credit,
         gnc_numeric amount);
-
+/** @} */
 #endif

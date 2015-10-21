@@ -31,7 +31,12 @@
 #include "gnc-tree-view-split-reg.h"
 
 G_BEGIN_DECLS
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-tree-util-split-reg.h
+ */
 
 /*****************************************************************************/
 
@@ -83,7 +88,7 @@ gnc_numeric gnc_tree_util_get_rate_for (GncTreeViewSplitReg *view, Transaction *
                                         Split *split, gboolean is_blank);
 
 /*****************************************************************************/
-
+/** @} */
 G_END_DECLS
 
 #endif /* __GNC_TREE_UTIL_SPLIT_REG_H */

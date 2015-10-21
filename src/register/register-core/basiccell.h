@@ -20,12 +20,30 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * basiccell.h
+/** @addtogroup RegisterCore Register Core
+ * @{
+ * @addtogroup Cell Cell
+ * @brief A "Cell" is an active object which is designed to read a specific kind
+ * of user input. A Cell object has callbacks that are called when the
+ * user enters the cell (e.g. by mouse-clicking on a cell in a table, or
+ * tabbing into it), when the user attempts to modify text in the cell
+ * (e.g. by typing in it), and when the user leaves the cell (e.g. by
+ * mouse-clicking elsewhere, or tabbing away).
  *
- * FUNCTION:
- * The BasicCell class provides an abstract base class
+ * Special-purpose cells can be created by "inheriting" from the basic
+ * cell object. Thus, there are special-purpose cells for handling dates,
+ * pull-down menus, text fields with auto-completion from a list of
+ * alternatives, monetary amounts, etc.
+ *
+ * Cells implementations may or may not contain GUI code. Cells which
+ * require only that text be displayed are completely "GUI-independent",
+ * that is, they depend on the underlying table to display the text. Cells
+ * which require additional GUI elements (such as pull-down menus) must
+ * implement the proper GUI handling on their own (using, e.g., GTK).
+ * @{
+ * @file basiccell.h
+ * @struct basic_cell
+ * @brief The BasicCell class provides an abstract base class
  * defining the handling of the editing of a cell of a table.
  * Classes that provide the actual handling for different
  * cell types should inherit from this class.
@@ -130,8 +148,8 @@
  *
  * The gui_private member may be used by the derived class to
  *    store any additional GUI-specific data.
- *
- * HISTORY:
+ */
+/* HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
@@ -190,11 +208,11 @@ struct basic_cell
 {
     char * cell_name;
     gchar *cell_type_name;
-    char * value;                  /* current value */
-    guint value_chars;           /* number of characters in value */
+    char * value;                  /** current value */
+    guint value_chars;           /** number of characters in value */
 
-    gboolean changed;               /* true if value modified */
-    gboolean conditionally_changed; /* true if value modified conditionally */
+    gboolean changed;               /** true if value modified */
+    gboolean conditionally_changed; /** true if value modified conditionally */
 
     /* "virtual", overloaded methods */
     CellSetValueFunc set_value;
@@ -212,14 +230,13 @@ struct basic_cell
     CellDestroyFunc gui_destroy;
 
     /* GUI information */
-    char *sample_text;       /* sample text for sizing purposes */
-    CellAlignment alignment; /* horizontal alignment in column */
-    gboolean expandable;     /* can fill with extra space */
-    gboolean span;           /* can span multiple columns */
-    gboolean is_popup;       /* is a popup widget */
+    char *sample_text;       /** sample text for sizing purposes */
+    CellAlignment alignment; /** horizontal alignment in column */
+    gboolean expandable;     /** can fill with extra space */
+    gboolean span;           /** can span multiple columns */
+    gboolean is_popup;       /** is a popup widget */
 
-    /* general hook for gui-private data */
-    gpointer gui_private;
+    gpointer gui_private;    /** general hook for gui-private data */
 };
 
 
@@ -260,4 +277,5 @@ void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
         const char *value);
 
+/** @} @} */
 #endif /* BASIC_CELL_H */

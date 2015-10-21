@@ -26,8 +26,13 @@
 #include "gnucash-item-edit.h"
 #include <libgnomecanvas/libgnomecanvas.h>
 
-
-/** Type Definitions ***************************************************/
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file gnucash-sheetP.h
+ * @brief Private declarations for GnucashSheet class.
+ */
 
 struct _GnucashSheet
 {
@@ -101,11 +106,11 @@ struct _GnucashSheet
 
     /* IMContext */
     GtkIMContext *im_context;
-    gint preedit_length; /* num of bytes */
-    gint preedit_char_length; /* num of chars in UTF-8 */
-    gint preedit_start_position; /* save preedit start position   *
+    gint preedit_length; /** num of bytes */
+    gint preedit_char_length; /** num of chars in UTF-8 */
+    gint preedit_start_position; /** save preedit start position   *
                                       * combined with selection start */
-    gint preedit_cursor_position; /* save preedit cursor position */
+    gint preedit_cursor_position; /** save preedit cursor position */
     gint preedit_selection_length;
     PangoAttrList *preedit_attrs;
     gboolean need_im_reset;
@@ -149,12 +154,10 @@ struct _GnucashRegisterClass
 };
 
 
-/** Accessor functions *************************************************/
-
 GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
 //Table       *gnucash_sheet_get_table (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_rows (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_cols (GnucashSheet *sheet);
 
+/** @} */
 #endif
-

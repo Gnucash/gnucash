@@ -30,6 +30,10 @@
 #include "basiccell.h"
 #include "register-common.h"
 
+/** @addtogroup Table Table
+ * @{
+ * @file table-model.h
+ */
 typedef enum
 {
     XACC_CELL_ALLOW_NONE       = 0,
@@ -246,5 +250,5 @@ TableSaveHandler gnc_table_model_get_pre_save_handler
 (TableModel *model);
 TableSaveHandler gnc_table_model_get_post_save_handler
 (TableModel *model);
-
+/** @} */
 #endif

@@ -28,7 +28,12 @@
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-plugin-register2.h
+ */
 /* type macros */
 #define GNC_TYPE_PLUGIN_REGISTER2            (gnc_plugin_register2_get_type ())
 #define GNC_PLUGIN_REGISTER2(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_REGISTER2, GncPluginRegister2))
@@ -56,5 +61,6 @@ GType      gnc_plugin_register2_get_type (void);
 GncPlugin *gnc_plugin_register2_new      (void);
 
 G_END_DECLS
+/** @} */
 
 #endif /* __GNC_PLUGIN_REGISTER2_H */

@@ -25,7 +25,14 @@
 #define GNC_SCROLLED_WINDOW_H
 
 #include <gtk/gtk.h>
-
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ * @brief Gtk+-2 widgets for displaying SplitRegister components.
+ */
+/** @file gnucash-scrolled-window.h
+ * @brief Public declarations for GncScrolledWindow class
+ */
 G_BEGIN_DECLS
 
 #define GNC_TYPE_SCROLLED_WINDOW        (gnc_scrolled_window_get_type ())
@@ -50,5 +57,5 @@ GType      gnc_scrolled_window_get_type (void);
 GtkWidget *gnc_scrolled_window_new (void);
 
 G_END_DECLS
-
+/** @} */
 #endif /* GNC_SCROLLED_WINDOW_H */

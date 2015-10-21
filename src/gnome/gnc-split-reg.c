@@ -164,8 +164,6 @@ void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   gpointer user_data );
 
 
-void gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data);
-
 static void gnc_split_reg_class_init( GNCSplitRegClass *klass );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
@@ -1891,16 +1889,6 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev)
   Query *query = gnc_ledger_display_get_query( gsr->ledger );
   qof_query_set_sort_increasing (query, rev, rev, rev);
   gnc_ledger_display_refresh( gsr->ledger );
-}
-
-void
-gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg *gsr = data;
-    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
-
-    /* XXX Ignore the return value -- we don't care if this succeeds */
-    (void)gnc_split_register_handle_exchange (reg, TRUE);
 }
 
 static void

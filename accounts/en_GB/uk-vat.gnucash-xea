@@ -192,7 +192,7 @@
 <gnc:account version="2.0.0">
   <act:name>VAT</act:name>
   <act:id type="new">3352145930e40b21fee20532ad07501b</act:id>
-  <act:type>EXPENSE</act:type>
+  <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>GBP</cmdty:id>
@@ -214,7 +214,7 @@
 <gnc:account version="2.0.0">
   <act:name>Input</act:name>
   <act:id type="new">d3fda498135dbfca02febf0fbe379069</act:id>
-  <act:type>EXPENSE</act:type>
+  <act:type>ASSSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>GBP</cmdty:id>
@@ -226,7 +226,7 @@
 <gnc:account version="2.0.0">
   <act:name>Output</act:name>
   <act:id type="new">a46d9e9624070fcd2427973a4c725ed6</act:id>
-  <act:type>EXPENSE</act:type>
+  <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>GBP</cmdty:id>
@@ -244,7 +244,7 @@
 <gnc:account version="2.0.0">
   <act:name>EC</act:name>
   <act:id type="new">37d726ec68d451d098496b7f5513f6f8</act:id>
-  <act:type>EXPENSE</act:type>
+  <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>GBP</cmdty:id>
@@ -256,7 +256,7 @@
 <gnc:account version="2.0.0">
   <act:name>Sales</act:name>
   <act:id type="new">61bdfc571cdbf2259d99078fe75527a4</act:id>
-  <act:type>EXPENSE</act:type>
+  <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>GBP</cmdty:id>

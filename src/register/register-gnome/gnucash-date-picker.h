@@ -24,7 +24,13 @@
 #define GNUCASH_DATE_PICKER_H
 
 #include <libgnomecanvas/libgnomecanvas.h>
-
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file gnucash-date-picker.h
+ * @brief Public declarations for GncDatePicker class
+ */
 #define GNC_DATE_PICKER(obj)      G_TYPE_CHECK_INSTANCE_CAST((obj), gnc_date_picker_get_type (), GNCDatePicker)
 #define GNC_DATE_PICKER_CLASS(k)  G_TYPE_CHECK_CLASS_CAST((k), gnc_date_picker_get_type (), GNCDatePickerClass)
 #define IS_GNC_DATE_PICKER(o)     G_TYPE_CHECK_INSTANCE_TYPE((o), gnc_date_picker_get_type ())
@@ -62,5 +68,5 @@ typedef struct
 
 } GNCDatePickerClass;
 
-
+/** @} */
 #endif /* GNUCASH_DATE_PICKER_H */

@@ -28,7 +28,10 @@
 #include "basiccell.h"
 #include "cellblock.h"
 
-
+/** @addtogroup Table Table
+ * @{
+ * @file table-layout.h
+ */
 /** Standard Cursor Names ********************************************/
 #define CURSOR_HEADER "cursor-header"
 
@@ -79,5 +82,5 @@ void gnc_table_layout_save_cursor (TableLayout *layout,
 void gnc_table_layout_restore_cursor (TableLayout *layout,
                                       CellBlock *cursor,
                                       CursorBuffer *buffer);
-
+/** @} */
 #endif

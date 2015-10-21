@@ -19,14 +19,18 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup GUI
- *  @{
- */
-/** @addtogroup Register Registers, Ledgers and Journals
- *  @{
- */
 /** @addtogroup RegisterCore Register Core
- *  @{
+ * @{
+ * @addtogroup Cellblock Cellblock
+ * @brief A "Cellblock" is an array of active cells. The cells are laid out in
+ * rows and columns. The cellblock serves as a convenient container for
+ * organizing active cells in an array. Through the mechanism of Cursors
+ * (defined below), it allows a group of cells to be treated as a single
+ * transactional entity. That is, the cursor/cellblock allows all edits to a
+ * groups of cells to be simultaneously committed or rejected by underlying
+ * engines. This makes it appropriate for use as a GUI for
+ * transaction-processing applications with two-phase commit requirements.
+ * @{
  */
 /** @file cellblock.h
  *  @brief Declarations for the CellBlock object
@@ -60,14 +64,40 @@ typedef struct
 } CellBlock;
 
 
+/** Create a new CellBlock on the heap.
+ * @param rows Number of rows.
+ * @param cols Number of columns.
+ * @param cursor_name A string name for the CellBlock. It will be copied with a
+ * new string on the heap.
+ * @return a newly-allocated CellBlock which should be deleted with
+ * gnc_cellblock_destroy.
+ */
 CellBlock * gnc_cellblock_new (int rows, int cols, const char *cursor_name);
 
+/** Delete a CellBlock and its Cells.
+ * @param cellblock The CellBlock to destroy.
+ */
 void        gnc_cellblock_destroy (CellBlock *cellblock);
 
+/** Add a cell to the CellBlock at the specified coordinates. The CellBlock
+ * takes ownership of the Cell. If there's already a Cell at the location it
+ * will be leaked, so callers shoud first call gnc_cellblock_get_cell() and
+ * delete the result if it's not NULL.
+ * @param cellblock The CellBlock
+ * @param row The row at which to add the cell
+ * @param col The column at which to add the cell
+ * @param cell The cell to place at the coordinates.
+ */
 void        gnc_cellblock_set_cell (CellBlock *cellblock,
                                     int row, int col,
                                     BasicCell *cell);
 
+/** Retrieve the Cell at the specified coordinates.
+ * @param cellblock The CellBlock
+ * @param row The row of the requested Cell
+ * @param col The column of the requested Cell
+ * @return A pointer to the requested Cell.
+ */
 BasicCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                     int row, int col);
 
@@ -90,13 +120,19 @@ BasicCell * gnc_cellblock_get_cell_by_name(CellBlock *cellblock,
         const char *cell_name,
         int *row, int *col);
 
-/* Return number of changed cells. */
+/** Return number of changed cells.
+ * @param cursor The cellblock to query
+ * @param include_conditional If TRUE counts conditionally-changed cells
+ * @return The number of changed cells found.
+ */
 int         gnc_cellblock_changed (CellBlock *cursor,
                                    gboolean include_conditional);
 
+/** Sets all cells in the cellblock to not changed.
+ * @param cursor The cellblock.
+ */
 void        gnc_cellblock_clear_changes (CellBlock *cursor);
 
 #endif
-/** @} */
 /** @} */
 /** @} */

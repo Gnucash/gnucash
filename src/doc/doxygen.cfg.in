@@ -1846,3 +1846,10 @@ GENERATE_LEGEND        = YES
 # the various graphs.
 
 DOT_CLEANUP            = YES
+
+# GObject code frequently hides the definition of structs in private headers and
+# typedefs them in public declarations. TYPEDEF_HIDES_STRUCT prevents leaking
+# the private names into the documentation.
+
+TYPEDEF_HIDES_STRUCT = YES
+

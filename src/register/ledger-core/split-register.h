@@ -19,6 +19,14 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+#ifndef SPLIT_REGISTER_H
+#define SPLIT_REGISTER_H
+
+#include <glib.h>
+
+#include "Transaction.h"
+#include "table-allgui.h"
+
 /** @addtogroup GUI
  *  @{
  */
@@ -27,80 +35,75 @@
  */
 /** @addtogroup SplitRegister Split Register
  *  @brief GnuCash-specific ledger and journal displays based on
- *  @ref RegisterCore.
+ *  RegisterCore.
  *
- *  @details The split register is a spreadsheet-like area that looks like
- *  a checkbook register. It displays transactions and allows the user to
- *  edit them in-place. The register does @b not contain any of the other
- *  window decorations that one might want to have for a free standing window
- *  (e.g. menubars, *  toolbars, etc.)
+ * @details The split register is a spreadsheet-like area that looks like
+ * a checkbook register. It displays transactions and allows the user to
+ * edit them in-place. The register does @b not contain any of the other
+ * window decorations that one might want to have for a free standing window
+ * (e.g. menubars, *  toolbars, etc.)
  *
- *  The layout of the register is configurable. There's a broad
- *  variety of cell types to choose from: date cells that know
- *  how to parse dates, price cells that know how to parse prices,
- *  etc.  These cells can be laid out in any column; even a multi-row
- *  layout is supported.  The name "split register" is derived from
- *  the fact that this register can display multiple rows of
- *  transaction splits underneath a transaction title/summary row.
+ * The layout of the register is configurable. There's a broad
+ * variety of cell types to choose from: date cells that know
+ * how to parse dates, price cells that know how to parse prices,
+ * etc.  These cells can be laid out in any column; even a multi-row
+ * layout is supported.  The name "split register" is derived from
+ * the fact that this register can display multiple rows of
+ * transaction splits underneath a transaction title/summary row.
  *
- *  An area for entering new transactions is provided at the bottom of
- *  the register.
+ * An area for entering new transactions is provided at the bottom of
+ * the register.
  *
- *  All user input to the register is handled by the 'cursor', which
- *  is mapped onto one of the displayed rows.
+ * All user input to the register is handled by the 'cursor', which
+ * is mapped onto one of the displayed rows.
  *
- *  @par Design Notes.
- *  @{
- *  Some notes about the "blank split":@n
- *  Q: What is the "blank split"?@n
- *  A: A new, empty split appended to the bottom of the ledger
- *  window.  The blank split provides an area where the user
- *  can type in new split/transaction info.
- *  The "blank split" is treated in a special way for a number
- *  of reasons:
- *  -  it must always appear as the bottom-most split
- *     in the Ledger window,
- *  -  it must be committed if the user edits it, and
- *     a new blank split must be created.
- *  -  it must be deleted when the ledger window is closed.
+ * @par Design Notes.
+ * Some notes about the "blank split":@n
+ * Q: What is the "blank split"?@n
+ * A: A new, empty split appended to the bottom of the ledger
+ * window.  The blank split provides an area where the user
+ * can type in new split/transaction info.
+ * The "blank split" is treated in a special way for a number
+ * of reasons:
+ * -  it must always appear as the bottom-most split
+ *    in the Ledger window,
+ * -  it must be committed if the user edits it, and
+ *    a new blank split must be created.
+ * -  it must be deleted when the ledger window is closed.
+ * @par
+ * To implement the above, the register "user_data" is used
+ * to store an SRInfo structure containing the blank split.
  *
- *  To implement the above, the register "user_data" is used
- *  to store an SRInfo structure containing the blank split.
- *  @}
- *
- *  @par Some notes on Commit/Rollback:
- *  @{
- *  There's an engine component and a gui component to the commit/rollback
- *  scheme.  On the engine side, one must always call BeginEdit()
- *  before starting to edit a transaction.  When you think you're done,
- *  you can call CommitEdit() to commit the changes, or RollbackEdit() to
- *  go back to how things were before you started the edit. Think of it as
- *  a one-shot mega-undo for that transaction.
- *
- *  Note that the query engine uses the original values, not the currently
- *  edited values, when performing a sort.  This allows your to e.g. edit
- *  the date without having the transaction hop around in the gui while you
- *  do it.
- *
- *  On the gui side, commits are now performed on a per-transaction basis,
- *  rather than a per-split (per-journal-entry) basis.  This means that
- *  if you have a transaction with a lot of splits in it, you can edit them
- *  all you want without having to commit one before moving to the next.
- *
+ * @par Some notes on Commit/Rollback:
+ * There's an engine component and a gui component to the commit/rollback
+ * scheme.  On the engine side, one must always call BeginEdit()
+ * before starting to edit a transaction.  When you think you're done,
+ * you can call CommitEdit() to commit the changes, or RollbackEdit() to
+ * go back to how things were before you started the edit. Think of it as
+ * a one-shot mega-undo for that transaction.
+ * @par
+ * Note that the query engine uses the original values, not the currently
+ * edited values, when performing a sort.  This allows your to e.g. edit
+ * the date without having the transaction hop around in the gui while you
+ * do it.
+ * @par
+ * On the gui side, commits are now performed on a per-transaction basis,
+ * rather than a per-split (per-journal-entry) basis.  This means that
+ * if you have a transaction with a lot of splits in it, you can edit them
+ * all you want without having to commit one before moving to the next.
+ * @par
  * Similarly, the "cancel" button will now undo the changes to all of the
  * lines in the transaction display, not just to one line (one split) at a
  * time.
- * @}
- *
+  *
  * @par Some notes on Reloads & Redraws:
- * @{
  * Reloads and redraws tend to be heavyweight. We try to use change flags
  * as much as possible in this code, but imagine the following scenario:
- *
+ * @par
  * Create two bank accounts.  Transfer money from one to the other.
  * Open two registers, showing each account. Change the amount in one window.
  * Note that the other window also redraws, to show the new correct amount.
- *
+ * @par
  * Since you changed an amount value, potentially *all* displayed
  * balances change in *both* register windows (as well as the ledger
  * balance in the main window).  Three or more windows may be involved
@@ -108,26 +111,25 @@
  * entering a paycheck (or correcting a typo in an old paycheck).
  * Changing a date might even cause all entries in all three windows
  * to be re-ordered.
- *
+ * @par
  * The only thing I can think of is a bit stored with every table
  * entry, stating 'this entry has changed since lst time, redraw it'.
  * But that still doesn't avoid the overhead of reloading the table
  * from the engine.
- * @}
  *
- *  The Register itself is independent of GnuCash, and is designed
- *  so that it can be used with other applications.
- *  The Ledger is an adaptation of the Register for use by GnuCash.
- *  The Ledger sets up an explicit visual layout, putting certain
- *  types of cells in specific locations (e.g. date on left, summary
- *  in middle, value at right), and hooks up these cells to
- *  the various GnuCash financial objects.
+ * The Register itself is independent of GnuCash, and is designed
+ * so that it can be used with other applications.
+ * The Ledger is an adaptation of the Register for use by GnuCash.
+ * The Ledger sets up an explicit visual layout, putting certain
+ * types of cells in specific locations (e.g. date on left, summary
+ * in middle, value at right), and hooks up these cells to
+ * the various GnuCash financial objects.
  *
- *  This code is also theoretically independent of the actual GUI
- *  toolkit/widget-set (it once worked with both Motif and Gnome).
- *  The actual GUI-toolkit specific code is supposed to be in a
- *  GUI portability layer.  Over the years, some gnome-isms may
- *  have snuck in; these should also be cleaned up.
+ * This code is also theoretically independent of the actual GUI
+ * toolkit/widget-set (it once worked with both Motif and Gnome).
+ * The actual GUI-toolkit specific code is supposed to be in a
+ * GUI portability layer.  Over the years, some gnome-isms may
+ * have snuck in; these should also be cleaned up.
  *
  *  @{
  */
@@ -135,15 +137,6 @@
  *  @brief API for checkbook register display area
  *  @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
  */
-/** @{ */
-
-#ifndef SPLIT_REGISTER_H
-#define SPLIT_REGISTER_H
-
-#include <glib.h>
-
-#include "Transaction.h"
-#include "table-allgui.h"
 
 /** @brief Register types
  *
@@ -553,7 +546,6 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 gboolean
 gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans);
 
-/** @} */
 /** @} */
 /** @} */
 /** @} */

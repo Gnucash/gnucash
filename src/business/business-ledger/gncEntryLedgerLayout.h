@@ -25,7 +25,12 @@
 #define GNC_ENTRY_LEDGER_LAYOUT_H
 
 #include "gncEntryLedger.h"
-
+/** @ingroup Register
+ * @addtogroup BusinessRegister
+ * @{
+ */
+/** @file gncEntryLedgerLayout.h
+ */
 TableLayout * gnc_entry_ledger_layout_new (GncEntryLedger *ledger);
-
+/** @} */
 #endif /* GNC_ENTRY_LEDGER_LAYOUT_H */

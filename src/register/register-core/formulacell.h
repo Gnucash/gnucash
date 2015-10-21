@@ -19,18 +19,15 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/**
- * FILE:
- * formulacell.h
- *
- * FUNCTION:
- *
- * The FormulaCell is a register-table cell which can contain a formula
+/** @addtogroup Cell Cell
+ * @{
+ * @file formulacell.h
+ * @struct FormulaCell
+ * @brief The FormulaCell is a register-table cell which can contain a formula
  * involving numbers, formula markup and strings denoting either functions or
  * variables.
- *
- * Copyright (c) 2002 Joshua Sled <jsled@asynchronous.org>
- **/
+ */
+ /* Copyright (c) 2002 Joshua Sled <jsled@asynchronous.org> */
 
 #ifndef FORMULA_CELL_H
 #define FORMULA_CELL_H
@@ -42,7 +39,7 @@
 #include "basiccell.h"
 #include "qof.h"
 
-typedef struct _FormulaCell
+typedef struct
 {
     BasicCell cell;
 
@@ -57,8 +54,7 @@ typedef struct _FormulaCell
 BasicCell* gnc_formula_cell_new (void);
 
 void gnc_formula_cell_set_value( FormulaCell *fc, const char *newVal );
-
+/** @} */
 #endif /* FORMULA_CELL_H */
 
 /* --------------- end of file ---------------------- */
-
