@@ -114,6 +114,7 @@ test_engine_SOURCES = \
 	utest-Entry.c \
 	utest-Invoice.c \
 	test-engine-kvp-properties.c \
+	utest-gnc-pricedb.c \
 	dummy.cpp
 
 test_engine_LDADD = \
