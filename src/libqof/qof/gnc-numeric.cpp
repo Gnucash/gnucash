@@ -487,20 +487,7 @@ gnc_numeric_invert(gnc_numeric num)
 {
     if (num.num == 0)
         return gnc_numeric_zero();
-    if (num.denom > 0)
-    {
-        if (num.num < 0)
-            return gnc_numeric_create (-num.denom, -num.num);
-        return gnc_numeric_create (num.denom, num.num);
-    }
-    else /* Negative denominator means multiply instead of divide. */
-    {
-        int64_t mult = (num.num < 0 ? INT64_C(-1) : INT64_C(1));
-        qofint128 denom = mult128(-num.denom, mult * num.num);
-        if (denom.hi)
-            return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-        return gnc_numeric_create (mult, denom.lo);
-    }
+    return static_cast<gnc_numeric>(GncNumeric(num).inv());
 }
 /* *******************************************************************
  *  double_to_gnc_numeric

@@ -80,9 +80,7 @@ GncRational::operator-() const noexcept
 GncRational&
 GncRational::inv () noexcept
 {
-    auto tmp = m_num;
-    m_num = m_den;
-    m_den = tmp;
+    std::swap(m_num, m_den);
 
     GncRational b {1, 1};
     GncDenom d {*this, b, INT64_C(0), GNC_HOW_RND_NEVER };

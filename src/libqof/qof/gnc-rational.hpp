@@ -44,6 +44,7 @@ public:
     GncRational& div(GncRational b, GncDenom& d) noexcept;
     GncRational& add(const GncRational& b, GncDenom& d) noexcept;
     GncRational& sub(const GncRational& b, GncDenom& d) noexcept;
+
 /** Inverts the number, equivalent of /= {1, 1} */
     GncRational& inv() noexcept;
 
