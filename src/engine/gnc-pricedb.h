@@ -518,8 +518,8 @@ GNCPrice * gnc_pricedb_lookup_latest_before(GNCPriceDB *db,
  */
 /* NOT USED, but see bug 743753 */
 PriceList * gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
-        gnc_commodity *c,
-        Timespec t);
+                                                         const gnc_commodity *c,
+                                                          Timespec t);
 
 
 /** @brief Convert a balance from one currency to another using the most recent
@@ -554,7 +554,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
                                           const gnc_commodity *new_currency,
                                           Timespec t);
 
-typedef gboolean (*f)(GNCPrice *p, gpointer user_data) GncPriceForeachFunction;
+typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
 
 /** @brief Call a GncPriceForeachFunction once for each price in db, until the
  * function returns FALSE.
@@ -571,7 +571,7 @@ typedef gboolean (*f)(GNCPrice *p, gpointer user_data) GncPriceForeachFunction;
  * processing was the same as the previous invocation (stable), FALSE otherwise.
  */
 gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
-                                       GncPriceForeachFunction *f,
+                                       GncPriceForeachFunc f,
                                        gpointer user_data,
                                        gboolean stable_order);
 

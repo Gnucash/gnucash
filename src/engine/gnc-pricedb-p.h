@@ -81,6 +81,7 @@ typedef enum
 typedef struct gnc_price_lookup_helper_s
 {
     GList    **return_list;
+    gnc_commodity *key;
     Timespec time;
 } GNCPriceLookupHelper;
 
