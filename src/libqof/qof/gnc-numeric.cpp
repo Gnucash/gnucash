@@ -482,11 +482,6 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
     return TRUE;
 }
 
-gnc_numeric
-gnc_numeric_invert(gnc_numeric num)
-{
-    return static_cast<gnc_numeric>(GncNumeric{num}.inv());
-}
 /* *******************************************************************
  *  double_to_gnc_numeric
  ********************************************************************/

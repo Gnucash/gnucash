@@ -1135,9 +1135,9 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                   }
                   else
                   {
-                  exchange = gnc_numeric_invert(gnc_price_get_value(price));
-                  exchange = gnc_numeric_convert(exchange, 1000,
-                                                 GNC_HOW_RND_ROUND_HALF_UP);
+                  exchange = gnc_numeric_div(gnc_numeric_create(1,1),
+                  gnc_price_get_value(price),
+                  1000, GNC_HOW_RND_ROUND_HALF_UP);
                   }
                   }
                   else
@@ -1745,3 +1745,4 @@ GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_e
                                     result_map, NULL);
     return result_map;
 }
+
