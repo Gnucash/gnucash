@@ -350,19 +350,6 @@ while(<>) {
     last unless $to_currency;
 
     my $price = $quoter->currency($from_currency, $to_currency);
-    my $inv_price = undef;
-    #Sometimes price quotes are available in only one direction, and if the
-    #direction we asked for results in a quote < 1 we want the other direction
-    #if it's available to get more significant digits.
-    unless (defined($price) && $price > 1) {
-        $inv_price = $quoter->currency($to_currency, $from_currency);
-        if (defined($inv_price)) {
-            my $tmp = $to_currency;
-            $to_currency = $from_currency;
-            $from_currency = $tmp;
-            $price = $inv_price;
-        }
-    }
 
     $quote_data{$from_currency, "success"} = defined($price);
     $quote_data{$from_currency, "symbol"} = $from_currency;
