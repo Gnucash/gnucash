@@ -504,6 +504,13 @@ gnc_numeric gnc_numeric_reduce(gnc_numeric n);
  ********************************************************************/
 gboolean gnc_numeric_to_decimal(gnc_numeric * a,
                                 guint8 * max_decimal_places);
+
+/** Invert a gnc_numeric.
+ * Much faster than dividing 1 by it.
+ * @param num The number to be inverted
+ * @return a gnc_numeric that is the inverse of num
+ */
+gnc_numeric gnc_numeric_invert (gnc_numeric num);
 /** @} */
 
 /** @name GValue

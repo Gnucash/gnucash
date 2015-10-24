@@ -141,9 +141,11 @@ void gnc_xfer_dialog_set_date(XferDialog *xferData, time64 set_time);
 /** Set the "sensitive" state of the date field to the given value */
 void gnc_xfer_dialog_set_date_sensitive(XferDialog *xferData, gboolean is_sensitive);
 
-/** Set the exchange rate.  If exchange-rate is 0, then do nothing */
-void gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData,
-                                       gnc_numeric exchange_rate);
+/** Set the dialog's exchange rate edit.  If price_value is 0, then do
+ *  nothing.
+ */
+void gnc_xfer_dialog_set_price_edit(XferDialog *xferData,
+				    gnc_numeric price_value);
 
 /** Indicate whether the dialog should quickfill based on the "To" account,
  * rather than the default which is the "From" account.

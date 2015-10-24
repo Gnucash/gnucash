@@ -878,7 +878,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             {
                 exch_rate = gnc_numeric_div ((gnc_numeric){1, 1}, exch_rate,
                             GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                gnc_xfer_dialog_set_exchange_rate (xfer, exch_rate);
+                gnc_xfer_dialog_set_price_edit (xfer, exch_rate);
             }
         }
 
@@ -901,11 +901,8 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             gnc_price_set_commodity (convprice, account_currency);
             gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
             gnc_price_set_time (convprice, postdate);
-            gnc_price_set_source (convprice, "user:invoice-post");
-
-            /* Yes, magic strings are evil but I can't find any defined constants
-               for this..*/
-            gnc_price_set_typestr (convprice, "last");
+            gnc_price_set_source (convprice, PRICE_SOURCE_INVOICE);
+            gnc_price_set_typestr (convprice, PRICE_TYPE_LAST);
             gnc_price_set_value (convprice, exch_rate);
             gncInvoiceAddPrice(invoice, convprice);
             gnc_price_commit_edit (convprice);
@@ -1702,7 +1699,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     }
 
     /* Set the type label */
-    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit Note") 
+    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit Note")
                         : gtk_label_get_text (GTK_LABEL(iw->type_label)));
 
     if (iw->owner_choice)
@@ -1820,14 +1817,14 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             gtk_widget_hide (hide);
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide4"));
             gtk_widget_hide (hide);
-            
+
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "posted_label"));
             gtk_widget_show (show);
             gtk_widget_show (iw->posted_date_hbox);
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_label"));
             gtk_widget_show (show);
             gtk_widget_show (acct_entry);
-            
+
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide1"));
             gtk_widget_show (show);
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide2"));
@@ -2347,17 +2344,17 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         {
         case GNC_OWNER_VENDOR:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
-            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill")); 
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID")); 
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
             break;
         case GNC_OWNER_EMPLOYEE:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID")); 
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
         default:
             break;
         }
-    
+
     entry_ledger = gnc_entry_ledger_new (iw->book, ledger_type);
 
     /* Save the ledger... */
@@ -2430,7 +2427,7 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     const GncOwner *start_owner;
     GncBillTerm *owner_terms = NULL;
     GncOwnerType owner_type;
-    
+
     g_assert (dialog_type == NEW_INVOICE || dialog_type == MOD_INVOICE || dialog_type == DUP_INVOICE);
 
     if (invoice)
@@ -2513,20 +2510,20 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
     iw->info_label = GTK_WIDGET (gtk_builder_get_object (builder, "label1"));
     invoice_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_invoice_type"));
-     
+
     iw->type_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_choice_hbox"));
     iw->type_choice = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_invoice"));
-    
+
     /* The default GUI lables are for invoices, so change them if it isn't. */
     owner_type = gncOwnerGetType (&iw->owner);
     switch(owner_type)
     {
         case GNC_OWNER_VENDOR:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
-            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill")); 
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
             gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Bill"));
             gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
-             
+
             break;
         case GNC_OWNER_EMPLOYEE:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
@@ -2536,7 +2533,7 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
         default:
         break;
     }
-    
+
     /* configure the type related widgets based on dialog type and invoice type */
     switch (dialog_type)
     {
@@ -3306,4 +3303,3 @@ gnc_invoice_remind_bills_due_cb (void)
 
     gnc_invoice_remind_bills_due();
 }
-
