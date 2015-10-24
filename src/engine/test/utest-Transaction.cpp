@@ -219,7 +219,7 @@ teardown (Fixture *fixture, gconstpointer pData)
     test_destroy (fixture->curr);
     test_destroy (fixture->comm);
     g_free (mbe);
-    test_destroy (book);
+    qof_book_destroy(book);
     g_slist_free_full (fixture->hdlrs, test_free_log_handler);
     test_clear_error_list();
 }
@@ -391,7 +391,7 @@ test_gnc_transaction_dispose ()
     test_destroy (curr);
 
     test_destroy (txn);
-    test_destroy (book);
+    qof_book_destroy (book);
 }
 /* gnc_transaction_finalize
 static void
@@ -476,7 +476,7 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     xaccTransRollbackEdit (txn);
     test_destroy (txn);
     test_destroy (curr);
-    test_destroy (book);
+    qof_book_destroy (book);
     g_free (t_entered);
 }
 /* gnc_transaction_class_init
@@ -513,7 +513,7 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
     test_signal_assert_hits (sig1, 1);
 
     test_destroy (txn);
-    test_destroy (book);
+    qof_book_destroy (book);
     test_signal_free (sig1);
 }
 /* xaccTransSortSplits
@@ -1673,7 +1673,7 @@ test_xaccTransCommitEdit (void)
     test_destroy (acc2);
     test_destroy (curr);
     test_destroy (comm);
-    test_destroy (book);
+    qof_book_destroy (book);
 }
 /* xaccTransRollbackEdit
 void

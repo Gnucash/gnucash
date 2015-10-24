@@ -370,7 +370,11 @@
                  (string? currency-str)
                  (gnc-commodity-table-lookup commodity-table
                                              "ISO4217"
-                                             (string-upcase currency-str)))))
+                                             (string-upcase currency-str))))
+           (pricedb (gnc-pricedb-get-db book))
+           (saved-price #f)
+           (commodity-str (gnc-commodity-get-printname commodity))
+           )
 
       (or-map (lambda (price-sym)
                 (let ((p (assq-ref quote-data price-sym)))
@@ -403,27 +407,46 @@
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
            currency-str ":" (gnc-commodity-get-mnemonic commodity))
-          (let ((gnc-price (gnc-price-create book)))
-            (if (not gnc-price)
-                (string-append
-                 currency-str ":" (gnc-commodity-get-mnemonic commodity))
-                (begin
-				  (gnc-price-begin-edit gnc-price)
-                  (gnc-price-set-commodity gnc-price commodity)
-                  (gnc-price-set-currency gnc-price currency)
-                  (gnc-price-set-time gnc-price gnc-time)
-                  (gnc-price-set-source gnc-price "Finance::Quote")
-                  (gnc-price-set-typestr gnc-price price-type)
-                  (gnc-price-set-value gnc-price price)
-				  (gnc-price-commit-edit gnc-price)
-                  gnc-price))))))
+          (begin
+            (set! saved-price (gnc-pricedb-lookup-day pricedb
+                                                      commodity currency
+                                                      gnc-time))
+            (if (not (null? saved-price))
+                (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
+                    (begin
+                      (gnc-price-begin-edit saved-price)
+                      (gnc-price-set-time saved-price gnc-time)
+                      (gnc-price-set-source saved-price PRICE-SOURCE-FQ)
+                      (gnc-price-set-typestr saved-price price-type)
+                      (gnc-price-set-value saved-price price)
+                      (gnc-price-commit-edit saved-price)
+                      #f)
+                    #f)
+              (let ((gnc-price (gnc-price-create book)))
+                (if (not gnc-price)
+                    (string-append
+                     currency-str ":" (gnc-commodity-get-mnemonic commodity))
+                    (begin
+                      (gnc-price-begin-edit gnc-price)
+                      (gnc-price-set-commodity gnc-price commodity)
+                      (gnc-price-set-currency gnc-price currency)
+                      (gnc-price-set-time gnc-price gnc-time)
+                      (gnc-price-set-source gnc-price PRICE-SOURCE-FQ)
+                      (gnc-price-set-typestr gnc-price price-type)
+                      (gnc-price-set-value gnc-price price)
+                      (gnc-price-commit-edit gnc-price)
+                      gnc-price)))))
+          )))
 
   (define (book-add-prices! book prices)
     (let ((pricedb (gnc-pricedb-get-db book)))
       (for-each
        (lambda (price)
-         (gnc-pricedb-add-price pricedb price)
-         (gnc-price-unref price))
+         (if price
+             (begin
+               (gnc-pricedb-add-price pricedb price)
+               (gnc-price-unref price)
+               #f)))
        prices)))
 
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
