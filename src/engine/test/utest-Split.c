@@ -110,7 +110,7 @@ teardown (Fixture *fixture, gconstpointer pData)
     test_destroy (fixture->split);
     test_destroy (fixture->curr);
     test_destroy (fixture->comm);
-    test_destroy (book);
+    qof_book_destroy (book);
     g_free (fixture->func);
     g_slist_free_full (fixture->hdlrs, test_free_log_handler);
     test_clear_error_list();
@@ -171,7 +171,7 @@ test_gnc_split_dispose ()
     g_assert (instance->e_type == NULL);
 
     g_object_unref (split);
-    g_object_unref (book);
+    qof_book_destroy (book);
 }
 /* gnc_split_finalize
 static void
@@ -251,7 +251,7 @@ test_gnc_split_set_get_property ()
     g_object_unref (lot);
     gnc_commodity_destroy (curr);
     g_object_unref (split);
-    g_object_unref (book);
+    qof_book_destroy (book);
 }
 
 /* xaccInitSplit
@@ -1094,7 +1094,7 @@ test_xaccSplitDestroy ()
     test_destroy (txn);
     test_destroy (acc);
     test_destroy (gnaira);
-    test_destroy (book);
+    qof_book_destroy (book);
 }
 /* xaccSplitOrder
 gint

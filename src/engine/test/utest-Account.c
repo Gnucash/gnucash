@@ -694,8 +694,7 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
     /* acc1 gets freed by setting the root accout to acc2
         g_object_unref (acc1);
     */
-    g_object_unref (book1);
-    g_object_unref (acc2);
+    qof_book_destroy (book1);
 }
 
 /* xaccMallocAccount
@@ -711,8 +710,8 @@ test_xaccMallocAccount (void)
     g_assert (acc != NULL);
     test_signal_assert_hits (signal, 1);
     test_signal_free (signal);
-    g_object_unref (book);
     g_object_unref (acc);
+    qof_book_destroy (book);
 }
 
 /* gnc_account_create_root
@@ -734,8 +733,8 @@ test_gnc_account_create_root (void)
     g_object_get (acc, "name", &name, NULL);
     g_assert_cmpstr (name, == , "Root Account");
     g_assert (gnc_book_get_root_account (book) == acc);
-    g_object_unref (book);
     g_object_unref (acc);
+    qof_book_destroy (book);
     g_free (func);
     g_free (name);
 }
@@ -1403,7 +1402,7 @@ test_xaccAccountOrder ( )
     xaccAccountDestroy (aa);
     xaccAccountBeginEdit (ab);
     xaccAccountDestroy (ab);
-    g_object_unref (book);
+    qof_book_destroy (book);
 }
 /* qof_xaccAccountOrder
 static int
@@ -1544,7 +1543,7 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     xaccAccountDestroy (account);
     xaccAccountBeginEdit (froot);
     xaccAccountDestroy (froot);
-    g_object_unref (fbook);
+    qof_book_destroy (fbook);
 
 }
 /* Simple Getters or passthroughs, no tests:
