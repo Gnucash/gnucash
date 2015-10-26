@@ -169,7 +169,8 @@ typedef enum
     PRICE_SOURCE_SPLIT_REG,        // "user:split-register"
     PRICE_SOURCE_STOCK_SPLIT,      // "user:stock-split"
     PRICE_SOURCE_INVOICE,          // "user:invoice-post"
-    PRICE_SOURCE_INVALID,
+    PRICE_SOURCE_TEMP,             // "temporary"
+    PRICE_SOURCE_INVALID,          // "invalid"
 } PriceSource;
 
 #define PRICE_TYPE_LAST "last"
@@ -188,6 +189,17 @@ GNCPrice *gnc_price_create(QofBook *book);
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
 GNCPrice *gnc_price_clone(GNCPrice* p, QofBook *book);
+
+/** Return a newly-allocated price that's the inverse of the given price, p.
+ *
+ * Inverse means that the commodity and currency are swapped and the value is
+ * the numeric inverse of the original's. The source is set to PRICE_SOURCE_TEMP
+ * to prevent it being saved in the pricedb.
+ * @param p The price to invert
+ * @return a new price, with a ref-count of 1. Don't forget to unref it!
+ */
+GNCPrice *gnc_price_invert(GNCPrice *p);
+
 /**  @} */
 
 /* ------------------ */

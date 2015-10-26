@@ -95,11 +95,10 @@ gnc_price_init(GNCPrice* price)
 
 /* Array of char constants for converting price-source enums. Be sure to keep in
  * sync with the enum values in gnc-pricedb.h The string user:price-editor is
- * explicitly used by price_to_gui() in dialog-price-editor.c and the string
- * Finance::Quote is explicitly used by fq-results->commod-tz-quote-triples in
- * price-quotes.scm. Take care to keep them in sync if you make changes. Beware
+ * explicitly used by price_to_gui() in dialog-price-editor.c. Beware
  * that the strings are used to store the enum values in the backends so any
  * changes will affect backward data compatibility.
+ * The last two values, temporary and invalid, are *not* used.
  */
 static const char* source_names[] =
 {
@@ -112,7 +111,7 @@ static const char* source_names[] =
     "user:xfer-dialog",
     "user:split-register",
     "user:stock-split",
-    "user:invoice-post",
+    "temporary",
     "invalid"
 };
 
@@ -381,6 +380,23 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
     gnc_price_commit_edit(new_p);
     LEAVE (" ");
     return(new_p);
+}
+
+GNCPrice *
+gnc_price_invert (GNCPrice *p)
+{
+    QofBook *book = qof_instance_get_book (QOF_INSTANCE(p));
+    GNCPrice *new_p = gnc_price_create (book);
+    qof_instance_copy_version(new_p, p);
+    gnc_price_begin_edit(new_p);
+    gnc_price_set_time(new_p, gnc_price_get_time(p));
+    gnc_price_set_source(new_p, PRICE_SOURCE_TEMP);
+    gnc_price_set_typestr(new_p, gnc_price_get_typestr(p));
+    gnc_price_set_commodity(new_p, gnc_price_get_currency(p));
+    gnc_price_set_currency(new_p, gnc_price_get_commodity(p));
+    gnc_price_set_value(new_p, gnc_numeric_invert(gnc_price_get_value(p)));
+    gnc_price_commit_edit(new_p);
+    return new_p;
 }
 
 /* ==================================================================== */
