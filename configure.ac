@@ -1297,7 +1297,7 @@ then
 #Save CFLAGS so that we can put the warnings in AM_CFLAGS
   __cflags="$CFLAGS"
   CFLAGS=
-  GNOME_COMPILE_WARNINGS
+  COMPILE_WARNINGS
   AM_CFLAGS="$CFLAGS"
   CFLAGS="$__cflags"
 
@@ -1438,7 +1438,7 @@ then
   AM_CXXFLAGS="${AM_CXXFLAGS} -Wall"
 
 else
-  # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
+  # COMPILE_WARNINGS will add -Wall; no need to set it again.
   # also, only add it for GCC.
   if test ${GCC}x = yesx
   then
@@ -1552,12 +1552,14 @@ AC_ARG_ENABLE(python-bindings,
 ### Additional compiler warnings (or not) if we're running GCC
 ###-------------------------------------------------------------------------
 
-# This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+
+# This has to come after AC_PROG_CC _AND_ COMPILE_WARNINGS
 AC_LANG([C++])
 AX_CHECK_COMPILE_FLAG([-Wno-deprecated-register],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"], [-Werror])
 AC_LANG([C])
+
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
@@ -1567,7 +1569,7 @@ then
   #around to cleaning them up.
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
   # other flags...
-  # These next two are included in the GNOME_COMPILE_WARNINGS
+  # These next two are included in the COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
   #warnFLAGS="${warnFLAGS} -Wmissing-declarations"
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall

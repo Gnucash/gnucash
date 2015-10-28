@@ -164,7 +164,8 @@ remove_clicked (CommoditiesDialog *cd)
     g_list_free (accounts);
 
     pdb = gnc_pricedb_get_db (cd->book);
-    if (gnc_pricedb_has_prices(pdb, commodity, NULL))
+    prices = gnc_pricedb_get_prices(pdb, commodity, NULL);
+    if (prices)
     {
         message = _("This commodity has price quotes. Are "
                     "you sure you want to delete the selected "
