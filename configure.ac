@@ -1028,7 +1028,8 @@ then
   then
     enable_compile_warnings="yes"
   fi
-  GNOME_COMPILE_WARNINGS
+  COMPILE_WARNINGS
+
 
   PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.24.0)
   AS_SCRUB_INCLUDE(GTK_CFLAGS)
@@ -1169,7 +1170,7 @@ then
   AC_DEFINE(GNOME,,using GNOME)
 
 else
-  # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
+  # COMPILE_WARNINGS will add -Wall; no need to set it again.
   # also, only add it for GCC.
   if test ${GCC}x = yesx
   then
@@ -1294,14 +1295,14 @@ AC_ARG_ENABLE(python-bindings,
 ### Additional compiler warnings (or not) if we're running GCC
 ###-------------------------------------------------------------------------
 
-# This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+# This has to come after AC_PROG_CC _AND_ COMPILE_WARNINGS
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
   CFLAGS="${CFLAGS} -Wno-unused"
   # other flags...
-  # These next two are included in the GNOME_COMPILE_WARNINGS
+  # These next two are included in the COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
   #warnFLAGS="${warnFLAGS} -Wmissing-declarations"
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
