@@ -419,38 +419,37 @@
             (set! saved-price (gnc-pricedb-lookup-day pricedb
                                                       commodity currency
                                                       gnc-time))
-            (if (null? saved-price) ;;See if there's a reversed price.
-                (begin
-                  (set! saved-price (gnc-pricedb-lookup-day pricedb currency
-                                                            commodity gnc-time))
-                  (if (not (null? saved-price))
-                      (set! price (gnc-numeric-invert price)))))
             (if (not (null? saved-price))
-                (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
-                    (begin
-                      (gnc-price-begin-edit saved-price)
-                      (gnc-price-set-time saved-price gnc-time)
-                      (gnc-price-set-source saved-price PRICE-SOURCE-FQ)
-                      (gnc-price-set-typestr saved-price price-type)
-                      (gnc-price-set-value saved-price price)
-                      (gnc-price-commit-edit saved-price)
+                (begin
+                  (if (gnc-commodity-equiv (gnc-price-get-currency saved-price)
+                                           commodity)
+                      (set! price (gnc-numeric-invert price)))
+                  (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
+                      (begin
+                        (gnc-price-begin-edit saved-price)
+                        (gnc-price-set-time saved-price gnc-time)
+                        (gnc-price-set-source saved-price PRICE-SOURCE-FQ)
+                        (gnc-price-set-typestr saved-price price-type)
+                        (gnc-price-set-value saved-price price)
+                        (gnc-price-commit-edit saved-price)
+                        #f)
                       #f)
-                    #f)
-              (let ((gnc-price (gnc-price-create book)))
-                (if (not gnc-price)
-                    (string-append
-                     currency-str ":" (gnc-commodity-get-mnemonic commodity))
-                    (begin
-                      (gnc-price-begin-edit gnc-price)
-                      (gnc-price-set-commodity gnc-price commodity)
-                      (gnc-price-set-currency gnc-price currency)
-                      (gnc-price-set-time gnc-price gnc-time)
-                      (gnc-price-set-source gnc-price PRICE-SOURCE-FQ)
-                      (gnc-price-set-typestr gnc-price price-type)
-                      (gnc-price-set-value gnc-price price)
-                      (gnc-price-commit-edit gnc-price)
-                      gnc-price)))))
-          )))
+                  (let ((gnc-price (gnc-price-create book)))
+                    (if (not gnc-price)
+                        (string-append
+                         currency-str ":" (gnc-commodity-get-mnemonic commodity))
+                        (begin
+                          (gnc-price-begin-edit gnc-price)
+                          (gnc-price-set-commodity gnc-price commodity)
+                          (gnc-price-set-currency gnc-price currency)
+                          (gnc-price-set-time gnc-price gnc-time)
+                          (gnc-price-set-source gnc-price PRICE-SOURCE-FQ)
+                          (gnc-price-set-typestr gnc-price price-type)
+                          (gnc-price-set-value gnc-price price)
+                          (gnc-price-commit-edit gnc-price)
+                          gnc-price)))))
+            ))
+      ))
 
   (define (book-add-prices! book prices)
     (let ((pricedb (gnc-pricedb-get-db book)))
