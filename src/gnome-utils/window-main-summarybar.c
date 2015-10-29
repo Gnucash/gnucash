@@ -148,20 +148,23 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
     for (node = children; node; node = g_list_next(node))
     {
         Account *account = node->data;
+        QofBook *book = gnc_account_get_book (account);
+        GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
+        gnc_commodity *to_curr = options.default_currency;
 
         account_type = xaccAccountGetType(account);
         account_currency = xaccAccountGetCommodity(account);
 
         if (options.grand_total)
             grand_total_accum = gnc_ui_get_currency_accumulator(currency_list,
-                                options.default_currency,
+                                to_curr,
                                 TOTAL_GRAND_TOTAL);
 
         if (!gnc_commodity_is_currency(account_currency))
         {
             non_currency = TRUE;
             non_curr_accum = gnc_ui_get_currency_accumulator(currency_list,
-                             options.default_currency,
+                             to_curr,
                              TOTAL_NON_CURR_TOTAL);
         }
 
@@ -186,9 +189,10 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
             end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
             timespecFromTime64(&end_timespec, options.end_date);
             end_amount_default_currency =
-                xaccAccountConvertBalanceToCurrencyAsOfDate
-                (account, end_amount, account_currency, options.default_currency,
-                 timespecToTime64(timespecCanonicalDayTime(end_timespec)));
+                gnc_pricedb_convert_balance_nearest_price (pricedb, end_amount,
+                                                           account_currency,
+                                                           to_curr,
+                                                           end_timespec);
 
             if (!non_currency || options.non_currency)
             {
@@ -202,7 +206,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
             {
                 non_curr_accum->assets =
                     gnc_numeric_add (non_curr_accum->assets, end_amount_default_currency,
-                                     gnc_commodity_get_fraction (options.default_currency),
+                                     gnc_commodity_get_fraction (to_curr),
                                      GNC_HOW_RND_ROUND_HALF_UP);
             }
 
@@ -210,7 +214,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
             {
                 grand_total_accum->assets =
                     gnc_numeric_add (grand_total_accum->assets, end_amount_default_currency,
-                                     gnc_commodity_get_fraction (options.default_currency),
+                                     gnc_commodity_get_fraction (to_curr),
                                      GNC_HOW_RND_ROUND_HALF_UP);
             }
 
@@ -221,15 +225,18 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
             start_amount = xaccAccountGetBalanceAsOfDate(account, options.start_date);
             timespecFromTime64(&start_timespec, options.start_date);
             start_amount_default_currency =
-                xaccAccountConvertBalanceToCurrencyAsOfDate
-                (account, start_amount, account_currency, options.default_currency,
-                 timespecToTime64(timespecCanonicalDayTime(start_timespec)));
+                gnc_pricedb_convert_balance_nearest_price (pricedb,
+                                                           start_amount,
+                                                           account_currency,
+                                                           to_curr,
+                                                           start_timespec);
             end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
             timespecFromTime64(&end_timespec, options.end_date);
             end_amount_default_currency =
-                xaccAccountConvertBalanceToCurrencyAsOfDate
-                (account, end_amount, account_currency, options.default_currency,
-                 timespecToTime64(timespecCanonicalDayTime(end_timespec)));
+                gnc_pricedb_convert_balance_nearest_price (pricedb, end_amount,
+                                                           account_currency,
+                                                           to_curr,
+                                                           end_timespec);
 
             if (!non_currency || options.non_currency)
             {
@@ -247,11 +254,11 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
             {
                 non_curr_accum->profits =
                     gnc_numeric_add (non_curr_accum->profits, start_amount_default_currency,
-                                     gnc_commodity_get_fraction (options.default_currency),
+                                     gnc_commodity_get_fraction (to_curr),
                                      GNC_HOW_RND_ROUND_HALF_UP);
                 non_curr_accum->profits =
                     gnc_numeric_sub (non_curr_accum->profits, end_amount_default_currency,
-                                     gnc_commodity_get_fraction (options.default_currency),
+                                     gnc_commodity_get_fraction (to_curr),
                                      GNC_HOW_RND_ROUND_HALF_UP);
             }
 
@@ -260,12 +267,12 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                 grand_total_accum->profits =
                     gnc_numeric_add (grand_total_accum->profits,
                                      start_amount_default_currency,
-                                     gnc_commodity_get_fraction (options.default_currency),
+                                     gnc_commodity_get_fraction (to_curr),
                                      GNC_HOW_RND_ROUND_HALF_UP);
                 grand_total_accum->profits =
                     gnc_numeric_sub (grand_total_accum->profits,
                                      end_amount_default_currency,
-                                     gnc_commodity_get_fraction (options.default_currency),
+                                     gnc_commodity_get_fraction (to_curr),
                                      GNC_HOW_RND_ROUND_HALF_UP);
             }
 
@@ -568,4 +575,3 @@ gnc_main_window_summary_new (void)
 
     return retval->hbox;
 }
-

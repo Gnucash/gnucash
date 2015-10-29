@@ -185,6 +185,8 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
                                        time64 date,
                                        gboolean include_children)
 {
+    QofBook *book = gnc_account_get_book (account);
+    GNCPriceDB *pdb = gnc_pricedb_get_db (book);
     gnc_numeric balance;
     gnc_commodity *currency;
 
@@ -209,8 +211,10 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
             child = node->data;
             child_currency = xaccAccountGetCommodity (child);
             child_balance = xaccAccountGetBalanceAsOfDate (child, date);
-            child_balance = xaccAccountConvertBalanceToCurrency (child,
-                            child_balance, child_currency, currency);
+            child_balance =
+                gnc_pricedb_convert_balance_latest_price (pdb, child_balance,
+                                                          child_currency,
+                                                          currency);
             balance = gnc_numeric_add_fixed (balance, child_balance);
         }
 
@@ -316,4 +320,3 @@ gnc_ui_owner_get_print_report_balance (GncOwner *owner,
     print_info = gnc_commodity_print_info (report_commodity, TRUE);
     return g_strdup (xaccPrintAmount (balance, print_info));
 }
-
