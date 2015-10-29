@@ -231,7 +231,10 @@ refresh_details_page (StockSplitInfo *info)
     if (prices)
     {
         /* Use the first existing price */
-        currency = gnc_price_get_currency(prices->data);
+        if (gnc_commodity_equiv (commodity, gnc_price_get_currency(prices->data)))
+            currency = gnc_price_get_commodity(prices->data);
+        else
+            currency = gnc_price_get_currency(prices->data);
     }
     else
     {

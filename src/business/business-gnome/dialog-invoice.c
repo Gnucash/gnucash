@@ -898,7 +898,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             gnc_price_set_commodity (convprice, account_currency);
             gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
             gnc_price_set_time (convprice, postdate);
-            gnc_price_set_source (convprice, PRICE_SOURCE_INVOICE);
+            gnc_price_set_source (convprice, PRICE_SOURCE_TEMP);
             gnc_price_set_typestr (convprice, PRICE_TYPE_LAST);
             gnc_price_set_value (convprice, exch_rate);
             gncInvoiceAddPrice(invoice, convprice);

@@ -2067,15 +2067,9 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
         return;
     gnc_date_cell_get_date ((DateCell*)cell, &ts);
     price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
-    if (!price)
-    {
-        price = gnc_pricedb_lookup_day (pricedb, curr, comm, ts);
-        if (price)
-/* It might be better to raise an error here: We shouldn't be creating
- * currency->commodity prices.
- */
+    if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
             swap = TRUE;
-    }
+
     if (price)
     {
         price_value = gnc_price_get_value(price);

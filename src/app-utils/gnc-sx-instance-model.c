@@ -1122,9 +1122,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                   price = gnc_pricedb_lookup_latest(price_db, first_cmdty, split_cmdty);
                   if (price == NULL)
                   {
-                  price = gnc_pricedb_lookup_latest(price_db, split_cmdty, first_cmdty);
-                  if (price == NULL)
-                  {
                   GString *err = g_string_new("");
                   g_string_printf(err, "could not find pricedb entry for commodity-pair (%s, %s).",
                   gnc_commodity_get_mnemonic(first_cmdty),
@@ -1135,7 +1132,9 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                   }
                   else
                   {
-                  exchange = gnc_numeric_invert(gnc_price_get_value(price));
+                 if (gnc_commodity_equiv(first_cmdty,
+                     gnc_price_get_commodity(price)))
+                      exchange = gnc_numeric_invert(gnc_price_get_value(price));
                   exchange = gnc_numeric_convert(exchange, 1000,
                                                  GNC_HOW_RND_ROUND_HALF_UP);
                   }

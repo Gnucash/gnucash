@@ -347,7 +347,11 @@ pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer data)
                      (pedit_dialog->price_db, commodity);
         if (price_list)
         {
-            currency = gnc_price_get_currency((GNCPrice *)price_list->data);
+            GNCPrice * price = (GNCPrice*)price_list->data;
+            if (gnc_commodity_equiv(commodity, gnc_price_get_currency(price)))
+                currency = gnc_price_get_commodity((GNCPrice *)price);
+            else
+                currency = gnc_price_get_currency((GNCPrice *)price);
 
             if (currency)
                 gnc_currency_edit_set_currency
