@@ -193,6 +193,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         gnc_commodity *split_cmdty = NULL;
         GncGUID *acct_guid;
         Account *acct;
+        gnc_numeric split_amount;
 
         s = (Split*)split_list->data;
         kvpf = xaccSplitGetSlots(s);
@@ -203,12 +204,14 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         acct_guid = kvp_value_get_guid(kvp_val);
         acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
         split_cmdty = xaccAccountGetCommodity(acct);
-        if (first_cmdty == NULL)
+        split_amount = xaccSplitGetAmount(s);
+        if (!gnc_numeric_zero_p(split_amount) && first_cmdty == NULL)
         {
             first_cmdty = split_cmdty;
         }
 
-        if (! gnc_commodity_equal(split_cmdty, first_cmdty))
+        if (!gnc_numeric_zero_p(split_amount) &&
+            ! gnc_commodity_equal(split_cmdty, first_cmdty))
         {
             GncSxVariable *var;
             GString *var_name;
