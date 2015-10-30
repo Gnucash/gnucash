@@ -1477,7 +1477,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 	    currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
         else
         {
-            currency_symbol = gnc_commodity_get_mnemonic (info.commodity);
+            currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
             cs_precedes  = FALSE;
             sep_by_space = TRUE;
         }
