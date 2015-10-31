@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-05 10:40-0700\n"
-"PO-Revision-Date: 2015-10-27 17:55+0100\n"
+"PO-Revision-Date: 2015-10-31 18:33+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -7838,7 +7838,6 @@ msgid "Select the account for which you want to record a stock split or merger."
 msgstr "Wählen Sie das Konto, für das Sie die Teilung oder den Zusammenschluss eingeben möchten."
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:5
-#, fuzzy
 msgid "Stock Split Account"
 msgstr "Aktiendepot"
 
@@ -7909,7 +7908,6 @@ msgid "<b>A_sset Account</b>"
 msgstr "<b>_Aktiva Konto</b>"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:21
-#, fuzzy
 msgid "Cash in Lieu"
 msgstr "Ausgleichsbetrag"
 
@@ -10608,7 +10606,6 @@ msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
 msgstr "Zuletzt geändert am %a, %e.%b %Y um %I:%M%P"
 
 #: ../src/gnome-utils/gnc-main-window.c:1671
-#, fuzzy, c-format
 msgid "Last modified on %x %X"
 msgstr "Zuletzt geändert am %a, %e.%b %Y um %I:%M"
 
@@ -20122,7 +20119,7 @@ msgstr "Durchschnittlicher Kontostand"
 #: ../src/report/standard-reports/net-linechart.scm:45
 #: ../src/report/standard-reports/price-scatter.scm:39
 msgid "Step Size"
-msgstr "Schrittgrösse"
+msgstr "Schrittgröße"
 
 #: ../src/report/standard-reports/average-balance.scm:43
 #: ../src/report/standard-reports/daily-reports.scm:63
