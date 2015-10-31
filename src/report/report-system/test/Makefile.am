@@ -23,7 +23,8 @@ SCM_TESTS = \
 	test-list-extras \
 	test-test-extras \
 	test-account  \
-	test-split
+	test-split \
+	test-report-utilities
 
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
