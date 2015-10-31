@@ -39,10 +39,6 @@
     @ingroup QOF
 */
 /**
-    @addtogroup Math128 Math128: 128-bit Integer Math Library
-    @ingroup QOF
-*/
-/**
     @addtogroup Numeric Numeric: Rational Number Handling w/ Rounding Error Control
     @ingroup QOF
 */

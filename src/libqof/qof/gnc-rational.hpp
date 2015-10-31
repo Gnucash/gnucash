@@ -24,6 +24,10 @@
 
 struct GncDenom;
 
+/** @ingroup QOF
+ *  @brief Rational number class using GncInt128 for the numerator and denominator.
+ */
+
 class GncRational
 {
 public:

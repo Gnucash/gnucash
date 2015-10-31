@@ -45,8 +45,9 @@ extern "C"
 #include <type_traits>
 
 //using std::string;
-
-/**
+/** @addtogroup GncInt128
+ * @ingroup QOF
+ * @{
  * @brief provides a 128-bit int as a base class for GncNumeric.
  *
  * All the usual operators are provided. Only the explicit integer
@@ -64,9 +65,9 @@ class GncInt128
     uint64_t m_lo;
 
 public:
-static const unsigned int numlegs = 2;
-static const unsigned int legbits = 64;
-static const unsigned int maxbits = legbits * numlegs;
+    static const unsigned int numlegs = 2;
+    static const unsigned int legbits = 64;
+    static const unsigned int maxbits = legbits * numlegs;
 
 enum // Values for m_flags
 {
@@ -75,14 +76,16 @@ enum // Values for m_flags
     overflow = 2,
     NaN = 4
 };
-/**
- * Construct a GncInt128 from two int64_t.
- *
- * N.B.: If the two parameters are of differing sign, it's taken to
+/** @addtogroup Constructors Constructors
+ *  Constructors are templated so that a GncInt128 can be constructed from any
+ *  arbitrary integer type or pair of integer types.
+ * @note If the two parameters are of differing sign, it's taken to
  * mean that the lower magnitude is *reducing* the magnitude of the
  * upper, so the lower magnitude will be subracted from UINT64_MAX to
  * obtain the lower limb value.
+*  @{
  */
+/** Default constructor. Makes 0. */
     GncInt128();
     template <typename T>
     GncInt128(T lower) : GncInt128 {INT64_C(0), static_cast<int64_t>(lower)}
@@ -119,6 +122,7 @@ enum // Values for m_flags
 
     GncInt128 (int64_t upper, uint64_t lower, unsigned char flags = '\0');
     GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
+/** @} */
 /**
  * Clear the object.
  *
