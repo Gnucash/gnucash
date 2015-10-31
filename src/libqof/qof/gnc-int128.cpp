@@ -46,17 +46,9 @@ namespace {
 
 GncInt128::GncInt128 () : m_flags {}, m_hi {0}, m_lo {0}{}
 
-GncInt128::GncInt128 (int64_t lower) :
-    m_flags {static_cast<unsigned char>(lower < 0 ? neg : pos)},
-    m_hi {0},
-    m_lo {static_cast<uint64_t>(lower < 0 ? -lower : lower)} {}
-
-GncInt128::GncInt128 (uint64_t lower) :
-    m_flags {}, m_hi {0}, m_lo {lower} {}
-
 GncInt128::GncInt128 (int64_t upper, int64_t lower, unsigned char flags) :
     m_flags {static_cast<unsigned char>(flags ^ (upper < 0 ? neg :
-    upper == 0 && lower < 0 ? neg : pos))},
+                                                 upper == 0 && lower < 0 ? neg : pos))},
     m_hi {static_cast<uint64_t>(upper < 0 ? -upper : upper)},
     m_lo {static_cast<uint64_t>(lower < 0 ? -lower : lower)}
 {
@@ -68,9 +60,12 @@ GncInt128::GncInt128 (int64_t upper, int64_t lower, unsigned char flags) :
     m_hi >>= 1;
 }
 
+GncInt128::GncInt128 (int64_t upper, uint64_t lower, unsigned char flags) :
+    m_flags {static_cast<unsigned char>(flags ^ (upper < 0 ? neg : pos))},
+    m_hi {static_cast<uint64_t>(upper < 0 ? -upper : upper)}, m_lo {lower} {}
+
 GncInt128::GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags) :
-    m_flags {flags}, m_hi {upper},
-    m_lo {lower} {}
+    m_flags {flags}, m_hi {upper}, m_lo {lower} {}
 
 GncInt128&
 GncInt128::zero () noexcept
@@ -609,7 +604,7 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, GncInt128& q, GncInt128& r) n
 
 }// namespace
 
-void
+ void
 GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) noexcept
 {
     if (isOverflow() || b.isOverflow())

@@ -42,6 +42,7 @@ extern "C"
 #include <stdexcept>
 #include <string>
 #include <ostream>
+#include <type_traits>
 
 //using std::string;
 
@@ -74,14 +75,6 @@ enum // Values for m_flags
     overflow = 2,
     NaN = 4
 };
-
-    GncInt128 ();
-    GncInt128 (int16_t lower) : GncInt128{static_cast<int64_t>(lower)} {};
-    GncInt128 (uint16_t lower) : GncInt128{static_cast<uint64_t>(lower)} {};
-    GncInt128 (int32_t lower) : GncInt128{static_cast<int64_t>(lower)} {};
-    GncInt128 (uint32_t lower) : GncInt128{static_cast<uint64_t>(lower)} {};
-    GncInt128 (int64_t lower);
-    GncInt128 (uint64_t lower);
 /**
  * Construct a GncInt128 from two int64_t.
  *
@@ -90,21 +83,42 @@ enum // Values for m_flags
  * upper, so the lower magnitude will be subracted from UINT64_MAX to
  * obtain the lower limb value.
  */
-    GncInt128 (int16_t upper, int16_t lower, unsigned char flags = '\0') :
-        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
-                      flags} {};
-    GncInt128 (uint16_t upper, uint16_t lower, unsigned char flags = '\0') :
-        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
-                      flags} {};
-    GncInt128 (int32_t upper, int32_t lower, unsigned char flags = '\0') :
-        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
-                      flags} {};
-    GncInt128 (uint32_t upper, uint32_t lower, unsigned char flags = '\0') :
-        GncInt128{static_cast<int64_t>(upper), static_cast<int64_t>(lower),
-                      flags} {};
-    GncInt128 (int64_t upper, int64_t lower, unsigned char flags = '\0');
-    GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
+    GncInt128();
+    template <typename T>
+    GncInt128(T lower) : GncInt128 {INT64_C(0), static_cast<int64_t>(lower)}
+    {
+        static_assert (std::is_integral<T>(),
+                       "GncInt128 can be constructed only with "
+                       "integral arguments.");
+    }
+    GncInt128(uint64_t lower) : GncInt128 {UINT64_C(0), lower} {}
+/** Double-integer constructor template.
+ */
+    template <typename T, typename U>
+    GncInt128(T upper, U lower, unsigned char flags = '\0') :
+        GncInt128 {static_cast<int64_t>(upper),
+                   static_cast<int64_t>(lower), flags}
+    {
+        static_assert (std::is_integral<T>(),
+                       "GncInt128 can be constructed only with "
+                       "integral arguments.");
+        static_assert (std::is_integral<U>(),
+                       "GncInt128 can be constructed only with "
+                       "integral arguments.");
+    }
 
+    GncInt128 (int64_t upper, int64_t lower, unsigned char flags = '\0');
+    template <typename T>
+    GncInt128(T upper, uint64_t lower) :
+        GncInt128 {static_cast<int64_t>(upper), lower}
+        {
+            static_assert (std::is_integral<T>(),
+                           "GncInt128 can be constructed only with "
+                           "integral arguments.");
+        }
+
+    GncInt128 (int64_t upper, uint64_t lower, unsigned char flags = '\0');
+    GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags = '\0');
 /**
  * Clear the object.
  *
