@@ -1473,11 +1473,9 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
     if (info.commodity && info.use_symbol)
     {
-        if (gnc_commodity_is_iso (info.commodity))
-	    currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
-        else
+        currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
+        if (!gnc_commodity_is_iso (info.commodity))
         {
-            currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
             cs_precedes  = FALSE;
             sep_by_space = TRUE;
         }
