@@ -1109,6 +1109,12 @@ add_price(GNCPriceDB *db, GNCPrice *p)
         return FALSE;
     }
 
+    if (!insert_or_replace_price(db, p))
+    {
+        LEAVE("A better price already exists");
+        return FALSE;
+    }
+
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
     if (!currency_hash)
     {
@@ -1128,11 +1134,6 @@ add_price(GNCPriceDB *db, GNCPrice *p)
         return FALSE;
     }
 
-    if (!insert_or_replace_price(db, p))
-    {
-        LEAVE("A better price already exists");
-        return FALSE;
-    }
     g_hash_table_insert(currency_hash, currency, price_list);
     p->db = db;
     qof_event_gen (&p->inst, QOF_EVENT_ADD, NULL);
