@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-05 10:40-0700\n"
-"PO-Revision-Date: 2015-10-31 18:33+0100\n"
+"PO-Revision-Date: 2015-11-01 10:09+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -8214,7 +8214,6 @@ msgid "Add a new price."
 msgstr "Neuen Kurswert hinzufügen."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
-#, fuzzy
 msgid "Remove the current price."
 msgstr "Aktuellen Kurswert entfernen."
 
@@ -8223,7 +8222,6 @@ msgid "Edit the current price."
 msgstr "Aktuellen Kurs bearbeiten."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:18
-#, fuzzy
 msgid "Remove prices older than a user-entered date."
 msgstr "Entferne Kurse, die älter als ein bestimmtes Datum sind"
 
@@ -8430,7 +8428,6 @@ msgid "Account Deletion"
 msgstr "Kontenlöschung"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:2
-#, fuzzy
 msgid "The following Scheduled Transactions reference the deleted account and must now be corrected. Press OK to edit them."
 msgstr "Die folgenden terminierten Buchungen gehören zu dem gelöschten Konto und müssen nun geändert werden. Klicken Sie Ok, um sie zu ändern."
 
@@ -9097,7 +9094,6 @@ msgid "Search only active data"
 msgstr "Nur aktive Daten durchsuchen"
 
 #: ../src/gnome-search/dialog-search.glade.h:12
-#, fuzzy
 msgid "Choose whether to search all your data or only that marked as \"active\"."
 msgstr "Wählen Sie, ob entweder alle Daten durchsucht werden sollen oder nur der als »aktiv« markierte Teil"
 
@@ -10315,7 +10311,6 @@ msgid "GnuCash could not find the associated file."
 msgstr "GnuCash konnte die dazugehörige Datei nicht finden."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:452
-#, fuzzy
 msgid "GnuCash could not find the associated file"
 msgstr "GnuCash konnte die dazugehörige Datei nicht finden."
 
@@ -10633,7 +10628,6 @@ msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
-#, fuzzy
 msgid "© 1997-2015 Contributors"
 msgstr "© 1997-2015 Mitwirkende"
 
