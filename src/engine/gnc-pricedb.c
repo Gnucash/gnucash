@@ -1489,6 +1489,7 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
      * first in the list.  */
     result = price_list->data;
     gnc_price_ref(result);
+    g_list_free (price_list);
     LEAVE(" ");
     return result;
 }
@@ -1818,10 +1819,12 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
         if (timespec_equal(&price_time, &t))
         {
             gnc_price_ref(p);
+            g_list_free (price_list);
             return p;
         }
         item = item->next;
     }
+    g_list_free (price_list);
     LEAVE (" ");
     return NULL;
 }
@@ -1934,6 +1937,7 @@ lookup_nearest_in_time(GNCPriceDB *db,
     }
 
     gnc_price_ref(result);
+    g_list_free (price_list);
     LEAVE (" ");
     return result;
 }
@@ -1975,6 +1979,7 @@ gnc_pricedb_lookup_latest_before (GNCPriceDB *db,
     }
     while (timespec_cmp(&price_time, &t) > 0 && item);
     gnc_price_ref(current_price);
+    g_list_free (price_list);
     LEAVE (" ");
     return current_price;
 }
