@@ -948,6 +948,27 @@ csv_export_assistant_create (CsvExportInfo *info)
     return window;
 }
 
+static void
+gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
+{
+    CsvExportInfo *info;
+
+    info = g_new0 (CsvExportInfo, 1);
+    info->export_type = export_type;
+
+    if (q)
+        info->query = q;
+    if (acc)
+        info->account = acc;
+
+    csv_export_assistant_create (info);
+    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
+                                NULL, csv_export_close_handler,
+                                info);
+    gtk_widget_show_all (info->window);
+    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+}
+
 
 /********************************************************************\
  * gnc_file_csv_export                                              *
@@ -959,16 +980,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 void
 gnc_file_csv_export (CsvExportType export_type)
 {
-    CsvExportInfo *info;
-
-    info = g_new0 (CsvExportInfo, 1);
-    info->export_type = export_type;
-    csv_export_assistant_create (info);
-    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
-                                NULL, csv_export_close_handler,
-                                info);
-    gtk_widget_show_all (info->window);
-    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+    gnc_file_csv_export_internal (export_type, NULL, NULL);
 }
 
 
@@ -983,16 +995,5 @@ gnc_file_csv_export (CsvExportType export_type)
 void
 gnc_file_csv_export_register (CsvExportType export_type, Query *q, Account *acc)
 {
-    CsvExportInfo *info;
-
-    info = g_new0 (CsvExportInfo, 1);
-    info->export_type = export_type;
-    info->query = q;
-    info->account = acc;
-    csv_export_assistant_create (info);
-    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
-                                NULL, csv_export_close_handler,
-                                info);
-    gtk_widget_show_all (info->window);
-    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+    gnc_file_csv_export_internal (export_type, q, acc);
 }
