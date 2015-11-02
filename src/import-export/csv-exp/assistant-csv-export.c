@@ -628,6 +628,7 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
     else
     {
+        /* General Journal and search registers are always multi-line exported */
         if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
             gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
         else
@@ -829,7 +830,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     {
         GtkWidget *chkbox = GTK_WIDGET(gtk_builder_get_object(builder, "simple_layout"));
 
-        // If export is an account tree or info->account is NULL (Search/gl register)
+        // Don't provide simple export layout for search registers and General Journal
         if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
             gtk_widget_destroy (chkbox);
         gtk_widget_destroy (info->account_page);
@@ -973,7 +974,7 @@ gnc_file_csv_export (CsvExportType export_type)
 
 /********************************************************************\
  * gnc_file_csv_export_register                                     *
- * opens up a assistant to export register transactions based.      *                                                        *
+ * opens up a assistant to export register transactions based.      *
  * Args:   export_type                                              *
  * Args:   Query                                                    *
  * Args:   Account                                                  *
