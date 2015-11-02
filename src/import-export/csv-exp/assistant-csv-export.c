@@ -687,12 +687,7 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
     if (info->export_type == XML_EXPORT_TREE)
         text = g_strdup_printf (gettext (finish_tree_string), info->file_name);
     else
-    {
-        if ((info->export_type == XML_EXPORT_REGISTER) && (info->account != NULL))
-            text = g_strdup_printf (gettext (finish_trans_string), info->file_name, 1);
-        else
-            text = g_strdup_printf (gettext (finish_trans_string), info->file_name, info->csva.num_accounts);
-    }
+        text = g_strdup_printf (gettext (finish_trans_string), info->file_name, info->csva.num_accounts);
 
     gtk_label_set_text (GTK_LABEL(info->finish_label), text);
     g_free (text);
@@ -960,6 +955,8 @@ gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
         info->query = q;
     if (acc)
         info->account = acc;
+    if ((export_type == XML_EXPORT_REGISTER) && acc)
+        info->csva.num_accounts = 1;
 
     csv_export_assistant_create (info);
     gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
