@@ -1836,7 +1836,7 @@ gnc_plugin_page_register2_get_query (GncPluginPage *plugin_page)
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page), NULL);
 
     page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
