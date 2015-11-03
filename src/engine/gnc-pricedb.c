@@ -1435,6 +1435,40 @@ price_list_from_hashtable (GHashTable *hash, const gnc_commodity *currency)
     return result;
 }
 
+static PriceList *
+pricedb_price_list_merge (PriceList *a, PriceList *b)
+{
+    PriceList *merged_list = NULL;
+    GList *next_a = a;
+    GList *next_b = b;
+    
+    while (next_a || next_b)
+    {
+        if (next_a == NULL)
+        {
+            merged_list = g_list_prepend (merged_list, next_b->data);
+            next_b = next_b->next;
+        }
+        else if (next_b == NULL)
+        {
+            merged_list = g_list_prepend (merged_list, next_a->data);
+            next_a = next_a->next;
+        }
+        /* We're building the list in reverse order so reverse the comparison. */
+        else if (compare_prices_by_date (next_a->data, next_b->data) < 0)
+        {
+            merged_list = g_list_prepend (merged_list, next_a->data);
+            next_a = next_a->next;
+        }
+        else
+        {
+            merged_list = g_list_prepend (merged_list, next_b->data);
+            next_b = next_b->next;
+        }
+    }
+    return g_list_reverse (merged_list);
+}
+
 static PriceList*
 pricedb_get_prices_internal(GNCPriceDB *db, const gnc_commodity *commodity,
                             const gnc_commodity *currency, gboolean bidi)
@@ -1459,14 +1493,24 @@ pricedb_get_prices_internal(GNCPriceDB *db, const gnc_commodity *commodity,
         if (reverse_list)
         {
             if (forward_list)
-                forward_list = g_list_concat (forward_list, reverse_list);
+            {
+                /* Since we have a currency both lists came directly from a 
+                   currency hash table we know they are both sorted already. */
+                PriceList *merged_list;
+                merged_list = pricedb_price_list_merge (forward_list, reverse_list);
+                g_list_free (forward_list);
+                g_list_free (reverse_list);
+                forward_list = merged_list;
+            }
             else
             {
                 forward_list = reverse_list;
             }
         }
     }
-    if (forward_list)
+    if (forward_list && !currency)
+        /* Multiple currencies, reverse_list doesn't exist and 
+           forward_list must be sorted */
         forward_list = g_list_sort (forward_list, compare_prices_by_date);
     return forward_list;
 }
@@ -1513,20 +1557,107 @@ typedef struct
 {
     GList **list;
     const gnc_commodity *com;
+    GNCPrice *previous_price;
+    gboolean have_good_price;
+    Timespec t;
+    gboolean before;
 } UsesCommodity;
 
 static gboolean
-price_uses_commodity(GNCPrice *price, gpointer data)
+price_list_scan_any_currency(GNCPrice *price, gpointer data)
 {
     UsesCommodity *helper = (UsesCommodity*)data;
     gnc_commodity *com = gnc_price_get_commodity(price);
     gnc_commodity *cur = gnc_price_get_currency(price);
+    Timespec time = gnc_price_get_time(price);
+    gnc_commodity *previous_com = NULL;
+    gnc_commodity *previous_cur = NULL;
+    Timespec previous_time;
+    gboolean same_price_list = FALSE;
+    
+    if (helper->previous_price)
+    {
+        previous_com = gnc_price_get_commodity(helper->previous_price);
+        previous_cur = gnc_price_get_currency(helper->previous_price);
+        previous_time = gnc_price_get_time(helper->previous_price);
+        if (previous_com == com && previous_cur == cur)
+            same_price_list = TRUE;
+    }
+    if (helper->have_good_price && same_price_list)
+    {
+        helper->previous_price = price;
+        /* Tell scanner to skip rest of price list */
+        return FALSE;
+    }
+    
+    /* If we're changing commodity or currency finish up the previous one
+       before starting the new one */
+    if (!same_price_list && !helper->have_good_price && helper->previous_price && 
+        (previous_com == helper->com || previous_cur == helper->com))
+    {
+        /* Use the last price from the previous group of prices */
+        if (! (helper->before && 
+               timespec_cmp(&previous_time, &helper->t) > 0))
+        {
+            gnc_price_ref(helper->previous_price);
+            *helper->list = g_list_prepend(*helper->list, helper->previous_price);
+        }
+    }
+    
+    if (!same_price_list)
+        helper->have_good_price = FALSE;
+    
     if (helper->com == com || helper->com == cur)
     {
-        gnc_price_ref(price);
-        *helper->list = g_list_prepend(*helper->list, price);
+        if (timespec_cmp(&time, &helper->t) < 0)
+        {
+            /* This price is before given time */
+            if (helper->before)
+            {
+                /* We want the first price before the given time */
+                gnc_price_ref(price);
+                *helper->list = g_list_prepend(*helper->list, price);
+            }
+            else
+            {
+                /* Previous price (if any) is after and this price is before,
+                   use the closest one */
+                if (same_price_list)
+                {
+                    Timespec diff_prev = timespec_diff(&previous_time, &helper->t);
+                    Timespec diff_next = timespec_diff(&time, &helper->t);
+                    diff_prev = timespec_abs(&diff_prev);
+                    diff_next = timespec_abs(&diff_next);
+                    if (timespec_cmp(&diff_prev, &diff_next) < 0)
+                    {
+                        gnc_price_ref(helper->previous_price);
+                        *helper->list = g_list_prepend(*helper->list, helper->previous_price);
+                    }
+                    else
+                    {
+                        gnc_price_ref(price);
+                        *helper->list = g_list_prepend(*helper->list, price);
+                    }
+                }
+                else
+                {
+                    /* First price for this commodity/currency is before the
+                       given time, it's the closest */
+                    gnc_price_ref(price);
+                    *helper->list = g_list_prepend(*helper->list, price);
+                }
+            }
+            helper->have_good_price = TRUE;
+        }
     }
-    return TRUE;
+    else
+    {
+        /* Don't care about this commodity/currency, skip it */
+        helper->have_good_price = TRUE;
+    }
+    helper->previous_price = price;
+    /* Done with this price list if we have a good price from it. */
+    return !helper->have_good_price;
 }
 
 static gboolean
@@ -1669,13 +1800,13 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
                                        const gnc_commodity *commodity)
 {
     GList *prices = NULL, *result;
-    UsesCommodity helper = {&prices, commodity};
+    UsesCommodity helper = {&prices, commodity, NULL, FALSE, timespec_now(), TRUE};
     result = NULL;
 
     if (!db || !commodity) return NULL;
     ENTER ("db=%p commodity=%p", db, commodity);
 
-    gnc_pricedb_foreach_price(db, price_uses_commodity,
+    gnc_pricedb_foreach_price(db, price_list_scan_any_currency,
                                        &helper, FALSE);
     prices = g_list_sort(prices, compare_prices_by_date);
     result = latest_before(prices, commodity, timespec_now());
@@ -1690,13 +1821,13 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
                                                 Timespec t)
 {
     GList *prices = NULL, *result;
-    UsesCommodity helper = {&prices, commodity};
+    UsesCommodity helper = {&prices, commodity, NULL, FALSE, t, FALSE};
     result = NULL;
 
     if (!db || !commodity) return NULL;
     ENTER ("db=%p commodity=%p", db, commodity);
 
-    gnc_pricedb_foreach_price(db, price_uses_commodity,
+    gnc_pricedb_foreach_price(db, price_list_scan_any_currency,
                                        &helper, FALSE);
     prices = g_list_sort(prices, compare_prices_by_date);
     result = nearest_to(prices, commodity, t);
@@ -1711,13 +1842,13 @@ gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
                                               Timespec t)
 {
     GList *prices = NULL, *result;
-    UsesCommodity helper = {&prices, commodity};
+    UsesCommodity helper = {&prices, commodity, NULL, FALSE, t, TRUE};
     result = NULL;
 
     if (!db || !commodity) return NULL;
     ENTER ("db=%p commodity=%p", db, commodity);
 
-    gnc_pricedb_foreach_price(db, price_uses_commodity,
+    gnc_pricedb_foreach_price(db, price_list_scan_any_currency,
                                        &helper, FALSE);
     prices = g_list_sort(prices, compare_prices_by_date);
     result = latest_before(prices, commodity, t);
