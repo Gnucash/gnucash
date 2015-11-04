@@ -86,6 +86,11 @@ static const gchar *finish_trans_string = N_(
             " the number of accounts exported will be %u.\n\n"
             "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
 
+static const gchar *finish_trans_search_gl_string = N_(
+            /* Translators: %s is the file name string. */
+            "When you click 'Apply', the transactions will be exported to the file '%s.\n\n"
+            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
+
 static const gchar *start_tree_string = N_(
             "This assistant will help you export the Account Tree to a file\n"
             " with the separator specified below.\n\n"
@@ -687,8 +692,12 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
     if (info->export_type == XML_EXPORT_TREE)
         text = g_strdup_printf (gettext (finish_tree_string), info->file_name);
     else
-        text = g_strdup_printf (gettext (finish_trans_string), info->file_name, info->csva.num_accounts);
-
+    {
+        if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
+            text = g_strdup_printf (gettext (finish_trans_search_gl_string), info->file_name);
+        else
+            text = g_strdup_printf (gettext (finish_trans_string), info->file_name, info->csva.num_accounts);
+    }
     gtk_label_set_text (GTK_LABEL(info->finish_label), text);
     g_free (text);
 

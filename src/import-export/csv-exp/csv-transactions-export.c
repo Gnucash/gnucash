@@ -210,23 +210,31 @@ add_second_date (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 static gchar*
 add_account_name (gchar *so_far, Account *acc, Split *split, gboolean full, CsvExportInfo *info)
 {
-    gchar       *name;
+    gchar       *name = NULL;
     gchar       *conv;
     gchar       *result;
     Account     *account = NULL;
 
     if (split == NULL)
-        account = acc;
+    {
+        if (acc == NULL)
+            name = g_strdup (" ");
+        else
+            account = acc;
+    }
     else
         account = xaccSplitGetAccount (split);
 
-    if (full)
-        name = gnc_account_get_full_name (account);
-    else
-        name = g_strdup (xaccAccountGetName (account));
-
+    if (account != NULL)
+    {
+        if (full)
+            name = gnc_account_get_full_name (account);
+        else
+            name = g_strdup (xaccAccountGetName (account));
+    }
     conv = csv_txn_test_field_string (info, name);
     result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    g_free (name);
     g_free (conv);
     g_free (so_far);
     return result;
