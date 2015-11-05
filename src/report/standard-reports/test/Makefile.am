@@ -3,6 +3,7 @@ MODULE_TESTS=test-load-module
 TESTS = $(SCM_TESTS) $(MODULE_TESTS)
 
 SCM_TESTS = \
+	test-cash-flow \
 	test-standard-category-report \
 	test-standard-net-barchart \
 	test-standard-net-linechart
