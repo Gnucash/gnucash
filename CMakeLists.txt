@@ -80,13 +80,13 @@ FIND_PACKAGE (SWIG REQUIRED)
 INCLUDE (${SWIG_USE_FILE})
 
 # guile library and include dir
-PKG_CHECK_MODULES (GUILE guile-1.8>=1.8.0)
+PKG_CHECK_MODULES (GUILE guile-2.0>=2.0.9)
 ADD_DEFINITIONS (-DHAVE_GUILE18)
 # We also need to look up the executable
 FIND_PROGRAM (GUILE_EXECUTABLE guile)
 
 IF (NOT GUILE_FOUND)
-  MESSAGE (SEND_ERROR "Guile was not found, but is required. Please set PKG_CONFIG_PATH so that guile-1.8.pc is found.")
+  MESSAGE (SEND_ERROR "Guile was not found, but is required. Please set PKG_CONFIG_PATH so that guile-2.0.pc is found.")
 ENDIF (NOT GUILE_FOUND)
 IF (NOT GUILE_EXECUTABLE)
   MESSAGe (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
@@ -148,7 +148,7 @@ ENDIF (WITH_AQBANKING)
 # Compiler flags
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations -std=gnu99 -O2")
 ENDIF (UNIX)
 IF (MINGW)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")

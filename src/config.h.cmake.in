@@ -69,6 +69,8 @@
 #cmakedefine HAVE_WCTYPE_H 1
 #cmakedefine HAVE_X11_XLIB_H 1
 
+#cmakedefine GNC_PLATFORM_POSIX 1
+
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine STDC_HEADERS 1
 
