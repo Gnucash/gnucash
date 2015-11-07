@@ -145,7 +145,6 @@ Select location and file name for the Import, then click 'OK'...
                                   <object class="GtkSpinButton" id="start_row">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="editable">False</property>
                                     <property name="invisible_char">●</property>
                                     <property name="invisible_char_set">True</property>
                                     <property name="primary_icon_activatable">False</property>
@@ -153,6 +152,7 @@ Select location and file name for the Import, then click 'OK'...
                                     <property name="primary_icon_sensitive">True</property>
                                     <property name="secondary_icon_sensitive">True</property>
                                     <property name="adjustment">start_row_adj</property>
+                                    <property name="numeric">True</property>
                                     <signal name="value-changed" handler="csv_import_trans_srow_cb" swapped="no"/>
                                   </object>
                                   <packing>
@@ -177,7 +177,6 @@ Select location and file name for the Import, then click 'OK'...
                                   <object class="GtkSpinButton" id="end_row">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="editable">False</property>
                                     <property name="invisible_char">●</property>
                                     <property name="invisible_char_set">True</property>
                                     <property name="primary_icon_activatable">False</property>
@@ -185,6 +184,7 @@ Select location and file name for the Import, then click 'OK'...
                                     <property name="primary_icon_sensitive">True</property>
                                     <property name="secondary_icon_sensitive">True</property>
                                     <property name="adjustment">end_row_adj</property>
+                                    <property name="numeric">True</property>
                                     <signal name="value-changed" handler="csv_import_trans_erow_cb" swapped="no"/>
                                   </object>
                                   <packing>
