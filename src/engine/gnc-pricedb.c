@@ -1494,8 +1494,11 @@ pricedb_get_prices_internal(GNCPriceDB *db, const gnc_commodity *commodity,
         {
             if (forward_list)
             {
-                /* Since we have a currency both lists came directly from a 
-                   currency hash table we know they are both sorted already. */
+                /* Since we have a currency both lists are a direct copy of a price
+                   list in the price DB.  This means the lists are already sorted
+                   from newest to oldest and we can just merge them together.  This
+                   is substantially faster than concatenating them and sorting the
+                   resulting list. */
                 PriceList *merged_list;
                 merged_list = pricedb_price_list_merge (forward_list, reverse_list);
                 g_list_free (forward_list);
@@ -1563,6 +1566,16 @@ typedef struct
     gboolean before;
 } UsesCommodity;
 
+/* price_list_scan_any_currency is the helper function used with
+ * gnc_pricedb_foreach_price by the "any_currency" price lookup functions. It 
+ * builds a list of prices that are either to or from the commodity "com".  
+ * The resulting list will include all prices newer than "t" and the first 
+ * price older than "t".  All older prices will be ignored.  Since in the most 
+ * common cases we will be looking for recent prices which are at the front of 
+ * the various price lists, this is considerably faster than concatenating all 
+ * the relevant price lists and sorting the result.  
+*/
+ 
 static gboolean
 price_list_scan_any_currency(GNCPrice *price, gpointer data)
 {
