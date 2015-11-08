@@ -21,7 +21,10 @@ TESTS = \
 SCM_TESTS = \
 	test-collectors \
 	test-list-extras \
-	test-test-extras
+	test-test-extras \
+	test-account  \
+	test-split \
+	test-report-utilities
 
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
@@ -52,7 +55,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/gnc-module
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
-	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	echo '$(TESTS_ENVIRONMENT) ${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
 	chmod a+x $@
 
 TESTS_ENVIRONMENT = \

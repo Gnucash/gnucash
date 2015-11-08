@@ -54,8 +54,10 @@
 (export env-create-transaction)
 (export env-create-account)
 (export env-create-root-account)
+(export env-create-test-accounts)
 (export env-create-daily-transactions)
 (export env-create-account-structure)
+(export env-create-account-structure-alist)
 (export env-expense-account-structure)
 
 (export pattern-streamer)
@@ -235,6 +237,15 @@
 			 options
 			 account-structure)))
 
+(define (env-create-account-structure-alist env account-structure)
+  (let ((accounts (env-create-account-structure env account-structure)))
+    (define (flatten l)
+      (if (null? l) '()
+	  (if (not (pair? l)) (list l)
+	      (append (flatten (car l)) (flatten (cdr l))))))
+    (map (lambda (acct) (cons (xaccAccountGetName acct) acct))
+	 (flatten accounts))))
+
 (define (env-expense-account-structure env)
   (env-create-account-structure
    env
@@ -247,6 +258,15 @@
 	       (list "Parking")
 	       (list "Petrol")))))
 
+(define (env-create-test-accounts env)
+  (env-create-account-structure-alist env
+				      (list "Root"
+					    (list (cons 'type ACCT-TYPE-ASSET))
+					    (list "Bank")
+					    (list "Wallet")
+					    (list "Other")
+					    (list "Expenses"
+						  (list (cons 'type ACCT-TYPE-EXPENSE))))))
 ;; Date sequences
 ;;
 

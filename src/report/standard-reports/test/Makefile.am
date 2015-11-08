@@ -3,6 +3,7 @@ MODULE_TESTS=test-load-module
 TESTS = $(SCM_TESTS) $(MODULE_TESTS)
 
 SCM_TESTS = \
+	test-cash-flow \
 	test-standard-category-report \
 	test-standard-net-barchart \
 	test-standard-net-linechart
@@ -43,7 +44,8 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/gnc-module
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
-	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	echo "$(TESTS_ENVIRONMENT) \\" > $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
 	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
