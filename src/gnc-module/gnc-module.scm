@@ -49,3 +49,12 @@
 (export gnc:module-load)
 (export gnc:module-load-optional)
 (export gnc:module-unload)
+(export gnc:module-begin-syntax)
+
+;; Guile 2 needs to load external modules at compile time
+(cond-expand
+   (guile-2
+    (define-syntax-rule (gnc:module-begin-syntax form ...)
+      (eval-when (load compile eval expand) (begin form ...))))
+   (else
+    (define gnc:module-begin-syntax begin)))
