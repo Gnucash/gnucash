@@ -21,7 +21,9 @@ TESTS = \
 SCM_TESTS = \
 	test-collectors \
 	test-list-extras \
-	test-test-extras
+	test-test-extras \
+	test-account  \
+	test-split
 
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
