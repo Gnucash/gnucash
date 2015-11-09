@@ -406,7 +406,8 @@
 	 (money-out-alist '())
 	 (money-out-collector (gnc:make-commodity-collector))
 
-	 (splits-to-do (gnc:accounts-count-splits accounts))
+	 (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-tp to-date-tp))
+	 (splits-to-do (length all-splits))
 	 (seen-split-list '())
 	 (work-done 0))
 
@@ -500,12 +501,8 @@
 	)
       )
 
-    (define (calc-money-in-out-internal accounts-internal)
-      (if (not (null? accounts-internal))
-	  (let* ((current (car accounts-internal))
-		 (rest (cdr accounts-internal)))
-	    (for-each work-per-split (xaccAccountGetSplitList current))
-	    (calc-money-in-out-internal rest))))
+    (define (calc-money-in-out-internal accounts)
+      (for-each work-per-split all-splits))
 
     ;; And calculate
     (calc-money-in-out-internal accounts)
