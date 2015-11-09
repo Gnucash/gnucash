@@ -15,6 +15,9 @@
 (export account-list-predicate)
 (export accounts-get-children-depth)
 
+(export account-hashtable-ref)
+(export account-hashtable-set!)
+
 ;; is account in list of accounts?
 (define (account-same? a1 a2)
   (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
@@ -58,5 +61,14 @@
 		  (+ acct-depth (- (gnc-account-get-tree-depth acct) 1))))
 	      accounts)))
 
+(define (account-assoc acc alist)
+  (find (lambda (pair) (account-same? acc (car pair))) alist))
 
+(define (account-hash acc size)
+  (remainder (string-hash (gncAccountGetGUID acc)) size))
 
+(define (account-hashtable-ref table account)
+  (hashx-ref account-hash account-assoc table account))
+
+(define (account-hashtable-set! table account value)
+  (hashx-set! account-hash account-assoc table account value))
