@@ -398,12 +398,14 @@
 	 (include-trading-accounts (cdr (assq 'include-trading-accounts settings)))
 	 (to-report-currency (cdr (assq 'to-report-currency settings)))
 
+	 (is-report-account? (account-in-list-pred accounts))
+
 	 (money-in-accounts '())
-	 (money-in-alist '())
+	 (money-in-hash (make-hash-table))
 	 (money-in-collector (gnc:make-commodity-collector))
 
 	 (money-out-accounts '())
-	 (money-out-alist '())
+	 (money-out-hash (make-hash-table))
 	 (money-out-collector (gnc:make-commodity-collector))
 
 	 (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-tp to-date-tp))
@@ -447,46 +449,44 @@
 		   (if (and	 ;; make sure we don't have
 			(not (null? s-account)) ;;  any dangling splits
 			(or include-trading-accounts (not (eq? s-account-type ACCT-TYPE-TRADING)))
-			(not (account-in-list? s-account accounts)))
+			(not (is-report-account? s-account)))
 		       (if (not (split-seen? s))
 			   (begin
 			     (if (gnc-numeric-negative-p s-value)
-				 (let ((pair (account-in-alist s-account money-in-alist)))
+				 (let ((s-account-in-collector (account-hashtable-ref money-in-hash s-account)))
 					;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
 					;	     (gnc-numeric-to-double s-amount)
 					;	     (gnc-commodity-get-printname parent-currency)
 					;	     (gnc-numeric-to-double s-value))
-				   (if (not pair)
+				   (if (not s-account-in-collector)
 				       (begin
-					 (set! pair (list s-account (gnc:make-commodity-collector)))
-					 (set! money-in-alist (cons pair money-in-alist))
+					 (set! s-account-in-collector (gnc:make-commodity-collector))
+					 (account-hashtable-set! money-in-hash s-account
+								 s-account-in-collector)
 					 (set! money-in-accounts (cons s-account money-in-accounts))
-					;(gnc:debug money-in-alist)
 					 )
 				       )
-				   (let ((s-account-in-collector (cadr pair))
-					 (s-report-value (to-report-currency parent-currency
+				   (let ((s-report-value (to-report-currency parent-currency
 									     (gnc-numeric-neg s-value)
 									     (gnc-transaction-get-date-posted
 									      parent))))
 				     (money-in-collector 'add report-currency s-report-value)
 				     (s-account-in-collector 'add report-currency s-report-value))
 				   )
-				 (let ((pair (account-in-alist s-account money-out-alist)))
+				 (let ((s-account-out-collector (account-hashtable-ref money-out-hash s-account)))
 					;(gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
 					;	     (gnc-numeric-to-double s-amount)
 					;	     (gnc-commodity-get-printname parent-currency)
 					;	     (gnc-numeric-to-double s-value))
-				   (if (not pair)
+				   (if (not s-account-out-collector)
 				       (begin
-					 (set! pair (list s-account (gnc:make-commodity-collector)))
-					 (set! money-out-alist (cons pair money-out-alist))
+					 (set! s-account-out-collector (gnc:make-commodity-collector))
+					 (account-hashtable-set! money-out-hash s-account
+								 s-account-out-collector)
 					 (set! money-out-accounts (cons s-account money-out-accounts))
-					;(gnc:debug money-out-alist)
 					 )
 				       )
-				   (let ((s-account-out-collector (cadr pair))
-					 (s-report-value (to-report-currency parent-currency
+				   (let ((s-report-value (to-report-currency parent-currency
 									     s-value
 									     (gnc-transaction-get-date-posted
 									      parent))))
@@ -513,10 +513,10 @@
     (calc-money-in-out-internal accounts)
     ;; Return an association list of results
     (list (cons 'money-in-accounts money-in-accounts)
-	  (cons 'money-in-alist money-in-alist)
+	  (cons 'money-in-alist (hash-map->list (lambda (k v) (list k v)) money-in-hash))
 	  (cons 'money-in-collector money-in-collector)
 	  (cons 'money-out-accounts money-out-accounts)
-	  (cons 'money-out-alist money-out-alist)
+	  (cons 'money-out-alist (hash-map->list (lambda (k v) (list k v)) money-out-hash))
 	  (cons 'money-out-collector money-out-collector))))
 
 (gnc:define-report 
