@@ -407,8 +407,14 @@
 
 	 (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-tp to-date-tp))
 	 (splits-to-do (length all-splits))
-	 (seen-split-list '())
+	 (splits-seen-table (make-hash-table))
 	 (work-done 0))
+
+    (define (split-seen? split)
+      (if (split-hashtable-ref splits-seen-table split) #t
+	  (begin
+	    (split-hashtable-set! splits-seen-table split #t)
+	    #f)))
 
     (define (work-per-split split)
       (set! work-done (+ 1 work-done))
@@ -441,9 +447,8 @@
 			(not (null? s-account)) ;;  any dangling splits
 			(or include-trading-accounts (not (eq? s-account-type ACCT-TYPE-TRADING)))
 			(not (account-in-list? s-account accounts)))
-		       (if (not (split-in-list? s seen-split-list))
+		       (if (not (split-seen? s))
 			   (begin
-			     (set! seen-split-list (cons s seen-split-list))
 			     (if (gnc-numeric-negative-p s-value)
 				 (let ((pair (account-in-alist s-account money-in-alist)))
 					;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
