@@ -594,10 +594,8 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
     }
 
     /* Verify the third part of the path: the price. */
-    price_list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
     i = gtk_tree_path_get_indices (path)[2];
-    price = g_list_nth_data (price_list, i);
-    gnc_price_list_destroy(price_list);
+    price = gnc_pricedb_nth_price(priv->price_db, commodity, i);
     /* There's a race condition here that I can't resolve.
      * Comment this check out for now, and we'll handle the
      * resulting problem elsewhere. */
@@ -860,9 +858,7 @@ gnc_tree_model_price_iter_next (GtkTreeModel *tree_model,
     {
         commodity = gnc_price_get_commodity((GNCPrice*)iter->user_data2);
         n = GPOINTER_TO_INT(iter->user_data3) + 1;
-        list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
-        iter->user_data2 = g_list_nth_data(list, n);
-        gnc_price_list_destroy(list);
+        iter->user_data2 = gnc_pricedb_nth_price(priv->price_db, commodity, n);
         if (iter->user_data2 == NULL)
         {
             LEAVE("no next iter");
@@ -936,18 +932,18 @@ gnc_tree_model_price_iter_children (GtkTreeModel *tree_model,
 
     if (parent->user_data == ITER_IS_COMMODITY)
     {
+        GNCPrice *price;
         commodity = (gnc_commodity *)parent->user_data2;
-        list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
-        if (list == NULL)
+        price = gnc_pricedb_nth_price(priv->price_db, commodity, 0);
+        if (price == NULL)
         {
             LEAVE("no prices");
             return FALSE;
         }
         iter->stamp      = model->stamp;
         iter->user_data  = ITER_IS_PRICE;
-        iter->user_data2 = g_list_nth_data(list, 0);
+        iter->user_data2 = price;
         iter->user_data3 = GINT_TO_POINTER(0);
-        gnc_price_list_destroy(list);
         LEAVE("price iter %p (%s)", iter, iter_to_string(model, iter));
         return TRUE;
     }
@@ -1038,9 +1034,7 @@ gnc_tree_model_price_iter_n_children (GtkTreeModel *tree_model,
     if (iter->user_data == ITER_IS_COMMODITY)
     {
         commodity = (gnc_commodity *)iter->user_data2;
-        list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
-        n = g_list_length(list);
-        gnc_price_list_destroy(list);
+        n = gnc_pricedb_num_prices(priv->price_db, commodity);
         LEAVE("price list length %d", n);
         return n;
     }
@@ -1099,13 +1093,11 @@ gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
     if (parent->user_data == ITER_IS_COMMODITY)
     {
         commodity = (gnc_commodity *)parent->user_data2;
-        list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
 
         iter->stamp      = model->stamp;
         iter->user_data  = ITER_IS_PRICE;
-        iter->user_data2 = g_list_nth_data(list, n);
+        iter->user_data2 = gnc_pricedb_nth_price(priv->price_db, commodity, n);
         iter->user_data3 = GINT_TO_POINTER(n);
-        gnc_price_list_destroy(list);
         LEAVE("price iter %p (%s)", iter, iter_to_string(model, iter));
         return iter->user_data2 != NULL;
     }

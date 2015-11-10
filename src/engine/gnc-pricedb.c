@@ -1407,11 +1407,21 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db,
 /* ==================================================================== */
 /* lookup/query functions */
 
+static PriceList *pricedb_price_list_merge (PriceList *a, PriceList *b);
+
 static void
 hash_values_helper(gpointer key, gpointer value, gpointer data)
 {
     GList ** l = data;
-    *l = g_list_concat(*l, g_list_copy (value));
+    if (*l)
+    {
+        GList *new_l;
+        new_l = pricedb_price_list_merge(*l, value);
+        g_list_free (*l);
+        *l = new_l;
+    }
+    else
+        *l = g_list_copy (value);
 }
 
 static PriceList *
@@ -1511,10 +1521,7 @@ pricedb_get_prices_internal(GNCPriceDB *db, const gnc_commodity *commodity,
             }
         }
     }
-    if (forward_list && !currency)
-        /* Multiple currencies, reverse_list doesn't exist and 
-           forward_list must be sorted */
-        forward_list = g_list_sort (forward_list, compare_prices_by_date);
+
     return forward_list;
 }
 
@@ -1933,7 +1940,124 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
     return result;
 }
 
+/* Return the number of prices in the data base for the given commodity
+ */
+static void
+price_count_helper(gpointer key, gpointer value, gpointer data)
+{
+    int *result = data;
+    GList *price_list = value;
+    
+    *result += g_list_length(price_list);
+}
 
+int
+gnc_pricedb_num_prices(GNCPriceDB *db,
+                       const gnc_commodity *c)
+{
+    int result = 0;
+    GHashTable *currency_hash;
+    
+    if (!db || !c) return 0;
+    ENTER ("db=%p commodity=%p", db, c);
+
+    currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+    if (currency_hash)
+    {
+        g_hash_table_foreach(currency_hash, price_count_helper,  (gpointer)&result);
+    }
+    
+    LEAVE ("count=%d", result);
+    return result;
+}
+
+/* Return the nth price for the given commodity
+ */
+GNCPrice *
+gnc_pricedb_nth_price (GNCPriceDB *db,
+                       const gnc_commodity *c,
+                       const int n)
+{
+    GNCPrice *result = NULL;
+    GHashTable *currency_hash;
+    
+    if (!db || !c || n < 0) return NULL;
+    ENTER ("db=%p commodity=%p index=%d", db, c, n);
+    
+    currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+    if (currency_hash)
+    {
+        int num_currencies = g_hash_table_size(currency_hash);
+        if (num_currencies == 1)
+        {
+            /* Optimize the case of prices in only one currency, it's common
+               and much faster */
+            GHashTableIter iter;
+            gpointer key, value;
+            g_hash_table_iter_init(&iter, currency_hash);
+            if (g_hash_table_iter_next(&iter, &key, &value))
+            {
+                PriceList *prices = value;
+                result = g_list_nth_data(prices, n);
+            }
+        }
+        else if (num_currencies > 1)
+        {
+            /* Prices for multiple currencies, must find the nth entry in the
+               merged currency list. */
+            GList **price_array = (GList **)g_new(gpointer, num_currencies);
+            GList **next_list;
+            int i, j;
+            GHashTableIter iter;
+            gpointer key, value;
+            
+            /* Build an array of all the currencies this commodity has prices for */
+            for (i = 0, g_hash_table_iter_init(&iter, currency_hash);
+                 g_hash_table_iter_next(&iter, &key, &value) && i < num_currencies;
+                 i++)
+            {
+                price_array[i] = value;
+            }
+            
+            /* Iterate n times to get the nth price, each time finding the currency
+               with the latest price */
+            for (i = 0; i <= n; i++)
+            {
+                next_list = NULL;
+                for (j = 0; j < num_currencies; j++)
+                {
+                    /* Save this entry if it's the first one or later than
+                       the saved one. */
+                    if (price_array[j] != NULL &&
+                        (next_list == NULL || *next_list == NULL ||
+                        compare_prices_by_date((*next_list)->data, (price_array[j])->data) > 0))
+                    {
+                        next_list = &price_array[j];
+                    }
+                }
+                /* next_list points to the list with the latest price unless all
+                   the lists are empty */
+                if (next_list && *next_list)
+                {
+                    result = (*next_list)->data;
+                    *next_list = (*next_list)->next;
+                }
+                else
+                {
+                    /* all the lists are empty, "n" is greater than the number
+                       of prices for this commodity. */
+                    result = NULL;
+                    break;
+                }
+            }
+            g_free(price_array);
+        }
+    }
+
+    LEAVE ("price=%p", result);
+    return result;
+}
+                       
 GNCPrice *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
                        const gnc_commodity *c,

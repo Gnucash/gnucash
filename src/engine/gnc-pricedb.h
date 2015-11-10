@@ -587,6 +587,27 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
                                        gpointer user_data,
                                        gboolean stable_order);
 
+/** @brief Get the number of prices, in any currency, for a given commodity.
+ * @param db The pricedb
+ * @param c The commodity
+ * @return The number of prices in the database for this commody, zero if none
+ */
+int
+gnc_pricedb_num_prices(GNCPriceDB *db,
+                       const gnc_commodity *c);
+
+/** @brief Get the nth price for the given commodity in  reverse date order
+ * @param db The pricedb
+ * @param c The commodity whose nth price is needed
+ * @param n Zero based index of the price wanted
+ * @return The nth price for this commodity in reverse chronological order, without
+ * regard for what currency the price is in
+ */
+GNCPrice *
+gnc_pricedb_nth_price (GNCPriceDB *db,
+                       const gnc_commodity *c,
+                       const int n);
+
 /* The following two convenience functions are used to test the xml backend */
 /** @brief Return the number of prices in the database.
  *
