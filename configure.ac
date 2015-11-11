@@ -452,26 +452,45 @@ AC_CHECK_FUNCS(gethostid link)
 ### --------------------------------------------------------------------------
 ### Guile version checks
 
+GUILE_EFFECTIVE_VERSION=0
 # - check minimum version
 # - determine GUILE_CFLAGS and GUILE_LIBS
-gnc_have_guile_2=no
-gnc_have_guile_www=no
-PKG_CHECK_MODULES(GUILE,
-                  [guile-2.0 >= 2.0.0],
-		  [gnc_have_guile_2=yes
-		  GUILE_EFFECTIVE_VERSION=2.0
-		  AC_PATH_PROG([GUILD], guild)],
-   [PKG_CHECK_MODULES(GUILE,
-                  [guile-1.8 >= 1.8.5],
-		  [GUILE_EFFECTIVE_VERSION=1.8],
-                  [AC_MSG_ERROR([
-    guile does not appear to be installed correctly, or is not in the
-    correct version range.  Perhaps you have not installed the guile
-    development packages?  Gnucash requires at least version 1.8.5 to build.
-  ])])
-])
 
-AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "x${gnc_have_guile_2}" = xyes)
+AC_ARG_WITH([guile],
+    AS_HELP_STRING([--with-guile=1.8|2.0|auto],
+                   [which guile version to compile against @<:@default: auto@:>@]),
+    [],
+    [with_guile=auto]
+)
+
+AS_IF([test "$with_guile" = "2.0"],
+      [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
+                         [GUILE_EFFECTIVE_VERSION=2.0
+                          AC_PATH_PROG([GUILD], guild)])],
+      [test "$with_guile" = "1.8"],
+      [PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5],
+                         [GUILE_EFFECTIVE_VERSION=1.8])],
+      [test "$with_guile" = "auto"],
+      [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
+          [GUILE_EFFECTIVE_VERSION=2.0
+           AC_PATH_PROG([GUILD], guild)],
+          [PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5],
+                             [GUILE_EFFECTIVE_VERSION=1.8],
+                             [GUILE_EFFECTIVE_VERSION=0])
+          ])],
+      # else
+      [AC_MSG_ERROR([invalid guile version specified])]
+)
+
+AS_IF([test "$GUILE_EFFECTIVE_VERSION" = "0"],
+      [AC_MSG_ERROR([
+       guile does not appear to be installed correctly, or is not in the
+       correct version range.  Perhaps you have not installed the guile
+       development packages?  Gnucash requires at least version 1.8.5 to build.
+       ])]
+)
+
+AM_CONDITIONAL(GNC_HAVE_GUILE_2, [test "$GUILE_EFFECTIVE_VERSION" = "2.0"])
 AC_SUBST(GUILE_EFFECTIVE_VERSION)
 AC_SUBST(GUILE, [`pwd`/gnc-guile])
 
@@ -498,7 +517,7 @@ if test "${BUILDING_FROM_VCS}" = yes
 then
     AX_PKG_SWIG(2.0.10, [gnc_have_swig_2_0_10=yes], [gnc_have_swig_2_0_10=no])
 
-    if test "${gnc_have_guile_2}" = yes
+    if test "${GUILE_EFFECTIVE_VERSION}" = "2.0"
     then
         if test "${gnc_have_swig_2_0_10}" = no
         then
