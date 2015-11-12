@@ -95,3 +95,19 @@
      ((split-same? (car splits) split) #t)
      (else (split-in-list? split (cdr splits))))))
 
+;; Split hashtable. Because we do gncSplitGetGUID so often, it
+;; turns out to be a bit quicker to store a (hash, split) pair
+;; instead of just the split.
+(define (split-assoc split alist)
+  (find (lambda (pair) (split-same? (cdr split) (cdr (car pair)))) alist))
+(define (split-hash split size)
+  (remainder (car split) size))
+
+(define (split-hashtable-ref table split)
+  (hashx-ref split-hash split-assoc table
+	     (cons (string-hash (gncSplitGetGUID split)) split)))
+
+(define (split-hashtable-set! table split value)
+  (hashx-set! split-hash split-assoc table
+	      (cons (string-hash (gncSplitGetGUID split)) split) value))
+

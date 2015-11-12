@@ -83,6 +83,11 @@
 (export split-same?)
 (export split-in-list?)
 
+(export split-same?)
+(export split-in-list?)
+(export split-hashtable-ref)
+(export split-hashtable-set!)
+
 (export gnc:split-structure)
 (export gnc:make-split-scm)
 (export gnc:split-scm?)
