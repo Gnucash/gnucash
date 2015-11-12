@@ -2830,6 +2830,11 @@ price_foreach(const QofCollection *col, QofInstanceForeachCB cb, gpointer data)
 
 /* ==================================================================== */
 
+#ifdef DUMP_FUNCTIONS
+/* For debugging only, don't delete this */
+static void price_list_dump(GList *price_list, const char *tag);
+#endif
+
 static const char *
 price_printable(gpointer obj)
 {
@@ -2840,6 +2845,13 @@ price_printable(gpointer obj)
     char *val, *da;
 
     if (!pr) return "";
+
+#ifdef DUMP_FUNCTIONS
+    /* Reference it so the compiler doesn't optimize it out. bit
+       don't actually call it. */
+    if (obj == buff)
+        price_list_dump(NULL, "");
+#endif
 
     val = gnc_numeric_to_string (pr->value);
     da = qof_print_date (pr->tmspec.tv_sec);
@@ -2855,6 +2867,21 @@ price_printable(gpointer obj)
     g_free (da);
     return buff;
 }
+
+#ifdef DUMP_FUNCTIONS
+/* For debugging only, don't delete this */
+static void
+price_list_dump(GList *price_list, const char *tag)
+{
+    GNCPrice *price;
+    GList *node;
+    printf("Price list %s\n", tag);
+    for (node = price_list; node != NULL; node = node->next)
+    {
+        printf("%s\n", price_printable(node->data));
+    }
+}
+#endif
 
 #ifdef _MSC_VER
 /* MSVC compiler doesn't have C99 "designated initializers"
