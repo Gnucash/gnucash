@@ -2251,7 +2251,7 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices)
          from_node = g_list_next(from_node))
     {
         for (to_node = to_prices; to_node != NULL;
-             to_node = g_list_next(to_price))
+             to_node = g_list_next(to_node))
         {
             gnc_commodity *to_com, *to_cur;
             gnc_commodity *from_com, *from_cur;
@@ -2324,13 +2324,17 @@ indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
     if (t == NULL)
     {
         from_prices = gnc_pricedb_lookup_latest_any_currency(db, from);
-        to_prices = gnc_pricedb_lookup_latest_any_currency(db, to);
+        /* "to" is often the book currency which may have lots of prices,
+            so avoid getting them if they aren't needed. */
+        if (from_prices)
+            to_prices = gnc_pricedb_lookup_latest_any_currency(db, to);
     }
     else
     {
         from_prices = gnc_pricedb_lookup_nearest_in_time_any_currency(db,
                                                                       from, *t);
-        to_prices = gnc_pricedb_lookup_nearest_in_time_any_currency(db,
+        if (from_prices)
+            to_prices = gnc_pricedb_lookup_nearest_in_time_any_currency(db,
                                                                     to, *t);
     }
     if (from_prices == NULL || to_prices == NULL)
