@@ -3,7 +3,7 @@
 
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 
-(use-modules (gnucash report report-system split))
+(use-modules (gnucash engine))
 (use-modules (gnucash report report-system test test-extras))
 
 (use-modules (gnucash report report-system))

@@ -67,8 +67,21 @@
 (export GNC_COMMODITY_NS_MUTUAL)
 
 (export gnc:url->loaded-session)
+
+;; engine-utilities.scm
 (export gnc:account-map-descendants)
 (export gnc:account-map-children)
+
+(export account-same?)
+(export account-in-list?)
+(export account-in-list-pred)
+(export account-in-alist)
+(export account-full-name<?)
+(export account-list-predicate)
+(export accounts-get-children-depth)
+
+(export split-same?)
+(export split-in-list?)
 
 (export gnc:split-structure)
 (export gnc:make-split-scm)

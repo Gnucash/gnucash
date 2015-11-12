@@ -1,4 +1,4 @@
-(use-modules (gnucash report report-system account))
+(use-modules (gnucash engine))
 
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (sw_engine))

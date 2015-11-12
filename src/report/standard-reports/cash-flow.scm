@@ -31,8 +31,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash report report-system account))
-(use-modules (gnucash report report-system split))
+(use-modules (gnucash engine))
 
 (use-modules (gnucash printf))
 

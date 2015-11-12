@@ -31,8 +31,7 @@
 (use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
-(use-modules (gnucash report report-system account))
-(use-modules (gnucash report report-system split))
+(use-modules (gnucash engine))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
