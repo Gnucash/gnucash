@@ -79,6 +79,8 @@
 (export account-full-name<?)
 (export account-list-predicate)
 (export accounts-get-children-depth)
+(export account-hashtable-ref)
+(export account-hashtable-set!)
 
 (export split-same?)
 (export split-in-list?)
