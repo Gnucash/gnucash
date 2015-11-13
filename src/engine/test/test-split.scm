@@ -4,9 +4,9 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 
 (use-modules (gnucash engine))
-(use-modules (gnucash report report-system test test-extras))
-
-(use-modules (gnucash report report-system))
+(use-modules (sw_engine))
+(use-modules (gnucash engine test test-extras))
+(use-modules (gnucash app-utils))
 
 (define (run-test)
   (test test-split-in-list?))

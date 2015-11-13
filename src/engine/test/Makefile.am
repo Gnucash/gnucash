@@ -53,7 +53,11 @@ TESTS = \
   test-vendor \
   $(SCM_TESTS)
 
-SCM_TESTS = test-test-extras
+SCM_TESTS = \
+  test-test-extras \
+  test-account \
+  test-split
+
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 GNC_TEST_DEPS = \
