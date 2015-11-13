@@ -1,6 +1,6 @@
 (use-modules (gnucash engine))
 
-(use-modules (gnucash engine test test-extras))
+(use-modules (gnucash report report-system test test-extras))
 (use-modules (sw_engine))
 
 (define (run-test)

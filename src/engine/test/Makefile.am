@@ -50,18 +50,31 @@ TESTS = \
   test-customer \
   test-employee \
   test-job \
-  test-vendor
+  test-vendor \
+  $(SCM_TESTS)
+
+SCM_TESTS = test-test-extras
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/engine/test \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/app-utils \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/scm \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql
+
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
@@ -101,15 +114,30 @@ test_link_LDADD = ../libgncmod-engine.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
+SCM_TEST_HELPERS = test-extras.scm
+
 EXTRA_DIST += \
   test-create-account \
   test-create-account.scm \
   test-scm-query-import \
-  test-scm-query-import.scm
+  test-scm-query-import.scm \
+  $(SCM_TEST_HELPERS) \
+  $(SCM_TEST_SRCS)
 
 TEST_PROGS += test-engine
 
+.scm-links:
+	$(RM) -rf gnucash
+	mkdir -p  gnucash/engine/test
+	( cd gnucash/engine/test; for A in $(SCM_TEST_HELPERS) ; do $(LN_S) -f $(abs_srcdir)/$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
+	touch .scm-links
+endif
+
 noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
+
+noinst_DATA: .scm-links
 
 test_engine_SOURCES = \
 	test-engine.c \
@@ -144,6 +172,8 @@ libutest_Trans_la_SOURCES = \
 
 libutest_Trans_la_LIBADD = $(LDADD)
 
+CLEANFILES = .scm-links
+DISTCLEANFILES = $(SCM_TESTS)
 
 clean-local:
 	rm -f translog.*

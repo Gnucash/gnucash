@@ -19,7 +19,7 @@
 
 (debug-set! stack 50000)
 (use-modules (gnucash report report-system list-extras))
-(use-modules (gnucash report report-system test test-extras))
+(use-modules (gnucash engine test test-extras))
 
 (define (run-test)
     (test test-list-min-max))

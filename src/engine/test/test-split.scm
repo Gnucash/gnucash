@@ -4,7 +4,7 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 
 (use-modules (gnucash engine))
-(use-modules (gnucash engine test test-extras))
+(use-modules (gnucash report report-system test test-extras))
 
 (use-modules (gnucash report report-system))
 
@@ -27,7 +27,3 @@
 	 (not (split-in-list? (first splits-tx1) splits-tx2))
 	 (not (split-in-list? (second splits-tx1) splits-tx2))
 	 (not (split-in-list? (first splits-tx1) '())))))
-
-							   
-
-  

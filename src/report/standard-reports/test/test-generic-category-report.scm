@@ -34,6 +34,7 @@
 (use-modules (sw_engine))
 
 (use-modules (gnucash report report-system collectors))
+(use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report report-system test test-extras))
 
 (export run-category-income-expense-test)
