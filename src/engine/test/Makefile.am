@@ -63,6 +63,7 @@ SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/engine/test \
+  --gnc-module-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/app-utils \
