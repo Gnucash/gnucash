@@ -18,6 +18,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (debug-set! stack 50000)
+(use-modules (gnucash gnc-module))
+(gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (gnucash report report-system list-extras))
 (use-modules (gnucash engine test test-extras))
 

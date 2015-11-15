@@ -4,7 +4,6 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 
 (use-modules (gnucash engine))
-(use-modules (sw_engine))
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash app-utils))
 

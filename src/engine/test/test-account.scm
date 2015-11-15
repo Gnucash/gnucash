@@ -1,7 +1,10 @@
+(use-modules (gnucash gnc-module))
+
+(gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
+
 (use-modules (gnucash engine))
 
 (use-modules (gnucash engine test test-extras))
-(use-modules (sw_engine))
 
 (define (run-test)
   (test test-account-same?)
