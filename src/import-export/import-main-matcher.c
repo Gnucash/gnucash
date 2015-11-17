@@ -151,11 +151,8 @@ on_matcher_ok_clicked (GtkButton *button,
                        GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
-    GtkTreePath *path;
-    GtkTreeRowReference *ref;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
-    GSList *refs_list = NULL;
 
     g_assert (info);
 
@@ -177,11 +174,6 @@ on_matcher_ok_clicked (GtkButton *button,
 
         if (gnc_import_process_trans_item(NULL, trans_info))
         {
-            path = gtk_tree_model_get_path(model, &iter);
-            ref = gtk_tree_row_reference_new(model, path);
-            refs_list = g_slist_append(refs_list, ref);
-            gtk_tree_path_free(path);
-
             if (info->transaction_processed_cb)
             {
                 info->transaction_processed_cb(trans_info,
