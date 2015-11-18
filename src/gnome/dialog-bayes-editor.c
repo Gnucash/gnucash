@@ -157,6 +157,20 @@ list_type_selected (GtkToggleButton* button, BayesDialog *bayes_dialog)
 }
 
 static void
+show_probability_column (BayesDialog *bayes_dialog, gboolean show)
+{
+    GtkTreeViewColumn *tree_column;
+
+    // Show Probability Column
+    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(bayes_dialog->view), 4);
+    gtk_tree_view_column_set_visible (tree_column, show);
+
+    // Hide Based on Column
+    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(bayes_dialog->view), 1);
+    gtk_tree_view_column_set_visible (tree_column, !show);
+}
+
+static void
 add_to_store (gpointer user_data)
 {
     GtkTreeIter  iter;
@@ -312,6 +326,9 @@ get_account_info (BayesDialog *bayes_dialog)
         {
             if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
                 qof_instance_foreach_slot(QOF_INSTANCE(acc), IMAP_FRAME_BAYES, build_bayes, &kvpInfo);
+
+            // Show Probability Column
+            show_probability_column (bayes_dialog, TRUE);
         }
 
         if (bayes_dialog->type == NBAYES)
@@ -343,6 +360,9 @@ get_account_info (BayesDialog *bayes_dialog)
                 qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head, build_non_bayes, &kvpInfo);
 
             g_free (kvp_path_head);
+
+            // Hide Probability Column
+            show_probability_column (bayes_dialog, FALSE);
         }
 
         if (bayes_dialog->type == ONLINE)
@@ -368,6 +388,8 @@ get_account_info (BayesDialog *bayes_dialog)
                     add_to_store (&kvpInfo);
                 }
             }
+            // Hide Probability Column
+            show_probability_column (bayes_dialog, FALSE);
         }
     }
     g_list_free (accts);
