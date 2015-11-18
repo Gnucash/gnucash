@@ -185,6 +185,68 @@ add_to_store (gpointer user_data)
 }
 
 static void
+build_bayes_layer_two (const char *key, const GValue *value, gpointer data)
+{
+    QofBook     *book;
+    gchar       *kvp_path;
+    gchar       *probability;
+
+    struct kvp_info *kvpInfo = (struct kvp_info*)data;
+
+    // Get the book
+    book = gnc_get_current_book();
+
+    PINFO("build_bayes_layer_two: account '%s', token_count: '%ld'", (char*)key, (long)g_value_get_int64(value));
+
+    probability = g_strdup_printf ("%ld", g_value_get_int64 (value));
+
+    kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
+
+    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
+
+    kvpInfo->map_account = gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), key);
+
+    kvpInfo->kvp_path = kvp_path;
+    kvpInfo->probability = probability;
+
+    // Add kvp data to store
+    add_to_store (kvpInfo);
+
+    g_free (kvp_path);
+    g_free (probability);
+}
+
+static void
+build_bayes (const char *key, const GValue *value, gpointer data)
+{
+    char *kvp_path;
+    struct kvp_info *kvpInfo = (struct kvp_info*)data;
+    struct kvp_info  kvpInfol2;
+
+    PINFO("build_bayes: match string '%s'", (char*)key);
+
+    if (G_VALUE_HOLDS (value, G_TYPE_STRING) && g_value_get_string (value) == NULL)
+    {
+        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", key);
+
+        if (qof_instance_has_slot (QOF_INSTANCE(kvpInfo->source_account), kvp_path))
+        {
+            PINFO("build_bayes: kvp_path is '%s', key '%s'", kvp_path, key);
+
+            kvpInfol2.store = kvpInfo->store;
+            kvpInfol2.source_account = kvpInfo->source_account;
+            kvpInfol2.based_on = _("Bayesian");
+            kvpInfol2.match_string = key;
+            kvpInfol2.kvp_path_head = kvp_path;
+
+            qof_instance_foreach_slot (QOF_INSTANCE(kvpInfo->source_account), kvp_path,
+                                       build_bayes_layer_two, &kvpInfol2);
+        }
+        g_free (kvp_path);
+    }
+}
+
+static void
 build_non_bayes (const char *key, const GValue *value, gpointer data)
 {
     if (G_VALUE_HOLDS_BOXED (value))
@@ -245,6 +307,12 @@ get_account_info (BayesDialog *bayes_dialog)
 
         // Save source account
         kvpInfo.source_account = acc;
+
+        if (bayes_dialog->type == BAYES)
+        {
+            if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
+                qof_instance_foreach_slot(QOF_INSTANCE(acc), IMAP_FRAME_BAYES, build_bayes, &kvpInfo);
+        }
 
         if (bayes_dialog->type == NBAYES)
         {
