@@ -39,7 +39,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">What type of data to display?</property>
+            <property name="label" translatable="yes">What type of information to display?</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -52,8 +52,8 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="remove_button">
-                <property name="label">gtk-remove</property>
+              <object class="GtkButton" id="delete_button">
+                <property name="label">gtk-delete</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -198,7 +198,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="map_account_name">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Map Account Name</property>
+                    <property name="title" translatable="yes">Mapped to Account Name</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                       <attributes>
@@ -233,7 +233,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="ypad">5</property>
-            <property name="label" translatable="yes">You may select multiple rows and then press remove button...</property>
+            <property name="label" translatable="yes">You may select multiple rows and then press the delete button...</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -244,7 +244,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-10">remove_button</action-widget>
+      <action-widget response="-10">delete_button</action-widget>
       <action-widget response="-6">close_button</action-widget>
     </action-widgets>
   </object>

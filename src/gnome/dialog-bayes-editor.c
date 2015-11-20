@@ -85,23 +85,23 @@ struct kvp_info
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-void gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer data);
-void gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer data);
-void gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data);
+void gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data);
+void gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer user_data);
+void gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data);
 
 static void get_account_info (BayesDialog *bayes_dialog);
 
 void
-gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer data)
+gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
-    BayesDialog *bayes_dialog = data;
+    BayesDialog *bayes_dialog = user_data;
 
     ENTER(" ");
     gnc_unregister_gui_component_by_data (DIALOG_BAYES_CM_CLASS, bayes_dialog);
 
     if (bayes_dialog->dialog)
     {
-        gtk_widget_destroy(bayes_dialog->dialog);
+        gtk_widget_destroy (bayes_dialog->dialog);
         bayes_dialog->dialog = NULL;
     }
     g_free (bayes_dialog);
@@ -109,9 +109,9 @@ gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer data)
 }
 
 void
-gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer data)
+gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
 {
-    BayesDialog *bayes_dialog = data;
+    BayesDialog *bayes_dialog = user_data;
 
     ENTER(" ");
     gnc_close_gui_component_by_data (DIALOG_BAYES_CM_CLASS, bayes_dialog);
@@ -119,12 +119,11 @@ gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer data)
 }
 
 static gboolean
-are_you_sure (gpointer data)
+are_you_sure (BayesDialog *bayes_dialog)
 {
-    BayesDialog *bayes_dialog = data;
     GtkWidget   *dialog;
     gint         response;
-    const char  *title = _("Are you sure you want to remove entries?");
+    const char  *title = _("Are you sure you want to delete the entries ?");
 
     dialog = gtk_message_dialog_new (GTK_WINDOW (bayes_dialog->dialog),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -132,7 +131,7 @@ are_you_sure (gpointer data)
                                      GTK_BUTTONS_CANCEL,
                                      "%s", title);
 
-    gtk_dialog_add_button (GTK_DIALOG(dialog), _("_Remove"), GTK_RESPONSE_ACCEPT);
+    gtk_dialog_add_button (GTK_DIALOG(dialog), _("_Delete"), GTK_RESPONSE_ACCEPT);
 
     gtk_widget_grab_focus (gtk_dialog_get_widget_for_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT));
 
@@ -157,9 +156,8 @@ delete_kvp (Account *account, gchar *full_account, gchar *kvp_path)
 }
 
 static void
-gnc_bayes_dialog_remove (gpointer data)
+gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
 {
-    BayesDialog      *bayes_dialog = data;
     GList            *list, *row;
     GtkTreeModel     *model;
     GtkTreeIter       iter;
@@ -174,7 +172,7 @@ gnc_bayes_dialog_remove (gpointer data)
     if (g_list_length (list) == 0)
         return;
 
-    // Are we sure we want to remove the entries
+    // Are we sure we want to delete the entries
     if (are_you_sure (bayes_dialog) == FALSE)
         return;
 
@@ -239,14 +237,14 @@ gnc_bayes_dialog_remove (gpointer data)
 }
 
 void
-gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
+gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
-    BayesDialog *bayes_dialog = data;
+    BayesDialog *bayes_dialog = user_data;
 
     switch (response_id)
     {
     case GTK_RESPONSE_APPLY:
-        gnc_bayes_dialog_remove (bayes_dialog);
+        gnc_bayes_dialog_delete (bayes_dialog);
         return;
 
     case GTK_RESPONSE_CLOSE:
@@ -256,10 +254,6 @@ gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data
     }
 }
 
-/** Event handler for clicking one of the list type radio buttons.
- * @param button The "List Type" radio button
- * @param bayes_dialog The display of the data
- */
 static void
 list_type_selected (GtkToggleButton* button, BayesDialog *bayes_dialog)
 {
@@ -323,13 +317,13 @@ add_to_store (gpointer user_data)
 }
 
 static void
-build_bayes_layer_two (const char *key, const GValue *value, gpointer data)
+build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 {
     QofBook     *book;
     gchar       *kvp_path;
     gchar       *probability;
 
-    struct kvp_info *kvpInfo = (struct kvp_info*)data;
+    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
 
     // Get the book
     book = gnc_get_current_book();
@@ -355,10 +349,10 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer data)
 }
 
 static void
-build_bayes (const char *key, const GValue *value, gpointer data)
+build_bayes (const char *key, const GValue *value, gpointer user_data)
 {
     char *kvp_path;
-    struct kvp_info *kvpInfo = (struct kvp_info*)data;
+    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
     struct kvp_info  kvpInfol2;
 
     PINFO("build_bayes: match string '%s'", (char*)key);
@@ -385,7 +379,7 @@ build_bayes (const char *key, const GValue *value, gpointer data)
 }
 
 static void
-build_non_bayes (const char *key, const GValue *value, gpointer data)
+build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 {
     if (G_VALUE_HOLDS_BOXED (value))
     {
@@ -394,7 +388,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer data)
         gchar       *kvp_path;
         gchar       *guid_string = NULL;
 
-        struct kvp_info *kvpInfo = (struct kvp_info*)data;
+        struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
 
         // Get the book
         book = gnc_get_current_book();
@@ -452,7 +446,7 @@ get_account_info (BayesDialog *bayes_dialog)
         if (bayes_dialog->type == BAYES)
         {
             if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
-                qof_instance_foreach_slot(QOF_INSTANCE(acc), IMAP_FRAME_BAYES, build_bayes, &kvpInfo);
+                qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES, build_bayes, &kvpInfo);
 
             // Show Probability Column
             show_probability_column (bayes_dialog, TRUE);
@@ -556,7 +550,7 @@ gnc_bayes_dialog_create (GtkWidget *parent, BayesDialog *bayes_dialog)
     bayes_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
 
     /* Enable alternative line colors */
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(bayes_dialog->view),TRUE);
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(bayes_dialog->view), TRUE);
 
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);

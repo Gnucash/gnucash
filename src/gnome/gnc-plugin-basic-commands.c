@@ -206,7 +206,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     {
         "ToolsBayesEditorAction", NULL, N_("_Bayesian Editor"), NULL,
-        N_("View and edit Bayesian and Non Bayesian values"),
+        N_("View and Delete Bayesian and Non Bayesian information"),
         G_CALLBACK (gnc_main_window_cmd_tools_bayes_editor)
     },
 
