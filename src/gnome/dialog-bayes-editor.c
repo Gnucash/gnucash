@@ -118,6 +118,126 @@ gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer data)
     LEAVE(" ");
 }
 
+static gboolean
+are_you_sure (gpointer data)
+{
+    BayesDialog *bayes_dialog = data;
+    GtkWidget   *dialog;
+    gint         response;
+    const char  *title = _("Are you sure you want to remove entries?");
+
+    dialog = gtk_message_dialog_new (GTK_WINDOW (bayes_dialog->dialog),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_QUESTION,
+                                     GTK_BUTTONS_CANCEL,
+                                     "%s", title);
+
+    gtk_dialog_add_button (GTK_DIALOG(dialog), _("_Remove"), GTK_RESPONSE_ACCEPT);
+
+    gtk_widget_grab_focus (gtk_dialog_get_widget_for_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT));
+
+    response = gtk_dialog_run (GTK_DIALOG(dialog));
+
+    gtk_widget_destroy (dialog);
+
+    if (response == GTK_RESPONSE_ACCEPT)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+static void
+delete_kvp (Account *account, gchar *full_account, gchar *kvp_path)
+{
+    qof_instance_slot_delete_if_empty (QOF_INSTANCE(account), kvp_path);
+
+    PINFO("Delete source account is '%s', path is '%s'", full_account, kvp_path);
+
+    g_free (kvp_path);
+}
+
+static void
+gnc_bayes_dialog_remove (gpointer data)
+{
+    BayesDialog      *bayes_dialog = data;
+    GList            *list, *row;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
+    GtkTreeSelection *selection;
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(bayes_dialog->view));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(bayes_dialog->view));
+
+    list = gtk_tree_selection_get_selected_rows (selection, &model);
+
+    // Make sure we have some rows selected
+    if (g_list_length (list) == 0)
+        return;
+
+    // Are we sure we want to remove the entries
+    if (are_you_sure (bayes_dialog) == FALSE)
+        return;
+
+    // reverse list
+    list = g_list_reverse (list);
+
+    for (row = g_list_first (list); row; row = g_list_next (row))
+    {
+	if (gtk_tree_model_get_iter (model, &iter, row->data))
+        {
+            Account *source_account = NULL;
+            gchar   *full_source_account;
+            gchar   *kvp_path;
+            gchar   *match_string;
+
+            gtk_tree_model_get (model, &iter, SOURCE_ACCOUNT, &source_account, SOURCE_FULL_ACC, &full_source_account,
+                                              KVP_PATH, &kvp_path, MATCH_STRING, &match_string, -1);
+
+            PINFO("Account is '%s', Path is '%s', Search is '%s'", full_source_account, kvp_path, match_string);
+
+            if ((source_account != NULL) && qof_instance_has_slot (QOF_INSTANCE(source_account), kvp_path))
+            {
+                xaccAccountBeginEdit (source_account);
+
+                qof_instance_slot_delete (QOF_INSTANCE(source_account), kvp_path);
+                g_free (kvp_path);
+
+                if (bayes_dialog->type == BAYES)
+                {
+                    kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", match_string);
+                    delete_kvp (source_account, full_source_account, kvp_path);
+
+                    kvp_path = g_strdup_printf (IMAP_FRAME_BAYES);
+                    delete_kvp (source_account, full_source_account, kvp_path);
+                }
+
+                if (bayes_dialog->type == NBAYES)
+                {
+                    kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
+                    delete_kvp (source_account, full_source_account, kvp_path);
+
+                    kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_MEMO);
+                    delete_kvp (source_account, full_source_account, kvp_path);
+
+                    kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_CSV);
+                    delete_kvp (source_account, full_source_account, kvp_path);
+
+                    kvp_path = g_strdup_printf (IMAP_FRAME);
+                    delete_kvp (source_account, full_source_account, kvp_path);
+                }
+                qof_instance_set_dirty (QOF_INSTANCE(source_account));
+                xaccAccountCommitEdit (source_account);
+            }
+            g_free (match_string);
+            g_free (full_source_account);
+	}
+    }
+    g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+    g_list_free (list);
+
+    get_account_info (bayes_dialog);
+}
+
 void
 gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 {
@@ -125,6 +245,10 @@ gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data
 
     switch (response_id)
     {
+    case GTK_RESPONSE_APPLY:
+        gnc_bayes_dialog_remove (bayes_dialog);
+        return;
+
     case GTK_RESPONSE_CLOSE:
     default:
         gnc_close_gui_component_by_data (DIALOG_BAYES_CM_CLASS, bayes_dialog);
@@ -268,6 +392,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer data)
         QofBook     *book;
         GncGUID     *guid = NULL;
         gchar       *kvp_path;
+        gchar       *guid_string = NULL;
 
         struct kvp_info *kvpInfo = (struct kvp_info*)data;
 
@@ -275,8 +400,9 @@ build_non_bayes (const char *key, const GValue *value, gpointer data)
         book = gnc_get_current_book();
 
         guid = (GncGUID*)g_value_get_boxed (value);
+        guid_string = guid_to_string (guid);
 
-        PINFO("build_non_bayes: account '%s', match account guid: '%s'", (char*)key, guid_to_string(guid));
+        PINFO("build_non_bayes: account '%s', match account guid: '%s'", (char*)key, guid_string);
 
         kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
 
@@ -291,6 +417,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer data)
         add_to_store (kvpInfo);
 
         g_free (kvp_path);
+        g_free (guid_string);
     }
 }
 
