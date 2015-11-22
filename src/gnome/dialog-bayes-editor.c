@@ -416,6 +416,26 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 }
 
 static void
+get_non_bayes_info (Account *acc, const gchar *imap_frame, GtkTreeModel *store, const gchar *text)
+{
+    gchar   *kvp_path_head = NULL;
+
+    struct kvp_info kvpInfo;
+
+    kvpInfo.source_account = acc;
+    kvpInfo.store = store;
+    kvpInfo.based_on = text;
+
+    kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", imap_frame);
+    kvpInfo.kvp_path_head = kvp_path_head;
+
+    if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path_head))
+        qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head, build_non_bayes, &kvpInfo);
+
+    g_free (kvp_path_head);
+}
+
+static void
 get_account_info (BayesDialog *bayes_dialog)
 {
     Account *root;
@@ -438,7 +458,6 @@ get_account_info (BayesDialog *bayes_dialog)
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
     {
         Account *acc = ptr->data;
-        gchar   *kvp_path_head = NULL;
 
         // Save source account
         kvpInfo.source_account = acc;
@@ -454,33 +473,14 @@ get_account_info (BayesDialog *bayes_dialog)
 
         if (bayes_dialog->type == NBAYES)
         {
-            kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
+            // Description
+            get_non_bayes_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
 
-            kvpInfo.based_on = _("Description Field");
-            kvpInfo.kvp_path_head = kvp_path_head;
+            // Memo
+            get_non_bayes_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
 
-            if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path_head))
-                qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head, build_non_bayes, &kvpInfo);
-
-            g_free (kvp_path_head);
-            kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_MEMO);
-
-            kvpInfo.based_on = _("Memo Field");
-            kvpInfo.kvp_path_head = kvp_path_head;
-
-            if (qof_instance_has_slot (QOF_INSTANCE (acc), kvp_path_head))
-                qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head, build_non_bayes, &kvpInfo);
-
-            g_free (kvp_path_head);
-            kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_CSV);
-
-            kvpInfo.based_on = _("CSV Account Map");
-            kvpInfo.kvp_path_head = kvp_path_head;
-
-            if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path_head))
-                qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head, build_non_bayes, &kvpInfo);
-
-            g_free (kvp_path_head);
+            // CSV Account Map
+            get_non_bayes_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
 
             // Hide Probability Column
             show_probability_column (bayes_dialog, FALSE);
