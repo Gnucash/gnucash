@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-05 10:40-0700\n"
-"PO-Revision-Date: 2015-11-01 10:09+0100\n"
+"PO-Revision-Date: 2015-11-26 15:31+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -2930,13 +2930,11 @@ msgstr "Bericht zum _Drucken:"
 
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:26
-#, fuzzy
 msgid "_Process payments on posting"
 msgstr "Automatisch durchbuchen"
 
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:29
-#, fuzzy
 msgid "Pro_cess payments on posting"
 msgstr "Automatisch durchbuchen"
 
@@ -3950,9 +3948,8 @@ msgstr "Geben Sie die Art des Postens ein"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:585
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:460
 #: ../src/register/ledger-core/split-register-model.c:889
-#, fuzzy
 msgid "%A %d %B %Y"
-msgstr "%#d. %B %Y"
+msgstr "%A %d %B %Y"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:597
 msgid "Enter the Entry Description"
@@ -6543,24 +6540,20 @@ msgid "This value contains the X,Y coordinates for the start of the numerical am
 msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Zahlen auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:20
-#, fuzzy
 msgid "Position of payee address"
-msgstr "Position der Zahlungsempfänger-Zeile"
+msgstr "Position der Adresse des Zahlungsempfängers"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:21
-#, fuzzy
 msgid "This value contains the X,Y coordinates for the start of the payee address line on the check. Coordinates are from the lower left corner of the specified check position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Datumszeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr "Dieser Wert enthält die X,Y-Koordinaten für Zeile des Zahlungsempfängers auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:22
-#, fuzzy
 msgid "Position of notes line"
-msgstr "Position der Datumszeile"
+msgstr "Position der Zeile Bemerkungen"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:23
-#, fuzzy
 msgid "This value contains the X,Y coordinates for the start of the notes line on the check. Coordinates are from the lower left corner of the specified check position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Datumszeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr "Dieser Wert enthält die X,Y-Koordinaten für die Zeile Bemerkunge auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:24
 msgid "Position of memo line"
@@ -6575,9 +6568,8 @@ msgid "Offset for complete check"
 msgstr "Offset für ganzen Scheck"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:27
-#, fuzzy
 msgid "This value contains the X,Y offset for the complete check. Coordinates are from the lower left corner of the specified check position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Verwendungszweck-Zeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr "Dieser Wert enthält die X,Y-Koordinaten für den gesamten Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:28
 #, fuzzy
@@ -8189,7 +8181,7 @@ msgstr "Kurs-Editor"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:8
 msgid "_Namespace:"
-msgstr "_Namensstandard:"
+msgstr "_Namensraum:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:9
 #: ../src/gnome-utils/dialog-commodity.c:289
@@ -9586,7 +9578,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Wertpapierkennnummer (WKN, ISIN oder ähnliches): "
+"Wertpapierkennnummer (ISIN, WKN oder ähnliches): "
 
 #: ../src/gnome-utils/dialog-commodity.c:189
 msgid ""
@@ -10825,15 +10817,13 @@ msgstr "Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das n�
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1919
 #: ../src/register/ledger-core/split-register-model.c:2015
-#, fuzzy
 msgid "Change split linked to a reconciled split?"
 msgstr "Abgeglichenen Buchungsteil ändern?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1921
 #: ../src/register/ledger-core/split-register-model.c:2017
-#, fuzzy
 msgid "You are about to change a split that is linked to a reconciled split. Doing so might make future reconciliation difficult! Continue with this change?"
-msgstr "Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste Abgleichen erschweren. Trotzdem fortsetzen?"
+msgstr "Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste Abgleichen erschweren. Wollen Sie trotzdem fortsetzen?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1935
 #: ../src/register/ledger-core/split-register-model.c:2031
@@ -12027,7 +12017,7 @@ msgstr "_Symbol/Abkürzung:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:13
 msgid "ISIN, CUSI_P or other code:"
-msgstr "_WKN, ISIN oder anderer Code:"
+msgstr "ISIN, _WKN oder anderer Code:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:14
 msgid "F_raction traded:"
@@ -12341,9 +12331,8 @@ msgid "How many days to keep old log/backup files."
 msgstr "Anzahl Tage, die die alten Backup-Dateien noch aufgehoben werden sollen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:68
-#, fuzzy
 msgid "_Retain log/backup files:"
-msgstr "Logdateien au_fbewahren"
+msgstr "Log-/Sicherungsdateien au_fbewahren"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:69
 msgid "Com_press files"
@@ -12541,7 +12530,7 @@ msgstr "Im Zweizeilenstil Farben nur mit jedem Buchungssatz abwechseln, anstatt 
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:129
 msgid "Don't _use GnuCash built-in colors"
-msgstr ""
+msgstr "Benutzt nicht die GnuCash-eigenen Farben"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:130
 msgid "GnuCash uses a yellow/green theme by default for register windows. Check this if you want to use the system color theme instead."
@@ -19945,7 +19934,7 @@ msgstr "Auswahl für Kurslisten treffen"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:50
 msgid "How to report brokerage fees"
-msgstr ""
+msgstr "Wie werden Maklergebühren dargestellt?"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:88
 msgid "Basis calculation method."
@@ -19987,31 +19976,28 @@ msgid "How to report commissions and other brokerage fees."
 msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:111
-#, fuzzy
 msgid "Include in basis"
-msgstr "_Unterkonten mit einbeziehen"
+msgstr "Schließt Bemessungsgrundlage ein"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:112
 msgid "Include brokerage fees in the basis for the asset."
-msgstr ""
+msgstr "Schließt die Maklergebühr in die Basis für den Gewinn ein."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:114
-#, fuzzy
 msgid "Include in gain"
-msgstr "_Gesamtsumme anzeigen"
+msgstr "Schließt Gewinn ein"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:115
 msgid "Include brokerage fees in the gain and loss but not in the basis."
-msgstr ""
+msgstr "Schließt Maklergebührt in Gewinn und Verlust ein, aber nicht in der Bemessungsgrundlage."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:117
 msgid "Ignore"
 msgstr "Ignorieren"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:118
-#, fuzzy
 msgid "Ignore brokerage fees entirely."
-msgstr "Ignoriere Vermittlungsgebühren bei der Ermittlung der Renditen."
+msgstr "Ignoriere Maklergebühren völlig."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:125
 msgid "Display the ticker symbols."
