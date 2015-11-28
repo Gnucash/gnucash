@@ -25,17 +25,13 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 
 #include "qof.h"
-
-#include "gnc-backend-sql.h"
-
-#include "gnc-book-sql.h"
-#include "gnc-slots-sql.h"
 
 #include "gnc-engine.h"
 #include "SX-book.h"
@@ -44,6 +40,11 @@
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
 #endif
+}
+#include "gnc-backend-sql.h"
+#include "gnc-book-sql.h"
+#include "gnc-slots-sql.h"
+
 
 #define BOOK_TABLE "books"
 #define TABLE_VERSION 1

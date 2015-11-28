@@ -22,8 +22,14 @@
 /* Private structures and variables for gnc-backend-dbi.c and its unit tests */
 #ifndef GNC_BACKEND_DBI_PRIV_H
 #define GNC_BACKEND_DBI_PRIV_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <dbi/dbi.h>
+#ifdef __cplusplus
+}
+#endif
 #include "gnc-backend-sql.h"
 
 /**

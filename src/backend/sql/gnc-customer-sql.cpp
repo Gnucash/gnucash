@@ -27,19 +27,21 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-backend-sql.h"
-#include "gnc-slots-sql.h"
-
 #include "gncBillTermP.h"
 #include "gncCustomerP.h"
 #include "gncTaxTableP.h"
+}
+
+#include "gnc-backend-sql.h"
+#include "gnc-slots-sql.h"
 #include "gnc-customer-sql.h"
 #include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"

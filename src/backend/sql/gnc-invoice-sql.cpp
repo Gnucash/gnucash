@@ -27,7 +27,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -36,12 +37,12 @@
 
 #include "gnc-commodity.h"
 
+#include "gncBillTermP.h"
+#include "gncInvoiceP.h"
+}
 #include "gnc-backend-sql.h"
 #include "gnc-commodity-sql.h"
 #include "gnc-slots-sql.h"
-
-#include "gncBillTermP.h"
-#include "gncInvoiceP.h"
 #include "gnc-invoice-sql.h"
 #include "gnc-owner-sql.h"
 #include "gnc-bill-term-sql.h"
@@ -181,7 +182,7 @@ save_invoice( GncSqlBackend* be, QofInstance* inst )
 {
     const GncGUID* guid;
     GncInvoice* invoice;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok = TRUE;
 

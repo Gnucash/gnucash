@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db using libdbi
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <platform.h>
@@ -36,8 +37,6 @@
 #include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-
-#include "gnc-backend-dbi-priv.h"
 
 #include "qof.h"
 #include "qofquery-p.h"
@@ -52,8 +51,6 @@
 #include "gnc-filepath-utils.h"
 #include <gnc-path.h>
 #include "gnc-locale-utils.h"
-
-#include "gnc-backend-dbi.h"
 
 #include "gnc-prefs.h"
 
@@ -79,6 +76,11 @@ static dbi_inst dbi_instance = NULL;
 
 /* For direct access to dbi data structs, sadly needed for datetime */
 #include <dbi/dbi-dev.h>
+}
+
+#include "gnc-backend-dbi.h"
+#include "gnc-backend-dbi-priv.h"
+
 
 #define GNC_HOST_NAME_MAX 255
 #define TRANSACTION_NAME "trans"
@@ -226,8 +228,8 @@ gnc_dbi_verify_conn( GncDbiSqlConnection* dbi_conn )
 static void
 create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    GncDbiBackend* be = be_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    GncDbiBackend* be = static_cast<decltype(be)>(be_p);
 
     g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -239,13 +241,13 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 }
 
 static void
-sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
+sqlite3_error_fn(dbi_conn conn, void* user_data)
 {
     const gchar* msg;
-
-    (void)dbi_conn_error( conn, &msg );
+    GncDbiSqlConnection *db_conn = static_cast<decltype(db_conn)>(conn);
+    (void)dbi_conn_error(db_conn, &msg);
     PERR( "DBI error: %s\n", msg );
-    gnc_dbi_set_error( conn, ERR_BACKEND_MISC, 0, FALSE );
+    gnc_dbi_set_error(db_conn, ERR_BACKEND_MISC, 0, FALSE);
 }
 
 static void
@@ -258,7 +260,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     gchar* dirname = NULL;
     gchar* basename = NULL;
     gchar *filepath = NULL;
-    gchar *msg = " ";
+    const char *msg = nullptr;
     gboolean file_exists;
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
 
@@ -270,8 +272,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 
     /* Remove uri type if present */
     filepath = gnc_uri_get_path ( book_id );
-    file_exists = g_file_test( filepath,
-                               G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS );
+    GFileTest ftest = static_cast<decltype(ftest)>(
+        G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS) ;
+    file_exists = g_file_test( filepath, ftest);
     if ( !create && !file_exists )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
@@ -1669,7 +1672,7 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
     for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
     {
         const char *errmsg;
-        conn->provider->drop_index (conn->conn, iter->data);
+        conn->provider->drop_index (conn->conn, static_cast<char*>(iter->data));
         if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
         {
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
@@ -2590,7 +2593,7 @@ add_columns_ddl( GncSqlConnection* conn,
 static void
 append_sqlite3_col_def( GString* ddl, GncSqlColumnInfo* info )
 {
-    gchar* type_name;
+    const char* type_name = nullptr;
 
     if ( info->type == BCT_INT )
     {
@@ -2669,7 +2672,7 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 static void
 append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info )
 {
-    gchar* type_name;
+    const char* type_name = nullptr;
 
     if ( info->type == BCT_INT )
     {
@@ -2760,7 +2763,7 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 static void
 append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info )
 {
-    gchar* type_name;
+    const char* type_name = nullptr;
 
     if ( info->type == BCT_INT )
     {

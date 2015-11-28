@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include <stdlib.h>
 #include "config.h"
 
@@ -45,7 +46,14 @@
 #include <gncBillTerm.h>
 #include <gncTaxTable.h>
 #include <gncInvoice.h>
+#include "gnc-prefs.h"
+#include "gnc-pricedb.h"
 
+
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+}
 #include "gnc-backend-sql.h"
 
 #include "gnc-account-sql.h"
@@ -54,7 +62,6 @@
 #include "gnc-commodity-sql.h"
 #include "gnc-lots-sql.h"
 #include "gnc-price-sql.h"
-#include "gnc-pricedb.h"
 #include "gnc-recurrence-sql.h"
 #include "gnc-schedxaction-sql.h"
 #include "gnc-slots-sql.h"
@@ -71,12 +78,6 @@
 #include "gnc-owner-sql.h"
 #include "gnc-tax-table-sql.h"
 #include "gnc-vendor-sql.h"
-
-#include "gnc-prefs.h"
-
-#if defined( S_SPLINT_S )
-#include "splint-defs.h"
-#endif
 
 static void gnc_sql_init_object_handlers( void );
 static void update_progress( GncSqlBackend* be );
@@ -151,8 +152,8 @@ gnc_sql_init( /*@ unused @*/ GncSqlBackend* be )
 static void
 create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    GncSqlBackend* be = be_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    GncSqlBackend* be = static_cast<decltype(be)>(be_p);
 
     g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -182,8 +183,8 @@ gnc_sql_set_load_order( const gchar** load_order )
 static void
 initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    GncSqlBackend* be = be_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    GncSqlBackend* be = static_cast<decltype(be)>(be_p);
     gint i;
 
     g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
@@ -212,7 +213,7 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
 
 void
 gnc_sql_push_commodity_for_postload_processing (GncSqlBackend *be,
-						gpointer *comm)
+						gpointer comm)
 {
     post_load_commodities = g_list_prepend(post_load_commodities, comm);
 }
@@ -246,7 +247,9 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
         /* Load any initial stuff. Some of this needs to happen in a certain order */
         for ( i = 0; fixed_load_order[i] != NULL; i++ )
         {
-            pData = qof_object_lookup_backend( fixed_load_order[i], GNC_SQL_BACKEND );
+            pData = static_cast<decltype(pData)>(qof_object_lookup_backend(
+                                                     fixed_load_order[i],
+                                                     GNC_SQL_BACKEND));
             if ( pData->initial_load != NULL )
             {
                 update_progress( be );
@@ -257,7 +260,10 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
         {
             for ( i = 0; other_load_order[i] != NULL; i++ )
             {
-                pData = qof_object_lookup_backend( other_load_order[i], GNC_SQL_BACKEND );
+                pData =
+                    static_cast<decltype(pData)>(qof_object_lookup_backend(
+                                                          other_load_order[i],
+                                                          GNC_SQL_BACKEND));
                 if ( pData->initial_load != NULL )
                 {
                     update_progress( be );
@@ -408,7 +414,7 @@ write_schedXactions( GncSqlBackend* be )
 
     for ( ; schedXactions != NULL && is_ok; schedXactions = schedXactions->next )
     {
-        tmpSX = schedXactions->data;
+        tmpSX = static_cast<decltype(tmpSX)>(schedXactions->data);
         is_ok = gnc_sql_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
     }
     update_progress( be );
@@ -419,8 +425,8 @@ write_schedXactions( GncSqlBackend* be )
 static void
 write_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    GncSqlBackend* be = static_cast<decltype(be)>(be_p);
 
     g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -546,8 +552,8 @@ gnc_sql_rollback_edit( GncSqlBackend *be, QofInstance *inst )
 static void
 commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    sql_backend* be_data = be_data_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    sql_backend* be_data = static_cast<decltype(be_data)>(be_data_p);
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -684,7 +690,7 @@ handle_and_term( QofQueryTerm* pTerm, GString* sql )
         for ( name = pParamPath; name != NULL; name = name->next )
         {
             if ( name != pParamPath ) g_string_append( sql, "." );
-            g_string_append( sql, name->data );
+            g_string_append(sql, static_cast<char*>(name->data));
         }
 
         if ( guid_data->options == QOF_GUID_MATCH_ANY )
@@ -695,7 +701,8 @@ handle_and_term( QofQueryTerm* pTerm, GString* sql )
         for ( guid_entry = guid_data->guids; guid_entry != NULL; guid_entry = guid_entry->next )
         {
             if ( guid_entry != guid_data->guids ) g_string_append( sql, "." );
-            (void)guid_to_string_buff( guid_entry->data, val );
+            (void)guid_to_string_buff(static_cast<GncGUID*>(guid_entry->data),
+                                      val);
             g_string_append( sql, "'" );
             g_string_append( sql, val );
             g_string_append( sql, "'" );
@@ -715,7 +722,7 @@ handle_and_term( QofQueryTerm* pTerm, GString* sql )
     for ( name = pParamPath; name != NULL; name = name->next )
     {
         if ( name != pParamPath ) g_string_append( sql, "." );
-        g_string_append( sql, name->data );
+        g_string_append(sql, static_cast<char*>(name->data) );
     }
 
     if ( pPredData->how == QOF_COMPARE_LT )
@@ -811,8 +818,8 @@ handle_and_term( QofQueryTerm* pTerm, GString* sql )
 static void
 compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    sql_backend* be_data = be_data_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    sql_backend* be_data = static_cast<decltype(be_data)>(be_data_p);
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -849,7 +856,8 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 //gnc_sql_compile_query_to_sql( be, pQuery );
     searchObj = qof_query_get_search_for( pQuery );
 
-    pQueryInfo = g_malloc( (gsize)sizeof( gnc_sql_query_info ) );
+    pQueryInfo = static_cast<decltype(pQueryInfo)>(
+        g_malloc(sizeof(gnc_sql_query_info)));
     g_assert( pQueryInfo != NULL );
     pQueryInfo->pCompiledQuery = NULL;
     pQueryInfo->searchObj = searchObj;
@@ -927,8 +935,8 @@ gnc_sql_compile_query_to_sql( GncSqlBackend* be, QofQuery* query )
 static void
 free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    sql_backend* be_data = be_data_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    sql_backend* be_data = static_cast<decltype(be_data)>(be_data_p);
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -980,8 +988,8 @@ gnc_sql_free_query( QofBackend* pBEnd, gpointer pQuery )
 static void
 run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
-    GncSqlObjectBackend* pData = data_p;
-    sql_backend* be_data = be_data_p;
+    GncSqlObjectBackend* pData = static_cast<decltype(pData)>(data_p);
+    sql_backend* be_data = static_cast<decltype(be_data)>(be_data_p);
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
@@ -1125,14 +1133,14 @@ gnc_sql_get_integer_value( const GValue* value )
 
 /* ----------------------------------------------------------------- */
 /*@ null @*/ static gpointer
-get_autoinc_id()
+get_autoinc_id(void *object, const QofParam* param)
 {
     // Just need a 0 to force a new autoinc value
     return (gpointer)0;
 }
 
 static void
-set_autoinc_id()
+set_autoinc_id(void* object, void *item)
 {
     // Nowhere to put the ID
 }
@@ -1380,7 +1388,8 @@ add_gvalue_int_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 
     if ( table_row->gobj_param_name != NULL )
     {
-        g_object_get_property( pObject, table_row->gobj_param_name, value );
+        g_object_get_property(G_OBJECT(pObject), table_row->gobj_param_name,
+                              value );
     }
     else
     {
@@ -1688,7 +1697,7 @@ add_gvalue_double_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     getter = gnc_sql_get_getter( obj_name, table_row );
     if ( getter != NULL )
     {
-        pDouble = (*getter)( pObject, NULL );
+        pDouble = static_cast<decltype(pDouble)>((*getter)(pObject, NULL ));
     }
     if ( pDouble != NULL )
     {
@@ -1798,7 +1807,7 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
         getter = gnc_sql_get_getter( obj_name, table_row );
         if ( getter != NULL )
         {
-            guid = (*getter)( pObject, NULL );
+            guid = static_cast<decltype(guid)>((*getter)( pObject, NULL ));
         }
     }
     (void)g_value_init( value, G_TYPE_STRING );
@@ -1848,7 +1857,7 @@ gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeCo
         getter = gnc_sql_get_getter( obj_name, table_row );
         if ( getter != NULL )
         {
-            inst = (*getter)( pObject, NULL );
+            inst = static_cast<decltype(inst)>((*getter)( pObject, NULL ));
         }
     }
     if ( inst != NULL )
@@ -2084,7 +2093,7 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
             {
                 gchar buf[5];
                 GDateDay day;
-                guint month;
+                GDateMonth month;
                 GDateYear year;
 
                 strncpy( buf, &s[0], 4 );
@@ -2092,7 +2101,7 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
                 year = (GDateYear)atoi( buf );
                 strncpy( buf, &s[4], 2 );
                 buf[2] = '\0';
-                month = (guint)atoi( buf );
+                month = static_cast<decltype(month)>(atoi( buf ));
                 strncpy( buf, &s[6], 2 );
                 day = (GDateDay)atoi( buf );
 
@@ -2373,7 +2382,8 @@ get_handler( const GncSqlColumnTableEntry* table_row )
 
     if ( g_columnTypeHash != NULL )
     {
-        pHandler = g_hash_table_lookup( g_columnTypeHash, table_row->col_type );
+        pHandler = static_cast<decltype(pHandler)>(
+            g_hash_table_lookup(g_columnTypeHash, table_row->col_type));
         g_assert( pHandler != NULL );
     }
     else
@@ -3049,7 +3059,7 @@ gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar*
 {
     const GncGUID* guid;
     gboolean is_infant;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_ok;
 
     is_infant = qof_instance_get_infant( inst );

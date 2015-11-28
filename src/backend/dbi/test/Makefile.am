@@ -58,10 +58,10 @@ gnc_dbd_dir_override = GNC_DBD_DIR="@GNC_DBD_DIR@"
 endif
 
 test_backend_dbi_SOURCES = \
-    test-backend-dbi.c \
+    test-backend-dbi.cpp \
     test-backend-dbi-basic.cpp \
     test-dbi-stuff.cpp \
-    test-dbi-business-stuff.c
+    test-dbi-business-stuff.cpp
 
 test_backend_dbi_LDFLAGS="-ldbi"
 test_backend_dbi_CPPFLAGS = \

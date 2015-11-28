@@ -25,26 +25,24 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 
 #include "qof.h"
-
-#include "gnc-backend-sql.h"
-
 #include "Recurrence.h"
-
-#include "gnc-budget-sql.h"
-#include "gnc-slots-sql.h"
-#include "gnc-recurrence-sql.h"
-
 #include "gnc-budget.h"
 
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
 #endif
+}
+#include "gnc-backend-sql.h"
+#include "gnc-budget-sql.h"
+#include "gnc-slots-sql.h"
+#include "gnc-recurrence-sql.h"
 
 #define BUDGET_TABLE "budgets"
 #define TABLE_VERSION 1
@@ -394,7 +392,7 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GncGUID* guid;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok;
 

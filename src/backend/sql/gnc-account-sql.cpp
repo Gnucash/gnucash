@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -35,16 +36,16 @@
 #include "AccountP.h"
 #include "gnc-commodity.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+}
 #include "gnc-backend-sql.h"
 
 #include "gnc-account-sql.h"
 #include "gnc-commodity-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-transaction-sql.h"
-
-#if defined( S_SPLINT_S )
-#include "splint-defs.h"
-#endif
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -184,7 +185,8 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row,
     if ( gnc_account_get_parent( pAccount ) == NULL
             && pAccount != gnc_book_get_root_account( be->book ) )
     {
-        account_parent_guid_struct* s = g_malloc( (gsize)sizeof(account_parent_guid_struct) );
+        account_parent_guid_struct* s = static_cast<decltype(s)>(
+            g_malloc(sizeof(account_parent_guid_struct)));
         g_assert( s != NULL );
 
         s->pAccount = pAccount;
@@ -336,7 +338,7 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
     gboolean is_infant;
     gboolean is_ok = FALSE;
     gnc_commodity* commodity;
-    gint op;
+    E_DB_OPERATION op;
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( inst != NULL, FALSE );

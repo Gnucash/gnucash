@@ -20,7 +20,7 @@ AM_CPPFLAGS = \
   ${WARN_CFLAGS}
 
 libgncmod_backend_dbi_la_SOURCES = \
-  gnc-backend-dbi.c
+  gnc-backend-dbi.cpp
 
 noinst_HEADERS = \
   gnc-backend-dbi.h \

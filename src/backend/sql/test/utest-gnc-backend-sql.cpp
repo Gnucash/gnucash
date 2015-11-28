@@ -20,10 +20,13 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 ********************************************************************/
+extern "C"
+{
 #include "config.h"
 #include <string.h>
 #include <glib.h>
 #include <unittest-support.h>
+}
 /* Add specific headers for this class */
 #include "../gnc-backend-sql.h"
 
@@ -195,12 +198,14 @@ test_gnc_sql_commit_edit (void)
     QofInstance *inst;
     guint dirty_called = 0;
     GncSqlConnection conn;
-    gchar *msg1 = "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'null'\n";
-    gchar *msg2 = "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'Book'\n";
-    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "gnc.backend.sql";
-    TestErrorStruct check1 = { loglevel, logdomain, msg1, 0 };
-    TestErrorStruct check2 = { loglevel, logdomain, msg2, 0 };
+    const char *msg1 = "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'null'\n";
+    const char *msg2 = "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'Book'\n";
+    GLogLevelFlags loglevel = static_cast<decltype(loglevel)>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    const char *logdomain = "gnc.backend.sql";
+    TestErrorStruct check1 = { loglevel, const_cast<char*>(logdomain),
+                               const_cast<char*>(msg1), 0 };
+    TestErrorStruct check2 = { loglevel, const_cast<char*>(logdomain),
+                               const_cast<char*>(msg2), 0 };
     guint hdlr1;
 
     test_add_error (&check1);
@@ -215,7 +220,7 @@ test_gnc_sql_commit_edit (void)
     conn.beginTransaction = fake_connection_function;
     conn.rollbackTransaction = fake_connection_function;
     conn.commitTransaction = fake_connection_function;
-    inst  = g_object_new (QOF_TYPE_INSTANCE, NULL);
+    inst  = static_cast<decltype(inst)>(g_object_new (QOF_TYPE_INSTANCE, NULL));
     qof_instance_init_data (inst, QOF_ID_NULL, be.book);
     be.loading = FALSE;
     qof_book_set_dirty_cb (be.book, test_dirty_cb, &dirty_called);
@@ -581,20 +586,20 @@ static void
 test_gnc_sql_convert_timespec_to_string ()
 {
     GncSqlBackend be = {{
-            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-            0, NULL, 0, "", NULL
+            nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+            nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+            nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0, nullptr, nullptr
         },
-        NULL, NULL, FALSE, FALSE, FALSE, 0, 0, NULL,
+        nullptr, nullptr, FALSE, FALSE, FALSE, 0, 0, nullptr,
         "%4d-%02d-%02d %02d:%02d:%02d"
     };
-    gchar *date[numtests] = {"1995-03-11 19:17:26",
-                             "2001-04-20 11:44:07",
-                             "1964-02-29 09:15:23",
-                             "1959-04-02 00:00:00",
-                             "2043-11-22 05:32:45",
-                             "2153-12-18 01:15:30"
-                            };
+    const char *date[numtests] = {"1995-03-11 19:17:26",
+                                  "2001-04-20 11:44:07",
+                                  "1964-02-29 09:15:23",
+                                  "1959-04-02 00:00:00",
+                                  "2043-11-22 05:32:45",
+                                  "2153-12-18 01:15:30"
+    };
     int i;
     for (i = 0; i < numtests; i++)
     {
@@ -941,107 +946,107 @@ void
 test_suite_gnc_backend_sql (void)
 {
 
-// GNC_TEST_ADD (suitename, "gnc sql init", Fixture, NULL, test_gnc_sql_init,  teardown);
-// GNC_TEST_ADD (suitename, "create tables cb", Fixture, NULL, test_create_tables_cb,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql set load order", Fixture, NULL, test_gnc_sql_set_load_order,  teardown);
-// GNC_TEST_ADD (suitename, "initial load cb", Fixture, NULL, test_initial_load_cb,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql load", Fixture, NULL, test_gnc_sql_load,  teardown);
-// GNC_TEST_ADD (suitename, "write account tree", Fixture, NULL, test_write_account_tree,  teardown);
-// GNC_TEST_ADD (suitename, "write accounts", Fixture, NULL, test_write_accounts,  teardown);
-// GNC_TEST_ADD (suitename, "write tx", Fixture, NULL, test_write_tx,  teardown);
-// GNC_TEST_ADD (suitename, "write transactions", Fixture, NULL, test_write_transactions,  teardown);
-// GNC_TEST_ADD (suitename, "write template transactions", Fixture, NULL, test_write_template_transactions,  teardown);
-// GNC_TEST_ADD (suitename, "write schedXactions", Fixture, NULL, test_write_schedXactions,  teardown);
-// GNC_TEST_ADD (suitename, "write cb", Fixture, NULL, test_write_cb,  teardown);
-// GNC_TEST_ADD (suitename, "update progress", Fixture, NULL, test_update_progress,  teardown);
-// GNC_TEST_ADD (suitename, "finish progress", Fixture, NULL, test_finish_progress,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql sync all", Fixture, NULL, test_gnc_sql_sync_all,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql begin edit", Fixture, NULL, test_gnc_sql_begin_edit,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql rollback edit", Fixture, NULL, test_gnc_sql_rollback_edit,  teardown);
-// GNC_TEST_ADD (suitename, "commit cb", Fixture, NULL, test_commit_cb,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql init", Fixture, nullptr, test_gnc_sql_init,  teardown);
+// GNC_TEST_ADD (suitename, "create tables cb", Fixture, nullptr, test_create_tables_cb,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql set load order", Fixture, nullptr, test_gnc_sql_set_load_order,  teardown);
+// GNC_TEST_ADD (suitename, "initial load cb", Fixture, nullptr, test_initial_load_cb,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql load", Fixture, nullptr, test_gnc_sql_load,  teardown);
+// GNC_TEST_ADD (suitename, "write account tree", Fixture, nullptr, test_write_account_tree,  teardown);
+// GNC_TEST_ADD (suitename, "write accounts", Fixture, nullptr, test_write_accounts,  teardown);
+// GNC_TEST_ADD (suitename, "write tx", Fixture, nullptr, test_write_tx,  teardown);
+// GNC_TEST_ADD (suitename, "write transactions", Fixture, nullptr, test_write_transactions,  teardown);
+// GNC_TEST_ADD (suitename, "write template transactions", Fixture, nullptr, test_write_template_transactions,  teardown);
+// GNC_TEST_ADD (suitename, "write schedXactions", Fixture, nullptr, test_write_schedXactions,  teardown);
+// GNC_TEST_ADD (suitename, "write cb", Fixture, nullptr, test_write_cb,  teardown);
+// GNC_TEST_ADD (suitename, "update progress", Fixture, nullptr, test_update_progress,  teardown);
+// GNC_TEST_ADD (suitename, "finish progress", Fixture, nullptr, test_finish_progress,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql sync all", Fixture, nullptr, test_gnc_sql_sync_all,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql begin edit", Fixture, nullptr, test_gnc_sql_begin_edit,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql rollback edit", Fixture, nullptr, test_gnc_sql_rollback_edit,  teardown);
+// GNC_TEST_ADD (suitename, "commit cb", Fixture, nullptr, test_commit_cb,  teardown);
     GNC_TEST_ADD_FUNC (suitename, "gnc sql commit edit", test_gnc_sql_commit_edit);
-// GNC_TEST_ADD (suitename, "handle and term", Fixture, NULL, test_handle_and_term,  teardown);
-// GNC_TEST_ADD (suitename, "compile query cb", Fixture, NULL, test_compile_query_cb,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql compile query", Fixture, NULL, test_gnc_sql_compile_query,  teardown);
-// GNC_TEST_ADD (suitename, "convert search obj", Fixture, NULL, test_convert_search_obj,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql compile query to sql", Fixture, NULL, test_gnc_sql_compile_query_to_sql,  teardown);
-// GNC_TEST_ADD (suitename, "free query cb", Fixture, NULL, test_free_query_cb,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql free query", Fixture, NULL, test_gnc_sql_free_query,  teardown);
-// GNC_TEST_ADD (suitename, "run query cb", Fixture, NULL, test_run_query_cb,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql run query", Fixture, NULL, test_gnc_sql_run_query,  teardown);
-// GNC_TEST_ADD (suitename, "business core sql init", Fixture, NULL, test_business_core_sql_init,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql init object handlers", Fixture, NULL, test_gnc_sql_init_object_handlers,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql get integer value", Fixture, NULL, test_gnc_sql_get_integer_value,  teardown);
-// GNC_TEST_ADD (suitename, "get autoinc id", Fixture, NULL, test_get_autoinc_id,  teardown);
-// GNC_TEST_ADD (suitename, "set autoinc id", Fixture, NULL, test_set_autoinc_id,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql get getter", Fixture, NULL, test_gnc_sql_get_getter,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add colname to list", Fixture, NULL, test_gnc_sql_add_colname_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add subtable colnames to list", Fixture, NULL, test_gnc_sql_add_subtable_colnames_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "create column info", Fixture, NULL, test_create_column_info,  teardown);
-// GNC_TEST_ADD (suitename, "load string", Fixture, NULL, test_load_string,  teardown);
-// GNC_TEST_ADD (suitename, "add string col info to list", Fixture, NULL, test_add_string_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue string to slist", Fixture, NULL, test_add_gvalue_string_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load int", Fixture, NULL, test_load_int,  teardown);
-// GNC_TEST_ADD (suitename, "add int col info to list", Fixture, NULL, test_add_int_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue int to slist", Fixture, NULL, test_add_gvalue_int_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load boolean", Fixture, NULL, test_load_boolean,  teardown);
-// GNC_TEST_ADD (suitename, "add boolean col info to list", Fixture, NULL, test_add_boolean_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue boolean to slist", Fixture, NULL, test_add_gvalue_boolean_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load int64", Fixture, NULL, test_load_int64,  teardown);
-// GNC_TEST_ADD (suitename, "add int64 col info to list", Fixture, NULL, test_add_int64_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue int64 to slist", Fixture, NULL, test_add_gvalue_int64_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load double", Fixture, NULL, test_load_double,  teardown);
-// GNC_TEST_ADD (suitename, "add double col info to list", Fixture, NULL, test_add_double_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue double to slist", Fixture, NULL, test_add_gvalue_double_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load guid", Fixture, NULL, test_load_guid,  teardown);
-// GNC_TEST_ADD (suitename, "add guid col info to list", Fixture, NULL, test_add_guid_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue guid to slist", Fixture, NULL, test_add_gvalue_guid_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, NULL, test_gnc_sql_add_gvalue_objectref_guid_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, NULL, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "handle and term", Fixture, nullptr, test_handle_and_term,  teardown);
+// GNC_TEST_ADD (suitename, "compile query cb", Fixture, nullptr, test_compile_query_cb,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql compile query", Fixture, nullptr, test_gnc_sql_compile_query,  teardown);
+// GNC_TEST_ADD (suitename, "convert search obj", Fixture, nullptr, test_convert_search_obj,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql compile query to sql", Fixture, nullptr, test_gnc_sql_compile_query_to_sql,  teardown);
+// GNC_TEST_ADD (suitename, "free query cb", Fixture, nullptr, test_free_query_cb,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql free query", Fixture, nullptr, test_gnc_sql_free_query,  teardown);
+// GNC_TEST_ADD (suitename, "run query cb", Fixture, nullptr, test_run_query_cb,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql run query", Fixture, nullptr, test_gnc_sql_run_query,  teardown);
+// GNC_TEST_ADD (suitename, "business core sql init", Fixture, nullptr, test_business_core_sql_init,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql init object handlers", Fixture, nullptr, test_gnc_sql_init_object_handlers,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql get integer value", Fixture, nullptr, test_gnc_sql_get_integer_value,  teardown);
+// GNC_TEST_ADD (suitename, "get autoinc id", Fixture, nullptr, test_get_autoinc_id,  teardown);
+// GNC_TEST_ADD (suitename, "set autoinc id", Fixture, nullptr, test_set_autoinc_id,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql get getter", Fixture, nullptr, test_gnc_sql_get_getter,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql add colname to list", Fixture, nullptr, test_gnc_sql_add_colname_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql add subtable colnames to list", Fixture, nullptr, test_gnc_sql_add_subtable_colnames_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "create column info", Fixture, nullptr, test_create_column_info,  teardown);
+// GNC_TEST_ADD (suitename, "load string", Fixture, nullptr, test_load_string,  teardown);
+// GNC_TEST_ADD (suitename, "add string col info to list", Fixture, nullptr, test_add_string_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue string to slist", Fixture, nullptr, test_add_gvalue_string_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load int", Fixture, nullptr, test_load_int,  teardown);
+// GNC_TEST_ADD (suitename, "add int col info to list", Fixture, nullptr, test_add_int_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue int to slist", Fixture, nullptr, test_add_gvalue_int_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load boolean", Fixture, nullptr, test_load_boolean,  teardown);
+// GNC_TEST_ADD (suitename, "add boolean col info to list", Fixture, nullptr, test_add_boolean_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue boolean to slist", Fixture, nullptr, test_add_gvalue_boolean_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load int64", Fixture, nullptr, test_load_int64,  teardown);
+// GNC_TEST_ADD (suitename, "add int64 col info to list", Fixture, nullptr, test_add_int64_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue int64 to slist", Fixture, nullptr, test_add_gvalue_int64_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load double", Fixture, nullptr, test_load_double,  teardown);
+// GNC_TEST_ADD (suitename, "add double col info to list", Fixture, nullptr, test_add_double_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue double to slist", Fixture, nullptr, test_add_gvalue_double_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load guid", Fixture, nullptr, test_load_guid,  teardown);
+// GNC_TEST_ADD (suitename, "add guid col info to list", Fixture, nullptr, test_add_guid_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue guid to slist", Fixture, nullptr, test_add_gvalue_guid_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_gvalue_objectref_guid_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, nullptr, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
     GNC_TEST_ADD_FUNC (suitename, "gnc sql convert timespec to string", test_gnc_sql_convert_timespec_to_string);
-// GNC_TEST_ADD (suitename, "load timespec", Fixture, NULL, test_load_timespec,  teardown);
-// GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, NULL, test_add_timespec_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue timespec to slist", Fixture, NULL, test_add_gvalue_timespec_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load date", Fixture, NULL, test_load_date,  teardown);
-// GNC_TEST_ADD (suitename, "add date col info to list", Fixture, NULL, test_add_date_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue date to slist", Fixture, NULL, test_add_gvalue_date_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "load numeric", Fixture, NULL, test_load_numeric,  teardown);
-// GNC_TEST_ADD (suitename, "add numeric col info to list", Fixture, NULL, test_add_numeric_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add numeric colname to list", Fixture, NULL, test_add_numeric_colname_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue numeric to slist", Fixture, NULL, test_add_gvalue_numeric_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "get handler", Fixture, NULL, test_get_handler,  teardown);
-// GNC_TEST_ADD (suitename, "register standard col type handlers", Fixture, NULL, test_register_standard_col_type_handlers,  teardown);
-// GNC_TEST_ADD (suitename, " retrieve guid ", Fixture, NULL, test__retrieve_guid_,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql load guid", Fixture, NULL, test_gnc_sql_load_guid,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql load tx guid", Fixture, NULL, test_gnc_sql_load_tx_guid,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql load object", Fixture, NULL, test_gnc_sql_load_object,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create select statement", Fixture, NULL, test_gnc_sql_create_select_statement,  teardown);
-// GNC_TEST_ADD (suitename, "create single col select statement", Fixture, NULL, test_create_single_col_select_statement,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql execute select statement", Fixture, NULL, test_gnc_sql_execute_select_statement,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create statement from sql", Fixture, NULL, test_gnc_sql_create_statement_from_sql,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql execute select sql", Fixture, NULL, test_gnc_sql_execute_select_sql,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql execute nonselect sql", Fixture, NULL, test_gnc_sql_execute_nonselect_sql,  teardown);
-// GNC_TEST_ADD (suitename, "execute statement get count", Fixture, NULL, test_execute_statement_get_count,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql append guid list to sql", Fixture, NULL, test_gnc_sql_append_guid_list_to_sql,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql object is it in db", Fixture, NULL, test_gnc_sql_object_is_it_in_db,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql do db operation", Fixture, NULL, test_gnc_sql_do_db_operation,  teardown);
-// GNC_TEST_ADD (suitename, "create gslist from values", Fixture, NULL, test_create_gslist_from_values,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql get sql value", Fixture, NULL, test_gnc_sql_get_sql_value,  teardown);
-// GNC_TEST_ADD (suitename, "free gvalue list", Fixture, NULL, test_free_gvalue_list,  teardown);
-// GNC_TEST_ADD (suitename, "build insert statement", Fixture, NULL, test_build_insert_statement,  teardown);
-// GNC_TEST_ADD (suitename, "build update statement", Fixture, NULL, test_build_update_statement,  teardown);
-// GNC_TEST_ADD (suitename, "build delete statement", Fixture, NULL, test_build_delete_statement,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql commit standard item", Fixture, NULL, test_gnc_sql_commit_standard_item,  teardown);
-// GNC_TEST_ADD (suitename, "do create table", Fixture, NULL, test_do_create_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create table", Fixture, NULL, test_gnc_sql_create_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create temp table", Fixture, NULL, test_gnc_sql_create_temp_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create index", Fixture, NULL, test_gnc_sql_create_index,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql get table version", Fixture, NULL, test_gnc_sql_get_table_version,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql upgrade table", Fixture, NULL, test_gnc_sql_upgrade_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add columns to table", Fixture, NULL, test_gnc_sql_add_columns_to_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql init version info", Fixture, NULL, test_gnc_sql_init_version_info,  teardown);
-// GNC_TEST_ADD (suitename, "reset version info", Fixture, NULL, test_reset_version_info,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql finalize version info", Fixture, NULL, test_gnc_sql_finalize_version_info,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql set table version", Fixture, NULL, test_gnc_sql_set_table_version,  teardown);
+// GNC_TEST_ADD (suitename, "load timespec", Fixture, nullptr, test_load_timespec,  teardown);
+// GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, nullptr, test_add_timespec_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue timespec to slist", Fixture, nullptr, test_add_gvalue_timespec_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load date", Fixture, nullptr, test_load_date,  teardown);
+// GNC_TEST_ADD (suitename, "add date col info to list", Fixture, nullptr, test_add_date_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue date to slist", Fixture, nullptr, test_add_gvalue_date_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "load numeric", Fixture, nullptr, test_load_numeric,  teardown);
+// GNC_TEST_ADD (suitename, "add numeric col info to list", Fixture, nullptr, test_add_numeric_col_info_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add numeric colname to list", Fixture, nullptr, test_add_numeric_colname_to_list,  teardown);
+// GNC_TEST_ADD (suitename, "add gvalue numeric to slist", Fixture, nullptr, test_add_gvalue_numeric_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "get handler", Fixture, nullptr, test_get_handler,  teardown);
+// GNC_TEST_ADD (suitename, "register standard col type handlers", Fixture, nullptr, test_register_standard_col_type_handlers,  teardown);
+// GNC_TEST_ADD (suitename, " retrieve guid ", Fixture, nullptr, test__retrieve_guid_,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql load guid", Fixture, nullptr, test_gnc_sql_load_guid,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql load tx guid", Fixture, nullptr, test_gnc_sql_load_tx_guid,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql load object", Fixture, nullptr, test_gnc_sql_load_object,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql create select statement", Fixture, nullptr, test_gnc_sql_create_select_statement,  teardown);
+// GNC_TEST_ADD (suitename, "create single col select statement", Fixture, nullptr, test_create_single_col_select_statement,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql execute select statement", Fixture, nullptr, test_gnc_sql_execute_select_statement,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql create statement from sql", Fixture, nullptr, test_gnc_sql_create_statement_from_sql,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql execute select sql", Fixture, nullptr, test_gnc_sql_execute_select_sql,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql execute nonselect sql", Fixture, nullptr, test_gnc_sql_execute_nonselect_sql,  teardown);
+// GNC_TEST_ADD (suitename, "execute statement get count", Fixture, nullptr, test_execute_statement_get_count,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql append guid list to sql", Fixture, nullptr, test_gnc_sql_append_guid_list_to_sql,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql object is it in db", Fixture, nullptr, test_gnc_sql_object_is_it_in_db,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql do db operation", Fixture, nullptr, test_gnc_sql_do_db_operation,  teardown);
+// GNC_TEST_ADD (suitename, "create gslist from values", Fixture, nullptr, test_create_gslist_from_values,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql get sql value", Fixture, nullptr, test_gnc_sql_get_sql_value,  teardown);
+// GNC_TEST_ADD (suitename, "free gvalue list", Fixture, nullptr, test_free_gvalue_list,  teardown);
+// GNC_TEST_ADD (suitename, "build insert statement", Fixture, nullptr, test_build_insert_statement,  teardown);
+// GNC_TEST_ADD (suitename, "build update statement", Fixture, nullptr, test_build_update_statement,  teardown);
+// GNC_TEST_ADD (suitename, "build delete statement", Fixture, nullptr, test_build_delete_statement,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql commit standard item", Fixture, nullptr, test_gnc_sql_commit_standard_item,  teardown);
+// GNC_TEST_ADD (suitename, "do create table", Fixture, nullptr, test_do_create_table,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql create table", Fixture, nullptr, test_gnc_sql_create_table,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql create temp table", Fixture, nullptr, test_gnc_sql_create_temp_table,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql create index", Fixture, nullptr, test_gnc_sql_create_index,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql get table version", Fixture, nullptr, test_gnc_sql_get_table_version,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql upgrade table", Fixture, nullptr, test_gnc_sql_upgrade_table,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql add columns to table", Fixture, nullptr, test_gnc_sql_add_columns_to_table,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql init version info", Fixture, nullptr, test_gnc_sql_init_version_info,  teardown);
+// GNC_TEST_ADD (suitename, "reset version info", Fixture, nullptr, test_reset_version_info,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql finalize version info", Fixture, nullptr, test_gnc_sql_finalize_version_info,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql set table version", Fixture, nullptr, test_gnc_sql_set_table_version,  teardown);
 
 }

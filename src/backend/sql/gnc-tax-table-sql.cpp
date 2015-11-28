@@ -27,19 +27,20 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-backend-sql.h"
-#include "gnc-slots-sql.h"
-
 #include "gncEntry.h"
 #include "gncTaxTableP.h"
+}
 
+#include "gnc-backend-sql.h"
+#include "gnc-slots-sql.h"
 #include "gnc-tax-table-sql.h"
 
 #define _GNC_MOD_NAME	GNC_ID_TAXTABLE
@@ -274,7 +275,8 @@ load_single_taxtable( GncSqlBackend* be, GncSqlRow* row,
        GncGUID so that after they are all loaded, the parents can be fixed up. */
     if ( gncTaxTableGetParent( tt ) == NULL )
     {
-        taxtable_parent_guid_struct* s = g_malloc( (gsize)sizeof(taxtable_parent_guid_struct) );
+        taxtable_parent_guid_struct* s = static_cast<decltype(s)>(
+            g_malloc(sizeof(taxtable_parent_guid_struct)));
         g_assert( s != NULL );
 
         s->tt = tt;
@@ -423,7 +425,7 @@ save_taxtable( GncSqlBackend* be, QofInstance* inst )
 {
     GncTaxTable* tt;
     const GncGUID* guid;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok;
 
@@ -565,4 +567,3 @@ gnc_taxtable_sql_initialize( void )
     gnc_sql_register_col_type_handler( CT_TAXTABLEREF, &taxtable_guid_handler );
 }
 /* ========================== END OF FILE ===================== */
-

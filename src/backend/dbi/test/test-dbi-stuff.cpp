@@ -37,10 +37,10 @@ extern "C"
 #include <gnc-commodity.h>
 #include <SX-book.h>
 #include <gnc-lot.h>
-#include "../gnc-backend-dbi-priv.h"
 }
 
 #include <kvp_frame.hpp>
+#include "../gnc-backend-dbi-priv.h"
 
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 

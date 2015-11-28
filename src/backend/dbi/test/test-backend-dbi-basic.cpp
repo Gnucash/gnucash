@@ -37,8 +37,6 @@ extern "C"
 #include <qof.h>
 #include <unittest-support.h>
 #include <test-stuff.h>
-#include <test-dbi-stuff.h>
-#include <test-dbi-business-stuff.h>
 /* For cleaning up the database */
 #include <dbi/dbi.h>
 #include <gnc-uri-utils.h>
@@ -51,12 +49,14 @@ extern "C"
 #include "gncAddress.h"
 #include "gncCustomer.h"
 #include "gncInvoice.h"
-/* For test_conn_index_functions */
-#include "../gnc-backend-dbi-priv.h"
 /* For version_control */
 #include <gnc-prefs.h>
 #include <qofsession-p.h>
 }
+/* For test_conn_index_functions */
+#include "test-dbi-stuff.h"
+#include "test-dbi-business-stuff.h"
+#include "../gnc-backend-dbi-priv.h"
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
@@ -66,7 +66,7 @@ static dbi_inst dbi_instance = NULL;
 #endif
 
 static const gchar* suitename = "/backend/dbi";
-extern "C" void test_suite_gnc_backend_dbi (void);
+void test_suite_gnc_backend_dbi (void);
 
 typedef struct
 {
@@ -616,7 +616,7 @@ create_dbi_test_suite (const char *dbm_name, const char *url)
 
 }
 
-extern "C" void
+void
 test_suite_gnc_backend_dbi (void)
 {
     dbi_driver driver = NULL;

@@ -25,28 +25,28 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 
 #include "qof.h"
-
-#include "gnc-backend-sql.h"
-
-#include "gnc-schedxaction-sql.h"
-#include "gnc-slots-sql.h"
-
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "Recurrence.h"
 
-#include "gnc-recurrence-sql.h"
-#include "gnc-transaction-sql.h"
-
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
+}
+
+#include "gnc-backend-sql.h"
+#include "gnc-schedxaction-sql.h"
+#include "gnc-slots-sql.h"
+#include "gnc-recurrence-sql.h"
+#include "gnc-transaction-sql.h"
+
 
 #define SCHEDXACTION_TABLE "schedxactions"
 #define TABLE_VERSION 1
@@ -167,7 +167,7 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 {
     SchedXaction* pSx;
     const GncGUID* guid;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok;
 

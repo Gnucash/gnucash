@@ -93,7 +93,8 @@ sqlEscapeString (sqlEscape *b, const char *str)
     /* get more space, if needed */
     if (len >= b->esc_buflen)
     {
-        b->escape = g_realloc(b->escape, len + 100);
+        b->escape = static_cast<decltype(b->escape)>(g_realloc(b->escape,
+                                                               len + 100));
         b->esc_buflen = len + 100;
     }
 
@@ -137,7 +138,7 @@ sqlEscape_new (void)
 {
     sqlEscape *b = g_new (sqlEscape, 1);
 
-    b->escape = g_malloc (INITIAL_BUFSZ);
+    b->escape = static_cast<decltype(b->escape)>(g_malloc (INITIAL_BUFSZ));
     b->esc_buflen = INITIAL_BUFSZ;
     return (b);
 }

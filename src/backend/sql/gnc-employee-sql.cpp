@@ -27,7 +27,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -35,14 +36,15 @@
 #include <string.h>
 
 #include "gnc-commodity.h"
+#include "gncEmployeeP.h"
+}
 
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-commodity-sql.h"
-
-#include "gncEmployeeP.h"
 #include "gnc-employee-sql.h"
 #include "gnc-address-sql.h"
+
 
 #define _GNC_MOD_NAME	GNC_ID_EMPLOYEE
 
@@ -158,7 +160,7 @@ save_employee( GncSqlBackend* be, QofInstance* inst )
 {
     GncEmployee* emp;
     const GncGUID* guid;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok = TRUE;
 

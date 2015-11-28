@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -34,13 +35,13 @@
 #include "gnc-engine.h"
 #include "Recurrence.h"
 
-#include "gnc-backend-sql.h"
-
-#include "gnc-recurrence-sql.h"
-
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
 #endif
+}
+
+#include "gnc-backend-sql.h"
+#include "gnc-recurrence-sql.h"
 
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 

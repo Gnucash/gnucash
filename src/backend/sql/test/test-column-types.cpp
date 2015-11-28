@@ -1,5 +1,5 @@
 /***************************************************************************
- *            test-column-types.c
+ *            test-column-types.cpp
  *
  *  Tests the basic SQL column types
  *
@@ -23,12 +23,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include "qof.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
-
+}
 #include "gnc-backend-sql.h"
 
 int main( int argc, char ** argv )

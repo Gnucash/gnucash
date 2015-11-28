@@ -27,20 +27,22 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-backend-sql.h"
-#include "gnc-slots-sql.h"
-
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
-#include "gnc-bill-term-sql.h"
 #include "qof.h"
+}
+
+#include "gnc-backend-sql.h"
+#include "gnc-slots-sql.h"
+#include "gnc-bill-term-sql.h"
 
 #define _GNC_MOD_NAME	GNC_ID_BILLTERM
 
@@ -193,7 +195,8 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
        GncGUID so that after they are all loaded, the parents can be fixed up. */
     if ( gncBillTermGetParent( pBillTerm ) == NULL )
     {
-        billterm_parent_guid_struct* s = g_malloc( (gsize)sizeof(billterm_parent_guid_struct) );
+        billterm_parent_guid_struct* s = static_cast<decltype(s)>(
+            g_malloc(sizeof(billterm_parent_guid_struct)));
         g_assert( s != NULL );
 
         s->billterm = pBillTerm;

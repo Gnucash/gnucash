@@ -31,8 +31,10 @@
 #define GNC_BILLTERM_SQL_H
 
 #include "gnc-backend-sql.h"
+extern "C"
+{
 #include "qof.h"
-
+}
 #define CT_BILLTERMREF "billterm"
 
 void gnc_billterm_sql_initialize( void );

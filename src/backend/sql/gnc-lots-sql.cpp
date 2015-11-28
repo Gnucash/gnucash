@@ -26,6 +26,8 @@
  * restoring data to/from an SQL db
  */
 
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -34,14 +36,14 @@
 #include "Account.h"
 #include "gnc-lot.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+}
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 
 #include "gnc-lots-sql.h"
-
-#if defined( S_SPLINT_S )
-#include "splint-defs.h"
-#endif
 
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 

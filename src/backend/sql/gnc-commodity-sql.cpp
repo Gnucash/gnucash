@@ -25,16 +25,17 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 
 #include "qof.h"
+#include "gnc-commodity.h"
+}
 
 #include "gnc-backend-sql.h"
-#include "gnc-commodity.h"
-
 #include "gnc-commodity-sql.h"
 #include "gnc-slots-sql.h"
 
@@ -189,7 +190,7 @@ do_commit_commodity( GncSqlBackend* be, QofInstance* inst, gboolean force_insert
 {
     const GncGUID* guid;
     gboolean is_infant;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_ok;
 
     is_infant = qof_instance_get_infant( inst );

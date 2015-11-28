@@ -4,7 +4,7 @@ include $(top_srcdir)/test-templates/Makefile.decl
 MODULEPATH = src/backend/sql
 
 test_column_types_SOURCES = \
-  test-column-types.c
+  test-column-types.cpp
 
 check_PROGRAMS = \
   test-column-types \
@@ -53,8 +53,8 @@ AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
 #test_sqlbedir = ${top_srcdir}/${MODULEPATH}/test
 
 test_sqlbe_SOURCES = \
-	test-sqlbe.c \
-	utest-gnc-backend-sql.c
+	test-sqlbe.cpp \
+	utest-gnc-backend-sql.cpp
 
 #test_sqlbe_HEADERS = \
 #	$(top_srcdir)/$(MODULEPATH)/gnc-backend-sql.h

@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -33,15 +34,16 @@
 #include "qof.h"
 #include "gnc-pricedb.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+}
 #include "gnc-backend-sql.h"
 
 #include "gnc-commodity-sql.h"
 #include "gnc-price-sql.h"
 #include "gnc-slots-sql.h"
 
-#if defined( S_SPLINT_S )
-#include "splint-defs.h"
-#endif
 
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -158,7 +160,7 @@ static gboolean
 save_price( GncSqlBackend* be, QofInstance* inst )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok = TRUE;
 

@@ -28,17 +28,17 @@
  * restoring data to/from an SQL database
  */
 
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "gncOrderP.h"
+}
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
-
-#include "gncOrderP.h"
-
 #include "gnc-order-sql.h"
 #include "gnc-owner-sql.h"
 

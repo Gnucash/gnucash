@@ -33,14 +33,13 @@ extern "C"
 
 #include <qof.h>
 #include <gnc-engine.h>
-#include "gnc-backend-sql.h"
-
-#include "gnc-slots-sql.h"
 
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
 }
+#include "gnc-backend-sql.h"
+#include "gnc-slots-sql.h"
 
 #include <kvp_frame.hpp>
 

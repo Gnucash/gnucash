@@ -25,7 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib/gi18n.h>
@@ -38,13 +39,7 @@
 #include "Transaction.h"
 #include "gnc-lot.h"
 #include "engine-helpers.h"
-
-#include "gnc-backend-sql.h"
-#include "gnc-transaction-sql.h"
 #include "gnc-commodity.h"
-#include "gnc-commodity-sql.h"
-#include "gnc-slots-sql.h"
-
 #include "gnc-engine.h"
 
 #include "escape.h"
@@ -52,6 +47,12 @@
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
+}
+
+#include "gnc-backend-sql.h"
+#include "gnc-transaction-sql.h"
+#include "gnc-commodity-sql.h"
+#include "gnc-slots-sql.h"
 
 #define SIMPLE_QUERY_COMPILATION 1
 #define LOAD_TRANSACTIONS_AS_NEEDED 0
@@ -594,7 +595,7 @@ delete_splits( GncSqlBackend* be, Transaction* pTx )
 static gboolean
 commit_split( GncSqlBackend* be, QofInstance* inst )
 {
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     gboolean is_ok;
     GncGUID *guid = (GncGUID*)qof_instance_get_guid(inst);
@@ -670,11 +671,11 @@ static gboolean
 save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
 {
     const GncGUID* guid;
-    gint op;
+    E_DB_OPERATION op;
     gboolean is_infant;
     QofInstance* inst;
     gboolean is_ok = TRUE;
-    gchar* err = NULL;
+    const char* err = NULL;
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( pTx != NULL, FALSE );
@@ -754,11 +755,11 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
     }
     if (! is_ok )
     {
-        G_GNUC_UNUSED gchar *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
-        G_GNUC_UNUSED gchar *message2 = "\nDatabase may be corrupted, check your data carefully.";
         Split* split = xaccTransGetSplit( pTx, 0);
         Account *acc = xaccSplitGetAccount( split );
         /* FIXME: This needs to be implemented
+        const char *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
+        const char *message2 = "\nDatabase may be corrupted, check your data carefully.";
         qof_error_format_secondary_text( GTK_MESSAGE_DIALOG( msg ),
         					  message1,
         					 xaccTransGetDescription( pTx ),
@@ -931,7 +932,8 @@ convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQ
             gchar guid_buf[GUID_ENCODING_LENGTH+1];
 
             if ( guid_entry != guid_data->guids ) g_string_append( sql, "," );
-            (void)guid_to_string_buff( guid_entry->data, guid_buf );
+            (void)guid_to_string_buff(static_cast<GncGUID*>(guid_entry->data),
+                                      guid_buf );
             g_string_append_printf( sql, "'%s'", guid_buf );
         }
         g_string_append( sql, "))" );
@@ -1085,7 +1087,8 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
     g_return_val_if_fail( be != NULL, NULL );
     g_return_val_if_fail( query != NULL, NULL );
 
-    query_info = g_malloc( (gsize)sizeof(split_query_info_t) );
+    query_info = static_cast<decltype(query_info)>(
+        g_malloc(sizeof(split_query_info_t)));
     g_assert( query_info != NULL );
     query_info->has_been_run = FALSE;
 
@@ -1117,18 +1120,20 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 
                 term = (QofQueryTerm*)andTerm->data;
                 paramPath = qof_query_term_get_param_path( term );
-
-                if ( strcmp( paramPath->data, QOF_PARAM_BOOK ) == 0 ) continue;
+                const char *path = static_cast<decltype(path)>(paramPath->data);
+                const char *next_path =
+                    static_cast<decltype(next_path)>(paramPath->next->data);
+                if (strcmp(path, QOF_PARAM_BOOK) == 0) continue;
 
 #if SIMPLE_QUERY_COMPILATION
-                if ( strcmp( paramPath->data, SPLIT_ACCOUNT ) != 0
-                        || strcmp( paramPath->next->data, QOF_PARAM_GUID ) != 0 ) continue;
+                if ( strcmp(path, SPLIT_ACCOUNT) != 0 ||
+                     strcmp(next_path, QOF_PARAM_GUID) != 0 ) continue;
 #endif
 
                 if ( need_AND ) g_string_append( sql, " AND " );
 
-                if ( strcmp( paramPath->data, SPLIT_ACCOUNT ) == 0
-                        && strcmp( paramPath->next->data, QOF_PARAM_GUID ) == 0 )
+                if ( strcmp(path, SPLIT_ACCOUNT) == 0 &&
+                     strcmp(next_path, QOF_PARAM_GUID) == 0 )
                 {
                     convert_query_term_to_sql( be, "s.account_guid", term, sql );
 #if SIMPLE_QUERY_COMPILATION
@@ -1136,12 +1141,12 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 #endif
 
                 }
-                else if ( strcmp( paramPath->data, SPLIT_RECONCILE ) == 0 )
+                else if ( strcmp(path, SPLIT_RECONCILE) == 0 )
                 {
                     convert_query_term_to_sql( be, "s.reconcile_state", term, sql );
 
                 }
-                else if ( strcmp( paramPath->data, SPLIT_TRANS ) == 0 )
+                else if ( strcmp(path, SPLIT_TRANS) == 0 )
                 {
 #if TX_GUID_CHECK
                     if ( !has_tx_guid_check )
@@ -1150,11 +1155,11 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
                         has_tx_guid_check = TRUE;
                     }
 #endif
-                    if ( strcmp( paramPath->next->data, TRANS_DATE_POSTED ) == 0 )
+                    if (strcmp(next_path, TRANS_DATE_POSTED) == 0 )
                     {
                         convert_query_term_to_sql( be, "t.post_date", term, sql );
                     }
-                    else if ( strcmp( paramPath->next->data, TRANS_DESCRIPTION ) == 0 )
+                    else if (strcmp(next_path, TRANS_DESCRIPTION) == 0 )
                     {
                         convert_query_term_to_sql( be, "t.description", term, sql );
                     }
@@ -1164,7 +1169,7 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
                     }
 
                 }
-                else if ( strcmp( paramPath->data, SPLIT_VALUE ) == 0 )
+                else if ( strcmp(path, SPLIT_VALUE) == 0 )
                 {
                     convert_query_term_to_sql( be, "s.value_num/s.value_denom", term, sql );
 
@@ -1180,7 +1185,7 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
                     while ( paramPath->next != NULL )
                     {
                         g_string_append( name, "." );
-                        g_string_append( name, paramPath->next->data );
+                        g_string_append( name, next_path );
                         paramPath = paramPath->next;
                     }
                     PERR( "Unknown SPLIT query field: %s\n", name->str );
@@ -1323,7 +1328,7 @@ load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
     g_return_val_if_fail( be != NULL, NULL );
     g_return_val_if_fail( row != NULL, NULL );
 
-    bal = g_malloc( (gsize)sizeof(single_acct_balance_t) );
+    bal = static_cast<decltype(bal)>(g_malloc(sizeof(single_acct_balance_t)));
     g_assert( bal != NULL );
 
     bal->be = be;

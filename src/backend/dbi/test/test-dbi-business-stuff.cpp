@@ -22,14 +22,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-
+extern "C"
+{
 #include "config.h"
 #include "qof.h"
 #include "cashobjects.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-#include "test-dbi-stuff.h"
-#include "test-dbi-business-stuff.h"
 #include <unittest-support.h>
 
 #include "Account.h"
@@ -40,6 +39,10 @@
 #include "gncInvoice.h"
 #include "gncEmployee.h"
 #include "gncVendor.h"
+}
+
+#include "test-dbi-stuff.h"
+#include "test-dbi-business-stuff.h"
 
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
@@ -188,4 +191,3 @@ compare_business_books( QofBook* book_1, QofBook* book_2 )
     compare_jobs( book_1, book_2 );
     compare_vendors( book_1, book_2 );
 }
-

@@ -27,7 +27,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
-
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -37,7 +38,7 @@
 #include "gnc-engine.h"
 
 #include "gncAddress.h"
-
+}
 #include "gnc-backend-sql.h"
 #include "gnc-address-sql.h"
 
@@ -205,7 +206,7 @@ add_gvalue_address_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 
     if ( G_VALUE_TYPE(&value) != 0 )
     {
-        addr = g_value_get_object( &value );
+        addr = static_cast<decltype(addr)>(g_value_get_object(&value));
         for ( subtable_row = col_table; subtable_row->col_name != NULL; subtable_row++ )
         {
             subfield_value = g_new0( GValue, 1 );
