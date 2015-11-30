@@ -42,12 +42,12 @@ extern "C"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
-#include "escape.h"
-
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
 }
+
+#include "escape.h"
 
 #include "gnc-backend-sql.h"
 #include "gnc-transaction-sql.h"

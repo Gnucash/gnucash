@@ -79,6 +79,7 @@ typedef int ssize_t;
 #include "gnc-uri-utils.h"
 #include "io-gncxml-v2.h"
 #include "gnc-backend-xml.h"
+#include "gnc-prefs.h"
 
 #ifndef HAVE_STRPTIME
 # include "strptime.h"
@@ -87,7 +88,6 @@ typedef int ssize_t;
 
 #include "gnc-xml-helper.h"
 #include "io-gncxml.h"
-#include "gnc-prefs.h"
 
 #include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
