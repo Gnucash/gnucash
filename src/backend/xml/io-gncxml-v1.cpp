@@ -43,14 +43,15 @@ extern "C"
 #include <TransLog.h>
 #include <gnc-pricedb.h>
 #include <gnc-pricedb-p.h>
-#include "io-gncxml.h"
+}
 
+#include "io-gncxml.h"
 #include "sixtp.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-stack.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
-}
+
 #include <kvp_frame.hpp>
 
 /* from Transaction-xml-parser-v1.c */

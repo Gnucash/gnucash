@@ -29,10 +29,10 @@ extern "C"
 
 #include "gnc-xml-helper.h"
 #include <gnc-engine.h>
-#include "sixtp-utils.h"
-#include "sixtp-dom-parsers.h"
 }
 
+#include "sixtp-utils.h"
+#include "sixtp-dom-parsers.h"
 #include <kvp_frame.hpp>
 
 static QofLogModule log_module = GNC_MOD_IO;
@@ -302,10 +302,7 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 
 static KvpValue* dom_tree_to_kvp_value(xmlNodePtr node);
 //needed for test access as well as internal use.
-extern "C"
-{
-    KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
-}
+KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
 
 static KvpValue*
 dom_tree_to_list_kvp_value(xmlNodePtr node)

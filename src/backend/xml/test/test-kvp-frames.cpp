@@ -8,17 +8,17 @@ extern "C"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
-#include "test-file-stuff.h"
 
 #include "qof.h"
+}
 
+#include "test-file-stuff.h"
 #include "sixtp-dom-generators.h"
 #include "sixtp-dom-parsers.h"
 
 #define GNC_V2_STRING "gnc-v2"
 const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
 extern KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
-}
 
 static void
 test_kvp_get_slot(int run,

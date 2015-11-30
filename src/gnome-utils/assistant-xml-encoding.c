@@ -1403,4 +1403,3 @@ gxi_selected_enc_activated_cb (GtkTreeView *view, GtkTreePath *path,
         return;
     gxi_remove_encoding (data, model, &iter);
 }
-

@@ -23,18 +23,16 @@
 
 #ifndef SIXTP_DOM_PARSERS_H
 #define SIXTP_DOM_PARSERS_H
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include <glib.h>
-
-#include "gnc-xml-helper.h"
 
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "gnc-budget.h"
+}
+
+#include "gnc-xml-helper.h"
 
 GncGUID* dom_tree_to_guid(xmlNodePtr node);
 
@@ -78,7 +76,4 @@ gboolean dom_tree_generic_parse(xmlNodePtr node,
                                 struct dom_tree_handler *handlers,
                                 gpointer data);
 
-#ifdef __cplusplus
-}
-#endif
 #endif /* _SIXTP_DOM_PARSERS_H_ */

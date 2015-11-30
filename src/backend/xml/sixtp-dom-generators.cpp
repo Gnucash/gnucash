@@ -27,12 +27,12 @@ extern "C"
 #include "config.h"
 #include <glib.h>
 
-#include "gnc-xml-helper.h"
 #include <gnc-date.h>
+}
 
+#include "gnc-xml-helper.h"
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
-}
 
 #include <kvp_frame.hpp>
 
@@ -369,4 +369,3 @@ qof_instance_slots_to_dom_tree(const char *tag, const QofInstance* inst)
     frame->for_each_slot(add_kvp_slot, static_cast<void*>(ret));
     return ret;
 }
-

@@ -24,14 +24,13 @@
 
 #ifndef TEST_FILE_STUFF_H
 #define TEST_FILE_STUFF_H
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 #include <glib.h>
 
 #include <gnc-commodity.h>
 #include <gnc-engine.h>
+}
 #include <gnc-xml-helper.h>
 #include <io-gncxml-gen.h>
 #include <sixtp.h>
@@ -51,7 +50,7 @@ gboolean print_dom_tree(gpointer data_for_children, GSList* data_from_children,
                         const gchar *tag);
 
 /**/
-gboolean check_dom_tree_version(xmlNodePtr node, gchar *verstr);
+gboolean check_dom_tree_version(xmlNodePtr node,  const char *verstr);
 gboolean equals_node_val_vs_string(xmlNodePtr node, const gchar* str);
 gboolean equals_node_val_vs_guid(xmlNodePtr node, const GncGUID *id);
 gboolean equals_node_val_vs_commodity(xmlNodePtr node,
@@ -65,7 +64,4 @@ void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,
                   sixtp *parser, const char *parser_tag,
                   QofBook *book);
-#ifdef __cplusplus
-}
-#endif
 #endif

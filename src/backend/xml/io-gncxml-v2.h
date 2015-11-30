@@ -30,48 +30,16 @@
 
 #ifndef IO_GNCXML_V2_H
 #define IO_GNCXML_V2_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <glib.h>
 
 #include "gnc-engine.h"
 #include "gnc-backend-xml.h"
 
-#include "sixtp.h"
 
-typedef struct
-{
-    int accounts_total;
-    int accounts_loaded;
-
-    int books_total;
-    int books_loaded;
-
-    int commodities_total;
-    int commodities_loaded;
-
-    int transactions_total;
-    int transactions_loaded;
-
-    int prices_total;
-    int prices_loaded;
-
-    int schedXactions_total;
-    int schedXactions_loaded;
-
-    int budgets_total;
-    int budgets_loaded;
-} load_counter;
-
-typedef struct sixtp_gdv2 sixtp_gdv2;
-typedef void (*countCallbackFn)(sixtp_gdv2 *gd, const char *type);
-struct sixtp_gdv2
-{
-    QofBook *book;
-    load_counter counter;
-    countCallbackFn countCallback;
-    QofBePercentageFunc gui_display_fn;
-    gboolean exporting;
-};
 
 /**
  * Struct used to pass in a new data type for XML storage.  This contains
@@ -98,18 +66,6 @@ struct sixtp_gdv2
  */
 #define GNC_FILE_BACKEND	"gnc:file:2"
 #define GNC_FILE_BACKEND_VERS	2
-typedef struct
-{
-    int		version;	/* backend version number */
-    const char *	type_name;	/* The XML tag for this type */
-
-    sixtp *	(*create_parser) (void);
-    gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
-    int	      (*get_count) (QofBook *);
-    gboolean	(*write) (FILE*, QofBook*);
-    void		(*scrub) (QofBook *);
-    gboolean	(*ns) (FILE*);
-} GncXmlDataType_t;
 
 /**
  * Struct used to pass the account group/accounts and trasnactions in
@@ -123,9 +79,6 @@ typedef struct
     TransList	*transactions;
     QofBook *book;
 } gnc_template_xaction_data;
-
-/** Call after loading each record */
-void run_callback(sixtp_gdv2 *data, const char *type);
 
 /** read in an account group from a file */
 gboolean qof_session_load_from_xml_file_v2(FileBackend *, QofBook *, QofBookFileType);
@@ -188,5 +141,7 @@ gint gnc_xml2_find_ambiguous(
  */
 gboolean gnc_xml2_parse_with_subst (
     FileBackend *fbe, QofBook *book, GHashTable *subst);
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* __IO_GNCXML_V2_H__ */

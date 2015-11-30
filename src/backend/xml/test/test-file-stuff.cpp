@@ -20,8 +20,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-#include <kvp_frame.hpp>
-
 extern "C"
 {
 #include "config.h"
@@ -37,10 +35,13 @@ extern "C"
 #include <glib/gstdio.h>
 
 #include "gnc-engine.h"
+#include "test-stuff.h"
+}
+
+#include "test-file-stuff.h"
+#include <kvp_frame.hpp>
 #include "sixtp-dom-parsers.h"
 #include "sixtp-parsers.h"
-#include "test-file-stuff.h"
-#include "test-stuff.h"
 #include "io-gncxml-gen.h"
 #include "sixtp-utils.h"
 /*
@@ -49,7 +50,6 @@ extern "C"
 /***********************************************************************/
 
 extern KvpFrame* dom_tree_to_kvp_frame(xmlNodePtr node);
-}
 
 static int
 files_return(int ret, const char* msg)
@@ -118,7 +118,7 @@ print_dom_tree(gpointer data_for_children, GSList* data_from_children,
 }
 
 gboolean
-check_dom_tree_version(xmlNodePtr node, gchar *verstr)
+check_dom_tree_version(xmlNodePtr node,  const char *verstr)
 {
     char *verteststr;
 

@@ -4,32 +4,39 @@ SUBDIRS = test-files
 test_date_converting_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-date-converting.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-date-converting.cpp
 
 test_dom_converters1_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-dom-converters1.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-dom-converters1.cpp
 
 test_kvp_frames_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
   test-kvp-frames.cpp
+
+test_load_backend_SOURCES = \
+test-load-backend.cpp
+test_load_xml2_SOURCES = \
+test-load-xml2.cpp
+test_save_in_lang_SOURCES = \
+test-save-in-lang.cpp
 
 # the xml backend is now a GModule - this test does
 # not load it as a module and cannot link to it
@@ -38,151 +45,151 @@ test_kvp_frames_SOURCES = \
 test_load_example_account_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/io-example-account.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-utils.c \
-  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-load-example-account.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/io-example-account.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-gen.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-utils.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-load-example-account.cpp
 
 test_string_converters_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-string-converters.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-string-converters.cpp
 
 test_xml_account_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-utils.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-xml-account.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-gen.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-utils.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-xml-account.cpp
 
 test_xml_commodity_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-utils.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-xml-commodity.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-gen.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-utils.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-xml-commodity.cpp
 
 test_xml_pricedb_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-utils.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-xml-pricedb.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-gen.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-utils.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-xml-pricedb.cpp
 
 test_xml_transaction_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-utils.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-xml-transaction.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-gen.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-utils.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-xml-transaction.cpp
 
 test_xml2_is_file_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp-dom-parsers.cpp \
   ${top_srcdir}/src/backend/xml/sixtp-dom-generators.cpp \
-  ${top_srcdir}/src/backend/xml/sixtp-utils.c \
-  ${top_srcdir}/src/backend/xml/sixtp.c \
-  ${top_srcdir}/src/backend/xml/sixtp-stack.c \
-  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/xml/io-utils.c \
-  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
-  test-xml2-is-file.c
+  ${top_srcdir}/src/backend/xml/sixtp-utils.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-stack.cpp \
+  ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-account-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-lot-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-recurrence-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-schedxaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-freqspec-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-transaction-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-gen.cpp \
+  ${top_srcdir}/src/backend/xml/io-gncxml-v2.cpp \
+  ${top_srcdir}/src/backend/xml/io-utils.cpp \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.cpp \
+  test-xml2-is-file.cpp
 
 TESTS = \
   test-date-converting \
@@ -271,8 +278,8 @@ AM_CPPFLAGS = \
 
 EXTRA_DIST = \
   grab-types.pl \
-  test-dom-parser1.c \
+  test-dom-parser1.cpp \
   test-real-data.sh \
-  test-xml2-is-file.c
+  test-xml2-is-file.cpp
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.xml\"

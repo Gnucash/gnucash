@@ -23,9 +23,10 @@
 
 #ifndef SIXTP_UTILS_H
 #define SIXTP_UTILS_H
-
+extern "C"
+{
 #include "qof.h"
-
+}
 #include "sixtp.h"
 
 typedef struct
