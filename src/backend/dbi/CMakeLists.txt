@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/app-utils)
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/backend/sql)
 
 SET (libgnc_backend_dbi_SOURCES
-  gnc-backend-dbi.c
+  gnc-backend-dbi.cpp
 )
 SET (libgnc_backend_dbi_HEADERS
   gnc-backend-dbi.h
