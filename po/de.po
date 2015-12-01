@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-05 10:40-0700\n"
-"PO-Revision-Date: 2015-11-26 15:31+0100\n"
+"PO-Revision-Date: 2015-11-30 19:08+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -19349,11 +19349,11 @@ msgstr "Zeige Zwischensummen für übergeordnete Konten gemäß Rechnungswesen-S
 
 #: ../src/report/report-system/report.scm:65
 msgid "_Assets & Liabilities"
-msgstr "_Aktiva & Passiva"
+msgstr "_Aktiva & Verbindlichkeiten"
 
 #: ../src/report/report-system/report.scm:66
 msgid "_Income & Expense"
-msgstr "_Erträge & Aufwendungen"
+msgstr "_Ertrag & Aufwand"
 
 #: ../src/report/report-system/report.scm:68
 msgid "_Taxes"
@@ -19426,7 +19426,7 @@ msgstr "Aktiva"
 #: ../src/report/standard-reports/net-linechart.scm:390
 #: ../src/report/standard-reports/net-linechart.scm:463
 msgid "Liabilities"
-msgstr "Fremdkapital"
+msgstr "Verbindlichkeit"
 
 #: ../src/report/report-system/report-utilities.scm:114
 msgid "Stocks"
@@ -19490,7 +19490,7 @@ msgstr "Aktiva Tortendiagramm"
 
 #: ../src/report/standard-reports/account-piecharts.scm:41
 msgid "Liability Piechart"
-msgstr "Fremdkapital Tortendiagramm"
+msgstr "Verbindlichkeit Tortendiagramm"
 
 #: ../src/report/standard-reports/account-piecharts.scm:46
 msgid "Shows a piechart with the Income per given time interval"
