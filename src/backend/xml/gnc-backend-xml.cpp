@@ -172,7 +172,7 @@ gnc_xml_be_get_file_lock (FileBackend *be)
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     while (snprintf (path, pathbuf_size - (path - pathbuf), ".%lx.%d.LNK", gethostid(), getpid())
-            >= pathbuf_size - (path - pathbuf))
+	   >= static_cast<int>(pathbuf_size - (path - pathbuf)))
     {
         pathbuf_size += 100;
         tmpbuf = (char *) realloc (pathbuf, pathbuf_size);
