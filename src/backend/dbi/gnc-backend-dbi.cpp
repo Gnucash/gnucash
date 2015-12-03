@@ -30,6 +30,16 @@ extern "C"
 #include "config.h"
 
 #include <platform.h>
+#ifdef __STRICT_ANSI__
+#undef __STRICT_ANSI__
+#define __STRICT_ANSI_UNSET__ 1
+#endif
+#ifdef _NO_OLDNAMES
+#undef _NO_OLDNAMES
+#endif
+#ifdef _UWIN
+#undef _UWIN
+#endif
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
@@ -81,6 +91,12 @@ static dbi_inst dbi_instance = NULL;
 #include "gnc-backend-dbi.h"
 #include "gnc-backend-dbi-priv.h"
 
+#if PLATFORM(WINDOWS)
+#ifdef __STRICT_ANSI_UNSET__
+#undef __STRICT_ANSI_UNSET__
+#define __STRICT_ANSI__ 1
+#endif
+#endif
 
 #define GNC_HOST_NAME_MAX 255
 #define TRANSACTION_NAME "trans"

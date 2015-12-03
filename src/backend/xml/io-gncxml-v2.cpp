@@ -24,9 +24,18 @@ extern "C"
 
 #include <platform.h>
 #if PLATFORM(WINDOWS)
+#ifdef __STRICT_ANSI__
+#undef __STRICT_ANSI__
+#define __STRICT_ANSI_UNSET__ 1
+#endif
+#ifdef _NO_OLDNAMES
+#undef _NO_OLDNAMES
+#endif
+#ifdef _UWIN
+#undef _UWIN
+#endif
 #include <windows.h>
 #endif
-
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <fcntl.h>
@@ -45,13 +54,12 @@ extern "C"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#ifdef G_OS_WIN32
-# include <io.h>
-# define close _close
-# define fdopen _fdopen
-# define read _read
+#if PLATFORM(WINDOWS)
+#ifdef __STRICT_ANSI_UNSET__
+#undef __STRICT_ANSI_UNSET__
+#define __STRICT_ANSI__ 1
 #endif
-#include "platform.h"
+#endif
 #if COMPILER(MSVC)
 # define g_fopen fopen
 # define g_open _open
