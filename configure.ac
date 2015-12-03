@@ -1558,9 +1558,6 @@ AC_LANG([C++])
 AX_CHECK_COMPILE_FLAG([-Wno-deprecated-register],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"], [-Werror])
-AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations],
-    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-deprecated-declarations"],
-    [AM_CXXFLAGS="${AM_CXXFLAGS}"], [-Werror])
 AC_LANG([C])
 
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)

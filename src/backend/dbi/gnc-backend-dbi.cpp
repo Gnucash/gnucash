@@ -77,13 +77,6 @@ extern "C"
 #define GETPID() getpid()
 #endif
 
-#if LIBDBI_VERSION >= 900
-#define HAVE_LIBDBI_R 1
-static dbi_inst dbi_instance = NULL;
-#else
-#define HAVE_LIBDBI_R 0
-#endif
-
 /* For direct access to dbi data structs, sadly needed for datetime */
 #include <dbi/dbi-dev.h>
 }
@@ -96,6 +89,13 @@ static dbi_inst dbi_instance = NULL;
 #undef __STRICT_ANSI_UNSET__
 #define __STRICT_ANSI__ 1
 #endif
+#endif
+
+#if LIBDBI_VERSION >= 900
+#define HAVE_LIBDBI_R 1
+static dbi_inst dbi_instance = NULL;
+#else
+#define HAVE_LIBDBI_R 0
 #endif
 
 #define GNC_HOST_NAME_MAX 255
