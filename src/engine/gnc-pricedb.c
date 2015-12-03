@@ -104,7 +104,7 @@ gnc_price_init(GNCPrice* price)
  * changes will affect backward data compatibility.
  * The last two values, temporary and invalid, are *not* used.
  */
-static const char* source_names[static_cast<size_t>(PRICE_SOURCE_INVALID)] =
+static const char* source_names[(size_t)PRICE_SOURCE_INVALID + 1] =
 {
     /* sync with price_to_gui in dialog-price-editor.c */
     "user:price-editor",
