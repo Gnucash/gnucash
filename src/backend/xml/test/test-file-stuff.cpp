@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+#include <kvp_frame.hpp>
+
 extern "C"
 {
 #include "config.h"
@@ -39,7 +41,6 @@ extern "C"
 }
 
 #include "test-file-stuff.h"
-#include <kvp_frame.hpp>
 #include "sixtp-dom-parsers.h"
 #include "sixtp-parsers.h"
 #include "io-gncxml-gen.h"
