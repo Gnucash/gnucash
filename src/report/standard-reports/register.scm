@@ -323,6 +323,9 @@
                      (gnc:make-gnc-monetary trans-currency
                                             (gnc-numeric-neg (xaccSplitGetValue split))))
                     " ")))
+    ; For single account registers, use the split's cached balance to remain
+    ; consistent with the balances shown in the register itself
+    ; For others, use the cumulated balance from the totals-collector
     (if (balance-col column-vector)
         (addto! row-contents
                 (if transaction-info?
@@ -331,7 +334,10 @@
                      (gnc:html-split-anchor
                       split
                       (gnc:make-gnc-monetary
-                        currency (cadr (total-collector 'getpair currency #f)))))
+                        currency
+                        (if ledger-type?
+                            (cadr (total-collector 'getpair currency #f))
+                            (xaccSplitGetBalance split)))))
                     " ")))
 
     (gnc:html-table-append-row/markup! table row-style
