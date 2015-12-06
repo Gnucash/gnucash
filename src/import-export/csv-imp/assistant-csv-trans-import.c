@@ -2299,6 +2299,90 @@ import_account_check_all (GtkTreeModel *model)
 }
 
 
+/*****************************************************************
+ * Parse the text spliting into a path and the last_part based on
+ * account separator. If the path is valid, add the last_part and
+ * return this. If the path is invalid, use the new separator path
+ * with the last_part and return that so there is only one new
+ * account dialog.
+ *****************************************************************/
+static gchar *
+import_account_text_parse (gchar *text)
+{
+    QofBook     *book;
+    const gchar *sep;
+    const gchar *newsep;
+    gchar      **names;
+    gchar      **ptr = NULL;
+    gint         i, count = 0;
+    gchar       *ret_string, *last_part = NULL;;
+
+    // Get the book
+    book = gnc_get_current_book ();
+    sep = gnc_get_account_separator_string ();
+
+    // Setup an alternative separator
+    if (g_strcmp0 (sep,":") == 0)
+        newsep = "-";
+    else
+        newsep = ":";
+
+    // Split the incoming string by current separator
+    names = g_strsplit (text, sep, -1);
+
+    /* find the last_part and count parts */
+    for (ptr = names; *ptr; ptr++)
+    {
+        if (g_strcmp0 (*ptr,"") != 0) //separator is last in string
+        {
+            g_free (last_part);
+            last_part = g_strdup (*ptr);
+            count = count + 1;
+        }
+    }
+
+    // If count is 1 we have no path
+    if (count == 1)
+        ret_string = g_strdup (last_part);
+    else
+    {
+        Account   *account;
+        gchar     *sep_path, *newsep_path;
+
+        // Start to create two paths based on current and possibly new separator
+        sep_path = g_strdup (names[0]);
+        newsep_path = g_strdup (names[0]);
+
+        // Join the parts together apart from last_part which could be account name
+        for (i = 1; i < count - 1; i++)
+        {
+            gchar *temp_sep_path, *temp_newsep_path;
+
+            temp_sep_path = g_strdup (sep_path);
+            temp_newsep_path = g_strdup (newsep_path);
+            g_free (sep_path);
+            g_free (newsep_path);
+            sep_path = g_strconcat (temp_sep_path, sep, names[i], NULL);
+            newsep_path = g_strconcat (temp_newsep_path, newsep, names[i], NULL);
+            g_free (temp_sep_path);
+            g_free (temp_newsep_path);
+        }
+        account = gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), sep_path);
+
+        if (account == NULL) // path not found
+            ret_string = g_strconcat (newsep_path, newsep, last_part, NULL);
+        else
+            ret_string = g_strconcat (sep_path, sep, last_part, NULL);
+
+        g_free (sep_path);
+        g_free (newsep_path);
+    }
+    g_free (last_part);
+    g_strfreev (names);
+    return ret_string;
+}
+
+
 static void
 import_account_select_cb (GtkWidget *widget, gpointer user_data)
 {
@@ -2315,7 +2399,7 @@ import_account_select_cb (GtkWidget *widget, gpointer user_data)
     {
         Account *gnc_acc = NULL, *account = NULL;
         gchar *text = NULL;
-        gchar *fullpath = NULL;
+        gchar *parsed_text = NULL;
 
         // Get the the String
         gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
@@ -2323,18 +2407,26 @@ import_account_select_cb (GtkWidget *widget, gpointer user_data)
         // Get the pointer to the Account
         gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
 
-        gnc_acc = gnc_import_select_account (NULL, NULL, 1, text, NULL, ACCT_TYPE_NONE, account, NULL);
+        parsed_text = import_account_text_parse (text);
 
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_ACCOUNT, gnc_acc, -1);
+        gnc_acc = gnc_import_select_account (NULL, NULL, 1, parsed_text, NULL, ACCT_TYPE_NONE, account, NULL);
 
-        fullpath = gnc_account_get_full_name (gnc_acc);
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_FULLPATH, fullpath, -1);
+        if (gnc_acc != NULL) // We may of canceled
+        {
+            gchar *fullpath = NULL;
 
-        // Update the account kvp mappings
-        gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+            gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_ACCOUNT, gnc_acc, -1);
 
+            fullpath = gnc_account_get_full_name (gnc_acc);
+            gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_FULLPATH, fullpath, -1);
+
+            // Update the account kvp mappings
+            gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+
+            g_free (fullpath);
+        }
         g_free (text);
-        g_free (fullpath);
+        g_free (parsed_text);
     }
     if (import_account_check_all (model))
         gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), info->account_match_page, TRUE);
@@ -2371,7 +2463,7 @@ import_account_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer use
             {
                 Account *gnc_acc = NULL, *account = NULL;
                 gchar *text = NULL;
-                gchar *fullpath = NULL;
+                gchar *parsed_text = NULL;
 
                 // Get the the String
                 gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
@@ -2379,18 +2471,26 @@ import_account_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer use
                 // Get the pointer to the Account
                 gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
 
-                gnc_acc = gnc_import_select_account (NULL, NULL, 1, text, NULL, ACCT_TYPE_NONE, account, NULL);
+                parsed_text = import_account_text_parse (text);
 
-                gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_ACCOUNT, gnc_acc, -1);
+                gnc_acc = gnc_import_select_account (NULL, NULL, 1, parsed_text, NULL, ACCT_TYPE_NONE, account, NULL);
 
-                fullpath = gnc_account_get_full_name (gnc_acc);
-                gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_FULLPATH, fullpath, -1);
+                if (gnc_acc != NULL) // We may of canceled
+                {
+                    gchar *fullpath = NULL;
 
-                // Update the account kvp mappings
-                gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_ACCOUNT, gnc_acc, -1);
 
+                    fullpath = gnc_account_get_full_name (gnc_acc);
+                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, MAPPING_FULLPATH, fullpath, -1);
+
+                    // Update the account kvp mappings
+                    gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+
+                    g_free (fullpath);
+                }
                 g_free (text);
-                g_free (fullpath);
+                g_free (parsed_text);
             }
             gtk_tree_path_free (path);
         }
