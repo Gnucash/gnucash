@@ -342,6 +342,18 @@ Account * gnc_import_select_account(GtkWidget *parent,
             response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
             switch (response)
             {
+            case GNC_RESPONSE_NEW:
+                gnc_import_add_account(NULL, picker);
+                retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
+
+                if (retval == NULL)
+                {
+                    response = GNC_RESPONSE_NEW;
+                    break;
+                }
+                response = GTK_RESPONSE_OK;
+                ok_pressed_retval = TRUE;
+
             case GTK_RESPONSE_OK:
                 retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
                 if (retval)
@@ -368,10 +380,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
                 }
                 ok_pressed_retval = TRUE;
                 break;
-            case GNC_RESPONSE_NEW:
-                gnc_import_add_account(NULL, picker);
-                ok_pressed_retval = TRUE;
-                break;
+
             default:
                 ok_pressed_retval = FALSE;
                 break;
