@@ -55,8 +55,7 @@ TEST_GROUP_2 = \
   test-customer \
   test-employee \
   test-job \
-  test-vendor \
-  $(SCM_TESTS)
+  test-vendor
 
 SCM_TESTS = \
   test-test-extras \
@@ -107,7 +106,7 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
 
-TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2}
+TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2} ${SCM_TESTS}
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
