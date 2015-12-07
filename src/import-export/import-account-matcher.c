@@ -344,18 +344,16 @@ Account * gnc_import_select_account(GtkWidget *parent,
             {
             case GNC_RESPONSE_NEW:
                 gnc_import_add_account(NULL, picker);
-                retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
+                response = GTK_RESPONSE_OK;
+                /* no break */
 
+            case GTK_RESPONSE_OK:
+                retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
                 if (retval == NULL)
                 {
                     response = GNC_RESPONSE_NEW;
                     break;
                 }
-                response = GTK_RESPONSE_OK;
-                ok_pressed_retval = TRUE;
-
-            case GTK_RESPONSE_OK:
-                retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
                 if (retval)
                     retval_name = xaccAccountGetName(retval);
                 if (!retval_name)
