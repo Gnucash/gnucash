@@ -608,6 +608,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 Account *acct = NULL;
                 gnc_commodity *split_cmdty = NULL;
                 txnCreditDebitSums *tcds = NULL;
+                gnc_numeric split_amount;
 
                 s = (Split*)splitList->data;
                 t = xaccSplitGetParent( s );
@@ -629,11 +630,14 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 				  NULL);
                 acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
                 split_cmdty = xaccAccountGetCommodity(acct);
-                if (base_cmdty == NULL)
+                split_amount = xaccSplitGetAmount(s);
+                if (!gnc_numeric_zero_p(split_amount) && base_cmdty == NULL)
                 {
                     base_cmdty = split_cmdty;
                 }
-                multi_commodity |= !gnc_commodity_equal(split_cmdty, base_cmdty);
+                multi_commodity |= (!gnc_numeric_zero_p(split_amount) &&
+                                    !gnc_commodity_equal(split_cmdty,
+                                                         base_cmdty));
 
 		if ( credit_formula &&
 		     g_strcmp0 (credit_formula, "") != 0 &&
@@ -777,6 +781,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         {
             gnc_warning_dialog(sxed->dialog, "%s",
                                _("Scheduled Transactions with variables "
+                                 "or involving more than one commodity "
                                  "cannot be automatically created."));
             return FALSE;
         }

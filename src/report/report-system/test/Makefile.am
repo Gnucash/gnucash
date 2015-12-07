@@ -21,7 +21,7 @@ TESTS = \
 SCM_TESTS = \
 	test-collectors \
 	test-list-extras \
-	test-test-extras
+	test-report-utilities
 
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
@@ -31,10 +31,12 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/html \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/report-system/test \
+  --gnc-module-dir ${top_builddir}/src/engine/test \
 \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/engine/test \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnome-utils \

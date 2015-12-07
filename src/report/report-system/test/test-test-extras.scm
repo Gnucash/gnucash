@@ -19,6 +19,8 @@
 
 (debug-set! stack 50000)
 (use-modules (gnucash report report-system test test-extras))
+(use-modules (gnucash engine test test-extras))
+
 (use-modules (ice-9 streams))
 
 (define (run-test)
@@ -97,7 +99,7 @@
 ;(use-modules (gnucash printf))
 ;(use-modules (gnucash report report-system))
 ;(use-modules (gnucash app-utils))
-;(use-modules (gnucash engine))
+(use-modules (gnucash engine))
 (use-modules (sw_engine))
 
 (define (test-create-account-structure)

@@ -164,7 +164,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 
     g_list_free (radio_list);
 
-    root = gnc_account_get_root(default_account);
+    root = default_account ? gnc_account_get_root(default_account) : NULL;
     switch (choice)
     {
     default:

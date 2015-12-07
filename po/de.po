@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-05 10:40-0700\n"
-"PO-Revision-Date: 2015-10-05 07:46+0200\n"
+"PO-Revision-Date: 2015-10-31 18:33+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -7076,11 +7076,11 @@ msgstr "Tab schließen wechselt zum zuletzt benutzten Tab."
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:67
 msgid "If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left."
 msgstr "Wenn gewählt wird beim Schließen eines Tabs (Karteikarte) zum zuletzt besuchten Tab gewechselt. Andernfalls wird zum Tab links daneben gewechselt."
-
+#.fuzzy
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:68
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:62
 msgid "Set book option on new files to use split \"action\" field for \"Num\" field on registers/reports"
-msgstr ""
+msgstr "Setzt die Buchungsoption "
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:63
@@ -7838,7 +7838,6 @@ msgid "Select the account for which you want to record a stock split or merger."
 msgstr "Wählen Sie das Konto, für das Sie die Teilung oder den Zusammenschluss eingeben möchten."
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:5
-#, fuzzy
 msgid "Stock Split Account"
 msgstr "Aktiendepot"
 
@@ -7909,7 +7908,6 @@ msgid "<b>A_sset Account</b>"
 msgstr "<b>_Aktiva Konto</b>"
 
 #: ../src/gnome/gtkbuilder/assistant-stock-split.glade.h:21
-#, fuzzy
 msgid "Cash in Lieu"
 msgstr "Ausgleichsbetrag"
 
@@ -10608,7 +10606,6 @@ msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
 msgstr "Zuletzt geändert am %a, %e.%b %Y um %I:%M%P"
 
 #: ../src/gnome-utils/gnc-main-window.c:1671
-#, fuzzy, c-format
 msgid "Last modified on %x %X"
 msgstr "Zuletzt geändert am %a, %e.%b %Y um %I:%M"
 
@@ -13549,7 +13546,7 @@ msgstr "Auswahl _abgleichen"
 
 #: ../src/gnome/window-reconcile2.c:2214 ../src/gnome/window-reconcile.c:2214
 msgid "Reconcile the selected transactions"
-msgstr "Ausgewählte Buchungen abgleichen löschen"
+msgstr "Ausgewählte Buchungen abgleichen"
 
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
 msgid "_Unreconcile Selection"
@@ -17148,7 +17145,7 @@ msgstr "Klammern"
 msgid "Surround negative amounts with brackets, e.g. ($100.00)."
 msgstr "Klammere negative Beträge ein, z.B. (100,00 €)."
 
-#: ../src/report/business-reports/balsheet-eg.scm:366
+#: ../src/report/business-reports/balsheet-eg.scm:360
 msgid "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)"
 msgstr "(Testversion ─ verlassen Sie sich nicht auf die Zahlen in diesem Bericht ohne sie zu überprüfen.<br>Ändern Sie die 'Zusätzliche Anmerkungen'-Option, um diese Nachricht loszuwerden."
 
@@ -20122,7 +20119,7 @@ msgstr "Durchschnittlicher Kontostand"
 #: ../src/report/standard-reports/net-linechart.scm:45
 #: ../src/report/standard-reports/price-scatter.scm:39
 msgid "Step Size"
-msgstr "Schrittgrösse"
+msgstr "Schrittgröße"
 
 #: ../src/report/standard-reports/average-balance.scm:43
 #: ../src/report/standard-reports/daily-reports.scm:63

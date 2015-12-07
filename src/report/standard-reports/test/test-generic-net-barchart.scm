@@ -26,6 +26,7 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report report-system test test-extras))
 
 (export run-net-asset-income-test)

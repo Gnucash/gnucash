@@ -73,7 +73,6 @@ gncmodscm_DATA = \
      list-extras.scm \
      report-collectors.scm
 
-
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = \
     report-system.scm \

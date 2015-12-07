@@ -20,23 +20,29 @@
 (debug-set! stack 50000)
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
-(use-modules (gnucash report report-system list-extras))
 (use-modules (gnucash engine test test-extras))
+(use-modules (ice-9 streams))
+(use-modules (gnucash engine))
+(use-modules (sw_engine))
 
 (define (run-test)
-    (test test-list-min-max))
+  (and (logging-and #t)
+       (logging-and)
+       (not (logging-and #t #f))
+       (test-create-account-structure)))
 
-(define (test-list-min-max)
-  (and (equal? (cons 1 1) (list-min-max (list 1) <))
-       (equal? (cons 1 2) (list-min-max (list 1 2) <))       
-       (equal? (cons 1 2) (list-min-max (list 2 1) <))       
-       (equal? (cons 1 2) (list-min-max (list 1 1 2) <))
-       (equal? (cons 1 2) (list-min-max (list 1 2 1) <))
-       (equal? (cons 1 2) (list-min-max (list 1 2 2) <))
-       (equal? (cons 1 2) (list-min-max (list 2 1 1) <))
-       (equal? (cons 1 2) (list-min-max (list 2 2 1) <))
-       (equal? (cons 1 3) (list-min-max (list 1 1 3) <))
-       (equal? (cons 1 3) (list-min-max (list 1 2 3) <))
-       (equal? (cons 1 3) (list-min-max (list 1 3 2) <))
-       (equal? (cons 1 3) (list-min-max (list 2 3 1) <))
-       (equal? (cons 1 3) (list-min-max (list 3 2 1) <))))
+(define (test-create-account-structure)
+  (let ((env (create-test-env)))
+    (let ((accounts (env-create-account-structure env (list "Assets"
+							    (list (cons 'type ACCT-TYPE-ASSET))
+							    (list "Bank Account")
+							    (list "Savings"
+								  (list "Instant")
+								  (list "30 day notice"))))))
+      (and (= 3 (length accounts))
+	   (equal? "Assets" (xaccAccountGetName (car accounts)))
+	   ))))
+
+
+
+

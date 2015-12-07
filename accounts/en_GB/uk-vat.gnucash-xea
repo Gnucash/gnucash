@@ -214,7 +214,7 @@
 <gnc:account version="2.0.0">
   <act:name>Input</act:name>
   <act:id type="new">d3fda498135dbfca02febf0fbe379069</act:id>
-  <act:type>ASSSET</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>GBP</cmdty:id>

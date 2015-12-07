@@ -613,6 +613,8 @@ inner_main (void *closure, int argc, char **argv)
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();
     }
+    /* Ensure temporary preferences are temporary */
+    gnc_prefs_reset_group (GNC_PREFS_GROUP_WARNINGS_TEMP);
 
     gnc_destroy_splash_screen();
     gnc_main_window_show_all_windows();
