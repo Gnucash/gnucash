@@ -2429,7 +2429,6 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     gboolean swap_amounts = FALSE;
     gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
     gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
-    gnc_numeric dialog_rate = *exch_rate;
 
     g_return_val_if_fail(txn_cur, TRUE);
 
@@ -2491,14 +2490,13 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
         gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
         if (!gnc_numeric_zero_p(*exch_rate))
-            dialog_rate = gnc_numeric_invert(*exch_rate);
+            *exch_rate = gnc_numeric_invert(*exch_rate);
         amount = gnc_numeric_neg(amount);
     }
     else
     {
         gnc_xfer_dialog_select_to_currency(xfer, xfer_com);
         gnc_xfer_dialog_select_from_currency(xfer, txn_cur);
-
         if (xaccTransUseTradingAccounts ( txn ))
             amount = gnc_numeric_neg(amount);
     }
@@ -2520,6 +2518,9 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     /* and run it... */
     if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
         return TRUE;
+    /* If we inverted the rate for the dialog, invert it back. */
+    if (swap_amounts)
+        *exch_rate = gnc_numeric_invert(*exch_rate);
 
     return FALSE;
 }
