@@ -1083,33 +1083,6 @@ xml_rollback_edit (QofBackend *be, QofInstance *inst)
 #endif
 }
 
-static void
-xml_commit_edit (QofBackend *be, QofInstance *inst)
-{
-    if (qof_instance_get_dirty(inst) && qof_get_alt_dirty_mode() &&
-            !(qof_instance_get_infant(inst) && qof_instance_get_destroying(inst)))
-    {
-        qof_collection_mark_dirty(qof_instance_get_collection(inst));
-        qof_book_mark_session_dirty(qof_instance_get_book(inst));
-    }
-#if BORKEN_FOR_NOW
-    FileBackend *fbe = (FileBackend *) be;
-    QofBook *book = gp;
-    const char * filepath;
-
-    if (strcmp (GNC_ID_PERIOD, typ)) return;
-    filepath = build_period_filepath(fbe, book);
-    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
-    gnc_xml_be_write_to_file(fbe, book, filepath, FALSE);
-
-    /* We want to force a save of the current book at this point,
-     * because if we don't, and the user forgets to do so, then
-     * there'll be the same transactions in the closed book,
-     * and also in the current book. */
-    gnc_xml_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
-#endif
-}
-
 /* ---------------------------------------------------------------------- */
 
 
@@ -1233,7 +1206,7 @@ gnc_backend_new(void)
 
     /* The file backend treats accounting periods transactionally. */
     be->begin = xml_begin_edit;
-    be->commit = xml_commit_edit;
+    be->commit = NULL;
     be->rollback = xml_rollback_edit;
 
     /* The file backend always loads all data ... */

@@ -1002,6 +1002,12 @@ qof_commit_edit_part2(QofInstance *inst,
 
     priv = GET_PRIVATE(inst);
 
+    if (priv->dirty && qof_get_alt_dirty_mode() &&
+        !(priv->infant && priv->do_free)) {
+      qof_collection_mark_dirty(priv->collection);
+      qof_book_mark_session_dirty(priv->book);
+    }
+
     /* See if there's a backend.  If there is, invoke it. */
     be = qof_book_get_backend(priv->book);
     if (be && qof_backend_commit_exists(be))
@@ -1031,11 +1037,6 @@ qof_commit_edit_part2(QofInstance *inst,
         /* XXX the backend commit code should clear dirty!! */
         priv->dirty = FALSE;
     }
-//    if (dirty && qof_get_alt_dirty_mode() &&
-//        !(priv->infant && priv->do_free)) {
-//      qof_collection_mark_dirty(priv->collection);
-//      qof_book_mark_dirty(priv->book);
-//    }
     priv->infant = FALSE;
 
     if (priv->do_free)
