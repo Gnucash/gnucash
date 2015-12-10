@@ -716,15 +716,7 @@ qof_instance_get_dirty (QofInstance *inst)
     }
 
     priv = GET_PRIVATE(inst);
-    if (qof_get_alt_dirty_mode())
-        return priv->dirty;
-    coll = priv->collection;
-    if (qof_collection_is_dirty(coll))
-    {
-        return priv->dirty;
-    }
-    priv->dirty = FALSE;
-    return FALSE;
+    return priv->dirty;
 }
 
 void
@@ -735,11 +727,6 @@ qof_instance_set_dirty(QofInstance* inst)
 
     priv = GET_PRIVATE(inst);
     priv->dirty = TRUE;
-    if (!qof_get_alt_dirty_mode())
-    {
-        coll = priv->collection;
-        qof_collection_mark_dirty(coll);
-    }
 }
 
 gboolean
@@ -1002,7 +989,7 @@ qof_commit_edit_part2(QofInstance *inst,
 
     priv = GET_PRIVATE(inst);
 
-    if (priv->dirty && qof_get_alt_dirty_mode() &&
+    if (priv->dirty &&
         !(priv->infant && priv->do_free)) {
       qof_collection_mark_dirty(priv->collection);
       qof_book_mark_session_dirty(priv->book);

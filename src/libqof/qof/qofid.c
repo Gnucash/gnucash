@@ -31,7 +31,6 @@
 #include "qofid-p.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
-static gboolean qof_alt_dirty_mode = FALSE;
 
 struct QofCollection_s
 {
@@ -41,20 +40,6 @@ struct QofCollection_s
     GHashTable * hash_of_entities;
     gpointer     data;       /* place where object class can hang arbitrary data */
 };
-
-/* =============================================================== */
-
-gboolean
-qof_get_alt_dirty_mode (void)
-{
-    return qof_alt_dirty_mode;
-}
-
-void
-qof_set_alt_dirty_mode (gboolean enabled)
-{
-    qof_alt_dirty_mode = enabled;
-}
 
 /* =============================================================== */
 
@@ -102,8 +87,6 @@ qof_collection_remove_entity (QofInstance *ent)
     if (!col) return;
     guid = qof_instance_get_guid(ent);
     g_hash_table_remove (col->hash_of_entities, guid);
-    if (!qof_alt_dirty_mode)
-        qof_collection_mark_dirty(col);
     qof_instance_set_collection(ent, NULL);
 }
 
@@ -118,8 +101,6 @@ qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
     g_return_if_fail (col->e_type == ent->e_type);
     qof_collection_remove_entity (ent);
     g_hash_table_insert (col->hash_of_entities, (gpointer)guid, ent);
-    if (!qof_alt_dirty_mode)
-        qof_collection_mark_dirty(col);
     qof_instance_set_collection(ent, col);
 }
 
@@ -146,8 +127,6 @@ qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
         return FALSE;
     }
     g_hash_table_insert (coll->hash_of_entities, (gpointer)guid, ent);
-    if (!qof_alt_dirty_mode)
-        qof_collection_mark_dirty(coll);
     return TRUE;
 }
 
