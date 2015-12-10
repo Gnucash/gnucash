@@ -1,21 +1,8 @@
 # CMakeLists.txt for src/backend/dbi
 
-ADD_DEFINITIONS (-DG_LOG_DOMAIN=\"gnc.backend.sql\")
 
-INCLUDE_DIRECTORIES (${GCONF2_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${GLIB2_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${GUILE_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src ) # for config.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src ) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/engine)
 
-SET (libgnc_backend_sql_SOURCES
+SET (backend_sql_SOURCES
   gnc-backend-sql.cpp
   gnc-account-sql.cpp
   gnc-address-sql.cpp
@@ -40,7 +27,7 @@ SET (libgnc_backend_sql_SOURCES
   gnc-vendor-sql.cpp
   escape.cpp
 )
-SET (libgnc_backend_sql_HEADERS
+SET (backend_sql_noinst_HEADERS
   gnc-account-sql.h
   gnc-address-sql.h
   gnc-backend-sql.h
@@ -67,9 +54,22 @@ SET (libgnc_backend_sql_HEADERS
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${libgnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+SET_SOURCE_FILES_PROPERTIES (${gnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 ADD_LIBRARY	(gnc-backend-sql
-  ${libgnc_backend_sql_SOURCES}
-  ${libgnc_backend_sql_HEADERS}
-  )
+  ${backend_sql_SOURCES}
+  ${backend_sql_noinst_HEADERS}
+)
+
+TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine gnc-qof)
+
+TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
+
+TARGET_INCLUDE_DIRECTORIES(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+INSTALL(TARGETS gnc-backend-sql
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+# No headers to install

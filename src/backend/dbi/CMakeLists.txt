@@ -1,32 +1,47 @@
 # CMakeLists.txt for src/backend/dbi
 
-ADD_DEFINITIONS (-DG_LOG_DOMAIN=\"gnc.backend.dbi\")
+# Source file gncmod-backend-dbi.c does not appear to be use in Makefile.in, so not included here.
 
-INCLUDE_DIRECTORIES (${GCONF2_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${GLIB2_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${LIBDBI_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src ) # for config.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src ) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/engine)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/app-utils)
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/backend/sql)
-
-SET (libgnc_backend_dbi_SOURCES
+SET (backend_dbi_SOURCES
   gnc-backend-dbi.cpp
 )
-SET (libgnc_backend_dbi_HEADERS
-  gnc-backend-dbi.h
+SET (backend_dbi_noinst_HEADERS
+  gnc-backend-dbi.h gnc-backend-dbi-priv.h
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${libgnc_backend_dbi_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+SET_SOURCE_FILES_PROPERTIES (${backend_dbi_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY	(gnc-backend-dbi
-  ${libgnc_backend_dbi_SOURCES}
-  ${libgnc_backend_dbi_HEADERS}
+ADD_LIBRARY	(gncmod-backend-dbi
+  ${backend_dbi_SOURCES}
+  ${backend_dbi_noinst_HEADERS}
+)
+
+TARGET_LINK_LIBRARIES(gncmod-backend-dbi gnc-backend-sql gncmod-engine gnc-qof ${GTK2_LDFLAGS} ${LIBDBI_LIBRARY})
+
+TARGET_COMPILE_DEFINITIONS(gncmod-backend-dbi PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.dbi\")
+
+TARGET_INCLUDE_DIRECTORIES(gncmod-backend-dbi PRIVATE ${LIBDBI_INCLUDE_PATH})
+
+INSTALL(TARGETS gncmod-backend-dbi
+  LIBRARY DESTINATION lib/gnucash
+  ARCHIVE DESTINATION lib/gnucash
+  RUNTIME DESTINATION bin)
+# No headers to install
+
+# FIXME: Below is a hack to create .libs/libgncmod-backend-dbi to silence some complaints
+# from guile when compiling. Eventually, fix the guile module loader to not expect items
+# to be in .libs. At this time, WIN32 does not use guile-2, so no need for this.
+
+IF (NOT WIN32)
+  SET(_LINK_TARGET ${CMAKE_CURRENT_BINARY_DIR}/.libs/libgncmod-backend-dbi${CMAKE_SHARED_LIBRARY_SUFFIX})
+  FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/.libs)
+
+  ADD_CUSTOM_COMMAND(
+      OUTPUT ${_LINK_TARGET}
+      COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE:gncmod-backend-dbi> ${_LINK_TARGET}
+      DEPENDS gnc-backend-dbi
   )
+
+  ADD_CUSTOM_TARGET(gncmod-backend-dbi-link ALL DEPENDS gncmod-backend-dbi ${_LINK_TARGET})
+ENDIF()

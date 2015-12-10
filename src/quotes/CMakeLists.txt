@@ -1,0 +1,46 @@
+
+
+
+SET(PERL ${PERL_EXECUTABLE})
+
+SET(_TMPDIR ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
+FILE(WRITE ${_TMPDIR}/copy_with_perms.cmake
+  "FILE(COPY \${SRC} DESTINATION \${DST}
+   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)"
+)
+
+FOREACH(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump)
+  STRING(REPLACE ".in" "" _OUTPUT_FILE_NAME ${file})
+  GNC_CONFIGURE2(${file} ${_OUTPUT_FILE_NAME})
+  SET(_ABS_OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_OUTPUT_FILE_NAME})
+  INSTALL(PROGRAMS ${_ABS_OUPUT_FILE} DESTINATION bin)
+  IF (GNC_BUILD_AS_INSTALL)
+    ADD_CUSTOM_COMMAND(
+      OUTPUT ${_ABS_OUTPUT_FILE}
+      APPEND
+      COMMAND ${CMAKE_COMMAND} -D SRC=${_ABS_OUTPUT_FILE}
+                               -D DST=${BINDIR_BUILD}
+                               -P ${_TMPDIR}/copy_with_perms.cmake
+    )
+  ENDIF()
+ENDFOREACH(file)
+
+SET(_MAN_FILES "")
+FOREACH(file gnc-fq-dump gnc-fq-helper)
+  SET(_POD_INPUT ${CMAKE_CURRENT_BINARY_DIR}/${file})
+  SET(_MAN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${file}.1)
+  LIST(APPEND _MAN_FILES ${_MAN_OUTPUT})
+  ADD_CUSTOM_COMMAND(
+      OUTPUT ${_MAN_OUTPUT}
+      COMMAND
+        ${CMAKE_COMMAND} -E env ${PERL_EXECUTABLE} ${POD2MAN_EXECUTABLE} ${_POD_INPUT} ${_MAN_OUTPUT}
+      DEPENDS ${_POD_INPUT}
+  )
+ENDFOREACH(file)
+
+# I don't bother copying the man pages for GNC_BUILD_AS_INSTALL. I probably should for completeness.
+
+ADD_CUSTOM_TARGET(quotes-man ALL DEPENDS ${_MAN_FILES})
+ADD_CUSTOM_TARGET(quotes-bin ALL DEPENDS gnc-fq-check gnc-fq-update)
+INSTALL(FILES ${_MAN_FILES} DESTINATION share/man/man1)
+
