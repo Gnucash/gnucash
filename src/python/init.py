@@ -24,15 +24,13 @@ if noisy:
     print "test", sys.modules.keys()
     print "test2", dir(_sw_app_utils)
 
-root = _sw_app_utils.gnc_get_current_root_account()
+    root = _sw_app_utils.gnc_get_current_root_account()
 
-if noisy:
     print "test", dir(root), root.__class__
     print "test2", dir(gnucash_core_c)
 
-acct = Account(instance = root)
+    acct = Account(instance = root)
 
-if noisy:
     print "test3", dir(acct)
    #print acct.GetName()
    #print acct.GetBalance()

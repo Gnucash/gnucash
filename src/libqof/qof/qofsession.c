@@ -96,6 +96,12 @@ unregister_all_providers (void)
     }
 }
 
+#define DEFAULT_BACKEND "xml"
+
+static void
+qof_session_load_backend(QofSession * session, const char * access_method);
+
+
 /* ====================================================================== */
 
 void
@@ -258,6 +264,7 @@ qof_session_init (QofSession *session)
     session->backend = NULL;
     session->lock = 1;
 
+    qof_session_load_backend(session, DEFAULT_BACKEND);
     qof_session_clear_error (session);
 }
 
@@ -355,24 +362,33 @@ qof_session_load_backend(QofSession * session, const char * access_method)
         /* Does this provider handle the desired access method? */
         if (0 == g_ascii_strcasecmp (access_method, prov->access_method))
         {
-            /* More than one backend could provide this
-            access method, check file type compatibility. */
-            type_check = (gboolean (*)(const char*)) prov->check_data_type;
-            if (type_check)
+            /* If this is a completely new session (that is, not associated with a file or db yet)
+             * go for the default backend and skip further type checking.
+             * This should prevent unintended data loss when a user starts a new book without
+             * going via the hierarchy assistant.
+             * See https://bugzilla.gnome.org/show_bug.cgi?id=745101
+             */
+            if (session->book_id || (0 != g_ascii_strcasecmp (DEFAULT_BACKEND, prov->access_method)))
             {
-                prov_type = (type_check)(session->book_id);
-                if (!prov_type)
+                /* More than one backend could provide this
+                   access method, check file type compatibility. */
+                type_check = (gboolean (*)(const char*)) prov->check_data_type;
+                if (type_check)
                 {
-                    PINFO(" %s not usable", prov->provider_name);
+                    prov_type = (type_check)(session->book_id);
+                    if (!prov_type)
+                    {
+                        PINFO(" %s not usable", prov->provider_name);
+                        p = p->next;
+                        continue;
+                    }
+                }
+                PINFO (" selected %s", prov->provider_name);
+                if (NULL == prov->backend_new)
+                {
                     p = p->next;
                     continue;
                 }
-            }
-            PINFO (" selected %s", prov->provider_name);
-            if (NULL == prov->backend_new)
-            {
-                p = p->next;
-                continue;
             }
             /* Use the providers creation callback */
             session->backend = (*(prov->backend_new))();
