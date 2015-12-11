@@ -1579,6 +1579,8 @@ gnc_file_revert (void)
         fileurl = _("<unknown>");
     if ((tmp = strrchr(fileurl, '/')) != NULL)
         filename = tmp + 1;
+    else
+        filename = fileurl;
 
     if (!gnc_verify_dialog (NULL, FALSE, title, filename))
         return;
