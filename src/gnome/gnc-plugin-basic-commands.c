@@ -432,7 +432,6 @@ gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
         return;
 
     gnc_file_new ();
-    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
@@ -463,7 +462,6 @@ gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     gnc_file_save ();
     gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
@@ -481,7 +479,6 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
     gnc_file_save_as ();
 #endif
     gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
@@ -516,8 +513,6 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
     gnc_file_export ();
 #endif
     gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
-    /* gnc_refresh_main_window_info (); */
 }
 
 static void
