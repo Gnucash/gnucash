@@ -224,13 +224,26 @@ static const gchar *gnc_plugin_important_actions[] =
     NULL,
 };
 
-/** These actions, plus FileSaveAction, are made not sensitive (i.e.,
+/** These actions are made not sensitive (i.e.,
  * their toolbar and menu items are grayed out and do not send events
  * when clicked) when the current book is "Read Only".
  */
-static const gchar *readonly_inactive_actions[] =
+static const gchar *readwrite_only_active_actions[] =
 {
     "ToolsBookCloseAction",
+    NULL
+};
+
+/** These actions are made not sensitive (i.e.,
+ * their toolbar and menu items are grayed out and do not send events
+ * when clicked) when the current book is not dirty. As a read only book
+ * can't be dirty this implies they will be disabled for a read only book
+ * as well.
+ */
+static const gchar *dirty_only_active_actions[] =
+{
+    "FileSaveAction",
+    "FileRevertAction",
     NULL
 };
 
@@ -323,7 +336,6 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 {
     GncMainWindow  *window;
     GtkActionGroup *action_group;
-    GtkAction *file_save_action;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -339,12 +351,10 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
     g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+    gnc_plugin_update_actions (action_group, readwrite_only_active_actions,
                                "sensitive", is_readwrite);
-    /* FileSaveAction needs to be set separately because it has *two* conditions */
-    file_save_action = gtk_action_group_get_action (action_group,
-                       "FileSaveAction");
-    gtk_action_set_sensitive (file_save_action, is_readwrite && is_dirty);
+    gnc_plugin_update_actions (action_group, dirty_only_active_actions,
+                               "sensitive", is_dirty);
 }
 
 static void
