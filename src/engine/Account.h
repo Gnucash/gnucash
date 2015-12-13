@@ -1406,6 +1406,37 @@ Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* to
 void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
                                          Account *acc);
 
+struct kvp_info
+{
+    Account        *source_account;
+    Account        *map_account;
+    GList          *list;
+    char           *kvp_path_head;
+    char           *kvp_path;
+    char           *match_string;
+    char           *probability;
+};
+
+/** Returns a GList of structure kvp_info of all Bayesian mappings for
+ *  required Account
+ */
+GList *gnc_account_imap_get_info_bayes (Account *acc, const char *category);
+
+/** Returns a GList of structure kvp_info of all Non Bayesian mappings for
+ *  required Account
+ */
+GList *gnc_account_imap_get_info (Account *acc, const char *category);
+
+/** Returns the text string pointed to by kvp_path for the Account, free
+ *  the returned text
+ */
+gchar *gnc_account_get_kvp_text (Account *acc, const char *kvp_path);
+
+/** Delete the kvp_path for the Account, if empty is TRUE then use
+ *  delete if empty, kvp_path is freed
+ */
+void gnc_account_delete_kvp (Account *acc, char *kvp_path, gboolean empty);
+
 /** @} */
 
 

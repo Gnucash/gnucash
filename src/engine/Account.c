@@ -5485,6 +5485,211 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     LEAVE(" ");
 }
 
+/*******************************************************************************/
+
+static void
+build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
+{
+    QofBook     *book;
+    Account     *root;
+    gchar       *kvp_path;
+    gchar       *probability;
+
+    struct kvp_info *kvpInfo_node;
+
+    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
+
+    // Get the book
+    book = qof_instance_get_book (kvpInfo->source_account);
+    root = gnc_book_get_root_account (book);
+
+    PINFO("build_bayes_layer_two: account '%s', token_count: '%ld'",
+                                  (char*)key, (long)g_value_get_int64(value));
+
+    probability = g_strdup_printf ("%ld", g_value_get_int64 (value));
+
+    kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
+
+    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
+
+    kvpInfo_node = g_malloc(sizeof(*kvpInfo_node));
+
+    kvpInfo_node->source_account = kvpInfo->source_account;
+    kvpInfo_node->map_account    = gnc_account_lookup_by_full_name (root, key);
+    kvpInfo_node->kvp_path       = g_strdup (kvp_path);
+    kvpInfo_node->match_string   = g_strdup (kvpInfo->match_string);
+    kvpInfo_node->kvp_path_head  = g_strdup (kvpInfo->kvp_path_head);
+    kvpInfo_node->probability    = g_strdup (probability);
+
+    kvpInfo->list = g_list_append (kvpInfo->list, kvpInfo_node);
+
+    g_free (kvp_path);
+    g_free (probability);
+}
+
+static void
+build_bayes (const char *key, const GValue *value, gpointer user_data)
+{
+    gchar *kvp_path;
+    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
+    struct kvp_info  kvpInfol2;
+
+    PINFO("build_bayes: match string '%s'", (char*)key);
+
+    if (G_VALUE_HOLDS (value, G_TYPE_STRING) && g_value_get_string (value) == NULL)
+    {
+        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", key);
+
+        if (qof_instance_has_slot (QOF_INSTANCE(kvpInfo->source_account), kvp_path))
+        {
+            PINFO("build_bayes: kvp_path is '%s', key '%s'", kvp_path, key);
+
+            kvpInfol2.source_account = kvpInfo->source_account;
+            kvpInfol2.match_string   = g_strdup (key);
+            kvpInfol2.kvp_path_head  = g_strdup (kvp_path);
+            kvpInfol2.list           = kvpInfo->list;
+
+            qof_instance_foreach_slot (QOF_INSTANCE(kvpInfo->source_account), kvp_path,
+                                       build_bayes_layer_two, &kvpInfol2);
+
+            kvpInfo->list = kvpInfol2.list;
+            g_free (kvpInfol2.match_string);
+            g_free (kvpInfol2.kvp_path_head);
+        }
+        g_free (kvp_path);
+    }
+}
+
+
+static void
+build_non_bayes (const char *key, const GValue *value, gpointer user_data)
+{
+    if (G_VALUE_HOLDS_BOXED (value))
+    {
+        QofBook     *book;
+        GncGUID     *guid = NULL;
+        gchar       *kvp_path;
+        gchar       *guid_string = NULL;
+
+        struct kvp_info *kvpInfo_node;
+
+        struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
+
+        // Get the book
+        book = qof_instance_get_book (kvpInfo->source_account);
+
+        guid = (GncGUID*)g_value_get_boxed (value);
+        guid_string = guid_to_string (guid);
+
+        PINFO("build_non_bayes: account '%s', match account guid: '%s'",
+                                (char*)key, guid_string);
+
+        kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
+
+        PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
+
+        kvpInfo_node = g_malloc(sizeof(*kvpInfo_node));
+
+        kvpInfo_node->source_account = kvpInfo->source_account;
+        kvpInfo_node->map_account    = xaccAccountLookup (guid, book);
+        kvpInfo_node->kvp_path       = g_strdup (kvp_path);
+        kvpInfo_node->match_string   = g_strdup (key);
+        kvpInfo_node->kvp_path_head  = g_strdup (kvpInfo->kvp_path_head);
+        kvpInfo_node->probability    = g_strdup (" ");
+
+        kvpInfo->list = g_list_append (kvpInfo->list, kvpInfo_node);
+
+        g_free (kvp_path);
+        g_free (guid_string);
+    }
+}
+
+
+GList *
+gnc_account_imap_get_info_bayes (Account *acc, const char *category)
+{
+    GList *list = NULL;
+
+    struct kvp_info kvpInfo;
+
+    kvpInfo.source_account = acc;
+    kvpInfo.list = list;
+
+    if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
+        qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES,
+                                   build_bayes, &kvpInfo);
+
+    return kvpInfo.list;
+}
+
+
+GList *
+gnc_account_imap_get_info (Account *acc, const char *category)
+{
+    GList *list = NULL;
+    gchar *kvp_path_head = NULL;
+
+    struct kvp_info kvpInfo;
+
+    kvpInfo.source_account = acc;
+    kvpInfo.list = list;
+
+    kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", category);
+    kvpInfo.kvp_path_head = kvp_path_head;
+
+    if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path_head))
+        qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head,
+                                   build_non_bayes, &kvpInfo);
+
+    g_free (kvp_path_head);
+
+    return kvpInfo.list;
+}
+
+/*******************************************************************************/
+
+gchar *
+gnc_account_get_kvp_text (Account *acc, const char *kvp_path)
+{
+    GValue v = G_VALUE_INIT;
+    gchar *text = NULL;
+
+    if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
+    {
+        qof_instance_get_kvp (QOF_INSTANCE(acc), kvp_path, &v);
+
+        if (G_VALUE_HOLDS_STRING (&v))
+        {
+            gchar const *string;
+            string = g_value_get_string (&v);
+            text = g_strdup (string);
+        }
+    }
+    return text;
+}
+
+
+void
+gnc_account_delete_kvp (Account *acc, char *kvp_path, gboolean empty)
+{
+    if ((acc != NULL) && qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
+    {
+        xaccAccountBeginEdit (acc);
+
+        if (empty)
+            qof_instance_slot_delete_if_empty (QOF_INSTANCE(acc), kvp_path);
+        else
+            qof_instance_slot_delete (QOF_INSTANCE(acc), kvp_path);
+
+        PINFO("Account is '%s', path is '%s'", xaccAccountGetName (acc), kvp_path);
+
+        qof_instance_set_dirty (QOF_INSTANCE(acc));
+        xaccAccountCommitEdit (acc);
+    }
+    g_free (kvp_path);
+}
+
+
 /* ================================================================ */
 /* QofObject function implementation and registration */
 

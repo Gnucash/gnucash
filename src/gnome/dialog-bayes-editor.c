@@ -32,7 +32,7 @@
 #include "gnc-session.h"
 
 #include "gnc-ui-util.h"
-#include "qofinstance-p.h"
+#include "Account.h"
 
 #define DIALOG_BAYES_CM_CLASS   "dialog-bayes-edit"
 #define GNC_PREFS_GROUP         "dialogs.bayes-editor"
@@ -63,23 +63,11 @@ typedef struct
     GtkWidget    *view;
     GncListType   type;
 
-    GtkWidget *radio_bayes;
-    GtkWidget *radio_nbayes;
-    GtkWidget *radio_online;
+    GtkWidget    *radio_bayes;
+    GtkWidget    *radio_nbayes;
+    GtkWidget    *radio_online;
 
-} BayesDialog;
-
-struct kvp_info
-{
-    GtkTreeModel *store;
-    Account      *source_account;
-    Account      *map_account;
-    const gchar  *based_on;
-    const gchar  *match_string;
-    const gchar  *kvp_path_head;
-    const gchar  *kvp_path;
-    const gchar  *probability;
-};
+}BayesDialog;
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -146,16 +134,6 @@ are_you_sure (BayesDialog *bayes_dialog)
 }
 
 static void
-delete_kvp (Account *account, gchar *full_account, gchar *kvp_path)
-{
-    qof_instance_slot_delete_if_empty (QOF_INSTANCE(account), kvp_path);
-
-    PINFO("Delete source account is '%s', path is '%s'", full_account, kvp_path);
-
-    g_free (kvp_path);
-}
-
-static void
 gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
 {
     GList            *list, *row;
@@ -193,38 +171,33 @@ gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
 
             PINFO("Account is '%s', Path is '%s', Search is '%s'", full_source_account, kvp_path, match_string);
 
-            if ((source_account != NULL) && qof_instance_has_slot (QOF_INSTANCE(source_account), kvp_path))
+            if (source_account != NULL)
             {
-                xaccAccountBeginEdit (source_account);
-
-                qof_instance_slot_delete (QOF_INSTANCE(source_account), kvp_path);
-                g_free (kvp_path);
+                gnc_account_delete_kvp (source_account, kvp_path, FALSE);
 
                 if (bayes_dialog->type == BAYES)
                 {
                     kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", match_string);
-                    delete_kvp (source_account, full_source_account, kvp_path);
+                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME_BAYES);
-                    delete_kvp (source_account, full_source_account, kvp_path);
+                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
                 }
 
                 if (bayes_dialog->type == NBAYES)
                 {
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
-                    delete_kvp (source_account, full_source_account, kvp_path);
+                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_MEMO);
-                    delete_kvp (source_account, full_source_account, kvp_path);
+                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_CSV);
-                    delete_kvp (source_account, full_source_account, kvp_path);
+                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME);
-                    delete_kvp (source_account, full_source_account, kvp_path);
+                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
                 }
-                qof_instance_set_dirty (QOF_INSTANCE(source_account));
-                xaccAccountCommitEdit (source_account);
             }
             g_free (match_string);
             g_free (full_source_account);
@@ -289,7 +262,7 @@ show_probability_column (BayesDialog *bayes_dialog, gboolean show)
 }
 
 static void
-add_to_store (gpointer user_data)
+add_to_store (GtkTreeModel *store, const gchar *text, gpointer user_data)
 {
     GtkTreeIter  iter;
     gchar       *fullname = NULL;
@@ -297,17 +270,17 @@ add_to_store (gpointer user_data)
 
     struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
 
-    gtk_list_store_append (GTK_LIST_STORE(kvpInfo->store), &iter);
+    gtk_list_store_append (GTK_LIST_STORE(store), &iter);
 
     fullname = gnc_account_get_full_name (kvpInfo->source_account);
 
     map_fullname = gnc_account_get_full_name (kvpInfo->map_account);
 
-    PINFO("Add to Store: Source Acc '%s', Based on '%s', Map Acc '%s'", fullname, kvpInfo->based_on, map_fullname);
+    PINFO("Add to Store: Source Acc '%s', Match '%s', Map Acc '%s'", fullname, kvpInfo->match_string, map_fullname);
 
-    gtk_list_store_set (GTK_LIST_STORE(kvpInfo->store), &iter,
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
                         SOURCE_FULL_ACC, fullname, SOURCE_ACCOUNT, kvpInfo->source_account,
-                        BASED_ON, kvpInfo->based_on,
+                        BASED_ON, text,
                         MATCH_STRING, kvpInfo->match_string,
                         MAP_FULL_ACC, map_fullname, MAP_ACCOUNT, kvpInfo->map_account,
                         KVP_PATH, kvpInfo->kvp_path, PROBABILITY, kvpInfo->probability, -1);
@@ -317,122 +290,43 @@ add_to_store (gpointer user_data)
 }
 
 static void
-build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
+get_bayes_info (Account *acc, const gchar *category, GtkTreeModel *store, const gchar *text)
 {
-    QofBook     *book;
-    gchar       *kvp_path;
-    gchar       *probability;
+    GList *kvp_list, *node;
+    gchar *acc_name = NULL;
 
-    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
+    acc_name = gnc_account_get_full_name (acc);
+    PINFO("Source Acc '%s', Based on '%s', Path Head '%s'", acc_name, text, category);
+    g_free (acc_name);
 
-    // Get the book
-    book = gnc_get_current_book();
+    if (category == NULL) // For Bayesian, category is NULL
+        kvp_list = gnc_account_imap_get_info_bayes (acc, category);
+    else
+        kvp_list = gnc_account_imap_get_info (acc, category);
 
-    PINFO("build_bayes_layer_two: account '%s', token_count: '%ld'", (char*)key, (long)g_value_get_int64(value));
-
-    probability = g_strdup_printf ("%ld", g_value_get_int64 (value));
-
-    kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
-
-    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
-
-    kvpInfo->map_account = gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), key);
-
-    kvpInfo->kvp_path = kvp_path;
-    kvpInfo->probability = probability;
-
-    // Add kvp data to store
-    add_to_store (kvpInfo);
-
-    g_free (kvp_path);
-    g_free (probability);
-}
-
-static void
-build_bayes (const char *key, const GValue *value, gpointer user_data)
-{
-    char *kvp_path;
-    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
-    struct kvp_info  kvpInfol2;
-
-    PINFO("build_bayes: match string '%s'", (char*)key);
-
-    if (G_VALUE_HOLDS (value, G_TYPE_STRING) && g_value_get_string (value) == NULL)
+    if (g_list_length (kvp_list) > 0)
     {
-        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", key);
+        PINFO("List length is %d", g_list_length (kvp_list));
 
-        if (qof_instance_has_slot (QOF_INSTANCE(kvpInfo->source_account), kvp_path))
+        for (node = kvp_list;  node; node = g_list_next (node))
         {
-            PINFO("build_bayes: kvp_path is '%s', key '%s'", kvp_path, key);
+            struct kvp_info *kvpInfo;
 
-            kvpInfol2.store = kvpInfo->store;
-            kvpInfol2.source_account = kvpInfo->source_account;
-            kvpInfol2.based_on = _("Bayesian");
-            kvpInfol2.match_string = key;
-            kvpInfol2.kvp_path_head = kvp_path;
+            kvpInfo = node->data;
 
-            qof_instance_foreach_slot (QOF_INSTANCE(kvpInfo->source_account), kvp_path,
-                                       build_bayes_layer_two, &kvpInfol2);
+            // Add to store
+            add_to_store (store, text, kvpInfo);
+
+            // Free the members and structure
+            g_free (kvpInfo->kvp_path_head);
+            g_free (kvpInfo->kvp_path);
+            g_free (kvpInfo->match_string);
+            g_free (kvpInfo->probability);
+            g_free (kvpInfo);
         }
-        g_free (kvp_path);
     }
-}
-
-static void
-build_non_bayes (const char *key, const GValue *value, gpointer user_data)
-{
-    if (G_VALUE_HOLDS_BOXED (value))
-    {
-        QofBook     *book;
-        GncGUID     *guid = NULL;
-        gchar       *kvp_path;
-        gchar       *guid_string = NULL;
-
-        struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
-
-        // Get the book
-        book = gnc_get_current_book();
-
-        guid = (GncGUID*)g_value_get_boxed (value);
-        guid_string = guid_to_string (guid);
-
-        PINFO("build_non_bayes: account '%s', match account guid: '%s'", (char*)key, guid_string);
-
-        kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
-
-        PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
-
-        kvpInfo->map_account = xaccAccountLookup (guid, book);
-        kvpInfo->match_string = key;
-        kvpInfo->kvp_path = kvp_path;
-        kvpInfo->probability = " ";
-
-        // Add kvp data to store
-        add_to_store (kvpInfo);
-
-        g_free (kvp_path);
-        g_free (guid_string);
-    }
-}
-
-static void
-get_non_bayes_info (Account *acc, const gchar *imap_frame, GtkTreeModel *store, const gchar *text)
-{
-    gchar   *kvp_path_head = NULL;
-
-    struct kvp_info kvpInfo;
-
-    kvpInfo.source_account = acc;
-    kvpInfo.store = store;
-    kvpInfo.based_on = text;
-
-    kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", imap_frame);
-    kvpInfo.kvp_path_head = kvp_path_head;
-
-    if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path_head))
-        qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head, build_non_bayes, &kvpInfo);
-
-    g_free (kvp_path_head);
+    // Free the list
+    g_list_free (kvp_list);
 }
 
 static void
@@ -452,7 +346,9 @@ get_account_info (BayesDialog *bayes_dialog)
 
     store = gtk_tree_view_get_model (GTK_TREE_VIEW(bayes_dialog->view));
     gtk_list_store_clear (GTK_LIST_STORE(store));
-    kvpInfo.store = store;
+
+    // Hide Probability Column
+    show_probability_column (bayes_dialog, FALSE);
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
@@ -464,8 +360,7 @@ get_account_info (BayesDialog *bayes_dialog)
 
         if (bayes_dialog->type == BAYES)
         {
-            if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
-                qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES, build_bayes, &kvpInfo);
+            get_bayes_info (acc, NULL, store, _("Bayesian"));
 
             // Show Probability Column
             show_probability_column (bayes_dialog, TRUE);
@@ -474,43 +369,37 @@ get_account_info (BayesDialog *bayes_dialog)
         if (bayes_dialog->type == NBAYES)
         {
             // Description
-            get_non_bayes_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
+            get_bayes_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
 
             // Memo
-            get_non_bayes_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
+            get_bayes_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
 
             // CSV Account Map
-            get_non_bayes_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
-
-            // Hide Probability Column
-            show_probability_column (bayes_dialog, FALSE);
+            get_bayes_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
         }
 
         if (bayes_dialog->type == ONLINE)
         {
-            GValue v = G_VALUE_INIT;
+            gchar *text = NULL;
 
-            kvpInfo.based_on = _("Online Id");
             kvpInfo.kvp_path = "online_id";
 
-            if (qof_instance_has_slot (QOF_INSTANCE(acc), kvpInfo.kvp_path))
+            text = gnc_account_get_kvp_text (acc, kvpInfo.kvp_path);
+
+            if (text != NULL)
             {
-                qof_instance_get_kvp (QOF_INSTANCE(acc), kvpInfo.kvp_path, &v);
-
-                if (G_VALUE_HOLDS_STRING (&v))
-                {
-                    const gchar *string = g_value_get_string (&v);
-
+                if (g_strcmp0 (text, "") == 0)
+                    kvpInfo.map_account = NULL;
+                else
                     kvpInfo.map_account = kvpInfo.source_account;
-                    kvpInfo.match_string  = string;
-                    kvpInfo.probability = " ";
 
-                    // Add kvp data to store
-                    add_to_store (&kvpInfo);
-                }
+                kvpInfo.match_string  = text;
+                kvpInfo.probability = " ";
+
+                // Add kvp data to store
+                add_to_store (store, _("Online Id"), &kvpInfo);
             }
-            // Hide Probability Column
-            show_probability_column (bayes_dialog, FALSE);
+            g_free (text);
         }
     }
     g_list_free (accts);
