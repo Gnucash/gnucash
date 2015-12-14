@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-12 18:36+0100\n"
-"PO-Revision-Date: 2015-12-12 13:43+0100\n"
+"PO-Revision-Date: 2015-12-13 20:53+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -5691,7 +5691,7 @@ msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:186
 msgid "_Price Editor"
-msgstr "_Kurs-Datenbank"
+msgstr "_Kurs-Editor"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:187
 msgid "View and edit the prices for stocks and mutual funds"
@@ -9250,9 +9250,8 @@ msgid "<b>_Lots in This Account</b>"
 msgstr "<b>_Posten in diesem Konto</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:7
-#, fuzzy
 msgid "Show only open lots"
-msgstr "Diagramm anzeigen"
+msgstr "Nur offene Posten anzeigen"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:8
 #, fuzzy
@@ -16704,19 +16703,16 @@ msgid "place_holder"
 msgstr "Platzhalter"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
-#, fuzzy
 msgid "Export Account T_ree to CSV..."
-msgstr "_Konten exportieren"
+msgstr "_Kontenhierarchie nach CSV exportieren ..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:48
-#, fuzzy
 msgid "Export the Account Tree to a CSV file"
-msgstr "Die Konten-Hierarchie in eine neue GnuCash-Datei exportieren"
+msgstr "Kontenhierarchie in eine CSV Datei exportieren"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:52
-#, fuzzy
 msgid "Export _Transactions to CSV..."
-msgstr "Abfrage Konto_umsätze..."
+msgstr "Buchungen nach CSV exportieren..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:53
 msgid "Export the Transactions to a CSV file"
