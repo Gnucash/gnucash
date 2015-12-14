@@ -364,82 +364,14 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler)
 gboolean
 string_to_timespec_secs(const gchar *str, Timespec *ts)
 {
-
-    struct tm parsed_time;
-    const gchar *strpos;
-    time64 parsed_secs;
-    long int gmtoff;
-
-    if (!str || !ts) return FALSE;
-
-    memset(&parsed_time, 0, sizeof(struct tm));
-
-    /* If you change this, make sure you also change the output code, if
-       necessary. */
-    /*fprintf(stderr, "parsing (%s)\n", str);*/
-    strpos = strptime(str, TIMESPEC_PARSE_TIME_FORMAT, &parsed_time);
-
-    g_return_val_if_fail(strpos, FALSE);
-
-    {
-        char sign;
-        int h1;
-        int h2;
-        int m1;
-        int m2;
-        int num_read;
-
-        /* must use "<" here because %n's effects aren't well defined */
-        if (sscanf(strpos, " %c%1d%1d%1d%1d%n",
-                   &sign,
-                   &h1,
-                   &h2,
-                   &m1,
-                   &m2,
-                   &num_read) < 5)
-        {
-            return(FALSE);
-        }
-
-        if ((sign != '+') && (sign != '-')) return(FALSE);
-        if (!isspace_str(strpos + num_read, -1)) return(FALSE);
-
-        gmtoff = (h1 * 10 + h2) * 60 * 60;
-        gmtoff += (m1 * 10 + m2) * 60;
-        if (sign == '-') gmtoff = - gmtoff;
-
-        parsed_time.tm_isdst = -1;
-    }
-
-    parsed_secs = gnc_timegm(&parsed_time);
-
-    parsed_secs -= gmtoff;
-
-    ts->tv_sec = parsed_secs;
-
+    *ts = gnc_iso8601_to_timespec_gmt(str);
     return(TRUE);
 }
 
 gboolean
 string_to_timespec_nsecs(const gchar *str, Timespec *ts)
 {
-    long int nanosecs;
-    unsigned int charcount;
-
-    if (!str || !ts) return FALSE;
-
-    /* The '%n' doesn't count as a conversion. */
-    if (1 != sscanf(str, " %ld%n", &nanosecs, &charcount))
-        return FALSE;
-
-    while ( (*((gchar*)str + charcount) != '\0') &&
-            isspace(*((unsigned char*)str + charcount)))
-        charcount++;
-
-    if (charcount != strlen(str)) return(FALSE);
-
-    ts->tv_nsec = nanosecs;
-
+    *ts = gnc_iso8601_to_timespec_gmt(str);
     return(TRUE);
 }
 

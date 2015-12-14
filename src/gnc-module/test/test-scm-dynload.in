@@ -1,4 +1,4 @@
-#! /bin/sh
+#! @SHELL@
 echo "  test-scm-dynload: testing dynamic-link of libgnc-module from Scheme.";
 exec ${GUILE} -s $0 "$@"
 !#

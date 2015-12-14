@@ -224,13 +224,26 @@ static const gchar *gnc_plugin_important_actions[] =
     NULL,
 };
 
-/** These actions, plus FileSaveAction, are made not sensitive (i.e.,
+/** These actions are made not sensitive (i.e.,
  * their toolbar and menu items are grayed out and do not send events
  * when clicked) when the current book is "Read Only".
  */
-static const gchar *readonly_inactive_actions[] =
+static const gchar *readwrite_only_active_actions[] =
 {
     "ToolsBookCloseAction",
+    NULL
+};
+
+/** These actions are made not sensitive (i.e.,
+ * their toolbar and menu items are grayed out and do not send events
+ * when clicked) when the current book is not dirty. As a read only book
+ * can't be dirty this implies they will be disabled for a read only book
+ * as well.
+ */
+static const gchar *dirty_only_active_actions[] =
+{
+    "FileSaveAction",
+    "FileRevertAction",
     NULL
 };
 
@@ -323,7 +336,6 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 {
     GncMainWindow  *window;
     GtkActionGroup *action_group;
-    GtkAction *file_save_action;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -339,12 +351,10 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
     g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+    gnc_plugin_update_actions (action_group, readwrite_only_active_actions,
                                "sensitive", is_readwrite);
-    /* FileSaveAction needs to be set separately because it has *two* conditions */
-    file_save_action = gtk_action_group_get_action (action_group,
-                       "FileSaveAction");
-    gtk_action_set_sensitive (file_save_action, is_readwrite && is_dirty);
+    gnc_plugin_update_actions (action_group, dirty_only_active_actions,
+                               "sensitive", is_dirty);
 }
 
 static void
@@ -432,7 +442,6 @@ gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
         return;
 
     gnc_file_new ();
-    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
@@ -463,7 +472,6 @@ gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     gnc_file_save ();
     gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
@@ -481,26 +489,24 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
     gnc_file_save_as ();
 #endif
     gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
 gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *data)
 {
+    GtkWidget *dialog;
+    QofSession *session;
+    QofBook *book;
+    const gchar *filename, *tmp;
+    const gchar *title = _("Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?");
+
     g_return_if_fail (data != NULL);
 
     if (!gnc_main_window_all_finish_pending())
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-
-    {
-        gchar *filename = gnc_history_get_last();
-        // And actually open the current file again
-        gnc_file_open_file (filename, qof_book_is_readonly(gnc_get_current_book()));
-        g_free(filename);
-    }
-
+    gnc_file_revert();
     gnc_window_set_progressbar_window (NULL);
 }
 
@@ -516,8 +522,6 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
     gnc_file_export ();
 #endif
     gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
-    /* gnc_refresh_main_window_info (); */
 }
 
 static void

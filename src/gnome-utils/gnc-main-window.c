@@ -1468,26 +1468,13 @@ gnc_main_window_generate_title (GncMainWindow *window)
     const gchar *readonly_text = NULL;
     gchar *readonly;
     gchar *title;
-    GtkAction* action;
 
-    /* The save action is sensitive if the book is dirty */
-    action = gnc_main_window_find_action (window, "FileSaveAction");
-    if (action != NULL)
-    {
-        gtk_action_set_sensitive(action, FALSE);
-    }
     if (gnc_current_session_exist())
     {
         book_id = qof_session_get_url (gnc_get_current_session ());
         book = gnc_get_current_book();
         if (qof_book_session_not_saved (book))
-        {
             dirty = "*";
-            if (action != NULL)
-            {
-                gtk_action_set_sensitive(action, TRUE);
-            }
-        }
         if (qof_book_is_readonly(book))
         {
             /* Translators: This string is shown in the window title if this
@@ -1538,6 +1525,8 @@ gnc_main_window_generate_title (GncMainWindow *window)
     gnc_plugin_update_actions(priv->action_group,
                               immutable_page_actions,
                               "sensitive", !immutable);
+    /* Trigger sensitivity updtates of other actions such as Save/Revert */
+    g_signal_emit_by_name (window, "page_changed", page);
     g_free( filename );
     g_free(readonly);
 

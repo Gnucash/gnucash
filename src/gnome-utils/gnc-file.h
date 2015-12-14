@@ -34,7 +34,7 @@
  *
  * These GUI utilities implement and maintain a single global "session"
  * that defines the currently edited account group.  In a sense, these
- * functions provide the GUI for the xaccSession object.  The session
+ * functions provide the GUI for the qof_session object.  The session
  * is essentially a file that is open for editing, with locks on it
  * to prevent other readers and writers from accessing it as long as its
  * open.
@@ -92,6 +92,9 @@
  *    case it is up to the user to try again, or to pick
  *    a different filename).
  *
+ * The gnc_file_revert() routine will discard any changes since the last
+ * time the session was saved (but only after user confirmation).
+ *
  * The gnc_file_open_file() routine behaves much like the gnc_file_open()
  *    routine, except that the new file to open is passed as a char *
  *    argument.
@@ -130,6 +133,7 @@ void gnc_file_save (void);
 void gnc_file_save_as (void);
 void gnc_file_do_export(const char* filename);
 void gnc_file_do_save_as(const char* filename);
+void gnc_file_revert (void);
 
 /** Tell the user about errors in the backends
 

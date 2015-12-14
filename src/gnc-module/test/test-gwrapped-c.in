@@ -1,4 +1,4 @@
-#! /bin/sh
+#! @SHELL@
 ${GUILE} -c "(use-modules (gnucash unittest-support))
           (define log-domain \"gnc.module\")
           (define check (new-TestErrorStruct))

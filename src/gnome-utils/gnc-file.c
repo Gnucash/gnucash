@@ -1564,6 +1564,31 @@ gnc_file_do_save_as (const char* filename)
 }
 
 void
+gnc_file_revert (void)
+{
+    QofSession *session;
+    const gchar *fileurl, *filename, *tmp;
+    const gchar *title = _("Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?");
+
+    if (!gnc_main_window_all_finish_pending())
+        return;
+
+    session = gnc_get_current_session();
+    fileurl = qof_session_get_url(session);
+    if (fileurl == NULL)
+        fileurl = _("<unknown>");
+    if ((tmp = strrchr(fileurl, '/')) != NULL)
+        filename = tmp + 1;
+    else
+        filename = fileurl;
+
+    if (!gnc_verify_dialog (NULL, FALSE, title, filename))
+        return;
+
+    qof_book_mark_session_saved (qof_session_get_book (session));
+    gnc_file_open_file (fileurl, qof_book_is_readonly(gnc_get_current_book()));}
+
+void
 gnc_file_quit (void)
 {
     QofSession *session;

@@ -119,6 +119,7 @@ struct _invoice_select_window
     GncOwner	owner_def;
 };
 
+static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 /** This data structure does double duty.  It is used to maintain
  *  information for the "New Invoice" dialog, and it is also used to
@@ -1756,9 +1757,29 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->opened_date), ts);
         }
 
-        /* fill in the terms menu */
+        /* fill in the terms text */
         iw->terms = gncInvoiceGetTerms (invoice);
-        gnc_simple_combo_set_value (GTK_COMBO_BOX(iw->terms_menu), iw->terms);
+        //DEBUG("iw->dialog_type: %d",iw->dialog_type);
+        switch (iw->dialog_type)
+        {
+            case NEW_INVOICE:
+            case MOD_INVOICE:
+            case DUP_INVOICE: //??
+                gnc_simple_combo_set_value (GTK_COMBO_BOX(iw->terms_menu), iw->terms);
+                break;
+
+            case EDIT_INVOICE:
+            case VIEW_INVOICE:
+                // Fill in the invoice view version
+                if(gncBillTermGetName (iw->terms) != NULL)
+                    gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),gncBillTermGetName (iw->terms));
+                else
+                    gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),"None");
+                break;
+
+            default:
+                break;
+        }
 
         /*
          * Next, figure out if we've been posted, and if so set the
@@ -2406,7 +2427,6 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 
     /* Now fill in a lot of the pieces and display properly */
-    gnc_billterms_combo (GTK_COMBO_BOX(iw->terms_menu), iw->book, TRUE, iw->terms);
     gnc_invoice_update_window (iw, dialog);
 
     gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
@@ -2602,7 +2622,23 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     /* Now fill in a lot of the pieces and display properly */
-    gnc_billterms_combo (GTK_COMBO_BOX(iw->terms_menu), iw->book, TRUE, iw->terms);
+    switch(dialog_type)
+    {
+        case NEW_INVOICE:
+        case MOD_INVOICE:
+        case DUP_INVOICE:
+            gnc_billterms_combo (GTK_COMBO_BOX(iw->terms_menu), iw->book, TRUE, iw->terms);
+            break;
+        case EDIT_INVOICE:
+        case VIEW_INVOICE:
+            // Fill in the invoice view version
+            if(gncBillTermGetName (iw->terms) != NULL)
+                gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),gncBillTermGetName (iw->terms));
+            else
+                gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),"None");
+        break;
+    }
+
     gnc_invoice_update_window (iw, iw->dialog);
     gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 
