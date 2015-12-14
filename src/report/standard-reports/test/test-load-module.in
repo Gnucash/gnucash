@@ -1,15 +1,20 @@
-#! /bin/sh 
+#! @SHELL@ 
 exec ${GUILE} -s "$0"
 !#
 
-(display "  testing US tax info module load ... ")
+(display "  testing standard report module load ... ")
+(setenv "GNC_UNINSTALLED" "1")
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
-(if (gnc:module-load "gnucash/tax/us" 0)
+(if (gnc:module-load "gnucash/report/standard-reports" 0)
     (begin 
       (display "ok\n")
       (exit 0))
     (begin 
       (display "failed\n")
       (exit -1)))
+
+
+ 
+

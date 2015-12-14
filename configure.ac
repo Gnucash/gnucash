@@ -1377,7 +1377,6 @@ chmod u+x ${srcdir}/src/bin/generate-gnc-script
 # the ANSI2KNR-filtering rules.
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
-
 # Don't add empty lines in the following macro, they
 # will cause the Windows build to fail if using a git repo as source
 AC_CONFIG_FILES(
@@ -1569,6 +1568,48 @@ AC_CONFIG_FILES(
   ,
   dnl # init-commands go here
 )
+dnl # Shell scripts, to have their shells set
+AC_CONFIG_FILES([src/app-utils/test/test-load-module],
+                [chmod +x src/app-utils/test/test-load-module])
+AC_CONFIG_FILES([src/backend/xml/test/test-real-data.sh],
+                [chmod +x src/backend/xml/test/test-real-data.sh])
+AC_CONFIG_FILES([src/bin/test/test-version],
+                [chmod +x src/bin/test/test-version])
+AC_CONFIG_FILES([src/engine/test/test-create-account],
+                [chmod +x src/engine/test/test-create-account])
+AC_CONFIG_FILES([src/engine/test/test-scm-query-import],
+                [chmod +x src/engine/test/test-scm-query-import])
+AC_CONFIG_FILES([src/gnc-module/test/test-gwrapped-c],
+                [chmod +x src/gnc-module/test/test-gwrapped-c])
+AC_CONFIG_FILES([src/gnc-module/test/test-load-deps],
+                [chmod +x src/gnc-module/test/test-load-deps])
+AC_CONFIG_FILES([src/gnc-module/test/test-load-scm],
+                [chmod +x src/gnc-module/test/test-load-scm])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-dynload],
+                [chmod +x src/gnc-module/test/test-scm-dynload])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-init],
+                [chmod +x src/gnc-module/test/test-scm-init])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-module],
+                [chmod +x src/gnc-module/test/test-scm-module])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-multi],
+                [chmod +x src/gnc-module/test/test-scm-multi])
+AC_CONFIG_FILES([src/gnome-utils/test/test-load-module],
+                [chmod +x src/gnome-utils/test/test-load-module])
+AC_CONFIG_FILES([src/report/locale-specific/us/test/test-load-module],
+                [src/report/locale-specific/us/test/test-load-module])
+AC_CONFIG_FILES([src/report/report-gnome/test/test-load-module],
+                [chmod +x src/report/report-gnome/test/test-load-module])
+AC_CONFIG_FILES([src/report/report-system/test/test-load-module],
+                [chmod +x src/report/report-system/test/test-load-module])
+AC_CONFIG_FILES([src/report/standard-reports/test/test-load-module],
+                [chmod +x src/report/standard-reports/test/test-load-module])
+AC_CONFIG_FILES([src/report/stylesheets/test/test-load-module],
+                [chmod +x src/report/stylesheets/test/test-load-module])
+AC_CONFIG_FILES([src/report/utility-reports/test/test-load-module],
+                [chmod +x src/report/utility-reports/test/test-load-module])
+AC_CONFIG_FILES([src/tax/us/test/test-load-module],
+                [chmod +x src/tax/us/test/test-load-module])
+
 # A few files need extra actions at creation time
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
