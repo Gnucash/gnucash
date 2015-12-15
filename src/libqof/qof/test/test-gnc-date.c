@@ -1623,7 +1623,7 @@ test_gnc_iso8601_to_timespec_gmt (FixtureA *f, gconstpointer pData)
 #else
     g_assert_cmpint (t.tv_nsec, ==, f->ts1.tv_nsec);
 #endif
-    t = gnc_iso8601_to_timespec_gmt ("2020-11-7 06:21:19 -05");
+    t = gnc_iso8601_to_timespec_gmt ("2020-11-07 06:21:19 -05");
     g_assert_cmpint (t.tv_sec, ==, f->ts2.tv_sec);
     g_assert_cmpint (t.tv_nsec, ==, f->ts2.tv_nsec);
 

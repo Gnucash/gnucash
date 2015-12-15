@@ -28,7 +28,10 @@ extern "C"
 #include "platform.h"
 }
 #include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <memory>
+#include <iostream>
+#include <sstream>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
 
@@ -38,6 +41,7 @@ using PTime = boost::posix_time::ptime;
 using LDT = boost::local_time::local_date_time;
 using Duration = boost::posix_time::time_duration;
 using LDTBase = boost::local_time::local_date_time_base<PTime, boost::date_time::time_zone_base<PTime, char>>;
+using boost::date_time::special_values::not_a_date_time;
 using time64 = int64_t;
 
 static const TimeZoneProvider tzp;
@@ -171,7 +175,15 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
     }
     try
     {
-        auto pdt = boost::posix_time::time_from_string(str.substr(0, tzpos));
+        using Facet = boost::posix_time::time_input_facet;
+        //The stream destructor frees the facet, so it must be heap-allocated.
+        auto input_facet(new Facet());
+        std::istringstream ss(str.substr(0, tzpos));
+        ss.imbue(std::locale(std::locale(), input_facet));
+        input_facet->set_iso_extended_format();
+        PTime pdt(not_a_date_time);
+        ss >> pdt;
+        std::cout << std::endl << "String " << ss.str() << " produced " << pdt << std::endl;
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
                      LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
