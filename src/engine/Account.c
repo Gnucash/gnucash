@@ -5503,10 +5503,10 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
     book = qof_instance_get_book (kvpInfo->source_account);
     root = gnc_book_get_root_account (book);
 
-    PINFO("build_bayes_layer_two: account '%s', token_count: '%ld'",
-                                  (char*)key, (long)g_value_get_int64(value));
+    PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
+                                  (char*)key, g_value_get_int64(value));
 
-    probability = g_strdup_printf ("%ld", g_value_get_int64 (value));
+    probability = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
 
     kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
 
