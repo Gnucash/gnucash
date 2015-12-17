@@ -22,16 +22,16 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkDialog" id="Bayesian Dialog">
+  <object class="GtkDialog" id="Import Map Dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Bayesian Editor</property>
+    <property name="title" translatable="yes">Import Map Editor</property>
     <property name="modal">True</property>
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="gnc_bayes_dialog_window_destroy_cb" swapped="no"/>
-    <signal name="response" handler="gnc_bayes_dialog_response_cb" swapped="no"/>
+    <signal name="destroy" handler="gnc_imap_dialog_window_destroy_cb" swapped="no"/>
+    <signal name="response" handler="gnc_imap_dialog_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="can_focus">False</property>

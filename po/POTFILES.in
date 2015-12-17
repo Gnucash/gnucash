@@ -204,11 +204,11 @@ src/gnome/assistant-acct-period.c
 src/gnome/assistant-hierarchy.c
 src/gnome/assistant-loan.c
 src/gnome/assistant-stock-split.c
-src/gnome/dialog-bayes-editor.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-find-transactions2.c
 src/gnome/dialog-find-transactions.c
+src/gnome/dialog-imap-editor.c
 src/gnome/dialog-lot-viewer.c
 src/gnome/dialog-new-user.c
 src/gnome/dialog-price-edit-db.c
@@ -247,9 +247,9 @@ src/gnome/gtkbuilder/assistant-acct-period.glade
 src/gnome/gtkbuilder/assistant-hierarchy.glade
 src/gnome/gtkbuilder/assistant-loan.glade
 src/gnome/gtkbuilder/assistant-stock-split.glade
-src/gnome/gtkbuilder/dialog-bayes-editor.glade
 src/gnome/gtkbuilder/dialog-commodities.glade
 src/gnome/gtkbuilder/dialog-fincalc.glade
+src/gnome/gtkbuilder/dialog-imap-editor.glade
 src/gnome/gtkbuilder/dialog-lot-viewer.glade
 src/gnome/gtkbuilder/dialog-new-user.glade
 src/gnome/gtkbuilder/dialog-price.glade

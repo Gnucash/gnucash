@@ -4,8 +4,8 @@ gtkbuilder_DATA = \
 	assistant-hierarchy.glade \
 	assistant-loan.glade \
 	assistant-stock-split.glade \
-	dialog-bayes-editor.glade \
 	dialog-commodities.glade \
+	dialog-imap-editor.glade \
 	dialog-fincalc.glade \
 	dialog-lot-viewer.glade \
 	dialog-new-user.glade \

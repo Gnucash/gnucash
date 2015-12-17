@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-bayes-editor.c -- Bayesian and Non Bayesian editor dialog *
+ * dialog-imap-editor.c -- Import Map Editor dialog                 *
  * Copyright (C) 2015 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "dialog-bayes-editor.h"
+#include "dialog-imap-editor.h"
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -34,8 +34,8 @@
 #include "gnc-ui-util.h"
 #include "Account.h"
 
-#define DIALOG_BAYES_CM_CLASS   "dialog-bayes-edit"
-#define GNC_PREFS_GROUP         "dialogs.bayes-editor"
+#define DIALOG_IMAP_CM_CLASS    "dialog-imap-edit"
+#define GNC_PREFS_GROUP         "dialogs.imap-editor"
 
 #define IMAP_FRAME_BAYES        "import-map-bayes"
 #define IMAP_FRAME              "import-map"
@@ -45,7 +45,7 @@
 #define IMAP_FRAME_CSV          "csv-account-map"
 
 /** Enumeration for the liststore */
-enum GncBayesColumn {SOURCE_FULL_ACC, SOURCE_ACCOUNT, BASED_ON, MATCH_STRING,
+enum GncImapColumn {SOURCE_FULL_ACC, SOURCE_ACCOUNT, BASED_ON, MATCH_STRING,
                      MAP_FULL_ACC, MAP_ACCOUNT, KVP_PATH, PROBABILITY};
 
 typedef enum
@@ -67,53 +67,53 @@ typedef struct
     GtkWidget    *radio_nbayes;
     GtkWidget    *radio_online;
 
-}BayesDialog;
+}ImapDialog;
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-void gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data);
-void gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer user_data);
-void gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data);
+void gnc_imap_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data);
+void gnc_imap_dialog_close_cb (GtkDialog *dialog, gpointer user_data);
+void gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data);
 
-static void get_account_info (BayesDialog *bayes_dialog);
+static void get_account_info (ImapDialog *imap_dialog);
 
 void
-gnc_bayes_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
+gnc_imap_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
-    BayesDialog *bayes_dialog = user_data;
+    ImapDialog *imap_dialog = user_data;
 
     ENTER(" ");
-    gnc_unregister_gui_component_by_data (DIALOG_BAYES_CM_CLASS, bayes_dialog);
+    gnc_unregister_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap_dialog);
 
-    if (bayes_dialog->dialog)
+    if (imap_dialog->dialog)
     {
-        gtk_widget_destroy (bayes_dialog->dialog);
-        bayes_dialog->dialog = NULL;
+        gtk_widget_destroy (imap_dialog->dialog);
+        imap_dialog->dialog = NULL;
     }
-    g_free (bayes_dialog);
+    g_free (imap_dialog);
     LEAVE(" ");
 }
 
 void
-gnc_bayes_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
+gnc_imap_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
 {
-    BayesDialog *bayes_dialog = user_data;
+    ImapDialog *imap_dialog = user_data;
 
     ENTER(" ");
-    gnc_close_gui_component_by_data (DIALOG_BAYES_CM_CLASS, bayes_dialog);
+    gnc_close_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap_dialog);
     LEAVE(" ");
 }
 
 static gboolean
-are_you_sure (BayesDialog *bayes_dialog)
+are_you_sure (ImapDialog *imap_dialog)
 {
     GtkWidget   *dialog;
     gint         response;
     const char  *title = _("Are you sure you want to delete the entries ?");
 
-    dialog = gtk_message_dialog_new (GTK_WINDOW (bayes_dialog->dialog),
+    dialog = gtk_message_dialog_new (GTK_WINDOW (imap_dialog->dialog),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_CANCEL,
@@ -134,15 +134,15 @@ are_you_sure (BayesDialog *bayes_dialog)
 }
 
 static void
-gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
+gnc_imap_dialog_delete (ImapDialog *imap_dialog)
 {
     GList            *list, *row;
     GtkTreeModel     *model;
     GtkTreeIter       iter;
     GtkTreeSelection *selection;
 
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(bayes_dialog->view));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(bayes_dialog->view));
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap_dialog->view));
 
     list = gtk_tree_selection_get_selected_rows (selection, &model);
 
@@ -151,7 +151,7 @@ gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
         return;
 
     // Are we sure we want to delete the entries
-    if (are_you_sure (bayes_dialog) == FALSE)
+    if (are_you_sure (imap_dialog) == FALSE)
         return;
 
     // reverse list
@@ -175,7 +175,7 @@ gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
             {
                 gnc_account_delete_kvp (source_account, kvp_path, FALSE);
 
-                if (bayes_dialog->type == BAYES)
+                if (imap_dialog->type == BAYES)
                 {
                     kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", match_string);
                     gnc_account_delete_kvp (source_account, kvp_path, TRUE);
@@ -184,7 +184,7 @@ gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
                     gnc_account_delete_kvp (source_account, kvp_path, TRUE);
                 }
 
-                if (bayes_dialog->type == NBAYES)
+                if (imap_dialog->type == NBAYES)
                 {
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
                     gnc_account_delete_kvp (source_account, kvp_path, TRUE);
@@ -206,58 +206,58 @@ gnc_bayes_dialog_delete (BayesDialog *bayes_dialog)
     g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
     g_list_free (list);
 
-    get_account_info (bayes_dialog);
+    get_account_info (imap_dialog);
 }
 
 void
-gnc_bayes_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
-    BayesDialog *bayes_dialog = user_data;
+    ImapDialog *imap_dialog = user_data;
 
     switch (response_id)
     {
     case GTK_RESPONSE_APPLY:
-        gnc_bayes_dialog_delete (bayes_dialog);
+        gnc_imap_dialog_delete (imap_dialog);
         return;
 
     case GTK_RESPONSE_CLOSE:
     default:
-        gnc_close_gui_component_by_data (DIALOG_BAYES_CM_CLASS, bayes_dialog);
+        gnc_close_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap_dialog);
         return;
     }
 }
 
 static void
-list_type_selected (GtkToggleButton* button, BayesDialog *bayes_dialog)
+list_type_selected (GtkToggleButton* button, ImapDialog *imap_dialog)
 {
     GncListType type;
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(bayes_dialog->radio_bayes)))
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(imap_dialog->radio_bayes)))
         type = BAYES;
-    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(bayes_dialog->radio_nbayes)))
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(imap_dialog->radio_nbayes)))
         type = NBAYES;
     else
         type = ONLINE;
 
     // Lets do this only on change of list type
-    if (type != bayes_dialog->type)
+    if (type != imap_dialog->type)
     {
-        bayes_dialog->type = type;
-        get_account_info (bayes_dialog);
+        imap_dialog->type = type;
+        get_account_info (imap_dialog);
     }
 }
 
 static void
-show_probability_column (BayesDialog *bayes_dialog, gboolean show)
+show_probability_column (ImapDialog *imap_dialog, gboolean show)
 {
     GtkTreeViewColumn *tree_column;
 
     // Show Probability Column
-    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(bayes_dialog->view), 4);
+    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap_dialog->view), 4);
     gtk_tree_view_column_set_visible (tree_column, show);
 
     // Hide Based on Column
-    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(bayes_dialog->view), 1);
+    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap_dialog->view), 1);
     gtk_tree_view_column_set_visible (tree_column, !show);
 }
 
@@ -290,7 +290,7 @@ add_to_store (GtkTreeModel *store, const gchar *text, gpointer user_data)
 }
 
 static void
-get_bayes_info (Account *acc, const gchar *category, GtkTreeModel *store, const gchar *text)
+get_imap_info (Account *acc, const gchar *category, GtkTreeModel *store, const gchar *text)
 {
     GList *kvp_list, *node;
     gchar *acc_name = NULL;
@@ -330,7 +330,7 @@ get_bayes_info (Account *acc, const gchar *category, GtkTreeModel *store, const 
 }
 
 static void
-get_account_info (BayesDialog *bayes_dialog)
+get_account_info (ImapDialog *imap_dialog)
 {
     Account *root;
     Account *acc;
@@ -344,11 +344,11 @@ get_account_info (BayesDialog *bayes_dialog)
     root = gnc_book_get_root_account (gnc_get_current_book());
     accts = gnc_account_get_descendants_sorted (root);
 
-    store = gtk_tree_view_get_model (GTK_TREE_VIEW(bayes_dialog->view));
+    store = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
     gtk_list_store_clear (GTK_LIST_STORE(store));
 
     // Hide Probability Column
-    show_probability_column (bayes_dialog, FALSE);
+    show_probability_column (imap_dialog, FALSE);
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
@@ -358,27 +358,27 @@ get_account_info (BayesDialog *bayes_dialog)
         // Save source account
         kvpInfo.source_account = acc;
 
-        if (bayes_dialog->type == BAYES)
+        if (imap_dialog->type == BAYES)
         {
-            get_bayes_info (acc, NULL, store, _("Bayesian"));
+            get_imap_info (acc, NULL, store, _("Bayesian"));
 
             // Show Probability Column
-            show_probability_column (bayes_dialog, TRUE);
+            show_probability_column (imap_dialog, TRUE);
         }
 
-        if (bayes_dialog->type == NBAYES)
+        if (imap_dialog->type == NBAYES)
         {
             // Description
-            get_bayes_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
+            get_imap_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
 
             // Memo
-            get_bayes_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
+            get_imap_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
 
             // CSV Account Map
-            get_bayes_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
+            get_imap_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
         }
 
-        if (bayes_dialog->type == ONLINE)
+        if (imap_dialog->type == ONLINE)
         {
             gchar *text = NULL;
 
@@ -406,7 +406,7 @@ get_account_info (BayesDialog *bayes_dialog)
 }
 
 static void
-gnc_bayes_dialog_create (GtkWidget *parent, BayesDialog *bayes_dialog)
+gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
 {
     GtkWidget        *dialog;
     GtkBuilder       *builder;
@@ -414,45 +414,45 @@ gnc_bayes_dialog_create (GtkWidget *parent, BayesDialog *bayes_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-bayes-editor.glade", "list-view");
-    gnc_builder_add_from_file (builder, "dialog-bayes-editor.glade", "Bayesian Dialog");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "list-view");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "Import Map Dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Bayesian Dialog"));
-    bayes_dialog->dialog = dialog;
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Import Map Dialog"));
+    imap_dialog->dialog = dialog;
 
-    bayes_dialog->session = gnc_get_current_session();
-    bayes_dialog->type = BAYES;
+    imap_dialog->session = gnc_get_current_session();
+    imap_dialog->type = BAYES;
 
     /* parent */
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
     /* Connect the radio buttons...*/
-    bayes_dialog->radio_bayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-bayes"));
-    bayes_dialog->radio_nbayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-nbayes"));
-    bayes_dialog->radio_online = GTK_WIDGET(gtk_builder_get_object (builder, "radio-online"));
-    g_signal_connect (bayes_dialog->radio_bayes, "toggled",
-                      G_CALLBACK(list_type_selected), (gpointer)bayes_dialog);
-    g_signal_connect (bayes_dialog->radio_nbayes, "toggled",
-                      G_CALLBACK(list_type_selected), (gpointer)bayes_dialog);
+    imap_dialog->radio_bayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-bayes"));
+    imap_dialog->radio_nbayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-nbayes"));
+    imap_dialog->radio_online = GTK_WIDGET(gtk_builder_get_object (builder, "radio-online"));
+    g_signal_connect (imap_dialog->radio_bayes, "toggled",
+                      G_CALLBACK(list_type_selected), (gpointer)imap_dialog);
+    g_signal_connect (imap_dialog->radio_nbayes, "toggled",
+                      G_CALLBACK(list_type_selected), (gpointer)imap_dialog);
 
-    bayes_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
+    imap_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
 
     /* Enable alternative line colors */
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(bayes_dialog->view), TRUE);
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(imap_dialog->view), TRUE);
 
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(bayes_dialog->view));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap_dialog->view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, bayes_dialog);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, imap_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(bayes_dialog->dialog));
-    get_account_info (bayes_dialog);
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog));
+    get_account_info (imap_dialog);
 
     LEAVE(" ");
 }
@@ -460,11 +460,11 @@ gnc_bayes_dialog_create (GtkWidget *parent, BayesDialog *bayes_dialog)
 static void
 close_handler (gpointer user_data)
 {
-    BayesDialog *bayes_dialog = user_data;
+    ImapDialog *imap_dialog = user_data;
 
     ENTER(" ");
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(bayes_dialog->dialog));
-    gtk_widget_destroy (GTK_WIDGET(bayes_dialog->dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog));
+    gtk_widget_destroy (GTK_WIDGET(imap_dialog->dialog));
     LEAVE(" ");
 }
 
@@ -479,48 +479,48 @@ static gboolean
 show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
-    BayesDialog *bayes_dialog = user_data;
+    ImapDialog *imap_dialog = user_data;
 
     ENTER(" ");
-    if (!bayes_dialog)
+    if (!imap_dialog)
     {
         LEAVE("No data strucure");
         return(FALSE);
     }
-    gtk_window_present (GTK_WINDOW(bayes_dialog->dialog));
+    gtk_window_present (GTK_WINDOW(imap_dialog->dialog));
     LEAVE(" ");
     return(TRUE);
 }
 
 /********************************************************************\
- * gnc_bayes_dialog                                                 *
- * opens a window showing all Bayesian and Non-Bayesian information *
+ * gnc_imap_dialog                                                  *
+ * opens a window showing Bayesian and Non-Bayesian information     *
  *                                                                  *
  * Args:   parent  - the parent of the window to be created         *
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_bayes_dialog (GtkWidget *parent)
+gnc_imap_dialog (GtkWidget *parent)
 {
-    BayesDialog *bayes_dialog;
+    ImapDialog *imap_dialog;
     gint component_id;
 
     ENTER(" ");
-    if (gnc_forall_gui_components (DIALOG_BAYES_CM_CLASS, show_handler, NULL))
+    if (gnc_forall_gui_components (DIALOG_IMAP_CM_CLASS, show_handler, NULL))
     {
         LEAVE("Existing dialog raised");
         return;
     }
-    bayes_dialog = g_new0 (BayesDialog, 1);
+    imap_dialog = g_new0 (ImapDialog, 1);
 
-    gnc_bayes_dialog_create (parent, bayes_dialog);
+    gnc_imap_dialog_create (parent, imap_dialog);
 
-    component_id = gnc_register_gui_component (DIALOG_BAYES_CM_CLASS,
+    component_id = gnc_register_gui_component (DIALOG_IMAP_CM_CLASS,
                    refresh_handler, close_handler,
-                   bayes_dialog);
+                   imap_dialog);
 
-    gnc_gui_component_set_session (component_id, bayes_dialog->session);
+    gnc_gui_component_set_session (component_id, imap_dialog->session);
 
-    gtk_widget_show (bayes_dialog->dialog);
+    gtk_widget_show (imap_dialog->dialog);
     LEAVE(" ");
 }
