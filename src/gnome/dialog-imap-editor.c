@@ -46,7 +46,7 @@
 
 /** Enumeration for the liststore */
 enum GncImapColumn {SOURCE_FULL_ACC, SOURCE_ACCOUNT, BASED_ON, MATCH_STRING,
-                     MAP_FULL_ACC, MAP_ACCOUNT, KVP_PATH, PROBABILITY};
+                     MAP_FULL_ACC, MAP_ACCOUNT, KVP_PATH, COUNT};
 
 typedef enum
 {
@@ -248,17 +248,19 @@ list_type_selected (GtkToggleButton* button, ImapDialog *imap_dialog)
 }
 
 static void
-show_probability_column (ImapDialog *imap_dialog, gboolean show)
+show_count_column (ImapDialog *imap_dialog, gboolean show)
 {
     GtkTreeViewColumn *tree_column;
 
-    // Show Probability Column
+    // Show Count Column
     tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap_dialog->view), 4);
     gtk_tree_view_column_set_visible (tree_column, show);
 
     // Hide Based on Column
     tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap_dialog->view), 1);
     gtk_tree_view_column_set_visible (tree_column, !show);
+
+    gtk_tree_view_columns_autosize (GTK_TREE_VIEW(imap_dialog->view));
 }
 
 static void
@@ -283,7 +285,7 @@ add_to_store (GtkTreeModel *store, const gchar *text, gpointer user_data)
                         BASED_ON, text,
                         MATCH_STRING, kvpInfo->match_string,
                         MAP_FULL_ACC, map_fullname, MAP_ACCOUNT, kvpInfo->map_account,
-                        KVP_PATH, kvpInfo->kvp_path, PROBABILITY, kvpInfo->probability, -1);
+                        KVP_PATH, kvpInfo->kvp_path, COUNT, kvpInfo->count, -1);
 
     g_free (fullname);
     g_free (map_fullname);
@@ -321,7 +323,7 @@ get_imap_info (Account *acc, const gchar *category, GtkTreeModel *store, const g
             g_free (kvpInfo->kvp_path_head);
             g_free (kvpInfo->kvp_path);
             g_free (kvpInfo->match_string);
-            g_free (kvpInfo->probability);
+            g_free (kvpInfo->count);
             g_free (kvpInfo);
         }
     }
@@ -347,8 +349,8 @@ get_account_info (ImapDialog *imap_dialog)
     store = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
     gtk_list_store_clear (GTK_LIST_STORE(store));
 
-    // Hide Probability Column
-    show_probability_column (imap_dialog, FALSE);
+    // Hide Count Column
+    show_count_column (imap_dialog, FALSE);
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
@@ -362,8 +364,8 @@ get_account_info (ImapDialog *imap_dialog)
         {
             get_imap_info (acc, NULL, store, _("Bayesian"));
 
-            // Show Probability Column
-            show_probability_column (imap_dialog, TRUE);
+            // Show Count Column
+            show_count_column (imap_dialog, TRUE);
         }
 
         if (imap_dialog->type == NBAYES)
@@ -394,7 +396,7 @@ get_account_info (ImapDialog *imap_dialog)
                     kvpInfo.map_account = kvpInfo.source_account;
 
                 kvpInfo.match_string  = text;
-                kvpInfo.probability = " ";
+                kvpInfo.count = " ";
 
                 // Add kvp data to store
                 add_to_store (store, _("Online Id"), &kvpInfo);
