@@ -5159,7 +5159,7 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
     struct account_token_count* this_account;
 
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%ld'\n", (char*)key,
+    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'\n", (char*)key,
     //                  (long)g_value_get_int64(value));
 
     /* add the count to the total_count */
@@ -5318,7 +5318,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
             account_c = (struct account_token_count*)current_account_token->data;
 
             PINFO("account_c->account_name('%s'), "
-                  "account_c->token_count('%ld')/total_count('%ld')",
+                  "account_c->token_count('%" G_GINT64_FORMAT "')/total_count('%" G_GINT64_FORMAT "')",
                   account_c->account_name, (long)account_c->token_count,
                   (long)tokenInfo.total_count);
 
@@ -5502,10 +5502,10 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
     book = qof_instance_get_book (kvpInfo->source_account);
     root = gnc_book_get_root_account (book);
 
-    PINFO("build_bayes_layer_two: account '%s', token_count: '%ld'",
+    PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
                                   (char*)key, (long)g_value_get_int64(value));
 
-    probability = g_strdup_printf ("%ld", g_value_get_int64 (value));
+    probability = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
 
     kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
 
