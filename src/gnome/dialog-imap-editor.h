@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-bayes-editor.h -- Bayesian and Non Bayesian editor dialog *
+ * dialog-imap-editor.h -- Import Map Editor dialog                 *
  * Copyright (C) 2015 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,9 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DIALOG_BAYES_EDITOR_H
-#define DIALOG_BAYES_EDITOR_H
+#ifndef DIALOG_IMAP_EDITOR_H
+#define DIALOG_IMAP_EDITOR_H
 
-void gnc_bayes_dialog (GtkWidget *parent);
+void gnc_imap_dialog (GtkWidget *parent);
 
 #endif

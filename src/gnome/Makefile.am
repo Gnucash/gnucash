@@ -28,11 +28,11 @@ libgnc_gnome_la_SOURCES = \
   assistant-hierarchy.c \
   assistant-loan.c \
   assistant-stock-split.c \
-  dialog-bayes-editor.c \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-find-transactions2.c \
+  dialog-imap-editor.c \
   dialog-lot-viewer.c \
   dialog-new-user.c \
   dialog-price-editor.c \
@@ -82,10 +82,10 @@ noinst_HEADERS = \
   assistant-hierarchy.h \
   assistant-loan.h \
   assistant-stock-split.h \
-  dialog-bayes-editor.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-find-transactions2.h \
+  dialog-imap-editor.h \
   dialog-lot-viewer.h \
   dialog-new-user.h \
   dialog-print-check.h \

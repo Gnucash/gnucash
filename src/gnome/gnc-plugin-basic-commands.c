@@ -39,12 +39,12 @@
 #include "gnc-plugin-basic-commands.h"
 #include "gnc-ui-util.h"
 
-#include "dialog-bayes-editor.h"
 #include "dialog-book-close.h"
 #include "dialog-file-access.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-find-transactions2.h"
+#include "dialog-imap-editor.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
 #include "assistant-acct-period.h"
@@ -89,7 +89,7 @@ static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, G
 static void gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_bayes_editor (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data);
 
@@ -205,9 +205,9 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_tools_close_book)
     },
     {
-        "ToolsBayesEditorAction", NULL, N_("_Bayesian Editor"), NULL,
+        "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
         N_("View and Delete Bayesian and Non Bayesian information"),
-        G_CALLBACK (gnc_main_window_cmd_tools_bayes_editor)
+        G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
     },
 
     /* Help menu */
@@ -607,10 +607,10 @@ gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionD
 #endif /* CLOSE_BOOKS_ACTUALLY_WORKS */
 
 static void
-gnc_main_window_cmd_tools_bayes_editor (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor(NULL, TRUE);
-    gnc_bayes_dialog (NULL);
+    gnc_imap_dialog (NULL);
     gnc_unset_busy_cursor(NULL);
 }
 
