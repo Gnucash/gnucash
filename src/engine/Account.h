@@ -1414,7 +1414,7 @@ struct kvp_info
     char           *kvp_path_head;
     char           *kvp_path;
     char           *match_string;
-    char           *probability;
+    char           *count;
 };
 
 /** Returns a GList of structure kvp_info of all Bayesian mappings for

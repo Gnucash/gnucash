@@ -5493,7 +5493,7 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
     QofBook     *book;
     Account     *root;
     gchar       *kvp_path;
-    gchar       *probability;
+    gchar       *count;
 
     struct kvp_info *kvpInfo_node;
 
@@ -5506,7 +5506,7 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
     PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
                                   (char*)key, g_value_get_int64(value));
 
-    probability = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
+    count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
 
     kvp_path = g_strconcat (kvpInfo->kvp_path_head, "/", key, NULL);
 
@@ -5519,12 +5519,12 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
     kvpInfo_node->kvp_path       = g_strdup (kvp_path);
     kvpInfo_node->match_string   = g_strdup (kvpInfo->match_string);
     kvpInfo_node->kvp_path_head  = g_strdup (kvpInfo->kvp_path_head);
-    kvpInfo_node->probability    = g_strdup (probability);
+    kvpInfo_node->count          = g_strdup (count);
 
     kvpInfo->list = g_list_append (kvpInfo->list, kvpInfo_node);
 
     g_free (kvp_path);
-    g_free (probability);
+    g_free (count);
 }
 
 static void
@@ -5595,7 +5595,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
         kvpInfo_node->kvp_path       = g_strdup (kvp_path);
         kvpInfo_node->match_string   = g_strdup (key);
         kvpInfo_node->kvp_path_head  = g_strdup (kvpInfo->kvp_path_head);
-        kvpInfo_node->probability    = g_strdup (" ");
+        kvpInfo_node->count          = g_strdup (" ");
 
         kvpInfo->list = g_list_append (kvpInfo->list, kvpInfo_node);
 

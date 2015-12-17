@@ -16,9 +16,9 @@
       <column type="gchararray"/>
       <!-- column-name map_account -->
       <column type="gpointer"/>
-      <!-- column-name kvp_path -->
+      <!-- column-name path -->
       <column type="gchararray"/>
-      <!-- column-name probability -->
+      <!-- column-name count -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -208,9 +208,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="probability">
+                  <object class="GtkTreeViewColumn" id="count">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Probability Value</property>
+                    <property name="title" translatable="yes">Count of Match String Usage</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext5"/>
                       <attributes>
