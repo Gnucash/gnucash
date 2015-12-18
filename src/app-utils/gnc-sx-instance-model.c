@@ -193,7 +193,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         gnc_commodity *split_cmdty = NULL;
         GncGUID *acct_guid;
         Account *acct;
-        gnc_numeric split_amount;
+        gboolean split_is_marker = TRUE;
 
         s = (Split*)split_list->data;
         kvpf = xaccSplitGetSlots(s);
@@ -204,13 +204,40 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         acct_guid = kvp_value_get_guid(kvp_val);
         acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
         split_cmdty = xaccAccountGetCommodity(acct);
-        split_amount = xaccSplitGetAmount(s);
-        if (!gnc_numeric_zero_p(split_amount) && first_cmdty == NULL)
+        // existing... ------------------------------------------
+        kvp_val = kvp_frame_get_slot_path(kvpf,
+                                          GNC_SX_ID,
+                                          GNC_SX_CREDIT_FORMULA,
+                                          NULL);
+        if (kvp_val != NULL)
+        {
+            str = kvp_value_get_string(kvp_val);
+            if (str && strlen(str) != 0)
+            {
+                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
+                split_is_marker = FALSE;
+            }
+        }
+
+        kvp_val = kvp_frame_get_slot_path(kvpf,
+                                          GNC_SX_ID,
+                                          GNC_SX_DEBIT_FORMULA,
+                                          NULL);
+        if (kvp_val != NULL)
+        {
+            str = kvp_value_get_string(kvp_val);
+            if (str && strlen(str) != 0)
+            {
+                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
+                split_is_marker = FALSE;
+            }
+        }
+        if (!split_is_marker && first_cmdty == NULL)
         {
             first_cmdty = split_cmdty;
         }
 
-        if (!gnc_numeric_zero_p(split_amount) &&
+        if (!split_is_marker &&
             ! gnc_commodity_equal(split_cmdty, first_cmdty))
         {
             GncSxVariable *var;
@@ -228,32 +255,6 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             g_string_free(var_name, TRUE);
         }
 
-        // existing... ------------------------------------------
-        kvp_val = kvp_frame_get_slot_path(kvpf,
-                                          GNC_SX_ID,
-                                          GNC_SX_CREDIT_FORMULA,
-                                          NULL);
-        if (kvp_val != NULL)
-        {
-            str = kvp_value_get_string(kvp_val);
-            if (str && strlen(str) != 0)
-            {
-                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
-            }
-        }
-
-        kvp_val = kvp_frame_get_slot_path(kvpf,
-                                          GNC_SX_ID,
-                                          GNC_SX_DEBIT_FORMULA,
-                                          NULL);
-        if (kvp_val != NULL)
-        {
-            str = kvp_value_get_string(kvp_val);
-            if (str && strlen(str) != 0)
-            {
-                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
-            }
-        }
     }
 
     return 0;
