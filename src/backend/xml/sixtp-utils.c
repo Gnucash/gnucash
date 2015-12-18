@@ -368,7 +368,7 @@ string_to_timespec_secs(const gchar *str, Timespec *ts)
 gboolean
 string_to_timespec_nsecs(const gchar *str, Timespec *ts)
 {
-    *ts = gnc_iso8601_to_timespec_gmt(str);
+    /* We don't do nanoseconds anymore. */
     return(TRUE);
 }
 

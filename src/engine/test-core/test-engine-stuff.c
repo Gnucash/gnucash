@@ -239,20 +239,7 @@ get_random_timespec(void)
     while (ret->tv_sec <= 0)
         ret->tv_sec = rand();
 
-    if (zero_nsec)
-        ret->tv_nsec = 0;
-    else
-    {
-        ret->tv_nsec = rand();
-
-        if (usec_resolution)
-        {
-            ret->tv_nsec = MIN (ret->tv_nsec, 999999999);
-            ret->tv_nsec /= 1000;
-            ret->tv_nsec *= 1000;
-        }
-    }
-
+    ret->tv_nsec = 0;
     return ret;
 }
 
