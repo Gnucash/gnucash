@@ -1018,33 +1018,33 @@
 (define (gnc:html-acct-table-set-row-env! acct-table row env)
   (gnc:html-acct-table-set-cell! acct-table row -1 env))
 
-(define (gnc:html-acct-table-append-row acct-table objects)
+(define (gnc:html-acct-table-append-row! acct-table newrow)
   (gnc:html-table-append-row!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
     (lambda (x) (gnc:make-html-table-cell (list x)))
-    objects)))
+    newrow)))
 
 (define (gnc:html-acct-table-prepend-row! acct-table newrow)
   (gnc:html-table-prepend-row!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
     (lambda (x) (gnc:make-html-table-cell (list x)))
-    objects)))
+    newrow)))
 
-(define (gnc:html-acct-table-append-col acct-table objects)
+(define (gnc:html-acct-table-append-col! acct-table newcol)
   (gnc:html-table-append-col!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
     (lambda (x) (gnc:make-html-table-cell (list x)))
-    objects)))
+    newcol)))
 
 (define (gnc:html-acct-table-prepend-col! acct-table newrow)
   (gnc:html-table-prepend-col!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
     (lambda (x) (gnc:make-html-table-cell (list x)))
-    objects)))
+    newcol)))
 
 (define (gnc:html-acct-table-remove-last-row! acct-table)
   (gnc:html-table-remove-last-row! (gnc:_html-acct-table-matrix_ acct-table)))
