@@ -88,6 +88,7 @@ endif
 
 clean-local:
 	$(RM) -rf gnucash
+	$(RM) *.log
 
 noinst_DATA = .scm-links
 CLEANFILES = .scm-links
