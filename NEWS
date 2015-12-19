@@ -1,11 +1,70 @@
 Version history:
 ------- -------
-2.6.8 - 27 September 2015
-Announcement: GnuCash 2.6.8 Release 2015-09-27
-GnuCash 2.6.8 released
+2.6.10 - 20 December 2015
+Announcement: GnuCash 2.6.10 Release 2015-12-20
+GnuCash 2.6.10 released
 
-The GnuCash development team humbly announces GnuCash 2.6.9, the
-ninth maintenance release in the 2.6-stable series, a snap release to repair a serious bug on Microsoft Windows.
+The GnuCash development team proudly announces GnuCash 2.6.10, the
+tenth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+     Bug 627692 - Report options, Account Selection, "select all" => not all
+                  accounts selected, only visible ones
+     Bug 646129 - Account selection in reports: 'Select Children' doesn't
+                  actually select children if they are collapsed.
+     Bug 662126 - Cannot create scheduled transaction for dividend reinvestment
+     Bug 742321 - Reset temporary prefs on application startup
+     Bug 745101 - No warning when quitting with unsaved file.
+     	 	  When the file was first created without the New File Assistant.
+     Bug 746155 - Reports: html-acct-table prepend-row! & prepend-col!
+     	 	  unknown variables Fixed following the suggestions by
+		  Tony Kerns.
+     Bug 754192 - Since Last Run Dialog asks for security price even if not
+                  needed.
+     Bug 754533 -  No Account Templates Error Patch
+     Bug 755781 - Files with copyright but no grant of license.
+     Bug 756335 - When importing, date selection causes exit crash
+     Bug 756339 - Prices table not updated
+     Bug 756720 - configure fails to find libgoffice 0.10-10 (0.10.18-1)
+     	 	  While we can't support libgoffice 0.10 because that would
+		  require gtk3 we can improve the error message if no libgoffice
+		  0.8.x version is found.
+     Bug 757378 - Display the user-defined display symbol for non-currency
+                  commodities.
+     Bug 759224 - illegal dates in stock transactions cause corrupt file.
+     Bug 759294 - New the billing term are not saved during invoice editing.
+                  Prevent editing the terms from the invoice view.
+
+Other repairs that weren't marked as bugs in git:
+    Revert the automatic inversion of prices whose value is less than 1.0.
+        This corrects several regressions from 2.6.8 and 2.6.9; it proved to
+	be to big a change for a maintenance branch and will re-appear in the
+	next major release.
+    Fix test failure due to trying to parse nanoseconds, which we don't
+        actually use.
+    Use @SHELL@ instead of hardcode /bin/sh in test shell scripts.
+        This is a workaround for MacOS X 10.11's System Integrity Protection.
+    Improve the revert action: Ask user confirmation and don't ask to save
+        before reverting
+    Have a more generic mechanism to set Save action's sensitivity and use it
+        for Revert action as well
+    Avoid assert in gnc_split_register_balance_trans if default_account is null.
+    Performance improvements in the Cash Flow report.
+    Add new account chart for Duch small businesses.
+    Add some developer documentation.
+
+New Translations:
+     Portugal Portuguese
+Updated Translations:
+     Arabic, German
+
+2.6.9 - 5 October 2015
+Announcement: GnuCash 2.6.8 Release 2015-10-05
+GnuCash 2.6.9 released
+
+The GnuCash development team humbly announces GnuCash 2.6.9, the ninth
+maintenance release in the 2.6-stable series, a snap release to repair
+a serious bug on Microsoft Windows.
 
 The following bugs are fixed:
      Bug 755920 - Crash (Freeze) when using File Save As.. in Windows OS
