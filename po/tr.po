@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-26 10:44-0700\n"
+"POT-Creation-Date: 2015-10-05 12:57-0700\n"
 "PO-Revision-Date: 2010-10-05 12:46+0200\n"
 "Last-Translator: Seyfi Duyan <seyfi.duyan@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -747,8 +747,8 @@ msgid "Opening Balances"
 msgstr "Sermaye"
 
 #: ../src/app-utils/gnc-ui-util.c:672
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:57
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:72
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:76
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:200
 #: ../src/report/standard-reports/balance-sheet.scm:673
 msgid "Retained Earnings"
@@ -756,8 +756,8 @@ msgstr "Dağıtılmamış Kârlar"
 
 #: ../src/app-utils/gnc-ui-util.c:744 ../src/engine/Account.c:3951
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:52
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:56
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:71
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:75
 #: ../src/register/ledger-core/split-register.c:2548
 #: ../src/report/standard-reports/balance-sheet.scm:661
 #: ../src/report/standard-reports/budget-balance-sheet.scm:812
@@ -778,7 +778,7 @@ msgstr "Sermaye"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:373
+#: ../src/report/standard-reports/register.scm:392
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -798,7 +798,7 @@ msgstr "Borç"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:375
+#: ../src/report/standard-reports/register.scm:394
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -819,7 +819,7 @@ msgstr "Giren"
 
 #: ../src/app-utils/prefs.scm:64
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3133
-#: ../src/import-export/csv-imp/gnc-csv-model.c:50
+#: ../src/import-export/csv-imp/gnc-csv-model.c:70
 msgid "Deposit"
 msgstr "Yatan"
 
@@ -919,7 +919,7 @@ msgstr "Alış"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:826
+#: ../src/report/standard-reports/register.scm:845
 msgid "Charge"
 msgstr ""
 
@@ -955,7 +955,7 @@ msgstr "Gider"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:813
+#: ../src/report/standard-reports/register.scm:832
 msgid "Invoice"
 msgstr "Satış"
 
@@ -967,7 +967,7 @@ msgstr "Çıkan"
 
 #: ../src/app-utils/prefs.scm:81
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
-#: ../src/import-export/csv-imp/gnc-csv-model.c:51
+#: ../src/import-export/csv-imp/gnc-csv-model.c:71
 msgid "Withdrawal"
 msgstr "Çekim"
 
@@ -1003,12 +1003,12 @@ msgstr "Satış"
 #: ../src/engine/Scrub.c:393 ../src/gnome/gnc-budget-view.c:385
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2975
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3076
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:13
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:19
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:28
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:34
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:40
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:46
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:32
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:38
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:59
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
 #: ../src/register/ledger-core/split-register.c:2564
 #: ../src/report/report-system/report-utilities.scm:117
 #: ../src/report/standard-reports/advanced-portfolio.scm:1078
@@ -1210,7 +1210,7 @@ msgstr "G.Pusulası"
 #: ../src/business/business-gnome/business-gnome-utils.c:448
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:668
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
-#: ../src/import-export/csv-imp/gnc-csv-model.c:44
+#: ../src/import-export/csv-imp/gnc-csv-model.c:64
 #: ../src/report/standard-reports/transaction.scm:685
 #: ../src/report/standard-reports/transaction.scm:722
 #: ../src/report/standard-reports/transaction.scm:777
@@ -1879,13 +1879,13 @@ msgstr "Açılış"
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
 #: ../src/gnome/reconcile-view.c:385
-#: ../src/import-export/csv-imp/gnc-csv-model.c:46
+#: ../src/import-export/csv-imp/gnc-csv-model.c:66
 #: ../src/register/ledger-core/split-register-model.c:246
 #: ../src/register/ledger-core/split-register-model.c:266
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
-#: ../src/report/standard-reports/register.scm:127
-#: ../src/report/standard-reports/register.scm:395
+#: ../src/report/standard-reports/register.scm:146
+#: ../src/report/standard-reports/register.scm:414
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -1937,8 +1937,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:430
-#: ../src/report/standard-reports/register.scm:826
+#: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:845
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -3238,7 +3238,7 @@ msgstr "GnuCash Başlangıç belgesini aç"
 #: ../src/gnome-utils/gnc-tree-view-account.c:749
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:47
+#: ../src/import-export/csv-imp/gnc-csv-model.c:67
 #: ../src/import-export/import-main-matcher.c:485
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
@@ -3259,8 +3259,8 @@ msgstr "GnuCash Başlangıç belgesini aç"
 #: ../src/report/standard-reports/general-journal.scm:111
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
-#: ../src/report/standard-reports/register.scm:129
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:148
+#: ../src/report/standard-reports/register.scm:419
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3343,7 +3343,7 @@ msgstr "Fatura Adresi"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:474
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2914
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:48
+#: ../src/import-export/csv-imp/gnc-csv-model.c:68
 #: ../src/register/ledger-core/split-register-model.c:468
 #: ../src/report/business-reports/balsheet-eg.scm:301
 #: ../src/report/business-reports/taxinvoice.scm:91
@@ -3660,7 +3660,7 @@ msgstr "İşleneceği hesap"
 #: ../src/gnome/reconcile-view.c:389
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/import-export/csv-imp/gnc-csv-model.c:45
+#: ../src/import-export/csv-imp/gnc-csv-model.c:65
 #: ../src/import-export/import-main-matcher.c:481
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
@@ -3688,9 +3688,9 @@ msgstr "İşleneceği hesap"
 #: ../src/report/standard-reports/net-barchart.scm:410
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
-#: ../src/report/standard-reports/register.scm:121
-#: ../src/report/standard-reports/register.scm:385
-#: ../src/report/standard-reports/register.scm:787
+#: ../src/report/standard-reports/register.scm:140
+#: ../src/report/standard-reports/register.scm:404
+#: ../src/report/standard-reports/register.scm:806
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3760,8 +3760,8 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
-#: ../src/report/standard-reports/register.scm:131
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:150
+#: ../src/report/standard-reports/register.scm:424
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -4110,7 +4110,7 @@ msgstr "Ara toplam"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:121
 #: ../src/report/business-reports/easy-invoice.scm:478
 #: ../src/report/business-reports/fancy-invoice.scm:517
-#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:36
+#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:55
 msgid "Tax"
 msgstr "KDV"
 
@@ -4395,8 +4395,8 @@ msgstr "Bir faturaya bağlıdır. Önce faturanın muhasebe kaydını iptal edin
 msgid " (posted)"
 msgstr " (muhasebeleşmiş)"
 
-#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:139
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
+#: ../src/report/standard-reports/register.scm:439
 msgid "Lot"
 msgstr ""
 
@@ -4526,7 +4526,7 @@ msgstr "Açık"
 
 #: ../src/engine/Split.c:1410 ../src/engine/Split.c:1427
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
-#: ../src/report/standard-reports/register.scm:232
+#: ../src/report/standard-reports/register.scm:251
 msgid "-- Split Transaction --"
 msgstr "-- Bileşik İşlem --"
 
@@ -4727,7 +4727,7 @@ msgstr "Ana Para"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2970
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:20
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:39
 #: ../src/register/ledger-core/split-register.c:2471
 #: ../src/register/ledger-core/split-register.c:2508
 #: ../src/register/ledger-core/split-register.c:2516
@@ -4760,9 +4760,9 @@ msgstr ""
 #: ../src/gnome/assistant-stock-split.c:570
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
-#: ../src/gnome-utils/gnc-icons.c:18
+#: ../src/gnome-utils/gnc-icons.c:38
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
-#: ../src/import-export/csv-imp/gnc-csv-model.c:49
+#: ../src/import-export/csv-imp/gnc-csv-model.c:69
 #: ../src/import-export/import-main-matcher.c:482
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
@@ -4775,8 +4775,8 @@ msgstr ""
 #: ../src/report/standard-reports/cash-flow.scm:49
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
-#: ../src/report/standard-reports/register.scm:134
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:153
+#: ../src/report/standard-reports/register.scm:429
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "Hesap"
@@ -4796,8 +4796,8 @@ msgstr "Sembol"
 #: ../src/report/standard-reports/general-journal.scm:113
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
-#: ../src/report/standard-reports/register.scm:137
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:156
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -4889,8 +4889,8 @@ msgstr "Yeni Fiyat:"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3002
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
-#: ../src/report/standard-reports/register.scm:149
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/report/standard-reports/register.scm:168
+#: ../src/report/standard-reports/register.scm:458
 msgid "Value"
 msgstr "Değer"
 
@@ -4947,9 +4947,9 @@ msgid "Open"
 msgstr "Aç"
 
 #: ../src/gnome/dialog-lot-viewer.c:857
-#: ../src/report/report-system/html-fonts.scm:70
+#: ../src/report/report-system/html-fonts.scm:89
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:379
+#: ../src/report/standard-reports/register.scm:398
 msgid "Title"
 msgstr "Başlık"
 
@@ -4958,7 +4958,7 @@ msgstr "Başlık"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:458
 #: ../src/gnome-utils/gnc-tree-view-owner.c:466
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3212
-#: ../src/import-export/csv-imp/gnc-csv-model.c:52
+#: ../src/import-export/csv-imp/gnc-csv-model.c:72
 #: ../src/register/ledger-core/split-register-model.c:311
 #: ../src/register/ledger-core/split-register-model.c:461
 #: ../src/report/business-reports/customer-summary.scm:184
@@ -4966,7 +4966,7 @@ msgstr "Başlık"
 #: ../src/report/business-reports/owner-report.scm:309
 #: ../src/report/report-system/html-utilities.scm:727
 #: ../src/report/standard-reports/account-summary.scm:460
-#: ../src/report/standard-reports/register.scm:155
+#: ../src/report/standard-reports/register.scm:174
 #: ../src/report/standard-reports/sx-summary.scm:465
 #: ../src/report/standard-reports/transaction.scm:465
 msgid "Balance"
@@ -4978,7 +4978,7 @@ msgid "Gains"
 msgstr "Vadeli"
 
 #: ../src/gnome/dialog-lot-viewer.c:938
-#: ../src/report/standard-reports/average-balance.scm:108
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Gain/Loss"
 msgstr ""
 
@@ -5279,8 +5279,8 @@ msgid "Form"
 msgstr ""
 
 #: ../src/gnome/gnc-budget-view.c:387
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:79
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:84
 #: ../src/report/report-system/report-utilities.scm:118
 #: ../src/report/standard-reports/budget-income-statement.scm:674
 #: ../src/report/standard-reports/income-statement.scm:610
@@ -5309,7 +5309,7 @@ msgstr "Transfer"
 #: ../src/report/business-reports/fancy-invoice.scm:299
 #: ../src/report/business-reports/invoice.scm:120
 #: ../src/report/business-reports/invoice.scm:284
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:287
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:306
 #: ../src/report/report-system/html-acct-table.scm:899
 #: ../src/report/report-system/html-utilities.scm:619
 #: ../src/report/standard-reports/advanced-portfolio.scm:1043
@@ -5645,7 +5645,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:247
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
-#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/window-reconcile2.c:2184
+#: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
 #: ../src/gnome/window-reconcile.c:2184
 msgid "_Transfer..."
 msgstr "T_ransfer..."
@@ -5743,8 +5743,8 @@ msgstr "Aç"
 #: ../src/report/standard-reports/account-piecharts.scm:68
 #: ../src/report/standard-reports/account-summary.scm:75
 #: ../src/report/standard-reports/advanced-portfolio.scm:158
-#: ../src/report/standard-reports/average-balance.scm:69
-#: ../src/report/standard-reports/average-balance.scm:318
+#: ../src/report/standard-reports/average-balance.scm:88
+#: ../src/report/standard-reports/average-balance.scm:337
 #: ../src/report/standard-reports/balance-sheet.scm:88
 #: ../src/report/standard-reports/budget-balance-sheet.scm:53
 #: ../src/report/standard-reports/budget-barchart.scm:44
@@ -6136,7 +6136,7 @@ msgstr "Cari bileşendeki kur değerini düzenle"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:366
 #: ../src/gnome/gnc-plugin-page-register.c:375
-#: ../src/gnome-utils/gnc-icons.c:25
+#: ../src/gnome-utils/gnc-icons.c:45
 msgid "_Jump"
 msgstr "Mukabile _Geç"
 
@@ -6212,7 +6212,7 @@ msgstr "Mutabakat tarihine göre sırala"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:418
-#: ../src/gnome-utils/gnc-icons.c:24
+#: ../src/gnome-utils/gnc-icons.c:44
 msgid "S_plit Transaction"
 msgstr "İşlem _Bileşenleri"
 
@@ -6259,7 +6259,7 @@ msgstr "Tüm işlemleri bileşenleriyle göster"
 #: ../src/register/ledger-core/split-register.c:2489
 #: ../src/register/ledger-core/split-register-layout.c:687
 #: ../src/register/ledger-core/split-register-model.c:332
-#: ../src/report/standard-reports/register.scm:135
+#: ../src/report/standard-reports/register.scm:154
 msgid "Transfer"
 msgstr "Transfer"
 
@@ -6371,12 +6371,12 @@ msgstr "Arama Sonuçları Raporu"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:869
+#: ../src/report/standard-reports/register.scm:888
 msgid "Register"
 msgstr "Defter"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:381
+#: ../src/report/standard-reports/register.scm:400
 msgid "Register Report"
 msgstr "Defter Raporu"
 
@@ -9840,7 +9840,7 @@ msgstr ""
 "dosyası incelenirken bir hata oldu.\n"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1286 ../src/gnome-utils/gnc-file.c:1515
+#: ../src/gnome-utils/gnc-file.c:1293 ../src/gnome-utils/gnc-file.c:1527
 msgid "Writing file..."
 msgstr "Dosya yazılıyor..."
 
@@ -10384,7 +10384,7 @@ msgid "Import"
 msgstr "İçe aktar"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
-#: ../src/gnome-utils/gnc-file.c:1336
+#: ../src/gnome-utils/gnc-file.c:1343
 msgid "Save"
 msgstr "Kaydet"
 
@@ -10617,19 +10617,19 @@ msgstr "Kullanıcı verileri yükleniyor..."
 msgid "Re-saving user data..."
 msgstr "Kullanıcı verileri yükleniyor..."
 
-#: ../src/gnome-utils/gnc-file.c:1200 ../src/gnome-utils/gnc-file.c:1430
+#: ../src/gnome-utils/gnc-file.c:1207 ../src/gnome-utils/gnc-file.c:1442
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr " %s dosyası zaten var. Üzerine yazılsın mı?"
 
-#: ../src/gnome-utils/gnc-file.c:1229
+#: ../src/gnome-utils/gnc-file.c:1236
 msgid "Exporting file..."
 msgstr "Dosya dışarıya aktarılıyor..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1242
+#: ../src/gnome-utils/gnc-file.c:1249
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -10640,7 +10640,7 @@ msgstr ""
 "dosyası kayıt edilirken bir hata oldu.\n"
 " "
 
-#: ../src/gnome-utils/gnc-file.c:1274
+#: ../src/gnome-utils/gnc-file.c:1281
 #, fuzzy
 msgid "The database was opened read-only. Do you want to save it to a different place?"
 msgstr " %s veritabanı mevcut değil. Oluşturulsun mu?"
@@ -10677,20 +10677,20 @@ msgstr "%s kilitlenemedi."
 msgid "GnuCash could not open the associated URI:"
 msgstr "%s kilitlenemedi."
 
-#: ../src/gnome-utils/gnc-icons.c:19
+#: ../src/gnome-utils/gnc-icons.c:39
 msgid "_Delete Account"
 msgstr "Hesabı _Sil"
 
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile2.c:2179
+#: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
 #: ../src/gnome/window-reconcile.c:2179
 msgid "_Edit Account"
 msgstr "Hesabı Dü_zenle"
 
-#: ../src/gnome-utils/gnc-icons.c:21
+#: ../src/gnome-utils/gnc-icons.c:41
 msgid "_New Account"
 msgstr "Yeni _Hesap"
 
-#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile2.c:2174
+#: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
 #: ../src/gnome/window-reconcile.c:2174
 msgid "_Open Account"
 msgstr "_Hesabı Aç"
@@ -11339,8 +11339,8 @@ msgstr ""
 #: ../src/report/standard-reports/portfolio.scm:247
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
-#: ../src/report/standard-reports/register.scm:141
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:160
+#: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -11428,7 +11428,7 @@ msgstr "Hesapla"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:718
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:284
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:303
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
@@ -12242,7 +12242,7 @@ msgstr "<b>_Üst Hesap</b>"
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:379
+#: ../src/report/standard-reports/register.scm:398
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -13234,7 +13234,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
-#: ../src/import-export/csv-imp/gnc-csv-model.c:38
+#: ../src/import-export/csv-imp/gnc-csv-model.c:58
 msgid "Locale"
 msgstr ""
 
@@ -14643,7 +14643,7 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:409
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:70
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
 msgid "Unspecified"
 msgstr ""
 
@@ -14757,7 +14757,7 @@ msgid "The Online Banking job is still running; are you sure you want to cancel?
 msgstr "Değişiklik yapıldı, bunlar iptal edilsin mi?"
 
 #: ../src/import-export/aqb/gncmod-aqbanking.c:79
-#: ../src/import-export/gncmod-generic-import.c:59
+#: ../src/import-export/gncmod-generic-import.c:79
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:162
 #, fuzzy
 msgid "Online Banking"
@@ -15531,55 +15531,55 @@ msgstr ""
 msgid "Row %u, account %s not in %s\n"
 msgstr "Açılacak hesapların seçimi"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:30
+#: ../src/import-export/csv-imp/gnc-csv-model.c:50
 msgid "y-m-d"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:31
+#: ../src/import-export/csv-imp/gnc-csv-model.c:51
 msgid "d-m-y"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:32
+#: ../src/import-export/csv-imp/gnc-csv-model.c:52
 msgid "m-d-y"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:33
+#: ../src/import-export/csv-imp/gnc-csv-model.c:53
 msgid "d-m"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:34
+#: ../src/import-export/csv-imp/gnc-csv-model.c:54
 msgid "m-d"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:39
+#: ../src/import-export/csv-imp/gnc-csv-model.c:59
 #: ../src/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:40
+#: ../src/import-export/csv-imp/gnc-csv-model.c:60
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:456
+#: ../src/import-export/csv-imp/gnc-csv-model.c:476
 msgid "File opening failed."
 msgstr "Dosya açılamadı."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:471
-#: ../src/import-export/csv-imp/gnc-csv-model.c:479
+#: ../src/import-export/csv-imp/gnc-csv-model.c:491
+#: ../src/import-export/csv-imp/gnc-csv-model.c:499
 msgid "Unknown encoding."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:810
+#: ../src/import-export/csv-imp/gnc-csv-model.c:830
 #, fuzzy
 msgid "No date column."
 msgstr "Düğmelerde sadece yazı görünsün"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:811
+#: ../src/import-export/csv-imp/gnc-csv-model.c:831
 msgid "No balance, deposit, or withdrawal column."
 msgstr ""
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1105
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1125
 #, fuzzy, c-format
 msgid "%s column could not be understood."
 msgstr ""
@@ -16581,155 +16581,155 @@ msgstr ""
 msgid "Show documentation"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:14
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:33
 msgid "Dividends"
 msgstr "Temettü"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:29
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:48
 msgid "Cap Return"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:35
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:54
 msgid "Cap. gain (long)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:41
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
 msgid "Cap. gain (mid)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
 msgid "Cap. gain (short)"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:61
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:80
 msgid "Commissions"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:85
 msgid "Margin Interest"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:66
-#: ../src/import-export/qif-imp/qif-file.scm:74
+#: ../src/import-export/qif-imp/qif-file.scm:85
+#: ../src/import-export/qif-imp/qif-file.scm:93
 #, fuzzy
 msgid "Line"
 msgstr "Yok"
 
-#: ../src/import-export/qif-imp/qif-file.scm:77
+#: ../src/import-export/qif-imp/qif-file.scm:96
 #, fuzzy
 msgid "Read aborted."
 msgstr "Oluşturmaya hazır"
 
-#: ../src/import-export/qif-imp/qif-file.scm:92
+#: ../src/import-export/qif-imp/qif-file.scm:111
 #, fuzzy
 msgid "Reading"
 msgstr "Dosya okunuyor..."
 
-#: ../src/import-export/qif-imp/qif-file.scm:121
+#: ../src/import-export/qif-imp/qif-file.scm:140
 msgid "Some characters have been discarded."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:122
-#: ../src/import-export/qif-imp/qif-file.scm:126
+#: ../src/import-export/qif-imp/qif-file.scm:141
+#: ../src/import-export/qif-imp/qif-file.scm:145
 #, fuzzy
 msgid "Converted to: "
 msgstr "Dosyaları sıkıştır."
 
-#: ../src/import-export/qif-imp/qif-file.scm:125
+#: ../src/import-export/qif-imp/qif-file.scm:144
 msgid "Some characters have been converted according to your locale."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:184
+#: ../src/import-export/qif-imp/qif-file.scm:203
 msgid "Ignoring unknown option"
 msgstr ""
 
 #. The date is missing! Warn the user.
-#: ../src/import-export/qif-imp/qif-file.scm:318
+#: ../src/import-export/qif-imp/qif-file.scm:337
 #, fuzzy
 msgid "Date required."
 msgstr "Düzenleme Tarihi"
 
-#: ../src/import-export/qif-imp/qif-file.scm:319
+#: ../src/import-export/qif-imp/qif-file.scm:338
 #, fuzzy
 msgid "Discarding this transaction."
 msgstr "_Hareket bul"
 
-#: ../src/import-export/qif-imp/qif-file.scm:351
+#: ../src/import-export/qif-imp/qif-file.scm:370
 msgid "Ignoring class line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:419
+#: ../src/import-export/qif-imp/qif-file.scm:438
 msgid "Ignoring category line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:450
+#: ../src/import-export/qif-imp/qif-file.scm:469
 msgid "Ignoring security line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:458
+#: ../src/import-export/qif-imp/qif-file.scm:477
 msgid "File does not appear to be in QIF format"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:634
+#: ../src/import-export/qif-imp/qif-file.scm:653
 #, fuzzy
 msgid "Transaction date"
 msgstr "Hareketler"
 
-#: ../src/import-export/qif-imp/qif-file.scm:635
+#: ../src/import-export/qif-imp/qif-file.scm:654
 #, fuzzy
 msgid "Transaction amount"
 msgstr "_Yevmiye Defteri"
 
-#: ../src/import-export/qif-imp/qif-file.scm:636
+#: ../src/import-export/qif-imp/qif-file.scm:655
 #, fuzzy
 msgid "Share price"
 msgstr "Yeni Fiyat:"
 
-#: ../src/import-export/qif-imp/qif-file.scm:637
+#: ../src/import-export/qif-imp/qif-file.scm:656
 #, fuzzy
 msgid "Share quantity"
 msgstr "Adet"
 
-#: ../src/import-export/qif-imp/qif-file.scm:638
+#: ../src/import-export/qif-imp/qif-file.scm:657
 #, fuzzy
 msgid "Investment action"
 msgstr "Yatırımlar"
 
-#: ../src/import-export/qif-imp/qif-file.scm:639
+#: ../src/import-export/qif-imp/qif-file.scm:658
 msgid "Reconciliation status"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:640
+#: ../src/import-export/qif-imp/qif-file.scm:659
 msgid "Commission"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:641
+#: ../src/import-export/qif-imp/qif-file.scm:660
 #, fuzzy
 msgid "Account type"
 msgstr "Hesap Türü"
 
-#: ../src/import-export/qif-imp/qif-file.scm:642
+#: ../src/import-export/qif-imp/qif-file.scm:661
 #, fuzzy
 msgid "Tax class"
 msgstr "Vergi Tabloları"
 
-#: ../src/import-export/qif-imp/qif-file.scm:643
+#: ../src/import-export/qif-imp/qif-file.scm:662
 msgid "Category budget amount"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:644
+#: ../src/import-export/qif-imp/qif-file.scm:663
 #, fuzzy
 msgid "Account budget amount"
 msgstr "Hesap Tercihleri"
 
-#: ../src/import-export/qif-imp/qif-file.scm:645
+#: ../src/import-export/qif-imp/qif-file.scm:664
 msgid "Credit limit"
 msgstr "Kredi Limiti"
 
 #.
 #. Fields of categories.
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:658
+#: ../src/import-export/qif-imp/qif-file.scm:677
 #, fuzzy
 msgid "Parsing categories"
 msgstr "Dosya okunuyor..."
@@ -16737,7 +16737,7 @@ msgstr "Dosya okunuyor..."
 #.
 #. Fields of accounts
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:690
+#: ../src/import-export/qif-imp/qif-file.scm:709
 #, fuzzy
 msgid "Parsing accounts"
 msgstr "Hesap Düzenle"
@@ -16745,76 +16745,76 @@ msgstr "Hesap Düzenle"
 #.
 #. fields of transactions
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:731
+#: ../src/import-export/qif-imp/qif-file.scm:750
 #, fuzzy
 msgid "Parsing transactions"
 msgstr "Hareketler oluşturuluyor..."
 
 #. Data was not in any of the supplied formats.
-#: ../src/import-export/qif-imp/qif-file.scm:907
+#: ../src/import-export/qif-imp/qif-file.scm:926
 msgid "Unrecognized or inconsistent format."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:949
+#: ../src/import-export/qif-imp/qif-file.scm:968
 #, fuzzy
 msgid "Parsing failed."
 msgstr "Dosya okunuyor..."
 
-#: ../src/import-export/qif-imp/qif-file.scm:990
+#: ../src/import-export/qif-imp/qif-file.scm:1009
 msgid "Parse ambiguity between formats"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:992
+#: ../src/import-export/qif-imp/qif-file.scm:1011
 msgid "Value '%s' could be %s or %s."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-merge-groups.scm:94
+#: ../src/import-export/qif-imp/qif-merge-groups.scm:113
 #, fuzzy
 msgid "Finding duplicate transactions"
 msgstr "Hareket S_ureti..."
 
-#: ../src/import-export/qif-imp/qif-parse.scm:175
+#: ../src/import-export/qif-imp/qif-parse.scm:194
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-parse.scm:282
+#: ../src/import-export/qif-imp/qif-parse.scm:301
 #, fuzzy
 msgid "Unrecognized action '%s'."
 msgstr "Kâr/Zarar"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:307
+#: ../src/import-export/qif-imp/qif-parse.scm:326
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:171
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:190
 msgid "QIF import: Name conflict with another account."
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:256
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:275
 msgid "Preparing to convert your QIF data"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:307
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:326
 #, fuzzy
 msgid "Creating accounts"
 msgstr "Hesap Düzenle"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:356
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:375
 #, fuzzy
 msgid "Matching transfers between accounts"
 msgstr "hiçbiriyle eşleşmesin"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:374
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:393
 #, fuzzy
 msgid "Converting"
 msgstr "Dosyaları sıkıştır."
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:459
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:478
 #, fuzzy
 msgid "Missing transaction date."
 msgstr "_Bu hareketi"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:468
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:487
 msgid "Dates earlier than 1970 are not supported."
 msgstr ""
 
@@ -17172,7 +17172,7 @@ msgid "T-Ref"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:269
-#: ../src/report/standard-reports/register.scm:125
+#: ../src/report/standard-reports/register.scm:144
 msgid "T-Num"
 msgstr ""
 
@@ -17276,8 +17276,8 @@ msgstr "olan"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:565
 #: ../src/report/business-reports/owner-report.scm:40
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
-#: ../src/report/locale-specific/us/taxtxf.scm:156
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "To"
 msgstr ""
 
@@ -17295,7 +17295,7 @@ msgstr ""
 #: ../src/report/standard-reports/account-piecharts.scm:65
 #: ../src/report/standard-reports/account-summary.scm:114
 #: ../src/report/standard-reports/advanced-portfolio.scm:71
-#: ../src/report/standard-reports/average-balance.scm:22
+#: ../src/report/standard-reports/average-balance.scm:41
 #: ../src/report/standard-reports/balance-sheet.scm:138
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
@@ -17320,7 +17320,7 @@ msgstr "Rapor para birimi"
 #: ../src/report/standard-reports/account-piecharts.scm:66
 #: ../src/report/standard-reports/account-summary.scm:115
 #: ../src/report/standard-reports/advanced-portfolio.scm:41
-#: ../src/report/standard-reports/average-balance.scm:23
+#: ../src/report/standard-reports/average-balance.scm:42
 #: ../src/report/standard-reports/balance-sheet.scm:139
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
@@ -17781,8 +17781,8 @@ msgstr "Bir bilanço göster (eguile şablonu kullanarak)"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:562
 #: ../src/report/business-reports/owner-report.scm:39
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
-#: ../src/report/locale-specific/us/taxtxf.scm:156
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "From"
 msgstr ""
 
@@ -17927,8 +17927,8 @@ msgstr "Hesap adına göre sırala, ara toplamlı"
 
 #: ../src/report/business-reports/customer-summary.scm:452
 #: ../src/report/business-reports/customer-summary.scm:839
-#: ../src/report/standard-reports/average-balance.scm:107
-#: ../src/report/standard-reports/average-balance.scm:128
+#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:147
 msgid "Profit"
 msgstr ""
 
@@ -17991,7 +17991,7 @@ msgstr "Gider Raporu"
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/owner-report.scm:719
 #: ../src/report/report-gnome/dialog-report-column-view.c:351
-#: ../src/report/report-gnome/report-gnome.scm:61
+#: ../src/report/report-gnome/report-gnome.scm:80
 msgid "Report"
 msgstr "Rapor"
 
@@ -18066,7 +18066,7 @@ msgstr ""
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:386
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "Tarih görünsün mü?"
@@ -18074,7 +18074,7 @@ msgstr "Tarih görünsün mü?"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:401
+#: ../src/report/standard-reports/register.scm:420
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "Açıklama görünsün mü?"
@@ -18164,19 +18164,19 @@ msgstr "Çek/işlem no. görünsün mü?"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:385
-#: ../src/report/standard-reports/register.scm:391
-#: ../src/report/standard-reports/register.scm:395
-#: ../src/report/standard-reports/register.scm:400
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:415
-#: ../src/report/standard-reports/register.scm:420
-#: ../src/report/standard-reports/register.scm:425
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/register.scm:439
 #: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -18238,7 +18238,7 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "Toplamlar"
@@ -18246,7 +18246,7 @@ msgstr "Toplamlar"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "Toplamlar görünsün mü?"
@@ -18988,320 +18988,320 @@ msgstr ""
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:62
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:81
 msgid "Tax Report / TXF Export"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:135
-#: ../src/report/locale-specific/us/taxtxf.scm:160
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
+#: ../src/report/locale-specific/us/taxtxf.scm:179
 msgid "Alternate Period"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:136
-#: ../src/report/locale-specific/us/taxtxf.scm:161
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
+#: ../src/report/locale-specific/us/taxtxf.scm:180
 msgid "Override or modify From: & To:."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
-#: ../src/report/locale-specific/us/taxtxf.scm:164
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 msgid "Use From - To"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
-#: ../src/report/locale-specific/us/taxtxf.scm:164
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 msgid "Use From - To period."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
-#: ../src/report/locale-specific/us/taxtxf.scm:166
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "1st Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
-#: ../src/report/locale-specific/us/taxtxf.scm:166
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "Jan 1 - Mar 31."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
-#: ../src/report/locale-specific/us/taxtxf.scm:168
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
+#: ../src/report/locale-specific/us/taxtxf.scm:187
 msgid "2nd Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
-#: ../src/report/locale-specific/us/taxtxf.scm:168
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
+#: ../src/report/locale-specific/us/taxtxf.scm:187
 msgid "Apr 1 - May 31."
 msgstr ""
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
-#: ../src/report/locale-specific/us/taxtxf.scm:173
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "3rd Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
-#: ../src/report/locale-specific/us/taxtxf.scm:173
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "Jun 1 - Aug 31."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:194
 msgid "4th Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:194
 msgid "Sep 1 - Dec 31."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
-#: ../src/report/locale-specific/us/taxtxf.scm:177
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 msgid "Last Year"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
-#: ../src/report/locale-specific/us/taxtxf.scm:177
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 #, fuzzy
 msgid "Last Year."
 msgstr "Salı"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
-#: ../src/report/locale-specific/us/taxtxf.scm:179
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
+#: ../src/report/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
-#: ../src/report/locale-specific/us/taxtxf.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
+#: ../src/report/locale-specific/us/taxtxf.scm:199
 msgid "Jan 1 - Mar 31, Last year."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:157
-#: ../src/report/locale-specific/us/taxtxf.scm:182
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
+#: ../src/report/locale-specific/us/taxtxf.scm:201
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
+#: ../src/report/locale-specific/us/taxtxf.scm:202
 msgid "Apr 1 - May 31, Last year."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
+#: ../src/report/locale-specific/us/taxtxf.scm:204
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr ""
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:161
-#: ../src/report/locale-specific/us/taxtxf.scm:189
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
+#: ../src/report/locale-specific/us/taxtxf.scm:208
 msgid "Jun 1 - Aug 31, Last year."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:163
-#: ../src/report/locale-specific/us/taxtxf.scm:191
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
+#: ../src/report/locale-specific/us/taxtxf.scm:210
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:164
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
+#: ../src/report/locale-specific/us/taxtxf.scm:211
 msgid "Sep 1 - Dec 31, Last year."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:168
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:187
+#: ../src/report/locale-specific/us/taxtxf.scm:215
 msgid "Select Accounts (none = all)"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:197
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:188
+#: ../src/report/locale-specific/us/taxtxf.scm:216
 #, fuzzy
 msgid "Select accounts."
 msgstr "Tüm hesapları seç."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:175
-#: ../src/report/locale-specific/us/taxtxf.scm:203
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:194
+#: ../src/report/locale-specific/us/taxtxf.scm:222
 msgid "Suppress $0.00 values"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:195
 msgid "$0.00 valued Accounts won't be printed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:199
 msgid "Print Full account names"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:181
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:200
 #, fuzzy
 msgid "Print all Parent account names."
 msgstr "Geçerli bir üst hesap seçiniz."
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:259
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:278
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:832
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
 msgid "Period from %s to %s"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:869
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:888
 msgid "Tax Report & XML Export"
 msgstr ""
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:871
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:890
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:875
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:884
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:894
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:903
 msgid "Taxable Income / Deductible Expenses"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:876
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:895
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:881
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:900
 msgid "XML"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:885
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:904
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:96
+#: ../src/report/locale-specific/us/taxtxf.scm:115
 msgid "Tax Schedule Report/TXF Export"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:204
+#: ../src/report/locale-specific/us/taxtxf.scm:223
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:208
+#: ../src/report/locale-specific/us/taxtxf.scm:227
 msgid "Do not print full account names"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:209
+#: ../src/report/locale-specific/us/taxtxf.scm:228
 #, fuzzy
 msgid "Do not print all Parent account names."
 msgstr "Geçerli bir üst hesap seçiniz."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:213
+#: ../src/report/locale-specific/us/taxtxf.scm:232
 #, fuzzy
 msgid "Print all Transfer To/From Accounts"
 msgstr "Aktarma Hesabı"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:214
+#: ../src/report/locale-specific/us/taxtxf.scm:233
 msgid "Print all split details for multi-split transactions."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:218
+#: ../src/report/locale-specific/us/taxtxf.scm:237
 msgid "Print TXF export parameters"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:219
+#: ../src/report/locale-specific/us/taxtxf.scm:238
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:224
+#: ../src/report/locale-specific/us/taxtxf.scm:243
 #, fuzzy
 msgid "Do not print T-Num:Memo data"
 msgstr "Cari hareketi sil"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:225
+#: ../src/report/locale-specific/us/taxtxf.scm:244
 #, fuzzy
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "Cari hareketi sil"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:228
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 msgid "Do not print Action:Memo data"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:229
+#: ../src/report/locale-specific/us/taxtxf.scm:248
 #, fuzzy
 msgid "Do not print Action:Memo data for transactions."
 msgstr "Cari hareketi sil"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:233
+#: ../src/report/locale-specific/us/taxtxf.scm:252
 #, fuzzy
 msgid "Do not print transaction detail"
 msgstr "Cari hareketi sil"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:234
+#: ../src/report/locale-specific/us/taxtxf.scm:253
 #, fuzzy
 msgid "Do not print transaction detail for accounts."
 msgstr "Geçerli bir üst hesap seçiniz."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:238
+#: ../src/report/locale-specific/us/taxtxf.scm:257
 msgid "Do not use special date processing"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:239
+#: ../src/report/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 msgid "Do not print transactions out of specified dates."
 msgstr "Geçerli bir üst hesap seçiniz."
 
-#: ../src/report/locale-specific/us/taxtxf.scm:243
+#: ../src/report/locale-specific/us/taxtxf.scm:262
 #, fuzzy
 msgid "Currency conversion date"
 msgstr "İşlem sahibi"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:244
+#: ../src/report/locale-specific/us/taxtxf.scm:263
 #, fuzzy
 msgid "Select date to use for PriceDB lookups."
 msgstr "Rapor tarih aralığını seçin"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:266
 #, fuzzy
 msgid "Nearest transaction date"
 msgstr "Hareket Yapıştır"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:266
 #, fuzzy
 msgid "Use nearest to transaction date."
 msgstr "Hareketi Sil"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:249
+#: ../src/report/locale-specific/us/taxtxf.scm:268
 #, fuzzy
 msgid "Nearest report date"
 msgstr "Yıllık Faiz"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:249
+#: ../src/report/locale-specific/us/taxtxf.scm:268
 #, fuzzy
 msgid "Use nearest to report date."
 msgstr "Cari raporu tekrar yükle"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:256
+#: ../src/report/locale-specific/us/taxtxf.scm:275
 #, fuzzy
 msgid "Shade alternate transactions"
 msgstr "Netleşen hareketleri işaretle"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:257
+#: ../src/report/locale-specific/us/taxtxf.scm:276
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3513
+#: ../src/report/locale-specific/us/taxtxf.scm:3532
 msgid "Tax Schedule Report & TXF Export"
 msgstr ""
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf.scm:3515
+#: ../src/report/locale-specific/us/taxtxf.scm:3534
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3519
-#: ../src/report/locale-specific/us/taxtxf.scm:3528
+#: ../src/report/locale-specific/us/taxtxf.scm:3538
+#: ../src/report/locale-specific/us/taxtxf.scm:3547
 msgid "Taxable Income/Deductible Expenses"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3520
+#: ../src/report/locale-specific/us/taxtxf.scm:3539
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3529
+#: ../src/report/locale-specific/us/taxtxf.scm:3548
 #, fuzzy
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "Hesaba yeni bir hareket ekle"
@@ -19341,7 +19341,7 @@ msgid "Delete report configuration"
 msgstr "Seçili hareketi sil"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#: ../src/report/report-gnome/report-gnome.scm:122
+#: ../src/report/report-gnome/report-gnome.scm:141
 #, fuzzy
 msgid "Saved Report Configurations"
 msgstr "Rapor ayarlarını düzenle"
@@ -19624,23 +19624,23 @@ msgstr "Bu rapor için ayar yok."
 msgid "GnuCash-Report"
 msgstr "GnuCash Ekranları"
 
-#: ../src/report/report-gnome/report-gnome.scm:54
+#: ../src/report/report-gnome/report-gnome.scm:73
 msgid "This report has no options."
 msgstr ""
 
-#: ../src/report/report-gnome/report-gnome.scm:78
+#: ../src/report/report-gnome/report-gnome.scm:97
 msgid "Display the %s report"
 msgstr "%s raporunu göster"
 
-#: ../src/report/report-gnome/report-gnome.scm:124
+#: ../src/report/report-gnome/report-gnome.scm:143
 msgid "Manage and run saved report configurations"
 msgstr ""
 
-#: ../src/report/report-gnome/report-gnome.scm:144
+#: ../src/report/report-gnome/report-gnome.scm:163
 msgid "Welcome Sample Report"
 msgstr "Örnek Rapor"
 
-#: ../src/report/report-gnome/report-gnome.scm:146
+#: ../src/report/report-gnome/report-gnome.scm:165
 msgid "Welcome-to-GnuCash report screen"
 msgstr ""
 
@@ -19688,90 +19688,90 @@ msgstr ""
 msgid "Adjusting Entries"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:69
-#: ../src/report/report-system/html-fonts.scm:74
-#: ../src/report/report-system/html-fonts.scm:79
-#: ../src/report/report-system/html-fonts.scm:84
-#: ../src/report/report-system/html-fonts.scm:89
-#: ../src/report/report-system/html-fonts.scm:94
-#: ../src/report/report-system/html-fonts.scm:99
-#: ../src/report/report-system/html-fonts.scm:104
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:88
+#: ../src/report/report-system/html-fonts.scm:93
+#: ../src/report/report-system/html-fonts.scm:98
+#: ../src/report/report-system/html-fonts.scm:103
+#: ../src/report/report-system/html-fonts.scm:108
+#: ../src/report/report-system/html-fonts.scm:113
+#: ../src/report/report-system/html-fonts.scm:118
+#: ../src/report/report-system/html-fonts.scm:123
+#: ../src/report/report-system/html-fonts.scm:128
 msgid "Fonts"
 msgstr "Yazı tipleri"
 
-#: ../src/report/report-system/html-fonts.scm:70
+#: ../src/report/report-system/html-fonts.scm:89
 #, fuzzy
 msgid "Font info for the report title."
 msgstr "Rapor başlığı yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:75
+#: ../src/report/report-system/html-fonts.scm:94
 msgid "Account link"
 msgstr "Hesap bağlantısı"
 
-#: ../src/report/report-system/html-fonts.scm:75
+#: ../src/report/report-system/html-fonts.scm:94
 #, fuzzy
 msgid "Font info for account name."
 msgstr "Hesap adı yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:80
+#: ../src/report/report-system/html-fonts.scm:99
 msgid "Number cell"
 msgstr "Sayısal hücre"
 
-#: ../src/report/report-system/html-fonts.scm:80
+#: ../src/report/report-system/html-fonts.scm:99
 #, fuzzy
 msgid "Font info for regular number cells."
 msgstr "Normal sayısal hücrelerin yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:85
+#: ../src/report/report-system/html-fonts.scm:104
 msgid "Negative Values in Red"
 msgstr "Eksi değerler kırmızı renk"
 
-#: ../src/report/report-system/html-fonts.scm:85
+#: ../src/report/report-system/html-fonts.scm:104
 msgid "Display negative values in red."
 msgstr "Eksi değerleri kırmızı renkte göster"
 
-#: ../src/report/report-system/html-fonts.scm:90
+#: ../src/report/report-system/html-fonts.scm:109
 msgid "Number header"
 msgstr "Sayısal sütunbaşlığı"
 
-#: ../src/report/report-system/html-fonts.scm:90
+#: ../src/report/report-system/html-fonts.scm:109
 #, fuzzy
 msgid "Font info for number headers."
 msgstr "Sayısal sütunbaşlıkları yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:95
+#: ../src/report/report-system/html-fonts.scm:114
 msgid "Text cell"
 msgstr "Metin hücre"
 
-#: ../src/report/report-system/html-fonts.scm:95
+#: ../src/report/report-system/html-fonts.scm:114
 #, fuzzy
 msgid "Font info for regular text cells."
 msgstr "Normal metin hücresi yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:100
+#: ../src/report/report-system/html-fonts.scm:119
 msgid "Total number cell"
 msgstr "Toplamlı sayısal hücre"
 
-#: ../src/report/report-system/html-fonts.scm:100
+#: ../src/report/report-system/html-fonts.scm:119
 #, fuzzy
 msgid "Font info for number cells containing a total."
 msgstr "Toplam içeren sayısal hücre yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:105
+#: ../src/report/report-system/html-fonts.scm:124
 msgid "Total label cell"
 msgstr "Toplam yanı hücre"
 
-#: ../src/report/report-system/html-fonts.scm:105
+#: ../src/report/report-system/html-fonts.scm:124
 #, fuzzy
 msgid "Font info for cells containing total labels."
 msgstr "Toplam yanındaki hücre yazı tipi"
 
-#: ../src/report/report-system/html-fonts.scm:110
+#: ../src/report/report-system/html-fonts.scm:129
 msgid "Centered label cell"
 msgstr "Ortalı hücre"
 
-#: ../src/report/report-system/html-fonts.scm:110
+#: ../src/report/report-system/html-fonts.scm:129
 #, fuzzy
 msgid "Font info for centered label cells."
 msgstr "Ortalı hücre yazı tipi"
@@ -20345,7 +20345,7 @@ msgstr ""
 #. in *one* place.
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
-#: ../src/report/standard-reports/average-balance.scm:19
+#: ../src/report/standard-reports/average-balance.scm:38
 #: ../src/report/standard-reports/cash-flow.scm:44
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
@@ -20360,7 +20360,7 @@ msgid "Start Date"
 msgstr "Başlama Tarihi"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
-#: ../src/report/standard-reports/average-balance.scm:20
+#: ../src/report/standard-reports/average-balance.scm:39
 #: ../src/report/standard-reports/cash-flow.scm:45
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
@@ -20402,8 +20402,8 @@ msgid "Maximum Slices"
 msgstr ""
 
 #: ../src/report/standard-reports/account-piecharts.scm:75
-#: ../src/report/standard-reports/average-balance.scm:111
-#: ../src/report/standard-reports/average-balance.scm:447
+#: ../src/report/standard-reports/average-balance.scm:130
+#: ../src/report/standard-reports/average-balance.scm:466
 #: ../src/report/standard-reports/category-barchart.scm:87
 #: ../src/report/standard-reports/daily-reports.scm:68
 #: ../src/report/standard-reports/net-barchart.scm:61
@@ -20413,8 +20413,8 @@ msgid "Plot Width"
 msgstr ""
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
-#: ../src/report/standard-reports/average-balance.scm:111
-#: ../src/report/standard-reports/average-balance.scm:449
+#: ../src/report/standard-reports/average-balance.scm:130
+#: ../src/report/standard-reports/average-balance.scm:468
 #: ../src/report/standard-reports/category-barchart.scm:88
 #: ../src/report/standard-reports/daily-reports.scm:69
 #: ../src/report/standard-reports/net-barchart.scm:62
@@ -20797,8 +20797,8 @@ msgid "Basis calculation method."
 msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:90
-#: ../src/report/standard-reports/average-balance.scm:106
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:125
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Average"
 msgstr "Ortalama"
 
@@ -20960,11 +20960,11 @@ msgstr ""
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:17
+#: ../src/report/standard-reports/average-balance.scm:36
 msgid "Average Balance"
 msgstr "Ortalama Bakiye"
 
-#: ../src/report/standard-reports/average-balance.scm:21
+#: ../src/report/standard-reports/average-balance.scm:40
 #: ../src/report/standard-reports/category-barchart.scm:77
 #: ../src/report/standard-reports/net-barchart.scm:49
 #: ../src/report/standard-reports/net-linechart.scm:45
@@ -20972,33 +20972,33 @@ msgstr "Ortalama Bakiye"
 msgid "Step Size"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:24
+#: ../src/report/standard-reports/average-balance.scm:43
 #: ../src/report/standard-reports/daily-reports.scm:63
 msgid "Include Sub-Accounts"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:25
+#: ../src/report/standard-reports/average-balance.scm:44
 #, fuzzy
 msgid "Exclude transactions between selected accounts"
 msgstr "Hesaba yeni bir hareket ekle"
 
-#: ../src/report/standard-reports/average-balance.scm:57
+#: ../src/report/standard-reports/average-balance.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:95
 #, fuzzy
 msgid "Include sub-accounts of all selected accounts."
 msgstr "Seçili hesabın tüm alt hesaplarını seç."
 
-#: ../src/report/standard-reports/average-balance.scm:63
+#: ../src/report/standard-reports/average-balance.scm:82
 msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:70
+#: ../src/report/standard-reports/average-balance.scm:89
 #, fuzzy
 msgid "Do transaction report on this account."
 msgstr "Hesaba yeni bir işlem ekle"
 
-#: ../src/report/standard-reports/average-balance.scm:93
-#: ../src/report/standard-reports/average-balance.scm:323
+#: ../src/report/standard-reports/average-balance.scm:112
+#: ../src/report/standard-reports/average-balance.scm:342
 #: ../src/report/standard-reports/category-barchart.scm:184
 #: ../src/report/standard-reports/category-barchart.scm:253
 #: ../src/report/standard-reports/net-barchart.scm:133
@@ -21008,69 +21008,69 @@ msgstr "Hesaba yeni bir işlem ekle"
 msgid "Show table"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:94
+#: ../src/report/standard-reports/average-balance.scm:113
 #: ../src/report/standard-reports/category-barchart.scm:185
 #: ../src/report/standard-reports/net-barchart.scm:134
 #: ../src/report/standard-reports/net-linechart.scm:140
 msgid "Display a table of the selected data."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:98
-#: ../src/report/standard-reports/average-balance.scm:322
+#: ../src/report/standard-reports/average-balance.scm:117
+#: ../src/report/standard-reports/average-balance.scm:341
 msgid "Show plot"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:99
+#: ../src/report/standard-reports/average-balance.scm:118
 msgid "Display a graph of the selected data."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:103
-#: ../src/report/standard-reports/average-balance.scm:321
+#: ../src/report/standard-reports/average-balance.scm:122
+#: ../src/report/standard-reports/average-balance.scm:340
 msgid "Plot Type"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:104
+#: ../src/report/standard-reports/average-balance.scm:123
 msgid "The type of graph to generate."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:106
+#: ../src/report/standard-reports/average-balance.scm:125
 #, fuzzy
 msgid "Average Balance."
 msgstr "Ortalama Bakiye"
 
-#: ../src/report/standard-reports/average-balance.scm:107
+#: ../src/report/standard-reports/average-balance.scm:126
 #, fuzzy
 msgid "Profit (Gain minus Loss)."
 msgstr "Kâr ve Zarar"
 
-#: ../src/report/standard-reports/average-balance.scm:108
+#: ../src/report/standard-reports/average-balance.scm:127
 #, fuzzy
 msgid "Gain And Loss."
 msgstr "Kâr/Zarar"
 
 #. Watch out -- these names should be consistent with the display
 #. option where you choose them, otherwise users are confused.
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Period start"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Period end"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Maximum"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Minimum"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Gain"
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:128
+#: ../src/report/standard-reports/average-balance.scm:147
 msgid "Loss"
 msgstr ""
 
@@ -21861,8 +21861,8 @@ msgstr "Genel Raporlar"
 
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
-#: ../src/report/standard-reports/register.scm:126
-#: ../src/report/standard-reports/register.scm:391
+#: ../src/report/standard-reports/register.scm:145
+#: ../src/report/standard-reports/register.scm:410
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 #, fuzzy
@@ -21873,7 +21873,7 @@ msgstr "İşlem"
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:463
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -22269,124 +22269,124 @@ msgstr ""
 msgid "Price Scatterplot"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:151
+#: ../src/report/standard-reports/register.scm:170
 #, fuzzy
 msgid "Debit Value"
 msgstr "Cari Değer:"
 
-#: ../src/report/standard-reports/register.scm:153
+#: ../src/report/standard-reports/register.scm:172
 #, fuzzy
 msgid "Credit Value"
 msgstr "Cari Değer:"
 
-#: ../src/report/standard-reports/register.scm:380
+#: ../src/report/standard-reports/register.scm:399
 #, fuzzy
 msgid "The title of the report."
 msgstr "Bu rapor için ayar yok."
 
 # Çek veya "transaction" no. olduğu kabul edildi.
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:411
 #, fuzzy
 msgid "Display the check number/action?"
 msgstr "Çek/işlem no. görünsün mü?"
 
 # Çek veya "transaction" no. olduğu kabul edildi.
-#: ../src/report/standard-reports/register.scm:396
+#: ../src/report/standard-reports/register.scm:415
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "Çek/işlem no. görünsün mü?"
 
-#: ../src/report/standard-reports/register.scm:406
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "Bilgi notu görünsün mü?"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:430
 msgid "Display the account?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:416
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr "Hisse adeti görünsün mü?"
 
-#: ../src/report/standard-reports/register.scm:421
+#: ../src/report/standard-reports/register.scm:440
 msgid "Display the name of lot the shares are in?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:426
+#: ../src/report/standard-reports/register.scm:445
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr "Hisse fiyatı görünsün mü?"
 
-#: ../src/report/standard-reports/register.scm:431
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr "Tutar görünsün mü?"
 
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:453
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "Tek"
 
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:453
 #: ../src/report/standard-reports/transaction.scm:988
 #, fuzzy
 msgid "Single Column Display."
 msgstr "Tek Sütun Sergi"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:454
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr "Çift"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:454
 #: ../src/report/standard-reports/transaction.scm:989
 #, fuzzy
 msgid "Two Column Display."
 msgstr "Çift Sütun Sergi"
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:459
 #, fuzzy
 msgid "Display the value in transaction currency?"
 msgstr "Cari hareketi sil"
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:464
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
 msgid "Display a running balance?"
 msgstr "%s raporunu göster"
 
-#: ../src/report/standard-reports/register.scm:598
+#: ../src/report/standard-reports/register.scm:617
 msgid "Total Debits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:600
+#: ../src/report/standard-reports/register.scm:619
 msgid "Total Credits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:602
+#: ../src/report/standard-reports/register.scm:621
 #, fuzzy
 msgid "Total Value Debits"
 msgstr "Top Borç"
 
-#: ../src/report/standard-reports/register.scm:604
+#: ../src/report/standard-reports/register.scm:623
 #, fuzzy
 msgid "Total Value Credits"
 msgstr "Top Alacak"
 
-#: ../src/report/standard-reports/register.scm:607
+#: ../src/report/standard-reports/register.scm:626
 msgid "Net Change"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:610
+#: ../src/report/standard-reports/register.scm:629
 #, fuzzy
 msgid "Value Change"
 msgstr "Değişiklik Doğrulama"
 
-#: ../src/report/standard-reports/register.scm:769
+#: ../src/report/standard-reports/register.scm:788
 msgid "Client"
 msgstr ""
 
@@ -23140,7 +23140,7 @@ msgstr "Firma logosu."
 #: ../src/report/stylesheets/stylesheet-footer.scm:116
 #: ../src/report/stylesheets/stylesheet-footer.scm:209
 #: ../src/report/stylesheets/stylesheet-plain.scm:48
-#: ../src/report/utility-reports/hello-world.scm:141
+#: ../src/report/utility-reports/hello-world.scm:160
 msgid "Background Color"
 msgstr "Artalan Rengi"
 
@@ -23156,7 +23156,7 @@ msgstr "Rapor için genel artalan rengi."
 #: ../src/report/stylesheets/stylesheet-fancy.scm:190
 #: ../src/report/stylesheets/stylesheet-footer.scm:123
 #: ../src/report/stylesheets/stylesheet-footer.scm:210
-#: ../src/report/utility-reports/hello-world.scm:148
+#: ../src/report/utility-reports/hello-world.scm:167
 msgid "Text Color"
 msgstr "Metin Rengi"
 
@@ -23392,72 +23392,72 @@ msgstr "Raporlarda artalan renk."
 msgid "Plain"
 msgstr "Sade"
 
-#: ../src/report/utility-reports/hello-world.scm:42
-#: ../src/report/utility-reports/hello-world.scm:52
-#: ../src/report/utility-reports/hello-world.scm:78
-#: ../src/report/utility-reports/hello-world.scm:89
-#: ../src/report/utility-reports/hello-world.scm:98
-#: ../src/report/utility-reports/hello-world.scm:105
-#: ../src/report/utility-reports/hello-world.scm:112
-#: ../src/report/utility-reports/hello-world.scm:123
-#: ../src/report/utility-reports/hello-world.scm:141
-#: ../src/report/utility-reports/hello-world.scm:148
+#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:71
+#: ../src/report/utility-reports/hello-world.scm:97
+#: ../src/report/utility-reports/hello-world.scm:108
+#: ../src/report/utility-reports/hello-world.scm:117
+#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:131
+#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:160
+#: ../src/report/utility-reports/hello-world.scm:167
 msgid "Hello, World!"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:42
+#: ../src/report/utility-reports/hello-world.scm:61
 msgid "Boolean Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:43
+#: ../src/report/utility-reports/hello-world.scm:62
 msgid "This is a boolean option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:52
+#: ../src/report/utility-reports/hello-world.scm:71
 msgid "Multi Choice Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:53
+#: ../src/report/utility-reports/hello-world.scm:72
 msgid "This is a multi choice option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:56
+#: ../src/report/utility-reports/hello-world.scm:75
 msgid "First Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:57
+#: ../src/report/utility-reports/hello-world.scm:76
 msgid "Help for first option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:60
+#: ../src/report/utility-reports/hello-world.scm:79
 msgid "Second Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:80
 msgid "Help for second option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:64
+#: ../src/report/utility-reports/hello-world.scm:83
 msgid "Third Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:65
+#: ../src/report/utility-reports/hello-world.scm:84
 msgid "Help for third option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:68
+#: ../src/report/utility-reports/hello-world.scm:87
 msgid "Fourth Options"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:69
+#: ../src/report/utility-reports/hello-world.scm:88
 msgid "The fourth option rules!"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:78
+#: ../src/report/utility-reports/hello-world.scm:97
 msgid "String Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:98
 msgid "This is a string option."
 msgstr ""
 
@@ -23472,217 +23472,217 @@ msgstr ""
 #. The name of this report. This will be used, among other things,
 #. for making its menu item in the main menu. You need to use the
 #. untranslated value here!
-#: ../src/report/utility-reports/hello-world.scm:79
-#: ../src/report/utility-reports/hello-world.scm:313
-#: ../src/report/utility-reports/hello-world.scm:478
+#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:332
+#: ../src/report/utility-reports/hello-world.scm:497
 msgid "Hello, World"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:89
+#: ../src/report/utility-reports/hello-world.scm:108
 msgid "Just a Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:90
+#: ../src/report/utility-reports/hello-world.scm:109
 msgid "This is a date option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:117
 msgid "Time and Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:99
+#: ../src/report/utility-reports/hello-world.scm:118
 msgid "This is a date option with time."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:105
+#: ../src/report/utility-reports/hello-world.scm:124
 msgid "Combo Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:106
+#: ../src/report/utility-reports/hello-world.scm:125
 msgid "This is a combination date option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:112
+#: ../src/report/utility-reports/hello-world.scm:131
 msgid "Relative Date Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:113
+#: ../src/report/utility-reports/hello-world.scm:132
 msgid "This is a relative date option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:123
+#: ../src/report/utility-reports/hello-world.scm:142
 msgid "Number Option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:143
 msgid "This is a number option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:142
-#: ../src/report/utility-reports/hello-world.scm:149
+#: ../src/report/utility-reports/hello-world.scm:161
+#: ../src/report/utility-reports/hello-world.scm:168
 #, fuzzy
 msgid "This is a color option."
 msgstr "_Bu işlem"
 
-#: ../src/report/utility-reports/hello-world.scm:170
-#: ../src/report/utility-reports/hello-world.scm:183
+#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:202
 msgid "Hello Again"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:170
+#: ../src/report/utility-reports/hello-world.scm:189
 msgid "An account list option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:171
+#: ../src/report/utility-reports/hello-world.scm:190
 #, fuzzy
 msgid "This is an account list option."
 msgstr "Bu salt okunur bir hesaptır."
 
-#: ../src/report/utility-reports/hello-world.scm:183
+#: ../src/report/utility-reports/hello-world.scm:202
 msgid "A list option"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:184
+#: ../src/report/utility-reports/hello-world.scm:203
 msgid "This is a list option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:188
+#: ../src/report/utility-reports/hello-world.scm:207
 msgid "The Good"
 msgstr ""
 
 # Book teriminin burada dosya(file) yerine kullanıldığı kabul edildi.
-#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:208
 #, fuzzy
 msgid "Good option."
 msgstr "Dosya Seçenekleri"
 
-#: ../src/report/utility-reports/hello-world.scm:192
+#: ../src/report/utility-reports/hello-world.scm:211
 msgid "The Bad"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:193
+#: ../src/report/utility-reports/hello-world.scm:212
 #, fuzzy
 msgid "Bad option."
 msgstr "Ayarlar"
 
-#: ../src/report/utility-reports/hello-world.scm:196
+#: ../src/report/utility-reports/hello-world.scm:215
 msgid "The Ugly"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:197
+#: ../src/report/utility-reports/hello-world.scm:216
 msgid "Ugly option."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:222
 msgid "Testing"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:222
 msgid "Crash the report"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:205
+#: ../src/report/utility-reports/hello-world.scm:224
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:328
+#: ../src/report/utility-reports/hello-world.scm:347
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:334
+#: ../src/report/utility-reports/hello-world.scm:353
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:339
+#: ../src/report/utility-reports/hello-world.scm:358
 msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:340
+#: ../src/report/utility-reports/hello-world.scm:359
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:344
+#: ../src/report/utility-reports/hello-world.scm:363
 msgid "The current time is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:349
+#: ../src/report/utility-reports/hello-world.scm:368
 msgid "The boolean option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:350
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "true"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:350
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "false"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:354
+#: ../src/report/utility-reports/hello-world.scm:373
 msgid "The multi-choice option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:359
+#: ../src/report/utility-reports/hello-world.scm:378
 msgid "The string option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:364
+#: ../src/report/utility-reports/hello-world.scm:383
 msgid "The date option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:388
 msgid "The date and time option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:374
+#: ../src/report/utility-reports/hello-world.scm:393
 msgid "The relative date option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:379
+#: ../src/report/utility-reports/hello-world.scm:398
 msgid "The combination date option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:384
+#: ../src/report/utility-reports/hello-world.scm:403
 msgid "The number option is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:395
+#: ../src/report/utility-reports/hello-world.scm:414
 msgid "The number option formatted as currency is %s."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:407
+#: ../src/report/utility-reports/hello-world.scm:426
 msgid "Items you selected:"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:414
+#: ../src/report/utility-reports/hello-world.scm:433
 msgid "List items selected"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:419
+#: ../src/report/utility-reports/hello-world.scm:438
 msgid "(You selected no list items.)"
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:455
+#: ../src/report/utility-reports/hello-world.scm:474
 msgid "You have selected no accounts."
 msgstr ""
 
-#: ../src/report/utility-reports/hello-world.scm:460
+#: ../src/report/utility-reports/hello-world.scm:479
 #, fuzzy
 msgid "Display help"
 msgstr "Sergi"
 
-#: ../src/report/utility-reports/hello-world.scm:465
+#: ../src/report/utility-reports/hello-world.scm:484
 msgid "Have a nice day!"
 msgstr ""
 
 #. The name in the menu
 #. (only necessary if it differs from the name)
-#: ../src/report/utility-reports/hello-world.scm:489
+#: ../src/report/utility-reports/hello-world.scm:508
 msgid "Sample Report with Examples"
 msgstr ""
 
 #. A tip that is used to provide additional information about the
 #. report to the user.
-#: ../src/report/utility-reports/hello-world.scm:493
+#: ../src/report/utility-reports/hello-world.scm:512
 msgid "A sample report with examples."
 msgstr ""
 
@@ -23775,17 +23775,17 @@ msgstr ""
 msgid "Adding remaining good quotes."
 msgstr ""
 
-#: ../src/tax/us/de_DE.scm:37
+#: ../src/tax/us/de_DE.scm:56
 #, fuzzy
 msgid "Tax Number"
 msgstr "No"
 
-#: ../src/tax/us/txf-de_DE.scm:330
+#: ../src/tax/us/txf-de_DE.scm:349
 #, fuzzy
 msgid "The electronic tax number of your business"
 msgstr "İşletme unvanı"
 
-#: ../src/tax/us/txf.scm:87
+#: ../src/tax/us/txf.scm:106
 #, fuzzy
 msgid "No help available."
 msgstr "Bir değişken değildir"
