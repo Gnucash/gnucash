@@ -95,7 +95,7 @@ TP_LINGUAS="az ca cs da eu fa ja nl pt rw sk sr sv tr uk zh_CN"
 dnl already marked as external at TP:
 GC_LINGUAS="ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt_BR ro ru ta te ur vi zh_TW "
 dnl not marked or no TP team:
-NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali"
+NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali pt_PT"
 
 ALL_LINGUAS="$TP_LINGUAS $GC_LINGUAS $NEW_LINGUAS"
 
