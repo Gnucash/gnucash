@@ -75,7 +75,7 @@ void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data);
 // utils
 static gchar *gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
 static void gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
-
+static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 BillImportGui *
 gnc_plugin_bi_import_showGUI(void)
@@ -167,7 +167,7 @@ static gchar *
 gnc_plugin_bi_import_getFilename(void)
 {
     // prepare file import dialog
-    gchar *filename;
+    gchar *filename = NULL;
     GList *filters;
     GtkFileFilter *filter;
     filters = NULL;
@@ -264,7 +264,7 @@ gnc_bi_import_gui_destroy_cb (GtkWidget *widget, gpointer data)
 
 void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 {
-    gchar *filename;
+    gchar *filename = NULL;
     BillImportGui *gui = data;
 
     filename = gnc_plugin_bi_import_getFilename();
@@ -328,7 +328,7 @@ void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data)
 void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gchar *temp;
+    gchar *temp = NULL;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     temp = gnc_input_dialog (0, _("Adjust regular expression used for import"), _("This regular expression is used to parse the import file. Modify according to your needs.\n"), gui->regexp->str);
@@ -343,7 +343,7 @@ void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
 void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    const gchar *name;
+    const gchar *name = NULL;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
@@ -359,7 +359,7 @@ void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    const gchar *name;
+    const gchar *name = NULL;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
@@ -391,7 +391,7 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     gint result;
     GtkWidget *view;
     GtkTextBuffer *buffer;
-    gchar *user_input;
+    gchar *user_input = NULL;
     GtkTextIter start, end;
 
     /* Create the widgets */
