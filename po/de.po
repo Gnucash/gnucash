@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-12 18:36+0100\n"
-"PO-Revision-Date: 2015-12-13 20:53+0100\n"
+"PO-Revision-Date: 2015-12-19 20:37+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -311,8 +311,7 @@ msgstr "Voreinstellung Lieferant Steuertabelle"
 
 #: ../src/app-utils/business-prefs.scm:119
 msgid "The default tax table to apply to vendors."
-msgstr ""
-"Voreinstellung für die Steuertabelle, die bei Lieferanten angewendet werden "
+msgstr "Voreinstellung für die Steuertabelle, die bei Lieferanten angewendet werden "
 "soll."
 
 #: ../src/app-utils/business-prefs.scm:124
@@ -14623,7 +14622,7 @@ msgstr "Tipps beim Programmstart _anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:1
 msgid "Transfer Funds"
-msgstr "Buchen"
+msgstr "Umbuchung"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:2
 msgid "<b>Basic Information</b>"
@@ -19622,8 +19621,7 @@ msgstr "eine"
 
 #: ../src/report/business-reports/balsheet-eg.scm:336
 msgid "Display liabilities and equity below assets."
-msgstr ""
-"Zeigt die Passiva (Verbindlichkeiten und Eigenkapital) unter den Aktiva an."
+msgstr "Zeigt die Passiva (Verbindlichkeiten und Eigenkapital) unter den Aktiva an."
 
 #: ../src/report/business-reports/balsheet-eg.scm:338
 msgid "Two"
@@ -19631,8 +19629,7 @@ msgstr "zwei"
 
 #: ../src/report/business-reports/balsheet-eg.scm:339
 msgid "Display assets on the left, liabilities and equity on the right."
-msgstr ""
-"Stellt Aktiva links und Passiva (Verbindlichkeiten und Eigenkapital) rechts "
+msgstr "Stellt Aktiva links und Passiva (Verbindlichkeiten und Eigenkapital) rechts "
 "dar."
 
 #: ../src/report/business-reports/balsheet-eg.scm:344
