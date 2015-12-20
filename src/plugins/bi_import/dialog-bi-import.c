@@ -90,8 +90,9 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
     FILE *f;
 
     // regexp
-    char *line;
-    gchar *line_utf8, *temp;
+    char *line = NULL;
+    gchar *line_utf8 = NULL;
+    gchar *temp = NULL;
     GMatchInfo *match_info;
     GError *err;
     GRegex *regexpat;
@@ -233,7 +234,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 {
     GtkTreeIter iter;
     gboolean valid, row_deleted, row_fixed;
-    gchar *id, *date_opened, *date_posted, *due_date, *owner_id, *date, *quantity, *price;
+    gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
+        *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
     GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
     guint dummy;
     gint row = 1;
@@ -511,11 +513,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 {
     gboolean valid;
     GtkTreeIter iter;
-    gchar *id, *date_opened, *owner_id, *billing_id, *notes;
-    gchar *date, *desc, *action, *account, *quantity, *price, *disc_type,
-          *disc_how, *discount, *taxable, *taxincluded, *tax_table;
-    gchar *date_posted, *due_date, *account_posted, *memo_posted,
-          *accumulatesplits;
+    gchar *id = NULL, *date_opened = NULL, *owner_id = NULL, *billing_id = NULL, *notes = NULL;
+    gchar *date = NULL, *desc = NULL, *action = NULL, *account = NULL, *quantity = NULL,
+          *price = NULL, *disc_type = NULL, *disc_how = NULL, *discount = NULL, *taxable = NULL,
+          *taxincluded = NULL, *tax_table = NULL;
+    gchar *date_posted = NULL, *due_date = NULL, *account_posted = NULL, *memo_posted = NULL,
+          *accumulatesplits = NULL;
     guint dummy;
     GncInvoice *invoice;
     GncEntry *entry;
