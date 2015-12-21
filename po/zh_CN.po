@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-26 10:44-0700\n"
+"POT-Creation-Date: 2015-10-05 12:57-0700\n"
 "PO-Revision-Date: 2010-07-13 12:58+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -824,8 +824,8 @@ msgid "Opening Balances"
 msgstr "期初余额"
 
 #: ../src/app-utils/gnc-ui-util.c:672
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:57
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:72
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:76
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:200
 #: ../src/report/standard-reports/balance-sheet.scm:673
 msgid "Retained Earnings"
@@ -833,8 +833,8 @@ msgstr "留存收益"
 
 #: ../src/app-utils/gnc-ui-util.c:744 ../src/engine/Account.c:3951
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:52
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:56
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:71
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:75
 #: ../src/register/ledger-core/split-register.c:2548
 #: ../src/report/standard-reports/balance-sheet.scm:661
 #: ../src/report/standard-reports/budget-balance-sheet.scm:812
@@ -855,7 +855,7 @@ msgstr "期初余额"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:373
+#: ../src/report/standard-reports/register.scm:392
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -875,7 +875,7 @@ msgstr "借方"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:375
+#: ../src/report/standard-reports/register.scm:394
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -898,7 +898,7 @@ msgstr "资金收入"
 
 #: ../src/app-utils/prefs.scm:64
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3133
-#: ../src/import-export/csv-imp/gnc-csv-model.c:50
+#: ../src/import-export/csv-imp/gnc-csv-model.c:70
 msgid "Deposit"
 msgstr "存款"
 
@@ -998,7 +998,7 @@ msgstr "购买"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:826
+#: ../src/report/standard-reports/register.scm:845
 msgid "Charge"
 msgstr "费用"
 
@@ -1034,7 +1034,7 @@ msgstr "支出"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:813
+#: ../src/report/standard-reports/register.scm:832
 msgid "Invoice"
 msgstr "发票"
 
@@ -1046,7 +1046,7 @@ msgstr "资金支出"
 
 #: ../src/app-utils/prefs.scm:81
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
-#: ../src/import-export/csv-imp/gnc-csv-model.c:51
+#: ../src/import-export/csv-imp/gnc-csv-model.c:71
 msgid "Withdrawal"
 msgstr "取款"
 
@@ -1082,12 +1082,12 @@ msgstr "出售"
 #: ../src/engine/Scrub.c:393 ../src/gnome/gnc-budget-view.c:385
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2975
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3076
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:13
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:19
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:28
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:34
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:40
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:46
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:32
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:38
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:59
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
 #: ../src/register/ledger-core/split-register.c:2564
 #: ../src/report/report-system/report-utilities.scm:117
 #: ../src/report/standard-reports/advanced-portfolio.scm:1078
@@ -1294,7 +1294,7 @@ msgstr "支出凭证"
 #: ../src/business/business-gnome/business-gnome-utils.c:448
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:668
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
-#: ../src/import-export/csv-imp/gnc-csv-model.c:44
+#: ../src/import-export/csv-imp/gnc-csv-model.c:64
 #: ../src/report/standard-reports/transaction.scm:685
 #: ../src/report/standard-reports/transaction.scm:722
 #: ../src/report/standard-reports/transaction.scm:777
@@ -1980,13 +1980,13 @@ msgstr "已打开"
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
 #: ../src/gnome/reconcile-view.c:385
-#: ../src/import-export/csv-imp/gnc-csv-model.c:46
+#: ../src/import-export/csv-imp/gnc-csv-model.c:66
 #: ../src/register/ledger-core/split-register-model.c:246
 #: ../src/register/ledger-core/split-register-model.c:266
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
-#: ../src/report/standard-reports/register.scm:127
-#: ../src/report/standard-reports/register.scm:395
+#: ../src/report/standard-reports/register.scm:146
+#: ../src/report/standard-reports/register.scm:414
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -2038,8 +2038,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:430
-#: ../src/report/standard-reports/register.scm:826
+#: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:845
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -3353,7 +3353,7 @@ msgstr "选择所有者对话框"
 #: ../src/gnome-utils/gnc-tree-view-account.c:749
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:47
+#: ../src/import-export/csv-imp/gnc-csv-model.c:67
 #: ../src/import-export/import-main-matcher.c:485
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
@@ -3374,8 +3374,8 @@ msgstr "选择所有者对话框"
 #: ../src/report/standard-reports/general-journal.scm:111
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
-#: ../src/report/standard-reports/register.scm:129
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:148
+#: ../src/report/standard-reports/register.scm:419
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3460,7 +3460,7 @@ msgstr "账单地址"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:474
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2914
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:48
+#: ../src/import-export/csv-imp/gnc-csv-model.c:68
 #: ../src/register/ledger-core/split-register-model.c:468
 #: ../src/report/business-reports/balsheet-eg.scm:301
 #: ../src/report/business-reports/taxinvoice.scm:91
@@ -3780,7 +3780,7 @@ msgstr "入账到"
 #: ../src/gnome/reconcile-view.c:389
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/import-export/csv-imp/gnc-csv-model.c:45
+#: ../src/import-export/csv-imp/gnc-csv-model.c:65
 #: ../src/import-export/import-main-matcher.c:481
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
@@ -3808,9 +3808,9 @@ msgstr "入账到"
 #: ../src/report/standard-reports/net-barchart.scm:410
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
-#: ../src/report/standard-reports/register.scm:121
-#: ../src/report/standard-reports/register.scm:385
-#: ../src/report/standard-reports/register.scm:787
+#: ../src/report/standard-reports/register.scm:140
+#: ../src/report/standard-reports/register.scm:404
+#: ../src/report/standard-reports/register.scm:806
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3881,8 +3881,8 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
-#: ../src/report/standard-reports/register.scm:131
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:150
+#: ../src/report/standard-reports/register.scm:424
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -4225,7 +4225,7 @@ msgstr "小计"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:121
 #: ../src/report/business-reports/easy-invoice.scm:478
 #: ../src/report/business-reports/fancy-invoice.scm:517
-#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:36
+#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:55
 msgid "Tax"
 msgstr "税"
 
@@ -4544,8 +4544,8 @@ msgstr "从发票产生的。试着取消入账此发票。"
 msgid " (posted)"
 msgstr " (已入账)"
 
-#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:139
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
+#: ../src/report/standard-reports/register.scm:439
 msgid "Lot"
 msgstr "Lot"
 
@@ -4676,7 +4676,7 @@ msgstr "不平衡的"
 
 #: ../src/engine/Split.c:1410 ../src/engine/Split.c:1427
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
-#: ../src/report/standard-reports/register.scm:232
+#: ../src/report/standard-reports/register.scm:251
 msgid "-- Split Transaction --"
 msgstr "-- 拆分交易 --"
 
@@ -4874,7 +4874,7 @@ msgstr "本金"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2970
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:20
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:39
 #: ../src/register/ledger-core/split-register.c:2471
 #: ../src/register/ledger-core/split-register.c:2508
 #: ../src/register/ledger-core/split-register.c:2516
@@ -4906,9 +4906,9 @@ msgstr "添加价格时发生错误。"
 #: ../src/gnome/assistant-stock-split.c:570
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
-#: ../src/gnome-utils/gnc-icons.c:18
+#: ../src/gnome-utils/gnc-icons.c:38
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
-#: ../src/import-export/csv-imp/gnc-csv-model.c:49
+#: ../src/import-export/csv-imp/gnc-csv-model.c:69
 #: ../src/import-export/import-main-matcher.c:482
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
@@ -4921,8 +4921,8 @@ msgstr "添加价格时发生错误。"
 #: ../src/report/standard-reports/cash-flow.scm:49
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
-#: ../src/report/standard-reports/register.scm:134
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:153
+#: ../src/report/standard-reports/register.scm:429
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "会计科目"
@@ -4942,8 +4942,8 @@ msgstr "符号"
 #: ../src/report/standard-reports/general-journal.scm:113
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
-#: ../src/report/standard-reports/register.scm:137
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:156
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -5032,8 +5032,8 @@ msgstr "股份价格"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3002
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
-#: ../src/report/standard-reports/register.scm:149
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/report/standard-reports/register.scm:168
+#: ../src/report/standard-reports/register.scm:458
 msgid "Value"
 msgstr "值"
 
@@ -5092,9 +5092,9 @@ msgid "Open"
 msgstr "打开"
 
 #: ../src/gnome/dialog-lot-viewer.c:857
-#: ../src/report/report-system/html-fonts.scm:70
+#: ../src/report/report-system/html-fonts.scm:89
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:379
+#: ../src/report/standard-reports/register.scm:398
 msgid "Title"
 msgstr "标题"
 
@@ -5103,7 +5103,7 @@ msgstr "标题"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:458
 #: ../src/gnome-utils/gnc-tree-view-owner.c:466
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3212
-#: ../src/import-export/csv-imp/gnc-csv-model.c:52
+#: ../src/import-export/csv-imp/gnc-csv-model.c:72
 #: ../src/register/ledger-core/split-register-model.c:311
 #: ../src/register/ledger-core/split-register-model.c:461
 #: ../src/report/business-reports/customer-summary.scm:184
@@ -5111,7 +5111,7 @@ msgstr "标题"
 #: ../src/report/business-reports/owner-report.scm:309
 #: ../src/report/report-system/html-utilities.scm:727
 #: ../src/report/standard-reports/account-summary.scm:460
-#: ../src/report/standard-reports/register.scm:155
+#: ../src/report/standard-reports/register.scm:174
 #: ../src/report/standard-reports/sx-summary.scm:465
 #: ../src/report/standard-reports/transaction.scm:465
 msgid "Balance"
@@ -5122,7 +5122,7 @@ msgid "Gains"
 msgstr "收益"
 
 #: ../src/gnome/dialog-lot-viewer.c:938
-#: ../src/report/standard-reports/average-balance.scm:108
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Gain/Loss"
 msgstr "损益"
 
@@ -5414,8 +5414,8 @@ msgid "Form"
 msgstr "表单"
 
 #: ../src/gnome/gnc-budget-view.c:387
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:79
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:84
 #: ../src/report/report-system/report-utilities.scm:118
 #: ../src/report/standard-reports/budget-income-statement.scm:674
 #: ../src/report/standard-reports/income-statement.scm:610
@@ -5445,7 +5445,7 @@ msgstr "转账"
 #: ../src/report/business-reports/fancy-invoice.scm:299
 #: ../src/report/business-reports/invoice.scm:120
 #: ../src/report/business-reports/invoice.scm:284
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:287
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:306
 #: ../src/report/report-system/html-acct-table.scm:899
 #: ../src/report/report-system/html-utilities.scm:619
 #: ../src/report/standard-reports/advanced-portfolio.scm:1043
@@ -5783,7 +5783,7 @@ msgstr "给定结清金额，自动结清独立交易。"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:247
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
-#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/window-reconcile2.c:2184
+#: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
 #: ../src/gnome/window-reconcile.c:2184
 msgid "_Transfer..."
 msgstr "转账(_T)..."
@@ -5880,8 +5880,8 @@ msgstr "打开"
 #: ../src/report/standard-reports/account-piecharts.scm:68
 #: ../src/report/standard-reports/account-summary.scm:75
 #: ../src/report/standard-reports/advanced-portfolio.scm:158
-#: ../src/report/standard-reports/average-balance.scm:69
-#: ../src/report/standard-reports/average-balance.scm:318
+#: ../src/report/standard-reports/average-balance.scm:88
+#: ../src/report/standard-reports/average-balance.scm:337
 #: ../src/report/standard-reports/balance-sheet.scm:88
 #: ../src/report/standard-reports/budget-balance-sheet.scm:53
 #: ../src/report/standard-reports/budget-barchart.scm:44
@@ -6273,7 +6273,7 @@ msgstr "编辑当前交易的汇率"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:366
 #: ../src/gnome/gnc-plugin-page-register.c:375
-#: ../src/gnome-utils/gnc-icons.c:25
+#: ../src/gnome-utils/gnc-icons.c:45
 msgid "_Jump"
 msgstr "跳转(_J)"
 
@@ -6349,7 +6349,7 @@ msgstr "以对账日期排序"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:418
-#: ../src/gnome-utils/gnc-icons.c:24
+#: ../src/gnome-utils/gnc-icons.c:44
 msgid "S_plit Transaction"
 msgstr "拆分交易(_P)"
 
@@ -6395,7 +6395,7 @@ msgstr "显示展开的交易，包含所有子交易"
 #: ../src/register/ledger-core/split-register.c:2489
 #: ../src/register/ledger-core/split-register-layout.c:687
 #: ../src/register/ledger-core/split-register-model.c:332
-#: ../src/report/standard-reports/register.scm:135
+#: ../src/report/standard-reports/register.scm:154
 msgid "Transfer"
 msgstr "转账"
 
@@ -6507,12 +6507,12 @@ msgstr "搜索结果报告"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:869
+#: ../src/report/standard-reports/register.scm:888
 msgid "Register"
 msgstr "账簿"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:381
+#: ../src/report/standard-reports/register.scm:400
 msgid "Register Report"
 msgstr "账簿报表"
 
@@ -10082,7 +10082,7 @@ msgid "There was an error parsing the file."
 msgstr "解析文件时遇到错误。"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1286 ../src/gnome-utils/gnc-file.c:1515
+#: ../src/gnome-utils/gnc-file.c:1293 ../src/gnome-utils/gnc-file.c:1527
 msgid "Writing file..."
 msgstr "正在写入文件..."
 
@@ -10625,7 +10625,7 @@ msgid "Import"
 msgstr "导入"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
-#: ../src/gnome-utils/gnc-file.c:1336
+#: ../src/gnome-utils/gnc-file.c:1343
 msgid "Save"
 msgstr "保存"
 
@@ -10863,19 +10863,19 @@ msgstr "正在加载用户数据..."
 msgid "Re-saving user data..."
 msgstr "正在加载用户数据..."
 
-#: ../src/gnome-utils/gnc-file.c:1200 ../src/gnome-utils/gnc-file.c:1430
+#: ../src/gnome-utils/gnc-file.c:1207 ../src/gnome-utils/gnc-file.c:1442
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "文件 %s 已存在。您确定您要覆盖它吗？"
 
-#: ../src/gnome-utils/gnc-file.c:1229
+#: ../src/gnome-utils/gnc-file.c:1236
 msgid "Exporting file..."
 msgstr "导出文件"
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1242
+#: ../src/gnome-utils/gnc-file.c:1249
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -10886,7 +10886,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/gnome-utils/gnc-file.c:1274
+#: ../src/gnome-utils/gnc-file.c:1281
 #, fuzzy
 #| msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgid "The database was opened read-only. Do you want to save it to a different place?"
@@ -10931,20 +10931,20 @@ msgstr "GnuCash 无法获得 %s 的锁。"
 msgid "GnuCash could not open the associated URI:"
 msgstr "GnuCash 无法获得 %s 的锁。"
 
-#: ../src/gnome-utils/gnc-icons.c:19
+#: ../src/gnome-utils/gnc-icons.c:39
 msgid "_Delete Account"
 msgstr "删除科目(_D)"
 
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile2.c:2179
+#: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
 #: ../src/gnome/window-reconcile.c:2179
 msgid "_Edit Account"
 msgstr "编辑科目(_E)"
 
-#: ../src/gnome-utils/gnc-icons.c:21
+#: ../src/gnome-utils/gnc-icons.c:41
 msgid "_New Account"
 msgstr "新建科目(_N)"
 
-#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile2.c:2174
+#: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
 #: ../src/gnome/window-reconcile.c:2174
 msgid "_Open Account"
 msgstr "打开科目(_O)"
@@ -11611,8 +11611,8 @@ msgstr "薪金"
 #: ../src/report/standard-reports/portfolio.scm:247
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
-#: ../src/report/standard-reports/register.scm:141
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:160
+#: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -11698,7 +11698,7 @@ msgstr "重新计算(_R)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:718
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:284
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:303
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
@@ -12535,7 +12535,7 @@ msgstr "<b>父科目(_P)</b>"
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:379
+#: ../src/report/standard-reports/register.scm:398
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -13553,7 +13553,7 @@ msgstr "2005-07-31"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
-#: ../src/import-export/csv-imp/gnc-csv-model.c:38
+#: ../src/import-export/csv-imp/gnc-csv-model.c:58
 msgid "Locale"
 msgstr ""
 
@@ -15103,7 +15103,7 @@ msgstr ""
 "您想在一次进入任务么？"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:409
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:70
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
 msgid "Unspecified"
 msgstr "未指定"
 
@@ -15246,7 +15246,7 @@ msgid "The Online Banking job is still running; are you sure you want to cancel?
 msgstr "网上银行依旧在运行，您确定想取消么？"
 
 #: ../src/import-export/aqb/gncmod-aqbanking.c:79
-#: ../src/import-export/gncmod-generic-import.c:59
+#: ../src/import-export/gncmod-generic-import.c:79
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:162
 msgid "Online Banking"
 msgstr "网上银行"
@@ -16073,54 +16073,54 @@ msgstr ""
 msgid "Row %u, account %s not in %s\n"
 msgstr "显示科目说明"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:30
+#: ../src/import-export/csv-imp/gnc-csv-model.c:50
 msgid "y-m-d"
 msgstr "年-月-日"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:31
+#: ../src/import-export/csv-imp/gnc-csv-model.c:51
 msgid "d-m-y"
 msgstr "日-月-年"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:32
+#: ../src/import-export/csv-imp/gnc-csv-model.c:52
 msgid "m-d-y"
 msgstr "月-日-年"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:33
+#: ../src/import-export/csv-imp/gnc-csv-model.c:53
 msgid "d-m"
 msgstr "日-月"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:34
+#: ../src/import-export/csv-imp/gnc-csv-model.c:54
 msgid "m-d"
 msgstr "月-日"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:39
+#: ../src/import-export/csv-imp/gnc-csv-model.c:59
 #: ../src/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr "句号为小数点：123,456.78"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:40
+#: ../src/import-export/csv-imp/gnc-csv-model.c:60
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr "逗号为小数点：123.456,78"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:456
+#: ../src/import-export/csv-imp/gnc-csv-model.c:476
 msgid "File opening failed."
 msgstr "打开文件失败。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:471
-#: ../src/import-export/csv-imp/gnc-csv-model.c:479
+#: ../src/import-export/csv-imp/gnc-csv-model.c:491
+#: ../src/import-export/csv-imp/gnc-csv-model.c:499
 msgid "Unknown encoding."
 msgstr "未知编码。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:810
+#: ../src/import-export/csv-imp/gnc-csv-model.c:830
 msgid "No date column."
 msgstr "无日期列。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:811
+#: ../src/import-export/csv-imp/gnc-csv-model.c:831
 msgid "No balance, deposit, or withdrawal column."
 msgstr "无余额、存款或取款列。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1105
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1125
 #, c-format
 msgid "%s column could not be understood."
 msgstr "无法理解%s栏。"
@@ -17189,216 +17189,216 @@ msgstr ""
 msgid "Show documentation"
 msgstr "显示文档"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:14
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:33
 msgid "Dividends"
 msgstr "股利"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:29
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:48
 msgid "Cap Return"
 msgstr "最高利润"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:35
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:54
 msgid "Cap. gain (long)"
 msgstr "获益上限 (长期)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:41
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
 msgid "Cap. gain (mid)"
 msgstr "获益上限 (中期)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
 msgid "Cap. gain (short)"
 msgstr "获益上限 (短期)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:61
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:80
 msgid "Commissions"
 msgstr "佣金"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:85
 msgid "Margin Interest"
 msgstr "保证金利率"
 
-#: ../src/import-export/qif-imp/qif-file.scm:66
-#: ../src/import-export/qif-imp/qif-file.scm:74
+#: ../src/import-export/qif-imp/qif-file.scm:85
+#: ../src/import-export/qif-imp/qif-file.scm:93
 msgid "Line"
 msgstr "行数"
 
-#: ../src/import-export/qif-imp/qif-file.scm:77
+#: ../src/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
 msgstr "停止读取。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:92
+#: ../src/import-export/qif-imp/qif-file.scm:111
 msgid "Reading"
 msgstr "阅读"
 
-#: ../src/import-export/qif-imp/qif-file.scm:121
+#: ../src/import-export/qif-imp/qif-file.scm:140
 msgid "Some characters have been discarded."
 msgstr "丢弃了一些字符。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:122
-#: ../src/import-export/qif-imp/qif-file.scm:126
+#: ../src/import-export/qif-imp/qif-file.scm:141
+#: ../src/import-export/qif-imp/qif-file.scm:145
 msgid "Converted to: "
 msgstr "转换到："
 
-#: ../src/import-export/qif-imp/qif-file.scm:125
+#: ../src/import-export/qif-imp/qif-file.scm:144
 msgid "Some characters have been converted according to your locale."
 msgstr "一些字符已经根据您的本地区域设置进行了转换。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:184
+#: ../src/import-export/qif-imp/qif-file.scm:203
 msgid "Ignoring unknown option"
 msgstr "忽略未知选项"
 
 #. The date is missing! Warn the user.
-#: ../src/import-export/qif-imp/qif-file.scm:318
+#: ../src/import-export/qif-imp/qif-file.scm:337
 msgid "Date required."
 msgstr "需要的日期。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:319
+#: ../src/import-export/qif-imp/qif-file.scm:338
 msgid "Discarding this transaction."
 msgstr "丢弃这笔交易。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:351
+#: ../src/import-export/qif-imp/qif-file.scm:370
 msgid "Ignoring class line"
 msgstr "忽略级别行"
 
-#: ../src/import-export/qif-imp/qif-file.scm:419
+#: ../src/import-export/qif-imp/qif-file.scm:438
 msgid "Ignoring category line"
 msgstr "忽略类别行"
 
-#: ../src/import-export/qif-imp/qif-file.scm:450
+#: ../src/import-export/qif-imp/qif-file.scm:469
 msgid "Ignoring security line"
 msgstr "忽略证券行"
 
-#: ../src/import-export/qif-imp/qif-file.scm:458
+#: ../src/import-export/qif-imp/qif-file.scm:477
 msgid "File does not appear to be in QIF format"
 msgstr "文件看起来不像 QIF 格式。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:634
+#: ../src/import-export/qif-imp/qif-file.scm:653
 msgid "Transaction date"
 msgstr "交易日期"
 
-#: ../src/import-export/qif-imp/qif-file.scm:635
+#: ../src/import-export/qif-imp/qif-file.scm:654
 msgid "Transaction amount"
 msgstr "交易金额"
 
-#: ../src/import-export/qif-imp/qif-file.scm:636
+#: ../src/import-export/qif-imp/qif-file.scm:655
 msgid "Share price"
 msgstr "股价"
 
-#: ../src/import-export/qif-imp/qif-file.scm:637
+#: ../src/import-export/qif-imp/qif-file.scm:656
 msgid "Share quantity"
 msgstr "股份数量"
 
-#: ../src/import-export/qif-imp/qif-file.scm:638
+#: ../src/import-export/qif-imp/qif-file.scm:657
 msgid "Investment action"
 msgstr "投资操作"
 
-#: ../src/import-export/qif-imp/qif-file.scm:639
+#: ../src/import-export/qif-imp/qif-file.scm:658
 msgid "Reconciliation status"
 msgstr "对账状态"
 
-#: ../src/import-export/qif-imp/qif-file.scm:640
+#: ../src/import-export/qif-imp/qif-file.scm:659
 msgid "Commission"
 msgstr "交易"
 
-#: ../src/import-export/qif-imp/qif-file.scm:641
+#: ../src/import-export/qif-imp/qif-file.scm:660
 msgid "Account type"
 msgstr "科目类型"
 
-#: ../src/import-export/qif-imp/qif-file.scm:642
+#: ../src/import-export/qif-imp/qif-file.scm:661
 msgid "Tax class"
 msgstr "税级"
 
-#: ../src/import-export/qif-imp/qif-file.scm:643
+#: ../src/import-export/qif-imp/qif-file.scm:662
 msgid "Category budget amount"
 msgstr "类别预算金额"
 
-#: ../src/import-export/qif-imp/qif-file.scm:644
+#: ../src/import-export/qif-imp/qif-file.scm:663
 msgid "Account budget amount"
 msgstr "科目预算金额"
 
-#: ../src/import-export/qif-imp/qif-file.scm:645
+#: ../src/import-export/qif-imp/qif-file.scm:664
 msgid "Credit limit"
 msgstr "信贷限额"
 
 #.
 #. Fields of categories.
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:658
+#: ../src/import-export/qif-imp/qif-file.scm:677
 msgid "Parsing categories"
 msgstr "解析类别"
 
 #.
 #. Fields of accounts
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:690
+#: ../src/import-export/qif-imp/qif-file.scm:709
 msgid "Parsing accounts"
 msgstr "解析科目"
 
 #.
 #. fields of transactions
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:731
+#: ../src/import-export/qif-imp/qif-file.scm:750
 msgid "Parsing transactions"
 msgstr "解析交易"
 
 #. Data was not in any of the supplied formats.
-#: ../src/import-export/qif-imp/qif-file.scm:907
+#: ../src/import-export/qif-imp/qif-file.scm:926
 msgid "Unrecognized or inconsistent format."
 msgstr "无法识别或不一致的格式。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:949
+#: ../src/import-export/qif-imp/qif-file.scm:968
 msgid "Parsing failed."
 msgstr "语法分析失败。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:990
+#: ../src/import-export/qif-imp/qif-file.scm:1009
 msgid "Parse ambiguity between formats"
 msgstr "在格式间出现解析歧义"
 
-#: ../src/import-export/qif-imp/qif-file.scm:992
+#: ../src/import-export/qif-imp/qif-file.scm:1011
 msgid "Value '%s' could be %s or %s."
 msgstr "值“%s”可能是“%s”或“%s”。"
 
-#: ../src/import-export/qif-imp/qif-merge-groups.scm:94
+#: ../src/import-export/qif-imp/qif-merge-groups.scm:113
 msgid "Finding duplicate transactions"
 msgstr "正在寻找重复交易"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:175
+#: ../src/import-export/qif-imp/qif-parse.scm:194
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
 msgstr "无法识别的科目类型“%s”。默认为银行。"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:282
+#: ../src/import-export/qif-imp/qif-parse.scm:301
 msgid "Unrecognized action '%s'."
 msgstr "无法识别的操作“%s”。"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:307
+#: ../src/import-export/qif-imp/qif-parse.scm:326
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
 msgstr "无法识别的状态“%s”。默认为未结清。"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:171
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:190
 msgid "QIF import: Name conflict with another account."
 msgstr "导入 QIF ：名称与其它科目冲突。"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:256
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:275
 msgid "Preparing to convert your QIF data"
 msgstr "正准备转换您的 QIF 数据"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:307
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:326
 msgid "Creating accounts"
 msgstr "创建科目"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:356
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:375
 msgid "Matching transfers between accounts"
 msgstr "在不同科目间匹配转账"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:374
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:393
 msgid "Converting"
 msgstr "正转换"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:459
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:478
 msgid "Missing transaction date."
 msgstr "丢失交易日期。"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:468
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:487
 msgid "Dates earlier than 1970 are not supported."
 msgstr "不支持1970年以前的日期。"
 
@@ -17773,7 +17773,7 @@ msgid "T-Ref"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:269
-#: ../src/report/standard-reports/register.scm:125
+#: ../src/report/standard-reports/register.scm:144
 msgid "T-Num"
 msgstr ""
 
@@ -17881,8 +17881,8 @@ msgstr "列表"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:565
 #: ../src/report/business-reports/owner-report.scm:40
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
-#: ../src/report/locale-specific/us/taxtxf.scm:156
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "To"
 msgstr "到"
 
@@ -17900,7 +17900,7 @@ msgstr "排序顺序"
 #: ../src/report/standard-reports/account-piecharts.scm:65
 #: ../src/report/standard-reports/account-summary.scm:114
 #: ../src/report/standard-reports/advanced-portfolio.scm:71
-#: ../src/report/standard-reports/average-balance.scm:22
+#: ../src/report/standard-reports/average-balance.scm:41
 #: ../src/report/standard-reports/balance-sheet.scm:138
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
@@ -17925,7 +17925,7 @@ msgstr "报表的货币"
 #: ../src/report/standard-reports/account-piecharts.scm:66
 #: ../src/report/standard-reports/account-summary.scm:115
 #: ../src/report/standard-reports/advanced-portfolio.scm:41
-#: ../src/report/standard-reports/average-balance.scm:23
+#: ../src/report/standard-reports/average-balance.scm:42
 #: ../src/report/standard-reports/balance-sheet.scm:139
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
@@ -18427,8 +18427,8 @@ msgstr "显示资产负债表 (使用 eguile 模板)"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:562
 #: ../src/report/business-reports/owner-report.scm:39
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
-#: ../src/report/locale-specific/us/taxtxf.scm:156
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "From"
 msgstr "从"
 
@@ -18581,8 +18581,8 @@ msgstr "按科目名的字母顺序"
 
 #: ../src/report/business-reports/customer-summary.scm:452
 #: ../src/report/business-reports/customer-summary.scm:839
-#: ../src/report/standard-reports/average-balance.scm:107
-#: ../src/report/standard-reports/average-balance.scm:128
+#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:147
 msgid "Profit"
 msgstr "利润"
 
@@ -18651,7 +18651,7 @@ msgstr "支出报表"
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/owner-report.scm:719
 #: ../src/report/report-gnome/dialog-report-column-view.c:351
-#: ../src/report/report-gnome/report-gnome.scm:61
+#: ../src/report/report-gnome/report-gnome.scm:80
 msgid "Report"
 msgstr "报表"
 
@@ -18733,7 +18733,7 @@ msgstr "用于替换发票、账单或支出凭证的自定义字符串"
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:386
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "是否显示日期？"
@@ -18741,7 +18741,7 @@ msgstr "是否显示日期？"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:401
+#: ../src/report/standard-reports/register.scm:420
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "是否显示叙述？"
@@ -18832,19 +18832,19 @@ msgstr "显示交易的价值"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:385
-#: ../src/report/standard-reports/register.scm:391
-#: ../src/report/standard-reports/register.scm:395
-#: ../src/report/standard-reports/register.scm:400
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:415
-#: ../src/report/standard-reports/register.scm:420
-#: ../src/report/standard-reports/register.scm:425
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/register.scm:439
 #: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -18905,7 +18905,7 @@ msgstr "是否显示所有的个人税种？"
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "合计"
@@ -18913,7 +18913,7 @@ msgstr "合计"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "是否显示合计？"
@@ -19701,53 +19701,53 @@ msgstr ""
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr "显示一个带税栏的客户发票 (使用 eguile 模板)"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:62
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:81
 msgid "Tax Report / TXF Export"
 msgstr "税务报表/ TXF 导出"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:135
-#: ../src/report/locale-specific/us/taxtxf.scm:160
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
+#: ../src/report/locale-specific/us/taxtxf.scm:179
 msgid "Alternate Period"
 msgstr "替代期间"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:136
-#: ../src/report/locale-specific/us/taxtxf.scm:161
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
+#: ../src/report/locale-specific/us/taxtxf.scm:180
 #, fuzzy
 #| msgid "Override or modify From: & To:"
 msgid "Override or modify From: & To:."
 msgstr "无视或修改 从： & 到："
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
-#: ../src/report/locale-specific/us/taxtxf.scm:164
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 msgid "Use From - To"
 msgstr "使用 从 - 到"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
-#: ../src/report/locale-specific/us/taxtxf.scm:164
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 #, fuzzy
 #| msgid "Use From - To period"
 msgid "Use From - To period."
 msgstr "使用 从 - 到期间"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
-#: ../src/report/locale-specific/us/taxtxf.scm:166
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "1st Est Tax Quarter"
 msgstr "第一税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
-#: ../src/report/locale-specific/us/taxtxf.scm:166
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 #, fuzzy
 #| msgid "Jan 1 - Mar 31"
 msgid "Jan 1 - Mar 31."
 msgstr "一月 1 - 三月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
-#: ../src/report/locale-specific/us/taxtxf.scm:168
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
+#: ../src/report/locale-specific/us/taxtxf.scm:187
 msgid "2nd Est Tax Quarter"
 msgstr "第二税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
-#: ../src/report/locale-specific/us/taxtxf.scm:168
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
+#: ../src/report/locale-specific/us/taxtxf.scm:187
 #, fuzzy
 #| msgid "Apr 1 - May 31"
 msgid "Apr 1 - May 31."
@@ -19756,297 +19756,297 @@ msgstr "四月 1 - 五月 31"
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
-#: ../src/report/locale-specific/us/taxtxf.scm:173
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "3rd Est Tax Quarter"
 msgstr "第三税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
-#: ../src/report/locale-specific/us/taxtxf.scm:173
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 #, fuzzy
 #| msgid "Jun 1 - Aug 31"
 msgid "Jun 1 - Aug 31."
 msgstr "六月 1 - 八月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:194
 msgid "4th Est Tax Quarter"
 msgstr "第四税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:194
 #, fuzzy
 #| msgid "Sep 1 - Dec 31"
 msgid "Sep 1 - Dec 31."
 msgstr "九月 1 - 十二月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
-#: ../src/report/locale-specific/us/taxtxf.scm:177
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 msgid "Last Year"
 msgstr "去年"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
-#: ../src/report/locale-specific/us/taxtxf.scm:177
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 #, fuzzy
 #| msgid "Last Year"
 msgid "Last Year."
 msgstr "去年"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
-#: ../src/report/locale-specific/us/taxtxf.scm:179
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
+#: ../src/report/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "去年第一税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
-#: ../src/report/locale-specific/us/taxtxf.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
+#: ../src/report/locale-specific/us/taxtxf.scm:199
 #, fuzzy
 #| msgid "Jan 1 - Mar 31, Last year"
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "去年一月 1 - 三月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:157
-#: ../src/report/locale-specific/us/taxtxf.scm:182
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
+#: ../src/report/locale-specific/us/taxtxf.scm:201
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "去年第二税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
+#: ../src/report/locale-specific/us/taxtxf.scm:202
 #, fuzzy
 #| msgid "Apr 1 - May 31, Last year"
 msgid "Apr 1 - May 31, Last year."
 msgstr "去年四月 1 - 五月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
+#: ../src/report/locale-specific/us/taxtxf.scm:204
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "去年第三税季"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:161
-#: ../src/report/locale-specific/us/taxtxf.scm:189
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
+#: ../src/report/locale-specific/us/taxtxf.scm:208
 #, fuzzy
 #| msgid "Jun 1 - Aug 31, Last year"
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "去年六月 1 - 八月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:163
-#: ../src/report/locale-specific/us/taxtxf.scm:191
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
+#: ../src/report/locale-specific/us/taxtxf.scm:210
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "去年第四税季"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:164
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
+#: ../src/report/locale-specific/us/taxtxf.scm:211
 #, fuzzy
 #| msgid "Sep 1 - Dec 31, Last year"
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "去年九月 1 - 十二月 31"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:168
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:187
+#: ../src/report/locale-specific/us/taxtxf.scm:215
 msgid "Select Accounts (none = all)"
 msgstr "选择科目 (无 = 全选)"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:197
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:188
+#: ../src/report/locale-specific/us/taxtxf.scm:216
 #, fuzzy
 #| msgid "Select accounts"
 msgid "Select accounts."
 msgstr "选择科目"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:175
-#: ../src/report/locale-specific/us/taxtxf.scm:203
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:194
+#: ../src/report/locale-specific/us/taxtxf.scm:222
 msgid "Suppress $0.00 values"
 msgstr "抑制 $0.00 值"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:195
 msgid "$0.00 valued Accounts won't be printed."
 msgstr "其值为 $0.00 的科目不会打印出来。"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:199
 msgid "Print Full account names"
 msgstr "打印科目全名"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:181
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:200
 #, fuzzy
 #| msgid "Print all Parent account names"
 msgid "Print all Parent account names."
 msgstr "打印所有父科目的名称"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:259
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:278
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
 msgstr "警告：某些科目分配到相同的 TXF 码。只有具付款人源的 TXF 码会被重复。"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:832
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
 msgid "Period from %s to %s"
 msgstr "从 %s 到 %s 期间"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:869
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:888
 msgid "Tax Report & XML Export"
 msgstr "税务报表 & XML 导出"
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:871
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:890
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr "须纳税的收入 / 可减免的支出 / 导出至 .XML 文件"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:875
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:884
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:894
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:903
 msgid "Taxable Income / Deductible Expenses"
 msgstr "须纳税的收入 / 可减免的支出"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:876
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:895
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr "这个报表显示您须纳税的收入与可减免的支出。"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:881
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:900
 msgid "XML"
 msgstr "XML"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:885
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:904
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "这个页面显示您须纳税的收入与可减免的支出。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:96
+#: ../src/report/locale-specific/us/taxtxf.scm:115
 msgid "Tax Schedule Report/TXF Export"
 msgstr "税务计划报表及导出 TXF"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:204
+#: ../src/report/locale-specific/us/taxtxf.scm:223
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "不会打印价值为0.00的税号"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:208
+#: ../src/report/locale-specific/us/taxtxf.scm:227
 msgid "Do not print full account names"
 msgstr "不打印完整科目名"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:209
+#: ../src/report/locale-specific/us/taxtxf.scm:228
 #, fuzzy
 #| msgid "Do not print all Parent account names"
 msgid "Do not print all Parent account names."
 msgstr "不打印所有父科目的名称"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:213
+#: ../src/report/locale-specific/us/taxtxf.scm:232
 msgid "Print all Transfer To/From Accounts"
 msgstr "打印所有的转入/转出科目"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:214
+#: ../src/report/locale-specific/us/taxtxf.scm:233
 #, fuzzy
 #| msgid "Print all split details for multi-split transactions"
 msgid "Print all split details for multi-split transactions."
 msgstr "对含有多笔子交易显示所有子交易的明细"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:218
+#: ../src/report/locale-specific/us/taxtxf.scm:237
 msgid "Print TXF export parameters"
 msgstr "打印 TXF 输出参数"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:219
+#: ../src/report/locale-specific/us/taxtxf.scm:238
 #, fuzzy
 #| msgid "Show TXF export parameters for each TXF code/account on report"
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr "在报表上为每个 TXF 代码/科目显示 TXF 输出参数"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:224
+#: ../src/report/locale-specific/us/taxtxf.scm:243
 #, fuzzy
 #| msgid "Do not print Action:Memo data"
 msgid "Do not print T-Num:Memo data"
 msgstr "不打印“操作：备注”数据"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:225
+#: ../src/report/locale-specific/us/taxtxf.scm:244
 #, fuzzy
 #| msgid "Do not print Action:Memo data for transactions"
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "不打印交易的“操作：备注”数据"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:228
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 msgid "Do not print Action:Memo data"
 msgstr "不打印“操作：备注”数据"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:229
+#: ../src/report/locale-specific/us/taxtxf.scm:248
 #, fuzzy
 #| msgid "Do not print Action:Memo data for transactions"
 msgid "Do not print Action:Memo data for transactions."
 msgstr "不打印交易的“操作：备注”数据"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:233
+#: ../src/report/locale-specific/us/taxtxf.scm:252
 msgid "Do not print transaction detail"
 msgstr "不打印交易明细"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:234
+#: ../src/report/locale-specific/us/taxtxf.scm:253
 #, fuzzy
 #| msgid "Do not print transaction detail for accounts"
 msgid "Do not print transaction detail for accounts."
 msgstr "不为科目打印交易明细"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:238
+#: ../src/report/locale-specific/us/taxtxf.scm:257
 msgid "Do not use special date processing"
 msgstr "不使用指定日期进行处理"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:239
+#: ../src/report/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 #| msgid "Do not print transactions out of specified dates"
 msgid "Do not print transactions out of specified dates."
 msgstr "不打印指定日期的交易"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:243
+#: ../src/report/locale-specific/us/taxtxf.scm:262
 msgid "Currency conversion date"
 msgstr "货币转换日期"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:244
+#: ../src/report/locale-specific/us/taxtxf.scm:263
 #, fuzzy
 #| msgid "Select date to use for PriceDB lookups"
 msgid "Select date to use for PriceDB lookups."
 msgstr "为价格数据库(PriceDB)设置所用的日期"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:266
 msgid "Nearest transaction date"
 msgstr "最接近交易的日期"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:266
 #, fuzzy
 #| msgid "Use nearest to transaction date"
 msgid "Use nearest to transaction date."
 msgstr "使用最接近交易的日期"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:249
+#: ../src/report/locale-specific/us/taxtxf.scm:268
 msgid "Nearest report date"
 msgstr "最接近报表的日期"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:249
+#: ../src/report/locale-specific/us/taxtxf.scm:268
 #, fuzzy
 #| msgid "Use nearest to report date"
 msgid "Use nearest to report date."
 msgstr "使用最接近报表的日期"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:256
+#: ../src/report/locale-specific/us/taxtxf.scm:275
 msgid "Shade alternate transactions"
 msgstr "淡化其它交易"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:257
+#: ../src/report/locale-specific/us/taxtxf.scm:276
 #, fuzzy
 #| msgid "Shade background of alternate transactions, if more than one displayed"
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr "如果多于一笔交易显示，将其它交易的背景淡化。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3513
+#: ../src/report/locale-specific/us/taxtxf.scm:3532
 msgid "Tax Schedule Report & TXF Export"
 msgstr "税务计划报表与TXF输出"
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf.scm:3515
+#: ../src/report/locale-specific/us/taxtxf.scm:3534
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
 msgstr "带交易明细的须纳税的收入/可扣除的支出，以及输出到 .TXF 文件。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3519
-#: ../src/report/locale-specific/us/taxtxf.scm:3528
+#: ../src/report/locale-specific/us/taxtxf.scm:3538
+#: ../src/report/locale-specific/us/taxtxf.scm:3547
 msgid "Taxable Income/Deductible Expenses"
 msgstr "须纳税的收入/可扣除的支出"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3520
+#: ../src/report/locale-specific/us/taxtxf.scm:3539
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
 msgstr "这个报表显示所得税相关科目的交易明细。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3529
+#: ../src/report/locale-specific/us/taxtxf.scm:3548
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "这个页面显示所得税相关科目的交易明细。"
 
@@ -20091,7 +20091,7 @@ msgid "Delete report configuration"
 msgstr "设置配置路径"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#: ../src/report/report-gnome/report-gnome.scm:122
+#: ../src/report/report-gnome/report-gnome.scm:141
 #, fuzzy
 #| msgid "Set configuration path"
 msgid "Saved Report Configurations"
@@ -20367,25 +20367,25 @@ msgstr "这个报表没有可用的选项。"
 msgid "GnuCash-Report"
 msgstr "GnuCash 选项"
 
-#: ../src/report/report-gnome/report-gnome.scm:54
+#: ../src/report/report-gnome/report-gnome.scm:73
 msgid "This report has no options."
 msgstr "这个报表没有选项。"
 
-#: ../src/report/report-gnome/report-gnome.scm:78
+#: ../src/report/report-gnome/report-gnome.scm:97
 msgid "Display the %s report"
 msgstr "显示 %s 报表"
 
-#: ../src/report/report-gnome/report-gnome.scm:124
+#: ../src/report/report-gnome/report-gnome.scm:143
 #, fuzzy
 #| msgid "Manage and run custom reports"
 msgid "Manage and run saved report configurations"
 msgstr "管理和执行自定义报表"
 
-#: ../src/report/report-gnome/report-gnome.scm:144
+#: ../src/report/report-gnome/report-gnome.scm:163
 msgid "Welcome Sample Report"
 msgstr "欢迎样本报表"
 
-#: ../src/report/report-gnome/report-gnome.scm:146
+#: ../src/report/report-gnome/report-gnome.scm:165
 msgid "Welcome-to-GnuCash report screen"
 msgstr "欢迎使用 GnuCash 报表画面"
 
@@ -20427,97 +20427,97 @@ msgstr "无法阅读模板文件“%s”。"
 msgid "Adjusting Entries"
 msgstr "调整交易"
 
-#: ../src/report/report-system/html-fonts.scm:69
-#: ../src/report/report-system/html-fonts.scm:74
-#: ../src/report/report-system/html-fonts.scm:79
-#: ../src/report/report-system/html-fonts.scm:84
-#: ../src/report/report-system/html-fonts.scm:89
-#: ../src/report/report-system/html-fonts.scm:94
-#: ../src/report/report-system/html-fonts.scm:99
-#: ../src/report/report-system/html-fonts.scm:104
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:88
+#: ../src/report/report-system/html-fonts.scm:93
+#: ../src/report/report-system/html-fonts.scm:98
+#: ../src/report/report-system/html-fonts.scm:103
+#: ../src/report/report-system/html-fonts.scm:108
+#: ../src/report/report-system/html-fonts.scm:113
+#: ../src/report/report-system/html-fonts.scm:118
+#: ../src/report/report-system/html-fonts.scm:123
+#: ../src/report/report-system/html-fonts.scm:128
 msgid "Fonts"
 msgstr "字体"
 
-#: ../src/report/report-system/html-fonts.scm:70
+#: ../src/report/report-system/html-fonts.scm:89
 #, fuzzy
 #| msgid "Font info for the report title"
 msgid "Font info for the report title."
 msgstr "报表标题的字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:75
+#: ../src/report/report-system/html-fonts.scm:94
 msgid "Account link"
 msgstr "科目链接"
 
-#: ../src/report/report-system/html-fonts.scm:75
+#: ../src/report/report-system/html-fonts.scm:94
 #, fuzzy
 #| msgid "Font info for account name"
 msgid "Font info for account name."
 msgstr "科目名的字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:80
+#: ../src/report/report-system/html-fonts.scm:99
 msgid "Number cell"
 msgstr "数字单元格"
 
-#: ../src/report/report-system/html-fonts.scm:80
+#: ../src/report/report-system/html-fonts.scm:99
 #, fuzzy
 #| msgid "Font info for regular number cells"
 msgid "Font info for regular number cells."
 msgstr "常规数字单元格的字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:85
+#: ../src/report/report-system/html-fonts.scm:104
 msgid "Negative Values in Red"
 msgstr "用红色显示负数"
 
-#: ../src/report/report-system/html-fonts.scm:85
+#: ../src/report/report-system/html-fonts.scm:104
 msgid "Display negative values in red."
 msgstr "用红色显示负数。"
 
-#: ../src/report/report-system/html-fonts.scm:90
+#: ../src/report/report-system/html-fonts.scm:109
 msgid "Number header"
 msgstr "数字标题"
 
-#: ../src/report/report-system/html-fonts.scm:90
+#: ../src/report/report-system/html-fonts.scm:109
 #, fuzzy
 #| msgid "Font info for number headers"
 msgid "Font info for number headers."
 msgstr "数字标题的字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:95
+#: ../src/report/report-system/html-fonts.scm:114
 msgid "Text cell"
 msgstr "文本单元格"
 
-#: ../src/report/report-system/html-fonts.scm:95
+#: ../src/report/report-system/html-fonts.scm:114
 #, fuzzy
 #| msgid "Font info for regular text cells"
 msgid "Font info for regular text cells."
 msgstr "常规文本单元格的字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:100
+#: ../src/report/report-system/html-fonts.scm:119
 msgid "Total number cell"
 msgstr "合计数字单元格"
 
-#: ../src/report/report-system/html-fonts.scm:100
+#: ../src/report/report-system/html-fonts.scm:119
 #, fuzzy
 #| msgid "Font info for number cells containing a total"
 msgid "Font info for number cells containing a total."
 msgstr "包含合计的数字单元格字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:105
+#: ../src/report/report-system/html-fonts.scm:124
 msgid "Total label cell"
 msgstr "合计标签单元格"
 
-#: ../src/report/report-system/html-fonts.scm:105
+#: ../src/report/report-system/html-fonts.scm:124
 #, fuzzy
 #| msgid "Font info for cells containing total labels"
 msgid "Font info for cells containing total labels."
 msgstr "包含合计标签的单元格字体信息"
 
-#: ../src/report/report-system/html-fonts.scm:110
+#: ../src/report/report-system/html-fonts.scm:129
 msgid "Centered label cell"
 msgstr "居中的标签单元格"
 
-#: ../src/report/report-system/html-fonts.scm:110
+#: ../src/report/report-system/html-fonts.scm:129
 #, fuzzy
 #| msgid "Font info for centered label cells"
 msgid "Font info for centered label cells."
@@ -21133,7 +21133,7 @@ msgstr "显示特定时间的负债余额饼图"
 #. in *one* place.
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
-#: ../src/report/standard-reports/average-balance.scm:19
+#: ../src/report/standard-reports/average-balance.scm:38
 #: ../src/report/standard-reports/cash-flow.scm:44
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
@@ -21148,7 +21148,7 @@ msgid "Start Date"
 msgstr "开始日期"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
-#: ../src/report/standard-reports/average-balance.scm:20
+#: ../src/report/standard-reports/average-balance.scm:39
 #: ../src/report/standard-reports/cash-flow.scm:45
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
@@ -21191,8 +21191,8 @@ msgid "Maximum Slices"
 msgstr "最大部分"
 
 #: ../src/report/standard-reports/account-piecharts.scm:75
-#: ../src/report/standard-reports/average-balance.scm:111
-#: ../src/report/standard-reports/average-balance.scm:447
+#: ../src/report/standard-reports/average-balance.scm:130
+#: ../src/report/standard-reports/average-balance.scm:466
 #: ../src/report/standard-reports/category-barchart.scm:87
 #: ../src/report/standard-reports/daily-reports.scm:68
 #: ../src/report/standard-reports/net-barchart.scm:61
@@ -21202,8 +21202,8 @@ msgid "Plot Width"
 msgstr "制图宽度"
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
-#: ../src/report/standard-reports/average-balance.scm:111
-#: ../src/report/standard-reports/average-balance.scm:449
+#: ../src/report/standard-reports/average-balance.scm:130
+#: ../src/report/standard-reports/average-balance.scm:468
 #: ../src/report/standard-reports/category-barchart.scm:88
 #: ../src/report/standard-reports/daily-reports.scm:69
 #: ../src/report/standard-reports/net-barchart.scm:62
@@ -21610,8 +21610,8 @@ msgid "Basis calculation method."
 msgstr "工本计算方式"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:90
-#: ../src/report/standard-reports/average-balance.scm:106
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:125
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Average"
 msgstr "均值"
 
@@ -21785,11 +21785,11 @@ msgstr "如果您现在处于一个多种货币的环境，汇率也许不正确
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:17
+#: ../src/report/standard-reports/average-balance.scm:36
 msgid "Average Balance"
 msgstr "平均结算"
 
-#: ../src/report/standard-reports/average-balance.scm:21
+#: ../src/report/standard-reports/average-balance.scm:40
 #: ../src/report/standard-reports/category-barchart.scm:77
 #: ../src/report/standard-reports/net-barchart.scm:49
 #: ../src/report/standard-reports/net-linechart.scm:45
@@ -21797,38 +21797,38 @@ msgstr "平均结算"
 msgid "Step Size"
 msgstr "步长"
 
-#: ../src/report/standard-reports/average-balance.scm:24
+#: ../src/report/standard-reports/average-balance.scm:43
 #: ../src/report/standard-reports/daily-reports.scm:63
 msgid "Include Sub-Accounts"
 msgstr "包含子科目"
 
-#: ../src/report/standard-reports/average-balance.scm:25
+#: ../src/report/standard-reports/average-balance.scm:44
 #, fuzzy
 #| msgid "Exclude transactions between selected accounts?"
 msgid "Exclude transactions between selected accounts"
 msgstr "把选定科目间的交易排除在外么？"
 
-#: ../src/report/standard-reports/average-balance.scm:57
+#: ../src/report/standard-reports/average-balance.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:95
 #, fuzzy
 #| msgid "Include sub-accounts of all selected accounts"
 msgid "Include sub-accounts of all selected accounts."
 msgstr "包含所有已选科目的子科目"
 
-#: ../src/report/standard-reports/average-balance.scm:63
+#: ../src/report/standard-reports/average-balance.scm:82
 #, fuzzy
 #| msgid "Exclude transactions that only involve two accounts, both of which are selected below.  This only affects the profit and loss columns of the table."
 msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr "除了只涉及两个科目的交易，下面的都选择了。这只会对表中损益栏有影响。"
 
-#: ../src/report/standard-reports/average-balance.scm:70
+#: ../src/report/standard-reports/average-balance.scm:89
 #, fuzzy
 #| msgid "Do transaction report on this account"
 msgid "Do transaction report on this account."
 msgstr "进行此科目的交易报表"
 
-#: ../src/report/standard-reports/average-balance.scm:93
-#: ../src/report/standard-reports/average-balance.scm:323
+#: ../src/report/standard-reports/average-balance.scm:112
+#: ../src/report/standard-reports/average-balance.scm:342
 #: ../src/report/standard-reports/category-barchart.scm:184
 #: ../src/report/standard-reports/category-barchart.scm:253
 #: ../src/report/standard-reports/net-barchart.scm:133
@@ -21838,46 +21838,46 @@ msgstr "进行此科目的交易报表"
 msgid "Show table"
 msgstr "显示表格"
 
-#: ../src/report/standard-reports/average-balance.scm:94
+#: ../src/report/standard-reports/average-balance.scm:113
 #: ../src/report/standard-reports/category-barchart.scm:185
 #: ../src/report/standard-reports/net-barchart.scm:134
 #: ../src/report/standard-reports/net-linechart.scm:140
 msgid "Display a table of the selected data."
 msgstr "显示已选数据的表格。"
 
-#: ../src/report/standard-reports/average-balance.scm:98
-#: ../src/report/standard-reports/average-balance.scm:322
+#: ../src/report/standard-reports/average-balance.scm:117
+#: ../src/report/standard-reports/average-balance.scm:341
 msgid "Show plot"
 msgstr "显示图表"
 
-#: ../src/report/standard-reports/average-balance.scm:99
+#: ../src/report/standard-reports/average-balance.scm:118
 msgid "Display a graph of the selected data."
 msgstr "显示已选数据的图形。"
 
-#: ../src/report/standard-reports/average-balance.scm:103
-#: ../src/report/standard-reports/average-balance.scm:321
+#: ../src/report/standard-reports/average-balance.scm:122
+#: ../src/report/standard-reports/average-balance.scm:340
 msgid "Plot Type"
 msgstr "绘图类型"
 
-#: ../src/report/standard-reports/average-balance.scm:104
+#: ../src/report/standard-reports/average-balance.scm:123
 #, fuzzy
 #| msgid "The type of graph to generate"
 msgid "The type of graph to generate."
 msgstr "要产生的图形种类"
 
-#: ../src/report/standard-reports/average-balance.scm:106
+#: ../src/report/standard-reports/average-balance.scm:125
 #, fuzzy
 #| msgid "Average Balance"
 msgid "Average Balance."
 msgstr "平均结算"
 
-#: ../src/report/standard-reports/average-balance.scm:107
+#: ../src/report/standard-reports/average-balance.scm:126
 #, fuzzy
 #| msgid "Profit (Gain minus Loss)"
 msgid "Profit (Gain minus Loss)."
 msgstr "利润 (获利减去亏损)"
 
-#: ../src/report/standard-reports/average-balance.scm:108
+#: ../src/report/standard-reports/average-balance.scm:127
 #, fuzzy
 #| msgid "Gain And Loss"
 msgid "Gain And Loss."
@@ -21885,27 +21885,27 @@ msgstr "损益"
 
 #. Watch out -- these names should be consistent with the display
 #. option where you choose them, otherwise users are confused.
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Period start"
 msgstr "期间开始"
 
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Period end"
 msgstr "期间结束"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Maximum"
 msgstr "最大"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Minimum"
 msgstr "最小"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Gain"
 msgstr "增益"
 
-#: ../src/report/standard-reports/average-balance.scm:128
+#: ../src/report/standard-reports/average-balance.scm:147
 msgid "Loss"
 msgstr "损失"
 
@@ -22698,8 +22698,8 @@ msgstr "普通日记账"
 
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
-#: ../src/report/standard-reports/register.scm:126
-#: ../src/report/standard-reports/register.scm:391
+#: ../src/report/standard-reports/register.scm:145
+#: ../src/report/standard-reports/register.scm:410
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 #, fuzzy
@@ -22711,7 +22711,7 @@ msgstr "动作"
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:463
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -23136,121 +23136,121 @@ msgstr "您选择的商品与报表的货币是完全相同的。显示同样商
 msgid "Price Scatterplot"
 msgstr "价格散布图"
 
-#: ../src/report/standard-reports/register.scm:151
+#: ../src/report/standard-reports/register.scm:170
 msgid "Debit Value"
 msgstr "借额："
 
-#: ../src/report/standard-reports/register.scm:153
+#: ../src/report/standard-reports/register.scm:172
 msgid "Credit Value"
 msgstr "贷额："
 
-#: ../src/report/standard-reports/register.scm:380
+#: ../src/report/standard-reports/register.scm:399
 #, fuzzy
 #| msgid "The title of the report"
 msgid "The title of the report."
 msgstr "报表的标题"
 
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:411
 #, fuzzy
 #| msgid "Display the check number?"
 msgid "Display the check number/action?"
 msgstr "是否显示支票号码？"
 
-#: ../src/report/standard-reports/register.scm:396
+#: ../src/report/standard-reports/register.scm:415
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "是否显示支票号码？"
 
-#: ../src/report/standard-reports/register.scm:406
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "显示备注？"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:430
 msgid "Display the account?"
 msgstr "是否显示科目？"
 
-#: ../src/report/standard-reports/register.scm:416
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr "是否显示股份数量？"
 
-#: ../src/report/standard-reports/register.scm:421
+#: ../src/report/standard-reports/register.scm:440
 msgid "Display the name of lot the shares are in?"
 msgstr "是否显示股份所在的 Lot 的名称？"
 
-#: ../src/report/standard-reports/register.scm:426
+#: ../src/report/standard-reports/register.scm:445
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr "显示股份价格？"
 
-#: ../src/report/standard-reports/register.scm:431
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr "是否显示金额？"
 
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:453
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "单重"
 
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:453
 #: ../src/report/standard-reports/transaction.scm:988
 #, fuzzy
 #| msgid "Single Column Display"
 msgid "Single Column Display."
 msgstr "单栏显示"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:454
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr "双重"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:454
 #: ../src/report/standard-reports/transaction.scm:989
 #, fuzzy
 #| msgid "Two Column Display"
 msgid "Two Column Display."
 msgstr "双栏显示"
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:459
 msgid "Display the value in transaction currency?"
 msgstr "是否在交易货币中显示值？"
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:464
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
 #| msgid "Display a running balance"
 msgid "Display a running balance?"
 msgstr "显示进行中的结算"
 
-#: ../src/report/standard-reports/register.scm:598
+#: ../src/report/standard-reports/register.scm:617
 msgid "Total Debits"
 msgstr "借方合计"
 
-#: ../src/report/standard-reports/register.scm:600
+#: ../src/report/standard-reports/register.scm:619
 msgid "Total Credits"
 msgstr "贷方合计"
 
-#: ../src/report/standard-reports/register.scm:602
+#: ../src/report/standard-reports/register.scm:621
 msgid "Total Value Debits"
 msgstr "借方价值合计"
 
-#: ../src/report/standard-reports/register.scm:604
+#: ../src/report/standard-reports/register.scm:623
 msgid "Total Value Credits"
 msgstr "贷方价值合计"
 
-#: ../src/report/standard-reports/register.scm:607
+#: ../src/report/standard-reports/register.scm:626
 msgid "Net Change"
 msgstr "净变动"
 
-#: ../src/report/standard-reports/register.scm:610
+#: ../src/report/standard-reports/register.scm:629
 msgid "Value Change"
 msgstr "价格变化"
 
-#: ../src/report/standard-reports/register.scm:769
+#: ../src/report/standard-reports/register.scm:788
 msgid "Client"
 msgstr "客户"
 
@@ -24057,7 +24057,7 @@ msgstr "公司商标图案。"
 #: ../src/report/stylesheets/stylesheet-footer.scm:116
 #: ../src/report/stylesheets/stylesheet-footer.scm:209
 #: ../src/report/stylesheets/stylesheet-plain.scm:48
-#: ../src/report/utility-reports/hello-world.scm:141
+#: ../src/report/utility-reports/hello-world.scm:160
 msgid "Background Color"
 msgstr "背景颜色"
 
@@ -24073,7 +24073,7 @@ msgstr "报表的通用背景颜色。"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:190
 #: ../src/report/stylesheets/stylesheet-footer.scm:123
 #: ../src/report/stylesheets/stylesheet-footer.scm:210
-#: ../src/report/utility-reports/hello-world.scm:148
+#: ../src/report/utility-reports/hello-world.scm:167
 msgid "Text Color"
 msgstr "文字颜色"
 
@@ -24315,78 +24315,78 @@ msgstr "报表的背景颜色。"
 msgid "Plain"
 msgstr "普通"
 
-#: ../src/report/utility-reports/hello-world.scm:42
-#: ../src/report/utility-reports/hello-world.scm:52
-#: ../src/report/utility-reports/hello-world.scm:78
-#: ../src/report/utility-reports/hello-world.scm:89
-#: ../src/report/utility-reports/hello-world.scm:98
-#: ../src/report/utility-reports/hello-world.scm:105
-#: ../src/report/utility-reports/hello-world.scm:112
-#: ../src/report/utility-reports/hello-world.scm:123
-#: ../src/report/utility-reports/hello-world.scm:141
-#: ../src/report/utility-reports/hello-world.scm:148
+#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:71
+#: ../src/report/utility-reports/hello-world.scm:97
+#: ../src/report/utility-reports/hello-world.scm:108
+#: ../src/report/utility-reports/hello-world.scm:117
+#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:131
+#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:160
+#: ../src/report/utility-reports/hello-world.scm:167
 msgid "Hello, World!"
 msgstr "Hello，World！"
 
-#: ../src/report/utility-reports/hello-world.scm:42
+#: ../src/report/utility-reports/hello-world.scm:61
 msgid "Boolean Option"
 msgstr "布尔选项"
 
-#: ../src/report/utility-reports/hello-world.scm:43
+#: ../src/report/utility-reports/hello-world.scm:62
 msgid "This is a boolean option."
 msgstr "这是一个布尔选项。"
 
-#: ../src/report/utility-reports/hello-world.scm:52
+#: ../src/report/utility-reports/hello-world.scm:71
 msgid "Multi Choice Option"
 msgstr "复选选项"
 
-#: ../src/report/utility-reports/hello-world.scm:53
+#: ../src/report/utility-reports/hello-world.scm:72
 msgid "This is a multi choice option."
 msgstr "这是一个复选选项。"
 
-#: ../src/report/utility-reports/hello-world.scm:56
+#: ../src/report/utility-reports/hello-world.scm:75
 msgid "First Option"
 msgstr "第一选项"
 
-#: ../src/report/utility-reports/hello-world.scm:57
+#: ../src/report/utility-reports/hello-world.scm:76
 #, fuzzy
 #| msgid "Help for first option"
 msgid "Help for first option."
 msgstr "第一选项说明"
 
-#: ../src/report/utility-reports/hello-world.scm:60
+#: ../src/report/utility-reports/hello-world.scm:79
 msgid "Second Option"
 msgstr "第二选项"
 
-#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:80
 #, fuzzy
 #| msgid "Help for second option"
 msgid "Help for second option."
 msgstr "第二选项说明"
 
-#: ../src/report/utility-reports/hello-world.scm:64
+#: ../src/report/utility-reports/hello-world.scm:83
 msgid "Third Option"
 msgstr "第三选项"
 
-#: ../src/report/utility-reports/hello-world.scm:65
+#: ../src/report/utility-reports/hello-world.scm:84
 #, fuzzy
 #| msgid "Help for third option"
 msgid "Help for third option."
 msgstr "第三选项说明"
 
-#: ../src/report/utility-reports/hello-world.scm:68
+#: ../src/report/utility-reports/hello-world.scm:87
 msgid "Fourth Options"
 msgstr "第四选项"
 
-#: ../src/report/utility-reports/hello-world.scm:69
+#: ../src/report/utility-reports/hello-world.scm:88
 msgid "The fourth option rules!"
 msgstr "第四选项才是王道！"
 
-#: ../src/report/utility-reports/hello-world.scm:78
+#: ../src/report/utility-reports/hello-world.scm:97
 msgid "String Option"
 msgstr "字符串选项"
 
-#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:98
 #, fuzzy
 #| msgid "This is a string option"
 msgid "This is a string option."
@@ -24403,233 +24403,233 @@ msgstr "这是一个字符串选项"
 #. The name of this report. This will be used, among other things,
 #. for making its menu item in the main menu. You need to use the
 #. untranslated value here!
-#: ../src/report/utility-reports/hello-world.scm:79
-#: ../src/report/utility-reports/hello-world.scm:313
-#: ../src/report/utility-reports/hello-world.scm:478
+#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:332
+#: ../src/report/utility-reports/hello-world.scm:497
 msgid "Hello, World"
 msgstr "您好，世界"
 
-#: ../src/report/utility-reports/hello-world.scm:89
+#: ../src/report/utility-reports/hello-world.scm:108
 msgid "Just a Date Option"
 msgstr "只是日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:90
+#: ../src/report/utility-reports/hello-world.scm:109
 #, fuzzy
 #| msgid "This is a date option"
 msgid "This is a date option."
 msgstr "这是一个日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:117
 msgid "Time and Date Option"
 msgstr "时间和日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:99
+#: ../src/report/utility-reports/hello-world.scm:118
 #, fuzzy
 #| msgid "This is a date option with time"
 msgid "This is a date option with time."
 msgstr "这是一个带有时间的日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:105
+#: ../src/report/utility-reports/hello-world.scm:124
 msgid "Combo Date Option"
 msgstr "组合日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:106
+#: ../src/report/utility-reports/hello-world.scm:125
 #, fuzzy
 #| msgid "This is a combination date option"
 msgid "This is a combination date option."
 msgstr "这是一个组合的日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:112
+#: ../src/report/utility-reports/hello-world.scm:131
 msgid "Relative Date Option"
 msgstr "相对日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:113
+#: ../src/report/utility-reports/hello-world.scm:132
 #, fuzzy
 #| msgid "This is a relative date option"
 msgid "This is a relative date option."
 msgstr "这是一个相对日期选项"
 
-#: ../src/report/utility-reports/hello-world.scm:123
+#: ../src/report/utility-reports/hello-world.scm:142
 msgid "Number Option"
 msgstr "数值选项"
 
-#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:143
 msgid "This is a number option."
 msgstr "这是一个数值选项。"
 
-#: ../src/report/utility-reports/hello-world.scm:142
-#: ../src/report/utility-reports/hello-world.scm:149
+#: ../src/report/utility-reports/hello-world.scm:161
+#: ../src/report/utility-reports/hello-world.scm:168
 #, fuzzy
 #| msgid "This is a color option"
 msgid "This is a color option."
 msgstr "这是一个颜色选项"
 
-#: ../src/report/utility-reports/hello-world.scm:170
-#: ../src/report/utility-reports/hello-world.scm:183
+#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:202
 msgid "Hello Again"
 msgstr "再次 Hello"
 
-#: ../src/report/utility-reports/hello-world.scm:170
+#: ../src/report/utility-reports/hello-world.scm:189
 msgid "An account list option"
 msgstr "科目列表选项"
 
-#: ../src/report/utility-reports/hello-world.scm:171
+#: ../src/report/utility-reports/hello-world.scm:190
 #, fuzzy
 #| msgid "This is an account list option"
 msgid "This is an account list option."
 msgstr "这是一个科目列表选项"
 
-#: ../src/report/utility-reports/hello-world.scm:183
+#: ../src/report/utility-reports/hello-world.scm:202
 msgid "A list option"
 msgstr "列表选项"
 
-#: ../src/report/utility-reports/hello-world.scm:184
+#: ../src/report/utility-reports/hello-world.scm:203
 #, fuzzy
 #| msgid "This is a list option"
 msgid "This is a list option."
 msgstr "这是一个列表选项"
 
-#: ../src/report/utility-reports/hello-world.scm:188
+#: ../src/report/utility-reports/hello-world.scm:207
 msgid "The Good"
 msgstr "好的"
 
-#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:208
 #, fuzzy
 #| msgid "Good option"
 msgid "Good option."
 msgstr "好的选项"
 
-#: ../src/report/utility-reports/hello-world.scm:192
+#: ../src/report/utility-reports/hello-world.scm:211
 msgid "The Bad"
 msgstr "坏的"
 
-#: ../src/report/utility-reports/hello-world.scm:193
+#: ../src/report/utility-reports/hello-world.scm:212
 #, fuzzy
 #| msgid "Bad option"
 msgid "Bad option."
 msgstr "坏的选项"
 
-#: ../src/report/utility-reports/hello-world.scm:196
+#: ../src/report/utility-reports/hello-world.scm:215
 msgid "The Ugly"
 msgstr "丑的"
 
-#: ../src/report/utility-reports/hello-world.scm:197
+#: ../src/report/utility-reports/hello-world.scm:216
 #, fuzzy
 #| msgid "Ugly option"
 msgid "Ugly option."
 msgstr "丑的选项"
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:222
 msgid "Testing"
 msgstr "正在试验"
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:222
 msgid "Crash the report"
 msgstr "报表故障"
 
-#: ../src/report/utility-reports/hello-world.scm:205
+#: ../src/report/utility-reports/hello-world.scm:224
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
 msgstr "这是测试用的。您的报表应该不会有像这个的选项。"
 
-#: ../src/report/utility-reports/hello-world.scm:328
+#: ../src/report/utility-reports/hello-world.scm:347
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
 msgstr "这是 GnuCash 的范例报表。想知道关于写出自己的报表或扩充现有报表的详细数据，请查看在 scm/report 目录的 guile (scheme) 源代码。"
 
-#: ../src/report/utility-reports/hello-world.scm:334
+#: ../src/report/utility-reports/hello-world.scm:353
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
 msgstr "需要撰写报表的帮助、或贡献您独特、新奇又酷的报表，请联系邮件列表 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:339
+#: ../src/report/utility-reports/hello-world.scm:358
 msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr "需要订阅通信论坛的详情，请看 &lt;http://www.gnucash.org/&gt;。"
 
-#: ../src/report/utility-reports/hello-world.scm:340
+#: ../src/report/utility-reports/hello-world.scm:359
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
 msgstr "您可以从 &lt;http://www.scheme.com/tspl2d/&gt; 学习到更多关于如何写 scheme 程序。"
 
-#: ../src/report/utility-reports/hello-world.scm:344
+#: ../src/report/utility-reports/hello-world.scm:363
 msgid "The current time is %s."
 msgstr "当前的时间是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:349
+#: ../src/report/utility-reports/hello-world.scm:368
 msgid "The boolean option is %s."
 msgstr "布尔选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:350
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "true"
 msgstr "真"
 
-#: ../src/report/utility-reports/hello-world.scm:350
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "false"
 msgstr "假"
 
-#: ../src/report/utility-reports/hello-world.scm:354
+#: ../src/report/utility-reports/hello-world.scm:373
 msgid "The multi-choice option is %s."
 msgstr "复选选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:359
+#: ../src/report/utility-reports/hello-world.scm:378
 msgid "The string option is %s."
 msgstr "字符串选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:364
+#: ../src/report/utility-reports/hello-world.scm:383
 msgid "The date option is %s."
 msgstr "日期选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:388
 msgid "The date and time option is %s."
 msgstr "时间和日期选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:374
+#: ../src/report/utility-reports/hello-world.scm:393
 msgid "The relative date option is %s."
 msgstr "相对日期选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:379
+#: ../src/report/utility-reports/hello-world.scm:398
 msgid "The combination date option is %s."
 msgstr "组合日期选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:384
+#: ../src/report/utility-reports/hello-world.scm:403
 msgid "The number option is %s."
 msgstr "数值选项是 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:395
+#: ../src/report/utility-reports/hello-world.scm:414
 msgid "The number option formatted as currency is %s."
 msgstr "货币形式的数字选项为 %s。"
 
-#: ../src/report/utility-reports/hello-world.scm:407
+#: ../src/report/utility-reports/hello-world.scm:426
 msgid "Items you selected:"
 msgstr "您选择的项目："
 
-#: ../src/report/utility-reports/hello-world.scm:414
+#: ../src/report/utility-reports/hello-world.scm:433
 msgid "List items selected"
 msgstr "列表中被选择的项目"
 
-#: ../src/report/utility-reports/hello-world.scm:419
+#: ../src/report/utility-reports/hello-world.scm:438
 msgid "(You selected no list items.)"
 msgstr "(您未选定列表中的项目。)"
 
-#: ../src/report/utility-reports/hello-world.scm:455
+#: ../src/report/utility-reports/hello-world.scm:474
 msgid "You have selected no accounts."
 msgstr "您还没有选择科目。"
 
-#: ../src/report/utility-reports/hello-world.scm:460
+#: ../src/report/utility-reports/hello-world.scm:479
 #, fuzzy
 #| msgid "Display"
 msgid "Display help"
 msgstr "显示"
 
-#: ../src/report/utility-reports/hello-world.scm:465
+#: ../src/report/utility-reports/hello-world.scm:484
 msgid "Have a nice day!"
 msgstr "祝您有美好的一天！"
 
 #. The name in the menu
 #. (only necessary if it differs from the name)
-#: ../src/report/utility-reports/hello-world.scm:489
+#: ../src/report/utility-reports/hello-world.scm:508
 msgid "Sample Report with Examples"
 msgstr "具有范例的样本报表"
 
 #. A tip that is used to provide additional information about the
 #. report to the user.
-#: ../src/report/utility-reports/hello-world.scm:493
+#: ../src/report/utility-reports/hello-world.scm:512
 msgid "A sample report with examples."
 msgstr "具有范例的样本报表。"
 
@@ -24727,15 +24727,15 @@ msgstr "添加剩余货物报价么？"
 msgid "Adding remaining good quotes."
 msgstr "添加剩余货物报价。"
 
-#: ../src/tax/us/de_DE.scm:37
+#: ../src/tax/us/de_DE.scm:56
 msgid "Tax Number"
 msgstr "税号"
 
-#: ../src/tax/us/txf-de_DE.scm:330
+#: ../src/tax/us/txf-de_DE.scm:349
 msgid "The electronic tax number of your business"
 msgstr "您的公司的电子税号"
 
-#: ../src/tax/us/txf.scm:87
+#: ../src/tax/us/txf.scm:106
 msgid "No help available."
 msgstr "没有可用帮助。"
 

@@ -898,7 +898,7 @@
         (let loop ((current (car objects))
                    (rest (cdr objects)))
           (let ((val (getter current)))
-            (if val
+            (if (and val (string? val))
                 (begin
                   (set! do-parsing #t)
                   (set! formats (checker val formats))))

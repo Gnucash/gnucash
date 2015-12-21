@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-26 10:44-0700\n"
+"POT-Creation-Date: 2015-10-05 12:57-0700\n"
 "PO-Revision-Date: 2011-09-20 01:21+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -767,8 +767,8 @@ msgid "Opening Balances"
 msgstr "開始残高"
 
 #: ../src/app-utils/gnc-ui-util.c:672
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:57
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:72
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:76
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:200
 #: ../src/report/standard-reports/balance-sheet.scm:673
 msgid "Retained Earnings"
@@ -776,8 +776,8 @@ msgstr "利益剰余金"
 
 #: ../src/app-utils/gnc-ui-util.c:744 ../src/engine/Account.c:3951
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:52
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:56
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:71
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:75
 #: ../src/register/ledger-core/split-register.c:2548
 #: ../src/report/standard-reports/balance-sheet.scm:661
 #: ../src/report/standard-reports/budget-balance-sheet.scm:812
@@ -798,7 +798,7 @@ msgstr "開始残高"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:373
+#: ../src/report/standard-reports/register.scm:392
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -818,7 +818,7 @@ msgstr "借方"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:375
+#: ../src/report/standard-reports/register.scm:394
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -841,7 +841,7 @@ msgstr "入金"
 
 #: ../src/app-utils/prefs.scm:64
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3133
-#: ../src/import-export/csv-imp/gnc-csv-model.c:50
+#: ../src/import-export/csv-imp/gnc-csv-model.c:70
 msgid "Deposit"
 msgstr "入金"
 
@@ -941,7 +941,7 @@ msgstr "購入"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:826
+#: ../src/report/standard-reports/register.scm:845
 msgid "Charge"
 msgstr "請求"
 
@@ -977,7 +977,7 @@ msgstr "費用"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:813
+#: ../src/report/standard-reports/register.scm:832
 msgid "Invoice"
 msgstr "得意先請求書"
 
@@ -989,7 +989,7 @@ msgstr "出金"
 
 #: ../src/app-utils/prefs.scm:81
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
-#: ../src/import-export/csv-imp/gnc-csv-model.c:51
+#: ../src/import-export/csv-imp/gnc-csv-model.c:71
 msgid "Withdrawal"
 msgstr "出金"
 
@@ -1025,12 +1025,12 @@ msgstr "売却"
 #: ../src/engine/Scrub.c:393 ../src/gnome/gnc-budget-view.c:385
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2975
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3076
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:13
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:19
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:28
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:34
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:40
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:46
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:32
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:38
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:53
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:59
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
 #: ../src/register/ledger-core/split-register.c:2564
 #: ../src/report/report-system/report-utilities.scm:117
 #: ../src/report/standard-reports/advanced-portfolio.scm:1078
@@ -1237,7 +1237,7 @@ msgstr "立替払請求書"
 #: ../src/business/business-gnome/business-gnome-utils.c:448
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:668
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
-#: ../src/import-export/csv-imp/gnc-csv-model.c:44
+#: ../src/import-export/csv-imp/gnc-csv-model.c:64
 #: ../src/report/standard-reports/transaction.scm:685
 #: ../src/report/standard-reports/transaction.scm:722
 #: ../src/report/standard-reports/transaction.scm:777
@@ -1924,13 +1924,13 @@ msgstr "作成済"
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
 #: ../src/gnome/reconcile-view.c:385
-#: ../src/import-export/csv-imp/gnc-csv-model.c:46
+#: ../src/import-export/csv-imp/gnc-csv-model.c:66
 #: ../src/register/ledger-core/split-register-model.c:246
 #: ../src/register/ledger-core/split-register-model.c:266
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
-#: ../src/report/standard-reports/register.scm:127
-#: ../src/report/standard-reports/register.scm:395
+#: ../src/report/standard-reports/register.scm:146
+#: ../src/report/standard-reports/register.scm:414
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -1982,8 +1982,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:430
-#: ../src/report/standard-reports/register.scm:826
+#: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:845
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -3282,7 +3282,7 @@ msgstr "所有者選択ダイアログ"
 #: ../src/gnome-utils/gnc-tree-view-account.c:749
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:47
+#: ../src/import-export/csv-imp/gnc-csv-model.c:67
 #: ../src/import-export/import-main-matcher.c:485
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
@@ -3303,8 +3303,8 @@ msgstr "所有者選択ダイアログ"
 #: ../src/report/standard-reports/general-journal.scm:111
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
-#: ../src/report/standard-reports/register.scm:129
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:148
+#: ../src/report/standard-reports/register.scm:419
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3389,7 +3389,7 @@ msgstr "請求住所"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:474
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2914
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
-#: ../src/import-export/csv-imp/gnc-csv-model.c:48
+#: ../src/import-export/csv-imp/gnc-csv-model.c:68
 #: ../src/register/ledger-core/split-register-model.c:468
 #: ../src/report/business-reports/balsheet-eg.scm:301
 #: ../src/report/business-reports/taxinvoice.scm:91
@@ -3713,7 +3713,7 @@ msgstr "記帳先"
 #: ../src/gnome/reconcile-view.c:389
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/import-export/csv-imp/gnc-csv-model.c:45
+#: ../src/import-export/csv-imp/gnc-csv-model.c:65
 #: ../src/import-export/import-main-matcher.c:481
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
@@ -3741,9 +3741,9 @@ msgstr "記帳先"
 #: ../src/report/standard-reports/net-barchart.scm:410
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
-#: ../src/report/standard-reports/register.scm:121
-#: ../src/report/standard-reports/register.scm:385
-#: ../src/report/standard-reports/register.scm:787
+#: ../src/report/standard-reports/register.scm:140
+#: ../src/report/standard-reports/register.scm:404
+#: ../src/report/standard-reports/register.scm:806
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3812,8 +3812,8 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
-#: ../src/report/standard-reports/register.scm:131
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:150
+#: ../src/report/standard-reports/register.scm:424
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -4156,7 +4156,7 @@ msgstr "小計"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:121
 #: ../src/report/business-reports/easy-invoice.scm:478
 #: ../src/report/business-reports/fancy-invoice.scm:517
-#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:36
+#: ../src/report/business-reports/invoice.scm:454 ../src/tax/us/de_DE.scm:55
 msgid "Tax"
 msgstr "税金"
 
@@ -4480,8 +4480,8 @@ msgstr "得意先請求書によって作成されています。得意先請求
 msgid " (posted)"
 msgstr " (記帳済) "
 
-#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:139
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
+#: ../src/report/standard-reports/register.scm:439
 msgid "Lot"
 msgstr "ロット"
 
@@ -4612,7 +4612,7 @@ msgstr "貸借不一致"
 
 #: ../src/engine/Split.c:1410 ../src/engine/Split.c:1427
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
-#: ../src/report/standard-reports/register.scm:232
+#: ../src/report/standard-reports/register.scm:251
 msgid "-- Split Transaction --"
 msgstr "-- スプリット取引 --"
 
@@ -4803,7 +4803,7 @@ msgstr "元本"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2970
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:20
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:39
 #: ../src/register/ledger-core/split-register.c:2471
 #: ../src/register/ledger-core/split-register.c:2508
 #: ../src/register/ledger-core/split-register.c:2516
@@ -4835,9 +4835,9 @@ msgstr "価格追加中にエラーが発生しました。"
 #: ../src/gnome/assistant-stock-split.c:570
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
-#: ../src/gnome-utils/gnc-icons.c:18
+#: ../src/gnome-utils/gnc-icons.c:38
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
-#: ../src/import-export/csv-imp/gnc-csv-model.c:49
+#: ../src/import-export/csv-imp/gnc-csv-model.c:69
 #: ../src/import-export/import-main-matcher.c:482
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
@@ -4850,8 +4850,8 @@ msgstr "価格追加中にエラーが発生しました。"
 #: ../src/report/standard-reports/cash-flow.scm:49
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
-#: ../src/report/standard-reports/register.scm:134
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:153
+#: ../src/report/standard-reports/register.scm:429
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "勘定科目"
@@ -4871,8 +4871,8 @@ msgstr "記号"
 #: ../src/report/standard-reports/general-journal.scm:113
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
-#: ../src/report/standard-reports/register.scm:137
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:156
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -4961,8 +4961,8 @@ msgstr "株価"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3002
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
-#: ../src/report/standard-reports/register.scm:149
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/report/standard-reports/register.scm:168
+#: ../src/report/standard-reports/register.scm:458
 msgid "Value"
 msgstr "価値"
 
@@ -5021,9 +5021,9 @@ msgid "Open"
 msgstr "開く"
 
 #: ../src/gnome/dialog-lot-viewer.c:857
-#: ../src/report/report-system/html-fonts.scm:70
+#: ../src/report/report-system/html-fonts.scm:89
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:379
+#: ../src/report/standard-reports/register.scm:398
 msgid "Title"
 msgstr "タイトル"
 
@@ -5032,7 +5032,7 @@ msgstr "タイトル"
 #: ../src/gnome-utils/gnc-tree-view-owner.c:458
 #: ../src/gnome-utils/gnc-tree-view-owner.c:466
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3212
-#: ../src/import-export/csv-imp/gnc-csv-model.c:52
+#: ../src/import-export/csv-imp/gnc-csv-model.c:72
 #: ../src/register/ledger-core/split-register-model.c:311
 #: ../src/register/ledger-core/split-register-model.c:461
 #: ../src/report/business-reports/customer-summary.scm:184
@@ -5040,7 +5040,7 @@ msgstr "タイトル"
 #: ../src/report/business-reports/owner-report.scm:309
 #: ../src/report/report-system/html-utilities.scm:727
 #: ../src/report/standard-reports/account-summary.scm:460
-#: ../src/report/standard-reports/register.scm:155
+#: ../src/report/standard-reports/register.scm:174
 #: ../src/report/standard-reports/sx-summary.scm:465
 #: ../src/report/standard-reports/transaction.scm:465
 msgid "Balance"
@@ -5051,7 +5051,7 @@ msgid "Gains"
 msgstr "損益"
 
 #: ../src/gnome/dialog-lot-viewer.c:938
-#: ../src/report/standard-reports/average-balance.scm:108
+#: ../src/report/standard-reports/average-balance.scm:127
 msgid "Gain/Loss"
 msgstr "利益/損失"
 
@@ -5342,8 +5342,8 @@ msgid "Form"
 msgstr "フォーム"
 
 #: ../src/gnome/gnc-budget-view.c:387
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:65
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:79
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:84
 #: ../src/report/report-system/report-utilities.scm:118
 #: ../src/report/standard-reports/budget-income-statement.scm:674
 #: ../src/report/standard-reports/income-statement.scm:610
@@ -5373,7 +5373,7 @@ msgstr "資金移動"
 #: ../src/report/business-reports/fancy-invoice.scm:299
 #: ../src/report/business-reports/invoice.scm:120
 #: ../src/report/business-reports/invoice.scm:284
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:287
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:306
 #: ../src/report/report-system/html-acct-table.scm:899
 #: ../src/report/report-system/html-utilities.scm:619
 #: ../src/report/standard-reports/advanced-portfolio.scm:1043
@@ -5703,7 +5703,7 @@ msgstr "清算金額を入力したときに各取引を自動清算します。
 #: ../src/gnome/gnc-plugin-page-account-tree.c:247
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
-#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/window-reconcile2.c:2184
+#: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
 #: ../src/gnome/window-reconcile.c:2184
 msgid "_Transfer..."
 msgstr "資金移動(_T)..."
@@ -5800,8 +5800,8 @@ msgstr "開く"
 #: ../src/report/standard-reports/account-piecharts.scm:68
 #: ../src/report/standard-reports/account-summary.scm:75
 #: ../src/report/standard-reports/advanced-portfolio.scm:158
-#: ../src/report/standard-reports/average-balance.scm:69
-#: ../src/report/standard-reports/average-balance.scm:318
+#: ../src/report/standard-reports/average-balance.scm:88
+#: ../src/report/standard-reports/average-balance.scm:337
 #: ../src/report/standard-reports/balance-sheet.scm:88
 #: ../src/report/standard-reports/budget-balance-sheet.scm:53
 #: ../src/report/standard-reports/budget-barchart.scm:44
@@ -6191,7 +6191,7 @@ msgstr "現在の取引の為替・交換レートを編集します"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:366
 #: ../src/gnome/gnc-plugin-page-register.c:375
-#: ../src/gnome-utils/gnc-icons.c:25
+#: ../src/gnome-utils/gnc-icons.c:45
 msgid "_Jump"
 msgstr "ジャンプ(_J)"
 
@@ -6267,7 +6267,7 @@ msgstr "照合日順にソート"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:418
-#: ../src/gnome-utils/gnc-icons.c:24
+#: ../src/gnome-utils/gnc-icons.c:44
 msgid "S_plit Transaction"
 msgstr "スプリット取引(_P)"
 
@@ -6313,7 +6313,7 @@ msgstr "すべてのスプリットを含めて展開した取引を表示しま
 #: ../src/register/ledger-core/split-register.c:2489
 #: ../src/register/ledger-core/split-register-layout.c:687
 #: ../src/register/ledger-core/split-register-model.c:332
-#: ../src/report/standard-reports/register.scm:135
+#: ../src/report/standard-reports/register.scm:154
 msgid "Transfer"
 msgstr "資金移動"
 
@@ -6426,12 +6426,12 @@ msgstr "検索結果帳票"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:869
+#: ../src/report/standard-reports/register.scm:888
 msgid "Register"
 msgstr "記録簿"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:381
+#: ../src/report/standard-reports/register.scm:400
 msgid "Register Report"
 msgstr "記録簿帳票"
 
@@ -9957,7 +9957,7 @@ msgid "There was an error parsing the file."
 msgstr "ファイル解析中にエラーがありました。"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1286 ../src/gnome-utils/gnc-file.c:1515
+#: ../src/gnome-utils/gnc-file.c:1293 ../src/gnome-utils/gnc-file.c:1527
 msgid "Writing file..."
 msgstr "ファイル書込み中..."
 
@@ -10493,7 +10493,7 @@ msgid "Import"
 msgstr "インポート"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1083
-#: ../src/gnome-utils/gnc-file.c:1336
+#: ../src/gnome-utils/gnc-file.c:1343
 msgid "Save"
 msgstr "保存"
 
@@ -10728,19 +10728,19 @@ msgstr "ユーザーデータをロード中..."
 msgid "Re-saving user data..."
 msgstr "ユーザーデータを再保存中..."
 
-#: ../src/gnome-utils/gnc-file.c:1200 ../src/gnome-utils/gnc-file.c:1430
+#: ../src/gnome-utils/gnc-file.c:1207 ../src/gnome-utils/gnc-file.c:1442
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "ファイル %s はすでに存在します。本当に上書きしていいですか?"
 
-#: ../src/gnome-utils/gnc-file.c:1229
+#: ../src/gnome-utils/gnc-file.c:1236
 msgid "Exporting file..."
 msgstr "ファイルのエクスポート中..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1242
+#: ../src/gnome-utils/gnc-file.c:1249
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -10751,7 +10751,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/gnome-utils/gnc-file.c:1274
+#: ../src/gnome-utils/gnc-file.c:1281
 #, fuzzy
 #| msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgid "The database was opened read-only. Do you want to save it to a different place?"
@@ -10796,20 +10796,20 @@ msgstr "GnuCashは %s をロックすることができませんでした。"
 msgid "GnuCash could not open the associated URI:"
 msgstr "GnuCashは %s をロックすることができませんでした。"
 
-#: ../src/gnome-utils/gnc-icons.c:19
+#: ../src/gnome-utils/gnc-icons.c:39
 msgid "_Delete Account"
 msgstr "勘定科目の削除(_D)"
 
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile2.c:2179
+#: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
 #: ../src/gnome/window-reconcile.c:2179
 msgid "_Edit Account"
 msgstr "勘定科目の編集(_E)"
 
-#: ../src/gnome-utils/gnc-icons.c:21
+#: ../src/gnome-utils/gnc-icons.c:41
 msgid "_New Account"
 msgstr "新規勘定科目(_N)"
 
-#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile2.c:2174
+#: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
 #: ../src/gnome/window-reconcile.c:2174
 msgid "_Open Account"
 msgstr "勘定科目を開く(_O)"
@@ -11461,8 +11461,8 @@ msgstr "小切手"
 #: ../src/report/standard-reports/portfolio.scm:247
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
-#: ../src/report/standard-reports/register.scm:141
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:160
+#: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -11548,7 +11548,7 @@ msgstr "再計算(_R)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:718
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:284
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:303
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
@@ -12378,7 +12378,7 @@ msgstr "<b>親勘定科目(_P)</b>"
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:379
+#: ../src/report/standard-reports/register.scm:398
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -13394,7 +13394,7 @@ msgstr "2005-07-31"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
-#: ../src/import-export/csv-imp/gnc-csv-model.c:38
+#: ../src/import-export/csv-imp/gnc-csv-model.c:58
 msgid "Locale"
 msgstr ""
 
@@ -14859,7 +14859,7 @@ msgstr ""
 "ジョブを再入力しますか?"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:409
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:70
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
 msgid "Unspecified"
 msgstr "指定なし"
 
@@ -14976,7 +14976,7 @@ msgid "The Online Banking job is still running; are you sure you want to cancel?
 msgstr "インターネットバンキングのジョブは実行中です。本当に取り消しますか?"
 
 #: ../src/import-export/aqb/gncmod-aqbanking.c:79
-#: ../src/import-export/gncmod-generic-import.c:59
+#: ../src/import-export/gncmod-generic-import.c:79
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:162
 msgid "Online Banking"
 msgstr "インターネットバンキング"
@@ -15793,54 +15793,54 @@ msgstr ""
 msgid "Row %u, account %s not in %s\n"
 msgstr "勘定科目の備考を表示する"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:30
+#: ../src/import-export/csv-imp/gnc-csv-model.c:50
 msgid "y-m-d"
 msgstr "年-月-日"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:31
+#: ../src/import-export/csv-imp/gnc-csv-model.c:51
 msgid "d-m-y"
 msgstr "日-月-年"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:32
+#: ../src/import-export/csv-imp/gnc-csv-model.c:52
 msgid "m-d-y"
 msgstr "月-日-年"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:33
+#: ../src/import-export/csv-imp/gnc-csv-model.c:53
 msgid "d-m"
 msgstr "日-月"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:34
+#: ../src/import-export/csv-imp/gnc-csv-model.c:54
 msgid "m-d"
 msgstr "月-日"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:39
+#: ../src/import-export/csv-imp/gnc-csv-model.c:59
 #: ../src/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr "ピリオド: 123,456.78"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:40
+#: ../src/import-export/csv-imp/gnc-csv-model.c:60
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr "カンマ: 123,456.78"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:456
+#: ../src/import-export/csv-imp/gnc-csv-model.c:476
 msgid "File opening failed."
 msgstr "ファイルを開けませんでした。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:471
-#: ../src/import-export/csv-imp/gnc-csv-model.c:479
+#: ../src/import-export/csv-imp/gnc-csv-model.c:491
+#: ../src/import-export/csv-imp/gnc-csv-model.c:499
 msgid "Unknown encoding."
 msgstr "文字コードが不明です。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:810
+#: ../src/import-export/csv-imp/gnc-csv-model.c:830
 msgid "No date column."
 msgstr "日付の列がありません。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:811
+#: ../src/import-export/csv-imp/gnc-csv-model.c:831
 msgid "No balance, deposit, or withdrawal column."
 msgstr "残高、入金、出金の列がありません。"
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1105
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1125
 #, c-format
 msgid "%s column could not be understood."
 msgstr "%s の列が処理できませんでした。"
@@ -16920,216 +16920,216 @@ msgstr ""
 msgid "Show documentation"
 msgstr "ドキュメントを表示する"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:14
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:33
 msgid "Dividends"
 msgstr "配当"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:29
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:48
 msgid "Cap Return"
 msgstr "投資利益"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:35
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:54
 msgid "Cap. gain (long)"
 msgstr "資本利得(長期)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:41
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:60
 msgid "Cap. gain (mid)"
 msgstr "資本利得(中期)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:47
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
 msgid "Cap. gain (short)"
 msgstr "資本利得(短期)"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:61
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:80
 msgid "Commissions"
 msgstr "手数料"
 
-#: ../src/import-export/qif-imp/qif-dialog-utils.scm:66
+#: ../src/import-export/qif-imp/qif-dialog-utils.scm:85
 msgid "Margin Interest"
 msgstr "マージン利率"
 
-#: ../src/import-export/qif-imp/qif-file.scm:66
-#: ../src/import-export/qif-imp/qif-file.scm:74
+#: ../src/import-export/qif-imp/qif-file.scm:85
+#: ../src/import-export/qif-imp/qif-file.scm:93
 msgid "Line"
 msgstr "行"
 
-#: ../src/import-export/qif-imp/qif-file.scm:77
+#: ../src/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
 msgstr "読み込みを中止しました。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:92
+#: ../src/import-export/qif-imp/qif-file.scm:111
 msgid "Reading"
 msgstr "読み込み中です"
 
-#: ../src/import-export/qif-imp/qif-file.scm:121
+#: ../src/import-export/qif-imp/qif-file.scm:140
 msgid "Some characters have been discarded."
 msgstr "いくつかの文字が破棄されました。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:122
-#: ../src/import-export/qif-imp/qif-file.scm:126
+#: ../src/import-export/qif-imp/qif-file.scm:141
+#: ../src/import-export/qif-imp/qif-file.scm:145
 msgid "Converted to: "
 msgstr "変換先:"
 
-#: ../src/import-export/qif-imp/qif-file.scm:125
+#: ../src/import-export/qif-imp/qif-file.scm:144
 msgid "Some characters have been converted according to your locale."
 msgstr "ロケールに基づいていくつかの文字が破棄されました。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:184
+#: ../src/import-export/qif-imp/qif-file.scm:203
 msgid "Ignoring unknown option"
 msgstr "不明なオプションを無視しています"
 
 #. The date is missing! Warn the user.
-#: ../src/import-export/qif-imp/qif-file.scm:318
+#: ../src/import-export/qif-imp/qif-file.scm:337
 msgid "Date required."
 msgstr "日付が必要です。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:319
+#: ../src/import-export/qif-imp/qif-file.scm:338
 msgid "Discarding this transaction."
 msgstr "この取引を破棄します。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:351
+#: ../src/import-export/qif-imp/qif-file.scm:370
 msgid "Ignoring class line"
 msgstr ""
 
-#: ../src/import-export/qif-imp/qif-file.scm:419
+#: ../src/import-export/qif-imp/qif-file.scm:438
 msgid "Ignoring category line"
 msgstr "カテゴリー行を無視しています"
 
-#: ../src/import-export/qif-imp/qif-file.scm:450
+#: ../src/import-export/qif-imp/qif-file.scm:469
 msgid "Ignoring security line"
 msgstr "証券行を無視しています"
 
-#: ../src/import-export/qif-imp/qif-file.scm:458
+#: ../src/import-export/qif-imp/qif-file.scm:477
 msgid "File does not appear to be in QIF format"
 msgstr "ファイルがQIF形式ではありません。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:634
+#: ../src/import-export/qif-imp/qif-file.scm:653
 msgid "Transaction date"
 msgstr "取引日"
 
-#: ../src/import-export/qif-imp/qif-file.scm:635
+#: ../src/import-export/qif-imp/qif-file.scm:654
 msgid "Transaction amount"
 msgstr "取引金額"
 
-#: ../src/import-export/qif-imp/qif-file.scm:636
+#: ../src/import-export/qif-imp/qif-file.scm:655
 msgid "Share price"
 msgstr "株価"
 
-#: ../src/import-export/qif-imp/qif-file.scm:637
+#: ../src/import-export/qif-imp/qif-file.scm:656
 msgid "Share quantity"
 msgstr "株式数"
 
-#: ../src/import-export/qif-imp/qif-file.scm:638
+#: ../src/import-export/qif-imp/qif-file.scm:657
 msgid "Investment action"
 msgstr "投資アクション"
 
-#: ../src/import-export/qif-imp/qif-file.scm:639
+#: ../src/import-export/qif-imp/qif-file.scm:658
 msgid "Reconciliation status"
 msgstr "照合の状態"
 
-#: ../src/import-export/qif-imp/qif-file.scm:640
+#: ../src/import-export/qif-imp/qif-file.scm:659
 msgid "Commission"
 msgstr "手数料"
 
-#: ../src/import-export/qif-imp/qif-file.scm:641
+#: ../src/import-export/qif-imp/qif-file.scm:660
 msgid "Account type"
 msgstr "勘定科目タイプ"
 
-#: ../src/import-export/qif-imp/qif-file.scm:642
+#: ../src/import-export/qif-imp/qif-file.scm:661
 msgid "Tax class"
 msgstr "税金のクラス"
 
-#: ../src/import-export/qif-imp/qif-file.scm:643
+#: ../src/import-export/qif-imp/qif-file.scm:662
 msgid "Category budget amount"
 msgstr "予算カテゴリーの金額"
 
-#: ../src/import-export/qif-imp/qif-file.scm:644
+#: ../src/import-export/qif-imp/qif-file.scm:663
 msgid "Account budget amount"
 msgstr "予算勘定科目の金額"
 
-#: ../src/import-export/qif-imp/qif-file.scm:645
+#: ../src/import-export/qif-imp/qif-file.scm:664
 msgid "Credit limit"
 msgstr "与信限度額"
 
 #.
 #. Fields of categories.
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:658
+#: ../src/import-export/qif-imp/qif-file.scm:677
 msgid "Parsing categories"
 msgstr "カテゴリーを解析中..."
 
 #.
 #. Fields of accounts
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:690
+#: ../src/import-export/qif-imp/qif-file.scm:709
 msgid "Parsing accounts"
 msgstr "勘定科目を解析中..."
 
 #.
 #. fields of transactions
 #.
-#: ../src/import-export/qif-imp/qif-file.scm:731
+#: ../src/import-export/qif-imp/qif-file.scm:750
 msgid "Parsing transactions"
 msgstr "取引を解析中..."
 
 #. Data was not in any of the supplied formats.
-#: ../src/import-export/qif-imp/qif-file.scm:907
+#: ../src/import-export/qif-imp/qif-file.scm:926
 msgid "Unrecognized or inconsistent format."
 msgstr "認識できない、または不整合のあるファイル形式です。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:949
+#: ../src/import-export/qif-imp/qif-file.scm:968
 msgid "Parsing failed."
 msgstr "解析に失敗しました。"
 
-#: ../src/import-export/qif-imp/qif-file.scm:990
+#: ../src/import-export/qif-imp/qif-file.scm:1009
 msgid "Parse ambiguity between formats"
 msgstr "ファイル形式が曖昧です"
 
-#: ../src/import-export/qif-imp/qif-file.scm:992
+#: ../src/import-export/qif-imp/qif-file.scm:1011
 msgid "Value '%s' could be %s or %s."
 msgstr "値 '%s' は %s または %s のようです。"
 
-#: ../src/import-export/qif-imp/qif-merge-groups.scm:94
+#: ../src/import-export/qif-imp/qif-merge-groups.scm:113
 msgid "Finding duplicate transactions"
 msgstr "重複した取引を検索中しています"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:175
+#: ../src/import-export/qif-imp/qif-parse.scm:194
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
 msgstr "勘定科目タイプ'%s'を認識できません。銀行をデフォルトとして割り当てます。"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:282
+#: ../src/import-export/qif-imp/qif-parse.scm:301
 msgid "Unrecognized action '%s'."
 msgstr "アクション'%s'を認識できません。"
 
-#: ../src/import-export/qif-imp/qif-parse.scm:307
+#: ../src/import-export/qif-imp/qif-parse.scm:326
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
 msgstr "照合状態'%s'を認識できません。未清算をデフォルトとして割り当てます。"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:171
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:190
 msgid "QIF import: Name conflict with another account."
 msgstr "QIFインポート: 勘定科目名が他の勘定科目と競合しています。"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:256
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:275
 msgid "Preparing to convert your QIF data"
 msgstr "QIFデータ変換の準備をしています"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:307
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:326
 msgid "Creating accounts"
 msgstr "勘定科目を作成しています"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:356
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:375
 msgid "Matching transfers between accounts"
 msgstr "勘定科目間で取引を一致させています"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:374
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:393
 msgid "Converting"
 msgstr "変換しています"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:459
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:478
 msgid "Missing transaction date."
 msgstr "取引の日付が存在しません。"
 
-#: ../src/import-export/qif-imp/qif-to-gnc.scm:468
+#: ../src/import-export/qif-imp/qif-to-gnc.scm:487
 msgid "Dates earlier than 1970 are not supported."
 msgstr "1970以前の日付はサポートしていません。"
 
@@ -17480,7 +17480,7 @@ msgid "T-Ref"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:269
-#: ../src/report/standard-reports/register.scm:125
+#: ../src/report/standard-reports/register.scm:144
 msgid "T-Num"
 msgstr ""
 
@@ -17588,8 +17588,8 @@ msgstr "一覧"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:565
 #: ../src/report/business-reports/owner-report.scm:40
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
-#: ../src/report/locale-specific/us/taxtxf.scm:156
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "To"
 msgstr "終了日"
 
@@ -17607,7 +17607,7 @@ msgstr "ソート順"
 #: ../src/report/standard-reports/account-piecharts.scm:65
 #: ../src/report/standard-reports/account-summary.scm:114
 #: ../src/report/standard-reports/advanced-portfolio.scm:71
-#: ../src/report/standard-reports/average-balance.scm:22
+#: ../src/report/standard-reports/average-balance.scm:41
 #: ../src/report/standard-reports/balance-sheet.scm:138
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
@@ -17632,7 +17632,7 @@ msgstr "帳票の通貨"
 #: ../src/report/standard-reports/account-piecharts.scm:66
 #: ../src/report/standard-reports/account-summary.scm:115
 #: ../src/report/standard-reports/advanced-portfolio.scm:41
-#: ../src/report/standard-reports/average-balance.scm:23
+#: ../src/report/standard-reports/average-balance.scm:42
 #: ../src/report/standard-reports/balance-sheet.scm:139
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
@@ -18118,8 +18118,8 @@ msgstr "貸借対照表を表示します (eguileテンプレートを使用)"
 #: ../src/report/business-reports/job-report.scm:379
 #: ../src/report/business-reports/job-report.scm:562
 #: ../src/report/business-reports/owner-report.scm:39
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:131
-#: ../src/report/locale-specific/us/taxtxf.scm:156
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
+#: ../src/report/locale-specific/us/taxtxf.scm:175
 msgid "From"
 msgstr "開始日"
 
@@ -18268,8 +18268,8 @@ msgstr "得意先名をアルファベット順にソートします。"
 
 #: ../src/report/business-reports/customer-summary.scm:452
 #: ../src/report/business-reports/customer-summary.scm:839
-#: ../src/report/standard-reports/average-balance.scm:107
-#: ../src/report/standard-reports/average-balance.scm:128
+#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:147
 msgid "Profit"
 msgstr "利益"
 
@@ -18338,7 +18338,7 @@ msgstr "費用帳票"
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/owner-report.scm:719
 #: ../src/report/report-gnome/dialog-report-column-view.c:351
-#: ../src/report/report-gnome/report-gnome.scm:61
+#: ../src/report/report-gnome/report-gnome.scm:80
 msgid "Report"
 msgstr "帳票"
 
@@ -18416,7 +18416,7 @@ msgstr "Invoice、BillまたはExpence Voucherの代わりに表題に表示す�
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:386
+#: ../src/report/standard-reports/register.scm:405
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "日付を表示するかどうかを指定します。"
@@ -18424,7 +18424,7 @@ msgstr "日付を表示するかどうかを指定します。"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:401
+#: ../src/report/standard-reports/register.scm:420
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "説明を表示するかどうかを指定します。"
@@ -18515,19 +18515,19 @@ msgstr "項目の合計額を表示するかどうかを指定します。"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:385
-#: ../src/report/standard-reports/register.scm:391
-#: ../src/report/standard-reports/register.scm:395
-#: ../src/report/standard-reports/register.scm:400
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:415
-#: ../src/report/standard-reports/register.scm:420
-#: ../src/report/standard-reports/register.scm:425
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:434
 #: ../src/report/standard-reports/register.scm:439
 #: ../src/report/standard-reports/register.scm:444
 #: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -18588,7 +18588,7 @@ msgstr "すべての個別税額を表示するかどうかを指定します。
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:449
+#: ../src/report/standard-reports/register.scm:468
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "合計"
@@ -18596,7 +18596,7 @@ msgstr "合計"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "合計を表示するかどうかを指定します。"
@@ -19370,53 +19370,53 @@ msgstr ""
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr "税金欄を含めた得意先請求書を表示します (eguileテンプレートを使用)"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:62
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:81
 msgid "Tax Report / TXF Export"
 msgstr "税金レポート / TXFファイルへの出力"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:135
-#: ../src/report/locale-specific/us/taxtxf.scm:160
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
+#: ../src/report/locale-specific/us/taxtxf.scm:179
 msgid "Alternate Period"
 msgstr "期間の変更"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:136
-#: ../src/report/locale-specific/us/taxtxf.scm:161
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
+#: ../src/report/locale-specific/us/taxtxf.scm:180
 #, fuzzy
 #| msgid "Override or modify From: & To:"
 msgid "Override or modify From: & To:."
 msgstr "開始日:と終了日:を上書きあるいは修正する"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
-#: ../src/report/locale-specific/us/taxtxf.scm:164
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 msgid "Use From - To"
 msgstr "上の開始日と終了日を使用"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:139
-#: ../src/report/locale-specific/us/taxtxf.scm:164
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
+#: ../src/report/locale-specific/us/taxtxf.scm:183
 #, fuzzy
 #| msgid "Use From - To period"
 msgid "Use From - To period."
 msgstr "上の開始日と終了日の期間を使用"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
-#: ../src/report/locale-specific/us/taxtxf.scm:166
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "1st Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:141
-#: ../src/report/locale-specific/us/taxtxf.scm:166
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
+#: ../src/report/locale-specific/us/taxtxf.scm:185
 #, fuzzy
 #| msgid "Jan 1 - Mar 31"
 msgid "Jan 1 - Mar 31."
 msgstr "1月1日から3月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
-#: ../src/report/locale-specific/us/taxtxf.scm:168
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
+#: ../src/report/locale-specific/us/taxtxf.scm:187
 msgid "2nd Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:143
-#: ../src/report/locale-specific/us/taxtxf.scm:168
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:162
+#: ../src/report/locale-specific/us/taxtxf.scm:187
 #, fuzzy
 #| msgid "Apr 1 - May 31"
 msgid "Apr 1 - May 31."
@@ -19425,296 +19425,296 @@ msgstr "4月1日から5月31日まで"
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
-#: ../src/report/locale-specific/us/taxtxf.scm:173
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "3rd Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:148
-#: ../src/report/locale-specific/us/taxtxf.scm:173
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
+#: ../src/report/locale-specific/us/taxtxf.scm:192
 #, fuzzy
 #| msgid "Jun 1 - Aug 31"
 msgid "Jun 1 - Aug 31."
 msgstr "6月1日から8月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:194
 msgid "4th Est Tax Quarter"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:150
-#: ../src/report/locale-specific/us/taxtxf.scm:175
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
+#: ../src/report/locale-specific/us/taxtxf.scm:194
 #, fuzzy
 #| msgid "Sep 1 - Dec 31"
 msgid "Sep 1 - Dec 31."
 msgstr "9月1日から12月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
-#: ../src/report/locale-specific/us/taxtxf.scm:177
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 msgid "Last Year"
 msgstr "前年"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:152
-#: ../src/report/locale-specific/us/taxtxf.scm:177
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
+#: ../src/report/locale-specific/us/taxtxf.scm:196
 #, fuzzy
 #| msgid "Last Year"
 msgid "Last Year."
 msgstr "前年"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:154
-#: ../src/report/locale-specific/us/taxtxf.scm:179
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
+#: ../src/report/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:155
-#: ../src/report/locale-specific/us/taxtxf.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
+#: ../src/report/locale-specific/us/taxtxf.scm:199
 #, fuzzy
 #| msgid "Jan 1 - Mar 31, Last year"
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "前年の1月1日から3月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:157
-#: ../src/report/locale-specific/us/taxtxf.scm:182
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
+#: ../src/report/locale-specific/us/taxtxf.scm:201
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
-#: ../src/report/locale-specific/us/taxtxf.scm:183
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
+#: ../src/report/locale-specific/us/taxtxf.scm:202
 #, fuzzy
 #| msgid "Apr 1 - May 31, Last year"
 msgid "Apr 1 - May 31, Last year."
 msgstr "前年の4月1日から5月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
-#: ../src/report/locale-specific/us/taxtxf.scm:185
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
+#: ../src/report/locale-specific/us/taxtxf.scm:204
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr ""
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:161
-#: ../src/report/locale-specific/us/taxtxf.scm:189
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
+#: ../src/report/locale-specific/us/taxtxf.scm:208
 #, fuzzy
 #| msgid "Jun 1 - Aug 31, Last year"
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "前年の6月1日から8月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:163
-#: ../src/report/locale-specific/us/taxtxf.scm:191
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
+#: ../src/report/locale-specific/us/taxtxf.scm:210
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:164
-#: ../src/report/locale-specific/us/taxtxf.scm:192
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
+#: ../src/report/locale-specific/us/taxtxf.scm:211
 #, fuzzy
 #| msgid "Sep 1 - Dec 31, Last year"
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "前年の9月1日から12月31日まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:168
-#: ../src/report/locale-specific/us/taxtxf.scm:196
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:187
+#: ../src/report/locale-specific/us/taxtxf.scm:215
 msgid "Select Accounts (none = all)"
 msgstr "勘定科目を選択(なし=すべて)"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
-#: ../src/report/locale-specific/us/taxtxf.scm:197
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:188
+#: ../src/report/locale-specific/us/taxtxf.scm:216
 #, fuzzy
 #| msgid "Select accounts"
 msgid "Select accounts."
 msgstr "勘定科目を選択"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:175
-#: ../src/report/locale-specific/us/taxtxf.scm:203
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:194
+#: ../src/report/locale-specific/us/taxtxf.scm:222
 msgid "Suppress $0.00 values"
 msgstr "金額0の項目を印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:195
 msgid "$0.00 valued Accounts won't be printed."
 msgstr "金額が0の勘定科目を印刷しない。"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:180
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:199
 msgid "Print Full account names"
 msgstr "勘定科目のフルネームを印刷"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:181
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:200
 #, fuzzy
 #| msgid "Print all Parent account names"
 msgid "Print all Parent account names."
 msgstr "すべての親勘定科目名を印刷"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:259
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:278
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:832
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
 msgid "Period from %s to %s"
 msgstr "期間 %s から %s まで"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:869
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:888
 msgid "Tax Report & XML Export"
 msgstr "税金帳票・XMLエクスポート"
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:871
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:890
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
 msgstr "課税収入 / 控除費用 / .XMLファイルへエクスポート"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:875
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:884
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:894
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:903
 msgid "Taxable Income / Deductible Expenses"
 msgstr "課税収入 / 控除費用"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:876
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:895
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr "このレポートは課税収入と控除費用を表示します。"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:881
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:900
 msgid "XML"
 msgstr "XML"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:885
+#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:904
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "このページは課税収入と控除費用を表示します。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:96
+#: ../src/report/locale-specific/us/taxtxf.scm:115
 msgid "Tax Schedule Report/TXF Export"
 msgstr "税金予定帳票/TXFファイルへのエクスポート"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:204
+#: ../src/report/locale-specific/us/taxtxf.scm:223
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "金額が0の税金コードを印刷しない。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:208
+#: ../src/report/locale-specific/us/taxtxf.scm:227
 msgid "Do not print full account names"
 msgstr "勘定科目のフルネームを印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:209
+#: ../src/report/locale-specific/us/taxtxf.scm:228
 #, fuzzy
 #| msgid "Do not print all Parent account names"
 msgid "Do not print all Parent account names."
 msgstr "すべての親勘定科目名を印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:213
+#: ../src/report/locale-specific/us/taxtxf.scm:232
 msgid "Print all Transfer To/From Accounts"
 msgstr "すべての資金移動元・資金移動先勘定科目を印刷する"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:214
+#: ../src/report/locale-specific/us/taxtxf.scm:233
 #, fuzzy
 #| msgid "Print all split details for multi-split transactions"
 msgid "Print all split details for multi-split transactions."
 msgstr "複数スプリット取引に関してはすべてのスプリット詳細を印刷する"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:218
+#: ../src/report/locale-specific/us/taxtxf.scm:237
 msgid "Print TXF export parameters"
 msgstr "TXFエクスポートパラメーターを印刷する"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:219
+#: ../src/report/locale-specific/us/taxtxf.scm:238
 #, fuzzy
 #| msgid "Show TXF export parameters for each TXF code/account on report"
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr "帳票の各 TXFコード/勘定科目に対して TXF エクスポートパラメーターを表示します"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:224
+#: ../src/report/locale-specific/us/taxtxf.scm:243
 #, fuzzy
 #| msgid "Do not print Action:Memo data"
 msgid "Do not print T-Num:Memo data"
 msgstr "アクション:摘要データを印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:225
+#: ../src/report/locale-specific/us/taxtxf.scm:244
 #, fuzzy
 #| msgid "Do not print Action:Memo data for transactions"
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "取引に関するアクション:摘要データを印刷しません。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:228
+#: ../src/report/locale-specific/us/taxtxf.scm:247
 msgid "Do not print Action:Memo data"
 msgstr "アクション:摘要データを印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:229
+#: ../src/report/locale-specific/us/taxtxf.scm:248
 #, fuzzy
 #| msgid "Do not print Action:Memo data for transactions"
 msgid "Do not print Action:Memo data for transactions."
 msgstr "取引に関するアクション:摘要データを印刷しません。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:233
+#: ../src/report/locale-specific/us/taxtxf.scm:252
 msgid "Do not print transaction detail"
 msgstr "取引の詳細を印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:234
+#: ../src/report/locale-specific/us/taxtxf.scm:253
 #, fuzzy
 #| msgid "Do not print transaction detail for accounts"
 msgid "Do not print transaction detail for accounts."
 msgstr "この勘定科目では取引の詳細を印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:238
+#: ../src/report/locale-specific/us/taxtxf.scm:257
 msgid "Do not use special date processing"
 msgstr "特別な日付処理を行わない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:239
+#: ../src/report/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 #| msgid "Do not print transactions out of specified dates"
 msgid "Do not print transactions out of specified dates."
 msgstr "指定期間外の取引は印刷しない"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:243
+#: ../src/report/locale-specific/us/taxtxf.scm:262
 msgid "Currency conversion date"
 msgstr "通貨両替日時"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:244
+#: ../src/report/locale-specific/us/taxtxf.scm:263
 #, fuzzy
 #| msgid "Select date to use for PriceDB lookups"
 msgid "Select date to use for PriceDB lookups."
 msgstr "価格データベースを検索するのに使う日付を選択"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:266
 msgid "Nearest transaction date"
 msgstr "取引日時にもっとも近い"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:247
+#: ../src/report/locale-specific/us/taxtxf.scm:266
 #, fuzzy
 #| msgid "Use nearest to transaction date"
 msgid "Use nearest to transaction date."
 msgstr "取引日時にもっとも近いものを使用"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:249
+#: ../src/report/locale-specific/us/taxtxf.scm:268
 msgid "Nearest report date"
 msgstr "帳票日時にもっとも近い"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:249
+#: ../src/report/locale-specific/us/taxtxf.scm:268
 #, fuzzy
 #| msgid "Use nearest to report date"
 msgid "Use nearest to report date."
 msgstr "帳票の日付にもっとも近いものを使用"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:256
+#: ../src/report/locale-specific/us/taxtxf.scm:275
 #, fuzzy
 msgid "Shade alternate transactions"
 msgstr "取引を削除する"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:257
+#: ../src/report/locale-specific/us/taxtxf.scm:276
 msgid "Shade background of alternate transactions, if more than one displayed."
 msgstr ""
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3513
+#: ../src/report/locale-specific/us/taxtxf.scm:3532
 msgid "Tax Schedule Report & TXF Export"
 msgstr "税金予定帳票・TXFファイルへのエクスポート"
 
 #. 'menu-path (list gnc:menuname-taxes)
-#: ../src/report/locale-specific/us/taxtxf.scm:3515
+#: ../src/report/locale-specific/us/taxtxf.scm:3534
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
 msgstr "課税収入・取引明細込みの控除費用・TXFファイルへのエクスポート"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3519
-#: ../src/report/locale-specific/us/taxtxf.scm:3528
+#: ../src/report/locale-specific/us/taxtxf.scm:3538
+#: ../src/report/locale-specific/us/taxtxf.scm:3547
 msgid "Taxable Income/Deductible Expenses"
 msgstr "課税収入/控除費用"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3520
+#: ../src/report/locale-specific/us/taxtxf.scm:3539
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
 msgstr "この帳票は課税収入に関係した勘定科目の取引詳細を表示します。"
 
-#: ../src/report/locale-specific/us/taxtxf.scm:3529
+#: ../src/report/locale-specific/us/taxtxf.scm:3548
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "このページは課税収入の勘定科目に関係した取引詳細を表示します。"
 
@@ -19757,7 +19757,7 @@ msgid "Delete report configuration"
 msgstr "コンフィグレーションパスを設定する"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#: ../src/report/report-gnome/report-gnome.scm:122
+#: ../src/report/report-gnome/report-gnome.scm:141
 #, fuzzy
 #| msgid "Set configuration path"
 msgid "Saved Report Configurations"
@@ -20028,25 +20028,25 @@ msgstr "この帳票にはオプションはありません。"
 msgid "GnuCash-Report"
 msgstr "GnuCashオプション"
 
-#: ../src/report/report-gnome/report-gnome.scm:54
+#: ../src/report/report-gnome/report-gnome.scm:73
 msgid "This report has no options."
 msgstr "この帳票にはオプションはありません"
 
-#: ../src/report/report-gnome/report-gnome.scm:78
+#: ../src/report/report-gnome/report-gnome.scm:97
 msgid "Display the %s report"
 msgstr "%s 帳票を表示します。"
 
-#: ../src/report/report-gnome/report-gnome.scm:124
+#: ../src/report/report-gnome/report-gnome.scm:143
 #, fuzzy
 #| msgid "Manage and run custom reports"
 msgid "Manage and run saved report configurations"
 msgstr "カスタム帳票の管理と実行"
 
-#: ../src/report/report-gnome/report-gnome.scm:144
+#: ../src/report/report-gnome/report-gnome.scm:163
 msgid "Welcome Sample Report"
 msgstr "サンプル帳票へようこそ"
 
-#: ../src/report/report-gnome/report-gnome.scm:146
+#: ../src/report/report-gnome/report-gnome.scm:165
 msgid "Welcome-to-GnuCash report screen"
 msgstr "\"GnuCashへようこそ\"の帳票画面"
 
@@ -20088,97 +20088,97 @@ msgstr "テンプレートファイル \"%s\" を読み込むことができま�
 msgid "Adjusting Entries"
 msgstr ""
 
-#: ../src/report/report-system/html-fonts.scm:69
-#: ../src/report/report-system/html-fonts.scm:74
-#: ../src/report/report-system/html-fonts.scm:79
-#: ../src/report/report-system/html-fonts.scm:84
-#: ../src/report/report-system/html-fonts.scm:89
-#: ../src/report/report-system/html-fonts.scm:94
-#: ../src/report/report-system/html-fonts.scm:99
-#: ../src/report/report-system/html-fonts.scm:104
-#: ../src/report/report-system/html-fonts.scm:109
+#: ../src/report/report-system/html-fonts.scm:88
+#: ../src/report/report-system/html-fonts.scm:93
+#: ../src/report/report-system/html-fonts.scm:98
+#: ../src/report/report-system/html-fonts.scm:103
+#: ../src/report/report-system/html-fonts.scm:108
+#: ../src/report/report-system/html-fonts.scm:113
+#: ../src/report/report-system/html-fonts.scm:118
+#: ../src/report/report-system/html-fonts.scm:123
+#: ../src/report/report-system/html-fonts.scm:128
 msgid "Fonts"
 msgstr "フォント"
 
-#: ../src/report/report-system/html-fonts.scm:70
+#: ../src/report/report-system/html-fonts.scm:89
 #, fuzzy
 #| msgid "Font info for the report title"
 msgid "Font info for the report title."
 msgstr "帳票タイトルのフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:75
+#: ../src/report/report-system/html-fonts.scm:94
 msgid "Account link"
 msgstr "勘定科目へのリンク"
 
-#: ../src/report/report-system/html-fonts.scm:75
+#: ../src/report/report-system/html-fonts.scm:94
 #, fuzzy
 #| msgid "Font info for account name"
 msgid "Font info for account name."
 msgstr "勘定科目名のフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:80
+#: ../src/report/report-system/html-fonts.scm:99
 msgid "Number cell"
 msgstr "数値セル"
 
-#: ../src/report/report-system/html-fonts.scm:80
+#: ../src/report/report-system/html-fonts.scm:99
 #, fuzzy
 #| msgid "Font info for regular number cells"
 msgid "Font info for regular number cells."
 msgstr "通常の数値セルのフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:85
+#: ../src/report/report-system/html-fonts.scm:104
 msgid "Negative Values in Red"
 msgstr "負の金額を赤色で表示する"
 
-#: ../src/report/report-system/html-fonts.scm:85
+#: ../src/report/report-system/html-fonts.scm:104
 msgid "Display negative values in red."
 msgstr "負の金額を赤色で表示します。"
 
-#: ../src/report/report-system/html-fonts.scm:90
+#: ../src/report/report-system/html-fonts.scm:109
 msgid "Number header"
 msgstr "番号の見出し"
 
-#: ../src/report/report-system/html-fonts.scm:90
+#: ../src/report/report-system/html-fonts.scm:109
 #, fuzzy
 #| msgid "Font info for number headers"
 msgid "Font info for number headers."
 msgstr "番号の見出しのフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:95
+#: ../src/report/report-system/html-fonts.scm:114
 msgid "Text cell"
 msgstr "テキストセル"
 
-#: ../src/report/report-system/html-fonts.scm:95
+#: ../src/report/report-system/html-fonts.scm:114
 #, fuzzy
 #| msgid "Font info for regular text cells"
 msgid "Font info for regular text cells."
 msgstr "通常のテキストセルのフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:100
+#: ../src/report/report-system/html-fonts.scm:119
 msgid "Total number cell"
 msgstr "合計セル"
 
-#: ../src/report/report-system/html-fonts.scm:100
+#: ../src/report/report-system/html-fonts.scm:119
 #, fuzzy
 #| msgid "Font info for number cells containing a total"
 msgid "Font info for number cells containing a total."
 msgstr "合計を含む数値セルのフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:105
+#: ../src/report/report-system/html-fonts.scm:124
 msgid "Total label cell"
 msgstr "合計ラベルのセル"
 
-#: ../src/report/report-system/html-fonts.scm:105
+#: ../src/report/report-system/html-fonts.scm:124
 #, fuzzy
 #| msgid "Font info for cells containing total labels"
 msgid "Font info for cells containing total labels."
 msgstr "合計ラベルのフォント情報"
 
-#: ../src/report/report-system/html-fonts.scm:110
+#: ../src/report/report-system/html-fonts.scm:129
 msgid "Centered label cell"
 msgstr "中央配置したラベルのセル"
 
-#: ../src/report/report-system/html-fonts.scm:110
+#: ../src/report/report-system/html-fonts.scm:129
 #, fuzzy
 #| msgid "Font info for centered label cells"
 msgid "Font info for centered label cells."
@@ -20794,7 +20794,7 @@ msgstr "与えられた時間間隔で負債残高に関する円グラフを表
 #. in *one* place.
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
-#: ../src/report/standard-reports/average-balance.scm:19
+#: ../src/report/standard-reports/average-balance.scm:38
 #: ../src/report/standard-reports/cash-flow.scm:44
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
@@ -20809,7 +20809,7 @@ msgid "Start Date"
 msgstr "開始日付"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
-#: ../src/report/standard-reports/average-balance.scm:20
+#: ../src/report/standard-reports/average-balance.scm:39
 #: ../src/report/standard-reports/cash-flow.scm:45
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
@@ -20851,8 +20851,8 @@ msgid "Maximum Slices"
 msgstr "最大分割数"
 
 #: ../src/report/standard-reports/account-piecharts.scm:75
-#: ../src/report/standard-reports/average-balance.scm:111
-#: ../src/report/standard-reports/average-balance.scm:447
+#: ../src/report/standard-reports/average-balance.scm:130
+#: ../src/report/standard-reports/average-balance.scm:466
 #: ../src/report/standard-reports/category-barchart.scm:87
 #: ../src/report/standard-reports/daily-reports.scm:68
 #: ../src/report/standard-reports/net-barchart.scm:61
@@ -20862,8 +20862,8 @@ msgid "Plot Width"
 msgstr "プロット幅"
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
-#: ../src/report/standard-reports/average-balance.scm:111
-#: ../src/report/standard-reports/average-balance.scm:449
+#: ../src/report/standard-reports/average-balance.scm:130
+#: ../src/report/standard-reports/average-balance.scm:468
 #: ../src/report/standard-reports/category-barchart.scm:88
 #: ../src/report/standard-reports/daily-reports.scm:69
 #: ../src/report/standard-reports/net-barchart.scm:62
@@ -21266,8 +21266,8 @@ msgid "Basis calculation method."
 msgstr "原価の計算方法"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:90
-#: ../src/report/standard-reports/average-balance.scm:106
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:125
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Average"
 msgstr "平均"
 
@@ -21435,11 +21435,11 @@ msgstr "複数通貨を利用している場合、為替は正確でないかも
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:17
+#: ../src/report/standard-reports/average-balance.scm:36
 msgid "Average Balance"
 msgstr "平均残高"
 
-#: ../src/report/standard-reports/average-balance.scm:21
+#: ../src/report/standard-reports/average-balance.scm:40
 #: ../src/report/standard-reports/category-barchart.scm:77
 #: ../src/report/standard-reports/net-barchart.scm:49
 #: ../src/report/standard-reports/net-linechart.scm:45
@@ -21447,34 +21447,34 @@ msgstr "平均残高"
 msgid "Step Size"
 msgstr "ステップサイズ"
 
-#: ../src/report/standard-reports/average-balance.scm:24
+#: ../src/report/standard-reports/average-balance.scm:43
 #: ../src/report/standard-reports/daily-reports.scm:63
 msgid "Include Sub-Accounts"
 msgstr "子勘定科目を含める"
 
-#: ../src/report/standard-reports/average-balance.scm:25
+#: ../src/report/standard-reports/average-balance.scm:44
 msgid "Exclude transactions between selected accounts"
 msgstr "選択した勘定科目間の取引を除外します"
 
-#: ../src/report/standard-reports/average-balance.scm:57
+#: ../src/report/standard-reports/average-balance.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:95
 #, fuzzy
 #| msgid "Include sub-accounts of all selected accounts"
 msgid "Include sub-accounts of all selected accounts."
 msgstr "選択されたすべての勘定科目の子勘定科目を含む"
 
-#: ../src/report/standard-reports/average-balance.scm:63
+#: ../src/report/standard-reports/average-balance.scm:82
 msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
-#: ../src/report/standard-reports/average-balance.scm:70
+#: ../src/report/standard-reports/average-balance.scm:89
 #, fuzzy
 #| msgid "Do transaction report on this account"
 msgid "Do transaction report on this account."
 msgstr "この勘定科目について取引出納帳を実行する"
 
-#: ../src/report/standard-reports/average-balance.scm:93
-#: ../src/report/standard-reports/average-balance.scm:323
+#: ../src/report/standard-reports/average-balance.scm:112
+#: ../src/report/standard-reports/average-balance.scm:342
 #: ../src/report/standard-reports/category-barchart.scm:184
 #: ../src/report/standard-reports/category-barchart.scm:253
 #: ../src/report/standard-reports/net-barchart.scm:133
@@ -21484,46 +21484,46 @@ msgstr "この勘定科目について取引出納帳を実行する"
 msgid "Show table"
 msgstr "表を表示する"
 
-#: ../src/report/standard-reports/average-balance.scm:94
+#: ../src/report/standard-reports/average-balance.scm:113
 #: ../src/report/standard-reports/category-barchart.scm:185
 #: ../src/report/standard-reports/net-barchart.scm:134
 #: ../src/report/standard-reports/net-linechart.scm:140
 msgid "Display a table of the selected data."
 msgstr "選択されたデータの表を表示する"
 
-#: ../src/report/standard-reports/average-balance.scm:98
-#: ../src/report/standard-reports/average-balance.scm:322
+#: ../src/report/standard-reports/average-balance.scm:117
+#: ../src/report/standard-reports/average-balance.scm:341
 msgid "Show plot"
 msgstr "プロットを表示する"
 
-#: ../src/report/standard-reports/average-balance.scm:99
+#: ../src/report/standard-reports/average-balance.scm:118
 msgid "Display a graph of the selected data."
 msgstr "選択されたデータのグラフを表示する"
 
-#: ../src/report/standard-reports/average-balance.scm:103
-#: ../src/report/standard-reports/average-balance.scm:321
+#: ../src/report/standard-reports/average-balance.scm:122
+#: ../src/report/standard-reports/average-balance.scm:340
 msgid "Plot Type"
 msgstr "プロット形式"
 
-#: ../src/report/standard-reports/average-balance.scm:104
+#: ../src/report/standard-reports/average-balance.scm:123
 #, fuzzy
 #| msgid "The type of graph to generate"
 msgid "The type of graph to generate."
 msgstr "生成するグラフのタイプ"
 
-#: ../src/report/standard-reports/average-balance.scm:106
+#: ../src/report/standard-reports/average-balance.scm:125
 #, fuzzy
 #| msgid "Average Balance"
 msgid "Average Balance."
 msgstr "平均残高"
 
-#: ../src/report/standard-reports/average-balance.scm:107
+#: ../src/report/standard-reports/average-balance.scm:126
 #, fuzzy
 #| msgid "Profit (Gain minus Loss)"
 msgid "Profit (Gain minus Loss)."
 msgstr "利益 (利得 - 損失)"
 
-#: ../src/report/standard-reports/average-balance.scm:108
+#: ../src/report/standard-reports/average-balance.scm:127
 #, fuzzy
 #| msgid "Gain And Loss"
 msgid "Gain And Loss."
@@ -21531,27 +21531,27 @@ msgstr "利益および損失"
 
 #. Watch out -- these names should be consistent with the display
 #. option where you choose them, otherwise users are confused.
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Period start"
 msgstr "期間の開始日"
 
-#: ../src/report/standard-reports/average-balance.scm:126
+#: ../src/report/standard-reports/average-balance.scm:145
 msgid "Period end"
 msgstr "期間の終了日"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Maximum"
 msgstr "最大"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Minimum"
 msgstr "最小"
 
-#: ../src/report/standard-reports/average-balance.scm:127
+#: ../src/report/standard-reports/average-balance.scm:146
 msgid "Gain"
 msgstr "所得"
 
-#: ../src/report/standard-reports/average-balance.scm:128
+#: ../src/report/standard-reports/average-balance.scm:147
 msgid "Loss"
 msgstr "損失"
 
@@ -22337,8 +22337,8 @@ msgstr "一般仕訳帳"
 
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
-#: ../src/report/standard-reports/register.scm:126
-#: ../src/report/standard-reports/register.scm:391
+#: ../src/report/standard-reports/register.scm:145
+#: ../src/report/standard-reports/register.scm:410
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 #, fuzzy
@@ -22350,7 +22350,7 @@ msgstr "アクション"
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:463
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -22758,122 +22758,122 @@ msgstr "商品と帳票の通貨が同一です。同一の商品の価格を表
 msgid "Price Scatterplot"
 msgstr "価格の散布図"
 
-#: ../src/report/standard-reports/register.scm:151
+#: ../src/report/standard-reports/register.scm:170
 msgid "Debit Value"
 msgstr "借方金額"
 
-#: ../src/report/standard-reports/register.scm:153
+#: ../src/report/standard-reports/register.scm:172
 msgid "Credit Value"
 msgstr "貸方金額"
 
-#: ../src/report/standard-reports/register.scm:380
+#: ../src/report/standard-reports/register.scm:399
 #, fuzzy
 #| msgid "The title of the report"
 msgid "The title of the report."
 msgstr "帳票のタイトル"
 
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:411
 #, fuzzy
 #| msgid "Display the check number?"
 msgid "Display the check number/action?"
 msgstr "小切手番号を表示するかどうかを指定します。"
 
-#: ../src/report/standard-reports/register.scm:396
+#: ../src/report/standard-reports/register.scm:415
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "小切手番号を表示するかどうかを指定します。"
 
-#: ../src/report/standard-reports/register.scm:406
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "摘要を表示するかどうかを指定します。"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:430
 msgid "Display the account?"
 msgstr "勘定科目を表示しますか?"
 
-#: ../src/report/standard-reports/register.scm:416
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr "株式数・持分を表示するかどうかを指定します。"
 
-#: ../src/report/standard-reports/register.scm:421
+#: ../src/report/standard-reports/register.scm:440
 msgid "Display the name of lot the shares are in?"
 msgstr "持分・株式数が含まれるロットの名前を表示しますか?"
 
-#: ../src/report/standard-reports/register.scm:426
+#: ../src/report/standard-reports/register.scm:445
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr "商品の価格を表示するかどうかを指定します。"
 
-#: ../src/report/standard-reports/register.scm:431
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr "金額の表示方法を指定します。"
 
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:453
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "1行"
 
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:453
 #: ../src/report/standard-reports/transaction.scm:988
 #, fuzzy
 #| msgid "Single Column Display"
 msgid "Single Column Display."
 msgstr "1行で表示します。"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:454
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr "2行"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:454
 #: ../src/report/standard-reports/transaction.scm:989
 #, fuzzy
 #| msgid "Two Column Display"
 msgid "Two Column Display."
 msgstr "2行で表示します。"
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:459
 msgid "Display the value in transaction currency?"
 msgstr "取引通貨の値を表示しますか?"
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:464
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
 #| msgid "Display a running balance"
 msgid "Display a running balance?"
 msgstr "運用中の残高を表示するかどうかを指定します。"
 
-#: ../src/report/standard-reports/register.scm:598
+#: ../src/report/standard-reports/register.scm:617
 msgid "Total Debits"
 msgstr "借方合計"
 
-#: ../src/report/standard-reports/register.scm:600
+#: ../src/report/standard-reports/register.scm:619
 msgid "Total Credits"
 msgstr "貸方合計"
 
-#: ../src/report/standard-reports/register.scm:602
+#: ../src/report/standard-reports/register.scm:621
 msgid "Total Value Debits"
 msgstr "借方合計金額"
 
-#: ../src/report/standard-reports/register.scm:604
+#: ../src/report/standard-reports/register.scm:623
 msgid "Total Value Credits"
 msgstr "貸方合計金額"
 
-#: ../src/report/standard-reports/register.scm:607
+#: ../src/report/standard-reports/register.scm:626
 msgid "Net Change"
 msgstr "変更総額"
 
-#: ../src/report/standard-reports/register.scm:610
+#: ../src/report/standard-reports/register.scm:629
 #, fuzzy
 msgid "Value Change"
 msgstr "変更済"
 
-#: ../src/report/standard-reports/register.scm:769
+#: ../src/report/standard-reports/register.scm:788
 msgid "Client"
 msgstr "クライアント"
 
@@ -23672,7 +23672,7 @@ msgstr "会社のロゴ画像"
 #: ../src/report/stylesheets/stylesheet-footer.scm:116
 #: ../src/report/stylesheets/stylesheet-footer.scm:209
 #: ../src/report/stylesheets/stylesheet-plain.scm:48
-#: ../src/report/utility-reports/hello-world.scm:141
+#: ../src/report/utility-reports/hello-world.scm:160
 msgid "Background Color"
 msgstr "背景色"
 
@@ -23688,7 +23688,7 @@ msgstr "一般的な帳票の背景色"
 #: ../src/report/stylesheets/stylesheet-fancy.scm:190
 #: ../src/report/stylesheets/stylesheet-footer.scm:123
 #: ../src/report/stylesheets/stylesheet-footer.scm:210
-#: ../src/report/utility-reports/hello-world.scm:148
+#: ../src/report/utility-reports/hello-world.scm:167
 msgid "Text Color"
 msgstr "文字色"
 
@@ -23928,78 +23928,78 @@ msgstr "帳票の背景色"
 msgid "Plain"
 msgstr "平易"
 
-#: ../src/report/utility-reports/hello-world.scm:42
-#: ../src/report/utility-reports/hello-world.scm:52
-#: ../src/report/utility-reports/hello-world.scm:78
-#: ../src/report/utility-reports/hello-world.scm:89
-#: ../src/report/utility-reports/hello-world.scm:98
-#: ../src/report/utility-reports/hello-world.scm:105
-#: ../src/report/utility-reports/hello-world.scm:112
-#: ../src/report/utility-reports/hello-world.scm:123
-#: ../src/report/utility-reports/hello-world.scm:141
-#: ../src/report/utility-reports/hello-world.scm:148
+#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:71
+#: ../src/report/utility-reports/hello-world.scm:97
+#: ../src/report/utility-reports/hello-world.scm:108
+#: ../src/report/utility-reports/hello-world.scm:117
+#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:131
+#: ../src/report/utility-reports/hello-world.scm:142
+#: ../src/report/utility-reports/hello-world.scm:160
+#: ../src/report/utility-reports/hello-world.scm:167
 msgid "Hello, World!"
 msgstr "Hello, World!"
 
-#: ../src/report/utility-reports/hello-world.scm:42
+#: ../src/report/utility-reports/hello-world.scm:61
 msgid "Boolean Option"
 msgstr "論理値オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:43
+#: ../src/report/utility-reports/hello-world.scm:62
 msgid "This is a boolean option."
 msgstr "これは論理値オプションです。"
 
-#: ../src/report/utility-reports/hello-world.scm:52
+#: ../src/report/utility-reports/hello-world.scm:71
 msgid "Multi Choice Option"
 msgstr "複数選択オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:53
+#: ../src/report/utility-reports/hello-world.scm:72
 msgid "This is a multi choice option."
 msgstr "これは複数選択オプションです。"
 
-#: ../src/report/utility-reports/hello-world.scm:56
+#: ../src/report/utility-reports/hello-world.scm:75
 msgid "First Option"
 msgstr "最初のオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:57
+#: ../src/report/utility-reports/hello-world.scm:76
 #, fuzzy
 #| msgid "Help for first option"
 msgid "Help for first option."
 msgstr "最初のオプションのヘルプ"
 
-#: ../src/report/utility-reports/hello-world.scm:60
+#: ../src/report/utility-reports/hello-world.scm:79
 msgid "Second Option"
 msgstr "2番目のオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:61
+#: ../src/report/utility-reports/hello-world.scm:80
 #, fuzzy
 #| msgid "Help for second option"
 msgid "Help for second option."
 msgstr "2番目のオプションのヘルプ"
 
-#: ../src/report/utility-reports/hello-world.scm:64
+#: ../src/report/utility-reports/hello-world.scm:83
 msgid "Third Option"
 msgstr "3番目のオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:65
+#: ../src/report/utility-reports/hello-world.scm:84
 #, fuzzy
 #| msgid "Help for third option"
 msgid "Help for third option."
 msgstr "3番目のオプションのヘルプ"
 
-#: ../src/report/utility-reports/hello-world.scm:68
+#: ../src/report/utility-reports/hello-world.scm:87
 msgid "Fourth Options"
 msgstr "4番目のオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:69
+#: ../src/report/utility-reports/hello-world.scm:88
 msgid "The fourth option rules!"
 msgstr "4番目のオプションのヘルプ"
 
-#: ../src/report/utility-reports/hello-world.scm:78
+#: ../src/report/utility-reports/hello-world.scm:97
 msgid "String Option"
 msgstr "文字列のオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:79
+#: ../src/report/utility-reports/hello-world.scm:98
 #, fuzzy
 #| msgid "This is a string option"
 msgid "This is a string option."
@@ -24016,233 +24016,233 @@ msgstr "これは文字列のオプションです"
 #. The name of this report. This will be used, among other things,
 #. for making its menu item in the main menu. You need to use the
 #. untranslated value here!
-#: ../src/report/utility-reports/hello-world.scm:79
-#: ../src/report/utility-reports/hello-world.scm:313
-#: ../src/report/utility-reports/hello-world.scm:478
+#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:332
+#: ../src/report/utility-reports/hello-world.scm:497
 msgid "Hello, World"
 msgstr "Hello, World"
 
-#: ../src/report/utility-reports/hello-world.scm:89
+#: ../src/report/utility-reports/hello-world.scm:108
 msgid "Just a Date Option"
 msgstr "日付のみのオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:90
+#: ../src/report/utility-reports/hello-world.scm:109
 #, fuzzy
 #| msgid "This is a date option"
 msgid "This is a date option."
 msgstr "これは日付オプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:98
+#: ../src/report/utility-reports/hello-world.scm:117
 msgid "Time and Date Option"
 msgstr "日時オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:99
+#: ../src/report/utility-reports/hello-world.scm:118
 #, fuzzy
 #| msgid "This is a date option with time"
 msgid "This is a date option with time."
 msgstr "これは日時オプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:105
+#: ../src/report/utility-reports/hello-world.scm:124
 msgid "Combo Date Option"
 msgstr "コンボ日付オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:106
+#: ../src/report/utility-reports/hello-world.scm:125
 #, fuzzy
 #| msgid "This is a combination date option"
 msgid "This is a combination date option."
 msgstr "これは組合せ日付オプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:112
+#: ../src/report/utility-reports/hello-world.scm:131
 msgid "Relative Date Option"
 msgstr "相対日付オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:113
+#: ../src/report/utility-reports/hello-world.scm:132
 #, fuzzy
 #| msgid "This is a relative date option"
 msgid "This is a relative date option."
 msgstr "これは相対日付オプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:123
+#: ../src/report/utility-reports/hello-world.scm:142
 msgid "Number Option"
 msgstr "数値オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:124
+#: ../src/report/utility-reports/hello-world.scm:143
 msgid "This is a number option."
 msgstr "これは数値オプションです。"
 
-#: ../src/report/utility-reports/hello-world.scm:142
-#: ../src/report/utility-reports/hello-world.scm:149
+#: ../src/report/utility-reports/hello-world.scm:161
+#: ../src/report/utility-reports/hello-world.scm:168
 #, fuzzy
 #| msgid "This is a color option"
 msgid "This is a color option."
 msgstr "これは色オプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:170
-#: ../src/report/utility-reports/hello-world.scm:183
+#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:202
 msgid "Hello Again"
 msgstr "Hello Again"
 
-#: ../src/report/utility-reports/hello-world.scm:170
+#: ../src/report/utility-reports/hello-world.scm:189
 msgid "An account list option"
 msgstr "勘定科目一覧オプション"
 
-#: ../src/report/utility-reports/hello-world.scm:171
+#: ../src/report/utility-reports/hello-world.scm:190
 #, fuzzy
 #| msgid "This is an account list option"
 msgid "This is an account list option."
 msgstr "これは勘定科目一覧オプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:183
+#: ../src/report/utility-reports/hello-world.scm:202
 msgid "A list option"
 msgstr "一覧のオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:184
+#: ../src/report/utility-reports/hello-world.scm:203
 #, fuzzy
 #| msgid "This is a list option"
 msgid "This is a list option."
 msgstr "これは一覧のオプションです"
 
-#: ../src/report/utility-reports/hello-world.scm:188
+#: ../src/report/utility-reports/hello-world.scm:207
 msgid "The Good"
 msgstr "ためになるもの"
 
-#: ../src/report/utility-reports/hello-world.scm:189
+#: ../src/report/utility-reports/hello-world.scm:208
 #, fuzzy
 #| msgid "Good option"
 msgid "Good option."
 msgstr "ためになるオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:192
+#: ../src/report/utility-reports/hello-world.scm:211
 msgid "The Bad"
 msgstr "ためにならないもの"
 
-#: ../src/report/utility-reports/hello-world.scm:193
+#: ../src/report/utility-reports/hello-world.scm:212
 #, fuzzy
 #| msgid "Bad option"
 msgid "Bad option."
 msgstr "ためにならないオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:196
+#: ../src/report/utility-reports/hello-world.scm:215
 msgid "The Ugly"
 msgstr "ひどいもの"
 
-#: ../src/report/utility-reports/hello-world.scm:197
+#: ../src/report/utility-reports/hello-world.scm:216
 #, fuzzy
 #| msgid "Ugly option"
 msgid "Ugly option."
 msgstr "ひどいオプション"
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:222
 msgid "Testing"
 msgstr "テスト中"
 
-#: ../src/report/utility-reports/hello-world.scm:203
+#: ../src/report/utility-reports/hello-world.scm:222
 msgid "Crash the report"
 msgstr "帳票をクラッシュさせる"
 
-#: ../src/report/utility-reports/hello-world.scm:205
+#: ../src/report/utility-reports/hello-world.scm:224
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
 msgstr "これはテスト用です。あなたの帳票にはこんなオプションはない方がいいでしょう。"
 
-#: ../src/report/utility-reports/hello-world.scm:328
+#: ../src/report/utility-reports/hello-world.scm:347
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
 msgstr "これはGnuCashのサンプル帳票です。scm/reportディレクトリ内のguile(scheme)のソースコードを見ると、自分で新しく帳票を作成したり、既存の帳票を修正したりする際の詳細情報を得ることができます。"
 
-#: ../src/report/utility-reports/hello-world.scm:334
+#: ../src/report/utility-reports/hello-world.scm:353
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
 msgstr "新しい帳票を書く手助けが欲しい、自分の新しい帳票やすばらしい帳票を提供したい場合、メーリングリスト %s にご連絡ください。"
 
-#: ../src/report/utility-reports/hello-world.scm:339
+#: ../src/report/utility-reports/hello-world.scm:358
 msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr "メーリングリストに参加するには、&lt;http://www.gnucash.org/&gt; をご覧ください。"
 
-#: ../src/report/utility-reports/hello-world.scm:340
+#: ../src/report/utility-reports/hello-world.scm:359
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
 msgstr "&lt;http://www.scheme.com/tspl2d/&gt; でschemeの書き方についてもっと学べます。"
 
-#: ../src/report/utility-reports/hello-world.scm:344
+#: ../src/report/utility-reports/hello-world.scm:363
 msgid "The current time is %s."
 msgstr "現在時刻は %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:349
+#: ../src/report/utility-reports/hello-world.scm:368
 msgid "The boolean option is %s."
 msgstr "論理値オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:350
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "true"
 msgstr "真"
 
-#: ../src/report/utility-reports/hello-world.scm:350
+#: ../src/report/utility-reports/hello-world.scm:369
 msgid "false"
 msgstr "偽"
 
-#: ../src/report/utility-reports/hello-world.scm:354
+#: ../src/report/utility-reports/hello-world.scm:373
 msgid "The multi-choice option is %s."
 msgstr "複選択肢オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:359
+#: ../src/report/utility-reports/hello-world.scm:378
 msgid "The string option is %s."
 msgstr "文字列オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:364
+#: ../src/report/utility-reports/hello-world.scm:383
 msgid "The date option is %s."
 msgstr "日付オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:369
+#: ../src/report/utility-reports/hello-world.scm:388
 msgid "The date and time option is %s."
 msgstr "日時オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:374
+#: ../src/report/utility-reports/hello-world.scm:393
 msgid "The relative date option is %s."
 msgstr "相対日付オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:379
+#: ../src/report/utility-reports/hello-world.scm:398
 msgid "The combination date option is %s."
 msgstr "組合せ日付オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:384
+#: ../src/report/utility-reports/hello-world.scm:403
 msgid "The number option is %s."
 msgstr "数値オプションは %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:395
+#: ../src/report/utility-reports/hello-world.scm:414
 msgid "The number option formatted as currency is %s."
 msgstr "数値オプションを通貨としてフォーマットすると %s です。"
 
-#: ../src/report/utility-reports/hello-world.scm:407
+#: ../src/report/utility-reports/hello-world.scm:426
 msgid "Items you selected:"
 msgstr "選択したアイテム:"
 
-#: ../src/report/utility-reports/hello-world.scm:414
+#: ../src/report/utility-reports/hello-world.scm:433
 msgid "List items selected"
 msgstr "選択されたアイテム一覧"
 
-#: ../src/report/utility-reports/hello-world.scm:419
+#: ../src/report/utility-reports/hello-world.scm:438
 msgid "(You selected no list items.)"
 msgstr "(アイテム一覧が選択されてません)"
 
-#: ../src/report/utility-reports/hello-world.scm:455
+#: ../src/report/utility-reports/hello-world.scm:474
 msgid "You have selected no accounts."
 msgstr "勘定科目が一つも選択されていません"
 
-#: ../src/report/utility-reports/hello-world.scm:460
+#: ../src/report/utility-reports/hello-world.scm:479
 #, fuzzy
 #| msgid "Display"
 msgid "Display help"
 msgstr "表示"
 
-#: ../src/report/utility-reports/hello-world.scm:465
+#: ../src/report/utility-reports/hello-world.scm:484
 msgid "Have a nice day!"
 msgstr "いい1日を!"
 
 #. The name in the menu
 #. (only necessary if it differs from the name)
-#: ../src/report/utility-reports/hello-world.scm:489
+#: ../src/report/utility-reports/hello-world.scm:508
 msgid "Sample Report with Examples"
 msgstr "サンプル帳票例"
 
 #. A tip that is used to provide additional information about the
 #. report to the user.
-#: ../src/report/utility-reports/hello-world.scm:493
+#: ../src/report/utility-reports/hello-world.scm:512
 msgid "A sample report with examples."
 msgstr "サンプル帳票の例"
 
@@ -24340,15 +24340,15 @@ msgstr "残りの良い見積を追加しますか?"
 msgid "Adding remaining good quotes."
 msgstr "残りの良い見積を追加します"
 
-#: ../src/tax/us/de_DE.scm:37
+#: ../src/tax/us/de_DE.scm:56
 msgid "Tax Number"
 msgstr "納税番号"
 
-#: ../src/tax/us/txf-de_DE.scm:330
+#: ../src/tax/us/txf-de_DE.scm:349
 msgid "The electronic tax number of your business"
 msgstr "ビジネスに関する電子納税番号です"
 
-#: ../src/tax/us/txf.scm:87
+#: ../src/tax/us/txf.scm:106
 msgid "No help available."
 msgstr "ヘルプが利用できません。"
 

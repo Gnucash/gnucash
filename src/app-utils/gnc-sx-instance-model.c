@@ -192,7 +192,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         gnc_commodity *split_cmdty = NULL;
         GncGUID *acct_guid = NULL;
         Account *acct;
-        gnc_numeric split_amount;
+        gboolean split_is_marker = TRUE;
 
         s = (Split*)split_list->data;
 
@@ -203,13 +203,26 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 			  NULL);
         acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
         split_cmdty = xaccAccountGetCommodity(acct);
-        split_amount = xaccSplitGetAmount(s);
-        if (!gnc_numeric_zero_p(split_amount) && first_cmdty == NULL)
+        // existing... ------------------------------------------
+	if (credit_formula && strlen(credit_formula) != 0)
+	{
+	    gnc_sx_parse_vars_from_formula(credit_formula, var_hash, NULL);
+	    split_is_marker = FALSE;
+	}
+	if (debit_formula && strlen(debit_formula) != 0)
+	{
+	    gnc_sx_parse_vars_from_formula(debit_formula, var_hash, NULL);
+	    split_is_marker = FALSE;
+	}
+	g_free (credit_formula);
+	g_free (debit_formula);
+
+        if (!split_is_marker && first_cmdty == NULL)
         {
             first_cmdty = split_cmdty;
         }
 
-        if (!gnc_numeric_zero_p(split_amount) &&
+        if (!split_is_marker &&
             ! gnc_commodity_equal(split_cmdty, first_cmdty))
         {
             GncSxVariable *var;
@@ -226,18 +239,6 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             g_hash_table_insert(var_hash, g_strdup(var->name), var);
             g_string_free(var_name, TRUE);
         }
-
-        // existing... ------------------------------------------
-	if (credit_formula && strlen(credit_formula) != 0)
-	{
-	    gnc_sx_parse_vars_from_formula(credit_formula, var_hash, NULL);
-	}
-	if (debit_formula && strlen(debit_formula) != 0)
-	{
-	    gnc_sx_parse_vars_from_formula(debit_formula, var_hash, NULL);
-	}
-	g_free (credit_formula);
-	g_free (debit_formula);
     }
 
     return 0;
