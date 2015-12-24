@@ -14846,6 +14846,16 @@ msgstr "dann am:"
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
+msgctxt "Monthly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
+msgctxt "Monthly"
+msgid "months."
+msgstr "Monate."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "On the"
 msgstr "Am"
