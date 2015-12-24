@@ -25943,38 +25943,6 @@ msgstr ""
 #~ msgid "Retrieve the current online quote"
 #~ msgstr "Aktuellen Buchungsteil löschen"
 
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "Tage."
-
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "Wochen."
-
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "Monate."
-
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "Monate."
-
 #~ msgid "Auto pay on post_ing"
 #~ msgstr "Automatisch durchbuchen"
 
