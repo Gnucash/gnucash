@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-12 18:36+0100\n"
+"POT-Creation-Date: 2015-12-23 21:27+0100\n"
 "PO-Revision-Date: 2015-12-21 20:26+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
@@ -10491,7 +10491,7 @@ msgstr "Sie müssen einen Suchausdruck angeben"
 
 #: ../src/gnome-search/search-string.c:220
 #: ../src/import-export/csv-imp/csv-account-import.c:112
-#: ../src/plugins/bi_import/dialog-bi-import.c:122
+#: ../src/plugins/bi_import/dialog-bi-import.c:123
 #: ../src/plugins/customer_import/dialog-customer-import.c:102
 #, c-format
 msgid ""
@@ -14759,6 +14759,26 @@ msgstr "Nicht vorgemerkt"
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
+msgctxt "Daily"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
+msgctxt "Daily"
+msgid "days."
+msgstr "Tage."
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
+msgctxt "Weekly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
+msgctxt "Weekly"
+msgid "weeks."
+msgstr "Wochen."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 #: ../src/report/standard-reports/daily-reports.scm:355
 msgid "Saturday"
@@ -14799,6 +14819,16 @@ msgstr "Montag"
 #: ../src/report/standard-reports/daily-reports.scm:354
 msgid "Tuesday"
 msgstr "Dienstag"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
+msgctxt "Semimonthly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
+msgctxt "Semimonthly"
+msgid "months."
+msgstr "Monate."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
@@ -18666,41 +18696,41 @@ msgstr "%#d. %B %Y"
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:285
+#: ../src/plugins/bi_import/dialog-bi-import.c:287
 #, c-format
 msgid "ROW %d DELETED, PRICE_NOT_SET: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Preis fehlt: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:295
+#: ../src/plugins/bi_import/dialog-bi-import.c:297
 #, c-format
 msgid "ROW %d DELETED, QTY_NOT_SET: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Anzahl fehlt: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:309
+#: ../src/plugins/bi_import/dialog-bi-import.c:311
 #, c-format
 msgid "ROW %d DELETED, ID_NOT_SET\n"
 msgstr "Zeile %d GELÖSCHT, ID fehlt!\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:410
+#: ../src/plugins/bi_import/dialog-bi-import.c:412
 #, c-format
 msgid "ROW %d DELETED, OWNER_NOT_SET: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Lieferant fehlt: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:435
+#: ../src/plugins/bi_import/dialog-bi-import.c:437
 #, c-format
 msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Lieferant existiert nicht: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:449
+#: ../src/plugins/bi_import/dialog-bi-import.c:451
 #, c-format
 msgid "ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Kunde existiert nicht: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:493
+#: ../src/plugins/bi_import/dialog-bi-import.c:495
 msgid "These rows were deleted:"
 msgstr "Diese Zeilen wurden gelöscht:"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:661
+#: ../src/plugins/bi_import/dialog-bi-import.c:664
 msgid "Are you sure you have bills/invoices to update?"
 msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
 
