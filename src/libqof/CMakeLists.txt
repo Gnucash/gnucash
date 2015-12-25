@@ -118,3 +118,5 @@ SET(qof_test_HEADERS
 )
 
 INSTALL(FILES ${qof_test_HEADERS} DESTINATION libexec/gnucash/src/libqof/qof/test)
+
+ADD_SUBDIRECTORY(qof/test)

@@ -35,8 +35,8 @@ TESTS = ${check_PROGRAMS}
 if WITH_GOOGLE_TEST
 test_kvp_value_SOURCES = \
     $(top_srcdir)/$(MODULEPATH)/kvp-value.cpp \
-    test-kvp-value.cpp \
-    test-kvp-frame.cpp
+    gtest-kvp-value.cpp \
+    gtest-kvp-frame.cpp
 test_kvp_value_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
         $(GLIB_LIBS) \
@@ -54,7 +54,7 @@ test_kvp_value_CPPFLAGS = \
     $(GLIB_CFLAGS) \
     $(BOOST_CPPFLAGS)
 
-check_PROGRAMS += test-kvp-value
+check_PROGRAMS += gtest-kvp-value
 
 test_gnc_int128_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
