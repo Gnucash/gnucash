@@ -516,3 +516,6 @@ IF(UNIX)
 ENDIF(UNIX)
 
 INCLUDE (CPack)
+
+# Google Test and Google Mock library.
+add_subdirectory(3rdparty/gtest_and_gmock)
