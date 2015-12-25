@@ -29,6 +29,8 @@
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "engine/gnc-engine.h"
+#include "engine/SplitP.h"
 #include "gnc-date.h"
 #include "qof.h"
 #include "qofbook.h"
@@ -338,8 +340,8 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
             g_assert (recn == NREC || recn == CREC);
 
             if (recn == CREC &&
-		gnc_difftime (trans_date, statement_date) <= 0)
-		g_hash_table_insert (view->reconciled, split, split);
+               gnc_difftime (trans_date, statement_date) <= 0)
+               g_hash_table_insert (view->reconciled, split, split);
         }
     }
 
@@ -821,6 +823,10 @@ gnc_reconcile_view_refresh (GNCReconcileView *view)
         g_hash_table_foreach (view->reconciled, grv_refresh_helper, view);
 }
 
+typedef struct BalanceHashHelperData {
+  Account *context_account;
+  gnc_numeric *total;
+} BalanceHashHelperData;
 
 /********************************************************************\
  * gnc_reconcile_view_reconciled_balance                            *
@@ -833,14 +839,23 @@ static void
 grv_balance_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
     Split *split = key;
-    gnc_numeric *total = user_data;
+    BalanceHashHelperData *data = user_data;
+    gnc_numeric *total = data->total;
 
-    *total = gnc_numeric_add_fixed (*total, xaccSplitGetAmount (split));
+    gnc_numeric unconverted_amount = xaccSplitGetAmount (split);
+    gnc_numeric converted_amount = xaccAccountConvertBalanceToCurrency(
+        split->acc,
+        unconverted_amount,
+        xaccAccountGetCommodity (split->acc),
+        xaccAccountGetCommodity (data->context_account));
+
+    *total = gnc_numeric_add_fixed (*total, converted_amount);
 }
 
 gnc_numeric
 gnc_reconcile_view_reconciled_balance (GNCReconcileView *view)
 {
+    BalanceHashHelperData data;
     gnc_numeric total = gnc_numeric_zero ();
 
     g_return_val_if_fail (view != NULL, total);
@@ -849,7 +864,10 @@ gnc_reconcile_view_reconciled_balance (GNCReconcileView *view)
     if (view->reconciled == NULL)
         return total;
 
-    g_hash_table_foreach (view->reconciled, grv_balance_hash_helper, &total);
+    data.context_account = view->account;
+    data.total = &total;
+
+    g_hash_table_foreach (view->reconciled, grv_balance_hash_helper, &data);
 
     return gnc_numeric_abs (total);
 }
