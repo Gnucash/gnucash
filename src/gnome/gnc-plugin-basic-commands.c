@@ -183,7 +183,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* Tools menu */
 
     {
-        "ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
+        "ToolsPriceEditorAction", NULL, N_("_Price Database"), NULL,
         N_("View and edit the prices for stocks and mutual funds"),
         G_CALLBACK (gnc_main_window_cmd_tools_price_editor)
     },
