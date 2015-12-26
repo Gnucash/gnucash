@@ -14,19 +14,6 @@ gnc_guile_LDADD   = ${GUILE_LIBS}
 dist_doc_DATA = \
   AUTHORS \
   COPYING \
-  ChangeLog \
-  ChangeLog.2014 \
-  ChangeLog.2013 \
-  ChangeLog.2012 \
-  ChangeLog.2011 \
-  ChangeLog.2010 \
-  ChangeLog.2009 \
-  ChangeLog.2008 \
-  ChangeLog.2007 \
-  ChangeLog.2006 \
-  ChangeLog.2005 \
-  ChangeLog.2004 \
-  ChangeLog.2003 \
   DOCUMENTERS \
   HACKING \
   INSTALL \
@@ -200,29 +187,6 @@ po/gnucash.pot: po/POTFILES.in
 .potfiles:
 
 SVN = svn
-
-if BUILDING_FROM_VCS
-# This rule will generate a ChangeLog of gnucash/trunk commits, plus
-# all additional branches that are added in
-# ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
-# idea? Before a release, NEWS will get updated because of the version
-# change, so this should fit just fine.)
-ChangeLog: NEWS
-	cd $(abs_srcdir) ; \
-	if test x$(VCS_TYPE) = xsvn ; then \
-	  $(SVN) log -v --xml -r HEAD:'{2015-01-01}' http://svn.gnucash.org/repo/gnucash | \
-	    $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
-	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
-	else \
-	  if test x$(VCS_TYPE) = xgit ; then \
-	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2013-01-01 > $(abs_builddir)/$@ ; \
-	  else \
-	    touch $(abs_builddir)/$@ ; \
-	    echo "Note: not in svn or git. ChangeLog not regenerated." ; \
-	  fi ; \
-	fi ; \
-	cd $(abs_builddir)
-endif
 
 ASTYLE = /usr/bin/astyle
 .PHONY: indent
