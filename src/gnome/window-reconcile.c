@@ -175,6 +175,41 @@ static GtkActionEntry recnWindow_actions [];
 /** The number of actions provided by the main window. */
 static guint recnWindow_n_actions;
 
+static gpointer
+commodity_compare(Account *account, gpointer user_data) {
+  gboolean equal = gnc_commodity_equiv (xaccAccountGetCommodity (account),
+                                        (gnc_commodity*) user_data);
+
+  return equal ? NULL : account;
+}
+
+
+/********************************************************************\
+ * has_account_different_commodities                                *
+ *                                                                  *
+ * Args:   parent account - the account to look in                  *
+ * Return: true if there exists a subaccount with different         *
+ *    commodity then the parent account.                            *
+\********************************************************************/
+static gboolean
+has_account_different_commodities(const Account *account)
+{
+    gnc_commodity *parent_commodity;
+    gpointer result;
+
+    if (account == NULL)
+        return FALSE;
+
+    parent_commodity = xaccAccountGetCommodity (account);
+
+    result = gnc_account_foreach_descendant_until (account,
+                                                   commodity_compare,
+                                                   parent_commodity);
+
+    return result != NULL;
+}
+
+
 /********************************************************************\
  * recnRefresh                                                      *
  *   refreshes the transactions in the reconcile window             *
@@ -658,6 +693,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gboolean auto_interest_xfer_option;
     GNCPrintAmountInfo print_info;
     gnc_numeric ending;
+    gboolean has_uniform_currency;
     char *title;
     int result;
 
@@ -675,7 +711,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
     auto_interest_xfer_option =
         gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
-    data.include_children = xaccAccountGetReconcileChildrenStatus(account);
+    data.include_children = !has_account_different_commodities(account) &&
+        xaccAccountGetReconcileChildrenStatus(account);
 
     ending = gnc_ui_account_get_reconciled_balance(account,
              data.include_children);
@@ -1586,6 +1623,7 @@ RecnWindow *
 recnWindow (GtkWidget *parent, Account *account)
 {
     gnc_numeric new_ending;
+    gboolean enable_subaccounts;
     time64 statement_date;
 
     if (account == NULL)
@@ -1603,9 +1641,11 @@ recnWindow (GtkWidget *parent, Account *account)
 
     gnc_get_reconcile_info (account, &new_ending, &statement_date);
 
+    enable_subaccounts = !has_account_different_commodities(account);
     /* Popup a little window to prompt the user to enter the
      * ending balance for his/her bank statement */
-    if (!startRecnWindow (parent, account, &new_ending, &statement_date, TRUE))
+    if (!startRecnWindow (parent, account, &new_ending, &statement_date,
+            enable_subaccounts))
         return NULL;
 
     return recnWindowWithBalance (parent, account, new_ending, statement_date);
