@@ -208,3 +208,4 @@ GNC_ADD_SCHEME_TARGETS(scm-engine-1
 )
 
 ADD_CUSTOM_TARGET(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)
+ADD_SUBDIRECTORY(test)
