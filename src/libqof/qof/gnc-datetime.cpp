@@ -41,7 +41,7 @@ using PTime = boost::posix_time::ptime;
 using LDT = boost::local_time::local_date_time;
 using Duration = boost::posix_time::time_duration;
 using LDTBase = boost::local_time::local_date_time_base<PTime, boost::date_time::time_zone_base<PTime, char>>;
-using boost::date_time::special_values::not_a_date_time;
+using boost::date_time::not_a_date_time;
 using time64 = int64_t;
 
 static const TimeZoneProvider tzp;
