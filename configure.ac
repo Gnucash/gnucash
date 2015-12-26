@@ -229,7 +229,11 @@ zone_no_dst(int year, TZInfo *std_info)
 
 	 ])],
 	 [AC_MSG_RESULT([yes])],
-	 [AC_MSG_FAILURE([Boost Header Fails to compile with C++11. To fix this, open it and change line 67 to
+	 [AC_MSG_FAILURE([
+Boost Header Fails to compile with C++11. To fix this, open
+date_time/local_time/custom_time_zone.hpp, perhaps as root,
+in your boost include directory (/usr/include/boost in most cases)
+and change line 67 to
       return (bool) dst_calc_rules_; //if calc_rule is set the tz has dst
 ])])
 CXXFLAGS="$oldcxxflags"
