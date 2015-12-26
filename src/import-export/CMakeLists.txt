@@ -20,6 +20,7 @@ SET (generic_import_SOURCES
   import-commodity-matcher.c
   import-backend.c
   import-format-dialog.c
+  import-match-map.c
   import-match-picker.c
   import-parse.c
   import-utilities.c
@@ -33,6 +34,7 @@ SET_SOURCE_FILES_PROPERTIES (${generic_import_SOURCES} PROPERTIES OBJECT_DEPENDS
 
 SET (generic_import_HEADERS
   import-parse.h
+  import-match-map.h
 )
 
 SET (generic_import_noinst_HEADERS

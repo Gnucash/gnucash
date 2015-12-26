@@ -5,7 +5,6 @@ SET (business_reports_SCHEME
   easy-invoice.scm
   fancy-invoice.scm
   taxinvoice.scm
-  receipt.scm
   invoice.scm
   job-report.scm
   owner-report.scm
@@ -18,8 +17,6 @@ SET (business_reports_SCHEME
 SET(business_reports_DATA
   taxinvoice.eguile.scm
   taxinvoice.css
-  receipt.eguile.scm
-  receipt.css
   balsheet-eg.css
   balsheet-eg.eguile.scm
 )

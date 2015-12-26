@@ -3,7 +3,7 @@
 # Source file gncmod-backend-dbi.c does not appear to be use in Makefile.in, so not included here.
 
 SET (backend_dbi_SOURCES
-  gnc-backend-dbi.cpp
+  gnc-backend-dbi.c
 )
 SET (backend_dbi_noinst_HEADERS
   gnc-backend-dbi.h gnc-backend-dbi-priv.h
