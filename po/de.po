@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-12 18:36+0100\n"
-"PO-Revision-Date: 2015-12-19 20:37+0100\n"
+"PO-Revision-Date: 2015-12-21 20:26+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -1116,6 +1116,7 @@ msgid ""
 "Set the prefix for gsettings schemas for gsettings queries. This can be "
 "useful to have a different settings tree while debugging."
 msgstr ""
+
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -2987,7 +2988,7 @@ msgstr ""
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:11
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:23
 msgid "The invoice report to be used for printing."
-msgstr ""
+msgstr "Der Rechnungsbericht wird zum Drucken benutzt."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:12
 msgid "The name of the report to be used for invoice printing."
@@ -3904,7 +3905,7 @@ msgstr "Buchungstext"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:21
 msgid "(USD)"
-msgstr ""
+msgstr "(USD)"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:22
 msgid "Transaction Details"
@@ -4406,6 +4407,9 @@ msgid ""
 "  %s\n"
 "doesn't exist. This is however not fatal.\n"
 msgstr ""
+"Beachten Sie: das Verzeichnis\n"
+"  %s\n"
+"existiert nicht. Dies ist allerdings nicht schlimm.\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:349
 #, c-format
@@ -4562,8 +4566,7 @@ msgstr "Zusätzliche Kosten Kreditkarte"
 
 #: ../src/engine/gncInvoice.c:1609
 msgid "Generated from an invoice. Try unposting the invoice."
-msgstr ""
-"Aus einer Rechnung erzeugt. Für Änderungen müssen Sie die Buchung der "
+msgstr "Aus einer Rechnung erzeugt. Für Änderungen müssen Sie die Buchung der "
 "Rechnung löschen."
 
 #: ../src/engine/gncInvoice.c:2042
@@ -4581,7 +4584,7 @@ msgstr " (geschlossen)"
 
 #: ../src/engine/gncOwner.c:960
 msgid "Offset between documents: "
-msgstr ""
+msgstr "Abstand zwischen Dokumenten"
 
 #: ../src/engine/gncOwner.c:1070
 msgid "Lot Link"
@@ -5388,6 +5391,8 @@ msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
 msgstr ""
+"Beachten Sie: Wenn Sie bereits Änderungen in der Vorlage angenommen haben, wird"
+"Abbrechen diese nicht zurücknehmen."
 
 #: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1386
 msgid "(never)"
@@ -8169,7 +8174,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:95
 msgid "Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "Zeigt eingegebenen und abgeglichenen Daten in der Selektion"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
@@ -8180,14 +8185,13 @@ msgstr ""
 "zu übernehmen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
-#, fuzzy
 msgid "Show the calendar buttons"
-msgstr "Namensspalte anzeigen"
+msgstr "Zeigt die Kalenderschaltfächen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:98
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:156
 msgid "Show the calendar buttons Cancel, Today and Select."
-msgstr ""
+msgstr "Zeigt die Kalenderschaltfächen Abbrechen, Heute und Auswählen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:99
 #, fuzzy
@@ -15454,7 +15458,7 @@ msgstr ""
 #: ../src/import-export/aqb/assistant-ab-initial.c:581
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
-msgstr ""
+msgstr "Bankleitzahl %s (%s), Kontonummer %s (%s)"
 
 #: ../src/import-export/aqb/assistant-ab-initial.c:874
 msgid "Online Banking Account Name"
@@ -22634,14 +22638,12 @@ msgstr ""
 #: ../src/report/standard-reports/advanced-portfolio.scm:97
 #, fuzzy
 msgid "Use last-in first-out method for basis."
-msgstr ""
-"Verwende die First-In First-Out-Zuordnung (zuerst erworbene werden zuerst "
+msgstr "Verwende die First-In First-Out-Zuordnung (zuerst erworbene werden zuerst "
 "verkauft) zur Ermittlung der Basis."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:103
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr ""
-"Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls "
+msgstr "Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls "
 "möglich."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:109
