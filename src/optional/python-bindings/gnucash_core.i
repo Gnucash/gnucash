@@ -80,6 +80,8 @@
 #include "gncIDSearch.h"
 #include "engine/gnc-pricedb.h"
 #include "app-utils/gnc-prefs-utils.h"
+#include "cap-gains.h"
+#include "Scrub3.h"
 %}
 
 %include <timespec.i>
@@ -208,6 +210,9 @@
 
 // Commodity prices includes and stuff
 %include <gnc-pricedb.h>
+
+%include <cap-gains.h>
+%include <Scrub3.h>
 
 %init %{
 gnc_environment_setup();
