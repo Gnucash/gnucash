@@ -3,29 +3,29 @@
 
 
 SET (backend_sql_SOURCES
-  gnc-backend-sql.cpp
-  gnc-account-sql.cpp
-  gnc-address-sql.cpp
-  gnc-bill-term-sql.cpp
-  gnc-book-sql.cpp
-  gnc-budget-sql.cpp
-  gnc-commodity-sql.cpp
-  gnc-customer-sql.cpp
-  gnc-employee-sql.cpp
-  gnc-entry-sql.cpp
-  gnc-invoice-sql.cpp
-  gnc-job-sql.cpp
-  gnc-lots-sql.cpp
-  gnc-order-sql.cpp
-  gnc-owner-sql.cpp
-  gnc-price-sql.cpp
-  gnc-recurrence-sql.cpp
-  gnc-schedxaction-sql.cpp
-  gnc-slots-sql.cpp
-  gnc-tax-table-sql.cpp
-  gnc-transaction-sql.cpp
-  gnc-vendor-sql.cpp
-  escape.cpp
+  gnc-backend-sql.c
+  gnc-account-sql.c
+  gnc-address-sql.c
+  gnc-bill-term-sql.c
+  gnc-book-sql.c
+  gnc-budget-sql.c
+  gnc-commodity-sql.c
+  gnc-customer-sql.c
+  gnc-employee-sql.c
+  gnc-entry-sql.c
+  gnc-invoice-sql.c
+  gnc-job-sql.c
+  gnc-lots-sql.c
+  gnc-order-sql.c
+  gnc-owner-sql.c
+  gnc-price-sql.c
+  gnc-recurrence-sql.c
+  gnc-schedxaction-sql.c
+  gnc-slots-sql.c
+  gnc-tax-table-sql.c
+  gnc-transaction-sql.c
+  gnc-vendor-sql.c
+  escape.c
 )
 SET (backend_sql_noinst_HEADERS
   gnc-account-sql.h

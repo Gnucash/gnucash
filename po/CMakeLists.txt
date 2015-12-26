@@ -3,7 +3,7 @@
 # Set of available languages.
 SET (TP_LINGUAS az ca cs da eu fa ja nl pt rw sk sr sv tr uk zh_CN)
 # already marked as external at TP:
-SET (GC_LINGUAS ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt_BR ro ru ta te ur vi zh_TW)
+SET (GC_LINGUAS ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt_BR pt_PT ro ru ta te ur vi zh_TW)
 # not marked or no TP team:
 SET (NEW_LINGUAS as brx doi es_NI kok kok@latin ks mai mni mni@bengali)
 
