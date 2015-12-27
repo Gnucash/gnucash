@@ -181,9 +181,11 @@ static GtkActionEntry gnc_plugin_actions [] =
 #endif // CLOSE_BOOKS_ACTUALLY_WORKS
 
     /* Tools menu */
-
     {
-        "ToolsPriceEditorAction", NULL, N_("_Price Database"), NULL,
+    	/* Translators: This entry opens the Price Database window
+    	 * and will be renamed to "_Price Database" in v.2.8 */
+
+    	"ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
         N_("View and edit the prices for stocks and mutual funds"),
         G_CALLBACK (gnc_main_window_cmd_tools_price_editor)
     },
