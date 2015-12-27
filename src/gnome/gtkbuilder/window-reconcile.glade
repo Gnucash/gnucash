@@ -96,6 +96,8 @@
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="gnc_start_recn_children_changed"/>
+                        <property name="tooltip_text" translatable="yes">Include all descendant accounts in the reconcile. All of them must use the same commodity as this one.</property>
+
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

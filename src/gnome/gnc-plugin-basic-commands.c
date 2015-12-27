@@ -181,7 +181,6 @@ static GtkActionEntry gnc_plugin_actions [] =
 #endif // CLOSE_BOOKS_ACTUALLY_WORKS
 
     /* Tools menu */
-
     {
         "ToolsPriceEditorAction", NULL, N_("_Price Database"), NULL,
         N_("View and edit the prices for stocks and mutual funds"),
