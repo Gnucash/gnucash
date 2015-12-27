@@ -8,6 +8,7 @@
 *.pyo
 *.schemas
 *~
+.autotools
 .cproject
 .deps
 .libs
@@ -256,3 +257,4 @@ DerivedData/
 *.perspectivev3
 xcuserdata/
 messages.mo
+/.settings/
