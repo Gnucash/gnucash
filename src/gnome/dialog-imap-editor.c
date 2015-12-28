@@ -46,7 +46,7 @@
 
 /** Enumeration for the liststore */
 enum GncImapColumn {SOURCE_FULL_ACC, SOURCE_ACCOUNT, BASED_ON, MATCH_STRING,
-                     MAP_FULL_ACC, MAP_ACCOUNT, KVP_PATH, COUNT};
+                     MAP_FULL_ACC, MAP_ACCOUNT, FULL_CATEGORY, COUNT};
 
 typedef enum
 {
@@ -163,40 +163,40 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
         {
             Account *source_account = NULL;
             gchar   *full_source_account;
-            gchar   *kvp_path;
+            gchar   *full_category;
             gchar   *match_string;
 
             gtk_tree_model_get (model, &iter, SOURCE_ACCOUNT, &source_account, SOURCE_FULL_ACC, &full_source_account,
-                                              KVP_PATH, &kvp_path, MATCH_STRING, &match_string, -1);
+                                              FULL_CATEGORY, &full_category, MATCH_STRING, &match_string, -1);
 
-            PINFO("Account is '%s', Path is '%s', Search is '%s'", full_source_account, kvp_path, match_string);
+            PINFO("Account is '%s', Path is '%s', Search is '%s'", full_source_account, full_category, match_string);
 
             if (source_account != NULL)
             {
-                gnc_account_delete_map_entry (source_account, kvp_path, FALSE);
+                gnc_account_delete_map_entry (source_account, full_category, FALSE);
 
                 if (imap_dialog->type == BAYES)
                 {
-                    kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", match_string);
-                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
+                    full_category = g_strdup_printf (IMAP_FRAME_BAYES "/%s", match_string);
+                    gnc_account_delete_map_entry (source_account, full_category, TRUE);
 
-                    kvp_path = g_strdup_printf (IMAP_FRAME_BAYES);
-                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
+                    full_category = g_strdup_printf (IMAP_FRAME_BAYES);
+                    gnc_account_delete_map_entry (source_account, full_category, TRUE);
                 }
 
                 if (imap_dialog->type == NBAYES)
                 {
-                    kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
-                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
+                    full_category = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
+                    gnc_account_delete_map_entry (source_account, full_category, TRUE);
 
-                    kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_MEMO);
-                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
+                    full_category = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_MEMO);
+                    gnc_account_delete_map_entry (source_account, full_category, TRUE);
 
-                    kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_CSV);
-                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
+                    full_category = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_CSV);
+                    gnc_account_delete_map_entry (source_account, full_category, TRUE);
 
-                    kvp_path = g_strdup_printf (IMAP_FRAME);
-                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
+                    full_category = g_strdup_printf (IMAP_FRAME);
+                    gnc_account_delete_map_entry (source_account, full_category, TRUE);
                 }
             }
             g_free (match_string);
@@ -280,14 +280,12 @@ add_to_store (GtkTreeModel *store, const gchar *text, gpointer user_data)
 
     PINFO("Add to Store: Source Acc '%s', Match '%s', Map Acc '%s'", fullname, imapInfo->match_string, map_fullname);
 
-g_print("Add to Store: Source Acc '%s', Match '%s', Map Acc '%s'\n Path is '%s', Path Head is '%s'\n\n", fullname, imapInfo->match_string, map_fullname, imapInfo->kvp_path, imapInfo->kvp_path_head);
-
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
                         SOURCE_FULL_ACC, fullname, SOURCE_ACCOUNT, imapInfo->source_account,
                         BASED_ON, text,
                         MATCH_STRING, imapInfo->match_string,
                         MAP_FULL_ACC, map_fullname, MAP_ACCOUNT, imapInfo->map_account,
-                        KVP_PATH, imapInfo->kvp_path, COUNT, imapInfo->count, -1);
+                        FULL_CATEGORY, imapInfo->full_category, COUNT, imapInfo->count, -1);
 
     g_free (fullname);
     g_free (map_fullname);
@@ -322,8 +320,8 @@ get_imap_info (Account *acc, const gchar *category, GtkTreeModel *store, const g
             add_to_store (store, text, imapInfo);
 
             // Free the members and structure
-            g_free (imapInfo->kvp_path_head);
-            g_free (imapInfo->kvp_path);
+            g_free (imapInfo->category_head);
+            g_free (imapInfo->full_category);
             g_free (imapInfo->match_string);
             g_free (imapInfo->count);
             g_free (imapInfo);
@@ -412,9 +410,9 @@ get_account_info_online (GList *accts, GtkTreeModel *store)
         // Save source account
         imapInfo.source_account = acc;
 
-        imapInfo.kvp_path = "online_id";
+        imapInfo.full_category = "online_id";
 
-        text = gnc_account_get_map_entry (acc, imapInfo.kvp_path);
+        text = gnc_account_get_map_entry (acc, imapInfo.full_category);
 
         if (text != NULL)
         {
