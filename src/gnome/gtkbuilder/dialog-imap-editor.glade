@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkListStore" id="list-view">
+  <object class="GtkTreeStore" id="tree-store">
     <columns>
       <!-- column-name source_account_name -->
       <column type="gchararray"/>
@@ -158,7 +158,7 @@
               <object class="GtkTreeView" id="treeview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="model">list-view</property>
+                <property name="model">tree-store</property>
                 <child>
                   <object class="GtkTreeViewColumn" id="source_account_name">
                     <property name="resizable">True</property>
