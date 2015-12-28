@@ -5508,7 +5508,7 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 
     count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
 
-    kvp_path = g_strconcat (imapInfo->kvp_path_head, "/", key, NULL);
+    kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
 
     PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
 
@@ -5516,9 +5516,9 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 
     imapInfo_node->source_account = imapInfo->source_account;
     imapInfo_node->map_account    = gnc_account_lookup_by_full_name (root, key);
-    imapInfo_node->kvp_path       = g_strdup (kvp_path);
+    imapInfo_node->full_category  = g_strdup (kvp_path);
     imapInfo_node->match_string   = g_strdup (imapInfo->match_string);
-    imapInfo_node->kvp_path_head  = g_strdup (imapInfo->kvp_path_head);
+    imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
     imapInfo_node->count          = g_strdup (count);
 
     imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
@@ -5546,7 +5546,7 @@ build_bayes (const char *key, const GValue *value, gpointer user_data)
 
             imapInfol2.source_account = imapInfo->source_account;
             imapInfol2.match_string   = g_strdup (key);
-            imapInfol2.kvp_path_head  = g_strdup (kvp_path);
+            imapInfol2.category_head  = g_strdup (kvp_path);
             imapInfol2.list           = imapInfo->list;
 
             qof_instance_foreach_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path,
@@ -5554,7 +5554,7 @@ build_bayes (const char *key, const GValue *value, gpointer user_data)
 
             imapInfo->list = imapInfol2.list;
             g_free (imapInfol2.match_string);
-            g_free (imapInfol2.kvp_path_head);
+            g_free (imapInfol2.category_head);
         }
         g_free (kvp_path);
     }
@@ -5584,7 +5584,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
         PINFO("build_non_bayes: account '%s', match account guid: '%s'",
                                 (char*)key, guid_string);
 
-        kvp_path = g_strconcat (imapInfo->kvp_path_head, "/", key, NULL);
+        kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
 
         PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
 
@@ -5592,9 +5592,9 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 
         imapInfo_node->source_account = imapInfo->source_account;
         imapInfo_node->map_account    = xaccAccountLookup (guid, book);
-        imapInfo_node->kvp_path       = g_strdup (kvp_path);
+        imapInfo_node->full_category  = g_strdup (kvp_path);
         imapInfo_node->match_string   = g_strdup (key);
-        imapInfo_node->kvp_path_head  = g_strdup (imapInfo->kvp_path_head);
+        imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
         imapInfo_node->count          = g_strdup (" ");
 
         imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
@@ -5627,21 +5627,21 @@ GList *
 gnc_account_imap_get_info (Account *acc, const char *category)
 {
     GList *list = NULL;
-    gchar *kvp_path_head = NULL;
+    gchar *category_head = NULL;
 
     struct imap_info imapInfo;
 
     imapInfo.source_account = acc;
     imapInfo.list = list;
 
-    kvp_path_head = g_strdup_printf (IMAP_FRAME "/%s", category);
-    imapInfo.kvp_path_head = kvp_path_head;
+    category_head = g_strdup_printf (IMAP_FRAME "/%s", category);
+    imapInfo.category_head = category_head;
 
-    if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path_head))
-        qof_instance_foreach_slot (QOF_INSTANCE(acc), kvp_path_head,
+    if (qof_instance_has_slot (QOF_INSTANCE(acc), category_head))
+        qof_instance_foreach_slot (QOF_INSTANCE(acc), category_head,
                                    build_non_bayes, &imapInfo);
 
-    g_free (kvp_path_head);
+    g_free (category_head);
 
     return imapInfo.list;
 }
@@ -5649,10 +5649,11 @@ gnc_account_imap_get_info (Account *acc, const char *category)
 /*******************************************************************************/
 
 gchar *
-gnc_account_get_map_entry (Account *acc, const char *kvp_path)
+gnc_account_get_map_entry (Account *acc, const char *full_category)
 {
     GValue v = G_VALUE_INIT;
     gchar *text = NULL;
+    gchar *kvp_path = g_strdup (full_category);
 
     if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
     {
@@ -5665,13 +5666,16 @@ gnc_account_get_map_entry (Account *acc, const char *kvp_path)
             text = g_strdup (string);
         }
     }
+    g_free (kvp_path);
     return text;
 }
 
 
 void
-gnc_account_delete_map_entry (Account *acc, char *kvp_path, gboolean empty)
+gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
 {
+    gchar *kvp_path = g_strdup (full_category);
+
     if ((acc != NULL) && qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
     {
         xaccAccountBeginEdit (acc);
@@ -5687,6 +5691,7 @@ gnc_account_delete_map_entry (Account *acc, char *kvp_path, gboolean empty)
         xaccAccountCommitEdit (acc);
     }
     g_free (kvp_path);
+    g_free (full_category);
 }
 
 
