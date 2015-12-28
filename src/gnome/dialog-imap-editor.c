@@ -173,30 +173,30 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
 
             if (source_account != NULL)
             {
-                gnc_account_delete_kvp (source_account, kvp_path, FALSE);
+                gnc_account_delete_map_entry (source_account, kvp_path, FALSE);
 
                 if (imap_dialog->type == BAYES)
                 {
                     kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", match_string);
-                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
+                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME_BAYES);
-                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
+                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
                 }
 
                 if (imap_dialog->type == NBAYES)
                 {
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_DESC);
-                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
+                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_MEMO);
-                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
+                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME "/%s", IMAP_FRAME_CSV);
-                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
+                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
 
                     kvp_path = g_strdup_printf (IMAP_FRAME);
-                    gnc_account_delete_kvp (source_account, kvp_path, TRUE);
+                    gnc_account_delete_map_entry (source_account, kvp_path, TRUE);
                 }
             }
             g_free (match_string);
@@ -270,22 +270,24 @@ add_to_store (GtkTreeModel *store, const gchar *text, gpointer user_data)
     gchar       *fullname = NULL;
     gchar       *map_fullname = NULL;
 
-    struct kvp_info *kvpInfo = (struct kvp_info*)user_data;
+    struct imap_info *imapInfo = (struct imap_info*)user_data;
 
     gtk_list_store_append (GTK_LIST_STORE(store), &iter);
 
-    fullname = gnc_account_get_full_name (kvpInfo->source_account);
+    fullname = gnc_account_get_full_name (imapInfo->source_account);
 
-    map_fullname = gnc_account_get_full_name (kvpInfo->map_account);
+    map_fullname = gnc_account_get_full_name (imapInfo->map_account);
 
-    PINFO("Add to Store: Source Acc '%s', Match '%s', Map Acc '%s'", fullname, kvpInfo->match_string, map_fullname);
+    PINFO("Add to Store: Source Acc '%s', Match '%s', Map Acc '%s'", fullname, imapInfo->match_string, map_fullname);
+
+g_print("Add to Store: Source Acc '%s', Match '%s', Map Acc '%s'\n Path is '%s', Path Head is '%s'\n\n", fullname, imapInfo->match_string, map_fullname, imapInfo->kvp_path, imapInfo->kvp_path_head);
 
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
-                        SOURCE_FULL_ACC, fullname, SOURCE_ACCOUNT, kvpInfo->source_account,
+                        SOURCE_FULL_ACC, fullname, SOURCE_ACCOUNT, imapInfo->source_account,
                         BASED_ON, text,
-                        MATCH_STRING, kvpInfo->match_string,
-                        MAP_FULL_ACC, map_fullname, MAP_ACCOUNT, kvpInfo->map_account,
-                        KVP_PATH, kvpInfo->kvp_path, COUNT, kvpInfo->count, -1);
+                        MATCH_STRING, imapInfo->match_string,
+                        MAP_FULL_ACC, map_fullname, MAP_ACCOUNT, imapInfo->map_account,
+                        KVP_PATH, imapInfo->kvp_path, COUNT, imapInfo->count, -1);
 
     g_free (fullname);
     g_free (map_fullname);
@@ -294,7 +296,7 @@ add_to_store (GtkTreeModel *store, const gchar *text, gpointer user_data)
 static void
 get_imap_info (Account *acc, const gchar *category, GtkTreeModel *store, const gchar *text)
 {
-    GList *kvp_list, *node;
+    GList *imap_list, *node;
     gchar *acc_name = NULL;
 
     acc_name = gnc_account_get_full_name (acc);
@@ -302,45 +304,142 @@ get_imap_info (Account *acc, const gchar *category, GtkTreeModel *store, const g
     g_free (acc_name);
 
     if (category == NULL) // For Bayesian, category is NULL
-        kvp_list = gnc_account_imap_get_info_bayes (acc, category);
+        imap_list = gnc_account_imap_get_info_bayes (acc);
     else
-        kvp_list = gnc_account_imap_get_info (acc, category);
+        imap_list = gnc_account_imap_get_info (acc, category);
 
-    if (g_list_length (kvp_list) > 0)
+    if (g_list_length (imap_list) > 0)
     {
-        PINFO("List length is %d", g_list_length (kvp_list));
+        PINFO("List length is %d", g_list_length (imap_list));
 
-        for (node = kvp_list;  node; node = g_list_next (node))
+        for (node = imap_list;  node; node = g_list_next (node))
         {
-            struct kvp_info *kvpInfo;
+            struct imap_info *imapInfo;
 
-            kvpInfo = node->data;
+            imapInfo = node->data;
 
             // Add to store
-            add_to_store (store, text, kvpInfo);
+            add_to_store (store, text, imapInfo);
 
             // Free the members and structure
-            g_free (kvpInfo->kvp_path_head);
-            g_free (kvpInfo->kvp_path);
-            g_free (kvpInfo->match_string);
-            g_free (kvpInfo->count);
-            g_free (kvpInfo);
+            g_free (imapInfo->kvp_path_head);
+            g_free (imapInfo->kvp_path);
+            g_free (imapInfo->match_string);
+            g_free (imapInfo->count);
+            g_free (imapInfo);
         }
     }
     // Free the list
-    g_list_free (kvp_list);
+    g_list_free (imap_list);
+}
+
+static void
+show_first_row (ImapDialog *imap_dialog)
+{
+    GtkTreeIter iter;
+    GtkTreeModel *store;
+
+    store = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
+
+    // See if there are any entries
+    if (gtk_tree_model_get_iter_first (store, &iter))
+    {
+        GtkTreePath *path;
+        path = gtk_tree_path_new_first (); // Set Path to first entry
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(imap_dialog->view), path, NULL, TRUE, 0.0, 0.0);
+        gtk_tree_path_free (path);
+    }
+}
+
+static void
+get_account_info_bayes (GList *accts, GtkTreeModel *store)
+{
+    GList   *ptr;
+
+    struct imap_info imapInfo;
+
+    /* Go through list of accounts */
+    for (ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        Account *acc = ptr->data;
+
+        // Save source account
+        imapInfo.source_account = acc;
+
+        get_imap_info (acc, NULL, store, _("Bayesian"));
+    }
+}
+
+static void
+get_account_info_nbayes (GList *accts, GtkTreeModel *store)
+{
+    GList   *ptr;
+
+    struct imap_info imapInfo;
+
+    /* Go through list of accounts */
+    for (ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        Account *acc = ptr->data;
+
+        // Save source account
+        imapInfo.source_account = acc;
+
+        // Description
+        get_imap_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
+
+        // Memo
+        get_imap_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
+
+        // CSV Account Map
+        get_imap_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
+    }
+}
+
+static void
+get_account_info_online (GList *accts, GtkTreeModel *store)
+{
+    GList   *ptr;
+
+    struct imap_info imapInfo;
+
+    /* Go through list of accounts */
+    for (ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        gchar  *text = NULL;
+        Account *acc = ptr->data;
+
+        // Save source account
+        imapInfo.source_account = acc;
+
+        imapInfo.kvp_path = "online_id";
+
+        text = gnc_account_get_map_entry (acc, imapInfo.kvp_path);
+
+        if (text != NULL)
+        {
+            if (g_strcmp0 (text, "") == 0)
+                imapInfo.map_account = NULL;
+            else
+                imapInfo.map_account = imapInfo.source_account;
+
+            imapInfo.match_string  = text;
+            imapInfo.count = " ";
+
+            // Add imap data to store
+            add_to_store (store, _("Online Id"), &imapInfo);
+        }
+        g_free (text);
+    }
 }
 
 static void
 get_account_info (ImapDialog *imap_dialog)
 {
     Account *root;
-    Account *acc;
-    GList   *accts, *ptr;
+    GList   *accts;
     GtkTreeIter iter;
     GtkTreeModel *store;
-
-    struct kvp_info kvpInfo;
 
     /* Get list of Accounts */
     root = gnc_book_get_root_account (gnc_get_current_book());
@@ -352,58 +451,21 @@ get_account_info (ImapDialog *imap_dialog)
     // Hide Count Column
     show_count_column (imap_dialog, FALSE);
 
-    /* Go through list of accounts */
-    for (ptr = accts; ptr; ptr = g_list_next (ptr))
+    if (imap_dialog->type == BAYES)
     {
-        Account *acc = ptr->data;
+        get_account_info_bayes (accts, store);
 
-        // Save source account
-        kvpInfo.source_account = acc;
-
-        if (imap_dialog->type == BAYES)
-        {
-            get_imap_info (acc, NULL, store, _("Bayesian"));
-
-            // Show Count Column
-            show_count_column (imap_dialog, TRUE);
-        }
-
-        if (imap_dialog->type == NBAYES)
-        {
-            // Description
-            get_imap_info (acc, IMAP_FRAME_DESC, store, _("Description Field"));
-
-            // Memo
-            get_imap_info (acc, IMAP_FRAME_MEMO, store, _("Memo Field"));
-
-            // CSV Account Map
-            get_imap_info (acc, IMAP_FRAME_CSV, store, _("CSV Account Map"));
-        }
-
-        if (imap_dialog->type == ONLINE)
-        {
-            gchar *text = NULL;
-
-            kvpInfo.kvp_path = "online_id";
-
-            text = gnc_account_get_kvp_text (acc, kvpInfo.kvp_path);
-
-            if (text != NULL)
-            {
-                if (g_strcmp0 (text, "") == 0)
-                    kvpInfo.map_account = NULL;
-                else
-                    kvpInfo.map_account = kvpInfo.source_account;
-
-                kvpInfo.match_string  = text;
-                kvpInfo.count = " ";
-
-                // Add kvp data to store
-                add_to_store (store, _("Online Id"), &kvpInfo);
-            }
-            g_free (text);
-        }
+        // Show Count Column
+        show_count_column (imap_dialog, TRUE);
     }
+    else if (imap_dialog->type == NBAYES)
+        get_account_info_nbayes (accts, store);
+    else if (imap_dialog->type == ONLINE)
+        get_account_info_online (accts, store);
+
+    // if there are any entries, show first row
+    show_first_row (imap_dialog);
+
     g_list_free (accts);
 }
 
