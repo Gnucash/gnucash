@@ -186,6 +186,7 @@ struct _qifimportwindow
     SCM       match_transactions;
     SCM       transaction_status;
     int       selected_transaction;
+    gchar    *date_format;
 };
 
 struct _qifassistantpage
@@ -1807,6 +1808,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     parse_return = scm_call_2(qif_file_parse, SCM_CAR(imported_files), progress);
     gnc_progress_dialog_pop(wind->load_progress);
     wind->ask_date_format = FALSE;
+    wind->date_format = NULL;
     if (parse_return == SCM_BOOL_T)
     {
         /* Canceled by the user. */
@@ -2002,28 +2004,31 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    SCM  reparse_dates   = scm_c_eval_string("qif-file:reparse-dates");
-    SCM  format_sym;
-    gchar *text;
-
     /* Get the selected date format. */
-    model = gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo));
-    gtk_combo_box_get_active_iter (GTK_COMBO_BOX(wind->date_format_combo), &iter);
-    gtk_tree_model_get( model, &iter, 0, &text, -1 );
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX (wind->date_format_combo));
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (wind->date_format_combo), &iter);
+    gtk_tree_model_get (model, &iter, 0, &wind->date_format, -1);
 
-    if (!text)
+    if (!wind->date_format)
     {
         g_critical("QIF import: BUG DETECTED in gnc_ui_qif_import_date_valid_cb. Format is NULL.");
     }
-    format_sym = scm_from_locale_symbol (text);
-    g_free(text);
-
-    /* Reparse the dates using the selected format. */
-    scm_call_2(reparse_dates, wind->selected_file, format_sym);
 
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
+static void
+qif_import_reparse_dates (QIFImportWindow* wind)
+{
+    SCM  reparse_dates   = scm_c_eval_string ("qif-file:reparse-dates");
+    SCM format_sym = scm_from_locale_symbol (wind->date_format);
+
+    /* Reparse the dates using the selected format. */
+    scm_call_2 (reparse_dates, wind->selected_file, format_sym);
+    g_free (wind->date_format);
+    wind->date_format = NULL;
+    wind->ask_date_format = FALSE;
+}
 
 /******************************************
  * Page 4 - Account Setup Page Procedures
@@ -2041,8 +2046,9 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
     gint num = gtk_assistant_get_current_page (assistant);
 
     SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
-
-    /* Determine the next page to display. */
+    if (wind->ask_date_format && wind->date_format)
+        qif_import_reparse_dates (wind);
+   /* Determine the next page to display. */
     if (scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T)
     {
         /* There is an account name missing. Ask the user to provide one. */
