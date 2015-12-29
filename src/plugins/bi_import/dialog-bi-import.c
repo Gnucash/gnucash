@@ -89,9 +89,8 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
     bi_import_stats stats_fallback;
     FILE *f;
 
-    // regexp
-    char *line = NULL;
-    gchar *line_utf8 = NULL;
+    gchar *line = NULL;
+    gchar *codeset = NULL;
     gchar *temp = NULL;
     GMatchInfo *match_info;
     GError *err;
@@ -151,18 +150,21 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
         int l;
         // read one line
         if (!fgets (line, buffer_size, f))
-            break;			// eof
+            break;          // eof
+        codeset = g_get_codeset ();
+        DEBUG("Codeset: %s",codeset);
+       
         // now strip the '\n' from the end of the line
         l = strlen (line);
         if ((l > 0) && (line[l - 1] == '\n'))
             line[l - 1] = 0;
 
-        // convert line from locale into utf8
-        line_utf8 = g_locale_to_utf8 (line, -1, NULL, NULL, NULL);
+        DEBUG("%s",g_locale_to_utf8 (line, -1, NULL, NULL, NULL));
 
+        g_free(codeset);
         // parse the line
-        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not alsways set -> g_match_info_free will segfault
-        if (g_regex_match (regexpat, line_utf8, 0, &match_info))
+        match_info = NULL;  // it seems, that in contrast to documentation, match_info is not alsways set -> g_match_info_free will segfault
+        if (g_regex_match (regexpat, line, 0, &match_info))
         {
             // match found
             stats->n_imported++;
@@ -198,14 +200,12 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
         {
             // ignore line
             stats->n_ignored++;
-            g_string_append (stats->ignored_lines, line_utf8);
+            g_string_append (stats->ignored_lines, line);
             g_string_append_c (stats->ignored_lines, '\n');
         }
 
         g_match_info_free (match_info);
         match_info = 0;
-        g_free (line_utf8);
-        line_utf8 = 0;
     }
     g_free (line);
     line = 0;
@@ -236,13 +236,13 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     gboolean valid, row_deleted, row_fixed;
     gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
         *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
-    GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
+    GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date; // needed to fix multi line invoices
     guint dummy;
     gint row = 1;
     const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
-    
-    
-    //date_format_string = qof_date_format_get_string (qof_date_format_get());	
+
+
+    //date_format_string = qof_date_format_get_string (qof_date_format_get());
 
     DEBUG("date_format_string: %s",date_format_string);
     // allow the call to this function with only GtkListeStore* specified
@@ -298,7 +298,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                                     row, id);
         }
         else
-        {   // TODO: If id is empty get the next one in the series.  Bug 731105 
+        {   // TODO: If id is empty get the next one in the series.  Bug 731105
             if (strlen (id) == 0)
             {
                 // no invoice id specified
@@ -342,7 +342,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     GDate date;
                     g_date_clear (&date, 1);
                     gnc_gdate_set_today (&date);
-                    g_date_strftime (temp, 20, date_format_string, &date);	// Create a user specified date string.
+                    g_date_strftime (temp, 20, date_format_string, &date);  // Create a user specified date string.
                     g_string_assign (prev_date_opened, temp);
                 }
                 // fix this by using the previous date_opened value (multi line invoice)
@@ -386,9 +386,9 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 gtk_list_store_set (store, &iter, DUE_DATE,
                                         date_posted, -1);
                 row_fixed = TRUE;
-                
+
             }
-            
+
             // due_date is valid
             */
             if (strlen (quantity) == 0)
@@ -397,7 +397,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
-            
+
 
             // quantity is valid
 
@@ -533,7 +533,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gchar *new_id = NULL;
     gint64 denom = 0;
     gnc_commodity *currency;
-    
+
     // these arguments are needed
     g_return_if_fail (store && book);
     // logic of this function only works for bills or invoices
@@ -610,15 +610,15 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 gncOwnerInitCustomer (owner,
                                       gnc_search_customer_on_id (book, owner_id));
             gncInvoiceSetOwner (invoice, owner);
-            gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
-            if (strlen (date_opened) != 0)	// If a date is specified in CSV
+            gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));   // Set the invoice currency based on the owner
+            if (strlen (date_opened) != 0)  // If a date is specified in CSV
             {
                 // FIXME: Must check for the return value of qof_scan_date!
                 qof_scan_date (date_opened, &day, &month, &year);
                 gncInvoiceSetDateOpened (invoice,
                                          gnc_dmy2timespec (day, month, year));
             }
-            else			// If no date in CSV
+            else            // If no date in CSV
             {
                 time64 now = gnc_time (NULL);
                 Timespec now_timespec;
@@ -646,15 +646,15 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 // time.
 // An import can contain many lines usually referring to the same invoice.
 // NB: Posted invoices are NEVER updated.
-        else			// if invoice exists
+        else            // if invoice exists
         {
-            if (gncInvoiceIsPosted (invoice))	// Is it already posted?
+            if (gncInvoiceIsPosted (invoice))   // Is it already posted?
             {
                 valid =
                     gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-                continue;		// If already posted then never import
+                continue;       // If already posted then never import
             }
-            if (update != YES)	// Pop up a dialog to ask if updates are the expected action
+            if (update != YES)  // Pop up a dialog to ask if updates are the expected action
             {
                 dialog = gtk_message_dialog_new (NULL,
                                                  GTK_DIALOG_MODAL,
@@ -708,7 +708,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetDateGDate (entry, date);
             g_date_free (date);
         }
-        timespecFromTime64 (&today, gnc_time (NULL));	// set today to the current date
+        timespecFromTime64 (&today, gnc_time (NULL));   // set today to the current date
         gncEntrySetDateEntered (entry, today);
         gncEntrySetDescription (entry, desc);
         gncEntrySetAction (entry, action);
@@ -717,7 +717,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gncEntrySetQuantity (entry, value);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
-        
+
         if (g_ascii_strcasecmp (type, "BILL") == 0)
         {
             gncEntrySetBillAccount (entry, acc);
@@ -751,8 +751,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
 
         // handle auto posting of invoices
-    
-        
+
+
         if (valid)
             gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
         if (g_strcmp0 (id, new_id) != 0)
@@ -771,7 +771,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
                 d1 = gnc_dmy2timespec (day, month, year);
                 // FIXME: Must check for the return value of qof_scan_date!
-                qof_scan_date (due_date, &day, &month, &year);	// obtains the due date, or leaves it at date_posted
+                qof_scan_date (due_date, &day, &month, &year);  // obtains the due date, or leaves it at date_posted
                 d2 = gnc_dmy2timespec (day, month, year);
                 acc = gnc_account_lookup_for_register
                       (gnc_get_current_root_account (), account_posted);
@@ -782,8 +782,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             }
 
         }
-        
-        
+
+
     }
     // cleanup
     g_free (new_id);
@@ -809,5 +809,5 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     g_free (account_posted);
     g_free (memo_posted);
     g_free (accumulatesplits);
-    
+
 }
