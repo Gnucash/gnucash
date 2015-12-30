@@ -1,6 +1,22 @@
+2015-12-20 Mechtilde 
+
+	* more German translation (HEAD -> PotTest, home/GermanTranslation, github/GermanTranslation, GermanTranslation)
+
+2015-12-14 Mechtilde 
+
+	* add German Translation
+
 2015-12-19 John Ralls 
 
-	* Update the po files from the Translation Project. (HEAD, origin/maint, origin/HEAD, maint)
+	* Release 2.6.10 (origin/maint, home/maint, github/maint, maint)
+
+2015-12-19 John Ralls 
+
+	* Clean log files in report-system/test.
+
+2015-12-19 John Ralls 
+
+	* Update the po files from the Translation Project.
 
 2015-12-19 Pedro Albuquerque 
 
@@ -24,7 +40,7 @@
 
 2015-12-14 John Ralls 
 
-	* Use @SHELL@ instead of hardcode /bin/sh in test shell scripts. (origin/el-cap)
+	* Use @SHELL@ instead of hardcode /bin/sh in test shell scripts.
 
 2015-12-10 John Ralls 
 
@@ -428,7 +444,7 @@
 
 2015-10-05 John Ralls 
 
-	* Release 2.6.9 (tag: 2.6.9)
+	* Release 2.6.9
 
 2015-10-05 John Ralls 
 
@@ -480,7 +496,7 @@
 
 2015-09-26 John Ralls 
 
-	* Release Gnucash-2.6.8 (tag: 2.6.8)
+	* Release Gnucash-2.6.8
 
 2015-09-26 John Ralls 
 
@@ -488,7 +504,7 @@
 
 2015-09-25 Mechtilde 
 
-	* corr some translations
+	* corr some translations (home/GermanTranslation2, github/GermanTranslation2)
 
 2015-09-25 Mechtilde 
 
@@ -880,7 +896,7 @@
 
 2015-06-27 John Ralls 
 
-	* Release 2.6.7 (tag: 2.6.7)
+	* Release 2.6.7
 
 2015-06-27 John Ralls 
 
@@ -1016,7 +1032,7 @@
 
 2015-03-30 John Ralls 
 
-	* Update NEWS and ChangeLog to include Bug 746977 and fix some typos. (tag: 2.6.6a)
+	* Update NEWS and ChangeLog to include Bug 746977 and fix some typos.
 
 2015-03-30 Geert Janssens 
 
@@ -1036,7 +1052,7 @@
 
 2015-03-28 John Ralls 
 
-	* Remove extraneous path noise from translation project files. (tag: 2.6.6)
+	* Remove extraneous path noise from translation project files.
 
 2015-03-28 John Ralls 
 
@@ -1356,7 +1372,7 @@
 
 2014-12-18 John Ralls 
 
-	* Update News for re-tag of 2.6.5 (tag: 2.6.5a)
+	* Update News for re-tag of 2.6.5
 
 2014-12-17 Geert Janssens 
 
@@ -1368,7 +1384,7 @@
 
 2014-12-15 John Ralls 
 
-	* Release 2.6.5. (tag: 2.6.5)
+	* Release 2.6.5.
 
 2014-12-15 John Ralls 
 
@@ -1640,7 +1656,7 @@
 
 2014-09-27 John Ralls 
 
-	* Release 2.6.4 (tag: 2.6.4)
+	* Release 2.6.4
 
 2014-09-27 John Ralls 
 
@@ -2416,7 +2432,7 @@
 
 2014-03-30 John Ralls 
 
-	* Revert "Win32 build: Update aqbanking version numbers" (tag: 2.6.3)
+	* Revert "Win32 build: Update aqbanking version numbers"
 
 2014-03-30 John Ralls 
 
@@ -2540,7 +2556,7 @@
 
 2014-03-01 John Ralls 
 
-	* Release GnuCash 2.6.2 (tag: 2.6.2)
+	* Release GnuCash 2.6.2
 
 2014-03-01 John Ralls 
 
