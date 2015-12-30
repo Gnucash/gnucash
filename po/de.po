@@ -1117,7 +1117,6 @@ msgid ""
 "useful to have a different settings tree while debugging."
 msgstr ""
 
-
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:130
@@ -4584,7 +4583,7 @@ msgstr " (geschlossen)"
 
 #: ../src/engine/gncOwner.c:960
 msgid "Offset between documents: "
-msgstr "Abstand zwischen Dokumenten"
+msgstr "Abstand zwischen Dokumenten: "
 
 #: ../src/engine/gncOwner.c:1070
 msgid "Lot Link"
@@ -14626,7 +14625,7 @@ msgstr "Tipps beim Programmstart _anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:1
 msgid "Transfer Funds"
-msgstr "Umbuchung"
+msgstr "Buchen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:2
 msgid "<b>Basic Information</b>"
@@ -16755,7 +16754,7 @@ msgstr "Kontenhierarchie in eine CSV Datei exportieren"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:52
 msgid "Export _Transactions to CSV..."
-msgstr "Buchungen nach CSV exportieren..."
+msgstr "_Buchungen nach CSV exportieren..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:53
 msgid "Export the Transactions to a CSV file"
@@ -22683,7 +22682,7 @@ msgstr "Verwende die First-In First-Out-Zuordnung (zuerst erworbene werden zuers
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:103
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr "Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls "
+msgstr "Kurse aus der Kursdatenbank gegenüber Kursen aus Buchungen bevorzugen, falls "
 "möglich."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:109
