@@ -577,7 +577,8 @@ ab_account_longname(const AB_ACCOUNT *ab_acc)
     bankcode = AB_Account_GetBankCode(ab_acc);
     subAccountId = AB_Account_GetSubAccountId(ab_acc);
 
-    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
+    /* Translators: Strings are 1. Bank code, 2. Bank name,
+     * 3. Account Number,  4. Subaccount ID                  */
     result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
                              bankcode,
                              bankname ? bankname : "",
