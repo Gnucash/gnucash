@@ -27,6 +27,10 @@ dist_doc_DATA = \
   ChangeLog.2005 \
   ChangeLog.2004 \
   ChangeLog.2003 \
+  ChangeLog.2002 \
+  ChangeLog.2001 \
+  ChangeLog.2000 \
+  ChangeLog.1999 \
   DOCUMENTERS \
   HACKING \
   INSTALL \
