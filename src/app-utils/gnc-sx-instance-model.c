@@ -214,8 +214,12 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             str = kvp_value_get_string(kvp_val);
             if (str && strlen(str) != 0)
             {
-                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
-                split_is_marker = FALSE;
+		gnc_numeric val = gnc_numeric_zero();
+                int result = gnc_sx_parse_vars_from_formula(str, var_hash,
+							    &val);
+		if (result == 0 && (!gnc_numeric_zero_p(val) ||
+				    g_hash_table_size(var_hash) != 0))
+		    split_is_marker = FALSE;
             }
         }
 
@@ -228,8 +232,12 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             str = kvp_value_get_string(kvp_val);
             if (str && strlen(str) != 0)
             {
-                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
-                split_is_marker = FALSE;
+		gnc_numeric val = gnc_numeric_zero();
+                int result = gnc_sx_parse_vars_from_formula(str, var_hash,
+							    &val);
+		if (result == 0 && (!gnc_numeric_zero_p(val) ||
+				    g_hash_table_size(var_hash) != 0))
+		    split_is_marker = FALSE;
             }
         }
         if (!split_is_marker && first_cmdty == NULL)
