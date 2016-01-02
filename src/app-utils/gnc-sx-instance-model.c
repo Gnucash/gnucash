@@ -377,7 +377,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
     const GDate *range_end = (const GDate*)user_data;
     GDate creation_end, remind_end;
     GDate cur_date;
-    void *sequence_ctx;
+    SXTmpStateData *sequence_ctx = gnc_sx_create_temporal_state(sx);
 
     instances->sx = sx;
 
@@ -402,12 +402,14 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
                                        &inst_date, postponed->data, seq_num);
             instances->instance_list =
                 g_list_append(instances->instance_list, inst);
+            gnc_sx_destroy_temporal_state(sequence_ctx);
+            sequence_ctx = gnc_sx_clone_temporal_state(postponed->data);
+            gnc_sx_incr_temporal_state(sx, sequence_ctx);
         }
     }
 
     /* to-create */
     g_date_clear(&cur_date, 1);
-    sequence_ctx = gnc_sx_create_temporal_state(sx);
     cur_date = xaccSchedXactionGetNextInstance(sx, sequence_ctx);
     instances->next_instance_date = cur_date;
     while (g_date_valid(&cur_date) && g_date_compare(&cur_date, &creation_end) <= 0)
