@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-02 13:27+0100\n"
-"PO-Revision-Date: 2016-01-02 16:10+0100\n"
+"PO-Revision-Date: 2016-01-02 22:42+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -8312,97 +8312,89 @@ msgstr ""
 "angezeigt."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "Use relative profit/loss starting date"
-msgstr "Einnahmen/Ausgabenrechnung Startdatum-Typ"
+msgstr "Nutze relatives Startdatum für die Einnahmen/Ausgabenrechnung"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:5
-#, fuzzy
 msgid ""
 "This setting controls the type of starting date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the starting "
 "date specified by the start-date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start-period key."
 msgstr ""
-"Diese Einstellung wählt die Art des Start-Datums in den Einnahme-/"
-"Ausgabenrechnungen. Wenn auf »absolute« gesetzt, wird das absolute "
-"Startdatum aus der Einstellung »start_date« verwendet. Andernfalls wird ein "
-"relatives Startdatum gemäß der Einstellung »start_period« verwendet."
+"Diese Einstellung prüft die Art des Start-Datums in den Einnahmen-/"
+"Ausgabenrechnungen. Wenn diese auf \"absolute\"gesetzt ist, wird das absolute "
+"Startdatum aus der Einstellung \"start_date\" verwendet. Andernfalls wird ein "
+"relatives Startdatum gemäß der Einstellung \"start_period\" verwendet."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:6
-#, fuzzy
 msgid "Use absolute profit/loss starting date"
-msgstr "Einnahmen/Ausgabenrechnung Startdatum-Typ"
+msgstr "Nutzt das absolute Startdatum für die Einnahmen-/Ausgabenrechnung"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:7
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr "Anfangszeitpunkt (in Sekunden seit 1. Januar 1970)"
+msgstr "Anfangsdatum (in Sekunden seit dem 1. Januar 1970)"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:8
-#, fuzzy
+
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Diese Einstellung setzt das Anfangs-Datum in den Einnahme-/"
-"Ausgabenrechnungen, wenn die Einstellung »start_choice« auf »absolute« "
-"gesetzt ist. Dann gibt diese Einstellung das Datum in Sekunden seit 1. "
-"Januar 1970 an."
+"Ausgabenrechnungen, wenn die Einstellung \"start_choice\" auf \"absolute\" "
+"gesetzt ist. Dann gibt diese Einstellung das Datum in Sekunden seit dem "
+"1. Januar 1970 an."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:9
 msgid "Starting time period identifier"
 msgstr "Index für relativen Anfangszeitpunkt"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:10
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
 "Diese Einstellung setzt das Start-Datum in den Einname-/Ausgabenrechnungen, "
-"wenn die Einstellung »start_choice« auf etwas anderes als »absolute« gesetzt "
+"wenn die Einstellung \"start_choice\" auf etwas anderes als \"absolute\" gesetzt "
 "ist. Dann wählt diese Einstellung eines der relativen Datumsvorgaben mit dem "
 "jeweiligen Index von 0 bis 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:11
-#, fuzzy
 msgid "Use relative profit/loss ending date"
-msgstr "Einnahmen/Ausgabenrechnung Enddatum-Typ"
+msgstr "Nutzt das relative Enddatum für die Einnahmen/Ausgabenrechnung"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:12
-#, fuzzy
 msgid ""
 "This setting controls the type of ending date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the ending "
 "date specified by the end-date key. If set to anything else, GnuCash will "
 "retrieve the ending date specified by the end-period key."
 msgstr ""
-"Diese Einstellung wählt die Art des End-Datums in den Einnahme-/"
-"Ausgabenrechnungen. Wenn auf »absolute« gesetzt, wird das absolute Enddatum "
+"Diese Einstellung prüft die Art des End-Datums in den Einnahme-/"
+"Ausgabenrechnungen. Wenn diese auf \"absolute\" gesetzt sind, wird das absolute Enddatum "
 "aus der Einstellung »end_date« verwendet. Andernfalls wird ein relatives "
-"Enddatum gemäß der Einstellung »end_period« verwendet."
+"Enddatum gemäß der Einstellung \"end_period\" verwendet."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:13
-#, fuzzy
 msgid "Use absolute profit/loss ending date"
-msgstr "Einnahmen/Ausgabenrechnung Enddatum-Typ"
+msgstr "Nutzt das absolute Enddatum für die Einnahmen/Ausgabenrechnung"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:14
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr "Endzeitpunkt (in Sekunden seit 1. Januar 1970)"
+msgstr "Enddatum (in Sekunden seit 1. Januar 1970)"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:15
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 "Diese Einstellung setzt das End-Datum in den Einnahme-/Ausgabenrechnungen, "
-"wenn die Einstellung »end_choice« auf »absolute« gesetzt ist. Dann gibt "
-"diese Einstellung das Datum in Sekunden seit 1. Januar 1970 an."
+"wenn die Einstellung \"end_choice\" auf \"absolute\" gesetzt ist. Dann gibt "
+"diese Einstellung das Datum in Sekunden seit dem 1. Januar 1970 an."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:16
 msgid "Ending time period identifier"
@@ -8415,8 +8407,8 @@ msgid ""
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
-"Diese Einstellung setzt das End-Datum in den Einname-/Ausgabenrechnungen, "
-"wenn die Einstellung »end_choice« auf etwas anderes als »absolute« gesetzt "
+"Diese Einstellung setzt das Enddatum in den Einname-/Ausgabenrechnungen, "
+"wenn die Einstellung \"end_choice\" auf etwas anderes als \"absolute« gesetzt "
 "ist. Dann wählt diese Einstellung eines der relativen Datumsvorgaben mit dem "
 "jeweiligen Index von 0 bis 8."
 
@@ -8435,9 +8427,8 @@ msgid "Width of this column"
 msgstr "Breite der Spalte"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "This setting stores the width of the given column in pixels."
-msgstr "Diese Einstellung kontrolliert, ob die Datum-Spalte angezeigt wird."
+msgstr "Diese Einstellung speichert die Weite der aufgeführten Spalten in Pixel."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:1
 msgid ""
@@ -10152,14 +10143,12 @@ msgid "Sa_ve Sort Order"
 msgstr "Sortierreihenfolge speichern"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
-#, fuzzy
 msgid "Save the sort order for this register."
-msgstr "Bearbeiten des übergeordneten Kontos für dieses Kontobuch"
+msgstr "Sortierreihenfolge für diese Liste speichern"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:49
-#, fuzzy
 msgid "Reverse Order"
-msgstr "Wie Kontobuch"
+msgstr "Umgekehrte Reihenfolge"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:50
 msgid "Sort in descending order."
@@ -12036,9 +12025,9 @@ msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
 msgstr "Zuletzt geändert am %a, %e.%b %Y um %I:%M%P"
 
 #: ../src/gnome-utils/gnc-main-window.c:1660
-#, fuzzy, c-format
+#, c-format
 msgid "Last modified on %x %X"
-msgstr "Zuletzt geändert am %a, %e.%b %Y um %I:%M"
+msgstr "Zuletzt geändert am %x %X"
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.
@@ -12242,9 +12231,8 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
 #, fuzzy
 msgid "Not enough information for Blank Transaction?"
-msgstr ""
-"Alle Buchungssätze mit Bemerkung anzeigen, also zwei Zeilen pro Buchung "
-"anzeigen"
+msgstr "Nicht genug Informationen für eine ..."
+
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1727
 #, fuzzy
@@ -13074,16 +13062,17 @@ msgstr ""
 "Diese Rückfrage kommt vor dem gleichzeitigen Löschen von mehreren Kursen."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:13
-#, fuzzy
 msgid "Edit account payable/accounts receivable register"
-msgstr "Forderungen Konten"
+msgstr "Bearbeiten der Forderungs-/Verbindlichkeitskonton"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:14
 msgid ""
 "This dialog is presented before allowing you to edit an accounts payable/"
 "accounts receivable account. These account types are reserved for the "
 "business features and should rarely be manipulated manually."
-msgstr ""
+msgstr "Dieser Dialog wird angezeigt, bevor Sie ein Forderungs-/"
+"Verbindlichkeitskonto anlegen können. Diese Kontoarten sind für die Geschäftsbuchungen "
+"reserviert und sollten nicht manuell geändert werden,"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:15
 msgid "Read only register"
@@ -13993,11 +13982,9 @@ msgid "Perform account list _setup on new file"
 msgstr "Konteneinrichtung bei neuer Datei"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
-#, fuzzy
 msgid "Present the new account list dialog when you choose File -> New File."
 msgstr ""
-"Assistent für neue Konteneinrichtung öffnen, wenn »Neue Datei« im Menü "
-"»Datei« gewählt wird"
+"Der Assistent für neue Konteneinrichtung erscheint, wenn Sie Datei -> Neue Datei wählen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:64
 msgid "Display \"_tip of the day\" dialog"
@@ -15139,7 +15126,6 @@ msgid "Only show _active owners"
 msgstr "Nur _aktive Mandanten zeigen"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:3
-#, fuzzy
 msgid "Show _zero balance owners"
 msgstr "Nullsalden anzeigen"
 
@@ -16721,12 +16707,11 @@ msgstr "Buchungen in eine CSV-Textdatei exportieren"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:5
 msgid "Window geometry"
-msgstr "Fenstergröße"
+msgstr "Fensterposition"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:6
-#, fuzzy
 msgid "The position of paned window when it was last closed."
-msgstr "Größe des Fensters beim letzten Schließen"
+msgstr "Position des Fensters beim letzten Schließen"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:70
 #, c-format
@@ -21156,7 +21141,7 @@ msgstr "Diese Seite zeigt Ihnen Details zu steuerrelevanten Konten."
 #: ../src/report/report-gnome/dialog-custom-report.c:315
 #, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "Sind Sie sicher, dass Sie \"%s\" löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie %s löschen möchten?"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:421
 msgid "You must select a report configuration to load."
