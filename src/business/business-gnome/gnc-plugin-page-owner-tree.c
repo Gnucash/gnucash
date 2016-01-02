@@ -626,7 +626,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
                                       "show-column-menu", TRUE,
                                       NULL);
 
-    g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
+    g_object_set(G_OBJECT(plugin_page), "page-name", _(label), NULL);
 
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);
