@@ -101,7 +101,7 @@ typedef struct _GncSxVariable
 typedef struct _GncSxInstance
 {
     GncSxInstances *parent; /**< the parent instances collection. **/
-    void *temporal_state; /**< the sx creation temporal state. **/
+    SXTmpStateData *temporal_state; /**< the sx creation temporal state. **/
     GncSxInstanceState orig_state; /**< the original state at generation time. **/
     GncSxInstanceState state; /**< the current state of the instance (during editing) **/
     GDate date; /**< the instance date. **/
