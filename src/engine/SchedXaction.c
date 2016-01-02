@@ -899,20 +899,10 @@ xaccSchedXactionGetNextInstance (const SchedXaction *sx, SXTmpStateData *tsd)
     }
     else if ( xaccSchedXactionHasOccurDef( sx ) )
     {
-        if ( stateData )
+        if ((tsd && tsd->num_occur_rem == 0) ||
+            (!tsd && sx->num_occurances_remain == 0 ))
         {
-            SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-            if ( tsd->num_occur_rem == 0 )
-            {
-                g_date_clear( &next_occur, 1 );
-            }
-        }
-        else
-        {
-            if ( sx->num_occurances_remain == 0 )
-            {
-                g_date_clear( &next_occur, 1 );
-            }
+            g_date_clear( &next_occur, 1 );
         }
     }
     return next_occur;
@@ -1080,43 +1070,36 @@ gnc_sx_create_temporal_state(const SchedXaction *sx )
 }
 
 void
-gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData )
+gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *tsd )
 {
-    GDate unused;
-    SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-
-    g_date_clear( &unused, 1 );
-    tsd->last_date =
-        xaccSchedXactionGetNextInstance (sx, stateData);
-    if ( xaccSchedXactionHasOccurDef( sx ) )
+    g_return_if_fail(tsd != NULL);
+    tsd->last_date = xaccSchedXactionGetNextInstance (sx, tsd);
+    if (xaccSchedXactionHasOccurDef (sx))
     {
-        tsd->num_occur_rem -= 1;
+        --tsd->num_occur_rem;
     }
-    tsd->num_inst += 1;
+    ++tsd->num_inst;
 }
 
 void
-gnc_sx_destroy_temporal_state( SXTmpStateData *stateData )
+gnc_sx_destroy_temporal_state (SXTmpStateData *tsd)
 {
-    g_free( (SXTmpStateData*)stateData );
+    g_free(tsd);
 }
 
 SXTmpStateData*
-gnc_sx_clone_temporal_state( SXTmpStateData *stateData )
+gnc_sx_clone_temporal_state (SXTmpStateData *tsd)
 {
-    SXTmpStateData *toRet, *tsd;
-    tsd = (SXTmpStateData*)stateData;
-    toRet = g_memdup( tsd, sizeof( SXTmpStateData ) );
+    SXTmpStateData *toRet;
+    toRet = g_memdup (tsd, sizeof (SXTmpStateData));
     return toRet;
 }
 
-static
-gint
+static gint
 _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 {
-    SXTmpStateData *tsd_a, *tsd_b;
-    tsd_a = (SXTmpStateData*)a;
-    tsd_b = (SXTmpStateData*)b;
+    const SXTmpStateData *tsd_a = (SXTmpStateData*)a;
+    const SXTmpStateData *tsd_b = (SXTmpStateData*)b;
 
     if ( !tsd_a && !tsd_b )
         return 0;
@@ -1143,8 +1126,8 @@ gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 }
 
 /**
- * Removes an instance from the deferred list.  If the instance is no longer
- * useful; gnc_sx_destroy_temporal_state() it.
+ * Removes an instance from the deferred list. The saved SXTmpStateData existed
+ * for comparison only, so destroy it.
  **/
 void
 gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
