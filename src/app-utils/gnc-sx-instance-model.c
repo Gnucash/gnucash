@@ -406,7 +406,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
     /* to-create */
     g_date_clear(&cur_date, 1);
     sequence_ctx = gnc_sx_create_temporal_state(sx);
-    cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
+    cur_date = xaccSchedXactionGetNextInstance(sx, sequence_ctx);
     instances->next_instance_date = cur_date;
     while (g_date_valid(&cur_date) && g_date_compare(&cur_date, &creation_end) <= 0)
     {
@@ -416,7 +416,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE, &cur_date, sequence_ctx, seq_num);
         instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
-        cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
+        cur_date = xaccSchedXactionGetNextInstance(sx, sequence_ctx);
     }
 
     /* reminders */
@@ -428,7 +428,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER, &cur_date, sequence_ctx, seq_num);
         instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
-        cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
+        cur_date = xaccSchedXactionGetNextInstance(sx, sequence_ctx);
     }
 
     return instances;
