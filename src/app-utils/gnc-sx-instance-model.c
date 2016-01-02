@@ -398,8 +398,10 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             g_date_clear(&inst_date, 1);
             inst_date = xaccSchedXactionGetNextInstance(sx, postponed->data);
             seq_num = gnc_sx_get_instance_count(sx, postponed->data);
-            inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
-            instances->instance_list = g_list_append(instances->instance_list, inst);
+            inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED,
+                                       &inst_date, postponed->data, seq_num);
+            instances->instance_list =
+                g_list_append(instances->instance_list, inst);
         }
     }
 
@@ -413,20 +415,24 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         GncSxInstance *inst;
         int seq_num;
         seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
-        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE, &cur_date, sequence_ctx, seq_num);
+        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE,
+                                   &cur_date, sequence_ctx, seq_num);
         instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
         cur_date = xaccSchedXactionGetNextInstance(sx, sequence_ctx);
     }
 
     /* reminders */
-    while (g_date_valid(&cur_date) && g_date_compare(&cur_date, &remind_end) <= 0)
+    while (g_date_valid(&cur_date) &&
+           g_date_compare(&cur_date, &remind_end) <= 0)
     {
         GncSxInstance *inst;
         int seq_num;
         seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
-        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER, &cur_date, sequence_ctx, seq_num);
-        instances->instance_list = g_list_append(instances->instance_list, inst);
+        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER,
+                                   &cur_date, sequence_ctx, seq_num);
+        instances->instance_list = g_list_append(instances->instance_list,
+                                                 inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
         cur_date = xaccSchedXactionGetNextInstance(sx, sequence_ctx);
     }
@@ -1324,7 +1330,8 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
             {
                 // remove from postponed list
                 g_assert(inst->temporal_state != NULL);
-                gnc_sx_remove_defer_instance(inst->parent->sx, inst->temporal_state);
+                gnc_sx_remove_defer_instance(inst->parent->sx,
+                                             inst->temporal_state);
             }
 
             switch (inst->state)
