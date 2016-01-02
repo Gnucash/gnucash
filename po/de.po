@@ -18,8 +18,12 @@ msgstr ""
 "PO-Revision-Date: 2015-12-21 20:26+0100\n"
 =======
 "POT-Creation-Date: 2015-12-31 09:15+0100\n"
+<<<<<<< bfb978eb886cbf3bb867a62b60ca3df39487480e
 "PO-Revision-Date: 2016-01-02 15:19+0100\n"
 >>>>>>> add some translations
+=======
+"PO-Revision-Date: 2016-01-02 16:10+0100\n"
+>>>>>>> remove some fuzzy flags
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -5380,12 +5384,12 @@ msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
 
 #: ../src/gnome/dialog-sx-editor.c:798
-#, fuzzy
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
-"Terminierte Buchungen mit Variablen können nicht automatisch erstellt werden."
+"Terminierte Buchungen mit Variablen oder mit mehr als einem Wertpapier "
+"können nicht automatisch erstellt werden."
 
 #: ../src/gnome/dialog-sx-from-trans.c:557
 msgid ""
@@ -8176,9 +8180,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:101
-#, fuzzy
 msgid "Number of transactions to show in a register."
-msgstr "Anzahl Buchungen:"
+msgstr "Anzahl Buchungen, die angezeigt werden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:102
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:144
@@ -8421,9 +8424,9 @@ msgstr ""
 "jeweiligen Index von 0 bis 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:1
-#, fuzzy
+
 msgid "Display this column"
-msgstr "Konto anzeigen?"
+msgstr "Diese Spalte anzeigen?"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:2
 msgid ""
@@ -8455,7 +8458,6 @@ msgstr ""
 "machen. Bitte sorgen Sie für ein konkret rechtzeitiges Backup."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:4
-#, fuzzy
 msgid "Setup Account Period"
 msgstr "Buchführungsperioden einrichten"
 
@@ -8468,6 +8470,7 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
+"\n"
 "Wählen Sie einen Buchungszeitraum und ein Abschlussdatum für diesen "
 "Zeitraum. Der Buchabschluss wird für Mitternacht jenes Datums gespeichert."
 
@@ -8650,7 +8653,6 @@ msgstr ""
 "Sie die erstellte Terminierte Buchung direkt ändern."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:4
-#, fuzzy
 msgid "Loan / Mortgage Repayment Setup"
 msgstr "Einrichtung Hypothek/Darlehen-Tilgung"
 
@@ -8760,9 +8762,8 @@ msgid "Repayment Frequency"
 msgstr "Tilgungshäufigkeit"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:32
-#, fuzzy
 msgid "Loan Repayment"
-msgstr "Tilgung"
+msgstr "Tilgung des Darlehen"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:33
 msgid ""
@@ -8808,19 +8809,17 @@ msgid "Payment Frequency"
 msgstr "Zahlungshäufigkeit"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:44
-#, fuzzy
+
 msgid "Previous Option"
-msgstr "Erste Option"
+msgstr "Vorherige Option"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:45
-#, fuzzy
 msgid "Next Option"
-msgstr "Zahlenoptionen"
+msgstr "Nächste Option"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:46
-#, fuzzy
 msgid "Loan Payment"
-msgstr "Steuern"
+msgstr "Darlehenzahlung"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:47
 msgid ""
@@ -10168,9 +10167,8 @@ msgid "Reverse Order"
 msgstr "Wie Kontobuch"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:50
-#, fuzzy
 msgid "Sort in descending order."
-msgstr "Spalten aufsteigend oder absteigend sortieren"
+msgstr "Absteigend sortieren"
 
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:1
 msgid "<b>Auto-Clear Information</b>"
@@ -10226,9 +10224,8 @@ msgid "Select"
 msgstr "Auswählen"
 
 #: ../src/gnome-search/dialog-search.c:1077
-#, fuzzy
 msgid "Order"
-msgstr "Bestellungsnummer"
+msgstr "Bestellung"
 
 #: ../src/gnome-search/dialog-search.c:1083
 msgid "New Transaction"
@@ -11095,9 +11092,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/dialog-transfer.c:1331
-#, fuzzy
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "Warnung: Modul Finance::Quote ist nicht korrekt installiert."
+msgstr "Warnung: Modul Finance::Quote muss installiert sein, um die Schaltfläche zu aktivieren."
 
 #: ../src/gnome-utils/dialog-transfer.c:1433
 msgid ""
@@ -12263,7 +12259,6 @@ msgstr ""
 "Änderungen in der Buchung speichern, oder möchten Sie abbrechen?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1738
-#, fuzzy
 msgid "_Return"
 msgstr "Kapitalverzinsung"
 
@@ -12414,7 +12409,6 @@ msgid "Fee"
 msgstr "Gebühr"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2915
-#, fuzzy
 msgid "ATM Withdraw"
 msgstr "Belastung"
 
@@ -12724,7 +12718,7 @@ msgstr "Inhaber ID"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:418
 msgid "Address Name"
-msgstr "Adressname: "
+msgstr "Adressname "
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:423
 msgid "Address 1"
@@ -12775,12 +12769,12 @@ msgid "Save the changed transaction?"
 msgstr "Geänderte Buchung speichern?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2415
-#, fuzzy
 msgid ""
 "The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
 msgstr ""
-"Die aktuelle Buchungsvorlage wurde verändert. Soll sie gespeichert werden?"
+"Die aktuelle Buchung wurde verändert. Wollen Sie die Änderungen erfassen "
+"oder verwerfen"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2453
 #: ../src/register/ledger-core/split-register-control.c:1549
@@ -12860,14 +12854,12 @@ msgid "Debit Formula"
 msgstr "Haben-Formel"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3263
-#, fuzzy
 msgid "Enter Due Date"
-msgstr "Fälligkeitsdatum"
+msgstr "Fälligkeitsdatum eingeben"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3274
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr ""
-"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+msgstr "Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3276
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3283
@@ -12921,20 +12913,17 @@ msgid "Reason the transaction was voided"
 msgstr "Grund für Buchungsstornierung"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3339
-#, fuzzy
 msgid "Enter the reconcile type"
-msgstr "Sortiere nach Abgleich-Datum"
+msgstr "Abgleich-Typ eingeben"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3349
-#, fuzzy
 msgid "Enter the type of transaction"
-msgstr "Geben Sie die Art des Postens ein"
+msgstr "Geben Sie die Art der Buchung ein"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3359
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3379
-#, fuzzy
 msgid "Enter the value of shares bought or sold"
-msgstr "Geben Sie die verkaufte Anzahl von Aktien ein"
+msgstr "Geben Sie den Wert der ge- oder verkauften Aktien ein"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3369
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3381
@@ -13042,9 +13031,8 @@ msgstr ""
 "gespeichert werden oder die Änderung verworfen werden."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:5
-#, fuzzy
 msgid "Duplicating a changed invoice entry"
-msgstr "Eine geänderte Rechnungszeile duplizieren"
+msgstr "Einen geänderte Rechnungseintrag duplizieren"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:6
 msgid ""
@@ -13064,9 +13052,8 @@ msgid "This dialog is presented before allowing you to delete a commodity."
 msgstr "Diese Rückfrage kommt vor dem Löschen einer Devise/Wertpapier."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:9
-#, fuzzy
 msgid "Delete a commodity with price quotes"
-msgstr "Eine Devise/Wertpapier und deren Kurse löschen"
+msgstr "Eine Devise/Wertpapier mit den Kurswerten löschen"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:10
 msgid ""
@@ -13195,11 +13182,8 @@ msgid "This dialog is presented before allowing you to delete a transaction."
 msgstr "Diese Rückfrage kommt vor dem Löschen einer Buchung."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:30
-#, fuzzy
 msgid "Delete a transaction with reconciled splits"
-msgstr ""
-"Sie können eine Buchung mit abgeglichenen oder bestätigten Buchungsteilen "
-"nicht ungültig machen."
+msgstr "Sie können eine Buchung mit abgeglichenen Buchungen nicht löschen."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:31
 msgid ""
@@ -13557,7 +13541,6 @@ msgid "Show _hidden accounts"
 msgstr "_Versteckte Konten anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:55
-#, fuzzy
 msgid "Show accounts which have the option \"Hidden\" checked."
 msgstr "Konten anzeigen, die als »Versteckt« markiert sind."
 
@@ -13566,7 +13549,6 @@ msgid "Show _zero total accounts"
 msgstr "Konten mit Saldo _Null anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:57
-#, fuzzy
 msgid "Show accounts which have a zero total value."
 msgstr "Konten nicht anzeigen, die Kontostand Null haben."
 
@@ -14015,8 +13997,7 @@ msgstr "Konteneinrichtung bei neuer Datei"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
 #, fuzzy
 msgid "Present the new account list dialog when you choose File -> New File."
-msgstr ""
-"Assistent für neue Konteneinrichtung öffnen, wenn »Neue Datei« im Menü "
+msgstr "Assistent für neue Konteneinrichtung öffnen, wenn »Neue Datei« im Menü "
 "»Datei« gewählt wird"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:64
@@ -14024,7 +14005,6 @@ msgid "Display \"_tip of the day\" dialog"
 msgstr "»Tipp des Tages« anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:65
-#, fuzzy
 msgid "Display hints for using GnuCash at startup."
 msgstr "Anzeigen von Hinweisen beim Start von GnuCash"
 
@@ -14405,7 +14385,6 @@ msgid "_Save window size and position"
 msgstr "_Fenstergrößen und -positionen speichern"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
-#, fuzzy
 msgid "Save window size and location when it is closed."
 msgstr "Fenstergröße und -positionen speichern"
 
@@ -14583,9 +14562,8 @@ msgid "<b>Tax Table Entries</b>"
 msgstr "<b>Einträge Steuertabelle</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:10
-#, fuzzy
 msgid "Value $"
-msgstr "Wert"
+msgstr "Wert €"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:12
 #, no-c-format
