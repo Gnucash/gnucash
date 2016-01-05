@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-31 09:15+0100\n"
+"POT-Creation-Date: 2016-01-05 05:25+0100\n"
 "PO-Revision-Date: 2015-12-21 20:26+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
@@ -3342,7 +3342,6 @@ msgid "Choose Owner Dialog"
 msgstr "Auswahl des Besitzers"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-choose-owner.glade.h:2
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:5
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:66
 #: ../src/gnome/dialog-find-transactions2.c:154
 #: ../src/gnome/dialog-find-transactions.c:153
@@ -3539,32 +3538,6 @@ msgstr "Lieferadresse"
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:1
 msgid "Question"
 msgstr "Frage"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:2
-msgid "Dummy message"
-msgstr "Beispiel-Nachricht"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:3
-msgid "postd"
-msgstr "Gebucht"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:4
-msgid "duedate"
-msgstr "Fällig"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:6
-msgid "acct"
-msgstr "Konto"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:7
-msgid "question"
-msgstr "Frage"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:8
-#: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:25
-#: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
-msgid "label"
-msgstr "Beschriftung"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:2
 msgid "Employee Number: "
@@ -16927,6 +16900,11 @@ msgstr "Kontenimport-Vorschau der ersten 10 Zeilen"
 msgid "Import Accounts Now"
 msgstr "_Konten jetzt importieren"
 
+#: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:25
+#: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
+msgid "label"
+msgstr "Beschriftung"
+
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:26
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:48
 msgid "Import Summary"
@@ -21199,6 +21177,12 @@ msgstr ""
 #: ../src/report/locale-specific/us/taxtxf.scm:3548
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "Diese Seite zeigt Ihnen Details zu steuerrelevanten Konten."
+
+#. we must confirm the user wants to delete their precious custom report!
+#: ../src/report/report-gnome/dialog-custom-report.c:315
+#, fuzzy, c-format
+msgid "Are you sure you want to delete %s?"
+msgstr "Sind Sie sicher, dass Sie »%s« löschen möchten?"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:421
 msgid "You must select a report configuration to load."
@@ -25959,6 +25943,21 @@ msgstr ""
 "Fenster mit der Kontenhierarchie (Bearbeiten -> Suchen ...). Wenn Sie eine "
 "Buchung in einem bestimmten Konto suchen, starten Sie diese Suche vom "
 "Kontofenster dieses Kontos."
+
+#~ msgid "Dummy message"
+#~ msgstr "Beispiel-Nachricht"
+
+#~ msgid "postd"
+#~ msgstr "Gebucht"
+
+#~ msgid "duedate"
+#~ msgstr "Fällig"
+
+#~ msgid "acct"
+#~ msgstr "Konto"
+
+#~ msgid "question"
+#~ msgstr "Frage"
 
 #~ msgid "(USD)"
 #~ msgstr "(USD)"

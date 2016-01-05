@@ -86,7 +86,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xpad">8</property>
-                    <property name="label" translatable="yes">Dummy message</property>
+                    <property name="label" translatable="no">Dummy message</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -128,7 +128,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">postd</property>
+                        <property name="label" translatable="no">postdate</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -142,7 +142,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">duedate</property>
+                        <property name="label" translatable="no">duedate</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -156,7 +156,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Description</property>
+                        <property name="label" translatable="Yes">Description</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -170,7 +170,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">acct</property>
+                        <property name="label" translatable="no">acct</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -264,7 +264,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="question_check">
-                        <property name="label" translatable="yes">question</property>
+                        <property name="label" translatable="no">question</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -405,7 +405,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xpad">8</property>
-                    <property name="label" translatable="yes">Dummy message</property>
+                    <property name="label" translatable="no">Dummy message</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -442,7 +442,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="no">label</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
