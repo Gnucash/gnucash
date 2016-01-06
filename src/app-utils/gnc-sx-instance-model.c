@@ -283,8 +283,7 @@ gnc_sx_get_template_transaction_account(const SchedXaction *sx)
 void
 gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash)
 {
-    Account *sx_template_acct;
-    sx_template_acct = gnc_sx_get_template_transaction_account(sx);
+    Account *sx_template_acct = gnc_sx_get_template_transaction_account(sx);
     xaccAccountForEachTransaction(sx_template_acct, _get_vars_helper, var_hash);
 }
 
@@ -988,12 +987,15 @@ _get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_n
                                       numeric_key,
                                       NULL);
     *numeric = kvp_value_get_numeric(kvp_val);
-    if ((gnc_numeric_check(*numeric) == GNC_ERROR_OK)
-        && !gnc_numeric_zero_p(*numeric))
+    if ((variable_bindings == NULL ||
+         g_hash_table_size(variable_bindings) == 0) &&
+        gnc_numeric_check(*numeric) == GNC_ERROR_OK &&
+        !gnc_numeric_zero_p(*numeric))
     {
-        /* Already a valid non-zero result? Then return and don't
-         * parse the string. Luckily we avoid any locale problems with
-         * decimal points here! Phew. */
+        /* If there are no variables to parse and we had a valid numeric stored
+         * then we can skip parsing the formula, which might save some
+         * localization problems with separators.
+         */
         return;
     }
 
@@ -1672,9 +1674,15 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
             gint gncn_error;
 
             /* Credit value */
-            _get_sx_formula_value(creation_data->sx, template_split, &credit_num, creation_data->creation_errors, GNC_SX_CREDIT_FORMULA, GNC_SX_CREDIT_NUMERIC, NULL);
+            _get_sx_formula_value(creation_data->sx, template_split,
+                                  &credit_num, creation_data->creation_errors,
+                                  GNC_SX_CREDIT_FORMULA, GNC_SX_CREDIT_NUMERIC,
+                                  NULL);
             /* Debit value */
-            _get_sx_formula_value(creation_data->sx, template_split, &debit_num, creation_data->creation_errors, GNC_SX_DEBIT_FORMULA, GNC_SX_DEBIT_NUMERIC, NULL);
+            _get_sx_formula_value(creation_data->sx, template_split,
+                                  &debit_num, creation_data->creation_errors,
+                                  GNC_SX_DEBIT_FORMULA, GNC_SX_DEBIT_NUMERIC,
+                                  NULL);
 
             /* The resulting cash flow number: debit minus credit,
              * multiplied with the count factor. */
