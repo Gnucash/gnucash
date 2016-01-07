@@ -1406,6 +1406,37 @@ Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* to
 void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
                                          Account *acc);
 
+struct imap_info
+{
+    Account        *source_account;
+    Account        *map_account;
+    GList          *list;
+    char           *category_head;
+    char           *full_category;
+    char           *match_string;
+    char           *count;
+};
+
+/** Returns a GList of structure imap_info of all Bayesian mappings for
+ *  required Account
+ */
+GList *gnc_account_imap_get_info_bayes (Account *acc);
+
+/** Returns a GList of structure imap_info of all Non Bayesian mappings for
+ *  required Account
+ */
+GList *gnc_account_imap_get_info (Account *acc, const char *category);
+
+/** Returns the text string pointed to by full_category for the Account, free
+ *  the returned text
+ */
+gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
+
+/** Delete the entry for Account pointed to by full_category, if empty is TRUE then use
+ *  delete if empty, full_category is freed
+ */
+void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty);
+
 /** @} */
 
 
