@@ -383,7 +383,10 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
                     line = g_strdup ("");
                 temp2 = g_strdup_printf ("%d", line_year);
                 temp = g_strconcat (form_line_data, "\n", temp2, " - ",
-                                    until, "   ", line, NULL);
+                                    ((year != 0) && (until == now))
+                                        ? g_strdup_printf("%d", year)
+                                        : until,
+                                    "   ", line, NULL);
                 if (until != now)
                     g_free (until);
                 until = g_strdup_printf ("%d", (line_year - 1));
