@@ -5159,8 +5159,8 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
     struct account_token_count* this_account;
 
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%ld'\n", (char*)key,
-    //                  (long)g_value_get_int64(value));
+    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'\n", (char*)key,
+    //                  g_value_get_int64(value));
 
     /* add the count to the total_count */
     tokenInfo->total_count += g_value_get_int64(value);
@@ -5318,9 +5318,10 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
             account_c = (struct account_token_count*)current_account_token->data;
 
             PINFO("account_c->account_name('%s'), "
-                  "account_c->token_count('%ld')/total_count('%ld')",
-                  account_c->account_name, (long)account_c->token_count,
-                  (long)tokenInfo.total_count);
+                  "account_c->token_count('%" G_GINT64_FORMAT
+                  "')/total_count('%" G_GINT64_FORMAT "')",
+                  account_c->account_name, account_c->token_count,
+                  tokenInfo.total_count);
 
             account_p = g_hash_table_lookup(running_probabilities,
                                             account_c->account_name);
