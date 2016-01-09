@@ -750,10 +750,10 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
     for ( i = 0; i < numIters && !unbalanceable; i++ )
     {
+        GList *splitList = xaccSchedXactionGetSplits (sxed->sx);
         gnc_sx_randomize_variables(vars);
         g_hash_table_foreach( txns, set_sums_to_zero, NULL );
 
-        GList *splitList = xaccSchedXactionGetSplits (sxed->sx);
         splitCount += g_list_length( splitList );
 
         for ( ; splitList; splitList = splitList->next )
