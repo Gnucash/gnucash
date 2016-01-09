@@ -439,6 +439,13 @@ typedef struct _txnCreditDebitSums
     gnc_numeric debitSum;
 } txnCreditDebitSums;
 
+static txnCreditDebitSums *
+tcds_new (void)
+{
+    txnCreditDebitSums *tcds = g_new0 (txnCreditDebitSums, 1);
+    tcds->creditSum = tcds->debitSum = gnc_numeric_zero();
+    return tcds;
+}
 
 static
 void
@@ -451,42 +458,232 @@ set_sums_to_zero( gpointer key,
     tcds->debitSum  = gnc_numeric_zero();
 }
 
+inline static gnc_numeric
+tcds_difference (txnCreditDebitSums *tcds)
+{
+    return gnc_numeric_sub_fixed (tcds->debitSum, tcds->creditSum);
+}
 
 static void
-check_credit_debit_balance( gpointer key,
-                            gpointer val,
-                            gpointer ud )
+check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
 {
     txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
     gboolean *unbalanced = (gboolean*)ud;
-    *unbalanced |= !(gnc_numeric_zero_p(
-                         gnc_numeric_sub_fixed( tcds->debitSum,
-                                                tcds->creditSum ) ));
+    gnc_numeric diff = tcds_difference (tcds);
+    const char *result = gnc_numeric_zero_p (diff) ? "true" : "false";
+    *unbalanced |= !(gnc_numeric_zero_p(diff));
 
-    if (qof_log_check(G_LOG_DOMAIN, QOF_LOG_DEBUG))
-    {
-        if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
-                                                        tcds->creditSum ) ) )
-        {
-            g_debug( "%p | true [%s - %s = %s]",
-                     key,
-                     gnc_numeric_to_string( tcds->debitSum ),
-                     gnc_numeric_to_string( tcds->creditSum ),
-                     gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                  tcds->creditSum )) );
-        }
-        else
-        {
-            g_debug( "%p | false [%s - %s = %s]",
-                     key,
-                     gnc_numeric_to_string( tcds->debitSum ),
-                     gnc_numeric_to_string( tcds->creditSum ),
-                     gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                  tcds->creditSum )) );
-        }
-    }
+    DEBUG ("%p | %s [%s - %s = %s]", key, result,
+           gnc_numeric_to_string (tcds->debitSum),
+           gnc_numeric_to_string (tcds->creditSum),
+           gnc_numeric_to_string (diff));
 }
 
+static gboolean
+gnc_sxed_check_names (GncSxEditorDialog *sxed)
+{
+    gchar *name, *nameKey;
+    gboolean nameExists, nameHasChanged;
+    GList *sxList;
+
+    name = gtk_editable_get_chars( GTK_EDITABLE(sxed->nameEntry), 0, -1 );
+    if ( strlen(name) == 0 )
+    {
+        const char *sx_has_no_name_msg =
+            _( "Please name the Scheduled Transaction." );
+        gnc_error_dialog( sxed->dialog, "%s", sx_has_no_name_msg );
+        g_free( name );
+        return FALSE;
+
+    }
+
+    nameExists = FALSE;
+    nameKey = g_utf8_collate_key(name, -1);
+    nameHasChanged =
+        (xaccSchedXactionGetName(sxed->sx) == NULL)
+        || (strcmp (xaccSchedXactionGetName(sxed->sx), name) != 0);
+    for (sxList = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
+         nameHasChanged && !nameExists && sxList;
+         sxList = sxList->next)
+    {
+        char *existingName, *existingNameKey;
+        existingName = xaccSchedXactionGetName ((SchedXaction*)sxList->data);
+        existingNameKey = g_utf8_collate_key(existingName, -1);
+        nameExists |=  (strcmp(nameKey, existingNameKey) == 0 );
+        g_free (existingNameKey);
+    }
+    g_free (nameKey);
+    if (nameHasChanged && nameExists)
+    {
+        const char *sx_has_existing_name_msg =
+            _("A Scheduled Transaction with the name \"%s\" already exists. "
+              "Are you sure you want to name this one the same?");
+        if (!gnc_verify_dialog (sxed->dialog, FALSE,
+                                sx_has_existing_name_msg, name))
+        {
+            g_free (name);
+            return FALSE;
+        }
+    }
+    g_free (name);
+    return TRUE;
+}
+
+static gboolean
+gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
+{
+    GDate startDate, endDate, nextDate;
+    GList *schedule = NULL;
+
+    if ( !gtk_toggle_button_get_active(sxed->optEndDate)
+         && !gtk_toggle_button_get_active(sxed->optEndCount)
+         && !gtk_toggle_button_get_active(sxed->optEndNone) )
+    {
+        const char *sx_end_spec_msg =
+            _("Please provide a valid end selection.");
+        gnc_error_dialog (sxed->dialog, "%s", sx_end_spec_msg);
+        return FALSE;
+    }
+
+    if (gtk_toggle_button_get_active (sxed->optEndCount))
+    {
+        gint occur  =
+            gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(sxed->endCountSpin));
+        gint rem =
+            gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(sxed->endRemainSpin));
+
+        if (occur == 0)
+        {
+            const char *sx_occur_count_zero_msg =
+                _("There must be some number of occurrences.");
+            gnc_error_dialog (sxed->dialog, "%s", sx_occur_count_zero_msg);
+            return FALSE;
+        }
+
+        if (rem > occur)
+        {
+            const char *sx_occur_counts_wrong_msg =
+                _("The number of remaining occurrences (%d) is greater than "
+                  "the number of total occurrences (%d).");
+            gnc_error_dialog (sxed->dialog, sx_occur_counts_wrong_msg,
+                              rem, occur);
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    g_date_clear (&endDate, 1);
+    if (gtk_toggle_button_get_active (sxed->optEndDate))
+    {
+        gnc_gdate_set_time64 (&endDate,
+                              gnc_date_edit_get_date (sxed-> endDateEntry));
+    }
+
+    g_date_clear (&nextDate, 1);
+    gnc_frequency_save_to_recurrence (sxed->gncfreq, &schedule, &startDate);
+    if (g_list_length(schedule) > 0)
+    {
+        g_date_subtract_days (&startDate, 1);
+        recurrenceListNextInstance (schedule, &startDate, &nextDate);
+    }
+    recurrenceListFree (&schedule);
+
+    if (!g_date_valid(&nextDate) ||
+        (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0)))
+    {
+        const char *invalid_sx_check_msg =
+            _("You have attempted to create a Scheduled Transaction which "
+              "will never run. Do you really want to do this?");
+        if (!gnc_verify_dialog(sxed->dialog, FALSE,
+                               "%s", invalid_sx_check_msg))
+            return FALSE;
+    }
+    return TRUE;
+}
+
+static gboolean
+gnc_sxed_check_autocreate (GncSxEditorDialog *sxed, int ttVarCount,
+                           int splitCount, gboolean multi_commodity)
+{
+    gboolean autocreateState;
+
+    autocreateState =
+        gtk_toggle_button_get_active (
+            GTK_TOGGLE_BUTTON(sxed->autocreateOpt));
+
+    if (((ttVarCount > 0) || multi_commodity) && autocreateState)
+    {
+        gnc_warning_dialog(sxed->dialog, "%s",
+                           _("Scheduled Transactions with variables "
+                             "or involving more than one commodity "
+                             "cannot be automatically created."));
+        return FALSE;
+    }
+
+    /* Fix for part of Bug#121740 -- auto-create transactions are
+     * only valid if there's actually a transaction to create. */
+    if (autocreateState && splitCount == 0)
+    {
+        gnc_warning_dialog(sxed->dialog, "%s",
+                           _("Scheduled Transactions without a template "
+                             "transaction cannot be automatically created.") );
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static gboolean
+gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s,
+                     gnc_commodity *base_cmdty, gboolean *multi_cmdty)
+{
+    gnc_commodity *split_cmdty = NULL;
+    gnc_numeric split_amount = gnc_numeric_zero ();
+    Account *acct;
+    KvpFrame *f = xaccSplitGetSlots (s);
+    KvpValue *v = kvp_frame_get_slot_path(f, GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
+    GncGUID *acct_guid = kvp_value_get_guid (v);
+    acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+    split_cmdty = xaccAccountGetCommodity(acct);
+    split_amount = xaccSplitGetAmount(s);
+    if (!gnc_numeric_zero_p(split_amount) && base_cmdty == NULL)
+    {
+        base_cmdty = split_cmdty;
+    }
+    *multi_cmdty |= (!gnc_numeric_zero_p(split_amount) &&
+                    !gnc_commodity_equal(split_cmdty, base_cmdty));
+    return TRUE;
+}
+
+static gboolean
+gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
+                                  GHashTable *vars, const char *key,
+                                  txnCreditDebitSums *tcds)
+{
+    KvpFrame *f = xaccSplitGetSlots (s);
+    KvpValue *v = kvp_frame_get_slot_path (f, GNC_SX_ID, key, NULL);
+    gnc_numeric tmp = gnc_numeric_zero ();
+    char *str = NULL;
+
+    if (v == NULL || (str = kvp_value_get_string(v)) == NULL ||
+        strlen(str) == 0)
+        return TRUE; /* No formula no foul */
+    if (gnc_sx_parse_vars_from_formula (str, vars, &tmp) < 0)
+    {
+        gchar *err = g_strdup_printf (_("Couldn't parse %s for split \"%s\"."),
+                                      key, xaccSplitGetMemo (s));
+        gnc_error_dialog (GTK_WIDGET(sxed->dialog), "%s", err);
+        g_free (err);
+
+        return FALSE;
+    }
+    if (g_strcmp0 (key, GNC_SX_CREDIT_FORMULA) == 0)
+        tcds->creditSum = gnc_numeric_add(tcds->creditSum, tmp, 100,
+                                          GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD);
+    else
+        tcds->debitSum = gnc_numeric_add (tcds->debitSum, tmp, 100,
+                                          GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD);
+    return TRUE;
+}
 
 /*******************************************************************************
  * Checks to make sure that the SX is in a reasonable state to save.
@@ -495,10 +692,6 @@ check_credit_debit_balance( gpointer key,
 static gboolean
 gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 {
-    gboolean multi_commodity = FALSE;
-    gnc_commodity *base_cmdty = NULL;
-    gint ttVarCount, splitCount;
-    GList *schedule = NULL;
 
     /* Do checks on validity and such, interrupting the user if
      * things aren't right.
@@ -519,353 +712,106 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
      *   right... ]
      */
 
-    ttVarCount = 0;
-    splitCount = 0;
-    {
-        static const int NUM_ITERS_WITH_VARS = 5;
-        static const int NUM_ITERS_NO_VARS = 1;
-        int numIters, i;
-        GHashTable *vars, *txns;
-        GList *splitList = NULL;
-        char *str;
-        kvp_frame *f;
-        kvp_value *v;
-        Split *s;
-        Transaction *t;
-        gnc_numeric tmp;
-        gboolean unbalanceable;
-        gpointer unusedKey, unusedValue;
+    gboolean multi_commodity = FALSE;
+    gint ttVarCount = 0, splitCount = 0;
+    static const int NUM_ITERS_WITH_VARS = 5;
+    static const int NUM_ITERS_NO_VARS = 1;
+    int numIters = NUM_ITERS_NO_VARS, i;
+    gboolean unbalanceable = FALSE;
+    gpointer unusedKey, unusedValue;
 
-        unbalanceable = FALSE; /* innocent until proven guilty */
-        vars = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
-        txns = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, g_free);
-        numIters = NUM_ITERS_NO_VARS;
-        /**
-         * Plan:
-         * . Do a first pass to get the variables.
-         * . Set each variable to random values.
-         * . see if we balance after that
-         *   . true: all good
-         *   . false: indicate to user, allow decision.
+    GHashTable *vars = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                  (GDestroyNotify)gnc_sx_variable_free);
+    GHashTable *txns = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                              NULL, g_free);
+    /**
+     * Plan:
+     * . Do a first pass to get the variables.
+     * . Set each variable to random values.
+     * . see if we balance after that
+     *   . true: all good
+     *   . false: indicate to user, allow decision.
+     */
+
+    /* FIXME: This is probably superfluous. */
+    gnc_split_register_save (
+        gnc_ledger_display_get_split_register(sxed->ledger), FALSE);
+    /* numeric-formulas-get-balanced determination */
+    gnc_sx_get_variables (sxed->sx, vars);
+
+    ttVarCount = g_hash_table_size (vars);
+    if (ttVarCount != 0)
+    {
+        /* balance with random variable bindings some number of times in an
+         * attempt to ferret out un-balanceable transactions.
          */
-
-        /* FIXME: This _really_ shouldn't require a modification of the
-         * SX just to get the var names... */
-        gnc_split_register_save ( gnc_ledger_display_get_split_register(sxed->ledger),
-                                  FALSE );
-        /* numeric-formulas-get-balanced determination */
-        gnc_sx_get_variables( sxed->sx, vars );
-
-        ttVarCount = g_hash_table_size( vars );
-        if ( ttVarCount != 0 )
-        {
-            /* balance with random variable bindings some number
-             * of times in an attempt to ferret out
-             * un-balanceable transactions.
-             *
-             * NOTE: The Real Way to do this is with some
-             * symbolic math to eliminate the variables.  This is
-             * hard, and we don't do it.  This solution will
-             * suffice for now, and perhaps for the lifetime of
-             * the software. --jsled */
-            numIters = NUM_ITERS_WITH_VARS;
-        }
-
-        for ( i = 0; i < numIters && !unbalanceable; i++ )
-        {
-            gnc_sx_randomize_variables(vars);
-            g_hash_table_foreach( txns, set_sums_to_zero, NULL );
-            tmp = gnc_numeric_zero();
-
-            splitList = xaccSchedXactionGetSplits( sxed->sx );
-            splitCount += g_list_length( splitList );
-
-            for ( ; splitList; splitList = splitList->next )
-            {
-                GncGUID *acct_guid;
-                Account *acct;
-                gnc_commodity *split_cmdty;
-                txnCreditDebitSums *tcds;
-                gnc_numeric split_amount;
-
-                s = (Split*)splitList->data;
-                t = xaccSplitGetParent( s );
-
-                if ( !(tcds =
-                       (txnCreditDebitSums*)g_hash_table_lookup( txns,
-                                                                 (gpointer)t )) )
-                {
-                    tcds = g_new0( txnCreditDebitSums, 1 );
-                    tcds->creditSum = gnc_numeric_zero();
-                    tcds->debitSum  = gnc_numeric_zero();
-                    g_hash_table_insert( txns, (gpointer)t, (gpointer)tcds );
-                }
-
-                f = xaccSplitGetSlots( s );
-
-                /* contains the guid of the split's actual account. */
-                v = kvp_frame_get_slot_path(f,
-                                            GNC_SX_ID,
-                                            GNC_SX_ACCOUNT,
-                                            NULL);
-                acct_guid = kvp_value_get_guid( v );
-                acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
-                split_cmdty = xaccAccountGetCommodity(acct);
-                split_amount = xaccSplitGetAmount(s);
-                if (!gnc_numeric_zero_p(split_amount) && base_cmdty == NULL)
-                {
-                    base_cmdty = split_cmdty;
-                }
-                multi_commodity |= (!gnc_numeric_zero_p(split_amount) &&
-                                    !gnc_commodity_equal(split_cmdty,
-                                                         base_cmdty));
-
-                v = kvp_frame_get_slot_path( f,
-                                             GNC_SX_ID,
-                                             GNC_SX_CREDIT_FORMULA,
-                                             NULL );
-                if ( v
-                     && (str = kvp_value_get_string(v))
-                     && strlen( str ) != 0 )
-                {
-                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 )
-                    {
-                        GString *errStr;
-
-                        errStr = g_string_sized_new( 32 );
-                        g_string_printf( errStr,
-                                         _( "Couldn't parse credit formula for "
-                                            "split \"%s\"." ),
-                                         xaccSplitGetMemo( s ) );
-                        gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
-                                          errStr->str );
-                        g_string_free( errStr, TRUE );
-
-                        return FALSE;
-                    }
-                    tcds->creditSum =
-                        gnc_numeric_add( tcds->creditSum, tmp, 100,
-                                         (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
-                    tmp = gnc_numeric_zero();
-                }
-                v = kvp_frame_get_slot_path( f,
-                                             GNC_SX_ID,
-                                             GNC_SX_DEBIT_FORMULA,
-                                             NULL );
-                if ( v
-                     && (str = kvp_value_get_string(v))
-                     && strlen(str) != 0 )
-                {
-                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 )
-                    {
-                        GString *errStr;
-
-                        errStr = g_string_sized_new( 32 );
-                        g_string_printf( errStr,
-                                         _( "Couldn't parse debit formula for "
-                                            "split \"%s\"." ),
-                                         xaccSplitGetMemo( s ) );
-                        gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
-                                          (gchar*)errStr->str );
-                        g_string_free( errStr, TRUE );
-
-                        return FALSE;
-                    }
-                    tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 100,
-                                                      (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
-                    tmp = gnc_numeric_zero();
-                }
-            }
-
-            g_hash_table_foreach( txns,
-                                  check_credit_debit_balance,
-                                  &unbalanceable );
-        }
-
-        /* Subtract out pre-defined vars */
-        if (g_hash_table_lookup_extended(vars, "i",
-                                         &unusedKey,
-                                         &unusedValue))
-        {
-            ttVarCount -= 1;
-        }
-
-        g_hash_table_destroy(vars);
-        g_hash_table_destroy(txns);
-
-        if ( unbalanceable
-             && !gnc_verify_dialog( sxed->dialog, FALSE,
-                                    "%s",
-                                    _("The Scheduled Transaction Editor "
-                                      "cannot automatically balance "
-                                      "this transaction. "
-                                      "Should it still be "
-                                      "entered?") ) )
-        {
-            return FALSE;
-        }
+        numIters = NUM_ITERS_WITH_VARS;
     }
 
-    /* read out data back into SchedXaction object. */
-    /* FIXME: this is getting too deep; split out. */
+    for ( i = 0; i < numIters && !unbalanceable; i++ )
     {
-        gchar *name, *nameKey;
-        gboolean nameExists, nameHasChanged;
-        GList *sxList;
+        gnc_sx_randomize_variables(vars);
+        g_hash_table_foreach( txns, set_sums_to_zero, NULL );
 
-        name = gtk_editable_get_chars( GTK_EDITABLE(sxed->nameEntry), 0, -1 );
-        if ( strlen(name) == 0 )
-        {
-            const char *sx_has_no_name_msg =
-                _( "Please name the Scheduled Transaction." );
-            gnc_error_dialog( sxed->dialog, "%s", sx_has_no_name_msg );
-            g_free( name );
-            return FALSE;
+        GList *splitList = xaccSchedXactionGetSplits (sxed->sx);
+        splitCount += g_list_length( splitList );
 
-        }
+        for ( ; splitList; splitList = splitList->next )
+        {
+            gnc_commodity *base_cmdty = NULL;
+            txnCreditDebitSums *tcds;
+            Split *s = (Split*)splitList->data;
+            Transaction *t = xaccSplitGetParent (s);
 
-        nameExists = FALSE;
-        nameKey = g_utf8_collate_key(name, -1);
-        nameHasChanged =
-            (xaccSchedXactionGetName(sxed->sx) == NULL)
-            || (strcmp( xaccSchedXactionGetName(sxed->sx), name ) != 0);
-        for ( sxList =
-                  gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
-              nameHasChanged && !nameExists && sxList;
-              sxList = sxList->next )
-        {
-            char *existingName, *existingNameKey;
-            existingName =
-                xaccSchedXactionGetName( (SchedXaction*)sxList->
-                                         data );
-            existingNameKey = g_utf8_collate_key(existingName, -1);
-            nameExists |= ( strcmp(nameKey, existingNameKey) == 0 );
-            g_free( existingNameKey );
-        }
-        if ( nameHasChanged && nameExists )
-        {
-            const char *sx_has_existing_name_msg =
-                _( "A Scheduled Transaction with the "
-                   "name \"%s\" already exists. "
-                   "Are you sure you want to name "
-                   "this one the same?" );
-            if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
-                                      sx_has_existing_name_msg,
-                                      name) )
+            tcds = (txnCreditDebitSums*)g_hash_table_lookup (txns, (gpointer)t);
+            if (tcds == NULL)
             {
-                g_free( nameKey );
-                g_free( name );
-                return FALSE;
+                tcds = tcds_new ();
+                g_hash_table_insert (txns, (gpointer)t, (gpointer)tcds);
             }
+
+            if (!gnc_sxed_split_check_account (sxed, s, base_cmdty,
+                                               &multi_commodity))
+                return FALSE;
+
+            if (!gnc_sxed_split_calculate_formula (sxed, s, vars,
+                                                   GNC_SX_CREDIT_FORMULA,
+                                                   tcds))
+                return FALSE;
+            if (!gnc_sxed_split_calculate_formula (sxed, s, vars,
+                                                   GNC_SX_DEBIT_FORMULA,
+                                                   tcds))
+                return FALSE;
         }
-        g_free( nameKey );
-        g_free( name );
+
+        g_hash_table_foreach (txns, check_credit_debit_balance, &unbalanceable);
     }
 
-    // @@FIXME: similar to below, check the commodities involved, and disallow autocreation
+    /* Subtract out pre-defined vars */
+    if (g_hash_table_lookup_extended(vars, "i", &unusedKey, &unusedValue))
+        ttVarCount -= 1;
+
+    g_hash_table_destroy(vars);
+    g_hash_table_destroy(txns);
+
+    if (unbalanceable)
     {
-        gboolean autocreateState;
-
-        autocreateState =
-            gtk_toggle_button_get_active (
-                GTK_TOGGLE_BUTTON(sxed->autocreateOpt));
-
-        if (((ttVarCount > 0) || multi_commodity) && autocreateState)
-        {
-            gnc_warning_dialog(sxed->dialog, "%s",
-                               _("Scheduled Transactions with variables "
-                                 "or involving more than one commodity "
-                                 "cannot be automatically created."));
+        const char *msg =
+            _("The Scheduled Transaction Editor cannot automatically "
+              "balance this transaction. Should it still be entered?");
+        if (!gnc_verify_dialog (sxed->dialog, FALSE, "%s", msg))
             return FALSE;
-        }
-
-        /* Fix for part of Bug#121740 -- auto-create transactions are
-         * only valid if there's actually a transaction to create. */
-        if ( autocreateState && splitCount == 0 )
-        {
-            gnc_warning_dialog(sxed->dialog, "%s",
-                               _("Scheduled Transactions without a template "
-                                 "transaction cannot be automatically created.") );
-            return FALSE;
-        }
     }
 
-    /* deal with time. */
-    {
-        GDate startDate, endDate, nextDate;
+    if (!gnc_sxed_check_names (sxed))
+        return FALSE;
 
-        if ( !gtk_toggle_button_get_active(sxed->optEndDate)
-             && !gtk_toggle_button_get_active(sxed->optEndCount)
-             && !gtk_toggle_button_get_active(sxed->optEndNone) )
-        {
-            const char *sx_end_spec_msg =
-                _( "Please provide a valid end selection." );
-            gnc_error_dialog( sxed->dialog, "%s", sx_end_spec_msg );
-            return FALSE;
-        }
+    if (!gnc_sxed_check_autocreate (sxed, ttVarCount,
+                                    splitCount, multi_commodity))
+        return FALSE;
 
-        if ( gtk_toggle_button_get_active(sxed->optEndCount))
-        {
-            gint occur, rem;
-
-            occur  =
-                gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endCountSpin) );
-
-            rem =
-                gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
-
-            if ( occur == 0 )
-            {
-                const char *sx_occur_count_zero_msg =
-                    _( "There must be some number of occurrences." );
-                gnc_error_dialog( sxed->dialog, "%s",
-                                  sx_occur_count_zero_msg );
-                return FALSE;
-            }
-
-            if ( rem > occur )
-            {
-                const char *sx_occur_counts_wrong_msg =
-                    _( "The number of remaining occurrences "
-                       "(%d) is greater than the number of "
-                       "total occurrences (%d)." );
-                gnc_error_dialog( sxed->dialog,
-                                  sx_occur_counts_wrong_msg,
-                                  rem, occur );
-                return FALSE;
-            }
-
-        }
-
-        g_date_clear( &endDate, 1 );
-        if ( gtk_toggle_button_get_active(sxed->optEndDate) )
-        {
-            gnc_gdate_set_time64( &endDate,
-                                  gnc_date_edit_get_date( sxed->
-                                                          endDateEntry ) );
-        }
-
-        g_date_clear(&nextDate, 1);
-        gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &startDate);
-        if (g_list_length(schedule) > 0)
-        {
-            g_date_subtract_days(&startDate, 1);
-            recurrenceListNextInstance(schedule, &startDate, &nextDate);
-        }
-        recurrenceListFree(&schedule);
-
-        if (!g_date_valid(&nextDate)
-            || (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0)))
-        {
-            const char *invalid_sx_check_msg =
-                _("You have attempted to create a Scheduled "
-                  "Transaction which will never run. Do you "
-                  "really want to do this?");
-            if (!gnc_verify_dialog(sxed->dialog, FALSE,
-                                   "%s", invalid_sx_check_msg))
-                return FALSE;
-        }
-    }
+    if (!gnc_sxed_check_endpoint (sxed))
+        return FALSE;
     return TRUE;
 }
 
