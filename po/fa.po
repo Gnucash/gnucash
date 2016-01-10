@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 12:57-0700\n"
+"POT-Creation-Date: 2015-12-19 12:03-0800\n"
 "PO-Revision-Date: 2013-09-17 19:27+0330\n"
 "Last-Translator: سید‌علی‌اکبر نجفیان <s.ali.najafian@chmail.ir>\n"
 "Language-Team: Persian <translation-team-fa@lists.sourceforge.net>\n"
@@ -273,7 +273,7 @@ msgstr ""
 
 #: ../src/app-utils/date-utilities.scm:122
 #: ../src/report/standard-reports/account-piecharts.scm:470
-#: ../src/report/standard-reports/cash-flow.scm:206
+#: ../src/report/standard-reports/cash-flow.scm:167
 #: ../src/report/standard-reports/category-barchart.scm:460
 #: ../src/report/standard-reports/daily-reports.scm:484
 #: ../src/report/standard-reports/equity-statement.scm:346
@@ -771,7 +771,7 @@ msgstr "مانده‌ی اولیه"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:398
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -791,7 +791,7 @@ msgstr "بدهی"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:394
+#: ../src/report/standard-reports/register.scm:400
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -914,7 +914,7 @@ msgstr "خرید"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:851
 msgid "Charge"
 msgstr ""
 
@@ -933,7 +933,7 @@ msgstr "هزینه"
 #. page / name / orderkey / tooltip / default
 #: ../src/app-utils/prefs.scm:75
 #: ../src/business/business-gnome/business-gnome-utils.c:225
-#: ../src/business/business-gnome/dialog-invoice.c:3177
+#: ../src/business/business-gnome/dialog-invoice.c:3213
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:383
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:1
 #: ../src/engine/gncInvoice.c:969 ../src/gnome-search/dialog-search.c:1069
@@ -950,7 +950,7 @@ msgstr "هزینه"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:832
+#: ../src/report/standard-reports/register.scm:838
 msgid "Invoice"
 msgstr "فاکتور"
 
@@ -1023,10 +1023,10 @@ msgstr ""
 
 #: ../src/app-utils/prefs.scm:91
 #: ../src/business/business-gnome/business-gnome-utils.c:219
-#: ../src/business/business-gnome/dialog-invoice.c:2347
-#: ../src/business/business-gnome/dialog-invoice.c:2523
-#: ../src/business/business-gnome/dialog-invoice.c:2524
-#: ../src/business/business-gnome/dialog-invoice.c:3165
+#: ../src/business/business-gnome/dialog-invoice.c:2368
+#: ../src/business/business-gnome/dialog-invoice.c:2543
+#: ../src/business/business-gnome/dialog-invoice.c:2544
+#: ../src/business/business-gnome/dialog-invoice.c:3201
 #: ../src/engine/gncInvoice.c:971 ../src/gnome-search/dialog-search.c:1053
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3098
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:3
@@ -1116,7 +1116,7 @@ msgstr "برای یافتن آخرین نسخه‌ی پایدار برنامه،
 msgid "- GnuCash personal and small business finance management"
 msgstr ""
 
-#: ../src/bin/gnucash-bin.c:385 ../src/bin/gnucash-bin.c:764
+#: ../src/bin/gnucash-bin.c:385 ../src/bin/gnucash-bin.c:766
 #, c-format
 msgid ""
 "%s\n"
@@ -1137,7 +1137,7 @@ msgstr "GnuCash %s development version"
 #. 2nd %s is the scm type (svn/svk/git/bzr);
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
-#: ../src/bin/gnucash-bin.c:404 ../src/gnome-utils/gnc-main-window.c:4393
+#: ../src/bin/gnucash-bin.c:404 ../src/gnome-utils/gnc-main-window.c:4382
 #, c-format
 msgid ""
 "%s\n"
@@ -1152,7 +1152,7 @@ msgstr ""
 #. Translators: 1st %s is a fixed message, which is translated independently;
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
-#: ../src/bin/gnucash-bin.c:415 ../src/gnome-utils/gnc-main-window.c:4400
+#: ../src/bin/gnucash-bin.c:415 ../src/gnome-utils/gnc-main-window.c:4389
 #, c-format
 msgid ""
 "%s\n"
@@ -1172,7 +1172,7 @@ msgstr ""
 msgid "Loading data..."
 msgstr "بارگذاری داده‌ّها ..."
 
-#: ../src/bin/gnucash-bin.c:765
+#: ../src/bin/gnucash-bin.c:767
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
 "       Perhaps you need to set the $DISPLAY environment variable ?"
@@ -1180,8 +1180,8 @@ msgstr ""
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
-#: ../src/business/business-gnome/dialog-invoice.c:1311
-#: ../src/business/business-gnome/dialog-invoice.c:1389
+#: ../src/business/business-gnome/dialog-invoice.c:1312
+#: ../src/business/business-gnome/dialog-invoice.c:1390
 #: ../src/gnome-utils/gnc-general-select.c:214
 msgid "Select..."
 msgstr "انتخاب"
@@ -1192,9 +1192,9 @@ msgid "Edit..."
 msgstr "ویرایش"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:222
-#: ../src/business/business-gnome/dialog-invoice.c:2352
-#: ../src/business/business-gnome/dialog-invoice.c:2530
-#: ../src/business/business-gnome/dialog-invoice.c:2531
+#: ../src/business/business-gnome/dialog-invoice.c:2373
+#: ../src/business/business-gnome/dialog-invoice.c:2550
+#: ../src/business/business-gnome/dialog-invoice.c:2551
 msgid "Voucher"
 msgstr ""
 
@@ -1380,10 +1380,10 @@ msgstr "فاکتورهای مشتری"
 
 #: ../src/business/business-gnome/dialog-customer.c:907
 #: ../src/business/business-gnome/dialog-employee.c:712
-#: ../src/business/business-gnome/dialog-invoice.c:2931
-#: ../src/business/business-gnome/dialog-invoice.c:2940
-#: ../src/business/business-gnome/dialog-invoice.c:2951
-#: ../src/business/business-gnome/dialog-invoice.c:3204
+#: ../src/business/business-gnome/dialog-invoice.c:2967
+#: ../src/business/business-gnome/dialog-invoice.c:2976
+#: ../src/business/business-gnome/dialog-invoice.c:2987
+#: ../src/business/business-gnome/dialog-invoice.c:3240
 #: ../src/business/business-gnome/dialog-job.c:549
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:1
 msgid "Process Payment"
@@ -1411,8 +1411,8 @@ msgstr "شماره تماس"
 
 #. FALL THROUGH
 #: ../src/business/business-gnome/dialog-customer.c:932
-#: ../src/business/business-gnome/dialog-invoice.c:3076
-#: ../src/business/business-gnome/dialog-invoice.c:3217
+#: ../src/business/business-gnome/dialog-invoice.c:3112
+#: ../src/business/business-gnome/dialog-invoice.c:3253
 #: ../src/business/business-gnome/dialog-job.c:575
 #: ../src/business/business-gnome/dialog-order.c:885
 #: ../src/business/business-gnome/dialog-vendor.c:735
@@ -1483,7 +1483,7 @@ msgid "Employee Username"
 msgstr "نام کاربری کارمند"
 
 #: ../src/business/business-gnome/dialog-employee.c:725
-#: ../src/business/business-gnome/dialog-invoice.c:3056
+#: ../src/business/business-gnome/dialog-invoice.c:3092
 msgid "Employee Name"
 msgstr "نام کارمند"
 
@@ -1493,7 +1493,7 @@ msgid "Username"
 msgstr "نام کاربری"
 
 #: ../src/business/business-gnome/dialog-employee.c:736
-#: ../src/gnome/dialog-sx-editor2.c:1757 ../src/gnome/dialog-sx-editor.c:1787
+#: ../src/gnome/dialog-sx-editor2.c:1757 ../src/gnome/dialog-sx-editor.c:1792
 #: ../src/gnome/dialog-tax-info.c:1150 ../src/gnome-utils/gnc-dense-cal.c:337
 #: ../src/gnome-utils/gnc-tree-model-budget.c:96
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:396
@@ -1512,23 +1512,23 @@ msgstr "یافتن کارمند"
 #. * label in the frame and means
 #. * e.g. customer i.e. the company being
 #. * invoiced.
-#: ../src/business/business-gnome/dialog-invoice.c:386
+#: ../src/business/business-gnome/dialog-invoice.c:387
 #: ../src/business/business-gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
 msgstr "شما باید اطلاعات مالی را وارد نمایید."
 
-#: ../src/business/business-gnome/dialog-invoice.c:579
+#: ../src/business/business-gnome/dialog-invoice.c:580
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "آیا از پاک کردن مورد انتخابی اطمینان دارید؟"
 
-#: ../src/business/business-gnome/dialog-invoice.c:581
+#: ../src/business/business-gnome/dialog-invoice.c:582
 msgid "This entry is attached to an order and will be deleted from that as well!"
 msgstr "این عنوان به یک سفارش پیوست شده است و از آن بخش حذف خواهد شد."
 
-#: ../src/business/business-gnome/dialog-invoice.c:691
-#: ../src/business/business-gnome/dialog-invoice.c:2985
-#: ../src/business/business-gnome/dialog-invoice.c:3019
-#: ../src/business/business-gnome/dialog-invoice.c:3053
+#: ../src/business/business-gnome/dialog-invoice.c:692
+#: ../src/business/business-gnome/dialog-invoice.c:3021
+#: ../src/business/business-gnome/dialog-invoice.c:3055
+#: ../src/business/business-gnome/dialog-invoice.c:3089
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2836
 #: ../src/register/ledger-core/split-register-model.c:231
 #: ../src/report/business-reports/aging.scm:393
@@ -1544,62 +1544,62 @@ msgid "Due Date"
 msgstr "تا تاریخ "
 
 #. Should be using standard label for due date?
-#: ../src/business/business-gnome/dialog-invoice.c:692
+#: ../src/business/business-gnome/dialog-invoice.c:693
 #: ../src/report/business-reports/aging.scm:394
 #: ../src/report/business-reports/owner-report.scm:571
 msgid "Post Date"
 msgstr "زمان ثبت"
 
-#: ../src/business/business-gnome/dialog-invoice.c:693
+#: ../src/business/business-gnome/dialog-invoice.c:694
 msgid "Post to Account"
 msgstr "ثبت در حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:694
+#: ../src/business/business-gnome/dialog-invoice.c:695
 msgid "Accumulate Splits?"
 msgstr "تجمیع تکه‌تراکنش‌ها؟"
 
-#: ../src/business/business-gnome/dialog-invoice.c:787
+#: ../src/business/business-gnome/dialog-invoice.c:788
 msgid "The Invoice must have at least one Entry."
 msgstr "فاکتور دسته کم باید شامل یک ورودی باشد."
 
-#: ../src/business/business-gnome/dialog-invoice.c:807
+#: ../src/business/business-gnome/dialog-invoice.c:808
 msgid "Do you really want to post the invoice?"
 msgstr "آیا مطمئنید می خواهید این فاکتور را ثبت کنید."
 
 #. Fill in the conversion prices with feedback from the user
-#: ../src/business/business-gnome/dialog-invoice.c:822
+#: ../src/business/business-gnome/dialog-invoice.c:823
 #, fuzzy
 #| msgid "One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each."
 msgid "One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each."
 msgstr "یکی یا چند تا از ورودی‌ها برای حسابهایی با واحد پولی متفاوت وارد شده‌اند..از شما برای هزینه تبدیل هر کدام پرسش می‌شود."
 
-#: ../src/business/business-gnome/dialog-invoice.c:952
+#: ../src/business/business-gnome/dialog-invoice.c:953
 msgid "The post action was canceled because not all exchange rates were given."
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:1221
+#: ../src/business/business-gnome/dialog-invoice.c:1222
 #: ../src/gnome/window-reconcile2.c:1142 ../src/gnome/window-reconcile.c:1142
 msgid "Total:"
 msgstr "کل:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1227
+#: ../src/business/business-gnome/dialog-invoice.c:1228
 msgid "Subtotal:"
 msgstr "جمع جزیی:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1228
+#: ../src/business/business-gnome/dialog-invoice.c:1229
 msgid "Tax:"
 msgstr "مالیات:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1232
+#: ../src/business/business-gnome/dialog-invoice.c:1233
 msgid "Total Cash:"
 msgstr "کل نقدینگی:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1233
+#: ../src/business/business-gnome/dialog-invoice.c:1234
 msgid "Total Charge:"
 msgstr "جمع هزینه‌ها:"
 
 #. Set the type label
-#: ../src/business/business-gnome/dialog-invoice.c:1702
+#: ../src/business/business-gnome/dialog-invoice.c:1703
 #: ../src/business/business-gnome/dialog-payment.c:1010
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:22
 #: ../src/engine/gncInvoice.c:977
@@ -1616,159 +1616,159 @@ msgstr "جمع هزینه‌ها:"
 msgid "Credit Note"
 msgstr "حساب بستانکار"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1901
-#: ../src/business/business-gnome/dialog-invoice.c:1920
-#: ../src/business/business-gnome/dialog-invoice.c:1939
+#: ../src/business/business-gnome/dialog-invoice.c:1922
+#: ../src/business/business-gnome/dialog-invoice.c:1941
+#: ../src/business/business-gnome/dialog-invoice.c:1960
 #, fuzzy
 msgid "New Credit Note"
 msgstr "حساب بستانکار"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1902
+#: ../src/business/business-gnome/dialog-invoice.c:1923
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:275
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:21
 #: ../src/gnome-search/dialog-search.c:1071
 msgid "New Invoice"
 msgstr "صورتحساب جدید"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1907
-#: ../src/business/business-gnome/dialog-invoice.c:1926
-#: ../src/business/business-gnome/dialog-invoice.c:1945
+#: ../src/business/business-gnome/dialog-invoice.c:1928
+#: ../src/business/business-gnome/dialog-invoice.c:1947
+#: ../src/business/business-gnome/dialog-invoice.c:1966
 #, fuzzy
 msgid "Edit Credit Note"
 msgstr "ویرایش گزینه‌های گزارش"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1908
+#: ../src/business/business-gnome/dialog-invoice.c:1929
 msgid "Edit Invoice"
 msgstr "ویرایش صورتحساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1911
-#: ../src/business/business-gnome/dialog-invoice.c:1930
-#: ../src/business/business-gnome/dialog-invoice.c:1949
+#: ../src/business/business-gnome/dialog-invoice.c:1932
+#: ../src/business/business-gnome/dialog-invoice.c:1951
+#: ../src/business/business-gnome/dialog-invoice.c:1970
 #, fuzzy
 msgid "View Credit Note"
 msgstr "نمایش/ویرایش شغل"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1912
+#: ../src/business/business-gnome/dialog-invoice.c:1933
 msgid "View Invoice"
 msgstr "مشاهده صورتحساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1921
+#: ../src/business/business-gnome/dialog-invoice.c:1942
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:274
 #: ../src/gnome-search/dialog-search.c:1055
 msgid "New Bill"
 msgstr "صورت‌حساب جدید"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1927
+#: ../src/business/business-gnome/dialog-invoice.c:1948
 msgid "Edit Bill"
 msgstr "ویرایش صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1931
+#: ../src/business/business-gnome/dialog-invoice.c:1952
 msgid "View Bill"
 msgstr "نمایش صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1940
+#: ../src/business/business-gnome/dialog-invoice.c:1961
 #: ../src/gnome-search/dialog-search.c:1067
 msgid "New Expense Voucher"
 msgstr "کوپن جدید برای هزینه‌ها"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1946
+#: ../src/business/business-gnome/dialog-invoice.c:1967
 msgid "Edit Expense Voucher"
 msgstr "ویرایش سند هزینه"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1950
+#: ../src/business/business-gnome/dialog-invoice.c:1971
 msgid "View Expense Voucher"
 msgstr "مشاهده سند هزینه"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2346
-#: ../src/business/business-gnome/dialog-invoice.c:2522
+#: ../src/business/business-gnome/dialog-invoice.c:2367
+#: ../src/business/business-gnome/dialog-invoice.c:2542
 #, fuzzy
 #| msgid "Job Information"
 msgid "Bill Information"
 msgstr "اطلاعات شغل"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2348
-#: ../src/business/business-gnome/dialog-invoice.c:2525
-#: ../src/business/business-gnome/dialog-invoice.c:3026
+#: ../src/business/business-gnome/dialog-invoice.c:2369
+#: ../src/business/business-gnome/dialog-invoice.c:2545
+#: ../src/business/business-gnome/dialog-invoice.c:3062
 msgid "Bill ID"
 msgstr "شماره‌ی صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2351
-#: ../src/business/business-gnome/dialog-invoice.c:2529
+#: ../src/business/business-gnome/dialog-invoice.c:2372
+#: ../src/business/business-gnome/dialog-invoice.c:2549
 #, fuzzy
 #| msgid "Owner Information"
 msgid "Voucher Information"
 msgstr "اطلاعات مالک"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2353
-#: ../src/business/business-gnome/dialog-invoice.c:2532
-#: ../src/business/business-gnome/dialog-invoice.c:3060
+#: ../src/business/business-gnome/dialog-invoice.c:2374
+#: ../src/business/business-gnome/dialog-invoice.c:2552
+#: ../src/business/business-gnome/dialog-invoice.c:3096
 msgid "Voucher ID"
 msgstr "شماره‌ی سند"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2829
+#: ../src/business/business-gnome/dialog-invoice.c:2865
 #, fuzzy
 msgid "Date of duplicated entries"
 msgstr "تاریخ ورودی‌های تکراری"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2864
+#: ../src/business/business-gnome/dialog-invoice.c:2900
 #, fuzzy
 #| msgid "Do you really want to post the invoice?"
 msgid "Do you really want to post these invoices?"
 msgstr "آیا مطمئنید می خواهید این فاکتور را ثبت کنید."
 
-#: ../src/business/business-gnome/dialog-invoice.c:2930
+#: ../src/business/business-gnome/dialog-invoice.c:2966
 msgid "View/Edit Invoice"
 msgstr "نمایش/ویرایش صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2932
-#: ../src/business/business-gnome/dialog-invoice.c:2941
-#: ../src/business/business-gnome/dialog-invoice.c:2952
+#: ../src/business/business-gnome/dialog-invoice.c:2968
+#: ../src/business/business-gnome/dialog-invoice.c:2977
+#: ../src/business/business-gnome/dialog-invoice.c:2988
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:261
 #: ../src/gnome/gnc-plugin-page-register2.c:480
 #: ../src/gnome/gnc-plugin-page-register.c:483
 msgid "Duplicate"
 msgstr "تکرار"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2933
-#: ../src/business/business-gnome/dialog-invoice.c:2942
-#: ../src/business/business-gnome/dialog-invoice.c:2953
+#: ../src/business/business-gnome/dialog-invoice.c:2969
+#: ../src/business/business-gnome/dialog-invoice.c:2978
+#: ../src/business/business-gnome/dialog-invoice.c:2989
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:265
 msgid "Post"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:2934
-#: ../src/business/business-gnome/dialog-invoice.c:2943
-#: ../src/business/business-gnome/dialog-invoice.c:2954
+#: ../src/business/business-gnome/dialog-invoice.c:2970
+#: ../src/business/business-gnome/dialog-invoice.c:2979
+#: ../src/business/business-gnome/dialog-invoice.c:2990
 #, fuzzy
 msgid "Printable Report"
 msgstr "صورت‌حساب قابل چاپ"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2939
-#: ../src/business/business-gnome/dialog-invoice.c:3203
+#: ../src/business/business-gnome/dialog-invoice.c:2975
+#: ../src/business/business-gnome/dialog-invoice.c:3239
 msgid "View/Edit Bill"
 msgstr ""
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
-#: ../src/business/business-gnome/dialog-invoice.c:2950
+#: ../src/business/business-gnome/dialog-invoice.c:2986
 msgid "View/Edit Voucher"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:2964
+#: ../src/business/business-gnome/dialog-invoice.c:3000
 msgid "Invoice Owner"
 msgstr "دارنده فاکتور"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2967
+#: ../src/business/business-gnome/dialog-invoice.c:3003
 #: ../src/report/business-reports/easy-invoice.scm:339
 #: ../src/report/business-reports/fancy-invoice.scm:329
 #: ../src/report/business-reports/invoice.scm:314
 msgid "Invoice Notes"
 msgstr "یادداشت‌ّهای فاکتور"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2970
-#: ../src/business/business-gnome/dialog-invoice.c:3004
-#: ../src/business/business-gnome/dialog-invoice.c:3038
-#: ../src/business/business-gnome/dialog-invoice.c:3067
+#: ../src/business/business-gnome/dialog-invoice.c:3006
+#: ../src/business/business-gnome/dialog-invoice.c:3040
+#: ../src/business/business-gnome/dialog-invoice.c:3074
+#: ../src/business/business-gnome/dialog-invoice.c:3103
 #: ../src/business/business-gnome/dialog-job.c:562
 #: ../src/business/business-gnome/dialog-job.c:573
 #: ../src/business/business-gnome/dialog-order.c:883
@@ -1782,15 +1782,15 @@ msgstr "یادداشت‌ّهای فاکتور"
 msgid "Billing ID"
 msgstr "کد مالی"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2973
-#: ../src/business/business-gnome/dialog-invoice.c:3007
-#: ../src/business/business-gnome/dialog-invoice.c:3041
+#: ../src/business/business-gnome/dialog-invoice.c:3009
+#: ../src/business/business-gnome/dialog-invoice.c:3043
+#: ../src/business/business-gnome/dialog-invoice.c:3077
 msgid "Is Paid?"
 msgstr "پرداخت شده؟"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2976
-#: ../src/business/business-gnome/dialog-invoice.c:3010
-#: ../src/business/business-gnome/dialog-invoice.c:3044
+#: ../src/business/business-gnome/dialog-invoice.c:3012
+#: ../src/business/business-gnome/dialog-invoice.c:3046
+#: ../src/business/business-gnome/dialog-invoice.c:3080
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:5
 #: ../src/gnome/dialog-find-transactions2.c:125
 #: ../src/gnome/dialog-find-transactions.c:124
@@ -1798,48 +1798,48 @@ msgstr "پرداخت شده؟"
 msgid "Date Posted"
 msgstr "تاریخ ثبت"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2979
-#: ../src/business/business-gnome/dialog-invoice.c:3013
-#: ../src/business/business-gnome/dialog-invoice.c:3047
+#: ../src/business/business-gnome/dialog-invoice.c:3015
+#: ../src/business/business-gnome/dialog-invoice.c:3049
+#: ../src/business/business-gnome/dialog-invoice.c:3083
 msgid "Is Posted?"
 msgstr "ثبت شده؟"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2982
-#: ../src/business/business-gnome/dialog-invoice.c:3016
-#: ../src/business/business-gnome/dialog-invoice.c:3050
+#: ../src/business/business-gnome/dialog-invoice.c:3018
+#: ../src/business/business-gnome/dialog-invoice.c:3052
+#: ../src/business/business-gnome/dialog-invoice.c:3086
 #: ../src/business/business-gnome/dialog-order.c:872
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:4
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:3
 msgid "Date Opened"
 msgstr "تاریخ گشایش"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2988
-#: ../src/business/business-gnome/dialog-invoice.c:3022
+#: ../src/business/business-gnome/dialog-invoice.c:3024
+#: ../src/business/business-gnome/dialog-invoice.c:3058
 msgid "Company Name "
 msgstr "نام شرکت"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2992
+#: ../src/business/business-gnome/dialog-invoice.c:3028
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:3
 msgid "Invoice ID"
 msgstr "شماره فاکتور"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2998
+#: ../src/business/business-gnome/dialog-invoice.c:3034
 msgid "Bill Owner"
 msgstr "صادر کننده‌ی صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3001
+#: ../src/business/business-gnome/dialog-invoice.c:3037
 msgid "Bill Notes"
 msgstr "یادداشت‌های صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3032
+#: ../src/business/business-gnome/dialog-invoice.c:3068
 msgid "Voucher Owner"
 msgstr "صادر کننده‌ی سند"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3035
+#: ../src/business/business-gnome/dialog-invoice.c:3071
 msgid "Voucher Notes"
 msgstr "یادداشت‌های سند"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3069
+#: ../src/business/business-gnome/dialog-invoice.c:3105
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:2
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:7
 #: ../src/gnome/dialog-lot-viewer.c:831 ../src/gnome/dialog-tax-info.c:1189
@@ -1857,29 +1857,29 @@ msgstr "یادداشت‌های سند"
 msgid "Type"
 msgstr "نوع"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3071
+#: ../src/business/business-gnome/dialog-invoice.c:3107
 #: ../src/register/ledger-core/split-register-model.c:300
 msgid "Paid"
 msgstr "پرداخت شده"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3074
+#: ../src/business/business-gnome/dialog-invoice.c:3110
 msgid "Posted"
 msgstr "ثبت شده"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3079
-#: ../src/business/business-gnome/dialog-invoice.c:3219
+#: ../src/business/business-gnome/dialog-invoice.c:3115
+#: ../src/business/business-gnome/dialog-invoice.c:3255
 #: ../src/report/business-reports/easy-invoice.scm:805
 #, fuzzy
 msgid "Due"
 msgstr "تا"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3081
+#: ../src/business/business-gnome/dialog-invoice.c:3117
 #: ../src/business/business-gnome/dialog-order.c:890
 #: ../src/gnome/dialog-lot-viewer.c:837
 msgid "Opened"
 msgstr "باز شده"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3083
+#: ../src/business/business-gnome/dialog-invoice.c:3119
 #: ../src/business/business-gnome/dialog-order.c:892
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
@@ -1890,7 +1890,7 @@ msgstr "باز شده"
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
 #: ../src/report/standard-reports/register.scm:146
-#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:420
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -1898,15 +1898,15 @@ msgstr "باز شده"
 msgid "Num"
 msgstr "شماره"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3164
+#: ../src/business/business-gnome/dialog-invoice.c:3200
 msgid "Find Bill"
 msgstr "یافتن صورت‌حساب"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3170
+#: ../src/business/business-gnome/dialog-invoice.c:3206
 msgid "Find Expense Voucher"
 msgstr "یافتن سند هزینه"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3171
+#: ../src/business/business-gnome/dialog-invoice.c:3207
 #: ../src/gnome-search/dialog-search.c:1065
 #: ../src/report/business-reports/easy-invoice.scm:712
 #: ../src/report/business-reports/fancy-invoice.scm:811
@@ -1914,23 +1914,23 @@ msgstr "یافتن سند هزینه"
 msgid "Expense Voucher"
 msgstr "سند هزینه"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3176
+#: ../src/business/business-gnome/dialog-invoice.c:3212
 msgid "Find Invoice"
 msgstr "جستجوی صورت‌حساب"
 
 #. Translators: This abbreviation is the column heading for
 #. the condition "Is this invoice a Credit Note?"
-#: ../src/business/business-gnome/dialog-invoice.c:3213
+#: ../src/business/business-gnome/dialog-invoice.c:3249
 msgid "CN?"
 msgstr ""
 
 #. note the "Amount" multichoice option here
-#: ../src/business/business-gnome/dialog-invoice.c:3215
+#: ../src/business/business-gnome/dialog-invoice.c:3251
 #: ../src/gnome/dialog-lot-viewer.c:926 ../src/gnome/reconcile-view.c:373
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2992
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3004
 #: ../src/import-export/aqb/dialog-ab.glade.h:34
-#: ../src/import-export/import-main-matcher.c:484
+#: ../src/import-export/import-main-matcher.c:476
 #: ../src/import-export/import-match-picker.c:345
 #: ../src/import-export/import-match-picker.c:385
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3498
@@ -1942,8 +1942,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:455
+#: ../src/report/standard-reports/register.scm:851
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -1954,14 +1954,14 @@ msgstr "مقدار"
 
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
-#: ../src/business/business-gnome/dialog-invoice.c:3269
+#: ../src/business/business-gnome/dialog-invoice.c:3305
 #, c-format
 msgid "The following bill is due:"
 msgid_plural "The following %d bills are due:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:3274
+#: ../src/business/business-gnome/dialog-invoice.c:3310
 #, fuzzy
 msgid "Due Bills Reminder"
 msgstr "یادآوری صورتحساب های سررسید شده "
@@ -3177,7 +3177,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
 #: ../src/import-export/csv-imp/gnc-csv-model.c:67
-#: ../src/import-export/import-main-matcher.c:485
+#: ../src/import-export/import-main-matcher.c:477
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3489
@@ -3198,7 +3198,7 @@ msgstr ""
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
 #: ../src/report/standard-reports/register.scm:148
-#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3420,7 +3420,7 @@ msgid "Default Rate: "
 msgstr "نرخ پیش فرض:"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:18
-#: ../src/gnome-utils/dialog-transfer.c:1956
+#: ../src/gnome-utils/dialog-transfer.c:1976
 msgid "Credit Account"
 msgstr "حساب بستانکار"
 
@@ -3592,7 +3592,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
 #: ../src/import-export/csv-imp/gnc-csv-model.c:65
-#: ../src/import-export/import-main-matcher.c:481
+#: ../src/import-export/import-main-matcher.c:473
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3481
@@ -3620,8 +3620,8 @@ msgstr ""
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
 #: ../src/report/standard-reports/register.scm:140
-#: ../src/report/standard-reports/register.scm:404
-#: ../src/report/standard-reports/register.scm:806
+#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:812
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3678,14 +3678,14 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2898
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2916
 #: ../src/import-export/csv-exp/csv-transactions-export.c:420
-#: ../src/import-export/import-main-matcher.c:486
+#: ../src/import-export/import-main-matcher.c:478
 #: ../src/import-export/import-match-picker.c:347
 #: ../src/import-export/import-match-picker.c:387
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
 #: ../src/report/standard-reports/register.scm:150
-#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:430
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -4297,7 +4297,7 @@ msgid " (posted)"
 msgstr ""
 
 #: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/report/standard-reports/register.scm:445
 msgid "Lot"
 msgstr ""
 
@@ -4649,7 +4649,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-icons.c:38
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
 #: ../src/import-export/csv-imp/gnc-csv-model.c:69
-#: ../src/import-export/import-main-matcher.c:482
+#: ../src/import-export/import-main-matcher.c:474
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
 #: ../src/register/ledger-core/split-register-model.c:325
@@ -4657,12 +4657,12 @@ msgstr ""
 #: ../src/report/business-reports/owner-report.scm:48
 #: ../src/report/standard-reports/advanced-portfolio.scm:1042
 #: ../src/report/standard-reports/budget-flow.scm:43
-#: ../src/report/standard-reports/budget.scm:47
-#: ../src/report/standard-reports/cash-flow.scm:49
+#: ../src/report/standard-reports/budget.scm:48
+#: ../src/report/standard-reports/cash-flow.scm:51
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
 #: ../src/report/standard-reports/register.scm:153
-#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "حساب"
@@ -4683,7 +4683,7 @@ msgstr ""
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
 #: ../src/report/standard-reports/register.scm:156
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:440
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -4773,7 +4773,7 @@ msgstr ""
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
 #: ../src/report/standard-reports/register.scm:168
-#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:464
 msgid "Value"
 msgstr "مقدار"
 
@@ -4813,8 +4813,8 @@ msgid "Description, Notes, or Memo"
 msgstr ""
 
 #. FIXME: All this does is leak.
-#: ../src/gnome/dialog-find-transactions2.c:221
-#: ../src/gnome/dialog-find-transactions.c:220
+#: ../src/gnome/dialog-find-transactions2.c:224
+#: ../src/gnome/dialog-find-transactions.c:223
 #: ../src/gnome-search/dialog-search.c:1449
 msgid "Find Transaction"
 msgstr "جستجوی تراکنش"
@@ -4830,7 +4830,7 @@ msgstr "بازکردن"
 #: ../src/gnome/dialog-lot-viewer.c:857
 #: ../src/report/report-system/html-fonts.scm:89
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:404
 msgid "Title"
 msgstr "عنوان"
 
@@ -4890,7 +4890,7 @@ msgid "You must select a Currency."
 msgstr "باید یک نوع وجه رایج انتخاب نمایید."
 
 #: ../src/gnome/dialog-price-editor.c:229
-#: ../src/gnome-utils/dialog-transfer.c:1711
+#: ../src/gnome-utils/dialog-transfer.c:1731
 msgid "You must enter a valid amount."
 msgstr "باید یک مقدار صحیح وارد نمایید."
 
@@ -4986,52 +4986,52 @@ msgstr "_A کنش‌ها"
 msgid "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:648 ../src/gnome/dialog-sx-editor.c:655
+#: ../src/gnome/dialog-sx-editor2.c:648 ../src/gnome/dialog-sx-editor.c:659
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:676 ../src/gnome/dialog-sx-editor.c:683
+#: ../src/gnome/dialog-sx-editor2.c:676 ../src/gnome/dialog-sx-editor.c:687
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:710 ../src/gnome/dialog-sx-editor.c:717
+#: ../src/gnome/dialog-sx-editor2.c:710 ../src/gnome/dialog-sx-editor.c:721
 #: ../src/gnome/dialog-sx-from-trans.c:260
 msgid "The Scheduled Transaction Editor cannot automatically balance this transaction. Should it still be entered?"
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:731 ../src/gnome/dialog-sx-editor.c:738
+#: ../src/gnome/dialog-sx-editor2.c:731 ../src/gnome/dialog-sx-editor.c:742
 msgid "Please name the Scheduled Transaction."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:758 ../src/gnome/dialog-sx-editor.c:766
+#: ../src/gnome/dialog-sx-editor2.c:758 ../src/gnome/dialog-sx-editor.c:770
 #, c-format
 msgid "A Scheduled Transaction with the name \"%s\" already exists. Are you sure you want to name this one the same?"
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:786 ../src/gnome/dialog-sx-editor.c:794
+#: ../src/gnome/dialog-sx-editor2.c:786
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:796 ../src/gnome/dialog-sx-editor.c:804
+#: ../src/gnome/dialog-sx-editor2.c:796 ../src/gnome/dialog-sx-editor.c:809
 msgid "Scheduled Transactions without a template transaction cannot be automatically created."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:811 ../src/gnome/dialog-sx-editor.c:819
+#: ../src/gnome/dialog-sx-editor2.c:811 ../src/gnome/dialog-sx-editor.c:824
 msgid "Please provide a valid end selection."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:829 ../src/gnome/dialog-sx-editor.c:837
+#: ../src/gnome/dialog-sx-editor2.c:829 ../src/gnome/dialog-sx-editor.c:842
 msgid "There must be some number of occurrences."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:838 ../src/gnome/dialog-sx-editor.c:846
+#: ../src/gnome/dialog-sx-editor2.c:838 ../src/gnome/dialog-sx-editor.c:851
 #, c-format
 msgid "The number of remaining occurrences (%d) is greater than the number of total occurrences (%d)."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:870 ../src/gnome/dialog-sx-editor.c:878
+#: ../src/gnome/dialog-sx-editor2.c:870 ../src/gnome/dialog-sx-editor.c:883
 msgid "You have attempted to create a Scheduled Transaction which will never run. Do you really want to do this?"
 msgstr ""
 
@@ -5039,18 +5039,22 @@ msgstr ""
 msgid "Note: If you have already accepted changes to the Template, Cancel will not revoke them."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1381
+#: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1386
 msgid "(never)"
 msgstr "(هرگز)"
 
-#: ../src/gnome/dialog-sx-editor2.c:1531 ../src/gnome/dialog-sx-editor.c:1549
+#: ../src/gnome/dialog-sx-editor2.c:1531 ../src/gnome/dialog-sx-editor.c:1554
 msgid "The current template transaction has been changed. Would you like to record the changes?"
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:1784 ../src/gnome/dialog-sx-editor.c:1814
+#: ../src/gnome/dialog-sx-editor2.c:1784 ../src/gnome/dialog-sx-editor.c:1819
 #: ../src/gnome/gnc-plugin-page-sx-list.c:243
 #: ../src/gnome/gnc-plugin-page-sx-list.c:249
 msgid "Scheduled Transactions"
+msgstr ""
+
+#: ../src/gnome/dialog-sx-editor.c:798
+msgid "Scheduled Transactions with variables or involving more than one commodity cannot be automatically created."
 msgstr ""
 
 #: ../src/gnome/dialog-sx-from-trans.c:557
@@ -5346,13 +5350,19 @@ msgstr ""
 msgid "View the Tips of the Day"
 msgstr ""
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:546
+#: ../src/gnome/gnc-plugin-basic-commands.c:501
+#: ../src/gnome-utils/gnc-file.c:1571
+#, c-format
+msgid "Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?"
+msgstr ""
+
+#: ../src/gnome/gnc-plugin-basic-commands.c:550
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr ""
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
-#: ../src/gnome/gnc-plugin-basic-commands.c:577
+#: ../src/gnome/gnc-plugin-basic-commands.c:581
 #, c-format
 msgid "There are no Scheduled Transactions to be entered at this time. (%d transaction automatically created)"
 msgid_plural "There are no Scheduled Transactions to be entered at this time. (%d transactions automatically created)"
@@ -5700,7 +5710,7 @@ msgstr "برآورد"
 #: ../src/report/standard-reports/budget-barchart.scm:106
 #: ../src/report/standard-reports/budget-flow.scm:45
 #: ../src/report/standard-reports/budget-income-statement.scm:59
-#: ../src/report/standard-reports/budget.scm:71
+#: ../src/report/standard-reports/budget.scm:72
 msgid "Budget"
 msgstr "بودجه"
 
@@ -5738,7 +5748,7 @@ msgstr "_l تکرار تراکنش"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:194
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#: ../src/gnome/gnc-split-reg.c:1337
+#: ../src/gnome/gnc-split-reg.c:1335
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1065
 msgid "_Delete Transaction"
 msgstr "_D حذف تراکنش"
@@ -5765,7 +5775,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:199
 #: ../src/gnome/gnc-plugin-page-register.c:204
-#: ../src/gnome/gnc-split-reg.c:1297
+#: ../src/gnome/gnc-split-reg.c:1295
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1025
 msgid "_Delete Split"
 msgstr "_D پاک کردن تراکنش‌تکه‌ای"
@@ -6201,12 +6211,12 @@ msgstr "گزارش نتایج جستجو"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:888
+#: ../src/report/standard-reports/register.scm:894
 msgid "Register"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:406
 msgid "Register Report"
 msgstr "ثبات"
 
@@ -6318,7 +6328,7 @@ msgid "Transaction Report"
 msgstr "گزارش تراکنش"
 
 #: ../src/gnome/gnc-plugin-page-register.c:3025
-#: ../src/gnome/gnc-split-reg.c:882
+#: ../src/gnome/gnc-split-reg.c:880
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1123
 msgid "A reversing entry has already been created for this transaction."
 msgstr ""
@@ -6414,39 +6424,39 @@ msgstr ""
 msgid "Open general ledger window"
 msgstr "باز کردن پنجره‌ی راهنمای برنامه‌یGnuCash"
 
-#: ../src/gnome/gnc-split-reg2.c:625 ../src/gnome/gnc-split-reg.c:636
+#: ../src/gnome/gnc-split-reg2.c:625 ../src/gnome/gnc-split-reg.c:634
 msgid "<No information>"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:764 ../src/gnome/gnc-split-reg.c:1624
+#: ../src/gnome/gnc-split-reg2.c:764 ../src/gnome/gnc-split-reg.c:1622
 msgid "Balancing entry from reconcilation"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:935 ../src/gnome/gnc-split-reg.c:2082
+#: ../src/gnome/gnc-split-reg2.c:935 ../src/gnome/gnc-split-reg.c:2070
 msgid "Present:"
 msgstr "حال:"
 
-#: ../src/gnome/gnc-split-reg2.c:936 ../src/gnome/gnc-split-reg.c:2083
+#: ../src/gnome/gnc-split-reg2.c:936 ../src/gnome/gnc-split-reg.c:2071
 msgid "Future:"
 msgstr "آینده:"
 
-#: ../src/gnome/gnc-split-reg2.c:937 ../src/gnome/gnc-split-reg.c:2084
+#: ../src/gnome/gnc-split-reg2.c:937 ../src/gnome/gnc-split-reg.c:2072
 msgid "Cleared:"
 msgstr "تسویه شده:"
 
-#: ../src/gnome/gnc-split-reg2.c:938 ../src/gnome/gnc-split-reg.c:2085
+#: ../src/gnome/gnc-split-reg2.c:938 ../src/gnome/gnc-split-reg.c:2073
 msgid "Reconciled:"
 msgstr "مطابقت شده:"
 
-#: ../src/gnome/gnc-split-reg2.c:939 ../src/gnome/gnc-split-reg.c:2086
+#: ../src/gnome/gnc-split-reg2.c:939 ../src/gnome/gnc-split-reg.c:2074
 msgid "Projected Minimum:"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:943 ../src/gnome/gnc-split-reg.c:2090
+#: ../src/gnome/gnc-split-reg2.c:943 ../src/gnome/gnc-split-reg.c:2078
 msgid "Shares:"
 msgstr "سهام:"
 
-#: ../src/gnome/gnc-split-reg2.c:944 ../src/gnome/gnc-split-reg.c:2091
+#: ../src/gnome/gnc-split-reg2.c:944 ../src/gnome/gnc-split-reg.c:2079
 msgid "Current Value:"
 msgstr "مقدار جاری:"
 
@@ -6458,90 +6468,90 @@ msgstr ""
 msgid "The register displayed is for Account Payable or Account Receivable. Changing the entries may cause harm, please use the business options to change the entries."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:1068 ../src/gnome/gnc-split-reg.c:2165
+#: ../src/gnome/gnc-split-reg2.c:1068 ../src/gnome/gnc-split-reg.c:2153
 msgid "This account register is read-only."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:1111 ../src/gnome/gnc-split-reg.c:2208
+#: ../src/gnome/gnc-split-reg2.c:1111 ../src/gnome/gnc-split-reg.c:2196
 msgid "This account may not be edited. If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:1118 ../src/gnome/gnc-split-reg.c:2215
+#: ../src/gnome/gnc-split-reg2.c:1118 ../src/gnome/gnc-split-reg.c:2203
 msgid "One of the sub-accounts selected may not be edited. If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:909
+#: ../src/gnome/gnc-split-reg.c:907
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:66
 msgid "Cannot modify or delete this transaction."
 msgstr "نمی‌توان این تراکنش را پاک و یا اصلا کرد."
 
-#: ../src/gnome/gnc-split-reg.c:911
+#: ../src/gnome/gnc-split-reg.c:909
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:923
+#: ../src/gnome/gnc-split-reg.c:921
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid "The date of this transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:959
+#: ../src/gnome/gnc-split-reg.c:957
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:841
 msgid "Remove the splits from this transaction?"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:960
+#: ../src/gnome/gnc-split-reg.c:958
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:842
 msgid "This transaction contains reconciled splits. Modifying it is not a good idea because that will cause your reconciled balance to be off."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:987
+#: ../src/gnome/gnc-split-reg.c:985
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:888
 msgid "_Remove Splits"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1180
+#: ../src/gnome/gnc-split-reg.c:1178
 msgid "This transaction is not associated with a URI."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1236
+#: ../src/gnome/gnc-split-reg.c:1234
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:964
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1237
+#: ../src/gnome/gnc-split-reg.c:1235
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:965
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1240
+#: ../src/gnome/gnc-split-reg.c:1238
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:968
 msgid "You cannot delete this split."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1241
+#: ../src/gnome/gnc-split-reg.c:1239
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:969
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window. You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1269
+#: ../src/gnome/gnc-split-reg.c:1267
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:997
 msgid "(no memo)"
 msgstr "(بدون یادداشت)"
 
-#: ../src/gnome/gnc-split-reg.c:1272
+#: ../src/gnome/gnc-split-reg.c:1270
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1000
 msgid "(no description)"
 msgstr "(بدون اطلاعات)"
 
-#: ../src/gnome/gnc-split-reg.c:1313
+#: ../src/gnome/gnc-split-reg.c:1311
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1041
 msgid "Delete the current transaction?"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:1314
+#: ../src/gnome/gnc-split-reg.c:1312
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1042
 msgid "You would be deleting a transaction with reconciled splits! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
@@ -9174,7 +9184,7 @@ msgid "matches no accounts"
 msgstr ""
 
 #: ../src/gnome-search/search-account.c:219
-#: ../src/report/standard-reports/cash-flow.scm:409
+#: ../src/report/standard-reports/cash-flow.scm:260
 msgid "Selected Accounts"
 msgstr "حساب‌های انتخاب شده"
 
@@ -9708,87 +9718,87 @@ msgstr "ذخیره با نام دیگر.."
 msgid "Export"
 msgstr "صدور"
 
-#: ../src/gnome-utils/dialog-options.c:811
-#: ../src/gnome-utils/dialog-options.c:953
+#: ../src/gnome-utils/dialog-options.c:813
+#: ../src/gnome-utils/dialog-options.c:955
 msgid "Select All"
 msgstr "انتخاب همه"
 
-#: ../src/gnome-utils/dialog-options.c:813
+#: ../src/gnome-utils/dialog-options.c:815
 msgid "Select all accounts."
 msgstr "انتخاب همه‌ی حساب‌ها"
 
-#: ../src/gnome-utils/dialog-options.c:818
-#: ../src/gnome-utils/dialog-options.c:960
+#: ../src/gnome-utils/dialog-options.c:820
+#: ../src/gnome-utils/dialog-options.c:962
 msgid "Clear All"
 msgstr "پاک کردن همه"
 
-#: ../src/gnome-utils/dialog-options.c:820
+#: ../src/gnome-utils/dialog-options.c:822
 msgid "Clear the selection and unselect all accounts."
 msgstr "بخش انتخاب شده را پاک کرده وتمام حساب ها را از حالت انتخاب خارج کن."
 
-#: ../src/gnome-utils/dialog-options.c:825
+#: ../src/gnome-utils/dialog-options.c:827
 msgid "Select Children"
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:827
+#: ../src/gnome-utils/dialog-options.c:829
 msgid "Select all descendents of selected account."
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:833
-#: ../src/gnome-utils/dialog-options.c:967
+#: ../src/gnome-utils/dialog-options.c:835
+#: ../src/gnome-utils/dialog-options.c:969
 msgid "Select Default"
 msgstr "انتخاب پیش‌فرض"
 
-#: ../src/gnome-utils/dialog-options.c:835
+#: ../src/gnome-utils/dialog-options.c:837
 msgid "Select the default account selection."
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:849
+#: ../src/gnome-utils/dialog-options.c:851
 msgid "Show Hidden Accounts"
 msgstr "نمایش حساب‌ّهای مخقی"
 
-#: ../src/gnome-utils/dialog-options.c:851
+#: ../src/gnome-utils/dialog-options.c:853
 msgid "Show accounts that have been marked hidden."
 msgstr "نمایش‌ حساب‌هایی که به عنوان مخفی علامت گذاری شده‌اند"
 
-#: ../src/gnome-utils/dialog-options.c:955
+#: ../src/gnome-utils/dialog-options.c:957
 msgid "Select all entries."
 msgstr "انتخاب تمام ورودی‌ها"
 
-#: ../src/gnome-utils/dialog-options.c:962
+#: ../src/gnome-utils/dialog-options.c:964
 msgid "Clear the selection and unselect all entries."
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:969
+#: ../src/gnome-utils/dialog-options.c:971
 msgid "Select the default selection."
 msgstr ""
 
 #. The reset button on each option page
-#: ../src/gnome-utils/dialog-options.c:1129
+#: ../src/gnome-utils/dialog-options.c:1131
 msgid "Reset defaults"
 msgstr "پاک‌سازی پیش‌گزیده‌ها"
 
-#: ../src/gnome-utils/dialog-options.c:1131
+#: ../src/gnome-utils/dialog-options.c:1133
 msgid "Reset all values to their defaults."
 msgstr "پاک‌سازی همه‌ی مقادیر به مقادیر پیش فرضشان"
 
-#: ../src/gnome-utils/dialog-options.c:1455
+#: ../src/gnome-utils/dialog-options.c:1457
 msgid "Page"
 msgstr "صفحه"
 
-#: ../src/gnome-utils/dialog-options.c:2070
+#: ../src/gnome-utils/dialog-options.c:2072
 msgid "Clear"
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:2071
+#: ../src/gnome-utils/dialog-options.c:2073
 msgid "Clear any selected image file."
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:2073
+#: ../src/gnome-utils/dialog-options.c:2075
 msgid "Select image"
 msgstr "انتخاب عکس"
 
-#: ../src/gnome-utils/dialog-options.c:2075
+#: ../src/gnome-utils/dialog-options.c:2077
 msgid "Select an image file."
 msgstr "انتخاب یک عکس"
 
@@ -9870,27 +9880,27 @@ msgstr "باید یک قیمت معتبر وارد نمایید."
 msgid "You must enter a valid `to' amount."
 msgstr ""
 
-#: ../src/gnome-utils/dialog-transfer.c:1720
+#: ../src/gnome-utils/dialog-transfer.c:1740
 msgid "You must enter an amount to transfer."
 msgstr "باید مقداری را برای انتقال وارد نمایید."
 
-#: ../src/gnome-utils/dialog-transfer.c:1960
+#: ../src/gnome-utils/dialog-transfer.c:1980
 msgid "Debit Account"
 msgstr "حساب بدهکار"
 
-#: ../src/gnome-utils/dialog-transfer.c:1978
+#: ../src/gnome-utils/dialog-transfer.c:1998
 msgid "Transfer From"
 msgstr "اتقال از"
 
-#: ../src/gnome-utils/dialog-transfer.c:1982
+#: ../src/gnome-utils/dialog-transfer.c:2002
 msgid "Transfer To"
 msgstr "انتقال به"
 
-#: ../src/gnome-utils/dialog-transfer.c:2039
+#: ../src/gnome-utils/dialog-transfer.c:2059
 msgid "Debit Amount:"
 msgstr "مقدار بدهکار:"
 
-#: ../src/gnome-utils/dialog-transfer.c:2044
+#: ../src/gnome-utils/dialog-transfer.c:2064
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:14
 msgid "To Amount:"
 msgstr ""
@@ -10277,6 +10287,11 @@ msgstr ""
 msgid "The database was opened read-only. Do you want to save it to a different place?"
 msgstr ""
 
+#: ../src/gnome-utils/gnc-file.c:1579
+#: ../src/gnome-utils/gnc-main-window.c:1220
+msgid "<unknown>"
+msgstr "<ناشناخته>"
+
 #: ../src/gnome-utils/gnc-general-select.c:218
 msgid "View..."
 msgstr "مشاهده..."
@@ -10566,57 +10581,53 @@ msgstr "اگر ذخیره نکنید،تغییرات ایجاد شده از %d �
 msgid "If you don't save, changes from the past %d days and %d hours will be discarded."
 msgstr "اگر ذخیره نکنید،تغییرات ایجاد شده از %d روز و %d ساعت گذشته از بین خواهند رفت."
 
-#: ../src/gnome-utils/gnc-main-window.c:1220
-msgid "<unknown>"
-msgstr "<ناشناخته>"
-
 #: ../src/gnome-utils/gnc-main-window.c:1257
 msgid "Close _Without Saving"
 msgstr ""
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: ../src/gnome-utils/gnc-main-window.c:1495
+#: ../src/gnome-utils/gnc-main-window.c:1482
 msgid "(read-only)"
 msgstr "(فقط خواندنی)"
 
-#: ../src/gnome-utils/gnc-main-window.c:1503
+#: ../src/gnome-utils/gnc-main-window.c:1490
 msgid "Unsaved Book"
 msgstr "کتابچه‌ی ذخیره نشده"
 
-#: ../src/gnome-utils/gnc-main-window.c:1670
+#: ../src/gnome-utils/gnc-main-window.c:1659
 msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:1671
+#: ../src/gnome-utils/gnc-main-window.c:1660
 #, c-format
 msgid "Last modified on %x %X"
 msgstr ""
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.
-#: ../src/gnome-utils/gnc-main-window.c:1677
+#: ../src/gnome-utils/gnc-main-window.c:1666
 #, c-format
 msgid "File %s opened. %s"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:2701
+#: ../src/gnome-utils/gnc-main-window.c:2690
 msgid "Unable to save to database."
 msgstr "توانایی ذخیره در پایگاه داده را ندارد."
 
-#: ../src/gnome-utils/gnc-main-window.c:2703
+#: ../src/gnome-utils/gnc-main-window.c:2692
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "توانایی ذخیره در پایگاه داده را ندارد:کتابچه در حالت فقط-خواندنی نشانه‌گذاری شده است."
 
-#: ../src/gnome-utils/gnc-main-window.c:3992
+#: ../src/gnome-utils/gnc-main-window.c:3981
 msgid "Book Options"
 msgstr "گزینه‌های کتابچه"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
+#: ../src/gnome-utils/gnc-main-window.c:4367
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:4380
+#: ../src/gnome-utils/gnc-main-window.c:4369
 msgid "© 1997-2015 Contributors"
 msgstr ""
 
@@ -10624,7 +10635,7 @@ msgstr ""
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: ../src/gnome-utils/gnc-main-window.c:4417
+#: ../src/gnome-utils/gnc-main-window.c:4406
 msgid "translator_credits"
 msgstr ""
 
@@ -10735,20 +10746,20 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:405
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:413
-#: ../src/register/ledger-core/split-register-control.c:1317
-#: ../src/register/ledger-core/split-register-control.c:1330
+#: ../src/register/ledger-core/split-register-control.c:1320
+#: ../src/register/ledger-core/split-register-control.c:1333
 msgid "This register does not support editing exchange rates."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:421
-#: ../src/register/ledger-core/split-register-control.c:1371
-#: ../src/register/ledger-core/split-register-control.c:1446
+#: ../src/register/ledger-core/split-register-control.c:1374
+#: ../src/register/ledger-core/split-register-control.c:1449
 msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:461
-#: ../src/register/ledger-core/split-register-control.c:1418
-#: ../src/register/ledger-core/split-register-control.c:1431
+#: ../src/register/ledger-core/split-register-control.c:1421
+#: ../src/register/ledger-core/split-register-control.c:1434
 msgid "The two currencies involved equal each other."
 msgstr ""
 
@@ -10789,17 +10800,17 @@ msgid "_Return"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1781
-#: ../src/register/ledger-core/split-register-control.c:1828
+#: ../src/register/ledger-core/split-register-control.c:1831
 msgid "Mark split as unreconciled?"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1783
-#: ../src/register/ledger-core/split-register-control.c:1830
+#: ../src/register/ledger-core/split-register-control.c:1833
 msgid "You are about to mark a reconciled split as unreconciled. Doing so might make future reconciliation difficult! Continue with this change?"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1827
-#: ../src/register/ledger-core/split-register-control.c:1847
+#: ../src/register/ledger-core/split-register-control.c:1850
 msgid "_Unreconcile"
 msgstr ""
 
@@ -10951,7 +10962,7 @@ msgstr "چک دریافتی"
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
 #: ../src/report/standard-reports/register.scm:160
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -11271,7 +11282,7 @@ msgid " Scheduled "
 msgstr "زمان‌بندی‌شده"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2413
-#: ../src/register/ledger-core/split-register-control.c:1531
+#: ../src/register/ledger-core/split-register-control.c:1534
 msgid "Save the changed transaction?"
 msgstr ""
 
@@ -11281,12 +11292,12 @@ msgid "The current transaction has changed. Would you like to record the changes
 msgstr "تراکنش جاری تغییر یافته است.آیا می‌خواهید تغییرات را قبل از نسخه برداری این ورودی،اعمال کنید یا نسخه برداری را لغو می‌کنید؟"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2453
-#: ../src/register/ledger-core/split-register-control.c:1546
+#: ../src/register/ledger-core/split-register-control.c:1549
 msgid "_Discard Changes"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2455
-#: ../src/register/ledger-core/split-register-control.c:1548
+#: ../src/register/ledger-core/split-register-control.c:1551
 msgid "_Record Changes"
 msgstr ""
 
@@ -11340,7 +11351,7 @@ msgid "Accounts / Void Reason"
 msgstr "نام حساب"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2962
-#: ../src/import-export/import-main-matcher.c:492
+#: ../src/import-export/import-main-matcher.c:484
 msgid "R"
 msgstr "R"
 
@@ -11797,7 +11808,7 @@ msgstr ""
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -15260,68 +15271,68 @@ msgstr ""
 msgid "y/d/m"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:263
+#: ../src/import-export/import-main-matcher.c:255
 msgid "Destination account for the auto-balance split."
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:487
+#: ../src/import-export/import-main-matcher.c:479
 msgid "A"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:489
+#: ../src/import-export/import-main-matcher.c:481
 msgid "U+R"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:498
+#: ../src/import-export/import-main-matcher.c:490
 msgid "Info"
 msgstr "اطلاعات"
 
-#: ../src/import-export/import-main-matcher.c:734
+#: ../src/import-export/import-main-matcher.c:726
 msgid "New, already balanced"
 msgstr ""
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:760
+#: ../src/import-export/import-main-matcher.c:752
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr ""
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:768
+#: ../src/import-export/import-main-matcher.c:760
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr ""
 
 #. Translators: %s is the amount to be transferred.
-#: ../src/import-export/import-main-matcher.c:779
+#: ../src/import-export/import-main-matcher.c:771
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:791
+#: ../src/import-export/import-main-matcher.c:783
 msgid "Reconcile (manual) match"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:795
+#: ../src/import-export/import-main-matcher.c:787
 msgid "Reconcile (auto) match"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:801
-#: ../src/import-export/import-main-matcher.c:820
+#: ../src/import-export/import-main-matcher.c:793
+#: ../src/import-export/import-main-matcher.c:812
 msgid "Match missing!"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:810
+#: ../src/import-export/import-main-matcher.c:802
 msgid "Update and reconcile (manual) match"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:814
+#: ../src/import-export/import-main-matcher.c:806
 msgid "Update and reconcile (auto) match"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:825
+#: ../src/import-export/import-main-matcher.c:817
 msgid "Do not import (no action selected)"
 msgstr ""
 
@@ -16381,19 +16392,19 @@ msgstr ""
 msgid "You are about to overwrite an existing transaction. Are you sure you want to do that?"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-control.c:1356
+#: ../src/register/ledger-core/split-register-control.c:1359
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-control.c:1383
+#: ../src/register/ledger-core/split-register-control.c:1386
 msgid "The entered account could not be found."
 msgstr "حساب وارد شده یافت نمی‌شود."
 
-#: ../src/register/ledger-core/split-register-control.c:1482
+#: ../src/register/ledger-core/split-register-control.c:1485
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-control.c:1533
+#: ../src/register/ledger-core/split-register-control.c:1536
 #, fuzzy
 #| msgid "The current transaction has been changed. Would you like to record the changes before duplicating this entry, or cancel the duplication?"
 msgid "The current transaction has been changed. Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
@@ -16580,7 +16591,7 @@ msgstr "ترتیب مرتب‌سازی"
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
 #: ../src/report/standard-reports/budget-income-statement.scm:118
-#: ../src/report/standard-reports/cash-flow.scm:51
+#: ../src/report/standard-reports/cash-flow.scm:53
 #: ../src/report/standard-reports/category-barchart.scm:78
 #: ../src/report/standard-reports/daily-reports.scm:58
 #: ../src/report/standard-reports/equity-statement.scm:79
@@ -16605,8 +16616,8 @@ msgstr "گزارش ارز"
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
 #: ../src/report/standard-reports/budget-income-statement.scm:119
-#: ../src/report/standard-reports/budget.scm:49
-#: ../src/report/standard-reports/cash-flow.scm:52
+#: ../src/report/standard-reports/budget.scm:50
+#: ../src/report/standard-reports/cash-flow.scm:54
 #: ../src/report/standard-reports/category-barchart.scm:79
 #: ../src/report/standard-reports/daily-reports.scm:59
 #: ../src/report/standard-reports/equity-statement.scm:80
@@ -16855,7 +16866,7 @@ msgstr "بیشینه تعداد قطعات در در نمودار تکه ای"
 #: ../src/report/standard-reports/balance-sheet.scm:94
 #: ../src/report/standard-reports/budget-balance-sheet.scm:59
 #: ../src/report/standard-reports/budget-income-statement.scm:83
-#: ../src/report/standard-reports/budget.scm:67
+#: ../src/report/standard-reports/budget.scm:68
 #: ../src/report/standard-reports/income-statement.scm:70
 msgid "Flatten list to depth limit"
 msgstr ""
@@ -16864,7 +16875,7 @@ msgstr ""
 #: ../src/report/standard-reports/balance-sheet.scm:96
 #: ../src/report/standard-reports/budget-balance-sheet.scm:61
 #: ../src/report/standard-reports/budget-income-statement.scm:85
-#: ../src/report/standard-reports/budget.scm:69
+#: ../src/report/standard-reports/budget.scm:70
 #: ../src/report/standard-reports/income-statement.scm:72
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr ""
@@ -17340,7 +17351,7 @@ msgstr ""
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:411
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "نمایش تاریخ؟"
@@ -17348,7 +17359,7 @@ msgstr "نمایش تاریخ؟"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:426
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "نمایش توضیحات؟"
@@ -17439,19 +17450,19 @@ msgstr "شماره‌ی تراکنش نمایش داده شود؟"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:414
-#: ../src/report/standard-reports/register.scm:419
-#: ../src/report/standard-reports/register.scm:424
-#: ../src/report/standard-reports/register.scm:429
-#: ../src/report/standard-reports/register.scm:434
-#: ../src/report/standard-reports/register.scm:439
-#: ../src/report/standard-reports/register.scm:444
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:458
-#: ../src/report/standard-reports/register.scm:463
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:416
+#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:455
+#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:474
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -17512,7 +17523,7 @@ msgstr "نمایش همه‌ی مالیات‌های انفرادی؟"
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:474
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "مجموع"
@@ -17520,7 +17531,7 @@ msgstr "مجموع"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:475
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "نمایش مجموع؟"
@@ -19602,7 +19613,7 @@ msgstr "نمایش یک نمودار تکه ای بدهی ها بر اساس د�
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
 #: ../src/report/standard-reports/average-balance.scm:38
-#: ../src/report/standard-reports/cash-flow.scm:44
+#: ../src/report/standard-reports/cash-flow.scm:46
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
 #: ../src/report/standard-reports/equity-statement.scm:67
@@ -19617,7 +19628,7 @@ msgstr "تاریخ آغاز"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
 #: ../src/report/standard-reports/average-balance.scm:39
-#: ../src/report/standard-reports/cash-flow.scm:45
+#: ../src/report/standard-reports/cash-flow.scm:47
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
 #: ../src/report/standard-reports/equity-statement.scm:68
@@ -19943,8 +19954,8 @@ msgstr "نمایش مانده یک حساب"
 #: ../src/report/standard-reports/balance-sheet.scm:143
 #: ../src/report/standard-reports/budget-balance-sheet.scm:108
 #: ../src/report/standard-reports/budget-income-statement.scm:123
-#: ../src/report/standard-reports/budget.scm:50
-#: ../src/report/standard-reports/cash-flow.scm:53
+#: ../src/report/standard-reports/budget.scm:51
+#: ../src/report/standard-reports/cash-flow.scm:55
 #: ../src/report/standard-reports/equity-statement.scm:84
 #: ../src/report/standard-reports/income-statement.scm:116
 #: ../src/report/standard-reports/sx-summary.scm:100
@@ -19956,7 +19967,7 @@ msgstr "نمایش نرخ تبدیل"
 #: ../src/report/standard-reports/balance-sheet.scm:144
 #: ../src/report/standard-reports/budget-balance-sheet.scm:109
 #: ../src/report/standard-reports/budget-income-statement.scm:124
-#: ../src/report/standard-reports/cash-flow.scm:79
+#: ../src/report/standard-reports/cash-flow.scm:81
 #: ../src/report/standard-reports/equity-statement.scm:85
 #: ../src/report/standard-reports/income-statement.scm:117
 #: ../src/report/standard-reports/sx-summary.scm:101
@@ -20155,12 +20166,12 @@ msgid "Basis"
 msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:1072
-#: ../src/report/standard-reports/cash-flow.scm:458
+#: ../src/report/standard-reports/cash-flow.scm:309
 msgid "Money In"
 msgstr "پول وارده"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:1073
-#: ../src/report/standard-reports/cash-flow.scm:503
+#: ../src/report/standard-reports/cash-flow.scm:354
 msgid "Money Out"
 msgstr "پول خارج شده"
 
@@ -20463,7 +20474,7 @@ msgstr ""
 #: ../src/report/standard-reports/budget-barchart.scm:62
 #: ../src/report/standard-reports/budget-flow.scm:58
 #: ../src/report/standard-reports/budget-income-statement.scm:60
-#: ../src/report/standard-reports/budget.scm:84
+#: ../src/report/standard-reports/budget.scm:85
 msgid "Budget to use."
 msgstr ""
 
@@ -20717,7 +20728,7 @@ msgid "Budget Profit & Loss"
 msgstr ""
 
 #. for gnc-build-url
-#: ../src/report/standard-reports/budget.scm:38
+#: ../src/report/standard-reports/budget.scm:39
 msgid "Budget Report"
 msgstr "گزارش بودجه"
 
@@ -20725,142 +20736,141 @@ msgstr "گزارش بودجه"
 #. in *one* place.
 #. (define optname-from-date (N_ "Start Date"))
 #. (define optname-to-date (N_ "End Date"))
-#: ../src/report/standard-reports/budget.scm:45
-#: ../src/report/standard-reports/cash-flow.scm:47
+#: ../src/report/standard-reports/budget.scm:46
+#: ../src/report/standard-reports/cash-flow.scm:49
 msgid "Account Display Depth"
 msgstr "عمق نمایش حساب‌ها"
 
-#: ../src/report/standard-reports/budget.scm:46
-#: ../src/report/standard-reports/cash-flow.scm:48
+#: ../src/report/standard-reports/budget.scm:47
+#: ../src/report/standard-reports/cash-flow.scm:50
 msgid "Always show sub-accounts"
 msgstr "همیشه ریز حساب‌ها را نشان بده"
 
-#: ../src/report/standard-reports/budget.scm:51
-#: ../src/report/standard-reports/cash-flow.scm:54
+#: ../src/report/standard-reports/budget.scm:52
+#: ../src/report/standard-reports/cash-flow.scm:56
 msgid "Show Full Account Names"
 msgstr "نمایش نام کامل حساب"
 
-#: ../src/report/standard-reports/budget.scm:52
+#: ../src/report/standard-reports/budget.scm:53
 msgid "Select Columns"
 msgstr "انتخاب ستون"
 
-#: ../src/report/standard-reports/budget.scm:53
+#: ../src/report/standard-reports/budget.scm:54
 msgid "Show Budget"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:54
+#: ../src/report/standard-reports/budget.scm:55
 msgid "Display a column for the budget values."
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:55
+#: ../src/report/standard-reports/budget.scm:56
 msgid "Show Actual"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:56
+#: ../src/report/standard-reports/budget.scm:57
 #, fuzzy
 #| msgid "Display all the individual taxes?"
 msgid "Display a column for the actual values."
 msgstr "نمایش همه‌ی مالیات‌های انفرادی؟"
 
-#: ../src/report/standard-reports/budget.scm:57
+#: ../src/report/standard-reports/budget.scm:58
 msgid "Show Difference"
 msgstr "نمایش تفاضل"
 
-#: ../src/report/standard-reports/budget.scm:58
+#: ../src/report/standard-reports/budget.scm:59
 msgid "Display the difference as budget - actual."
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:59
+#: ../src/report/standard-reports/budget.scm:60
 msgid "Show Column with Totals"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:60
+#: ../src/report/standard-reports/budget.scm:61
 #, fuzzy
 #| msgid "Display the totals?"
 msgid "Display a column with the row totals."
 msgstr "نمایش مجموع؟"
 
-#: ../src/report/standard-reports/budget.scm:61
+#: ../src/report/standard-reports/budget.scm:62
 msgid "Roll up budget amounts to parent"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:62
+#: ../src/report/standard-reports/budget.scm:63
 msgid "If parent account does not have its own budget value, use the sum of the child account budget values."
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:63
+#: ../src/report/standard-reports/budget.scm:64
 msgid "Include accounts with zero total balances and budget values"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:64
+#: ../src/report/standard-reports/budget.scm:65
 #, fuzzy
 #| msgid "Include accounts with zero total (recursive) balances in this report"
 msgid "Include accounts with zero total (recursive) balances and budget values in this report."
 msgstr "این گزارش حساب‌ها با جمع موجودی صفر ( به صورت بازگشتی ) را شامل شود"
 
-#: ../src/report/standard-reports/budget.scm:65
+#: ../src/report/standard-reports/budget.scm:66
 msgid "Compress prior/later periods"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:66
+#: ../src/report/standard-reports/budget.scm:67
 msgid "Accumulate columns for periods before and after the current period to allow focus on the current period."
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:104
-#: ../src/report/standard-reports/cash-flow.scm:85
+#: ../src/report/standard-reports/budget.scm:105
+#: ../src/report/standard-reports/cash-flow.scm:87
 #, fuzzy
 #| msgid "Show full account names (including parent accounts)"
 msgid "Show full account names (including parent accounts)."
 msgstr "نمایش نام کامل حساب‌ها(شامل حساب‌های پایه)"
 
-#: ../src/report/standard-reports/budget.scm:447
+#: ../src/report/standard-reports/budget.scm:448
 msgid "Bgt"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:455
+#: ../src/report/standard-reports/budget.scm:456
 msgid "Act"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:463
+#: ../src/report/standard-reports/budget.scm:464
 msgid "Diff"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:661
+#: ../src/report/standard-reports/budget.scm:621
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#. for gnc-build-url
-#: ../src/report/standard-reports/cash-flow.scm:40
+#: ../src/report/standard-reports/cash-flow.scm:42
 msgid "Cash Flow"
 msgstr "گردش مالی"
 
-#: ../src/report/standard-reports/cash-flow.scm:55
+#: ../src/report/standard-reports/cash-flow.scm:57
 msgid "Include Trading Accounts in report"
 msgstr ""
 
-#: ../src/report/standard-reports/cash-flow.scm:104
+#: ../src/report/standard-reports/cash-flow.scm:106
 #, fuzzy
 #| msgid "Include transactions to/from filter accounts only"
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "شامل تراکنش‌ها به/از حساب‌های فیلتر شده "
 
-#: ../src/report/standard-reports/cash-flow.scm:390
+#: ../src/report/standard-reports/cash-flow.scm:241
 msgid "%s and subaccounts"
 msgstr "%s و ریز حساب‌ها"
 
-#: ../src/report/standard-reports/cash-flow.scm:391
+#: ../src/report/standard-reports/cash-flow.scm:242
 msgid "%s and selected subaccounts"
 msgstr "%s و زیر حساب‌های انتخاب شده"
 
-#: ../src/report/standard-reports/cash-flow.scm:423
+#: ../src/report/standard-reports/cash-flow.scm:274
 msgid "Money into selected accounts comes from"
 msgstr ""
 
-#: ../src/report/standard-reports/cash-flow.scm:468
+#: ../src/report/standard-reports/cash-flow.scm:319
 msgid "Money out of selected accounts goes to"
 msgstr ""
 
-#: ../src/report/standard-reports/cash-flow.scm:513
+#: ../src/report/standard-reports/cash-flow.scm:364
 msgid "Difference"
 msgstr "تفاوت"
 
@@ -21066,7 +21076,7 @@ msgstr "روزنامه‌ی عمومی"
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
 #: ../src/report/standard-reports/register.scm:145
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 msgid "Num/Action"
@@ -21076,7 +21086,7 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -21471,109 +21481,109 @@ msgstr ""
 msgid "Credit Value"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:399
+#: ../src/report/standard-reports/register.scm:405
 #, fuzzy
 #| msgid "The title of the report"
 msgid "The title of the report."
 msgstr "عنوان گزارش"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:417
 msgid "Display the check number/action?"
 msgstr "نمایش شماره/کنش بررسی"
 
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:421
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "نمایش شماره چک؟"
 
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:431
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "نمایش یادداشت‌ها؟"
 
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:436
 msgid "Display the account?"
 msgstr "نمایش حساب؟"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:441
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:446
 msgid "Display the name of lot the shares are in?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:451
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:456
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:459
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "تکی"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:459
 #: ../src/report/standard-reports/transaction.scm:988
 #, fuzzy
 #| msgid "Select Columns"
 msgid "Single Column Display."
 msgstr "انتخاب ستون"
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:460
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:460
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Two Column Display."
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:459
+#: ../src/report/standard-reports/register.scm:465
 msgid "Display the value in transaction currency?"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:470
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
 #| msgid "Display the transaction date?"
 msgid "Display a running balance?"
 msgstr "نمایش تاریخ تراکنش؟"
 
-#: ../src/report/standard-reports/register.scm:617
+#: ../src/report/standard-reports/register.scm:623
 msgid "Total Debits"
 msgstr "مجموع بدهی‌ّها"
 
-#: ../src/report/standard-reports/register.scm:619
+#: ../src/report/standard-reports/register.scm:625
 msgid "Total Credits"
 msgstr "مجموع بستانکاری‌ها"
 
-#: ../src/report/standard-reports/register.scm:621
+#: ../src/report/standard-reports/register.scm:627
 msgid "Total Value Debits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:623
+#: ../src/report/standard-reports/register.scm:629
 msgid "Total Value Credits"
 msgstr ""
 
-#: ../src/report/standard-reports/register.scm:626
+#: ../src/report/standard-reports/register.scm:632
 msgid "Net Change"
 msgstr "تغییر خالص"
 
-#: ../src/report/standard-reports/register.scm:629
+#: ../src/report/standard-reports/register.scm:635
 msgid "Value Change"
 msgstr "تغییر ارزش"
 
-#: ../src/report/standard-reports/register.scm:788
+#: ../src/report/standard-reports/register.scm:794
 msgid "Client"
 msgstr ""
 
@@ -22953,51 +22963,51 @@ msgstr "به گنوکش خوش آمدید."
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:500 ../src/scm/price-quotes.scm:501
+#: ../src/scm/price-quotes.scm:486 ../src/scm/price-quotes.scm:487
 msgid "No commodities marked for quote retrieval."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:505 ../src/scm/price-quotes.scm:506
-#: ../src/scm/price-quotes.scm:529 ../src/scm/price-quotes.scm:532
+#: ../src/scm/price-quotes.scm:491 ../src/scm/price-quotes.scm:492
+#: ../src/scm/price-quotes.scm:515 ../src/scm/price-quotes.scm:518
 msgid "Unable to get quotes or diagnose the problem."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:511 ../src/scm/price-quotes.scm:513
+#: ../src/scm/price-quotes.scm:497 ../src/scm/price-quotes.scm:499
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:519 ../src/scm/price-quotes.scm:520
+#: ../src/scm/price-quotes.scm:505 ../src/scm/price-quotes.scm:506
 msgid "There was a system error while retrieving the price quotes."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:525 ../src/scm/price-quotes.scm:526
+#: ../src/scm/price-quotes.scm:511 ../src/scm/price-quotes.scm:512
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:542 ../src/scm/price-quotes.scm:553
-#: ../src/scm/price-quotes.scm:561
+#: ../src/scm/price-quotes.scm:528 ../src/scm/price-quotes.scm:539
+#: ../src/scm/price-quotes.scm:547
 msgid "Unable to retrieve quotes for these items:"
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:547
+#: ../src/scm/price-quotes.scm:533
 msgid "Continue using only the good quotes?"
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:566
+#: ../src/scm/price-quotes.scm:552
 msgid "Continuing with good quotes."
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:581 ../src/scm/price-quotes.scm:590
+#: ../src/scm/price-quotes.scm:567 ../src/scm/price-quotes.scm:576
 msgid "Unable to create prices for these items:"
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:586
+#: ../src/scm/price-quotes.scm:572
 msgid "Add remaining good quotes?"
 msgstr ""
 
-#: ../src/scm/price-quotes.scm:595
+#: ../src/scm/price-quotes.scm:581
 msgid "Adding remaining good quotes."
 msgstr ""
 

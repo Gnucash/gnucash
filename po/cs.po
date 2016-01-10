@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 12:57-0700\n"
+"POT-Creation-Date: 2015-12-19 12:03-0800\n"
 "PO-Revision-Date: 2012-03-29 11:39+0200\n"
 "Last-Translator: Petr Pisar <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -301,7 +301,7 @@ msgstr ""
 
 #: ../src/app-utils/date-utilities.scm:122
 #: ../src/report/standard-reports/account-piecharts.scm:470
-#: ../src/report/standard-reports/cash-flow.scm:206
+#: ../src/report/standard-reports/cash-flow.scm:167
 #: ../src/report/standard-reports/category-barchart.scm:460
 #: ../src/report/standard-reports/daily-reports.scm:484
 #: ../src/report/standard-reports/equity-statement.scm:346
@@ -792,7 +792,7 @@ msgstr "Počáteční zůstatek"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: ../src/register/ledger-core/split-register.c:2367
 #: ../src/report/standard-reports/general-journal.scm:88
-#: ../src/report/standard-reports/register.scm:392
+#: ../src/report/standard-reports/register.scm:398
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
@@ -812,7 +812,7 @@ msgstr "Má dáti"
 #: ../src/register/ledger-core/split-register.c:2506
 #: ../src/register/ledger-core/split-register.c:2524
 #: ../src/report/standard-reports/general-journal.scm:89
-#: ../src/report/standard-reports/register.scm:394
+#: ../src/report/standard-reports/register.scm:400
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
@@ -935,7 +935,7 @@ msgstr "Nákup"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3070
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3156
 #: ../src/register/ledger-core/split-register.c:2475
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:851
 msgid "Charge"
 msgstr "Účtovat"
 
@@ -954,7 +954,7 @@ msgstr "Výdaje"
 #. page / name / orderkey / tooltip / default
 #: ../src/app-utils/prefs.scm:75
 #: ../src/business/business-gnome/business-gnome-utils.c:225
-#: ../src/business/business-gnome/dialog-invoice.c:3177
+#: ../src/business/business-gnome/dialog-invoice.c:3213
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:383
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:1
 #: ../src/engine/gncInvoice.c:969 ../src/gnome-search/dialog-search.c:1069
@@ -971,7 +971,7 @@ msgstr "Výdaje"
 #: ../src/report/business-reports/taxinvoice.eguile.scm:114
 #: ../src/report/business-reports/taxinvoice.scm:203
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
-#: ../src/report/standard-reports/register.scm:832
+#: ../src/report/standard-reports/register.scm:838
 msgid "Invoice"
 msgstr "Faktura"
 
@@ -1044,10 +1044,10 @@ msgstr "Vrácené"
 
 #: ../src/app-utils/prefs.scm:91
 #: ../src/business/business-gnome/business-gnome-utils.c:219
-#: ../src/business/business-gnome/dialog-invoice.c:2347
-#: ../src/business/business-gnome/dialog-invoice.c:2523
-#: ../src/business/business-gnome/dialog-invoice.c:2524
-#: ../src/business/business-gnome/dialog-invoice.c:3165
+#: ../src/business/business-gnome/dialog-invoice.c:2368
+#: ../src/business/business-gnome/dialog-invoice.c:2543
+#: ../src/business/business-gnome/dialog-invoice.c:2544
+#: ../src/business/business-gnome/dialog-invoice.c:3201
 #: ../src/engine/gncInvoice.c:971 ../src/gnome-search/dialog-search.c:1053
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3098
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:3
@@ -1143,7 +1143,7 @@ msgstr ""
 msgid "- GnuCash personal and small business finance management"
 msgstr ""
 
-#: ../src/bin/gnucash-bin.c:385 ../src/bin/gnucash-bin.c:764
+#: ../src/bin/gnucash-bin.c:385 ../src/bin/gnucash-bin.c:766
 #, c-format
 msgid ""
 "%s\n"
@@ -1164,7 +1164,7 @@ msgstr "Vývojová verze GnuCash %s"
 #. 2nd %s is the scm type (svn/svk/git/bzr);
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
-#: ../src/bin/gnucash-bin.c:404 ../src/gnome-utils/gnc-main-window.c:4393
+#: ../src/bin/gnucash-bin.c:404 ../src/gnome-utils/gnc-main-window.c:4382
 #, fuzzy, c-format
 #| msgid "%s  This copy was built from svn r%s on %s."
 msgid ""
@@ -1180,7 +1180,7 @@ msgstr "GnuCash %s"
 #. Translators: 1st %s is a fixed message, which is translated independently;
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
-#: ../src/bin/gnucash-bin.c:415 ../src/gnome-utils/gnc-main-window.c:4400
+#: ../src/bin/gnucash-bin.c:415 ../src/gnome-utils/gnc-main-window.c:4389
 #, fuzzy, c-format
 #| msgid "%s  This copy was built from r%s on %s."
 msgid ""
@@ -1201,7 +1201,7 @@ msgstr "Kontroluji Finance::Quote..."
 msgid "Loading data..."
 msgstr "Načítám data..."
 
-#: ../src/bin/gnucash-bin.c:765
+#: ../src/bin/gnucash-bin.c:767
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
 "       Perhaps you need to set the $DISPLAY environment variable ?"
@@ -1209,8 +1209,8 @@ msgstr ""
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
-#: ../src/business/business-gnome/dialog-invoice.c:1311
-#: ../src/business/business-gnome/dialog-invoice.c:1389
+#: ../src/business/business-gnome/dialog-invoice.c:1312
+#: ../src/business/business-gnome/dialog-invoice.c:1390
 #: ../src/gnome-utils/gnc-general-select.c:214
 msgid "Select..."
 msgstr "Vybrat..."
@@ -1221,9 +1221,9 @@ msgid "Edit..."
 msgstr "Upravit..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:222
-#: ../src/business/business-gnome/dialog-invoice.c:2352
-#: ../src/business/business-gnome/dialog-invoice.c:2530
-#: ../src/business/business-gnome/dialog-invoice.c:2531
+#: ../src/business/business-gnome/dialog-invoice.c:2373
+#: ../src/business/business-gnome/dialog-invoice.c:2550
+#: ../src/business/business-gnome/dialog-invoice.c:2551
 #, fuzzy
 msgid "Voucher"
 msgstr "Zdroj"
@@ -1410,10 +1410,10 @@ msgstr "Zákazníkovy faktury"
 
 #: ../src/business/business-gnome/dialog-customer.c:907
 #: ../src/business/business-gnome/dialog-employee.c:712
-#: ../src/business/business-gnome/dialog-invoice.c:2931
-#: ../src/business/business-gnome/dialog-invoice.c:2940
-#: ../src/business/business-gnome/dialog-invoice.c:2951
-#: ../src/business/business-gnome/dialog-invoice.c:3204
+#: ../src/business/business-gnome/dialog-invoice.c:2967
+#: ../src/business/business-gnome/dialog-invoice.c:2976
+#: ../src/business/business-gnome/dialog-invoice.c:2987
+#: ../src/business/business-gnome/dialog-invoice.c:3240
 #: ../src/business/business-gnome/dialog-job.c:549
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:1
 msgid "Process Payment"
@@ -1439,8 +1439,8 @@ msgstr "Kontakt"
 
 #. FALL THROUGH
 #: ../src/business/business-gnome/dialog-customer.c:932
-#: ../src/business/business-gnome/dialog-invoice.c:3076
-#: ../src/business/business-gnome/dialog-invoice.c:3217
+#: ../src/business/business-gnome/dialog-invoice.c:3112
+#: ../src/business/business-gnome/dialog-invoice.c:3253
 #: ../src/business/business-gnome/dialog-job.c:575
 #: ../src/business/business-gnome/dialog-order.c:885
 #: ../src/business/business-gnome/dialog-vendor.c:735
@@ -1510,7 +1510,7 @@ msgid "Employee Username"
 msgstr "Uživatelské jméno zaměstnance"
 
 #: ../src/business/business-gnome/dialog-employee.c:725
-#: ../src/business/business-gnome/dialog-invoice.c:3056
+#: ../src/business/business-gnome/dialog-invoice.c:3092
 msgid "Employee Name"
 msgstr "Jméno zaměstnance"
 
@@ -1520,7 +1520,7 @@ msgid "Username"
 msgstr "Jméno uživatele"
 
 #: ../src/business/business-gnome/dialog-employee.c:736
-#: ../src/gnome/dialog-sx-editor2.c:1757 ../src/gnome/dialog-sx-editor.c:1787
+#: ../src/gnome/dialog-sx-editor2.c:1757 ../src/gnome/dialog-sx-editor.c:1792
 #: ../src/gnome/dialog-tax-info.c:1150 ../src/gnome-utils/gnc-dense-cal.c:337
 #: ../src/gnome-utils/gnc-tree-model-budget.c:96
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:396
@@ -1539,23 +1539,23 @@ msgstr "Najít zaměstnance"
 #. * label in the frame and means
 #. * e.g. customer i.e. the company being
 #. * invoiced.
-#: ../src/business/business-gnome/dialog-invoice.c:386
+#: ../src/business/business-gnome/dialog-invoice.c:387
 #: ../src/business/business-gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
 msgstr "Musíte zadat fakturační informace."
 
-#: ../src/business/business-gnome/dialog-invoice.c:579
+#: ../src/business/business-gnome/dialog-invoice.c:580
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "Opravdu chcete odstranit vybranou položku?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:581
+#: ../src/business/business-gnome/dialog-invoice.c:582
 msgid "This entry is attached to an order and will be deleted from that as well!"
 msgstr "Tato položka je připojena k objednávce a bude odstraněna i z ní!"
 
-#: ../src/business/business-gnome/dialog-invoice.c:691
-#: ../src/business/business-gnome/dialog-invoice.c:2985
-#: ../src/business/business-gnome/dialog-invoice.c:3019
-#: ../src/business/business-gnome/dialog-invoice.c:3053
+#: ../src/business/business-gnome/dialog-invoice.c:692
+#: ../src/business/business-gnome/dialog-invoice.c:3021
+#: ../src/business/business-gnome/dialog-invoice.c:3055
+#: ../src/business/business-gnome/dialog-invoice.c:3089
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2836
 #: ../src/register/ledger-core/split-register-model.c:231
 #: ../src/report/business-reports/aging.scm:393
@@ -1570,60 +1570,60 @@ msgid "Due Date"
 msgstr "Datum splatnosti"
 
 #. Should be using standard label for due date?
-#: ../src/business/business-gnome/dialog-invoice.c:692
+#: ../src/business/business-gnome/dialog-invoice.c:693
 #: ../src/report/business-reports/aging.scm:394
 #: ../src/report/business-reports/owner-report.scm:571
 msgid "Post Date"
 msgstr "Datum vystavení"
 
-#: ../src/business/business-gnome/dialog-invoice.c:693
+#: ../src/business/business-gnome/dialog-invoice.c:694
 msgid "Post to Account"
 msgstr "Vystavit k účtu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:694
+#: ../src/business/business-gnome/dialog-invoice.c:695
 msgid "Accumulate Splits?"
 msgstr "Akumulovat části?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:787
+#: ../src/business/business-gnome/dialog-invoice.c:788
 msgid "The Invoice must have at least one Entry."
 msgstr "Faktura musí mít alespoň jednu položku."
 
-#: ../src/business/business-gnome/dialog-invoice.c:807
+#: ../src/business/business-gnome/dialog-invoice.c:808
 msgid "Do you really want to post the invoice?"
 msgstr "Opravdu chcete vystavit fakturu?"
 
 #. Fill in the conversion prices with feedback from the user
-#: ../src/business/business-gnome/dialog-invoice.c:822
+#: ../src/business/business-gnome/dialog-invoice.c:823
 msgid "One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each."
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:952
+#: ../src/business/business-gnome/dialog-invoice.c:953
 msgid "The post action was canceled because not all exchange rates were given."
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:1221
+#: ../src/business/business-gnome/dialog-invoice.c:1222
 #: ../src/gnome/window-reconcile2.c:1142 ../src/gnome/window-reconcile.c:1142
 msgid "Total:"
 msgstr "Celkem:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1227
+#: ../src/business/business-gnome/dialog-invoice.c:1228
 msgid "Subtotal:"
 msgstr "Částečný součet:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1228
+#: ../src/business/business-gnome/dialog-invoice.c:1229
 msgid "Tax:"
 msgstr "Daň:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1232
+#: ../src/business/business-gnome/dialog-invoice.c:1233
 msgid "Total Cash:"
 msgstr "Celkem hotovost:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1233
+#: ../src/business/business-gnome/dialog-invoice.c:1234
 msgid "Total Charge:"
 msgstr "Celkem naúčtováno:"
 
 #. Set the type label
-#: ../src/business/business-gnome/dialog-invoice.c:1702
+#: ../src/business/business-gnome/dialog-invoice.c:1703
 #: ../src/business/business-gnome/dialog-payment.c:1010
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:22
 #: ../src/engine/gncInvoice.c:977
@@ -1641,166 +1641,166 @@ msgstr "Celkem naúčtováno:"
 msgid "Credit Note"
 msgstr "Účet Dal"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1901
-#: ../src/business/business-gnome/dialog-invoice.c:1920
-#: ../src/business/business-gnome/dialog-invoice.c:1939
+#: ../src/business/business-gnome/dialog-invoice.c:1922
+#: ../src/business/business-gnome/dialog-invoice.c:1941
+#: ../src/business/business-gnome/dialog-invoice.c:1960
 #, fuzzy
 #| msgid "Credit Account"
 msgid "New Credit Note"
 msgstr "Účet Dal"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1902
+#: ../src/business/business-gnome/dialog-invoice.c:1923
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:275
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:21
 #: ../src/gnome-search/dialog-search.c:1071
 msgid "New Invoice"
 msgstr "Nová faktura"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1907
-#: ../src/business/business-gnome/dialog-invoice.c:1926
-#: ../src/business/business-gnome/dialog-invoice.c:1945
+#: ../src/business/business-gnome/dialog-invoice.c:1928
+#: ../src/business/business-gnome/dialog-invoice.c:1947
+#: ../src/business/business-gnome/dialog-invoice.c:1966
 #, fuzzy
 #| msgid "Edit report options"
 msgid "Edit Credit Note"
 msgstr "Upravit možnosti sestavy"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1908
+#: ../src/business/business-gnome/dialog-invoice.c:1929
 msgid "Edit Invoice"
 msgstr "Upravit fakturu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1911
-#: ../src/business/business-gnome/dialog-invoice.c:1930
-#: ../src/business/business-gnome/dialog-invoice.c:1949
+#: ../src/business/business-gnome/dialog-invoice.c:1932
+#: ../src/business/business-gnome/dialog-invoice.c:1951
+#: ../src/business/business-gnome/dialog-invoice.c:1970
 #, fuzzy
 #| msgid "View/Edit Job"
 msgid "View Credit Note"
 msgstr "Zobrazit/upravit práci"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1912
+#: ../src/business/business-gnome/dialog-invoice.c:1933
 msgid "View Invoice"
 msgstr "Zobrazit fakturu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1921
+#: ../src/business/business-gnome/dialog-invoice.c:1942
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:274
 #: ../src/gnome-search/dialog-search.c:1055
 msgid "New Bill"
 msgstr "Nový účet"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1927
+#: ../src/business/business-gnome/dialog-invoice.c:1948
 msgid "Edit Bill"
 msgstr "Upravit účet"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1931
+#: ../src/business/business-gnome/dialog-invoice.c:1952
 msgid "View Bill"
 msgstr "Zobrazit účet"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1940
+#: ../src/business/business-gnome/dialog-invoice.c:1961
 #: ../src/gnome-search/dialog-search.c:1067
 msgid "New Expense Voucher"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:1946
+#: ../src/business/business-gnome/dialog-invoice.c:1967
 msgid "Edit Expense Voucher"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:1950
+#: ../src/business/business-gnome/dialog-invoice.c:1971
 msgid "View Expense Voucher"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:2346
-#: ../src/business/business-gnome/dialog-invoice.c:2522
+#: ../src/business/business-gnome/dialog-invoice.c:2367
+#: ../src/business/business-gnome/dialog-invoice.c:2542
 #, fuzzy
 #| msgid "Billing Information"
 msgid "Bill Information"
 msgstr "Fakturační informace"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2348
-#: ../src/business/business-gnome/dialog-invoice.c:2525
-#: ../src/business/business-gnome/dialog-invoice.c:3026
+#: ../src/business/business-gnome/dialog-invoice.c:2369
+#: ../src/business/business-gnome/dialog-invoice.c:2545
+#: ../src/business/business-gnome/dialog-invoice.c:3062
 msgid "Bill ID"
 msgstr "ID účtu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2351
-#: ../src/business/business-gnome/dialog-invoice.c:2529
+#: ../src/business/business-gnome/dialog-invoice.c:2372
+#: ../src/business/business-gnome/dialog-invoice.c:2549
 #, fuzzy
 #| msgid "Invoice Information"
 msgid "Voucher Information"
 msgstr "Informace o faktuře"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2353
-#: ../src/business/business-gnome/dialog-invoice.c:2532
-#: ../src/business/business-gnome/dialog-invoice.c:3060
+#: ../src/business/business-gnome/dialog-invoice.c:2374
+#: ../src/business/business-gnome/dialog-invoice.c:2552
+#: ../src/business/business-gnome/dialog-invoice.c:3096
 #, fuzzy
 msgid "Voucher ID"
 msgstr "ID dodavatele"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2829
+#: ../src/business/business-gnome/dialog-invoice.c:2865
 #, fuzzy
 #| msgid "Match duplicate transactions"
 msgid "Date of duplicated entries"
 msgstr "Přiřadit duplikované účetní položky"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2864
+#: ../src/business/business-gnome/dialog-invoice.c:2900
 #, fuzzy
 #| msgid "Do you really want to post the invoice?"
 msgid "Do you really want to post these invoices?"
 msgstr "Opravdu chcete vystavit fakturu?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2930
+#: ../src/business/business-gnome/dialog-invoice.c:2966
 msgid "View/Edit Invoice"
 msgstr "Zobrazit/upravit fakturu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2932
-#: ../src/business/business-gnome/dialog-invoice.c:2941
-#: ../src/business/business-gnome/dialog-invoice.c:2952
+#: ../src/business/business-gnome/dialog-invoice.c:2968
+#: ../src/business/business-gnome/dialog-invoice.c:2977
+#: ../src/business/business-gnome/dialog-invoice.c:2988
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:261
 #: ../src/gnome/gnc-plugin-page-register2.c:480
 #: ../src/gnome/gnc-plugin-page-register.c:483
 msgid "Duplicate"
 msgstr "Duplikovat"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2933
-#: ../src/business/business-gnome/dialog-invoice.c:2942
-#: ../src/business/business-gnome/dialog-invoice.c:2953
+#: ../src/business/business-gnome/dialog-invoice.c:2969
+#: ../src/business/business-gnome/dialog-invoice.c:2978
+#: ../src/business/business-gnome/dialog-invoice.c:2989
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:265
 msgid "Post"
 msgstr "Vystavit"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2934
-#: ../src/business/business-gnome/dialog-invoice.c:2943
-#: ../src/business/business-gnome/dialog-invoice.c:2954
+#: ../src/business/business-gnome/dialog-invoice.c:2970
+#: ../src/business/business-gnome/dialog-invoice.c:2979
+#: ../src/business/business-gnome/dialog-invoice.c:2990
 #, fuzzy
 #| msgid "Single Report"
 msgid "Printable Report"
 msgstr "Jediná sestava"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2939
-#: ../src/business/business-gnome/dialog-invoice.c:3203
+#: ../src/business/business-gnome/dialog-invoice.c:2975
+#: ../src/business/business-gnome/dialog-invoice.c:3239
 msgid "View/Edit Bill"
 msgstr "Zobrazit/upravit účet"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
-#: ../src/business/business-gnome/dialog-invoice.c:2950
+#: ../src/business/business-gnome/dialog-invoice.c:2986
 #, fuzzy
 msgid "View/Edit Voucher"
 msgstr "Zobrazit/upravit dodavatele"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2964
+#: ../src/business/business-gnome/dialog-invoice.c:3000
 msgid "Invoice Owner"
 msgstr "Vlastník faktury"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2967
+#: ../src/business/business-gnome/dialog-invoice.c:3003
 #: ../src/report/business-reports/easy-invoice.scm:339
 #: ../src/report/business-reports/fancy-invoice.scm:329
 #: ../src/report/business-reports/invoice.scm:314
 msgid "Invoice Notes"
 msgstr "Poznámky o faktuře"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2970
-#: ../src/business/business-gnome/dialog-invoice.c:3004
-#: ../src/business/business-gnome/dialog-invoice.c:3038
-#: ../src/business/business-gnome/dialog-invoice.c:3067
+#: ../src/business/business-gnome/dialog-invoice.c:3006
+#: ../src/business/business-gnome/dialog-invoice.c:3040
+#: ../src/business/business-gnome/dialog-invoice.c:3074
+#: ../src/business/business-gnome/dialog-invoice.c:3103
 #: ../src/business/business-gnome/dialog-job.c:562
 #: ../src/business/business-gnome/dialog-job.c:573
 #: ../src/business/business-gnome/dialog-order.c:883
@@ -1813,15 +1813,15 @@ msgstr "Poznámky o faktuře"
 msgid "Billing ID"
 msgstr "Fakturační ID"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2973
-#: ../src/business/business-gnome/dialog-invoice.c:3007
-#: ../src/business/business-gnome/dialog-invoice.c:3041
+#: ../src/business/business-gnome/dialog-invoice.c:3009
+#: ../src/business/business-gnome/dialog-invoice.c:3043
+#: ../src/business/business-gnome/dialog-invoice.c:3077
 msgid "Is Paid?"
 msgstr "Zaplaceno?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2976
-#: ../src/business/business-gnome/dialog-invoice.c:3010
-#: ../src/business/business-gnome/dialog-invoice.c:3044
+#: ../src/business/business-gnome/dialog-invoice.c:3012
+#: ../src/business/business-gnome/dialog-invoice.c:3046
+#: ../src/business/business-gnome/dialog-invoice.c:3080
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:5
 #: ../src/gnome/dialog-find-transactions2.c:125
 #: ../src/gnome/dialog-find-transactions.c:124
@@ -1829,50 +1829,50 @@ msgstr "Zaplaceno?"
 msgid "Date Posted"
 msgstr "Datum vystavení"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2979
-#: ../src/business/business-gnome/dialog-invoice.c:3013
-#: ../src/business/business-gnome/dialog-invoice.c:3047
+#: ../src/business/business-gnome/dialog-invoice.c:3015
+#: ../src/business/business-gnome/dialog-invoice.c:3049
+#: ../src/business/business-gnome/dialog-invoice.c:3083
 msgid "Is Posted?"
 msgstr "Je vystavena?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2982
-#: ../src/business/business-gnome/dialog-invoice.c:3016
-#: ../src/business/business-gnome/dialog-invoice.c:3050
+#: ../src/business/business-gnome/dialog-invoice.c:3018
+#: ../src/business/business-gnome/dialog-invoice.c:3052
+#: ../src/business/business-gnome/dialog-invoice.c:3086
 #: ../src/business/business-gnome/dialog-order.c:872
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:4
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:3
 msgid "Date Opened"
 msgstr "Datum otevření"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2988
-#: ../src/business/business-gnome/dialog-invoice.c:3022
+#: ../src/business/business-gnome/dialog-invoice.c:3024
+#: ../src/business/business-gnome/dialog-invoice.c:3058
 msgid "Company Name "
 msgstr "Jméno společnosti "
 
-#: ../src/business/business-gnome/dialog-invoice.c:2992
+#: ../src/business/business-gnome/dialog-invoice.c:3028
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:3
 msgid "Invoice ID"
 msgstr "ID faktury"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2998
+#: ../src/business/business-gnome/dialog-invoice.c:3034
 msgid "Bill Owner"
 msgstr "Vlastník účtu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3001
+#: ../src/business/business-gnome/dialog-invoice.c:3037
 msgid "Bill Notes"
 msgstr "Poznámky účtu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3032
+#: ../src/business/business-gnome/dialog-invoice.c:3068
 #, fuzzy
 msgid "Voucher Owner"
 msgstr "Vlastník faktury"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3035
+#: ../src/business/business-gnome/dialog-invoice.c:3071
 #, fuzzy
 msgid "Voucher Notes"
 msgstr "Poznámky o faktuře"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3069
+#: ../src/business/business-gnome/dialog-invoice.c:3105
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:2
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:7
 #: ../src/gnome/dialog-lot-viewer.c:831 ../src/gnome/dialog-tax-info.c:1189
@@ -1890,28 +1890,28 @@ msgstr "Poznámky o faktuře"
 msgid "Type"
 msgstr "Typ"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3071
+#: ../src/business/business-gnome/dialog-invoice.c:3107
 #: ../src/register/ledger-core/split-register-model.c:300
 msgid "Paid"
 msgstr "Zaplaceno"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3074
+#: ../src/business/business-gnome/dialog-invoice.c:3110
 msgid "Posted"
 msgstr "Vystavena"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3079
-#: ../src/business/business-gnome/dialog-invoice.c:3219
+#: ../src/business/business-gnome/dialog-invoice.c:3115
+#: ../src/business/business-gnome/dialog-invoice.c:3255
 #: ../src/report/business-reports/easy-invoice.scm:805
 msgid "Due"
 msgstr "Splatné"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3081
+#: ../src/business/business-gnome/dialog-invoice.c:3117
 #: ../src/business/business-gnome/dialog-order.c:890
 #: ../src/gnome/dialog-lot-viewer.c:837
 msgid "Opened"
 msgstr "Otevřena"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3083
+#: ../src/business/business-gnome/dialog-invoice.c:3119
 #: ../src/business/business-gnome/dialog-order.c:892
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:914 ../src/gnome/reconcile-view.c:381
@@ -1922,7 +1922,7 @@ msgstr "Otevřena"
 #: ../src/report/standard-reports/general-journal.scm:110
 #: ../src/report/standard-reports/general-ledger.scm:99
 #: ../src/report/standard-reports/register.scm:146
-#: ../src/report/standard-reports/register.scm:414
+#: ../src/report/standard-reports/register.scm:420
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
@@ -1930,15 +1930,15 @@ msgstr "Otevřena"
 msgid "Num"
 msgstr "Č."
 
-#: ../src/business/business-gnome/dialog-invoice.c:3164
+#: ../src/business/business-gnome/dialog-invoice.c:3200
 msgid "Find Bill"
 msgstr "Najít účet"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3170
+#: ../src/business/business-gnome/dialog-invoice.c:3206
 msgid "Find Expense Voucher"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:3171
+#: ../src/business/business-gnome/dialog-invoice.c:3207
 #: ../src/gnome-search/dialog-search.c:1065
 #: ../src/report/business-reports/easy-invoice.scm:712
 #: ../src/report/business-reports/fancy-invoice.scm:811
@@ -1946,23 +1946,23 @@ msgstr ""
 msgid "Expense Voucher"
 msgstr ""
 
-#: ../src/business/business-gnome/dialog-invoice.c:3176
+#: ../src/business/business-gnome/dialog-invoice.c:3212
 msgid "Find Invoice"
 msgstr "Najít fakturu"
 
 #. Translators: This abbreviation is the column heading for
 #. the condition "Is this invoice a Credit Note?"
-#: ../src/business/business-gnome/dialog-invoice.c:3213
+#: ../src/business/business-gnome/dialog-invoice.c:3249
 msgid "CN?"
 msgstr ""
 
 #. note the "Amount" multichoice option here
-#: ../src/business/business-gnome/dialog-invoice.c:3215
+#: ../src/business/business-gnome/dialog-invoice.c:3251
 #: ../src/gnome/dialog-lot-viewer.c:926 ../src/gnome/reconcile-view.c:373
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2992
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3004
 #: ../src/import-export/aqb/dialog-ab.glade.h:34
-#: ../src/import-export/import-main-matcher.c:484
+#: ../src/import-export/import-main-matcher.c:476
 #: ../src/import-export/import-match-picker.c:345
 #: ../src/import-export/import-match-picker.c:385
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3498
@@ -1974,8 +1974,8 @@ msgstr ""
 #: ../src/report/standard-reports/general-journal.scm:116
 #: ../src/report/standard-reports/general-ledger.scm:91
 #: ../src/report/standard-reports/general-ledger.scm:111
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:845
+#: ../src/report/standard-reports/register.scm:455
+#: ../src/report/standard-reports/register.scm:851
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
 #: ../src/report/standard-reports/transaction.scm:758
@@ -1986,7 +1986,7 @@ msgstr "Částka"
 
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
-#: ../src/business/business-gnome/dialog-invoice.c:3269
+#: ../src/business/business-gnome/dialog-invoice.c:3305
 #, fuzzy, c-format
 msgid "The following bill is due:"
 msgid_plural "The following %d bills are due:"
@@ -1994,7 +1994,7 @@ msgstr[0] "Je potřeba zaplatit následující účet"
 msgstr[1] "Je potřeba zaplatit následující účet"
 msgstr[2] "Je potřeba zaplatit následující účet"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3274
+#: ../src/business/business-gnome/dialog-invoice.c:3310
 msgid "Due Bills Reminder"
 msgstr "Připomínka splatných účtů"
 
@@ -3286,7 +3286,7 @@ msgstr "Dialog volby vlastníka"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
 #: ../src/import-export/csv-imp/gnc-csv-model.c:67
-#: ../src/import-export/import-main-matcher.c:485
+#: ../src/import-export/import-main-matcher.c:477
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3489
@@ -3307,7 +3307,7 @@ msgstr "Dialog volby vlastníka"
 #: ../src/report/standard-reports/general-ledger.scm:80
 #: ../src/report/standard-reports/general-ledger.scm:100
 #: ../src/report/standard-reports/register.scm:148
-#: ../src/report/standard-reports/register.scm:419
+#: ../src/report/standard-reports/register.scm:425
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
@@ -3533,7 +3533,7 @@ msgid "Default Rate: "
 msgstr "Implicitní mzda: "
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:18
-#: ../src/gnome-utils/dialog-transfer.c:1956
+#: ../src/gnome-utils/dialog-transfer.c:1976
 msgid "Credit Account"
 msgstr "Účet Dal"
 
@@ -3712,7 +3712,7 @@ msgstr "Vystavit na"
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
 #: ../src/import-export/csv-imp/gnc-csv-model.c:65
-#: ../src/import-export/import-main-matcher.c:481
+#: ../src/import-export/import-main-matcher.c:473
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3481
@@ -3740,8 +3740,8 @@ msgstr "Vystavit na"
 #: ../src/report/standard-reports/net-linechart.scm:459
 #: ../src/report/standard-reports/portfolio.scm:53
 #: ../src/report/standard-reports/register.scm:140
-#: ../src/report/standard-reports/register.scm:404
-#: ../src/report/standard-reports/register.scm:806
+#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:812
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
 #: ../src/report/standard-reports/transaction.scm:734
@@ -3801,14 +3801,14 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2898
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2916
 #: ../src/import-export/csv-exp/csv-transactions-export.c:420
-#: ../src/import-export/import-main-matcher.c:486
+#: ../src/import-export/import-main-matcher.c:478
 #: ../src/import-export/import-match-picker.c:347
 #: ../src/import-export/import-match-picker.c:387
 #: ../src/register/ledger-core/split-register-model.c:339
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
 #: ../src/report/standard-reports/register.scm:150
-#: ../src/report/standard-reports/register.scm:424
+#: ../src/report/standard-reports/register.scm:430
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
@@ -4468,7 +4468,7 @@ msgid " (posted)"
 msgstr " (vystaveno)"
 
 #: ../src/engine/gnc-lot.c:689 ../src/report/standard-reports/register.scm:158
-#: ../src/report/standard-reports/register.scm:439
+#: ../src/report/standard-reports/register.scm:445
 msgid "Lot"
 msgstr ""
 
@@ -4835,7 +4835,7 @@ msgstr "Chyba při přidávání ceny."
 #: ../src/gnome-utils/gnc-icons.c:38
 #: ../src/import-export/aqb/gnc-ab-utils.c:458
 #: ../src/import-export/csv-imp/gnc-csv-model.c:69
-#: ../src/import-export/import-main-matcher.c:482
+#: ../src/import-export/import-main-matcher.c:474
 #: ../src/import-export/import-match-picker.c:343
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
 #: ../src/register/ledger-core/split-register-model.c:325
@@ -4843,12 +4843,12 @@ msgstr "Chyba při přidávání ceny."
 #: ../src/report/business-reports/owner-report.scm:48
 #: ../src/report/standard-reports/advanced-portfolio.scm:1042
 #: ../src/report/standard-reports/budget-flow.scm:43
-#: ../src/report/standard-reports/budget.scm:47
-#: ../src/report/standard-reports/cash-flow.scm:49
+#: ../src/report/standard-reports/budget.scm:48
+#: ../src/report/standard-reports/cash-flow.scm:51
 #: ../src/report/standard-reports/general-journal.scm:112
 #: ../src/report/standard-reports/portfolio.scm:243
 #: ../src/report/standard-reports/register.scm:153
-#: ../src/report/standard-reports/register.scm:429
+#: ../src/report/standard-reports/register.scm:435
 #: ../src/report/standard-reports/transaction.scm:450
 msgid "Account"
 msgstr "Účet"
@@ -4869,7 +4869,7 @@ msgstr "Symbol"
 #: ../src/report/standard-reports/general-ledger.scm:88
 #: ../src/report/standard-reports/general-ledger.scm:108
 #: ../src/report/standard-reports/register.scm:156
-#: ../src/report/standard-reports/register.scm:434
+#: ../src/report/standard-reports/register.scm:440
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
 #: ../src/report/standard-reports/transaction.scm:956
@@ -4959,7 +4959,7 @@ msgstr "Cena podílu"
 #: ../src/report/standard-reports/advanced-portfolio.scm:1071
 #: ../src/report/standard-reports/portfolio.scm:248
 #: ../src/report/standard-reports/register.scm:168
-#: ../src/report/standard-reports/register.scm:458
+#: ../src/report/standard-reports/register.scm:464
 msgid "Value"
 msgstr "Hodnota"
 
@@ -5003,8 +5003,8 @@ msgid "Description, Notes, or Memo"
 msgstr ""
 
 #. FIXME: All this does is leak.
-#: ../src/gnome/dialog-find-transactions2.c:221
-#: ../src/gnome/dialog-find-transactions.c:220
+#: ../src/gnome/dialog-find-transactions2.c:224
+#: ../src/gnome/dialog-find-transactions.c:223
 #: ../src/gnome-search/dialog-search.c:1449
 msgid "Find Transaction"
 msgstr "Hledat účetní položku"
@@ -5020,7 +5020,7 @@ msgstr "Otevřít"
 #: ../src/gnome/dialog-lot-viewer.c:857
 #: ../src/report/report-system/html-fonts.scm:89
 #: ../src/report/standard-reports/general-journal.scm:96
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:404
 msgid "Title"
 msgstr "Nadpis"
 
@@ -5087,7 +5087,7 @@ msgid "You must select a Currency."
 msgstr "Musíte zvolit měnu."
 
 #: ../src/gnome/dialog-price-editor.c:229
-#: ../src/gnome-utils/dialog-transfer.c:1711
+#: ../src/gnome-utils/dialog-transfer.c:1731
 msgid "You must enter a valid amount."
 msgstr "Musíte zadat platnou částku."
 
@@ -5185,52 +5185,52 @@ msgstr "_Akce"
 msgid "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr "Tato PÚP byla změněna; opravdu to chcete zrušit?"
 
-#: ../src/gnome/dialog-sx-editor2.c:648 ../src/gnome/dialog-sx-editor.c:655
+#: ../src/gnome/dialog-sx-editor2.c:648 ../src/gnome/dialog-sx-editor.c:659
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
 msgstr "Nemohu zpracovat vzorec Dal pro část \"%s\"."
 
-#: ../src/gnome/dialog-sx-editor2.c:676 ../src/gnome/dialog-sx-editor.c:683
+#: ../src/gnome/dialog-sx-editor2.c:676 ../src/gnome/dialog-sx-editor.c:687
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
 msgstr "Nemohu zpracovat formuli Má dáti pro část \"%s\"."
 
-#: ../src/gnome/dialog-sx-editor2.c:710 ../src/gnome/dialog-sx-editor.c:717
+#: ../src/gnome/dialog-sx-editor2.c:710 ../src/gnome/dialog-sx-editor.c:721
 #: ../src/gnome/dialog-sx-from-trans.c:260
 msgid "The Scheduled Transaction Editor cannot automatically balance this transaction. Should it still be entered?"
 msgstr "Editor plánovaných účetních položek nemůže automaticky vyrovnat tuto účetní položku. Má být přesto vložena?"
 
-#: ../src/gnome/dialog-sx-editor2.c:731 ../src/gnome/dialog-sx-editor.c:738
+#: ../src/gnome/dialog-sx-editor2.c:731 ../src/gnome/dialog-sx-editor.c:742
 msgid "Please name the Scheduled Transaction."
 msgstr "Pojmenujte prosím tuto plánovanou účetní položku."
 
-#: ../src/gnome/dialog-sx-editor2.c:758 ../src/gnome/dialog-sx-editor.c:766
+#: ../src/gnome/dialog-sx-editor2.c:758 ../src/gnome/dialog-sx-editor.c:770
 #, c-format
 msgid "A Scheduled Transaction with the name \"%s\" already exists. Are you sure you want to name this one the same?"
 msgstr "Plánovaná účetní položka se jménem \"%s\" již existuje. Opravdu chcete tuto pojmenovat stejně?"
 
-#: ../src/gnome/dialog-sx-editor2.c:786 ../src/gnome/dialog-sx-editor.c:794
+#: ../src/gnome/dialog-sx-editor2.c:786
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr "Plánované účetní položky s proměnnými nemohou být automaticky vytvářeny."
 
-#: ../src/gnome/dialog-sx-editor2.c:796 ../src/gnome/dialog-sx-editor.c:804
+#: ../src/gnome/dialog-sx-editor2.c:796 ../src/gnome/dialog-sx-editor.c:809
 msgid "Scheduled Transactions without a template transaction cannot be automatically created."
 msgstr "Plánované účetní položky bez šablony účetní položky nemohou být automaticky vytvářeny."
 
-#: ../src/gnome/dialog-sx-editor2.c:811 ../src/gnome/dialog-sx-editor.c:819
+#: ../src/gnome/dialog-sx-editor2.c:811 ../src/gnome/dialog-sx-editor.c:824
 msgid "Please provide a valid end selection."
 msgstr "Poskytněte prosím platný výběr konce."
 
-#: ../src/gnome/dialog-sx-editor2.c:829 ../src/gnome/dialog-sx-editor.c:837
+#: ../src/gnome/dialog-sx-editor2.c:829 ../src/gnome/dialog-sx-editor.c:842
 msgid "There must be some number of occurrences."
 msgstr "Musí být nějaký počet výskytů."
 
-#: ../src/gnome/dialog-sx-editor2.c:838 ../src/gnome/dialog-sx-editor.c:846
+#: ../src/gnome/dialog-sx-editor2.c:838 ../src/gnome/dialog-sx-editor.c:851
 #, c-format
 msgid "The number of remaining occurrences (%d) is greater than the number of total occurrences (%d)."
 msgstr "Počet zbývajících výskytů (%d) je větší než počet výskytů celkem (%d)."
 
-#: ../src/gnome/dialog-sx-editor2.c:870 ../src/gnome/dialog-sx-editor.c:878
+#: ../src/gnome/dialog-sx-editor2.c:870 ../src/gnome/dialog-sx-editor.c:883
 msgid "You have attempted to create a Scheduled Transaction which will never run. Do you really want to do this?"
 msgstr "Pokusili jste se vytvořit plánovanou účetní položku, která se nikdy neuskuteční. Opravdu to chcete udělat?"
 
@@ -5238,19 +5238,25 @@ msgstr "Pokusili jste se vytvořit plánovanou účetní položku, která se nik
 msgid "Note: If you have already accepted changes to the Template, Cancel will not revoke them."
 msgstr ""
 
-#: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1381
+#: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1386
 msgid "(never)"
 msgstr "(nikdy)"
 
-#: ../src/gnome/dialog-sx-editor2.c:1531 ../src/gnome/dialog-sx-editor.c:1549
+#: ../src/gnome/dialog-sx-editor2.c:1531 ../src/gnome/dialog-sx-editor.c:1554
 msgid "The current template transaction has been changed. Would you like to record the changes?"
 msgstr "Aktuální šablona účetní položky byla změněna. Chcete tuto změnu zaznamenat?"
 
-#: ../src/gnome/dialog-sx-editor2.c:1784 ../src/gnome/dialog-sx-editor.c:1814
+#: ../src/gnome/dialog-sx-editor2.c:1784 ../src/gnome/dialog-sx-editor.c:1819
 #: ../src/gnome/gnc-plugin-page-sx-list.c:243
 #: ../src/gnome/gnc-plugin-page-sx-list.c:249
 msgid "Scheduled Transactions"
 msgstr "Plánované účetní položky"
+
+#: ../src/gnome/dialog-sx-editor.c:798
+#, fuzzy
+#| msgid "Scheduled Transactions with variables cannot be automatically created."
+msgid "Scheduled Transactions with variables or involving more than one commodity cannot be automatically created."
+msgstr "Plánované účetní položky s proměnnými nemohou být automaticky vytvářeny."
 
 #: ../src/gnome/dialog-sx-from-trans.c:557
 msgid "The Scheduled Transaction is unbalanced. You are strongly encouraged to correct this situation."
@@ -5558,13 +5564,20 @@ msgstr "_Tipy dne"
 msgid "View the Tips of the Day"
 msgstr "Zobrazit tipy dne"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:546
+#: ../src/gnome/gnc-plugin-basic-commands.c:501
+#: ../src/gnome-utils/gnc-file.c:1571
+#, fuzzy, c-format
+#| msgid "The file %s already exists. Are you sure you want to overwrite it?"
+msgid "Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?"
+msgstr "Soubor %s již existuje. Opravdu jej chcete přepsat?"
+
+#: ../src/gnome/gnc-plugin-basic-commands.c:550
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr "V současné době nejsou pro vložení naplánovány žádné účetní položky."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
-#: ../src/gnome/gnc-plugin-basic-commands.c:577
+#: ../src/gnome/gnc-plugin-basic-commands.c:581
 #, c-format
 msgid "There are no Scheduled Transactions to be entered at this time. (%d transaction automatically created)"
 msgid_plural "There are no Scheduled Transactions to be entered at this time. (%d transactions automatically created)"
@@ -5927,7 +5940,7 @@ msgstr "Odhadnout"
 #: ../src/report/standard-reports/budget-barchart.scm:106
 #: ../src/report/standard-reports/budget-flow.scm:45
 #: ../src/report/standard-reports/budget-income-statement.scm:59
-#: ../src/report/standard-reports/budget.scm:71
+#: ../src/report/standard-reports/budget.scm:72
 msgid "Budget"
 msgstr "Rozpočet"
 
@@ -5965,7 +5978,7 @@ msgstr "_Duplikovat účetní položku"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:194
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#: ../src/gnome/gnc-split-reg.c:1337
+#: ../src/gnome/gnc-split-reg.c:1335
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1065
 msgid "_Delete Transaction"
 msgstr "_Odstranit účetní položku"
@@ -6000,7 +6013,7 @@ msgstr "_Duplikovat položku"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:199
 #: ../src/gnome/gnc-plugin-page-register.c:204
-#: ../src/gnome/gnc-split-reg.c:1297
+#: ../src/gnome/gnc-split-reg.c:1295
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1025
 msgid "_Delete Split"
 msgstr "_Odstranit část"
@@ -6446,12 +6459,12 @@ msgstr "Zpráva o výsledcích hledání"
 #: ../src/gnome/gnc-plugin-page-register.c:2581
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
 #: ../src/report/standard-reports/general-journal.scm:38
-#: ../src/report/standard-reports/register.scm:888
+#: ../src/report/standard-reports/register.scm:894
 msgid "Register"
 msgstr "Účetní kniha"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2415
-#: ../src/report/standard-reports/register.scm:400
+#: ../src/report/standard-reports/register.scm:406
 msgid "Register Report"
 msgstr "Sestava účetní knihy"
 
@@ -6565,7 +6578,7 @@ msgid "Transaction Report"
 msgstr "Sestava účetních položek"
 
 #: ../src/gnome/gnc-plugin-page-register.c:3025
-#: ../src/gnome/gnc-split-reg.c:882
+#: ../src/gnome/gnc-split-reg.c:880
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1123
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Obrácená položka již byla pro tuto účetní položku vytvořena."
@@ -6673,39 +6686,39 @@ msgstr "Otevřít okno s účetní knihou"
 msgid "Open general ledger window"
 msgstr "Otevřít okno s účetní knihou"
 
-#: ../src/gnome/gnc-split-reg2.c:625 ../src/gnome/gnc-split-reg.c:636
+#: ../src/gnome/gnc-split-reg2.c:625 ../src/gnome/gnc-split-reg.c:634
 msgid "<No information>"
 msgstr "<žádné informace>"
 
-#: ../src/gnome/gnc-split-reg2.c:764 ../src/gnome/gnc-split-reg.c:1624
+#: ../src/gnome/gnc-split-reg2.c:764 ../src/gnome/gnc-split-reg.c:1622
 msgid "Balancing entry from reconcilation"
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:935 ../src/gnome/gnc-split-reg.c:2082
+#: ../src/gnome/gnc-split-reg2.c:935 ../src/gnome/gnc-split-reg.c:2070
 msgid "Present:"
 msgstr "Současné"
 
-#: ../src/gnome/gnc-split-reg2.c:936 ../src/gnome/gnc-split-reg.c:2083
+#: ../src/gnome/gnc-split-reg2.c:936 ../src/gnome/gnc-split-reg.c:2071
 msgid "Future:"
 msgstr "Budoucí:"
 
-#: ../src/gnome/gnc-split-reg2.c:937 ../src/gnome/gnc-split-reg.c:2084
+#: ../src/gnome/gnc-split-reg2.c:937 ../src/gnome/gnc-split-reg.c:2072
 msgid "Cleared:"
 msgstr "Zúčtováno:"
 
-#: ../src/gnome/gnc-split-reg2.c:938 ../src/gnome/gnc-split-reg.c:2085
+#: ../src/gnome/gnc-split-reg2.c:938 ../src/gnome/gnc-split-reg.c:2073
 msgid "Reconciled:"
 msgstr "Odsouhlaseno:"
 
-#: ../src/gnome/gnc-split-reg2.c:939 ../src/gnome/gnc-split-reg.c:2086
+#: ../src/gnome/gnc-split-reg2.c:939 ../src/gnome/gnc-split-reg.c:2074
 msgid "Projected Minimum:"
 msgstr "Předpokládané minimum:"
 
-#: ../src/gnome/gnc-split-reg2.c:943 ../src/gnome/gnc-split-reg.c:2090
+#: ../src/gnome/gnc-split-reg2.c:943 ../src/gnome/gnc-split-reg.c:2078
 msgid "Shares:"
 msgstr "Podíly:"
 
-#: ../src/gnome/gnc-split-reg2.c:944 ../src/gnome/gnc-split-reg.c:2091
+#: ../src/gnome/gnc-split-reg2.c:944 ../src/gnome/gnc-split-reg.c:2079
 msgid "Current Value:"
 msgstr "Současná hodnota:"
 
@@ -6719,98 +6732,98 @@ msgstr "Pohledávky"
 msgid "The register displayed is for Account Payable or Account Receivable. Changing the entries may cause harm, please use the business options to change the entries."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg2.c:1068 ../src/gnome/gnc-split-reg.c:2165
+#: ../src/gnome/gnc-split-reg2.c:1068 ../src/gnome/gnc-split-reg.c:2153
 msgid "This account register is read-only."
 msgstr "Tato účetní kniha je jen pro čtení."
 
-#: ../src/gnome/gnc-split-reg2.c:1111 ../src/gnome/gnc-split-reg.c:2208
+#: ../src/gnome/gnc-split-reg2.c:1111 ../src/gnome/gnc-split-reg.c:2196
 #, fuzzy
 #| msgid "This account may not be edited.  If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
 msgid "This account may not be edited. If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
 msgstr "Tento účet nelze upravovat. Pokud chcete v této účetní knize upravovat účetní položky, otevřete prosím možnosti účtu a vypněte zaškrtávací pole Drží místo."
 
-#: ../src/gnome/gnc-split-reg2.c:1118 ../src/gnome/gnc-split-reg.c:2215
+#: ../src/gnome/gnc-split-reg2.c:1118 ../src/gnome/gnc-split-reg.c:2203
 #, fuzzy
 #| msgid "One of the sub-accounts selected may not be edited.  If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
 msgid "One of the sub-accounts selected may not be edited. If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
 msgstr "Jeden z vybraných podúčtů nelze upravovat. Pokud chcete v této účetní knize upravovat účetní položky, otevřete prosím možnosti podúčtu a vypněte zaškrtávací pole Drží místo. Můžete také místo sady účtů otevřít jeden účet."
 
-#: ../src/gnome/gnc-split-reg.c:909
+#: ../src/gnome/gnc-split-reg.c:907
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:66
 msgid "Cannot modify or delete this transaction."
 msgstr "Nemohu upravit nebo odstranit tuto účetní položku."
 
-#: ../src/gnome/gnc-split-reg.c:911
+#: ../src/gnome/gnc-split-reg.c:909
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "Tato účetní položka je označena jen pro čtení s poznámkou: '%s'"
 
-#: ../src/gnome/gnc-split-reg.c:923
+#: ../src/gnome/gnc-split-reg.c:921
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid "The date of this transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
 
-#: ../src/gnome/gnc-split-reg.c:959
+#: ../src/gnome/gnc-split-reg.c:957
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:841
 msgid "Remove the splits from this transaction?"
 msgstr "Odstranit části této účetní položky?"
 
-#: ../src/gnome/gnc-split-reg.c:960
+#: ../src/gnome/gnc-split-reg.c:958
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:842
 msgid "This transaction contains reconciled splits. Modifying it is not a good idea because that will cause your reconciled balance to be off."
 msgstr "Tato účetní položka obsahuje odsouhlasené části. Její úprava není dobrý nápad, protože to způsobí neplatnost vašeho odsouhlaseného zůstatku."
 
-#: ../src/gnome/gnc-split-reg.c:987
+#: ../src/gnome/gnc-split-reg.c:985
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:888
 msgid "_Remove Splits"
 msgstr "Odstranit _části"
 
-#: ../src/gnome/gnc-split-reg.c:1180
+#: ../src/gnome/gnc-split-reg.c:1178
 #, fuzzy
 #| msgid "The current transaction is not balanced."
 msgid "This transaction is not associated with a URI."
 msgstr "Aktuální účetní položka není vyrovnaná."
 
-#: ../src/gnome/gnc-split-reg.c:1236
+#: ../src/gnome/gnc-split-reg.c:1234
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:964
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
 msgstr "Odstranit část '%s' z účetní položky '%s'?"
 
-#: ../src/gnome/gnc-split-reg.c:1237
+#: ../src/gnome/gnc-split-reg.c:1235
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:965
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr "Odstraňovali byste odsouhlasenou část! To není dobrý nápad, protože to způsobí neplatnost vašeho odsouhlaseného zůstatku."
 
-#: ../src/gnome/gnc-split-reg.c:1240
+#: ../src/gnome/gnc-split-reg.c:1238
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:968
 msgid "You cannot delete this split."
 msgstr "Nemůžete odstranit tuto část."
 
-#: ../src/gnome/gnc-split-reg.c:1241
+#: ../src/gnome/gnc-split-reg.c:1239
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:969
 #, fuzzy
 #| msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window. You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
 msgstr "Toto je část, která ukotvuje tuto účetní položku k účetní knize. Nemůžete ji odstranit z tohoto okna účetní knihy. Můžete z tohoto okna odstranit celou účetní položku nebo můžete přejít na účetní knihu, která obsahuje jinou stránku této účetní položky a odstranit tuto část z té druhé účetní knihy."
 
-#: ../src/gnome/gnc-split-reg.c:1269
+#: ../src/gnome/gnc-split-reg.c:1267
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:997
 msgid "(no memo)"
 msgstr "(žádná poznámka)"
 
-#: ../src/gnome/gnc-split-reg.c:1272
+#: ../src/gnome/gnc-split-reg.c:1270
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1000
 msgid "(no description)"
 msgstr "(žádný popis)"
 
-#: ../src/gnome/gnc-split-reg.c:1313
+#: ../src/gnome/gnc-split-reg.c:1311
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1041
 msgid "Delete the current transaction?"
 msgstr "Odstranit aktuální účetní položku?"
 
-#: ../src/gnome/gnc-split-reg.c:1314
+#: ../src/gnome/gnc-split-reg.c:1312
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1042
 msgid "You would be deleting a transaction with reconciled splits! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr "Odstraňovali byste účetní položku s odsouhlasenými částmi! To není dobrý nápad, protože to způsobí neplatnost vašeho odsouhlaseného zůstatku."
@@ -9613,7 +9626,7 @@ msgid "matches no accounts"
 msgstr "neodpovídá žádnému účtu"
 
 #: ../src/gnome-search/search-account.c:219
-#: ../src/report/standard-reports/cash-flow.scm:409
+#: ../src/report/standard-reports/cash-flow.scm:260
 msgid "Selected Accounts"
 msgstr "Vybrané účty"
 
@@ -10180,92 +10193,92 @@ msgstr "Uložit _jako..."
 msgid "Export"
 msgstr "Export"
 
-#: ../src/gnome-utils/dialog-options.c:811
-#: ../src/gnome-utils/dialog-options.c:953
+#: ../src/gnome-utils/dialog-options.c:813
+#: ../src/gnome-utils/dialog-options.c:955
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: ../src/gnome-utils/dialog-options.c:813
+#: ../src/gnome-utils/dialog-options.c:815
 msgid "Select all accounts."
 msgstr "Vybrat všechny účty."
 
-#: ../src/gnome-utils/dialog-options.c:818
-#: ../src/gnome-utils/dialog-options.c:960
+#: ../src/gnome-utils/dialog-options.c:820
+#: ../src/gnome-utils/dialog-options.c:962
 msgid "Clear All"
 msgstr "Zrušit vše"
 
-#: ../src/gnome-utils/dialog-options.c:820
+#: ../src/gnome-utils/dialog-options.c:822
 msgid "Clear the selection and unselect all accounts."
 msgstr "Zrušit výběr všech účtů."
 
-#: ../src/gnome-utils/dialog-options.c:825
+#: ../src/gnome-utils/dialog-options.c:827
 #, fuzzy
 msgid "Select Children"
 msgstr "Zvolte měnu"
 
-#: ../src/gnome-utils/dialog-options.c:827
+#: ../src/gnome-utils/dialog-options.c:829
 #, fuzzy
 msgid "Select all descendents of selected account."
 msgstr "Odstranit vybraný účet"
 
-#: ../src/gnome-utils/dialog-options.c:833
-#: ../src/gnome-utils/dialog-options.c:967
+#: ../src/gnome-utils/dialog-options.c:835
+#: ../src/gnome-utils/dialog-options.c:969
 msgid "Select Default"
 msgstr "Vybrat implicitní"
 
-#: ../src/gnome-utils/dialog-options.c:835
+#: ../src/gnome-utils/dialog-options.c:837
 msgid "Select the default account selection."
 msgstr "Vybrat implicitní výběr účtu."
 
-#: ../src/gnome-utils/dialog-options.c:849
+#: ../src/gnome-utils/dialog-options.c:851
 #, fuzzy
 msgid "Show Hidden Accounts"
 msgstr "Zobrazovat _skryté účty"
 
-#: ../src/gnome-utils/dialog-options.c:851
+#: ../src/gnome-utils/dialog-options.c:853
 #, fuzzy
 msgid "Show accounts that have been marked hidden."
 msgstr "Zahrnout účty, které mají nulový zůstatek podílů."
 
-#: ../src/gnome-utils/dialog-options.c:955
+#: ../src/gnome-utils/dialog-options.c:957
 msgid "Select all entries."
 msgstr "Vybrat všechny položky."
 
-#: ../src/gnome-utils/dialog-options.c:962
+#: ../src/gnome-utils/dialog-options.c:964
 msgid "Clear the selection and unselect all entries."
 msgstr "Zrušit výběr všech položek."
 
-#: ../src/gnome-utils/dialog-options.c:969
+#: ../src/gnome-utils/dialog-options.c:971
 msgid "Select the default selection."
 msgstr "Vybrat implicitní výběr."
 
 #. The reset button on each option page
-#: ../src/gnome-utils/dialog-options.c:1129
+#: ../src/gnome-utils/dialog-options.c:1131
 #, fuzzy
 msgid "Reset defaults"
 msgstr "Implicitní nastavení účetní knihy"
 
-#: ../src/gnome-utils/dialog-options.c:1131
+#: ../src/gnome-utils/dialog-options.c:1133
 msgid "Reset all values to their defaults."
 msgstr "Vrátit všechny hodnoty na implicitní."
 
-#: ../src/gnome-utils/dialog-options.c:1455
+#: ../src/gnome-utils/dialog-options.c:1457
 msgid "Page"
 msgstr ""
 
-#: ../src/gnome-utils/dialog-options.c:2070
+#: ../src/gnome-utils/dialog-options.c:2072
 msgid "Clear"
 msgstr "Smazat"
 
-#: ../src/gnome-utils/dialog-options.c:2071
+#: ../src/gnome-utils/dialog-options.c:2073
 msgid "Clear any selected image file."
 msgstr "Zrušit vybraný soubor obrázku."
 
-#: ../src/gnome-utils/dialog-options.c:2073
+#: ../src/gnome-utils/dialog-options.c:2075
 msgid "Select image"
 msgstr "Zvolte obrázek"
 
-#: ../src/gnome-utils/dialog-options.c:2075
+#: ../src/gnome-utils/dialog-options.c:2077
 msgid "Select an image file."
 msgstr "Zvolte soubor obrázku"
 
@@ -10352,27 +10365,27 @@ msgstr "Musíte zadat platnou cenu."
 msgid "You must enter a valid `to' amount."
 msgstr "Musíte zadat platnou částku `do'."
 
-#: ../src/gnome-utils/dialog-transfer.c:1720
+#: ../src/gnome-utils/dialog-transfer.c:1740
 msgid "You must enter an amount to transfer."
 msgstr "Musíte zadat částku k převodu."
 
-#: ../src/gnome-utils/dialog-transfer.c:1960
+#: ../src/gnome-utils/dialog-transfer.c:1980
 msgid "Debit Account"
 msgstr "Účet Má dáti"
 
-#: ../src/gnome-utils/dialog-transfer.c:1978
+#: ../src/gnome-utils/dialog-transfer.c:1998
 msgid "Transfer From"
 msgstr "Převod z"
 
-#: ../src/gnome-utils/dialog-transfer.c:1982
+#: ../src/gnome-utils/dialog-transfer.c:2002
 msgid "Transfer To"
 msgstr "Převod do"
 
-#: ../src/gnome-utils/dialog-transfer.c:2039
+#: ../src/gnome-utils/dialog-transfer.c:2059
 msgid "Debit Amount:"
 msgstr "Částka Má dáti:"
 
-#: ../src/gnome-utils/dialog-transfer.c:2044
+#: ../src/gnome-utils/dialog-transfer.c:2064
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:14
 msgid "To Amount:"
 msgstr "Na částku:"
@@ -10791,6 +10804,11 @@ msgstr ""
 msgid "The database was opened read-only. Do you want to save it to a different place?"
 msgstr "Databáze %s zřejmě neexistuje. Chcete ji vytvořit?"
 
+#: ../src/gnome-utils/gnc-file.c:1579
+#: ../src/gnome-utils/gnc-main-window.c:1220
+msgid "<unknown>"
+msgstr "<neznámé>"
+
 #: ../src/gnome-utils/gnc-general-select.c:218
 msgid "View..."
 msgstr "Zobrazit..."
@@ -11092,58 +11110,54 @@ msgstr "Pokud je neuložíte, budou změny za posledních %d hodin a %d minut zt
 msgid "If you don't save, changes from the past %d days and %d hours will be discarded."
 msgstr "Pokud je neuložíte, budou změny za posledních %d dnů a %d hodin ztraceny."
 
-#: ../src/gnome-utils/gnc-main-window.c:1220
-msgid "<unknown>"
-msgstr "<neznámé>"
-
 #: ../src/gnome-utils/gnc-main-window.c:1257
 msgid "Close _Without Saving"
 msgstr "Zavřít _bez uložení"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: ../src/gnome-utils/gnc-main-window.c:1495
+#: ../src/gnome-utils/gnc-main-window.c:1482
 msgid "(read-only)"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:1503
+#: ../src/gnome-utils/gnc-main-window.c:1490
 #, fuzzy
 msgid "Unsaved Book"
 msgstr "Uzavřít účetní knihu"
 
-#: ../src/gnome-utils/gnc-main-window.c:1670
+#: ../src/gnome-utils/gnc-main-window.c:1659
 msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:1671
+#: ../src/gnome-utils/gnc-main-window.c:1660
 #, c-format
 msgid "Last modified on %x %X"
 msgstr ""
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.
-#: ../src/gnome-utils/gnc-main-window.c:1677
+#: ../src/gnome-utils/gnc-main-window.c:1666
 #, fuzzy, c-format
 msgid "File %s opened. %s"
 msgstr "Zpracovávání souboru QIF selhalo: %s"
 
-#: ../src/gnome-utils/gnc-main-window.c:2701
+#: ../src/gnome-utils/gnc-main-window.c:2690
 msgid "Unable to save to database."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:2703
+#: ../src/gnome-utils/gnc-main-window.c:2692
 msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:3992
+#: ../src/gnome-utils/gnc-main-window.c:3981
 msgid "Book Options"
 msgstr "Možnosti knihy"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
+#: ../src/gnome-utils/gnc-main-window.c:4367
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr "Osobní správce financí GnuCash. Způsob GNU, jak spravovat vaše peníze!"
 
-#: ../src/gnome-utils/gnc-main-window.c:4380
+#: ../src/gnome-utils/gnc-main-window.c:4369
 msgid "© 1997-2015 Contributors"
 msgstr ""
 
@@ -11151,7 +11165,7 @@ msgstr ""
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: ../src/gnome-utils/gnc-main-window.c:4417
+#: ../src/gnome-utils/gnc-main-window.c:4406
 msgid "translator_credits"
 msgstr "Miloslav Trmač <mitr@volny.cz>"
 
@@ -11274,20 +11288,20 @@ msgstr "_Znovu vyvážit"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:405
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:413
-#: ../src/register/ledger-core/split-register-control.c:1317
-#: ../src/register/ledger-core/split-register-control.c:1330
+#: ../src/register/ledger-core/split-register-control.c:1320
+#: ../src/register/ledger-core/split-register-control.c:1333
 msgid "This register does not support editing exchange rates."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:421
-#: ../src/register/ledger-core/split-register-control.c:1371
-#: ../src/register/ledger-core/split-register-control.c:1446
+#: ../src/register/ledger-core/split-register-control.c:1374
+#: ../src/register/ledger-core/split-register-control.c:1449
 msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr "Pro změnu kurzů účetní položky ji musíte rozbalit."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:461
-#: ../src/register/ledger-core/split-register-control.c:1418
-#: ../src/register/ledger-core/split-register-control.c:1431
+#: ../src/register/ledger-core/split-register-control.c:1421
+#: ../src/register/ledger-core/split-register-control.c:1434
 msgid "The two currencies involved equal each other."
 msgstr ""
 
@@ -11335,19 +11349,19 @@ msgid "_Return"
 msgstr "Celková návratnost"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1781
-#: ../src/register/ledger-core/split-register-control.c:1828
+#: ../src/register/ledger-core/split-register-control.c:1831
 msgid "Mark split as unreconciled?"
 msgstr "Označit část jako neodsouhlasenou?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1783
-#: ../src/register/ledger-core/split-register-control.c:1830
+#: ../src/register/ledger-core/split-register-control.c:1833
 #, fuzzy
 #| msgid "You are about to mark a reconciled split as unreconciled.  Doing so might make future reconciliation difficult!  Continue with this change?"
 msgid "You are about to mark a reconciled split as unreconciled. Doing so might make future reconciliation difficult! Continue with this change?"
 msgstr "Hodláte označit odsouhlasenou část jako neodsouhlasenou. To může ztížit budoucí odsouhlasování! Pokračovat s touto změnou?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1827
-#: ../src/register/ledger-core/split-register-control.c:1847
+#: ../src/register/ledger-core/split-register-control.c:1850
 msgid "_Unreconcile"
 msgstr "Zrušit _odsouhlasení"
 
@@ -11506,7 +11520,7 @@ msgstr "Šek"
 #: ../src/report/standard-reports/price-scatter.scm:41
 #: ../src/report/standard-reports/price-scatter.scm:346
 #: ../src/report/standard-reports/register.scm:160
-#: ../src/report/standard-reports/register.scm:444
+#: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
 #: ../src/report/standard-reports/transaction.scm:957
@@ -11852,7 +11866,7 @@ msgid " Scheduled "
 msgstr "Plánováno"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2413
-#: ../src/register/ledger-core/split-register-control.c:1531
+#: ../src/register/ledger-core/split-register-control.c:1534
 msgid "Save the changed transaction?"
 msgstr "Uložit změněnou účetní položku?"
 
@@ -11863,12 +11877,12 @@ msgid "The current transaction has changed. Would you like to record the changes
 msgstr "Aktuální šablona účetní položky byla změněna. Chcete tuto změnu zaznamenat?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2453
-#: ../src/register/ledger-core/split-register-control.c:1546
+#: ../src/register/ledger-core/split-register-control.c:1549
 msgid "_Discard Changes"
 msgstr "Za_hodit změny"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2455
-#: ../src/register/ledger-core/split-register-control.c:1548
+#: ../src/register/ledger-core/split-register-control.c:1551
 msgid "_Record Changes"
 msgstr "Za_znamenat změny"
 
@@ -11935,7 +11949,7 @@ msgid "Accounts / Void Reason"
 msgstr "Kód účtu"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2962
-#: ../src/import-export/import-main-matcher.c:492
+#: ../src/import-export/import-main-matcher.c:484
 msgid "R"
 msgstr "O"
 
@@ -12429,7 +12443,7 @@ msgstr "<b>_Rodičovský účet</b>"
 #: ../src/report/report-system/report.scm:71
 #: ../src/report/standard-reports/equity-statement.scm:109
 #: ../src/report/standard-reports/equity-statement.scm:113
-#: ../src/report/standard-reports/register.scm:398
+#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/trial-balance.scm:147
 #: ../src/report/standard-reports/trial-balance.scm:151
 #: ../src/report/stylesheets/stylesheet-easy.scm:46
@@ -16257,70 +16271,70 @@ msgstr "r/m/d"
 msgid "y/d/m"
 msgstr "r/d/m"
 
-#: ../src/import-export/import-main-matcher.c:263
+#: ../src/import-export/import-main-matcher.c:255
 msgid "Destination account for the auto-balance split."
 msgstr "Cílový účet pro část automatického vyrovnání"
 
-#: ../src/import-export/import-main-matcher.c:487
+#: ../src/import-export/import-main-matcher.c:479
 msgid "A"
 msgstr "P"
 
-#: ../src/import-export/import-main-matcher.c:489
+#: ../src/import-export/import-main-matcher.c:481
 msgid "U+R"
 msgstr ""
 
-#: ../src/import-export/import-main-matcher.c:498
+#: ../src/import-export/import-main-matcher.c:490
 msgid "Info"
 msgstr "Info"
 
-#: ../src/import-export/import-main-matcher.c:734
+#: ../src/import-export/import-main-matcher.c:726
 msgid "New, already balanced"
 msgstr "Nová, již vyrovnaná"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:760
+#: ../src/import-export/import-main-matcher.c:752
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Nová, převod %s do (ručně) \"%s\""
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:768
+#: ../src/import-export/import-main-matcher.c:760
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Nová, převod %s do (automaticky) \"%s\""
 
 #. Translators: %s is the amount to be transferred.
-#: ../src/import-export/import-main-matcher.c:779
+#: ../src/import-export/import-main-matcher.c:771
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Nová, NEVYROVNANÁ (pro převod %s potřebuji akci)!"
 
-#: ../src/import-export/import-main-matcher.c:791
+#: ../src/import-export/import-main-matcher.c:783
 msgid "Reconcile (manual) match"
 msgstr "Odsouhlasit (ruční) přiřazení"
 
-#: ../src/import-export/import-main-matcher.c:795
+#: ../src/import-export/import-main-matcher.c:787
 msgid "Reconcile (auto) match"
 msgstr "Odsouhlasit (automatické) přiřazení"
 
-#: ../src/import-export/import-main-matcher.c:801
-#: ../src/import-export/import-main-matcher.c:820
+#: ../src/import-export/import-main-matcher.c:793
+#: ../src/import-export/import-main-matcher.c:812
 msgid "Match missing!"
 msgstr "Přiřazení chybí!"
 
-#: ../src/import-export/import-main-matcher.c:810
+#: ../src/import-export/import-main-matcher.c:802
 #, fuzzy
 msgid "Update and reconcile (manual) match"
 msgstr "Odsouhlasit (ruční) přiřazení"
 
-#: ../src/import-export/import-main-matcher.c:814
+#: ../src/import-export/import-main-matcher.c:806
 #, fuzzy
 msgid "Update and reconcile (auto) match"
 msgstr "Odsouhlasit (automatické) přiřazení"
 
-#: ../src/import-export/import-main-matcher.c:825
+#: ../src/import-export/import-main-matcher.c:817
 msgid "Do not import (no action selected)"
 msgstr "Neimportovat (nevybrána žádná akce)"
 
@@ -17537,21 +17551,21 @@ msgstr "Hodláte změnit existující část. Opravdu to chcete udělat?"
 msgid "You are about to overwrite an existing transaction. Are you sure you want to do that?"
 msgstr "Hodláte změnit existující účetní položku. Opravdu to chcete udělat?"
 
-#: ../src/register/ledger-core/split-register-control.c:1356
+#: ../src/register/ledger-core/split-register-control.c:1359
 #, fuzzy
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr "Pro změnu kurzů účetní položky ji musíte rozbalit."
 
-#: ../src/register/ledger-core/split-register-control.c:1383
+#: ../src/register/ledger-core/split-register-control.c:1386
 #, fuzzy
 msgid "The entered account could not be found."
 msgstr "Soubor %s nelze najít."
 
-#: ../src/register/ledger-core/split-register-control.c:1482
+#: ../src/register/ledger-core/split-register-control.c:1485
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-control.c:1533
+#: ../src/register/ledger-core/split-register-control.c:1536
 #, fuzzy
 #| msgid "The current transaction has been changed.  Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
 msgid "The current transaction has been changed. Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
@@ -17750,7 +17764,7 @@ msgstr "Pořadí řazení"
 #: ../src/report/standard-reports/budget-balance-sheet.scm:103
 #: ../src/report/standard-reports/budget-flow.scm:47
 #: ../src/report/standard-reports/budget-income-statement.scm:118
-#: ../src/report/standard-reports/cash-flow.scm:51
+#: ../src/report/standard-reports/cash-flow.scm:53
 #: ../src/report/standard-reports/category-barchart.scm:78
 #: ../src/report/standard-reports/daily-reports.scm:58
 #: ../src/report/standard-reports/equity-statement.scm:79
@@ -17775,8 +17789,8 @@ msgstr "Měna sestavy"
 #: ../src/report/standard-reports/budget-balance-sheet.scm:104
 #: ../src/report/standard-reports/budget-flow.scm:44
 #: ../src/report/standard-reports/budget-income-statement.scm:119
-#: ../src/report/standard-reports/budget.scm:49
-#: ../src/report/standard-reports/cash-flow.scm:52
+#: ../src/report/standard-reports/budget.scm:50
+#: ../src/report/standard-reports/cash-flow.scm:54
 #: ../src/report/standard-reports/category-barchart.scm:79
 #: ../src/report/standard-reports/daily-reports.scm:59
 #: ../src/report/standard-reports/equity-statement.scm:80
@@ -18049,7 +18063,7 @@ msgstr "Maximální počet úrovní zobrazovaných ve stromu účtů"
 #: ../src/report/standard-reports/balance-sheet.scm:94
 #: ../src/report/standard-reports/budget-balance-sheet.scm:59
 #: ../src/report/standard-reports/budget-income-statement.scm:83
-#: ../src/report/standard-reports/budget.scm:67
+#: ../src/report/standard-reports/budget.scm:68
 #: ../src/report/standard-reports/income-statement.scm:70
 msgid "Flatten list to depth limit"
 msgstr "Zploštit seznam na limit hloubky"
@@ -18058,7 +18072,7 @@ msgstr "Zploštit seznam na limit hloubky"
 #: ../src/report/standard-reports/balance-sheet.scm:96
 #: ../src/report/standard-reports/budget-balance-sheet.scm:61
 #: ../src/report/standard-reports/budget-income-statement.scm:85
-#: ../src/report/standard-reports/budget.scm:69
+#: ../src/report/standard-reports/budget.scm:70
 #: ../src/report/standard-reports/income-statement.scm:72
 #, fuzzy
 #| msgid "Displays accounts which exceed the depth limit at the depth limit"
@@ -18543,7 +18557,7 @@ msgstr ""
 #: ../src/report/business-reports/fancy-invoice.scm:260
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:166
-#: ../src/report/standard-reports/register.scm:405
+#: ../src/report/standard-reports/register.scm:411
 #: ../src/report/standard-reports/transaction.scm:942
 msgid "Display the date?"
 msgstr "Zobrazovat datum?"
@@ -18551,7 +18565,7 @@ msgstr "Zobrazovat datum?"
 #: ../src/report/business-reports/easy-invoice.scm:255
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
-#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:426
 #: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the description?"
 msgstr "Zobrazovat popis?"
@@ -18644,19 +18658,19 @@ msgstr "Zobrazovat hodnotu položky"
 #: ../src/report/business-reports/invoice.scm:336
 #: ../src/report/business-reports/taxinvoice.scm:93
 #: ../src/report/report-system/report.scm:73
-#: ../src/report/standard-reports/register.scm:404
 #: ../src/report/standard-reports/register.scm:410
-#: ../src/report/standard-reports/register.scm:414
-#: ../src/report/standard-reports/register.scm:419
-#: ../src/report/standard-reports/register.scm:424
-#: ../src/report/standard-reports/register.scm:429
-#: ../src/report/standard-reports/register.scm:434
-#: ../src/report/standard-reports/register.scm:439
-#: ../src/report/standard-reports/register.scm:444
-#: ../src/report/standard-reports/register.scm:449
-#: ../src/report/standard-reports/register.scm:458
-#: ../src/report/standard-reports/register.scm:463
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:416
+#: ../src/report/standard-reports/register.scm:420
+#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:455
+#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:474
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:384
@@ -18717,7 +18731,7 @@ msgstr "Zobrazovat všechny individuální daně?"
 #: ../src/report/standard-reports/general-journal.scm:118
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
-#: ../src/report/standard-reports/register.scm:468
+#: ../src/report/standard-reports/register.scm:474
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Totals"
 msgstr "Součty"
@@ -18725,7 +18739,7 @@ msgstr "Součty"
 #: ../src/report/business-reports/easy-invoice.scm:315
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
-#: ../src/report/standard-reports/register.scm:469
+#: ../src/report/standard-reports/register.scm:475
 #: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the totals?"
 msgstr "Zobrazovat součty?"
@@ -20926,7 +20940,7 @@ msgstr "Zobrazí koláčový graf pasiv v zadaném časovém intervalu"
 #. Option names
 #: ../src/report/standard-reports/account-piecharts.scm:63
 #: ../src/report/standard-reports/average-balance.scm:38
-#: ../src/report/standard-reports/cash-flow.scm:44
+#: ../src/report/standard-reports/cash-flow.scm:46
 #: ../src/report/standard-reports/category-barchart.scm:75
 #: ../src/report/standard-reports/daily-reports.scm:56
 #: ../src/report/standard-reports/equity-statement.scm:67
@@ -20941,7 +20955,7 @@ msgstr "Počáteční datum"
 
 #: ../src/report/standard-reports/account-piecharts.scm:64
 #: ../src/report/standard-reports/average-balance.scm:39
-#: ../src/report/standard-reports/cash-flow.scm:45
+#: ../src/report/standard-reports/cash-flow.scm:47
 #: ../src/report/standard-reports/category-barchart.scm:76
 #: ../src/report/standard-reports/daily-reports.scm:57
 #: ../src/report/standard-reports/equity-statement.scm:68
@@ -21282,8 +21296,8 @@ msgstr "Zobrazovat poznámky o účtu"
 #: ../src/report/standard-reports/balance-sheet.scm:143
 #: ../src/report/standard-reports/budget-balance-sheet.scm:108
 #: ../src/report/standard-reports/budget-income-statement.scm:123
-#: ../src/report/standard-reports/budget.scm:50
-#: ../src/report/standard-reports/cash-flow.scm:53
+#: ../src/report/standard-reports/budget.scm:51
+#: ../src/report/standard-reports/cash-flow.scm:55
 #: ../src/report/standard-reports/equity-statement.scm:84
 #: ../src/report/standard-reports/income-statement.scm:116
 #: ../src/report/standard-reports/sx-summary.scm:100
@@ -21295,7 +21309,7 @@ msgstr "Zobrazovat kurzy"
 #: ../src/report/standard-reports/balance-sheet.scm:144
 #: ../src/report/standard-reports/budget-balance-sheet.scm:109
 #: ../src/report/standard-reports/budget-income-statement.scm:124
-#: ../src/report/standard-reports/cash-flow.scm:79
+#: ../src/report/standard-reports/cash-flow.scm:81
 #: ../src/report/standard-reports/equity-statement.scm:85
 #: ../src/report/standard-reports/income-statement.scm:117
 #: ../src/report/standard-reports/sx-summary.scm:101
@@ -21515,12 +21529,12 @@ msgid "Basis"
 msgstr "Základ"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:1072
-#: ../src/report/standard-reports/cash-flow.scm:458
+#: ../src/report/standard-reports/cash-flow.scm:309
 msgid "Money In"
 msgstr "Vstup peněz"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:1073
-#: ../src/report/standard-reports/cash-flow.scm:503
+#: ../src/report/standard-reports/cash-flow.scm:354
 msgid "Money Out"
 msgstr "Výstup peněz"
 
@@ -21849,7 +21863,7 @@ msgstr "Jestli zahrnout řádek obsahující celkové výnosy nebo ne"
 #: ../src/report/standard-reports/budget-barchart.scm:62
 #: ../src/report/standard-reports/budget-flow.scm:58
 #: ../src/report/standard-reports/budget-income-statement.scm:60
-#: ../src/report/standard-reports/budget.scm:84
+#: ../src/report/standard-reports/budget.scm:85
 #, fuzzy
 msgid "Budget to use."
 msgstr "Možnosti rozpočtu"
@@ -22138,7 +22152,7 @@ msgid "Budget Profit & Loss"
 msgstr "Období rozpočtu:"
 
 #. for gnc-build-url
-#: ../src/report/standard-reports/budget.scm:38
+#: ../src/report/standard-reports/budget.scm:39
 msgid "Budget Report"
 msgstr "Sestava rozpočtu"
 
@@ -22146,149 +22160,148 @@ msgstr "Sestava rozpočtu"
 #. in *one* place.
 #. (define optname-from-date (N_ "Start Date"))
 #. (define optname-to-date (N_ "End Date"))
-#: ../src/report/standard-reports/budget.scm:45
-#: ../src/report/standard-reports/cash-flow.scm:47
+#: ../src/report/standard-reports/budget.scm:46
+#: ../src/report/standard-reports/cash-flow.scm:49
 msgid "Account Display Depth"
 msgstr "Hloubka zobrazování účtů"
 
-#: ../src/report/standard-reports/budget.scm:46
-#: ../src/report/standard-reports/cash-flow.scm:48
+#: ../src/report/standard-reports/budget.scm:47
+#: ../src/report/standard-reports/cash-flow.scm:50
 msgid "Always show sub-accounts"
 msgstr "Vždy zobrazovat podúčty"
 
-#: ../src/report/standard-reports/budget.scm:51
-#: ../src/report/standard-reports/cash-flow.scm:54
+#: ../src/report/standard-reports/budget.scm:52
+#: ../src/report/standard-reports/cash-flow.scm:56
 msgid "Show Full Account Names"
 msgstr "Zobrazovat úplné názvy účtů"
 
-#: ../src/report/standard-reports/budget.scm:52
+#: ../src/report/standard-reports/budget.scm:53
 #, fuzzy
 msgid "Select Columns"
 msgstr "Vyberte účty"
 
-#: ../src/report/standard-reports/budget.scm:53
+#: ../src/report/standard-reports/budget.scm:54
 #, fuzzy
 msgid "Show Budget"
 msgstr "Nový rozpočet"
 
-#: ../src/report/standard-reports/budget.scm:54
+#: ../src/report/standard-reports/budget.scm:55
 #, fuzzy
 msgid "Display a column for the budget values."
 msgstr "Zobrazovat hodnotu položky"
 
-#: ../src/report/standard-reports/budget.scm:55
+#: ../src/report/standard-reports/budget.scm:56
 #, fuzzy
 msgid "Show Actual"
 msgstr "Zobrazit tabulku"
 
-#: ../src/report/standard-reports/budget.scm:56
+#: ../src/report/standard-reports/budget.scm:57
 #, fuzzy
 msgid "Display a column for the actual values."
 msgstr "Zobrazovat všechny individuální daně?"
 
-#: ../src/report/standard-reports/budget.scm:57
+#: ../src/report/standard-reports/budget.scm:58
 #, fuzzy
 msgid "Show Difference"
 msgstr "Rozdíl"
 
-#: ../src/report/standard-reports/budget.scm:58
+#: ../src/report/standard-reports/budget.scm:59
 #, fuzzy
 msgid "Display the difference as budget - actual."
 msgstr "Zobrazovat datum odsouhlasení?"
 
-#: ../src/report/standard-reports/budget.scm:59
+#: ../src/report/standard-reports/budget.scm:60
 #, fuzzy
 msgid "Show Column with Totals"
 msgstr "Zobrazovat částečné součty"
 
-#: ../src/report/standard-reports/budget.scm:60
+#: ../src/report/standard-reports/budget.scm:61
 #, fuzzy
 msgid "Display a column with the row totals."
 msgstr "Zobrazovat součty?"
 
-#: ../src/report/standard-reports/budget.scm:61
+#: ../src/report/standard-reports/budget.scm:62
 msgid "Roll up budget amounts to parent"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:62
+#: ../src/report/standard-reports/budget.scm:63
 msgid "If parent account does not have its own budget value, use the sum of the child account budget values."
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:63
+#: ../src/report/standard-reports/budget.scm:64
 #, fuzzy
 msgid "Include accounts with zero total balances and budget values"
 msgstr "Zahrnout účty s nulovými celkovými zůstatky"
 
-#: ../src/report/standard-reports/budget.scm:64
+#: ../src/report/standard-reports/budget.scm:65
 #, fuzzy
 msgid "Include accounts with zero total (recursive) balances and budget values in this report."
 msgstr "Zahrnout do téo sestavy účty snulovými celkovými (rekurzivními) zůstatky"
 
-#: ../src/report/standard-reports/budget.scm:65
+#: ../src/report/standard-reports/budget.scm:66
 #, fuzzy
 msgid "Compress prior/later periods"
 msgstr "_Komprimovat soubory"
 
-#: ../src/report/standard-reports/budget.scm:66
+#: ../src/report/standard-reports/budget.scm:67
 msgid "Accumulate columns for periods before and after the current period to allow focus on the current period."
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:104
-#: ../src/report/standard-reports/cash-flow.scm:85
+#: ../src/report/standard-reports/budget.scm:105
+#: ../src/report/standard-reports/cash-flow.scm:87
 #, fuzzy
 #| msgid "Show full account names (including parent accounts)"
 msgid "Show full account names (including parent accounts)."
 msgstr "Zobrazovat úplné názvy účtů (včetně rodičovských účtů)"
 
-#: ../src/report/standard-reports/budget.scm:447
+#: ../src/report/standard-reports/budget.scm:448
 msgid "Bgt"
 msgstr "Rozp"
 
-#: ../src/report/standard-reports/budget.scm:455
+#: ../src/report/standard-reports/budget.scm:456
 msgid "Act"
 msgstr "Účet"
 
-#: ../src/report/standard-reports/budget.scm:463
+#: ../src/report/standard-reports/budget.scm:464
 msgid "Diff"
 msgstr ""
 
-#: ../src/report/standard-reports/budget.scm:661
+#: ../src/report/standard-reports/budget.scm:621
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#. for gnc-build-url
-#: ../src/report/standard-reports/cash-flow.scm:40
+#: ../src/report/standard-reports/cash-flow.scm:42
 msgid "Cash Flow"
 msgstr "Tok hotovosti"
 
-#: ../src/report/standard-reports/cash-flow.scm:55
+#: ../src/report/standard-reports/cash-flow.scm:57
 #, fuzzy
 msgid "Include Trading Accounts in report"
 msgstr "Zahrnout součet aktiv"
 
-#: ../src/report/standard-reports/cash-flow.scm:104
+#: ../src/report/standard-reports/cash-flow.scm:106
 #, fuzzy
 #| msgid "Include transactions to/from filter accounts only"
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "Zahrnout jen účetní položky z/do filtrovaných účtů"
 
-#: ../src/report/standard-reports/cash-flow.scm:390
+#: ../src/report/standard-reports/cash-flow.scm:241
 msgid "%s and subaccounts"
 msgstr "%s a podúčty"
 
-#: ../src/report/standard-reports/cash-flow.scm:391
+#: ../src/report/standard-reports/cash-flow.scm:242
 msgid "%s and selected subaccounts"
 msgstr "%s a vybrané podúčty"
 
-#: ../src/report/standard-reports/cash-flow.scm:423
+#: ../src/report/standard-reports/cash-flow.scm:274
 msgid "Money into selected accounts comes from"
 msgstr "Peníze do vybraných účtů přichází z"
 
-#: ../src/report/standard-reports/cash-flow.scm:468
+#: ../src/report/standard-reports/cash-flow.scm:319
 msgid "Money out of selected accounts goes to"
 msgstr "Peníze z vybraných účtů odchází do"
 
-#: ../src/report/standard-reports/cash-flow.scm:513
+#: ../src/report/standard-reports/cash-flow.scm:364
 msgid "Difference"
 msgstr "Rozdíl"
 
@@ -22502,7 +22515,7 @@ msgstr "Hlavní deník"
 #: ../src/report/standard-reports/general-journal.scm:109
 #: ../src/report/standard-reports/general-ledger.scm:78
 #: ../src/report/standard-reports/register.scm:145
-#: ../src/report/standard-reports/register.scm:410
+#: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:386
 #: ../src/report/standard-reports/transaction.scm:945
 #, fuzzy
@@ -22514,7 +22527,7 @@ msgstr "Akce"
 #: ../src/report/standard-reports/general-journal.scm:117
 #: ../src/report/standard-reports/general-ledger.scm:92
 #: ../src/report/standard-reports/general-ledger.scm:112
-#: ../src/report/standard-reports/register.scm:463
+#: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:404
 #: ../src/report/standard-reports/transaction.scm:959
 msgid "Running Balance"
@@ -22940,118 +22953,118 @@ msgstr "Současná hodnota:"
 msgid "Credit Value"
 msgstr "Současná hodnota:"
 
-#: ../src/report/standard-reports/register.scm:399
+#: ../src/report/standard-reports/register.scm:405
 #, fuzzy
 #| msgid "The title of the report"
 msgid "The title of the report."
 msgstr "Nadpis sestavy"
 
-#: ../src/report/standard-reports/register.scm:411
+#: ../src/report/standard-reports/register.scm:417
 #, fuzzy
 #| msgid "Display the check number?"
 msgid "Display the check number/action?"
 msgstr "Zobrazovat číslo šeku?"
 
-#: ../src/report/standard-reports/register.scm:415
+#: ../src/report/standard-reports/register.scm:421
 #: ../src/report/standard-reports/transaction.scm:945
 #: ../src/report/standard-reports/transaction.scm:946
 msgid "Display the check number?"
 msgstr "Zobrazovat číslo šeku?"
 
-#: ../src/report/standard-reports/register.scm:425
+#: ../src/report/standard-reports/register.scm:431
 #: ../src/report/standard-reports/transaction.scm:973
 msgid "Display the memo?"
 msgstr "Zobrazovat poznámku?"
 
-#: ../src/report/standard-reports/register.scm:430
+#: ../src/report/standard-reports/register.scm:436
 msgid "Display the account?"
 msgstr "Zobrazovat účet?"
 
-#: ../src/report/standard-reports/register.scm:435
+#: ../src/report/standard-reports/register.scm:441
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the number of shares?"
 msgstr "Zobrazovat počet podílů?"
 
-#: ../src/report/standard-reports/register.scm:440
+#: ../src/report/standard-reports/register.scm:446
 #, fuzzy
 msgid "Display the name of lot the shares are in?"
 msgstr "Zobrazovat počet podílů?"
 
-#: ../src/report/standard-reports/register.scm:445
+#: ../src/report/standard-reports/register.scm:451
 #: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the shares price?"
 msgstr "Zobrazovat cenu podílů"
 
-#: ../src/report/standard-reports/register.scm:450
+#: ../src/report/standard-reports/register.scm:456
 #: ../src/report/standard-reports/transaction.scm:984
 msgid "Display the amount?"
 msgstr "Zobrazovat částku?"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:459
 #: ../src/report/standard-reports/transaction.scm:624
 #: ../src/report/standard-reports/transaction.scm:988
 msgid "Single"
 msgstr "Jednoduchý"
 
-#: ../src/report/standard-reports/register.scm:453
+#: ../src/report/standard-reports/register.scm:459
 #: ../src/report/standard-reports/transaction.scm:988
 #, fuzzy
 #| msgid "Single Column Display"
 msgid "Single Column Display."
 msgstr "Zobrazení v jednou sloupci"
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:460
 #: ../src/report/standard-reports/transaction.scm:989
 msgid "Double"
 msgstr "Dvojitý"
 
-#: ../src/report/standard-reports/register.scm:454
+#: ../src/report/standard-reports/register.scm:460
 #: ../src/report/standard-reports/transaction.scm:989
 #, fuzzy
 #| msgid "Two Column Display"
 msgid "Two Column Display."
 msgstr "Zobrazení ve dvou sloupcích"
 
-#: ../src/report/standard-reports/register.scm:459
+#: ../src/report/standard-reports/register.scm:465
 #, fuzzy
 msgid "Display the value in transaction currency?"
 msgstr "Zobrazovat odkaz účetní položky?"
 
-#: ../src/report/standard-reports/register.scm:464
+#: ../src/report/standard-reports/register.scm:470
 #: ../src/report/standard-reports/transaction.scm:959
 #, fuzzy
 #| msgid "Display a running balance"
 msgid "Display a running balance?"
 msgstr "Zobrazovat průběžný zůstatek"
 
-#: ../src/report/standard-reports/register.scm:617
+#: ../src/report/standard-reports/register.scm:623
 msgid "Total Debits"
 msgstr "Celkem Má dáti"
 
-#: ../src/report/standard-reports/register.scm:619
+#: ../src/report/standard-reports/register.scm:625
 msgid "Total Credits"
 msgstr "Celkem Dal"
 
-#: ../src/report/standard-reports/register.scm:621
+#: ../src/report/standard-reports/register.scm:627
 #, fuzzy
 msgid "Total Value Debits"
 msgstr "Celkem Má dáti"
 
-#: ../src/report/standard-reports/register.scm:623
+#: ../src/report/standard-reports/register.scm:629
 #, fuzzy
 msgid "Total Value Credits"
 msgstr "Celkem Dal"
 
-#: ../src/report/standard-reports/register.scm:626
+#: ../src/report/standard-reports/register.scm:632
 msgid "Net Change"
 msgstr "Čistá změna"
 
-#: ../src/report/standard-reports/register.scm:629
+#: ../src/report/standard-reports/register.scm:635
 #, fuzzy
 msgid "Value Change"
 msgstr "Čistá změna"
 
-#: ../src/report/standard-reports/register.scm:788
+#: ../src/report/standard-reports/register.scm:794
 msgid "Client"
 msgstr "Klient"
 
@@ -24474,51 +24487,51 @@ msgstr "Vítejte v GnuCash"
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr "GnuCash 2.0 má mnoho hezkých vlastností. Tady je jich několik."
 
-#: ../src/scm/price-quotes.scm:500 ../src/scm/price-quotes.scm:501
+#: ../src/scm/price-quotes.scm:486 ../src/scm/price-quotes.scm:487
 msgid "No commodities marked for quote retrieval."
 msgstr "Pro získávání cen nebyly vybrány žádné komodity."
 
-#: ../src/scm/price-quotes.scm:505 ../src/scm/price-quotes.scm:506
-#: ../src/scm/price-quotes.scm:529 ../src/scm/price-quotes.scm:532
+#: ../src/scm/price-quotes.scm:491 ../src/scm/price-quotes.scm:492
+#: ../src/scm/price-quotes.scm:515 ../src/scm/price-quotes.scm:518
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Nemohu získat uvedené ceny nebo rozpoznat problém."
 
-#: ../src/scm/price-quotes.scm:511 ../src/scm/price-quotes.scm:513
+#: ../src/scm/price-quotes.scm:497 ../src/scm/price-quotes.scm:499
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
 msgstr "Chybí vám některé potřebné knihovny Perlu. Nainstalujte je spuštěním 'gnc-fq-update' jako root."
 
-#: ../src/scm/price-quotes.scm:519 ../src/scm/price-quotes.scm:520
+#: ../src/scm/price-quotes.scm:505 ../src/scm/price-quotes.scm:506
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Při získávání cen došlo k systémové chybě."
 
-#: ../src/scm/price-quotes.scm:525 ../src/scm/price-quotes.scm:526
+#: ../src/scm/price-quotes.scm:511 ../src/scm/price-quotes.scm:512
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Při získávání cen došlo k neznámé chybě."
 
-#: ../src/scm/price-quotes.scm:542 ../src/scm/price-quotes.scm:553
-#: ../src/scm/price-quotes.scm:561
+#: ../src/scm/price-quotes.scm:528 ../src/scm/price-quotes.scm:539
+#: ../src/scm/price-quotes.scm:547
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Nemohu získat uvedené ceny těchto položek:"
 
-#: ../src/scm/price-quotes.scm:547
+#: ../src/scm/price-quotes.scm:533
 msgid "Continue using only the good quotes?"
 msgstr "Pokračovat jen s dobrými uvedenými cenami?"
 
-#: ../src/scm/price-quotes.scm:566
+#: ../src/scm/price-quotes.scm:552
 msgid "Continuing with good quotes."
 msgstr "Pokračuji s dobrými uvedenými cenami."
 
-#: ../src/scm/price-quotes.scm:581 ../src/scm/price-quotes.scm:590
+#: ../src/scm/price-quotes.scm:567 ../src/scm/price-quotes.scm:576
 msgid "Unable to create prices for these items:"
 msgstr "Nemohu vytvořit ceny pro tyto položky:"
 
-#: ../src/scm/price-quotes.scm:586
+#: ../src/scm/price-quotes.scm:572
 msgid "Add remaining good quotes?"
 msgstr "Přidat zbývající dobré uvedené ceny?"
 
-#: ../src/scm/price-quotes.scm:595
+#: ../src/scm/price-quotes.scm:581
 msgid "Adding remaining good quotes."
 msgstr "Přidávám zbývající dobré uvedené ceny."
 
