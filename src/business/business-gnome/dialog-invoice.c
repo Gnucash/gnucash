@@ -2697,7 +2697,6 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
 {
     InvoiceWindow *iw;
     GncInvoice *new_invoice = NULL;
-    gchar *new_id;
     GDate new_date_gdate;
 
     g_assert(old_invoice);
@@ -2718,11 +2717,8 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
         }
     }
 
-    // Set a new id from the respective counter
-    new_id = gncInvoiceNextID(gnc_get_current_book(),
-                              gncInvoiceGetOwner(new_invoice));
-    gncInvoiceSetID(new_invoice, new_id);
-    g_free(new_id);
+    // Unset the invoice ID, let it get allocated later
+    gncInvoiceSetID(new_invoice, "");
 
     // Modify the date to today
     if (new_date)
