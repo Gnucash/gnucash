@@ -870,105 +870,22 @@ xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
     gnc_sx_commit_edit(sx);
 }
 
-
 GDate
-xaccSchedXactionGetNextInstance(const SchedXaction *sx, SXTmpStateData *stateData )
-{
-    GDate    last_occur, next_occur, tmpDate;
-
-    g_date_clear( &last_occur, 1 );
-    g_date_clear( &next_occur, 1 );
-    g_date_clear( &tmpDate, 1 );
-
-    if ( g_date_valid( &sx->last_date ) )
-    {
-        last_occur = sx->last_date;
-    }
-
-    if ( stateData != NULL )
-    {
-        SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-        last_occur = tsd->last_date;
-    }
-
-    if ( g_date_valid( &sx->start_date ) )
-    {
-        if ( g_date_valid(&last_occur) )
-        {
-            last_occur =
-                ( g_date_compare( &last_occur,
-                                  &sx->start_date ) > 0 ?
-                  last_occur : sx->start_date );
-        }
-        else
-        {
-            /* Think about this for a second, and you realize that if the
-             * start date is _today_, we need a last-occur date such that
-             * the 'next instance' is after that date, and equal to the
-             * start date... one day should be good.
-             *
-             * This only holds for the first instance [read: if the
-             * last[-occur]_date is invalid] */
-            last_occur = sx->start_date;
-            g_date_subtract_days( &last_occur, 1 );
-        }
-    }
-
-    recurrenceListNextInstance(sx->schedule, &last_occur, &next_occur);
-
-    /* out-of-bounds check */
-    if ( xaccSchedXactionHasEndDate( sx ) )
-    {
-        const GDate *end_date = xaccSchedXactionGetEndDate( sx );
-        if ( g_date_compare( &next_occur, end_date ) > 0 )
-        {
-            g_debug("next_occur past end date");
-            g_date_clear( &next_occur, 1 );
-        }
-    }
-    else if ( xaccSchedXactionHasOccurDef( sx ) )
-    {
-        if ( stateData )
-        {
-            SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-            if ( tsd->num_occur_rem == 0 )
-            {
-                g_debug("no more occurances remain");
-                g_date_clear( &next_occur, 1 );
-            }
-        }
-        else
-        {
-            if ( sx->num_occurances_remain == 0 )
-            {
-                g_date_clear( &next_occur, 1 );
-            }
-        }
-    }
-
-    return next_occur;
-}
-
-GDate
-xaccSchedXactionGetInstanceAfter( const SchedXaction *sx,
-                                  GDate *date,
-                                  SXTmpStateData *stateData )
+xaccSchedXactionGetNextInstance (const SchedXaction *sx, SXTmpStateData *tsd)
 {
     GDate prev_occur, next_occur;
 
     g_date_clear( &prev_occur, 1 );
-    if ( date )
-    {
-        prev_occur = *date;
-    }
-
-    if ( stateData != NULL )
-    {
-        SXTmpStateData *tsd = (SXTmpStateData*)stateData;
+    if ( tsd != NULL )
         prev_occur = tsd->last_date;
-    }
 
-    if ( ! g_date_valid( &prev_occur ) )
+    /* If prev_occur is in the "cleared" state and sx->start_date isn't, then
+     * we're at the beginning. We want to pretend prev_occur is the day before
+     * the start_date in case the start_date is today so that the SX will fire
+     * today. If start_date isn't valid either then the SX will fire anyway, no
+     * harm done.
+     */
+    if (! g_date_valid( &prev_occur ) && g_date_valid(&sx->start_date))
     {
         /* We must be at the beginning. */
         prev_occur = sx->start_date;
@@ -987,20 +904,10 @@ xaccSchedXactionGetInstanceAfter( const SchedXaction *sx,
     }
     else if ( xaccSchedXactionHasOccurDef( sx ) )
     {
-        if ( stateData )
+        if ((tsd && tsd->num_occur_rem == 0) ||
+            (!tsd && sx->num_occurances_remain == 0 ))
         {
-            SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-            if ( tsd->num_occur_rem == 0 )
-            {
-                g_date_clear( &next_occur, 1 );
-            }
-        }
-        else
-        {
-            if ( sx->num_occurances_remain == 0 )
-            {
-                g_date_clear( &next_occur, 1 );
-            }
+            g_date_clear( &next_occur, 1 );
         }
     }
     return next_occur;
@@ -1142,45 +1049,36 @@ gnc_sx_create_temporal_state(const SchedXaction *sx )
 }
 
 void
-gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData )
+gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *tsd )
 {
-    GDate unused;
-    SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-
-    g_date_clear( &unused, 1 );
-    tsd->last_date =
-        xaccSchedXactionGetInstanceAfter( sx,
-                                          &unused,
-                                          stateData );
-    if ( xaccSchedXactionHasOccurDef( sx ) )
+    g_return_if_fail(tsd != NULL);
+    tsd->last_date = xaccSchedXactionGetNextInstance (sx, tsd);
+    if (xaccSchedXactionHasOccurDef (sx))
     {
-        tsd->num_occur_rem -= 1;
+        --tsd->num_occur_rem;
     }
-    tsd->num_inst += 1;
+    ++tsd->num_inst;
 }
 
 void
-gnc_sx_destroy_temporal_state( SXTmpStateData *stateData )
+gnc_sx_destroy_temporal_state (SXTmpStateData *tsd)
 {
-    g_free( (SXTmpStateData*)stateData );
+    g_free(tsd);
 }
 
 SXTmpStateData*
-gnc_sx_clone_temporal_state( SXTmpStateData *stateData )
+gnc_sx_clone_temporal_state (SXTmpStateData *tsd)
 {
-    SXTmpStateData *toRet, *tsd;
-    tsd = (SXTmpStateData*)stateData;
-    toRet = g_memdup( tsd, sizeof( SXTmpStateData ) );
+    SXTmpStateData *toRet;
+    toRet = g_memdup (tsd, sizeof (SXTmpStateData));
     return toRet;
 }
 
-static
-gint
+static gint
 _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 {
-    SXTmpStateData *tsd_a, *tsd_b;
-    tsd_a = (SXTmpStateData*)a;
-    tsd_b = (SXTmpStateData*)b;
+    const SXTmpStateData *tsd_a = (SXTmpStateData*)a;
+    const SXTmpStateData *tsd_b = (SXTmpStateData*)b;
 
     if ( !tsd_a && !tsd_b )
         return 0;
@@ -1207,8 +1105,8 @@ gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 }
 
 /**
- * Removes an instance from the deferred list.  If the instance is no longer
- * useful; gnc_sx_destroy_temporal_state() it.
+ * Removes an instance from the deferred list. The saved SXTmpStateData existed
+ * for comparison only, so destroy it.
  **/
 void
 gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )

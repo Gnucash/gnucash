@@ -27,6 +27,10 @@ dist_doc_DATA = \
   ChangeLog.2005 \
   ChangeLog.2004 \
   ChangeLog.2003 \
+  ChangeLog.2002 \
+  ChangeLog.2001 \
+  ChangeLog.2000 \
+  ChangeLog.1999 \
   DOCUMENTERS \
   HACKING \
   INSTALL \
@@ -215,7 +219,7 @@ ChangeLog: NEWS
 	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
 	else \
 	  if test x$(VCS_TYPE) = xgit ; then \
-	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2013-01-01 > $(abs_builddir)/$@ ; \
+	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2016-01-01 > $(abs_builddir)/$@ ; \
 	  else \
 	    touch $(abs_builddir)/$@ ; \
 	    echo "Note: not in svn or git. ChangeLog not regenerated." ; \

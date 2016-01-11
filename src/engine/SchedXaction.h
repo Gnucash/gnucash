@@ -269,10 +269,8 @@ SXTmpStateData *gnc_sx_clone_temporal_state( SXTmpStateData *stateData );
  * for possible action without modifying the SX state until action is
  * actually taken.
 */
-GDate xaccSchedXactionGetNextInstance(const SchedXaction *sx, SXTmpStateData *stateData );
-GDate xaccSchedXactionGetInstanceAfter(const SchedXaction *sx,
-                                       GDate *date,
-                                       SXTmpStateData *stateData );
+GDate xaccSchedXactionGetNextInstance(const SchedXaction *sx,
+                                      SXTmpStateData *stateData);
 
 /** \brief Set the schedxaction's template transaction.
 

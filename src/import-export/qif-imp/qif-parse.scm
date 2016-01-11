@@ -419,7 +419,7 @@
   (let ((retval '()))
     (if (or (not (string? date-string))
             (not (> (string-length date-string) 0)))
-        (set! retval possible-formats)
+        (set! retval #f)
         (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
       (if match
           (if (match:substring match 1)

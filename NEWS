@@ -1,5 +1,36 @@
 Version history:
 ------- -------
+2.6.11 - 11 January 2016
+Announcement: GnuCash 2.6.11 Release 2016-01-11
+GnuCash 2.6.11 released
+
+The GnuCash development team announces GnuCash 2.6.11, a snap release
+to correct a QIF import regression and the eleventh maintenance
+release in the 2.6-stable series.
+
+The following bugs are fixed:
+     Bug 680104 - Scheduled Tranaction formula not calculated when variables
+                  are mixed with constants.
+     Bug 756335 - When importing, date selection causes exit crash.
+     Bug 759570 - Postponing a repeating SX skips over the instance.
+     Bug 759674 - GNUCash crashes when importing invoices or bills with
+                  delimited import.
+     Bug 759859 - Reconcilation does not convert transactions' currency to
+                  the main one making reconcilation impossible.
+     Bug 760052 - missing flag translatable in Custom Report.
+     Bug 760079 - Translations comments: Remove translatable flag from
+                  placeholder labels in dialog date-close.
+     Bug 760398 - Cancelling the creation of a duplicate bill or invoice
+                  doesn't reset the invoice number counter
+
+Other repairs that weren't marked as bugs in git:
+     Add Account.AssignLots to python bindings.
+     Allow panel that provides information about TXF categories to be adjusted by the user in the Income Tax Information dialog under Edit->Tax Report Options.
+     Minor improvement to information provided about TXF categories in the Income Tax Information dialog under Edit->Tax Report Options.
+
+
+Updated Translations: German
+
 2.6.10 - 20 December 2015
 Announcement: GnuCash 2.6.10 Release 2015-12-20
 GnuCash 2.6.10 released

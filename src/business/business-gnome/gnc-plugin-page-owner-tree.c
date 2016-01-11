@@ -605,19 +605,19 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     case GNC_OWNER_UNDEFINED :
         break;
     case GNC_OWNER_CUSTOMER :
-        label = N_("Customers");
+        label = _("Customers");
         state_section = "Customers Overview";
         break;
     case GNC_OWNER_JOB :
-        label = N_("Jobs");
+        label = _("Jobs");
         state_section = "Jobs Overview";
         break;
     case GNC_OWNER_VENDOR :
-        label = N_("Vendors");
+        label = _("Vendors");
         state_section = "Vendors Overview";
         break;
     case GNC_OWNER_EMPLOYEE :
-        label = N_("Employees");
+        label = _("Employees");
         state_section = "Employees Overview";
         break;
     }

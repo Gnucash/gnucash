@@ -258,7 +258,7 @@ SCM_FILE_LINKS = \
   ${gncscm_DATA}
 endif
 
-.scm-links: 
+.scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
@@ -311,8 +311,9 @@ CLEANFILES = \
 
 MAINTAINERCLEANFILES = swig-gnome-utils.c
 
-# FIXME: Symlinking directories only works on non-win32.
+# We want to do this only for the Gnome help tool on Linux and MacPorts.
 if !PLATFORM_WIN32
+if !PLATFORM_OSX_QUARTZ
 #
 # I hate inconsistent standards. Autotools puts help files into
 # ${datadir}/gnome/help/${program} while the gnome2 libraries expect
@@ -323,6 +324,7 @@ install-data-hook:
 
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
+endif
 endif
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui\"

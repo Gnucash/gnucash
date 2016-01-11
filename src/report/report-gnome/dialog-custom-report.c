@@ -312,7 +312,7 @@ custom_report_delete (SCM guid, CustomReportDialog *crd)
     report_name = gnc_scm_to_utf8_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
 
     /* we must confirm the user wants to delete their precious custom report! */
-    if (gnc_verify_dialog(crd->dialog, FALSE, "Are you sure you want to delete %s?", report_name))
+    if (gnc_verify_dialog(crd->dialog, FALSE, _("Are you sure you want to delete %s?"), report_name))
     {
         SCM del_report = scm_c_eval_string("gnc:delete-report");
         scm_call_1(del_report, guid);

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-12 18:36+0100\n"
-"PO-Revision-Date: 2015-12-12 13:43+0100\n"
+"POT-Creation-Date: 2016-01-05 05:25+0100\n"
+"PO-Revision-Date: 2015-12-21 20:26+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -1369,7 +1369,7 @@ msgid "Proximo"
 msgstr "Im nächsten Monat"
 
 #: ../src/business/business-gnome/dialog-billterms.c:533
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:26
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:27
 #: ../src/report/business-reports/customer-summary.scm:224
 #: ../src/report/business-reports/job-report.scm:255
 #: ../src/report/business-reports/owner-report.scm:341
@@ -1662,7 +1662,7 @@ msgstr ""
 "vorliegen."
 
 #: ../src/business/business-gnome/dialog-invoice.c:1222
-#: ../src/gnome/window-reconcile2.c:1142 ../src/gnome/window-reconcile.c:1142
+#: ../src/gnome/window-reconcile2.c:1142 ../src/gnome/window-reconcile.c:1179
 msgid "Total:"
 msgstr "Summe:"
 
@@ -2003,8 +2003,8 @@ msgstr "Gutschrift?"
 #: ../src/import-export/import-main-matcher.c:476
 #: ../src/import-export/import-match-picker.c:345
 #: ../src/import-export/import-match-picker.c:385
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3498
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3535
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3504
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3541
 #: ../src/report/business-reports/customer-summary.scm:71
 #: ../src/report/business-reports/job-report.scm:48
 #: ../src/report/business-reports/owner-report.scm:57
@@ -2542,7 +2542,7 @@ msgstr "Aktuellen Posten speichern"
 
 #. Add the Cancel button for the matcher
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:156
-#: ../src/gnome/window-reconcile2.c:2166 ../src/gnome/window-reconcile.c:2166
+#: ../src/gnome/window-reconcile2.c:2166 ../src/gnome/window-reconcile.c:2206
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1473
 msgid "_Cancel"
 msgstr "_Abbrechen"
@@ -2553,7 +2553,7 @@ msgstr "Aktuellen Posten abbrechen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:161
 #: ../src/gnome/gnc-plugin-page-sx-list.c:158
-#: ../src/gnome/window-reconcile2.c:2208 ../src/gnome/window-reconcile.c:2208
+#: ../src/gnome/window-reconcile2.c:2208 ../src/gnome/window-reconcile.c:2248
 msgid "_Delete"
 msgstr "_Löschen"
 
@@ -2988,7 +2988,7 @@ msgstr ""
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:11
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:23
 msgid "The invoice report to be used for printing."
-msgstr ""
+msgstr "Der Rechnungsbericht wird zum Drucken benutzt."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:12
 msgid "The name of the report to be used for invoice printing."
@@ -3342,7 +3342,6 @@ msgid "Choose Owner Dialog"
 msgstr "Auswahl des Besitzers"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-choose-owner.glade.h:2
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:5
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:66
 #: ../src/gnome/dialog-find-transactions2.c:154
 #: ../src/gnome/dialog-find-transactions.c:153
@@ -3356,8 +3355,8 @@ msgstr "Auswahl des Besitzers"
 #: ../src/import-export/import-main-matcher.c:477
 #: ../src/import-export/import-match-picker.c:346
 #: ../src/import-export/import-match-picker.c:386
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3489
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3526
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3495
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3532
 #: ../src/register/ledger-core/split-register-model.c:286
 #: ../src/report/business-reports/customer-summary.scm:70
 #: ../src/report/business-reports/easy-invoice.scm:112
@@ -3539,32 +3538,6 @@ msgstr "Lieferadresse"
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:1
 msgid "Question"
 msgstr "Frage"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:2
-msgid "Dummy message"
-msgstr "Beispiel-Nachricht"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:3
-msgid "postd"
-msgstr "Gebucht"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:4
-msgid "duedate"
-msgstr "Fällig"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:6
-msgid "acct"
-msgstr "Konto"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:7
-msgid "question"
-msgstr "Frage"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:8
-#: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:25
-#: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
-msgid "label"
-msgstr "Beschriftung"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:2
 msgid "Employee Number: "
@@ -3791,8 +3764,8 @@ msgstr "Buchen nach (Soll)"
 #: ../src/import-export/import-main-matcher.c:473
 #: ../src/import-export/import-match-picker.c:344
 #: ../src/import-export/import-match-picker.c:384
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3481
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3518
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3487
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3524
 #: ../src/register/ledger-core/split-register-model.c:224
 #: ../src/report/business-reports/customer-summary.scm:67
 #: ../src/report/business-reports/easy-invoice.scm:110
@@ -3904,14 +3877,10 @@ msgid "Memo"
 msgstr "Buchungstext"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:21
-msgid "(USD)"
-msgstr ""
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:22
 msgid "Transaction Details"
 msgstr "Buchungsdetails"
 
-#: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:23
+#: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:22
 msgid "Transfer Account"
 msgstr "Herkunftskonto (Haben)"
 
@@ -3949,7 +3918,7 @@ msgid "Tax Table:"
 msgstr "Steuertabelle:"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-vendor.glade.h:20
-#: ../src/gnome/window-reconcile2.c:466 ../src/gnome/window-reconcile.c:466
+#: ../src/gnome/window-reconcile2.c:466 ../src/gnome/window-reconcile.c:501
 msgid "Payment Information"
 msgstr "Zahlungsinformation"
 
@@ -4407,6 +4376,9 @@ msgid ""
 "  %s\n"
 "doesn't exist. This is however not fatal.\n"
 msgstr ""
+"Beachten Sie: das Verzeichnis\n"
+"  %s\n"
+"existiert nicht. Dies ist allerdings nicht schlimm.\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:349
 #, c-format
@@ -4582,7 +4554,7 @@ msgstr " (geschlossen)"
 
 #: ../src/engine/gncOwner.c:960
 msgid "Offset between documents: "
-msgstr ""
+msgstr "Abstand zwischen Dokumenten: "
 
 #: ../src/engine/gncOwner.c:1070
 msgid "Lot Link"
@@ -5072,7 +5044,7 @@ msgstr "Abschlussbuchungen"
 #: ../src/gnome/dialog-find-transactions.c:116
 #: ../src/gnome/gnc-plugin-page-register2.c:484
 #: ../src/gnome/gnc-plugin-page-register.c:487
-#: ../src/gnome/window-reconcile2.c:1315 ../src/gnome/window-reconcile.c:1315
+#: ../src/gnome/window-reconcile2.c:1315 ../src/gnome/window-reconcile.c:1352
 #: ../src/import-export/csv-exp/csv-transactions-export.c:423
 msgid "Reconcile"
 msgstr "Abgleichen"
@@ -5141,7 +5113,7 @@ msgstr "Buchungen suchen"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:339
 #: ../src/gnome/gnc-plugin-page-budget.c:176 ../src/gnome-utils/gnc-file.c:100
 #: ../src/gnome-utils/gnc-file.c:1034 ../src/gnome/window-reconcile2.c:1700
-#: ../src/gnome/window-reconcile.c:1700
+#: ../src/gnome/window-reconcile.c:1740
 msgid "Open"
 msgstr "Öffnen"
 
@@ -5281,15 +5253,15 @@ msgstr "Komplett"
 
 #: ../src/gnome/dialog-sx-editor2.c:166 ../src/gnome/dialog-sx-editor.c:167
 #: ../src/gnome/gnc-plugin-page-sx-list.c:146
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:17
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:18
 #: ../src/gnome-utils/gnc-main-window.c:260
-#: ../src/gnome/window-reconcile2.c:2203 ../src/gnome/window-reconcile.c:2203
+#: ../src/gnome/window-reconcile2.c:2203 ../src/gnome/window-reconcile.c:2243
 #: ../src/report/report-gnome/dialog-report.glade.h:20
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
 #: ../src/gnome/dialog-sx-editor2.c:167 ../src/gnome/dialog-sx-editor.c:168
-#: ../src/gnome/window-reconcile2.c:2144 ../src/gnome/window-reconcile.c:2144
+#: ../src/gnome/window-reconcile2.c:2144 ../src/gnome/window-reconcile.c:2184
 msgid "_Transaction"
 msgstr "_Buchung"
 
@@ -5389,6 +5361,8 @@ msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
 msgstr ""
+"Beachten Sie: Wenn Sie bereits Änderungen in der Vorlage angenommen haben, "
+"wird Abbrechen diese nicht zurücknehmen."
 
 #: ../src/gnome/dialog-sx-editor2.c:1363 ../src/gnome/dialog-sx-editor.c:1386
 msgid "(never)"
@@ -5689,48 +5663,50 @@ msgstr "_Buchabschluss"
 msgid "Archive old data using accounting periods"
 msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:186
+#. Translators: This entry opens the Price Database window
+#. * and will be renamed to "_Price Database" in v.2.8
+#: ../src/gnome/gnc-plugin-basic-commands.c:188
 msgid "_Price Editor"
-msgstr "_Kurs-Datenbank"
+msgstr "_Kurs-Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:187
+#: ../src/gnome/gnc-plugin-basic-commands.c:189
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Kurse für Währungen/Wertpapiere anzeigen und bearbeiten"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:191
+#: ../src/gnome/gnc-plugin-basic-commands.c:193
 msgid "_Security Editor"
 msgstr "_Wertpapier-Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:192
+#: ../src/gnome/gnc-plugin-basic-commands.c:194
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 "Wertpapiere für Aktienkonten und Investmentfonds anzeigen und bearbeiten"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:196
+#: ../src/gnome/gnc-plugin-basic-commands.c:198
 msgid "_Loan Repayment Calculator"
 msgstr "_Darlehensrechner"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:197
+#: ../src/gnome/gnc-plugin-basic-commands.c:199
 msgid "Use the loan/mortgage repayment calculator"
 msgstr "Den Darlehensrechner benutzen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:201
+#: ../src/gnome/gnc-plugin-basic-commands.c:203
 msgid "_Close Book"
 msgstr "_Buchabschluss"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:202
+#: ../src/gnome/gnc-plugin-basic-commands.c:204
 msgid "Close the Book at the end of the Period"
 msgstr "Die Bücher zum Ende der Buchführungsperiode abschließen."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:209
+#: ../src/gnome/gnc-plugin-basic-commands.c:211
 msgid "_Tips Of The Day"
 msgstr "_Tipp des Tages"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:210
+#: ../src/gnome/gnc-plugin-basic-commands.c:212
 msgid "View the Tips of the Day"
 msgstr "»Tipp des Tages« anzeigen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:501
+#: ../src/gnome/gnc-plugin-basic-commands.c:503
 #: ../src/gnome-utils/gnc-file.c:1571
 #, fuzzy, c-format
 msgid ""
@@ -5740,13 +5716,13 @@ msgstr ""
 "Die Datei »%s« existiert bereits. Sind Sie sicher, dass sie überschrieben "
 "werden soll?"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:550
+#: ../src/gnome/gnc-plugin-basic-commands.c:552
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr "Es gibt keine terminierten Buchungen, die gebucht werden sollten."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
-#: ../src/gnome/gnc-plugin-basic-commands.c:581
+#: ../src/gnome/gnc-plugin-basic-commands.c:583
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
@@ -5904,14 +5880,14 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register2.c:331
 #: ../src/gnome/gnc-plugin-page-register.c:340
 #: ../src/gnome-utils/gnc-icons.c:43 ../src/gnome/window-reconcile2.c:2184
-#: ../src/gnome/window-reconcile.c:2184
+#: ../src/gnome/window-reconcile.c:2224
 msgid "_Transfer..."
 msgstr "_Buchen..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:248
 #: ../src/gnome/gnc-plugin-page-register2.c:332
 #: ../src/gnome/gnc-plugin-page-register.c:341
-#: ../src/gnome/window-reconcile2.c:2185 ../src/gnome/window-reconcile.c:2185
+#: ../src/gnome/window-reconcile2.c:2185 ../src/gnome/window-reconcile.c:2225
 msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
@@ -5944,7 +5920,7 @@ msgid "Check & Repair A_ccount"
 msgstr "_Konto überprüfen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:263
-#: ../src/gnome/window-reconcile2.c:2190 ../src/gnome/window-reconcile.c:2190
+#: ../src/gnome/window-reconcile2.c:2190 ../src/gnome/window-reconcile.c:2230
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -8170,7 +8146,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:95
 msgid "Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "Zeigt eingegebenen und abgeglichenen Daten in der Selektion"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
@@ -8181,14 +8157,13 @@ msgstr ""
 "zu übernehmen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
-#, fuzzy
 msgid "Show the calendar buttons"
-msgstr "Namensspalte anzeigen"
+msgstr "Zeigt die Kalenderschaltfächen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:98
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:156
 msgid "Show the calendar buttons Cancel, Today and Select."
-msgstr ""
+msgstr "Zeigt die Kalenderschaltfächen Abbrechen, Heute und Auswählen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:99
 #, fuzzy
@@ -9250,9 +9225,8 @@ msgid "<b>_Lots in This Account</b>"
 msgstr "<b>_Posten in diesem Konto</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:7
-#, fuzzy
 msgid "Show only open lots"
-msgstr "Diagramm anzeigen"
+msgstr "Nur offene Posten anzeigen"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:8
 #, fuzzy
@@ -9398,55 +9372,60 @@ msgid "_Price:"
 msgstr "_Preis:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:14
+#: ../src/report/standard-reports/price-scatter.scm:96
+msgid "Price Database"
+msgstr "Kurs-Datenbank"
+
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
 msgid "Add a new price."
 msgstr "Neuen Kurswert hinzufügen."
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:16
 msgid "Remove the current price."
 msgstr "Aktuellen Kurswert entfernen."
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:16
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:17
 msgid "Edit the current price."
 msgstr "Aktuellen Kurs bearbeiten."
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:18
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:19
 msgid "Remove prices older than a user-entered date."
 msgstr "Entferne Kurse, die älter als ein bestimmtes Datum sind"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:19
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:20
 msgid "Remove _Old"
 msgstr "Alte ent_fernen"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:20
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:21
 msgid "Get new online quotes for stock accounts."
 msgstr "Neue Börsenkurse für Aktienkonten online abrufen."
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:21
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:22
 msgid "Get _Quotes"
 msgstr "_Kurse abrufen"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:22
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:23
 msgid "Bid"
 msgstr "Geldkurs"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:23
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:24
 msgid "Ask"
 msgstr "Briefkurs"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:24
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:25
 msgid "Last"
 msgstr "Vortag"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:25
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:26
 msgid "Net Asset Value"
 msgstr "Nettoanteilswert"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:27
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:28
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:26
 msgid "Dummy commodity Line"
 msgstr "Dummy commodity Line"
 
-#: ../src/gnome/gtkbuilder/dialog-price.glade.h:28
+#: ../src/gnome/gtkbuilder/dialog-price.glade.h:29
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:27
 msgid "Dummy namespace Line"
 msgstr "Dummy namespace Line"
@@ -10214,7 +10193,7 @@ msgstr "_Datum des Kontoauszugs:"
 
 #. starting balance title/value
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:3
-#: ../src/gnome/window-reconcile2.c:1810 ../src/gnome/window-reconcile.c:1810
+#: ../src/gnome/window-reconcile2.c:1810 ../src/gnome/window-reconcile.c:1850
 msgid "Starting Balance:"
 msgstr "Anfangssaldo:"
 
@@ -10223,7 +10202,13 @@ msgid "Include _subaccounts"
 msgstr "_Unterkonten einbeziehen"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:6
-#: ../src/gnome/window-reconcile2.c:762 ../src/gnome/window-reconcile.c:762
+msgid ""
+"Include all descendant accounts in the reconcile. All of them must use the "
+"same commodity as this one."
+msgstr ""
+
+#: ../src/gnome/gtkbuilder/window-reconcile.glade.h:7
+#: ../src/gnome/window-reconcile2.c:762 ../src/gnome/window-reconcile.c:799
 msgid "Enter _Interest Payment..."
 msgstr "Zahlung Haben_zins eingeben..."
 
@@ -10489,7 +10474,7 @@ msgstr "Sie müssen einen Suchausdruck angeben"
 
 #: ../src/gnome-search/search-string.c:220
 #: ../src/import-export/csv-imp/csv-account-import.c:112
-#: ../src/plugins/bi_import/dialog-bi-import.c:122
+#: ../src/plugins/bi_import/dialog-bi-import.c:123
 #: ../src/plugins/customer_import/dialog-customer-import.c:102
 #, c-format
 msgid ""
@@ -11776,7 +11761,7 @@ msgid "_Delete Account"
 msgstr "_Konto löschen"
 
 #: ../src/gnome-utils/gnc-icons.c:40 ../src/gnome/window-reconcile2.c:2179
-#: ../src/gnome/window-reconcile.c:2179
+#: ../src/gnome/window-reconcile.c:2219
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
@@ -11785,7 +11770,7 @@ msgid "_New Account"
 msgstr "_Neues Konto"
 
 #: ../src/gnome-utils/gnc-icons.c:42 ../src/gnome/window-reconcile2.c:2174
-#: ../src/gnome/window-reconcile.c:2174
+#: ../src/gnome/window-reconcile.c:2214
 msgid "_Open Account"
 msgstr "_Konto öffnen"
 
@@ -11829,7 +11814,7 @@ msgstr "_Fenster"
 #. Add the help button for the matcher
 #: ../src/gnome-utils/gnc-main-window.c:268
 #: ../src/gnome/window-reconcile2.c:2145 ../src/gnome/window-reconcile2.c:2226
-#: ../src/gnome/window-reconcile.c:2145 ../src/gnome/window-reconcile.c:2226
+#: ../src/gnome/window-reconcile.c:2185 ../src/gnome/window-reconcile.c:2266
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1531
 msgid "_Help"
 msgstr "_Hilfe"
@@ -11892,7 +11877,7 @@ msgstr "Wählen Sie die Kontoarten, die in der Kontenansicht angezeigt werden."
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:343
-#: ../src/gnome/window-reconcile2.c:2189 ../src/gnome/window-reconcile.c:2189
+#: ../src/gnome/window-reconcile2.c:2189 ../src/gnome/window-reconcile.c:2229
 msgid "_Check & Repair"
 msgstr "Überprüfen"
 
@@ -14757,6 +14742,26 @@ msgstr "Nicht vorgemerkt"
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
+msgctxt "Daily"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
+msgctxt "Daily"
+msgid "days."
+msgstr "Tage."
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
+msgctxt "Weekly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
+msgctxt "Weekly"
+msgid "weeks."
+msgstr "Wochen."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 #: ../src/report/standard-reports/daily-reports.scm:355
 msgid "Saturday"
@@ -14798,6 +14803,16 @@ msgstr "Montag"
 msgid "Tuesday"
 msgstr "Dienstag"
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
+msgctxt "Semimonthly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
+msgctxt "Semimonthly"
+msgid "months."
+msgstr "Monate."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
 msgstr "Zuerst am:"
@@ -14813,6 +14828,16 @@ msgstr "dann am:"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
+msgctxt "Monthly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
+msgctxt "Monthly"
+msgid "months."
+msgstr "Monate."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "On the"
@@ -15186,76 +15211,76 @@ msgstr ""
 msgid "The selected amount cannot be cleared."
 msgstr "Der gewählte Betrag kann nicht automatisch abgeglichen werden."
 
-#: ../src/gnome/window-reconcile2.c:455 ../src/gnome/window-reconcile.c:455
+#: ../src/gnome/window-reconcile2.c:455 ../src/gnome/window-reconcile.c:490
 msgid "Interest Payment"
 msgstr "Habenzinsen"
 
-#: ../src/gnome/window-reconcile2.c:458 ../src/gnome/window-reconcile.c:458
+#: ../src/gnome/window-reconcile2.c:458 ../src/gnome/window-reconcile.c:493
 msgid "Interest Charge"
 msgstr "Sollzinsen"
 
-#: ../src/gnome/window-reconcile2.c:476 ../src/gnome/window-reconcile.c:476
+#: ../src/gnome/window-reconcile2.c:476 ../src/gnome/window-reconcile.c:511
 msgid "Payment From"
 msgstr "Zahlung von"
 
 #: ../src/gnome/window-reconcile2.c:482 ../src/gnome/window-reconcile2.c:492
-#: ../src/gnome/window-reconcile.c:482 ../src/gnome/window-reconcile.c:492
+#: ../src/gnome/window-reconcile.c:517 ../src/gnome/window-reconcile.c:527
 msgid "Reconcile Account"
 msgstr "Konto abgleichen"
 
-#: ../src/gnome/window-reconcile2.c:497 ../src/gnome/window-reconcile.c:497
+#: ../src/gnome/window-reconcile2.c:497 ../src/gnome/window-reconcile.c:532
 msgid "Payment To"
 msgstr "Zahlung an"
 
-#: ../src/gnome/window-reconcile2.c:510 ../src/gnome/window-reconcile.c:510
+#: ../src/gnome/window-reconcile2.c:510 ../src/gnome/window-reconcile.c:545
 msgid "No Auto Interest Payments for this Account"
 msgstr "Keine automatischen Habenzins-Zahlungen für dieses Konto"
 
-#: ../src/gnome/window-reconcile2.c:511 ../src/gnome/window-reconcile.c:511
+#: ../src/gnome/window-reconcile2.c:511 ../src/gnome/window-reconcile.c:546
 msgid "No Auto Interest Charges for this Account"
 msgstr "Keine automatischen Sollzins-Zahlungen für dieses Konto"
 
-#: ../src/gnome/window-reconcile2.c:764 ../src/gnome/window-reconcile.c:764
+#: ../src/gnome/window-reconcile2.c:764 ../src/gnome/window-reconcile.c:801
 msgid "Enter _Interest Charge..."
 msgstr "Zahlung _Sollzins eingeben..."
 
-#: ../src/gnome/window-reconcile2.c:1068 ../src/gnome/window-reconcile.c:1068
+#: ../src/gnome/window-reconcile2.c:1068 ../src/gnome/window-reconcile.c:1105
 #: ../src/report/business-reports/owner-report.scm:56
 msgid "Debits"
 msgstr "Soll"
 
-#: ../src/gnome/window-reconcile2.c:1078 ../src/gnome/window-reconcile.c:1078
+#: ../src/gnome/window-reconcile2.c:1078 ../src/gnome/window-reconcile.c:1115
 #: ../src/report/business-reports/owner-report.scm:55
 #: ../src/report/report-system/report-utilities.scm:111
 msgid "Credits"
 msgstr "Haben"
 
-#: ../src/gnome/window-reconcile2.c:1270 ../src/gnome/window-reconcile.c:1270
+#: ../src/gnome/window-reconcile2.c:1270 ../src/gnome/window-reconcile.c:1307
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
 
 #. statement date title/value
-#: ../src/gnome/window-reconcile2.c:1800 ../src/gnome/window-reconcile.c:1800
+#: ../src/gnome/window-reconcile2.c:1800 ../src/gnome/window-reconcile.c:1840
 msgid "Statement Date:"
 msgstr "Datum des Kontoauszugs:"
 
 #. ending balance title/value
-#: ../src/gnome/window-reconcile2.c:1820 ../src/gnome/window-reconcile.c:1820
+#: ../src/gnome/window-reconcile2.c:1820 ../src/gnome/window-reconcile.c:1860
 msgid "Ending Balance:"
 msgstr "Schlusssaldo:"
 
 #. reconciled balance title/value
-#: ../src/gnome/window-reconcile2.c:1830 ../src/gnome/window-reconcile.c:1830
+#: ../src/gnome/window-reconcile2.c:1830 ../src/gnome/window-reconcile.c:1870
 msgid "Reconciled Balance:"
 msgstr "Abgeglichener Saldo:"
 
 #. difference title/value
-#: ../src/gnome/window-reconcile2.c:1840 ../src/gnome/window-reconcile.c:1840
+#: ../src/gnome/window-reconcile2.c:1840 ../src/gnome/window-reconcile.c:1880
 msgid "Difference:"
 msgstr "Differenz:"
 
-#: ../src/gnome/window-reconcile2.c:1929 ../src/gnome/window-reconcile.c:1929
+#: ../src/gnome/window-reconcile2.c:1929 ../src/gnome/window-reconcile.c:1969
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
@@ -15263,98 +15288,98 @@ msgstr ""
 "Sie haben Veränderungen vorgenommen. Sind Sie sicher, dass Sie abbrechen "
 "wollen?"
 
-#: ../src/gnome/window-reconcile2.c:2047 ../src/gnome/window-reconcile.c:2047
+#: ../src/gnome/window-reconcile2.c:2047 ../src/gnome/window-reconcile.c:2087
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 "Das Konto ist nicht ausgeglichen. Sind Sie sicher, dass Sie das Abgleichen "
 "beenden wollen?"
 
-#: ../src/gnome/window-reconcile2.c:2104 ../src/gnome/window-reconcile.c:2104
+#: ../src/gnome/window-reconcile2.c:2104 ../src/gnome/window-reconcile.c:2144
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr ""
 "Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
 
 #. Toplevel
-#: ../src/gnome/window-reconcile2.c:2142 ../src/gnome/window-reconcile.c:2142
+#: ../src/gnome/window-reconcile2.c:2142 ../src/gnome/window-reconcile.c:2182
 msgid "_Reconcile"
 msgstr "Ab_gleichen"
 
-#: ../src/gnome/window-reconcile2.c:2143 ../src/gnome/window-reconcile.c:2143
+#: ../src/gnome/window-reconcile2.c:2143 ../src/gnome/window-reconcile.c:2183
 msgid "_Account"
 msgstr "_Konto"
 
-#: ../src/gnome/window-reconcile2.c:2150 ../src/gnome/window-reconcile.c:2150
+#: ../src/gnome/window-reconcile2.c:2150 ../src/gnome/window-reconcile.c:2190
 msgid "_Reconcile Information..."
 msgstr "_Informationen zum Abgleich..."
 
-#: ../src/gnome/window-reconcile2.c:2151 ../src/gnome/window-reconcile.c:2151
+#: ../src/gnome/window-reconcile2.c:2151 ../src/gnome/window-reconcile.c:2191
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Informationen zum Abgleich ändern, zum Beispiel das Datum und der "
 "Schlusssaldo des Kontoauszugs."
 
-#: ../src/gnome/window-reconcile2.c:2156 ../src/gnome/window-reconcile.c:2156
+#: ../src/gnome/window-reconcile2.c:2156 ../src/gnome/window-reconcile.c:2196
 msgid "_Finish"
 msgstr "_Fertig"
 
-#: ../src/gnome/window-reconcile2.c:2157 ../src/gnome/window-reconcile.c:2157
+#: ../src/gnome/window-reconcile2.c:2157 ../src/gnome/window-reconcile.c:2197
 msgid "Finish the reconciliation of this account"
 msgstr "Kontoabstimmung beenden"
 
-#: ../src/gnome/window-reconcile2.c:2161 ../src/gnome/window-reconcile.c:2161
+#: ../src/gnome/window-reconcile2.c:2161 ../src/gnome/window-reconcile.c:2201
 msgid "_Postpone"
 msgstr "_Unterbrechen"
 
-#: ../src/gnome/window-reconcile2.c:2162 ../src/gnome/window-reconcile.c:2162
+#: ../src/gnome/window-reconcile2.c:2162 ../src/gnome/window-reconcile.c:2202
 msgid "Postpone the reconciliation of this account"
 msgstr "Das Abgleichen des Kontos unterbrechen"
 
-#: ../src/gnome/window-reconcile2.c:2167 ../src/gnome/window-reconcile.c:2167
+#: ../src/gnome/window-reconcile2.c:2167 ../src/gnome/window-reconcile.c:2207
 msgid "Cancel the reconciliation of this account"
 msgstr "Die Abstimmung dieses Kontos abbrechen"
 
-#: ../src/gnome/window-reconcile2.c:2175 ../src/gnome/window-reconcile.c:2175
+#: ../src/gnome/window-reconcile2.c:2175 ../src/gnome/window-reconcile.c:2215
 msgid "Open the account"
 msgstr "Konto öffnen"
 
-#: ../src/gnome/window-reconcile2.c:2180 ../src/gnome/window-reconcile.c:2180
+#: ../src/gnome/window-reconcile2.c:2180 ../src/gnome/window-reconcile.c:2220
 msgid "Edit the main account for this register"
 msgstr "Bearbeiten des übergeordneten Kontos für dieses Kontobuch"
 
-#: ../src/gnome/window-reconcile2.c:2198 ../src/gnome/window-reconcile.c:2198
+#: ../src/gnome/window-reconcile2.c:2198 ../src/gnome/window-reconcile.c:2238
 msgid "_Balance"
 msgstr "_Saldo"
 
-#: ../src/gnome/window-reconcile2.c:2199 ../src/gnome/window-reconcile.c:2199
+#: ../src/gnome/window-reconcile2.c:2199 ../src/gnome/window-reconcile.c:2239
 msgid "Add a new balancing entry to the account"
 msgstr "Dem Konto eine ausgleichende Buchung hinzufügen"
 
-#: ../src/gnome/window-reconcile2.c:2204 ../src/gnome/window-reconcile.c:2204
+#: ../src/gnome/window-reconcile2.c:2204 ../src/gnome/window-reconcile.c:2244
 msgid "Edit the current transaction"
 msgstr "Aktuellen Buchungssatz bearbeiten"
 
-#: ../src/gnome/window-reconcile2.c:2209 ../src/gnome/window-reconcile.c:2209
+#: ../src/gnome/window-reconcile2.c:2209 ../src/gnome/window-reconcile.c:2249
 msgid "Delete the selected transaction"
 msgstr "Ausgewählten Buchungssatz löschen"
 
-#: ../src/gnome/window-reconcile2.c:2213 ../src/gnome/window-reconcile.c:2213
+#: ../src/gnome/window-reconcile2.c:2213 ../src/gnome/window-reconcile.c:2253
 msgid "_Reconcile Selection"
 msgstr "Auswahl _abgleichen"
 
-#: ../src/gnome/window-reconcile2.c:2214 ../src/gnome/window-reconcile.c:2214
+#: ../src/gnome/window-reconcile2.c:2214 ../src/gnome/window-reconcile.c:2254
 msgid "Reconcile the selected transactions"
 msgstr "Ausgewählte Buchungen abgleichen"
 
-#: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
+#: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2258
 msgid "_Unreconcile Selection"
 msgstr "_Nicht abgeglichene Auswahl"
 
-#: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
+#: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2259
 msgid "Unreconcile the selected transactions"
 msgstr "Ausgewählten Buchungssatz nicht abgleichen"
 
-#: ../src/gnome/window-reconcile2.c:2227 ../src/gnome/window-reconcile.c:2227
+#: ../src/gnome/window-reconcile2.c:2227 ../src/gnome/window-reconcile.c:2267
 msgid "Open the GnuCash help window"
 msgstr "Das GnuCash-Hilfe-Fenster öffnen"
 
@@ -15452,22 +15477,23 @@ msgstr ""
 "»AqBanking Assistent« erfolgreich aufgerufen worden ist. Bitte versuchen Sie "
 "erneut, den »AqBanking Einrichtungs-Assistent« korrekt auszuführen."
 
-#. Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code.
-#: ../src/import-export/aqb/assistant-ab-initial.c:581
+#. Translators: Strings are 1. Bank code, 2. Bank name,
+#. * 3. Account Number,  4. Subaccount ID
+#: ../src/import-export/aqb/assistant-ab-initial.c:582
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
-msgstr ""
+msgstr "Bankleitzahl %s (%s), Kontonummer %s (%s)"
 
-#: ../src/import-export/aqb/assistant-ab-initial.c:874
+#: ../src/import-export/aqb/assistant-ab-initial.c:875
 msgid "Online Banking Account Name"
 msgstr "Online-Banking Kontoname"
 
-#: ../src/import-export/aqb/assistant-ab-initial.c:879
+#: ../src/import-export/aqb/assistant-ab-initial.c:880
 msgid "GnuCash Account Name"
 msgstr "GnuCash Kontoname"
 
-#: ../src/import-export/aqb/assistant-ab-initial.c:885
-#: ../src/import-export/qif-imp/assistant-qif-import.c:545
+#: ../src/import-export/aqb/assistant-ab-initial.c:886
+#: ../src/import-export/qif-imp/assistant-qif-import.c:546
 #: ../src/import-export/qif-imp/dialog-account-picker.c:379
 msgid "New?"
 msgstr "Neu?"
@@ -16704,19 +16730,16 @@ msgid "place_holder"
 msgstr "Platzhalter"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
-#, fuzzy
 msgid "Export Account T_ree to CSV..."
-msgstr "_Konten exportieren"
+msgstr "_Kontenhierarchie nach CSV exportieren ..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:48
-#, fuzzy
 msgid "Export the Account Tree to a CSV file"
-msgstr "Die Konten-Hierarchie in eine neue GnuCash-Datei exportieren"
+msgstr "Kontenhierarchie in eine CSV Datei exportieren"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:52
-#, fuzzy
 msgid "Export _Transactions to CSV..."
-msgstr "Abfrage Konto_umsätze..."
+msgstr "_Buchungen nach CSV exportieren..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:53
 msgid "Export the Transactions to a CSV file"
@@ -16876,6 +16899,11 @@ msgstr "Kontenimport-Vorschau der ersten 10 Zeilen"
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:24
 msgid "Import Accounts Now"
 msgstr "_Konten jetzt importieren"
+
+#: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:25
+#: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
+msgid "label"
+msgstr "Beschriftung"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:26
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:48
@@ -17722,18 +17750,18 @@ msgstr "_OFX/QFX importieren..."
 msgid "Process an OFX/QFX response file"
 msgstr "Eine OFX/QFX Datei verarbeiten"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:531
+#: ../src/import-export/qif-imp/assistant-qif-import.c:532
 msgid "GnuCash account name"
 msgstr "GnuCash Kontobezeichnung"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:833
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2666
+#: ../src/import-export/qif-imp/assistant-qif-import.c:834
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2672
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
 msgstr ""
 "Geben Sie einen Namen oder kurze Beschreibung an, z.B. »Deutsche Telekom«."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:835
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2673
+#: ../src/import-export/qif-imp/assistant-qif-import.c:836
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2679
 msgid ""
 "Enter the ticker symbol or other well known abbreviation, such as \"RHT\". "
 "If there isn't one, or you don't know it, create your own."
@@ -17742,8 +17770,8 @@ msgstr ""
 "Beispiel »RHT«. Wenn es keine gibt oder Sie das nicht kennen, können Sie "
 "sich selber einen Eintrag ausdenken und eintragen."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:838
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2681
+#: ../src/import-export/qif-imp/assistant-qif-import.c:839
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2687
 msgid ""
 "Select the exchange on which the symbol is traded, or select the type of "
 "investment (such as FUND for mutual funds.) If you don't see your exchange "
@@ -17754,73 +17782,73 @@ msgstr ""
 "Investmentart nicht in der Liste vorhanden ist, können Sie selbige neu "
 "eintippen."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:863
+#: ../src/import-export/qif-imp/assistant-qif-import.c:864
 msgid "Enter information about"
 msgstr "Eingabe der Informationen über"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:879
+#: ../src/import-export/qif-imp/assistant-qif-import.c:880
 msgid "_Name or description:"
 msgstr "_Name oder Beschreibung:"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:899
+#: ../src/import-export/qif-imp/assistant-qif-import.c:900
 msgid "_Ticker symbol or other abbreviation:"
 msgstr "_Tickersymbol oder andere Abkürzung:"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:924
+#: ../src/import-export/qif-imp/assistant-qif-import.c:925
 msgid "_Exchange or abbreviation type:"
 msgstr "_Börse oder Abkürzungsart:"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1123
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3103
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1124
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3109
 msgid "(split)"
 msgstr "(Buchungsteil)"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1518
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1519
 msgid "Please select a file to load."
 msgstr "Sie müssen eine Datei angeben, die geladen werden soll."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1521
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1522
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
 "Datei nicht gefunden oder Zugriffsberechtigung liegt nicht vor. Bitte wählen "
 "Sie eine andere Datei."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1532
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1533
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "Diese QIF Datei ist bereits geladen. Bitte wählen Sie eine andere."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1600
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1601
 msgid "Select QIF File"
 msgstr "QIF-Datei auswählen"
 
 #. Swap the button label between pause and resume.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1663
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1667
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2774
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2778
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1664
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1668
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2780
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2784
 msgid "_Resume"
 msgstr "_Fortsetzen"
 
 #. Inform the user.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1752
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1822
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2860
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1753
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1824
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2866
 msgid "Canceled"
 msgstr "Abgebrochen"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1766
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1770
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1767
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1771
 msgid "An error occurred while loading the QIF file."
 msgstr "Beim Laden der QIF-Datei ist ein Fehler aufgetreten."
 
 #. Inform the user.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1767
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1785
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1841
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1897
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2880
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2901
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2948
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1768
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1786
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1843
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1899
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2886
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2907
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2954
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
@@ -17828,26 +17856,26 @@ msgstr "Fehlgeschlagen"
 #. Remove any converted data.
 #. An error occurred during duplicate checking.
 #. Remove any converted data.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1818
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1835
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2856
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2874
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2897
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2942
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1820
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1837
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2862
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2880
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2903
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2948
 msgid "Cleaning up"
 msgstr "Aufräumen"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1840
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1844
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1842
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1846
 msgid "A bug was detected while parsing the QIF file."
 msgstr "Beim Verarbeiten der QIF Datei ist ein Fehler aufgetreten."
 
 #. The file was loaded successfully.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1916
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1918
 msgid "Loading completed"
 msgstr "Vollständig geladen"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:1947
+#: ../src/import-export/qif-imp/assistant-qif-import.c:1949
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -17857,40 +17885,40 @@ msgstr ""
 "dabei keine Fehler oder Warnungen auftreten, kommt der nächste Schritt. "
 "Andernfalls werden die Meldungen unten angezeigt."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2512
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2518
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:60
 msgid "Choose the QIF file currency and select Book Options"
 msgstr "Bestimmen Sie die Währung der QIF-Datei und die Buch-Optionen"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2519
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2525
 msgid "Choose the QIF file currency"
 msgstr "Wählen Sie die Währung der QIF-Datei"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2701
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2707
 msgid "You must enter an existing national currency or enter a different type."
 msgstr ""
 "Sie müssen entweder eine existierende Währung angeben oder einen anderen Typ "
 "wählen."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2879
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2883
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2885
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2889
 msgid "A bug was detected while converting the QIF data."
 msgstr "Ein Fehler ist beim Konvertieren der QIF-Daten aufgetreten."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2933
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2939
 msgid "Canceling"
 msgstr "Abbrechen"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2947
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2951
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2953
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2957
 msgid "A bug was detected while detecting duplicates."
 msgstr "Ein Fehler ist bei der Duplikaterkennung aufgetreten."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:2970
+#: ../src/import-export/qif-imp/assistant-qif-import.c:2976
 msgid "Conversion completed"
 msgstr "Vollständig konvertiert"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3002
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3008
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -17900,36 +17928,36 @@ msgstr ""
 "importieren. Wenn keine Fehler oder Warnungen auftreten, folgt der nächste "
 "Schritt. Andernfalls werden die Details unten angezeigt."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3198
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3204
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash konnte die Zuordnungseinstellungen nicht speichern."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3231
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3237
 #, c-format
 msgid "There was a problem with the import."
 msgstr "Es ist während des Importes ein Problem aufgetreten."
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3233
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3239
 #, c-format
 msgid "QIF Import Completed."
 msgstr "QIF-Import abgeschlossen."
 
 #. Set up the QIF account to GnuCash account matcher.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3456
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3462
 msgid "QIF account name"
 msgstr "QIF-Kontobezeichnung"
 
 #. Set up the QIF category to GnuCash account matcher.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3462
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3468
 msgid "QIF category name"
 msgstr "QIF-Kategorie"
 
 #. Set up the QIF payee/memo to GnuCash account matcher.
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3468
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3474
 msgid "QIF payee/memo"
 msgstr "QIF Empfänger/Text"
 
-#: ../src/import-export/qif-imp/assistant-qif-import.c:3543
+#: ../src/import-export/qif-imp/assistant-qif-import.c:3549
 msgid "Match?"
 msgstr "Passt?"
 
@@ -18667,41 +18695,41 @@ msgstr "%#d. %B %Y"
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:285
+#: ../src/plugins/bi_import/dialog-bi-import.c:287
 #, c-format
 msgid "ROW %d DELETED, PRICE_NOT_SET: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Preis fehlt: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:295
+#: ../src/plugins/bi_import/dialog-bi-import.c:297
 #, c-format
 msgid "ROW %d DELETED, QTY_NOT_SET: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Anzahl fehlt: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:309
+#: ../src/plugins/bi_import/dialog-bi-import.c:311
 #, c-format
 msgid "ROW %d DELETED, ID_NOT_SET\n"
 msgstr "Zeile %d GELÖSCHT, ID fehlt!\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:410
+#: ../src/plugins/bi_import/dialog-bi-import.c:412
 #, c-format
 msgid "ROW %d DELETED, OWNER_NOT_SET: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Lieferant fehlt: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:435
+#: ../src/plugins/bi_import/dialog-bi-import.c:437
 #, c-format
 msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Lieferant existiert nicht: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:449
+#: ../src/plugins/bi_import/dialog-bi-import.c:451
 #, c-format
 msgid "ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"
 msgstr "Zeile %d GELÖSCHT, Kunde existiert nicht: id=%s\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:493
+#: ../src/plugins/bi_import/dialog-bi-import.c:495
 msgid "These rows were deleted:"
 msgstr "Diese Zeilen wurden gelöscht:"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:661
+#: ../src/plugins/bi_import/dialog-bi-import.c:664
 msgid "Are you sure you have bills/invoices to update?"
 msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
 
@@ -21150,6 +21178,12 @@ msgstr ""
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "Diese Seite zeigt Ihnen Details zu steuerrelevanten Konten."
 
+#. we must confirm the user wants to delete their precious custom report!
+#: ../src/report/report-gnome/dialog-custom-report.c:315
+#, fuzzy, c-format
+msgid "Are you sure you want to delete %s?"
+msgstr "Sind Sie sicher, dass Sie »%s« löschen möchten?"
+
 #: ../src/report/report-gnome/dialog-custom-report.c:421
 msgid "You must select a report configuration to load."
 msgstr ""
@@ -22648,7 +22682,7 @@ msgstr ""
 #: ../src/report/standard-reports/advanced-portfolio.scm:103
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr ""
-"Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls "
+"Kurse aus der Kursdatenbank gegenüber Kursen aus Buchungen bevorzugen, falls "
 "möglich."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:109
@@ -23998,10 +24032,6 @@ msgstr "Tatsächliche Buchungen"
 msgid "The instantaneous price of actual currency transactions in the past."
 msgstr ""
 "Der aufgezeichnete Preis von tatsächlichen Buchungen in der Vergangenheit."
-
-#: ../src/report/standard-reports/price-scatter.scm:96
-msgid "Price Database"
-msgstr "Kurs-Datenbank"
 
 #: ../src/report/standard-reports/price-scatter.scm:97
 msgid "The recorded prices."
@@ -25914,41 +25944,27 @@ msgstr ""
 "Buchung in einem bestimmten Konto suchen, starten Sie diese Suche vom "
 "Kontofenster dieses Kontos."
 
+#~ msgid "Dummy message"
+#~ msgstr "Beispiel-Nachricht"
+
+#~ msgid "postd"
+#~ msgstr "Gebucht"
+
+#~ msgid "duedate"
+#~ msgstr "Fällig"
+
+#~ msgid "acct"
+#~ msgstr "Konto"
+
+#~ msgid "question"
+#~ msgstr "Frage"
+
+#~ msgid "(USD)"
+#~ msgstr "(USD)"
+
 #, fuzzy
 #~ msgid "Retrieve the current online quote"
 #~ msgstr "Aktuellen Buchungsteil löschen"
-
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "Tage."
-
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "Wochen."
-
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "Monate."
-
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "Monate."
 
 #~ msgid "Auto pay on post_ing"
 #~ msgstr "Automatisch durchbuchen"
