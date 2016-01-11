@@ -266,7 +266,7 @@ gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_
     }
 }
 
-gboolean
+static gboolean
 filter_test_and_move_next (GtkTreeModel *model, GtkTreeIter *iter, ImapDialog *imap_dialog)
 {
     GtkTreePath *tree_path;
