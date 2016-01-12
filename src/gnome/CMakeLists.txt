@@ -11,6 +11,7 @@ SET (gnc_gnome_noinst_HEADERS
   dialog-fincalc.h
   dialog-find-transactions.h
   dialog-find-transactions2.h
+  dialog-imap-editor.h
   dialog-lot-viewer.h
   dialog-new-user.h
   dialog-print-check.h
@@ -53,6 +54,7 @@ SET (gnc_gnome_SOURCES
   dialog-fincalc.c
   dialog-find-transactions.c
   dialog-find-transactions2.c
+  dialog-imap-editor.c
   dialog-lot-viewer.c
   dialog-new-user.c
   dialog-price-editor.c
