@@ -1,17 +1,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; price-quotes.scm - manage sub-processes.
 ;;; Copyright 2001 Rob Browning <rlb@cs.utexas.edu>
-;;; 
-;;; This program is free software; you can redistribute it and/or    
-;;; modify it under the terms of the GNU General Public License as   
-;;; published by the Free Software Foundation; either version 2 of   
-;;; the License, or (at your option) any later version.              
-;;;                                                                  
-;;; This program is distributed in the hope that it will be useful,  
-;;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;;; GNU General Public License for more details.                     
-;;;                                                                  
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License as
+;;; published by the Free Software Foundation; either version 2 of
+;;; the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, contact:
 ;;;
@@ -35,7 +35,7 @@
 
 (define (item-list->hash! lst hash
 			  getkey getval
-			  hashref hashset 
+			  hashref hashset
 			  list-duplicates?)
   ;; Takes a list of the form (item item item item) and returns a hash
   ;; formed by traversing the list, and getting the key and val from
@@ -58,7 +58,7 @@
 	  (if existing-val
 	      (hashset hash key (cons val existing-val))
 	      (hashset hash key (list val))))))
-  
+
   (for-each handle-item lst)
   hash)
 
@@ -205,7 +205,7 @@
     ;; a list of the corresponding commodities.  Also perform a bit of
     ;; optimization, merging calls for symbols to the same
     ;; Finance::Quote method.
-    ;; 
+    ;;
     ;; Returns a list of the info needed for a set of calls to
     ;; gnc-fq-helper.  Each item will of the list will be of the
     ;; form:
@@ -223,7 +223,7 @@
 	   (commodity-list #f)
 	   (currency-list (filter
 			   (lambda (a) (not (gnc-commodity-equiv (cadr a) (caddr a))))
-			   (call-with-values 
+			   (call-with-values
                                (lambda () (partition!
                                            (lambda (cmd)
                                              (not (string=? (car cmd) "currency")))
@@ -257,7 +257,7 @@
     ;;
     ;; ("yahoo" (commodity-1 currency-1 tz-1)
     ;;          (commodity-2 currency-2 tz-2) ...)
-    ;; 
+    ;;
     ;; ("yahoo" "IBM" "AMD" ...)
     ;;
 
@@ -412,7 +412,7 @@
                                                       commodity currency
                                                       gnc-time))
             (if (not (null? saved-price))
-                (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
+                (if (>= (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
                     (begin
                       (gnc-price-begin-edit saved-price)
                       (gnc-price-set-time saved-price gnc-time)
