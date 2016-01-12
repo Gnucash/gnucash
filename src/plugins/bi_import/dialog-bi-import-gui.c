@@ -289,6 +289,7 @@ void gnc_bi_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
     g_free( filename );
 }
 
+// Semicolon separated
 void gnc_bi_import_gui_option1_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
@@ -298,6 +299,7 @@ void gnc_bi_import_gui_option1_cb (GtkWidget *widget, gpointer data)
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// Comma separated
 void gnc_bi_import_gui_option2_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
@@ -307,6 +309,7 @@ void gnc_bi_import_gui_option2_cb (GtkWidget *widget, gpointer data)
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// Semicolon separated with quotes
 void gnc_bi_import_gui_option3_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
@@ -316,6 +319,7 @@ void gnc_bi_import_gui_option3_cb (GtkWidget *widget, gpointer data)
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// Comma separated with quote
 void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
@@ -325,6 +329,7 @@ void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data)
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// DIY regex.
 void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
