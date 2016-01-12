@@ -183,7 +183,6 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
         input_facet->set_iso_extended_format();
         PTime pdt(not_a_date_time);
         ss >> pdt;
-        std::cout << std::endl << "String " << ss.str() << " produced " << pdt << std::endl;
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
                      LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
