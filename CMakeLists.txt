@@ -440,6 +440,10 @@ IF (GNC_BUILD_AS_INSTALL)
 ENDIF()
 # Install DOC files from top level directory
 
+#Link LICENSE to COPYING so that people expecting to find it,
+#will. COPYING is normally linked by autogen.sh to the latest
+#automake-provided version.
+execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "create_symlink" "${CMAKE_SOURCE_DIR}/LICENSE" "${CMAKE_SOURCE_DIR}/COPYING")
 
 SET(gnucash_DOCS
     AUTHORS
@@ -460,6 +464,7 @@ SET(gnucash_DOCS
     ChangeLog.2012
     ChangeLog.2013
     ChangeLog.2014
+    COPYING
     DOCUMENTERS
     HACKING
     LICENSE
