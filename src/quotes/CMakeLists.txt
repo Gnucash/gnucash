@@ -26,6 +26,12 @@ FOREACH(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump)
   ENDIF()
 ENDFOREACH(file)
 
+SET(CMAKE_COMMAND_TMP "")
+IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
+  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+ENDIF()
+
+
 SET(_MAN_FILES "")
 FOREACH(file gnc-fq-dump gnc-fq-helper)
   SET(_POD_INPUT ${CMAKE_CURRENT_BINARY_DIR}/${file})
@@ -34,7 +40,7 @@ FOREACH(file gnc-fq-dump gnc-fq-helper)
   ADD_CUSTOM_COMMAND(
       OUTPUT ${_MAN_OUTPUT}
       COMMAND
-        ${CMAKE_COMMAND} -E env ${PERL_EXECUTABLE} ${POD2MAN_EXECUTABLE} ${_POD_INPUT} ${_MAN_OUTPUT}
+        ${CMAKE_COMMAND_TMP} ${PERL_EXECUTABLE} ${POD2MAN_EXECUTABLE} ${_POD_INPUT} ${_MAN_OUTPUT}
       DEPENDS ${_POD_INPUT}
   )
 ENDFOREACH(file)

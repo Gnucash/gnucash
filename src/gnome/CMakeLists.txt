@@ -117,9 +117,14 @@ INSTALL(TARGETS gnc-gnome
 
 # FIXME: where does LC_ALL=C come from?
 
+SET(CMAKE_COMMAND_TMP "")
+IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
+  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+ENDIF()
+
 ADD_CUSTOM_COMMAND(
     OUTPUT gnucash.appdata.xml
-    COMMAND ${CMAKE_COMMAND} -E env
+    COMMAND ${CMAKE_COMMAND_TMP}
       LC_ALL=C
       ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -x -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
         ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in gnucash.appdata.xml
@@ -137,7 +142,7 @@ CONFIGURE_FILE(gnucash.desktop.in.in gnucash.desktop.in)
 
 ADD_CUSTOM_COMMAND(
     OUTPUT gnucash.desktop
-    COMMAND ${CMAKE_COMMAND} -E env
+    COMMAND ${CMAKE_COMMAND_TMP}
       LC_ALL=C
       ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -d -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
         gnucash.desktop.in gnucash.desktop
