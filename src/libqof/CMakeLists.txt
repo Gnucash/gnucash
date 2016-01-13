@@ -71,6 +71,7 @@ SET (gnc_qof_SOURCES
    qof/qofutil.cpp
    qof/qof-string-cache.cpp
 )
+
 IF (WIN32)
   ADD_DEFINITIONS (-DOS_WIN32)
   SET (gnc_qof_SOURCES ${gnc_qof_SOURCES}

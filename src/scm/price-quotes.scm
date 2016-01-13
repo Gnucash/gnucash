@@ -424,7 +424,7 @@
                   (if (gnc-commodity-equiv (gnc-price-get-currency saved-price)
                                            commodity)
                       (set! price (gnc-numeric-invert price)))
-                  (if (> (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
+                  (if (>= (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
                       (begin
                         (gnc-price-begin-edit saved-price)
                         (gnc-price-set-time saved-price gnc-time)
