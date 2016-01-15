@@ -6,7 +6,7 @@
 IF (WIN32)
   CMAKE_MINIMUM_REQUIRED (VERSION 3.3.2)
 ELSE()
-  CMAKE_MINIMUM_REQUIRED (VERSION 3.1)
+  CMAKE_MINIMUM_REQUIRED (VERSION 3.0)
 ENDIF()
 
 PROJECT (Gnucash)
@@ -475,6 +475,19 @@ SET(gnucash_DOCS
 )
 
 INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
+
+# Link COPYING to LICENSE
+SET (_CMD create_symlink)
+IF (WIN32)
+  SET(_CMD copy)
+ENDIF()
+
+INSTALL(CODE
+" EXECUTE_PROCESS(
+      COMMAND ${CMAKE_COMMAND} -E ${_CMD} LICENSE COPYING
+      WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/share/doc/gnucash
+  )"
+)
 
 #For windows, copy in some DLLs from Mingw
 

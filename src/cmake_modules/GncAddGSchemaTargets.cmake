@@ -7,6 +7,10 @@ MACRO(ADD_GSCHEMA_TARGETS _TARGET _gschema_INPUTS)
   IF(WIN32)
     SET(INITTOOL_OPTIONS "/tmp")
   ENDIF(WIN32)
+  SET(CMAKE_COMMAND_TMP "")
+  IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
+    SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+  ENDIF()
   FOREACH(file ${_gschema_INPUTS})
     GNC_CONFIGURE2(${file}.in.in ${file}.in)
     STRING(REPLACE ".xml" ".valid" file_no_xml ${file})
@@ -20,7 +24,7 @@ MACRO(ADD_GSCHEMA_TARGETS _TARGET _gschema_INPUTS)
     ENDIF()
     ADD_CUSTOM_COMMAND(
         OUTPUT ${_OUTPUT_FILE}
-        COMMAND ${CMAKE_COMMAND} -E env
+        COMMAND ${CMAKE_COMMAND_TMP}
           LC_ALL=C
           ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -x -u ${INITTOOL_OPTIONS} ${CMAKE_CURRENT_BINARY_DIR}/${file}.in ${CMAKE_CURRENT_BINARY_DIR}/${file}
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${file}.in
@@ -35,14 +39,14 @@ MACRO(ADD_GSCHEMA_TARGETS _TARGET _gschema_INPUTS)
     ENDIF()
     ADD_CUSTOM_COMMAND(
         OUTPUT ${_VALID_FILE}
-        COMMAND ${CMAKE_COMMAND} -E env
-        ${GLIB_COMPILE_SCHEMAS} --strict --dry-run --schema-file=${_OUTPUT_FILE}
+        COMMAND ${CMAKE_COMMAND_TMP}
+          ${GLIB_COMPILE_SCHEMAS} --strict --dry-run --schema-file=${_OUTPUT_FILE}
         COMMAND ${CMAKE_COMMAND} -E touch ${_VALID_FILE}
         DEPENDS ${_OUTPUT_FILE}
     )
   ENDFOREACH(file)
 
-  ADD_CUSTOM_TARGET(${_TARGET} DEPENDS "${_gschema_OUTPUTS};${_gschema_VALIDS};${_gschema_BUILDS}")
+  ADD_CUSTOM_TARGET(${_TARGET} DEPENDS ${_gschema_OUTPUTS} ${_gschema_VALIDS} ${_gschema_BUILDS})
 
   INSTALL(FILES ${_gschema_OUTPUTS} DESTINATION share/glib-2.0/schemas)
 
