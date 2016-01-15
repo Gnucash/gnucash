@@ -440,11 +440,6 @@ IF (GNC_BUILD_AS_INSTALL)
 ENDIF()
 # Install DOC files from top level directory
 
-#Link LICENSE to COPYING so that people expecting to find it,
-#will. COPYING is normally linked by autogen.sh to the latest
-#automake-provided version.
-execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "create_symlink" "${CMAKE_SOURCE_DIR}/LICENSE" "${CMAKE_SOURCE_DIR}/COPYING")
-
 SET(gnucash_DOCS
     AUTHORS
     ChangeLog
@@ -470,13 +465,13 @@ SET(gnucash_DOCS
     LICENSE
     NEWS
     README.dependencies
-    COPYING
-    INSTALL
 )
 
 INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
 
-# Link COPYING to LICENSE
+#Link LICENSE to COPYING so that people expecting to find it,
+#will. COPYING is normally linked by autogen.sh to the latest
+#automake-provided version.
 SET (_CMD create_symlink)
 IF (WIN32)
   SET(_CMD copy)
