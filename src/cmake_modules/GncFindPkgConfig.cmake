@@ -1,4 +1,3 @@
-
 if(${CMAKE_VERSION} VERSION_GREATER 3.1)
 
 function (pkg_get_variable result pkg variable)
@@ -225,7 +224,7 @@ macro(_gnc_pkg_check_modules_internal _is_required _is_silent _no_cmake_path _no
 
     if(NOT "${_extra_paths}" STREQUAL "")
       # Restore the environment variable
-      set(ENV{PKG_CONFIG_PATH} ${_pkgconfig_path})
+      set(ENV{PKG_CONFIG_PATH} ${_pkgconfig_path_old})
     endif()
 
     unset(_extra_paths)
@@ -257,4 +256,3 @@ macro(gnc_pkg_check_modules _prefix _module0)
 endmacro()
 
 endif()
-
