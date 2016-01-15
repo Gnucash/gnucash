@@ -441,6 +441,19 @@ SET(gnucash_DOCS
 
 INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
 
+# Link COPYING to LICENSE
+SET (_CMD create_symlink)
+IF (WIN32)
+  SET(_CMD copy)
+ENDIF()
+
+INSTALL(CODE
+" EXECUTE_PROCESS(
+      COMMAND ${CMAKE_COMMAND} -E ${_CMD} LICENSE COPYING
+      WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/share/doc/gnucash
+  )"
+)
+
 #For windows, copy in some DLLs from Mingw
 
 IF (WIN32)
