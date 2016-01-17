@@ -478,7 +478,7 @@ AC_SUBST(GUILE, [`pwd`/gnc-guile])
 AC_CHECK_HEADERS(ltdl.h,
          [],
          [AC_MSG_ERROR([ltdl.h not found. Perhaps you need to install
-the intltool-ltdl development packages ?])])
+the libtool(-ltdl) development package?])])
 
 ### --------------------------------------------------------------------------
 ### SWIG version checks (only when building from SCM)
