@@ -37,11 +37,13 @@
 #include "qof.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
+#include "gnc-prefs.h"
 /********************************************************************\
  *   Constants   *
 \********************************************************************/
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.match-picker"
+#define GNC_PREF_DISPLAY_RECONCILED "display-reconciled"
 
 enum downloaded_cols
 {
@@ -63,6 +65,7 @@ enum matcher_cols
     MATCHER_COL_AMOUNT,
     MATCHER_COL_DESCRIPTION,
     MATCHER_COL_MEMO,
+    MATCHER_COL_RECONCILED,
     MATCHER_COL_INFO_PTR,
     NUM_MATCHER_COLS
 };
@@ -85,6 +88,7 @@ struct _transpickerdialog
     GtkWidget * transaction_matcher;
     GtkTreeView * downloaded_view;
     GtkTreeView * match_view;
+    GtkCheckButton * reconciled_chk;
     GNCImportSettings * user_settings;
     struct _transactioninfo * selected_trans_info;
     GNCImportMatchInfo * selected_match_info;
@@ -171,34 +175,20 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
     gtk_tree_selection_select_iter(selection, &iter);
 }
 
-/********************************************************************\
- *                                                                   *
- *                       GUI callbacks                               *
- *                                                                   *
-\********************************************************************/
-
 static void
-downloaded_transaction_changed_cb (GtkTreeSelection *selection,
-                                   GNCImportMatchPicker *matcher)
+match_update_match_model (GNCImportMatchPicker *matcher)
 {
     GNCImportMatchInfo * match_info;
-    GtkTreeModel *dl_model;
-    GtkListStore *match_store;
     GtkTreeIter iter;
+    gboolean show_reconciled;
+    gchar reconciled;
+    GtkListStore *match_store;
     GList * list_element;
     gchar *text;
     const gchar *ro_text;
-    /*DEBUG("row: %d%s%d",row,", column: ",column);*/
 
-    /* Get the transaction info from the "downloaded" model.  */
-    if (!gtk_tree_selection_get_selected(selection, &dl_model, &iter))
-    {
-        matcher->selected_trans_info = NULL;
-        return;
-    }
-    gtk_tree_model_get(dl_model, &iter,
-                       DOWNLOADED_COL_INFO_PTR, &matcher->selected_trans_info,
-                       -1);
+    show_reconciled = gtk_toggle_button_get_active(
+            GTK_TOGGLE_BUTTON(matcher->reconciled_chk));
 
     /* Now rewrite the "match" model based on that trans. */
     match_store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->match_view));
@@ -208,6 +198,15 @@ downloaded_transaction_changed_cb (GtkTreeSelection *selection,
     while (list_element != NULL)
     {
         match_info = list_element->data;
+
+        /* Skip this match if reconciled and we're not showing those */
+        reconciled = xaccSplitGetReconcile(
+                gnc_import_MatchInfo_get_split(match_info));
+        if (show_reconciled == FALSE && reconciled != NREC)
+        {
+            list_element = g_list_next(list_element);
+            continue;
+        }
 
         gtk_list_store_append(match_store, &iter);
 
@@ -243,27 +242,20 @@ downloaded_transaction_changed_cb (GtkTreeSelection *selection,
         ro_text = xaccSplitGetMemo(gnc_import_MatchInfo_get_split(match_info) );
         gtk_list_store_set(match_store, &iter, MATCHER_COL_MEMO, ro_text, -1);
 
+        /*Reconciled*/
+        ro_text = gnc_get_reconcile_str(reconciled);
+        gtk_list_store_set(match_store, &iter, MATCHER_COL_RECONCILED, ro_text,
+                           -1);
+
         gtk_list_store_set(match_store, &iter, MATCHER_COL_INFO_PTR, match_info, -1);
         if (gnc_import_MatchInfo_get_probability(match_info) != 0)
         {
-            if (SHOW_NUMERIC_SCORE == TRUE)
-            {
                 gtk_list_store_set(match_store, &iter,
                                    MATCHER_COL_CONFIDENCE_PIXBUF,
                                    gen_probability_pixbuf(gnc_import_MatchInfo_get_probability(match_info),
                                            matcher->user_settings,
                                            GTK_WIDGET(matcher->match_view)),
                                    -1);
-            }
-            else
-            {
-                gtk_list_store_set(match_store, &iter,
-                                   MATCHER_COL_CONFIDENCE_PIXBUF,
-                                   gen_probability_pixbuf(gnc_import_MatchInfo_get_probability(match_info),
-                                           matcher->user_settings,
-                                           GTK_WIDGET(matcher->match_view)),
-                                   -1);
-            }
         }
 
         if (match_info ==
@@ -277,6 +269,40 @@ downloaded_transaction_changed_cb (GtkTreeSelection *selection,
 
         list_element = g_list_next(list_element);
     }
+}
+
+/********************************************************************\
+ *                                                                   *
+ *                       GUI callbacks                               *
+ *                                                                   *
+\********************************************************************/
+
+static void
+downloaded_transaction_changed_cb (GtkTreeSelection *selection,
+                                   GNCImportMatchPicker *matcher)
+{
+    GtkTreeModel *dl_model;
+    GtkTreeIter iter;
+    /*DEBUG("row: %d%s%d",row,", column: ",column);*/
+
+    /* Get the transaction info from the "downloaded" model.  */
+    if (!gtk_tree_selection_get_selected(selection, &dl_model, &iter))
+    {
+        matcher->selected_trans_info = NULL;
+        return;
+    }
+    gtk_tree_model_get(dl_model, &iter,
+                       DOWNLOADED_COL_INFO_PTR, &matcher->selected_trans_info,
+                       -1);
+
+    match_update_match_model (matcher);
+}
+
+static void
+match_show_reconciled_changed_cb (GtkCheckButton* checkbox,
+                                  GNCImportMatchPicker *matcher)
+{
+    match_update_match_model (matcher);
 }
 
 static void
@@ -365,7 +391,7 @@ gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
     store = gtk_list_store_new(NUM_MATCHER_COLS,
                                G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_POINTER);
+                               G_TYPE_STRING, G_TYPE_POINTER);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
@@ -385,6 +411,7 @@ gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
     add_column(view, _("Amount"),      MATCHER_COL_AMOUNT);
     add_column(view, _("Description"), MATCHER_COL_DESCRIPTION);
     add_column(view, _("Memo"),        MATCHER_COL_MEMO);
+    add_column(view, _("Reconciled"),  MATCHER_COL_RECONCILED);
 
     selection = gtk_tree_view_get_selection(view);
     g_signal_connect(selection, "changed",
@@ -401,6 +428,7 @@ static void
 init_match_picker_gui(GNCImportMatchPicker * matcher)
 {
     GtkBuilder *builder;
+    gboolean show_reconciled;
 
     /* DEBUG("Begin..."); */
 
@@ -415,6 +443,10 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
     matcher->transaction_matcher = GTK_WIDGET(gtk_builder_get_object (builder, "match_picker"));
     matcher->downloaded_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "download_view"));
     matcher->match_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "matched_view"));
+    matcher->reconciled_chk = (GtkCheckButton *)GTK_WIDGET(gtk_builder_get_object(builder, "hide_reconciled_check1"));
+    
+    gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_DISPLAY_RECONCILED,
+                    matcher->reconciled_chk, "active");
 
     gnc_import_match_picker_init_downloaded_view(matcher);
     gnc_import_match_picker_init_match_view(matcher);
@@ -425,6 +457,11 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
        ", clear_threshold:",matcher->clear_threshold,
        ", add_threshold:",matcher->add_threshold,
        ", display_threshold:",matcher->display_threshold); */
+    
+    /* now that we've bound the checkbox appropriately we can hook up the
+     * change callback */
+    gtk_signal_connect ((GtkObject *)matcher->reconciled_chk, "toggled",
+                       G_CALLBACK(match_show_reconciled_changed_cb), matcher);
 
     gnc_restore_window_size(GNC_PREFS_GROUP,
                             GTK_WINDOW (matcher->transaction_matcher));
