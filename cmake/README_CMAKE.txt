@@ -29,10 +29,10 @@ faster that using the default Makefile generator to me.)
 
 == Scope
 
-The scope of the current work is to duplicate the `make` and `make
-install` actions as the Autotools system would. Currently, there is no
-support for `make check`, `make dist`, `make distcheck` or similar
-targets. Other limitations include:
+The scope of the current work is to duplicate the `make`,
+`make check` and `make install` actions as the Autotools system would.
+Currently, there is no support for `make dist`, `make distcheck` or
+similar targets. Other limitations include:
 
   * Not all options available in `./configure` have been ported to
     this CMake system.
@@ -152,6 +152,24 @@ For Xcode via the command line (see below to build from within Xcode):
 
    $ xcodebuild -jobs N [-target=install]
 
+=== Running tests
+
+To run the Gnucash tests (also called checks), use the `check` target.
+For ninja, use:
+
+   $ ninja check
+
+For Makefiles:
+
+   $ make check
+
+For Xcode via the command line:
+
+   $ xcodebuild -jobs N -target=check
+
+A test summary will appear in the terminal. Full logs are available
+in at Testing/Temporary/LastTest.log in the build directory.
+
 === Launching GnuCash
 
 Assuming the build completes successfully, in all cases you can run
@@ -185,7 +203,6 @@ Then continue to follow the existing build instructions.
 
 At this writing, generating a distribution with the CMake build
 via dist.sh has not been tested.
-
 
 == Using Xcode on OS X
 

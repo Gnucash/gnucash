@@ -1,3 +1,4 @@
+ADD_SUBDIRECTORY(test)
 
 SET (register_gnome_SOURCES
   gncmod-register-gnome.c

@@ -36,6 +36,7 @@
 
 /* Running on OSX, either X11 or Quartz */
 #cmakedefine GNC_PLATFORM_OSX 1
+#cmakedefine PLATFORM_OSX 1
 
 /* POSIX-compliant OS */
 #cmakedefine GNC_PLATFORM_POSIX 1

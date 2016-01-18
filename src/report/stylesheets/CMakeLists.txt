@@ -1,3 +1,4 @@
+ADD_SUBDIRECTORY(test)
 
 SET(stylesheets_SOURCES
   gnc-plugin-stylesheets.c

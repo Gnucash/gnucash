@@ -1,4 +1,5 @@
 ADD_SUBDIRECTORY(gschemas)
+ADD_SUBDIRECTORY(test)
 
 SET(ofx_SOURCES
   gnc-ofx-import.c

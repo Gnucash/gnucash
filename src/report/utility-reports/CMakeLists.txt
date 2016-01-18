@@ -1,4 +1,4 @@
-
+ADD_SUBDIRECTORY(test)
 
 SET(utility_reports_SOURCES
   gncmod-utility-reports.c

@@ -1,4 +1,4 @@
-
+ADD_SUBDIRECTORY(test)
 # Build the library
 
 SET (app_utils_noinst_HEADERS

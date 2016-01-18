@@ -1,3 +1,5 @@
+ADD_SUBDIRECTORY(test)
+
 SET(tax_us_SOURCES gncmod-tax-us.c)
 
 # Add dependency on config.h

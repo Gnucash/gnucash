@@ -19,8 +19,11 @@ INCLUDE_DIRECTORIES(
   ${GUILE_INCLUDE_DIRS}
 )
 
-ADD_LIBRARY(test-core ${test_core_SOURCES} ${test_core_noinst_HEADERS})
-TARGET_LINK_LIBRARIES(test-core gnc-qof ${GLIB2_LDFLAGS})
+ADD_LIBRARY(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})
+TARGET_LINK_LIBRARIES(test-core gncmod-engine gnc-qof ${GLIB2_LDFLAGS})
+IF (UNIX)
+  TARGET_COMPILE_OPTIONS(test-core PRIVATE -fPIC)
+ENDIF()
 
 SET (SWIG_UNITTEST_SUPPORT_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-guile.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_UNITTEST_SUPPORT_GUILE_C}
@@ -41,7 +44,7 @@ SET(GUILE_LIBRARY_DIRS src/test-core src/libqof)
 SET(GUILE_DEPENDS      test-core-guile)
 
 
-GNC_ADD_SCHEME_TARGETS(scm_test_core
+GNC_ADD_SCHEME_TARGETS(scm-test-core
   ${test_core_SCHEME}
   ${GUILE_OUTPUT_DIR}
   "${GUILE_MODULES}"

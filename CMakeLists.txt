@@ -11,6 +11,8 @@ ENDIF()
 
 PROJECT (Gnucash)
 
+ENABLE_TESTING()
+
 # Version number of gnucash
 SET (GNUCASH_MAJOR_VERSION 2)
 SET (GNUCASH_MINOR_VERSION 6)
@@ -43,6 +45,7 @@ INCLUDE (CheckIncludeFiles)
 INCLUDE (GncAddSchemeTargets)
 INCLUDE (GncConfigure)
 INCLUDE (GncAddGSchemaTargets)
+INCLUDE (GncAddTest)
 
 # ############################################################
 # These options are settable from the CMake command line. For example, to disable
@@ -76,6 +79,8 @@ SET(DATADIRNAME share)
 SET(GNC_SYSTEM_XDG_DATA_DIRS /usr/local/share /usr/share)
 SET(GNC_DBD_DIR ${CMAKE_PREFIX_PATH}/lib/dbd CACHE PATH "specify location of libdbi drivers")
 SET(PKGLIBDIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash)
+SET(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
+SET(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")
 
 IF(GNC_BUILD_AS_INSTALL)
   SET(DATADIR_BUILD    ${CMAKE_BINARY_DIR}/${DATADIRNAME})
@@ -85,6 +90,11 @@ IF(GNC_BUILD_AS_INSTALL)
 
 ENDIF()
 
+SET(SHELL_FROM_ENV $ENV{SHELL})
+SET(SHELL bin/bash)
+IF (SHELL_FROM_ENV) # Replacing this with IF ($ENV{SHELL}) doesn't work.
+  SET(SHELL ${SHELL_FROM_ENV})
+ENDIF()
 
 IF (WIN32)
   # Help Windows find the various dependencies. We assume here that the standard advice for building
@@ -379,6 +389,25 @@ IF (GNC_BUILD_AS_INSTALL)
 ENDIF()
 # ############################################################
 
+SET(CMAKE_CTEST_COMMAND ctest)
+IF (XCODE_VERSION)
+  SET(CMAKE_CTEST_COMMAND ctest -C Debug)
+ENDIF()
+
+# There are targets that need to build before tests will run
+ADD_CUSTOM_TARGET(check
+  COMMAND ${CMAKE_CTEST_COMMAND}
+  DEPENDS gnucash scm-app-utils scm-gnome-utils scm-report-gnome
+     scm-engine scm-gnc-module scm-test-engine scm-report-system-3
+     scm-test-core scm-test-report-system scm-standard-reports-2
+     scm-test-standard-reports foo gncmodfoo baz gncmodbaz
+     bar gncmodbar gncmod_agedver gncmod_incompatdep
+     gncmod_futuremodsys
+)
+IF (NOT WIN32)
+  ADD_DEPENDENCIES(check gncmod-backend-xml-link)
+ENDIF()
+
 # The subdirectories
 ADD_SUBDIRECTORY (accounts)
 ADD_SUBDIRECTORY (checks)
@@ -441,7 +470,9 @@ SET(gnucash_DOCS
 
 INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
 
-# Link COPYING to LICENSE
+#Link LICENSE to COPYING so that people expecting to find it,
+#will. COPYING is normally linked by autogen.sh to the latest
+#automake-provided version.
 SET (_CMD create_symlink)
 IF (WIN32)
   SET(_CMD copy)

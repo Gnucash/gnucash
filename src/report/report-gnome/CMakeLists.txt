@@ -1,4 +1,4 @@
-
+ADD_SUBDIRECTORY(test)
 
 SET (report_gnome_HEADERS
   dialog-report-column-view.h
