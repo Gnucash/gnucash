@@ -108,6 +108,14 @@ void gnc_utf8_strip_invalid (gchar *str);
  * caller. */
 gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
 
+/** Strip any non-utf8 characters and any control characters (everything < 0x20,
+ * \b, \f, \n, \r, \t, and \v) from a string. Rewrites the string in-place.
+ *
+ * @param str Pointer to the string to clean up.
+ */
+
+void gnc_utf8_strip_invalid_and_controls (gchar* str);
+
 /**
  * @brief Converts a string from UTF-8 to the encoding used for
  * strings in the current locale.

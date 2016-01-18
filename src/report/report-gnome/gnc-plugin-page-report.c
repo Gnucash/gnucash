@@ -46,6 +46,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+#include <gnc-glib-utils.h>
 #include "gfec.h"
 #include "dialog-custom-report.h"
 #include "gnc-component-manager.h"
@@ -604,11 +605,11 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
                "Report name", NULL);
     if (strcmp(old_name, new_name) != 0)
     {
-        /* Bug 727130 - escape the non-printable characters from the name */
-        new_name_escaped = g_strescape(new_name,NULL);
-        ENTER("Escaped new report name: %s", new_name_escaped);
-        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name_escaped);
-        g_free(new_name_escaped);
+        /* Bug 727130, 760711 - remove only the non-printable
+         * characters from the new name */
+        gnc_utf8_strip_invalid_and_controls(new_name);
+        ENTER("Cleaned-up new report name: %s", new_name);
+        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
 	}
     g_free(new_name);
 
