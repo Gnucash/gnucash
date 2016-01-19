@@ -15976,7 +15976,7 @@ msgstr "Kein gültiges Online-Banking-Konto zugewiesen."
 
 #: ../src/import-export/aqb/gnc-ab-getbalance.c:97
 msgid "Online action \"Get Balance\" not available for this account."
-msgstr "Die Online-Aktion »Saldenabruf« is für dieses Konto nicht verfügbar."
+msgstr "Die Online-Aktion »Saldenabruf« ist für dieses Konto nicht verfügbar."
 
 #: ../src/import-export/aqb/gnc-ab-getbalance.c:130
 #: ../src/import-export/aqb/gnc-ab-gettrans.c:195
@@ -15992,7 +15992,7 @@ msgstr ""
 
 #: ../src/import-export/aqb/gnc-ab-gettrans.c:160
 msgid "Online action \"Get Transactions\" not available for this account."
-msgstr "Die Online-Aktion »Umsatzabruf« is für dieses Konto nicht verfügbar."
+msgstr "Die Online-Aktion »Umsatzabruf« ist für dieses Konto nicht verfügbar."
 
 #: ../src/import-export/aqb/gnc-ab-gettrans.c:213
 msgid ""
