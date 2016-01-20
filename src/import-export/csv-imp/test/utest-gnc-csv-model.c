@@ -42,7 +42,21 @@ typedef struct
     int          exp_day;
 } parse_date_data;
 
+typedef struct
+{
+    const gchar *csv_line;
+    int          num_fields;
+    const gchar *fields [8];
+} parse_test_data;
+
 static const gchar* samplefile1 = "sample1.csv";
+
+static parse_test_data comma_separated [] = {
+        { "Date,Num,Description,Notes,Account,Deposit,Withdrawal,Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
+        { "05/01/15,45,Acme Inc.,,Miscellaneous,,\"1,100.00\",", 8, { "05/01/15","45","Acme Inc.","","Miscellaneous","","1,100.00","" } },
+        { "05/01/15,45,Acme Inc.,,Miscellaneous,", 4, { "05/01/15","45","Acme Inc.","",NULL,NULL,NULL,NULL } },
+        { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
+};
 
 static char* get_filepath(const char* filename, gboolean test_existence)
 {
@@ -267,6 +281,7 @@ test_gnc_csv_new_parse_data (void)
 void gnc_csv_parse_data_free (GncCsvParseData* parse_data)// C: 3 in 1  Local: 0:0:0
 */
 // Basic freeing of memory - no test
+
 /* gnc_csv_convert_encoding
 int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding,// C: 1  Local: 1:0:0
 */
@@ -301,9 +316,8 @@ test_gnc_csv_load_file (Fixture *fixture, gconstpointer pData)
 int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)// C: 13 in 1  Local: 0:0:0
 */
 static void
-test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
+test_gnc_csv_parse_from_file (Fixture *fixture, gconstpointer pData)
 {
-
     GError *the_error = NULL;
     int resultcode = 0;
 
@@ -315,6 +329,62 @@ test_gnc_csv_parse (Fixture *fixture, gconstpointer pData)
     g_assert (g_strcmp0 ((char*)((GPtrArray*)(fixture->parse_data->orig_lines->pdata[1]))->pdata[6],
                          "1,100.00") == 0);
 }
+
+/* Test parsing for several different prepared strings
+ * These tests bypass file loading, rather taking a
+ * prepared set of strings as input. This makes it
+ * easier to add test cases without having to create new test files
+ * each time to load from.
+ * Note this bypasses encoding configuration, which should be tested
+ * independently.
+ */
+
+/* This helper function will run the parse step on the given data
+ * with the parser as configured by the calling test function.
+ * This allows the same code to be used with different csv test strings
+ * and parser option combinations.
+ */
+static void
+test_gnc_csv_parse_helper (GncCsvParseData *parse_data, gconstpointer pData)
+{
+    parse_test_data *test_data = (parse_test_data *) pData;
+    GError *the_error = NULL;
+    int resultcode = 0;
+    int i = 0;
+
+    while (test_data[i].csv_line)
+    {
+        int j;
+        parse_test_data cur_line = test_data[i];
+
+        g_test_message("Using string %s\n", cur_line.csv_line);
+        g_free (parse_data->file_str.begin);
+        parse_data->file_str.begin = g_strdup (cur_line.csv_line);
+        parse_data->file_str.end = parse_data->file_str.begin + strlen (parse_data->file_str.begin);
+        resultcode = gnc_csv_parse (parse_data, TRUE, &the_error);
+        g_assert (resultcode == 0);
+        for (j=0; j < cur_line.num_fields; j++)
+        {
+            g_assert (g_strcmp0 ((char*)((GPtrArray*)(parse_data->orig_lines->pdata[0]))->pdata[j],
+                     (cur_line.fields[j])) == 0);
+        }
+
+        i++;
+    }
+}
+
+static void
+test_gnc_csv_parse_comma_sep (Fixture *fixture, gconstpointer pData)
+{
+    GSList* sep_list = NULL;
+
+    sep_list = g_slist_append (sep_list, ",");
+    stf_parse_options_csv_set_separators (fixture->parse_data->options, NULL, sep_list);
+    g_slist_free (sep_list);
+
+    test_gnc_csv_parse_helper (fixture->parse_data, pData);
+}
+
 /* trans_property_free
 static void trans_property_free (TransProperty* prop)// Local: 2:0:0
 */
@@ -359,7 +429,8 @@ GNC_TEST_ADD_FUNC (suitename, "gnc csv new parse data", test_gnc_csv_new_parse_d
 // GNC_TEST_ADD (suitename, "gnc csv parse data free", Fixture, NULL, setup, test_gnc_csv_parse_data_free, teardown);
 // GNC_TEST_ADD (suitename, "gnc csv convert encoding", Fixture, NULL, setup, test_gnc_csv_convert_encoding, teardown);
 GNC_TEST_ADD (suitename, "gnc csv load file", Fixture, NULL, setup, test_gnc_csv_load_file, teardown);
-GNC_TEST_ADD (suitename, "gnc csv parse", Fixture, samplefile1, setup_one_file, test_gnc_csv_parse, teardown);
+GNC_TEST_ADD (suitename, "gnc csv parse from file", Fixture, samplefile1, setup_one_file, test_gnc_csv_parse_from_file, teardown);
+GNC_TEST_ADD (suitename, "parse comma", Fixture, comma_separated, setup, test_gnc_csv_parse_comma_sep, teardown);
 // GNC_TEST_ADD (suitename, "trans property free", Fixture, NULL, setup, test_trans_property_free, teardown);
 // GNC_TEST_ADD (suitename, "trans property set", Fixture, NULL, setup, test_trans_property_set, teardown);
 // GNC_TEST_ADD (suitename, "trans property list free", Fixture, NULL, setup, test_trans_property_list_free, teardown);
