@@ -13,17 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< e4a249d94edd56c8c56a6062f7f00c4643dd8081
-"POT-Creation-Date: 2016-01-05 05:25+0100\n"
-"PO-Revision-Date: 2015-12-21 20:26+0100\n"
-=======
-"POT-Creation-Date: 2015-12-31 09:15+0100\n"
-<<<<<<< bfb978eb886cbf3bb867a62b60ca3df39487480e
-"PO-Revision-Date: 2016-01-02 15:19+0100\n"
->>>>>>> add some translations
-=======
+"POT-Creation-Date: 2016-01-02 13:27+0100\n"
 "PO-Revision-Date: 2016-01-02 16:10+0100\n"
->>>>>>> remove some fuzzy flags
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -302,7 +293,8 @@ msgstr "Die Adresse (URL) Ihrer Webseite."
 
 #: ../src/app-utils/business-prefs.scm:107
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "Eine Identifikationsnummer ihres Geschäfts (z.B. USt-IdNr.: DE123456789)."
+msgstr ""
+"Eine Identifikationsnummer ihres Geschäfts (z.B. USt-IdNr.: DE123456789)."
 
 #: ../src/app-utils/business-prefs.scm:112
 msgid "Default Customer TaxTable"
@@ -318,7 +310,8 @@ msgstr "Voreinstellung Lieferant Steuertabelle"
 
 #: ../src/app-utils/business-prefs.scm:119
 msgid "The default tax table to apply to vendors."
-msgstr "Voreinstellung für die Steuertabelle, die bei Lieferanten angewendet werden "
+msgstr ""
+"Voreinstellung für die Steuertabelle, die bei Lieferanten angewendet werden "
 "soll."
 
 #: ../src/app-utils/business-prefs.scm:124
@@ -2394,7 +2387,8 @@ msgstr "Neuer Mitarbeiter..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:247
 msgid "Open the New Employee dialog"
-msgstr "Den Dialog für das Anlegen neuer Mitarbeiterinnen und Mitarbeitern öffnen"
+msgstr ""
+"Den Dialog für das Anlegen neuer Mitarbeiterinnen und Mitarbeitern öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:251
 msgid "_Find Employee..."
@@ -4540,7 +4534,8 @@ msgstr "Zusätzliche Kosten Kreditkarte"
 
 #: ../src/engine/gncInvoice.c:1609
 msgid "Generated from an invoice. Try unposting the invoice."
-msgstr "Aus einer Rechnung erzeugt. Für Änderungen müssen Sie die Buchung der "
+msgstr ""
+"Aus einer Rechnung erzeugt. Für Änderungen müssen Sie die Buchung der "
 "Rechnung löschen."
 
 #: ../src/engine/gncInvoice.c:2042
@@ -4989,7 +4984,8 @@ msgstr ""
 
 #: ../src/gnome/dialog-commodities.c:177
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Sind Sie sicher, dass Sie die gewählte Devise/Wertpapier löschen wollen?"
+msgstr ""
+"Sind Sie sicher, dass Sie die gewählte Devise/Wertpapier löschen wollen?"
 
 #: ../src/gnome/dialog-commodities.c:186
 msgid "Delete commodity?"
@@ -5167,7 +5163,8 @@ msgstr "Posten im Konto %s"
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
 msgstr[0] "Sind Sie sicher, dass Sie den gewählten Kurswert löschen wollen?"
-msgstr[1] "Sind Sie sicher, dass Sie die %d gewählten Kurswerte löschen wollen?"
+msgstr[1] ""
+"Sind Sie sicher, dass Sie die %d gewählten Kurswerte löschen wollen?"
 
 #: ../src/gnome/dialog-price-edit-db.c:193
 msgid "Delete prices?"
@@ -8424,7 +8421,6 @@ msgstr ""
 "jeweiligen Index von 0 bis 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:1
-
 msgid "Display this column"
 msgstr "Diese Spalte anzeigen?"
 
@@ -8809,7 +8805,6 @@ msgid "Payment Frequency"
 msgstr "Zahlungshäufigkeit"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:44
-
 msgid "Previous Option"
 msgstr "Vorherige Option"
 
@@ -9324,8 +9319,8 @@ msgid ""
 "specified date. Otherwise only stock prices added by Finance::Quote will be "
 "deleted."
 msgstr ""
-"Wenn gewählt, werden auch manuell eingegebene Kurse vor dem gewählten "
-"Datum gelöscht. Andernfalls werden nur von Finance::Quote hinzugefügte Kurse "
+"Wenn gewählt, werden auch manuell eingegebene Kurse vor dem gewählten Datum "
+"gelöscht. Andernfalls werden nur von Finance::Quote hinzugefügte Kurse "
 "gelöscht."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:4
@@ -11093,7 +11088,9 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-transfer.c:1331
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "Warnung: Modul Finance::Quote muss installiert sein, um die Schaltfläche zu aktivieren."
+msgstr ""
+"Warnung: Modul Finance::Quote muss installiert sein, um die Schaltfläche zu "
+"aktivieren."
 
 #: ../src/gnome-utils/dialog-transfer.c:1433
 msgid ""
@@ -12859,7 +12856,8 @@ msgstr "Fälligkeitsdatum eingeben"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3274
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
+msgstr ""
+"Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3276
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3283
@@ -13997,7 +13995,8 @@ msgstr "Konteneinrichtung bei neuer Datei"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
 #, fuzzy
 msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "Assistent für neue Konteneinrichtung öffnen, wenn »Neue Datei« im Menü "
+msgstr ""
+"Assistent für neue Konteneinrichtung öffnen, wenn »Neue Datei« im Menü "
 "»Datei« gewählt wird"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:64
@@ -15232,7 +15231,8 @@ msgstr "Haben"
 
 #: ../src/gnome/window-reconcile2.c:1270 ../src/gnome/window-reconcile.c:1307
 msgid "Are you sure you want to delete the selected transaction?"
-msgstr "Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
+msgstr ""
+"Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
 
 #. statement date title/value
 #: ../src/gnome/window-reconcile2.c:1800 ../src/gnome/window-reconcile.c:1840
@@ -19628,7 +19628,8 @@ msgstr "eine"
 
 #: ../src/report/business-reports/balsheet-eg.scm:336
 msgid "Display liabilities and equity below assets."
-msgstr "Zeigt die Passiva (Verbindlichkeiten und Eigenkapital) unter den Aktiva an."
+msgstr ""
+"Zeigt die Passiva (Verbindlichkeiten und Eigenkapital) unter den Aktiva an."
 
 #: ../src/report/business-reports/balsheet-eg.scm:338
 msgid "Two"
@@ -19636,7 +19637,8 @@ msgstr "zwei"
 
 #: ../src/report/business-reports/balsheet-eg.scm:339
 msgid "Display assets on the left, liabilities and equity on the right."
-msgstr "Stellt Aktiva links und Passiva (Verbindlichkeiten und Eigenkapital) rechts "
+msgstr ""
+"Stellt Aktiva links und Passiva (Verbindlichkeiten und Eigenkapital) rechts "
 "dar."
 
 #: ../src/report/business-reports/balsheet-eg.scm:344
@@ -21152,9 +21154,9 @@ msgstr "Diese Seite zeigt Ihnen Details zu steuerrelevanten Konten."
 
 #. we must confirm the user wants to delete their precious custom report!
 #: ../src/report/report-gnome/dialog-custom-report.c:315
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "Sind Sie sicher, dass Sie »%s« löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie \"%s\" löschen möchten?"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:421
 msgid "You must select a report configuration to load."
@@ -25507,7 +25509,8 @@ msgstr "Keine Devisen/Wertpapiere zum Börsenkurs-Abruf markiert."
 #: ../src/scm/price-quotes.scm:491 ../src/scm/price-quotes.scm:492
 #: ../src/scm/price-quotes.scm:515 ../src/scm/price-quotes.scm:518
 msgid "Unable to get quotes or diagnose the problem."
-msgstr "Abrufen der Börsenkurse fehlgeschlagen. Genauere Diagnose ebenfalls "
+msgstr ""
+"Abrufen der Börsenkurse fehlgeschlagen. Genauere Diagnose ebenfalls "
 "fehlgeschlagen."
 
 #: ../src/scm/price-quotes.scm:497 ../src/scm/price-quotes.scm:499
