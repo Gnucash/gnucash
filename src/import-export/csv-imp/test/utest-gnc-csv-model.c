@@ -189,7 +189,7 @@ test_parse_date (Fixture *fixture, gconstpointer pData)
         { 4,   "20130801",          -1,     -1, -1},
 
         // Sentinel to mark the end of available tests
-        {         NULL, 0,           0,     0,  0},
+        { 0,         NULL,           0,      0,  0},
 
     };
     int i = 0;
