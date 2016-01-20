@@ -58,6 +58,13 @@ static parse_test_data comma_separated [] = {
         { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
 };
 
+static parse_test_data semicolon_separated [] = {
+        { "Date;Num;Description;Notes;Account;Deposit;Withdrawal;Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
+        { "05/01/15;45;Acme Inc.;;Miscellaneous;;\"1,100.00\";", 8, { "05/01/15","45","Acme Inc.","","Miscellaneous","","1,100.00","" } },
+        { "05/01/15;45;Acme Inc.;;Miscellaneous;", 4, { "05/01/15","45","Acme Inc.","",NULL,NULL,NULL,NULL } },
+        { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
+};
+
 static char* get_filepath(const char* filename, gboolean test_existence)
 {
     char *result;
@@ -385,6 +392,18 @@ test_gnc_csv_parse_comma_sep (Fixture *fixture, gconstpointer pData)
     test_gnc_csv_parse_helper (fixture->parse_data, pData);
 }
 
+static void
+test_gnc_csv_parse_semicolon_sep (Fixture *fixture, gconstpointer pData)
+{
+    GSList* sep_list = NULL;
+
+    sep_list = g_slist_append (sep_list, ";");
+    stf_parse_options_csv_set_separators (fixture->parse_data->options, NULL, sep_list);
+    g_slist_free (sep_list);
+
+    test_gnc_csv_parse_helper (fixture->parse_data, pData);
+}
+
 /* trans_property_free
 static void trans_property_free (TransProperty* prop)// Local: 2:0:0
 */
@@ -431,6 +450,7 @@ GNC_TEST_ADD_FUNC (suitename, "gnc csv new parse data", test_gnc_csv_new_parse_d
 GNC_TEST_ADD (suitename, "gnc csv load file", Fixture, NULL, setup, test_gnc_csv_load_file, teardown);
 GNC_TEST_ADD (suitename, "gnc csv parse from file", Fixture, samplefile1, setup_one_file, test_gnc_csv_parse_from_file, teardown);
 GNC_TEST_ADD (suitename, "parse comma", Fixture, comma_separated, setup, test_gnc_csv_parse_comma_sep, teardown);
+GNC_TEST_ADD (suitename, "parse semicolon", Fixture, semicolon_separated, setup, test_gnc_csv_parse_semicolon_sep, teardown);
 // GNC_TEST_ADD (suitename, "trans property free", Fixture, NULL, setup, test_trans_property_free, teardown);
 // GNC_TEST_ADD (suitename, "trans property set", Fixture, NULL, setup, test_trans_property_set, teardown);
 // GNC_TEST_ADD (suitename, "trans property list free", Fixture, NULL, setup, test_trans_property_list_free, teardown);
