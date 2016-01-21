@@ -1613,6 +1613,8 @@ AC_CONFIG_FILES([src/tax/us/test/test-load-module],
 
 # A few files need extra actions at creation time
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
+#Link (copy on Windows) test data files:
+AC_CONFIG_LINKS([src/import-export/csv-imp/test/sample1.csv:src/import-export/csv-imp/test/sample1.csv])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT
 

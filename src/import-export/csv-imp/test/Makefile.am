@@ -24,12 +24,12 @@ test_csv_imp_SOURCES = \
   test-csv-imp.c \
   utest-gnc-csv-model.c
 
-test_csv_imp_HEADERSS =
+test_csv_imp_HEADERS =
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.
 test_csv_imp_LDADD = \
-  ${top_builddir}/${MODULEPATH}/libgncmod-csv-import.la \
+  ${top_builddir}/${MODULEPATH}/Libgncmod-csv-import.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgnc-gnome.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
@@ -66,8 +66,33 @@ test_csv_imp_CFLAGS = \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
+GNC_TEST_DEPS = \
+--library-dir    ${top_builddir}/${MODULEPATH} \
+--library-dir    ${top_builddir}/src/import-export \
+--library-dir    ${top_builddir}/src/gnome \
+--library-dir    ${top_builddir}/src/gnome-utils \
+--library-dir    ${top_builddir}/src/gnome-search \
+--library-dir    ${top_builddir}/src/register/ledger-core \
+--library-dir    ${top_builddir}/src/register/register-core \
+--library-dir    ${top_builddir}/src/register/register-gnome \
+--library-dir    ${top_builddir}/src/report/report-system \
+--library-dir    ${top_builddir}/src/report/report-gnome \
+--library-dir    ${top_builddir}/src/html \
+--library-dir    ${top_builddir}/src/app-utils \
+--library-dir    ${top_builddir}/src/backend/xml \
+--library-dir    ${top_builddir}/src/engine \
+--library-dir    ${top_builddir}/src/core-utils \
+--library-dir    ${top_builddir}/src/gnc-module \
+--library-dir    ${top_builddir}/src/libqof/qof \
+--library-dir    ${top_builddir}/lib/stf
+
 TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
-  G_DEBUG=
+  G_DEBUG= \
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
+
+EXTRA_DIST= \
+  sample1.csv
+
 
 AM_CPPFLAGS = -DG_LOG_DOMAIN=\"gnc.import.csv\"
