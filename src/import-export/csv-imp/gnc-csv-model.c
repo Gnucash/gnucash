@@ -362,6 +362,7 @@ GncCsvParseData* gnc_csv_new_parse_data (void)
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
+    parse_data->raw_mapping = NULL;
     parse_data->raw_str.begin = parse_data->raw_str.end
                                 = parse_data->file_str.begin = parse_data->file_str.end = NULL;
     parse_data->orig_lines = NULL;
