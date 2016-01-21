@@ -29,7 +29,7 @@ test_csv_imp_HEADERS =
 #The tests might require more libraries, but try to keep them
 #as independent as possible.
 test_csv_imp_LDADD = \
-  ${top_builddir}/${MODULEPATH}/Libgncmod-csv-import.la \
+  ${top_builddir}/${MODULEPATH}/libgncmod-csv-import.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgnc-gnome.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
