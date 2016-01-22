@@ -132,7 +132,7 @@ time64 parse_date (const char* date_str, int format)// C: 14 in 7 SCM: 9 in 2 Lo
 static void
 test_parse_date (void)
 {
-    time64 rawtime = gnc_time_utc (NULL);
+    time64 rawtime = gnc_time (NULL);
     struct tm *tm = gnc_gmtime (&rawtime);
     int curr_year = tm->tm_year;
 
