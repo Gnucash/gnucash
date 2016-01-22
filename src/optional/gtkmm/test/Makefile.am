@@ -12,7 +12,7 @@ test_gtkmm_SOURCES = \
 	test-gtkmm.cpp \
 	test-book.cpp
 
-test_gtkmm_HEADERSS = \
+test_gtkmm_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/gncmm/Book.hpp
 
 TEST_PROGS += test-gtkmm
