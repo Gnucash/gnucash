@@ -8,16 +8,24 @@ include $(top_srcdir)/test-templates/Makefile.decl
 #after $(top_srcdir) or $(top_builddir):
 MODULEPATH = src/optional/gtkmm
 
-test_gtkmm_SOURCES = \
-	test-gtkmm.cpp \
-	test-book.cpp
-
-test_gtkmm_HEADERSS = \
-	$(top_srcdir)/${MODULEPATH}/gncmm/Book.hpp
+#The test program. You'll need to add to this if you have more than one module above.
 
 check_PROGRAMS = test-gtkmm
 
 TESTS = ${check_PROGRAMS}
+
+test_gtkmmdir = ${top_srcdir}/${MODULEPATH}/test
+
+#Program files for tests go here. It's probably best to have one for
+#each file in the parent directory. Include
+#test_foo_support.c if you have one and aren't building the
+#support library.
+test_gtkmm_SOURCES = \
+	test-gtkmm.cpp \
+	test-book.cpp
+
+test_gtkmm_HEADERS = \
+	$(top_srcdir)/${MODULEPATH}/gncmm/Book.hpp
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.

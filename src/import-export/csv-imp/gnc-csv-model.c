@@ -50,6 +50,12 @@
 #include <stdlib.h>
 #include <math.h>
 
+GQuark
+gnc_csv_imp_error_quark (void)
+{
+  return g_quark_from_static_string ("g-csv-imp-error-quark");
+}
+
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 const int num_date_formats = 5;
@@ -158,10 +164,14 @@ static time64 parse_date_with_year (const char* date_str, int format)
         }
     }
 
-    /* Put some sane values in retvalue by using the current time for
+    /* Put some sane values in retvalue by using a fixed time for
      * the non-year-month-day parts of the date. */
     gnc_time (&rawtime);
     gnc_localtime_r (&rawtime, &retvalue);
+    retvalue.tm_hour = 11;
+    retvalue.tm_min = 0;
+    retvalue.tm_sec = 0;
+    retvalue.tm_isdst = -1;
 
     /* j traverses pmatch (index 0 contains the entire string, so we
      * start at index 1 for the first meaningful match). */
@@ -181,7 +191,7 @@ static time64 parse_date_with_year (const char* date_str, int format)
             date_segment[mem_length] = '\0';
 
             /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if the change when we use gnc_mktime
+             * values so that we can check if they change when we use gnc_mktime
              * below. */
             switch (segment_type)
             {
@@ -268,10 +278,14 @@ static time64 parse_date_without_year (const char* date_str, int format)
     if (pmatch[0].rm_eo == 0)
         return -1;
 
-    /* Put some sane values in retvalue by using the current time for
+    /* Put some sane values in retvalue by using a fixed time for
      * the non-year-month-day parts of the date. */
     gnc_time (&rawtime);
     gnc_localtime_r (&rawtime, &retvalue);
+    retvalue.tm_hour = 11;
+    retvalue.tm_min = 0;
+    retvalue.tm_sec = 0;
+    retvalue.tm_isdst = -1;
     orig_year = retvalue.tm_year;
 
     /* j traverses pmatch (index 0 contains the entire string, so we
@@ -293,7 +307,7 @@ static time64 parse_date_without_year (const char* date_str, int format)
             date_segment[mem_length] = '\0';
 
             /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if the change when we use gnc_mktime
+             * values so that we can check if they change when we use gnc_mktime
              * below. */
             switch (segment_type)
             {
@@ -357,6 +371,7 @@ GncCsvParseData* gnc_csv_new_parse_data (void)
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
+    parse_data->raw_mapping = NULL;
     parse_data->raw_str.begin = parse_data->raw_str.end
                                 = parse_data->file_str.begin = parse_data->file_str.end = NULL;
     parse_data->orig_lines = NULL;
@@ -417,7 +432,7 @@ void gnc_csv_parse_data_free (GncCsvParseData* parse_data)
         g_list_free (parse_data->transactions);
     }
 
-    g_free (parse_data->chunk);
+    g_string_chunk_free (parse_data->chunk);
     g_free (parse_data);
 }
 
@@ -475,14 +490,13 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
     const char* guess_enc = NULL;
 
     /* Get the raw data first and handle an error if one occurs. */
-    parse_data->raw_mapping = g_mapped_file_new (filename, FALSE, error);
+    parse_data->raw_mapping = g_mapped_file_new (filename, FALSE, NULL);
     if (parse_data->raw_mapping == NULL)
     {
         /* TODO Handle file opening errors more specifically,
          * e.g. inexistent file versus no read permission. */
         parse_data->raw_str.begin = NULL;
-        g_clear_error (error);
-        g_set_error (error, 0, GNC_CSV_FILE_OPEN_ERR, "%s", _("File opening failed."));
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_OPEN, "%s", _("File opening failed."));
         return 1;
     }
 
@@ -497,7 +511,7 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
                                       "UTF-8", NULL);
     if (guess_enc == NULL)
     {
-        g_set_error (error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
         return 1;
     }
     /* Convert using the guessed encoding into parse_data->file_str and
@@ -505,7 +519,7 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
     gnc_csv_convert_encoding (parse_data, guess_enc, error);
     if (parse_data->file_str.begin == NULL)
     {
-        g_set_error (error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
         return 1;
     }
     else
@@ -568,7 +582,7 @@ int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError**
     /* If it failed, generate an error. */
     if (parse_data->orig_lines == NULL)
     {
-        g_set_error (error, 0, 0, "Parsing failed.");
+        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_PARSE, "Parsing failed.");
         return 1;
     }
 

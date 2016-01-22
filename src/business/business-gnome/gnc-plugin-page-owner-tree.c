@@ -603,6 +603,8 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
+        PWARN("missing owner_type");
+        label = _("Unknown");
         break;
     case GNC_OWNER_CUSTOMER :
         label = _("Customers");

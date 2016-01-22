@@ -93,11 +93,11 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-TP_LINGUAS="az ca cs da eu fa ja nl pt rw sk sr sv tr uk zh_CN"
+TP_LINGUAS="az ca cs da eu fa ja nl rw sk sr sv tr uk zh_CN"
 dnl already marked as external at TP:
-GC_LINGUAS="ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt_BR ro ru ta te ur vi zh_TW "
+GC_LINGUAS="ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt pt_BR ro ru ta te ur vi zh_TW "
 dnl not marked or no TP team:
-NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali pt_PT"
+NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali"
 
 ALL_LINGUAS="$TP_LINGUAS $GC_LINGUAS $NEW_LINGUAS"
 
@@ -568,7 +568,7 @@ AC_SUBST(GUILE, [`pwd`/gnc-guile])
 AC_CHECK_HEADERS(ltdl.h,
          [],
          [AC_MSG_ERROR([ltdl.h not found. Perhaps you need to install
-the intltool-ltdl development packages ?])])
+the libtool(-ltdl) development package?])])
 
 ### --------------------------------------------------------------------------
 ### SWIG version checks (only when building from SCM)
@@ -1743,6 +1743,7 @@ AC_CONFIG_FILES(
   src/import-export/ofx/test/Makefile
   src/import-export/csv-imp/Makefile
   src/import-export/csv-imp/gschemas/Makefile
+  src/import-export/csv-imp/test/Makefile
   src/import-export/csv-exp/Makefile
   src/import-export/csv-exp/gschemas/Makefile
   src/import-export/log-replay/Makefile
@@ -1876,6 +1877,8 @@ AC_CONFIG_FILES([src/tax/us/test/test-load-module],
 
 # A few files need extra actions at creation time
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
+#Link (copy on Windows) test data files:
+AC_CONFIG_LINKS([src/import-export/csv-imp/test/sample1.csv:src/import-export/csv-imp/test/sample1.csv])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT
 

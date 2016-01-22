@@ -15,6 +15,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2015 \
   ChangeLog.2014 \
   ChangeLog.2013 \
   ChangeLog.2012 \

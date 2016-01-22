@@ -565,6 +565,19 @@
   smallest-fraction="100"
   local-symbol="Br"
 />
+<!-- "BYN" - "Belarussian Ruble"
+-->
+<currency
+  isocode="BYN"
+  fullname="Belarussian Ruble"
+  unitname="ruble"
+  partname="kapeyka"
+  namespace="ISO4217"
+  exchange-code="933"
+  parts-per-unit="100"
+  smallest-fraction="1"
+  local-symbol="Br"
+/>
 <!-- "BZD" - "Belize Dollar"
 -->
 <currency

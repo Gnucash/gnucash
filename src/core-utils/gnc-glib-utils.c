@@ -208,6 +208,21 @@ gnc_utf8_strip_invalid_strdup(const gchar* str)
     return result;
 }
 
+void
+gnc_utf8_strip_invalid_and_controls (gchar *str)
+{
+    gchar *c = NULL;
+    const gchar *controls = "\b\f\n\r\t\v";
+    g_return_if_fail (str != NULL && strlen (str) > 0);
+    gnc_utf8_strip_invalid (str); /* First fix the UTF-8 */
+    for(c = str + strlen (str) - 1; c != str; --c)
+    {
+        gboolean line_control = ((unsigned char)(*c) < 0x20);
+        if (line_control || strchr(controls, *c) != NULL)
+            *c = ' '; /*replace controls with a single space. */
+    }
+}
+
 gchar *
 gnc_locale_from_utf8(const gchar* str)
 {

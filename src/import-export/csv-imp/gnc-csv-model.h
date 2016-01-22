@@ -38,27 +38,34 @@
  * columns that can exist in a CSV/Fixed-Width file. There should be
  * no two columns with the same type except for the GNC_CSV_NONE
  * type. */
-enum GncCsvColumnType {GNC_CSV_NONE,
-                       GNC_CSV_DATE,
-                       GNC_CSV_NUM,
-                       GNC_CSV_DESCRIPTION,
-                       GNC_CSV_NOTES,
-                       GNC_CSV_ACCOUNT,
-                       GNC_CSV_DEPOSIT,
-                       GNC_CSV_WITHDRAWAL,
-                       GNC_CSV_BALANCE,
-                       GNC_CSV_MEMO,
-                       GNC_CSV_OACCOUNT,
-                       GNC_CSV_OMEMO,
-                       GNC_CSV_NUM_COL_TYPES
-                      };
+enum GncCsvColumnType {
+    GNC_CSV_NONE,
+    GNC_CSV_DATE,
+    GNC_CSV_NUM,
+    GNC_CSV_DESCRIPTION,
+    GNC_CSV_NOTES,
+    GNC_CSV_ACCOUNT,
+    GNC_CSV_DEPOSIT,
+    GNC_CSV_WITHDRAWAL,
+    GNC_CSV_BALANCE,
+    GNC_CSV_MEMO,
+    GNC_CSV_OACCOUNT,
+    GNC_CSV_OMEMO,
+    GNC_CSV_NUM_COL_TYPES
+};
+
+/** Error domain for the csv importer. */
+#define GNC_CSV_IMP_ERROR gnc_csv_imp_error_quark ()
+GQuark gnc_csv_imp_error_quark (void);
 
 /** Enumeration for error types. These are the different types of
  * errors that various functions used for the CSV/Fixed-Width importer
  * can have. */
-enum GncCsvErrorType {GNC_CSV_FILE_OPEN_ERR,
-                      GNC_CSV_ENCODING_ERR
-                     };
+enum GncCsvErrorType {
+    GNC_CSV_IMP_ERROR_OPEN,
+    GNC_CSV_IMP_ERROR_ENCODING,
+    GNC_CSV_IMP_ERROR_PARSE
+};
 
 /** Struct for containing a string. This struct simply contains
  * pointers to the beginning and end of a string. We need this because

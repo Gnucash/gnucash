@@ -1,3 +1,5 @@
+include $(top_srcdir)/test-templates/Makefile.decl
+MODULEPATH = src/core-utils
 
 AM_CPPFLAGS = \
   -I${top_srcdir} \
@@ -17,9 +19,11 @@ LDADD = \
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
 #
+
 TESTS = \
   test-gnc-uri-utils \
-  test-resolve-file-path
+  test-resolve-file-path \
+  test-gnc-glib-utils
 
 GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/libqof/qof \
@@ -29,10 +33,21 @@ TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
-check_PROGRAMS = \
-  test-gnc-uri-utils \
-  test-resolve-file-path
+check_PROGRAMS = ${TESTS}
 
+test_gnc_glib_utils_SOURCES = \
+  $(top_srcdir)/$(MODULEPATH)/gnc-glib-utils.c \
+  test-gnc-glib-utils.c
+
+test_gnc_glib_utils_LDADD = \
+        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+        ${top_builddir}/src/test-core/libtest-core.la \
+        $(GLIB_LIBS)
+
+test_gnc_glib_utils_CFLAGS = \
+        ${DEFAULT_INCLUDES} \
+        -I${top_srcdir}/${MODULEPATH} \
+        ${GLIB_CFLAGS}
 
 EXTRA_DIST =
 

@@ -73,6 +73,7 @@ gnc_show_splash_screen (void)
 
     gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
     gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
+    gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_DIALOG);
 
     pixmap = gnc_gnome_get_pixmap ("gnucash_splash.png");
 

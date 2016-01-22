@@ -363,9 +363,36 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     GncTreeView *view;
     GtkTreeModel *model, *f_model, *s_model;
     const gchar *sample_type, *sample_currency;
+    const gchar *owner_name = NULL, * owner_id = NULL;
     GncTreeViewOwnerPrivate *priv;
 
     ENTER(" ");
+
+    switch (owner_type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        PWARN("missing owner_type");
+        owner_name = _("Name");
+        owner_id = _("ID #");
+        break;
+    case GNC_OWNER_CUSTOMER :
+        owner_name = _("Company Name");
+        owner_id = _("Customer Number");
+        break;
+    case GNC_OWNER_JOB :
+        owner_name = _("Job Name");
+        owner_id = _("Job Number");
+        break;
+    case GNC_OWNER_VENDOR :
+        owner_name = _("Company Name");
+        owner_id = _("Vendor Number");
+        break;
+    case GNC_OWNER_EMPLOYEE :
+        owner_name = _("Employee Name");
+        owner_id = _("Employee Number");
+        break;
+    }
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_OWNER,
                          "name", "owner_tree", NULL);
@@ -394,7 +421,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     sample_currency = gnc_commodity_get_fullname(gnc_default_currency());
 
     priv->name_column
-        = gnc_tree_view_add_text_column(view, _("Owner Name"), GNC_OWNER_TREE_NAME_COL,
+        = gnc_tree_view_add_text_column(view, owner_name, GNC_OWNER_TREE_NAME_COL,
                                         NULL, "GnuCash Inc.",
                                         GNC_TREE_MODEL_OWNER_COL_NAME,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
@@ -405,7 +432,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
     priv->id_column
-        = gnc_tree_view_add_text_column(view, _("Owner ID"), GNC_OWNER_TREE_ID_COL,
+        = gnc_tree_view_add_text_column(view, owner_id, GNC_OWNER_TREE_ID_COL,
                                         NULL, "1-123-1234",
                                         GNC_TREE_MODEL_OWNER_COL_ID,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
