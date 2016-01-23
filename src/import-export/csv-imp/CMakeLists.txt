@@ -12,6 +12,7 @@ SET(csv_import_SOURCES
   gnc-csv-account-map.c
   gnc-csv-model.c
   gnc-csv-gnumeric-popup.c
+  gnc-csv-imp-trans.cpp
   gnc-csv-tokenizer.cpp
   gnc-csv-trans-settings.c
   gnc-dummy-tokenizer.cpp
@@ -36,6 +37,7 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-account-map.h
   gnc-csv-model.h
   gnc-csv-gnumeric-popup.h
+  gnc-csv-imp-trans.hpp
   gnc-csv-tokenizer.hpp
   gnc-csv-trans-settings.h
   gnc-dummy-tokenizer.hpp

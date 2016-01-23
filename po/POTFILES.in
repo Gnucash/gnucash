@@ -435,6 +435,7 @@ src/import-export/csv-imp/csv-account-import.c
 src/import-export/csv-imp/csv-fixed-trans-import.c
 src/import-export/csv-imp/gnc-csv-account-map.c
 src/import-export/csv-imp/gnc-csv-gnumeric-popup.c
+src/import-export/csv-imp/gnc-csv-imp-trans.cpp
 src/import-export/csv-imp/gnc-csv-model.c
 src/import-export/csv-imp/gnc-csv-tokenizer.cpp
 src/import-export/csv-imp/gnc-csv-trans-settings.c
