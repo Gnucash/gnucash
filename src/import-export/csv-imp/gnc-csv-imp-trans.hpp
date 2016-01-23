@@ -111,43 +111,43 @@ extern const gchar* date_format_user[];
 extern const gchar* gnc_csv_column_type_strs[];
 
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
-typedef struct
+class GncCsvParseData
 {
+public:
+    // Constructor - Destructor
+    GncCsvParseData();
+    ~GncCsvParseData();
+
+    int load_file (const char* filename, GError** error);
+    int convert_encoding (const char* encoding, GError** error);
+
+    int parse (gboolean guessColTypes, GError** error);
+    int parse_to_trans (Account* account, gboolean redo_errors);
+    bool check_for_column_type (int type);
+
+
     const gchar* encoding;
-    GMappedFile* raw_mapping;   /**< The mapping containing raw_str */
-    GncCsvStr raw_str;          /**< Untouched data from the file as a string */
     GncCsvStr file_str;         /**< raw_str translated into UTF-8 */
     GPtrArray* orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
-    GArray* orig_row_lengths;   /**< The lengths of rows in orig_lines
-                                      before error messages are appended */
     int orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
-    GStringChunk* chunk;        /**< A chunk of memory in which the contents of orig_lines is stored */
+    GList* error_lines;         /**< List of row numbers in orig_lines that have errors */
     StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
     GArray* column_types;       /**< Array of values from the GncCsvColumnType enumeration */
-    GList* error_lines;         /**< List of row numbers in orig_lines that have errors */
     GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     guint start_row;            /**< The start row to generate transactions from. */
     guint end_row;              /**< The end row to generate transactions from. */
     gboolean skip_rows;         /**< Skip Alternate Rows from start row. */
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
-} GncCsvParseData;
 
-GncCsvParseData* gnc_csv_new_parse_data (void);
-
-void gnc_csv_parse_data_free (GncCsvParseData* parse_data);
-
-int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
-                      GError** error);
-
-int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding, GError** error);
-
-int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
-
-int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
+private:
+    GMappedFile* raw_mapping;   /**< The mapping containing raw_str */
+    GncCsvStr raw_str;          /**< Untouched data from the file as a string */
+    GArray* orig_row_lengths;   /**< The lengths of rows in orig_lines
+                                      before error messages are appended */
+    GStringChunk* chunk;        /**< A chunk of memory in which the contents of orig_lines is stored */
+};
 
 time64 parse_date (const char* date_str, int format);
-
-gboolean gnc_csv_parse_check_for_column_type (GncCsvParseData* parse_data, gint type);
 
 #endif

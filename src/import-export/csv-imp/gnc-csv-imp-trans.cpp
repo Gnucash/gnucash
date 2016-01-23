@@ -360,76 +360,60 @@ time64 parse_date (const char* date_str, int format)
 /** Constructor for GncCsvParseData.
  * @return Pointer to a new GncCSvParseData
  */
-GncCsvParseData* gnc_csv_new_parse_data (void)
+GncCsvParseData::GncCsvParseData()
 {
-    GncCsvParseData* parse_data = g_new(GncCsvParseData, 1);
-    parse_data->encoding = "UTF-8";
+    encoding = "UTF-8";
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
-    parse_data->raw_mapping = NULL;
-    parse_data->raw_str.begin = parse_data->raw_str.end
-                                = parse_data->file_str.begin = parse_data->file_str.end = NULL;
-    parse_data->orig_lines = NULL;
-    parse_data->orig_row_lengths = NULL;
-    parse_data->column_types = NULL;
-    parse_data->error_lines = parse_data->transactions = NULL;
-    parse_data->options = default_parse_options();
-    parse_data->date_format = -1;
-    parse_data->currency_format = 0;
-    parse_data->chunk = g_string_chunk_new(100 * 1024);
-    parse_data->start_row = 0;
-    parse_data->end_row = 1000;
-    parse_data->skip_rows = FALSE;
-    return parse_data;
+    raw_mapping = NULL;
+    raw_str.begin = raw_str.end = file_str.begin = file_str.end = NULL;
+    orig_lines = NULL;
+    orig_row_lengths = NULL;
+    column_types = NULL;
+    error_lines = transactions = NULL;
+    options = default_parse_options();
+    date_format = -1;
+    currency_format = 0;
+    chunk = g_string_chunk_new(100 * 1024);
+    start_row = 0;
+    end_row = 1000;
+    skip_rows = FALSE;
 }
 
 /** Destructor for GncCsvParseData.
- * @param parse_data Parse data whose memory will be freed
  */
-void gnc_csv_parse_data_free (GncCsvParseData* parse_data)
+GncCsvParseData::~GncCsvParseData()
 {
     /* All non-NULL pointers have been initialized and must be freed. */
 
-    if (parse_data->raw_mapping != NULL)
+    if (raw_mapping != NULL)
     {
-        g_mapped_file_unref (parse_data->raw_mapping);
+        g_mapped_file_unref (raw_mapping);
     }
 
-    if (parse_data->file_str.begin != NULL)
-        g_free (parse_data->file_str.begin);
+    if (file_str.begin != NULL)
+        g_free (file_str.begin);
 
-    if (parse_data->orig_lines != NULL)
-        stf_parse_general_free (parse_data->orig_lines);
+    if (orig_lines != NULL)
+        stf_parse_general_free (orig_lines);
 
-    if (parse_data->orig_row_lengths != NULL)
-        g_array_free (parse_data->orig_row_lengths, FALSE);
+    if (orig_row_lengths != NULL)
+        g_array_free (orig_row_lengths, FALSE);
 
-    if (parse_data->options != NULL)
-        stf_parse_options_free (parse_data->options);
+    if (options != NULL)
+        stf_parse_options_free (options);
 
-    if (parse_data->column_types != NULL)
-        g_array_free (parse_data->column_types, TRUE);
+    if (column_types != NULL)
+        g_array_free (column_types, TRUE);
 
-    if (parse_data->error_lines != NULL)
-        g_list_free (parse_data->error_lines);
+    if (error_lines != NULL)
+        g_list_free (error_lines);
 
-    if (parse_data->transactions != NULL)
-    {
-        GList* transactions = parse_data->transactions;
-        /* We have to free the GncCsvTransLine's that are at each node in
-         * the list before freeing the entire list. */
-        do
-        {
-            g_free (transactions->data);
-            transactions = g_list_next (transactions);
-        }
-        while (transactions != NULL);
-        g_list_free (parse_data->transactions);
-    }
+    if (transactions != NULL)
+        g_list_free_full (transactions, g_free);
 
-    g_string_chunk_free (parse_data->chunk);
-    g_free (parse_data);
+    g_string_chunk_free (chunk);
 }
 
 /** Converts raw file data using a new encoding. This function must be
@@ -440,31 +424,31 @@ void gnc_csv_parse_data_free (GncCsvParseData* parse_data)
  * @param error Will point to an error on failure
  * @return 0 on success, 1 on failure
  */
-int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding,
-                             GError** error)
+int GncCsvParseData::convert_encoding (const char* encoding,
+                                       GError** error)
 {
     gsize bytes_read, bytes_written;
 
-    /* If parse_data->file_str has already been initialized it must be
+    /* If file_str has already been initialized it must be
      * freed first. (This should always be the case, since
      * gnc_csv_load_file should always be called before this
      * function.) */
-    if (parse_data->file_str.begin != NULL)
-        g_free(parse_data->file_str.begin);
+    if (file_str.begin != NULL)
+        g_free(file_str.begin);
 
     /* Do the actual translation to UTF-8. */
-    parse_data->file_str.begin = g_convert (parse_data->raw_str.begin,
-                                           parse_data->raw_str.end - parse_data->raw_str.begin,
+    file_str.begin = g_convert (raw_str.begin,
+                                           raw_str.end - raw_str.begin,
                                            "UTF-8", encoding, &bytes_read, &bytes_written,
                                            error);
     /* Handle errors that occur. */
-    if (parse_data->file_str.begin == NULL)
+    if (file_str.begin == NULL)
         return 1;
 
     /* On success, save the ending pointer of the translated data and
      * the encoding type and return 0. */
-    parse_data->file_str.end = parse_data->file_str.begin + bytes_written;
-    parse_data->encoding = (gchar*)encoding;
+    file_str.end = file_str.begin + bytes_written;
+    encoding = (gchar*)encoding;
     return 0;
 }
 
@@ -480,40 +464,40 @@ int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding,
  * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
-int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
-                      GError** error)
+int GncCsvParseData::load_file (const char* filename,
+                                GError** error)
 {
     const char* guess_enc = NULL;
 
     /* Get the raw data first and handle an error if one occurs. */
-    parse_data->raw_mapping = g_mapped_file_new (filename, FALSE, NULL);
-    if (parse_data->raw_mapping == NULL)
+    raw_mapping = g_mapped_file_new (filename, FALSE, error);
+    if (raw_mapping == NULL)
     {
         /* TODO Handle file opening errors more specifically,
          * e.g. inexistent file versus no read permission. */
-        parse_data->raw_str.begin = NULL;
+        raw_str.begin = NULL;
         g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_OPEN, "%s", _("File opening failed."));
         return 1;
     }
 
     /* Copy the mapping's contents into parse-data->raw_str. */
-    parse_data->raw_str.begin = g_mapped_file_get_contents (parse_data->raw_mapping);
-    parse_data->raw_str.end = parse_data->raw_str.begin + g_mapped_file_get_length (parse_data->raw_mapping);
+    raw_str.begin = g_mapped_file_get_contents (raw_mapping);
+    raw_str.end = raw_str.begin + g_mapped_file_get_length (raw_mapping);
 
     /* Make a guess at the encoding of the data. */
-    if (!g_mapped_file_get_length (parse_data->raw_mapping) == 0)
-        guess_enc = go_guess_encoding ((const char*)(parse_data->raw_str.begin),
-                                      (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
+    if (!g_mapped_file_get_length (raw_mapping) == 0)
+        guess_enc = go_guess_encoding ((const char*)(raw_str.begin),
+                                      (size_t)(raw_str.end - raw_str.begin),
                                       "UTF-8", NULL);
     if (guess_enc == NULL)
     {
         g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
         return 1;
     }
-    /* Convert using the guessed encoding into parse_data->file_str and
+    /* Convert using the guessed encoding into file_str and
      * handle any errors that occur. */
-    gnc_csv_convert_encoding (parse_data, guess_enc, error);
-    if (parse_data->file_str.begin == NULL)
+    convert_encoding (guess_enc, error);
+    if (file_str.begin == NULL)
     {
         g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
         return 1;
@@ -523,7 +507,7 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
 }
 
 /** Parses a file into cells. This requires having an encoding that
- * works (see gnc_csv_convert_encoding). parse_data->options should be
+ * works (see gnc_csv_convert_encoding). options should be
  * set according to how the user wants before calling this
  * function. (Note: this function must be called with guessColTypes as
  * TRUE before it is ever called with it as FALSE.) (Note: if
@@ -534,76 +518,76 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
  * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
-int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)
+int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
 {
     /* max_cols is the number of columns in the row with the most columns. */
     guint i, max_cols = 0;
 
-    if (parse_data->orig_lines != NULL)
+    if (orig_lines != NULL)
     {
-        stf_parse_general_free (parse_data->orig_lines);
+        stf_parse_general_free (orig_lines);
     }
 
     /* If everything is fine ... */
-    if (parse_data->file_str.begin != NULL)
+    if (file_str.begin != NULL)
     {
         /* Do the actual parsing. */
-        parse_data->orig_lines = stf_parse_general (parse_data->options, parse_data->chunk,
-                                 parse_data->file_str.begin,
-                                 parse_data->file_str.end);
+        orig_lines = stf_parse_general (options, chunk,
+                                 file_str.begin,
+                                 file_str.end);
     }
     /* If we couldn't get the encoding right, we just want an empty array. */
     else
     {
-        parse_data->orig_lines = g_ptr_array_new();
+        orig_lines = g_ptr_array_new();
     }
 
-    /* Record the original row lengths of parse_data->orig_lines. */
-    if (parse_data->orig_row_lengths != NULL)
-        g_array_free (parse_data->orig_row_lengths, FALSE);
+    /* Record the original row lengths of orig_lines. */
+    if (orig_row_lengths != NULL)
+        g_array_free (orig_row_lengths, FALSE);
 
-    parse_data->orig_row_lengths =
-        g_array_sized_new (FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
+    orig_row_lengths =
+        g_array_sized_new (FALSE, FALSE, sizeof(int), orig_lines->len);
 
-    g_array_set_size (parse_data->orig_row_lengths, parse_data->orig_lines->len);
-    parse_data->orig_max_row = 0;
-    for (i = 0; i < parse_data->orig_lines->len; i++)
+    g_array_set_size (orig_row_lengths, orig_lines->len);
+    orig_max_row = 0;
+    for (i = 0; i < orig_lines->len; i++)
     {
-        int length = ((GPtrArray*)parse_data->orig_lines->pdata[i])->len;
-        parse_data->orig_row_lengths->data[i] = length;
-        if (length > parse_data->orig_max_row)
-            parse_data->orig_max_row = length;
+        int length = ((GPtrArray*)orig_lines->pdata[i])->len;
+        orig_row_lengths->data[i] = length;
+        if (length > orig_max_row)
+            orig_max_row = length;
     }
 
     /* If it failed, generate an error. */
-    if (parse_data->orig_lines == NULL)
+    if (orig_lines == NULL)
     {
         g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_PARSE, "Parsing failed.");
         return 1;
     }
 
     /* Now that we have data, let's set max_cols. */
-    for (i = 0; i < parse_data->orig_lines->len; i++)
+    for (i = 0; i < orig_lines->len; i++)
     {
-        if (max_cols < ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len)
-            max_cols = ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len;
+        if (max_cols < ((GPtrArray*)(orig_lines->pdata[i]))->len)
+            max_cols = ((GPtrArray*)(orig_lines->pdata[i]))->len;
     }
 
     if (guessColTypes)
     {
-        /* Free parse_data->column_types if it's already been created. */
-        if (parse_data->column_types != NULL)
-            g_array_free (parse_data->column_types, TRUE);
+        /* Free column_types if it's already been created. */
+        if (column_types != NULL)
+            g_array_free (column_types, TRUE);
 
-        /* Create parse_data->column_types and fill it with guesses based
+        /* Create column_types and fill it with guesses based
          * on the contents of each column. */
-        parse_data->column_types = g_array_sized_new (FALSE, FALSE, sizeof(int),
+        column_types = g_array_sized_new (FALSE, FALSE, sizeof(int),
                                    max_cols);
-        g_array_set_size (parse_data->column_types, max_cols);
+        g_array_set_size (column_types, max_cols);
         /* TODO Make it actually guess. */
-        for (i = 0; i < parse_data->column_types->len; i++)
+        for (i = 0; i < column_types->len; i++)
         {
-            parse_data->column_types->data[i] = GNC_CSV_NONE;
+            column_types->data[i] = GNC_CSV_NONE;
         }
     }
     else
@@ -611,13 +595,13 @@ int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError**
         /* If we don't need to guess column types, we will simply set any
          * new columns that are created that didn't exist before to "None"
          * since we don't want gibberish to appear. Note:
-         * parse_data->column_types should have already been
+         * column_types should have already been
          * initialized, so we don't check for it being NULL. */
-        i = parse_data->column_types->len;
-        g_array_set_size (parse_data->column_types, max_cols);
-        for (; i < parse_data->column_types->len; i++)
+        i = column_types->len;
+        g_array_set_size (column_types, max_cols);
+        for (; i < column_types->len; i++)
         {
-            parse_data->column_types->data[i] = GNC_CSV_NONE;
+            column_types->data[i] = GNC_CSV_NONE;
         }
     }
     return 0;
@@ -1096,8 +1080,8 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
 }
 
 /** Creates a list of transactions from parsed data. Transactions that
- * could be created from rows are placed in parse_data->transactions;
- * rows that fail are placed in parse_data->error_lines. (Note: there
+ * could be created from rows are placed in transactions;
+ * rows that fail are placed in error_lines. (Note: there
  * is no way for this function to "fail," i.e. it only returns 0, so
  * it may be changed to a void function in the future.)
  * @param parse_data Data that is being parsed
@@ -1105,67 +1089,66 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
  * @param redo_errors TRUE to convert only error data, FALSE for all data
  * @return 0 on success, 1 on failure
  */
-int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
-                           gboolean redo_errors)
+int GncCsvParseData::parse_to_trans (Account* account,
+                                     gboolean redo_errors)
 {
     gboolean hasBalanceColumn;
     guint i, j, max_cols = 0;
-    GArray* column_types = parse_data->column_types;
-    GList *error_lines = NULL, *begin_error_lines = NULL;
+    GList *error_lines_iter = NULL, *begin_error_lines = NULL;
     Account *home_account = NULL;
 
     /* last_transaction points to the last element in
-     * parse_data->transactions, or NULL if it's empty. */
+     * transactions, or NULL if it's empty. */
     GList* last_transaction = NULL;
 
-    /* Free parse_data->error_lines and parse_data->transactions if they
+    /* Free error_lines and transactions if they
      * already exist. */
     if (redo_errors) /* If we're redoing errors, we save freeing until the end. */
-        begin_error_lines = error_lines = parse_data->error_lines;
+        begin_error_lines = error_lines_iter = error_lines;
     else
     {
-        if (parse_data->error_lines != NULL)
-            g_list_free(parse_data->error_lines);
+        if (error_lines != NULL)
+            g_list_free(error_lines);
 
-        if (parse_data->transactions != NULL)
-            g_list_free (parse_data->transactions);
+        if (transactions != NULL)
+            g_list_free (transactions);
     }
-    parse_data->error_lines = NULL;
+    error_lines = NULL;
 
     if (redo_errors) /* If we're looking only at error data ... */
     {
-        if (parse_data->transactions == NULL)
+        if (transactions == NULL)
             last_transaction = NULL;
         else
         {
             /* Move last_transaction to the end. */
-            last_transaction = parse_data->transactions;
+            last_transaction = transactions;
             while (g_list_next (last_transaction) != NULL)
             {
                 last_transaction = g_list_next (last_transaction);
             }
         }
-        /* ... we use only the lines in error_lines. */
-        if (error_lines == NULL)
-            i = parse_data->orig_lines->len; /* Don't go into the for loop. */
+        /* ... we use only the lines in error_lines_iter. */
+        if (error_lines_iter == NULL)
+            i = orig_lines->len; /* Don't go into the for loop. */
         else
-            i = GPOINTER_TO_INT(error_lines->data);
+            i = GPOINTER_TO_INT(error_lines_iter->data);
     }
     else /* Otherwise, we look at all the data. */
     {
         /* The following while-loop effectively behaves like the following for-loop:
-         * for(i = 0; i < parse_data->orig_lines->len; i++). */
-        i = parse_data->start_row;
+         * for(i = 0; i < orig_lines->len; i++). */
+        i = start_row;
         last_transaction = NULL;
     }
 
-    /* set parse_data->end_row to number of lines */
-    if (parse_data->end_row > parse_data->orig_lines->len)
-        parse_data->end_row = parse_data->orig_lines->len;
+    /* set end_row to number of lines */
+    if (end_row > orig_lines->len)
+        end_row = orig_lines->len;
 
-    while (i < parse_data->end_row)
+    while (i < end_row)
     {
-        GPtrArray* line = (GPtrArray*) parse_data->orig_lines->pdata[i];
+        GPtrArray* line = (GPtrArray*) orig_lines->pdata[i];
         /* This flag is TRUE if there are any errors in this row. */
         gboolean errors = FALSE;
         gchar* error_message = NULL;
@@ -1194,7 +1177,7 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
         }
         else
         {
-            list = trans_property_list_new (home_account, parse_data->date_format, parse_data->currency_format);
+            list = trans_property_list_new (home_account, date_format, currency_format);
 
             for (j = 0; j < line->len; j++)
             {
@@ -1219,7 +1202,7 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
                 }
             }
 
-            /* If we had success, add the transaction to parse_data->transaction. */
+            /* If we had success, add the transaction to transaction. */
             if (!errors)
             {
                 trans_line = trans_property_list_to_trans (list, &error_message);
@@ -1228,13 +1211,13 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
             trans_property_list_free (list);
         }
 
-        /* If there were errors, add this line to parse_data->error_lines. */
+        /* If there were errors, add this line to error_lines. */
         if (errors)
         {
-            parse_data->error_lines = g_list_append (parse_data->error_lines,
-                                                    GINT_TO_POINTER(i));
+            error_lines = g_list_append (error_lines,
+                                         GINT_TO_POINTER(i));
             /* If there's already an error message, we need to replace it. */
-            if (line->len > (guint)(parse_data->orig_row_lengths->data[i]))
+            if (line->len > (guint)(orig_row_lengths->data[i]))
             {
                 g_free(line->pdata[line->len - 1]);
                 line->pdata[line->len - 1] = error_message;
@@ -1259,10 +1242,10 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
             if (last_transaction == NULL ||
                     xaccTransGetDate (((GncCsvTransLine*)(last_transaction->data))->trans) <= xaccTransGetDate (trans_line->trans))
             {
-                parse_data->transactions = g_list_append (parse_data->transactions, trans_line);
+                transactions = g_list_append (transactions, trans_line);
                 /* If this is the first transaction, we need to get last_transaction on track. */
                 if (last_transaction == NULL)
-                    last_transaction = parse_data->transactions;
+                    last_transaction = transactions;
                 else /* Otherwise, we can just continue. */
                     last_transaction = g_list_next (last_transaction);
             }
@@ -1278,11 +1261,11 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
                 /* Move insertion_spot one location forward since we have to
                  * use the g_list_insert_before function. */
                 if (insertion_spot == NULL) /* We need to handle the case of inserting at the beginning of the list. */
-                    insertion_spot = parse_data->transactions;
+                    insertion_spot = transactions;
                 else
                     insertion_spot = g_list_next (insertion_spot);
 
-                parse_data->transactions = g_list_insert_before (parse_data->transactions, insertion_spot, trans_line);
+                transactions = g_list_insert_before (transactions, insertion_spot, trans_line);
             }
         }
 
@@ -1290,15 +1273,15 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
         if (redo_errors)
         {
             /* Move to the next error line in the list. */
-            error_lines = g_list_next (error_lines);
-            if (error_lines == NULL)
-                i = parse_data->orig_lines->len; /* Don't continue the for loop. */
+            error_lines_iter = g_list_next (error_lines_iter);
+            if (error_lines_iter == NULL)
+                i = orig_lines->len; /* Don't continue the for loop. */
             else
-                i = GPOINTER_TO_INT(error_lines->data);
+                i = GPOINTER_TO_INT(error_lines_iter->data);
         }
         else
         {
-            if (parse_data->skip_rows == FALSE)
+            if (skip_rows == FALSE)
                 i++;
             else
                 i = i + 2;
@@ -1307,9 +1290,9 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
 
     /* If we have a balance column, set the appropriate amounts on the transactions. */
     hasBalanceColumn = FALSE;
-    for (i = 0; i < parse_data->column_types->len; i++)
+    for (i = 0; i < column_types->len; i++)
     {
-        if (parse_data->column_types->data[i] == GNC_CSV_BALANCE)
+        if (column_types->data[i] == GNC_CSV_BALANCE)
         {
             hasBalanceColumn = TRUE;
             break;
@@ -1320,7 +1303,7 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
     {
         Split      *split, *osplit;
         gnc_numeric balance_offset;
-        GList      *transactions = parse_data->transactions;
+        GList* tx_iter = transactions;
 
         if (account != NULL)
             home_account = account;
@@ -1331,10 +1314,9 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
          * any given transaction. */
         balance_offset = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (home_account),
                                      GNC_HOW_RND_ROUND_HALF_UP);
-
-        while (transactions != NULL)
+        while (tx_iter != NULL)
         {
-            GncCsvTransLine* trans_line = (GncCsvTransLine*)transactions->data;
+            GncCsvTransLine* trans_line = (GncCsvTransLine*)tx_iter->data;
             if (trans_line->balance_set)
             {
                 time64 date = xaccTransGetDate (trans_line->trans);
@@ -1372,33 +1354,32 @@ int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account,
                                                  xaccAccountGetCommoditySCU (home_account),
                                                  GNC_HOW_RND_ROUND_HALF_UP);
             }
-            transactions = g_list_next (transactions);
+            tx_iter = g_list_next (tx_iter);
         }
     }
 
     if (redo_errors) /* Now that we're at the end, we do the freeing. */
         g_list_free (begin_error_lines);
 
-    /* We need to resize parse_data->column_types since errors may have added columns. */
-    for (i = 0; i < parse_data->orig_lines->len; i++)
+    /* We need to resize column_types since errors may have added columns. */
+    for (i = 0; i < orig_lines->len; i++)
     {
-        if (max_cols < ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len)
-            max_cols = ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len;
+        if (max_cols < ((GPtrArray*)(orig_lines->pdata[i]))->len)
+            max_cols = ((GPtrArray*)(orig_lines->pdata[i]))->len;
     }
-    i = parse_data->column_types->len;
-    parse_data->column_types = g_array_set_size (parse_data->column_types, max_cols);
+    i = column_types->len;
+    column_types = g_array_set_size (column_types, max_cols);
     for (; i < max_cols; i++)
     {
-        parse_data->column_types->data[i] = GNC_CSV_NONE;
+        column_types->data[i] = GNC_CSV_NONE;
     }
     return 0;
 }
 
 
-gboolean
-gnc_csv_parse_check_for_column_type (GncCsvParseData* parse_data, gint type)
+bool
+GncCsvParseData::check_for_column_type (int type)
 {
-    GArray* column_types = parse_data->column_types;
     gboolean ret = FALSE;
     int j, ncols = column_types->len; /* ncols is the number of columns in the data. */
 
