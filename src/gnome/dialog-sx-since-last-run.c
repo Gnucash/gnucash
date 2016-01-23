@@ -791,10 +791,36 @@ gnc_sx_slr_tree_model_adapter_new(GncSxInstanceModel *instances)
     return rtn;
 }
 
+static void
+creation_error_dialog (GtkWindow *parent, GList **creation_errors)
+{
+    GList *node = *creation_errors;
+    GtkMessageDialog *dialog = NULL;
+    gchar *message = NULL;
+    if (*creation_errors == NULL) return;
+    for(; node != NULL; node = g_list_next (node))
+    {
+        const gchar *fmt = message == NULL ? "%s%s" : "%s\n%s";
+        gchar *new_msg = g_strdup_printf (fmt, message, node->data);
+        g_free (message);
+        message = new_msg;
+        g_free(node->data);
+    }
+    g_list_free (*creation_errors);
+    creation_errors = NULL;
+    dialog = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
+                                     GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+                                     "%s", message);
+    gtk_dialog_run (dialog);
+    gtk_widget_unref (dialog);
+    g_free (message);
+}
+
 void
 gnc_sx_sxsincelast_book_opened(void)
 {
     GList *auto_created_txns = NULL;
+    GList *creation_errors = NULL;
     GncSxInstanceModel *inst_model;
     GncSxSummary summary;
 
@@ -810,7 +836,8 @@ gnc_sx_sxsincelast_book_opened(void)
     inst_model = gnc_sx_get_current_instances();
     gnc_sx_instance_model_summarize(inst_model, &summary);
     gnc_sx_summary_print(&summary);
-    gnc_sx_instance_model_effect_change(inst_model, TRUE, &auto_created_txns, NULL);
+    gnc_sx_instance_model_effect_change(inst_model, TRUE, &auto_created_txns,
+                                        &creation_errors);
 
     if (summary.need_dialog)
     {
@@ -837,6 +864,8 @@ gnc_sx_sxsincelast_book_opened(void)
     }
     g_list_free(auto_created_txns);
     g_object_unref(G_OBJECT(inst_model));
+    if (creation_errors)
+        creation_error_dialog(&creation_errors);
 }
 
 static void
@@ -1075,6 +1104,7 @@ dialog_destroy_cb(GtkWidget *object, GncSxSinceLastRunDialog *app_dialog)
 static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
+    GList* creation_errors = NULL;
     switch (response_id)
     {
     case GTK_RESPONSE_OK:
@@ -1108,8 +1138,11 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
         }
     }
     gnc_suspend_gui_refresh();
-    gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &app_dialog->created_txns, NULL);
+    gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &app_dialog->created_txns, &creation_errors);
     gnc_resume_gui_refresh();
+    if (creation_errors)
+        creation_error_dialog(&creation_errors);
+
     if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
             && g_list_length(app_dialog->created_txns) > 0)
     {
