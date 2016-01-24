@@ -643,6 +643,8 @@ gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s,
     KvpValue *v = kvp_frame_get_slot_path(f, GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
     GncGUID *acct_guid = kvp_value_get_guid (v);
     acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+    if (acct == NULL)
+        return FALSE;
     split_cmdty = xaccAccountGetCommodity(acct);
     split_amount = xaccSplitGetAmount(s);
     if (!gnc_numeric_zero_p(split_amount) && base_cmdty == NULL)
@@ -685,6 +687,100 @@ gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
     return TRUE;
 }
 
+typedef struct
+{
+    GncSxEditorDialog *sxed;
+    GHashTable *txns;
+    GHashTable *vars;
+    txnCreditDebitSums *tcds;
+    gboolean multi_commodity;
+    gboolean err;
+} CheckTxnSplitData;
+
+static void
+split_error_warning_dialog (GtkWidget *parent, const gchar *title,
+                            gchar *message)
+{
+    GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (parent), 0,
+                                                GTK_MESSAGE_ERROR,
+                                                GTK_BUTTONS_CLOSE,
+                                                "%s", title);
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              "%s", message);
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    g_signal_connect_swapped (dialog, "response",
+                              G_CALLBACK(gtk_widget_destroy), dialog);
+    gtk_dialog_run (GTK_DIALOG (dialog));
+
+}
+static gboolean
+check_transaction_splits (Transaction *txn, gpointer data)
+{
+    GList *splitList = xaccTransGetSplitList (txn);
+    CheckTxnSplitData *sd = (CheckTxnSplitData*)data;
+
+    for ( ; splitList; splitList = splitList->next )
+    {
+        gnc_commodity *base_cmdty = NULL;
+        txnCreditDebitSums *tcds;
+        Split *s = (Split*)splitList->data;
+
+        tcds = (txnCreditDebitSums*)g_hash_table_lookup (sd->txns,
+                                                         (gpointer)txn);
+        if (sd->tcds == NULL)
+        {
+            sd->tcds = tcds_new ();
+            g_hash_table_insert (sd->txns, (gpointer)txn, (gpointer)(sd->tcds));
+        }
+
+        if (!gnc_sxed_split_check_account (sd->sxed, s, base_cmdty,
+                                           &sd->multi_commodity))
+        {
+            gchar *message = g_strdup_printf
+                (_("Split with memo %s has an invalid account."),
+                 xaccSplitGetMemo (s));
+            split_error_warning_dialog (sd->sxed->dialog,
+                                        _("Invalid Account in Split"),
+                                        message);
+            g_free (message);
+            sd->err = TRUE;
+            return FALSE;
+        }
+
+        if (!gnc_sxed_split_calculate_formula (sd->sxed, s, sd->vars,
+                                               GNC_SX_CREDIT_FORMULA,
+                                               sd->tcds))
+        {
+            gchar *message = g_strdup_printf
+                (_("Split with memo %s has an unparseable Credit Formula."),
+                 xaccSplitGetMemo (s));
+            split_error_warning_dialog (sd->sxed->dialog,
+                                        _("Unparsable Formula in Split"),
+                                        message);
+            g_free (message);
+            sd->err = TRUE;
+            return FALSE;
+        }
+
+        if (!gnc_sxed_split_calculate_formula (sd->sxed, s, sd->vars,
+                                               GNC_SX_DEBIT_FORMULA,
+                                               sd->tcds))
+
+        {
+            gchar *message = g_strdup_printf
+                (_("Split with memo %s has an unparseable Debit Formula."),
+                 xaccSplitGetMemo (s));
+            split_error_warning_dialog (sd->sxed->dialog,
+                                        _("Unparsable Formula in Split"),
+                                        message);
+            g_free (message);
+            sd->err = TRUE;
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 /*******************************************************************************
  * Checks to make sure that the SX is in a reasonable state to save.
  * @return true if checks out okay, false otherwise.
@@ -724,6 +820,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                   (GDestroyNotify)gnc_sx_variable_free);
     GHashTable *txns = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                               NULL, g_free);
+    CheckTxnSplitData sd = {sxed, txns, vars, NULL, FALSE, FALSE};
+
     /**
      * Plan:
      * . Do a first pass to get the variables.
@@ -751,38 +849,16 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
     for ( i = 0; i < numIters && !unbalanceable; i++ )
     {
         GList *splitList = xaccSchedXactionGetSplits (sxed->sx);
+        Account *tmpl_acct = gnc_sx_get_template_transaction_account (sxed->sx);
         gnc_sx_randomize_variables(vars);
         g_hash_table_foreach( txns, set_sums_to_zero, NULL );
 
         splitCount += g_list_length( splitList );
 
-        for ( ; splitList; splitList = splitList->next )
-        {
-            gnc_commodity *base_cmdty = NULL;
-            txnCreditDebitSums *tcds;
-            Split *s = (Split*)splitList->data;
-            Transaction *t = xaccSplitGetParent (s);
+        xaccAccountForEachTransaction(tmpl_acct, check_transaction_splits, &sd);
 
-            tcds = (txnCreditDebitSums*)g_hash_table_lookup (txns, (gpointer)t);
-            if (tcds == NULL)
-            {
-                tcds = tcds_new ();
-                g_hash_table_insert (txns, (gpointer)t, (gpointer)tcds);
-            }
-
-            if (!gnc_sxed_split_check_account (sxed, s, base_cmdty,
-                                               &multi_commodity))
-                return FALSE;
-
-            if (!gnc_sxed_split_calculate_formula (sxed, s, vars,
-                                                   GNC_SX_CREDIT_FORMULA,
-                                                   tcds))
-                return FALSE;
-            if (!gnc_sxed_split_calculate_formula (sxed, s, vars,
-                                                   GNC_SX_DEBIT_FORMULA,
-                                                   tcds))
-                return FALSE;
-        }
+        if (sd.err)
+            return FALSE;
 
         g_hash_table_foreach (txns, check_credit_debit_balance, &unbalanceable);
     }
@@ -807,7 +883,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         return FALSE;
 
     if (!gnc_sxed_check_autocreate (sxed, ttVarCount,
-                                    splitCount, multi_commodity))
+                                    splitCount, sd.multi_commodity))
         return FALSE;
 
     if (!gnc_sxed_check_endpoint (sxed))
@@ -819,7 +895,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 /******************************************************************************
  * Saves the contents of the SX.  This assumes that gnc_sxed_check_consistent
  * has returned true.
- *****************************************************************************/
+  *****************************************************************************/
 static void
 gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 {

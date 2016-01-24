@@ -941,14 +941,14 @@ _get_template_split_account(const SchedXaction* sx, const Split *template_split,
                                       NULL);
     if (kvp_val == NULL)
     {
-        GString *err = g_string_new("");
-        g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
-                        xaccSchedXactionGetName(sx));
-        g_critical("%s", err->str);
+        gchar *err = g_strdup_printf("Null account kvp value for SX [%s], "
+                                       "cancelling creation.",
+                                       xaccSchedXactionGetName(sx));
+        g_critical("%s", err);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
         else
-            g_string_free(err, TRUE);
+            g_free(err);
         return FALSE;
     }
     acct_guid = kvp_value_get_guid( kvp_val );
@@ -1247,7 +1247,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     if (err_flag)
     {
-        g_critical("new transaction creation sx [%s]",
+        g_critical("Error in SX transaction [%s], creation aborted.",
                    xaccSchedXactionGetName(sx));
         xaccTransDestroy(new_txn);
         xaccTransCommitEdit(new_txn);
