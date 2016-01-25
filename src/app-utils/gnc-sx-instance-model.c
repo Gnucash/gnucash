@@ -1081,7 +1081,7 @@ split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
         g_critical("%s", err->str);
         if (creation_data->creation_errors != NULL)
             *creation_data->creation_errors =
-                g_list_prepend(*creation_data->creation_errors, err);
+                g_list_append(*creation_data->creation_errors, err);
         else
             g_string_free(err, TRUE);
         final = gnc_numeric_zero();

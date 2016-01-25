@@ -800,8 +800,11 @@ creation_error_dialog (GList **creation_errors)
     if (*creation_errors == NULL) return;
     for(; node != NULL; node = g_list_next (node))
     {
-        const gchar *fmt = message == NULL ? "%s%s" : "%s\n%s";
-        gchar *new_msg = g_strdup_printf (fmt, message, node->data);
+        gchar *new_msg = NULL;
+        if (message == NULL)
+            new_msg = g_strdup_printf ("%s", node->data);
+        else
+            new_msg = g_strdup_printf("%s\n%s", message, node->data);
         g_free (message);
         message = new_msg;
         g_free(node->data);
@@ -810,7 +813,7 @@ creation_error_dialog (GList **creation_errors)
     creation_errors = NULL;
     dialog = gtk_message_dialog_new (NULL, 0,
                                      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
-                                     "%s", _("Invalid Transactions"));
+                                     "\t%s\t", _("Invalid Transactions"));
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
     g_signal_connect_swapped (dialog, "response",
