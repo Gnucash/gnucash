@@ -802,9 +802,9 @@ creation_error_dialog (GList **creation_errors)
     {
         gchar *new_msg = NULL;
         if (message == NULL)
-            new_msg = g_strdup_printf ("%s", node->data);
+            new_msg = g_strdup_printf ("%s", (gchar*)(node->data));
         else
-            new_msg = g_strdup_printf("%s\n%s", message, node->data);
+            new_msg = g_strdup_printf("%s\n%s", message, (gchar*)(node->data));
         g_free (message);
         message = new_msg;
         g_free(node->data);
