@@ -1,6 +1,7 @@
 # CMakeLists.txt for src/import_export/qif-imp
 
 ADD_SUBDIRECTORY(gschemas)
+#ADD_SUBDIRECTORY(test)
 
 SET (qif_import_SOURCES
     dialog-account-picker.c

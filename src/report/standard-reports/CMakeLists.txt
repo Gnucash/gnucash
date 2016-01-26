@@ -1,4 +1,6 @@
 
+#ADD_SUBDIRECTORY(test)
+
 SET(standard_reports_SOURCES gncmod-standard-reports.c)
 
 ADD_LIBRARY (gncmod-standard-reports ${standard_reports_SOURCES})

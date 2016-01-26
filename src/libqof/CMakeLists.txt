@@ -1,5 +1,7 @@
 # CMakeLists.txt for src/libqof
 
+#ADD_SUBDIRECTORY(qof/test)
+
 SET (gnc_qof_HEADERS
     qof/gnc-aqbanking-templates.h
     qof/gnc-date-p.h

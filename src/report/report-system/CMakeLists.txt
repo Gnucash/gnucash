@@ -1,3 +1,4 @@
+#ADD_SUBDIRECTORY(test)
 
 SET (report_system_HEADERS
   gnc-report.h

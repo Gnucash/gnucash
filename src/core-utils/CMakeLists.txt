@@ -1,6 +1,6 @@
 # CMakeLists.txt for src/core-utils
 
-
+#ADD_SUBDIRECTORY(test)
 # Command to generate the swig-engine.c wrapper file
 SET (SWIG_CORE_UTILS_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_CORE_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)

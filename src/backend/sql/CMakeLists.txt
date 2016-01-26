@@ -1,6 +1,6 @@
 # CMakeLists.txt for src/backend/dbi
 
-
+#ADD_SUBDIRECTORY(test)
 
 SET (backend_sql_SOURCES
   gnc-backend-sql.cpp

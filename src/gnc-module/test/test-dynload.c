@@ -40,9 +40,15 @@ guile_main(void *closure, int argc, char ** argv)
     gchar *logdomain = "gnc.module";
     gchar *modpath;
     guint loglevel = G_LOG_LEVEL_WARNING;
+    const char *libdir = g_getenv("LIBDIR");
     TestErrorStruct check = { loglevel, logdomain, msg };
     g_log_set_handler (logdomain, loglevel,
                        (GLogFunc)test_checked_handler, &check);
+
+    if (libdir == NULL)
+    {
+        libdir = "../.libs";
+    }
 
     g_test_message("  test-dynload.c: testing dynamic linking of libgnc-module ...");
 #ifdef G_OS_WIN32
@@ -53,9 +59,16 @@ guile_main(void *closure, int argc, char ** argv)
  * that means that g_module_build_path (), which uses ".so", doesn't
  * build the right path name.
  */
-    modpath = g_build_filename ("..", ".libs", "libgnc-module.dylib", NULL);
+    if (libdir == NULL)
+    {
+        modpath = g_build_filename ("..", ".libs", "libgnc-module.dylib", NULL);
+    }
+    else
+    {
+        modpath = g_build_filename (libdir, "libgnc-module.dylib", NULL);
+    }
 #else /* Regular Unix */
-    modpath = g_module_build_path ("../.libs", "gnc-module");
+    modpath = g_module_build_path (libdir, "gnc-module");
 #endif
     gmodule = g_module_open(modpath, 0);
 

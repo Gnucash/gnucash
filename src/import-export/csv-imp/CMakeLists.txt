@@ -1,4 +1,5 @@
 ADD_SUBDIRECTORY(gschemas)
+#ADD_SUBDIRECTORY(test)
 
 SET(csv_import_SOURCES
   gncmod-csv-import.c

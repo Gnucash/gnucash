@@ -1,5 +1,7 @@
 # CMakeLists.txt for src/backend/xml
 
+#ADD_SUBDIRECTORY(test)
+
 # Command to generate the swig-engine.c wrapper file
 SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)

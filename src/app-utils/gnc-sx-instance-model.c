@@ -1199,7 +1199,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     if (err_flag)
     {
-        g_critical("new transaction creation sx [%s]",
+        g_critical("Error in SX transaction [%s], creation aborted.",
                    xaccSchedXactionGetName(sx));
         xaccTransDestroy(new_txn);
         xaccTransCommitEdit(new_txn);
@@ -1278,6 +1278,7 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
         {
             GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
             gboolean sx_is_auto_create;
+            GList *instance_errors = NULL;
 
             xaccSchedXactionGetAutoCreate(inst->parent->sx, &sx_is_auto_create, NULL);
             if (auto_create_only && !sx_is_auto_create)
@@ -1315,9 +1316,20 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                     increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
                     break;
                 case SX_INSTANCE_STATE_TO_CREATE:
-                    create_transactions_for_instance(inst, created_transaction_guids, creation_errors);
-                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                    gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_CREATED);
+                    create_transactions_for_instance (inst,
+                                                      created_transaction_guids,
+                                                      &instance_errors);
+                    if (instance_errors == NULL)
+                    {
+                        increment_sx_state (inst, &last_occur_date,
+                                            &instance_count,
+                                            &remain_occur_count);
+                        gnc_sx_instance_model_change_instance_state
+                            (model, inst, SX_INSTANCE_STATE_CREATED);
+                    }
+                    else
+                        *creation_errors = g_list_concat (*creation_errors,
+                                                          instance_errors);
                     break;
                 case SX_INSTANCE_STATE_REMINDER:
                     // do nothing
