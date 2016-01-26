@@ -1,5 +1,5 @@
 
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 
 SET(standard_reports_SOURCES gncmod-standard-reports.c)
 

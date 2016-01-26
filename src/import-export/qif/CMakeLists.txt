@@ -1,6 +1,6 @@
 
 #Tests for this directory are not run.
-##ADD_SUBDIRECTORY(test)
+#ADD_SUBDIRECTORY(test)
 
 SET(qif_SOURCES
   qif-context.c

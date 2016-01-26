@@ -14,10 +14,10 @@ SET(BACKEND_DBI_TEST_INCLUDE_DIRS
 SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine gnc-qof test-core ${LIBDBI_LIBRARY})
 
 SET(test_dbi_backend_SOURCES
-  test-backend-dbi.c
-  test-backend-dbi-basic.c
-  test-dbi-business-stuff.c
-  test-dbi-stuff.c
+  test-backend-dbi.cpp
+  test-backend-dbi-basic.cpp
+  test-dbi-business-stuff.cpp
+  test-dbi-stuff.cpp
 )
 
 GNC_ADD_TEST(test-backend-dbi "${test_dbi_backend_SOURCES}"

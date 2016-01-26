@@ -1,7 +1,7 @@
 
 
 SET(libgncmod_test_engine_SOURCES
-  gncmod-test-engine.c test-engine-stuff.c
+  gncmod-test-engine.c test-engine-stuff.cpp
 )
 
 ADD_LIBRARY(gncmod-test-engine STATIC ${libgncmod_test_engine_SOURCES})

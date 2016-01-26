@@ -1,5 +1,5 @@
 
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 
 SET (ledger_core_SOURCES
   gnc-ledger-display.c

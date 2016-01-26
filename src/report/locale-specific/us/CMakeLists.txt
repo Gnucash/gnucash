@@ -1,4 +1,4 @@
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 
 SET(locale_reports_us_SOURCES
   gncmod-locale-reports-us.c

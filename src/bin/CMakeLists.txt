@@ -1,5 +1,5 @@
 ADD_SUBDIRECTORY(overrides)
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 # Some settings are platform dependent. Let's define them per platform.
 IF (WIN32)
   # Windows specific settings go here:

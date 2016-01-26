@@ -1,4 +1,4 @@
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 
 SET(tax_us_SOURCES gncmod-tax-us.c)
 

@@ -14,11 +14,12 @@ SET(test_qof_SOURCES
   test-gnc-date.c
   test-qof.c
   test-qofbook.c
-  test-qofinstance.c
-  test-kvp_frame.c
+  test-qofinstance.cpp
+#  test-kvp-frame.cpp  This now use Google Test
   test-qofobject.c
   test-qofsession.c
   test-qof-string-cache.c
+  test-gnc-guid.cpp
   ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c
 )
 

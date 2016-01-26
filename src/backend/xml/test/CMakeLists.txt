@@ -24,13 +24,13 @@ ENDFUNCTION()
 ################################
 
 SET(test_backend_xml_base_SOURCES
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-dom-parsers.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-dom-generators.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-utils.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-stack.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-to-dom-parser.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-xml-helper.c
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-dom-parsers.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-dom-generators.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-utils.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-stack.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/sixtp-to-dom-parser.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-xml-helper.cpp
 )
 
 ## the xml backend is now a GModule - this test does
@@ -39,47 +39,47 @@ SET(test_backend_xml_base_SOURCES
 
 SET(test_backend_xml_module_SOURCES
   ${test_backend_xml_base_SOURCES}
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-example-account.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-gncxml-gen.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-gncxml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-utils.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-account-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-budget-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-lot-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-recurrence-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-schedxaction-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-freqspec-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-transaction-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-commodity-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-book-xml-v2.c
-  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-pricedb-xml-v2.c
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-example-account.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-gncxml-gen.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-gncxml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/io-utils.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-account-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-budget-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-lot-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-recurrence-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-schedxaction-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-freqspec-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-transaction-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-commodity-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-book-xml-v2.cpp
+  ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-pricedb-xml-v2.cpp
 )
 
-# The test test-dom-parser1.c is not run by Makefile.am
+# The test test-dom-parser1.cpp is not run by Makefile.am
 
-ADD_XML_TEST(test-date-converting "${test_backend_xml_base_SOURCES};test-date-converting.c")
-ADD_XML_TEST(test-dom-converters1 "${test_backend_xml_base_SOURCES};test-dom-converters1.c")
-ADD_XML_TEST(test-kvp-frames      "${test_backend_xml_base_SOURCES};test-kvp-frames.c")
-ADD_XML_TEST(test-load-backend  test-load-backend.c)
-ADD_XML_TEST(test-load-xml2 test-load-xml2.c
+ADD_XML_TEST(test-date-converting "${test_backend_xml_base_SOURCES};test-date-converting.cpp")
+ADD_XML_TEST(test-dom-converters1 "${test_backend_xml_base_SOURCES};test-dom-converters1.cpp")
+ADD_XML_TEST(test-kvp-frames      "${test_backend_xml_base_SOURCES};test-kvp-frames.cpp")
+ADD_XML_TEST(test-load-backend  test-load-backend.cpp)
+ADD_XML_TEST(test-load-xml2 test-load-xml2.cpp
   GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2
 )
 # Not run in autotools.
-#ADD_XML_TEST(test-save-in-lang test-save-in-lang.c
+#ADD_XML_TEST(test-save-in-lang test-save-in-lang.cpp
 #  GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2
 #)
 
 GNC_ADD_TEST_WITH_GUILE(test-load-example-account
-  "${test_backend_xml_module_SOURCES};test-load-example-account.c"
+  "${test_backend_xml_module_SOURCES};test-load-example-account.cpp"
   XML_TEST_INCLUDE_DIRS XML_TEST_LIBS
   GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/accounts/C
 )
-ADD_XML_TEST(test-string-converters "${test_backend_xml_base_SOURCES};test-string-converters.c")
-ADD_XML_TEST(test-xml-account "${test_backend_xml_module_SOURCES};test-xml-account.c;test-file-stuff.c")
-ADD_XML_TEST(test-xml-commodity "${test_backend_xml_module_SOURCES};test-xml-commodity.c;test-file-stuff.c")
-ADD_XML_TEST(test-xml-pricedb "${test_backend_xml_module_SOURCES};test-xml-pricedb.c;test-file-stuff.c")
-ADD_XML_TEST(test-xml-transaction "${test_backend_xml_module_SOURCES};test-xml-transaction.c;test-file-stuff.c")
-ADD_XML_TEST(test-xml2-is-file "${test_backend_xml_module_SOURCES};test-xml2-is-file.c"
+ADD_XML_TEST(test-string-converters "${test_backend_xml_base_SOURCES};test-string-converters.cpp")
+ADD_XML_TEST(test-xml-account "${test_backend_xml_module_SOURCES};test-xml-account.cpp;test-file-stuff.cpp")
+ADD_XML_TEST(test-xml-commodity "${test_backend_xml_module_SOURCES};test-xml-commodity.cpp;test-file-stuff.cpp")
+ADD_XML_TEST(test-xml-pricedb "${test_backend_xml_module_SOURCES};test-xml-pricedb.cpp;test-file-stuff.cpp")
+ADD_XML_TEST(test-xml-transaction "${test_backend_xml_module_SOURCES};test-xml-transaction.cpp;test-file-stuff.cpp")
+ADD_XML_TEST(test-xml2-is-file "${test_backend_xml_module_SOURCES};test-xml2-is-file.cpp"
    GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2)
 
 SET(CMAKE_COMMAND_TMP "")

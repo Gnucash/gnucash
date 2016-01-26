@@ -1,6 +1,6 @@
 # CMakeLists.txt for src/import-export
 
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 
 # ############################################################
 IF (WITH_AQBANKING)

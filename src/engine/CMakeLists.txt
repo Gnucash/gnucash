@@ -1,7 +1,7 @@
 # CMakeLists.txt for src/engine
 
-#ADD_SUBDIRECTORY(test-core)
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test-core)
+ADD_SUBDIRECTORY(test)
 
 SET(engine_noinst_HEADERS
   AccountP.h
