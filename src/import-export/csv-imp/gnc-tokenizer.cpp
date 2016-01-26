@@ -1,4 +1,5 @@
 #include "gnc-tokenizer.hpp"
+#include "gnc-csv-tokenizer.hpp"
 
 #include <iostream>
 #include <fstream>      // fstream
@@ -19,6 +20,9 @@ std::unique_ptr<GncTokenizer> GncTokenizerFactory(GncImpFileFormat fmt)
     std::unique_ptr<GncTokenizer> tok(nullptr);
     switch (fmt)
     {
+    case GncImpFileFormat::CSV:
+        tok.reset(new GncCsvTokenizer());
+        break;
     default:
         break;
     }
