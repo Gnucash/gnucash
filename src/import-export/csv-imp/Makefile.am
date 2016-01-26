@@ -12,6 +12,7 @@ libgncmod_csv_import_la_SOURCES = \
   csv-fixed-trans-import.c \
   gnc-csv-account-map.c \
   gnc-csv-model.c \
+  gnc-csv-tokenizer.cpp \
   gnc-csv-gnumeric-popup.c \
   gnc-tokenizer.cpp \
   gnc-csv-trans-settings.c
@@ -25,6 +26,7 @@ noinst_HEADERS = \
   csv-fixed-trans-import.h \
   gnc-csv-account-map.h \
   gnc-csv-model.h \
+  gnc-csv-tokenizer.hpp \
   gnc-csv-gnumeric-popup.h \
   gnc-tokenizer.hpp \
   gnc-csv-trans-settings.h

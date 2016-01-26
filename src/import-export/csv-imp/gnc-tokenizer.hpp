@@ -50,6 +50,7 @@ using str_vec = std::vector<std::string>;
 /** Enumeration for file formats supported by this importer. */
 enum class GncImpFileFormat {
     UNKNOWN,
+    CSV,
 };
 
 

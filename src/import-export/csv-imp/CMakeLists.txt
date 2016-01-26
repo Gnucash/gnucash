@@ -12,6 +12,7 @@ SET(csv_import_SOURCES
   gnc-csv-account-map.c
   gnc-csv-model.c
   gnc-csv-gnumeric-popup.c
+  gnc-csv-tokenizer.cpp
   gnc-csv-trans-settings.c
   gnc-tokenizer.cpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
@@ -33,6 +34,7 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-account-map.h
   gnc-csv-model.h
   gnc-csv-gnumeric-popup.h
+  gnc-csv-tokenizer.hpp
   gnc-csv-trans-settings.h
   gnc-tokenizer.hpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
