@@ -31,9 +31,8 @@
  * USA.
  */
 
-#include <goffice/goffice-config.h>
+#include "config.h"
 #include "go-optionmenu.h"
-#include <goffice/gtk/go-gtk-compat.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n-lib.h>
@@ -265,7 +264,7 @@ go_option_menu_set_menu (GOOptionMenu *option_menu,
 		return;
 
 	if (option_menu->menu) {
-		if (gtk_menu_shell_get_active (option_menu->menu))
+		if (option_menu->menu->active)
 			gtk_menu_shell_cancel (option_menu->menu);
 
 		handle_menu_signals (option_menu, FALSE);
