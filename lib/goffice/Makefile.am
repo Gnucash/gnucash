@@ -10,8 +10,10 @@ REALHDRS = go-optionmenu.h \
 libgnc_goffice_la_SOURCES = ${REALSRCS}
 noinst_HEADERS = ${REALHDRS}
 
-libgnc_goffice_la_LIBADD = $(GTK_LIBS)
+libgnc_goffice_la_LIBADD = $(GTK_LIBS) \
+                           ${LIBXML2_LIBS}
 
-AM_CPPFLAGS = $(GTK_CFLAGS)
+AM_CPPFLAGS = $(GTK_CFLAGS) \
+              ${LIBXML2_CFLAGS}
 
 EXTRA_DIST = $(REALSRCS) $(REALHDRS)

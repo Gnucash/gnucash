@@ -23,12 +23,11 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <goffice/goffice-config.h>
+#include "config.h"
 #include "go-charmap-sel.h"
 #include "go-optionmenu.h"
-#include <goffice/utils/go-glib-extras.h>
+#include "go-glib-extras.h"
 #include <glib/gi18n-lib.h>
-#include <gsf/gsf-impl-utils.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -425,8 +424,7 @@ cs_build_menu (GOCharmapSel *cs)
 	set_menu_to_default (cs, lg_cnt);
 }
 
-static void
-cs_class_init (GtkWidgetClass *widget_klass)
+static void cs_class_init(GtkWidgetClass *widget_klass)
 {
 	CharsetInfo *ci;
 	size_t i;
@@ -551,9 +549,6 @@ cs_class_init (GtkWidgetClass *widget_klass)
 		g_free (autoaliases);
 	}
 }
-
-GSF_CLASS (GOCharmapSel, go_charmap_sel,
-	   cs_class_init, cs_init, GTK_TYPE_HBOX)
 
 GtkWidget *
 go_charmap_sel_new (GOCharmapSelTestDirection test)
