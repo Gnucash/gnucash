@@ -62,7 +62,7 @@ account_imap_destroy (GncImportMatchMap *imap)
  * search the existing mappings for the account
  * linked to the import string.
  **************************************************/
-Account * gnc_csv_account_map_search (gchar *map_string)
+Account * gnc_csv_account_map_search (const gchar *map_string)
 {
     Account *root, *account = NULL;
     GList   *accts, *ptr;
@@ -144,7 +144,7 @@ gnc_csv_account_map_load_mappings (GtkTreeModel *mappings_store)
  * change the existing mappings
  **************************************************/
 void
-gnc_csv_account_map_change_mappings (Account *old_account, Account *new_account, gchar *map_string)
+gnc_csv_account_map_change_mappings (Account *old_account, Account *new_account, const gchar *map_string)
 {
     GncImportMatchMap *tmp_imap;
 
