@@ -15,8 +15,11 @@ SET(test_csv_imp_SOURCES
   utest-gnc-csv-model.c
 )
 
-GNC_ADD_TEST(test-csv-imp "${test_csv_imp_SOURCES}"
-  CSV_IMP_TEST_INCLUDE_DIRS CSV_IMP_TEST_LIBS
-  SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
-)
+# This test does not run in Win32
+IF (NOT WIN32)
+  GNC_ADD_TEST(test-csv-imp "${test_csv_imp_SOURCES}"
+    CSV_IMP_TEST_INCLUDE_DIRS CSV_IMP_TEST_LIBS
+    SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
+  )
+ENDIF()
 

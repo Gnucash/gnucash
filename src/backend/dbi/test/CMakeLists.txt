@@ -20,12 +20,15 @@ SET(test_dbi_backend_SOURCES
   test-dbi-stuff.c
 )
 
-GNC_ADD_TEST(test-backend-dbi "${test_dbi_backend_SOURCES}"
-  BACKEND_DBI_TEST_INCLUDE_DIRS BACKEND_DBI_TEST_LIBS
-)
+# This test does not work on Win32
+IF (NOT WIN32)
+  GNC_ADD_TEST(test-backend-dbi "${test_dbi_backend_SOURCES}"
+    BACKEND_DBI_TEST_INCLUDE_DIRS BACKEND_DBI_TEST_LIBS
+  )
 
-TARGET_COMPILE_DEFINITIONS(test-backend-dbi PRIVATE
-  TEST_MYSQL_URL=\"${TEST_MYSQL_URL}\"
-  TEST_PGSQL_URL=\"${TEST_PGSQL_URL}\"
-  DBI_TEST_XML_FILENAME=\"${CMAKE_CURRENT_SOURCE_DIR}/test-dbi.xml\"
-)
+  TARGET_COMPILE_DEFINITIONS(test-backend-dbi PRIVATE
+    TEST_MYSQL_URL=\"${TEST_MYSQL_URL}\"
+    TEST_PGSQL_URL=\"${TEST_PGSQL_URL}\"
+    DBI_TEST_XML_FILENAME=\"${CMAKE_CURRENT_SOURCE_DIR}/test-dbi.xml\"
+  )
+ENDIF()

@@ -91,7 +91,10 @@ IF(GNC_BUILD_AS_INSTALL)
 ENDIF()
 
 SET(SHELL_FROM_ENV $ENV{SHELL})
-SET(SHELL bin/bash)
+SET(SHELL /bin/bash)
+IF (WIN32)
+  SET(SHELL ${CMAKE_PREFIX_PATH}/mingw/msys/1.0/bin/bash.exe)
+ENDIF()
 IF (SHELL_FROM_ENV) # Replacing this with IF ($ENV{SHELL}) doesn't work.
   SET(SHELL ${SHELL_FROM_ENV})
 ENDIF()
@@ -224,16 +227,10 @@ IF (GUILE2_FOUND) # found guile-2.0
   ADD_DEFINITIONS (-DHAVE_GUILE20)
   SET(HAVE_GUILE2 TRUE)
   SET(GUILE_EFFECTIVE_VERSION 2.0)
-  # We also need to look up the executable
-  FIND_PROGRAM (GUILE_EXECUTABLE guile)
-  FIND_PROGRAM (GUILD_EXECUTABLE guild)
-
   SET(GUILE_INCLUDE_DIRS ${GUILE2_INCLUDE_DIRS})
   SET(GUILE_LDFLAGS ${GUILE2_LDFLAGS})
 
-  IF (NOT GUILE_EXECUTABLE)
-    MESSAGE (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
-  ENDIF (NOT GUILE_EXECUTABLE)
+  FIND_PROGRAM (GUILD_EXECUTABLE guild)
   IF (NOT GUILD_EXECUTABLE)
     MESSAGE (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
   ENDIF (NOT GUILD_EXECUTABLE)
@@ -245,12 +242,17 @@ ELSE()
     MESSAGE (SEND_ERROR "Neither guile 1.8 nor guile 2.0 where find. Please set PKG_CONFIG_PATH one of these is found.")
   ENDIF(NOT GUILE1_FOUND)
 
-  SET(GUILE_INCLUDE_DIRS ${GUILE1_INCLUDE_DIRS})
-  SET(GUILE_LDFLAGS ${GUILE1_LDFLAGS})
   SET(HAVE_GUILE1 TRUE)
   SET(GUILE_EFFECTIVE_VERSION 1.8)
+  SET(GUILE_INCLUDE_DIRS ${GUILE1_INCLUDE_DIRS})
+  SET(GUILE_LDFLAGS ${GUILE1_LDFLAGS})
   MESSAGE(STATUS "Using guile-1.8.x")
 ENDIF()
+
+FIND_PROGRAM (GUILE_EXECUTABLE guile)
+IF (NOT GUILE_EXECUTABLE)
+  MESSAGE (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
+ENDIF (NOT GUILE_EXECUTABLE)
 
 # Qt
 IF (WITH_CUTECASH)
@@ -402,7 +404,7 @@ ADD_CUSTOM_TARGET(check
      scm-test-core scm-test-report-system scm-standard-reports-2
      scm-test-standard-reports foo gncmodfoo baz gncmodbaz
      bar gncmodbar gncmod_agedver gncmod_incompatdep
-     gncmod_futuremodsys
+     gncmod_futuremodsys test-core-guile
 )
 IF (NOT WIN32)
   ADD_DEPENDENCIES(check gncmod-backend-xml-link)
