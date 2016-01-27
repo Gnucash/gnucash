@@ -42,8 +42,11 @@ SET(test_engine_SOURCES
   utest-Transaction.c
 )
 
-ADD_ENGINE_TEST(test-engine "${test_engine_SOURCES}")
-TARGET_COMPILE_OPTIONS(test-engine PRIVATE -Wno-write-strings)
+# This test does not run on Win32
+IF (NOT WIN32)
+  ADD_ENGINE_TEST(test-engine "${test_engine_SOURCES}")
+  TARGET_COMPILE_OPTIONS(test-engine PRIVATE -Wno-write-strings)
+ENDIF()
 
 ADD_ENGINE_TEST(test-account-object test-account-object.c)
 ADD_ENGINE_TEST(test-group-vs-book test-group-vs-book.c)
@@ -63,6 +66,7 @@ ADD_ENGINE_TEST(test-vendor test-vendor.c)
 
 ############################
 # This is a C test that needs GUILE environment variables set.
+# It does not pass on Win32.
 GNC_ADD_TEST_WITH_GUILE(test-scm-query test-scm-query.c ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 ############################
 

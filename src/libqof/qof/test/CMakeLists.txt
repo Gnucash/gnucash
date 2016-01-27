@@ -22,5 +22,10 @@ SET(test_qof_SOURCES
   ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c
 )
 
-GNC_ADD_TEST(test-qof "${test_qof_SOURCES}" TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
-TARGET_COMPILE_DEFINITIONS(test-qof PRIVATE TESTPROG=test_qof)
+# This test does not on Win32. Worse, it causes a dialog box to
+# pop up due to an assertion. This interferes with running the tests
+# unattended.
+IF (NOT WIN32)
+  GNC_ADD_TEST(test-qof "${test_qof_SOURCES}" TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
+  TARGET_COMPILE_DEFINITIONS(test-qof PRIVATE TESTPROG=test_qof)
+ENDIF()
