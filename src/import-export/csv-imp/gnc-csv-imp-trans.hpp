@@ -34,10 +34,12 @@ extern "C" {
 
 #include "Account.h"
 #include "Transaction.h"
-#include "stf/stf-parse.h"
 }
 
 #include <vector>
+#include <memory>
+
+#include "gnc-tokenizer.hpp"
 
 
 /** Enumeration for column types. These are the different types of
@@ -73,15 +75,6 @@ enum GncCsvErrorType {
     GNC_CSV_IMP_ERROR_PARSE
 };
 
-/** Struct for containing a string. This struct simply contains
- * pointers to the beginning and end of a string. We need this because
- * the STF code that gnc_csv_parse calls requires these pointers. */
-typedef struct
-{
-    char* begin;
-    char* end;
-} GncCsvStr;
-
 /* TODO We now sort transactions by date, not line number, so we
  * should probably get rid of this struct and uses of it. */
 
@@ -112,28 +105,30 @@ extern const gchar* date_format_user[];
 /* This array contains all of the different strings for different column types. */
 extern const gchar* gnc_csv_column_type_strs[];
 
+using str_vec_t = std::vector<std::string> ;
+
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
 class GncCsvParseData
 {
 public:
     // Constructor - Destructor
-    GncCsvParseData();
+    GncCsvParseData(GncImpFileFormat format = GncImpFileFormat::UNKNOWN);
     ~GncCsvParseData();
 
+    int file_format(GncImpFileFormat format, GError** error);
+    GncImpFileFormat file_format();
+
     int load_file (const char* filename, GError** error);
-    int convert_encoding (const char* encoding, GError** error);
+    void convert_encoding (const std::string& encoding);
 
     int parse (gboolean guessColTypes, GError** error);
     int parse_to_trans (Account* account, gboolean redo_errors);
     bool check_for_column_type (int type);
 
-
-    const gchar* encoding;
-    GncCsvStr file_str;         /**< raw_str translated into UTF-8 */
-    GPtrArray* orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
-    int orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
+    std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
+    std::vector<str_vec_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
+    std::vector<str_vec>::size_type orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
     GList* error_lines;         /**< List of row numbers in orig_lines that have errors */
-    StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
     std::vector<GncCsvColumnType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
     GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
@@ -143,11 +138,10 @@ public:
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
 
 private:
-    GMappedFile* raw_mapping;   /**< The mapping containing raw_str */
-    GncCsvStr raw_str;          /**< Untouched data from the file as a string */
-    GArray* orig_row_lengths;   /**< The lengths of rows in orig_lines
+    std::vector<std::vector<str_vec>::size_type>
+              orig_row_lengths; /**< The lengths of rows in orig_lines
                                       before error messages are appended */
-    GStringChunk* chunk;        /**< A chunk of memory in which the contents of orig_lines is stored */
+    GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 };
 
 time64 parse_date (const char* date_str, int format);
