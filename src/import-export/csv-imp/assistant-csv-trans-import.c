@@ -234,7 +234,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         gtk_adjustment_set_upper (adj, info->num_of_rows);
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows - info->settings_data->footer_rows);
 
-        // Set Aternate rows
+        // Set Alternate rows
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data->skip_alt_rows);
 
         // Set Import Format
@@ -1043,7 +1043,7 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
 static void encoding_selected (GOCharmapSel* selector, const char* encoding,
                               CsvImportTrans* info)
 {
-    /* This gets called twice everytime a new encoding is selected. The
+    /* This gets called twice every time a new encoding is selected. The
      * second call actually passes the correct data; thus, we only do
      * something the second time this is called. */
 
@@ -1404,7 +1404,7 @@ static void treeview_resized (GtkWidget* widget, GtkAllocation* allocation, CsvI
 
         /* Get the width. */
         col_width = gtk_tree_view_column_get_width (gtk_tree_view_get_column (info->treeview, i));
-        /* Set the minumum width for a column so that drop down selector can be seen. */
+        /* Set the minimum width for a column so that drop down selector can be seen. */
         if (col_width < MIN_COL_WIDTH)
         {
             col_width = MIN_COL_WIDTH;
@@ -1842,7 +1842,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
         GList *tv_columns, *tv_columns_begin, *ctv_columns, *ctv_columns_begin;
         tv_columns = tv_columns_begin = gtk_tree_view_get_columns (info->treeview);
         ctv_columns = ctv_columns_begin = gtk_tree_view_get_columns (info->ctreeview);
-        /* Clear out exisiting columns in info->treeview. */
+        /* Clear out existing columns in info->treeview. */
         while (tv_columns != NULL)
         {
             gtk_tree_view_remove_column (info->treeview, GTK_TREE_VIEW_COLUMN(tv_columns->data));
@@ -2184,7 +2184,7 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 1);
 
-        /* Set spin buttons and settings combo hbox not sensative */
+        /* Set spin buttons and settings combo hbox not sensitive */
         gtk_widget_set_sensitive (info->combo_hbox, FALSE);
         gtk_widget_set_sensitive (info->start_row_spin, FALSE);
         gtk_widget_set_sensitive (info->end_row_spin, FALSE);
@@ -2300,7 +2300,7 @@ import_account_check_all (GtkTreeModel *model)
 
 
 /*****************************************************************
- * Parse the text spliting into a path and the last_part based on
+ * Parse the text splitting into a path and the last_part based on
  * account separator. If the path is valid, add the last_part and
  * return this. If the path is invalid, use the new separator path
  * with the last_part and return that so there is only one new
@@ -2601,7 +2601,7 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
 
         if (info->gnc_csv_importer_gui == NULL)
         {
-            /* Create the genereic transaction importer GUI. */
+            /* Create the generic transaction importer GUI. */
             info->gnc_csv_importer_gui = gnc_gen_trans_assist_new (info->match_page, NULL, FALSE, 42);
 
             /* Add the help button for the matcher */
@@ -3003,7 +3003,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         g_signal_connect (G_OBJECT(save_button), "clicked",
                          G_CALLBACK(csv_import_trans_save_settings_cb), (gpointer)info);
 
-        // Add Deelete Settings button
+        // Add Delete Settings button
         del_button = gtk_button_new_with_label (_("Delete Settings"));
         gtk_box_pack_start (GTK_BOX(info->combo_hbox), del_button, FALSE, FALSE, 6);
         gtk_widget_show (del_button);
@@ -3110,7 +3110,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     }
 
     /* Account page */
-    /* Initialise the Account Picker and add to the Assistant */
+    /* Initialize the Account Picker and add to the Assistant */
     info->account_page  = GTK_WIDGET(gtk_builder_get_object (builder, "account_page"));
     info->account_picker = gnc_import_account_assist_setup (info->account_page);
     info->account_label = GTK_WIDGET(gtk_builder_get_object (builder, "account_page_label"));

@@ -411,7 +411,7 @@ int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding,
 }
 
 /** Loads a file into a GncCsvParseData. This is the first function
- * that must be called after createing a new GncCsvParseData. If this
+ * that must be called after creating a new GncCsvParseData. If this
  * fails because the file couldn't be opened, no more functions can be
  * called on the parse data until this succeeds (or until it fails
  * because of an encoding guess error). If it fails because the
@@ -686,7 +686,7 @@ static gboolean trans_property_set (TransProperty* prop, char* str)
         switch (prop->list->currency_format)
         {
         case 0:
-            /* Currancy locale */
+            /* Currency locale */
             if (!(xaccParseAmount (str_dupe, TRUE, &val, &endptr)))
             {
                 g_free (str_dupe);
@@ -694,7 +694,7 @@ static gboolean trans_property_set (TransProperty* prop, char* str)
             }
             break;
         case 1:
-            /* Currancy decimal period */
+            /* Currency decimal period */
             if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
             {
                 g_free (str_dupe);
@@ -702,7 +702,7 @@ static gboolean trans_property_set (TransProperty* prop, char* str)
             }
             break;
         case 2:
-            /* Currancy decimal comma */
+            /* Currency decimal comma */
             if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
             {
                 g_free (str_dupe);
@@ -740,7 +740,7 @@ static TransPropertyList* trans_property_list_new (Account* account, int date_fo
  */
 static void trans_property_list_free (TransPropertyList* list)
 {
-    /* Free all of the properties in this list before freeeing the list itself. */
+    /* Free all of the properties in this list before freeing the list itself. */
     GList* properties_begin = list->properties;
     while (list->properties != NULL)
     {
