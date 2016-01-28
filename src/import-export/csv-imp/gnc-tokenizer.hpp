@@ -51,6 +51,7 @@ using str_vec = std::vector<std::string>;
 enum class GncImpFileFormat {
     UNKNOWN,
     CSV,
+    FIXED_WIDTH
 };
 
 

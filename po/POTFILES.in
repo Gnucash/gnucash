@@ -438,6 +438,7 @@ src/import-export/csv-imp/gnc-csv-gnumeric-popup.c
 src/import-export/csv-imp/gnc-csv-model.c
 src/import-export/csv-imp/gnc-csv-tokenizer.cpp
 src/import-export/csv-imp/gnc-csv-trans-settings.c
+src/import-export/csv-imp/gnc-fw-tokenizer.cpp
 src/import-export/csv-imp/gncmod-csv-import.c
 src/import-export/csv-imp/gnc-plugin-csv-import.c
 src/import-export/csv-imp/gnc-tokenizer.cpp
