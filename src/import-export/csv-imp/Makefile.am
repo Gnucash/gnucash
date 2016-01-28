@@ -13,6 +13,7 @@ libgncmod_csv_import_la_SOURCES = \
   gnc-csv-account-map.c \
   gnc-csv-model.c \
   gnc-csv-gnumeric-popup.c \
+  gnc-tokenizer.cpp \
   gnc-csv-trans-settings.c
 
 noinst_HEADERS = \
@@ -25,6 +26,7 @@ noinst_HEADERS = \
   gnc-csv-account-map.h \
   gnc-csv-model.h \
   gnc-csv-gnumeric-popup.h \
+  gnc-tokenizer.hpp \
   gnc-csv-trans-settings.h
 
 libgncmod_csv_import_la_LDFLAGS = -avoid-version

@@ -432,6 +432,7 @@ src/import-export/csv-imp/gnc-csv-model.c
 src/import-export/csv-imp/gnc-csv-trans-settings.c
 src/import-export/csv-imp/gncmod-csv-import.c
 src/import-export/csv-imp/gnc-plugin-csv-import.c
+src/import-export/csv-imp/gnc-tokenizer.cpp
 [type: gettext/gsettings]src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in
 src/import-export/dialog-import.glade
 src/import-export/gncmod-generic-import.c

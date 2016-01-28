@@ -420,7 +420,7 @@ ENDIF()
 SET (Boost_USE_MULTITHREADED ON)
 SET (Boost_FIND_QUIETLY ON)
 
-FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex)
+FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale)
 
 IF (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
