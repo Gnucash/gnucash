@@ -1,0 +1,13 @@
+This code is extracted from goffice.
+
+In particular,
+- go-charmap-sel is a widget to allow the user to select an encoding
+- go-option-menu is a widget used by go-charmap-sel to add manu items
+  with a radio button.
+- go-glib-extras is copied because we use a few functions from it:
+  - go_ascii_strcase_equal and go_ascii_strcase_hash
+  - go_guess_encoding
+
+This code is currently used by the csv importer, but could be useful
+in several interfaces that require the user to select an encoding
+(various importers and exporters mostly).

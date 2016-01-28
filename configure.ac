@@ -1697,6 +1697,7 @@ AC_CONFIG_FILES(
   doc/Makefile
   doc/examples/Makefile
   lib/Makefile
+  lib/goffice/Makefile
   lib/libc/Makefile
   lib/stf/Makefile
   packaging/Makefile
