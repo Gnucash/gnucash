@@ -27,7 +27,6 @@ extern "C" {
 #endif
 
 #include <glib/gi18n.h>
-#include <goffice/go-glib-extras.h>
 
 #include "gnc-csv-account-map.h"
 #include "gnc-ui-util.h"
@@ -44,6 +43,8 @@ extern "C" {
 }
 
 #include "gnc-csv-imp-trans.hpp"
+#include "gnc-csv-tokenizer.hpp"
+#include "gnc-fw-tokenizer.hpp"
 
 GQuark
 gnc_csv_imp_error_quark (void)
@@ -82,17 +83,6 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 //        N_("Other Account"),
 //        N_("Other Memo")
 //};
-
-/** A set of sensible defaults for parsing CSV files.
- * @return StfParseOptions_t* for parsing a file with comma separators
- */
-static StfParseOptions_t* default_parse_options (void)
-{
-    StfParseOptions_t* options = stf_parse_options_new();
-    stf_parse_options_set_type (options, PARSE_TYPE_CSV);
-    stf_parse_options_csv_set_separators (options, ",", NULL);
-    return options;
-}
 
 /** Parses a string into a date, given a format. The format must
  * include the year. This function should only be called by
@@ -360,24 +350,20 @@ time64 parse_date (const char* date_str, int format)
 /** Constructor for GncCsvParseData.
  * @return Pointer to a new GncCSvParseData
  */
-GncCsvParseData::GncCsvParseData()
+GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
 {
-    encoding = "UTF-8";
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
-    raw_mapping = NULL;
-    raw_str.begin = raw_str.end = file_str.begin = file_str.end = NULL;
-    orig_lines = NULL;
-    orig_row_lengths = NULL;
     error_lines = transactions = NULL;
-    options = default_parse_options();
     date_format = -1;
     currency_format = 0;
-    chunk = g_string_chunk_new(100 * 1024);
     start_row = 0;
     end_row = 1000;
     skip_rows = FALSE;
+
+    file_fmt = format;
+    tokenizer = GncTokenizerFactory(file_fmt);
 }
 
 /** Destructor for GncCsvParseData.
@@ -386,30 +372,40 @@ GncCsvParseData::~GncCsvParseData()
 {
     /* All non-NULL pointers have been initialized and must be freed. */
 
-    if (raw_mapping != NULL)
-    {
-        g_mapped_file_unref (raw_mapping);
-    }
-
-    if (file_str.begin != NULL)
-        g_free (file_str.begin);
-
-    if (orig_lines != NULL)
-        stf_parse_general_free (orig_lines);
-
-    if (orig_row_lengths != NULL)
-        g_array_free (orig_row_lengths, FALSE);
-
-    if (options != NULL)
-        stf_parse_options_free (options);
-
     if (error_lines != NULL)
         g_list_free (error_lines);
 
     if (transactions != NULL)
         g_list_free_full (transactions, g_free);
+}
 
-    g_string_chunk_free (chunk);
+int GncCsvParseData::file_format(GncImpFileFormat format,
+                                  GError** error)
+{
+    if (file_fmt == format)
+        return 0;
+
+    std::string new_encoding = "UTF-8";
+    std::string new_imp_file;
+
+    // Recover common settings from old tokenizer
+    if (tokenizer)
+    {
+        new_encoding = tokenizer->encoding();
+        new_imp_file = tokenizer->current_file();
+    }
+
+    file_fmt = format;
+    tokenizer = GncTokenizerFactory(file_fmt);
+
+    // Set up new tokenizer with common settings
+    // recovered from old tokenizer
+    tokenizer->encoding(new_encoding);
+    return load_file(new_imp_file.c_str(), error);
+}
+GncImpFileFormat GncCsvParseData::file_format()
+{
+    return file_fmt;
 }
 
 /** Converts raw file data using a new encoding. This function must be
@@ -420,32 +416,11 @@ GncCsvParseData::~GncCsvParseData()
  * @param error Will point to an error on failure
  * @return 0 on success, 1 on failure
  */
-int GncCsvParseData::convert_encoding (const char* encoding,
-                                       GError** error)
+void GncCsvParseData::convert_encoding (const std::string& encoding)
 {
-    gsize bytes_read, bytes_written;
-
-    /* If file_str has already been initialized it must be
-     * freed first. (This should always be the case, since
-     * gnc_csv_load_file should always be called before this
-     * function.) */
-    if (file_str.begin != NULL)
-        g_free(file_str.begin);
-
-    /* Do the actual translation to UTF-8. */
-    file_str.begin = g_convert (raw_str.begin,
-                                           raw_str.end - raw_str.begin,
-                                           "UTF-8", encoding, &bytes_read, &bytes_written,
-                                           error);
-    /* Handle errors that occur. */
-    if (file_str.begin == NULL)
-        return 1;
-
-    /* On success, save the ending pointer of the translated data and
-     * the encoding type and return 0. */
-    file_str.end = file_str.begin + bytes_written;
-    encoding = (gchar*)encoding;
-    return 0;
+    // TODO investigate if we can catch conversion errors and report them
+    if (tokenizer)
+        tokenizer->encoding(encoding);
 }
 
 /** Loads a file into a GncCsvParseData. This is the first function
@@ -463,43 +438,21 @@ int GncCsvParseData::convert_encoding (const char* encoding,
 int GncCsvParseData::load_file (const char* filename,
                                 GError** error)
 {
-    const char* guess_enc = NULL;
 
     /* Get the raw data first and handle an error if one occurs. */
-    raw_mapping = g_mapped_file_new (filename, FALSE, error);
-    if (raw_mapping == NULL)
+    try
+    {
+        tokenizer->load_file (filename);
+        return 0;
+    }
+    catch (std::ifstream::failure& ios_err)
     {
         /* TODO Handle file opening errors more specifically,
          * e.g. inexistent file versus no read permission. */
-        raw_str.begin = NULL;
+        PWARN ("Error: %s", ios_err.what());
         g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_OPEN, "%s", _("File opening failed."));
         return 1;
     }
-
-    /* Copy the mapping's contents into parse-data->raw_str. */
-    raw_str.begin = g_mapped_file_get_contents (raw_mapping);
-    raw_str.end = raw_str.begin + g_mapped_file_get_length (raw_mapping);
-
-    /* Make a guess at the encoding of the data. */
-    if (!g_mapped_file_get_length (raw_mapping) == 0)
-        guess_enc = go_guess_encoding ((const char*)(raw_str.begin),
-                                      (size_t)(raw_str.end - raw_str.begin),
-                                      "UTF-8", NULL);
-    if (guess_enc == NULL)
-    {
-        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
-        return 1;
-    }
-    /* Convert using the guessed encoding into file_str and
-     * handle any errors that occur. */
-    convert_encoding (guess_enc, error);
-    if (file_str.begin == NULL)
-    {
-        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_ENCODING, "%s", _("Unknown encoding."));
-        return 1;
-    }
-    else
-        return 0;
 }
 
 /** Parses a file into cells. This requires having an encoding that
@@ -516,82 +469,43 @@ int GncCsvParseData::load_file (const char* filename,
  */
 int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
 {
-    /* max_cols is the number of columns in the row with the most columns. */
-    guint i, max_cols = 0;
-
-    if (orig_lines != NULL)
-    {
-        stf_parse_general_free (orig_lines);
-    }
-
-    /* If everything is fine ... */
-    if (file_str.begin != NULL)
-    {
-        /* Do the actual parsing. */
-        orig_lines = stf_parse_general (options, chunk,
-                                 file_str.begin,
-                                 file_str.end);
-    }
-    /* If we couldn't get the encoding right, we just want an empty array. */
-    else
-    {
-        orig_lines = g_ptr_array_new();
-    }
-
-    /* Record the original row lengths of orig_lines. */
-    if (orig_row_lengths != NULL)
-        g_array_free (orig_row_lengths, FALSE);
-
-    orig_row_lengths =
-        g_array_sized_new (FALSE, FALSE, sizeof(int), orig_lines->len);
-
-    g_array_set_size (orig_row_lengths, orig_lines->len);
-    orig_max_row = 0;
-    for (i = 0; i < orig_lines->len; i++)
-    {
-        int length = ((GPtrArray*)orig_lines->pdata[i])->len;
-        orig_row_lengths->data[i] = length;
-        if (length > orig_max_row)
-            orig_max_row = length;
-    }
+    tokenizer->tokenize();
+    orig_lines.clear();
+    orig_lines = tokenizer->get_tokens();
 
     /* If it failed, generate an error. */
-    if (orig_lines == NULL)
+    if (orig_lines.size() == 0)
     {
         g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_PARSE, "Parsing failed.");
         return 1;
     }
 
-    /* Now that we have data, let's set max_cols. */
-    for (i = 0; i < orig_lines->len; i++)
+
+    /* Record the original row lengths of orig_lines. */
+    orig_row_lengths.clear();
+
+    orig_row_lengths.reserve(orig_lines.size());
+    orig_max_row = 0;
+    for(std::vector<str_vec>::iterator it = orig_lines.begin(); it != orig_lines.end(); ++it)
     {
-        if (max_cols < ((GPtrArray*)(orig_lines->pdata[i]))->len)
-            max_cols = ((GPtrArray*)(orig_lines->pdata[i]))->len;
+        std::vector<std::string>::size_type length = it->size();
+        orig_row_lengths.push_back(length);
+        if (length > orig_max_row)
+            orig_max_row = length;
     }
 
     if (guessColTypes)
     {
         /* Free column_types if it's already been created. */
         column_types.clear();
+    }
+    column_types.resize(orig_max_row, GNC_CSV_NONE);
 
-        /* Create column_types and fill it with guesses based
+    if (guessColTypes)
+    {
+        /* Guess column_types based
          * on the contents of each column. */
         /* TODO Make it actually guess. */
-        for (i = 0; i < max_cols; i++)
-        {
-            column_types.push_back(GNC_CSV_NONE);
-        }
-    }
-    else
-    {
-        /* If we don't need to guess column types, we will simply set any
-         * new columns that are created that didn't exist before to "None"
-         * since we don't want gibberish to appear. */
-        i = column_types.size();
-        for (; i < max_cols; i++)
-        {
-            column_types.push_back(GNC_CSV_NONE);
-        }
     }
     return 0;
 }
@@ -656,7 +570,7 @@ static void trans_property_free (TransProperty* prop)
  * @param str The string to be parsed
  * @return TRUE on success, FALSE on failure
  */
-static gboolean trans_property_set (TransProperty* prop, char* str)
+static gboolean trans_property_set (TransProperty* prop, const char* str)
 {
     char *endptr, *possible_currency_symbol, *str_dupe;
     gnc_numeric val;
@@ -1082,7 +996,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                                      gboolean redo_errors)
 {
     gboolean hasBalanceColumn;
-    guint i, j, max_cols = 0;
+    guint i, j = 0;
     GList *error_lines_iter = NULL, *begin_error_lines = NULL;
     Account *home_account = NULL;
 
@@ -1119,7 +1033,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         }
         /* ... we use only the lines in error_lines_iter. */
         if (error_lines_iter == NULL)
-            i = orig_lines->len; /* Don't go into the for loop. */
+            i = orig_lines.size(); /* Don't go into the for loop. */
         else
             i = GPOINTER_TO_INT(error_lines_iter->data);
     }
@@ -1132,12 +1046,12 @@ int GncCsvParseData::parse_to_trans (Account* account,
     }
 
     /* set end_row to number of lines */
-    if (end_row > orig_lines->len)
-        end_row = orig_lines->len;
+    if (end_row > orig_lines.size())
+        end_row = orig_lines.size();
 
     while (i < end_row)
     {
-        GPtrArray* line = (GPtrArray*) orig_lines->pdata[i];
+        std::vector<std::string> line = orig_lines[i];
         /* This flag is TRUE if there are any errors in this row. */
         gboolean errors = FALSE;
         gchar* error_message = NULL;
@@ -1149,12 +1063,12 @@ int GncCsvParseData::parse_to_trans (Account* account,
         // If account = NULL, we should have an Account column
         if (home_account == NULL)
         {
-            for (j = 0; j < line->len; j++)
+            for (j = 0; j < line.size(); j++)
             {
                 /* Look for "Account" columns. */
                 if (column_types[j] == GNC_CSV_ACCOUNT)
                 {
-                    home_account = gnc_csv_account_map_search ((gchar*) line->pdata[j]);
+                    home_account = gnc_csv_account_map_search (line[j].c_str());
                 }
             }
         }
@@ -1168,14 +1082,14 @@ int GncCsvParseData::parse_to_trans (Account* account,
         {
             list = trans_property_list_new (home_account, date_format, currency_format);
 
-            for (j = 0; j < line->len; j++)
+            for (j = 0; j < line.size(); j++)
             {
                 /* We do nothing in "None" or "Account" columns. */
                 if ((column_types[j] != GNC_CSV_NONE) && (column_types[j] != GNC_CSV_ACCOUNT))
                 {
                     /* Affect the transaction appropriately. */
                     TransProperty* property = trans_property_new (column_types[j], list);
-                    gboolean succeeded = trans_property_set (property, (gchar *) line->pdata[j]);
+                    gboolean succeeded = trans_property_set (property, line[j].c_str());
 
                     /* TODO Maybe move error handling to within TransPropertyList functions? */
                     if (succeeded)
@@ -1205,16 +1119,14 @@ int GncCsvParseData::parse_to_trans (Account* account,
         {
             error_lines = g_list_append (error_lines,
                                          GINT_TO_POINTER(i));
-            /* If there's already an error message, we need to replace it. */
-            if (line->len > (guint)(orig_row_lengths->data[i]))
-            {
-                g_free(line->pdata[line->len - 1]);
-                line->pdata[line->len - 1] = error_message;
-            }
+            /* If there's already an error message at the end of the line,
+             * we need to replace it with the new one, otherwise append the
+             * new one at the end of the line */
+            if (line.size() > (guint)(orig_row_lengths[i]))
+                line[line.size() - 1] = error_message;
             else
             {
-                /* Put the error message at the end of the line. */
-                g_ptr_array_add (line, error_message);
+                line.push_back (std::string(error_message));
             }
         }
         else
@@ -1264,7 +1176,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
             /* Move to the next error line in the list. */
             error_lines_iter = g_list_next (error_lines_iter);
             if (error_lines_iter == NULL)
-                i = orig_lines->len; /* Don't continue the for loop. */
+                i = orig_lines.size(); /* Don't continue the for loop. */
             else
                 i = GPOINTER_TO_INT(error_lines_iter->data);
         }
@@ -1351,14 +1263,13 @@ int GncCsvParseData::parse_to_trans (Account* account,
         g_list_free (begin_error_lines);
 
     /* We need to resize column_types since errors may have added columns. */
-    for (i = 0; i < orig_lines->len; i++)
+    std::vector<std::string>::size_type max_cols = 0;
+    for(std::vector<str_vec>::iterator it = orig_lines.begin(); it != orig_lines.end(); ++it)
     {
-        if (max_cols < ((GPtrArray*)(orig_lines->pdata[i]))->len)
-            max_cols = ((GPtrArray*)(orig_lines->pdata[i]))->len;
+        if (it->size() > max_cols)
+            max_cols = it->size();
     }
-    i = column_types.size();
-    for (; i < max_cols; i++)
-        column_types.push_back(GNC_CSV_NONE);
+    column_types.resize(max_cols, GNC_CSV_NONE);
 
     return 0;
 }
