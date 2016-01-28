@@ -36,10 +36,10 @@ libgncmod_csv_import_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/lib/goffice/libgnc-goffice.la \
   ${top_builddir}/lib/stf/libgnc-stf.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${GOFFICE_LIBS} \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
