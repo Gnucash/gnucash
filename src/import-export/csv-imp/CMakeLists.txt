@@ -13,6 +13,7 @@ SET(csv_import_SOURCES
   gnc-csv-model.c
   gnc-csv-gnumeric-popup.c
   gnc-csv-trans-settings.c
+  gnc-tokenizer.cpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.c
@@ -33,6 +34,7 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-model.h
   gnc-csv-gnumeric-popup.h
   gnc-csv-trans-settings.h
+  gnc-tokenizer.hpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.h
@@ -41,7 +43,7 @@ SET(csv_import_noinst_HEADERS
 
 ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-csv-import ${GOFFICE_LDFLAGS} gncmod-generic-import gncmod-gnome-utils
+TARGET_LINK_LIBRARIES(gncmod-csv-import ${GOFFICE_LDFLAGS} ${Boost_LIBRARIES} gncmod-generic-import gncmod-gnome-utils
                  gncmod-app-utils gncmod-engine gnc-core-utils gnc-module)
 
 
