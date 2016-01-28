@@ -355,7 +355,7 @@ GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
-    error_lines = transactions = NULL;
+    transactions = NULL;
     date_format = -1;
     currency_format = 0;
     start_row = 0;
@@ -371,9 +371,6 @@ GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
 GncCsvParseData::~GncCsvParseData()
 {
     /* All non-NULL pointers have been initialized and must be freed. */
-
-    if (error_lines != NULL)
-        g_list_free (error_lines);
 
     if (transactions != NULL)
         g_list_free_full (transactions, g_free);
@@ -996,8 +993,6 @@ int GncCsvParseData::parse_to_trans (Account* account,
                                      gboolean redo_errors)
 {
     gboolean hasBalanceColumn;
-    guint i, j = 0;
-    GList *error_lines_iter = NULL, *begin_error_lines = NULL;
     Account *home_account = NULL;
 
     /* last_transaction points to the last element in
@@ -1006,17 +1001,14 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
     /* Free error_lines and transactions if they
      * already exist. */
-    if (redo_errors) /* If we're redoing errors, we save freeing until the end. */
-        begin_error_lines = error_lines_iter = error_lines;
-    else
+    if (!redo_errors) /* If we're redoing errors, we save freeing until the end. */
     {
-        if (error_lines != NULL)
-            g_list_free(error_lines);
+        line_errors.clear();
+        line_errors.resize(orig_lines.size());
 
         if (transactions != NULL)
             g_list_free (transactions);
     }
-    error_lines = NULL;
 
     if (redo_errors) /* If we're looking only at error data ... */
     {
@@ -1031,17 +1023,9 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 last_transaction = g_list_next (last_transaction);
             }
         }
-        /* ... we use only the lines in error_lines_iter. */
-        if (error_lines_iter == NULL)
-            i = orig_lines.size(); /* Don't go into the for loop. */
-        else
-            i = GPOINTER_TO_INT(error_lines_iter->data);
     }
     else /* Otherwise, we look at all the data. */
     {
-        /* The following while-loop effectively behaves like the following for-loop:
-         * for(i = 0; i < orig_lines->len; i++). */
-        i = start_row;
         last_transaction = NULL;
     }
 
@@ -1049,12 +1033,21 @@ int GncCsvParseData::parse_to_trans (Account* account,
     if (end_row > orig_lines.size())
         end_row = orig_lines.size();
 
-    while (i < end_row)
+    for (uint i = 0; i < end_row; ++i)
     {
+        /* Skip current line if:
+           1. only looking for lines with error AND no error on current line
+           OR
+           2. looking for all lines AND
+              skip_rows is enabled AND
+              current line is an odd line */
+        if ((redo_errors && line_errors[i].empty()) ||
+           (!redo_errors && skip_rows && (i % 2 == 1)))
+            continue;
+
         std::vector<std::string> line = orig_lines[i];
         /* This flag is TRUE if there are any errors in this row. */
         gboolean errors = FALSE;
-        gchar* error_message = NULL;
         TransPropertyList* list;
         GncCsvTransLine* trans_line = NULL;
 
@@ -1063,7 +1056,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         // If account = NULL, we should have an Account column
         if (home_account == NULL)
         {
-            for (j = 0; j < line.size(); j++)
+            for (uint j = 0; j < line.size(); j++)
             {
                 /* Look for "Account" columns. */
                 if (column_types[j] == GNC_CSV_ACCOUNT)
@@ -1075,7 +1068,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
         if (home_account == NULL)
         {
-            error_message = g_strdup_printf (_("Account column could not be understood."));
+            line_errors[i] = _("Account column could not be understood.");
             errors = TRUE;
         }
         else
@@ -1097,8 +1090,10 @@ int GncCsvParseData::parse_to_trans (Account* account,
                     else
                     {
                         errors = TRUE;
-                        error_message = g_strdup_printf (_("%s column could not be understood."),
+                        gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
                                                         _(gnc_csv_column_type_strs[property->type]));
+                        line_errors[i] = error_message;
+                        g_free (error_message);
                         trans_property_free (property);
                         break;
                     }
@@ -1108,30 +1103,21 @@ int GncCsvParseData::parse_to_trans (Account* account,
             /* If we had success, add the transaction to transaction. */
             if (!errors)
             {
+                gchar *error_message = NULL;
                 trans_line = trans_property_list_to_trans (list, &error_message);
-                errors = trans_line == NULL;
+                errors = (trans_line == NULL);
+                if (errors)
+                {
+                    line_errors[i] = error_message;
+                    g_free (error_message);
+                }
             }
             trans_property_list_free (list);
         }
 
-        /* If there were errors, add this line to error_lines. */
-        if (errors)
+        /* If all went well, add this transaction to the list. */
+        if (!errors)
         {
-            error_lines = g_list_append (error_lines,
-                                         GINT_TO_POINTER(i));
-            /* If there's already an error message at the end of the line,
-             * we need to replace it with the new one, otherwise append the
-             * new one at the end of the line */
-            if (line.size() > (guint)(orig_row_lengths[i]))
-                line[line.size() - 1] = error_message;
-            else
-            {
-                line.push_back (std::string(error_message));
-            }
-        }
-        else
-        {
-            /* If all went well, add this transaction to the list. */
             trans_line->line_no = i;
 
             /* We keep the transactions sorted by date. We start at the end
@@ -1168,24 +1154,6 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
                 transactions = g_list_insert_before (transactions, insertion_spot, trans_line);
             }
-        }
-
-        /* Increment to the next row. */
-        if (redo_errors)
-        {
-            /* Move to the next error line in the list. */
-            error_lines_iter = g_list_next (error_lines_iter);
-            if (error_lines_iter == NULL)
-                i = orig_lines.size(); /* Don't continue the for loop. */
-            else
-                i = GPOINTER_TO_INT(error_lines_iter->data);
-        }
-        else
-        {
-            if (skip_rows == FALSE)
-                i++;
-            else
-                i = i + 2;
         }
     }
 
@@ -1258,18 +1226,6 @@ int GncCsvParseData::parse_to_trans (Account* account,
             tx_iter = g_list_next (tx_iter);
         }
     }
-
-    if (redo_errors) /* Now that we're at the end, we do the freeing. */
-        g_list_free (begin_error_lines);
-
-    /* We need to resize column_types since errors may have added columns. */
-    std::vector<std::string>::size_type max_cols = 0;
-    for(std::vector<str_vec>::iterator it = orig_lines.begin(); it != orig_lines.end(); ++it)
-    {
-        if (it->size() > max_cols)
-            max_cols = it->size();
-    }
-    column_types.resize(max_cols, GNC_CSV_NONE);
 
     return 0;
 }

@@ -128,7 +128,6 @@ public:
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
     std::vector<str_vec_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
     std::vector<str_vec>::size_type orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
-    GList* error_lines;         /**< List of row numbers in orig_lines that have errors */
     std::vector<GncCsvColumnType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
     GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
@@ -141,6 +140,7 @@ private:
     std::vector<std::vector<str_vec>::size_type>
               orig_row_lengths; /**< The lengths of rows in orig_lines
                                       before error messages are appended */
+    std::vector<std::string> line_errors;
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 };
 
