@@ -1,5 +1,6 @@
 #include "gnc-tokenizer.hpp"
 #include "gnc-csv-tokenizer.hpp"
+#include "gnc-fw-tokenizer.hpp"
 
 #include <iostream>
 #include <fstream>      // fstream
@@ -22,6 +23,9 @@ std::unique_ptr<GncTokenizer> GncTokenizerFactory(GncImpFileFormat fmt)
     {
     case GncImpFileFormat::CSV:
         tok.reset(new GncCsvTokenizer());
+        break;
+    case GncImpFileFormat::FIXED_WIDTH:
+        tok.reset(new GncFwTokenizer());
         break;
     default:
         break;

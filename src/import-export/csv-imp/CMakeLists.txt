@@ -14,6 +14,7 @@ SET(csv_import_SOURCES
   gnc-csv-gnumeric-popup.c
   gnc-csv-tokenizer.cpp
   gnc-csv-trans-settings.c
+  gnc-fw-tokenizer.cpp
   gnc-tokenizer.cpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
@@ -34,6 +35,7 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-gnumeric-popup.h
   gnc-csv-tokenizer.hpp
   gnc-csv-trans-settings.h
+  gnc-fw-tokenizer.hpp
   gnc-tokenizer.hpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h

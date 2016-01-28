@@ -14,6 +14,7 @@ libgncmod_csv_import_la_SOURCES = \
   gnc-csv-model.c \
   gnc-csv-tokenizer.cpp \
   gnc-csv-gnumeric-popup.c \
+  gnc-fw-tokenizer.cpp \
   gnc-tokenizer.cpp \
   gnc-csv-trans-settings.c
 
@@ -28,6 +29,7 @@ noinst_HEADERS = \
   gnc-csv-model.h \
   gnc-csv-tokenizer.hpp \
   gnc-csv-gnumeric-popup.h \
+  gnc-fw-tokenizer.hpp \
   gnc-tokenizer.hpp \
   gnc-csv-trans-settings.h
 
