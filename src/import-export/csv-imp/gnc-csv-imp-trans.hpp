@@ -44,22 +44,22 @@ extern "C" {
 
 /** Enumeration for column types. These are the different types of
  * columns that can exist in a CSV/Fixed-Width file. There should be
- * no two columns with the same type except for the GNC_CSV_NONE
+ * no two columns with the same type except for the GncTransPropType::NONE
  * type. */
-enum GncCsvColumnType {
-    GNC_CSV_NONE,
-    GNC_CSV_DATE,
-    GNC_CSV_NUM,
-    GNC_CSV_DESCRIPTION,
-    GNC_CSV_NOTES,
-    GNC_CSV_ACCOUNT,
-    GNC_CSV_DEPOSIT,
-    GNC_CSV_WITHDRAWAL,
-    GNC_CSV_BALANCE,
-    GNC_CSV_MEMO,
-    GNC_CSV_OACCOUNT,
-    GNC_CSV_OMEMO,
-    GNC_CSV_NUM_COL_TYPES
+enum class GncTransPropType {
+    NONE,
+    DATE,
+    NUM,
+    DESCRIPTION,
+    NOTES,
+    ACCOUNT,
+    DEPOSIT,
+    WITHDRAWAL,
+    BALANCE,
+    MEMO,
+    OACCOUNT,
+    OMEMO,
+    NUM_COL_TYPES
 };
 
 /** Error domain for the csv importer. */
@@ -103,7 +103,7 @@ extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
 /* This array contains all of the different strings for different column types. */
-extern const gchar* gnc_csv_column_type_strs[];
+extern const gchar* gnc_csv_col_type_strs[];
 
 using str_vec_t = std::vector<std::string> ;
 
@@ -123,12 +123,12 @@ public:
 
     int parse (gboolean guessColTypes, GError** error);
     int parse_to_trans (Account* account, gboolean redo_errors);
-    bool check_for_column_type (int type);
+    bool check_for_column_type (GncTransPropType type);
 
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
     std::vector<str_vec_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
     std::vector<str_vec>::size_type orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
-    std::vector<GncCsvColumnType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
+    std::vector<GncTransPropType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
     GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     guint start_row;            /**< The start row to generate transactions from. */
