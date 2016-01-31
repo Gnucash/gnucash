@@ -124,21 +124,21 @@ const char* date_regex[] = {
 //                                       N_("Comma: 123.456,78")
 //                                      };
 //
-///* This array contains all of the different strings for different column types. */
-//const gchar* gnc_csv_column_type_strs[GNC_CSV_NUM_COL_TYPES] = {
-//        N_("None"),
-//        N_("Date"),
-//        N_("Num"),
-//        N_("Description"),
-//        N_("Notes"),
-//        N_("Account"),
-//        N_("Deposit"),
-//        N_("Withdrawal"),
-//        N_("Balance"),
-//        N_("Memo"),
-//        N_("Other Account"),
-//        N_("Other Memo")
-//};
+/* This array contains all of the different strings for different column types. */
+const gchar* gnc_csv_col_type_strs[GncTransPropType::NUM_COL_TYPES] = {
+        N_("None"),
+        N_("Date"),
+        N_("Num"),
+        N_("Description"),
+        N_("Notes"),
+        N_("Account"),
+        N_("Deposit"),
+        N_("Withdrawal"),
+        N_("Balance"),
+        N_("Memo"),
+        N_("Other Account"),
+        N_("Other Memo")
+};
 
 /** Parses a string into a date, given a format. This function
  * requires only knowing the order in which the year, month and day
@@ -326,7 +326,7 @@ int GncCsvParseData::load_file (const char* filename,
  * set according to how the user wants before calling this
  * function. (Note: this function must be called with guessColTypes as
  * TRUE before it is ever called with it as FALSE.) (Note: if
- * guessColTypes is TRUE, all the column types will be GNC_CSV_NONE
+ * guessColTypes is TRUE, all the column types will be GncTransPropType::NONE
  * right now.)
  * @param parse_data Data that is being parsed
  * @param guessColTypes TRUE to guess what the types of columns are based on the cell contents
@@ -365,7 +365,7 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
         /* Free column_types if it's already been created. */
         column_types.clear();
     }
-    column_types.resize(orig_max_row, GNC_CSV_NONE);
+    column_types.resize(orig_max_row, GncTransPropType::NONE);
 
     if (guessColTypes)
     {
@@ -388,8 +388,8 @@ typedef struct
 /** A struct encapsulating a property of a transaction. */
 typedef struct
 {
-    int type;                /**< A value from the GncCsvColumnType enum except
-                               * GNC_CSV_NONE and GNC_CSV_NUM_COL_TYPES */
+    GncTransPropType type;   /**< A value from the GncTransPropType enum except
+                               * GncTransPropType::NONE and GncTransPropType::NUM_COL_TYPES */
     void* value;             /**< Pointer to the data that will be used to configure a transaction */
     TransPropertyList* list; /**< The list the property belongs to */
 } TransProperty;
@@ -397,7 +397,7 @@ typedef struct
 /** Constructor for TransProperty.
  * @param type The type of the new property (see TransProperty.type for possible values)
  */
-static TransProperty* trans_property_new (int type, TransPropertyList* list)
+static TransProperty* trans_property_new (GncTransPropType type, TransPropertyList* list)
 {
     TransProperty* prop = g_new (TransProperty, 1);
     prop->type = type;
@@ -416,10 +416,10 @@ static void trans_property_free (TransProperty* prop)
         /* The types for "Date" and "Balance" (time64 and gnc_numeric,
          * respectively) are typically not pointed to, we have to free
          * them, unlike types like char* ("Description"). */
-    case GNC_CSV_DATE:
-    case GNC_CSV_BALANCE:
-    case GNC_CSV_DEPOSIT:
-    case GNC_CSV_WITHDRAWAL:
+    case GncTransPropType::DATE:
+    case GncTransPropType::BALANCE:
+    case GncTransPropType::DEPOSIT:
+    case GncTransPropType::WITHDRAWAL:
         if (prop->value != NULL)
             g_free(prop->value);
         break;
@@ -444,26 +444,26 @@ static gboolean trans_property_set (TransProperty* prop, const char* str)
     regex_t regex;
     switch (prop->type)
     {
-    case GNC_CSV_DATE:
+    case GncTransPropType::DATE:
         prop->value = g_new(time64, 1);
         *((time64*)(prop->value)) = parse_date(str, prop->list->date_format);
         return *((time64*)(prop->value)) != -1;
 
-    case GNC_CSV_DESCRIPTION:
-    case GNC_CSV_NOTES:
-    case GNC_CSV_MEMO:
-    case GNC_CSV_OMEMO:
-    case GNC_CSV_NUM:
+    case GncTransPropType::DESCRIPTION:
+    case GncTransPropType::NOTES:
+    case GncTransPropType::MEMO:
+    case GncTransPropType::OMEMO:
+    case GncTransPropType::NUM:
         prop->value = g_strdup (str);
         return TRUE;
 
-    case GNC_CSV_OACCOUNT:
+    case GncTransPropType::OACCOUNT:
         prop->value = gnc_csv_account_map_search (str);
         return TRUE;
 
-    case GNC_CSV_BALANCE:
-    case GNC_CSV_DEPOSIT:
-    case GNC_CSV_WITHDRAWAL:
+    case GncTransPropType::BALANCE:
+    case GncTransPropType::DEPOSIT:
+    case GncTransPropType::WITHDRAWAL:
         str_dupe = g_strdup (str); /* First, we make a copy so we can't mess up real data. */
         /* If a cell is empty or just spaces make its value = "0" */
         reti = regcomp(&regex, "[0-9]", 0);
@@ -637,13 +637,13 @@ static gboolean trans_property_list_verify_essentials (TransPropertyList* list, 
     {
         switch (((TransProperty*)(list->properties->data))->type)
         {
-        case GNC_CSV_DATE:
+        case GncTransPropType::DATE:
             possible_errors[NO_DATE] = NULL;
             break;
 
-        case GNC_CSV_BALANCE:
-        case GNC_CSV_DEPOSIT:
-        case GNC_CSV_WITHDRAWAL:
+        case GncTransPropType::BALANCE:
+        case GncTransPropType::DEPOSIT:
+        case GncTransPropType::WITHDRAWAL:
             possible_errors[NO_AMOUNT] = NULL;
             break;
         default:
@@ -756,31 +756,31 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
         TransProperty* prop = (TransProperty*)(list->properties->data);
         switch (prop->type)
         {
-        case GNC_CSV_DATE:
+        case GncTransPropType::DATE:
             xaccTransSetDatePostedSecsNormalized (trans_line->trans, *((time64*)(prop->value)));
             break;
 
-        case GNC_CSV_DESCRIPTION:
+        case GncTransPropType::DESCRIPTION:
             xaccTransSetDescription (trans_line->trans, (char*)(prop->value));
             break;
 
-        case GNC_CSV_NOTES:
+        case GncTransPropType::NOTES:
             xaccTransSetNotes (trans_line->trans, (char*)(prop->value));
             break;
 
-        case GNC_CSV_OACCOUNT:
+        case GncTransPropType::OACCOUNT:
             oaccount = ((Account*)(prop->value));
             break;
 
-        case GNC_CSV_MEMO:
+        case GncTransPropType::MEMO:
             memo = g_strdup ((char*)(prop->value));
             break;
 
-        case GNC_CSV_OMEMO:
+        case GncTransPropType::OMEMO:
             omemo = g_strdup ((char*)(prop->value));
             break;
 
-        case GNC_CSV_NUM:
+        case GncTransPropType::NUM:
             /* the 'num' is saved and passed to 'trans_add_split' below where
              * 'gnc_set_num_action' is used to set tran-num and/or split-action
              * per book option */
@@ -791,7 +791,7 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
             trans_line->num = g_strdup ((char*)(prop->value));
             break;
 
-        case GNC_CSV_DEPOSIT: /* Add deposits to the existing amount. */
+        case GncTransPropType::DEPOSIT: /* Add deposits to the existing amount. */
             if (prop->value != NULL)
             {
                 amount = gnc_numeric_add (*((gnc_numeric*)(prop->value)),
@@ -804,7 +804,7 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
             }
             break;
 
-        case GNC_CSV_WITHDRAWAL: /* Withdrawals are just negative deposits. */
+        case GncTransPropType::WITHDRAWAL: /* Withdrawals are just negative deposits. */
             if (prop->value != NULL)
             {
                 amount = gnc_numeric_add (gnc_numeric_neg(*((gnc_numeric*)(prop->value))),
@@ -817,7 +817,7 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
             }
             break;
 
-        case GNC_CSV_BALANCE: /* The balance gets stored in a separate field in trans_line. */
+        case GncTransPropType::BALANCE: /* The balance gets stored in a separate field in trans_line. */
             /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
             if (!amount_set && prop->value != NULL)
             {
@@ -935,7 +935,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
             for (uint j = 0; j < line.size(); j++)
             {
                 /* Look for "Account" columns. */
-                if (column_types[j] == GNC_CSV_ACCOUNT)
+                if (column_types[j] == GncTransPropType::ACCOUNT)
                     home_account = gnc_csv_account_map_search (line[j].c_str());
             }
         }
@@ -952,7 +952,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         for (uint j = 0; j < line.size(); j++)
         {
             /* We do nothing in "None" or "Account" columns. */
-            if ((column_types[j] != GNC_CSV_NONE) && (column_types[j] != GNC_CSV_ACCOUNT))
+            if ((column_types[j] != GncTransPropType::NONE) && (column_types[j] != GncTransPropType::ACCOUNT))
             {
                 /* Affect the transaction appropriately. */
                 TransProperty* property = trans_property_new (column_types[j], list);
@@ -965,7 +965,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 {
                     loop_err = true;
                     gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
-                                                    _(gnc_csv_column_type_strs[property->type]));
+                                                    _(gnc_csv_col_type_strs[property->type]));
                     *line_errs_it = error_message;
 
                     g_free (error_message);
@@ -1026,7 +1026,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         }
     }
 
-    if (std::find(column_types.begin(),column_types.end(), GNC_CSV_BALANCE) !=
+    if (std::find(column_types.begin(),column_types.end(), GncTransPropType::BALANCE) !=
         column_types.end()) // This is only used if we have one home account
     {
         Split      *split, *osplit;
@@ -1091,15 +1091,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
 
 bool
-GncCsvParseData::check_for_column_type (int type)
+GncCsvParseData::check_for_column_type (GncTransPropType type)
 {
-    gboolean ret = FALSE;
-    int j, ncols = column_types.size(); /* ncols is the number of columns in the data. */
-
-    for (j = 0; j < ncols; j++)
-    {
-        if (column_types[j] == type)
-            ret = TRUE;
-    }
-    return ret;
+    return (std::find (column_types.begin(), column_types.end(), type) != column_types.end());
 }
