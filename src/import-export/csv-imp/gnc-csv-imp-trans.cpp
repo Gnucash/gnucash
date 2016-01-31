@@ -33,6 +33,7 @@ extern "C" {
 #include "engine-helpers.h"
 
 #include <string.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <regex.h>
@@ -42,6 +43,7 @@ extern "C" {
 #include <math.h>
 }
 
+#include <algorithm>
 #include <boost/regex.hpp>
 
 #include "gnc-csv-imp-trans.hpp"
@@ -859,7 +861,6 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
 int GncCsvParseData::parse_to_trans (Account* account,
                                      gboolean redo_errors)
 {
-    gboolean hasBalanceColumn;
     Account *home_account = NULL;
 
     /* last_transaction points to the last element in
@@ -896,11 +897,22 @@ int GncCsvParseData::parse_to_trans (Account* account,
         last_transaction = NULL;
     }
 
-    /* set end_row to number of lines */
-    if (end_row > orig_lines.size())
-        end_row = orig_lines.size();
+    /* compute start and end iterators based on user-set restrictions */
+    auto line_errs_it = line_errors.begin();
+    std::advance(line_errs_it, start_row);
+    auto orig_lines_it = orig_lines.cbegin();
+    std::advance(orig_lines_it, start_row);
 
-    for (uint i = 0; i < end_row; ++i)
+    auto orig_lines_max = orig_lines.cbegin();
+    if (end_row > orig_lines.size())
+        orig_lines_max = orig_lines.cend();
+    else
+        std::advance(orig_lines_max, end_row);
+
+    bool odd_line = false;
+    for (orig_lines_it, line_errs_it, odd_line;
+            orig_lines_it != orig_lines_max;
+            ++orig_lines_it, ++line_errs_it, odd_line = !odd_line)
     {
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
@@ -908,14 +920,11 @@ int GncCsvParseData::parse_to_trans (Account* account,
            2. looking for all lines AND
               skip_rows is enabled AND
               current line is an odd line */
-        if ((redo_errors && line_errors[i].empty()) ||
-           (!redo_errors && skip_rows && (i % 2 == 1)))
+        if ((redo_errors && line_errs_it->empty()) ||
+           (!redo_errors && skip_rows && odd_line))
             continue;
 
-        std::vector<std::string> line = orig_lines[i];
-        /* This flag is TRUE if there are any errors in this row. */
-        gboolean errors = FALSE;
-        TransPropertyList* list;
+        std::vector<std::string> line = *orig_lines_it;
         GncCsvTransLine* trans_line = NULL;
 
         home_account = account;
@@ -927,115 +936,98 @@ int GncCsvParseData::parse_to_trans (Account* account,
             {
                 /* Look for "Account" columns. */
                 if (column_types[j] == GNC_CSV_ACCOUNT)
-                {
                     home_account = gnc_csv_account_map_search (line[j].c_str());
-                }
             }
         }
 
         if (home_account == NULL)
         {
-            line_errors[i] = _("Account column could not be understood.");
-            errors = TRUE;
+            *line_errs_it = _("Account column could not be understood.");
+            continue;
         }
-        else
+
+        TransPropertyList* list = trans_property_list_new (home_account, date_format, currency_format);
+
+        bool loop_err = false;
+        for (uint j = 0; j < line.size(); j++)
         {
-            list = trans_property_list_new (home_account, date_format, currency_format);
-
-            for (j = 0; j < line.size(); j++)
+            /* We do nothing in "None" or "Account" columns. */
+            if ((column_types[j] != GNC_CSV_NONE) && (column_types[j] != GNC_CSV_ACCOUNT))
             {
-                /* We do nothing in "None" or "Account" columns. */
-                if ((column_types[j] != GNC_CSV_NONE) && (column_types[j] != GNC_CSV_ACCOUNT))
-                {
-                    /* Affect the transaction appropriately. */
-                    TransProperty* property = trans_property_new (column_types[j], list);
-                    gboolean succeeded = trans_property_set (property, line[j].c_str());
+                /* Affect the transaction appropriately. */
+                TransProperty* property = trans_property_new (column_types[j], list);
+                gboolean succeeded = trans_property_set (property, line[j].c_str());
 
-                    /* TODO Maybe move error handling to within TransPropertyList functions? */
-                    if (succeeded)
-                        trans_property_list_add (property);
-                    else
-                    {
-                        errors = TRUE;
-                        gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
-                                                        _(gnc_csv_column_type_strs[property->type]));
-                        line_errors[i] = error_message;
-                        g_free (error_message);
-                        trans_property_free (property);
-                        break;
-                    }
-                }
-            }
-
-            /* If we had success, add the transaction to transaction. */
-            if (!errors)
-            {
-                gchar *error_message = NULL;
-                trans_line = trans_property_list_to_trans (list, &error_message);
-                errors = (trans_line == NULL);
-                if (errors)
+                /* TODO Maybe move error handling to within TransPropertyList functions? */
+                if (succeeded)
+                    trans_property_list_add (property);
+                else
                 {
-                    line_errors[i] = error_message;
+                    loop_err = true;
+                    gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
+                                                    _(gnc_csv_column_type_strs[property->type]));
+                    *line_errs_it = error_message;
+
                     g_free (error_message);
+                    trans_property_free (property);
+                    trans_property_list_free (list);
+                    break;
                 }
             }
+        }
+        if (loop_err)
+            continue;
+
+        /* If column parsing was successful, convert trans properties into a trans line. */
+        gchar *error_message = NULL;
+        trans_line = trans_property_list_to_trans (list, &error_message);
+        if (trans_line == NULL)
+        {
+            *line_errs_it = error_message;
+            g_free (error_message);
             trans_property_list_free (list);
+            continue;
         }
 
         /* If all went well, add this transaction to the list. */
-        if (!errors)
+        /* We keep the transactions sorted by date. We start at the end
+         * of the list and go backward, simply because the file itself
+         * is probably also sorted by date (but we need to handle the
+         * exception anyway). */
+
+        /* If we can just put it at the end, do so and increment last_transaction. */
+        if (last_transaction == NULL ||
+                xaccTransGetDate (((GncCsvTransLine*)(last_transaction->data))->trans) <= xaccTransGetDate (trans_line->trans))
         {
-            trans_line->line_no = i;
-
-            /* We keep the transactions sorted by date. We start at the end
-             * of the list and go backward, simply because the file itself
-             * is probably also sorted by date (but we need to handle the
-             * exception anyway). */
-
-            /* If we can just put it at the end, do so and increment last_transaction. */
-            if (last_transaction == NULL ||
-                    xaccTransGetDate (((GncCsvTransLine*)(last_transaction->data))->trans) <= xaccTransGetDate (trans_line->trans))
+            transactions = g_list_append (transactions, trans_line);
+            /* If this is the first transaction, we need to get last_transaction on track. */
+            if (last_transaction == NULL)
+                last_transaction = transactions;
+            else /* Otherwise, we can just continue. */
+                last_transaction = g_list_next (last_transaction);
+        }
+        /* Otherwise, search backward for the correct spot. */
+        else
+        {
+            GList* insertion_spot = last_transaction;
+            while (insertion_spot != NULL &&
+                    xaccTransGetDate (((GncCsvTransLine*)(insertion_spot->data))->trans) > xaccTransGetDate (trans_line->trans))
             {
-                transactions = g_list_append (transactions, trans_line);
-                /* If this is the first transaction, we need to get last_transaction on track. */
-                if (last_transaction == NULL)
-                    last_transaction = transactions;
-                else /* Otherwise, we can just continue. */
-                    last_transaction = g_list_next (last_transaction);
+                insertion_spot = g_list_previous (insertion_spot);
             }
-            /* Otherwise, search backward for the correct spot. */
+            /* Move insertion_spot one location forward since we have to
+             * use the g_list_insert_before function. */
+            if (insertion_spot == NULL) /* We need to handle the case of inserting at the beginning of the list. */
+                insertion_spot = transactions;
             else
-            {
-                GList* insertion_spot = last_transaction;
-                while (insertion_spot != NULL &&
-                        xaccTransGetDate (((GncCsvTransLine*)(insertion_spot->data))->trans) > xaccTransGetDate (trans_line->trans))
-                {
-                    insertion_spot = g_list_previous (insertion_spot);
-                }
-                /* Move insertion_spot one location forward since we have to
-                 * use the g_list_insert_before function. */
-                if (insertion_spot == NULL) /* We need to handle the case of inserting at the beginning of the list. */
-                    insertion_spot = transactions;
-                else
-                    insertion_spot = g_list_next (insertion_spot);
+                insertion_spot = g_list_next (insertion_spot);
 
-                transactions = g_list_insert_before (transactions, insertion_spot, trans_line);
-            }
+            transactions = g_list_insert_before (transactions, insertion_spot, trans_line);
         }
     }
 
-    /* If we have a balance column, set the appropriate amounts on the transactions. */
-    hasBalanceColumn = FALSE;
-    for (i = 0; i < column_types.size(); i++)
-    {
-        if (column_types[i] == GNC_CSV_BALANCE)
-        {
-            hasBalanceColumn = TRUE;
-            break;
-        }
-    }
-
-    if (hasBalanceColumn) // This is only used if we have one home account
+    if (std::find(column_types.begin(),column_types.end(), GNC_CSV_BALANCE) !=
+        column_types.end()) // This is only used if we have one home account
     {
         Split      *split, *osplit;
         gnc_numeric balance_offset;
