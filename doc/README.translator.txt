@@ -48,7 +48,7 @@ You need to update this with the current information.
 
 For example in the de.po file, we have this:
 
-# Messages in Deutsch für GnuCash
+# Messages in Deutsch fÃ¼r GnuCash
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 
@@ -64,14 +64,14 @@ msgid ""
 "The GNU way to manage your money!"
 msgstr ""
 
-After, the tranlation in the de.po file:
+After, the translation in the de.po file:
 
 #: messages-i18n.c:11
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
 msgstr ""
-"GnuCash: Ihr persönlicher Finanzmanager.\n"
+"GnuCash: Ihr persÃ¶nlicher Finanzmanager.\n"
 "Der GNU-Weg, ihr Geld zu verwalten !"
 
 
@@ -145,7 +145,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
+"Es gab einen Fehler beim Ã–ffnen der Datei. \n"
 "     %s."
 
 You need to correct the translated string and remove the 'fuzzy' keyword.
@@ -159,7 +159,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
+"Es gab einen Fehler beim Ã–ffnen der Datei. \n"
 "     %s."
 
 2) You have this:
@@ -205,7 +205,7 @@ For each file:
 4) Change the gnc-act:title, gnc-act:short-description, and
    gnc-act:long-description to contain appropriately translated text.
    Do not add any newlines in the long description except at the end
-   and begining of the string.
+   and beginning of the string.
 5) For each gnc:account in the file translate the act:name, and
    act:description fields.  Please do not translate any other fields.
 
