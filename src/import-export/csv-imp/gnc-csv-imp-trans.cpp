@@ -42,6 +42,9 @@ extern "C" {
 #include <math.h>
 }
 
+#include <boost/regex.hpp>
+#include <boost/regex/icu.hpp>
+
 #include "gnc-csv-imp-trans.hpp"
 #include "gnc-csv-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
@@ -62,6 +65,58 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 //                                   N_("m-d")
 //                                  };
 //
+/* Regular expressions used to parse dates per date format */
+const char* date_regex[] = {
+                             "(?:"                                   // either y-m-d
+                                 "(?<YEAR>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<DAY>[[:Nd:]]+)"
+                             "|"                                     // or CCYYMMDD
+                                 "(?<YEAR>[[:Nd:]]{4})"
+                                 "(?<MONTH>[[:Nd:]]{2})"
+                                 "(?<DAY>[[:Nd:]]{2})"
+                             ")",
+
+                             "(?:"                                   // either d-m-y
+                                 "(?<DAY>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<YEAR>[[:Nd:]]+)"
+                             "|"                                     // or DDMMCCYY
+                                 "(?<DAY>[[:Nd:]]{2})"
+                                 "(?<MONTH>[[:Nd:]]{2})"
+                                 "(?<YEAR>[[:Nd:]]{4})"
+                             ")",
+
+                             "(?:"                                   // either m-d-y
+                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<DAY>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<YEAR>[[:Nd:]]+)"
+                             "|"                                     // or MMDDCCYY
+                                 "(?<MONTH>[[:Nd:]]{2})"
+                                 "(?<DAY>[[:Nd:]]{2})"
+                                 "(?<YEAR>[[:Nd:]]{4})"
+                             ")",
+
+                             "(?:"                                   // either d-m(-y)
+                                 "(?<DAY>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<MONTH>[[:Nd:]]+)(?:[[:P*:][:Zs:]]+"
+                                 "(?<YEAR>[[:Nd:]]+))?"
+                             "|"                                     // or DDMM(CCYY)
+                                 "(?<DAY>[[:Nd:]]{2})"
+                                 "(?<MONTH>[[:Nd:]]{2})"
+                                 "(?<YEAR>[[:Nd:]]+)?"
+                             ")",
+
+                             "(?:"                                   // either m-d(-y)
+                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
+                                 "(?<DAY>[[:Nd:]]+)(?:[[:P*:][:Zs:]]+"
+                                 "(?<YEAR>[[:Nd:]]+))?"
+                             "|"                                     // or MMDD(CCYY)
+                                 "(?<MONTH>[[:Nd:]]{2})"
+                                 "(?<DAY>[[:Nd:]]{2})"
+                                 "(?<YEAR>[[:Nd:]]+)?"
+                             ")",
+};
 //const int num_currency_formats = 3;
 //const gchar* currency_format_user[] = {N_("Locale"),
 //                                       N_("Period: 123,456.78"),
@@ -84,253 +139,6 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 //        N_("Other Memo")
 //};
 
-/** Parses a string into a date, given a format. The format must
- * include the year. This function should only be called by
- * parse_date.
- * @param date_str The string containing a date being parsed
- * @param format An index specifying a format in date_format_user
- * @return The parsed value of date_str on success or -1 on failure
- */
-static time64 parse_date_with_year (const char* date_str, int format)
-{
-    time64 rawtime; /* The integer time */
-    struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
-
-    int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
-
-    /* Buffer for containing individual parts (e.g. year, month, day) of a date */
-    char date_segment[5];
-
-    /* The compiled regular expression */
-    regex_t preg = {0};
-
-    /* An array containing indices specifying the matched substrings in date_str */
-    regmatch_t pmatch[4] = { {0}, {0}, {0}, {0} };
-
-    /* The regular expression for parsing dates */
-    const char* regex = "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$";
-
-    /* We get our matches using the regular expression. */
-    regcomp (&preg, regex, REG_EXTENDED);
-    regexec (&preg, date_str, 4, pmatch, 0);
-    regfree (&preg);
-
-    /* If there wasn't a match, there was an error. */
-    if (pmatch[0].rm_eo == 0)
-        return -1;
-
-    /* If this is a string without separators ... */
-    if (pmatch[1].rm_so == -1)
-    {
-        /* ... we will fill in the indices based on the user's selection. */
-        int k = 0; /* k traverses date_str by keeping track of where separators "should" be. */
-        j = 1; /* j traverses pmatch. */
-        for (i = 0; date_format_user[format][i]; i++)
-        {
-            char segment_type = date_format_user[format][i];
-            /* Only do something if this is a meaningful character */
-            if (segment_type == 'y' || segment_type == 'm' || segment_type == 'd')
-            {
-                pmatch[j].rm_so = k;
-                switch (segment_type)
-                {
-                case 'm':
-                case 'd':
-                    k += 2;
-                    break;
-
-                case 'y':
-                    k += 4;
-                    break;
-                }
-
-                pmatch[j].rm_eo = k;
-                j++;
-            }
-        }
-    }
-
-    /* Put some sane values in retvalue by using a fixed time for
-     * the non-year-month-day parts of the date. */
-    gnc_time (&rawtime);
-    gnc_localtime_r (&rawtime, &retvalue);
-    retvalue.tm_hour = 11;
-    retvalue.tm_min = 0;
-    retvalue.tm_sec = 0;
-    retvalue.tm_isdst = -1;
-
-    /* j traverses pmatch (index 0 contains the entire string, so we
-     * start at index 1 for the first meaningful match). */
-    j = 1;
-    /* Go through the date format and interpret the matches in order of
-     * the sections in the date format. */
-    for (i = 0; date_format_user[format][i]; i++)
-    {
-        char segment_type = date_format_user[format][i];
-        /* Only do something if this is a meaningful character */
-        if (segment_type == 'y' || segment_type == 'm' || segment_type == 'd')
-        {
-            /* Copy the matching substring into date_segment so that we can
-             * convert it into an integer. */
-            mem_length = pmatch[j].rm_eo - pmatch[j].rm_so;
-            memcpy (date_segment, date_str + pmatch[j].rm_so, mem_length);
-            date_segment[mem_length] = '\0';
-
-            /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if they change when we use gnc_mktime
-             * below. */
-            switch (segment_type)
-            {
-            case 'y':
-                retvalue.tm_year = atoi (date_segment);
-
-                /* Handle two-digit years. */
-                if (retvalue.tm_year < 100)
-                {
-                    /* We allow two-digit years in the range 1969 - 2068. */
-                    if (retvalue.tm_year < 69)
-                        retvalue.tm_year += 100;
-                }
-                else
-                    retvalue.tm_year -= 1900;
-                orig_year = retvalue.tm_year;
-                break;
-
-            case 'm':
-                orig_month = retvalue.tm_mon = atoi (date_segment) - 1;
-                break;
-
-            case 'd':
-                orig_day = retvalue.tm_mday = atoi (date_segment);
-                break;
-            }
-            j++;
-        }
-    }
-    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
-     * everything is okay; otherwise, an error has occurred. */
-    /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with gnc_mktime
-     * near midnight, causing the code to incorrectly think a date is
-     * incorrect. */
-    test_retvalue = retvalue;
-    gnc_mktime (&test_retvalue);
-    retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = gnc_mktime (&retvalue);
-    if (retvalue.tm_mday == orig_day &&
-            retvalue.tm_mon == orig_month &&
-            retvalue.tm_year == orig_year)
-    {
-        return rawtime;
-    }
-    else
-    {
-        return -1;
-    }
-}
-
-/** Parses a string into a date, given a format. The format cannot
- * include the year. This function should only be called by
- * parse_date.
- * @param date_str The string containing a date being parsed
- * @param format An index specifying a format in date_format_user
- * @return The parsed value of date_str on success or -1 on failure
- */
-static time64 parse_date_without_year (const char* date_str, int format)
-{
-    time64 rawtime; /* The integer time */
-    struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
-
-    int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
-
-    /* Buffer for containing individual parts (e.g. year, month, day) of a date */
-    gchar* date_segment;
-
-    /* The compiled regular expression */
-    regex_t preg = {0};
-
-    /* An array containing indices specifying the matched substrings in date_str */
-    regmatch_t pmatch[3] = { {0}, {0}, {0} };
-
-    /* The regular expression for parsing dates */
-    const char* regex = "^ *([0-9]+) *[-/.'] *([0-9]+).*$";
-
-    /* We get our matches using the regular expression. */
-    regcomp (&preg, regex, REG_EXTENDED);
-    regexec (&preg, date_str, 3, pmatch, 0);
-    regfree (&preg);
-
-    /* If there wasn't a match, there was an error. */
-    if (pmatch[0].rm_eo == 0)
-        return -1;
-
-    /* Put some sane values in retvalue by using a fixed time for
-     * the non-year-month-day parts of the date. */
-    gnc_time (&rawtime);
-    gnc_localtime_r (&rawtime, &retvalue);
-    retvalue.tm_hour = 11;
-    retvalue.tm_min = 0;
-    retvalue.tm_sec = 0;
-    retvalue.tm_isdst = -1;
-    orig_year = retvalue.tm_year;
-
-    /* j traverses pmatch (index 0 contains the entire string, so we
-     * start at index 1 for the first meaningful match). */
-    j = 1;
-    /* Go through the date format and interpret the matches in order of
-     * the sections in the date format. */
-    for (i = 0; date_format_user[format][i]; i++)
-    {
-        char segment_type = date_format_user[format][i];
-        /* Only do something if this is a meaningful character */
-        if (segment_type == 'm' || segment_type == 'd')
-        {
-            /* Copy the matching substring into date_segment so that we can
-             * convert it into an integer. */
-            mem_length = pmatch[j].rm_eo - pmatch[j].rm_so;
-            date_segment = g_new (gchar, mem_length);
-            memcpy(date_segment, date_str + pmatch[j].rm_so, mem_length);
-            date_segment[mem_length] = '\0';
-
-            /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if they change when we use gnc_mktime
-             * below. */
-            switch (segment_type)
-            {
-            case 'm':
-                orig_month = retvalue.tm_mon = atoi (date_segment) - 1;
-                break;
-
-            case 'd':
-                orig_day = retvalue.tm_mday = atoi (date_segment);
-                break;
-            }
-            g_free (date_segment);
-            j++;
-        }
-    }
-    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
-     * everything is okay; otherwise, an error has occurred. */
-    /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with gnc_mktime
-     * near midnight, causing the code to incorrectly think a date is
-     * incorrect. */
-    test_retvalue = retvalue;
-    gnc_mktime (&test_retvalue);
-    retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = gnc_mktime (&retvalue);
-    if (retvalue.tm_mday == orig_day &&
-            retvalue.tm_mon == orig_month &&
-            retvalue.tm_year == orig_year)
-    {
-        return rawtime;
-    }
-    else
-    {
-        return -1;
-    }
-}
-
 /** Parses a string into a date, given a format. This function
  * requires only knowing the order in which the year, month and day
  * appear. For example, 01-02-2003 will be parsed the same way as
@@ -339,12 +147,72 @@ static time64 parse_date_without_year (const char* date_str, int format)
  * @param format An index specifying a format in date_format_user
  * @return The parsed value of date_str on success or -1 on failure
  */
-time64 parse_date (const char* date_str, int format)
+time64 parse_date (const std::string &date_str, int format)
 {
-    if (strchr (date_format_user[format], 'y'))
-        return parse_date_with_year (date_str, format);
+    time64 rawtime; /* The integer time */
+    struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
+    int orig_year = -1, orig_month = -1, orig_day = -1;
+
+    boost::u32regex r = boost::make_u32regex(date_regex[format]);
+    boost::smatch what;
+    if(!boost::u32regex_search(date_str.cbegin(), date_str.cend(), what, r))
+        return -1;  // regex didn't find a match
+
+    // xxx Different behavior from 2.6.x series !
+    // If date format without year was selected, the match
+    // should NOT have found a year.
+    if ((format >= 3) && (what.length("YEAR") != 0))
+        return -1;
+
+
+    /* Put some sane values in retvalue by using a fixed time for
+     * the non-year-month-day parts of the date. */
+    gnc_time (&rawtime);
+    gnc_localtime_r (&rawtime, &retvalue);
+    retvalue.tm_hour = 11;
+    retvalue.tm_min = 0;
+    retvalue.tm_sec = 0;
+    retvalue.tm_isdst = -1;
+
+    retvalue.tm_mday = std::stoi (what.str("DAY"));
+    retvalue.tm_mon = std::stoi (what.str("MONTH")) - 1;
+
+    if (format < 3)
+    {
+        retvalue.tm_year = std::stoi (what.str("YEAR"));
+
+        /* Handle two-digit years. */
+        if (retvalue.tm_year < 100)
+        {
+            /* We allow two-digit years in the range 1969 - 2068. */
+            if (retvalue.tm_year < 69)
+                retvalue.tm_year += 100;
+        }
+        else
+            retvalue.tm_year -= 1900;
+    }
+
+    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
+     * everything is okay; otherwise, an error has occurred. */
+    /* We have to use a "test" date value to account for changes in
+     * daylight savings time, which can cause a date change with gnc_mktime
+     * near midnight, causing the code to incorrectly think a date is
+     * incorrect. */
+
+    orig_day   = retvalue.tm_mday;
+    orig_month = retvalue.tm_mon;
+    orig_year  = retvalue.tm_year;
+
+    test_retvalue = retvalue;
+    gnc_mktime (&test_retvalue);
+    retvalue.tm_isdst = test_retvalue.tm_isdst;
+    rawtime = gnc_mktime (&retvalue);
+    if (retvalue.tm_mday == orig_day &&
+            retvalue.tm_mon == orig_month &&
+            retvalue.tm_year == orig_year)
+        return rawtime;
     else
-        return parse_date_without_year (date_str, format);
+        return -1;
 }
 
 /** Constructor for GncCsvParseData.

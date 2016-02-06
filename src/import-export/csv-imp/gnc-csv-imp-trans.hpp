@@ -144,6 +144,6 @@ private:
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 };
 
-time64 parse_date (const char* date_str, int format);
+time64 parse_date (const std::string &date_str, int format);
 
 #endif
