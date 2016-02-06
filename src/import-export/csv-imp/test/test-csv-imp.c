@@ -32,6 +32,7 @@
  * each sub-suite; avoids having header files. */
 
 extern GTestSuite *test_suite_gnc_csv_model();
+extern GTestSuite *test_suite_gnc_csv_imp_trans();
 
 int
 main (int   argc,
@@ -55,6 +56,7 @@ main (int   argc,
      * details. Unfortunately, GLib-Testing doesn't provide the automatic
      * registration features of more sophisticated frameworks. */
     test_suite_gnc_csv_model();
+    test_suite_gnc_csv_imp_trans();
 
     return g_test_run();
 }

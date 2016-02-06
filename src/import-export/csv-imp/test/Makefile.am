@@ -22,7 +22,8 @@ test_csv_impdir = ${top_srcdir}/${MODULEPATH}/test
 #support library.
 test_csv_imp_SOURCES = \
   test-csv-imp.c \
-  utest-gnc-csv-model.c
+  utest-gnc-csv-model.c \
+  utest-gnc-csv-imp-trans.cpp
 
 test_csv_imp_HEADERS =
 
@@ -42,7 +43,8 @@ test_csv_imp_LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/lib/stf/libgnc-stf.la \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  $(BOOST_LDFLAGS)
 
 test_csv_imp_CFLAGS = \
 	-DTESTPROG=test_csv-imp \
@@ -65,6 +67,29 @@ test_csv_imp_CFLAGS = \
   -I${top_srcdir}/lib \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
+
+test_csv_imp_CPPFLAGS = \
+	-DTESTPROG=test_csv-imp \
+	${DEFAULT_INCLUDES} \
+	-I$(top_srcdir)/${MODULEPATH}/ \
+  -I${top_srcdir}/src/test-core \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/import-export \
+  -I${top_srcdir}/src/gnome \
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/register/register-gnome \
+  -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/lib \
+  ${GTK_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  $(BOOST_CPPFLAGS)
 
 GNC_TEST_DEPS = \
 --library-dir    ${top_builddir}/${MODULEPATH} \

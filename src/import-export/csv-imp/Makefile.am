@@ -51,7 +51,10 @@ libgncmod_csv_import_la_LIBADD = \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GOFFICE_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${BOOST_LDFLAGS} \
+  -lboost_regex \
+  -lboost_locale
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
@@ -67,7 +70,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/lib \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
-  $(GOFFICE_CFLAGS)
+  $(GOFFICE_CFLAGS) \
+  ${BOOST_CPPFLAGS}
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \
