@@ -43,7 +43,6 @@ extern "C" {
 }
 
 #include <boost/regex.hpp>
-#include <boost/regex/icu.hpp>
 
 #include "gnc-csv-imp-trans.hpp"
 #include "gnc-csv-tokenizer.hpp"
@@ -68,53 +67,53 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 /* Regular expressions used to parse dates per date format */
 const char* date_regex[] = {
                              "(?:"                                   // either y-m-d
-                                 "(?<YEAR>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<DAY>[[:Nd:]]+)"
+                                 "(?<YEAR>[0-9]+)[-/.' ]+"
+                                 "(?<MONTH>[0-9]+)[-/.' ]+"
+                                 "(?<DAY>[0-9]+)"
                              "|"                                     // or CCYYMMDD
-                                 "(?<YEAR>[[:Nd:]]{4})"
-                                 "(?<MONTH>[[:Nd:]]{2})"
-                                 "(?<DAY>[[:Nd:]]{2})"
+                                 "(?<YEAR>[0-9]{4})"
+                                 "(?<MONTH>[0-9]{2})"
+                                 "(?<DAY>[0-9]{2})"
                              ")",
 
                              "(?:"                                   // either d-m-y
-                                 "(?<DAY>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<YEAR>[[:Nd:]]+)"
+                                 "(?<DAY>[0-9]+)[-/.' ]+"
+                                 "(?<MONTH>[0-9]+)[-/.' ]+"
+                                 "(?<YEAR>[0-9]+)"
                              "|"                                     // or DDMMCCYY
-                                 "(?<DAY>[[:Nd:]]{2})"
-                                 "(?<MONTH>[[:Nd:]]{2})"
-                                 "(?<YEAR>[[:Nd:]]{4})"
+                                 "(?<DAY>[0-9]{2})"
+                                 "(?<MONTH>[0-9]{2})"
+                                 "(?<YEAR>[0-9]{4})"
                              ")",
 
                              "(?:"                                   // either m-d-y
-                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<DAY>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<YEAR>[[:Nd:]]+)"
+                                 "(?<MONTH>[0-9]+)[-/.' ]+"
+                                 "(?<DAY>[0-9]+)[-/.' ]+"
+                                 "(?<YEAR>[0-9]+)"
                              "|"                                     // or MMDDCCYY
-                                 "(?<MONTH>[[:Nd:]]{2})"
-                                 "(?<DAY>[[:Nd:]]{2})"
-                                 "(?<YEAR>[[:Nd:]]{4})"
+                                 "(?<MONTH>[0-9]{2})"
+                                 "(?<DAY>[0-9]{2})"
+                                 "(?<YEAR>[0-9]{4})"
                              ")",
 
                              "(?:"                                   // either d-m(-y)
-                                 "(?<DAY>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<MONTH>[[:Nd:]]+)(?:[[:P*:][:Zs:]]+"
-                                 "(?<YEAR>[[:Nd:]]+))?"
+                                 "(?<DAY>[0-9]+)[-/.' ]+"
+                                 "(?<MONTH>[0-9]+)(?:[-/.' ]+"
+                                 "(?<YEAR>[0-9]+))?"
                              "|"                                     // or DDMM(CCYY)
-                                 "(?<DAY>[[:Nd:]]{2})"
-                                 "(?<MONTH>[[:Nd:]]{2})"
-                                 "(?<YEAR>[[:Nd:]]+)?"
+                                 "(?<DAY>[0-9]{2})"
+                                 "(?<MONTH>[0-9]{2})"
+                                 "(?<YEAR>[0-9]+)?"
                              ")",
 
                              "(?:"                                   // either m-d(-y)
-                                 "(?<MONTH>[[:Nd:]]+)[[:P*:][:Zs:]]+"
-                                 "(?<DAY>[[:Nd:]]+)(?:[[:P*:][:Zs:]]+"
-                                 "(?<YEAR>[[:Nd:]]+))?"
+                                 "(?<MONTH>[0-9]+)[-/.' ]+"
+                                 "(?<DAY>[0-9]+)(?:[-/.' ]+"
+                                 "(?<YEAR>[0-9]+))?"
                              "|"                                     // or MMDD(CCYY)
-                                 "(?<MONTH>[[:Nd:]]{2})"
-                                 "(?<DAY>[[:Nd:]]{2})"
-                                 "(?<YEAR>[[:Nd:]]+)?"
+                                 "(?<MONTH>[0-9]{2})"
+                                 "(?<DAY>[0-9]{2})"
+                                 "(?<YEAR>[0-9]+)?"
                              ")",
 };
 //const int num_currency_formats = 3;
@@ -153,9 +152,9 @@ time64 parse_date (const std::string &date_str, int format)
     struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
     int orig_year = -1, orig_month = -1, orig_day = -1;
 
-    boost::u32regex r = boost::make_u32regex(date_regex[format]);
+    boost::regex r(date_regex[format]);
     boost::smatch what;
-    if(!boost::u32regex_search(date_str.cbegin(), date_str.cend(), what, r))
+    if(!boost::regex_search(date_str.cbegin(), date_str.cend(), what, r))
         return -1;  // regex didn't find a match
 
     // xxx Different behavior from 2.6.x series !
