@@ -28,6 +28,7 @@ SET (generic_import_SOURCES
   import-utilities.c
   import-settings.c
   import-main-matcher.c
+  import-pending-matches.c
   gncmod-generic-import.c
 )
 
@@ -45,6 +46,7 @@ SET (generic_import_noinst_HEADERS
   import-commodity-matcher.h
   import-main-matcher.h
   import-match-picker.h
+  import-pending-matches.h
   import-settings.h
   import-utilities.h
 )

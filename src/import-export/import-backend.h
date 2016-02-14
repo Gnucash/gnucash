@@ -25,15 +25,23 @@
     @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
 
-#ifndef TRANSACTION_MATCHER_H
-#define TRANSACTION_MATCHER_H
+#ifndef IMPORT_BACKEND_H
+#define IMPORT_BACKEND_H
 
 #include "Transaction.h"
 #include "import-match-map.h"
 #include "import-settings.h"
 
 typedef struct _transactioninfo GNCImportTransInfo;
-typedef struct _matchinfo GNCImportMatchInfo;
+typedef struct _selected_match_info GNCImportSelectedMatchInfo;
+typedef struct _matchinfo
+{
+    Transaction * trans;
+    Split * split;
+    /*GNC_match_probability probability;*/
+    gint probability;
+    gboolean update_proposed;
+} GNCImportMatchInfo;
 
 typedef enum _action
 {
@@ -187,7 +195,7 @@ gnc_import_TransInfo_get_selected_match (const GNCImportTransInfo *info);
     by the user or by an algorithm?
 */
 void
-gnc_import_TransInfo_set_selected_match (GNCImportTransInfo *info,
+gnc_import_TransInfo_set_selected_match_info (GNCImportTransInfo *info,
         GNCImportMatchInfo *match,
         gboolean selected_manually);
 

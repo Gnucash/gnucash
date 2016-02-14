@@ -48,7 +48,9 @@
 #include "import-match-picker.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"
+#include "import-pending-matches.h"
 #include "app-utils/gnc-component-manager.h"
+#include "guid.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 
@@ -64,6 +66,7 @@ struct _main_matcher_info
     int selected_row;
     GNCTransactionProcessedCB transaction_processed_cb;
     gpointer user_data;
+    GNCImportPendingMatches *pending_matches;
 };
 
 enum downloaded_cols
@@ -260,7 +263,7 @@ static void
 run_match_dialog (GNCImportMainMatcher *info,
                   GNCImportTransInfo *trans_info)
 {
-    gnc_import_match_picker_run_and_close (trans_info);
+    gnc_import_match_picker_run_and_close (trans_info, info->pending_matches);
 }
 
 static void
@@ -516,6 +519,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);
+    info->pending_matches = gnc_import_PendingMatches_new();
 
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
@@ -881,6 +885,9 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
     GNCImportTransInfo * transaction_info = NULL;
     GtkTreeModel *model;
     GtkTreeIter iter;
+    GNCImportMatchInfo *selected_match;
+    GncGUID *pending_match_guid;
+    gboolean match_selected_manually;
     g_assert (gui);
     g_assert (trans);
 
@@ -894,6 +901,15 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
 
         gnc_import_TransInfo_init_matches(transaction_info,
                                           gui->user_settings);
+        
+        selected_match =
+            gnc_import_TransInfo_get_selected_match(transaction_info);
+        match_selected_manually =
+            gnc_import_TransInfo_get_match_selected_manually(transaction_info);
+            
+        gnc_import_PendingMatches_add_match(gui->pending_matches,
+                                            selected_match,
+                                            match_selected_manually);        
 
         model = gtk_tree_view_get_model(gui->view);
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);

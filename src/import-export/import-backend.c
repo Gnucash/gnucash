@@ -72,6 +72,12 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
  *               Structures passed between the functions            *
 \********************************************************************/
 
+struct _selected_match_info
+{
+    GNCImportMatchInfo *selected_match;
+    gboolean selected_manually;
+};
+
 struct _transactioninfo
 {
     Transaction * trans;
@@ -79,8 +85,7 @@ struct _transactioninfo
 
     /* GList of GNCImportMatchInfo's, one for each possible duplicate match. */
     GList * match_list;
-    GNCImportMatchInfo * selected_match_info;
-    gboolean match_selected_manually;
+    GNCImportSelectedMatchInfo selected_match_info;
 
     GNCImportAction action;
     GNCImportAction previous_action;
@@ -94,15 +99,6 @@ struct _transactioninfo
 
     /* Reference id to link gnc transaction to external object. E.g. aqbanking job id. */
     guint32 ref_id;
-};
-
-struct _matchinfo
-{
-    Transaction * trans;
-    Split * split;
-    /*GNC_match_probability probability;*/
-    gint probability;
-    gboolean update_proposed;
 };
 
 /* Some simple getters and setters for the above data types. */
@@ -149,24 +145,24 @@ GNCImportMatchInfo *
 gnc_import_TransInfo_get_selected_match (const GNCImportTransInfo *info)
 {
     g_assert (info);
-    return info->selected_match_info;
+    return info->selected_match_info.selected_match;
 }
 
 void
-gnc_import_TransInfo_set_selected_match (GNCImportTransInfo *info,
+gnc_import_TransInfo_set_selected_match_info (GNCImportTransInfo *info,
         GNCImportMatchInfo *match,
         gboolean selected_manually)
 {
     g_assert (info);
-    info->selected_match_info = match;
-    info->match_selected_manually = selected_manually;
+    info->selected_match_info.selected_match = match;
+    info->selected_match_info.selected_manually = selected_manually;
 }
 
 gboolean
 gnc_import_TransInfo_get_match_selected_manually (const GNCImportTransInfo *info)
 {
     g_assert (info);
-    return info->match_selected_manually;
+    return info->selected_match_info.selected_manually;
 }
 
 GNCImportAction
@@ -1202,14 +1198,13 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
         trans_info->match_list = g_list_sort(trans_info->match_list,
                                              compare_probability);
         best_match = g_list_nth_data(trans_info->match_list, 0);
-        gnc_import_TransInfo_set_selected_match (trans_info,
+        gnc_import_TransInfo_set_selected_match_info (trans_info,
                 best_match,
                 FALSE);
         if (best_match != NULL &&
                 best_match->probability >= gnc_import_Settings_get_clear_threshold(settings))
         {
             trans_info->action = GNCImport_CLEAR;
-            trans_info->selected_match_info = best_match;
         }
         else if (best_match == NULL ||
                  best_match->probability <= gnc_import_Settings_get_add_threshold(settings))
