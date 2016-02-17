@@ -375,7 +375,6 @@ void MainWindow::loadFile(const QString &fileName)
 
     /* -------------- BEGIN CORE SESSION CODE ------------- */
     /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-    m_session.call_close_hooks();
     gnc_hook_run(HOOK_BOOK_CLOSED, m_session.gobj());
     qof_session_destroy(m_session.gobj());
     m_session.reset();

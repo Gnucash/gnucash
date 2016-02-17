@@ -20,46 +20,33 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include "config.h"
 #include <glib.h>
 #include <unittest-support.h>
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "../qof.h"
 #include "../qofbackend-p.h"
 #include "../qofsession-p.h"
 #include "../qofclass-p.h"
+#include "../gnc-backend-prov.hpp"
+#include <vector>
 
 static const gchar *suitename = "/qof/qofsession";
-void test_suite_qofsession ( void );
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-extern GHookList* get_session_closed_hooks (void);
-extern GSList* get_provider_list (void);
-extern gboolean get_qof_providers_initialized (void);
-extern void unregister_all_providers (void);
+extern "C" void test_suite_qofsession ( void );
 
 extern void (*p_qof_session_load_backend) (QofSession * session, const char * access_method);
 extern void (*p_qof_session_clear_error) (QofSession * session);
 extern void (*p_qof_session_destroy_backend) (QofSession * session);
 
-extern void init_static_qofsession_pointers (void);
+void init_static_qofsession_pointers (void);
 
-#ifdef __cplusplus
-}
-#endif
+using ProviderVec =  std::vector<QofBackendProvider_ptr>;
+extern ProviderVec& get_providers (void);
+extern bool get_providers_initialized (void);
+extern void unregister_all_providers (void);
 
 typedef struct
 {
@@ -136,22 +123,30 @@ test_session_safe_save( Fixture *fixture, gconstpointer pData )
 static struct
 {
     QofBackend *be;
-    gboolean data_compatible;
-    gboolean check_data_type_called;
-    gboolean backend_new_called;
+    bool data_compatible;
+    bool check_data_type_called;
+    bool backend_new_called;
 } load_backend_struct;
 
-static gboolean
-mock_check_data_type (const char* book_id)
+struct QofMockLoadBackendProvider : public QofBackendProvider
+{
+    QofMockLoadBackendProvider(const char *name, const char* type) :
+        QofBackendProvider{name, type} {}
+    QofBackend* create_backend(void);
+    bool type_check(const char* type);
+};
+
+bool
+QofMockLoadBackendProvider::type_check (const char* book_id)
 {
     g_assert (book_id);
-    g_assert_cmpstr (book_id, == , "my book");
-    load_backend_struct.check_data_type_called = TRUE;
+    g_assert_cmpstr (book_id, ==, "my book");
+    load_backend_struct.check_data_type_called = true;
     return load_backend_struct.data_compatible;
 }
 
-static QofBackend*
-mock_backend_new (void)
+QofBackend*
+QofMockLoadBackendProvider::create_backend (void)
 {
     QofBackend *be = NULL;
 
@@ -165,55 +160,44 @@ mock_backend_new (void)
 static void
 test_qof_session_load_backend (Fixture *fixture, gconstpointer pData)
 {
-    QofBackendProvider *prov = NULL;
     QofBook *book = NULL;
 
     /* init */
-    prov = g_new0 (QofBackendProvider, 1);
 
     g_test_message ("Test when no provider is registered");
-    g_assert (!get_qof_providers_initialized ());
-    g_assert (get_provider_list () == NULL);
+    g_assert (!get_providers_initialized ());
+    g_assert (get_providers ().empty());
     p_qof_session_load_backend (fixture->session, "file");
-    g_assert (get_qof_providers_initialized ());
+    g_assert (!get_providers_initialized ());
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "Failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with provider registered but access method not supported");
-    prov->access_method = "unsupported";
-    qof_backend_register_provider (prov);
-    g_assert (get_provider_list ());
-    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 1);
+    auto prov = QofBackendProvider_ptr(new QofMockLoadBackendProvider("Mock Backend", "unsupported"));
+    qof_backend_register_provider (std::move(prov));
+    g_assert (!get_providers().empty());
+    g_assert_cmpint (get_providers().size(), == , 1);
     p_qof_session_load_backend (fixture->session, "file");
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "Failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with access method supported but type incompatible");
-    prov->access_method = "file";
-    prov->check_data_type = mock_check_data_type;
+    prov = QofBackendProvider_ptr(new QofMockLoadBackendProvider("Mock Backend",
+                                                                 "file"));
+    qof_backend_register_provider (std::move(prov));
     load_backend_struct.data_compatible = FALSE;
     load_backend_struct.check_data_type_called = FALSE;
     fixture->session->book_id = g_strdup ("my book");
     p_qof_session_load_backend (fixture->session, "file");
     g_assert (load_backend_struct.check_data_type_called);
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "Failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
-    g_test_message ("Test with type compatible but backend_new not set");
-    prov->backend_new = NULL;
-    load_backend_struct.data_compatible = TRUE;
-    load_backend_struct.check_data_type_called = FALSE;
-    p_qof_session_load_backend (fixture->session, "file");
-    g_assert (load_backend_struct.check_data_type_called);
-    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
-    p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with type compatible backend_new set");
-    prov->backend_new = mock_backend_new;
     load_backend_struct.be = NULL;
     load_backend_struct.data_compatible = TRUE;
     load_backend_struct.check_data_type_called = FALSE;
@@ -227,12 +211,11 @@ test_qof_session_load_backend (Fixture *fixture, gconstpointer pData)
     g_assert (load_backend_struct.backend_new_called);
     g_assert (load_backend_struct.be);
     g_assert (load_backend_struct.be == fixture->session->backend);
-    g_assert (prov == fixture->session->backend->provider);
     g_assert (qof_book_get_backend (book) == load_backend_struct.be);
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     unregister_all_providers ();
-    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 0);
+    g_assert_cmpint (get_providers().size(), == , 0);
 }
 
 static struct
@@ -329,9 +312,23 @@ mock_session_begin (QofBackend *be, QofSession *session, const char *book_id,
     }
     session_begin_struct.session_begin_called = TRUE;
 }
+struct QofMockSessBackendProvider : public QofBackendProvider
+{
+    QofMockSessBackendProvider(const char *name, const char* type) :
+        QofBackendProvider{name, type} {}
+    QofBackend* create_backend(void);
+    bool type_check(const char* type);
+};
 
-static QofBackend*
-mock_backend_new_for_begin (void)
+bool
+QofMockSessBackendProvider::type_check (const char* book_id)
+{
+    g_assert (book_id);
+    return true;
+}
+
+QofBackend*
+QofMockSessBackendProvider::create_backend (void)
 {
     QofBackend *be = NULL;
 
@@ -348,7 +345,6 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
 {
     gboolean ignore_lock, create, force;
     QofBackend *be = NULL;
-    QofBackendProvider *prov = NULL;
 
     /* setup */
     ignore_lock = TRUE;
@@ -357,9 +353,7 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
 
     be = g_new0 (QofBackend, 1);
     g_assert (be);
-    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 0);
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->backend_new = mock_backend_new_for_begin;
+    g_assert_cmpint (get_providers().size(), == , 0);
 
     /* run tests */
     g_test_message ("Test when book_id is set backend is not changed");
@@ -383,14 +377,14 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
     g_assert (fixture->session->backend == NULL);
     g_assert (fixture->session->book_id == NULL);
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "Failed to load 'file' using access_method");
 
     g_test_message ("Test access_method parsing");
     qof_session_begin (fixture->session, "postgres://localhost:8080", ignore_lock, create, force);
     g_assert (fixture->session->backend == NULL);
     g_assert (fixture->session->book_id == NULL);
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'postgres' using access_method");
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "Failed to load 'postgres' using access_method");
 
     g_test_message ("Test with valid backend returned and session begin set; error is produced");
     session_begin_struct.session = fixture->session;
@@ -398,8 +392,10 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
     session_begin_struct.backend_new_called = FALSE;
     session_begin_struct.session_begin_called = FALSE;
     session_begin_struct.produce_error = TRUE;
-    prov->access_method = "postgres";
-    qof_backend_register_provider (prov);
+    auto prov = QofBackendProvider_ptr(new QofMockSessBackendProvider("Mock Backend",
+                                                                  "postgres"));
+    qof_backend_register_provider (std::move(prov));
+
     qof_session_begin (fixture->session, "postgres://localhost:8080", ignore_lock, create, force);
     g_assert (fixture->session->backend);
     g_assert (session_begin_struct.be == fixture->session->backend);
@@ -769,37 +765,6 @@ test_qof_session_data_loaded (Fixture *fixture, gconstpointer pData)
 }
 
 static void
-test_qof_backend_get_access_method_list (Fixture *fixture, gconstpointer pData)
-{
-    GList *list = NULL;
-    const char *access_methods[4] = { "file", "http", "postgres", "sqlite" };
-    int i;
-
-    for (i = 0; i < 4; i++)
-    {
-        QofBackendProvider *prov = g_new0 (QofBackendProvider, 1);
-        g_assert (prov);
-        prov->access_method = access_methods[ i ];
-        qof_backend_register_provider (prov);
-        g_assert_cmpint (g_slist_length (get_provider_list ()), == , (i + 1));
-    }
-    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 4);
-
-    g_test_message ("Test list of access methods is returned");
-    list = qof_backend_get_registered_access_method_list ();
-    g_assert (list);
-    g_assert_cmpint (g_list_length (list), == , 4);
-    g_assert_cmpstr (g_list_nth_data (list, 0), == , "file");
-    g_assert_cmpstr (g_list_nth_data (list, 1), == , "http");
-    g_assert_cmpstr (g_list_nth_data (list, 2), == , "postgres");
-    g_assert_cmpstr (g_list_nth_data (list, 3), == , "sqlite");
-
-    g_list_free (list);
-    unregister_all_providers ();
-}
-
-
-static void
 test_qof_session_get_book (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = NULL;
@@ -890,37 +855,6 @@ mock_hook_fn (gpointer data, gpointer user_data)
     hooks_struct.call_count++;
 }
 
-static void
-test_qof_session_close_hooks (Fixture *fixture, gconstpointer pData)
-{
-    gint data1, data2, data3;
-
-    g_test_message ("Test hooks list is initialized and hooks are added");
-    g_assert (!get_session_closed_hooks ());
-    qof_session_add_close_hook (mock_hook_fn, (gpointer) &data1);
-    g_assert (get_session_closed_hooks ());
-    g_assert (g_hook_find_func_data (get_session_closed_hooks (), FALSE, mock_hook_fn, (gpointer) &data1));
-    qof_session_add_close_hook (mock_hook_fn, (gpointer) &data2);
-    g_assert (g_hook_find_func_data (get_session_closed_hooks (), FALSE, mock_hook_fn, (gpointer) &data2));
-    qof_session_add_close_hook (mock_hook_fn, (gpointer) &data3);
-    g_assert (g_hook_find_func_data (get_session_closed_hooks (), FALSE, mock_hook_fn, (gpointer) &data3));
-
-    g_test_message ("Test all close hooks are called");
-    hooks_struct.session = fixture->session;
-    hooks_struct.data1 = (gpointer) &data1;
-    hooks_struct.data2 = (gpointer) &data2;
-    hooks_struct.data3 = (gpointer) &data3;
-    hooks_struct.call_count = 0;
-    qof_session_call_close_hooks (fixture->session);
-    g_assert_cmpuint (hooks_struct.call_count, == , 3);
-
-    /* currently qofsession does not provide a way to clear hooks list
-     * g_hook_list_clear is used to destroy list and all of it's elements
-     * though i' not sure if it frees all the memory allocated
-     */
-    g_hook_list_clear (get_session_closed_hooks ());
-}
-
 void
 test_suite_qofsession ( void )
 {
@@ -936,9 +870,7 @@ test_suite_qofsession ( void )
     GNC_TEST_ADD (suitename, "qof session swap data", Fixture, NULL, setup, test_qof_session_swap_data, teardown);
     GNC_TEST_ADD (suitename, "qof session events", Fixture, NULL, setup, test_qof_session_events, teardown);
     GNC_TEST_ADD (suitename, "qof session data loaded", Fixture, NULL, setup, test_qof_session_data_loaded, teardown);
-    GNC_TEST_ADD (suitename, "qof backend access method list", Fixture, NULL, setup, test_qof_backend_get_access_method_list, teardown);
     GNC_TEST_ADD (suitename, "qof session get book", Fixture, NULL, setup, test_qof_session_get_book, teardown);
     GNC_TEST_ADD (suitename, "qof session get error", Fixture, NULL, setup, test_qof_session_get_error, teardown);
     GNC_TEST_ADD (suitename, "qof session clear error", Fixture, NULL, setup, test_qof_session_clear_error, teardown);
-    GNC_TEST_ADD (suitename, "qof session close hooks", Fixture, NULL, setup, test_qof_session_close_hooks, teardown);
 }

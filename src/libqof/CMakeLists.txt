@@ -35,6 +35,7 @@ SET (gnc_qof_HEADERS
     qof/qof-string-cache.h
 )
 SET (gnc_qof_noinst_HEADERS
+    qof/gnc-backend-prov.hpp
     qof/qofbook-p.h
     qof/qofclass-p.h
     qof/gnc-date-p.h

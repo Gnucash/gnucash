@@ -99,14 +99,6 @@ public:
     {
         qof_session_save(gobj(), percentage_func);
     }
-
-
-    void call_close_hooks ()
-    {
-        qof_session_call_close_hooks (gobj());
-    }
-
-
 };
 
 std::pair<QString, QString> errorToStringPair(QofBackendError err);

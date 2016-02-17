@@ -34,10 +34,9 @@
 extern "C"
 {
 #endif
-#include "qof.h"
+#include <qof.h>
 #include <gmodule.h>
-#include "qofbackend-p.h"
-
+#include <qofbackend-p.h>
 
 typedef enum
 {

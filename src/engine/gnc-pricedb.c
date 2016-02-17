@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <string.h>
 #include "gnc-pricedb-p.h"
-#include "qofbackend-p.h"
+#include <qofinstance-p.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PRICE;
@@ -1457,7 +1457,7 @@ pricedb_price_list_merge (PriceList *a, PriceList *b)
     PriceList *merged_list = NULL;
     GList *next_a = a;
     GList *next_b = b;
-    
+
     while (next_a || next_b)
     {
         if (next_a == NULL)
@@ -1577,15 +1577,15 @@ typedef struct
 } UsesCommodity;
 
 /* price_list_scan_any_currency is the helper function used with
- * pricedb_pricelist_traversal by the "any_currency" price lookup functions. It 
- * builds a list of prices that are either to or from the commodity "com".  
- * The resulting list will include the last price newer than "t" and the first 
- * price older than "t".  All other prices will be ignored.  Since in the most 
- * common cases we will be looking for recent prices which are at the front of 
- * the various price lists, this is considerably faster than concatenating all 
- * the relevant price lists and sorting the result.  
+ * pricedb_pricelist_traversal by the "any_currency" price lookup functions. It
+ * builds a list of prices that are either to or from the commodity "com".
+ * The resulting list will include the last price newer than "t" and the first
+ * price older than "t".  All other prices will be ignored.  Since in the most
+ * common cases we will be looking for recent prices which are at the front of
+ * the various price lists, this is considerably faster than concatenating all
+ * the relevant price lists and sorting the result.
 */
- 
+
 static gboolean
 price_list_scan_any_currency(GList *price_list, gpointer data)
 {
@@ -1593,18 +1593,18 @@ price_list_scan_any_currency(GList *price_list, gpointer data)
     GList *node = price_list;
     gnc_commodity *com;
     gnc_commodity *cur;
-    
+
     if (!price_list)
         return TRUE;
 
     com = gnc_price_get_commodity(node->data);
     cur = gnc_price_get_currency(node->data);
-    
+
     /* if this price list isn't for the commodity we are interested in,
        ignore it. */
     if (com != helper->com && cur != helper->com)
         return TRUE;
-    
+
     /* The price list is sorted in decreasing order of time.  Find the first
        price on it that is older than the requested time and add it and the
        previous price to the result list. */
@@ -1900,7 +1900,7 @@ price_count_helper(gpointer key, gpointer value, gpointer data)
 {
     int *result = data;
     GList *price_list = value;
-    
+
     *result += g_list_length(price_list);
 }
 
@@ -1910,7 +1910,7 @@ gnc_pricedb_num_prices(GNCPriceDB *db,
 {
     int result = 0;
     GHashTable *currency_hash;
-    
+
     if (!db || !c) return 0;
     ENTER ("db=%p commodity=%p", db, c);
 
@@ -1919,7 +1919,7 @@ gnc_pricedb_num_prices(GNCPriceDB *db,
     {
         g_hash_table_foreach(currency_hash, price_count_helper,  (gpointer)&result);
     }
-    
+
     LEAVE ("count=%d", result);
     return result;
 }
@@ -1933,10 +1933,10 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
 {
     GNCPrice *result = NULL;
     GHashTable *currency_hash;
-    
+
     if (!db || !c || n < 0) return NULL;
     ENTER ("db=%p commodity=%p index=%d", db, c, n);
-    
+
     currency_hash = g_hash_table_lookup(db->commodity_hash, c);
     if (currency_hash)
     {
@@ -1963,7 +1963,7 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
             int i, j;
             GHashTableIter iter;
             gpointer key, value;
-            
+
             /* Build an array of all the currencies this commodity has prices for */
             for (i = 0, g_hash_table_iter_init(&iter, currency_hash);
                  g_hash_table_iter_next(&iter, &key, &value) && i < num_currencies;
@@ -1971,7 +1971,7 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
             {
                 price_array[i] = value;
             }
-            
+
             /* Iterate n times to get the nth price, each time finding the currency
                with the latest price */
             for (i = 0; i <= n; i++)
@@ -2010,7 +2010,7 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
     LEAVE ("price=%p", result);
     return result;
 }
-                       
+
 GNCPrice *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
                        const gnc_commodity *c,

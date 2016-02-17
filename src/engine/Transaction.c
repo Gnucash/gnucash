@@ -64,8 +64,8 @@ struct timeval
 #include "gnc-event.h"
 #include <gnc-gdate-utils.h>
 #include "SchedXaction.h"
-#include "qofbackend-p.h"
 #include "gncBusiness.h"
+#include <qofinstance-p.h>
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
@@ -1139,10 +1139,10 @@ xaccTransIsBalanced (const Transaction *trans)
 
     if (xaccTransUseTradingAccounts(trans))
     {
-        /* Transaction is imbalanced if the value is imbalanced in either 
+        /* Transaction is imbalanced if the value is imbalanced in either
            trading or non-trading splits.  One can't be used to balance
            the other. */
-        FOR_EACH_SPLIT(trans, 
+        FOR_EACH_SPLIT(trans,
         {
             Account *acc = xaccSplitGetAccount(s);
             if (!acc || xaccAccountGetType(acc) != ACCT_TYPE_TRADING)
@@ -1155,12 +1155,12 @@ xaccTransIsBalanced (const Transaction *trans)
                 imbal_trading = gnc_numeric_add(imbal_trading, xaccSplitGetValue(s),
                                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
             }
-        } 
+        }
         );
     }
     else
         imbal = xaccTransGetImbalanceValue(trans);
-    
+
     if (! gnc_numeric_zero_p(imbal) || ! gnc_numeric_zero_p(imbal_trading))
         return FALSE;
 
@@ -1815,7 +1815,7 @@ xaccTransRollbackEdit (Transaction *trans)
     be = qof_book_get_backend(qof_instance_get_book(trans));
     /** \todo Fix transrollbackedit in QOF so that rollback
     is exposed via the API. */
-    if (be && be->rollback)
+    if (qof_backend_can_rollback (be))
     {
         QofBackendError errcode;
 
@@ -1826,7 +1826,7 @@ xaccTransRollbackEdit (Transaction *trans)
         }
         while (ERR_BACKEND_NO_ERR != errcode);
 
-        (be->rollback) (be, &(trans->inst));
+        qof_backend_rollback_instance (be, &(trans->inst));
 
         errcode = qof_backend_get_error (be);
         if (ERR_BACKEND_MOD_DESTROY == errcode)

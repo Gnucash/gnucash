@@ -14,7 +14,7 @@ test_qof_SOURCES = \
 	test-qofbook.c \
 	test-qofinstance.cpp \
 	test-qofobject.c \
-	test-qofsession.c \
+	test-qofsession.cpp \
 	test-qof-string-cache.c \
 	test-gnc-guid.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c

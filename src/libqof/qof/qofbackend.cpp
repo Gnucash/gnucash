@@ -79,6 +79,20 @@ qof_backend_check_error (QofBackend *be)
     return be->last_err != ERR_BACKEND_NO_ERR;
 }
 
+gboolean
+qof_backend_can_rollback (QofBackend* be)
+{
+    if (be == nullptr) return FALSE;
+    return be->rollback != nullptr;
+}
+
+void
+qof_backend_rollback_instance (QofBackend* be, QofInstance* inst)
+{
+    if (be == nullptr || be->rollback == nullptr) return;
+    (be->rollback)(be, inst);
+}
+
 void
 qof_backend_set_message (QofBackend *be, const char *format, ...)
 {

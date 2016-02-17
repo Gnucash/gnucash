@@ -78,7 +78,6 @@ extern "C"
 
 #include "gnc-uri-utils.h"
 #include "io-gncxml-v2.h"
-#include "gnc-backend-xml.h"
 #include "gnc-prefs.h"
 
 #ifndef HAVE_STRPTIME
@@ -86,6 +85,9 @@ extern "C"
 #endif
 }
 
+#include <gnc-backend-prov.hpp>
+#include "gnc-backend-xml.h"
+#include <qofbackend-p.h>
 #include "gnc-xml-helper.h"
 #include "io-gncxml.h"
 
@@ -104,6 +106,20 @@ extern "C"
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static gboolean save_may_clobber_data (QofBackend* bend);
+
+struct QofXmlBackendProvider : public QofBackendProvider
+{
+    QofXmlBackendProvider (const char* name, const char* type) :
+        QofBackendProvider {name, type} {}
+    QofXmlBackendProvider(QofXmlBackendProvider&) = delete;
+    QofXmlBackendProvider operator=(QofXmlBackendProvider&) = delete;
+    QofXmlBackendProvider(QofXmlBackendProvider&&) = delete;
+    QofXmlBackendProvider operator=(QofXmlBackendProvider&&) = delete;
+    ~QofXmlBackendProvider () = default;
+    QofBackend* create_backend(void);
+    bool type_check(const char* type);
+
+};
 
 /* ================================================================= */
 
@@ -598,8 +614,8 @@ gnc_xml_be_determine_file_type (const char* path)
     return GNC_BOOK_NOT_OURS;
 }
 
-static gboolean
-gnc_determine_file_type (const char* uri)
+bool
+QofXmlBackendProvider::type_check (const char *uri)
 {
     struct stat sbuf;
     int rc;
@@ -1206,8 +1222,8 @@ gnc_xml_be_write_accounts_to_file (QofBackend* be, QofBook* book)
 
 /* ================================================================= */
 
-static QofBackend*
-gnc_backend_new (void)
+QofBackend*
+QofXmlBackendProvider::create_backend(void)
 {
     FileBackend* gnc_be;
     QofBackend* be;
@@ -1268,14 +1284,6 @@ business_core_xml_init (void)
     gnc_vendor_xml_initialize ();
 }
 
-static void
-gnc_provider_free (QofBackendProvider* prov)
-{
-    prov->provider_name = NULL;
-    prov->access_method = NULL;
-    g_free (prov);
-}
-
 #ifndef GNC_NO_LOADABLE_MODULES
 G_MODULE_EXPORT void
 qof_backend_module_init (void)
@@ -1287,22 +1295,12 @@ qof_backend_module_init (void)
 void
 gnc_module_init_backend_xml (void)
 {
-    QofBackendProvider* prov;
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash File Backend Version 2";
-    prov->access_method = "file";
-    prov->backend_new = gnc_backend_new;
-    prov->provider_free = gnc_provider_free;
-    prov->check_data_type = gnc_determine_file_type;
-    qof_backend_register_provider (prov);
+    const char* name {"GnuCash File Backend Version 2"};
+    auto prov = QofBackendProvider_ptr(new QofXmlBackendProvider{name, "xml"});
 
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash File Backend Version 2";
-    prov->access_method = "xml";
-    prov->backend_new = gnc_backend_new;
-    prov->provider_free = gnc_provider_free;
-    prov->check_data_type = gnc_determine_file_type;
-    qof_backend_register_provider (prov);
+    qof_backend_register_provider(std::move(prov));
+    prov = QofBackendProvider_ptr(new QofXmlBackendProvider{name, "file"});
+    qof_backend_register_provider(std::move(prov));
 
     /* And the business objects */
     business_core_xml_init ();

@@ -235,45 +235,6 @@
  *    This should be done in the function called from backend_new.
  */
 
-struct QofBackendProvider_s
-{
-    /** Some arbitrary name given for this particular backend provider */
-    /*@ observer @*/
-    const char * provider_name;
-
-    /** The access method that this provider provides, for example,
-     *  file:// http:// postgres:// or sqlite://, but without the :// at the end
-     */
-    /*@ observer @*/
-    const char * access_method;
-
-    /** Return a new, fully initialized backend.
-     *
-     * If the backend supports configuration, all configuration options
-     * should be initialised to usable values here.
-     * */
-    QofBackend * (*backend_new) (void);
-
-    /** \brief Distinguish two providers with same access method.
-
-      More than 1 backend can be registered under the same access_method,
-      so each one is passed the path to the data (e.g. a file) and
-      should return TRUE only:
-    -# if the backend recognises the type as one that it can load and write or
-    -# if the path contains no data but can be used (e.g. a new session).
-
-      \note If the backend can cope with more than one type, the backend
-      should not try to store or cache the sub-type for this data.
-      It is sufficient only to return TRUE if any ONE of the supported
-      types match the incoming data. The backend should not assume that
-      returning TRUE will mean that the data will naturally follow.
-      */
-    /*@ null @*/
-    gboolean (*check_data_type) (const char*);
-
-    /** Free this structure, unregister this backend handler. */
-    void (*provider_free) (/*@ only @*/ QofBackendProvider *);
-};
 
 typedef enum
 {
@@ -310,8 +271,6 @@ struct QofBackend_s
 
     QofBePercentageFunc percentage;
 
-    QofBackendProvider *provider;
-
     QofBackendError last_err;
     char * error_msg;
 
@@ -344,15 +303,6 @@ struct QofBackend_s
 extern "C"
 {
 #endif
-
-/** Let the sytem know about a new provider of backends.  This function
- *  is typically called by the provider library at library load time.
- *  This function allows the backend library to tell the QOF infrastructure
- *  that it can handle URL's of a certain type.  Note that a single
- *  backend library may register more than one provider, if it is
- *  capable of handling more than one URL access method.
- */
-void qof_backend_register_provider (/*@ only @*/ QofBackendProvider *);
 
 /** The qof_backend_set_message() assigns a string to the backend error message.
  */

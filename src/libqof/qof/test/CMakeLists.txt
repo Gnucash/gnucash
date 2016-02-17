@@ -1,4 +1,3 @@
-
 SET(TEST_QOF_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/src # for config.h
   ${CMAKE_SOURCE_DIR}/src/test-core  # for unittest-support.h
@@ -17,7 +16,7 @@ SET(test_qof_SOURCES
   test-qofinstance.cpp
 #  test-kvp-frame.cpp  This now use Google Test
   test-qofobject.c
-  test-qofsession.c
+  test-qofsession.cpp
   test-qof-string-cache.c
   test-gnc-guid.cpp
   ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c

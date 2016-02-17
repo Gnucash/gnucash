@@ -31,6 +31,9 @@
  @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
    */
 
+extern "C"
+{
+
 #include "config.h"
 
 #include <platform.h>
@@ -52,128 +55,71 @@
 
 #include <glib.h>
 #include "qof.h"
-#include "qofbackend-p.h"
 #include "qofbook-p.h"
-#include "qofsession-p.h"
 #include "qofobject-p.h"
 
-static GHookList * session_closed_hooks = NULL;
 static QofLogModule log_module = QOF_MOD_SESSION;
-static GSList *provider_list = NULL;
-static gboolean qof_providers_initialized = FALSE;
+} //extern 'C'
 
+#include "qofbackend-p.h"
+#include "qofsession-p.h"
+#include "gnc-backend-prov.hpp"
+
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <sstream>
+
+using ProviderVec =  std::vector<QofBackendProvider_ptr>;
+static ProviderVec s_providers;
 /*
  * These getters are used in tests to reach static vars from outside
  * They should be removed when no longer needed
  */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-GHookList* get_session_closed_hooks (void );
-GSList* get_provider_list (void );
-gboolean get_qof_providers_initialized (void );
+ProviderVec& get_providers (void );
+bool get_providers_initialized (void );
 void unregister_all_providers (void );
 
-#ifdef __cplusplus
-}
-#endif
-
-GHookList*
-get_session_closed_hooks (void)
+ProviderVec&
+get_providers (void)
 {
-    return session_closed_hooks;
+    return s_providers;
 }
 
-GSList*
-get_provider_list (void)
+bool
+get_providers_initialized (void)
 {
-    return provider_list;
-}
-
-gboolean
-get_qof_providers_initialized (void)
-{
-    return qof_providers_initialized;
+    return !s_providers.empty();
 }
 
 void
 unregister_all_providers (void)
 {
-    if (provider_list)
-    {
-        g_slist_foreach (provider_list, (GFunc) g_free, NULL);
-        g_slist_free (provider_list);
-        provider_list = NULL;
-    }
+    s_providers.clear();
 }
 
 /* ====================================================================== */
 
 void
-qof_backend_register_provider (QofBackendProvider *prov)
+qof_backend_register_provider (QofBackendProvider_ptr&& prov)
 {
-    provider_list = g_slist_append (provider_list, prov);
+    s_providers.emplace_back(std::move(prov));
 }
 
+/* Called from C so we have to keep the GList for now. */
 GList*
 qof_backend_get_registered_access_method_list(void)
 {
     GList* list = NULL;
-    GSList* node;
-
-    for ( node = provider_list; node != NULL; node = node->next )
-    {
-        QofBackendProvider *prov = static_cast<QofBackendProvider*>(node->data);
-        list = g_list_append( list, (gchar*)prov->access_method );
-    }
-
+    std::for_each(s_providers.begin(), s_providers.end(),
+                  [&list](QofBackendProvider_ptr& provider) {
+                      gpointer method = reinterpret_cast<gpointer>(const_cast<char*>(provider->access_method));
+                      list = g_list_prepend(list, method);
+                  });
     return list;
 }
 
-/* ====================================================================== */
-
-/* hook routines */
-
-void
-qof_session_add_close_hook (GFunc fn, gpointer data)
-{
-    GHook *hook;
-
-    if (session_closed_hooks == NULL)
-    {
-        session_closed_hooks = static_cast<GHookList*>(malloc(sizeof(GHookList))); /* LEAKED */
-        g_hook_list_init (session_closed_hooks, sizeof(GHook));
-    }
-
-    hook = g_hook_alloc(session_closed_hooks);
-    if (!hook)
-        return;
-
-    hook->func = reinterpret_cast<void*>(fn);
-    hook->data = data;
-    g_hook_append(session_closed_hooks, hook);
-}
-
-void
-qof_session_call_close_hooks (QofSession *session)
-{
-    GHook *hook;
-    GFunc fn;
-
-    if (session_closed_hooks == NULL)
-        return;
-
-    hook = g_hook_first_valid (session_closed_hooks, FALSE);
-    while (hook)
-    {
-        fn = (GFunc)hook->func;
-        fn(session, hook->data);
-        hook = g_hook_next_valid (session_closed_hooks, hook, FALSE);
-    }
-}
 
 /* ====================================================================== */
 /* error handling routines */
@@ -337,70 +283,38 @@ qof_session_ensure_all_data_loaded (QofSession *session)
 
 /* ====================================================================== */
 
-/** Programs that use their own backends also need to call
-the default QOF ones. The backends specified here are
-loaded only by applications that do not have their own. */
-struct backend_providers
-{
-    const char *libdir;
-    const char *filename;
-};
-
 static void
 qof_session_load_backend(QofSession * session, const char * access_method)
 {
-    GSList *p;
-    QofBackendProvider *prov;
-    char *msg;
-    gboolean prov_type;
-    gboolean (*type_check) (const char*);
 
-    ENTER (" list=%d, initted=%s", g_slist_length(provider_list),
-           qof_providers_initialized ? "true" : "false");
-    prov_type = FALSE;
-    if (!qof_providers_initialized)
+    ENTER (" list=%lu", s_providers.size());
+    for (QofBackendProvider_ptr& prov : s_providers)
     {
-        qof_providers_initialized = TRUE;
-    }
-    p = provider_list;
-    while (p != NULL)
-    {
-        prov = static_cast<QofBackendProvider*>(p->data);
         /* Does this provider handle the desired access method? */
-        if (0 == g_ascii_strcasecmp (access_method, prov->access_method))
+        if (0 != g_ascii_strcasecmp (access_method, prov->access_method))
+            continue;
+
+        /* More than one backend could provide this
+           access method, check file type compatibility. */
+
+        if (!prov->type_check(session->book_id))
         {
-            /* More than one backend could provide this
-            access method, check file type compatibility. */
-            type_check = (gboolean (*)(const char*)) prov->check_data_type;
-            if (type_check)
-            {
-                prov_type = (type_check)(session->book_id);
-                if (!prov_type)
-                {
-                    PINFO(" %s not usable", prov->provider_name);
-                    p = p->next;
-                    continue;
-                }
-            }
-            PINFO (" selected %s", prov->provider_name);
-            if (NULL == prov->backend_new)
-            {
-                p = p->next;
-                continue;
-            }
-            /* Use the providers creation callback */
-            session->backend = (*(prov->backend_new))();
-            session->backend->provider = prov;
-            /* Tell the book about the backend that they'll be using. */
-            qof_book_set_backend (session->book, session->backend);
-            LEAVE (" ");
-            return;
+            PINFO(" %s not usable", prov->provider_name);
+            continue;
         }
-        p = p->next;
+        PINFO (" selected %s", prov->provider_name);
+        /* Use the providers creation callback */
+        session->backend = prov->create_backend();
+        /* Tell the book about the backend that they'll be using. */
+        qof_book_set_backend (session->book, session->backend);
+        LEAVE (" ");
+        return;
     }
-    msg = g_strdup_printf("failed to load '%s' using access_method", access_method);
-    qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, msg);
-    g_free(msg);
+
+    std::ostringstream msgstrm;
+    msgstrm << "Failed to load '" << access_method << "' using access_method";
+    qof_session_push_error (session, ERR_BACKEND_NO_HANDLER,
+                            msgstrm.str().c_str());
     LEAVE (" ");
 }
 
@@ -866,20 +780,11 @@ qof_session_export (QofSession *tmp_session,
 
 /* ================= Static function access for testing ================= */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 void init_static_qofsession_pointers (void);
 
 void (*p_qof_session_load_backend) (QofSession * session, const char * access_method);
 void (*p_qof_session_clear_error) (QofSession *session);
 void (*p_qof_session_destroy_backend) (QofSession *session);
-
-#ifdef __cplusplus
-}
-#endif
 
 void
 init_static_qofsession_pointers (void)

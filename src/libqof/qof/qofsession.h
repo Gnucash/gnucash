@@ -289,20 +289,6 @@ gboolean qof_session_events_pending (const QofSession *session);
 gboolean qof_session_process_events (QofSession *session);
 /** @} */
 
-/** Register a function to be called just before a session is closed.
- *
- *  @param fn The function to be called.  The function definition must
- *  be func(gpointer session, gpointer user_data);
- *
- *  @param data The data to be passed to the function. */
-void qof_session_add_close_hook (GFunc fn, gpointer data);
-
-/** Call all registered session close hooks, informing them that the
- *  specified session is about to be closed.
- *
- *  @param session A pointer to the session being closed. */
-void qof_session_call_close_hooks (QofSession *session);
-
 gboolean qof_session_export (QofSession *tmp_session,
                              QofSession *real_session,
                              QofPercentageFunc percentage_func);

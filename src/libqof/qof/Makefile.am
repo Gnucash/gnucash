@@ -82,6 +82,7 @@ qofinclude_HEADERS = \
    qof-gobject.h
 
 noinst_HEADERS = \
+   gnc-backend-prov.hpp \
    qofbook-p.h  \
    qofclass-p.h  \
    qofevent-p.h \

@@ -127,15 +127,6 @@ typedef enum
     ERR_RPC_FAILED,               /**< Operation failed */
     ERR_RPC_NOT_ADDED,            /**< object not added */
 } QofBackendError;
-
-/**
- * A structure that declares backend services that can be gotten.
- * The Provider specifies a URL access method, and specifies the
- * function to create a backend that can handle that URL access
- * function.
- */
-typedef struct QofBackendProvider_s QofBackendProvider;
-
 /** \brief Pseudo-object providing an interface between the
  * engine and a persistant data store (e.g. a server, a database,
  * or a file).
@@ -144,10 +135,44 @@ typedef struct QofBackendProvider_s QofBackendProvider;
  * engine.  The backend can, however, report errors to the GUI & other
  * front-end users.
  */
-typedef struct QofBackend_s QofBackend;
+    typedef struct QofBackend_s QofBackend;
+
+    /* The following functions are used in C files. */
+/** Get the last backend error. */
+    QofBackendError qof_backend_get_error (QofBackend*);
+/** Set the error on the specified QofBackend. */
+    void qof_backend_set_error (QofBackend*, QofBackendError);
+
+/* Temporary wrapper so that we don't have to expose qofbackend-p.h to Transaction.c */
+    gboolean qof_backend_can_rollback (QofBackend*);
+    void qof_backend_rollback_instance (QofBackend*, QofInstance*);
+
+/** \brief Load a QOF-compatible backend shared library.
+
+    \param directory Can be NULL if filename is a complete path.
+    \param module_name  Name of the .la file that describes the
+    shared library. This provides platform independence,
+    courtesy of libtool.
+
+    \return FALSE in case or error, otherwise TRUE.
+*/
+    gboolean
+    qof_load_backend_library(const gchar *directory, const gchar* module_name);
+
+/** \brief Finalize all loaded backend sharable libraries. */
+    void qof_finalize_backend_libraries(void);
+
+/** \brief Retrieve the backend used by this book */
+    QofBackend* qof_book_get_backend (const QofBook *book);
+
+    void qof_book_set_backend (QofBook *book, QofBackend *);
+
 
 /** \brief DOCUMENT ME! */
 typedef void (*QofBePercentageFunc) (/*@ null @*/ const char *message, double percent);
+
+#ifdef __cplusplus
+}
 
 /** @name Allow access to the begin routine for this backend. */
 //@{
@@ -161,15 +186,6 @@ void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
 gboolean qof_backend_commit_exists(const QofBackend *be);
 //@}
 
-/** The qof_backend_set_error() routine pushes an error code onto the error
- *  stack. (FIXME: the stack is 1 deep in current implementation).
- */
-void qof_backend_set_error (QofBackend *be, QofBackendError err);
-
-/** The qof_backend_get_error() routine pops an error code off the error stack.
- */
-QofBackendError qof_backend_get_error (QofBackend *be);
-
 /** Report if the backend is in an error state.
  *  Since get_error resets the error state, its use for branching as the backend
  *  bubbles back up to the session would make the session think that there was
@@ -179,28 +195,6 @@ QofBackendError qof_backend_get_error (QofBackend *be);
  */
 gboolean qof_backend_check_error (QofBackend *be);
 
-/** \brief Load a QOF-compatible backend shared library.
-
-\param directory Can be NULL if filename is a complete path.
-\param module_name  Name of the .la file that describes the
-	shared library. This provides platform independence,
-	courtesy of libtool.
-
-\return FALSE in case or error, otherwise TRUE.
-*/
-gboolean
-qof_load_backend_library(const gchar *directory, const gchar* module_name);
-
-/** \brief Finalize all loaded backend sharable libraries. */
-void qof_finalize_backend_libraries(void);
-
-/** \brief Retrieve the backend used by this book */
-QofBackend* qof_book_get_backend (const QofBook *book);
-
-void qof_book_set_backend (QofBook *book, QofBackend *);
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* QOF_BACKEND_H */
