@@ -2284,7 +2284,7 @@ add_numeric_col_info_to_list (const GncSqlBackend* be,
         buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable_row->col_name);
         auto info = new GncSqlColumnInfo(buf, BCT_INT64, 0, false, false,
                                          table_row->flags & COL_PKEY,
-                                         table_row->flags ^ COL_NNUL);
+                                         table_row->flags & COL_NNUL);
 
         *pList = g_list_append (*pList, info);
     }

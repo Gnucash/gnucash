@@ -372,23 +372,23 @@ struct GncSqlColumnInfo
     GncSqlColumnInfo (std::string&& name, GncSqlBasicColumnType type,
                       unsigned int size = 0, bool unicode = false,
                       bool autoinc = false, bool primary = false,
-                      bool null_allowed = false) :
+                      bool not_null = false) :
         m_name{name}, m_type{type}, m_size{size}, m_unicode{unicode},
-        m_autoinc{autoinc}, m_primary_key{primary}, m_null_allowed{null_allowed}
+        m_autoinc{autoinc}, m_primary_key{primary}, m_not_null{not_null}
         {}
     GncSqlColumnInfo(const GncSqlColumnTableEntry* e, GncSqlBasicColumnType t,
                      unsigned int size = 0, bool unicode = true) :
         m_name{e->col_name}, m_type{t}, m_size{size}, m_unicode{unicode},
         m_autoinc(e->flags & COL_AUTOINC),
         m_primary_key(e->flags & COL_PKEY),
-        m_null_allowed(e->flags ^ COL_NNUL) {}
+        m_not_null(e->flags & COL_NNUL) {}
     std::string m_name; /**< Column name */
     GncSqlBasicColumnType m_type; /**< Column basic type */
     unsigned int m_size; /**< Column size (string types) */
     bool m_unicode; /**< Column is unicode (string types) */
     bool m_autoinc; /**< Column is autoinc (int type) */
     bool m_primary_key; /**< Column is the primary key */
-    bool m_null_allowed; /**< Column allows NULL values */
+    bool m_not_null; /**< Column forbids NULL values */
 };
 
 typedef enum

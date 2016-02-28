@@ -182,7 +182,7 @@ add_owner_col_info_to_list (const GncSqlBackend* be,
     buf = g_strdup_printf ("%s_type", table_row->col_name);
     auto info = new GncSqlColumnInfo(buf, BCT_INT, 0, false, false,
                                      table_row->flags & COL_PKEY,
-                                     table_row->flags ^ COL_NNUL);
+                                     table_row->flags & COL_NNUL);
 
     *pList = g_list_append (*pList, info);
 
@@ -190,7 +190,7 @@ add_owner_col_info_to_list (const GncSqlBackend* be,
     info = new GncSqlColumnInfo(buf, BCT_STRING, GUID_ENCODING_LENGTH,
                                      false, false,
                                      table_row->flags & COL_PKEY,
-                                     table_row->flags ^ COL_NNUL);
+                                     table_row->flags & COL_NNUL);
 
     *pList = g_list_append (*pList, info);
 }
