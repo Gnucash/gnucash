@@ -128,9 +128,9 @@ load_address (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_address_col_info_to_list (const GncSqlBackend* be,
-                              const GncSqlColumnTableEntry* table_row,
-                              GList** pList)
+add_address_col_info_to_list(const GncSqlBackend* be,
+                             const GncSqlColumnTableEntry* table_row,
+                             ColVec& vec)
 {
     GncSqlColumnInfo* info;
     gchar* buf;
@@ -138,17 +138,15 @@ add_address_col_info_to_list (const GncSqlBackend* be,
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
     for (subtable_row = col_table; subtable_row->col_name != NULL; subtable_row++)
     {
         buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable_row->col_name);
-        auto info = new GncSqlColumnInfo(buf, BCT_STRING, subtable_row->size,
-                                         true, false,
-                                         table_row->flags & COL_PKEY,
-                                         table_row->flags & COL_NNUL);
 
-        *pList = g_list_append (*pList, info);
+        GncSqlColumnInfo info(buf, BCT_STRING, subtable_row->size, true, false,
+                              table_row->flags & COL_PKEY,
+                              table_row->flags & COL_NNUL);
+        vec.emplace_back(std::move(info));
     }
 }
 

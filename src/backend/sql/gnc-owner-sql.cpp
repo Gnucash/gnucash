@@ -169,30 +169,27 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_owner_col_info_to_list (const GncSqlBackend* be,
-                            const GncSqlColumnTableEntry* table_row,
-                            GList** pList)
+add_owner_col_info_to_list(const GncSqlBackend* be,
+                           const GncSqlColumnTableEntry* table_row,
+                           ColVec& vec)
 {
     gchar* buf;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
     buf = g_strdup_printf ("%s_type", table_row->col_name);
-    auto info = new GncSqlColumnInfo(buf, BCT_INT, 0, false, false,
+    GncSqlColumnInfo info(buf, BCT_INT, 0, false, false,
                                      table_row->flags & COL_PKEY,
                                      table_row->flags & COL_NNUL);
-
-    *pList = g_list_append (*pList, info);
+    vec.emplace_back(std::move(info));
 
     buf = g_strdup_printf ("%s_guid", table_row->col_name);
-    info = new GncSqlColumnInfo(buf, BCT_STRING, GUID_ENCODING_LENGTH,
+    GncSqlColumnInfo info2(buf, BCT_STRING, GUID_ENCODING_LENGTH,
                                      false, false,
                                      table_row->flags & COL_PKEY,
                                      table_row->flags & COL_NNUL);
-
-    *pList = g_list_append (*pList, info);
+    vec.emplace_back(std::move(info2));
 }
 
 static void

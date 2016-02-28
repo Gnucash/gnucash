@@ -1236,18 +1236,15 @@ load_string (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_string_col_info_to_list (const GncSqlBackend* be,
-                             const GncSqlColumnTableEntry* table_row,
-                             GList** pList)
+add_string_col_info_to_list(const GncSqlBackend* be,
+                            const GncSqlColumnTableEntry* table_row,
+                            ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_STRING,
-                                     table_row->size, TRUE};
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_STRING, table_row->size, TRUE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -1346,17 +1343,15 @@ load_int (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_int_col_info_to_list (const GncSqlBackend* be,
-                          const GncSqlColumnTableEntry* table_row,
-                          GList** pList)
+add_int_col_info_to_list(const GncSqlBackend* be,
+                         const GncSqlColumnTableEntry* table_row,
+                         ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_INT, 0, FALSE};
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_INT, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -1449,16 +1444,15 @@ load_boolean (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_boolean_col_info_to_list (const GncSqlBackend* be,
-                              const GncSqlColumnTableEntry* table_row,
-                              GList** pList)
+add_boolean_col_info_to_list(const GncSqlBackend* be,
+                             const GncSqlColumnTableEntry* table_row,
+                             ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_INT, 0, FALSE};
-    *pList = g_list_append (*pList, static_cast<void*>(info));
+    GncSqlColumnInfo info{table_row, BCT_INT, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -1543,16 +1537,15 @@ load_int64 (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_int64_col_info_to_list (const GncSqlBackend* be,
-                            const GncSqlColumnTableEntry* table_row,
-                            GList** pList)
+add_int64_col_info_to_list(const GncSqlBackend* be,
+                           const GncSqlColumnTableEntry* table_row,
+                           ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
-    auto info = new GncSqlColumnInfo{table_row, BCT_INT64, 0, FALSE};
 
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_INT64, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -1654,17 +1647,15 @@ load_double (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_double_col_info_to_list (const GncSqlBackend* be,
-                             const GncSqlColumnTableEntry* table_row,
-                             GList** pList)
+add_double_col_info_to_list(const GncSqlBackend* be,
+                            const GncSqlColumnTableEntry* table_row,
+                            ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_DOUBLE, 0, FALSE};
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_DOUBLE, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -1758,18 +1749,15 @@ load_guid (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_guid_col_info_to_list (const GncSqlBackend* be,
-                           const GncSqlColumnTableEntry* table_row,
-                           GList** pList)
+add_guid_col_info_to_list(const GncSqlBackend* be,
+                          const GncSqlColumnTableEntry* table_row,
+                          ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_STRING,
-                                GUID_ENCODING_LENGTH, FALSE};
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -1868,11 +1856,11 @@ gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be,
 }
 
 void
-gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* be,
-                                             const GncSqlColumnTableEntry* table_row,
-                                             GList** pList)
+gnc_sql_add_objectref_guid_col_info_to_list( const GncSqlBackend* be,
+        const GncSqlColumnTableEntry* table_row,
+        ColVec& info_vec)
 {
-    add_guid_col_info_to_list (be, table_row, pList);
+    add_guid_col_info_to_list(be, table_row, info_vec);
 }
 
 /* ----------------------------------------------------------------- */
@@ -1976,18 +1964,15 @@ load_timespec (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_timespec_col_info_to_list (const GncSqlBackend* be,
-                               const GncSqlColumnTableEntry* table_row,
-                               GList** pList)
+add_timespec_col_info_to_list(const GncSqlBackend* be,
+                              const GncSqlColumnTableEntry* table_row,
+                              ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_DATETIME,
-                                TIMESPEC_COL_SIZE, FALSE};
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -2136,15 +2121,13 @@ load_date (const GncSqlBackend* be, GncSqlRow* row,
 static void
 add_date_col_info_to_list (const GncSqlBackend* be,
                            const GncSqlColumnTableEntry* table_row,
-                           GList** pList)
+                           ColVec& vec)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    auto info = new GncSqlColumnInfo{table_row, BCT_DATE, DATE_COL_SIZE, FALSE};
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{table_row, BCT_DATE, DATE_COL_SIZE, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
 static void
@@ -2267,26 +2250,24 @@ load_numeric (const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_numeric_col_info_to_list (const GncSqlBackend* be,
-                              const GncSqlColumnTableEntry* table_row,
-                              GList** pList)
+add_numeric_col_info_to_list(const GncSqlBackend* be,
+                             const GncSqlColumnTableEntry* table_row,
+                             ColVec& vec)
 {
     gchar* buf;
     const GncSqlColumnTableEntry* subtable_row;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
     for (subtable_row = numeric_col_table; subtable_row->col_name != NULL;
          subtable_row++)
     {
-        buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable_row->col_name);
-        auto info = new GncSqlColumnInfo(buf, BCT_INT64, 0, false, false,
-                                         table_row->flags & COL_PKEY,
-                                         table_row->flags & COL_NNUL);
-
-        *pList = g_list_append (*pList, info);
+        buf = g_strdup_printf("%s_%s", table_row->col_name, subtable_row->col_name);
+        GncSqlColumnInfo info(buf, BCT_INT64, 0, false, false,
+                                 table_row->flags & COL_PKEY,
+                                 table_row->flags & COL_NNUL);
+        vec.emplace_back(std::move(info));
     }
 }
 
@@ -3098,7 +3079,7 @@ static gboolean
 do_create_table (const GncSqlBackend* be, const gchar* table_name,
                  const GncSqlColumnTableEntry* col_table)
 {
-    GList* col_info_list = NULL;
+    ColVec info_vec;
     gboolean ok = FALSE;
 
     g_return_val_if_fail (be != NULL, FALSE);
@@ -3111,10 +3092,9 @@ do_create_table (const GncSqlBackend* be, const gchar* table_name,
 
         pHandler = get_handler (col_table);
         g_assert (pHandler != NULL);
-        pHandler->add_col_info_to_list_fn (be, col_table, &col_info_list);
+        pHandler->add_col_info_to_list_fn (be, col_table, info_vec);
     }
-    g_assert (col_info_list != NULL);
-    ok = gnc_sql_connection_create_table (be->conn, table_name, col_info_list);
+    ok = gnc_sql_connection_create_table (be->conn, table_name, info_vec);
     return ok;
 }
 
@@ -3219,7 +3199,7 @@ gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be,
                                        const gchar* table_name,
                                        const GncSqlColumnTableEntry* new_col_table)
 {
-    GList* col_info_list = NULL;
+    ColVec info_vec;
     gboolean ok = FALSE;
 
     g_return_val_if_fail (be != NULL, FALSE);
@@ -3232,11 +3212,9 @@ gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be,
 
         pHandler = get_handler (new_col_table);
         g_assert (pHandler != NULL);
-        pHandler->add_col_info_to_list_fn (be, new_col_table, &col_info_list);
+        pHandler->add_col_info_to_list_fn (be, new_col_table, info_vec);
     }
-    g_assert (col_info_list != NULL);
-    ok = gnc_sql_connection_add_columns_to_table (be->conn, table_name,
-                                                  col_info_list);
+    ok = gnc_sql_connection_add_columns_to_table(be->conn, table_name, info_vec);
     return ok;
 }
 

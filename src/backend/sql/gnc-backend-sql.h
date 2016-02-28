@@ -171,25 +171,16 @@ struct GncSqlStatement
 struct GncSqlConnection
 {
     void (*dispose) (GncSqlConnection*);
-    GncSqlResult* (*executeSelectStatement) (GncSqlConnection*,
-                                             GncSqlStatement*);  /**< Returns NULL if error */
-    gint (*executeNonSelectStatement) (GncSqlConnection*,
-                                       GncSqlStatement*);  /**< Returns -1 if error */
+    GncSqlResult* (*executeSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns NULL if error */
+    gint (*executeNonSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns -1 if error */
     GncSqlStatement* (*createStatementFromSql) (GncSqlConnection*, const gchar*);
-    gboolean (*doesTableExist) (GncSqlConnection*,
-                                const gchar*);   /**< Returns true if successful */
-    gboolean (*beginTransaction) (
-        GncSqlConnection*);  /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*rollbackTransaction) (
-        GncSqlConnection*);  /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*commitTransaction) (
-        GncSqlConnection*);  /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*createTable) (GncSqlConnection*, const gchar*,
-                             GList*);  /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*createIndex) (GncSqlConnection*, const gchar*, const gchar*,
-                             const GncSqlColumnTableEntry*);  /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*addColumnsToTable) (GncSqlConnection*, const gchar* table,
-                                   GList*);  /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*doesTableExist) (GncSqlConnection*, const gchar*);  /**< Returns true if successful */
+    gboolean (*beginTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*rollbackTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*commitTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*createTable) (GncSqlConnection*, const gchar*, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*createIndex) (GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry*); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*addColumnsToTable) (GncSqlConnection*, const gchar* table, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
     gchar* (*quoteString) (const GncSqlConnection*, gchar*);
 };
 #define gnc_sql_connection_dispose(CONN) (CONN)->dispose(CONN)
@@ -391,6 +382,18 @@ struct GncSqlColumnInfo
     bool m_not_null; /**< Column forbids NULL values */
 };
 
+inline bool operator==(const GncSqlColumnInfo& l,
+                       const GncSqlColumnInfo& r)
+{
+    return l.m_name == r.m_name && l.m_type == r.m_type;
+}
+
+inline bool operator!=(const GncSqlColumnInfo& l,
+                       const GncSqlColumnInfo& r)
+{
+    return !(l == r);
+}
+
 typedef enum
 {
     OP_DB_INSERT,
@@ -403,14 +406,13 @@ typedef void (*GNC_SQL_LOAD_FN) (const GncSqlBackend* be,
                                  QofSetterFunc setter, gpointer pObject,
                                  const GncSqlColumnTableEntry* table);
 typedef void (*GNC_SQL_ADD_COL_INFO_TO_LIST_FN) (const GncSqlBackend* be,
-                                                 const GncSqlColumnTableEntry* table_row,
-                                                 GList** pList);
-typedef void (*GNC_SQL_ADD_COLNAME_TO_LIST_FN) (const GncSqlColumnTableEntry*
-                                                table_row, GList** pList);
+                                       const GncSqlColumnTableEntry* table_row,
+                                                 ColVec& vec);
+typedef void (*GNC_SQL_ADD_COLNAME_TO_LIST_FN) (const GncSqlColumnTableEntry* table_row, GList** pList);
 typedef void (*GNC_SQL_ADD_GVALUE_TO_SLIST_FN) (const GncSqlBackend* be,
                                                 QofIdTypeConst obj_name,
                                                 const gpointer pObject,
-                                                const GncSqlColumnTableEntry* table_row,
+                                        const GncSqlColumnTableEntry* table_row,
                                                 GSList** pList);
 
 /**
@@ -673,7 +675,7 @@ void gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be,
  */
 void gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* be,
                                                   const GncSqlColumnTableEntry* table_row,
-                                                  GList** pList);
+                                                  ColVec& vec);
 
 /**
  * Appends the ascii strings for a list of GUIDs to the end of an SQL string.

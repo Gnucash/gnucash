@@ -62,13 +62,14 @@ typedef enum
     GNC_DBI_FAIL_TEST
 } GncDbiTestResult;
 
-typedef gchar* (*CREATE_TABLE_DDL_FN) (GncSqlConnection* conn,
-                                       const gchar* table_name,
-                                       const GList* col_info_list);
-typedef GSList* (*GET_TABLE_LIST_FN) (dbi_conn conn, const gchar* dbname);
-typedef void (*APPEND_COLUMN_DEF_FN) (GString* ddl, GncSqlColumnInfo* info);
-typedef GSList* (*GET_INDEX_LIST_FN) (dbi_conn conn);
-typedef void (*DROP_INDEX_FN) (dbi_conn conn, const gchar* index);
+typedef gchar* (*CREATE_TABLE_DDL_FN)   (GncSqlConnection* conn,
+                                         const gchar* table_name,
+                                         const ColVec& info_vec);
+typedef GSList* (*GET_TABLE_LIST_FN)    (dbi_conn conn, const gchar* dbname);
+typedef void    (*APPEND_COLUMN_DEF_FN) (GString* ddl,
+                                         const GncSqlColumnInfo& info);
+typedef GSList* (*GET_INDEX_LIST_FN)    (dbi_conn conn);
+typedef void    (*DROP_INDEX_FN)        (dbi_conn conn, const gchar* index);
 typedef struct
 {
     CREATE_TABLE_DDL_FN     create_table_ddl;
