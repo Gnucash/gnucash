@@ -457,8 +457,8 @@ gnc_dotgnucash_dir (void)
     if (!gnc_validate_directory(tmp_dir, TRUE, &errmsg))
         exit(1);
     g_free(tmp_dir);
-    tmp_dir = g_build_filename(tmp_dir, "translog", (gchar *)NULL);
-    if (!gnc_validate_directory(dotgnucash, TRUE, &errmsg))
+    tmp_dir = g_build_filename(dotgnucash, "translog", (gchar *)NULL);
+    if (!gnc_validate_directory(tmp_dir, TRUE, &errmsg))
         exit(1);
     g_free(tmp_dir);
 

@@ -147,7 +147,7 @@ gnc_state_set_base (const QofSession *session)
             {
                 DEBUG ("Trying old state file names for compatibility");
                 i = 1;
-                g_free ( sf_extension);
+                g_free (sf_extension);
                 sf_extension = g_strdup ("");
 
                 /* Regardless of whether or not an old state file is found,
@@ -190,6 +190,7 @@ gnc_state_set_base (const QofSession *session)
     }
 
     DEBUG("Clean up");
+    g_free(sf_extension);
     g_free(original);
     g_key_file_free (key_file);
 
