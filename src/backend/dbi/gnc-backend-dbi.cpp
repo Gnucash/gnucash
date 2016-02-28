@@ -2717,8 +2717,7 @@ add_columns_ddl (GncSqlConnection* conn,
         }
         g_string_append (ddl, "ADD COLUMN ");
         dbi_conn->provider->append_col_def (ddl, info);
-        g_free (info->name);
-        g_free (info);
+        delete info;
     }
 
     return g_string_free (ddl, FALSE);
@@ -2729,42 +2728,42 @@ append_sqlite3_col_def (GString* ddl, GncSqlColumnInfo* info)
 {
     const char* type_name = nullptr;
 
-    if (info->type == BCT_INT)
+    if (info->m_type == BCT_INT)
     {
         type_name = "integer";
     }
-    else if (info->type == BCT_INT64)
+    else if (info->m_type == BCT_INT64)
     {
         type_name = "bigint";
     }
-    else if (info->type == BCT_DOUBLE)
+    else if (info->m_type == BCT_DOUBLE)
     {
         type_name = "float8";
     }
-    else if (info->type == BCT_STRING || info->type == BCT_DATE
-             || info->type == BCT_DATETIME)
+    else if (info->m_type == BCT_STRING || info->m_type == BCT_DATE
+             || info->m_type == BCT_DATETIME)
     {
         type_name = "text";
     }
     else
     {
-        PERR ("Unknown column type: %d\n", info->type);
+        PERR ("Unknown column type: %d\n", info->m_type);
         type_name = "";
     }
-    g_string_append_printf (ddl, "%s %s", info->name, type_name);
-    if (info->size != 0)
+    g_string_append_printf (ddl, "%s %s", info->m_name.c_str(), type_name);
+    if (info->m_size != 0)
     {
-        (void)g_string_append_printf (ddl, "(%d)", info->size);
+        (void)g_string_append_printf (ddl, "(%d)", info->m_size);
     }
-    if (info->is_primary_key)
+    if (info->m_primary_key)
     {
         (void)g_string_append (ddl, " PRIMARY KEY");
     }
-    if (info->is_autoinc)
+    if (info->m_autoinc)
     {
         (void)g_string_append (ddl, " AUTOINCREMENT");
     }
-    if (!info->null_allowed)
+    if (!info->m_null_allowed)
     {
         (void)g_string_append (ddl, " NOT NULL");
     }
@@ -2795,8 +2794,7 @@ conn_create_table_ddl_sqlite3 (GncSqlConnection* conn,
             (void)g_string_append (ddl, ", ");
         }
         append_sqlite3_col_def (ddl, info);
-        g_free (info->name);
-        g_free (info);
+        delete info;
     }
     (void)g_string_append (ddl, ")");
 
@@ -2808,55 +2806,56 @@ append_mysql_col_def (GString* ddl, GncSqlColumnInfo* info)
 {
     const char* type_name = nullptr;
 
-    if (info->type == BCT_INT)
+    if (info->m_type == BCT_INT)
     {
         type_name = "integer";
     }
-    else if (info->type == BCT_INT64)
+    else if (info->m_type == BCT_INT64)
     {
         type_name = "bigint";
     }
-    else if (info->type == BCT_DOUBLE)
+    else if (info->m_type == BCT_DOUBLE)
     {
         type_name = "double";
     }
-    else if (info->type == BCT_STRING)
+    else if (info->m_type == BCT_STRING)
     {
         type_name = "varchar";
     }
-    else if (info->type == BCT_DATE)
+    else if (info->m_type == BCT_DATE)
     {
-        info->size = 0;
+        info->m_size = 0;
         type_name = "date";
     }
-    else if (info->type == BCT_DATETIME)
+    else if (info->m_type == BCT_DATETIME)
     {
-        info->size = 0;
+        info->m_size = 0;
         type_name = "TIMESTAMP NULL DEFAULT 0";
     }
     else
     {
-        PERR ("Unknown column type: %d\n", info->type);
+        PERR ("Unknown column type: %d\n", info->m_type);
         type_name = "";
     }
-    g_string_append_printf (ddl, "%s %s", info->name, type_name);
-    if (info->size != 0)
+    g_string_append_printf (ddl, "%s %s", info->m_name.c_str(), type_name);
+    if (info->m_size != 0)
     {
-        g_string_append_printf (ddl, "(%d)", info->size);
+        g_string_append_printf (ddl, "(%d)", info->m_size);
     }
-    if (info->is_unicode)
+    if (info->m_unicode)
     {
         (void)g_string_append (ddl, " CHARACTER SET utf8");
     }
-    if (info->is_primary_key)
+    if (info->m_primary_key)
     {
         (void)g_string_append (ddl, " PRIMARY KEY");
     }
-    if (info->is_autoinc)
+    if (info->m_autoinc)
     {
         (void)g_string_append (ddl, " AUTO_INCREMENT");
     }
-    if (!info->null_allowed)
+    if (!info->m_null_allowed)
+
     {
         (void)g_string_append (ddl, " NOT NULL");
     }
@@ -2886,8 +2885,7 @@ conn_create_table_ddl_mysql (GncSqlConnection* conn, const gchar* table_name,
             (void)g_string_append (ddl, ", ");
         }
         append_mysql_col_def (ddl, info);
-        g_free (info->name);
-        g_free (info);
+        delete info;
     }
     (void)g_string_append (ddl, ")");
 
@@ -2899,9 +2897,9 @@ append_pgsql_col_def (GString* ddl, GncSqlColumnInfo* info)
 {
     const char* type_name = nullptr;
 
-    if (info->type == BCT_INT)
+    if (info->m_type == BCT_INT)
     {
-        if (info->is_autoinc)
+        if (info->m_autoinc)
         {
             type_name = "serial";
         }
@@ -2910,43 +2908,44 @@ append_pgsql_col_def (GString* ddl, GncSqlColumnInfo* info)
             type_name = "integer";
         }
     }
-    else if (info->type == BCT_INT64)
+    else if (info->m_type == BCT_INT64)
     {
         type_name = "int8";
     }
-    else if (info->type == BCT_DOUBLE)
+    else if (info->m_type == BCT_DOUBLE)
+
     {
         type_name = "double precision";
     }
-    else if (info->type == BCT_STRING)
+    else if (info->m_type == BCT_STRING)
     {
         type_name = "varchar";
     }
-    else if (info->type == BCT_DATE)
+    else if (info->m_type == BCT_DATE)
     {
-        info->size = 0;
+        info->m_size = 0;
         type_name = "date";
     }
-    else if (info->type == BCT_DATETIME)
+    else if (info->m_type == BCT_DATETIME)
     {
-        info->size = 0;
+        info->m_size = 0;
         type_name = "timestamp without time zone";
     }
     else
     {
-        PERR ("Unknown column type: %d\n", info->type);
+        PERR ("Unknown column type: %d\n", info->m_type);
         type_name = "";
     }
-    g_string_append_printf (ddl, "%s %s", info->name, type_name);
-    if (info->size != 0)
+    g_string_append_printf (ddl, "%s %s", info->m_name.c_str(), type_name);
+    if (info->m_size != 0)
     {
-        g_string_append_printf (ddl, "(%d)", info->size);
+        g_string_append_printf (ddl, "(%d)", info->m_size);
     }
-    if (info->is_primary_key)
+    if (info->m_primary_key)
     {
         (void)g_string_append (ddl, " PRIMARY KEY");
     }
-    if (!info->null_allowed)
+    if (!info->m_null_allowed)
     {
         (void)g_string_append (ddl, " NOT NULL");
     }
@@ -2977,9 +2976,8 @@ conn_create_table_ddl_pgsql (GncSqlConnection* conn, const gchar* table_name,
             (void)g_string_append (ddl, ", ");
         }
         append_pgsql_col_def (ddl, info);
-        is_unicode = is_unicode || info->is_unicode;
-        g_free (info->name);
-        g_free (info);
+        is_unicode = is_unicode || info->m_unicode;
+        delete info;
     }
     (void)g_string_append (ddl, ")");
     if (is_unicode)

@@ -173,7 +173,6 @@ add_owner_col_info_to_list (const GncSqlBackend* be,
                             const GncSqlColumnTableEntry* table_row,
                             GList** pList)
 {
-    GncSqlColumnInfo* info;
     gchar* buf;
 
     g_return_if_fail (be != NULL);
@@ -181,23 +180,18 @@ add_owner_col_info_to_list (const GncSqlBackend* be,
     g_return_if_fail (pList != NULL);
 
     buf = g_strdup_printf ("%s_type", table_row->col_name);
-    info = g_new0 (GncSqlColumnInfo, 1);
-    info->name = buf;
-    info->type = BCT_INT;
-    info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
-    info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
-    info->size = table_row->size;
-    info->is_unicode = FALSE;
+    auto info = new GncSqlColumnInfo(buf, BCT_INT, 0, false, false,
+                                     table_row->flags & COL_PKEY,
+                                     table_row->flags ^ COL_NNUL);
+
     *pList = g_list_append (*pList, info);
 
     buf = g_strdup_printf ("%s_guid", table_row->col_name);
-    info = g_new0 (GncSqlColumnInfo, 1);
-    info->name = buf;
-    info->type = BCT_STRING;
-    info->size = GUID_ENCODING_LENGTH;
-    info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
-    info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
-    info->is_unicode = FALSE;
+    info = new GncSqlColumnInfo(buf, BCT_STRING, GUID_ENCODING_LENGTH,
+                                     false, false,
+                                     table_row->flags & COL_PKEY,
+                                     table_row->flags ^ COL_NNUL);
+
     *pList = g_list_append (*pList, info);
 }
 

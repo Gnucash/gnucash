@@ -51,6 +51,9 @@ extern "C"
 #include <string>
 #include <vector>
 
+struct GncSqlColumnInfo;
+
+using ColVec = std::vector<GncSqlColumnInfo>;
 using LoadOrder = std::vector<std::string>;
 typedef struct GncSqlConnection GncSqlConnection;
 
@@ -310,22 +313,6 @@ typedef enum
     BCT_DATETIME
 } GncSqlBasicColumnType;
 
-/**
- * @struct GncSqlColumnInfo
- *
- * The GncSqlColumnInfo structure contains information required to create
- * a column in a table.
- */
-typedef struct
-{
-    gchar* name;                /**< Column name */
-    GncSqlBasicColumnType type; /**< Column basic type */
-    gint size;                  /**< Column size (string types) */
-    gboolean is_unicode;        /**< Column is unicode (string types) */
-    gboolean is_autoinc;        /**< Column is autoinc (int type) */
-    gboolean is_primary_key;    /**< Column is the primary key */
-    gboolean null_allowed;      /**< Column allows NULL values */
-} GncSqlColumnInfo;
 
 // Type for conversion of db row to object.
 #define CT_STRING "ct_string"
@@ -365,7 +352,7 @@ struct GncSqlColumnTableEntry
 {
     const gchar* col_name; /**< Column name */
     const gchar* col_type;  /**< Column type */
-    gint size;              /**< Column size in bytes, for string columns */
+    unsigned int size;      /**< Column size in bytes, for string columns */
 #define COL_PKEY    0x01    /**< The column is a primary key */
 #define COL_NNUL    0x02    /**< The column may not contain a NULL value */
 #define COL_UNIQUE  0x04    /**< The column must contain unique values */
@@ -375,6 +362,33 @@ struct GncSqlColumnTableEntry
     const gchar* qof_param_name;  /**< If non-null, qof parameter name */
     QofAccessFunc getter;   /**< General access function */
     QofSetterFunc setter;   /**< General setter function */
+};
+
+/**
+ *  information required to create a column in a table.
+ */
+struct GncSqlColumnInfo
+{
+    GncSqlColumnInfo (std::string&& name, GncSqlBasicColumnType type,
+                      unsigned int size = 0, bool unicode = false,
+                      bool autoinc = false, bool primary = false,
+                      bool null_allowed = false) :
+        m_name{name}, m_type{type}, m_size{size}, m_unicode{unicode},
+        m_autoinc{autoinc}, m_primary_key{primary}, m_null_allowed{null_allowed}
+        {}
+    GncSqlColumnInfo(const GncSqlColumnTableEntry* e, GncSqlBasicColumnType t,
+                     unsigned int size = 0, bool unicode = true) :
+        m_name{e->col_name}, m_type{t}, m_size{size}, m_unicode{unicode},
+        m_autoinc(e->flags & COL_AUTOINC),
+        m_primary_key(e->flags & COL_PKEY),
+        m_null_allowed(e->flags ^ COL_NNUL) {}
+    std::string m_name; /**< Column name */
+    GncSqlBasicColumnType m_type; /**< Column basic type */
+    unsigned int m_size; /**< Column size (string types) */
+    bool m_unicode; /**< Column is unicode (string types) */
+    bool m_autoinc; /**< Column is autoinc (int type) */
+    bool m_primary_key; /**< Column is the primary key */
+    bool m_null_allowed; /**< Column allows NULL values */
 };
 
 typedef enum

@@ -408,15 +408,6 @@ GList** pList)// C: 1 */
 test_gnc_sql_add_subtable_colnames_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* create_column_info
-static GncSqlColumnInfo*
-create_column_info (const GncSqlColumnTableEntry* table_row, GncSqlBasicColumnType type,
-gint size, gboolean is_unicode)// 9
-*/
-/* static void
-test_create_column_info (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* load_string
 static void
 load_string (const GncSqlBackend* be, GncSqlRow* row,
@@ -987,7 +978,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "gnc sql get getter", Fixture, nullptr, test_gnc_sql_get_getter,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add colname to list", Fixture, nullptr, test_gnc_sql_add_colname_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add subtable colnames to list", Fixture, nullptr, test_gnc_sql_add_subtable_colnames_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "create column info", Fixture, nullptr, test_create_column_info,  teardown);
 // GNC_TEST_ADD (suitename, "load string", Fixture, nullptr, test_load_string,  teardown);
 // GNC_TEST_ADD (suitename, "add string col info to list", Fixture, nullptr, test_add_string_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add gvalue string to slist", Fixture, nullptr, test_add_gvalue_string_to_slist,  teardown);
