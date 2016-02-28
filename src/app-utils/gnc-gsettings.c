@@ -109,6 +109,8 @@ static GSettings * gnc_gsettings_get_schema_ptr (const gchar *schema_str)
             PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
     }
 
+    g_free(full_name);
+
     LEAVE("");
     return gset;
 }

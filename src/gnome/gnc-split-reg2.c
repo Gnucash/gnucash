@@ -298,6 +298,7 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     /* Restore the sort depth from saved state */
     model->sort_depth = g_key_file_get_integer (state_file, state_section, "sort_depth", NULL);
+    g_free(state_section);
 
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     if (s_model)

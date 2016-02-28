@@ -564,8 +564,10 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
     }
     if (!string_to_guid(guid_str, &guid))
     {
+        g_free(guid_str);
         return NULL;
     }
+    g_free(guid_str);
 
     book = qof_session_get_book(gnc_get_current_session());
     bgt = gnc_budget_lookup(&guid, book);
