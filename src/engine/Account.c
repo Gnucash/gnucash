@@ -5723,6 +5723,155 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
     g_free (full_category);
 }
 
+/*******************************************************************************/
+
+static gchar *
+look_for_old_separator (Account *root, gchar *full_name, const gchar *separator)
+{
+    GList *top_accounts, *ptr;
+    gchar *converted_name = g_strdup (full_name);
+
+    top_accounts = gnc_account_get_descendants (root);
+
+    PINFO("Incoming full_name is '%s'", full_name);
+
+    /* Go through list of top level accounts */
+    for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
+    {
+        const gchar *name = xaccAccountGetName (ptr->data);
+
+        if (g_str_has_prefix (converted_name, name))
+        {
+            const gchar old_sep = converted_name[strlen (name)];
+
+            if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
+                converted_name = g_strdelimit (converted_name, &old_sep, *separator);
+
+            break;
+        }
+    }
+    g_list_free (top_accounts); // Free the List
+    g_free (full_name);
+
+    PINFO("Return full_name is '%s'", converted_name);
+
+    return converted_name;
+}
+
+static void
+change_imap_entry (Account *root, gpointer user_data)
+{
+    Account       *map_account = NULL;
+    const gchar   *sep = gnc_get_account_separator_string ();
+    gchar         *full_name;
+
+    struct imap_info *imapInfo = (struct imap_info*)user_data;
+
+    PINFO("Category Head is '%s', Full Category is '%s'", imapInfo->category_head, imapInfo->full_category);
+
+    full_name = g_strdup (imapInfo->full_category + strlen (imapInfo->category_head) + 1);
+
+    if (g_strstr_len (full_name, -1, sep) == NULL) // does full_name contain a different account separator
+        full_name = look_for_old_separator (root, full_name, sep);
+
+    PINFO("full name is '%s'", full_name);
+
+    map_account = gnc_account_lookup_by_full_name (root, full_name);
+
+    if (map_account != NULL)
+    {
+        gchar   *guid_string;
+        gchar   *kvp_path;
+        int64_t  count = 1;
+
+        GValue value = G_VALUE_INIT;
+
+        xaccAccountBeginEdit (imapInfo->source_account);
+
+        guid_string = guid_to_string (xaccAccountGetGUID (map_account));
+
+        PINFO("Map Account is '%s',GUID is '%s', Count is %s", xaccAccountGetName (map_account),
+               guid_string, imapInfo->count);
+
+        // save converting string, get the count value
+        qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), imapInfo->full_category, &value);
+
+        if (G_VALUE_HOLDS_INT64 (&value))
+            count = g_value_get_int64 (&value);
+
+        // Delete the old entry based on full account name
+        kvp_path = g_strdup (imapInfo->full_category);
+        gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
+
+        g_value_set_int64 (&value, count);
+
+        // Add new entry based on guid
+        kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
+        qof_instance_set_kvp (QOF_INSTANCE (imapInfo->source_account), kvp_path, &value);
+
+        qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
+        xaccAccountCommitEdit (imapInfo->source_account);
+
+        g_free (kvp_path);
+        g_free (guid_string);
+    }
+    g_free (full_name);
+}
+
+static void
+get_account_imap_info (Account *root, Account *acc)
+{
+    GList *imap_list, *node;
+    gchar *acc_name = NULL;
+
+    acc_name = gnc_account_get_full_name (acc);
+    PINFO("Source Acc '%s'", acc_name);
+
+    imap_list = gnc_account_imap_get_info_bayes (acc);
+
+    if (g_list_length (imap_list) > 0)
+    {
+        PINFO("List length is %d", g_list_length (imap_list));
+
+        for (node = imap_list;  node; node = g_list_next (node))
+        {
+            struct imap_info *imapInfo = node->data;
+
+            // Lets start doing stuff
+            change_imap_entry (root, imapInfo);
+
+            // Free the members and structure
+            g_free (imapInfo->category_head);
+            g_free (imapInfo->full_category);
+            g_free (imapInfo->match_string);
+            g_free (imapInfo->count);
+            g_free (imapInfo);
+        }
+    }
+    g_free (acc_name);
+    g_list_free (imap_list); // Free the List
+}
+
+void
+gnc_account_imap_convert_bayes (QofBook *book)
+{
+    Account      *root;
+    GList        *accts, *ptr;
+
+    /* Get list of Accounts */
+    root = gnc_book_get_root_account (book);
+    accts = gnc_account_get_descendants_sorted (root);
+
+    /* Go through list of accounts */
+    for (ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        Account *acc = ptr->data;
+
+        get_account_imap_info (root, acc);
+    }
+    g_list_free (accts);
+}
+
 
 /* ================================================================ */
 /* QofObject function implementation and registration */
