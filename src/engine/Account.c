@@ -5508,7 +5508,8 @@ static void
 build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 {
     QofBook     *book;
-    Account     *root;
+    Account     *map_account = NULL;
+    GncGUID     *guid;
     gchar       *kvp_path;
     gchar       *count;
 
@@ -5518,21 +5519,32 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 
     // Get the book
     book = qof_instance_get_book (imapInfo->source_account);
-    root = gnc_book_get_root_account (book);
 
-    PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
+    if (G_VALUE_HOLDS_INT64 (value))
+    {
+        PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
                                   (char*)key, g_value_get_int64(value));
 
-    count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
+        count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
+    }
+    else
+        count = g_strdup ("0");
 
     kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
 
     PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
 
+    guid = g_new (GncGUID, 1);
+
+    if (string_to_guid (key, guid))
+        map_account = xaccAccountLookup (guid, book);
+
+    g_free (guid);
+
     imapInfo_node = g_malloc(sizeof(*imapInfo_node));
 
     imapInfo_node->source_account = imapInfo->source_account;
-    imapInfo_node->map_account    = gnc_account_lookup_by_full_name (root, key);
+    imapInfo_node->map_account    = map_account;
     imapInfo_node->full_category  = g_strdup (kvp_path);
     imapInfo_node->match_string   = g_strdup (imapInfo->match_string);
     imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
