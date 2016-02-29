@@ -5400,14 +5400,27 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     /* has this probability met our threshold? */
     if (account_i.probability >= threshold)
     {
-        PINFO("found match");
-        LEAVE(" ");
-        return gnc_account_lookup_by_full_name(gnc_book_get_root_account(imap->book),
-                                               account_i.account_name);
-    }
+        GncGUID *guid;
+        Account *account = NULL;
 
-    PINFO("no match");
-    LEAVE(" ");
+        PINFO("Probability has met threshold");
+
+        guid = g_new (GncGUID, 1);
+
+        if (string_to_guid (account_i.account_name, guid))
+            account = xaccAccountLookup (guid, imap->book);
+
+        g_free (guid);
+
+        if (account != NULL)
+            LEAVE("Return account is '%s'", xaccAccountGetName (account));
+        else
+            LEAVE("Return NULL, account for Guid '%s' can not be found", account_i.account_name);
+
+        return account;
+    }
+    PINFO("Probability has not met threshold");
+    LEAVE("Return NULL");
 
     return NULL; /* we didn't meet our threshold, return NULL for an account */
 }
@@ -5422,6 +5435,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     GList *current_token;
     gint64 token_count;
     char *account_fullname, *kvp_path;
+    char *guid_string;
 
     ENTER(" ");
     if (!imap)
@@ -5435,6 +5449,8 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     xaccAccountBeginEdit (imap->acc);
 
     PINFO("account name: '%s'\n", account_fullname);
+
+    guid_string = guid_to_string (xaccAccountGetGUID (acc));
 
     /* process each token in the list */
     for (current_token = g_list_first(tokens); current_token;
@@ -5455,7 +5471,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
 
         kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s/%s",
                                     (char*)current_token->data,
-                                    account_fullname);
+                                    guid_string);
 
         qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
         /* if the token/account is already in the tree, read the current
@@ -5477,10 +5493,11 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         g_free (kvp_path);
     }
 
-    /* free up the account fullname string */
+    /* free up the account fullname and guid string */
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
-    g_free(account_fullname);
+    g_free (account_fullname);
+    g_free (guid_string);
 
     LEAVE(" ");
 }
