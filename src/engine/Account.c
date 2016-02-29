@@ -5874,19 +5874,40 @@ gnc_account_imap_convert_bayes (QofBook *book)
 {
     Account      *root;
     GList        *accts, *ptr;
+    gboolean      run_once = FALSE;
+    GValue        value_s = G_VALUE_INIT;
 
-    /* Get list of Accounts */
-    root = gnc_book_get_root_account (book);
-    accts = gnc_account_get_descendants_sorted (root);
+    // get the run-once value
+    qof_instance_get_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_s);
 
-    /* Go through list of accounts */
-    for (ptr = accts; ptr; ptr = g_list_next (ptr))
+    if (G_VALUE_HOLDS_STRING (&value_s) && (strcmp(g_value_get_string (&value_s), "true") == 0))
+        run_once = TRUE;
+
+    if (run_once == FALSE)
     {
-        Account *acc = ptr->data;
+        GValue value_b = G_VALUE_INIT;
 
-        get_account_imap_info (root, acc);
+        /* Get list of Accounts */
+        root = gnc_book_get_root_account (book);
+        accts = gnc_account_get_descendants_sorted (root);
+
+        /* Go through list of accounts */
+        for (ptr = accts; ptr; ptr = g_list_next (ptr))
+        {
+            Account *acc = ptr->data;
+
+            get_account_imap_info (root, acc);
+        }
+        g_list_free (accts);
+
+        g_value_init (&value_b, G_TYPE_BOOLEAN);
+
+        g_value_set_boolean (&value_b, TRUE);
+
+        // set the run-once value
+        qof_instance_set_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_b);
+        qof_instance_set_dirty (QOF_INSTANCE (book));
     }
-    g_list_free (accts);
 }
 
 
