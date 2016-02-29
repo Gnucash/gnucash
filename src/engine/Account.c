@@ -5886,6 +5886,7 @@ gnc_account_imap_convert_bayes (QofBook *book)
 
         get_account_imap_info (root, acc);
     }
+    g_list_free (accts);
 }
 
 
