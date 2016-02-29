@@ -5803,10 +5803,27 @@ change_imap_entry (Account *root, gpointer user_data)
         kvp_path = g_strdup (imapInfo->full_category);
         gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
 
+        // create path based on guid
+        kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
+
+        // check for existing guid entry
+        if (qof_instance_has_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path))
+        {
+            int64_t  existing_count = 1;
+
+            // get the count value
+            qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), kvp_path, &value);
+
+            if (G_VALUE_HOLDS_INT64 (&value))
+                existing_count = g_value_get_int64 (&value);
+
+            // if existing_count is greater, use that one
+            if (existing_count > count)
+                count = existing_count;
+        }
         g_value_set_int64 (&value, count);
 
-        // Add new entry based on guid
-        kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
+        // Add or Update the entry based on guid
         qof_instance_set_kvp (QOF_INSTANCE (imapInfo->source_account), kvp_path, &value);
 
         qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
