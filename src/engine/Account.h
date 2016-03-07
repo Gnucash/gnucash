@@ -1406,7 +1406,7 @@ Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* to
 void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
                                          Account *acc);
 
-struct imap_info
+typedef struct imap_info
 {
     Account        *source_account;
     Account        *map_account;
@@ -1415,7 +1415,7 @@ struct imap_info
     char           *full_category;
     char           *match_string;
     char           *count;
-};
+}GncImapInfo;
 
 /** Returns a GList of structure imap_info of all Bayesian mappings for
  *  required Account

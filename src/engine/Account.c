@@ -5639,7 +5639,7 @@ gnc_account_imap_get_info_bayes (Account *acc)
 {
     GList *list = NULL;
 
-    struct imap_info imapInfo;
+    GncImapInfo imapInfo;
 
     imapInfo.source_account = acc;
     imapInfo.list = list;
@@ -5658,7 +5658,7 @@ gnc_account_imap_get_info (Account *acc, const char *category)
     GList *list = NULL;
     gchar *category_head = NULL;
 
-    struct imap_info imapInfo;
+    GncImapInfo imapInfo;
 
     imapInfo.source_account = acc;
     imapInfo.list = list;
@@ -5770,13 +5770,11 @@ look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar
 }
 
 static void
-change_imap_entry (Account *root, gpointer user_data)
+change_imap_entry (Account *root, GncImapInfo *imapInfo)
 {
     Account       *map_account = NULL;
     const gchar   *sep = gnc_get_account_separator_string ();
     gchar         *full_name;
-
-    struct imap_info *imapInfo = (struct imap_info*)user_data;
 
     PINFO("Category Head is '%s', Full Category is '%s'", imapInfo->category_head, imapInfo->full_category);
 
@@ -5870,7 +5868,7 @@ get_account_imap_info (Account *root, Account *acc)
 
         for (node = imap_list;  node; node = g_list_next (node))
         {
-            struct imap_info *imapInfo = node->data;
+            GncImapInfo *imapInfo = node->data;
 
             // Lets start doing stuff
             change_imap_entry (root, imapInfo);
