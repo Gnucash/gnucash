@@ -5829,7 +5829,7 @@ change_imap_entry (Account *root, gpointer user_data)
         // check for existing guid entry
         if (qof_instance_has_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path))
         {
-            int64_t  existing_count = 1;
+            int64_t  existing_count = 0;
 
             // get the count value
             qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), kvp_path, &value);
@@ -5837,9 +5837,7 @@ change_imap_entry (Account *root, gpointer user_data)
             if (G_VALUE_HOLDS_INT64 (&value))
                 existing_count = g_value_get_int64 (&value);
 
-            // if existing_count is greater, use that one
-            if (existing_count > count)
-                count = existing_count;
+            count = count + existing_count;
         }
         g_value_set_int64 (&value, count);
 
