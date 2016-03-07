@@ -40,6 +40,7 @@
 #include "gnc-lot.h"
 #include "gnc-pricedb.h"
 #include "qofinstance-p.h"
+#include "gnc-features.h"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -5922,7 +5923,11 @@ gnc_account_imap_convert_bayes (QofBook *book)
 
         // set the run-once value
         qof_instance_set_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_b);
-        qof_instance_set_dirty (QOF_INSTANCE (book));
+
+        /* Set a feature flag in the book for the change to use guid.
+         * This will prevent older GnuCash versions that don't support this feature
+         * from opening this file. */
+        gnc_features_set_used (book, GNC_FEATURE_CHANGE_BAYESIAN);
     }
 }
 
