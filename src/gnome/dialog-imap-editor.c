@@ -400,12 +400,10 @@ show_count_column (ImapDialog *imap_dialog, gboolean show)
 }
 
 static void
-add_to_store (GtkTreeModel *model, GtkTreeIter *iter, const gchar *text, gpointer user_data)
+add_to_store (GtkTreeModel *model, GtkTreeIter *iter, const gchar *text, GncImapInfo *imapInfo)
 {
     gchar       *fullname = NULL;
     gchar       *map_fullname = NULL;
-
-    struct imap_info *imapInfo = (struct imap_info*)user_data;
 
     fullname = gnc_account_get_full_name (imapInfo->source_account);
 
@@ -455,7 +453,7 @@ get_imap_info (Account *acc, const gchar *category, GtkTreeModel *model, const g
 
         for (node = imap_list;  node; node = g_list_next (node))
         {
-            struct imap_info *imapInfo = node->data;
+            GncImapInfo *imapInfo = node->data;
 
             // First add a child entry and pass iter to add_to_store
             gtk_tree_store_append (GTK_TREE_STORE(model), &child, &toplevel);
@@ -533,7 +531,7 @@ get_account_info_online (GList *accts, GtkTreeModel *model)
     GList       *ptr;
     GtkTreeIter  toplevel;
 
-    struct imap_info imapInfo;
+    GncImapInfo imapInfo;
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
