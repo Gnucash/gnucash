@@ -5726,32 +5726,43 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
 /*******************************************************************************/
 
 static gchar *
-look_for_old_separator (Account *root, gchar *full_name, const gchar *separator)
+look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar *separator)
 {
     GList *top_accounts, *ptr;
     gchar *converted_name = g_strdup (full_name);
+    gint   found_len = 0;
+    gchar  found_sep;
 
     top_accounts = gnc_account_get_descendants (root);
 
-    PINFO("Incoming full_name is '%s'", full_name);
+    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name, separator);
 
     /* Go through list of top level accounts */
     for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
     {
         const gchar *name = xaccAccountGetName (ptr->data);
 
+        // we are looking for the longest top level account that matches
         if (g_str_has_prefix (converted_name, name))
         {
-            const gchar old_sep = converted_name[strlen (name)];
+            gint name_len = strlen (name);
+            const gchar old_sep = converted_name[name_len];
 
             if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
-                converted_name = g_strdelimit (converted_name, &old_sep, *separator);
-
-            break;
+            {
+                if (name_len > found_len)
+                {
+                    found_sep = converted_name[name_len];
+                    found_len = name_len;
+                }
+            }
         }
     }
     g_list_free (top_accounts); // Free the List
     g_free (full_name);
+
+    if (found_len > 1)
+        converted_name = g_strdelimit (converted_name, &found_sep, *separator);
 
     PINFO("Return full_name is '%s'", converted_name);
 
@@ -5769,16 +5780,25 @@ change_imap_entry (Account *root, gpointer user_data)
 
     PINFO("Category Head is '%s', Full Category is '%s'", imapInfo->category_head, imapInfo->full_category);
 
+    // do we have a map_account all ready, implying a guid string
+    if (imapInfo->map_account != NULL)
+        return;
+
     full_name = g_strdup (imapInfo->full_category + strlen (imapInfo->category_head) + 1);
 
-    if (g_strstr_len (full_name, -1, sep) == NULL) // does full_name contain a different account separator
-        full_name = look_for_old_separator (root, full_name, sep);
-
-    PINFO("full name is '%s'", full_name);
-
+    // may be top level or match with existing separator
     map_account = gnc_account_lookup_by_full_name (root, full_name);
 
-    if (map_account != NULL)
+    // do we have a valid account, if not, look for old separator
+    if (map_account == NULL)
+    {
+        full_name = look_for_old_separator_descendants (root, full_name, sep);
+        map_account = gnc_account_lookup_by_full_name (root, full_name); // lets try again
+    }
+
+    PINFO("Full account name is '%s'", full_name);
+
+    if (map_account != NULL) // we have an account, try and convert
     {
         gchar   *guid_string;
         gchar   *kvp_path;
