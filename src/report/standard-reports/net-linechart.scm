@@ -408,39 +408,39 @@
             chart markers)
 
        ;; URLs for income/expense or asset/liabilities bars.
-       (if show-sep?
-           (let ((urls
-                  (list
-                   (gnc:make-report-anchor
-                    (if inc-exp?
-                        category-barchart-income-uuid
-                        category-barchart-asset-uuid)
-                    report-obj
-                    (list
-                     (list gnc:pagename-display
-                           "Use Stacked Lines" #t)
-                     (list gnc:pagename-general
-                           gnc:optname-reportname
-                           (if inc-exp?
-                               (_ "Income Chart")
-                               (_ "Asset Chart")))))
-                   (gnc:make-report-anchor
-                    (if inc-exp?
-                        category-barchart-expense-uuid
-                        category-barchart-liability-uuid)
-                    report-obj
-                    (list
-                     (list gnc:pagename-display
-                           "Use Stacked Lines" #t)
-                     (list gnc:pagename-general
-                           gnc:optname-reportname
-                           (if inc-exp?
-                               (_ "Expense Chart")
-                               (_ "Liability Chart"))))))))
-             (gnc:html-linechart-set-button-1-line-urls!
-              chart urls)
-             (gnc:html-linechart-set-button-1-legend-urls!
-              chart urls)))
+;;       (if show-sep?
+;;           (let ((urls
+;;                  (list
+;;                   (gnc:make-report-anchor
+;;                    (if inc-exp?
+;;                        category-barchart-income-uuid
+;;                        category-barchart-asset-uuid)
+;;                    report-obj
+;;                    (list
+;;                     (list gnc:pagename-display
+;;                           "Use Stacked Lines" #t)
+;;                     (list gnc:pagename-general
+;;                           gnc:optname-reportname
+;;                           (if inc-exp?
+;;                               (_ "Income Chart")
+;;                               (_ "Asset Chart")))))
+;;                   (gnc:make-report-anchor
+;;                    (if inc-exp?
+;;                        category-barchart-expense-uuid
+;;                        category-barchart-liability-uuid)
+;;                    report-obj
+;;                    (list
+;;                     (list gnc:pagename-display
+;;                           "Use Stacked Lines" #t)
+;;                     (list gnc:pagename-general
+;;                           gnc:optname-reportname
+;;                           (if inc-exp?
+;;                               (_ "Expense Chart")
+;;                               (_ "Liability Chart"))))))))
+;;             (gnc:html-linechart-set-button-1-line-urls!
+;;              chart urls)
+;;             (gnc:html-linechart-set-button-1-legend-urls!
+;;              chart urls)))
 
        ;; Test for all-zero data here.
        (if non-zeros

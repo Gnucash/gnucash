@@ -62,9 +62,32 @@
   (record-constructor <html-linechart>))
 
 (define (gnc:make-html-linechart)
-  (gnc:make-html-linechart-internal -1 -1 #f #f #f #f '() '() '()
-                                    #f #f #f #f #f #f '()
-                                    #f #f #f #f #f #f -1 ))
+  (gnc:make-html-linechart-internal
+    -1   ;;width
+    -1   ;;height
+    #f   ;;title
+    #f   ;;subtitle
+    #f   ;;x-axis-label
+    #f   ;;y-axis-label
+    '()  ;;col-labels
+    '()  ;;row-labels
+    '()  ;;col-colors
+    #f   ;;legend-reversed?
+    #f   ;;row-labels-rotated?
+    #f   ;;stacked?
+    #t   ;;markers?
+    #t   ;;major-grid?
+    #t   ;;minor-grid?
+    '()  ;;data
+    #f   ;;button-1-line-urls
+    #f   ;;button-2-line-urls
+    #f   ;;button-3-line-urls
+    #f   ;;button-1-legend-urls
+    #f   ;;button-2-legend-urls
+    #f   ;;button-3-legend-urls
+    1.5  ;;line-width
+  )
+)
 
 (define gnc:html-linechart-data
   (record-accessor <html-linechart> 'data))
@@ -373,12 +396,12 @@
                          (push "var d")
                          (push series-index)
                          (push " = [];\n")))
-         (series-data-add (lambda (series-index x y)
+         (series-data-add (lambda (series-index date y)
                          (push (string-append
                                "  d"
                                (number->string series-index)
                                ".push(["
-                               (number->string x)
+                               "\"" date "\""
                                ", "
                                (number->string y)
                                "]);\n"))))
@@ -398,6 +421,8 @@
         (begin
             (push (gnc:html-js-include "jqplot/jquery.min.js"))
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
@@ -416,20 +441,24 @@
             (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
-                (let loop ((col 0) (rowcnt 1))
+                (let loop ((col 0) (rowcnt 0))
                   (series-data-start col)
                   (if (list? (car data))
                       (begin 
                         (set! cols (length (car data)))))    
                   (for-each
                     (lambda (row)
-                      (series-data-add col rowcnt
-                                       (ensure-numeric (list-ref-safe row col)))
+                      (if (< rowcnt rows)
+                        (series-data-add col
+                          (list-ref (gnc:html-linechart-row-labels linechart) rowcnt)
+                          (ensure-numeric (list-ref-safe row col))
+                        )
+                      )
                       (set! rowcnt (+ rowcnt 1)))
                     data)
                   (series-data-end col (list-ref-safe (gnc:html-linechart-col-labels linechart) col))
                   (if (< col (- cols 1))
-                      (loop (+ 1 col) 1)))))
+                      (loop (+ 1 col) 0)))))
 
 
             (push "var options = {
@@ -441,7 +470,7 @@
                         lineWidth: ")
             (push (ensure-numeric line-width))
             (push ",
-                        showMarker: false,
+                        showMarker: true,
                    },
                    series: series,
                    axesDefaults: {
@@ -450,6 +479,7 @@
                    },
                    axes: {
                        xaxis: {
+                           renderer:$.jqplot.DateAxisRenderer,
                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                            tickOptions: {
                                angle: -30,
@@ -460,9 +490,9 @@
                            autoscale: true,
                        },
                    },
-                   highlighter: {
-                       tooltipContentEditor: formatTooltip,
-                       tooltipLocation: 'ne',
+                   cursor: {
+                       show: true,
+                       zoom: true
                    }
                 };\n")
 
@@ -508,19 +538,20 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
-            (if (and (string? row-labels) (> (string-length row-labels) 0))
-              (begin
-                (let ((tick-count 1))
-                  (push "  options.axes.xaxis.ticks = [")
-                  (for-each 
-                    (lambda (val)
-                            (push "[")(push tick-count)
-                            (push ",\"")(push val)
-                            (push "\"],")
-                            (set! tick-count (+ tick-count 1)))
-                    (gnc:html-linechart-row-labels linechart))
-                (push "];\n"))))
 
+            ;; adjust the date string format to the one given by the preferences
+            (push "  options.axes.xaxis.tickOptions.formatString = '")
+            (let ( ;; get the date string for the 2nd January in year 1970
+                   (date-string (gnc-print-date (cons 86400 0)))
+                 )
+              (cond
+                ((string=? date-string "1970-01-02") (push "%F"))
+                ((string=? date-string "01/02/1970") (push "%v")) ;; US format is not supported by the DateAxisRenderer
+                ((string=? date-string "02/01/1970") (push "%d/%m/%Y"))
+                ((string=? date-string "02.01.1970") (push "%d.%m.%Y"))
+              )
+            )
+            (push "';\n")
 
             (push "$.jqplot.config.enablePlugins = true;")
             (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
