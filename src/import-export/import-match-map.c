@@ -447,14 +447,31 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
     /* has this probability met our threshold? */
     if (account_i.probability >= threshold)
     {
-        PINFO("found match");
-        LEAVE(" ");
-        return gnc_account_lookup_by_full_name(gnc_book_get_root_account(imap->book),
-                                               account_i.account_name);
-    }
+        Account *account = NULL;
+        PINFO("Probability has met threshold");
 
-    PINFO("no match");
-    LEAVE(" ");
+        account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(imap->book),
+                                               account_i.account_name);
+
+        if (account == NULL) // Possibly we have a Guid or account not found
+        {
+            GncGUID *guid = g_new (GncGUID, 1);
+
+            if (string_to_guid (account_i.account_name, guid))
+                account = xaccAccountLookup (guid, imap->book);
+
+            g_free (guid);
+        }
+
+        if (account != NULL)
+            LEAVE("Return account is '%s'", xaccAccountGetName (account));
+        else
+            LEAVE("Return NULL, account for string '%s' can not be found", account_i.account_name);
+
+        return account;
+    }
+    PINFO("Probability has not met threshold");
+    LEAVE("Return NULL");
 
     return NULL; /* we didn't meet our threshold, return NULL for an account */
 }
@@ -468,6 +485,8 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
     gint64 token_count;
     char* account_fullname;
     kvp_value *new_value; /* the value that will be added back into the kvp tree */
+    const gchar *guid_string;
+    gboolean use_fullname = TRUE;
 
     ENTER(" ");
 
@@ -483,6 +502,8 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
     xaccAccountBeginEdit (imap->acc);
 
     PINFO("account name: '%s'\n", account_fullname);
+
+    guid_string = guid_to_string (xaccAccountGetGUID (acc));
 
     /* process each token in the list */
     for (current_token = g_list_first(tokens); current_token;
@@ -500,10 +521,19 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
 
         PINFO("adding token '%s'\n", (char*)current_token->data);
 
-        /* is this token/account_name already in the kvp tree? */
+        /* is this token/account_name already in the kvp tree under fullname? */
         value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
                                         (char*)current_token->data, account_fullname,
                                         NULL);
+
+        if (!value) // we have not found entry under the fullname, maybe guid
+        {
+            value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
+                                            (char*)current_token->data, guid_string,
+                                            NULL);
+            if (value)
+                use_fullname = FALSE;
+        }
 
         /* if the token/account is already in the tree, read the current
          * value from the tree and use this for the basis of the value we
@@ -525,10 +555,23 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
         new_value = kvp_value_new_gint64(token_count);
 
         /* insert the value into the kvp tree at
-         * /imap->frame/IMAP_FRAME/token_string/account_name_string
+         * /imap->frame/IMAP_FRAME/token_string/account_fullname or guid
          */
-        kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
-                                (char*)current_token->data, account_fullname, NULL);
+        if (use_fullname == TRUE)
+        {
+            KvpFrame  *book_frame = qof_book_get_slots (imap->book);
+            const gchar *book_path = "changed-bayesian-to-guid";
+
+            kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
+                                    (char*)current_token->data, account_fullname, NULL);
+
+            /* Reset the run once kvp flag for versions 2.7.0 and later */
+            if (kvp_frame_get_string(book_frame, book_path) != NULL)
+                kvp_frame_set_string(book_frame, book_path, "false");
+        }
+        else
+            kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
+                                    (char*)current_token->data, guid_string, NULL);
         /* kvp_frame_set_slot_path() copied the value so we
          * need to delete this one ;-) */
         kvp_value_delete(new_value);
