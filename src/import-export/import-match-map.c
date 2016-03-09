@@ -558,8 +558,17 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
          * /imap->frame/IMAP_FRAME/token_string/account_fullname or guid
          */
         if (use_fullname == TRUE)
+        {
+            KvpFrame  *book_frame = qof_book_get_slots (imap->book);
+            const gchar *book_path = "changed-bayesian-to-guid";
+
             kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
                                     (char*)current_token->data, account_fullname, NULL);
+
+            /* Reset the run once kvp flag for versions 2.7.0 and later */
+            if (kvp_frame_get_string(book_frame, book_path) != NULL)
+                kvp_frame_set_string(book_frame, book_path, "false");
+        }
         else
             kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
                                     (char*)current_token->data, guid_string, NULL);
