@@ -40,6 +40,7 @@
 #include "gnc-lot.h"
 #include "gnc-pricedb.h"
 #include "qofinstance-p.h"
+#include "gnc-features.h"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -5137,8 +5138,8 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
 
 struct account_token_count
 {
-    char* account_name;
-    gint64 token_count; /**< occurances of a given token for this account_name */
+    char* account_guid;
+    gint64 token_count; /**< occurances of a given token for this account_guid */
 };
 
 /** total_count and the token_count for a given account let us calculate the
@@ -5159,7 +5160,7 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
     struct account_token_count* this_account;
 
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'\n", (char*)key,
+    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'", (char*)key,
     //                  g_value_get_int64(value));
 
     /* add the count to the total_count */
@@ -5169,8 +5170,8 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     this_account = (struct account_token_count*)
                    g_new0(struct account_token_count, 1);
 
-    /* fill in the account name and number of tokens found for this account name */
-    this_account->account_name = (char*)key;
+    /* fill in the account guid and number of tokens found for this account guid */
+    this_account->account_guid = (char*)key;
     this_account->token_count = g_value_get_int64(value);
 
     /* append onto the glist a pointer to the new account_token_count structure */
@@ -5207,7 +5208,7 @@ buildProbabilities(gpointer key, gpointer value, gpointer data)
          (account_p->product + account_p->product_difference))
         * PROBABILITY_FACTOR;
 
-    PINFO("P('%s') = '%d'\n", (char*)key, probability);
+    PINFO("P('%s') = '%d'", (char*)key, probability);
 
     g_hash_table_insert(final_probabilities, key, GINT_TO_POINTER(probability));
 }
@@ -5222,19 +5223,19 @@ freeProbabilities(gpointer key, gpointer value, gpointer data)
     g_free(value);
 }
 
-/** holds an account name and its corresponding integer probability
+/** holds an account guid and its corresponding integer probability
   the integer probability is some factor of 10
  */
 struct account_info
 {
-    char* account_name;
+    char* account_guid;
     gint32 probability;
 };
 
-/** Find the highest probability and the corresponding account name
+/** Find the highest probability and the corresponding account guid
     store in data, a (struct account_info*)
     NOTE: this is a g_hash_table_foreach() function for a hash table of entries
-    key is a  pointer to the account name, value is a gint32, 100000x
+    key is a  pointer to the account guid, value is a gint32, 100000x
     the probability for this account
 */
 static void
@@ -5245,9 +5246,9 @@ highestProbability(gpointer key, gpointer value, gpointer data)
     /* if the current probability is greater than the stored, store the current */
     if (GPOINTER_TO_INT(value) > account_i->probability)
     {
-        /* Save the new highest probability and the assoaciated account name */
+        /* Save the new highest probability and the assoaciated account guid */
         account_i->probability = GPOINTER_TO_INT(value);
-        account_i->account_name = key;
+        account_i->account_guid = key;
     }
 }
 
@@ -5295,7 +5296,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     {
         char* path = g_strdup_printf (IMAP_FRAME_BAYES "/%s",
                                             (char*)current_token->data);
-   /* zero out the token_accounts_info structure */
+        /* zero out the token_accounts_info structure */
         memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
 
         PINFO("token: '%s'", (char*)current_token->data);
@@ -5317,14 +5318,14 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
             /* get the account name and corresponding token count */
             account_c = (struct account_token_count*)current_account_token->data;
 
-            PINFO("account_c->account_name('%s'), "
+            PINFO("account_c->account_guid('%s'), "
                   "account_c->token_count('%" G_GINT64_FORMAT
                   "')/total_count('%" G_GINT64_FORMAT "')",
-                  account_c->account_name, account_c->token_count,
+                  account_c->account_guid, account_c->token_count,
                   tokenInfo.total_count);
 
             account_p = g_hash_table_lookup(running_probabilities,
-                                            account_c->account_name);
+                                            account_c->account_guid);
 
             /* if the account exists in the list then continue
              * the running probablities
@@ -5358,10 +5359,10 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
                 PINFO("product == %f, product_difference == %f",
                       account_p->product, account_p->product_difference);
 
-                /* add the account name and (struct account_probability*)
+                /* add the account guid and (struct account_probability*)
                  * to the hash table */
                 g_hash_table_insert(running_probabilities,
-                                    account_c->account_name, account_p);
+                                    account_c->account_guid, account_p);
             }
         } /* for all accounts in tokenInfo */
 
@@ -5394,22 +5395,74 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     g_hash_table_destroy(final_probabilities);
 
     PINFO("highest P('%s') = '%d'",
-          account_i.account_name ? account_i.account_name : "(null)",
+          account_i.account_guid ? account_i.account_guid : "(null)",
           account_i.probability);
 
     /* has this probability met our threshold? */
     if (account_i.probability >= threshold)
     {
-        PINFO("found match");
-        LEAVE(" ");
-        return gnc_account_lookup_by_full_name(gnc_book_get_root_account(imap->book),
-                                               account_i.account_name);
-    }
+        GncGUID *guid;
+        Account *account = NULL;
 
-    PINFO("no match");
-    LEAVE(" ");
+        PINFO("Probability has met threshold");
+
+        guid = g_new (GncGUID, 1);
+
+        if (string_to_guid (account_i.account_guid, guid))
+            account = xaccAccountLookup (guid, imap->book);
+
+        g_free (guid);
+
+        if (account != NULL)
+            LEAVE("Return account is '%s'", xaccAccountGetName (account));
+        else
+            LEAVE("Return NULL, account for Guid '%s' can not be found", account_i.account_guid);
+
+        return account;
+    }
+    PINFO("Probability has not met threshold");
+    LEAVE("Return NULL");
 
     return NULL; /* we didn't meet our threshold, return NULL for an account */
+}
+
+
+static void
+change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count)
+{
+    GValue value = G_VALUE_INIT;
+
+    PINFO("Source Account is '%s', kvp_path is '%s', Count is '%" G_GINT64_FORMAT "'",
+           xaccAccountGetName (imap->acc), kvp_path, token_count);
+
+    // check for existing guid entry
+    if (qof_instance_has_slot (QOF_INSTANCE(imap->acc), kvp_path))
+    {
+        int64_t  existing_token_count = 0;
+
+        // get the existing_token_count value
+        qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
+
+        if (G_VALUE_HOLDS_INT64 (&value))
+            existing_token_count = g_value_get_int64 (&value);
+
+        PINFO("found existing value of '%" G_GINT64_FORMAT "'", existing_token_count);
+
+        token_count = token_count + existing_token_count;
+    }
+
+    if (!G_IS_VALUE (&value))
+        g_value_init (&value, G_TYPE_INT64);
+
+    g_value_set_int64 (&value, token_count);
+
+    // Add or Update the entry based on guid
+    qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
+
+    /* Set a feature flag in the book for the change to use guid.
+     * This will prevent older GnuCash versions that don't support this feature
+     * from opening this file. */
+    gnc_features_set_used (imap->book, GNC_FEATURE_CHANGE_BAYESIAN);
 }
 
 
@@ -5422,6 +5475,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     GList *current_token;
     gint64 token_count;
     char *account_fullname, *kvp_path;
+    char *guid_string;
 
     ENTER(" ");
     if (!imap)
@@ -5434,7 +5488,9 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     account_fullname = gnc_account_get_full_name(acc);
     xaccAccountBeginEdit (imap->acc);
 
-    PINFO("account name: '%s'\n", account_fullname);
+    PINFO("account name: '%s'", account_fullname);
+
+    guid_string = guid_to_string (xaccAccountGetGUID (acc));
 
     /* process each token in the list */
     for (current_token = g_list_first(tokens); current_token;
@@ -5448,39 +5504,26 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         if (!current_token->data || (*((char*)current_token->data) == '\0'))
             continue;
 
-        /* start off with no tokens for this account */
-        token_count = 0;
+        /* start off with one token for this account */
+        token_count = 1;
 
-        PINFO("adding token '%s'\n", (char*)current_token->data);
+        PINFO("adding token '%s'", (char*)current_token->data);
 
         kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s/%s",
                                     (char*)current_token->data,
-                                    account_fullname);
+                                    guid_string);
 
-        qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
-        /* if the token/account is already in the tree, read the current
-         * value from the tree and use this for the basis of the value we
-         * are putting back
-         */
-        if (G_VALUE_HOLDS_INT64 (&value))
-        {
-            int64_t count = g_value_get_int64 (&value);
-            PINFO("found existing value of '%" G_GINT64_FORMAT "'\n", count);
+        /* change the imap entry for the account */
+        change_imap_entry (imap, kvp_path, token_count);
 
-            token_count += count;
-        }
-        token_count++;
-        if (!G_IS_VALUE (&value))
-            g_value_init (&value, G_TYPE_INT64);
-        g_value_set_int64 (&value, token_count);
-        qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
         g_free (kvp_path);
     }
 
-    /* free up the account fullname string */
+    /* free up the account fullname and guid string */
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
-    g_free(account_fullname);
+    g_free (account_fullname);
+    g_free (guid_string);
 
     LEAVE(" ");
 }
@@ -5491,7 +5534,8 @@ static void
 build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 {
     QofBook     *book;
-    Account     *root;
+    Account     *map_account = NULL;
+    GncGUID     *guid;
     gchar       *kvp_path;
     gchar       *count;
 
@@ -5501,21 +5545,32 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
 
     // Get the book
     book = qof_instance_get_book (imapInfo->source_account);
-    root = gnc_book_get_root_account (book);
 
-    PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
+    if (G_VALUE_HOLDS_INT64 (value))
+    {
+        PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
                                   (char*)key, g_value_get_int64(value));
 
-    count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
+        count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
+    }
+    else
+        count = g_strdup ("0");
 
     kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
 
     PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
 
+    guid = g_new (GncGUID, 1);
+
+    if (string_to_guid (key, guid))
+        map_account = xaccAccountLookup (guid, book);
+
+    g_free (guid);
+
     imapInfo_node = g_malloc(sizeof(*imapInfo_node));
 
     imapInfo_node->source_account = imapInfo->source_account;
-    imapInfo_node->map_account    = gnc_account_lookup_by_full_name (root, key);
+    imapInfo_node->map_account    = map_account;
     imapInfo_node->full_category  = g_strdup (kvp_path);
     imapInfo_node->match_string   = g_strdup (imapInfo->match_string);
     imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
@@ -5610,7 +5665,7 @@ gnc_account_imap_get_info_bayes (Account *acc)
 {
     GList *list = NULL;
 
-    struct imap_info imapInfo;
+    GncImapInfo imapInfo;
 
     imapInfo.source_account = acc;
     imapInfo.list = list;
@@ -5629,7 +5684,7 @@ gnc_account_imap_get_info (Account *acc, const char *category)
     GList *list = NULL;
     gchar *category_head = NULL;
 
-    struct imap_info imapInfo;
+    GncImapInfo imapInfo;
 
     imapInfo.source_account = acc;
     imapInfo.list = list;
@@ -5692,6 +5747,204 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
     }
     g_free (kvp_path);
     g_free (full_category);
+}
+
+/*******************************************************************************/
+
+static gchar *
+look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar *separator)
+{
+    GList *top_accounts, *ptr;
+    gchar *converted_name = g_strdup (full_name);
+    gint   found_len = 0;
+    gchar  found_sep;
+
+    top_accounts = gnc_account_get_descendants (root);
+
+    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name, separator);
+
+    /* Go through list of top level accounts */
+    for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
+    {
+        const gchar *name = xaccAccountGetName (ptr->data);
+
+        // we are looking for the longest top level account that matches
+        if (g_str_has_prefix (converted_name, name))
+        {
+            gint name_len = strlen (name);
+            const gchar old_sep = converted_name[name_len];
+
+            if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
+            {
+                if (name_len > found_len)
+                {
+                    found_sep = converted_name[name_len];
+                    found_len = name_len;
+                }
+            }
+        }
+    }
+    g_list_free (top_accounts); // Free the List
+    g_free (full_name);
+
+    if (found_len > 1)
+        converted_name = g_strdelimit (converted_name, &found_sep, *separator);
+
+    PINFO("Return full_name is '%s'", converted_name);
+
+    return converted_name;
+}
+
+
+static void
+update_imap_entry (Account *map_account, GncImapInfo *imapInfo)
+{
+    GncImportMatchMap *imap;
+    gchar   *guid_string;
+    gchar   *kvp_path;
+    int64_t  token_count = 1;
+
+    GValue value = G_VALUE_INIT;
+
+    // Create an ImportMatchMap object
+    imap = gnc_account_imap_create_imap (imapInfo->source_account);
+
+    xaccAccountBeginEdit (imapInfo->source_account);
+
+    guid_string = guid_to_string (xaccAccountGetGUID (map_account));
+
+    PINFO("Map Account is '%s', GUID is '%s', Count is %s", xaccAccountGetName (map_account),
+               guid_string, imapInfo->count);
+
+    // save converting string, get the count value
+    qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), imapInfo->full_category, &value);
+
+    if (G_VALUE_HOLDS_INT64 (&value))
+        token_count = g_value_get_int64 (&value);
+
+    // Delete the old entry based on full account name
+    kvp_path = g_strdup (imapInfo->full_category);
+    gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
+
+    // create path based on guid
+    kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
+
+    // change the imap entry of source_account
+    change_imap_entry (imap, kvp_path, token_count);
+
+    qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
+    xaccAccountCommitEdit (imapInfo->source_account);
+
+    g_free (kvp_path);
+    g_free (guid_string);
+}
+
+
+static void
+convert_imap_entry (Account *root, GncImapInfo *imapInfo)
+{
+    Account       *map_account = NULL;
+    const gchar   *sep = gnc_get_account_separator_string ();
+    gchar         *full_name;
+
+    PINFO("Category Head is '%s', Full Category is '%s'", imapInfo->category_head, imapInfo->full_category);
+
+    // do we have a map_account all ready, implying a guid string
+    if (imapInfo->map_account != NULL)
+        return;
+
+    full_name = g_strdup (imapInfo->full_category + strlen (imapInfo->category_head) + 1);
+
+    // may be top level or match with existing separator
+    map_account = gnc_account_lookup_by_full_name (root, full_name);
+
+    // do we have a valid account, if not, look for old separator
+    if (map_account == NULL)
+    {
+        full_name = look_for_old_separator_descendants (root, full_name, sep);
+        map_account = gnc_account_lookup_by_full_name (root, full_name); // lets try again
+    }
+
+    PINFO("Full account name is '%s'", full_name);
+
+    if (map_account != NULL) // we have an account, try and update it
+        update_imap_entry (map_account, imapInfo);
+
+    g_free (full_name);
+}
+
+static void
+get_account_imap_info (Account *root, Account *acc)
+{
+    GList *imap_list, *node;
+    gchar *acc_name = NULL;
+
+    acc_name = gnc_account_get_full_name (acc);
+    PINFO("Source Acc '%s'", acc_name);
+
+    imap_list = gnc_account_imap_get_info_bayes (acc);
+
+    if (g_list_length (imap_list) > 0) // we have mappings
+    {
+        PINFO("List length is %d", g_list_length (imap_list));
+
+        for (node = imap_list;  node; node = g_list_next (node))
+        {
+            GncImapInfo *imapInfo = node->data;
+
+            // Lets start doing stuff
+            convert_imap_entry (root, imapInfo);
+
+            // Free the members and structure
+            g_free (imapInfo->category_head);
+            g_free (imapInfo->full_category);
+            g_free (imapInfo->match_string);
+            g_free (imapInfo->count);
+            g_free (imapInfo);
+        }
+    }
+    g_free (acc_name);
+    g_list_free (imap_list); // Free the List
+}
+
+void
+gnc_account_imap_convert_bayes (QofBook *book)
+{
+    Account      *root;
+    GList        *accts, *ptr;
+    gboolean      run_once = FALSE;
+    GValue        value_s = G_VALUE_INIT;
+
+    // get the run-once value
+    qof_instance_get_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_s);
+
+    if (G_VALUE_HOLDS_STRING (&value_s) && (strcmp(g_value_get_string (&value_s), "true") == 0))
+        run_once = TRUE;
+
+    if (run_once == FALSE)
+    {
+        GValue value_b = G_VALUE_INIT;
+
+        /* Get list of Accounts */
+        root = gnc_book_get_root_account (book);
+        accts = gnc_account_get_descendants_sorted (root);
+
+        /* Go through list of accounts */
+        for (ptr = accts; ptr; ptr = g_list_next (ptr))
+        {
+            Account *acc = ptr->data;
+
+            get_account_imap_info (root, acc);
+        }
+        g_list_free (accts);
+
+        g_value_init (&value_b, G_TYPE_BOOLEAN);
+
+        g_value_set_boolean (&value_b, TRUE);
+
+        // set the run-once value
+        qof_instance_set_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_b);
+    }
 }
 
 
