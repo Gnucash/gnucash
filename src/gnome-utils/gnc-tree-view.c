@@ -1059,6 +1059,7 @@ gnc_tree_view_set_state_section (GncTreeView *view,
                 g_free (column_name);
             }
         }
+        g_strfreev(keys);
     }
 
     /* Rebuild the column visibility menu */

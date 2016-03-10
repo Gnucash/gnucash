@@ -2697,7 +2697,7 @@ set_gncEntry_date(gpointer data, gpointer user_data)
 
 InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open_properties, const GDate *new_date)
 {
-    InvoiceWindow *iw;
+    InvoiceWindow *iw = NULL;
     GncInvoice *new_invoice = NULL;
     GDate new_date_gdate;
 
@@ -2748,10 +2748,14 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
     }
     else
     {
-        // Open the newly created invoice in the "edit" window
+         // Open the newly created invoice in the "edit" window
         iw = gnc_ui_invoice_edit (new_invoice);
+        // Check the ID; set one if necessary
+        if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (iw->id_entry)), "") == 0)
+        {
+            gncInvoiceSetID (new_invoice, gncInvoiceNextID(iw->book, &(iw->owner)));
+        }
     }
-
     return iw;
 }
 

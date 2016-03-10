@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-05 05:25+0100\n"
-"PO-Revision-Date: 2016-01-07 06:37+0000\n"
+"PO-Revision-Date: 2016-02-18 05:13+0000\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -317,7 +317,7 @@ msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
 msgstr ""
-"Marque para ter contas de comércio usadas para transações envolvendo mais de "
+"Marque para ter contas de bolsa usadas para transações envolvendo mais de "
 "uma mercadoria ou moeda."
 
 #: ../src/app-utils/business-prefs.scm:139
@@ -644,7 +644,7 @@ msgstr "Falta de pilha"
 
 #: ../src/app-utils/gnc-exp-parser.c:626
 msgid "Undefined character"
-msgstr "Caráter indefinido"
+msgstr "Carácter indefinido"
 
 #: ../src/app-utils/gnc-exp-parser.c:628
 msgid "Not a variable"
@@ -673,11 +673,11 @@ msgstr "Erro numérico"
 #. * identification (e.g., Form 1040, Schedule A).
 #: ../src/app-utils/gnc-ui-util.c:339
 msgid "Tax-related but has no tax code"
-msgstr "Relativo a impostos mas sem código de imposto"
+msgstr "Sujeita a impostos mas sem código de imposto"
 
 #: ../src/app-utils/gnc-ui-util.c:353
 msgid "Tax entity type not specified"
-msgstr "Entidade de imposto não especificada"
+msgstr "Campo de imposto não especificado"
 
 #: ../src/app-utils/gnc-ui-util.c:430
 #, c-format
@@ -688,8 +688,8 @@ msgstr "Tipo de imposto %s: código inválido %s para o tipo de conta"
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
 msgstr ""
-"Não relativo a imposto; tipo de imposto %s: código inválido %s para o tipo "
-"de conta"
+"Não sujeita a imposto; tipo de imposto %s: código inválido %s para o tipo de "
+"conta"
 
 #: ../src/app-utils/gnc-ui-util.c:447
 #, c-format
@@ -699,7 +699,7 @@ msgstr "Código %s inválido para o tipo de imposto %s"
 #: ../src/app-utils/gnc-ui-util.c:451
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
-msgstr "Não relativo a imposto; código inválido %s para o tipo de imposto %s"
+msgstr "Não sujeita a imposto; código inválido %s para o tipo de imposto %s"
 
 #: ../src/app-utils/gnc-ui-util.c:469
 #, c-format
@@ -709,7 +709,7 @@ msgstr "Sem formulário: código %s, tipo de imposto %s"
 #: ../src/app-utils/gnc-ui-util.c:473
 #, c-format
 msgid "Not tax-related; no form: code %s, tax type %s"
-msgstr "Não relativo a imposto; sem formulário: código %s, tipo de imposto %s"
+msgstr "Não sujeita a imposto; sem formulário: código %s, tipo de imposto %s"
 
 #: ../src/app-utils/gnc-ui-util.c:490 ../src/app-utils/gnc-ui-util.c:505
 #, c-format
@@ -720,18 +720,18 @@ msgstr "Sem descrição: formulário %s, código %s, tipo de imposto %s"
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
 msgstr ""
-"Não relativo a imposto; sem descrição: formulário %s, código %s, tipo de "
+"Não sujeita a imposto; sem descrição: formulário %s, código %s, tipo de "
 "imposto %s"
 
 #: ../src/app-utils/gnc-ui-util.c:532
 #, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
-msgstr "Não relativo a imposto; %s%s: %s (código %s, tipo de imposto %s)"
+msgstr "Não sujeita a imposto; %s%s: %s (código %s, tipo de imposto %s)"
 
 #: ../src/app-utils/gnc-ui-util.c:579
 #, c-format
 msgid "(Tax-related subaccounts: %d)"
-msgstr "(Sub-contas relativas a imposto: %d)"
+msgstr "(Sub-contas sujeitas a imposto: %d)"
 
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
@@ -800,7 +800,7 @@ msgstr "Saldo inicial"
 #: ../src/report/standard-reports/transaction.scm:461
 #: ../src/report/standard-reports/trial-balance.scm:658
 msgid "Debit"
-msgstr "Crédito"
+msgstr "Débito"
 
 #: ../src/app-utils/guile-util.c:937
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:9
@@ -820,7 +820,7 @@ msgstr "Crédito"
 #: ../src/report/standard-reports/transaction.scm:463
 #: ../src/report/standard-reports/trial-balance.scm:661
 msgid "Credit"
-msgstr "Débito"
+msgstr "Crédito"
 
 #: ../src/app-utils/option-util.c:1685
 #, c-format
@@ -941,7 +941,7 @@ msgstr "Compra"
 #: ../src/register/ledger-core/split-register.c:2475
 #: ../src/report/standard-reports/register.scm:851
 msgid "Charge"
-msgstr "Pagamento"
+msgstr "A crédito"
 
 #: ../src/app-utils/prefs.scm:73 ../src/engine/Account.c:3950
 #: ../src/engine/gncInvoice.c:973
@@ -3138,8 +3138,8 @@ msgid ""
 "If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
 msgstr ""
-"Se ativo, cada nova fatura será aberta na sua própria janela de nível de "
-"topo. Senão, a fatura será aberta na janela atual."
+"Se ativo, cada nova fatura será aberta na sua própria janela de topo. Senão, "
+"a fatura será aberta na janela atual."
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:20
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:59
@@ -4455,7 +4455,7 @@ msgstr "Raiz"
 #: ../src/engine/Scrub.c:466
 #: ../src/report/standard-reports/income-statement.scm:621
 msgid "Trading"
-msgstr "Comércio"
+msgstr "Bolsa"
 
 #: ../src/engine/cap-gains.c:236
 msgid "Orphaned Gains"
@@ -4471,8 +4471,8 @@ msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
 msgstr ""
-"Ganhos ou perdas realizados em contas de mercadorias ou comércio que não "
-"foram registados em mais lado nenhum."
+"Ganhos ou perdas realizados em contas de mercadorias ou bolsa que não foram "
+"registados em mais lado nenhum."
 
 #: ../src/engine/gnc-budget.c:93 ../src/gnome/gnc-plugin-page-budget.c:838
 msgid "Unnamed Budget"
@@ -4610,7 +4610,7 @@ msgstr "Anualmente"
 #. Reason 2: zero Orphan a/c
 #: ../src/engine/Scrub.c:89 ../src/report/business-reports/balsheet-eg.scm:511
 msgid "Orphan"
-msgstr "Orfão"
+msgstr "Orfã"
 
 #. (> (accrec-depth accrec) 1))
 #. Reason 1: zero Imbalance a/c
@@ -5115,7 +5115,7 @@ msgstr "Eliminar preços?"
 
 #: ../src/gnome/dialog-price-editor.c:213
 msgid "You must select a Security."
-msgstr "Tem de escolher uma garantia."
+msgstr "Tem de escolher uma mercadoria."
 
 #: ../src/gnome/dialog-price-editor.c:218
 msgid "You must select a Currency."
@@ -5366,7 +5366,7 @@ msgstr "Criado"
 #: ../src/gnome/dialog-sx-since-last-run.c:455
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:89
 msgid "Never"
-msgstr "Sem término"
+msgstr "Nunca"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:525
 msgid "(Need Value)"
@@ -5612,7 +5612,7 @@ msgstr "Veja e edite as cotações de ações e outros títulos"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:193
 msgid "_Security Editor"
-msgstr "Editor de _garantias"
+msgstr "Editor de mercadoria_s"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:194
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -8027,7 +8027,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
 msgid "Only display leaf account names."
-msgstr "Mostrar só nomes de conta de folha."
+msgstr "Mostrar só nomes de conta \"folha\"."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:92
 msgid ""
@@ -8036,10 +8036,10 @@ msgid ""
 "including the path in the account tree. Activating this option implies that "
 "you use unique leaf names."
 msgstr ""
-"Mostrar só os nomes de conta de folha no diário e no balão de seleção de "
+"Mostrar só os nomes de conta \"folha\" no diário e no balão de seleção de "
 "conta. O comportamento predefinido é mostrar o nome completo, incluindo o "
 "caminho na árvore de contas. Ativar esta opção implica usar unicamente nomes "
-"de folha."
+"de \"folha\"."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:93
 msgid "Show the entered and reconcile dates"
@@ -8528,7 +8528,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:30
 msgid "Finish Account Setup"
-msgstr "Terminar configuração de conta"
+msgstr "Terminar configuração de contas"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:1
 msgid ""
@@ -9027,11 +9027,11 @@ msgstr "total"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:15
 msgid "Discrete"
-msgstr "Discreto"
+msgstr "Discreta"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:16
 msgid "Continuous"
-msgstr "Contínuo"
+msgstr "Contínua"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:18
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:51
@@ -9248,7 +9248,7 @@ msgstr "Espaço de _nome:"
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:9
 #: ../src/gnome-utils/dialog-commodity.c:289
 msgid "_Security:"
-msgstr "_Garantia:"
+msgstr "_Mercadoria:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:10
 #: ../src/gnome-utils/dialog-commodity.c:294
@@ -9266,7 +9266,7 @@ msgstr "_Preço:"
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:14
 #: ../src/report/standard-reports/price-scatter.scm:96
 msgid "Price Database"
-msgstr "Base de dados de preço"
+msgstr "Base de dados de cotações"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
 msgid "Add a new price."
@@ -9306,11 +9306,11 @@ msgstr "Venda"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:25
 msgid "Last"
-msgstr "Último"
+msgstr "Última"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:26
 msgid "Net Asset Value"
-msgstr "Valor ativo líquido"
+msgstr "Valor líquido do ativo"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:28
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:26
@@ -9918,7 +9918,7 @@ msgstr "_Reconciliada"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:19
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:20
 msgid "C_leared"
-msgstr "C_onfirmado"
+msgstr "C_onfirmada"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:20
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:21
@@ -10060,7 +10060,7 @@ msgstr "<b>Informação de autoconfirmação</b>"
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:2
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:4
 msgid "_Ending Balance:"
-msgstr "_Balanço final:"
+msgstr "_Saldo final:"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:1
 msgid "<b>Reconcile Information</b>"
@@ -10068,13 +10068,13 @@ msgstr "<b>Reconciliar informação</b>"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:2
 msgid "Statement _Date:"
-msgstr "_Data do documento:"
+msgstr "_Data do extrato:"
 
 #. starting balance title/value
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:3
 #: ../src/gnome/window-reconcile2.c:1810 ../src/gnome/window-reconcile.c:1850
 msgid "Starting Balance:"
-msgstr "Balanço inicial:"
+msgstr "Saldo inicial:"
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:5
 msgid "Include _subaccounts"
@@ -10734,16 +10734,16 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:284
 msgid "Select security/currency"
-msgstr "Selecione a garantia/moeda"
+msgstr "Selecione a mercadoria/moeda"
 
 #: ../src/gnome-utils/dialog-commodity.c:285
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:14
 msgid "_Security/currency:"
-msgstr "_Garantia/Moeda:"
+msgstr "_Mercadoria/Moeda:"
 
 #: ../src/gnome-utils/dialog-commodity.c:288
 msgid "Select security"
-msgstr "Selecione a garantia"
+msgstr "Selecione a mercadoria"
 
 #: ../src/gnome-utils/dialog-commodity.c:293
 msgid "Select currency"
@@ -10768,15 +10768,15 @@ msgstr "Informação da moeda"
 
 #: ../src/gnome-utils/dialog-commodity.c:1048
 msgid "Edit security"
-msgstr "Editar garantia"
+msgstr "Editar mercadoria"
 
 #: ../src/gnome-utils/dialog-commodity.c:1048
 msgid "New security"
-msgstr "Nova garantia"
+msgstr "Nova mercadoria"
 
 #: ../src/gnome-utils/dialog-commodity.c:1049
 msgid "Security Information"
-msgstr "Informação da garantia"
+msgstr "Informação da mercadoria"
 
 #: ../src/gnome-utils/dialog-commodity.c:1325
 msgid "You may not create a new national currency."
@@ -12581,7 +12581,7 @@ msgstr "A"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:424
 msgid "Security"
-msgstr "Garantia"
+msgstr "Mercadoria"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:807
 msgid "Status Bar"
@@ -13153,7 +13153,7 @@ msgstr "No_tas:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:19
 msgid "Ta_x related"
-msgstr "Relativo a _impostos"
+msgstr "Sujeita a _impostos"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:20
 msgid ""
@@ -13399,7 +13399,7 @@ msgstr "Descrição:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:1
 msgid "Select security/currency "
-msgstr "Selecione a garantia/moeda "
+msgstr "Selecione a mercadoria/moeda "
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:2
 msgid "Select user information here..."
@@ -13440,8 +13440,8 @@ msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
 msgstr ""
-"Insira a mais pequena fração da mercadoria que pode ser transacionada. Para "
-"ações que só possam ser transacionadas em números inteiros, insira 1."
+"Insira a mais pequena fração da mercadoria que pode ser negociada. Para "
+"ações que só possam ser negociadas em números inteiros, insira 1."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:9
 msgid "<b>Quote Source Information</b>"
@@ -13465,7 +13465,7 @@ msgstr "ISIN, CUSI_P ou outro código:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:14
 msgid "F_raction traded:"
-msgstr "F_ração transacionada:"
+msgstr "F_ração negociada:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
 msgid "Warning: Finance::Quote not installed properly."
@@ -13683,7 +13683,7 @@ msgstr "Contas de c_rédito"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:26
 msgid "_Income & expense"
-msgstr "_Receita & despesa"
+msgstr "_Receita & Despesa"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:28
 msgid "<b>Reverse Balanced Accounts</b>"
@@ -13798,7 +13798,7 @@ msgstr "Data/Hora"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:60
 msgid "Perform account list _setup on new file"
-msgstr "Realizar configuração de li_sta de contas em ficheiro novo"
+msgstr "Configurar árvore de conta_s em ficheiro novo"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
 msgid "Present the new account list dialog when you choose File -> New File."
@@ -14117,7 +14117,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:149
 msgid "_Only display leaf account names"
-msgstr "Mostrar só nomes de conta de _folha"
+msgstr "Mostrar só nomes de conta \"_folha\""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:150
 msgid ""
@@ -14126,10 +14126,10 @@ msgid ""
 "display the full name, including the path in the account tree. Checking this "
 "option implies that you use unique leaf names."
 msgstr ""
-"Se marcada, só os nomes de contas folha são mostrados no diário e no balão "
-"de seleção de contas. O comportamento predefinido é mostrar o nome completo, "
-"incluindo o caminho, na árvore de contas. Marcar esta opção implica usar só "
-"nomes de folha."
+"Se marcada, só os nomes de contas \"folha\" são mostrados no diário e no "
+"balão de seleção de contas. O comportamento predefinido é mostrar o nome "
+"completo, incluindo o caminho, na árvore de contas. Marcar esta opção "
+"implica usar só nomes de \"folhas\"."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:151
 msgid "Number of _characters for auto complete:"
@@ -14172,8 +14172,8 @@ msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
 msgstr ""
-"Se marcada, cada relatório será aberto na sua própria janela de nível de "
-"topo. Senão, será aberto na janela atual."
+"Se marcada, cada relatório será aberto na sua própria janela de topo. Senão, "
+"será aberto na janela atual."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:168
 msgid "Reports"
@@ -14933,7 +14933,7 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"Corresponder \"dia da seman\" com \"semana do mês\" (poe ex., \"2ª terça\" "
+"Corresponder \"dia da semana\" com \"semana do mês\" (por ex., \"2ª terça\" "
 "de cada mês)?"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:2
@@ -15017,7 +15017,7 @@ msgstr "Sem cobrança automática de juros nesta conta"
 
 #: ../src/gnome/window-reconcile2.c:764 ../src/gnome/window-reconcile.c:801
 msgid "Enter _Interest Charge..."
-msgstr "_Insira cobrança de juros..."
+msgstr "_Inserir cobrança de juros..."
 
 #: ../src/gnome/window-reconcile2.c:1068 ../src/gnome/window-reconcile.c:1105
 #: ../src/report/business-reports/owner-report.scm:56
@@ -16621,7 +16621,7 @@ msgstr ""
 "\n"
 "O ficheiro tem de estar no mesmo formato que o ficheiro exportado, uma vez "
 "que este é um formato de importação fixo. Se a conta estiver em falta, "
-"baseado no nome completo da conta, será adicionada, desde que a garantia/"
+"baseado no nome completo da conta, será adicionada, desde que a mercadoria/"
 "moeda especificada exista. Se a conta existir, serão atualizados quatro "
 "campos: código, descrição, notas e cor.\n"
 "\n"
@@ -17501,7 +17501,7 @@ msgstr ""
 #: ../src/import-export/ofx/gnc-ofx-import.c:563
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Conta de ações para a garantia \"%s\""
+msgstr "Conta de ações para a mercadoria \"%s\""
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -17510,7 +17510,7 @@ msgstr "Conta de ações para a garantia \"%s\""
 #: ../src/import-export/ofx/gnc-ofx-import.c:729
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "Conta de receita para a garantia \"%s\""
+msgstr "Conta de receita para a mercadoria \"%s\""
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:842
 msgid "Unknown OFX account"
@@ -18155,7 +18155,7 @@ msgstr ""
 "gravada e usada como predefinições na próxima importação QIF.\n"
 "\n"
 "Clique em Recuar para rever as comparações de contas e categorias, alterar "
-"definições de moedas e garantias para novas contas ou para adicionar mais "
+"definições de moedas e mercadorias para novas contas ou para adicionar mais "
 "ficheiros à área de estágio.\n"
 "\n"
 "Clique em Cancelar para abortar o processo de importação QIF."
@@ -18218,7 +18218,7 @@ msgstr ""
 
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:9
 msgid "_Not cleared"
-msgstr "_Não confirmadas"
+msgstr "_Não confirmada"
 
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:10
 msgid ""
@@ -18309,7 +18309,7 @@ msgstr "Foram descartados alguns caracteres."
 #: ../src/import-export/qif-imp/qif-file.scm:141
 #: ../src/import-export/qif-imp/qif-file.scm:145
 msgid "Converted to: "
-msgstr "Comvertido para: "
+msgstr "Convertido para: "
 
 #: ../src/import-export/qif-imp/qif-file.scm:144
 msgid "Some characters have been converted according to your locale."
@@ -18338,7 +18338,7 @@ msgstr "A ignorar linha de categoria"
 
 #: ../src/import-export/qif-imp/qif-file.scm:469
 msgid "Ignoring security line"
-msgstr "A ignorar linha de garantia"
+msgstr "A ignorar linha de mercadoria"
 
 #: ../src/import-export/qif-imp/qif-file.scm:477
 msgid "File does not appear to be in QIF format"
@@ -19028,7 +19028,7 @@ msgstr "Moeda do relatório"
 #: ../src/report/standard-reports/sx-summary.scm:96
 #: ../src/report/standard-reports/trial-balance.scm:131
 msgid "Price Source"
-msgstr "Fonte do preço"
+msgstr "Fonte da cotação"
 
 #: ../src/report/business-reports/aging.scm:44
 msgid "Show Multi-currency Totals"
@@ -19177,7 +19177,7 @@ msgstr "Contas de capital próprio"
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:193
 #: ../src/report/report-system/report-utilities.scm:126
 msgid "Trading Accounts"
-msgstr "Contas de negócios"
+msgstr "Contas de bolsa"
 
 #: ../src/report/business-reports/balsheet-eg.eguile.scm:199
 #: ../src/report/standard-reports/balance-sheet.scm:674
@@ -19200,7 +19200,7 @@ msgstr "<strong>Taxas de câmbio</strong> usadas para este relatório"
 #. All the options stuff starts here
 #: ../src/report/business-reports/balsheet-eg.scm:249
 msgid "Balance Sheet (eguile)"
-msgstr "Folha de saldo (eguile)"
+msgstr "Folha de balanço (eguile)"
 
 #. define all option's names and help text so that they are properly
 #. defined in *one* place.
@@ -19231,7 +19231,7 @@ msgstr "Título deste relatório."
 #: ../src/report/business-reports/balsheet-eg.scm:256
 #: ../src/report/standard-reports/balance-sheet.scm:82
 msgid "Balance Sheet Date"
-msgstr "Data da folha de saldo"
+msgstr "Data da folha de balanço"
 
 #: ../src/report/business-reports/balsheet-eg.scm:257
 msgid "1- or 2-column report"
@@ -19242,7 +19242,7 @@ msgid ""
 "The balance sheet can be displayed with either 1 or 2 columns. 'auto' means "
 "that the layout will be adjusted to fit the width of the page."
 msgstr ""
-"A folha de saldo pode ser mostrada com1 ou 2 colunas. \"Automático\" "
+"A folha de balanço pode ser mostrada com 1 ou 2 colunas. \"Automático\" "
 "significa que a disposição será ajustada para caber na largura da página."
 
 #: ../src/report/business-reports/balsheet-eg.scm:261
@@ -19294,8 +19294,7 @@ msgstr "Excluir contas com saldos totais zero"
 msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-"
 "accounts."
-msgstr ""
-"Excluir contas não nível de topo com saldo zero e sem subcontas não zero."
+msgstr "Excluir contas não de topo com saldo zero e sem subcontas não zero."
 
 #: ../src/report/business-reports/balsheet-eg.scm:271
 #: ../src/report/standard-reports/account-summary.scm:99
@@ -19480,11 +19479,11 @@ msgstr ""
 
 #: ../src/report/business-reports/balsheet-eg.scm:692
 msgid "Balance Sheet using eguile-gnc"
-msgstr "Folha de saldo usando eguile-gnc"
+msgstr "Folha de balanço usando eguile-gnc"
 
 #: ../src/report/business-reports/balsheet-eg.scm:693
 msgid "Display a balance sheet (using eguile template)"
-msgstr "Mostrar uma folha de saldo (usando um modelo eguile)"
+msgstr "Mostrar uma folha de balanço (usando um modelo eguile)"
 
 #. Option names
 #: ../src/report/business-reports/customer-summary.scm:42
@@ -19807,7 +19806,7 @@ msgstr "Mostrar o desconto da entrada?"
 #: ../src/report/business-reports/fancy-invoice.scm:290
 #: ../src/report/business-reports/invoice.scm:275
 msgid "Display the entry's taxable status?"
-msgstr "Mostra se a entrada paga imposto?"
+msgstr "Mostrar se a entrada paga imposto?"
 
 #: ../src/report/business-reports/easy-invoice.scm:285
 #: ../src/report/business-reports/fancy-invoice.scm:295
@@ -20819,7 +20818,7 @@ msgstr "Esta página mostra a sua receita coletável e a sua despesa dedutível.
 
 #: ../src/report/locale-specific/us/taxtxf.scm:115
 msgid "Tax Schedule Report/TXF Export"
-msgstr "Relatório de impostos/Exportação Mod. IRX"
+msgstr "Relatório de impostos/Exportação Mod. IRS"
 
 #: ../src/report/locale-specific/us/taxtxf.scm:223
 msgid "$0.00 valued Tax codes won't be printed."
@@ -21379,7 +21378,7 @@ msgstr "Informação de letra para células de texto regulares."
 
 #: ../src/report/report-system/html-fonts.scm:119
 msgid "Total number cell"
-msgstr "Célula de número total"
+msgstr "Células de totais"
 
 #: ../src/report/report-system/html-fonts.scm:119
 msgid "Font info for number cells containing a total."
@@ -21387,11 +21386,11 @@ msgstr "Informação de letra para células de número contento um total."
 
 #: ../src/report/report-system/html-fonts.scm:124
 msgid "Total label cell"
-msgstr "Célula de rótulo total"
+msgstr "Célula de rótulo Total"
 
 #: ../src/report/report-system/html-fonts.scm:124
 msgid "Font info for cells containing total labels."
-msgstr "Informação de letra para células contendo rótulos totais."
+msgstr "Informação de letra para células contendo rótulos Total."
 
 #: ../src/report/report-system/html-fonts.scm:129
 msgid "Centered label cell"
@@ -22144,7 +22143,7 @@ msgstr "Saldo em %s"
 #. window.
 #: ../src/report/standard-reports/account-summary.scm:64
 msgid "Account Summary"
-msgstr "Plano de contas"
+msgstr "Sumário de contas"
 
 #: ../src/report/standard-reports/account-summary.scm:69
 #: ../src/report/standard-reports/balance-sheet.scm:79
@@ -22681,12 +22680,12 @@ msgstr "Perda"
 #: ../src/report/standard-reports/balance-sheet.scm:72
 #: ../src/report/standard-reports/trial-balance.scm:618
 msgid "Balance Sheet"
-msgstr "Folha de saldo"
+msgstr "Folha de balanço"
 
 #: ../src/report/standard-reports/balance-sheet.scm:83
 #: ../src/report/standard-reports/budget-balance-sheet.scm:48
 msgid "Single column Balance Sheet"
-msgstr "Folha de saldo de coluna única"
+msgstr "Folha de balanço de coluna única"
 
 #: ../src/report/standard-reports/balance-sheet.scm:85
 #: ../src/report/standard-reports/budget-balance-sheet.scm:50
@@ -22813,7 +22812,7 @@ msgstr "Total de passivo e capital próprio"
 
 #: ../src/report/standard-reports/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
-msgstr "Folha de saldo do orçamento"
+msgstr "Folha de balanço do orçamento"
 
 #: ../src/report/standard-reports/budget-balance-sheet.scm:98
 msgid "Include new/existing totals"
@@ -23207,15 +23206,15 @@ msgstr "%s: %s"
 
 #: ../src/report/standard-reports/cash-flow.scm:42
 msgid "Cash Flow"
-msgstr "Fluxo de dinheiro"
+msgstr "Fluxo de caixa"
 
 #: ../src/report/standard-reports/cash-flow.scm:57
 msgid "Include Trading Accounts in report"
-msgstr "Incluir contas de negociação no relatório"
+msgstr "Incluir contas de bolsa no relatório"
 
 #: ../src/report/standard-reports/cash-flow.scm:106
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr "Incluir transferências de e para contas de negociação no relatório."
+msgstr "Incluir transferências de e para contas de bolsa no relatório."
 
 #: ../src/report/standard-reports/cash-flow.scm:241
 msgid "%s and subaccounts"
@@ -23254,7 +23253,7 @@ msgstr "Gráfico de barras das despesas"
 
 #: ../src/report/standard-reports/category-barchart.scm:49
 msgid "Asset Barchart"
-msgstr "Gráfico de barras dos ativos"
+msgstr "Gráfico de barras do ativo"
 
 #: ../src/report/standard-reports/category-barchart.scm:50
 msgid "Liability Barchart"
@@ -23593,22 +23592,21 @@ msgstr "Ordem secundária"
 
 #: ../src/report/standard-reports/income-statement.scm:97
 msgid "Label the trading accounts section"
-msgstr "Rotular a secção de contas de negócio"
+msgstr "Rotular a secção de contas de bolsa"
 
 #: ../src/report/standard-reports/income-statement.scm:99
 msgid "Whether or not to include a label for the trading accounts section."
-msgstr "Se deve ou não incluir um rótulo na secção de contas de negócio."
+msgstr "Se deve ou não incluir um rótulo na secção de contas de bolsa."
 
 #: ../src/report/standard-reports/income-statement.scm:100
 msgid "Include trading accounts total"
-msgstr "Incluir total de contas de negócio"
+msgstr "Incluir total de contas de bolsa"
 
 #: ../src/report/standard-reports/income-statement.scm:102
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr ""
-"Se deve ou não incluir uma linha indicando o saldo total de contas de "
-"negócio."
+"Se deve ou não incluir uma linha indicando o saldo total de contas de bolsa."
 
 #: ../src/report/standard-reports/income-statement.scm:629
 msgid "Total Trading"
@@ -24724,7 +24722,7 @@ msgstr "Cor do texto da ligação."
 #: ../src/report/stylesheets/stylesheet-footer.scm:137
 #: ../src/report/stylesheets/stylesheet-footer.scm:212
 msgid "Table Cell Color"
-msgstr "Cor da célula"
+msgstr "Cor da célula da tabela"
 
 #: ../src/report/stylesheets/stylesheet-easy.scm:124
 #: ../src/report/stylesheets/stylesheet-fancy.scm:118
@@ -24832,7 +24830,7 @@ msgstr "Espaçamento de células"
 #: ../src/report/stylesheets/stylesheet-footer.scm:176
 #: ../src/report/stylesheets/stylesheet-plain.scm:70
 msgid "Space between table cells."
-msgstr "Espaçamento entre células da tabela."
+msgstr "Espaço entre células da tabela."
 
 #: ../src/report/stylesheets/stylesheet-easy.scm:169
 #: ../src/report/stylesheets/stylesheet-easy.scm:214
@@ -25134,7 +25132,7 @@ msgstr ""
 msgid ""
 "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr ""
-"Para detalhes sobre como subscrever esta lista, veja &lt;http://www.gnucash."
+" Para detalhes sobre como subscrever esta lista, veja &lt;http://www.gnucash."
 "org/&gt;."
 
 #: ../src/report/utility-reports/hello-world.scm:359
@@ -25398,7 +25396,7 @@ msgstr "Faça a gestão das suas finaças, contas e investimentos"
 
 #: ../src/libqof/qof/qofbookslots.h:66
 msgid "Use Trading Accounts"
-msgstr "Usar contas de negócio"
+msgstr "Usar contas de bolsa"
 
 #: ../src/libqof/qof/qofbookslots.h:67
 msgid "Day Threshold for Read-Only Transactions (red line)"
@@ -25410,7 +25408,7 @@ msgstr "Usar campo de ação de parcela para Número"
 
 #: ../src/libqof/qof/qofbookslots.h:70
 msgid "Budgeting"
-msgstr "Orçamentar"
+msgstr "Orçamento"
 
 #: ../src/libqof/qof/qofbookslots.h:71
 msgid "Default Budget"

@@ -325,6 +325,7 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     const gchar *ptr;
     gunichar uni;
     gint len;
+    gboolean map_allocated = FALSE;
 
     ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
     if (info->accel_assigned)
@@ -336,7 +337,10 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     /* Get map of used keys */
     map = g_hash_table_lookup(table, info->path);
     if (map == NULL)
+    {
         map = g_strdup("");
+        map_allocated = TRUE;
+    }
     DEBUG("map '%s', path %s", map, info->path);
 
     for (ptr = info->ae.label; *ptr; ptr = g_utf8_next_char(ptr))
@@ -356,6 +360,10 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     {
         /* Ran out of characters. Nothing to do. */
         info->accel_assigned = TRUE;
+        if (map_allocated)
+        {
+            g_free(map);
+        }
         LEAVE("All characters already assigned");
         return;
     }
@@ -375,6 +383,10 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     g_hash_table_replace(table, info->path, new_map);
 
     info->accel_assigned = TRUE;
+    if (map_allocated)
+    {
+        g_free(map);
+    }
     LEAVE("assigned");
 }
 

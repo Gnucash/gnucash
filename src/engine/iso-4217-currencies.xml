@@ -553,6 +553,7 @@
   local-symbol=""
 />
 <!-- "BYR" - "Belarussian Ruble"
+  2017-01-01 "BYN" 10000
 -->
 <currency
   isocode="BYR"
