@@ -5755,7 +5755,6 @@ static gchar *
 look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar *separator)
 {
     GList *top_accounts, *ptr;
-    gchar *converted_name = g_strdup (full_name);
     gint   found_len = 0;
     gchar  found_sep;
 
@@ -5769,30 +5768,29 @@ look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar
         const gchar *name = xaccAccountGetName (ptr->data);
 
         // we are looking for the longest top level account that matches
-        if (g_str_has_prefix (converted_name, name))
+        if (g_str_has_prefix (full_name, name))
         {
             gint name_len = strlen (name);
-            const gchar old_sep = converted_name[name_len];
+            const gchar old_sep = full_name[name_len];
 
             if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
             {
                 if (name_len > found_len)
                 {
-                    found_sep = converted_name[name_len];
+                    found_sep = full_name[name_len];
                     found_len = name_len;
                 }
             }
         }
     }
     g_list_free (top_accounts); // Free the List
-    g_free (full_name);
 
     if (found_len > 1)
-        converted_name = g_strdelimit (converted_name, &found_sep, *separator);
+        full_name = g_strdelimit (full_name, &found_sep, *separator);
 
-    PINFO("Return full_name is '%s'", converted_name);
+    PINFO("Return full_name is '%s'", full_name);
 
-    return converted_name;
+    return full_name;
 }
 
 
