@@ -44,7 +44,7 @@
 #define GNC_FEATURE_CREDIT_NOTES "Credit Notes"
 #define GNC_FEATURE_NUM_FIELD_SOURCE "Number Field Source"
 #define GNC_FEATURE_KVP_EXTRA_DATA "Extra data in addresses, jobs or invoice entries"
-#define GNC_FEATURE_CHANGE_BAYESIAN "Change the way Bayesian data is saved to use Guid"
+#define GNC_FEATURE_GUID_BAYESIAN "Account GUID based Bayesian data"
 
 /** @} */
 
