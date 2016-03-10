@@ -1001,18 +1001,6 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
     return equal_data.equal;
 }
 
-static gboolean
-insert_or_replace_price(GNCPriceDB *db, GNCPrice *p)
-{
-    GNCPrice *old_price = gnc_pricedb_lookup_day (db, p->commodity,
-                                                  p->currency, p->tmspec);
-    if (old_price == NULL)
-        return TRUE;
-    if (p->source < old_price->source)
-        return TRUE;
-    return FALSE;
-
-}
 /* ==================================================================== */
 /* The add_price() function is a utility that only manages the
  * dual hash table instertion */
@@ -1026,6 +1014,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
     gnc_commodity *commodity;
     gnc_commodity *currency;
     GHashTable *currency_hash;
+    GNCPrice *old_price;
 
     if (!db || !p) return FALSE;
     ENTER ("db=%p, pr=%p dirty=%d destroying=%d",
@@ -1072,19 +1061,32 @@ add_price(GNCPriceDB *db, GNCPrice *p)
         LEAVE ("gnc_price_list_insert failed");
         return FALSE;
     }
+
     if (!price_list)
     {
         LEAVE (" no price list");
         return FALSE;
     }
 
-    if (!insert_or_replace_price(db, p))
+/* Check for an existing price on the same day. If there is no existing price,
+ * add this one. If this price is of equal or better precedence than the old
+ * one, copy this one over the old one.
+ */
+    old_price = gnc_pricedb_lookup_day (db, p->commodity, p->currency,
+                                        p->tmspec);
+    if (!db->bulk_update && old_price != NULL)
     {
-        LEAVE("A better price already exists");
-        return FALSE;
+        if (p->source > old_price->source)
+        {
+            gnc_price_unref(p);
+            LEAVE ("Better price already in DB.");
+            return FALSE;
+        }
+        gnc_pricedb_remove_price(db, old_price);
     }
     g_hash_table_insert(currency_hash, currency, price_list);
     p->db = db;
+
     qof_event_gen (&p->inst, QOF_EVENT_ADD, NULL);
 
     LEAVE ("db=%p, pr=%p dirty=%d dextroying=%d commodity=%s/%s currency_hash=%p",
