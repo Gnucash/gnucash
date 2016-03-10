@@ -158,9 +158,8 @@
                 ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
                 ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
 
-                ;; Validate against XHTML 1.0 Transitional
-                (push "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
-                (push "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n")
+                ;; Validate against HTML4 Transitional:
+                (push "<!DOCTYPE!DOCTYPE html PUBLIC -//W3C//DTD HTML 4.01 Transitional//EN\" \n\"http://www.w3.org/TR/html4/loose.dtd\">")
                 (push "<head>\n")
                 (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
 				(if css? 
