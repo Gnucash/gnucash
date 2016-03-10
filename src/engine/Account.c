@@ -5795,7 +5795,7 @@ look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar
 
 
 static void
-update_imap_entry (Account *map_account, GncImapInfo *imapInfo)
+convert_imap_entry (GncImapInfo *imapInfo, Account *map_account)
 {
     GncImportMatchMap *imap;
     gchar   *guid_string;
@@ -5838,10 +5838,10 @@ update_imap_entry (Account *map_account, GncImapInfo *imapInfo)
 }
 
 
-static void
-convert_imap_entry (Account *root, GncImapInfo *imapInfo)
+static Account *
+look_for_old_mapping (GncImapInfo *imapInfo)
 {
-    Account       *map_account = NULL;
+    Account       *root, *map_account = NULL;
     const gchar   *sep = gnc_get_account_separator_string ();
     gchar         *full_name;
 
@@ -5849,7 +5849,9 @@ convert_imap_entry (Account *root, GncImapInfo *imapInfo)
 
     // do we have a map_account all ready, implying a guid string
     if (imapInfo->map_account != NULL)
-        return;
+        return map_account;
+
+    root = gnc_account_get_root (imapInfo->source_account);
 
     full_name = g_strdup (imapInfo->full_category + strlen (imapInfo->category_head) + 1);
 
@@ -5865,14 +5867,13 @@ convert_imap_entry (Account *root, GncImapInfo *imapInfo)
 
     PINFO("Full account name is '%s'", full_name);
 
-    if (map_account != NULL) // we have an account, try and update it
-        update_imap_entry (map_account, imapInfo);
-
     g_free (full_name);
+
+    return map_account;
 }
 
 static void
-get_account_imap_info (Account *root, Account *acc)
+convert_imap_account (Account *acc)
 {
     GList *imap_list, *node;
     gchar *acc_name = NULL;
@@ -5888,10 +5889,14 @@ get_account_imap_info (Account *root, Account *acc)
 
         for (node = imap_list;  node; node = g_list_next (node))
         {
+            Account *map_account = NULL;
             GncImapInfo *imapInfo = node->data;
 
             // Lets start doing stuff
-            convert_imap_entry (root, imapInfo);
+            map_account = look_for_old_mapping (imapInfo);
+
+            if (map_account != NULL) // we have an account, try and update it
+                convert_imap_entry (imapInfo, map_account);
 
             // Free the members and structure
             g_free (imapInfo->category_head);
@@ -5932,7 +5937,7 @@ gnc_account_imap_convert_bayes (QofBook *book)
         {
             Account *acc = ptr->data;
 
-            get_account_imap_info (root, acc);
+            convert_imap_account (acc);
         }
         g_list_free (accts);
 
