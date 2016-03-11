@@ -1589,16 +1589,16 @@ update_price(XferDialog *xferData, PriceReq *pr)
 
     if (gnc_numeric_equal(pr->reverse ? gnc_numeric_invert(value) : value,
                           price_value))
+    if (gnc_price_get_source(pr->price) < xferData->price_source)
+    {
+        PINFO("Existing price is preferred, so won't supersede.");
+        gnc_price_unref (pr->price);
+        return;
+    }
     {
         PINFO("Same price for %s in %s",
               gnc_commodity_get_mnemonic(pr->from),
               gnc_commodity_get_mnemonic(pr->to));
-        gnc_price_unref (pr->price);
-        return;
-    }
-    if (gnc_price_get_source(pr->price) < xferData->price_source)
-    {
-        PINFO("Existing price is preferred, so won't supersede.");
         gnc_price_unref (pr->price);
         return;
     }
