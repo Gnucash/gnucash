@@ -1016,6 +1016,8 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
 
     g_return_if_fail(xferData);
 
+    xferData->price_source = PRICE_SOURCE_USER_PRICE;
+
     /* Get the amount editing controls of the dialog. */
     amount_edit     = GNC_AMOUNT_EDIT(xferData->amount_edit);
     price_edit      = GNC_AMOUNT_EDIT(xferData->price_edit);
@@ -1056,7 +1058,6 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog *xferData = data;
 
     gnc_xfer_update_to_amount (xferData);
-    xferData->price_source = PRICE_SOURCE_USER_PRICE;
     xferData->price_type = PRICE_TYPE_TRN;
 
 
