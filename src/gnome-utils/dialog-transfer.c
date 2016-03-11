@@ -1583,7 +1583,7 @@ update_price(XferDialog *xferData, PriceReq *pr)
 {
     gnc_commodity *from = xferData->from_commodity;
     gnc_commodity *to = xferData->to_commodity;
-    gnc_numeric value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));;
+    gnc_numeric value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
     gnc_numeric price_value = gnc_price_get_value(pr->price);
 
     if (gnc_numeric_equal(pr->reverse ? gnc_numeric_invert(value) : value,
