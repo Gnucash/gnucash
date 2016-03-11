@@ -1748,6 +1748,8 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
             gnc_xfer_update_to_amount(xferData);
 
         price_value = gnc_xfer_dialog_compute_price_value(xferData);
+        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
+                                   price_value);
         *(xferData->exch_rate) = gnc_numeric_abs(price_value);
     }
     else
