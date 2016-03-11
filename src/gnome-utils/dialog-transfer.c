@@ -1631,6 +1631,7 @@ new_price(XferDialog *xferData, Timespec ts)
 /* We want to store currency rates such that the rate > 1 and commodity
  * prices in terms of a currency regardless of value.
  */
+    value = gnc_numeric_abs(value);
     if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
     {
         if (value.num < value.denom)
