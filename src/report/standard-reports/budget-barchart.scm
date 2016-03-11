@@ -46,6 +46,8 @@
 
 (define optname-running-sum (N_ "Running Sum"))
 (define optname-chart-type (N_ "Chart Type"))
+(define optname-from-date (N_ "Start Date"))
+(define optname-to-date (N_ "End Date"))
 
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit
@@ -100,6 +102,11 @@
       )
     )
 
+    ;; date interval
+    (gnc:options-add-date-interval!
+     options gnc:pagename-general
+     optname-from-date optname-to-date "d")
+
 
     ;; Option to select the accounts to that will be displayed
     (add-option (gnc:make-account-list-option
@@ -129,8 +136,12 @@
 ;;
 ;; Create bar and and vaules
 ;;
-(define (gnc:chart-create-budget-actual budget acct running-sum chart-type)
-  (let* ((chart #f))
+(define (gnc:chart-create-budget-actual budget acct running-sum chart-type from-tp to-tp)
+  (let* (
+          (chart #f)
+          (report-start-time (car from-tp))
+          (report-end-time (car to-tp))
+        )
 
     (if (eqv? chart-type 'bars)
       (begin
@@ -166,43 +177,51 @@
         (period 0)
         (bgt-sum 0)
         (act-sum 0)
-        (date 0)
+        (date (gnc-budget-get-period-start-date budget period))
+        (period-start-time (car date))
         (bgt-vals '())
         (act-vals '())
         (date-list '())
       )
 
-      ;; Loop though periods
+      ;; Loop through periods
       (while (< period num-periods)
-
-        ;; Add calc new running sum and add to list
-	(if running-sum 
-          (set! bgt-sum (+ bgt-sum 
-            (gnc-numeric-to-double
-              (gnc:get-account-period-rolledup-budget-value budget acct period))))
-          
-	  (set! bgt-sum 
-            (gnc-numeric-to-double
-              (gnc:get-account-period-rolledup-budget-value budget acct period)))
-        )
-        (set! bgt-vals (append bgt-vals (list bgt-sum)))
-
+        ;;add calc new running sums
 	(if running-sum
-	  (set! act-sum (+ act-sum
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-actual-value budget acct period))))
-	  
-	  (set! act-sum
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-actual-value budget acct period)))
-	)
-        (set! act-vals (append act-vals (list act-sum)))
-
-	;; Add period to date list
+          (begin
+            (set! bgt-sum (+ bgt-sum
+              (gnc-numeric-to-double
+                (gnc:get-account-period-rolledup-budget-value budget acct period))))
+	    (set! act-sum (+ act-sum
+              (gnc-numeric-to-double
+                (gnc-budget-get-account-period-actual-value budget acct period))))
+          )
+        )
+        (if (<= report-start-time period-start-time)
+	  ;; within reporting period, update the display lists
+          (begin
+            (if (not running-sum)
+              (begin
+	        (set! bgt-sum
+                  (gnc-numeric-to-double
+                    (gnc:get-account-period-rolledup-budget-value budget acct period)))
+	        (set! act-sum
+                  (gnc-numeric-to-double
+                    (gnc-budget-get-account-period-actual-value budget acct period)))
+              )
+            )
+            (set! bgt-vals (append bgt-vals (list bgt-sum)))
+            (set! act-vals (append act-vals (list act-sum)))
+            (set! date-list (append date-list (list (gnc-print-date date))))
+          )
+        )
+        ;; prepare data for next loop repetition
+        (set! period (+ period 1))
         (set! date (gnc-budget-get-period-start-date budget period))
-        (set! date-list (append date-list (list (gnc-print-date date))))
-
-	(set! period (+ period 1))
+        (set! period-start-time (car date))
+        (if (< report-end-time period-start-time)
+          (set! period num-periods) ;; reporting period has ended, break the loop
+        )
       )
 
       (if (eqv? chart-type 'bars)
@@ -286,6 +305,12 @@
       (report-title (get-option gnc:pagename-general
         gnc:optname-reportname))
       (document (gnc:make-html-document))
+      (from-date-tp (gnc:timepair-start-day-time
+                      (gnc:date-option-absolute-time
+                        (get-option gnc:pagename-general optname-from-date))))
+      (to-date-tp (gnc:timepair-end-day-time
+                    (gnc:date-option-absolute-time
+                      (get-option gnc:pagename-general optname-to-date))))
     )
     (cond
       ((null? accounts)
@@ -318,7 +343,7 @@
                 )
               (gnc:html-document-add-object!
                 document
-                (gnc:chart-create-budget-actual budget acct running-sum chart-type)
+                (gnc:chart-create-budget-actual budget acct running-sum chart-type from-date-tp to-date-tp)
               )
             )
           )
