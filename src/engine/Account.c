@@ -5849,7 +5849,7 @@ look_for_old_mapping (GncImapInfo *imapInfo)
 
     // do we have a map_account all ready, implying a guid string
     if (imapInfo->map_account != NULL)
-        return map_account;
+        return NULL;
 
     root = gnc_account_get_root (imapInfo->source_account);
 
