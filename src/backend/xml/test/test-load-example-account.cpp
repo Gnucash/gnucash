@@ -44,82 +44,82 @@ extern "C"
 
 #include "io-example-account.h"
 
-static const gchar *da_ending = ".gnucash-xea";
+static const gchar* da_ending = ".gnucash-xea";
 
 static void
-test_load_file(const char *filename)
+test_load_file (const char* filename)
 {
-    GncExampleAccount *gea;
+    GncExampleAccount* gea;
 
-    gea = gnc_read_example_account(filename);
+    gea = gnc_read_example_account (filename);
 
     if (gea != NULL)
     {
-        success("example account load");
-        gnc_destroy_example_account(gea);
+        success ("example account load");
+        gnc_destroy_example_account (gea);
     }
     else
     {
-        failure_args("example account load", __FILE__, __LINE__, "for file %s",
-                     filename);
+        failure_args ("example account load", __FILE__, __LINE__, "for file %s",
+                      filename);
     }
 }
 
 static void
-guile_main (void *closure, int argc, char **argv)
+guile_main (void* closure, int argc, char** argv)
 {
-    const char *location = g_getenv("GNC_ACCOUNT_PATH");
-    GSList *list = NULL;
-    GDir *ea_dir;
+    const char* location = g_getenv ("GNC_ACCOUNT_PATH");
+    GSList* list = NULL;
+    GDir* ea_dir;
 
     if (!location)
     {
         location = "../../../../accounts/C";
     }
 
-    gnc_module_system_init();
-    gnc_module_load("gnucash/engine", 0);
+    gnc_module_system_init ();
+    gnc_module_load ("gnucash/engine", 0);
 
-    if ((ea_dir = g_dir_open(location, 0, NULL)) == NULL)
+    if ((ea_dir = g_dir_open (location, 0, NULL)) == NULL)
     {
-        failure("unable to open ea directory");
+        failure ("unable to open ea directory");
     }
     else
     {
-        const gchar *entry;
+        const gchar* entry;
 
-        while ((entry = g_dir_read_name(ea_dir)) != NULL)
+        while ((entry = g_dir_read_name (ea_dir)) != NULL)
         {
-            if (g_str_has_suffix(entry, da_ending))
+            if (g_str_has_suffix (entry, da_ending))
             {
-                gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
-                if (!g_file_test(to_open, G_FILE_TEST_IS_DIR))
+                gchar* to_open = g_build_filename (location, entry, (gchar*)NULL);
+                if (!g_file_test (to_open, G_FILE_TEST_IS_DIR))
                 {
-                    test_load_file(to_open);
+                    test_load_file (to_open);
                 }
-                g_free(to_open);
+                g_free (to_open);
             }
         }
     }
-    g_dir_close(ea_dir);
+    g_dir_close (ea_dir);
 
     {
-        list = gnc_load_example_account_list(location);
+        list = gnc_load_example_account_list (location);
 
-        do_test(list != NULL, "gnc_load_example_account_list");
+        do_test (list != NULL, "gnc_load_example_account_list");
 
-        gnc_free_example_account_list(list);
+        gnc_free_example_account_list (list);
     }
 
 
-    print_test_results();
-    exit(get_rv());
+    print_test_results ();
+    exit (get_rv ());
 }
 
 int
-main (int argc, char ** argv)
+main (int argc, char** argv)
 {
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     scm_boot_guile (argc, argv, guile_main, NULL);
-    exit(get_rv());
+    exit (get_rv ());
 }

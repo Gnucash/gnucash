@@ -32,6 +32,6 @@
 
 #define CT_ORDERREF "order"
 
-void gnc_order_sql_initialize( void );
+void gnc_order_sql_initialize (void);
 
 #endif /* GNC_ORDER_SQL_H */

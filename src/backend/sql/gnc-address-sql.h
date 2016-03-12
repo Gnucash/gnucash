@@ -31,6 +31,6 @@
 
 #define CT_ADDRESS "address"
 
-void gnc_address_sql_initialize( void );
+void gnc_address_sql_initialize (void);
 
 #endif /* GNC_ADDRESS_SQL_H */

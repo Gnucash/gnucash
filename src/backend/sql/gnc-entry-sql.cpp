@@ -49,7 +49,7 @@ extern "C"
 #include "gnc-owner-sql.h"
 #include "gnc-tax-table-sql.h"
 
-#define _GNC_MOD_NAME	GNC_ID_ENTRY
+#define _GNC_MOD_NAME   GNC_ID_ENTRY
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -61,8 +61,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_DISCTYPE_LEN 2048
 #define MAX_DISCHOW_LEN 2048
 
-static void entry_set_invoice( gpointer pObject, gpointer val );
-static void entry_set_bill( gpointer pObject, gpointer val );
+static void entry_set_invoice (gpointer pObject, gpointer val);
+static void entry_set_bill (gpointer pObject, gpointer val);
 
 static GncSqlColumnTableEntry col_table[] =
 {
@@ -83,215 +83,218 @@ static GncSqlColumnTableEntry col_table[] =
         "invoice",       CT_INVOICEREF,  0,                   0,                 NULL, NULL,
         (QofAccessFunc)gncEntryGetInvoice, (QofSetterFunc)entry_set_invoice
     },
-    { "i_disc_type",   CT_STRING,      MAX_DISCTYPE_LEN,    0,        			NULL, ENTRY_INV_DISC_TYPE },
-    { "i_disc_how",    CT_STRING,      MAX_DISCHOW_LEN,     0,        			NULL, ENTRY_INV_DISC_HOW },
-    { "i_taxable",     CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_INV_TAXABLE },
-    { "i_taxincluded", CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_INV_TAX_INC },
+    { "i_disc_type",   CT_STRING,      MAX_DISCTYPE_LEN,    0,                  NULL, ENTRY_INV_DISC_TYPE },
+    { "i_disc_how",    CT_STRING,      MAX_DISCHOW_LEN,     0,                  NULL, ENTRY_INV_DISC_HOW },
+    { "i_taxable",     CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_INV_TAXABLE },
+    { "i_taxincluded", CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_INV_TAX_INC },
     {
-        "i_taxtable",    CT_TAXTABLEREF, 0,                   0,        			NULL, NULL,
+        "i_taxtable",    CT_TAXTABLEREF, 0,                   0,                    NULL, NULL,
         (QofAccessFunc)gncEntryGetInvTaxTable, (QofSetterFunc)gncEntrySetInvTaxTable
     },
-    { "b_acct",        CT_ACCOUNTREF,  0,                   0,        			NULL, ENTRY_BACCT },
-    { "b_price",       CT_NUMERIC,     0,                   0,        			NULL, ENTRY_BPRICE },
+    { "b_acct",        CT_ACCOUNTREF,  0,                   0,                  NULL, ENTRY_BACCT },
+    { "b_price",       CT_NUMERIC,     0,                   0,                  NULL, ENTRY_BPRICE },
     {
-        "bill",          CT_INVOICEREF,  0,                   0,        			NULL, NULL,
+        "bill",          CT_INVOICEREF,  0,                   0,                    NULL, NULL,
         (QofAccessFunc)gncEntryGetBill, (QofSetterFunc)entry_set_bill
     },
-    { "b_taxable",     CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILL_TAXABLE },
-    { "b_taxincluded", CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILL_TAX_INC },
+    { "b_taxable",     CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_BILL_TAXABLE },
+    { "b_taxincluded", CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_BILL_TAX_INC },
     {
-        "b_taxtable",    CT_TAXTABLEREF, 0,                   0,        			NULL, NULL,
+        "b_taxtable",    CT_TAXTABLEREF, 0,                   0,                    NULL, NULL,
         (QofAccessFunc)gncEntryGetBillTaxTable, (QofSetterFunc)gncEntrySetBillTaxTable
     },
     {
-        "b_paytype",     CT_INT,         0,                   0,        			NULL, NULL,
+        "b_paytype",     CT_INT,         0,                   0,                    NULL, NULL,
         (QofAccessFunc)gncEntryGetBillPayment, (QofSetterFunc)gncEntrySetBillPayment
     },
-    { "billable",      CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILLABLE },
-    { "billto",        CT_OWNERREF,    0,                   0,        			NULL, ENTRY_BILLTO },
+    { "billable",      CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_BILLABLE },
+    { "billto",        CT_OWNERREF,    0,                   0,                  NULL, ENTRY_BILLTO },
     {
-        "order_guid",    CT_ORDERREF,    0,                   0,        			NULL, NULL,
+        "order_guid",    CT_ORDERREF,    0,                   0,                    NULL, NULL,
         (QofAccessFunc)gncEntryGetOrder, (QofSetterFunc)gncEntrySetOrder
     },
     { NULL }
 };
 
 static void
-entry_set_invoice( gpointer pObject, gpointer val )
+entry_set_invoice (gpointer pObject, gpointer val)
 {
     GncEntry* entry;
     GncInvoice* invoice;
 
-    g_return_if_fail( pObject != NULL );
-    g_return_if_fail( GNC_IS_ENTRY(pObject) );
-    g_return_if_fail( val != NULL );
-    g_return_if_fail( GNC_IS_INVOICE(val) );
+    g_return_if_fail (pObject != NULL);
+    g_return_if_fail (GNC_IS_ENTRY (pObject));
+    g_return_if_fail (val != NULL);
+    g_return_if_fail (GNC_IS_INVOICE (val));
 
-    entry = GNC_ENTRY(pObject);
-    invoice = GNC_INVOICE(val);
+    entry = GNC_ENTRY (pObject);
+    invoice = GNC_INVOICE (val);
 
-    gncInvoiceAddEntry( invoice, entry );
+    gncInvoiceAddEntry (invoice, entry);
 }
 
 static void
-entry_set_bill( gpointer pObject, gpointer val )
+entry_set_bill (gpointer pObject, gpointer val)
 {
     GncEntry* entry;
     GncInvoice* bill;
 
-    g_return_if_fail( pObject != NULL );
-    g_return_if_fail( GNC_IS_ENTRY(pObject) );
-    g_return_if_fail( val != NULL );
-    g_return_if_fail( GNC_IS_INVOICE(val) );
+    g_return_if_fail (pObject != NULL);
+    g_return_if_fail (GNC_IS_ENTRY (pObject));
+    g_return_if_fail (val != NULL);
+    g_return_if_fail (GNC_IS_INVOICE (val));
 
-    entry = GNC_ENTRY(pObject);
-    bill = GNC_INVOICE(val);
+    entry = GNC_ENTRY (pObject);
+    bill = GNC_INVOICE (val);
 
-    gncBillAddEntry( bill, entry );
+    gncBillAddEntry (bill, entry);
 }
 
 static GncEntry*
-load_single_entry( GncSqlBackend* be, GncSqlRow* row )
+load_single_entry (GncSqlBackend* be, GncSqlRow* row)
 {
     const GncGUID* guid;
     GncEntry* pEntry;
 
-    g_return_val_if_fail( be != NULL, NULL );
-    g_return_val_if_fail( row != NULL, NULL );
+    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (row != NULL, NULL);
 
-    guid = gnc_sql_load_guid( be, row );
-    pEntry = gncEntryLookup( be->book, guid );
-    if ( pEntry == NULL )
+    guid = gnc_sql_load_guid (be, row);
+    pEntry = gncEntryLookup (be->book, guid);
+    if (pEntry == NULL)
     {
-        pEntry = gncEntryCreate( be->book );
+        pEntry = gncEntryCreate (be->book);
     }
-    gnc_sql_load_object( be, row, GNC_ID_ENTRY, pEntry, col_table );
-    qof_instance_mark_clean( QOF_INSTANCE(pEntry) );
+    gnc_sql_load_object (be, row, GNC_ID_ENTRY, pEntry, col_table);
+    qof_instance_mark_clean (QOF_INSTANCE (pEntry));
 
     return pEntry;
 }
 
 static void
-load_all_entries( GncSqlBackend* be )
+load_all_entries (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
 
-    g_return_if_fail( be != NULL );
+    g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
-    result = gnc_sql_execute_select_statement( be, stmt );
-    gnc_sql_statement_dispose( stmt );
-    if ( result != NULL )
+    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    result = gnc_sql_execute_select_statement (be, stmt);
+    gnc_sql_statement_dispose (stmt);
+    if (result != NULL)
     {
         GncSqlRow* row;
         GList* list = NULL;
 
-        row = gnc_sql_result_get_first_row( result );
-        while ( row != NULL )
+        row = gnc_sql_result_get_first_row (result);
+        while (row != NULL)
         {
-            GncEntry* pEntry = load_single_entry( be, row );
-            if ( pEntry != NULL )
+            GncEntry* pEntry = load_single_entry (be, row);
+            if (pEntry != NULL)
             {
-                list = g_list_append( list, pEntry );
+                list = g_list_append (list, pEntry);
             }
-            row = gnc_sql_result_get_next_row( result );
+            row = gnc_sql_result_get_next_row (result);
         }
-        gnc_sql_result_dispose( result );
+        gnc_sql_result_dispose (result);
 
-        if ( list != NULL )
+        if (list != NULL)
         {
-            gnc_sql_slots_load_for_list( be, list );
-            g_list_free( list );
+            gnc_sql_slots_load_for_list (be, list);
+            g_list_free (list);
         }
     }
 }
 
 /* ================================================================= */
 static void
-create_entry_tables( GncSqlBackend* be )
+create_entry_tables (GncSqlBackend* be)
 {
     gint version;
 
-    g_return_if_fail( be != NULL );
+    g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version( be, TABLE_NAME );
-    if ( version == 0 )
+    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    if (version == 0)
     {
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
     }
-    else if ( version < TABLE_VERSION )
+    else if (version < TABLE_VERSION)
     {
         /* Upgrade:
             1->2: 64 bit int handling
-        	2->3: "entered" -> "date_entered", and it can be NULL
+            2->3: "entered" -> "date_entered", and it can be NULL
         */
-        gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
-        gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+        gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
 
-        PINFO("Entries table upgraded from version %d to version %d\n", version, TABLE_VERSION);
+        PINFO ("Entries table upgraded from version %d to version %d\n", version,
+               TABLE_VERSION);
     }
 }
 
 /* ================================================================= */
 static gboolean
-save_entry( GncSqlBackend* be, QofInstance* inst )
+save_entry (GncSqlBackend* be, QofInstance* inst)
 {
-    g_return_val_if_fail( inst != NULL, FALSE );
-    g_return_val_if_fail( GNC_IS_ENTRY(inst), FALSE );
-    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail (inst != NULL, FALSE);
+    g_return_val_if_fail (GNC_IS_ENTRY (inst), FALSE);
+    g_return_val_if_fail (be != NULL, FALSE);
 
-    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_ENTRY, col_table );
+    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_ENTRY,
+                                         col_table);
 }
 
 /* ================================================================= */
 static void
-write_single_entry( QofInstance *term_p, gpointer data_p )
+write_single_entry (QofInstance* term_p, gpointer data_p)
 {
     write_objects_t* s = (write_objects_t*)data_p;
-    GncEntry* entry = GNC_ENTRY(term_p);
+    GncEntry* entry = GNC_ENTRY (term_p);
 
-    g_return_if_fail( term_p != NULL );
-    g_return_if_fail( GNC_IS_ENTRY(term_p) );
-    g_return_if_fail( data_p != NULL );
+    g_return_if_fail (term_p != NULL);
+    g_return_if_fail (GNC_IS_ENTRY (term_p));
+    g_return_if_fail (data_p != NULL);
 
     /* Only save if attached */
-    if ( s->is_ok && (gncEntryGetOrder( entry ) != NULL || gncEntryGetInvoice( entry ) != NULL ||
-                      gncEntryGetBill( entry ) != NULL) )
+    if (s->is_ok && (gncEntryGetOrder (entry) != NULL ||
+                     gncEntryGetInvoice (entry) != NULL ||
+                     gncEntryGetBill (entry) != NULL))
     {
-        s->is_ok = save_entry( s->be, term_p );
+        s->is_ok = save_entry (s->be, term_p);
     }
 }
 
 static gboolean
-write_entries( GncSqlBackend* be )
+write_entries (GncSqlBackend* be)
 {
     write_objects_t data;
 
-    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail (be != NULL, FALSE);
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach( GNC_ID_ENTRY, be->book, write_single_entry, &data );
+    qof_object_foreach (GNC_ID_ENTRY, be->book, write_single_entry, &data);
 
     return data.is_ok;
 }
 
 /* ================================================================= */
 void
-gnc_entry_sql_initialize( void )
+gnc_entry_sql_initialize (void)
 {
     static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ENTRY,
-        save_entry,							/* commit */
-        load_all_entries,					/* initial_load */
-        create_entry_tables,				/* create_tables */
+        save_entry,                         /* commit */
+        load_all_entries,                   /* initial_load */
+        create_entry_tables,                /* create_tables */
         NULL, NULL, NULL,
-        write_entries						/* write */
+        write_entries                       /* write */
     };
 
-    qof_object_register_backend( GNC_ID_ENTRY, GNC_SQL_BACKEND, &be_data );
+    qof_object_register_backend (GNC_ID_ENTRY, GNC_SQL_BACKEND, &be_data);
 }
 /* ========================== END OF FILE ===================== */

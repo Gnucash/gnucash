@@ -50,11 +50,11 @@ extern "C"
 
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_ID_BILLTERM
+#define _GNC_MOD_NAME   GNC_ID_BILLTERM
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *billterm_version_string = "2.0.0";
+const gchar* billterm_version_string = "2.0.0";
 
 /* ids */
 #define gnc_billterm_string "gnc:GncBillTerm"
@@ -79,35 +79,35 @@ const gchar *billterm_version_string = "2.0.0";
 #define prox_cutoff_string "bt-prox:cutoff-day"
 
 static xmlNodePtr
-billterm_dom_tree_create (GncBillTerm *term)
+billterm_dom_tree_create (GncBillTerm* term)
 {
     xmlNodePtr ret, data;
 
-    ret = xmlNewNode(NULL, BAD_CAST gnc_billterm_string);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST billterm_version_string);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_billterm_string);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST billterm_version_string);
 
-    maybe_add_guid(ret, billterm_guid_string, QOF_INSTANCE(term));
-    xmlAddChild(ret, text_to_dom_tree (billterm_name_string,
-                                       gncBillTermGetName (term)));
-    xmlAddChild(ret, text_to_dom_tree (billterm_desc_string,
-                                       gncBillTermGetDescription (term)));
+    maybe_add_guid (ret, billterm_guid_string, QOF_INSTANCE (term));
+    xmlAddChild (ret, text_to_dom_tree (billterm_name_string,
+                                        gncBillTermGetName (term)));
+    xmlAddChild (ret, text_to_dom_tree (billterm_desc_string,
+                                        gncBillTermGetDescription (term)));
 
-    xmlAddChild(ret, int_to_dom_tree (billterm_refcount_string,
-                                      gncBillTermGetRefcount (term)));
-    xmlAddChild(ret, int_to_dom_tree (billterm_invisible_string,
-                                      gncBillTermGetInvisible (term)));
+    xmlAddChild (ret, int_to_dom_tree (billterm_refcount_string,
+                                       gncBillTermGetRefcount (term)));
+    xmlAddChild (ret, int_to_dom_tree (billterm_invisible_string,
+                                       gncBillTermGetInvisible (term)));
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree(billterm_slots_string,
-                                                    QOF_INSTANCE(term)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree (billterm_slots_string,
+                                                      QOF_INSTANCE (term)));
 
     /* We should not be our own child */
-    if (gncBillTermGetChild(term) != term)
-        maybe_add_guid(ret, billterm_child_string,
-                       QOF_INSTANCE(gncBillTermGetChild (term)));
+    if (gncBillTermGetChild (term) != term)
+        maybe_add_guid (ret, billterm_child_string,
+                        QOF_INSTANCE (gncBillTermGetChild (term)));
 
-    maybe_add_guid(ret, billterm_parent_string,
-                   QOF_INSTANCE(gncBillTermGetParent (term)));
+    maybe_add_guid (ret, billterm_parent_string,
+                    QOF_INSTANCE (gncBillTermGetParent (term)));
 
     switch (gncBillTermGetType (term))
     {
@@ -138,13 +138,13 @@ billterm_dom_tree_create (GncBillTerm *term)
 
 struct billterm_pdata
 {
-    GncBillTerm *term;
-    QofBook *book;
+    GncBillTerm* term;
+    QofBook* book;
 };
 
 static gboolean
-set_int (xmlNodePtr node, GncBillTerm *term,
-         void (*func)(GncBillTerm *, gint))
+set_int (xmlNodePtr node, GncBillTerm* term,
+         void (*func) (GncBillTerm*, gint))
 {
     gint64 val;
     dom_tree_to_integer (node, &val);
@@ -153,8 +153,8 @@ set_int (xmlNodePtr node, GncBillTerm *term,
 }
 
 static gboolean
-set_numeric (xmlNodePtr node, GncBillTerm *term,
-             void (*func)(GncBillTerm *, gnc_numeric))
+set_numeric (xmlNodePtr node, GncBillTerm* term,
+             void (*func) (GncBillTerm*, gnc_numeric))
 {
     gnc_numeric* num = dom_tree_to_gnc_numeric (node);
     g_return_val_if_fail (num, FALSE);
@@ -169,21 +169,21 @@ set_numeric (xmlNodePtr node, GncBillTerm *term,
 static gboolean
 days_duedays_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDueDays);
 }
 
 static gboolean
 days_discdays_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDiscountDays);
 }
 
 static gboolean
 days_discount_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_numeric (node, pdata->term, gncBillTermSetDiscount);
 }
 
@@ -196,7 +196,7 @@ static struct dom_tree_handler days_data_handlers_v2[] =
 };
 
 static gboolean
-dom_tree_to_days_data (xmlNodePtr node, struct billterm_pdata *pdata)
+dom_tree_to_days_data (xmlNodePtr node, struct billterm_pdata* pdata)
 {
     gboolean successful;
 
@@ -213,28 +213,28 @@ dom_tree_to_days_data (xmlNodePtr node, struct billterm_pdata *pdata)
 static gboolean
 prox_dueday_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDueDays);
 }
 
 static gboolean
 prox_discday_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetDiscountDays);
 }
 
 static gboolean
 prox_discount_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_numeric (node, pdata->term, gncBillTermSetDiscount);
 }
 
 static gboolean
 prox_cutoff_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_int (node, pdata->term, gncBillTermSetCutoff);
 }
 
@@ -248,7 +248,7 @@ static struct dom_tree_handler prox_data_handlers_v2[] =
 };
 
 static gboolean
-dom_tree_to_prox_data (xmlNodePtr node, struct billterm_pdata *pdata)
+dom_tree_to_prox_data (xmlNodePtr node, struct billterm_pdata* pdata)
 {
     gboolean successful;
 
@@ -263,13 +263,13 @@ dom_tree_to_prox_data (xmlNodePtr node, struct billterm_pdata *pdata)
 /***********************************************************************/
 
 static gboolean
-set_parent_child (xmlNodePtr node, struct billterm_pdata *pdata,
-                  void (*func)(GncBillTerm *, GncBillTerm *))
+set_parent_child (xmlNodePtr node, struct billterm_pdata* pdata,
+                  void (*func) (GncBillTerm*, GncBillTerm*))
 {
-    GncGUID *guid;
-    GncBillTerm *term;
+    GncGUID* guid;
+    GncBillTerm* term;
 
-    guid = dom_tree_to_guid(node);
+    guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     term = gncBillTermLookup (pdata->book, guid);
     if (!term)
@@ -287,24 +287,24 @@ set_parent_child (xmlNodePtr node, struct billterm_pdata *pdata,
 }
 
 static gboolean
-set_string (xmlNodePtr node, GncBillTerm *term,
-            void (*func)(GncBillTerm *, const char *))
+set_string (xmlNodePtr node, GncBillTerm* term,
+            void (*func) (GncBillTerm*, const char*))
 {
-    char* txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
+    char* txt = dom_tree_to_text (node);
+    g_return_val_if_fail (txt, FALSE);
     func (term, txt);
-    g_free(txt);
+    g_free (txt);
     return TRUE;
 }
 
 static gboolean
 billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
-    GncGUID *guid;
-    GncBillTerm *term;
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
+    GncGUID* guid;
+    GncBillTerm* term;
 
-    guid = dom_tree_to_guid(node);
+    guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     term = gncBillTermLookup (pdata->book, guid);
     if (term)
@@ -315,10 +315,10 @@ billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
     }
     else
     {
-        gncBillTermSetGUID(pdata->term, guid);
+        gncBillTermSetGUID (pdata->term, guid);
     }
 
-    g_free(guid);
+    g_free (guid);
 
     return TRUE;
 }
@@ -326,24 +326,24 @@ billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_name_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_string (node, pdata->term, gncBillTermSetName);
 }
 
 static gboolean
 billterm_desc_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_string (node, pdata->term, gncBillTermSetDescription);
 }
 
 static gboolean
 billterm_refcount_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     gint64 val;
 
-    dom_tree_to_integer(node, &val);
+    dom_tree_to_integer (node, &val);
     gncBillTermSetRefcount (pdata->term, val);
     return TRUE;
 }
@@ -351,10 +351,10 @@ billterm_refcount_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_invisible_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     gint64 val;
 
-    dom_tree_to_integer(node, &val);
+    dom_tree_to_integer (node, &val);
     if (val)
         gncBillTermMakeInvisible (pdata->term);
     return TRUE;
@@ -363,21 +363,21 @@ billterm_invisible_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_parent_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_parent_child (node, pdata, gncBillTermSetParent);
 }
 
 static gboolean
 billterm_child_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
     return set_parent_child (node, pdata, gncBillTermSetChild);
 }
 
 static gboolean
 billterm_days_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
 
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (gncBillTermGetType (pdata->term) == 0, FALSE);
@@ -389,7 +389,7 @@ billterm_days_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
 
     g_return_val_if_fail (node, FALSE);
     g_return_val_if_fail (gncBillTermGetType (pdata->term) == 0, FALSE);
@@ -401,8 +401,8 @@ billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
 static gboolean
 billterm_slots_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
-    struct billterm_pdata *pdata = static_cast<decltype(pdata)>(billterm_pdata);
-    return dom_tree_create_instance_slots (node, QOF_INSTANCE(pdata->term));
+    struct billterm_pdata* pdata = static_cast<decltype (pdata)> (billterm_pdata);
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->term));
 }
 
 static struct dom_tree_handler billterm_handlers_v2[] =
@@ -421,7 +421,7 @@ static struct dom_tree_handler billterm_handlers_v2[] =
 };
 
 static GncBillTerm*
-dom_tree_to_billterm (xmlNodePtr node, QofBook *book)
+dom_tree_to_billterm (xmlNodePtr node, QofBook* book)
 {
     struct billterm_pdata billterm_pdata;
     gboolean successful;
@@ -448,15 +448,15 @@ dom_tree_to_billterm (xmlNodePtr node, QofBook *book)
 }
 
 static gboolean
-gnc_billterm_end_handler(gpointer data_for_children,
-                         GSList* data_from_children, GSList* sibling_data,
-                         gpointer parent_data, gpointer global_data,
-                         gpointer *result, const gchar *tag)
+gnc_billterm_end_handler (gpointer data_for_children,
+                          GSList* data_from_children, GSList* sibling_data,
+                          gpointer parent_data, gpointer global_data,
+                          gpointer* result, const gchar* tag)
 {
-    GncBillTerm *term;
+    GncBillTerm* term;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    QofBook *book = static_cast<decltype(book)>(gdata->bookdata);
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
 
     if (parent_data)
@@ -471,34 +471,34 @@ gnc_billterm_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
     term = dom_tree_to_billterm (tree, book);
     if (term != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, term);
+        gdata->cb (tag, gdata->parsedata, term);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return term != NULL;
 }
 
-static sixtp *
-billterm_sixtp_parser_create(void)
+static sixtp*
+billterm_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_billterm_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_billterm_end_handler, NULL, NULL);
 }
 
 static void
-do_count (QofInstance *term_p, gpointer count_p)
+do_count (QofInstance* term_p, gpointer count_p)
 {
-    int *count = static_cast<decltype(count)>(count_p);
+    int* count = static_cast<decltype (count)> (count_p);
     (*count)++;
 }
 
 static int
-billterm_get_count (QofBook *book)
+billterm_get_count (QofBook* book)
 {
     int count = 0;
     qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -506,48 +506,49 @@ billterm_get_count (QofBook *book)
 }
 
 static void
-xml_add_billterm (QofInstance *term_p, gpointer out_p)
+xml_add_billterm (QofInstance* term_p, gpointer out_p)
 {
     xmlNodePtr node;
-    GncBillTerm *term = (GncBillTerm *) term_p;
-    FILE *out = static_cast<decltype(out)>(out_p);
+    GncBillTerm* term = (GncBillTerm*) term_p;
+    FILE* out = static_cast<decltype (out)> (out_p);
 
-    if (ferror(out))
+    if (ferror (out))
         return;
 
     node = billterm_dom_tree_create (term);
-    xmlElemDump(out, NULL, node);
+    xmlElemDump (out, NULL, node);
     xmlFreeNode (node);
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    if (ferror (out) || fprintf (out, "\n") < 0)
         return;
 }
 
 static gboolean
-billterm_write (FILE *out, QofBook *book)
+billterm_write (FILE* out, QofBook* book)
 {
-    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
-    return ferror(out) == 0;
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_billterm,
+                               (gpointer) out);
+    return ferror (out) == 0;
 }
 
 static gboolean
-billterm_is_grandchild (GncBillTerm *term)
+billterm_is_grandchild (GncBillTerm* term)
 {
-    return (gncBillTermGetParent(gncBillTermGetParent(term)) != NULL);
+    return (gncBillTermGetParent (gncBillTermGetParent (term)) != NULL);
 }
 
-static GncBillTerm *
-billterm_find_senior (GncBillTerm *term)
+static GncBillTerm*
+billterm_find_senior (GncBillTerm* term)
 {
-    GncBillTerm *temp, *parent, *gp = NULL;
+    GncBillTerm* temp, *parent, *gp = NULL;
 
     temp = term;
     do
     {
         /* See if "temp" is a grandchild */
-        parent = gncBillTermGetParent(temp);
+        parent = gncBillTermGetParent (temp);
         if (!parent)
             break;
-        gp = gncBillTermGetParent(parent);
+        gp = gncBillTermGetParent (parent);
         if (!gp)
             break;
 
@@ -572,39 +573,39 @@ billterm_find_senior (GncBillTerm *term)
 
 /* build a list of bill terms that are grandchildren or bogus (empty entry list). */
 static void
-billterm_scrub_cb (QofInstance *term_p, gpointer list_p)
+billterm_scrub_cb (QofInstance* term_p, gpointer list_p)
 {
-    GncBillTerm *term = GNC_BILLTERM(term_p);
-    GList **list = static_cast<decltype(list)>(list_p);
+    GncBillTerm* term = GNC_BILLTERM (term_p);
+    GList** list = static_cast<decltype (list)> (list_p);
 
-    if (billterm_is_grandchild(term))
+    if (billterm_is_grandchild (term))
     {
-        *list = g_list_prepend(*list, term);
+        *list = g_list_prepend (*list, term);
 
     }
-    else if (!gncBillTermGetType(term))
+    else if (!gncBillTermGetType (term))
     {
-        GncBillTerm *t = gncBillTermGetParent(term);
+        GncBillTerm* t = gncBillTermGetParent (term);
         if (t)
         {
             /* Fix up the broken "copy" function */
-            gchar guidstr[GUID_ENCODING_LENGTH+1];
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),guidstr);
-            PWARN("Fixing broken child billterm: %s", guidstr);
+            gchar guidstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), guidstr);
+            PWARN ("Fixing broken child billterm: %s", guidstr);
 
-            gncBillTermBeginEdit(term);
-            gncBillTermSetType(term, gncBillTermGetType(t));
-            gncBillTermSetDueDays (term, gncBillTermGetDueDays(t));
-            gncBillTermSetDiscountDays (term, gncBillTermGetDiscountDays(t));
-            gncBillTermSetDiscount (term, gncBillTermGetDiscount(t));
-            gncBillTermSetCutoff (term, gncBillTermGetCutoff(t));
-            gncBillTermCommitEdit(term);
+            gncBillTermBeginEdit (term);
+            gncBillTermSetType (term, gncBillTermGetType (t));
+            gncBillTermSetDueDays (term, gncBillTermGetDueDays (t));
+            gncBillTermSetDiscountDays (term, gncBillTermGetDiscountDays (t));
+            gncBillTermSetDiscount (term, gncBillTermGetDiscount (t));
+            gncBillTermSetCutoff (term, gncBillTermGetCutoff (t));
+            gncBillTermCommitEdit (term);
 
         }
         else
         {
             /* No parent?  Must be a standalone */
-            *list = g_list_prepend(*list, term);
+            *list = g_list_prepend (*list, term);
         }
     }
 }
@@ -613,82 +614,82 @@ billterm_scrub_cb (QofInstance *term_p, gpointer list_p)
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-billterm_scrub_invoices (QofInstance * invoice_p, gpointer ht_p)
+billterm_scrub_invoices (QofInstance* invoice_p, gpointer ht_p)
 {
-    GHashTable *ht = static_cast<decltype(ht)>(ht_p);
-    GncInvoice *invoice = GNC_INVOICE(invoice_p);
-    GncBillTerm *term, *new_bt;
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncInvoice* invoice = GNC_INVOICE (invoice_p);
+    GncBillTerm* term, *new_bt;
     gint32 count;
 
-    term = gncInvoiceGetTerms(invoice);
+    term = gncInvoiceGetTerms (invoice);
     if (term)
     {
-        if (billterm_is_grandchild(term))
+        if (billterm_is_grandchild (term))
         {
-            gchar guidstr[GUID_ENCODING_LENGTH+1];
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(invoice)),guidstr);
-            PWARN("Fixing i-billterm on invoice %s\n", guidstr);
-            new_bt = billterm_find_senior(term);
-            gncInvoiceBeginEdit(invoice);
-            gncInvoiceSetTerms(invoice, new_bt);
-            gncInvoiceCommitEdit(invoice);
+            gchar guidstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (invoice)), guidstr);
+            PWARN ("Fixing i-billterm on invoice %s\n", guidstr);
+            new_bt = billterm_find_senior (term);
+            gncInvoiceBeginEdit (invoice);
+            gncInvoiceSetTerms (invoice, new_bt);
+            gncInvoiceCommitEdit (invoice);
             term = new_bt;
         }
         if (term)
         {
-            count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+            count = GPOINTER_TO_INT (g_hash_table_lookup (ht, term));
             count++;
-            g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
+            g_hash_table_insert (ht, term, GINT_TO_POINTER (count));
         }
     }
 }
 
 static void
-billterm_scrub_cust (QofInstance * cust_p, gpointer ht_p)
+billterm_scrub_cust (QofInstance* cust_p, gpointer ht_p)
 {
-    GHashTable *ht = static_cast<decltype(ht)>(ht_p);
-    GncCustomer *cust = GNC_CUSTOMER(cust_p);
-    GncBillTerm *term;
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncCustomer* cust = GNC_CUSTOMER (cust_p);
+    GncBillTerm* term;
     gint32 count;
 
-    term = gncCustomerGetTerms(cust);
+    term = gncCustomerGetTerms (cust);
     if (term)
     {
-        count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, term));
         count++;
-        g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
-        if (billterm_is_grandchild(term))
+        g_hash_table_insert (ht, term, GINT_TO_POINTER (count));
+        if (billterm_is_grandchild (term))
         {
-            gchar custstr[GUID_ENCODING_LENGTH+1];
-            gchar termstr[GUID_ENCODING_LENGTH+1];
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(cust)),custstr);
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),termstr);
-            PWARN("customer %s has grandchild billterm %s\n", custstr,termstr);
+            gchar custstr[GUID_ENCODING_LENGTH + 1];
+            gchar termstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (cust)), custstr);
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), termstr);
+            PWARN ("customer %s has grandchild billterm %s\n", custstr, termstr);
         }
     }
 }
 
 static void
-billterm_scrub_vendor (QofInstance * vendor_p, gpointer ht_p)
+billterm_scrub_vendor (QofInstance* vendor_p, gpointer ht_p)
 {
-    GHashTable *ht = static_cast<decltype(ht)>(ht_p);
-    GncVendor *vendor = GNC_VENDOR(vendor_p);
-    GncBillTerm *term;
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncVendor* vendor = GNC_VENDOR (vendor_p);
+    GncBillTerm* term;
     gint32 count;
 
-    term = gncVendorGetTerms(vendor);
+    term = gncVendorGetTerms (vendor);
     if (term)
     {
-        count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, term));
         count++;
-        g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
-        if (billterm_is_grandchild(term))
+        g_hash_table_insert (ht, term, GINT_TO_POINTER (count));
+        if (billterm_is_grandchild (term))
         {
-            gchar vendstr[GUID_ENCODING_LENGTH+1];
-            gchar termstr[GUID_ENCODING_LENGTH+1];
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(vendor)),vendstr);
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),termstr);
-            PWARN("vendor %s has grandchild billterm %s\n", vendstr, termstr);
+            gchar vendstr[GUID_ENCODING_LENGTH + 1];
+            gchar termstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (vendor)), vendstr);
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), termstr);
+            PWARN ("vendor %s has grandchild billterm %s\n", vendstr, termstr);
         }
     }
 }
@@ -696,28 +697,28 @@ billterm_scrub_vendor (QofInstance * vendor_p, gpointer ht_p)
 static void
 billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
 {
-    GncBillTerm *term = static_cast<decltype(term)>(key);
-    gint32 count = GPOINTER_TO_INT(value);
+    GncBillTerm* term = static_cast<decltype (term)> (key);
+    gint32 count = GPOINTER_TO_INT (value);
 
-    if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term))
+    if (count != gncBillTermGetRefcount (term) && !gncBillTermGetInvisible (term))
     {
-        gchar termstr[GUID_ENCODING_LENGTH+1];
-        guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)),termstr);
-        PWARN("Fixing refcount on billterm %s (%" G_GINT64_FORMAT " -> %d)\n",
-                termstr, gncBillTermGetRefcount(term), count);
-        gncBillTermSetRefcount(term, count);
+        gchar termstr[GUID_ENCODING_LENGTH + 1];
+        guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), termstr);
+        PWARN ("Fixing refcount on billterm %s (%" G_GINT64_FORMAT " -> %d)\n",
+               termstr, gncBillTermGetRefcount (term), count);
+        gncBillTermSetRefcount (term, count);
     }
 }
 
 static void
-billterm_scrub (QofBook *book)
+billterm_scrub (QofBook* book)
 {
-    GList *list = NULL;
-    GList *node;
-    GncBillTerm *parent, *term;
-    GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
+    GList* list = NULL;
+    GList* node;
+    GncBillTerm* parent, *term;
+    GHashTable* ht = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-    DEBUG("scrubbing billterms...");
+    DEBUG ("scrubbing billterms...");
     qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
     qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
     qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
@@ -726,36 +727,36 @@ billterm_scrub (QofBook *book)
     /* destroy the list of "grandchildren" bill terms */
     for (node = list; node; node = node->next)
     {
-        gchar termstr[GUID_ENCODING_LENGTH+1];
-        term = static_cast<decltype(term)>(node->data);
+        gchar termstr[GUID_ENCODING_LENGTH + 1];
+        term = static_cast<decltype (term)> (node->data);
 
-        guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(term)), termstr);
+        guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), termstr);
         PWARN ("deleting grandchild billterm: %s\n", termstr);
 
         /* Make sure the parent has no children */
-        parent = gncBillTermGetParent(term);
-        gncBillTermSetChild(parent, NULL);
+        parent = gncBillTermGetParent (term);
+        gncBillTermSetChild (parent, NULL);
 
         /* Destroy this bill term */
-        gncBillTermBeginEdit(term);
-        gncBillTermDestroy(term);
+        gncBillTermBeginEdit (term);
+        gncBillTermDestroy (term);
     }
 
     /* reset the refcounts as necessary */
-    g_hash_table_foreach(ht, billterm_reset_refcount, NULL);
+    g_hash_table_foreach (ht, billterm_reset_refcount, NULL);
 
-    g_list_free(list);
-    g_hash_table_destroy(ht);
+    g_list_free (list);
+    g_hash_table_destroy (ht);
 }
 
 static gboolean
-billterm_ns(FILE *out)
+billterm_ns (FILE* out)
 {
-    g_return_val_if_fail(out, FALSE);
+    g_return_val_if_fail (out, FALSE);
     return
-        gnc_xml2_write_namespace_decl(out, "billterm")
-        && gnc_xml2_write_namespace_decl(out, "bt-days")
-        && gnc_xml2_write_namespace_decl(out, "bt-prox");
+        gnc_xml2_write_namespace_decl (out, "billterm")
+        && gnc_xml2_write_namespace_decl (out, "bt-days")
+        && gnc_xml2_write_namespace_decl (out, "bt-prox");
 }
 
 void
@@ -766,7 +767,7 @@ gnc_billterm_xml_initialize (void)
         GNC_FILE_BACKEND_VERS,
         gnc_billterm_string,
         billterm_sixtp_parser_create,
-        NULL,			/* add_item */
+        NULL,           /* add_item */
         billterm_get_count,
         billterm_write,
         billterm_scrub,
@@ -778,27 +779,27 @@ gnc_billterm_xml_initialize (void)
                                  &be_data);
 }
 
-GncBillTerm *
-gnc_billterm_xml_find_or_create(QofBook *book, GncGUID *guid)
+GncBillTerm*
+gnc_billterm_xml_find_or_create (QofBook* book, GncGUID* guid)
 {
-    GncBillTerm *term;
-    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    GncBillTerm* term;
+    gchar guidstr[GUID_ENCODING_LENGTH + 1];
 
-    guid_to_string_buff(guid, guidstr);
-    g_return_val_if_fail(book, NULL);
-    g_return_val_if_fail(guid, NULL);
-    term = gncBillTermLookup(book, guid);
-    DEBUG("looking for billterm %s, found %p", guidstr, term);
+    guid_to_string_buff (guid, guidstr);
+    g_return_val_if_fail (book, NULL);
+    g_return_val_if_fail (guid, NULL);
+    term = gncBillTermLookup (book, guid);
+    DEBUG ("looking for billterm %s, found %p", guidstr, term);
     if (!term)
     {
-        term = gncBillTermCreate(book);
-        gncBillTermBeginEdit(term);
-        gncBillTermSetGUID(term, guid);
-        gncBillTermCommitEdit(term);
-        DEBUG("Created term: %p", term);
+        term = gncBillTermCreate (book);
+        gncBillTermBeginEdit (term);
+        gncBillTermSetGUID (term, guid);
+        gncBillTermCommitEdit (term);
+        DEBUG ("Created term: %p", term);
     }
     else
-        gncBillTermDecRef(term);
+        gncBillTermDecRef (term);
 
     return term;
 }

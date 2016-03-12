@@ -32,16 +32,16 @@ extern "C"
 }
 #include "gnc-backend-sql.h"
 
-int main( int argc, char ** argv )
+int main (int argc, char** argv)
 {
-    qof_init();
-    cashobjects_register();
-    gnc_sql_init( NULL );
+    qof_init ();
+    cashobjects_register ();
+    gnc_sql_init (NULL);
     /*    do_test(
             qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
             " loading gnc-backend-gda GModule failed");
     */
-    print_test_results();
-    qof_close();
-    exit( get_rv() );
+    print_test_results ();
+    qof_close ();
+    exit (get_rv ());
 }

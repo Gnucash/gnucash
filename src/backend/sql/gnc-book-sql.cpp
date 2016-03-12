@@ -51,10 +51,10 @@ extern "C"
 
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
-static  gpointer get_root_account_guid( gpointer pObject );
-static void set_root_account_guid( gpointer pObject,  gpointer pValue );
-static  gpointer get_root_template_guid( gpointer pObject );
-static void set_root_template_guid( gpointer pObject,  gpointer pValue );
+static  gpointer get_root_account_guid (gpointer pObject);
+static void set_root_account_guid (gpointer pObject,  gpointer pValue);
+static  gpointer get_root_template_guid (gpointer pObject);
+static void set_root_template_guid (gpointer pObject,  gpointer pValue);
 
 static const GncSqlColumnTableEntry col_table[] =
 {
@@ -72,164 +72,165 @@ static const GncSqlColumnTableEntry col_table[] =
 
 /* ================================================================= */
 static  gpointer
-get_root_account_guid( gpointer pObject )
+get_root_account_guid (gpointer pObject)
 {
-    QofBook* book = QOF_BOOK(pObject);
+    QofBook* book = QOF_BOOK (pObject);
     const Account* root;
 
-    g_return_val_if_fail( pObject != NULL, NULL );
-    g_return_val_if_fail( QOF_IS_BOOK(pObject), NULL );
+    g_return_val_if_fail (pObject != NULL, NULL);
+    g_return_val_if_fail (QOF_IS_BOOK (pObject), NULL);
 
-    root = gnc_book_get_root_account( book );
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(root) );
+    root = gnc_book_get_root_account (book);
+    return (gpointer)qof_instance_get_guid (QOF_INSTANCE (root));
 }
 
 static void
-set_root_account_guid( gpointer pObject,  gpointer pValue )
+set_root_account_guid (gpointer pObject,  gpointer pValue)
 {
-    QofBook* book = QOF_BOOK(pObject);
+    QofBook* book = QOF_BOOK (pObject);
     const Account* root;
     GncGUID* guid = (GncGUID*)pValue;
 
-    g_return_if_fail( pObject != NULL );
-    g_return_if_fail( QOF_IS_BOOK(pObject) );
-    g_return_if_fail( pValue != NULL );
+    g_return_if_fail (pObject != NULL);
+    g_return_if_fail (QOF_IS_BOOK (pObject));
+    g_return_if_fail (pValue != NULL);
 
-    root = gnc_book_get_root_account( book );
-    qof_instance_set_guid( QOF_INSTANCE(root), guid );
+    root = gnc_book_get_root_account (book);
+    qof_instance_set_guid (QOF_INSTANCE (root), guid);
 }
 
 static  gpointer
-get_root_template_guid( gpointer pObject )
+get_root_template_guid (gpointer pObject)
 {
-    const QofBook* book = QOF_BOOK(pObject);
+    const QofBook* book = QOF_BOOK (pObject);
     const Account* root;
 
-    g_return_val_if_fail( pObject != NULL, NULL );
-    g_return_val_if_fail( QOF_IS_BOOK(pObject), NULL );
+    g_return_val_if_fail (pObject != NULL, NULL);
+    g_return_val_if_fail (QOF_IS_BOOK (pObject), NULL);
 
-    root = gnc_book_get_template_root( book );
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(root) );
+    root = gnc_book_get_template_root (book);
+    return (gpointer)qof_instance_get_guid (QOF_INSTANCE (root));
 }
 
 static void
-set_root_template_guid( gpointer pObject,  gpointer pValue )
+set_root_template_guid (gpointer pObject,  gpointer pValue)
 {
-    QofBook* book = QOF_BOOK(pObject);
+    QofBook* book = QOF_BOOK (pObject);
     GncGUID* guid = (GncGUID*)pValue;
     Account* root;
 
-    g_return_if_fail( pObject != NULL );
-    g_return_if_fail( QOF_IS_BOOK(pObject) );
-    g_return_if_fail( pValue != NULL );
+    g_return_if_fail (pObject != NULL);
+    g_return_if_fail (QOF_IS_BOOK (pObject));
+    g_return_if_fail (pValue != NULL);
 
-    root = gnc_book_get_template_root( book );
-    if ( root == NULL )
+    root = gnc_book_get_template_root (book);
+    if (root == NULL)
     {
-        root = xaccMallocAccount( book );
-        xaccAccountBeginEdit( root );
-        xaccAccountSetType( root, ACCT_TYPE_ROOT );
-        xaccAccountCommitEdit( root );
-        gnc_book_set_template_root( book, root );
+        root = xaccMallocAccount (book);
+        xaccAccountBeginEdit (root);
+        xaccAccountSetType (root, ACCT_TYPE_ROOT);
+        xaccAccountCommitEdit (root);
+        gnc_book_set_template_root (book, root);
     }
-    qof_instance_set_guid( QOF_INSTANCE(root), guid );
+    qof_instance_set_guid (QOF_INSTANCE (root), guid);
 }
 
 /* ================================================================= */
 static void
-load_single_book( GncSqlBackend* be, GncSqlRow* row )
+load_single_book (GncSqlBackend* be, GncSqlRow* row)
 {
     QofBook* pBook;
 
-    g_return_if_fail( be != NULL );
-    g_return_if_fail( row != NULL );
+    g_return_if_fail (be != NULL);
+    g_return_if_fail (row != NULL);
 
-    gnc_sql_load_guid( be, row );
+    gnc_sql_load_guid (be, row);
 
     pBook = be->book;
-    if ( pBook == NULL )
+    if (pBook == NULL)
     {
-        pBook = qof_book_new();
+        pBook = qof_book_new ();
     }
 
-    qof_book_begin_edit( pBook );
-    gnc_sql_load_object( be, row, GNC_ID_BOOK, pBook, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE(pBook) );
-    qof_book_commit_edit( pBook );
+    qof_book_begin_edit (pBook);
+    gnc_sql_load_object (be, row, GNC_ID_BOOK, pBook, col_table);
+    gnc_sql_slots_load (be, QOF_INSTANCE (pBook));
+    qof_book_commit_edit (pBook);
 
-    qof_instance_mark_clean( QOF_INSTANCE(pBook) );
+    qof_instance_mark_clean (QOF_INSTANCE (pBook));
 }
 
 static void
-load_all_books( GncSqlBackend* be )
+load_all_books (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
 
-    g_return_if_fail( be != NULL );
+    g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement( be, BOOK_TABLE );
-    if ( stmt != NULL )
+    stmt = gnc_sql_create_select_statement (be, BOOK_TABLE);
+    if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement( be, stmt );
-        gnc_sql_statement_dispose( stmt );
-        if ( result != NULL )
+        result = gnc_sql_execute_select_statement (be, stmt);
+        gnc_sql_statement_dispose (stmt);
+        if (result != NULL)
         {
-            GncSqlRow* row = gnc_sql_result_get_first_row( result );
+            GncSqlRow* row = gnc_sql_result_get_first_row (result);
 
             /* If there are no rows, try committing the book; unset
-	     * loading so that it will actually get saved.
-	     */
-            if ( row == NULL )
+            * loading so that it will actually get saved.
+            */
+            if (row == NULL)
             {
                 be->loading = FALSE;
-                (void)gnc_sql_save_book( be, QOF_INSTANCE(be->book) );
+                (void)gnc_sql_save_book (be, QOF_INSTANCE (be->book));
                 be->loading = TRUE;
             }
             else
             {
                 // Otherwise, load the 1st book.
-                load_single_book( be, row );
+                load_single_book (be, row);
             }
 
-            gnc_sql_result_dispose( result );
+            gnc_sql_result_dispose (result);
         }
     }
 }
 
 /* ================================================================= */
 static void
-create_book_tables( GncSqlBackend* be )
+create_book_tables (GncSqlBackend* be)
 {
     gint version;
 
-    g_return_if_fail( be != NULL );
+    g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version( be, BOOK_TABLE );
-    if ( version == 0 )
+    version = gnc_sql_get_table_version (be, BOOK_TABLE);
+    if (version == 0)
     {
-        (void)gnc_sql_create_table( be, BOOK_TABLE, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table (be, BOOK_TABLE, TABLE_VERSION, col_table);
     }
 }
 
 /* ================================================================= */
 gboolean
-gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst)
+gnc_sql_save_book (GncSqlBackend* be, QofInstance* inst)
 {
     gboolean status;
 
-    g_return_val_if_fail( be != NULL, FALSE );
-    g_return_val_if_fail( inst != NULL, FALSE );
-    g_return_val_if_fail( QOF_IS_BOOK(inst), FALSE );
+    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (inst != NULL, FALSE);
+    g_return_val_if_fail (QOF_IS_BOOK (inst), FALSE);
 
-    status = gnc_sql_commit_standard_item( be, inst, BOOK_TABLE, GNC_ID_BOOK, col_table );
+    status = gnc_sql_commit_standard_item (be, inst, BOOK_TABLE, GNC_ID_BOOK,
+                                           col_table);
 
     return status;
 }
 
 /* ================================================================= */
 void
-gnc_sql_init_book_handler( void )
+gnc_sql_init_book_handler (void)
 {
     static GncSqlObjectBackend be_data =
     {
@@ -237,13 +238,13 @@ gnc_sql_init_book_handler( void )
         GNC_ID_BOOK,
         gnc_sql_save_book,      /* commit */
         load_all_books,         /* initial_load */
-        create_book_tables,		/* create_tables */
+        create_book_tables,     /* create_tables */
         NULL,                   /* compile_query */
         NULL,                   /* run_query */
         NULL,                   /* free_query */
         NULL                    /* write */
     };
 
-    (void)qof_object_register_backend( GNC_ID_BOOK, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend (GNC_ID_BOOK, GNC_SQL_BACKEND, &be_data);
 }
 /* ========================== END OF FILE ===================== */

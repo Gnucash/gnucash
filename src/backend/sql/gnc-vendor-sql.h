@@ -30,6 +30,6 @@
 #ifndef GNC_VENDOR_SQL_H
 #define GNC_VENDOR_SQL_H
 
-void gnc_vendor_sql_initialize( void );
+void gnc_vendor_sql_initialize (void);
 
 #endif /* GNC_VENDOR_SQL_H */

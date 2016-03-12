@@ -64,8 +64,8 @@ extern "C"
  * The ns() method will output XML namespace information for the selected
  *   plug-in object.
  */
-#define GNC_FILE_BACKEND	"gnc:file:2"
-#define GNC_FILE_BACKEND_VERS	2
+#define GNC_FILE_BACKEND    "gnc:file:2"
+#define GNC_FILE_BACKEND_VERS   2
 
 /**
  * Struct used to pass the account group/accounts and trasnactions in
@@ -75,38 +75,42 @@ extern "C"
  **/
 typedef struct
 {
-    AccountList	*accts;
-    TransList	*transactions;
-    QofBook *book;
+    AccountList* accts;
+    TransList*   transactions;
+    QofBook* book;
 } gnc_template_xaction_data;
 
 /** read in an account group from a file */
-gboolean qof_session_load_from_xml_file_v2(FileBackend *, QofBook *, QofBookFileType);
+gboolean qof_session_load_from_xml_file_v2 (FileBackend*, QofBook*,
+                                            QofBookFileType);
 
 /* write all book info to a file */
-gboolean gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *fh);
-gboolean gnc_book_write_to_xml_file_v2(QofBook *book, const char *filename, gboolean compress);
+gboolean gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* fh);
+gboolean gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
+                                        gboolean compress);
 
 /** write just the commodities and accounts to a file */
-gboolean gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *fh);
-gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
-        const char *filename);
+gboolean gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* be,
+                                                       QofBook* book, FILE* fh);
+gboolean gnc_book_write_accounts_to_xml_file_v2 (QofBackend* be, QofBook* book,
+                                                 const char* filename);
 
 /** The is_gncxml_file() routine checks to see if the first few
  * chars of the file look like gnc-xml data.
  */
-QofBookFileType gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
+QofBookFileType gnc_is_xml_data_file_v2 (const gchar* name,
+                                         gboolean* with_encoding);
 
 /** Write a name-space declaration for the provided namespace data type
  * within the GNC XML namespace at http://www.gnucash.org/XML.
  */
-gboolean gnc_xml2_write_namespace_decl (FILE *out, const char *name_space);
+gboolean gnc_xml2_write_namespace_decl (FILE* out, const char* name_space);
 
 
 typedef struct
 {
     GQuark encoding;
-    gchar *utf8_string;
+    gchar* utf8_string;
 } conv_type;
 
 /** Read a file as plain byte stream to find words that are not completely ASCII.
@@ -130,9 +134,9 @@ typedef struct
  *
  * @return Size of impossible, -1 on error.
  */
-gint gnc_xml2_find_ambiguous(
-    const gchar *filename, GList *encodings, GHashTable **unique,
-    GHashTable **ambiguous, GList **impossible);
+gint gnc_xml2_find_ambiguous (
+    const gchar* filename, GList* encodings, GHashTable** unique,
+    GHashTable** ambiguous, GList** impossible);
 
 /** Parse a file in push mode, but replace byte sequences in the file given a
  * hash table of substitutions
@@ -140,7 +144,7 @@ gint gnc_xml2_find_ambiguous(
  * @param subst hash table with keys and values of type gchar*
  */
 gboolean gnc_xml2_parse_with_subst (
-    FileBackend *fbe, QofBook *book, GHashTable *subst);
+    FileBackend* fbe, QofBook* book, GHashTable* subst);
 #ifdef __cplusplus
 }
 #endif

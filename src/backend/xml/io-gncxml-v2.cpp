@@ -86,14 +86,14 @@ extern "C"
 static QofLogModule log_module = GNC_MOD_IO;
 
 /* map pointers, e.g. of type FILE*, to GThreads */
-static GHashTable *threads = NULL;
-G_LOCK_DEFINE_STATIC(threads);
+static GHashTable* threads = NULL;
+G_LOCK_DEFINE_STATIC (threads);
 
 typedef struct
 {
     gint fd;
-    gchar *filename;
-    gchar *perms;
+    gchar* filename;
+    gchar* perms;
     gboolean compress;
 } gz_thread_params_t;
 
@@ -102,38 +102,40 @@ struct file_backend
 {
     gboolean        ok;
     gpointer        data;
-    sixtp_gdv2    * gd;
-    const char    * tag;
-    sixtp         * parser;
-    FILE          * out;
-    QofBook       * book;
+    sixtp_gdv2*     gd;
+    const char*     tag;
+    sixtp*          parser;
+    FILE*           out;
+    QofBook*        book;
 };
 
 #define GNC_V2_STRING "gnc-v2"
 /* non-static because they are used in sixtp.c */
-const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
-extern const gchar *gnc_v2_book_version_string;        /* see gnc-book-xml-v2 */
+const gchar* gnc_v2_xml_version_string = GNC_V2_STRING;
+extern const gchar*
+gnc_v2_book_version_string;        /* see gnc-book-xml-v2 */
 
 /* Forward declarations */
-static FILE *try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
+static FILE* try_gz_open (const char* filename, const char* perms,
+                          gboolean use_gzip,
                           gboolean compress);
-static gboolean is_gzipped_file(const gchar *name);
-static gboolean wait_for_gzip(FILE *file);
+static gboolean is_gzipped_file (const gchar* name);
+static gboolean wait_for_gzip (FILE* file);
 
 static void
-clear_up_account_commodity(
-    gnc_commodity_table *tbl, Account *act,
-    gnc_commodity * (*getter) (const Account *account),
-    void (*setter) (Account *account, gnc_commodity *comm),
-    int (*scu_getter) (const Account *account),
-    void (*scu_setter) (Account *account, int scu))
+clear_up_account_commodity (
+    gnc_commodity_table* tbl, Account* act,
+    gnc_commodity * (*getter) (const Account* account),
+    void (*setter) (Account* account, gnc_commodity* comm),
+    int (*scu_getter) (const Account* account),
+    void (*scu_setter) (Account* account, int scu))
 {
-    gnc_commodity *gcom;
-    gnc_commodity *com = getter(act);
+    gnc_commodity* gcom;
+    gnc_commodity* com = getter (act);
     int old_scu;
 
     if (scu_getter)
-        old_scu = scu_getter(act);
+        old_scu = scu_getter (act);
     else
         old_scu = 0;
 
@@ -142,8 +144,8 @@ clear_up_account_commodity(
         return;
     }
 
-    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_mnemonic(com));
+    gcom = gnc_commodity_table_lookup (tbl, gnc_commodity_get_namespace (com),
+                                       gnc_commodity_get_mnemonic (com));
 
     if (gcom == com)
     {
@@ -151,35 +153,35 @@ clear_up_account_commodity(
     }
     else if (!gcom)
     {
-        PWARN("unable to find global commodity for %s adding new",
-              gnc_commodity_get_unique_name(com));
-        gnc_commodity_table_insert(tbl, com);
+        PWARN ("unable to find global commodity for %s adding new",
+               gnc_commodity_get_unique_name (com));
+        gnc_commodity_table_insert (tbl, com);
     }
     else
     {
-        setter(act, gcom);
+        setter (act, gcom);
         if (old_scu != 0 && scu_setter)
-            scu_setter(act, old_scu);
-        gnc_commodity_destroy(com);
+            scu_setter (act, old_scu);
+        gnc_commodity_destroy (com);
     }
 }
 
 static void
-clear_up_transaction_commodity(
-    gnc_commodity_table *tbl, Transaction *trans,
-    gnc_commodity * (*getter) (const Transaction *trans),
-    void (*setter) (Transaction *trans, gnc_commodity *comm))
+clear_up_transaction_commodity (
+    gnc_commodity_table* tbl, Transaction* trans,
+    gnc_commodity * (*getter) (const Transaction* trans),
+    void (*setter) (Transaction* trans, gnc_commodity* comm))
 {
-    gnc_commodity *gcom;
-    gnc_commodity *com = getter(trans);
+    gnc_commodity* gcom;
+    gnc_commodity* com = getter (trans);
 
     if (!com)
     {
         return;
     }
 
-    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_mnemonic(com));
+    gcom = gnc_commodity_table_lookup (tbl, gnc_commodity_get_namespace (com),
+                                       gnc_commodity_get_mnemonic (com));
 
     if (gcom == com)
     {
@@ -187,38 +189,38 @@ clear_up_transaction_commodity(
     }
     else if (!gcom)
     {
-        PWARN("unable to find global commodity for %s adding new",
-              gnc_commodity_get_unique_name(com));
-        gnc_commodity_table_insert(tbl, com);
+        PWARN ("unable to find global commodity for %s adding new",
+               gnc_commodity_get_unique_name (com));
+        gnc_commodity_table_insert (tbl, com);
     }
     else
     {
-        xaccTransBeginEdit(trans);
-        setter(trans, gcom);
-        xaccTransCommitEdit(trans);
-        gnc_commodity_destroy(com);
+        xaccTransBeginEdit (trans);
+        setter (trans, gcom);
+        xaccTransCommitEdit (trans);
+        gnc_commodity_destroy (com);
     }
 }
 
 static gboolean
-add_account_local(sixtp_gdv2 *data, Account *act)
+add_account_local (sixtp_gdv2* data, Account* act)
 {
-    gnc_commodity_table *table;
-    Account *parent, *root;
+    gnc_commodity_table* table;
+    Account* parent, *root;
     int type;
 
     table = gnc_commodity_table_get_table (data->book);
 
-    clear_up_account_commodity(table, act,
-                               DxaccAccountGetCurrency,
-                               DxaccAccountSetCurrency,
-                               NULL, NULL);
+    clear_up_account_commodity (table, act,
+                                DxaccAccountGetCurrency,
+                                DxaccAccountSetCurrency,
+                                NULL, NULL);
 
-    clear_up_account_commodity(table, act,
-                               xaccAccountGetCommodity,
-                               xaccAccountSetCommodity,
-                               xaccAccountGetCommoditySCUi,
-                               xaccAccountSetCommoditySCU);
+    clear_up_account_commodity (table, act,
+                                xaccAccountGetCommodity,
+                                xaccAccountSetCommodity,
+                                xaccAccountGetCommoditySCUi,
+                                xaccAccountSetCommoditySCU);
 
     xaccAccountScrubCommodity (act);
     xaccAccountScrubKvp (act);
@@ -226,137 +228,137 @@ add_account_local(sixtp_gdv2 *data, Account *act)
     /* Backwards compatability.  If there's no parent, see if this
      * account is of type ROOT.  If not, find or create a ROOT
      * account and make that the parent. */
-    type = xaccAccountGetType(act);
+    type = xaccAccountGetType (act);
     if (type == ACCT_TYPE_ROOT)
     {
-        gnc_book_set_root_account(data->book, act);
+        gnc_book_set_root_account (data->book, act);
     }
     else
     {
-        parent = gnc_account_get_parent(act);
+        parent = gnc_account_get_parent (act);
         if (parent == NULL)
         {
-            root = gnc_book_get_root_account(data->book);
-            gnc_account_append_child(root, act);
+            root = gnc_book_get_root_account (data->book);
+            gnc_account_append_child (root, act);
         }
     }
 
     data->counter.accounts_loaded++;
-    sixtp_run_callback(data, "account");
+    sixtp_run_callback (data, "account");
 
     return FALSE;
 }
 
 static gboolean
-add_book_local(sixtp_gdv2 *data, QofBook *book)
+add_book_local (sixtp_gdv2* data, QofBook* book)
 {
     data->counter.books_loaded++;
-    sixtp_run_callback(data, "book");
+    sixtp_run_callback (data, "book");
 
     return FALSE;
 }
 
 static gboolean
-add_commodity_local(sixtp_gdv2 *data, gnc_commodity *com)
+add_commodity_local (sixtp_gdv2* data, gnc_commodity* com)
 {
-    gnc_commodity_table *table;
+    gnc_commodity_table* table;
 
     table = gnc_commodity_table_get_table (data->book);
 
-    gnc_commodity_table_insert(table, com);
+    gnc_commodity_table_insert (table, com);
 
     data->counter.commodities_loaded++;
-    sixtp_run_callback(data, "commodities");
+    sixtp_run_callback (data, "commodities");
 
     return TRUE;
 }
 
 static gboolean
-add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
+add_transaction_local (sixtp_gdv2* data, Transaction* trn)
 {
-    gnc_commodity_table *table;
+    gnc_commodity_table* table;
 
     table = gnc_commodity_table_get_table (data->book);
 
     xaccTransBeginEdit (trn);
-    clear_up_transaction_commodity(table, trn,
-                                   xaccTransGetCurrency,
-                                   xaccTransSetCurrency);
+    clear_up_transaction_commodity (table, trn,
+                                    xaccTransGetCurrency,
+                                    xaccTransSetCurrency);
 
     xaccTransScrubCurrency (trn);
     xaccTransCommitEdit (trn);
 
     data->counter.transactions_loaded++;
-    sixtp_run_callback(data, "transaction");
+    sixtp_run_callback (data, "transaction");
     return TRUE;
 }
 
 static gboolean
-add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
+add_schedXaction_local (sixtp_gdv2* data, SchedXaction* sx)
 {
-    SchedXactions *sxes;
-    sxes = gnc_book_get_schedxactions(data->book);
-    gnc_sxes_add_sx(sxes, sx);
+    SchedXactions* sxes;
+    sxes = gnc_book_get_schedxactions (data->book);
+    gnc_sxes_add_sx (sxes, sx);
     data->counter.schedXactions_loaded++;
-    sixtp_run_callback(data, "schedXactions");
+    sixtp_run_callback (data, "schedXactions");
     return TRUE;
 }
 
 static gboolean
-add_template_transaction_local( sixtp_gdv2 *data,
-                                gnc_template_xaction_data *txd )
+add_template_transaction_local (sixtp_gdv2* data,
+                                gnc_template_xaction_data* txd)
 {
-    GList *n;
-    Account *acctRoot = NULL;
-    QofBook *book;
+    GList* n;
+    Account* acctRoot = NULL;
+    QofBook* book;
 
     book = data->book;
 
     /* expect a struct of: */
     /* . template accounts. */
     /* . transactions in those accounts. */
-    for ( n = txd->accts; n; n = n->next )
+    for (n = txd->accts; n; n = n->next)
     {
-        if ( gnc_account_get_parent( (Account*)n->data ) == NULL )
+        if (gnc_account_get_parent ((Account*)n->data) == NULL)
         {
-            if ( xaccAccountGetType( (Account*)n->data ) == ACCT_TYPE_ROOT )
+            if (xaccAccountGetType ((Account*)n->data) == ACCT_TYPE_ROOT)
             {
                 /* replace the gnc_book_init-created root account */
-                gnc_book_set_template_root(book, (Account *)n->data);
+                gnc_book_set_template_root (book, (Account*)n->data);
             }
             else
             {
                 /* This is an old data file that doesn't have a template root
                    account and this is a top level account.  Make it a child
                    of the template root account. */
-                acctRoot = gnc_book_get_template_root(book);
-                gnc_account_append_child( acctRoot, (Account*)n->data );
+                acctRoot = gnc_book_get_template_root (book);
+                gnc_account_append_child (acctRoot, (Account*)n->data);
             }
         }
 
     }
 
-    for ( n = txd->transactions; n; n = n->next )
+    for (n = txd->transactions; n; n = n->next)
     {
         /* insert transactions into accounts */
-        add_transaction_local( data, (Transaction*)n->data );
+        add_transaction_local (data, (Transaction*)n->data);
     }
 
     return TRUE;
 }
 
 static gboolean
-add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
+add_pricedb_local (sixtp_gdv2* data, GNCPriceDB* db)
 {
     /* gnc_pricedb_print_contents(db, stdout); */
     return TRUE;
 }
 
 static void
-do_counter_cb (const char *type, gpointer data_p, gpointer be_data_p)
+do_counter_cb (const char* type, gpointer data_p, gpointer be_data_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    struct file_backend *be_data = static_cast<decltype(be_data)>(be_data_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
 
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
@@ -371,17 +373,17 @@ do_counter_cb (const char *type, gpointer data_p, gpointer be_data_p)
 }
 
 static gboolean
-gnc_counter_end_handler(gpointer data_for_children,
-                        GSList* data_from_children, GSList* sibling_data,
-                        gpointer parent_data, gpointer global_data,
-                        gpointer *result, const gchar *tag)
+gnc_counter_end_handler (gpointer data_for_children,
+                         GSList* data_from_children, GSList* sibling_data,
+                         gpointer parent_data, gpointer global_data,
+                         gpointer* result, const gchar* tag)
 {
-    char *strval;
+    char* strval;
     gint64 val;
-    char *type;
+    char* type;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    sixtp_gdv2 *sixdata = (sixtp_gdv2*)gdata->parsedata;
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    sixtp_gdv2* sixdata = (sixtp_gdv2*)gdata->parsedata;
     gboolean ret = TRUE;
 
     if (parent_data)
@@ -392,45 +394,45 @@ gnc_counter_end_handler(gpointer data_for_children,
     if (!tag)
         return TRUE;
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
     /* Note: BADXML.
      *
      * This is invalid xml because the namespace isn't declared in the
      * tag itself. This should be changed to 'type' at some point. */
-    type = (char*)xmlGetProp(tree, BAD_CAST "cd:type");
-    strval = dom_tree_to_text(tree);
-    if (!string_to_gint64(strval, &val))
+    type = (char*)xmlGetProp (tree, BAD_CAST "cd:type");
+    strval = dom_tree_to_text (tree);
+    if (!string_to_gint64 (strval, &val))
     {
         PERR ("string_to_gint64 failed with input: %s",
               strval ? strval : "(null)");
         ret = FALSE;
     }
-    else if (g_strcmp0(type, "transaction") == 0)
+    else if (g_strcmp0 (type, "transaction") == 0)
     {
         sixdata->counter.transactions_total = val;
     }
-    else if (g_strcmp0(type, "account") == 0)
+    else if (g_strcmp0 (type, "account") == 0)
     {
         sixdata->counter.accounts_total = val;
     }
-    else if (g_strcmp0(type, "book") == 0)
+    else if (g_strcmp0 (type, "book") == 0)
     {
         sixdata->counter.books_total = val;
     }
-    else if (g_strcmp0(type, "commodity") == 0)
+    else if (g_strcmp0 (type, "commodity") == 0)
     {
         sixdata->counter.commodities_total = val;
     }
-    else if (g_strcmp0(type, "schedxaction") == 0)
+    else if (g_strcmp0 (type, "schedxaction") == 0)
     {
         sixdata->counter.schedXactions_total = val;
     }
-    else if (g_strcmp0(type, "budget") == 0)
+    else if (g_strcmp0 (type, "budget") == 0)
     {
         sixdata->counter.budgets_total = val;
     }
-    else if (g_strcmp0(type, "price") == 0)
+    else if (g_strcmp0 (type, "price") == 0)
     {
         sixdata->counter.prices_total = val;
     }
@@ -445,7 +447,7 @@ gnc_counter_end_handler(gpointer data_for_children,
 
         if (be_data.ok == FALSE)
         {
-            PERR("Unknown type: %s", type ? type : "(null)");
+            PERR ("Unknown type: %s", type ? type : "(null)");
             /* Do *NOT* flag this as an error. Gnucash 1.8 writes invalid
              * xml by writing the 'cd:type' attribute without providing
              * the namespace in the gnc:count-data tag.  The parser is
@@ -458,40 +460,40 @@ gnc_counter_end_handler(gpointer data_for_children,
 
     g_free (strval);
     xmlFree (type);
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
     return ret;
 }
 
 static sixtp*
-gnc_counter_sixtp_parser_create(void)
+gnc_counter_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_counter_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_counter_end_handler, NULL, NULL);
 }
 
 static void
-debug_print_counter_data(load_counter *data)
+debug_print_counter_data (load_counter* data)
 {
-    DEBUG("Transactions: Total: %d, Loaded: %d",
-          data->transactions_total, data->transactions_loaded);
-    DEBUG("Accounts: Total: %d, Loaded: %d",
-          data->accounts_total, data->accounts_loaded);
-    DEBUG("Books: Total: %d, Loaded: %d",
-          data->books_total, data->books_loaded);
-    DEBUG("Commodities: Total: %d, Loaded: %d",
-          data->commodities_total, data->commodities_loaded);
-    DEBUG("Scheduled Transactions: Total: %d, Loaded: %d",
-          data->schedXactions_total, data->schedXactions_loaded);
-    DEBUG("Budgets: Total: %d, Loaded: %d",
-          data->budgets_total, data->budgets_loaded);
+    DEBUG ("Transactions: Total: %d, Loaded: %d",
+           data->transactions_total, data->transactions_loaded);
+    DEBUG ("Accounts: Total: %d, Loaded: %d",
+           data->accounts_total, data->accounts_loaded);
+    DEBUG ("Books: Total: %d, Loaded: %d",
+           data->books_total, data->books_loaded);
+    DEBUG ("Commodities: Total: %d, Loaded: %d",
+           data->commodities_total, data->commodities_loaded);
+    DEBUG ("Scheduled Transactions: Total: %d, Loaded: %d",
+           data->schedXactions_total, data->schedXactions_loaded);
+    DEBUG ("Budgets: Total: %d, Loaded: %d",
+           data->budgets_total, data->budgets_loaded);
 }
 
 static void
-file_rw_feedback (sixtp_gdv2 *gd, const char *type)
+file_rw_feedback (sixtp_gdv2* gd, const char* type)
 {
-    load_counter *counter;
+    load_counter* counter;
     int loaded, total, percentage;
 
-    g_assert(gd != NULL);
+    g_assert (gd != NULL);
     if (!gd->gui_display_fn)
         return;
 
@@ -523,28 +525,28 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
 //      printf("Scheduled Transactions: Total: %d, Loaded: %d\n",
 //             counter->schedXactions_total, counter->schedXactions_loaded);
 //      printf("Budgets: Total: %d, Loaded: %d\n",
-//	     counter->budgets_total, counter->budgets_loaded);
+//       counter->budgets_total, counter->budgets_loaded);
     }
-    gd->gui_display_fn(NULL, percentage);
+    gd->gui_display_fn (NULL, percentage);
 }
 
-static const char *BOOK_TAG = "gnc:book";
-static const char *BOOK_ID_TAG = "book:id";
-static const char *BOOK_SLOTS_TAG = "book:slots";
-static const char *ACCOUNT_TAG = "gnc:account";
-static const char *PRICEDB_TAG = "gnc:pricedb";
-static const char *COMMODITY_TAG = "gnc:commodity";
-static const char *COUNT_DATA_TAG = "gnc:count-data";
-static const char *TRANSACTION_TAG = "gnc:transaction";
-static const char *SCHEDXACTION_TAG = "gnc:schedxaction";
-static const char *TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
-static const char *BUDGET_TAG = "gnc:budget";
+static const char* BOOK_TAG = "gnc:book";
+static const char* BOOK_ID_TAG = "book:id";
+static const char* BOOK_SLOTS_TAG = "book:slots";
+static const char* ACCOUNT_TAG = "gnc:account";
+static const char* PRICEDB_TAG = "gnc:pricedb";
+static const char* COMMODITY_TAG = "gnc:commodity";
+static const char* COUNT_DATA_TAG = "gnc:count-data";
+static const char* TRANSACTION_TAG = "gnc:transaction";
+static const char* SCHEDXACTION_TAG = "gnc:schedxaction";
+static const char* TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
+static const char* BUDGET_TAG = "gnc:budget";
 
 static void
-add_item_cb (const char *type, gpointer data_p, gpointer be_data_p)
+add_item_cb (const char* type, gpointer data_p, gpointer be_data_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    struct file_backend *be_data = static_cast<decltype(be_data)>(be_data_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
 
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
@@ -555,42 +557,42 @@ add_item_cb (const char *type, gpointer data_p, gpointer be_data_p)
     if (!g_strcmp0 (be_data->tag, data->type_name))
     {
         if (data->add_item)
-            (data->add_item)(be_data->gd, be_data->data);
+            (data->add_item) (be_data->gd, be_data->data);
 
         be_data->ok = TRUE;
     }
 }
 
 static gboolean
-book_callback(const char *tag, gpointer globaldata, gpointer data)
+book_callback (const char* tag, gpointer globaldata, gpointer data)
 {
-    sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
+    sixtp_gdv2* gd = (sixtp_gdv2*)globaldata;
 
-    if (g_strcmp0(tag, ACCOUNT_TAG) == 0)
+    if (g_strcmp0 (tag, ACCOUNT_TAG) == 0)
     {
-        add_account_local(gd, (Account*)data);
+        add_account_local (gd, (Account*)data);
     }
-    else if (g_strcmp0(tag, PRICEDB_TAG) == 0)
+    else if (g_strcmp0 (tag, PRICEDB_TAG) == 0)
     {
-        add_pricedb_local(gd, (GNCPriceDB*)data);
+        add_pricedb_local (gd, (GNCPriceDB*)data);
     }
-    else if (g_strcmp0(tag, COMMODITY_TAG) == 0)
+    else if (g_strcmp0 (tag, COMMODITY_TAG) == 0)
     {
-        add_commodity_local(gd, (gnc_commodity*)data);
+        add_commodity_local (gd, (gnc_commodity*)data);
     }
-    else if (g_strcmp0(tag, TRANSACTION_TAG) == 0)
+    else if (g_strcmp0 (tag, TRANSACTION_TAG) == 0)
     {
-        add_transaction_local(gd, (Transaction*)data);
+        add_transaction_local (gd, (Transaction*)data);
     }
-    else if (g_strcmp0(tag, SCHEDXACTION_TAG) == 0)
+    else if (g_strcmp0 (tag, SCHEDXACTION_TAG) == 0)
     {
-        add_schedXaction_local(gd, (SchedXaction*)data);
+        add_schedXaction_local (gd, (SchedXaction*)data);
     }
-    else if (g_strcmp0(tag, TEMPLATE_TRANSACTION_TAG) == 0)
+    else if (g_strcmp0 (tag, TEMPLATE_TRANSACTION_TAG) == 0)
     {
-        add_template_transaction_local( gd, (gnc_template_xaction_data*)data );
+        add_template_transaction_local (gd, (gnc_template_xaction_data*)data);
     }
-    else if (g_strcmp0(tag, BUDGET_TAG) == 0)
+    else if (g_strcmp0 (tag, BUDGET_TAG) == 0)
     {
         // Nothing needed here.
     }
@@ -614,28 +616,28 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
 }
 
 static gboolean
-generic_callback(const char *tag, gpointer globaldata, gpointer data)
+generic_callback (const char* tag, gpointer globaldata, gpointer data)
 {
-    sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
+    sixtp_gdv2* gd = (sixtp_gdv2*)globaldata;
 
-    if (g_strcmp0(tag, BOOK_TAG) == 0)
+    if (g_strcmp0 (tag, BOOK_TAG) == 0)
     {
-        add_book_local(gd, (QofBook*)data);
-        book_callback(tag, globaldata, data);
+        add_book_local (gd, (QofBook*)data);
+        book_callback (tag, globaldata, data);
     }
     else
     {
         // PWARN ("importing pre-book-style XML data file");
-        book_callback(tag, globaldata, data);
+        book_callback (tag, globaldata, data);
     }
     return TRUE;
 }
 
 static void
-add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
+add_parser_cb (const char* type, gpointer data_p, gpointer be_data_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    struct file_backend *be_data = static_cast<decltype(be_data)>(be_data_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
 
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
@@ -644,34 +646,34 @@ add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
         return;
 
     if (data->create_parser)
-        if (!sixtp_add_some_sub_parsers(
-                    be_data->parser, TRUE,
-                    data->type_name, (data->create_parser)(),
-                    NULL, NULL))
+        if (!sixtp_add_some_sub_parsers (
+                be_data->parser, TRUE,
+                data->type_name, (data->create_parser) (),
+                NULL, NULL))
             be_data->ok = FALSE;
 }
 
 static void
-scrub_cb (const char *type, gpointer data_p, gpointer be_data_p)
+scrub_cb (const char* type, gpointer data_p, gpointer be_data_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    struct file_backend *be_data = static_cast<decltype(be_data)>(be_data_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
 
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
 
     if (data->scrub)
-        (data->scrub)(be_data->book);
+        (data->scrub) (be_data->book);
 }
 
-static sixtp_gdv2 *
+static sixtp_gdv2*
 gnc_sixtp_gdv2_new (
-    QofBook *book,
+    QofBook* book,
     gboolean exporting,
     countCallbackFn countcallback,
     QofBePercentageFunc gui_display_fn)
 {
-    sixtp_gdv2 *gd = g_new0(sixtp_gdv2, 1);
+    sixtp_gdv2* gd = g_new0 (sixtp_gdv2, 1);
 
     if (gd == NULL) return NULL;
 
@@ -697,73 +699,73 @@ gnc_sixtp_gdv2_new (
 }
 
 static gboolean
-qof_session_load_from_xml_file_v2_full(
-    FileBackend *fbe, QofBook *book,
+qof_session_load_from_xml_file_v2_full (
+    FileBackend* fbe, QofBook* book,
     sixtp_push_handler push_handler, gpointer push_user_data,
     QofBookFileType type)
 {
-    Account *root;
-    QofBackend *be = &fbe->be;
-    sixtp_gdv2 *gd;
-    sixtp *top_parser;
-    sixtp *main_parser;
-    sixtp *book_parser;
+    Account* root;
+    QofBackend* be = &fbe->be;
+    sixtp_gdv2* gd;
+    sixtp* top_parser;
+    sixtp* main_parser;
+    sixtp* book_parser;
     struct file_backend be_data;
     gboolean retval;
-    char *v2type = NULL;
+    char* v2type = NULL;
 
-    gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, be->percentage);
 
-    top_parser = sixtp_new();
-    main_parser = sixtp_new();
-    book_parser = sixtp_new();
+    top_parser = sixtp_new ();
+    main_parser = sixtp_new ();
+    book_parser = sixtp_new ();
 
     if (type == GNC_BOOK_XML2_FILE)
-        v2type = g_strdup(GNC_V2_STRING);
+        v2type = g_strdup (GNC_V2_STRING);
 
-    if (!sixtp_add_some_sub_parsers(
-                top_parser, TRUE,
-                v2type, main_parser,
-                NULL, NULL))
+    if (!sixtp_add_some_sub_parsers (
+            top_parser, TRUE,
+            v2type, main_parser,
+            NULL, NULL))
     {
-        g_free(v2type);
+        g_free (v2type);
         goto bail;
     }
 
-    g_free(v2type);
+    g_free (v2type);
 
-    if (!sixtp_add_some_sub_parsers(
-                main_parser, TRUE,
-                COUNT_DATA_TAG, gnc_counter_sixtp_parser_create(),
-                BOOK_TAG, book_parser,
+    if (!sixtp_add_some_sub_parsers (
+            main_parser, TRUE,
+            COUNT_DATA_TAG, gnc_counter_sixtp_parser_create (),
+            BOOK_TAG, book_parser,
 
-                /* the following are present here only to support
-                 * the older, pre-book format.  Basically, the top-level
-                 * book is implicit. */
-                PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
-                COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
-                ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
-                TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
-                SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create(),
-                TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
-                NULL, NULL))
+            /* the following are present here only to support
+             * the older, pre-book format.  Basically, the top-level
+             * book is implicit. */
+            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create (),
+            COMMODITY_TAG, gnc_commodity_sixtp_parser_create (),
+            ACCOUNT_TAG, gnc_account_sixtp_parser_create (),
+            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create (),
+            SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create (),
+            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create (),
+            NULL, NULL))
     {
         goto bail;
     }
 
-    if (!sixtp_add_some_sub_parsers(
-                book_parser, TRUE,
-                BOOK_ID_TAG, gnc_book_id_sixtp_parser_create(),
-                BOOK_SLOTS_TAG, gnc_book_slots_sixtp_parser_create(),
-                COUNT_DATA_TAG, gnc_counter_sixtp_parser_create(),
-                PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
-                COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
-                ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
-                BUDGET_TAG, gnc_budget_sixtp_parser_create(),
-                TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
-                SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create(),
-                TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
-                NULL, NULL))
+    if (!sixtp_add_some_sub_parsers (
+            book_parser, TRUE,
+            BOOK_ID_TAG, gnc_book_id_sixtp_parser_create (),
+            BOOK_SLOTS_TAG, gnc_book_slots_sixtp_parser_create (),
+            COUNT_DATA_TAG, gnc_counter_sixtp_parser_create (),
+            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create (),
+            COMMODITY_TAG, gnc_commodity_sixtp_parser_create (),
+            ACCOUNT_TAG, gnc_account_sixtp_parser_create (),
+            BUDGET_TAG, gnc_budget_sixtp_parser_create (),
+            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create (),
+            SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create (),
+            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create (),
+            NULL, NULL))
     {
         goto bail;
     }
@@ -776,7 +778,7 @@ qof_session_load_from_xml_file_v2_full(
 
     /* stop logging while we load */
     xaccLogDisable ();
-    xaccDisableDataScrubbing();
+    xaccDisableDataScrubbing ();
 
     if (push_handler)
     {
@@ -787,62 +789,62 @@ qof_session_load_from_xml_file_v2_full(
         gpdata.parsedata = gd;
         gpdata.bookdata = book;
 
-        retval = sixtp_parse_push(top_parser, push_handler, push_user_data,
-                                  NULL, &gpdata, &parse_result);
+        retval = sixtp_parse_push (top_parser, push_handler, push_user_data,
+                                   NULL, &gpdata, &parse_result);
     }
     else
     {
-	/* Even though libxml2 knows how to decompress zipped files, we
-	 * do it ourself since as of version 2.9.1 it has a bug that
-	 * causes it to fail to decompress certain files. See
-	 * https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more
-	 * info.
-	 */
-	gchar *filename = fbe->fullpath;
-	FILE *file;
-	gboolean is_compressed = is_gzipped_file(filename);
-	file = try_gz_open(filename, "r", is_compressed, FALSE);
-	if (file == NULL)
-	{
-	    PWARN("Unable to open file %s", filename);
-	    retval = FALSE;
-	}
-	else
-	{
-	    retval = gnc_xml_parse_fd(top_parser, file,
-				      generic_callback, gd, book);
-	    fclose(file);
-	    if (is_compressed)
-		wait_for_gzip(file);
-	}
+        /* Even though libxml2 knows how to decompress zipped files, we
+         * do it ourself since as of version 2.9.1 it has a bug that
+         * causes it to fail to decompress certain files. See
+         * https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more
+         * info.
+         */
+        gchar* filename = fbe->fullpath;
+        FILE* file;
+        gboolean is_compressed = is_gzipped_file (filename);
+        file = try_gz_open (filename, "r", is_compressed, FALSE);
+        if (file == NULL)
+        {
+            PWARN ("Unable to open file %s", filename);
+            retval = FALSE;
+        }
+        else
+        {
+            retval = gnc_xml_parse_fd (top_parser, file,
+                                       generic_callback, gd, book);
+            fclose (file);
+            if (is_compressed)
+                wait_for_gzip (file);
+        }
     }
 
     if (!retval)
     {
-        sixtp_destroy(top_parser);
+        sixtp_destroy (top_parser);
         xaccLogEnable ();
-        xaccEnableDataScrubbing();
+        xaccEnableDataScrubbing ();
         goto bail;
     }
-    debug_print_counter_data(&gd->counter);
+    debug_print_counter_data (&gd->counter);
 
     /* destroy the parser */
     sixtp_destroy (top_parser);
-    g_free(gd);
+    g_free (gd);
 
-    xaccEnableDataScrubbing();
+    xaccEnableDataScrubbing ();
 
     /* Mark the session as saved */
     qof_book_mark_session_saved (book);
 
     /* Call individual scrub functions */
-    memset(&be_data, 0, sizeof(be_data));
+    memset (&be_data, 0, sizeof (be_data));
     be_data.book = book;
     qof_object_foreach_backend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
     /* fix price quote sources */
-    root = gnc_book_get_root_account(book);
-    xaccAccountTreeScrubQuoteSources (root, gnc_commodity_table_get_table(book));
+    root = gnc_book_get_root_account (book);
+    xaccAccountTreeScrubQuoteSources (root, gnc_commodity_table_get_table (book));
 
     /* Fix account and transaction commodities */
     xaccAccountTreeScrubCommodities (root);
@@ -853,9 +855,9 @@ qof_session_load_from_xml_file_v2_full(
     /* commit all groups, this completes the BeginEdit started when the
      * account_end_handler finished reading the account.
      */
-    gnc_account_foreach_descendant(root,
-                                   (AccountCb) xaccAccountCommitEdit,
-                                   NULL);
+    gnc_account_foreach_descendant (root,
+                                    (AccountCb) xaccAccountCommitEdit,
+                                    NULL);
 
     /* start logging again */
     xaccLogEnable ();
@@ -863,63 +865,63 @@ qof_session_load_from_xml_file_v2_full(
     return TRUE;
 
 bail:
-    g_free(gd);
+    g_free (gd);
     return FALSE;
 }
 
 gboolean
-qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book,
-                                  QofBookFileType type)
+qof_session_load_from_xml_file_v2 (FileBackend* fbe, QofBook* book,
+                                   QofBookFileType type)
 {
-    return qof_session_load_from_xml_file_v2_full(fbe, book, NULL, NULL, type);
+    return qof_session_load_from_xml_file_v2_full (fbe, book, NULL, NULL, type);
 }
 
 /***********************************************************************/
 
 static gboolean
-write_counts(FILE* out, ...)
+write_counts (FILE* out, ...)
 {
     va_list ap;
-    char *type;
+    char* type;
     gboolean success = TRUE;
 
-    va_start(ap, out);
-    type = g_strdup (va_arg(ap, char *));
+    va_start (ap, out);
+    type = g_strdup (va_arg (ap, char*));
 
     while (success && type)
     {
-        int amount = va_arg(ap, int);
+        int amount = va_arg (ap, int);
 
         if (amount != 0)
         {
 #if GNUCASH_REALLY_BUILD_AN_XML_TREE_ON_OUTPUT
-            char *val;
+            char* val;
             xmlNodePtr node;
 
-            val = g_strdup_printf("%d", amount);
+            val = g_strdup_printf ("%d", amount);
 
-            node = xmlNewNode(NULL, BAD_CAST COUNT_DATA_TAG);
+            node = xmlNewNode (NULL, BAD_CAST COUNT_DATA_TAG);
             /* Note: BADXML.
              *
              * This is invalid xml because the namespace isn't
              * declared in the tag itself. This should be changed to
              * 'type' at some point. */
-            xmlSetProp(node, BAD_CAST "cd:type", checked_char_cast (type));
-            xmlNodeAddContent(node, checked_char_cast (val));
-            g_free(val);
-	    g_free (type);
+            xmlSetProp (node, BAD_CAST "cd:type", checked_char_cast (type));
+            xmlNodeAddContent (node, checked_char_cast (val));
+            g_free (val);
+            g_free (type);
 
-            xmlElemDump(out, NULL, node);
-            xmlFreeNode(node);
+            xmlElemDump (out, NULL, node);
+            xmlFreeNode (node);
 
-            if (ferror(out) || fprintf(out, "\n") < 0)
+            if (ferror (out) || fprintf (out, "\n") < 0)
             {
                 success = FALSE;
                 break;
             }
 #else
-            if (fprintf(out, "<%s %s=\"%s\">%d</%s>\n",
-                        COUNT_DATA_TAG, "cd:type", type, amount, COUNT_DATA_TAG) < 0)
+            if (fprintf (out, "<%s %s=\"%s\">%d</%s>\n",
+                         COUNT_DATA_TAG, "cd:type", type, amount, COUNT_DATA_TAG) < 0)
             {
                 success = FALSE;
                 break;
@@ -928,41 +930,42 @@ write_counts(FILE* out, ...)
 
         }
 
-        type = va_arg(ap, char *);
+        type = va_arg (ap, char*);
     }
 
-    va_end(ap);
+    va_end (ap);
     return success;
 }
 
 static gint
-compare_namespaces(gconstpointer a, gconstpointer b)
+compare_namespaces (gconstpointer a, gconstpointer b)
 {
-    const gchar *sa = (const gchar *) a;
-    const gchar *sb = (const gchar *) b;
-    return(g_strcmp0(sa, sb));
+    const gchar* sa = (const gchar*) a;
+    const gchar* sb = (const gchar*) b;
+    return (g_strcmp0 (sa, sb));
 }
 
 static gint
-compare_commodity_ids(gconstpointer a, gconstpointer b)
+compare_commodity_ids (gconstpointer a, gconstpointer b)
 {
-    const gnc_commodity *ca = (const gnc_commodity *) a;
-    const gnc_commodity *cb = (const gnc_commodity *) b;
-    return(g_strcmp0(gnc_commodity_get_mnemonic(ca),
-                       gnc_commodity_get_mnemonic(cb)));
+    const gnc_commodity* ca = (const gnc_commodity*) a;
+    const gnc_commodity* cb = (const gnc_commodity*) b;
+    return (g_strcmp0 (gnc_commodity_get_mnemonic (ca),
+                       gnc_commodity_get_mnemonic (cb)));
 }
 
-static gboolean write_pricedb (FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static gboolean write_transactions (FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static gboolean write_template_transaction_data (FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static gboolean write_schedXactions(FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static void write_budget (QofInstance *ent, gpointer data);
+static gboolean write_pricedb (FILE* out, QofBook* book, sixtp_gdv2* gd);
+static gboolean write_transactions (FILE* out, QofBook* book, sixtp_gdv2* gd);
+static gboolean write_template_transaction_data (FILE* out, QofBook* book,
+                                                 sixtp_gdv2* gd);
+static gboolean write_schedXactions (FILE* out, QofBook* book, sixtp_gdv2* gd);
+static void write_budget (QofInstance* ent, gpointer data);
 
 static void
-write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
+write_counts_cb (const char* type, gpointer data_p, gpointer be_data_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    struct file_backend *be_data = static_cast<decltype(be_data)>(be_data_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
 
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
@@ -974,20 +977,20 @@ write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
 }
 
 static void
-write_data_cb (const char *type, gpointer data_p, gpointer be_data_p)
+write_data_cb (const char* type, gpointer data_p, gpointer be_data_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    struct file_backend *be_data = static_cast<decltype(be_data)>(be_data_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
 
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
 
-    if (data->write && !ferror(be_data->out))
-        (data->write)(be_data->out, be_data->book);
+    if (data->write && !ferror (be_data->out))
+        (data->write) (be_data->out, be_data->book);
 }
 
 static gboolean
-write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
+write_book (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
     struct file_backend be_data;
 
@@ -999,17 +1002,17 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
      */
     xmlNodePtr node;
 
-    node = gnc_book_dom_tree_create(book);
+    node = gnc_book_dom_tree_create (book);
 
     if (!node)
     {
         return FALSE;
     }
 
-    xmlElemDump(out, NULL, node);
-    xmlFreeNode(node);
+    xmlElemDump (out, NULL, node);
+    xmlFreeNode (node);
 
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    if (ferror (out) || fprintf (out, "\n") < 0)
     {
         return FALSE;
     }
@@ -1019,7 +1022,8 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     be_data.out = out;
     be_data.book = book;
     be_data.gd = gd;
-    if (fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string) < 0)
+    if (fprintf (out, "<%s version=\"%s\">\n", BOOK_TAG,
+                 gnc_v2_book_version_string) < 0)
         return FALSE;
     if (!write_book_parts (out, book))
         return FALSE;
@@ -1027,89 +1031,91 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     /* gd->counter.{foo}_total fields should have all these totals
        already collected.  I don't know why we're re-calling all these
        functions.  */
-    if (!write_counts(out,
-                      "commodity",
-                      gnc_commodity_table_get_size(
-                          gnc_commodity_table_get_table(book)),
-                      "account",
-                      1 + gnc_account_n_descendants(gnc_book_get_root_account(book)),
-                      "transaction",
-                      gnc_book_count_transactions(book),
-                      "schedxaction",
-                      g_list_length(gnc_book_get_schedxactions(book)->sx_list),
-                      "budget", qof_collection_count(
-                          qof_book_get_collection(book, GNC_ID_BUDGET)),
-                      "price", gnc_pricedb_get_num_prices(gnc_pricedb_get_db(book)),
-                      NULL))
+    if (!write_counts (out,
+                       "commodity",
+                       gnc_commodity_table_get_size (
+                           gnc_commodity_table_get_table (book)),
+                       "account",
+                       1 + gnc_account_n_descendants (gnc_book_get_root_account (book)),
+                       "transaction",
+                       gnc_book_count_transactions (book),
+                       "schedxaction",
+                       g_list_length (gnc_book_get_schedxactions (book)->sx_list),
+                       "budget", qof_collection_count (
+                           qof_book_get_collection (book, GNC_ID_BUDGET)),
+                       "price", gnc_pricedb_get_num_prices (gnc_pricedb_get_db (book)),
+                       NULL))
         return FALSE;
 
     qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
-    if (ferror(out)
-            || !write_commodities(out, book, gd)
-            || !write_pricedb(out, book, gd)
-            || !write_accounts(out, book, gd)
-            || !write_transactions(out, book, gd)
-            || !write_template_transaction_data(out, book, gd)
-            || !write_schedXactions(out, book, gd))
+    if (ferror (out)
+        || !write_commodities (out, book, gd)
+        || !write_pricedb (out, book, gd)
+        || !write_accounts (out, book, gd)
+        || !write_transactions (out, book, gd)
+        || !write_template_transaction_data (out, book, gd)
+        || !write_schedXactions (out, book, gd))
 
         return FALSE;
 
-    qof_collection_foreach(qof_book_get_collection(book, GNC_ID_BUDGET),
-                           write_budget, &be_data);
-    if (ferror(out))
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
+                            write_budget, &be_data);
+    if (ferror (out))
         return FALSE;
 
     qof_object_foreach_backend (GNC_FILE_BACKEND, write_data_cb, &be_data);
-    if (ferror(out))
+    if (ferror (out))
         return FALSE;
 
-    if (fprintf( out, "</%s>\n", BOOK_TAG ) < 0)
+    if (fprintf (out, "</%s>\n", BOOK_TAG) < 0)
         return FALSE;
 
     return TRUE;
 }
 
 gboolean
-write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
+write_commodities (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
-    gnc_commodity_table *tbl;
-    GList *namespaces;
-    GList *lp;
+    gnc_commodity_table* tbl;
+    GList* namespaces;
+    GList* lp;
     gboolean success = TRUE;
 
-    tbl = gnc_commodity_table_get_table(book);
+    tbl = gnc_commodity_table_get_table (book);
 
-    namespaces = gnc_commodity_table_get_namespaces(tbl);
+    namespaces = gnc_commodity_table_get_namespaces (tbl);
     if (namespaces)
     {
-        namespaces = g_list_sort(namespaces, compare_namespaces);
+        namespaces = g_list_sort (namespaces, compare_namespaces);
     }
 
     for (lp = namespaces; success && lp; lp = lp->next)
     {
-        GList *comms, *lp2;
+        GList* comms, *lp2;
         xmlNodePtr comnode;
 
-        comms = gnc_commodity_table_get_commodities(tbl, static_cast<const char*>(lp->data));
-        comms = g_list_sort(comms, compare_commodity_ids);
+        comms = gnc_commodity_table_get_commodities (tbl,
+                                                     static_cast<const char*> (lp->data));
+        comms = g_list_sort (comms, compare_commodity_ids);
 
         for (lp2 = comms; lp2; lp2 = lp2->next)
         {
-            comnode = gnc_commodity_dom_tree_create(static_cast<const gnc_commodity*>(lp2->data));
+            comnode = gnc_commodity_dom_tree_create (static_cast<const gnc_commodity*>
+                                                     (lp2->data));
             if (comnode == NULL)
                 continue;
 
-            xmlElemDump(out, NULL, comnode);
-            if (ferror(out) || fprintf(out, "\n") < 0)
+            xmlElemDump (out, NULL, comnode);
+            if (ferror (out) || fprintf (out, "\n") < 0)
             {
                 success = FALSE;
                 break;
             }
 
-            xmlFreeNode(comnode);
+            xmlFreeNode (comnode);
             gd->counter.commodities_loaded++;
-            sixtp_run_callback(gd, "commodities");
+            sixtp_run_callback (gd, "commodities");
         }
 
         g_list_free (comms);
@@ -1121,13 +1127,13 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 }
 
 static gboolean
-write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
+write_pricedb (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
     xmlNodePtr node;
     xmlNodePtr parent;
     xmlOutputBufferPtr outbuf;
 
-    parent = gnc_pricedb_dom_tree_create(gnc_pricedb_get_db(book));
+    parent = gnc_pricedb_dom_tree_create (gnc_pricedb_get_db (book));
 
     if (!parent)
     {
@@ -1138,92 +1144,92 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
        We do it this way instead of just calling xmlElemDump so that we can
        increment the progress bar as we go. */
 
-    if (fprintf( out, "<%s version=\"%s\">\n", parent->name,
-                 xmlGetProp(parent, BAD_CAST "version")) < 0)
+    if (fprintf (out, "<%s version=\"%s\">\n", parent->name,
+                 xmlGetProp (parent, BAD_CAST "version")) < 0)
         return FALSE;
 
     /* We create our own output buffer so we can call xmlNodeDumpOutput to get
        the indendation correct. */
-    outbuf = xmlOutputBufferCreateFile(out, NULL);
+    outbuf = xmlOutputBufferCreateFile (out, NULL);
     if (outbuf == NULL)
     {
-        xmlFreeNode(parent);
+        xmlFreeNode (parent);
         return FALSE;
     }
 
     for (node = parent->children; node; node = node->next)
     {
         /* Write two spaces since xmlNodeDumpOutput doesn't indent the first line */
-        xmlOutputBufferWrite(outbuf, 2, "  ");
-        xmlNodeDumpOutput(outbuf, NULL, node, 1, 1, NULL);
+        xmlOutputBufferWrite (outbuf, 2, "  ");
+        xmlNodeDumpOutput (outbuf, NULL, node, 1, 1, NULL);
         /* It also doesn't terminate the last line */
-        xmlOutputBufferWrite(outbuf, 1, "\n");
-        if (ferror(out))
+        xmlOutputBufferWrite (outbuf, 1, "\n");
+        if (ferror (out))
             break;
         gd->counter.prices_loaded += 1;
-        sixtp_run_callback(gd, "prices");
+        sixtp_run_callback (gd, "prices");
     }
 
-    xmlOutputBufferClose(outbuf);
+    xmlOutputBufferClose (outbuf);
 
-    if (ferror(out) || fprintf(out, "</%s>\n", parent->name) < 0)
+    if (ferror (out) || fprintf (out, "</%s>\n", parent->name) < 0)
     {
-        xmlFreeNode(parent);
+        xmlFreeNode (parent);
         return FALSE;
     }
 
-    xmlFreeNode(parent);
+    xmlFreeNode (parent);
     return TRUE;
 }
 
 static int
-xml_add_trn_data(Transaction *t, gpointer data)
+xml_add_trn_data (Transaction* t, gpointer data)
 {
-    struct file_backend *be_data = static_cast<decltype(be_data)>(data);
+    struct file_backend* be_data = static_cast<decltype (be_data)> (data);
     xmlNodePtr node;
 
-    node = gnc_transaction_dom_tree_create(t);
+    node = gnc_transaction_dom_tree_create (t);
 
-    xmlElemDump(be_data->out, NULL, node);
-    xmlFreeNode(node);
+    xmlElemDump (be_data->out, NULL, node);
+    xmlFreeNode (node);
 
-    if (ferror(be_data->out) || fprintf(be_data->out, "\n") < 0)
+    if (ferror (be_data->out) || fprintf (be_data->out, "\n") < 0)
         return -1;
 
     be_data->gd->counter.transactions_loaded++;
-    sixtp_run_callback(be_data->gd, "transaction");
+    sixtp_run_callback (be_data->gd, "transaction");
     return 0;
 }
 
 static gboolean
-write_transactions(FILE *out, QofBook *book, sixtp_gdv2 *gd)
+write_transactions (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
     struct file_backend be_data;
 
     be_data.out = out;
     be_data.gd = gd;
     return 0 ==
-           xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
-                   xml_add_trn_data,
-                   (gpointer) &be_data);
+           xaccAccountTreeForEachTransaction (gnc_book_get_root_account (book),
+                                              xml_add_trn_data,
+                                              (gpointer) &be_data);
 }
 
 static gboolean
-write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
+write_template_transaction_data (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
-    Account *ra;
+    Account* ra;
     struct file_backend be_data;
 
     be_data.out = out;
     be_data.gd = gd;
 
-    ra = gnc_book_get_template_root(book);
-    if ( gnc_account_n_descendants(ra) > 0 )
+    ra = gnc_book_get_template_root (book);
+    if (gnc_account_n_descendants (ra) > 0)
     {
-        if (fprintf(out, "<%s>\n", TEMPLATE_TRANSACTION_TAG) < 0
-                || !write_account_tree(out, ra, gd)
-                || xaccAccountTreeForEachTransaction(ra, xml_add_trn_data, (gpointer)&be_data)
-                || fprintf(out, "</%s>\n", TEMPLATE_TRANSACTION_TAG) < 0)
+        if (fprintf (out, "<%s>\n", TEMPLATE_TRANSACTION_TAG) < 0
+            || !write_account_tree (out, ra, gd)
+            || xaccAccountTreeForEachTransaction (ra, xml_add_trn_data, (gpointer)&be_data)
+            || fprintf (out, "</%s>\n", TEMPLATE_TRANSACTION_TAG) < 0)
 
             return FALSE;
     }
@@ -1232,139 +1238,140 @@ write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 }
 
 static gboolean
-write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
+write_schedXactions (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
-    GList *schedXactions;
-    SchedXaction *tmpSX;
+    GList* schedXactions;
+    SchedXaction* tmpSX;
     xmlNodePtr node;
 
-    schedXactions = gnc_book_get_schedxactions(book)->sx_list;
+    schedXactions = gnc_book_get_schedxactions (book)->sx_list;
 
     if (schedXactions == NULL)
         return TRUE;
 
     do
     {
-        tmpSX = static_cast<decltype(tmpSX)>(schedXactions->data);
-        node = gnc_schedXaction_dom_tree_create( tmpSX );
-        xmlElemDump( out, NULL, node );
-        xmlFreeNode(node);
-        if (ferror(out) || fprintf(out, "\n") < 0)
+        tmpSX = static_cast<decltype (tmpSX)> (schedXactions->data);
+        node = gnc_schedXaction_dom_tree_create (tmpSX);
+        xmlElemDump (out, NULL, node);
+        xmlFreeNode (node);
+        if (ferror (out) || fprintf (out, "\n") < 0)
             return FALSE;
         gd->counter.schedXactions_loaded++;
-        sixtp_run_callback(gd, "schedXactions");
+        sixtp_run_callback (gd, "schedXactions");
     }
-    while ( (schedXactions = schedXactions->next) );
+    while ((schedXactions = schedXactions->next));
 
     return TRUE;
 }
 
 static void
-write_budget (QofInstance *ent, gpointer data)
+write_budget (QofInstance* ent, gpointer data)
 {
     xmlNodePtr node;
-    struct file_backend* be = static_cast<decltype(be)>(data);
+    struct file_backend* be = static_cast<decltype (be)> (data);
 
-    GncBudget *bgt = GNC_BUDGET(ent);
+    GncBudget* bgt = GNC_BUDGET (ent);
 
-    if (ferror(be->out))
+    if (ferror (be->out))
         return;
 
-    node = gnc_budget_dom_tree_create(bgt);
-    xmlElemDump( be->out, NULL, node );
-    xmlFreeNode(node);
-    if (ferror(be->out) || fprintf(be->out, "\n") < 0)
+    node = gnc_budget_dom_tree_create (bgt);
+    xmlElemDump (be->out, NULL, node);
+    xmlFreeNode (node);
+    if (ferror (be->out) || fprintf (be->out, "\n") < 0)
         return;
 
     be->gd->counter.budgets_loaded++;
-    sixtp_run_callback(be->gd, "budgets");
+    sixtp_run_callback (be->gd, "budgets");
 }
 
 gboolean
-gnc_xml2_write_namespace_decl (FILE *out, const char *name_space)
+gnc_xml2_write_namespace_decl (FILE* out, const char* name_space)
 {
-    g_return_val_if_fail(name_space, FALSE);
-    return fprintf(out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
-                   name_space, name_space) >= 0;
+    g_return_val_if_fail (name_space, FALSE);
+    return fprintf (out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
+                    name_space, name_space) >= 0;
 }
 
 static void
-do_write_namespace_cb (const char *type, gpointer data_p, gpointer file_p)
+do_write_namespace_cb (const char* type, gpointer data_p, gpointer file_p)
 {
-    GncXmlDataType_t *data = static_cast<decltype(data)>(data_p);
-    FILE *out = static_cast<decltype(out)>(file_p);
+    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
+    FILE* out = static_cast<decltype (out)> (file_p);
 
     g_return_if_fail (type && data && out);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
 
-    if (data->ns && !ferror(out))
-        (data->ns)(out);
+    if (data->ns && !ferror (out))
+        (data->ns) (out);
 }
 
 static gboolean
-write_v2_header (FILE *out)
+write_v2_header (FILE* out)
 {
-    if (fprintf(out, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n") < 0
-            || fprintf(out, "<" GNC_V2_STRING) < 0
+    if (fprintf (out, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n") < 0
+        || fprintf (out, "<" GNC_V2_STRING) < 0
 
-            || !gnc_xml2_write_namespace_decl (out, "gnc")
-            || !gnc_xml2_write_namespace_decl (out, "act")
-            || !gnc_xml2_write_namespace_decl (out, "book")
-            || !gnc_xml2_write_namespace_decl (out, "cd")
-            || !gnc_xml2_write_namespace_decl (out, "cmdty")
-            || !gnc_xml2_write_namespace_decl (out, "price")
-            || !gnc_xml2_write_namespace_decl (out, "slot")
-            || !gnc_xml2_write_namespace_decl (out, "split")
-            || !gnc_xml2_write_namespace_decl (out, "sx")
-            || !gnc_xml2_write_namespace_decl (out, "trn")
-            || !gnc_xml2_write_namespace_decl (out, "ts")
-            || !gnc_xml2_write_namespace_decl (out, "fs")
-            || !gnc_xml2_write_namespace_decl (out, "bgt")
-            || !gnc_xml2_write_namespace_decl (out, "recurrence")
-            || !gnc_xml2_write_namespace_decl (out, "lot"))
+        || !gnc_xml2_write_namespace_decl (out, "gnc")
+        || !gnc_xml2_write_namespace_decl (out, "act")
+        || !gnc_xml2_write_namespace_decl (out, "book")
+        || !gnc_xml2_write_namespace_decl (out, "cd")
+        || !gnc_xml2_write_namespace_decl (out, "cmdty")
+        || !gnc_xml2_write_namespace_decl (out, "price")
+        || !gnc_xml2_write_namespace_decl (out, "slot")
+        || !gnc_xml2_write_namespace_decl (out, "split")
+        || !gnc_xml2_write_namespace_decl (out, "sx")
+        || !gnc_xml2_write_namespace_decl (out, "trn")
+        || !gnc_xml2_write_namespace_decl (out, "ts")
+        || !gnc_xml2_write_namespace_decl (out, "fs")
+        || !gnc_xml2_write_namespace_decl (out, "bgt")
+        || !gnc_xml2_write_namespace_decl (out, "recurrence")
+        || !gnc_xml2_write_namespace_decl (out, "lot"))
 
         return FALSE;
 
     /* now cope with the plugins */
     qof_object_foreach_backend (GNC_FILE_BACKEND, do_write_namespace_cb, out);
 
-    if (ferror(out) || fprintf(out, ">\n") < 0)
+    if (ferror (out) || fprintf (out, ">\n") < 0)
         return FALSE;
 
     return TRUE;
 }
 
 gboolean
-gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
+gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* out)
 {
-    QofBackend *be;
-    sixtp_gdv2 *gd;
+    QofBackend* be;
+    sixtp_gdv2* gd;
     gboolean success = TRUE;
 
     if (!out) return FALSE;
 
-    if (!write_v2_header(out)
-            || !write_counts(out, "book", 1, NULL))
+    if (!write_v2_header (out)
+        || !write_counts (out, "book", 1, NULL))
         return FALSE;
 
-    be = qof_book_get_backend(book);
-    gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
+    be = qof_book_get_backend (book);
+    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
-        gnc_commodity_table_get_size(gnc_commodity_table_get_table(book));
+        gnc_commodity_table_get_size (gnc_commodity_table_get_table (book));
     gd->counter.accounts_total = 1 +
-                                 gnc_account_n_descendants(gnc_book_get_root_account(book));
-    gd->counter.transactions_total = gnc_book_count_transactions(book);
+                                 gnc_account_n_descendants (gnc_book_get_root_account (book));
+    gd->counter.transactions_total = gnc_book_count_transactions (book);
     gd->counter.schedXactions_total =
-        g_list_length(gnc_book_get_schedxactions(book)->sx_list);
-    gd->counter.budgets_total = qof_collection_count(
-                                    qof_book_get_collection(book, GNC_ID_BUDGET));
-    gd->counter.prices_total = gnc_pricedb_get_num_prices(gnc_pricedb_get_db(book));
+        g_list_length (gnc_book_get_schedxactions (book)->sx_list);
+    gd->counter.budgets_total = qof_collection_count (
+                                    qof_book_get_collection (book, GNC_ID_BUDGET));
+    gd->counter.prices_total = gnc_pricedb_get_num_prices (gnc_pricedb_get_db (
+                                                               book));
 
-    if (!write_book(out, book, gd)
-            || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
+    if (!write_book (out, book, gd)
+        || fprintf (out, "</" GNC_V2_STRING ">\n\n") < 0)
         success = FALSE;
 
-    g_free(gd);
+    g_free (gd);
     return success;
 }
 
@@ -1372,36 +1379,37 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
  * This function is called by the "export" code.
  */
 gboolean
-gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *out)
+gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* be, QofBook* book,
+                                              FILE* out)
 {
-    gnc_commodity_table *table;
-    Account *root;
+    gnc_commodity_table* table;
+    Account* root;
     int ncom, nacc;
-    sixtp_gdv2 *gd;
+    sixtp_gdv2* gd;
     gboolean success = TRUE;
 
     if (!out) return FALSE;
 
-    root = gnc_book_get_root_account(book);
-    nacc = 1 + gnc_account_n_descendants(root);
+    root = gnc_book_get_root_account (book);
+    nacc = 1 + gnc_account_n_descendants (root);
 
-    table = gnc_commodity_table_get_table(book);
-    ncom = gnc_commodity_table_get_size(table);
+    table = gnc_commodity_table_get_table (book);
+    ncom = gnc_commodity_table_get_size (table);
 
-    if (!write_v2_header(out)
-            || !write_counts(out, "commodity", ncom, "account", nacc, NULL))
+    if (!write_v2_header (out)
+        || !write_counts (out, "commodity", ncom, "account", nacc, NULL))
         return FALSE;
 
-    gd = gnc_sixtp_gdv2_new(book, TRUE, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, TRUE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total = ncom;
     gd->counter.accounts_total = nacc;
 
-    if (!write_commodities(out, book, gd)
-            || !write_accounts(out, book, gd)
-            || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
+    if (!write_commodities (out, book, gd)
+        || !write_accounts (out, book, gd)
+        || fprintf (out, "</" GNC_V2_STRING ">\n\n") < 0)
         success = FALSE;
 
-    g_free(gd);
+    g_free (gd);
     return success;
 }
 
@@ -1410,7 +1418,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
 /* Compress or decompress function that is to be run in a separate thread.
  * Returns 1 on success or 0 otherwise, stuffed into a pointer type. */
 static gpointer
-gz_thread_func(gz_thread_params_t *params)
+gz_thread_func (gz_thread_params_t* params)
 {
     gchar buffer[BUFLEN];
     gssize bytes;
@@ -1420,33 +1428,33 @@ gz_thread_func(gz_thread_params_t *params)
 
 #ifdef G_OS_WIN32
     {
-        gchar *conv_name = g_win32_locale_filename_from_utf8(params->filename);
-        gchar *perms;
+        gchar* conv_name = g_win32_locale_filename_from_utf8 (params->filename);
+        gchar* perms;
 
         if (!conv_name)
         {
-            g_warning("Could not convert '%s' to system codepage",
-                      params->filename);
+            g_warning ("Could not convert '%s' to system codepage",
+                       params->filename);
             success = 0;
             goto cleanup_gz_thread_func;
         }
 
-        if (strchr(params->perms, 'b'))
-            perms = g_strdup(params->perms);
+        if (strchr (params->perms, 'b'))
+            perms = g_strdup (params->perms);
         else
-            perms = g_strdup_printf("%cb%s", *params->perms, params->perms + 1);
+            perms = g_strdup_printf ("%cb%s", *params->perms, params->perms + 1);
 
-        file = gzopen(conv_name, perms);
-        g_free(perms);
-        g_free(conv_name);
+        file = gzopen (conv_name, perms);
+        g_free (perms);
+        g_free (conv_name);
     }
 #else /* !G_OS_WIN32 */
-    file = gzopen(params->filename, params->perms);
+    file = gzopen (params->filename, params->perms);
 #endif /* G_OS_WIN32 */
 
     if (file == NULL)
     {
-        g_warning("Child threads gzopen failed");
+        g_warning ("Child threads gzopen failed");
         success = 0;
         goto cleanup_gz_thread_func;
     }
@@ -1455,15 +1463,15 @@ gz_thread_func(gz_thread_params_t *params)
     {
         while (success)
         {
-            bytes = read(params->fd, buffer, BUFLEN);
+            bytes = read (params->fd, buffer, BUFLEN);
             if (bytes > 0)
             {
-                if (gzwrite(file, buffer, bytes) <= 0)
+                if (gzwrite (file, buffer, bytes) <= 0)
                 {
                     gint errnum;
-                    const gchar *error = gzerror(file, &errnum);
-                    g_warning("Could not write the compressed file '%s'. The error is: '%s' (%d)",
-                              params->filename, error, errnum);
+                    const gchar* error = gzerror (file, &errnum);
+                    g_warning ("Could not write the compressed file '%s'. The error is: '%s' (%d)",
+                               params->filename, error, errnum);
                     success = 0;
                 }
             }
@@ -1473,8 +1481,8 @@ gz_thread_func(gz_thread_params_t *params)
             }
             else
             {
-                g_warning("Could not read from pipe. The error is '%s' (errno %d)",
-                          g_strerror(errno) ? g_strerror(errno) : "", errno);
+                g_warning ("Could not read from pipe. The error is '%s' (errno %d)",
+                           g_strerror (errno) ? g_strerror (errno) : "", errno);
                 success = 0;
             }
         }
@@ -1483,7 +1491,7 @@ gz_thread_func(gz_thread_params_t *params)
     {
         while (success)
         {
-            gzval = gzread(file, buffer, BUFLEN);
+            gzval = gzread (file, buffer, BUFLEN);
             if (gzval > 0)
             {
                 if (
@@ -1494,8 +1502,8 @@ gz_thread_func(gz_thread_params_t *params)
 #endif
                     (params->fd, buffer, gzval) < 0)
                 {
-                    g_warning("Could not write to pipe. The error is '%s' (%d)",
-                              g_strerror(errno) ? g_strerror(errno) : "", errno);
+                    g_warning ("Could not write to pipe. The error is '%s' (%d)",
+                               g_strerror (errno) ? g_strerror (errno) : "", errno);
                     success = 0;
                 }
             }
@@ -1506,145 +1514,146 @@ gz_thread_func(gz_thread_params_t *params)
             else
             {
                 gint errnum;
-                const gchar *error = gzerror(file, &errnum);
-                g_warning("Could not read from compressed file '%s'. The error is: '%s' (%d)",
-                          params->filename, error, errnum);
+                const gchar* error = gzerror (file, &errnum);
+                g_warning ("Could not read from compressed file '%s'. The error is: '%s' (%d)",
+                           params->filename, error, errnum);
                 success = 0;
             }
         }
     }
 
-    if ((gzval = gzclose(file)) != Z_OK)
+    if ((gzval = gzclose (file)) != Z_OK)
     {
-        g_warning("Could not close the compressed file '%s' (errnum %d)",
-                  params->filename, gzval);
+        g_warning ("Could not close the compressed file '%s' (errnum %d)",
+                   params->filename, gzval);
         success = 0;
     }
 
 cleanup_gz_thread_func:
-    close(params->fd);
-    g_free(params->filename);
-    g_free(params->perms);
-    g_free(params);
+    close (params->fd);
+    g_free (params->filename);
+    g_free (params->perms);
+    g_free (params);
 
-    return GINT_TO_POINTER(success);
+    return GINT_TO_POINTER (success);
 }
 
-static FILE *
-try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
+static FILE*
+try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
              gboolean compress)
 {
-    if (strstr(filename, ".gz.") != NULL) /* its got a temp extension */
+    if (strstr (filename, ".gz.") != NULL) /* its got a temp extension */
         use_gzip = TRUE;
 
     if (!use_gzip)
-        return g_fopen(filename, perms);
+        return g_fopen (filename, perms);
 
     {
         int filedes[2];
-        GThread *thread;
-        GError *error = NULL;
-        gz_thread_params_t *params;
-        FILE *file;
+        GThread* thread;
+        GError* error = NULL;
+        gz_thread_params_t* params;
+        FILE* file;
 
 #ifdef G_OS_WIN32
-        if (_pipe(filedes, 4096, _O_BINARY) < 0)
+        if (_pipe (filedes, 4096, _O_BINARY) < 0)
         {
 #else
-        if (pipe(filedes) < 0)
+        if (pipe (filedes) < 0)
         {
 #endif
-            g_warning("Pipe call failed. Opening uncompressed file.");
-            return g_fopen(filename, perms);
+            g_warning ("Pipe call failed. Opening uncompressed file.");
+            return g_fopen (filename, perms);
         }
 
-        params = g_new(gz_thread_params_t, 1);
+        params = g_new (gz_thread_params_t, 1);
         params->fd = filedes[compress ? 0 : 1];
-        params->filename = g_strdup(filename);
-        params->perms = g_strdup(perms);
+        params->filename = g_strdup (filename);
+        params->perms = g_strdup (perms);
         params->compress = compress;
 
 #ifndef HAVE_GLIB_2_32
-        thread = g_thread_create((GThreadFunc) gz_thread_func, params,
-				 TRUE, &error);
+        thread = g_thread_create ((GThreadFunc) gz_thread_func, params,
+                                  TRUE, &error);
 #else
-        thread = g_thread_new("xml_thread", (GThreadFunc) gz_thread_func,
-			      params);
+        thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
+                               params);
 #endif
         if (!thread)
         {
-            g_warning("Could not create thread for (de)compression: %s",
-                      error->message);
-            g_error_free(error);
-            g_free(params->filename);
-            g_free(params->perms);
-            g_free(params);
-            close(filedes[0]);
-            close(filedes[1]);
+            g_warning ("Could not create thread for (de)compression: %s",
+                       error->message);
+            g_error_free (error);
+            g_free (params->filename);
+            g_free (params->perms);
+            g_free (params);
+            close (filedes[0]);
+            close (filedes[1]);
 
-            return g_fopen(filename, perms);
+            return g_fopen (filename, perms);
         }
 
         if (compress)
-            file = fdopen(filedes[1], "w");
+            file = fdopen (filedes[1], "w");
         else
-            file = fdopen(filedes[0], "r");
+            file = fdopen (filedes[0], "r");
 
-        G_LOCK(threads);
+        G_LOCK (threads);
         if (!threads)
-            threads = g_hash_table_new(g_direct_hash, g_direct_equal);
+            threads = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-        g_hash_table_insert(threads, file, thread);
-        G_UNLOCK(threads);
+        g_hash_table_insert (threads, file, thread);
+        G_UNLOCK (threads);
 
         return file;
     }
 }
 
 static gboolean
-wait_for_gzip(FILE *file)
+wait_for_gzip (FILE* file)
 {
     gboolean retval = TRUE;
 
-    G_LOCK(threads);
+    G_LOCK (threads);
     if (threads)
     {
-        GThread *thread = static_cast<decltype(thread)>(g_hash_table_lookup(threads, file));
+        GThread* thread = static_cast<decltype (thread)> (g_hash_table_lookup (threads,
+                                                          file));
         if (thread)
         {
-            g_hash_table_remove(threads, file);
-            retval = GPOINTER_TO_INT(g_thread_join(thread));
+            g_hash_table_remove (threads, file);
+            retval = GPOINTER_TO_INT (g_thread_join (thread));
         }
     }
-    G_UNLOCK(threads);
+    G_UNLOCK (threads);
 
     return retval;
 }
 
 gboolean
-gnc_book_write_to_xml_file_v2(
-    QofBook *book,
-    const char *filename,
+gnc_book_write_to_xml_file_v2 (
+    QofBook* book,
+    const char* filename,
     gboolean compress)
 {
-    FILE *out;
+    FILE* out;
     gboolean success = TRUE;
 
-    out = try_gz_open(filename, "w", compress, TRUE);
+    out = try_gz_open (filename, "w", compress, TRUE);
 
     /* Try to write as much as possible */
     if (!out
-            || !gnc_book_write_to_xml_filehandle_v2(book, out)
-            || !write_emacs_trailer(out))
+        || !gnc_book_write_to_xml_filehandle_v2 (book, out)
+        || !write_emacs_trailer (out))
         success = FALSE;
 
     /* Close the output stream */
-    if (out && fclose(out))
+    if (out && fclose (out))
         success = FALSE;
 
     /* Optionally wait for parallel compression threads */
     if (out && compress)
-        if (!wait_for_gzip(out))
+        if (!wait_for_gzip (out))
             success = FALSE;
 
     return success;
@@ -1656,31 +1665,31 @@ gnc_book_write_to_xml_file_v2(
  * postgress or anything else.
  */
 gboolean
-gnc_book_write_accounts_to_xml_file_v2(
-    QofBackend *be,
-    QofBook *book,
-    const char *filename)
+gnc_book_write_accounts_to_xml_file_v2 (
+    QofBackend* be,
+    QofBook* book,
+    const char* filename)
 {
-    FILE *out;
+    FILE* out;
     gboolean success = TRUE;
 
-    out = g_fopen(filename, "w");
+    out = g_fopen (filename, "w");
 
     /* Try to write as much as possible */
     if (!out
-            || !gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out)
-            || !write_emacs_trailer(out))
+        || !gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out)
+        || !write_emacs_trailer (out))
         success = FALSE;
 
     /* Close the output stream */
-    if (out && fclose(out))
+    if (out && fclose (out))
         success = FALSE;
 
-    if (!success && !qof_backend_check_error(be))
+    if (!success && !qof_backend_check_error (be))
     {
 
         /* Use a generic write error code */
-        qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
+        qof_backend_set_error (be, ERR_FILEIO_WRITE_ERROR);
     }
 
     return success;
@@ -1688,22 +1697,22 @@ gnc_book_write_accounts_to_xml_file_v2(
 
 /***********************************************************************/
 static gboolean
-is_gzipped_file(const gchar *name)
+is_gzipped_file (const gchar* name)
 {
     unsigned char buf[2];
-    int fd = g_open(name, O_RDONLY, 0);
+    int fd = g_open (name, O_RDONLY, 0);
 
     if (fd == -1)
     {
         return FALSE;
     }
 
-    if (read(fd, buf, 2) != 2)
+    if (read (fd, buf, 2) != 2)
     {
-        close(fd);
+        close (fd);
         return FALSE;
     }
-    close(fd);
+    close (fd);
 
     if (buf[0] == 037 && buf[1] == 0213)
     {
@@ -1714,9 +1723,9 @@ is_gzipped_file(const gchar *name)
 }
 
 QofBookFileType
-gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
+gnc_is_xml_data_file_v2 (const gchar* name, gboolean* with_encoding)
 {
-    if (is_gzipped_file(name))
+    if (is_gzipped_file (name))
     {
         gzFile file = NULL;
         char first_chunk[256];
@@ -1724,73 +1733,73 @@ gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
 
 #ifdef G_OS_WIN32
         {
-            gchar *conv_name = g_win32_locale_filename_from_utf8(name);
+            gchar* conv_name = g_win32_locale_filename_from_utf8 (name);
             if (!conv_name)
-                g_warning("Could not convert '%s' to system codepage", name);
+                g_warning ("Could not convert '%s' to system codepage", name);
             else
             {
-                file = gzopen(conv_name, "rb");
-                g_free(conv_name);
+                file = gzopen (conv_name, "rb");
+                g_free (conv_name);
             }
         }
 #else
-        file = gzopen(name, "r");
+        file = gzopen (name, "r");
 #endif
         if (file == NULL)
             return GNC_BOOK_NOT_OURS;
 
-        num_read = gzread(file, first_chunk, sizeof(first_chunk) - 1);
-        gzclose(file);
+        num_read = gzread (file, first_chunk, sizeof (first_chunk) - 1);
+        gzclose (file);
 
         if (num_read < 1)
             return GNC_BOOK_NOT_OURS;
 
-        return gnc_is_our_first_xml_chunk(first_chunk, with_encoding);
+        return gnc_is_our_first_xml_chunk (first_chunk, with_encoding);
     }
 
-    return (gnc_is_our_xml_file(name, with_encoding));
+    return (gnc_is_our_xml_file (name, with_encoding));
 }
 
 
 static void
-replace_character_references(gchar *string)
+replace_character_references (gchar* string)
 {
-    gchar *cursor, *semicolon, *tail;
+    gchar* cursor, *semicolon, *tail;
     glong number;
 
-    for (cursor = strstr(string, "&#");
-            cursor && *cursor;
-            cursor = strstr(cursor, "&#"))
+    for (cursor = strstr (string, "&#");
+         cursor && *cursor;
+         cursor = strstr (cursor, "&#"))
     {
-        semicolon = strchr(cursor, ';');
+        semicolon = strchr (cursor, ';');
         if (semicolon && *semicolon)
         {
 
             /* parse number */
             errno = 0;
-            if (*(cursor + 2) == 'x')
+            if (* (cursor + 2) == 'x')
             {
-                number = strtol(cursor + 3, &tail, 16);
+                number = strtol (cursor + 3, &tail, 16);
             }
             else
             {
-                number = strtol(cursor + 2, &tail, 10);
+                number = strtol (cursor + 2, &tail, 10);
             }
             if (errno || tail != semicolon || number < 0 || number > 255)
             {
-                PWARN("Illegal character reference");
+                PWARN ("Illegal character reference");
                 return;
             }
 
             /* overwrite '&' with the specified character */
             *cursor = (gchar) number;
             cursor++;
-            if (*(semicolon + 1))
+            if (* (semicolon + 1))
             {
                 /* move text after semicolon the the left */
-                tail = g_strdup(semicolon + 1);
-                strcpy(cursor, tail);
-                g_free(tail);
+                tail = g_strdup (semicolon + 1);
+                strcpy (cursor, tail);
+                g_free (tail);
             }
             else
             {
@@ -1801,27 +1810,27 @@ replace_character_references(gchar *string)
         }
         else
         {
-            PWARN("Unclosed character reference");
+            PWARN ("Unclosed character reference");
             return;
         }
     }
 }
 
 static void
-conv_free(conv_type *conv)
+conv_free (conv_type* conv)
 {
     if (conv)
     {
-        g_free(conv->utf8_string);
-        g_free(conv);
+        g_free (conv->utf8_string);
+        g_free (conv);
     }
 }
 
 static void
-conv_list_free(GList *conv_list)
+conv_list_free (GList* conv_list)
 {
-    g_list_foreach(conv_list, (GFunc) conv_free, NULL);
-    g_list_free(conv_list);
+    g_list_foreach (conv_list, (GFunc) conv_free, NULL);
+    g_list_free (conv_list);
 }
 
 typedef struct
@@ -1831,82 +1840,82 @@ typedef struct
 } iconv_item_type;
 
 gint
-gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
-                        GHashTable **unique, GHashTable **ambiguous,
-                        GList **impossible)
+gnc_xml2_find_ambiguous (const gchar* filename, GList* encodings,
+                         GHashTable** unique, GHashTable** ambiguous,
+                         GList** impossible)
 {
-    FILE *file = NULL;
-    GList *iconv_list = NULL, *conv_list = NULL, *iter;
-    iconv_item_type *iconv_item = NULL, *ascii = NULL;
-    const gchar *enc;
-    GHashTable *processed = NULL;
+    FILE* file = NULL;
+    GList* iconv_list = NULL, *conv_list = NULL, *iter;
+    iconv_item_type* iconv_item = NULL, *ascii = NULL;
+    const gchar* enc;
+    GHashTable* processed = NULL;
     gint n_impossible = 0;
-    GError *error = NULL;
+    GError* error = NULL;
     gboolean is_compressed;
     gboolean clean_return = FALSE;
 
-    is_compressed = is_gzipped_file(filename);
-    file = try_gz_open(filename, "r", is_compressed, FALSE);
+    is_compressed = is_gzipped_file (filename);
+    file = try_gz_open (filename, "r", is_compressed, FALSE);
     if (file == NULL)
     {
-        PWARN("Unable to open file %s", filename);
+        PWARN ("Unable to open file %s", filename);
         goto cleanup_find_ambs;
     }
 
     /* we need ascii */
-    ascii = g_new(iconv_item_type, 1);
-    ascii->encoding = g_quark_from_string("ASCII");
-    ascii->iconv = g_iconv_open("UTF-8", "ASCII");
+    ascii = g_new (iconv_item_type, 1);
+    ascii->encoding = g_quark_from_string ("ASCII");
+    ascii->iconv = g_iconv_open ("UTF-8", "ASCII");
     if (ascii->iconv == (GIConv) - 1)
     {
-        PWARN("Unable to open ASCII ICONV conversion descriptor");
+        PWARN ("Unable to open ASCII ICONV conversion descriptor");
         goto cleanup_find_ambs;
     }
 
     /* call iconv_open on encodings */
     for (iter = encodings; iter; iter = iter->next)
     {
-        iconv_item = g_new(iconv_item_type, 1);
+        iconv_item = g_new (iconv_item_type, 1);
         iconv_item->encoding = GPOINTER_TO_UINT (iter->data);
         if (iconv_item->encoding == ascii->encoding)
         {
             continue;
         }
 
-        enc = g_quark_to_string(iconv_item->encoding);
-        iconv_item->iconv = g_iconv_open("UTF-8", enc);
+        enc = g_quark_to_string (iconv_item->encoding);
+        iconv_item->iconv = g_iconv_open ("UTF-8", enc);
         if (iconv_item->iconv == (GIConv) - 1)
         {
-            PWARN("Unable to open IConv conversion descriptor for '%s'", enc);
+            PWARN ("Unable to open IConv conversion descriptor for '%s'", enc);
             goto cleanup_find_ambs;
         }
         else
         {
-            iconv_list = g_list_prepend(iconv_list, iconv_item);
+            iconv_list = g_list_prepend (iconv_list, iconv_item);
         }
     }
 
     /* prepare data containers */
     if (unique)
-        *unique = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
-                                        (GDestroyNotify) conv_free);
+        *unique = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                         (GDestroyNotify) conv_free);
     if (ambiguous)
-        *ambiguous = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
-                                           (GDestroyNotify) conv_list_free);
+        *ambiguous = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                            (GDestroyNotify) conv_list_free);
     if (impossible)
         *impossible = NULL;
-    processed = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+    processed = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
     /* loop through lines */
     while (1)
     {
         gchar line[256], *word, *utf8;
-        gchar **word_array, **word_cursor;
-        conv_type *conv = NULL;
+        gchar** word_array, **word_cursor;
+        conv_type* conv = NULL;
 
-        if (!fgets(line, sizeof(line) - 1, file))
+        if (!fgets (line, sizeof (line) - 1, file))
         {
-            if (feof(file))
+            if (feof (file))
             {
                 break;
             }
@@ -1916,9 +1925,9 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             }
         }
 
-        g_strchomp(line);
-        replace_character_references(line);
-        word_array = g_strsplit_set(line, "> <", 0);
+        g_strchomp (line);
+        replace_character_references (line);
+        word_array = g_strsplit_set (line, "> <", 0);
 
         /* loop through words */
         for (word_cursor = word_array; *word_cursor; word_cursor++)
@@ -1927,18 +1936,18 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             if (!word)
                 continue;
 
-            utf8 = g_convert_with_iconv(word, -1, ascii->iconv,
-                                        NULL, NULL, &error);
+            utf8 = g_convert_with_iconv (word, -1, ascii->iconv,
+                                         NULL, NULL, &error);
             if (utf8)
             {
                 /* pure ascii */
-                g_free(utf8);
+                g_free (utf8);
                 continue;
             }
-            g_error_free(error);
+            g_error_free (error);
             error = NULL;
 
-            if (g_hash_table_lookup_extended(processed, word, NULL, NULL))
+            if (g_hash_table_lookup_extended (processed, word, NULL, NULL))
             {
                 /* already processed */
                 continue;
@@ -1948,19 +1957,19 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             conv_list = NULL;
             for (iter = iconv_list; iter; iter = iter->next)
             {
-                iconv_item = static_cast<decltype(iconv_item)>(iter->data);
-                utf8 = g_convert_with_iconv(word, -1, iconv_item->iconv,
-                                            NULL, NULL, &error);
+                iconv_item = static_cast<decltype (iconv_item)> (iter->data);
+                utf8 = g_convert_with_iconv (word, -1, iconv_item->iconv,
+                                             NULL, NULL, &error);
                 if (utf8)
                 {
-                    conv = g_new(conv_type, 1);
+                    conv = g_new (conv_type, 1);
                     conv->encoding = iconv_item->encoding;
                     conv->utf8_string = utf8;
-                    conv_list = g_list_prepend(conv_list, conv);
+                    conv_list = g_list_prepend (conv_list, conv);
                 }
                 else
                 {
-                    g_error_free(error);
+                    g_error_free (error);
                     error = NULL;
                 }
             }
@@ -1969,7 +1978,7 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             if (!conv_list)
             {
                 if (impossible)
-                    *impossible = g_list_append(*impossible, g_strdup(word));
+                    *impossible = g_list_append (*impossible, g_strdup (word));
                 n_impossible++;
             }
 
@@ -1978,11 +1987,11 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             {
                 if (ambiguous)
                 {
-                    g_hash_table_insert(*ambiguous, g_strdup(word), conv_list);
+                    g_hash_table_insert (*ambiguous, g_strdup (word), conv_list);
                 }
                 else
                 {
-                    conv_list_free(conv_list);
+                    conv_list_free (conv_list);
                 }
             }
 
@@ -1991,18 +2000,18 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             {
                 if (unique)
                 {
-                    g_hash_table_insert(*unique, g_strdup(word), conv);
+                    g_hash_table_insert (*unique, g_strdup (word), conv);
                 }
                 else
                 {
-                    conv_free(conv);
+                    conv_free (conv);
                 }
-                g_list_free(conv_list);
+                g_list_free (conv_list);
             }
 
-            g_hash_table_insert(processed, g_strdup(word), NULL);
+            g_hash_table_insert (processed, g_strdup (word), NULL);
         }
-        g_strfreev(word_array);
+        g_strfreev (word_array);
     }
 
     clean_return = TRUE;
@@ -2015,21 +2024,21 @@ cleanup_find_ambs:
         {
             if (iter->data)
             {
-                g_iconv_close(((iconv_item_type*) iter->data)->iconv);
-                g_free(iter->data);
+                g_iconv_close (((iconv_item_type*) iter->data)->iconv);
+                g_free (iter->data);
             }
         }
-        g_list_free(iconv_list);
+        g_list_free (iconv_list);
     }
     if (processed)
-        g_hash_table_destroy(processed);
+        g_hash_table_destroy (processed);
     if (ascii)
-        g_free(ascii);
+        g_free (ascii);
     if (file)
     {
-        fclose(file);
+        fclose (file);
         if (is_compressed)
-            wait_for_gzip(file);
+            wait_for_gzip (file);
     }
 
     return (clean_return) ? n_impossible : -1;
@@ -2037,34 +2046,34 @@ cleanup_find_ambs:
 
 typedef struct
 {
-    gchar *filename;
-    GHashTable *subst;
+    gchar* filename;
+    GHashTable* subst;
 } push_data_type;
 
 static void
 parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
-                               push_data_type *push_data)
+                               push_data_type* push_data)
 {
-    const gchar *filename;
-    FILE *file = NULL;
+    const gchar* filename;
+    FILE* file = NULL;
     GIConv ascii = (GIConv) - 1;
-    GString *output = NULL;
-    GError *error = NULL;
+    GString* output = NULL;
+    GError* error = NULL;
     gboolean is_compressed;
 
     filename = push_data->filename;
-    is_compressed = is_gzipped_file(filename);
-    file = try_gz_open(filename, "r", is_compressed, FALSE);
+    is_compressed = is_gzipped_file (filename);
+    file = try_gz_open (filename, "r", is_compressed, FALSE);
     if (file == NULL)
     {
-        PWARN("Unable to open file %s", filename);
+        PWARN ("Unable to open file %s", filename);
         goto cleanup_push_handler;
     }
 
-    ascii = g_iconv_open("UTF-8", "ASCII");
+    ascii = g_iconv_open ("UTF-8", "ASCII");
     if (ascii == (GIConv) - 1)
     {
-        PWARN("Unable to open ASCII ICONV conversion descriptor");
+        PWARN ("Unable to open ASCII ICONV conversion descriptor");
         goto cleanup_push_handler;
     }
 
@@ -2073,11 +2082,11 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
     {
         gchar line[256], *word, *repl, *utf8;
         gint pos, len;
-        gchar *start, *cursor;
+        gchar* start, *cursor;
 
-        if (!fgets(line, sizeof(line) - 1, file))
+        if (!fgets (line, sizeof (line) - 1, file))
         {
-            if (feof(file))
+            if (feof (file))
             {
                 break;
             }
@@ -2087,8 +2096,8 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
             }
         }
 
-        replace_character_references(line);
-        output = g_string_new(line);
+        replace_character_references (line);
+        output = g_string_new (line);
 
         /* loop through words */
         cursor = output->str;
@@ -2097,7 +2106,7 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
         {
             /* ignore delimiters */
             while (*cursor == '>' || *cursor == ' ' || *cursor == '<' ||
-                    *cursor == '\n')
+                   *cursor == '\n')
             {
                 cursor++;
                 pos += 1;
@@ -2111,34 +2120,35 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
             start = cursor;
             len = 0;
             while (*cursor && *cursor != '>' && *cursor != ' ' && *cursor != '<' &&
-                    *cursor != '\n')
+                   *cursor != '\n')
             {
                 cursor++;
                 len++;
             }
 
-            utf8 = g_convert_with_iconv(start, len, ascii, NULL, NULL, &error);
+            utf8 = g_convert_with_iconv (start, len, ascii, NULL, NULL, &error);
 
             if (utf8)
             {
                 /* pure ascii */
-                g_free(utf8);
+                g_free (utf8);
                 pos += len;
             }
             else
             {
-                g_error_free(error);
+                g_error_free (error);
                 error = NULL;
 
-                word = g_strndup(start, len);
-                repl = static_cast<decltype(repl)>(g_hash_table_lookup(push_data->subst, word));
-                g_free(word);
+                word = g_strndup (start, len);
+                repl = static_cast<decltype (repl)> (g_hash_table_lookup (push_data->subst,
+                                                                          word));
+                g_free (word);
                 if (repl)
                 {
                     /* there is a replacement */
-                    output = g_string_insert(g_string_erase(output, pos, len),
-                                             pos, repl);
-                    pos += strlen(repl);
+                    output = g_string_insert (g_string_erase (output, pos, len),
+                                              pos, repl);
+                    pos += strlen (repl);
                     cursor = output->str + pos;
                 }
                 else
@@ -2149,45 +2159,45 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
             }
         }
 
-        if (xmlParseChunk(xml_context, output->str, output->len, 0) != 0)
+        if (xmlParseChunk (xml_context, output->str, output->len, 0) != 0)
         {
             goto cleanup_push_handler;
         }
     }
 
     /* last chunk */
-    xmlParseChunk(xml_context, "", 0, 1);
+    xmlParseChunk (xml_context, "", 0, 1);
 
 cleanup_push_handler:
 
     if (output)
-        g_string_free(output, TRUE);
+        g_string_free (output, TRUE);
     if (ascii != (GIConv) - 1)
-        g_iconv_close(ascii);
+        g_iconv_close (ascii);
     if (file)
     {
-        fclose(file);
+        fclose (file);
         if (is_compressed)
-            wait_for_gzip(file);
+            wait_for_gzip (file);
     }
 }
 
 gboolean
-gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
+gnc_xml2_parse_with_subst (FileBackend* fbe, QofBook* book, GHashTable* subst)
 {
-    push_data_type *push_data;
+    push_data_type* push_data;
     gboolean success;
 
-    push_data = g_new(push_data_type, 1);
+    push_data = g_new (push_data_type, 1);
     push_data->filename = fbe->fullpath;
     push_data->subst = subst;
 
-    success = qof_session_load_from_xml_file_v2_full(
+    success = qof_session_load_from_xml_file_v2_full (
                   fbe, book, (sixtp_push_handler) parse_with_subst_push_handler,
                   push_data, GNC_BOOK_XML2_FILE);
 
     if (success)
-	qof_instance_set_dirty (QOF_INSTANCE (book));
+        qof_instance_set_dirty (QOF_INSTANCE (book));
 
     return success;
 }

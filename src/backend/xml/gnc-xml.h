@@ -36,35 +36,35 @@ extern "C"
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
 
-xmlNodePtr gnc_account_dom_tree_create(Account *act, gboolean exporting,
-                                       gboolean allow_incompat);
-sixtp* gnc_account_sixtp_parser_create(void);
+xmlNodePtr gnc_account_dom_tree_create (Account* act, gboolean exporting,
+                                        gboolean allow_incompat);
+sixtp* gnc_account_sixtp_parser_create (void);
 
-xmlNodePtr gnc_book_dom_tree_create(QofBook *book);
-sixtp* gnc_book_sixtp_parser_create(void);
-sixtp* gnc_book_id_sixtp_parser_create(void);
-sixtp* gnc_book_slots_sixtp_parser_create(void);
+xmlNodePtr gnc_book_dom_tree_create (QofBook* book);
+sixtp* gnc_book_sixtp_parser_create (void);
+sixtp* gnc_book_id_sixtp_parser_create (void);
+sixtp* gnc_book_slots_sixtp_parser_create (void);
 
-xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *com);
-sixtp* gnc_commodity_sixtp_parser_create(void);
+xmlNodePtr gnc_commodity_dom_tree_create (const gnc_commodity* com);
+sixtp* gnc_commodity_sixtp_parser_create (void);
 
-sixtp* gnc_freqSpec_sixtp_parser_create(void);
+sixtp* gnc_freqSpec_sixtp_parser_create (void);
 
-xmlNodePtr gnc_lot_dom_tree_create(GNCLot *);
-sixtp* gnc_lot_sixtp_parser_create(void);
+xmlNodePtr gnc_lot_dom_tree_create (GNCLot*);
+sixtp* gnc_lot_sixtp_parser_create (void);
 
-xmlNodePtr gnc_pricedb_dom_tree_create(GNCPriceDB *db);
-sixtp* gnc_pricedb_sixtp_parser_create(void);
+xmlNodePtr gnc_pricedb_dom_tree_create (GNCPriceDB* db);
+sixtp* gnc_pricedb_sixtp_parser_create (void);
 
-xmlNodePtr gnc_schedXaction_dom_tree_create( SchedXaction *sx );
-sixtp* gnc_schedXaction_sixtp_parser_create(void);
+xmlNodePtr gnc_schedXaction_dom_tree_create (SchedXaction* sx);
+sixtp* gnc_schedXaction_sixtp_parser_create (void);
 
-xmlNodePtr gnc_budget_dom_tree_create( GncBudget *bgt );
-sixtp* gnc_budget_sixtp_parser_create(void);
+xmlNodePtr gnc_budget_dom_tree_create (GncBudget* bgt);
+sixtp* gnc_budget_sixtp_parser_create (void);
 
-xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
-sixtp* gnc_transaction_sixtp_parser_create(void);
+xmlNodePtr gnc_transaction_dom_tree_create (Transaction* txn);
+sixtp* gnc_transaction_sixtp_parser_create (void);
 
-sixtp* gnc_template_transaction_sixtp_parser_create(void);
+sixtp* gnc_template_transaction_sixtp_parser_create (void);
 
 #endif /* GNC_XML_H */

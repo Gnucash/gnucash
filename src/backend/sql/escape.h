@@ -36,10 +36,10 @@
 
 typedef struct _escape sqlEscape;
 
-sqlEscape * sqlEscape_new(void);
-void sqlEscape_destroy (sqlEscape *);
+sqlEscape* sqlEscape_new (void);
+void sqlEscape_destroy (sqlEscape*);
 
-const char * sqlEscapeString (sqlEscape *, const char *orig_string);
+const char* sqlEscapeString (sqlEscape*, const char* orig_string);
 
 #endif /* SQL_ESCAPE_H */
 

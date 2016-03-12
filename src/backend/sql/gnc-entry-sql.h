@@ -30,6 +30,6 @@
 #ifndef GNC_ENTRY_SQL_H
 #define GNC_ENTRY_SQL_H
 
-void gnc_entry_sql_initialize( void );
+void gnc_entry_sql_initialize (void);
 
 #endif /* GNC_ENTRY_SQL_H */

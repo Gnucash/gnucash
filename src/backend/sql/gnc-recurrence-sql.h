@@ -36,12 +36,14 @@ extern "C"
 }
 #include "gnc-backend-sql.h"
 
-gboolean gnc_sql_recurrence_save( GncSqlBackend* be, const GncGUID* guid, const Recurrence* pRecurrence );
-void gnc_sql_recurrence_save_list( GncSqlBackend* be, const GncGUID* guid, GList* schedule );
-gboolean gnc_sql_recurrence_delete( GncSqlBackend* be, const GncGUID* guid );
-Recurrence* gnc_sql_recurrence_load( GncSqlBackend* be, const GncGUID* guid );
-GList* gnc_sql_recurrence_load_list( GncSqlBackend* be, const GncGUID* guid );
+gboolean gnc_sql_recurrence_save (GncSqlBackend* be, const GncGUID* guid,
+                                  const Recurrence* pRecurrence);
+void gnc_sql_recurrence_save_list (GncSqlBackend* be, const GncGUID* guid,
+                                   GList* schedule);
+gboolean gnc_sql_recurrence_delete (GncSqlBackend* be, const GncGUID* guid);
+Recurrence* gnc_sql_recurrence_load (GncSqlBackend* be, const GncGUID* guid);
+GList* gnc_sql_recurrence_load_list (GncSqlBackend* be, const GncGUID* guid);
 
-void gnc_sql_init_recurrence_handler( void );
+void gnc_sql_init_recurrence_handler (void);
 
 #endif /* GNC_RECURRENCE_SQL_H */

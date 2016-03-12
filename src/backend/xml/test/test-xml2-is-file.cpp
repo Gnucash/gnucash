@@ -33,19 +33,20 @@ extern "C"
 #define FILENAME "Money95bank_fr.gml2"
 
 int
-main(int argc, char **argv)
+main (int argc, char** argv)
 {
-    const char *directory = g_getenv("GNC_TEST_FILES");
+    const char* directory = g_getenv ("GNC_TEST_FILES");
 
     if (!directory)
     {
         directory = "test-files/xml2";
     }
 
-    char *filename = static_cast<decltype(filename)>(malloc(strlen(directory) + 1 + strlen(FILENAME) + 1));
-    sprintf(filename, "%s/%s", directory, FILENAME);
-    do_test(gnc_is_xml_data_file_v2(filename, NULL), "gnc_is_xml_data_file_v2");
+    char* filename = static_cast<decltype (filename)> (malloc (strlen (
+            directory) + 1 + strlen (FILENAME) + 1));
+    sprintf (filename, "%s/%s", directory, FILENAME);
+    do_test (gnc_is_xml_data_file_v2 (filename, NULL), "gnc_is_xml_data_file_v2");
 
-    print_test_results();
-    exit(get_rv());
+    print_test_results ();
+    exit (get_rv ());
 }

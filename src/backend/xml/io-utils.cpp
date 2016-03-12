@@ -39,68 +39,68 @@ extern "C"
   <!-- End:             -->
 */
 
-static const gchar *emacs_trailer =
+static const gchar* emacs_trailer =
     "<!-- Local variables: -->\n"
     "<!-- mode: xml        -->\n"
     "<!-- End:             -->\n";
 
 
 gboolean
-write_emacs_trailer(FILE *out)
+write_emacs_trailer (FILE* out)
 {
-    return fprintf(out, "%s", emacs_trailer) >= 0;
+    return fprintf (out, "%s", emacs_trailer) >= 0;
 }
 
 static gboolean
-write_one_account(FILE *out,
-                  Account *account,
-                  sixtp_gdv2 *gd,
-                  gboolean allow_incompat)
+write_one_account (FILE* out,
+                   Account* account,
+                   sixtp_gdv2* gd,
+                   gboolean allow_incompat)
 {
     xmlNodePtr accnode;
 
     accnode =
-        gnc_account_dom_tree_create(account, gd && gd->exporting, allow_incompat);
+        gnc_account_dom_tree_create (account, gd && gd->exporting, allow_incompat);
 
-    xmlElemDump(out, NULL, accnode);
-    xmlFreeNode(accnode);
+    xmlElemDump (out, NULL, accnode);
+    xmlFreeNode (accnode);
 
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    if (ferror (out) || fprintf (out, "\n") < 0)
         return FALSE;
 
     gd->counter.accounts_loaded++;
-    sixtp_run_callback(gd, "account");
+    sixtp_run_callback (gd, "account");
     return TRUE;
 }
 
 gboolean
-write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd)
+write_account_tree (FILE* out, Account* root, sixtp_gdv2* gd)
 {
-    GList *descendants, *node;
+    GList* descendants, *node;
     gboolean allow_incompat = TRUE;
     gboolean success = TRUE;
 
     if (allow_incompat)
-        if (!write_one_account(out, root, gd, allow_incompat))
+        if (!write_one_account (out, root, gd, allow_incompat))
             return FALSE;
 
-    descendants = gnc_account_get_descendants(root);
-    for (node = descendants; node; node = g_list_next(node))
+    descendants = gnc_account_get_descendants (root);
+    for (node = descendants; node; node = g_list_next (node))
     {
-        if (!write_one_account(out, static_cast<Account*>(node->data),
-                               gd, allow_incompat))
+        if (!write_one_account (out, static_cast<Account*> (node->data),
+                                gd, allow_incompat))
         {
             success = FALSE;
             break;
         }
     }
 
-    g_list_free(descendants);
+    g_list_free (descendants);
     return success;
 }
 
 gboolean
-write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd)
+write_accounts (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
-    return write_account_tree(out, gnc_book_get_root_account(book), gd);
+    return write_account_tree (out, gnc_book_get_root_account (book), gd);
 }

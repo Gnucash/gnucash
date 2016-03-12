@@ -49,92 +49,92 @@ extern "C"
 static QofLogModule log_module = GNC_MOD_IO;
 
 gboolean
-isspace_str(const gchar *str, int nomorethan)
+isspace_str (const gchar* str, int nomorethan)
 {
-    const gchar *cursor = str;
+    const gchar* cursor = str;
     while (*cursor && (nomorethan != 0))
     {
-        if (!isspace(*cursor))
+        if (!isspace (*cursor))
         {
-            return(FALSE);
+            return (FALSE);
         }
         cursor++;
         nomorethan--;
     }
-    return(TRUE);
+    return (TRUE);
 }
 
 gboolean
-allow_and_ignore_only_whitespace(GSList *sibling_data,
-                                 gpointer parent_data,
-                                 gpointer global_data,
-                                 gpointer *result,
-                                 const char *text,
-                                 int length)
+allow_and_ignore_only_whitespace (GSList* sibling_data,
+                                  gpointer parent_data,
+                                  gpointer global_data,
+                                  gpointer* result,
+                                  const char* text,
+                                  int length)
 {
-    return(isspace_str(text, length));
+    return (isspace_str (text, length));
 }
 
 gboolean
-generic_accumulate_chars(GSList *sibling_data,
-                         gpointer parent_data,
-                         gpointer global_data,
-                         gpointer *result,
+generic_accumulate_chars (GSList* sibling_data,
+                          gpointer parent_data,
+                          gpointer global_data,
+                          gpointer* result,
 
-                         const char *text,
-                         int length)
+                          const char* text,
+                          int length)
 {
-    gchar *copytxt = g_strndup(text, length);
-    g_return_val_if_fail(result, FALSE);
+    gchar* copytxt = g_strndup (text, length);
+    g_return_val_if_fail (result, FALSE);
 
     *result = copytxt;
-    return(TRUE);
+    return (TRUE);
 }
 
 
 void
-generic_free_data_for_children(gpointer data_for_children,
-                               GSList* data_from_children,
-                               GSList* sibling_data,
-                               gpointer parent_data,
-                               gpointer global_data,
-                               gpointer *result,
-                               const gchar *tag)
+generic_free_data_for_children (gpointer data_for_children,
+                                GSList* data_from_children,
+                                GSList* sibling_data,
+                                gpointer parent_data,
+                                gpointer global_data,
+                                gpointer* result,
+                                const gchar* tag)
 {
-    if (data_for_children) g_free(data_for_children);
+    if (data_for_children) g_free (data_for_children);
 }
 
-gchar *
-concatenate_child_result_chars(GSList *data_from_children)
+gchar*
+concatenate_child_result_chars (GSList* data_from_children)
 {
-    GSList *lp;
-    gchar *name = g_strdup("");
+    GSList* lp;
+    gchar* name = g_strdup ("");
 
-    g_return_val_if_fail(name, NULL);
+    g_return_val_if_fail (name, NULL);
 
     /* child data lists are in reverse chron order */
-    data_from_children = g_slist_reverse(g_slist_copy(data_from_children));
+    data_from_children = g_slist_reverse (g_slist_copy (data_from_children));
 
     for (lp = data_from_children; lp; lp = lp->next)
     {
-        sixtp_child_result *cr = (sixtp_child_result *) lp->data;
+        sixtp_child_result* cr = (sixtp_child_result*) lp->data;
         if (cr->type != SIXTP_CHILD_RESULT_CHARS)
         {
             PERR ("result type is not chars");
             g_slist_free (data_from_children);
-            g_free(name);
-            return(NULL);
+            g_free (name);
+            return (NULL);
         }
         else
         {
-            char *temp;
-            temp = g_strconcat(name, (gchar *) cr->data, NULL);
+            char* temp;
+            temp = g_strconcat (name, (gchar*) cr->data, NULL);
             g_free (name);
             name = temp;
         }
     }
     g_slist_free (data_from_children);
-    return(name);
+    return (name);
 }
 
 /****************************************************************************/
@@ -147,17 +147,17 @@ concatenate_child_result_chars(GSList *data_from_children)
  */
 
 gboolean
-string_to_double(const char *str, double *result)
+string_to_double (const char* str, double* result)
 {
-    char *endptr = 0x0;
+    char* endptr = 0x0;
 
-    g_return_val_if_fail(str, FALSE);
-    g_return_val_if_fail(result, FALSE);
+    g_return_val_if_fail (str, FALSE);
+    g_return_val_if_fail (result, FALSE);
 
     *result = strtod (str, &endptr);
     if (endptr == str) return (FALSE);
 
-    return(TRUE);
+    return (TRUE);
 }
 
 /*********/
@@ -166,18 +166,18 @@ string_to_double(const char *str, double *result)
 /* Maybe there should be a comment here explaining why this function
    doesn't call g_ascii_strtoull, because it's not so obvious. -CAS */
 gboolean
-string_to_gint64(const gchar *str, gint64 *v)
+string_to_gint64 (const gchar* str, gint64* v)
 {
     /* convert a string to a gint64. only whitespace allowed before and after. */
     long long int v_in;
     int num_read;
 
-    g_return_val_if_fail(str, FALSE);
+    g_return_val_if_fail (str, FALSE);
 
     /* must use "<" here because %n's effects aren't well defined */
-    if (sscanf(str, " " QOF_SCANF_LLD "%n", &v_in, &num_read) < 1)
+    if (sscanf (str, " " QOF_SCANF_LLD "%n", &v_in, &num_read) < 1)
     {
-        return(FALSE);
+        return (FALSE);
     }
 
     /*
@@ -185,15 +185,15 @@ string_to_gint64(const gchar *str, gint64 *v)
      * returns bad values in num_read if there is a space before %n. It
      * is fixed in the next release 10.2 afaik
      */
-    while ( (*((gchar*)str + num_read) != '\0') &&
-            isspace(*((unsigned char*)str + num_read)))
+    while ((* ((gchar*)str + num_read) != '\0') &&
+           isspace (* ((unsigned char*)str + num_read)))
         num_read++;
 
     if (v)
         *v = v_in;
 
-    if (!isspace_str(str + num_read, -1)) return(FALSE);
-    return(TRUE);
+    if (!isspace_str (str + num_read, -1)) return (FALSE);
+    return (TRUE);
 }
 
 /*********/
@@ -201,26 +201,26 @@ string_to_gint64(const gchar *str, gint64 *v)
  */
 
 gboolean
-string_to_gint32(const gchar *str, gint32 *v)
+string_to_gint32 (const gchar* str, gint32* v)
 {
     /* convert a string to a gint32. only whitespace allowed before and after. */
     int num_read;
     int v_in;
 
     /* must use "<" here because %n's effects aren't well defined */
-    if (sscanf(str, " %d%n", &v_in, &num_read) < 1)
+    if (sscanf (str, " %d%n", &v_in, &num_read) < 1)
     {
-        return(FALSE);
+        return (FALSE);
     }
-    while ( (*((gchar*)str + num_read) != '\0') &&
-            isspace(*((unsigned char*)str + num_read)))
+    while ((* ((gchar*)str + num_read) != '\0') &&
+           isspace (* ((unsigned char*)str + num_read)))
         num_read++;
 
     if (v)
         *v = v_in;
 
-    if (!isspace_str(str + num_read, -1)) return(FALSE);
-    return(TRUE);
+    if (!isspace_str (str + num_read, -1)) return (FALSE);
+    return (TRUE);
 }
 
 /************/
@@ -228,33 +228,33 @@ string_to_gint32(const gchar *str, gint32 *v)
  */
 
 gboolean
-hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
+hex_string_to_binary (const gchar* str,  void** v, guint64* data_len)
 {
     /* Convert a hex string to binary.  No whitespace allowed. */
-    const gchar *cursor = str;
+    const gchar* cursor = str;
     guint64 str_len;
     gboolean error = FALSE;
 
-    g_return_val_if_fail(str, FALSE);
-    g_return_val_if_fail(v, FALSE);
-    g_return_val_if_fail(data_len, FALSE);
+    g_return_val_if_fail (str, FALSE);
+    g_return_val_if_fail (v, FALSE);
+    g_return_val_if_fail (data_len, FALSE);
 
-    str_len = strlen(str);
+    str_len = strlen (str);
     /* Since no whitespace is allowed and hex encoding is 2 text chars
        per binary char, the result must be half the input size and the
        input size must be even. */
-    if ((str_len % 2) != 0) return(FALSE);
+    if ((str_len % 2) != 0) return (FALSE);
     *data_len = 0;
-    *v = g_new0(char, str_len / 2);
+    *v = g_new0 (char, str_len / 2);
 
-    g_return_val_if_fail(*v, FALSE);
+    g_return_val_if_fail (*v, FALSE);
 
-    while (*cursor && *(cursor + 1))
+    while (*cursor && * (cursor + 1))
     {
         gchar tmpstr[2];
         int tmpint;
 
-        if (isspace(*cursor) || isspace(*(cursor + 1)))
+        if (isspace (*cursor) || isspace (* (cursor + 1)))
         {
             error = TRUE;
         }
@@ -262,16 +262,16 @@ hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
         {
             int num_read;
             tmpstr[0] = *cursor;
-            tmpstr[0] = *(cursor + 1);
+            tmpstr[0] = * (cursor + 1);
 
-            if ((sscanf(tmpstr, "%x%n", &tmpint, &num_read) < 1)
-                    || (num_read != 2))
+            if ((sscanf (tmpstr, "%x%n", &tmpint, &num_read) < 1)
+                || (num_read != 2))
             {
                 error = TRUE;
             }
             else
             {
-                *((gchar *) (v + *data_len)) = tmpint;
+                * ((gchar*) (v + *data_len)) = tmpint;
                 *data_len += 1;
                 cursor += 2;
             }
@@ -280,13 +280,13 @@ hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 
     if (error || (*data_len != (str_len / 2)))
     {
-        g_free(*v);
+        g_free (*v);
         *v = NULL;
         *data_len = 0;
-        return(FALSE);
+        return (FALSE);
     }
 
-    return(TRUE);
+    return (TRUE);
 }
 
 /***************************************************************************/
@@ -311,28 +311,28 @@ hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
  */
 
 gboolean
-generic_return_chars_end_handler(gpointer data_for_children,
-                                 GSList* data_from_children,
-                                 GSList* sibling_data,
-                                 gpointer parent_data,
-                                 gpointer global_data,
-                                 gpointer *result,
-                                 const gchar *tag)
+generic_return_chars_end_handler (gpointer data_for_children,
+                                  GSList* data_from_children,
+                                  GSList* sibling_data,
+                                  gpointer parent_data,
+                                  gpointer global_data,
+                                  gpointer* result,
+                                  const gchar* tag)
 {
-    gchar *txt = NULL;
+    gchar* txt = NULL;
 
-    txt = concatenate_child_result_chars(data_from_children);
-    g_return_val_if_fail(txt, FALSE);
+    txt = concatenate_child_result_chars (data_from_children);
+    g_return_val_if_fail (txt, FALSE);
     *result = txt;
-    return(TRUE);
+    return (TRUE);
 }
 
 
 sixtp*
-simple_chars_only_parser_new(sixtp_end_handler end_handler)
+simple_chars_only_parser_new (sixtp_end_handler end_handler)
 {
-    return sixtp_set_any(
-               sixtp_new(), FALSE,
+    return sixtp_set_any (
+               sixtp_new (), FALSE,
                SIXTP_END_HANDLER_ID, (end_handler
                                       ? end_handler
                                       : generic_return_chars_end_handler),
@@ -362,17 +362,17 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler)
 */
 
 gboolean
-string_to_timespec_secs(const gchar *str, Timespec *ts)
+string_to_timespec_secs (const gchar* str, Timespec* ts)
 {
-    *ts = gnc_iso8601_to_timespec_gmt(str);
-    return(TRUE);
+    *ts = gnc_iso8601_to_timespec_gmt (str);
+    return (TRUE);
 }
 
 gboolean
-string_to_timespec_nsecs(const gchar *str, Timespec *ts)
+string_to_timespec_nsecs (const gchar* str, Timespec* ts)
 {
     /* We don't do nanoseconds anymore. */
-    return(TRUE);
+    return (TRUE);
 }
 
 /* Top level timespec node:
@@ -393,15 +393,15 @@ string_to_timespec_nsecs(const gchar *str, Timespec *ts)
  */
 
 gboolean
-generic_timespec_start_handler(GSList* sibling_data, gpointer parent_data,
-                               gpointer global_data,
-                               gpointer *data_for_children, gpointer *result,
-                               const gchar *tag, gchar **attrs)
+generic_timespec_start_handler (GSList* sibling_data, gpointer parent_data,
+                                gpointer global_data,
+                                gpointer* data_for_children, gpointer* result,
+                                const gchar* tag, gchar** attrs)
 {
-    TimespecParseInfo *tsp = g_new0(TimespecParseInfo, 1);
-    g_return_val_if_fail(tsp, FALSE);
+    TimespecParseInfo* tsp = g_new0 (TimespecParseInfo, 1);
+    g_return_val_if_fail (tsp, FALSE);
     *data_for_children = tsp;
-    return(TRUE);
+    return (TRUE);
 }
 
 /* You can't use this function directly.  You have to call it from
@@ -409,17 +409,17 @@ generic_timespec_start_handler(GSList* sibling_data, gpointer parent_data,
    new timespec.  Otherwise, you can presume that everything's been
    cleaned up properly and return FALSE.  */
 gboolean
-timespec_parse_ok(TimespecParseInfo *info)
+timespec_parse_ok (TimespecParseInfo* info)
 {
 
     if ((info->s_block_count > 1) || (info->ns_block_count > 1) ||
-            ((info->s_block_count == 0) && (info->ns_block_count == 0)))
+        ((info->s_block_count == 0) && (info->ns_block_count == 0)))
     {
-        return(FALSE);
+        return (FALSE);
     }
     else
     {
-        return(TRUE);
+        return (TRUE);
     }
 }
 
@@ -444,27 +444,27 @@ timespec_parse_ok(TimespecParseInfo *info)
  */
 
 gboolean
-generic_timespec_secs_end_handler(gpointer data_for_children,
-                                  GSList  *data_from_children, GSList *sibling_data,
-                                  gpointer parent_data, gpointer global_data,
-                                  gpointer *result, const gchar *tag)
+generic_timespec_secs_end_handler (gpointer data_for_children,
+                                   GSList*  data_from_children, GSList* sibling_data,
+                                   gpointer parent_data, gpointer global_data,
+                                   gpointer* result, const gchar* tag)
 {
-    gchar *txt = NULL;
-    TimespecParseInfo *info = (TimespecParseInfo *) parent_data;
+    gchar* txt = NULL;
+    TimespecParseInfo* info = (TimespecParseInfo*) parent_data;
     gboolean ok;
 
-    g_return_val_if_fail(parent_data, FALSE);
+    g_return_val_if_fail (parent_data, FALSE);
 
-    txt = concatenate_child_result_chars(data_from_children);
-    g_return_val_if_fail(txt, FALSE);
+    txt = concatenate_child_result_chars (data_from_children);
+    g_return_val_if_fail (txt, FALSE);
 
-    ok = string_to_timespec_secs(txt, &(info->ts));
-    g_free(txt);
+    ok = string_to_timespec_secs (txt, & (info->ts));
+    g_free (txt);
 
-    g_return_val_if_fail(ok, FALSE);
+    g_return_val_if_fail (ok, FALSE);
 
     info->s_block_count++;
-    return(TRUE);
+    return (TRUE);
 }
 
 /* <s> (parent timespec-node)
@@ -485,34 +485,34 @@ generic_timespec_secs_end_handler(gpointer data_for_children,
  */
 
 gboolean
-generic_timespec_nsecs_end_handler(gpointer data_for_children,
-                                   GSList  *data_from_children, GSList *sibling_data,
-                                   gpointer parent_data, gpointer global_data,
-                                   gpointer *result, const gchar *tag)
+generic_timespec_nsecs_end_handler (gpointer data_for_children,
+                                    GSList*  data_from_children, GSList* sibling_data,
+                                    gpointer parent_data, gpointer global_data,
+                                    gpointer* result, const gchar* tag)
 {
-    gchar *txt = NULL;
-    TimespecParseInfo *info = (TimespecParseInfo *) parent_data;
+    gchar* txt = NULL;
+    TimespecParseInfo* info = (TimespecParseInfo*) parent_data;
     gboolean ok;
 
-    g_return_val_if_fail(parent_data, FALSE);
+    g_return_val_if_fail (parent_data, FALSE);
 
-    txt = concatenate_child_result_chars(data_from_children);
-    g_return_val_if_fail(txt, FALSE);
+    txt = concatenate_child_result_chars (data_from_children);
+    g_return_val_if_fail (txt, FALSE);
 
-    ok = string_to_timespec_nsecs(txt, &(info->ts));
-    g_free(txt);
+    ok = string_to_timespec_nsecs (txt, & (info->ts));
+    g_free (txt);
 
-    g_return_val_if_fail(ok, FALSE);
+    g_return_val_if_fail (ok, FALSE);
 
     info->ns_block_count++;
-    return(TRUE);
+    return (TRUE);
 }
 
 static sixtp*
-timespec_sixtp_new(sixtp_end_handler ender)
+timespec_sixtp_new (sixtp_end_handler ender)
 {
-    return sixtp_set_any(
-               sixtp_new(), FALSE,
+    return sixtp_set_any (
+               sixtp_new (), FALSE,
                SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
                SIXTP_END_HANDLER_ID, ender,
                SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
@@ -520,30 +520,30 @@ timespec_sixtp_new(sixtp_end_handler ender)
                SIXTP_NO_MORE_HANDLERS);
 }
 
-sixtp *
-generic_timespec_parser_new(sixtp_end_handler end_handler)
+sixtp*
+generic_timespec_parser_new (sixtp_end_handler end_handler)
 {
-    sixtp *top_level =
-        sixtp_set_any(sixtp_new(), FALSE,
-                      SIXTP_START_HANDLER_ID, generic_timespec_start_handler,
-                      SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
-                      SIXTP_END_HANDLER_ID, end_handler,
-                      SIXTP_CLEANUP_RESULT_ID, sixtp_child_free_data,
-                      SIXTP_FAIL_HANDLER_ID, generic_free_data_for_children,
-                      SIXTP_RESULT_FAIL_ID, sixtp_child_free_data,
-                      SIXTP_NO_MORE_HANDLERS);
-    g_return_val_if_fail(top_level, NULL);
+    sixtp* top_level =
+        sixtp_set_any (sixtp_new (), FALSE,
+                       SIXTP_START_HANDLER_ID, generic_timespec_start_handler,
+                       SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+                       SIXTP_END_HANDLER_ID, end_handler,
+                       SIXTP_CLEANUP_RESULT_ID, sixtp_child_free_data,
+                       SIXTP_FAIL_HANDLER_ID, generic_free_data_for_children,
+                       SIXTP_RESULT_FAIL_ID, sixtp_child_free_data,
+                       SIXTP_NO_MORE_HANDLERS);
+    g_return_val_if_fail (top_level, NULL);
 
-    if (!sixtp_add_some_sub_parsers(
-                top_level, TRUE,
-                "s", timespec_sixtp_new(generic_timespec_secs_end_handler),
-                "ns", timespec_sixtp_new(generic_timespec_nsecs_end_handler),
-                NULL, NULL))
+    if (!sixtp_add_some_sub_parsers (
+            top_level, TRUE,
+            "s", timespec_sixtp_new (generic_timespec_secs_end_handler),
+            "ns", timespec_sixtp_new (generic_timespec_nsecs_end_handler),
+            NULL, NULL))
     {
         return NULL;
     }
 
-    return(top_level);
+    return (top_level);
 }
 
 /****************************************************************************/
@@ -568,44 +568,44 @@ generic_timespec_parser_new(sixtp_end_handler end_handler)
  */
 
 gboolean
-generic_guid_end_handler(gpointer data_for_children,
-                         GSList  *data_from_children, GSList *sibling_data,
-                         gpointer parent_data, gpointer global_data,
-                         gpointer *result, const gchar *tag)
+generic_guid_end_handler (gpointer data_for_children,
+                          GSList*  data_from_children, GSList* sibling_data,
+                          gpointer parent_data, gpointer global_data,
+                          gpointer* result, const gchar* tag)
 {
-    gchar *txt = NULL;
-    GncGUID *gid;
+    gchar* txt = NULL;
+    GncGUID* gid;
     gboolean ok;
 
-    txt = concatenate_child_result_chars(data_from_children);
-    g_return_val_if_fail(txt, FALSE);
+    txt = concatenate_child_result_chars (data_from_children);
+    g_return_val_if_fail (txt, FALSE);
 
-    gid = g_new(GncGUID, 1);
+    gid = g_new (GncGUID, 1);
     if (!gid)
     {
-        g_free(txt);
-        return(FALSE);
+        g_free (txt);
+        return (FALSE);
     }
 
-    ok = string_to_guid(txt, gid);
-    g_free(txt);
+    ok = string_to_guid (txt, gid);
+    g_free (txt);
 
     if (!ok)
     {
         PERR ("couldn't parse GncGUID");
-        g_free(gid);
-        return(FALSE);
+        g_free (gid);
+        return (FALSE);
     }
 
     *result = gid;
-    return(TRUE);
+    return (TRUE);
 }
 
 sixtp*
-generic_guid_parser_new(void)
+generic_guid_parser_new (void)
 {
-    return sixtp_set_any(
-               sixtp_new(), FALSE,
+    return sixtp_set_any (
+               sixtp_new (), FALSE,
                SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
                SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
                SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
@@ -637,23 +637,23 @@ generic_guid_parser_new(void)
  */
 
 gboolean
-generic_gnc_numeric_end_handler(gpointer data_for_children,
-                                GSList  *data_from_children, GSList *sibling_data,
-                                gpointer parent_data, gpointer global_data,
-                                gpointer *result, const gchar *tag)
+generic_gnc_numeric_end_handler (gpointer data_for_children,
+                                 GSList*  data_from_children, GSList* sibling_data,
+                                 gpointer parent_data, gpointer global_data,
+                                 gpointer* result, const gchar* tag)
 {
-    gnc_numeric *num = NULL;
-    gchar *txt = NULL;
+    gnc_numeric* num = NULL;
+    gchar* txt = NULL;
     gboolean ok = FALSE;
 
-    txt = concatenate_child_result_chars(data_from_children);
+    txt = concatenate_child_result_chars (data_from_children);
 
     if (txt)
     {
-        num = g_new(gnc_numeric, 1);
+        num = g_new (gnc_numeric, 1);
         if (num)
         {
-            if (string_to_gnc_numeric(txt, num))
+            if (string_to_gnc_numeric (txt, num))
             {
                 ok = TRUE;
                 *result = num;
@@ -661,21 +661,21 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
         }
     }
 
-    g_free(txt);
+    g_free (txt);
     if (!ok)
     {
         PERR ("couldn't parse numeric quantity");
-        g_free(num);
+        g_free (num);
     }
 
-    return(ok);
+    return (ok);
 }
 
 sixtp*
-generic_gnc_numeric_parser_new(void)
+generic_gnc_numeric_parser_new (void)
 {
-    return sixtp_set_any(
-               sixtp_new(), FALSE,
+    return sixtp_set_any (
+               sixtp_new (), FALSE,
                SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
                SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,
                SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
@@ -688,10 +688,10 @@ generic_gnc_numeric_parser_new(void)
 /***************************************************************************/
 
 sixtp*
-restore_char_generator(sixtp_end_handler ender)
+restore_char_generator (sixtp_end_handler ender)
 {
-    return sixtp_set_any(
-               sixtp_new(), FALSE,
+    return sixtp_set_any (
+               sixtp_new (), FALSE,
                SIXTP_CHARACTERS_HANDLER_ID, generic_accumulate_chars,
                SIXTP_END_HANDLER_ID, ender,
                SIXTP_CLEANUP_CHARS_ID, sixtp_child_free_data,

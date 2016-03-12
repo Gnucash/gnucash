@@ -46,10 +46,10 @@ extern "C"
 #include "../sixtp-dom-parsers.h"
 #include "test-file-stuff.h"
 
-static QofBook *sixbook;
+static QofBook* sixbook;
 
 static gchar*
-node_and_account_equal(xmlNodePtr node, Account *act)
+node_and_account_equal (xmlNodePtr node, Account* act)
 {
     xmlNodePtr mark;
 
@@ -58,135 +58,136 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         node = node->next;
     }
 
-    if (!check_dom_tree_version(node, "2.0.0"))
+    if (!check_dom_tree_version (node, "2.0.0"))
     {
-        return g_strdup("version wrong.  Not 2.0.0 or not there");
+        return g_strdup ("version wrong.  Not 2.0.0 or not there");
     }
 
-    if (!node->name || g_strcmp0((char*)node->name, "gnc:account"))
+    if (!node->name || g_strcmp0 ((char*)node->name, "gnc:account"))
     {
-        return g_strdup("Name of toplevel node is bad");
+        return g_strdup ("Name of toplevel node is bad");
     }
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if (g_strcmp0((char*)mark->name, "text") == 0)
+        if (g_strcmp0 ((char*)mark->name, "text") == 0)
         {
         }
-        else if (g_strcmp0((char*)mark->name, "act:name") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:name") == 0)
         {
-            if (!equals_node_val_vs_string(mark, xaccAccountGetName(act)))
+            if (!equals_node_val_vs_string (mark, xaccAccountGetName (act)))
             {
-                return g_strdup("names differ");
+                return g_strdup ("names differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:id") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:id") == 0)
         {
-            if (!equals_node_val_vs_guid(mark, xaccAccountGetGUID(act)))
+            if (!equals_node_val_vs_guid (mark, xaccAccountGetGUID (act)))
             {
-                return g_strdup("ids differ");
+                return g_strdup ("ids differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:type") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:type") == 0)
         {
-            gchar *txt;
+            gchar* txt;
             GNCAccountType type;
 
-            txt = dom_tree_to_text(mark);
+            txt = dom_tree_to_text (mark);
 
             if (!txt)
             {
-                return g_strdup("couldn't get type string");
+                return g_strdup ("couldn't get type string");
             }
-            else if (!xaccAccountStringToType(txt, &type))
+            else if (!xaccAccountStringToType (txt, &type))
             {
-                g_free(txt);
-                return g_strdup("couldn't convert type string to int");
+                g_free (txt);
+                return g_strdup ("couldn't convert type string to int");
             }
-            else if (type != xaccAccountGetType(act))
+            else if (type != xaccAccountGetType (act))
             {
-                g_free(txt);
-                return g_strdup("types differ");
+                g_free (txt);
+                return g_strdup ("types differ");
             }
             else
             {
-                g_free(txt);
+                g_free (txt);
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:commodity") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:commodity") == 0)
         {
             /* This is somewhat BS, because if the commodity isn't a
                currency (and therefore built in) there isn't a
                corresponding currency in the XML, skip the test. jralls
                2010-11-02 */
-            if (xaccAccountGetCommodity(act) == NULL) continue;
-            if (!equals_node_val_vs_commodity(
-                        mark, xaccAccountGetCommodity(act),
-                        gnc_account_get_book(act)))
+            if (xaccAccountGetCommodity (act) == NULL) continue;
+            if (!equals_node_val_vs_commodity (
+                    mark, xaccAccountGetCommodity (act),
+                    gnc_account_get_book (act)))
             {
-                return g_strdup("commodities differ");
+                return g_strdup ("commodities differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:code") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:code") == 0)
         {
-            if (!equals_node_val_vs_string(mark, xaccAccountGetCode(act)))
+            if (!equals_node_val_vs_string (mark, xaccAccountGetCode (act)))
             {
-                return g_strdup("codes differ");
+                return g_strdup ("codes differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:description") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:description") == 0)
         {
-            if (!equals_node_val_vs_string(
-                        mark, xaccAccountGetDescription(act)))
+            if (!equals_node_val_vs_string (
+                    mark, xaccAccountGetDescription (act)))
             {
-                return g_strdup("descriptions differ");
+                return g_strdup ("descriptions differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:slots") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:slots") == 0)
         {
             /* xaccAccountDeleteOldData (act); */
 
-            if (!equals_node_val_vs_kvp_frame(mark, qof_instance_get_slots(QOF_INSTANCE (act))))
+            if (!equals_node_val_vs_kvp_frame (mark,
+                                               qof_instance_get_slots (QOF_INSTANCE (act))))
             {
-                return g_strdup("slots differ");
+                return g_strdup ("slots differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:parent") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:parent") == 0)
         {
-            if (!equals_node_val_vs_guid(
-                        mark, xaccAccountGetGUID(gnc_account_get_parent(act))))
+            if (!equals_node_val_vs_guid (
+                    mark, xaccAccountGetGUID (gnc_account_get_parent (act))))
             {
-                return g_strdup("parent ids differ");
+                return g_strdup ("parent ids differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:commodity-scu") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:commodity-scu") == 0)
         {
-            if (!equals_node_val_vs_int(mark, xaccAccountGetCommoditySCU(act)))
+            if (!equals_node_val_vs_int (mark, xaccAccountGetCommoditySCU (act)))
             {
-                return g_strdup("commodity scus differ");
+                return g_strdup ("commodity scus differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:hidden") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:hidden") == 0)
         {
-            if (!equals_node_val_vs_boolean(mark, xaccAccountGetHidden(act)))
+            if (!equals_node_val_vs_boolean (mark, xaccAccountGetHidden (act)))
             {
-                return g_strdup("Hidden flags differ");
+                return g_strdup ("Hidden flags differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:placeholder") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:placeholder") == 0)
         {
-            if (!equals_node_val_vs_boolean(mark, xaccAccountGetPlaceholder(act)))
+            if (!equals_node_val_vs_boolean (mark, xaccAccountGetPlaceholder (act)))
             {
-                return g_strdup("Placeholder flags differ");
+                return g_strdup ("Placeholder flags differ");
             }
         }
-        else if (g_strcmp0((char*)mark->name, "act:security") == 0)
+        else if (g_strcmp0 ((char*)mark->name, "act:security") == 0)
         {
             return NULL; // This tag is ignored.
         }
         else
         {
-            return g_strdup_printf("unknown node in dom tree: %s", mark->name);
+            return g_strdup_printf ("unknown node in dom tree: %s", mark->name);
         }
     }
 
@@ -194,27 +195,27 @@ node_and_account_equal(xmlNodePtr node, Account *act)
 }
 
 static void
-delete_random_account(Account *act)
+delete_random_account (Account* act)
 {
-    xaccAccountBeginEdit(act);
-    xaccAccountDestroy(act);
+    xaccAccountBeginEdit (act);
+    xaccAccountDestroy (act);
 }
 
 struct act_data_struct
 {
-    Account *act;
+    Account* act;
     int value;
 };
 typedef struct act_data_struct act_data;
 
 static gboolean
-test_add_account(const char *tag, gpointer globaldata, gpointer data)
+test_add_account (const char* tag, gpointer globaldata, gpointer data)
 {
-    Account *account = static_cast<decltype(account)>(data);
-    act_data *gdata = (act_data*)globaldata;
-    gnc_commodity * com;
-    gnc_commodity * new_com;
-    gnc_commodity_table *t;
+    Account* account = static_cast<decltype (account)> (data);
+    act_data* gdata = (act_data*)globaldata;
+    gnc_commodity* com;
+    gnc_commodity* new_com;
+    gnc_commodity_table* t;
 
     com = xaccAccountGetCommodity (account);
 
@@ -229,68 +230,68 @@ test_add_account(const char *tag, gpointer globaldata, gpointer data)
         xaccAccountSetCommodity (account, new_com);
     }
 
-    do_test_args(xaccAccountEqual((Account*)account, (Account*)(gdata->act),
-                                  TRUE),
-                 "gnc_account_sixtp_parser_create",
-                 __FILE__, __LINE__, "%d", gdata->value );
+    do_test_args (xaccAccountEqual ((Account*)account, (Account*) (gdata->act),
+                                    TRUE),
+                  "gnc_account_sixtp_parser_create",
+                  __FILE__, __LINE__, "%d", gdata->value);
 
     return TRUE;
 }
 
 static void
-test_account(int i, Account *test_act)
+test_account (int i, Account* test_act)
 {
     xmlNodePtr test_node;
-    gchar *filename1;
-    gchar *compare_msg;
+    gchar* filename1;
+    gchar* compare_msg;
     int fd;
 
-    test_node = gnc_account_dom_tree_create(test_act, FALSE, TRUE);
+    test_node = gnc_account_dom_tree_create (test_act, FALSE, TRUE);
 
     if (!test_node)
     {
-        failure_args("account_xml", __FILE__, __LINE__,
-                     "gnc_account_dom_tree_create returned NULL");
+        failure_args ("account_xml", __FILE__, __LINE__,
+                      "gnc_account_dom_tree_create returned NULL");
         return;
     }
 
-    if ((compare_msg = node_and_account_equal(test_node, test_act)) != NULL)
+    if ((compare_msg = node_and_account_equal (test_node, test_act)) != NULL)
     {
-        failure_args("account_xml", __FILE__, __LINE__,
-                     "node and account were not equal: %s", compare_msg);
-        xmlElemDump(stdout, NULL, test_node);
-        fprintf(stdout, "\n");
-        xmlFreeNode(test_node);
-        g_free(compare_msg);
+        failure_args ("account_xml", __FILE__, __LINE__,
+                      "node and account were not equal: %s", compare_msg);
+        xmlElemDump (stdout, NULL, test_node);
+        fprintf (stdout, "\n");
+        xmlFreeNode (test_node);
+        g_free (compare_msg);
         return;
     }
     else
     {
-        success("account_xml");
+        success ("account_xml");
     }
 
-    filename1 = g_strdup_printf("test_file_XXXXXX");
+    filename1 = g_strdup_printf ("test_file_XXXXXX");
 
-    fd = g_mkstemp(filename1);
+    fd = g_mkstemp (filename1);
 
-    write_dom_node_to_file(test_node, fd);
+    write_dom_node_to_file (test_node, fd);
 
-    close(fd);
+    close (fd);
 
     {
-        sixtp *parser;
+        sixtp* parser;
         act_data data;
 
         data.act = test_act;
         data.value = i;
 
-        parser = gnc_account_sixtp_parser_create();
+        parser = gnc_account_sixtp_parser_create ();
 
-        if (!gnc_xml_parse_file(parser, filename1, test_add_account,
-                                &data, sixbook))
+        if (!gnc_xml_parse_file (parser, filename1, test_add_account,
+                                 &data, sixbook))
         {
-            failure_args("gnc_xml_parse_file returned FALSE",
-                         __FILE__, __LINE__, "%d", i);
+            failure_args ("gnc_xml_parse_file returned FALSE",
+                          __FILE__, __LINE__, "%d", i);
         }
 
         /* no handling of circular data structures.  We'll do that later */
@@ -298,48 +299,51 @@ test_account(int i, Account *test_act)
     }
 
 
-    g_unlink(filename1);
-    g_free(filename1);
-    xmlFreeNode(test_node);
+    g_unlink (filename1);
+    g_free (filename1);
+    xmlFreeNode (test_node);
 }
 
 static void
-test_generation()
+test_generation ()
 {
     int i;
 
     for (i = 0; i < 20; i++)
     {
-        Account *ran_act;
+        Account* ran_act;
 
-        ran_act = get_random_account(sixbook);
+        ran_act = get_random_account (sixbook);
 
-        test_account(i, ran_act);
+        test_account (i, ran_act);
 
-        delete_random_account(ran_act);
+        delete_random_account (ran_act);
     }
 
     {
         /* empty some things. */
-        Account *act;
-        const char *msg = "xaccAccountSetCommodity: assertion `GNC_IS_COMMODITY(com)' failed";
-        const char *logdomain = "gnc.engine";
-        GLogLevelFlags loglevel = static_cast<decltype(loglevel)>(G_LOG_LEVEL_CRITICAL);
-        TestErrorStruct check = { loglevel, const_cast<char*>(logdomain),
-                                  const_cast<char*>(msg) };
+        Account* act;
+        const char* msg =
+            "xaccAccountSetCommodity: assertion `GNC_IS_COMMODITY(com)' failed";
+        const char* logdomain = "gnc.engine";
+        GLogLevelFlags loglevel = static_cast<decltype (loglevel)>
+                                  (G_LOG_LEVEL_CRITICAL);
+        TestErrorStruct check = { loglevel, const_cast<char*> (logdomain),
+                                  const_cast<char*> (msg)
+                                };
         g_log_set_handler (logdomain, loglevel,
                            (GLogFunc)test_checked_handler, &check);
 
-        act = get_random_account(sixbook);
+        act = get_random_account (sixbook);
 
-        xaccAccountSetCode(act, "");
-        xaccAccountSetDescription(act, "");
+        xaccAccountSetCode (act, "");
+        xaccAccountSetDescription (act, "");
 
-        xaccAccountSetCommodity(act, NULL);
+        xaccAccountSetCommodity (act, NULL);
 
-        test_account(-1, act);
+        test_account (-1, act);
 
-        delete_random_account(act);
+        delete_random_account (act);
     }
 
     /*     { */
@@ -361,46 +365,46 @@ test_generation()
 }
 
 static gboolean
-test_real_account(const char *tag, gpointer global_data, gpointer data)
+test_real_account (const char* tag, gpointer global_data, gpointer data)
 {
-    char *msg;
-    Account *act = (Account*)data;
+    char* msg;
+    Account* act = (Account*)data;
 
-    if (!gnc_account_get_parent(act))
+    if (!gnc_account_get_parent (act))
     {
-        gnc_account_append_child(gnc_book_get_root_account(sixbook), act);
+        gnc_account_append_child (gnc_book_get_root_account (sixbook), act);
     }
 
-    msg = node_and_account_equal((xmlNodePtr)global_data, act);
-    do_test_args(msg == NULL, "test_real_account",
-                 __FILE__, __LINE__, msg);
+    msg = node_and_account_equal ((xmlNodePtr)global_data, act);
+    do_test_args (msg == NULL, "test_real_account",
+                  __FILE__, __LINE__, msg);
 
-    g_free(msg);
+    g_free (msg);
     return TRUE;
 }
 
 int
-main (int argc, char ** argv)
+main (int argc, char** argv)
 {
-    QofSession *session;
+    QofSession* session;
 
-    qof_init();
-    cashobjects_register();
-    session = qof_session_new();
+    qof_init ();
+    cashobjects_register ();
+    session = qof_session_new ();
     sixbook = qof_session_get_book (session);
     if (argc > 1)
     {
-        test_files_in_dir(argc, argv, test_real_account,
-                          gnc_account_sixtp_parser_create(),
-                          "gnc:account", sixbook);
+        test_files_in_dir (argc, argv, test_real_account,
+                           gnc_account_sixtp_parser_create (),
+                           "gnc:account", sixbook);
     }
     else
     {
-        test_generation();
+        test_generation ();
     }
 
-    qof_session_destroy(session);
-    print_test_results();
-    qof_close();
-    exit(get_rv());
+    qof_session_destroy (session);
+    print_test_results ();
+    qof_close ();
+    exit (get_rv ());
 }

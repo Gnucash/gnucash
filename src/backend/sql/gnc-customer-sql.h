@@ -30,6 +30,6 @@
 #ifndef GNC_CUSTOMER_SQL_H
 #define GNC_CUSTOMER_SQL_H
 
-void gnc_customer_sql_initialize( void );
+void gnc_customer_sql_initialize (void);
 
 #endif /* GNC_CUSTOMER_SQL_H */

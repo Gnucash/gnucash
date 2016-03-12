@@ -31,6 +31,6 @@
 
 #define CT_OWNERREF "owner"
 
-void gnc_owner_sql_initialize( void );
+void gnc_owner_sql_initialize (void);
 
 #endif /* GNC_OWNER_SQL_H */

@@ -34,9 +34,9 @@ extern "C"
 
 
 #define GNC_V2_STRING "gnc-v2"
-const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
+const gchar* gnc_v2_xml_version_string = GNC_V2_STRING;
 
-static const char *test_strings[] =
+static const char* test_strings[] =
 {
     "FooBar",
     "<Ugly crap>",
@@ -47,18 +47,18 @@ static const char *test_strings[] =
 };
 
 static void
-test_string_converters(void)
+test_string_converters (void)
 {
     int i;
 
     for (i = 0; test_strings[i]; ++i)
     {
-        const char *mark = test_strings[i];
-        xmlNodePtr test_node = text_to_dom_tree("test-string", mark);
-        char *backout = dom_tree_to_text(test_node);
+        const char* mark = test_strings[i];
+        xmlNodePtr test_node = text_to_dom_tree ("test-string", mark);
+        char* backout = dom_tree_to_text (test_node);
 
-        do_test_args(
-            g_strcmp0(backout, mark) == 0,
+        do_test_args (
+            g_strcmp0 (backout, mark) == 0,
             "string converting", __FILE__, __LINE__, "with string %s", mark);
     }
 }
@@ -66,24 +66,24 @@ test_string_converters(void)
 static void
 test_bad_string (void)
 {
-    const char *badstr = "foo\abar";
-    const char *sanitized = "foo?bar";
+    const char* badstr = "foo\abar";
+    const char* sanitized = "foo?bar";
     xmlNodePtr test_node = text_to_dom_tree ("test-string", badstr);
 
-    char *backout = dom_tree_to_text (test_node);
+    char* backout = dom_tree_to_text (test_node);
     do_test_args (g_strcmp0 (backout, sanitized) == 0,
-		  "string sanitizing", __FILE__, __LINE__,
-		  "with string %s", badstr);
+                  "string sanitizing", __FILE__, __LINE__,
+                  "with string %s", badstr);
 }
 
 int
-main(int argc, char **argv)
+main (int argc, char** argv)
 {
-    qof_log_init();
-    fflush(stdout);
-    test_string_converters();
+    qof_log_init ();
+    fflush (stdout);
+    test_string_converters ();
     test_bad_string ();
-    fflush(stdout);
-    print_test_results();
-    exit(get_rv());
+    fflush (stdout);
+    print_test_results ();
+    exit (get_rv ());
 }

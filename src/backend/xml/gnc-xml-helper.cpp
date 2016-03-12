@@ -29,13 +29,13 @@ extern "C"
 #include "gnc-xml-helper.h"
 
 xmlChar*
-checked_char_cast (gchar *val)
+checked_char_cast (gchar* val)
 {
     const int length = -1; /* Assumes val is null-terminated */
-    gchar *end;
+    gchar* end;
     if (val == NULL) return NULL;
     /* Replace any invalid UTF-8 characters with a sequence of '?' */
-    while (!g_utf8_validate (val, length, (const gchar**)(&end)))
+    while (!g_utf8_validate (val, length, (const gchar**) (&end)))
         *end = '?';
     /* Replace any invalid (for XML) control characters (everything < 0x20
      * except \n, \t, and \r) with '?'. Technically we should replace
@@ -44,9 +44,9 @@ checked_char_cast (gchar *val)
      * would use intentionally use one of these characters anyway.
      */
 
-     for (end = val; *end; ++end)
-	if (*end > 0 && *end < 0x20 && *end != 0x09 &&
-	    *end != 0x0a && *end != 0x0d)
-	    *end = '?';
-    return (xmlChar*)(val);
+    for (end = val; *end; ++end)
+        if (*end > 0 && *end < 0x20 && *end != 0x09 &&
+            *end != 0x0a && *end != 0x0d)
+            *end = '?';
+    return (xmlChar*) (val);
 }

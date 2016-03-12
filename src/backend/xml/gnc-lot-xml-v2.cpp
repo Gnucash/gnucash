@@ -48,7 +48,7 @@ extern "C"
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *lot_version_string = "2.0.0";
+const gchar* lot_version_string = "2.0.0";
 
 /* ids */
 #define gnc_lot_string "gnc:lot"
@@ -56,20 +56,20 @@ const gchar *lot_version_string = "2.0.0";
 #define lot_slots_string "lot:slots"
 
 xmlNodePtr
-gnc_lot_dom_tree_create(GNCLot *lot)
+gnc_lot_dom_tree_create (GNCLot* lot)
 {
     xmlNodePtr ret;
 
-    ENTER("(lot=%p)", lot);
-    ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST lot_version_string);
+    ENTER ("(lot=%p)", lot);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_lot_string);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST lot_version_string);
 
-    xmlAddChild(ret, guid_to_dom_tree(lot_id_string, gnc_lot_get_guid(lot)));
+    xmlAddChild (ret, guid_to_dom_tree (lot_id_string, gnc_lot_get_guid (lot)));
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree(lot_slots_string,
-                                                    QOF_INSTANCE(lot)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree (lot_slots_string,
+                                                      QOF_INSTANCE (lot)));
 
-    LEAVE("");
+    LEAVE ("");
     return ret;
 }
 
@@ -77,37 +77,37 @@ gnc_lot_dom_tree_create(GNCLot *lot)
 
 struct lot_pdata
 {
-    GNCLot  *lot;
-    QofBook *book;
+    GNCLot*  lot;
+    QofBook* book;
 };
 
 static gboolean
 lot_id_handler (xmlNodePtr node, gpointer p)
 {
-    struct lot_pdata *pdata = static_cast<decltype(pdata)>(p);
-    GncGUID *guid;
+    struct lot_pdata* pdata = static_cast<decltype (pdata)> (p);
+    GncGUID* guid;
 
-    ENTER("(lot=%p)", pdata->lot);
-    guid = dom_tree_to_guid(node);
-    gnc_lot_set_guid(pdata->lot, *guid);
+    ENTER ("(lot=%p)", pdata->lot);
+    guid = dom_tree_to_guid (node);
+    gnc_lot_set_guid (pdata->lot, *guid);
 
-    g_free(guid);
+    g_free (guid);
 
-    LEAVE("");
+    LEAVE ("");
     return TRUE;
 }
 
 static gboolean
 lot_slots_handler (xmlNodePtr node, gpointer p)
 {
-    struct lot_pdata *pdata = static_cast<decltype(pdata)>(p);
+    struct lot_pdata* pdata = static_cast<decltype (pdata)> (p);
     gboolean success;
 
-    ENTER("(lot=%p)", pdata->lot);
-    success = dom_tree_create_instance_slots(node, QOF_INSTANCE (pdata->lot));
+    ENTER ("(lot=%p)", pdata->lot);
+    success = dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->lot));
 
-    LEAVE("");
-    g_return_val_if_fail(success, FALSE);
+    LEAVE ("");
+    g_return_val_if_fail (success, FALSE);
     return TRUE;
 }
 
@@ -120,15 +120,15 @@ static struct dom_tree_handler lot_handlers_v2[] =
 };
 
 static gboolean
-gnc_lot_end_handler(gpointer data_for_children,
-                    GSList* data_from_children, GSList* sibling_data,
-                    gpointer parent_data, gpointer global_data,
-                    gpointer *result, const gchar *tag)
+gnc_lot_end_handler (gpointer data_for_children,
+                     GSList* data_from_children, GSList* sibling_data,
+                     gpointer parent_data, gpointer global_data,
+                     gpointer* result, const gchar* tag)
 {
-    GNCLot *lot;
+    GNCLot* lot;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    QofBook *book = static_cast<decltype(book)>(gdata->bookdata);
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
     if (parent_data)
     {
@@ -142,30 +142,30 @@ gnc_lot_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
-    lot = dom_tree_to_lot(tree, book);
-    ENTER("(lot=%p)", lot);
+    lot = dom_tree_to_lot (tree, book);
+    ENTER ("(lot=%p)", lot);
     if (lot != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, lot);
+        gdata->cb (tag, gdata->parsedata, lot);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
-    LEAVE("");
+    LEAVE ("");
     return lot != NULL;
 }
 
 GNCLot*
-dom_tree_to_lot (xmlNodePtr node, QofBook *book)
+dom_tree_to_lot (xmlNodePtr node, QofBook* book)
 {
     struct lot_pdata pdata;
-    GNCLot *lot;
+    GNCLot* lot;
     gboolean successful;
 
-    lot = gnc_lot_new(book);
-    ENTER("(lot=%p)", lot);
+    lot = gnc_lot_new (book);
+    ENTER ("(lot=%p)", lot);
 
     pdata.lot = lot;
     pdata.book = book;
@@ -179,14 +179,14 @@ dom_tree_to_lot (xmlNodePtr node, QofBook *book)
         lot = NULL;
     }
 
-    LEAVE("");
+    LEAVE ("");
     return lot;
 }
 
 sixtp*
-gnc_lot_sixtp_parser_create(void)
+gnc_lot_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_lot_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_lot_end_handler, NULL, NULL);
 }
 
 /* ================== END OF FILE ========================== */

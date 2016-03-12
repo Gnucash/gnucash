@@ -49,7 +49,7 @@ extern "C"
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *account_version_string = "2.0.0";
+const gchar* account_version_string = "2.0.0";
 
 /* ids */
 #define gnc_account_string "gnc:account"
@@ -74,95 +74,95 @@ const gchar *account_version_string = "2.0.0";
 #define act_placeholder_string "act:placeholder"
 
 xmlNodePtr
-gnc_account_dom_tree_create(Account *act,
-                            gboolean exporting,
-                            gboolean allow_incompat)
+gnc_account_dom_tree_create (Account* act,
+                             gboolean exporting,
+                             gboolean allow_incompat)
 {
-    const char *str;
+    const char* str;
     xmlNodePtr ret;
-    GList *lots, *n;
-    Account *parent;
-    gnc_commodity *acct_commodity;
+    GList* lots, *n;
+    Account* parent;
+    gnc_commodity* acct_commodity;
 
     ENTER ("(account=%p)", act);
 
-    ret = xmlNewNode(NULL, BAD_CAST gnc_account_string);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST account_version_string);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_account_string);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST account_version_string);
 
-    xmlAddChild(ret, text_to_dom_tree(act_name_string,
-                                      xaccAccountGetName(act)));
+    xmlAddChild (ret, text_to_dom_tree (act_name_string,
+                                        xaccAccountGetName (act)));
 
-    xmlAddChild(ret, guid_to_dom_tree(act_id_string, xaccAccountGetGUID(act)));
+    xmlAddChild (ret, guid_to_dom_tree (act_id_string, xaccAccountGetGUID (act)));
 
-    xmlAddChild(ret, text_to_dom_tree(
-                    act_type_string,
-                    xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
+    xmlAddChild (ret, text_to_dom_tree (
+                     act_type_string,
+                     xaccAccountTypeEnumAsString (xaccAccountGetType (act))));
 
     /* Don't write new XML tags in version 2.3.x and 2.4.x because it
        would mean 2.2.x cannot read those files again. But we can
        enable writing these tags in 2.5.x or late in 2.4.x. */
     /*
     xmlAddChild(ret, boolean_to_dom_tree(
-    						act_hidden_string,
-    						xaccAccountGetHidden(act)));
+                            act_hidden_string,
+                            xaccAccountGetHidden(act)));
     xmlAddChild(ret, boolean_to_dom_tree(
-    						act_placeholder_string,
-    						xaccAccountGetPlaceholder(act)));
+                            act_placeholder_string,
+                            xaccAccountGetPlaceholder(act)));
     */
 
-    acct_commodity = xaccAccountGetCommodity(act);
+    acct_commodity = xaccAccountGetCommodity (act);
     if (acct_commodity != NULL)
     {
-        xmlAddChild(ret, commodity_ref_to_dom_tree(act_commodity_string,
-                    acct_commodity));
+        xmlAddChild (ret, commodity_ref_to_dom_tree (act_commodity_string,
+                                                     acct_commodity));
 
-        xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
-                                         xaccAccountGetCommoditySCUi(act)));
+        xmlAddChild (ret, int_to_dom_tree (act_commodity_scu_string,
+                                           xaccAccountGetCommoditySCUi (act)));
 
-        if (xaccAccountGetNonStdSCU(act))
-            xmlNewChild(ret, NULL, BAD_CAST act_non_standard_scu_string, NULL);
+        if (xaccAccountGetNonStdSCU (act))
+            xmlNewChild (ret, NULL, BAD_CAST act_non_standard_scu_string, NULL);
     }
 
-    str = xaccAccountGetCode(act);
-    if (str && strlen(str) > 0)
+    str = xaccAccountGetCode (act);
+    if (str && strlen (str) > 0)
     {
-        xmlAddChild(ret, text_to_dom_tree(act_code_string, str));
+        xmlAddChild (ret, text_to_dom_tree (act_code_string, str));
     }
 
-    str = xaccAccountGetDescription(act);
-    if (str && strlen(str) > 0)
+    str = xaccAccountGetDescription (act);
+    if (str && strlen (str) > 0)
     {
-        xmlAddChild(ret, text_to_dom_tree(act_description_string, str));
+        xmlAddChild (ret, text_to_dom_tree (act_description_string, str));
     }
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree(act_slots_string,
-                                                    QOF_INSTANCE(act)));
-    parent = gnc_account_get_parent(act);
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree (act_slots_string,
+                                                      QOF_INSTANCE (act)));
+    parent = gnc_account_get_parent (act);
     if (parent)
     {
-        if (!gnc_account_is_root(parent) || allow_incompat)
-            xmlAddChild(ret, guid_to_dom_tree(act_parent_string,
-                                              xaccAccountGetGUID(parent)));
+        if (!gnc_account_is_root (parent) || allow_incompat)
+            xmlAddChild (ret, guid_to_dom_tree (act_parent_string,
+                                                xaccAccountGetGUID (parent)));
     }
 
     lots = xaccAccountGetLotList (act);
     PINFO ("lot list=%p", lots);
     if (lots && !exporting)
     {
-        xmlNodePtr toaddto = xmlNewChild(ret, NULL, BAD_CAST act_lots_string, NULL);
+        xmlNodePtr toaddto = xmlNewChild (ret, NULL, BAD_CAST act_lots_string, NULL);
 
-        lots = g_list_sort(lots, qof_instance_guid_compare);
+        lots = g_list_sort (lots, qof_instance_guid_compare);
 
         for (n = lots; n; n = n->next)
         {
-            GNCLot * lot = static_cast<decltype(lot)>(n->data);
-            xmlAddChild(toaddto, gnc_lot_dom_tree_create(lot));
+            GNCLot* lot = static_cast<decltype (lot)> (n->data);
+            xmlAddChild (toaddto, gnc_lot_dom_tree_create (lot));
         }
     }
-    g_list_free(lots);
+    g_list_free (lots);
 
-    LEAVE("");
+    LEAVE ("");
     return ret;
 }
 
@@ -170,20 +170,20 @@ gnc_account_dom_tree_create(Account *act,
 
 struct account_pdata
 {
-    Account *account;
-    QofBook *book;
+    Account* account;
+    QofBook* book;
 };
 
 static inline gboolean
-set_string(xmlNodePtr node, Account* act,
-           void (*func)(Account *act, const gchar *txt))
+set_string (xmlNodePtr node, Account* act,
+            void (*func) (Account* act, const gchar* txt))
 {
-    gchar* txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
+    gchar* txt = dom_tree_to_text (node);
+    g_return_val_if_fail (txt, FALSE);
 
-    func(act, txt);
+    func (act, txt);
 
-    g_free(txt);
+    g_free (txt);
 
     return TRUE;
 }
@@ -191,23 +191,23 @@ set_string(xmlNodePtr node, Account* act,
 static gboolean
 account_name_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
-    return set_string(node, pdata->account, xaccAccountSetName);
+    return set_string (node, pdata->account, xaccAccountSetName);
 }
 
 static gboolean
 account_id_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
-    GncGUID *guid;
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
+    GncGUID* guid;
 
-    guid = dom_tree_to_guid(node);
-    g_return_val_if_fail(guid, FALSE);
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
 
-    xaccAccountSetGUID(pdata->account, guid);
+    xaccAccountSetGUID (pdata->account, guid);
 
-    g_free(guid);
+    g_free (guid);
 
     return TRUE;
 }
@@ -215,15 +215,15 @@ account_id_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_type_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     GNCAccountType type = ACCT_TYPE_INVALID;
-    char *string;
+    char* string;
 
     string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
-    xaccAccountStringToType(string, &type);
+    xaccAccountStringToType (string, &type);
     xmlFree (string);
 
-    xaccAccountSetType(pdata->account, type);
+    xaccAccountSetType (pdata->account, type);
 
     return TRUE;
 }
@@ -231,12 +231,12 @@ account_type_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
-    gnc_commodity *ref;
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
+    gnc_commodity* ref;
 
 //    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-    ref = dom_tree_to_commodity_ref(node, pdata->book);
-    xaccAccountSetCommodity(pdata->account, ref);
+    ref = dom_tree_to_commodity_ref (node, pdata->book);
+    xaccAccountSetCommodity (pdata->account, ref);
 
     return TRUE;
 }
@@ -244,11 +244,11 @@ account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gint64 val;
 
-    dom_tree_to_integer(node, &val);
-    xaccAccountSetCommoditySCU(pdata->account, val);
+    dom_tree_to_integer (node, &val);
+    xaccAccountSetCommoditySCU (pdata->account, val);
 
     return TRUE;
 }
@@ -256,11 +256,11 @@ account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_hidden_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gboolean val;
 
-    dom_tree_to_boolean(node, &val);
-    xaccAccountSetHidden(pdata->account, val);
+    dom_tree_to_boolean (node, &val);
+    xaccAccountSetHidden (pdata->account, val);
 
     return TRUE;
 }
@@ -268,11 +268,11 @@ account_hidden_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_placeholder_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gboolean val;
 
-    dom_tree_to_boolean(node, &val);
-    xaccAccountSetPlaceholder(pdata->account, val);
+    dom_tree_to_boolean (node, &val);
+    xaccAccountSetPlaceholder (pdata->account, val);
 
     return TRUE;
 }
@@ -280,9 +280,9 @@ account_placeholder_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_non_standard_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
-    xaccAccountSetNonStdSCU(pdata->account, TRUE);
+    xaccAccountSetNonStdSCU (pdata->account, TRUE);
 
     return TRUE;
 }
@@ -294,13 +294,13 @@ account_non_standard_scu_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 deprecated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
-    gnc_commodity *ref;
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
+    gnc_commodity* ref;
 
-    PWARN("Account %s: Obsolete xml tag 'act:currency' will not be preserved.",
-          xaccAccountGetName( pdata->account ));
-    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-    DxaccAccountSetCurrency(pdata->account, ref);
+    PWARN ("Account %s: Obsolete xml tag 'act:currency' will not be preserved.",
+           xaccAccountGetName (pdata->account));
+    ref = dom_tree_to_commodity_ref_no_engine (node, pdata->book);
+    DxaccAccountSetCurrency (pdata->account, ref);
 
     return TRUE;
 }
@@ -308,32 +308,32 @@ deprecated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 deprecated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
-    PWARN("Account %s: Obsolete xml tag 'act:currency-scu' will not be preserved.",
-          xaccAccountGetName( pdata->account ));
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
+    PWARN ("Account %s: Obsolete xml tag 'act:currency-scu' will not be preserved.",
+           xaccAccountGetName (pdata->account));
     return TRUE;
 }
 
 static gboolean
 deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
-    gnc_commodity *ref, *orig = xaccAccountGetCommodity(pdata->account);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
+    gnc_commodity* ref, *orig = xaccAccountGetCommodity (pdata->account);
 
-    PWARN("Account %s: Obsolete xml tag 'act:security' will not be preserved.",
-          xaccAccountGetName( pdata->account ));
+    PWARN ("Account %s: Obsolete xml tag 'act:security' will not be preserved.",
+           xaccAccountGetName (pdata->account));
     /* If the account has both a commodity and a security elemet, and
        the commodity is a currecny, then the commodity is probably
        wrong. In that case we want to replace it with the
        security. jralls 2010-11-02 */
-    if (!orig || gnc_commodity_is_currency( orig ) )
+    if (!orig || gnc_commodity_is_currency (orig))
     {
-        ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-        xaccAccountSetCommodity(pdata->account, ref);
+        ref = dom_tree_to_commodity_ref_no_engine (node, pdata->book);
+        xaccAccountSetCommodity (pdata->account, ref);
         /* If the SCU was set, it was probably wrong, so zero it out
            so that the SCU handler can fix it if there's a
            security-scu element. jralls 2010-11-02 */
-        xaccAccountSetCommoditySCU(pdata->account, 0);
+        xaccAccountSetCommoditySCU (pdata->account, 0);
     }
 
     return TRUE;
@@ -342,15 +342,15 @@ deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 deprecated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     gint64 val;
 
-    PWARN("Account %s: Obsolete xml tag 'act:security-scu' will not be preserved.",
-          xaccAccountGetName( pdata->account ));
-    if (!xaccAccountGetCommoditySCU(pdata->account))
+    PWARN ("Account %s: Obsolete xml tag 'act:security-scu' will not be preserved.",
+           xaccAccountGetName (pdata->account));
+    if (!xaccAccountGetCommoditySCU (pdata->account))
     {
-        dom_tree_to_integer(node, &val);
-        xaccAccountSetCommoditySCU(pdata->account, val);
+        dom_tree_to_integer (node, &val);
+        xaccAccountSetCommoditySCU (pdata->account, val);
     }
 
     return TRUE;
@@ -361,28 +361,28 @@ deprecated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 static gboolean
 account_slots_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->account));
 }
 
 static gboolean
 account_parent_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
-    Account *parent;
-    GncGUID *gid;
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
+    Account* parent;
+    GncGUID* gid;
 
-    gid = dom_tree_to_guid(node);
-    g_return_val_if_fail(gid, FALSE);
+    gid = dom_tree_to_guid (node);
+    g_return_val_if_fail (gid, FALSE);
 
-    parent = xaccAccountLookup(gid, pdata->book);
+    parent = xaccAccountLookup (gid, pdata->book);
     if (!parent)
     {
         g_free (gid);
-        g_return_val_if_fail(parent, FALSE);
+        g_return_val_if_fail (parent, FALSE);
     }
 
-    gnc_account_append_child(parent, pdata->account);
+    gnc_account_append_child (parent, pdata->account);
 
     g_free (gid);
 
@@ -390,38 +390,38 @@ account_parent_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-account_code_handler(xmlNodePtr node, gpointer act_pdata)
+account_code_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
-    return set_string(node, pdata->account, xaccAccountSetCode);
+    return set_string (node, pdata->account, xaccAccountSetCode);
 }
 
 static gboolean
-account_description_handler(xmlNodePtr node, gpointer act_pdata)
+account_description_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
 
-    return set_string(node, pdata->account, xaccAccountSetDescription);
+    return set_string (node, pdata->account, xaccAccountSetDescription);
 }
 
 static gboolean
-account_lots_handler(xmlNodePtr node, gpointer act_pdata)
+account_lots_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    struct account_pdata *pdata = static_cast<decltype(pdata)>(act_pdata);
+    struct account_pdata* pdata = static_cast<decltype (pdata)> (act_pdata);
     xmlNodePtr mark;
 
-    g_return_val_if_fail(node, FALSE);
-    g_return_val_if_fail(node->xmlChildrenNode, FALSE);
+    g_return_val_if_fail (node, FALSE);
+    g_return_val_if_fail (node->xmlChildrenNode, FALSE);
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        GNCLot *lot;
+        GNCLot* lot;
 
-        if (g_strcmp0("text", (char*) mark->name) == 0)
+        if (g_strcmp0 ("text", (char*) mark->name) == 0)
             continue;
 
-        lot = dom_tree_to_lot(mark, pdata->book);
+        lot = dom_tree_to_lot (mark, pdata->book);
 
         if (lot)
         {
@@ -462,15 +462,15 @@ static struct dom_tree_handler account_handlers_v2[] =
 };
 
 static gboolean
-gnc_account_end_handler(gpointer data_for_children,
-                        GSList* data_from_children, GSList* sibling_data,
-                        gpointer parent_data, gpointer global_data,
-                        gpointer *result, const gchar *tag)
+gnc_account_end_handler (gpointer data_for_children,
+                         GSList* data_from_children, GSList* sibling_data,
+                         gpointer parent_data, gpointer global_data,
+                         gpointer* result, const gchar* tag)
 {
-    Account *acc, *parent, *root;
+    Account* acc, *parent, *root;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    QofBook *book = static_cast<decltype(book)>(gdata->bookdata);
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
     int type;
 
 
@@ -486,52 +486,52 @@ gnc_account_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
-    acc = dom_tree_to_account(tree, book);
+    acc = dom_tree_to_account (tree, book);
     if (acc != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, acc);
+        gdata->cb (tag, gdata->parsedata, acc);
         /*
          * Now return the account to the "edit" state.  At the end of reading
          * all the transactions, we will Commit.  This replaces #splits
          * rebalances with #accounts rebalances at the end.  A BIG win!
          */
-        xaccAccountBeginEdit(acc);
+        xaccAccountBeginEdit (acc);
 
         /* Backwards compatability.  If there's no parent, see if this
          * account is of type ROOT.  If not, find or create a ROOT
          * account and make that the parent. */
-        parent = gnc_account_get_parent(acc);
+        parent = gnc_account_get_parent (acc);
         if (parent == NULL)
         {
-            type = xaccAccountGetType(acc);
+            type = xaccAccountGetType (acc);
             if (type != ACCT_TYPE_ROOT)
             {
-                root = gnc_book_get_root_account(book);
+                root = gnc_book_get_root_account (book);
                 if (root == NULL)
                 {
-                    root = gnc_account_create_root(book);
+                    root = gnc_account_create_root (book);
                 }
-                gnc_account_append_child(root, acc);
+                gnc_account_append_child (root, acc);
             }
         }
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return acc != NULL;
 }
 
 Account*
-dom_tree_to_account (xmlNodePtr node, QofBook *book)
+dom_tree_to_account (xmlNodePtr node, QofBook* book)
 {
     struct account_pdata act_pdata;
-    Account *accToRet;
+    Account* accToRet;
     gboolean successful;
 
-    accToRet = xaccMallocAccount(book);
-    xaccAccountBeginEdit(accToRet);
+    accToRet = xaccMallocAccount (book);
+    xaccAccountBeginEdit (accToRet);
 
     act_pdata.account = accToRet;
     act_pdata.book = book;
@@ -553,9 +553,9 @@ dom_tree_to_account (xmlNodePtr node, QofBook *book)
 }
 
 sixtp*
-gnc_account_sixtp_parser_create(void)
+gnc_account_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_account_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_account_end_handler, NULL, NULL);
 }
 
 /* ======================  END OF FILE ===================*/

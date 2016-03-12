@@ -47,11 +47,11 @@ extern "C"
 
 #include "sixtp-dom-parsers.h"
 
-const gchar *freqspec_version_string = "1.0.0";
+const gchar* freqspec_version_string = "1.0.0";
 
 struct freqTypeTuple
 {
-    const char         *str;
+    const char*         str;
     FreqType        ft;
 };
 
@@ -64,12 +64,12 @@ struct freqTypeTuple freqTypeStrs[] =
     { "monthly",          MONTHLY },
     { "month_relative",   MONTH_RELATIVE },
     { "composite",        COMPOSITE },
-    { NULL,               static_cast<FreqType>(-1) },
+    { NULL,               static_cast<FreqType> (-1) },
 };
 
 struct uiFreqTypeTuple
 {
-    const char        *str;
+    const char*        str;
     UIFreqType        uift;
 };
 
@@ -87,7 +87,7 @@ struct uiFreqTypeTuple uiFreqTypeStrs[] =
     { "tri_anually",  UIFREQ_TRI_ANUALLY },
     { "semi_yearly",  UIFREQ_SEMI_YEARLY },
     { "yearly",       UIFREQ_YEARLY },
-    { NULL,           static_cast<UIFreqType>(-1) }
+    { NULL,           static_cast<UIFreqType> (-1) }
 };
 
 /**
@@ -95,10 +95,10 @@ struct uiFreqTypeTuple uiFreqTypeStrs[] =
  **/
 typedef struct
 {
-    QofBook         *book;            /* Book we're loading into. */
+    QofBook*         book;            /* Book we're loading into. */
 
-    Recurrence *recurrence;
-    GList *recurrence_list;
+    Recurrence* recurrence;
+    GList* recurrence_list;
 
     /* fields used in the union of unions... :) */
     GDate                 once_day;     /* once */
@@ -107,79 +107,79 @@ typedef struct
     gint64                day;          /* monthly or month-relative */
     gint64                occurrence;   /* month-relative */
     gint64                weekend_adj;  /* monthly/yearly */
-    GList                *list;         /* composite */
+    GList*                list;         /* composite */
     UIFreqType            uift;
 } fsParseData;
 
 static void
-fspd_init( fsParseData *fspd )
+fspd_init (fsParseData* fspd)
 {
     fspd->list    = NULL;
     fspd->book    = NULL;
-    fspd->recurrence = g_new0(Recurrence, 1);
+    fspd->recurrence = g_new0 (Recurrence, 1);
     fspd->recurrence_list = NULL;
     fspd->uift = UIFREQ_NONE;
     fspd->interval
-    = fspd->offset
-      = fspd->day
-        = fspd->occurrence
-          = 0;
+        = fspd->offset
+          = fspd->day
+            = fspd->occurrence
+              = 0;
     fspd->weekend_adj = WEEKEND_ADJ_NONE;
-    g_date_clear( &fspd->once_day, 1 );
+    g_date_clear (&fspd->once_day, 1);
 }
 
 static
 gboolean
-gnc_fs_handler( xmlNodePtr node, gpointer d );
+gnc_fs_handler (xmlNodePtr node, gpointer d);
 
 static
 gboolean
-fs_uift_handler( xmlNodePtr node, gpointer data)
+fs_uift_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     int            i;
-    char        *nodeTxt;
+    char*        nodeTxt;
 
-    nodeTxt = dom_tree_to_text( node );
+    nodeTxt = dom_tree_to_text (node);
 
-    g_return_val_if_fail( nodeTxt, FALSE );
-    for ( i = 0; uiFreqTypeStrs[i].str != NULL; i++ )
+    g_return_val_if_fail (nodeTxt, FALSE);
+    for (i = 0; uiFreqTypeStrs[i].str != NULL; i++)
     {
-        if ( g_strcmp0( nodeTxt, uiFreqTypeStrs[i].str ) == 0 )
+        if (g_strcmp0 (nodeTxt, uiFreqTypeStrs[i].str) == 0)
         {
             fspd->uift = uiFreqTypeStrs[i].uift;
-            g_free( nodeTxt );
+            g_free (nodeTxt);
             return TRUE;
         }
     }
-    g_free( nodeTxt );
+    g_free (nodeTxt);
     return FALSE;
 }
 
 static
 gboolean
-fs_date_handler( xmlNodePtr node, gpointer data )
+fs_date_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
-    GDate                *foo;
-    foo = dom_tree_to_gdate( node );
-    if ( foo == NULL )
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
+    GDate*                foo;
+    foo = dom_tree_to_gdate (node);
+    if (foo == NULL)
         return FALSE;
     fspd->once_day = *foo;
-    g_date_free( foo );
+    g_date_free (foo);
     return TRUE;
 }
 
 static
 gboolean
-fs_interval_handler( xmlNodePtr node, gpointer data )
+fs_interval_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
     gint64          foo;
 
-    ret = dom_tree_to_integer( node, &foo );
-    if ( ! ret )
+    ret = dom_tree_to_integer (node, &foo);
+    if (! ret)
     {
         return ret;
     }
@@ -189,14 +189,14 @@ fs_interval_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
-fs_offset_handler( xmlNodePtr node, gpointer data )
+fs_offset_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
     gint64          foo;
 
-    ret = dom_tree_to_integer( node, &foo );
-    if ( ! ret )
+    ret = dom_tree_to_integer (node, &foo);
+    if (! ret)
         return ret;
     fspd->offset = foo;
     return TRUE;
@@ -204,14 +204,14 @@ fs_offset_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
-fs_day_handler( xmlNodePtr node, gpointer data )
+fs_day_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
     gint64          foo;
 
-    ret = dom_tree_to_integer( node, &foo );
-    if ( ! ret )
+    ret = dom_tree_to_integer (node, &foo);
+    if (! ret)
         return ret;
     fspd->day = foo;
     return TRUE;
@@ -219,13 +219,13 @@ fs_day_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
-fs_weekday_handler( xmlNodePtr node, gpointer data)
+fs_weekday_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
     gint64          foo;
-    ret = dom_tree_to_integer( node, &foo );
-    if ( !ret )
+    ret = dom_tree_to_integer (node, &foo);
+    if (!ret)
         return ret;
     fspd->day = foo;
     return TRUE;
@@ -233,13 +233,13 @@ fs_weekday_handler( xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_occurrence_handler( xmlNodePtr node, gpointer data )
+fs_occurrence_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
     gint64          foo;
-    ret = dom_tree_to_integer( node, &foo );
-    if ( !ret )
+    ret = dom_tree_to_integer (node, &foo);
+    if (!ret)
         return ret;
     fspd->occurrence = foo;
     return TRUE;
@@ -247,13 +247,13 @@ fs_occurrence_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
-fs_weekend_adj_handler( xmlNodePtr node, gpointer data )
+fs_weekend_adj_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        ret;
     gint64          foo;
-    ret = dom_tree_to_integer( node, &foo );
-    if ( !ret )
+    ret = dom_tree_to_integer (node, &foo);
+    if (!ret)
         return ret;
     fspd->weekend_adj = foo;
     return TRUE;
@@ -261,28 +261,29 @@ fs_weekend_adj_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
-fs_subelement_handler( xmlNodePtr node, gpointer data )
+fs_subelement_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
-    GList *recurrences;
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
+    GList* recurrences;
 
-    recurrences = dom_tree_freqSpec_to_recurrences(node, fspd->book);
+    recurrences = dom_tree_freqSpec_to_recurrences (node, fspd->book);
     if (recurrences == NULL)
         return FALSE;
 
     {
-        GList *r_iter;
+        GList* r_iter;
         for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
         {
-            Recurrence *r = (Recurrence*)r_iter->data;
+            Recurrence* r = (Recurrence*)r_iter->data;
             GDate recurrence_date;
             if (fspd->uift == UIFREQ_SEMI_MONTHLY)
             {
                 // complementry hack around 'once' freqspects not being valid. :/
-                recurrence_date = recurrenceGetDate(r);
-                recurrenceSet(r, recurrenceGetMultiplier(r), PERIOD_MONTH, &recurrence_date, recurrenceGetWeekendAdjust(r));
+                recurrence_date = recurrenceGetDate (r);
+                recurrenceSet (r, recurrenceGetMultiplier (r), PERIOD_MONTH, &recurrence_date,
+                               recurrenceGetWeekendAdjust (r));
             }
-            fspd->recurrence_list = g_list_append(fspd->recurrence_list, r);
+            fspd->recurrence_list = g_list_append (fspd->recurrence_list, r);
         }
     }
     return TRUE;
@@ -302,98 +303,102 @@ struct dom_tree_handler fs_union_dom_handlers[] =
 };
 
 static gboolean
-fs_none_handler( xmlNodePtr node, gpointer data )
+fs_none_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
-    gboolean	successful;
-    successful = dom_tree_generic_parse( node,
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
+    gboolean    successful;
+    successful = dom_tree_generic_parse (node,
                                          fs_union_dom_handlers,
-                                         fspd );
+                                         fspd);
     return successful;
 }
 
 static
 gboolean
-fs_once_handler( xmlNodePtr node, gpointer data )
+fs_once_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        successful;
 
-    successful = dom_tree_generic_parse( node,
+    successful = dom_tree_generic_parse (node,
                                          fs_union_dom_handlers,
-                                         fspd );
-    if ( !successful )
+                                         fspd);
+    if (!successful)
         return FALSE;
-    recurrenceSet(fspd->recurrence, 0, PERIOD_ONCE, &fspd->once_day, WEEKEND_ADJ_NONE);
+    recurrenceSet (fspd->recurrence, 0, PERIOD_ONCE, &fspd->once_day,
+                   WEEKEND_ADJ_NONE);
 
     return TRUE;
 }
 
 static gboolean
-fs_daily_handler(xmlNodePtr node, gpointer data)
+fs_daily_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate offset_date;
     gboolean        successful;
-    successful = dom_tree_generic_parse(node, fs_union_dom_handlers, fspd );
+    successful = dom_tree_generic_parse (node, fs_union_dom_handlers, fspd);
     if (!successful)
         return FALSE;
 
-    g_date_clear(&offset_date, 1);
-    g_date_set_julian(&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
-    recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date, WEEKEND_ADJ_NONE);
+    g_date_clear (&offset_date, 1);
+    g_date_set_julian (&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
+    recurrenceSet (fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date,
+                   WEEKEND_ADJ_NONE);
 
     return TRUE;
 }
 
 static
 gboolean
-fs_weekly_handler( xmlNodePtr node, gpointer data )
+fs_weekly_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate offset_date;
     gboolean        successful;
-    successful = dom_tree_generic_parse( node,
+    successful = dom_tree_generic_parse (node,
                                          fs_union_dom_handlers,
-                                         fspd );
-    if ( !successful )
+                                         fspd);
+    if (!successful)
         return FALSE;
 
-    g_date_clear(&offset_date, 1);
-    g_date_set_julian(&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
-    recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_WEEK, &offset_date, WEEKEND_ADJ_NONE);
+    g_date_clear (&offset_date, 1);
+    g_date_set_julian (&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
+    recurrenceSet (fspd->recurrence, fspd->interval, PERIOD_WEEK, &offset_date,
+                   WEEKEND_ADJ_NONE);
 
     return TRUE;
 }
 
 static
 gboolean
-fs_monthly_handler( xmlNodePtr node, gpointer data)
+fs_monthly_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     GDate offset_date;
     gboolean        successful;
-    successful = dom_tree_generic_parse( node,
+    successful = dom_tree_generic_parse (node,
                                          fs_union_dom_handlers,
-                                         fspd );
-    if ( !successful )
+                                         fspd);
+    if (!successful)
         return FALSE;
 
 
-    g_date_clear(&offset_date, 1);
-    g_date_set_julian(&offset_date, 1);
-    g_date_add_months(&offset_date, fspd->offset);
-    g_date_set_day(&offset_date, fspd->day);
+    g_date_clear (&offset_date, 1);
+    g_date_set_julian (&offset_date, 1);
+    g_date_add_months (&offset_date, fspd->offset);
+    g_date_set_day (&offset_date, fspd->day);
     if (fspd->uift == UIFREQ_ONCE)
     {
         // hack...
-        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_ONCE, &offset_date, WEEKEND_ADJ_NONE);
+        recurrenceSet (fspd->recurrence, fspd->interval, PERIOD_ONCE, &offset_date,
+                       WEEKEND_ADJ_NONE);
     }
     else
     {
-        recurrenceSet(fspd->recurrence, fspd->interval,
-                      PERIOD_MONTH, &offset_date,
-                      static_cast<WeekendAdjust>(fspd->weekend_adj));
+        recurrenceSet (fspd->recurrence, fspd->interval,
+                       PERIOD_MONTH, &offset_date,
+                       static_cast<WeekendAdjust> (fspd->weekend_adj));
     }
 
     return successful;
@@ -401,28 +406,28 @@ fs_monthly_handler( xmlNodePtr node, gpointer data)
 
 static
 gboolean
-fs_month_relative_handler( xmlNodePtr node, gpointer data)
+fs_month_relative_handler (xmlNodePtr node, gpointer data)
 {
-    g_critical("this was never supported, how is it in the datafile?");
+    g_critical ("this was never supported, how is it in the datafile?");
     return FALSE;
 }
 
 static
 gboolean
-fs_guid_handler( xmlNodePtr node, gpointer data)
+fs_guid_handler (xmlNodePtr node, gpointer data)
 {
     return TRUE;
 }
 
 static
 gboolean
-fs_composite_handler( xmlNodePtr node, gpointer data)
+fs_composite_handler (xmlNodePtr node, gpointer data)
 {
-    fsParseData *fspd = static_cast<decltype(fspd)>(data);
+    fsParseData* fspd = static_cast<decltype (fspd)> (data);
     gboolean        successful;
-    successful = dom_tree_generic_parse( node,
+    successful = dom_tree_generic_parse (node,
                                          fs_union_dom_handlers,
-                                         fspd );
+                                         fspd);
     return successful;
 }
 
@@ -443,75 +448,75 @@ static struct dom_tree_handler fs_dom_handlers[] =
 
 static
 gboolean
-gnc_fs_handler( xmlNodePtr node, gpointer d )
+gnc_fs_handler (xmlNodePtr node, gpointer d)
 {
-    return dom_tree_generic_parse( node, fs_dom_handlers, d );
+    return dom_tree_generic_parse (node, fs_dom_handlers, d);
 }
 
 static
 gboolean
-gnc_freqSpec_end_handler(gpointer data_for_children,
-                         GSList* data_from_children, GSList* sibling_data,
-                         gpointer parent_data, gpointer global_data,
-                         gpointer *result, const gchar *tag)
+gnc_freqSpec_end_handler (gpointer data_for_children,
+                          GSList* data_from_children, GSList* sibling_data,
+                          gpointer parent_data, gpointer global_data,
+                          gpointer* result, const gchar* tag)
 {
     fsParseData                fspd;
     gboolean                successful = FALSE;
     xmlNodePtr                tree = (xmlNodePtr)data_for_children;
-    sixtp_gdv2                *globaldata = (sixtp_gdv2*)global_data;
+    sixtp_gdv2*                globaldata = (sixtp_gdv2*)global_data;
 
-    fspd_init( &fspd );
+    fspd_init (&fspd);
     fspd.book = globaldata->book;
 
     /* this won't actually get invoked [FreqSpecs aren't top-level
        elements]; see dom_tree_to_freqSpec(), below. */
-    if ( parent_data )
+    if (parent_data)
         return TRUE;
 
-    if ( !tag )
+    if (!tag)
         return TRUE;
 
-    g_return_val_if_fail( tree, FALSE );
+    g_return_val_if_fail (tree, FALSE);
 
-    successful = dom_tree_generic_parse( tree, fs_dom_handlers, &fspd );
+    successful = dom_tree_generic_parse (tree, fs_dom_handlers, &fspd);
     if (!successful)
     {
-        xmlElemDump( stdout, NULL, tree );
+        xmlElemDump (stdout, NULL, tree);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return successful;
 }
 
 sixtp*
-gnc_freqSpec_sixtp_parser_create(void)
+gnc_freqSpec_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new( gnc_freqSpec_end_handler, NULL, NULL );
+    return sixtp_dom_parser_new (gnc_freqSpec_end_handler, NULL, NULL);
 }
 
 static void
-common_parse(fsParseData *fspd, xmlNodePtr node, QofBook *book)
+common_parse (fsParseData* fspd, xmlNodePtr node, QofBook* book)
 {
     gboolean        successful;
 
     fspd->book = book;
-    successful = dom_tree_generic_parse( node, fs_dom_handlers, fspd );
+    successful = dom_tree_generic_parse (node, fs_dom_handlers, fspd);
     if (!successful)
     {
-        xmlElemDump(stdout, NULL, node);
+        xmlElemDump (stdout, NULL, node);
     }
 }
 
 GList*
-dom_tree_freqSpec_to_recurrences(xmlNodePtr node, QofBook *book)
+dom_tree_freqSpec_to_recurrences (xmlNodePtr node, QofBook* book)
 {
     fsParseData        fspd;
-    fspd_init( &fspd );
-    common_parse(&fspd, node, book);
+    fspd_init (&fspd);
+    common_parse (&fspd, node, book);
     if (fspd.recurrence_list == NULL)
     {
-        fspd.recurrence_list = g_list_append(fspd.recurrence_list, fspd.recurrence);
+        fspd.recurrence_list = g_list_append (fspd.recurrence_list, fspd.recurrence);
     }
     return fspd.recurrence_list;
 }

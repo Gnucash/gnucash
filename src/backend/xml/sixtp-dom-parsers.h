@@ -34,37 +34,37 @@ extern "C"
 
 #include "gnc-xml-helper.h"
 
-GncGUID* dom_tree_to_guid(xmlNodePtr node);
+GncGUID* dom_tree_to_guid (xmlNodePtr node);
 
-gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book);
-gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *);
+gnc_commodity* dom_tree_to_commodity_ref (xmlNodePtr node, QofBook* book);
+gnc_commodity* dom_tree_to_commodity_ref_no_engine (xmlNodePtr node, QofBook*);
 
-GList* dom_tree_freqSpec_to_recurrences(xmlNodePtr node, QofBook *book);
-Recurrence* dom_tree_to_recurrence(xmlNodePtr node);
+GList* dom_tree_freqSpec_to_recurrences (xmlNodePtr node, QofBook* book);
+Recurrence* dom_tree_to_recurrence (xmlNodePtr node);
 
-Timespec dom_tree_to_timespec(xmlNodePtr node);
-gboolean dom_tree_valid_timespec(Timespec *ts, const xmlChar *name);
-GDate* dom_tree_to_gdate(xmlNodePtr node);
-gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
-gchar * dom_tree_to_text(xmlNodePtr tree);
-gboolean string_to_binary(const gchar *str,  void **v, guint64 *data_len);
-gboolean dom_tree_create_instance_slots(xmlNodePtr node, QofInstance *inst);
+Timespec dom_tree_to_timespec (xmlNodePtr node);
+gboolean dom_tree_valid_timespec (Timespec* ts, const xmlChar* name);
+GDate* dom_tree_to_gdate (xmlNodePtr node);
+gnc_numeric* dom_tree_to_gnc_numeric (xmlNodePtr node);
+gchar* dom_tree_to_text (xmlNodePtr tree);
+gboolean string_to_binary (const gchar* str,  void** v, guint64* data_len);
+gboolean dom_tree_create_instance_slots (xmlNodePtr node, QofInstance* inst);
 
-gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
-gboolean dom_tree_to_guint16(xmlNodePtr node, guint16 *i);
-gboolean dom_tree_to_guint(xmlNodePtr node, guint *i);
-gboolean dom_tree_to_boolean(xmlNodePtr node, gboolean* b);
+gboolean dom_tree_to_integer (xmlNodePtr node, gint64* daint);
+gboolean dom_tree_to_guint16 (xmlNodePtr node, guint16* i);
+gboolean dom_tree_to_guint (xmlNodePtr node, guint* i);
+gboolean dom_tree_to_boolean (xmlNodePtr node, gboolean* b);
 
 /* higher level structures */
-Account* dom_tree_to_account(xmlNodePtr node, QofBook *book);
-QofBook* dom_tree_to_book   (xmlNodePtr node, QofBook *book);
-GNCLot*  dom_tree_to_lot    (xmlNodePtr node, QofBook *book);
-Transaction* dom_tree_to_transaction(xmlNodePtr node, QofBook *book);
-GncBudget* dom_tree_to_budget(xmlNodePtr node, QofBook *book);
+Account* dom_tree_to_account (xmlNodePtr node, QofBook* book);
+QofBook* dom_tree_to_book (xmlNodePtr node, QofBook* book);
+GNCLot*  dom_tree_to_lot (xmlNodePtr node, QofBook* book);
+Transaction* dom_tree_to_transaction (xmlNodePtr node, QofBook* book);
+GncBudget* dom_tree_to_budget (xmlNodePtr node, QofBook* book);
 
 struct dom_tree_handler
 {
-    const char *tag;
+    const char* tag;
 
     gboolean (*handler) (xmlNodePtr, gpointer data);
 
@@ -72,8 +72,8 @@ struct dom_tree_handler
     int gotten;
 };
 
-gboolean dom_tree_generic_parse(xmlNodePtr node,
-                                struct dom_tree_handler *handlers,
-                                gpointer data);
+gboolean dom_tree_generic_parse (xmlNodePtr node,
+                                 struct dom_tree_handler* handlers,
+                                 gpointer data);
 
 #endif /* _SIXTP_DOM_PARSERS_H_ */

@@ -34,7 +34,7 @@ extern "C"
 }
 #include "gnc-backend-sql.h"
 
-void gnc_sql_init_schedxaction_handler( void );
-gboolean gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst );
+void gnc_sql_init_schedxaction_handler (void);
+gboolean gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst);
 
 #endif /* GNC_SCHEDXACTION_SQL_H */

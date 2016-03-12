@@ -32,6 +32,6 @@
 
 #define CT_INVOICEREF "invoice"
 
-void gnc_invoice_sql_initialize( void );
+void gnc_invoice_sql_initialize (void);
 
 #endif /* GNC_INVOICE_SQL_H */

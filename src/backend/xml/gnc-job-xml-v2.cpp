@@ -47,11 +47,11 @@ extern "C"
 #include "gnc-owner-xml-v2.h"
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_ID_JOB
+#define _GNC_MOD_NAME   GNC_ID_JOB
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *job_version_string = "2.0.0";
+const gchar* job_version_string = "2.0.0";
 
 /* ids */
 #define gnc_job_string "gnc:GncJob"
@@ -64,33 +64,33 @@ const gchar *job_version_string = "2.0.0";
 #define job_slots_string "job:slots"
 
 static xmlNodePtr
-job_dom_tree_create (GncJob *job)
+job_dom_tree_create (GncJob* job)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, BAD_CAST gnc_job_string);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST job_version_string);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_job_string);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST job_version_string);
 
-    xmlAddChild(ret, guid_to_dom_tree(job_guid_string,
-                                      qof_instance_get_guid (QOF_INSTANCE (job))));
+    xmlAddChild (ret, guid_to_dom_tree (job_guid_string,
+                                        qof_instance_get_guid (QOF_INSTANCE (job))));
 
-    xmlAddChild(ret, text_to_dom_tree(job_id_string,
-                                      gncJobGetID (job)));
+    xmlAddChild (ret, text_to_dom_tree (job_id_string,
+                                        gncJobGetID (job)));
 
-    xmlAddChild(ret, text_to_dom_tree(job_name_string,
-                                      gncJobGetName (job)));
+    xmlAddChild (ret, text_to_dom_tree (job_name_string,
+                                        gncJobGetName (job)));
 
     maybe_add_string (ret, job_reference_string, gncJobGetReference (job));
 
-    xmlAddChild(ret, gnc_owner_to_dom_tree (job_owner_string,
-                                            gncJobGetOwner (job)));
+    xmlAddChild (ret, gnc_owner_to_dom_tree (job_owner_string,
+                                             gncJobGetOwner (job)));
 
-    xmlAddChild(ret, int_to_dom_tree(job_active_string,
-                                     gncJobGetActive (job)));
+    xmlAddChild (ret, int_to_dom_tree (job_active_string,
+                                       gncJobGetActive (job)));
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree(job_slots_string,
-                                                    QOF_INSTANCE(job)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree (job_slots_string,
+                                                      QOF_INSTANCE (job)));
 
     return ret;
 }
@@ -99,20 +99,20 @@ job_dom_tree_create (GncJob *job)
 
 struct job_pdata
 {
-    GncJob *job;
-    QofBook *book;
+    GncJob* job;
+    QofBook* book;
 };
 
 static gboolean
-set_string(xmlNodePtr node, GncJob* job,
-           void (*func)(GncJob *job, const char *txt))
+set_string (xmlNodePtr node, GncJob* job,
+            void (*func) (GncJob* job, const char* txt))
 {
-    char* txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
+    char* txt = dom_tree_to_text (node);
+    g_return_val_if_fail (txt, FALSE);
 
-    func(job, txt);
+    func (job, txt);
 
-    g_free(txt);
+    g_free (txt);
 
     return TRUE;
 }
@@ -120,20 +120,20 @@ set_string(xmlNodePtr node, GncJob* job,
 static gboolean
 job_name_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
 
-    return set_string(node, pdata->job, gncJobSetName);
+    return set_string (node, pdata->job, gncJobSetName);
 }
 
 static gboolean
 job_guid_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
-    GncGUID *guid;
-    GncJob *job;
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
+    GncGUID* guid;
+    GncJob* job;
 
-    guid = dom_tree_to_guid(node);
-    g_return_val_if_fail(guid, FALSE);
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
     job = gncJobLookup (pdata->book, guid);
     if (job)
     {
@@ -143,10 +143,10 @@ job_guid_handler (xmlNodePtr node, gpointer job_pdata)
     }
     else
     {
-        gncJobSetGUID(pdata->job, guid);
+        gncJobSetGUID (pdata->job, guid);
     }
 
-    g_free(guid);
+    g_free (guid);
 
     return TRUE;
 }
@@ -154,23 +154,23 @@ job_guid_handler (xmlNodePtr node, gpointer job_pdata)
 static gboolean
 job_id_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
 
-    return set_string(node, pdata->job, gncJobSetID);
+    return set_string (node, pdata->job, gncJobSetID);
 }
 
 static gboolean
 job_reference_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
 
-    return set_string(node, pdata->job, gncJobSetReference);
+    return set_string (node, pdata->job, gncJobSetReference);
 }
 
 static gboolean
 job_owner_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
     GncOwner owner;
     gboolean ret;
 
@@ -184,13 +184,13 @@ job_owner_handler (xmlNodePtr node, gpointer job_pdata)
 static gboolean
 job_active_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
     gint64 val;
     gboolean ret;
 
-    ret = dom_tree_to_integer(node, &val);
+    ret = dom_tree_to_integer (node, &val);
     if (ret)
-        gncJobSetActive(pdata->job, (gboolean)val);
+        gncJobSetActive (pdata->job, (gboolean)val);
 
     return ret;
 }
@@ -198,7 +198,7 @@ job_active_handler (xmlNodePtr node, gpointer job_pdata)
 static gboolean
 job_slots_handler (xmlNodePtr node, gpointer job_pdata)
 {
-    struct job_pdata *pdata = static_cast<decltype(pdata)>(job_pdata);
+    struct job_pdata* pdata = static_cast<decltype (pdata)> (job_pdata);
 
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->job));
 }
@@ -216,12 +216,12 @@ static struct dom_tree_handler job_handlers_v2[] =
 };
 
 static GncJob*
-dom_tree_to_job (xmlNodePtr node, QofBook *book)
+dom_tree_to_job (xmlNodePtr node, QofBook* book)
 {
     struct job_pdata job_pdata;
     gboolean successful;
 
-    job_pdata.job = gncJobCreate(book);
+    job_pdata.job = gncJobCreate (book);
     job_pdata.book = book;
     gncJobBeginEdit (job_pdata.job);
 
@@ -241,15 +241,15 @@ dom_tree_to_job (xmlNodePtr node, QofBook *book)
 }
 
 static gboolean
-gnc_job_end_handler(gpointer data_for_children,
-                    GSList* data_from_children, GSList* sibling_data,
-                    gpointer parent_data, gpointer global_data,
-                    gpointer *result, const gchar *tag)
+gnc_job_end_handler (gpointer data_for_children,
+                     GSList* data_from_children, GSList* sibling_data,
+                     gpointer parent_data, gpointer global_data,
+                     gpointer* result, const gchar* tag)
 {
-    GncJob *job;
+    GncJob* job;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    QofBook *book = static_cast<decltype(book)>(gdata->bookdata);
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
     if (parent_data)
     {
@@ -263,29 +263,29 @@ gnc_job_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
-    job = dom_tree_to_job(tree, book);
+    job = dom_tree_to_job (tree, book);
     if (job != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, job);
+        gdata->cb (tag, gdata->parsedata, job);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return job != NULL;
 }
 
-static sixtp *
-job_sixtp_parser_create(void)
+static sixtp*
+job_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_job_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_job_end_handler, NULL, NULL);
 }
 
 static gboolean
-job_should_be_saved (GncJob *job)
+job_should_be_saved (GncJob* job)
 {
-    const char *id;
+    const char* id;
 
     /* make sure this is a valid job before we save it -- should have an ID */
     id = gncJobGetID (job);
@@ -296,15 +296,15 @@ job_should_be_saved (GncJob *job)
 }
 
 static void
-do_count (QofInstance * job_p, gpointer count_p)
+do_count (QofInstance* job_p, gpointer count_p)
 {
-    int *count = static_cast<decltype(count)>(count_p);
-    if (job_should_be_saved ((GncJob *)job_p))
+    int* count = static_cast<decltype (count)> (count_p);
+    if (job_should_be_saved ((GncJob*)job_p))
         (*count)++;
 }
 
 static int
-job_get_count (QofBook *book)
+job_get_count (QofBook* book)
 {
     int count = 0;
     qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -312,36 +312,36 @@ job_get_count (QofBook *book)
 }
 
 static void
-xml_add_job (QofInstance * job_p, gpointer out_p)
+xml_add_job (QofInstance* job_p, gpointer out_p)
 {
     xmlNodePtr node;
-    GncJob *job = (GncJob *) job_p;
-    FILE *out = static_cast<decltype(out)>(out_p);
+    GncJob* job = (GncJob*) job_p;
+    FILE* out = static_cast<decltype (out)> (out_p);
 
-    if (ferror(out))
+    if (ferror (out))
         return;
     if (!job_should_be_saved (job))
         return;
 
     node = job_dom_tree_create (job);
-    xmlElemDump(out, NULL, node);
+    xmlElemDump (out, NULL, node);
     xmlFreeNode (node);
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    if (ferror (out) || fprintf (out, "\n") < 0)
         return;
 }
 
 static gboolean
-job_write (FILE *out, QofBook *book)
+job_write (FILE* out, QofBook* book)
 {
     qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
-    return ferror(out) == 0;
+    return ferror (out) == 0;
 }
 
 static gboolean
-job_ns(FILE *out)
+job_ns (FILE* out)
 {
-    g_return_val_if_fail(out, FALSE);
-    return gnc_xml2_write_namespace_decl(out, "job");
+    g_return_val_if_fail (out, FALSE);
+    return gnc_xml2_write_namespace_decl (out, "job");
 }
 
 void
@@ -352,10 +352,10 @@ gnc_job_xml_initialize (void)
         GNC_FILE_BACKEND_VERS,
         gnc_job_string,
         job_sixtp_parser_create,
-        NULL,			/* add_item */
+        NULL,           /* add_item */
         job_get_count,
         job_write,
-        NULL,			/* scrub */
+        NULL,           /* scrub */
         job_ns,
     };
 

@@ -30,6 +30,6 @@
 #ifndef GNC_EMPLOYEE_SQL_H
 #define GNC_EMPLOYEE_SQL_H
 
-void gnc_employee_sql_initialize( void );
+void gnc_employee_sql_initialize (void);
 
 #endif /* GNC_EMPLOYEE_SQL_H */

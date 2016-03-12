@@ -44,7 +44,8 @@ typedef enum
     XML_RETAIN_NONE,
     XML_RETAIN_DAYS,
     XML_RETAIN_ALL
-} XMLFileRetentionType;
+}
+XMLFileRetentionType;
 
 typedef enum
 {
@@ -60,13 +61,13 @@ struct FileBackend_struct
 {
     QofBackend be;
 
-    char *dirname;
-    char *fullpath;  /* Fully qualified path to book */
-    char *lockfile;
-    char *linkfile;
+    char* dirname;
+    char* fullpath;  /* Fully qualified path to book */
+    char* lockfile;
+    char* linkfile;
     int lockfd;
 
-    QofBook *book;  /* The primary, main open book */
+    QofBook* book;  /* The primary, main open book */
 };
 
 typedef struct FileBackend_struct FileBackend;
@@ -76,7 +77,7 @@ typedef struct FileBackend_struct FileBackend;
 
 /** Initialization function which can be used when this module is
  * statically linked into the application. */
-void gnc_module_init_backend_xml(void);
+void gnc_module_init_backend_xml (void);
 
 #ifndef GNC_NO_LOADABLE_MODULES
 /** This is the standarized initialization function of a qof_backend
@@ -84,7 +85,7 @@ void gnc_module_init_backend_xml(void);
  * GNC_NO_LOADABLE_MODULES. This one simply calls
  * gnc_module_init_backend_file(). */
 G_MODULE_EXPORT
-void qof_backend_module_init(void);
+void qof_backend_module_init (void);
 #endif
 #ifdef __cplusplus
 }

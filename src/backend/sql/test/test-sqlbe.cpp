@@ -1,6 +1,6 @@
 /********************************************************************
- * testmain.c: GLib g_test test execution file.			    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * testmain.c: GLib g_test test execution file.             *
+ * Copyright 2011 John Ralls <jralls@ceridwen.us>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,14 +30,14 @@ extern void test_suite_gnc_backend_sql ();
 
 int
 main (int   argc,
-      char *argv[])
+      char* argv[])
 {
-    qof_init(); 			/* Initialize the GObject system */
-    qof_log_init_filename_special("stderr"); /* Init the log system */
-    g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
-    g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
+    qof_init ();            /* Initialize the GObject system */
+    qof_log_init_filename_special ("stderr"); /* Init the log system */
+    g_test_init (&argc, &argv, NULL);    /* initialize test program */
+    g_test_bug_base ("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
 
     test_suite_gnc_backend_sql ();
 
-    return g_test_run( );
+    return g_test_run ();
 }

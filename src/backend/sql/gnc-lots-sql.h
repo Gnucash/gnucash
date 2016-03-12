@@ -29,6 +29,6 @@
 #ifndef GNC_LOT_SQL_H
 #define GNC_LOT_SQL_H
 
-void gnc_sql_init_lot_handler( void );
+void gnc_sql_init_lot_handler (void);
 
 #endif /* GNC_LOT_SQL_H */

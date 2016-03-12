@@ -29,6 +29,6 @@
 #ifndef GNC_BUDGET_SQL_H
 #define GNC_BUDGET_SQL_H
 
-void gnc_sql_init_budget_handler( void );
+void gnc_sql_init_budget_handler (void);
 
 #endif /* GNC_BUDGET_SQL_H */

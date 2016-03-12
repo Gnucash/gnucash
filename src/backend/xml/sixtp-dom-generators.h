@@ -35,21 +35,21 @@ extern "C"
 
 #include "gnc-xml-helper.h"
 
-xmlNodePtr text_to_dom_tree(const char *tag, const char *str);
-xmlNodePtr int_to_dom_tree(const char *tag, gint64 val);
-xmlNodePtr boolean_to_dom_tree(const char* tag, gboolean val);
-xmlNodePtr guid_to_dom_tree(const char *tag, const GncGUID* gid);
-xmlNodePtr commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c);
-xmlNodePtr timespec_to_dom_tree(const char *tag, const Timespec *spec);
-gchar * timespec_nsec_to_string(const Timespec *ts);
-gchar * timespec_sec_to_string(const Timespec *ts);
-xmlNodePtr gdate_to_dom_tree(const char *tag, const GDate *spec);
-xmlNodePtr gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num);
-xmlNodePtr qof_instance_slots_to_dom_tree(const char *tag,
-                                          const QofInstance *inst);
-xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int);
-xmlNodePtr recurrence_to_dom_tree(const gchar *tag, const Recurrence *r);
+xmlNodePtr text_to_dom_tree (const char* tag, const char* str);
+xmlNodePtr int_to_dom_tree (const char* tag, gint64 val);
+xmlNodePtr boolean_to_dom_tree (const char* tag, gboolean val);
+xmlNodePtr guid_to_dom_tree (const char* tag, const GncGUID* gid);
+xmlNodePtr commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c);
+xmlNodePtr timespec_to_dom_tree (const char* tag, const Timespec* spec);
+gchar* timespec_nsec_to_string (const Timespec* ts);
+gchar* timespec_sec_to_string (const Timespec* ts);
+xmlNodePtr gdate_to_dom_tree (const char* tag, const GDate* spec);
+xmlNodePtr gnc_numeric_to_dom_tree (const char* tag, const gnc_numeric* num);
+xmlNodePtr qof_instance_slots_to_dom_tree (const char* tag,
+                                           const QofInstance* inst);
+xmlNodePtr guint_to_dom_tree (const char* tag, guint an_int);
+xmlNodePtr recurrence_to_dom_tree (const gchar* tag, const Recurrence* r);
 
-gchar* double_to_string(double value);
+gchar* double_to_string (double value);
 
 #endif /* _SIXTP_DOM_GENERATORS_H_ */

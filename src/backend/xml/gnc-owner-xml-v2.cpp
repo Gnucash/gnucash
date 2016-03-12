@@ -50,17 +50,17 @@ extern "C"
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *owner_version_string = "2.0.0";
+const gchar* owner_version_string = "2.0.0";
 
 /* ids */
-#define owner_type_string	"owner:type"
-#define owner_id_string		"owner:id"
+#define owner_type_string   "owner:type"
+#define owner_id_string     "owner:id"
 
 xmlNodePtr
-gnc_owner_to_dom_tree (const char *tag, const GncOwner *owner)
+gnc_owner_to_dom_tree (const char* tag, const GncOwner* owner)
 {
     xmlNodePtr ret;
-    const char *type_str;
+    const char* type_str;
 
     switch (gncOwnerGetType (owner))
     {
@@ -81,8 +81,8 @@ gnc_owner_to_dom_tree (const char *tag, const GncOwner *owner)
         return NULL;
     }
 
-    ret = xmlNewNode(NULL, BAD_CAST tag);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST owner_version_string);
+    ret = xmlNewNode (NULL, BAD_CAST tag);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST owner_version_string);
 
     xmlAddChild (ret, text_to_dom_tree (owner_type_string, type_str));
     xmlAddChild (ret, guid_to_dom_tree (owner_id_string,
@@ -95,16 +95,16 @@ gnc_owner_to_dom_tree (const char *tag, const GncOwner *owner)
 
 struct owner_pdata
 {
-    GncOwner *owner;
-    QofBook *book;
+    GncOwner* owner;
+    QofBook* book;
 };
 
 static gboolean
 owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
 {
-    struct owner_pdata *pdata = static_cast<decltype(pdata)>(owner_pdata);
-    char* txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
+    struct owner_pdata* pdata = static_cast<decltype (pdata)> (owner_pdata);
+    char* txt = dom_tree_to_text (node);
+    g_return_val_if_fail (txt, FALSE);
 
     if (!g_strcmp0 (txt, GNC_ID_CUSTOMER))
         gncOwnerInitCustomer (pdata->owner, NULL);
@@ -117,28 +117,28 @@ owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
     else
     {
         PWARN ("Unknown owner type: %s", txt);
-        g_free(txt);
+        g_free (txt);
         return FALSE;
     }
 
-    g_free(txt);
+    g_free (txt);
     return TRUE;
 }
 
 static gboolean
 owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
 {
-    struct owner_pdata *pdata = static_cast<decltype(pdata)>(owner_pdata);
-    GncGUID *guid;
+    struct owner_pdata* pdata = static_cast<decltype (pdata)> (owner_pdata);
+    GncGUID* guid;
 
-    guid = dom_tree_to_guid(node);
+    guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
 
     switch (gncOwnerGetType (pdata->owner))
     {
     case GNC_OWNER_CUSTOMER:
     {
-        GncCustomer *cust = gncCustomerLookup (pdata->book, guid);
+        GncCustomer* cust = gncCustomerLookup (pdata->book, guid);
         if (!cust)
         {
             cust = gncCustomerCreate (pdata->book);
@@ -149,7 +149,7 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
     }
     case GNC_OWNER_JOB:
     {
-        GncJob *job = gncJobLookup (pdata->book, guid);
+        GncJob* job = gncJobLookup (pdata->book, guid);
         if (!job)
         {
             job = gncJobCreate (pdata->book);
@@ -160,7 +160,7 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
     }
     case GNC_OWNER_VENDOR:
     {
-        GncVendor *vendor = gncVendorLookup (pdata->book, guid);
+        GncVendor* vendor = gncVendorLookup (pdata->book, guid);
         if (!vendor)
         {
             vendor = gncVendorCreate (pdata->book);
@@ -171,7 +171,7 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
     }
     case GNC_OWNER_EMPLOYEE:
     {
-        GncEmployee *employee = gncEmployeeLookup (pdata->book, guid);
+        GncEmployee* employee = gncEmployeeLookup (pdata->book, guid);
         if (!employee)
         {
             employee = gncEmployeeCreate (pdata->book);
@@ -198,7 +198,7 @@ static struct dom_tree_handler owner_handlers_v2[] =
 };
 
 gboolean
-gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
+gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner* owner, QofBook* book)
 {
     struct owner_pdata owner_pdata;
     gboolean successful;
@@ -218,10 +218,10 @@ gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
 }
 
 static gboolean
-owner_ns(FILE *out)
+owner_ns (FILE* out)
 {
-    g_return_val_if_fail(out, FALSE);
-    return gnc_xml2_write_namespace_decl(out, "owner");
+    g_return_val_if_fail (out, FALSE);
+    return gnc_xml2_write_namespace_decl (out, "owner");
 }
 
 void
@@ -231,11 +231,11 @@ gnc_owner_xml_initialize (void)
     {
         GNC_FILE_BACKEND_VERS,
         "gnc:Owner",
-        NULL,			/* parser_create */
-        NULL,			/* add_item */
-        NULL,			/* get_count */
-        NULL,			/* write */
-        NULL,			/* scrub */
+        NULL,           /* parser_create */
+        NULL,           /* add_item */
+        NULL,           /* get_count */
+        NULL,           /* write */
+        NULL,           /* scrub */
         owner_ns,
     };
 

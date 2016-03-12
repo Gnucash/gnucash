@@ -46,17 +46,17 @@ extern "C"
 #include "io-gncxml-v2.h"
 #include "test-file-stuff.h"
 
-static QofSession *session;
+static QofSession* session;
 static int iter;
 
 static gboolean
-test_add_pricedb (const char *tag, gpointer globaldata, gpointer data)
+test_add_pricedb (const char* tag, gpointer globaldata, gpointer data)
 {
-    sixtp_gdv2 *gdata = static_cast<decltype(gdata)>(globaldata);
-    GNCPriceDB *db1 = static_cast<decltype(db1)>(data);
-    GNCPriceDB *db2 = gnc_pricedb_get_db (gdata->book);
+    sixtp_gdv2* gdata = static_cast<decltype (gdata)> (globaldata);
+    GNCPriceDB* db1 = static_cast<decltype (db1)> (data);
+    GNCPriceDB* db2 = gnc_pricedb_get_db (gdata->book);
 
-    do_test_args (gnc_pricedb_equal(db1, db2),
+    do_test_args (gnc_pricedb_equal (db1, db2),
                   "gnc_pricedb_sixtp_parser_create",
                   __FILE__, __LINE__, "%d", iter);
 
@@ -64,12 +64,12 @@ test_add_pricedb (const char *tag, gpointer globaldata, gpointer data)
 }
 
 static void
-test_db (GNCPriceDB *db)
+test_db (GNCPriceDB* db)
 {
     xmlNodePtr test_node;
-    gchar *filename1;
+    gchar* filename1;
     int fd;
-    QofBook *book = qof_instance_get_book (QOF_INSTANCE (db));
+    QofBook* book = qof_instance_get_book (QOF_INSTANCE (db));
 
     test_node = gnc_pricedb_dom_tree_create (db);
 
@@ -93,15 +93,15 @@ test_db (GNCPriceDB *db)
 
     {
         sixtp *parser;
-	load_counter lc = {0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0};
+	load_counter lc = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         sixtp_gdv2 data = {book, lc, NULL, NULL, FALSE};
 
         parser = sixtp_new ();
 
         if (!sixtp_add_some_sub_parsers
-                (parser, TRUE,
-                 "gnc:pricedb", gnc_pricedb_sixtp_parser_create(),
-                 NULL, NULL))
+            (parser, TRUE,
+             "gnc:pricedb", gnc_pricedb_sixtp_parser_create (),
+             NULL, NULL))
         {
             failure_args ("sixtp_add_some_sub_parsers failed",
                           __FILE__, __LINE__, "%d", iter);
@@ -125,9 +125,9 @@ test_generation (void)
 {
     for (iter = 0; iter < 20; iter++)
     {
-        GNCPriceDB *db;
-        g_message("iter=%d", iter);
-        session = qof_session_new();
+        GNCPriceDB* db;
+        g_message ("iter=%d", iter);
+        session = qof_session_new ();
         db = get_random_pricedb (qof_session_get_book (session));
         if (!db)
         {
@@ -139,21 +139,21 @@ test_generation (void)
             test_db (db);
 
         gnc_pricedb_destroy (db);
-        qof_session_end(session);
+        qof_session_end (session);
     }
 }
 
 int
-main (int argc, char ** argv)
+main (int argc, char** argv)
 {
-    qof_init();
-    cashobjects_register();
+    qof_init ();
+    cashobjects_register ();
     //qof_log_init_filename("/tmp/gnctest.trace");
     //qof_log_set_default(QOF_LOG_DETAIL);
     //qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
     session = qof_session_new ();
     test_generation ();
     print_test_results ();
-    qof_close();
-    exit(get_rv());
+    qof_close ();
+    exit (get_rv ());
 }

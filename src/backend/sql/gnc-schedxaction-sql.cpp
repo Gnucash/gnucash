@@ -76,92 +76,92 @@ static const GncSqlColumnTableEntry col_table[] =
 
 /* ================================================================= */
 static  SchedXaction*
-load_single_sx( GncSqlBackend* be, GncSqlRow* row )
+load_single_sx (GncSqlBackend* be, GncSqlRow* row)
 {
     const GncGUID* guid;
     SchedXaction* pSx;
     GList* schedule;
     GDate start_date;
 
-    g_return_val_if_fail( be != NULL, NULL );
-    g_return_val_if_fail( row != NULL, NULL );
+    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (row != NULL, NULL);
 
-    guid = gnc_sql_load_guid( be, row );
-    g_assert( guid != NULL );
-    pSx = xaccSchedXactionMalloc( be->book );
+    guid = gnc_sql_load_guid (be, row);
+    g_assert (guid != NULL);
+    pSx = xaccSchedXactionMalloc (be->book);
 
-    gnc_sx_begin_edit( pSx );
-    gnc_sql_load_object( be, row, GNC_SX_ID, pSx, col_table );
-    schedule = gnc_sql_recurrence_load_list( be, guid );
-    gnc_sx_set_schedule( pSx, schedule );
-    gnc_sx_commit_edit( pSx );
-    gnc_sql_transaction_load_tx_for_account( be, pSx->template_acct );
+    gnc_sx_begin_edit (pSx);
+    gnc_sql_load_object (be, row, GNC_SX_ID, pSx, col_table);
+    schedule = gnc_sql_recurrence_load_list (be, guid);
+    gnc_sx_set_schedule (pSx, schedule);
+    gnc_sx_commit_edit (pSx);
+    gnc_sql_transaction_load_tx_for_account (be, pSx->template_acct);
 
-    g_object_get(pSx, "start-date", &start_date, NULL);
+    g_object_get (pSx, "start-date", &start_date, NULL);
 
     return pSx;
 }
 
 static void
-load_all_sxes( GncSqlBackend* be )
+load_all_sxes (GncSqlBackend* be)
 {
     GncSqlStatement* stmt = NULL;
     GncSqlResult* result;
 
-    g_return_if_fail( be != NULL );
+    g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement( be, SCHEDXACTION_TABLE );
-    if ( stmt == NULL ) return;
-    result = gnc_sql_execute_select_statement( be, stmt );
-    gnc_sql_statement_dispose( stmt );
-    if ( result != NULL )
+    stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
+    if (stmt == NULL) return;
+    result = gnc_sql_execute_select_statement (be, stmt);
+    gnc_sql_statement_dispose (stmt);
+    if (result != NULL)
     {
         GncSqlRow* row;
-        SchedXactions *sxes;
+        SchedXactions* sxes;
         GList* list = NULL;
-        sxes = gnc_book_get_schedxactions( be->book );
+        sxes = gnc_book_get_schedxactions (be->book);
 
-        row = gnc_sql_result_get_first_row( result );
-        while ( row != NULL )
+        row = gnc_sql_result_get_first_row (result);
+        while (row != NULL)
         {
             SchedXaction* sx;
 
-            sx = load_single_sx( be, row );
-            if ( sx != NULL )
+            sx = load_single_sx (be, row);
+            if (sx != NULL)
             {
-                gnc_sxes_add_sx( sxes, sx );
-                list = g_list_prepend( list, sx );
+                gnc_sxes_add_sx (sxes, sx);
+                list = g_list_prepend (list, sx);
             }
-            row = gnc_sql_result_get_next_row( result );
+            row = gnc_sql_result_get_next_row (result);
         }
-        gnc_sql_result_dispose( result );
+        gnc_sql_result_dispose (result);
 
-        if ( list != NULL )
+        if (list != NULL)
         {
-            gnc_sql_slots_load_for_list( be, list );
-            g_list_free( list );
+            gnc_sql_slots_load_for_list (be, list);
+            g_list_free (list);
         }
     }
 }
 
 /* ================================================================= */
 static void
-create_sx_tables( GncSqlBackend* be )
+create_sx_tables (GncSqlBackend* be)
 {
     gint version;
 
-    g_return_if_fail( be != NULL );
+    g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version( be, SCHEDXACTION_TABLE );
-    if ( version == 0 )
+    version = gnc_sql_get_table_version (be, SCHEDXACTION_TABLE);
+    if (version == 0)
     {
-        (void)gnc_sql_create_table( be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table (be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table);
     }
 }
 
 /* ================================================================= */
 gboolean
-gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
+gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst)
 {
     SchedXaction* pSx;
     const GncGUID* guid;
@@ -169,18 +169,18 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
     gboolean is_infant;
     gboolean is_ok;
 
-    g_return_val_if_fail( be != NULL, FALSE );
-    g_return_val_if_fail( inst != NULL, FALSE );
-    g_return_val_if_fail( GNC_IS_SX(inst), FALSE );
+    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (inst != NULL, FALSE);
+    g_return_val_if_fail (GNC_IS_SX (inst), FALSE);
 
-    pSx = GNC_SX(inst);
+    pSx = GNC_SX (inst);
 
-    is_infant = qof_instance_get_infant( inst );
-    if ( qof_instance_get_destroying( inst ) )
+    is_infant = qof_instance_get_infant (inst);
+    if (qof_instance_get_destroying (inst))
     {
         op = OP_DB_DELETE;
     }
-    else if ( be->is_pristine_db || is_infant )
+    else if (be->is_pristine_db || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -188,27 +188,28 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation( be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx, col_table );
-    guid = qof_instance_get_guid( inst );
-    if ( op == OP_DB_INSERT || op == OP_DB_UPDATE )
+    is_ok = gnc_sql_do_db_operation (be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx,
+                                     col_table);
+    guid = qof_instance_get_guid (inst);
+    if (op == OP_DB_INSERT || op == OP_DB_UPDATE)
     {
-        gnc_sql_recurrence_save_list( be, guid, gnc_sx_get_schedule( pSx ) );
+        gnc_sql_recurrence_save_list (be, guid, gnc_sx_get_schedule (pSx));
     }
     else
     {
-        gnc_sql_recurrence_delete( be, guid );
+        gnc_sql_recurrence_delete (be, guid);
     }
 
-    if ( is_ok )
+    if (is_ok)
     {
         // Now, commit any slots
-        if ( op == OP_DB_INSERT || op == OP_DB_UPDATE )
+        if (op == OP_DB_INSERT || op == OP_DB_UPDATE)
         {
-            is_ok = gnc_sql_slots_save( be, guid, is_infant, inst);
+            is_ok = gnc_sql_slots_save (be, guid, is_infant, inst);
         }
         else
         {
-            is_ok = gnc_sql_slots_delete( be, guid );
+            is_ok = gnc_sql_slots_delete (be, guid);
         }
     }
 
@@ -217,7 +218,7 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 
 /* ================================================================= */
 void
-gnc_sql_init_schedxaction_handler( void )
+gnc_sql_init_schedxaction_handler (void)
 {
     static GncSqlObjectBackend be_data =
     {
@@ -232,6 +233,7 @@ gnc_sql_init_schedxaction_handler( void )
         NULL                          /* write */
     };
 
-    (void)qof_object_register_backend( GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend (GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND,
+                                       &be_data);
 }
 /* ========================== END OF FILE ===================== */

@@ -48,148 +48,148 @@ extern "C"
 
 #include "sixtp-dom-parsers.h"
 
-const gchar *transaction_version_string = "2.0.0";
+const gchar* transaction_version_string = "2.0.0";
 
 static void
-add_gnc_num(xmlNodePtr node, const gchar *tag, gnc_numeric num)
+add_gnc_num (xmlNodePtr node, const gchar* tag, gnc_numeric num)
 {
-    xmlAddChild(node, gnc_numeric_to_dom_tree(tag, &num));
+    xmlAddChild (node, gnc_numeric_to_dom_tree (tag, &num));
 }
 
 static void
-add_timespec(xmlNodePtr node, const gchar *tag, Timespec tms, gboolean always)
+add_timespec (xmlNodePtr node, const gchar* tag, Timespec tms, gboolean always)
 {
-    if (always || !((tms.tv_sec == 0) && (tms.tv_nsec == 0)))
+    if (always || ! ((tms.tv_sec == 0) && (tms.tv_nsec == 0)))
     {
-        xmlAddChild(node, timespec_to_dom_tree(tag, &tms));
+        xmlAddChild (node, timespec_to_dom_tree (tag, &tms));
     }
 }
 
 static xmlNodePtr
-split_to_dom_tree(const gchar *tag, Split *spl)
+split_to_dom_tree (const gchar* tag, Split* spl)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, BAD_CAST tag);
+    ret = xmlNewNode (NULL, BAD_CAST tag);
 
-    xmlAddChild(ret, guid_to_dom_tree("split:id", xaccSplitGetGUID(spl)));
+    xmlAddChild (ret, guid_to_dom_tree ("split:id", xaccSplitGetGUID (spl)));
 
     {
-        char *memo = g_strdup (xaccSplitGetMemo(spl));
+        char* memo = g_strdup (xaccSplitGetMemo (spl));
 
-        if (memo && g_strcmp0(memo, "") != 0)
+        if (memo && g_strcmp0 (memo, "") != 0)
         {
-            xmlNewTextChild(ret, NULL, BAD_CAST "split:memo",
-			    checked_char_cast (memo));
+            xmlNewTextChild (ret, NULL, BAD_CAST "split:memo",
+                             checked_char_cast (memo));
         }
-	g_free (memo);
+        g_free (memo);
     }
 
     {
-        char *action = g_strdup (xaccSplitGetAction(spl));
+        char* action = g_strdup (xaccSplitGetAction (spl));
 
-        if (action && g_strcmp0(action, "") != 0)
+        if (action && g_strcmp0 (action, "") != 0)
         {
-            xmlNewTextChild(ret, NULL, BAD_CAST "split:action",
-			    checked_char_cast (action));
+            xmlNewTextChild (ret, NULL, BAD_CAST "split:action",
+                             checked_char_cast (action));
         }
-	g_free (action);
+        g_free (action);
     }
 
     {
         char tmp[2];
 
-        tmp[0] = xaccSplitGetReconcile(spl);
+        tmp[0] = xaccSplitGetReconcile (spl);
         tmp[1] = '\0';
 
-        xmlNewTextChild(ret, NULL, BAD_CAST "split:reconciled-state",
-			BAD_CAST tmp);
+        xmlNewTextChild (ret, NULL, BAD_CAST "split:reconciled-state",
+                         BAD_CAST tmp);
     }
 
-    add_timespec(ret, "split:reconcile-date",
-                 xaccSplitRetDateReconciledTS(spl), FALSE);
+    add_timespec (ret, "split:reconcile-date",
+                  xaccSplitRetDateReconciledTS (spl), FALSE);
 
-    add_gnc_num(ret, "split:value", xaccSplitGetValue(spl));
+    add_gnc_num (ret, "split:value", xaccSplitGetValue (spl));
 
-    add_gnc_num(ret, "split:quantity", xaccSplitGetAmount(spl));
+    add_gnc_num (ret, "split:quantity", xaccSplitGetAmount (spl));
 
     {
-        Account * account = xaccSplitGetAccount (spl);
+        Account* account = xaccSplitGetAccount (spl);
 
-        xmlAddChild (ret, guid_to_dom_tree("split:account",
-                                           xaccAccountGetGUID (account)));
+        xmlAddChild (ret, guid_to_dom_tree ("split:account",
+                                            xaccAccountGetGUID (account)));
     }
     {
-        GNCLot * lot = xaccSplitGetLot (spl);
+        GNCLot* lot = xaccSplitGetLot (spl);
 
         if (lot)
         {
-            xmlAddChild (ret, guid_to_dom_tree("split:lot",
-                                               gnc_lot_get_guid(lot)));
+            xmlAddChild (ret, guid_to_dom_tree ("split:lot",
+                                                gnc_lot_get_guid (lot)));
         }
     }
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree("split:slots",
-                                                    QOF_INSTANCE(spl)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree ("split:slots",
+                                                      QOF_INSTANCE (spl)));
     return ret;
 }
 
 static void
-add_trans_splits(xmlNodePtr node, Transaction *trn)
+add_trans_splits (xmlNodePtr node, Transaction* trn)
 {
-    GList *n;
+    GList* n;
     xmlNodePtr toaddto;
 
-    toaddto = xmlNewChild(node, NULL, BAD_CAST "trn:splits", NULL);
+    toaddto = xmlNewChild (node, NULL, BAD_CAST "trn:splits", NULL);
 
-    for (n = xaccTransGetSplitList(trn); n; n = n->next)
+    for (n = xaccTransGetSplitList (trn); n; n = n->next)
     {
-        Split *s = static_cast<decltype(s)>(n->data);
-        xmlAddChild(toaddto, split_to_dom_tree("trn:split", s));
+        Split* s = static_cast<decltype (s)> (n->data);
+        xmlAddChild (toaddto, split_to_dom_tree ("trn:split", s));
     }
 }
 
 xmlNodePtr
-gnc_transaction_dom_tree_create(Transaction *trn)
+gnc_transaction_dom_tree_create (Transaction* trn)
 {
     xmlNodePtr ret;
-    gchar *str = NULL;
+    gchar* str = NULL;
 
-    ret = xmlNewNode(NULL, BAD_CAST "gnc:transaction");
+    ret = xmlNewNode (NULL, BAD_CAST "gnc:transaction");
 
-    xmlSetProp(ret, BAD_CAST "version",
-	       BAD_CAST transaction_version_string);
+    xmlSetProp (ret, BAD_CAST "version",
+                BAD_CAST transaction_version_string);
 
-    xmlAddChild(ret, guid_to_dom_tree("trn:id", xaccTransGetGUID(trn)));
+    xmlAddChild (ret, guid_to_dom_tree ("trn:id", xaccTransGetGUID (trn)));
 
-    xmlAddChild(ret, commodity_ref_to_dom_tree("trn:currency",
-                xaccTransGetCurrency(trn)));
-    str = g_strdup (xaccTransGetNum(trn));
-    if (str && (g_strcmp0(str, "") != 0))
+    xmlAddChild (ret, commodity_ref_to_dom_tree ("trn:currency",
+                                                 xaccTransGetCurrency (trn)));
+    str = g_strdup (xaccTransGetNum (trn));
+    if (str && (g_strcmp0 (str, "") != 0))
     {
-        xmlNewTextChild(ret, NULL, BAD_CAST "trn:num",
-			checked_char_cast (str));
+        xmlNewTextChild (ret, NULL, BAD_CAST "trn:num",
+                         checked_char_cast (str));
     }
     g_free (str);
 
-    add_timespec(ret, "trn:date-posted", xaccTransRetDatePostedTS(trn), TRUE);
+    add_timespec (ret, "trn:date-posted", xaccTransRetDatePostedTS (trn), TRUE);
 
-    add_timespec(ret, "trn:date-entered",
-                 xaccTransRetDateEnteredTS(trn), TRUE);
+    add_timespec (ret, "trn:date-entered",
+                  xaccTransRetDateEnteredTS (trn), TRUE);
 
-    str = g_strdup (xaccTransGetDescription(trn));
+    str = g_strdup (xaccTransGetDescription (trn));
     if (str)
     {
-        xmlNewTextChild(ret, NULL, BAD_CAST "trn:description",
-                        checked_char_cast (str));
+        xmlNewTextChild (ret, NULL, BAD_CAST "trn:description",
+                         checked_char_cast (str));
     }
     g_free (str);
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree("trn:slots",
-                                                    QOF_INSTANCE(trn)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree ("trn:slots",
+                                                      QOF_INSTANCE (trn)));
 
-    add_trans_splits(ret, trn);
+    add_trans_splits (ret, trn);
 
     return ret;
 }
@@ -198,121 +198,121 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 
 struct split_pdata
 {
-    Split *split;
-    QofBook *book;
+    Split* split;
+    QofBook* book;
 };
 
 static inline gboolean
-set_spl_string(xmlNodePtr node, Split *spl,
-               void (*func)(Split *spl, const char *txt))
+set_spl_string (xmlNodePtr node, Split* spl,
+                void (*func) (Split* spl, const char* txt))
 {
-    gchar *tmp = dom_tree_to_text(node);
-    g_return_val_if_fail(tmp, FALSE);
+    gchar* tmp = dom_tree_to_text (node);
+    g_return_val_if_fail (tmp, FALSE);
 
-    func(spl, tmp);
+    func (spl, tmp);
 
-    g_free(tmp);
+    g_free (tmp);
 
     return TRUE;
 }
 
 static inline gboolean
-set_spl_gnc_num(xmlNodePtr node, Split* spl,
-                void (*func)(Split *spl, gnc_numeric gn))
+set_spl_gnc_num (xmlNodePtr node, Split* spl,
+                 void (*func) (Split* spl, gnc_numeric gn))
 {
-    gnc_numeric *num = dom_tree_to_gnc_numeric(node);
-    g_return_val_if_fail(num, FALSE);
+    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
+    g_return_val_if_fail (num, FALSE);
 
-    func(spl, *num);
+    func (spl, *num);
 
-    g_free(num);
+    g_free (num);
 
     return FALSE;
 }
 
 static gboolean
-spl_id_handler(xmlNodePtr node, gpointer data)
+spl_id_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    GncGUID *tmp = dom_tree_to_guid(node);
-    g_return_val_if_fail(tmp, FALSE);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    GncGUID* tmp = dom_tree_to_guid (node);
+    g_return_val_if_fail (tmp, FALSE);
 
-    xaccSplitSetGUID(pdata->split, tmp);
+    xaccSplitSetGUID (pdata->split, tmp);
 
-    g_free(tmp);
+    g_free (tmp);
     return TRUE;
 }
 
 static gboolean
-spl_memo_handler(xmlNodePtr node, gpointer data)
+spl_memo_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    return set_spl_string(node, pdata->split, xaccSplitSetMemo);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    return set_spl_string (node, pdata->split, xaccSplitSetMemo);
 }
 
 static gboolean
-spl_action_handler(xmlNodePtr node, gpointer data)
+spl_action_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    return set_spl_string(node, pdata->split, xaccSplitSetAction);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    return set_spl_string (node, pdata->split, xaccSplitSetAction);
 }
 
 static gboolean
-spl_reconciled_state_handler(xmlNodePtr node, gpointer data)
+spl_reconciled_state_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    gchar *tmp = dom_tree_to_text(node);
-    g_return_val_if_fail(tmp, FALSE);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    gchar* tmp = dom_tree_to_text (node);
+    g_return_val_if_fail (tmp, FALSE);
 
-    xaccSplitSetReconcile(pdata->split, tmp[0]);
+    xaccSplitSetReconcile (pdata->split, tmp[0]);
 
-    g_free(tmp);
+    g_free (tmp);
 
     return TRUE;
 }
 
 static gboolean
-spl_reconcile_date_handler(xmlNodePtr node, gpointer data)
+spl_reconcile_date_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
     Timespec ts;
 
-    ts = dom_tree_to_timespec(node);
-    if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
+    ts = dom_tree_to_timespec (node);
+    if (!dom_tree_valid_timespec (&ts, node->name)) return FALSE;
 
-    xaccSplitSetDateReconciledTS(pdata->split, &ts);
+    xaccSplitSetDateReconciledTS (pdata->split, &ts);
 
     return TRUE;
 }
 
 static gboolean
-spl_value_handler(xmlNodePtr node, gpointer data)
+spl_value_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    return set_spl_gnc_num(node, pdata->split, xaccSplitSetValue);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    return set_spl_gnc_num (node, pdata->split, xaccSplitSetValue);
 }
 
 static gboolean
-spl_quantity_handler(xmlNodePtr node, gpointer data)
+spl_quantity_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    return set_spl_gnc_num(node, pdata->split, xaccSplitSetAmount);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    return set_spl_gnc_num (node, pdata->split, xaccSplitSetAmount);
 }
 
 gboolean gnc_transaction_xml_v2_testing = FALSE;
 
 static gboolean
-spl_account_handler(xmlNodePtr node, gpointer data)
+spl_account_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    GncGUID *id = dom_tree_to_guid(node);
-    Account *account;
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    GncGUID* id = dom_tree_to_guid (node);
+    Account* account;
 
-    g_return_val_if_fail(id, FALSE);
+    g_return_val_if_fail (id, FALSE);
 
     account = xaccAccountLookup (id, pdata->book);
     if (!account && gnc_transaction_xml_v2_testing &&
-            !guid_equal (id, guid_null ()))
+        !guid_equal (id, guid_null ()))
     {
         account = xaccMallocAccount (pdata->book);
         xaccAccountSetGUID (account, id);
@@ -322,23 +322,23 @@ spl_account_handler(xmlNodePtr node, gpointer data)
 
     xaccAccountInsertSplit (account, pdata->split);
 
-    g_free(id);
+    g_free (id);
 
     return TRUE;
 }
 
 static gboolean
-spl_lot_handler(xmlNodePtr node, gpointer data)
+spl_lot_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
-    GncGUID *id = dom_tree_to_guid(node);
-    GNCLot *lot;
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
+    GncGUID* id = dom_tree_to_guid (node);
+    GNCLot* lot;
 
-    g_return_val_if_fail(id, FALSE);
+    g_return_val_if_fail (id, FALSE);
 
     lot = gnc_lot_lookup (id, pdata->book);
     if (!lot && gnc_transaction_xml_v2_testing &&
-            !guid_equal (id, guid_null ()))
+        !guid_equal (id, guid_null ()))
     {
         lot = gnc_lot_new (pdata->book);
         gnc_lot_set_guid (lot, *id);
@@ -346,20 +346,20 @@ spl_lot_handler(xmlNodePtr node, gpointer data)
 
     gnc_lot_add_split (lot, pdata->split);
 
-    g_free(id);
+    g_free (id);
 
     return TRUE;
 }
 
 static gboolean
-spl_slots_handler(xmlNodePtr node, gpointer data)
+spl_slots_handler (xmlNodePtr node, gpointer data)
 {
-    struct split_pdata *pdata = static_cast<decltype(pdata)>(data);
+    struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
     gboolean successful;
 
-    successful = dom_tree_create_instance_slots(node,
-                                                QOF_INSTANCE (pdata->split));
-    g_return_val_if_fail(successful, FALSE);
+    successful = dom_tree_create_instance_slots (node,
+                                                 QOF_INSTANCE (pdata->split));
+    g_return_val_if_fail (successful, FALSE);
 
     return TRUE;
 }
@@ -380,27 +380,27 @@ struct dom_tree_handler spl_dom_handlers[] =
 };
 
 static Split*
-dom_tree_to_split(xmlNodePtr node, QofBook *book)
+dom_tree_to_split (xmlNodePtr node, QofBook* book)
 {
     struct split_pdata pdata;
-    Split *ret;
+    Split* ret;
 
     g_return_val_if_fail (book, NULL);
 
-    ret = xaccMallocSplit(book);
-    g_return_val_if_fail(ret, NULL);
+    ret = xaccMallocSplit (book);
+    g_return_val_if_fail (ret, NULL);
 
     pdata.split = ret;
     pdata.book = book;
 
     /* this isn't going to work in a testing setup */
-    if (dom_tree_generic_parse(node, spl_dom_handlers, &pdata))
+    if (dom_tree_generic_parse (node, spl_dom_handlers, &pdata))
     {
         return ret;
     }
     else
     {
-        xaccSplitDestroy(ret);
+        xaccSplitDestroy (ret);
         return NULL;
     }
 }
@@ -409,148 +409,148 @@ dom_tree_to_split(xmlNodePtr node, QofBook *book)
 
 struct trans_pdata
 {
-    Transaction *trans;
-    QofBook *book;
+    Transaction* trans;
+    QofBook* book;
 };
 
 static inline gboolean
-set_tran_string(xmlNodePtr node, Transaction *trn,
-                void (*func)(Transaction *trn, const char *txt))
+set_tran_string (xmlNodePtr node, Transaction* trn,
+                 void (*func) (Transaction* trn, const char* txt))
 {
-    gchar *tmp;
+    gchar* tmp;
 
-    tmp = dom_tree_to_text(node);
+    tmp = dom_tree_to_text (node);
 
-    g_return_val_if_fail(tmp, FALSE);
+    g_return_val_if_fail (tmp, FALSE);
 
-    func(trn, tmp);
+    func (trn, tmp);
 
-    g_free(tmp);
+    g_free (tmp);
 
     return TRUE;
 }
 
 static inline gboolean
-set_tran_date(xmlNodePtr node, Transaction *trn,
-              void (*func)(Transaction *trn, const Timespec *tm))
+set_tran_date (xmlNodePtr node, Transaction* trn,
+               void (*func) (Transaction* trn, const Timespec* tm))
 {
     Timespec tm;
 
-    tm = dom_tree_to_timespec(node);
+    tm = dom_tree_to_timespec (node);
 
-    if (!dom_tree_valid_timespec(&tm, node->name)) return FALSE;
+    if (!dom_tree_valid_timespec (&tm, node->name)) return FALSE;
 
-    func(trn, &tm);
-
-    return TRUE;
-}
-
-static gboolean
-trn_id_handler(xmlNodePtr node, gpointer trans_pdata)
-{
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
-    GncGUID *tmp = dom_tree_to_guid(node);
-
-    g_return_val_if_fail(tmp, FALSE);
-
-    xaccTransSetGUID((Transaction*)trn, tmp);
-
-    g_free(tmp);
+    func (trn, &tm);
 
     return TRUE;
 }
 
 static gboolean
-trn_currency_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_id_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
-    gnc_commodity *ref;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
+    GncGUID* tmp = dom_tree_to_guid (node);
 
-    ref = dom_tree_to_commodity_ref(node, pdata->book);
-    xaccTransSetCurrency(trn, ref);
+    g_return_val_if_fail (tmp, FALSE);
+
+    xaccTransSetGUID ((Transaction*)trn, tmp);
+
+    g_free (tmp);
 
     return TRUE;
 }
 
 static gboolean
-trn_num_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_currency_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
+    gnc_commodity* ref;
 
-    return set_tran_string(node, trn, xaccTransSetNum);
+    ref = dom_tree_to_commodity_ref (node, pdata->book);
+    xaccTransSetCurrency (trn, ref);
+
+    return TRUE;
 }
 
 static gboolean
-trn_date_posted_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_num_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
 
-    return set_tran_date(node, trn, xaccTransSetDatePostedTS);
+    return set_tran_string (node, trn, xaccTransSetNum);
 }
 
 static gboolean
-trn_date_entered_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_date_posted_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
 
-    return set_tran_date(node, trn, xaccTransSetDateEnteredTS);
+    return set_tran_date (node, trn, xaccTransSetDatePostedTS);
 }
 
 static gboolean
-trn_description_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_date_entered_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
 
-    return set_tran_string(node, trn, xaccTransSetDescription);
+    return set_tran_date (node, trn, xaccTransSetDateEnteredTS);
 }
 
 static gboolean
-trn_slots_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_description_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
+
+    return set_tran_string (node, trn, xaccTransSetDescription);
+}
+
+static gboolean
+trn_slots_handler (xmlNodePtr node, gpointer trans_pdata)
+{
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
     gboolean successful;
 
-    successful = dom_tree_create_instance_slots(node, QOF_INSTANCE (trn));
+    successful = dom_tree_create_instance_slots (node, QOF_INSTANCE (trn));
 
-    g_return_val_if_fail(successful, FALSE);
+    g_return_val_if_fail (successful, FALSE);
 
     return TRUE;
 }
 
 static gboolean
-trn_splits_handler(xmlNodePtr node, gpointer trans_pdata)
+trn_splits_handler (xmlNodePtr node, gpointer trans_pdata)
 {
-    struct trans_pdata *pdata = static_cast<decltype(pdata)>(trans_pdata);
-    Transaction *trn = pdata->trans;
+    struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
+    Transaction* trn = pdata->trans;
     xmlNodePtr mark;
 
-    g_return_val_if_fail(node, FALSE);
-    g_return_val_if_fail(node->xmlChildrenNode, FALSE);
+    g_return_val_if_fail (node, FALSE);
+    g_return_val_if_fail (node->xmlChildrenNode, FALSE);
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        Split *spl;
+        Split* spl;
 
-        if (g_strcmp0("text", (char*)mark->name) == 0)
+        if (g_strcmp0 ("text", (char*)mark->name) == 0)
             continue;
 
-        if (g_strcmp0("trn:split", (char*)mark->name))
+        if (g_strcmp0 ("trn:split", (char*)mark->name))
         {
             return FALSE;
         }
 
-        spl = dom_tree_to_split(mark, pdata->book);
+        spl = dom_tree_to_split (mark, pdata->book);
 
         if (spl)
         {
-            xaccTransAppendSplit(trn, spl);
+            xaccTransAppendSplit (trn, spl);
         }
         else
         {
@@ -574,14 +574,14 @@ struct dom_tree_handler trn_dom_handlers[] =
 };
 
 static gboolean
-gnc_transaction_end_handler(gpointer data_for_children,
-                            GSList* data_from_children, GSList* sibling_data,
-                            gpointer parent_data, gpointer global_data,
-                            gpointer *result, const gchar *tag)
+gnc_transaction_end_handler (gpointer data_for_children,
+                             GSList* data_from_children, GSList* sibling_data,
+                             gpointer parent_data, gpointer global_data,
+                             gpointer* result, const gchar* tag)
 {
-    Transaction *trn = NULL;
+    Transaction* trn = NULL;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
+    gxpf_data* gdata = (gxpf_data*)global_data;
 
     if (parent_data)
     {
@@ -595,47 +595,47 @@ gnc_transaction_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
-    trn = dom_tree_to_transaction(tree,
-                                  static_cast<QofBook*>(gdata->bookdata));
+    trn = dom_tree_to_transaction (tree,
+                                   static_cast<QofBook*> (gdata->bookdata));
     if (trn != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, trn);
+        gdata->cb (tag, gdata->parsedata, trn);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return trn != NULL;
 }
 
-Transaction *
-dom_tree_to_transaction( xmlNodePtr node, QofBook *book )
+Transaction*
+dom_tree_to_transaction (xmlNodePtr node, QofBook* book)
 {
-    Transaction *trn;
+    Transaction* trn;
     gboolean successful;
     struct trans_pdata pdata;
 
-    g_return_val_if_fail(node, NULL);
-    g_return_val_if_fail(book, NULL);
+    g_return_val_if_fail (node, NULL);
+    g_return_val_if_fail (book, NULL);
 
-    trn = xaccMallocTransaction(book);
-    g_return_val_if_fail(trn, NULL);
-    xaccTransBeginEdit(trn);
+    trn = xaccMallocTransaction (book);
+    g_return_val_if_fail (trn, NULL);
+    xaccTransBeginEdit (trn);
 
     pdata.trans = trn;
     pdata.book = book;
 
-    successful = dom_tree_generic_parse(node, trn_dom_handlers, &pdata);
+    successful = dom_tree_generic_parse (node, trn_dom_handlers, &pdata);
 
-    xaccTransCommitEdit(trn);
+    xaccTransCommitEdit (trn);
 
-    if ( !successful )
+    if (!successful)
     {
-        xmlElemDump(stdout, NULL, node);
-        xaccTransBeginEdit(trn);
-        xaccTransDestroy(trn);
-        xaccTransCommitEdit(trn);
+        xmlElemDump (stdout, NULL, node);
+        xaccTransBeginEdit (trn);
+        xaccTransDestroy (trn);
+        xaccTransCommitEdit (trn);
         trn = NULL;
     }
 
@@ -643,7 +643,7 @@ dom_tree_to_transaction( xmlNodePtr node, QofBook *book )
 }
 
 sixtp*
-gnc_transaction_sixtp_parser_create(void)
+gnc_transaction_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_transaction_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_transaction_end_handler, NULL, NULL);
 }

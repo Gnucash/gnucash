@@ -1,7 +1,7 @@
 /********************************************************************
  * utest-gnc-backend-sql.c:                                         *
- *             GLib g_test test suite for gnc-backend-sql.c.	    *
- * Copyright 2012 John Ralls <jralls@ceridwen.us>		    *
+ *             GLib g_test test suite for gnc-backend-sql.c.        *
+ * Copyright 2012 John Ralls <jralls@ceridwen.us>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,7 +30,7 @@ extern "C"
 /* Add specific headers for this class */
 #include "../gnc-backend-sql.h"
 
-static const gchar *suitename = "/backend/sql/gnc-backend-sql";
+static const gchar* suitename = "/backend/sql/gnc-backend-sql";
 void test_suite_gnc_backend_sql (void);
 
 /* gnc_sql_init
@@ -180,13 +180,13 @@ test_dirty_cb (QofBook* book, gboolean dirty, gpointer data)
 {
     g_assert (data != NULL);
     if (dirty)
-        ++*(guint*)data;
-    else if (*(guint*)data)
-        --*(guint*)data;
+        ++* (guint*)data;
+    else if (* (guint*)data)
+        --* (guint*)data;
 }
 
 static gboolean
-fake_connection_function (GncSqlConnection *conn)
+fake_connection_function (GncSqlConnection* conn)
 {
     return TRUE;
 }
@@ -195,17 +195,22 @@ static void
 test_gnc_sql_commit_edit (void)
 {
     GncSqlBackend be;
-    QofInstance *inst;
+    QofInstance* inst;
     guint dirty_called = 0;
     GncSqlConnection conn;
-    const char *msg1 = "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'null'\n";
-    const char *msg2 = "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'Book'\n";
-    GLogLevelFlags loglevel = static_cast<decltype(loglevel)>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
-    const char *logdomain = "gnc.backend.sql";
-    TestErrorStruct check1 = { loglevel, const_cast<char*>(logdomain),
-                               const_cast<char*>(msg1), 0 };
-    TestErrorStruct check2 = { loglevel, const_cast<char*>(logdomain),
-                               const_cast<char*>(msg2), 0 };
+    const char* msg1 =
+        "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'null'\n";
+    const char* msg2 =
+        "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'Book'\n";
+    GLogLevelFlags loglevel = static_cast<decltype (loglevel)>
+                              (G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
+    const char* logdomain = "gnc.backend.sql";
+    TestErrorStruct check1 = { loglevel, const_cast<char*> (logdomain),
+                               const_cast<char*> (msg1), 0
+                             };
+    TestErrorStruct check2 = { loglevel, const_cast<char*> (logdomain),
+                               const_cast<char*> (msg2), 0
+                             };
     guint hdlr1;
 
     test_add_error (&check1);
@@ -220,7 +225,7 @@ test_gnc_sql_commit_edit (void)
     conn.beginTransaction = fake_connection_function;
     conn.rollbackTransaction = fake_connection_function;
     conn.commitTransaction = fake_connection_function;
-    inst  = static_cast<decltype(inst)>(g_object_new (QOF_TYPE_INSTANCE, NULL));
+    inst  = static_cast<decltype (inst)> (g_object_new (QOF_TYPE_INSTANCE, NULL));
     qof_instance_init_data (inst, QOF_ID_NULL, be.book);
     be.loading = FALSE;
     qof_book_set_dirty_cb (be.book, test_dirty_cb, &dirty_called);
@@ -234,8 +239,8 @@ test_gnc_sql_commit_edit (void)
     g_assert (!qof_instance_get_dirty_flag (inst));
     g_assert (!qof_book_session_not_saved (be.book));
     g_assert_cmpint (dirty_called, == , 0);
-    g_assert_cmpint (check1.hits, ==, 2);
-    g_assert_cmpint (check2.hits, ==, 0);
+    g_assert_cmpint (check1.hits, == , 2);
+    g_assert_cmpint (check2.hits, == , 0);
 
     qof_book_mark_session_dirty (be.book);
 
@@ -246,8 +251,8 @@ test_gnc_sql_commit_edit (void)
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
     g_assert (qof_book_session_not_saved (be.book));
     g_assert_cmpint (dirty_called, == , 1);
-    g_assert_cmpint (check1.hits, ==, 2);
-    g_assert_cmpint (check2.hits, ==, 0);
+    g_assert_cmpint (check1.hits, == , 2);
+    g_assert_cmpint (check2.hits, == , 0);
 
     qof_instance_set_dirty_flag (QOF_INSTANCE (be.book), TRUE);
 
@@ -258,8 +263,8 @@ test_gnc_sql_commit_edit (void)
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
     g_assert (!qof_book_session_not_saved (be.book));
     g_assert_cmpint (dirty_called, == , 0);
-    g_assert_cmpint (check1.hits, ==, 2);
-    g_assert_cmpint (check2.hits, ==, 2);
+    g_assert_cmpint (check1.hits, == , 2);
+    g_assert_cmpint (check2.hits, == , 2);
 
     g_log_remove_handler (logdomain, hdlr1);
     g_object_unref (inst);
@@ -593,20 +598,20 @@ test_gnc_sql_convert_timespec_to_string ()
         nullptr, nullptr, FALSE, FALSE, FALSE, 0, 0, nullptr,
         "%4d-%02d-%02d %02d:%02d:%02d"
     };
-    const char *date[numtests] = {"1995-03-11 19:17:26",
+    const char* date[numtests] = {"1995-03-11 19:17:26",
                                   "2001-04-20 11:44:07",
                                   "1964-02-29 09:15:23",
                                   "1959-04-02 00:00:00",
                                   "2043-11-22 05:32:45",
                                   "2153-12-18 01:15:30"
-    };
+                                 };
     int i;
     for (i = 0; i < numtests; i++)
     {
 
         Timespec ts = gnc_iso8601_to_timespec_gmt (date[i]);
-        gchar *datestr = gnc_sql_convert_timespec_to_string (&be, ts);
-        g_assert_cmpstr (date[i], ==, datestr);
+        gchar* datestr = gnc_sql_convert_timespec_to_string (&be, ts);
+        g_assert_cmpstr (date[i], == , datestr);
 
         g_free (datestr);
     }
@@ -1003,7 +1008,8 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "add gvalue guid to slist", Fixture, nullptr, test_add_gvalue_guid_to_slist,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_gvalue_objectref_guid_to_slist,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, nullptr, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
-    GNC_TEST_ADD_FUNC (suitename, "gnc sql convert timespec to string", test_gnc_sql_convert_timespec_to_string);
+    GNC_TEST_ADD_FUNC (suitename, "gnc sql convert timespec to string",
+                       test_gnc_sql_convert_timespec_to_string);
 // GNC_TEST_ADD (suitename, "load timespec", Fixture, nullptr, test_load_timespec,  teardown);
 // GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, nullptr, test_add_timespec_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add gvalue timespec to slist", Fixture, nullptr, test_add_gvalue_timespec_to_slist,  teardown);

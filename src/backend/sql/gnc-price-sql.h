@@ -29,6 +29,6 @@
 #ifndef GNC_PRICE_SQL_H
 #define GNC_PRICE_SQL_H
 
-void gnc_sql_init_price_handler( void );
+void gnc_sql_init_price_handler (void);
 
 #endif /* GNC_PRICE_SQL_H */

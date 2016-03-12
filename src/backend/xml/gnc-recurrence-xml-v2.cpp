@@ -44,7 +44,7 @@ extern "C"
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *recurrence_version_string = "1.0.0";
+const gchar* recurrence_version_string = "1.0.0";
 #define recurrence_root          "gnc:recurrence"
 #define recurrence_mult          "recurrence:mult"
 #define recurrence_period_type   "recurrence:period_type"
@@ -54,49 +54,49 @@ const gchar *recurrence_version_string = "1.0.0";
 //TODO: I think three of these functions rightly belong in Recurrence.c.
 
 static gboolean
-recurrence_period_type_handler(xmlNodePtr node, gpointer d)
+recurrence_period_type_handler (xmlNodePtr node, gpointer d)
 {
     PeriodType pt;
-    char *nodeTxt;
+    char* nodeTxt;
 
-    nodeTxt = dom_tree_to_text(node);
-    g_return_val_if_fail(nodeTxt, FALSE);
-    pt = recurrencePeriodTypeFromString(nodeTxt);
-    ((Recurrence *) d)->ptype = pt;
-    g_free(nodeTxt);
+    nodeTxt = dom_tree_to_text (node);
+    g_return_val_if_fail (nodeTxt, FALSE);
+    pt = recurrencePeriodTypeFromString (nodeTxt);
+    ((Recurrence*) d)->ptype = pt;
+    g_free (nodeTxt);
     return (pt != -1);
 }
 
 static gboolean
-recurrence_start_date_handler(xmlNodePtr node, gpointer r)
+recurrence_start_date_handler (xmlNodePtr node, gpointer r)
 {
-    GDate *d;
+    GDate* d;
 
-    d = dom_tree_to_gdate(node);
-    g_return_val_if_fail(d, FALSE);
-    g_return_val_if_fail(g_date_valid(d), FALSE);
-    ((Recurrence *) r)->start = *d;
-    g_date_free(d);
+    d = dom_tree_to_gdate (node);
+    g_return_val_if_fail (d, FALSE);
+    g_return_val_if_fail (g_date_valid (d), FALSE);
+    ((Recurrence*) r)->start = *d;
+    g_date_free (d);
     return TRUE;
 }
 
 static gboolean
-recurrence_mult_handler(xmlNodePtr node, gpointer r)
+recurrence_mult_handler (xmlNodePtr node, gpointer r)
 {
-    return dom_tree_to_guint16(node, &((Recurrence *)r)->mult);
+    return dom_tree_to_guint16 (node, & ((Recurrence*)r)->mult);
 }
 
 static gboolean
-recurrence_weekend_adj_handler(xmlNodePtr node, gpointer d)
+recurrence_weekend_adj_handler (xmlNodePtr node, gpointer d)
 {
     WeekendAdjust wadj;
-    char *nodeTxt;
+    char* nodeTxt;
 
-    nodeTxt = dom_tree_to_text(node);
-    g_return_val_if_fail(nodeTxt, FALSE);
-    wadj = recurrenceWeekendAdjustFromString(nodeTxt);
-    ((Recurrence *) d)->wadj = wadj;
-    g_free(nodeTxt);
+    nodeTxt = dom_tree_to_text (node);
+    g_return_val_if_fail (nodeTxt, FALSE);
+    wadj = recurrenceWeekendAdjustFromString (nodeTxt);
+    ((Recurrence*) d)->wadj = wadj;
+    g_free (nodeTxt);
     return (wadj != -1);
 }
 
@@ -110,43 +110,43 @@ static struct dom_tree_handler recurrence_dom_handlers[] =
 };
 
 Recurrence*
-dom_tree_to_recurrence(xmlNodePtr node)
+dom_tree_to_recurrence (xmlNodePtr node)
 {
     gboolean successful;
-    Recurrence *r;
+    Recurrence* r;
 
-    r = g_new(Recurrence, 1);
+    r = g_new (Recurrence, 1);
     /* In case the file doesn't have a weekend adjustment element */
     r->wadj = WEEKEND_ADJ_NONE;
     successful = dom_tree_generic_parse (node, recurrence_dom_handlers, r);
     if (!successful)
     {
         PERR ("failed to parse recurrence node");
-        xmlElemDump(stdout, NULL, node);
-        g_free(r);
+        xmlElemDump (stdout, NULL, node);
+        g_free (r);
         r = NULL;
     }
     return r;
 }
 
 xmlNodePtr
-recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
+recurrence_to_dom_tree (const gchar* tag, const Recurrence* r)
 {
     xmlNodePtr n;
     PeriodType pt;
     GDate d;
     WeekendAdjust wadj;
 
-    n = xmlNewNode(NULL, BAD_CAST tag);
-    xmlSetProp(n, BAD_CAST "version", BAD_CAST recurrence_version_string);
-    xmlAddChild(n, guint_to_dom_tree(recurrence_mult,
-                                     recurrenceGetMultiplier(r)));
-    pt = recurrenceGetPeriodType(r);
-    xmlAddChild(n, text_to_dom_tree(recurrence_period_type,
-                                    recurrencePeriodTypeToString(pt)));
-    d = recurrenceGetDate(r);
-    xmlAddChild(n, gdate_to_dom_tree(recurrence_start, &d));
-    wadj = recurrenceGetWeekendAdjust(r);
+    n = xmlNewNode (NULL, BAD_CAST tag);
+    xmlSetProp (n, BAD_CAST "version", BAD_CAST recurrence_version_string);
+    xmlAddChild (n, guint_to_dom_tree (recurrence_mult,
+                                       recurrenceGetMultiplier (r)));
+    pt = recurrenceGetPeriodType (r);
+    xmlAddChild (n, text_to_dom_tree (recurrence_period_type,
+                                      recurrencePeriodTypeToString (pt)));
+    d = recurrenceGetDate (r);
+    xmlAddChild (n, gdate_to_dom_tree (recurrence_start, &d));
+    wadj = recurrenceGetWeekendAdjust (r);
     if (wadj != WEEKEND_ADJ_NONE)
     {
         /* In r17725 and r17751, I introduced this extra XML child
@@ -155,8 +155,8 @@ recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
         to improve this broken backward compatibility for most of the
         cases, we don't write out this XML element as long as it is
         only "none". */
-        xmlAddChild(n, text_to_dom_tree(recurrence_weekend_adj,
-                                        recurrenceWeekendAdjustToString(wadj)));
+        xmlAddChild (n, text_to_dom_tree (recurrence_weekend_adj,
+                                          recurrenceWeekendAdjustToString (wadj)));
     }
     return n;
 }

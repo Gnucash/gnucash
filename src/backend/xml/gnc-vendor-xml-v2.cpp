@@ -50,11 +50,11 @@ extern "C"
 #include "xml-helpers.h"
 #include "gnc-bill-term-xml-v2.h"
 
-#define _GNC_MOD_NAME	GNC_ID_VENDOR
+#define _GNC_MOD_NAME   GNC_ID_VENDOR
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *vendor_version_string = "2.0.0";
+const gchar* vendor_version_string = "2.0.0";
 
 /* ids */
 #define gnc_vendor_string "gnc:GncVendor"
@@ -72,56 +72,56 @@ const gchar *vendor_version_string = "2.0.0";
 #define vendor_slots_string "vendor:slots"
 
 static xmlNodePtr
-vendor_dom_tree_create (GncVendor *vendor)
+vendor_dom_tree_create (GncVendor* vendor)
 {
     xmlNodePtr ret;
-    GncBillTerm *term;
-    GncTaxTable *taxtable;
+    GncBillTerm* term;
+    GncTaxTable* taxtable;
 
-    ret = xmlNewNode(NULL, BAD_CAST gnc_vendor_string);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST vendor_version_string);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_vendor_string);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST vendor_version_string);
 
-    xmlAddChild(ret, guid_to_dom_tree(vendor_guid_string,
-                                      qof_instance_get_guid (QOF_INSTANCE(vendor))));
+    xmlAddChild (ret, guid_to_dom_tree (vendor_guid_string,
+                                        qof_instance_get_guid (QOF_INSTANCE (vendor))));
 
-    xmlAddChild(ret, text_to_dom_tree(vendor_name_string,
-                                      gncVendorGetName (vendor)));
+    xmlAddChild (ret, text_to_dom_tree (vendor_name_string,
+                                        gncVendorGetName (vendor)));
 
-    xmlAddChild(ret, text_to_dom_tree(vendor_id_string,
-                                      gncVendorGetID (vendor)));
+    xmlAddChild (ret, text_to_dom_tree (vendor_id_string,
+                                        gncVendorGetID (vendor)));
 
-    xmlAddChild(ret, gnc_address_to_dom_tree(vendor_addr_string,
-                gncVendorGetAddr (vendor)));
+    xmlAddChild (ret, gnc_address_to_dom_tree (vendor_addr_string,
+                                               gncVendorGetAddr (vendor)));
 
     maybe_add_string (ret, vendor_notes_string, gncVendorGetNotes (vendor));
 
     term = gncVendorGetTerms (vendor);
     if (term)
-        xmlAddChild(ret, guid_to_dom_tree(vendor_terms_string,
-                                          qof_instance_get_guid(QOF_INSTANCE(term))));
+        xmlAddChild (ret, guid_to_dom_tree (vendor_terms_string,
+                                            qof_instance_get_guid (QOF_INSTANCE (term))));
 
-    xmlAddChild(ret, text_to_dom_tree(vendor_taxincluded_string,
-                                      gncTaxIncludedTypeToString (
-                                          gncVendorGetTaxIncluded (vendor))));
+    xmlAddChild (ret, text_to_dom_tree (vendor_taxincluded_string,
+                                        gncTaxIncludedTypeToString (
+                                            gncVendorGetTaxIncluded (vendor))));
 
-    xmlAddChild(ret, int_to_dom_tree(vendor_active_string,
-                                     gncVendorGetActive (vendor)));
+    xmlAddChild (ret, int_to_dom_tree (vendor_active_string,
+                                       gncVendorGetActive (vendor)));
 
     xmlAddChild
     (ret,
-     commodity_ref_to_dom_tree(vendor_currency_string,
-                               gncVendorGetCurrency (vendor)));
+     commodity_ref_to_dom_tree (vendor_currency_string,
+                                gncVendorGetCurrency (vendor)));
 
     xmlAddChild (ret, int_to_dom_tree (vendor_taxtableoverride_string,
                                        gncVendorGetTaxTableOverride (vendor)));
     taxtable = gncVendorGetTaxTable (vendor);
     if (taxtable)
         xmlAddChild (ret, guid_to_dom_tree (vendor_taxtable_string,
-                                            qof_instance_get_guid(QOF_INSTANCE(taxtable))));
+                                            qof_instance_get_guid (QOF_INSTANCE (taxtable))));
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree(vendor_slots_string,
-                                                    QOF_INSTANCE(vendor)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree (vendor_slots_string,
+                                                      QOF_INSTANCE (vendor)));
     return ret;
 }
 
@@ -129,34 +129,34 @@ vendor_dom_tree_create (GncVendor *vendor)
 
 struct vendor_pdata
 {
-    GncVendor *vendor;
-    QofBook *book;
+    GncVendor* vendor;
+    QofBook* book;
 };
 
 static gboolean
-set_string(xmlNodePtr node, GncVendor* vendor,
-           void (*func)(GncVendor *vendor, const char *txt))
+set_string (xmlNodePtr node, GncVendor* vendor,
+            void (*func) (GncVendor* vendor, const char* txt))
 {
-    char* txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
+    char* txt = dom_tree_to_text (node);
+    g_return_val_if_fail (txt, FALSE);
 
-    func(vendor, txt);
+    func (vendor, txt);
 
-    g_free(txt);
+    g_free (txt);
 
     return TRUE;
 }
 
 static gboolean
-set_boolean(xmlNodePtr node, GncVendor* vendor,
-            void (*func)(GncVendor* vendor, gboolean b))
+set_boolean (xmlNodePtr node, GncVendor* vendor,
+             void (*func) (GncVendor* vendor, gboolean b))
 {
     gint64 val;
     gboolean ret;
 
-    ret = dom_tree_to_integer(node, &val);
+    ret = dom_tree_to_integer (node, &val);
     if (ret)
-        func(vendor, (gboolean)val);
+        func (vendor, (gboolean)val);
 
     return ret;
 }
@@ -164,20 +164,20 @@ set_boolean(xmlNodePtr node, GncVendor* vendor,
 static gboolean
 vendor_name_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
-    return set_string(node, pdata->vendor, gncVendorSetName);
+    return set_string (node, pdata->vendor, gncVendorSetName);
 }
 
 static gboolean
 vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
-    GncGUID *guid;
-    GncVendor *vendor;
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
+    GncGUID* guid;
+    GncVendor* vendor;
 
-    guid = dom_tree_to_guid(node);
-    g_return_val_if_fail(guid, FALSE);
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
     vendor = gncVendorLookup (pdata->book, guid);
     if (vendor)
     {
@@ -187,10 +187,10 @@ vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
     }
     else
     {
-        gncVendorSetGUID(pdata->vendor, guid);
+        gncVendorSetGUID (pdata->vendor, guid);
     }
 
-    g_free(guid);
+    g_free (guid);
 
     return TRUE;
 }
@@ -198,30 +198,30 @@ vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
 static gboolean
 vendor_id_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
-    return set_string(node, pdata->vendor, gncVendorSetID);
+    return set_string (node, pdata->vendor, gncVendorSetID);
 }
 
 static gboolean
 vendor_notes_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
-    return set_string(node, pdata->vendor, gncVendorSetNotes);
+    return set_string (node, pdata->vendor, gncVendorSetNotes);
 }
 
 static gboolean
 vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
-    GncGUID *guid;
-    GncBillTerm *term;
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
+    GncGUID* guid;
+    GncBillTerm* term;
 
-    guid = dom_tree_to_guid(node);
+    guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
-    term = gnc_billterm_xml_find_or_create(pdata->book, guid);
-    g_assert(term);
+    term = gnc_billterm_xml_find_or_create (pdata->book, guid);
+    g_assert (term);
     g_free (guid);
     gncVendorSetTerms (pdata->vendor, term);
 
@@ -231,17 +231,17 @@ vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
 static gboolean
 vendor_addr_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
 
-    return gnc_dom_tree_to_address (node, gncVendorGetAddr(pdata->vendor));
+    return gnc_dom_tree_to_address (node, gncVendorGetAddr (pdata->vendor));
 }
 
 static gboolean
 vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     GncTaxIncluded type;
-    char *str;
+    char* str;
     gboolean ret;
 
     str = dom_tree_to_text (node);
@@ -251,7 +251,7 @@ vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
     g_free (str);
 
     if (ret)
-        gncVendorSetTaxIncluded(pdata->vendor, type);
+        gncVendorSetTaxIncluded (pdata->vendor, type);
 
     return ret;
 }
@@ -259,17 +259,17 @@ vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
 static gboolean
 vendor_active_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     return set_boolean (node, pdata->vendor, gncVendorSetActive);
 }
 
 static gboolean
 vendor_currency_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
-    gnc_commodity *com;
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
+    gnc_commodity* com;
 
-    com = dom_tree_to_commodity_ref(node, pdata->book);
+    com = dom_tree_to_commodity_ref (node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
     gncVendorSetCurrency (pdata->vendor, com);
@@ -280,9 +280,9 @@ vendor_currency_handler (xmlNodePtr node, gpointer vendor_pdata)
 static gboolean
 vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
-    GncGUID *guid;
-    GncTaxTable *taxtable;
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
+    GncGUID* guid;
+    GncTaxTable* taxtable;
 
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
@@ -298,22 +298,22 @@ vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
         gncTaxTableDecRef (taxtable);
 
     gncVendorSetTaxTable (pdata->vendor, taxtable);
-    g_free(guid);
+    g_free (guid);
     return TRUE;
 }
 
 static gboolean
 vendor_taxtableoverride_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
     return set_boolean (node, pdata->vendor, gncVendorSetTaxTableOverride);
 }
 
 static gboolean
 vendor_slots_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
-    struct vendor_pdata *pdata = static_cast<decltype(pdata)>(vendor_pdata);
-    return dom_tree_create_instance_slots(node, QOF_INSTANCE(pdata->vendor));
+    struct vendor_pdata* pdata = static_cast<decltype (pdata)> (vendor_pdata);
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->vendor));
 
 }
 
@@ -336,12 +336,12 @@ static struct dom_tree_handler vendor_handlers_v2[] =
 };
 
 static GncVendor*
-dom_tree_to_vendor (xmlNodePtr node, QofBook *book)
+dom_tree_to_vendor (xmlNodePtr node, QofBook* book)
 {
     struct vendor_pdata vendor_pdata;
     gboolean successful;
 
-    vendor_pdata.vendor = gncVendorCreate(book);
+    vendor_pdata.vendor = gncVendorCreate (book);
     vendor_pdata.book = book;
     gncVendorBeginEdit (vendor_pdata.vendor);
 
@@ -361,15 +361,15 @@ dom_tree_to_vendor (xmlNodePtr node, QofBook *book)
 }
 
 static gboolean
-gnc_vendor_end_handler(gpointer data_for_children,
-                       GSList* data_from_children, GSList* sibling_data,
-                       gpointer parent_data, gpointer global_data,
-                       gpointer *result, const gchar *tag)
+gnc_vendor_end_handler (gpointer data_for_children,
+                        GSList* data_from_children, GSList* sibling_data,
+                        gpointer parent_data, gpointer global_data,
+                        gpointer* result, const gchar* tag)
 {
-    GncVendor *vendor;
+    GncVendor* vendor;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    QofBook *book = static_cast<decltype(book)>(gdata->bookdata);
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
     if (parent_data)
     {
@@ -383,29 +383,29 @@ gnc_vendor_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
-    vendor = dom_tree_to_vendor(tree, book);
+    vendor = dom_tree_to_vendor (tree, book);
     if (vendor != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, vendor);
+        gdata->cb (tag, gdata->parsedata, vendor);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return vendor != NULL;
 }
 
-static sixtp *
-vendor_sixtp_parser_create(void)
+static sixtp*
+vendor_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_vendor_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_vendor_end_handler, NULL, NULL);
 }
 
 static gboolean
-vendor_should_be_saved (GncVendor *vendor)
+vendor_should_be_saved (GncVendor* vendor)
 {
-    const char *id;
+    const char* id;
 
     /* make sure this is a valid vendor before we save it -- should have an ID */
     id = gncVendorGetID (vendor);
@@ -416,15 +416,15 @@ vendor_should_be_saved (GncVendor *vendor)
 }
 
 static void
-do_count (QofInstance * vendor_p, gpointer count_p)
+do_count (QofInstance* vendor_p, gpointer count_p)
 {
-    int *count = static_cast<decltype(count)>(count_p);
-    if (vendor_should_be_saved ((GncVendor *)vendor_p))
+    int* count = static_cast<decltype (count)> (count_p);
+    if (vendor_should_be_saved ((GncVendor*)vendor_p))
         (*count)++;
 }
 
 static int
-vendor_get_count (QofBook *book)
+vendor_get_count (QofBook* book)
 {
     int count = 0;
     qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -432,36 +432,37 @@ vendor_get_count (QofBook *book)
 }
 
 static void
-xml_add_vendor (QofInstance * vendor_p, gpointer out_p)
+xml_add_vendor (QofInstance* vendor_p, gpointer out_p)
 {
     xmlNodePtr node;
-    GncVendor *vendor = (GncVendor *) vendor_p;
-    FILE *out = static_cast<decltype(out)>(out_p);
+    GncVendor* vendor = (GncVendor*) vendor_p;
+    FILE* out = static_cast<decltype (out)> (out_p);
 
-    if (ferror(out))
+    if (ferror (out))
         return;
     if (!vendor_should_be_saved (vendor))
         return;
 
     node = vendor_dom_tree_create (vendor);
-    xmlElemDump(out, NULL, node);
+    xmlElemDump (out, NULL, node);
     xmlFreeNode (node);
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    if (ferror (out) || fprintf (out, "\n") < 0)
         return;
 }
 
 static gboolean
-vendor_write (FILE *out, QofBook *book)
+vendor_write (FILE* out, QofBook* book)
 {
-    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
-    return ferror(out) == 0;
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_vendor,
+                               (gpointer) out);
+    return ferror (out) == 0;
 }
 
 static gboolean
-vendor_ns(FILE *out)
+vendor_ns (FILE* out)
 {
-    g_return_val_if_fail(out, FALSE);
-    return gnc_xml2_write_namespace_decl(out, "vendor");
+    g_return_val_if_fail (out, FALSE);
+    return gnc_xml2_write_namespace_decl (out, "vendor");
 }
 
 void
@@ -472,10 +473,10 @@ gnc_vendor_xml_initialize (void)
         GNC_FILE_BACKEND_VERS,
         gnc_vendor_string,
         vendor_sixtp_parser_create,
-        NULL,			/* add_item */
+        NULL,           /* add_item */
         vendor_get_count,
         vendor_write,
-        NULL,			/* scrub */
+        NULL,           /* scrub */
         vendor_ns,
     };
 

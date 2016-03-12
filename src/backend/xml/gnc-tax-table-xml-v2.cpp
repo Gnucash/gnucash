@@ -46,11 +46,11 @@ extern "C"
 
 #include "gnc-tax-table-xml-v2.h"
 
-#define _GNC_MOD_NAME	GNC_ID_TAXTABLE
+#define _GNC_MOD_NAME   GNC_ID_TAXTABLE
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-const gchar *taxtable_version_string = "2.0.0";
+const gchar* taxtable_version_string = "2.0.0";
 
 /* ids */
 #define gnc_taxtable_string "gnc:GncTaxTable"
@@ -69,71 +69,71 @@ const gchar *taxtable_version_string = "2.0.0";
 #define ttentry_amount_string "tte:amount"
 
 static void
-maybe_add_guid (xmlNodePtr ptr, const char *tag, GncTaxTable *table)
+maybe_add_guid (xmlNodePtr ptr, const char* tag, GncTaxTable* table)
 {
     if (table)
         xmlAddChild (ptr, guid_to_dom_tree (tag,
-                                            qof_instance_get_guid(QOF_INSTANCE(table))));
+                                            qof_instance_get_guid (QOF_INSTANCE (table))));
 }
 
 static xmlNodePtr
-ttentry_dom_tree_create (GncTaxTableEntry *entry)
+ttentry_dom_tree_create (GncTaxTableEntry* entry)
 {
     xmlNodePtr ret;
-    Account *account;
+    Account* account;
     gnc_numeric amount;
 
-    ret = xmlNewNode(NULL, BAD_CAST gnc_taxtableentry_string);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_taxtableentry_string);
 
     account = gncTaxTableEntryGetAccount (entry);
     if (account)
-        xmlAddChild(ret, guid_to_dom_tree (ttentry_account_string,
-                                           qof_instance_get_guid (QOF_INSTANCE(account))));
+        xmlAddChild (ret, guid_to_dom_tree (ttentry_account_string,
+                                            qof_instance_get_guid (QOF_INSTANCE (account))));
 
     amount = gncTaxTableEntryGetAmount (entry);
     xmlAddChild (ret, gnc_numeric_to_dom_tree (ttentry_amount_string, &amount));
 
-    xmlAddChild(ret, text_to_dom_tree (ttentry_type_string,
-                                       gncAmountTypeToString (
-                                           gncTaxTableEntryGetType (entry))));
+    xmlAddChild (ret, text_to_dom_tree (ttentry_type_string,
+                                        gncAmountTypeToString (
+                                            gncTaxTableEntryGetType (entry))));
 
     return ret;
 }
 
 static xmlNodePtr
-taxtable_dom_tree_create (GncTaxTable *table)
+taxtable_dom_tree_create (GncTaxTable* table)
 {
     xmlNodePtr ret, entries;
-    GList *list;
+    GList* list;
 
-    ret = xmlNewNode(NULL, BAD_CAST gnc_taxtable_string);
-    xmlSetProp(ret, BAD_CAST "version", BAD_CAST taxtable_version_string);
+    ret = xmlNewNode (NULL, BAD_CAST gnc_taxtable_string);
+    xmlSetProp (ret, BAD_CAST "version", BAD_CAST taxtable_version_string);
 
-    maybe_add_guid(ret, taxtable_guid_string, table);
-    xmlAddChild(ret, text_to_dom_tree (taxtable_name_string,
-                                       gncTaxTableGetName (table)));
+    maybe_add_guid (ret, taxtable_guid_string, table);
+    xmlAddChild (ret, text_to_dom_tree (taxtable_name_string,
+                                        gncTaxTableGetName (table)));
 
-    xmlAddChild(ret, int_to_dom_tree (taxtable_refcount_string,
-                                      gncTaxTableGetRefcount (table)));
-    xmlAddChild(ret, int_to_dom_tree (taxtable_invisible_string,
-                                      gncTaxTableGetInvisible (table)));
+    xmlAddChild (ret, int_to_dom_tree (taxtable_refcount_string,
+                                       gncTaxTableGetRefcount (table)));
+    xmlAddChild (ret, int_to_dom_tree (taxtable_invisible_string,
+                                       gncTaxTableGetInvisible (table)));
 
     /* We should not be our own child */
-    if (gncTaxTableGetChild(table) != table)
-        maybe_add_guid(ret, taxtable_child_string, gncTaxTableGetChild (table));
+    if (gncTaxTableGetChild (table) != table)
+        maybe_add_guid (ret, taxtable_child_string, gncTaxTableGetChild (table));
 
-    maybe_add_guid(ret, taxtable_parent_string, gncTaxTableGetParent (table));
+    maybe_add_guid (ret, taxtable_parent_string, gncTaxTableGetParent (table));
 
     entries = xmlNewChild (ret, NULL, BAD_CAST taxtable_entries_string, NULL);
     for (list = gncTaxTableGetEntries (table); list; list = list->next)
     {
-        GncTaxTableEntry *entry = static_cast<decltype(entry)>(list->data);
-        xmlAddChild(entries, ttentry_dom_tree_create (entry));
+        GncTaxTableEntry* entry = static_cast<decltype (entry)> (list->data);
+        xmlAddChild (entries, ttentry_dom_tree_create (entry));
     }
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
-    xmlAddChild(ret, qof_instance_slots_to_dom_tree(taxtable_slots_string,
-                                                    QOF_INSTANCE(table)));
+    xmlAddChild (ret, qof_instance_slots_to_dom_tree (taxtable_slots_string,
+                                                      QOF_INSTANCE (table)));
     return ret;
 }
 
@@ -141,16 +141,16 @@ taxtable_dom_tree_create (GncTaxTable *table)
 
 struct ttentry_pdata
 {
-    GncTaxTableEntry *ttentry;
-    QofBook *book;
+    GncTaxTableEntry* ttentry;
+    QofBook* book;
 };
 
 static gboolean
 ttentry_acct_handler (xmlNodePtr node, gpointer ttentry_pdata)
 {
-    struct ttentry_pdata *pdata = static_cast<decltype(pdata)>(ttentry_pdata);
-    GncGUID *guid;
-    Account * acc;
+    struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
+    GncGUID* guid;
+    Account* acc;
 
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
@@ -165,9 +165,9 @@ ttentry_acct_handler (xmlNodePtr node, gpointer ttentry_pdata)
 static gboolean
 ttentry_type_handler (xmlNodePtr node, gpointer ttentry_pdata)
 {
-    struct ttentry_pdata *pdata = static_cast<decltype(pdata)>(ttentry_pdata);
+    struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
     GncAmountType type;
-    char *str;
+    char* str;
     gboolean ret;
 
     str = dom_tree_to_text (node);
@@ -185,12 +185,12 @@ ttentry_type_handler (xmlNodePtr node, gpointer ttentry_pdata)
 static gboolean
 ttentry_amount_handler (xmlNodePtr node, gpointer ttentry_pdata)
 {
-    struct ttentry_pdata *pdata = static_cast<decltype(pdata)>(ttentry_pdata);
-    gnc_numeric* num = dom_tree_to_gnc_numeric(node);
-    g_return_val_if_fail(num, FALSE);
+    struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
+    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
+    g_return_val_if_fail (num, FALSE);
 
     gncTaxTableEntrySetAmount (pdata->ttentry, *num);
-    g_free(num);
+    g_free (num);
     return TRUE;
 }
 
@@ -203,7 +203,7 @@ static struct dom_tree_handler ttentry_handlers_v2[] =
 };
 
 static GncTaxTableEntry*
-dom_tree_to_ttentry (xmlNodePtr node, QofBook *book)
+dom_tree_to_ttentry (xmlNodePtr node, QofBook* book)
 {
     struct ttentry_pdata ttentry_pdata;
     gboolean successful;
@@ -228,18 +228,18 @@ dom_tree_to_ttentry (xmlNodePtr node, QofBook *book)
 
 struct taxtable_pdata
 {
-    GncTaxTable *table;
-    QofBook *book;
+    GncTaxTable* table;
+    QofBook* book;
 };
 
 static gboolean
-set_parent_child (xmlNodePtr node, struct taxtable_pdata *pdata,
-                  void (*func)(GncTaxTable *, GncTaxTable *))
+set_parent_child (xmlNodePtr node, struct taxtable_pdata* pdata,
+                  void (*func) (GncTaxTable*, GncTaxTable*))
 {
-    GncGUID *guid;
-    GncTaxTable *table;
+    GncGUID* guid;
+    GncTaxTable* table;
 
-    guid = dom_tree_to_guid(node);
+    guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     table = gncTaxTableLookup (pdata->book, guid);
 
@@ -267,11 +267,11 @@ set_parent_child (xmlNodePtr node, struct taxtable_pdata *pdata,
 static gboolean
 taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
-    GncGUID *guid;
-    GncTaxTable *table;
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
+    GncGUID* guid;
+    GncTaxTable* table;
 
-    guid = dom_tree_to_guid(node);
+    guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     table = gncTaxTableLookup (pdata->book, guid);
     if (table)
@@ -282,10 +282,10 @@ taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
     }
     else
     {
-        gncTaxTableSetGUID(pdata->table, guid);
+        gncTaxTableSetGUID (pdata->table, guid);
     }
 
-    g_free(guid);
+    g_free (guid);
 
     return TRUE;
 }
@@ -293,22 +293,22 @@ taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
 static gboolean
 taxtable_name_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
-    char* txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
+    char* txt = dom_tree_to_text (node);
+    g_return_val_if_fail (txt, FALSE);
 
     gncTaxTableSetName (pdata->table, txt);
-    g_free(txt);
+    g_free (txt);
     return TRUE;
 }
 
 static gboolean
 taxtable_refcount_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     gint64 val;
 
-    dom_tree_to_integer(node, &val);
+    dom_tree_to_integer (node, &val);
     gncTaxTableSetRefcount (pdata->table, val);
     return TRUE;
 }
@@ -316,10 +316,10 @@ taxtable_refcount_handler (xmlNodePtr node, gpointer taxtable_pdata)
 static gboolean
 taxtable_invisible_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     gint64 val;
 
-    dom_tree_to_integer(node, &val);
+    dom_tree_to_integer (node, &val);
     if (val)
         gncTaxTableMakeInvisible (pdata->table);
     return TRUE;
@@ -328,21 +328,21 @@ taxtable_invisible_handler (xmlNodePtr node, gpointer taxtable_pdata)
 static gboolean
 taxtable_parent_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     return set_parent_child (node, pdata, gncTaxTableSetParent);
 }
 
 static gboolean
 taxtable_child_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     return set_parent_child (node, pdata, gncTaxTableSetChild);
 }
 
 static gboolean
 taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
     xmlNodePtr mark;
 
     g_return_val_if_fail (node, FALSE);
@@ -350,7 +350,7 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        GncTaxTableEntry *entry;
+        GncTaxTableEntry* entry;
 
         if (g_strcmp0 ("text", (char*)mark->name) == 0)
             continue;
@@ -372,9 +372,9 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
 static gboolean
 taxtable_slots_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
-    struct taxtable_pdata *pdata = static_cast<decltype(pdata)>(taxtable_pdata);
+    struct taxtable_pdata* pdata = static_cast<decltype (pdata)> (taxtable_pdata);
 
-    return dom_tree_create_instance_slots(node, QOF_INSTANCE (pdata->table));
+    return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->table));
 }
 
 static struct dom_tree_handler taxtable_handlers_v2[] =
@@ -391,7 +391,7 @@ static struct dom_tree_handler taxtable_handlers_v2[] =
 };
 
 static GncTaxTable*
-dom_tree_to_taxtable (xmlNodePtr node, QofBook *book)
+dom_tree_to_taxtable (xmlNodePtr node, QofBook* book)
 {
     struct taxtable_pdata taxtable_pdata;
     gboolean successful;
@@ -416,15 +416,15 @@ dom_tree_to_taxtable (xmlNodePtr node, QofBook *book)
 }
 
 static gboolean
-gnc_taxtable_end_handler(gpointer data_for_children,
-                         GSList* data_from_children, GSList* sibling_data,
-                         gpointer parent_data, gpointer global_data,
-                         gpointer *result, const gchar *tag)
+gnc_taxtable_end_handler (gpointer data_for_children,
+                          GSList* data_from_children, GSList* sibling_data,
+                          gpointer parent_data, gpointer global_data,
+                          gpointer* result, const gchar* tag)
 {
-    GncTaxTable *table;
+    GncTaxTable* table;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    gxpf_data *gdata = (gxpf_data*)global_data;
-    QofBook *book = static_cast<decltype(book)>(gdata->bookdata);
+    gxpf_data* gdata = (gxpf_data*)global_data;
+    QofBook* book = static_cast<decltype (book)> (gdata->bookdata);
 
     if (parent_data)
     {
@@ -438,34 +438,34 @@ gnc_taxtable_end_handler(gpointer data_for_children,
         return TRUE;
     }
 
-    g_return_val_if_fail(tree, FALSE);
+    g_return_val_if_fail (tree, FALSE);
 
     table = dom_tree_to_taxtable (tree, book);
     if (table != NULL)
     {
-        gdata->cb(tag, gdata->parsedata, table);
+        gdata->cb (tag, gdata->parsedata, table);
     }
 
-    xmlFreeNode(tree);
+    xmlFreeNode (tree);
 
     return table != NULL;
 }
 
-static sixtp *
-taxtable_sixtp_parser_create(void)
+static sixtp*
+taxtable_sixtp_parser_create (void)
 {
-    return sixtp_dom_parser_new(gnc_taxtable_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new (gnc_taxtable_end_handler, NULL, NULL);
 }
 
 static void
-do_count (QofInstance * table_p, gpointer count_p)
+do_count (QofInstance* table_p, gpointer count_p)
 {
-    int *count = static_cast<decltype(count)>(count_p);
+    int* count = static_cast<decltype (count)> (count_p);
     (*count)++;
 }
 
 static int
-taxtable_get_count (QofBook *book)
+taxtable_get_count (QofBook* book)
 {
     int count = 0;
     qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -473,49 +473,50 @@ taxtable_get_count (QofBook *book)
 }
 
 static void
-xml_add_taxtable (QofInstance * table_p, gpointer out_p)
+xml_add_taxtable (QofInstance* table_p, gpointer out_p)
 {
     xmlNodePtr node;
-    GncTaxTable *table = (GncTaxTable *) table_p;
-    FILE *out = static_cast<decltype(out)>(out_p);
+    GncTaxTable* table = (GncTaxTable*) table_p;
+    FILE* out = static_cast<decltype (out)> (out_p);
 
-    if (ferror(out))
+    if (ferror (out))
         return;
 
     node = taxtable_dom_tree_create (table);
-    xmlElemDump(out, NULL, node);
+    xmlElemDump (out, NULL, node);
     xmlFreeNode (node);
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    if (ferror (out) || fprintf (out, "\n") < 0)
         return;
 }
 
 static gboolean
-taxtable_write (FILE *out, QofBook *book)
+taxtable_write (FILE* out, QofBook* book)
 {
-    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
-    return ferror(out) == 0;
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_taxtable,
+                               (gpointer) out);
+    return ferror (out) == 0;
 }
 
 
 static gboolean
-taxtable_is_grandchild (GncTaxTable *table)
+taxtable_is_grandchild (GncTaxTable* table)
 {
-    return (gncTaxTableGetParent(gncTaxTableGetParent(table)) != NULL);
+    return (gncTaxTableGetParent (gncTaxTableGetParent (table)) != NULL);
 }
 
-static GncTaxTable *
-taxtable_find_senior (GncTaxTable *table)
+static GncTaxTable*
+taxtable_find_senior (GncTaxTable* table)
 {
-    GncTaxTable *temp, *parent, *gp = NULL;
+    GncTaxTable* temp, *parent, *gp = NULL;
 
     temp = table;
     do
     {
         /* See if "temp" is a grandchild */
-        parent = gncTaxTableGetParent(temp);
+        parent = gncTaxTableGetParent (temp);
         if (!parent)
             break;
-        gp = gncTaxTableGetParent(parent);
+        gp = gncTaxTableGetParent (parent);
         if (!gp)
             break;
 
@@ -540,128 +541,129 @@ taxtable_find_senior (GncTaxTable *table)
 
 /* build a list of tax tables that are grandchildren or bogus (empty entry list). */
 static void
-taxtable_scrub_cb (QofInstance * table_p, gpointer list_p)
+taxtable_scrub_cb (QofInstance* table_p, gpointer list_p)
 {
-    GncTaxTable *table = GNC_TAXTABLE(table_p);
-    GList **list = static_cast<decltype(list)>(list_p);
+    GncTaxTable* table = GNC_TAXTABLE (table_p);
+    GList** list = static_cast<decltype (list)> (list_p);
 
-    if (taxtable_is_grandchild(table) || gncTaxTableGetEntries(table) == NULL)
-        *list = g_list_prepend(*list, table);
+    if (taxtable_is_grandchild (table) || gncTaxTableGetEntries (table) == NULL)
+        *list = g_list_prepend (*list, table);
 }
 
 /* for each entry, check the tax tables.  If the tax tables are
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-taxtable_scrub_entries (QofInstance * entry_p, gpointer ht_p)
+taxtable_scrub_entries (QofInstance* entry_p, gpointer ht_p)
 {
-    GHashTable *ht = static_cast<decltype(ht)>(ht_p);
-    GncEntry *entry = GNC_ENTRY(entry_p);
-    GncTaxTable *table, *new_tt;
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncEntry* entry = GNC_ENTRY (entry_p);
+    GncTaxTable* table, *new_tt;
     gint32 count;
 
-    table = gncEntryGetInvTaxTable(entry);
+    table = gncEntryGetInvTaxTable (entry);
     if (table)
     {
-        if (taxtable_is_grandchild(table))
+        if (taxtable_is_grandchild (table))
         {
-            gchar guidstr[GUID_ENCODING_LENGTH+1];
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(entry)),guidstr);
-            PINFO("Fixing i-taxtable on entry %s\n",guidstr);
-            new_tt = taxtable_find_senior(table);
-            gncEntryBeginEdit(entry);
-            gncEntrySetInvTaxTable(entry, new_tt);
-            gncEntryCommitEdit(entry);
+            gchar guidstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (entry)), guidstr);
+            PINFO ("Fixing i-taxtable on entry %s\n", guidstr);
+            new_tt = taxtable_find_senior (table);
+            gncEntryBeginEdit (entry);
+            gncEntrySetInvTaxTable (entry, new_tt);
+            gncEntryCommitEdit (entry);
             table = new_tt;
         }
         if (table)
         {
-            count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+            count = GPOINTER_TO_INT (g_hash_table_lookup (ht, table));
             count++;
-            g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+            g_hash_table_insert (ht, table, GINT_TO_POINTER (count));
         }
     }
 
-    table = gncEntryGetBillTaxTable(entry);
+    table = gncEntryGetBillTaxTable (entry);
     if (table)
     {
-        if (taxtable_is_grandchild(table))
+        if (taxtable_is_grandchild (table))
         {
-            gchar guidstr[GUID_ENCODING_LENGTH+1];
-            guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(entry)),guidstr);
-            PINFO("Fixing b-taxtable on entry %s\n",guidstr);
-            new_tt = taxtable_find_senior(table);
-            gncEntryBeginEdit(entry);
-            gncEntrySetBillTaxTable(entry, new_tt);
-            gncEntryCommitEdit(entry);
+            gchar guidstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (entry)), guidstr);
+            PINFO ("Fixing b-taxtable on entry %s\n", guidstr);
+            new_tt = taxtable_find_senior (table);
+            gncEntryBeginEdit (entry);
+            gncEntrySetBillTaxTable (entry, new_tt);
+            gncEntryCommitEdit (entry);
             table = new_tt;
         }
         if (table)
         {
-            count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+            count = GPOINTER_TO_INT (g_hash_table_lookup (ht, table));
             count++;
-            g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+            g_hash_table_insert (ht, table, GINT_TO_POINTER (count));
         }
     }
 }
 
 static void
-taxtable_scrub_cust (QofInstance * cust_p, gpointer ht_p)
+taxtable_scrub_cust (QofInstance* cust_p, gpointer ht_p)
 {
-    GHashTable *ht = static_cast<decltype(ht)>(ht_p);
-    GncCustomer *cust = GNC_CUSTOMER(cust_p);
-    GncTaxTable *table;
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncCustomer* cust = GNC_CUSTOMER (cust_p);
+    GncTaxTable* table;
     gint32 count;
 
-    table = gncCustomerGetTaxTable(cust);
+    table = gncCustomerGetTaxTable (cust);
     if (table)
     {
-        count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, table));
         count++;
-        g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+        g_hash_table_insert (ht, table, GINT_TO_POINTER (count));
     }
 }
 
 static void
-taxtable_scrub_vendor (QofInstance * vendor_p, gpointer ht_p)
+taxtable_scrub_vendor (QofInstance* vendor_p, gpointer ht_p)
 {
-    GHashTable *ht = static_cast<decltype(ht)>(ht_p);
-    GncVendor *vendor = GNC_VENDOR(vendor_p);
-    GncTaxTable *table;
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncVendor* vendor = GNC_VENDOR (vendor_p);
+    GncTaxTable* table;
     gint32 count;
 
-    table = gncVendorGetTaxTable(vendor);
+    table = gncVendorGetTaxTable (vendor);
     if (table)
     {
-        count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, table));
         count++;
-        g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+        g_hash_table_insert (ht, table, GINT_TO_POINTER (count));
     }
 }
 
 static void
 taxtable_reset_refcount (gpointer key, gpointer value, gpointer notused)
 {
-    GncTaxTable *table = static_cast<decltype(table)>(key);
-    gint32 count = GPOINTER_TO_INT(value);
+    GncTaxTable* table = static_cast<decltype (table)> (key);
+    gint32 count = GPOINTER_TO_INT (value);
 
-    if (count != gncTaxTableGetRefcount(table) && !gncTaxTableGetInvisible(table))
+    if (count != gncTaxTableGetRefcount (table) &&
+        !gncTaxTableGetInvisible (table))
     {
-        gchar guidstr[GUID_ENCODING_LENGTH+1];
-        guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(table)),guidstr);
-        PWARN("Fixing refcount on taxtable %s (%" G_GINT64_FORMAT " -> %d)\n",
-              guidstr,gncTaxTableGetRefcount(table), count);
-        gncTaxTableSetRefcount(table, count);
+        gchar guidstr[GUID_ENCODING_LENGTH + 1];
+        guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (table)), guidstr);
+        PWARN ("Fixing refcount on taxtable %s (%" G_GINT64_FORMAT " -> %d)\n",
+               guidstr, gncTaxTableGetRefcount (table), count);
+        gncTaxTableSetRefcount (table, count);
     }
 }
 
 static void
-taxtable_scrub (QofBook *book)
+taxtable_scrub (QofBook* book)
 {
-    GList *list = NULL;
-    GList *node;
-    GncTaxTable *parent, *table;
-    GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
+    GList* list = NULL;
+    GList* node;
+    GncTaxTable* parent, *table;
+    GHashTable* ht = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     qof_object_foreach (GNC_ID_ENTRY, book, taxtable_scrub_entries, ht);
     qof_object_foreach (GNC_ID_CUSTOMER, book, taxtable_scrub_cust, ht);
@@ -671,35 +673,35 @@ taxtable_scrub (QofBook *book)
     /* destroy the list of "grandchildren" tax tables */
     for (node = list; node; node = node->next)
     {
-        gchar guidstr[GUID_ENCODING_LENGTH+1];
-        table = static_cast<decltype(table)>(node->data);
+        gchar guidstr[GUID_ENCODING_LENGTH + 1];
+        table = static_cast<decltype (table)> (node->data);
 
-        guid_to_string_buff(qof_instance_get_guid(QOF_INSTANCE(table)),guidstr);
+        guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (table)), guidstr);
         PINFO ("deleting grandchild taxtable: %s\n", guidstr);
 
         /* Make sure the parent has no children */
-        parent = gncTaxTableGetParent(table);
-        gncTaxTableSetChild(parent, NULL);
+        parent = gncTaxTableGetParent (table);
+        gncTaxTableSetChild (parent, NULL);
 
         /* Destroy this tax table */
-        gncTaxTableBeginEdit(table);
-        gncTaxTableDestroy(table);
+        gncTaxTableBeginEdit (table);
+        gncTaxTableDestroy (table);
     }
 
     /* reset the refcounts as necessary */
-    g_hash_table_foreach(ht, taxtable_reset_refcount, NULL);
+    g_hash_table_foreach (ht, taxtable_reset_refcount, NULL);
 
-    g_list_free(list);
-    g_hash_table_destroy(ht);
+    g_list_free (list);
+    g_hash_table_destroy (ht);
 }
 
 static gboolean
-taxtable_ns(FILE *out)
+taxtable_ns (FILE* out)
 {
-    g_return_val_if_fail(out, FALSE);
+    g_return_val_if_fail (out, FALSE);
     return
-        gnc_xml2_write_namespace_decl(out, "taxtable")
-        && gnc_xml2_write_namespace_decl(out, "tte");
+        gnc_xml2_write_namespace_decl (out, "taxtable")
+        && gnc_xml2_write_namespace_decl (out, "tte");
 }
 
 void
@@ -710,7 +712,7 @@ gnc_taxtable_xml_initialize (void)
         GNC_FILE_BACKEND_VERS,
         gnc_taxtable_string,
         taxtable_sixtp_parser_create,
-        NULL,			/* add_item */
+        NULL,           /* add_item */
         taxtable_get_count,
         taxtable_write,
         taxtable_scrub,

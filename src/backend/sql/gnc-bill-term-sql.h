@@ -37,7 +37,7 @@ extern "C"
 }
 #define CT_BILLTERMREF "billterm"
 
-void gnc_billterm_sql_initialize( void );
-gboolean gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst );
+void gnc_billterm_sql_initialize (void);
+gboolean gnc_sql_save_billterm (GncSqlBackend* be, QofInstance* inst);
 
 #endif /* GNC_BILLTERM_SQL_H */

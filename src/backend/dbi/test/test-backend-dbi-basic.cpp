@@ -37,10 +37,10 @@ extern "C"
 #include <qof.h>
 #include <unittest-support.h>
 #include <test-stuff.h>
-/* For cleaning up the database */
+    /* For cleaning up the database */
 #include <dbi/dbi.h>
 #include <gnc-uri-utils.h>
-/* For setup_business */
+    /* For setup_business */
 #include "Account.h"
 #include <TransLog.h>
 #include "Transaction.h"
@@ -49,7 +49,7 @@ extern "C"
 #include "gncAddress.h"
 #include "gncCustomer.h"
 #include "gncInvoice.h"
-/* For version_control */
+    /* For version_control */
 #include <gnc-prefs.h>
 #include <qofsession-p.h>
 }
@@ -70,66 +70,68 @@ void test_suite_gnc_backend_dbi (void);
 
 typedef struct
 {
-    QofSession *session;
-    gchar *filename;
-    GSList *hdlrs;
+    QofSession* session;
+    gchar* filename;
+    GSList* hdlrs;
 } Fixture;
 
 static void
-setup (Fixture *fixture, gconstpointer pData)
+setup (Fixture* fixture, gconstpointer pData)
 {
-    gchar *url = (gchar *)pData;
-    fixture->session = qof_session_new();
+    gchar* url = (gchar*)pData;
+    fixture->session = qof_session_new ();
     /* When running distcheck the source directory is read-only, which
      * prevents creating the lock file. Force the session to get
      * around that.
      */
     qof_session_begin (fixture->session, DBI_TEST_XML_FILENAME, TRUE,
                        FALSE, TRUE);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==,
+    g_assert_cmpint (qof_session_get_error (fixture->session), == ,
                      ERR_BACKEND_NO_ERR);
     qof_session_load (fixture->session, NULL);
 
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid());
+        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid ());
     else
         fixture->filename = NULL;
 }
 
 static void
-setup_memory (Fixture *fixture, gconstpointer pData)
+setup_memory (Fixture* fixture, gconstpointer pData)
 {
-    QofSession* session = qof_session_new();
-    gchar *url = (gchar*)pData;
+    QofSession* session = qof_session_new ();
+    gchar* url = (gchar*)pData;
     QofBook* book;
-    Account *root, *acct1, *acct2;
+    Account* root, *acct1, *acct2;
     Transaction* tx;
-    Split *spl1, *spl2;
+    Split* spl1, *spl2;
     gnc_commodity_table* table;
     gnc_commodity* currency;
 
-    session = qof_session_new();
+    session = qof_session_new ();
     book = qof_session_get_book (session);
     root = gnc_book_get_root_account (book);
 
     table = gnc_commodity_table_get_table (book);
-    currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, "CAD");
+    currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY,
+                                           "CAD");
 
     acct1 = xaccMallocAccount (book);
     xaccAccountSetType (acct1, ACCT_TYPE_BANK);
     xaccAccountSetName (acct1, "Bank 1");
     xaccAccountSetCommodity (acct1, currency);
 
-    auto frame = qof_instance_get_slots (QOF_INSTANCE(acct1));
-    frame->set("int64-val", new KvpValue(INT64_C(100)));
-    frame->set("double-val", new KvpValue(3.14159));
-    frame->set("numeric-val", new KvpValue(gnc_numeric_zero()));
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acct1));
+    frame->set ("int64-val", new KvpValue (INT64_C (100)));
+    frame->set ("double-val", new KvpValue (3.14159));
+    frame->set ("numeric-val", new KvpValue (gnc_numeric_zero ()));
 
-    frame->set("timespec-val", new KvpValue(timespec_now ()));
+    frame->set ("timespec-val", new KvpValue (timespec_now ()));
 
-    frame->set("string-val", new KvpValue("abcdefghijklmnop"));
-    auto guid = qof_instance_get_guid (QOF_INSTANCE(acct1));
-    frame->set("guid-val", new KvpValue(const_cast<GncGUID*>(guid_copy(guid))));
+    frame->set ("string-val", new KvpValue ("abcdefghijklmnop"));
+    auto guid = qof_instance_get_guid (QOF_INSTANCE (acct1));
+    frame->set ("guid-val", new KvpValue (const_cast<GncGUID*> (guid_copy (
+            guid))));
 
     gnc_account_append_child (root, acct1);
 
@@ -148,16 +150,16 @@ setup_memory (Fixture *fixture, gconstpointer pData)
 
     fixture->session = session;
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid());
+        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid ());
     else
         fixture->filename = NULL;
 }
 
 static void
-setup_business (Fixture *fixture, gconstpointer pData)
+setup_business (Fixture* fixture, gconstpointer pData)
 {
-    QofSession* session = qof_session_new();
-    gchar *url = (gchar*)pData;
+    QofSession* session = qof_session_new ();
+    gchar* url = (gchar*)pData;
     QofBook* book = qof_session_get_book (session);
     Account* root = gnc_book_get_root_account (book);
     Account* acct1;
@@ -171,7 +173,8 @@ setup_business (Fixture *fixture, gconstpointer pData)
     GncTaxTableEntry* tte;
 
     table = gnc_commodity_table_get_table (book);
-    currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, "CAD");
+    currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY,
+                                           "CAD");
 
     acct1 = xaccMallocAccount (book);
     xaccAccountSetType (acct1, ACCT_TYPE_BANK);
@@ -191,15 +194,15 @@ setup_business (Fixture *fixture, gconstpointer pData)
 
     tt = gncTaxTableCreate (book);
     gncTaxTableSetName (tt, "tt");
-    tte = gncTaxTableEntryCreate();
+    tte = gncTaxTableEntryCreate ();
     gncTaxTableEntrySetAccount (tte, acct1);
     gncTaxTableEntrySetType (tte, GNC_AMT_TYPE_VALUE);
-    gncTaxTableEntrySetAmount (tte, gnc_numeric_zero());
+    gncTaxTableEntrySetAmount (tte, gnc_numeric_zero ());
     gncTaxTableAddEntry (tt, tte);
-    tte = gncTaxTableEntryCreate();
+    tte = gncTaxTableEntryCreate ();
     gncTaxTableEntrySetAccount (tte, acct2);
     gncTaxTableEntrySetType (tte, GNC_AMT_TYPE_PERCENT);
-    gncTaxTableEntrySetAmount (tte, gnc_numeric_zero());
+    gncTaxTableEntrySetAmount (tte, gnc_numeric_zero ());
     gncTaxTableAddEntry (tt, tte);
 
     cust = gncCustomerCreate (book);
@@ -207,7 +210,7 @@ setup_business (Fixture *fixture, gconstpointer pData)
     gncCustomerSetName (cust, "MyCustomer");
     gncCustomerSetNotes (cust, "Here are some notes");
     gncCustomerSetCurrency (cust, currency);
-    addr = gncAddressCreate (book, QOF_INSTANCE(cust));
+    addr = gncAddressCreate (book, QOF_INSTANCE (cust));
     gncAddressSetName (addr, "theAddress");
     gncAddressSetAddr1 (addr, "Address line #1");
     gncAddressSetAddr2 (addr, "Address line #2");
@@ -225,7 +228,7 @@ setup_business (Fixture *fixture, gconstpointer pData)
 
     fixture->session = session;
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid());
+        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid ());
     else
         fixture->filename = NULL;
 }
@@ -233,9 +236,9 @@ setup_business (Fixture *fixture, gconstpointer pData)
 static void
 drop_table (gconstpointer tdata, gconstpointer cdata)
 {
-    gchar *table = (gchar*)tdata;
+    gchar* table = (gchar*)tdata;
     dbi_conn conn = (dbi_conn)cdata;
-    gchar *query = g_strdup_printf ("DROP TABLE %s", table);
+    gchar* query = g_strdup_printf ("DROP TABLE %s", table);
     dbi_result rslt = dbi_conn_query (conn, query);
     g_free (query);
 }
@@ -243,35 +246,35 @@ drop_table (gconstpointer tdata, gconstpointer cdata)
 static void
 destroy_database (gchar* url)
 {
-    gchar *protocol = NULL;
-    gchar *host = NULL;
-    gchar *dbname = NULL;
-    gchar *username = NULL;
-    gchar *password = NULL;
-    gchar *basename = NULL;
+    gchar* protocol = NULL;
+    gchar* host = NULL;
+    gchar* dbname = NULL;
+    gchar* username = NULL;
+    gchar* password = NULL;
+    gchar* basename = NULL;
     gint portnum = 0;
-    gchar *port = NULL;
+    gchar* port = NULL;
     auto pgsql = "pgsql";
     dbi_conn conn = NULL;
     auto errfmt = "Unable to delete tables in %s: %s";
     gint fail = 0;
     dbi_result tables;
-    GSList *list = NULL;
+    GSList* list = NULL;
 
-    gnc_uri_get_components  (url, &protocol, &host, &portnum,
-                             &username, &password, &dbname);
+    gnc_uri_get_components (url, &protocol, &host, &portnum,
+                            &username, &password, &dbname);
     if (g_strcmp0 (protocol, "postgres") == 0)
-        #if HAVE_LIBDBI_R
-        conn = dbi_conn_new_r( pgsql, dbi_instance );
-        #else
-        conn = dbi_conn_new( pgsql );
-        #endif
+#if HAVE_LIBDBI_R
+        conn = dbi_conn_new_r (pgsql, dbi_instance);
+#else
+        conn = dbi_conn_new (pgsql);
+#endif
     else
-        #if HAVE_LIBDBI_R
+#if HAVE_LIBDBI_R
         conn = dbi_conn_new_r (protocol, dbi_instance);
-        #else
+#else
         conn = dbi_conn_new (protocol);
-        #endif
+#endif
     port = g_strdup_printf ("%d", portnum);
     if (conn == NULL)
     {
@@ -299,7 +302,7 @@ destroy_database (gchar* url)
     fail = dbi_conn_connect (conn);
     if (fail != 0)
     {
-        const gchar *error;
+        const gchar* error;
         gint errnum = dbi_conn_error (conn, &error);
         g_printf (errfmt, url, error);
         dbi_conn_close (conn);
@@ -308,7 +311,7 @@ destroy_database (gchar* url)
     tables = dbi_conn_get_table_list (conn, dbname, NULL);
     while (dbi_result_next_row (tables) != 0)
     {
-        const gchar *table = dbi_result_get_string_idx (tables, 1);
+        const gchar* table = dbi_result_get_string_idx (tables, 1);
         list = g_slist_prepend (list, g_strdup (table));
     }
     dbi_result_free (tables);
@@ -317,22 +320,25 @@ destroy_database (gchar* url)
 }
 
 static void
-teardown (Fixture *fixture, gconstpointer pData)
+teardown (Fixture* fixture, gconstpointer pData)
 {
     auto lockfile = g_strdup_printf ("%s/test-dbi.xml.LCK",
-                                       g_path_get_dirname (DBI_TEST_XML_FILENAME));
-    auto msg = g_strdup_printf ("[xml_session_end()] Error on g_unlink(%s): 2: No such file or directory", lockfile);
+                                     g_path_get_dirname (DBI_TEST_XML_FILENAME));
+    auto msg =
+        g_strdup_printf ("[xml_session_end()] Error on g_unlink(%s): 2: No such file or directory",
+                         lockfile);
     auto logdomain = "gnc.backend";
-    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
-    TestErrorStruct *check = test_error_struct_new (logdomain, loglevel, msg);
+    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL);
+    TestErrorStruct* check = test_error_struct_new (logdomain, loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                     (GLogFunc)test_checked_handler);
+                                                 (GLogFunc)test_checked_handler);
     qof_session_end (fixture->session);
     qof_session_destroy (fixture->session);
     if (fixture->filename)
     {
         g_unlink (fixture->filename);
-	g_free (fixture->filename);
+        g_free (fixture->filename);
     }
     else
         destroy_database ((gchar*)pData);
@@ -340,26 +346,26 @@ teardown (Fixture *fixture, gconstpointer pData)
     g_free (msg);
     g_free (lockfile);
     g_slist_free_full (fixture->hdlrs, test_free_log_handler);
-    test_clear_error_list();
+    test_clear_error_list ();
 }
 
 
 static void
-test_conn_index_functions (QofBackend *qbe)
+test_conn_index_functions (QofBackend* qbe)
 {
-    GncDbiBackend *be = (GncDbiBackend*)qbe;
-    GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(be->sql_be.conn);
-    GSList *index_list, *iter;
+    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiSqlConnection* conn = (GncDbiSqlConnection*) (be->sql_be.conn);
+    GSList* index_list, *iter;
 
     index_list = conn->provider->get_index_list (be->conn);
-    g_test_message  ("Returned from index list\n");
+    g_test_message ("Returned from index list\n");
     g_assert (index_list != NULL);
-    g_assert_cmpint (g_slist_length (index_list), ==, 4);
-    for  (iter = index_list; iter != NULL; iter = g_slist_next (iter))
+    g_assert_cmpint (g_slist_length (index_list), == , 4);
+    for (iter = index_list; iter != NULL; iter = g_slist_next (iter))
     {
-        const char *errmsg;
+        const char* errmsg;
         conn->provider->drop_index (be->conn,
-                                    static_cast<const char*>(iter->data));
+                                    static_cast<const char*> (iter->data));
         g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn, &errmsg));
     }
 
@@ -370,42 +376,43 @@ test_conn_index_functions (QofBackend *qbe)
  * QofSession::save_as to save it to a specified sql url, then load it
  * back and compare. */
 static void
-test_dbi_store_and_reload (Fixture *fixture, gconstpointer pData)
+test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
 {
 
     const gchar* url = (const gchar*)pData;
     QofSession* session_2;
     QofSession* session_3;
-    QofBackend *be;
+    QofBackend* be;
 
     auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     auto log_domain = "gnc.backend.dbi";
-    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
-    TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
+    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL);
+    TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                     (GLogFunc)test_checked_handler);
+                                                 (GLogFunc)test_checked_handler);
     if (fixture->filename)
         url = fixture->filename;
 
     // Save the session data
-    session_2 = qof_session_new();
+    session_2 = qof_session_new ();
     qof_session_begin (session_2, url, FALSE, TRUE, TRUE);
     g_assert (session_2 != NULL);
-    g_assert_cmpint (qof_session_get_error (session_2), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
     qof_session_swap_data (fixture->session, session_2);
     qof_session_save (session_2, NULL);
     g_assert (session_2 != NULL);
-    g_assert_cmpint (qof_session_get_error (session_2), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
 
     // Reload the session data
-    session_3 = qof_session_new();
+    session_3 = qof_session_new ();
     g_assert (session_3 != NULL);
     qof_session_begin (session_3, url, TRUE, FALSE, FALSE);
     g_assert (session_3 != NULL);
-    g_assert_cmpint (qof_session_get_error (session_3), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     qof_session_load (session_3, NULL);
     g_assert (session_3 != NULL);
-    g_assert_cmpint (qof_session_get_error (session_3), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     // Compare with the original data
     compare_books (qof_session_get_book (session_2),
                    qof_session_get_book (session_3));
@@ -424,16 +431,17 @@ test_dbi_store_and_reload (Fixture *fixture, gconstpointer pData)
  * appropriate shell.
  */
 static void
-test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
+test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
 {
     auto url = (gchar*)pData;
-    QofSession *session_1 = NULL, *session_2 = NULL;
-    QofBackend *be;
+    QofSession* session_1 = NULL, *session_2 = NULL;
+    QofBackend* be;
 
     auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     auto log_domain = "gnc.backend.dbi";
-    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
-    TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
+    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL);
+    TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
 
     if (fixture->filename)
         url = fixture->filename;
@@ -442,7 +450,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
     session_1 = qof_session_new ();
     qof_session_begin (session_1, url, FALSE, TRUE, TRUE);
     if (session_1 &&
-            qof_session_get_error (session_1) != ERR_BACKEND_NO_ERR)
+        qof_session_get_error (session_1) != ERR_BACKEND_NO_ERR)
     {
         g_warning ("Session Error: %d, %s", qof_session_get_error (session_1),
                    qof_session_get_error_message (session_1));
@@ -454,10 +462,10 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
     qof_session_save (session_1, NULL);
     /* Do a safe save */
     qof_session_safe_save (session_1, NULL);
-    if (session_1 && qof_session_get_error(session_1) != ERR_BACKEND_NO_ERR)
+    if (session_1 && qof_session_get_error (session_1) != ERR_BACKEND_NO_ERR)
     {
         g_warning ("Session Error: %s",
-                   qof_session_get_error_message(session_1));
+                   qof_session_get_error_message (session_1));
         g_test_message ("DB Session Safe Save Failed");
         g_assert (FALSE);
         goto cleanup;
@@ -467,10 +475,10 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
     session_2 = qof_session_new ();
     qof_session_begin (session_2, url, TRUE, FALSE, FALSE);
     if (session_2 &&
-            qof_session_get_error (session_2) != ERR_BACKEND_NO_ERR)
+        qof_session_get_error (session_2) != ERR_BACKEND_NO_ERR)
     {
-        g_warning ("Session Error: %d, %s", qof_session_get_error(session_2),
-                   qof_session_get_error_message(session_2));
+        g_warning ("Session Error: %d, %s", qof_session_get_error (session_2),
+                   qof_session_get_error_message (session_2));
         g_test_message ("DB Session re-creation Failed");
         g_assert (FALSE);
         goto cleanup;
@@ -483,7 +491,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
 
 cleanup:
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                     (GLogFunc)test_checked_handler);
+                                                 (GLogFunc)test_checked_handler);
     if (session_2 != NULL)
     {
         qof_session_end (session_2);
@@ -501,24 +509,24 @@ cleanup:
  * be better to do this starting from a fresh file, but instead we're
  * being lazy and using an existing one. */
 static void
-test_dbi_version_control (Fixture *fixture, gconstpointer pData)
+test_dbi_version_control (Fixture* fixture, gconstpointer pData)
 {
     auto url = (gchar*)pData;
-    QofSession *sess;
-    QofBook *book;
-    QofBackend *qbe;
+    QofSession* sess;
+    QofBook* book;
+    QofBackend* qbe;
     QofBackendError err;
-    gint ourversion = gnc_prefs_get_long_version();
+    gint ourversion = gnc_prefs_get_long_version ();
 
     // Load the session data
     if (fixture->filename)
         url = fixture->filename;
-    sess = qof_session_new();
+    sess = qof_session_new ();
     qof_session_begin (sess, url, FALSE, TRUE, TRUE);
-    if (sess && qof_session_get_error(sess) != ERR_BACKEND_NO_ERR)
+    if (sess && qof_session_get_error (sess) != ERR_BACKEND_NO_ERR)
     {
-        g_warning ("Session Error: %d, %s", qof_session_get_error(sess),
-                   qof_session_get_error_message(sess));
+        g_warning ("Session Error: %d, %s", qof_session_get_error (sess),
+                   qof_session_get_error_message (sess));
         g_test_message ("DB Session Creation Failed");
         g_assert (FALSE);
         goto cleanup;
@@ -533,11 +541,11 @@ test_dbi_version_control (Fixture *fixture, gconstpointer pData)
     qof_book_commit_edit (book);
     qof_session_end (sess);
     qof_session_destroy (sess);
-    sess = qof_session_new();
+    sess = qof_session_new ();
     qof_session_begin (sess, url, TRUE, FALSE, FALSE);
     qof_session_load (sess, NULL);
     err = qof_session_pop_error (sess);
-    g_assert_cmpint (err, ==, ERR_SQL_DB_TOO_OLD);
+    g_assert_cmpint (err, == , ERR_SQL_DB_TOO_OLD);
     qbe = qof_session_get_backend (sess);
     book = qof_session_get_book (sess);
     qof_book_begin_edit (book);
@@ -548,12 +556,12 @@ test_dbi_version_control (Fixture *fixture, gconstpointer pData)
     qof_book_commit_edit (book);
     qof_session_end (sess);
     qof_session_destroy (sess);
-    sess = qof_session_new();
+    sess = qof_session_new ();
     qof_session_begin (sess, url, TRUE, FALSE, FALSE);
     qof_session_load (sess, NULL);
     qof_session_ensure_all_data_loaded (sess);
     err = qof_session_pop_error (sess);
-    g_assert_cmpint (err, ==, ERR_SQL_DB_TOO_NEW);
+    g_assert_cmpint (err, == , ERR_SQL_DB_TOO_NEW);
 cleanup:
     qbe = qof_session_get_backend (sess);
     book = qof_session_get_book (sess);
@@ -566,7 +574,7 @@ cleanup:
 }
 
 static void
-test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
+test_dbi_business_store_and_reload (Fixture* fixture, gconstpointer pData)
 {
     QofSession* session_2;
     QofSession* session_3;
@@ -574,28 +582,30 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
 
     auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     auto log_domain = "gnc.backend.dbi";
-    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
-    TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
+    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
+                                                 G_LOG_FLAG_FATAL);
+    TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
     if (fixture->filename)
         url = fixture->filename;
     // Save the session data
-    session_2 = qof_session_new();
+    session_2 = qof_session_new ();
     qof_session_begin (session_2, url, FALSE, TRUE, TRUE);
     qof_session_swap_data (fixture->session, session_2);
     qof_session_save (session_2, NULL);
 
     // Reload the session data
-    session_3 = qof_session_new();
+    session_3 = qof_session_new ();
     qof_session_begin (session_3, url, TRUE, FALSE, FALSE);
     qof_session_load (session_3, NULL);
 
     // Compare with the original data
-    compare_business_books (qof_session_get_book (session_2), qof_session_get_book (session_3));
+    compare_business_books (qof_session_get_book (session_2),
+                            qof_session_get_book (session_3));
     qof_session_end (session_2);
     qof_session_destroy (session_2);
 
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                     (GLogFunc)test_checked_handler);
+                                                 (GLogFunc)test_checked_handler);
     qof_session_end (session_3);
     qof_session_destroy (session_3);
 }
@@ -634,7 +644,7 @@ test_adjust_sql_options_string (void)
 }
 
 static void
-create_dbi_test_suite (const char *dbm_name, const char *url)
+create_dbi_test_suite (const char* dbm_name, const char* url)
 {
     auto subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
     GNC_TEST_ADD (subsuite, "store_and_reload", Fixture, url, setup,
@@ -653,15 +663,15 @@ void
 test_suite_gnc_backend_dbi (void)
 {
     dbi_driver driver = NULL;
-    GList *drivers = NULL;
-    #if HAVE_LIBDBI_R
+    GList* drivers = NULL;
+#if HAVE_LIBDBI_R
     if (dbi_instance == NULL)
-      dbi_initialize_r (NULL, &dbi_instance);
+        dbi_initialize_r (NULL, &dbi_instance);
     while ((driver = dbi_driver_list_r (driver, dbi_instance)))
-    #else
+#else
     dbi_initialize (NULL);
     while ((driver = dbi_driver_list (driver)))
-    #endif
+#endif
     {
         drivers = g_list_prepend (drivers,
                                   (gchar*)dbi_driver_get_name (driver));
@@ -669,10 +679,10 @@ test_suite_gnc_backend_dbi (void)
     if (g_list_find_custom (drivers, "sqlite3", (GCompareFunc)g_strcmp0))
         create_dbi_test_suite ("sqlite3", "sqlite3");
     if (strlen (TEST_MYSQL_URL) > 0 &&
-            g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
+        g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
         create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
     if (strlen (TEST_PGSQL_URL) > 0 &&
-            g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
+        g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
     {
         g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);

@@ -46,156 +46,156 @@ extern "C"
 #include "sixtp-dom-generators.h"
 
 #define GNC_V2_STRING "gnc-v2"
-const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
+const gchar* gnc_v2_xml_version_string = GNC_V2_STRING;
 
 static void
-test_dom_tree_to_commodity_ref(void)
+test_dom_tree_to_commodity_ref (void)
 {
     int i;
     for (i = 0; i < 20; i++)
     {
-        gnc_commodity *test_com1;
-        gchar *test_str1;
-        gchar *test_str2;
-        gnc_commodity *test_com2;
+        gnc_commodity* test_com1;
+        gchar* test_str1;
+        gchar* test_str2;
+        gnc_commodity* test_com2;
         xmlNodePtr test_node;
-        QofBook *book;
+        QofBook* book;
 
         book = qof_book_new ();
 
-        test_str1 = get_random_string();
-        test_str2 = get_random_string();
+        test_str1 = get_random_string ();
+        test_str2 = get_random_string ();
 
-        test_com1 = gnc_commodity_new(book, NULL, test_str1, test_str2, NULL, 0);
-        test_node = commodity_ref_to_dom_tree("test-com", test_com1);
+        test_com1 = gnc_commodity_new (book, NULL, test_str1, test_str2, NULL, 0);
+        test_node = commodity_ref_to_dom_tree ("test-com", test_com1);
 
-        test_com2 = dom_tree_to_commodity_ref_no_engine(test_node, book);
+        test_com2 = dom_tree_to_commodity_ref_no_engine (test_node, book);
 
-        do_test(gnc_commodity_equiv(test_com1, test_com2),
-                "dom_tree_to_commodity_ref_no_engine");
+        do_test (gnc_commodity_equiv (test_com1, test_com2),
+                 "dom_tree_to_commodity_ref_no_engine");
 
-        xmlFreeNode(test_node);
-        gnc_commodity_destroy(test_com1);
-        gnc_commodity_destroy(test_com2);
-        g_free(test_str1);
-        g_free(test_str2);
+        xmlFreeNode (test_node);
+        gnc_commodity_destroy (test_com1);
+        gnc_commodity_destroy (test_com2);
+        g_free (test_str1);
+        g_free (test_str2);
 
         qof_book_destroy (book);
     }
 }
 
 static void
-test_dom_tree_to_text(void)
+test_dom_tree_to_text (void)
 {
     int i;
 
     for (i = 0; i < 20; i++)
     {
-        gchar *test_string1;
-        gchar *test_string2;
+        gchar* test_string1;
+        gchar* test_string2;
         xmlNodePtr test_node;
 
-        test_node = xmlNewNode(NULL, BAD_CAST "test-node");
-        test_string1 = get_random_string();
+        test_node = xmlNewNode (NULL, BAD_CAST "test-node");
+        test_string1 = get_random_string ();
 
-        xmlNodeAddContent(test_node, BAD_CAST test_string1);
+        xmlNodeAddContent (test_node, BAD_CAST test_string1);
 
-        test_string2 = dom_tree_to_text(test_node);
+        test_string2 = dom_tree_to_text (test_node);
 
         if (!test_string2)
         {
-            failure_args("dom_tree_to_text", __FILE__, __LINE__,
-                         "null return from dom_tree_to_text");
-            xmlElemDump(stdout, NULL, test_node);
+            failure_args ("dom_tree_to_text", __FILE__, __LINE__,
+                          "null return from dom_tree_to_text");
+            xmlElemDump (stdout, NULL, test_node);
         }
-        else if (g_strcmp0(test_string1, test_string2) == 0)
+        else if (g_strcmp0 (test_string1, test_string2) == 0)
         {
-            success_args("dom_tree_to_text", __FILE__, __LINE__, "with string %s",
-                         test_string1);
+            success_args ("dom_tree_to_text", __FILE__, __LINE__, "with string %s",
+                          test_string1);
         }
         else
         {
-            failure_args("dom_tree_to_text", __FILE__, __LINE__,
-                         "with string %s", test_string1);
+            failure_args ("dom_tree_to_text", __FILE__, __LINE__,
+                          "with string %s", test_string1);
         }
 
-        xmlFreeNode(test_node);
-        g_free(test_string1);
-        if (test_string2) g_free(test_string2);
+        xmlFreeNode (test_node);
+        g_free (test_string1);
+        if (test_string2) g_free (test_string2);
     }
 }
 
 
 static void
-test_dom_tree_to_timespec(void)
+test_dom_tree_to_timespec (void)
 {
     int i;
     for (i = 0; i < 20; i++)
     {
-        Timespec *test_spec1;
+        Timespec* test_spec1;
         Timespec test_spec2;
         xmlNodePtr test_node;
 
-        test_spec1 = get_random_timespec();
+        test_spec1 = get_random_timespec ();
 
-        test_node = timespec_to_dom_tree("test-spec", test_spec1);
+        test_node = timespec_to_dom_tree ("test-spec", test_spec1);
 
-        test_spec2 = dom_tree_to_timespec(test_node);
+        test_spec2 = dom_tree_to_timespec (test_node);
 
-        if (!dom_tree_valid_timespec(&test_spec2, (const xmlChar*)"test-spec"))
+        if (!dom_tree_valid_timespec (&test_spec2, (const xmlChar*)"test-spec"))
         {
-            failure_args("dom_tree_to_timespec",
-                         __FILE__, __LINE__, "NULL return");
-            printf("Node looks like:\n");
-            xmlElemDump(stdout, NULL, test_node);
-            printf("\n");
+            failure_args ("dom_tree_to_timespec",
+                          __FILE__, __LINE__, "NULL return");
+            printf ("Node looks like:\n");
+            xmlElemDump (stdout, NULL, test_node);
+            printf ("\n");
         }
 
-        else if (timespec_cmp(test_spec1, &test_spec2) == 0)
+        else if (timespec_cmp (test_spec1, &test_spec2) == 0)
         {
-            success("dom_tree_to_timespec");
+            success ("dom_tree_to_timespec");
         }
         else
         {
-            failure("dom_tree_to_timespec");
-            printf("Node looks like:\n");
-            xmlElemDump(stdout, NULL, test_node);
-            printf("\n");
-            printf("Secs are %" G_GUINT64_FORMAT " vs %" G_GUINT64_FORMAT " :: ",
-                   test_spec1->tv_sec,
-                   test_spec2.tv_sec);
-            printf("NSecs are %ld vs %ld\n",
-                   test_spec1->tv_nsec,
-                   test_spec2.tv_nsec);
+            failure ("dom_tree_to_timespec");
+            printf ("Node looks like:\n");
+            xmlElemDump (stdout, NULL, test_node);
+            printf ("\n");
+            printf ("Secs are %" G_GUINT64_FORMAT " vs %" G_GUINT64_FORMAT " :: ",
+                    test_spec1->tv_sec,
+                    test_spec2.tv_sec);
+            printf ("NSecs are %ld vs %ld\n",
+                    test_spec1->tv_nsec,
+                    test_spec2.tv_nsec);
         }
 
-        g_free(test_spec1);
-        xmlFreeNode(test_node);
+        g_free (test_spec1);
+        xmlFreeNode (test_node);
     }
 }
 
-static const char *
-test_gnc_nums_internal(gnc_numeric to_test)
+static const char*
+test_gnc_nums_internal (gnc_numeric to_test)
 {
-    const char *ret = NULL;
-    gnc_numeric *to_compare = NULL;
+    const char* ret = NULL;
+    gnc_numeric* to_compare = NULL;
     xmlNodePtr to_gen = NULL;
 
-    to_gen = gnc_numeric_to_dom_tree("test-num", &to_test);
+    to_gen = gnc_numeric_to_dom_tree ("test-num", &to_test);
     if (!to_gen)
     {
         ret =  "no dom tree created";
     }
     else
     {
-        to_compare = dom_tree_to_gnc_numeric(to_gen);
+        to_compare = dom_tree_to_gnc_numeric (to_gen);
         if (!to_compare)
         {
             ret = "no gnc_numeric parsed";
         }
         else
         {
-            if (!gnc_numeric_equal(to_test, *to_compare))
+            if (!gnc_numeric_equal (to_test, *to_compare))
             {
                 ret = "numerics compared different";
             }
@@ -204,86 +204,86 @@ test_gnc_nums_internal(gnc_numeric to_test)
 
     if (to_compare)
     {
-        g_free(to_compare);
+        g_free (to_compare);
     }
     if (to_gen)
     {
-        xmlFreeNode(to_gen);
+        xmlFreeNode (to_gen);
     }
 
     return ret;
 }
 
 static void
-test_dom_tree_to_gnc_numeric(void)
+test_dom_tree_to_gnc_numeric (void)
 {
     int i;
 
     for (i = 0; i < 20; i++)
     {
 
-        const char *message =
-            test_gnc_nums_internal(get_random_gnc_numeric(GNC_DENOM_AUTO));
+        const char* message =
+            test_gnc_nums_internal (get_random_gnc_numeric (GNC_DENOM_AUTO));
 
-        do_test_args(message == NULL, "dom_tree_to_gnc_numeric",
-                     __FILE__, __LINE__, message);
+        do_test_args (message == NULL, "dom_tree_to_gnc_numeric",
+                      __FILE__, __LINE__, message);
     }
 
     {
-        const char *message = test_gnc_nums_internal
-                  (gnc_numeric_create(18768786810LL, 100000));
+        const char* message = test_gnc_nums_internal
+                              (gnc_numeric_create (18768786810LL, 100000));
 
-        do_test_args(message == NULL, "gnc_num 18768786810/100000",
-                     __FILE__, __LINE__, message);
+        do_test_args (message == NULL, "gnc_num 18768786810/100000",
+                      __FILE__, __LINE__, message);
     }
 }
 
 
 static void
-test_dom_tree_to_guid(void)
+test_dom_tree_to_guid (void)
 {
     int i;
     for (i = 0; i < 20; i++)
     {
-        GncGUID *test_guid1;
-        GncGUID *test_guid2;
+        GncGUID* test_guid1;
+        GncGUID* test_guid2;
         xmlNodePtr test_node;
 
-        test_guid1 = get_random_guid();
+        test_guid1 = get_random_guid ();
 
-        if (!(test_node = guid_to_dom_tree("test-guid", test_guid1)))
+        if (! (test_node = guid_to_dom_tree ("test-guid", test_guid1)))
         {
-            failure_args("guid_to_dom_tree", __FILE__, __LINE__,
-                         "conversion to dom tree failed");
+            failure_args ("guid_to_dom_tree", __FILE__, __LINE__,
+                          "conversion to dom tree failed");
         }
 
-        test_guid2 = dom_tree_to_guid(test_node);
+        test_guid2 = dom_tree_to_guid (test_node);
 
-        do_test(guid_equal(test_guid1, test_guid2),
-                "dom_tree_to_guid" );
+        do_test (guid_equal (test_guid1, test_guid2),
+                 "dom_tree_to_guid");
 
-        xmlFreeNode(test_node);
-        g_free(test_guid1);
-        g_free(test_guid2);
+        xmlFreeNode (test_node);
+        g_free (test_guid1);
+        g_free (test_guid2);
     }
 }
 
 int
-main(int argc, char **argv)
+main (int argc, char** argv)
 {
-    qof_init();
-    cashobjects_register();
-    test_dom_tree_to_guid();
-    fflush(stdout);
-    test_dom_tree_to_commodity_ref();
-    fflush(stdout);
-    test_dom_tree_to_text();
-    fflush(stdout);
-    test_dom_tree_to_timespec();
-    fflush(stdout);
-    test_dom_tree_to_gnc_numeric();
-    fflush(stdout);
-    print_test_results();
-    qof_close();
-    exit(get_rv());
+    qof_init ();
+    cashobjects_register ();
+    test_dom_tree_to_guid ();
+    fflush (stdout);
+    test_dom_tree_to_commodity_ref ();
+    fflush (stdout);
+    test_dom_tree_to_text ();
+    fflush (stdout);
+    test_dom_tree_to_timespec ();
+    fflush (stdout);
+    test_dom_tree_to_gnc_numeric ();
+    fflush (stdout);
+    print_test_results ();
+    qof_close ();
+    exit (get_rv ());
 }

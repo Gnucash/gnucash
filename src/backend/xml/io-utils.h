@@ -32,12 +32,12 @@ extern "C"
 
 #include "io-gncxml-v2.h"
 
-gboolean write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd);
-gboolean write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);
-gboolean write_book_parts(FILE *out, QofBook *book);
-gboolean write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+gboolean write_account_tree (FILE* out, Account* root, sixtp_gdv2* gd);
+gboolean write_accounts (FILE* out, QofBook* book, sixtp_gdv2* gd);
+gboolean write_book_parts (FILE* out, QofBook* book);
+gboolean write_commodities (FILE* out, QofBook* book, sixtp_gdv2* gd);
 
-gboolean write_emacs_trailer(FILE *out);
+gboolean write_emacs_trailer (FILE* out);
 
 
 #endif /* IO_UTILS_H */

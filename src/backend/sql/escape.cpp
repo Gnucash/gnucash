@@ -42,7 +42,7 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 struct _escape
 {
     /* pointer to memory used for escaping arguments */
-    char * escape;
+    char* escape;
     size_t esc_buflen;
 };
 
@@ -51,25 +51,25 @@ struct _escape
  * database SQL parser doesn't puke on the query string
  */
 
-const char *
-sqlEscapeString (sqlEscape *b, const char *str)
+const char*
+sqlEscapeString (sqlEscape* b, const char* str)
 {
-    const char *p, *src_head;
-    char *dst_tail;
+    const char* p, *src_head;
+    char* dst_tail;
     size_t len, slen;
 
-    ENTER("str = %s", str);
+    ENTER ("str = %s", str);
 
     if (!b || !str)
     {
-        LEAVE("(null) args");
+        LEAVE ("(null) args");
         return NULL;
     }
 
     /* if a string is escaped twice, just return the first */
     if (b->escape == str)
     {
-        LEAVE("%s: already escaped", str);
+        LEAVE ("%s: already escaped", str);
         return str;
     }
 
@@ -78,7 +78,7 @@ sqlEscapeString (sqlEscape *b, const char *str)
     slen = strcspn (str, "\\\'");
     if (len == slen)
     {
-        LEAVE("nothing to escape");
+        LEAVE ("nothing to escape");
         return str;
     }
 
@@ -93,13 +93,13 @@ sqlEscapeString (sqlEscape *b, const char *str)
     /* get more space, if needed */
     if (len >= b->esc_buflen)
     {
-        b->escape = static_cast<decltype(b->escape)>(g_realloc(b->escape,
-                                                               len + 100));
+        b->escape = static_cast < decltype (b->escape) > (g_realloc (b->escape,
+                                                          len + 100));
         b->esc_buflen = len + 100;
     }
 
     /* copy and escape */
-    src_head = (char *) str;
+    src_head = (char*) str;
     dst_tail = b->escape;
     p = src_head + strcspn (src_head, "\\\'");
     while (*p)
@@ -125,7 +125,7 @@ sqlEscapeString (sqlEscape *b, const char *str)
     }
     *dst_tail = 0;
 
-    LEAVE("b->escape = %s", b->escape);
+    LEAVE ("b->escape = %s", b->escape);
     return b->escape;
 }
 
@@ -133,12 +133,12 @@ sqlEscapeString (sqlEscape *b, const char *str)
 
 #define INITIAL_BUFSZ 2000
 
-sqlEscape *
+sqlEscape*
 sqlEscape_new (void)
 {
-    sqlEscape *b = g_new (sqlEscape, 1);
+    sqlEscape* b = g_new (sqlEscape, 1);
 
-    b->escape = static_cast<decltype(b->escape)>(g_malloc (INITIAL_BUFSZ));
+    b->escape = static_cast < decltype (b->escape) > (g_malloc (INITIAL_BUFSZ));
     b->esc_buflen = INITIAL_BUFSZ;
     return (b);
 }
@@ -146,18 +146,18 @@ sqlEscape_new (void)
 /* ================================================ */
 
 void
-sqlEscape_destroy (sqlEscape *b)
+sqlEscape_destroy (sqlEscape* b)
 {
-    ENTER(" ");
+    ENTER (" ");
     if (!b)
     {
-        LEAVE("b is (null)");
+        LEAVE ("b is (null)");
         return;
     }
     g_free (b->escape);
     b->escape = NULL;
     g_free (b);
-    LEAVE(" ");
+    LEAVE (" ");
 }
 
 /* ================ END OF FILE ==================== */
