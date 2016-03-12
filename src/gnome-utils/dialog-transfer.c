@@ -1000,6 +1000,8 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
 
     g_return_if_fail(xferData);
 
+    xferData->price_source = PRICE_SOURCE_USER_PRICE;
+
     /* Get the amount editing controls of the dialog. */
     amount_edit     = GNC_AMOUNT_EDIT(xferData->amount_edit);
     price_edit      = GNC_AMOUNT_EDIT(xferData->price_edit);
@@ -1040,7 +1042,6 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog *xferData = data;
 
     gnc_xfer_update_to_amount (xferData);
-    xferData->price_source = PRICE_SOURCE_USER_PRICE;
     xferData->price_type = PRICE_TYPE_TRN;
 
 
@@ -1563,86 +1564,67 @@ swap_commodities(gnc_commodity **from, gnc_commodity **to, gnc_numeric value)
 }
 
 static void
-create_price(XferDialog *xferData, Timespec ts)
+update_price(XferDialog *xferData, PriceReq *pr)
 {
-    PriceReq pr;
+    gnc_commodity *from = xferData->from_commodity;
+    gnc_commodity *to = xferData->to_commodity;
+    gnc_numeric value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+    gnc_numeric price_value = gnc_price_get_value(pr->price);
+    gnc_numeric rounded_pr_value = round_price(pr->from, pr->to, price_value);
+    gnc_numeric rounded_value;
+
+    if (gnc_price_get_source(pr->price) < xferData->price_source)
+    {
+        PINFO("Existing price is preferred, so won't supersede.");
+        gnc_price_unref (pr->price);
+        return;
+    }
+
+    if (pr->reverse)
+        value = swap_commodities(&from, &to, value);
+    /* Test the rounded values for equality to minimize price-dithering. */
+    rounded_value = round_price(from, to, value);
+    if (gnc_numeric_equal(rounded_value, rounded_pr_value))
+    {
+        PINFO("Same price for %s in %s",
+              gnc_commodity_get_mnemonic(pr->from),
+              gnc_commodity_get_mnemonic(pr->to));
+        gnc_price_unref (pr->price);
+        return;
+    }
+    gnc_price_begin_edit (pr->price);
+    gnc_price_set_time (pr->price, pr->ts);
+    gnc_price_set_typestr(pr->price, xferData->price_type);
+    gnc_price_set_value (pr->price, value);
+    gnc_price_commit_edit (pr->price);
+    PINFO("Updated price: 1 %s = %f %s",
+          gnc_commodity_get_mnemonic(pr->from),
+          gnc_numeric_to_double(gnc_price_get_value(pr->price)),
+          gnc_commodity_get_mnemonic(pr->to));
+    gnc_price_unref (pr->price);
+}
+
+static void
+new_price(XferDialog *xferData, Timespec ts)
+{
     GNCPrice *price = NULL;
     gnc_commodity *from = xferData->from_commodity;
     gnc_commodity *to = xferData->to_commodity;
-    gnc_numeric price_value;
-    gnc_numeric value;
-    gnc_numeric from_amt, to_amt;
-    gboolean swap = FALSE;
+    gnc_numeric value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
 
-/* Bail in the unlikely event that both currencies have joined the Euro. */
-    if (gnc_is_euro_currency (from) && gnc_is_euro_currency (to))
-        return;
-
-    value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
-
-/* Normally we want to store currency rates such that the rate > 1 and commodity
- * prices in terms of a currency regardless of value. However, if we already
- * have a price in either direction we want to continue using that direction for
- * the rest of the day so that we don't wind up with two prices if the rate
- * shifts to be < 1. */
-
-    price_request_from_xferData(&pr, xferData);
-    if (lookup_price(&pr, SAME_DAY))
-    {
-        price_value = gnc_price_get_value(pr.price);
-        if (gnc_numeric_equal(pr.reverse ? gnc_numeric_invert(value) : value,
-                              price_value))
-        {
-            PINFO("Found price for %s in %s",
-                  gnc_commodity_get_mnemonic(pr.from),
-                  gnc_commodity_get_mnemonic(pr.to));
-            gnc_price_unref (pr.price);
-            return;
-        }
-        if (gnc_price_get_source(pr.price) < xferData->price_source)
-        {
-            PINFO("Existing price is preferred, so won't supersede.");
-            gnc_price_unref (pr.price);
-            return;
-        }
-        if (pr.reverse)
-        {
-            value = swap_commodities(&from, &to, value);
-            xferData->from_commodity = from;
-            xferData->to_commodity = to;
-        }
-        value = round_price(pr.from, pr.to, value);
-        gnc_price_begin_edit (pr.price);
-        gnc_price_set_time (pr.price, ts);
-        gnc_price_set_source (pr.price, xferData->price_source);
-        gnc_price_set_typestr(pr.price, xferData->price_type);
-        gnc_price_set_value (pr.price, value);
-        gnc_price_commit_edit (pr.price);
-        PINFO("Modified price: 1 %s = %f %s",
-              gnc_commodity_get_mnemonic(from),
-              gnc_numeric_to_double(value),
-              gnc_commodity_get_mnemonic(to));
-        gnc_price_unref (pr.price);
-        return;
-    }
+/* We want to store currency rates such that the rate > 1 and commodity
+ * prices in terms of a currency regardless of value.
+ */
+    value = gnc_numeric_abs(value);
     if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
     {
         if (value.num < value.denom)
-        {
             value = swap_commodities(&from, &to, value);
-        }
-        value = gnc_numeric_convert(value, CURRENCY_DENOM,
-                                    GNC_HOW_RND_ROUND_HALF_UP);
     }
-    else if (gnc_commodity_is_currency(from) || gnc_commodity_is_currency(to))
-    {
-        int scu;
-        if (gnc_commodity_is_currency(from))
+    else if (gnc_commodity_is_currency(from))
             value = swap_commodities(&from, &to, value);
-        scu = gnc_commodity_get_fraction (to);
-        value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
-                                    GNC_HOW_RND_ROUND_HALF_UP);
-    }
+
+    value = round_price (from, to, value);
     price = gnc_price_create (xferData->book);
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, from);
@@ -1656,6 +1638,25 @@ create_price(XferDialog *xferData, Timespec ts)
     PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
           gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
     gnc_price_unref (price);
+}    
+
+static void
+create_price(XferDialog *xferData, Timespec ts)
+{
+    PriceReq pr;
+
+/* Bail in the unlikely event that both currencies have joined the Euro. */
+    if (gnc_is_euro_currency (xferData->from_commodity) &&
+        gnc_is_euro_currency (xferData->to_commodity))
+        return;
+
+    price_request_from_xferData(&pr, xferData);
+    if (lookup_price(&pr, SAME_DAY))
+    {
+        update_price(xferData, &pr);
+        return;
+    }
+    new_price (xferData, ts);
 }
 
 void
@@ -1732,6 +1733,8 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
             gnc_xfer_update_to_amount(xferData);
 
         price_value = gnc_xfer_dialog_compute_price_value(xferData);
+        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
+                                   price_value);
         *(xferData->exch_rate) = gnc_numeric_abs(price_value);
     }
     else
