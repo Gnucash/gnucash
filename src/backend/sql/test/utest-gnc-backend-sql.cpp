@@ -556,12 +556,12 @@ test_add_gvalue_guid_to_slist (Fixture *fixture, gconstpointer pData)
 {
 }*/
 // Not Used
-/* gnc_sql_add_gvalue_objectref_guid_to_slist
+/* gnc_sql_add_objectref_guid_to_vec
 void
-gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,// 1
+gnc_sql_add_objectref_guid_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,// 1
 */
 /* static void
-test_gnc_sql_add_gvalue_objectref_guid_to_slist (Fixture *fixture, gconstpointer pData)
+test_gnc_sql_add_objectref_guid_to_vec (Fixture *fixture, gconstpointer pData)
 {
 }*/
 // Not Used
@@ -624,12 +624,12 @@ add_timespec_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableE
 test_add_timespec_col_info_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* add_gvalue_timespec_to_slist
+/* add_value_timespec_to_vec
 static void
 add_gvalue_timespec_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,// 2
 */
 /* static void
-test_add_gvalue_timespec_to_slist (Fixture *fixture, gconstpointer pData)
+test_add_value_timespec_to_vec (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* load_date
@@ -648,12 +648,12 @@ add_date_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry
 test_add_date_col_info_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* add_gvalue_date_to_slist
+/* add_value_date_to_vec
 static void
-add_gvalue_date_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,// 2
+add_value_date_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,// 2
 */
 /* static void
-test_add_gvalue_date_to_slist (Fixture *fixture, gconstpointer pData)
+test_add_value_date_to_vec (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* load_numeric
@@ -680,12 +680,12 @@ add_numeric_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pL
 test_add_numeric_colname_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* add_gvalue_numeric_to_slist
+/* add_value_numeric_to_vec
 static void
-add_gvalue_numeric_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,// 2
+add_value_numeric_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,// 2
 */
 /* static void
-test_add_gvalue_numeric_to_slist (Fixture *fixture, gconstpointer pData)
+test_add_value_numeric_to_vec (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* get_handler
@@ -980,36 +980,36 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "gnc sql add subtable colnames to list", Fixture, nullptr, test_gnc_sql_add_subtable_colnames_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "load string", Fixture, nullptr, test_load_string,  teardown);
 // GNC_TEST_ADD (suitename, "add string col info to list", Fixture, nullptr, test_add_string_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue string to slist", Fixture, nullptr, test_add_gvalue_string_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value string to vec", Fixture, nullptr, test_add_value_string_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load int", Fixture, nullptr, test_load_int,  teardown);
 // GNC_TEST_ADD (suitename, "add int col info to list", Fixture, nullptr, test_add_int_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue int to slist", Fixture, nullptr, test_add_gvalue_int_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value int to vec", Fixture, nullptr, test_add_value_int_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load boolean", Fixture, nullptr, test_load_boolean,  teardown);
 // GNC_TEST_ADD (suitename, "add boolean col info to list", Fixture, nullptr, test_add_boolean_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue boolean to slist", Fixture, nullptr, test_add_gvalue_boolean_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value boolean to vec", Fixture, nullptr, test_add_value_boolean_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load int64", Fixture, nullptr, test_load_int64,  teardown);
 // GNC_TEST_ADD (suitename, "add int64 col info to list", Fixture, nullptr, test_add_int64_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue int64 to slist", Fixture, nullptr, test_add_gvalue_int64_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value int64 to vec", Fixture, nullptr, test_add_value_int64_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load double", Fixture, nullptr, test_load_double,  teardown);
 // GNC_TEST_ADD (suitename, "add double col info to list", Fixture, nullptr, test_add_double_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue double to slist", Fixture, nullptr, test_add_gvalue_double_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value double to vec", Fixture, nullptr, test_add_value_double_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load guid", Fixture, nullptr, test_load_guid,  teardown);
 // GNC_TEST_ADD (suitename, "add guid col info to list", Fixture, nullptr, test_add_guid_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue guid to slist", Fixture, nullptr, test_add_gvalue_guid_to_slist,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_gvalue_objectref_guid_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value guid to vec", Fixture, nullptr, test_add_value_guid_to_vec,  teardown);
+// GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_objectref_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, nullptr, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
     GNC_TEST_ADD_FUNC (suitename, "gnc sql convert timespec to string",
                        test_gnc_sql_convert_timespec_to_string);
 // GNC_TEST_ADD (suitename, "load timespec", Fixture, nullptr, test_load_timespec,  teardown);
 // GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, nullptr, test_add_timespec_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue timespec to slist", Fixture, nullptr, test_add_gvalue_timespec_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value timespec to vec", Fixture, nullptr, test_add_value_timespec_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load date", Fixture, nullptr, test_load_date,  teardown);
 // GNC_TEST_ADD (suitename, "add date col info to list", Fixture, nullptr, test_add_date_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue date to slist", Fixture, nullptr, test_add_gvalue_date_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value date to vec", Fixture, nullptr, test_add_value_date_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load numeric", Fixture, nullptr, test_load_numeric,  teardown);
 // GNC_TEST_ADD (suitename, "add numeric col info to list", Fixture, nullptr, test_add_numeric_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add numeric colname to list", Fixture, nullptr, test_add_numeric_colname_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add gvalue numeric to slist", Fixture, nullptr, test_add_gvalue_numeric_to_slist,  teardown);
+// GNC_TEST_ADD (suitename, "add value numeric to vec", Fixture, nullptr, test_add_value_numeric_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "get handler", Fixture, nullptr, test_get_handler,  teardown);
 // GNC_TEST_ADD (suitename, "register standard col type handlers", Fixture, nullptr, test_register_standard_col_type_handlers,  teardown);
 // GNC_TEST_ADD (suitename, " retrieve guid ", Fixture, nullptr, test__retrieve_guid_,  teardown);

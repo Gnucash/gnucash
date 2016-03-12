@@ -325,8 +325,7 @@ load_invoice_guid (const GncSqlBackend* be, GncSqlRow* row,
 static GncSqlColumnTypeHandler invoice_guid_handler
 = { load_invoice_guid,
     gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    gnc_sql_add_gvalue_objectref_guid_to_slist
+    gnc_sql_add_objectref_guid_to_vec
   };
 /* ================================================================= */
 void

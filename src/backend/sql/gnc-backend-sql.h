@@ -55,7 +55,8 @@ struct GncSqlColumnInfo;
 struct GncSqlColumnTableEntry;
 using EntryVec = std::vector<GncSqlColumnTableEntry>;
 using ColVec = std::vector<GncSqlColumnInfo>;
-using LoadOrder = std::vector<std::string>;
+using StrVec = std::vector<std::string>;
+using PairVec = std::vector<std::pair<std::string, std::string>>;
 typedef struct GncSqlConnection GncSqlConnection;
 
 /**
@@ -153,14 +154,14 @@ struct GncSqlStatement
     void (*dispose) (GncSqlStatement*);
     gchar* (*toSql) (GncSqlStatement*);
     void (*addWhereCond) (GncSqlStatement*, QofIdTypeConst, gpointer,
-                          const GncSqlColumnTableEntry&, GValue*);
+                          const PairVec&);
 };
 #define gnc_sql_statement_dispose(STMT) \
         (STMT)->dispose(STMT)
 #define gnc_sql_statement_to_sql(STMT) \
         (STMT)->toSql(STMT)
-#define gnc_sql_statement_add_where_cond(STMT,TYPENAME,OBJ,COLDESC,VALUE) \
-        (STMT)->addWhereCond(STMT, TYPENAME, OBJ, COLDESC, VALUE)
+#define gnc_sql_statement_add_where_cond(STMT,TYPENAME,OBJ,COL_VAL_PAIR) \
+        (STMT)->addWhereCond(STMT, TYPENAME, OBJ, COL_VAL_PAIR)
 
 /**
  * @struct GncSqlConnection
@@ -181,7 +182,7 @@ struct GncSqlConnection
     gboolean (*createTable) (GncSqlConnection*, const gchar*, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*createIndex) (GncSqlConnection*, const gchar*, const gchar*, const EntryVec&); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*addColumnsToTable) (GncSqlConnection*, const gchar* table, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
-    gchar* (*quoteString) (const GncSqlConnection*, gchar*);
+    gchar* (*quoteString) (const GncSqlConnection*, const char*);
 };
 #define gnc_sql_connection_dispose(CONN) (CONN)->dispose(CONN)
 #define gnc_sql_connection_execute_select_statement(CONN,STMT) \
@@ -434,18 +435,17 @@ typedef enum
 } E_DB_OPERATION;
 
 typedef void (*GNC_SQL_LOAD_FN) (const GncSqlBackend* be,
-                                 GncSqlRow* row,
-                                 QofSetterFunc setter, gpointer pObject,
-                                 const GncSqlColumnTableEntry& table);
+                                 GncSqlRow* row, QofSetterFunc setter,
+                                 gpointer pObject,
+                                 const GncSqlColumnTableEntry& table_row);
 typedef void (*GNC_SQL_ADD_COL_INFO_TO_LIST_FN) (const GncSqlBackend* be,
-                                       const GncSqlColumnTableEntry& table_row,
+                                                 const GncSqlColumnTableEntry& table_row,
                                                  ColVec& vec);
-typedef void (*GNC_SQL_ADD_COLNAME_TO_LIST_FN) (const GncSqlColumnTableEntry& table_row, GList** pList);
-typedef void (*GNC_SQL_ADD_GVALUE_TO_SLIST_FN) (const GncSqlBackend* be,
-                                                QofIdTypeConst obj_name,
-                                                const gpointer pObject,
-                                        const GncSqlColumnTableEntry& table_row,
-                                                GSList** pList);
+typedef void (*GNC_SQL_ADD_VALUE_TO_VEC_FN) (const GncSqlBackend* be,
+                                             QofIdTypeConst obj_name,
+                                             const gpointer pObject,
+                                             const GncSqlColumnTableEntry& table_row,
+                                             PairVec& vec);
 
 /**
  * @struct GncSqlColumnTypeHandler
@@ -469,14 +469,11 @@ typedef struct
     GNC_SQL_ADD_COL_INFO_TO_LIST_FN add_col_info_to_list_fn;
 
     /**
-     * Routine to add a column name string for the column type to a GList.
+     * Add a pair of the table column heading and object's value's string
+     * representation to a PairVec; used for constructing WHERE clauses and
+     * UPDATE statements.
      */
-    GNC_SQL_ADD_COLNAME_TO_LIST_FN  add_colname_to_list_fn;
-
-    /**
-     * Routine to add a GValue for the property to a GSList.
-     */
-    GNC_SQL_ADD_GVALUE_TO_SLIST_FN  add_gvalue_to_slist_fn;
+    GNC_SQL_ADD_VALUE_TO_VEC_FN	add_value_to_vec_fn;
 } GncSqlColumnTypeHandler;
 
 /**
@@ -488,16 +485,6 @@ typedef struct
  */
 QofAccessFunc gnc_sql_get_getter (QofIdTypeConst obj_name,
                                   const GncSqlColumnTableEntry& table_row);
-
-/**
- * Adds a column name to a list.  If the column type spans multiple columns,
- * all of the column names for the pieces are added.
- *
- * @param table_row DB table column
- * @param pList List
- */
-void gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry& table_row,
-                                  GList** pList);
 
 /**
  * Performs an operation on the database.
@@ -691,11 +678,11 @@ void gnc_sql_register_col_type_handler (const gchar* colType,
  * @param table_row DB table column description
  * @param pList List
  */
-void gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be,
-                                                 QofIdTypeConst obj_name,
-                                                 const gpointer pObject,
-                                                 const GncSqlColumnTableEntry& table_row,
-                                                 GSList** pList);
+void gnc_sql_add_objectref_guid_to_vec (const GncSqlBackend* be,
+                                        QofIdTypeConst obj_name,
+                                        const gpointer pObject,
+                                        const GncSqlColumnTableEntry& table_row,
+                                        PairVec& vec);
 
 /**
  * Adds a column info structure for an object reference GncGUID to the end of a
@@ -719,28 +706,6 @@ void gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* be,
  */
 guint gnc_sql_append_guid_list_to_sql (GString* str, GList* list,
                                        guint maxCount);
-
-/**
- * Appends column names for a subtable to the end of a GList.
- *
- * @param table_row Main DB column description
- * @param subtable Sub-column description table
- * @param pList List
- */
-void gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry& table_row,
-                                            const EntryVec& subtable,
-                                            GList** pList);
-
-/**
- * Returns a string corresponding to the SQL representation of a GValue.  The
- * caller must free the string.
- *
- * @param conn SQL connection
- * @param value Value to be converted
- * @return String
- */
-gchar* gnc_sql_get_sql_value (const GncSqlConnection* conn,
-                              const GValue* value);
 
 /**
  * Initializes DB table version information.
@@ -822,7 +787,7 @@ gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const char* table_name
  *
  * @param load_order NULL-terminated array of object type ID strings
  */
-void gnc_sql_set_load_order(LoadOrder&& load_order);
+void gnc_sql_set_load_order(StrVec&& load_order);
 
 void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 
@@ -835,6 +800,95 @@ typedef struct
     GncSqlBackend* be;
     gboolean is_ok;
 } write_objects_t;
+
+template <typename T> T
+get_row_value_from_object(QofIdTypeConst obj_name, const gpointer pObject,
+                          const GncSqlColumnTableEntry& table_row)
+{
+    return get_row_value_from_object<T>(obj_name, pObject, table_row,
+                                        std::is_pointer<T>());
+}
+
+template <typename T> T
+get_row_value_from_object(QofIdTypeConst obj_name, const gpointer pObject,
+                          const GncSqlColumnTableEntry& table_row,
+                          std::true_type)
+{
+    g_return_val_if_fail(obj_name != nullptr && pObject != nullptr, nullptr);
+    T result = nullptr;
+    if (table_row.gobj_param_name != nullptr)
+        g_object_get(pObject, table_row.gobj_param_name, &result, NULL );
+    else
+    {
+        QofAccessFunc getter = gnc_sql_get_getter(obj_name, table_row);
+        if (getter != nullptr)
+            result = reinterpret_cast<T>((getter)(pObject, nullptr));
+    }
+    return result;
+}
+
+template <typename T> T
+get_row_value_from_object(QofIdTypeConst obj_name, const gpointer pObject,
+                          const GncSqlColumnTableEntry& table_row,
+                          std::false_type)
+{
+    g_return_val_if_fail(obj_name != nullptr && pObject != nullptr,
+                         static_cast<T>(0));
+    T result = static_cast<T>(0);
+    if (table_row.gobj_param_name != nullptr)
+        g_object_get(pObject, table_row.gobj_param_name, &result, NULL );
+    else
+    {
+        QofAccessFunc getter = gnc_sql_get_getter(obj_name, table_row);
+        if (getter != nullptr)
+            result = reinterpret_cast<T>((getter)(pObject, nullptr));
+    }
+    return result;
+}
+
+template <typename T> void
+add_value_to_vec(const GncSqlBackend* be, QofIdTypeConst obj_name,
+                 const gpointer pObject,
+                 const GncSqlColumnTableEntry& table_row,
+                 PairVec& vec)
+{
+    add_value_to_vec<T>(be, obj_name, pObject, table_row, vec,
+                        std::is_pointer<T>());
+}
+
+template <typename T> void
+add_value_to_vec(const GncSqlBackend* be, QofIdTypeConst obj_name,
+                 const gpointer pObject,
+                 const GncSqlColumnTableEntry& table_row,
+                 PairVec& vec, std::true_type)
+{
+    T s = get_row_value_from_object<T>(obj_name, pObject, table_row);
+
+    if (s != nullptr)
+    {
+        std::ostringstream stream;
+        stream << *s;
+        vec.emplace_back(std::make_pair(std::string{table_row.col_name},
+                                        stream.str()));
+        return;
+    }
+}
+
+template <typename T> void
+add_value_to_vec(const GncSqlBackend* be, QofIdTypeConst obj_name,
+                 const gpointer pObject,
+                 const GncSqlColumnTableEntry& table_row,
+                 PairVec& vec, std::false_type)
+{
+    T s = get_row_value_from_object<T>(obj_name, pObject, table_row);
+
+    std::ostringstream stream;
+    stream << s;
+    vec.emplace_back(std::make_pair(std::string{table_row.col_name},
+                                    stream.str()));
+    return;
+}
+
 
 #endif /* GNC_BACKEND_SQL_H */
 

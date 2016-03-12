@@ -83,6 +83,7 @@ extern "C"
 #include <boost/regex.hpp>
 #include <string>
 
+#include <gnc-datetime.hpp>
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-dbi.h"
 #include "gnc-backend-dbi-priv.h"
@@ -2194,16 +2195,16 @@ row_get_value_at_col_name (GncSqlRow* row, const gchar* col_name)
     GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
     gushort type;
     guint attrs;
-    GValue* value;
+    GValue *value;
 
     type = dbi_result_get_field_type (dbi_row->result, col_name);
     attrs = dbi_result_get_field_attribs (dbi_row->result, col_name);
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
 
     switch (type)
     {
     case DBI_TYPE_INTEGER:
+        value = g_new0 (GValue, 1);
+        g_assert (value != NULL);
         (void)g_value_init (value, G_TYPE_INT64);
         g_value_set_int64 (value, dbi_result_get_longlong (dbi_row->result, col_name));
         break;
@@ -2211,11 +2212,15 @@ row_get_value_at_col_name (GncSqlRow* row, const gchar* col_name)
         gnc_push_locale (LC_NUMERIC, "C");
         if ((attrs & DBI_DECIMAL_SIZEMASK) == DBI_DECIMAL_SIZE4)
         {
+            value = g_new0 (GValue, 1);
+            g_assert (value != NULL);
             (void)g_value_init (value, G_TYPE_FLOAT);
             g_value_set_float (value, dbi_result_get_float (dbi_row->result, col_name));
         }
         else if ((attrs & DBI_DECIMAL_SIZEMASK) == DBI_DECIMAL_SIZE8)
         {
+            value = g_new0 (GValue, 1);
+            g_assert (value != NULL);
             (void)g_value_init (value, G_TYPE_DOUBLE);
             g_value_set_double (value, dbi_result_get_double (dbi_row->result, col_name));
         }
@@ -2226,6 +2231,8 @@ row_get_value_at_col_name (GncSqlRow* row, const gchar* col_name)
         gnc_pop_locale (LC_NUMERIC);
         break;
     case DBI_TYPE_STRING:
+        value = g_new0 (GValue, 1);
+        g_assert (value != NULL);
         (void)g_value_init (value, G_TYPE_STRING);
         g_value_take_string (value, dbi_result_get_string_copy (dbi_row->result,
                                                                 col_name));
@@ -2238,11 +2245,11 @@ row_get_value_at_col_name (GncSqlRow* row, const gchar* col_name)
         else
         {
 #if HAVE_LIBDBI_TO_LONGLONG
-	    /* A less evil hack than the one equrie by libdbi-0.8, but
-	     * still necessary to work around the same bug.
-	     */
-	    time64 time = dbi_result_get_as_longlong(dbi_row->result,
-						     col_name);
+            /* A less evil hack than the one equrie by libdbi-0.8, but
+             * still necessary to work around the same bug.
+             */
+            time64 time = dbi_result_get_as_longlong(dbi_row->result,
+                                                     col_name);
 #else
             /* A seriously evil hack to work around libdbi bug #15
              * https://sourceforge.net/p/libdbi/bugs/15/. When libdbi
@@ -2253,14 +2260,18 @@ row_get_value_at_col_name (GncSqlRow* row, const gchar* col_name)
             guint64 row = dbi_result_get_currow (result);
             guint idx = dbi_result_get_field_idx (result, col_name) - 1;
             time64 time = result->rows[row]->field_values[idx].d_datetime;
+            if (time < MINTIME || time > MAXTIME)
+                return nullptr;
+            value = g_new0 (GValue, 1);
+            g_assert (value != NULL);
 #endif //HAVE_LIBDBI_TO_LONGLONG
+
             (void)g_value_init (value, G_TYPE_INT64);
             g_value_set_int64 (value, time);
         }
         break;
     default:
         PERR ("Field %s: unknown DBI_TYPE: %d\n", col_name, type);
-        g_free (value);
         return NULL;
     }
 
@@ -2431,19 +2442,20 @@ stmt_to_sql (GncSqlStatement* stmt)
 
 static void
 stmt_add_where_cond(GncSqlStatement* stmt, QofIdTypeConst type_name,
-                    gpointer obj, const GncSqlColumnTableEntry& table_row,
-                    GValue* value )
+                    gpointer obj, const PairVec& col_values)
 {
-    GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
-    gchar* buf;
-    gchar* value_str;
-
-    value_str = gnc_sql_get_sql_value (dbi_stmt->conn, value);
-    buf = g_strdup_printf (" WHERE %s = %s", table_row.col_name,
-                           value_str);
-    g_free (value_str);
-    (void)g_string_append (dbi_stmt->sql, buf);
-    g_free (buf);
+    GncDbiSqlStatement* dbi_stmt = reinterpret_cast<GncDbiSqlStatement*>(stmt);
+    std::ostringstream sql;
+    sql << " WHERE ";
+    for (auto colpair : col_values)
+    {
+        if (colpair != *col_values.begin())
+            sql << " AND ";
+        sql << colpair.first << " = " <<
+            gnc_sql_connection_quote_string (dbi_stmt->conn,
+                                             colpair.second.c_str());
+    }
+    (void)g_string_append (dbi_stmt->sql, sql.str().c_str());
 }
 
 static GncSqlStatement*
@@ -3046,7 +3058,7 @@ conn_add_columns_to_table(GncSqlConnection* conn, const char* table_name,
 }
 
 static  gchar*
-conn_quote_string (const GncSqlConnection* conn, gchar* unquoted_str)
+conn_quote_string (const GncSqlConnection* conn, const char* unquoted_str)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     gchar* quoted_str;

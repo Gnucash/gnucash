@@ -191,50 +191,33 @@ add_owner_col_info_to_list(const GncSqlBackend* be,
 }
 
 static void
-add_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pList)
+add_value_owner_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,
+                        const gpointer pObject,
+                        const GncSqlColumnTableEntry& table_row,
+                        PairVec& vec)
 {
-    gchar* buf;
-
-    buf = g_strdup_printf ("%s_type", table_row.col_name);
-    (*pList) = g_list_append ((*pList), buf);
-    buf = g_strdup_printf ("%s_guid", table_row.col_name);
-    (*pList) = g_list_append ((*pList), buf);
-}
-
-static void
-add_gvalue_owner_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                           const gpointer pObject,
-                           const GncSqlColumnTableEntry& table_row,
-                           GSList** pList)
-{
-    GValue* subfield_value;
-    GncOwner* owner;
-    gchar* buf;
-    const GncGUID* guid;
-    gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncOwnerType type;
-    QofInstance* inst = NULL;
-    OwnerGetterFunc getter;
-
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 
-    getter = (OwnerGetterFunc)gnc_sql_get_getter (obj_name, table_row);
-    owner = (*getter) (pObject);
+    auto getter = (OwnerGetterFunc)gnc_sql_get_getter (obj_name, table_row);
+    auto owner = (*getter) (pObject);
 
-    if (owner != NULL)
+    QofInstance* inst = nullptr;
+    GncOwnerType type;
+
+    std::ostringstream buf;
+
+    buf << table_row.col_name << "_type";
+    std::string type_hdr{buf.str()};
+    buf.str("");
+    buf << table_row.col_name << "_guid";
+    std::string guid_hdr{buf.str()};
+    buf.str("");
+
+    if (owner != nullptr)
     {
-        buf = g_strdup_printf ("%s_type", table_row.col_name);
-        subfield_value = g_new0 (GValue, 1);
-        g_value_init (subfield_value, G_TYPE_INT);
         type = gncOwnerGetType (owner);
-        g_value_set_int (subfield_value, type);
-        (*pList) = g_slist_append ((*pList), subfield_value);
-        g_free (buf);
-
-        buf = g_strdup_printf ("%s_guid", table_row.col_name);
-        subfield_value = g_new0 (GValue, 1);
         switch (type)
         {
         case GNC_OWNER_CUSTOMER:
@@ -256,37 +239,31 @@ add_gvalue_owner_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
         default:
             PWARN ("Invalid owner type: %d\n", type);
         }
-        g_value_init (subfield_value, G_TYPE_STRING);
-        if (inst != NULL)
-        {
-            guid = qof_instance_get_guid (inst);
-            if (guid != NULL)
-            {
-                (void)guid_to_string_buff (guid, guid_buf);
-                g_value_take_string (subfield_value, g_strdup_printf ("%s", guid_buf));
-            }
-        }
-        (*pList) = g_slist_append ((*pList), subfield_value);
-        g_free (buf);
     }
-    else
+
+    if (inst == nullptr)
     {
-        subfield_value = g_new0 (GValue, 1);
-        g_value_init (subfield_value, G_TYPE_STRING);
-        g_value_set_string (subfield_value, "NULL");
-        (*pList) = g_slist_append ((*pList), subfield_value);
-        subfield_value = g_new0 (GValue, 1);
-        g_value_init (subfield_value, G_TYPE_STRING);
-        g_value_set_string (subfield_value, "NULL");
-        (*pList) = g_slist_append ((*pList), subfield_value);
+        /* Twice, once for type, once for guid. */
+        vec.emplace_back (std::make_pair (type_hdr, std::string{"NULL"}));
+        vec.emplace_back (std::make_pair (guid_hdr, std::string{"NULL"}));
+
+        return;
     }
+    buf << type;
+    vec.emplace_back(std::make_pair(type_hdr, buf.str()));
+    buf.str("");
+    auto guid = qof_instance_get_guid(inst);
+    if (guid != nullptr)
+        buf << guid;
+    else
+        buf << "NULL";
+    vec.emplace_back(std::make_pair(guid_hdr, buf.str()));
 }
 
 static GncSqlColumnTypeHandler owner_handler
 = { load_owner,
     add_owner_col_info_to_list,
-    add_colname_to_list,
-    add_gvalue_owner_to_slist
+    add_value_owner_to_vec
   };
 
 /* ================================================================= */
