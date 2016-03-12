@@ -267,6 +267,8 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
                                     [type](const OBEEntry& entry){
                                           return type == std::get<0>(entry);
                                     });
+            if (entry == backend_registry.end())
+                continue;
             auto obe = std::get<1>(*entry);
             if (entry != backend_registry.end() &&
                 obe->initial_load != nullptr)
