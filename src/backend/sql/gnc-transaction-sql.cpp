@@ -66,8 +66,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef struct
 {
-    /*@ dependent @*/ GncSqlBackend* be;
-    /*@ dependent @*/
+     GncSqlBackend* be;
     const GncGUID* guid;
     gboolean is_ok;
 } split_info_t;
@@ -77,7 +76,6 @@ typedef struct
 
 static const GncSqlColumnTableEntry tx_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",          CT_GUID,           0,                      COL_NNUL | COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          "currency" },
     { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          "num" },
@@ -85,19 +83,17 @@ static const GncSqlColumnTableEntry tx_col_table[] =
     { "enter_date",    CT_TIMESPEC,       0,                      0,                 "enter-date" },
     { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
-static /*@ dependent @*//*@ null @*/ gpointer get_split_reconcile_state( gpointer pObject );
-static void set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue );
-static void set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot );
+static  gpointer get_split_reconcile_state( gpointer pObject );
+static void set_split_reconcile_state( gpointer pObject,  gpointer pValue );
+static void set_split_lot( gpointer pObject,  gpointer pLot );
 
 #define SPLIT_MAX_MEMO_LEN 2048
 #define SPLIT_MAX_ACTION_LEN 2048
 
 static const GncSqlColumnTableEntry split_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",            CT_GUID,         0,                    COL_NNUL | COL_PKEY, "guid" },
     { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          "transaction" },
     { "account_guid",    CT_ACCOUNTREF,   0,                    COL_NNUL,          "account" },
@@ -115,36 +111,29 @@ static const GncSqlColumnTableEntry split_col_table[] =
         (QofAccessFunc)xaccSplitGetLot, set_split_lot
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 static const GncSqlColumnTableEntry post_date_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "post_date", CT_TIMESPEC, 0, 0, "post-date" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 static const GncSqlColumnTableEntry account_guid_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "account_guid", CT_ACCOUNTREF, 0, COL_NNUL, "account" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 static const GncSqlColumnTableEntry tx_guid_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "tx_guid", CT_GUID, 0, 0, "guid" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
 
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_split_reconcile_state( gpointer pObject )
 {
     static gchar c[2];
@@ -158,7 +147,7 @@ get_split_reconcile_state( gpointer pObject )
 }
 
 static void
-set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_split_reconcile_state( gpointer pObject,  gpointer pValue )
 {
     const gchar* s = (const gchar*)pValue;
 
@@ -170,7 +159,7 @@ set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue )
 }
 
 static void
-set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot )
+set_split_lot( gpointer pObject,  gpointer pLot )
 {
     GNCLot* lot;
     Split* split;
@@ -187,7 +176,7 @@ set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot )
     gnc_lot_add_split( lot, split );
 }
 
-static /*@ null @*/ Split*
+static  Split*
 load_single_split( GncSqlBackend* be, GncSqlRow* row )
 {
     const GncGUID* guid;
@@ -280,7 +269,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
     (void)g_string_free( sql, TRUE );
 }
 
-static /*@ null @*/ Transaction*
+static  Transaction*
 load_single_tx( GncSqlBackend* be, GncSqlRow* row )
 {
     const GncGUID* guid;
@@ -325,7 +314,7 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
  */
 typedef struct
 {
-    /*@ dependent @*/ Account* acc;
+     Account* acc;
     gnc_numeric start_bal;
     gnc_numeric end_bal;
     gnc_numeric start_cleared_bal;
@@ -1078,7 +1067,7 @@ typedef struct
 
 #define TX_GUID_CHECK 0
 
-G_GNUC_UNUSED static /*@ null @*/ gpointer
+G_GNUC_UNUSED static  gpointer
 compile_split_query( GncSqlBackend* be, QofQuery* query )
 {
     split_query_info_t* query_info = NULL;
@@ -1269,8 +1258,7 @@ free_split_query( GncSqlBackend* be, gpointer pQuery )
 /* ----------------------------------------------------------------- */
 typedef struct
 {
-    /*@ dependent @*/ const GncSqlBackend* be;
-    /*@ dependent @*/
+     const GncSqlBackend* be;
     Account* acct;
     char reconcile_state;
     gnc_numeric balance;
@@ -1312,15 +1300,13 @@ set_acct_bal_balance( gpointer pObject, gnc_numeric value )
 
 static const GncSqlColumnTableEntry acct_balances_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "account_guid",    CT_GUID,    0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_account_from_guid },
     { "reconcile_state", CT_STRING,  1, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_reconcile_state },
     { "quantity",        CT_NUMERIC, 0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_balance },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
-G_GNUC_UNUSED static /*@ null @*/ single_acct_balance_t*
+G_GNUC_UNUSED static  single_acct_balance_t*
 load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
 {
     single_acct_balance_t* bal = NULL;
@@ -1337,7 +1323,7 @@ load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
     return bal;
 }
 
-/*@ null @*/ GSList*
+ GSList*
 gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 {
 #if LOAD_TRANSACTIONS_AS_NEEDED
@@ -1429,7 +1415,7 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 /* ----------------------------------------------------------------- */
 static void
 load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
-              /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+               QofSetterFunc setter, gpointer pObject,
               const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;

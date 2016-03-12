@@ -52,9 +52,9 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define TABLE_NAME "accounts"
 #define TABLE_VERSION 1
 
-static /*@ null @*//*@ dependent @*/ gpointer get_parent( gpointer pObject );
-static void set_parent( gpointer pObject, /*@ null @*/ gpointer pValue );
-static void set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_parent( gpointer pObject );
+static void set_parent( gpointer pObject,  gpointer pValue );
+static void set_parent_guid( gpointer pObject,  gpointer pValue );
 
 #define ACCOUNT_MAX_NAME_LEN 2048
 #define ACCOUNT_MAX_TYPE_LEN 2048
@@ -63,7 +63,6 @@ static void set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",           CT_GUID,         0,                           COL_NNUL | COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
@@ -79,25 +78,22 @@ static const GncSqlColumnTableEntry col_table[] =
     { "hidden",         CT_BOOLEAN,      0,                           0,                 "hidden" },
     { "placeholder",    CT_BOOLEAN,      0,                           0,                 "placeholder" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 static GncSqlColumnTableEntry parent_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "parent_guid", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 typedef struct
 {
-    /*@ dependent @*/ Account* pAccount;
+     Account* pAccount;
     GncGUID guid;
 } account_parent_guid_struct;
 
 /* ================================================================= */
 
-static /*@ null @*//*@ dependent @*/ gpointer
+static  gpointer
 get_parent( gpointer pObject )
 {
     const Account* pAccount;
@@ -122,7 +118,7 @@ get_parent( gpointer pObject )
 }
 
 static void
-set_parent( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_parent( gpointer pObject,  gpointer pValue )
 {
     Account* pAccount;
     QofBook* pBook;
@@ -145,7 +141,7 @@ set_parent( gpointer pObject, /*@ null @*/ gpointer pValue )
 }
 
 static void
-set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_parent_guid( gpointer pObject,  gpointer pValue )
 {
     account_parent_guid_struct* s = (account_parent_guid_struct*)pObject;
     GncGUID* guid = (GncGUID*)pValue;
@@ -156,7 +152,7 @@ set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
     s->guid = *guid;
 }
 
-static /*@ dependent @*//*@ null @*/ Account*
+static  Account*
 load_single_account( GncSqlBackend* be, GncSqlRow* row,
                      GList** l_accounts_needing_parents )
 {
@@ -401,7 +397,7 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 /* ================================================================= */
 static void
 load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
-                   /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+                    QofSetterFunc setter, gpointer pObject,
                    const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;

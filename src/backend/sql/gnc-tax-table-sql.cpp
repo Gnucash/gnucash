@@ -120,7 +120,7 @@ static GncSqlColumnTableEntry guid_col_table[] =
 
 typedef struct
 {
-    /*@ dependent @*/ GncTaxTable* tt;
+     GncTaxTable* tt;
     GncGUID guid;
     gboolean have_guid;
 } taxtable_parent_guid_struct;
@@ -141,7 +141,7 @@ set_obj_guid( gpointer pObject, gpointer pValue )
     // Nowhere to put the GncGUID
 }
 
-static /*@ null @*//*@ dependent @*/ gpointer
+static  gpointer
 bt_get_parent( gpointer pObject )
 {
     const GncTaxTable* tt;
@@ -190,7 +190,7 @@ tt_set_parent( gpointer data, gpointer value )
 }
 
 static void
-tt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+tt_set_parent_guid( gpointer pObject,  gpointer pValue )
 {
     taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)pObject;
     GncGUID* guid = (GncGUID*)pValue;

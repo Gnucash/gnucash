@@ -85,7 +85,6 @@ struct GncDbiBackend_struct
 
     dbi_conn conn;
 
-    /*@ dependent @*/
     QofBook *primary_book;	/* The primary, main open book */
     gboolean	loading;		/* We are performing an initial load */
     gboolean  in_query;
@@ -104,11 +103,8 @@ typedef struct
 {
     GncSqlConnection base;
 
-    /*@ observer @*/
     QofBackend* qbe;
-    /*@ observer @*/
     dbi_conn conn;
-    /*@ observer @*/
     provider_functions_t* provider;
     gboolean conn_ok;       // Used by the error handler routines to flag if the connection is ok to use
     gint last_error;        // Code of the last error that occurred. This is set in the error callback function

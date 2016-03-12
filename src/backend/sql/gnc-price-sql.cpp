@@ -45,7 +45,7 @@ extern "C"
 #include "gnc-slots-sql.h"
 
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "prices"
 #define TABLE_VERSION 2
@@ -55,7 +55,6 @@ extern "C"
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",           CT_GUID,           0,                    COL_NNUL | COL_PKEY, "guid" },
     { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          "commodity" },
     { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          "currency" },
@@ -64,12 +63,11 @@ static const GncSqlColumnTableEntry col_table[] =
     { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 "type" },
     { "value",          CT_NUMERIC,        0,                    COL_NNUL,          "value" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
 
-static /*@ null @*//*@ dependent @*/ GNCPrice*
+static  GNCPrice*
 load_single_price( GncSqlBackend* be, GncSqlRow* row )
 {
     GNCPrice* pPrice;

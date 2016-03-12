@@ -40,7 +40,7 @@ int gnc_module_current  = 0;
 int gnc_module_revision = 0;
 int gnc_module_age      = 0;
 
-/*@ dependent @*//*@ null @*/
+
 static GNCModule engine;
 
 gchar *

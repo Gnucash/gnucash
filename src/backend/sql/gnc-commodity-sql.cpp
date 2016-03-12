@@ -43,10 +43,10 @@ extern "C"
 #include "splint-defs.h"
 #endif
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+ static QofLogModule log_module = G_LOG_DOMAIN;
 
-static /*@ dependent @*//*@ null @*/ gpointer get_quote_source_name( gpointer pObject );
-static void set_quote_source_name( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_quote_source_name( gpointer pObject );
+static void set_quote_source_name( gpointer pObject,  gpointer pValue );
 
 #define COMMODITIES_TABLE "commodities"
 #define TABLE_VERSION 1
@@ -60,7 +60,6 @@ static void set_quote_source_name( gpointer pObject, /*@ null @*/ gpointer pValu
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",         CT_GUID,    0,                             COL_NNUL | COL_PKEY, "guid" },
     {
         "namespace",    CT_STRING,  COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
@@ -78,12 +77,11 @@ static const GncSqlColumnTableEntry col_table[] =
     },
     { "quote_tz",     CT_STRING,  COMMODITY_MAX_QUOTE_TZ_LEN,    0,                 "quote-tz" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
 
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_quote_source_name( gpointer pObject )
 {
     const gnc_commodity* pCommodity;
@@ -113,7 +111,7 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
     gnc_commodity_set_quote_source( pCommodity, quote_source );
 }
 
-static /*@ dependent @*/ gnc_commodity*
+static  gnc_commodity*
 load_single_commodity( GncSqlBackend* be, GncSqlRow* row )
 {
     QofBook* pBook = be->book;
@@ -274,7 +272,7 @@ gnc_sql_commit_commodity (gnc_commodity *pCommodity)
 
 static void
 load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
-                     /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+                      QofSetterFunc setter, gpointer pObject,
                      const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;

@@ -51,14 +51,13 @@ extern "C"
 
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
-static /*@ dependent @*//*@ null @*/ gpointer get_root_account_guid( gpointer pObject );
-static void set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
-static /*@ dependent @*//*@ null @*/ gpointer get_root_template_guid( gpointer pObject );
-static void set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_root_account_guid( gpointer pObject );
+static void set_root_account_guid( gpointer pObject,  gpointer pValue );
+static  gpointer get_root_template_guid( gpointer pObject );
+static void set_root_template_guid( gpointer pObject,  gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",               CT_GUID, 0, COL_NNUL | COL_PKEY, "guid" },
     {
         "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL,
@@ -69,11 +68,10 @@ static const GncSqlColumnTableEntry col_table[] =
         (QofAccessFunc)get_root_template_guid, set_root_template_guid
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_root_account_guid( gpointer pObject )
 {
     QofBook* book = QOF_BOOK(pObject);
@@ -87,7 +85,7 @@ get_root_account_guid( gpointer pObject )
 }
 
 static void
-set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_root_account_guid( gpointer pObject,  gpointer pValue )
 {
     QofBook* book = QOF_BOOK(pObject);
     const Account* root;
@@ -101,7 +99,7 @@ set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
     qof_instance_set_guid( QOF_INSTANCE(root), guid );
 }
 
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_root_template_guid( gpointer pObject )
 {
     const QofBook* book = QOF_BOOK(pObject);
@@ -115,7 +113,7 @@ get_root_template_guid( gpointer pObject )
 }
 
 static void
-set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_root_template_guid( gpointer pObject,  gpointer pValue )
 {
     QofBook* book = QOF_BOOK(pObject);
     GncGUID* guid = (GncGUID*)pValue;

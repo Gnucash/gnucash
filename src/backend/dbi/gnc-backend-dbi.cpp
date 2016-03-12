@@ -113,7 +113,7 @@ static gchar lock_table[] = "gnclock";
 #define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
 #define PGSQL_DEFAULT_PORT 5432
 
-static /*@ null @*/ gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
+static  gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
         const gchar* table_name,
         const GList* col_info_list );
 static GSList* conn_get_table_list( dbi_conn conn, const gchar* dbname );
@@ -131,7 +131,7 @@ static provider_functions_t provider_sqlite3 =
 };
 #define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
-static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
+static  gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
         const gchar* table_name,
         const GList* col_info_list );
 static void append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info );
@@ -147,7 +147,7 @@ static provider_functions_t provider_mysql =
 };
 #define MYSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
-static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
+static  gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
         const gchar* table_name,
         const GList* col_info_list );
 static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
@@ -169,14 +169,14 @@ static gboolean gnc_dbi_lock_database( QofBackend *qbe, gboolean ignore_lock );
 static void gnc_dbi_unlock( QofBackend *qbe );
 static gboolean save_may_clobber_data( QofBackend* qbe );
 
-static /*@ null @*/ gchar* create_index_ddl( GncSqlConnection* conn,
+static  gchar* create_index_ddl( GncSqlConnection* conn,
         const gchar* index_name,
         const gchar* table_name,
         const GncSqlColumnTableEntry* col_table );
-static /*@ null @*/ gchar* add_columns_ddl( GncSqlConnection* conn,
+static  gchar* add_columns_ddl( GncSqlConnection* conn,
         const gchar* table_name,
         GList* col_info_list );
-static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functions_t* provider, /*@ observer @*/ QofBackend* qbe, /*@ observer @*/ dbi_conn conn );
+static GncSqlConnection* create_dbi_connection(  provider_functions_t* provider,  QofBackend* qbe,  dbi_conn conn );
 static GncDbiTestResult conn_test_dbi_library( dbi_conn conn );
 #define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
 #define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
@@ -1515,7 +1515,7 @@ gnc_dbi_session_end( QofBackend *be_start )
 }
 
 static void
-gnc_dbi_destroy_backend( /*@ only @*/ QofBackend *be )
+gnc_dbi_destroy_backend(  QofBackend *be )
 {
     g_return_if_fail( be != NULL );
 
@@ -1539,7 +1539,7 @@ gnc_dbi_destroy_backend( /*@ only @*/ QofBackend *be )
  * both values to match this version of Gnucash.
  */
 static void
-gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadType loadType )
+gnc_dbi_load( QofBackend* qbe,  QofBook *book, QofBackendLoadType loadType )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 
@@ -1867,9 +1867,9 @@ init_sql_backend( GncDbiBackend* dbi_be )
 
 static QofBackend*
 new_backend( void (*session_begin)( QofBackend *, QofSession *, const gchar *,
-                                    /*@ unused @*/ gboolean,
-                                    /*@ unused @*/ gboolean,
-                                    /*@ unused @*/ gboolean ) )
+                                     gboolean,
+                                     gboolean,
+                                     gboolean ) )
 {
     GncDbiBackend *dbi_be;
     QofBackend *be;
@@ -1905,7 +1905,7 @@ gnc_dbi_backend_postgres_new( void )
 }
 
 static void
-gnc_dbi_provider_free( /*@ only @*/ QofBackendProvider *prov )
+gnc_dbi_provider_free(  QofBackendProvider *prov )
 {
     g_return_if_fail( prov != NULL );
 
@@ -2121,13 +2121,12 @@ typedef struct
 {
     GncSqlRow base;
 
-    /*@ dependent @*/
     dbi_result result;
     GList* gvalue_list;
 } GncDbiSqlRow;
 
 static void
-row_dispose( /*@ only @*/ GncSqlRow* row )
+row_dispose(  GncSqlRow* row )
 {
     GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
     GList* node;
@@ -2151,7 +2150,7 @@ row_dispose( /*@ only @*/ GncSqlRow* row )
     g_free( dbi_row );
 }
 
-static /*@ null @*/ const GValue*
+static  const GValue*
 row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 {
     GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
@@ -2223,7 +2222,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 }
 
 static GncSqlRow*
-create_dbi_row( /*@ dependent @*/ dbi_result result )
+create_dbi_row(  dbi_result result )
 {
     GncDbiSqlRow* row;
 
@@ -2241,9 +2240,7 @@ typedef struct
 {
     GncSqlResult base;
 
-    /*@ observer @*/
     GncDbiSqlConnection* dbi_conn;
-    /*@ owned @*/
     dbi_result result;
     guint num_rows;
     guint cur_row;
@@ -2251,7 +2248,7 @@ typedef struct
 } GncDbiSqlResult;
 
 static void
-result_dispose( /*@ only @*/ GncSqlResult* result )
+result_dispose(  GncSqlResult* result )
 {
     GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
 
@@ -2281,7 +2278,7 @@ result_get_num_rows( GncSqlResult* result )
     return dbi_result->num_rows;
 }
 
-static /*@ null @*/ GncSqlRow*
+static  GncSqlRow*
 result_get_first_row( GncSqlResult* result )
 {
     GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
@@ -2309,7 +2306,7 @@ result_get_first_row( GncSqlResult* result )
     }
 }
 
-static /*@ null @*/ GncSqlRow*
+static  GncSqlRow*
 result_get_next_row( GncSqlResult* result )
 {
     GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
@@ -2338,7 +2335,7 @@ result_get_next_row( GncSqlResult* result )
 }
 
 static GncSqlResult*
-create_dbi_result( /*@ observer @*/ GncDbiSqlConnection* dbi_conn, /*@ owned @*/ dbi_result result )
+create_dbi_result(  GncDbiSqlConnection* dbi_conn,  dbi_result result )
 {
     GncDbiSqlResult* dbi_result;
 
@@ -2362,12 +2359,11 @@ typedef struct
     GncSqlStatement base;
 
     GString* sql;
-    /*@ observer @*/
     GncSqlConnection* conn;
 } GncDbiSqlStatement;
 
 static void
-stmt_dispose( /*@ only @*/ GncSqlStatement* stmt )
+stmt_dispose(  GncSqlStatement* stmt )
 {
     GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 
@@ -2387,8 +2383,8 @@ stmt_to_sql( GncSqlStatement* stmt )
 }
 
 static void
-stmt_add_where_cond( GncSqlStatement* stmt, /*@ unused @*/ QofIdTypeConst type_name,
-                     /*@ unused @*/ gpointer obj, const GncSqlColumnTableEntry* table_row, GValue* value )
+stmt_add_where_cond( GncSqlStatement* stmt,  QofIdTypeConst type_name,
+                      gpointer obj, const GncSqlColumnTableEntry* table_row, GValue* value )
 {
     GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
     gchar* buf;
@@ -2403,7 +2399,7 @@ stmt_add_where_cond( GncSqlStatement* stmt, /*@ unused @*/ QofIdTypeConst type_n
 }
 
 static GncSqlStatement*
-create_dbi_statement( /*@ observer @*/ GncSqlConnection* conn, const gchar* sql )
+create_dbi_statement(  GncSqlConnection* conn, const gchar* sql )
 {
     GncDbiSqlStatement* stmt;
 
@@ -2420,14 +2416,14 @@ create_dbi_statement( /*@ observer @*/ GncSqlConnection* conn, const gchar* sql 
 }
 /* --------------------------------------------------------- */
 static void
-conn_dispose( /*@ only @*/ GncSqlConnection* conn )
+conn_dispose(  GncSqlConnection* conn )
 {
     //GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
     g_free( conn );
 }
 
-static /*@ null @*/ GncSqlResult*
+static  GncSqlResult*
 conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
@@ -2483,7 +2479,7 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 }
 
 static GncSqlStatement*
-conn_create_statement_from_sql( /*@ observer @*/ GncSqlConnection* conn, const gchar* sql )
+conn_create_statement_from_sql(  GncSqlConnection* conn, const gchar* sql )
 {
     //GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
@@ -2523,7 +2519,7 @@ conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
 }
 
 static gboolean
-conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
+conn_begin_transaction(  GncSqlConnection* conn )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
@@ -2563,7 +2559,7 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 }
 
 static gboolean
-conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
+conn_rollback_transaction(  GncSqlConnection* conn )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
@@ -2590,7 +2586,7 @@ conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 }
 
 static gboolean
-conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
+conn_commit_transaction(  GncSqlConnection* conn )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
@@ -2616,7 +2612,7 @@ conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
     return success;
 }
 
-static /*@ null @*/ gchar*
+static  gchar*
 create_index_ddl( GncSqlConnection* conn,
                   const gchar* index_name,
                   const gchar* table_name,
@@ -2645,7 +2641,7 @@ create_index_ddl( GncSqlConnection* conn,
     return g_string_free( ddl, FALSE );
 }
 
-static /*@ null @*/ gchar*
+static  gchar*
 add_columns_ddl( GncSqlConnection* conn,
                  const gchar* table_name,
                  GList* col_info_list )
@@ -2725,7 +2721,7 @@ append_sqlite3_col_def( GString* ddl, GncSqlColumnInfo* info )
     }
 }
 
-static /*@ null @*/ gchar*
+static  gchar*
 conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
                                const gchar* table_name,
                                const GList* col_info_list )
@@ -2817,7 +2813,7 @@ append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info )
     }
 }
 
-static /*@ null @*/ gchar*
+static  gchar*
 conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
                              const GList* col_info_list )
 {
@@ -2907,7 +2903,7 @@ append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info )
     }
 }
 
-static /*@ null @*/ gchar*
+static  gchar*
 conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
                              const GList* col_info_list )
 {
@@ -2983,8 +2979,8 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 }
 
 static gboolean
-conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const gchar* index_name,
-                                  /*@ unused @*/ const gchar* table_name, /*@ unused @*/ const GncSqlColumnTableEntry* col_table )
+conn_create_index(  GncSqlConnection* conn,  const gchar* index_name,
+                                   const gchar* table_name,  const GncSqlColumnTableEntry* col_table )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     gchar* ddl;
@@ -3019,7 +3015,7 @@ conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const g
 }
 
 static gboolean
-conn_add_columns_to_table( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const gchar* table_name,
+conn_add_columns_to_table(  GncSqlConnection* conn,  const gchar* table_name,
         GList* col_info_list )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
@@ -3053,7 +3049,7 @@ conn_add_columns_to_table( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/
     return TRUE;
 }
 
-static /*@ null @*/ gchar*
+static  gchar*
 conn_quote_string( const GncSqlConnection* conn, gchar* unquoted_str )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
@@ -3240,9 +3236,9 @@ conn_test_dbi_library( dbi_conn conn )
 
 
 static GncSqlConnection*
-create_dbi_connection( /*@ observer @*/ provider_functions_t* provider,
-                                        /*@ observer @*/ QofBackend* qbe,
-                                        /*@ observer @*/ dbi_conn conn )
+create_dbi_connection(  provider_functions_t* provider,
+                                         QofBackend* qbe,
+                                         dbi_conn conn )
 {
     GncDbiSqlConnection* dbi_conn;
 

@@ -43,7 +43,7 @@ extern "C"
 
 #include <kvp_frame.hpp>
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
 #define TABLE_VERSION 3
@@ -57,37 +57,34 @@ typedef enum
 
 typedef struct
 {
-    /*@ dependent @*/ 	GncSqlBackend* be;
-    /*@ dependent @*/
+     	GncSqlBackend* be;
     const GncGUID* guid;
     gboolean is_ok;
-    /*@ dependent @*/
     KvpFrame* pKvpFrame;
     KvpValue::Type value_type;
     GList *pList;
     context_t context;
-    /*@ dependent @*/
     KvpValue* pKvpValue;
     GString* path;
 } slot_info_t;
 
 
-static /*@ null @*/ gpointer get_obj_guid( gpointer pObject );
+static  gpointer get_obj_guid( gpointer pObject );
 static void set_obj_guid( void );
-static /*@ null @*/ gpointer get_path( gpointer pObject );
-static void set_path( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_path( gpointer pObject );
+static void set_path( gpointer pObject,  gpointer pValue );
 static KvpValue::Type get_slot_type( gpointer pObject );
-static void set_slot_type( gpointer pObject, /*@ null @*/ gpointer pValue );
+static void set_slot_type( gpointer pObject,  gpointer pValue );
 static gint64 get_int64_val( gpointer pObject );
 static void set_int64_val( gpointer pObject, gint64 pValue );
-static /*@ null @*/ gpointer get_string_val( gpointer pObject );
-static void set_string_val( gpointer pObject, /*@ null @*/ gpointer pValue );
-static /*@ dependent @*//*@ null @*/ gpointer get_double_val( gpointer pObject );
-static void set_double_val( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_string_val( gpointer pObject );
+static void set_string_val( gpointer pObject,  gpointer pValue );
+static  gpointer get_double_val( gpointer pObject );
+static void set_double_val( gpointer pObject,  gpointer pValue );
 static Timespec get_timespec_val( gpointer pObject );
 static void set_timespec_val( gpointer pObject, Timespec ts );
-static /*@ null @*/ gpointer get_guid_val( gpointer pObject );
-static void set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_guid_val( gpointer pObject );
+static void set_guid_val( gpointer pObject,  gpointer pValue );
 static gnc_numeric get_numeric_val( gpointer pObject );
 static void set_numeric_val( gpointer pObject, gnc_numeric value );
 static GDate* get_gdate_val( gpointer pObject );
@@ -115,7 +112,6 @@ enum
 static const GncSqlColumnTableEntry col_table[] =
 {
     /* col_name, col_type, size, flags, g0bj_param_name, qof_param_name, getter, setter */
-    /*@ -full_init_block @*/
     { "id",             CT_INT,      0, COL_PKEY | COL_NNUL | COL_AUTOINC },
     {
         "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
@@ -158,25 +154,20 @@ static const GncSqlColumnTableEntry col_table[] =
         (QofAccessFunc)get_gdate_val, (QofSetterFunc)set_gdate_val
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const GncSqlColumnTableEntry obj_guid_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, (QofAccessFunc)get_obj_guid, _retrieve_guid_ },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 static const GncSqlColumnTableEntry gdate_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "gdate_val", CT_GDATE, 0, 0, },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
@@ -280,7 +271,7 @@ set_slot_from_value( slot_info_t *pInfo, KvpValue *pValue)
     }
 }
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_obj_guid( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
@@ -296,7 +287,7 @@ set_obj_guid( void )
     // Nowhere to put the GncGUID
 }
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_path( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
@@ -307,7 +298,7 @@ get_path( gpointer pObject )
 }
 
 static void
-set_path( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_path( gpointer pObject,  gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -333,7 +324,7 @@ get_slot_type( gpointer pObject )
 }
 
 static void
-set_slot_type( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_slot_type( gpointer pObject,  gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -373,7 +364,7 @@ set_int64_val( gpointer pObject, gint64 value )
     set_slot_from_value( pInfo, pValue );
 }
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_string_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
@@ -391,7 +382,7 @@ get_string_val( gpointer pObject )
 }
 
 static void
-set_string_val( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_string_val( gpointer pObject,  gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     g_return_if_fail( pObject != NULL );
@@ -403,7 +394,7 @@ set_string_val( gpointer pObject, /*@ null @*/ gpointer pValue )
     set_slot_from_value( pInfo, value );
 }
 
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_double_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
@@ -423,7 +414,7 @@ get_double_val( gpointer pObject )
 }
 
 static void
-set_double_val( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_double_val( gpointer pObject,  gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue *value = NULL;
@@ -459,7 +450,7 @@ set_timespec_val( gpointer pObject, Timespec ts )
     set_slot_from_value( pInfo, value );
 }
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_guid_val( gpointer pObject )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
@@ -477,7 +468,7 @@ get_guid_val( gpointer pObject )
 }
 
 static void
-set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_guid_val( gpointer pObject,  gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -869,7 +860,7 @@ slots_load_info ( slot_info_t *pInfo )
     }
 }
 
-static /*@ dependent @*//*@ null @*/ const GncGUID*
+static  const GncGUID*
 load_obj_guid( const GncSqlBackend* be, GncSqlRow* row )
 {
     static GncGUID guid;

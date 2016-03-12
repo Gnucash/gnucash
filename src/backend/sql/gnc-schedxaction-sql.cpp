@@ -57,7 +57,6 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",              CT_GUID,       0,               COL_NNUL | COL_PKEY, "guid" },
     { "name",              CT_STRING,     SX_MAX_NAME_LEN, 0,                 "name" },
     { "enabled",           CT_BOOLEAN,    0,               COL_NNUL,          "enabled" },
@@ -73,11 +72,10 @@ static const GncSqlColumnTableEntry col_table[] =
     { "instance_count",    CT_INT,        0,               COL_NNUL,          "instance-count" },
     { "template_act_guid", CT_ACCOUNTREF, 0,               COL_NNUL,          "template-account" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static /*@ null @*/ SchedXaction*
+static  SchedXaction*
 load_single_sx( GncSqlBackend* be, GncSqlRow* row )
 {
     const GncGUID* guid;

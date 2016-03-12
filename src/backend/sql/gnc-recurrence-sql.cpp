@@ -53,27 +53,24 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef struct
 {
-    /*@ dependent @*/ GncSqlBackend* be;
-    /*@ dependent @*/
+     GncSqlBackend* be;
     const GncGUID* guid;
-    /*@ dependent @*/
     Recurrence* pRecurrence;
 } recurrence_info_t;
 
-static /*@ null @*/ gpointer get_obj_guid( gpointer pObject );
+static  gpointer get_obj_guid( gpointer pObject );
 static void set_obj_guid( void );
 static gint get_recurrence_mult( gpointer pObject );
 static void set_recurrence_mult( gpointer pObject, gint value );
-static /*@ null @*/ gpointer get_recurrence_period_type( gpointer pObject );
-static void set_recurrence_period_type( gpointer pObject, /*@ null @*/ gpointer pValue );
-static /*@ null @*/ gpointer get_recurrence_weekend_adjust( gpointer pObject );
-static void set_recurrence_weekend_adjust( gpointer pObject, /*@ null @*/ gpointer pValue );
-static /*@ dependent @*//*@ null @*/ gpointer get_recurrence_period_start( gpointer pObject );
-static void set_recurrence_period_start( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_recurrence_period_type( gpointer pObject );
+static void set_recurrence_period_type( gpointer pObject,  gpointer pValue );
+static  gpointer get_recurrence_weekend_adjust( gpointer pObject );
+static void set_recurrence_weekend_adjust( gpointer pObject,  gpointer pValue );
+static  gpointer get_recurrence_period_start( gpointer pObject );
+static void set_recurrence_period_start( gpointer pObject,  gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "id",                      CT_INT,    0,                                     COL_PKEY | COL_NNUL | COL_AUTOINC },
     {
         "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
@@ -96,36 +93,31 @@ static const GncSqlColumnTableEntry col_table[] =
         (QofAccessFunc)get_recurrence_weekend_adjust, set_recurrence_weekend_adjust
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const GncSqlColumnTableEntry guid_col_table[] =
 {
-    /*@ -full_init_block @*/
     {
         "obj_guid", CT_GUID, 0, 0, NULL, NULL,
         (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* Special column table used to upgrade table from version 1 to 2 */
 static const GncSqlColumnTableEntry weekend_adjust_col_table[] =
 {
-    /*@ -full_init_block @*/
     {
         "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0,
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_obj_guid( gpointer pObject )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
@@ -163,7 +155,7 @@ set_recurrence_mult( gpointer pObject, gint value )
     pInfo->pRecurrence->mult = (guint16)value;
 }
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_recurrence_period_type( gpointer pObject )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
@@ -187,7 +179,7 @@ set_recurrence_period_type( gpointer pObject, gpointer pValue )
     pInfo->pRecurrence->ptype = recurrencePeriodTypeFromString( (gchar*)pValue );
 }
 
-static /*@ null @*/ gpointer
+static  gpointer
 get_recurrence_weekend_adjust( gpointer pObject )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
@@ -211,7 +203,7 @@ set_recurrence_weekend_adjust( gpointer pObject, gpointer pValue )
     pInfo->pRecurrence->wadj = recurrenceWeekendAdjustFromString( (gchar*)pValue );
 }
 
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_recurrence_period_start( gpointer pObject )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
@@ -293,7 +285,7 @@ gnc_sql_recurrence_delete( GncSqlBackend* be, const GncGUID* guid )
 }
 
 static void
-load_recurrence( GncSqlBackend* be, GncSqlRow* row, /*@ out @*/ Recurrence* r )
+load_recurrence( GncSqlBackend* be, GncSqlRow* row,  Recurrence* r )
 {
     recurrence_info_t recurrence_info;
 
@@ -307,7 +299,7 @@ load_recurrence( GncSqlBackend* be, GncSqlRow* row, /*@ out @*/ Recurrence* r )
     gnc_sql_load_object( be, row, TABLE_NAME, &recurrence_info, col_table );
 }
 
-static /*@ null @*/ GncSqlResult*
+static  GncSqlResult*
 gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GncGUID* guid )
 {
     gchar* buf;
@@ -327,7 +319,7 @@ gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GncGUID* guid )
     return result;
 }
 
-/*@ null @*/ Recurrence*
+ Recurrence*
 gnc_sql_recurrence_load( GncSqlBackend* be, const GncGUID* guid )
 {
     GncSqlResult* result;
@@ -361,7 +353,7 @@ gnc_sql_recurrence_load( GncSqlBackend* be, const GncGUID* guid )
     return r;
 }
 
-/*@ null @*/ GList*
+ GList*
 gnc_sql_recurrence_load_list( GncSqlBackend* be, const GncGUID* guid )
 {
     GncSqlResult* result;

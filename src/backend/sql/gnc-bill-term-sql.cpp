@@ -93,7 +93,7 @@ static GncSqlColumnTableEntry billterm_parent_col_table[] =
 
 typedef struct
 {
-    /*@ dependent @*/ GncBillTerm* billterm;
+     GncBillTerm* billterm;
     GncGUID guid;
     gboolean have_guid;
 } billterm_parent_guid_struct;
@@ -111,7 +111,7 @@ set_invisible( gpointer data, gboolean value )
     }
 }
 
-static /*@ null @*//*@ dependent @*/ gpointer
+static  gpointer
 bt_get_parent( gpointer pObject )
 {
     const GncBillTerm* billterm;
@@ -160,7 +160,7 @@ bt_set_parent( gpointer data, gpointer value )
 }
 
 static void
-bt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+bt_set_parent_guid( gpointer pObject,  gpointer pValue )
 {
     billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)pObject;
     GncGUID* guid = (GncGUID*)pValue;

@@ -49,25 +49,23 @@ extern "C"
 #define AMOUNTS_TABLE "budget_amounts"
 #define AMOUNTS_TABLE_VERSION 1
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",        CT_GUID,   0,                          COL_NNUL | COL_PKEY, "guid" },
     { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { "num_periods", CT_INT,    0,                          COL_NNUL,          "num_periods" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
-static /*@ dependent @*//*@ null @*/ QofInstance* get_budget( gpointer pObj );
+static  QofInstance* get_budget( gpointer pObj );
 static void set_budget( gpointer pObj, gpointer val );
-static /*@ dependent @*//*@ null @*/ QofInstance* get_account( gpointer pObj );
+static  QofInstance* get_account( gpointer pObj );
 static void set_account( gpointer pObj, gpointer val );
 static gint get_period_num( gpointer pObj );
 static void set_period_num( gpointer pObj, gpointer val );
@@ -83,7 +81,6 @@ typedef struct
 
 static const GncSqlColumnTableEntry budget_amounts_col_table[] =
 {
-    /*@ -full_init_block @*/
     { "id",           CT_INT,        0, COL_NNUL | COL_PKEY | COL_AUTOINC },
     {
         "budget_guid",  CT_BUDGETREF,  0, COL_NNUL,                     NULL, NULL,
@@ -102,11 +99,10 @@ static const GncSqlColumnTableEntry budget_amounts_col_table[] =
         (QofAccessFunc)get_amount, (QofSetterFunc)set_amount
     },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static /*@ dependent @*//*@ null@ */ QofInstance*
+static QofInstance*
 get_budget( gpointer pObj )
 {
     budget_amount_info_t* info = (budget_amount_info_t*)pObj;
@@ -121,7 +117,7 @@ set_budget( gpointer pObj, gpointer val )
 {
 }
 
-static /*@ dependent @*//*@ null @*/ QofInstance*
+static  QofInstance*
 get_account( gpointer pObj )
 {
     budget_amount_info_t* info = (budget_amount_info_t*)pObj;
@@ -257,7 +253,6 @@ static gboolean
 save_budget_amounts( GncSqlBackend* be, GncBudget* budget )
 {
     GList* descendants;
-    /*@ dependent @*/
     GList* node;
     budget_amount_info_t info;
     guint num_periods;
@@ -292,7 +287,7 @@ save_budget_amounts( GncSqlBackend* be, GncBudget* budget )
     return is_ok;
 }
 /*----------------------------------------------------------------*/
-static /*@ dependent @*//*@ null @*/ GncBudget*
+static  GncBudget*
 load_single_budget( GncSqlBackend* be, GncSqlRow* row )
 {
     const GncGUID* guid;
@@ -477,7 +472,7 @@ write_budgets( GncSqlBackend* be )
 /* ================================================================= */
 static void
 load_budget_guid( const GncSqlBackend* be, GncSqlRow* row,
-                  /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+                   QofSetterFunc setter, gpointer pObject,
                   const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;

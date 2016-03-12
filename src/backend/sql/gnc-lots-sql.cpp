@@ -45,17 +45,16 @@ extern "C"
 
 #include "gnc-lots-sql.h"
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "lots"
 #define TABLE_VERSION 2
 
-static /*@ dependent @*//*@ null @*/ gpointer get_lot_account( gpointer pObject );
-static void set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue );
+static  gpointer get_lot_account( gpointer pObject );
+static void set_lot_account( gpointer pObject,  gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-    /*@ -full_init_block @*/
     { "guid",         CT_GUID,       0, COL_NNUL | COL_PKEY, "guid" },
     {
         "account_guid", CT_ACCOUNTREF, 0, 0,                 NULL, NULL,
@@ -63,11 +62,10 @@ static const GncSqlColumnTableEntry col_table[] =
     },
     { "is_closed",    CT_BOOLEAN,    0, COL_NNUL,          "is-closed" },
     { NULL }
-    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static /*@ dependent @*//*@ null @*/ gpointer
+static  gpointer
 get_lot_account( gpointer pObject )
 {
     const GNCLot* lot;
@@ -82,7 +80,7 @@ get_lot_account( gpointer pObject )
 }
 
 static void
-set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue )
+set_lot_account( gpointer pObject,  gpointer pValue )
 {
     GNCLot* lot;
     Account* pAccount;
@@ -98,7 +96,7 @@ set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue )
     }
 }
 
-static /*@ dependent @*//*@ null @*/ GNCLot*
+static  GNCLot*
 load_single_lot( GncSqlBackend* be, GncSqlRow* row )
 {
     GNCLot* lot;
@@ -216,7 +214,7 @@ write_lots( GncSqlBackend* be )
 /* ================================================================= */
 static void
 load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
-               /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+                QofSetterFunc setter, gpointer pObject,
                const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
