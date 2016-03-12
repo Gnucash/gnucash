@@ -51,7 +51,7 @@ typedef GncOwner* (*OwnerGetterFunc) (const gpointer);
 static void
 load_owner (const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const GncSqlColumnTableEntry* table_row)
+            const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     gchar* buf;
@@ -64,14 +64,13 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
     book = be->book;
-    buf = g_strdup_printf ("%s_type", table_row->col_name);
+    buf = g_strdup_printf ("%s_type", table_row.col_name);
     val = gnc_sql_row_get_value_at_col_name (row, buf);
     type = (GncOwnerType)gnc_sql_get_integer_value (val);
     g_free (buf);
-    buf = g_strdup_printf ("%s_guid", table_row->col_name);
+    buf = g_strdup_printf ("%s_guid", table_row.col_name);
     val = gnc_sql_row_get_value_at_col_name (row, buf);
     g_free (buf);
 
@@ -156,10 +155,10 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
         PWARN ("Invalid owner type: %d\n", type);
     }
 
-    if (table_row->gobj_param_name != NULL)
+    if (table_row.gobj_param_name != NULL)
     {
         qof_instance_increase_editlevel (pObject);
-        g_object_set (pObject, table_row->gobj_param_name, &owner, NULL);
+        g_object_set (pObject, table_row.gobj_param_name, &owner, NULL);
         qof_instance_decrease_editlevel (pObject);
     }
     else
@@ -170,42 +169,42 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
 
 static void
 add_owner_col_info_to_list(const GncSqlBackend* be,
-                           const GncSqlColumnTableEntry* table_row,
+                           const GncSqlColumnTableEntry& table_row,
                            ColVec& vec)
 {
     gchar* buf;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    buf = g_strdup_printf ("%s_type", table_row->col_name);
+    buf = g_strdup_printf ("%s_type", table_row.col_name);
     GncSqlColumnInfo info(buf, BCT_INT, 0, false, false,
-                                     table_row->flags & COL_PKEY,
-                                     table_row->flags & COL_NNUL);
+                                     table_row.flags & COL_PKEY,
+                                     table_row.flags & COL_NNUL);
     vec.emplace_back(std::move(info));
 
-    buf = g_strdup_printf ("%s_guid", table_row->col_name);
+    buf = g_strdup_printf ("%s_guid", table_row.col_name);
     GncSqlColumnInfo info2(buf, BCT_STRING, GUID_ENCODING_LENGTH,
                                      false, false,
-                                     table_row->flags & COL_PKEY,
-                                     table_row->flags & COL_NNUL);
+                                     table_row.flags & COL_PKEY,
+                                     table_row.flags & COL_NNUL);
     vec.emplace_back(std::move(info2));
 }
 
 static void
-add_colname_to_list (const GncSqlColumnTableEntry* table_row, GList** pList)
+add_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pList)
 {
     gchar* buf;
 
-    buf = g_strdup_printf ("%s_type", table_row->col_name);
+    buf = g_strdup_printf ("%s_type", table_row.col_name);
     (*pList) = g_list_append ((*pList), buf);
-    buf = g_strdup_printf ("%s_guid", table_row->col_name);
+    buf = g_strdup_printf ("%s_guid", table_row.col_name);
     (*pList) = g_list_append ((*pList), buf);
 }
 
 static void
 add_gvalue_owner_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                           const gpointer pObject, const GncSqlColumnTableEntry* table_row,
+                           const gpointer pObject,
+                           const GncSqlColumnTableEntry& table_row,
                            GSList** pList)
 {
     GValue* subfield_value;
@@ -220,14 +219,13 @@ add_gvalue_owner_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
     getter = (OwnerGetterFunc)gnc_sql_get_getter (obj_name, table_row);
     owner = (*getter) (pObject);
 
     if (owner != NULL)
     {
-        buf = g_strdup_printf ("%s_type", table_row->col_name);
+        buf = g_strdup_printf ("%s_type", table_row.col_name);
         subfield_value = g_new0 (GValue, 1);
         g_value_init (subfield_value, G_TYPE_INT);
         type = gncOwnerGetType (owner);
@@ -235,7 +233,7 @@ add_gvalue_owner_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
         (*pList) = g_slist_append ((*pList), subfield_value);
         g_free (buf);
 
-        buf = g_strdup_printf ("%s_guid", table_row->col_name);
+        buf = g_strdup_printf ("%s_guid", table_row.col_name);
         subfield_value = g_new0 (GValue, 1);
         switch (type)
         {

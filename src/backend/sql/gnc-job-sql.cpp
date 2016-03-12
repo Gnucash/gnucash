@@ -54,8 +54,8 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_NAME_LEN 2048
 #define MAX_REFERENCE_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",      CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
     { "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
     { "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          "name" },
@@ -68,8 +68,7 @@ static GncSqlColumnTableEntry col_table[] =
         "owner",     CT_OWNERREF, 0,                 0,                 NULL, NULL,
         (QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner
     },
-    { NULL }
-};
+});
 
 static GncJob*
 load_single_job (GncSqlBackend* be, GncSqlRow* row)

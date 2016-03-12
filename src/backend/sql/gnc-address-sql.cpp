@@ -50,8 +50,8 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 #define ADDRESS_MAX_FAX_LEN 128
 #define ADDRESS_MAX_EMAIL_LEN 256
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "name",  CT_STRING, ADDRESS_MAX_NAME_LEN,         COL_NNUL, "name" },
     { "addr1", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr1" },
     { "addr2", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr2" },
@@ -60,8 +60,7 @@ static GncSqlColumnTableEntry col_table[] =
     { "phone", CT_STRING, ADDRESS_MAX_PHONE_LEN,        COL_NNUL, "phone" },
     { "fax",   CT_STRING, ADDRESS_MAX_FAX_LEN,          COL_NNUL, "fax" },
     { "email", CT_STRING, ADDRESS_MAX_EMAIL_LEN,        COL_NNUL, "email" },
-    { NULL }
-};
+});
 
 typedef void (*AddressSetterFunc) (gpointer, GncAddress*);
 typedef GncAddress* (*AddressGetterFunc) (const gpointer);
@@ -69,24 +68,24 @@ typedef GncAddress* (*AddressGetterFunc) (const gpointer);
 static void
 load_address (const GncSqlBackend* be, GncSqlRow* row,
               QofSetterFunc setter, gpointer pObject,
-              const GncSqlColumnTableEntry* table_row)
+              const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     gchar* buf;
     GncAddress* addr;
     AddressSetterFunc a_setter = (AddressSetterFunc)setter;
-    const GncSqlColumnTableEntry* subtable;
     const gchar* s;
+
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
     addr = gncAddressCreate (be->book, QOF_INSTANCE(pObject));
-    for (subtable = col_table; subtable->col_name != NULL; subtable++)
+    for (auto const& subtable_row : col_table)
     {
-        buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable->col_name);
+        buf = g_strdup_printf ("%s_%s", table_row.col_name,
+                               subtable_row.col_name);
         val = gnc_sql_row_get_value_at_col_name (row, buf);
         g_free (buf);
         if (val == NULL)
@@ -97,28 +96,28 @@ load_address (const GncSqlBackend* be, GncSqlRow* row,
         {
             s = g_value_get_string (val);
         }
-        if (subtable->gobj_param_name != NULL)
+        if (subtable_row.gobj_param_name != NULL)
         {
-            g_object_set (addr, subtable->gobj_param_name, s, NULL);
+            g_object_set (addr, subtable_row.gobj_param_name, s, NULL);
         }
         else
         {
-            if (subtable->qof_param_name != NULL)
+            if (subtable_row.qof_param_name != NULL)
             {
                 setter = qof_class_get_parameter_setter (GNC_ID_ADDRESS,
-                                                         subtable->qof_param_name);
+                                                         subtable_row.qof_param_name);
             }
             else
             {
-                setter = subtable->setter;
+                setter = subtable_row.setter;
             }
             (*setter) (addr, (const gpointer)s);
         }
     }
-    if (table_row->gobj_param_name != NULL)
+    if (table_row.gobj_param_name != NULL)
     {
         qof_instance_increase_editlevel (pObject);
-        g_object_set (pObject, table_row->gobj_param_name, addr, NULL);
+        g_object_set (pObject, table_row.gobj_param_name, addr, NULL);
         qof_instance_decrease_editlevel (pObject);
     }
     else
@@ -129,29 +128,27 @@ load_address (const GncSqlBackend* be, GncSqlRow* row,
 
 static void
 add_address_col_info_to_list(const GncSqlBackend* be,
-                             const GncSqlColumnTableEntry* table_row,
+                             const GncSqlColumnTableEntry& table_row,
                              ColVec& vec)
 {
     GncSqlColumnInfo* info;
     gchar* buf;
-    const GncSqlColumnTableEntry* subtable_row;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    for (subtable_row = col_table; subtable_row->col_name != NULL; subtable_row++)
+    for (auto const& subtable_row : col_table)
     {
-        buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable_row->col_name);
+        buf = g_strdup_printf ("%s_%s", table_row.col_name, subtable_row.col_name);
 
-        GncSqlColumnInfo info(buf, BCT_STRING, subtable_row->size, true, false,
-                              table_row->flags & COL_PKEY,
-                              table_row->flags & COL_NNUL);
+        GncSqlColumnInfo info(buf, BCT_STRING, subtable_row.size, true, false,
+                              table_row.flags & COL_PKEY,
+                              table_row.flags & COL_NNUL);
         vec.emplace_back(std::move(info));
     }
 }
 
 static void
-add_address_colname_to_list (const GncSqlColumnTableEntry* table_row,
+add_address_colname_to_list (const GncSqlColumnTableEntry& table_row,
                              GList** pList)
 {
     gnc_sql_add_subtable_colnames_to_list (table_row, col_table, pList);
@@ -160,7 +157,7 @@ add_address_colname_to_list (const GncSqlColumnTableEntry* table_row,
 static void
 get_gvalue_address (const GncSqlBackend* be, QofIdTypeConst obj_name,
                     const gpointer pObject,
-                    const GncSqlColumnTableEntry* table_row, GValue* value)
+                    const GncSqlColumnTableEntry& table_row, GValue* value)
 {
     AddressGetterFunc getter;
     GncAddress* addr;
@@ -168,13 +165,11 @@ get_gvalue_address (const GncSqlBackend* be, QofIdTypeConst obj_name,
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (value != NULL);
 
     memset (value, 0, sizeof (GValue));
-    if (table_row->gobj_param_name != NULL)
+    if (table_row.gobj_param_name != NULL)
     {
-        g_object_get (pObject, table_row->gobj_param_name, &addr, NULL);
+        g_object_get (pObject, table_row.gobj_param_name, &addr, NULL);
     }
     else
     {
@@ -187,7 +182,8 @@ get_gvalue_address (const GncSqlBackend* be, QofIdTypeConst obj_name,
 
 static void
 add_gvalue_address_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                             const gpointer pObject, const GncSqlColumnTableEntry* table_row,
+                             const gpointer pObject,
+                             const GncSqlColumnTableEntry& table_row,
                              GSList** pList)
 {
     GValue value;
@@ -195,25 +191,23 @@ add_gvalue_address_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
     GncAddress* addr;
     gchar* s;
     QofAccessFunc getter;
-    const GncSqlColumnTableEntry* subtable_row;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
     memset (&value, 0, sizeof (GValue));
     get_gvalue_address (be, obj_name, pObject, table_row, &value);
 
     if (G_VALUE_TYPE (&value) != 0)
     {
-        addr = static_cast<decltype (addr)> (g_value_get_object (&value));
-        for (subtable_row = col_table; subtable_row->col_name != NULL; subtable_row++)
+        addr = static_cast<decltype(addr)>(g_value_get_object(&value));
+        for (auto const& subtable_row : col_table)
         {
             subfield_value = g_new0 (GValue, 1);
-            if (subtable_row->gobj_param_name != NULL)
+            if (subtable_row.gobj_param_name != NULL)
             {
-                g_object_get (addr, subtable_row->gobj_param_name, &s, NULL);
+                g_object_get (addr, subtable_row.gobj_param_name, &s, NULL);
             }
             else
             {

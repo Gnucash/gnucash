@@ -61,8 +61,8 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 #define TABLE_NAME "vendors"
 #define TABLE_VERSION 1
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",         CT_GUID,          0,               COL_NNUL | COL_PKEY, "guid" },
     { "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL,            "name" },
     { "id",           CT_STRING,        MAX_ID_LEN,      COL_NNUL,            "id" },
@@ -74,8 +74,7 @@ static GncSqlColumnTableEntry col_table[] =
     { "terms",        CT_BILLTERMREF,   0,               0,                   "terms" },
     { "tax_inc",      CT_STRING,        MAX_TAX_INC_LEN, 0,                   "tax-included-string" },
     { "tax_table",    CT_TAXTABLEREF,   0,               0,                   "tax-table" },
-    { NULL }
-};
+});
 
 static GncVendor*
 load_single_vendor (GncSqlBackend* be, GncSqlRow* row)

@@ -64,8 +64,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static void entry_set_invoice (gpointer pObject, gpointer val);
 static void entry_set_bill (gpointer pObject, gpointer val);
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",          CT_GUID,        0,                   COL_NNUL | COL_PKEY, "guid" },
     { "date",          CT_TIMESPEC,    0,                   COL_NNUL,          NULL, ENTRY_DATE },
     { "date_entered",  CT_TIMESPEC,    0,                   0,                 NULL, ENTRY_DATE_ENTERED },
@@ -113,8 +113,7 @@ static GncSqlColumnTableEntry col_table[] =
         "order_guid",    CT_ORDERREF,    0,                   0,                    NULL, NULL,
         (QofAccessFunc)gncEntryGetOrder, (QofSetterFunc)gncEntrySetOrder
     },
-    { NULL }
-};
+});
 
 static void
 entry_set_invoice (gpointer pObject, gpointer val)

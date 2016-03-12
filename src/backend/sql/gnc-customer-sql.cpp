@@ -58,8 +58,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ID_LEN 2048
 #define MAX_NOTES_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",         CT_GUID,          0,             COL_NNUL | COL_PKEY, "guid" },
     { "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL,          "name" },
     { "id",           CT_STRING,        MAX_ID_LEN,    COL_NNUL,          NULL, CUSTOMER_ID },
@@ -83,8 +83,7 @@ static GncSqlColumnTableEntry col_table[] =
         "taxtable",     CT_TAXTABLEREF,   0,             0,                 NULL, NULL,
         (QofAccessFunc)gncCustomerGetTaxTable, (QofSetterFunc)gncCustomerSetTaxTable
     },
-    { NULL }
-};
+});
 
 static GncCustomer*
 load_single_customer (GncSqlBackend* be, GncSqlRow* row)

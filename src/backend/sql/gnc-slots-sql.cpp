@@ -110,7 +110,7 @@ enum
     gdate_val_col
 };
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
     /* col_name, col_type, size, flags, g0bj_param_name, qof_param_name, getter, setter */
     { "id",             CT_INT,      0, COL_PKEY | COL_NNUL | COL_AUTOINC },
@@ -154,21 +154,18 @@ static const GncSqlColumnTableEntry col_table[] =
         "gdate_val",    CT_GDATE,    0,                     0,        NULL, NULL,
         (QofAccessFunc)get_gdate_val, (QofSetterFunc)set_gdate_val
     },
-    { NULL }
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static const GncSqlColumnTableEntry obj_guid_col_table[] =
+static const EntryVec obj_guid_col_table
 {
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, (QofAccessFunc)get_obj_guid, _retrieve_guid_ },
-    { NULL }
 };
 
-static const GncSqlColumnTableEntry gdate_col_table[] =
+static const EntryVec gdate_col_table
 {
     { "gdate_val", CT_GDATE, 0, 0, },
-    { NULL }
 };
 
 /* ================================================================= */
@@ -751,7 +748,8 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 
             while (row != NULL)
             {
-                GncSqlColumnTableEntry table_row = col_table[guid_val_col];
+                const GncSqlColumnTableEntry& table_row =
+                    col_table[guid_val_col];
                 GncGUID child_guid;
                 const GValue* val =
                     gnc_sql_row_get_value_at_col_name (row, table_row.col_name);

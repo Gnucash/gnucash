@@ -76,7 +76,7 @@ typedef struct
 #define TX_MAX_NUM_LEN 2048
 #define TX_MAX_DESCRIPTION_LEN 2048
 
-static const GncSqlColumnTableEntry tx_col_table[] =
+static const EntryVec tx_col_table
 {
     { "guid",          CT_GUID,           0,                      COL_NNUL | COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          "currency" },
@@ -84,7 +84,6 @@ static const GncSqlColumnTableEntry tx_col_table[] =
     { "post_date",     CT_TIMESPEC,       0,                      0,                 "post-date" },
     { "enter_date",    CT_TIMESPEC,       0,                      0,                 "enter-date" },
     { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 "description" },
-    { NULL }
 };
 
 static  gpointer get_split_reconcile_state (gpointer pObject);
@@ -94,7 +93,7 @@ static void set_split_lot (gpointer pObject,  gpointer pLot);
 #define SPLIT_MAX_MEMO_LEN 2048
 #define SPLIT_MAX_ACTION_LEN 2048
 
-static const GncSqlColumnTableEntry split_col_table[] =
+static const EntryVec split_col_table
 {
     { "guid",            CT_GUID,         0,                    COL_NNUL | COL_PKEY, "guid" },
     { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          "transaction" },
@@ -112,25 +111,21 @@ static const GncSqlColumnTableEntry split_col_table[] =
         "lot_guid",        CT_LOTREF,       0,                    0,                 NULL, NULL,
         (QofAccessFunc)xaccSplitGetLot, set_split_lot
     },
-    { NULL }
 };
 
-static const GncSqlColumnTableEntry post_date_col_table[] =
+static const EntryVec post_date_col_table
 {
     { "post_date", CT_TIMESPEC, 0, 0, "post-date" },
-    { NULL }
 };
 
-static const GncSqlColumnTableEntry account_guid_col_table[] =
+static const EntryVec account_guid_col_table
 {
     { "account_guid", CT_ACCOUNTREF, 0, COL_NNUL, "account" },
-    { NULL }
 };
 
-static const GncSqlColumnTableEntry tx_guid_col_table[] =
+static const EntryVec tx_guid_col_table
 {
     { "tx_guid", CT_GUID, 0, 0, "guid" },
-    { NULL }
 };
 
 /* ================================================================= */
@@ -1322,12 +1317,11 @@ set_acct_bal_balance (gpointer pObject, gnc_numeric value)
     bal->balance = value;
 }
 
-static const GncSqlColumnTableEntry acct_balances_col_table[] =
+static const EntryVec acct_balances_col_table
 {
     { "account_guid",    CT_GUID,    0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_account_from_guid },
     { "reconcile_state", CT_STRING,  1, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_reconcile_state },
     { "quantity",        CT_NUMERIC, 0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_balance },
-    { NULL }
 };
 
 G_GNUC_UNUSED static  single_acct_balance_t*
@@ -1444,7 +1438,7 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 static void
 load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
               QofSetterFunc setter, gpointer pObject,
-              const GncSqlColumnTableEntry* table_row)
+              const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -1454,9 +1448,8 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     g_assert (val != NULL);
     guid_str = g_value_get_string (val);
     if (guid_str != NULL)
@@ -1480,10 +1473,10 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
 
         if (tx != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, tx, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, tx, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

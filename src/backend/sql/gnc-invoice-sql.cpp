@@ -59,8 +59,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_NOTES_LEN 2048
 #define MAX_BILLING_ID_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",         CT_GUID,         0,                  COL_NNUL | COL_PKEY, "guid" },
     { "id",           CT_STRING,       MAX_ID_LEN,         COL_NNUL,          NULL, INVOICE_ID },
     { "date_opened",  CT_TIMESPEC,     0,                  0,                 NULL, INVOICE_OPENED },
@@ -91,8 +91,7 @@ static GncSqlColumnTableEntry col_table[] =
         "charge_amt",   CT_NUMERIC,      0,                  0,                 NULL, NULL,
         (QofAccessFunc)gncInvoiceGetToChargeAmount, (QofSetterFunc)gncInvoiceSetToChargeAmount
     },
-    { NULL }
-};
+});
 
 static GncInvoice*
 load_single_invoice (GncSqlBackend* be, GncSqlRow* row)
@@ -287,7 +286,7 @@ write_invoices (GncSqlBackend* be)
 static void
 load_invoice_guid (const GncSqlBackend* be, GncSqlRow* row,
                    QofSetterFunc setter, gpointer pObject,
-                   const GncSqlColumnTableEntry* table_row)
+                   const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -296,9 +295,8 @@ load_invoice_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -306,10 +304,10 @@ load_invoice_guid (const GncSqlBackend* be, GncSqlRow* row,
         invoice = gncInvoiceLookup (be->book, &guid);
         if (invoice != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, invoice, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, invoice, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

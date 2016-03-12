@@ -65,8 +65,8 @@ static void tt_set_parent_guid (gpointer pObject, gpointer pValue);
 #define TT_TABLE_NAME "taxtables"
 #define TT_TABLE_VERSION 2
 
-static GncSqlColumnTableEntry tt_col_table[] =
-{
+static EntryVec tt_col_table
+({
     { "guid",      CT_GUID,        0,            COL_NNUL | COL_PKEY, "guid" },
     { "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          "name" },
     { "refcount",  CT_INT64,       0,            COL_NNUL,          "ref-count" },
@@ -77,20 +77,18 @@ static GncSqlColumnTableEntry tt_col_table[] =
         "parent",    CT_GUID,        0,          0,                 NULL, NULL,
         (QofAccessFunc)bt_get_parent, tt_set_parent
     },
-    { NULL }
-};
+});
 
-static GncSqlColumnTableEntry tt_parent_col_table[] =
-{
+static EntryVec tt_parent_col_table
+({
     { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, tt_set_parent_guid },
-    { NULL }
-};
+});
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
 #define TTENTRIES_TABLE_VERSION 3
 
-static GncSqlColumnTableEntry ttentries_col_table[] =
-{
+static EntryVec ttentries_col_table
+({
     { "id",       CT_INT,         0, COL_PKEY | COL_NNUL | COL_AUTOINC },
     {
         "taxtable", CT_TAXTABLEREF, 0, COL_NNUL, NULL, NULL,
@@ -108,16 +106,14 @@ static GncSqlColumnTableEntry ttentries_col_table[] =
         "type",     CT_INT,         0, COL_NNUL, NULL, NULL,
         (QofAccessFunc)gncTaxTableEntryGetType, (QofSetterFunc)gncTaxTableEntrySetType
     },
-    { NULL }
-};
+});
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static GncSqlColumnTableEntry guid_col_table[] =
-{
+static EntryVec guid_col_table
+({
     { "taxtable", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
-    { NULL }
-};
+});
 
 typedef struct
 {
@@ -511,7 +507,7 @@ write_taxtables (GncSqlBackend* be)
 static void
 load_taxtable_guid (const GncSqlBackend* be, GncSqlRow* row,
                     QofSetterFunc setter, gpointer pObject,
-                    const GncSqlColumnTableEntry* table_row)
+                    const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -520,9 +516,8 @@ load_taxtable_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -530,10 +525,10 @@ load_taxtable_guid (const GncSqlBackend* be, GncSqlRow* row,
         taxtable = gncTaxTableLookup (be->book, &guid);
         if (taxtable != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, taxtable, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, taxtable, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

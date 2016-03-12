@@ -54,16 +54,15 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static  gpointer get_lot_account (gpointer pObject);
 static void set_lot_account (gpointer pObject,  gpointer pValue);
 
-static const GncSqlColumnTableEntry col_table[] =
-{
+static const EntryVec col_table
+({
     { "guid",         CT_GUID,       0, COL_NNUL | COL_PKEY, "guid" },
     {
         "account_guid", CT_ACCOUNTREF, 0, 0,                 NULL, NULL,
         (QofAccessFunc)get_lot_account,   set_lot_account
     },
-    { "is_closed",    CT_BOOLEAN,    0, COL_NNUL,          "is-closed" },
-    { NULL }
-};
+    { "is_closed",    CT_BOOLEAN,    0, COL_NNUL,          "is-closed" }
+});
 
 /* ================================================================= */
 static  gpointer
@@ -217,7 +216,7 @@ write_lots (GncSqlBackend* be)
 static void
 load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
                QofSetterFunc setter, gpointer pObject,
-               const GncSqlColumnTableEntry* table_row)
+               const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -226,9 +225,8 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -236,10 +234,10 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
         lot = gnc_lot_lookup (&guid, be->book);
         if (lot != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, lot, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, lot, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

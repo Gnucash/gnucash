@@ -52,7 +52,8 @@ extern "C"
 #include <vector>
 
 struct GncSqlColumnInfo;
-
+struct GncSqlColumnTableEntry;
+using EntryVec = std::vector<GncSqlColumnTableEntry>;
 using ColVec = std::vector<GncSqlColumnInfo>;
 using LoadOrder = std::vector<std::string>;
 typedef struct GncSqlConnection GncSqlConnection;
@@ -137,7 +138,6 @@ void gnc_sql_commit_edit (GncSqlBackend* qbe, QofInstance* inst);
 
 /**
  */
-typedef struct GncSqlColumnTableEntry GncSqlColumnTableEntry;
 typedef struct GncSqlStatement GncSqlStatement;
 typedef struct GncSqlResult GncSqlResult;
 typedef struct GncSqlRow GncSqlRow;
@@ -153,7 +153,7 @@ struct GncSqlStatement
     void (*dispose) (GncSqlStatement*);
     gchar* (*toSql) (GncSqlStatement*);
     void (*addWhereCond) (GncSqlStatement*, QofIdTypeConst, gpointer,
-                          const GncSqlColumnTableEntry*, GValue*);
+                          const GncSqlColumnTableEntry&, GValue*);
 };
 #define gnc_sql_statement_dispose(STMT) \
         (STMT)->dispose(STMT)
@@ -179,7 +179,7 @@ struct GncSqlConnection
     gboolean (*rollbackTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*commitTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*createTable) (GncSqlConnection*, const gchar*, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*createIndex) (GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry*); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*createIndex) (GncSqlConnection*, const gchar*, const gchar*, const EntryVec&); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*addColumnsToTable) (GncSqlConnection*, const gchar* table, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
     gchar* (*quoteString) (const GncSqlConnection*, gchar*);
 };
@@ -321,12 +321,18 @@ typedef enum
 #define CT_LOTREF "ct_lotref"
 #define CT_TXREF "ct_txref"
 
+enum ColumnFlags : int
+{
+    COL_NO_FLAG = 0,
+        COL_PKEY = 0x01,        /**< The column is a primary key */
+        COL_NNUL = 0x02,    /**< The column may not contain a NULL value */
+        COL_UNIQUE = 0x04,  /**< The column must contain unique values */
+        COL_AUTOINC = 0x08 /**< The column is an auto-incrementing int */
+        };
+
 /**
- * @struct GncSqlColumnTableEntry
- *
- * The GncSqlColumnTableEntry struct contains all of the information
- * required to copy information between an object and the database for a
- * specific object property.
+ * Contains all of the information required to copy information between an
+ * object and the database for a specific object property.
  *
  * If an entry contains a gobj_param_name value, this string is used as the
  * property name for a call to g_object_get() or g_object_set().  If the
@@ -341,19 +347,45 @@ typedef enum
  */
 struct GncSqlColumnTableEntry
 {
-    const gchar* col_name; /**< Column name */
-    const gchar* col_type;  /**< Column type */
-    unsigned int size;      /**< Column size in bytes, for string columns */
-#define COL_PKEY    0x01    /**< The column is a primary key */
-#define COL_NNUL    0x02    /**< The column may not contain a NULL value */
-#define COL_UNIQUE  0x04    /**< The column must contain unique values */
-#define COL_AUTOINC 0x08    /**< The column is an auto-incrementing int */
-    gint flags;             /**< Column flags */
-    const gchar* gobj_param_name; /**< If non-null, g_object param name */
-    const gchar* qof_param_name;  /**< If non-null, qof parameter name */
-    QofAccessFunc getter;   /**< General access function */
-    QofSetterFunc setter;   /**< General setter function */
+    GncSqlColumnTableEntry (const char* name, const char*type, unsigned int s,
+                            ColumnFlags f, const char* gobj_name = nullptr,
+                            const char* qof_name = nullptr,
+                            QofAccessFunc get = nullptr,
+                            QofSetterFunc set = nullptr) :
+        col_name{name}, col_type{type}, size{s}, flags{f},
+        gobj_param_name{gobj_name}, qof_param_name{qof_name}, getter{get},
+        setter{set} {}
+    GncSqlColumnTableEntry (const char* name, const char*type, unsigned int s,
+                            int f, const char* gobj_name = nullptr,
+                            const char* qof_name = nullptr,
+                            QofAccessFunc get = nullptr,
+                            QofSetterFunc set = nullptr) :
+        col_name{name}, col_type{type}, size{s},
+        flags{static_cast<ColumnFlags>(f)},
+        gobj_param_name{gobj_name}, qof_param_name{qof_name}, getter{get},
+        setter{set} {}
+    const char* col_name;        /**< Column name */
+    const char* col_type;        /**< Column type */
+    unsigned int size;         /**< Column size in bytes, for string columns */
+    ColumnFlags flags;           /**< Column flags */
+    const char* gobj_param_name; /**< If non-null, g_object param name */
+    const char* qof_param_name;  /**< If non-null, qof parameter name */
+    QofAccessFunc getter;        /**< General access function */
+    QofSetterFunc setter;        /**< General setter function */
 };
+
+inline bool operator==(const GncSqlColumnTableEntry& l,
+                       const GncSqlColumnTableEntry& r)
+{
+    return strcmp(l.col_name, r.col_name) == 0 &&
+        strcmp(l.col_type, r.col_type) == 0;
+}
+
+inline bool operator!=(const GncSqlColumnTableEntry& l,
+                       const GncSqlColumnTableEntry& r)
+{
+    return !(l == r);
+}
 
 /**
  *  information required to create a column in a table.
@@ -367,12 +399,12 @@ struct GncSqlColumnInfo
         m_name{name}, m_type{type}, m_size{size}, m_unicode{unicode},
         m_autoinc{autoinc}, m_primary_key{primary}, m_not_null{not_null}
         {}
-    GncSqlColumnInfo(const GncSqlColumnTableEntry* e, GncSqlBasicColumnType t,
+    GncSqlColumnInfo(const GncSqlColumnTableEntry& e, GncSqlBasicColumnType t,
                      unsigned int size = 0, bool unicode = true) :
-        m_name{e->col_name}, m_type{t}, m_size{size}, m_unicode{unicode},
-        m_autoinc(e->flags & COL_AUTOINC),
-        m_primary_key(e->flags & COL_PKEY),
-        m_not_null(e->flags & COL_NNUL) {}
+        m_name{e.col_name}, m_type{t}, m_size{size}, m_unicode{unicode},
+        m_autoinc(e.flags & COL_AUTOINC),
+        m_primary_key(e.flags & COL_PKEY),
+        m_not_null(e.flags & COL_NNUL) {}
     std::string m_name; /**< Column name */
     GncSqlBasicColumnType m_type; /**< Column basic type */
     unsigned int m_size; /**< Column size (string types) */
@@ -404,15 +436,15 @@ typedef enum
 typedef void (*GNC_SQL_LOAD_FN) (const GncSqlBackend* be,
                                  GncSqlRow* row,
                                  QofSetterFunc setter, gpointer pObject,
-                                 const GncSqlColumnTableEntry* table);
+                                 const GncSqlColumnTableEntry& table);
 typedef void (*GNC_SQL_ADD_COL_INFO_TO_LIST_FN) (const GncSqlBackend* be,
-                                       const GncSqlColumnTableEntry* table_row,
+                                       const GncSqlColumnTableEntry& table_row,
                                                  ColVec& vec);
-typedef void (*GNC_SQL_ADD_COLNAME_TO_LIST_FN) (const GncSqlColumnTableEntry* table_row, GList** pList);
+typedef void (*GNC_SQL_ADD_COLNAME_TO_LIST_FN) (const GncSqlColumnTableEntry& table_row, GList** pList);
 typedef void (*GNC_SQL_ADD_GVALUE_TO_SLIST_FN) (const GncSqlBackend* be,
                                                 QofIdTypeConst obj_name,
                                                 const gpointer pObject,
-                                        const GncSqlColumnTableEntry* table_row,
+                                        const GncSqlColumnTableEntry& table_row,
                                                 GSList** pList);
 
 /**
@@ -455,7 +487,7 @@ typedef struct
  * @return Access function
  */
 QofAccessFunc gnc_sql_get_getter (QofIdTypeConst obj_name,
-                                  const GncSqlColumnTableEntry* table_row);
+                                  const GncSqlColumnTableEntry& table_row);
 
 /**
  * Adds a column name to a list.  If the column type spans multiple columns,
@@ -464,7 +496,7 @@ QofAccessFunc gnc_sql_get_getter (QofIdTypeConst obj_name,
  * @param table_row DB table column
  * @param pList List
  */
-void gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry* table_row,
+void gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry& table_row,
                                   GList** pList);
 
 /**
@@ -483,7 +515,7 @@ gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
                                   const gchar* table_name,
                                   QofIdTypeConst obj_name,
                                   gpointer pObject,
-                                  const GncSqlColumnTableEntry* table);
+                                  const EntryVec& table);
 
 /**
  * Executes an SQL SELECT statement and returns the result rows.  If an error
@@ -538,7 +570,7 @@ GncSqlStatement* gnc_sql_create_statement_from_sql (GncSqlBackend* be,
  */
 void gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow* row,
                           QofIdTypeConst obj_name, gpointer pObject,
-                          const GncSqlColumnTableEntry* table);
+                          const EntryVec& table);
 
 /**
  * Checks whether an object is in the database or not.
@@ -552,8 +584,9 @@ void gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow* row,
  */
 gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* be,
                                      const gchar* table_name,
-                                     QofIdTypeConst obj_name, const gpointer pObject,
-                                     const GncSqlColumnTableEntry* table);
+                                     QofIdTypeConst obj_name,
+                                     const gpointer pObject,
+                                     const EntryVec& table );
 
 /**
  * Returns the version number for a DB table.
@@ -581,7 +614,7 @@ gboolean gnc_sql_set_table_version (GncSqlBackend* be,
 gboolean gnc_sql_create_table (GncSqlBackend* be,
                                const gchar* table_name,
                                gint table_version,
-                               const GncSqlColumnTableEntry* col_table);
+                               const EntryVec& col_table);
 
 /**
  * Creates a temporary table in the database.  A temporary table does not
@@ -594,7 +627,7 @@ gboolean gnc_sql_create_table (GncSqlBackend* be,
  */
 gboolean gnc_sql_create_temp_table (const GncSqlBackend* be,
                                     const gchar* table_name,
-                                    const GncSqlColumnTableEntry* col_table);
+                                    const EntryVec& col_table);
 
 /**
  * Creates an index in the database
@@ -605,9 +638,8 @@ gboolean gnc_sql_create_temp_table (const GncSqlBackend* be,
  * @param col_table Columns that the index should index
  * @return TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_sql_create_index (const GncSqlBackend* be,
-                               const gchar* index_name,
-                               const gchar* table_name, const GncSqlColumnTableEntry* col_table);
+gboolean gnc_sql_create_index (const GncSqlBackend* be, const char* index_name,
+                               const char* table_name, const EntryVec& col_table);
 
 /**
  * Loads the object guid from a database row.  The table must have a column
@@ -662,7 +694,7 @@ void gnc_sql_register_col_type_handler (const gchar* colType,
 void gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be,
                                                  QofIdTypeConst obj_name,
                                                  const gpointer pObject,
-                                                 const GncSqlColumnTableEntry* table_row,
+                                                 const GncSqlColumnTableEntry& table_row,
                                                  GSList** pList);
 
 /**
@@ -674,7 +706,7 @@ void gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be,
  * @param pList List
  */
 void gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* be,
-                                                  const GncSqlColumnTableEntry* table_row,
+                                                  const GncSqlColumnTableEntry& table_row,
                                                   ColVec& vec);
 
 /**
@@ -695,9 +727,8 @@ guint gnc_sql_append_guid_list_to_sql (GString* str, GList* list,
  * @param subtable Sub-column description table
  * @param pList List
  */
-void gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry*
-                                            table_row,
-                                            const GncSqlColumnTableEntry* subtable,
+void gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry& table_row,
+                                            const EntryVec& subtable,
                                             GList** pList);
 
 /**
@@ -739,7 +770,7 @@ void gnc_sql_finalize_version_info (GncSqlBackend* be);
 gboolean gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
                                        const gchar* tableName,
                                        QofIdTypeConst obj_name,
-                                       const GncSqlColumnTableEntry* col_table);
+                                       const EntryVec& col_table);
 
 /**
  * Gets an integer value (of any size) from a GValue.
@@ -771,7 +802,7 @@ gchar* gnc_sql_convert_timespec_to_string (const GncSqlBackend* be,
  * @param col_table Column table
  */
 void gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
-                            const GncSqlColumnTableEntry* col_table);
+                            const EntryVec& col_table);
 
 /**
  * Adds one or more columns to an existing table.
@@ -781,9 +812,8 @@ void gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
  * @param new_col_table Column table for new columns
  * @return TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be,
-                                       const gchar* table_name,
-                                       const GncSqlColumnTableEntry* new_col_table);
+gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const char* table_name,
+                                       const EntryVec& new_col_table);
 
 /**
  * Specifies the load order for a set of objects.  When loading from a database,

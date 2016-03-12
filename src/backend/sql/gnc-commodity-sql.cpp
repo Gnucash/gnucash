@@ -59,7 +59,7 @@ static void set_quote_source_name (gpointer pObject,  gpointer pValue);
 #define COMMODITY_MAX_QUOTESOURCE_LEN 2048
 #define COMMODITY_MAX_QUOTE_TZ_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
     { "guid",         CT_GUID,    0,                             COL_NNUL | COL_PKEY, "guid" },
     {
@@ -77,7 +77,6 @@ static const GncSqlColumnTableEntry col_table[] =
         (QofAccessFunc)get_quote_source_name, set_quote_source_name
     },
     { "quote_tz",     CT_STRING,  COMMODITY_MAX_QUOTE_TZ_LEN,    0,                 "quote-tz" },
-    { NULL }
 };
 
 /* ================================================================= */
@@ -276,7 +275,7 @@ gnc_sql_commit_commodity (gnc_commodity* pCommodity)
 static void
 load_commodity_guid (const GncSqlBackend* be, GncSqlRow* row,
                      QofSetterFunc setter, gpointer pObject,
-                     const GncSqlColumnTableEntry* table_row)
+                     const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -285,9 +284,8 @@ load_commodity_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -295,10 +293,10 @@ load_commodity_guid (const GncSqlBackend* be, GncSqlRow* row,
         commodity = gnc_commodity_find_commodity_by_guid (&guid, be->book);
         if (commodity != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, commodity, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, commodity, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else if (setter != NULL)

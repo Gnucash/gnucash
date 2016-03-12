@@ -55,13 +55,12 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
     { "guid",        CT_GUID,   0,                          COL_NNUL | COL_PKEY, "guid" },
     { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { "num_periods", CT_INT,    0,                          COL_NNUL,          "num_periods" },
-    { NULL }
 };
 
 static  QofInstance* get_budget (gpointer pObj);
@@ -80,7 +79,7 @@ typedef struct
     guint period_num;
 } budget_amount_info_t;
 
-static const GncSqlColumnTableEntry budget_amounts_col_table[] =
+static const EntryVec budget_amounts_col_table
 {
     { "id",           CT_INT,        0, COL_NNUL | COL_PKEY | COL_AUTOINC },
     {
@@ -99,7 +98,6 @@ static const GncSqlColumnTableEntry budget_amounts_col_table[] =
         "amount",       CT_NUMERIC,    0, COL_NNUL,                     NULL, NULL,
         (QofAccessFunc)get_amount, (QofSetterFunc)set_amount
     },
-    { NULL }
 };
 
 /* ================================================================= */
@@ -484,7 +482,7 @@ write_budgets (GncSqlBackend* be)
 static void
 load_budget_guid (const GncSqlBackend* be, GncSqlRow* row,
                   QofSetterFunc setter, gpointer pObject,
-                  const GncSqlColumnTableEntry* table_row)
+                  const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -493,9 +491,8 @@ load_budget_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -503,10 +500,10 @@ load_budget_guid (const GncSqlBackend* be, GncSqlRow* row,
         budget = gnc_budget_lookup (&guid, be->book);
         if (budget != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, budget, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, budget, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

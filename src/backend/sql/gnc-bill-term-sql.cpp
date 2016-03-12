@@ -61,7 +61,7 @@ static void bt_set_parent_guid (gpointer data, gpointer value);
 #define TABLE_NAME "billterms"
 #define TABLE_VERSION 2
 
-static GncSqlColumnTableEntry col_table[] =
+static EntryVec col_table
 {
     { "guid",         CT_GUID,        0,                   COL_NNUL | COL_PKEY, "guid" },
     { "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          "name" },
@@ -83,13 +83,11 @@ static GncSqlColumnTableEntry col_table[] =
     { "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },
     { "discount",     CT_NUMERIC,     0,                   0,                 0,    GNC_BILLTERM_DISCOUNT },
     { "cutoff",       CT_INT,         0,                   0,                 0,    GNC_BILLTERM_CUTOFF },
-    { NULL }
 };
 
-static GncSqlColumnTableEntry billterm_parent_col_table[] =
+static EntryVec billterm_parent_col_table
 {
     { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, (QofSetterFunc)bt_set_parent_guid },
-    { NULL }
 };
 
 typedef struct
@@ -353,7 +351,7 @@ gnc_sql_save_billterm (GncSqlBackend* be, QofInstance* inst)
 static void
 load_billterm_guid (const GncSqlBackend* be, GncSqlRow* row,
                     QofSetterFunc setter, gpointer pObject,
-                    const GncSqlColumnTableEntry* table_row)
+                    const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -362,9 +360,8 @@ load_billterm_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -372,10 +369,10 @@ load_billterm_guid (const GncSqlBackend* be, GncSqlRow* row,
         term = gncBillTermLookup (be->book, &guid);
         if (term != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, term, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, term, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

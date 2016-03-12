@@ -62,7 +62,7 @@ static void set_parent_guid (gpointer pObject,  gpointer pValue);
 #define ACCOUNT_MAX_CODE_LEN 2048
 #define ACCOUNT_MAX_DESCRIPTION_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
     { "guid",           CT_GUID,         0,                           COL_NNUL | COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
@@ -78,13 +78,11 @@ static const GncSqlColumnTableEntry col_table[] =
     { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { "hidden",         CT_BOOLEAN,      0,                           0,                 "hidden" },
     { "placeholder",    CT_BOOLEAN,      0,                           0,                 "placeholder" },
-    { NULL }
 };
-static GncSqlColumnTableEntry parent_col_table[] =
-{
+static EntryVec parent_col_table
+({
     { "parent_guid", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
-    { NULL }
-};
+});
 
 typedef struct
 {
@@ -403,7 +401,7 @@ gnc_sql_save_account (GncSqlBackend* be, QofInstance* inst)
 static void
 load_account_guid (const GncSqlBackend* be, GncSqlRow* row,
                    QofSetterFunc setter, gpointer pObject,
-                   const GncSqlColumnTableEntry* table_row)
+                   const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -412,9 +410,8 @@ load_account_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -422,10 +419,10 @@ load_account_guid (const GncSqlBackend* be, GncSqlRow* row,
         account = xaccAccountLookup (&guid, be->book);
         if (account != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, account, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, account, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

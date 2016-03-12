@@ -386,7 +386,7 @@ test_set_autoinc_id (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* gnc_sql_get_getter
-gnc_sql_get_getter (QofIdTypeConst obj_name, const GncSqlColumnTableEntry* table_row)// C: 3 in 2 */
+gnc_sql_get_getter (QofIdTypeConst obj_name, const GncSqlColumnTableEntry& table_row)// C: 3 in 2 */
 /* static void
 test_gnc_sql_get_getter (Fixture *fixture, gconstpointer pData)
 {
@@ -394,7 +394,7 @@ test_gnc_sql_get_getter (Fixture *fixture, gconstpointer pData)
 // Make Static
 /* gnc_sql_add_colname_to_list
 void
-gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry* table_row, GList** pList)// 9
+gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pList)// 9
 */
 /* static void
 test_gnc_sql_add_colname_to_list (Fixture *fixture, gconstpointer pData)
@@ -402,7 +402,7 @@ test_gnc_sql_add_colname_to_list (Fixture *fixture, gconstpointer pData)
 }*/
 /* gnc_sql_add_subtable_colnames_to_list
 void
-gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry* table_row, const GncSqlColumnTableEntry* subtable,
+gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry& table_row, const EntryVec& subtable,
 GList** pList)// C: 1 */
 /* static void
 test_gnc_sql_add_subtable_colnames_to_list (Fixture *fixture, gconstpointer pData)
@@ -411,7 +411,7 @@ test_gnc_sql_add_subtable_colnames_to_list (Fixture *fixture, gconstpointer pDat
 /* load_string
 static void
 load_string (const GncSqlBackend* be, GncSqlRow* row,
-const GncSqlColumnTableEntry* table_row)// 2
+const GncSqlColumnTableEntry& table_row)// 2
 */
 /* static void
 test_load_string (Fixture *fixture, gconstpointer pData)
@@ -419,7 +419,7 @@ test_load_string (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_string_col_info_to_list
 static void
-add_string_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
+add_string_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,
 GList** pList)// 2
 */
 /* static void
@@ -429,7 +429,7 @@ test_add_string_col_info_to_list (Fixture *fixture, gconstpointer pData)
 /* add_gvalue_string_to_slist
 static void
 add_gvalue_string_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList)// 2
+const gpointer pObject, const GncSqlColumnTableEntry& table_row, GSList** pList)// 2
 */
 /* static void
 test_add_gvalue_string_to_slist (Fixture *fixture, gconstpointer pData)
@@ -445,7 +445,7 @@ test_load_int (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_int_col_info_to_list
 static void
-add_int_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_int_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_int_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -469,7 +469,7 @@ test_load_boolean (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_boolean_col_info_to_list
 static void
-add_boolean_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_boolean_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_boolean_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -493,7 +493,7 @@ test_load_int64 (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_int64_col_info_to_list
 static void
-add_int64_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_int64_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_int64_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -517,7 +517,7 @@ test_load_double (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_double_col_info_to_list
 static void
-add_double_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_double_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_double_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -541,7 +541,7 @@ test_load_guid (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_guid_col_info_to_list
 static void
-add_guid_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 3
+add_guid_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 3
 */
 /* static void
 test_add_guid_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -618,7 +618,7 @@ test_load_timespec (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_timespec_col_info_to_list
 static void
-add_timespec_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_timespec_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_timespec_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -642,7 +642,7 @@ test_load_date (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_date_col_info_to_list
 static void
-add_date_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_date_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_date_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -666,7 +666,7 @@ test_load_numeric (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_numeric_col_info_to_list
 static void
-add_numeric_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,// 2
+add_numeric_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,// 2
 */
 /* static void
 test_add_numeric_col_info_to_list (Fixture *fixture, gconstpointer pData)
@@ -674,7 +674,7 @@ test_add_numeric_col_info_to_list (Fixture *fixture, gconstpointer pData)
 }*/
 /* add_numeric_colname_to_list
 static void
-add_numeric_colname_to_list (const GncSqlColumnTableEntry* table_row, GList** pList)// 2
+add_numeric_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pList)// 2
 */
 /* static void
 test_add_numeric_colname_to_list (Fixture *fixture, gconstpointer pData)
@@ -689,7 +689,7 @@ test_add_gvalue_numeric_to_slist (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* get_handler
-get_handler (const GncSqlColumnTableEntry* table_row)// C: 1 */
+get_handler (const GncSqlColumnTableEntry& table_row)// C: 1 */
 /* static void
 test_get_handler (Fixture *fixture, gconstpointer pData)
 {

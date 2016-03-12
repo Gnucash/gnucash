@@ -215,7 +215,7 @@ static gboolean save_may_clobber_data (QofBackend* qbe);
 static gchar* create_index_ddl (GncSqlConnection* conn,
                                 const gchar* index_name,
                                 const gchar* table_name,
-                                const GncSqlColumnTableEntry* col_table);
+                                const EntryVec& col_table);
 static gchar* add_columns_ddl (GncSqlConnection* conn,
                                const gchar* table_name,
                                const ColVec& info_vec);
@@ -2430,15 +2430,16 @@ stmt_to_sql (GncSqlStatement* stmt)
 }
 
 static void
-stmt_add_where_cond (GncSqlStatement* stmt,  QofIdTypeConst type_name,
-                     gpointer obj, const GncSqlColumnTableEntry* table_row, GValue* value)
+stmt_add_where_cond(GncSqlStatement* stmt, QofIdTypeConst type_name,
+                    gpointer obj, const GncSqlColumnTableEntry& table_row,
+                    GValue* value )
 {
     GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
     gchar* buf;
     gchar* value_str;
 
     value_str = gnc_sql_get_sql_value (dbi_stmt->conn, value);
-    buf = g_strdup_printf (" WHERE %s = %s", table_row->col_name,
+    buf = g_strdup_printf (" WHERE %s = %s", table_row.col_name,
                            value_str);
     g_free (value_str);
     (void)g_string_append (dbi_stmt->sql, buf);
@@ -2660,29 +2661,25 @@ conn_commit_transaction (GncSqlConnection* conn)
     return success;
 }
 
-static  gchar*
-create_index_ddl (GncSqlConnection* conn,
-                  const gchar* index_name,
-                  const gchar* table_name,
-                  const GncSqlColumnTableEntry* col_table)
+static gchar*
+create_index_ddl (GncSqlConnection* conn, const char* index_name,
+                  const char* table_name, const EntryVec& col_table)
 {
     GString* ddl;
-    const GncSqlColumnTableEntry* table_row;
 
     g_return_val_if_fail (conn != NULL, NULL);
     g_return_val_if_fail (index_name != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
-    g_return_val_if_fail (col_table != NULL, NULL);
 
     ddl = g_string_new ("");
     g_string_printf (ddl, "CREATE INDEX %s ON %s (", index_name, table_name);
-    for (table_row = col_table; table_row->col_name != NULL; ++table_row)
+    for (auto const& table_row : col_table)
     {
-        if (table_row != col_table)
+        if (table_row != *col_table.begin())
         {
             (void)g_string_append (ddl, ", ");
         }
-        g_string_append_printf (ddl, "%s", table_row->col_name);
+        g_string_append_printf (ddl, "%s", table_row.col_name);
     }
     (void)g_string_append (ddl, ")");
 
@@ -2986,8 +2983,8 @@ conn_create_table (GncSqlConnection* conn, const gchar* table_name,
 }
 
 static gboolean
-conn_create_index (GncSqlConnection* conn,  const gchar* index_name,
-                   const gchar* table_name,  const GncSqlColumnTableEntry* col_table)
+conn_create_index(GncSqlConnection* conn, const char* index_name,
+                   const char* table_name, const EntryVec& col_table)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     gchar* ddl;
@@ -2996,7 +2993,6 @@ conn_create_index (GncSqlConnection* conn,  const gchar* index_name,
     g_return_val_if_fail (conn != NULL, FALSE);
     g_return_val_if_fail (index_name != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (col_table != NULL, FALSE);
 
     ddl = create_index_ddl (conn, index_name, table_name, col_table);
     if (ddl != NULL)

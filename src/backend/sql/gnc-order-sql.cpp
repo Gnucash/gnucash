@@ -54,8 +54,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_NOTES_LEN 2048
 #define MAX_REFERENCE_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",        CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
     { "id",          CT_STRING,   MAX_ID_LEN,        COL_NNUL,            "id" },
     { "notes",       CT_STRING,   MAX_NOTES_LEN,     COL_NNUL,            "notes" },
@@ -64,8 +64,7 @@ static GncSqlColumnTableEntry col_table[] =
     { "date_opened", CT_TIMESPEC, 0,                 COL_NNUL,            "date-opened" },
     { "date_closed", CT_TIMESPEC, 0,                 COL_NNUL,            "date-closed" },
     { "owner",       CT_OWNERREF, 0,                 COL_NNUL,            NULL, ORDER_OWNER },
-    { NULL },
-};
+});
 
 static GncOrder*
 load_single_order (GncSqlBackend* be, GncSqlRow* row)
@@ -202,7 +201,7 @@ write_orders (GncSqlBackend* be)
 static void
 load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
                  QofSetterFunc setter, gpointer pObject,
-                 const GncSqlColumnTableEntry* table_row)
+                 const GncSqlColumnTableEntry& table_row)
 {
     const GValue* val;
     GncGUID guid;
@@ -211,9 +210,8 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (be != NULL);
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
+    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
     if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
         g_value_get_string (val) != NULL)
     {
@@ -221,10 +219,10 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
         order = gncOrderLookup (be->book, &guid);
         if (order != NULL)
         {
-            if (table_row->gobj_param_name != NULL)
+            if (table_row.gobj_param_name != NULL)
             {
                 qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, order, NULL);
+                g_object_set (pObject, table_row.gobj_param_name, order, NULL);
                 qof_instance_decrease_editlevel (pObject);
             }
             else

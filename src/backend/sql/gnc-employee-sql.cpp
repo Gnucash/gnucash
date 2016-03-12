@@ -58,8 +58,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define TABLE_NAME "employees"
 #define TABLE_VERSION 2
 
-static GncSqlColumnTableEntry col_table[] =
-{
+static EntryVec col_table
+({
     { "guid",       CT_GUID,          0,                COL_NNUL | COL_PKEY, "guid" },
     { "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,            "username" },
     { "id",         CT_STRING,        MAX_ID_LEN,       COL_NNUL,            "id" },
@@ -71,8 +71,7 @@ static GncSqlColumnTableEntry col_table[] =
     { "workday",    CT_NUMERIC,       0,                COL_NNUL,            "workday" },
     { "rate",       CT_NUMERIC,       0,                COL_NNUL,            "rate" },
     { "addr",       CT_ADDRESS,       0,                0,                   "address" },
-    { NULL }
-};
+});
 
 static GncEmployee*
 load_single_employee (GncSqlBackend* be, GncSqlRow* row)
