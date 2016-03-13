@@ -899,8 +899,14 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
     
     gint width; // FIXME: VARIABLE NOT NEEDED?
-    
+
     gint i;
+    gint num_top_accounts;
+
+    gnc_numeric totalincome = gnc_numeric_zero();
+    gnc_numeric totalexpenses = gnc_numeric_zero();
+    gnc_numeric totalassets = gnc_numeric_zero();
+    gnc_numeric totalliabilities = gnc_numeric_zero();
 
     view = GNC_BUDGET_VIEW(user_data);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
@@ -910,17 +916,8 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     period_num = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(col),
                                  "period_num"));
 
-    gnc_numeric totalincome;
-    totalincome = gnc_numeric_zero();
-    gnc_numeric totalexpenses;
-    totalexpenses = gnc_numeric_zero();
-    gnc_numeric totalassets;
-    totalassets = gnc_numeric_zero();
-    gnc_numeric totalliabilities;
-    totalliabilities = gnc_numeric_zero();
-    
-    
-    gint num_top_accounts = gnc_account_n_children(priv->rootAcct);
+
+    num_top_accounts = gnc_account_n_children(priv->rootAcct);
     
     // step through each child account of the root, find the total income, expenses, liabilities, and assets.
     
