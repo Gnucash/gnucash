@@ -5427,6 +5427,45 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 }
 
 
+static void
+change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count)
+{
+    GValue value = G_VALUE_INIT;
+
+    PINFO("Source Account is '%s', kvp_path is '%s', Count is '%" G_GINT64_FORMAT "'",
+           xaccAccountGetName (imap->acc), kvp_path, token_count);
+
+    // check for existing guid entry
+    if (qof_instance_has_slot (QOF_INSTANCE(imap->acc), kvp_path))
+    {
+        int64_t  existing_token_count = 0;
+
+        // get the existing_token_count value
+        qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
+
+        if (G_VALUE_HOLDS_INT64 (&value))
+            existing_token_count = g_value_get_int64 (&value);
+
+        PINFO("found existing value of '%" G_GINT64_FORMAT "'", existing_token_count);
+
+        token_count = token_count + existing_token_count;
+    }
+
+    if (!G_IS_VALUE (&value))
+        g_value_init (&value, G_TYPE_INT64);
+
+    g_value_set_int64 (&value, token_count);
+
+    // Add or Update the entry based on guid
+    qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
+
+    /* Set a feature flag in the book for the change to use guid.
+     * This will prevent older GnuCash versions that don't support this feature
+     * from opening this file. */
+    gnc_features_set_used (imap->book, GNC_FEATURE_GUID_BAYESIAN);
+}
+
+
 /** Updates the imap for a given account using a list of tokens */
 void
 gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
@@ -5465,8 +5504,8 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         if (!current_token->data || (*((char*)current_token->data) == '\0'))
             continue;
 
-        /* start off with no tokens for this account */
-        token_count = 0;
+        /* start off with one token for this account */
+        token_count = 1;
 
         PINFO("adding token '%s'", (char*)current_token->data);
 
@@ -5474,23 +5513,9 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
                                     (char*)current_token->data,
                                     guid_string);
 
-        qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
-        /* if the token/account is already in the tree, read the current
-         * value from the tree and use this for the basis of the value we
-         * are putting back
-         */
-        if (G_VALUE_HOLDS_INT64 (&value))
-        {
-            int64_t count = g_value_get_int64 (&value);
-            PINFO("found existing value of '%" G_GINT64_FORMAT "'", count);
+        /* change the imap entry for the account */
+        change_imap_entry (imap, kvp_path, token_count);
 
-            token_count += count;
-        }
-        token_count++;
-        if (!G_IS_VALUE (&value))
-            g_value_init (&value, G_TYPE_INT64);
-        g_value_set_int64 (&value, token_count);
-        qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
         g_free (kvp_path);
     }
 
@@ -5770,8 +5795,53 @@ look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar
     return converted_name;
 }
 
+
 static void
-change_imap_entry (Account *root, GncImapInfo *imapInfo)
+update_imap_entry (Account *map_account, GncImapInfo *imapInfo)
+{
+    GncImportMatchMap *imap;
+    gchar   *guid_string;
+    gchar   *kvp_path;
+    int64_t  token_count = 1;
+
+    GValue value = G_VALUE_INIT;
+
+    // Create an ImportMatchMap object
+    imap = gnc_account_imap_create_imap (imapInfo->source_account);
+
+    xaccAccountBeginEdit (imapInfo->source_account);
+
+    guid_string = guid_to_string (xaccAccountGetGUID (map_account));
+
+    PINFO("Map Account is '%s', GUID is '%s', Count is %s", xaccAccountGetName (map_account),
+               guid_string, imapInfo->count);
+
+    // save converting string, get the count value
+    qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), imapInfo->full_category, &value);
+
+    if (G_VALUE_HOLDS_INT64 (&value))
+        token_count = g_value_get_int64 (&value);
+
+    // Delete the old entry based on full account name
+    kvp_path = g_strdup (imapInfo->full_category);
+    gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
+
+    // create path based on guid
+    kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
+
+    // change the imap entry of source_account
+    change_imap_entry (imap, kvp_path, token_count);
+
+    qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
+    xaccAccountCommitEdit (imapInfo->source_account);
+
+    g_free (kvp_path);
+    g_free (guid_string);
+}
+
+
+static void
+convert_imap_entry (Account *root, GncImapInfo *imapInfo)
 {
     Account       *map_account = NULL;
     const gchar   *sep = gnc_get_account_separator_string ();
@@ -5797,58 +5867,9 @@ change_imap_entry (Account *root, GncImapInfo *imapInfo)
 
     PINFO("Full account name is '%s'", full_name);
 
-    if (map_account != NULL) // we have an account, try and convert
-    {
-        gchar   *guid_string;
-        gchar   *kvp_path;
-        int64_t  count = 1;
+    if (map_account != NULL) // we have an account, try and update it
+        update_imap_entry (map_account, imapInfo);
 
-        GValue value = G_VALUE_INIT;
-
-        xaccAccountBeginEdit (imapInfo->source_account);
-
-        guid_string = guid_to_string (xaccAccountGetGUID (map_account));
-
-        PINFO("Map Account is '%s',GUID is '%s', Count is %s", xaccAccountGetName (map_account),
-               guid_string, imapInfo->count);
-
-        // save converting string, get the count value
-        qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), imapInfo->full_category, &value);
-
-        if (G_VALUE_HOLDS_INT64 (&value))
-            count = g_value_get_int64 (&value);
-
-        // Delete the old entry based on full account name
-        kvp_path = g_strdup (imapInfo->full_category);
-        gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
-
-        // create path based on guid
-        kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
-
-        // check for existing guid entry
-        if (qof_instance_has_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path))
-        {
-            int64_t  existing_count = 0;
-
-            // get the count value
-            qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), kvp_path, &value);
-
-            if (G_VALUE_HOLDS_INT64 (&value))
-                existing_count = g_value_get_int64 (&value);
-
-            count = count + existing_count;
-        }
-        g_value_set_int64 (&value, count);
-
-        // Add or Update the entry based on guid
-        qof_instance_set_kvp (QOF_INSTANCE (imapInfo->source_account), kvp_path, &value);
-
-        qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
-        xaccAccountCommitEdit (imapInfo->source_account);
-
-        g_free (kvp_path);
-        g_free (guid_string);
-    }
     g_free (full_name);
 }
 
@@ -5863,7 +5884,7 @@ get_account_imap_info (Account *root, Account *acc)
 
     imap_list = gnc_account_imap_get_info_bayes (acc);
 
-    if (g_list_length (imap_list) > 0)
+    if (g_list_length (imap_list) > 0) // we have mappings
     {
         PINFO("List length is %d", g_list_length (imap_list));
 
@@ -5872,7 +5893,7 @@ get_account_imap_info (Account *root, Account *acc)
             GncImapInfo *imapInfo = node->data;
 
             // Lets start doing stuff
-            change_imap_entry (root, imapInfo);
+            convert_imap_entry (root, imapInfo);
 
             // Free the members and structure
             g_free (imapInfo->category_head);
@@ -5923,11 +5944,6 @@ gnc_account_imap_convert_bayes (QofBook *book)
 
         // set the run-once value
         qof_instance_set_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_b);
-
-        /* Set a feature flag in the book for the change to use guid.
-         * This will prevent older GnuCash versions that don't support this feature
-         * from opening this file. */
-        gnc_features_set_used (book, GNC_FEATURE_GUID_BAYESIAN);
     }
 }
 
