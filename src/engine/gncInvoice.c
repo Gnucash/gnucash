@@ -1389,7 +1389,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     const GncOwner *owner;
 
     if (!invoice || !acc) return NULL;
-
+    if (gncInvoiceIsPosted (invoice)) return NULL;
+    
     gncInvoiceBeginEdit (invoice);
     book = qof_instance_get_book(invoice);
 

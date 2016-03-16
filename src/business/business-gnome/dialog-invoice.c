@@ -2886,17 +2886,41 @@ static void post_one_invoice_cb(gpointer data, gpointer user_data)
     gnc_invoice_post(iw, post_params);
 }
 
+static void gnc_invoice_is_posted(gpointer inv, gpointer test_value)
+{
+    GncInvoice *invoice = inv;
+    gboolean *test = (gboolean*)test_value;
+      
+    if (gncInvoiceIsPosted (invoice))
+    {
+        *test = TRUE;
+    }
+}
+
+
 static void
 multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
 {
     struct post_invoice_params post_params;
+    gboolean test;
     InvoiceWindow *iw;
 
     if (g_list_length(invoice_list) == 0)
         return;
-
     // Get the posting parameters for these invoices
     iw = gnc_ui_invoice_edit(invoice_list->data);
+    test = FALSE;
+    gnc_suspend_gui_refresh (); // Turn off GUI refresh for the duration.
+    // Check if any of the selected invoices have already been posted.
+    g_list_foreach(invoice_list, gnc_invoice_is_posted, &test);
+    gnc_resume_gui_refresh ();
+    if (test)
+    {
+        gnc_error_dialog (iw_get_window(iw), "%s",
+                          _("One or more selected invoices have already been posted.\nRe-check you selection."));
+        return;
+    }
+    
     if (!gnc_dialog_post_invoice(iw, _("Do you really want to post these invoices?"),
                                  &post_params.ddue, &post_params.postdate,
                                  &post_params.memo, &post_params.acc,
