@@ -672,6 +672,8 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
     xaccTransBeginEdit(to_trans);
 
     FOR_EACH_SPLIT(to_trans, xaccSplitDestroy(s));
+    g_list_free(to_trans->splits);
+    to_trans->splits = NULL;
 
     xaccTransSetCurrency(to_trans, xaccTransGetCurrency(from_trans));
     xaccTransSetDescription(to_trans, xaccTransGetDescription(from_trans));
@@ -1267,22 +1269,78 @@ xaccTransGetCurrency (const Transaction *trans)
     return trans ? trans->common_currency : NULL;
 }
 
+/* Helper functions for xaccTransSetCurrency */
+static gnc_numeric
+find_new_rate(Transaction *trans, gnc_commodity *curr)
+{
+    GList *node;
+    gnc_numeric rate = gnc_numeric_zero();
+    for (node = trans->splits; node != NULL; node = g_list_next (node))
+    {
+        Split *split = GNC_SPLIT(node->data);
+        gnc_commodity *split_com =
+            xaccAccountGetCommodity(xaccSplitGetAccount(split));
+        if (gnc_commodity_equal(curr, split_com))
+        {
+/* This looks backwards, but the amount of the balancing transaction
+ * that we're going to use it on is in the value's currency. */
+            rate = gnc_numeric_div(xaccSplitGetAmount(split),
+                                   xaccSplitGetValue(split),
+                                   GNC_DENOM_AUTO, GNC_HOW_RND_NEVER);
+            break;
+        }
+    }
+    return rate;
+}
+
+static void
+split_set_new_value(Split* split, gnc_commodity *curr, gnc_commodity *old_curr,
+                    gnc_numeric rate)
+{
+    gnc_commodity *split_com =
+        xaccAccountGetCommodity(xaccSplitGetAccount(split));
+    if (gnc_commodity_equal(curr, split_com))
+        xaccSplitSetValue(split, xaccSplitGetAmount(split));
+    else if (gnc_commodity_equal(old_curr, split_com))
+        xaccSplitSetSharePrice(split, rate);
+    else
+    {
+        gnc_numeric old_rate = gnc_numeric_div(xaccSplitGetValue(split),
+                                               xaccSplitGetAmount(split),
+                                               GNC_DENOM_AUTO,
+                                               GNC_HOW_RND_NEVER);
+        gnc_numeric new_rate = gnc_numeric_div(old_rate, rate, GNC_DENOM_AUTO,
+                                               GNC_HOW_RND_NEVER);
+        xaccSplitSetSharePrice(split, new_rate);
+    }
+}
+
+/**
+ * Set a new currency on a transaction.
+ * When we do that to a transaction with splits we need to re-value
+ * all of the splits in the new currency.
+ * @param trans: The transaction to change
+ * @param curr: The new currency to set.
+ */
 void
 xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 {
-    gint fraction, old_fraction;
-
+    gnc_commodity *old_curr = trans->common_currency;
     if (!trans || !curr || trans->common_currency == curr) return;
     xaccTransBeginEdit(trans);
 
-    old_fraction = gnc_commodity_get_fraction (trans->common_currency);
     trans->common_currency = curr;
-    fraction = gnc_commodity_get_fraction (curr);
-
-    /* avoid needless crud if fraction didn't change */
-    if (fraction != old_fraction)
+    if (old_curr != NULL && trans->splits != NULL)
     {
-        FOR_EACH_SPLIT(trans, xaccSplitSetValue(s, xaccSplitGetValue(s)));
+        gnc_numeric rate = find_new_rate(trans, curr);
+        if (!gnc_numeric_zero_p (rate))
+        {
+            FOR_EACH_SPLIT(trans, split_set_new_value(s, curr, old_curr, rate));
+        }
+        else
+        {
+            FOR_EACH_SPLIT(trans, xaccSplitSetValue(s, xaccSplitGetValue(s)));
+        }
     }
 
     qof_instance_set_dirty(QOF_INSTANCE(trans));

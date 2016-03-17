@@ -929,20 +929,18 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
 
     g_free (check->msg);
     g_free (check2.msg);
-    check->msg = g_strdup("[xaccSplitEqual] amounts differ: 13333/1000 vs 100000/1000");
     check2.msg = g_strdup_printf (
                      "[xaccTransEqual] splits %s and %s differ", split_guid0, split_guid0);
     qof_instance_set_guid (split1, qof_instance_get_guid (split0));
     g_assert (!xaccTransEqual (clone, txn0, TRUE, TRUE, TRUE, TRUE));
     g_assert (xaccTransEqual (clone, txn0, TRUE, FALSE, FALSE, TRUE));
-    g_assert_cmpint (check->hits, ==, 11);
+    g_assert_cmpint (check->hits, ==, 10);
     g_assert_cmpint (check2.hits, ==, 2);
 
     qof_instance_set_guid (xaccTransGetSplit (txn1, 0),
                            qof_instance_get_guid (split0));
     qof_instance_set_guid (xaccTransGetSplit (txn1, 1),
                            qof_instance_get_guid (xaccTransGetSplit (txn0, 1)));
-    g_free (check->msg);
     {
         Split* split00 = xaccTransGetSplit (txn0, 0);
         Split* split01 = xaccTransGetSplit (txn0, 1);
@@ -958,7 +956,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
         test_add_error (&check3);
         g_assert (!xaccTransEqual (txn1, txn0, TRUE, TRUE, TRUE, TRUE));
         g_assert (xaccTransEqual (txn1, txn0, TRUE, TRUE, FALSE, TRUE));
-        g_assert_cmpint (check->hits, ==, 12);
+        g_assert_cmpint (check->hits, ==, 11);
         g_assert_cmpint (check2.hits, ==, 3);
         g_assert_cmpint (check3.hits, ==, 0);
 
