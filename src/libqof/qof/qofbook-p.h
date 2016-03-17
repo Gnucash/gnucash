@@ -61,13 +61,16 @@ backends (when reading the GncGUID from the data source). */
 #define qof_book_set_guid(book,guid)    \
          qof_instance_set_guid(QOF_INSTANCE(book), guid)
 
-/** Validate a counter format string with the given
- *    G_GINT64_FORMAT. Returns an error message if the format string
- *    was invalid, or NULL if it is ok. The caller should free the
- *    error message with g_free.
+/** Validate a counter format string with a given format specifier.
+ *    If valid, returns a normalized format string,
+ *    that is whatever long int specifier was used will be replaced with the value of
+ *    the posix "PRIx64" macro.
+ *    If not valid returns NULL and optionally set an error message is a non-null
+ *    err_msg parameter was passed.
+ *    The caller should free the returned format string and  error message with g_free.
  */
-gchar *qof_book_validate_counter_format_internal(const gchar *p,
-        const gchar* gint64_format);
+gchar *qof_book_normalize_counter_format_internal(const gchar *p,
+        const gchar* gint64_format, gchar **err_msg);
 
 /** This debugging function can be used to traverse the book structure
  *    and all subsidiary structures, printing out which structures

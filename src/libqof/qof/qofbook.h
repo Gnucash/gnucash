@@ -322,11 +322,14 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
  */
 gchar *qof_book_increment_and_format_counter (QofBook *book, const char *counter_name);
 
-/** Validate a counter format string. Returns an error message if the
- *    format string was invalid, or NULL if it is ok. The caller should
- *    free the error message with g_free.
+/** Validate a counter format string. If valid, returns a normalized format string,
+ *    that is whatever long int specifier was used will be replaced with the value of
+ *    the posix "PRIx64" macro.
+ *    If not valid returns NULL and optionally set an error message is a non-null
+ *    err_msg parameter was passed.
+ *    The caller should free the returned format string and  error message with g_free.
  */
-gchar * qof_book_validate_counter_format(const gchar *format);
+gchar * qof_book_normalize_counter_format(const gchar *format, gchar **err_msg);
 
 /** Get the format string to use for the named counter.
  *    The return value is NULL on error or the format string of the
