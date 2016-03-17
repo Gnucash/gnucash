@@ -147,7 +147,7 @@ test_book_normalize_counter( void )
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
@@ -157,7 +157,7 @@ test_book_normalize_counter( void )
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
@@ -167,47 +167,47 @@ test_book_normalize_counter( void )
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
-    /* Test the posix' PRIx64 */
-    r = qof_book_normalize_counter_format("Test - %" PRIx64, &err_msg);
+    /* Test the posix' PRIi64 */
+    r = qof_book_normalize_counter_format("Test - %" PRIi64, &err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
-    /* Test the posix' PRIx64 with precision field */
-    r = qof_book_normalize_counter_format("Test - %.3" PRIx64, &err_msg);
+    /* Test the posix' PRIi64 with precision field */
+    r = qof_book_normalize_counter_format("Test - %.3" PRIi64, &err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %.3" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %.3" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
-    /* Test the posix' PRIx64 with width field */
-    r = qof_book_normalize_counter_format("Test - %5" PRIx64, &err_msg);
+    /* Test the posix' PRIi64 with width field */
+    r = qof_book_normalize_counter_format("Test - %5" PRIi64, &err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %5" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %5" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
-    /* Test the posix' PRIx64 with width and precision field */
-    r = qof_book_normalize_counter_format("Test - %5.4" PRIx64, &err_msg);
+    /* Test the posix' PRIi64 with width and precision field */
+    r = qof_book_normalize_counter_format("Test - %5.4" PRIi64, &err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %5.4" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %5.4" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
@@ -217,7 +217,7 @@ test_book_normalize_counter( void )
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
@@ -227,7 +227,7 @@ test_book_normalize_counter( void )
     {
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert_cmpstr( r, == , "Test - %" PRIx64);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
     g_assert(err_msg == NULL);
     g_free(r);
 
@@ -366,11 +366,11 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Testing counter format with existing counter" );
     r = qof_book_get_counter_format( fixture->book, counter_name );
-    g_assert_cmpstr( r, == , "%.6" PRIx64);
+    g_assert_cmpstr( r, == , "%.6" PRIi64);
 
     g_test_message( "Testing counter format for default value" );
     r = qof_book_get_counter_format( fixture->book, counter_name );
-    g_assert_cmpstr( r, == , "%.6" PRIx64);
+    g_assert_cmpstr( r, == , "%.6" PRIi64);
 }
 
 static void

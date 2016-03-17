@@ -513,7 +513,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
     if (!norm_format)
     {
         /* Use the default format */
-        norm_format = g_strdup ("%.6" PRIx64);
+        norm_format = g_strdup ("%.6" PRIi64);
     }
     return norm_format;
 }
@@ -525,7 +525,7 @@ qof_book_normalize_counter_format(const gchar *p, gchar **err_msg)
             G_GINT64_FORMAT,
             "lli",
             "I64i",
-            PRIx64,
+            PRIi64,
             "li",
             NULL,
     };
@@ -645,7 +645,7 @@ qof_book_normalize_counter_format_internal(const gchar *p,
 
     /* Copy the string we have so far and add normalized format specifier for long int */
     aux_str = g_strndup (base, p - base);
-    normalized_str = g_strconcat (aux_str, PRIx64, NULL);
+    normalized_str = g_strconcat (aux_str, PRIi64, NULL);
     g_free (aux_str);
 
     /* Skip length modifier / conversion specifier */
