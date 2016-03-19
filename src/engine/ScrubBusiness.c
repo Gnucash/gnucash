@@ -462,6 +462,50 @@ gncScrubBusinessLot (GNCLot *lot)
     return splits_deleted;
 }
 
+void
+gncScrubBusinessSplit (Split *split)
+{
+    const gchar *memo = _("Please delete this transaction. Explanation at http://wiki.gnucash.org/wiki/Business_Features_Issues#Double_Posting");
+    Transaction *txn;
+
+    if (!split) return;
+    ENTER ("(split=%p)", split);
+
+    txn = xaccSplitGetParent (split);
+    if (txn)
+    {
+        gchar txntype = xaccTransGetTxnType (txn);
+        const gchar *read_only = xaccTransGetReadOnly (txn);
+        gboolean is_void = xaccTransGetVoidStatus (txn);
+        GNCLot *lot = xaccSplitGetLot (split);
+
+        /* Look for transactions as a result of double posting an invoice or bill
+         * Refer to https://bugzilla.gnome.org/show_bug.cgi?id=754209
+         * to learn how this could have happened in the past.
+         * Characteristics of such transaction are:
+         * - read only
+         * - not voided (to ensure read only is set by the business functions)
+         * - transaction type is none (should be type invoice for proper post transactions)
+         * - assigned to a lot
+         */
+        if ((txntype == TXN_TYPE_NONE) && read_only && !is_void && lot)
+        {
+            gchar *txn_date = qof_print_date (xaccTransGetDateEntered (txn));
+            xaccTransClearReadOnly (txn);
+            xaccSplitSetMemo (split, memo);
+            gnc_lot_remove_split (lot, split);
+            PWARN("Cleared double post status of transaction \"%s\", dated %s. "
+                  "Please delete transaction and verify balance.",
+                  xaccTransGetDescription (txn),
+                  txn_date);
+            g_free (txn_date);
+        }
+
+    }
+
+    LEAVE ("(split=%p)", split);
+}
+
 /* ============================================================== */
 
 void
@@ -505,20 +549,72 @@ gncScrubBusinessAccountLots (Account *acc)
 
 /* ============================================================== */
 
+void
+gncScrubBusinessAccountSplits (Account *acc)
+{
+    SplitList *splits, *node;
+    gint split_count = 0;
+    gint curr_split_no = 1;
+    const gchar *str;
+
+    if (!acc) return;
+    if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
+
+    str = xaccAccountGetName(acc);
+    str = str ? str : "(null)";
+
+    ENTER ("(acc=%s)", str);
+    PINFO ("Cleaning up superfluous lot links in account %s \n", str);
+    xaccAccountBeginEdit(acc);
+
+    splits = xaccAccountGetSplitList(acc);
+    split_count = g_list_length (splits);
+    for (node = splits; node; node = node->next)
+    {
+        Split *split = node->data;
+
+        PINFO("Start processing split %d of %d",
+              curr_split_no, split_count);
+
+        if (split)
+            gncScrubBusinessSplit (split);
+
+        PINFO("Finished processing split %d of %d",
+              curr_split_no, split_count);
+        curr_split_no++;
+    }
+    xaccAccountCommitEdit(acc);
+    LEAVE ("(acc=%s)", str);
+}
+
+/* ============================================================== */
+
+void
+gncScrubBusinessAccount (Account *acc)
+{
+    if (!acc) return;
+    if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
+
+    gncScrubBusinessAccountLots (acc);
+    gncScrubBusinessAccountSplits (acc);
+}
+
+/* ============================================================== */
+
 static void
 lot_scrub_cb (Account *acc, gpointer data)
 {
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
-    gncScrubBusinessAccountLots (acc);
+    gncScrubBusinessAccount (acc);
 }
 
 void
-gncScrubBusinessAccountTreeLots (Account *acc)
+gncScrubBusinessAccountTree (Account *acc)
 {
     if (!acc) return;
 
     gnc_account_foreach_descendant(acc, lot_scrub_cb, NULL);
-    gncScrubBusinessAccountLots (acc);
+    gncScrubBusinessAccount (acc);
 }
 
 /* ========================== END OF FILE  ========================= */

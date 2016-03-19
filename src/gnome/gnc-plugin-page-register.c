@@ -3726,7 +3726,10 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
     split = gnc_split_register_get_current_split (reg);
     lot = xaccSplitGetLot (split);
     if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+    {
         gncScrubBusinessLot (lot);
+        gncScrubBusinessSplit (split);
+    }
     gnc_resume_gui_refresh();
     LEAVE(" ");
 }
@@ -3773,7 +3776,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
 
         lot = xaccSplitGetLot (split);
         if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+        {
             gncScrubBusinessLot (lot);
+            gncScrubBusinessSplit (split);
+        }
 
         PINFO("Finished processing split %d of %d",
               curr_split_no, split_count);
