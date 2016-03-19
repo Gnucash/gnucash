@@ -146,17 +146,17 @@
       <description>This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
     </key>
     <key name="date-completion-thisyear" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>In the current calendar year</summary>
       <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
     </key>
     <key name="date-completion-sliding" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>In a sliding 12-month window starting a configurable number of months before the current month</summary>
       <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
     </key>
     <key name="date-backmonths" type="d">
-      <default>6.0</default>
+      <default>11.0</default>
       <summary>Maximum number of months to go back.</summary>
       <description>Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</description>
     </key>
