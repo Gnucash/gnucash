@@ -2570,6 +2570,9 @@ xaccTransReverse (Transaction *orig)
     kvp_val = kvp_value_new_guid(xaccTransGetGUID(trans));
     kvp_frame_set_slot_nc(orig->inst.kvp_data, TRANS_REVERSED_BY, kvp_val);
 
+    /* Make sure the reverse transaction is not read-only */
+    xaccTransClearReadOnly(trans);
+
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
     return trans;
