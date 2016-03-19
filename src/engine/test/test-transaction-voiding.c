@@ -154,7 +154,7 @@ run_test (void)
 
     if (xaccTransGetVoidStatus(transaction))
     {
-        failure("void status reports trus after restoring transaction");
+        failure("void status reports true after restoring transaction");
     }
 
     if (xaccTransGetVoidReason(transaction))
@@ -186,6 +186,21 @@ run_test (void)
     if (!(gnc_numeric_zero_p(xaccSplitVoidFormerValue(xaccTransGetSplit(transaction, 1)))))
     {
         failure("former value (after restore) should be zero");
+    }
+
+    xaccTransSetReadOnly (transaction, "Read-only void test");
+    xaccTransVoid(transaction, reason);
+
+    ts = xaccTransGetVoidTime (transaction);
+
+    if (xaccTransGetVoidStatus(transaction))
+    {
+        failure("void status reports true while read-only transaction can't be voided");
+    }
+
+    if (xaccTransGetVoidReason(transaction))
+    {
+        failure("void reason exists while read-only transaction can't be voided");
     }
 
     return;
