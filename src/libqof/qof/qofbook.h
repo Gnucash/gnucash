@@ -343,7 +343,7 @@ gchar * qof_book_normalize_counter_format(const gchar *format, gchar **err_msg);
 
 /** Get the format string to use for the named counter.
  *    The return value is NULL on error or the format string of the
- *    counter. The string should not be freed.
+ *    counter. The returned string should be freed by the caller.
  */
 char *qof_book_get_counter_format (const QofBook *book,
                                    const char *counter_name);
