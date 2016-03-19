@@ -154,6 +154,7 @@ struct GncBudgetViewPrivate
     Account* expenses;
     Account* assets;
     Account* liabilities;
+    Account* rootAcct;
 };
 
 #define GNC_BUDGET_VIEW_GET_PRIVATE(o)  \
@@ -216,9 +217,11 @@ gnc_budget_view_init(GncBudgetView *budget_view)
     ENTER("view %p", budget_view);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
-    /* Keep track of the top level asset, liability, income and expense accounts */
+    /* Keep track of the root and top level asset, liability, income and expense accounts */
     root = gnc_book_get_root_account(gnc_get_current_book());
     num_top_accounts = gnc_account_n_children(root);
+    
+    priv->rootAcct = root;
 
     for (i = 0; i < num_top_accounts; ++i)
     {
@@ -721,9 +724,9 @@ budget_accum_helper(Account* account, gpointer data)
     }
 }
 
-/** \brief Function to calculate the accumulated budget amount in a given account for a specified period.
+/** \brief Function to calculate the accumulated budget amount in a given account at a specified period number.
 
-This function uses the \ref budget_accum_helper to calculate the accumulated budget amount in a given budget account for a specified period. Specifically, it uses the function \ref gnc_account_foreach_child function passing through an instance of \ref budget_accum_helper.
+This function uses the \ref budget_accum_helper to calculate the accumulated budget amount in a given budget account for a specified period number. If the acocunt does not have children, then it simply returns the balance of the account.
 */
 static gnc_numeric
 gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint period_num)
@@ -733,9 +736,19 @@ gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint per
     info.total = gnc_numeric_zero();
     info.budget = budget;
     info.period_num = period_num;
-    gnc_account_foreach_child(account, budget_accum_helper, &info);
+    
 
-    return info.total;
+    
+    if (!gnc_budget_is_account_period_value_set(budget, account, period_num))
+    {
+    	gnc_account_foreach_child(account, budget_accum_helper, &info);
+    }
+    else
+    {
+    	info.total = gnc_budget_get_account_period_value(budget, account, period_num);
+    }
+    	return info.total;
+    
 }
 
 /** \brief Calculates and displays budget amount for a period in a defined account.
@@ -871,7 +884,10 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
 
 /** \brief Function to find the total in a column of budget provided and display the info in the totals tree widget.
 
-This function looks at which type of account is in question, and then calls the function \ref gbv_get_accumulated_budget_amount on the root account (assuming that we are not at a totals column) or \ref bgv_get_total_for_account if we are. It then displays this information in the totals tree widget.
+This function is called on each row within the totals tree (i.e. assets, expenses, transfers, and totals) in order to 
+update the total values in the totals tree (grand totals at the bottom of the budget page). It looks at which type of account is currently being examined, and then calls the function
+\ref gbv_get_accumulated_budget_amount on all of the relevant children accounts of the root. It then sets the value and color of the cell based on this information in the totals tree widget.
+
 */
 static void
 totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
@@ -882,10 +898,20 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     GncBudgetViewPrivate* priv;
     gint row_type;
     GncBudget *budget;
+    Account* account; // used to make things easier in the adding up processes
     gint period_num;
-    gnc_numeric value;
+    gnc_numeric value; // used to assist in adding and subtracting
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    gint width;
+    
+    gint width; // FIXME: VARIABLE NOT NEEDED?
+
+    gint i;
+    gint num_top_accounts;
+
+    gnc_numeric totalincome = gnc_numeric_zero();
+    gnc_numeric totalexpenses = gnc_numeric_zero();
+    gnc_numeric totalassets = gnc_numeric_zero();
+    gnc_numeric totalliabilities = gnc_numeric_zero();
 
     view = GNC_BUDGET_VIEW(user_data);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
@@ -895,78 +921,83 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     period_num = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(col),
                                  "period_num"));
 
+
+    num_top_accounts = gnc_account_n_children(priv->rootAcct);
+    
+    // step through each child account of the root, find the total income, expenses, liabilities, and assets.
+    
+    for (i = 0; i < num_top_accounts; ++i)
+  	{
+    	account = gnc_account_nth_child(priv->rootAcct, i);
+    	
+    	// find the total for this account
+    	
+    	if (period_num < 0)
+    	{
+    		value = bgv_get_total_for_account(account, budget);
+    	}
+    	else
+    	{
+    		value = gbv_get_accumulated_budget_amount(budget, account, period_num);
+    	}
+
+		// test for what account type, and add 'value' to the appopriate total
+    	
+    	if (xaccAccountGetType(account) == ACCT_TYPE_INCOME)
+    	{
+    		totalincome = gnc_numeric_add(totalincome, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+    	}
+    	else if (xaccAccountGetType(account) == ACCT_TYPE_EXPENSE)
+    	{
+    		totalexpenses = gnc_numeric_add(totalexpenses, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+    	}
+    	else if (xaccAccountGetType(account) == ACCT_TYPE_ASSET)
+    	{
+    		totalassets = gnc_numeric_add(totalassets, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+    	}
+    	else if (xaccAccountGetType(account) == ACCT_TYPE_LIABILITY)
+    	{
+    		totalliabilities = gnc_numeric_add(totalliabilities, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+    	}
+    	else
+    	{
+    		// Do nothing because this account is not of interest
+    	}
+    	
+   	}
+
+   
+    
+    // at this point we should have variables holding the values for assets, liabilities, expenses and incomes.
+    
+    // Set the text to display, depending on which of the totals rows we are currently looking at	
+    	
     if (row_type == TOTALS_TYPE_INCOME)
     {
-        if (period_num >= 0)
-        {
-            value = gbv_get_accumulated_budget_amount(budget, priv->income, period_num);
-        }
-        else
-        {
-            value = bgv_get_total_for_account(priv->income, budget);
-        }
-        xaccSPrintAmount(amtbuff, value,
+    	// FIXME: There must be a better way to get the GncAccountPrintInfo object than this. Would prefer to depreciate the tracking of top level accounts.
+        xaccSPrintAmount(amtbuff, totalincome,
                          gnc_account_print_info(priv->income, FALSE));
         g_object_set(cell, "foreground", "black", NULL);
     }
     else if (row_type == TOTALS_TYPE_EXPENSES)
     {
-        if (period_num >= 0)
-        {
-            value = gbv_get_accumulated_budget_amount(budget, priv->expenses, period_num);
-        }
-        else
-        {
-            value = bgv_get_total_for_account(priv->expenses, budget);
-        }
-        xaccSPrintAmount(amtbuff, value,
+       
+        xaccSPrintAmount(amtbuff, totalexpenses,
                          gnc_account_print_info(priv->expenses, FALSE));
         g_object_set(cell, "foreground", "black", NULL);
     }
     else if (row_type == TOTALS_TYPE_TRANSFERS)
     {
-        gnc_numeric assets;
-        gnc_numeric liabilities;
-
-        if (period_num >= 0)
-        {
-            assets = gbv_get_accumulated_budget_amount(budget, priv->assets, period_num);
-            liabilities = gbv_get_accumulated_budget_amount(budget, priv->liabilities, period_num);
-        }
-        else
-        {
-            assets = bgv_get_total_for_account(priv->assets, budget);
-            liabilities = bgv_get_total_for_account(priv->liabilities, budget);
-        }
-        value = gnc_numeric_sub(assets, liabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        xaccSPrintAmount(amtbuff, value,
+    	
+        xaccSPrintAmount(amtbuff, gnc_numeric_sub(totalassets, totalliabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
                          gnc_account_print_info(priv->assets, FALSE));
         g_object_set(cell, "foreground", "black", NULL);
     }
     else if (row_type == TOTALS_TYPE_TOTAL)
     {
-        gnc_numeric income;
-        gnc_numeric expenses;
-        gnc_numeric assets;
-        gnc_numeric liabilities;
-
-        if (period_num >= 0)
-        {
-            income = gbv_get_accumulated_budget_amount(budget, priv->income, period_num);
-            expenses = gbv_get_accumulated_budget_amount(budget, priv->expenses, period_num);
-            assets = gbv_get_accumulated_budget_amount(budget, priv->assets, period_num);
-            liabilities = gbv_get_accumulated_budget_amount(budget, priv->liabilities, period_num);
-        }
-        else
-        {
-            income = bgv_get_total_for_account(priv->income, budget);
-            expenses = bgv_get_total_for_account(priv->expenses, budget);
-            assets = bgv_get_total_for_account(priv->assets, budget);
-            liabilities = bgv_get_total_for_account(priv->liabilities, budget);
-        }
-        value = gnc_numeric_sub(income, expenses, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        value = gnc_numeric_sub(value, assets, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        value = gnc_numeric_add(value, liabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_sub(totalincome, totalexpenses, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_sub(value, totalassets, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_add(value, totalliabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         xaccSPrintAmount(amtbuff, value,
                          gnc_account_print_info(priv->assets, FALSE));
         if (gnc_numeric_negative_p(value))
@@ -980,6 +1011,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     }
     else
     {
+    	// if it reaches here then the row type was not set correctly
         g_strlcpy(amtbuff, "error", sizeof(amtbuff));
     }
 

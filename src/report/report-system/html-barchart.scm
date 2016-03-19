@@ -424,6 +424,14 @@
                       (loop (+ 1 col) 1)))))
 
 
+            (push "var all_ticks = [")
+            (for-each
+                (lambda (val)
+                    (push "\"")
+                    (push val)
+                    (push "\","))
+                (gnc:html-barchart-row-labels barchart))
+            (push "];\n")
             (push "var options = {
                    shadowAlpha: 0.07,
                    stackSeries: false,
@@ -493,28 +501,43 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
-            (if (and (string? row-labels) (> (string-length row-labels) 0))
-              (begin 
-                (push "  options.axes.xaxis.ticks = [")
-                (for-each (lambda (val)
-                        (push "\"")
-                        (push val)
-                        (push "\","))
-                    (gnc:html-barchart-row-labels barchart))
-                (push "];\n")))
+            (push "  options.axes.xaxis.ticks = all_ticks;\n")
 
 
             (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
+            (push "$(document).ready(function() {
+var plot = $.jqplot('")(push chart-id)(push"', data, options);
+var int_chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
+plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
+plot.replot();
+});
 
-  function formatTooltip(str, seriesIndex, pointIndex) {
-      if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-          x = options.axes.xaxis.ticks[pointIndex];
-      else
-          x = pointIndex;
-      y = data[seriesIndex][pointIndex][1].toFixed(2);
-      return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
-  }\n") 
+function formatTooltip(str, seriesIndex, pointIndex) {
+    if (options.axes.xaxis.ticks[pointIndex] !== undefined)
+        x = options.axes.xaxis.ticks[pointIndex];
+    else
+        x = pointIndex;
+    y = data[seriesIndex][pointIndex][1].toFixed(2);
+    return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
+}
+
+function getVisualTicks(chart_width) {
+    var num_ticks = all_ticks.length;
+    var label_width = 25;
+    var num_labels = chart_width / label_width;
+    var show_every_nth_label = Math.ceil (num_ticks / num_labels);
+    var visual_ticks = [];
+
+    if (show_every_nth_label == 0)
+        show_every_nth_label = 1;
+    for (counter = 0; counter < all_ticks.length; counter++) {
+        if ((counter % show_every_nth_label) == 0)
+            visual_ticks.push (all_ticks[counter]);
+        else
+            visual_ticks.push (' ');
+    }
+    return visual_ticks;
+}\n")
 
             (push "});\n</script>")
 

@@ -2972,6 +2972,12 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
         gnc_error_dialog(NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
         return;
     }
+    reason = xaccTransGetReadOnly (trans);
+    if (reason)
+    {
+        gnc_error_dialog(NULL, _("This transaction is marked read-only with the comment: '%s'"), reason);
+        return;
+    }
 
     if (!gnc_plugin_page_register_finish_pending(GNC_PLUGIN_PAGE(page)))
         return;
@@ -3744,7 +3750,10 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
     split = gnc_split_register_get_current_split (reg);
     lot = xaccSplitGetLot (split);
     if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+    {
         gncScrubBusinessLot (lot);
+        gncScrubBusinessSplit (split);
+    }
     gnc_resume_gui_refresh();
     LEAVE(" ");
 }
@@ -3791,7 +3800,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
 
         lot = xaccSplitGetLot (split);
         if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+        {
             gncScrubBusinessLot (lot);
+            gncScrubBusinessSplit (split);
+        }
 
         PINFO("Finished processing split %d of %d",
               curr_split_no, split_count);

@@ -27,6 +27,7 @@ extern "C"
 #include "config.h"
 #include <string.h>
 #include <glib.h>
+#include <inttypes.h>
 #include <unittest-support.h>
 #ifdef __cplusplus
 }
@@ -132,64 +133,133 @@ test_book_readonly( Fixture *fixture, gconstpointer pData )
     g_assert( qof_book_is_readonly( fixture->book ) );
 }
 static void
-test_book_validate_counter( void )
+test_book_normalize_counter( void )
 {
-    gchar *r;
+    gchar *r, *err_msg = NULL;
     g_test_bug("644036");
+    g_test_bug("728722");
 
     /* Test for detection of missing format conversion */
-    r = qof_book_validate_counter_format("This string is missing the conversion specifier");
-    g_assert(r);
-    if (r && g_test_verbose())
+    r = qof_book_normalize_counter_format("This string is missing the conversion specifier", &err_msg);
+    g_assert(!r);
+    g_assert(err_msg);
+    if (!r && g_test_verbose())
     {
-        g_test_message("Counter format validation correctly failed: %s", r);
+        g_test_message("Counter format normalization correctly failed: %s", err_msg);
     }
-    g_free(r);
+    g_free(err_msg);
+    err_msg = NULL;
 
     /* Test the usual Linux/Unix G_GINT64_FORMAT */
-    r = qof_book_validate_counter_format_internal("Test - %li", "li");
-    if (r && g_test_verbose())
+    r = qof_book_normalize_counter_format("Test - %li", &err_msg);
+    if (!r && g_test_verbose())
     {
-        g_test_message("Counter format validation erroneously failed: %s", r);
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert(r == NULL);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
+    g_assert(err_msg == NULL);
     g_free(r);
 
     /* Test the Windows G_GINT64_FORMAT */
-    r = qof_book_validate_counter_format_internal("Test - %I64i", "I64i");
-    if (r && g_test_verbose())
+    r = qof_book_normalize_counter_format("Test - %I64i", &err_msg);
+    if (!r && g_test_verbose())
     {
-        g_test_message("Counter format validation erroneously failed: %s", r);
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert(r == NULL);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
+    g_assert(err_msg == NULL);
     g_free(r);
 
-    /* Test the system's GINT64_FORMAT */
-    r = qof_book_validate_counter_format("Test - %" G_GINT64_FORMAT);
-    if (r && g_test_verbose())
+    /* Test the system's G_INT64_FORMAT */
+    r = qof_book_normalize_counter_format("Test - %" G_GINT64_FORMAT, &err_msg);
+    if (!r && g_test_verbose())
     {
-        g_test_message("Counter format validation erroneously failed: %s", r);
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
-    g_assert(r == NULL);
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
+    g_assert(err_msg == NULL);
+    g_free(r);
+
+    /* Test the posix' PRIi64 */
+    r = qof_book_normalize_counter_format("Test - %" PRIi64, &err_msg);
+    if (!r && g_test_verbose())
+    {
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
+    }
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
+    g_assert(err_msg == NULL);
+    g_free(r);
+
+    /* Test the posix' PRIi64 with precision field */
+    r = qof_book_normalize_counter_format("Test - %.3" PRIi64, &err_msg);
+    if (!r && g_test_verbose())
+    {
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
+    }
+    g_assert_cmpstr( r, == , "Test - %.3" PRIi64);
+    g_assert(err_msg == NULL);
+    g_free(r);
+
+    /* Test the posix' PRIi64 with width field */
+    r = qof_book_normalize_counter_format("Test - %5" PRIi64, &err_msg);
+    if (!r && g_test_verbose())
+    {
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
+    }
+    g_assert_cmpstr( r, == , "Test - %5" PRIi64);
+    g_assert(err_msg == NULL);
+    g_free(r);
+
+    /* Test the posix' PRIi64 with width and precision field */
+    r = qof_book_normalize_counter_format("Test - %5.4" PRIi64, &err_msg);
+    if (!r && g_test_verbose())
+    {
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
+    }
+    g_assert_cmpstr( r, == , "Test - %5.4" PRIi64);
+    g_assert(err_msg == NULL);
+    g_free(r);
+
+    /* Test the usual Linux/Unix G_GINT64_FORMAT */
+    r = qof_book_normalize_counter_format_internal("Test - %li", "li", &err_msg);
+    if (!r && g_test_verbose())
+    {
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
+    }
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
+    g_assert(err_msg == NULL);
+    g_free(r);
+
+    /* Test the Windows G_GINT64_FORMAT */
+    r = qof_book_normalize_counter_format_internal("Test - %I64i", "I64i", &err_msg);
+    if (!r && g_test_verbose())
+    {
+        g_test_message("Counter format normalization erroneously failed: %s", err_msg);
+    }
+    g_assert_cmpstr( r, == , "Test - %" PRIi64);
+    g_assert(err_msg == NULL);
     g_free(r);
 
     /* Test an erroneous Windows G_GINT64_FORMAT */
-    r = qof_book_validate_counter_format_internal("Test - %li", "I64i");
-    if (r && g_test_verbose())
+    r = qof_book_normalize_counter_format_internal("Test - %li", "I64i", &err_msg);
+    g_assert(!r);
+    g_assert(err_msg);
+    if (!r && g_test_verbose())
     {
-        g_test_message("Counter format validation correctly failed: %s", r);
+        g_test_message("Counter format normalization correctly failed: %s", err_msg);
     }
-    g_assert(r);
-    g_free(r);
+    g_free(err_msg);
+    err_msg = NULL;
 
     /* Test an erroneous Linux G_GINT64_FORMAT */
-    r = qof_book_validate_counter_format_internal("Test - %I64i", "li");
-    if (r && g_test_verbose())
+    r = qof_book_normalize_counter_format_internal("Test - %I64i", "li", &err_msg);
+    g_assert(!r);
+    g_assert(err_msg);
+    if (!r && g_test_verbose())
     {
-        g_test_message("Counter format validation correctly failed: %s", r);
+        g_test_message("Counter format normalization correctly failed: %s", err_msg);
     }
-    g_assert(r);
-    g_free(r);
+    g_free(err_msg);
 }
 
 static void
@@ -298,18 +368,18 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format when counter name is empty string" );
-    r = qof_book_get_counter_format( fixture->book, NULL );
+    r = qof_book_get_counter_format( fixture->book, "" );
     g_assert_cmpstr( r, == , NULL );
     g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format with existing counter" );
     r = qof_book_get_counter_format( fixture->book, counter_name );
-    g_assert_cmpstr( r, == , "%.6" G_GINT64_FORMAT);
+    g_assert_cmpstr( r, == , "%.6" PRIi64);
 
     g_test_message( "Testing counter format for default value" );
     r = qof_book_get_counter_format( fixture->book, counter_name );
-    g_assert_cmpstr( r, == , "%.6" G_GINT64_FORMAT);
+    g_assert_cmpstr( r, == , "%.6" PRIi64);
 }
 
 static void
@@ -340,7 +410,7 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     g_free( test_struct.msg );
 
     g_test_message( "Testing increment and format when counter name is empty string" );
-    r = qof_book_increment_and_format_counter( fixture->book, NULL );
+    r = qof_book_increment_and_format_counter( fixture->book, "" );
     g_assert_cmpstr( r, == , NULL );
     g_free( r );
     g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
@@ -833,7 +903,7 @@ void
 test_suite_qofbook ( void )
 {
     GNC_TEST_ADD( suitename, "readonly", Fixture, NULL, setup, test_book_readonly, teardown );
-    GNC_TEST_ADD_FUNC( suitename, "validate counter", test_book_validate_counter );
+    GNC_TEST_ADD_FUNC( suitename, "validate counter", test_book_normalize_counter );
     GNC_TEST_ADD( suitename, "get string option", Fixture, NULL, setup, test_book_get_string_option, teardown );
     GNC_TEST_ADD( suitename, "set string option", Fixture, NULL, setup, test_book_set_string_option, teardown );
     GNC_TEST_ADD( suitename, "session not saved", Fixture, NULL, setup, test_book_session_not_saved, teardown );

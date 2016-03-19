@@ -885,11 +885,15 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         if (gnc_split_register_get_default_account (reg) != NULL)
         {
-            Account *default_account;
+            Account *default_account =
+                gnc_split_register_get_default_account (reg);
+            gnc_commodity *trans_cmdty = xaccTransGetCurrency(trans);
+            gnc_commodity *acct_cmdty = xaccAccountGetCommodity(default_account);
             Split *s;
             int i = 0;
-
-            default_account = gnc_split_register_get_default_account (reg);
+            if (gnc_commodity_is_currency(acct_cmdty) &&
+                !gnc_commodity_equal(trans_cmdty, acct_cmdty))
+                xaccTransSetCurrency(trans, acct_cmdty);
 
             while ((s = xaccTransGetSplit(trans, i)) != NULL)
             {

@@ -102,3 +102,7 @@ Douglas Adams, \"The Restaurant at the End of the Universe\"")
  N_( "To search through all your transactions, start a search (Edit -> \
 Find...) from the main accounts hierarchy page. To limit your search \
 to a single account, start the search from that account's register.")
+
+ N_( "To visually compare on screen the contents of 2 tabs, \
+in one of the tabs, select Window -> New Window with Page \
+from the menu to duplicate that tab in a new window.")
