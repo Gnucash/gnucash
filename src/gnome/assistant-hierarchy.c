@@ -226,13 +226,25 @@ gnc_get_ea_locale_dir(const char *top_dir)
     int i;
 
 #ifdef PLATFORM_WIN32
-    /* On win32, setlocale() doesn't say anything useful. Use
-       glib's function instead. */
-    locale = g_win32_getlocale();
-    if (!locale)
+    /* On win32, setlocale() doesn't say anything useful, so we check
+     * g_win32_getlocale(). Unfortunately it checks the value of $LANG first,
+     * and the user might have worked around the absence of sv in gettext's
+     * Microsoft Conversion Array by setting it to "Swedish_Sweden", so first
+     * check that.
+     */
+    locale = g_getenv("LANG");
+    if (g_strcmp0(locale, "Swedish_Sweden") == 0)
+        locale = g_strdup("sv_SV");
+    elae if (g_strcmp0(locale, "Swedish_Finland") == 0)
+        locale =g_strdup("sv_FI");
+    else
     {
-        PWARN ("Couldn't retrieve locale. Falling back to default one.");
-        locale = g_strdup ("C");
+        locale = g_win32_getlocale();
+        if (!locale)
+        {
+            PWARN ("Couldn't retrieve locale. Falling back to default one.");
+            locale = g_strdup ("C");
+        }
     }
 #elif defined PLATFORM_OSX
     locale = mac_locale();
