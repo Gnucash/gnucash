@@ -38,6 +38,7 @@
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
+#include "Account-Imap.h"
 #include "Query.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
@@ -460,15 +461,6 @@ TransactionGetTokens(GNCImportTransInfo *info)
     /* return the pointer to the GList */
     return tokens;
 }
-/* Destroy an import map. But all stored entries will still continue
- * to exist in the underlying kvp frame of the account.
- */
-static void
-gnc_imap_destroy (GncImportMatchMap *imap)
-{
-    if (!imap) return;
-    g_free (imap);
-}
 
 /* searches using the GNCImportTransInfo through all existing transactions
  * if there is an exact match of the description and memo
@@ -517,7 +509,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
     */
 
     if (matchmap == NULL)
-        gnc_imap_destroy (tmp_map);
+        gnc_account_imap_delete_imap (tmp_map);
 
     return result;
 }
@@ -588,7 +580,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
     } /* if(useBayes) */
 
     if (matchmap == NULL)
-        gnc_imap_destroy (tmp_matchmap);
+        gnc_account_imap_delete_imap (tmp_matchmap);
 }
 
 

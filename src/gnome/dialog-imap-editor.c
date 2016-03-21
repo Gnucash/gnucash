@@ -33,12 +33,10 @@
 
 #include "gnc-ui-util.h"
 #include "Account.h"
+#include "Account-Imap.h"
 
 #define DIALOG_IMAP_CM_CLASS    "dialog-imap-edit"
 #define GNC_PREFS_GROUP         "dialogs.imap-editor"
-
-#define IMAP_FRAME_BAYES        "import-map-bayes"
-#define IMAP_FRAME              "import-map"
 
 #define IMAP_FRAME_DESC         "desc"
 #define IMAP_FRAME_MEMO         "memo"

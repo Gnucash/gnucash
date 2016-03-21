@@ -24,6 +24,7 @@ extern "C"
 {
 #include <config.h>
 #include "../Account.h"
+#include "../Account-Imap.h"
 #include <qof.h>
 #include <qofinstance-p.h>
 }
@@ -87,9 +88,6 @@ TEST_F(ImapTest, CreateImap) {
 
     g_free(imap);
 }
-
-static const char* IMAP_FRAME = "import-map";
-static const char* IMAP_FRAME_BAYES = "import-map-bayes";
 
 class ImapPlainTest : public ImapTest
 {

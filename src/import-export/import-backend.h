@@ -28,6 +28,7 @@
 #ifndef TRANSACTION_MATCHER_H
 #define TRANSACTION_MATCHER_H
 
+#include "Account-Imap.h"
 #include "Transaction.h"
 #include "import-settings.h"
 
