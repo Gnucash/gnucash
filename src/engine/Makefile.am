@@ -16,6 +16,7 @@ AM_CPPFLAGS = \
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
+  Account-Imap.cpp \
   Recurrence.c \
   Query.c \
   SchedXaction.c \
@@ -64,6 +65,7 @@ EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
+  Account-Imap.h \
   FreqSpec.h \
   Recurrence.h \
   SchedXaction.h \
