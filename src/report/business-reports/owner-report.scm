@@ -202,11 +202,10 @@
     (define oldintervalreversed (reverse (make-interval-list to-date)))          
     (reverse (cons dayforcurrent oldintervalreversed))) 
 
-(define (make-aging-table options query bucket-intervals reverse? date-type)
+(define (make-aging-table options query bucket-intervals reverse? date-type currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
     (buckets (new-bucket-vector))
     (payments (gnc-numeric-zero))
-    (currency (gnc-default-currency)) ;XXX
     (table (gnc:make-html-table)))
 
      (define (in-interval this-date current-bucket)
@@ -385,7 +384,7 @@
     (total (gnc-numeric-zero))
     (debit (gnc-numeric-zero))
     (credit (gnc-numeric-zero))
-    (currency (gnc-default-currency)) ;XXX
+    (currency (xaccAccountGetCommodity acc))
     (table (gnc:make-html-table))
     (reverse? (gnc:option-value (gnc:lookup-option options "__reg"
                               "reverse?"))))
@@ -477,7 +476,7 @@
        "grand-total"
        (list (gnc:make-html-table-cell/size
           1 columns-used-size
-          (make-aging-table options query interval-vec reverse? date-type)))))
+          (make-aging-table options query interval-vec reverse? date-type currency)))))
 
     table))
 
