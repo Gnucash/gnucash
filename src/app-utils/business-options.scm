@@ -459,15 +459,25 @@
 
 ;; This defines an option to set a counter format, which has the same
 ;; exception as gnc:make-counter-option above.
+;; Note this function uses a hack to make sure there never is a default value
+;; (default-value is set to #f and value subsequently set to whatever was passed as default-value)
+;; This hack was introduced to fix https://bugzilla.gnome.org/show_bug.cgi?id=687504
 (define (gnc:make-counter-format-option
          section
          name
-	 key
+         key
          sort-tag
          documentation-string
          default-value)
-  (let ((option (gnc:make-string-option section name sort-tag documentation-string default-value)))
-     (gnc:set-option-scm->kvp option (lambda (f p) (kvp-frame-set-slot-path-gslist f ((gnc:option-getter option)) (list "counter_formats" key))))
+  (let ((option (gnc:make-string-option section name sort-tag documentation-string #f)))
+     (gnc:option-set-value option default-value)
+     (gnc:set-option-scm->kvp option
+         (lambda (f p)
+             (let ((value ((gnc:option-getter option)))
+                   (path (list "counter_formats" key)))
+                  (if (and (string? value)(not (string-null? value)))
+                      (kvp-frame-set-slot-path-gslist f value path)
+                      (gnc-kvp-frame-delete-at-path f path)))))
      (gnc:set-option-kvp->scm option (lambda (f p)
                                (let ((v (kvp-frame-get-slot-path-gslist f (list "counter_formats" key))))
                                  (if (and v (string? v))
