@@ -57,7 +57,7 @@
     
     (define pagename-sorting (N_ "Sorting"))
     (define (set-option! section name value)
-      (gnc:option-set-value 
+      (gnc:option-set-default-value
        (gnc:lookup-option options section name) value))
     
     ;; set options in the accounts tab...

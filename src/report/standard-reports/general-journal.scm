@@ -53,7 +53,7 @@
 	 )
     
     (define (set-option! section name value)
-      (gnc:option-set-value 
+      (gnc:option-set-default-value
        (gnc:lookup-option options section name) value))
     
     ;; Match, by default, all non-void transactions ever recorded in

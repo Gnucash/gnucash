@@ -75,6 +75,7 @@
 (export gnc:option-value-get-index)
 (export gnc:option-number-of-indices)
 (export gnc:option-default-value)
+(export gnc:option-set-default-value)
 (export gnc:restore-form-generator)
 (export gnc:value->string)
 (export gnc:make-string-option)
