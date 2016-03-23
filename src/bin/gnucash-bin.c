@@ -729,7 +729,6 @@ main(int argc, char ** argv)
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
-        bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
         bindtextdomain(GETTEXT_PACKAGE, localedir);
         textdomain(GETTEXT_PACKAGE);
         bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
