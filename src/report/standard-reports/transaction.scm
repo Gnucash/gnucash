@@ -1472,7 +1472,7 @@ Credit Card, and Income accounts.")))))
 
           (set! splits (qof-query-run query))
 
-          (gnc:warn "Splits in trep-renderer:" splits)
+          ;;(gnc:warn "Splits in trep-renderer:" splits)
 
 	  ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
 
