@@ -262,14 +262,14 @@ csv_account_import (CsvImportInfo *info)
                     xaccAccountSetName (acc, name);
                     xaccAccountSetType (acc, xaccAccountStringToEnum (type));
 
-                    if (!g_strcmp0 (notes, "") == 0)
+                    if (g_strcmp0 (notes, "") != 0)
                         xaccAccountSetNotes (acc, notes);
-                    if (!g_strcmp0 (description, "") == 0)
+                    if (g_strcmp0 (description, "") != 0)
                         xaccAccountSetDescription (acc, description);
-                    if (!g_strcmp0 (code, "") == 0)
+                    if (g_strcmp0 (code, "") != 0)
                         xaccAccountSetCode (acc, code);
 
-                    if (!g_strcmp0 (color, "") == 0)
+                    if (g_strcmp0 (color, "") != 0)
                     {
                         if (gdk_color_parse (color, &testcolor))
                             xaccAccountSetColor (acc, color);
@@ -309,19 +309,19 @@ csv_account_import (CsvImportInfo *info)
             /* Lets try and update the color, notes, description, code entries */
             DEBUG("Existing account, will try and update account %s", full_name);
             info->num_updates = info->num_updates + 1;
-            if (!g_strcmp0 (color, "") == 0)
+            if (g_strcmp0 (color, "") != 0)
             {
                 if (gdk_color_parse (color, &testcolor))
                     xaccAccountSetColor (acc, color);
             }
 
-            if (!g_strcmp0 (notes, "") == 0)
+            if (g_strcmp0 (notes, "") != 0)
                 xaccAccountSetNotes (acc, notes);
 
-            if (!g_strcmp0 (description, "") == 0)
+            if (g_strcmp0 (description, "") != 0)
                 xaccAccountSetDescription (acc, description);
 
-            if (!g_strcmp0 (code, "") == 0)
+            if (g_strcmp0 (code, "") != 0)
                 xaccAccountSetCode (acc, code);
         }
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (info->store), &iter);

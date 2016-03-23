@@ -89,7 +89,7 @@ test_db (GNCPriceDB *db)
 
     {
         sixtp *parser;
-	load_counter lc;
+	load_counter lc = {0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0};
         sixtp_gdv2 data = {book, lc, NULL, NULL, FALSE};
 
         parser = sixtp_new ();
