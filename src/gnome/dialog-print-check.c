@@ -277,7 +277,6 @@ struct _print_check_dialog
     GtkWidget *dialog;
     GtkWindow *caller_window;
 
-    GncPluginPageRegister *plugin_page;
     Split *split;
     GList *splits;
 
@@ -1601,7 +1600,7 @@ initialize_format_combobox (PrintCheckDialog *pcd)
  * make a new print check dialog and wait for it.    *
  *****************************************************/
 void
-gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
+gnc_ui_print_check_dialog_create(GtkWidget *parent,
                                  GList *splits)
 {
     PrintCheckDialog *pcd;
@@ -1612,7 +1611,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     Transaction *trans = NULL;
 
     pcd = g_new0(PrintCheckDialog, 1);
-    pcd->plugin_page = plugin_page;
+    pcd->caller_window = GTK_WINDOW(parent);
     pcd->splits = g_list_copy(splits);
 
     builder = gtk_builder_new();
@@ -1682,9 +1681,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     pcd->check_rotation = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "check_rotation_entry"));
     pcd->units_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "units_combobox"));
 
-    window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-    gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
-    pcd->caller_window = GTK_WINDOW(window);
+    gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), pcd->caller_window);
 
     /* Create and attach the date-format chooser */
     table = GTK_WIDGET(gtk_builder_get_object (builder, "options_table"));

@@ -2705,6 +2705,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     GList         * splits = NULL, *item;
     GNCLedgerDisplayType ledger_type;
     Account       * account;
+    GtkWidget     * window;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -2713,6 +2714,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     ledger_type = gnc_ledger_display_type(priv->ledger);
+    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page));
     if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
         account  = gnc_plugin_page_register_get_account (plugin_page);
@@ -2724,7 +2726,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
             if (xaccSplitGetAccount(split) == account)
             {
                 splits = g_list_append(splits, split);
-                gnc_ui_print_check_dialog_create(plugin_page, splits);
+                gnc_ui_print_check_dialog_create(window, splits);
                 g_list_free(splits);
             }
             else
@@ -2735,7 +2737,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
                 if (split)
                 {
                     splits = g_list_append(splits, split);
-                    gnc_ui_print_check_dialog_create(plugin_page, splits);
+                    gnc_ui_print_check_dialog_create(window, splits);
                     g_list_free(splits);
                 }
             }
@@ -2757,14 +2759,13 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
             {
                 if (xaccSplitGetAccount(split) != common_acct)
                 {
-                    GtkWidget *dialog, *window;
+                    GtkWidget *dialog;
                     gint response;
                     const gchar *title = _("Print checks from multiple accounts?");
                     const gchar *message =
                         _("This search result contains splits from more than one account. "
                           "Do you want to print the checks even though they are not all "
                           "from the same account?");
-                    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page));
                     dialog = gtk_message_dialog_new(GTK_WINDOW(window),
                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                                     GTK_MESSAGE_WARNING,
@@ -2786,11 +2787,11 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
                 }
             }
         }
-        gnc_ui_print_check_dialog_create(plugin_page, splits);
+        gnc_ui_print_check_dialog_create(window, splits);
     }
     else
     {
-        gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page)), "%s",
+        gnc_error_dialog(window, "%s",
                          _("You can only print checks from a bank account register or search results."));
         LEAVE("Unsupported ledger type");
         return;
