@@ -189,9 +189,13 @@ mac_set_currency_locale(NSLocale *locale, NSString *locale_str)
 	    setlocale(LC_MONETARY, [money_locale UTF8String]);
     }
 }
-
+/* The locale that we got from AppKit isn't a supported POSIX one, so we need to
+ * find something close. First see if we can find another locale for the
+ * country; failing that, try the language. Ultimately fall back on en_US.
+ */
 static NSString*
-mac_find_close_country(NSString *locale_str, NSString *lang_str)
+mac_find_close_country(NSString *locale_str, NSString *country_str,
+                       NSString *lang_str)
 {
     NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
     NSEnumerator *locale_iter = [all_locales objectEnumerator];
@@ -200,13 +204,25 @@ mac_find_close_country(NSString *locale_str, NSString *lang_str)
           " by the C runtime", [locale_str UTF8String]);
     while ((this_locale = (NSString*)[locale_iter nextObject]))
         if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
-              objectForKey: NSLocaleLanguageCode]
-             isEqualToString: lang_str] &&
+              objectForKey: NSLocaleCountryCode]
+             isEqualToString: country_str] &&
             setlocale (LC_ALL, [this_locale UTF8String]))
         {
             new_locale = this_locale;
             break;
         }
+    if (new_locale)
+        locale_str = new_locale;
+    else
+        while ((this_locale = (NSString*)[locale_iter nextObject]))
+            if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
+                  objectForKey: NSLocaleLanguageCode]
+                 isEqualToString: lang_str] &&
+                setlocale (LC_ALL, [this_locale UTF8String]))
+            {
+                new_locale = this_locale;
+                break;
+            }
     if (new_locale)
         locale_str = new_locale;
     else
@@ -243,7 +259,7 @@ mac_convert_complex_language(NSString* this_lang)
 }
 
 static void
-mac_set_languages(NSArray* languages)
+mac_set_languages(NSArray* languages, NSString *lang_str)
 {
     /* Process the language list. */
 
@@ -260,10 +276,17 @@ mac_set_languages(NSArray* languages)
  * any messages can default to it */
         if ( [this_lang containsString: @"en"])
             new_languages = [new_languages arrayByAddingObject: @"C"];
+        if (![new_languages containsObject: lang_str]) {
+            NSArray *temp_array = [NSArray arrayWithObject: lang_str];
+            new_languages = [temp_array arrayByAddingObjectsFromArray: new_languages];
+        }
         langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
     }
     if (langs && strlen(langs) > 0)
+    {
+        PWARN("Language list: %s", langs);
         g_setenv("LANGUAGE", langs, TRUE);
+    }
 }
 
 static void
@@ -273,7 +296,7 @@ set_mac_locale()
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSLocale *locale = [NSLocale currentLocale];
     NSString *lang_str, *country_str, *locale_str;
-    NSArray *languages = [defs objectForKey: @"AppleLanguages"];
+    NSArray *languages = [[defs arrayForKey: @"AppleLanguages"] retain];
     @try
     {
         lang_str = [locale objectForKey: NSLocaleLanguageCode];
@@ -293,8 +316,9 @@ set_mac_locale()
     if ([locale_str isEqualToString: @"_"])
 	locale_str = @"en_US";
 
+    lang_str = mac_convert_complex_language(lang_str);
     if (!setlocale(LC_ALL, [locale_str UTF8String]))
-        locale_str =  mac_find_close_country(locale_str, lang_str);
+        locale_str =  mac_find_close_country(locale_str, country_str, lang_str);
     if (g_getenv("LANG") == NULL)
 	g_setenv("LANG", [locale_str UTF8String], TRUE);
     mac_set_currency_locale(locale, locale_str);
@@ -303,8 +327,10 @@ set_mac_locale()
     gnc_localeconv ();
     /* Process the languages, including the one from the Apple locale. */
     if ([languages count] > 0)
-        mac_set_languages(languages);
-
+        mac_set_languages(languages, lang_str);
+    else
+        g_setenv("LANGUAGE", [lang_str UTF8String], TRUE);
+    [languages release];
     [pool drain];
 }
 #endif /* MAC_INTEGRATION */
