@@ -2256,8 +2256,8 @@ draw_check_format(GtkPrintContext *context, gint position,
         /* Standard positioning is used.
          * Note that the first check on the page (position 0) doesn't
          * need to be moved (hence the test for position > 0 above. */
-        cairo_translate(cr, 0, format->height);
-        g_debug("Position %d translated by %f (pre-defined)", position, format->height);
+        cairo_translate(cr, 0, position * format->height);
+        g_debug("Position %d translated by %f (pre-defined)", position, position * format->height);
     }
     else if (position == pcd->position_max)
     {
