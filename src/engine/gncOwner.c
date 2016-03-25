@@ -637,6 +637,31 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
     return (owner->owner.undefined != NULL);
 }
 
+gboolean gncOwnerGetOwnerFromTxn (Transaction *txn, GncOwner *owner)
+{
+    Split *apar_split = NULL;
+
+    if (!txn || !owner) return FALSE;
+
+    if (xaccTransGetTxnType (txn) == TXN_TYPE_NONE)
+        return FALSE;
+
+    apar_split = xaccTransGetFirstAPARAcctSplit (txn);
+    if (apar_split)
+    {
+        GNCLot *lot = xaccSplitGetLot (apar_split);
+        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+        if (invoice)
+            gncOwnerCopy (gncInvoiceGetOwner (invoice), owner);
+        else if (!gncOwnerGetOwnerFromLot (lot, owner))
+                return FALSE;
+
+        return TRUE; // Got owner from either invoice or lot
+    }
+
+    return FALSE;
+}
+
 gboolean gncOwnerIsValid (const GncOwner *owner)
 {
     if (!owner) return FALSE;

@@ -195,6 +195,15 @@ gint gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB);
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
+/** Convenience function to get the owner from a transaction.
+ * Transactions don't really have an owner. What this function will
+ * do it figure out whether the transaction is part of a business
+ * transaction (either a posted invoice/bill/voucher/credit note or
+ * a payment transaction) and use the business object behind it
+ * to extract owner information.
+ */
+gboolean gncOwnerGetOwnerFromTxn (Transaction *txn, GncOwner *owner);
+
 gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GncGUID *guid);
 
 /** Get the kvp-frame from the underlying owner object */

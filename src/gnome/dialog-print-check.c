@@ -1706,28 +1706,20 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
      * it would create build problems */
     if (g_list_length(pcd->splits) == 1)
     {
-        trans = xaccSplitGetParent((Split *)(pcd->splits->data));
-        if (xaccTransGetTxnType (trans) == TXN_TYPE_PAYMENT)
-        {
-            Split *apar_split = xaccTransGetFirstAPARAcctSplit (trans);
-            if (apar_split)
-            {
-                GNCLot *lot = xaccSplitGetLot (apar_split);
-                GncOwner owner;
-                if (!gncOwnerGetOwnerFromLot (lot, &owner))
-                {
-                    GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
-                    if (invoice)
-                        gncOwnerCopy (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)), &owner);
-                }
+        GncOwner txn_owner;
 
-                /* Got a business owner, get the address */
-                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
-                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
-                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
-                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
-                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
-            }
+        trans = xaccSplitGetParent((Split *)(pcd->splits->data));
+        if (gncOwnerGetOwnerFromTxn (trans, &txn_owner))
+        {
+            GncOwner owner;
+            gncOwnerCopy (gncOwnerGetEndOwner (&txn_owner), &owner);
+
+            /* Got a business owner, get the address */
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
         }
     }
 
