@@ -208,7 +208,7 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner);
  * split in the transfer account).
  */
 GNCLot *
-gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
+gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
                           Account *posted_acc, Account *xfer_acc,
                           gnc_numeric amount, gnc_numeric exch, Timespec date,
                           const char *memo, const char *num);
@@ -261,7 +261,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
  * details on what happens exactly.
  */
 void
-gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
+gncOwnerApplyPayment (const GncOwner *owner, Transaction **preset_txn, GList *lots,
                       Account *posted_acc, Account *xfer_acc,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num, gboolean auto_pay);

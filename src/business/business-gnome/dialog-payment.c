@@ -51,6 +51,7 @@
 #include "business-gnome-utils.h"
 
 #include "dialog-transfer.h"
+#include "dialog-print-check.h"
 #include "gnome-search/gnc-general-search.h"
 
 #define DIALOG_PAYMENT_CUSTOMER_CM_CLASS "customer-payment-dialog"
@@ -72,6 +73,7 @@ struct _payment_window
     GtkWidget   * acct_tree;
     GtkWidget   * docs_list_tree_view;
     GtkWidget   * commodity_label;
+    GtkWidget   * print_check;
 
     gint          component_id;
     QofBook     * book;
@@ -84,6 +86,7 @@ struct _payment_window
     GList       * acct_commodities;
 
     Transaction * pre_existing_txn;
+    gboolean      print_check_state;
 };
 
 void gnc_ui_payment_window_set_num (PaymentWindow *pw, const char* num)
@@ -235,6 +238,16 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
 
 update_cleanup:
     gtk_widget_set_sensitive (pw->acct_tree, enable_xfer_acct);
+
+    /* Disable "Print Check" widget if amount is zero but save current
+       state to restore when the widget is re-enabled */
+    if (gtk_widget_is_sensitive (pw->print_check))
+        pw->print_check_state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(pw->print_check));
+    if (!enable_xfer_acct)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(pw->print_check), FALSE);
+    gtk_widget_set_sensitive (pw->print_check, enable_xfer_acct);
+    if (gtk_widget_is_sensitive (pw->print_check))
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(pw->print_check), pw->print_check_state);
 
     /* Check if there are issues preventing a successful payment */
     gtk_widget_set_tooltip_text (pw->payment_warning, conflict_msg);
@@ -736,14 +749,23 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         else
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-        gncOwnerApplyPayment (&pw->owner, pw->pre_existing_txn, selected_lots,
-                              pw->post_acct, pw->xfer_acct, pw->amount_tot,
-                              exch, date, memo, num, auto_pay);
+        gncOwnerApplyPayment (&pw->owner, &(pw->pre_existing_txn), selected_lots,
+                              pw->post_acct, pw->xfer_acct, pw->amount_tot, exch,
+                              date, memo, num, auto_pay);
     }
     gnc_resume_gui_refresh ();
 
     /* Save the transfer account, xfer_acct */
     gnc_payment_dialog_remember_account(pw, pw->xfer_acct);
+
+    if (gtk_widget_is_sensitive (pw->print_check) &&
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(pw->print_check)))
+    {
+        Split *split = xaccTransFindSplitByAccount (pw->pre_existing_txn, pw->xfer_acct);
+        GList *splits = NULL;
+        splits = g_list_append(splits, split);
+        gnc_ui_print_check_dialog_create(NULL, splits);
+    }
 
     gnc_ui_payment_window_destroy (pw);
 }
@@ -975,6 +997,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     box = GTK_WIDGET (gtk_builder_get_object (builder, "date_box"));
     pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
+    pw->print_check = GTK_WIDGET (gtk_builder_get_object (builder, "print_check"));
 
     pw->docs_list_tree_view = GTK_WIDGET (gtk_builder_get_object (builder, "docs_list_tree_view"));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
