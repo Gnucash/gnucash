@@ -1170,19 +1170,34 @@ gnc_ui_payment_new (GncOwner *owner, QofBook *book)
 gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 {
     gboolean result = TRUE;
-    Split *assetaccount_split;
+    Split *assetaccount_split, *aparaccount_split;
     gnc_numeric amount;
 
     if (!txn)
         return result;
 
-    // We require the txn to have one split in an A/R or A/P account.
-
     if (!xaccTransGetSplitList(txn))
         return result;
+
+    /* First test if one split is in an A/R or A/P account.
+     * That will give us the best Customer vs Vendor/Employee distinction */
+    aparaccount_split = xaccTransGetFirstAPARAcctSplit(txn);
+    if (aparaccount_split)
+    {
+        if (xaccAccountGetType (xaccSplitGetAccount (aparaccount_split)) == ACCT_TYPE_RECEIVABLE)
+            return TRUE;  // Type is Customer
+        else if (xaccAccountGetType (xaccSplitGetAccount (aparaccount_split)) == ACCT_TYPE_PAYABLE)
+            return FALSE; // Type is Vendor/Employee, there's not enough information to refine more
+    }
+
+    /* For the lack of an A/R or A/P account we'll assume positive changes to an
+     * Asset/Liability or Equity account are Customer payments the others will be
+     * considered Vendor payments */
     assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
     if (!assetaccount_split)
     {
+        /* Transaction isn't valid for a payment, just return the default
+         * Calling code will have to handle this situation properly */
         g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return result;
