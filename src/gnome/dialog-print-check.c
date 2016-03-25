@@ -1705,17 +1705,35 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     /* Can't access business objects e.g. Customer,Vendor,Employee because
      * it would create build problems */
     if (g_list_length(pcd->splits) == 1)
+    {
         trans = xaccSplitGetParent((Split *)(pcd->splits->data));
-    else
-        trans = NULL;
-    if ( trans )
-    {
+        if (xaccTransGetTxnType (trans) == TXN_TYPE_PAYMENT)
+        {
+            Split *apar_split = xaccTransGetFirstAPARAcctSplit (trans);
+            if (apar_split)
+            {
+                GNCLot *lot = xaccSplitGetLot (apar_split);
+                GncOwner owner;
+                if (!gncOwnerGetOwnerFromLot (lot, &owner))
+                {
+                    GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+                    if (invoice)
+                        gncOwnerCopy (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)), &owner);
+                }
+
+                /* Got a business owner, get the address */
+                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
+                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
+                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
+                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
+                gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
+            }
+        }
+    }
+
+    /* Use transaction description as address name if no better address has been found */
+    if ( trans && (0 == gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name))) )
         gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
-    }
-    else
-    {
-        /* nothing to do - defaults to blank */
-    }
 
     gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 
