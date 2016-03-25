@@ -212,7 +212,6 @@ src/gnome/dialog-lot-viewer.c
 src/gnome/dialog-new-user.c
 src/gnome/dialog-price-edit-db.c
 src/gnome/dialog-price-editor.c
-src/gnome/dialog-print-check2.c
 src/gnome/dialog-print-check.c
 src/gnome/dialog-progress.c
 src/gnome/dialog-sx-editor2.c
