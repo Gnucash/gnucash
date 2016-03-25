@@ -370,6 +370,21 @@ int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);
 SplitList *   xaccTransGetSplitList (const Transaction *trans);
 gboolean      xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
+/** The xaccTransGetFirstPaymentAcctSplit() method returns a pointer to the first
+    split in this transaction that belongs to an account which is considered a
+    valid account for business payments.
+    @param trans The transaction
+
+    If there is no such split in the transaction NULL will be returned. */
+Split *       xaccTransGetFirstPaymentAcctSplit (const Transaction *trans);
+
+/** The xaccTransGetFirstPaymentAcctSplit() method returns a pointer to the first
+    split in this transaction that belongs to an AR or AP account.
+    @param trans The transaction
+
+    If there is no such split in the transaction NULL will be returned. */
+Split *       xaccTransGetFirstAPARAcctSplit (const Transaction *trans);
+
 /** Set the transaction to be ReadOnly by setting a non-NULL value as "reason".
  *
  * FIXME: If "reason" is NULL, this function does nothing, instead of removing the

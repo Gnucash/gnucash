@@ -88,3 +88,12 @@ GList * gncBusinessGetOwnerList (QofBook *book, const char *type_name,
 
     return data.result;
 }
+
+gboolean gncBusinessIsPaymentAcctType (GNCAccountType type)
+{
+    if (xaccAccountIsAssetLiabType(type) ||
+        xaccAccountIsEquityType(type))
+        return TRUE;
+    else
+        return FALSE;
+}

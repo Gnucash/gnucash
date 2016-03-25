@@ -60,6 +60,7 @@ struct timeval
 #include <gnc-gdate-utils.h>
 #include "SchedXaction.h"
 #include "qofbackend-p.h"
+#include "gncBusiness.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
@@ -2139,6 +2140,28 @@ SplitList *
 xaccTransGetSplitList (const Transaction *trans)
 {
     return trans ? trans->splits : NULL;
+}
+
+Split *xaccTransGetFirstPaymentAcctSplit(const Transaction *trans)
+{
+    FOR_EACH_SPLIT (trans,
+                    const Account *account = xaccSplitGetAccount(s);
+                    if (gncBusinessIsPaymentAcctType(xaccAccountGetType(account)))
+                        return s;
+                   );
+
+    return NULL;
+}
+
+Split *xaccTransGetFirstAPARAcctSplit(const Transaction *trans)
+{
+    FOR_EACH_SPLIT (trans,
+                    const Account *account = xaccSplitGetAccount(s);
+                    if (xaccAccountIsAPARType(xaccAccountGetType(account)))
+                        return s;
+                   );
+
+    return NULL;
 }
 
 int
