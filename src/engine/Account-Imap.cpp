@@ -24,21 +24,6 @@
  *                                                                  *
 \********************************************************************/
 
-//#include "config.h"
-
-//#include <glib.h>
-//#include <glib/gi18n.h>
-//#include <stdlib.h>
-//#include <stdint.h>
-//#include <string.h>
-
-//#include "AccountP.h"
-//#include "Account-Imap.h"
-//#include "gnc-glib-utils.h"
-//#include "qofinstance-p.h"
-//#include "gnc-features.h"
-
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -58,17 +43,127 @@ extern "C"
 #include <kvp_frame.hpp>
 
 #include <iostream>
+#include <string>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
-
-//FIXME create in a C++ class ImportMapBayes ?
 
 /* ================================================================ */
 /* The following functions are used by
  * src/import-export/import-backend.c to manipulate the contra-account
  * matching data. See src/import-export/import-backend.c for explanations.
  */
+
+GncImportMap::GncImportMap(Account *acc)
+{
+std::cout << "Create Map" << std::endl;
+}
+
+GncImportMap::~GncImportMap()
+{
+std::cout << "Destroy" << std::endl;
+}
+
+Account *
+GncImportMap::find_account (const char* category, const char *key)
+{
+std::cout << "find_account" << category << ", " << key << std::endl;
+    return nullptr;
+}
+
+void
+GncImportMap::add_account (const char *category, const char *key, Account *acc)
+{
+std::cout << "add_account" << category << ", " << key << std::endl;
+}
+
+void
+GncImportMap::delete_account (const char *category, const char *key)
+{
+std::cout << "Delete_account" << std::endl;
+}
+
+Account *
+GncImportMap::find_account_bayes (GList* tokens)
+{
+std::cout << "find_account_bayes" << std::endl;
+    return nullptr;
+}
+
+void
+GncImportMap::add_account_bayes (GList* tokens, Account *acc)
+{
+std::cout << "add_account_bayes" << std::endl;
+}
+
+/*****************************************************************************/
+
+// C access functions
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+GncImportMap *
+gnc_account_imap_create_imapx (Account *acc)
+{
+std::cout << "c_create_imap" << std::endl;
+    return nullptr;
+}
+
+void
+gnc_account_imap_delete_imapx (GncImportMap *map)
+{
+std::cout << "c_delete_imap" << std::endl;
+}
+
+Account *
+gnc_account_imap_find_accountx (GncImportMap *imap, const char* category, const char *key)
+{
+std::cout << "c_find_account" << std::endl;
+
+    return imap->find_account (category, key);
+}
+
+void
+gnc_account_imap_add_accountx (GncImportMap *imap, const char* category, const char *key, Account *acc)
+{
+std::cout << "c_add_account" << std::endl;
+
+    imap->add_account (category, key, acc);
+}
+
+void
+gnc_account_imap_delete_accountx (GncImportMap *imap, const char *category, const char *key)
+{
+std::cout << "c_delete_account" << std::endl;
+
+    imap->delete_account (category, key);
+}
+
+Account *
+gnc_account_imap_find_account_bayesx (GncImportMap *imap, GList* tokens)
+{
+std::cout << "c_find_account_bayes" << std::endl;
+
+    return imap->find_account_bayes (tokens);
+}
+
+void gnc_account_imap_add_account_bayesx (GncImportMap *imap, GList* tokens, Account *acc)
+{
+std::cout << "c_add_account_bayes" << std::endl;
+
+    imap->add_account_bayes (tokens, acc);
+}
+
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif
+
+
+
+
+/*****************************************************************************/
+
 
 /* Obtain an ImportMatchMap object from an Account or a Book */
 GncImportMatchMap *

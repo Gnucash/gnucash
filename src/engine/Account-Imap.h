@@ -62,6 +62,31 @@ typedef struct imap_info
 static const char* IMAP_FRAME = "import-map";
 static const char* IMAP_FRAME_BAYES = "import-map-bayes";
 
+#ifdef __cplusplus
+class GncImportMap
+{
+public:
+    // Constructor - Destructor
+    GncImportMap(Account *acc);
+    ~GncImportMap();
+
+    Account *find_account (const char* category, const char *key);
+    void add_account (const char *category, const char *key, Account *acc);
+    void delete_account (const char *category, const char *key);
+
+    Account *find_account_bayes (GList* tokens);
+    void add_account_bayes (GList* tokens, Account *acc);
+
+private:
+    Account *account = nullptr;
+    QofBook *book;
+};
+#else
+  typedef
+    struct GncImportMap
+      GncImportMap;
+#endif
+
 
 /* ================================================================ */
 /* The following functions are used by
@@ -69,38 +94,44 @@ static const char* IMAP_FRAME_BAYES = "import-map-bayes";
  * matching data. See src/import-export/import-backend.c for explanations.
  */
 
-
 /** Obtain an ImportMatchMap object from an Account or a Book
  */
 GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
+GncImportMap *gnc_account_imap_create_imapx (Account *acc);
 
 /** Delete an ImportMatchMap object from an Account or a Book
  */
 void gnc_account_imap_delete_imap (GncImportMatchMap *imap);
+void gnc_account_imap_delete_imapx (GncImportMap *imap);
 
 /* Look up an Account in the map non Baysian
  */
 Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
                                         const char *key);
+Account *gnc_account_imap_find_accountx (GncImportMap *imap, const char* category, const char *key);
 
 /* Store an Account in the map non Baysian
  */
 void gnc_account_imap_add_account (GncImportMatchMap *imap, const char *category,
                                    const char *key, Account *acc);
+void gnc_account_imap_add_accountx (GncImportMap *imap, const char* category, const char *key, Account *acc);
 
 /* Remove a reference to an Account in the map non Baysian
  */
 void gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category,
                                       const char *key);
+void gnc_account_imap_delete_accountx (GncImportMap *imap, const char *category, const char *key);
 
 /** Look up an Account in the map using Baysian
  */
 Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
+Account* gnc_account_imap_find_account_bayesx (GncImportMap *imap, GList* tokens);
 
 /** Updates the imap for a given account using a list of tokens
  */
 void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
                                          Account *acc);
+void gnc_account_imap_add_account_bayesx (GncImportMap *imap, GList* tokens, Account *acc);
 
 /** Returns a GList of structure imap_infox of all Bayesian mappings for
  *  required Account
