@@ -1343,11 +1343,11 @@ load_boolean (const GncSqlBackend* be, GncSqlRow* row,
     }
     if (table_row.gobj_param_name != nullptr)
     {
-	if (QOF_IS_INSTANCE (pObject))
-	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
+        if (QOF_IS_INSTANCE (pObject))
+            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
         g_object_set (pObject, table_row.gobj_param_name, int_value, nullptr);
-	if (QOF_IS_INSTANCE (pObject))
-	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
+        if (QOF_IS_INSTANCE (pObject))
+            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
     }
     else
     {

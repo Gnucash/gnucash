@@ -1,4 +1,3 @@
-
 /********************************************************************
  * gnc-backend-sql.h: load and save data to SQL                     *
  *                                                                  *
@@ -262,8 +261,8 @@ struct GncSqlResult
  */
 typedef struct
 {
-    int		version;		/**< Backend version number */
-    const std::string	type_name;	/**< Engine object type name */
+    int         version;                /**< Backend version number */
+    const std::string   type_name;      /**< Engine object type name */
     /** Commit an instance of this object to the database
      * @return TRUE if successful, FALSE if error
      */
@@ -284,7 +283,7 @@ typedef struct
     gboolean (*write) (GncSqlBackend* be);
 } GncSqlObjectBackend;
 #define GNC_SQL_BACKEND             "gnc:sql:1"
-#define GNC_SQL_BACKEND_VERSION	1
+#define GNC_SQL_BACKEND_VERSION 1
 using GncSqlObjectBackendPtr = GncSqlObjectBackend*;
 using OBEEntry = std::tuple<std::string, GncSqlObjectBackendPtr>;
 using OBEVec = std::vector<OBEEntry>;
@@ -473,7 +472,7 @@ typedef struct
      * representation to a PairVec; used for constructing WHERE clauses and
      * UPDATE statements.
      */
-    GNC_SQL_ADD_VALUE_TO_VEC_FN	add_value_to_vec_fn;
+    GNC_SQL_ADD_VALUE_TO_VEC_FN add_value_to_vec_fn;
 } GncSqlColumnTypeHandler;
 
 /**
