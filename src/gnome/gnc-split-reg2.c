@@ -546,6 +546,9 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
     {
         char string[256];
         print_info = gnc_account_print_info( leader, TRUE );
+        amount = xaccAccountGetBalance( leader );
+        if ( reverse )
+            amount = gnc_numeric_neg( amount );
         xaccSPrintAmount( string, amount, print_info );
         gnc_set_label_color( gsr->shares_label, amount );
         gtk_label_set_text( GTK_LABEL(gsr->shares_label), string );
