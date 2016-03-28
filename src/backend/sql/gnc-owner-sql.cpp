@@ -53,11 +53,8 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
             const GncSqlColumnTableEntry& table_row)
 {
-    const GValue* val;
-    gchar* buf;
     GncOwnerType type;
     GncGUID guid;
-    QofBook* book;
     GncOwner owner;
     GncGUID* pGuid = NULL;
 
@@ -65,20 +62,21 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
-    book = be->book;
-    buf = g_strdup_printf ("%s_type", table_row.col_name);
-    val = gnc_sql_row_get_value_at_col_name (row, buf);
-    type = (GncOwnerType)gnc_sql_get_integer_value (val);
-    g_free (buf);
-    buf = g_strdup_printf ("%s_guid", table_row.col_name);
-    val = gnc_sql_row_get_value_at_col_name (row, buf);
-    g_free (buf);
-
-    if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
-        g_value_get_string (val) != NULL)
+    auto book = be->book;
+    auto buf = g_strdup_printf ("%s_type", table_row.col_name);
+    try
     {
-        string_to_guid (g_value_get_string (val), &guid);
+        type = static_cast<decltype(type)>(row->get_int_at_col (buf));
+        g_free (buf);
+        buf = g_strdup_printf ("%s_guid", table_row.col_name);
+        auto val = row->get_string_at_col (buf);
+        g_free (buf);
+        string_to_guid (val.c_str(), &guid);
         pGuid = &guid;
+    }
+    catch (std::invalid_argument)
+    {
+        return;
     }
 
     switch (type)

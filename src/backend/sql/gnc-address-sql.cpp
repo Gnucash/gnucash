@@ -70,48 +70,45 @@ load_address (const GncSqlBackend* be, GncSqlRow* row,
               QofSetterFunc setter, gpointer pObject,
               const GncSqlColumnTableEntry& table_row)
 {
-    const GValue* val;
-    gchar* buf;
-    GncAddress* addr;
     AddressSetterFunc a_setter = (AddressSetterFunc)setter;
     const gchar* s;
 
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
-    addr = gncAddressCreate (be->book, QOF_INSTANCE(pObject));
+    auto addr = gncAddressCreate (be->book, QOF_INSTANCE(pObject));
+
     for (auto const& subtable_row : col_table)
     {
-        buf = g_strdup_printf ("%s_%s", table_row.col_name,
-                               subtable_row.col_name);
-        val = gnc_sql_row_get_value_at_col_name (row, buf);
-        g_free (buf);
-        if (val == NULL)
+        auto buf = g_strdup_printf ("%s_%s", table_row.col_name,
+                                    subtable_row.col_name);
+        try
         {
-            s = NULL;
-        }
-        else
-        {
-            s = g_value_get_string (val);
-        }
-        if (subtable_row.gobj_param_name != NULL)
-        {
-            g_object_set (addr, subtable_row.gobj_param_name, s, NULL);
-        }
-        else
-        {
-            if (subtable_row.qof_param_name != NULL)
+            auto val = row->get_string_at_col (buf);
+            g_free (buf);
+            if (subtable_row.gobj_param_name != NULL)
             {
-                setter = qof_class_get_parameter_setter (GNC_ID_ADDRESS,
-                                                         subtable_row.qof_param_name);
+                g_object_set (addr, subtable_row.gobj_param_name,
+                              val.c_str(), NULL);
             }
             else
             {
-                setter = subtable_row.setter;
+                if (subtable_row.qof_param_name != NULL)
+                {
+                    setter = qof_class_get_parameter_setter (GNC_ID_ADDRESS,
+                                                             subtable_row.qof_param_name);
+                }
+                else
+                {
+                    setter = subtable_row.setter;
+                }
+                (*setter) (addr, (const gpointer)val.c_str());
             }
-            (*setter) (addr, (const gpointer)s);
+        }
+        catch (std::invalid_argument)
+        {
+            return;
         }
     }
     if (table_row.gobj_param_name != NULL)

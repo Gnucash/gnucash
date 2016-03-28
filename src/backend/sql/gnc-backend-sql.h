@@ -140,7 +140,6 @@ void gnc_sql_commit_edit (GncSqlBackend* qbe, QofInstance* inst);
  */
 typedef struct GncSqlStatement GncSqlStatement;
 typedef struct GncSqlResult GncSqlResult;
-typedef struct GncSqlRow GncSqlRow;
 
 /**
  *@struct GncSqlStatement
@@ -208,20 +207,21 @@ struct GncSqlConnection
         (CONN)->quoteString(CONN,STR)
 
 /**
- * @struct GncSqlRow
- *
  * Struct used to represent a row in the result of an SQL SELECT statement.
  * SQL backends must provide a structure which implements all of the functions.
  */
-struct GncSqlRow
+
+class GncSqlRow
 {
-    const GValue* (*getValueAtColName) (GncSqlRow*, const gchar*);
-    void (*dispose) (GncSqlRow*);
+public:
+    virtual ~GncSqlRow() = default;
+    virtual int64_t get_int_at_col (const char* col) = 0;
+    virtual float get_float_at_col (const char* col) = 0;
+    virtual double get_double_at_col (const char* col) = 0;
+    virtual std::string get_string_at_col (const char* col) = 0;
+    virtual time64 get_time64_at_col (const char* col) = 0;
+    virtual bool is_col_null (const char* col) const noexcept = 0;
 };
-#define gnc_sql_row_get_value_at_col_name(ROW,N) \
-        (ROW)->getValueAtColName(ROW,N)
-#define gnc_sql_row_dispose(ROW) \
-        (ROW)->dispose(ROW)
 
 /**
  * @struct GncSqlResult

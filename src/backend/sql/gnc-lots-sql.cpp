@@ -218,7 +218,6 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
                QofSetterFunc setter, gpointer pObject,
                const GncSqlColumnTableEntry& table_row)
 {
-    const GValue* val;
     GncGUID guid;
     GNCLot* lot;
 
@@ -226,11 +225,10 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
-    if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
-        g_value_get_string (val) != NULL)
+    try
     {
-        (void)string_to_guid (g_value_get_string (val), &guid);
+        auto val = row->get_string_at_col (table_row.col_name);
+        (void)string_to_guid (val.c_str(), &guid);
         lot = gnc_lot_lookup (&guid, be->book);
         if (lot != NULL)
         {
@@ -248,9 +246,10 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
         }
         else
         {
-            PWARN ("Lot ref '%s' not found", g_value_get_string (val));
+            PWARN ("Lot ref '%s' not found", val.c_str());
         }
     }
+    catch (std::invalid_argument) {}
 }
 
 static GncSqlColumnTypeHandler lot_guid_handler

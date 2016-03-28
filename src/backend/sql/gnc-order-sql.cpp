@@ -203,7 +203,6 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
                  QofSetterFunc setter, gpointer pObject,
                  const GncSqlColumnTableEntry& table_row)
 {
-    const GValue* val;
     GncGUID guid;
     GncOrder* order = NULL;
 
@@ -211,11 +210,10 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
-    if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
-        g_value_get_string (val) != NULL)
+    try
     {
-        string_to_guid (g_value_get_string (val), &guid);
+        auto val = row->get_string_at_col (table_row.col_name);
+        string_to_guid (val.c_str(), &guid);
         order = gncOrderLookup (be->book, &guid);
         if (order != NULL)
         {
@@ -232,9 +230,10 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
         }
         else
         {
-            PWARN ("Order ref '%s' not found", g_value_get_string (val));
+            PWARN ("Order ref '%s' not found", val.c_str());
         }
     }
+    catch (std::invalid_argument) {}
 }
 
 static GncSqlColumnTypeHandler order_guid_handler

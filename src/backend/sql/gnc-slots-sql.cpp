@@ -748,17 +748,20 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 
             while (row != NULL)
             {
-                const GncSqlColumnTableEntry& table_row =
-                    col_table[guid_val_col];
-                GncGUID child_guid;
-                const GValue* val =
-                    gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
-                if (val == NULL)
+                try
+                {
+                    const GncSqlColumnTableEntry& table_row =
+                        col_table[guid_val_col];
+                    GncGUID child_guid;
+                    auto val = row->get_string_at_col (table_row.col_name);
+                    (void)string_to_guid (val.c_str(), &child_guid);
+                    gnc_sql_slots_delete (be, &child_guid);
+                    row = gnc_sql_result_get_next_row (result);
+                }
+                catch (std::invalid_argument)
+                {
                     continue;
-
-                (void)string_to_guid (g_value_get_string (val), &child_guid);
-                gnc_sql_slots_delete (be, &child_guid);
-                row = gnc_sql_result_get_next_row (result);
+                }
             }
             gnc_sql_result_dispose (result);
         }

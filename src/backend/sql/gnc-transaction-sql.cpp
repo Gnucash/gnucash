@@ -1440,7 +1440,6 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
               QofSetterFunc setter, gpointer pObject,
               const GncSqlColumnTableEntry& table_row)
 {
-    const GValue* val;
     GncGUID guid;
     Transaction* tx;
     const gchar* guid_str;
@@ -1449,12 +1448,10 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
-    g_assert (val != NULL);
-    guid_str = g_value_get_string (val);
-    if (guid_str != NULL)
+    try
     {
-        (void)string_to_guid (guid_str, &guid);
+        auto val = row->get_string_at_col (table_row.col_name);
+        (void)string_to_guid (val.c_str(), &guid);
         tx = xaccTransLookup (&guid, be->book);
 
         // If the transaction is not found, try loading it
@@ -1464,7 +1461,7 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
             GncSqlStatement* stmt;
 
             buf = g_strdup_printf ("SELECT * FROM %s WHERE guid='%s'",
-                                   TRANSACTION_TABLE, guid_str);
+                                   TRANSACTION_TABLE, val.c_str());
             stmt = gnc_sql_create_statement_from_sql ((GncSqlBackend*)be, buf);
             g_free (buf);
             query_transactions ((GncSqlBackend*)be, stmt);
@@ -1486,6 +1483,7 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
             }
         }
     }
+    catch (std::invalid_argument) {}
 }
 
 static GncSqlColumnTypeHandler tx_guid_handler
