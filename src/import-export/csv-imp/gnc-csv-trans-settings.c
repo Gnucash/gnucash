@@ -336,7 +336,7 @@ gnc_csv_trans_save_settings (CsvSettings *settings_data, gchar *settings_name)
     // Do a test read of column types
     test_string = g_key_file_get_string (keyfile, group, CSV_COL_TYPES, &key_error);
 
-    if ((key_error) || (!g_strcmp0 (test_string, settings_data->column_types) == 0))
+    if ((key_error) || (g_strcmp0 (test_string, settings_data->column_types) != 0))
     {
         if (key_error)
         {

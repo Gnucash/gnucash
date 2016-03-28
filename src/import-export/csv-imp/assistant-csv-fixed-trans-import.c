@@ -505,7 +505,7 @@ csv_fixed_trans_import_summary_page_prepare (GtkAssistant *assistant,
     if (info->new_book)
         info->new_book = gnc_new_book_option_display (info->window);
 
-    if (!g_strcmp0 (info->error, "") == 0)
+    if (g_strcmp0 (info->error, "") != 0)
     {
         GtkTextBuffer *buffer;
 

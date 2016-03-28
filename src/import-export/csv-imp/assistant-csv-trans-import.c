@@ -261,7 +261,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         go_charmap_sel_set_encoding (info->encselector, info->settings_data->encoding);
 
         // This section deals with the column widths
-        if ((!info->settings_data->csv_format) && (!g_strcmp0 (info->settings_data->column_widths, NULL) == 0))
+        if ((!info->settings_data->csv_format) && (g_strcmp0 (info->settings_data->column_widths, NULL) != 0))
         {
             GError  *error = NULL;
             gchar  **widths;
@@ -306,7 +306,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         }
 
         // This section deals with the column types
-        if (!g_strcmp0 (info->settings_data->column_types, NULL) == 0)
+        if (g_strcmp0 (info->settings_data->column_types, NULL) != 0)
         {
             GtkTreeModel *store;
             GtkTreeIter   iter;

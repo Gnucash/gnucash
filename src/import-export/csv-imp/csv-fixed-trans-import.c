@@ -193,7 +193,7 @@ save_error_text (CsvFTImportInfo *info, gint row, gchar *etext)
 
     current_error_text = g_strdup (info->error);
 
-    if (!g_strcmp0 (info->error, "") == 0)
+    if (g_strcmp0 (info->error, "") != 0)
         g_free (info->error);
 
     text = g_strdup_printf (gettext("Row %u, %s\n"), row + 1, etext);
@@ -504,11 +504,11 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
                 xaccTransBeginEdit (new_trans);
                 xaccTransSetCurrency (new_trans, trans_commodity);
                 xaccTransSetDatePostedSecsNormalized (new_trans, parse_date (date, info->date_format));
-                if (!g_strcmp0 (description, "") == 0)
+                if (g_strcmp0 (description, "") != 0)
                     xaccTransSetDescription (new_trans, description);
-                if (!g_strcmp0 (notes, "") == 0)
+                if (g_strcmp0 (notes, "") != 0)
                     xaccTransSetNotes (new_trans, notes);
-                if (!g_strcmp0 (number, "") == 0)
+                if (g_strcmp0 (number, "") != 0)
                     xaccTransSetNum (new_trans, number);
 
                 if (g_strcmp0 (type, "I") == 0) // Invoice Transaction Type
@@ -610,9 +610,9 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
                 split = xaccMallocSplit (book);
                 xaccSplitSetAccount (split, acct);
                 xaccSplitSetParent (split, new_trans);
-                if (!g_strcmp0 (memo, "") == 0)
+                if (g_strcmp0 (memo, "") != 0)
                     xaccSplitSetMemo (split, memo);
-                if (!g_strcmp0 (action, "") == 0)
+                if (g_strcmp0 (action, "") != 0)
                     xaccSplitSetAction (split, action);
 
                 if (g_strcmp0 (reconcile, _("n")) == 0) // Normal
