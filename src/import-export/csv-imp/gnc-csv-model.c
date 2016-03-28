@@ -505,7 +505,7 @@ int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
     parse_data->raw_str.end = parse_data->raw_str.begin + g_mapped_file_get_length (parse_data->raw_mapping);
 
     /* Make a guess at the encoding of the data. */
-    if (!g_mapped_file_get_length (parse_data->raw_mapping) == 0)
+    if (g_mapped_file_get_length (parse_data->raw_mapping) != 0)
         guess_enc = go_guess_encoding ((const char*)(parse_data->raw_str.begin),
                                       (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
                                       "UTF-8", NULL);

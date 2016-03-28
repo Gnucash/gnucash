@@ -1849,7 +1849,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     g_return_if_fail (owner->owner.undefined);
 
     /* Create a lot for this payment */
-    payment_lot = gncOwnerCreatePaymentLot (owner, txn, invoice->posted_acc, xfer_acc,
+    payment_lot = gncOwnerCreatePaymentLot (owner, &txn, invoice->posted_acc, xfer_acc,
                                             amount, exch, date, memo, num);
 
     /* Select the invoice as only payment candidate */

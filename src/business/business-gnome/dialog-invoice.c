@@ -811,10 +811,13 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     /* Yep, we're posting.  So, save the invoice...
      * Note that we can safely ignore the return value; we checked
      * the verify_ok earlier, so we know it's ok.
+     * Additionally make sure the invoice has the owner's currency
+     * refer to https://bugzilla.gnome.org/show_bug.cgi?id=728074
      */
     gnc_suspend_gui_refresh ();
     gncInvoiceBeginEdit (invoice);
     gnc_invoice_window_ok_save (iw);
+    gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (gncInvoiceGetOwner (invoice)));
 
     /* Fill in the conversion prices with feedback from the user */
     text = _("One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each.");

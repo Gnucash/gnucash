@@ -36,6 +36,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#ifdef PLATFORM_OSX
+#include <Foundation/Foundation.h>
+#endif
+
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
 #include "dialog-options.h"
@@ -187,6 +191,36 @@ set_final_balance (GHashTable *hash, Account *account, gnc_numeric in_balance)
     g_hash_table_insert (hash, account, balance);
 }
 
+#ifdef PLATFORM_OSX
+/* Repeat retrieving the locale from defaults in case it was overridden in
+ * gnucash-bin because it wasn't a supported POSIX locale.
+ */
+static char*
+mac_locale()
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLocale* locale = [NSLocale currentLocale];
+    NSString* locale_str;
+    char *retval = NULL;
+    @try
+    {
+        locale_str =[[[locale objectForKey: NSLocaleLanguageCode]
+		       stringByAppendingString: @"_"]
+		      stringByAppendingString:
+		      [locale objectForKey: NSLocaleCountryCode]];
+    }
+    @catch (NSException *err)
+    {
+	locale_str = @"_";
+    }
+/* If we didn't get a valid current locale, the string will be just "_" */
+    if ([locale_str isEqualToString: @"_"])
+	locale_str = @"en_US";
+    retval = g_strdup([locale_str UTF8String]);
+    [pool drain];
+    return retval;
+}
+#endif
 static gchar*
 gnc_get_ea_locale_dir(const char *top_dir)
 {
@@ -196,26 +230,31 @@ gnc_get_ea_locale_dir(const char *top_dir)
     struct stat buf;
     int i;
 
-#ifdef HAVE_LC_MESSAGES
-    locale = g_strdup(setlocale(LC_MESSAGES, NULL));
-#else
-# ifdef G_OS_WIN32
-    /* On win32, setlocale() doesn't say anything useful. Use
-       glib's function instead. */
-    locale = g_win32_getlocale();
-    if (!locale)
-    {
-        PWARN ("Couldn't retrieve locale. Falling back to default one.");
-        locale = g_strdup ("C");
-    }
-# else
-    /*
-     * Mac OS X 10.1 and earlier, not only doesn't have LC_MESSAGES
-     * setlocale can sometimes return NULL instead of "C"
+#ifdef PLATFORM_WIN32
+    /* On win32, setlocale() doesn't say anything useful, so we check
+     * g_win32_getlocale(). Unfortunately it checks the value of $LANG first,
+     * and the user might have worked around the absence of sv in gettext's
+     * Microsoft Conversion Array by setting it to "Swedish_Sweden", so first
+     * check that.
      */
-    locale = g_strdup(setlocale(LC_ALL, NULL) ?
-                      setlocale(LC_ALL, NULL) : "C");
-# endif
+    locale = g_getenv("LANG");
+    if (g_strcmp0(locale, "Swedish_Sweden") == 0)
+        locale = g_strdup("sv_SV");
+    else if (g_strcmp0(locale, "Swedish_Finland") == 0)
+        locale =g_strdup("sv_FI");
+    else
+    {
+        locale = g_win32_getlocale();
+        if (!locale)
+        {
+            PWARN ("Couldn't retrieve locale. Falling back to default one.");
+            locale = g_strdup ("C");
+        }
+    }
+#elif defined PLATFORM_OSX
+    locale = mac_locale();
+# else
+    locale = g_strdup(setlocale(LC_MESSAGES, NULL));
 #endif
 
     i = strlen(locale);

@@ -3292,7 +3292,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
             {
                 gnc_commodity *split_com;
                 split_com = xaccAccountGetCommodity (acc);
-                if (!g_strcmp0 (gnc_commodity_get_namespace (split_com), "template") == 0)
+                if (g_strcmp0 (gnc_commodity_get_namespace (split_com), "template") != 0)
                 {
                     DEBUG("Insert trans %p for gl (%s)", trans, name);
                     gtm_sr_insert_trans (model, trans, TRUE);

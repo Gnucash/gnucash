@@ -1,5 +1,70 @@
 Version history:
 ------- -------
+2.6.12 - 26 March 2016
+Announcement: GnuCash 2.6.12 Release 2016-03-26
+GnuCash 2.6.10 released
+
+The GnuCash development team proudly announces GnuCash 2.6.12, the
+twelfth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+     Bug 482186 - Customer and vendor report for partners who get invoiced/paid
+                  in foreign currency show total labeled with the symbol of the
+		  default currency
+     Bug 620281 - Adding reversing transaction to bill transactions creates
+                  undeleteable transactions
+     Bug 642292 - General Ledger report - 'Primary Sort Key' value is not
+                  persistent
+     Bug 687504 - Not possible to reset an invoice/bill counter format
+     Bug 693342 - Print (bottom) prints to middle for 3-check pages
+     Bug 719904 - Decide payment type only based on the account type involved
+     Bug 720934 - Barcharts with many data points have overlapping x-axis labels
+     Bug 722996 - Cannot add stock price on Price Editor
+     Bug 723689 - Splash screen doesn’t set the floating hint.
+     Bug 728074 - Posting bill converts currency to itself using 0 rate
+     Bug 728722 - Setting number format details appear wrong in Help,
+                  section 10.3.4. Counters Book Options Tab
+     Bug 733164 - {MacOSX] Command-H Invokes Help->Help Contents
+     Bug 742352 - Budget Summary section does not show expense totals
+     Bug 744157 - Tip about subaccount is confusing
+     Bug 754209 - Bills can be posted from "find bill" search results even if
+                  bill is already posted and results in extra $ posted to A/P
+     Bug 754856 - scheduled transaction <gnc.app-utils.sx> fails without warning
+     Bug 756469 - CSV Invoice Import - Items with double quote escape not
+                  imported.
+     Bug 760015 - guile support is automagic
+     Bug 760529 - Get Quotes updates value just once per day
+     Bug 760711 - Non-ASCII characters not shown in Report Name when a report
+                  is created with 2.6.11
+     Bug 762971 - Duplicating multiple invoices results in invoices without an
+                  ID number
+     Bug 763111 - commodities prices editor creates hidden db entries
+     Bug 763146 - Invalid exchange rate is recorded when entering multi-currency
+                  transaction
+     Bug 763279 - GnuCash has empty reports in recent Gentoo builds.
+
+Other repairs that weren't marked as bugs in git:
+     Various memory leaks.
+     More multi-currency fixes related to bug 763146.
+     Be more liberal in accepting business counter custom formats: li, lli, I64i,
+         and whatever is defined to G_GINT_64 or PRIx64 on the system on which
+	 GnuCash is compiled.
+     Correctly re-value splits when the transaction currency is changed.
+     Reset the transaction currency to match the currently open account when
+         auto-completing.
+     Refine the MacOS X localization when the system-generated POSIX locale
+         isn't a supported locale: Prefer the country to language when selecting
+	 an alternate locale, but still pass the original language to gettext.
+     Check printing: extract address from invoice/bill for payment transactions
+     
+Robert Fewell has contributed changes needed to allow the 2.6 series
+    to read files from future major versions which use GUIDs instead of
+    names to identify matched accounts with the Bayesian import matcher.
+
+Translation Updates: Azeri, Basque, Catalan, Chinese (Simplified), Czech,
+                     Danish, Dutch, Farsi, Japanese, Kinyarwandan, Portuguese,
+		     Slovak, Serbian, Swedish, Turkish, Ukrainian.
+
 2.6.11 - 11 January 2016
 Announcement: GnuCash 2.6.11 Release 2016-01-11
 GnuCash 2.6.11 released

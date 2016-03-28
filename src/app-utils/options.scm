@@ -177,6 +177,17 @@
   (let ((getter (gnc:option-default-getter option)))
     (getter)))
 
+;; Attention: this function can only be used with restrictions
+;; - only during option generation, not in arbitrary code
+;; - only for option types for which no conversion is required
+;;   between default-value and value. In the various gnc:make-option
+;;   functions below this is ok when
+;;   1. there's (value default-value) in the let* call
+;;   2. default-getter is set to (lambda() default-value)
+(define (gnc:option-set-default-value option default-value)
+  (vector-set! option 7 (lambda() default-value))
+  (gnc:option-set-value option default-value))
+
 
 (define (gnc:restore-form-generator value->string)
   (lambda () (string-append

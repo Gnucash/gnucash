@@ -1408,7 +1408,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
     gboolean is_template = FALSE;
     gboolean negative_in_red = FALSE;
     gboolean show_extra_dates = FALSE;
-    gnc_numeric num;
+    gnc_numeric num = gnc_numeric_zero();
     const gchar *s = "";
     const gchar *row_color;
     RowDepth depth;

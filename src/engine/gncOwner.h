@@ -195,6 +195,15 @@ gint gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB);
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
+/** Convenience function to get the owner from a transaction.
+ * Transactions don't really have an owner. What this function will
+ * do it figure out whether the transaction is part of a business
+ * transaction (either a posted invoice/bill/voucher/credit note or
+ * a payment transaction) and use the business object behind it
+ * to extract owner information.
+ */
+gboolean gncOwnerGetOwnerFromTxn (Transaction *txn, GncOwner *owner);
+
 gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GncGUID *guid);
 
 /**
@@ -205,7 +214,7 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
  * split in the transfer account).
  */
 GNCLot *
-gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
+gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
                           Account *posted_acc, Account *xfer_acc,
                           gnc_numeric amount, gnc_numeric exch, Timespec date,
                           const char *memo, const char *num);
@@ -258,7 +267,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
  * details on what happens exactly.
  */
 void
-gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
+gncOwnerApplyPayment (const GncOwner *owner, Transaction **preset_txn, GList *lots,
                       Account *posted_acc, Account *xfer_acc,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num, gboolean auto_pay);
