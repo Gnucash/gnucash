@@ -83,8 +83,8 @@ protected:
 TEST_F(ImapTest, CreateImap) {
     GncImportMatchMap *imap = gnc_account_imap_create_imap (t_bank_account);
     EXPECT_NE(nullptr, imap);
-    EXPECT_EQ(t_bank_account, imap->acc);
-    EXPECT_EQ(gnc_account_get_book(t_bank_account), imap->book);
+    EXPECT_EQ(t_bank_account, imap->get_account());
+    EXPECT_EQ(gnc_account_get_book(t_bank_account), imap->get_book());
 
     g_free(imap);
 }
@@ -145,7 +145,7 @@ TEST_F(ImapPlainTest, AddAccount)
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     auto value = root->get_slot({IMAP_FRAME, "foo", "bar"});
     auto check_account = [this](KvpValue* v) {
-        return xaccAccountLookup(v->get<GncGUID*>(), this->t_imap->book); };
+        return xaccAccountLookup(v->get<GncGUID*>(), this->t_imap->get_book()); };
     EXPECT_EQ(t_expense_account1, check_account(value));
     value = root->get_slot({IMAP_FRAME, "baz", "waldo"});
     EXPECT_EQ(t_expense_account2, check_account(value));
@@ -289,7 +289,7 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2));
     auto value = root->get_slot({IMAP_FRAME_BAYES, "foo", "bar"});
     auto check_account = [this](KvpValue* v) {
-        return (v->get<const char*>(), this->t_imap->book); };
+        return (v->get<const char*>(), this->t_imap->get_book()); };
     value = root->get_slot({IMAP_FRAME_BAYES, foo, acct1_guid});
     EXPECT_EQ(1, value->get<int64_t>());
     value = root->get_slot({IMAP_FRAME_BAYES, bar, acct1_guid});
@@ -323,7 +323,7 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     gnc_account_imap_add_account_bayes(t_imap, t_list2, t_expense_account2); //Drink
 
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto book = qof_instance_get_slots(QOF_INSTANCE(t_imap->book));
+    auto book = qof_instance_get_slots(QOF_INSTANCE(t_imap->get_book()));
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2)); //Drink
     auto acct3_guid = guid_to_string (xaccAccountGetGUID(t_asset_account2)); //Asset-Bank
@@ -356,7 +356,7 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
 
     // Start Convert
-    gnc_account_imap_convert_bayes (t_imap->book);
+    gnc_account_imap_convert_bayes (t_imap->get_book());
 
     // convert from 'Asset-Bank' to 'Asset-Bank' guid
     value = root->get_slot({IMAP_FRAME_BAYES, pepper, acct3_guid});
