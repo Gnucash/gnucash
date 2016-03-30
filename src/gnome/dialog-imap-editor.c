@@ -144,7 +144,7 @@ delete_info_bayes (Account *source_account, gchar *match_string, gint depth)
     full_category = g_strdup_printf ("%s/%s", IMAP_FRAME_BAYES, match_string);
     gnc_account_delete_map_entry (source_account, full_category, TRUE);
 
-    full_category = g_strdup_printf (IMAP_FRAME_BAYES);
+    full_category = g_strdup_printf ("%s", IMAP_FRAME_BAYES);
     if (depth == 1) // top level, delete all below
         gnc_account_delete_map_entry (source_account, full_category, FALSE);
     else
@@ -165,7 +165,7 @@ delete_info_nbayes (Account *source_account, gint depth)
     full_category = g_strdup_printf ("%s/%s", IMAP_FRAME, IMAP_FRAME_CSV);
     gnc_account_delete_map_entry (source_account, full_category, TRUE);
 
-    full_category = g_strdup_printf (IMAP_FRAME);
+    full_category = g_strdup_printf ("%s", IMAP_FRAME);
     if (depth == 1) // top level, delete all below
         gnc_account_delete_map_entry (source_account, full_category, FALSE);
     else

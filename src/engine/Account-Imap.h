@@ -24,8 +24,7 @@
     @{ */
 /** @file Account-Imap.h
     @brief Account Imap handling public routines
-    @author Copyright (C) 1997 Robin D. Clark
-    @author Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 2007 David Hampton
     @author Copyright (C) 2016 Robert Fewell
 */
 
@@ -75,8 +74,8 @@ public:
     QofBook *get_book();
 
 private:
-    Account *account = nullptr;
-    QofBook *book;
+    Account *m_account = nullptr;
+    QofBook *m_book;
 };
 #else
   typedef
@@ -119,12 +118,12 @@ Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* to
  */
 void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens, Account *acc);
 
-/** Returns a GList of structure imap_infox of all Bayesian mappings for
+/** Returns a GList of structure imap_info of all Bayesian mappings for
  *  required Account
  */
 GList *gnc_account_imap_get_info_bayes (Account *acc);
 
-/** Returns a GList of structure imap_infox of all Non Bayesian mappings for
+/** Returns a GList of structure imap_info of all Non Bayesian mappings for
  *  required Account
  */
 GList *gnc_account_imap_get_info (Account *acc, const char *category);

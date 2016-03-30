@@ -1,7 +1,5 @@
 /********************************************************************\
- * Account-Imap.c -- Account Import Mapping                         *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
+ * Account-Imap.cpp -- Account Import Mapping                       *
  * Copyright (C) 2007 David Hampton <hampton@employees.org>         *
  * Copyright (C) 2016 Robert Fewell                                 *
  *                                                                  *
@@ -24,20 +22,14 @@
  *                                                                  *
 \********************************************************************/
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include <config.h>
 #include "AccountP.h"
 #include <qof.h>
 #include <qofinstance-p.h>
 #include "gnc-features.h"
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "Account-Imap.h"
 #include <kvp_frame.hpp>
@@ -54,16 +46,13 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
  * matching data. See src/import-export/import-backend.c for explanations.
  */
 
-GncImportMatchMap::GncImportMatchMap(Account *acc)
+GncImportMatchMap::GncImportMatchMap (Account *acc) :
+    m_account {acc},
+    m_book {gnc_account_get_book(acc)}
 {
 std::cout << "Create Map" << std::endl;
     /* Cache the book for easy lookups; store the account/book for
      * marking dirtiness */
-    if (acc)
-    {
-        account = acc;
-        book = gnc_account_get_book (acc);
-    }
 }
 
 GncImportMatchMap::~GncImportMatchMap()
@@ -75,14 +64,14 @@ Account *
 GncImportMatchMap::get_account()
 {
 std::cout << "get_account" << std::endl;
-    return account;
+    return m_account;
 }
 
 QofBook *
 GncImportMatchMap::get_book()
 {
 std::cout << "get_book" << std::endl;
-    return book;
+    return m_book;
 }
 
 Account *
@@ -90,11 +79,14 @@ GncImportMatchMap::find_account (const char* category, const char *key)
 {
     KvpValue *value;
 
-std::cout << "find_account " << category << ", " << key << std::endl;
-
     if (!key) return nullptr;
 
-    auto slots = qof_instance_get_slots(QOF_INSTANCE(account));
+if(!category)
+std::cout << "find_account null, " << key << std::endl;
+else
+std::cout << "find_account " << category << ", " << key << std::endl;
+
+    auto slots = qof_instance_get_slots(QOF_INSTANCE(m_account));
 
     if (!category)
         value = slots->get_slot({IMAP_FRAME, key});
@@ -104,7 +96,7 @@ std::cout << "find_account " << category << ", " << key << std::endl;
     if (value == nullptr || value->get_type() != KvpValue::Type::GUID)
        return nullptr;
 
-    return xaccAccountLookup(value->get<GncGUID*>(), book);
+    return xaccAccountLookup(value->get<GncGUID*>(), m_book);
 }
 
 void
@@ -112,21 +104,24 @@ GncImportMatchMap::add_account (const char *category, const char *key, Account *
 {
     if (!key || !acc || (strlen (key) == 0)) return;
 
+if(!category)
+std::cout << "add_account null, " << key << std::endl;
+else
 std::cout << "add_account " << category << ", " << key << std::endl;
 
-    auto acc_slots = qof_instance_get_slots(QOF_INSTANCE(account));
+    auto acc_slots = qof_instance_get_slots(QOF_INSTANCE(m_account));
 
     auto acc_val = new KvpValue(const_cast<GncGUID*>(xaccAccountGetGUID(acc)));
 
-    xaccAccountBeginEdit (account);
+    xaccAccountBeginEdit (m_account);
 
     if (!category)
         acc_slots->set_path({IMAP_FRAME, key}, acc_val);
     else
         acc_slots->set_path({IMAP_FRAME, category, key}, acc_val);
 
-    qof_instance_set_dirty (QOF_INSTANCE (account));
-    xaccAccountCommitEdit (account);
+    qof_instance_set_dirty (QOF_INSTANCE (m_account));
+    xaccAccountCommitEdit (m_account);
 }
 
 void
@@ -135,9 +130,12 @@ GncImportMatchMap::delete_account (const char *category, const char *key)
     std::string kvp_path;
     std::string delim = "/";
 
-    if ( !key) return;
+    if (!key) return;
 
-std::cout << "Delete_account" << std::endl;
+if(!category)
+std::cout << "delete_account null, " << key << std::endl;
+
+std::cout << "delete_account " << category << ", " << key << std::endl;
 
     std::string str_key (key);
 
@@ -148,23 +146,23 @@ std::cout << "Delete_account" << std::endl;
         std::string str_category (category);
         kvp_path = IMAP_FRAME + delim + str_category + delim + str_key;
     }
-    xaccAccountBeginEdit (account);
+    xaccAccountBeginEdit (m_account);
 
-    if (qof_instance_has_slot (QOF_INSTANCE (account), kvp_path.c_str()))
+    if (qof_instance_has_slot (QOF_INSTANCE (m_account), kvp_path.c_str()))
     {
-        qof_instance_slot_delete (QOF_INSTANCE (account), kvp_path.c_str());
+        qof_instance_slot_delete (QOF_INSTANCE (m_account), kvp_path.c_str());
 
         if (category)
         {
             std::string str_category (category);
             kvp_path = IMAP_FRAME + delim + str_category;
 
-            qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), kvp_path.c_str());
+            qof_instance_slot_delete_if_empty (QOF_INSTANCE (m_account), kvp_path.c_str());
         }
-        qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), IMAP_FRAME);
+        qof_instance_slot_delete_if_empty (QOF_INSTANCE (m_account), IMAP_FRAME);
     }
-    qof_instance_set_dirty (QOF_INSTANCE (account));
-    xaccAccountCommitEdit (account);
+    qof_instance_set_dirty (QOF_INSTANCE (m_account));
+    xaccAccountCommitEdit (m_account);
 }
 
 Account *
@@ -181,11 +179,6 @@ std::cout << "add_account_bayes" << std::endl;
 }
 
 /*****************************************************************************/
-
-// C access functions
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 GncImportMatchMap *
 gnc_account_imap_create_imap (Account *acc)
@@ -243,13 +236,6 @@ std::cout << "c_add_account_bayes" << std::endl;
 
     imap->add_account_bayes (tokens, acc);
 }
-
-#ifdef __cplusplus
-} /* closing brace for extern "C" */
-#endif
-
-
-
 
 /*****************************************************************************/
 
