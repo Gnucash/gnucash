@@ -1092,7 +1092,10 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
 {
     qof_book_begin_edit(book);
     auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
-    delete frame->set(opt_name, new KvpValue(opt_val));
+    if (opt_val && (*opt_val != '\0'))
+        delete frame->set(opt_name, new KvpValue(g_strdup(opt_val)));
+    else
+        delete frame->set(opt_name, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }

@@ -252,6 +252,9 @@ KvpValue* qof_book_get_option (QofBook *book, GSList *key_path);
 
 %clear GSList *key_path;
 
+const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
+void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
+
 #if defined(SWIGGUILE)
 %init {
   {
