@@ -491,9 +491,10 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     pw->invoice = NULL;
 
     /* Now handle the account tree */
-    qof_instance_get (qofOwnerGetOwner (owner),
-		      "payment-last-account", &guid,
-		      NULL);
+    if (gncOwnerIsValid(owner))
+        qof_instance_get (qofOwnerGetOwner (owner),
+                          "payment-last-account", &guid,
+                          NULL);
 
     /* refresh the post and acc available accounts, but cleanup first */
     if (pw->acct_types)
