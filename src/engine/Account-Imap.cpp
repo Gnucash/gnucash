@@ -50,27 +50,23 @@ GncImportMatchMap::GncImportMatchMap (Account *acc) :
     m_account {acc},
     m_book {gnc_account_get_book(acc)}
 {
-std::cout << "Create Map" << std::endl;
     /* Cache the book for easy lookups; store the account/book for
      * marking dirtiness */
 }
 
 GncImportMatchMap::~GncImportMatchMap()
 {
-std::cout << "Destroy" << std::endl;
 }
 
 Account *
 GncImportMatchMap::get_account()
 {
-std::cout << "get_account" << std::endl;
     return m_account;
 }
 
 QofBook *
 GncImportMatchMap::get_book()
 {
-std::cout << "get_book" << std::endl;
     return m_book;
 }
 
@@ -81,10 +77,7 @@ GncImportMatchMap::find_account (const char* category, const char *key)
 
     if (!key) return nullptr;
 
-if(!category)
-std::cout << "find_account null, " << key << std::endl;
-else
-std::cout << "find_account " << category << ", " << key << std::endl;
+    ENTER(" ");
 
     auto slots = qof_instance_get_slots(QOF_INSTANCE(m_account));
 
@@ -94,7 +87,11 @@ std::cout << "find_account " << category << ", " << key << std::endl;
         value = slots->get_slot({IMAP_FRAME, category, key});
 
     if (value == nullptr || value->get_type() != KvpValue::Type::GUID)
+    {
+       LEAVE("No Guid");
        return nullptr;
+    }
+    LEAVE("Guid found");
 
     return xaccAccountLookup(value->get<GncGUID*>(), m_book);
 }
@@ -104,10 +101,7 @@ GncImportMatchMap::add_account (const char *category, const char *key, Account *
 {
     if (!key || !acc || (strlen (key) == 0)) return;
 
-if(!category)
-std::cout << "add_account null, " << key << std::endl;
-else
-std::cout << "add_account " << category << ", " << key << std::endl;
+    ENTER(" ");
 
     auto acc_slots = qof_instance_get_slots(QOF_INSTANCE(m_account));
 
@@ -122,6 +116,8 @@ std::cout << "add_account " << category << ", " << key << std::endl;
 
     qof_instance_set_dirty (QOF_INSTANCE (m_account));
     xaccAccountCommitEdit (m_account);
+
+    LEAVE(" ");
 }
 
 void
@@ -132,10 +128,7 @@ GncImportMatchMap::delete_account (const char *category, const char *key)
 
     if (!key) return;
 
-if(!category)
-std::cout << "delete_account null, " << key << std::endl;
-
-std::cout << "delete_account " << category << ", " << key << std::endl;
+    ENTER(" ");
 
     std::string str_key (key);
 
@@ -163,6 +156,8 @@ std::cout << "delete_account " << category << ", " << key << std::endl;
     }
     qof_instance_set_dirty (QOF_INSTANCE (m_account));
     xaccAccountCommitEdit (m_account);
+
+    LEAVE(" ");
 }
 
 
@@ -292,8 +287,6 @@ highestProbability(gpointer key, gpointer value, gpointer data)
 Account *
 GncImportMatchMap::find_account_bayes (GList* tokens)
 {
-std::cout << "find_account_bayes" << std::endl;
-
     struct token_accounts_info tokenInfo; /**< holds the accounts and total
                                            * token count for a single token */
     GList *current_token;                 /**< pointer to the current
@@ -494,11 +487,10 @@ change_imap_entry (GncImportMatchMap *imap, std::string kvp_path, int64_t token_
     gnc_features_set_used (imap->get_book(), GNC_FEATURE_GUID_BAYESIAN);
 }
 
+
 void
 GncImportMatchMap::add_account_bayes (GList* tokens, Account *acc)
 {
-std::cout << "add_account_bayes" << std::endl;
-
     GList *current_token;
 
     std::string account_fullname;
@@ -552,7 +544,6 @@ std::cout << "add_account_bayes" << std::endl;
 GncImportMatchMap *
 gnc_account_imap_create_imap (Account *acc)
 {
-std::cout << "c_create_imap" << std::endl;
     if (!acc) return nullptr;
 
     GncImportMatchMap *ImportMap = new GncImportMatchMap(acc);
@@ -562,7 +553,6 @@ std::cout << "c_create_imap" << std::endl;
 void
 gnc_account_imap_delete_imap (GncImportMatchMap *imap)
 {
-std::cout << "c_delete_imap" << std::endl;
     if (!imap) return;
     delete (imap);
 }
@@ -570,39 +560,29 @@ std::cout << "c_delete_imap" << std::endl;
 Account *
 gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category, const char *key)
 {
-std::cout << "c_find_account" << std::endl;
-
     return imap->find_account (category, key);
 }
 
 void
 gnc_account_imap_add_account (GncImportMatchMap *imap, const char* category, const char *key, Account *acc)
 {
-std::cout << "c_add_account" << std::endl;
-
     imap->add_account (category, key, acc);
 }
 
 void
 gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category, const char *key)
 {
-std::cout << "c_delete_account" << std::endl;
-
     imap->delete_account (category, key);
 }
 
 Account *
 gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens)
 {
-std::cout << "c_find_account_bayes" << std::endl;
-
     return imap->find_account_bayes (tokens);
 }
 
 void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens, Account *acc)
 {
-std::cout << "c_add_account_bayes" << std::endl;
-
     imap->add_account_bayes (tokens, acc);
 }
 
