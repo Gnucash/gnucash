@@ -44,6 +44,10 @@ extern "C"
 #include <string.h>
 
 #include <glib.h>
+#ifdef GNC_PLATFORM_WINDOWS
+  /* Mingw disables the standard type macros for C++ without this override. */
+#define __STDC_FORMAT_MACROS = 1
+#endif
 #include <inttypes.h>
 
 #ifdef __cplusplus
