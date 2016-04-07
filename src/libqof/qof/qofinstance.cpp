@@ -1062,7 +1062,7 @@ qof_instance_has_kvp (QofInstance *inst)
 void
 qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value)
 {
-    delete inst->kvp_data->set_path({key}, kvp_value_from_gvalue(value));
+    delete inst->kvp_data->set_path(key, kvp_value_from_gvalue(value));
 }
 
 void
@@ -1115,7 +1115,7 @@ qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
     auto container = new KvpFrame;
     container->set(key, new KvpValue(const_cast<GncGUID*>(guid)));
     container->set("date", new KvpValue(time));
-    delete inst->kvp_data->set_path({path}, new KvpValue(container));
+    delete inst->kvp_data->set_path(path, new KvpValue(container));
 }
 
 inline static gboolean
@@ -1182,7 +1182,7 @@ qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
     case KvpValue::Type::FRAME:
         if (kvp_match_guid (v, key, guid))
         {
-            delete inst->kvp_data->set_path({path}, nullptr);
+            delete inst->kvp_data->set_path(path, nullptr);
             delete v;
         }
         break;
@@ -1227,7 +1227,7 @@ qof_instance_kvp_merge_guids (const QofInstance *target,
         if (target_val)
             target_val->add(v);
         else
-            target->kvp_data->set_path({path}, v);
+            target->kvp_data->set_path(path, v);
         donor->kvp_data->set(path, nullptr); //Contents moved, Don't delete!
         break;
     case KvpValue::Type::GLIST:

@@ -307,7 +307,7 @@ GncDateTime::utc_tm() const
 GncDate
 GncDateTime::date() const
 {
-    return std::move(GncDate(m_impl->date()));
+    return GncDate(m_impl->date());
 }
 
 std::string
