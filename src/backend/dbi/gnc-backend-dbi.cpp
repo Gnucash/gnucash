@@ -260,10 +260,14 @@ static void
 sqlite3_error_fn(dbi_conn conn, void* user_data)
 {
     const gchar* msg;
-    GncDbiSqlConnection *db_conn = static_cast<decltype(db_conn)>(conn);
-    (void)dbi_conn_error(db_conn, &msg);
+    GncDbiBackend *be = static_cast<decltype(be)>(user_data);
+/* FIXME: Cast won't be necessary once GncDbiSqlConnection is a derived class of
+ * GncSqlConnection. */
+    GncDbiSqlConnection *dbi_conn =
+        reinterpret_cast<decltype(dbi_conn)>(be->sql_be.conn);
+    (void)dbi_conn_error(conn, &msg);
     PERR( "DBI error: %s\n", msg );
-    gnc_dbi_set_error(db_conn, ERR_BACKEND_MISC, 0, FALSE);
+    gnc_dbi_set_error(dbi_conn, ERR_BACKEND_MISC, 0, FALSE);
 }
 
 static void
