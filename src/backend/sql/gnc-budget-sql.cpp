@@ -193,7 +193,6 @@ load_budget_amounts (GncSqlBackend* be, GncBudget* budget)
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     gchar* sql;
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (budget != NULL);
@@ -206,20 +205,12 @@ load_budget_amounts (GncSqlBackend* be, GncBudget* budget)
     g_free (sql);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = gnc_sql_execute_select_statement (be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
-        {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            budget_amount_info_t info = { budget, NULL, 0 };
+        budget_amount_info_t info = { budget, NULL, 0 };
 
-            while (row != NULL)
-            {
-                gnc_sql_load_object (be, row, NULL, &info, budget_amounts_col_table);
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-        }
+        for (auto row : *result)
+            gnc_sql_load_object (be, row, NULL, &info, budget_amounts_col_table);
     }
 }
 
@@ -294,14 +285,13 @@ save_budget_amounts (GncSqlBackend* be, GncBudget* budget)
 }
 /*----------------------------------------------------------------*/
 static  GncBudget*
-load_single_budget (GncSqlBackend* be, GncSqlRow* row)
+load_single_budget (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncBudget* pBudget = NULL;
     Recurrence* r;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     if (guid != NULL)
@@ -331,7 +321,6 @@ static void
 load_all_budgets (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
     GList* list = NULL;
 
     g_return_if_fail (be != NULL);
@@ -339,29 +328,21 @@ load_all_budgets (GncSqlBackend* be)
     stmt = gnc_sql_create_select_statement (be, BUDGET_TABLE);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = gnc_sql_execute_select_statement (be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        for (auto row : *result)
         {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            GncBudget* b;
-
-            while (row != NULL)
+            auto b = load_single_budget (be, row);
+            if (b != NULL)
             {
-                b = load_single_budget (be, row);
-                if (b != NULL)
-                {
-                    list = g_list_prepend (list, b);
-                }
-                row = gnc_sql_result_get_next_row (result);
+                list = g_list_prepend (list, b);
             }
-            gnc_sql_result_dispose (result);
+        }
 
-            if (list != NULL)
-            {
-                gnc_sql_slots_load_for_list (be, list);
-                g_list_free (list);
-            }
+        if (list != NULL)
+        {
+            gnc_sql_slots_load_for_list (be, list);
+            g_list_free (list);
         }
     }
 }
@@ -480,7 +461,7 @@ write_budgets (GncSqlBackend* be)
 
 /* ================================================================= */
 static void
-load_budget_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_budget_guid (const GncSqlBackend* be, GncSqlRow& row,
                   QofSetterFunc setter, gpointer pObject,
                   const GncSqlColumnTableEntry& table_row)
 {
@@ -489,12 +470,11 @@ load_budget_guid (const GncSqlBackend* be, GncSqlRow* row,
     GncBudget* budget = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         budget = gnc_budget_lookup (&guid, be->book);
         if (budget != NULL)

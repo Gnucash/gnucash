@@ -150,13 +150,12 @@ entry_set_bill (gpointer pObject, gpointer val)
 }
 
 static GncEntry*
-load_single_entry (GncSqlBackend* be, GncSqlRow* row)
+load_single_entry (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncEntry* pEntry;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     pEntry = gncEntryLookup (be->book, guid);
@@ -174,35 +173,27 @@ static void
 load_all_entries (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    GList* list = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        GncEntry* pEntry = load_single_entry (be, row);
+        if (pEntry != NULL)
         {
-            GncEntry* pEntry = load_single_entry (be, row);
-            if (pEntry != NULL)
-            {
-                list = g_list_append (list, pEntry);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            list = g_list_append (list, pEntry);
         }
-        gnc_sql_result_dispose (result);
+    }
 
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
     }
 }
 

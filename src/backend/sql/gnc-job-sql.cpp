@@ -71,13 +71,12 @@ static EntryVec col_table
 });
 
 static GncJob*
-load_single_job (GncSqlBackend* be, GncSqlRow* row)
+load_single_job (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncJob* pJob;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     pJob = gncJobLookup (be->book, guid);
@@ -95,35 +94,26 @@ static void
 load_all_jobs (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    GList* list = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        GncJob* pJob = load_single_job (be, row);
+        if (pJob != NULL)
         {
-            GncJob* pJob = load_single_job (be, row);
-            if (pJob != NULL)
-            {
-                list = g_list_append (list, pJob);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            list = g_list_append (list, pJob);
         }
-        gnc_sql_result_dispose (result);
+    }
 
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
     }
 }
 

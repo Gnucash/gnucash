@@ -410,7 +410,7 @@ test_gnc_sql_add_subtable_colnames_to_list (Fixture *fixture, gconstpointer pDat
 }*/
 /* load_string
 static void
-load_string (const GncSqlBackend* be, GncSqlRow* row,
+load_string (const GncSqlBackend* be, GncSqlRow& row,
 const GncSqlColumnTableEntry& table_row)// 2
 */
 /* static void
@@ -437,7 +437,7 @@ test_add_gvalue_string_to_slist (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_int
 static void
-load_int (const GncSqlBackend* be, GncSqlRow* row,// 4
+load_int (const GncSqlBackend* be, GncSqlRow& row,// 4
 */
 /* static void
 test_load_int (Fixture *fixture, gconstpointer pData)
@@ -461,7 +461,7 @@ test_add_gvalue_int_to_slist (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_boolean
 static void
-load_boolean (const GncSqlBackend* be, GncSqlRow* row,// 2
+load_boolean (const GncSqlBackend* be, GncSqlRow& row,// 2
 */
 /* static void
 test_load_boolean (Fixture *fixture, gconstpointer pData)
@@ -485,7 +485,7 @@ test_add_gvalue_boolean_to_slist (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_int64
 static void
-load_int64 (const GncSqlBackend* be, GncSqlRow* row,// 2
+load_int64 (const GncSqlBackend* be, GncSqlRow& row,// 2
 */
 /* static void
 test_load_int64 (Fixture *fixture, gconstpointer pData)
@@ -509,7 +509,7 @@ test_add_gvalue_int64_to_slist (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_double
 static void
-load_double (const GncSqlBackend* be, GncSqlRow* row,// 2
+load_double (const GncSqlBackend* be, GncSqlRow& row,// 2
 */
 /* static void
 test_load_double (Fixture *fixture, gconstpointer pData)
@@ -533,7 +533,7 @@ test_add_gvalue_double_to_slist (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_guid
 static void
-load_guid (const GncSqlBackend* be, GncSqlRow* row,// 3
+load_guid (const GncSqlBackend* be, GncSqlRow& row,// 3
 */
 /* static void
 test_load_guid (Fixture *fixture, gconstpointer pData)
@@ -610,7 +610,7 @@ test_gnc_sql_convert_timespec_to_string ()
 }
 /* load_timespec
 static void
-load_timespec (const GncSqlBackend* be, GncSqlRow* row,// 2
+load_timespec (const GncSqlBackend* be, GncSqlRow& row,// 2
 */
 /* static void
 test_load_timespec (Fixture *fixture, gconstpointer pData)
@@ -634,7 +634,7 @@ test_add_value_timespec_to_vec (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_date
 static void
-load_date (const GncSqlBackend* be, GncSqlRow* row,// 2
+load_date (const GncSqlBackend* be, GncSqlRow& row,// 2
 */
 /* static void
 test_load_date (Fixture *fixture, gconstpointer pData)
@@ -658,7 +658,7 @@ test_add_value_date_to_vec (Fixture *fixture, gconstpointer pData)
 }*/
 /* load_numeric
 static void
-load_numeric (const GncSqlBackend* be, GncSqlRow* row,// 2
+load_numeric (const GncSqlBackend* be, GncSqlRow& row,// 2
 */
 /* static void
 test_load_numeric (Fixture *fixture, gconstpointer pData)
@@ -713,7 +713,7 @@ test__retrieve_guid_ (Fixture *fixture, gconstpointer pData)
 }*/
 /* gnc_sql_load_guid
 const GncGUID*
-gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow* row)// C: 15 in 14 */
+gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row)// C: 15 in 14 */
 /* static void
 test_gnc_sql_load_guid (Fixture *fixture, gconstpointer pData)
 {
@@ -721,7 +721,7 @@ test_gnc_sql_load_guid (Fixture *fixture, gconstpointer pData)
 // Not Used
 /* gnc_sql_load_tx_guid
 const GncGUID*
-gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow* row)// 1
+gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow& row)// 1
 */
 /* static void
 test_gnc_sql_load_tx_guid (Fixture *fixture, gconstpointer pData)
@@ -729,7 +729,7 @@ test_gnc_sql_load_tx_guid (Fixture *fixture, gconstpointer pData)
 }*/
 /* gnc_sql_load_object
 void
-gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow* row,// C: 29 in 19 */
+gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,// C: 29 in 19 */
 /* static void
 test_gnc_sql_load_object (Fixture *fixture, gconstpointer pData)
 {

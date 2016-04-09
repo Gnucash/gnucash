@@ -94,13 +94,12 @@ static EntryVec col_table
 });
 
 static GncInvoice*
-load_single_invoice (GncSqlBackend* be, GncSqlRow* row)
+load_single_invoice (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncInvoice* pInvoice;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     pInvoice = gncInvoiceLookup (be->book, guid);
@@ -118,35 +117,27 @@ static void
 load_all_invoices (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    GList* list = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        GncInvoice* pInvoice = load_single_invoice (be, row);
+        if (pInvoice != NULL)
         {
-            GncInvoice* pInvoice = load_single_invoice (be, row);
-            if (pInvoice != NULL)
-            {
-                list = g_list_append (list, pInvoice);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            list = g_list_append (list, pInvoice);
         }
-        gnc_sql_result_dispose (result);
+    }
 
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
     }
 }
 
@@ -284,7 +275,7 @@ write_invoices (GncSqlBackend* be)
 
 /* ================================================================= */
 static void
-load_invoice_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_invoice_guid (const GncSqlBackend* be, GncSqlRow& row,
                    QofSetterFunc setter, gpointer pObject,
                    const GncSqlColumnTableEntry& table_row)
 {
@@ -292,12 +283,11 @@ load_invoice_guid (const GncSqlBackend* be, GncSqlRow* row,
     GncInvoice* invoice = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         invoice = gncInvoiceLookup (be->book, &guid);
         if (invoice != NULL)

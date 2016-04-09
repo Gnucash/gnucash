@@ -2156,53 +2156,66 @@ gnc_module_finalize_backend_dbi (void)
 }
 
 /* --------------------------------------------------------- */
+GncSqlRow&
+GncDbiSqlResult::IteratorImpl::operator++()
+{
+    int status = dbi_result_next_row (m_inst->m_dbi_result);
+    if (status)
+        return m_inst->m_row;
+    int error = m_inst->dberror();
+    if (error == DBI_ERROR_BADIDX || error == 0) //ran off the end of the results
+        return m_inst->m_sentinel;
+    PERR("Error %d incrementing results iterator.", error);
+    qof_backend_set_error (m_inst->m_conn->qbe, ERR_BACKEND_SERVER_ERR);
+    return m_inst->m_sentinel;
+}
 
 int64_t
-GncDbiSqlRow::get_int_at_col(const char* col)
+GncDbiSqlResult::IteratorImpl::get_int_at_col(const char* col) const
 {
-    auto type = dbi_result_get_field_type (m_result, col);
+    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_INTEGER)
         throw (std::invalid_argument{"Requested integer from non-integer column."});
-    return dbi_result_get_longlong (m_result, col);
+    return dbi_result_get_longlong (m_inst->m_dbi_result, col);
 }
 
 float
-GncDbiSqlRow::get_float_at_col(const char* col)
+GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
 {
-    auto type = dbi_result_get_field_type (m_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_result, col);
+    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
+    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_DECIMAL ||
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE4)
         throw (std::invalid_argument{"Requested float from non-float column."});
     gnc_push_locale (LC_NUMERIC, "C");
-    auto retval =  dbi_result_get_float(m_result, col);
+    auto retval =  dbi_result_get_float(m_inst->m_dbi_result, col);
     gnc_pop_locale (LC_NUMERIC);
     return retval;
 }
 
 double
-GncDbiSqlRow::get_double_at_col(const char* col)
+GncDbiSqlResult::IteratorImpl::get_double_at_col(const char* col) const
 {
-    auto type = dbi_result_get_field_type (m_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_result, col);
+    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
+    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_DECIMAL ||
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE8)
         throw (std::invalid_argument{"Requested double from non-double column."});
     gnc_push_locale (LC_NUMERIC, "C");
-    auto retval =  dbi_result_get_double(m_result, col);
+    auto retval =  dbi_result_get_double(m_inst->m_dbi_result, col);
     gnc_pop_locale (LC_NUMERIC);
     return retval;
 }
 
 std::string
-GncDbiSqlRow::get_string_at_col(const char* col)
+GncDbiSqlResult::IteratorImpl::get_string_at_col(const char* col) const
 {
-    auto type = dbi_result_get_field_type (m_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_result, col);
+    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
+    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_STRING)
         throw (std::invalid_argument{"Requested string from non-string column."});
     gnc_push_locale (LC_NUMERIC, "C");
-    auto strval = dbi_result_get_string(m_result, col);
+    auto strval = dbi_result_get_string(m_inst->m_dbi_result, col);
     if (strval == nullptr)
     {
         gnc_pop_locale (LC_NUMERIC);
@@ -2213,10 +2226,10 @@ GncDbiSqlRow::get_string_at_col(const char* col)
     return retval;
 }
 time64
-GncDbiSqlRow::get_time64_at_col (const char* col)
+GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
 {
-    auto type = dbi_result_get_field_type (m_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_result, col);
+    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
+    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if (type != DBI_TYPE_DATETIME)
         throw (std::invalid_argument{"Requested double from non-double column."});
     gnc_push_locale (LC_NUMERIC, "C");
@@ -2233,7 +2246,7 @@ GncDbiSqlRow::get_time64_at_col (const char* col)
      * dbi_result_get_as_longlong.
      * Note: 0.9 is available in Debian Jessie and Fedora 21.
      */
-    auto result = (dbi_result_t*) (m_result);
+    auto result = (dbi_result_t*) (m_inst->m_dbi_result);
     auto row = dbi_result_get_currow (result);
     auto idx = dbi_result_get_field_idx (result, col) - 1;
     time64 retval = result->rows[row]->field_values[idx].d_datetime;
@@ -2246,105 +2259,50 @@ GncDbiSqlRow::get_time64_at_col (const char* col)
 
 
 /* --------------------------------------------------------- */
-typedef struct
+
+GncDbiSqlResult::~GncDbiSqlResult()
 {
-    GncSqlResult base;
+    int status = dbi_result_free (m_dbi_result);
+    
+    if (status == 0)
+        return;
 
-    GncDbiSqlConnection* dbi_conn;
-    dbi_result result;
-    guint num_rows;
-    guint cur_row;
-    GncDbiSqlRow* row;
-} GncDbiSqlResult;
+    PERR ("Error %d in dbi_result_free() result.", dberror() );
+    qof_backend_set_error (m_conn->qbe, ERR_BACKEND_SERVER_ERR);
+}
 
-static void
-result_dispose (GncSqlResult* result)
+GncSqlRow&
+GncDbiSqlResult::begin()
 {
-    GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
 
-    delete dbi_result->row;
-    if (dbi_result->result != NULL)
+    if (m_dbi_result == nullptr ||
+        dbi_result_get_numrows(m_dbi_result) == 0)
+        return m_sentinel;
+    int status = dbi_result_first_row(m_dbi_result);
+    if (status)
+        return m_row;
+    int error = dberror(); //
+
+    if (error != DBI_ERROR_BADIDX) //otherwise just an empty result set
     {
-        gint status;
-
-        status = dbi_result_free (dbi_result->result);
-        if (status < 0)
-        {
-            PERR ("Error in dbi_result_free() result\n");
-            qof_backend_set_error (dbi_result->dbi_conn->qbe, ERR_BACKEND_SERVER_ERR);
-        }
+        PERR ("Error %d in dbi_result_first_row()", dberror());
+        qof_backend_set_error (m_conn->qbe, ERR_BACKEND_SERVER_ERR);
     }
-    g_free (result);
+    return m_sentinel;
 }
 
-static guint
-result_get_num_rows (GncSqlResult* result)
+int
+GncDbiSqlResult::dberror()
 {
-    GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
-
-    return dbi_result->num_rows;
+    return dbi_conn_error(m_conn->conn, nullptr);
 }
 
-static  GncSqlRow*
-result_get_first_row (GncSqlResult* result)
+uint64_t
+GncDbiSqlResult::size() const noexcept
 {
-    GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
-
-    if (dbi_result->num_rows > 0)
-    {
-        gint status = dbi_result_first_row (dbi_result->result);
-        if (status == 0)
-        {
-            PERR ("Error in dbi_result_first_row()\n");
-            qof_backend_set_error (dbi_result->dbi_conn->qbe, ERR_BACKEND_SERVER_ERR);
-        }
-        dbi_result->cur_row = 1;
-        return dbi_result->row;
-    }
-    else
-        return nullptr;
+    return dbi_result_get_numrows(m_dbi_result);
 }
 
-static  GncSqlRow*
-result_get_next_row (GncSqlResult* result)
-{
-    GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
-
-    if (dbi_result->cur_row < dbi_result->num_rows)
-    {
-        gint status = dbi_result_next_row (dbi_result->result);
-        if (status == 0)
-        {
-            PERR ("Error in dbi_result_first_row()\n");
-            qof_backend_set_error (dbi_result->dbi_conn->qbe, ERR_BACKEND_SERVER_ERR);
-        }
-        dbi_result->cur_row++;
-        return dbi_result->row;
-    }
-    else
-        return nullptr;
-}
-
-static GncSqlResult*
-create_dbi_result (GncDbiSqlConnection* dbi_conn,  dbi_result result)
-{
-    GncDbiSqlResult* dbi_result;
-
-    dbi_result = g_new0 (GncDbiSqlResult, 1);
-    g_assert (dbi_result != NULL);
-
-    dbi_result->base.dispose = result_dispose;
-    dbi_result->base.getNumRows = result_get_num_rows;
-    dbi_result->base.getFirstRow = result_get_first_row;
-    dbi_result->base.getNextRow = result_get_next_row;
-    dbi_result->result = result;
-    dbi_result->num_rows = (guint)dbi_result_get_numrows (result);
-    dbi_result->cur_row = 0;
-    dbi_result->row = new GncDbiSqlRow{result};
-    dbi_result->dbi_conn = dbi_conn;
-
-    return (GncSqlResult*)dbi_result;
-}
 /* --------------------------------------------------------- */
 typedef struct
 {
@@ -2417,7 +2375,7 @@ conn_dispose (GncSqlConnection* conn)
     g_free (conn);
 }
 
-static  GncSqlResult*
+static  GncSqlResultPtr
 conn_execute_select_statement (GncSqlConnection* conn, GncSqlStatement* stmt)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
@@ -2432,13 +2390,10 @@ conn_execute_select_statement (GncSqlConnection* conn, GncSqlStatement* stmt)
         result = dbi_conn_query (dbi_conn->conn, dbi_stmt->sql->str);
     }
     while (dbi_conn->retry);
-    if (result == NULL)
-    {
+    if (result == nullptr)
         PERR ("Error executing SQL %s\n", dbi_stmt->sql->str);
-        return NULL;
-    }
     gnc_pop_locale (LC_NUMERIC);
-    return create_dbi_result (dbi_conn, result);
+    return GncSqlResultPtr(new GncDbiSqlResult (dbi_conn, result));
 }
 
 static gint
@@ -2562,7 +2517,8 @@ conn_rollback_transaction (GncSqlConnection* conn)
     gboolean success = FALSE;
 
     DEBUG ("ROLLBACK\n");
-    result = dbi_conn_queryf (dbi_conn->conn, "ROLLBACK");
+    const char* command =  "ROLLBACK";
+    result = dbi_conn_query (dbi_conn->conn, command);
     success = (result != NULL);
 
     status = dbi_result_free (result);

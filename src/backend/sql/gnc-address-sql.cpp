@@ -66,7 +66,7 @@ typedef void (*AddressSetterFunc) (gpointer, GncAddress*);
 typedef GncAddress* (*AddressGetterFunc) (const gpointer);
 
 static void
-load_address (const GncSqlBackend* be, GncSqlRow* row,
+load_address (const GncSqlBackend* be, GncSqlRow& row,
               QofSetterFunc setter, gpointer pObject,
               const GncSqlColumnTableEntry& table_row)
 {
@@ -85,7 +85,7 @@ load_address (const GncSqlBackend* be, GncSqlRow* row,
                                     subtable_row.col_name);
         try
         {
-            auto val = row->get_string_at_col (buf);
+            auto val = row.get_string_at_col (buf);
             g_free (buf);
             if (subtable_row.gobj_param_name != NULL)
             {

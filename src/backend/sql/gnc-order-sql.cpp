@@ -67,13 +67,12 @@ static EntryVec col_table
 });
 
 static GncOrder*
-load_single_order (GncSqlBackend* be, GncSqlRow* row)
+load_single_order (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncOrder* pOrder;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     pOrder = gncOrderLookup (be->book, guid);
@@ -91,35 +90,26 @@ static void
 load_all_orders (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    GList* list = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        GncOrder* pOrder = load_single_order (be, row);
+        if (pOrder != NULL)
         {
-            GncOrder* pOrder = load_single_order (be, row);
-            if (pOrder != NULL)
-            {
-                list = g_list_append (list, pOrder);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            list = g_list_append (list, pOrder);
         }
-        gnc_sql_result_dispose (result);
+    }
 
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
     }
 }
 
@@ -199,7 +189,7 @@ write_orders (GncSqlBackend* be)
 
 /* ================================================================= */
 static void
-load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_order_guid (const GncSqlBackend* be, GncSqlRow& row,
                  QofSetterFunc setter, gpointer pObject,
                  const GncSqlColumnTableEntry& table_row)
 {
@@ -207,12 +197,11 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
     GncOrder* order = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         order = gncOrderLookup (be->book, &guid);
         if (order != NULL)

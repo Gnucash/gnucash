@@ -75,7 +75,7 @@ static const EntryVec col_table
 
 /* ================================================================= */
 static  SchedXaction*
-load_single_sx (GncSqlBackend* be, GncSqlRow* row)
+load_single_sx (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     SchedXaction* pSx;
@@ -83,7 +83,6 @@ load_single_sx (GncSqlBackend* be, GncSqlRow* row)
     GDate start_date;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     g_assert (guid != NULL);
@@ -105,41 +104,33 @@ static void
 load_all_sxes (GncSqlBackend* be)
 {
     GncSqlStatement* stmt = NULL;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
     if (stmt == NULL) return;
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    SchedXactions* sxes;
+    GList* list = NULL;
+    sxes = gnc_book_get_schedxactions (be->book);
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        SchedXactions* sxes;
-        GList* list = NULL;
-        sxes = gnc_book_get_schedxactions (be->book);
+        SchedXaction* sx;
 
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        sx = load_single_sx (be, row);
+        if (sx != NULL)
         {
-            SchedXaction* sx;
-
-            sx = load_single_sx (be, row);
-            if (sx != NULL)
-            {
-                gnc_sxes_add_sx (sxes, sx);
-                list = g_list_prepend (list, sx);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            gnc_sxes_add_sx (sxes, sx);
+            list = g_list_prepend (list, sx);
         }
-        gnc_sql_result_dispose (result);
+    }
 
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
     }
 }
 

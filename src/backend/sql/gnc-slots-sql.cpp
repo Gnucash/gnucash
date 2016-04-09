@@ -724,7 +724,6 @@ gboolean
 gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 {
     gchar* buf;
-    GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GncSqlStatement* stmt;
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
@@ -740,30 +739,23 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
     g_free (buf);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = gnc_sql_execute_select_statement (be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        for (auto row : *result)
         {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-            while (row != NULL)
+            try
             {
-                try
-                {
-                    const GncSqlColumnTableEntry& table_row =
-                        col_table[guid_val_col];
-                    GncGUID child_guid;
-                    auto val = row->get_string_at_col (table_row.col_name);
-                    (void)string_to_guid (val.c_str(), &child_guid);
-                    gnc_sql_slots_delete (be, &child_guid);
-                    row = gnc_sql_result_get_next_row (result);
-                }
-                catch (std::invalid_argument)
-                {
-                    continue;
-                }
+                const GncSqlColumnTableEntry& table_row =
+                    col_table[guid_val_col];
+                GncGUID child_guid;
+                auto val = row.get_string_at_col (table_row.col_name);
+                (void)string_to_guid (val.c_str(), &child_guid);
+                gnc_sql_slots_delete (be, &child_guid);
             }
-            gnc_sql_result_dispose (result);
+            catch (std::invalid_argument)
+            {
+                continue;
+            }
         }
     }
 
@@ -777,13 +769,12 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 }
 
 static void
-load_slot (slot_info_t* pInfo, GncSqlRow* row)
+load_slot (slot_info_t* pInfo, GncSqlRow& row)
 {
     slot_info_t* slot_info;
 
     g_return_if_fail (pInfo != NULL);
     g_return_if_fail (pInfo->be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pInfo->pKvpFrame != NULL);
 
     slot_info = slot_info_copy (pInfo, NULL);
@@ -829,7 +820,6 @@ static void
 slots_load_info (slot_info_t* pInfo)
 {
     gchar* buf;
-    GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GncSqlStatement* stmt;
 
@@ -846,29 +836,19 @@ slots_load_info (slot_info_t* pInfo)
     g_free (buf);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (pInfo->be, stmt);
+        auto result = gnc_sql_execute_select_statement (pInfo->be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
-        {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-            while (row != NULL)
-            {
-                load_slot (pInfo, row);
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-        }
+        for (auto row : *result)
+            load_slot (pInfo, row);
     }
 }
 
 static  const GncGUID*
-load_obj_guid (const GncSqlBackend* be, GncSqlRow* row)
+load_obj_guid (const GncSqlBackend* be, GncSqlRow& row)
 {
     static GncGUID guid;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     gnc_sql_load_object (be, row, NULL, &guid, obj_guid_col_table);
 
@@ -876,7 +856,7 @@ load_obj_guid (const GncSqlBackend* be, GncSqlRow* row)
 }
 
 static void
-load_slot_for_list_item (GncSqlBackend* be, GncSqlRow* row,
+load_slot_for_list_item (GncSqlBackend* be, GncSqlRow& row,
                          QofCollection* coll)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
@@ -884,7 +864,6 @@ load_slot_for_list_item (GncSqlBackend* be, GncSqlRow* row,
     QofInstance* inst;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (coll != NULL);
 
     guid = load_obj_guid (be, row);
@@ -909,7 +888,6 @@ gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
     QofCollection* coll;
     GncSqlStatement* stmt;
     GString* sql;
-    GncSqlResult* result;
     gboolean single_item;
 
     g_return_if_fail (be != NULL);
@@ -949,23 +927,14 @@ gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
         return;
     }
     (void)g_string_free (sql, TRUE);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
-    {
-        GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-        while (row != NULL)
-        {
-            load_slot_for_list_item (be, row, coll);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-    }
+    for (auto row : *result)
+        load_slot_for_list_item (be, row, coll);
 }
 
 static void
-load_slot_for_book_object (GncSqlBackend* be, GncSqlRow* row,
+load_slot_for_book_object (GncSqlBackend* be, GncSqlRow& row,
                            BookLookupFn lookup_fn)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
@@ -973,7 +942,6 @@ load_slot_for_book_object (GncSqlBackend* be, GncSqlRow* row,
     QofInstance* inst;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (lookup_fn != NULL);
 
     guid = load_obj_guid (be, row);
@@ -1008,7 +976,6 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
 {
     gchar* sql;
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
@@ -1028,19 +995,10 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
         return;
     }
     g_free (sql);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
-    {
-        GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-        while (row != NULL)
-        {
-            load_slot_for_book_object (be, row, lookup_fn);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-    }
+    for (auto row : *result)
+        load_slot_for_book_object (be, row, lookup_fn);
 }
 
 /* ================================================================= */

@@ -136,12 +136,11 @@ set_root_template_guid (gpointer pObject,  gpointer pValue)
 
 /* ================================================================= */
 static void
-load_single_book (GncSqlBackend* be, GncSqlRow* row)
+load_single_book (GncSqlBackend* be, GncSqlRow& row)
 {
     QofBook* pBook;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
 
     gnc_sql_load_guid (be, row);
 
@@ -163,35 +162,29 @@ static void
 load_all_books (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, BOOK_TABLE);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = gnc_sql_execute_select_statement (be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        auto row = result->begin();
+
+        /* If there are no rows, try committing the book; unset
+         * loading so that it will actually get saved.
+         */
+        if (row == result->end())
         {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-            /* If there are no rows, try committing the book; unset
-            * loading so that it will actually get saved.
-            */
-            if (row == NULL)
-            {
-                be->loading = FALSE;
-                (void)gnc_sql_save_book (be, QOF_INSTANCE (be->book));
-                be->loading = TRUE;
-            }
-            else
-            {
-                // Otherwise, load the 1st book.
-                load_single_book (be, row);
-            }
-
-            gnc_sql_result_dispose (result);
+            be->loading = FALSE;
+            (void)gnc_sql_save_book (be, QOF_INSTANCE (be->book));
+            be->loading = TRUE;
+        }
+        else
+        {
+            // Otherwise, load the 1st book.
+            load_single_book (be, *row);
         }
     }
 }

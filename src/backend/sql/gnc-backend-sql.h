@@ -139,7 +139,9 @@ void gnc_sql_commit_edit (GncSqlBackend* qbe, QofInstance* inst);
 /**
  */
 typedef struct GncSqlStatement GncSqlStatement;
-typedef struct GncSqlResult GncSqlResult;
+class GncSqlResult;
+//using GncSqlResultPtr = std::unique_ptr<GncSqlResult>;
+using GncSqlResultPtr = GncSqlResult*;
 
 /**
  *@struct GncSqlStatement
@@ -170,7 +172,7 @@ struct GncSqlStatement
 struct GncSqlConnection
 {
     void (*dispose) (GncSqlConnection*);
-    GncSqlResult* (*executeSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns NULL if error */
+    GncSqlResultPtr (*executeSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns NULL if error */
     gint (*executeNonSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns -1 if error */
     GncSqlStatement* (*createStatementFromSql) (GncSqlConnection*, const gchar*);
     gboolean (*doesTableExist) (GncSqlConnection*, const gchar*);  /**< Returns true if successful */
@@ -211,39 +213,82 @@ struct GncSqlConnection
  * SQL backends must provide a structure which implements all of the functions.
  */
 
-class GncSqlRow
+class GncSqlRow;
+/**
+ * Pure virtual class to iterate over a query result set.
+ */
+class GncSqlResult
 {
 public:
-    virtual ~GncSqlRow() = default;
-    virtual int64_t get_int_at_col (const char* col) = 0;
-    virtual float get_float_at_col (const char* col) = 0;
-    virtual double get_double_at_col (const char* col) = 0;
-    virtual std::string get_string_at_col (const char* col) = 0;
-    virtual time64 get_time64_at_col (const char* col) = 0;
-    virtual bool is_col_null (const char* col) const noexcept = 0;
+    virtual ~GncSqlResult() = default;
+    virtual uint64_t size() const noexcept = 0;
+    virtual GncSqlRow& begin() = 0;
+    virtual GncSqlRow& end() = 0;
+    friend GncSqlRow;
+protected:
+    class IteratorImpl {
+    public:
+        virtual ~IteratorImpl() = default;
+        virtual GncSqlRow& operator++() = 0;
+        virtual GncSqlResult* operator*() = 0;
+        virtual int64_t get_int_at_col (const char* col) const = 0;
+        virtual float get_float_at_col (const char* col) const = 0;
+        virtual double get_double_at_col (const char* col) const = 0;
+        virtual std::string get_string_at_col (const char* col) const = 0;
+        virtual time64 get_time64_at_col (const char* col) const = 0;
+        virtual bool is_col_null (const char* col) const noexcept = 0;
+    };
 };
 
 /**
- * @struct GncSqlResult
+ * Row of SQL Query results.
  *
- * Struct used to represent the result of an SQL SELECT statement.  SQL
- * backends must provide a structure which implements all of the functions.
+ * This is a "pointer" class of a pimpl pattern, the implementation being
+ * GncSqlResul::IteratorImpl. It's designed to present a std::forward_iterator
+ * like interface for use with range-for while allowing for wrapping a C API.
+ *
+ * Important Implementation Note: Operator++() as written requires that the
+ * sentinel GncSqlRow returned by GncSqlResult::end() has m_impl = nullptr in
+ * order to terminate the loop condition. This is a bit of a hack and might be a
+ * problem with a different SQL interface library from libdbi.
+ *
+ * Note that GncSqlResult::begin and GncSqlRow::operator++() return
+ * GncSqlRow&. This is necessary for operator++() to be called: Using operator
+ * ++() on a pointer performs pointer arithmetic rather than calling the
+ * pointed-to-class's operator++() and C++'s range-for uses operator++()
+ * directly on whatever begin() gives it.
  */
-struct GncSqlResult
+class GncSqlRow
 {
-    guint (*getNumRows) (GncSqlResult*);
-    GncSqlRow* (*getFirstRow) (GncSqlResult*);
-    GncSqlRow* (*getNextRow) (GncSqlResult*);
-    void (*dispose) (GncSqlResult*);
+public:
+    GncSqlRow (GncSqlResult::IteratorImpl* iter) : m_iter{iter} {}
+    ~GncSqlRow() { }
+    GncSqlRow& operator++();
+    GncSqlRow& operator*() { return *this; }
+    friend bool operator!=(const GncSqlRow&, const GncSqlRow&);
+    int64_t get_int_at_col (const char* col) const {
+        return m_iter->get_int_at_col (col); }
+    float get_float_at_col (const char* col) const {
+        return m_iter->get_float_at_col (col); }
+    double get_double_at_col (const char* col) const {
+        return m_iter->get_double_at_col (col); }
+    std::string get_string_at_col (const char* col) const {
+        return m_iter->get_string_at_col (col); }
+    time64 get_time64_at_col (const char* col) const {
+        return m_iter->get_time64_at_col (col); }
+    bool is_col_null (const char* col) const noexcept {
+        return m_iter->is_col_null (col); }
+private:
+    GncSqlResult::IteratorImpl* m_iter;
 };
-#define gnc_sql_result_get_num_rows(RESULT) \
-        (RESULT)->getNumRows(RESULT)
-#define gnc_sql_result_get_first_row(RESULT) \
-        (RESULT)->getFirstRow(RESULT)
-#define gnc_sql_result_get_next_row(RESULT) \
-        (RESULT)->getNextRow(RESULT)
-#define gnc_sql_result_dispose(RESULT) \
-        (RESULT)->dispose(RESULT)
+
+inline bool operator!=(const GncSqlRow& lr, const GncSqlRow& rr) {
+    return lr.m_iter != rr.m_iter;
+}
+
+inline bool operator==(const GncSqlRow& lr, const GncSqlRow& rr) {
+    return !(lr != rr);
+}
 
 /**
  * @struct GncSqlObjectBackend
@@ -434,7 +479,7 @@ typedef enum
 } E_DB_OPERATION;
 
 typedef void (*GNC_SQL_LOAD_FN) (const GncSqlBackend* be,
-                                 GncSqlRow* row, QofSetterFunc setter,
+                                 GncSqlRow& row, QofSetterFunc setter,
                                  gpointer pObject,
                                  const GncSqlColumnTableEntry& table_row);
 typedef void (*GNC_SQL_ADD_COL_INFO_TO_LIST_FN) (const GncSqlBackend* be,
@@ -512,8 +557,8 @@ gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
  * @param statement Statement
  * @return Results, or NULL if an error has occured
  */
-GncSqlResult* gnc_sql_execute_select_statement (GncSqlBackend* be,
-                                                GncSqlStatement* statement);
+GncSqlResultPtr gnc_sql_execute_select_statement (GncSqlBackend* be,
+                                                  GncSqlStatement* statement);
 
 /**
  * Executes an SQL SELECT statement from an SQL char string and returns the
@@ -524,7 +569,7 @@ GncSqlResult* gnc_sql_execute_select_statement (GncSqlBackend* be,
  * @param sql SQL SELECT string
  * @return Results, or NULL if an error has occured
  */
-GncSqlResult* gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql);
+GncSqlResultPtr gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql);
 
 /**
  * Executes an SQL non-SELECT statement from an SQL char string.
@@ -554,7 +599,7 @@ GncSqlStatement* gnc_sql_create_statement_from_sql (GncSqlBackend* be,
  * @param pObject Object to be loaded
  * @param table DB table description
  */
-void gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow* row,
+void gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,
                           QofIdTypeConst obj_name, gpointer pObject,
                           const EntryVec& table);
 
@@ -636,7 +681,7 @@ gboolean gnc_sql_create_index (const GncSqlBackend* be, const char* index_name,
  * @return GncGUID
  */
 
-const GncGUID* gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow* row);
+const GncGUID* gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row);
 
 /**
  * Loads the transaction guid from a database row.  The table must have a column
@@ -647,7 +692,7 @@ const GncGUID* gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow* row);
  * @return GncGUID
  */
 
-const GncGUID* gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow* row);
+const GncGUID* gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow& row);
 
 /**
  * Creates a basic SELECT statement for a table.

@@ -200,12 +200,11 @@ tt_set_parent_guid (gpointer pObject,  gpointer pValue)
 }
 
 static void
-load_single_ttentry (GncSqlBackend* be, GncSqlRow* row, GncTaxTable* tt)
+load_single_ttentry (GncSqlBackend* be, GncSqlRow& row, GncTaxTable* tt)
 {
     GncTaxTableEntry* e = gncTaxTableEntryCreate ();
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (tt != NULL);
 
     gnc_sql_load_object (be, row, GNC_ID_TAXTABLE, e, ttentries_col_table);
@@ -215,7 +214,6 @@ load_single_ttentry (GncSqlBackend* be, GncSqlRow* row, GncTaxTable* tt)
 static void
 load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
 {
-    GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GValue value;
     gchar* buf;
@@ -232,31 +230,20 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
                            TTENTRIES_TABLE_NAME, guid_buf);
     stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
     g_free (buf);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
-    {
-        GncSqlRow* row;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
-        {
-            load_single_ttentry (be, row, tt);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-    }
+    for (auto row : *result)
+        load_single_ttentry (be, row, tt);
 }
 
 static void
-load_single_taxtable (GncSqlBackend* be, GncSqlRow* row,
+load_single_taxtable (GncSqlBackend* be, GncSqlRow& row,
                       GList** l_tt_needing_parents)
 {
     const GncGUID* guid;
     GncTaxTable* tt;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
 
     guid = gnc_sql_load_guid (be, row);
     tt = gncTaxTableLookup (be->book, guid);
@@ -297,47 +284,37 @@ static void
 load_all_taxtables (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     /* First time, create the query */
     stmt = gnc_sql_create_select_statement (be, TT_TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    GList* tt_needing_parents = NULL;
+
+    for (auto row : *result)
+        load_single_taxtable (be, row, &tt_needing_parents);
+
+    /* While there are items on the list of taxtables needing parents,
+       try to see if the parent has now been loaded.  Theory says that if
+       items are removed from the front and added to the back if the
+       parent is still not available, then eventually, the list will
+       shrink to size 0. */
+    if (tt_needing_parents != NULL)
     {
-        GncSqlRow* row;
-        GList* tt_needing_parents = NULL;
+        gboolean progress_made = TRUE;
+        GList* elem;
 
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        while (progress_made)
         {
-            load_single_taxtable (be, row, &tt_needing_parents);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        /* While there are items on the list of taxtables needing parents,
-           try to see if the parent has now been loaded.  Theory says that if
-           items are removed from the front and added to the back if the
-           parent is still not available, then eventually, the list will
-           shrink to size 0. */
-        if (tt_needing_parents != NULL)
-        {
-            gboolean progress_made = TRUE;
-            GList* elem;
-
-            while (progress_made)
+            progress_made = FALSE;
+            for (elem = tt_needing_parents; elem != NULL; elem = g_list_next (elem))
             {
-                progress_made = FALSE;
-                for (elem = tt_needing_parents; elem != NULL; elem = g_list_next (elem))
-                {
-                    taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)elem->data;
-                    tt_set_parent (s->tt, &s->guid);
-                    tt_needing_parents = g_list_delete_link (tt_needing_parents, elem);
-                    progress_made = TRUE;
-                }
+                taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)elem->data;
+                tt_set_parent (s->tt, &s->guid);
+                tt_needing_parents = g_list_delete_link (tt_needing_parents, elem);
+                progress_made = TRUE;
             }
         }
     }
@@ -505,7 +482,7 @@ write_taxtables (GncSqlBackend* be)
 
 /* ================================================================= */
 static void
-load_taxtable_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_taxtable_guid (const GncSqlBackend* be, GncSqlRow& row,
                     QofSetterFunc setter, gpointer pObject,
                     const GncSqlColumnTableEntry& table_row)
 {
@@ -513,12 +490,11 @@ load_taxtable_guid (const GncSqlBackend* be, GncSqlRow* row,
     GncTaxTable* taxtable = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         taxtable = gncTaxTableLookup (be->book, &guid);
         if (taxtable != NULL)

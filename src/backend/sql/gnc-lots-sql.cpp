@@ -97,12 +97,11 @@ set_lot_account (gpointer pObject,  gpointer pValue)
 }
 
 static  GNCLot*
-load_single_lot (GncSqlBackend* be, GncSqlRow* row)
+load_single_lot (GncSqlBackend* be, GncSqlRow& row)
 {
     GNCLot* lot;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     lot = gnc_lot_new (be->book);
 
@@ -117,31 +116,22 @@ static void
 load_all_lots (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = gnc_sql_execute_select_statement (be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
-        {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            gchar* sql;
+        if (result->begin () == nullptr)
+            return;
+        for (auto row : *result)
+            load_single_lot (be, row);
 
-            while (row != NULL)
-            {
-                load_single_lot (be, row);
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-
-            sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
-            gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_lot_lookup);
-            g_free (sql);
-        }
+        auto sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s",
+                                   TABLE_NAME);
+        gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_lot_lookup);
+        g_free (sql);
     }
 }
 
@@ -214,7 +204,7 @@ write_lots (GncSqlBackend* be)
 
 /* ================================================================= */
 static void
-load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_lot_guid (const GncSqlBackend* be, GncSqlRow& row,
                QofSetterFunc setter, gpointer pObject,
                const GncSqlColumnTableEntry& table_row)
 {
@@ -222,12 +212,11 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow* row,
     GNCLot* lot;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         lot = gnc_lot_lookup (&guid, be->book);
         if (lot != NULL)

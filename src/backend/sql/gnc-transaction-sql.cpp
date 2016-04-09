@@ -174,7 +174,7 @@ set_split_lot (gpointer pObject,  gpointer pLot)
 }
 
 static  Split*
-load_single_split (GncSqlBackend* be, GncSqlRow* row)
+load_single_split (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncGUID split_guid;
@@ -182,7 +182,6 @@ load_single_split (GncSqlBackend* be, GncSqlRow* row)
     gboolean bad_guid = FALSE;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     if (guid == NULL) return NULL;
@@ -225,7 +224,6 @@ static void
 load_splits_for_tx_list (GncSqlBackend* be, GList* list)
 {
     GString* sql;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
@@ -239,44 +237,34 @@ load_splits_for_tx_list (GncSqlBackend* be, GList* list)
     (void)g_string_append (sql, ")");
 
     // Execute the query and load the splits
-    result = gnc_sql_execute_select_sql (be, sql->str);
-    if (result != NULL)
+    auto result = gnc_sql_execute_select_sql (be, sql->str);
+    GList* split_list = NULL;
+    for (auto row : *result)
     {
-        GList* split_list = NULL;
-        GncSqlRow* row;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        Split* s;
+        s = load_single_split (be, row);
+        if (s != NULL)
         {
-            Split* s;
-            s = load_single_split (be, row);
-            if (s != NULL)
-            {
-                split_list = g_list_prepend (split_list, s);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            split_list = g_list_prepend (split_list, s);
         }
+    }
 
-        if (split_list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, split_list);
-            g_list_free (split_list);
-        }
-
-        gnc_sql_result_dispose (result);
+    if (split_list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, split_list);
+        g_list_free (split_list);
     }
     (void)g_string_free (sql, TRUE);
 }
 
 static  Transaction*
-load_single_tx (GncSqlBackend* be, GncSqlRow* row)
+load_single_tx (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncGUID tx_guid;
     Transaction* pTx;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     if (guid == NULL) return NULL;
@@ -332,126 +320,120 @@ typedef struct
 static void
 query_transactions (GncSqlBackend* be, GncSqlStatement* stmt)
 {
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
     g_return_if_fail (stmt != NULL);
 
-    result = gnc_sql_execute_select_statement (be, stmt);
-    if (result != NULL)
+    auto result = gnc_sql_execute_select_statement (be, stmt);
+    if (result->begin() == result->end())
+        return;
+
+    GList* tx_list = NULL;
+    GList* node;
+    Transaction* tx;
+#if LOAD_TRANSACTIONS_AS_NEEDED
+    GSList* bal_list = NULL;
+    GSList* nextbal;
+    Account* root = gnc_book_get_root_account (be->book);
+
+    qof_event_suspend ();
+    xaccAccountBeginEdit (root);
+
+    // Save the start/ending balances (balance, cleared and reconciled) for
+    // every account.
+    gnc_account_foreach_descendant (gnc_book_get_root_account (be->primary_book),
+                                    save_account_balances,
+                                    &bal_list);
+#endif
+
+    // Load the transactions
+    for (auto row : *result)
     {
-        GList* tx_list = NULL;
-        GList* node;
-        GncSqlRow* row;
-        Transaction* tx;
-#if LOAD_TRANSACTIONS_AS_NEEDED
-        GSList* bal_list = NULL;
-        GSList* nextbal;
-        Account* root = gnc_book_get_root_account (be->book);
-
-        qof_event_suspend ();
-        xaccAccountBeginEdit (root);
-
-        // Save the start/ending balances (balance, cleared and reconciled) for
-        // every account.
-        gnc_account_foreach_descendant (gnc_book_get_root_account (be->primary_book),
-                                        save_account_balances,
-                                        &bal_list);
-#endif
-
-        // Load the transactions
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        tx = load_single_tx (be, row);
+        if (tx != NULL)
         {
-            tx = load_single_tx (be, row);
-            if (tx != NULL)
-            {
-                tx_list = g_list_prepend (tx_list, tx);
-                xaccTransScrubPostedDate (tx);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            xaccTransScrubPostedDate (tx);
+            tx_list = g_list_prepend (tx_list, tx);
         }
-        gnc_sql_result_dispose (result);
-
-        // Load all splits and slots for the transactions
-        if (tx_list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, tx_list);
-            load_splits_for_tx_list (be, tx_list);
-        }
-
-        // Commit all of the transactions
-        for (node = tx_list; node != NULL; node = node->next)
-        {
-            Transaction* pTx = GNC_TRANSACTION (node->data);
-            xaccTransCommitEdit (pTx);
-        }
-        g_list_free (tx_list);
-
-#if LOAD_TRANSACTIONS_AS_NEEDED
-        // Update the account balances based on the loaded splits.  If the end
-        // balance has changed, update the start balance so that the end
-        // balance is the same as it was before the splits were loaded.
-        // Repeat for cleared and reconciled balances.
-        for (nextbal = bal_list; nextbal != NULL; nextbal = nextbal->next)
-        {
-            full_acct_balances_t* balns = (full_acct_balances_t*)nextbal->data;
-            gnc_numeric* pnew_end_bal;
-            gnc_numeric* pnew_end_c_bal;
-            gnc_numeric* pnew_end_r_bal;
-            gnc_numeric adj;
-
-            g_object_get (balns->acc,
-                          "end-balance", &pnew_end_bal,
-                          "end-cleared-balance", &pnew_end_c_bal,
-                          "end-reconciled-balance", &pnew_end_r_bal,
-                          NULL);
-
-            qof_instance_increase_editlevel (balns - acc);
-            if (!gnc_numeric_eq (*pnew_end_bal, balns->end_bal))
-            {
-                adj = gnc_numeric_sub (balns->end_bal, *pnew_end_bal,
-                                       GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                balns->start_bal = gnc_numeric_add (balns->start_bal, adj,
-                                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                g_object_set (balns->acc, "start-balance", &balns->start_bal, NULL);
-                qof_instance_decrease_editlevel (balns - acc);
-            }
-            if (!gnc_numeric_eq (*pnew_end_c_bal, balns->end_cleared_bal))
-            {
-                adj = gnc_numeric_sub (balns->end_cleared_bal, *pnew_end_c_bal,
-                                       GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                balns->start_cleared_bal = gnc_numeric_add (balns->start_cleared_bal, adj,
-                                                            GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                g_object_set (balns->acc, "start-cleared-balance", &balns->start_cleared_bal,
-                              NULL);
-            }
-            if (!gnc_numeric_eq (*pnew_end_r_bal, balns->end_reconciled_bal))
-            {
-                adj = gnc_numeric_sub (balns->end_reconciled_bal, *pnew_end_r_bal,
-                                       GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                balns->start_reconciled_bal = gnc_numeric_add (balns->start_reconciled_bal,
-                                                               adj,
-                                                               GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                g_object_set (balns->acc, "start-reconciled-balance",
-                              &balns->start_reconciled_bal, NULL);
-            }
-            qof_instance_decrease_editlevel (balns - acc);
-            xaccAccountRecomputeBalance (balns->acc);
-            g_free (pnew_end_bal);
-            g_free (pnew_end_c_bal);
-            g_free (pnew_end_r_bal);
-            g_free (balns);
-        }
-        if (bal_list != NULL)
-        {
-            g_slist_free (bal_list);
-        }
-
-        xaccAccountCommitEdit (root);
-        qof_event_resume ();
-#endif
     }
+
+    // Load all splits and slots for the transactions
+    if (tx_list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, tx_list);
+        load_splits_for_tx_list (be, tx_list);
+    }
+
+    // Commit all of the transactions
+    for (node = tx_list; node != NULL; node = node->next)
+    {
+        Transaction* pTx = GNC_TRANSACTION (node->data);
+        xaccTransCommitEdit (pTx);
+    }
+    g_list_free (tx_list);
+
+#if LOAD_TRANSACTIONS_AS_NEEDED
+    // Update the account balances based on the loaded splits.  If the end
+    // balance has changed, update the start balance so that the end
+    // balance is the same as it was before the splits were loaded.
+    // Repeat for cleared and reconciled balances.
+    for (nextbal = bal_list; nextbal != NULL; nextbal = nextbal->next)
+    {
+        full_acct_balances_t* balns = (full_acct_balances_t*)nextbal->data;
+        gnc_numeric* pnew_end_bal;
+        gnc_numeric* pnew_end_c_bal;
+        gnc_numeric* pnew_end_r_bal;
+        gnc_numeric adj;
+
+        g_object_get (balns->acc,
+                      "end-balance", &pnew_end_bal,
+                      "end-cleared-balance", &pnew_end_c_bal,
+                      "end-reconciled-balance", &pnew_end_r_bal,
+                      NULL);
+
+        qof_instance_increase_editlevel (balns - acc);
+        if (!gnc_numeric_eq (*pnew_end_bal, balns->end_bal))
+        {
+            adj = gnc_numeric_sub (balns->end_bal, *pnew_end_bal,
+                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            balns->start_bal = gnc_numeric_add (balns->start_bal, adj,
+                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            g_object_set (balns->acc, "start-balance", &balns->start_bal, NULL);
+            qof_instance_decrease_editlevel (balns - acc);
+        }
+        if (!gnc_numeric_eq (*pnew_end_c_bal, balns->end_cleared_bal))
+        {
+            adj = gnc_numeric_sub (balns->end_cleared_bal, *pnew_end_c_bal,
+                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            balns->start_cleared_bal = gnc_numeric_add (balns->start_cleared_bal, adj,
+                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            g_object_set (balns->acc, "start-cleared-balance", &balns->start_cleared_bal,
+                          NULL);
+        }
+        if (!gnc_numeric_eq (*pnew_end_r_bal, balns->end_reconciled_bal))
+        {
+            adj = gnc_numeric_sub (balns->end_reconciled_bal, *pnew_end_r_bal,
+                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            balns->start_reconciled_bal = gnc_numeric_add (balns->start_reconciled_bal,
+                                                           adj,
+                                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            g_object_set (balns->acc, "start-reconciled-balance",
+                          &balns->start_reconciled_bal, NULL);
+        }
+        qof_instance_decrease_editlevel (balns - acc);
+        xaccAccountRecomputeBalance (balns->acc);
+        g_free (pnew_end_bal);
+        g_free (pnew_end_c_bal);
+        g_free (pnew_end_r_bal);
+        g_free (balns);
+    }
+    if (bal_list != NULL)
+    {
+        g_slist_free (bal_list);
+    }
+
+    xaccAccountCommitEdit (root);
+    qof_event_resume ();
+#endif
 }
 
 /* ================================================================= */
@@ -1325,12 +1307,11 @@ static const EntryVec acct_balances_col_table
 };
 
 G_GNUC_UNUSED static  single_acct_balance_t*
-load_single_acct_balances (const GncSqlBackend* be, GncSqlRow* row)
+load_single_acct_balances (const GncSqlBackend* be, GncSqlRow& row)
 {
     single_acct_balance_t* bal = NULL;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     bal = static_cast<decltype (bal)> (g_malloc (sizeof (single_acct_balance_t)));
     g_assert (bal != NULL);
@@ -1345,7 +1326,6 @@ GSList*
 gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 {
 #if LOAD_TRANSACTIONS_AS_NEEDED
-    GncSqlResult* result;
     GncSqlStatement* stmt;
     gchar* buf;
     GSList* bal_slist = NULL;
@@ -1357,75 +1337,68 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
     stmt = gnc_sql_create_statement_from_sql (be, buf);
     g_assert (stmt != NULL);
     g_free (buf);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    acct_balances_t* bal = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        acct_balances_t* bal = NULL;
+        single_acct_balance_t* single_bal;
 
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        // Get the next reconcile state balance and merge with other balances
+        single_bal = load_single_acct_balances (be, row);
+        if (single_bal != NULL)
         {
-            single_acct_balance_t* single_bal;
-
-            // Get the next reconcile state balance and merge with other balances
-            single_bal = load_single_acct_balances (be, row);
-            if (single_bal != NULL)
+            if (bal != NULL && bal->acct != single_bal->acct)
             {
-                if (bal != NULL && bal->acct != single_bal->acct)
-                {
-                    bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
-                                                            bal->reconciled_balance,
-                                                            GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                    bal->balance = gnc_numeric_add (bal->balance, bal->cleared_balance,
-                                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                    bal_slist = g_slist_append (bal_slist, bal);
-                    bal = NULL;
-                }
-                if (bal == NULL)
-                {
-                    bal = g_malloc ((gsize)sizeof (acct_balances_t));
-                    g_assert (bal != NULL);
-
-                    bal->acct = single_bal->acct;
-                    bal->balance = gnc_numeric_zero ();
-                    bal->cleared_balance = gnc_numeric_zero ();
-                    bal->reconciled_balance = gnc_numeric_zero ();
-                }
-                if (single_bal->reconcile_state == 'n')
-                {
-                    bal->balance = gnc_numeric_add (bal->balance, single_bal->balance,
-                                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                }
-                else if (single_bal->reconcile_state == 'c')
-                {
-                    bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
-                                                            single_bal->balance,
-                                                            GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                }
-                else if (single_bal->reconcile_state == 'y')
-                {
-                    bal->reconciled_balance = gnc_numeric_add (bal->reconciled_balance,
-                                                               single_bal->balance,
-                                                               GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                }
-                g_free (single_bal);
+                bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
+                                                        bal->reconciled_balance,
+                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+                bal->balance = gnc_numeric_add (bal->balance, bal->cleared_balance,
+                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+                bal_slist = g_slist_append (bal_slist, bal);
+                bal = NULL;
             }
-            row = gnc_sql_result_get_next_row (result);
-        }
+            if (bal == NULL)
+            {
+                bal = g_malloc ((gsize)sizeof (acct_balances_t));
+                g_assert (bal != NULL);
 
-        // Add the final balance
-        if (bal != NULL)
-        {
-            bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
-                                                    bal->reconciled_balance,
-                                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            bal->balance = gnc_numeric_add (bal->balance, bal->cleared_balance,
-                                            GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            bal_slist = g_slist_append (bal_slist, bal);
+                bal->acct = single_bal->acct;
+                bal->balance = gnc_numeric_zero ();
+                bal->cleared_balance = gnc_numeric_zero ();
+                bal->reconciled_balance = gnc_numeric_zero ();
+            }
+            if (single_bal->reconcile_state == 'n')
+            {
+                bal->balance = gnc_numeric_add (bal->balance, single_bal->balance,
+                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            }
+            else if (single_bal->reconcile_state == 'c')
+            {
+                bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
+                                                        single_bal->balance,
+                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            }
+            else if (single_bal->reconcile_state == 'y')
+            {
+                bal->reconciled_balance = gnc_numeric_add (bal->reconciled_balance,
+                                                           single_bal->balance,
+                                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            }
+            g_free (single_bal);
         }
-        gnc_sql_result_dispose (result);
+    }
+
+    // Add the final balance
+    if (bal != NULL)
+    {
+        bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
+                                                bal->reconciled_balance,
+                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        bal->balance = gnc_numeric_add (bal->balance, bal->cleared_balance,
+                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        bal_slist = g_slist_append (bal_slist, bal);
     }
 
     return bal_slist;
@@ -1436,7 +1409,7 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 
 /* ----------------------------------------------------------------- */
 static void
-load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_tx_guid (const GncSqlBackend* be, GncSqlRow& row,
               QofSetterFunc setter, gpointer pObject,
               const GncSqlColumnTableEntry& table_row)
 {
@@ -1445,12 +1418,11 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow* row,
     const gchar* guid_str;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         tx = xaccTransLookup (&guid, be->book);
 

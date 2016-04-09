@@ -112,7 +112,7 @@ set_quote_source_name (gpointer pObject, gpointer pValue)
 }
 
 static  gnc_commodity*
-load_single_commodity (GncSqlBackend* be, GncSqlRow* row)
+load_single_commodity (GncSqlBackend* be, GncSqlRow& row)
 {
     QofBook* pBook = be->book;
     gnc_commodity* pCommodity;
@@ -129,39 +129,30 @@ static void
 load_all_commodities (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
     gnc_commodity_table* pTable;
 
     pTable = gnc_commodity_table_get_table (be->book);
     stmt = gnc_sql_create_select_statement (be, COMMODITIES_TABLE);
     if (stmt == NULL) return;
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+
+    for (auto row : *result)
     {
-        gnc_commodity* pCommodity;
-        GncSqlRow* row = gnc_sql_result_get_first_row (result);
-        gchar* sql;
+        auto pCommodity = load_single_commodity (be, row);
 
-        while (row != NULL)
+        if (pCommodity != NULL)
         {
-            pCommodity = load_single_commodity (be, row);
+            GncGUID guid;
 
-            if (pCommodity != NULL)
-            {
-                GncGUID guid;
-
-                guid = *qof_instance_get_guid (QOF_INSTANCE (pCommodity));
-                pCommodity = gnc_commodity_table_insert (pTable, pCommodity);
-                if (qof_instance_is_dirty (QOF_INSTANCE (pCommodity)))
-                    gnc_sql_push_commodity_for_postload_processing (be, (gpointer)pCommodity);
-                qof_instance_set_guid (QOF_INSTANCE (pCommodity), &guid);
-            }
-            row = gnc_sql_result_get_next_row (result);
+            guid = *qof_instance_get_guid (QOF_INSTANCE (pCommodity));
+            pCommodity = gnc_commodity_table_insert (pTable, pCommodity);
+            if (qof_instance_is_dirty (QOF_INSTANCE (pCommodity)))
+                gnc_sql_push_commodity_for_postload_processing (be, (gpointer)pCommodity);
+            qof_instance_set_guid (QOF_INSTANCE (pCommodity), &guid);
         }
-        gnc_sql_result_dispose (result);
 
-        sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", COMMODITIES_TABLE);
+        auto sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", COMMODITIES_TABLE);
         gnc_sql_slots_load_for_sql_subquery (be, sql,
                                              (BookLookupFn)gnc_commodity_find_commodity_by_guid);
         g_free (sql);
@@ -273,7 +264,7 @@ gnc_sql_commit_commodity (gnc_commodity* pCommodity)
 /* ----------------------------------------------------------------- */
 
 static void
-load_commodity_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_commodity_guid (const GncSqlBackend* be, GncSqlRow& row,
                      QofSetterFunc setter, gpointer pObject,
                      const GncSqlColumnTableEntry& table_row)
 {
@@ -281,12 +272,11 @@ load_commodity_guid (const GncSqlBackend* be, GncSqlRow* row,
     gnc_commodity* commodity = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         commodity = gnc_commodity_find_commodity_by_guid (&guid, be->book);
         if (commodity != NULL)

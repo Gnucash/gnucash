@@ -67,12 +67,11 @@ static const EntryVec col_table
 /* ================================================================= */
 
 static  GNCPrice*
-load_single_price (GncSqlBackend* be, GncSqlRow* row)
+load_single_price (GncSqlBackend* be, GncSqlRow& row)
 {
     GNCPrice* pPrice;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     pPrice = gnc_price_create (be->book);
 
@@ -87,7 +86,6 @@ static void
 load_all_prices (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
     QofBook* pBook;
     GNCPriceDB* pPriceDB;
 
@@ -98,33 +96,30 @@ load_all_prices (GncSqlBackend* be)
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     if (stmt != NULL)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = gnc_sql_execute_select_statement (be, stmt);
         gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        if (result->begin() == result->end())
+            return;
+        
+        GNCPrice* pPrice;
+        gchar* sql;
+
+        gnc_pricedb_set_bulk_update (pPriceDB, TRUE);
+        for (auto row : *result)
         {
-            GNCPrice* pPrice;
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            gchar* sql;
+            pPrice = load_single_price (be, row);
 
-            gnc_pricedb_set_bulk_update (pPriceDB, TRUE);
-            while (row != NULL)
+            if (pPrice != NULL)
             {
-                pPrice = load_single_price (be, row);
-
-                if (pPrice != NULL)
-                {
-                    (void)gnc_pricedb_add_price (pPriceDB, pPrice);
-                    gnc_price_unref (pPrice);
-                }
-                row = gnc_sql_result_get_next_row (result);
+                (void)gnc_pricedb_add_price (pPriceDB, pPrice);
+                gnc_price_unref (pPrice);
             }
-            gnc_sql_result_dispose (result);
-            gnc_pricedb_set_bulk_update (pPriceDB, FALSE);
-
-            sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
-            gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_price_lookup);
-            g_free (sql);
         }
+        gnc_pricedb_set_bulk_update (pPriceDB, FALSE);
+
+        sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
+        gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_price_lookup);
+        g_free (sql);
     }
 }
 

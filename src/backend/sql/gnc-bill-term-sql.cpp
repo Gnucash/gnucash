@@ -172,14 +172,13 @@ bt_set_parent_guid (gpointer pObject,  gpointer pValue)
 }
 
 static GncBillTerm*
-load_single_billterm (GncSqlBackend* be, GncSqlRow* row,
+load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
                       GList** l_billterms_needing_parents)
 {
     const GncGUID* guid;
     GncBillTerm* pBillTerm;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     pBillTerm = gncBillTermLookup (be->book, guid);
@@ -221,60 +220,50 @@ static void
 load_all_billterms (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    GList* list = NULL;
+    GList* l_billterms_needing_parents = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-        GList* l_billterms_needing_parents = NULL;
+        auto pBillTerm =
+            load_single_billterm (be, row, &l_billterms_needing_parents);
+        if (pBillTerm != NULL)
+            list = g_list_append (list, pBillTerm);
+    }
 
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
+    }
+
+    /* While there are items on the list of billterms needing parents,
+       try to see if the parent has now been loaded.  Theory says that if
+       items are removed from the front and added to the back if the
+       parent is still not available, then eventually, the list will
+       shrink to size 0. */
+    if (l_billterms_needing_parents != NULL)
+    {
+        gboolean progress_made = TRUE;
+        GList* elem;
+
+        while (progress_made)
         {
-            GncBillTerm* pBillTerm = load_single_billterm (be, row,
-                                                           &l_billterms_needing_parents);
-            if (pBillTerm != NULL)
+            progress_made = FALSE;
+            for (elem = l_billterms_needing_parents; elem != NULL;
+                 elem = g_list_next (elem))
             {
-                list = g_list_append (list, pBillTerm);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
-
-        /* While there are items on the list of billterms needing parents,
-           try to see if the parent has now been loaded.  Theory says that if
-           items are removed from the front and added to the back if the
-           parent is still not available, then eventually, the list will
-           shrink to size 0. */
-        if (l_billterms_needing_parents != NULL)
-        {
-            gboolean progress_made = TRUE;
-            GList* elem;
-
-            while (progress_made)
-            {
-                progress_made = FALSE;
-                for (elem = l_billterms_needing_parents; elem != NULL;
-                     elem = g_list_next (elem))
-                {
-                    billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)elem->data;
-                    bt_set_parent (s->billterm, &s->guid);
-                    l_billterms_needing_parents = g_list_delete_link (l_billterms_needing_parents,
-                                                                      elem);
-                    progress_made = TRUE;
-                }
+                billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)elem->data;
+                bt_set_parent (s->billterm, &s->guid);
+                l_billterms_needing_parents = g_list_delete_link (l_billterms_needing_parents,
+                                                                  elem);
+                progress_made = TRUE;
             }
         }
     }
@@ -349,7 +338,7 @@ gnc_sql_save_billterm (GncSqlBackend* be, QofInstance* inst)
 
 /* ================================================================= */
 static void
-load_billterm_guid (const GncSqlBackend* be, GncSqlRow* row,
+load_billterm_guid (const GncSqlBackend* be, GncSqlRow& row,
                     QofSetterFunc setter, gpointer pObject,
                     const GncSqlColumnTableEntry& table_row)
 {
@@ -357,12 +346,11 @@ load_billterm_guid (const GncSqlBackend* be, GncSqlRow* row,
     GncBillTerm* term = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     try
     {
-        auto val = row->get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         term = gncBillTermLookup (be->book, &guid);
         if (term != NULL)

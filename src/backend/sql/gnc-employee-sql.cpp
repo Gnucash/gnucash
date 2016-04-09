@@ -74,13 +74,12 @@ static EntryVec col_table
 });
 
 static GncEmployee*
-load_single_employee (GncSqlBackend* be, GncSqlRow* row)
+load_single_employee (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncEmployee* pEmployee;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     pEmployee = gncEmployeeLookup (be->book, guid);
@@ -98,36 +97,30 @@ static void
 load_all_employees (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = gnc_sql_execute_select_statement (be, stmt);
     gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+
+    GList* list = NULL;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        GncEmployee* pEmployee = load_single_employee (be, row);
+        if (pEmployee != NULL)
         {
-            GncEmployee* pEmployee = load_single_employee (be, row);
-            if (pEmployee != NULL)
-            {
-                list = g_list_append (list, pEmployee);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
+            list = g_list_append (list, pEmployee);
         }
     }
+
+    if (list != NULL)
+    {
+        gnc_sql_slots_load_for_list (be, list);
+        g_list_free (list);
+    }
+
 }
 
 /* ================================================================= */

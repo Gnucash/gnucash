@@ -49,7 +49,7 @@ typedef void (*OwnerSetterFunc) (gpointer, GncOwner*);
 typedef GncOwner* (*OwnerGetterFunc) (const gpointer);
 
 static void
-load_owner (const GncSqlBackend* be, GncSqlRow* row,
+load_owner (const GncSqlBackend* be, GncSqlRow& row,
             QofSetterFunc setter, gpointer pObject,
             const GncSqlColumnTableEntry& table_row)
 {
@@ -59,17 +59,16 @@ load_owner (const GncSqlBackend* be, GncSqlRow* row,
     GncGUID* pGuid = NULL;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
 
     auto book = be->book;
     auto buf = g_strdup_printf ("%s_type", table_row.col_name);
     try
     {
-        type = static_cast<decltype(type)>(row->get_int_at_col (buf));
+        type = static_cast<decltype(type)>(row.get_int_at_col (buf));
         g_free (buf);
         buf = g_strdup_printf ("%s_guid", table_row.col_name);
-        auto val = row->get_string_at_col (buf);
+        auto val = row.get_string_at_col (buf);
         g_free (buf);
         string_to_guid (val.c_str(), &guid);
         pGuid = &guid;
